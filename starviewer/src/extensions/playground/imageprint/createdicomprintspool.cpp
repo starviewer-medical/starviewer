@@ -115,35 +115,47 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     //m_storedPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate); 
 }
 
-void CreateDicomPrintSpool::transformImageForPrinting(Image *image, const QString &spoolDirectoryPath)
+void CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const QString &spoolDirectoryPath)
 {
-    // Inicialitzem l'StoredPrint
-    //TODO Esbrinar els camps DefaultIllumination i getDefaultReflection, DicomPrint utilitzen els mateixos valors per defecte
-
-    //TODO:m_presentationState cal que sigui global ? cada vegada li fem un new cal ?
     DiDisplayFunction *l_displayFunction[DVPSD_max];
-    //TODO Els valors per defecte són densitatMíninim H/V (MinPrintResolution) densitatMàxima H/V (MaxPrintResolution) i mida de previsualització de la imatge (PreviewSize)
-    m_presentationState = new DVPresentationState(OFstatic_cast(DiDisplayFunction **, l_displayFunction), 1024 , 1024 , 8192 , 8192, 256, 256);
-    DcmFileFormat *imageFileFormat = NULL;
-    DcmDataset *imageToPrintDataset = NULL;
-
-    DVPSHelper::loadFileFormat(qPrintable(image->getPath()), imageFileFormat);
-    imageToPrintDataset = imageFileFormat->getDataset();
-    //TODO que significa el false?
-    m_presentationState->attachImage(imageFileFormat,false);
-
     unsigned long bitmapWidth, bitmapHeight, bitmapSize;
     double pixelAspectRatio;
     void *pixelData;
+    DcmFileFormat *imageToPrintDcmFileFormat = NULL;
+    DcmDataset *imageToPrintDataset = NULL;
+
+    //TODO:m_presentationState cal que sigui global ? cada vegada li fem un new cal ?
+    //TODO: Comprovar que els display function realment al dviface no se li assigni cap valor
+    //TODO: DisplayFunction Se li pot donar valor null, no es necessita per la impressora ?
+
+    /*El constructor del mètode DVPresentationState necessita els següents paràmetres
+        1r - Llista d'objectes que descriuen les característiques de la pantalla 
+
+        2n,3r i 4t,5è Indiquen la resolució mínima d'impressió H/V i la màxima H/V respectivament, se li donen els valors per defecte de les dcmtk, consultant
+        el DICOM Conformance d'algunes impressores, s'ha vist que imprimint una sola imatge amb format STARDARD\1,1 per tamanys del film grans algunes 
+        impressores poden imprimir en una resolució superior de fins 11000, però com que difícilment tindrem casos en els que s'imprimeixin una sola imatge en films
+        grans deixem els valors per defecte de les dcmtk.
+
+        5è,6è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.*/
+    m_presentationState = new DVPresentationState(OFstatic_cast(DiDisplayFunction **, l_displayFunction), 1024 , 1024 , 8192 , 8192, 256, 256);
+
+    DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);//Carreguem la imatge que hem d'imprimor
+    imageToPrintDataset = imageToPrintDcmFileFormat->getDataset();
+    
+    /*El 2n paràmete del attach image indica, si el presentation state és l'amo de la imatge passada per paràmetre, per poder destruir l'objecte,
+      en aquest cas l'indiquem que no és l'amo, per poder-lo destruir nosaltres.*/
+    m_presentationState->attachImage(imageToPrintDcmFileFormat, false);
 
     bitmapSize = m_presentationState->getPrintBitmapSize();
-    pixelAspectRatio = m_presentationState->getPrintBitmapPixelAspectRatio();
-    m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight);   	    
+    m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight); 
+    pixelAspectRatio = m_presentationState->getPrintBitmapPixelAspectRatio();  	    
     pixelData = new char[bitmapSize];
-    //TODO que significa el false ?
+
+    /*El 3r paràmetre indica si la imatge s'ha de redenritzar amb el presentation LUT invers*/
     m_presentationState->getPrintBitmap(pixelData, bitmapSize, false); 
 
-    this->createHardcopyGrayscaleImage(image, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio, spoolDirectoryPath);
+    //Guardem la imatge a disc
+    createHardcopyGrayscaleImage(imageToPrint, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio, spoolDirectoryPath);
 }
 
 void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
