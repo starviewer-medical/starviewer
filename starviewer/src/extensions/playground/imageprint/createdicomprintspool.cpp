@@ -11,6 +11,7 @@
 #include "dicomprinter.h"
 #include "image.h"
 #include "logging.h"
+#include "starviewerapplication.h"
 
 namespace udg
 {
@@ -172,9 +173,8 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     m_storedPrint->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
 
     // Hardcopy Equipment Module
-    //TODO: posar dades starviewer ?
-    transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceManufacturer, "OFFIS", true);
-    transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceSoftwareVersion, OFFIS_DTK_IMPLEMENTATION_VERSION_NAME, true);	
+    transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceManufacturer, qPrintable(ApplicationNameString), true);
+    transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceSoftwareVersion, qPrintable(StarviewerVersionString), true);	
 
     // General Image Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceNumber, qPrintable(imageToPrint->getInstanceNumber()));
