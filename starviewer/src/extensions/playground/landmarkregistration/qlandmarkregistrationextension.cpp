@@ -157,7 +157,7 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
 {
     m_inputVolume = input;
 
-    if(m_inputVolume->getSeries()->getNumberOfPhases()==1)
+    if(m_inputVolume->getNumberOfPhases()==1)
     {
         m_seriesLabel->setVisible(false);
         m_seriesSpinBox->setVisible(false);
@@ -168,7 +168,7 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
         m_seriesLabel->setVisible(true);
         m_seriesSpinBox->setVisible(true);
         m_seriesSpinBox->setMinimum(0);
-        m_seriesSpinBox->setMaximum(input->getSeries()->getNumberOfPhases() -1);
+        m_seriesSpinBox->setMaximum(input->getNumberOfPhases() -1);
         m_firstVolume = m_inputVolume->getPhaseVolume(m_seriesSpinBox->value());
     }
 
@@ -205,7 +205,7 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
 {
     m_secondInputVolume = input;
 
-    if(m_inputVolume->getSeries()->getNumberOfPhases()==1)
+    if(m_inputVolume->getNumberOfPhases()==1)
     {
         m_seriesLabel_2->setVisible(false);
         m_seriesSpinBox_2->setVisible(false);
@@ -216,7 +216,7 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
         m_seriesLabel_2->setVisible(true);
         m_seriesSpinBox_2->setVisible(true);
         m_seriesSpinBox_2->setMinimum(0);
-        m_seriesSpinBox_2->setMaximum(input->getSeries()->getNumberOfPhases() -1);
+        m_seriesSpinBox_2->setMaximum(input->getNumberOfPhases() -1);
         m_secondVolume = m_secondInputVolume->getPhaseVolume(m_seriesSpinBox_2->value());
     }
 

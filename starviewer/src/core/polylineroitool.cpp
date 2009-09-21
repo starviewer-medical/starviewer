@@ -67,8 +67,9 @@ void PolylineROITool::printData()
         intersection[2] = (bounds[5]+bounds[4])/2.0;
 
         DrawerText * text = new DrawerText;
-
-        const double * pixelSpacing = m_2DViewer->getInput()->getSeries()->getImages().at(0)->getPixelSpacing();
+        // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
+        // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
+        const double *pixelSpacing = m_2DViewer->getInput()->getImage(0,0)->getPixelSpacing();
 
         if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
         {

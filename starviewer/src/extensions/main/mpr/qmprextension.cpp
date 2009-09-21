@@ -680,7 +680,7 @@ void QMPRExtension::pushSagitalViewAxialAxisActor()
 
 void QMPRExtension::setInput( Volume *input )
 {
-    if( input->getSeries()->getNumberOfPhases() > 1 )
+    if( input->getNumberOfPhases() > 1 )
         m_phasesAlertLabel->setVisible(true);
     else
         m_phasesAlertLabel->setVisible(false);

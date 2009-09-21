@@ -347,6 +347,7 @@ void ExtensionHandler::processInput(Patient *patient, const QString &defaultSeri
             Volume *volume = new Volume;
             volume->setImages( series->getImages() );
             volume->setNumberOfPhases( series->getNumberOfPhases() );
+            volume->setNumberOfSlicesPerPhase( series->getNumberOfSlicesPerPhase() );
             series->addVolume(volume);
         }
     }
