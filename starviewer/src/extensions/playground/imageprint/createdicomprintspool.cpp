@@ -167,37 +167,35 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     DcmDataset *transformedImageDatasetToPrint = transformedImageToPrint->getDataset();
     QString transformedImagePath;
 
-    // write patient module
+    //write patient module
     m_presentationState->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
-    // write general study and general series module
+    //write general study and general series module
     m_storedPrint->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
 
     // Hardcopy Equipment Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceManufacturer, qPrintable(ApplicationNameString), true);
     transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceSoftwareVersion, qPrintable(StarviewerVersionString), true);	
 
-    // General Image Module
+    //General Image Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceNumber, qPrintable(imageToPrint->getInstanceNumber()));
     transformedImageDatasetToPrint->putAndInsertString(DCM_PatientOrientation, qPrintable(imageToPrint->getPatientOrientation()));
     transformedImageDatasetToPrint->putAndInsertString(DCM_ImageType, "DERIVED\\SECONDARY", true);
     transformedImageDatasetToPrint->putAndInsertString(DCM_DerivationDescription, "Hardcopy rendered using Presentation State");
-    	
-    // SOP Common Module
+    
+    //SOP Common Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_SOPClassUID, UID_HardcopyGrayscaleImageStorage);
 
     dcmGenerateUniqueIdentifier(InstanceUIDOfTransformedImage);    
     transformedImageDatasetToPrint->putAndInsertString(DCM_SOPInstanceUID, InstanceUIDOfTransformedImage);		
 
-    //TODO:Prova de substiuir per mètode qt ? 
+    //Instance Creation Modukle
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationDate, qPrintable(QDateTime::currentDateTime().toString("yyyyMMdd")));
-
-    //TODO:Prova de substiuir per mètode qt ? 
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationTime, qPrintable(QDateTime::currentDateTime().toString("hhmmss")));
 
-    // Hardcopy Grayscale Image Module
+    /*Hardcopy Grayscale Image Module
+      El valor d'aquests tags són hard coded obtinguts del mètode saveHardcopyGrayscaleImage de dviface.cxx*/
     transformedImageDatasetToPrint->putAndInsertString(DCM_PhotometricInterpretation, "MONOCHROME2");
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_SamplesPerPixel, 1);
-
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_Rows, OFstatic_cast(Uint16, bitmapWidth));
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_Columns, OFstatic_cast(Uint16, bitmapHeight));
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_BitsAllocated, 16);
@@ -228,9 +226,11 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
     //TODO:S'hauria de fer a un altre lloc aquest càlcul perquè també s'utilitza a PrintDicomSpool
     transformedImagePath = spoolDirectoryPath + QDir::separator() + InstanceUIDOfTransformedImage + ".dcm";
+    //Guardem la imatge transformada
     OFCondition saveImageCondition = DVPSHelper::saveFileFormat(qPrintable(transformedImagePath), transformedImageToPrint, true);
 
     m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
+    //Afegim la imatge al Image Box
     m_storedPrint->addImageBox(qPrintable(m_dicomPrinter.getAETitle()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL, 
                                m_presentationState->getPresentationLUTData(), m_presentationState->isMonochrome1Image());
 
