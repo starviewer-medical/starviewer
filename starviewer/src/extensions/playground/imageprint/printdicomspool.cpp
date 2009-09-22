@@ -19,7 +19,7 @@
 #include <QDir>
 
 #include "logging.h"
-#include "../inputoutput/pacsdevice.cpp"
+#include "../inputoutput/pacsdevice.h"
 
 namespace udg{
 
@@ -40,6 +40,7 @@ void PrintDicomSpool::print(const QString &spoolDirectoryPath)
     DVPSPrintMessageHandler printConnection;
     OFCondition result;
 
+    //TODO: podem utilitzar el del DVSStoredPrint
     //Connectem amb la impressora
     result = printConnection.negotiateAssociation(NULL/*tlayer només s'utilitza per ssl*/, qPrintable(PacsDevice::getLocalAETitle()),
                                                qPrintable(m_dicomPrinter.getAETitle()), qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(),
