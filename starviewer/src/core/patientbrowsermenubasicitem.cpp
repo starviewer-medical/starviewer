@@ -21,6 +21,7 @@ PatientBrowserMenuBasicItem::PatientBrowserMenuBasicItem( QWidget *parent )
 : QLabel(parent)
 {
     setFrameShape(QFrame::StyledPanel);
+    setStyleSheet( "border: 1px solid gray; border-radius: 2;" );
 }
 
 void PatientBrowserMenuBasicItem::setSerie( Series * serie )
@@ -34,8 +35,6 @@ void PatientBrowserMenuBasicItem::setSerie( Series * serie )
         .arg( serie->getBodyPartExamined() )
         .arg( serie->getViewPosition() )
         );
-
-    setStyleSheet( "border: 1px solid gray; border-radius: 2;" );
 }
 
 Series *  PatientBrowserMenuBasicItem::getSerie()
