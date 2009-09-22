@@ -106,7 +106,6 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
      */ 
     //m_storedPrint->setResolutionID(NULL);
 
-    //TODO: No sé si es guarden al fitxer StoredPrint potser s'han d'especificar en el moment d'imprimir ?
     /* Tag Requested Decimate/Crop Behaviour (2020,0040) de Imagex Box Indica que s'ha de fer si la imatge excedeix el màxim de píxels que suporta la cel·la
        Hi ha 3 comportaments :
             - Decimate : Escala la imatge fins que hi càpiga
@@ -126,8 +125,6 @@ void CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     void *pixelData;
     DcmFileFormat *imageToPrintDcmFileFormat = NULL;
     DcmDataset *imageToPrintDataset = NULL;
-
-    //TODO:m_presentationState cal que sigui global ? cada vegada li fem un new cal ?
 
     /*El constructor del mètode DVPresentationState necessita els següents paràmetres
         1r - Llista d'objectes que descriuen les característiques de la pantalla tipus objecte DiDisplayFunction, com aquestes imatges no han de ser visualitzades
@@ -158,6 +155,11 @@ void CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
 
     //Guardem la imatge a disc
     createHardcopyGrayscaleImage(imageToPrint, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio, spoolDirectoryPath);
+
+    //No fem delete del imageToPrintDataset perquè és un punter que apunta al Dataset de l'objecte imageToPrintDcmFileFormat del qual ja fem un delete
+    delete m_presentationState;
+    delete pixelData;
+    delete imageToPrintDcmFileFormat;
 }
 
 void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
@@ -238,7 +240,7 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     DEBUG_LOG(QString("Imatge Creada %1").arg(InstanceUIDOfTransformedImage));
     DEBUG_LOG(qPrintable(m_dicomPrinter.getAETitle()));
 
-    //TODO faltaran delete dels punters?
+    delete transformedImageToPrint;
 }
 
 void CreateDicomPrintSpool::setImageBoxAttributes()
@@ -260,8 +262,8 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
 
 void CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &storedPrintDcmtkFilePath)
 {
-    DcmFileFormat *fileformat = new DcmFileFormat();
-    DcmDataset *dataset	= fileformat->getDataset();	
+    DcmFileFormat *fileFormat = new DcmFileFormat();
+    DcmDataset *dataset	= fileFormat->getDataset();	
     char storedPrintInstanceUID[70];
 
     dcmGenerateUniqueIdentifier(storedPrintInstanceUID);
@@ -270,6 +272,9 @@ void CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &storedPrin
     m_storedPrint->setInstanceUID(storedPrintInstanceUID);	
     OFCondition write = m_storedPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
 
-    write = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileformat, true);
+    write = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileFormat, true);
+
+    delete fileFormat;
+    delete m_storedPrint;
 }
 }
