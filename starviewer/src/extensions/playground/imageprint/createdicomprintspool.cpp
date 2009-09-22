@@ -12,6 +12,7 @@
 #include "image.h"
 #include "logging.h"
 #include "starviewerapplication.h"
+#include "../inputoutput/pacsdevice.h"
 
 namespace udg
 {
@@ -56,8 +57,9 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
         s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
      */
     //TODO preguntar perquè necessita el Illumination i Reflected Ambient Ligth, preguntar si realement són aquests tags
-    m_storedPrint = new DVPSStoredPrint(2000 ,10 , qPrintable(m_dicomPrinter.getAETitle()));
+    m_storedPrint = new DVPSStoredPrint(2000 ,10 , qPrintable(PacsDevice::getLocalAETitle()));
     m_storedPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()));//S'ha d'indicar el AETitle de la impressora
+    m_storedPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()));
 
     //Indiquem el layout de la placa
     m_storedPrint->setImageDisplayFormat(m_dicomPrintJob.getPrintPage().getFilmLayoutColumns(), m_dicomPrintJob.getPrintPage().getFilmLayoutRows());
@@ -234,7 +236,7 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
     m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
     //Afegim la imatge al Image Box
-    m_storedPrint->addImageBox(qPrintable(m_dicomPrinter.getAETitle()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL, 
+    m_storedPrint->addImageBox(qPrintable(PacsDevice::getLocalAETitle()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL, 
                                m_presentationState->getPresentationLUTData(), m_presentationState->isMonochrome1Image());
 
     DEBUG_LOG(QString("Imatge Creada %1").arg(InstanceUIDOfTransformedImage));
