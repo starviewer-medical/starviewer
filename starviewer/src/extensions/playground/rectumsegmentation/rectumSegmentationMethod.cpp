@@ -117,7 +117,7 @@ double rectumSegmentationMethod::applyMethod()
     seedPoint[2] = m_pz;
     m_Volume->getItkData()->TransformPhysicalPointToIndex(seedPoint, seedIndex);
 
-    std::cout<<"Seed Index: "<<seedIndex<<endl;
+    //std::cout<<"Seed Index: "<<seedIndex<<endl;
     incaster->SetInput( m_Volume->getItkData() );
     extracter->SetInput( incaster->GetOutput() );
     connectedThreshold->SetInput( extracter->GetOutput() );
@@ -142,12 +142,13 @@ double rectumSegmentationMethod::applyMethod()
     internalSeedIndex[1] = seedIndex[1];
     connectedThreshold->SetSeed( internalSeedIndex );
 
-    std::cout<<"Init filter"<<std::endl;
+    /*std::cout<<"Init filter"<<std::endl;
     std::cout<<"Parameters: "<<internalSeedIndex<<std::endl;
     std::cout<<"Slice: "<<sliceNumber<<std::endl;
     std::cout<<"Histogram parameters: "<<m_lowerThreshold<<" "<<m_upperThreshold<<std::endl;
     std::cout<<"mask Values: "<<m_insideMaskValue<<" "<<m_outsideMaskValue<<std::endl;
     std::cout<<"Seed Indexs: "<<internalSeedIndex[0]<<" "<<internalSeedIndex[1]<<std::endl;
+	*/
 
     typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType,2> StructuringElementType;
     typedef itk::BinaryErodeImageFilter<InternalImageType,InternalImageType,StructuringElementType > ErodeFilterType;
@@ -175,7 +176,7 @@ double rectumSegmentationMethod::applyMethod()
     //Màxim budell sa 8mm--> Per confirmar!!!!
     //double rectumwith = 8.0;
     double rectumwidth = m_multiplier;
-    std::cout<<"Rectumwidth (Multiplier): "<<rectumwidth<<std::endl;
+    //std::cout<<"Rectumwidth (Multiplier): "<<rectumwidth<<std::endl;
     radiusErode[0]=(unsigned long) (rectumwidth/(2*m_Volume->getItkData()->GetSpacing()[0]))+radiusDilatePre[0];
     radiusErode[1]=(unsigned long) (rectumwidth/(2*m_Volume->getItkData()->GetSpacing()[1]))+radiusDilatePre[1];
 
@@ -196,7 +197,7 @@ double rectumSegmentationMethod::applyMethod()
     binaryDilate->SetKernel( structuringElementDilate );
     binaryDilate->SetInput( binaryErode->GetOutput() );
 
-    std::cout<<"Morfo Operators: "<<radiusDilatePre[0]<<" "<<radiusDilatePre[1]<<" // "<<radiusErode[0]<<" "<<radiusErode[1]<<" // "<<radiusDilate[0]<<" "<<radiusDilate[1]<<std::endl;
+    //std::cout<<"Morfo Operators: "<<radiusDilatePre[0]<<" "<<radiusDilatePre[1]<<" // "<<radiusErode[0]<<" "<<radiusErode[1]<<" // "<<radiusDilate[0]<<" "<<radiusDilate[1]<<std::endl;
 
     ConnectedFilterType::Pointer connectedThreshold2 = ConnectedFilterType::New();
     connectedThreshold2->SetLower( m_insideMaskValue - 2 );
@@ -237,7 +238,7 @@ double rectumSegmentationMethod::applyMethod()
     binthresholdFilter->SetLowerThreshold( m_insideMaskValue - 2 );
     binthresholdFilter->SetUpperThreshold( m_insideMaskValue + 2 );
     distanceFilter->SetInput( binthresholdFilter->GetOutput() );
-    std::cout<<"Inside: "<<m_insideMaskValue<<", outside: "<<m_outsideMaskValue<<std::endl;
+    //std::cout<<"Inside: "<<m_insideMaskValue<<", outside: "<<m_outsideMaskValue<<std::endl;
     distanceFilter->Update();
 
         /*OutputCastingFilterType::Pointer outcaster2 = OutputCastingFilterType::New();
@@ -275,8 +276,8 @@ double rectumSegmentationMethod::applyMethod()
         }
         ++itDist;
     }
-    std::cout<<"Max="<<max<<", min="<<min<<std::endl;
-    std::cout<<"PosMax= ["<<xmax<<", "<<ymax<<"]"<<std::endl;
+    //std::cout<<"Max="<<max<<", min="<<min<<std::endl;
+    //std::cout<<"PosMax= ["<<xmax<<", "<<ymax<<"]"<<std::endl;
 
 
     Volume::ItkImageType::Pointer maskAux = Volume::ItkImageType::New();
@@ -327,8 +328,8 @@ double rectumSegmentationMethod::applyMethod()
     Volume::ItkImageType::SpacingType sp = m_Volume->getItkData()->GetSpacing();
     m_volume = m_cont*sp[0]*sp[1]*sp[2];
 
-    std::cout<<"Volume: "<<m_volume<<" ("<<m_cont<<", "<<cont2<<", "<<cont3<<" voxels)"<<std::endl;
-    std::cout<<"Size: "<<sizeOut<<std::endl;
+    //std::cout<<"Volume: "<<m_volume<<" ("<<m_cont<<", "<<cont2<<", "<<cont3<<" voxels)"<<std::endl;
+    //std::cout<<"Size: "<<sizeOut<<std::endl;
 
     m_Mask->setData( maskAux );
     m_Mask->getVtkData()->Update();
@@ -374,11 +375,12 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     ThresholdFilter->SetOutsideValue( m_outsideMaskValue );
     ThresholdFilter->SetInsideValue(  m_insideMaskValue );
 
-    std::cout<<"Init filter"<<std::endl;
+    /*std::cout<<"Init filter"<<std::endl;
     std::cout<<"Slice: "<<slice<<std::endl;
     std::cout<<"Histogram parameters: "<<m_lowerThreshold<<" "<<m_upperThreshold<<std::endl;
     std::cout<<"mask Values: "<<m_insideMaskValue<<" "<<m_outsideMaskValue<<std::endl;
-
+	*/
+	
     typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType,2> StructuringElementType;
     typedef itk::BinaryErodeImageFilter<InternalImageType,InternalImageType,StructuringElementType > ErodeFilterType;
     typedef itk::BinaryDilateImageFilter<InternalImageType,InternalImageType,StructuringElementType > DilateFilterType;
@@ -405,7 +407,7 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     //Màxim budell sa 8mm--> Per confirmar!!!!
     //double rectumwidth = 8.0;
     double rectumwidth = m_multiplier;
-    std::cout<<"Rectumwidth (Multiplier): "<<rectumwidth<<std::endl;
+    //std::cout<<"Rectumwidth (Multiplier): "<<rectumwidth<<std::endl;
     radiusErode[0]=(unsigned long) (rectumwidth/(2*m_Volume->getItkData()->GetSpacing()[0]))+radiusDilatePre[0];
     radiusErode[1]=(unsigned long) (rectumwidth/(2*m_Volume->getItkData()->GetSpacing()[1]))+radiusDilatePre[1];
 
@@ -426,7 +428,7 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     binaryDilate->SetKernel( structuringElementDilate );
     binaryDilate->SetInput( binaryErode->GetOutput() );
 
-    std::cout<<"Morfo Operators: "<<radiusDilatePre[0]<<" "<<radiusDilatePre[1]<<" // "<<radiusErode[0]<<" "<<radiusErode[1]<<" // "<<radiusDilate[0]<<" "<<radiusDilate[1]<<std::endl;
+    //std::cout<<"Morfo Operators: "<<radiusDilatePre[0]<<" "<<radiusDilatePre[1]<<" // "<<radiusErode[0]<<" "<<radiusErode[1]<<" // "<<radiusDilate[0]<<" "<<radiusDilate[1]<<std::endl;
 
    try
     {
@@ -438,7 +440,7 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
         std::cerr << excep << std::endl;
     }
 
-    std::cout<<"Init Region Growing From Region..."<<std::endl;
+    //std::cout<<"Init Region Growing From Region..."<<std::endl;
     ExtractFilterType::Pointer extracterPrevious = ExtractFilterType::New();
     extracterPrevious->SetInput( m_Mask->getItkData() );
     start[2] = slice - step;
@@ -458,7 +460,7 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     itk::ImageRegionIteratorWithIndex< InternalImageType > itRegion( regionThreshold, regionThreshold->GetLargestPossibleRegion() );
 
     itRegion.GoToBegin();
-    std::cout<<"Init Region..."<<std::endl;
+    //std::cout<<"Init Region..."<<std::endl;
     while(!itRegion.IsAtEnd())
     {
         itRegion.Set(m_outsideMaskValue);
@@ -468,13 +470,16 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     itDilate.GoToBegin();
     itPrevious.GoToBegin();
     itRegion.GoToBegin();
-    std::cout<<"Init Recorregut..."<<std::endl;
+    //std::cout<<"Init Recorregut..."<<std::endl;
     while(!itDilate.IsAtEnd())
     {
         if((itDilate.Get()==m_insideMaskValue)&&(itPrevious.Get()==m_insideMaskValue)&&(itRegion.Get()!=m_insideMaskValue))
         {
             //std::cout<<"Crida a regionGrowingRecursive a "<<itDilate.GetIndex()[0]<<", "<<itDilate.GetIndex()[1]<<" [ "<<regionThreshold->GetLargestPossibleRegion().GetSize()<<std::endl;
-            this->regionGrowingRecursive(regionThreshold, binaryDilate->GetOutput(), itDilate.GetIndex()[0], itDilate.GetIndex()[1]);
+			//Primer ho desem en atributs de la classe així ja no s'ha de passar per paràmetre
+			m_maskrecursive = regionThreshold;
+			m_imrecursive = binaryDilate->GetOutput();
+            this->regionGrowingRecursive( itDilate.GetIndex()[0], itDilate.GetIndex()[1]);
         }
         ++itDilate;
         ++itPrevious;
@@ -489,12 +494,13 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     unsigned int i,j;
     int contant=m_cont;
     IntermediateImageType::SizeType sizeOut = inputRegion.GetSize();
-    std::cout<<sizeOut<<std::endl;
+    //std::cout<<sizeOut<<std::endl;
     itk::ImageRegionIterator< Volume::ItkImageType >::IndexType indexMask;
     indexMask[0]=0;
     indexMask[1]=0;
     indexMask[2]=slice;
     itMask.SetIndex(indexMask);
+    //std::cout<<"Init Recorregut2... i="<<sizeOut[0]<<",j="<<sizeOut[1]<<std::endl;
     for(j=0;j<sizeOut[1];j++){
         for(i=0;i<sizeOut[0];i++){
             if(itSeg.Get()==m_insideMaskValue)
@@ -510,11 +516,11 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     Volume::ItkImageType::SpacingType sp = m_Volume->getItkData()->GetSpacing();
     m_volume = m_cont*sp[0]*sp[1]*sp[2];
 
-    std::cout<<"Volume: "<<m_volume<<" ("<<m_cont<<" voxels), ( increment de "<<m_cont-contant<<" voxels)"<<std::endl;
+    //std::cout<<"Volume: "<<m_volume<<" ("<<m_cont<<" voxels), ( increment de "<<m_cont-contant<<" voxels)"<<std::endl;
 
     m_Mask->getVtkData()->Update();
-    std::cout<<"End for step "<<step<<" in slice "<<slice<<std::endl;
-    if((slice + step)>0 && (slice + step) < m_Mask->getItkData()->GetLargestPossibleRegion().GetSize()[2] && contant != m_cont)
+    //std::cout<<"End for step "<<step<<" in slice "<<slice<<std::endl;
+    if((slice + step)>=0 && (slice + step) < m_Mask->getItkData()->GetLargestPossibleRegion().GetSize()[2] && contant != m_cont)
     {
         this->applyMethodNextSlice(slice + step, step);
     }
@@ -522,15 +528,15 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     return;
 }
 
-void rectumSegmentationMethod::regionGrowingRecursive( InternalImageType::Pointer mask, InternalImageType::Pointer im, int indexX, int indexY )
+void rectumSegmentationMethod::regionGrowingRecursive(int indexX, int indexY )
 {
-    itk::ImageRegionIteratorWithIndex< InternalImageType > itIm( im, im->GetLargestPossibleRegion());
-    itk::ImageRegionIteratorWithIndex< InternalImageType > itMask( mask, mask->GetLargestPossibleRegion());
+    itk::ImageRegionIteratorWithIndex< InternalImageType > itIm( m_imrecursive, m_imrecursive->GetLargestPossibleRegion());
+    itk::ImageRegionIteratorWithIndex< InternalImageType > itMask( m_maskrecursive, m_maskrecursive->GetLargestPossibleRegion());
     InternalImageType::IndexType index;
     index[0]=indexX;
     index[1]=indexY;
-    //std::cout<<index[0]<<" "<<index[1]<<" ["<<mask->GetLargestPossibleRegion().GetSize()[0]<<" "<<mask->GetLargestPossibleRegion().GetSize()[1];
-    itIm.SetIndex(index);
+
+	itIm.SetIndex(index);
     itMask.SetIndex(index);
     //if((itIm.Get()>=m_lowerThreshold)&&(itIm.Get()<=m_upperThreshold)&&(itMask.Get()!=m_insideMaskValue))
     //if((itIm.Get()==m_insideMaskValue)&&(itMask.Get()!=m_insideMaskValue))
@@ -538,14 +544,14 @@ void rectumSegmentationMethod::regionGrowingRecursive( InternalImageType::Pointe
     {
         //std::cout<<"->Set "<<std::endl;
         itMask.Set(m_insideMaskValue);
-        if(indexX+1 < (int)mask->GetLargestPossibleRegion().GetSize()[0])
-            regionGrowingRecursive( mask, im, indexX + 1, indexY );
+        if(indexX+1 < (int)m_maskrecursive->GetLargestPossibleRegion().GetSize()[0])
+            regionGrowingRecursive( indexX + 1, indexY );
         if(indexX > 0)
-            regionGrowingRecursive( mask, im, indexX - 1, indexY );
-        if(indexY+1 < (int)mask->GetLargestPossibleRegion().GetSize()[1])
-            regionGrowingRecursive( mask, im, indexX, indexY + 1 );
+            regionGrowingRecursive( indexX - 1, indexY );
+        if(indexY+1 < (int)m_maskrecursive->GetLargestPossibleRegion().GetSize()[1])
+            regionGrowingRecursive( indexX, indexY + 1 );
         if(indexY > 0)
-            regionGrowingRecursive( mask, im, indexX, indexY - 1 );
+            regionGrowingRecursive( indexX, indexY - 1 );
     }
     else
     {
@@ -556,7 +562,7 @@ void rectumSegmentationMethod::regionGrowingRecursive( InternalImageType::Pointe
 
 double rectumSegmentationMethod::applyCleanSkullMethod()
 {
-    std::cout<<"Clean Skull!!"<<std::endl;
+    //std::cout<<"Clean Skull!!"<<std::endl;
   typedef itk::BinaryThresholdImageFilter<Volume::ItkImageType, Volume::ItkImageType >  ThresholdFilterType;
   typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType,Volume::VDimension> StructuringElementType;
   typedef itk::BinaryErodeImageFilter<Volume::ItkImageType,Volume::ItkImageType,StructuringElementType > ErodeFilterType;
@@ -724,7 +730,7 @@ void rectumSegmentationMethod::applyFilter(Volume* output)
 
 
 
-    std::cout<<"Init filter"<<std::endl;
+    DEBUG_LOG("Init filter");
 
     try
     {
@@ -868,8 +874,8 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     resampleFilter->SetSize( newsize );
     resampleFilter->SetInput( m_Volume->getItkData() );
     resampleFilter->Update();
-    std::cout<<"resampleVolumeOriginal: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
-    std::cout<<"resampleVolumeNew: ["<<neworigin[0]<<","<<neworigin[1]<<","<<neworigin[2]<<"] ,["<<newspacing[0]<<","<<newspacing[1]<<","<<newspacing[2]<<"] ,"<<newsize<<std::endl;
+    //std::cout<<"resampleVolumeOriginal: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
+    //std::cout<<"resampleVolumeNew: ["<<neworigin[0]<<","<<neworigin[1]<<","<<neworigin[2]<<"] ,["<<newspacing[0]<<","<<newspacing[1]<<","<<newspacing[2]<<"] ,"<<newsize<<std::endl;
 
     //Resamplagem la màscara per tal de que tingui un vòxel isomètric (el mètode ho requereix)
     ResampleFilterType::Pointer resampleMaskFilter = ResampleFilterType::New();
@@ -901,8 +907,8 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     resampleMaskFilter->SetSize( newsize );
     resampleMaskFilter->SetInput( m_Mask->getItkData() );
 
-    std::cout<<"resampleMaskOriginal: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
-    std::cout<<"resampleMaskNew: ["<<neworigin[0]<<","<<neworigin[1]<<","<<neworigin[2]<<"] ,["<<newspacing[0]<<","<<newspacing[1]<<","<<newspacing[2]<<"] ,"<<newsize<<std::endl;
+    //std::cout<<"resampleMaskOriginal: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
+    //std::cout<<"resampleMaskNew: ["<<neworigin[0]<<","<<neworigin[1]<<","<<neworigin[2]<<"] ,["<<newspacing[0]<<","<<newspacing[1]<<","<<newspacing[2]<<"] ,"<<newsize<<std::endl;
 
     //Fi resample
 
@@ -969,7 +975,7 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
             mean=k + m_lowerVentriclesThreshold;//L'hem restat en la generació de listograma
         }
     }
-    std::cout<<"estimed mean: "<<mean<<std::endl;
+    //std::cout<<"estimed mean: "<<mean<<std::endl;
 
     typedef itk::Statistics::CovarianceCalculator< SampleType > CovarianceAlgorithmType;
     CovarianceAlgorithmType::Pointer covarianceAlgorithm = CovarianceAlgorithmType::New();
@@ -978,12 +984,12 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     covarianceAlgorithm->SetMean( 0 );
     covarianceAlgorithm->Update();
 
-    std::cout << "Using the one pass algorithm:" << std::endl;
-    std::cout << "Mean = " << std::endl ;
-    std::cout << *(covarianceAlgorithm->GetMean()) << std::endl;
+    //std::cout << "Using the one pass algorithm:" << std::endl;
+    //std::cout << "Mean = " << std::endl ;
+    //std::cout << *(covarianceAlgorithm->GetMean()) << std::endl;
 
-    std::cout << "Covariance = " << std::endl ;
-    std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
+    //std::cout << "Covariance = " << std::endl ;
+    //std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
     //double mean = (*covarianceAlgorithm->GetMean())[0];
     //double variance = (*covarianceAlgorithm->GetOutput())[0][0];
 
@@ -994,7 +1000,7 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
 
     m_mean=mean;
     m_variance=sqrt((*covarianceAlgorithm->GetOutput())[0][0]);
-    std::cout <<"Mean: "<<m_mean<<", Variance: "<<m_variance << std::endl;
+    //std::cout <<"Mean: "<<m_mean<<", Variance: "<<m_variance << std::endl;
     //computeSpeedMap(speedMapVolume);
 
   typedef itk::CastImageFilter< Volume::ItkImageType, InternalImageType> InputCastingFilterType;
@@ -1089,14 +1095,14 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
   // Software Guide : EndCodeSnippet
 
   // Print out some useful information
-  std::cout << std::endl;
+  /*std::cout << std::endl;
   std::cout << erfcSegmentation << std::endl;
   std::cout << std::endl;
   std::cout << "Max. no. iterations: " << erfcSegmentation->GetNumberOfIterations() << std::endl;
   std::cout << "Max. RMS error: " << erfcSegmentation->GetMaximumRMSError() << std::endl;
   std::cout << "No. elapsed iterations: " << erfcSegmentation->GetElapsedIterations() << std::endl;
   std::cout << "RMS change: " << erfcSegmentation->GetRMSChange() << std::endl;
-  std::cout << std::endl;
+  std::cout << std::endl;*/
 
   typedef itk::ImageFileWriter< InternalImageType > InternalWriterType;
 
@@ -1126,7 +1132,7 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     Volume::ItkImageType::PointType newor = thresholder->GetOutput()->GetOrigin();
     Volume::ItkImageType::SpacingType newsp = thresholder->GetOutput()->GetSpacing();
     newsize = thresholder->GetOutput()->GetBufferedRegion().GetSize();
-    std::cout<<"thresholder: ["<<newor<<" ,"<<newsp<<" ,"<<newsize<<std::endl;
+    //std::cout<<"thresholder: ["<<newor<<" ,"<<newsp<<" ,"<<newsize<<std::endl;
 
 
     //Resamplagem la màscara per tal de que tingui la mida original
@@ -1148,9 +1154,9 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     resampleMaskFilter2->SetInput( thresholder->GetOutput() );
     resampleMaskFilter2->Update();
 
-    std::cout<<"resample: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
+    //std::cout<<"resample: ["<<origin[0]<<","<<origin[1]<<","<<origin[2]<<"] ,["<<spacing[0]<<","<<spacing[1]<<","<<spacing[2]<<"] ,"<<size<<std::endl;
 
-    std::cout<<"Mask Set!!"<<std::endl;
+    //std::cout<<"Mask Set!!"<<std::endl;
     //lesionMask->setData( thresholder->GetOutput());
     lesionMask->setData( resampleMaskFilter2->GetOutput());
 
@@ -1197,16 +1203,16 @@ double rectumSegmentationMethod::applyMethodRectum(Volume * lesionMask)
     }
 */
     lesionMask->getVtkData()->Update();
-    std::cout<<"Lesion: "<<lesionMask->getItkData()->GetOrigin()<<" ,"<<lesionMask->getItkData()->GetSpacing()<<" ,"<<lesionMask->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
-    std::cout<<"Volume: "<<m_Volume->getItkData()->GetOrigin()<<" ,"<<m_Volume->getItkData()->GetSpacing()<<" ,"<<m_Volume->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
+    //std::cout<<"Lesion: "<<lesionMask->getItkData()->GetOrigin()<<" ,"<<lesionMask->getItkData()->GetSpacing()<<" ,"<<lesionMask->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
+    //std::cout<<"Volume: "<<m_Volume->getItkData()->GetOrigin()<<" ,"<<m_Volume->getItkData()->GetSpacing()<<" ,"<<m_Volume->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
 
 
-    std::cout<<"End method!!"<<std::endl;
+    //std::cout<<"End method!!"<<std::endl;
 
     double volspacing[3];
     m_Volume->getSpacing(volspacing);
     //std::cout<<"spacing"<<spacing[0]<<" "<<spacing[1]<<" "<<spacing[2]<<std::endl;
-    std::cout<<"Volume: "<<m_edemaCont<<",* "<<volspacing[0]*volspacing[1]*volspacing[2]<<std::endl;
+    //std::cout<<"Volume: "<<m_edemaCont<<",* "<<volspacing[0]*volspacing[1]*volspacing[2]<<std::endl;
 
     return (double)m_edemaCont*volspacing[0]*volspacing[1]*volspacing[2];
 }
@@ -1272,9 +1278,9 @@ double rectumSegmentationMethod::applyVentriclesMethod()
 
     volumeCalc->SetInsideValue( m_insideMaskValue );
 
-    std::cout<<"Init filter"<<std::endl;
-    std::cout<<"Parameters: "<<seedIndex<<std::endl;
-    std::cout<<"Histogram parameters: "<<m_lowerThreshold<<" "<<m_upperThreshold<<std::endl;
+    //std::cout<<"Init filter"<<std::endl;
+    //std::cout<<"Parameters: "<<seedIndex<<std::endl;
+    //std::cout<<"Histogram parameters: "<<m_lowerThreshold<<" "<<m_upperThreshold<<std::endl;
 
 
     try
