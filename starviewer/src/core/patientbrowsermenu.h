@@ -49,8 +49,9 @@ private slots:
 
     void emitSelected( Series * serie );
 
+private:
     /// Actualitza la posició de la informació addicional
-    void updatePosition( );
+    void updatePosition();
 
 private:
     /// Atribut que guarda el punter al menú basic que representa al pacient
