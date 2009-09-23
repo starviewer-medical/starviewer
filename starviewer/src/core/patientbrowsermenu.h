@@ -43,6 +43,10 @@ signals:
     void selectedSeries( Series *series );
 
 private slots:
+    /// TODO mètode transicional per fer el refactoring pas a pas. Actualitza les vistes relacionades amb l'item actiu 
+    /// que ara per ara serà una Series, però més endavant tindrà una forma més abstracta, com pot ser "Item" o "ID"
+    void updateActiveItemView( Series *series );
+
     void emitSelected( Series * serie );
 
     /// Actualitza la posició de la informació addicional
