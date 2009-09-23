@@ -30,7 +30,7 @@ public:
 
     void applyMethodNextSlice( unsigned int slice, int step );
 
-    void regionGrowingRecursive( InternalImageType::Pointer mask, InternalImageType::Pointer im, int indexX, int indexY );
+    void regionGrowingRecursive( int indexX, int indexY );
 
     /// Neteja els casos propers al crani
     double applyCleanSkullMethod();
@@ -100,6 +100,9 @@ private:
     ///Volum on guardarem el resultat de la segmetnació que volem segmentar
     Volume* m_Mask;
     Volume* m_filteredInputImage;
+
+	InternalImageType::Pointer m_maskrecursive;
+	InternalImageType::Pointer m_imrecursive;
 
     ///Posició de la llavor
     double m_px, m_py, m_pz;
