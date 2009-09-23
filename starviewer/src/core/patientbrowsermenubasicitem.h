@@ -18,13 +18,10 @@ Widget per utilitzar com a item de menú. Pot representar diversos objectes i te
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class PatientBrowserMenuBasicItem : public QLabel
-{
+class PatientBrowserMenuBasicItem : public QLabel {
 Q_OBJECT
 public:
-
     PatientBrowserMenuBasicItem( QWidget *parent = 0 );
-
     ~PatientBrowserMenuBasicItem(){}
 
     /// Posem la serie a representar

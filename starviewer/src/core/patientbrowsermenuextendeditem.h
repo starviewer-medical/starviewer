@@ -24,28 +24,22 @@ class PatientBrowserMenuExtendedItem : public QFrame
 {
 Q_OBJECT
 public:
-
     PatientBrowserMenuExtendedItem(QWidget *parent = 0);
-
     PatientBrowserMenuExtendedItem( Series * series, QWidget *parent = 0 );
-
     ~PatientBrowserMenuExtendedItem();
 
     // Tractament dels events
     bool event( QEvent * event );
 
 public slots:
-
     /// Assigna la serie a mostrar
     void setSeries(Series * series);
 
 signals:
-
     /// Signal que s'emet quan es rep l'event de tancar el menu
     void close();
 
 private:
-
     /// Crea el widget inicial sense cap informació
     void createInitialWidget();
 
@@ -54,13 +48,13 @@ private:
 
 private:
     /// Serie a la qual es representa la informació addicional.
-    Series * m_series;
+    Series *m_series;
 
     /// Label que conté el text addicional a mostrar
-    QLabel * m_text;
+    QLabel *m_text;
 
     /// Label que conté la icona a mostrar
-    QLabel * m_icon;
+    QLabel *m_icon;
 };
 
 }
