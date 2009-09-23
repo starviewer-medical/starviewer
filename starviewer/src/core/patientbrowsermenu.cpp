@@ -40,7 +40,6 @@ void PatientBrowserMenu::setPatient( Patient * patient )
     m_patientBrowserList->setPatient( patient );
 
     connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), SLOT( updateActiveItemView(Series*) ));
-    connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), SLOT( updatePosition() ));
     connect(m_patientBrowserList, SIGNAL( selectedSerie(Series*) ), SLOT ( emitSelected(Series*) ));
 }
 
@@ -54,6 +53,8 @@ void PatientBrowserMenu::updateActiveItemView( Series *series )
                                     .arg( series->getProtocolName().trimmed() )
                                     .arg( series->getNumberOfImages() )
                                     );
+    // Actualitzem la posició del widget amb la informació adicional
+    updatePosition();
 }
 
 void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
