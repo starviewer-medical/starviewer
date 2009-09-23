@@ -32,7 +32,7 @@ public:
     ~PatientBrowserMenu();
 
     /// Assignem un pacient per representar al menu
-    void setPatient( Patient * patient );
+    void setPatient( Patient *patient );
 
 public slots:
     /// Fem que es mostri el menú en la posició indicada

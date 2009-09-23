@@ -22,17 +22,14 @@ Widget per representar visualment en un menú les dades bàsiques de l'estructur
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class PatientBrowserMenuList : public QWidget
-{
+class PatientBrowserMenuList : public QWidget {
 Q_OBJECT
 public:
-
     PatientBrowserMenuList( QWidget *parent = 0 );
-
     ~PatientBrowserMenuList();
 
     /// Posem el pacient al widget
-    void setPatient( Patient * patient );
+    void setPatient( Patient *patient );
 
     /// Posem una serie com a seleccionada
     void setSelectedSerie( QString serieUID );
@@ -51,7 +48,6 @@ private:
     QList< PatientBrowserMenuBasicItem *> * m_seriesList;
 
 signals:
-
     /// Senyal que s'emet quan el mouse entra en el widget que representa a una serie
     void isActive(Series*);
 
