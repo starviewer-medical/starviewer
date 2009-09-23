@@ -39,9 +39,21 @@ void PatientBrowserMenu::setPatient( Patient * patient )
 {
     m_patientBrowserList->setPatient( patient );
 
-    connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), m_patientAdditionalInfo, SLOT( setSeries(Series*) ));
+    connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), SLOT( updateActiveItemView(Series*) ));
     connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), SLOT( updatePosition() ));
     connect(m_patientBrowserList, SIGNAL( selectedSerie(Series*) ), SLOT ( emitSelected(Series*) ));
+}
+
+void PatientBrowserMenu::updateActiveItemView( Series *series )
+{
+    // actualitzem les dades de l'item amb informació adicional
+    m_patientAdditionalInfo->setPixmap( series->getThumbnail() );
+    m_patientAdditionalInfo->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
+                                    .arg( series->getDescription().trimmed() )
+                                    .arg( series->getModality().trimmed() )
+                                    .arg( series->getProtocolName().trimmed() )
+                                    .arg( series->getNumberOfImages() )
+                                    );
 }
 
 void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )

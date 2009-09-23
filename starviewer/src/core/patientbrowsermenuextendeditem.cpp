@@ -11,22 +11,12 @@
 #include <QPainter>
 #include <QEvent>
 
-#include "logging.h"
-
 namespace udg {
 
 PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem(QWidget *parent)
 : QFrame(parent)
 {
-    m_series = 0;
     createInitialWidget();
-}
-
-PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem(Series * series, QWidget *parent)
-: QFrame(parent)
-{
-    createInitialWidget();
-    setSeries( series );
 }
 
 PatientBrowserMenuExtendedItem::~PatientBrowserMenuExtendedItem()
@@ -47,17 +37,14 @@ void PatientBrowserMenuExtendedItem::createInitialWidget()
     verticalLayout->addWidget( m_text );
 }
 
-void PatientBrowserMenuExtendedItem::setSeries( Series *series )
+void PatientBrowserMenuExtendedItem::setPixmap( const QPixmap &pixmap )
 {
-    m_series = series;
+    m_icon->setPixmap( pixmap );
+}
 
-    m_icon->setPixmap( series->getThumbnail() );
-    m_text->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
-                    .arg( series->getDescription().trimmed() )
-                    .arg( series->getModality().trimmed() )
-                    .arg( series->getProtocolName().trimmed() )
-                    .arg( series->getNumberOfImages() )
-                    );
+void PatientBrowserMenuExtendedItem::setText( const QString &text )
+{
+    m_text->setText( text );
 }
 
 QPixmap PatientBrowserMenuExtendedItem::makeEmptyThumbnail()
