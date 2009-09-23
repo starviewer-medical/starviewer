@@ -37,27 +37,32 @@ PatientBrowserMenu::~PatientBrowserMenu()
 
 void PatientBrowserMenu::setPatient( Patient * patient )
 {
-    m_patientBrowserList->setPatient( patient );
+    m_patient = patient;
+    m_patientBrowserList->setPatient( m_patient );
 
-    connect(m_patientBrowserList, SIGNAL( isActive(Series*) ), SLOT( updateActiveItemView(Series*) ));
-    connect(m_patientBrowserList, SIGNAL( selectedSerie(Series*) ), SLOT ( emitSelected(Series*) ));
+    connect(m_patientBrowserList, SIGNAL( isActive(QString) ), SLOT( updateActiveItemView(QString) ));
+    connect(m_patientBrowserList, SIGNAL( selectedItem(QString) ), SLOT ( emitSelected(QString) ));
 }
 
-void PatientBrowserMenu::updateActiveItemView( Series *series )
+void PatientBrowserMenu::updateActiveItemView( const QString &identifier )
 {
-    // actualitzem les dades de l'item amb informació adicional
-    m_patientAdditionalInfo->setPixmap( series->getThumbnail() );
-    m_patientAdditionalInfo->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
-                                    .arg( series->getDescription().trimmed() )
-                                    .arg( series->getModality().trimmed() )
-                                    .arg( series->getProtocolName().trimmed() )
-                                    .arg( series->getNumberOfImages() )
-                                    );
-    // Actualitzem la posició del widget amb la informació adicional
-    updatePosition();
+    Series *series = m_patient->getSeries(identifier);
+    if( series )
+    {
+        // actualitzem les dades de l'item amb informació adicional
+        m_patientAdditionalInfo->setPixmap( series->getThumbnail() );
+        m_patientAdditionalInfo->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
+                                        .arg( series->getDescription().trimmed() )
+                                        .arg( series->getModality().trimmed() )
+                                        .arg( series->getProtocolName().trimmed() )
+                                        .arg( series->getNumberOfImages() )
+                                        );
+        // Actualitzem la posició del widget amb la informació adicional
+        updatePosition();
+    }
 }
 
-void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
+void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier )
 {
     // Calcular si el menu hi cap a la pantalla
     int x = point.x();
@@ -76,7 +81,7 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
         screen_y = qApp->desktop()->availableGeometry( point ).height();
     }
 
-    m_patientBrowserList->setSelectedSerie( serieUID );
+    m_patientBrowserList->setSelectedItem( identifier );
     QSize widgetIdealSize = m_patientBrowserList->sizeHint();
 
     if ( ( x + widgetIdealSize.width() ) > screen_x )
@@ -125,7 +130,7 @@ void PatientBrowserMenu::popup(const QPoint &point, QString serieUID )
     // FI HACK
 }
 
-void PatientBrowserMenu::emitSelected( Series * serie )
+void PatientBrowserMenu::emitSelected( const QString &identifier )
 {
     // HACK De moment això és un workaround per solucionar el ticket #824
     // és important que s'esborrin en aquest ordre, sinó es fa així el problema persisteix
@@ -133,7 +138,9 @@ void PatientBrowserMenu::emitSelected( Series * serie )
     // Si en tinguéssim un d'estàtic segurament això ens ocasionaria que l'aplicació petaria més endavant
     delete m_patientAdditionalInfo;
     delete m_patientBrowserList;
-    emit selectedSeries( serie );
+    Series *series = m_patient->getSeries(identifier);
+    if( series )
+        emit selectedSeries( series );
 }
 
 void PatientBrowserMenu::updatePosition()

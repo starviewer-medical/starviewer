@@ -11,8 +11,6 @@
 
 namespace udg {
 
-class Series;
-
 /**
 Widget per utilitzar com a item de menú. Pot representar diversos objectes i te la funcionalitat de canviar l'aparença al situar-se el mouse sobre l'element.
 
@@ -24,32 +22,29 @@ public:
     PatientBrowserMenuBasicItem( QWidget *parent = 0 );
     ~PatientBrowserMenuBasicItem(){}
 
-    /// Posem la serie a representar
-    void setSerie( Series * serie );
-
-    /// Obtenim la serie que es representa
-    Series *  getSerie();
+    void setIdentifier( const QString &identifier );
+    QString getIdentifier() const;
 
     /// La posem en negreta per marcar que es la que s'esta visualitzant
     void setFontBold();
 
 signals:
-    /// Aquest senyal s'emetrà quan el mouse entri al widget
-    void isActive(Series*);
+    /// Aquest senyal s'emetrà quan el mouse entri al widget i ens notifica el seu identificador
+    void isActive(QString);
 
     /// Aquest senyal s'emetrà quan el mouse surti del widget
     void isNotActive();
 
-    /// Aquest senyal s'emet quan s'escull una serie de l'item
-    void selectedSerie( Series * );
+    /// Aquest senyal s'emet quan s'escull un ítem i ens notifica el seu identificador
+    void selectedItem(QString);
 
 protected:
     /// Sobrecàrrega del mètode que tracta tots els events
     bool event( QEvent * event);
 
 private:
-    /// Serie que representa l'item
-    Series * m_serie;
+    /// Identificador de l'ítem
+    QString m_identifier;
 };
 
 }
