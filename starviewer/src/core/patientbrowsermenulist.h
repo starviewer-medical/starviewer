@@ -32,7 +32,7 @@ public:
     void setPatient( Patient *patient );
 
     /// Posem una serie com a seleccionada
-    void setSelectedSerie( QString serieUID );
+    void setSelectedItem( const QString &identifier );
 
     /// Tractament dels events
     bool event( QEvent * event );
@@ -45,17 +45,17 @@ private:
     PatientBrowserMenuBasicItem * createSerieWidget( Series * serie, QWidget * parent );
 
     /// Llista dels items de les series que formen la llista
-    QList< PatientBrowserMenuBasicItem *> * m_seriesList;
+    QList< PatientBrowserMenuBasicItem *> m_itemsList;
 
 signals:
-    /// Senyal que s'emet quan el mouse entra en el widget que representa a una serie
-    void isActive(Series*);
+    /// Senyal que s'emet quan el mouse entra en el widget i ens notifica el seu identificador
+    void isActive(QString);
 
-    /// Senyal que s'emet quan no hi ha cap serie activada
+    /// Senyal que s'emet quan no hi ha cap item activat
     void isNotActive();
 
-    /// Aquest senyal s'emet quan s'escull una serie de l'item
-    void selectedSerie( Series * );
+    /// Aquest senyal s'emet quan s'escull una ítem i ens notifica el seu identificador
+    void selectedItem(QString);
 
     /// Signal que s'emet quan es rep l'event de tancar el menu
     void close();

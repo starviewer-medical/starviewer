@@ -22,7 +22,6 @@ namespace udg {
 
 PatientBrowserMenuList::PatientBrowserMenuList( QWidget * parent ) : QWidget(parent)
 {
-    m_seriesList = new QList< PatientBrowserMenuBasicItem * >();
 }
 
 PatientBrowserMenuList::~PatientBrowserMenuList()
@@ -105,32 +104,39 @@ QWidget * PatientBrowserMenuList::createStudyWidget( Study * study, QWidget * pa
 
 PatientBrowserMenuBasicItem *PatientBrowserMenuList::createSerieWidget( Series * serie, QWidget * parent )
 {
-    PatientBrowserMenuBasicItem * seriebasicWidget = new PatientBrowserMenuBasicItem( parent );
-    seriebasicWidget->setSerie( serie );
+    PatientBrowserMenuBasicItem *seriebasicWidget = new PatientBrowserMenuBasicItem( parent );
+    
+    seriebasicWidget->setText( tr(" Serie %1: %2 %3 %4 %5")
+                        .arg( serie->getSeriesNumber().trimmed() )
+                        .arg( serie->getProtocolName().trimmed() )
+                        .arg( serie->getDescription().trimmed() )
+                        .arg( serie->getBodyPartExamined() )
+                        .arg( serie->getViewPosition() )
+                        );
+    seriebasicWidget->setIdentifier( serie->getInstanceUID() );
+
     seriebasicWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-    connect( seriebasicWidget , SIGNAL( selectedSerie( Series *) ) , this , SIGNAL( selectedSerie( Series * ) ) );
-    connect( seriebasicWidget , SIGNAL( isActive(Series *) ) , this , SIGNAL( isActive(Series *) ) );
-    connect( seriebasicWidget , SIGNAL( isNotActive() ) , this , SIGNAL( isNotActive() ) );
+    connect( seriebasicWidget, SIGNAL( selectedItem(QString) ), SIGNAL( selectedItem(QString) ) );
+    connect( seriebasicWidget, SIGNAL( isActive(QString) ), SIGNAL( isActive(QString) ) ) ;
+    connect( seriebasicWidget, SIGNAL( isNotActive() ), SIGNAL( isNotActive() ) );
 
-    m_seriesList->push_back( seriebasicWidget );
+    m_itemsList.push_back( seriebasicWidget );
 
     return seriebasicWidget;
 }
 
-void PatientBrowserMenuList::setSelectedSerie( QString serieUID )
+void PatientBrowserMenuList::setSelectedItem( const QString &identifier )
 {
     int i = 0;
-    bool find = 0;
+    bool found = false;
 
-    while( i < m_seriesList->size() && !find )
+    while( i < m_itemsList.size() && !found )
     {
-        if( m_seriesList->value( i )->getSerie()->getInstanceUID() == serieUID )
+        if( m_itemsList.value(i)->getIdentifier() == identifier )
         {
-            find = true;
-//             QFont font = ( m_seriesList->value( i )->font() );
-//             font.setBold( true );
-            m_seriesList->value( i )->setFontBold();
+            found = true;
+            m_itemsList.value(i)->setFontBold();
         }
         i++;
     }

@@ -36,18 +36,18 @@ public:
 
 public slots:
     /// Fem que es mostri el menú en la posició indicada
-    void popup(const QPoint &point, QString serieUID);
+    void popup(const QPoint &point, const QString &identifier);
 
 signals:
     /// senyal que envia la serie escollida per ser visualitzada
-    void selectedSeries( Series *series );
+    void selectedSeries( Series * );
 
 private slots:
     /// TODO mètode transicional per fer el refactoring pas a pas. Actualitza les vistes relacionades amb l'item actiu 
     /// que ara per ara serà una Series, però més endavant tindrà una forma més abstracta, com pot ser "Item" o "ID"
-    void updateActiveItemView( Series *series );
+    void updateActiveItemView( const QString &identifier );
 
-    void emitSelected( Series * serie );
+    void emitSelected( const QString &identifier );
 
 private:
     /// Actualitza la posició de la informació addicional
@@ -59,6 +59,9 @@ private:
 
     /// Atribut que guarda el punter al menú amb informació addicional de la serie seleccionada
     PatientBrowserMenuExtendedItem * m_patientAdditionalInfo;
+
+    /// Pacient que ens proporciona les dades d'entrada
+    Patient *m_patient;
 };
 
 }
