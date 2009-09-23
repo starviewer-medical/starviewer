@@ -142,7 +142,10 @@ void CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
 
     DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);//Carreguem la imatge que hem d'imprimor
     imageToPrintDataset = imageToPrintDcmFileFormat->getDataset();
-    
+
+    //Traspassem la informació del mòdul de pacient i imatge entre d'altres al presentation state
+    m_presentationState->createFromImage(*imageToPrintDataset);
+
     /*El 2n paràmete del attach image indica, si el presentation state és l'amo de la imatge passada per paràmetre, per poder destruir l'objecte,
       en aquest cas l'indiquem que no és l'amo, per poder-lo destruir nosaltres.*/
     m_presentationState->attachImage(imageToPrintDcmFileFormat, false);
