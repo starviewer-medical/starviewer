@@ -13,6 +13,8 @@
 
 namespace udg {
 
+const QString NoItemText( QObject::tr("No Item Selected") );
+
 PatientBrowserMenuExtendedItem::PatientBrowserMenuExtendedItem(QWidget *parent)
 : QFrame(parent)
 {
@@ -32,7 +34,7 @@ void PatientBrowserMenuExtendedItem::createInitialWidget()
     verticalLayout->addWidget( m_icon );
 
     m_text = new QLabel( this );
-    m_text->setText(tr("No Series Selected"));
+    m_text->setText(NoItemText);
     m_text->setAlignment( Qt::AlignCenter );
     verticalLayout->addWidget( m_text );
 }
@@ -54,7 +56,7 @@ QPixmap PatientBrowserMenuExtendedItem::makeEmptyThumbnail()
 
     QPainter painter(&pixmap);
     painter.setPen(Qt::white);
-    painter.drawText(0, 0, 100, 100, Qt::AlignCenter | Qt::TextWordWrap, tr("No Series Selected"));
+    painter.drawText(0, 0, 100, 100, Qt::AlignCenter | Qt::TextWordWrap, NoItemText );
 
     return pixmap;
 }
