@@ -203,9 +203,7 @@ Status PrintDicomSpool::sendImageToPrint(DVPSPrintMessageHandler& printConnectio
     }
     
     delete dcmimage;
-    delete studyUID;
-    delete seriesUID;
-    delete instanceUID;
+    //No s'ha de fer el delete del studyUID, seriesUID i instanceUID perquè són un punter a informació del storedPrint
 
     return Status().setStatus(result);
 }
