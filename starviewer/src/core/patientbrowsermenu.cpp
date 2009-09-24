@@ -50,7 +50,7 @@ void PatientBrowserMenu::setPatient(Patient * patient)
 
         // Per cada sèrie de l'estudi extreurem el seu label i l'identificador
         QList< QPair<QString,QString> > itemsList;
-        foreach( Series *series, study->getSeries() )
+        foreach( Series *series, study->getViewableSeries() )
         {
             QPair<QString,QString> itemPair;
             // label
