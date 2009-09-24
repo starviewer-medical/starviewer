@@ -106,63 +106,39 @@ void PrintDicomSpool::print(const QString &spoolDirectoryPath)
 
 Status PrintDicomSpool::printSCUcreateBasicFilmSession(DVPSPrintMessageHandler& printConnection)
 {
-    OFCondition result = EC_Normal;
+    OFCondition result;
     DcmDataset datasetBasicFilmSession;
-    DcmElement *elementBasicFilmSession = NULL;
+    DcmElement *attributeBasicFilmSession = NULL;
     Status state;
 
-    elementBasicFilmSession = new DcmCodeString(DCM_MediumType);
-    result = elementBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getMediumType()));
-    if (EC_Normal==result)
-    {
-        result = datasetBasicFilmSession.insert(elementBasicFilmSession, OFTrue /*replaceOld*/);
-    }
-    else return state.setStatus(result);
+    attributeBasicFilmSession = new DcmCodeString(DCM_MediumType);
+    attributeBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getMediumType()));
+    result = datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
-    elementBasicFilmSession = new DcmCodeString(DCM_FilmDestination);
-    result = elementBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getFilmDestination())); 
-    if (EC_Normal==result)
-    {
-        result = datasetBasicFilmSession.insert(elementBasicFilmSession, OFTrue /*replaceOld*/);
-    }
-    else return state.setStatus(result);
+    attributeBasicFilmSession = new DcmCodeString(DCM_FilmDestination);
+    attributeBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getFilmDestination())); 
+    datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
     //TODO:Comprovar si l'utilitzarem  
-    /*elementBasicFilmSession = new DcmLongString(DCM_FilmSessionLabel);
-    if (elementBasicFilmSession) result = elementBasicFilmSession->putString(printerFilmSessionLabel.c_str()); else result=EC_IllegalCall;
-    if (EC_Normal==result)
-    {
-        result = datasetBasicFilmSession.insert(elementBasicFilmSession, OFTrue replaceOld);
-    }
-    else return state.setStatus(result);
+    /*attributeBasicFilmSession = new DcmLongString(DCM_FilmSessionLabel);
+    attributeBasicFilmSession->putString(printerFilmSessionLabel.c_str()); else result=EC_IllegalCall;
+    datasetBasicFilmSession.insert(attributeBasicFilmSession, OFTrue replaceOld);
    */
 
-    elementBasicFilmSession = new DcmCodeString(DCM_PrintPriority);
-    result = elementBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getPrintPriority()));
-    if (EC_Normal==result)
-    {
-        result = datasetBasicFilmSession.insert(elementBasicFilmSession, OFTrue /*replaceOld*/);
-    }
-    else return state.setStatus(result);
+    attributeBasicFilmSession = new DcmCodeString(DCM_PrintPriority);
+    attributeBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getPrintPriority()));
+    datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
     /*TODO:Si no m'equivoco només serveix per quan s'esborra el treball imprés del servidor d'impressió, si no l'especifiquem 
      el servidor d'impressió l'emplena automàticament*/
-    /*elementBasicFilmSession = new DcmShortString(DCM_OwnerID);
-    result = elementBasicFilmSession->putString(printerOwnerID.c_str());
-    if (EC_Normal==result)
-    {
-        result = datasetBasicFilmSession.insert(elementBasicFilmSession, OFTrue replaceOld);
-    }
-    else return state.setStatus(result);
+    /*attributeBasicFilmSession = new DcmShortString(DCM_OwnerID);
+    attributeBasicFilmSession->putString(printerOwnerID.c_str());
+    datasetBasicFilmSession.insert(attributeBasicFilmSession, OFTrue replaceOld);
     */
 
-    elementBasicFilmSession = new DcmIntegerString(DCM_NumberOfCopies);
-    result = elementBasicFilmSession->putString(qPrintable(QString().setNum(m_dicomPrintJob.getNumberOfCopies()))); 
-    if (EC_Normal==result)
-    {
-        result = datasetBasicFilmSession.insert(elementBasicFilmSession, OFTrue /*replaceOld*/);
-    }
-    else return state.setStatus(result);
+    attributeBasicFilmSession = new DcmIntegerString(DCM_NumberOfCopies);
+    attributeBasicFilmSession->putString(qPrintable(QString().setNum(m_dicomPrintJob.getNumberOfCopies()))); 
+    datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
     result = m_storedPrintDcmtk->printSCUcreateBasicFilmSession(printConnection, datasetBasicFilmSession, true /*plutInSession*/);
     
