@@ -35,16 +35,45 @@ PatientBrowserMenu::~PatientBrowserMenu()
 {
 }
 
-void PatientBrowserMenu::setPatient( Patient * patient )
+void PatientBrowserMenu::setPatient(Patient * patient)
 {
     m_patient = patient;
-    m_patientBrowserList->setPatient( m_patient );
+    QString caption;
+    foreach( Study *study, m_patient->getStudies() )
+    {
+        // Extreiem el caption de l'estudi
+        caption = tr("Study %1 : %2 [%3] %4")
+            .arg( study->getDateAsString() )
+            .arg( study->getTimeAsString() )
+            .arg( study->getModalitiesAsSingleString() )
+            .arg( study->getDescription() );
+
+        // Per cada sèrie de l'estudi extreurem el seu label i l'identificador
+        QList< QPair<QString,QString> > itemsList;
+        foreach( Series *series, study->getSeries() )
+        {
+            QPair<QString,QString> itemPair;
+            // label
+            itemPair.first = tr(" Serie %1: %2 %3 %4 %5")
+                        .arg( series->getSeriesNumber().trimmed() )
+                        .arg( series->getProtocolName().trimmed() )
+                        .arg( series->getDescription().trimmed() )
+                        .arg( series->getBodyPartExamined() )
+                        .arg( series->getViewPosition() );
+            // identifier
+            itemPair.second = series->getInstanceUID();
+            // afegim el parell a la llista
+            itemsList << itemPair;
+        }
+        // afegim les sèries agrupades per estudi
+        m_patientBrowserList->addItemsGroup( caption, itemsList );
+    }
 
     connect(m_patientBrowserList, SIGNAL( isActive(QString) ), SLOT( updateActiveItemView(QString) ));
     connect(m_patientBrowserList, SIGNAL( selectedItem(QString) ), SLOT ( emitSelected(QString) ));
 }
 
-void PatientBrowserMenu::updateActiveItemView( const QString &identifier )
+void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
 {
     Series *series = m_patient->getSeries(identifier);
     if( series )
@@ -62,7 +91,7 @@ void PatientBrowserMenu::updateActiveItemView( const QString &identifier )
     }
 }
 
-void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier )
+void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
 {
     // Calcular si el menu hi cap a la pantalla
     int x = point.x();
@@ -130,7 +159,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier )
     // FI HACK
 }
 
-void PatientBrowserMenu::emitSelected( const QString &identifier )
+void PatientBrowserMenu::emitSelected(const QString &identifier)
 {
     // HACK De moment això és un workaround per solucionar el ticket #824
     // és important que s'esborrin en aquest ordre, sinó es fa així el problema persisteix

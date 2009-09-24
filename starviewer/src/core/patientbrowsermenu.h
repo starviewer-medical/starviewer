@@ -14,10 +14,9 @@ class QPoint;
 namespace udg {
 
 class Patient;
+class Series;
 class PatientBrowserMenuExtendedItem;
 class PatientBrowserMenuList;
-class Study;
-class Series;
 
 /**
 Classe que correspon al widget que es mostra al pulsar el botó dret del ratolí.
