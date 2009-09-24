@@ -39,32 +39,40 @@ void PrintDicomSpool::printBasicGrayscaleSpool(const QString &spoolDirectoryPath
 {
     DVPSPrintMessageHandler printerConnection;
     OFCondition result;
+    bool printerSupportsPresentationLUTSOPClass = false, printerSupportsAnnotationSOPClass = false, transferSyntaxImplicit = false;
 
     //TODO: podem utilitzar el del DVSStoredPrint
-    //Connectem amb la impressora
-    result = printerConnection.negotiateAssociation(NULL/*tlayer només s'utilitza per ssl*/, qPrintable(PacsDevice::getLocalAETitle()),
-                                               qPrintable(m_dicomPrinter.getAETitle()), qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(),
-                                               ASC_DEFAULTMAXPDU, false /*targetSupportsPLUT*/, true /*targetSupportsAnnotation*/, true /*targetImplicitOnly*/);
+    /*Connectem amb la impressora
+        1r Paràmetre és de tipus objecte tlayer només s'utilitza si la comunicació es fa amb ssl
+        2n AETitle del Starviewer 3r AETitle de la impressora Dicom
+        4t Hostname de la impressora dicom 5è Port pel qual ens hem de comunicar amb la impressora
+        6è Tamany màxim de la pdu per la comunicació, li donem el valor per defecte del els dcmtk
+        7è Indiquem si la impressora suporta Presentation LUT SOP Class, com que de moment nosaltres no ho soportem li indiquem fals
+        8è Indiquem si la impressora suporta Basic Annotation Box SOP Class, com que de moment nosaltres no ho soportem li indiquem fals
+        9è Indica si la comunicació s'ha de fer amb transfer syntax Implicit, això és degut a que dispositius vells que suportaven Dicom 
+           tot i que indicar en el seu conformance que suportaven transfer syntax explicit, alhora de la veritat tenien problemes, per això
+           existeix un paràmetre per indicar només de comunicar-se amb Implicit, com que de moment no ens hem de comunicar amb dispositius vells
+           i tots els moderns suporten Explicit indiquem false
+     */
+    result = printerConnection.negotiateAssociation(NULL, qPrintable(PacsDevice::getLocalAETitle()), qPrintable(m_dicomPrinter.getAETitle()), 
+                                                    qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(), ASC_DEFAULTMAXPDU, 
+                                                    printerSupportsPresentationLUTSOPClass, printerSupportsAnnotationSOPClass, transferSyntaxImplicit);
     
     if (result.bad())
     {
         ERROR_LOG(QString("No s'ha pogut connectar amb la impressora amb AETitle: %1, IP: %2, port: %3, descripció error:%4 ").arg(m_dicomPrinter.getAETitle(), 
                            m_dicomPrinter.getHostname(), QString().setNum(m_dicomPrinter.getPort()), result.text()));
-
         return;
     }
 
+    /*TODO: És necessari ?, simplement demana a la impressora informació de certs paràmetres, té algun sentit ? Preguntar al fòrum,
+      Enganxar codi dvpssp.cxx línia 1342 ensenyant que no fa res*/
     if (EC_Normal != (result = m_storedPrintDcmtk->printSCUgetPrinterInstance(printerConnection)))
     {
         //TODO: Request printer settings els podem obtenir ?
         DEBUG_LOG(QString("spooler: printer communication failed, unable to request printer settings. %1").arg(result.text()));
     }
 
-    if (EC_Normal==result) if (EC_Normal != (result = m_storedPrintDcmtk->printSCUpreparePresentationLUT(
-    printerConnection, true /*targetRequiresMatchingLUT*/, true/*targetPreferSCPLUTRendering*/, true/*targetSupports12bit*/)))
-    {
-        DEBUG_LOG(QString("spooler: printer communication failed, unable to create presentation LUT.").arg(result.text()));
-    }
     if (!createAndSendBasicFilmSession(printerConnection).good())
     {
         DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film session. %1").arg(result.text()));
