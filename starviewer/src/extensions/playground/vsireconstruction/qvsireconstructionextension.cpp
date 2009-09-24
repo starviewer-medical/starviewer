@@ -1949,56 +1949,20 @@ void QVSIReconstructionExtension::setLeftButtonOff( )
 
 void QVSIReconstructionExtension::contextMenuDSCRelease()
 {
-    // Extret dels exemples de vtkEventQtSlotConnect
-
-    // Obtenim la posició de l'event
-    int eventPositionX = 0;//this->getEventPositionX();
-    int eventPositionY = 0;//this->getEventPositionY();
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
-    // map to global
-    //QPoint globalPoint = this->mapToGlobal( point );
-//     emit showContextMenu( globalPoint );
     m_imageVSItype = QVSIReconstructionExtension::DSC;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint()) );
 }
 
 void QVSIReconstructionExtension::contextMenuSEPreRelease()
 {
-    // Extret dels exemples de vtkEventQtSlotConnect
-
-    // Obtenim la posició de l'event
-    int eventPositionX = 0;//this->getEventPositionX();
-    int eventPositionY = 0;//this->getEventPositionY();
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
-    // map to global
-    //QPoint globalPoint = this->mapToGlobal( point );
-//     emit showContextMenu( globalPoint );
     m_imageVSItype = QVSIReconstructionExtension::SEPre;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint()) );
 }
 
 void QVSIReconstructionExtension::contextMenuSEPostRelease()
 {
-    // Extret dels exemples de vtkEventQtSlotConnect
-
-    // Obtenim la posició de l'event
-    int eventPositionX = 0;//this->getEventPositionX();
-    int eventPositionY = 0;//this->getEventPositionY();
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
-    // map to global
-    //QPoint globalPoint = this->mapToGlobal( point );
-//     emit showContextMenu( globalPoint );
     m_imageVSItype = QVSIReconstructionExtension::SEPost;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint()) );
 }
 
 void QVSIReconstructionExtension::contextMenuEvent(QContextMenuEvent *event)

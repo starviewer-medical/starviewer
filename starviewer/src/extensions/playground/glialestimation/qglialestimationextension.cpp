@@ -1277,62 +1277,32 @@ void QGlialEstimationExtension::setLeftButtonOff( )
 
 void QGlialEstimationExtension::contextMenuT1Release()
 {
-    int eventPositionX = 0;//this->getEventPositionX();
-    int eventPositionY = 0;//this->getEventPositionY();
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
     m_imageGlialtype = QGlialEstimationExtension::T1;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint()) );
 }
 
 void QGlialEstimationExtension::contextMenuPerfuRelease()
 {
-    int eventPositionX = 0;//this->getEventPositionX();
-    int eventPositionY = 0;//this->getEventPositionY();
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
     m_imageGlialtype = QGlialEstimationExtension::perfu;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint()) );
 }
 
 void QGlialEstimationExtension::contextMenuFLAIRRelease()
 {
-    int eventPositionX = 0;
-    int eventPositionY = 0;
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
     m_imageGlialtype = QGlialEstimationExtension::FLAIR;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint()) );
 }
 
 void QGlialEstimationExtension::contextMenuDifuRelease()
 {
-    int eventPositionX = 0;
-    int eventPositionY = 0;
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
     m_imageGlialtype = QGlialEstimationExtension::difu;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint()) );
 }
 
 void QGlialEstimationExtension::contextMenuSpectrumRelease()
 {
-    int eventPositionX = 0;
-    int eventPositionY = 0;
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
     m_imageGlialtype = QGlialEstimationExtension::spectrum;
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint()) );
 }
 
 void QGlialEstimationExtension::contextMenuEvent(QContextMenuEvent *event)
