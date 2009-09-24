@@ -151,6 +151,7 @@ Status PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHand
     const char *studyUID = NULL, *seriesUID = NULL, *instanceUID = NULL;
     DicomImage *imageToPrint;
     QString imageToPrintPath;
+    bool isImageMonochrome1;
 
     result = m_storedPrintDcmtk->getImageReference(imageNumber, studyUID, seriesUID, instanceUID);
 
@@ -166,8 +167,10 @@ Status PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHand
 
     if (imageToPrint && EIS_Normal == imageToPrint->getStatus())
     {
+        isImageMonochrome1 = imageToPrint->getPhotometricInterpretation() == EP_Interpretation::EPI_Monochrome1;
+
         //Enviem la imatge
-        result = m_storedPrintDcmtk->printSCUsetBasicImageBox(printerConnection, imageNumber, *imageToPrint, true/*opt_Monochrome1*/);
+        result = m_storedPrintDcmtk->printSCUsetBasicImageBox(printerConnection, imageNumber, *imageToPrint, isImageMonochrome1);
         if (EC_Normal != result)
         {
             DEBUG_LOG(QString("spooler: printer communication failed, unable to transmit basic grayscale image box. %1").arg(result.text()));
