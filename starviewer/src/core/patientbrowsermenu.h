@@ -35,7 +35,7 @@ public:
 
 public slots:
     /// Fem que es mostri el menú en la posició indicada
-    void popup(const QPoint &point, const QString &identifier);
+    void popup(const QPoint &point, const QString &identifier = QString() );
 
 signals:
     /// Senyal que notifica el volum corresponent a l'ítem escollit

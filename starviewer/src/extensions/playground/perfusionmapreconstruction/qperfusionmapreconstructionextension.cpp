@@ -1057,16 +1057,7 @@ void QPerfusionMapReconstructionExtension::contextMenuEvent(QContextMenuEvent *e
 
     connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setVolume(Volume *) ));
 
-    QString seriesUID;
-    if( m_mainVolume )
-    {
-        // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
-        // del volum per poder eliminar el mètode Volume::getSeries()
-        // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
-        // Llavors no necessitarem especificar-li cap UID de Sèrie
-        seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
-    }
-    patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
+    patientMenu->popup(event->globalPos()); //->globalPos() ?
 }
 
 void QPerfusionMapReconstructionExtension::setVolume(Volume *volume)
