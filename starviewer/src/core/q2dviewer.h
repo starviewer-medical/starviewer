@@ -75,8 +75,6 @@ public:
     Q2DViewer( QWidget *parent = 0 );
     ~Q2DViewer();
 
-    virtual void setInput( Volume *volume );
-
     /// Ens retorna la vista que tenim en aquells moments del volum
     CameraOrientationType getView() const;
 
@@ -246,6 +244,8 @@ public:
     vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
 
 public slots:
+    virtual void setInput( Volume *volume );
+
     void resetView( CameraOrientationType view );
     void resetViewToAxial();
     void resetViewToCoronal();

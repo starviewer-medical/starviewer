@@ -2003,58 +2003,49 @@ void QVSIReconstructionExtension::contextMenuSEPostRelease()
 
 void QVSIReconstructionExtension::contextMenuEvent(QContextMenuEvent *event)
 {
-    //if (m_contextMenuActive)
-    //{
-        PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
-        patientMenu->setAttribute(Qt::WA_DeleteOnClose);
-        patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
+    PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
+    patientMenu->setAttribute(Qt::WA_DeleteOnClose);
+    patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
 
-        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), SLOT( setSeries(Series*) ));
+    connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setVolume(Volume *) ));
 
-        QString seriesUID;
-        if( m_mainVolume )
-        {
-            // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
-            // del volum per poder eliminar el mètode Volume::getSeries()
-            // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
-            // Llavors no necessitarem especificar-li cap UID de Sèrie
-            seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
-        }
-        patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
+    QString seriesUID;
+    if( m_mainVolume )
+    {
+        // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
+        // del volum per poder eliminar el mètode Volume::getSeries()
+        // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
+        // Llavors no necessitarem especificar-li cap UID de Sèrie
+        seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
+    }
+    patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
 
-    //}
 }
 
-void QVSIReconstructionExtension::setSeries(Series *series)
+void QVSIReconstructionExtension::setVolume(Volume *volume)
 {
-    QString modality = series->getModality();
-    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    Series *series = volume->getImage(0,0)->getParentSeries();
+    QString description = series->getDescription();
+    switch(m_imageVSItype)
     {
-        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
-    }
-    else
-    {
-        switch(m_imageVSItype)
-        {
-        case DSC:
-            m_DSCLineEdit->clear();
-            m_DSCLineEdit->insert(series->getDescription());
-            m_DSCVolume = series->getFirstVolume();
-            break;
-        case SEPre:
-            m_SEPreLineEdit->clear();
-            m_SEPreLineEdit->insert(series->getDescription());
-            m_SEPreVolume = series->getFirstVolume();
-            break;
-        case SEPost:
-            m_SEPostLineEdit->clear();
-            m_SEPostLineEdit->insert(series->getDescription());
-            m_SEPostVolume = series->getFirstVolume();
-            break;
-        default:
-            DEBUG_LOG("No existeix aquest tipus d'imatge!!");
-            break;
-        }
+    case DSC:
+        m_DSCLineEdit->clear();
+        m_DSCLineEdit->insert(description);
+        m_DSCVolume = volume;
+        break;
+    case SEPre:
+        m_SEPreLineEdit->clear();
+        m_SEPreLineEdit->insert(description);
+        m_SEPreVolume = volume;
+        break;
+    case SEPost:
+        m_SEPostLineEdit->clear();
+        m_SEPostLineEdit->insert(description);
+        m_SEPostVolume = volume;
+        break;
+    default:
+        DEBUG_LOG("No existeix aquest tipus d'imatge!!");
+        break;
     }
 }
 

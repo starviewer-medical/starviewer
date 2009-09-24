@@ -15,7 +15,7 @@
 #include "patientbrowsermenuextendeditem.h"
 #include "patientbrowsermenulist.h"
 #include "series.h"
-#include "logging.h"
+#include "volume.h"
 
 namespace udg {
 
@@ -169,7 +169,7 @@ void PatientBrowserMenu::emitSelected(const QString &identifier)
     delete m_patientBrowserList;
     Series *series = m_patient->getSeries(identifier);
     if( series )
-        emit selectedSeries( series );
+        emit selectedVolume( series->getFirstVolume() );
 }
 
 void PatientBrowserMenu::updatePosition()

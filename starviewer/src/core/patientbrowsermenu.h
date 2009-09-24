@@ -14,7 +14,7 @@ class QPoint;
 namespace udg {
 
 class Patient;
-class Series;
+class Volume;
 class PatientBrowserMenuExtendedItem;
 class PatientBrowserMenuList;
 
@@ -38,8 +38,8 @@ public slots:
     void popup(const QPoint &point, const QString &identifier);
 
 signals:
-    /// senyal que envia la serie escollida per ser visualitzada
-    void selectedSeries(Series *);
+    /// Senyal que notifica el volum corresponent a l'ítem escollit
+    void selectedVolume(Volume *);
 
 private slots:
     /// TODO mètode transicional per fer el refactoring pas a pas. Actualitza les vistes relacionades amb l'item actiu 

@@ -26,11 +26,7 @@ class Q3DMPRViewer : public QViewer{
 Q_OBJECT
 public:
     Q3DMPRViewer( QWidget *parent = 0 );
-
     ~Q3DMPRViewer();
-
-    /// Li indiquem el volum a visualitzar
-    virtual void setInput( Volume *inputImage );
 
     /// Retorna el volum transformat segons el reslice de cada vista
     Volume *getAxialResliceOutput();
@@ -61,6 +57,9 @@ signals:
     void planesHasChanged( void );
 
 public slots:
+    /// Li indiquem el volum a visualitzar
+    virtual void setInput( Volume *inputImage );
+
     void resetViewToAxial();
     void resetViewToSagital();
     void resetViewToCoronal();
