@@ -19,7 +19,7 @@ void DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
     storedDcmtkFilePath = dicomPrintSpool.createPrintSpool(printer, printJob, Settings().getValue(ImagePrintSettings::SpoolDirectory).toString());
 
-    printDicomSpool.printSpool(printer, printJob, storedDcmtkFilePath, Settings().getValue(ImagePrintSettings::SpoolDirectory).toString());
+    printDicomSpool.printBasicGrayscale(printer, printJob, storedDcmtkFilePath, Settings().getValue(ImagePrintSettings::SpoolDirectory).toString());
 
     //TODO: falta esborra el contingut del directori spool
 }
