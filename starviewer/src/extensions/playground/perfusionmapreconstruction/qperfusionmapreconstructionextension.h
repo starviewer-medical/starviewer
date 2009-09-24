@@ -95,7 +95,7 @@ private slots:
     /// Visualitza el menú que permet escollir la sèrie del DSC
     void contextMenuDSCRelease();
     void contextMenuEvent(QContextMenuEvent *event);
-    void setSeries(Series *series);
+    void setVolume(Volume *volume);
 
 private:
     /// El volum principal

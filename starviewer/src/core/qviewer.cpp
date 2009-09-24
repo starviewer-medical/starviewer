@@ -583,27 +583,6 @@ void QViewer::grabCurrentView()
     m_grabList << image;
 }
 
-void QViewer::setSeries(Series *series)
-{
-    if( !series )
-    {
-        DEBUG_LOG("La sèrie és nul·la!");
-        return;
-    }
-    if( !series->isViewable() )
-    {
-        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
-    }
-    else
-    {
-        if( series->getFirstVolume() != m_mainVolume )
-        {
-            setInput( series->getFirstVolume() );
-            emit volumeChanged( series->getFirstVolume() );
-        }
-    }
-}
-
 void QViewer::getDefaultWindowLevel( double windowLevel[2] )
 {
     if (!m_hasDefaultWindowLevelDefined)
@@ -758,7 +737,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
         patientMenu->setAttribute(Qt::WA_DeleteOnClose);
         patientMenu->setPatient( mainWindow->getCurrentPatient() );
 
-        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), SLOT( setSeries(Series*) ));
+        connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ));
 
         QString seriesUID;
         if( m_mainVolume )

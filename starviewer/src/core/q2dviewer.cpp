@@ -703,6 +703,8 @@ void Q2DViewer::setInput( Volume *volume )
     // HACK
     // S'activa el refresh per tal de que es renderitzi el visualitzador
     this->m_isRefreshActive = true;
+    // indiquem el canvi de volum
+    emit volumeChanged(m_mainVolume);
 }
 
 void Q2DViewer::setOverlayInput( Volume *volume )

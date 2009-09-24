@@ -56,8 +56,6 @@ public:
     /// retorna el tipu de visualització que es té assignat com a un string
     QString getRenderFunctionAsString();
 
-    virtual void setInput( Volume* volume );
-
     /// Obté el window level actual de la imatge
     double getCurrentColorWindow();
     double getCurrentColorLevel();
@@ -71,6 +69,8 @@ public:
     vtkPlanes *getClippingPlanes() const;
     
 public slots:
+    virtual void setInput( Volume* volume );
+
     /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
     void setRenderFunction(RenderFunction function);
     void setRenderFunctionToRayCasting();

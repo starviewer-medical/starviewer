@@ -1337,37 +1337,36 @@ void QGlialEstimationExtension::contextMenuSpectrumRelease()
 
 void QGlialEstimationExtension::contextMenuEvent(QContextMenuEvent *event)
 {
-    //if (m_contextMenuActive)
-    //{
-        PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
-        patientMenu->setAttribute(Qt::WA_DeleteOnClose);
-        patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
+    PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
+    patientMenu->setAttribute(Qt::WA_DeleteOnClose);
+    patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
 
-        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), SLOT( setSeries(Series*) ));
+    connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setVolume(Volume *) ));
 
-        QString seriesUID;
-        if( m_mainVolume )
-        {
-            // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
-            // del volum per poder eliminar el mètode Volume::getSeries()
-            // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
-            // Llavors no necessitarem especificar-li cap UID de Sèrie
-            seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
-        }
-        patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
-
-    //}
+    QString seriesUID;
+    if( m_mainVolume )
+    {
+        // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
+        // del volum per poder eliminar el mètode Volume::getSeries()
+        // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
+        // Llavors no necessitarem especificar-li cap UID de Sèrie
+        seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
+    }
+    patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
 }
 
-void QGlialEstimationExtension::setSeries(Series *series)
+void QGlialEstimationExtension::setVolume(Volume *volume)
 {
+    Series *series = volume->getImage(0,0)->getParentSeries();
+    QString description = series->getDescription();
+
     itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc;
     switch(m_imageGlialtype)
     {
     case T1:
         m_T1LineEdit->clear();
-        m_T1LineEdit->insert(series->getDescription());
-        m_T1Volume = series->getFirstVolume();
+        m_T1LineEdit->insert(description);
+        m_T1Volume = volume;
 
         minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
         minmaxCalc->SetImage(m_T1Volume->getItkData());
@@ -1385,27 +1384,27 @@ void QGlialEstimationExtension::setSeries(Series *series)
         break;
     case perfu:
         m_perfuLineEdit->clear();
-        m_perfuLineEdit->insert(series->getDescription());
-        m_perfuVolume = series->getFirstVolume();
+        m_perfuLineEdit->insert(description);
+        m_perfuVolume = volume;
         this->computeCBV();
         m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
         break;
     case FLAIR:
         m_FLAIRLineEdit->clear();
-        m_FLAIRLineEdit->insert(series->getDescription());
-        m_FLAIRVolume = series->getFirstVolume();
+        m_FLAIRLineEdit->insert(description);
+        m_FLAIRVolume = volume;
         m_viewersLayout->getViewerWidget(3)->setInput( m_FLAIRVolume );
         break;
     case difu:
         m_difuLineEdit->clear();
-        m_difuLineEdit->insert(series->getDescription());
-        m_difuVolume = series->getFirstVolume();
+        m_difuLineEdit->insert(description);
+        m_difuVolume = volume;
         m_viewersLayout->getViewerWidget(4)->setInput( m_difuVolume );
         break;
     case spectrum:
         m_spectrumLineEdit->clear();
-        m_spectrumLineEdit->insert(series->getDescription());
-        m_spectrumVolume = series->getFirstVolume();
+        m_spectrumLineEdit->insert(description);
+        m_spectrumVolume = volume;
         m_viewersLayout->getViewerWidget(5)->setInput( m_spectrumVolume );
         break;
     default:

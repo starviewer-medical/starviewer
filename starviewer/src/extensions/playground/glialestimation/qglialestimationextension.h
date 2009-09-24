@@ -90,7 +90,7 @@ private slots:
     void contextMenuDifuRelease();
     void contextMenuSpectrumRelease();
     void contextMenuEvent(QContextMenuEvent *event);
-    void setSeries(Series *series);
+    void setVolume(Volume *volume);
 
     /// Canvia a l'estat contrari del layout --> 3x2 a 2x3 o al revés
     void changeLayout();

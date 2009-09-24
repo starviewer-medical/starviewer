@@ -1051,33 +1051,29 @@ void QPerfusionMapReconstructionExtension::contextMenuDSCRelease()
 
 void QPerfusionMapReconstructionExtension::contextMenuEvent(QContextMenuEvent *event)
 {
-    //if (m_contextMenuActive)
-    //{
-        PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
-        patientMenu->setAttribute(Qt::WA_DeleteOnClose);
-        patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
+    PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
+    patientMenu->setAttribute(Qt::WA_DeleteOnClose);
+    patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
 
-        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), SLOT( setSeries(Series*) ));
+    connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setVolume(Volume *) ));
 
-        QString seriesUID;
-        if( m_mainVolume )
-        {
-            // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
-            // del volum per poder eliminar el mètode Volume::getSeries()
-            // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
-            // Llavors no necessitarem especificar-li cap UID de Sèrie
-            seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
-        }
-        patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
-
-    //}
+    QString seriesUID;
+    if( m_mainVolume )
+    {
+        // TODO HACK Fem aquest workaround transitori d'obtenir l'UID de Sèrie a partir de la primera imatge
+        // del volum per poder eliminar el mètode Volume::getSeries()
+        // El següent pas és desvincular "Series" del menú contextual per un altre identificador pels volums
+        // Llavors no necessitarem especificar-li cap UID de Sèrie
+        seriesUID = m_mainVolume->getImages().first()->getParentSeries()->getInstanceUID();
+    }
+    patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
 }
 
-void QPerfusionMapReconstructionExtension::setSeries(Series *series)
+void QPerfusionMapReconstructionExtension::setVolume(Volume *volume)
 {
     m_DSCLineEdit->clear();
-    m_DSCLineEdit->insert(series->getDescription());
-    m_DSCVolume = series->getFirstVolume();
+    m_DSCLineEdit->insert( volume->getImage(0,0)->getParentSeries()->getDescription() );
+    m_DSCVolume = volume;
 }
 
 bool QPerfusionMapReconstructionExtension::findProbableSeries( )
