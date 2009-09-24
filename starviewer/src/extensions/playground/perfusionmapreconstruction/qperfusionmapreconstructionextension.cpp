@@ -1034,19 +1034,7 @@ void QPerfusionMapReconstructionExtension::setLeftButtonOff( )
 
 void QPerfusionMapReconstructionExtension::contextMenuDSCRelease()
 {
-    // Extret dels exemples de vtkEventQtSlotConnect
-
-    // Obtenim la posició de l'event
-    int eventPositionX = 0;//this->getEventPositionX();
-    int eventPositionY = 0;//this->getEventPositionY();
-
-    QPoint point = QPoint( eventPositionX, eventPositionY );
-
-    // map to global
-    //QPoint globalPoint = this->mapToGlobal( point );
-//     emit showContextMenu( globalPoint );
-
-    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point) );
+    this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, QPoint() ) );
 }
 
 void QPerfusionMapReconstructionExtension::contextMenuEvent(QContextMenuEvent *event)
