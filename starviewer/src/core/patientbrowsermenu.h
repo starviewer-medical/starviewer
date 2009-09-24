@@ -32,7 +32,7 @@ public:
     ~PatientBrowserMenu();
 
     /// Assignem un pacient per representar al menu
-    void setPatient( Patient *patient );
+    void setPatient(Patient *patient);
 
 public slots:
     /// Fem que es mostri el menú en la posició indicada
@@ -40,14 +40,14 @@ public slots:
 
 signals:
     /// senyal que envia la serie escollida per ser visualitzada
-    void selectedSeries( Series * );
+    void selectedSeries(Series *);
 
 private slots:
     /// TODO mètode transicional per fer el refactoring pas a pas. Actualitza les vistes relacionades amb l'item actiu 
     /// que ara per ara serà una Series, però més endavant tindrà una forma més abstracta, com pot ser "Item" o "ID"
-    void updateActiveItemView( const QString &identifier );
+    void updateActiveItemView(const QString &identifier);
 
-    void emitSelected( const QString &identifier );
+    void emitSelected(const QString &identifier);
 
 private:
     /// Actualitza la posició de la informació addicional
@@ -55,10 +55,10 @@ private:
 
 private:
     /// Atribut que guarda el punter al menú basic que representa al pacient
-    PatientBrowserMenuList * m_patientBrowserList;
+    PatientBrowserMenuList *m_patientBrowserList;
 
     /// Atribut que guarda el punter al menú amb informació addicional de la serie seleccionada
-    PatientBrowserMenuExtendedItem * m_patientAdditionalInfo;
+    PatientBrowserMenuExtendedItem *m_patientAdditionalInfo;
 
     /// Pacient que ens proporciona les dades d'entrada
     Patient *m_patient;
