@@ -1392,8 +1392,6 @@ bool QGlialEstimationExtension::findProbableSeries( )
                 m_T1LineEdit->insert(series->getDescription());
                 m_T1Volume = series->getFirstVolume();
                 findT1=true;
-                Volume * volume = series->getFirstVolume();
-                Image * image = volume->getImage(0,1);
                 //std::cout<<"*";
                 //slicesDSC = series->getFirstVolume()->getDimensions()[3];
             }
