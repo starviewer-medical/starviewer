@@ -137,11 +137,12 @@ public:
 
     /**
      * Ens dóna la imatge corresponent a la llesca i fase donats
+     * Per defecte, només especificarem la imatge sense tenir en compte la fase
      * @param sliceNumber llesca
      * @param phaseNumber fase
      * @return la imatge en cas que els índexs siguin correctes, NULL altrament
      */
-    Image *getImage( int sliceNumber, int phaseNumber ) const;
+    Image *getImage( int sliceNumber, int phaseNumber = 0 ) const;
 
     /**
      * Ens retorna la direcció REAL(DICOM) en la que es troben apilades

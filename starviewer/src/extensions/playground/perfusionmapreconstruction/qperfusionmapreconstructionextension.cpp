@@ -1051,7 +1051,7 @@ void QPerfusionMapReconstructionExtension::contextMenuEvent(QContextMenuEvent *e
 void QPerfusionMapReconstructionExtension::setVolume(Volume *volume)
 {
     m_DSCLineEdit->clear();
-    m_DSCLineEdit->insert( volume->getImage(0,0)->getParentSeries()->getDescription() );
+    m_DSCLineEdit->insert( volume->getImage(0)->getParentSeries()->getDescription() );
     m_DSCVolume = volume;
 }
 

@@ -376,8 +376,8 @@ void Volume::getStackDirection( double direction[3], int stack )
     // TODO encara no suportem múltiples stacks!!!!
     // fem el tractament com si només hi hagués un sol
     Q_UNUSED(stack);
-    Image *firstImage = this->getImage(0,0);
-    Image *secondImage = this->getImage(1,0);
+    Image *firstImage = this->getImage(0);
+    Image *secondImage = this->getImage(1);
     if( !firstImage )
     {
         DEBUG_LOG("Error gravísim. No hi ha 'primera' imatge!" );

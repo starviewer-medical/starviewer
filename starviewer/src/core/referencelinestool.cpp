@@ -303,7 +303,7 @@ void ReferenceLinesTool::updateFrameOfReference()
     {
         // TODO assumim que totes les imatges són de la mateixa sèrie i per això agafem la informació de la primera imatge
         // Ben fet (les imatges poden ser de diferents sèries), caldria obtenir el frame of reference de la imatge que s'està veient
-        Image *image = m_2DViewer->getInput()->getImage(0,0);
+        Image *image = m_2DViewer->getInput()->getImage(0);
         if( image )
         {
             // ens guardem el nostre

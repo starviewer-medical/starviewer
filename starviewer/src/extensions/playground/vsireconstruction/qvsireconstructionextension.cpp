@@ -1978,7 +1978,7 @@ void QVSIReconstructionExtension::contextMenuEvent(QContextMenuEvent *event)
 
 void QVSIReconstructionExtension::setVolume(Volume *volume)
 {
-    Series *series = volume->getImage(0,0)->getParentSeries();
+    Series *series = volume->getImage(0)->getParentSeries();
     QString description = series->getDescription();
     switch(m_imageVSItype)
     {

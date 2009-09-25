@@ -1318,7 +1318,7 @@ void QGlialEstimationExtension::contextMenuEvent(QContextMenuEvent *event)
 
 void QGlialEstimationExtension::setVolume(Volume *volume)
 {
-    Series *series = volume->getImage(0,0)->getParentSeries();
+    Series *series = volume->getImage(0)->getParentSeries();
     QString description = series->getDescription();
 
     itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc;
