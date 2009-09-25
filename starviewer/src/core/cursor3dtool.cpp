@@ -280,7 +280,7 @@ void Cursor3DTool::updateFrameOfReference()
 
     // TODO De moment agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie.
     // També ho fem així de moment per evitar problemes amb imatges multiframe, que encara no tractem correctament
-    Image *image = m_2DViewer->getInput()->getImage(0,0);
+    Image *image = m_2DViewer->getInput()->getImage(0);
     if( image )
     {
         Series *series = image->getParentSeries();
