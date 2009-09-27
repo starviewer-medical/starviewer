@@ -34,7 +34,7 @@ private:
     static const QString DicomPrinterListSectionName;
     Settings::KeyValueMapType dicomPrinterToKeyValueMap( const DicomPrinter &dicomPrinter);
     DicomPrinter keyValueMapToDicomPrinter(const Settings::KeyValueMapType &item);
-    int existPrinter(DicomPrinter &printer);
+    int indexOfPrinterInSettings(DicomPrinter &printer);
     
     QStringList getAvailableMediumTypeValues();
     QStringList getAvailableFilmSizeValues();

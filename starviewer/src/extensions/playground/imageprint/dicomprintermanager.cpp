@@ -245,7 +245,7 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
 
 bool DicomPrinterManager::addPrinter(DicomPrinter &printer)
 {   
-    if(this->existPrinter(printer) == -1)
+    if(this->indexOfPrinterInSettings(printer) == -1)
     {
         Settings settings;
         settings.addListItem( DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer) );
@@ -257,7 +257,7 @@ bool DicomPrinterManager::addPrinter(DicomPrinter &printer)
 bool DicomPrinterManager::updatePrinter(const int &printerID, DicomPrinter &printer)
 {
     Settings settings;
-    int indexTrobat=this->existPrinter(printer);
+    int indexTrobat=this->indexOfPrinterInSettings(printer);
     if(indexTrobat == printerID || indexTrobat==-1 )
     {
         settings.setListItem( printerID,DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer) );    
@@ -275,7 +275,7 @@ void DicomPrinterManager::deletePrinter(const int &printerID)
     settings.removeListItem( DicomPrinterListSectionName, printerID );
 }
 
-int DicomPrinterManager::existPrinter(DicomPrinter &printer)
+int DicomPrinterManager::indexOfPrinterInSettings(DicomPrinter &printer)
 {
     int i=0;       
     QList<DicomPrinter> dicomPrinterList = getDicomPrinterList();
