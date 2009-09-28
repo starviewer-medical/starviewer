@@ -183,7 +183,7 @@ private:
     /// Donades unes imatges que tenen diferents mides, les llegim en un sol
     /// volum adaptant la mida als valors maxims de row i column. S'executarà quan volguem llegir
     /// una sèrie que conté imatges amb diferents mides
-    void readDifferentSizeImagesIntoOneVolume( QStringList filenames );
+    void readDifferentSizeImagesIntoOneVolume( const QStringList &filenames );
 
 private:
     /// Filtres per importar/exportar

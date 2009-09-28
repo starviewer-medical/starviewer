@@ -480,7 +480,7 @@ void Volume::loadSlicesWithReaders( int method )
     reader->load();
 }
 
-void Volume::readDifferentSizeImagesIntoOneVolume( QStringList filenames )
+void Volume::readDifferentSizeImagesIntoOneVolume( const QStringList &filenames )
 {
     int errorCode = NoError;
     // declarem el filtre de tiling
