@@ -124,10 +124,6 @@ public:
     /// Retorna les imatges que composen el volum
     QList<Image *> getImages() const;
 
-    /// Mètode de conveniència en el que obtenim la llista de fitxers a partir de totes les imatges.
-    /// \deprecated TODO Es manté per dependència amb codi que ha de canviar
-    QStringList getInputFiles() const;
-
     /// Mètodes ràpids per obtenir estudi/pacient al que pertany aquest volum
     Study *getStudy();
     Patient *getPatient();
