@@ -161,6 +161,14 @@ Status ConvertToDicomdir::createDicomdir( const QString &dicomdirPath, CreateDic
     CreateDicomdir createDicomdir;
     Status state, stateNotDicomConformance;
 
+    /*El DICOM indica per cada profile les imatges han de ser d'uns determinats transfer syntax, per exemple per STD-GEN-CD han de ser Explicit
+     *Little Endian per STD-GEN-DVD-JPEG poden ser Explicit Little Endian i suporten ademés alguns transfer syntax JPEG lossy i lossless. El que tenen
+     *en comú tots els profiles és que suporten Explicit Little Endian, per això si no convertim els imatges a Little Endian abans de generar el DICOMDIR
+     *ens podem trobar que contingui alguna imatge amb alguna transfer syntax, que segons la normativa dicom no sigui acceptada per aquest profile, per això
+     *indiquem que no es comprovi la transfer syntax.
+     ATENCIÓ si deshabilitem la comprovació de la transfer syntax podem tenir DICOMDIR que no siguin DICOM conformance*/
+    createDicomdir.setCheckTransferSyntax(getConvertDicomdirImagesToLittleEndian());
+
     createDicomdir.setDevice( selectedDevice );
     state = createDicomdir.create( dicomdirPath );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
     if ( !state.good() )//ha fallat crear el dicomdir, ara intentem crear-lo en mode no estricte

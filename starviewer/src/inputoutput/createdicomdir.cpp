@@ -81,6 +81,13 @@ void CreateDicomdir::setStrictMode(bool enabled)
     }
 }
 
+void CreateDicomdir::setCheckTransferSyntax(bool checkTransferSyntax)
+{
+    /*Atenció el nom del mètode disableTransferSyntaxCheck és enganyós, perquè per desactivar el check dels transfer syntax, s'ha d'invocar passant-li
+      la variable amb el valor false, i per indicar que s'ha de comprovar la transfer syntax s'ha de cridar amb la variable a cert*/
+    m_ddir.disableTransferSyntaxCheck(checkTransferSyntax);
+}
+
 Status CreateDicomdir::create( QString dicomdirPath )
 {
     QString outputDirectory = dicomdirPath + "/DICOMDIR";//Nom del fitxer dicomDir
