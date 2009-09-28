@@ -95,7 +95,11 @@ Volume::VtkImageTypePointer Volume::getVtkData()
     if( !m_dataLoaded )
     {
         // TODO Ara mateix llegim a partir de Input. Més endavant s'haurà de llegir a partir de les classes DICOMImageReader
-        QStringList fileList = getInputFiles();
+        QStringList fileList;
+        foreach (Image *image, m_imageSet)
+        {
+            fileList << image->getPath();
+        }
         if( !fileList.isEmpty() )
         {
             switch( this->readFiles( fileList ) )
@@ -290,17 +294,6 @@ void Volume::setImages( const QList<Image *> &imageList )
 QList<Image *> Volume::getImages() const
 {
     return m_imageSet;
-}
-
-QStringList Volume::getInputFiles() const
-{
-    QStringList filepaths;
-    foreach (Image *image, this->getImages())
-    {
-        filepaths << image->getPath();
-    }
-
-    return filepaths;
 }
 
 Study *Volume::getStudy()
