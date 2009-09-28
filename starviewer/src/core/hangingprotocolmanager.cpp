@@ -151,7 +151,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
             while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
             {
                 imageSet = hangingProtocol->getImageSet( imageSetNumber );
-				serie = searchSerie( patient, seriesList, imageSet, hangingProtocol->getAllDiferent(), hangingProtocol );
+                serie = searchSerie( seriesList, imageSet, hangingProtocol->getAllDiferent(), hangingProtocol );
 
                 if( serie != 0 )
                 {
@@ -217,7 +217,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     return candidates;
 }
 
-void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
+void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout )
 {
 	Identifier id;
 	HangingProtocol * hangingProtocol;
@@ -290,7 +290,7 @@ bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patien
     return valid;
 }
 
-Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol )
+Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol )
 {
     bool found = false;
     int i = 0;
@@ -307,7 +307,7 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> 
 
         if( imageSet->getTypeOfItem() != "image" )
         {
-            if( isValidSerie( patient, serie, imageSet, hangingProtocol ) )
+            if( isValidSerie( serie, imageSet, hangingProtocol ) )
             {
                 found = true;
                 imageSet->setSeriesToDisplay( serie );
@@ -348,7 +348,7 @@ Series * HangingProtocolManager::searchSerie( Patient * patient, QList<Series*> 
     return 0;
 }
 
-bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )
+bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )
 {
     bool valid = true;
     int i = 0;
@@ -405,7 +405,7 @@ bool HangingProtocolManager::isValidSerie( Patient *patient, Series *serie, Hang
         }
         else if( restriction.selectorAttribute == "PatientName" )
         {
-            if( patient->getFullName() != restriction.valueRepresentation )
+            if( serie->getParentStudy()->getParentPatient()->getFullName() != restriction.valueRepresentation )
                 valid = false;
         }
         else if( restriction.selectorAttribute == "SeriesNumber" )
