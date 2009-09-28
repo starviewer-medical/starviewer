@@ -509,7 +509,7 @@ void Q2DViewerExtension::setHangingProtocol( int hangingProtocolNumber )
 {
     /// Aplicació dels hanging protocols
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
-    hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea, m_patient );
+    hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea );
 }
 
 }

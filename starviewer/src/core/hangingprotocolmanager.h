@@ -36,7 +36,7 @@ public:
     QList<HangingProtocol * > searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient);
 
     // Aplicar un hanging protocol concret
-    void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );
+    void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout );
 
     /// TODO Mètode públic temporal per poder aplicar les transformacions desitjades per un viewer
     /// es fa especialment per no haver de fer noves classes ni duplicar el mapa de transformacions
@@ -51,13 +51,13 @@ private:
     bool isValid( HangingProtocol *protocol, Patient *patient);
 
     // Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
-    Series *searchSerie( Patient *patient, QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol );
+    Series *searchSerie( QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol );
 
     /// Cert si la imatge compleix les restriccions
     bool isValidImage( Image *image, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
 
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
-    bool isValidSerie( Patient *patient, Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
+    bool isValidSerie( Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
 
     /// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
     void applyDisplayTransformations( Series *serie,  int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet );
