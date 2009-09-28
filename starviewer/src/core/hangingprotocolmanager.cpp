@@ -199,8 +199,8 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
                     qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
                     if( imageSet->getTypeOfItem() == "image" )
                     {
-                        viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
-                        applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+                        viewerWidget->getViewer()->setSlice( imageSet->getImageToDisplay() );
+                        applyDisplayTransformations( serie, imageSet->getImageToDisplay(), viewerWidget, displaySet);
                     }
                     else
                     {
@@ -249,8 +249,8 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 
 				if( imageSet->getTypeOfItem() == "image" )
 				{
-                    viewerWidget->getViewer()->setSlice( imageSet->getImatgeToDisplay() );
-					applyDisplayTransformations( serie, imageSet->getImatgeToDisplay(), viewerWidget, displaySet);
+                    viewerWidget->getViewer()->setSlice( imageSet->getImageToDisplay() );
+					applyDisplayTransformations( serie, imageSet->getImageToDisplay(), viewerWidget, displaySet);
 				}
 				else
 				{
