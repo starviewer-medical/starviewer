@@ -13,7 +13,7 @@ namespace udg {
 HangingProtocolImageSet::HangingProtocolImageSet(QObject *parent)
  : QObject(parent)
 {
-	m_serieToDisplay = NULL;
+    m_serieToDisplay = NULL;
 }
 
 HangingProtocolImageSet::~HangingProtocolImageSet()
@@ -40,35 +40,34 @@ QList<HangingProtocolImageSet::Restriction> HangingProtocolImageSet::getRestrict
     return m_listOfRestrictions;
 }
 
-
 void HangingProtocolImageSet::setTypeOfItem( QString type)
 {
-	m_typeOfItem = type;
+    m_typeOfItem = type;
 }
 
 QString HangingProtocolImageSet::getTypeOfItem() const
 {
-	return m_typeOfItem;
+    return m_typeOfItem;
 }
 
 void HangingProtocolImageSet::setImageToDisplay( int imageNumber )
 {
-	m_imageToDisplay = imageNumber;
+    m_imageToDisplay = imageNumber;
 }
 
 int HangingProtocolImageSet::getImageToDisplay() const
 {	
-	return m_imageToDisplay;
+    return m_imageToDisplay;
 }
 
 void HangingProtocolImageSet::setSeriesToDisplay( Series * series )
 {
-	m_serieToDisplay = series;
+    m_serieToDisplay = series;
 }
 
 Series * HangingProtocolImageSet::getSeriesToDisplay() const
 {
-	return m_serieToDisplay;
+    return m_serieToDisplay;
 }
 
 void HangingProtocolImageSet::show()

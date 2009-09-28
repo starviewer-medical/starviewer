@@ -16,17 +16,13 @@ class Series;
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class HangingProtocolImageSet : public QObject
-{
+class HangingProtocolImageSet : public QObject {
 Q_OBJECT
 public:
-
     HangingProtocolImageSet(QObject *parent = 0);
-
     ~HangingProtocolImageSet();
 
     enum SelectorUsageFlag { MATCH, NO_MATCH };
-
     enum SelectorCategory { RELATIVE_TIME, ABSTRACT_PRIOR };
 
     struct Restriction
@@ -43,35 +39,34 @@ public:
     /// Obtenir l'identificador de l'Image Set
     int getIdentifier() const;
 
-    /// Afegir una restriccio
+    /// Afegir una restricció
     void addRestriction( Restriction restriction );
 
     /// Obtenir les restriccions
     QList<Restriction> getRestrictions() const;
 
-	/// Posar el tipus d'element
-	void setTypeOfItem( QString );
-		
-	/// Obtenir el tipus d'element
-	QString getTypeOfItem() const;
+    /// Posar el tipus d'element
+    void setTypeOfItem( QString );
+    	
+    /// Obtenir el tipus d'element
+    QString getTypeOfItem() const;
 
-	/// Posar el número de la imatge a mostrar
-	void setImageToDisplay( int imageNumber );
+    /// Posar el número de la imatge a mostrar
+    void setImageToDisplay( int imageNumber );
 
-	/// Obtenir el numero de la imatge a mostrar
-	int getImageToDisplay() const;
+    /// Obtenir el número de la imatge a mostrar
+    int getImageToDisplay() const;
 
-	/// Assignar la serie que es representa
-	void setSeriesToDisplay( Series * series );
-	
-	/// Obtenir la serie que es representa
-	Series * getSeriesToDisplay() const;
+    /// Assignar la sèrie que es representa
+    void setSeriesToDisplay( Series * series );
+
+    /// Obtenir la sèrie que es representa
+    Series * getSeriesToDisplay() const;
 
     /// Mètode per mostrar els valors
     void show();
 
 private:
-
     /// Llista de restriccions que ha de complir l'Image Set
     QList<Restriction> m_listOfRestrictions;
 
@@ -90,18 +85,17 @@ private:
     /// Unitats rang
     QString m_timeUnits;
 
-    /// Descripcio
+    /// Descripció
     QString m_description;
 
-	/// Per saber si s'ha de tractar a nivell d'imatge o de sèrie. 
-	QString m_typeOfItem;
+    /// Per saber si s'ha de tractar a nivell d'imatge o de sèrie. 
+    QString m_typeOfItem;
 
-	/// Serie que s'ajusta a les restriccions
-	Series * m_serieToDisplay;
+    /// Serie que s'ajusta a les restriccions
+    Series * m_serieToDisplay;
 
-	/// Número d'imatge a mostrar
-	int m_imageToDisplay;
-
+    /// Número d'imatge a mostrar
+    int m_imageToDisplay;
 };
 
 }
