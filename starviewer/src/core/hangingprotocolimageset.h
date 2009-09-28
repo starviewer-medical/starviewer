@@ -59,7 +59,7 @@ public:
 	void setImageToDisplay( int imageNumber );
 
 	/// Obtenir el numero de la imatge a mostrar
-	int getImatgeToDisplay() const;
+	int getImageToDisplay() const;
 
 	/// Assignar la serie que es representa
 	void setSeriesToDisplay( Series * series );

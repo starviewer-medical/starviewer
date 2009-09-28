@@ -56,7 +56,7 @@ void HangingProtocolImageSet::setImageToDisplay( int imageNumber )
 	m_imageToDisplay = imageNumber;
 }
 
-int HangingProtocolImageSet::getImatgeToDisplay() const
+int HangingProtocolImageSet::getImageToDisplay() const
 {	
 	return m_imageToDisplay;
 }
