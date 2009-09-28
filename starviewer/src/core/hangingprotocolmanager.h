@@ -53,9 +53,6 @@ private:
     /// Mira si el protocol es pot aplicar al pacient
     bool isValid( HangingProtocol *protocol, Patient *patient);
 
-    /// Buscar la sèrie corresponent a l'image set definit
-    Series *searchSerie( Patient *patient, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
-
 	// Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
     Series *searchSerie( Patient *patient, QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol );
 
