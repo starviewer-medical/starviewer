@@ -22,12 +22,12 @@ public:
     HangingProtocolImageSet(QObject *parent = 0);
     ~HangingProtocolImageSet();
 
-    enum SelectorUsageFlag { MATCH, NO_MATCH };
-    enum SelectorCategory { RELATIVE_TIME, ABSTRACT_PRIOR };
+    enum SelectorUsageFlag { Match, NoMatch };
+    enum SelectorCategory { RelativeTime, AbstractPrior };
 
     struct Restriction
     {
-        SelectorUsageFlag usageFlag; // MATCH o NO_MATCH
+        SelectorUsageFlag usageFlag; // Match o NoMatch
         QString selectorAttribute; // TAG
         QString valueRepresentation; // valor del TAG
         int selectorValueNumber; // Només si el TAG és multivalor

@@ -31,7 +31,7 @@ public:
     void setName( QString name );
 
     /// Definició dels diferents nivells que pot tenir un Hanging Protocol
-    enum HangingProtocolLevel { MANUFACTURER, SITE, USER_GROUP, SINGLE_USER };
+    enum HangingProtocolLevel { Manufacturer, Site, UserGroup, SingleUser };
 
     /// Obtenir el layout
     HangingProtocolLayout * getHangingProtocolLayout();

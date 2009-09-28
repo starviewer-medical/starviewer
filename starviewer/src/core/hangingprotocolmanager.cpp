@@ -386,7 +386,7 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
         else if( restriction.selectorAttribute == "SeriesDescription" )
         {
             bool contains = serie->getDescription().contains( restriction.valueRepresentation, Qt::CaseInsensitive );
-            bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NO_MATCH );
+            bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
             valid = contains ^ match;
         }
         else if( restriction.selectorAttribute == "ScanOptions" )
@@ -550,7 +550,7 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
 
 				QString viewPosition = dicomReader.getAttributeByName( DCM_ViewPosition );
                 bool contains = viewPosition.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
-                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NO_MATCH );
+                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
                 valid = contains ^ match;
             }
             else if( restriction.selectorAttribute == "ImageLaterality" )
@@ -571,7 +571,7 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             else if( restriction.selectorAttribute == "CodeMeaning" )
             {
                 QStringList tagValue =  dicomReader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning );
-				bool match = ( restriction.usageFlag  == HangingProtocolImageSet::MATCH );
+				bool match = ( restriction.usageFlag  == HangingProtocolImageSet::Match );
 
                 if( tagValue.isEmpty() || !( tagValue.at(0).contains( restriction.valueRepresentation ) ) )
 						valid = false;
@@ -582,7 +582,7 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             {
                 QString imageType = dicomReader.getAttributeByName( DCM_ImageType );
                 bool isLocalyzer = imageType.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
-                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NO_MATCH );
+                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
                 valid = isLocalyzer ^ match;
             }
             else if( restriction.selectorAttribute == "Anterior" )
