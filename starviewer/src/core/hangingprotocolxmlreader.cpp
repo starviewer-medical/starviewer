@@ -187,9 +187,9 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction( 
         {
             reader->readNext();
             if( reader->text() == "MATCH" )
-                restriction.usageFlag = HangingProtocolImageSet::MATCH;
+                restriction.usageFlag = HangingProtocolImageSet::Match;
             else if ( reader->text() == "NO_MATCH" )
-                restriction.usageFlag = HangingProtocolImageSet::NO_MATCH;
+                restriction.usageFlag = HangingProtocolImageSet::NoMatch;
         }
         else if( reader->name() == "selectorAttribute" )
         {
