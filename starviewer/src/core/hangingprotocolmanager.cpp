@@ -113,11 +113,9 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     int numberOfItems = HangingProtocolsRepository::getRepository()->getNumberOfItems();
     int hangingProtocolNumber;
     int imageSetNumber;
-    int displaySetNumber;
     HangingProtocolImageSet *imageSet;
-    HangingProtocolDisplaySet *displaySet;
     Series *serie;
-    Q2DViewerWidget *viewerWidget;
+
 	QList<HangingProtocol * > candidates;
 	QList<Series *> seriesList;
     QString hangingProtocolNamesLogList; // Noms per mostrar al log
@@ -181,87 +179,65 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     if( bestHangingProtocol )
     {
         DEBUG_LOG( QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName() ) );
-
-        for( displaySetNumber = 0; displaySetNumber < bestHangingProtocol->getNumberOfDisplaySets(); displaySetNumber ++)
-        {
-            serie = 0;
-            displaySet = bestHangingProtocol->getDisplaySet( displaySetNumber + 1 );
-            imageSet = bestHangingProtocol->getImageSet( displaySet->getImageSetNumber() );
-            serie = imageSet->getSeriesToDisplay();
-            viewerWidget = layout->addViewer( displaySet->getPosition() );
-
-            if( serie != 0 ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
-            {
-                // cal que la sèrie que escollim sigui vàlida, sinó no posarem pas res
-                if( serie->isViewable() && serie->getFirstVolume() )
-                {
-                    viewerWidget->setInput( serie->getFirstVolume() );
-                    qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
-                    if( imageSet->getTypeOfItem() == "image" )
-                    {
-                        viewerWidget->getViewer()->setSlice( imageSet->getImageToDisplay() );
-                        applyDisplayTransformations( serie, imageSet->getImageToDisplay(), viewerWidget, displaySet);
-                    }
-                    else
-                    {
-                        applyDisplayTransformations( serie, 0, viewerWidget, displaySet);
-                    }
-                }
-            }
-        }
+        applyHangingProtocol(bestHangingProtocol,layout);
         INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
         INFO_LOG( QString("Hanging protocol aplicat: %1").arg( bestHangingProtocol->getName() ) );
-        return candidates;
     }
-    INFO_LOG( QString("No s'ha trobat cap hanging protocol") );
+    else
+    {
+        INFO_LOG( QString("No s'ha trobat cap hanging protocol") );
+    }
     return candidates;
 }
 
 void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout )
 {
 	Identifier id;
-	HangingProtocol * hangingProtocol;
-	int displaySetNumber;
-	Series * serie;
-	Q2DViewerWidget * viewerWidget;
-	HangingProtocolImageSet * imageSet;
-	HangingProtocolDisplaySet * displaySet;
-
 
 	id.setValue( hangingProtocolNumber );
-    hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
-	displaySetNumber = hangingProtocol->getNumberOfDisplaySets();
+    HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
+    // TODO aixpo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
+    // Caldria incoporar algun paràmetre per indicar quin és el visor seleccionat per defecte
 	layout->setGrid(1,1);
-
-	for( displaySetNumber = 0; displaySetNumber < hangingProtocol->getNumberOfDisplaySets(); displaySetNumber ++)
-	{
-		serie = 0;
-		displaySet = hangingProtocol->getDisplaySet( displaySetNumber + 1 );
-		imageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
-		serie = imageSet->getSeriesToDisplay();
-		viewerWidget = layout->addViewer( displaySet->getPosition() );
-
-		if( serie != 0 ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
-		{
-			if( serie->getFirstVolume())
-			{
-				viewerWidget->setInput( serie->getFirstVolume() );
-
-				if( imageSet->getTypeOfItem() == "image" )
-				{
-                    viewerWidget->getViewer()->setSlice( imageSet->getImageToDisplay() );
-					applyDisplayTransformations( serie, imageSet->getImageToDisplay(), viewerWidget, displaySet);
-				}
-				else
-				{
-					applyDisplayTransformations( serie, 0, viewerWidget, displaySet);
-				}
-			}
-		}
-	}
-	layout->getViewerSelected()->update();
-
+    applyHangingProtocol(hangingProtocol,layout);
     INFO_LOG( QString("Hanging protocol aplicat: %1").arg( hangingProtocol->getName() ) );
+}
+
+void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout )
+{
+    int displaySetNumber;
+    HangingProtocolImageSet *hangingProtocolImageSet;
+    HangingProtocolDisplaySet *displaySet;
+    Series *serie;
+    Q2DViewerWidget *viewerWidget;
+
+    for( displaySetNumber = 0; displaySetNumber < hangingProtocol->getNumberOfDisplaySets(); displaySetNumber++ )
+    {
+        serie = 0;
+        displaySet = hangingProtocol->getDisplaySet( displaySetNumber + 1 );
+        hangingProtocolImageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
+        serie = hangingProtocolImageSet->getSeriesToDisplay();
+        viewerWidget = layout->addViewer( displaySet->getPosition() );
+
+        if( serie ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
+        {
+            // cal que la sèrie que escollim sigui vàlida, sinó no posarem pas res
+            if( serie->isViewable() && serie->getFirstVolume() )
+            {
+                viewerWidget->setInput( serie->getFirstVolume() );
+                qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+                if( hangingProtocolImageSet->getTypeOfItem() == "image" )
+                {
+                    viewerWidget->getViewer()->setSlice( hangingProtocolImageSet->getImageToDisplay() );
+                    applyDisplayTransformations( serie, hangingProtocolImageSet->getImageToDisplay(), viewerWidget, displaySet);
+                }
+                else
+                {
+                    applyDisplayTransformations( serie, 0, viewerWidget, displaySet);
+                }
+            }
+        }
+    }
 }
 
 bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patient)
@@ -597,7 +573,5 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
     }
     return valid;
 }
-
-
 
 }
