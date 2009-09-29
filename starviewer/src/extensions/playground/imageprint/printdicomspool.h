@@ -12,6 +12,7 @@
 ///Representació d'una impressora DICOM amb les eines DCMTK.
 class DVPSStoredPrint;
 class DVPSPrintMessageHandler;
+class DcmDataset;
 
 namespace udg
 {   
@@ -34,8 +35,8 @@ private:
 
     void printBasicGrayscaleSpool(const QString &spoolDirectoryPath);
 
-    //Crea un Film session
-    Status createAndSendBasicFilmSession(DVPSPrintMessageHandler& printConnection);
+    //Retorna els atributs del FilmSession en un Dataset
+    DcmDataset getAttributesBasicFilmSession();
 
     ///Una vegada creada la FilmSession i FilmBox aquest mètode ens permet enviar una imatge a imprimir cap a la impressora
     Status createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printConnection, size_t imageNumber, const QString &spoolDirectoryPath);
