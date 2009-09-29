@@ -35,8 +35,9 @@ public:
     /// Buscar i aplicar el millor hanging protocol
     QList<HangingProtocol * > searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient);
 
-    // Aplicar un hanging protocol concret
+    // Aplica un hanging protocol concret, ja sigui via identificador o per instància
     void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout );
+    void applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout * layout );
 
     /// TODO Mètode públic temporal per poder aplicar les transformacions desitjades per un viewer
     /// es fa especialment per no haver de fer noves classes ni duplicar el mapa de transformacions
