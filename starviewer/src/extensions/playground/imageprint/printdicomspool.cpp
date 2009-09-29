@@ -73,7 +73,7 @@ void PrintDicomSpool::printBasicGrayscaleSpool(const QString &spoolDirectoryPath
         DEBUG_LOG(QString("spooler: printer communication failed, unable to request printer settings. %1").arg(result.text()));
     }
 
-    if (!createAndSendBasicFilmSession(printerConnection).good())
+    if (EC_Normal != (result = m_storedPrintDcmtk->printSCUcreateBasicFilmSession(printerConnection, getAttributesBasicFilmSession(), true /*plutInSession*/)))
     {
         DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film session. %1").arg(result.text()));
     }
@@ -112,7 +112,7 @@ void PrintDicomSpool::printBasicGrayscaleSpool(const QString &spoolDirectoryPath
     }
 }
 
-Status PrintDicomSpool::createAndSendBasicFilmSession(DVPSPrintMessageHandler& printerConnection)
+DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
 {
     OFCondition result;
     DcmDataset datasetBasicFilmSession;
@@ -148,9 +148,7 @@ Status PrintDicomSpool::createAndSendBasicFilmSession(DVPSPrintMessageHandler& p
     attributeBasicFilmSession->putString(qPrintable(QString().setNum(m_dicomPrintJob.getNumberOfCopies()))); 
     datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
-    result = m_storedPrintDcmtk->printSCUcreateBasicFilmSession(printerConnection, datasetBasicFilmSession, true /*plutInSession*/);
-    
-    return state.setStatus(result);
+    return datasetBasicFilmSession;
 }
 
 Status PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printerConnection, size_t imageNumber, const QString &spoolDirectoryPath)
