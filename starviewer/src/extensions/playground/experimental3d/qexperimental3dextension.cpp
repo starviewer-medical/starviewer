@@ -820,6 +820,13 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmAlphaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBetaLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBetaDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseObscuranceRadioButton, SIGNAL( toggled(bool) ), m_baseObscuranceFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseObscuranceRadioButton, SIGNAL( toggled(bool) ), m_baseObscuranceFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseObscuranceRadioButton, SIGNAL( toggled(bool) ), m_baseObscuranceFiltersLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseObscuranceRadioButton, SIGNAL( toggled(bool) ), m_baseObscuranceLowFilterLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseObscuranceRadioButton, SIGNAL( toggled(bool) ), m_baseObscuranceLowFilterDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseObscuranceRadioButton, SIGNAL( toggled(bool) ), m_baseObscuranceHighFilterLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseObscuranceRadioButton, SIGNAL( toggled(bool) ), m_baseObscuranceHighFilterDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmYLabel, SLOT( setEnabled(bool) ) );
@@ -1172,6 +1179,8 @@ void QExperimental3DExtension::render()
     }
     else if ( m_baseCoolWarmRadioButton->isChecked() ) m_volume->addCoolWarm( m_baseCoolWarmBDoubleSpinBox->value(), m_baseCoolWarmYDoubleSpinBox->value(), m_baseCoolWarmAlphaDoubleSpinBox->value(),
                                                                               m_baseCoolWarmBetaDoubleSpinBox->value() );
+    else if ( m_baseObscuranceRadioButton->isChecked() ) m_volume->addObscurance( m_obscurance, m_baseObscuranceFactorDoubleSpinBox->value(), m_baseObscuranceLowFilterDoubleSpinBox->value(),
+                                                                                  m_baseObscuranceHighFilterDoubleSpinBox->value() );
     else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
     else if ( m_baseVomiCoolWarmRadioButton->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_baseVomiCoolWarmFactorDoubleSpinBox->value(),
                                                                                       m_baseVomiCoolWarmYDoubleSpinBox->value(), m_baseVomiCoolWarmBDoubleSpinBox->value() );
@@ -1388,12 +1397,23 @@ void QExperimental3DExtension::computeCancelObscurance()
     {
         m_computingObscurance = true;
 
+        bool render = false;
+
+        if ( m_baseObscuranceRadioButton->isChecked() )
+        {
+            m_baseAmbientLightingRadioButton->setChecked( true );
+            render = true;
+        }
+
         if ( m_obscuranceCheckBox->isChecked() )
         {
             m_obscuranceCheckBox->setChecked( false );
-            render();
+            render = true;
         }
 
+        if ( render ) this->render();
+
+        m_baseObscuranceRadioButton->setEnabled( false );
         m_obscuranceCheckBox->setEnabled( false );
 
         delete m_obscuranceMainThread;          // esborrem el thread d'abans
@@ -1442,6 +1462,7 @@ void QExperimental3DExtension::endComputeObscurance()
     m_obscurancePushButton->setText( tr("Compute obscurance") );
     m_obscuranceLoadPushButton->setEnabled( true );
     m_obscuranceSavePushButton->setEnabled( true );
+    m_baseObscuranceRadioButton->setEnabled( true );
     m_obscuranceCheckBox->setEnabled( true );
 }
 
@@ -1462,12 +1483,23 @@ void QExperimental3DExtension::loadObscurance()
 
     if ( !obscuranceFileName.isNull() )
     {
+        bool render = false;
+
+        if ( m_baseObscuranceRadioButton->isChecked() )
+        {
+            m_baseAmbientLightingRadioButton->setChecked( true );
+            render = true;
+        }
+
         if ( m_obscuranceCheckBox->isChecked() )
         {
             m_obscuranceCheckBox->setChecked( false );
-            render();
+            render = true;
         }
 
+        if ( render ) this->render();
+
+        m_baseObscuranceRadioButton->setEnabled( false );
         m_obscuranceCheckBox->setEnabled( false );
 
         delete m_obscurance;
@@ -1480,6 +1512,7 @@ void QExperimental3DExtension::loadObscurance()
         {
             m_obscuranceSavePushButton->setEnabled( true );
             m_obscuranceCheckBox->setEnabled( true );
+            m_baseObscuranceRadioButton->setEnabled( true );
         }
         else
         {
