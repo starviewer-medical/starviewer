@@ -265,6 +265,11 @@ void QViewer::setupInteraction()
     m_vtkQtConnections->Connect(this->getInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*)));
 }
 
+vtkCamera *QViewer::getActiveCamera()
+{
+    return (this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL);
+}
+
 bool QViewer::saveGrabbedViews( const QString &baseName , FileType extension )
 {
     if( !m_grabList.empty() )
@@ -402,7 +407,7 @@ void QViewer::zoom( double factor )
     if( renderer )
     {
         // codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
-        vtkCamera *camera = renderer->GetActiveCamera();
+        vtkCamera *camera = getActiveCamera();
         if ( camera->GetParallelProjection() )
         {
             camera->SetParallelScale(camera->GetParallelScale() / factor );
@@ -433,9 +438,12 @@ void QViewer::pan( double motionVector[3] )
 {
     double viewFocus[4], viewPoint[3];
 
-    vtkRenderer *renderer = getRenderer();
-    vtkCamera *camera = renderer->GetActiveCamera();
-
+    vtkCamera *camera = getActiveCamera();
+    if( !camera )
+    {
+        DEBUG_LOG( "No hi ha càmera" );
+        return;
+    }
     camera->GetFocalPoint( viewFocus );
     camera->GetPosition( viewPoint );
     camera->SetFocalPoint( motionVector[0] + viewFocus[0],
@@ -446,10 +454,14 @@ void QViewer::pan( double motionVector[3] )
                         motionVector[1] + viewPoint[1],
                         motionVector[2] + viewPoint[2] );
 
+    // Nosaltres en principi no fem ús d'aquesta característica
     if( this->getInteractor()->GetLightFollowCamera() )
     {
+        vtkRenderer *renderer = getRenderer();
+        Q_ASSERT( renderer );
         renderer->UpdateLightsGeometryToFollowCamera();
     }
+
     emit cameraChanged();
     emit panChanged( motionVector );
     this->refresh();
@@ -466,7 +478,7 @@ void QViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX,
 
     int *size = this->getRenderWindowSize();
     int *rendererOrigin = this->getRenderer()->GetOrigin();
-    vtkCamera *camera = this->getRenderer()->GetActiveCamera();
+    vtkCamera *camera = getActiveCamera();
 
     double min[2];
     double rbcenter[4];
@@ -693,7 +705,7 @@ void QViewer::updateWindowLevelData()
 
 void QViewer::setCameraOrientation( int orientation )
 {
-    vtkCamera *cam = this->getRenderer() ? this->getRenderer()->GetActiveCamera() : NULL;
+    vtkCamera *cam = getActiveCamera();
     if (cam)
     {
         switch (orientation)

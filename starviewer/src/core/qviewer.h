@@ -14,6 +14,7 @@
 
 // Fordward declarations
 class QVTKWidget;
+class vtkCamera;
 class vtkRenderer;
 class vtkRenderWindow;
 class vtkRenderWindowInteractor;
@@ -262,6 +263,9 @@ protected:
      * @param orientation Orientació, valors enumerats que podran ser Axial, Sagital o Coronal
      */
     void setCameraOrientation( int orientation );
+
+    /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
+    vtkCamera *getActiveCamera();
 
     /**
      * Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat

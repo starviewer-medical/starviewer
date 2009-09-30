@@ -585,7 +585,9 @@ void Q2DViewer::addActors()
     renderer->AddViewProp( m_scalarBar );
     renderer->AddViewProp( m_imageActor );
     // TODO colocar això en un lloc mes adient
-    renderer->GetActiveCamera()->ParallelProjectionOn();
+    vtkCamera *camera = getActiveCamera();
+    Q_ASSERT( camera );
+    camera->ParallelProjectionOn();
 }
 
 QString Q2DViewer::getOppositeOrientationLabel( const QString &label )
@@ -832,7 +834,7 @@ void Q2DViewer::updateCamera()
 {
     if( m_mainVolume )
     {
-        vtkCamera *camera = this->getRenderer()->GetActiveCamera();
+        vtkCamera *camera = getActiveCamera();
         Q_ASSERT( camera );
 
         double roll = 0.0;
@@ -912,7 +914,7 @@ void Q2DViewer::resetCamera()
         m_applyFlip = false;
         m_isImageFlipped = false;
 
-        vtkCamera *camera = getRenderer()->GetActiveCamera();
+        vtkCamera *camera = getActiveCamera();
         Q_ASSERT( camera );
 
         double bounds[6];
