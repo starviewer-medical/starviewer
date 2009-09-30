@@ -1696,7 +1696,7 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
             {
                 lowerLeftText += tr("Slice: %1-%2/%3 Phase: %4/%5")
                         .arg( currentSlice )
-                        .arg( currentSlice+m_slabThickness-1 )
+                        .arg( currentSlice+m_slabThickness-1 ) // TODO potser hauríem de tenir una variable "slabRange"
                         .arg( maxSlice )
                         .arg( currentPhase )
                         .arg( maxPhase );
@@ -1716,7 +1716,7 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
             {
                 lowerLeftText += tr("Slice: %1-%2/%3")
                         .arg( currentSlice )
-                        .arg( currentSlice+m_slabThickness-1 )
+                        .arg( currentSlice+m_slabThickness-1 ) // TODO potser hauríem de tenir una variable "slabRange"
                         .arg( maxSlice );
             }
             else
