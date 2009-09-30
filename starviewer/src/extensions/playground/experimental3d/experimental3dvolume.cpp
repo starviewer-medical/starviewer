@@ -231,6 +231,7 @@ void Experimental3DVolume::addObscurance( Obscurance *obscurance, double factor,
         m_obscuranceVoxelShader->setObscurance( obscurance );
         m_obscuranceVoxelShader->setFactor( factor );
         m_obscuranceVoxelShader->setFilters( filterLow, filterHigh );
+        m_obscuranceVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_obscuranceVoxelShader ) != 0 );
     }
     else
     {
@@ -249,6 +250,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
     m_ambientVoxelShader->setTransferFunction( transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
+    m_obscuranceVoxelShader->setTransferFunction( transferFunction );
     m_vmiVoxelShader2->setTransferFunction( transferFunction );
     m_vomiVoxelShader->setTransferFunction( transferFunction );
     m_vomiCoolWarmVoxelShader->setTransferFunction( transferFunction );
@@ -404,6 +406,7 @@ void Experimental3DVolume::createVoxelShaders()
     m_contourVoxelShader = new ContourVoxelShader();
     m_celShadingVoxelShader = new CelShadingVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
+    m_obscuranceVoxelShader->setData( m_data, m_rangeMax );
     m_colorBleedingVoxelShader = new ColorBleedingVoxelShader();
     m_vmiVoxelShader2 = new VmiVoxelShader2();
     m_vmiVoxelShader2->setData( m_data, m_rangeMax, m_dataSize );

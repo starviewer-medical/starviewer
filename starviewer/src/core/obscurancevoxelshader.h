@@ -5,6 +5,7 @@
 #include "voxelshader.h"
 
 #include "obscurance.h"
+#include "transferfunction.h"
 #include "trilinearinterpolator.h"
 #include "vector3.h"
 
@@ -22,12 +23,17 @@ public:
     ObscuranceVoxelShader();
     virtual ~ObscuranceVoxelShader();
 
+    /// Assigna el volum de dades.
+    void setData( const unsigned short *data, unsigned short maxValue );
+    /// Assigna la funció de transferència.
+    void setTransferFunction( const TransferFunction &transferFunction );
     /// Assigna l'array d'obscurances.
     void setObscurance( const Obscurance *obscurance );
     /// Assigna el factor pel qual es multipliquen les obscurances.
     void setFactor( double factor );
     /// Assigna els filtres d'obscurances: per sota de \a low es considera 0 i per sobre de \a high es considera 1.
     void setFilters( double low, double high );
+    void setCombine( bool on );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
     virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
@@ -44,9 +50,17 @@ public:
 
 protected:
 
+    /// Omple la taula d'opacitats.
+    void precomputeOpacities();
+
+    const unsigned short *m_data;
+    unsigned short m_maxValue;
+    TransferFunction m_transferFunction;
+    float *m_opacities;
     const Obscurance *m_obscurance;
     double m_factor;
     double m_lowFilter, m_highFilter;
+    bool m_combine;
 
 };
 
@@ -71,19 +85,25 @@ inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, int off
     Q_UNUSED( direction );
     Q_UNUSED( remainingOpacity );
 
+    //Q_ASSERT( m_data );
     Q_ASSERT( m_obscurance );
 
-    if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
+    HdrColor color( 1.0f, 1.0f, 1.0f );
 
-    double obscurance = m_obscurance->obscurance( offset );
-    if ( obscurance < m_lowFilter ) obscurance = 0.0;
-    else if ( obscurance > m_highFilter ) obscurance = 1.0;
-    obscurance *= m_factor;
+    if ( m_combine ) color = baseColor;
+    else color.alpha = m_opacities[m_data[offset]];
 
-    HdrColor shaded = baseColor;
-    shaded.multiplyColorBy( obscurance );
+    if ( !color.isTransparent() && !color.isBlack() )
+    {
+        double obscurance = m_obscurance->obscurance( offset );
+        if ( obscurance < m_lowFilter ) obscurance = 0.0;
+        else if ( obscurance > m_highFilter ) obscurance = 1.0;
+        obscurance *= m_factor;
 
-    return shaded;
+        color.multiplyColorBy( obscurance );
+    }
+
+    return color;
 }
 
 
@@ -94,27 +114,41 @@ inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, const V
     Q_UNUSED( remainingOpacity );
 
     Q_ASSERT( interpolator );
+    Q_ASSERT( m_data );
     Q_ASSERT( m_obscurance );
-
-    if ( baseColor.isTransparent() || baseColor.isBlack() ) return baseColor;
 
     int offsets[8];
     double weights[8];
-    interpolator->getOffsetsAndWeights( position, offsets, weights );
+    bool offsetsAndWeights = false;
 
-    double obscurance;
-    if ( m_obscurance->isDoublePrecision() )
-        obscurance = TrilinearInterpolator::interpolate<double>( m_obscurance->doubleObscurance(), offsets, weights );
+    HdrColor color( 1.0f, 1.0f, 1.0f );
+
+    if ( m_combine ) color = baseColor;
     else
-        obscurance = TrilinearInterpolator::interpolate<float>( m_obscurance->floatObscurance(), offsets, weights );
-    if ( obscurance < m_lowFilter ) obscurance = 0.0;
-    else if ( obscurance > m_highFilter ) obscurance = 1.0;
-    obscurance *= m_factor;
+    {
+        interpolator->getOffsetsAndWeights( position, offsets, weights );
+        offsetsAndWeights = true;
+        double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
+        color.alpha = m_opacities[static_cast<int>(value)];
+    }
 
-    HdrColor shaded = baseColor;
-    shaded.multiplyColorBy( obscurance );
+    if ( !color.isTransparent() && !color.isBlack() )
+    {
+        if ( !offsetsAndWeights ) interpolator->getOffsetsAndWeights( position, offsets, weights );
 
-    return shaded;
+        double obscurance;
+        if ( m_obscurance->isDoublePrecision() )
+            obscurance = TrilinearInterpolator::interpolate<double>( m_obscurance->doubleObscurance(), offsets, weights );
+        else
+            obscurance = TrilinearInterpolator::interpolate<float>( m_obscurance->floatObscurance(), offsets, weights );
+        if ( obscurance < m_lowFilter ) obscurance = 0.0;
+        else if ( obscurance > m_highFilter ) obscurance = 1.0;
+        obscurance *= m_factor;
+
+        color.multiplyColorBy( obscurance );
+    }
+
+    return color;
 }
 
 
