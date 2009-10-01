@@ -32,7 +32,7 @@ public:
     void addItemsGroup( const QString &caption, const QList< QPair<QString,QString> > &itemsList );
 
     /// Marquem com a seleccionat l'ítem que tingui l'identificador donat
-    void setSelectedItem( const QString &identifier );
+    void markItem( const QString &identifier );
 
     /// Tractament dels events
     bool event( QEvent * event );
