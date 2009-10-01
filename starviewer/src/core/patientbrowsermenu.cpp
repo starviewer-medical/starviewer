@@ -95,7 +95,7 @@ void PatientBrowserMenu::setPatient(Patient * patient)
     }
 
     connect(m_patientBrowserList, SIGNAL( isActive(QString) ), SLOT( updateActiveItemView(QString) ));
-    connect(m_patientBrowserList, SIGNAL( selectedItem(QString) ), SLOT ( emitSelected(QString) ));
+    connect(m_patientBrowserList, SIGNAL( selectedItem(QString) ), SLOT ( processSelectedItem(QString) ));
 }
 
 void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
@@ -186,7 +186,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // FI HACK
 }
 
-void PatientBrowserMenu::emitSelected(const QString &identifier)
+void PatientBrowserMenu::processSelectedItem(const QString &identifier)
 {
     // HACK De moment això és un workaround per solucionar el ticket #824
     // és important que s'esborrin en aquest ordre, sinó es fa així el problema persisteix
