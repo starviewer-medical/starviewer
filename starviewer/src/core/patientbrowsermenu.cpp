@@ -137,7 +137,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
         screen_y = qApp->desktop()->availableGeometry( point ).height();
     }
 
-    m_patientBrowserList->setSelectedItem( identifier );
+    m_patientBrowserList->markItem( identifier );
     QSize widgetIdealSize = m_patientBrowserList->sizeHint();
 
     if ( ( x + widgetIdealSize.width() ) > screen_x )
