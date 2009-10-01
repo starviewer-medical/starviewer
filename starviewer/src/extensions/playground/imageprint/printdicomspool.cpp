@@ -25,23 +25,13 @@ namespace udg{
 
 void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath)
 {
-    m_dicomPrinter = dicomPrinter;
-    m_dicomPrintJob = dicomPrintJob;
-
-    m_storedPrintDcmtk = loadStoredPrintFileDcmtk(storedPrintDcmtkFilePath);
-
-    printBasicGrayscaleSpool(spoolDirectoryPath);
-
-    delete m_storedPrintDcmtk;
-}
-
-void PrintDicomSpool::printBasicGrayscaleSpool(const QString &spoolDirectoryPath)
-{
     DVPSPrintMessageHandler printerConnection;
     OFCondition result;
     bool printerSupportsPresentationLUTSOPClass = false, printerSupportsAnnotationSOPClass = false, transferSyntaxImplicit = false;
 
-    //TODO: podem utilitzar el del DVSStoredPrint
+    m_dicomPrinter = dicomPrinter;
+    m_dicomPrintJob = dicomPrintJob;
+
     /*Connectem amb la impressora
         1r Paràmetre és de tipus objecte tlayer només s'utilitza si la comunicació es fa amb ssl
         2n AETitle del Starviewer 3r AETitle de la impressora Dicom
@@ -57,7 +47,7 @@ void PrintDicomSpool::printBasicGrayscaleSpool(const QString &spoolDirectoryPath
     result = printerConnection.negotiateAssociation(NULL, qPrintable(PacsDevice::getLocalAETitle()), qPrintable(m_dicomPrinter.getAETitle()), 
                                                     qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(), ASC_DEFAULTMAXPDU, 
                                                     printerSupportsPresentationLUTSOPClass, printerSupportsAnnotationSOPClass, transferSyntaxImplicit);
-    
+
     if (result.bad())
     {
         ERROR_LOG(QString("No s'ha pogut connectar amb la impressora amb AETitle: %1, IP: %2, port: %3, descripció error:%4 ").arg(m_dicomPrinter.getAETitle(), 
@@ -65,63 +55,105 @@ void PrintDicomSpool::printBasicGrayscaleSpool(const QString &spoolDirectoryPath
         return;
     }
 
-    /*TODO: És necessari ?, simplement demana a la impressora informació de certs paràmetres, té algun sentit ? Preguntar al fòrum,
-      Enganxar codi dvpssp.cxx línia 1342 ensenyant que no fa res*/
-    if (EC_Normal != (result = m_storedPrintDcmtk->printSCUgetPrinterInstance(printerConnection)))
-    {
-        //TODO: Request printer settings els podem obtenir ?
-        DEBUG_LOG(QString("spooler: printer communication failed, unable to request printer settings. %1").arg(result.text()));
-    }
-
-    if (EC_Normal != (result = m_storedPrintDcmtk->printSCUcreateBasicFilmSession(printerConnection, getAttributesBasicFilmSession(), true /*plutInSession*/)))
-    {
-        DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film session. %1").arg(result.text()));
-    }
-
-    if (EC_Normal != (result = m_storedPrintDcmtk->printSCUcreateBasicFilmBox(printerConnection, true /*targetPLUTinFilmSession*/)))
-    {
-        DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film box. %1").arg(result.text()));
-    }
-
-    for (size_t imageNumber = 0; imageNumber < m_storedPrintDcmtk->getNumberOfImages(); imageNumber++)
-    {
-        createAndSendBasicGrayscaleImageBox(printerConnection, imageNumber, spoolDirectoryPath);
-    }
-
-    if (EC_Normal != (result = m_storedPrintDcmtk->printSCUprintBasicFilmSession(printerConnection)))
-    {
-        DEBUG_LOG(QString("spooler: printer communication failed, unable to print (at film session level). %1").arg(result.text()));
-    } 
-    else 
-    {
-        if (EC_Normal != (result = m_storedPrintDcmtk->printSCUprintBasicFilmBox(printerConnection)))
-        {
-            DEBUG_LOG(QString("spooler: printer communication failed, unable to print. %1").arg(result.text()));
-        }
-    }
-
-    if (EC_Normal==result) if (EC_Normal != (result = m_storedPrintDcmtk->printSCUdelete(printerConnection)))
-    {
-        DEBUG_LOG(QString("spooler: printer communication failed, unable to delete print objects %1.").arg(result.text()));
-    }
+    printStoredPrintDcmtkContent(printerConnection, storedPrintDcmtkFilePath, spoolDirectoryPath);
 
     result = printerConnection.releaseAssociation();
     if (result.bad())
     {
         DEBUG_LOG(QString("spooler: release of connection to printer failed. %1").arg(result.text()));
     }
+
+}
+
+void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &printerConnection, const QString storedPrintDcmtkFilePath, const QString &spoolDirectoryPath)
+{
+    OFCondition result;
+    DVPSStoredPrint	*storedPrintDcmtk = loadStoredPrintFileDcmtk(storedPrintDcmtkFilePath);
+    /*Aquesta variable indica si els Attibutes de PLUT que són Illumination (2010,015E) i (2010,0160) s'han d'afegir al BasicFilmSession o al BasicFilmBox
+     *Nosaltres indiquem que els afegim al BasicFilmBox perquè si mirem la documentació DICOM, tot i que dcmtk ho suporta aquests dos tags no apareixen com 
+     *a atributs possibles d'un BasicFilmBox.
+     *De totes maneres si mirem el codi de les dcmtk on passem aquesta variable, aquesta no té cap afecte, perquè com no soportem les PresentatioLUTSOP el valor
+     *que conté la variable s'ignora i aquestes dos tags no s'envien*/
+    bool addPLUTAttributesInBasicFilmSession = false;
+
+    if (!storedPrintDcmtk) return;
+
+    /*TODO: És necessari ?, simplement demana a la impressora informació de certs paràmetres, té algun sentit ? Preguntar al fòrum,
+      Enganxar codi dvpssp.cxx línia 1342 ensenyant que no fa res*/
+    result = storedPrintDcmtk->printSCUgetPrinterInstance(printerConnection);
+    if (EC_Normal != result)
+    {
+        DEBUG_LOG(QString("spooler: printer communication failed, unable to request printer settings. %1").arg(result.text()));
+    }
+
+    //Abans de fer un acció amb la impressora comprovem si la última ha anat bé amb EC_NORMAL=result, si ha fallat totes les accions restants no s'executaran
+    if (EC_Normal == result)
+    {
+        result = result = storedPrintDcmtk->printSCUcreateBasicFilmSession(printerConnection, getAttributesBasicFilmSession(), addPLUTAttributesInBasicFilmSession);
+        if (EC_Normal != result)
+        {
+            DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film session. %1").arg(result.text()));
+        }
+    }
+
+    if (EC_Normal == result)
+    {
+        result = storedPrintDcmtk->printSCUcreateBasicFilmBox(printerConnection, addPLUTAttributesInBasicFilmSession);
+        if (EC_Normal != result)
+        {
+            DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film box. %1").arg(result.text()));
+        }
+    }
+
+    if (EC_Normal == result)
+    {
+        for (size_t imageNumber = 0; imageNumber < storedPrintDcmtk->getNumberOfImages(); imageNumber++)
+        {
+            result = createAndSendBasicGrayscaleImageBox(printerConnection, storedPrintDcmtk, imageNumber, spoolDirectoryPath);
+
+            if (result != EC_Normal) break;
+        }
+    }
+
+    if (EC_Normal == result)
+    {
+        result = storedPrintDcmtk->printSCUprintBasicFilmSession(printerConnection);
+        if (EC_Normal != result)
+        {
+            DEBUG_LOG(QString("spooler: printer communication failed, unable to print (at film session level). %1").arg(result.text()));
+        } 
+    }
+
+    if (EC_Normal == result)
+    {
+        result = storedPrintDcmtk->printSCUprintBasicFilmBox(printerConnection);
+        if (EC_Normal != result)
+        {
+            DEBUG_LOG(QString("spooler: printer communication failed, unable to print. %1").arg(result.text()));
+        }
+    }
+
+    /*El printSCUDelete el fem sempre encara que algun pas hagi fallat, per indicar a la impressora que ja pot alliberar els recursos guardats per 
+      emmagatzemar el FilmSession,FilmBox i ImageBox. Aquest mètode només resultarà útil quan la impressió ha anat correcte o si s'ha produït un error
+      s'ha produït després de crear el FilmSession*/
+
+    result = storedPrintDcmtk->printSCUdelete(printerConnection);
+    if (EC_Normal != result)
+    {
+        DEBUG_LOG(QString("spooler: printer communication failed, unable to delete print objects %1.").arg(result.text()));
+    }
+
+    delete storedPrintDcmtk;
 }
 
 DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
 {
-    OFCondition result;
     DcmDataset datasetBasicFilmSession;
     DcmElement *attributeBasicFilmSession = NULL;
-    Status state;
 
     attributeBasicFilmSession = new DcmCodeString(DCM_MediumType);
     attributeBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getMediumType()));
-    result = datasetBasicFilmSession.insert(attributeBasicFilmSession);
+    datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
     attributeBasicFilmSession = new DcmCodeString(DCM_FilmDestination);
     attributeBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getFilmDestination())); 
@@ -151,7 +183,7 @@ DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
     return datasetBasicFilmSession;
 }
 
-Status PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printerConnection, size_t imageNumber, const QString &spoolDirectoryPath)
+OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printerConnection, DVPSStoredPrint	*storedPrintDcmtk, size_t imageNumber, const QString &spoolDirectoryPath)
 {
     OFCondition result;
     const char *studyUID = NULL, *seriesUID = NULL, *instanceUID = NULL;
@@ -159,12 +191,13 @@ Status PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHand
     QString imageToPrintPath;
     bool isImageMonochrome1;
 
-    result = m_storedPrintDcmtk->getImageReference(imageNumber, studyUID, seriesUID, instanceUID);
+    //Busquem el studyUID, seriesUID i instaceUID de la imatge a imprimir
+    result = storedPrintDcmtk->getImageReference(imageNumber, studyUID, seriesUID, instanceUID);
 
     if (result != EC_Normal || !studyUID || !seriesUID || !instanceUID)
     {
         ERROR_LOG(QString("No s'ha trobat la imatge número %1 per imprimir").arg(QString().setNum(imageNumber)));
-        return Status().setStatus(result);
+        return result;
     }
 
     //TODO:S'hauria de fer a un altre lloc el càlcul del path de la imatge perquè també s'utilitza a CreateDicomPrintSpool
@@ -176,7 +209,7 @@ Status PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHand
         isImageMonochrome1 = imageToPrint->getPhotometricInterpretation() == EP_Interpretation::EPI_Monochrome1;
 
         //Enviem la imatge
-        result = m_storedPrintDcmtk->printSCUsetBasicImageBox(printerConnection, imageNumber, *imageToPrint, isImageMonochrome1);
+        result = storedPrintDcmtk->printSCUsetBasicImageBox(printerConnection, imageNumber, *imageToPrint, isImageMonochrome1);
         if (EC_Normal != result)
         {
             DEBUG_LOG(QString("spooler: printer communication failed, unable to transmit basic grayscale image box. %1").arg(result.text()));
@@ -190,7 +223,7 @@ Status PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHand
     //No s'ha de fer el delete del studyUID, seriesUID i instanceUID perquè són un punter a informació del storedPrint
     delete imageToPrint;
     
-    return Status().setStatus(result);
+    return result;
 }
 
 DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(const QString &pathStoredPrintDcmtkFile)
