@@ -105,15 +105,7 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
         }
     }
 
-    if (EC_Normal == result)
-    {
-        result = storedPrintDcmtk->printSCUprintBasicFilmSession(printerConnection);
-        if (EC_Normal != result)
-        {
-            DEBUG_LOG(QString("spooler: printer communication failed, unable to print (at film session level). %1").arg(result.text()));
-        } 
-    }
-
+    //Donem ordre d'imprimir el BasicFilmBox, no cal donar ordre d'imprimir el FilmSession amb el BasicFilmBox n'hi ha suficent
     if (EC_Normal == result)
     {
         result = storedPrintDcmtk->printSCUprintBasicFilmBox(printerConnection);
