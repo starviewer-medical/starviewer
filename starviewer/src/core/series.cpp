@@ -384,6 +384,7 @@ Identifier Series::addVolume(Volume *volume)
 {
     Identifier volumeID = VolumeRepository::getRepository()->addVolume(volume);
     m_volumesList.append(volumeID);
+    volume->setIdentifier(volumeID);
     return volumeID;
 }
 
