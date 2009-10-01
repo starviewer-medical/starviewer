@@ -207,6 +207,26 @@ void Volume::getDimensions( int dims[3] )
     getVtkData()->GetDimensions( dims );
 }
 
+void Volume::setIdentifier( const Identifier &id )
+{
+    m_identifier = id;
+}
+
+Identifier Volume::getIdentifier() const
+{
+    return m_identifier;
+}
+
+void Volume::setThumbnail( const QPixmap &thumbnail )
+{
+    m_thumbnail = thumbnail;
+}
+
+QPixmap Volume::getThumbnail() const
+{
+    return m_thumbnail;
+}
+
 void Volume::setNumberOfPhases( int phases )
 {
     if( phases >= 1 )
