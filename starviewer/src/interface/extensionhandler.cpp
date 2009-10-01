@@ -341,14 +341,53 @@ void ExtensionHandler::processInput(Patient *patient, const QString &defaultSeri
     Q_UNUSED( defaultSeriesUID );
     foreach(Study *study, patient->getStudies() )
     {
+        // Per cada sèrie, si les seves imatges són multiframe o de mides diferents entre sí aniran en volums separats
         foreach(Series *series, study->getViewableSeries() )
         {
-            // TODO ara el que fem és que 1 Series equival a 1 Volume, més endavant es podrien fer un tracte més elaborat
-            Volume *volume = new Volume;
-            volume->setImages( series->getImages() );
-            volume->setNumberOfPhases( series->getNumberOfPhases() );
-            volume->setNumberOfSlicesPerPhase( series->getNumberOfSlicesPerPhase() );
-            series->addVolume(volume);
+            int rows = 0, columns = 0;
+            QList<Image *> volumeImages;
+            Image *image = series->getImages().first();
+            if( image )
+            {
+                rows = image->getRows();
+                columns = image->getColumns();
+            }
+
+            foreach( Image *image, series->getImages() )
+            {
+                if( image->isMultiFrame() )
+                {
+                    Volume *volume = new Volume;
+                    volume->addImage(image);
+                    volume->setNumberOfPhases(1);
+                    volume->setNumberOfSlicesPerPhase( image->getNumberOfFrames() );
+                    volume->setThumbnail( image->getThumbnail() );
+                    series->addVolume( volume );
+                }
+                else if( rows != image->getRows() || columns != image->getColumns() ) // per cada imatge de resolució diferent fem un volum nou
+                {
+                    Volume *volume = new Volume;
+                    volume->addImage(image);
+                    volume->setNumberOfPhases(1);
+                    volume->setNumberOfSlicesPerPhase(1);
+                    volume->setThumbnail( image->getThumbnail() );
+                    series->addVolume( volume );
+                }
+                else
+                {
+                    volumeImages << image;
+                }
+            }
+
+            if( !volumeImages.isEmpty() )
+            {
+                Volume *volume = new Volume;
+                volume->setImages( volumeImages );
+                volume->setNumberOfPhases( series->getNumberOfPhases() );
+                volume->setNumberOfSlicesPerPhase( series->getNumberOfSlicesPerPhase() );
+                volume->setThumbnail( volumeImages.at(volumeImages.count()/2)->getThumbnail() );
+                series->addVolume(volume);
+            }
         }
     }
     DEBUG_LOG( QString("Patient:\n%1").arg( patient->toString() ));
