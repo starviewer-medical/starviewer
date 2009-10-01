@@ -46,7 +46,9 @@ private slots:
     /// que ara per ara serà una Series, però més endavant tindrà una forma més abstracta, com pot ser "Item" o "ID"
     void updateActiveItemView(const QString &identifier);
 
-    void emitSelected(const QString &identifier);
+    /// Donat l'identificador de l'ítem fa les accions pertinents. 
+    /// En aquest cas s'encarrega d'obtenir el volum seleccionat per l'usuari i notificar-ho
+    void processSelectedItem(const QString &identifier);
 
 private:
     /// Actualitza la posició de la informació addicional
