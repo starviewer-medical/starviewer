@@ -1,23 +1,13 @@
 #include "printdicomspool.h"
 
-//TODO Fer neteja d'includes
-#include "dcmtk/dcmpstat/dvpsdef.h"    /* for constants */
-#include "dcmtk/dcmpstat/dviface.h"    /* for DVInterface */
-#include "dcmtk/ofstd/ofstring.h"   /* for OFString */
-#include "dcmtk/ofstd/ofbmanip.h"   /* for OFBitmanipTemplate */
-#include "dcmtk/ofstd/ofdatime.h"   /* for OFDateTime */
-#include "dcmtk/dcmdata/dcuid.h"      /* for dcmtk version name */
-#include "dcmtk/dcmdata/cmdlnarg.h"   /* for prepareCmdLineArgs */
-#include "dcmtk/ofstd/ofconapp.h"   /* for OFConsoleApplication */
-#include "dcmtk/dcmimgle/dcmimage.h"
-#include "dcmtk/dcmpstat/dvpspr.h"
-#include "dcmtk/dcmpstat/dvpssp.h"
-#include "dcmtk/dcmpstat/dvpshlp.h"     /* for class DVPSHelper */
-#include "dcmtk/ofstd/ofstd.h"
-#include "dcmtk/dcmdata/dcdebug.h"
+#include "dcmtk/dcmimgle/dcmimage.h" //classe DicomImage
+#include "dcmtk/dcmpstat/dvpspr.h" //classe DVPSPrintEventHandler
+#include "dcmtk/dcmpstat/dvpssp.h" //classe DVPSStoredPrint
+#include "dcmtk/dcmpstat/dvpshlp.h" //classe DVPSHelper
 
 #include <QDir>
 
+#include "dicomprintpage.h"
 #include "logging.h"
 #include "../inputoutput/pacsdevice.h"
 

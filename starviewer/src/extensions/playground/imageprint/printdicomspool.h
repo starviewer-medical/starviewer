@@ -5,7 +5,6 @@
 
 #include "dicomprinter.h"
 #include "dicomprintjob.h"
-#include "dicomprintpage.h"
 
 ///Representació d'una impressora DICOM amb les eines DCMTK.
 class DVPSStoredPrint;
