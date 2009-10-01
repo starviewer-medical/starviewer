@@ -19,6 +19,8 @@ public:
     ///Retorna una impressora 
     DicomPrinter getFakeDicomPrinter();
 
+    DicomPrinter getFakeDicomScopeDicomPrinter();
+
     ///Retorna un DicomPrintjob amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
     DicomPrintJob getFakeDicomPrintJob(QString studyUID, QString seriesUID, int numberOfImages);
 

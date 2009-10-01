@@ -16,8 +16,19 @@ DicomPrinter FakeObjects::getFakeDicomPrinter()
     DicomPrinter dicomPrinter;
 
     dicomPrinter.setHostname("localhost");
-    dicomPrinter.setPort(104);
-    dicomPrinter.setAETitle("DVTK_TEST");
+    dicomPrinter.setPort(104);//10006
+    dicomPrinter.setAETitle("DVTK_TEST");//PRINTSCP
+
+    return dicomPrinter;
+}
+
+DicomPrinter FakeObjects::getFakeDicomScopeDicomPrinter()
+{
+    DicomPrinter dicomPrinter;
+
+    dicomPrinter.setHostname("localhost");
+    dicomPrinter.setPort(10006);
+    dicomPrinter.setAETitle("PRINTSCP");
 
     return dicomPrinter;
 }
