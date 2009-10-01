@@ -341,7 +341,7 @@ void ExtensionHandler::processInput(Patient *patient, const QString &defaultSeri
     Q_UNUSED( defaultSeriesUID );
     foreach(Study *study, patient->getStudies() )
     {
-        foreach(Series *series, study->getSeries() )
+        foreach(Series *series, study->getViewableSeries() )
         {
             // TODO ara el que fem és que 1 Series equival a 1 Volume, més endavant es podrien fer un tracte més elaborat
             Volume *volume = new Volume;
