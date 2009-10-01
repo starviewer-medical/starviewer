@@ -12,7 +12,8 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         volume3dviewtesting \
                         experimental3d \
                         gputesting \
-                        imageprint
+                        imageprint \
+                        dti
 
 #CONTRIB_EXTENSIONS =
 
