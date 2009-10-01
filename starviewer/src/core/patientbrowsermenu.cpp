@@ -15,7 +15,9 @@
 #include "patientbrowsermenuextendeditem.h"
 #include "patientbrowsermenulist.h"
 #include "series.h"
+#include "image.h"
 #include "volume.h"
+#include "volumerepository.h"
 
 namespace udg {
 
@@ -39,6 +41,7 @@ void PatientBrowserMenu::setPatient(Patient * patient)
 {
     m_patient = patient;
     QString caption;
+    QString label;
     foreach( Study *study, m_patient->getStudies() )
     {
         // Extreiem el caption de l'estudi
@@ -52,18 +55,40 @@ void PatientBrowserMenu::setPatient(Patient * patient)
         QList< QPair<QString,QString> > itemsList;
         foreach( Series *series, study->getViewableSeries() )
         {
-            QPair<QString,QString> itemPair;
-            // label
-            itemPair.first = tr(" Serie %1: %2 %3 %4 %5")
+            label = tr(" Serie %1: %2 %3 %4 %5")
                         .arg( series->getSeriesNumber().trimmed() )
                         .arg( series->getProtocolName().trimmed() )
                         .arg( series->getDescription().trimmed() )
                         .arg( series->getBodyPartExamined() )
                         .arg( series->getViewPosition() );
-            // identifier
-            itemPair.second = series->getInstanceUID();
-            // afegim el parell a la llista
-            itemsList << itemPair;
+            
+            if( series->getNumberOfVolumes() > 1 )
+            {
+                QString volumeID;
+                int volumeNumber = 1;
+                foreach( Volume *volume, series->getVolumesList() )
+                {
+                    QPair<QString,QString> itemPair;
+                    // label
+                    itemPair.first = label + " (" + QString::number(volumeNumber) + ")";
+                    volumeNumber++;
+                    // identifier
+                    itemPair.second = QString::number(volume->getIdentifier().getValue());
+                    // afegim el parell a la llista
+                    itemsList << itemPair;
+                }
+            }
+            else // només tenim un sol volum per la sèrie
+            {
+                Volume *volume = series->getFirstVolume();
+                QPair<QString,QString> itemPair;
+                // label
+                itemPair.first = label;
+                // identifier
+                itemPair.second = QString::number(volume->getIdentifier().getValue());
+                // afegim el parell a la llista
+                itemsList << itemPair;
+            }
         }
         // afegim les sèries agrupades per estudi
         m_patientBrowserList->addItemsGroup( caption, itemsList );
@@ -75,16 +100,18 @@ void PatientBrowserMenu::setPatient(Patient * patient)
 
 void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
 {
-    Series *series = m_patient->getSeries(identifier);
-    if( series )
+    Identifier id( identifier.toInt() );
+    Volume *volume = VolumeRepository::getRepository()->getVolume( id );
+    if( volume )
     {
         // actualitzem les dades de l'item amb informació adicional
-        m_patientAdditionalInfo->setPixmap( series->getThumbnail() );
+        m_patientAdditionalInfo->setPixmap( volume->getThumbnail() );
+        Series *series = volume->getImage(0)->getParentSeries();
         m_patientAdditionalInfo->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
                                         .arg( series->getDescription().trimmed() )
                                         .arg( series->getModality().trimmed() )
                                         .arg( series->getProtocolName().trimmed() )
-                                        .arg( series->getNumberOfImages() )
+                                        .arg( volume->getImages().count() )
                                         );
         // Actualitzem la posició del widget amb la informació adicional
         updatePosition();
@@ -167,9 +194,9 @@ void PatientBrowserMenu::emitSelected(const QString &identifier)
     // Si en tinguéssim un d'estàtic segurament això ens ocasionaria que l'aplicació petaria més endavant
     delete m_patientAdditionalInfo;
     delete m_patientBrowserList;
-    Series *series = m_patient->getSeries(identifier);
-    if( series )
-        emit selectedVolume( series->getFirstVolume() );
+
+    Identifier id( identifier.toInt() );
+    emit selectedVolume( VolumeRepository::getRepository()->getVolume( id ) );
 }
 
 void PatientBrowserMenu::updatePosition()
