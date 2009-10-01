@@ -122,6 +122,9 @@ public:
     void setNumberOfFrames( int frames );
     int getNumberOfFrames() const;
 
+    /// Ens diu si la imatge és de tipus multi-frame
+    bool isMultiFrame() const;
+
     /// Assignar/Obtenir textes descriptius dels window level
     void addWindowLevelExplanation( QString explanation );
     void setWindowLevelExplanations( const QStringList &explanations );
