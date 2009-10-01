@@ -48,8 +48,8 @@ class Volume : public QObject
 {
 Q_OBJECT
 public:
-	/// Tipus de vòxel del volum
-	typedef signed short int VoxelType;
+    /// Tipus de vòxel del volum
+    typedef signed short int VoxelType;
     /// Tipus d'imatge intern per defecte d'itk
     typedef VoxelType ItkPixelType;
     static const unsigned int VDimension = 3;
@@ -166,11 +166,11 @@ public:
      */
     void getStackDirection( double direction[3], int stack = 0 );
 
-	/// Obtenim el punter a les dades que es troben en l'índex donat
-	/// És un accés a baix nivell, ja que obtenim el punter de les dades
-	/// Retornem el punter transformat al tipus natiu de dades VoxelType
-	VoxelType *getScalarPointer( int x = 0, int y = 0, int z = 0 );
-	VoxelType *getScalarPointer( int index[3] );
+    /// Obtenim el punter a les dades que es troben en l'índex donat
+    /// És un accés a baix nivell, ja que obtenim el punter de les dades
+    /// Retornem el punter transformat al tipus natiu de dades VoxelType
+    VoxelType *getScalarPointer( int x = 0, int y = 0, int z = 0 );
+    VoxelType *getScalarPointer( int index[3] );
 
 signals:
     /**
@@ -251,8 +251,8 @@ private:
      */
     int readFiles( QStringList filenames );
 
-	/// Donat un missatge d'error en un string, ens torna el codi d'error intern que sabem tractar
-	int identifyErrorMessage( const QString &errorMessage );
+    /// Donat un missatge d'error en un string, ens torna el codi d'error intern que sabem tractar
+    int identifyErrorMessage( const QString &errorMessage );
 
     /// S'encarrega de crear un volum "de mínims" per donar un output en casos que
     /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un 
