@@ -15,6 +15,7 @@ QCINEController::QCINEController(QWidget *parent)
  : QWidget(parent), m_cineController(0)
 {
     setupUi(this);
+    m_loopCheckBox->setChecked(true);
 }
 
 QCINEController::~QCINEController()
@@ -37,6 +38,8 @@ void QCINEController::setQViewer( QViewer *viewer )
         connect( m_cineController, SIGNAL( velocityChanged(int) ), SLOT( updateVelocityLabel(int) ) );
         connect( m_cineController, SIGNAL( velocityChanged(int) ), m_velocityControl, SLOT( setValue(int) ) );
         m_cineController->setInputViewer( viewer );
+        m_cineController->enableLoop( m_loopCheckBox->isChecked() );
+        m_cineController->enableBoomerang( m_boomerangCheckBox->isChecked() );
     }
     else
         m_cineController->setInputViewer( viewer );
