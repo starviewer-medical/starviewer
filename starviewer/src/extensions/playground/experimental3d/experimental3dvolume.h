@@ -79,7 +79,7 @@ public:
     /// Afegeix cel-shading amb el nombre de quantums especificat.
     void addCelShading( int quantums );
     /// Afegeix obscurances al shading.
-    void addObscurance( Obscurance *obscurance, double factor, double filterLow, double filterHigh );
+    void addObscurance( Obscurance *obscurance, double factor, double filterLow, double filterHigh, bool additive = false, double weight = 0.0 );
     /// Estableix la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
 
@@ -88,7 +88,7 @@ public:
     void startVmiSecondPass();
     QVector<float> finishVmiSecondPass();
     float viewedVolumeInVmiSecondPass() const;
-    void addVomi( const QVector<float> &vomi, float maximumVomi, float factor );
+    void addVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool additive = false, float weight = 0.0f );
     void addVomiCoolWarm( const QVector<float> &vomi, float maximumVomi, float factor, float y, float b );
     void addColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor );
     void addVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor );

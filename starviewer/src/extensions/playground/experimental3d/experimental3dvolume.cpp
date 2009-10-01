@@ -223,7 +223,7 @@ void Experimental3DVolume::addCelShading( int quantums )
 }
 
 
-void Experimental3DVolume::addObscurance( Obscurance *obscurance, double factor, double filterLow, double filterHigh )
+void Experimental3DVolume::addObscurance( Obscurance *obscurance, double factor, double filterLow, double filterHigh, bool additive, double weight )
 {
     if ( !obscurance->hasColor() )
     {
@@ -232,6 +232,7 @@ void Experimental3DVolume::addObscurance( Obscurance *obscurance, double factor,
         m_obscuranceVoxelShader->setFactor( factor );
         m_obscuranceVoxelShader->setFilters( filterLow, filterHigh );
         m_obscuranceVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_obscuranceVoxelShader ) != 0 );
+        m_obscuranceVoxelShader->setAdditive( additive, weight );
     }
     else
     {
@@ -286,11 +287,12 @@ float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
 }
 
 
-void Experimental3DVolume::addVomi( const QVector<float> &vomi, float maximumVomi, float factor )
+void Experimental3DVolume::addVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool additive, float weight )
 {
     if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiVoxelShader );
     m_vomiVoxelShader->setVomi( vomi, maximumVomi, factor );
     m_vomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) != 0 );
+    m_vomiVoxelShader->setAdditive( additive, weight );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
