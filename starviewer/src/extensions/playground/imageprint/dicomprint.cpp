@@ -16,8 +16,11 @@ void DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
     CreateDicomPrintSpool dicomPrintSpool;
     PrintDicomSpool printDicomSpool;
     QString storedDcmtkFilePath;
+    ImagePrintSettings imagePrintSettings;
 
-    storedDcmtkFilePath = dicomPrintSpool.createPrintSpool(printer, printJob, Settings().getValue(ImagePrintSettings::SpoolDirectory).toString());
+    imagePrintSettings.init();//TODO:A on s'ha de fer l'ini ? 
+
+    storedDcmtkFilePath = dicomPrintSpool.createPrintSpool(printer, printJob.getPrintPage(), Settings().getValue(ImagePrintSettings::SpoolDirectory).toString());
 
     printDicomSpool.printBasicGrayscale(printer, printJob, storedDcmtkFilePath, Settings().getValue(ImagePrintSettings::SpoolDirectory).toString());
 

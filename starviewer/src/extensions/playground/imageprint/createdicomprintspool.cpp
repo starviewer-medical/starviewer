@@ -17,7 +17,7 @@
 namespace udg
 {
 
-QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &spoolDirectoryPath)
+QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath)
 {
     QDir spoolDir;
 
@@ -27,12 +27,12 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
         spoolDir.mkdir(spoolDirectoryPath);
     }
 
-    m_dicomPrintJob = dicomPrintJob;
+    m_dicomPrintPage = dicomPrintPage;
     m_dicomPrinter = dicomPrinter;
 
     setBasicFilmBoxAttributes();
 
-    foreach(Image *image, dicomPrintJob.getPrintPage().getImagesToPrint())
+    foreach(Image *image,m_dicomPrintPage.getImagesToPrint())
     {
         transformImageForPrinting(image, spoolDirectoryPath);
     }
@@ -59,39 +59,39 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     m_storedPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()));
 
     //Indiquem el layout de la placa
-    m_storedPrint->setImageDisplayFormat(m_dicomPrintJob.getPrintPage().getFilmLayoutColumns(), m_dicomPrintJob.getPrintPage().getFilmLayoutRows());
+    m_storedPrint->setImageDisplayFormat(m_dicomPrintPage.getFilmLayoutColumns(), m_dicomPrintPage.getFilmLayoutRows());
 
-    m_storedPrint->setFilmSizeID(qPrintable(m_dicomPrintJob.getPrintPage().getFilmSize()));
+    m_storedPrint->setFilmSizeID(qPrintable(m_dicomPrintPage.getFilmSize()));
 
     /*Interpolació que s'aplicarà si s'ha d'escalar o ampliar la imatge perquè càpiga a la cel·la
      Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
-    m_storedPrint->setMagnificationType(qPrintable(m_dicomPrintJob.getPrintPage().getMagnificationType()));
+    m_storedPrint->setMagnificationType(qPrintable(m_dicomPrintPage.getMagnificationType()));
 
-    if (m_dicomPrintJob.getPrintPage().getMagnificationType().compare("CUBIC"))
+    if (m_dicomPrintPage.getMagnificationType().compare("CUBIC"))
     {
         /*El Smoothing Type, tag 2010,0080 del Basic Film Box, només se li pot donar valor sir el tag Magnification Type 2010,0060 té com a valor 'CUBIC'
           Especifica el tipus de funció d'interpollació a aplicar.
           Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
-        m_storedPrint->setSmoothingType(qPrintable(m_dicomPrintJob.getPrintPage().getSmoothingType()));
+        m_storedPrint->setSmoothingType(qPrintable(m_dicomPrintPage.getSmoothingType()));
     }
 
     //Densitat del marc que separa les imatges
-    m_storedPrint->setBorderDensity(qPrintable(m_dicomPrintJob.getPrintPage().getBorderDensity()));
+    m_storedPrint->setBorderDensity(qPrintable(m_dicomPrintPage.getBorderDensity()));
     //Densitat de les cel·les buides
-    m_storedPrint->setEmtpyImageDensity(qPrintable(m_dicomPrintJob.getPrintPage().getEmptyImageDensity()));
-    m_storedPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMaxDensity())));
-    m_storedPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintJob.getPrintPage().getMinDensity())));
+    m_storedPrint->setEmtpyImageDensity(qPrintable(m_dicomPrintPage.getEmptyImageDensity()));
+    m_storedPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMaxDensity())));
+    m_storedPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMinDensity())));
     
-    if (m_dicomPrintJob.getPrintPage().getFilmOrientation() == "PORTRAIT")
+    if (m_dicomPrintPage.getFilmOrientation() == "PORTRAIT")
     {
         m_storedPrint->setFilmOrientation(DVPSF_portrait);
     }
-    else if (m_dicomPrintJob.getPrintPage().getFilmOrientation() == "LANDSCAPE")
+    else if (m_dicomPrintPage.getFilmOrientation() == "LANDSCAPE")
     {
         m_storedPrint->setFilmOrientation(DVPSF_landscape);
     }
     
-    m_storedPrint->setTrim(m_dicomPrintJob.getPrintPage().getTrim() ? DVPSH_trim_on : DVPSH_trim_off);
+    m_storedPrint->setTrim(m_dicomPrintPage.getTrim() ? DVPSH_trim_on : DVPSH_trim_off);
     
     /*Tag Configuration Information (2010,0150) de Basic Film Box no li donem valor ara mateix, aquest camp permet configurar les impressions 
       amb característiques que no són Dicom Conformance, sinó que són dependents de al impressora.
@@ -255,9 +255,9 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
           Information (2010,0150) tot i que es poden especificar a nivell de Image Box com aquest tag té el mateix valor per totes les imatges del Film Box, 
           s'especifica a nivell de Film Box, els altres tags del Image Box són emplenats per les dcmtk*/
 
-        if (!m_dicomPrintJob.getPrintPage().getPolarity().isEmpty())
+        if (!m_dicomPrintPage.getPolarity().isEmpty())
         {
-            m_storedPrint->setImagePolarity(i, qPrintable(m_dicomPrintJob.getPrintPage().getPolarity()));
+            m_storedPrint->setImagePolarity(i, qPrintable(m_dicomPrintPage.getPolarity()));
         }
     }
 }

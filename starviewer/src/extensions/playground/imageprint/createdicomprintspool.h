@@ -8,8 +8,8 @@
 #ifndef UDGCREATEDICOMPRINTSPOOL_H
 #define UDGCREATEDICOMPRINTSPOOL_H
 
-#include "dicomprintjob.h"
 #include "dicomprinter.h"
+#include "dicomprintpage.h"
 
 class DVPSStoredPrint;
 class DVPresentationState;
@@ -23,7 +23,7 @@ class CreateDicomPrintSpool
  public:
 
 	//void setVolume(Volume *p_volume);
-	QString createPrintSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &spoolDirectoryPath);	
+	QString createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath);	
 
  private:
 	
@@ -40,7 +40,7 @@ class CreateDicomPrintSpool
        Retorna el pathfile del fitxer creat*/
     QString createStoredPrintDcmtkFile(const QString &spoolDirectoryPath);
 
-    DicomPrintJob m_dicomPrintJob;
+    DicomPrintPage m_dicomPrintPage;
     DicomPrinter m_dicomPrinter;
 	DVPSStoredPrint		* m_storedPrint;
 	DVPresentationState * m_presentationState;
