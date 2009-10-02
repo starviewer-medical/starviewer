@@ -195,8 +195,11 @@ void PatientBrowserMenu::processSelectedItem(const QString &identifier)
     delete m_patientAdditionalInfo;
     delete m_patientBrowserList;
 
-    Identifier id( identifier.toInt() );
-    emit selectedVolume( VolumeRepository::getRepository()->getVolume( id ) );
+    if( m_patientBrowserList->getMarkedItem() != identifier )
+    {
+        Identifier id( identifier.toInt() );
+        emit selectedVolume( VolumeRepository::getRepository()->getVolume( id ) );
+    }
 }
 
 void PatientBrowserMenu::updatePosition()
