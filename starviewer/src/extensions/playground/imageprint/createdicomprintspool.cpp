@@ -20,7 +20,6 @@ namespace udg
 QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &spoolDirectoryPath)
 {
     QDir spoolDir;
-    QString storedPrintDcmtkFilePath = spoolDirectoryPath + QDir::separator() + "storedPrint.dcm";
 
     //TODO: S'ha de fer aquí ? Comprovem si existeix el directori on s'ha de generar l'spool
     if (!spoolDir.exists(spoolDirectoryPath))
@@ -40,9 +39,7 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
 
     setImageBoxAttributes();
 
-    createStoredPrintDcmtkFile(storedPrintDcmtkFilePath);
-
-    return storedPrintDcmtkFilePath;
+    return createStoredPrintDcmtkFile(spoolDirectoryPath);
 }
 
 void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
@@ -233,7 +230,7 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     }
 
     //TODO:S'hauria de fer a un altre lloc aquest càlcul perquè també s'utilitza a PrintDicomSpool
-    transformedImagePath = spoolDirectoryPath + QDir::separator() + InstanceUIDOfTransformedImage + ".dcm";
+    transformedImagePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + InstanceUIDOfTransformedImage + ".dcm";
     //Guardem la imatge transformada
     OFCondition saveImageCondition = DVPSHelper::saveFileFormat(qPrintable(transformedImagePath), transformedImageToPrint, true);
 
@@ -265,13 +262,18 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
     }
 }
 
-void CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &storedPrintDcmtkFilePath)
+QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDirectoryPath)
 {
     DcmFileFormat *fileFormat = new DcmFileFormat();
     DcmDataset *dataset	= fileFormat->getDataset();	
     char storedPrintInstanceUID[70];
+    QString storedPrintDcmtkFilePath; 
 
     dcmGenerateUniqueIdentifier(storedPrintInstanceUID);
+
+    storedPrintDcmtkFilePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + "SP_" + storedPrintInstanceUID + ".dcm";
+
+    DEBUG_LOG(storedPrintDcmtkFilePath);
 
     m_storedPrint->deleteAnnotations();	
     m_storedPrint->setInstanceUID(storedPrintInstanceUID);	
@@ -281,5 +283,7 @@ void CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &storedPrin
 
     delete fileFormat;
     delete m_storedPrint;
+
+    return storedPrintDcmtkFilePath;
 }
 }
