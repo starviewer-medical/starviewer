@@ -751,8 +751,12 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
 
         connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ));
 
-        patientMenu->popup( event->globalPos(), QString::number( m_mainVolume->getIdentifier().getValue() )  ); //->globalPos() ?
-
+        QString selectedItem;
+        if( m_mainVolume )
+        {
+            selectedItem = QString::number( m_mainVolume->getIdentifier().getValue() );
+        }
+        patientMenu->popup( event->globalPos(), selectedItem ); //->globalPos() ?
     }
 }
 
