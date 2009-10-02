@@ -188,12 +188,8 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
 
 void PatientBrowserMenu::processSelectedItem(const QString &identifier)
 {
-    // HACK De moment això és un workaround per solucionar el ticket #824
-    // és important que s'esborrin en aquest ordre, sinó es fa així el problema persisteix
-    // ara també ens funciona bé perquè creem cada cop un PatientBrowserMenu.
-    // Si en tinguéssim un d'estàtic segurament això ens ocasionaria que l'aplicació petaria més endavant
-    delete m_patientAdditionalInfo;
-    delete m_patientBrowserList;
+    m_patientAdditionalInfo->hide();
+    m_patientBrowserList->hide();
 
     if( m_patientBrowserList->getMarkedItem() != identifier )
     {
