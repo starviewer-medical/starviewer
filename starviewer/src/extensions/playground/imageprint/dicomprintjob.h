@@ -2,6 +2,7 @@
 #define UDGDICOMPRINTJOB_H
 
 #include <QString>
+#include <QList>
 
 #include "printjob.h"
 #include "dicomprintpage.h"
@@ -28,10 +29,9 @@ public:
     QString getLabel() const;
     QString getFilmDestination() const;
 
-    ///Especifica/retorna el PrintPage del PrintJob
-    //TODO:Ara per fer les proves només permetem afegir una pàgina
-    void setPrintPage(DicomPrintPage dicomPrintPage);
-    DicomPrintPage getPrintPage();
+    ///Especifica/retorna les PrintPage del PrintJob
+    void setDicomPrintPages(QList<DicomPrintPage> dicomPrintPages);
+    QList<DicomPrintPage> getDicomPrintPages();
 
 
 private:
@@ -41,7 +41,7 @@ private:
     QString     m_label;
     QString     m_filmDestination;
 
-    DicomPrintPage m_dicomPrintPage;
+    QList<DicomPrintPage> m_listDicomPrintPage;
 };
 }; 
 #endif

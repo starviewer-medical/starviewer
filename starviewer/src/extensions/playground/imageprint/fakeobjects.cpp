@@ -42,7 +42,7 @@ DicomPrintJob FakeObjects::getFakeDicomPrintJob(QString studyUID, QString series
     dicomPrintJob.setMediumType("BLUE FILM");
     dicomPrintJob.setNumberOfCopies(1);
     dicomPrintJob.setPrintPriority("MED");
-    dicomPrintJob.setPrintPage(getFakeDicomPrintPage(studyUID, seriesUID, numberOfImages));
+    dicomPrintJob.setDicomPrintPages(getFakeDicomPrintPage(studyUID, seriesUID, numberOfImages));
 
     return dicomPrintJob;
 }
@@ -56,45 +56,55 @@ DicomPrintJob FakeObjects::getFakeDicomScopeDicomPrintJob(QString studyUID, QStr
     dicomPrintJob.setMediumType("STOREDPRINT");
     dicomPrintJob.setNumberOfCopies(1);
     dicomPrintJob.setPrintPriority("MED");
-    dicomPrintJob.setPrintPage(getFakeDicomPrintPage(studyUID, seriesUID, numberOfImages));
+    dicomPrintJob.setDicomPrintPages(getFakeDicomPrintPage(studyUID, seriesUID, numberOfImages));
 
     return dicomPrintJob;
 }
 
-DicomPrintPage FakeObjects::getFakeDicomPrintPage(QString studyUID, QString seriesUID, int numberOfImages)
+QList<DicomPrintPage> FakeObjects::getFakeDicomPrintPage(QString studyUID, QString seriesUID, int numberOfImages)
 {
-    DicomPrintPage dicomPrintPage;
+    QList<DicomPrintPage> dicomPrintPageList;
     DicomMask maskImagesToPrint;
     QList<Image*> databaseImages, imagesToPrint;
-    int index = 0;
+    int index = 0, rows = 2, columns = 2;
+
 
     maskImagesToPrint.setStudyUID(studyUID);
     maskImagesToPrint.setSeriesUID(seriesUID);
 
     databaseImages = LocalDatabaseManager().queryImage(maskImagesToPrint);
 
+
     while (index < numberOfImages &&  index <databaseImages.count())
     {
-        imagesToPrint.append(databaseImages.at(index));
-        index++;
+        DicomPrintPage dicomPrintPage;
+        int indexNumberOfImagesPage = 0;
+
+        while (indexNumberOfImagesPage < rows * columns &&  index <databaseImages.count())
+        {
+            imagesToPrint.append(databaseImages.at(index));
+            index++;
+            indexNumberOfImagesPage++;
+        }
+
+        dicomPrintPage.setImagesToPrint(imagesToPrint);
+
+        dicomPrintPage.setBorderDensity("BLACK");
+        dicomPrintPage.setEmptyImageDensity("WHITE");
+        dicomPrintPage.setFilmLayout("STANDARD\\2,2");
+        dicomPrintPage.setFilmOrientation("PORTRAIT");
+        dicomPrintPage.setFilmSize("8INX10IN");
+        dicomPrintPage.setMagnificationType("CUBIC");
+        dicomPrintPage.setMaxDensity(20);
+        dicomPrintPage.setMinDensity(1);
+        dicomPrintPage.setPageNumber(1);
+        dicomPrintPage.setPolarity("NORMAL");
+        //dicomPrintPage.setSmoothingType(""); depen de MagnificationType TODO:Testejar
+        dicomPrintPage.setTrim(true);
+
+        dicomPrintPageList.append(dicomPrintPage);
     }
-
-    dicomPrintPage.setImagesToPrint(imagesToPrint);
-
-    dicomPrintPage.setBorderDensity("BLACK");
-    dicomPrintPage.setEmptyImageDensity("WHITE");
-    dicomPrintPage.setFilmLayout("STANDARD\\2,2");
-    dicomPrintPage.setFilmOrientation("PORTRAIT");
-    dicomPrintPage.setFilmSize("8INX10IN");
-    dicomPrintPage.setMagnificationType("CUBIC");
-    dicomPrintPage.setMaxDensity(20);
-    dicomPrintPage.setMinDensity(1);
-    dicomPrintPage.setPageNumber(1);
-    dicomPrintPage.setPolarity("NORMAL");
-    //dicomPrintPage.setSmoothingType(""); depen de MagnificationType TODO:Testejar
-    dicomPrintPage.setTrim(true);
-
-    return dicomPrintPage;
+    return dicomPrintPageList;
 }
 
 }
