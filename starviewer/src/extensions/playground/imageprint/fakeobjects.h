@@ -28,7 +28,7 @@ public:
     DicomPrintJob getFakeDicomScopeDicomPrintJob(QString studyUID, QString seriesUID, int numberOfImages);
 
     ///Retorna un DicomPrintPage amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
-    DicomPrintPage getFakeDicomPrintPage(QString studyUID, QString seriesUID, int numberOfImages);
+    QList<DicomPrintPage> getFakeDicomPrintPage(QString studyUID, QString seriesUID, int numberOfImages);
 
 private:		
 	

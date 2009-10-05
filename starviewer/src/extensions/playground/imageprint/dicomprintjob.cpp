@@ -52,14 +52,14 @@ QString DicomPrintJob::getFilmDestination() const
     return m_filmDestination;
 }
 
-void DicomPrintJob::setPrintPage(DicomPrintPage dicomPrintPage)
+void DicomPrintJob::setDicomPrintPages(QList<DicomPrintPage> dicomPrintPages)
 {
-    m_dicomPrintPage = dicomPrintPage;
+    m_listDicomPrintPage = dicomPrintPages;
 }
 
-DicomPrintPage DicomPrintJob::getPrintPage()
+QList<DicomPrintPage> DicomPrintJob::getDicomPrintPages()
 {
-    return m_dicomPrintPage;
+    return m_listDicomPrintPage;
 }
 
 }
