@@ -65,6 +65,9 @@ public:
     void setID(const QString &id);
     QString getID() const;
 
+    /// Ens diu si aquest objecte conté dades o no
+    bool isEmpty() const;
+    
     bool operator ==(const PacsDevice &device);
 
     // TODO Aquests mètodes podrien desaparèixer. Caldria desvincular aquesta informació d'aquesta classe

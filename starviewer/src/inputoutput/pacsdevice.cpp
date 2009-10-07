@@ -111,6 +111,24 @@ QString PacsDevice::getID() const
     return m_id;
 }
 
+bool PacsDevice::isEmpty() const
+{
+    if( m_AETitle.isEmpty() &&
+        m_port.isEmpty() &&
+        m_address.isEmpty() &&
+        m_description.isEmpty() &&
+        m_institution.isEmpty() &&
+        m_location.isEmpty() &&
+        m_id.isEmpty() )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool PacsDevice::operator ==(const PacsDevice &device)
 {
     return m_AETitle == device.m_AETitle
