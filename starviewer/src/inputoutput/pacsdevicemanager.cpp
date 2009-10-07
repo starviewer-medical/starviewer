@@ -82,16 +82,22 @@ void PacsDeviceManager::updatePACS(PacsDevice &pacsToUpdate)
 
 bool PacsDeviceManager::deletePACS( const QString &pacsIDString)
 {
-    bool ok = false;
-    int pacsID = pacsIDString.toInt(&ok);
+    // Obtenim la llista completa de PACS
+    QList<PacsDevice> pacsList = getPACSList();
+    // Eliminem tots els PACS que tinguem guardats a disc
+    Settings settings;
+    settings.remove(PacsListConfigurationSectionName);
 
-    if(ok)
+    // Recorrem tota la llista de PACS i els afegim de nou
+    // excepte el que volem esborrar
+    foreach( PacsDevice device, pacsList )
     {
-        Settings settings;
-        settings.removeListItem( PacsListConfigurationSectionName, pacsID );
+        if( pacsIDString != device.getID() )
+        {
+            addPACS( device );    
+        }
     }
-
-    return ok;
+    return true;
 }
 
 QList<PacsDevice> PacsDeviceManager::getPACSList( bool onlyDefault )
