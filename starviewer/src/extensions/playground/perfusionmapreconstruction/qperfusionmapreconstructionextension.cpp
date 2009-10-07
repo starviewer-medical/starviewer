@@ -22,6 +22,9 @@
 #include "mathtools.h" // pel PI
 #include "qgraphicplotwidget.h"
 #include "perfusionmapreconstructionsettings.h"
+#include "toolproxy.h"
+#include "polylinetemporalroitool.h" 
+#include "polylinetemporalroitooldata.h" 
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -98,6 +101,7 @@ void QPerfusionMapReconstructionExtension::initializeTools()
     m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
+    m_roiToolButton->setDefaultAction( m_toolManager->registerTool("PolylineTemporalROITool") );
     m_toolManager->registerTool("SynchronizeTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
@@ -108,7 +112,7 @@ void QPerfusionMapReconstructionExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineTemporalROITool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -217,6 +221,20 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
     m_graphicplot->setMaxY(minmaxCalc->GetMaximum());
     m_graphicplot->setMinY(minmaxCalc->GetMinimum());
     std::cout<<"Max = "<<minmaxCalc->GetMaximum()<<", min = "<<minmaxCalc->GetMinimum()<<std::endl;*/
+
+	//li diem a la roi tool quin és els valors de deltaR
+    m_roiToolButton->defaultAction()->trigger();
+	PolylineTemporalROITool* roiTool = 
+		static_cast<PolylineTemporalROITool*> (m_2DView->getToolProxy()->getTool("PolylineTemporalROITool"));
+	PolylineTemporalROIToolData* roiData = static_cast<PolylineTemporalROIToolData*>(roiTool->getToolData());
+	if(!roiData->temporalImageHasBeenDefined())
+	{
+		//Només entrarem aquí la primera vegada
+		connect( roiData, SIGNAL( dataChanged( ) ), SLOT( paintROIData( ) ) );
+	}
+	roiData->setTemporalImage(m_mapCalculator->getDeltaRImage());
+    m_slicingToolButton->defaultAction()->trigger();
+
 
     QApplication::restoreOverrideCursor();
 }
@@ -1018,6 +1036,18 @@ void QPerfusionMapReconstructionExtension::paintMeanSlice( int slice )
             m_graphicplot->setData( m_meanseries[slice], 1 );
         }
     }    
+}
+
+void QPerfusionMapReconstructionExtension::paintROIData(  )
+{
+	DEBUG_LOG("pointROIData");
+	PolylineTemporalROIToolData* data = static_cast<PolylineTemporalROIToolData*>(m_2DView->getToolProxy()->getTool("PolylineTemporalROITool")->getToolData());
+	m_graphicplot->setData( data->getMeanVector(), 2 );
+	m_graphicplot->setPaintingFeatures(Qt::green, 1.5, 2);
+	/*for(int j=0;j<data->getMeanVector().size();j++)
+	{
+		std::cout<<"i: "<<j<<": "<<data->getMeanVector()[j]<<std::endl;
+	}*/
 }
 
 void QPerfusionMapReconstructionExtension::leftButtonEventHandler( )

@@ -34,8 +34,9 @@ const double PerfusionMapCalculatorMainThread::TE = 25.0;
 const double PerfusionMapCalculatorMainThread::TR = 1.5;
 
 PerfusionMapCalculatorMainThread::PerfusionMapCalculatorMainThread( QObject *parent )
- : QObject( parent ), m_DSCVolume(0), m_map0Volume(0), m_map1Volume(0), m_map2Volume(0), reg_fact(1.0), reg_exp(2.0)
+ : QObject( parent ), m_DSCVolume(0), m_map0Volume(0), m_map1Volume(0), m_map2Volume(0), reg_fact(1.0), reg_exp(2.0),m_AIFIsSet(false)
 {
+    m_aifIndex.resize( 3 );
 }
 
 
@@ -63,14 +64,23 @@ void PerfusionMapCalculatorMainThread::run()
     this->computeDeltaR();
     deltaRtime += time.elapsed();
     time.restart();
-    DEBUG_LOG("Compute Moments");
-    this->computeMoments();
-    momentstime += time.elapsed();
-    time.restart();
-    DEBUG_LOG("Find AIF");
-    this->findAIF();
-    findAiftime += time.elapsed();
-    time.restart();
+    if( !m_AIFIsSet )
+    {
+        DEBUG_LOG("Compute Moments");
+        this->computeMoments();
+        momentstime += time.elapsed();
+        time.restart();
+        DEBUG_LOG("Find AIF");
+        this->findAIF();
+        findAiftime += time.elapsed();
+        time.restart();
+        m_AIFIsSet = true;
+    }
+    else
+    {
+        DEBUG_LOG("Update AIF");
+        this->updateAIF();
+    }
     DEBUG_LOG("Compute Perfusion");
     //return;
     this->computePerfusion();
@@ -538,7 +548,7 @@ void PerfusionMapCalculatorMainThread::findAIF( )
     Volume::ItkImageType::IndexType index;
     int indexint;
     double value;//, valuem2;
-    m_aif = QVector<double>( m_DSCVolume->getNumberOfPhases() );
+    m_aif.resize( m_DSCVolume->getNumberOfPhases() );
 
     QVector< QPair< double, int > > sortedMoment1;
     QVector< QPair< double, int > > sortedMoment0;
@@ -621,6 +631,14 @@ void PerfusionMapCalculatorMainThread::findAIF( )
     index[1] = (int)(minposm2/iend) % jend;
     index[2] = (int)(minposm2/(iend*jend));
 
+    m_aifIndex[0] = index[0];
+    m_aifIndex[1] = index[1];
+    m_aifIndex[2] = index[2];
+
+    //std::cout<<m_aifIndex[0]<<","<<index[0]<<std::endl;
+    //std::cout<<m_aifIndex[1]<<","<<index[1]<<std::endl;
+    //std::cout<<m_aifIndex[2]<<","<<index[2]<<std::endl;
+
     m_m0aif = m0Image->GetPixel(index);
 
     DoubleTemporalImageType::IndexType indexTemp;
@@ -637,6 +655,32 @@ void PerfusionMapCalculatorMainThread::findAIF( )
 
     this->fftAIF();
     this->getOmega();
+}
+
+void PerfusionMapCalculatorMainThread::updateAIF( )
+{
+    //std::cout<<"Init Update!!"<<std::endl;
+
+    DoubleTemporalImageType::IndexType indexTemp;
+    indexTemp[1] = m_aifIndex[0];
+    indexTemp[2] = m_aifIndex[1];
+    indexTemp[3] = m_aifIndex[2];
+    int t, tend = m_DSCVolume->getNumberOfPhases();
+    DEBUG_LOG(QString("Tend AIF: %1").arg(tend));
+    for (t=0;t<tend;t++)
+    {
+        indexTemp[0] = t;
+        m_aif[t] = deltaRImage->GetPixel(indexTemp);
+
+    }
+    //Variables q no serveixen per res
+    double m1aif,m2aif;
+    this->computeMomentsVoxel(m_aif, m_m0aif,m1aif,m2aif);
+    //std::cout<<"m_m0aif="<<m_m0aif<<", m1aif="<<m1aif<<", m2aif="<<m2aif<<std::endl;
+    this->fftAIF();
+    //std::cout<<"End fftAIF"<<std::endl;
+    this->getOmega();
+    //std::cout<<"End Update!!"<<std::endl;
 }
 
 void PerfusionMapCalculatorMainThread::computePerfusion( )
@@ -729,6 +773,7 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
 
 */
   
+    //std::cout<<"Init Bucle"<<std::endl;
     //Init com estava abans!!!!!!!!!!
     int i,j,k,t;
     int iend = m_DSCVolume->getDimensions()[0];
@@ -798,13 +843,19 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
         }
     }
 
+    //std::cout<<"End Bucle"<<std::endl;
+
     time1 += time.elapsed();
     time.restart();
 
     //CBV
-    m_map0Volume = new Volume();
-    m_map0Volume->setImages( m_DSCVolume->getPhaseImages(0) );
-    //m_map0Volume->setImages( m_DSCVolume->getImages() );
+    //Si és la primera vegada
+    if(m_map0Volume==0) 
+    {
+        m_map0Volume = new Volume();
+        m_map0Volume->setImages( m_DSCVolume->getPhaseImages(0) );
+        //m_map0Volume->setImages( m_DSCVolume->getImages() );
+    }
     m_map0Volume->setData(map0Image);
 
     //MTT

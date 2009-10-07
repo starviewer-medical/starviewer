@@ -22,6 +22,7 @@
 #include "synchronizetool.h"
 #include "windowlevelpresetstool.h"
 #include "polylineroitool.h"
+#include "polylinetemporalroitool.h"
 #include "distancetool.h"
 #include "erasertool.h"
 #include "cursor3dtool.h"
@@ -96,6 +97,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "PolylineROITool" )
     {
         tool = new PolylineROITool( viewer );
+    }
+    else if( toolName == "PolylineTemporalROITool" )
+    {
+        tool = new PolylineTemporalROITool( viewer );
     }
     else if( toolName == "DistanceTool" )
     {
@@ -228,6 +233,12 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setStatusTip( tr("Enable/Disable Window Level Presets tool") );
     }
     else if( toolName == "PolylineROITool" )
+    {
+        toolAction->setText( tr("ROI") );
+        toolAction->setStatusTip( tr("Enable/Disable Polyline ROI tool") );
+        toolAction->setIcon( QIcon(":/images/polyline.png") );
+    }
+    else if( toolName == "PolylineTemporalROITool" )
     {
         toolAction->setText( tr("ROI") );
         toolAction->setStatusTip( tr("Enable/Disable Polyline ROI tool") );

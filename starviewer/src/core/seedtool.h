@@ -39,8 +39,8 @@ public:
     /// Assigna les dades pròpies de la seed (persistent data)
     void setToolData(ToolData * data);
 
-    /// Posem la llavor i li passem la posició: útil per fer-ho per codi
-    void setSeed(QVector<double> seedPosition);
+    /// Posem la llavor i li passem la posició i la llesca: útil per fer-ho per codi
+    void setSeed(QVector<double> seedPosition, int slice);
 
 signals:
     void seedChanged(double, double, double);
