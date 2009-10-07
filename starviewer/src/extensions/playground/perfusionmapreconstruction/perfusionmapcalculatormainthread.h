@@ -42,6 +42,7 @@ public:
     BoolImageType::Pointer getCheckImage(){return checkImage;}
 
     QVector<double> getAIF(){return m_aif;}
+    QVector<int> getAIFIndex(){return m_aifIndex;}
 
     QVector<QVector<double> > getMeanDeltaRPerSlice(){return m_meanseries;}
 
@@ -49,6 +50,9 @@ public slots:
 
     void stop();
     void run();
+
+    void setAIFIndex(double x,double y,double z)
+            {m_aifIndex[0]=x;m_aifIndex[1]=y;m_aifIndex[2]=z;m_AIFIsSet=true;}
 
 signals:
 
@@ -68,6 +72,7 @@ private:
     //Xapussa: posem directament el tipus dels voxels del Volume
     void computeMomentsVoxel( QVector<double> v, double &m0, double &m1, double &m2);
     void findAIF( );
+    void updateAIF( );
     void fftAIF( );
     void getOmega( );
     void computePerfusion( );
@@ -92,6 +97,7 @@ private:
     DoubleImageType::Pointer mttImage;
 
     QVector<double> m_aif;
+    QVector<int> m_aifIndex;
     double m_m0aif;
     QVector<double> fftaifreal;
     QVector<double> fftaifimag;
@@ -103,6 +109,7 @@ private:
 
     bool m_stopped;
 
+    bool m_AIFIsSet;
 
 };
 

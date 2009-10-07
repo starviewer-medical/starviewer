@@ -86,6 +86,9 @@ private slots:
     /// pinta la mitjana del deltaR de cada llesca
     void paintMeanSlice( int slice );
 
+    /// pinta les dades de la ROI
+    void paintROIData( );
+
     /// gestiona els events del botó esquerre
     void leftButtonEventHandler();
 

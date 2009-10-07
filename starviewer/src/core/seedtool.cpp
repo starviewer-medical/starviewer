@@ -63,9 +63,6 @@ void SeedTool::setToolData(ToolData * data)
     //Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
     if( m_myData != data )
     { 
-        // desfem els vincles anteriors
-        delete m_myData;
-    
         // creem de nou les dades
         m_toolData = data;
         m_myData = qobject_cast<SeedToolData *>(data);
@@ -99,7 +96,7 @@ void SeedTool::updateSeedPosition()
 {
     Q_ASSERT( m_2DViewer );
 
-    double xyz[3];
+	double xyz[3];
     if( m_2DViewer->getCurrentCursorImageCoordinate( xyz ) )
     {
         QVector<double> seedPosition(3);
@@ -107,14 +104,31 @@ void SeedTool::updateSeedPosition()
         seedPosition[1]=xyz[1];
         seedPosition[2]=xyz[2];
 
+        //DEBUG_LOG(QString("Seed Pos: [%1,%2,%3]").arg(seedPosition[0]).arg(seedPosition[1]).arg(seedPosition[2]));
+
         m_myData->setSeedPosition( seedPosition );
-        // TODO Apanyo perquè funcioni de momen, però s'ha d'arreglar
+        // TODO Apanyo perquè funcioni de moment, però s'ha d'arreglar
         // s'hauria d'emetre únicament "seedChanged()" i prou
         m_2DViewer->setSeedPosition( xyz );
         emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
         
         m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
+}
+
+void SeedTool::setSeed(QVector<double> seedPosition, int slice)
+{
+    Q_ASSERT( m_2DViewer );
+    
+    m_myData->setSeedPosition( seedPosition );
+    double xyz[3];
+    xyz[0]=seedPosition[0];
+    xyz[1]=seedPosition[1];
+    xyz[2]=seedPosition[2];
+    m_2DViewer->setSeedPosition( xyz );
+    emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
+    //DEBUG_LOG(QString("Seed Pos: [%1,%2,%3], slice = %4").arg(seedPosition[0]).arg(seedPosition[1]).arg(seedPosition[2]).arg(slice));
+    m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), slice );
 }
 
 ToolData *SeedTool::getToolData() const
