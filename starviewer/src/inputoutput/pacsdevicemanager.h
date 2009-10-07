@@ -28,13 +28,13 @@ public:
      * @param Objecte PacsDevice amb les dades del PACS
      * @return True en el cas que s'hagi afegit correctament, false si el PACS ja existia.
      */
-    bool addPACS(const PacsDevice &pacs);
+    bool addPACS(PacsDevice &pacs);
 
     /** 
      * Actualitza les dades del PACS passat per paràmetre. TODO què fem amb el camp ID?
      * @param pacs Objecte PacsDevice amb les noves dades del PACS
      */
-    void updatePACS(const PacsDevice &pacs);
+    void updatePACS(PacsDevice &pacs);
 
     /** 
      * Elimina de la llista de PACS configurats el PACS amb l'ID passat per paràmetre.

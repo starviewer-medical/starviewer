@@ -24,11 +24,32 @@ PacsDeviceManager::~PacsDeviceManager()
 {
 }
 
-bool PacsDeviceManager::addPACS(const PacsDevice &pacs)
+bool PacsDeviceManager::addPACS(PacsDevice &pacs)
 {
+    // Si el PACS ja existeix no l'afegim
     bool ok = !this->isPACSConfigured(pacs);
     if( ok )
     {
+        // En cas que existeixi, li assignarem l'ID
+        QList<PacsDevice> pacsList = getPACSList();
+        if( pacsList.isEmpty() )
+        {
+            // Si encara no teníem cap PACS, l'ID inicial serà 0
+            pacs.setID( QString::number(0) );
+        }
+        else
+        {
+            // En cas que ja en tinguem de configurats, l'ID serà
+            // l'ID més alt dels configurats + 1
+            int highestID = 0;
+            foreach( PacsDevice pacs, pacsList )
+            {
+                if( pacs.getID().toInt() > highestID )
+                    highestID = pacs.getID().toInt();
+            }
+            pacs.setID( QString::number(highestID + 1) );
+        }
+
         Settings settings;
         settings.addListItem( PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacs) );
     }
@@ -36,10 +57,27 @@ bool PacsDeviceManager::addPACS(const PacsDevice &pacs)
     return ok;
 }
 
-void PacsDeviceManager::updatePACS(const PacsDevice &pacsToUpdate)
+void PacsDeviceManager::updatePACS(PacsDevice &pacsToUpdate)
 {
+    // Obtenim la llista completa de PACS
+    QList<PacsDevice> pacsList = getPACSList();
+    // Eliminem tots els PACS que tinguem guardats a disc
     Settings settings;
-    settings.setListItem( pacsToUpdate.getID().toInt(),PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacsToUpdate) );
+    settings.remove(PacsListConfigurationSectionName);
+
+    // Recorrem tota la llista de PACS i els afegim de nou
+    // Si trobem el que volem fer update, afegim l'actualitzat
+    foreach( PacsDevice device, pacsList )
+    {
+        if( pacsToUpdate.getID() == device.getID() )
+        {
+            addPACS( pacsToUpdate );
+        }
+        else
+        {
+            addPACS( device );
+        }
+    }
 }
 
 bool PacsDeviceManager::deletePACS( const QString &pacsIDString)
@@ -78,22 +116,26 @@ QList<PacsDevice> PacsDeviceManager::getPACSList( bool onlyDefault )
 PacsDevice PacsDeviceManager::getPACSDeviceByID( const QString &pacsIDString )
 {
     QList<PacsDevice> pacsList = getPACSList();
-    bool ok = false;
-    int pacsID = pacsIDString.toInt(&ok);
     PacsDevice pacs;
 
-    if (ok)
+    bool found = false;
+    int i = 0;
+    int count = pacsList.count();
+    while( !found && i < count )
     {
-        if (pacsID < pacsList.count()) 
+        if( pacsIDString == pacsList.at(i).getID() )
         {
-            pacs = pacsList.at(pacsID);
+            found = true;
+            pacs = pacsList.at(i);
         }
-        else 
-            ERROR_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
+        i++;
     }
-    else 
-        ERROR_LOG("No s'ha pogut convertir l'string amb l'id del PACS a enter, el valor de l'string és: " + pacsIDString);
 
+    if( !found )
+    {
+        DEBUG_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
+        ERROR_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
+    }
     return pacs;
 }
 
