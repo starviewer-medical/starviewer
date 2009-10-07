@@ -153,15 +153,23 @@ void QConfigurationScreen::updateSelectedPACSInformation()
         selectedItem = m_PacsTreeView->selectedItems().first();
         // TODO en comptes d'obtenir del manager, potser es podria obtenir la informació directament del tree widget i estalviar aquest pas de "query"
         selectedPacs = pacsDeviceManager.getPACSDeviceByID( selectedItem->text(0) );// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
-
-        //emplenem els textos
-        m_textAETitle->setText( selectedPacs.getAETitle() );
-        m_textPort->setText( selectedPacs.getPort() );
-        m_textAddress->setText( selectedPacs.getAddress() );
-        m_textInstitution->setText( selectedPacs.getInstitution() );
-        m_textLocation->setText( selectedPacs.getLocation() );
-        m_textDescription->setText( selectedPacs.getDescription() );
-        m_checkDefault->setChecked( selectedPacs.isDefault() );
+        if( selectedPacs.isEmpty()
+        {
+            ERROR_LOG("No s'ha trobat cap PACS configurat amb l'ID: " + selectedItem->text(0) );
+            DEBUG_LOG("No s'ha trobat cap PACS configurat amb l'ID: " + selectedItem->text(0) );
+            clear();
+        }
+        else
+        {
+            //emplenem els textos
+            m_textAETitle->setText( selectedPacs.getAETitle() );
+            m_textPort->setText( selectedPacs.getPort() );
+            m_textAddress->setText( selectedPacs.getAddress() );
+            m_textInstitution->setText( selectedPacs.getInstitution() );
+            m_textLocation->setText( selectedPacs.getLocation() );
+            m_textDescription->setText( selectedPacs.getDescription() );
+            m_checkDefault->setChecked( selectedPacs.isDefault() );    
+        }
         // indiquem quin és l'ID del PACS seleccionat
         m_selectedPacsID = selectedPacs.getID();
     }
