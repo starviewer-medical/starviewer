@@ -117,10 +117,6 @@ void QConfigurationScreen::addPacs()
 
     if (validatePacsDevice())
     {
-        // TODO de moment assignem l'ID segons el nombre de PACS configurats
-        // TODO Caldria plantejar-se si realment el paràmetre "ID" tal i com s'està fent servir, és necessari o no
-        QString pacsID = QString::number( m_PacsTreeView->topLevelItemCount() );
-        pacs.setID( pacsID );
         pacs.setAETitle( m_textAETitle->text() );
         pacs.setPort( m_textPort->text() );
         pacs.setAddress( m_textAddress->text() );
@@ -158,7 +154,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
         // TODO en comptes d'obtenir del manager, potser es podria obtenir la informació directament del tree widget i estalviar aquest pas de "query"
         selectedPacs = pacsDeviceManager.getPACSDeviceByID( selectedItem->text(0) );// selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
 
-        //emplenem els textots
+        //emplenem els textos
         m_textAETitle->setText( selectedPacs.getAETitle() );
         m_textPort->setText( selectedPacs.getPort() );
         m_textAddress->setText( selectedPacs.getAddress() );
