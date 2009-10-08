@@ -79,7 +79,9 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
     //Abans de fer un acció amb la impressora comprovem si la última ha anat bé amb EC_NORMAL=result, si ha fallat totes les accions restants no s'executaran
     if (EC_Normal == result)
     {
-        result = result = storedPrintDcmtk->printSCUcreateBasicFilmSession(printerConnection, getAttributesBasicFilmSession(), addPLUTAttributesInBasicFilmSession);
+        DcmDataset basicFilmSessionDataset = getAttributesBasicFilmSession();
+
+        result = result = storedPrintDcmtk->printSCUcreateBasicFilmSession(printerConnection, basicFilmSessionDataset, addPLUTAttributesInBasicFilmSession);
         if (EC_Normal != result)
         {
             DEBUG_LOG(QString("spooler: printer communication failed, unable to create basic film session. %1").arg(result.text()));
@@ -188,7 +190,7 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
 
     if (imageToPrint && EIS_Normal == imageToPrint->getStatus())
     {
-        isImageMonochrome1 = imageToPrint->getPhotometricInterpretation() == EP_Interpretation::EPI_Monochrome1;
+        isImageMonochrome1 = imageToPrint->getPhotometricInterpretation() == EPI_Monochrome1;
 
         //Enviem la imatge
         result = storedPrintDcmtk->printSCUsetBasicImageBox(printerConnection, imageNumber, *imageToPrint, isImageMonochrome1);
