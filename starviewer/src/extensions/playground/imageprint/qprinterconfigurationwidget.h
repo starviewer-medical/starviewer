@@ -4,7 +4,7 @@
 #include "QWidget"
 
 /**
- * Interfície pels Widgets encarregats de manipular la impressora (Afegir, Elimnar...).
+ * InterfÃ­cie pels Widgets encarregats de manipular la impressora (Afegir, Elimnar...).
  */
 
 namespace udg {

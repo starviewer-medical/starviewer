@@ -7,7 +7,7 @@
 #include "dicomprintjob.h"
 #include "dicomprintpage.h"
 
-///Representació d'una impressora DICOM amb les eines DCMTK.
+///RepresentaciÃ³ d'una impressora DICOM amb les eines DCMTK.
 
 namespace udg
 {   
@@ -21,13 +21,13 @@ public:
 
     DicomPrinter getFakeDicomScopeDicomPrinter();
 
-    ///Retorna un DicomPrintjob amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
+    ///Retorna un DicomPrintjob amb imatges de l'estudi per imprimir, numberOfImages indica el nÃºmero d'imatges de l'estudi
     DicomPrintJob getFakeDicomPrintJob(QString studyUID, QString seriesUID, int numberOfImages);
 
-    ///Retorna un DicomPrintjob Per DicomScope amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
+    ///Retorna un DicomPrintjob Per DicomScope amb imatges de l'estudi per imprimir, numberOfImages indica el nÃºmero d'imatges de l'estudi
     DicomPrintJob getFakeDicomScopeDicomPrintJob(QString studyUID, QString seriesUID, int numberOfImages);
 
-    ///Retorna un DicomPrintPage amb imatges de l'estudi per imprimir, numberOfImages indica el número d'imatges de l'estudi
+    ///Retorna un DicomPrintPage amb imatges de l'estudi per imprimir, numberOfImages indica el nÃºmero d'imatges de l'estudi
     QList<DicomPrintPage> getFakeDicomPrintPage(QString studyUID, QString seriesUID, int numberOfImages);
 
 private:		

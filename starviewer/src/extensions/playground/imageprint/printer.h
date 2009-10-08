@@ -5,7 +5,7 @@
 
 /**
 * Classe abstracte que representa una Impressora.
-* Tota impressora (Dicom, Paper...) ha d'heret‡ d'aquesta classe.
+* Tota impressora (Dicom, Paper...) ha d'heret√† d'aquesta classe.
 */
 
 namespace udg {
@@ -26,7 +26,7 @@ public:
     /// Posa el tipus de la impressora.
     virtual void setType(const QString &_type)=0;
     
-    /// Posa la descripciÛ de la impressora.
+    /// Posa la descripci√≥ de la impressora.
     virtual void setDescription(const QString &_description)=0;
 
     /// Retorna el nom de la impressora.
@@ -41,7 +41,7 @@ public:
     /// Retorna el tipus de la impressora.
     virtual QString getType() const =0;
 
-    /// Retorna la descripciÛ de la impressora.
+    /// Retorna la descripci√≥ de la impressora.
     virtual QString getDescription() const=0;
     
 protected:    

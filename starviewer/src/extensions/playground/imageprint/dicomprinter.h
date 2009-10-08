@@ -6,7 +6,7 @@
 #include <QList>
 #include "printer.h"
 
-///RepresentaciÛ dels par‡metres d'una impressora DICOM.
+///Representaci√≥ dels par√†metres d'una impressora DICOM.
 
 namespace udg
 {   
@@ -25,7 +25,7 @@ public:
     void setType(const QString &type);
     QString getType() const;
 
-    /// Posa la descripciÛ de la impressora.
+    /// Posa la descripci√≥ de la impressora.
     void setDescription(const QString &description);	
     QString getDescription() const;
 
@@ -41,73 +41,73 @@ public:
     void setPort(const int &port);
     int getPort() const;
 
-    /// Posa els mitjans disponibles per la impressiÛ (\p mediumType Ès una llista d'opcions separades per "\").
+    /// Posa els mitjans disponibles per la impressi√≥ (\p mediumType √©s una llista d'opcions separades per "\").
     void setDefaultMediumType(const QString &mediumType);
     QString getDefaultMediumType() const; 
     void setAvailableMediumTypeValues(QStringList mediumTypeValues);
     QStringList getAvailableMediumTypeValues();
 
-    /// Posa les mides disponibles d'impressiÛ (\p filmSize Ès una llista d'opcions separades per "\").
+    /// Posa les mides disponibles d'impressi√≥ (\p filmSize √©s una llista d'opcions separades per "\").
     void setDefaultFilmSize(const QString &filmSize);	
     QString getDefaultFilmSize() const;
     void setAvailableFilmSizeValues(QStringList filmSizeValues);
     QStringList getAvailableFilmSizeValues();
 
-    /// Posa els layouts disponibles per la impressiÛ (\p layout Ès una llista d'opcions separades per "\").
+    /// Posa els layouts disponibles per la impressi√≥ (\p layout √©s una llista d'opcions separades per "\").
     void setDefaultFilmLayout(const QString &filmLayout);	
     QString getDefaultFilmLayout() const;
     void setAvailableFilmLayoutValues(QStringList filmLayoutValues);	
     QStringList getAvailableFilmLayoutValues();	
 
-    ///Especifica retorna la orientaciÛ (horitzontal/vertical) per defecte amb la que s'ha d'imprimir la placa
+    ///Especifica retorna la orientaci√≥ (horitzontal/vertical) per defecte amb la que s'ha d'imprimir la placa
     void setDefaultFilmOrientation(const QString &filmOrientation);	
     QString getDefaultFilmOrientation() const;
     void setAvailableFilmOrientationValues(QStringList filmOrientationValues);
     QStringList getAvailableFilmOrientationValues();
 
-    /// Posa el Magnification type disponibles per la impressiÛ (\p magnificationType Ès una llista d'opcions separades per "\").
+    /// Posa el Magnification type disponibles per la impressi√≥ (\p magnificationType √©s una llista d'opcions separades per "\").
     void setDefaultMagnificationType(const QString &magnificationType);	
     QString getDefaultMagnificationType() const;
     void setAvailableMagnificationTypeValues(QStringList magnificationTypeValues);
     QStringList getAvailableMagnificationTypeValues();
 
-    ///Especifica/retorna la resoluciÛ m‡xima de la impressiÛ.
+    ///Especifica/retorna la resoluci√≥ m√†xima de la impressi√≥.
     void setDefaultMaxDensity(ushort maxDensity);
     ushort getDefaultMaxDensity() const;
     void setAvailableMaxDensityValues(ushort maxDensityValues);
     ushort getAvailableMaxDensityValues();
 
-    ///Especifica/retorna la resoluciÛ mÌnima de la impressiÛ
+    ///Especifica/retorna la resoluci√≥ m√≠nima de la impressi√≥
     void setDefaultMinDensity(ushort minDensity);
     ushort getDefaultMinDensity() const;
     void setAvailableMinDensityValues(ushort minDensityValues);
     ushort getAvailableMinDensityValues();
     
-    /// Posa si es suporta l'˙s de TimBox o no.
+    /// Posa si es suporta l'√∫s de TimBox o no.
     void setDefaultTrim(bool trim);
 	bool getDefaultTrim() const;
     void setAvailableTrim(bool availableTrim);
     bool getAvailableTrim() const;
 
-    /// Posa les densitats disponibles en el Border  (\p borderDensity Ès una llista d'opcions separades per "\").
+    /// Posa les densitats disponibles en el Border  (\p borderDensity √©s una llista d'opcions separades per "\").
     void setDefaultBorderDensity(const QString &borderDensity);
     QString getDefaultBorderDensity() const;
     void setAvailableBorderDensityValues(QStringList borderDensityValues);
     QStringList getAvailableBorderDensityValues();
 
-    /// Posa les densitats disponibles en la zona buida (EmptyImage) de la impressiÛ  (\p borderDensity Ès una llista d'opcions separades per "\").
+    /// Posa les densitats disponibles en la zona buida (EmptyImage) de la impressi√≥  (\p borderDensity √©s una llista d'opcions separades per "\").
     void setDefaultEmptyImageDensity(const QString &emptyImageDensity);
     QString getDefaultEmptyImageDensity() const;
     void setAvailableEmptyImageDensityValues(QStringList emptyImageDensityValues);
     QStringList getAvailableEmptyImageDensityValues();
 
-    /// Posa els destins disponibles per la impressiÛ  (\p borderDensity Ès una llista d'opcions separades per "\").
+    /// Posa els destins disponibles per la impressi√≥  (\p borderDensity √©s una llista d'opcions separades per "\").
     void setDefaultFilmDestination(const QString &filmDestination);
     QString getDefaultFilmDestination() const;
     void setAvailableFilmDestinationValues(QStringList filmDestinationValues);
     QStringList getAvailableFilmDestinationValues();
 
-    ///Especifica/Retorna el smoothing type per defecte amb la que s'imprimir‡
+    ///Especifica/Retorna el smoothing type per defecte amb la que s'imprimir√†
     void setDefaultSmoothingType(const QString &smoothingType);
     QString getDefaultSmoothingType() const;
     void setAvailableSmoothingTypeValues(QStringList smoothingTypeValues);

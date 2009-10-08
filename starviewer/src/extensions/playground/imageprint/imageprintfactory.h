@@ -2,8 +2,8 @@
 #define UDGIMAGEPRINTFACTORY_H
 
 /**
- * Factory d'objectes que sÛn utilitzats a la impressiÛ d'imatges (Dicom, Paper...).
- * S'ha aplicat el patrÛ Abstract Factory.
+ * Factory d'objectes que s√≥n utilitzats a la impressi√≥ d'imatges (Dicom, Paper...).
+ * S'ha aplicat el patr√≥ Abstract Factory.
  */
 
 namespace udg {
@@ -21,7 +21,7 @@ public:
     /// Retorna la impressora.
     virtual Printer * getPrinter()=0;
     
-    /// Retorna el mËtode d'impressiÛ
+    /// Retorna el m√®tode d'impressi√≥
     virtual PrintMethod * getPrintMethod()=0;
     
      /// Retorna el manipulador de la impressora (Afegir, Eliminar...).
@@ -30,10 +30,10 @@ public:
     /// Retorna el Widget encarregat de manipular la impressora (Afegir, Elimnar...)
     virtual QPrinterConfigurationWidget * getPrinterConfigurationWidget()=0;
     
-    /// Retorna el Widget encarregat de configurar els par‡metres de la impressora per una impressiÛ.
+    /// Retorna el Widget encarregat de configurar els par√†metres de la impressora per una impressi√≥.
     virtual QPrintingConfigurationWidget* getPrintingConfigurationWidget()=0;
     
-    /// Retorna el widget encarregat de configurar el PrintJob per una impressiÛ.
+    /// Retorna el widget encarregat de configurar el PrintJob per una impressi√≥.
     virtual QPrintJobCreatorWidget * getPrintJobCreatorWidget() =0;
 };
 } 

@@ -5,7 +5,7 @@
 #include "qprintingconfigurationwidget.h"
 
 /**
- * ImplementaciÛ de QPrintingConfigurationWidget per impressores DICOM en DCMTK.
+ * Implementaci√≥ de QPrintingConfigurationWidget per impressores DICOM en DCMTK.
  */
 
 namespace udg {
@@ -25,7 +25,7 @@ public:
 
 private slots:
 
-    ///Test de la part d'impressiÛ mentre s'est‡ desenvolupant
+    ///Test de la part d'impressi√≥ mentre s'est√† desenvolupant
     void testPrinting();
 
 private:

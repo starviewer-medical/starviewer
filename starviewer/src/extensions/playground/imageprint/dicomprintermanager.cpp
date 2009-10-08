@@ -49,7 +49,7 @@ DicomPrinter DicomPrinterManager::getPrinterByID(const int &id)
     return dicomPrinter;
 }
 
-//TODO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació per obtenir les dades
+//TODO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementaciÃ³ per obtenir les dades
 // directament de la impressora.
 DicomPrinter  DicomPrinterManager::getAvailableParametersValues(const QString &AETitlePrinter, const int &port)
 {
@@ -169,7 +169,7 @@ QStringList DicomPrinterManager::getAvailablePolarityValues()
     return polarityValuesTemp;
 }
 
-// Gestió dels Settings
+// GestiÃ³ dels Settings
 Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap( const DicomPrinter &dicomPrinter)
 {
     Settings::KeyValueMapType item;

@@ -5,7 +5,7 @@
 #include "qprintjobcreatorwidget.h"
 
 /**
- * Implementació de QPrintJobCreatorWidget per impressores DICOM en DCMTK.
+ * ImplementaciÃ³ de QPrintJobCreatorWidget per impressores DICOM en DCMTK.
  */
 
 namespace udg {

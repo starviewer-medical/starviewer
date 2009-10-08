@@ -6,7 +6,7 @@
 #include "dicomprinter.h"
 #include "dicomprintjob.h"
 
-///Representació d'una impressora DICOM amb les eines DCMTK.
+///RepresentaciÃ³ d'una impressora DICOM amb les eines DCMTK.
 class DVPSStoredPrint;
 class DVPSPrintMessageHandler;
 class DcmDataset;
@@ -23,7 +23,7 @@ public:
 
 private:		
 	
-    /*TODO: Potser que daria més entés no guardar les variables com a membre i desdle mètode printSpool passar-la al mètode que 
+    /*TODO: Potser que daria mÃ©s entÃ©s no guardar les variables com a membre i desdle mÃ¨tode printSpool passar-la al mÃ¨tode que 
      *que les necessiti. Per exemple printSCUCreateBasicFilmSession necessita DicomPrintJob*/
     DicomPrinter m_dicomPrinter;
     DicomPrintJob m_dicomPrintJob;
@@ -35,7 +35,7 @@ private:
     //Retorna els atributs del FilmSession en un Dataset
     DcmDataset getAttributesBasicFilmSession();
 
-    ///Una vegada creada la FilmSession i FilmBox aquest mètode ens permet enviar una imatge a imprimir cap a la impressora
+    ///Una vegada creada la FilmSession i FilmBox aquest mÃ¨tode ens permet enviar una imatge a imprimir cap a la impressora
     OFCondition createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk, size_t imageNumber, const QString &spoolDirectoryPath);
 };
 }; 

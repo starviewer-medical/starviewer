@@ -5,7 +5,7 @@
 #include <QList>
 
 /**
-* Implementació per la Interfície PrintPage, que defineix una pàgina d'impressió amb imatges DICOM.
+* ImplementaciÃ³ per la InterfÃ­cie PrintPage, que defineix una pÃ gina d'impressiÃ³ amb imatges DICOM.
 */
 
 namespace udg
@@ -17,11 +17,11 @@ class PrintPage
 {
 public:
     
-    ///Especifica/retorna el número de pàgina
+    ///Especifica/retorna el nÃºmero de pÃ gina
     void setPageNumber(int pageNumber);
     int getPageNumber();
 
-    ///Especifica/retorna les imatges que s'han d'imprimir en aquesta pàgina. Les imatges s'imprimiren segons l'ordre d'inserció a la llista
+    ///Especifica/retorna les imatges que s'han d'imprimir en aquesta pÃ gina. Les imatges s'imprimiren segons l'ordre d'inserciÃ³ a la llista
     void setImagesToPrint(QList<Image*> imagesToPrint);
     QList<Image*> getImagesToPrint();
 

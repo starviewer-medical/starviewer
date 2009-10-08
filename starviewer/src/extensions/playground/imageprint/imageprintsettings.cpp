@@ -5,7 +5,7 @@
 
 namespace udg {
 
-// Definició de les claus
+// DefiniciÃ³ de les claus
 const QString DicomPrint("DicomPrint/");
 const QString ImagePrintSettings::SpoolDirectory( DicomPrint + "SpoolDirectory");
 

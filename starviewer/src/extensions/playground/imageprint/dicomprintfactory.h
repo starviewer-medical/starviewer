@@ -4,8 +4,8 @@
 #include "imageprintfactory.h"
 
 /**
- * Implementació del Factory ImagePrint per la impressió mitjançant DCMTK.
- * S'ha aplicat el patró Abstract Factory.
+ * ImplementaciÃ³ del Factory ImagePrint per la impressiÃ³ mitjanÃ§ant DCMTK.
+ * S'ha aplicat el patrÃ³ Abstract Factory.
  */
 
 namespace udg 

@@ -9,7 +9,7 @@ namespace udg {
 class DicomPrinter;
 
 /**
- * ImplementaciÛ de la interfÌcie QPrinterConfigurationWidget per impressiÛ d'imatge DICOM en DCMTK.
+ * Implementaci√≥ de la interf√≠cie QPrinterConfigurationWidget per impressi√≥ d'imatge DICOM en DCMTK.
  */
 
 class QDicomPrinterConfigurationWidget : public QPrinterConfigurationWidget , private::Ui::QDicomPrinterConfigurationWidgetBase
@@ -21,38 +21,38 @@ public:
     ~QDicomPrinterConfigurationWidget();
 	
 public slots:
-    // Acualiza la informaciÛ del Printer cada vegada que es selecciona al QTree una impressora.
+    // Acualiza la informaci√≥ del Printer cada vegada que es selecciona al QTree una impressora.
     void printerSelectionChanged();
-    // Afegeix una nova impressora Dicom a partir dels par‡metres introduits per l'usuari.
+    // Afegeix una nova impressora Dicom a partir dels par√†metres introduits per l'usuari.
     void addPrinter();
-    // Modifica una impressora Dicom ja existen amb els par‡metres introduits per l'usuari.
+    // Modifica una impressora Dicom ja existen amb els par√†metres introduits per l'usuari.
     void updatePrinter();
     // Esborra una impressora.
     void deletePrinter();
-    // Comprova la connexiÛ amb una impressora entrada al sistema.
+    // Comprova la connexi√≥ amb una impressora entrada al sistema.
     void testPrinter();
-    // Mostra per pantalla els diferents valors que poden agafar cadascun dels par‡metres d'una impressora.
+    // Mostra per pantalla els diferents valors que poden agafar cadascun dels par√†metres d'una impressora.
     void getAvailableParameters();
 
 private:
     void createConnections();
     // Actualitza la llista d'impressores entrades al sistema.
     void refreshPrinterList();
-    // Comprova la validesa dels p‡rametres d'entrada.
+    // Comprova la validesa dels p√†rametres d'entrada.
     bool validatePrinterSettings();
-    // Neteja els valors de la interÌfice.
+    // Neteja els valors de la inter√≠fice.
     void clearPrinterSettings();
-    // Es mostra la informaciÛ b‡sica de la impressora per pantalla (/p printer Ès la impressora que contÈ la informaciÛ a mostrar)
+    // Es mostra la informaci√≥ b√†sica de la impressora per pantalla (/p printer √©s la impressora que cont√© la informaci√≥ a mostrar)
     void setPrinterSettingsToControls(DicomPrinter& printer);
-    // Es guarda la informaciÛ b‡sica de la impressora de l'interfÌcie a un objecte DicomPrinter (/p printer Ès la impressora on es guarden les dades).
+    // Es guarda la informaci√≥ b√†sica de la impressora de l'interf√≠cie a un objecte DicomPrinter (/p printer √©s la impressora on es guarden les dades).
     void getPrinterSettingsFromControls(DicomPrinter& printer);
-    // Es mostra la informaciÛ avanÁada de la impressora per pantalla (/p printer Ès la impressora que contÈ la informaciÛ a mostrar)
+    // Es mostra la informaci√≥ avan√ßada de la impressora per pantalla (/p printer √©s la impressora que cont√© la informaci√≥ a mostrar)
     void setDefaultPrinterSettingsToControls(DicomPrinter& printer);
-     // Es guarda la informaciÛ avanÁada de la impressora de l'interfÌcie a un objecte DicomPrinter (/p printer Ès la impressora on es guarden les dades).
+     // Es guarda la informaci√≥ avan√ßada de la impressora de l'interf√≠cie a un objecte DicomPrinter (/p printer √©s la impressora on es guarden les dades).
     void getDefaultPrinterSettingsFromControls(DicomPrinter& printer);
-    // Es mostra la informaciÛ del Job de la impressora per pantalla (/p printer Ès la impressora que contÈ la informaciÛ a mostrar)
+    // Es mostra la informaci√≥ del Job de la impressora per pantalla (/p printer √©s la impressora que cont√© la informaci√≥ a mostrar)
     void setDefaultJobSettingsToControls(DicomPrinter& printer);
-    // Es guarda la informaciÛ del Job de la impressora de l'interfÌcie a un objecte DicomPrinter (/p printer Ès la impressora on es guarden les dades).
+    // Es guarda la informaci√≥ del Job de la impressora de l'interf√≠cie a un objecte DicomPrinter (/p printer √©s la impressora on es guarden les dades).
     void getDefaultJobSettingsFromControls(DicomPrinter& printer);
     
     int m_selectedPrinterId;
