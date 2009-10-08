@@ -1,6 +1,6 @@
 #include "qdicomprintingconfigurationwidget.h"
 
-#include <iostream> //TODO: és necessaria ?
+#include <iostream> //TODO: Ã©s necessaria ?
 
 #include "printer.h"
 #include "dicomprinter.h"

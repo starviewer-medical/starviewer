@@ -13,7 +13,7 @@ public:
 
     void init();
 
-    ///Directori de l'Spool on es creen les imatges a imprimir a través d'una impressora DICOM
+    ///Directori de l'Spool on es creen les imatges a imprimir a travÃ©s d'una impressora DICOM
     static const QString SpoolDirectory;
 
 };

@@ -4,7 +4,7 @@
 #include "QWidget"
 
 /**
- * Interfície pels Widgets encarregats de configurar els paràmetres de la impressora per una impressió.
+ * InterfÃ­cie pels Widgets encarregats de configurar els parÃ metres de la impressora per una impressiÃ³.
  */
 
 namespace udg {

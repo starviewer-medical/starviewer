@@ -139,7 +139,7 @@ void DicomPrintPage::getFilmLayoutColumnsRows(int &columns, int &rows)
     QStringList splittedFilmLayout;
     QString filmLayout = getFilmLayout();
     /*Comprovem amb expresions regulars que sigui un film layout correcte tenir en compte que en c++ per indicar '\' hem d'escriure '\\'
-      en el cas com és aquest que l'expresiò regular conté un '\', en expresió regular s'escriu '\\', i en codi ho hem d'escriur com '\\\\' */
+      en el cas com Ã©s aquest que l'expresiÃ² regular contÃ© un '\', en expresiÃ³ regular s'escriu '\\', i en codi ho hem d'escriur com '\\\\' */
 
     if (filmLayout.contains(QRegExp("STANDARD\\\\\\d,\\d", Qt::CaseInsensitive))) //STANDARD\C,R
     {
@@ -154,7 +154,7 @@ void DicomPrintPage::getFilmLayoutColumnsRows(int &columns, int &rows)
         columns = -1;
         rows = -1;
     }
-    //TODO: falten per implementar obtenir el número de columnes i files pels altres Layouts que també contempla el DICOM (PS 3.3 pàg 918 Tag Image Display Format)
+    //TODO: falten per implementar obtenir el nÃºmero de columnes i files pels altres Layouts que tambÃ© contempla el DICOM (PS 3.3 pÃ g 918 Tag Image Display Format)
 }
 
 }

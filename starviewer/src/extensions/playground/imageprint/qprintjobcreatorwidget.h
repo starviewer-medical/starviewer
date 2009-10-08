@@ -4,7 +4,7 @@
 #include "QWidget"
 
 /**
- * Interfície pels Widgets encarregats de configurar els paràmetres del PrintJob
+ * InterfÃ­cie pels Widgets encarregats de configurar els parÃ metres del PrintJob
  */
 
 namespace udg {
