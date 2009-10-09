@@ -396,13 +396,13 @@ Status RetrieveImages::retrieve()
 		else if (rsp.DimseStatus == STATUS_MOVE_Refused_OutOfResourcesSubOperations)
 		{
 			//No es poden descarregar les imatges
-            ERROR_LOG("No s'han pogut descarregar els objectes DICOM (0x702: MOVE_Refused_OutOfResourcesSubOperations):" + QString(DU_cfindStatusString(rsp.DimseStatus)));  //DU_cfindStatusString funció dcmtk que tradueix el codi d'error a un string comprensible
+            ERROR_LOG("No s'han pogut descarregar els objectes DICOM (0x702: MOVE_Refused_OutOfResourcesSubOperations):" + QString(DU_cmoveStatusString(rsp.DimseStatus)));  //DU_cmoveStatusString funció dcmtk que tradueix el codi d'error a un string comprensible
             state.setStatus(DcmtkMoveRefusedOutOfResources);
 		}
         else 
         {
             //S'ha produït un error no controla, per més detall sobre els errors consulta el PS 3.4 C.4.2.1.5
-            ERROR_LOG("s'ha produit un error no controlat al intentar descarregar l'estudi, error:" + QString(DU_cfindStatusString(rsp.DimseStatus)));  //DU_cfindStatusString funció dcmtk que tradueix el codi d'error a un string comprensible
+            ERROR_LOG("s'ha produit un error no controlat al intentar descarregar l'estudi, error:" + QString(DU_cmoveStatusString(rsp.DimseStatus)));  //DU_cmoveStatusString funció dcmtk que tradueix el codi d'error a un string comprensible
             state.setStatus(DcmtkMovescuUnknownError);
         }
 
