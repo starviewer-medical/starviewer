@@ -16,7 +16,7 @@ Q_OBJECT
 
 public slots:
     virtual void addPrinter() =0;
-    virtual void updatePrinter() =0;
+    virtual void modifyPrinter() =0;
     virtual void deletePrinter() =0; 
 };
 }

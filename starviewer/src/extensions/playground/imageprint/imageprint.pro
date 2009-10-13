@@ -6,7 +6,8 @@
 FORMS += qimageprintextensionbase.ui \
          qdicomjobcreatorwidgetbase.ui \
          qdicomprinterconfigurationwidgetbase.ui \
-         qdicomprintingconfigurationwidgetbase.ui
+         qdicomprintingconfigurationwidgetbase.ui \
+         qdicomaddprinterwizardbase.ui
 HEADERS +=  qimageprintextension.h \
             imageprintextensionmediator.h \
             imageprintfactory.h \
@@ -31,7 +32,8 @@ HEADERS +=  qimageprintextension.h \
             dicomprint.h \
             createdicomprintspool.h \
             printdicomspool.h \
-            imageprintsettings.h 
+            imageprintsettings.h \
+            qdicomaddprinterwizard.h 
 SOURCES +=  qimageprintextension.cpp \
             imageprintextensionmediator.cpp \
             dicomprintfactory.cpp \
@@ -49,7 +51,8 @@ SOURCES +=  qimageprintextension.cpp \
             dicomprint.cpp \
             createdicomprintspool.cpp \
             printdicomspool.cpp \
-            imageprintsettings.cpp
+            imageprintsettings.cpp \
+            qdicomaddprinterwizard.cpp
 
 RESOURCES += imageprint.qrc
 

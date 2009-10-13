@@ -26,13 +26,16 @@ public slots:
     // Afegeix una nova impressora Dicom a partir dels paràmetres introduits per l'usuari.
     void addPrinter();
     // Modifica una impressora Dicom ja existen amb els paràmetres introduits per l'usuari.
-    void updatePrinter();
+    void modifyPrinter();
     // Esborra una impressora.
     void deletePrinter();
     // Comprova la connexió amb una impressora entrada al sistema.
     void testPrinter();
     // Mostra per pantalla els diferents valors que poden agafar cadascun dels paràmetres d'una impressora.
     void getAvailableParameters();
+    // Mostra/Amaga per pantalla la informació avançada de la impressora.
+    void showAdvancedSettings();
+
 
 private:
     void createConnections();
@@ -46,17 +49,20 @@ private:
     void setPrinterSettingsToControls(DicomPrinter& printer);
     // Es guarda la informació bàsica de la impressora de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
     void getPrinterSettingsFromControls(DicomPrinter& printer);
-    // Es mostra la informació avançada de la impressora per pantalla (/p printer és la impressora que conté la informació a mostrar)
-    void setDefaultPrinterSettingsToControls(DicomPrinter& printer);
-     // Es guarda la informació avançada de la impressora de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
-    void getDefaultPrinterSettingsFromControls(DicomPrinter& printer);
-    // Es mostra la informació del Job de la impressora per pantalla (/p printer és la impressora que conté la informació a mostrar)
-    void setDefaultJobSettingsToControls(DicomPrinter& printer);
-    // Es guarda la informació del Job de la impressora de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
-    void getDefaultJobSettingsFromControls(DicomPrinter& printer);
+    // Es mostra la informació relacionada amb la impressió per pantalla (/p printer és la impressora que conté la informació a mostrar)
+    void setPrintSettingsToControls(DicomPrinter& printer);
+     // Es guarda la informaciórelacionada amb la impressió de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
+    void getPrintSettingsFromControls(DicomPrinter& printer);
+    // Es mostra la informació relacionada amb la placa a imprimir per pantalla (/p printer és la impressora que conté la informació a mostrar)
+    void setFilmSettingsToControls(DicomPrinter& printer);
+    // Es guarda la informació relacionada amb la placa a imprimir de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
+    void getFilmSettingsFromControls(DicomPrinter& printer);
+    // Es mostra la informació avançada de la impressió per pantalla (/p printer és la impressora que conté la informació a mostrar)
+    void setAdvancedSettingsToControls(DicomPrinter& printer);
+    // Es guarda la informació avançada de la impressió de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
+    void getAdvancedSettingsFromControls(DicomPrinter& printer);
     
     int m_selectedPrinterId;
-    bool m_semafor;
 };
 };
 #endif
