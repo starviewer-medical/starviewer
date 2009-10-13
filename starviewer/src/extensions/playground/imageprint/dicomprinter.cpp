@@ -350,4 +350,14 @@ QStringList DicomPrinter::getAvailablePolarityValues()
 {
     return m_polarityValues;
 }
+
+void DicomPrinter::setIsDefault(const bool &isDefault)
+{
+    m_isDefaultPrinter=isDefault;
+}
+
+bool DicomPrinter::getIsDefault() const
+{
+    return m_isDefaultPrinter;
+}
 }

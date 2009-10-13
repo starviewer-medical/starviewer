@@ -125,6 +125,10 @@ public:
     void setAvailablePolarityValues(QStringList polarityValues);
     QStringList getAvailablePolarityValues();
 
+    void setIsDefault(const bool &isDefault);
+    bool getIsDefault() const;
+
+
 private:		
 	
     QString m_aeTitle;

@@ -29,6 +29,9 @@ public:
     /// Posa la descripció de la impressora.
     virtual void setDescription(const QString &_description)=0;
 
+    /// Posa si és la impressora per defecte
+    virtual void setIsDefault(const bool &isDefault)=0;
+
     /// Retorna el nom de la impressora.
     virtual QString getName() const =0;
 
@@ -43,6 +46,10 @@ public:
 
     /// Retorna la descripció de la impressora.
     virtual QString getDescription() const=0;
+
+    // Retorna si és la impressora per defecte.
+    virtual bool getIsDefault() const=0;
+
     
 protected:    
     
@@ -51,6 +58,7 @@ protected:
     int     m_port;
     QString m_type;
     QString m_description;
+    bool    m_isDefaultPrinter;
     
 };
 } 
