@@ -112,6 +112,10 @@ OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Associa
 
 void RetrieveImages::moveCallback( void *callbackData , T_DIMSE_C_MoveRQ *req, int responseCount , T_DIMSE_C_MoveRSP *response )
 {
+    Q_UNUSED( req );
+    Q_UNUSED( responseCount );
+    Q_UNUSED( response );
+    
     OFCondition cond = EC_Normal;
     MyCallbackInfo *myCallbackData;
 
@@ -144,10 +148,10 @@ void RetrieveImages::storeSCPCallback(
     T_DIMSE_C_StoreRSP *rsp ,            /* final store response */
     DcmDataset **statusDetail )
 {
+    Q_UNUSED( imageFileName );
     DIC_UI sopClass;
     DIC_UI sopInstance;
     /* I found their default value in movescu.cpp */
-    E_EncodingType    opt_sequenceType = EET_ExplicitLength;
     OFBool            opt_correctUIDPadding = OFFalse;
     E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
 
