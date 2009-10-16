@@ -100,7 +100,8 @@ OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Associa
         }
     }
 
-    if ( cond.good() ) cond = ASC_acknowledgeAssociation( *assoc );
+    if ( cond.good() ) 
+        cond = ASC_acknowledgeAssociation( *assoc );
 
     if ( cond.bad() )
     {
@@ -178,7 +179,8 @@ void RetrieveImages::storeSCPCallback(
             QString retrievedDatasetStudyUID( text );
 
             E_TransferSyntax xfer = opt_writeTransferSyntax;
-            if (xfer == EXS_Unknown) xfer = ( *imageDataSet )->getOriginalXfer();
+            if (xfer == EXS_Unknown) 
+                xfer = ( *imageDataSet )->getOriginalXfer();
 
             //Guardem la imatge
             OFCondition stateSaveImage = save(cbdata, imageFilenameToSave);
@@ -236,7 +238,8 @@ OFCondition RetrieveImages::save(StoreCallbackData *storeCallbackData, QString i
     E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
 
     E_TransferSyntax xfer = opt_writeTransferSyntax;
-    if (xfer == EXS_Unknown) xfer = storeCallbackData->dcmff->getDataset()->getOriginalXfer();
+    if (xfer == EXS_Unknown) 
+        xfer = storeCallbackData->dcmff->getDataset()->getOriginalXfer();
 
     return storeCallbackData->dcmff->saveFile(
             qPrintable(QDir::toNativeSeparators(imageFileNameToSave)),
@@ -277,7 +280,8 @@ OFCondition RetrieveImages::subOpSCP( T_ASC_Association **subAssoc )
     T_DIMSE_Message     msg;
     T_ASC_PresentationContextID presID;
 
-    if ( !ASC_dataWaiting( *subAssoc , 0 ) ) return DIMSE_NODATAAVAILABLE;
+    if ( !ASC_dataWaiting( *subAssoc , 0 ) ) 
+        return DIMSE_NODATAAVAILABLE;
 
     OFCondition cond = DIMSE_receiveCommand( *subAssoc , DIMSE_BLOCKING , 0 , &presID , &msg , NULL );
 
@@ -364,7 +368,9 @@ Status RetrieveImages::retrieve()
 
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
     presId = ASC_findAcceptedPresentationContextID( m_assoc , UID_MOVEStudyRootQueryRetrieveInformationModel );
-    if ( presId == 0 ) return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
+    if ( presId == 0 ) 
+        return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
+    
     callbackData.assoc = m_assoc;
     callbackData.presId = presId;
 
@@ -543,11 +549,10 @@ Status RetrieveImages::retrieve()
 
     /* dump status detail information if there is some */
     if ( statusDetail != NULL )
-    {
         delete statusDetail;
-    }
 
-    if ( rspIds != NULL ) delete rspIds;
+    if ( rspIds != NULL ) 
+        delete rspIds;
 
     return state;
 }
@@ -562,13 +567,15 @@ QString RetrieveImages::getCompositeInstanceFileName(DcmDataset *imageDataset)
     studyPath = LocalDatabaseManager::getCachePath() + text;
 
     //comprovem, si el directori de l'estudi ja està creat
-    if ( !directory.exists( studyPath  ) ) directory.mkdir( studyPath );
+    if ( !directory.exists( studyPath  ) ) 
+        directory.mkdir( studyPath );
 
     imageDataset->findAndGetString( DCM_SeriesInstanceUID , text , false );
     seriesPath = studyPath + "/" + text;
 
     //comprovem, si el directori de la sèrie ja està creat, sinó el creem
-    if ( !directory.exists( seriesPath ) ) directory.mkdir( seriesPath );
+    if ( !directory.exists( seriesPath ) ) 
+        directory.mkdir( seriesPath );
 
     imageDataset->findAndGetString( DCM_SOPInstanceUID , text , false );
 
