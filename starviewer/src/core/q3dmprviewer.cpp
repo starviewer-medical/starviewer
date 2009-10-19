@@ -108,8 +108,6 @@ void Q3DMPRViewer::setInput( Volume *volume )
     //li donem la orientació per defecte
     this->resetViewToAxial();
     render();
-    // indiquem el canvi de volum
-    emit volumeChanged(m_mainVolume);
 }
 
 void Q3DMPRViewer::createActors()
