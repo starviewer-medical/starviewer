@@ -16,7 +16,13 @@
 
 // VTK
 #include <vtkImageData.h>
+#include <vtkExtractVOI.h>
+#include <vtkImageChangeInformation.h>
+#include <vtkDICOMImageReader.h>
 #include <vtkMath.h>
+
+// ITK
+#include <itkTileImageFilter.h>
 
 #include "volume.h"
 #include "logging.h"
@@ -494,6 +500,60 @@ void Volume::loadSlicesWithReaders( int method )
     reader->load();
 }
 
+void Volume::readDifferentSizeImagesIntoOneVolume( const QStringList &filenames )
+{
+    int errorCode = NoError;
+    // declarem el filtre de tiling
+    typedef itk::TileImageFilter< ItkImageType, ItkImageType  > TileFilterType;
+    TileFilterType::Pointer tileFilter = TileFilterType::New();
+    // inicialitzem les seves variables
+    // El layout ens serveix per indicar cap on creix la cua. En aquest cas volem fer creixer la coordenada Z
+    TileFilterType::LayoutArrayType layout;
+    layout[0] = 1;
+    layout[1] = 1;
+    layout[2] = 0;
+    tileFilter->SetLayout( layout );
+
+    int progressCount = 0;
+    int progressIncrement = static_cast<int>( (1.0/(double)filenames.count()) * 100 );
+
+    m_reader->SetImageIO( m_gdcmIO );
+    foreach( QString file, filenames )
+    {
+        emit progress( progressCount );
+        // declarem la imatge que volem carregar
+        ItkImageType::Pointer itkImage;
+        m_reader->SetFileName( qPrintable(file) );
+        try
+        {
+            m_reader->Update();
+        }
+        catch ( itk::ExceptionObject & e )
+        {
+            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
+                    .arg( QFileInfo( filenames.at(0) ).dir().path() )
+                    .arg( e.GetDescription() )
+                    );
+
+            // llegim el missatge d'error per esbrinar de quin error es tracta
+            errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
+        }
+        if ( errorCode == NoError )
+        {
+            itkImage = m_reader->GetOutput();
+            m_reader->GetOutput()->DisconnectPipeline();
+        }
+        // TODO no es fa tractament d'errors!
+
+        // Un cop llegit el block, fem el tiling
+        tileFilter->PushBackInput( itkImage );
+        progressCount += progressIncrement;
+    }
+    tileFilter->Update();
+    this->setData( tileFilter->GetOutput() );
+    emit progress(100);
+}
+
 //
 //
 //
@@ -610,13 +670,13 @@ int Volume::readFiles( QStringList filenames )
             break;
 
         case SizeMismatch:
-            // Això no hauria de passar! En principi ja es controla que les imatges que li donem a Volume 
-            // siguin homogènies en la resolució
-            DEBUG_LOG("Size Mismatch between images!");
-            ERROR_LOG("Size Mismatch between images!");
+            // TODO això es podria fer a ::getVtkData o ja està bé aquí?
+            errorCode = NoError;
+            readDifferentSizeImagesIntoOneVolume( filenames );
             emit progress( 100 );
             break;
         }
+        
     }
     else
     {
