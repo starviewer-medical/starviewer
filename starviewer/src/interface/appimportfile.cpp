@@ -13,7 +13,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 // itk
-#include <itkGDCMSeriesFileNames.h> // per generar els noms dels arxius DICOM d'un directori
+#include <itkGDCMImageIO.h> // per poder saber si l'arxiu que escanejem és llegible
 // recursos
 #include "logging.h"
 
@@ -101,17 +101,20 @@ QStringList AppImportFile::generateFilenames( const QString &dirPath )
     QStringList list;
     // Comprovem que el directori tingui arxius
     QDir dir(dirPath);
-    if( !dir.entryList( QDir::Files ).isEmpty() )
+    QFileInfoList fileInfoList = dir.entryInfoList( QDir::Files );
+
+    // TODO ara mateix únicament considerem arxius DICOM que pugui llegir GDCMImageIO
+    // aquesta funcionalitat és molt bàsica i si volguéssim un sistema d'importació DICOM
+    // més complet hauríem de crear tot un framework més complet i integrat amb la resta
+    itk::GDCMImageIO::Pointer gdcmIO = itk::GDCMImageIO::New();
+    foreach( QFileInfo fileInfo, fileInfoList )
     {
-        // Generador dels noms dels fitxers DICOM d'un directori
-        itk::GDCMSeriesFileNames::Pointer namesGenerator = itk::GDCMSeriesFileNames::New();
-        namesGenerator->SetInputDirectory( qPrintable(dirPath) );
-        const std::vector< std::string > &filenames = namesGenerator->GetInputFileNames();
-        // convertim el vector en QStringList
-        for( unsigned int i = 0; i < filenames.size(); i++ )
+        if( gdcmIO->CanReadFile( fileInfo.absoluteFilePath().toLatin1() ) )
         {
-            list += filenames[i].c_str();
+            list << fileInfo.absoluteFilePath();
         }
+        else
+            DEBUG_LOG( "File " + fileInfo.absoluteFilePath() + " is not readable for GDCM" );
     }
 
     return list;
