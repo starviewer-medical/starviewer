@@ -194,7 +194,9 @@ HEADERS += extensionfactory.h \
            glxew.h \
            wglew.h \
            shortcuts.h \
-           shortcutmanager.h
+           shortcutmanager.h \
+           volumebuilder.h \
+           volumebuilderfromcaptures.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -352,7 +354,9 @@ SOURCES += extensionmediator.cpp \
            settingsaccesslevelfilereader.cpp \
            glew.c \
            shortcuts.cpp \
-           shortcutmanager.cpp
+           shortcutmanager.cpp \
+           volumebuilder.cpp \
+           volumebuilderfromcaptures.cpp
 
 TEMPLATE = lib
 DESTDIR = ./
