@@ -39,6 +39,10 @@ public:
     void setInstanceUID( QString uid );
     QString getInstanceUID() const;
 
+    /// Assignar/Obtenir el SOP Class UID
+    void setSOPClassUID( QString sopClassUID );
+    QString getSOPClassUID() const;
+
     /// Assignar/Obtenir la modalitat de la sèrie
     void setModality( QString modality );
     QString getModality() const;
@@ -269,6 +273,9 @@ private:
     int findImageIndex( QString sopInstanceUID );
 
 private:
+    /// Identificació única del tipus de SOP. Veure PS 3.4 per conèixer el possibles valors que pot tenir.
+    QString m_sopClassUID;
+
     /// Informació comuna de la sèrie. C.7.3.1 General Series Module - PS 3.3.
 
     /// Tipus d'equipament que originalment va adquirir les dades per crear les imatges creades en aquesta sèrie.
