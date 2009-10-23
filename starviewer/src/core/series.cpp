@@ -119,6 +119,16 @@ bool Series::hasImages() const
     return ! m_imageSet.isEmpty();
 }
 
+void Series::setSOPClassUID( QString sopClassUID )
+{
+    m_sopClassUID = sopClassUID;
+}
+
+QString Series::getSOPClassUID() const
+{
+    return m_sopClassUID;
+}
+
 void Series::setModality( QString modality )
 {
     m_modality = modality;
