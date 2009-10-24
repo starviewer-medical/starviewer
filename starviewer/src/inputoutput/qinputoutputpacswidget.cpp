@@ -473,8 +473,8 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
        case QExecuteOperationThread::MoveUnknowStatus :
        case QExecuteOperationThread::MoveFailureOrRefusedStatus :
 			message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 doesn't respond as expected and %2 can't process the request for retrieving a study.").arg(pacs.getAETitle(), ApplicationNameString);
-            message += tr("\n\nTry later to retrieve the study, if the problem persists please contact with PACS administrator to solve the problem.");
+            message += tr("PACS %1 doesn't respond as expected and %2 can't process the request for retrieving a study. Be sure that your computer is connected on network and the PACS parameters are correct.").arg(pacs.getAETitle(), ApplicationNameString);
+            message += tr("\n\nIf the problem persists please contact with PACS administrator to solve the problem.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
        case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
