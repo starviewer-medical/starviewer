@@ -33,7 +33,7 @@ Q_OBJECT
 public:
 
     ///Es defineix els tipus d'error que podem tenir, el DatabaseError indica quan és error de Sqlite
-    enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace, ErrorRetrieving, PatientInconsistent, MoveDestinationAETileUnknownStatus, IncomingConnectionsPortPacsInUse,
+    enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace, PatientInconsistent, MoveDestinationAETileUnknownStatus, IncomingConnectionsPortPacsInUse,
                          MoveFailureOrRefusedStatus, MoveWarningStatus, MoveUnknowStatus};
 
     /** Constructor de la classe
