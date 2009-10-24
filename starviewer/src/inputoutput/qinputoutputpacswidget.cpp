@@ -433,13 +433,6 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
-        case QExecuteOperationThread::ErrorRetrieving :
-            message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred retrieving a study.\n");
-            message += tr("\nPACS %1 doesn't respond correctly, be sure that your computer is connected on network and the PACS parameters are correct.").arg(pacs.getAETitle());
-            message += tr("\nIf the problem persist contact with an administrator.");
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
         case QExecuteOperationThread::NoEnoughSpace :
             message = tr("There is not enough space to retrieve studies, please free space.");
             message += tr("\nAll pending retrieve operations will be cancelled.");
