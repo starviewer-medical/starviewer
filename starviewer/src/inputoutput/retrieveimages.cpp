@@ -206,7 +206,7 @@ void RetrieveImages::storeSCPCallback(
                     piSingleton->setError( retrievedDatasetStudyUID );
                     ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(cbdata->imageFileName));
                 }
-                else if ( strcmp( sopClass , req->AffectedSOPClassUID ) != 0 )
+                else if ( strcmp( sopClass , req->AffectedSOPClassUID ) != 0)
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
                     piSingleton->setError( retrievedDatasetStudyUID );
@@ -219,7 +219,6 @@ void RetrieveImages::storeSCPCallback(
                     ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
                 }
             }
-
             piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
         }
     }
@@ -386,164 +385,10 @@ Status RetrieveImages::retrieve()
         m_net , subOpCallback , NULL ,
         &rsp , &statusDetail , &rspIds );
 
-    //el rsp.DimseStatus conté el valor del tag 0000,0900 que indica l'status de les operacions amb el Pacs
     if (rsp.DimseStatus != STATUS_Success)
     {
-        // Aquests són els codis que podem rebre. Extrets de dimse.h (dcmtk)
-        /*
-        // Move Specific Codes 
-        STATUS_MOVE_Refused_OutOfResourcesNumberOfMatches                   0xa701
-        STATUS_MOVE_Refused_OutOfResourcesSubOperations                     0xa702
-        STATUS_MOVE_Failed_SOPClassNotSupported                             0xa800
-        STATUS_MOVE_Failed_MoveDestinationUnknown                           0xa801
-        STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass                   0xa900
-        STATUS_MOVE_Failed_UnableToProcess                                  0xc000
-        STATUS_MOVE_Cancel_SubOperationsTerminatedDueToCancelIndication     0xfe00
-        STATUS_MOVE_Warning_SubOperationsCompleteOneOrMoreFailures          0xb000        
-        */
-        // Per a una informació més detallada, consultar PS 3.4, secció C.4.2.1.5, taula C.4-2
-        // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
-        
-        QString errorMessage;
-        QString warnMessage;
-        QString infoMessage;
-        // Llista de camps relacionats amb l'error que poden contenir informació adicional
-        QList< DcmTagKey > relatedFieldsList;
-        switch(rsp.DimseStatus)
-        {
-            case STATUS_MOVE_Refused_OutOfResourcesNumberOfMatches: // 0xa701
-                // Refused: Out of Resources – Unable to calculate number of matches
-                // Related Fields
-                // DCM_ErrorComment (0000,0902)
-                relatedFieldsList << DCM_ErrorComment;
-                errorMessage = "(0xa701) MOVE REFUSED. Sense recursos. Incapaç de calcular el nombre de correspondències.";  
-                // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
-                break;
-
-            case STATUS_MOVE_Refused_OutOfResourcesSubOperations: // 0xa702
-                // Refused: Out of Resources – Unable to perform sub-operations
-                // Related Fields 
-                // DCM_NumberOfRemainingSuboperations (0000,1020) 
-                // DCM_NumberOfCompletedSuboperations (0000,1021)
-                // DCM_NumberOfFailedSuboperations (0000,1022)
-                // DCM_NumberOfWarningSuboperations (0000,1023)
-                relatedFieldsList << DCM_NumberOfRemainingSuboperations;
-                relatedFieldsList << DCM_NumberOfCompletedSuboperations;
-                relatedFieldsList << DCM_NumberOfFailedSuboperations;
-                relatedFieldsList << DCM_NumberOfWarningSuboperations;
-                // No es poden descarregar les imatges
-                errorMessage = "(0xa702) MOVE REFUSED. Sense recursos. Han fallat algunes sub-operacions.";  
-                state.setStatus(DcmtkMoveRefusedOutOfResources);
-                // TODO Provoca aquest error que s'esborri tot el que s'ha descarregat? Potser no és la millor solució
-                break;
-
-            case STATUS_MOVE_Failed_MoveDestinationUnknown: // 0xa801
-                // Refused: Move Destination unknown
-                // Related Fields 
-                // DCM_ErrorComment (0000,0902)
-                relatedFieldsList << DCM_ErrorComment;
-                // El PACS no ens té registrat amb el nostre AETitle
-                errorMessage = "(0xa801) MOVE FAILED. No s'han pogut descarregar els objectes DICOM, el PACS no ens té registrat amb l'AETITLE donat.";
-                state.setStatus(DcmtkMoveDestionationUnknown);
-                break;
-
-            case STATUS_MOVE_Failed_SOPClassNotSupported: // 0xa800
-                // ?
-                // En principi aquest error no ens hauria d'arribar per aquesta operació
-                errorMessage = "(0xa800) MOVE FAILED. SOP Class not Supported. En principi aquest error no s'hauria de donar aquí!.";
-                // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
-                break;
-            
-            case STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass: // 0xa900
-                // Identifier does not match SOP Class
-                // Related fields 
-                // DCM_OffendingElement (0000,0901)
-                // DCM_ErrorComment (0000,0902)
-                relatedFieldsList << DCM_OffendingElement;
-                relatedFieldsList << DCM_ErrorComment;
-                // En principi aquest error no ens hauria d'arribar per aquesta operació
-                errorMessage = "(0xa900) MOVE FAILED. Identifier does not match SOP Class. En principi aquest error no s'hauria de donar aquí!.";
-                // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
-                break;
-
-            case STATUS_MOVE_Failed_UnableToProcess: // 0xc000
-                // Unable to Process
-                // Related fields 
-                // DCM_OffendingElement (0000,0901)
-                // DCM_ErrorComment (0000,0902)
-                relatedFieldsList << DCM_OffendingElement;
-                relatedFieldsList << DCM_ErrorComment;
-                errorMessage = "(0xc000) MOVE FAILED. Incapaç de processar.";
-                // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
-                break;
-
-            case STATUS_MOVE_Cancel_SubOperationsTerminatedDueToCancelIndication: // 0xfe00
-                // Sub-operations terminated due to Cancel Indication
-                // Related fields 
-                // DCM_NumberOfRemainingSuboperations (0000,1020) 
-                // DCM_NumberOfCompletedSuboperations (0000,1021)
-                // DCM_NumberOfFailedSuboperations (0000,1022)
-                // DCM_NumberOfWarningSuboperations (0000,1023)
-                relatedFieldsList << DCM_NumberOfRemainingSuboperations;
-                relatedFieldsList << DCM_NumberOfCompletedSuboperations;
-                relatedFieldsList << DCM_NumberOfFailedSuboperations;
-                relatedFieldsList << DCM_NumberOfWarningSuboperations;
-                // Això representa que el cancel l'ha fet l'usuari o la cancel·lació pot provenir des d'un altre entitat?
-                infoMessage = "(0xfe00) MOVE CANCEL.(Cancel·lació demanada per l'usuari?).";
-                // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
-                break;
-
-            case STATUS_MOVE_Warning_SubOperationsCompleteOneOrMoreFailures: // 0xb000
-                // Sub-operations Complete – One or more Failures
-                // Related fields 
-                // DCM_NumberOfRemainingSuboperations (0000,1020) 
-                // DCM_NumberOfFailedSuboperations (0000,1022)
-                // DCM_NumberOfWarningSuboperations (0000,1023)
-                relatedFieldsList << DCM_NumberOfRemainingSuboperations;
-                relatedFieldsList << DCM_NumberOfFailedSuboperations;
-                relatedFieldsList << DCM_NumberOfWarningSuboperations;
-                warnMessage = "(0xb000) MOVE WARNING. Sub-operacions completades però hi ha hagut un o més errors en alguna de les sub-operacions.";
-                // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
-                break;
-            
-            default:
-                // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
-                errorMessage = "S'ha produit un error desconegut a l'intentar descarregar l'estudi.";
-                state.setStatus(DcmtkMovescuUnknownError);
-                break;
-        }
-
-        // Fem logs de la informació relacionada amb els errors
-        if( !errorMessage.isEmpty() )
-        {
-            // DU_cmoveStatusString és una funció dcmtk que tradueix el codi d'error a un string comprensible
-            ERROR_LOG( errorMessage + " Descripció rebuda: " + QString(DU_cmoveStatusString(rsp.DimseStatus)) );
-        }
-        if( !warnMessage.isEmpty() )
-        {
-            WARN_LOG( warnMessage + " Descripció rebuda: " + QString(DU_cmoveStatusString(rsp.DimseStatus)) );
-        }
-        if( !infoMessage.isEmpty() )
-        {
-            INFO_LOG( warnMessage + " Descripció rebuda: " + QString(DU_cmoveStatusString(rsp.DimseStatus)) );
-        }
-
-        if (statusDetail)
-        {
-            // Mostrem els detalls de l'status rebut, si se'ns han proporcionat
-            if( !relatedFieldsList.isEmpty() )
-            {
-                const char *text;
-                INFO_LOG("Status details");
-                foreach( DcmTagKey tagKey, relatedFieldsList )
-                {
-                    // Fem un log per cada camp relacionat amb l'error amb el format 
-                    // NomDelTag (xxxx,xxxx): ContingutDelTag
-                    statusDetail->findAndGetString(tagKey, text, false);
-                    INFO_LOG( QString( DcmTag(tagKey).getTagName() ) + " " + QString( tagKey.toString().c_str() ) + ": " + QString(text) );
-                } 
-            }
-        }
+        //Si hi hagut un error el gravem al log, i el transformem a l'objecte Status
+        state = processErrorResponseFromMoveSCP(&rsp, statusDetail);
     }
     else state.setStatus(cond);
 
@@ -553,6 +398,104 @@ Status RetrieveImages::retrieve()
 
     if ( rspIds != NULL ) 
         delete rspIds;
+
+    return state;
+}
+
+Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *response, DcmDataset *statusDetail)
+{
+    Status state;
+    QList< DcmTagKey > relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
+    QString messageErrorLog = "No s'ha pogut descarregar l'estudi, descripció error rebuda";
+
+    // A la secció C.4.2.1.5, taula C.4-2 podem trobar un descripció dels errors.
+    // A la secció C.4.2.3.1 es descriu els tipus generals d'error 
+    //      Failure o Refused: No s'ha pogut descarregat alguna imatge
+    //      Warning: S'ha pogut descarregar com a mínim una imatge
+    //      Success: Totes les imatges s'han descarregat correctament
+
+    // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
+    
+    if (response->DimseStatus == STATUS_Success)
+    {
+        state.setStatus("",true,0);
+        return state;
+    }
+
+    switch(response->DimseStatus)
+    {
+        case STATUS_MOVE_Refused_OutOfResourcesNumberOfMatches: // 0xa701
+            // Refused: Out of Resources – Unable to calculate number of matches
+            // Related Fields DCM_ErrorComment (0000,0902)
+            relatedFieldsList << DCM_ErrorComment;
+
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            state.setStatus(DcmtkMoveFailureOrRefusedStatus);
+            break;
+
+        case STATUS_MOVE_Refused_OutOfResourcesSubOperations: // 0xa702
+            // Refused: Out of Resources – Unable to perform sub-operations
+            // Related Fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfCompletedSuboperations (0000,1021)
+            // DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
+            relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfCompletedSuboperations;
+            relatedFieldsList << DCM_NumberOfFailedSuboperations << DCM_NumberOfWarningSuboperations;
+
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            state.setStatus(DcmtkMoveFailureOrRefusedStatus);
+            break;
+
+        case STATUS_MOVE_Failed_MoveDestinationUnknown: // 0xa801
+            // Refused: Move Destination unknown
+            // Related Fields DCM_ErrorComment (0000,0902)
+            relatedFieldsList << DCM_ErrorComment;
+
+            // El PACS no ens té registrat amb el nostre AETitle
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            state.setStatus(DcmtkMoveDestionationUnknown);
+            break;
+
+        case STATUS_MOVE_Failed_IdentifierDoesNotMatchSOPClass : //0xa900
+        case STATUS_MOVE_Failed_UnableToProcess : // 0xc000 
+            // Unable to Process or Identifier does not match SOP Class
+            // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
+            relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
+
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            state.setStatus(DcmtkMoveFailureOrRefusedStatus);
+            break;
+
+        case STATUS_MOVE_Warning_SubOperationsCompleteOneOrMoreFailures: // 0xb000
+            // Sub-operations Complete – One or more Failures
+            // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
+            relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations  << DCM_NumberOfWarningSuboperations;
+
+            WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripció rebuda: " + QString(DU_cmoveStatusString(response->DimseStatus)));
+            state.setStatus(DcmtkMoveWarningStatus);
+            break;
+
+        default:
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
+            state.setStatus(DcmtkMovescuUnknownError);
+            break;
+    }
+
+    if (statusDetail)
+    {
+        // Mostrem els detalls de l'status rebut, si se'ns han proporcionat
+        if( !relatedFieldsList.isEmpty() )
+        {
+            const char *text;
+            INFO_LOG("Status details");
+            foreach( DcmTagKey tagKey, relatedFieldsList )
+            {
+                // Fem un log per cada camp relacionat amb l'error amb el format 
+                // NomDelTag (xxxx,xxxx): ContingutDelTag
+                statusDetail->findAndGetString(tagKey, text, false);
+                INFO_LOG( QString( DcmTag(tagKey).getTagName() ) + " " + QString( tagKey.toString().c_str() ) + ": " + QString(text) );
+            } 
+        }
+    }
 
     return state;
 }

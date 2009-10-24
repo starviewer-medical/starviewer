@@ -421,6 +421,9 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
     QString message;
     PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
 
+    /*TODO:S'ha de millorar els missatges d'error indicant quin estudi ha fallat amb nom de pacient i study ID, s'ha de fer que l'error emeti
+     * en comptes del studyInstanceUID l'objecte Operation que conté la informació el patientName i el studyID */
+
     switch (error)
     {
         case QExecuteOperationThread::ErrorConnectingPacs :
@@ -436,12 +439,6 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             message += tr("\nPACS %1 doesn't respond correctly, be sure that your computer is connected on network and the PACS parameters are correct.").arg(pacs.getAETitle());
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::MoveDestinationAETileUnknown:
-            message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAETitle(), PacsDevice::getLocalAETitle() );
-            message += tr("\n\nContact with an administrador to register your computer to the PACS.");
-            QMessageBox::warning(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::NoEnoughSpace :
             message = tr("There is not enough space to retrieve studies, please free space.");
@@ -469,9 +466,21 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
-	   case QExecuteOperationThread::MoveRefusedOutOfResources :
+        case QExecuteOperationThread::MoveDestinationAETileUnknownStatus:
+            message = tr("Please review the operation list screen, ");
+            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAETitle(), PacsDevice::getLocalAETitle() );
+            message += tr("\n\nContact with an administrador to register your computer to the PACS.");
+            QMessageBox::warning(this, ApplicationNameString, message);
+            break;
+	   case QExecuteOperationThread::MoveWarningStatus :
+            message = tr("Some of the images of study %1 from PACS %2 can't be retrieved because are corrupted.\n").arg(studyInstanceUID, pacs.getAETitle());
+            message += tr("The study is incomplet.");
+            QMessageBox::warning(this, ApplicationNameString, message);
+            break;
+       case QExecuteOperationThread::MoveUnknowStatus :
+       case QExecuteOperationThread::MoveFailureOrRefusedStatus :
 			message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 is out of resources and can't process the request for retrieving a study.").arg(pacs.getAETitle());
+            message += tr("PACS %1 doesn't respond as expected and %2 can't process the request for retrieving a study.").arg(pacs.getAETitle(), ApplicationNameString);
             message += tr("\n\nTry later to retrieve the study, if the problem persists please contact with PACS administrator to solve the problem.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;

@@ -189,15 +189,23 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
     if (!retState.good())
     {
-        if (retState.code() == 1300)
+        switch(retState.code())
         {
-            errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveDestinationAETileUnknown);
-        }
-		else if( retState.code() == 1302)
-		{
-			errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveRefusedOutOfResources);
+            case 1300://Move Destination Unknow
+                errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveDestinationAETileUnknownStatus);
+                break;
+            case 1301://Move Status unknow
+                errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveFailureOrRefusedStatus);
+                break;
+            case 1302://Warning Status una part de l'estudi no s'ha descarregat
+                errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveWarningStatus);
+
+                emit filesRetrieved();//Si l'error és un warning vol dir que com a mínim hem rebut un objecte dicom, per tant el processe
+                break;
+            default:
+                errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveUnknowStatus);
+                break;
 		}
-        else errorRetrieving(studyUID, operation.getPacsDevice().getID(), ErrorRetrieving);
     }
     else emit filesRetrieved();
 
@@ -205,7 +213,10 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     fillersThread.wait();
     localDatabaseManagerThreaded.wait();
 
-    if (retState.good()) //Si l'estudi s'ha descarregat comprovem que no s'hagi produït cap error al inserir-lo a la base de dades
+    /*Si l'estudi s'ha descarregat comprovem que no s'hagi produït cap error al inserir-lo a la base de dades
+     *El codi d'error 1302 és un MoveWarningStatus, indica que alguna de les imatges de l'estudi no s'ha descarregat, tot i així processem les imatges
+     *que si s'han descarregat correctament*/
+    if (retState.good() || retState.code() == 1302) 
     {
         if ( localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok) //Comprovem si l'estudi s'ha inserit correctament a la BD
         {
@@ -396,8 +407,11 @@ void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QString 
 
     emit errorInOperation(studyInstanceUID, pacsID, lastError);
 
-    //Com la descàrrega ha fallat esborrem el directori on s'havia de descarregar l'estudi, per si s'ha descarregat alguna imatge
-    deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
+    //Si hem rebut un error i no és cap Warning, vol dir que no s'ha descarregat cap objecte Dicom, per tant esborrem el directori creat per guardar l'estudi
+    if (lastError != MoveWarningStatus) 
+    {
+        deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
+    }
 }
 
 void QExecuteOperationThread::seriesRetrieved(QString studyInstanceUID)
