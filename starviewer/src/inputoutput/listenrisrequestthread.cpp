@@ -39,6 +39,19 @@ bool ListenRISRequestThread::isListen()
     return isRunning();
 }
 
+/* El motiu que el disseny d'escolta peticions del RIS no segueixi el model tradicional de serveis de xarxa, que consisteix en tenir un thread que s'encarrega
+ * d'esperar connexions entrants i una vegada les té, crear un thread fill per atendre aquest nova connexió, mentre el thread pare pot tornar a esperar noves 
+ * connexions entrants, és per què amb el RIS PIER aquest model donava problemes, ens trobàvem moltes vegades que amb el temps que transcurria en que s'engegava 
+ * el thread i cridàvem el mètode readAll de QTcpServer ens donava un error de que el client remot havia tancat la connexió. Hem de tenir en compte que no teníem 
+ * accés al codi del RIS PIER que s'utilitzava per fer la petició, per saber com funcionava i quins timeouts tenia, ni teníem accés a una màquina amb el RIS PIER 
+ * per fer proves. Finalment es va optar per provar de processar les peticions del RIS amb aquest model, en que hi ha un mateix thread que accepta les connexions 
+ * i les processa, amb aquest model es van acabar els problemes amb les connexions del RIS PIER.
+    
+ *  Degut aquest mateix fet per això tampoc s'ha implamentat aquesta classe seguint el model recomenat per Qt, en el qual no tenim un loop pendent sempre 
+ *  d'acceptar noves connexions, sinó que conectem el signal incomingConnection() amb un slot de la nostra classe que s'activa cada vegada que hi ha una 
+ *  nova connexió.
+
+ */
 void ListenRISRequestThread::run()
 {
     QTcpServer tcpRISServer;
