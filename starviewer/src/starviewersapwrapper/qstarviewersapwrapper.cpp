@@ -29,37 +29,40 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
     INFO_LOG(QString("QStarviewerSAPWrapper::Demanare a l'Starviewer local pel port %1 la descarrega de l'estudi amb accession number %2").arg(QString().setNum(starviewerRisPort), accessionNumber));
 
     tcpSocket.connectToHost(locaHostAddress, starviewerRisPort);//Connectem contra el localhost
-
-    if (!tcpSocket.waitForConnected(1000)) //Esperem que ens haguem connectat
+    if (!tcpSocket.waitForConnected()) //Esperem que ens haguem connectat
     {
         errorConnecting(starviewerRisPort, tcpSocket.errorString());
         return;
     }
 
     tcpSocket.write(getXmlPier(accessionNumber).toLocal8Bit()); //Enviem la petició de descarregar del estudi
-    tcpSocket.flush();
-
-    if (tcpSocket.error() != QAbstractSocket::UnknownSocketError)
+    if (!tcpSocket.waitForBytesWritten())
     {
-        errorWriting(tcpSocket.errorString());
-    }
+        INFO_LOG("QStarviewerSAPWrapper::No s'ha pogut enviar la petició a Starviewer");
 
-   /* Xapussa a vegades ens trobem que si l'Starviewer tarda a agafar les dades que li hem enviat, resulta que nosaltres ja hem tancat
-    * la connexió, i quan l'Starviewer va per llegir les dades enviades es troba que la connexió està tancada i no pot llegir les dades enviades
-    */
-    sleepCurrentProcess(1);
-
-    tcpSocket.disconnectFromHost();//desconnectem
-    tcpSocket.waitForDisconnected(5000);
-
-    if (tcpSocket.error() != QAbstractSocket::UnknownSocketError)
-    {
-        errorWriting(tcpSocket.errorString());
+        if (tcpSocket.error() != QAbstractSocket::UnknownSocketError)
+        {
+            errorWriting(tcpSocket.errorString());
+        }
     }
     else 
     {
-        INFO_LOG("QStarviewerSAPWrapper::S'ha enviat amb exit la peticio al Starviewer");
+        INFO_LOG("QStarviewerSAPWrapper::S'ha enviat la petició correctament al Starviewer");
         printf(qPrintable(QString("The request to retrieve the study with accession number %1 has been sent succesfully.\n").arg(accessionNumber)));
+    }
+
+    tcpSocket.flush();
+
+    tcpSocket.disconnectFromHost();//desconnectem
+    if (!tcpSocket.waitForDisconnected())
+    {
+        INFO_LOG("QStarviewerSAPWrapper::No he pogut desconnectar del Starviewer");
+    }
+    else INFO_LOG("QStarviewerSAPWrapper::He desconnectat del Starviewer");
+
+    if (tcpSocket.error() != QAbstractSocket::UnknownSocketError)
+    {
+        errorClosing(tcpSocket.errorString());
     }
 }
 
@@ -112,10 +115,6 @@ bool QStarviewerSAPWrapper::startStarviewer()
         if (!starviewerRunning)
             INFO_LOG(QString("QStarviewerSAPWrapper:Intent %1 de %2 Starviewer encara no respón").arg(tries, maxTries));
     }
-
-    /*Xapussa sembla que el Starviewer si li arriben la petició de connexió per comprovar si està engegat i la de descarrega d'un estudi
-     *juntes sense haver tingut temps de processar la primera de provar si el Starviewer respón, dona problemes ja que algunes vegades ignora*/
-    sleepCurrentProcess(1);
 
     return true;
 }
