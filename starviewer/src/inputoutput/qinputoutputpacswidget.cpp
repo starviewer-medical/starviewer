@@ -466,7 +466,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
 	   case QExecuteOperationThread::MoveWarningStatus :
-            message = tr("Some of the images of study %1 from PACS %2 can't be retrieved because are corrupted.\n").arg(studyInstanceUID, pacs.getAETitle());
+            message = tr("Some images of study %1 from PACS %2 can't be retrieved because are corrupted.\n").arg(studyInstanceUID, pacs.getAETitle());
             message += tr("The study is incomplet.");
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
