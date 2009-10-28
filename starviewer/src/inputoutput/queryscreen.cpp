@@ -1424,8 +1424,8 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
     Status state = queryMultiplePacs(maskRisRequest, PacsListDB().queryDefaultPacs(), &multipleQueryStudy);
 
     //Fem els connects per tracta els possibles errors que es poden donar
-    connect ( &m_multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
-    connect ( &m_multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
+    connect ( &multipleQueryStudy, SIGNAL( errorConnectingPacs( QString ) ), SLOT( errorConnectingPacs( QString ) ) );
+    connect ( &multipleQueryStudy, SIGNAL( errorQueringStudiesPacs( QString ) ), SLOT( errorQueringStudiesPacs( QString ) ) );
 
     if (!state.good())
     {
