@@ -27,6 +27,37 @@ namespace udg {
     %HOMEPATH%: Ruta al directori "home" d'usuari
 
     El seu tractament serà "case sensitive".
+
+    A més a més, a aquestes paraules clau se'ls pot afegir un sufix que els hi apliqui una màscara.
+
+    == Màscara de truncatge ==
+    
+    Aquesta màscara el que fa és truncar a 'n' caràcters la clau %KEY%. Podem especificar adicionalment
+    un caràcter de padding amb el que s'omplin el nombre de caràcters buits si la longitud de %KEY% és 
+    inferior al nombre de caràcters truncats.
+    
+    La sintaxi és la següent
+    
+    %KEY%[n:c]  
+    
+    on:
+      * %KEY%: paraula clau del catàleg (HOSTANAME,IP, etc)
+      * n: nombre de caràcters a truncar de %KEY%. Ha de ser un nombre natural > 0
+      * c: caràcter de padding amb el que omplirem els espais buits. 
+           El caràcter de padding pot ser qualsevol caràcter, excepte l'espai en blanc
+
+    
+    Exemples:
+    
+    Per obtenir els 5 últims dígits de l'adreça IP i omplir els espais buits amb el caràcter 'x', escriuríem
+    %IP.3%[2:x]%IP.4%[3:x]
+    Si tinguèssim la adreça IP 10.80.9.2 el resultat seria "x9xx2"
+    
+    Per obtenir els 4 últims dígits, sense padding escriuríem
+    %IP.3%[1:]%IP.4%[3:]
+    i en aquest cas, per la mateixa adreça IP que l'anterior, el resultat seria "92"
+
+    
 */
 class SettingsParser : public Singleton<SettingsParser> {
 public:
