@@ -1439,12 +1439,22 @@ void QueryScreen::retrieveStudyFromRISRequest(DicomMask maskRisRequest)
         QMessageBox::information(this , ApplicationNameString , message);
         return;
     }
+	else
+	{
+		/*Degut al bug que es descriu al ticket #1042, es fa que només es descarregui el primer estudi trobat a la cerca de PACS 
+		  Si trobem més d'un estudi que compleixi la cerca, es descarrega el primer i executem la pipeline per carregar l'estudi i visualitzar-lo, de mentres 
+		  s'executa,si el segon és petit i es descarrega ràpida  executa la pipeline de carregar l'estudi mentre el primer emcara l'està executant per carregar i
+		  visualitzar l'estudi l'Starviewer peta*/
+		DICOMStudy study = multipleQueryStudy.getStudyList().at(0);//Agafem el primer estudi que ens han retornat els PACS que coincideix amb el cercat
 
-    foreach (DICOMStudy study, multipleQueryStudy.getStudyList())
-    {
-        maskStudyToRetrieve.setStudyUID(study.getStudyUID());
-        retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), study.getPacsId(), maskStudyToRetrieve, study);
-    }
+		maskStudyToRetrieve.setStudyUID(study.getStudyUID());
+		retrieveFromPacs(settings.getViewAutomaticallyAStudyRetrievedFromRisRequest(), study.getPacsId(), maskStudyToRetrieve, study);
+
+		if (multipleQueryStudy.getStudyList().count() > 1)
+		{
+			WARN_LOG("S'ha trobat mes d'un estudi que coincidia amb els parametres del cerca del RIS, pero nomes es baixara el primer estudi trobat");
+		}
+	}
 }
 
 QString QueryScreen::buildQueryParametersString(DicomMask mask)
