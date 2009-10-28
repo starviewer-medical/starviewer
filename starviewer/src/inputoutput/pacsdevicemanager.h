@@ -68,10 +68,6 @@ private:
 
     /// Donat un conjunt de claus-valor omple i retorna un objecte PacsDevice
     PacsDevice keyValueMapToPacsDevice( const Settings::KeyValueMapType &item );
-
-private:
-    /// Clau de settings per la llista de PACS
-    static const QString PacsListConfigurationSectionName;
 };
 
 };
