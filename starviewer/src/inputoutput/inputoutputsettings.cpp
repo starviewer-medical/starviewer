@@ -42,6 +42,8 @@ const QString InputOutputSettings::LocalAETitle( PacsParamBase + "AETitle");
 const QString InputOutputSettings::PacsConnectionTimeout( PacsParamBase + "timeout");
 const QString InputOutputSettings::MaximumPACSConnections( PacsParamBase + "MaxConnects");
 
+const QString InputOutputSettings::PacsListConfigurationSectionName = "PacsList";
+
 const QString DICOMDIRBaseKey("DICOMDIR/");
 const QString InputOutputSettings::DICOMDIRBurningApplicationPathKey( DICOMDIRBaseKey + "DICOMDIRBurningApplication");
 const QString InputOutputSettings::DICOMDIRBurningApplicationParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationParameters");

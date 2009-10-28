@@ -54,6 +54,9 @@ public:
     static const QString PacsConnectionTimeout;
     static const QString MaximumPACSConnections;
 
+    /// Llista de PACS
+    static const QString PacsListConfigurationSectionName;
+
     /// Paràmetres de la configuració DICOMDIR
     /// Path del programa de gravació
     static const QString DICOMDIRBurningApplicationPathKey;

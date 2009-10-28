@@ -10,11 +10,9 @@
 #include <QString>
 #include "pacsdevice.h"
 #include "logging.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
-
-// TODO passar-ho inputoutputsettings?
-const QString PacsDeviceManager::PacsListConfigurationSectionName = "PacsList";
 
 PacsDeviceManager::PacsDeviceManager()
 {
@@ -51,7 +49,7 @@ bool PacsDeviceManager::addPACS(PacsDevice &pacs)
         }
 
         Settings settings;
-        settings.addListItem( PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacs) );
+        settings.addListItem( InputOutputSettings::PacsListConfigurationSectionName, pacsDeviceToKeyValueMap(pacs) );
     }
 
     return ok;
@@ -63,7 +61,7 @@ void PacsDeviceManager::updatePACS(PacsDevice &pacsToUpdate)
     QList<PacsDevice> pacsList = getPACSList();
     // Eliminem tots els PACS que tinguem guardats a disc
     Settings settings;
-    settings.remove(PacsListConfigurationSectionName);
+    settings.remove(InputOutputSettings::PacsListConfigurationSectionName);
 
     // Recorrem tota la llista de PACS i els afegim de nou
     // Si trobem el que volem fer update, afegim l'actualitzat
@@ -86,7 +84,7 @@ bool PacsDeviceManager::deletePACS( const QString &pacsIDString)
     QList<PacsDevice> pacsList = getPACSList();
     // Eliminem tots els PACS que tinguem guardats a disc
     Settings settings;
-    settings.remove(PacsListConfigurationSectionName);
+    settings.remove(InputOutputSettings::PacsListConfigurationSectionName);
 
     // Recorrem tota la llista de PACS i els afegim de nou
     // excepte el que volem esborrar
@@ -104,7 +102,7 @@ QList<PacsDevice> PacsDeviceManager::getPACSList( bool onlyDefault )
 {
     QList<PacsDevice> configuredPacsList;
     Settings settings;
-    Settings::SettingListType list = settings.getList(PacsListConfigurationSectionName);
+    Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
     foreach( Settings::KeyValueMapType item, list )
     {
         PacsDevice pacs;
