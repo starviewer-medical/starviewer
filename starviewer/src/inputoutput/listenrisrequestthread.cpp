@@ -52,23 +52,33 @@ void ListenRISRequestThread::run()
 
     while (tcpRISServer.waitForNewConnection(-1)) //Esperem rebre connexions
     {
-        QTcpSocket *tcpSocket = tcpRISServer.nextPendingConnection();
-        QString risRequestData;
-
-        INFO_LOG("Rebuda peticio de la IP " + tcpSocket->peerAddress().toString());
-        if (tcpSocket->waitForReadyRead(msTimeOutToReadData))
+        INFO_LOG("S'ha rebut una nova connexió de RIS per atendre.");
+        while (tcpRISServer.hasPendingConnections())
         {
-            risRequestData= QString(tcpSocket->readAll());
-            INFO_LOG("Dades rebudes: " + risRequestData);
+            QTcpSocket *tcpSocket = tcpRISServer.nextPendingConnection();
+            QString risRequestData;
+
+            INFO_LOG("Rebuda peticio de la IP " + tcpSocket->peerAddress().toString());
+            if (tcpSocket->waitForReadyRead(msTimeOutToReadData))
+            {
+                risRequestData= QString(tcpSocket->readAll());
+                INFO_LOG("Dades rebudes: " + risRequestData);
+            }
+            else INFO_LOG("No s'ha rebut dades, error: " + tcpSocket->errorString());
+
+            INFO_LOG("Tanco socket");
+            tcpSocket->close();
+            INFO_LOG("Faig delete del socket");
+            delete tcpSocket;
+
+            if (!risRequestData.isEmpty()) processRequest(risRequestData);
+
+            if (tcpRISServer.hasPendingConnections()) 
+            {
+                INFO_LOG("Hi ha connexions de RIS pendents per atendre.");
+            }
+            else INFO_LOG("No hi ha connexions de RIS pendents per atendre.");
         }
-        else INFO_LOG("No s'ha rebut dades, error: " + tcpSocket->errorString());
-
-        INFO_LOG("Tanco socket");
-        tcpSocket->close();
-        INFO_LOG("Faig delete del socket");
-        delete tcpSocket;
-
-        if (!risRequestData.isEmpty()) processRequest(risRequestData);
     }
 
     //Si sortim del bucle és que s'ha produït un error

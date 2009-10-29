@@ -432,7 +432,7 @@ bool DICOMDIRReader::matchStudyMaskStudyUID( QString studyMaskStudyUID , QString
 
 bool DICOMDIRReader::matchStudyMaskPatientId( QString studyMaskPatientId , QString studyPatientId )
 {
-    //Si la màscara és buida rebem  * , si té valor és *ID_PACIENT*
+    //Si la màscara és buida rebem  '', si té valor es rep *ID_PACIENT*
     if ( studyMaskPatientId.length() > 1 )
     { //si hi ha màscara Patient Id
 
@@ -499,7 +499,7 @@ bool DICOMDIRReader::matchStudyMaskDate( QString studyMaskDate , QString studyDa
 
 bool DICOMDIRReader::matchStudyMaskPatientName( QString studyMaskPatientName , QString studyPatientName )
 {
-    //Si la màscara és buida rebem  * , si té valor és *NOM_A_CERCAR*
+    //Si la màscara és buida rebem  '' , si té valor és rep *NOM_A_CERCAR*
     if ( studyMaskPatientName.length() > 1 )
     {//si hi ha màscara Patient Name
         studyMaskPatientName = studyMaskPatientName.replace( "*" , "" ); //treiem els "*"

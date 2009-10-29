@@ -521,8 +521,6 @@ void Q3DViewer::setInput( Volume* volume )
     m_firstRender = true;
 
     render();
-    // indiquem el canvi de volum
-    emit volumeChanged(m_mainVolume);
 }
 
 void Q3DViewer::render()

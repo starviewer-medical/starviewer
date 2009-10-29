@@ -649,6 +649,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
         patientMenu->setPatient( mainWindow->getCurrentPatient() );
 
         connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ));
+        connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SIGNAL( volumeChanged(Volume *) ));
 
         QString selectedItem;
         if( m_mainVolume )

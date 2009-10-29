@@ -301,32 +301,20 @@ void ExtensionHandler::processInput(Patient *patient, const QString &defaultSeri
         // Per cada sèrie, si les seves imatges són multiframe o de mides diferents entre sí aniran en volums separats
         foreach(Series *series, study->getViewableSeries() )
         {
-            int rows = 0, columns = 0;
             QList<Image *> volumeImages;
-            Image *image = series->getImages().first();
-            if( image )
-            {
-                rows = image->getRows();
-                columns = image->getColumns();
-            }
-
             foreach( Image *image, series->getImages() )
             {
+                // TODO amb aquest sistema podria ser que tinguéssim una sèrie amb una o més imatges multiframe 
+                // barrejades amb una o més imatges single-frame que en els passos dels fillers steps s'haguéssin
+                // comptabilitzat amb fases, per tant, els hi assignaríem un rang erroni de fases i llesqes per fase
+                // És un cas extrem i extrany, però que ningú ens diu que no pugui passar.
+                // Tenir-ho en compte per en un futur fer la implementació adequada
                 if( image->isMultiFrame() )
                 {
                     Volume *volume = new Volume;
                     volume->addImage(image);
                     volume->setNumberOfPhases(1);
                     volume->setNumberOfSlicesPerPhase( image->getNumberOfFrames() );
-                    volume->setThumbnail( image->getThumbnail() );
-                    series->addVolume( volume );
-                }
-                else if( rows != image->getRows() || columns != image->getColumns() ) // per cada imatge de resolució diferent fem un volum nou
-                {
-                    Volume *volume = new Volume;
-                    volume->addImage(image);
-                    volume->setNumberOfPhases(1);
-                    volume->setNumberOfSlicesPerPhase(1);
                     volume->setThumbnail( image->getThumbnail() );
                     series->addVolume( volume );
                 }
