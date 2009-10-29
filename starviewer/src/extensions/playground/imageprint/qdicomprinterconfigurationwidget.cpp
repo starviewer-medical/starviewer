@@ -4,20 +4,24 @@
 #include "dicomprinter.h"
 #include "dicomprintermanager.h"
 #include "starviewerapplication.h"
-#include "qdicomaddprinterwizard.h"
+#include "qdicomaddprinterwidget.h"
 #include <QMessageBox>
 
 
 namespace udg {
 
+// Public Methods
 QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
 {
     setupUi( this );
-    createConnections();
 
-    m_listPrintersTreeWidget->setColumnHidden(0,true); 
-    clearPrinterSettings();
+    m_listPrintersTreeWidget->setColumnHidden(0,true);     
+    m_addPrinterWidget = new QDicomAddPrinterWidget();    
+    
+    createConnections();
     refreshPrinterList();
+    clearPrinterSettings();
+    m_advancedSettingsGroupBox->setVisible(false);
 }
 
 QDicomPrinterConfigurationWidget::~QDicomPrinterConfigurationWidget()
@@ -26,8 +30,7 @@ QDicomPrinterConfigurationWidget::~QDicomPrinterConfigurationWidget()
 }
 
 
-//*** Public Slot***//
-
+// Public Slots
 void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
 {
     DicomPrinterManager dicomPrinterManager;
@@ -50,32 +53,9 @@ void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
 }
 
 void QDicomPrinterConfigurationWidget::addPrinter()
-{
-    
-    QDicomAddPrinterWizard * prova = new QDicomAddPrinterWizard();
-    prova->setVisible(true);
-
-    /*
-    DicomPrinter dicomPrinter;
-    DicomPrinterManager dicomPrinterManager;
-    if (validatePrinterSettings())
-    {   
-        this->getPrinterSettingsFromControls(dicomPrinter);
-        this->getPrintSettingsFromControls(dicomPrinter);
-        this->getFilmSettingsFromControls(dicomPrinter);
-        this->getAdvancedSettingsFromControls(dicomPrinter);
-
-        if ( !dicomPrinterManager.addPrinter(dicomPrinter) )
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("This Printer already exists."));
-        }
-        else
-        {
-            refreshPrinterList();
-            clearPrinterSettings();
-        }
-    }
-    */
+{    
+    m_addPrinterWidget->clearInputs();
+    m_addPrinterWidget->setVisible(true);
 }
 
 void QDicomPrinterConfigurationWidget::modifyPrinter()
@@ -115,32 +95,26 @@ void QDicomPrinterConfigurationWidget::testPrinter()
 
 void QDicomPrinterConfigurationWidget::showAdvancedSettings()
 {
+    m_advancedSettingsGroupBox->setVisible(!m_advancedSettingsGroupBox->isVisible());
 }
 
-void  QDicomPrinterConfigurationWidget::getAvailableParameters()
+void QDicomPrinterConfigurationWidget::showNewPrinterAdded()
 {
-    DicomPrinterManager dicomPrinterManager;
-    DicomPrinter printer = dicomPrinterManager.getAvailableParametersValues(m_printerAetitleLineEdit->text(),(m_printerPortLineEdit->text().toInt()));
-    
-    this->clearPrinterSettings();
-
-    this->setPrinterSettingsToControls(printer);
-    this->setPrintSettingsToControls(printer);
-    this->setFilmSettingsToControls(printer);
-    this->setAdvancedSettingsToControls(printer);
+    this->refreshPrinterList();
 }
 
-//*** Private Methods***//
-
+// Private Methods
 void QDicomPrinterConfigurationWidget::createConnections()
 { 
     connect( m_listPrintersTreeWidget , SIGNAL( itemSelectionChanged() ), SLOT( printerSelectionChanged() ) );
-
-    connect(m_addPrinterPushButton, SIGNAL( clicked() ), SLOT( addPrinter() ));
-    connect( m_modifyPushButton , SIGNAL( clicked() ), SLOT( modifyPrinter() ));
+    connect( m_addPrinterPushButton, SIGNAL( clicked() ), SLOT( addPrinter() ));
+    connect( m_applySettingsPushButton , SIGNAL( clicked() ), SLOT( modifyPrinter() ));
+    connect( m_acceptSettingsPushButton , SIGNAL( clicked() ), SLOT( close() ));
+    connect( m_cancelSettingsPushButton , SIGNAL( clicked() ), SLOT( close() ));
     connect( m_deletePrinterPushButton , SIGNAL( clicked() ), SLOT( deletePrinter() ));
-    connect( m_testPushButton , SIGNAL( clicked() ), SLOT( testPrinter() ));    
-    connect( m_advancedSettingsPushButton , SIGNAL( clicked() ), SLOT( showAdvancedSettings() ));    
+    connect( m_testPrinterPushButton , SIGNAL( clicked() ), SLOT( testPrinter() ));    
+    connect( m_advancedSettingsPushButton , SIGNAL( clicked() ), SLOT( showAdvancedSettings() ));   
+    connect( m_addPrinterWidget, SIGNAL(newPrinterAddedSignal()), SLOT(showNewPrinterAdded()));
 }
 
 void QDicomPrinterConfigurationWidget::refreshPrinterList()
@@ -208,10 +182,17 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     m_layoutComboBox->clear();
     m_filmOrientationComboBox->clear();        
     m_filmSizeComboBox->clear();
-    m_visibleTrimCheckBox->clear();
+    m_yesVisibleTrimRadioButton->setChecked(true);
 
     // Advanced Settings
-
+    m_magnifactionTypeComboBox->clear();
+    m_smoothingTypeComboBox->clear();
+    //m_maximDensitySpinBox->
+    //m_miniumDensitySpinBox->
+    m_polarityComboBox->clear();
+    m_borderDensityComboBox->clear();
+    m_emptyDensityComboBox->clear();
+    m_configurationLineEdit->setText("");
 }
 
 void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter& printer)
@@ -268,11 +249,32 @@ void QDicomPrinterConfigurationWidget::getFilmSettingsFromControls(DicomPrinter&
 
 void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinter& printer)
 {
-
+    m_magnifactionTypeComboBox->addItems(printer.getAvailableMagnificationTypeValues());
+    m_magnifactionTypeComboBox->setCurrentIndex(m_magnifactionTypeComboBox->findText(printer.getDefaultMagnificationType()));
+    m_smoothingTypeComboBox->addItems(printer.getAvailableSmoothingTypeValues());
+    m_smoothingTypeComboBox->setCurrentIndex(m_smoothingTypeComboBox->findText(printer.getDefaultSmoothingType()));
+    m_maximDensitySpinBox->setMaximum(printer.getAvailableMaxDensityValues());
+    m_maximDensitySpinBox->setValue(printer.getDefaultMaxDensity());
+    m_polarityComboBox->addItems(printer.getAvailablePolarityValues());
+    m_polarityComboBox->setCurrentIndex(m_polarityComboBox->findText(printer.getDefaultPolarity()));
+    m_borderDensityComboBox->addItems(printer.getAvailableBorderDensityValues());
+    m_borderDensityComboBox->setCurrentIndex(m_borderDensityComboBox->findText(printer.getDefaultBorderDensity()));
+    m_emptyDensityComboBox->addItems(printer.getAvailableEmptyImageDensityValues());
+    m_emptyDensityComboBox->setCurrentIndex(m_borderDensityComboBox->findText(printer.getDefaultEmptyImageDensity()));
+    m_miniumDensitySpinBox->setMaximum(printer.getAvailableMinDensityValues());
+    m_miniumDensitySpinBox->setValue(printer.getDefaultMinDensity());
+    //m_configurationLineEdit->setText(prrinter.getConfiguration());
 }
 
 void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrinter& printer)
 {
-
+    printer.setDefaultMagnificationType(m_magnifactionTypeComboBox->currentText());
+    printer.setDefaultSmoothingType(m_smoothingTypeComboBox->currentText());
+    printer.setDefaultMaxDensity(m_maximDensitySpinBox->value());
+    printer.setDefaultPolarity(m_polarityComboBox->currentText());
+    printer.setDefaultBorderDensity(m_borderDensityComboBox->currentText());
+    printer.setDefaultEmptyImageDensity(m_emptyDensityComboBox->currentText());
+    printer.setDefaultMinDensity(m_miniumDensitySpinBox->value());
+    //printer.setConfiguration(m_configurationLineEdit->text());
 }
-}                                      
+}              

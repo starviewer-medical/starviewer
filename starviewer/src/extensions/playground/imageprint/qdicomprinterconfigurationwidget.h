@@ -7,6 +7,7 @@
 namespace udg {
 
 class DicomPrinter;
+class QDicomAddPrinterWidget;
 
 /**
  * Implementació de la interfície QPrinterConfigurationWidget per impressió d'imatge DICOM en DCMTK.
@@ -23,18 +24,18 @@ public:
 public slots:
     // Acualiza la informació del Printer cada vegada que es selecciona al QTree una impressora.
     void printerSelectionChanged();
-    // Afegeix una nova impressora Dicom a partir dels paràmetres introduits per l'usuari.
+    // Mostra un nou Widget en forma de Pop-up per poder introduir els paràmetres de la impressora.
     void addPrinter();
     // Modifica una impressora Dicom ja existen amb els paràmetres introduits per l'usuari.
     void modifyPrinter();
     // Esborra una impressora.
     void deletePrinter();
     // Comprova la connexió amb una impressora entrada al sistema.
-    void testPrinter();
-    // Mostra per pantalla els diferents valors que poden agafar cadascun dels paràmetres d'una impressora.
-    void getAvailableParameters();
+    void testPrinter();    
     // Mostra/Amaga per pantalla la informació avançada de la impressora.
     void showAdvancedSettings();
+    // Després d'afegir una impressora actualitza la llista d'impressores i et mostra la informació de la última. S'executa amb el Signal newPrinterAddedSignal
+    void showNewPrinterAdded();
 
 
 private:
@@ -63,6 +64,7 @@ private:
     void getAdvancedSettingsFromControls(DicomPrinter& printer);
     
     int m_selectedPrinterId;
+    QDicomAddPrinterWidget * m_addPrinterWidget;
 };
 };
 #endif
