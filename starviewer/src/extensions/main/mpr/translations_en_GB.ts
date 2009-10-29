@@ -84,43 +84,23 @@ p, li { white-space: pre-wrap; }<byte value="xd"/>
 <context>
     <name>udg::QMPRExtension</name>
     <message>
-        <location filename="qmprextension.cpp" line="153"/>
-        <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="162"/>
+        <location filename="qmprextension.cpp" line="160"/>
         <source>Switch horizontal layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="167"/>
+        <location filename="qmprextension.cpp" line="165"/>
         <source>&amp;MIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="168"/>
+        <location filename="qmprextension.cpp" line="166"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="169"/>
+        <location filename="qmprextension.cpp" line="167"/>
         <source>Maximum Intensity Projection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="859"/>
-        <source>Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="859"/>
-        <source>There are not grabbed views to save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="863"/>
-        <source>Save file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

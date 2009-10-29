@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
-<defaultcodec></defaultcodec>
 <context>
     <name>QMPRExtensionBase</name>
     <message>
@@ -90,42 +89,22 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QMPRExtension</name>
     <message>
-        <location filename="qmprextension.cpp" line="153"/>
-        <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
-        <translation>Imágenes PNG (*.png);;Imágenes PNM(*.pnm);;Imágenes JPEG (*.jpg);;Imágenes TIFF (*.tif);;Imágenes BMP (*.bmp);;Imágenes DICOM (*.dcm)</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="859"/>
-        <source>Information</source>
-        <translation>Información</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="859"/>
-        <source>There are not grabbed views to save</source>
-        <translation>No hay vistas capturadas para guardar</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="863"/>
-        <source>Save file</source>
-        <translation>Guardar archivo</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="162"/>
+        <location filename="qmprextension.cpp" line="160"/>
         <source>Switch horizontal layout</source>
         <translation>Cambiar distribución horizontal</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="167"/>
+        <location filename="qmprextension.cpp" line="165"/>
         <source>&amp;MIP</source>
         <translation>&amp;MIP</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="168"/>
+        <location filename="qmprextension.cpp" line="166"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="169"/>
+        <location filename="qmprextension.cpp" line="167"/>
         <source>Maximum Intensity Projection</source>
         <translation>Proyección de Máxima Intensidad</translation>
     </message>

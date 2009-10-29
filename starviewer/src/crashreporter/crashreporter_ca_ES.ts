@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
-<defaultcodec></defaultcodec>
 <context>
     <name>QCrashReporterBase</name>
     <message>
@@ -57,27 +56,27 @@
 <context>
     <name>udg::QCrashReporter</name>
     <message>
-        <location filename="qcrashreporter.cpp" line="26"/>
+        <location filename="qcrashreporter.cpp" line="27"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="27"/>
+        <location filename="qcrashreporter.cpp" line="28"/>
         <source>Quit %1</source>
         <translation>Abandonar %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="28"/>
+        <location filename="qcrashreporter.cpp" line="29"/>
         <source>Restart %1</source>
         <translation>Reiniciar %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="29"/>
+        <location filename="qcrashreporter.cpp" line="30"/>
         <source>Tell %1 about this crash</source>
         <translation>Notifica a %1 sobre aquest problema</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="30"/>
+        <location filename="qcrashreporter.cpp" line="31"/>
         <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
         <translation>Ho sentim però %1 ha tingut algun problema i s&apos;ha tancat inesperadament. Si dedica un moment per enviar-nos un informe de la incidència ens ajudarà a diagnosticar i arreglar el problema. La seva informació personal no s&apos;enviarà en aquest informe.</translation>
     </message>

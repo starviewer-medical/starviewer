@@ -13,6 +13,11 @@
         <source>Preview image not available</source>
         <translation>Previsualización no disponible</translation>
     </message>
+    <message>
+        <location filename="patientbrowsermenuextendeditem.cpp" line="16"/>
+        <source>No Item Selected</source>
+        <translation>Ningún elemento seleccionado</translation>
+    </message>
 </context>
 <context>
     <name>QTransferFunctionEditorByValuesBase</name>
@@ -56,12 +61,12 @@
 <context>
     <name>udg::DistanceTool</name>
     <message>
-        <location filename="distancetool.cpp" line="140"/>
+        <location filename="distancetool.cpp" line="142"/>
         <source>%1 mm</source>
         <translation>%1 mm</translation>
     </message>
     <message>
-        <location filename="distancetool.cpp" line="136"/>
+        <location filename="distancetool.cpp" line="138"/>
         <source>%1 px</source>
         <translation>%1 px</translation>
     </message>
@@ -89,22 +94,19 @@
     </message>
 </context>
 <context>
-    <name>udg::PatientBrowserMenuBasicItem</name>
+    <name>udg::PatientBrowserMenu</name>
     <message>
-        <location filename="patientbrowsermenubasicitem.cpp" line="31"/>
+        <location filename="patientbrowsermenu.cpp" line="49"/>
+        <source>Study %1 : %2 [%3] %4</source>
+        <translation>Estudio %1 : %2 [%3] %4</translation>
+    </message>
+    <message>
+        <location filename="patientbrowsermenu.cpp" line="59"/>
         <source> Serie %1: %2 %3 %4 %5</source>
         <translation> Serie %1: %2 %3 %4 %5</translation>
     </message>
-</context>
-<context>
-    <name>udg::PatientBrowserMenuExtendedItem</name>
     <message>
-        <location filename="patientbrowsermenuextendeditem.cpp" line="70"/>
-        <source>No Series Selected</source>
-        <translation>No hay ninguna serie seleccionada</translation>
-    </message>
-    <message>
-        <location filename="patientbrowsermenuextendeditem.cpp" line="55"/>
+        <location filename="patientbrowsermenu.cpp" line="110"/>
         <source>%1 
 %2 
 %3
@@ -113,14 +115,6 @@
 %2 
 %3 
 %4 Imágenes</translation>
-    </message>
-</context>
-<context>
-    <name>udg::PatientBrowserMenuList</name>
-    <message>
-        <location filename="patientbrowsermenulist.cpp" line="55"/>
-        <source>Study %1 : %2 [%3] %4</source>
-        <translation>Estudio %1 : %2 [%3] %4</translation>
     </message>
 </context>
 <context>
@@ -149,14 +143,14 @@
 <context>
     <name>udg::PolylineROITool</name>
     <message>
-        <location filename="polylineroitool.cpp" line="392"/>
+        <location filename="polylineroitool.cpp" line="394"/>
         <source>Area: %1 mm2
 Mean: %2</source>
         <translation>Area: %1 mm2
 Media: %2</translation>
     </message>
     <message>
-        <location filename="polylineroitool.cpp" line="388"/>
+        <location filename="polylineroitool.cpp" line="390"/>
         <source>Area: %1 px2
 Mean: %2</source>
         <translation>Area: %1 px2
@@ -166,39 +160,39 @@ Media: %2</translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="2068"/>
+        <location filename="q2dviewer.cpp" line="2079"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Corte: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2086"/>
+        <location filename="q2dviewer.cpp" line="2097"/>
         <source>Slice: %1/%2</source>
         <translation>Corte: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2059"/>
+        <location filename="q2dviewer.cpp" line="2070"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Corte: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2079"/>
+        <location filename="q2dviewer.cpp" line="2090"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Corte: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2092"/>
+        <location filename="q2dviewer.cpp" line="2103"/>
         <source> Thickness: %1 mm</source>
         <translation> Grosor: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1878"/>
+        <location filename="q2dviewer.cpp" line="1877"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1901"/>
+        <location filename="q2dviewer.cpp" line="1903"/>
         <source>%1
 %2
 %3 %4 %5
@@ -213,12 +207,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2040"/>
+        <location filename="q2dviewer.cpp" line="2044"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="2046"/>
+        <location filename="q2dviewer.cpp" line="2057"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -990,22 +984,12 @@ Variable de entorno(logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="506"/>
-        <source>Viewer</source>
-        <translation>Visualizador</translation>
-    </message>
-    <message>
-        <location filename="qviewer.cpp" line="506"/>
-        <source>The selected item is not a valid image format</source>
-        <translation>El ítem seleccionado no tiene un formato de imagen válido</translation>
-    </message>
-    <message>
-        <location filename="qviewer.cpp" line="600"/>
+        <location filename="qviewer.cpp" line="579"/>
         <source>Default %1</source>
         <translation>Por defecto %1</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="581"/>
+        <location filename="qviewer.cpp" line="560"/>
         <source>Default</source>
         <translation>Por defecto</translation>
     </message>
@@ -1049,22 +1033,22 @@ Variable de entorno(logFilePath): %2</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="89"/>
+        <location filename="screenshottool.cpp" line="88"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="86"/>
+        <location filename="screenshottool.cpp" line="85"/>
         <source>Save single screenshot as...</source>
         <translation>Guardar una única captura como...</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="90"/>
+        <location filename="screenshottool.cpp" line="89"/>
         <source>Save multiple screenshots as...</source>
         <translation>Guardar múltiples capturas como...</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="89"/>
+        <location filename="screenshottool.cpp" line="88"/>
         <source>You&apos;re going to save several screenshots at one time.
 It&apos;s recommended you save them in an empty folder.</source>
         <translation>Está a punto de guardar diversas capturas de pantalla a la vez.Se recomienda que las guarde en una carpeta vacía.</translation>

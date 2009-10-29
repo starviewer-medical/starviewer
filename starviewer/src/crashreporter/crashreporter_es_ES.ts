@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="es">
-<defaultcodec></defaultcodec>
 <context>
     <name>QCrashReporterBase</name>
     <message>
@@ -57,27 +56,27 @@
 <context>
     <name>udg::QCrashReporter</name>
     <message>
-        <location filename="qcrashreporter.cpp" line="26"/>
+        <location filename="qcrashreporter.cpp" line="27"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="27"/>
+        <location filename="qcrashreporter.cpp" line="28"/>
         <source>Quit %1</source>
         <translation>Abandonar %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="28"/>
+        <location filename="qcrashreporter.cpp" line="29"/>
         <source>Restart %1</source>
         <translation>Reiniciar %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="29"/>
+        <location filename="qcrashreporter.cpp" line="30"/>
         <source>Tell %1 about this crash</source>
         <translation>Informar a %1 sobre el problema</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="30"/>
+        <location filename="qcrashreporter.cpp" line="31"/>
         <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
         <translation>Lo sentimos pero %1 tuvo algun problema y terminó inesperadamente. Por favor dedique un momento para enviarnos un informe de incidencias que nos ayudará a diagnosticar y arreglar el problema. Su información personal no se enviará con el informe.</translation>
     </message>

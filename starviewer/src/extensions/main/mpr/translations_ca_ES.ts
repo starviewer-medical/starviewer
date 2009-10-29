@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ca">
-<defaultcodec></defaultcodec>
 <context>
     <name>QMPRExtensionBase</name>
     <message>
@@ -90,42 +89,22 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QMPRExtension</name>
     <message>
-        <location filename="qmprextension.cpp" line="153"/>
-        <source>PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)</source>
-        <translation>Imatges PNG (*.png);;Imatges PNM(*.pnm);;Imatges JPEG(*.jpg);;Imatges TIFF (*.tif);;Imatges BMP (*.bmp);;Imatges DICOM (*.dcm)</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="859"/>
-        <source>Information</source>
-        <translation>Informació</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="859"/>
-        <source>There are not grabbed views to save</source>
-        <translation>No hi ha vistes capturades per desar</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="863"/>
-        <source>Save file</source>
-        <translation>Desar fitxer</translation>
-    </message>
-    <message>
-        <location filename="qmprextension.cpp" line="162"/>
+        <location filename="qmprextension.cpp" line="160"/>
         <source>Switch horizontal layout</source>
         <translation>Canviar la distribució horitzontal</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="167"/>
+        <location filename="qmprextension.cpp" line="165"/>
         <source>&amp;MIP</source>
         <translation>&amp;MIP</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="169"/>
+        <location filename="qmprextension.cpp" line="167"/>
         <source>Maximum Intensity Projection</source>
         <translation>Projecció de Màxima Intensitat</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="168"/>
+        <location filename="qmprextension.cpp" line="166"/>
         <source>Ctrl+M</source>
         <translation></translation>
     </message>
