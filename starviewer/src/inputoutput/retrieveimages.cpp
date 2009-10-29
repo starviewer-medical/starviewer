@@ -408,6 +408,7 @@ Status RetrieveImages::retrieve()
                 // DCM_ErrorComment (0000,0902)
                 relatedFieldsList << DCM_ErrorComment;
                 errorMessage = "(0xa701) MOVE REFUSED. Sense recursos. Incapaç de calcular el nombre de correspondències.";  
+                state.setStatus(DcmtkMoveRefusedOutOfResources);
                 // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
                 break;
 
@@ -442,6 +443,7 @@ Status RetrieveImages::retrieve()
                 // ?
                 // En principi aquest error no ens hauria d'arribar per aquesta operació
                 errorMessage = "(0xa800) MOVE FAILED. SOP Class not Supported. En principi aquest error no s'hauria de donar aquí!.";
+                state.setStatus(DcmtkMovescuUnknownError);
                 // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
                 break;
             
@@ -454,6 +456,7 @@ Status RetrieveImages::retrieve()
                 relatedFieldsList << DCM_ErrorComment;
                 // En principi aquest error no ens hauria d'arribar per aquesta operació
                 errorMessage = "(0xa900) MOVE FAILED. Identifier does not match SOP Class. En principi aquest error no s'hauria de donar aquí!.";
+                state.setStatus(DcmtkMovescuUnknownError);
                 // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
                 break;
 
@@ -465,6 +468,7 @@ Status RetrieveImages::retrieve()
                 relatedFieldsList << DCM_OffendingElement;
                 relatedFieldsList << DCM_ErrorComment;
                 errorMessage = "(0xc000) MOVE FAILED. Incapaç de processar.";
+                state.setStatus(DcmtkMovescuUnknownError);
                 // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
                 break;
 
@@ -481,6 +485,7 @@ Status RetrieveImages::retrieve()
                 relatedFieldsList << DCM_NumberOfWarningSuboperations;
                 // Això representa que el cancel l'ha fet l'usuari o la cancel·lació pot provenir des d'un altre entitat?
                 infoMessage = "(0xfe00) MOVE CANCEL.(Cancel·lació demanada per l'usuari?).";
+                state.setStatus(DcmtkMovescuUnknownError);
                 // TODO cal especificar un state.setStatus()? En quins casos s'ens pot donar aquest error?
                 break;
 
