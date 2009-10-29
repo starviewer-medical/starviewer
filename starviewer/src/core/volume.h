@@ -22,6 +22,11 @@
 #include <itkSmartPointer.h>
 #include "itkQtAdaptor.h"
 #include "logging.h"
+#include "identifier.h"
+
+// Qt
+#include <QPixmap>
+
 // FWD declarations
 class vtkImageData;
 
@@ -106,6 +111,14 @@ public:
     int *getDimensions();
     void getDimensions( int dims[3] );
 
+    /// Assigna/Retorna l'identificador del volum. 
+    void setIdentifier( const Identifier &id );
+    Identifier getIdentifier() const;
+
+    /// Assigna/Retorna el thumbnail del volum
+    void setThumbnail( const QPixmap &thumbnail );
+    QPixmap getThumbnail() const;
+
     /// TODO Mètodes transitoris pels canvis de disseny del tema de fases
     void setNumberOfPhases( int phases );
     int getNumberOfPhases() const;
@@ -146,11 +159,12 @@ public:
 
     /**
      * Ens dóna la imatge corresponent a la llesca i fase donats
+     * Per defecte, només especificarem la imatge sense tenir en compte la fase
      * @param sliceNumber llesca
      * @param phaseNumber fase
      * @return la imatge en cas que els índexs siguin correctes, NULL altrament
      */
-    Image *getImage( int sliceNumber, int phaseNumber ) const;
+    Image *getImage( int sliceNumber, int phaseNumber = 0 ) const;
 
     /**
      * Ens retorna la direcció REAL(DICOM) en la que es troben apilades
@@ -218,6 +232,12 @@ private:
 
     /// Conjunt d'imatges que composen el volum
     QList<Image *> m_imageSet;
+
+    /// Identificador de volum
+    Identifier m_identifier;
+
+    /// Thumbnail del volum
+    QPixmap m_thumbnail;
 
 //
 // TOT AIXÒ ESTÀ PER L'ADAPTACIÓ D'INPUT NOMÉS!

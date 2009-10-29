@@ -15,7 +15,9 @@
 #include "patientbrowsermenuextendeditem.h"
 #include "patientbrowsermenulist.h"
 #include "series.h"
+#include "image.h"
 #include "volume.h"
+#include "volumerepository.h"
 
 namespace udg {
 
@@ -39,6 +41,7 @@ void PatientBrowserMenu::setPatient(Patient * patient)
 {
     m_patient = patient;
     QString caption;
+    QString label;
     foreach( Study *study, m_patient->getStudies() )
     {
         // Extreiem el caption de l'estudi
@@ -52,39 +55,63 @@ void PatientBrowserMenu::setPatient(Patient * patient)
         QList< QPair<QString,QString> > itemsList;
         foreach( Series *series, study->getViewableSeries() )
         {
-            QPair<QString,QString> itemPair;
-            // label
-            itemPair.first = tr(" Serie %1: %2 %3 %4 %5")
+            label = tr(" Serie %1: %2 %3 %4 %5")
                         .arg( series->getSeriesNumber().trimmed() )
                         .arg( series->getProtocolName().trimmed() )
                         .arg( series->getDescription().trimmed() )
                         .arg( series->getBodyPartExamined() )
                         .arg( series->getViewPosition() );
-            // identifier
-            itemPair.second = series->getInstanceUID();
-            // afegim el parell a la llista
-            itemsList << itemPair;
+            
+            if( series->getNumberOfVolumes() > 1 )
+            {
+                QString volumeID;
+                int volumeNumber = 1;
+                foreach( Volume *volume, series->getVolumesList() )
+                {
+                    QPair<QString,QString> itemPair;
+                    // label
+                    itemPair.first = label + " (" + QString::number(volumeNumber) + ")";
+                    volumeNumber++;
+                    // identifier
+                    itemPair.second = QString::number(volume->getIdentifier().getValue());
+                    // afegim el parell a la llista
+                    itemsList << itemPair;
+                }
+            }
+            else // només tenim un sol volum per la sèrie
+            {
+                Volume *volume = series->getFirstVolume();
+                QPair<QString,QString> itemPair;
+                // label
+                itemPair.first = label;
+                // identifier
+                itemPair.second = QString::number(volume->getIdentifier().getValue());
+                // afegim el parell a la llista
+                itemsList << itemPair;
+            }
         }
         // afegim les sèries agrupades per estudi
         m_patientBrowserList->addItemsGroup( caption, itemsList );
     }
 
     connect(m_patientBrowserList, SIGNAL( isActive(QString) ), SLOT( updateActiveItemView(QString) ));
-    connect(m_patientBrowserList, SIGNAL( selectedItem(QString) ), SLOT ( emitSelected(QString) ));
+    connect(m_patientBrowserList, SIGNAL( selectedItem(QString) ), SLOT ( processSelectedItem(QString) ));
 }
 
 void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
 {
-    Series *series = m_patient->getSeries(identifier);
-    if( series )
+    Identifier id( identifier.toInt() );
+    Volume *volume = VolumeRepository::getRepository()->getVolume( id );
+    if( volume )
     {
         // actualitzem les dades de l'item amb informació adicional
-        m_patientAdditionalInfo->setPixmap( series->getThumbnail() );
+        m_patientAdditionalInfo->setPixmap( volume->getThumbnail() );
+        Series *series = volume->getImage(0)->getParentSeries();
         m_patientAdditionalInfo->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
                                         .arg( series->getDescription().trimmed() )
                                         .arg( series->getModality().trimmed() )
                                         .arg( series->getProtocolName().trimmed() )
-                                        .arg( series->getNumberOfImages() )
+                                        .arg( volume->getImages().count() )
                                         );
         // Actualitzem la posició del widget amb la informació adicional
         updatePosition();
@@ -110,7 +137,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
         screen_y = qApp->desktop()->availableGeometry( point ).height();
     }
 
-    m_patientBrowserList->setSelectedItem( identifier );
+    m_patientBrowserList->markItem( identifier );
     QSize widgetIdealSize = m_patientBrowserList->sizeHint();
 
     if ( ( x + widgetIdealSize.width() ) > screen_x )
@@ -163,7 +190,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // FI HACK
 }
 
-void PatientBrowserMenu::emitSelected(const QString &identifier)
+void PatientBrowserMenu::processSelectedItem(const QString &identifier)
 {
     // HACK De moment això és un workaround per solucionar el ticket #824
     // és important que s'esborrin en aquest ordre, sinó es fa així el problema persisteix
@@ -171,9 +198,12 @@ void PatientBrowserMenu::emitSelected(const QString &identifier)
     // Si en tinguéssim un d'estàtic segurament això ens ocasionaria que l'aplicació petaria més endavant
     delete m_patientAdditionalInfo;
     delete m_patientBrowserList;
-    Series *series = m_patient->getSeries(identifier);
-    if( series )
-        emit selectedVolume( series->getFirstVolume() );
+
+    if( m_patientBrowserList->getMarkedItem() != identifier )
+    {
+        Identifier id( identifier.toInt() );
+        emit selectedVolume( VolumeRepository::getRepository()->getVolume( id ) );
+    }
 }
 
 void PatientBrowserMenu::updatePosition()

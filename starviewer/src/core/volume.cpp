@@ -201,6 +201,26 @@ void Volume::getDimensions( int dims[3] )
     getVtkData()->GetDimensions( dims );
 }
 
+void Volume::setIdentifier( const Identifier &id )
+{
+    m_identifier = id;
+}
+
+Identifier Volume::getIdentifier() const
+{
+    return m_identifier;
+}
+
+void Volume::setThumbnail( const QPixmap &thumbnail )
+{
+    m_thumbnail = thumbnail;
+}
+
+QPixmap Volume::getThumbnail() const
+{
+    return m_thumbnail;
+}
+
 void Volume::setNumberOfPhases( int phases )
 {
     if( phases >= 1 )
@@ -472,8 +492,8 @@ void Volume::getStackDirection( double direction[3], int stack )
     // TODO encara no suportem múltiples stacks!!!!
     // fem el tractament com si només hi hagués un sol
     Q_UNUSED(stack);
-    Image *firstImage = this->getImage(0,0);
-    Image *secondImage = this->getImage(1,0);
+    Image *firstImage = this->getImage(0);
+    Image *secondImage = this->getImage(1);
     if( !firstImage )
     {
         DEBUG_LOG("Error gravísim. No hi ha 'primera' imatge!" );

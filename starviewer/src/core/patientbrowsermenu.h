@@ -19,7 +19,8 @@ class PatientBrowserMenuExtendedItem;
 class PatientBrowserMenuList;
 
 /**
-Classe que correspon al widget que es mostra al pulsar el botó dret del ratolí.
+    Widget en forma de menú que desplega la informació del pacient que li donem 
+    d'entrada de forma que poguem navegar pels seus estudis i corresponents volums
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -42,21 +43,22 @@ signals:
     void selectedVolume(Volume *);
 
 private slots:
-    /// TODO mètode transicional per fer el refactoring pas a pas. Actualitza les vistes relacionades amb l'item actiu 
-    /// que ara per ara serà una Series, però més endavant tindrà una forma més abstracta, com pot ser "Item" o "ID"
+    /// Actualitza les vistes relacionades amb l'ítem actiu (aquell pel qual passa el ratolí per sobre)
     void updateActiveItemView(const QString &identifier);
 
-    void emitSelected(const QString &identifier);
+    /// Donat l'identificador de l'ítem fa les accions pertinents. 
+    /// En aquest cas s'encarrega d'obtenir el volum seleccionat per l'usuari i notificar-ho
+    void processSelectedItem(const QString &identifier);
 
 private:
     /// Actualitza la posició de la informació addicional
     void updatePosition();
 
 private:
-    /// Atribut que guarda el punter al menú basic que representa al pacient
+    /// Atribut que guarda el punter al menú basic que representa les dades del pacient
     PatientBrowserMenuList *m_patientBrowserList;
 
-    /// Atribut que guarda el punter al menú amb informació addicional de la serie seleccionada
+    /// Atribut que guarda el punter al menú amb informació addicional de l'ítem seleccionat
     PatientBrowserMenuExtendedItem *m_patientAdditionalInfo;
 
     /// Pacient que ens proporciona les dades d'entrada

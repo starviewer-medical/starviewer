@@ -1895,7 +1895,7 @@ void Q2DViewer::updatePatientAnnotationInformation()
     if( m_mainVolume )
     {
         // TODO de moment només agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie
-        Image *image = m_mainVolume->getImage(0,0);
+        Image *image = m_mainVolume->getImage(0);
         Series *series = image->getParentSeries();
         Study *study = series->getParentStudy();
         Patient *patient = study->getParentPatient();
@@ -1944,7 +1944,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
     // TODO de moment assumim que totes les imatges seran de la mateixa modalitat.
     // Per evitar problemes amb el tractament de multiframe (que deixem per més endavant)
     // agafem directament la primera imatge, però cal solucionar aquest aspecte adequadament.
-    Image *image = m_mainVolume->getImage(0,0);
+    Image *image = m_mainVolume->getImage(0);
     if( image->getParentSeries()->getModality() == "MG" )
     {
         m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;

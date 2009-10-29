@@ -92,7 +92,7 @@ PatientBrowserMenuBasicItem *PatientBrowserMenuList::createBasicItem( const QStr
     return seriebasicWidget;
 }
 
-void PatientBrowserMenuList::setSelectedItem( const QString &identifier )
+void PatientBrowserMenuList::markItem( const QString &identifier )
 {
     int i = 0;
     bool found = false;
@@ -103,9 +103,15 @@ void PatientBrowserMenuList::setSelectedItem( const QString &identifier )
         {
             found = true;
             m_itemsList.value(i)->setFontBold();
+            m_markedItem = identifier;
         }
         i++;
     }
+}
+
+QString PatientBrowserMenuList::getMarkedItem() const
+{
+    return m_markedItem;
 }
 
 bool PatientBrowserMenuList::event( QEvent * event )

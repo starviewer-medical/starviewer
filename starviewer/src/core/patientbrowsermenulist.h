@@ -32,7 +32,10 @@ public:
     void addItemsGroup( const QString &caption, const QList< QPair<QString,QString> > &itemsList );
 
     /// Marquem com a seleccionat l'ítem que tingui l'identificador donat
-    void setSelectedItem( const QString &identifier );
+    void markItem( const QString &identifier );
+
+    /// Retorna l'identificador de l'ítem que tinguem marcat com a seleccionat
+    QString getMarkedItem() const;
 
     /// Tractament dels events
     bool event( QEvent * event );
@@ -51,6 +54,9 @@ signals:
     void close();
 
 private:
+    /// Ítem que tenim marcat
+    QString m_markedItem;
+    
     /// Creem un widget amb la informació bàsica d'un ítem
     PatientBrowserMenuBasicItem *createBasicItem( const QString &label, const QString &identifier );
 

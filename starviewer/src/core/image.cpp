@@ -263,6 +263,14 @@ int Image::getNumberOfFrames() const
     return m_numberOfFrames;
 }
 
+bool Image::isMultiFrame() const
+{
+    if( getNumberOfFrames() > 1 )
+        return true;
+    else
+        return false;
+}
+
 void Image::addWindowLevelExplanation( QString explanation )
 {
     m_windowLevelExplanationList << explanation;
