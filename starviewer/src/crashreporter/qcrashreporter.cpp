@@ -77,7 +77,7 @@ void QCrashReporter::maybeSendReport()
 void QCrashReporter::sendReport()
 {
     QHash<QString,QString> options;
-    options.insert( "BuildID", "2009051200" );
+    options.insert( "BuildID", "2009102900" );
     options.insert( "ProductName", ApplicationNameString );
     options.insert( "Version", StarviewerVersionString );
     options.insert( "Email", m_emailLineEdit->text() );
