@@ -114,7 +114,8 @@ bool Q2DViewerPresentationStateAttacher::attach()
                             .arg( filesetUID.c_str() )
                             );
                     // comprovem si aquest presentation state fa referència al volum actual
-                    if( !isThisReferenced && m_viewerInput->getSeries()->getInstanceUID() == QString( seriesUID.c_str() ) )
+                    QString seriesInstanceUID = m_viewerInput->getImages().first()->getParentSeries()->getInstanceUID();
+                    if( !isThisReferenced && seriesInstanceUID == QString( seriesUID.c_str() ) )
                         isThisReferenced = true;
                 }
                 if( isThisReferenced )

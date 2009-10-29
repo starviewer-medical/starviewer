@@ -58,9 +58,6 @@ public:
     /// Retorna el renderer
     virtual vtkRenderer *getRenderer() = 0;
 
-    /// Indiquem les dades d'entrada
-    virtual void setInput(Volume* volume) = 0;
-
     /// Ens retorna el volum d'entrada
     virtual Volume* getInput( void ) { return m_mainVolume; }
 
@@ -165,6 +162,9 @@ public:
     void automaticRefresh( bool enable );
 
 public slots:
+    /// Indiquem les dades d'entrada
+    virtual void setInput(Volume* volume) = 0;
+
     /// Gestiona els events que rep de la finestra
     virtual void eventHandler( vtkObject * obj, unsigned long event, void * client_data, void *call_data, vtkCommand * command );
 
@@ -197,8 +197,6 @@ public slots:
 
     /// Crida que re-inicia a l'estat incial el visor
     virtual void reset() = 0;
-
-    void setSeries(Series *series);
 
     /// Obté el window/level per defecte. Si no se n'especifica cap amb setDefaultWindowLevel
     /// agafa un window/level que permeti veure correctament el Volum.

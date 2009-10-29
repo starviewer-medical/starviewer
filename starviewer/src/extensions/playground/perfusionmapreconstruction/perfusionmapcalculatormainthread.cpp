@@ -108,7 +108,7 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     sizet[0] = m_DSCVolume->getNumberOfPhases();  //les mostres temporals
     sizet[1] = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize()[0];  //les X
     sizet[2] = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize()[0];  //les Y
-    sizet[3] = m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();  //les Z
+    sizet[3] = m_DSCVolume->getNumberOfSlicesPerPhase();  //les Z
     //Ho definim així perquè l'iterador passi per totes les mostres temporals
     regiont.SetSize(sizet);
     regiont.SetIndex(startt);
@@ -126,7 +126,7 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     int i,j,k,t;
     int iend = m_DSCVolume->getDimensions()[0];
     int jend = m_DSCVolume->getDimensions()[1];
-    int kend = m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    int kend = m_DSCVolume->getNumberOfSlicesPerPhase();
     int tend = m_DSCVolume->getNumberOfPhases();
 
     Volume::ItkImageType::RegionType region;
@@ -136,7 +136,7 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     start[2]=0;
     Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
     //TODO: s'hauria de fer que només agafés el nombre de llesques (i no les phases)
-    size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
     region.SetSize(size);
     region.SetIndex(start);
 
@@ -367,7 +367,7 @@ void PerfusionMapCalculatorMainThread::computeMeanDeltaRPerSlice( )
     //TODO:Compte quan un no és múltiple de l'altre!!!
     int iend = m_DSCVolume->getDimensions()[0];
     int jend = m_DSCVolume->getDimensions()[1];
-    int kend = m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    int kend = m_DSCVolume->getNumberOfSlicesPerPhase();
     int tend = m_DSCVolume->getNumberOfPhases();
     m_meanseries = QVector<QVector<double> > (kend,QVector<double> (tend,0.0));
     QVector<signed int > contseries(kend,0);
@@ -429,7 +429,7 @@ void PerfusionMapCalculatorMainThread::computeMoments( )
     start[1]=0;
     start[2]=0;
     Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
-    size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
     region.SetSize(size);
     region.SetIndex(start);
     m0Image = DoubleImageType::New();
@@ -447,7 +447,7 @@ void PerfusionMapCalculatorMainThread::computeMoments( )
     int i,j,k,t;
     int iend = m_DSCVolume->getDimensions()[0];
     int jend = m_DSCVolume->getDimensions()[1];
-    int kend = m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    int kend = m_DSCVolume->getNumberOfSlicesPerPhase();
     int tend = m_DSCVolume->getNumberOfPhases();
     DoubleTemporalImageType::IndexType index;
     Volume::ItkImageType::IndexType indexMoment;
@@ -536,7 +536,7 @@ void PerfusionMapCalculatorMainThread::findAIF( )
     int i,j,k;
     int iend = m_DSCVolume->getDimensions()[0];
     int jend = m_DSCVolume->getDimensions()[1];
-    int kend = m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    int kend = m_DSCVolume->getNumberOfSlicesPerPhase();
     Volume::ItkImageType::IndexType index;
     int indexint;
     double value;//, valuem2;
@@ -653,7 +653,7 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     start[1]=0;
     start[2]=0;
     Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
-    size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
     region.SetSize(size);
     region.SetIndex(start);
     cbfImage = DoubleImageType::New();
@@ -688,7 +688,7 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     QVector<PerfusionMapCalculatorThread *> threads(numberOfThreads);
     int iend = m_DSCVolume->getDimensions()[0];
     int jend = m_DSCVolume->getDimensions()[1];
-    int kend = m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    int kend = m_DSCVolume->getNumberOfSlicesPerPhase();
     int tend = m_DSCVolume->getNumberOfPhases();
 
     for ( int i = 0; i < numberOfThreads; i++ )
@@ -735,7 +735,7 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     int i,j,k,t;
     int iend = m_DSCVolume->getDimensions()[0];
     int jend = m_DSCVolume->getDimensions()[1];
-    int kend = m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+    int kend = m_DSCVolume->getNumberOfSlicesPerPhase();
     int tend = m_DSCVolume->getNumberOfPhases();
     Volume::ItkImageType::IndexType index;
     double max;

@@ -214,19 +214,18 @@ int Volume::getNumberOfPhases() const
 
 Volume *Volume::getPhaseVolume( int index )
 {
-    int phases = this->getSeries()->getNumberOfPhases();
     Volume *result = NULL;
-    if( index >= 0 && index < phases )
+    if( index >= 0 && index < m_numberOfPhases )
     {
-        result = new Volume(  );
-        int slices = this->getSeries()->getNumberOfSlicesPerPhase();
+        result = new Volume();
+        // Obtenim el nombre d'imatges per fase
+        int slices = getNumberOfSlicesPerPhase();
         int currentImageIndex = index;
         QList<Image *> phaseImages;
-        QList<Image *> seriesImages = this->getSeries()->getImages();
         for( int i = 0; i < slices; i++ )
         {
-            phaseImages << seriesImages.at( currentImageIndex );
-            currentImageIndex += phases;
+            phaseImages << m_imageSet.at( currentImageIndex );
+            currentImageIndex += m_numberOfPhases;
         }
         result->setImages( phaseImages );
     }
@@ -235,17 +234,16 @@ Volume *Volume::getPhaseVolume( int index )
 
 QList<Image *> Volume::getPhaseImages( int index )
 {
-    int phases = this->getSeries()->getNumberOfPhases();
     QList<Image *> phaseImages;
-    if( index >= 0 && index < phases )
+    if( index >= 0 && index < m_numberOfPhases )
     {
-        int slices = this->getSeries()->getNumberOfSlicesPerPhase();
+        // Obtenim el nombre d'imatges per fase
+        int slices = getNumberOfSlicesPerPhase();
         int currentImageIndex = index;
-        QList<Image *> seriesImages = this->getSeries()->getImages();
         for( int i = 0; i < slices; i++ )
         {
-            phaseImages << seriesImages.at( currentImageIndex );
-            currentImageIndex += phases;
+            phaseImages << m_imageSet.at( currentImageIndex );
+            currentImageIndex += m_numberOfPhases;
         }
     }
     return phaseImages;
@@ -253,7 +251,7 @@ QList<Image *> Volume::getPhaseImages( int index )
 
 Volume *Volume::getSubVolume( int index  )
 {
-    int slices = this->getSeries()->getNumberOfSlicesPerPhase();
+    int slices = this->getNumberOfSlicesPerPhase();
     int *size = this->getWholeExtent();
 
     vtkExtractVOI * extractedVolume = vtkExtractVOI::New();
@@ -291,8 +289,8 @@ Volume * Volume::orderSlices()
     index[1] = 0;
     index[2] = 0;
 
-    phases = this->getSeries()->getNumberOfPhases();
-    slices = this->getSeries()->getNumberOfSlicesPerPhase();
+    phases = m_numberOfPhases;
+    slices = this->getNumberOfSlicesPerPhase();
 
     typedef ItkImageType ItkImageType3D;
     typedef itk::Image<ItkPixelType, 2 > ItkImageType2D;
@@ -349,6 +347,16 @@ Volume * Volume::orderSlices()
     return orderedVolume;
 }
 
+void Volume::setNumberOfSlicesPerPhase( int slicesPerPhase )
+{
+    m_numberOfSlicesPerPhase = slicesPerPhase;
+}
+
+int Volume::getNumberOfSlicesPerPhase() const
+{
+    return m_numberOfSlicesPerPhase;
+}
+
 void Volume::setImageOrderCriteria( unsigned int orderCriteria )
 {
     m_imageOrderCriteria = orderCriteria;
@@ -391,21 +399,11 @@ QStringList Volume::getInputFiles() const
     return filepaths;
 }
 
-Series *Volume::getSeries()
+Study *Volume::getStudy()
 {
     if( !m_imageSet.isEmpty() )
     {
-        return m_imageSet.at(0)->getParentSeries();
-    }
-    else
-        return NULL;
-}
-
-Study *Volume::getStudy()
-{
-    if( this->getSeries() )
-    {
-        return this->getSeries()->getParentStudy();
+        return m_imageSet.at(0)->getParentSeries()->getParentStudy();
     }
     else
         return NULL;

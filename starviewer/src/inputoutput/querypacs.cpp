@@ -101,10 +101,11 @@ Status QueryPacs::query()
     req.DataSetType = DIMSE_DATASET_PRESENT;
     req.Priority = DIMSE_PRIORITY_LOW;
 
+    PacsParameters pacsParameters;
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , presId , &req , m_mask ,
                           foundMatchCallback , this ,
-                          DIMSE_BLOCKING , 0 ,
+                          DIMSE_NONBLOCKING, pacsParameters.getTimeOut(),
                           &rsp , &statusDetail );
 
     /* dump status detail information if there is some */

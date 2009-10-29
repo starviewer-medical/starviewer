@@ -12,7 +12,6 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 
-#include "series.h"
 #include "logging.h"
 
 namespace udg {
@@ -21,26 +20,22 @@ PatientBrowserMenuBasicItem::PatientBrowserMenuBasicItem( QWidget *parent )
 : QLabel(parent)
 {
     setFrameShape(QFrame::StyledPanel);
-}
-
-void PatientBrowserMenuBasicItem::setSerie( Series * serie )
-{
-    m_serie = serie;
-
-    setText( tr(" Serie %1: %2 %3 %4 %5")
-        .arg( serie->getSeriesNumber().trimmed() )
-        .arg( serie->getProtocolName().trimmed() )
-        .arg( serie->getDescription().trimmed() )
-        .arg( serie->getBodyPartExamined() )
-        .arg( serie->getViewPosition() )
-        );
-
     setStyleSheet( "border: 1px solid gray; border-radius: 2;" );
 }
 
-Series *  PatientBrowserMenuBasicItem::getSerie()
+void PatientBrowserMenuBasicItem::setIdentifier( const QString &identifier )
 {
-    return m_serie;
+    m_identifier = identifier;
+}
+
+QString PatientBrowserMenuBasicItem::getIdentifier() const
+{
+    return m_identifier;
+}
+
+void PatientBrowserMenuBasicItem::setFontBold()
+{
+    setStyleSheet( "border: 1px solid gray; border-radius: 2;font-weight: bold" );
 }
 
 bool PatientBrowserMenuBasicItem::event( QEvent * event )
@@ -55,11 +50,11 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
         {
             setStyleSheet( "border: 1px solid gray; border-radius: 2; background-color: rgba(85, 160, 255, 128);" );
         }
-        emit isActive( m_serie );
+        emit isActive( m_identifier );
     }
     else if ( event->type() == QEvent::MouseButtonPress )
     {
-        emit selectedSerie( m_serie );
+        emit selectedItem( m_identifier );
         return true;
     }
     else if ( event->type() == QEvent::Leave )
@@ -79,11 +74,6 @@ bool PatientBrowserMenuBasicItem::event( QEvent * event )
     }
 
     return QLabel::event( event );
-}
-
-void PatientBrowserMenuBasicItem::setFontBold()
-{
-    setStyleSheet( "border: 1px solid gray; border-radius: 2;font-weight: bold" );
 }
 
 }

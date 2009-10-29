@@ -86,7 +86,7 @@ void QMPR3DExtension::setInput( Volume *input )
 void QMPR3DExtension::updateExtension( Volume * volume )
 {
     m_volume = volume;
-    if( m_volume->getSeries()->getNumberOfPhases() > 1 )
+    if( m_volume->getNumberOfPhases() > 1 )
         m_phasesAlertLabel->setVisible(true);
     else
         m_phasesAlertLabel->setVisible(false);

@@ -11,6 +11,7 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "series.h"
+#include "image.h"
 #include "study.h"
 #include "patient.h"
 #include "toolmanager.h"
@@ -221,7 +222,7 @@ void QGlialEstimationExtension::computeTTP( )
     start[1]=0;
     start[2]=0;
     Volume::ItkImageType::SizeType size = m_perfuVolume->getItkData()->GetBufferedRegion().GetSize();
-    size[2]=m_perfuVolume->getSeries()->getNumberOfSlicesPerPhase();
+    size[2]=m_perfuVolume->getNumberOfSlicesPerPhase();
     region.SetSize(size);
     region.SetIndex(start);
     Volume::ItkImageType::Pointer mapImage = Volume::ItkImageType::New();
@@ -272,8 +273,8 @@ void QGlialEstimationExtension::computeTTP( )
     unsigned int i,j,k,p;
     std::ofstream fout("perfu.dat", ios::out);
 
-    unsigned int kend=m_perfuVolume->getSeries()->getNumberOfSlicesPerPhase();
-    unsigned int pend=m_perfuVolume->getSeries()->getNumberOfPhases();
+    unsigned int kend=m_perfuVolume->getNumberOfSlicesPerPhase();
+    unsigned int pend=m_perfuVolume->getNumberOfPhases();
     mttIter.GoToBegin();
     for (k=0;k<kend;k++)
     {
@@ -408,7 +409,7 @@ void QGlialEstimationExtension::computeTTP( )
                 }
                 else
                 {
-                   mapIter.Set(((int)(mttIter.Get()*255)/m_perfuVolume->getSeries()->getNumberOfPhases()));//Ho escalem pq hi hagi tants valors com colors de la LuT
+                   mapIter.Set(((int)(mttIter.Get()*255)/m_perfuVolume->getNumberOfPhases()));//Ho escalem pq hi hagi tants valors com colors de la LuT
                 }
                 if(mapIter.Get()>m_mapMax)
                 {
@@ -542,7 +543,7 @@ void QGlialEstimationExtension::computeCBV( )
     Volume::ItkImageType::SizeType size = m_perfuVolume->getItkData()->GetBufferedRegion().GetSize();
     //std::cout<<"Perfu Volume Size: "<<size<<std::endl;
     //std::cout<<"End Perfu Volume"<<std::endl;
-    size[2]=m_perfuVolume->getSeries()->getNumberOfSlicesPerPhase();
+    size[2]=m_perfuVolume->getNumberOfSlicesPerPhase();
     region.SetSize(size);
     region.SetIndex(start);
     Volume::ItkImageType::Pointer mapImage = Volume::ItkImageType::New();
@@ -590,8 +591,8 @@ void QGlialEstimationExtension::computeCBV( )
     long cont=0;
     unsigned int i,j,k,p;
 
-    unsigned int kend=m_perfuVolume->getSeries()->getNumberOfSlicesPerPhase();
-    unsigned int pend=m_perfuVolume->getSeries()->getNumberOfPhases();
+    unsigned int kend=m_perfuVolume->getNumberOfSlicesPerPhase();
+    unsigned int pend=m_perfuVolume->getNumberOfPhases();
     sbIter.GoToBegin();
     rCBVIter.GoToBegin();
     mapIter.GoToBegin();
@@ -880,7 +881,7 @@ void QGlialEstimationExtension::applyFilterMapImage( )
         start[2]=0;
         //std::cout<<"Init Filter Volume"<<std::endl;
         Volume::ItkImageType::SizeType size = m_perfuVolume->getItkData()->GetBufferedRegion().GetSize();
-        size[2]=m_perfuVolume->getSeries()->getNumberOfSlicesPerPhase();
+        size[2]=m_perfuVolume->getNumberOfSlicesPerPhase();
         //std::cout<<"Perfu size:"<<size<<" // Start:"<<m_perfuVolume->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
         //std::cout<<"Map size:"<<m_mapVolume->getItkData()->GetBufferedRegion().GetSize()<<std::endl;
         region.SetSize(size);
@@ -1354,82 +1355,70 @@ void QGlialEstimationExtension::contextMenuSpectrumRelease()
 
 void QGlialEstimationExtension::contextMenuEvent(QContextMenuEvent *event)
 {
-    //if (m_contextMenuActive)
-    //{
-        PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
-        patientMenu->setAttribute(Qt::WA_DeleteOnClose);
-        patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
+    PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
+    patientMenu->setAttribute(Qt::WA_DeleteOnClose);
+    patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
 
-        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), SLOT( setSeries(Series*) ));
+    connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setVolume(Volume *) ));
 
-        QString seriesUID;
-        if( m_mainVolume )
-            seriesUID = m_mainVolume->getSeries()->getInstanceUID();
-        patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
-
-    //}
+    patientMenu->popup(event->globalPos()); //->globalPos() ?
 }
 
-void QGlialEstimationExtension::setSeries(Series *series)
+void QGlialEstimationExtension::setVolume(Volume *volume)
 {
-    QString modality = series->getModality();
+    Series *series = volume->getImage(0,0)->getParentSeries();
+    QString description = series->getDescription();
+
     itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc;
-    if( modality == "KO" || modality == "PR" || modality == "SR" )
+    switch(m_imageGlialtype)
     {
-        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
-    }
-    else
-    {
-        switch(m_imageGlialtype)
-        {
-        case T1:
-            m_T1LineEdit->clear();
-            m_T1LineEdit->insert(series->getDescription());
-            m_T1Volume = series->getFirstVolume();
+    case T1:
+        m_T1LineEdit->clear();
+        m_T1LineEdit->insert(description);
+        m_T1Volume = volume;
 
-            minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
-            minmaxCalc->SetImage(m_T1Volume->getItkData());
-            minmaxCalc->SetRegion(m_T1Volume->getItkData()->GetRequestedRegion());
-            minmaxCalc->Compute();
-            DEBUG_LOG( QString("ItkMax=%1, ItkMin=%2").arg(minmaxCalc->GetMaximum()).arg(minmaxCalc->GetMinimum()) );
-            m_minT1Value = minmaxCalc->GetMinimum();
-            m_maxT1Value = minmaxCalc->GetMaximum();
-            m_T1ValueSpinBox->setMinimum( m_minT1Value );
-            m_T1ValueSpinBox->setMaximum( m_maxT1Value );
-            m_T1ValueSlider->setMinimum( m_minT1Value );
-            m_T1ValueSlider->setMaximum( m_maxT1Value );
+        minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
+        minmaxCalc->SetImage(m_T1Volume->getItkData());
+        minmaxCalc->SetRegion(m_T1Volume->getItkData()->GetRequestedRegion());
+        minmaxCalc->Compute();
+        DEBUG_LOG( QString("ItkMax=%1, ItkMin=%2").arg(minmaxCalc->GetMaximum()).arg(minmaxCalc->GetMinimum()) );
+        m_minT1Value = minmaxCalc->GetMinimum();
+        m_maxT1Value = minmaxCalc->GetMaximum();
+        m_T1ValueSpinBox->setMinimum( m_minT1Value );
+        m_T1ValueSpinBox->setMaximum( m_maxT1Value );
+        m_T1ValueSlider->setMinimum( m_minT1Value );
+        m_T1ValueSlider->setMaximum( m_maxT1Value );
 
-            m_2DView_1->setInput( m_T1Volume );
-            break;
-        case perfu:
-            m_perfuLineEdit->clear();
-            m_perfuLineEdit->insert(series->getDescription());
-            m_perfuVolume = series->getFirstVolume();
-            this->computeCBV();
-            m_2DView_2->setInput( m_mapVolume );
-            break;
-        case FLAIR:
-            m_FLAIRLineEdit->clear();
-            m_FLAIRLineEdit->insert(series->getDescription());
-            m_FLAIRVolume = series->getFirstVolume();
-            m_2DView_4->setInput( m_FLAIRVolume );
-            break;
-        case difu:
-            m_difuLineEdit->clear();
-            m_difuLineEdit->insert(series->getDescription());
-            m_difuVolume = series->getFirstVolume();
-            m_2DView_5->setInput( m_difuVolume );
-            break;
-        case spectrum:
-            m_spectrumLineEdit->clear();
-            m_spectrumLineEdit->insert(series->getDescription());
-            m_spectrumVolume = series->getFirstVolume();
-            m_2DView_6->setInput( m_spectrumVolume );
-            break;
-        default:
-            DEBUG_LOG("No existeix aquest tipus d'imatge!!");
-            break;
-        }
+        m_2DView_1->setInput( m_T1Volume );
+        break;
+    case perfu:
+        m_perfuLineEdit->clear();
+        m_perfuLineEdit->insert(series->getDescription());
+        m_perfuVolume = series->getFirstVolume();
+        this->computeCBV();
+        m_2DView_2->setInput( m_mapVolume );
+        break;
+    case FLAIR:
+        m_FLAIRLineEdit->clear();
+        m_FLAIRLineEdit->insert(series->getDescription());
+        m_FLAIRVolume = series->getFirstVolume();
+        m_2DView_4->setInput( m_FLAIRVolume );
+        break;
+    case difu:
+        m_difuLineEdit->clear();
+        m_difuLineEdit->insert(series->getDescription());
+        m_difuVolume = series->getFirstVolume();
+        m_2DView_5->setInput( m_difuVolume );
+        break;
+    case spectrum:
+        m_spectrumLineEdit->clear();
+        m_spectrumLineEdit->insert(series->getDescription());
+        m_spectrumVolume = series->getFirstVolume();
+        m_2DView_6->setInput( m_spectrumVolume );
+        break;
+    default:
+        DEBUG_LOG("No existeix aquest tipus d'imatge!!");
+        break;
     }
 }
 

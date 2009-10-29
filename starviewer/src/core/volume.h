@@ -28,7 +28,6 @@ class vtkImageData;
 namespace udg {
 
 class Image;
-class Series;
 class Study;
 class Patient;
 
@@ -112,6 +111,8 @@ public:
     int getNumberOfPhases() const;
     Volume *getPhaseVolume( int index );
     QList<Image *> getPhaseImages( int index );
+    void setNumberOfSlicesPerPhase( int slicesPerPhase );
+    int getNumberOfSlicesPerPhase() const;
 
     /// TODO: Repassar: això no hauria d'anar així.
     /// Retorna un nou Volume on la Data és només del sub volume indicat
@@ -136,8 +137,7 @@ public:
     /// \deprecated TODO Es manté per dependència amb codi que ha de canviar
     QStringList getInputFiles() const;
 
-    /// Mètodes ràpids per obtenir la series/estudis/pacient a les que pertany aquest volum
-    Series *getSeries();
+    /// Mètodes ràpids per obtenir estudi/pacient al que pertany aquest volum
     Study *getStudy();
     Patient *getPatient();
 
@@ -271,6 +271,7 @@ private:
 
     /// TODO membre temporal per la transició al tractament de fases
     int m_numberOfPhases;
+    int m_numberOfSlicesPerPhase;
 
     /// Traductor d'events itk en signals de Qt 
     /// per poder monitorejar el progrés de lectura d'arxius

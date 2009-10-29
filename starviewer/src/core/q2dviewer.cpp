@@ -338,18 +338,17 @@ void Q2DViewer::rotateClockWise( int times )
 
 void Q2DViewer::rotateCounterClockWise( int times )
 {
-    // almenys ha de ser 1 ( +90º )
+    // almenys ha de ser 1 ( -90º )
     if( times <= 0 )
         return;
 
-    times += 3;
     if( m_isImageFlipped )
     {
-        m_rotateFactor = (m_rotateFactor-times) % 4 ;
+        m_rotateFactor = (m_rotateFactor+times) % 4 ;
     }
     else
     {
-        m_rotateFactor = (m_rotateFactor+times) % 4 ;
+        m_rotateFactor = (m_rotateFactor-times) % 4 ;
     }
     updateCamera();
 }
@@ -602,7 +601,7 @@ void Q2DViewer::getSliceRange(int &min, int &max)
         {
             // TODO assumim que sempre estem en axial!
             min = 0;
-            max = m_mainVolume->getSeries()->getNumberOfSlicesPerPhase() - 1;
+            max = m_mainVolume->getNumberOfSlicesPerPhase() - 1;
         }
     }
     else
@@ -890,6 +889,8 @@ void Q2DViewer::setInput( Volume* volume )
     // HACK
     // S'activa el refresh per tal de que es renderitzi el visualitzador
     this->m_isRefreshActive = true;
+    // indiquem el canvi de volum
+    emit volumeChanged(m_mainVolume);
 }
 
 void Q2DViewer::setOverlayInput( Volume* volume )
@@ -1147,7 +1148,7 @@ void Q2DViewer::resetCamera()
             scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
 
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-            position = m_mainVolume->getSeries()->getPatientPosition();
+            position = m_mainVolume->getImages().first()->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
                 m_rotateFactor = (m_rotateFactor+2) % 4 ;
 
@@ -1174,7 +1175,7 @@ void Q2DViewer::resetCamera()
             scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
 
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-            position = m_mainVolume->getSeries()->getPatientPosition();
+            position = m_mainVolume->getImages().first()->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
                 m_rotateFactor = (m_rotateFactor+2) % 4 ;
 
@@ -1475,7 +1476,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
 
             case Sagital: // YZ TODO encara no esta comprovat que aquest pla sigui correcte
             {
-                Image *image = m_mainVolume->getSeries()->getImages().at(0);
+                Image *image = m_mainVolume->getImages().first();
                 if( image )
                 {
                     imagePlane = new ImagePlane();
@@ -1513,7 +1514,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
 
             case Coronal: // XZ TODO encara no esta comprovat que aquest pla sigui correcte
             {
-                Image *image = m_mainVolume->getSeries()->getImages().at(0);
+                Image *image = m_mainVolume->getImages().first();
                 if( image )
                 {
                     imagePlane = new ImagePlane();
@@ -1893,9 +1894,12 @@ void Q2DViewer::updatePatientAnnotationInformation()
 {
     if( m_mainVolume )
     {
-		Patient *patient = m_mainVolume->getPatient();
-		Study *study = m_mainVolume->getStudy();
-		Series *series = m_mainVolume->getSeries();
+        // TODO de moment només agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie
+        Image *image = m_mainVolume->getImage(0,0);
+        Series *series = image->getParentSeries();
+        Study *study = series->getParentStudy();
+        Patient *patient = study->getParentPatient();
+
         // informació fixa
         m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:%6\n%7\n%8")
                     .arg( series->getInstitutionName() )
@@ -1913,14 +1917,14 @@ void Q2DViewer::updatePatientAnnotationInformation()
 		}
 		else
 		{
-			// Si protocol i descripció coincideixen posarem el contingut de protocol
-			// Si són diferents, els fusionarem
-			QString protocolName, description;
-			protocolName = m_mainVolume->getSeries()->getProtocolName();
-			description = m_mainVolume->getSeries()->getDescription();
-			m_lowerRightText = protocolName;
-			if( description != protocolName )
-				m_lowerRightText += "\n" + description;
+                    // Si protocol i descripció coincideixen posarem el contingut de protocol
+                    // Si són diferents, els fusionarem
+                    QString protocolName, description;
+                    protocolName = series->getProtocolName();
+                    description = series->getDescription();
+                    m_lowerRightText = protocolName;
+                    if( description != protocolName )
+                            m_lowerRightText += "\n" + description;
 		}
 
         m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
@@ -1937,17 +1941,19 @@ void Q2DViewer::updateSliceAnnotationInformation()
 {
     Q_ASSERT( m_cornerAnnotations );
     Q_ASSERT( m_mainVolume );
-
-    if( m_mainVolume->getSeries()->getModality() == "MG" )
+    // TODO de moment assumim que totes les imatges seran de la mateixa modalitat.
+    // Per evitar problemes amb el tractament de multiframe (que deixem per més endavant)
+    // agafem directament la primera imatge, però cal solucionar aquest aspecte adequadament.
+    Image *image = m_mainVolume->getImage(0,0);
+    if( image->getParentSeries()->getModality() == "MG" )
     {
         m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
-        Image *image = getCurrentDisplayedImage();
+
         if( image )
         {
             DICOMTagReader reader( image->getPath() );
             QString laterality = reader.getAttributeByName( DCM_ImageLaterality );
             QString desiredOrientation;
-
 
             QStringList tagValue = reader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning );
             if( ! tagValue.isEmpty() )
@@ -2040,7 +2046,14 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
 					lowerLeftText = tr("Loc: %1").arg( location.toDouble(), 0, 'f', 2 );
 					if( isThickSlabActive() )
 					{
-						Image *secondImage = m_mainVolume->getSeries()->getImageByIndex( ((m_currentSlice + m_slabThickness-1) * m_numberOfPhases) + m_currentPhase );
+                                                // TODO Necessitaríem funcions de més alt nivell per obtenir la imatge consecutiva d'acord amb els paràmetres
+                                                // de thicknes, fases, etc
+                                                Image *secondImage = 0;
+                                                int index = ((m_currentSlice + m_slabThickness-1) * m_numberOfPhases) + m_currentPhase;
+                                                if( index >= 0 && index < m_mainVolume->getImages().count() ) // està dins del rang
+                                                {
+                                                    secondImage = m_mainVolume->getImages().at(index);
+                                                }
 						if( secondImage )
 						{
 							lowerLeftText += tr("-%1").arg( secondImage->getSliceLocation().toDouble(), 0, 'f', 2 );

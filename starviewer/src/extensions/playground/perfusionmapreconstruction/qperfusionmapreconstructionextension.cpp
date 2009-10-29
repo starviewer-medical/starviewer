@@ -12,6 +12,7 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "series.h"
+#include "image.h"
 #include "study.h"
 #include "patient.h"
 #include "toolmanager.h"
@@ -870,7 +871,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         start[1]=0;
         start[2]=0;
         Volume::ItkImageType::SizeType size = m_DSCVolume->getItkData()->GetBufferedRegion().GetSize();
-        size[2]=m_DSCVolume->getSeries()->getNumberOfSlicesPerPhase();
+        size[2]=m_DSCVolume->getNumberOfSlicesPerPhase();
         region.SetSize(size);
         region.SetIndex(start);
         Volume::ItkImageType::Pointer auxImage = Volume::ItkImageType::New();
@@ -1075,35 +1076,20 @@ void QPerfusionMapReconstructionExtension::contextMenuDSCRelease()
 
 void QPerfusionMapReconstructionExtension::contextMenuEvent(QContextMenuEvent *event)
 {
-    //if (m_contextMenuActive)
-    //{
-        PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
-        patientMenu->setAttribute(Qt::WA_DeleteOnClose);
-        patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
+    PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
+    patientMenu->setAttribute(Qt::WA_DeleteOnClose);
+    patientMenu->setPatient( QApplicationMainWindow::getActiveApplicationMainWindow()->getCurrentPatient() );
 
-        connect(patientMenu, SIGNAL( selectedSeries(Series*) ), SLOT( setSeries(Series*) ));
+    connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setVolume(Volume *) ));
 
-        QString seriesUID;
-        if( m_mainVolume )
-            seriesUID = m_mainVolume->getSeries()->getInstanceUID();
-        patientMenu->popup( event->globalPos(), seriesUID  ); //->globalPos() ?
-
-    //}
+    patientMenu->popup(event->globalPos()); //->globalPos() ?
 }
 
-void QPerfusionMapReconstructionExtension::setSeries(Series *series)
+void QPerfusionMapReconstructionExtension::setVolume(Volume *volume)
 {
-    QString modality = series->getModality();
-    if( modality == "KO" || modality == "PR" || modality == "SR" )
-    {
-        QMessageBox::information( this , tr( "Viewer" ) , tr( "The selected item is not a valid image format" ) );
-    }
-    else
-    {
-        m_DSCLineEdit->clear();
-        m_DSCLineEdit->insert(series->getDescription());
-        m_DSCVolume = series->getFirstVolume();
-    }
+    m_DSCLineEdit->clear();
+    m_DSCLineEdit->insert( volume->getImage(0,0)->getParentSeries()->getDescription() );
+    m_DSCVolume = volume;
 }
 
 bool QPerfusionMapReconstructionExtension::findProbableSeries( )

@@ -92,7 +92,7 @@ private slots:
     void contextMenuDifuRelease();
     void contextMenuSpectrumRelease();
     void contextMenuEvent(QContextMenuEvent *event);
-    void setSeries(Series *series);
+    void setVolume(Volume *volume);
 
 
 private:

@@ -447,7 +447,7 @@ void Q3DViewer::setInput( Volume* volume )
     // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
     //\TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
     ImagePlane * currentPlane = new ImagePlane();
-    Image *imageReference = m_mainVolume->getSeries()->getImages().at( 0 ); //Sempre penem la primera llesca suposem que és constant
+    Image *imageReference = m_mainVolume->getImages().at( 0 ); //Sempre penem la primera llesca suposem que és constant
     currentPlane->fillFromImage( imageReference );
     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
     currentPlane->getRowDirectionVector( currentPlaneRowVector );
@@ -521,6 +521,8 @@ void Q3DViewer::setInput( Volume* volume )
     m_firstRender = true;
 
     render();
+    // indiquem el canvi de volum
+    emit volumeChanged(m_mainVolume);
 }
 
 void Q3DViewer::render()

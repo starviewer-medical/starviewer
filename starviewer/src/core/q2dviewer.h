@@ -83,7 +83,6 @@ public:
     ~Q2DViewer();
 
     virtual vtkRenderer *getRenderer();
-    virtual void setInput( Volume* volume );
 
     void resetView( CameraOrientationType view );
     void resetViewToAxial();
@@ -264,6 +263,8 @@ public:
     int getNearestSlice( double point[3], double &distance );
 
 public slots:
+    virtual void setInput( Volume* volume );
+
     virtual void render();
     void reset();
     /// Metodes per activar les Tools antigues.

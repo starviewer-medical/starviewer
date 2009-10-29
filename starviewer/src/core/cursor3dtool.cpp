@@ -12,6 +12,7 @@
 #include "logging.h"
 #include "volume.h"
 #include "series.h"
+#include "image.h"
 #include "imageplane.h"
 #include "drawercrosshair.h"
 #include "drawer.h"
@@ -155,14 +156,14 @@ void Cursor3DTool::updatePosition()
 
                 case Q2DViewer::Sagital:
                     xyz[0] = origin[0] + (slice * spacing[0]);
-                    image = m_2DViewer->getInput()->getSeries()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
+                    image = m_2DViewer->getInput()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
                     currentPlane = new ImagePlane();
                     currentPlane->fillFromImage( image);
                     break;
 
                 case Q2DViewer::Coronal:
                     xyz[1] = origin[1] + (slice * spacing[1]);
-                    image = m_2DViewer->getInput()->getSeries()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
+                    image = m_2DViewer->getInput()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
                     currentPlane = new ImagePlane();
                     currentPlane->fillFromImage( image);
                     break;
@@ -279,9 +280,13 @@ void Cursor3DTool::projectPoint()
 void Cursor3DTool::updateFrameOfReference()
 {
     Q_ASSERT( m_2DViewer->getInput() ); // hi ha d'haver input per força
-    Series *series = m_2DViewer->getInput()->getSeries();
-    if( series )
+
+    // TODO De moment agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie.
+    // També ho fem així de moment per evitar problemes amb imatges multiframe, que encara no tractem correctament
+    Image *image = m_2DViewer->getInput()->getImage(0,0);
+    if( image )
     {
+        Series *series = image->getParentSeries();
         // ens guardem el nostre
         m_myFrameOfReferenceUID = series->getFrameOfReferenceUID();
         m_myInstanceUID = series->getInstanceUID();
