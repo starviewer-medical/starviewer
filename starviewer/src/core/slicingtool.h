@@ -99,6 +99,9 @@ private:
 
     /// Controla si estem forçant el mode de phases amb la tecla Ctrl
     bool m_forcePhaseMode;
+
+    /// Indica si el mode d'scroll ha estat o no inicialitzat
+    bool m_scrollModeIsInitialized;
 };
 
 }

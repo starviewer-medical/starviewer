@@ -16,7 +16,7 @@
 namespace udg {
 
 SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1), m_screenSize(0), m_inputHasPhases(false), m_forcePhaseMode(false)
+ : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1), m_screenSize(0), m_inputHasPhases(false), m_forcePhaseMode(false), m_scrollModeIsInitialized(false)
 {
     m_state = NONE;
     m_toolName = "SlicingTool";
@@ -193,6 +193,11 @@ void SlicingTool::updateIncrement(int increment)
 
 void SlicingTool::computeImagesForScrollMode()
 {
+    if (!m_scrollModeIsInitialized)
+    {
+        chooseBestDefaultScrollMode(m_2DViewer->getInput());
+    }
+    
     if( m_forcePhaseMode )
         m_numberOfImages = m_2DViewer->getInput()->getNumberOfPhases();
     else
@@ -214,6 +219,12 @@ void SlicingTool::chooseBestDefaultScrollMode( Volume *input )
         {
             m_slicingMode = PhaseMode;
         }
+        
+        m_scrollModeIsInitialized = true;
+    }
+    else
+    {
+        m_scrollModeIsInitialized = false;
     }
 }
 
