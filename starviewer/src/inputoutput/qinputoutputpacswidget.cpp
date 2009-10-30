@@ -395,7 +395,8 @@ void QInputOutputPacsWidget::errorQueryingStudy(PacsDevice pacsDeviceError)
 {
     QString errorMessage;
 
-    errorMessage = tr("Can't query PACS %1 from %2\nBe sure that the IP and AETitle of this PACS are correct")
+    errorMessage = tr("%1 can't query to PACS %2 from %3.\nBe sure that your computer is connected on network and the PACS parameters are correct.")
+        .arg(ApplicationNameString)
         .arg(pacsDeviceError.getAETitle())
         .arg(pacsDeviceError.getInstitution());
 
@@ -404,15 +405,17 @@ void QInputOutputPacsWidget::errorQueryingStudy(PacsDevice pacsDeviceError)
 
 void QInputOutputPacsWidget::errorQueryingSeries(QString studyInstanceUID, PacsDevice pacsDeviceError)
 {
-    QString errorMessage = tr("Error! Can't query series from study %1 of PACS %2 from %3.").arg(studyInstanceUID, pacsDeviceError.getAETitle(), pacsDeviceError.getInstitution());
-    
+    QString errorMessage = tr("%1 can't query series from study %2 to PACS %3 from %4.\n").arg(ApplicationNameString, studyInstanceUID, pacsDeviceError.getAETitle(), pacsDeviceError.getInstitution());
+    errorMessage += tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
+
     QMessageBox::warning(this, ApplicationNameString, errorMessage);
 }
 
 void QInputOutputPacsWidget::errorQueryingImage(QString studyInstanceUID, QString seriesInstanceUID, PacsDevice pacsDeviceError)
 {
-    QString errorMessage = tr("Error! Can't query images from series %1 of PACS %2 from %3.").arg(seriesInstanceUID, pacsDeviceError.getAETitle(), pacsDeviceError.getInstitution());
-    
+    QString errorMessage = tr("%1 can't query images from series %2 to PACS %3 from %4.\n").arg(ApplicationNameString, seriesInstanceUID, pacsDeviceError.getAETitle(), pacsDeviceError.getInstitution());
+    errorMessage += tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
+
     QMessageBox::warning(this, ApplicationNameString, errorMessage);
 }
 
@@ -429,7 +432,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
         case QExecuteOperationThread::ErrorConnectingPacs :
             message = tr("Please review the operation list screen, ");
             message += tr("%1 can't connect to PACS %2 trying to retrieve or store a study.\n").arg(ApplicationNameString, pacs.getAETitle());
-            message += tr("\nBe sure that your computer is connected on network and the Pacs parameters are correct.");
+            message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
