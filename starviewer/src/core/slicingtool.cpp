@@ -148,16 +148,6 @@ void SlicingTool::inputChanged( Volume *input )
     chooseBestDefaultScrollMode(input);
     m_mouseMovement = false;
     m_state = NONE;
-    m_inputHasPhases = false;
-    if( input )
-    {
-        if( input->getNumberOfPhases() > 1 )
-            m_inputHasPhases = true;
-    }
-    else
-    {
-        DEBUG_LOG("L'input introduit és NULL!");
-    }
 }
 
 void SlicingTool::switchSlicingMode()
@@ -215,7 +205,12 @@ void SlicingTool::chooseBestDefaultScrollMode( Volume *input )
     m_slicingMode = SliceMode;
     if( input )
     {
-        if( input->getNumberOfPhases() > 1  && m_2DViewer->getMaximumSlice() <= 1 )
+        if( input->getNumberOfPhases() > 1 )
+            m_inputHasPhases = true;
+        else
+            m_inputHasPhases = false;
+        
+        if( m_inputHasPhases  && m_2DViewer->getMaximumSlice() <= 1 )
         {
             m_slicingMode = PhaseMode;
         }
