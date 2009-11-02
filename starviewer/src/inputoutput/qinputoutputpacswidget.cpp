@@ -457,7 +457,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
-       case QExecuteOperationThread::PatientInconsistent :
+        case QExecuteOperationThread::PatientInconsistent :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred and some operations may have failed.");
             message += tr("\n%1 has not be capable of read correctly dicom information of the study.").arg(ApplicationNameString);
@@ -470,15 +470,15 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
-       case QExecuteOperationThread::MoveUnknowStatus :
-       case QExecuteOperationThread::MoveFailureOrRefusedStatus :
+        case QExecuteOperationThread::MoveUnknowStatus :
+        case QExecuteOperationThread::MoveFailureOrRefusedStatus :
             message = tr("Please review the operation list screen, ");
             message += tr("PACS %1 doesn't respond as expected and %2 can't process the request for retrieving images.\n\n").arg(pacs.getAETitle(), ApplicationNameString);
             message += tr("The cause of the error can be that the requested images are corrupted or the the incoming port connection in PACS configuration is not correct.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
-       case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
-           message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsDevice::getQueryRetrievePort() );
+        case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
+            message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsDevice::getQueryRetrievePort() );
             message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
             message += tr("\n\nIf there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
