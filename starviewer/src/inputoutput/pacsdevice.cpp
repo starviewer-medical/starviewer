@@ -1,5 +1,6 @@
 #include "pacsdevice.h"
 
+#include "logging.h"
 #include "inputoutputsettings.h"
 #include <QStringList>
 
@@ -175,6 +176,30 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
     QString value = settings.getValue( InputOutputSettings::DefaultPACSListToQuery ).toString();
     QStringList pacsList = value.split("//",QString::SkipEmptyParts);
 
+    if( pacsList.isEmpty() )
+    {
+        // Migració de dades. Si encara no tenim definits els PACS per defecte en el nou format, obtenim els PACS per defecte
+        // del format antic, és a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
+        // Simplement llegim, no les escrivim en el nou format. TODO Caldria fer la importació al nou format?
+        Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
+        foreach( Settings::KeyValueMapType item, list )
+        {             
+            if( item.contains(".") )// El camp "default" té aquesta clau
+            {
+                if( item.value(".").toString() == "S" )
+                    pacsList << item.value("AETitle").toString() + item.value("PacsHostname").toString();
+            }
+        }
+        if( pacsList.isEmpty() )
+        {
+            INFO_LOG("No hi ha definits PACS per defecte en el nou format i tampoc s'han trobat de definits en l'antic format");
+        }
+        else
+        {
+            INFO_LOG("No hi ha definits PACS per defecte en el nou format. Els obtenim del format antic. Són aquests: " + pacsList.join("//") );
+        }
+    }
+    
     return pacsList;
 }
 
