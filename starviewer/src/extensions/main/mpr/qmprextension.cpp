@@ -16,7 +16,8 @@
 #include "windowlevelpresetstooldata.h"
 #include "drawer.h"
 #include "mprsettings.h"
-
+#include "screenshottool.h" 
+#include "toolproxy.h"
 // qt
 #include <QSlider> // pel control m_axialSlider
 #include <QSplitter>
@@ -180,7 +181,7 @@ void QMPRExtension::initializeTools()
     m_moveToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
     m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
-    m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
+    m_toolManager->registerTool("ScreenShotTool");
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
     m_polylineROIToolButton->setDefaultAction( m_toolManager->registerTool("PolylineROITool") );
     m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
@@ -241,6 +242,59 @@ void QMPRExtension::createConnections()
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
+
+    // HACK per poder fer servir l'eina d'screenshot amb el botonet
+    connect( m_axial2DView, SIGNAL(selected()), SLOT(changeSelectedViewer()) );
+    connect( m_sagital2DView, SIGNAL(selected()), SLOT(changeSelectedViewer()) );
+    connect( m_coronal2DView, SIGNAL(selected()), SLOT(changeSelectedViewer()) );
+    connect( m_screenShotToolButton, SIGNAL( clicked() ), SLOT( screenShot() ) );
+}
+
+void QMPRExtension::changeSelectedViewer()
+{
+    if( this->sender() == m_axial2DView )
+    {
+        m_axial2DView->setActive(true);
+        
+        m_sagital2DView->setActive(false);
+        m_coronal2DView->setActive(false);
+    }
+    else if( this->sender() == m_sagital2DView )
+    {
+        m_sagital2DView->setActive(true);
+        
+        m_axial2DView->setActive(false);
+        m_coronal2DView->setActive(false);
+    }
+    else if( this->sender() == m_coronal2DView )
+    {
+        m_coronal2DView->setActive(true);
+        
+        m_axial2DView->setActive(false);
+        m_sagital2DView->setActive(false);
+    }
+}
+
+void QMPRExtension::screenShot()
+{
+    ScreenShotTool *screenShotTool = 0;
+    if( m_axial2DView->isActive() )
+    {
+        screenShotTool = dynamic_cast<ScreenShotTool *>( m_axial2DView->getToolProxy()->getTool("ScreenShotTool") );
+    }
+    else if( m_sagital2DView->isActive() )
+    {
+        screenShotTool = dynamic_cast<ScreenShotTool *>( m_sagital2DView->getToolProxy()->getTool("ScreenShotTool") );
+    }
+    else if( m_coronal2DView->isActive() )
+    {
+        screenShotTool = dynamic_cast<ScreenShotTool *>( m_coronal2DView->getToolProxy()->getTool("ScreenShotTool") );
+    }
+
+    if( screenShotTool )
+        screenShotTool->singleCapture();
+    else
+        DEBUG_LOG("No hi ha tool d'screenshot disponible");
 }
 
 void QMPRExtension::showViewerInformation( bool show )

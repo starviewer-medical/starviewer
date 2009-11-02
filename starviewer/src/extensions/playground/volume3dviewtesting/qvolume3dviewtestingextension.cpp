@@ -12,6 +12,8 @@
 #include "renderingstyle.h"
 #include "starviewerapplication.h"
 #include "volume3dviewtestingsettings.h"
+#include "screenshottool.h"
+#include "toolproxy.h"
 // qt
 #include <QAction>
 #include <QFileDialog>
@@ -84,6 +86,10 @@ void QVolume3DViewTestingExtension::initializeTools()
     QStringList rightButtonExclusiveTools;
     rightButtonExclusiveTools << "Rotate3DTool" << "WindowLevelTool";
     m_toolManager->addExclusiveToolsGroup("RightButtonGroup", rightButtonExclusiveTools);
+
+    // Fem que quan es clicki al botó es faci un screen shot
+    ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>( m_3DView->getToolProxy()->getTool("ScreenShotTool") );
+    connect( m_screenShotToolButton, SIGNAL( clicked() ), screenShotTool, SLOT( singleCapture() ) );
 }
 
 void QVolume3DViewTestingExtension::loadClutPresets()

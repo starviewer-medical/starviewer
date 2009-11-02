@@ -121,6 +121,11 @@ private:
     void init();
 
 private slots:
+    /// Marca quins són els viewers que s'han de considerar seleccionats
+    void changeSelectedViewer();
+    /// Efectua un screenshot sobre el visor que estigui seleccionat
+    void screenShot();
+    
     /// gestiona els events de cada finestra per controlar els eixos de manipulació
     void handleAxialViewEvents( unsigned long eventID );
     void handleSagitalViewEvents( unsigned long eventID );
