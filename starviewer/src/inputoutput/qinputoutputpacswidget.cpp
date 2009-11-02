@@ -103,6 +103,8 @@ void QInputOutputPacsWidget::createConnections()
 
     //connect tracta els errors de connexió al PACS, al descarregar imatges
     connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QString, QExecuteOperationThread::OperationError)));
+    //connect tracta els warning de connexió al PACS, al descarregar imatges
+    connect (&m_qexecuteOperationThread, SIGNAL(warningInOperation(QString, QString, QExecuteOperationThread::OperationWarning)), SLOT(showQExecuteOperationThreadWarning(QString, QString, QExecuteOperationThread::OperationWarning)));
 
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
     connect(&m_qexecuteOperationThread, SIGNAL(viewStudy(QString, QString, QString)), this, SIGNAL(viewRetrievedStudy(QString)), Qt::QueuedConnection);
@@ -468,11 +470,6 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
-	   case QExecuteOperationThread::MoveWarningStatus :
-            message = tr("Some images of study %1 from PACS %2 can't be retrieved because are corrupted.\n").arg(studyInstanceUID, pacs.getAETitle());
-            message += tr("The study is incomplet.");
-            QMessageBox::warning(this, ApplicationNameString, message);
-            break;
        case QExecuteOperationThread::MoveUnknowStatus :
        case QExecuteOperationThread::MoveFailureOrRefusedStatus :
 			message = tr("Please review the operation list screen, ");
@@ -490,6 +487,28 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             message = tr("Please review the operation list screen, an unknown error has ocurred retrieving a study.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+    }
+}
+
+void QInputOutputPacsWidget::showQExecuteOperationThreadWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationWarning warning)
+{
+    QString message;
+    PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
+
+    /*TODO:S'ha de millorar els missatges d'error indicant quin estudi ha fallat amb nom de pacient i study ID, s'ha de fer que l'error emeti
+     * en comptes del studyInstanceUID l'objecte Operation que conté la informació el patientName i el studyID */
+
+    switch (warning)
+    {
+        case QExecuteOperationThread::MoveWarningStatus :
+            message = tr("Some images of study %1 from PACS %2 can't be retrieved because may be corrupted.\n").arg(studyInstanceUID, pacs.getAETitle());
+            message += tr("The study is incomplet.");
+            QMessageBox::warning(this, ApplicationNameString, message);
+            break;
+        default:
+            message = tr("Some images of study %1 from PACS %2.\n").arg(studyInstanceUID, pacs.getAETitle());
+            message += tr("The study is incomplet.");
+            QMessageBox::warning(this, ApplicationNameString, message);
     }
 }
 

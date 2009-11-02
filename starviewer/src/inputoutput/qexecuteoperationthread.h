@@ -34,7 +34,9 @@ public:
 
     ///Es defineix els tipus d'error que podem tenir, el DatabaseError indica quan és error de Sqlite
     enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace, PatientInconsistent, MoveDestinationAETileUnknownStatus, IncomingConnectionsPortPacsInUse,
-                         MoveFailureOrRefusedStatus, MoveWarningStatus, MoveUnknowStatus};
+                         MoveFailureOrRefusedStatus, MoveUnknowStatus};
+
+    enum OperationWarning { MoveWarningStatus };
 
     /** Constructor de la classe
       */
@@ -110,6 +112,8 @@ signals:
 
     ///Signal que s'emet quan es produeix un error a l'operació de descàrrega
     void errorInOperation(QString studyUID, QString pacsID, QExecuteOperationThread::OperationError);
+
+    void warningInOperation(QString studyUID, QString pacsID, QExecuteOperationThread::OperationWarning);
 
     ///Signal que s'emet quan s'han descarregat tots els fitxers d'un estudi
     void filesRetrieved();
