@@ -9,9 +9,9 @@
 
 #include "volumebuilderfromcaptures.h"
 
-#include <vtkimageappend.h>
-#include <vtkimagedata.h>
-#include <vtkimageflip.h>
+#include <vtkImageAppend.h>
+#include <vtkImageData.h>
+#include <vtkImageFlip.h>
 
 #include "volume.h"
 #include "series.h"
