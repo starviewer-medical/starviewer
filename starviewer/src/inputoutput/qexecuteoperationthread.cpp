@@ -45,6 +45,7 @@ QExecuteOperationThread::QExecuteOperationThread(QObject *parent)
 
     //Registrem aquest tipus per poder-ne fer signals
     qRegisterMetaType<QExecuteOperationThread::OperationError>("QExecuteOperationThread::OperationError");
+    qRegisterMetaType<QExecuteOperationThread::OperationError>("QExecuteOperationThread::OperationWarning");
 }
 
 QExecuteOperationThread::~QExecuteOperationThread()
@@ -198,9 +199,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
                 errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveFailureOrRefusedStatus);
                 break;
             case 1302://Warning Status una part de l'estudi no s'ha descarregat
-                errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveWarningStatus);
+                emit warningInOperation(studyUID, operation.getPacsDevice().getID(), MoveWarningStatus);
 
-                emit filesRetrieved();//Si l'error és un warning vol dir que com a mínim hem rebut un objecte dicom, per tant el processe
+                emit filesRetrieved();//Si l'error és un warning vol dir que com a mínim hem rebut un objecte dicom, per tant el processem
                 break;
             default:
                 errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveUnknowStatus);
@@ -407,11 +408,7 @@ void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QString 
 
     emit errorInOperation(studyInstanceUID, pacsID, lastError);
 
-    //Si hem rebut un error i no és cap Warning, vol dir que no s'ha descarregat cap objecte Dicom, per tant esborrem el directori creat per guardar l'estudi
-    if (lastError != MoveWarningStatus) 
-    {
-        deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
-    }
+    deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
 }
 
 void QExecuteOperationThread::seriesRetrieved(QString studyInstanceUID)

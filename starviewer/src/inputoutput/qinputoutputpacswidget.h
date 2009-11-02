@@ -116,6 +116,9 @@ private slots:
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
     void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
 
+    ///Ens Mostra un missatge indicant el warning produït a la QExecuteOperationThread
+    void showQExecuteOperationThreadWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationWarning warning);
+
     ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca d'estudis
     void queryStudyResultsReceived(QList<Patient*> patients, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID);
 
