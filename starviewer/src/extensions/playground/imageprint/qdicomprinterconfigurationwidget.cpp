@@ -191,7 +191,7 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     m_polarityComboBox->clear();
     m_borderDensityComboBox->clear();
     m_emptyDensityComboBox->clear();
-    m_configurationLineEdit->setText("");
+    m_configurationInformationLineEdit->setText("");
 }
 
 void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter& printer)
@@ -262,7 +262,7 @@ void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinte
     m_emptyDensityComboBox->setCurrentIndex(m_borderDensityComboBox->findText(printer.getDefaultEmptyImageDensity()));
     m_miniumDensitySpinBox->setMaximum(printer.getAvailableMinDensityValues());
     m_miniumDensitySpinBox->setValue(printer.getDefaultMinDensity());
-    //m_configurationLineEdit->setText(prrinter.getConfiguration());
+    m_configurationInformationLineEdit->setText(printer.getConfigurationInformation());
 }
 
 void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrinter& printer)
@@ -274,7 +274,7 @@ void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrin
     printer.setDefaultBorderDensity(m_borderDensityComboBox->currentText());
     printer.setDefaultEmptyImageDensity(m_emptyDensityComboBox->currentText());
     printer.setDefaultMinDensity(m_miniumDensitySpinBox->value());
-    //printer.setConfiguration(m_configurationLineEdit->text());
+    printer.setConfigurationInformation(m_configurationInformationLineEdit->text());
 }
 
 void QDicomPrinterConfigurationWidget::showAdvancedConfigurationOptions(bool show)
