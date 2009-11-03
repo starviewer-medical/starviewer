@@ -196,7 +196,12 @@ HEADERS += extensionfactory.h \
            shortcuts.h \
            shortcutmanager.h \
            volumebuilder.h \
-           volumebuilderfromcaptures.h
+           volumebuilderfromcaptures.h \
+           dicomattribute.h \
+           dicomvalueattribute.h \
+           dicomsequenceattribute.h \
+           dicomitem.h \
+           dicomtag.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -356,7 +361,12 @@ SOURCES += extensionmediator.cpp \
            shortcuts.cpp \
            shortcutmanager.cpp \
            volumebuilder.cpp \
-           volumebuilderfromcaptures.cpp
+           volumebuilderfromcaptures.cpp \
+           dicomattribute.cpp \
+           dicomvalueattribute.cpp \
+           dicomsequenceattribute.cpp \
+           dicomitem.cpp \
+           dicomtag.cpp
 
 TEMPLATE = lib
 DESTDIR = ./
