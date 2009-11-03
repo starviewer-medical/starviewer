@@ -94,7 +94,19 @@ void QDicomPrinterConfigurationWidget::testPrinter()
 
 void QDicomPrinterConfigurationWidget::showAdvancedSettings()
 {
+    QString buttonText = tr("Advanced Settings");
+
     showAdvancedConfigurationOptions(!m_advancedSettingsGroupBox->isVisible());
+
+    if (m_advancedSettingsGroupBox->isVisible())
+    {
+        m_advancedSettingsPushButton->setText(buttonText + " <<<");
+    }
+    else 
+    {
+        m_advancedSettingsPushButton->setText(buttonText + " >>>");
+    }
+
 }
 
 void QDicomPrinterConfigurationWidget::showNewPrinterAdded()

@@ -157,7 +157,7 @@
          <bool>true</bool>
         </property>
         <property name="text">
-         <string>AETitle</string>
+         <string>AETitle:</string>
         </property>
        </widget>
       </item>
@@ -167,7 +167,7 @@
       <item row="0" column="2">
        <widget class="QLabel" name="m_printerHostnameLabel">
         <property name="text">
-         <string>Hostname</string>
+         <string>Hostname:</string>
         </property>
        </widget>
       </item>
@@ -189,7 +189,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Port</string>
+         <string>Port:</string>
         </property>
        </widget>
       </item>
@@ -212,7 +212,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="m_printerDescriptionLabel">
         <property name="text">
-         <string>Description</string>
+         <string>Description:</string>
         </property>
        </widget>
       </item>
@@ -222,7 +222,7 @@
       <item row="1" column="4" colspan="2">
        <widget class="QCheckBox" name="m_printerDefaultPrinterCheckBox">
         <property name="text">
-         <string>Impressora per defecte</string>
+         <string>Default printer</string>
         </property>
        </widget>
       </item>
@@ -240,7 +240,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="m_numberCopiesLabel">
           <property name="text">
-           <string>Número de Còpies</string>
+           <string>Number of copies:</string>
           </property>
          </widget>
         </item>
@@ -250,7 +250,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="m_priorityLabel">
           <property name="text">
-           <string>Prioritat del Treball</string>
+           <string>Print priority:</string>
           </property>
          </widget>
         </item>
@@ -266,7 +266,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="m_mediumTypeLabel">
           <property name="text">
-           <string>Medium</string>
+           <string>Medium:</string>
           </property>
          </widget>
         </item>
@@ -282,7 +282,7 @@
         <item row="3" column="0">
          <widget class="QLabel" name="m_filmDestinationLabel">
           <property name="text">
-           <string>Film Destination</string>
+           <string>Film Destination:</string>
           </property>
          </widget>
         </item>
@@ -307,7 +307,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="m_layoutLabel">
           <property name="text">
-           <string>Layout</string>
+           <string>Layout:</string>
           </property>
          </widget>
         </item>
@@ -323,7 +323,7 @@
         <item row="1" column="0">
          <widget class="QLabel" name="m_filmOrientationLabel">
           <property name="text">
-           <string>Film Orientation</string>
+           <string>Film Orientation:</string>
           </property>
          </widget>
         </item>
@@ -339,7 +339,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="m_filmSizeLabel">
           <property name="text">
-           <string>Film Size</string>
+           <string>Film Size:</string>
           </property>
          </widget>
         </item>
@@ -355,7 +355,7 @@
         <item row="3" column="0">
          <widget class="QLabel" name="m_visibleTrimLabel">
           <property name="text">
-           <string>Visible Trim</string>
+           <string>Trim</string>
           </property>
          </widget>
         </item>
@@ -413,7 +413,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Magnification Type</string>
+              <string>Magnification Type:</string>
              </property>
             </widget>
            </item>
@@ -447,7 +447,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Smoothing</string>
+              <string>Smoothing:</string>
              </property>
             </widget>
            </item>
@@ -481,7 +481,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Minimum Density</string>
+              <string>Minimum Density:</string>
              </property>
             </widget>
            </item>
@@ -510,7 +510,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Polarity</string>
+              <string>Polarity:</string>
              </property>
             </widget>
            </item>
@@ -565,7 +565,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Border Density</string>
+              <string>Border Density:</string>
              </property>
             </widget>
            </item>
@@ -599,7 +599,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Empty Density</string>
+              <string>Empty Density:</string>
              </property>
             </widget>
            </item>
@@ -633,7 +633,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Maximum Denstiy</string>
+              <string>Maximum Denstiy:</string>
              </property>
             </widget>
            </item>
@@ -760,6 +760,38 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>m_listPrintersTreeWidget</tabstop>
+  <tabstop>m_testPrinterPushButton</tabstop>
+  <tabstop>m_addPrinterPushButton</tabstop>
+  <tabstop>m_deletePrinterPushButton</tabstop>
+  <tabstop>m_printerAetitleLineEdit</tabstop>
+  <tabstop>m_printerHostnameLineEdit</tabstop>
+  <tabstop>m_printerPortLineEdit</tabstop>
+  <tabstop>m_printerDescriptionLineEdit</tabstop>
+  <tabstop>m_printerDefaultPrinterCheckBox</tabstop>
+  <tabstop>m_numberCopiesSpinBox</tabstop>
+  <tabstop>m_priorityComboBox</tabstop>
+  <tabstop>m_mediumTypeComboBox</tabstop>
+  <tabstop>m_filmDestinationComboBox</tabstop>
+  <tabstop>m_layoutComboBox</tabstop>
+  <tabstop>m_filmOrientationComboBox</tabstop>
+  <tabstop>m_filmSizeComboBox</tabstop>
+  <tabstop>m_yesVisibleTrimRadioButton</tabstop>
+  <tabstop>m_noVisibleTrimRadioButton</tabstop>
+  <tabstop>m_magnifactionTypeComboBox</tabstop>
+  <tabstop>m_borderDensityComboBox</tabstop>
+  <tabstop>m_smoothingTypeComboBox</tabstop>
+  <tabstop>m_emptyDensityComboBox</tabstop>
+  <tabstop>m_miniumDensitySpinBox</tabstop>
+  <tabstop>m_maximDensitySpinBox</tabstop>
+  <tabstop>m_polarityComboBox</tabstop>
+  <tabstop>m_configurationInformationLineEdit</tabstop>
+  <tabstop>m_advancedSettingsPushButton</tabstop>
+  <tabstop>m_acceptSettingsPushButton</tabstop>
+  <tabstop>m_applySettingsPushButton</tabstop>
+  <tabstop>m_cancelSettingsPushButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
