@@ -31,7 +31,7 @@ public:
 
     void handleEvent( unsigned long eventID );
 
-private slots:
+private:
     /// Comença l'slicing
     void startSlicing();
 
@@ -41,11 +41,6 @@ private slots:
     /// Atura l'estat d'slicing
     void endSlicing();
 
-private slots:
-    /// Es crida cada cop que l'input del viewer s'ha actualitzat
-    void inputChanged(Volume *input);
-
-private:
     /**
      * Canvia el mode d'slicing tenint en compte l'actual
      */
@@ -66,6 +61,10 @@ private:
     /// Per exemple, en el cas que només tinguem fases i una sola imatge 
     /// és millor que per defecte estem en PhaseMode
     void chooseBestDefaultScrollMode( Volume *input );
+
+private slots:
+    /// Es crida cada cop que l'input del viewer s'ha actualitzat
+    void inputChanged(Volume *input);
 
 private:
     enum { SliceMode, PhaseMode };
