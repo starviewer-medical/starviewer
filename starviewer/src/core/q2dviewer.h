@@ -262,6 +262,9 @@ public:
     /// Busca la llesca que es troba més a prop del punt i retorna la distancia
     int getNearestSlice( double point[3], double &distance );
 
+    /// HACK Serveix per notificar el canvi de volum desde Q2DViewerWidget.
+    void notifyVolumeChanged(Volume *volume);
+
 public slots:
     virtual void setInput( Volume* volume );
 

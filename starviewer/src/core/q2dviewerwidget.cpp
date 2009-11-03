@@ -79,6 +79,7 @@ void Q2DViewerWidget::setInput( Volume *input )
 {
     m_mainVolume = input;
     m_2DView->setInput( input );
+    m_2DView->notifyVolumeChanged(input);
     updateProjectionLabel();
 }
 

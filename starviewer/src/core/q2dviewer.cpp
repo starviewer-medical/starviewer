@@ -2743,5 +2743,10 @@ int Q2DViewer::getNearestSlice( double projectedPosition[3], double &distance )
     return minimumSlice;
 }
 
+void Q2DViewer::notifyVolumeChanged(Volume *volume)
+{
+    emit volumeChanged(volume);
+}
+
 };  // end namespace udg
 
