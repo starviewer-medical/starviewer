@@ -673,12 +673,12 @@
          </size>
         </property>
         <property name="text">
-         <string>Configuration</string>
+         <string>Configuration Information:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="m_configurationLineEdit">
+       <widget class="QLineEdit" name="m_configurationInformationLineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
