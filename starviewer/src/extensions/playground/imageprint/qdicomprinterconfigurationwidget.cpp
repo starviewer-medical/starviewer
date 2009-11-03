@@ -7,7 +7,6 @@
 #include "qdicomaddprinterwidget.h"
 #include <QMessageBox>
 
-
 namespace udg {
 
 // Public Methods
@@ -21,7 +20,7 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
     createConnections();
     refreshPrinterList();
     clearPrinterSettings();
-    m_advancedSettingsGroupBox->setVisible(false);
+    showAdvancedConfigurationOptions(false);
 }
 
 QDicomPrinterConfigurationWidget::~QDicomPrinterConfigurationWidget()
@@ -95,7 +94,7 @@ void QDicomPrinterConfigurationWidget::testPrinter()
 
 void QDicomPrinterConfigurationWidget::showAdvancedSettings()
 {
-    m_advancedSettingsGroupBox->setVisible(!m_advancedSettingsGroupBox->isVisible());
+    showAdvancedConfigurationOptions(!m_advancedSettingsGroupBox->isVisible());
 }
 
 void QDicomPrinterConfigurationWidget::showNewPrinterAdded()
@@ -276,5 +275,10 @@ void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrin
     printer.setDefaultEmptyImageDensity(m_emptyDensityComboBox->currentText());
     printer.setDefaultMinDensity(m_miniumDensitySpinBox->value());
     //printer.setConfiguration(m_configurationLineEdit->text());
+}
+
+void QDicomPrinterConfigurationWidget::showAdvancedConfigurationOptions(bool show)
+{
+    m_advancedSettingsGroupBox->setVisible(show);
 }
 }              

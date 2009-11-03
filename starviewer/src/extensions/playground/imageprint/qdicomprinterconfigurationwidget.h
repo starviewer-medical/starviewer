@@ -37,7 +37,6 @@ public slots:
     // Després d'afegir una impressora actualitza la llista d'impressores i et mostra la informació de la última. S'executa amb el Signal newPrinterAddedSignal
     void showNewPrinterAdded();
 
-
 private:
     void createConnections();
     // Actualitza la llista d'impressores entrades al sistema.
@@ -63,6 +62,9 @@ private:
     // Es guarda la informació avançada de la impressió de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
     void getAdvancedSettingsFromControls(DicomPrinter& printer);
     
+    ///Mostra les opcions de configuració avançada i redimensiona la finestra
+    void showAdvancedConfigurationOptions(bool show);
+
     int m_selectedPrinterId;
     QDicomAddPrinterWidget * m_addPrinterWidget;
 };
