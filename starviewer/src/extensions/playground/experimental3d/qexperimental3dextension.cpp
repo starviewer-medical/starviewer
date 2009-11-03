@@ -1184,6 +1184,7 @@ void QExperimental3DExtension::render()
     else if ( m_baseObscuranceRadioButton->isChecked() ) m_volume->addObscurance( m_obscurance, m_baseObscuranceFactorDoubleSpinBox->value(), m_baseObscuranceLowFilterDoubleSpinBox->value(),
                                                                                   m_baseObscuranceHighFilterDoubleSpinBox->value() );
     else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
+    //else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
     else if ( m_baseVomiCoolWarmRadioButton->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_baseVomiCoolWarmFactorDoubleSpinBox->value(),
                                                                                       m_baseVomiCoolWarmYDoubleSpinBox->value(), m_baseVomiCoolWarmBDoubleSpinBox->value() );
     else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
