@@ -201,7 +201,9 @@ HEADERS += extensionfactory.h \
            dicomvalueattribute.h \
            dicomsequenceattribute.h \
            dicomitem.h \
-           dicomtag.h
+           dicomtag.h \
+           dicomwriter.h \
+           dicomwriterdcmtk.h
 
 SOURCES += extensionmediator.cpp \
            extensionmanager.cpp \
@@ -366,7 +368,9 @@ SOURCES += extensionmediator.cpp \
            dicomvalueattribute.cpp \
            dicomsequenceattribute.cpp \
            dicomitem.cpp \
-           dicomtag.cpp
+           dicomtag.cpp \
+           dicomwriter.cpp \
+           dicomwriterdcmtk.cpp
 
 TEMPLATE = lib
 DESTDIR = ./
