@@ -474,7 +474,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
         case QExecuteOperationThread::MoveFailureOrRefusedStatus :
             message = tr("Please review the operation list screen, ");
             message += tr("PACS %1 doesn't respond as expected and %2 can't process the request for retrieving images.\n\n").arg(pacs.getAETitle(), ApplicationNameString);
-            message += tr("The cause of the error can be that the requested images are corrupted or the the incoming port connection in PACS configuration is not correct.");
+            message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
