@@ -14,6 +14,7 @@
 #include "image.h"
 #include "toolmanager.h"
 #include "landmarkregistrationsettings.h"
+#include "patientbrowsermenu.h"
 
 //QT
 #include <QString>
@@ -128,11 +129,16 @@ void QLandmarkRegistrationExtension::createConnections()
     connect( m_2DView , SIGNAL( sliceChanged( int ) ), SLOT( sliceChanged1 (int) ) );
     connect( m_2DView_2 , SIGNAL( sliceChanged( int ) ), SLOT( sliceChanged2 (int) ) );
 
-    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
-    connect( m_2DView_2, SIGNAL( volumeChanged(Volume *) ), SLOT( setSecondInput( Volume * ) ) );
-
     connect( m_seriesSpinBox, SIGNAL( valueChanged(int) ), SLOT( setPhase(int) ) );
     connect( m_seriesSpinBox_2, SIGNAL( valueChanged(int) ), SLOT( setSecondPhase(int) ) );
+    
+    // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
+    // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
+    // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
+    disconnect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView, SLOT( setInput( Volume * ) ) );
+    connect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput( Volume * ) ) );
+    disconnect( m_2DView_2->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView_2, SLOT( setInput( Volume * ) ) );
+    connect( m_2DView_2->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setSecondInput( Volume * ) ) );
 }
 
 void QLandmarkRegistrationExtension::readSettings()

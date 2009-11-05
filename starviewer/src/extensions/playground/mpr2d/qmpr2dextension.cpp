@@ -15,6 +15,7 @@
 #include "toolmanager.h"
 #include "windowlevelpresetstooldata.h"
 #include "mpr2dsettings.h"
+#include "patientbrowsermenu.h"
 
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
@@ -236,8 +237,11 @@ void QMPR2DExtension::createConnections()
     connect( m_mipAction , SIGNAL( triggered(bool) ), SLOT( switchToMIPLayout(bool) ) );
     connect( m_mipAction , SIGNAL( triggered(bool) ) , m_rotate3DToolButton , SLOT( setVisible(bool) ) );
 
-    // quan canvia l'input de l'axial view hem de fer un altre cop el set input TODO millora de rendiment, s'hauria de fer primer l'input de l'extensió i no pas el del viewer per evitar que al 2D viewer se li doni dos cops l'input
-    connect( m_axial2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput(Volume *) ) );
+    // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
+    // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
+    // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
+    disconnect( m_axial2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_axial2DView, SLOT( setInput(Volume *) ) );
+    connect( m_axial2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ) );
 }
 
 void QMPR2DExtension::switchHorizontalLayout()
