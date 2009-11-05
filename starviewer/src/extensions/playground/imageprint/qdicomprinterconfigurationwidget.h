@@ -65,6 +65,12 @@ private:
     ///Mostra les opcions de configuració avançada i redimensiona la finestra
     void showAdvancedConfigurationOptions(bool show);
 
+    /**Retorna la impressora seleccionada, si no tenim cap impressora seleccionada retorna l'objecte amb les propietats buides.
+      * Aquest mètode retorna la informació de la impressora com està guardada, si seleccionem una impressora, en modifiquem les dades a través 
+      * d'aquesta d'interfície i cridem aquest mètode retornarà les dades tal com les teniem guardades al settings, no retornarà les dades modificada a la 
+      * interfície si no s'han aplicat els canvis i guardats al settings*/
+    DicomPrinter getSelectedDicomPrinter();
+
     int m_selectedPrinterId;
     QDicomAddPrinterWidget * m_addPrinterWidget;
 };
