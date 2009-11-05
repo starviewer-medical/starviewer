@@ -21,7 +21,7 @@ public:
     QDicomPrinterConfigurationWidget();
     ~QDicomPrinterConfigurationWidget();
 	
-public slots:
+private slots:
     // Acualiza la informació del Printer cada vegada que es selecciona al QTree una impressora.
     void printerSelectionChanged();
     // Mostra un nou Widget en forma de Pop-up per poder introduir els paràmetres de la impressora.

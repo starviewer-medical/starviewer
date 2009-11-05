@@ -1,4 +1,3 @@
-#include <iostream>
 #include "qdicomprinterconfigurationwidget.h"
 #include "printer.h"
 #include "dicomprinter.h"
