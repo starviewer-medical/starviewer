@@ -54,15 +54,15 @@ private:
     /// Actualitza la posició de la informació addicional
     void updatePosition();
 
+    /// Crea els widgets dels que es composa el menú
+    void createWidgets();
+
 private:
     /// Atribut que guarda el punter al menú basic que representa les dades del pacient
     PatientBrowserMenuList *m_patientBrowserList;
 
     /// Atribut que guarda el punter al menú amb informació addicional de l'ítem seleccionat
     PatientBrowserMenuExtendedItem *m_patientAdditionalInfo;
-
-    /// Pacient que ens proporciona les dades d'entrada
-    Patient *m_patient;
 };
 
 }

@@ -21,16 +21,9 @@
 
 namespace udg {
 
-PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) : QWidget(parent)
+PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) 
+ : QWidget(parent), m_patientAdditionalInfo(0), m_patientBrowserList(0)
 {
-    m_patientAdditionalInfo = new PatientBrowserMenuExtendedItem(this);
-    m_patientBrowserList = new PatientBrowserMenuList(this);
-
-    m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
-    m_patientBrowserList->setWindowFlags( Qt::Popup );
-    
-    connect( m_patientAdditionalInfo, SIGNAL( close() ), m_patientBrowserList, SLOT( close() ) );
-    connect( m_patientBrowserList, SIGNAL( close() ), m_patientAdditionalInfo, SLOT( close() ) );
 }
 
 PatientBrowserMenu::~PatientBrowserMenu()
@@ -39,10 +32,10 @@ PatientBrowserMenu::~PatientBrowserMenu()
 
 void PatientBrowserMenu::setPatient(Patient * patient)
 {
-    m_patient = patient;
+    createWidgets();
     QString caption;
     QString label;
-    foreach( Study *study, m_patient->getStudies() )
+    foreach( Study *study, patient->getStudies() )
     {
         // Extreiem el caption de l'estudi
         caption = tr("Study %1 : %2 [%3] %4")
@@ -227,6 +220,24 @@ void PatientBrowserMenu::updatePosition()
     m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
     m_patientAdditionalInfo->show();
     m_patientBrowserList->show();
+}
+
+void PatientBrowserMenu::createWidgets()
+{
+    if( m_patientAdditionalInfo )
+        delete m_patientAdditionalInfo;
+    
+    if( m_patientBrowserList )
+        delete m_patientBrowserList;
+    
+    m_patientAdditionalInfo = new PatientBrowserMenuExtendedItem(this);
+    m_patientBrowserList = new PatientBrowserMenuList(this);
+
+    m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
+    m_patientBrowserList->setWindowFlags( Qt::Popup );
+    
+    connect( m_patientAdditionalInfo, SIGNAL( close() ), m_patientBrowserList, SLOT( close() ) );
+    connect( m_patientBrowserList, SIGNAL( close() ), m_patientAdditionalInfo, SLOT( close() ) );
 }
 
 }
