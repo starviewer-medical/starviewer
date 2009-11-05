@@ -5,6 +5,8 @@
 #include "dicomprintermanager.h"
 #include "starviewerapplication.h"
 #include "qdicomaddprinterwidget.h"
+#include "dicomprint.h"
+
 #include <QMessageBox>
 
 namespace udg {
@@ -83,7 +85,48 @@ void QDicomPrinterConfigurationWidget::deletePrinter()
 
 void QDicomPrinterConfigurationWidget::testPrinter()
 {
+    if(!m_listPrintersTreeWidget->selectedItems().isEmpty())
+    {   
+        DicomPrint dicomPrint;
+        DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
+        bool testIsCorrect;
+        
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        testIsCorrect = dicomPrint.echoPrinter(selectedDicomPrinter);
+        QApplication::restoreOverrideCursor();
 
+        if (testIsCorrect)
+        {
+            //El test s'ha fet correctament i la impressora ha respós
+            QMessageBox::information(this, ApplicationNameString, tr("Test of printer %1 is correct.").arg(selectedDicomPrinter.getAETitle()));
+        }
+        else
+        {
+            //El test ha fallat per algun motiu
+            QString messageError;
+
+            switch(dicomPrint.getLastError())
+            {
+                case DicomPrint::ErrorConnecting :
+                    messageError = tr("Printer %1 doesn't respond.\nBe sure that the IP and AETitle are correct.").arg(selectedDicomPrinter.getAETitle());
+                    break;
+                case DicomPrint::NotRespondedAsExpected :
+                    messageError = tr("Printer %1 doesn't respond correclty.\nBe sure that the IP and AETitle are correct." ).arg(selectedDicomPrinter.getAETitle());
+                    break;
+                default:
+                    messageError = tr("Printer %1 doesn't respond.\nBe sure that the IP and AETitle are correct." ).arg(selectedDicomPrinter.getAETitle());
+                    break;
+            }
+
+            QMessageBox::information(this, ApplicationNameString, messageError);
+        }
+    }
+    else
+    {
+        QMessageBox::information( this , tr("Information") , tr("To test a Printer it is necessary to select an printer of the list.") );
+    }
+
+    DicomPrinter;
 }
 
 void QDicomPrinterConfigurationWidget::showAdvancedSettings()
