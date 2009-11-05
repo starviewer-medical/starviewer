@@ -277,9 +277,6 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
     m_selectedDiffusionImageSpinBox->setMaximum(m_diffusionInputVolume->getNumberOfPhases() -1);
     m_selectedDiffusionImageSpinBox->setValue(m_diffusionInputVolume->getNumberOfPhases() -1);
 
-    DEBUG_LOG("Fem el set diffusion");
-    setDiffusionImage( m_selectedDiffusionImageSpinBox->value() );
-
     m_diffusionSliceSlider->setValue( m_diffusion2DView->getCurrentSlice() );
 }
 
@@ -340,9 +337,6 @@ void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
 
     m_selectedPerfusionImageSpinBox->setMaximum(m_perfusionInputVolume->getNumberOfPhases() -1);
     m_selectedPerfusionImageSpinBox->setValue(m_perfusionInputVolume->getNumberOfPhases() -1);
-
-    DEBUG_LOG("Set Perfusion");
-    setPerfusionImage( m_selectedPerfusionImageSpinBox->value() );
 
     m_perfusionSliceSlider->setMinimum( 0 );
     m_perfusionSliceSlider->setMaximum( m_perfusionInputVolume->getNumberOfSlicesPerPhase() -1  );
