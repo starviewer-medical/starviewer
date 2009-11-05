@@ -45,6 +45,12 @@ void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
         this->setPrintSettingsToControls(selectedDicomPrinter);
         this->setFilmSettingsToControls(selectedDicomPrinter);
         this->setAdvancedSettingsToControls(selectedDicomPrinter);
+
+        m_applySettingsPushButton->setEnabled(true);
+    }
+    else
+    {
+        m_applySettingsPushButton->setEnabled(false);
     }
 }
 
