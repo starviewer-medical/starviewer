@@ -36,14 +36,14 @@
     <item>
      <widget class="QPushButton" name="m_cancelButton">
       <property name="text">
-       <string>Cancel·lar</string>
+       <string>Cancel</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="m_addButton">
       <property name="text">
-       <string>Afegir</string>
+       <string>Add</string>
       </property>
      </widget>
     </item>
@@ -211,7 +211,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Impressora per defecte</string>
+    <string>Default printer</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="m_printerDescriptionLineEdit">
@@ -278,6 +278,15 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>m_printerAetitleLineEdit</tabstop>
+  <tabstop>m_printerHostnameLineEdit</tabstop>
+  <tabstop>m_printerPortLineEdit</tabstop>
+  <tabstop>m_printerDescriptionLineEdit</tabstop>
+  <tabstop>m_printerDefaultPrinterCheckBox</tabstop>
+  <tabstop>m_cancelButton</tabstop>
+  <tabstop>m_addButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../../../main/main.qrc"/>
  </resources>
