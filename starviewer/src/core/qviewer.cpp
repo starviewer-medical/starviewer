@@ -80,6 +80,11 @@ QViewer::QViewer( QWidget *parent )
     viewerLayout->addWidget( m_vtkWidget );
     
     this->setMouseTracking( false );
+    m_patientBrowserMenu = new PatientBrowserMenu(0);
+    // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
+    // TODO Aquest comportament es podria flexibilitzar proporcionant paràmetres o una interfície per poder
+    // escollir altres comportaments que ens poden ser útils en altres contextes, com per exemple, a les extensions
+    connect(m_patientBrowserMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ));
 }
 
 QViewer::~QViewer()
@@ -87,6 +92,7 @@ QViewer::~QViewer()
     m_windowToImageFilter->Delete();
     delete m_vtkWidget;
     delete m_toolProxy;
+    delete m_patientBrowserMenu;
 }
 
 vtkRenderWindowInteractor *QViewer::getInteractor()
@@ -745,18 +751,15 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
         if( !mainWindow )
             return;
 
-        PatientBrowserMenu *patientMenu = new PatientBrowserMenu(this);
-        patientMenu->setAttribute(Qt::WA_DeleteOnClose);
-        patientMenu->setPatient( mainWindow->getCurrentPatient() );
-
-        connect(patientMenu, SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ));
+        // Li actualitzem l'input perquè mostri els estudis actuals
+        m_patientBrowserMenu->setPatient( mainWindow->getCurrentPatient() );
 
         QString selectedItem;
         if( m_mainVolume )
         {
             selectedItem = QString::number( m_mainVolume->getIdentifier().getValue() );
         }
-        patientMenu->popup( event->globalPos(), selectedItem ); //->globalPos() ?
+        m_patientBrowserMenu->popup( event->globalPos(), selectedItem ); //->globalPos() ?
     }
 }
 
@@ -764,4 +767,10 @@ void QViewer::automaticRefresh( bool enable )
 {
     m_isRefreshActive = enable;
 }
+
+PatientBrowserMenu *QViewer::getPatientBrowserMenu() const
+{
+    return m_patientBrowserMenu;
+}
+
 };  // end namespace udg

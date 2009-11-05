@@ -28,6 +28,7 @@ class Volume;
 class Series;
 class ToolProxy;
 class WindowLevelPresetsToolData;
+class PatientBrowserMenu;
 
 /**
 Classe base per a totes les finestres de visualització
@@ -172,6 +173,9 @@ public:
     // Activar o desactivar el refresh automatic
     void automaticRefresh( bool enable );
 
+    /// Ens retorna el menú de pacient amb el que s'escull l'input
+    PatientBrowserMenu *getPatientBrowserMenu() const;
+
 public slots:
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume* volume) = 0;
@@ -313,6 +317,9 @@ protected:
 
     /// Escollir si hi ha activat el renderitzat del viewer
     bool m_isRefreshActive;
+
+    /// Menú de pacient a través del qual podem escollir l'input del viewer
+    PatientBrowserMenu *m_patientBrowserMenu;
 
 private:
     /// Indica si el viewer és actiu o no
