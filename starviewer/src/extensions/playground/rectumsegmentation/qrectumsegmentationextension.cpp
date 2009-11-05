@@ -47,11 +47,10 @@
 #include <itkResampleImageFilter.h>
 
 //prova recte
-#include "itkRescaleIntensityImageFilter.h"
-#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
-#include "itkExtractImageFilter.h"
-
-#include "itkImageFileWriter.h"
+#include <itkRescaleIntensityImageFilter.h>
+#include <itkCurvatureAnisotropicDiffusionImageFilter.h>
+#include <itkExtractImageFilter.h>
+#include <itkImageFileWriter.h>
 
 namespace udg {
 
@@ -69,7 +68,6 @@ QRectumSegmentationExtension::QRectumSegmentationExtension( QWidget *parent )
     initializeTools();
     createConnections();
     readSettings();
-
 }
 
 QRectumSegmentationExtension::~QRectumSegmentationExtension()
@@ -153,28 +151,28 @@ void QRectumSegmentationExtension::initializeTools()
 
 void QRectumSegmentationExtension::createConnections()
 {
-  connect( m_filterPushButton, SIGNAL( clicked() ), SLOT( ApplyFilterMainImage() ) );
-  connect( m_applyMethodButton, SIGNAL( clicked() ), SLOT( ApplyMethod() ) );
-  connect( m_updateVolumeButton, SIGNAL( clicked() ), SLOT( updateVolume() ) );
-  connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
-  connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
-  connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-  connect( m_2DView, SIGNAL( sliceChanged(int) ) , m_sliceViewSlider , SLOT( setValue(int) ) );
-  connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
-  connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
-  connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
-  connect( m_2DView, SIGNAL( seedPositionChanged(double, double, double) ), SLOT( setSeedPosition(double, double, double) ) );
-  // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
-  // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
-  // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
-  disconnect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView, SLOT( setInput( Volume * ) ) );
-  connect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput( Volume * ) ) );
-  connect( m_2DView, SIGNAL( overlayChanged( ) ), SLOT( updateVolumeForced() ) );
-  connect( m_2DView, SIGNAL( overlayModified() ), SLOT( updateVolume() ) );
-  connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
-  connect( m_save3DPushButton, SIGNAL( clicked() ), SLOT( saveSegmentation3DVolume() ) );
-  connect( m_viewROICheckBox, SIGNAL( stateChanged(int) ), SLOT( viewRegionState(int) ) );
-  connect( m_toolsButtonGroup, SIGNAL( buttonReleased(int ) ), SLOT( toolChanged(int) ) );
+    connect( m_filterPushButton, SIGNAL( clicked() ), SLOT( ApplyFilterMainImage() ) );
+    connect( m_applyMethodButton, SIGNAL( clicked() ), SLOT( ApplyMethod() ) );
+    connect( m_updateVolumeButton, SIGNAL( clicked() ), SLOT( updateVolume() ) );
+    connect( m_viewThresholdButton, SIGNAL( clicked() ), SLOT( viewThresholds() ) );
+    connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
+    connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
+    connect( m_2DView, SIGNAL( sliceChanged(int) ) , m_sliceViewSlider , SLOT( setValue(int) ) );
+    connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( setLowerValue(int) ) );
+    connect( m_upperValueSlider, SIGNAL( valueChanged(int) ), SLOT( setUpperValue(int) ) );
+    connect( m_opacitySlider, SIGNAL( valueChanged(int) ), SLOT( setOpacity(int) ) );
+    connect( m_2DView, SIGNAL( seedPositionChanged(double, double, double) ), SLOT( setSeedPosition(double, double, double) ) );
+    // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
+    // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
+    // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
+    disconnect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView, SLOT( setInput( Volume * ) ) );
+    connect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput( Volume * ) ) );
+    connect( m_2DView, SIGNAL( overlayChanged( ) ), SLOT( updateVolumeForced() ) );
+    connect( m_2DView, SIGNAL( overlayModified() ), SLOT( updateVolume() ) );
+    connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
+    connect( m_save3DPushButton, SIGNAL( clicked() ), SLOT( saveSegmentation3DVolume() ) );
+    connect( m_viewROICheckBox, SIGNAL( stateChanged(int) ), SLOT( viewRegionState(int) ) );
+    connect( m_toolsButtonGroup, SIGNAL( buttonReleased(int ) ), SLOT( toolChanged(int) ) );
 }
 
 void QRectumSegmentationExtension::setInput( Volume *input )
@@ -195,7 +193,7 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     m_sliceSpinBox->setMaximum(dim[2]-1);
     m_sliceViewSlider->setValue(m_2DView->getCurrentSlice());
 
-    //Posem els nivells de dins i fora de la m�cara els valors l�its del w/l per tal que es vegi correcte
+    // Posem els nivells de dins i fora de la màscara els valors límits del w/l per tal que es vegi correcte
     double wl[2];
     m_2DView->getDefaultWindowLevel( wl );
     m_insideValue  = (int) wl[0];
@@ -231,7 +229,6 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     //m_upperValueSlider->setValue(170);  //Ara ho fem pel QtDesigner
 
     m_2DView->render();
-
 }
 
 void QRectumSegmentationExtension::ApplyFilterMainImage( )
@@ -250,7 +247,6 @@ void QRectumSegmentationExtension::ApplyFilterMainImage( )
         //delete m_mainVolume;
         QApplication::restoreOverrideCursor();
     }
-
 }
 
 void QRectumSegmentationExtension::ApplyMethod( )
@@ -292,7 +288,8 @@ void QRectumSegmentationExtension::ApplyMethod( )
     {
         x[0]=(m_initialRegionPoint[0]-m_mainVolume->getOrigin()[0])/m_mainVolume->getSpacing()[0];
         y[0]=(m_finalRegionPoint[0]-m_mainVolume->getOrigin()[0])/m_mainVolume->getSpacing()[0];
-    }else
+    }
+    else
     {
         x[0]=(m_finalRegionPoint[0]-m_mainVolume->getOrigin()[0])/m_mainVolume->getSpacing()[0];
         y[0]=(m_initialRegionPoint[0]-m_mainVolume->getOrigin()[0])/m_mainVolume->getSpacing()[0];
@@ -301,7 +298,8 @@ void QRectumSegmentationExtension::ApplyMethod( )
     {
         x[1]=(m_initialRegionPoint[1]-m_mainVolume->getOrigin()[1])/m_mainVolume->getSpacing()[1];
         y[1]=(m_finalRegionPoint[1]-m_mainVolume->getOrigin()[1])/m_mainVolume->getSpacing()[1];
-    }else
+    }
+    else
     {
         x[1]=(m_finalRegionPoint[1]-m_mainVolume->getOrigin()[1])/m_mainVolume->getSpacing()[1];
         y[1]=(m_initialRegionPoint[1]-m_mainVolume->getOrigin()[1])/m_mainVolume->getSpacing()[1];
@@ -322,8 +320,7 @@ void QRectumSegmentationExtension::ApplyMethod( )
     m_editorToolButton->defaultAction()->trigger();
     QApplication::restoreOverrideCursor();
     //std::cout<<"Fi Apply method!!"<<std::endl;
- }
-
+}
 
 void QRectumSegmentationExtension::strokeEventHandler( unsigned long id )
 {
@@ -347,7 +344,6 @@ void QRectumSegmentationExtension::strokeEventHandler( unsigned long id )
     default:
     break;
     }
-
 }
 
 void QRectumSegmentationExtension::onMouseMoveEventHandler( )
@@ -391,7 +387,6 @@ void QRectumSegmentationExtension::setSeedPosition(double x, double y, double z)
     {
         m_applyMethodButton->setEnabled(true);
     }
-
 }
 
 void QRectumSegmentationExtension::setRegionOfInterest( )
@@ -429,15 +424,15 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
         pointIds[2] = 2;
         pointIds[3] = 3;
 
-        vtkUnstructuredGrid*    grid = vtkUnstructuredGrid::New();
+        vtkUnstructuredGrid *grid = vtkUnstructuredGrid::New();
 
         grid->Allocate(1);
         grid->SetPoints(points);
 
         grid->InsertNextCell(VTK_QUAD,4,pointIds);
 
-        squareRegionActor -> GetProperty()->SetColor(0.45, 0.23, 0.26);
-        squareRegionActor -> GetProperty()->SetOpacity(0.2);
+        squareRegionActor->GetProperty()->SetColor(0.45, 0.23, 0.26);
+        squareRegionActor->GetProperty()->SetOpacity(0.2);
 
         vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
         squareMapper->SetInput( grid );
@@ -449,10 +444,9 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
         m_2DView->getRenderer()->ResetCameraClippingRange();
         m_2DView->refresh();
 
-
-        squareMapper-> Delete();
-        points      -> Delete();
-        grid        -> Delete();
+        squareMapper->Delete();
+        points->Delete();
+        grid->Delete();
     }
 }
 
@@ -599,7 +593,6 @@ void QRectumSegmentationExtension::viewThresholds()
 
 }
 
-
 void QRectumSegmentationExtension::viewLesionOverlay()
 {
     if(m_lesionMaskVolume != 0)
@@ -611,7 +604,6 @@ void QRectumSegmentationExtension::viewLesionOverlay()
         m_2DView->refresh();
     }
 }
-
 
 double QRectumSegmentationExtension::calculateMaskVolume()
 {
@@ -761,7 +753,6 @@ void QRectumSegmentationExtension::toolChanged( int but )
         m_regionToolButton->setChecked(false);        
     }
 }
-
 
 void QRectumSegmentationExtension::readSettings()
 {
