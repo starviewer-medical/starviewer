@@ -16,7 +16,8 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
 {
     setupUi( this );
 
-    m_listPrintersTreeWidget->setColumnHidden(0,true);     
+    m_listPrintersTreeWidget->setColumnHidden(0,true);
+
     m_addPrinterWidget = new QDicomAddPrinterWidget();    
     
     createConnections();
@@ -53,27 +54,40 @@ void QDicomPrinterConfigurationWidget::addPrinter()
     m_addPrinterWidget->setVisible(true);
 }
 
-void QDicomPrinterConfigurationWidget::modifyPrinter()
+bool QDicomPrinterConfigurationWidget::modifyPrinter()
 {
     DicomPrinter dicomPrinter;
     DicomPrinterManager dicomPrinterManager;
-    if (validatePrinterSettings())
-    {   
-        this->getPrinterSettingsFromControls(dicomPrinter);
-        this->getPrintSettingsFromControls(dicomPrinter);
-        this->getFilmSettingsFromControls(dicomPrinter);
-        this->getAdvancedSettingsFromControls(dicomPrinter);
+    
+    if (!m_listPrintersTreeWidget->selectedItems().isEmpty())
+    {
+        if (validatePrinterSettings())
+        {   
+            this->getPrinterSettingsFromControls(dicomPrinter);
+            this->getPrintSettingsFromControls(dicomPrinter);
+            this->getFilmSettingsFromControls(dicomPrinter);
+            this->getAdvancedSettingsFromControls(dicomPrinter);
 
-        if (!dicomPrinterManager.updatePrinter(m_selectedPrinterId,dicomPrinter))
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("This Printer already exists."));
-        }
-        else
-        {
-            refreshPrinterList();
-            clearPrinterSettings();
+            if (!dicomPrinterManager.updatePrinter(m_selectedPrinterId,dicomPrinter))
+            {
+                //Si rebem un error és que no ha trobat la impressora amb el ID passat per paràmetre
+                QMessageBox::critical(this, ApplicationNameString, tr("Error can't apply changes to the printer."));
+            }
+            else
+            {
+                refreshPrinterList();
+                clearPrinterSettings();
+
+                return true;
+            }
         }
     }
+    else
+    {
+        QMessageBox::information(this, ApplicationNameString, tr("A printer is not selected. To Add a new printer click at button '+'."));
+    }
+
+    return false;
 }
 
 void QDicomPrinterConfigurationWidget::deletePrinter()
@@ -81,6 +95,8 @@ void QDicomPrinterConfigurationWidget::deletePrinter()
     DicomPrinterManager dicomPrinterManager;
     dicomPrinterManager.deletePrinter(m_selectedPrinterId);
     this->refreshPrinterList();
+    clearPrinterSettings();
+
 }
 
 void QDicomPrinterConfigurationWidget::testPrinter()
@@ -157,8 +173,8 @@ void QDicomPrinterConfigurationWidget::createConnections()
     connect( m_listPrintersTreeWidget , SIGNAL( itemSelectionChanged() ), SLOT( printerSelectionChanged() ) );
     connect( m_addPrinterPushButton, SIGNAL( clicked() ), SLOT( addPrinter() ));
     connect( m_applySettingsPushButton , SIGNAL( clicked() ), SLOT( modifyPrinter() ));
-    connect( m_acceptSettingsPushButton , SIGNAL( clicked() ), SLOT( close() ));
-    connect( m_cancelSettingsPushButton , SIGNAL( clicked() ), SLOT( close() ));
+    connect( m_acceptSettingsPushButton , SIGNAL( clicked() ), SLOT( accept() ));
+    connect( m_cancelSettingsPushButton , SIGNAL( clicked() ), SLOT( cancel() ));
     connect( m_deletePrinterPushButton , SIGNAL( clicked() ), SLOT( deletePrinter() ));
     connect( m_testPrinterPushButton , SIGNAL( clicked() ), SLOT( testPrinter() ));    
     connect( m_advancedSettingsPushButton , SIGNAL( clicked() ), SLOT( showAdvancedSettings() ));   
@@ -235,12 +251,13 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     // Advanced Settings
     m_magnifactionTypeComboBox->clear();
     m_smoothingTypeComboBox->clear();
-    //m_maximDensitySpinBox->
-    //m_miniumDensitySpinBox->
+    m_maximDensitySpinBox->setValue(0);
+    m_miniumDensitySpinBox->setValue(0);
     m_polarityComboBox->clear();
     m_borderDensityComboBox->clear();
     m_emptyDensityComboBox->clear();
     m_configurationInformationLineEdit->setText("");
+    m_printerDefaultPrinterCheckBox->setChecked(false);
 }
 
 void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter& printer)
@@ -349,4 +366,46 @@ void QDicomPrinterConfigurationWidget::showAdvancedConfigurationOptions(bool sho
 {
     m_advancedSettingsGroupBox->setVisible(show);
 }
+
+void QDicomPrinterConfigurationWidget::cancel()
+{
+    /*Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
+     *com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera 
+     sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial*/
+    m_listPrintersTreeWidget->clearSelection();
+    clearPrinterSettings();
+    
+    close();
+}
+
+void QDicomPrinterConfigurationWidget::accept()
+{
+    bool closeWindow = false;
+
+    if (m_listPrintersTreeWidget->selectedItems().count() > 0)
+    {
+        /*Si tenim una impressora seleccionada guardem possibles canvis que s'hagin fet, si es produeix algun error guardant els canvis, 
+         no tanquem la finestra*/
+        if (modifyPrinter())
+        {
+            closeWindow = true;
+        }
+    }
+    else 
+    {
+        closeWindow = true;
+    }
+
+    if (closeWindow)
+    {
+        /*Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
+         *com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera 
+         sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial*/
+
+        m_listPrintersTreeWidget->clearSelection();
+        clearPrinterSettings();
+        close();
+    }
+}
+
 }              
