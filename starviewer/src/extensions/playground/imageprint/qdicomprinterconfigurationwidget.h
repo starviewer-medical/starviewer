@@ -27,7 +27,7 @@ public slots:
     // Mostra un nou Widget en forma de Pop-up per poder introduir els paràmetres de la impressora.
     void addPrinter();
     // Modifica una impressora Dicom ja existen amb els paràmetres introduits per l'usuari.
-    void modifyPrinter();
+    bool modifyPrinter();
     // Esborra una impressora.
     void deletePrinter();
     // Comprova la connexió amb una impressora entrada al sistema.
@@ -36,6 +36,10 @@ public slots:
     void showAdvancedSettings();
     // Després d'afegir una impressora actualitza la llista d'impressores i et mostra la informació de la última. S'executa amb el Signal newPrinterAddedSignal
     void showNewPrinterAdded();
+    ///Slot que s'executa al prèmer el botó cancel
+    void cancel();
+    ///Slot que s'executa al prèmer el botó accept
+    void accept();
 
 private:
     void createConnections();
