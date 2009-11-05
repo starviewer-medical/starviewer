@@ -9,6 +9,10 @@
 #include "printdicomspool.h"
 #include "../core/settings.h"
 #include "imageprintsettings.h"
+#include "../inputoutput/pacsdevice.h"
+#include "../inputoutput/pacsserver.h"
+#include "../inputoutput/status.h"
+#include "logging.h"
 
 namespace udg
 {
@@ -49,6 +53,54 @@ void DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
         indexNumberOfCopies++;
     }
     //TODO: falta esborra el contingut del directori spool
+}
+
+bool DicomPrint::echoPrinter(DicomPrinter printer)
+{
+    Status state;
+    PacsDevice pacs;
+    PacsServer pacsServer;
+    bool resultTest = false;;
+
+    /*HACK el codi de fer echoSCU espera que li passem un PACS, com aquest codi està a PacsServer una classe orientada completament a PACS, el que implica
+      que és difícil adaptar el codi perquè accepti altres objectes, a part de que les responsabilitat de la classe és sobre objectes PACS, per això
+      transformem l'objecte printer a PACS per poder fer l'echo i utilitzem les classes de PACS */ 
+    pacs.setAETitle(printer.getAETitle());
+    pacs.setPort(QString().setNum(printer.getPort()));
+    pacs.setAddress(printer.getHostname());
+    pacsServer.setPacs(pacs);
+
+    state = pacsServer.connect(PacsServer::echoPacs , PacsServer::studyLevel);
+
+    if (!state.good())
+    {
+        m_lastPrinterError = DicomPrint::ErrorConnecting;
+        ERROR_LOG("Can't connect to printer " + pacs.getAETitle() + ". Error description : " + state.text());
+    }
+    else
+    {
+        state = pacsServer.echo();
+
+        if (state.good())
+        {
+            resultTest = true;
+            INFO_LOG("Test of printer " + pacs.getAETitle() + "is correct.");
+        }
+        else
+        {
+            m_lastPrinterError = DicomPrint::NotRespondedAsExpected;
+            ERROR_LOG("Doing echo to printer " + pacs.getAETitle() + " doesn't responds correctly. Error description : " + state.text());
+        }
+
+        pacsServer.disconnect();
+    }
+
+    return resultTest;
+}
+
+DicomPrint::PrinterError DicomPrint::getLastError()
+{
+    return m_lastPrinterError;
 }
 
 }
