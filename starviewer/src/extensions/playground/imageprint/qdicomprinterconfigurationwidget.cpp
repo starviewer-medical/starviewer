@@ -32,22 +32,16 @@ QDicomPrinterConfigurationWidget::~QDicomPrinterConfigurationWidget()
 // Public Slots
 void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
 {
-    DicomPrinterManager dicomPrinterManager;
-    QTreeWidgetItem *selectedItem = 0;
-    
-    this->clearPrinterSettings();
-
-    if( !m_listPrintersTreeWidget->selectedItems().isEmpty() )
+    if(m_listPrintersTreeWidget->selectedItems().count() > 0)
     {   
-        selectedItem = m_listPrintersTreeWidget->selectedItems().first();
-        m_selectedPrinterId = selectedItem->text(0).toInt();
-        
-        DicomPrinter selectedPrinter = dicomPrinterManager.getPrinterByID(m_selectedPrinterId);
+        DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
+
+        this->clearPrinterSettings();
     
-        this->setPrinterSettingsToControls(selectedPrinter);
-        this->setPrintSettingsToControls(selectedPrinter);
-        this->setFilmSettingsToControls(selectedPrinter);
-        this->setAdvancedSettingsToControls(selectedPrinter);
+        this->setPrinterSettingsToControls(selectedDicomPrinter);
+        this->setPrintSettingsToControls(selectedDicomPrinter);
+        this->setFilmSettingsToControls(selectedDicomPrinter);
+        this->setAdvancedSettingsToControls(selectedDicomPrinter);
     }
 }
 
@@ -287,6 +281,25 @@ void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrin
     printer.setDefaultEmptyImageDensity(m_emptyDensityComboBox->currentText());
     printer.setDefaultMinDensity(m_miniumDensitySpinBox->value());
     printer.setConfigurationInformation(m_configurationInformationLineEdit->text());
+}
+
+DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()
+{
+    DicomPrinter selectedDicomPrinter;
+    DicomPrinterManager dicomPrinterManager;
+    QTreeWidgetItem *selectedItem;
+
+    if (m_listPrintersTreeWidget->selectedItems().count() > 0)
+    {
+        /*Seleccionem només la primera impressora seleccionada. El QTreeWidget està configurat com SingleSelection, per tant només es pot seleccionar
+          una impressora a la vegada*/
+        selectedItem = m_listPrintersTreeWidget->selectedItems().first();
+        m_selectedPrinterId = selectedItem->text(0).toInt();
+        
+        selectedDicomPrinter = dicomPrinterManager.getPrinterByID(m_selectedPrinterId);
+    }
+
+    return selectedDicomPrinter;
 }
 
 void QDicomPrinterConfigurationWidget::showAdvancedConfigurationOptions(bool show)
