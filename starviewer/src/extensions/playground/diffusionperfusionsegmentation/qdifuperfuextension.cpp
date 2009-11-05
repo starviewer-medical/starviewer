@@ -14,6 +14,7 @@
 #include "editortool.h"
 #include "editortooldata.h"
 #include "diffusionperfusionsegmentationsettings.h"
+#include "patientbrowsermenu.h"
 // Qt
 #include <QMessageBox>
 #include <QFileDialog>
@@ -216,8 +217,14 @@ void QDifuPerfuSegmentationExtension::createConnections()
     connect( m_diffusionOpacitySlider, SIGNAL( valueChanged(int) ), SLOT( setDiffusionOpacity(int) ) );
     connect( m_perfusionOpacitySlider, SIGNAL( valueChanged(int) ), SLOT( setPerfusionOpacity(int) ) );
 
-    connect( m_diffusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setDiffusionInput( Volume * ) ) );
-    connect( m_perfusion2DView, SIGNAL(volumeChanged(Volume *)), SLOT( setPerfusionInput( Volume * ) ) );
+    // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
+    // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
+    // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
+    disconnect( m_diffusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ),m_diffusion2DView, SLOT( setInput(Volume *) ) );
+    connect( m_diffusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setDiffusionInput(Volume *) ) );
+    disconnect( m_perfusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ),m_perfusion2DView, SLOT( setInput(Volume *) ) );
+    connect( m_perfusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setPerfusionInput(Volume *) ) );
+    
     connect( m_penombraVolumeLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( computePenombraVolume(const QString&) ) );
 
     connect( m_saveDiffusionVolumePushButton, SIGNAL( clicked() ), SLOT( saveDiffusionVolume() ) );

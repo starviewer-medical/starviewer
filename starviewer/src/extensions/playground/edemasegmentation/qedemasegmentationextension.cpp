@@ -15,6 +15,7 @@
 #include "editortool.h"
 #include "editortooldata.h"
 #include "edemasegmentationsettings.h"
+#include "patientbrowsermenu.h"
 //Qt
 #include <QString>
 #include <QAction>
@@ -160,7 +161,12 @@ void QEdemaSegmentationExtension::createConnections()
     // TODO en comptes de tenir aquesta connexió hauríem de connectar el signal de la tool que ens ho hauria de fer el toolmanager
     connect( m_2DView, SIGNAL( seedPositionChanged(double,double,double) ), SLOT( setSeedPosition(double,double,double) ) );
 
-    connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
+    // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
+    // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
+    // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
+    disconnect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView, SLOT( setInput(Volume *) ) );
+    connect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ) );
+
     connect( m_saveMaskPushButton, SIGNAL( clicked() ), SLOT( saveActivedMaskVolume() ) );
 
     connect( m_lowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds() ) );
