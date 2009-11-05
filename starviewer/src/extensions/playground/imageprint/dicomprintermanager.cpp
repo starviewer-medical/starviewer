@@ -180,6 +180,7 @@ Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap( const 
     item["PrinterDescription"] = dicomPrinter.getDescription();
     item["PrinterHostname"] = dicomPrinter.getHostname();
     item["PrinterPort"] = dicomPrinter.getPort();
+    item["IsDefaultPrinter"] = dicomPrinter.getIsDefault();
     item["DefaultMediumType"] = dicomPrinter.getDefaultMediumType();
     item["DefaultFilmSize"] = dicomPrinter.getDefaultFilmSize();
     item["DefaultFilmLayout"] = dicomPrinter.getDefaultFilmLayout();
@@ -209,6 +210,7 @@ DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter(const Settings::KeyV
     dicomPrinter.setDescription(item.value("PrinterDescription").toString());
     dicomPrinter.setHostname(item.value("PrinterHostname").toString());
     dicomPrinter.setPort(item.value("PrinterPort").toInt());
+    dicomPrinter.setIsDefault(item.value("IsDefaultPrinter").toBool());
     dicomPrinter.setDefaultMediumType(item.value("DefaultMediumType").toString());
     dicomPrinter.setDefaultFilmSize(item.value("DefaultFilmSize").toString());
     dicomPrinter.setDefaultFilmLayout(item.value("DefaultFilmLayout").toString());
