@@ -200,7 +200,7 @@ void Shortcuts::init()
     settingsRegistry->addSetting( Preferences, shortcutsList );
     
     shortcutsList.clear();
-    shortcutsList.append( QKeySequence( QKeySequence::Close ).toString() );
+    shortcutsList.append( QString("Ctrl+W") );
     settingsRegistry->addSetting( CloseCurrentExtension, shortcutsList );
     
     shortcutsList.clear();
