@@ -89,7 +89,6 @@ void QStudyTreeWidget::insertPatient(Patient* patient)
             //si l'estudi ja hi existeix a StudyTreeView l'esborrem
             removeStudy(patient->getStudies().at(0)->getInstanceUID()); 
         }
-        else m_insertedPatientList.append(patient);//Sinó existeix l'afegim a la llista de pacients inserits
 
         m_studyTreeView->addTopLevelItems(fillPatient(patient));
         m_studyTreeView->clearSelection();
@@ -130,6 +129,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         qtreeWidgetItemList.append(item);
     }
 
+    //Inserim l'estudi a la llista de pacients
     m_insertedPatientList.append(patient);
 
     return qtreeWidgetItemList;
