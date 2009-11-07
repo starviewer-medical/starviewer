@@ -11,6 +11,16 @@ DicomPrinter::~DicomPrinter()
 {
 }
 
+void DicomPrinter::setID(int ID)
+{
+    m_ID = ID;
+}
+
+int DicomPrinter::getID()
+{
+    return m_ID;
+}
+
 void DicomPrinter::setName(const QString &name)
 {
     m_name = name;

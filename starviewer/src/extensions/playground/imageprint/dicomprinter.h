@@ -17,6 +17,10 @@ public:
     DicomPrinter();
     ~DicomPrinter();
     
+    /// ID de l'impressora
+    int getID();
+    void setID(int ID);
+
     /// Posa el nom de la impressora.
     void setName(const QString &name);
     QString getName() const;
@@ -138,6 +142,7 @@ public:
 
 private:		
 	
+    int m_ID;
     QString m_aeTitle;
     QString	m_defaultDescription;
     QString	m_defaultMediumType;
