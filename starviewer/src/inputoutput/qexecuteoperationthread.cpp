@@ -253,31 +253,13 @@ void QExecuteOperationThread::moveStudy( Operation operation )
     StoreImages storeImages;
     StarviewerProcessImageStored *storedProcessImage = new StarviewerProcessImageStored();
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
+    QList<Image*> imagesToStoreList ;
 
     INFO_LOG( "Preparant les dades per moure estudi " + operation.getStudyUID() + " al PACS " + operation.getPacsDevice().getAETitle() );
 
     emit setOperating( operation.getStudyUID() );//Indiquem al QOperationState que comença l'enviament de les imatges
 
-    //cerquem el path de les imatges a emmagatzemar
-    LocalDatabaseManager localDatabaseManager;
-    DicomMask studyMask;
-    studyMask.setStudyUID( operation.getStudyUID() );
-    Patient *patient = localDatabaseManager.retrieve(studyMask);
-    if(localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-    {
-        ERROR_LOG(QString("Error al intentar obtenir els studys que s'han de gravar al pacs; Error: %1; StudyUID: %2")
-                          .arg( localDatabaseManager.getLastError() )
-                          .arg( operation.getStudyUID() ));
-        return;
-    }
-
-    // \TODO Això ho hem de fer així perquè nosaltres només volem un study, l'únic que pot retornar a partir del seu UID.
-    Study *study = patient->getStudies().first();
-    QList<Image*> imagesList;
-    foreach(Series *series, study->getSeries())
-    {
-        imagesList += series->getImages();
-    }
+    imagesToStoreList = getImagesToStoreList(operation.getDicomMask());
 
     PacsServer pacsConnection( operation.getPacsDevice() );
 
@@ -300,7 +282,7 @@ void QExecuteOperationThread::moveStudy( Operation operation )
     storeImages.setConnection( pacsConnection.getConnection() );
     storeImages.setNetwork( pacsConnection.getNetwork() );
 
-    state = storeImages.store(imagesList);
+    state = storeImages.store(imagesToStoreList);
 
     piSingleton->delProcessImage( operation.getStudyUID() );
     delete storedProcessImage; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
@@ -436,6 +418,51 @@ bool QExecuteOperationThread::existStudyInLocalDatabase(QString studyInstanceUID
     dicomMask.setStudyUID(studyInstanceUID);
 
     return localDatabaseManager.queryStudy(dicomMask).count() > 0;
+}
+
+QList<Image*> QExecuteOperationThread::getImagesToStoreList(DicomMask dicomMask)
+{
+    LocalDatabaseManager localDatabaseManager;
+    DicomMask studyMask;
+    QList<Image*> imagesToStoreList;
+
+    studyMask.setStudyUID( dicomMask.getStudyUID() );
+
+    /*Hem d'agafar tot l'estructura patient,study,series,image perquè la classe StarviewerProcessImageStored que se li passa un objecte Image, per indicar-li
+     que ja s'ha fet l'stored d'aquella imatge, necessita el SeriesUID i el StudyUID, l'objecte image si no té l'estructura Patient,Study,Series,Image per si sol 
+     no té aquesta informació, per això no podem utilitzar el mètode queryImage de LocalDatabaseManager*/
+    Patient *patient = localDatabaseManager.retrieve(studyMask);
+
+    if(localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+    {
+        ERROR_LOG(QString("Error al intentar obtenir els studys que s'han de gravar al pacs; Error: %1; StudyUID: %2")
+                          .arg( localDatabaseManager.getLastError() )
+                          .arg( dicomMask.getStudyUID() ));
+
+        return imagesToStoreList;
+    }
+
+    foreach(Series *series, patient->getStudies().first()->getSeries())
+    {
+        QString seriesInstanceUIDMask = dicomMask.getSeriesUID();
+
+        if (seriesInstanceUIDMask.isEmpty() || seriesInstanceUIDMask == series->getInstanceUID())
+        {
+            ///Si no tenim màscara de sèrie per aplicar o la màscara de la sèrie coincideix amb la sèrie actual, explorem les imatges
+            foreach(Image* image,series->getImages())
+            {
+                QString imageSOPInstanceUIDMask = dicomMask.getSOPInstanceUID();
+
+                if (imageSOPInstanceUIDMask.isEmpty() || imageSOPInstanceUIDMask == image->getSOPInstanceUID())
+                {
+                    //Si no tenim màscara d'imatge per aplicar o la màscara de la iamtge coincideix amb la imatge actual l'afegim a la llista
+                    imagesToStoreList.append(image);
+                }
+            }
+        }
+    }
+
+    return imagesToStoreList;
 }
 
 void QExecuteOperationThread::seriesRetrieved(QString studyInstanceUID)

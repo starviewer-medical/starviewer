@@ -337,12 +337,32 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
 void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
     QList<Study*> selectedStudies = m_studyTreeWidget->getSelectedStudies();
+    DicomMask dicomMaskObjectsToStore;
 
-    if (selectedStudies.count() == 0)
+    if (selectedStudies.count() == 1)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to store"));
+
+        dicomMaskObjectsToStore.setStudyUID(selectedStudies.at(0)->getInstanceUID());
+
+        if (!m_studyTreeWidget->getCurrentSeriesUID().isEmpty())
+            dicomMaskObjectsToStore.setSeriesUID(m_studyTreeWidget->getCurrentSeriesUID());
+
+        if (!m_studyTreeWidget->getCurrentImageUID().isEmpty())
+            dicomMaskObjectsToStore.setSOPInstanceUID(m_studyTreeWidget->getCurrentImageUID());
+
+        emit storeDicomObjectsToPacs(selectedStudies.at(0), dicomMaskObjectsToStore);
     }
-    else emit storeStudiesToPacs(selectedStudies);
+    else
+    {
+        if (selectedStudies.count() == 0)
+        {
+            QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to store to PACS."));
+        }
+        else
+        {
+            QMessageBox::warning(this, ApplicationNameString, tr("Only one selected object can be stored to PACS at same time. Please select only one study, series or image to store to PACS."));
+        }
+    }
 }
 
 void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
