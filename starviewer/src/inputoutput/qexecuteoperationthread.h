@@ -25,6 +25,7 @@ class PatientFiller;
 class QThreadRunWithExec;
 class StarviewerProcessImageRetrieved;
 class LocalDatabaseManager;
+class Image;
 
 class QExecuteOperationThread : public QThread
 {
@@ -161,6 +162,9 @@ private:
 
     ///Indica si l'estudi existeix a la base de dades local
     bool existStudyInLocalDatabase(QString studyInstanceUID);
+
+    ///Retorna la llista d'imatges a guardar a un PACS a partir de la màscara
+    QList<Image*> getImagesToStoreList(DicomMask dicomMask);
 };
 
 }

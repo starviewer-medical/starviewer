@@ -12,6 +12,7 @@
 
 #include "localdatabasemanager.h"
 #include "qdeleteoldstudiesthread.h"
+#include "dicommask.h"
 
 #include <QMenu>
 
@@ -21,7 +22,6 @@ class QString;
 namespace udg {
 
 // fordward declarations
-class DicomMask;
 class Patient;
 class StatsWatcher;
 class QCreateDicomdir;
@@ -69,8 +69,13 @@ signals:
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewPatients(QList<Patient*>);
 
-    ///Signal indicant que aquests estudis s'han de guardar a un PACS
-    void storeStudiesToPacs(QList<Study*> storeStudiesToPacs);
+    /**Signal indicant que s'han d'enviar el PACS els objectes que compleixin la màscara.
+      *El primer paràmetre indica l'estudi al que pertany l'objecte a guardar, i en segon lloc la màscara per poder especificar si passar tot l'estudi o una
+      *sèrie de l'estudi, o només una imatge*/
+    /*TODO: S'hauria de passar un objecte study que contingués només les imatges a guardar del PACS, però degut a que Operation que és l'objecte que es passa
+        a QExecuteOperationThread per indicar l'operació de guardar objectes el PACS, no se li pot especificar una llista d'objectes DICOM, sinó que se
+        li ha d'especificar la màscara dels objectes que s'han de guardar, enviem las màscara*/
+    void storeDicomObjectsToPacs(Study *study, DicomMask dicomMask);
 
 private:
     ///Crea les connexions entre signals i slots

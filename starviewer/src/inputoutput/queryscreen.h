@@ -87,8 +87,8 @@ private slots:
     ///Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
     void viewRetrievedStudyFromPacs(QString studyInstanceUID);
 
-    ///Signal indicant que hi ha estudis que s'han de guardar al PACS
-    void storeStudiesToPacs(QList<Study*> studiesToStore);
+    ///Guarda els objectes que compleixien la màscara passada per paràmetres de l'estudi passat per paràmetre al primer PACS que es troba com a PACS per defecte
+    void storeDicomObjectsToPacs(Study *studyToStore, DicomMask dicomMaskObjectsToStore);
 
     ///Slot que s'activa quan es rep una petició del RIS per descarregar un estudi d'un determinat PACS
     void retrieveStudyFromRISRequest(QString pacsID, Study *study);

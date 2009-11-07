@@ -162,28 +162,21 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
     }
 }
 
-void QInputOutputPacsWidget::storeStudiesToPacs(PacsDevice pacsToStore, QList<Study*> studiesToStore)
+void QInputOutputPacsWidget::storeDicomObjectsToPacs(PacsDevice pacsToStore, Study* studyToStore, DicomMask dicomMaskObjectsToStore)
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    Operation storeStudyOperation;
 
-    foreach(Study *studyToStore, studiesToStore)
-    {
-        PacsDeviceManager pacsDeviceManager;
-        Operation storeStudyOperation;
-        DicomMask dicomMask;
-        dicomMask.setStudyUID(studyToStore->getInstanceUID());
+    storeStudyOperation.setPatientName(studyToStore->getParentPatient()->getFullName());
+    storeStudyOperation.setPatientID(studyToStore->getParentPatient()->getID());
+    storeStudyOperation.setStudyUID(studyToStore->getInstanceUID());
+    storeStudyOperation.setStudyID(studyToStore->getID());
+    storeStudyOperation.setPriority(Operation::Low);
+    storeStudyOperation.setOperation(Operation::Move);
+    storeStudyOperation.setDicomMask(dicomMaskObjectsToStore);
+    storeStudyOperation.setPacsDevice(pacsToStore);
 
-        storeStudyOperation.setPatientName(studyToStore->getParentPatient()->getFullName());
-        storeStudyOperation.setPatientID(studyToStore->getParentPatient()->getID());
-        storeStudyOperation.setStudyUID(studyToStore->getInstanceUID());
-        storeStudyOperation.setStudyID(studyToStore->getID());
-        storeStudyOperation.setPriority(Operation::Low);
-        storeStudyOperation.setOperation(Operation::Move);
-        storeStudyOperation.setDicomMask(dicomMask);
-        storeStudyOperation.setPacsDevice(pacsToStore);
-
-        m_qexecuteOperationThread.queueOperation(storeStudyOperation);
-    }
+    m_qexecuteOperationThread.queueOperation(storeStudyOperation);
 
     QApplication::restoreOverrideCursor();
 }

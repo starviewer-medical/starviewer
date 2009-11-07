@@ -159,7 +159,7 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyWillBeDeletedFromDatabase(QString)), m_qInputOutputLocalDatabaseWidget , SLOT(removeStudyFromQStudyTreeWidget(QString)));
 
-    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(storeStudiesToPacs(QList<Study*> )), SLOT(storeStudiesToPacs(QList<Study*> )));
+    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(storeDicomObjectsToPacs(Study*, DicomMask)), SLOT(storeDicomObjectsToPacs(Study*,DicomMask)));
 }
 
 void QueryScreen::checkRequeriments()
@@ -294,7 +294,7 @@ void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
     m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "");
 }
 
-void QueryScreen::storeStudiesToPacs(QList<Study*> studiesToStore)
+void QueryScreen::storeDicomObjectsToPacs(Study *studyToStore, DicomMask dicomMaskObjectsToStore)
 {
     QList<PacsDevice> selectedPacs = m_PACSNodes->getSelectedPacs();
 
@@ -308,7 +308,7 @@ void QueryScreen::storeStudiesToPacs(QList<Study*> studiesToStore)
     }
     else
     {
-        m_qInputOutputPacsWidget->storeStudiesToPacs(selectedPacs.at(0), studiesToStore); 
+        m_qInputOutputPacsWidget->storeDicomObjectsToPacs(selectedPacs.at(0), studyToStore, dicomMaskObjectsToStore); 
     }
 }
 

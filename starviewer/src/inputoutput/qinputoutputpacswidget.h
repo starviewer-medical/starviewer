@@ -45,8 +45,11 @@ public:
     ///Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQuery);
 
-    //TODO: per implementar
-    void storeStudiesToPacs(PacsDevice pacs, QList<Study*> studiesToStore);
+    ///Guarda al PACS passat per paràmetre els objectes de l'estudi especificat que compleixen amb la màscara
+    /*TODO: S'hauria de passar un objecte study que contingués només les imatges a guardar del PACS, però degut a que Operation que és l'objecte que es passa
+        a QExecuteOperationThread per indicar l'operació de guardar objectes el PACS, no se li pot especificar una llista d'objectes DICOM, sinó que se
+        li ha d'especificar la màscara dels objectes que s'han de guardar, enviem las màscara*/
+    void storeDicomObjectsToPacs(PacsDevice pacs, Study *studyToStore, DicomMask dicomMaskObjectsToStore);
 
     ///Neteja els resultats de la última cerca
     void clear();
