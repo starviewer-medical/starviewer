@@ -74,7 +74,7 @@ public:
     /** removes study from the list
      * @param esbora l'estudi amb StudyUID de la llista
      */
-    void removeStudy( QString StudyUID );
+    void removeStudy( QString StudyInstanceUIDToRemove );
 
     /** Ordena per columna
      * @param Indica la columna per la que s'ha d'ordenar

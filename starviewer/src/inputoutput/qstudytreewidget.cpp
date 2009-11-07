@@ -416,15 +416,25 @@ QString QStudyTreeWidget::getCurrentImageUID()
     return result;
 }
 
-void QStudyTreeWidget::removeStudy( QString studyUID )
+void QStudyTreeWidget::removeStudy( QString studyInstanceUIDToRemove )
 {
-    QList<QTreeWidgetItem *> qStudyList( m_studyTreeView->findItems( studyUID , Qt::MatchExactly, UID ) );
+    QList<QTreeWidgetItem *> qStudyList( m_studyTreeView->findItems( studyInstanceUIDToRemove , Qt::MatchExactly, UID ) );
     QTreeWidgetItem *item;
-	
+    int indexOfStudy = 0;
+
     for ( int i = 0; i < qStudyList.count(); i++ )
     {
         item = qStudyList.at( i );
         delete item;
+    }
+
+    while ( indexOfStudy < m_insertedStudyList.count() )
+    {
+        if ( m_insertedStudyList.at( indexOfStudy )->getInstanceUID() == studyInstanceUIDToRemove )
+        {
+            m_insertedStudyList.removeAt( indexOfStudy );
+        }
+        indexOfStudy++;
     }
 
 	m_studyTreeView->clearSelection();
