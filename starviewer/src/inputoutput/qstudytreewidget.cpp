@@ -127,10 +127,10 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->addChild(expandableItem);
 
         qtreeWidgetItemList.append(item);
-    }
 
-    //Inserim l'estudi a la llista de pacients
-    m_insertedPatientList.append(patient);
+        //Inserim l'estudi a la llista d'estudis
+        m_insertedStudyList.append(studyToInsert);
+    }
 
     return qtreeWidgetItemList;
 }
@@ -237,7 +237,7 @@ void QStudyTreeWidget::clear()
     m_oldCurrentStudyUID = "";
     m_oldCurrentSeriesUID = "";
 
-    m_insertedPatientList.clear();
+    m_insertedStudyList.clear();
 }
 
 void QStudyTreeWidget::setSortColumn( int col )
@@ -302,14 +302,11 @@ QList<Study*> QStudyTreeWidget::getSelectedStudies()
     QList<Study*> selectedStudies;
 
    //Busquem pels estudis UID seleccionats 
-    foreach ( Patient *patientInserted , m_insertedPatientList ) 
+    foreach( Study *studyInserted , m_insertedStudyList )
     {
-        foreach( Study *studyInserted , patientInserted->getStudies() )
+        if ( selectedStudiesUID.contains( studyInserted->getInstanceUID() ) )
         {
-            if ( selectedStudiesUID.contains( studyInserted->getInstanceUID() ) )
-            {
-                selectedStudies.append(studyInserted);
-            } 
+            selectedStudies.append(studyInserted);
         }
     }
 
