@@ -196,7 +196,7 @@ private:
      * un mateix estudi pot estar a més d'un PACS
      * @param studyUID uid de l'estudi a cercar
      */
-    QTreeWidgetItem* getStudyItem(QString studyUID);
+    QTreeWidgetItem* getStudyQTreeWidgetItem(QString studyUID);
 
     ///Retorna l'Objecte QTtreeWidgeItem que és de l'estudi i series
     QTreeWidgetItem* getSeriesQTreeWidgetItem(QString studyUID, QString seriesUID);
@@ -234,7 +234,7 @@ private:
     /// Icones utilitzades com a root al TreeWidget
     QIcon m_openFolder , m_closeFolder , m_iconSeries;
 
-    QList<Patient*> m_insertedPatientList;
+    QList<Study*> m_insertedStudyList;
 };
 
 }; // end namespace

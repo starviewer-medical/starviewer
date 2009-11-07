@@ -84,7 +84,7 @@ void QStudyTreeWidget::insertPatient(Patient* patient)
 {
     if (patient->getNumberOfStudies() > 0)
     {
-        if (getStudyItem(patient->getStudies().at(0)->getInstanceUID()) != NULL)
+        if (getStudyQTreeWidgetItem(patient->getStudies().at(0)->getInstanceUID()) != NULL)
         {
             //si l'estudi ja hi existeix a StudyTreeView l'esborrem
             removeStudy(patient->getStudies().at(0)->getInstanceUID()); 
@@ -137,7 +137,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
 
 void QStudyTreeWidget::insertSeriesList(QString studyInstanceUID, QList<Series*> seriesList)
 {
-    QTreeWidgetItem *studyItem = getStudyItem(studyInstanceUID);
+    QTreeWidgetItem *studyItem = getStudyQTreeWidgetItem(studyInstanceUID);
     QList<QTreeWidgetItem*> qTreeWidgetItemSeriesList;
 
     foreach(Series *series, seriesList)
@@ -369,7 +369,7 @@ QString QStudyTreeWidget::getCurrentSeriesUID()
     else return "";
 }
 
-QTreeWidgetItem*  QStudyTreeWidget::getStudyItem(QString studyUID)
+QTreeWidgetItem*  QStudyTreeWidget::getStudyQTreeWidgetItem(QString studyUID)
 {
     QList<QTreeWidgetItem*> qStudyList( m_studyTreeView->findItems(studyUID, Qt::MatchExactly, UID) );//busquem l'estudi a la que pertany la sèrie
 
@@ -386,7 +386,7 @@ QTreeWidgetItem*  QStudyTreeWidget::getSeriesQTreeWidgetItem(QString studyInstan
     QTreeWidgetItem* studyItem, *item = NULL;
     int index = 0;
 
-    studyItem = getStudyItem(studyInstanceUID);
+    studyItem = getStudyQTreeWidgetItem(studyInstanceUID);
 
     while (item == NULL && index < studyItem->childCount())//cerquem la sèrie de la que depen la imatge
     {
