@@ -408,24 +408,34 @@ void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QString 
 
     emit errorInOperation(studyInstanceUID, pacsID, lastError);
 
-	INFO_LOG("Esborrem els fitxers del disc i de la base de dades l'estudi " + studyInstanceUID + " que s'ha descarregat incorrectament");
-	//TODO:Esborrar només els fitxers que s'hagin pogut descarregar, no tot l'estudi
+    if (lastError == QExecuteOperationThread::MoveFailureOrRefusedStatus || lastError == QExecuteOperationThread::MoveUnknowStatus ||
+        lastError == QExecuteOperationThread::DatabaseError || lastError == QExecuteOperationThread::PatientInconsistent)
+    {
+        /*Comprovem si l'estudi està inserit a la base de dades, si és així vol dir que anteriorment s'havia descarregat un part o tot l'estudi,
+         *com que ja tenim altres elements d'aquest estudi inserits a la base de dades no esborrem el directori de l'estudi*/
+        if (!existStudyInLocalDatabase(studyInstanceUID))
+        {
+            /*Si l'estudi no existeix a la base de dades esborrem el contingut del directori, en principi segons la normativa DICO; si rebem un status de 
+             * tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb èxit */
 
-	if (lastError == QExecuteOperationThread::MoveFailureOrRefusedStatus || lastError == QExecuteOperationThread::MoveUnknowStatus ||
-		lastError == QExecuteOperationThread::DatabaseError || lastError == QExecuteOperationThread::PatientInconsistent)
-	{
-		//Si s'ha produït un error dels tipus anteriors potser que tinguem fitxers descarregats, per tant esborrem l'estudi
+            INFO_LOG("L'estudi " + studyInstanceUID + " no existeix a la base de de dades, esborrem el contingut del seu directori.");
+            deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
+        }
+        else
+        {
+            INFO_LOG("L'estudi " + studyInstanceUID + " existeix a la base de dades, no esborrem el contingut del seu directori.");
+        }
+    }
+}
 
-		deleteDirectory.deleteDirectory(localDatabaseManager.getStudyPath(studyInstanceUID), true);
+bool QExecuteOperationThread::existStudyInLocalDatabase(QString studyInstanceUID)
+{
+    LocalDatabaseManager localDatabaseManager;
+    DicomMask dicomMask;
 
-		/* Imaginem el cas que descarreguem la sèrie 1 del estudi correctament i és inserit a la base de dades, llavors intentem descarregar la sèrie 2
-		 * però aquesta falla, no es pot descarregar, en aquest s'executa aquest mètode i es fa una crida a deleteDirectory, esborrant qualsevol fitxer
-		 * que s'hagi pogut descarregar d'aquesta descarrega fallida i els de la serèi 1 que si s'havien descarregat correctament, perquè el deleteDirectory esborra
-		 * tots els fitxers de l'estudi, al passar això si no esborréssim l'estudi de la base de dades quedaria inconsistent perquè tindríem l'estudi amb la
-		 * sèrie 1 a la base de dades, però els fitxers estarien esborrats.
-		 */
-		localDatabaseManager.del(studyInstanceUID);
-	}
+    dicomMask.setStudyUID(studyInstanceUID);
+
+    return localDatabaseManager.queryStudy(dicomMask).count() > 0;
 }
 
 void QExecuteOperationThread::seriesRetrieved(QString studyInstanceUID)

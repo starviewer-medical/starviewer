@@ -33,8 +33,7 @@ Q_OBJECT
 public:
 
     ///Es defineix els tipus d'error que podem tenir, el DatabaseError indica quan és error de Sqlite
-    enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace, PatientInconsistent, MoveDestinationAETileUnknownStatus, IncomingConnectionsPortPacsInUse,
-                         MoveFailureOrRefusedStatus, MoveUnknowStatus};
+    enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace, PatientInconsistent, MoveDestinationAETileUnknownStatus, IncomingConnectionsPortPacsInUse, MoveFailureOrRefusedStatus, MoveUnknowStatus};
 
     enum OperationWarning { MoveWarningStatus };
 
@@ -159,6 +158,9 @@ private:
 
     ///Si es produeix un error emet un signal amb l'error i esborra el directori de l'estudi per si s'hagués pogut descarregar alguna imatge
     void errorRetrieving(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError lastError);
+
+    ///Indica si l'estudi existeix a la base de dades local
+    bool existStudyInLocalDatabase(QString studyInstanceUID);
 };
 
 }
