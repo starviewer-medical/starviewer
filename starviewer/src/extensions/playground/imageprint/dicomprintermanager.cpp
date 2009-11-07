@@ -234,14 +234,18 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
 {
     Settings settings;
     QList<DicomPrinter> dicomPrintersList;
-    
+    int indexOfIDPrinter = 0;
+
     Settings::SettingListType list = settings.getList(DicomPrinterListSectionName);
     
     foreach( Settings::KeyValueMapType item, list )
     {
         DicomPrinter dicomPrinter;
+
         dicomPrinter = keyValueMapToDicomPrinter(item);
+        dicomPrinter.setID(indexOfIDPrinter);
         dicomPrintersList << dicomPrinter;
+        indexOfIDPrinter++;
     }
 
     return dicomPrintersList;   
