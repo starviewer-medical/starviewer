@@ -179,8 +179,9 @@ private:
       */
     void dvdCdDicomdirDesactivatedOnWindows();
 
-    /// Permet comprovar si la configuració es correcte per poder gravar el dicomdir en un cd o dvd
-    void checkDICOMDIRBurningApplicationConfiguration();
+    /**Indica si la configuració es correcte per poder gravar el dicomdir en un cd o dvd. No comprova que sigui un programa vàlid, simplement
+      *comprova que la ruta ens ha indicat com programa per gravar cd/dvd existeix*/
+    bool checkDICOMDIRBurningApplicationConfiguration();
 
     /**Retorna la mida que l'estudi ocuparà en el dicomdir, al fer el càlcul ja té en compta si les imatges que s'afegiran al DICOMDIR
       *han de conventir-se a transfer syntax LittleEndian o mantenen la seva transfer syntax, per calcular correctament la mida que ocuparà l'estudi.

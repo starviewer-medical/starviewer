@@ -622,29 +622,41 @@ void QCreateDicomdir::deviceChanged( int index )
         case CreateDicomdir::DvdRom:
             int maximumDeviceCapacity;
 
-            checkDICOMDIRBurningApplicationConfiguration();
-            
-
-            if (m_currentDevice == CreateDicomdir::CdRom) 
+            if (checkDICOMDIRBurningApplicationConfiguration())
             {
-                maximumDeviceCapacity = CDRomSizeMb;
-                m_DiskSpaceBytes = CDRomSizeBytes;
+                //La configuració de l'aplicació per gravar cd/dvd és vàlida
+                if (m_currentDevice == CreateDicomdir::CdRom) 
+                {
+                    maximumDeviceCapacity = CDRomSizeMb;
+                    m_DiskSpaceBytes = CDRomSizeBytes;
+                }
+                else
+                {
+                    maximumDeviceCapacity = DVDRomSizeMb;
+                    m_DiskSpaceBytes = DVDRomSizeBytes;
+                }
+                
+                m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
+                
+                m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
+                setDicomdirSize();//El cridem per refrescar la barra de progrés
+
+                if (m_dicomdirSizeBytes > m_DiskSpaceBytes)
+                {
+                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumDeviceCapacity) );
+                }
             }
             else
             {
-                maximumDeviceCapacity = DVDRomSizeMb;
-                m_DiskSpaceBytes = DVDRomSizeBytes;
+                //La configuració de l'aplicació per gravar cd/dvd no ès vàlida
+                QMessageBox::warning( this, ApplicationNameString, 
+                                        tr( "Invalid DICOMDIR burning application configuration.\n" 
+                                            "It can be solved in Tools -> Configuration -> DICOMDIR menu.") );
+            
+                //Marquem la opció de crear el dicomdir al disc dur
+                m_hardDiskAction->trigger();
             }
-            
-            m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
-            
-            m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
-            setDicomdirSize();//El cridem per refrescar la barra de progrés
 
-            if (m_dicomdirSizeBytes > m_DiskSpaceBytes)
-            {
-                QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumDeviceCapacity) );
-            }
             break;
     }
 }
@@ -660,18 +672,10 @@ void QCreateDicomdir::dvdCdDicomdirDesactivatedOnWindows()
     m_hardDiskAction->trigger();
 }
 
-void QCreateDicomdir::checkDICOMDIRBurningApplicationConfiguration()
+bool QCreateDicomdir::checkDICOMDIRBurningApplicationConfiguration()
 {
     Settings settings;
-    if( !QFile::exists((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString()) )
-    {
-        QMessageBox::warning( this, ApplicationNameString, 
-                                tr( "Invalid DICOMDIR burning application configuration.\n" 
-                                    "It can be solved in Tools -> Configuration -> DICOMDIR menu.") );
-    
-        //Marquem la opció de crear el dicomdir al disc dur
-        m_hardDiskAction->trigger();
-    }
+    return QFile::exists((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString());
 }
 
 quint64 QCreateDicomdir::getStudySizeInBytes(bool transferSyntaxInLittleEndian, QString studyInstanceUID)
