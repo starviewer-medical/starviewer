@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QDicomPrinterBasicSettingsWidgetBase</class>
+ <widget class="QWidget" name="QDicomPrinterBasicSettingsWidgetBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>545</width>
+    <height>140</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="horizontalSpacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="m_printSettingsGroupBox">
+     <property name="title">
+      <string>Print Settings</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="m_numberCopiesLabel">
+        <property name="text">
+         <string>Number of copies:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QSpinBox" name="m_numberCopiesSpinBox"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="m_priorityLabel">
+        <property name="text">
+         <string>Print priority:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="m_priorityComboBox">
+        <item>
+         <property name="text">
+          <string>Medium</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="m_mediumTypeLabel">
+        <property name="text">
+         <string>Medium:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="m_mediumTypeComboBox">
+        <item>
+         <property name="text">
+          <string>Blue Film</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="m_filmDestinationLabel">
+        <property name="text">
+         <string>Film Destination:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="m_filmDestinationComboBox">
+        <item>
+         <property name="text">
+          <string>Processor</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="m_filmSettingsGroupBox">
+     <property name="title">
+      <string>Film Settings</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="m_layoutLabel">
+        <property name="text">
+         <string>Layout:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QComboBox" name="m_layoutComboBox">
+        <item>
+         <property name="text">
+          <string>Standard 4,4</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="m_filmOrientationLabel">
+        <property name="text">
+         <string>Film Orientation:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QComboBox" name="m_filmOrientationComboBox">
+        <item>
+         <property name="text">
+          <string>Portrait</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="m_filmSizeLabel">
+        <property name="text">
+         <string>Film Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" colspan="2">
+       <widget class="QComboBox" name="m_filmSizeComboBox">
+        <item>
+         <property name="text">
+          <string>14 IN x 17 IN</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="m_visibleTrimLabel">
+        <property name="text">
+         <string>Trim</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QRadioButton" name="m_yesVisibleTrimRadioButton">
+        <property name="text">
+         <string>Yes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QRadioButton" name="m_noVisibleTrimRadioButton">
+        <property name="text">
+         <string>No</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

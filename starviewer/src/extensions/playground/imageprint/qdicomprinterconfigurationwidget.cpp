@@ -42,8 +42,7 @@ void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
         this->clearPrinterSettings();
     
         this->setPrinterSettingsToControls(selectedDicomPrinter);
-        this->setPrintSettingsToControls(selectedDicomPrinter);
-        this->setFilmSettingsToControls(selectedDicomPrinter);
+        m_qdicomPrinterBasicSettingsWidget->setDicomPrinterBasicSettings(selectedDicomPrinter);
         this->setAdvancedSettingsToControls(selectedDicomPrinter);
 
         m_applySettingsPushButton->setEnabled(true);
@@ -70,8 +69,7 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
         if (validatePrinterSettings())
         {   
             this->getPrinterSettingsFromControls(dicomPrinter);
-            this->getPrintSettingsFromControls(dicomPrinter);
-            this->getFilmSettingsFromControls(dicomPrinter);
+            m_qdicomPrinterBasicSettingsWidget->getDicomPrinterBasicSettings(dicomPrinter);
             this->getAdvancedSettingsFromControls(dicomPrinter);
 
             if (!dicomPrinterManager.updatePrinter(m_selectedPrinterId,dicomPrinter))
@@ -246,17 +244,8 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     m_printerHostnameLineEdit->setText("");
     m_printerPortLineEdit->setText("");
 
-    // Print Settings
-    m_numberCopiesSpinBox->setValue(0);
-    m_priorityComboBox->clear();
-    m_mediumTypeComboBox->clear();
-    m_filmDestinationComboBox->clear();
-    
-    // Film Settings
-    m_layoutComboBox->clear();
-    m_filmOrientationComboBox->clear();        
-    m_filmSizeComboBox->clear();
-    m_yesVisibleTrimRadioButton->setChecked(true);
+    //Basic Settings
+    m_qdicomPrinterBasicSettingsWidget->clear();
 
     // Advanced Settings
     m_magnifactionTypeComboBox->clear();
@@ -286,40 +275,6 @@ void QDicomPrinterConfigurationWidget::getPrinterSettingsFromControls(DicomPrint
     printer.setHostname(m_printerHostnameLineEdit->text());
     printer.setPort(m_printerPortLineEdit->text().toInt());
     printer.setIsDefault(m_printerDefaultPrinterCheckBox->isChecked());
-}
-
-void QDicomPrinterConfigurationWidget::setPrintSettingsToControls(DicomPrinter& printer)
-{
-    m_priorityComboBox->addItems(printer.getAvailablePrintPriorityValues());
-    m_priorityComboBox->setCurrentIndex(m_priorityComboBox->findText(printer.getDefaultPrintPriority()));
-    m_mediumTypeComboBox->addItems(printer.getAvailableMediumTypeValues());
-    m_mediumTypeComboBox->setCurrentIndex(m_mediumTypeComboBox->findText(printer.getDefaultMediumType()));
-    m_filmDestinationComboBox->addItems(printer.getAvailableFilmDestinationValues());
-    m_filmDestinationComboBox->setCurrentIndex(m_filmDestinationComboBox->findText(printer.getDefaultFilmDestination()));
-}
-
-void QDicomPrinterConfigurationWidget::getPrintSettingsFromControls(DicomPrinter& printer)
-{
-    printer.setDefaultPrintPriority(m_priorityComboBox->currentText());   
-    printer.setDefaultMediumType(m_mediumTypeComboBox->currentText());
-    printer.setDefaultFilmDestination(m_filmDestinationComboBox->currentText());
-}
-
-void QDicomPrinterConfigurationWidget::setFilmSettingsToControls(DicomPrinter& printer)
-{
-    m_layoutComboBox->addItems(printer.getAvailableFilmLayoutValues());
-    m_layoutComboBox->setCurrentIndex(m_layoutComboBox->findText(printer.getDefaultFilmLayout()));    
-    m_filmOrientationComboBox->addItems(printer.getAvailableFilmOrientationValues());
-    m_filmOrientationComboBox->setCurrentIndex(m_filmOrientationComboBox->findText(printer.getDefaultFilmOrientation()));
-    m_filmSizeComboBox->addItems(printer.getAvailableFilmSizeValues());
-    m_filmSizeComboBox->setCurrentIndex(m_filmSizeComboBox->findText(printer.getDefaultFilmSize()));
-}
-
-void QDicomPrinterConfigurationWidget::getFilmSettingsFromControls(DicomPrinter& printer)
-{
-    printer.setDefaultFilmLayout(m_layoutComboBox->currentText());
-    printer.setDefaultFilmOrientation(m_filmOrientationComboBox->currentText());
-    printer.setDefaultFilmSize(m_filmSizeComboBox->currentText());
 }
 
 void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinter& printer)

@@ -210,6 +210,9 @@
           <height>133</height>
          </size>
         </property>
+        <property name="maxLength">
+         <number>5</number>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
@@ -235,148 +238,19 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QGroupBox" name="m_printSettingsGroupBox">
-       <property name="title">
-        <string>Print Settings</string>
+      <widget class="udg::QDicomPrinterBasicSettingsWidget" name="m_qdicomPrinterBasicSettingsWidget" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="m_numberCopiesLabel">
-          <property name="text">
-           <string>Number of copies:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="m_numberCopiesSpinBox"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="m_priorityLabel">
-          <property name="text">
-           <string>Print priority:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QComboBox" name="m_priorityComboBox">
-          <item>
-           <property name="text">
-            <string>Medium</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="m_mediumTypeLabel">
-          <property name="text">
-           <string>Medium:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QComboBox" name="m_mediumTypeComboBox">
-          <item>
-           <property name="text">
-            <string>Blue Film</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="m_filmDestinationLabel">
-          <property name="text">
-           <string>Film Destination:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QComboBox" name="m_filmDestinationComboBox">
-          <item>
-           <property name="text">
-            <string>Processor</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="m_filmSettingsGroupBox">
-       <property name="title">
-        <string>Film Settings</string>
+       <property name="maximumSize">
+        <size>
+         <width>100000</width>
+         <height>100000</height>
+        </size>
        </property>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QLabel" name="m_layoutLabel">
-          <property name="text">
-           <string>Layout:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QComboBox" name="m_layoutComboBox">
-          <item>
-           <property name="text">
-            <string>Standard 4,4</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="m_filmOrientationLabel">
-          <property name="text">
-           <string>Film Orientation:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QComboBox" name="m_filmOrientationComboBox">
-          <item>
-           <property name="text">
-            <string>Portrait</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="m_filmSizeLabel">
-          <property name="text">
-           <string>Film Size:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="2">
-         <widget class="QComboBox" name="m_filmSizeComboBox">
-          <item>
-           <property name="text">
-            <string>14 IN x 17 IN</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="m_visibleTrimLabel">
-          <property name="text">
-           <string>Trim</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QRadioButton" name="m_yesVisibleTrimRadioButton">
-          <property name="text">
-           <string>Yes</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="2">
-         <widget class="QRadioButton" name="m_noVisibleTrimRadioButton">
-          <property name="text">
-           <string>No</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </item>
     </layout>
@@ -764,8 +638,28 @@
      </item>
     </layout>
    </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>1</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::QDicomPrinterBasicSettingsWidget</class>
+   <extends>QWidget</extends>
+   <header>qdicomprinterbasicsettingswidget.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>m_listPrintersTreeWidget</tabstop>
   <tabstop>m_testPrinterPushButton</tabstop>
@@ -776,15 +670,7 @@
   <tabstop>m_printerPortLineEdit</tabstop>
   <tabstop>m_printerDescriptionLineEdit</tabstop>
   <tabstop>m_printerDefaultPrinterCheckBox</tabstop>
-  <tabstop>m_numberCopiesSpinBox</tabstop>
-  <tabstop>m_priorityComboBox</tabstop>
-  <tabstop>m_mediumTypeComboBox</tabstop>
-  <tabstop>m_filmDestinationComboBox</tabstop>
-  <tabstop>m_layoutComboBox</tabstop>
-  <tabstop>m_filmOrientationComboBox</tabstop>
-  <tabstop>m_filmSizeComboBox</tabstop>
-  <tabstop>m_yesVisibleTrimRadioButton</tabstop>
-  <tabstop>m_noVisibleTrimRadioButton</tabstop>
+  <tabstop>m_qdicomPrinterBasicSettingsWidget</tabstop>
   <tabstop>m_magnifactionTypeComboBox</tabstop>
   <tabstop>m_borderDensityComboBox</tabstop>
   <tabstop>m_smoothingTypeComboBox</tabstop>
