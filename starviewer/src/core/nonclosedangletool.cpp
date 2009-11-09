@@ -216,9 +216,9 @@ void NonClosedAngleTool::computeAngle()
 
     DrawerText * text = new DrawerText;
 
-    if ( state == MathTools::PARALLEL )
+    if ( state == MathTools::ParallelLines )
         text->setText( tr("0.0 degrees") );
-    else if ( state == MathTools::SKEW )   //Won't occur
+    else if ( state == MathTools::SkewIntersection )   //Won't occur
         text->setText( tr("Skew lines.") );
     else
         text->setText( tr("%1 degrees").arg( angle,0,'f',1) );
