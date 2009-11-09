@@ -47,6 +47,9 @@ protected:
     ///polilinia principal: es la polilinia que ens marca la forma que hem anat editant.
     QPointer<DrawerPolyline> m_mainPolyline;
 
+    ///polilinia de tancament: es la polilinia que ens simula com quedaria la polilinia principal si es tanques, es a dir, uneix l'ultim punt anotat i el primer punt de la polilinia.
+    QPointer<DrawerPolyline> m_closingPolyline;
+
 private:
     /// ens permet anotar el seguent punt de la polilinia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
     void annotateNewPoint();
@@ -59,10 +62,6 @@ private:
 
     /// metode que tanca la forma de la polilinia que s'ha dibuixat
     void closeForm();
-
-protected:
-    ///polilinia de tancament: es la polilinia que ens simula com quedaria la polilinia principal si es tanques, es a dir, uneix l'ultim punt anotat i el primer punt de la polilinia.
-    QPointer<DrawerPolyline> m_closingPolyline;
 };
 
 }
