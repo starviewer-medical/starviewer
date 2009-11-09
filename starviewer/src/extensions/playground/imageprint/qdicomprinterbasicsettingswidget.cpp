@@ -26,7 +26,6 @@ void QDicomPrinterBasicSettingsWidget::setDicomPrinterBasicSettings(DicomPrinter
 void QDicomPrinterBasicSettingsWidget::clear()
 {
     // Print Settings
-    m_numberCopiesSpinBox->setValue(0);
     m_priorityComboBox->clear();
     m_mediumTypeComboBox->clear();
     m_filmDestinationComboBox->clear();
@@ -49,7 +48,6 @@ void QDicomPrinterBasicSettingsWidget::getFilmSettings(DicomPrinter& printer)
 
 void QDicomPrinterBasicSettingsWidget::getPrintSettings(DicomPrinter& printer)
 {
-    //TODO: Falta el número de còpies
     printer.setDefaultPrintPriority(m_priorityComboBox->currentText());   
     printer.setDefaultMediumType(m_mediumTypeComboBox->currentText());
     printer.setDefaultFilmDestination(m_filmDestinationComboBox->currentText());
