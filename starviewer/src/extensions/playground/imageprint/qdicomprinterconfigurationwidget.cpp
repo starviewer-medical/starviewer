@@ -257,6 +257,7 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     m_emptyDensityComboBox->clear();
     m_configurationInformationLineEdit->setText("");
     m_printerDefaultPrinterCheckBox->setChecked(false);
+    m_yesVisibleTrimRadioButton->setChecked(true);
 }
 
 void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter& printer)
@@ -294,6 +295,8 @@ void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinte
     m_miniumDensitySpinBox->setMaximum(printer.getAvailableMinDensityValues());
     m_miniumDensitySpinBox->setValue(printer.getDefaultMinDensity());
     m_configurationInformationLineEdit->setText(printer.getConfigurationInformation());
+    m_yesVisibleTrimRadioButton->setChecked(printer.getDefaultTrim());
+    m_noVisibleTrimRadioButton->setChecked(!printer.getDefaultTrim());
 }
 
 void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrinter& printer)
@@ -306,6 +309,7 @@ void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrin
     printer.setDefaultEmptyImageDensity(m_emptyDensityComboBox->currentText());
     printer.setDefaultMinDensity(m_miniumDensitySpinBox->value());
     printer.setConfigurationInformation(m_configurationInformationLineEdit->text());
+    printer.setDefaultTrim(m_yesVisibleTrimRadioButton->isChecked());
 }
 
 DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()

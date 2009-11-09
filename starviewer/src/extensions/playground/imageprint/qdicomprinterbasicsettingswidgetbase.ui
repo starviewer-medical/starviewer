@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>545</width>
-    <height>140</height>
+    <height>106</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,15 +25,15 @@
      <property name="title">
       <string>Print Settings</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0" colspan="2">
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
        <widget class="QLabel" name="m_priorityLabel">
         <property name="text">
          <string>Print priority:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="0" column="1">
        <widget class="QComboBox" name="m_priorityComboBox">
         <item>
          <property name="text">
@@ -49,7 +49,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item row="1" column="1">
        <widget class="QComboBox" name="m_mediumTypeComboBox">
         <item>
          <property name="text">
@@ -58,27 +58,20 @@
         </item>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
+      <item row="2" column="0">
        <widget class="QLabel" name="m_filmDestinationLabel">
         <property name="text">
          <string>Film Destination:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
+      <item row="2" column="1">
        <widget class="QComboBox" name="m_filmDestinationComboBox">
         <item>
          <property name="text">
           <string>Processor</string>
          </property>
         </item>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string/>
-        </property>
        </widget>
       </item>
      </layout>
@@ -89,7 +82,7 @@
      <property name="title">
       <string>Film Settings</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
+     <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="m_layoutLabel">
         <property name="text">
@@ -97,7 +90,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="2">
+      <item row="0" column="1">
        <widget class="QComboBox" name="m_layoutComboBox">
         <item>
          <property name="text">
@@ -113,7 +106,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
+      <item row="1" column="1">
        <widget class="QComboBox" name="m_filmOrientationComboBox">
         <item>
          <property name="text">
@@ -129,34 +122,13 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1" colspan="2">
+      <item row="2" column="1">
        <widget class="QComboBox" name="m_filmSizeComboBox">
         <item>
          <property name="text">
           <string>14 IN x 17 IN</string>
          </property>
         </item>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="m_visibleTrimLabel">
-        <property name="text">
-         <string>Trim</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QRadioButton" name="m_yesVisibleTrimRadioButton">
-        <property name="text">
-         <string>Yes</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2">
-       <widget class="QRadioButton" name="m_noVisibleTrimRadioButton">
-        <property name="text">
-         <string>No</string>
-        </property>
        </widget>
       </item>
      </layout>
