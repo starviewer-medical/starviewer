@@ -205,9 +205,9 @@ int MathTools::getSign( double number )
     int sign;
 
     if (number < 0. )
-        sign = NEGATIVE;
+        sign = NegativeSign;
     else
-        sign = POSITIVE;
+        sign = PositiveSign;
 
     return sign;
 }
@@ -323,7 +323,7 @@ double *MathTools::intersectionPoint3DLines(double *p1, double *p2, double *p3, 
 
         if ( MathTools::closeEnough(denominator,0.0) )
         {
-            state = PARALLEL;
+            state = ParallelLines;
             return intersection;
         }
         else
@@ -334,7 +334,7 @@ double *MathTools::intersectionPoint3DLines(double *p1, double *p2, double *p3, 
             intersection[1] = p1[1] + ( s * dv1[1] );
             intersection[2] = p1[2] + ( s * dv1[2] );
 
-            state = INTERSECT;
+            state = LinesIntersect;
             return intersection;
         }
 
@@ -342,7 +342,7 @@ double *MathTools::intersectionPoint3DLines(double *p1, double *p2, double *p3, 
     else
     //Skew Lines
     {
-        state = SKEW;
+        state = SkewIntersection;
         return intersection;
     }
 

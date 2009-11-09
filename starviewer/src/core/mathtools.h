@@ -19,8 +19,8 @@ namespace udg{
 class MathTools{
 
 public:
-    enum Sign{ POSITIVE, NEGATIVE };
-    enum Lines{ COINCIDENT, PARALLEL, SKEW, INTERSECT };
+    enum Sign{ PositiveSign, NegativeSign };
+    enum IntersectionResults{ LinesOverlap, ParallelLines, SkewIntersection, LinesIntersect };
 
 /// Declaració de constants
 static const double NumberEBase2Logarithm;
