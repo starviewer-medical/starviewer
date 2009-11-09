@@ -147,7 +147,6 @@ void QDicomPrinterConfigurationWidget::testPrinter()
         QMessageBox::information( this , tr("Information") , tr("To test a Printer it is necessary to select an printer of the list.") );
     }
 
-    DicomPrinter;
 }
 
 void QDicomPrinterConfigurationWidget::showAdvancedSettings()
