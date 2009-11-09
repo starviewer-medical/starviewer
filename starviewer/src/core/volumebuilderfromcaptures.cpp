@@ -178,8 +178,8 @@ Volume * VolumeBuilderFromCaptures::build()
     int * dimensions = newVtkData->GetDimensions();
     double * spacing = newVtkData->GetSpacing();
 
-    rows = dimensions[0];
-    columns = dimensions[1];
+    rows = dimensions[1];
+    columns = dimensions[0];
 
     Image * currentImage;
 
