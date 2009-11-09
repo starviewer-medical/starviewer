@@ -34,13 +34,10 @@ void QDicomPrinterBasicSettingsWidget::clear()
     m_layoutComboBox->clear();
     m_filmOrientationComboBox->clear();        
     m_filmSizeComboBox->clear();
-    m_yesVisibleTrimRadioButton->setChecked(true);
-
 }
 
 void QDicomPrinterBasicSettingsWidget::getFilmSettings(DicomPrinter& printer)
 {
-    //TODO:Falta el trim
     printer.setDefaultFilmLayout(m_layoutComboBox->currentText());
     printer.setDefaultFilmOrientation(m_filmOrientationComboBox->currentText());
     printer.setDefaultFilmSize(m_filmSizeComboBox->currentText());
