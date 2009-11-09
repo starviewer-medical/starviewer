@@ -20,6 +20,7 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
     m_addPrinterWidget = new QDicomAddPrinterWidget();    
     
     createConnections();
+    configureInputValidator();
     refreshPrinterList();
     clearPrinterSettings();
     showAdvancedConfigurationOptions(false);
@@ -183,6 +184,11 @@ void QDicomPrinterConfigurationWidget::createConnections()
     connect( m_testPrinterPushButton , SIGNAL( clicked() ), SLOT( testPrinter() ));    
     connect( m_advancedSettingsPushButton , SIGNAL( clicked() ), SLOT( showAdvancedSettings() ));   
     connect( m_addPrinterWidget, SIGNAL(newPrinterAddedSignal()), SLOT(showNewPrinterAdded()));
+}
+
+void QDicomPrinterConfigurationWidget::configureInputValidator()
+{
+    m_printerPortLineEdit->setValidator( new QIntValidator(0, 65535, m_printerPortLineEdit) );
 }
 
 void QDicomPrinterConfigurationWidget::refreshPrinterList()

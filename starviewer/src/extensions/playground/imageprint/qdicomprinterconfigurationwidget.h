@@ -42,6 +42,9 @@ private slots:
     void accept();
 
 private:
+    ///Crea InputValidators pels LineEdit que només accepten valors numèrics
+    void configureInputValidator();
+    ///Crea les connexions
     void createConnections();
     // Actualitza la llista d'impressores entrades al sistema.
     void refreshPrinterList();
