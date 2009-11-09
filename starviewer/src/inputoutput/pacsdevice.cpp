@@ -180,7 +180,7 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
     {
         // Migració de dades. Si encara no tenim definits els PACS per defecte en el nou format, obtenim els PACS per defecte
         // del format antic, és a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
-        // Simplement llegim, no les escrivim en el nou format. TODO Caldria fer la importació al nou format?
+        // Un cop llegits, els escrivim en el nou format
         Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
         foreach( Settings::KeyValueMapType item, list )
         {             
@@ -192,11 +192,13 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
         }
         if( pacsList.isEmpty() )
         {
-            INFO_LOG("No hi ha definits PACS per defecte en el nou format i tampoc s'han trobat de definits en l'antic format");
+            INFO_LOG("No hi ha PACS per defecte definits en el nou format i tampoc s'han trobat de definits en l'antic format");
         }
         else
         {
-            INFO_LOG("No hi ha definits PACS per defecte en el nou format. Els obtenim del format antic. Són aquests: " + pacsList.join("//") );
+            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. Són aquests: " + pacsList.join("//") + "//" );
+            Settings settings;
+            settings.setValue( InputOutputSettings::DefaultPACSListToQuery, pacsList.join("//") + "//" );
         }
     }
     
