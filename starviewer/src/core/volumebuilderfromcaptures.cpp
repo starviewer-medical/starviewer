@@ -197,6 +197,7 @@ Volume * VolumeBuilderFromCaptures::build()
 
         currentImage->setBitsAllocated( bitsAllocated );
         currentImage->setBitsStored( bitsStored );
+        currentImage->setHighBit( highBit );
         currentImage->setColumns( columns );
         currentImage->setInstanceNumber( QString::number(i+1) );
         currentImage->setNumberOfFrames( 1 );
