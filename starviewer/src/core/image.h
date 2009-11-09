@@ -98,6 +98,10 @@ public:
     void setBitsStored( int bits );
     int getBitsStored() const;
 
+    /// Assignar/Obtenir el bit més alt
+    void setHighBit( int highBit );
+    int getHighBit() const;
+
     /// Assignar/Obtenir la representació dels pixels
     void setPixelRepresentation( int representation );
     int getPixelRepresentation() const;

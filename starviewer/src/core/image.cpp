@@ -191,6 +191,16 @@ int Image::getBitsStored() const
     return m_bitsStored;
 }
 
+void Image::setHighBit( int highBit )
+{
+    m_highBit = highBit;
+}
+
+int Image::getHighBit() const
+{
+    return m_highBit;
+}
+
 void Image::setPixelRepresentation( int representation )
 {
     m_pixelRepresentation = representation;
