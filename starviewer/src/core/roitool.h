@@ -14,7 +14,6 @@
 namespace udg {
 
 class Q2DViewer;
-class ImagePlane;
 class DrawerPolyline;
 
 /**

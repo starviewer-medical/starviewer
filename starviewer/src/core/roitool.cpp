@@ -9,7 +9,6 @@
 #include "logging.h"
 #include "drawer.h"
 #include "drawerpolyline.h"
-#include "drawertext.h"
 //vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
