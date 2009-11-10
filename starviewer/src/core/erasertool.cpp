@@ -45,7 +45,7 @@ void EraserTool::handleEvent( unsigned long eventID )
 
         case vtkCommand::MouseMoveEvent:
 
-            if ( m_polyline && m_state == START_CLICK )
+            if ( m_polyline && m_state == StartClick )
                 drawAreaOfErasure();
         break;
 
@@ -80,7 +80,7 @@ void EraserTool::startEraserAction()
     //actualitzem els atributs de la polilinia
     m_polyline->update( DrawerPrimitive::VTKRepresentation );
 
-    m_state = START_CLICK;
+    m_state = StartClick;
 }
 
 void EraserTool::drawAreaOfErasure()
@@ -152,13 +152,13 @@ void EraserTool::erasePrimitive()
     m_polyline->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->getDrawer()->refresh();
 
-    m_state = NONE;
+    m_state = None;
 }
 
 void EraserTool::reset()
 {
     m_polyline = NULL;
-    m_state = NONE;
+    m_state = None;
 }
 
 }
