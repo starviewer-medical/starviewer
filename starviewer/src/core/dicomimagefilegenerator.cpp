@@ -93,11 +93,15 @@ bool DICOMImageFileGenerator::generateSCDICOMFiles()
         scalarPointer += bytesPerImage;
         i++;
 
-        writer->write();
+        // \TODO Si falla a l'escriure cal decidir què fer amb els fitxers que prèviament s'han pogut generar. Esborrar-los?
+        if ( ! writer->write() )
+            return false;
 
         image->setPath( writer->getPath() );
 
     }
+
+    return true;
 }
 
 void DICOMImageFileGenerator::fillGeneralImageInfo( DICOMWriter * writer , Image * image)
