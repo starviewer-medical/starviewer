@@ -51,6 +51,7 @@ public:
     enum GradientEstimator { FiniteDifference, FourDLInearRegression1, FourDLInearRegression2 };
 
     Experimental3DVolume( Volume *volume );
+    Experimental3DVolume( vtkImageData *image );
     ~Experimental3DVolume();
 
     /// Retorna el model de vòxels principal.
@@ -98,7 +99,7 @@ public:
 private:
 
     /// Crea el model de vòxels de treball.
-    void createImage( Volume *volume );
+    void createImage( vtkImageData *image );
     /// Crea les volume ray cast functions.
     void createVolumeRayCastFunctions();
     /// Crea els voxel shaders.

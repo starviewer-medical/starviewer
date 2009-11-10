@@ -39,7 +39,19 @@ namespace udg {
 Experimental3DVolume::Experimental3DVolume( Volume *volume )
  : m_finiteDifferenceGradientEstimator( 0 ), m_4DLinearRegressionGradientEstimator( 0 )
 {
-    createImage( volume );
+    createImage( volume->getVtkData() );
+    createVolumeRayCastFunctions();
+    createVoxelShaders();
+    createMapper();
+    createProperty();
+    createVolume();
+}
+
+
+Experimental3DVolume::Experimental3DVolume( vtkImageData *image )
+ : m_finiteDifferenceGradientEstimator( 0 ), m_4DLinearRegressionGradientEstimator( 0 )
+{
+    createImage( image );
     createVolumeRayCastFunctions();
     createVoxelShaders();
     createMapper();
@@ -363,13 +375,12 @@ QVector<float> Experimental3DVolume::computeVomiGradient( const QVector<float> &
 }
 
 
-void Experimental3DVolume::createImage( Volume *volume )
+void Experimental3DVolume::createImage( vtkImageData *image )
 {
     // sembla que el volum arriba sempre com a short
     // normalment els volums aprofiten només 12 bits com a màxim, per tant no hi hauria d'haver problema
-    vtkImageData *inputImage = volume->getVtkData();
 
-    double *range = inputImage->GetScalarRange();
+    double *range = image->GetScalarRange();
     double min = range[0], max = range[1];
     DEBUG_LOG( QString( "original range: min = %1, max = %2" ).arg( min ).arg( max ) );
 
@@ -377,7 +388,7 @@ void Experimental3DVolume::createImage( Volume *volume )
 
     // fem servir directament un vtkImageShiftScale, que permet fer castings també
     vtkImageShiftScale *imageShiftScale = vtkImageShiftScale::New();
-    imageShiftScale->SetInput( volume->getVtkData() );
+    imageShiftScale->SetInput( image );
     imageShiftScale->SetOutputScalarTypeToUnsignedShort();
     imageShiftScale->SetShift( shift );
     imageShiftScale->Update();
