@@ -7,6 +7,8 @@
 #ifndef UDGDICOMTAG_H
 #define UDGDICOMTAG_H
 
+#include "dicomdictionary.h"
+
 namespace udg {
 
 /**
@@ -15,6 +17,7 @@ namespace udg {
 
    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
+
 class DICOMTag
 {
 public:

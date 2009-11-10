@@ -14,34 +14,27 @@ namespace udg {
 
 class DICOMTag;
 
-class DICOMAttribute : public QObject
+class DICOMAttribute
 {
-Q_OBJECT
+
 public:
-    
+
     DICOMAttribute();
 
     ~DICOMAttribute();
 
-    void setTag( DICOMTag * tag );
+    void setTag( DICOMTag tag );
 
     DICOMTag * getTag();
 
-    QString getValueRepresentation();
+    virtual bool isValueAttribute() = 0;
 
-    virtual bool isValueAttribute();
-
-    virtual bool isSequenceAttribute();
-
-protected:
-
-    void setValueRepresentation( QString value );
+    virtual bool isSequenceAttribute() = 0;
 
 private:
 
     DICOMTag * m_tag;
 
-    QString m_valueRepresentation;
 };
 
 }
