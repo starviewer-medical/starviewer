@@ -41,7 +41,8 @@ private:
     void erasePrimitive();
 
 private slots:
-  
+    /// Slot que torna la tool al seu estat inicial
+    void reset();
 
 private:
 
