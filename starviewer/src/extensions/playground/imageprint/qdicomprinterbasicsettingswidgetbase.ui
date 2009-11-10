@@ -34,13 +34,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="m_priorityComboBox">
-        <item>
-         <property name="text">
-          <string>Medium</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="m_priorityComboBox"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="m_mediumTypeLabel">
@@ -50,13 +44,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="m_mediumTypeComboBox">
-        <item>
-         <property name="text">
-          <string>Blue Film</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="m_mediumTypeComboBox"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="m_filmDestinationLabel">
@@ -66,13 +54,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QComboBox" name="m_filmDestinationComboBox">
-        <item>
-         <property name="text">
-          <string>Processor</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="m_filmDestinationComboBox"/>
       </item>
      </layout>
     </widget>
@@ -91,13 +73,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="m_layoutComboBox">
-        <item>
-         <property name="text">
-          <string>Standard 4,4</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="m_layoutComboBox"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="m_filmOrientationLabel">
@@ -107,13 +83,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="m_filmOrientationComboBox">
-        <item>
-         <property name="text">
-          <string>Portrait</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="m_filmOrientationComboBox"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="m_filmSizeLabel">
@@ -123,13 +93,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QComboBox" name="m_filmSizeComboBox">
-        <item>
-         <property name="text">
-          <string>14 IN x 17 IN</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="m_filmSizeComboBox"/>
       </item>
      </layout>
     </widget>
