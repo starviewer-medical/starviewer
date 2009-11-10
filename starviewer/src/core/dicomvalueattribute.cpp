@@ -7,12 +7,14 @@
 #include "dicomvalueattribute.h"
 
 #include <QVariant>
+#include <QDate>
 
 namespace udg {
 
 DICOMValueAttribute::DICOMValueAttribute()
  : DICOMAttribute()
 {
+    setValueRepresentation( DICOMValueAttribute::Unknown );
 }
 
 DICOMValueAttribute::~DICOMValueAttribute()
@@ -20,12 +22,12 @@ DICOMValueAttribute::~DICOMValueAttribute()
 
 }
 
-bool isValueAttribute()
+bool DICOMValueAttribute::isValueAttribute()
 {
     return true;
 }
 
-bool isSequenceAttribute()
+bool DICOMValueAttribute::isSequenceAttribute()
 {
     return false;
 }
@@ -33,23 +35,46 @@ bool isSequenceAttribute()
 void DICOMValueAttribute::setValue( int value )
 {
     m_value = value;
+    setValueRepresentation( DICOMValueAttribute::Int );
 }
 
 void DICOMValueAttribute::setValue( unsigned int value )
 {
     m_value = value;
+    setValueRepresentation( DICOMValueAttribute::Uint );
 }
 
 void DICOMValueAttribute::setValue( double value )
 {
     m_value = value;
+    setValueRepresentation( DICOMValueAttribute::Double );
 }
 
 void DICOMValueAttribute::setValue( QString value )
 {
     m_value = value;
+    setValueRepresentation( DICOMValueAttribute::String );
 }
-    
+
+void DICOMValueAttribute::setValue( QByteArray value )
+{
+    m_value = value;
+    setValueRepresentation( DICOMValueAttribute::ByteArray );
+}
+
+
+void DICOMValueAttribute::setValue( QDate value )
+{
+    m_value = value.toString( "yyyyMMdd" );;
+    setValueRepresentation( DICOMValueAttribute::Date );
+}
+
+void DICOMValueAttribute::setValue( QTime value )
+{
+    m_value = value.toString( "HHmmss.zzz" );;
+    setValueRepresentation( DICOMValueAttribute::Time );
+}
+
 int DICOMValueAttribute::getValueAsInt()
 {
     return m_value.toInt();
@@ -60,6 +85,11 @@ unsigned int DICOMValueAttribute::getValueAsUnsignedInt()
     return m_value.toUInt();
 }
 
+float DICOMValueAttribute::getValueAsFloat()
+{
+    return static_cast<float>( m_value.toDouble() );
+}
+
 double DICOMValueAttribute::getValueAsDouble()
 {
     return m_value.toDouble();
@@ -68,6 +98,32 @@ double DICOMValueAttribute::getValueAsDouble()
 QString DICOMValueAttribute::getValueAsQString()
 {
     return m_value.toString();
+}
+
+QByteArray DICOMValueAttribute::getValueAsByteArray()
+{
+    return m_value.toByteArray();
+}
+
+QDate DICOMValueAttribute::getValueAsDate()
+{
+    return m_value.toDate();
+}
+
+QTime DICOMValueAttribute::getValueAsTime()
+{
+    return m_value.toTime();
+}
+
+
+DICOMValueAttribute::ValueRepresentation DICOMValueAttribute::getValueRepresentation()
+{
+    return m_valueRepresentation;
+}
+
+void DICOMValueAttribute::setValueRepresentation( ValueRepresentation value )
+{
+    m_valueRepresentation = value;
 }
 
 }

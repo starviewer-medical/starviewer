@@ -15,30 +15,47 @@ namespace udg {
 
 class DICOMValueAttribute : public DICOMAttribute
 {
-Q_OBJECT
+
 public:
-    
+
+    enum ValueRepresentation{ Unknown, String, ByteArray, Int, Uint, Float, Double, Date, Time };
+
     DICOMValueAttribute();
 
     ~DICOMValueAttribute();
    
-    bool isValueAttribute();
+    virtual bool isValueAttribute();
 
-    bool isSequenceAttribute();
+    virtual bool isSequenceAttribute();
 
     void setValue( int value );
     void setValue( unsigned int value );
+    void setValue( float value );
     void setValue( double value );
     void setValue( QString value );
+    void setValue( QByteArray value );
+    void setValue( QDate value );
+    void setValue( QTime value );
     
     int getValueAsInt();
     unsigned int getValueAsUnsignedInt();
+    float getValueAsFloat();
     double getValueAsDouble();
     QString getValueAsQString();
+    QByteArray getValueAsByteArray();
+    QDate getValueAsDate();
+    QTime getValueAsTime();
+
+    ValueRepresentation getValueRepresentation();
+
+protected:
+    void setValueRepresentation( ValueRepresentation value );
 
 private:
 
     QVariant m_value;
+
+    ValueRepresentation m_valueRepresentation;
 
 };
 

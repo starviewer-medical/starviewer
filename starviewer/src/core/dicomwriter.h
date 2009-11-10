@@ -7,7 +7,7 @@
 #ifndef UDGDICOMWRITER_H
 #define UDGDICOMWRITER_H
 
-#include <QObject>
+
 #include <QString>
 
 namespace udg {
@@ -24,9 +24,8 @@ tenint en compte un parametre de configuració.
 @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 
 */
-class DICOMWriter : public QObject
+class DICOMWriter
 {
-Q_OBJECT
 
 public:
 
@@ -38,17 +37,17 @@ public:
     QString getPath();
 
     /// Afegir un nou atribut basic al fitxer DICOM
-    virtual void addValueAttribute(DICOMValueAttribute * attribute);
+    virtual void addValueAttribute(DICOMValueAttribute * attribute) = 0;
 
     /// Afegir una sequencia al fitxer DICOM
-    virtual void addSequenceAttribute(DICOMSequenceAttribute * attribute);
+    virtual void addSequenceAttribute(DICOMSequenceAttribute * attribute) = 0;
 
     /// Generar el fitxer
-    virtual bool write();
+    virtual bool write() = 0;
 
 protected:
     /// Per instanciar nous objectes s'ha de fer ús del mètode \sa newInstance
-    DICOMWriter(QObject *parent = 0){}
+    DICOMWriter(){}
 
 private:
     QString m_path;

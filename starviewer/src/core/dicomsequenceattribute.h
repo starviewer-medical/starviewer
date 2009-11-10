@@ -16,7 +16,7 @@ class DICOMItem;
 
 class DICOMSequenceAttribute : public DICOMAttribute
 {
-Q_OBJECT
+
 public:
     
     DICOMSequenceAttribute();

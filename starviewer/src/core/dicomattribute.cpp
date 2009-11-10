@@ -12,16 +12,18 @@ namespace udg {
 
 DICOMAttribute::DICOMAttribute( )
 {
+    m_tag = new DICOMTag();
 }
 
 DICOMAttribute::~DICOMAttribute()
 {
-
+    delete m_tag;
 }
 
-void DICOMAttribute::setTag( DICOMTag * tag )
+void DICOMAttribute::setTag( DICOMTag tag )
 {
-    m_tag = tag;
+    m_tag->setGroup( tag.getGroup() );
+    m_tag->setElement( tag.getElement() );
 }
 
 DICOMTag * DICOMAttribute::getTag()
@@ -29,14 +31,5 @@ DICOMTag * DICOMAttribute::getTag()
     return m_tag;
 }
 
-QString DICOMAttribute::getValueRepresentation()
-{
-    return m_valueRepresentation;
-}
-
-void DICOMAttribute::setValueRepresentation( QString value )
-{
-    m_valueRepresentation = value;
-}
 
 }
