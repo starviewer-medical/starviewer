@@ -9,6 +9,7 @@
 
 #include "dicomwriter.h"
 
+class DcmDataset;
 
 namespace udg {
 
@@ -19,10 +20,10 @@ Genera fitxers DICOM utilitzant la llibreria dcmtk.
 */
 class DICOMWriterDCMTK : public DICOMWriter
 {
-Q_OBJECT
-public:
-    DICOMWriterDCMTK(QObject *parent = 0);
 
+public:
+    DICOMWriterDCMTK();
+    
     ~DICOMWriterDCMTK();
 
     /// Afegir un nou atribut basic al fitxer DICOM
@@ -34,6 +35,8 @@ public:
     /// Generar el fitxer
     virtual bool write();
 
+private:
+    DcmDataset * m_dataset;
 };
 
 }
