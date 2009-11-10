@@ -11,8 +11,6 @@
 #include "drawerpolyline.h"
 #include "mathtools.h"
 // vtk
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
 #include <vtkCommand.h>
 
 namespace udg {
