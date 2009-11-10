@@ -217,6 +217,9 @@ private slots:
 
     void getFileNameToSaveTour();
 
+    // Filtering
+    void gaussianFilter();
+
 private:
 
     Experimental3DVolume *m_volume;

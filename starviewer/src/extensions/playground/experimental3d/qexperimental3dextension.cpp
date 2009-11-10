@@ -1,5 +1,10 @@
 #include "qexperimental3dextension.h"
 
+#include <vtkImageCast.h>
+#include <vtkImageData.h>
+#include <vtkImageGaussianSmooth.h>
+#include <vtkImageMathematics.h>
+
 #include "experimental3dvolume.h"
 #include "informationtheory.h"
 #include "logging.h"
@@ -59,7 +64,7 @@ QExperimental3DExtension::~QExperimental3DExtension()
     }
 
     delete m_obscuranceMainThread;
-    delete m_obscurance;    
+    delete m_obscurance;
 }
 
 
@@ -945,6 +950,9 @@ void QExperimental3DExtension::createConnections()
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
+
+    // Filtering
+    connect( m_filteringGaussianPushButton, SIGNAL( clicked() ), SLOT( gaussianFilter() ) );
 }
 
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
@@ -2736,6 +2744,53 @@ void QExperimental3DExtension::getFileNameToSaveTour()
     }
 
     m_saveNextTourLineEdit->setText( fileName );
+}
+
+
+void QExperimental3DExtension::gaussianFilter()
+{
+    vtkImageCast *cast = vtkImageCast::New();
+    cast->SetInput( m_volume->getImage() );
+    cast->SetOutputScalarTypeToFloat();
+    cast->Update();
+
+    vtkImageGaussianSmooth *gaussian = vtkImageGaussianSmooth::New();
+    gaussian->SetInput( cast->GetOutput() );
+    gaussian->SetDimensionality( 3 );
+    gaussian->SetRadiusFactor( m_filteringRadiusDoubleSpinBox->value() );
+    gaussian->Update();
+
+    vtkImageMathematics *substract = vtkImageMathematics::New();
+    substract->SetInput1( gaussian->GetOutput() );
+    substract->SetInput2( cast->GetOutput() );
+    substract->SetOperationToSubtract();
+    substract->Update();
+
+    vtkImageMathematics *abs = vtkImageMathematics::New();
+    abs->SetInput( substract->GetOutput() );
+    abs->SetOperationToAbsoluteValue();
+    abs->Update();
+
+    // De moment ho posem com a VoMI
+    vtkImageData *absoluteDifference = abs->GetOutput();
+    float *data = reinterpret_cast<float*>( absoluteDifference->GetScalarPointer() );
+    double *range = absoluteDifference->GetScalarRange();
+    m_vomi.resize( m_volume->getSize() );
+    memcpy( m_vomi.data(), data, m_vomi.size() * sizeof(float) );
+    m_maximumVomi = range[1];
+    m_baseVomiRadioButton->setEnabled( true );
+    m_baseVomiCoolWarmRadioButton->setEnabled( true );
+    m_vomiCheckBox->setEnabled( true );
+    m_vomiCoolWarmCheckBox->setEnabled( true );
+    m_opacityLabel->setEnabled( true );
+    m_opacityVomiCheckBox->setEnabled( true );
+    m_saveVomiPushButton->setEnabled( true );
+    m_vomiGradientPushButton->setEnabled( true );
+
+    cast->Delete();
+    gaussian->Delete();
+    substract->Delete();
+    abs->Delete();
 }
 
 
