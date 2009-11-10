@@ -17,27 +17,25 @@ class DrawerPolyline;
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class EraserTool : public Tool
-{
+class EraserTool : public Tool {
 Q_OBJECT
 public:
-    ///possibles estats de la tool
-    enum { START_CLICK , NONE };
+    /// Possibles estats de la tool
+    enum { StartClick , None };
   
     EraserTool( QViewer *viewer, QObject *parent = 0 );
-
     ~EraserTool();
 
     void handleEvent( unsigned long eventID );
 
 private: 
-    ///inicia el procés de determinació de la zona d'esborrat
+    /// Inicia el procés de determinació de la zona d'esborrat
     void startEraserAction();
     
-    ///dibuixa l'àrea d'esborrat
+    /// Dibuixa l'àrea d'esborrat
     void drawAreaOfErasure();
     
-    ///cercarà quina és la primitiva més propera, i si està lo suficientment aprop l'esborrarà.
+    /// Cercarà quina és la primitiva més propera, i si està lo suficientment aprop l'esborrarà.
     void erasePrimitive();
 
 private slots:
@@ -45,22 +43,20 @@ private slots:
     void reset();
 
 private:
-
-/// Viewer 2D sobre el qual treballem
+    /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
     
-    ///ens permet determinar l'estat de la tool
+    /// Ens permet determinar l'estat de la tool
     int m_state;
     
-    ///primer punt de l'àrea d'esborrat
+    /// Primer punt de l'àrea d'esborrat
     double m_startPoint[3];
     
-    ///darrer punt de l'àrea d'esborrat
+    /// Darrer punt de l'àrea d'esborrat
     double m_endPoint[3];
     
-    ///polilínia que ens marca la zona d'esborrat.
+    /// Polilínia que ens marca la zona d'esborrat.
     DrawerPolyline *m_polyline;
-    
 };
 
 }
