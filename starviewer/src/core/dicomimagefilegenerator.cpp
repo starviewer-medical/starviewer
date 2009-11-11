@@ -45,7 +45,7 @@ bool DICOMImageFileGenerator::generateDICOMFiles()
     // Analitzem el SOP Class UID per saber si sabem generar el tipus de fitxers
     QString sopClass = m_input->getImages().at(0)->getParentSeries()->getSOPClassUID();
 
-    if ( sopClass  ==  UID_SecondaryCaptureImageStorage )
+    if ( sopClass  ==  UIDSecondaryCaptureImageStorage )
     {
         return generateSCDICOMFiles();
     }
@@ -86,7 +86,7 @@ bool DICOMImageFileGenerator::generateSCDICOMFiles()
 
         //Afegim el pixel data
         DICOMValueAttribute pixelData;
-        pixelData.setTag( DICOM_PixelData );
+        pixelData.setTag( DICOMPixelData );
         pixelData.setValue( QByteArray( scalarPointer , bytesPerImage ) );
         writer->addValueAttribute( &pixelData );
 
@@ -107,13 +107,13 @@ bool DICOMImageFileGenerator::generateSCDICOMFiles()
 void DICOMImageFileGenerator::fillGeneralImageInfo( DICOMWriter * writer , Image * image)
 {
     DICOMValueAttribute instanceNumber;
-    instanceNumber.setTag( DICOM_InstanceNumber );
+    instanceNumber.setTag( DICOMInstanceNumber );
     instanceNumber.setValue( image->getInstanceNumber() );
     writer->addValueAttribute( &instanceNumber );
 
     // Patient Position. Tipus 2C
     DICOMValueAttribute patientOrientation;
-    patientOrientation.setTag( DICOM_PatientOrientation );
+    patientOrientation.setTag( DICOMPatientOrientation );
     patientOrientation.setValue( image->getPatientOrientation() );
     writer->addValueAttribute( &patientOrientation );
 
@@ -122,42 +122,42 @@ void DICOMImageFileGenerator::fillGeneralImageInfo( DICOMWriter * writer , Image
 void DICOMImageFileGenerator::fillImagePixelInfo( DICOMWriter * writer , Image * image)
 {
     DICOMValueAttribute samplesPerPixel;
-    samplesPerPixel.setTag( DICOM_SamplesPerPixel );
+    samplesPerPixel.setTag( DICOMSamplesPerPixel );
     samplesPerPixel.setValue( image->getSamplesPerPixel() );
     writer->addValueAttribute( &samplesPerPixel );
 
     DICOMValueAttribute photometricRepresentation;
-    photometricRepresentation.setTag( DICOM_PhotometricInterpretation );
+    photometricRepresentation.setTag( DICOMPhotometricInterpretation );
     photometricRepresentation.setValue( image->getPhotometricInterpretation() );
     writer->addValueAttribute( &photometricRepresentation );
 
     DICOMValueAttribute rows;
-    rows.setTag( DICOM_Rows );
+    rows.setTag( DICOMRows );
     rows.setValue( image->getRows() );
     writer->addValueAttribute( &rows );
 
     DICOMValueAttribute columns;
-    columns.setTag( DICOM_Columns );
+    columns.setTag( DICOMColumns );
     columns.setValue( image->getColumns() );
     writer->addValueAttribute( &columns );
 
     DICOMValueAttribute bitsAllocated;
-    bitsAllocated.setTag( DICOM_BitsAllocated );
+    bitsAllocated.setTag( DICOMBitsAllocated );
     bitsAllocated.setValue( image->getBitsAllocated() );
     writer->addValueAttribute( &bitsAllocated );
 
     DICOMValueAttribute bitsStored;
-    bitsStored.setTag( DICOM_BitsStored );
+    bitsStored.setTag( DICOMBitsStored );
     bitsStored.setValue( image->getBitsStored() );
     writer->addValueAttribute( &bitsStored );
 
     DICOMValueAttribute highBit;
-    highBit.setTag( DICOM_HighBit);
+    highBit.setTag( DICOMHighBit );
     highBit.setValue( image->getHighBit() );
     writer->addValueAttribute( &highBit );
 
     DICOMValueAttribute pixelRepresentation;
-    pixelRepresentation.setTag( DICOM_PixelRepresentation );
+    pixelRepresentation.setTag( DICOMPixelRepresentation );
     pixelRepresentation.setValue( image->getPixelRepresentation() );
     writer->addValueAttribute( &pixelRepresentation );
 
@@ -166,7 +166,7 @@ void DICOMImageFileGenerator::fillImagePixelInfo( DICOMWriter * writer , Image *
     if ( image->getSamplesPerPixel() > 1)
     {
         DICOMValueAttribute planarConfiguration;
-        planarConfiguration.setTag( DICOM_PlanarConfiguration );
+        planarConfiguration.setTag( DICOMPlanarConfiguration );
         planarConfiguration.setValue( 0 ); // 0 = R1 G1 B1 R2 G2 B2 ... i 1 = R1 R2 ... G1 G2 ... B1 B2 ...
         writer->addValueAttribute( &planarConfiguration );
     }
@@ -178,22 +178,22 @@ void DICOMImageFileGenerator::fillSCInfo( DICOMWriter * writer , Image * image )
     Q_UNUSED( image );
 
     DICOMValueAttribute conversionType;
-    conversionType.setTag( DICOM_ConversionType );
+    conversionType.setTag( DICOMConversionType );
     conversionType.setValue( QString("WSD") );
     writer->addValueAttribute( &conversionType );
 }
 
 void DICOMImageFileGenerator::fillSOPInfo( DICOMWriter * writer , Image * image )
 {
-        DICOMValueAttribute classUID;
-        classUID.setTag( DICOM_SOPClassUID );
-        classUID.setValue( image->getParentSeries()->getSOPClassUID() );
-        writer->addValueAttribute( &classUID );
+    DICOMValueAttribute classUID;
+    classUID.setTag( DICOMSOPClassUID );
+    classUID.setValue( image->getParentSeries()->getSOPClassUID() );
+    writer->addValueAttribute( &classUID );
 
-        DICOMValueAttribute instanceUID;
-        instanceUID.setTag( DICOM_SOPInstanceUID );
-        instanceUID.setValue( image->getSOPInstanceUID() );
-        writer->addValueAttribute( &instanceUID );
+    DICOMValueAttribute instanceUID;
+    instanceUID.setTag( DICOMSOPInstanceUID );
+    instanceUID.setValue( image->getSOPInstanceUID() );
+    writer->addValueAttribute( &instanceUID );
 }
 
 }

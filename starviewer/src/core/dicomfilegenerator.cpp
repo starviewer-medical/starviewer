@@ -13,7 +13,7 @@
 #include "patient.h"
 #include "study.h"
 #include "series.h"
-
+#include "dicomdictionary.h"
 #include "dicomtag.h"
 #include "dicomvalueattribute.h"
 
@@ -51,22 +51,22 @@ bool DICOMFileGenerator::setDirPath( QString path )
 void DICOMFileGenerator::fillPatientInfo( DICOMWriter *writer, Patient *patient )
 {
     DICOMValueAttribute patientsName;
-    patientsName.setTag( DICOM_PatientsName );
+    patientsName.setTag( DICOMPatientsName );
     patientsName.setValue( patient->getFullName() );
     writer->addValueAttribute( &patientsName );
 
     DICOMValueAttribute patientID;
-    patientID.setTag( DICOM_PatientID );
+    patientID.setTag( DICOMPatientID );
     patientID.setValue( patient->getID() );
     writer->addValueAttribute( &patientID );
 
     DICOMValueAttribute patientBirthDate;
-    patientBirthDate.setTag( DICOM_PatientsBirthDate );
+    patientBirthDate.setTag( DICOMPatientsBirthDate );
     patientBirthDate.setValue( patient->getBirthDate() );
     writer->addValueAttribute( &patientBirthDate );
 
     DICOMValueAttribute patientSex;
-    patientSex.setTag( DICOM_PatientsSex );
+    patientSex.setTag( DICOMPatientsSex );
     patientSex.setValue( patient->getSex() );
     writer->addValueAttribute( &patientSex );
 
@@ -75,39 +75,39 @@ void DICOMFileGenerator::fillPatientInfo( DICOMWriter *writer, Patient *patient 
 void DICOMFileGenerator::fillStudyInfo( DICOMWriter *writer, Study *study )
 {
     DICOMValueAttribute studyInstanceUID;
-    studyInstanceUID.setTag( DICOM_StudyInstanceUID );
+    studyInstanceUID.setTag( DICOMStudyInstanceUID );
     studyInstanceUID.setValue( study->getInstanceUID() );
     writer->addValueAttribute( &studyInstanceUID );
 
     DICOMValueAttribute studyDate;
-    studyDate.setTag( DICOM_StudyDate );
+    studyDate.setTag( DICOMStudyDate );
     studyDate.setValue( study->getDate() );
     writer->addValueAttribute( &studyDate );
 
     DICOMValueAttribute studyTime;
-    studyTime.setTag( DICOM_StudyTime );
+    studyTime.setTag( DICOMStudyTime );
     studyTime.setValue( study->getTime() );
     writer->addValueAttribute( &studyTime );
 
     DICOMValueAttribute referringName;
-    referringName.setTag( DICOM_ReferringPhysiciansName );
+    referringName.setTag( DICOMReferringPhysiciansName );
     referringName.setValue( study->getReferringPhysiciansName() );
     writer->addValueAttribute( &referringName );
 
     DICOMValueAttribute studyID;
-    studyID.setTag( DICOM_StudyID );
+    studyID.setTag( DICOMStudyID );
     studyID.setValue( study->getID() );
     writer->addValueAttribute( &studyID );
 
     DICOMValueAttribute accessionNumber;
-    accessionNumber.setTag( DICOM_AccessionNumber );
+    accessionNumber.setTag( DICOMAccessionNumber );
     accessionNumber.setValue( study->getAccessionNumber() );
     writer->addValueAttribute( &accessionNumber );
 
     if ( !study->getDescription().isEmpty() ) // Tipus 3
     {
         DICOMValueAttribute studyDescription;
-        studyDescription.setTag( DICOM_StudyDescription );
+        studyDescription.setTag( DICOMStudyDescription );
         studyDescription.setValue( study->getDescription() );
         writer->addValueAttribute( &studyDescription );
     }
@@ -115,7 +115,7 @@ void DICOMFileGenerator::fillStudyInfo( DICOMWriter *writer, Study *study )
     if ( !study->getPatientAge().isEmpty() ) // Tipus 3
     {
         DICOMValueAttribute patientAge;
-        patientAge.setTag( DICOM_PatientsAge );
+        patientAge.setTag( DICOMPatientsAge );
         patientAge.setValue( study->getPatientAge() );
         writer->addValueAttribute( &patientAge );
     }
@@ -123,7 +123,7 @@ void DICOMFileGenerator::fillStudyInfo( DICOMWriter *writer, Study *study )
 //    if ( !study->getHeight() > 0.0 )
 //    {
 //        DICOMValueAttribute patientHeight;
-//        patientHeight.setTag( DICOM_PatientsSize );
+//        patientHeight.setTag( DICOMPatientsSize );
 //        patientHeight.setValue( study->getHeight() );
 //        writer->addValueAttribute( &patientHeight );
 //    }
@@ -131,7 +131,7 @@ void DICOMFileGenerator::fillStudyInfo( DICOMWriter *writer, Study *study )
 //    if ( !study->getWeight() > 0.0 )
 //    {
 //        DICOMValueAttribute patientWeight;
-//        patientWeight.setTag( DICOM_PatientsWeight );
+//        patientWeight.setTag( DICOMPatientsWeight );
 //        patientWeight.setValue( study->getWeight() );
 //        writer->addValueAttribute( &patientWeight );
 //    }
@@ -142,30 +142,30 @@ void DICOMFileGenerator::fillStudyInfo( DICOMWriter *writer, Study *study )
 void DICOMFileGenerator::fillSeriesInfo( DICOMWriter *writer, Series *series )
 {
     DICOMValueAttribute modality;
-    modality.setTag( DICOM_Modality );
+    modality.setTag( DICOMModality );
     modality.setValue( series->getModality() );
     writer->addValueAttribute( &modality );
 
     DICOMValueAttribute instanceUID;
-    instanceUID.setTag( DICOM_SeriesInstanceUID );
+    instanceUID.setTag( DICOMSeriesInstanceUID );
     instanceUID.setValue( series->getInstanceUID() );
     writer->addValueAttribute( &instanceUID );
 
     DICOMValueAttribute seriesNumber;
-    seriesNumber.setTag( DICOM_SeriesNumber );
+    seriesNumber.setTag( DICOMSeriesNumber );
     seriesNumber.setValue( series->getSeriesNumber() );
     writer->addValueAttribute( &seriesNumber );
 
     // \TODO Laterality Tipus 2C
     DICOMValueAttribute laterality;
-    laterality.setTag( DICOM_Laterality );
+    laterality.setTag( DICOMLaterality );
     laterality.setValue( QString("") );
     writer->addValueAttribute( &laterality );
 
     if ( series->getDate().isValid() ) // Tipus 3
     {
         DICOMValueAttribute seriesDate;
-        seriesDate.setTag( DICOM_SeriesDate );
+        seriesDate.setTag( DICOMSeriesDate );
         seriesDate.setValue( series->getDate() );
         writer->addValueAttribute( &seriesDate );
     }
@@ -173,7 +173,7 @@ void DICOMFileGenerator::fillSeriesInfo( DICOMWriter *writer, Series *series )
     if ( series->getTime().isValid() ) // Tipus 3
     {
         DICOMValueAttribute seriesTime;
-        seriesTime.setTag( DICOM_SeriesTime );
+        seriesTime.setTag( DICOMSeriesTime );
         seriesTime.setValue( series->getTime() );
         writer->addValueAttribute( &seriesTime );
     }
@@ -181,7 +181,7 @@ void DICOMFileGenerator::fillSeriesInfo( DICOMWriter *writer, Series *series )
     if ( !series->getProtocolName().isEmpty() ) // Tipus 3
     {
         DICOMValueAttribute protocolName;
-        protocolName.setTag( DICOM_ProtocolName );
+        protocolName.setTag( DICOMProtocolName );
         protocolName.setValue( series->getProtocolName() );
         writer->addValueAttribute( &protocolName );
     }
@@ -189,7 +189,7 @@ void DICOMFileGenerator::fillSeriesInfo( DICOMWriter *writer, Series *series )
     if ( !series->getDescription().isEmpty() ) // Tipus 3
     {
         DICOMValueAttribute seriesDescription;
-        seriesDescription.setTag( DICOM_SeriesDescription );
+        seriesDescription.setTag( DICOMSeriesDescription );
         seriesDescription.setValue( series->getDescription() );
         writer->addValueAttribute( &seriesDescription );
     }
@@ -203,14 +203,14 @@ void DICOMFileGenerator::fillSeriesInfo( DICOMWriter *writer, Series *series )
 void DICOMFileGenerator::fillGeneralEquipmentInfo( DICOMWriter *writer, Series *series )
 {
     DICOMValueAttribute manufacturer;
-    manufacturer.setTag( DICOM_Manufacturer );
+    manufacturer.setTag( DICOMManufacturer );
     manufacturer.setValue( series->getManufacturer() );
     writer->addValueAttribute( &manufacturer );
 
     if ( !series->getInstitutionName().isEmpty() ) // Tipus 3
     {
         DICOMValueAttribute institutionName;
-        institutionName.setTag( DICOM_InstitutionName );
+        institutionName.setTag( DICOMInstitutionName );
         institutionName.setValue( series->getInstitutionName() );
         writer->addValueAttribute( &institutionName );
     }
