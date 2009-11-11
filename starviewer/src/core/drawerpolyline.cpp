@@ -349,60 +349,56 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
     return ( allPointsAreInside );
 }
 
-double DrawerPolyline::computeArea( int view, const double * spacing )
+double DrawerPolyline::computeArea( int view )
 {
-    double area = 0.0;
-    double actualPoint[3];
-    double followPoint[3];
-    double * point;
-    for ( int j = 0; j < m_pointsList.count()-1; j++ )
+    // Mètode extret de http://alienryderflex.com/polygon_area/
+    
+    // Obtenim els índexs x,y depenent de la vista en que estan projectats els punts
+    // TODO eliminar aquesta dependència amb la vista del 2D Viewer
+    int xIndex, yIndex;
+    switch( view )
     {
-        point = m_pointsList.at( j );
-        actualPoint[0] = point[0];
-        actualPoint[1] = point[1];
-        actualPoint[2] = point[2];
+        case Q2DViewer::Axial:
+            xIndex = 0;
+            yIndex = 1;
+            break;
 
-        point = m_pointsList.at( j+1 );
-        followPoint[0] = point[0];
-        followPoint[1] = point[1];
-        followPoint[2] = point[2];
+        case Q2DViewer::Sagital:
+            xIndex = 2;
+            yIndex = 1;
+            break;
 
-        if ( spacing != NULL )
-        {
-            actualPoint[0] = MathTools::trunc( actualPoint[0]/spacing[0] );
-            actualPoint[1] = MathTools::trunc( actualPoint[1]/spacing[1] );
-            actualPoint[2] = MathTools::trunc( actualPoint[2]/spacing[2] );
-            followPoint[0] = MathTools::trunc( followPoint[0]/spacing[0] );
-            followPoint[1] = MathTools::trunc( followPoint[1]/spacing[1] );
-            followPoint[2] = MathTools::trunc( followPoint[2]/spacing[2] );
-        }
-        switch( view )
-        {
-            case Q2DViewer::Axial:
-                area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[1] + actualPoint[1] ) )/2.0;
-                break;
-
-            case Q2DViewer::Sagital:
-                area += ( ( followPoint[2]-actualPoint[2] )*(followPoint[1] + actualPoint[1] ) )/2.0;
-                break;
-
-            case Q2DViewer::Coronal:
-                area += ( ( followPoint[0]-actualPoint[0] )*(followPoint[2] + actualPoint[2] ) )/2.0;
-                break;
-        }
+        case Q2DViewer::Coronal:
+            xIndex = 0;
+            yIndex = 2;
+            break;
     }
 
-     //en el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
-     //per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI
-     if ( area < 0 )
-     {
-        //donem el resultat el valor absolut
-        area *= -1;
+    // Realitzem el càlcul de l'àrea
+    double area = 0.0;
+    int j = 0;
+    int numberOfPoints = m_pointsList.count();
+    for( int i=0; i<numberOfPoints; i++ ) 
+    {
+        j++; 
+        if( j == numberOfPoints ) 
+            j = 0;
+    
+        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex]) * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex]);
+    }
 
-        //intercanviem els punts de la QList
+    // En el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
+    // per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI
+    if ( area < 0 )
+    {
+        // Donem el resultat el valor absolut
+        area *= -1;
+        // Intercanviem els punts de la QList
+        // TODO Cal realment fer això?
         swap();
     }
-    return area;
+
+    return area*0.5;
 }
 
 }
