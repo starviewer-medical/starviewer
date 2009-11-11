@@ -70,16 +70,13 @@ void PolylineROITool::printData()
         // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
         // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
         const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
-
+        QString areaUnits;
         if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
-        {
-            double * spacing = m_2DViewer->getInput()->getSpacing();
-            text->setText( tr("Area: %1 px2\nMean: %2\nSt.Dev.: %3").arg( m_mainPolyline->computeArea( m_2DViewer->getView(), spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
-        }
-        else
-        {
-            text->setText( tr("Area: %1 mm2\nMean: %2\nSt.Dev.: %3").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
-        }
+            areaUnits = "px2";
+        else        
+            areaUnits = "mm2";
+
+        text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ), 0, 'f', 0 ).arg(areaUnits).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
 
         text->setAttatchmentPoint( intersection );
         text->update( DrawerPrimitive::VTKRepresentation );
