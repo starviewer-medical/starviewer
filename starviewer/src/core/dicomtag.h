@@ -7,7 +7,6 @@
 #ifndef UDGDICOMTAG_H
 #define UDGDICOMTAG_H
 
-#include "dicomdictionary.h"
 
 namespace udg {
 
