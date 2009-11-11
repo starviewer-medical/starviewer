@@ -57,6 +57,9 @@ void QDicomPrinterConfigurationWidget::addPrinter()
 {    
     m_addPrinterWidget->clearInputs();
     m_addPrinterWidget->setVisible(true);
+    /*TODO:Després d'afegir una impressora s'hauria de fer signal printerSettingsChanged(), ara aprofitem el fet de que quan s'afegeix una impressora
+      com només han d'entrar AETitle, Hostname, port i descripció, llavors s'han d'acabar de complimentar les dades de la impressora per triar els altres settings,
+      fent un modificar, al fer el modificar llavors es fa l'emit del signal printerSettingsChanged()*/
 }
 
 bool QDicomPrinterConfigurationWidget::modifyPrinter()
@@ -82,6 +85,7 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
                 refreshPrinterList();
                 clearPrinterSettings();
 
+                emit printerSettingsChanged();                
                 return true;
             }
         }
@@ -101,6 +105,7 @@ void QDicomPrinterConfigurationWidget::deletePrinter()
     this->refreshPrinterList();
     clearPrinterSettings();
 
+    emit printerSettingsChanged();
 }
 
 void QDicomPrinterConfigurationWidget::testPrinter()

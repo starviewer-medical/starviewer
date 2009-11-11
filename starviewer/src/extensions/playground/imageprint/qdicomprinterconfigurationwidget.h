@@ -20,7 +20,12 @@ Q_OBJECT
 public:
     QDicomPrinterConfigurationWidget();
     ~QDicomPrinterConfigurationWidget();
-	
+
+signals:
+
+    ///signal que s'emet quan s'afegeix/esborra/modifica impressora
+    void printerSettingsChanged();
+
 private slots:
     // Acualiza la informació del Printer cada vegada que es selecciona al QTree una impressora.
     void printerSelectionChanged();
