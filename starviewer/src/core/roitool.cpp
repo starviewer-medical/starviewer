@@ -12,7 +12,6 @@
 //vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
-//Qt
 
 namespace udg {
 
@@ -64,7 +63,6 @@ void ROITool::handleEvent( long unsigned eventID )
         break;
 
         case vtkCommand::MouseMoveEvent:
-
             if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
             {
                 this->simulateClosingPolyline();
@@ -91,10 +89,9 @@ void ROITool::annotateNewPoint()
 
     //actualitzem els atributs de la polilinia
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
-
 }
 
-void ROITool::simulateClosingPolyline( )
+void ROITool::simulateClosingPolyline()
 {
     double pickedPoint[3];
     m_2DViewer->getEventWorldCoordinate(pickedPoint);
@@ -106,7 +103,7 @@ void ROITool::simulateClosingPolyline( )
         m_closingPolyline->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
         m_2DViewer->getDrawer()->draw( m_closingPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
-        // Afegim els punts que simulen aquesta polilinia
+        // Afegim els punts que simulen aquesta polilínia
         m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
         m_closingPolyline->addPoint( pickedPoint );
         m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
@@ -118,7 +115,7 @@ void ROITool::simulateClosingPolyline( )
         m_closingPolyline->setPoint(2,m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
     }
 
-    //actualitzem els atributs de la polilinia
+    // Actualitzem els atributs de la polilínia
     m_closingPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
 
@@ -166,7 +163,7 @@ void ROITool::closeForm()
 
     emit finished();
 
-    m_mainPolyline=NULL;
+    m_mainPolyline = NULL;
 }
 
 }

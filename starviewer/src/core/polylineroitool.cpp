@@ -16,7 +16,6 @@
 //vtk
 #include <vtkLine.h>
 #include <vtkPoints.h>
-//Qt
 
 namespace udg {
 
@@ -243,12 +242,9 @@ void PolylineROITool::computeGrayValues()
         rayP2[rayPointIndex] += spacing[1];
     }
 
-
     //destruim els diferents segments que hem creat per simular la roi
     for ( i = 0; i < numberOfSegments; i++ )
         segments[i]->Delete();
-
-
 }
 
 double PolylineROITool::computeGrayMean()
@@ -268,7 +264,6 @@ double PolylineROITool::computeGrayMean()
 double PolylineROITool::computeStandardDeviation()
 {
     // no cal computeGrayValues(); ja ho ha fet computeGrayMean, que sempre es crida just abans
-
     double standardDeviation = 0.0;
     double mean = computeGrayMean();
 
@@ -278,7 +273,6 @@ double PolylineROITool::computeStandardDeviation()
     {
         double individualDeviation = value - mean;
         deviations << ( individualDeviation * individualDeviation );
-
     }
 
     grayValues.clear();
