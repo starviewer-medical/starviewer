@@ -22,7 +22,19 @@ public:
     ///Neteja els controls
     void clear();
 
+signals:
+
+    ///signal que s'emet quan es canvia algun dels settings d'una impressora 
+    void basicDicomPrinterSettingChanged();
+
+private slots:
+
+    ///Slot que emet signal indicant que algunes de les propietats de la impressora DICOM ha canviat
+    void settingChanged();
+
 private :
+
+    void createConnections();
 
     ///Emplena DicomPrinter amb  les dades del GroupBox Film Settings
     void getFilmSettings(DicomPrinter &dicomPrinter);

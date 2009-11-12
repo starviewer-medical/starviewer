@@ -9,6 +9,17 @@ namespace udg {
 QDicomPrinterBasicSettingsWidget::QDicomPrinterBasicSettingsWidget( QWidget *parent )
 {
     setupUi( this );
+    createConnections();
+}
+
+void QDicomPrinterBasicSettingsWidget::createConnections()
+{
+    connect(m_priorityComboBox, SIGNAL(currentIndexChanged(int)), SLOT(settingChanged()));
+    connect(m_mediumTypeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(settingChanged()));
+    connect(m_filmDestinationComboBox, SIGNAL(currentIndexChanged(int)), SLOT(settingChanged()));
+    connect(m_layoutComboBox, SIGNAL(currentIndexChanged(int)), SLOT(settingChanged()));
+    connect(m_filmOrientationComboBox, SIGNAL(currentIndexChanged(int)), SLOT(settingChanged()));
+    connect(m_filmSizeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(settingChanged()));
 }
 
 void QDicomPrinterBasicSettingsWidget::getDicomPrinterBasicSettings(DicomPrinter &dicomPrinter)
@@ -68,6 +79,11 @@ void QDicomPrinterBasicSettingsWidget::setPrintSettings(DicomPrinter& printer)
     m_mediumTypeComboBox->setCurrentIndex(m_mediumTypeComboBox->findText(printer.getDefaultMediumType()));
     m_filmDestinationComboBox->addItems(printer.getAvailableFilmDestinationValues());
     m_filmDestinationComboBox->setCurrentIndex(m_filmDestinationComboBox->findText(printer.getDefaultFilmDestination()));
+}
+
+void QDicomPrinterBasicSettingsWidget::settingChanged()
+{
+    emit basicDicomPrinterSettingChanged();
 }
 
 }
