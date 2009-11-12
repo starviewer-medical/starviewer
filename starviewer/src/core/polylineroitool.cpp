@@ -13,9 +13,7 @@
 #include "drawertext.h"
 #include "image.h"
 #include "mathtools.h"
-//vtk
-#include <vtkLine.h>
-#include <vtkPoints.h>
+
 
 namespace udg {
 
@@ -86,20 +84,13 @@ void PolylineROITool::printData()
 void PolylineROITool::computeGrayValues()
 {
     int i;
-    int subId;
     int initialPosition;
     int endPosition;
-    double intersectPoint[3];
     double *firstIntersection;
     double *secondIntersection;
-    double pcoords[3];
-    double t;
-    double p0[3];
-    double p1[3];
     int numberOfVoxels = 0;
     QList<double*> intersectionList;
     QList<int> indexList;
-    vtkPoints *auxPoints;
     double rayP1[3];
     double rayP2[3];
     double verticalLimit;
@@ -108,23 +99,17 @@ void PolylineROITool::computeGrayValues()
     //el nombre de segments és el mateix que el nombre de punts del polígon
     int numberOfSegments = m_mainPolyline->getNumberOfPoints()-1;
 
-    //taula de punters a vtkLine per a representar cadascun dels segments del polígon
-    QVector<vtkLine*> segments;
+    // Llistes de punts inicials i finals de cada segement
+    QVector<double *> segmentsStartPoints;
+    QVector<double *> segmentsEndPoints;
 
-    //creem els diferents segments
+    // Creem els diferents segments
     for ( i = 0; i < numberOfSegments; i++ )
     {
-        vtkLine *line = vtkLine::New();
-        line->GetPointIds()->SetNumberOfIds(2);
-        line->GetPoints()->SetNumberOfPoints(2);
-
         double *p1 = m_mainPolyline->getPoint( i );
         double *p2 = m_mainPolyline->getPoint( i+1 );
-
-        line->GetPoints()->InsertPoint( 0, p1 );
-        line->GetPoints()->InsertPoint( 1, p2 );
-
-        segments << line;
+        segmentsStartPoints << p1;
+        segmentsEndPoints << p2;
     }
 
     double *bounds = m_mainPolyline->getPolylineBounds();
@@ -175,31 +160,24 @@ void PolylineROITool::computeGrayValues()
 	break;
 	}
 
+    int intersectionState;
 	while( rayP1[rayPointIndex] <= verticalLimit )
     {
         intersectionList.clear();
         indexList.clear();
         for ( i = 0; i < numberOfSegments; i++ )
         {
-            auxPoints = segments[i]->GetPoints();
-            auxPoints->GetPoint(0,p0);
-            auxPoints->GetPoint(1,p1);
-			if( (rayP1[rayPointIndex] <= p0[rayPointIndex] && rayP1[rayPointIndex] >= p1[rayPointIndex])
-				|| (rayP1[rayPointIndex] >= p0[rayPointIndex] && rayP1[rayPointIndex] <= p1[rayPointIndex]) )
+            if( (rayP1[rayPointIndex] <= segmentsStartPoints.at(i)[rayPointIndex] && rayP1[rayPointIndex] >= segmentsEndPoints.at(i)[rayPointIndex])
+            || (rayP1[rayPointIndex] >= segmentsStartPoints.at(i)[rayPointIndex] && rayP1[rayPointIndex] <= segmentsEndPoints.at(i)[rayPointIndex]) )
                 indexList << i;
-
         }
+        
         //obtenim les interseccions entre tots els segments de la ROI i el raig actual
         foreach (int segment, indexList)
         {
-            if ( segments[segment]->IntersectWithLine(rayP1, rayP2, 0.0001, t, intersectPoint, pcoords, subId) > 0)
-            {
-                double *findedPoint = new double[3];
-                findedPoint[0] = intersectPoint[0];
-                findedPoint[1] = intersectPoint[1];
-                findedPoint[2] = intersectPoint[2];
-                intersectionList.append ( findedPoint );
-            }
+            double *foundPoint = MathTools::intersectionPoint3DLines( segmentsStartPoints.at(segment), segmentsEndPoints.at(segment), rayP1, rayP2, intersectionState );
+            if( intersectionState == MathTools::LinesIntersect )
+                intersectionList << foundPoint;
         }
 
         if ( (intersectionList.count() % 2)==0 )
@@ -241,10 +219,6 @@ void PolylineROITool::computeGrayValues()
 		rayP1[rayPointIndex] += spacing[1];
         rayP2[rayPointIndex] += spacing[1];
     }
-
-    //destruim els diferents segments que hem creat per simular la roi
-    for ( i = 0; i < numberOfSegments; i++ )
-        segments[i]->Delete();
 }
 
 double PolylineROITool::computeGrayMean()
