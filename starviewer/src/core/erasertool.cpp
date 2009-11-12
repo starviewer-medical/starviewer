@@ -27,8 +27,8 @@ EraserTool::EraserTool( QViewer *viewer, QObject *parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
-    m_polyline=NULL;
-    m_state = NONE;
+    reset();
+    connect( m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()) );
 
     DEBUG_LOG("ERASER TOOL CREADA ");
 }
@@ -172,4 +172,11 @@ void EraserTool::erasePrimitive()
 
     m_state = NONE;
 }
+
+void EraserTool::reset()
+{
+    m_polyline = NULL;
+    m_state = NONE;
+}
+
 }
