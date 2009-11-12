@@ -9,6 +9,7 @@
 #include "logging.h"
 #include "drawer.h"
 #include "drawerpolyline.h"
+#include "drawerpolygon.h"
 //vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
@@ -29,6 +30,7 @@ ROITool::ROITool( QViewer *viewer, QObject *parent )
 
     m_closingPolyline = NULL;
     m_mainPolyline = NULL;
+    m_roiPolygon = NULL;
 }
 
 ROITool::~ROITool()
@@ -38,6 +40,9 @@ ROITool::~ROITool()
 
     if ( !m_closingPolyline.isNull() )
         delete m_closingPolyline;
+
+    if ( !m_roiPolygon.isNull() )
+        delete m_roiPolygon;
 }
 
 void ROITool::handleEvent( long unsigned eventID )
@@ -79,15 +84,19 @@ void ROITool::annotateNewPoint()
         m_mainPolyline = new DrawerPolyline;
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
+    if(!m_roiPolygon)
+    {
+        m_roiPolygon = new DrawerPolygon;
+    }
 
     double pickedPoint[3];
     m_2DViewer->getEventWorldCoordinate(pickedPoint);
     m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
     
-    //afegim el punt
+    // Afegim el punt al polígon de la ROI
+    m_roiPolygon->addVertix( pickedPoint );
+    // Afegim el punt de la polilínia que estem pintant
     m_mainPolyline->addPoint( pickedPoint );
-
-    //actualitzem els atributs de la polilinia
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
 
@@ -154,16 +163,20 @@ Volume::VoxelType ROITool::getGrayValue( double *coords )
 
 void ROITool::closeForm()
 {
-    m_mainPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-    m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
-
+    // Eliminem les polilínies amb les que hem simulat el dibuix de la ROI
     delete m_closingPolyline;
+    delete m_mainPolyline;
 
-    m_2DViewer->getDrawer()->refresh();
+    // Dibuixem el polígon resultant
+    m_2DViewer->getDrawer()->draw( m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    m_roiPolygon->update( DrawerPrimitive::VTKRepresentation );
 
+    // Indiquem que hem finalitzat les tasques de dibuix
     emit finished();
 
-    m_mainPolyline = NULL;
+    // Un cop fets els càlculs, fem el punter nul per poder controlar si podem fer una nova roi o no
+    // No fem delete, perquè sinó això faria que s'esborrés del drawer
+    m_roiPolygon = NULL;
 }
 
 }

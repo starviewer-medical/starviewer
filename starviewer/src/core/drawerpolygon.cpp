@@ -69,6 +69,19 @@ void DrawerPolygon::setVertix( int i, double x, double y, double z )
     }
 }
 
+const double *DrawerPolygon::getVertix(int i)
+{
+    if( i >= m_pointsList.count() || i < 0 )
+    {
+        double *vertix = new double[3];
+        return vertix;
+    }
+   else
+    {
+        return m_pointsList.at(i).data();
+    }
+}
+
 vtkProp *DrawerPolygon::getAsVtkProp()
 {
     if( !m_vtkActor )
@@ -185,6 +198,16 @@ void DrawerPolygon::updateVtkActorProperties()
     //Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
+}
+
+int DrawerPolygon::getNumberOfPoints() const
+{
+    return m_pointsList.count();
+}
+
+double* DrawerPolygon::getBounds()
+{
+    return m_vtkPolydata->GetBounds();
 }
 
 double DrawerPolygon::getDistanceToPoint( double *point3D )
@@ -350,4 +373,58 @@ bool DrawerPolygon::isInsideOfBounds( double p1[3], double p2[3], int view )
 
     return ( allPointsAreInside );
 }
+
+double DrawerPolygon::computeArea( int view )
+{
+    // Mètode extret de http://alienryderflex.com/polygon_area/
+    
+    // Obtenim els índexs x,y depenent de la vista en que estan projectats els punts
+    // TODO eliminar aquesta dependència amb la vista del 2D Viewer
+    int xIndex, yIndex;
+    switch( view )
+    {
+        case Q2DViewer::Axial:
+            xIndex = 0;
+            yIndex = 1;
+            break;
+
+        case Q2DViewer::Sagital:
+            xIndex = 2;
+            yIndex = 1;
+            break;
+
+        case Q2DViewer::Coronal:
+            xIndex = 0;
+            yIndex = 2;
+            break;
+    }
+
+    // Realitzem el càlcul de l'àrea
+    double area = 0.0;
+    int j = 0;
+    int numberOfPoints = m_pointsList.count();
+    for( int i=0; i<numberOfPoints; i++ ) 
+    {
+        j++; 
+        if( j == numberOfPoints ) 
+            j = 0;
+    
+        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex]) * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex]);
+    }
+
+    // En el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
+    // per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI
+    if ( area < 0 )
+    {
+        // Donem el resultat el valor absolut
+        area *= -1;
+        // Intercanviem els punts de la QList
+        // TODO Cal realment fer això?
+        for ( int i = 0; i < (int)(numberOfPoints/2); i++ )
+            m_pointsList.swap( i, (numberOfPoints-1)-i );
+    }
+
+    return area*0.5;
+}
+
 }

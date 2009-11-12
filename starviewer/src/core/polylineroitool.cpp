@@ -9,11 +9,10 @@
 #include "logging.h"
 #include "series.h"
 #include "drawer.h"
-#include "drawerpolyline.h"
+#include "drawerpolygon.h"
 #include "drawertext.h"
 #include "image.h"
 #include "mathtools.h"
-
 
 namespace udg {
 
@@ -31,18 +30,18 @@ PolylineROITool::PolylineROITool( QViewer *viewer, QObject *parent )
 
     connect(this, SIGNAL(finished()), this, SLOT(start()));
 
-    m_mainPolyline = NULL;
+    m_roiPolygon = NULL;
 }
 
 PolylineROITool::~PolylineROITool()
 {
-    if ( !m_mainPolyline.isNull() )
-        delete m_mainPolyline;
+    if ( !m_roiPolygon.isNull() )
+        delete m_roiPolygon;
 }
 
 void PolylineROITool::start()
 {
-    if( m_mainPolyline == NULL )
+    if( m_roiPolygon == NULL )
         DEBUG_LOG(QString("PolylineROITool: La línia rebuda és nul·la!"));
     else
         printData();
@@ -50,7 +49,7 @@ void PolylineROITool::start()
 
 void PolylineROITool::printData()
 {
-    double *bounds = m_mainPolyline->getPolylineBounds();
+    double *bounds = m_roiPolygon->getBounds();
     if( !bounds )
     {
         DEBUG_LOG( "Bounds no definits" );
@@ -73,7 +72,7 @@ void PolylineROITool::printData()
         else        
             areaUnits = "mm2";
 
-        text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ), 0, 'f', 0 ).arg(areaUnits).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
+        text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_roiPolygon->computeArea( m_2DViewer->getView() ), 0, 'f', 0 ).arg(areaUnits).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
 
         text->setAttatchmentPoint( intersection );
         text->update( DrawerPrimitive::VTKRepresentation );
@@ -97,22 +96,22 @@ void PolylineROITool::computeGrayValues()
 	int currentView = m_2DViewer->getView();
 
     //el nombre de segments és el mateix que el nombre de punts del polígon
-    int numberOfSegments = m_mainPolyline->getNumberOfPoints()-1;
+    int numberOfSegments = m_roiPolygon->getNumberOfPoints()-1;
 
     // Llistes de punts inicials i finals de cada segement
-    QVector<double *> segmentsStartPoints;
-    QVector<double *> segmentsEndPoints;
+    QVector<const double *> segmentsStartPoints;
+    QVector<const double *> segmentsEndPoints;
 
     // Creem els diferents segments
     for ( i = 0; i < numberOfSegments; i++ )
     {
-        double *p1 = m_mainPolyline->getPoint( i );
-        double *p2 = m_mainPolyline->getPoint( i+1 );
-        segmentsStartPoints << p1;
+        const double *p1 = m_roiPolygon->getVertix(i);
+        const double *p2 = m_roiPolygon->getVertix(i+1);
+        segmentsStartPoints.append( p1 );
         segmentsEndPoints << p2;
     }
 
-    double *bounds = m_mainPolyline->getPolylineBounds();
+    double *bounds = m_roiPolygon->getBounds();
 	double *spacing = m_2DViewer->getInput()->getSpacing();
 
 	int rayPointIndex;
@@ -175,7 +174,7 @@ void PolylineROITool::computeGrayValues()
         //obtenim les interseccions entre tots els segments de la ROI i el raig actual
         foreach (int segment, indexList)
         {
-            double *foundPoint = MathTools::intersectionPoint3DLines( segmentsStartPoints.at(segment), segmentsEndPoints.at(segment), rayP1, rayP2, intersectionState );
+            double *foundPoint = MathTools::intersectionPoint3DLines( (double *)segmentsStartPoints.at(segment), (double *)segmentsEndPoints.at(segment), rayP1, rayP2, intersectionState );
             if( intersectionState == MathTools::LinesIntersect )
                 intersectionList << foundPoint;
         }
