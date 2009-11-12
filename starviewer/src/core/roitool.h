@@ -17,46 +17,43 @@ class Q2DViewer;
 class DrawerPolyline;
 
 /**
-*   Tool per dibuixar ROIS polilinies
+*   Tool per dibuixar ROIS amb polilínies
 *
 *   @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ROITool : public Tool
-{
+class ROITool : public Tool {
 Q_OBJECT
 public:
     ROITool( QViewer *viewer, QObject *parent = 0 );
-
     ~ROITool();
 
-    ///funcio manejadora dels events passats.
     void handleEvent( long unsigned eventID );
 
-    /// calcula el voxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
+    /// Calcula el vòxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
     Volume::VoxelType getGrayValue( double *coords );
 
 signals:
-    ///The drawing has finished
+    /// The drawing has finished
     void finished();
 
 protected:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
-    ///polilinia principal: es la polilinia que ens marca la forma que hem anat editant.
+    /// Polilínia principal: és la polilínia que ens marca la forma que hem anat editant.
     QPointer<DrawerPolyline> m_mainPolyline;
 
-    ///polilinia de tancament: es la polilinia que ens simula com quedaria la polilinia principal si es tanques, es a dir, uneix l'ultim punt anotat i el primer punt de la polilinia.
+    /// Polilínia de tancament: es la polilínia que ens simula com quedaria la polilínia principal si es tanques, es a dir, uneix l'últim punt anotat i el primer punt de la polilínia.
     QPointer<DrawerPolyline> m_closingPolyline;
 
 private:
-    /// ens permet anotar el seguent punt de la polilinia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
+    /// Ens permet anotar el següent punt de la polilínia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
     void annotateNewPoint();
 
-    ///ens simula com quedaria la polilinia que estem editant si la tanquessim. ens serveix per a veure dinamicament l'evolucio de la polilinia.
+    /// Ens simula com quedaria la polilínia que estem editant si la tanquèssim. Ens serveix per a veure dinàmicament l'evolució de la polilínia.
     void simulateClosingPolyline();
 
-    /// metode que tanca la forma de la polilinia que s'ha dibuixat
+    /// Mètode que tanca la forma de la polilínia que s'ha dibuixat
     void closeForm();
 };
 
