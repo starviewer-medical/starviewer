@@ -47,13 +47,25 @@ public:
     void setVertix( int i, double point[3] );
     void setVertix( int i, double x, double y, double z );
 
+    /// Ens retorna l'i-èssim vèrtex del polígon. Si l'índex està fora de rang ens retornarà un array sense inicialitzar
+    const double *getVertix(int i);
+    
     vtkProp *getAsVtkProp();
 
+    /// Ens retorna el nombre de punts que té el polígon
+    int getNumberOfPoints() const;
+
+    /// Retorna les coordenades del cub que envolta el polígon
+    double *getBounds();
+    
     ///calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
 
     ///mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
+
+    /// Calcula l'àrea del polígon
+    double computeArea( int view );
 
 public slots:
     void update( int representation );

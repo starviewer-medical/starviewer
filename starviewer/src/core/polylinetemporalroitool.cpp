@@ -8,7 +8,7 @@
 #include "polylinetemporalroitooldata.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include "drawerpolyline.h"
+#include "drawerpolygon.h"
 #include "drawer.h"
 //vtk
 #include <vtkPoints.h>
@@ -52,11 +52,9 @@ void PolylineTemporalROITool::setToolData(ToolData * data)
 
 void PolylineTemporalROITool::start()
 {
-    DEBUG_LOG( "Close Form! PTROI" );
-    m_mainPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-    m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
+    DEBUG_LOG("Start PolylineTemporalROI");
 
-    double *bounds = m_mainPolyline->getPolylineBounds();
+    double *bounds = m_roiPolygon->getBounds();
     if( !bounds )
     {
         DEBUG_LOG( "Bounds no definits" );
@@ -77,11 +75,11 @@ void PolylineTemporalROITool::start()
         if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
         {
             double * spacing = m_2DViewer->getInput()->getSpacing();
-            text->setText( tr("Area: %1 px2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() , spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+            text->setText( tr("Area: %1 px2\nMean: %2").arg( m_roiPolygon->computeArea( m_2DViewer->getView() , spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
         }
         else
         {
-            text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_mainPolyline->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+            text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_roiPolygon->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
         }
         
         text->setAttatchmentPoint( intersection );
@@ -89,11 +87,6 @@ void PolylineTemporalROITool::start()
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
  */
     }
-    delete m_closingPolyline;
-
-    m_closingPolyline=NULL;
-    m_mainPolyline=NULL;
-    m_2DViewer->getDrawer()->refresh();
 }
 
 void PolylineTemporalROITool::convertInputImageToTemporalImage()
@@ -166,7 +159,7 @@ double PolylineTemporalROITool::computeTemporalMean()
 	int currentView = m_2DViewer->getView();
 
 	//el nombre de segments és el mateix que el nombre de punts del polígon
-	int numberOfSegments = m_mainPolyline->getNumberOfPoints()-1;
+	int numberOfSegments = m_roiPolygon->getNumberOfPoints()-1;
 
 	//taula de punters a vtkLine per a representar cadascun dels segments del polígon
 	QVector<vtkLine*> segments;
@@ -178,8 +171,8 @@ double PolylineTemporalROITool::computeTemporalMean()
 		line->GetPointIds()->SetNumberOfIds(2);
 		line->GetPoints()->SetNumberOfPoints(2);
 
-		double *p1 = m_mainPolyline->getPoint( i );
-		double *p2 = m_mainPolyline->getPoint( i+1 );
+		const double *p1 = m_roiPolygon->getVertix( i );
+		const double *p2 = m_roiPolygon->getVertix( i+1 );
 
 		line->GetPoints()->InsertPoint( 0, p1 );
 		line->GetPoints()->InsertPoint( 1, p2 );
@@ -187,7 +180,7 @@ double PolylineTemporalROITool::computeTemporalMean()
 		segments << line;
 	}
 
-	double *bounds = m_mainPolyline->getPolylineBounds();
+	double *bounds = m_roiPolygon->getBounds();
 	double *spacing = m_2DViewer->getInput()->getSpacing();
 
 	int rayPointIndex;

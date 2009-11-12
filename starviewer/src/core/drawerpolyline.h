@@ -73,9 +73,6 @@ public:
     ///mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
-    /// calcula l'area del poligon que defineix la ROI
-    double computeArea( int view );
-
 public slots:
     void update( int representation );
 
