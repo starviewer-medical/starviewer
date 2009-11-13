@@ -867,6 +867,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_opacityVomiCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityVomiChecked(bool) ) );
     connect( m_opacitySaliencyCheckBox, SIGNAL( toggled(bool) ), SLOT( opacitySaliencyChecked(bool) ) );
+    connect( m_opacityFilteringCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityFilteringChecked(bool) ) );
     connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaLabel, SLOT( setEnabled(bool) ) );
     connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsLabel, SLOT( setEnabled(bool) ) );
@@ -1213,6 +1214,12 @@ void QExperimental3DExtension::render()
                                                                                            m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
     if ( m_opacitySaliencyCheckBox->isChecked() ) m_volume->addOpacity( m_voxelSaliencies, m_maximumSaliency, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
                                                                                                               m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
+    if ( m_opacityFilteringCheckBox->isChecked() )
+    {
+        QVector<float> absFiltering = QtConcurrent::blockingMapped( m_spatialImportanceFunction, qAbs<float> );
+        m_volume->addOpacity( absFiltering, m_maximumSpatialImportanceFunction, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
+                                                                                m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
+    }
     if ( m_filteringAmbientOcclusionCheckBox->isChecked() ) m_volume->addFilteringAmbientOcclusion( m_spatialImportanceFunction, m_maximumSpatialImportanceFunction,
                                                                                                     m_filteringAmbientOcclusionLambdaDoubleSpinBox->value() );
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
@@ -2671,6 +2678,7 @@ void QExperimental3DExtension::opacityVomiChecked( bool checked )
     if ( checked )
     {
         m_opacitySaliencyCheckBox->setChecked( false );
+        m_opacityFilteringCheckBox->setChecked( false );
         m_opacityLowLabel->setEnabled( true );
         m_opacityLowThresholdLabel->setEnabled( true );
         m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
@@ -2703,6 +2711,40 @@ void QExperimental3DExtension::opacitySaliencyChecked( bool checked )
     if ( checked )
     {
         m_opacityVomiCheckBox->setChecked( false );
+        m_opacityFilteringCheckBox->setChecked( false );
+        m_opacityLowLabel->setEnabled( true );
+        m_opacityLowThresholdLabel->setEnabled( true );
+        m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
+        m_opacityLowFactorLabel->setEnabled( true );
+        m_opacityLowFactorDoubleSpinBox->setEnabled( true );
+        m_opacityHighLabel->setEnabled( true );
+        m_opacityHighThresholdLabel->setEnabled( true );
+        m_opacityHighThresholdDoubleSpinBox->setEnabled( true );
+        m_opacityHighFactorLabel->setEnabled( true );
+        m_opacityHighFactorDoubleSpinBox->setEnabled( true );
+    }
+    else
+    {
+        m_opacityLowLabel->setEnabled( false );
+        m_opacityLowThresholdLabel->setEnabled( false );
+        m_opacityLowThresholdDoubleSpinBox->setEnabled( false );
+        m_opacityLowFactorLabel->setEnabled( false );
+        m_opacityLowFactorDoubleSpinBox->setEnabled( false );
+        m_opacityHighLabel->setEnabled( false );
+        m_opacityHighThresholdLabel->setEnabled( false );
+        m_opacityHighThresholdDoubleSpinBox->setEnabled( false );
+        m_opacityHighFactorLabel->setEnabled( false );
+        m_opacityHighFactorDoubleSpinBox->setEnabled( false );
+    }
+}
+
+
+void QExperimental3DExtension::opacityFilteringChecked( bool checked )
+{
+    if ( checked )
+    {
+        m_opacityVomiCheckBox->setChecked( false );
+        m_opacitySaliencyCheckBox->setChecked( false );
         m_opacityLowLabel->setEnabled( true );
         m_opacityLowThresholdLabel->setEnabled( true );
         m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
@@ -2779,6 +2821,7 @@ void QExperimental3DExtension::gaussianFilter()
     double *range = difference->GetScalarRange();
     m_maximumSpatialImportanceFunction = qMax( qAbs( range[0] ), qAbs( range[1] ) );
     m_filteringAmbientOcclusionCheckBox->setEnabled( true );
+    m_opacityFilteringCheckBox->setEnabled( true );
 
     cast->Delete();
     gaussian->Delete();

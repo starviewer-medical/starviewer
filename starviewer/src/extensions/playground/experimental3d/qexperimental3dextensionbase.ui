@@ -1049,6 +1049,16 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QCheckBox" name="m_opacityFilteringCheckBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Filtering</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>
