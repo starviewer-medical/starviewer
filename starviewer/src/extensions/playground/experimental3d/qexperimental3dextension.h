@@ -252,6 +252,10 @@ private:
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
 
+    // Filtering
+    QVector<float> m_spatialImportanceFunction; // ΔD = G * D − D
+    float m_maximumSpatialImportanceFunction;
+
     /// Cert quan estiguem executant el l'extensió interactivament.
     bool m_interactive;
 

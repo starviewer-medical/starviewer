@@ -40,6 +40,8 @@ class VoxelSaliencyVoxelShader;
 class ColorVomiVoxelShader;
 class OpacityVoxelShader;
 
+class FilteringAmbientOcclusionVoxelShader;
+
 
 class Experimental3DVolume {
 
@@ -95,6 +97,8 @@ public:
     void addVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor );
     void addOpacity( const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor );
     QVector<float> computeVomiGradient( const QVector<float> &vomi );
+
+    void addFilteringAmbientOcclusion( const QVector<float> &filteringAmbientOcclusion, float maximum, float lambda );
 
 private:
 
@@ -160,6 +164,8 @@ private:
     ColorVomiVoxelShader *m_colorVomiVoxelShader;
     /// Voxel shader que modifica l'opacitat segons la VoMI o la saliency.
     OpacityVoxelShader *m_opacityVoxelShader;
+
+    FilteringAmbientOcclusionVoxelShader *m_filteringAmbientOcclusionVoxelShader;
 
     /// Mapper.
     vtkVolumeRayCastMapper *m_mapper;

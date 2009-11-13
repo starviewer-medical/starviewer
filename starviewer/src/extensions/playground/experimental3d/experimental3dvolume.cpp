@@ -32,6 +32,8 @@
 #include "colorvomivoxelshader.h"
 #include "opacityvoxelshader.h"
 
+#include "filteringambientocclusionvoxelshader.h"
+
 
 namespace udg {
 
@@ -78,6 +80,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_voxelSaliencyVoxelShader;
     delete m_colorVomiVoxelShader;
     delete m_opacityVoxelShader;
+    delete m_filteringAmbientOcclusionVoxelShader;
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
@@ -375,6 +378,14 @@ QVector<float> Experimental3DVolume::computeVomiGradient( const QVector<float> &
 }
 
 
+void Experimental3DVolume::addFilteringAmbientOcclusion( const QVector<float> &filteringAmbientOcclusion, float maximum, float lambda )
+{
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_filteringAmbientOcclusionVoxelShader );
+    m_filteringAmbientOcclusionVoxelShader->setFilteringAmbientOcclusion( filteringAmbientOcclusion, maximum, lambda );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
 void Experimental3DVolume::createImage( vtkImageData *image )
 {
     // sembla que el volum arriba sempre com a short
@@ -434,6 +445,7 @@ void Experimental3DVolume::createVoxelShaders()
     m_opacityVoxelShader = new OpacityVoxelShader();
     m_coolWarmVoxelShader = new CoolWarmVoxelShader();
     m_coolWarmVoxelShader->setData( m_data, m_rangeMax );
+    m_filteringAmbientOcclusionVoxelShader = new FilteringAmbientOcclusionVoxelShader();
 }
 
 

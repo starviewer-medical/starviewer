@@ -867,6 +867,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_colorVomiCheckBox, SIGNAL( toggled(bool) ), m_colorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_opacityVomiCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityVomiChecked(bool) ) );
     connect( m_opacitySaliencyCheckBox, SIGNAL( toggled(bool) ), SLOT( opacitySaliencyChecked(bool) ) );
+    connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaLabel, SLOT( setEnabled(bool) ) );
+    connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsLabel, SLOT( setEnabled(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsSpinBox, SLOT( setEnabled(bool) ) );
 
@@ -1195,8 +1197,9 @@ void QExperimental3DExtension::render()
     //else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
     else if ( m_baseVomiCoolWarmRadioButton->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_baseVomiCoolWarmFactorDoubleSpinBox->value(),
                                                                                       m_baseVomiCoolWarmYDoubleSpinBox->value(), m_baseVomiCoolWarmBDoubleSpinBox->value() );
-    else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
+    //else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
     else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
+    else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVomi( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
 
     if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value(),
@@ -1210,6 +1213,8 @@ void QExperimental3DExtension::render()
                                                                                            m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
     if ( m_opacitySaliencyCheckBox->isChecked() ) m_volume->addOpacity( m_voxelSaliencies, m_maximumSaliency, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
                                                                                                               m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
+    if ( m_filteringAmbientOcclusionCheckBox->isChecked() ) m_volume->addFilteringAmbientOcclusion( m_spatialImportanceFunction, m_maximumSpatialImportanceFunction,
+                                                                                                    m_filteringAmbientOcclusionLambdaDoubleSpinBox->value() );
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 
     m_viewer->render();
@@ -2766,31 +2771,18 @@ void QExperimental3DExtension::gaussianFilter()
     substract->SetOperationToSubtract();
     substract->Update();
 
-    vtkImageMathematics *abs = vtkImageMathematics::New();
-    abs->SetInput( substract->GetOutput() );
-    abs->SetOperationToAbsoluteValue();
-    abs->Update();
-
     // De moment ho posem com a VoMI
-    vtkImageData *absoluteDifference = abs->GetOutput();
-    float *data = reinterpret_cast<float*>( absoluteDifference->GetScalarPointer() );
-    double *range = absoluteDifference->GetScalarRange();
-    m_vomi.resize( m_volume->getSize() );
-    memcpy( m_vomi.data(), data, m_vomi.size() * sizeof(float) );
-    m_maximumVomi = range[1];
-    m_baseVomiRadioButton->setEnabled( true );
-    m_baseVomiCoolWarmRadioButton->setEnabled( true );
-    m_vomiCheckBox->setEnabled( true );
-    m_vomiCoolWarmCheckBox->setEnabled( true );
-    m_opacityLabel->setEnabled( true );
-    m_opacityVomiCheckBox->setEnabled( true );
-    m_saveVomiPushButton->setEnabled( true );
-    m_vomiGradientPushButton->setEnabled( true );
+    vtkImageData *difference = substract->GetOutput();
+    float *data = reinterpret_cast<float*>( difference->GetScalarPointer() );
+    m_spatialImportanceFunction.resize( m_volume->getSize() );
+    memcpy( m_spatialImportanceFunction.data(), data, m_spatialImportanceFunction.size() * sizeof(float) );
+    double *range = difference->GetScalarRange();
+    m_maximumSpatialImportanceFunction = qMax( qAbs( range[0] ), qAbs( range[1] ) );
+    m_filteringAmbientOcclusionCheckBox->setEnabled( true );
 
     cast->Delete();
     gaussian->Delete();
     substract->Delete();
-    abs->Delete();
 }
 
 
