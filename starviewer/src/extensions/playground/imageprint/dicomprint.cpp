@@ -23,7 +23,7 @@ void DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
     QString storedDcmtkFilePath;
     ImagePrintSettings imagePrintSettings;
     QStringList dcmtkStoredPrintPathFileList;
-    int indexNumberOfCopies = 0;
+    int indexNumberOfCopies = 0, numberOfCopies;
 
     imagePrintSettings.init();//TODO:A on s'ha de fer l'ini ? 
 
@@ -39,11 +39,12 @@ void DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
       i després sortirà 3 vegades la segona pàgina, per evitar que sortin ordenades així fem aquest workaround, en el qual es repeteix el procés d'enviar cada 
       printjob tantes còpies com ens n'hagin sol·licitat, d'aquesta manera les pàgines sortiran correctament ordenades.
       */
-    while (indexNumberOfCopies < printJob.getNumberOfCopies())
-    {
-        DicomPrintJob dicomPrintJobToPrint = printJob;
 
-        dicomPrintJobToPrint.setNumberOfCopies(1);//Indiquem que només en volem una còpia
+    numberOfCopies = printJob.getNumberOfCopies();
+    printJob.setNumberOfCopies(1);//Indiquem que només en volem una còpia
+    
+    while (indexNumberOfCopies < numberOfCopies)
+    {
         //Enviem a imprimir cada pàgina    
         foreach(QString dcmtkStoredPrintPathFile, dcmtkStoredPrintPathFileList)
         {
