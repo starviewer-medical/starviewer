@@ -212,6 +212,7 @@ private slots:
 
     void opacityVomiChecked( bool checked );
     void opacitySaliencyChecked( bool checked );
+    void opacityFilteringChecked( bool checked );
 
     void setVmiOneViewpointMaximum( int maximum );
 
