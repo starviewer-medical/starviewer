@@ -30,7 +30,7 @@ public:
     bool isTransparent() const;
     /// Multiplica les components de color per \a f i retorna el color.
     HdrColor& multiplyColorBy( float f );
-    /// Posa a 1 les components més grans que 1.
+    /// Posa a 1 les components més grans que 1 i a 0 les més petites que 0.
     HdrColor& clamp();
 
     /// Suma component a component.
@@ -109,10 +109,10 @@ inline HdrColor& HdrColor::multiplyColorBy( float f )
 
 inline HdrColor& HdrColor::clamp()
 {
-    if ( red > 1.0 ) red = 1.0;
-    if ( green > 1.0 ) green = 1.0;
-    if ( blue > 1.0 ) blue = 1.0;
-    if ( alpha > 1.0 ) alpha = 1.0;
+    red = qBound( 0.0f, red, 1.0f );
+    green = qBound( 0.0f, green, 1.0f );
+    blue = qBound( 0.0f, blue, 1.0f );
+    alpha = qBound( 0.0f, alpha, 1.0f );
     return *this;
 }
 

@@ -25,7 +25,8 @@ HEADERS += experimental3dextensionmediator.h \
     celshadingvoxelshader.h \
     vomicoolwarmvoxelshader.h \
     coolwarmvoxelshader.h \
-    viewpointinformationchannel.h
+    viewpointinformationchannel.h \
+    filteringambientocclusionvoxelshader.h
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
     experimental3dsettings.cpp \
@@ -46,7 +47,8 @@ SOURCES += experimental3dextensionmediator.cpp \
     celshadingvoxelshader.cpp \
     vomicoolwarmvoxelshader.cpp \
     coolwarmvoxelshader.cpp \
-    viewpointinformationchannel.cpp
+    viewpointinformationchannel.cpp \
+    filteringambientocclusionvoxelshader.cpp
 RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
 cuda { 
