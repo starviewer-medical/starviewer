@@ -195,7 +195,7 @@ Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap( const 
     item["DefaultSmoothingType"] = dicomPrinter.getDefaultSmoothingType();
     item["DefaultPrintPriority"] = dicomPrinter.getDefaultPrintPriority();
     item["DefaultPolarity"] = dicomPrinter.getDefaultPolarity();
-    item["ConfigurationInformation"] = dicomPrinter.getConfigurationInformation();
+    item["ConfigurationInformation"] = dicomPrinter.getDefaultConfigurationInformation();
 
     return item;
 }
@@ -225,7 +225,7 @@ DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter(const Settings::KeyV
     dicomPrinter.setDefaultSmoothingType(item.value("DefaultSmoothingType").toString());
     dicomPrinter.setDefaultPrintPriority(item.value("DefaultPrintPriority").toString());
     dicomPrinter.setDefaultPolarity(item.value("DefaultPolarity").toString());
-    dicomPrinter.setConfigurationInformation(item.value("ConfigurationInformation").toString());
+    dicomPrinter.setDefaultConfigurationInformation(item.value("ConfigurationInformation").toString());
     
     return dicomPrinter;
 }

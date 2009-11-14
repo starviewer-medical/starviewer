@@ -379,12 +379,12 @@ QStringList DicomPrinter::getAvailablePolarityValues()
     return m_polarityValues;
 }
 
-void DicomPrinter::setConfigurationInformation(const QString configurationInformation)
+void DicomPrinter::setDefaultConfigurationInformation(const QString configurationInformation)
 {
     m_configurationInformation = configurationInformation;
 }
 
-QString DicomPrinter::getConfigurationInformation() const
+QString DicomPrinter::getDefaultConfigurationInformation() const
 {
     return m_configurationInformation;
 }

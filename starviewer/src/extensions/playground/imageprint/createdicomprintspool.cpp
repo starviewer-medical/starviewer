@@ -96,7 +96,7 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     /*Tag Configuration Information (2010,0150) de Basic Film Box no li donem valor ara mateix, aquest camp permet configurar les impressions 
       amb característiques que no són Dicom Conformance, sinó que són dependents de al impressora.
       Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
-    //m_storedPrint->setConfigurationInformation("");
+    m_storedPrint->setConfigurationInformation(qPrintable(m_dicomPrintPage.getConfigurationInformation()));
 
      /*Tag Requested Resolution ID (2020,0050) de Basic Film Box serveix per especificar amb quina resolució s'han d'imprimir les imatges, 
       té dos valors STANTARD i HIGH.

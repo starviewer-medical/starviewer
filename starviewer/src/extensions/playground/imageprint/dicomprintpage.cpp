@@ -138,4 +138,14 @@ QString DicomPrintPage::getPolarity() const
     return m_polarity;
 }
 
+void DicomPrintPage::setConfigurationInformation(const QString &configurationInformation)
+{
+    m_configurationInformation = configurationInformation;
+}
+
+QString DicomPrintPage::getConfigurationInformation() const
+{
+    return m_configurationInformation;
+}
+
 }
