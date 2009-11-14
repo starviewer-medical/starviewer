@@ -215,6 +215,7 @@ DicomPrintPage QImagePrintExtension::fillDicomPrintPagePrintSettings(DicomPrinte
     dicomPrintPage.setPolarity(dicomPrinter.getDefaultPolarity());
     dicomPrintPage.setSmoothingType(dicomPrinter.getDefaultSmoothingType());
     dicomPrintPage.setTrim(dicomPrinter.getDefaultTrim());
+    dicomPrintPage.setConfigurationInformation(dicomPrinter.getDefaultConfigurationInformation());
 
     return dicomPrintPage;
 }

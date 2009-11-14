@@ -67,6 +67,10 @@ public:
     void setPolarity(const QString &polarity);
     QString getPolarity() const;
 
+    ///Especifica retorna la informació del tag Configuration Information
+    void setConfigurationInformation(const QString &configurationInformation);
+    QString getConfigurationInformation() const;
+
 private:
 
     QString m_filmSize;
@@ -79,6 +83,7 @@ private:
     QString m_smoothingType;
     QString m_polarity;
     ushort m_minDensity, m_maxDensity;
+    QString m_configurationInformation;
 };
 };
 #endif

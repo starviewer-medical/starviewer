@@ -136,8 +136,8 @@ public:
       *anotacions a les imatges, aplicar LUT's, ... s'ha de mirar al dicom confomance de cada impressora per mirar quin valor pot agafar aquest camp
       */
     //El configuration Information no té AvailableConfiguration mètodes, perquè per cada impressora el valor és diferent.
-    void setConfigurationInformation(const QString configurationInformation);
-    QString getConfigurationInformation() const;
+    void setDefaultConfigurationInformation(const QString configurationInformation);
+    QString getDefaultConfigurationInformation() const;
 
     void setIsDefault(const bool &isDefault);
     bool getIsDefault() const;
