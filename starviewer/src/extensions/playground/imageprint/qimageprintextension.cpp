@@ -359,7 +359,7 @@ void QImagePrintExtension::updateSelectionImagesValue()
     m_toImageSlider->setTickInterval(tickInterval);
     m_fromImageSlider->setTickInterval(tickInterval);
 
-    
+    updateNumberOfDicomPrintPagesToPrint();
 }
 
 DicomPrinter QImagePrintExtension::getSelectedDicomPrinter()
