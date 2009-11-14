@@ -62,6 +62,9 @@ public:
     QString getDefaultFilmLayout() const;
     void setAvailableFilmLayoutValues(QStringList filmLayoutValues);	
     QStringList getAvailableFilmLayoutValues();	
+    ///Retorna el número de columnes/files del layout
+    int getDefaultFilmLayoutColumns();
+    int getDefaultFilmLayoutRows();
 
     ///Especifica retorna la orientació (horitzontal/vertical) per defecte amb la que s'ha d'imprimir la placa
     void setDefaultFilmOrientation(const QString &filmOrientation);	
@@ -174,6 +177,10 @@ private:
     QString m_defaultPolarity;
     QStringList m_polarityValues;    
     QString m_configurationInformation;
+
+    /**Mètode que retorna el número de columnes i files del layout, s'implementa en un sol mètode per no tenir codi duplicat
+       si s'implementés un mètode per obtenir el número de columnes i una altre per obtenir el número de files*/
+    void getDefaultFilmLayoutColumnsRows(int &colums, int &rows);   
 };
 }; 
 #endif
