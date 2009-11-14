@@ -31,7 +31,13 @@ bool ImagePrintExtensionMediator::initializeExtension(QWidget* extension, const 
     {
         return false;
     } 
-    
+
+    Volume *input = extensionContext.getDefaultVolume();
+    if( !input )
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    else
+        imagePrintExtension->setInput( input );
+
     return true;
 }
 }
