@@ -79,11 +79,6 @@ private:
     QString m_smoothingType;
     QString m_polarity;
     ushort m_minDensity, m_maxDensity;
-
-    /**Mètode que retorna el número de columnes i files del layout, s'implementa en un sol mètode per no tenir codi duplicat
-       si s'implementés un mètode per obtenir el número de columnes i una altre per obtenir el número de files*/
-    void getFilmLayoutColumnsRows(int &colums, int &rows);    
-    
 };
 };
 #endif

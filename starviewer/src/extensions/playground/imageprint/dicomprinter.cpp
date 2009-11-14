@@ -131,6 +131,24 @@ QString DicomPrinter::getDefaultFilmLayout() const
     return m_defaultFilmLayout;
 }
 
+int DicomPrinter::getDefaultFilmLayoutColumns()
+{
+    int columns, rows;
+
+    getDefaultFilmLayoutColumnsRows(columns, rows);
+
+    return columns;
+}
+
+int DicomPrinter::getDefaultFilmLayoutRows()
+{
+    int columns, rows;
+
+    getDefaultFilmLayoutColumnsRows(columns, rows);
+
+    return rows;
+}
+
 void DicomPrinter::setAvailableFilmLayoutValues(QStringList filmLayoutValues)
 {
     m_filmLayoutValues = filmLayoutValues;
@@ -380,4 +398,28 @@ bool DicomPrinter::getIsDefault() const
 {
     return m_isDefaultPrinter;
 }
+
+void DicomPrinter::getDefaultFilmLayoutColumnsRows(int &columns, int &rows)
+{
+    QStringList splittedFilmLayout;
+    QString filmLayout = getDefaultFilmLayout();
+    /*Comprovem amb expresions regulars que sigui un film layout correcte tenir en compte que en c++ per indicar '\' hem d'escriure '\\'
+      en el cas com és aquest que l'expresiò regular conté un '\', en expresió regular s'escriu '\\', i en codi ho hem d'escriur com '\\\\' */
+
+    if (filmLayout.contains(QRegExp("STANDARD\\\\\\d,\\d", Qt::CaseInsensitive))) //STANDARD\C,R
+    {
+        filmLayout.remove("STANDARD\\");
+        splittedFilmLayout = filmLayout.split(",");
+
+        columns = splittedFilmLayout.at(0).toInt();
+        rows = splittedFilmLayout.at(1).toInt();
+    }
+    else
+    {
+        columns = -1;
+        rows = -1;
+    }
+    //TODO: falten per implementar obtenir el número de columnes i files pels altres Layouts que també contempla el DICOM (PS 3.3 pàg 918 Tag Image Display Format)
+}
+
 }
