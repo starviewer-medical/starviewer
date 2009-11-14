@@ -14,8 +14,6 @@
 #include "dicomprintjob.h"
 #include "image.h"
 #include "dicomprint.h"
-#include "../inputoutput/localdatabasemanager.h" //Temporal fins que carreguem imatges d'un volum
-#include "../inputoutput/dicommask.h" //Temporal fins que carreguem imatges d'un volum
 #include "volume.h"
 #include "q2dviewer.h"
 
@@ -61,7 +59,6 @@ void QImagePrintExtension::createConnections()
     connect(m_toImageLineEdit, SIGNAL(textEdited (const QString &)), SLOT(m_toImageLineEditTextEdited(const QString &)));
 
     connect(m_qdicomPrinterBasicSettingsWidget, SIGNAL(basicDicomPrinterSettingChanged()), SLOT(updateNumberOfDicomPrintPagesToPrint()));
-    connect(m_loadImagesButton, SIGNAL(clicked()), SLOT(loadImagesToPrint()));
     connect(m_printButton, SIGNAL(clicked()), SLOT(print()));
 
     //connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
@@ -82,6 +79,8 @@ void QImagePrintExtension::setInput(Volume *input)
 
     m_sliceViewSlider->setMinimum(0);
     m_sliceViewSlider->setMaximum(input->getImages().count());
+
+    updateSelectionImagesValue();
 }
 
 void QImagePrintExtension::configurationPrinter()
@@ -171,12 +170,12 @@ QList<DicomPrintPage> QImagePrintExtension::getDicomPrintPageListToPrint()
 
 QList<Image*> QImagePrintExtension::getSelectedImagesToPrint()
 {
-    QList<Image*> imagesToPrint;
+    QList<Image*> imagesToPrint, imagesVolum = m_2DView->getInput()->getImages();
     int indexOfImage = m_fromImageSlider->value() -1;
 
     while (indexOfImage < m_toImageSlider->value())
     {
-        imagesToPrint.append(m_imageListToPrint.at(indexOfImage));
+        imagesToPrint.append(imagesVolum.at(indexOfImage));
         indexOfImage += m_intervalImagesSlider->value();
     }
 
@@ -328,29 +327,30 @@ void QImagePrintExtension::updateNumberOfDicomPrintPagesToPrint()
     }
 }
 
-void QImagePrintExtension::setSelectionImagesValue(QList<Image*> imageList)
+void QImagePrintExtension::updateSelectionImagesValue()
 {
     int tickInterval;
+    int numberOfImagesOfVolume = m_2DView->getInput()->getImages().count();
 
-    m_fromImageSlider->setMaximum(imageList.count());
+    m_fromImageSlider->setMaximum(numberOfImagesOfVolume);
     
-    m_toImageSlider->setMaximum(imageList.count());
-    m_toImageSlider->setValue(imageList.count());
-    m_toImageLineEdit->setText(QString().setNum(imageList.count()));
+    m_toImageSlider->setMaximum(numberOfImagesOfVolume);
+    m_toImageSlider->setValue(numberOfImagesOfVolume);
+    m_toImageLineEdit->setText(QString().setNum(numberOfImagesOfVolume));
 
-    if (imageList.count() < 10)
+    if (numberOfImagesOfVolume < 10)
     {
         tickInterval = 1;
     }
-    else if (imageList.count() < 50)
+    else if (numberOfImagesOfVolume < 50)
     {
         tickInterval = 2;
     }
-    else if (imageList.count() < 100)
+    else if (numberOfImagesOfVolume < 100)
     {
         tickInterval = 5;
     }
-    else if (imageList.count() < 400)
+    else if (numberOfImagesOfVolume < 400)
     {
         tickInterval = 10;
     }
@@ -360,21 +360,6 @@ void QImagePrintExtension::setSelectionImagesValue(QList<Image*> imageList)
     m_fromImageSlider->setTickInterval(tickInterval);
 
     
-}
-
-void QImagePrintExtension::loadImagesToPrint()
-{
-    LocalDatabaseManager localDatabaseManager;
-    DicomMask dicomMask;
-    
-    dicomMask.setStudyUID(m_studyInstanceUIDToPrint->text());
-    dicomMask.setSeriesUID(m_seriesInstanceUIDToPrint->text());
-    
-    m_imageListToPrint.clear();
-
-    m_imageListToPrint = localDatabaseManager.queryImage(dicomMask);
-
-    setSelectionImagesValue(m_imageListToPrint);
 }
 
 DicomPrinter QImagePrintExtension::getSelectedDicomPrinter()

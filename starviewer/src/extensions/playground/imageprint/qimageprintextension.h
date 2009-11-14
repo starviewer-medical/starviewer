@@ -52,29 +52,26 @@ private slots:
     ///Actualitza label indicant el número de pàgines dicom print que s'imprimiran
     void updateNumberOfDicomPrintPagesToPrint();
 
-    //Mètode que ens carrega les imatges a partir del UID d'estudi i sèrie entrat pels lineEdit, Mètode temporal fins que no ens passi un vòlum
-    void loadImagesToPrint();
-
     ///Envia a imprimir les imatges seleccionades a la impressora seleccionada
     void print();
+
 private:
     ImagePrintFactory		* m_factory;
-	QPrinterConfigurationWidget *m_printerConfigurationWidgetProof;
-    QList<Image*> m_imageListToPrint; //Temporal fins que tinguem el volum d'on agafar les imatges
+    QPrinterConfigurationWidget *m_printerConfigurationWidgetProof;
 
     ///Crea les connexions
-	void createConnections();
+    void createConnections();
 
     ///Crea inputValidators pels lineEdit de la selecció d'imatges
-	void configureInputValidator();
-    ///Configura els controls de selecció d'imatges en funció dels nombre d'imatges
+    void configureInputValidator();
 
-    void setSelectionImagesValue(QList<Image*> imageList);
-    ///Retorna una llista de pàgines per imprimir
+    ///Configura els controls de selecció d'imatges en funció dels nombre d'imatges
+    void updateSelectionImagesValue();
 
     ///Retorna el DicomPrintJob que s'ha d'enviar a imprimir en funció de la impressora i imatges seleccionades
     DicomPrintJob getDicomPrintJobToPrint();
 
+    ///Retorna una llista de pàgines per imprimir
     QList<DicomPrintPage> getDicomPrintPageListToPrint();
 
     ///Retorna les imatges s'han d'enviar a imprimir en funció de lo definit a la selecció d'imatges

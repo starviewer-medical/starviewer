@@ -644,50 +644,6 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Study UID:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="m_studyInstanceUIDToPrint"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Series UID:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="m_seriesInstanceUIDToPrint"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_loadImagesButton">
-       <property name="text">
-        <string>Load</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
