@@ -13,6 +13,7 @@
 #include "../inputoutput/pacsserver.h"
 #include "../inputoutput/status.h"
 #include "logging.h"
+#include "deletedirectory.h" 
 
 namespace udg
 {
@@ -24,6 +25,7 @@ void DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
     ImagePrintSettings imagePrintSettings;
     QStringList dcmtkStoredPrintPathFileList;
     int indexNumberOfCopies = 0, numberOfCopies;
+    DeleteDirectory deleteDirectory;
 
     imagePrintSettings.init();//TODO:A on s'ha de fer l'ini ? 
 
@@ -53,7 +55,8 @@ void DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
         indexNumberOfCopies++;
     }
-    //TODO: falta esborra el contingut del directori spool
+
+    deleteDirectory.deleteDirectory(Settings().getValue(ImagePrintSettings::SpoolDirectory).toString(), false);
 }
 
 bool DicomPrint::echoPrinter(DicomPrinter printer)
