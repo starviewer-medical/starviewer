@@ -296,7 +296,7 @@ void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinte
     m_borderDensityComboBox->addItems(printer.getAvailableBorderDensityValues());
     m_borderDensityComboBox->setCurrentIndex(m_borderDensityComboBox->findText(printer.getDefaultBorderDensity()));
     m_emptyDensityComboBox->addItems(printer.getAvailableEmptyImageDensityValues());
-    m_emptyDensityComboBox->setCurrentIndex(m_borderDensityComboBox->findText(printer.getDefaultEmptyImageDensity()));
+    m_emptyDensityComboBox->setCurrentIndex(m_emptyDensityComboBox->findText(printer.getDefaultEmptyImageDensity()));
     m_miniumDensitySpinBox->setMaximum(printer.getAvailableMinDensityValues());
     m_miniumDensitySpinBox->setValue(printer.getDefaultMinDensity());
     m_configurationInformationLineEdit->setText(printer.getDefaultConfigurationInformation());
