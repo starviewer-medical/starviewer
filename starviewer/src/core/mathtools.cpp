@@ -268,7 +268,7 @@ double MathTools::getDistance3D( const double firstPoint[3], const double second
     return (sqrt(value));
 }
 
-double *MathTools::intersectionPoint3DLines(double *p1, double *p2, double *p3, double *p4, int &state)
+double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
 {
     /* Solution by Wolfram Mathematics
     *

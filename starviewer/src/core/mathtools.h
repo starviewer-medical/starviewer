@@ -96,15 +96,15 @@ static double getDistance2D( const double firstPoint[2], const double secondPoin
 static double getDistance3D( const double firstPoint[3], const double secondPoint[3] );
 
 /**
-* retorna el punt d'interseccio de dues línies infinites
-* definides per dos segments
-* @param p1 primer punt de la primera recta
-* @param p2 segon punt de la primera recta
-* @param p3 primer punt de la segona recta
-* @param p4 segon punt de la segona recta
-* @param state contindrà el resultat de la intersecció: paral·leles, no intersecció, intersecció
+* Retorna el punt d'intersecció de dues línies 
+* infinites definides per dos segments
+* @param p1 Primer punt de la primera recta
+* @param p2 Segon punt de la primera recta
+* @param p3 Primer punt de la segona recta
+* @param p4 Segon punt de la segona recta
+* @param state Contindrà el resultat de la intersecció: ParallelLines, LinesIntersect, SkewLines (no intersecten però es creuen, estan a plans paral·lels)
 */
-static double *intersectionPoint3DLines(double *p1, double *p2, double *p3, double *p4, int &state);
+static double *infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state);
 
 /// ens retorna el valor truncat
 static double trunc( double x);

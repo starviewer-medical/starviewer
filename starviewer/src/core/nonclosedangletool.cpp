@@ -157,7 +157,7 @@ void NonClosedAngleTool::computeAngle()
     double *intersection;
     int state;
 
-    intersection = MathTools::intersectionPoint3DLines(p1,p2,p3,p4,state);
+    intersection = MathTools::infiniteLinesIntersection(p1,p2,p3,p4,state);
 
     double dist1, dist2, dist3, dist4;
     dist1 = MathTools::getDistance3D(intersection, p1);
