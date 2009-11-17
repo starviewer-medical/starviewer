@@ -174,7 +174,7 @@ void PolylineROITool::computeGrayValues()
         //obtenim les interseccions entre tots els segments de la ROI i el raig actual
         foreach (int segment, indexList)
         {
-            double *foundPoint = MathTools::intersectionPoint3DLines( (double *)segmentsStartPoints.at(segment), (double *)segmentsEndPoints.at(segment), rayP1, rayP2, intersectionState );
+            double *foundPoint = MathTools::infiniteLinesIntersection( (double *)segmentsStartPoints.at(segment), (double *)segmentsEndPoints.at(segment), rayP1, rayP2, intersectionState );
             if( intersectionState == MathTools::LinesIntersect )
                 intersectionList << foundPoint;
         }
