@@ -308,11 +308,6 @@
                <height>0</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>BILINEAR</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="1" column="0">
@@ -342,11 +337,6 @@
                <height>0</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>MEDIUM</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item row="2" column="0">
@@ -405,11 +395,6 @@
                <height>0</height>
               </size>
              </property>
-             <item>
-              <property name="text">
-               <string>BLACK</string>
-              </property>
-             </item>
             </widget>
            </item>
           </layout>
@@ -459,11 +444,6 @@
                  <height>0</height>
                 </size>
                </property>
-               <item>
-                <property name="text">
-                 <string>BLACK</string>
-                </property>
-               </item>
               </widget>
              </item>
             </layout>
@@ -497,11 +477,6 @@
                  <height>0</height>
                 </size>
                </property>
-               <item>
-                <property name="text">
-                 <string>BLACK</string>
-                </property>
-               </item>
               </widget>
              </item>
             </layout>
