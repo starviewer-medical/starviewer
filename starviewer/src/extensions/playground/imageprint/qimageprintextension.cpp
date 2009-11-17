@@ -188,6 +188,13 @@ int QImagePrintExtension::getNumberOfPagesToPrint()
     DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
 
     numberOfImagesToPrint = (m_toImageSlider->value() - m_fromImageSlider->value() +1) / m_intervalImagesSlider->value();
+    /*Si tenim residu hem d'augmena en 1 el número d'imatges Ex: han seleccionat de la 1 a la 15 d'imatge, cada 10 imatges, 
+      haurem d'imprimir la 1 i la 11 -> 2 Imatges
+      15 / 10 = 1
+      15 % 10 = 5, és més gran de 1 per tant hem d'afegir una altre imatge
+      */
+    numberOfImagesToPrint += (m_toImageSlider->value() - m_fromImageSlider->value() +1) % m_intervalImagesSlider->value() > 0 ? 1 : 0;
+
     numberOfImagesPerPage = selectedDicomPrinter.getDefaultFilmLayoutRows() * selectedDicomPrinter.getDefaultFilmLayoutColumns(); 
 
     if (numberOfImagesToPrint > 0 && numberOfImagesPerPage > 0)
