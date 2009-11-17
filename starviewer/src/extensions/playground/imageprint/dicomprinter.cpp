@@ -3,7 +3,12 @@
 namespace udg{
 
 DicomPrinter::DicomPrinter()
-{	
+{
+    m_ID = -1;
+    m_defaultMaxDensity = 0;
+    m_maxDensityValues = 0;
+    m_defaultMinDensity = 0;
+    m_minDensityValues = 0;
 }
 
  
