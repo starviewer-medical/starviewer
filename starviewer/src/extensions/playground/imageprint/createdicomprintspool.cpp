@@ -79,9 +79,19 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     m_storedPrint->setBorderDensity(qPrintable(m_dicomPrintPage.getBorderDensity()));
     //Densitat de les cel·les buides
     m_storedPrint->setEmtpyImageDensity(qPrintable(m_dicomPrintPage.getEmptyImageDensity()));
-    m_storedPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMaxDensity())));
-    m_storedPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMinDensity())));
-    
+
+    if (m_dicomPrintPage.getMinDensity() != 0)
+    {
+        //Si la densitat és 0, vol dir que no ens l'han especificat per tant no l'enviem
+        m_storedPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMinDensity())));     
+    }
+
+    if (m_dicomPrintPage.getMaxDensity() != 0)
+    {
+        //Si la densitat és 0, vol dir que no ens l'han especificat per tant no l'enviem
+        m_storedPrint->setMaxDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMaxDensity())));
+    }
+
     if (m_dicomPrintPage.getFilmOrientation() == "PORTRAIT")
     {
         m_storedPrint->setFilmOrientation(DVPSF_portrait);

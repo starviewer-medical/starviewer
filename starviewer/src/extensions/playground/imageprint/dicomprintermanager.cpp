@@ -112,13 +112,13 @@ QStringList DicomPrinterManager::getAvailableMagnificationTypeValues()
 
 ushort DicomPrinterManager::getAvailableMaxDensityValues()
 {
-    ushort maxDensityValuesTemp = 320;
+    ushort maxDensityValuesTemp = 399;
     return maxDensityValuesTemp;
 }
 
 ushort DicomPrinterManager::getAvailableMinDensityValues()
 {
-    ushort minDensityValues = 20;
+    ushort minDensityValues = 399;
     return minDensityValues;
 }
 

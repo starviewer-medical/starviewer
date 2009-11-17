@@ -24,6 +24,9 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
     refreshPrinterList();
     clearPrinterSettings();
     showAdvancedConfigurationOptions(false);
+
+    m_maximumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
+    m_minimumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
 }
 
 QDicomPrinterConfigurationWidget::~QDicomPrinterConfigurationWidget()
@@ -255,8 +258,8 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     // Advanced Settings
     m_magnifactionTypeComboBox->clear();
     m_smoothingTypeComboBox->clear();
-    m_maximDensitySpinBox->setValue(0);
-    m_miniumDensitySpinBox->setValue(0);
+    m_maximumDensitySpinBox->setValue(0);
+    m_minimumDensitySpinBox->setValue(0);
     m_polarityComboBox->clear();
     m_borderDensityComboBox->clear();
     m_emptyDensityComboBox->clear();
@@ -289,16 +292,16 @@ void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinte
     m_magnifactionTypeComboBox->setCurrentIndex(m_magnifactionTypeComboBox->findText(printer.getDefaultMagnificationType()));
     m_smoothingTypeComboBox->addItems(printer.getAvailableSmoothingTypeValues());
     m_smoothingTypeComboBox->setCurrentIndex(m_smoothingTypeComboBox->findText(printer.getDefaultSmoothingType()));
-    m_maximDensitySpinBox->setMaximum(printer.getAvailableMaxDensityValues());
-    m_maximDensitySpinBox->setValue(printer.getDefaultMaxDensity());
+    m_maximumDensitySpinBox->setMaximum(printer.getAvailableMaxDensityValues());
+    m_maximumDensitySpinBox->setValue(printer.getDefaultMaxDensity());
     m_polarityComboBox->addItems(printer.getAvailablePolarityValues());
     m_polarityComboBox->setCurrentIndex(m_polarityComboBox->findText(printer.getDefaultPolarity()));
     m_borderDensityComboBox->addItems(printer.getAvailableBorderDensityValues());
     m_borderDensityComboBox->setCurrentIndex(m_borderDensityComboBox->findText(printer.getDefaultBorderDensity()));
     m_emptyDensityComboBox->addItems(printer.getAvailableEmptyImageDensityValues());
     m_emptyDensityComboBox->setCurrentIndex(m_emptyDensityComboBox->findText(printer.getDefaultEmptyImageDensity()));
-    m_miniumDensitySpinBox->setMaximum(printer.getAvailableMinDensityValues());
-    m_miniumDensitySpinBox->setValue(printer.getDefaultMinDensity());
+    m_minimumDensitySpinBox->setMaximum(printer.getAvailableMinDensityValues());
+    m_minimumDensitySpinBox->setValue(printer.getDefaultMinDensity());
     m_configurationInformationLineEdit->setText(printer.getDefaultConfigurationInformation());
     m_yesVisibleTrimRadioButton->setChecked(printer.getDefaultTrim());
     m_noVisibleTrimRadioButton->setChecked(!printer.getDefaultTrim());
@@ -308,11 +311,11 @@ void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrin
 {
     printer.setDefaultMagnificationType(m_magnifactionTypeComboBox->currentText());
     printer.setDefaultSmoothingType(m_smoothingTypeComboBox->currentText());
-    printer.setDefaultMaxDensity(m_maximDensitySpinBox->value());
+    printer.setDefaultMaxDensity(m_maximumDensitySpinBox->value());
     printer.setDefaultPolarity(m_polarityComboBox->currentText());
     printer.setDefaultBorderDensity(m_borderDensityComboBox->currentText());
     printer.setDefaultEmptyImageDensity(m_emptyDensityComboBox->currentText());
-    printer.setDefaultMinDensity(m_miniumDensitySpinBox->value());
+    printer.setDefaultMinDensity(m_minimumDensitySpinBox->value());
     printer.setDefaultConfigurationInformation(m_configurationInformationLineEdit->text());
     printer.setDefaultTrim(m_yesVisibleTrimRadioButton->isChecked());
 }

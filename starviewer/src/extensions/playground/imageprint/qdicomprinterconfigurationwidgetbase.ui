@@ -353,7 +353,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QSpinBox" name="m_miniumDensitySpinBox">
+            <widget class="QSpinBox" name="m_minimumDensitySpinBox">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -497,7 +497,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="m_maximDensitySpinBox">
+              <widget class="QSpinBox" name="m_maximumDensitySpinBox">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -688,8 +688,8 @@
   <tabstop>m_borderDensityComboBox</tabstop>
   <tabstop>m_smoothingTypeComboBox</tabstop>
   <tabstop>m_emptyDensityComboBox</tabstop>
-  <tabstop>m_miniumDensitySpinBox</tabstop>
-  <tabstop>m_maximDensitySpinBox</tabstop>
+  <tabstop>m_minimumDensitySpinBox</tabstop>
+  <tabstop>m_maximumDensitySpinBox</tabstop>
   <tabstop>m_polarityComboBox</tabstop>
   <tabstop>m_configurationInformationLineEdit</tabstop>
   <tabstop>m_advancedSettingsPushButton</tabstop>

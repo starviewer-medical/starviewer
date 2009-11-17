@@ -84,7 +84,7 @@ public:
     void setAvailableMaxDensityValues(ushort maxDensityValues);
     ushort getAvailableMaxDensityValues();
 
-    ///Especifica/retorna la resolució mínima de la impressió
+    ///Especifica/retorna la resolució mínima de la impressió. Si té valor 0 vol dir que no s'aplica
     void setDefaultMinDensity(ushort minDensity);
     ushort getDefaultMinDensity() const;
     void setAvailableMinDensityValues(ushort minDensityValues);
