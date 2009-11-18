@@ -122,7 +122,7 @@ void DistanceTool::annotateNewPoint()
         {
             text->setText( tr("%1 mm").arg( m_line->computeDistance(), 0, 'f', 2 ) );
         }
-        text->setAttatchmentPoint( leftPoint );
+        text->setAttachmentPoint( leftPoint );
         text->setHorizontalJustification( "Right" );
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );

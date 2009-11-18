@@ -307,7 +307,7 @@ void AngleTool::placeText( DrawerText *angleText )
 
         if ( p3[horizontalCoord] <= p2[horizontalCoord] )
         {
-            angleText->setAttatchmentPoint( p2 );
+            angleText->setAttachmentPoint( p2 );
         }
         else
         {
@@ -322,7 +322,7 @@ void AngleTool::placeText( DrawerText *angleText )
             {
                 position[verticalCoord] += 2.;
             }
-            angleText->setAttatchmentPoint( position );
+            angleText->setAttachmentPoint( position );
         }
     }
     else
@@ -331,7 +331,7 @@ void AngleTool::placeText( DrawerText *angleText )
 
         if ( p3[horizontalCoord] <= p2[horizontalCoord] )
         {
-            angleText->setAttatchmentPoint( p2 );
+            angleText->setAttachmentPoint( p2 );
         }
         else
         {
@@ -346,7 +346,7 @@ void AngleTool::placeText( DrawerText *angleText )
             {
                 position[verticalCoord] -= 2.;
             }
-            angleText->setAttatchmentPoint( position );
+            angleText->setAttachmentPoint( position );
         }
     }
 }

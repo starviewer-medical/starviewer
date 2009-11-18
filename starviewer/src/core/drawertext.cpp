@@ -27,10 +27,10 @@ DrawerText::~DrawerText()
         m_vtkActor->Delete();
 }
 
-void DrawerText::setAttatchmentPoint( double point[3] )
+void DrawerText::setAttachmentPoint( double point[3] )
 {
     for( int i = 0; i<3; i++ )
-        m_attatchPoint[i] = point[i];
+        m_attachPoint[i] = point[i];
 
     emit changed();
 }
@@ -46,7 +46,7 @@ vtkProp *DrawerText::getAsVtkProp()
         m_vtkActor->SetCaption( qPrintable ( m_text ) );
 
         //Assignem la posició en pantalla
-        m_vtkActor->SetAttachmentPoint( m_attatchPoint );
+        m_vtkActor->SetAttachmentPoint( m_attachPoint );
 
         // li donem els atributs
         updateVtkActorProperties();
@@ -74,7 +74,7 @@ void DrawerText::updateVtkProp()
         //Assignem el text
         m_vtkActor->SetCaption( qPrintable ( m_text ) );
         //Assignem la posició en pantalla
-        m_vtkActor->SetAttachmentPoint( m_attatchPoint );
+        m_vtkActor->SetAttachmentPoint( m_attachPoint );
         updateVtkActorProperties();
         this->setModified(false);
     }
@@ -181,9 +181,9 @@ QString DrawerText::getText()
     return( m_text );
 }
 
-double* DrawerText::getAttatchmentPoint()
+double* DrawerText::getAttachmentPoint()
 {
-    return( m_attatchPoint );
+    return( m_attachPoint );
 }
 
 void DrawerText::borderOn()
@@ -349,7 +349,7 @@ bool DrawerText::isTextScaled()
 
 double DrawerText::getDistanceToPoint( double *point3D )
 {
-    return MathTools::getDistance3D( m_attatchPoint, point3D );
+    return MathTools::getDistance3D( m_attachPoint, point3D );
 }
 
 bool DrawerText::isInsideOfBounds( double p1[3], double p2[3], int view )
@@ -382,7 +382,7 @@ bool DrawerText::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxY = p1[1];
                 minY = p2[1];
             }
-            inside = ( m_attatchPoint[0] <= maxX && m_attatchPoint[0] >= minX && m_attatchPoint[1] <= maxY && m_attatchPoint[1] >= minY );
+            inside = ( m_attachPoint[0] <= maxX && m_attachPoint[0] >= minX && m_attachPoint[1] <= maxY && m_attachPoint[1] >= minY );
         break;
         case Q2DViewer::SagitalPlane:
             if ( p1[2] < p2[2] )
@@ -406,7 +406,7 @@ bool DrawerText::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxY = p1[1];
                 minY = p2[1];
             }
-            inside = ( m_attatchPoint[2] <= maxX && m_attatchPoint[2] >= minX && m_attatchPoint[1] <= maxY && m_attatchPoint[1] >= minY );
+            inside = ( m_attachPoint[2] <= maxX && m_attachPoint[2] >= minX && m_attachPoint[1] <= maxY && m_attachPoint[1] >= minY );
         break;
         case Q2DViewer::CoronalPlane:
             if ( p1[0] < p2[0] )
@@ -430,7 +430,7 @@ bool DrawerText::isInsideOfBounds( double p1[3], double p2[3], int view )
                 maxY = p1[2];
                 minY = p2[2];
             }
-            inside = ( m_attatchPoint[0] <= maxX && m_attatchPoint[0] >= minX && m_attatchPoint[2] <= maxY && m_attatchPoint[2] >= minY );
+            inside = ( m_attachPoint[0] <= maxX && m_attachPoint[0] >= minX && m_attachPoint[2] <= maxY && m_attachPoint[2] >= minY );
         break;
         }
 

@@ -35,10 +35,10 @@ public:
     QString getText();
     
     ///permet canviar el punt d'ancoratge
-    void setAttatchmentPoint( double point[3] );
+    void setAttachmentPoint( double point[3] );
     
     ///retorna el punt d'ancoratge
-    double* getAttatchmentPoint();
+    double* getAttachmentPoint();
     
     ///activa el dibuixat del requadre de la casella de text
     void borderOn();
@@ -190,7 +190,7 @@ private:
     vtkCaptionActor2D *m_vtkActor;
 
     /// Punt on es mostrara el text
-    double m_attatchPoint[3];
+    double m_attachPoint[3];
 };
 
 }
