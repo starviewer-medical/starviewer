@@ -24,6 +24,10 @@
 #include <QStringListModel>
 #include <QTextStream>
 
+#ifdef CUDA_AVAILABLE
+#include "cudafiltering.h"
+#endif
+
 
 namespace udg {
 
@@ -2801,6 +2805,7 @@ void QExperimental3DExtension::gaussianFilter()
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
+#ifndef CUDA_AVAILABLE
     vtkImageGaussianSmooth *gaussian = vtkImageGaussianSmooth::New();
     gaussian->SetInput( cast->GetOutput() );
     gaussian->SetDimensionality( 3 );
@@ -2820,12 +2825,24 @@ void QExperimental3DExtension::gaussianFilter()
     memcpy( m_spatialImportanceFunction.data(), data, m_spatialImportanceFunction.size() * sizeof(float) );
     double *range = difference->GetScalarRange();
     m_maximumSpatialImportanceFunction = qMax( qAbs( range[0] ), qAbs( range[1] ) );
+
+    gaussian->Delete();
+    substract->Delete();
+#else // CUDA_AVAILABLE
+    m_spatialImportanceFunction = cfGaussianDifference( cast->GetOutput(), m_filteringRadiusDoubleSpinBox->value() * 2.0f );    // crec que cal multiplicar per 2 perquè surti com l'altre
+    int size = m_volume->getSize();
+    m_maximumSpatialImportanceFunction = 0.0f;
+    for ( int i = 0; i < size; i++ )
+    {
+        float f = qAbs( m_spatialImportanceFunction.at( i ) );
+        if ( f > m_maximumSpatialImportanceFunction ) m_maximumSpatialImportanceFunction = f;
+    }
+#endif // CUDA_AVAILABLE
+
     m_filteringAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityFilteringCheckBox->setEnabled( true );
 
     cast->Delete();
-    gaussian->Delete();
-    substract->Delete();
 }
 
 
