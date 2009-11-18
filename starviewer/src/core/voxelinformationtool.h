@@ -8,13 +8,14 @@
 #define UDGVOXELINFORMATIONTOOL_H
 
 #include "tool.h"
-
-class vtkCaptionActor2D;
+#include <QPointer>
 
 namespace udg {
 
 class QViewer;
 class Q2DViewer;
+class DrawerText;
+class Volume;
 
 /**
 Tool per mostrar la informació del voxel (coordenades i valor ) en un visualitzador 2D
@@ -36,9 +37,12 @@ private slots:
     /// d'acord amb la posició on estigui el cursor
     void updateVoxelInformation();
 
+    /// Es crida quan canvia l'input del visor
+    void inputChanged(Volume *volume);
+
 private:
     /// Crear l'actor on es mostrarà la informació del voxel
-    void createCaptionActor();
+    void createCaption();
 
     /// Ens retorna les dimensions de la pantalla
     int *viewportDimensions();
@@ -58,8 +62,8 @@ private:
     /// 2DViewer amb el que operem
     Q2DViewer *m_2DViewer;
 
-    /// L'actor per mostrar les annotacions de voxel
-    vtkCaptionActor2D *m_voxelInformationCaption;
+    /// El texte per mostrar les annotacions de voxel
+    QPointer<DrawerText> m_caption;
 };
 
 }
