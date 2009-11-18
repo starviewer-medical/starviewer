@@ -259,7 +259,7 @@ void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angle
     position[horizontalCoord] = ( p1[horizontalCoord] + p2[horizontalCoord] ) / 2.0;
     position[verticalCoord] = ( p1[verticalCoord] + p2[verticalCoord] ) / 2.0;
 
-    angleText->setAttatchmentPoint(position);
+    angleText->setAttachmentPoint(position);
 
 }
 

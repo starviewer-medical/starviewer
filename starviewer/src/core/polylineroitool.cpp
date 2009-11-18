@@ -74,7 +74,7 @@ void PolylineROITool::printData()
 
         text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_roiPolygon->computeArea( m_2DViewer->getView() ), 0, 'f', 0 ).arg(areaUnits).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
 
-        text->setAttatchmentPoint( intersection );
+        text->setAttachmentPoint( intersection );
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
