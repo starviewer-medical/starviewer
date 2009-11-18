@@ -7,17 +7,15 @@
 #include "voxelinformationtool.h"
 #include "q2dviewer.h"
 #include "volume.h"
+#include "drawertext.h"
+#include "drawer.h"
 //vtk
-#include <vtkCaptionActor2D.h>
-#include <vtkProperty2D.h>
-#include <vtkTextProperty.h>
 #include <vtkCommand.h>
-#include <vtkRenderer.h>
 
 namespace udg {
 
 VoxelInformationTool::VoxelInformationTool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent), m_voxelInformationCaption(0)
+ : Tool(viewer, parent), m_caption(0)
 {
     m_toolName = "VoxelInformationTool";
 
@@ -26,18 +24,15 @@ VoxelInformationTool::VoxelInformationTool( QViewer *viewer, QObject *parent )
     {
         DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
     }
-    createCaptionActor();
+    createCaption();
     connect( m_2DViewer, SIGNAL( sliceChanged(int) ), SLOT( updateVoxelInformation() ) );
     connect( m_2DViewer, SIGNAL( phaseChanged(int) ), SLOT( updateVoxelInformation() ) );
+    connect( m_2DViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( inputChanged(Volume *) ) );
 }
 
 VoxelInformationTool::~VoxelInformationTool()
 {
-    // TODO s'hauria de veure si és millor substituir aquest
-    // voxelInformationCaption (vtkCaptionActor2D) per un DrawerText
-    m_2DViewer->getRenderer()->RemoveViewProp( m_voxelInformationCaption );
-    m_voxelInformationCaption->Delete();
-    m_2DViewer->refresh();
+    delete m_caption;
 }
 
 void VoxelInformationTool::handleEvent( unsigned long eventID )
@@ -52,41 +47,28 @@ void VoxelInformationTool::handleEvent( unsigned long eventID )
     break;
 
     case vtkCommand::LeaveEvent:
-        m_voxelInformationCaption->VisibilityOff();
+        m_caption->visibilityOff();
+        m_caption->update(DrawerPrimitive::VTKRepresentation);
         m_2DViewer->refresh();
     break;
 
     default:
     break;
     }
-
 }
 
-void VoxelInformationTool::createCaptionActor()
+void VoxelInformationTool::createCaption()
 {
-    m_voxelInformationCaption = vtkCaptionActor2D::New();
-    m_voxelInformationCaption->GetAttachmentPointCoordinate()->SetCoordinateSystemToWorld();
-    m_voxelInformationCaption->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-    m_voxelInformationCaption->BorderOff();
-    m_voxelInformationCaption->LeaderOff();
-    m_voxelInformationCaption->ThreeDimensionalLeaderOff();
-    m_voxelInformationCaption->GetProperty()->SetColor( 1.0 , 0 , 0 );
-    m_voxelInformationCaption->SetPadding( 0 );
-    m_voxelInformationCaption->SetPosition( -1.0 , -1.0 );
-    m_voxelInformationCaption->SetHeight( 0.05 );
-    m_voxelInformationCaption->SetWidth( 0.3 );
-    // propietats del texte
-    m_voxelInformationCaption->GetCaptionTextProperty()->SetColor( 1. , 0.7 , 0.0 );
-    m_voxelInformationCaption->GetCaptionTextProperty()->ShadowOn();
-    m_voxelInformationCaption->GetCaptionTextProperty()->ItalicOff();
-    m_voxelInformationCaption->GetCaptionTextProperty()->BoldOff();
-
-    // l'afegim al Q2DViewer TODO ara només es té en compte 1 sol renderer!
-    m_2DViewer->getRenderer()->AddViewProp( m_voxelInformationCaption );
+    m_caption = new DrawerText;
+    m_caption->shadowOn();
+    m_2DViewer->getDrawer()->draw( m_caption, Q2DViewer::Top2DPlane );
 }
 
 void VoxelInformationTool::updateVoxelInformation()
 {
+    if( !m_caption )
+        return;
+    
     double xyz[3];
     if( m_2DViewer->getCurrentCursorImageCoordinate(xyz) )
     {
@@ -94,13 +76,22 @@ void VoxelInformationTool::updateVoxelInformation()
     }
     else
     {
-        m_voxelInformationCaption->VisibilityOff();
+        m_caption->visibilityOff();
+        m_caption->update(DrawerPrimitive::VTKRepresentation);
     }
     m_2DViewer->refresh();
 }
 
+void VoxelInformationTool::inputChanged(Volume *volume)
+{
+    createCaption();
+}
+
 void VoxelInformationTool::placeText( double textPosition[3] )
 {
+    if( !m_caption )
+        return;
+    
     double worldPoint[4];
     int position[2];
     double xyz[3];
@@ -117,9 +108,10 @@ void VoxelInformationTool::placeText( double textPosition[3] )
     Volume::VoxelType voxelValue;
     if( m_2DViewer->getCurrentCursorImageVoxel(voxelValue) )
     {
-        m_voxelInformationCaption->VisibilityOn();
-        m_voxelInformationCaption->SetAttachmentPoint( xyz );
-        m_voxelInformationCaption->SetCaption(qPrintable(QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( voxelValue )));
+        m_caption->visibilityOn();
+        m_caption->setAttachmentPoint(xyz);
+        m_caption->setText( QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( voxelValue ) );
+        m_caption->update(DrawerPrimitive::VTKRepresentation);
     }
     else
         DEBUG_LOG("No s'ha trobat valor de la imatge");
