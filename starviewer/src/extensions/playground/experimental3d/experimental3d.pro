@@ -53,10 +53,13 @@ RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
 cuda { 
     HEADERS += cudaviewpointinformationchannel.h \
-        qcudarenderwindow.h
+        qcudarenderwindow.h \
+        cudafiltering.h
     SOURCES += qcudarenderwindow.cpp
-    CUSOURCES += cudaviewpointinformationchannel.cu
-    OTHER_FILES += cudaviewpointinformationchannel.cu
+    CUSOURCES += cudaviewpointinformationchannel.cu \
+        cudafiltering.cu
+    OTHER_FILES += cudaviewpointinformationchannel.cu \
+        cudafiltering.cu
 }
 include(../../basicconfextensions.inc)
 include(../../../cuda.inc)
