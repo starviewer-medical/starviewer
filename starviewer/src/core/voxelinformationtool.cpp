@@ -35,7 +35,9 @@ VoxelInformationTool::~VoxelInformationTool()
 {
     // TODO s'hauria de veure si és millor substituir aquest
     // voxelInformationCaption (vtkCaptionActor2D) per un DrawerText
+    m_2DViewer->getRenderer()->RemoveViewProp( m_voxelInformationCaption );
     m_voxelInformationCaption->Delete();
+    m_2DViewer->refresh();
 }
 
 void VoxelInformationTool::handleEvent( unsigned long eventID )
