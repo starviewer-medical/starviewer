@@ -284,15 +284,15 @@ bool DrawerText::isItalic()
 
 void DrawerText::shadowOn()
 {
-    shadow( true );
+    setShadow( true );
 }
 
 void DrawerText::shadowOff()
 {
-    shadow( false );
+    setShadow( false );
 }
 
-void DrawerText::shadow( bool shadow )
+void DrawerText::setShadow( bool shadow )
 {
     m_shadow = shadow;
     emit changed();

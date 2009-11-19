@@ -101,7 +101,7 @@ public:
     void shadowOff();
     
     ///activa / desactiva l'ombra del text
-    void shadow( bool shadow );
+    void setShadow( bool shadow );
     
     ///ens diu si està activada l'ombra del text
     bool hasShadow();
