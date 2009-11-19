@@ -1181,6 +1181,12 @@ void QExperimental3DExtension::enableSpecularLighting( bool on )
 }
 
 
+float passIfNegative( float f )
+{
+    return f < 0.0f ? f : 0.0f;
+}
+
+
 void QExperimental3DExtension::render()
 {
     m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
@@ -1224,8 +1230,27 @@ void QExperimental3DExtension::render()
         m_volume->addOpacity( absFiltering, m_maximumSpatialImportanceFunction, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
                                                                                 m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
     }
-    if ( m_filteringAmbientOcclusionCheckBox->isChecked() ) m_volume->addFilteringAmbientOcclusion( m_spatialImportanceFunction, m_maximumSpatialImportanceFunction,
-                                                                                                    m_filteringAmbientOcclusionLambdaDoubleSpinBox->value() );
+    if ( m_filteringAmbientOcclusionCheckBox->isChecked() )
+    {
+        switch ( m_filteringAmbientOcclusionTypeComboBox->currentIndex() )
+        {
+            case 0: // direct
+                m_volume->addFilteringAmbientOcclusion( m_spatialImportanceFunction, m_maximumSpatialImportanceFunction, m_filteringAmbientOcclusionLambdaDoubleSpinBox->value() );
+                break;
+            case 1: // absolute
+                {
+                    QVector<float> absFiltering = QtConcurrent::blockingMapped( m_spatialImportanceFunction, qAbs<float> );
+                    m_volume->addFilteringAmbientOcclusion( absFiltering, m_maximumSpatialImportanceFunction, m_filteringAmbientOcclusionLambdaDoubleSpinBox->value() );
+                }
+                break;
+            case 2: // negatives
+                {
+                    QVector<float> negativeFiltering = QtConcurrent::blockingMapped( m_spatialImportanceFunction, passIfNegative );
+                    m_volume->addFilteringAmbientOcclusion( negativeFiltering, m_maximumSpatialImportanceFunction, m_filteringAmbientOcclusionLambdaDoubleSpinBox->value() );
+                }
+                break;
+        }
+    }
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 
     m_viewer->render();

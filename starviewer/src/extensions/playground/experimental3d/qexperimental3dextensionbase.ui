@@ -1235,6 +1235,25 @@
           </widget>
          </item>
          <item>
+          <widget class="QComboBox" name="m_filteringAmbientOcclusionTypeComboBox">
+           <item>
+            <property name="text">
+             <string>Direct</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Absolute value</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Only negatives</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="m_filteringAmbientOcclusionLambdaLabel">
            <property name="enabled">
             <bool>false</bool>
