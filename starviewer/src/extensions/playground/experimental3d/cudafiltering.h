@@ -13,7 +13,7 @@ extern "C" {
 #endif
 
 
-QVector<float> cfGaussianDifference( vtkImageData *image, float radius );
+QVector<float> cfGaussianDifference( vtkImageData *image, int radius );
 QVector<float> cfBoxMeanDifference( vtkImageData *image, int radius );
 
 

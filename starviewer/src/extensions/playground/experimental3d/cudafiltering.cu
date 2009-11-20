@@ -119,7 +119,7 @@ __global__ void substractionKernel(float *result, cudaExtent dims)
 }
 
 
-QVector<float> cfGaussianDifference(vtkImageData *image, float radius)
+QVector<float> cfGaussianDifference(vtkImageData *image, int radius)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -153,13 +153,12 @@ QVector<float> cfGaussianDifference(vtkImageData *image, float radius)
     CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&dfResult), VOLUME_DATA_SIZE * sizeof(float)) );
 
     // Calcular kernel
-    const int RADIUS = static_cast<int>(ceil(radius));
-    const int KERNEL_WIDTH = 2 * RADIUS + 1;
+    const int KERNEL_WIDTH = 2 * radius + 1;
     QVector<float> kernel(KERNEL_WIDTH);
     float kernelSum = 0.0f;
     for (int i = 0; i < KERNEL_WIDTH; i++)
     {
-        float distance = (i - radius) / radius;
+        float distance = static_cast<float>(i - radius) / radius;
         kernel[i] = expf(-distance * distance / 2.0f);
         kernelSum += kernel.at(i);
     }
@@ -179,7 +178,7 @@ QVector<float> cfGaussianDifference(vtkImageData *image, float radius)
 
     // Executar per X
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
-    convolutionXKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, RADIUS, volumeDataDims);
+    convolutionXKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, radius, volumeDataDims);
     CUT_CHECK_ERROR( "convolutionXKernel() execution failed\n" );
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
 
@@ -190,7 +189,7 @@ QVector<float> cfGaussianDifference(vtkImageData *image, float radius)
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
 
     // Executar per Y
-    convolutionYKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, RADIUS, volumeDataDims);
+    convolutionYKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, radius, volumeDataDims);
     CUT_CHECK_ERROR( "convolutionYKernel() execution failed\n" );
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
 
@@ -199,7 +198,7 @@ QVector<float> cfGaussianDifference(vtkImageData *image, float radius)
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
 
     // Executar per Z
-    convolutionZKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, RADIUS, volumeDataDims);
+    convolutionZKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, radius, volumeDataDims);
     CUT_CHECK_ERROR( "convolutionZKernel() execution failed\n" );
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
 
