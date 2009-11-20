@@ -92,6 +92,9 @@ private slots:
     /// actualitza correctament el valor de l'slider quan hi ha thick slab
     void updateSlider();
 
+    /// Assigna el rang i el valor corresponent de l'slider segons l'input del viewer
+    void resetSliderRangeAndValue();
+    
     /// actualitza el valor de l'etiqueta que ens indica quina 
     /// projecció del pla estem veient
 	void updateProjectionLabel();

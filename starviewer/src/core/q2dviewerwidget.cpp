@@ -63,6 +63,8 @@ void Q2DViewerWidget::createConnections()
     connect( m_slider, SIGNAL( actionTriggered(int) ), SLOT( updateViewerSliceAccordingToSliderAction(int) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
     connect( m_2DView , SIGNAL( sliceChanged( int ) ) , SLOT( updateProjectionLabel() ) );
+    connect( m_2DView, SIGNAL( viewChanged(int) ), SLOT( resetSliderRangeAndValue() ) );
+    connect( m_2DView, SIGNAL( slabThicknessChanged(int) ), SLOT( resetSliderRangeAndValue() ) );
 
     // HACK amb això conseguim que quan es varïi el valor de la llesca amb l'slider, el viewer es marqui com a seleccionat
     connect( m_slider, SIGNAL( sliderPressed() ), SLOT( emitSelectedViewer() ));
@@ -174,6 +176,12 @@ void Q2DViewerWidget::emitSynchronize()
 
 void Q2DViewerWidget::updateSlider()
 {
+    m_slider->setValue( m_2DView->getCurrentSlice() );
+}
+
+void Q2DViewerWidget::resetSliderRangeAndValue()
+{
+    m_slider->setMaximum( m_2DView->getMaximumSlice() - m_2DView->getSlabThickness()+ 1 );
     m_slider->setValue( m_2DView->getCurrentSlice() );
 }
 
