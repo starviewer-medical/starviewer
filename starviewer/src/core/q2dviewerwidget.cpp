@@ -108,30 +108,6 @@ void Q2DViewerWidget::emitSelectedViewer()
         emit selected( this );
 }
 
-void Q2DViewerWidget::resetViewToAxial()
-{   
-    m_2DView->resetViewToAxial();
-
-    m_slider->setMaximum( m_2DView->getMaximumSlice() );
-    m_slider->setValue( m_2DView->getCurrentSlice() );
-}
-
-void Q2DViewerWidget::resetViewToSagital()
-{
-    m_2DView->resetViewToSagital();
-
-    m_slider->setMaximum( m_2DView->getMaximumSlice() );
-    m_slider->setValue( m_2DView->getCurrentSlice() );
-}
-
-void Q2DViewerWidget::resetViewToCoronal()
-{
-    m_2DView->resetViewToCoronal();
-
-    m_slider->setMaximum( m_2DView->getMaximumSlice() );
-    m_slider->setValue( m_2DView->getCurrentSlice() );
-}
-
 void Q2DViewerWidget::setSelected( bool option )
 {
     // per defecte li donem l'aspecte de background que té l'aplicació en general

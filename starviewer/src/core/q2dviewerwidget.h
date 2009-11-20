@@ -48,11 +48,6 @@ public:
     //TODO solució temporal a la desactivacio de la sincronitzacio
     void disableSynchronization();
 
-public slots:
-    void resetViewToAxial();
-    void resetViewToSagital();
-    void resetViewToCoronal();
-
 signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget
     void selected(Q2DViewerWidget * viewer);

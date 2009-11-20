@@ -423,15 +423,15 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     {
         if( reconstruction == "SAGITAL" )
         {
-            viewer->resetViewToSagital();
+            viewer->getViewer()->resetViewToSagital();
         }
         else if ( reconstruction == "CORONAL" )
         {
-            viewer->resetViewToCoronal();
+            viewer->getViewer()->resetViewToCoronal();
         }
         else if( reconstruction == "AXIAL" )
         {
-            viewer->resetViewToAxial();
+            viewer->getViewer()->resetViewToAxial();
         }
         else
         {
