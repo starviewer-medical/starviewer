@@ -129,6 +129,7 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
     //Donem ordre d'imprimir el BasicFilmBox, no cal donar ordre d'imprimir el FilmSession amb el BasicFilmBox n'hi ha suficent
     if (EC_Normal == result)
     {
+		INFO_LOG("S'ha enviat correctament totes les imatges a la impressora");
         result = storedPrintDcmtk->printSCUprintBasicFilmBox(printerConnection);
         if (EC_Normal != result)
         {

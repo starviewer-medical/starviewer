@@ -72,7 +72,7 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
 		if (printDicomSpool.getLastError()==PrintDicomSpool::Ok)
 		{
-			INFO_LOG("Les imatges s'han enviat a la impressora correctament");
+			INFO_LOG("S'ha imprés correctament.");
 		}
 
 		m_lastError = printDicomSpoolErrorToDicomPrintError(printDicomSpool.getLastError());
