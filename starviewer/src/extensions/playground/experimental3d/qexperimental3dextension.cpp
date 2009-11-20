@@ -2835,7 +2835,8 @@ void QExperimental3DExtension::gaussianFilter()
     vtkImageGaussianSmooth *gaussian = vtkImageGaussianSmooth::New();
     gaussian->SetInput( cast->GetOutput() );
     gaussian->SetDimensionality( 3 );
-    gaussian->SetRadiusFactor( m_filteringRadiusDoubleSpinBox->value() );
+    gaussian->SetRadiusFactor( m_filteringRadiusSpinBox->value() );
+    gaussian->SetStandardDeviation( 1.0 );
     gaussian->Update();
 
     vtkImageMathematics *substract = vtkImageMathematics::New();
@@ -2855,7 +2856,7 @@ void QExperimental3DExtension::gaussianFilter()
     gaussian->Delete();
     substract->Delete();
 #else // CUDA_AVAILABLE
-    m_spatialImportanceFunction = cfGaussianDifference( cast->GetOutput(), m_filteringGaussianRadiusDoubleSpinBox->value() * 2.0f );    // crec que cal multiplicar per 2 perquè surti com l'altre
+    m_spatialImportanceFunction = cfGaussianDifference( cast->GetOutput(), m_filteringRadiusSpinBox->value() );
     int size = m_volume->getSize();
     m_maximumSpatialImportanceFunction = 0.0f;
     for ( int i = 0; i < size; i++ )
@@ -2882,7 +2883,7 @@ void QExperimental3DExtension::boxMeanFilter()
 #ifndef CUDA_AVAILABLE
     QMessageBox::information( this, tr("Operation only available with CUDA"), "The box filter is only implemented in CUDA. Compile with CUDA support to use it." );
 #else // CUDA_AVAILABLE
-    m_spatialImportanceFunction = cfBoxMeanDifference( cast->GetOutput(), m_filteringBoxMeanRadiusSpinBox->value() );
+    m_spatialImportanceFunction = cfBoxMeanDifference( cast->GetOutput(), m_filteringRadiusSpinBox->value() );
     int size = m_volume->getSize();
     m_maximumSpatialImportanceFunction = 0.0f;
     for ( int i = 0; i < size; i++ )

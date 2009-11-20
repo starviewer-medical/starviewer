@@ -2780,19 +2780,19 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_50">
          <item>
-          <widget class="QLabel" name="m_filteringGaussianRadiusLabel">
+          <widget class="QLabel" name="m_filteringRadiusLabel">
            <property name="text">
             <string>Radius</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="m_filteringGaussianRadiusDoubleSpinBox">
+          <widget class="QSpinBox" name="m_filteringRadiusSpinBox">
            <property name="minimum">
-            <double>1.000000000000000</double>
+            <number>1</number>
            </property>
            <property name="maximum">
-            <double>10.000000000000000</double>
+            <number>10</number>
            </property>
           </widget>
          </item>
@@ -2800,27 +2800,6 @@
           <widget class="QPushButton" name="m_filteringGaussianPushButton">
            <property name="text">
             <string>Gaussian filter</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_52">
-         <item>
-          <widget class="QLabel" name="m_filteringBoxMeanRadiusLabel">
-           <property name="text">
-            <string>Radius</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="m_filteringBoxMeanRadiusSpinBox">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>10</number>
            </property>
           </widget>
          </item>
