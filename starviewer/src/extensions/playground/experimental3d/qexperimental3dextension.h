@@ -220,6 +220,7 @@ private slots:
 
     // Filtering
     void gaussianFilter();
+    void boxMeanFilter();
 
 private:
 

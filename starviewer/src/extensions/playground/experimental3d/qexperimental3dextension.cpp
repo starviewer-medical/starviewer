@@ -960,6 +960,7 @@ void QExperimental3DExtension::createConnections()
 
     // Filtering
     connect( m_filteringGaussianPushButton, SIGNAL( clicked() ), SLOT( gaussianFilter() ) );
+    connect( m_filteringBoxMeanPushButton, SIGNAL( clicked() ), SLOT( boxMeanFilter() ) );
 }
 
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
@@ -2854,7 +2855,34 @@ void QExperimental3DExtension::gaussianFilter()
     gaussian->Delete();
     substract->Delete();
 #else // CUDA_AVAILABLE
-    m_spatialImportanceFunction = cfGaussianDifference( cast->GetOutput(), m_filteringRadiusDoubleSpinBox->value() * 2.0f );    // crec que cal multiplicar per 2 perquè surti com l'altre
+    m_spatialImportanceFunction = cfGaussianDifference( cast->GetOutput(), m_filteringGaussianRadiusDoubleSpinBox->value() * 2.0f );    // crec que cal multiplicar per 2 perquè surti com l'altre
+    int size = m_volume->getSize();
+    m_maximumSpatialImportanceFunction = 0.0f;
+    for ( int i = 0; i < size; i++ )
+    {
+        float f = qAbs( m_spatialImportanceFunction.at( i ) );
+        if ( f > m_maximumSpatialImportanceFunction ) m_maximumSpatialImportanceFunction = f;
+    }
+#endif // CUDA_AVAILABLE
+
+    m_filteringAmbientOcclusionCheckBox->setEnabled( true );
+    m_opacityFilteringCheckBox->setEnabled( true );
+
+    cast->Delete();
+}
+
+
+void QExperimental3DExtension::boxMeanFilter()
+{
+    vtkImageCast *cast = vtkImageCast::New();
+    cast->SetInput( m_volume->getImage() );
+    cast->SetOutputScalarTypeToFloat();
+    cast->Update();
+
+#ifndef CUDA_AVAILABLE
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "The box filter is only implemented in CUDA. Compile with CUDA support to use it." );
+#else // CUDA_AVAILABLE
+    m_spatialImportanceFunction = cfBoxMeanDifference( cast->GetOutput(), m_filteringBoxMeanRadiusSpinBox->value() );
     int size = m_volume->getSize();
     m_maximumSpatialImportanceFunction = 0.0f;
     for ( int i = 0; i < size; i++ )
