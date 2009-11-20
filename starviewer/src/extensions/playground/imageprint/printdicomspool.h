@@ -19,9 +19,13 @@ class PrintDicomSpool
 {
 public:
 
+    enum PrintDicomSpoolError { CanNotConnectToDICOMPrinter , ErrorCreatingFilmSession, ErrorCreatingFilmbox, ErrorCreatingImageBox , ErrorLoadingImageToPrint, Ok };
+
     void printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintjob, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath);
 
-private:		
+	PrintDicomSpool::PrintDicomSpoolError getLastError();
+
+private:
 	
     /*TODO: Potser que daria més entés no guardar les variables com a membre i desdle mètode printSpool passar-la al mètode que 
      *que les necessiti. Per exemple printSCUCreateBasicFilmSession necessita DicomPrintJob*/
@@ -37,6 +41,8 @@ private:
 
     ///Una vegada creada la FilmSession i FilmBox aquest mètode ens permet enviar una imatge a imprimir cap a la impressora
     OFCondition createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk, size_t imageNumber, const QString &spoolDirectoryPath);
+
+    PrintDicomSpoolError m_lastError;
 };
 }; 
 #endif

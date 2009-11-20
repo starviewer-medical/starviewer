@@ -20,11 +20,19 @@ namespace udg
 QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath)
 {
     QDir spoolDir;
+    bool ok;
 
+	m_lastError = CreateDicomPrintSpool::Ok;
     //TODO: S'ha de fer aquí ? Comprovem si existeix el directori on s'ha de generar l'spool
     if (!spoolDir.exists(spoolDirectoryPath))
     {
-        spoolDir.mkdir(spoolDirectoryPath);
+        INFO_LOG("Es crearà el directori d'spool " + spoolDirectoryPath);
+        if (spoolDir.mkdir(spoolDirectoryPath))
+        {
+            ERROR_LOG("No s'ha pogut crear el directori d'spool");
+            m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+            return "";
+        }
     }
 
     m_dicomPrintPage = dicomPrintPage;
@@ -34,12 +42,23 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
 
     foreach(Image *image,m_dicomPrintPage.getImagesToPrint())
     {
-        transformImageForPrinting(image, spoolDirectoryPath);
+        ok = transformImageForPrinting(image, spoolDirectoryPath);
+
+		if (!ok)
+		{
+			break;
+		}
     }
 
-    setImageBoxAttributes();
-
-    return createStoredPrintDcmtkFile(spoolDirectoryPath);
+    if (ok)
+    {
+        setImageBoxAttributes();
+        return createStoredPrintDcmtkFile(spoolDirectoryPath);
+    }
+    else
+    {
+        return "";
+    }
 }
 
 void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
@@ -125,15 +144,19 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
        del decimate, per això de moment no s'especifica, i la impressora es comportarà com estigui definida per defecte.
      */
     //m_storedPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate); 
+
+    INFO_LOG("Emplenats els tags del FilmBox a l'objecte DVPStoredPrint");
 }
 
-void CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const QString &spoolDirectoryPath)
+bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const QString &spoolDirectoryPath)
 {
     unsigned long bitmapWidth, bitmapHeight, bitmapSize;
     double pixelAspectRatio;
     void *pixelData;
     DcmFileFormat *imageToPrintDcmFileFormat = NULL;
     DcmDataset *imageToPrintDataset = NULL;
+    OFCondition status;
+    bool ok = false;
 
     /*El constructor del mètode DVPresentationState necessita els següents paràmetres
         1r - Llista d'objectes que descriuen les característiques de la pantalla tipus objecte DiDisplayFunction, com aquestes imatges no han de ser visualitzades
@@ -147,45 +170,92 @@ void CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
         6è, 7è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.*/
     m_presentationState = new DVPresentationState(NULL, 1024 , 1024 , 8192 , 8192, 256, 256);
 
-    DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);//Carreguem la imatge que hem d'imprimor
+    INFO_LOG("Es transformarà la imatge " + imageToPrint->getPath() + " per imprimir.");
+    
+    status = DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);//Carreguem la imatge que hem d'imprimor
+    if (status != EC_Normal)
+    {
+        ERROR_LOG("No s'ha pogut carregar la imatge " + imageToPrint->getPath() + " . Descripció error: " + QString(status.text()));
+        m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+        return false;
+    }
+
     imageToPrintDataset = imageToPrintDcmFileFormat->getDataset();
 
     //Traspassem la informació del mòdul de pacient i imatge entre d'altres al presentation state
-    m_presentationState->createFromImage(*imageToPrintDataset);
+    status = m_presentationState->createFromImage(*imageToPrintDataset);
+    if (status != EC_Normal)
+    {
+        ERROR_LOG("No s'ha pogut el Presentation State a partir del dataSet de l'imatge. Descripció error: " + QString(status.text()));
+        m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+        return false;
+    }
 
     /*El 2n paràmete del attach image indica, si el presentation state és l'amo de la imatge passada per paràmetre, per poder destruir l'objecte,
       en aquest cas l'indiquem que no és l'amo, per poder-lo destruir nosaltres.*/
     m_presentationState->attachImage(imageToPrintDcmFileFormat, false);
 
     bitmapSize = m_presentationState->getPrintBitmapSize();
-    m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight); 
+
+    status = m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight); 
+    if (status != EC_Normal)
+    {
+        ERROR_LOG("No s'ha pogut obtenir l'amplada\alçada de la imatge. Descripció error: " + QString(status.text()));
+        m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+        return false;
+    }
+
     pixelAspectRatio = m_presentationState->getPrintBitmapPixelAspectRatio();  	    
     pixelData = new char[bitmapSize];
 
     /*El 3r paràmetre indica si la imatge s'ha de redenritzar amb el presentation LUT invers*/
-    m_presentationState->getPrintBitmap(pixelData, bitmapSize, false); 
-
-    //Guardem la imatge a disc
-    createHardcopyGrayscaleImage(imageToPrint, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio, spoolDirectoryPath);
+    status = m_presentationState->getPrintBitmap(pixelData, bitmapSize, false); 
+    if (status == EC_Normal)
+    {
+        //Guardem la imatge a disc
+        ok = createHardcopyGrayscaleImage(imageToPrint, pixelData, bitmapWidth, bitmapHeight, pixelAspectRatio, spoolDirectoryPath);
+    }
+    else
+    {
+        ERROR_LOG("No s'ha pogut obtenir el pixelData de la imatge transformada. Descripció del error: " + QString(status.text()));
+        m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+    }
 
     //No fem delete del imageToPrintDataset perquè és un punter que apunta al Dataset de l'objecte imageToPrintDcmFileFormat del qual ja fem un delete
     delete m_presentationState;
     delete pixelData;
     delete imageToPrintDcmFileFormat;
+
+    return ok;
 }
 
-void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
+bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath)
 {
     char InstanceUIDOfTransformedImage[70];
     OFString requestedImageSizeAsOFString;
     DcmFileFormat *transformedImageToPrint = new DcmFileFormat();
     DcmDataset *transformedImageDatasetToPrint = transformedImageToPrint->getDataset();
     QString transformedImagePath;
+    OFCondition status;
+    bool ok = false;
 
     //write patient module
-    m_presentationState->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
+    status = m_presentationState->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
+    if (status != EC_Normal)
+    {
+        ERROR_LOG("No s'han pogut gravar a la imatge per imprimir les dades del pacient");
+        m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+        return false;
+    }
+
     //write general study and general series module
-    m_storedPrint->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
+    status = m_storedPrint->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
+    if (status != EC_Normal)
+    {
+        ERROR_LOG("No s'han pogut gravar a la imatge per imprimir les dades de l'estudi i la sèrie");
+        m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+        return false;
+    }
 
     // Hardcopy Equipment Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceManufacturer, qPrintable(ApplicationNameString), true);
@@ -232,27 +302,57 @@ void CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     {
         pxData->putUint16Array(OFstatic_cast(Uint16 *, OFconst_cast(void *, pixelData)), OFstatic_cast(unsigned long, bitmapWidth*bitmapHeight));
         transformedImageDatasetToPrint->insert(pxData, OFTrue);
-    }
 
-    if(m_presentationState->getPresentationLUT() == DVPSP_table)
+        if(m_presentationState->getPresentationLUT() == DVPSP_table)
+        {
+            //En principi no treballem amb presentation LUT, per tant aquest codi crec que no s'hauria d'executar mai
+            INFO_LOG("Gravem presentation LUT");
+            status = m_presentationState->writePresentationLUTforPrint(*transformedImageDatasetToPrint);
+            if (status != EC_Normal)
+            {
+                ERROR_LOG("No s'ha pogut gravar el presentation LUT. Descripció error" + QString(status.text()));
+            }
+        }
+
+        //TODO:S'hauria de fer a un altre lloc aquest càlcul perquè també s'utilitza a PrintDicomSpool
+        transformedImagePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + InstanceUIDOfTransformedImage + ".dcm";
+        //Guardem la imatge transformada
+        status = DVPSHelper::saveFileFormat(qPrintable(transformedImagePath), transformedImageToPrint, true);
+
+        if (status == EC_Normal)
+        {
+            INFO_LOG("Creada imatge per imprimir al path " + transformedImagePath);
+
+            m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
+            //Afegim la imatge al Image Box
+            status = m_storedPrint->addImageBox(qPrintable(PacsDevice::getLocalAETitle()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL, 
+                                       m_presentationState->getPresentationLUTData(), m_presentationState->isMonochrome1Image());
+
+            if (status != EC_Normal)
+            {
+                m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+                ERROR_LOG("No s'ha pogut afegir l'imatge al ImageBox de l'objecte DVPSStoredPrint. Descripció error: " + QString(status.text()));
+            }
+            else
+            {
+                ok = true;
+            }
+        }
+        else
+        {
+            m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+            ERROR_LOG("No s'ha pogut gravar la imatge preparada per imprimir " + transformedImagePath + " . Descripció error " + QString(status.text()));
+        }
+    }
+    else
     {
-        m_presentationState->writePresentationLUTforPrint(*transformedImageDatasetToPrint);	
+        m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
+        ERROR_LOG("No s'ha pogut crear l'objecte DcmPolymorphOBOW, l'error sol venir perquè no hi ha suficent memòria RAM lliure");
     }
-
-    //TODO:S'hauria de fer a un altre lloc aquest càlcul perquè també s'utilitza a PrintDicomSpool
-    transformedImagePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + InstanceUIDOfTransformedImage + ".dcm";
-    //Guardem la imatge transformada
-    OFCondition saveImageCondition = DVPSHelper::saveFileFormat(qPrintable(transformedImagePath), transformedImageToPrint, true);
-
-    m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
-    //Afegim la imatge al Image Box
-    m_storedPrint->addImageBox(qPrintable(PacsDevice::getLocalAETitle()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL, 
-                               m_presentationState->getPresentationLUTData(), m_presentationState->isMonochrome1Image());
-
-    DEBUG_LOG(QString("Imatge Creada %1").arg(InstanceUIDOfTransformedImage));
-    DEBUG_LOG(qPrintable(m_dicomPrinter.getAETitle()));
 
     delete transformedImageToPrint;
+
+    return ok;
 }
 
 void CreateDicomPrintSpool::setImageBoxAttributes()
@@ -270,10 +370,13 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
             m_storedPrint->setImagePolarity(i, qPrintable(m_dicomPrintPage.getPolarity()));
         }
     }
+
+	INFO_LOG("Afegits els atributs al ImageBox");
 }
 
 QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDirectoryPath)
 {
+    OFCondition status;
     DcmFileFormat *fileFormat = new DcmFileFormat();
     DcmDataset *dataset	= fileFormat->getDataset();	
     char storedPrintInstanceUID[70];
@@ -283,17 +386,38 @@ QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDi
 
     storedPrintDcmtkFilePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + "SP_" + storedPrintInstanceUID + ".dcm";
 
-    DEBUG_LOG(storedPrintDcmtkFilePath);
-
     m_storedPrint->deleteAnnotations();	
     m_storedPrint->setInstanceUID(storedPrintInstanceUID);	
-    OFCondition write = m_storedPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
+    
+    status = m_storedPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
 
-    write = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileFormat, true);
+    if (!status.good())
+    {
+        ERROR_LOG(QString("Error al generar el dataset de les dades del storedPrint(DVPSStoredPrint). Descripcio error: %1").arg(status.text())); 
+        storedPrintDcmtkFilePath = "";
+    }
+    else
+    {
+        status = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileFormat, true);
 
+        if (!status.good())
+        {
+            ERROR_LOG(QString("Error al gravar el fitxer storedPrint a %1. Descripció error: %2").arg(storedPrintDcmtkFilePath, status.text()));
+            storedPrintDcmtkFilePath = "";
+        }
+        else
+        {
+            INFO_LOG("Es guadar el fitxer del storedPrint(DVPSStoredPrint) al path " + QString(storedPrintDcmtkFilePath));
+        }
+    }
     delete fileFormat;
     delete m_storedPrint;
 
     return storedPrintDcmtkFilePath;
+}
+
+CreateDicomPrintSpool::CreateDicomPrintSpoolError CreateDicomPrintSpool::getLastError()
+{
+    return m_lastError;
 }
 }

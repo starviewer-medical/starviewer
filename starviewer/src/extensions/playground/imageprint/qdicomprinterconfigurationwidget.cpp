@@ -135,7 +135,7 @@ void QDicomPrinterConfigurationWidget::testPrinter()
 
             switch(dicomPrint.getLastError())
             {
-                case DicomPrint::ErrorConnecting :
+                case DicomPrint::CanNotConnectToDicomPrinter :
                     messageError = tr("Printer %1 doesn't respond.\nBe sure that the IP and AETitle are correct.").arg(selectedDicomPrinter.getAETitle());
                     break;
                 case DicomPrint::NotRespondedAsExpected :
