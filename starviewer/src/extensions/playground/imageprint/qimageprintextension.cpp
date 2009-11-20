@@ -1,5 +1,7 @@
 #include <iostream>
+
 #include <QWidget>
+#include <QMessageBox>
 
 #include "qimageprintextension.h"
 #include "imageprintfactory.h"
@@ -13,9 +15,9 @@
 #include "dicomprintpage.h"
 #include "dicomprintjob.h"
 #include "image.h"
-#include "dicomprint.h"
 #include "volume.h"
 #include "q2dviewer.h"
+#include "starviewerapplication.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -118,8 +120,13 @@ void QImagePrintExtension::fillSelectedDicomPrinterComboBox()
 void QImagePrintExtension::print()
 {
     DicomPrint dicomPrint;
+	int printedPages = dicomPrint.print(getSelectedDicomPrinter(), getDicomPrintJobToPrint());
 
-    dicomPrint.print(getSelectedDicomPrinter(), getDicomPrintJobToPrint());
+	if (dicomPrint.getLastError() != DicomPrint::Ok)
+	{
+		//si hem imprés una o més pàgines i hi ha error vol dir que han quedat algunes pàgines per imprimir
+		showDicomPrintError(dicomPrint.getLastError(), printedPages > 0 );
+	}
 }
 
 DicomPrintJob QImagePrintExtension::getDicomPrintJobToPrint()
@@ -381,6 +388,49 @@ DicomPrinter QImagePrintExtension::getSelectedDicomPrinter()
     m_qdicomPrinterBasicSettingsWidget->getDicomPrinterBasicSettings(dicomPrinter);
 
     return dicomPrinter;
+}
+
+void QImagePrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage)
+{
+	QString messageError;
+
+	if (error != DicomPrint::Ok)
+	{
+		if (printedSomePage)
+		{
+			messageError = tr("Some of the pages film can't be printed because ");
+		}
+		else 
+		{
+			messageError = tr("The film can't be printed because ");
+		}
+
+		switch (error)
+		{
+			case DicomPrint::CanNotConnectToDicomPrinter:
+				messageError += tr("the printer doesn't respond.\n\n");
+				messageError += tr("Be sure that your are connected on the network and the printer network parameters are correct.");
+				break;
+			case DicomPrint::ErrorSendingDicomPrintJob:
+				messageError += tr("the printer doesn't respond as expected.\n\n");
+				messageError += tr("In most cases this error is produced because the printer doesn't accept some of the print configuration parameters.");
+				messageError += tr("Check printer DICOM Conformance to be sure that the printer accepts all your print configuration parameters.");
+				break;
+			case DicomPrint::ErrorCreatingPrintSpool:
+				messageError += tr("%1 can't create print spool.").arg(ApplicationNameString);
+				break;
+			case DicomPrint::ErrorLoadingImagesToPrint:
+				messageError += tr("%1 can't load some of the images to print.\n\n").arg(ApplicationNameString );
+				messageError += tr("Close image print tab and try again to print.");
+				break;
+			case DicomPrint::UnknowError:
+			default:
+				messageError += tr("and unknow error has produced.");
+			break;
+		}
+
+		QMessageBox::critical(this, ApplicationNameString, messageError);
+	}
 }
 
 }                                      

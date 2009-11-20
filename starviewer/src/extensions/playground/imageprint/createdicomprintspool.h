@@ -22,16 +22,19 @@ class CreateDicomPrintSpool
 {
  public:
 
-	//void setVolume(Volume *p_volume);
+    enum CreateDicomPrintSpoolError { ErrorLoadingImageToPrint, ErrorCreatingImageSpool, Ok };
+
 	QString createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath);	
+
+	CreateDicomPrintSpool::CreateDicomPrintSpoolError getLastError();
 
  private:
 	
-    void transformImageForPrinting(Image *image, const QString &spoolDirectoryPath);
+    bool transformImageForPrinting(Image *image, const QString &spoolDirectoryPath);
 
     void setBasicFilmBoxAttributes();
 
-    void createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath);
+    bool createHardcopyGrayscaleImage(Image *imageToPrint, const void *pixelData, unsigned long bitmapWidth, unsigned long bitmapHeight, double pixelAspectRatio, const QString &spoolDirectoryPath);
 
     void setImageBoxAttributes();
 
@@ -44,6 +47,7 @@ class CreateDicomPrintSpool
     DicomPrinter m_dicomPrinter;
 	DVPSStoredPrint		* m_storedPrint;
 	DVPresentationState * m_presentationState;
+    CreateDicomPrintSpoolError m_lastError;
 };
 };
 

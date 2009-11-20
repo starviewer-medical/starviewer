@@ -3,7 +3,7 @@
 #define UDGQIMAGEPRINTEXTENSION_H
 
 #include "ui_qimageprintextensionbase.h"
-
+#include "dicomprint.h"
 
 namespace udg {
 
@@ -88,6 +88,12 @@ private:
 
     ///ens retorna un DicomPrintPage amb els paràmetres d'impressió omplerts a partir d'una impressora. No afegeix les imatges ni número de pàgina
     DicomPrintPage fillDicomPrintPagePrintSettings(DicomPrinter dicomPrinter);
+
+	///Mostra per pantalla els errors que s'han produït alhora d'imprimir
+	/*Degut a només podem tenir una pàgina per FilmSession degut a limitacions de dcmtk fa que haguem d'imprimir pàgina per pàgina 
+	  per això ens podem trobar que la primera pàgina s'imprimeixi bé, i les restants no, per això passem el paràmetre printedSomePage per indica que només
+      algunes de les pàgines han fallat*/
+	void showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage);
 };
 } // end namespace udg.
 
