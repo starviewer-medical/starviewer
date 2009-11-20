@@ -77,7 +77,13 @@ void SynchronizeTool::setIncrement( int slice )
 
     if( configuration && configuration->getValue( "Slicing" ).toBool() )
     {
-        double increment = (slice - m_lastSlice)*m_q2dviewer->getThickness(); // Distancia incrementada
+        double thickness = m_q2dviewer->getThickness();
+        DEBUG_LOG( QString("setIncrement::Thickness = %1").arg(thickness) );
+        // si la imatge no conté thickness (0.0), llavors li donem un valor nominal
+        if( thickness == 0.0 )
+            thickness = 1.0;
+        
+        double increment = (slice - m_lastSlice)*thickness; // Distancia incrementada
         m_lastSlice = slice;
         disconnect( m_toolData, SIGNAL(sliceChanged( ) ), this, SLOT( applySliceChanges() ) );
         this->m_toolData->setIncrement( increment );
@@ -127,7 +133,13 @@ void SynchronizeTool::applySliceChanges()
 
     if( configuration && configuration->getValue( "Slicing" ).toBool() )
     {
-        double sliceIncrement = (this->m_toolData->getIncrement()/m_q2dviewer->getThickness()) + m_roundLostThickness;
+        double thickness = m_q2dviewer->getThickness();
+        DEBUG_LOG( QString("applySliceChanges::Thickness = %1").arg(thickness) );
+        // si la imatge no conté thickness (0.0), llavors li donem un valor nominal
+        if( thickness == 0.0 )
+            thickness = 1.0;
+        
+        double sliceIncrement = (this->m_toolData->getIncrement()/thickness) + m_roundLostThickness;
         int slices = qRound( sliceIncrement );
         m_roundLostThickness = sliceIncrement - slices;
         disconnect( m_viewer, SIGNAL(sliceChanged( int ) ), this, SLOT( setIncrement( int ) ) );
