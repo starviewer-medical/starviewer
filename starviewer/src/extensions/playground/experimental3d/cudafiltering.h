@@ -14,6 +14,7 @@ extern "C" {
 
 
 QVector<float> cfGaussianDifference( vtkImageData *image, float radius );
+QVector<float> cfBoxMeanDifference( vtkImageData *image, int radius );
 
 
 #ifdef __cplusplus
