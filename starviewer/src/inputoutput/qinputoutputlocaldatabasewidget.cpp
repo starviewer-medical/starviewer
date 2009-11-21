@@ -341,20 +341,11 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
  */
 void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
-    QList<Study *> selectedStudies = m_studyTreeWidget->getSelectedStudies();
-
-    if (selectedStudies.count() != 1)
+    if (m_studyTreeWidget->getSelectedStudies().count() == 0)
     {
-        if (selectedStudies.count() == 0)
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to store to PACS."));
-        }
-        else
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("Only one selected object can be stored to PACS at same time. Please select only one study, series or image to store to PACS."));
-        }
+        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to store to PACS."));
     }
-    else
+    else 
     {
         m_qwidgetSelectPacsToStoreDicomImage->show();
     }
@@ -411,22 +402,12 @@ void QInputOutputLocalDatabaseWidget::qSplitterPositionChanged()
 
 void QInputOutputLocalDatabaseWidget::storeSelectedStudyiesToSelectedPacs()
 {
-    QList<Study*> selectedStudies = m_studyTreeWidget->getSelectedStudies();
-
     foreach(PacsDevice pacsDevice, m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
     {
-        DicomMask dicomMaskObjectsToStore;
-
-        //Abans ja ens hem assegurat que només tinguem un estudi seleccionat
-       dicomMaskObjectsToStore.setStudyUID(selectedStudies.at(0)->getInstanceUID());
-
-        if (!m_studyTreeWidget->getCurrentSeriesUID().isEmpty())
-            dicomMaskObjectsToStore.setSeriesUID(m_studyTreeWidget->getCurrentSeriesUID());
-
-        if (!m_studyTreeWidget->getCurrentImageUID().isEmpty())
-            dicomMaskObjectsToStore.setSOPInstanceUID(m_studyTreeWidget->getCurrentImageUID());
-
-        emit storeDicomObjectsToPacs(pacsDevice, selectedStudies.at(0), dicomMaskObjectsToStore);
+        foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+        {
+            emit storeDicomObjectsToPacs(pacsDevice, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()), dicomMask);
+        }
     }
 }
 
