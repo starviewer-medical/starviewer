@@ -73,6 +73,11 @@ QList<PacsDevice> QPacsList::getSelectedPacs()
     return selectedPacsList;
 }
 
+void QPacsList::clearSelection()
+{
+    m_PacsTreeView->clearSelection();
+}
+
 void QPacsList::setDefaultPACS(QTreeWidgetItem *item)
 {
     Q_ASSERT(item);
