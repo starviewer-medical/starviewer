@@ -31,6 +31,9 @@ public:
     /// Retorna els pacs seleccionats per l'usuari
     QList<PacsDevice> getSelectedPacs();
 
+    ///Neteja els elements seleccionats de la llista
+    void clearSelection();
+
     ///Destructor de la classe
     ~QPacsList();
 
