@@ -365,45 +365,6 @@ Study* QStudyTreeWidget::getStudy(QString studyInstanceUID)
     return study;
 }
 
-QStringList QStudyTreeWidget::getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID )
-{
-    QStringList result;
-    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
-    foreach( QTreeWidgetItem *item, selectedItems )
-    {
-        // només mirem les series
-        if( isItemSeries( item ) )
-        {
-            // si aquesta serie seleccionada pertany a l'estudi que demanem
-            if( item->parent()->text( UID ) == studyUID )
-            {
-                result << item->text(UID); // afegim el SERIES UID
-            }
-        }
-    }
-    return result;
-}
-
-QStringList QStudyTreeWidget::getStudySelectedImagesUIDFromSelectedStudies( QString studyUID )
-{
-    QStringList result;
-    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
-    foreach( QTreeWidgetItem *item, selectedItems )
-    {
-        // només mirem les series
-        if( isItemImage( item ) )
-        {
-            // si aquesta imatge seleccionada pertany a l'estudi que demanem
-            if( item->parent()->parent()->text( UID ) == studyUID )
-            {
-                result << item->text(UID); // afegim l'Image UID (SOPInstance...)
-            }
-        }
-
-    }
-    return result;
-}
-
 QString QStudyTreeWidget::getCurrentSeriesUID()
 {
     if ( m_studyTreeView->currentItem() != NULL )

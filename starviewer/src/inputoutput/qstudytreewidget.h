@@ -96,12 +96,6 @@ public:
     ///Retorna l'estudi que tingui el studyInstanceUID passat per paràmetre
     Study* getStudy(QString studyInstanceUID);
 
-    ///Retorna una llista amb l'UID de les sèries dels estudis seleccionats
-    QStringList getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID );
-
-    ///Retorna una llista amb l'UID de les imatges dels estudis seleccionats
-    QStringList getStudySelectedImagesUIDFromSelectedStudies( QString studyUID );
-
     /** Retorna el UID de la sèrie seleccionada, si en aquell moment no hi ha cap sèrie seleccionada, retorna un QString buit
      *  @return UID de la sèrie seleccionat
      */
