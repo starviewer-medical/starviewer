@@ -21,7 +21,8 @@ FORMS += qconfigurationscreenbase.ui \
          qinputoutputdicomdirwidgetbase.ui \
          qinputoutputlocaldatabasewidgetbase.ui \
          qinputoutputpacswidgetbase.ui \
-         qdicomdirconfigurationscreenbase.ui
+         qdicomdirconfigurationscreenbase.ui \
+         qwidgetselectpacstostoredicomimagebase.ui
 
 HEADERS += databaseconnection.h \
            pacsconnection.h \
@@ -83,7 +84,8 @@ HEADERS += databaseconnection.h \
            pacsmanager.h \
            isoimagefilecreator.h \
            dicomdirburningapplication.h \
-           risrequestmanager.h
+           risrequestmanager.h \
+           qwidgetselectpacstostoredicomimage.h
 
 SOURCES += databaseconnection.cpp \
            pacsconnection.cpp \
@@ -142,7 +144,8 @@ SOURCES += databaseconnection.cpp \
            pacsmanager.cpp \
            isoimagefilecreator.cpp \
            dicomdirburningapplication.cpp \
-           risrequestmanager.cpp
+           risrequestmanager.cpp \
+           qwidgetselectpacstostoredicomimage.cpp
 
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
