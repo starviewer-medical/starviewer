@@ -17,6 +17,7 @@ class DicomMask;
 class QOperationStateScreen;
 class StatsWatcher;
 class RISRequestManager;
+class PacsDevice;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -56,7 +57,7 @@ public slots:
 
     /**Guarda els objectes que compleixien la màscara passada per paràmetres de l'estudi passat per paràmetre al primer PACS 
        que es troba com a PACS per defecte*/
-    void storeDicomObjectsToPacs(Study *studyToStore, DicomMask dicomMaskObjectsToStore);
+    void storeDicomObjectsToPacs(PacsDevice pacsDevice, Study *studyToStore, DicomMask dicomMaskObjectsToStore);
 
 signals:
     /// Signal que ens indica quins pacients s'han seleccionat per visualitzar

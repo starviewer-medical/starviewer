@@ -18,6 +18,7 @@
 #include "statswatcher.h"
 #include "qcreatedicomdir.h"
 #include "inputoutputsettings.h"
+#include "qwidgetselectpacstostoredicomimage.h"
 
 namespace udg
 {
@@ -25,7 +26,6 @@ namespace udg
 QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
-    createConnections();
 
     //esborrem els estudis vells de la cache
     deleteOldStudies();
@@ -40,6 +40,10 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
     //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
     m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
+
+    m_qwidgetSelectPacsToStoreDicomImage = new QWidgetSelectPacsToStoreDicomImage();
+
+    createConnections();
 }
 
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
@@ -70,6 +74,7 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     ///Si movem el QSplitter capturem el signal per guardar la seva posició
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
+    connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(storeSelectedStudyiesToSelectedPacs()));
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
@@ -336,23 +341,9 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
  */
 void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
-    QList<Study*> selectedStudies = m_studyTreeWidget->getSelectedStudies();
-    DicomMask dicomMaskObjectsToStore;
+    QList<Study *> selectedStudies = m_studyTreeWidget->getSelectedStudies();
 
-    if (selectedStudies.count() == 1)
-    {
-
-        dicomMaskObjectsToStore.setStudyUID(selectedStudies.at(0)->getInstanceUID());
-
-        if (!m_studyTreeWidget->getCurrentSeriesUID().isEmpty())
-            dicomMaskObjectsToStore.setSeriesUID(m_studyTreeWidget->getCurrentSeriesUID());
-
-        if (!m_studyTreeWidget->getCurrentImageUID().isEmpty())
-            dicomMaskObjectsToStore.setSOPInstanceUID(m_studyTreeWidget->getCurrentImageUID());
-
-        emit storeDicomObjectsToPacs(selectedStudies.at(0), dicomMaskObjectsToStore);
-    }
-    else
+    if (selectedStudies.count() != 1)
     {
         if (selectedStudies.count() == 0)
         {
@@ -362,6 +353,10 @@ void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
         {
             QMessageBox::warning(this, ApplicationNameString, tr("Only one selected object can be stored to PACS at same time. Please select only one study, series or image to store to PACS."));
         }
+    }
+    else
+    {
+        m_qwidgetSelectPacsToStoreDicomImage->show();
     }
 }
 
@@ -412,6 +407,27 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudiesThreadFinished()
 void QInputOutputLocalDatabaseWidget::qSplitterPositionChanged()
 {
     Settings().saveGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter );
+}
+
+void QInputOutputLocalDatabaseWidget::storeSelectedStudyiesToSelectedPacs()
+{
+    QList<Study*> selectedStudies = m_studyTreeWidget->getSelectedStudies();
+
+    foreach(PacsDevice pacsDevice, m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
+    {
+        DicomMask dicomMaskObjectsToStore;
+
+        //Abans ja ens hem assegurat que només tinguem un estudi seleccionat
+       dicomMaskObjectsToStore.setStudyUID(selectedStudies.at(0)->getInstanceUID());
+
+        if (!m_studyTreeWidget->getCurrentSeriesUID().isEmpty())
+            dicomMaskObjectsToStore.setSeriesUID(m_studyTreeWidget->getCurrentSeriesUID());
+
+        if (!m_studyTreeWidget->getCurrentImageUID().isEmpty())
+            dicomMaskObjectsToStore.setSOPInstanceUID(m_studyTreeWidget->getCurrentImageUID());
+
+        emit storeDicomObjectsToPacs(pacsDevice, selectedStudies.at(0), dicomMaskObjectsToStore);
+    }
 }
 
 bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)
