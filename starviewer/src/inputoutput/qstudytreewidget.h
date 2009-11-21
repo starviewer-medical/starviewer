@@ -35,6 +35,7 @@ class Study;
 class Patient;
 class Series;
 class Image;
+class DicomMask;
 
 /** Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.
   * Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació 
@@ -92,6 +93,9 @@ public:
     ///Retorna una llista amb els estudis seleccionats
     QList<Study*> getSelectedStudies();
 
+    ///Retorna l'estudi que tingui el studyInstanceUID passat per paràmetre
+    Study* getStudy(QString studyInstanceUID);
+
     ///Retorna una llista amb l'UID de les sèries dels estudis seleccionats
     QStringList getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID );
 
@@ -116,6 +120,9 @@ public:
 
     /// Retorna el QTreeWidget que conté el widget
     QTreeWidget *getQTreeWidget() const;
+
+    ///Per cada element selecciona Study/Series/Imatge retorna la seva DicomMask
+    QList<DicomMask> getDicomMaskOfSelectedItems();
 
 protected:
     /** Mostra el menu contextual
