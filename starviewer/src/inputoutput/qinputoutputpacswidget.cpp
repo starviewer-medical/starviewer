@@ -220,9 +220,7 @@ void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QStr
 
 void QInputOutputPacsWidget::retrieveSelectedStudies(bool view)
 {
-    QList<Study*> selectedStudies = m_studyTreeWidget->getSelectedStudies();
-
-    if(selectedStudies.isEmpty())
+    if(m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
     {
         QApplication::restoreOverrideCursor();
         if(view)
@@ -233,22 +231,9 @@ void QInputOutputPacsWidget::retrieveSelectedStudies(bool view)
         return;
     }
 
-    foreach(Study *studyToRetrieve, selectedStudies)
+    foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        DicomMask maskStudyToRetrieve;
-
-        maskStudyToRetrieve.setStudyUID(studyToRetrieve->getInstanceUID());
-
-        // TODO aquí només tenim en compte l'última sèrie o imatge seleccionada
-        // per tant si seleccionem més d'una sèrie/imatge només s'en baixarà una
-        // Caldria fer possible que es baixi tants com en seleccionem
-        if (!m_studyTreeWidget->getCurrentSeriesUID().isEmpty())
-            maskStudyToRetrieve.setSeriesUID(m_studyTreeWidget->getCurrentSeriesUID());
-
-        if (!m_studyTreeWidget->getCurrentImageUID().isEmpty())
-            maskStudyToRetrieve.setSOPInstanceUID(m_studyTreeWidget->getCurrentImageUID());
-
-        retrieve(view, getPacsIDFromQueriedStudies(studyToRetrieve->getInstanceUID()), maskStudyToRetrieve, studyToRetrieve);
+        retrieve(view, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
     }
 }
 
