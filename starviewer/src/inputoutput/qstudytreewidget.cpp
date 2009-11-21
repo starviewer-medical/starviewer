@@ -27,6 +27,7 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
+#include "dicommask.h"
 
 namespace udg {
 
@@ -65,6 +66,40 @@ void QStudyTreeWidget::createConnections()
 QTreeWidget *QStudyTreeWidget::getQTreeWidget() const
 {
     return m_studyTreeView;
+}
+
+QList<DicomMask> QStudyTreeWidget::getDicomMaskOfSelectedItems()
+{
+    QList<DicomMask> dicomMaskList;
+    QList<QTreeWidgetItem *> selectedItems = m_studyTreeView->selectedItems();
+
+    foreach( QTreeWidgetItem *item, selectedItems )
+    {
+        DicomMask dicomMask;
+        if( isItemStudy( item ) ) //es un estudi
+        {
+            dicomMask.setStudyUID( item->text(UID) );
+        }
+        else if( isItemSeries( item ) )
+        {
+            dicomMask.setStudyUID( item->parent()->text(UID) );
+            dicomMask.setSeriesUID( item->text(UID) );
+        }
+        else if( isItemImage( item ) )
+        {
+            dicomMask.setStudyUID( item->parent()->parent()->text(UID) );
+            dicomMask.setSeriesUID( item->parent()->text(UID) );
+            dicomMask.setSOPInstanceUID( item->text(UID) );
+        }
+        else
+        {
+            DEBUG_LOG("Texte no esperat: " + item->text(Type) );
+        }
+
+        dicomMaskList.append( dicomMask );
+    }
+
+    return dicomMaskList;
 }
 
 void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
@@ -311,6 +346,23 @@ QList<Study*> QStudyTreeWidget::getSelectedStudies()
     }
 
     return selectedStudies;
+}
+
+Study* QStudyTreeWidget::getStudy(QString studyInstanceUID)
+{
+    Study *study = NULL;
+
+   //Busquem pels estudis UID seleccionats 
+    foreach( Study *studyInserted , m_insertedStudyList )
+    {
+        if ( studyInserted->getInstanceUID() == studyInstanceUID )
+        {
+            study = studyInserted;
+            break;
+        }
+    }
+
+    return study;
 }
 
 QStringList QStudyTreeWidget::getStudySelectedSeriesUIDFromSelectedStudies( QString studyUID )
