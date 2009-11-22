@@ -4,17 +4,20 @@
 
 namespace udg 
 {	
+
 DicomPrintJob::DicomPrintJob()
-{	
+{
+
 }
  
 DicomPrintJob::~DicomPrintJob()
 {
+
 }
 
-void DicomPrintJob::setPrintPriority(const QString &_printPriority)
+void DicomPrintJob::setPrintPriority( const QString& printPriority )
 {
-    m_printPriority=_printPriority;
+    m_printPriority = printPriority;
 }
 
 QString DicomPrintJob::getPrintPriority() const
@@ -22,9 +25,9 @@ QString DicomPrintJob::getPrintPriority() const
     return m_printPriority;
 }
 
-void DicomPrintJob::setMediumType(const QString &_mediumType)
+void DicomPrintJob::setMediumType( const QString& mediumType )
 {
-    m_mediumType=_mediumType;
+    m_mediumType = mediumType;
 }
 
 QString DicomPrintJob::getMediumType() const
@@ -32,9 +35,9 @@ QString DicomPrintJob::getMediumType() const
     return m_mediumType;
 }
 
-void DicomPrintJob::setLabel(const QString &_label)
+void DicomPrintJob::setLabel( const QString& label )
 {
-    m_label=_label;
+    m_label = label;
 }
 
 QString DicomPrintJob::getLabel() const
@@ -42,9 +45,9 @@ QString DicomPrintJob::getLabel() const
     return m_label;
 }
 
-void DicomPrintJob::setFilmDestination(const QString &_filmDestination)
+void DicomPrintJob::setFilmDestination( const QString& filmDestination )
 {
-    m_filmDestination=_filmDestination;
+    m_filmDestination = filmDestination;
 }
 
 QString DicomPrintJob::getFilmDestination() const
@@ -52,7 +55,7 @@ QString DicomPrintJob::getFilmDestination() const
     return m_filmDestination;
 }
 
-void DicomPrintJob::setDicomPrintPages(QList<DicomPrintPage> dicomPrintPages)
+void DicomPrintJob::setDicomPrintPages( QList<DicomPrintPage> dicomPrintPages )
 {
     m_listDicomPrintPage = dicomPrintPages;
 }
@@ -61,5 +64,4 @@ QList<DicomPrintPage> DicomPrintJob::getDicomPrintPages()
 {
     return m_listDicomPrintPage;
 }
-
 }
