@@ -10,35 +10,51 @@
 
 namespace udg 
 {
-    class Printer;
-    class PrintMethod;
-    class PrinterManager;
-    class QPrinterConfigurationWidget;
-    class QPrintingConfigurationWidget;
-    class QPrintJobCreatorWidget;
+class Printer;
+class PrintMethod;
+class PrinterManager;
+class QPrinterConfigurationWidget;
+class QPrintingConfigurationWidget;
+class QPrintJobCreatorWidget;
 
 class DicomPrintFactory : public ImagePrintFactory
 {
-
 public:
-	 
-	DicomPrintFactory();
+     
+    DicomPrintFactory();
     ~DicomPrintFactory();
-	
-    Printer						* getPrinter();
-    PrintMethod					* getPrintMethod();
-    PrinterManager              * getPrinterManager();
-    QPrinterConfigurationWidget * getPrinterConfigurationWidget();
+
+    /// Retorna un objecte Printer (DicomPrinter)
+    Printer* getPrinter();
+
+    /// Retorna un objecte PrintMethod (DicomPrintMethod)
+    PrintMethod* getPrintMethod();
+
+    /// Retorna un objecte PrinterManager (DicomPrinterManager)
+    PrinterManager* getPrinterManager();
+
+    /// Retorna un objecte QPrinterConfigurationWidget (QDicomPrinterConfigurationWidget)
+    QPrinterConfigurationWidget* getPrinterConfigurationWidget();
+
+    /// Retorna un QPrintingConfigurationWidget (QDicomPrintingConfigurationWidget)
     QPrintingConfigurationWidget* getPrintingConfigurationWidget();
-    QPrintJobCreatorWidget		* getPrintJobCreatorWidget();
+
+    /// Retorna un QPrintJobCreatorWidget (QDicomJobCreatorWidget)
+    QPrintJobCreatorWidget* getPrintJobCreatorWidget();
 
 private:
-    Printer * m_printer;
-    PrintMethod * m_printMethod;
-    PrinterManager * m_printerManager;
-    QPrinterConfigurationWidget * m_qPrinterconfigurationWidget;
+
+    Printer* m_printer;
+
+    PrintMethod* m_printMethod;
+
+    PrinterManager* m_printerManager;
+
+    QPrinterConfigurationWidget* m_qPrinterconfigurationWidget;
+
     QPrintingConfigurationWidget* m_qPrintingConfigurationWidget;
-    QPrintJobCreatorWidget      * m_qPrintJobCreatorWidget;
+
+    QPrintJobCreatorWidget* m_qPrintJobCreatorWidget;
 };
 }
 
