@@ -155,7 +155,7 @@ void QCreateDicomdir::addStudy(Study *study)
         studySizeBytes = getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), study->getInstanceUID());
 
         //només comprovem l'espai si gravem a un cd o dvd
-        if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_DiskSpaceBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
+        if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_availableSpaceToRecordInBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
         {
             QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , ApplicationNameString , tr( "The study can't be added to Dicomdir list, the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR." ) );
@@ -616,7 +616,7 @@ void QCreateDicomdir::deviceChanged( int index )
         case CreateDicomdir::HardDisk:
             m_stackedWidget->setCurrentIndex(1);
             // per gravar al disc no hi ha màxim TODO això no es del tot cert, caldria comprovar l'espai de disc
-            m_DiskSpaceBytes = HardDiskSizeBytes;
+            m_availableSpaceToRecordInBytes = HardDiskSizeBytes;
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
@@ -628,12 +628,12 @@ void QCreateDicomdir::deviceChanged( int index )
                 if (m_currentDevice == CreateDicomdir::CdRom) 
                 {
                     maximumDeviceCapacity = CDRomSizeMb;
-                    m_DiskSpaceBytes = CDRomSizeBytes;
+                    m_availableSpaceToRecordInBytes = CDRomSizeBytes;
                 }
                 else
                 {
                     maximumDeviceCapacity = DVDRomSizeMb;
-                    m_DiskSpaceBytes = DVDRomSizeBytes;
+                    m_availableSpaceToRecordInBytes = DVDRomSizeBytes;
                 }
                 
                 m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
@@ -641,7 +641,7 @@ void QCreateDicomdir::deviceChanged( int index )
                 m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
                 setDicomdirSize();//El cridem per refrescar la barra de progrés
 
-                if (m_dicomdirSizeBytes > m_DiskSpaceBytes)
+                if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
                 {
                     QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumDeviceCapacity) );
                 }

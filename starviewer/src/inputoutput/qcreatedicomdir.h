@@ -155,7 +155,7 @@ private:
     quint64 m_dicomdirSizeBytes;
     
     /// Espai lliure en bytes del dispositiu de disc escollit sobre el que es vol grabar el DICOMDIR
-    quint64 m_DiskSpaceBytes;
+    quint64 m_availableSpaceToRecordInBytes;
 
     /// Menu contextual
     QMenu m_contextMenu;
