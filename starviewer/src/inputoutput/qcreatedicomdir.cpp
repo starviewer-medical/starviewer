@@ -185,6 +185,12 @@ void QCreateDicomdir::addStudy(Study *study)
 
 void QCreateDicomdir::createDicomdir()
 {
+    if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
+    {
+        QMessageBox::warning(this, ApplicationNameString, tr("DICOMDIR creation aborted.\n The selected studies exceed the available space for the current device.") );
+        return;
+    }
+
     Status state;
 
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
