@@ -848,6 +848,9 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionTypeComboBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_additiveObscuranceVomiCheckBox, SIGNAL( toggled(bool) ), m_additiveObscuranceVomiWeightLabel, SLOT( setEnabled(bool) ) );
     connect( m_additiveObscuranceVomiCheckBox, SIGNAL( toggled(bool) ), m_additiveObscuranceVomiWeightDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_contourCheckBox, SIGNAL( toggled(bool) ), m_contourDoubleSpinBox, SLOT( setEnabled(bool) ) );
@@ -1212,6 +1215,27 @@ void QExperimental3DExtension::render()
     //else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
     else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
     else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVomi( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
+    else if ( m_baseFilteringAmbientOcclusionRadioButton->isChecked() )
+    {
+        switch ( m_baseFilteringAmbientOcclusionTypeComboBox->currentIndex() )
+        {
+            case 0: // direct
+                m_volume->addFilteringAmbientOcclusionMap( m_spatialImportanceFunction, m_maximumSpatialImportanceFunction, m_baseFilteringAmbientOcclusionFactorDoubleSpinBox->value() );
+                break;
+            case 1: // absolute
+                {
+                    QVector<float> absFiltering = QtConcurrent::blockingMapped( m_spatialImportanceFunction, qAbs<float> );
+                    m_volume->addFilteringAmbientOcclusionMap( absFiltering, m_maximumSpatialImportanceFunction, m_baseFilteringAmbientOcclusionFactorDoubleSpinBox->value() );
+                }
+                break;
+            case 2: // negatives
+                {
+                    QVector<float> negativeFiltering = QtConcurrent::blockingMapped( m_spatialImportanceFunction, passIfNegative );
+                    m_volume->addFilteringAmbientOcclusionMap( negativeFiltering, m_maximumSpatialImportanceFunction, m_baseFilteringAmbientOcclusionFactorDoubleSpinBox->value() );
+                }
+                break;
+        }
+    }
 
     if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value(),
@@ -2866,6 +2890,7 @@ void QExperimental3DExtension::gaussianFilter()
     }
 #endif // CUDA_AVAILABLE
 
+    m_baseFilteringAmbientOcclusionRadioButton->setEnabled( true );
     m_filteringAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityFilteringCheckBox->setEnabled( true );
 
@@ -2893,6 +2918,7 @@ void QExperimental3DExtension::boxMeanFilter()
     }
 #endif // CUDA_AVAILABLE
 
+    m_baseFilteringAmbientOcclusionRadioButton->setEnabled( true );
     m_filteringAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityFilteringCheckBox->setEnabled( true );
 
