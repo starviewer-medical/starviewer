@@ -83,11 +83,13 @@ inline HdrColor FilteringAmbientOcclusionMapVoxelShader::nvShade( const Vector3 
     if ( !color.isTransparent() )
     {
         float f = m_filteringAmbientOcclusionFactor * m_filteringAmbientOcclusion.at( offset ) / m_maximumFilteringAmbientOcclusion;
+        f = qBound( -1.0f, f, 1.0f );
 
         if ( f > 0.0f ) // positiu: negre -> groc -> vermell
         {
             color.red = f < 0.5f ? 2.0f * f : 1.0f;
             color.green = 2.0f * ( f < 0.5f ? f : 1.0f - f );
+
         }
         else    // negatiu: negre -> verd -> blau
         {
@@ -120,6 +122,7 @@ inline HdrColor FilteringAmbientOcclusionMapVoxelShader::nvShade( const Vector3 
     if ( !color.isTransparent() )
     {
         float f = m_filteringAmbientOcclusionFactor * TrilinearInterpolator::interpolate<float>( m_filteringAmbientOcclusion.constData(), offsets, weights ) / m_maximumFilteringAmbientOcclusion;
+        f = qBound( -1.0f, f, 1.0f );
 
         if ( f > 0.0f ) // positiu: negre -> groc -> vermell
         {
