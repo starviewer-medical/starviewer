@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>475</width>
-    <height>791</height>
+    <height>819</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -626,6 +626,71 @@
             </item>
             <item>
              <widget class="QDoubleSpinBox" name="m_baseVoxelSalienciesFactorDoubleSpinBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximum">
+               <double>100.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_52">
+            <item>
+             <widget class="QRadioButton" name="m_baseFilteringAmbientOcclusionRadioButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Filtering AO</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="m_baseFilteringAmbientOcclusionTypeComboBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <item>
+               <property name="text">
+                <string>Direct</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Absolute value</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Only negatives</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="m_baseFilteringAmbientOcclusionFactorLabel">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Factor</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="m_baseFilteringAmbientOcclusionFactorDoubleSpinBox">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -2745,33 +2810,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="m_programTab">
-      <attribute name="title">
-       <string>Program</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_11">
-       <item>
-        <widget class="QPushButton" name="m_loadAndRunProgramPushButton">
-         <property name="text">
-          <string>Load and run...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>603</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="m_filteringTab">
       <attribute name="title">
        <string>Filtering</string>
@@ -2821,6 +2859,33 @@
           <size>
            <width>20</width>
            <height>688</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_programTab">
+      <attribute name="title">
+       <string>Program</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_11">
+       <item>
+        <widget class="QPushButton" name="m_loadAndRunProgramPushButton">
+         <property name="text">
+          <string>Load and run...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>603</height>
           </size>
          </property>
         </spacer>
