@@ -13,7 +13,6 @@
 #include "localdatabasemanager.h"
 #include "qdeleteoldstudiesthread.h"
 #include "dicommask.h"
-#include "pacsdevice.h"
 
 #include <QMenu>
 
@@ -27,7 +26,6 @@ class Patient;
 class StatsWatcher;
 class QCreateDicomdir;
 class Study;
-class QWidgetSelectPacsToStoreDicomImage;
 
 /** 
  * Widget en el que controla les operacions d'entrada/sortida de la base de dades local
@@ -77,7 +75,7 @@ signals:
     /*TODO: S'hauria de passar un objecte study que contingués només les imatges a guardar del PACS, però degut a que Operation que és l'objecte que es passa
         a QExecuteOperationThread per indicar l'operació de guardar objectes el PACS, no se li pot especificar una llista d'objectes DICOM, sinó que se
         li ha d'especificar la màscara dels objectes que s'han de guardar, enviem las màscara*/
-    void storeDicomObjectsToPacs(PacsDevice pacsDevice, Study *study, DicomMask dicomMask);
+    void storeDicomObjectsToPacs(Study *study, DicomMask dicomMask);
 
 private:
     ///Crea les connexions entre signals i slots
@@ -125,16 +123,11 @@ private slots:
     ///Guarda la posició de l'splitter quan l'han mogut
     void qSplitterPositionChanged();
 
-    ///Guarda els estudis seleccionats al PACS que l'usuari ha seleccionat
-    void storeSelectedStudyiesToSelectedPacs();
-
 private:
     QMenu m_contextMenuQStudyTreeWidget;
     QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
     QCreateDicomdir *m_qcreateDicomdir;
     StatsWatcher *m_statsWatcher;
-
-    QWidgetSelectPacsToStoreDicomImage *m_qwidgetSelectPacsToStoreDicomImage;
 };
 
 };// end namespace udg
