@@ -124,7 +124,7 @@ void QCreateDicomdir::setDicomdirSize()
     sizeInMb = m_dicomdirSizeBytes / ( 1024.0 * 1024 );//passem a Mb
     sizeText.setNum( sizeInMb , 'f' , 2 );
 
-    sizeOfDicomdirText = tr("DICOMDIR size: %1 Mb").arg(sizeText);
+    sizeOfDicomdirText = tr("DICOMDIR size: %1 Mb - Available Space: %2 Mb").arg(sizeText).arg(m_availableSpaceToRecordInBytes/(1024*1024));
     m_dicomdirSizeOnDiskLabel->setText( sizeOfDicomdirText );
 
     if ( sizeInMb < m_progressBarOcupat->maximum() )
@@ -153,9 +153,9 @@ void QCreateDicomdir::addStudy(Study *study)
         // \TODO Xapussa perquè ara, a primera instància, continui funcionant amb les classes Study i demés. Caldria unificar el tema
         // "a quin directori està aquest study"?
         studySizeBytes = getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), study->getInstanceUID());
-
-        //només comprovem l'espai si gravem a un cd o dvd
-        if ( ( (studySizeBytes + m_dicomdirSizeBytes)  > m_availableSpaceToRecordInBytes) && (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )  )
+        
+        // Comprovem si tenim prou espai per l'estudi
+        if ( studySizeBytes + m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes )
         {
             QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , ApplicationNameString , tr( "The study can't be added to Dicomdir list, the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR." ) );
@@ -179,7 +179,8 @@ void QCreateDicomdir::addStudy(Study *study)
             QApplication::restoreOverrideCursor();
         }
     }
-    else QMessageBox::warning( this , ApplicationNameString , tr( "The study already exists in the DICOMDIR list" ) );
+    else 
+        QMessageBox::warning( this , ApplicationNameString , tr( "The study already exists in the DICOMDIR list" ) );
 }
 
 void QCreateDicomdir::createDicomdir()
@@ -610,13 +611,18 @@ void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 void QCreateDicomdir::deviceChanged( int index )
 {
     m_currentDevice = (CreateDicomdir::recordDeviceDicomDir) index;
+    updateAvailableSpaceToRecord();
     switch( m_currentDevice )
     {
         case CreateDicomdir::UsbPen:
         case CreateDicomdir::HardDisk:
             m_stackedWidget->setCurrentIndex(1);
-            // per gravar al disc no hi ha màxim TODO això no es del tot cert, caldria comprovar l'espai de disc
-            m_availableSpaceToRecordInBytes = HardDiskSizeBytes;
+            setDicomdirSize();
+            if ( m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes )
+            {
+                QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of the device is %1 Mb" ).arg(m_availableSpaceToRecordInBytes/(1024*1024)) );
+            }
+
             break;
         case CreateDicomdir::CdRom:
         case CreateDicomdir::DvdRom:
@@ -628,12 +634,10 @@ void QCreateDicomdir::deviceChanged( int index )
                 if (m_currentDevice == CreateDicomdir::CdRom) 
                 {
                     maximumDeviceCapacity = CDRomSizeMb;
-                    m_availableSpaceToRecordInBytes = CDRomSizeBytes;
                 }
                 else
                 {
                     maximumDeviceCapacity = DVDRomSizeMb;
-                    m_availableSpaceToRecordInBytes = DVDRomSizeBytes;
                 }
                 
                 m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
@@ -710,6 +714,33 @@ quint64 QCreateDicomdir::getImageSizeInBytesInLittleEndianTransferSyntax(Image *
     imageSizeInBytesInLittleEndianTransferSyntax += image->getNumberOfFrames() * dicomHeaderSizeBytes;
 
     return imageSizeInBytesInLittleEndianTransferSyntax;
+}
+
+void QCreateDicomdir::updateAvailableSpaceToRecord()
+{
+    QString path = m_lineEditDicomdirPath->text();
+    HardDiskInformation diskInfo;
+    switch( m_currentDevice )
+    {
+        case CreateDicomdir::UsbPen:
+        case CreateDicomdir::HardDisk:
+            if( path.isEmpty() || !QDir(path).exists() )
+            {
+                QFileInfoList drives = QDir::drives();
+                m_lineEditDicomdirPath->setText( drives.first().absolutePath() );
+                path = m_lineEditDicomdirPath->text();
+            }
+            m_availableSpaceToRecordInBytes = diskInfo.getNumberOfFreeBytes(path);
+            break;
+        
+        case CreateDicomdir::CdRom:
+            m_availableSpaceToRecordInBytes = CDRomSizeBytes;
+            break;
+        
+        case CreateDicomdir::DvdRom:
+            m_availableSpaceToRecordInBytes = DVDRomSizeBytes;
+            break;
+    }
 }
 
 }

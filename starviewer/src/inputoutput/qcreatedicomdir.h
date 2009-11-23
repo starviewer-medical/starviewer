@@ -131,6 +131,9 @@ private:
     /// Inicialitza les QActions
     void createActions();
 
+    /// Actualitza la variable que comptabilitza l'espai disponible per grabar amb el dispositiu actual
+    void updateAvailableSpaceToRecord();
+
 private slots:
     /// Es passa per paràmetre l'identificador del dispositiu i es fan les pertinents accions
     void deviceChanged( int value );
@@ -142,11 +145,9 @@ private:
     /// Constants per definir les mides de CD/DVD i disc
     static const int CDRomSizeMb = 700;
     static const int DVDRomSizeMb = 4800;
-    static const int HardDiskSizeMb = 9999999;
 
     static const quint64 CDRomSizeBytes = ( quint64 ) CDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
     static const quint64 DVDRomSizeBytes = ( quint64 ) DVDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
-    static const quint64 HardDiskSizeBytes = ( quint64 ) HardDiskSizeMb * ( quint64 ) ( 1024 * 1024 );
 
     /// Indiquem de mitjana que ocupa una capçalera dicom d'una imatge, en el ticket #766 indiquem com s'ha obtingut el càcul
     static const int dicomHeaderSizeBytes = 23000;
