@@ -121,7 +121,7 @@ void QCreateDicomdir::setDicomdirSize()
     QString sizeOfDicomdirText, sizeText;
     double sizeInMb;
 
-    sizeInMb = m_dicomdirSizeBytes / ( 1024 * 1024 );//passem a Mb
+    sizeInMb = m_dicomdirSizeBytes / ( 1024.0 * 1024 );//passem a Mb
     sizeText.setNum( sizeInMb , 'f' , 2 );
 
     sizeOfDicomdirText = tr("DICOMDIR size: %1 Mb").arg(sizeText);
