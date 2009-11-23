@@ -159,7 +159,7 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyWillBeDeletedFromDatabase(QString)), m_qInputOutputLocalDatabaseWidget , SLOT(removeStudyFromQStudyTreeWidget(QString)));
 
-    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(storeDicomObjectsToPacs(PacsDevice, Study*, DicomMask)), SLOT(storeDicomObjectsToPacs(PacsDevice, Study*,DicomMask)));
+    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(storeDicomObjectsToPacs(Study*, DicomMask)), SLOT(storeDicomObjectsToPacs(Study*,DicomMask)));
 }
 
 void QueryScreen::checkRequeriments()
@@ -294,9 +294,22 @@ void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
     m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "");
 }
 
-void QueryScreen::storeDicomObjectsToPacs(PacsDevice pacsDevice, Study *studyToStore, DicomMask dicomMaskObjectsToStore)
+void QueryScreen::storeDicomObjectsToPacs(Study *studyToStore, DicomMask dicomMaskObjectsToStore)
 {
-    m_qInputOutputPacsWidget->storeDicomObjectsToPacs(pacsDevice, studyToStore, dicomMaskObjectsToStore); 
+    QList<PacsDevice> selectedPacs = m_PACSNodes->getSelectedPacs();
+
+    if (selectedPacs.count() == 0)
+    {
+        QMessageBox::warning(this, ApplicationNameString, tr("You have to select a PACS to store the study in."));
+    }
+    else if (selectedPacs.count() > 1)
+    {
+        QMessageBox::warning(this, ApplicationNameString, tr("The studies can only be stored to one PACS"));
+    }
+    else
+    {
+        m_qInputOutputPacsWidget->storeDicomObjectsToPacs(selectedPacs.at(0), studyToStore, dicomMaskObjectsToStore); 
+    }
 }
 
 void QueryScreen::refreshTab( int index )
