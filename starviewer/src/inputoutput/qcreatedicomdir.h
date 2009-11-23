@@ -187,12 +187,6 @@ private:
     /// Variable que ens diu quin és el dispositiu seleccionat en aquell moment
     CreateDicomdir::recordDeviceDicomDir m_currentDevice;
 
-    /**En windows la opció de crear DICOMDIR en cd/dvd ara mateix està deshabilitat perquè no tenim implementada la part 
-      *de comunicar-nos algun cap sw de crear cd/dvd, el que es fa en Windows és avisar de que està desactivat el servei i que el
-      *que es pot fer es crear el DICOMDIR al disc dur i després gravar-lo a cd, i s'activa per defecte la creació de DICOMDIR al disc dur
-      */
-    void dvdCdDicomdirDesactivatedOnWindows();
-
     /**
      * Indica si la configuració és correcte per poder gravar el DICOMDIR en un CD o DVD. No comprova que sigui 
      * un programa vàlid, simplement comprova que la ruta ens ha indicat com programa per gravar CD/DVD existeix
