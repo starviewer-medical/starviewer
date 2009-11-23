@@ -661,17 +661,6 @@ void QCreateDicomdir::deviceChanged( int index )
     }
 }
 
-void QCreateDicomdir::dvdCdDicomdirDesactivatedOnWindows()
-{
-    QMessageBox::information(this, ApplicationNameString, 
-                             tr("The creation of dicomdir on cd/dvd in Windows is desactivated.\n\n"
-                                "To create a cd/dvd with a Dicomdir, you have to create first the Dicomdir on your hard disk and "
-                                "then copy the directory where you have created it to a cd/dvd using a burning cd/dvd software."));
-
-    //Marquem la opció de crear el dicomdir al disc dur
-    m_hardDiskAction->trigger();
-}
-
 bool QCreateDicomdir::checkDICOMDIRBurningApplicationConfiguration()
 {
     Settings settings;
