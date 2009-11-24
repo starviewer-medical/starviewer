@@ -92,7 +92,7 @@ private:
 
     /// Processa el pacient donat per tal que pugui ser usat per les extensions
     //  Li crea els volums al repositori i assigna quina és la sèrie per defecte
-    void processInput(Patient *patient, const QString &defaultSeriesUID);
+    void generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID);
 
 private:
     /// Punter a l'aplicació principal
