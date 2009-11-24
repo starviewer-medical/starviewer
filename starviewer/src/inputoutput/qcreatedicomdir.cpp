@@ -140,47 +140,66 @@ void QCreateDicomdir::setDicomdirSize()
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
 }
 
-void QCreateDicomdir::addStudy(Study *study)
+void QCreateDicomdir::addStudies(const QList<Study *> &studies)
 {
+    QStringList existingStudies;
+    QStringList notAddedStudies;
     qint64 studySizeBytes;
     Status state;
     Settings settings;
-
-    if ( !studyExists( study->getInstanceUID() ) )
+    
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+    foreach( Study *study, studies )
     {
-        QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-
-        // \TODO Xapussa perquè ara, a primera instància, continui funcionant amb les classes Study i demés. Caldria unificar el tema
-        // "a quin directori està aquest study"?
-        studySizeBytes = getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), study->getInstanceUID());
-        
-        // Comprovem si tenim prou espai per l'estudi
-        if ( studySizeBytes + m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes )
+        if ( !studyExists( study->getInstanceUID() ) )
         {
-            QApplication::restoreOverrideCursor();
-            QMessageBox::warning( this , ApplicationNameString , tr( "The study can't be added to Dicomdir list, the DICOMDIR exceeds the maximum capacity of the selected device. Please change the selected device or create the DICOMDIR." ) );
+            // \TODO Xapussa perquè ara, a primera instància, continui funcionant amb les classes Study i demés. Caldria unificar el tema
+            // "a quin directori està aquest study"?
+            studySizeBytes = getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), study->getInstanceUID());
+            // Comprovem si tenim prou espai per l'estudi
+            if ( studySizeBytes + m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes )
+            {
+                notAddedStudies << study->getInstanceUID();
+            }
+            else
+            {
+                //Afegim la informació de l'estudi a la llista
+                QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
+                m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
+                setDicomdirSize(); // aquí o al final?
+            
+                Patient *patient = study->getParentPatient();
+                item->setText( 0, patient->getFullName() );
+                item->setText( 1, patient->getID() );
+                item->setText( 2, study->getPatientAge() );
+                item->setText( 3, study->getDescription() );
+                item->setText( 4, study->getModalitiesAsSingleString() );
+                item->setText( 5, study->getDate().toString(Qt::ISODate) );
+                item->setText( 6, study->getTime().toString(Qt::ISODate) );
+                item->setText( 7, study->getInstanceUID() );
+            }
         }
-        else
-        {  //Afegim la informació de l'estudi a la llista
-            QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
-            m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
-            setDicomdirSize();
-        
-            Patient *patient = study->getParentPatient();
-            item->setText( 0, patient->getFullName() );
-            item->setText( 1, patient->getID() );
-            item->setText( 2, study->getPatientAge() );
-            item->setText( 3, study->getDescription() );
-            item->setText( 4, study->getModalitiesAsSingleString() );
-            item->setText( 5, study->getDate().toString(Qt::ISODate) );
-            item->setText( 6, study->getTime().toString(Qt::ISODate) );
-            item->setText( 7, study->getInstanceUID() );
-
-            QApplication::restoreOverrideCursor();
-        }
+        else 
+            existingStudies << study->getInstanceUID();
     }
-    else 
-        QMessageBox::warning( this , ApplicationNameString , tr( "The study already exists in the DICOMDIR list" ) );
+    QApplication::restoreOverrideCursor();
+
+    if( notAddedStudies.size() > 0 || existingStudies.size() > 0 )
+    {
+        QString message;
+        message = tr("The following studies were not added to the DICOMDIR list for the following reasons");
+        if( existingStudies.size() > 0 )
+        {
+            message += tr("\n\n*Already exist in the list\n\n");
+            message += existingStudies.join("\n");
+        }
+        if( notAddedStudies.size() > 0 )
+        {
+            message += tr("\n\n*Exceed the device available space\n\n");
+            message += notAddedStudies.join("\n");
+        }
+        QMessageBox::warning(0, ApplicationNameString, message );
+    }
 }
 
 void QCreateDicomdir::createDicomdir()
