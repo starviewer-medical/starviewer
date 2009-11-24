@@ -128,7 +128,7 @@ void QCreateDicomdir::setDicomdirSize()
     m_dicomdirSizeOnDiskLabel->setText( sizeOfDicomdirText );
 
     if ( sizeInMb < m_progressBarOcupat->maximum() )
-        m_progressBarOcupat->setValue( QString::number(sizeInMb).toInt() );
+        m_progressBarOcupat->setValue( (int)sizeInMb );
     else
         m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
 
