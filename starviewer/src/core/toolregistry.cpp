@@ -205,7 +205,6 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("ROI's") );
         toolAction->setStatusTip( tr("Enable/Disable ROI tool") );
         toolAction->setIcon( QIcon(":/images/roi.png") );
-        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ROITool ) );
     }
     else if( toolName == "ReferenceLinesTool" )
     {
@@ -237,6 +236,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("ROI") );
         toolAction->setStatusTip( tr("Enable/Disable Polyline ROI tool") );
         toolAction->setIcon( QIcon(":/images/polyline.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ROITool ) );
     }
     else if( toolName == "PolylineTemporalROITool" )
     {
