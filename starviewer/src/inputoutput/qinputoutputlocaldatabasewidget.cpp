@@ -370,12 +370,14 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
     DicomMask studyMask;
     LocalDatabaseManager localDatabaseManager;
     QList<Patient*> patientList;
-
+    QList<Study *> studies;
+    
     foreach(QString studyUID, m_studyTreeWidget->getSelectedStudiesUID())
     {
         studyMask.setStudyUID(studyUID);
         patientList = localDatabaseManager.queryPatientStudy(studyMask);
-        if(showDatabaseManagerError(localDatabaseManager.getLastError())) return;
+        if(showDatabaseManagerError(localDatabaseManager.getLastError())) 
+            return;
 
         // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
         // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
@@ -384,11 +386,9 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
             showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
             return;
         }
-
-        m_qcreateDicomdir->addStudy(patientList.first()->getStudies().first());
-
-        delete patientList.first();
+        studies << patientList.first()->getStudies().first();
    }
+    m_qcreateDicomdir->addStudies(studies);
 }
 
 /*TODO: Aquesta responsabilitat d'esborrar els estudis vells al iniciar-se l'aplicació s'hauria de traslladar a un altre lloc, no és responsabilitat

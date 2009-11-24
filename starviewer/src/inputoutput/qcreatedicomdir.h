@@ -32,10 +32,10 @@ public:
     ~QCreateDicomdir();
 
     /** 
-     * Afegeix un estudi per convertir a DICOMDIR
-     * @param study estudi per convertir a DICOMDIR
+     * Afegeix una llista d'estudis per convertir a DICOMDIR
+     * @param studies Llista d'estudis per convertir a DICOMDIR
      */
-    void addStudy(Study* study);
+    void addStudies(const QList<Study *> &studies);
 
     /// Neteja el directori temporal utilitzat crear els DICOMDIR que es gravaran en CD o DVD
     void clearTemporaryDir();
