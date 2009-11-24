@@ -290,7 +290,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
         if (!error)
         {
             /// Hem de fer el que feia l'step del volume perquè ja no es fa.
-            processInput( patientsList.at(i), QString() );
+            generatePatientVolumes( patientsList.at(i), QString() );
             correctlyLoadedPatients << i;
         }
     }
@@ -330,13 +330,13 @@ void ExtensionHandler::processInput( QList<Patient *> patientsList )
     // Afegim els pacients carregats correctament
     foreach (Patient *patient, patientsList)
     {
-        processInput(patient,QString());
+        generatePatientVolumes(patient,QString());
         this->addPatientToWindow( patient, canReplaceActualPatient );
         canReplaceActualPatient = false; //Un cop carregat un pacient, ja no el podem reemplaçar
     }
 }
 
-void ExtensionHandler::processInput(Patient *patient, const QString &defaultSeriesUID)
+void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID)
 {
     Q_UNUSED( defaultSeriesUID );
     foreach(Study *study, patient->getStudies() )
