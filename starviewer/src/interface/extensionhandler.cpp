@@ -289,8 +289,6 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
         if (!error)
         {
-            /// Hem de fer el que feia l'step del volume perquè ja no es fa.
-            generatePatientVolumes( patientsList.at(i), QString() );
             correctlyLoadedPatients << i;
         }
     }
@@ -307,8 +305,21 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
         }
         QMessageBox::critical(0, ApplicationNameString, tr("Sorry, an error ocurred while loading the data of patients:<br> %1").arg(patientsWithError) );
     }
-
-    processInput( patientsList );
+    if( patientsWithError.isEmpty() )
+    {
+        // No hi ha cap error, els carreguem tots
+        processInput( patientsList );
+    }
+    else
+    {
+        // Carreguem únicament els correctes
+        QList<Patient *> rightPatients;
+        foreach( int index, correctlyLoadedPatients )
+        {
+            rightPatients << patientsList.at(index);
+        }
+        processInput( rightPatients );
+    }
 }
 
 void ExtensionHandler::processInput( QList<Patient *> patientsList )
