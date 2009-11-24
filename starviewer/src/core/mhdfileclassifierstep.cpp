@@ -163,12 +163,6 @@ bool MHDFileClassifierStep::classifyFile( QString file )
 //         image->setBitsAllocated( ? );
 //         image->setBitsStored( ? );
         series->addImage( image );
-
-        // aquí fem el pasdel volume generator step
-        Volume *volume = new Volume;
-        volume->setImages( series->getImages() );
-        series->addVolume(volume);
-        DEBUG_LOG("Generem un volum MHD!");
     }
 
     return ok;
