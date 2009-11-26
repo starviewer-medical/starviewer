@@ -27,7 +27,7 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
     if (!spoolDir.exists(spoolDirectoryPath))
     {
         INFO_LOG("Es crearà el directori d'spool " + spoolDirectoryPath);
-        if (spoolDir.mkdir(spoolDirectoryPath))
+        if (!spoolDir.mkdir(spoolDirectoryPath))
         {
             ERROR_LOG("No s'ha pogut crear el directori d'spool");
             m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
