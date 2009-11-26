@@ -31,27 +31,27 @@ QDicomDump::~QDicomDump()
 
 void QDicomDump::createConnections()
 {
-    //connectem els butons
+    // Connectem els butons
     connect( m_pushButtonAccept , SIGNAL( clicked() ) , SLOT( close() ) );
 }
 
 void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
 {
     initialize();
-    setNoVisibleAllDicomDumpWidgets();//Fem tots els widgets del formulari invisibles
+    setNoVisibleAllDicomDumpWidgets();// Fem tots els widgets del formulari invisibles
 
     if ( currentImage != NULL )
     {
         QString seriesModality = currentImage->getParentSeries()->getModality();
         
-        setCommonImageTagsValue( currentImage ); //Descodifiquem els tags comuns per totes les imatges
+        setCommonImageTagsValue( currentImage ); // Descodifiquem els tags comuns per totes les imatges
         
-        if ( seriesModality == "MR" ) //En funció de la modalitat cridem el QWidget que ens implementi el dicomdump per la modalitat
+        if ( seriesModality == "MR" ) // En funció de la modalitat cridem el QWidget que ens implementi el dicomdump per la modalitat
         {
             m_qdicomDumpMRWidget->setVisible( true );
             m_qdicomDumpMRWidget->setCurrentDisplayedImage( currentImage );
         }
-        else if ( seriesModality == "CT" ) //Per a CT en funció del tipus d'imatge hem de mostrar informació diferent pel dicomdump
+        else if ( seriesModality == "CT" ) // Per a CT en funció del tipus d'imatge hem de mostrar informació diferent pel dicomdump
         {
             DICOMTagReader dicomReader;
             bool ok = dicomReader.setFile( currentImage->getPath() );
@@ -60,17 +60,17 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
             {
                 QString imageType = dicomReader.getAttributeByName( DCM_ImageType );
 
-                if ( imageType.contains( "LOCALIZER" , Qt::CaseInsensitive ) )//Es tracta d'un survey
+                if ( imageType.contains( "LOCALIZER" , Qt::CaseInsensitive ) )// Es tracta d'un survey
                 {
                     m_qdicomDumpCTLocalizerWidget->setVisible( true );
                     m_qdicomDumpCTLocalizerWidget->setCurrentDisplayedImage( currentImage );
                 }
-                else if ( imageType.contains( "HELIX" , Qt::CaseInsensitive ) )//Es tracta d'una imatge helicoïdal
+                else if ( imageType.contains( "HELIX" , Qt::CaseInsensitive ) )// Es tracta d'una imatge helicoïdal
                 {
                     m_qdicomDumpCTHelixWidget->setVisible( true );
                     m_qdicomDumpCTHelixWidget->setCurrentDisplayedImage( currentImage );
                 }
-                else //QWidget de ct Genèric
+                else // QWidget de ct Genèric
                 {
                     m_qdicomDumpCTWidget->setVisible( true );
                     m_qdicomDumpCTWidget->setCurrentDisplayedImage( currentImage );
@@ -78,7 +78,7 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
             }
             else
             {
-                //QWidget de ct Genèric
+                // QWidget de ct Genèric
                 m_qdicomDumpCTWidget->setVisible( true );
                 m_qdicomDumpCTWidget->setCurrentDisplayedImage( currentImage );
             }
@@ -88,7 +88,7 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
 
 void QDicomDump::initialize()
 {
-    //Definim  el valor dels tags de Pacient
+    // Definim  el valor dels tags de Pacient
     m_labelPatientIDValue->setText( "-" );
     m_labelPatientAgeValue->setText( "-" );
     m_labelPatientNameValue->setText( "-" );
@@ -102,7 +102,7 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
 {
     Patient *currentPatient = currentImage->getParentSeries()->getParentStudy()->getParentPatient(); 
 
-    //Definim  el valor dels tags de Pacient
+    // Definim  el valor dels tags de Pacient
     m_labelPatientIDValue->setText( currentPatient->getID() );
 
     if ( !currentImage->getParentSeries()->getParentStudy()->getPatientAge().isEmpty() )
@@ -120,7 +120,7 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
         m_labelPatientSexValue->setText( currentPatient->getSex() );
     }
 
-    //Definim el valor dels tags d'imatge
+    // Definim el valor dels tags d'imatge
     DICOMTagReader dicomReader;
     bool ok = dicomReader.setFile( currentImage->getPath() );
 
@@ -140,7 +140,7 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
         QStringList split = value.split(".");
         QTime convertedTime = QTime::fromString(split[0], "hhmmss");
 
-        if (split.size() == 2) //té fracció al final
+        if (split.size() == 2) // Té fracció al final
         {
             // Trunquem a milisegons i no a milionèssimes de segons
             convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
