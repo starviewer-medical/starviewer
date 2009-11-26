@@ -50,11 +50,6 @@ private:
     /** Amaga tots els Widgets de diverses modalitats d'imatge que formen part del DicomDumpWidget
      */
     void setNoVisibleAllDicomDumpWidgets();
-
-private slots:
-
-    /// tanquem la finestra
-    void closeWindow();
 };
 
 };
