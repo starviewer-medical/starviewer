@@ -32,7 +32,7 @@ QDicomDump::~QDicomDump()
 void QDicomDump::createConnections()
 {
     //connectem els butons
-    connect( m_pushButtonAccept , SIGNAL( clicked() ) , SLOT( closeWindow() ) );
+    connect( m_pushButtonAccept , SIGNAL( clicked() ) , SLOT( close() ) );
 }
 
 void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
@@ -160,11 +160,6 @@ void QDicomDump::setNoVisibleAllDicomDumpWidgets()
     m_qdicomDumpMRWidget->setVisible( false );
     m_qdicomDumpCTWidget->setVisible( false );
     m_qdicomDumpCTLocalizerWidget->setVisible( false );
-}
-
-void QDicomDump::closeWindow()
-{
-    this->close();
 }
 
 };
