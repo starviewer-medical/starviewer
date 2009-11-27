@@ -156,13 +156,17 @@ QVector<float> cfGaussianDifference(vtkImageData *image, int radius)
     const int KERNEL_WIDTH = 2 * radius + 1;
     QVector<float> kernel(KERNEL_WIDTH);
     float kernelSum = 0.0f;
+    float sigma = radius / 3.0f;
     for (int i = 0; i < KERNEL_WIDTH; i++)
     {
-        float distance = static_cast<float>(i - radius) / radius;
-        kernel[i] = expf(-distance * distance / 2.0f);
+        float f = static_cast<float>(i - radius) / sigma;
+        kernel[i] = expf(-f * f / 2.0f);
         kernelSum += kernel.at(i);
     }
     for (int i = 0; i < KERNEL_WIDTH; i++) kernel[i] /= kernelSum;
+    std::cout << "kernel:";
+    for (int i = 0; i < KERNEL_WIDTH; i++) std::cout << " " << kernel[i];
+    std::cout << std::endl;
     float *dfKernel;
     CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&dfKernel), KERNEL_WIDTH * sizeof(float)) );
     CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(dfKernel), reinterpret_cast<void*>(kernel.data()), KERNEL_WIDTH * sizeof(float), cudaMemcpyHostToDevice) );
