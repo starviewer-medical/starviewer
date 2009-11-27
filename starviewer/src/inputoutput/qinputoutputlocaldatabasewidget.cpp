@@ -18,6 +18,7 @@
 #include "statswatcher.h"
 #include "qcreatedicomdir.h"
 #include "inputoutputsettings.h"
+#include "qwidgetselectpacstostoredicomimage.h"
 
 namespace udg
 {
@@ -25,7 +26,6 @@ namespace udg
 QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
-    createConnections();
 
     //esborrem els estudis vells de la cache
     deleteOldStudies();
@@ -40,6 +40,10 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
     //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
     m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
+
+    m_qwidgetSelectPacsToStoreDicomImage = new QWidgetSelectPacsToStoreDicomImage();
+
+    createConnections();
 }
 
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
@@ -70,6 +74,7 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     ///Si movem el QSplitter capturem el signal per guardar la seva posició
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
+    connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(storeSelectedStudyiesToSelectedPacs()));
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
@@ -336,32 +341,13 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
  */
 void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
-    QList<Study*> selectedStudies = m_studyTreeWidget->getSelectedStudies();
-    DicomMask dicomMaskObjectsToStore;
-
-    if (selectedStudies.count() == 1)
+    if (m_studyTreeWidget->getSelectedStudies().count() == 0)
     {
-
-        dicomMaskObjectsToStore.setStudyUID(selectedStudies.at(0)->getInstanceUID());
-
-        if (!m_studyTreeWidget->getCurrentSeriesUID().isEmpty())
-            dicomMaskObjectsToStore.setSeriesUID(m_studyTreeWidget->getCurrentSeriesUID());
-
-        if (!m_studyTreeWidget->getCurrentImageUID().isEmpty())
-            dicomMaskObjectsToStore.setSOPInstanceUID(m_studyTreeWidget->getCurrentImageUID());
-
-        emit storeDicomObjectsToPacs(selectedStudies.at(0), dicomMaskObjectsToStore);
+        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to store to PACS."));
     }
-    else
+    else 
     {
-        if (selectedStudies.count() == 0)
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to store to PACS."));
-        }
-        else
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("Only one selected object can be stored to PACS at same time. Please select only one study, series or image to store to PACS."));
-        }
+        m_qwidgetSelectPacsToStoreDicomImage->show();
     }
 }
 
@@ -412,6 +398,17 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudiesThreadFinished()
 void QInputOutputLocalDatabaseWidget::qSplitterPositionChanged()
 {
     Settings().saveGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter );
+}
+
+void QInputOutputLocalDatabaseWidget::storeSelectedStudyiesToSelectedPacs()
+{
+    foreach(PacsDevice pacsDevice, m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
+    {
+        foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+        {
+            emit storeDicomObjectsToPacs(pacsDevice, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()), dicomMask);
+        }
+    }
 }
 
 bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)
