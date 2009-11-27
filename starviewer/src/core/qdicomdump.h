@@ -41,8 +41,12 @@ private:
       */
     void setCommonImageTagsValue( Image *currentImage );
 
-    /// Amaga tots els Widgets de diverses modalitats d'imatge que formen part del DicomDumpWidget
-    void setNoVisibleAllDicomDumpWidgets();
+private:
+    /// Layout del widget on colocarem els widgets adicionals amb la informació específica de la imatge
+    QBoxLayout *m_widgetLayout;
+    
+    /// Referència a l'últim widget de dump inserit
+    QWidget *m_lastInsertedDumpWidget;
 };
 
 };

@@ -4,23 +4,35 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "qdicomdump.h"
 #include "series.h"
 #include "image.h"
 #include "patient.h"
 #include "logging.h"
 #include "dicomtagreader.h"
+#include "qdicomdumpmammographywidget.h"
+#include "qdicomdumpctlocalizerwidget.h"
+#include "qdicomdumpcthelixwidget.h"
+#include "qdicomdumpctwidget.h"
+#include "qdicomdumpmrwidget.h"
 #include <QDate>
 #include <QTime>
+#include <QBoxLayout>
 
 namespace udg {
 
 QDicomDump::QDicomDump(QWidget *parent)
- : QDialog(parent)
+ : QDialog(parent), m_lastInsertedDumpWidget(0)
 {
     setupUi( this );
-
+    // Obtenim el layout amb el que treballarem
+    m_widgetLayout = qobject_cast<QBoxLayout *>( this->layout() );
+    if( !m_widgetLayout )
+    {
+        DEBUG_LOG("no s'ens ha tornat el layout esperat! (QBoxLayout) Revisar el layout de QDicomDumpBase.ui!");
+        Q_ASSERT( m_widgetLayout );
+    }
+    
     createConnections();
 }
 
@@ -38,18 +50,29 @@ void QDicomDump::createConnections()
 void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
 {
     initialize();
-    setNoVisibleAllDicomDumpWidgets();// Fem tots els widgets del formulari invisibles
 
-    if ( currentImage != NULL )
+    // Si teníem un widget d'una imatge anterior, l'hem d'eliminar abans per poder posar la nova informació
+    if( m_lastInsertedDumpWidget )
     {
+        m_widgetLayout->removeWidget( m_lastInsertedDumpWidget );
+        delete m_lastInsertedDumpWidget;
+        m_lastInsertedDumpWidget = 0;
+    }
+    
+    // Segons el tipus d'imatge que tinguem, afegirem dinàmicament el widget amb la informació corresponent
+    if ( currentImage != NULL )
+    {        
         QString seriesModality = currentImage->getParentSeries()->getModality();
         
         setCommonImageTagsValue( currentImage ); // Descodifiquem els tags comuns per totes les imatges
         
         if ( seriesModality == "MR" ) // En funció de la modalitat cridem el QWidget que ens implementi el dicomdump per la modalitat
         {
-            m_qdicomDumpMRWidget->setVisible( true );
-            m_qdicomDumpMRWidget->setCurrentDisplayedImage( currentImage );
+            QDicomDumpMRWidget *widget = new QDicomDumpMRWidget;
+            widget->setCurrentDisplayedImage( currentImage );
+
+            m_lastInsertedDumpWidget = widget;
+
         }
         else if ( seriesModality == "CT" ) // Per a CT en funció del tipus d'imatge hem de mostrar informació diferent pel dicomdump
         {
@@ -62,27 +85,48 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
 
                 if ( imageType.contains( "LOCALIZER" , Qt::CaseInsensitive ) )// Es tracta d'un survey
                 {
-                    m_qdicomDumpCTLocalizerWidget->setVisible( true );
-                    m_qdicomDumpCTLocalizerWidget->setCurrentDisplayedImage( currentImage );
+                    QDicomDumpCTLocalizerWidget *widget = new QDicomDumpCTLocalizerWidget;
+                    widget->setCurrentDisplayedImage( currentImage );                    
+                    
+                    m_lastInsertedDumpWidget = widget;
                 }
                 else if ( imageType.contains( "HELIX" , Qt::CaseInsensitive ) )// Es tracta d'una imatge helicoïdal
                 {
-                    m_qdicomDumpCTHelixWidget->setVisible( true );
-                    m_qdicomDumpCTHelixWidget->setCurrentDisplayedImage( currentImage );
+                    QDicomDumpCTHelixWidget *widget = new QDicomDumpCTHelixWidget;
+                    widget->setCurrentDisplayedImage( currentImage );
+
+                    m_lastInsertedDumpWidget = widget;
                 }
                 else // QWidget de ct Genèric
                 {
-                    m_qdicomDumpCTWidget->setVisible( true );
-                    m_qdicomDumpCTWidget->setCurrentDisplayedImage( currentImage );
+                    QDicomDumpCTWidget *widget = new QDicomDumpCTWidget;
+                    widget->setCurrentDisplayedImage( currentImage );
+
+                    m_lastInsertedDumpWidget = widget;
                 }
             }
             else
             {
                 // QWidget de ct Genèric
-                m_qdicomDumpCTWidget->setVisible( true );
-                m_qdicomDumpCTWidget->setCurrentDisplayedImage( currentImage );
+                QDicomDumpCTWidget *widget = new QDicomDumpCTWidget;
+                widget->setCurrentDisplayedImage( currentImage );
+
+                m_lastInsertedDumpWidget = widget;
             }
         }
+        else if ( seriesModality == "MG" )
+        {
+            QDicomDumpMammographyWidget *widget = new QDicomDumpMammographyWidget;
+            widget->setCurrentDisplayedImage( currentImage );
+            if( m_lastInsertedDumpWidget )
+                m_widgetLayout->removeWidget( m_lastInsertedDumpWidget );
+
+            m_lastInsertedDumpWidget = widget;
+        }
+
+        // Si s'ha creat algun widget nou, l'inserim
+        if( m_lastInsertedDumpWidget )
+            m_widgetLayout->insertWidget(1,m_lastInsertedDumpWidget);
     }
 }
 
@@ -152,14 +196,6 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     {
         m_labelImageNumberValue->setText( currentImage->getInstanceNumber() );
     }
-}
-
-void QDicomDump::setNoVisibleAllDicomDumpWidgets()
-{
-    m_qdicomDumpCTHelixWidget->setVisible( false );
-    m_qdicomDumpMRWidget->setVisible( false );
-    m_qdicomDumpCTWidget->setVisible( false );
-    m_qdicomDumpCTLocalizerWidget->setVisible( false );
 }
 
 };
