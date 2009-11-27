@@ -87,14 +87,20 @@ inline HdrColor FilteringAmbientOcclusionMapVoxelShader::nvShade( const Vector3 
 
         if ( f > 0.0f ) // positiu: negre -> groc -> vermell
         {
-            color.red = f < 0.5f ? 2.0f * f : 1.0f;
-            color.green = 2.0f * ( f < 0.5f ? f : 1.0f - f );
+            //color.red = f < 0.5f ? 2.0f * f : 1.0f;
+            //color.green = 2.0f * ( f < 0.5f ? f : 1.0f - f );
+            color.red = 1.0f;
+            color.green = f < 0.5f ? 1.0f : 2.0f * ( 1.0f - f );
+            color.blue = f < 0.5f ? 1.0f - 2.0f * f : 0.0f;
 
         }
         else    // negatiu: negre -> verd -> blau
         {
-            color.green = 2.0f * ( f > -0.5f ? -f : 1.0f + f );
-            color.blue = f > -0.5f ? 0.0f : -2.0f * f;
+            //color.green = 2.0f * ( f > -0.5f ? -f : 1.0f + f );
+            //color.blue = f > -0.5f ? 0.0f : -2.0f * f;
+            color.red = -f < 0.5f ? 1.0f - 2.0f * -f : 0.0f;
+            color.green = -f < 0.5f ? 1.0f : 2.0f * ( 1.0f - -f );
+            color.blue = -f < 0.5f ? 1.0f - 2.0f * -f : 2.0f * -f;
         }
     }
 
@@ -126,13 +132,19 @@ inline HdrColor FilteringAmbientOcclusionMapVoxelShader::nvShade( const Vector3 
 
         if ( f > 0.0f ) // positiu: negre -> groc -> vermell
         {
-            color.red = f < 0.5f ? 2.0f * f : 1.0f;
-            color.green = 2.0f * ( f < 0.5f ? f : 1.0f - f );
+            //color.red = f < 0.5f ? 2.0f * f : 1.0f;
+            //color.green = 2.0f * ( f < 0.5f ? f : 1.0f - f );
+            color.red = 1.0f;
+            color.green = f < 0.5f ? 1.0f : 2.0f * ( 1.0f - f );
+            color.blue = f < 0.5f ? 1.0f - 2.0f * f : 0.0f;
         }
         else    // negatiu: negre -> verd -> blau
         {
-            color.green = 2.0f * ( f > -0.5f ? -f : 1.0f + f );
-            color.blue = f > -0.5f ? 0.0f : -2.0f * f;
+            //color.green = 2.0f * ( f > -0.5f ? -f : 1.0f + f );
+            //color.blue = f > -0.5f ? 0.0f : -2.0f * f;
+            color.red = -f < 0.5f ? 1.0f - 2.0f * -f : 0.0f;
+            color.green = -f < 0.5f ? 1.0f : 2.0f * ( 1.0f - -f );
+            color.blue = -f < 0.5f ? 1.0f - 2.0f * -f : 2.0f * -f;
         }
     }
 
