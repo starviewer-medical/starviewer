@@ -7,7 +7,7 @@
 #include "dicomtagreader.h"
 #include "logging.h"
 #include "singleton.h"
-
+#include "dicomtag.h"
 #include <QStringList>
 
 #include <dcmtk/dcmdata/dcfilefo.h>
@@ -82,15 +82,21 @@ void DICOMTagReader::setDcmDataset(QString filename, DcmDataset *dcmDataset)
     m_dicomData = dcmDataset;
 }
 
-bool DICOMTagReader::tagExists( DcmTagKey tag )
+bool DICOMTagReader::tagExists( DICOMTag tag )
 {
     if( m_dicomData )
-        return m_dicomData->tagExists( tag );
+        return m_dicomData->tagExists( DcmTagKey(tag.getGroup(),tag.getElement()) );
     else
     {
         DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat");
         return false;
     }
+}
+
+bool DICOMTagReader::tagExists( DcmTagKey tag )
+{
+    DEBUG_LOG("Aquest mètode està deprecated. S'eliminarà en breu, fer servir DICOMTag, no DcmTagKey");
+    return tagExists( DICOMTag(tag.getGroup(),tag.getElement()) );
 }
 
 bool DICOMTagReader::tagExists( unsigned int group, unsigned int element )
@@ -100,10 +106,10 @@ bool DICOMTagReader::tagExists( unsigned int group, unsigned int element )
 
 QString DICOMTagReader::getAttributeByTag( unsigned int group, unsigned int element )
 {
-    return this->getAttributeByName( DcmTagKey(group,element) );
+    return getAttributeByName( DICOMTag(group,element) );
 }
 
-QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
+QString DICOMTagReader::getAttributeByName( DICOMTag tag )
 {
     if( !m_dicomData )
     {
@@ -111,10 +117,12 @@ QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
         return QString();
     }
 
+    // Convertim DICOMTag al format de dcmtk
+    DcmTagKey dcmtkTag(tag.getGroup(),tag.getElement());
     QString result;
 
     OFString value;
-    OFCondition status = m_dicomData->findAndGetOFStringArray( tag , value );
+    OFCondition status = m_dicomData->findAndGetOFStringArray( dcmtkTag, value );
     if( status.good() )
     {
         result = value.c_str();
@@ -124,12 +132,17 @@ QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
         if (QString(status.text()) != "Tag Not Found")
         {
             DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
-                                .arg( tag.toString().c_str() ).arg( status.text() ) );
+                .arg( dcmtkTag.toString().c_str() ).arg( status.text() ) );
         }
     }
 
-
     return result;
+}
+
+QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
+{
+    DEBUG_LOG("Aquest mètode està deprecated. S'eliminarà en breu, fer servir DICOMTag, no DcmTagKey");
+    return getAttributeByName( DICOMTag(tag.getGroup(),tag.getElement()) );
 }
 
 QStringList DICOMTagReader::getSequenceAttributeByTag( unsigned int sequenceGroup, unsigned int sequenceElement, unsigned int group, unsigned int element )
@@ -137,20 +150,21 @@ QStringList DICOMTagReader::getSequenceAttributeByTag( unsigned int sequenceGrou
     return this->getSequenceAttributeByName( DcmTagKey(sequenceGroup,sequenceElement) , DcmTagKey(group,element) );
 }
 
-QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag )
+QStringList DICOMTagReader::getSequenceAttributeByName( DICOMTag sequenceTag, DICOMTag attributeTag )
 {
     if( !m_dicomData )
     {
         DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string-list buida.");
         return QStringList(); 
     }
-
+    // Convertim els DICOMTag al format de dcmtk, que serà qui farà la feina
+    DcmTagKey dcmtkSequenceTag( sequenceTag.getGroup(), sequenceTag.getElement() );
+    DcmTagKey dcmtkAttributeTag( attributeTag.getGroup(), attributeTag.getElement() );
     QStringList result;
     // obtenim els atributs de cada item d'una seqüència de "primer nivell"
-
     DcmStack stack;
 
-    OFCondition status = m_dicomData->search( sequenceTag, stack );
+    OFCondition status = m_dicomData->search( dcmtkSequenceTag, stack );
 
     if( status.good() )
     {
@@ -160,25 +174,31 @@ QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, D
         for(unsigned int i = 0; i < sequence->card(); i++ )
         {
             DcmItem *item = sequence->getItem( i );
-            status = item->findAndGetOFStringArray( attributeTag , value );
+            status = item->findAndGetOFStringArray( dcmtkAttributeTag , value );
             if( status.good() )
             {
                 result << value.c_str();
             }
             else if( QString(status.text()) != "Tag Not Found" )
             {
-                DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( attributeTag.toString().c_str() ).arg( status.text() ) );
+                DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( dcmtkAttributeTag.toString().c_str() ).arg( status.text() ) );
             }
         }
     }
     else if( QString(status.text()) != "Tag Not Found" )
-        DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( sequenceTag.toString().c_str() ).arg( status.text() ) );
+        DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( dcmtkSequenceTag.toString().c_str() ).arg( status.text() ) );
 
     return result;
 // \TODO el que ve a continuació és com hauria de ser quan s'implementi el mètode amb seqüències "embedded"
 //     QList<DcmTagKey> embeddedSequenceList;
 //     embeddedSequenceList << sequenceTag;
 //     return this->getSequenceAttributeByName( embeddedSequenceList, attributeTag );
+}
+
+QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag )
+{
+    DEBUG_LOG("Aquest mètode està deprecated. S'eliminarà en breu, fer servir DICOMTag, no DcmTagKey");
+    return getSequenceAttributeByName( DICOMTag(sequenceTag.getGroup(), sequenceTag.getElement()), DICOMTag(attributeTag.getGroup(),attributeTag.getElement()) );
 }
 
 QStringList DICOMTagReader::getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element )
@@ -192,7 +212,7 @@ QStringList DICOMTagReader::getSequenceAttributeByTag( QList<unsigned int *> emb
 
 }
 
-QStringList DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag )
+QStringList DICOMTagReader::getSequenceAttributeByName( QList<DICOMTag> embeddedSequencesTags, DICOMTag attributeTag )
 {
     Q_UNUSED(embeddedSequencesTags);
     Q_UNUSED(attributeTag);
@@ -257,6 +277,19 @@ QStringList DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embedde
 //     }
 
     return result;
+}
+
+QStringList DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag )
+{
+    DEBUG_LOG("Aquest mètode està deprecated. S'eliminarà en breu, fer servir DICOMTag, no DcmTagKey");
+    // Convertim els paràmetres a DICOMTag
+    QList<DICOMTag>  tagList;
+    foreach( DcmTagKey tag, embeddedSequencesTags )
+    {
+        tagList << DICOMTag(tag.getGroup(),tag.getElement());
+    }
+    
+    return getSequenceAttributeByName( tagList, DICOMTag(attributeTag.getGroup(),attributeTag.getElement()) );
 }
 
 }
