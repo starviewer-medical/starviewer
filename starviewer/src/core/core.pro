@@ -9,6 +9,7 @@ FORMS += qlogviewerbase.ui \
     qdicomdumpctlocalizerwidgetbase.ui \
     qdicomdumpmrwidgetbase.ui \
     qdicomdumpctwidgetbase.ui \
+    qdicomdumpmammographywidgetbase.ui \
     qtransferfunctioneditorbyvaluesbase.ui \
     qtransferfunctionintervaleditorbase.ui \
     qcinecontrollerbase.ui \
@@ -120,6 +121,7 @@ HEADERS += extensionfactory.h \
     qdicomdump.h \
     qdicomdumpmrwidget.h \
     qdicomdumpctwidget.h \
+    qdicomdumpmammographywidget.h \
     qcinecontroller.h \
     hoverpoints.h \
     qcolorspinbox.h \
@@ -297,6 +299,7 @@ SOURCES += extensionmediator.cpp \
     qdicomdumpctlocalizerwidget.cpp \
     qdicomdumpmrwidget.cpp \
     qdicomdumpctwidget.cpp \
+    qdicomdumpmammographywidget.cpp \
     qcinecontroller.cpp \
     hoverpoints.cpp \
     qcolorspinbox.cpp \
