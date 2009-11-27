@@ -10,6 +10,7 @@
 #include "patient.h"
 #include "logging.h"
 #include "dicomtagreader.h"
+#include "qdicomdumpmammographywidget.h"
 #include "qdicomdumpctlocalizerwidget.h"
 #include "qdicomdumpcthelixwidget.h"
 #include "qdicomdumpctwidget.h"
@@ -112,6 +113,15 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
 
                 m_lastInsertedDumpWidget = widget;
             }
+        }
+        else if ( seriesModality == "MG" )
+        {
+            QDicomDumpMammographyWidget *widget = new QDicomDumpMammographyWidget;
+            widget->setCurrentDisplayedImage( currentImage );
+            if( m_lastInsertedDumpWidget )
+                m_widgetLayout->removeWidget( m_lastInsertedDumpWidget );
+
+            m_lastInsertedDumpWidget = widget;
         }
 
         // Si s'ha creat algun widget nou, l'inserim
