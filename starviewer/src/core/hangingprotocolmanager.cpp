@@ -19,6 +19,7 @@
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 #include "identifier.h"
 #include "logging.h"
 
@@ -369,7 +370,7 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
             if( image )
             {
                 dicomReader.setFile( image->getPath() );
-                if( dicomReader.getAttributeByName( DCM_ScanOptions ) != restriction.valueRepresentation )
+                if( dicomReader.getAttributeByName( DICOMScanOptions ) != restriction.valueRepresentation )
                     valid = false;
             }
             else
@@ -409,7 +410,7 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     DICOMTagReader dicomReader;
     if( dicomReader.setFile( serie->getImages()[imageNumber]->getPath() ) )
     {
-        //dicomReader.getAttributeByName( DCM_PatientOrientation )
+        //dicomReader.getAttributeByName( DICOMPatientOrientation )
         QVector<QString> labels = viewer->getViewer()->getCurrentDisplayedImageOrientationLabels();
         applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3], displaySet->getPatientOrientation(), viewer->getViewer() );
     }
@@ -520,32 +521,32 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             restriction = listOfRestrictions.value( i );
             if( restriction.selectorAttribute == "ViewPosition" )
             {
-                //if( ! dicomReader.getAttributeByName( DCM_ViewPosition ).contains( restriction.valueRepresentation) )
+                //if( ! dicomReader.getAttributeByName( DICOMViewPosition ).contains( restriction.valueRepresentation) )
                 //    valid = false;
 
-                QString viewPosition = dicomReader.getAttributeByName( DCM_ViewPosition );
+                QString viewPosition = dicomReader.getAttributeByName( DICOMViewPosition );
                 bool contains = viewPosition.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
                 bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
                 valid = contains ^ match;
             }
             else if( restriction.selectorAttribute == "ImageLaterality" )
             {
-                if( dicomReader.getAttributeByName( DCM_ImageLaterality ) != restriction.valueRepresentation )
+                if( dicomReader.getAttributeByName( DICOMImageLaterality ) != restriction.valueRepresentation )
                     valid = false;
             }
             else if( restriction.selectorAttribute == "Laterality" )
             {
-                if( dicomReader.getAttributeByName( DCM_Laterality ) != restriction.valueRepresentation )
+                if( dicomReader.getAttributeByName( DICOMLaterality ) != restriction.valueRepresentation )
                     valid = false;
             }
             else if( restriction.selectorAttribute == "PatientOrientation" )
             {
-                if( ! dicomReader.getAttributeByName( DCM_PatientOrientation ).contains( restriction.valueRepresentation ) )
+                if( ! dicomReader.getAttributeByName( DICOMPatientOrientation ).contains( restriction.valueRepresentation ) )
                     valid = false;
             }
             else if( restriction.selectorAttribute == "CodeMeaning" )
             {
-                QStringList tagValue =  dicomReader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning );
+                QStringList tagValue =  dicomReader.getSequenceAttributeByName( DICOMViewCodeSequence, DICOMCodeMeaning );
                 bool match = ( restriction.usageFlag  == HangingProtocolImageSet::Match );
 
                 if( tagValue.isEmpty() || !( tagValue.at(0).contains( restriction.valueRepresentation ) ) )
@@ -555,7 +556,7 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             }
             else if( restriction.selectorAttribute == "ImageType" )
             {
-                QString imageType = dicomReader.getAttributeByName( DCM_ImageType );
+                QString imageType = dicomReader.getAttributeByName( DICOMImageType );
                 bool isLocalyzer = imageType.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
                 bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
                 valid = isLocalyzer ^ match;
