@@ -9,6 +9,7 @@
 #include "series.h"
 #include "image.h"
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 
 namespace udg {
 
@@ -66,16 +67,16 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
     bool ok = dicomReader.setFile( currentImage->getPath() );
     if( ok )
     {
-        if (dicomReader.tagExists( DCM_ReconstructionDiameter ))
+        if (dicomReader.tagExists( DICOMReconstructionDiameter ))
         {
-            m_labelReconstructionDiameterValue->setText( QString::number( dicomReader.getAttributeByName( DCM_ReconstructionDiameter ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
+            m_labelReconstructionDiameterValue->setText( QString::number( dicomReader.getAttributeByName( DICOMReconstructionDiameter ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
         }
         else
             m_labelReconstructionDiameterValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_TableHeight ))
+        if (dicomReader.tagExists( DICOMTableHeight ))
         {
-            m_labelTableHeightValue->setText( QString::number( dicomReader.getAttributeByName( DCM_TableHeight ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
+            m_labelTableHeightValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTableHeight ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
         }
         else
             m_labelTableHeightValue->setText( NotAvailableValue );
@@ -101,9 +102,9 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelPhilipsPitchValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_SpacingBetweenSlices ))
+        if (dicomReader.tagExists( DICOMSpacingBetweenSlices ))
         {
-            m_labelSpacingBetweenSlicesValue->setText( QString::number( dicomReader.getAttributeByName( DCM_SpacingBetweenSlices ).toDouble() , 'f' , 1 ) +  QString( tr( " mm" ) ) );
+            m_labelSpacingBetweenSlicesValue->setText( QString::number( dicomReader.getAttributeByName( DICOMSpacingBetweenSlices ).toDouble() , 'f' , 1 ) +  QString( tr( " mm" ) ) );
         }
         else
             m_labelSpacingBetweenSlicesValue->setText( NotAvailableValue );
@@ -129,9 +130,9 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelPhilipsViewConventionValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_FilterType ))
+        if (dicomReader.tagExists( DICOMFilterType ))
         {
-            m_labelFilterTypeValue->setText( dicomReader.getAttributeByName( DCM_FilterType ) );
+            m_labelFilterTypeValue->setText( dicomReader.getAttributeByName( DICOMFilterType ) );
         }
         else
             m_labelFilterTypeValue->setText( NotAvailableValue );
@@ -143,16 +144,16 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelPhilipsCollimationValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_KVP ))
+        if (dicomReader.tagExists( DICOMKVP ))
         {
-            m_labelVoltageValue->setText( QString::number( dicomReader.getAttributeByName( DCM_KVP ).toDouble() , 'f' , 0 ) +  QString( tr( " KV" ) ) );
+            m_labelVoltageValue->setText( QString::number( dicomReader.getAttributeByName( DICOMKVP ).toDouble() , 'f' , 0 ) +  QString( tr( " KV" ) ) );
         }
         else
             m_labelVoltageValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_ExposureInMicroAs ))
+        if (dicomReader.tagExists( DICOMExposureInMicroAs ))
         {
-            m_labelExposureValue->setText( QString::number( dicomReader.getAttributeByName( DCM_ExposureInMicroAs ).toDouble() , 'f' , 0 ) +  QString( tr( " mA" ) ) );
+            m_labelExposureValue->setText( QString::number( dicomReader.getAttributeByName( DICOMExposureInMicroAs ).toDouble() , 'f' , 0 ) +  QString( tr( " mA" ) ) );
         }
         else
             m_labelExposureValue->setText( NotAvailableValue );
@@ -168,9 +169,9 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
     else
         m_labelSliceLocationValue->setText( NotAvailableValue );
 
-    if ( dicomReader.tagExists( DCM_ImageType ) )
+    if ( dicomReader.tagExists( DICOMImageType ) )
     {
-        m_labelImageTypeValue->setText( dicomReader.getAttributeByName( DCM_ImageType ) );
+        m_labelImageTypeValue->setText( dicomReader.getAttributeByName( DICOMImageType ) );
     }
     else
         m_labelImageTypeValue->setText( NotAvailableValue );

@@ -10,6 +10,7 @@
 #include "patient.h"
 #include "logging.h"
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 #include "qdicomdumpmammographywidget.h"
 #include "qdicomdumpctlocalizerwidget.h"
 #include "qdicomdumpcthelixwidget.h"
@@ -83,7 +84,7 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
 
             if ( ok )
             {
-                QString imageType = dicomReader.getAttributeByName( DCM_ImageType );
+                QString imageType = dicomReader.getAttributeByName( DICOMImageType );
 
                 if ( imageType.contains( "LOCALIZER" , Qt::CaseInsensitive ) )// Es tracta d'un survey
                 {
@@ -184,7 +185,7 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     DICOMTagReader dicomReader;
     bool ok = dicomReader.setFile( currentImage->getPath() );
 
-    QString value = dicomReader.getAttributeByName( DCM_ContentDate );
+    QString value = dicomReader.getAttributeByName( DICOMContentDate );
     if( !value.isEmpty() )
     {
         // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format yyyy.MM.dd
@@ -193,7 +194,7 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     else
         m_labelImageDateValue->setText( NotAvailableValue );
 
-    value = dicomReader.getAttributeByName( DCM_ContentTime );
+    value = dicomReader.getAttributeByName( DICOMContentTime );
     if( !value.isEmpty() )
     {
         // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
