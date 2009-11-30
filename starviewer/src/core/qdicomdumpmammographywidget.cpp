@@ -35,11 +35,13 @@ void QDicomDumpMammographyWidget::initializeLabels()
         patient’s name(OK)
         patient ID(OK)
         patient’s age(OK)
-        birth date(pending)
+        birth date(OK)
     */
     // Study, series & image information
+    // TODO Caldria comprovar si l'acquisition date és el mateix que DICOMContentDate/DICOMContentTime
+    // En la informació genèrica del dump fem servir el "Content". Si aquest ens val, no caldrà obtenir el "Acquisition"
     // const DICOMTag    DICOMAcquisitionDate(0x0008, 0x0022); ->alt. const DICOMTag    DICOMContentDate(0x0008, 0x0023);
-    // const DICOMTag    DICOMAcquisitionDatetime(0x0008, 0x002a); ->alt. const DICOMTag    DICOMContentDate(0x0008, 0x0023);
+    // const DICOMTag    DICOMAcquisitionDatetime(0x0008, 0x002a); ->alt. const DICOMTag    DICOMContentTime(0x0008, 0x0033);
     m_operatorsNameValueLabel->setText( "-" );
     m_compressionForceValueLabel->setText( "-" );
     m_bodyPartThicknessValueLabel->setText( "-" );
@@ -71,12 +73,6 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
     bool ok = dicomReader.setFile( currentImage->getPath() );
     if( ok )
     {
-        /*
-        if( dicomReader.tagExists(  ) )
-            ->setText( dicomReader.getAttributeByName(  ) );
-        else
-            ->setText("N/A");
-        */
         //
         // Study, series & image information
         //
