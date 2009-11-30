@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>udg::Q2DViewerExtensionBase</class>
- <widget class="QWidget" name="udg::Q2DViewerExtensionBase" >
-  <property name="geometry" >
+ <widget class="QWidget" name="udg::Q2DViewerExtensionBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,140 +10,106 @@
     <height>636</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="spacing" >
+  <layout class="QVBoxLayout">
+   <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>0</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>0</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin">
           <number>0</number>
          </property>
          <item>
-          <widget class="QToolButton" name="m_buttonGrid" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <widget class="QToolButton" name="m_buttonGrid">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="minimumSize" >
+           <property name="minimumSize">
             <size>
              <width>0</width>
              <height>64</height>
             </size>
            </property>
-           <property name="toolTip" >
+           <property name="toolTip">
             <string>Series layout</string>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>...</string>
            </property>
-           <property name="icon" >
-            <iconset resource="../../../main/main.qrc" >:/images/grid.png</iconset>
+           <property name="icon">
+            <iconset resource="../../../main/main.qrc">
+             <normaloff>:/images/grid.png</normaloff>:/images/grid.png</iconset>
            </property>
-           <property name="iconSize" >
+           <property name="iconSize">
             <size>
              <width>32</width>
              <height>32</height>
             </size>
            </property>
-           <property name="autoRaise" >
+           <property name="autoRaise">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="m_downButtonGrid" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <widget class="QToolButton" name="m_downButtonGrid">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="minimumSize" >
+           <property name="minimumSize">
             <size>
              <width>0</width>
              <height>64</height>
             </size>
            </property>
-           <property name="toolTip" >
+           <property name="toolTip">
             <string>Series layout</string>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>...</string>
            </property>
-           <property name="icon" >
-            <iconset resource="../../../main/main.qrc" >:/images/down.png</iconset>
+           <property name="icon">
+            <iconset resource="../../../main/main.qrc">
+             <normaloff>:/images/down.png</normaloff>:/images/down.png</iconset>
            </property>
-           <property name="iconSize" >
+           <property name="iconSize">
             <size>
              <width>12</width>
              <height>32</height>
             </size>
            </property>
-           <property name="checkable" >
+           <property name="checkable">
             <bool>false</bool>
            </property>
-           <property name="autoRaise" >
+           <property name="autoRaise">
             <bool>true</bool>
            </property>
           </widget>
@@ -150,17 +117,17 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_3" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <widget class="QLabel" name="label_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Layout</string>
          </property>
-         <property name="alignment" >
+         <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
@@ -168,77 +135,102 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" >
-       <property name="spacing" >
+      <layout class="QHBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_imageGrid" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+        <widget class="QToolButton" name="m_imageGrid">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="toolTip" >
+         <property name="toolTip">
           <string>Image layout</string>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>...</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_downImageGrid" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+        <widget class="QToolButton" name="m_downImageGrid">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="toolTip" >
+         <property name="toolTip">
           <string>Image layout</string>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>...</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>12</width>
            <height>12</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>false</bool>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_previousStudiesToolButton">
+         <property name="text">
+          <string>Previous</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
@@ -246,121 +238,120 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" >
-       <property name="spacing" >
+      <layout class="QHBoxLayout">
+       <property name="spacing">
         <number>2</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_slicingToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_slicingToolButton">
+         <property name="text">
           <string>Scroll</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="checked" >
+         <property name="checked">
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_windowLevelToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_windowLevelToolButton">
+         <property name="text">
           <string>WW/WL</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_translateToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_translateToolButton">
+         <property name="text">
           <string>Pan</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_zoomToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_zoomToolButton">
+         <property name="text">
           <string>Zoom</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
@@ -368,118 +359,117 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" >
-       <property name="spacing" >
+      <layout class="QHBoxLayout">
+       <property name="spacing">
         <number>2</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_polylineButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_polylineButton">
+         <property name="text">
           <string>ROI</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_distanceToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_distanceToolButton">
+         <property name="text">
           <string>Distance</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_angleToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_angleToolButton">
+         <property name="text">
           <string>Angle</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_eraserToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_eraserToolButton">
+         <property name="text">
           <string>Erase</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
@@ -487,101 +477,89 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>0</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin">
           <number>0</number>
          </property>
          <item>
-          <widget class="QToolButton" name="m_axialViewToolButton" >
-           <property name="text" >
+          <widget class="QToolButton" name="m_axialViewToolButton">
+           <property name="text">
             <string>Axial</string>
            </property>
-           <property name="icon" >
-            <iconset/>
+           <property name="icon">
+            <iconset>
+             <normaloff/>
+            </iconset>
            </property>
-           <property name="iconSize" >
+           <property name="iconSize">
             <size>
              <width>32</width>
              <height>32</height>
             </size>
            </property>
-           <property name="toolButtonStyle" >
+           <property name="toolButtonStyle">
             <enum>Qt::ToolButtonTextUnderIcon</enum>
            </property>
-           <property name="autoRaise" >
+           <property name="autoRaise">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="m_sagitalViewToolButton" >
-           <property name="text" >
+          <widget class="QToolButton" name="m_sagitalViewToolButton">
+           <property name="text">
             <string>Sagital</string>
            </property>
-           <property name="icon" >
-            <iconset/>
+           <property name="icon">
+            <iconset>
+             <normaloff/>
+            </iconset>
            </property>
-           <property name="iconSize" >
+           <property name="iconSize">
             <size>
              <width>32</width>
              <height>32</height>
             </size>
            </property>
-           <property name="toolButtonStyle" >
+           <property name="toolButtonStyle">
             <enum>Qt::ToolButtonTextUnderIcon</enum>
            </property>
-           <property name="autoRaise" >
+           <property name="autoRaise">
             <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="m_coronalViewToolButton" >
-           <property name="text" >
+          <widget class="QToolButton" name="m_coronalViewToolButton">
+           <property name="text">
             <string>Coronal</string>
            </property>
-           <property name="icon" >
-            <iconset/>
+           <property name="icon">
+            <iconset>
+             <normaloff/>
+            </iconset>
            </property>
-           <property name="iconSize" >
+           <property name="iconSize">
             <size>
              <width>32</width>
              <height>32</height>
             </size>
            </property>
-           <property name="toolButtonStyle" >
+           <property name="toolButtonStyle">
             <enum>Qt::ToolButtonTextUnderIcon</enum>
            </property>
-           <property name="autoRaise" >
+           <property name="autoRaise">
             <bool>true</bool>
            </property>
           </widget>
@@ -589,11 +567,11 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
+        <widget class="QLabel" name="label_2">
+         <property name="text">
           <string>Orientation</string>
          </property>
-         <property name="alignment" >
+         <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
@@ -601,65 +579,59 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>1</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_screenShotToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_screenShotToolButton">
+         <property name="text">
           <string>...</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_viewerInformationToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_viewerInformationToolButton">
+         <property name="text">
           <string>...</string>
          </property>
-         <property name="icon" >
-          <iconset resource="../../../main/main.qrc" >:/images/viewerInfo.png</iconset>
+         <property name="icon">
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/viewerInfo.png</normaloff>:/images/viewerInfo.png</iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="checked" >
+         <property name="checked">
           <bool>true</bool>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
@@ -667,56 +639,50 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_dicomDumpToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_dicomDumpToolButton">
+         <property name="text">
           <string>Info</string>
          </property>
-         <property name="icon" >
-          <iconset resource="../../../main/main.qrc" >:/images/dicomDump.png</iconset>
+         <property name="icon">
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/dicomDump.png</normaloff>:/images/dicomDump.png</iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_rotateClockWiseToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_rotateClockWiseToolButton">
+         <property name="text">
           <string>Rotate</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
@@ -724,56 +690,51 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_flipVerticalToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_flipVerticalToolButton">
+         <property name="text">
           <string>FlipV</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_flipHorizontalToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_flipHorizontalToolButton">
+         <property name="text">
           <string>FlipH</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
@@ -781,31 +742,22 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeType" >
+         <property name="sizeType">
           <enum>QSizePolicy::Minimum</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>16</width>
            <height>1</height>
@@ -814,9 +766,9 @@
         </spacer>
        </item>
        <item>
-        <widget class="udg::QThickSlabWidget" native="1" name="m_thickSlabWidget" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+        <widget class="udg::QThickSlabWidget" name="m_thickSlabWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -825,13 +777,13 @@
        </item>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeType" >
+         <property name="sizeType">
           <enum>QSizePolicy::Minimum</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>1</height>
@@ -840,11 +792,11 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_4" >
-         <property name="text" >
+        <widget class="QLabel" name="label_4">
+         <property name="text">
           <string>Thick Slab</string>
          </property>
-         <property name="alignment" >
+         <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
@@ -852,62 +804,57 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>0</number>
        </property>
-       <property name="leftMargin" >
-        <number>3</number>
-       </property>
-       <property name="topMargin" >
-        <number>3</number>
-       </property>
-       <property name="rightMargin" >
-        <number>3</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>3</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_referenceLinesToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_referenceLinesToolButton">
+         <property name="text">
           <string>Ref.Lines</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_cursor3DToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_cursor3DToolButton">
+         <property name="text">
           <string>3D cursor</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="checkable" >
+         <property name="checkable">
           <bool>true</bool>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
@@ -915,9 +862,9 @@
       </layout>
      </item>
      <item>
-      <widget class="QCINEController" native="1" name="m_cineController" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+      <widget class="QCINEController" name="m_cineController" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -925,31 +872,22 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
-       <property name="leftMargin" >
-        <number>2</number>
-       </property>
-       <property name="topMargin" >
-        <number>2</number>
-       </property>
-       <property name="rightMargin" >
-        <number>2</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>2</number>
        </property>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeType" >
+         <property name="sizeType">
           <enum>QSizePolicy::Minimum</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>1</height>
@@ -958,31 +896,22 @@
         </spacer>
        </item>
        <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin" >
-          <number>2</number>
-         </property>
-         <property name="topMargin" >
-          <number>2</number>
-         </property>
-         <property name="rightMargin" >
-          <number>2</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin">
           <number>2</number>
          </property>
          <item>
-          <widget class="QWindowLevelComboBox" name="m_windowLevelComboBox" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+          <widget class="QWindowLevelComboBox" name="m_windowLevelComboBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="sizeAdjustPolicy" >
+           <property name="sizeAdjustPolicy">
             <enum>QComboBox::AdjustToContents</enum>
            </property>
           </widget>
@@ -991,13 +920,13 @@
        </item>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeType" >
+         <property name="sizeType">
           <enum>QSizePolicy::Preferred</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>1</height>
@@ -1006,17 +935,17 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>WW/WL</string>
          </property>
-         <property name="alignment" >
+         <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
@@ -1024,62 +953,57 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin">
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_restoreToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_restoreToolButton">
+         <property name="text">
           <string>Restore</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_invertToolButton" >
-         <property name="text" >
+        <widget class="QToolButton" name="m_invertToolButton">
+         <property name="text">
           <string>Invert</string>
          </property>
-         <property name="icon" >
-          <iconset/>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
          </property>
-         <property name="iconSize" >
+         <property name="iconSize">
           <size>
            <width>32</width>
            <height>32</height>
           </size>
          </property>
-         <property name="toolButtonStyle" >
+         <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
          </property>
-         <property name="autoRaise" >
+         <property name="autoRaise">
           <bool>true</bool>
          </property>
         </widget>
@@ -1087,33 +1011,35 @@
       </layout>
      </item>
      <item>
-      <widget class="QToolButton" name="m_rotateCounterClockWiseToolButton" >
-       <property name="text" >
+      <widget class="QToolButton" name="m_rotateCounterClockWiseToolButton">
+       <property name="text">
         <string>-90</string>
        </property>
-       <property name="icon" >
-        <iconset/>
+       <property name="icon">
+        <iconset>
+         <normaloff/>
+        </iconset>
        </property>
-       <property name="iconSize" >
+       <property name="iconSize">
         <size>
          <width>32</width>
          <height>32</height>
         </size>
        </property>
-       <property name="autoRaise" >
+       <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>111</width>
          <height>84</height>
@@ -1124,21 +1050,21 @@
     </layout>
    </item>
    <item>
-    <widget class="ViewersLayout" native="1" name="m_workingArea" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+    <widget class="ViewersLayout" name="m_workingArea" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="focusPolicy" >
+     <property name="focusPolicy">
       <enum>Qt::StrongFocus</enum>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>QWindowLevelComboBox</class>
@@ -1164,8 +1090,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc" />
-  <include location="q2dviewer.qrc" />
+  <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>
 </ui>
