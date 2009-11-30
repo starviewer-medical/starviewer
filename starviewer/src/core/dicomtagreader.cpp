@@ -93,12 +93,6 @@ bool DICOMTagReader::tagExists( DICOMTag tag )
     }
 }
 
-bool DICOMTagReader::tagExists( DcmTagKey tag )
-{
-    DEBUG_LOG("Aquest mètode està deprecated. S'eliminarà en breu, fer servir DICOMTag, no DcmTagKey");
-    return tagExists( DICOMTag(tag.getGroup(),tag.getElement()) );
-}
-
 bool DICOMTagReader::tagExists( unsigned int group, unsigned int element )
 {
     return this->tagExists( DICOMTag(group,element) );
@@ -137,12 +131,6 @@ QString DICOMTagReader::getAttributeByName( DICOMTag tag )
     }
 
     return result;
-}
-
-QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
-{
-    DEBUG_LOG("Aquest mètode està deprecated. S'eliminarà en breu, fer servir DICOMTag, no DcmTagKey");
-    return getAttributeByName( DICOMTag(tag.getGroup(),tag.getElement()) );
 }
 
 QStringList DICOMTagReader::getSequenceAttributeByTag( unsigned int sequenceGroup, unsigned int sequenceElement, unsigned int group, unsigned int element )
@@ -193,12 +181,6 @@ QStringList DICOMTagReader::getSequenceAttributeByName( DICOMTag sequenceTag, DI
 //     QList<DcmTagKey> embeddedSequenceList;
 //     embeddedSequenceList << sequenceTag;
 //     return this->getSequenceAttributeByName( embeddedSequenceList, attributeTag );
-}
-
-QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag )
-{
-    DEBUG_LOG("Aquest mètode està deprecated. S'eliminarà en breu, fer servir DICOMTag, no DcmTagKey");
-    return getSequenceAttributeByName( DICOMTag(sequenceTag.getGroup(), sequenceTag.getElement()), DICOMTag(attributeTag.getGroup(),attributeTag.getElement()) );
 }
 
 QStringList DICOMTagReader::getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element )
@@ -277,19 +259,6 @@ QStringList DICOMTagReader::getSequenceAttributeByName( QList<DICOMTag> embedded
 //     }
 
     return result;
-}
-
-QStringList DICOMTagReader::getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag )
-{
-    DEBUG_LOG("Aquest mètode està deprecated. S'eliminarà en breu, fer servir DICOMTag, no DcmTagKey");
-    // Convertim els paràmetres a DICOMTag
-    QList<DICOMTag>  tagList;
-    foreach( DcmTagKey tag, embeddedSequencesTags )
-    {
-        tagList << DICOMTag(tag.getGroup(),tag.getElement());
-    }
-    
-    return getSequenceAttributeByName( tagList, DICOMTag(attributeTag.getGroup(),attributeTag.getElement()) );
 }
 
 }
