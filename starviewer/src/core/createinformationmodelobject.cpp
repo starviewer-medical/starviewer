@@ -7,6 +7,7 @@
 #include "series.h"
 #include "image.h"
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 
 namespace udg{
 
@@ -14,10 +15,10 @@ Patient *CreateInformationModelObject::createPatient(DICOMTagReader *dicomTagRea
 {
     Patient *patient = new Patient;
 
-    patient->setFullName(dicomTagReader->getAttributeByName(DCM_PatientsName));
-    patient->setID(dicomTagReader->getAttributeByName(DCM_PatientID));
-    patient->setBirthDate(dicomTagReader->getAttributeByName(DCM_PatientsBirthDate));
-    patient->setSex(dicomTagReader->getAttributeByName(DCM_PatientsSex));
+    patient->setFullName(dicomTagReader->getAttributeByName(DICOMPatientsName));
+    patient->setID(dicomTagReader->getAttributeByName(DICOMPatientID));
+    patient->setBirthDate(dicomTagReader->getAttributeByName(DICOMPatientsBirthDate));
+    patient->setSex(dicomTagReader->getAttributeByName(DICOMPatientsSex));
 
     return patient;
 }
@@ -27,20 +28,20 @@ Study *CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
     Study *study = new Study;
     QString studyModalities;
 
-    study->setInstanceUID(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID));
-    study->setDate(dicomTagReader->getAttributeByName(DCM_StudyDate));
-    study->setTime(dicomTagReader->getAttributeByName(DCM_StudyTime));
-    study->setID(dicomTagReader->getAttributeByName(DCM_StudyID));
-    study->setAccessionNumber(dicomTagReader->getAttributeByName(DCM_AccessionNumber));
-    study->setDescription(dicomTagReader->getAttributeByName(DCM_StudyDescription));
-    study->setPatientAge(dicomTagReader->getAttributeByName(DCM_PatientsAge));
-    study->setHeight(dicomTagReader->getAttributeByName(DCM_PatientsSize).toDouble());
-    study->setWeight(dicomTagReader->getAttributeByName(DCM_PatientsWeight).toDouble());
-    study->setReferringPhysiciansName(dicomTagReader->getAttributeByName(DCM_ReferringPhysiciansName));
+    study->setInstanceUID(dicomTagReader->getAttributeByName(DICOMStudyInstanceUID));
+    study->setDate(dicomTagReader->getAttributeByName(DICOMStudyDate));
+    study->setTime(dicomTagReader->getAttributeByName(DICOMStudyTime));
+    study->setID(dicomTagReader->getAttributeByName(DICOMStudyID));
+    study->setAccessionNumber(dicomTagReader->getAttributeByName(DICOMAccessionNumber));
+    study->setDescription(dicomTagReader->getAttributeByName(DICOMStudyDescription));
+    study->setPatientAge(dicomTagReader->getAttributeByName(DICOMPatientsAge));
+    study->setHeight(dicomTagReader->getAttributeByName(DICOMPatientsSize).toDouble());
+    study->setWeight(dicomTagReader->getAttributeByName(DICOMPatientsWeight).toDouble());
+    study->setReferringPhysiciansName(dicomTagReader->getAttributeByName(DICOMReferringPhysiciansName));
 
     //Afegim la modalitat de l'estudi
     //Tenir en compte si aquest objecte s'utilitza per fer el dicomclassifierfillerstep que ells omplen la modalitat a partir de les series
-    studyModalities = dicomTagReader->getAttributeByName(DCM_ModalitiesInStudy);
+    studyModalities = dicomTagReader->getAttributeByName(DICOMModalitiesInStudy);
     
     foreach(QString modality, studyModalities.split("\\"))
     {
@@ -54,26 +55,26 @@ Series *CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReade
 {
     Series *series = new Series;
 
-    series->setInstanceUID(dicomTagReader->getAttributeByName(DCM_SeriesInstanceUID));
-    series->setModality(dicomTagReader->getAttributeByName(DCM_Modality));
-    series->setSeriesNumber(dicomTagReader->getAttributeByName(DCM_SeriesNumber));
-    series->setDate(dicomTagReader->getAttributeByName(DCM_SeriesDate));
-    series->setTime(dicomTagReader->getAttributeByName(DCM_SeriesTime));
-    series->setInstitutionName(dicomTagReader->getAttributeByName(DCM_InstitutionName));
-    series->setPatientPosition(dicomTagReader->getAttributeByName(DCM_PatientPosition));
-    series->setProtocolName(dicomTagReader->getAttributeByName(DCM_ProtocolName));
-    series->setDescription(dicomTagReader->getAttributeByName(DCM_SeriesDescription));
-    series->setFrameOfReferenceUID(dicomTagReader->getAttributeByName(DCM_FrameOfReferenceUID));
-    series->setPositionReferenceIndicator(dicomTagReader->getAttributeByName(DCM_PositionReferenceIndicator));
-    series->setManufacturer(dicomTagReader->getAttributeByName(DCM_Manufacturer));
-    series->setRequestedProcedureID(dicomTagReader->getAttributeByName(DCM_RequestedProcedureID));
-    series->setScheduledProcedureStepID(dicomTagReader->getAttributeByName(DCM_ScheduledProcedureStepID));
-    series->setPerformedProcedureStepStartDate(dicomTagReader->getAttributeByName(DCM_PerformedProcedureStepStartDate));
-    series->setPerformedProcedureStepStartTime(dicomTagReader->getAttributeByName(DCM_PerformedProcedureStepStartTime));
+    series->setInstanceUID(dicomTagReader->getAttributeByName(DICOMSeriesInstanceUID));
+    series->setModality(dicomTagReader->getAttributeByName(DICOMModality));
+    series->setSeriesNumber(dicomTagReader->getAttributeByName(DICOMSeriesNumber));
+    series->setDate(dicomTagReader->getAttributeByName(DICOMSeriesDate));
+    series->setTime(dicomTagReader->getAttributeByName(DICOMSeriesTime));
+    series->setInstitutionName(dicomTagReader->getAttributeByName(DICOMInstitutionName));
+    series->setPatientPosition(dicomTagReader->getAttributeByName(DICOMPatientPosition));
+    series->setProtocolName(dicomTagReader->getAttributeByName(DICOMProtocolName));
+    series->setDescription(dicomTagReader->getAttributeByName(DICOMSeriesDescription));
+    series->setFrameOfReferenceUID(dicomTagReader->getAttributeByName(DICOMFrameOfReferenceUID));
+    series->setPositionReferenceIndicator(dicomTagReader->getAttributeByName(DICOMPositionReferenceIndicator));
+    series->setManufacturer(dicomTagReader->getAttributeByName(DICOMManufacturer));
+    series->setRequestedProcedureID(dicomTagReader->getAttributeByName(DICOMRequestedProcedureID));
+    series->setScheduledProcedureStepID(dicomTagReader->getAttributeByName(DICOMScheduledProcedureStepID));
+    series->setPerformedProcedureStepStartDate(dicomTagReader->getAttributeByName(DICOMPerformedProcedureStepStartDate));
+    series->setPerformedProcedureStepStartTime(dicomTagReader->getAttributeByName(DICOMPerformedProcedureStepStartTime));
 
     /// Atributs necessaris pels hanging protocols
-    series->setBodyPartExamined(dicomTagReader->getAttributeByName(DCM_BodyPartExamined));
-    series->setViewPosition(dicomTagReader->getAttributeByName(DCM_ViewPosition));
+    series->setBodyPartExamined(dicomTagReader->getAttributeByName(DICOMBodyPartExamined));
+    series->setViewPosition(dicomTagReader->getAttributeByName(DICOMViewPosition));
 
     return series;
 }
@@ -82,8 +83,8 @@ Image *CreateInformationModelObject::createImage(DICOMTagReader *dicomTagReader)
 {
     Image * image = new Image();
 
-    image->setSOPInstanceUID(dicomTagReader->getAttributeByName(DCM_SOPInstanceUID));
-    image->setInstanceNumber(dicomTagReader->getAttributeByName(DCM_InstanceNumber));
+    image->setSOPInstanceUID(dicomTagReader->getAttributeByName(DICOMSOPInstanceUID));
+    image->setInstanceNumber(dicomTagReader->getAttributeByName(DICOMInstanceNumber));
 
     return image;
 }
