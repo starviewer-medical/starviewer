@@ -42,6 +42,8 @@ void QDicomDumpMammographyWidget::initializeLabels()
     // Study, series & image information
     // TODO Caldria comprovar si l'acquisition date és el mateix que DICOMContentDate/DICOMContentTime
     // En la informació genèrica del dump fem servir el "Content". Si aquest ens val, no caldrà obtenir el "Acquisition"
+    // La diferència és que el "Content Date" és la data en la que la creació de les dades va començar (Pixel data), 
+    // no quan aquestes es van adquirir, que és el que seria l'"Acquisition Date"
     // const DICOMTag    DICOMAcquisitionDate(0x0008, 0x0022); ->alt. const DICOMTag    DICOMContentDate(0x0008, 0x0023);
     // const DICOMTag    DICOMAcquisitionDatetime(0x0008, 0x002a); ->alt. const DICOMTag    DICOMContentTime(0x0008, 0x0033);
     m_operatorsNameValueLabel->setText( "-" );
