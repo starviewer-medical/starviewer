@@ -8,6 +8,7 @@
 #include "logging.h"
 #include "patientfillerinput.h"
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 #include "patient.h"
 #include "study.h"
 #include "series.h"
@@ -63,7 +64,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
         seriesInfo->numberOfImages++;
         if ( !seriesInfo->isCTLocalizer )
         {
-			QString imagePositionPatient = m_input->getDICOMFile()->getAttributeByName( DCM_ImagePositionPatient);
+			QString imagePositionPatient = m_input->getDICOMFile()->getAttributeByName( DICOMImagePositionPatient);
 			if( !imagePositionPatient.isEmpty() )
 			{
 				if ( seriesInfo->firstImagePosition == imagePositionPatient )
@@ -85,7 +86,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
         // en el cas del CT ens interessa saber si és localizer
         if( m_input->getCurrentSeries()->getModality() == "CT" )
         {
-            QString value = m_input->getDICOMFile()->getAttributeByName( DCM_ImageType );
+            QString value = m_input->getDICOMFile()->getAttributeByName( DICOMImageType );
             QStringList valueList = value.split( "\\" );
             if( valueList.count() >= 3 )
             {
@@ -105,7 +106,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
 
         if ( ! seriesInfo->isCTLocalizer )
         {
-            seriesInfo->firstImagePosition = m_input->getDICOMFile()->getAttributeByName( DCM_ImagePositionPatient );
+            seriesInfo->firstImagePosition = m_input->getDICOMFile()->getAttributeByName( DICOMImagePositionPatient );
         }
     }
 
@@ -142,11 +143,11 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
     DICOMTagReader dicomReader( list[0] );
 
     // si és un localizer no el considerarem que tingui fases
-    if (dicomReader.tagExists( DCM_ImageType ))
+    if (dicomReader.tagExists( DICOMImageType ))
     {
         // aquest valor és de tipus 3 al mòdul General Image, però consta com a tipus 1 a
         // gairebé totes les modalitats. Només consta com a tipus 2 per la modalitat US
-        QString value = dicomReader.getAttributeByName( DCM_ImageType );
+        QString value = dicomReader.getAttributeByName( DICOMImageType );
         if( series->getModality() == "CT" ) // en el cas del CT ens interessa saber si és localizer
         {
             QStringList valueList = value.split( "\\" );
@@ -163,20 +164,20 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
             {
                 // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
                 // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
-                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + dicomReader.getAttributeByName(DCM_SOPInstanceUID ) + " de la serie " + series->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
+                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + dicomReader.getAttributeByName(DICOMSOPInstanceUID ) + " de la serie " + series->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
             }
         }
     }
     if ( !localizer )
     {
-        QString imagePositionPatient = dicomReader.getAttributeByName( DCM_ImagePositionPatient );
+        QString imagePositionPatient = dicomReader.getAttributeByName( DICOMImagePositionPatient );
 
         if( !imagePositionPatient.isEmpty() )
         {
             while ( !found && phases < list.count() )
             {
                 dicomReader.setFile( list[phases] );
-                if ( imagePositionPatient == dicomReader.getAttributeByName( DCM_ImagePositionPatient  ) )
+                if ( imagePositionPatient == dicomReader.getAttributeByName( DICOMImagePositionPatient  ) )
                 {
                     phases++;
                 }
