@@ -8,6 +8,7 @@
 #include "logging.h"
 #include "patientfillerinput.h"
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 #include "patient.h"
 #include "study.h"
 #include "series.h"
@@ -134,23 +135,23 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
 {
 
     // comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData
-    bool ok = dicomReader->tagExists( DCM_PixelData );
+    bool ok = dicomReader->tagExists( DICOMPixelData );
     if( ok )
     {
-        image->setSOPInstanceUID( dicomReader->getAttributeByName( DCM_SOPInstanceUID ) );
-        image->setInstanceNumber( dicomReader->getAttributeByName( DCM_InstanceNumber ) );
+        image->setSOPInstanceUID( dicomReader->getAttributeByName( DICOMSOPInstanceUID ) );
+        image->setInstanceNumber( dicomReader->getAttributeByName( DICOMInstanceNumber ) );
 
         QString value;
 
         // \TODO Txapussa per sortir del pas. Serveix per calcular correctament el PixelSpacing
-        QString modality = dicomReader->getAttributeByName( DCM_Modality );
+        QString modality = dicomReader->getAttributeByName( DICOMModality );
         if ( modality == "CT" || modality == "MR")
         {
-            value = dicomReader->getAttributeByName( DCM_PixelSpacing );
+            value = dicomReader->getAttributeByName( DICOMPixelSpacing );
         }
         else
         {
-            value = dicomReader->getAttributeByName( DCM_ImagerPixelSpacing );
+            value = dicomReader->getAttributeByName( DICOMImagerPixelSpacing );
         }
         QStringList list;
         if ( !value.isEmpty() )
@@ -162,11 +163,11 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
                 DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada. Madalitat de la imatge: [" + modality + "]" );
         }
 
-        value = dicomReader->getAttributeByName( DCM_SliceThickness );
+        value = dicomReader->getAttributeByName( DICOMSliceThickness );
         if( !value.isEmpty() )
             image->setSliceThickness( value.toDouble() );
 
-        value = dicomReader->getAttributeByName( DCM_ImageOrientationPatient );
+        value = dicomReader->getAttributeByName( DICOMImageOrientationPatient );
         list = value.split( "\\" );
         if( list.size() == 6 )
         {
@@ -178,7 +179,7 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
             image->setImageOrientationPatient( orientation );
 
             // cerquem l'string amb la orientació del pacient
-            value = dicomReader->getAttributeByName( DCM_PatientOrientation );
+            value = dicomReader->getAttributeByName( DICOMPatientOrientation );
             if( !value.isEmpty() )
                 image->setPatientOrientation( value );
             else  // si no tenim aquest valor, el calculem a partir dels direction cosines
@@ -209,13 +210,13 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
              * ImageOrientationPatient i ImagePositionPatient.
              */
             // \TODO Part afegida per sortir del pas. S'hauria de refer aquesta part tenint mes en compte la dependencia de tags
-            value = dicomReader->getAttributeByName( DCM_PatientOrientation );
+            value = dicomReader->getAttributeByName( DICOMPatientOrientation );
             if( !value.isEmpty() )
                 image->setPatientOrientation( value );
             else
                 DEBUG_LOG("No s'ha pogut trobar informació d'orientació del pacient, ni ImageOrientationPatient ni PatientOrientation. Modalitat de la imatge: [" + modality + "]");
         }
-        value = dicomReader->getAttributeByName( DCM_ImagePositionPatient );
+        value = dicomReader->getAttributeByName( DICOMImagePositionPatient );
         if( !value.isEmpty() )
         {
             list = value.split("\\");
@@ -230,35 +231,35 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
             DEBUG_LOG("La imatge no conté informació de l'origen. Modalitat: [" + modality + "]");
         }
 
-        image->setSamplesPerPixel( dicomReader->getAttributeByName( DCM_SamplesPerPixel ).toInt() );
-        image->setPhotometricInterpretation( dicomReader->getAttributeByName( DCM_PhotometricInterpretation ) );
-        image->setRows( dicomReader->getAttributeByName( DCM_Rows ).toInt() );
-        image->setColumns( dicomReader->getAttributeByName( DCM_Columns ).toInt() );
-        image->setBitsAllocated( dicomReader->getAttributeByName( DCM_BitsAllocated ).toInt() );
-        image->setBitsStored( dicomReader->getAttributeByName( DCM_BitsStored ).toInt() );
-        image->setPixelRepresentation( dicomReader->getAttributeByName( DCM_PixelRepresentation ).toInt() );
+        image->setSamplesPerPixel( dicomReader->getAttributeByName( DICOMSamplesPerPixel ).toInt() );
+        image->setPhotometricInterpretation( dicomReader->getAttributeByName( DICOMPhotometricInterpretation ) );
+        image->setRows( dicomReader->getAttributeByName( DICOMRows ).toInt() );
+        image->setColumns( dicomReader->getAttributeByName( DICOMColumns ).toInt() );
+        image->setBitsAllocated( dicomReader->getAttributeByName( DICOMBitsAllocated ).toInt() );
+        image->setBitsStored( dicomReader->getAttributeByName( DICOMBitsStored ).toInt() );
+        image->setPixelRepresentation( dicomReader->getAttributeByName( DICOMPixelRepresentation ).toInt() );
 
-        value = dicomReader->getAttributeByName( DCM_RescaleSlope );
+        value = dicomReader->getAttributeByName( DICOMRescaleSlope );
         if( value.toDouble() == 0 )
             image->setRescaleSlope( 1. );
         else
             image->setRescaleSlope( value.toDouble() );
 
-        image->setRescaleIntercept( dicomReader->getAttributeByName( DCM_RescaleIntercept ).toDouble() );
+        image->setRescaleIntercept( dicomReader->getAttributeByName( DICOMRescaleIntercept ).toDouble() );
         // llegim els window levels
-        QStringList windowWidthList = dicomReader->getAttributeByName( DCM_WindowWidth ).split("\\");
-        QStringList windowLevelList = dicomReader->getAttributeByName( DCM_WindowCenter ).split("\\");
+        QStringList windowWidthList = dicomReader->getAttributeByName( DICOMWindowWidth ).split("\\");
+        QStringList windowLevelList = dicomReader->getAttributeByName( DICOMWindowCenter ).split("\\");
         for( int i = 0; i < windowWidthList.size(); i++ )
             image->addWindowLevel( windowWidthList.at(i).toDouble(), windowLevelList.at(i).toDouble() );
         // i després les respectives descripcions si n'hi ha
-        image->setWindowLevelExplanations( dicomReader->getAttributeByName( DCM_WindowCenterWidthExplanation ).split("\\") );
+        image->setWindowLevelExplanations( dicomReader->getAttributeByName( DICOMWindowCenterWidthExplanation ).split("\\") );
 
-        int frames = dicomReader->getAttributeByName( DCM_NumberOfFrames ).toInt();
+        int frames = dicomReader->getAttributeByName( DICOMNumberOfFrames ).toInt();
         image->setNumberOfFrames( frames ? frames : 1 );
 
-        if (dicomReader->tagExists( DCM_SliceLocation ))
+        if (dicomReader->tagExists( DICOMSliceLocation ))
         {
-            image->setSliceLocation( dicomReader->getAttributeByName( DCM_SliceLocation ) );
+            image->setSliceLocation( dicomReader->getAttributeByName( DICOMSliceLocation ) );
         }
     }
     else
