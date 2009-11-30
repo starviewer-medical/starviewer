@@ -18,6 +18,7 @@
 #include "dicommask.h"
 #include "logging.h"
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 
 namespace udg{
 
@@ -219,7 +220,7 @@ void RetrieveImages::storeSCPCallback(
                     ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
                 }
             }
-            piSingleton->process(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID), dicomTagReader);
+            piSingleton->process(dicomTagReader->getAttributeByName(DICOMStudyInstanceUID), dicomTagReader);
         }
     }
 

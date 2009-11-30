@@ -8,6 +8,7 @@
 #include "starviewerprocessimageretrieved.h"
 
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 
 namespace udg {
 
@@ -19,13 +20,13 @@ StarviewerProcessImageRetrieved::StarviewerProcessImageRetrieved() : ProcessImag
 
 void StarviewerProcessImageRetrieved::process(DICOMTagReader *dicomTagReader)
 {
-    QString seriesInstanceUID = dicomTagReader->getAttributeByName(DCM_SeriesInstanceUID);
+    QString seriesInstanceUID = dicomTagReader->getAttributeByName(DICOMSeriesInstanceUID);
 
     if (m_seriesInstanceUIDLastImageRetrieved.isEmpty())
     {
         //Cas de la primera imatge descarregada
         m_seriesInstanceUIDLastImageRetrieved = seriesInstanceUID;
-        m_studyInstanceUIDRetrieved = dicomTagReader->getAttributeByName(DCM_StudyInstanceUID);
+        m_studyInstanceUIDRetrieved = dicomTagReader->getAttributeByName(DICOMStudyInstanceUID);
     }
     else if (m_seriesInstanceUIDLastImageRetrieved != seriesInstanceUID)
     {
@@ -35,7 +36,7 @@ void StarviewerProcessImageRetrieved::process(DICOMTagReader *dicomTagReader)
         if (!m_seriesInstanceUIDListRetrieved.contains(m_seriesInstanceUIDLastImageRetrieved))
         {
             m_seriesInstanceUIDListRetrieved.append(m_seriesInstanceUIDLastImageRetrieved);
-            emit seriesRetrieved(dicomTagReader->getAttributeByName(DCM_StudyInstanceUID));
+            emit seriesRetrieved(dicomTagReader->getAttributeByName(DICOMStudyInstanceUID));
         }
         
         //Si la imatge descarregada actual té un UID de serie diferent que l'anterior

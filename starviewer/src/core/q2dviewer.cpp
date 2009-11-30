@@ -14,6 +14,7 @@
 #include "patient.h"
 #include "imageplane.h"
 #include "dicomtagreader.h" // per les annotacions de mamo
+#include "dicomdictionary.h"
 // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
 #include "hangingprotocolmanager.h"
 //thickslab
@@ -1580,10 +1581,10 @@ void Q2DViewer::updateSliceAnnotationInformation()
         if( image )
         {
             DICOMTagReader reader( image->getPath() );
-            QString laterality = reader.getAttributeByName( DCM_ImageLaterality );
+            QString laterality = reader.getAttributeByName( DICOMImageLaterality );
             QString desiredOrientation;
 
-            QStringList tagValue = reader.getSequenceAttributeByName( DCM_ViewCodeSequence, DCM_CodeMeaning );
+            QStringList tagValue = reader.getSequenceAttributeByName( DICOMViewCodeSequence, DICOMCodeMeaning );
             if( ! tagValue.isEmpty() )
             {
                 QString projection = tagValue.at(0);
