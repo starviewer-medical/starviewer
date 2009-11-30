@@ -21,6 +21,8 @@
 
 namespace udg {
 
+const QString NotAvailableValue( QObject::tr("N/A") );
+
 QDicomDump::QDicomDump(QWidget *parent)
  : QDialog(parent), m_lastInsertedDumpWidget(0)
 {
@@ -154,21 +156,29 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     {
         m_labelPatientAgeValue->setText( currentImage->getParentSeries()->getParentStudy()->getPatientAge() );
     }
+    else
+        m_labelPatientAgeValue->setText( NotAvailableValue );
 
     if ( !currentPatient->getBirthDateAsString().isEmpty() )
     {
         m_birthDateValueLabel->setText( currentPatient->getBirthDateAsString() );
     }
-
+    else
+        m_birthDateValueLabel->setText( NotAvailableValue );
+    
     if ( !currentPatient->getFullName().isEmpty() )
     {
         m_labelPatientNameValue->setText( currentPatient->getFullName() );
     }
+    else
+        m_labelPatientNameValue->setText( NotAvailableValue );
 
 	if ( !currentPatient->getSex().isEmpty() )
     {
         m_labelPatientSexValue->setText( currentPatient->getSex() );
     }
+    else
+        m_labelPatientSexValue->setText( NotAvailableValue );
 
     // Definim el valor dels tags d'imatge
     DICOMTagReader dicomReader;
@@ -180,6 +190,8 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
         // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format yyyy.MM.dd
         m_labelImageDateValue->setText(QDate::fromString(value.remove("."), "yyyyMMdd").toString(Qt::LocaleDate));
     }
+    else
+        m_labelImageDateValue->setText( NotAvailableValue );
 
     value = dicomReader.getAttributeByName( DCM_ContentTime );
     if( !value.isEmpty() )
@@ -197,11 +209,15 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
         }
         m_labelImageTimeValue->setText(convertedTime.toString(Qt::LocaleDate));
     }
+    else
+        m_labelImageTimeValue->setText( NotAvailableValue );
 
     if ( currentImage->getInstanceNumber() != "" )
     {
         m_labelImageNumberValue->setText( currentImage->getInstanceNumber() );
     }
+    else
+        m_labelImageNumberValue->setText( NotAvailableValue );
 }
 
 };
