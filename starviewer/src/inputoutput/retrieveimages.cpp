@@ -3,7 +3,9 @@
 #include <osconfig.h> /* make sure OS specific configuration is included first */
 #include <diutil.h>
 #include <dcfilefo.h>
-
+// Pels tags DcmTagKey DCM_xxxx
+#include <dcmtk/dcmdata/dctagkey.h>
+#include <dcmtk/dcmdata/dcdeftag.h>
 #include <ofconapp.h>//necessari per fer les sortides per pantalla de les dcmtkz
 
 #include <QDir>
