@@ -10,10 +10,6 @@
 #include <QString>
 #include <QList>
 
-// TODO Aquestes classes dcmtk han de desaparèixer
-#include <dcmtk/dcmdata/dctagkey.h>
-#include <dcmtk/dcmdata/dcdeftag.h>
-
 class DcmDataset;
 
 namespace udg {
@@ -56,8 +52,6 @@ public:
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
     bool tagExists( DICOMTag tag );
     bool tagExists( unsigned int group, unsigned int element );
-    /// TODO aquesta versió del mètode està deprecated
-    bool tagExists( DcmTagKey tag );
 
     /// Obtenim el valor d'un atribut en un string fent el query pel seu tag en hexadecimal.Cal haver fet un ús correcte de l'objecte m_dicomData.
     /// Exemple: getAttributeByTag(0x0020, 0x0020);
@@ -69,23 +63,17 @@ public:
     /// Exemple: getAttributeByName(DCM_PatientOrientation);  //Seria equivalent a l'anterior
     /// Retornarà QString buit si no es troba el tag o el tag estigui buit.
     QString getAttributeByName( DICOMTag tag );
-    /// TODO aquesta versió del mètode està deprecated
-    QString getAttributeByName( DcmTagKey tag );
 
     /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència. Tindrem tants valors d'aquell atribut com
     /// items tingui la seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
     QStringList getSequenceAttributeByTag( unsigned int sequenceGroup, unsigned int sequenceElement, unsigned int group, unsigned int element );
     QStringList getSequenceAttributeByName( DICOMTag sequenceTag, DICOMTag attributeTag );
-    /// TODO aquesta versió del mètode està deprecated
-    QStringList getSequenceAttributeByName( DcmTagKey sequenceTag, DcmTagKey attributeTag );
 
     /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència aniuada. Donem la llista aniuada de
     /// seqüències i l'atribut que volem de la última seqüència. Tindrem tants valors d'aquell atribut com items tingui la
     /// seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
     QStringList getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element );
     QStringList getSequenceAttributeByName( QList<DICOMTag> embeddedSequencesTags, DICOMTag attributeTag );
-    /// TODO aquesta versió del mètode està deprecated
-    QStringList getSequenceAttributeByName( QList<DcmTagKey> embeddedSequencesTags, DcmTagKey attributeTag );
 
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació
