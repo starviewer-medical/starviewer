@@ -12,6 +12,7 @@ PacsManager::PacsManager()
     m_queryWeaver = NULL;
     m_queryWeaver = new Weaver();
     m_queryWeaver->setMaximumNumberOfThreads(PacsDevice::getMaximumConnections());
+	m_numberOfQueryPacsJobsPending = 0;
 
     connect ( m_queryWeaver,  SIGNAL ( jobDone ( ThreadWeaver::Job* ) ), SLOT ( queryJobFinished ( ThreadWeaver::Job* ) ) );
 }
@@ -23,6 +24,7 @@ void PacsManager::queryStudy(DicomMask mask, QList<PacsDevice> pacsToQuery)
         QueryPacsJob *queryPacsJob = new QueryPacsJob(pacs, mask, QueryPacsJob::study);
 
         m_queryWeaver->enqueue ( queryPacsJob );
+		m_numberOfQueryPacsJobsPending++;
     }
 }
 
@@ -31,6 +33,7 @@ void PacsManager::querySeries(DicomMask mask, PacsDevice pacsToQuery)
     QueryPacsJob *queryPacsJob = new QueryPacsJob(pacsToQuery, mask, QueryPacsJob::series);
 
     m_queryWeaver->enqueue ( queryPacsJob );
+	m_numberOfQueryPacsJobsPending++;
 }
 
 void PacsManager::queryImage(DicomMask mask, PacsDevice pacsToQuery)
@@ -38,6 +41,7 @@ void PacsManager::queryImage(DicomMask mask, PacsDevice pacsToQuery)
     QueryPacsJob *queryPacsJob = new QueryPacsJob(pacsToQuery, mask, QueryPacsJob::image);
 
     m_queryWeaver->enqueue ( queryPacsJob );
+	m_numberOfQueryPacsJobsPending++;
 }
 
 void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
@@ -45,9 +49,12 @@ void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
     QueryPacsJob *queryPacsJob = dynamic_cast<QueryPacsJob*> ( job );
     QString studyInstanceUID, seriesInstanceUID;
 
+
     //Encara haguem abortat el job, se'ns indica quan ha finalitzat per això comprovem si ha estat abortat per ignora els resultats que ens envia
     if (!queryPacsJob->isAbortRequested())
     {
+		m_numberOfQueryPacsJobsPending--;
+
         switch (queryPacsJob->getQueryLevel())
         {
             case QueryPacsJob::study :
@@ -80,8 +87,9 @@ void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
         }
     }
 
-    if (m_queryWeaver->isIdle()) //Si no s'estan executant més consultes indiquem a finalitzat la cerca
-    {
+	//TODO:No hauria d'anar dins el if de si el job no ha estat cancel·lat ?
+    if (m_numberOfQueryPacsJobsPending == 0) //Si ja no tenim més jobs pendents d'atendre fem signal
+	{
         emit queryFinished();
     }
 
@@ -92,6 +100,8 @@ void PacsManager::cancelCurrentQueries()
 {
     m_queryWeaver->dequeue(); //Desencuem les consultes pendents de realitzar, el requestAbort només cancel.la les que s'estan executant
     m_queryWeaver->requestAbort();
+
+	m_numberOfQueryPacsJobsPending = 0;
 }
 
 bool PacsManager::isExecutingQueries()
