@@ -140,6 +140,7 @@ void QDicomDump::initialize()
     m_labelImageDateValue->setText( "-" );
     m_labelImageTimeValue->setText( "-" );
     m_labelImageNumberValue->setText( "-" );
+    m_birthDateValueLabel->setText( "-" );
 }
 
 void QDicomDump::setCommonImageTagsValue( Image *currentImage )
@@ -152,6 +153,11 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     if ( !currentImage->getParentSeries()->getParentStudy()->getPatientAge().isEmpty() )
     {
         m_labelPatientAgeValue->setText( currentImage->getParentSeries()->getParentStudy()->getPatientAge() );
+    }
+
+    if ( !currentPatient->getBirthDateAsString().isEmpty() )
+    {
+        m_birthDateValueLabel->setText( currentPatient->getBirthDateAsString() );
     }
 
     if ( !currentPatient->getFullName().isEmpty() )
