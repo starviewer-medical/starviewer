@@ -9,6 +9,7 @@
 #include "image.h"
 #include "series.h"
 #include "dicomtagreader.h"
+#include "dicomdictionary.h"
 
 namespace udg {
 
@@ -60,44 +61,44 @@ void QDicomDumpMRWidget::setImageDicomTagsValue( Image *currentImage )
     bool ok = dicomReader.setFile( currentImage->getPath() );
     if( ok )
     {
-        if (dicomReader.tagExists( DCM_ReconstructionDiameter ))
+        if (dicomReader.tagExists( DICOMReconstructionDiameter ))
         {
-            m_labelFieldOfViewValue->setText( QString::number( dicomReader.getAttributeByName( DCM_ReconstructionDiameter ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
+            m_labelFieldOfViewValue->setText( QString::number( dicomReader.getAttributeByName( DICOMReconstructionDiameter ).toDouble() , 'f' , 0 ) +  QString( tr( " mm" ) ) );
         }
         else
             m_labelFieldOfViewValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_PercentPhaseFieldOfView ))
+        if (dicomReader.tagExists( DICOMPercentPhaseFieldOfView ))
         {
-            m_labelRatioFieldOfViewValue->setText( QString::number( dicomReader.getAttributeByName( DCM_PercentPhaseFieldOfView ).toDouble() , 'f' , 0 ) +  QString( tr( " %" ) ) );
+            m_labelRatioFieldOfViewValue->setText( QString::number( dicomReader.getAttributeByName( DICOMPercentPhaseFieldOfView ).toDouble() , 'f' , 0 ) +  QString( tr( " %" ) ) );
         }
         else
             m_labelRatioFieldOfViewValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_RepetitionTime ))
+        if (dicomReader.tagExists( DICOMRepetitionTime ))
         {
-            m_labelRepetitionTimeValue->setText( QString::number( dicomReader.getAttributeByName( DCM_RepetitionTime ).toDouble() , 'f' , 0 ) +  QString( tr( " ms" ) ) );
+            m_labelRepetitionTimeValue->setText( QString::number( dicomReader.getAttributeByName( DICOMRepetitionTime ).toDouble() , 'f' , 0 ) +  QString( tr( " ms" ) ) );
         }
         else
             m_labelRepetitionTimeValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_EchoTime ))
+        if (dicomReader.tagExists( DICOMEchoTime ))
         {
-            m_labelEchoTimeValue->setText( QString::number( dicomReader.getAttributeByName( DCM_EchoTime ).toDouble() , 'f' , 1 ) +  QString( tr( " ms" ) ) );
+            m_labelEchoTimeValue->setText( QString::number( dicomReader.getAttributeByName( DICOMEchoTime ).toDouble() , 'f' , 1 ) +  QString( tr( " ms" ) ) );
         }
         else
             m_labelEchoTimeValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_InversionTime ))
+        if (dicomReader.tagExists( DICOMInversionTime ))
         {
-            m_labelInversionTimeValue->setText( QString::number( dicomReader.getAttributeByName( DCM_InversionTime ).toDouble() , 'f' , 0 ) +  QString( tr( " ms" ) ) );
+            m_labelInversionTimeValue->setText( QString::number( dicomReader.getAttributeByName( DICOMInversionTime ).toDouble() , 'f' , 0 ) +  QString( tr( " ms" ) ) );
         }
         else
             m_labelInversionTimeValue->setText( NotAvailableValue );
         
-        if (dicomReader.tagExists( DCM_FlipAngle))
+        if (dicomReader.tagExists( DICOMFlipAngle))
         {
-            m_labelFlipAngleValue->setText( dicomReader.getAttributeByName( DCM_FlipAngle) +  QString( tr( " degrees" ) ));
+            m_labelFlipAngleValue->setText( dicomReader.getAttributeByName( DICOMFlipAngle) +  QString( tr( " degrees" ) ));
         }
         else
             m_labelFlipAngleValue->setText( NotAvailableValue );
@@ -116,9 +117,9 @@ void QDicomDumpMRWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelPhilipsTurboFactorValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_NumberOfAverages ))
+        if (dicomReader.tagExists( DICOMNumberOfAverages ))
         {
-            m_labelNumberOfAveragesValue->setText( dicomReader.getAttributeByName( DCM_NumberOfAverages ) );
+            m_labelNumberOfAveragesValue->setText( dicomReader.getAttributeByName( DICOMNumberOfAverages ) );
         }
         else
             m_labelNumberOfAveragesValue->setText( NotAvailableValue );
@@ -137,9 +138,9 @@ void QDicomDumpMRWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelPhilipsSpacialPlaneValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( DCM_ReceiveCoilName ))
+        if (dicomReader.tagExists( DICOMReceiveCoilName ))
         {
-            m_labelReceiveCoilValue->setText( dicomReader.getAttributeByName( DCM_ReceiveCoilName ) );
+            m_labelReceiveCoilValue->setText( dicomReader.getAttributeByName( DICOMReceiveCoilName ) );
         }
         else
             m_labelReceiveCoilValue->setText( NotAvailableValue );
