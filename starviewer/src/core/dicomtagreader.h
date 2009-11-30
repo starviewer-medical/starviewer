@@ -30,11 +30,9 @@ public:
     DICOMTagReader();
     /// Constructor per nom de fitxer.
     DICOMTagReader(QString filename);
-    /// Constructor per nom de fitxer per si es té un DcmDataset ja llegit. D'aquesta forma no cal tornar-lo
-    /// a llegir.
+    /// Constructor per nom de fitxer per si es té un DcmDataset ja llegit. 
+    /// D'aquesta forma no cal tornar-lo a llegir.
     DICOMTagReader(QString filename, DcmDataset *dcmDataset);
-
-    /// Constructor
 
     ~DICOMTagReader();
 
@@ -60,7 +58,7 @@ public:
 
     /// Mètode igual que l'anterior però es cerca pel nom a través dels define's de dcmtk. Aquests defines
     /// es poden trobar a /usr/include/dcmtk/dcmdata/dcdeftag.h. Cal haver fet un ús correcte de l'objecte m_dicomData.
-    /// Exemple: getAttributeByName(DCM_PatientOrientation);  //Seria equivalent a l'anterior
+    /// Exemple: getAttributeByName(DCMPatientOrientation);  //Seria equivalent a l'anterior
     /// Retornarà QString buit si no es troba el tag o el tag estigui buit.
     QString getAttributeByName( DICOMTag tag );
 
