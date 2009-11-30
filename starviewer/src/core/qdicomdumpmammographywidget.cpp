@@ -85,17 +85,17 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
             m_operatorsNameValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMCompressionForce ) )
-            m_compressionForceValueLabel->setText( dicomReader.getAttributeByName( DICOMCompressionForce ) );
+            m_compressionForceValueLabel->setText( dicomReader.getAttributeByName( DICOMCompressionForce ) + " Newtons" );
         else
             m_compressionForceValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMBodyPartThickness ) )
-            m_bodyPartThicknessValueLabel->setText( dicomReader.getAttributeByName( DICOMBodyPartThickness ) );
+            m_bodyPartThicknessValueLabel->setText( dicomReader.getAttributeByName( DICOMBodyPartThickness ) + " mm" );
         else
             m_bodyPartThicknessValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMPositionerPrimaryAngle ) )
-            m_positionerPrimaryAngleValueLabel->setText( dicomReader.getAttributeByName( DICOMPositionerPrimaryAngle ) );
+            m_positionerPrimaryAngleValueLabel->setText( dicomReader.getAttributeByName( DICOMPositionerPrimaryAngle ) + "º" );
         else
             m_positionerPrimaryAngleValueLabel->setText(NotAvailableValue);
                 
@@ -141,18 +141,18 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
         // X-Ray acquisition dose information
         //
         if( dicomReader.tagExists( DICOMKVP ) )
-            m_kiloVoltagePeakValueLabel->setText( dicomReader.getAttributeByName( DICOMKVP ) );
+            m_kiloVoltagePeakValueLabel->setText( dicomReader.getAttributeByName( DICOMKVP ) + " kV" );
         else
             m_kiloVoltagePeakValueLabel->setText(NotAvailableValue);
 
         // L'exposure l'obtenim en miliAmpers/segon(mAs). Si els volguéssim en microAmpers/segon, caldria fer servir el tag DICOMExposureInMicroAs
         if( dicomReader.tagExists( DICOMExposure ) )
-            m_exposureValueLabel->setText( dicomReader.getAttributeByName( DICOMExposure ) );
+            m_exposureValueLabel->setText( dicomReader.getAttributeByName( DICOMExposure ) + " mAs" );
         else
             m_exposureValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMExposureTime ) )
-            m_exposureTimeValueLabel->setText( dicomReader.getAttributeByName( DICOMExposureTime ) );
+            m_exposureTimeValueLabel->setText( dicomReader.getAttributeByName( DICOMExposureTime ) + " ms" );
         else
             m_exposureTimeValueLabel->setText(NotAvailableValue);
     
@@ -171,14 +171,13 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
         else
             m_relativeExposureValueLabel->setText(NotAvailableValue);
     
-        // Se suposa que les unitats són "mGy"
         if( dicomReader.tagExists( DICOMOrganDose ) )
-            m_organDoseValueLabel->setText( dicomReader.getAttributeByName( DICOMOrganDose ) );
+            m_organDoseValueLabel->setText( dicomReader.getAttributeByName( DICOMOrganDose ) + " dGy" );
         else
             m_organDoseValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMEntranceDoseInmGy ) )
-            m_entranceDoseValueLabel->setText( dicomReader.getAttributeByName( DICOMEntranceDoseInmGy ) );
+            m_entranceDoseValueLabel->setText( dicomReader.getAttributeByName( DICOMEntranceDoseInmGy ) + " mGy" );
         else
             m_entranceDoseValueLabel->setText(NotAvailableValue);
     }

@@ -193,7 +193,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Organ Dose (mGy):</string>
+         <string>Organ Dose:</string>
         </property>
        </widget>
       </item>
@@ -225,7 +225,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Entrance Dose (mGy):</string>
+         <string>Entrance Dose:</string>
         </property>
        </widget>
       </item>
