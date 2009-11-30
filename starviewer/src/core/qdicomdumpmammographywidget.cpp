@@ -11,6 +11,8 @@
 
 namespace udg {
 
+const QString NotAvailableValue( QObject::tr("N/A") );
+
 QDicomDumpMammographyWidget::QDicomDumpMammographyWidget( QWidget *parent )
  : QWidget(parent)
 {
@@ -80,22 +82,22 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
         if( dicomReader.tagExists( DICOMOperatorsName ) )
             m_operatorsNameValueLabel->setText( dicomReader.getAttributeByName( DICOMOperatorsName ) );
         else
-            m_operatorsNameValueLabel->setText("N/A");
+            m_operatorsNameValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMCompressionForce ) )
             m_compressionForceValueLabel->setText( dicomReader.getAttributeByName( DICOMCompressionForce ) );
         else
-            m_compressionForceValueLabel->setText("N/A");
+            m_compressionForceValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMBodyPartThickness ) )
             m_bodyPartThicknessValueLabel->setText( dicomReader.getAttributeByName( DICOMBodyPartThickness ) );
         else
-            m_bodyPartThicknessValueLabel->setText("N/A");
+            m_bodyPartThicknessValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMPositionerPrimaryAngle ) )
             m_positionerPrimaryAngleValueLabel->setText( dicomReader.getAttributeByName( DICOMPositionerPrimaryAngle ) );
         else
-            m_positionerPrimaryAngleValueLabel->setText("N/A");
+            m_positionerPrimaryAngleValueLabel->setText(NotAvailableValue);
                 
         //
         // Equipment information
@@ -103,37 +105,37 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
         if( dicomReader.tagExists( DICOMManufacturer ) )
             m_manufacturerValueLabel->setText( dicomReader.getAttributeByName( DICOMManufacturer ) );
         else
-            m_manufacturerValueLabel->setText("N/A");
+            m_manufacturerValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMInstitutionName ) )
             m_institutionNameValueLabel->setText( dicomReader.getAttributeByName( DICOMInstitutionName ) );
         else
-            m_institutionNameValueLabel->setText("N/A");
+            m_institutionNameValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMInstitutionAddress ) )
             m_institutionAddressValueLabel->setText( dicomReader.getAttributeByName( DICOMInstitutionAddress ) );
         else
-            m_institutionAddressValueLabel->setText("N/A");
+            m_institutionAddressValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMManufacturersModelName ) )
             m_manufacturersModelNameValueLabel->setText( dicomReader.getAttributeByName( DICOMManufacturersModelName ) );
         else
-            m_manufacturersModelNameValueLabel->setText("N/A");
+            m_manufacturersModelNameValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMDeviceSerialNumber ) )
             m_deviceSerialNumberValueLabel->setText( dicomReader.getAttributeByName( DICOMDeviceSerialNumber ) );
         else
-            m_deviceSerialNumberValueLabel->setText("N/A");
+            m_deviceSerialNumberValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMDetectorID ) )
             m_detectorIDValueLabel->setText( dicomReader.getAttributeByName( DICOMDetectorID ) );
         else
-            m_detectorIDValueLabel->setText("N/A");
+            m_detectorIDValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMSoftwareVersions ) )
             m_softwareVersionsValueLabel->setText( dicomReader.getAttributeByName( DICOMSoftwareVersions ) );
         else
-            m_softwareVersionsValueLabel->setText("N/A");
+            m_softwareVersionsValueLabel->setText(NotAvailableValue);
 
         //
         // X-Ray acquisition dose information
@@ -141,44 +143,44 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
         if( dicomReader.tagExists( DICOMKVP ) )
             m_kiloVoltagePeakValueLabel->setText( dicomReader.getAttributeByName( DICOMKVP ) );
         else
-            m_kiloVoltagePeakValueLabel->setText("N/A");
+            m_kiloVoltagePeakValueLabel->setText(NotAvailableValue);
 
         // L'exposure l'obtenim en miliAmpers/segon(mAs). Si els volguéssim en microAmpers/segon, caldria fer servir el tag DICOMExposureInMicroAs
         if( dicomReader.tagExists( DICOMExposure ) )
             m_exposureValueLabel->setText( dicomReader.getAttributeByName( DICOMExposure ) );
         else
-            m_exposureValueLabel->setText("N/A");
+            m_exposureValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMExposureTime ) )
             m_exposureTimeValueLabel->setText( dicomReader.getAttributeByName( DICOMExposureTime ) );
         else
-            m_exposureTimeValueLabel->setText("N/A");
+            m_exposureTimeValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMFilterMaterial ) )
             m_filterMaterialValueLabel->setText( dicomReader.getAttributeByName( DICOMFilterMaterial ) );
         else
-            m_filterMaterialValueLabel->setText("N/A");
+            m_filterMaterialValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMAnodeTargetMaterial ) )
             m_anodeTargetMaterialValueLabel->setText( dicomReader.getAttributeByName( DICOMAnodeTargetMaterial ) );
         else
-            m_anodeTargetMaterialValueLabel->setText("N/A");
+            m_anodeTargetMaterialValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMRelativeXRayExposure ) )
             m_relativeExposureValueLabel->setText( dicomReader.getAttributeByName( DICOMRelativeXRayExposure ) );
         else
-            m_relativeExposureValueLabel->setText("N/A");
+            m_relativeExposureValueLabel->setText(NotAvailableValue);
     
         // Se suposa que les unitats són "mGy"
         if( dicomReader.tagExists( DICOMOrganDose ) )
             m_organDoseValueLabel->setText( dicomReader.getAttributeByName( DICOMOrganDose ) );
         else
-            m_organDoseValueLabel->setText("N/A");
+            m_organDoseValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMEntranceDoseInmGy ) )
             m_entranceDoseValueLabel->setText( dicomReader.getAttributeByName( DICOMEntranceDoseInmGy ) );
         else
-            m_entranceDoseValueLabel->setText("N/A");
+            m_entranceDoseValueLabel->setText(NotAvailableValue);
     }
 }
 
