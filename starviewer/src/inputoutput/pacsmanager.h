@@ -76,6 +76,8 @@ private:
 
     ThreadWeaver::Weaver* m_queryWeaver;
 
+	int m_numberOfQueryPacsJobsPending;
+
 };
 
 };  //  end  namespace udg
