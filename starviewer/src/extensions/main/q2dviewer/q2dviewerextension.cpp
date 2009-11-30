@@ -13,6 +13,7 @@
 #include "q2dviewerwidget.h"
 #include "menugridwidget.h"
 #include "tablemenu.h"
+#include "qpreviousstudieswidget.h"
 #include "patient.h"
 #include "study.h"
 #include "toolmanager.h"
@@ -76,6 +77,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     readSettings();
     createConnections();
 
+    m_previousStudiesToolButton->setEnabled(false);
     // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
@@ -113,18 +115,23 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     
     m_statsWatcher->addClicksCounter( m_cursor3DToolButton );
     m_statsWatcher->addClicksCounter( m_referenceLinesToolButton );
+
+    m_statsWatcher->addClicksCounter( m_previousStudiesToolButton );
 }
 
 Q2DViewerExtension::~Q2DViewerExtension()
 {
     writeSettings();
 
-	m_hangingCandidates.clear();
+    m_hangingCandidates.clear();
     delete m_predefinedSeriesGrid;
     delete m_seriesTableGrid;
     delete m_predefinedSlicesGrid;
     delete m_sliceTableGrid;
     delete m_dicomDumpCurrentDisplayedImage;
+    // L'objecte es crea quan fem un setInput. Per tant, fem la comprovació.
+    if ( !m_previousStudiesWidget )
+        delete m_previousStudiesWidget;
 }
 
 void Q2DViewerExtension::createConnections()
@@ -134,6 +141,7 @@ void Q2DViewerExtension::createConnections()
     connect( m_buttonGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveTable() ) );
     connect( m_downImageGrid, SIGNAL( clicked ( bool ) ), SLOT( showPredefinedImageGrid() ) );
     connect( m_imageGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveImageTable() ) );
+    connect( m_previousStudiesToolButton, SIGNAL( clicked ( bool ) ), SLOT( showPreviousStudiesWidget() ) );
 
     // Connexions del menu
     connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea , SLOT( setGrid( int, int ) ) );
@@ -171,6 +179,10 @@ void Q2DViewerExtension::setInput( Volume *input )
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
 
     connect( m_patient, SIGNAL( patientFused() ), SLOT(searchHangingProtocols()) );
+
+    /// Habilitem la possibilitat de buscar estudis previs.
+    m_previousStudiesWidget = new QPreviousStudiesWidget( m_mainVolume->getStudy() , this );
+    m_previousStudiesToolButton->setEnabled( true );
 }
 
 void Q2DViewerExtension::searchHangingProtocols()
@@ -224,6 +236,13 @@ void Q2DViewerExtension::showInteractiveImageTable()
     QPoint point = m_imageGrid->mapToGlobal( QPoint(0,0) );
     m_sliceTableGrid->move( point.x(),( point.y() + m_imageGrid->frameGeometry().height() ) );
     m_sliceTableGrid->show();
+}
+
+void Q2DViewerExtension::showPreviousStudiesWidget()
+{
+    QPoint point = m_previousStudiesToolButton->mapToGlobal( QPoint(0,0) );
+    m_previousStudiesWidget->move( point.x(),( point.y() + m_previousStudiesToolButton->frameGeometry().height() ) );
+    m_previousStudiesWidget->show();
 }
 
 Patient* Q2DViewerExtension::getPatient() const

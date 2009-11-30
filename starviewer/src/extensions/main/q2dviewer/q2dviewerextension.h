@@ -30,9 +30,10 @@ class MenuGridWidget;
 class TableMenu;
 class QDicomDump;
 class StatsWatcher;
+class QPreviousStudiesWidget;
 
 /**
-Extensió que s'executarà  per defecte a l'obrir un model
+Extensió que s'executarà  per defecte a l'obrir un model
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -68,6 +69,9 @@ public slots:
     /// Mostrar el menu de la taula per seleccionar grids dins una serie
     ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showInteractiveImageTable();
+
+    /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
+    void showPreviousStudiesWidget();
 
     /// Mostrar la informació del volum a cada visualitzador o no.
     void showViewerInformation( bool show );
@@ -160,6 +164,9 @@ private:
 
     /// Per fer estadístiques d'usabilitat
     StatsWatcher *m_statsWatcher;
+
+    /// Widget per poder seleccionar estudis previs
+    QPreviousStudiesWidget *m_previousStudiesWidget;
 };
 
 } // end namespace udg
