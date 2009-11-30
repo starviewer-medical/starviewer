@@ -101,7 +101,7 @@ bool DICOMTagReader::tagExists( DcmTagKey tag )
 
 bool DICOMTagReader::tagExists( unsigned int group, unsigned int element )
 {
-    return this->tagExists( DcmTagKey(group,element) );
+    return this->tagExists( DICOMTag(group,element) );
 }
 
 QString DICOMTagReader::getAttributeByTag( unsigned int group, unsigned int element )
@@ -147,7 +147,7 @@ QString DICOMTagReader::getAttributeByName( DcmTagKey tag )
 
 QStringList DICOMTagReader::getSequenceAttributeByTag( unsigned int sequenceGroup, unsigned int sequenceElement, unsigned int group, unsigned int element )
 {
-    return this->getSequenceAttributeByName( DcmTagKey(sequenceGroup,sequenceElement) , DcmTagKey(group,element) );
+    return this->getSequenceAttributeByName( DICOMTag(sequenceGroup,sequenceElement) , DICOMTag(group,element) );
 }
 
 QStringList DICOMTagReader::getSequenceAttributeByName( DICOMTag sequenceTag, DICOMTag attributeTag )
@@ -203,12 +203,12 @@ QStringList DICOMTagReader::getSequenceAttributeByName( DcmTagKey sequenceTag, D
 
 QStringList DICOMTagReader::getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element )
 {
-    QList<DcmTagKey> embeddedSequenceList;
+    QList<DICOMTag> embeddedSequenceList;
     foreach( unsigned int *tagNumbers, embeddedSequencesTags )
     {
-        embeddedSequenceList << DcmTagKey( tagNumbers[0], tagNumbers[1] );
+        embeddedSequenceList << DICOMTag( tagNumbers[0], tagNumbers[1] );
     }
-    return this->getSequenceAttributeByName( embeddedSequenceList, DcmTagKey( group, element ) );
+    return this->getSequenceAttributeByName( embeddedSequenceList, DICOMTag( group, element ) );
 
 }
 
