@@ -18,13 +18,13 @@ namespace udg {
 
 PreviousStudiesManager::PreviousStudiesManager()
 {
-	m_pacsManager = new PacsManager();
-	createConnections();
+    m_pacsManager = new PacsManager();
+    createConnections();
 }
 
 PreviousStudiesManager::~PreviousStudiesManager()
 {
-	m_pacsManager->cancelCurrentQueries();
+    m_pacsManager->cancelCurrentQueries();
 }
 
 void PreviousStudiesManager::createConnections()
@@ -38,94 +38,93 @@ void PreviousStudiesManager::createConnections()
 
 void PreviousStudiesManager::queryPreviousStudies(Study *study)
 {
-	PacsDeviceManager pacsDeviceManager;
+    PacsDeviceManager pacsDeviceManager;
 
     INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() + 
-	" de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
+    " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
 
-	m_pacsManager->cancelCurrentQueries();//Per si hi hagués una consulta executant-se
+    m_pacsManager->cancelCurrentQueries();//Per si hi hagués una consulta executant-se
 
-	///Fem neteja de consultes anteriors
-	m_mergedHashPacsIDOfStudyInstanceUID.clear();
-	m_mergedStudyList.clear();
-	m_pacsDeviceIDErrorEmited.clear();
+    ///Fem neteja de consultes anteriors
+    m_mergedHashPacsIDOfStudyInstanceUID.clear();
+    m_mergedStudyList.clear();
+    m_pacsDeviceIDErrorEmited.clear();
 
-	m_studyToFindPrevious = study;
+    m_studyToFindPrevious = study;
 
-	//Preguntem al PACS per estudis
-	m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientID(study), pacsDeviceManager.getPACSList(true));
-	m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientName(study), pacsDeviceManager.getPACSList(true));
-	
+    //Preguntem al PACS per estudis
+    m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientID(study), pacsDeviceManager.getPACSList(true));
+    m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientName(study), pacsDeviceManager.getPACSList(true));
 }
 
 void PreviousStudiesManager::cancelCurrentQuery()
 {
-	m_pacsManager->cancelCurrentQueries();
+    m_pacsManager->cancelCurrentQueries();
 }
 
 bool PreviousStudiesManager::isExecutingQueries()
 {
-	return m_pacsManager->isExecutingQueries();
+    return m_pacsManager->isExecutingQueries();
 }
 
 void PreviousStudiesManager::queryFinished()
 {
-	/*Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. A diferència de la 
+    /*Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. A diferència de la 
       PacsManager no podem emetre els resultats que anem rebent, perquè hem de fer un merge del resultats rebuts,
-	  per no tenir duplicats*/
-	emit queryPreviousStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
+      per no tenir duplicats*/
+    emit queryPreviousStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
 }
 
 void PreviousStudiesManager::queryStudyResultsReceived(QList<Patient*> patientListResults, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID)
 {
-	foreach(Patient *patient, patientListResults)
-	{
-		foreach(Study *study, patient->getStudies())
-		{
-			if (!isStudyInMergedStudyList(study) && !isStudyToFindPrevious(study))
-			{
-				/*Si l'estudi no està a llista ja d'estudis afegits i no és el mateix estudi pel qua ens han demanat el 
-				 *previ l'afegim*/
-				m_mergedStudyList.append(study);
-				
-				m_mergedHashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()];
-			}
-		}
-	}
+    foreach(Patient *patient, patientListResults)
+    {
+        foreach(Study *study, patient->getStudies())
+        {
+            if (!isStudyInMergedStudyList(study) && !isStudyToFindPrevious(study))
+            {
+                /*Si l'estudi no està a llista ja d'estudis afegits i no és el mateix estudi pel qua ens han demanat el 
+                 *previ l'afegim*/
+                m_mergedStudyList.append(study);
+
+                m_mergedHashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()];
+            }
+        }
+    }
 }
 
 void PreviousStudiesManager::errorQueryingStudy(PacsDevice pacs)
 {
-	/*Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
-	  dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
-	  que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals 
-	  d'errors en PACS emesos*/
-	if (!m_pacsDeviceIDErrorEmited.contains(pacs.getID()))
-	{
-		m_pacsDeviceIDErrorEmited.append(pacs.getID());
-		emit errorQueryingPreviousStudies(pacs);
-	}
+    /*Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
+      dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
+      que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals 
+      d'errors en PACS emesos*/
+    if (!m_pacsDeviceIDErrorEmited.contains(pacs.getID()))
+    {
+	    m_pacsDeviceIDErrorEmited.append(pacs.getID());
+	    emit errorQueryingPreviousStudies(pacs);
+    }
 }
 
 bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)
 {
-	bool studyFoundInMergedList = false;
-	
-	foreach(Study *studyMerged, m_mergedStudyList)
-	{
-		if (study->getInstanceUID() == studyMerged->getInstanceUID())
-		{
-			studyFoundInMergedList = true;
-			break;
-		}
-	}
+    bool studyFoundInMergedList = false;
 
-	return studyFoundInMergedList;
+    foreach(Study *studyMerged, m_mergedStudyList)
+    {
+        if (study->getInstanceUID() == studyMerged->getInstanceUID())
+        {
+            studyFoundInMergedList = true;
+            break;
+        }
+    }
+
+    return studyFoundInMergedList;
 }
 
 bool PreviousStudiesManager::isStudyToFindPrevious(Study *study)
 {
-	return study->getInstanceUID() == m_studyToFindPrevious->getInstanceUID();
+    return study->getInstanceUID() == m_studyToFindPrevious->getInstanceUID();
 }
 
 DicomMask PreviousStudiesManager::getBasicDicomMask()
@@ -146,28 +145,28 @@ DicomMask PreviousStudiesManager::getBasicDicomMask()
 
 DicomMask PreviousStudiesManager::getPreviousStudyDicomMaskPatientID(Study *study)
 {
-	DicomMask dicomMask = getBasicDicomMask();
+    DicomMask dicomMask = getBasicDicomMask();
 
-	///Indiquem que volem buscar estudis igual o menors d'aquella data
-	dicomMask.setStudyDate(getPreviousStudyDateMask(study->getDate()));
-	dicomMask.setPatientId(study->getParentPatient()->getID());
+    ///Indiquem que volem buscar estudis igual o menors d'aquella data
+    dicomMask.setStudyDate(getPreviousStudyDateMask(study->getDate()));
+    dicomMask.setPatientId(study->getParentPatient()->getID());
 
-	return dicomMask;
+    return dicomMask;
 }
 
 DicomMask PreviousStudiesManager::getPreviousStudyDicomMaskPatientName(Study *study)
 {
-	DicomMask dicomMask = getBasicDicomMask();
+    DicomMask dicomMask = getBasicDicomMask();
 
-	///Indiquem que volem buscar estudis igual o menors d'aquella data
-	dicomMask.setStudyDate(getPreviousStudyDateMask(study->getDate()));
-	dicomMask.setPatientName(study->getParentPatient()->getFullName());
+    ///Indiquem que volem buscar estudis igual o menors d'aquella data
+    dicomMask.setStudyDate(getPreviousStudyDateMask(study->getDate()));
+    dicomMask.setPatientName(study->getParentPatient()->getFullName());
 
-	return dicomMask;
+    return dicomMask;
 }
 
 QString PreviousStudiesManager::getPreviousStudyDateMask(QDate studyDate)
 {
-	return "-" + studyDate.toString("yyyyMMdd");
+    return "-" + studyDate.toString("yyyyMMdd");
 }
 }

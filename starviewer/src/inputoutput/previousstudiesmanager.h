@@ -56,52 +56,52 @@ signals:
 
 private slots:
 
-	///Slot que s'executa quan s'ha acabat la consulta d'estudis previs a PacsManager
-	void queryFinished();
+    ///Slot que s'executa quan s'ha acabat la consulta d'estudis previs a PacsManager
+    void queryFinished();
 
-	///Slot que s'executa quan rebem els resultats d'una cerca a un PACS
-	void queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>);
+    ///Slot que s'executa quan rebem els resultats d'una cerca a un PACS
+    void queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>);
 
-	///Slot que s'executa quan la consulta a un PACS a de PacsManager ha fallat
-	void errorQueryingStudy(PacsDevice);
+    ///Slot que s'executa quan la consulta a un PACS a de PacsManager ha fallat
+    void errorQueryingStudy(PacsDevice);
 
 private:
 
-	PacsManager *m_pacsManager;
-	QList<Study*> m_mergedStudyList;
-	QHash<QString,QString> m_mergedHashPacsIDOfStudyInstanceUID;
-	Study *m_studyToFindPrevious;
-	/*Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
-     *en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
-	 *com ja el tindrem aquesta llista ja no en farem signal*/
-	QStringList m_pacsDeviceIDErrorEmited;
+    PacsManager *m_pacsManager;
+    QList<Study*> m_mergedStudyList;
+    QHash<QString,QString> m_mergedHashPacsIDOfStudyInstanceUID;
+    Study *m_studyToFindPrevious;
+    /*Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
+    *en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
+    *com ja el tindrem aquesta llista ja no en farem signal*/
+    QStringList m_pacsDeviceIDErrorEmited;
 
-	///Crea les connexions
-	void createConnections();
+    ///Crea les connexions
+    void createConnections();
 
     ///Retorna una màscara de cerca base a partir de les quals es generan les DicomMask per cercar previs
     DicomMask getBasicDicomMask();
 
-	///Retorna una màscara per buscar estudis previs que coincideixin amb ID del pacient del Study
-	DicomMask getPreviousStudyDicomMaskPatientID(Study *study);
+    ///Retorna una màscara per buscar estudis previs que coincideixin amb ID del pacient del Study
+    DicomMask getPreviousStudyDicomMaskPatientID(Study *study);
 
-	///Retorna una màscara per buscar estudis previs que coincideixin amb Nom del pacient del Study
-	DicomMask getPreviousStudyDicomMaskPatientName(Study *study);	
+    ///Retorna una màscara per buscar estudis previs que coincideixin amb Nom del pacient del Study
+    DicomMask getPreviousStudyDicomMaskPatientName(Study *study);	
 
-	///Comprova si l'estudi ja l'hem rebut d'un altre PACS si és així no l'afegim, si no l'hem trobat
-	void mergeStudyWithReceivedResults(Study *study, QString pacsID);
+    ///Comprova si l'estudi ja l'hem rebut d'un altre PACS si és així no l'afegim, si no l'hem trobat
+    void mergeStudyWithReceivedResults(Study *study, QString pacsID);
 
-	///Ens indica si aquell estudi està a la llista d'estudis ja rebuts de previs, per evitar duplicats
-	/* Hem de tenir en compte que com fem la cerca per ID i un altre per Patient Name per obtenir més resultats
-	 * potser que en les dos consultes ens retornin el mateix estudi, per tant hem d'evitar duplicats.
-	 */
-	bool isStudyInMergedStudyList(Study *study);
+    ///Ens indica si aquell estudi està a la llista d'estudis ja rebuts de previs, per evitar duplicats
+    /* Hem de tenir en compte que com fem la cerca per ID i un altre per Patient Name per obtenir més resultats
+    * potser que en les dos consultes ens retornin el mateix estudi, per tant hem d'evitar duplicats.
+    */
+    bool isStudyInMergedStudyList(Study *study);
 
-	///Ens indica si aquest estudi és el mateix pel qual ens han demanat els previs, per evitar incloure'l a la llista 
-	bool isStudyToFindPrevious(Study *study);
+    ///Ens indica si aquest estudi és el mateix pel qual ens han demanat els previs, per evitar incloure'l a la llista 
+    bool isStudyToFindPrevious(Study *study);
 
-	///Donada una data la transforma a una màscara per cercar estudis previs a aquell
-	QString getPreviousStudyDateMask(QDate studyDate);
+    ///Donada una data la transforma a una màscara per cercar estudis previs a aquell
+    QString getPreviousStudyDateMask(QDate studyDate);
 
 };
 
