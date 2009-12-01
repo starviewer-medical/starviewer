@@ -76,7 +76,7 @@ private:
 
     ThreadWeaver::Weaver* m_queryWeaver;
 
-	int m_numberOfQueryPacsJobsPending;
+    int m_numberOfQueryPacsJobsPending;
 
 };
 
