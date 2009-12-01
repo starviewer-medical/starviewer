@@ -135,6 +135,8 @@ QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolut
                 }
                 // delete temporary pixel buffer
                 delete[] buffer;
+                // Cal esborrar la DicomImage per no tenir fugues de memòria
+                delete scaledImage;
             }
         }
         else
@@ -142,6 +144,8 @@ QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolut
             ok = false;
             DEBUG_LOG(QString( "La imatge escalada té errors. Error: %1 ").arg( DicomImage::getString( scaledImage->getStatus())));
         }
+        // Cal esborrar la DicomImage per no tenir fugues de memòria
+        delete dicomImage;
     }
     else
     {
