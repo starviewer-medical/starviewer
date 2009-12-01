@@ -133,6 +133,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     localDatabaseManager.setStudyRetrieving(studyUID);
     //s'indica que comença la descarrega de l'estudi al qOperationStateScreen
     emit setOperating( studyUID );
+    emit retrieveStarted( studyUID );
 
     if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
     {

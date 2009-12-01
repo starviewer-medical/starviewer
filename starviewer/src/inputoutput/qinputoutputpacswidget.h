@@ -72,8 +72,14 @@ signals:
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewRetrievedStudy(QString studyInstanceUID);
 
+    ///Signal que s'emet per indicar que un estudi s'ha començat a descarregar
+    void studyRetrieveStarted(QString studyInstanceUID);
+
+    ///Signal que indica que s'ha produït un error descarregant l'estudi indicat
+    void studyRetrieveFailed(QString studyInstanceUID);
+
     ///Signal que s'emet per indica que un estudi ha estat descarregat
-    void studyRetrieved(QString studyInstanceUID);
+    void studyRetrieveFinished(QString studyInstanceUID);
 
     ///Signal que s'emet per indicar que hi hagut algun canvi en l'estat de les operacions, (s'ha cancel·lat, ha acabat, s'ha creat un de nova, ha fallat)
     void operationStateChange();

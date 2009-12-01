@@ -34,6 +34,18 @@ public:
     ///Destructor de la classe
     ~QueryScreen();
 
+    /**Descarrega l'estudi sol·licitat en el PACS Indicat. 
+      *Mitjançant signal s'indica l'estat del la descarregar
+      *     signal: studyRetrieveStarted(QString studyInstanceUID) -> Indica que ha començat la descàrrega de l'estudi
+      *	    signal: studyRetrieveFinished(QString studyInstanceUID) -> Indica que ha finalitzat la dèscarrega de l'estudi
+      *	    signal: errorRetrievingStudy(QString studyInstanceUID) -> Indica que s'ha produït un error en la descàrrega
+      *
+      *	    ATENCIÓ!! Degut a aquesta classe és un singleton hi ha la possibilitat de que es facin signals d'estudis sol·licitats per altres 
+      *	              classes, per tant cada classe que utiltizi aquest mètode i connecti amb els signals descrits anteriorment ha de mantenir de manera
+      *	              interna una llista de les sol·licituds que ha fet per saber si aquell signal l'afecta o no.
+      */
+    void retrieveStudy(bool viewStudyWhenFinished, QString pacsID, Study *study);
+
 public slots:
     /// Obre un dicomdir
     void openDicomdir();
@@ -62,6 +74,15 @@ public slots:
 signals:
     /// Signal que ens indica quins pacients s'han seleccionat per visualitzar
     void selectedPatients( QList<Patient *> selectedPatients );
+
+    ///Indica que s'ha produït un error en la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
+    void studyRetrieveFailed(QString studyInstanceUID);
+
+    ///Indica que ha finalitzat la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
+    void studyRetrieveFinished(QString studyInstanceUID);
+
+    ///Indica que ha comença la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
+    void studyRetrieveStarted(QString studyInstanceUID);
 
 protected :
     /** Event que s'activa al tancar al rebren un event de tancament
@@ -94,6 +115,15 @@ private slots:
 
     ///Slot que s'activa quan es rep una petició del RIS per descarregar un estudi d'un determinat PACS
     void retrieveStudyFromRISRequest(QString pacsID, Study *study);
+
+    ///Slot que s'activa quan s'ha produït un error al descarregar un estudi
+    void studyRetrieveFailedSlot(QString studyInstanceUID);
+
+    ///Slot que s'activa quan ha finalitzat la descàrrega d'un estudi
+    void studyRetrieveFinishedSlot(QString studyInstanceUID);
+
+    ///Slot que s'activa quan s'inicia la descàrrega d'un estudi
+    void studyRetrieveStartedSlot(QString studyInstanceUID);
 
 private:
 
@@ -152,6 +182,9 @@ private:
     RISRequestManager *m_risRequestManager;
 
     StatsWatcher *m_statsWatcher;
+
+	///Llista per controlar la descarrega de quins estudis ha estat sol·licitada
+	QStringList m_studyRequestedToRetrieveFromPublicMethod;
 };
 
 };

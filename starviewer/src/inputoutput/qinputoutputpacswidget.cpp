@@ -92,8 +92,9 @@ void QInputOutputPacsWidget::createConnections()
     connect(&m_qexecuteOperationThread, SIGNAL(studyWillBeDeleted(QString)), SIGNAL(studyWillBeDeletedFromDatabase(QString)));
     connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), m_qoperationStateScreen, SLOT(setCancelledOperation(QString)));
 
-    connect(&m_qexecuteOperationThread, SIGNAL(retrieveFinished(QString)), SIGNAL(studyRetrieved(QString)));
-    
+    connect(&m_qexecuteOperationThread, SIGNAL(retrieveFinished(QString)), SIGNAL(studyRetrieveFinished(QString)));
+    connect(&m_qexecuteOperationThread, SIGNAL(retrieveStarted(QString)), SIGNAL(studyRetrieveStarted(QString)));
+
     // Label d'informació (cutre-xapussa)
     connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(setErrorOperation(QString)), SIGNAL(operationStateChange()));
@@ -403,6 +404,9 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
 {
     QString message;
     PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
+
+    //emitim signal cap a fora indicant que ha fallat la descàrrega de l'estudi
+    emit studyRetrieveFailed(studyInstanceUID);
 
     /*TODO:S'ha de millorar els missatges d'error indicant quin estudi ha fallat amb nom de pacient i study ID, s'ha de fer que l'error emeti
      * en comptes del studyInstanceUID l'objecte Operation que conté la informació el patientName i el studyID */
