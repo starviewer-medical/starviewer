@@ -67,6 +67,7 @@ inline HdrColor FilteringAmbientOcclusionVoxelShader::nvShade( const Vector3 &po
     if ( !color.isTransparent() )
     {
         float ao = m_filteringAmbientOcclusion.at( offset ) / m_maximum * m_lambda;
+        ao = qBound( -1.0f, ao, 1.0f ); // clipping
         color.red += ao;
         color.green += ao;
         color.blue += ao;
@@ -92,6 +93,7 @@ inline HdrColor FilteringAmbientOcclusionVoxelShader::nvShade( const Vector3 &po
         interpolator->getOffsetsAndWeights( position, offsets, weights );
 
         float ao = TrilinearInterpolator::interpolate<float>( m_filteringAmbientOcclusion.constData(), offsets, weights ) / m_maximum * m_lambda;
+        ao = qBound( -1.0f, ao, 1.0f ); // clipping
         color.red += ao;
         color.green += ao;
         color.blue += ao;
