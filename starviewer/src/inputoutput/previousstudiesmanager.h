@@ -79,6 +79,9 @@ private:
 	///Crea les connexions
 	void createConnections();
 
+    ///Retorna una màscara de cerca base a partir de les quals es generan les DicomMask per cercar previs
+    DicomMask getBasicDicomMask();
+
 	///Retorna una màscara per buscar estudis previs que coincideixin amb ID del pacient del Study
 	DicomMask getPreviousStudyDicomMaskPatientID(Study *study);
 
