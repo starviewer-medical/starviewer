@@ -12,6 +12,7 @@
 #include "patient.h"
 #include "pacsmanager.h"
 #include "pacsdevicemanager.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -38,6 +39,9 @@ void PreviousStudiesManager::createConnections()
 void PreviousStudiesManager::queryPreviousStudies(Study *study)
 {
 	PacsDeviceManager pacsDeviceManager;
+
+    INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() + 
+	" de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
 
 	m_pacsManager->cancelCurrentQueries();//Per si hi hagués una consulta executant-se
 
