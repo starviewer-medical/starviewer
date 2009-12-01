@@ -77,6 +77,7 @@ inline HdrColor FilteringAmbientOcclusionMapVoxelShader::nvShade( const Vector3 
 
     Q_ASSERT( m_data );
 
+    // Per pintar la diferència en escala de colors o grisos
     HdrColor color;
     color.alpha = m_opacities[m_data[offset]];
 
@@ -85,24 +86,38 @@ inline HdrColor FilteringAmbientOcclusionMapVoxelShader::nvShade( const Vector3 
         float f = m_filteringAmbientOcclusionFactor * m_filteringAmbientOcclusion.at( offset ) / m_maximumFilteringAmbientOcclusion;
         f = qBound( -1.0f, f, 1.0f );
 
-        if ( f > 0.0f ) // positiu: negre -> groc -> vermell
+        if ( f > 0.0f ) // positiu
         {
+            // negre -> groc -> vermell
             //color.red = f < 0.5f ? 2.0f * f : 1.0f;
             //color.green = 2.0f * ( f < 0.5f ? f : 1.0f - f );
+            // blanc -> groc -> vermell
             color.red = 1.0f;
             color.green = f < 0.5f ? 1.0f : 2.0f * ( 1.0f - f );
             color.blue = f < 0.5f ? 1.0f - 2.0f * f : 0.0f;
 
         }
-        else    // negatiu: negre -> verd -> blau
+        else    // negatiu
         {
+            // negre -> verd -> blau
             //color.green = 2.0f * ( f > -0.5f ? -f : 1.0f + f );
             //color.blue = f > -0.5f ? 0.0f : -2.0f * f;
+            // blanc -> verd -> blau
             color.red = -f < 0.5f ? 1.0f - 2.0f * -f : 0.0f;
             color.green = -f < 0.5f ? 1.0f : 2.0f * ( 1.0f - -f );
             color.blue = -f < 0.5f ? 1.0f - 2.0f * -f : 2.0f * -f;
         }
+
+        //color.red = color.green = color.blue = 1.0f - qAbs( f );    // escala de grisos inversa
+        //color.alpha = qAbs( f );    // alpha a partir del filtratge (s'ha de treure l'altra assignació d'alpha i l'if)
     }
+
+    /*
+    // Per pintar el volum filtrat (cal retocar també cudafiltering.cu)
+    float f = m_filteringAmbientOcclusion.at( offset ) / m_maximumFilteringAmbientOcclusion;
+    HdrColor color;
+    color.red = color.green = color.blue = color.alpha = f;
+    */
 
     return color;
 }
@@ -121,6 +136,7 @@ inline HdrColor FilteringAmbientOcclusionMapVoxelShader::nvShade( const Vector3 
     double weights[8];
     interpolator->getOffsetsAndWeights( position, offsets, weights );
 
+    // Per pintar la diferència en escala de colors o grisos
     double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
     HdrColor color;
     color.alpha = m_opacities[static_cast<int>(value)];
@@ -130,23 +146,37 @@ inline HdrColor FilteringAmbientOcclusionMapVoxelShader::nvShade( const Vector3 
         float f = m_filteringAmbientOcclusionFactor * TrilinearInterpolator::interpolate<float>( m_filteringAmbientOcclusion.constData(), offsets, weights ) / m_maximumFilteringAmbientOcclusion;
         f = qBound( -1.0f, f, 1.0f );
 
-        if ( f > 0.0f ) // positiu: negre -> groc -> vermell
+        if ( f > 0.0f ) // positiu
         {
+            // negre -> groc -> vermell
             //color.red = f < 0.5f ? 2.0f * f : 1.0f;
             //color.green = 2.0f * ( f < 0.5f ? f : 1.0f - f );
+            // blanc -> groc -> vermell
             color.red = 1.0f;
             color.green = f < 0.5f ? 1.0f : 2.0f * ( 1.0f - f );
             color.blue = f < 0.5f ? 1.0f - 2.0f * f : 0.0f;
         }
-        else    // negatiu: negre -> verd -> blau
+        else    // negatiu
         {
+            // negre -> verd -> blau
             //color.green = 2.0f * ( f > -0.5f ? -f : 1.0f + f );
             //color.blue = f > -0.5f ? 0.0f : -2.0f * f;
+            // blanc -> verd -> blau
             color.red = -f < 0.5f ? 1.0f - 2.0f * -f : 0.0f;
             color.green = -f < 0.5f ? 1.0f : 2.0f * ( 1.0f - -f );
             color.blue = -f < 0.5f ? 1.0f - 2.0f * -f : 2.0f * -f;
         }
+
+        //color.red = color.green = color.blue = 1.0f - qAbs( f );    // escala de grisos inversa
+        //color.alpha = qAbs( f );    // alpha a partir del filtratge (s'ha de treure l'altra assignació d'alpha i l'if)
     }
+
+    /*
+    // Per pintar el volum filtrat (cal retocar també cudafiltering.cu)
+    float f = TrilinearInterpolator::interpolate<float>( m_filteringAmbientOcclusion.constData(), offsets, weights ) / m_maximumFilteringAmbientOcclusion;
+    HdrColor color;
+    color.red = color.green = color.blue = color.alpha = f;
+    */
 
     return color;
 }
