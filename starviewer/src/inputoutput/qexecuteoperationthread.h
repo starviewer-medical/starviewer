@@ -77,6 +77,9 @@ signals:
     ///signal que s'emet cap a QueryScreen per indicar que l'estudi s'ha descarregat i s'ha processat
     void retrieveFinished( QString studyUID );
 
+    ///Indica que ha comença la descarrega dimatges DICOM
+    void retrieveStarted( QString studyUID );
+
     ///Indiquem que la operació serà cancel·lada
     void setCancelledOperation(QString studyInstanceUID);
 

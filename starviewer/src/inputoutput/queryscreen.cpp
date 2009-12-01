@@ -156,8 +156,12 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
     ///Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
     connect(m_qInputOutputPacsWidget, SIGNAL(operationStateChange()), SLOT(updateOperationsInProgressMessage()));
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyWillBeDeletedFromDatabase(QString)), m_qInputOutputLocalDatabaseWidget , SLOT(removeStudyFromQStudyTreeWidget(QString)));
+
+    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinishedSlot(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailedSlot(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStartedSlot(QString)));
 
     connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(storeDicomObjectsToPacs(PacsDevice, Study*, DicomMask)), SLOT(storeDicomObjectsToPacs(PacsDevice, Study*,DicomMask)));
 }
@@ -397,6 +401,56 @@ void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
     maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
     m_qInputOutputPacsWidget->retrieve( Settings().getValue( InputOutputSettings::RisRequestViewOnceRetrieved ).toBool(), pacsID, maskStudyToRetrieve, study);
 }
+
+void QueryScreen::retrieveStudy(bool viewStudyWhenFinished, QString pacsID, Study *study)
+{
+    DicomMask maskStudyToRetrieve;
+
+    maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
+
+    /*QueryScreen rep un signal cada vegada que qualsevol estudis en el procés de descàrrega canvia d'estat, en principi només ha de reemetre aquests signals
+      cap a fora quan és un signal que afecta un estudi sol·licitat a través d'aquest mètode públic, per això mantenim aquesta llista que ens indica els estudis 
+      pendents de descarregar sol·licitats a partir d'aquest mètode */
+
+    m_studyRequestedToRetrieveFromPublicMethod.append(study->getInstanceUID());
+
+    m_qInputOutputPacsWidget->retrieve(viewStudyWhenFinished, pacsID, maskStudyToRetrieve, study);
+}
+
+void QueryScreen::studyRetrieveFailedSlot(QString studyInstanceUID)
+{
+    if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
+    {
+        //és un estudi dels que ens han demanat des del mètode públic
+
+        m_studyRequestedToRetrieveFromPublicMethod.removeOne(studyInstanceUID);
+
+        emit studyRetrieveFailed(studyInstanceUID);
+    }
+}
+	
+void QueryScreen::studyRetrieveFinishedSlot(QString studyInstanceUID)
+{
+    if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
+    {
+        //és un estudi dels que ens han demanat des del mètode públic
+
+        m_studyRequestedToRetrieveFromPublicMethod.removeOne(studyInstanceUID);
+
+        emit studyRetrieveFinished(studyInstanceUID);
+    }
+}
+
+void QueryScreen::studyRetrieveStartedSlot(QString studyInstanceUID)
+{
+    if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
+    {
+        //és un estudi dels que ens han demanat des del mètode públic
+
+        emit studyRetrieveStarted(studyInstanceUID);
+    }
+}
+
 
 };
 
