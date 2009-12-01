@@ -124,9 +124,25 @@ bool PreviousStudiesManager::isStudyToFindPrevious(Study *study)
 	return study->getInstanceUID() == m_studyToFindPrevious->getInstanceUID();
 }
 
+DicomMask PreviousStudiesManager::getBasicDicomMask()
+{
+    DicomMask dicomMask;
+
+    ///Definim els camps que la consulta ha de retornar
+    dicomMask.setPatientName("");
+    dicomMask.setPatientId("");
+    dicomMask.setStudyId("");
+    dicomMask.setStudyDescription("");
+    dicomMask.setStudyModality("");
+    dicomMask.setStudyDate("");
+    dicomMask.setStudyTime("");
+
+    return dicomMask;
+}
+
 DicomMask PreviousStudiesManager::getPreviousStudyDicomMaskPatientID(Study *study)
 {
-	DicomMask dicomMask;
+	DicomMask dicomMask = getBasicDicomMask();
 
 	///Indiquem que volem buscar estudis igual o menors d'aquella data
 	dicomMask.setStudyDate(getPreviousStudyDateMask(study->getDate()));
@@ -137,7 +153,7 @@ DicomMask PreviousStudiesManager::getPreviousStudyDicomMaskPatientID(Study *stud
 
 DicomMask PreviousStudiesManager::getPreviousStudyDicomMaskPatientName(Study *study)
 {
-	DicomMask dicomMask;
+	DicomMask dicomMask = getBasicDicomMask();
 
 	///Indiquem que volem buscar estudis igual o menors d'aquella data
 	dicomMask.setStudyDate(getPreviousStudyDateMask(study->getDate()));
