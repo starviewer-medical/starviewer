@@ -8,6 +8,8 @@
 #include "qviewercinecontroller.h"
 
 #include <QToolButton>
+#include <QMenu>
+#include <QWidgetAction>
 
 namespace udg {
 
@@ -16,6 +18,28 @@ QCINEController::QCINEController(QWidget *parent)
 {
     setupUi(this);
     m_loopCheckBox->setChecked(true);
+
+    m_playToolButton->setPopupMode( QToolButton::MenuButtonPopup );
+
+    QMenu *menu = new QMenu;
+    
+    QWidgetAction *velocityWidgetAction = new QWidgetAction(this);
+    velocityWidgetAction->setDefaultWidget(m_velocityControl);
+    menu->addAction(velocityWidgetAction);
+
+    QWidgetAction *labelWidgetAction = new QWidgetAction(this);
+    labelWidgetAction->setDefaultWidget(m_velocityLabel);
+    menu->addAction(labelWidgetAction);
+
+    QWidgetAction *loopWidgetAction = new QWidgetAction(this);
+    loopWidgetAction->setDefaultWidget(m_loopCheckBox);
+    menu->addAction(loopWidgetAction);
+
+    QWidgetAction *boomerangWidgetAction = new QWidgetAction(this);
+    boomerangWidgetAction->setDefaultWidget(m_boomerangCheckBox);
+    menu->addAction(boomerangWidgetAction);
+
+    m_playToolButton->setMenu(menu);
 }
 
 QCINEController::~QCINEController()
