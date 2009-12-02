@@ -66,7 +66,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     //TODO ocultem botons que no son del tot necessaris o que no es faran servir
     m_windowLevelToolButton->setVisible(false);
     m_translateToolButton->setVisible(false);
-    m_rotateCounterClockWiseToolButton->setVisible( false );
 
     m_predefinedSeriesGrid = new MenuGridWidget(this);
     m_seriesTableGrid = new TableMenu(this);
@@ -83,15 +82,8 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_downImageGrid->setVisible(false);
     initializeTools();
 
-    //TODO "Xapussa" del ticket #599 per tal de crear el perfil per CR o MG
-    if( m_profile == "ProfileOnlyCR")
-    {
-        m_slicingToolButton->defaultAction()->toggle();
-        m_zoomToolButton->defaultAction()->trigger();
-        m_flipVerticalToolButton->setVisible(true);
-        m_flipHorizontalToolButton->setVisible(true);
-        m_cineController->setVisible(false);
-    }
+    m_flipVerticalToolButton->setVisible(true);
+    m_flipHorizontalToolButton->setVisible(true);
 
     // incorporem estadístiques
     m_statsWatcher = new StatsWatcher("2D Extension",this);
@@ -253,24 +245,21 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient( Patient *patient )
 {
     m_patient = patient;
-    // ara és super txapussa i només mirarà el primer estudi
+    // ara és super txapussa i només mirarà  el primer estudi
     foreach( Study *study, m_patient->getStudies() )
     {
         if( study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") || study->getModalities().contains("OP") )
         {
             m_slicingToolButton->defaultAction()->toggle();
             m_zoomToolButton->defaultAction()->trigger();
-            m_flipVerticalToolButton->setVisible(true);
-            m_flipHorizontalToolButton->setVisible(true);
-            m_cineController->setVisible(false);
         }
         else
         {
             m_slicingToolButton->defaultAction()->trigger();
-            m_cineController->setVisible(true);
         }
         break;
     }
+
 }
 
 void Q2DViewerExtension::initializeTools()
