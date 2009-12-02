@@ -139,6 +139,7 @@ DicomMask PreviousStudiesManager::getBasicDicomMask()
     dicomMask.setStudyModality("");
     dicomMask.setStudyDate("");
     dicomMask.setStudyTime("");
+	dicomMask.setStudyUID("");
 
     return dicomMask;
 }
