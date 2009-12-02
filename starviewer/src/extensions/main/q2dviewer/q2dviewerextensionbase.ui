@@ -581,117 +581,6 @@
      <item>
       <layout class="QVBoxLayout">
        <property name="spacing">
-        <number>1</number>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QToolButton" name="m_screenShotToolButton">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff/>
-          </iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_viewerInformationToolButton">
-         <property name="text">
-          <string>...</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/viewerInfo.png</normaloff>:/images/viewerInfo.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout">
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QToolButton" name="m_dicomDumpToolButton">
-         <property name="text">
-          <string>Info</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/dicomDump.png</normaloff>:/images/dicomDump.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_rotateClockWiseToolButton">
-         <property name="text">
-          <string>Rotate</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff/>
-          </iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout">
-       <property name="spacing">
         <number>6</number>
        </property>
        <property name="margin">
@@ -733,6 +622,216 @@
            <width>32</width>
            <height>32</height>
           </size>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QToolButton" name="m_rotateClockWiseToolButton">
+         <property name="text">
+          <string>Rotate</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_rotateCounterClockWiseToolButton">
+         <property name="text">
+          <string>-90</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="m_restoreToolButton">
+         <property name="text">
+          <string>Restore</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_invertToolButton">
+         <property name="text">
+          <string>Invert</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout">
+       <property name="spacing">
+        <number>1</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="m_screenShotToolButton">
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff/>
+          </iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_screenshotsExporterToolButton">
+         <property name="text">
+          <string>Exporter</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="m_dicomDumpToolButton">
+         <property name="text">
+          <string>Info</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/dicomDump.png</normaloff>:/images/dicomDump.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_viewerInformationToolButton">
+         <property name="text">
+          <string>...</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/viewerInfo.png</normaloff>:/images/viewerInfo.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
          <property name="autoRaise">
           <bool>true</bool>
@@ -953,85 +1052,6 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout">
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <property name="margin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QToolButton" name="m_restoreToolButton">
-         <property name="text">
-          <string>Restore</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff/>
-          </iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_invertToolButton">
-         <property name="text">
-          <string>Invert</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff/>
-          </iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="toolButtonStyle">
-          <enum>Qt::ToolButtonTextUnderIcon</enum>
-         </property>
-         <property name="autoRaise">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QToolButton" name="m_rotateCounterClockWiseToolButton">
-       <property name="text">
-        <string>-90</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff/>
-        </iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -1060,6 +1080,7 @@
      <property name="focusPolicy">
       <enum>Qt::StrongFocus</enum>
      </property>
+     <zorder></zorder>
     </widget>
    </item>
   </layout>
