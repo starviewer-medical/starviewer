@@ -66,6 +66,8 @@ void QImagePrintExtension::createConnections()
     //connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
     connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
 
+    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
+
 }
 
 void QImagePrintExtension::configureInputValidator()
@@ -78,9 +80,17 @@ void QImagePrintExtension::configureInputValidator()
 void QImagePrintExtension::setInput(Volume *input)
 {
     m_2DView->setInput(input);
+}
 
-    m_sliceViewSlider->setMinimum(0);
-    m_sliceViewSlider->setMaximum(input->getImages().count());
+void QImagePrintExtension::updateInput(Volume *input)
+{
+    m_sliceViewSlider->setMinimum( 0 );
+    m_sliceViewSlider->setMaximum( m_2DView->getMaximumSlice() );
+    m_sliceViewSlider->setValue( 0 );
+
+    m_intervalImagesSlider->setMinimum( 1 );
+    m_intervalImagesSlider->setMaximum( input->getImages().count() );
+    m_intervalImagesSlider->setValue( 1 );
 
     updateSelectionImagesValue();
 }
