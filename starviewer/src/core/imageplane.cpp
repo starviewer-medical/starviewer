@@ -158,6 +158,7 @@ bool ImagePlane::fillFromImage( const Image *image )
         this->setRows( image->getRows() );
         this->setColumns( image->getColumns() );
         this->setOrigin( image->getImagePositionPatient()[0], image->getImagePositionPatient()[1], image->getImagePositionPatient()[2] );
+        // TODO No tenim implementat cap mètode per guardar la location. De moment no es fa servir desde aquesta classe mai.
         QString location = image->getSliceLocation();
 
         return true;
