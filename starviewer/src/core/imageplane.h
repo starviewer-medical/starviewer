@@ -53,6 +53,7 @@ public:
     double getRowLength() const;
     double getColumnLength() const;
 
+    /// TODO Per implementar. No tenim aquest membre. De moment no es necessita aquesta informació a partir d'aquesta classe
     void setSliceLocation( double location );
     double getSliceLocation() const;
     /**
