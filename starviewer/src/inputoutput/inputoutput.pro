@@ -84,7 +84,8 @@ HEADERS += databaseconnection.h \
     dicomdirburningapplication.h \
     risrequestmanager.h \
     previousstudiesmanager.h \
-    qwidgetselectpacstostoredicomimage.h
+    qwidgetselectpacstostoredicomimage.h \
+    qpreviousstudieswidget.h
 SOURCES += databaseconnection.cpp \
     pacsconnection.cpp \
     pacsdevicemanager.cpp \
@@ -144,7 +145,8 @@ SOURCES += databaseconnection.cpp \
     dicomdirburningapplication.cpp \
     risrequestmanager.cpp \
     previousstudiesmanager.cpp \
-    qwidgetselectpacstostoredicomimage.cpp
+    qwidgetselectpacstostoredicomimage.cpp \
+    qpreviousstudieswidget.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib

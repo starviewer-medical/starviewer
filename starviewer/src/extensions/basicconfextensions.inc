@@ -4,8 +4,10 @@ TRANSLATIONS += $$EXTENSION_DIR/translations_ca_ES.ts \
 
 DESTDIR = ./
 
-INCLUDEPATH += ../../../core
-DEPENDPATH += ../../../core
+INCLUDEPATH += ../../../core \
+               ../../../inputoutput
+DEPENDPATH += ../../../core \
+               ../../../inputoutput
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui
 OBJECTS_DIR = ../../../../tmp/obj
