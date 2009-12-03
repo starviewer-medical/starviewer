@@ -126,6 +126,11 @@ QVector<float> cfGaussianDifference(vtkImageData *image, int radius)
     cudaEventCreate(&stop);
     cudaEventRecord(start, 0);
 
+    cudaEvent_t t0, t1;
+    float t01 = 0.0f;
+    cudaEventCreate(&t0);
+    cudaEventCreate(&t1);
+
     float *data = reinterpret_cast<float*>(image->GetScalarPointer());
     const uint VOLUME_DATA_SIZE = image->GetNumberOfPoints();
     int *dimensions = image->GetDimensions();
@@ -182,9 +187,14 @@ QVector<float> cfGaussianDifference(vtkImageData *image, int radius)
 
     // Executar per X
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
+    cudaEventRecord(t0, 0);
     convolutionXKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, radius, volumeDataDims);
     CUT_CHECK_ERROR( "convolutionXKernel() execution failed\n" );
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
+    cudaEventRecord(t1, 0);
+    cudaEventSynchronize(t1);
+    cudaEventElapsedTime(&t01, t0, t1);
+    std::cout << "X filter: " << t01 << " ms" << std::endl;
 
     // Copiar el resultat a l'array
     copyParams.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(dfResult), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);    // data, pitch, width, height
@@ -193,18 +203,28 @@ QVector<float> cfGaussianDifference(vtkImageData *image, int radius)
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
 
     // Executar per Y
+    cudaEventRecord(t0, 0);
     convolutionYKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, radius, volumeDataDims);
     CUT_CHECK_ERROR( "convolutionYKernel() execution failed\n" );
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
+    cudaEventRecord(t1, 0);
+    cudaEventSynchronize(t1);
+    cudaEventElapsedTime(&t01, t0, t1);
+    std::cout << "Y filter: " << t01 << " ms" << std::endl;
 
     // Copiar el resultat a l'array
     CUDA_SAFE_CALL( cudaMemcpy3D(&copyParams) );
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
 
     // Executar per Z
+    cudaEventRecord(t0, 0);
     convolutionZKernel<<<blockGrid, threadBlock>>>(dfResult, dfKernel, radius, volumeDataDims);
     CUT_CHECK_ERROR( "convolutionZKernel() execution failed\n" );
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
+    cudaEventRecord(t1, 0);
+    cudaEventSynchronize(t1);
+    cudaEventElapsedTime(&t01, t0, t1);
+    std::cout << "Z filter: " << t01 << " ms" << std::endl;
 
     // Copiar el volum original un altre cop a l'array
     copyParams.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(data), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);    // data, pitch, width, height
@@ -213,9 +233,14 @@ QVector<float> cfGaussianDifference(vtkImageData *image, int radius)
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
 
     // Resta
+    cudaEventRecord(t0, 0);
     substractionKernel<<<blockGrid, threadBlock>>>(dfResult, volumeDataDims);
     CUT_CHECK_ERROR( "substractionKernel() execution failed\n" );
     CUDA_SAFE_CALL( cudaThreadSynchronize() );
+    cudaEventRecord(t1, 0);
+    cudaEventSynchronize(t1);
+    cudaEventElapsedTime(&t01, t0, t1);
+    std::cout << "substraction: " << t01 << " ms" << std::endl;
 
     // Copiar el resultat final al host
     QVector<float> result(VOLUME_DATA_SIZE);
@@ -236,6 +261,8 @@ QVector<float> cfGaussianDifference(vtkImageData *image, int radius)
 
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
+    cudaEventDestroy(t0);
+    cudaEventDestroy(t1);
 
     return result;
 }
