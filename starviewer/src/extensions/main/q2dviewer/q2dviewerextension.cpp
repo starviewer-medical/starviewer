@@ -28,6 +28,7 @@
 #include "q2dviewersettings.h"
 
 #include <QMenu>
+#include <QWidgetAction>
 #include <QAction>
 #include <QPoint>
 #include <QGridLayout>
@@ -133,11 +134,10 @@ void Q2DViewerExtension::createConnections()
     connect( m_buttonGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveTable() ) );
     connect( m_downImageGrid, SIGNAL( clicked ( bool ) ), SLOT( showPredefinedImageGrid() ) );
     connect( m_imageGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveImageTable() ) );
-    connect( m_previousStudiesToolButton, SIGNAL( clicked ( bool ) ), SLOT( showPreviousStudiesWidget() ) );
 
     // Connexions del menu
     connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea , SLOT( setGrid( int, int ) ) );
-	connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int ) ), this, SLOT( setHangingProtocol( int ) ) );
+    connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int ) ), this, SLOT( setHangingProtocol( int ) ) );
     connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea, SLOT( setGrid( int, int ) ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
@@ -174,6 +174,16 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     /// Habilitem la possibilitat de buscar estudis previs.
     m_previousStudiesWidget = new QPreviousStudiesWidget( m_mainVolume->getStudy() , this );
+
+    QMenu *previousStudiesMenu = new QMenu;
+    QWidgetAction *previousStudiesWidgetAction = new QWidgetAction(this);
+    previousStudiesWidgetAction->setDefaultWidget(m_previousStudiesWidget);
+    previousStudiesMenu->addAction(previousStudiesWidgetAction);
+
+    if ( m_previousStudiesToolButton->menu() )
+        delete m_previousStudiesToolButton->menu();
+    m_previousStudiesToolButton->setMenu( previousStudiesMenu );
+
     m_previousStudiesToolButton->setEnabled( true );
 }
 
@@ -230,13 +240,6 @@ void Q2DViewerExtension::showInteractiveImageTable()
     m_sliceTableGrid->show();
 }
 
-void Q2DViewerExtension::showPreviousStudiesWidget()
-{
-    QPoint point = m_previousStudiesToolButton->mapToGlobal( QPoint(0,0) );
-    m_previousStudiesWidget->move( point.x(),( point.y() + m_previousStudiesToolButton->frameGeometry().height() ) );
-    m_previousStudiesWidget->show();
-}
-
 Patient* Q2DViewerExtension::getPatient() const
 {
     return m_patient;
@@ -245,7 +248,7 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient( Patient *patient )
 {
     m_patient = patient;
-    // ara és super txapussa i només mirarà  el primer estudi
+    // ara és super txapussa i només mirarà  el primer estudi
     foreach( Study *study, m_patient->getStudies() )
     {
         if( study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") || study->getModalities().contains("OP") )
