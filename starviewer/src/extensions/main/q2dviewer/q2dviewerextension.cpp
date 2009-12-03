@@ -281,6 +281,7 @@ void Q2DViewerExtension::initializeTools()
     m_cursor3DToolButton->setDefaultAction( m_toolManager->registerTool("Cursor3DTool") );
     m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
     m_openAngleToolButton->setDefaultAction( m_toolManager->registerTool( "NonClosedAngleTool" ) );
+    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool( "VoxelInformationTool" ) );
     // registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
