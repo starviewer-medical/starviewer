@@ -66,8 +66,6 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     m_thickSlabSlider->setVisible(visible);
     m_thickSlabSpinBox->setVisible(visible);
     m_mipToolButton->setVisible(visible);
-    // TODO l'eina de rotar no s'activa al toolmanager
-    m_rotate3DToolButton->setVisible(false);
     // aquests els amaguem per guanyar espai
     m_windowLevelToolButton->setVisible(false);
     m_moveToolButton->setVisible(false);
@@ -237,7 +235,6 @@ void QMPRExtension::createConnections()
     // layouts
     connect( m_horizontalLayoutAction , SIGNAL( triggered() ), SLOT( switchHorizontalLayout() ) );
     connect( m_mipAction , SIGNAL( triggered(bool) ), SLOT( switchToMIPLayout(bool) ) );
-    connect( m_mipAction , SIGNAL( triggered(bool) ) , m_rotate3DToolButton , SLOT( setVisible(bool) ) );
 
     // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
     // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
