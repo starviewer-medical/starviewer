@@ -208,8 +208,7 @@ HEADERS += extensionfactory.h \
     dicomwriterdcmtk.h \
     dicomfilegenerator.h \
     dicomdictionary.h \
-    dicomimagefilegenerator.h \
-    qpreviousstudieswidget.h
+    dicomimagefilegenerator.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -379,8 +378,7 @@ SOURCES += extensionmediator.cpp \
     dicomwriter.cpp \
     dicomwriterdcmtk.cpp \
     dicomfilegenerator.cpp \
-    dicomimagefilegenerator.cpp \
-    qpreviousstudieswidget.cpp
+    dicomimagefilegenerator.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
@@ -392,3 +390,4 @@ include(../compilationtype.inc)
 include(../translations.inc)
 QT += xml \
     network
+
