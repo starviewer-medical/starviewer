@@ -277,6 +277,7 @@ void Q2DViewerExtension::initializeTools()
     m_eraserToolButton->setDefaultAction( m_toolManager->registerTool( "EraserTool" ) );
     m_cursor3DToolButton->setDefaultAction( m_toolManager->registerTool("Cursor3DTool") );
     m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
+    m_openAngleToolButton->setDefaultAction( m_toolManager->registerTool( "NonClosedAngleTool" ) );
     // registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
@@ -297,7 +298,7 @@ void Q2DViewerExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "Cursor3DTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
