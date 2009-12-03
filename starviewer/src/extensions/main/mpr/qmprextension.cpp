@@ -186,13 +186,14 @@ void QMPRExtension::initializeTools()
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
     m_polylineROIToolButton->setDefaultAction( m_toolManager->registerTool("PolylineROITool") );
     m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
+    m_openAngleToolButton->setDefaultAction( m_toolManager->registerTool( "NonClosedAngleTool" ) );
     m_eraserToolButton->setDefaultAction( m_toolManager->registerTool("EraserTool") );
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "AngleTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList middleButtonExclusiveTools;
