@@ -17,7 +17,6 @@ QCINEController::QCINEController(QWidget *parent)
  : QWidget(parent), m_cineController(0)
 {
     setupUi(this);
-    m_loopCheckBox->setChecked(true);
 
     m_playToolButton->setPopupMode( QToolButton::MenuButtonPopup );
 
@@ -67,6 +66,8 @@ void QCINEController::setQViewer( QViewer *viewer )
     }
     else
         m_cineController->setInputViewer( viewer );
+    
+    m_loopCheckBox->setChecked(true);
 }
 
 void QCINEController::updateVelocityLabel( int value )
