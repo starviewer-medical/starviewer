@@ -10,6 +10,7 @@
 #include "tool.h"
 
 #include <QStringList>
+#include <QMap>
 
 namespace udg {
 
@@ -51,6 +52,9 @@ private:
     WindowLevelPresetsToolData *m_myToolData;
 
     QStringList m_standardPresets;
+
+    /// Aquest mapa ens donarà la relació entre el caràcter premut i l'índex corresponent dels presets
+    QMap <char, int> m_characterIndexMap;
 };
 
 }
