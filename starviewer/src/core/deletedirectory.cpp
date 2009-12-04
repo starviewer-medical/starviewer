@@ -4,14 +4,10 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
-#include <QString>
-#include <QFile>
-#include <QDir>
-#include <QCoreApplication>
-
 #include "deletedirectory.h"
 #include "logging.h"
+
+#include <QDir>
 
 namespace udg {
 
@@ -19,71 +15,54 @@ DeleteDirectory::DeleteDirectory()
 {
 }
 
-/**
- *
- * @param directoryPath
- * @return
- */
 bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDirectory)
 {
-    QStringList filesList, directoryList;
-    QString absoluteFilePath , absoluteDirectoryPath;
-    QDir directory, directoryToDelete;
-    QFile fileToDelete;
+    bool result;
+    result = removeDirectory( QDir(directoryPath), deleteRootDirectory );
 
-    //si ens envien un directori amb la '/' al final la trèiem
-    if ( directoryPath.at( directoryPath.length() - 1) == '/' )
-    {
-        directoryPath = directoryPath.remove ( directoryPath.length() - 1 , 1 );
-    }
+    if( result )
+        DEBUG_LOG("S'han esborrat");
+    else
+        DEBUG_LOG("Hi ha hagut errors en l'esborrat");
 
-    directory.setPath( directoryPath );
-
-	//Si el directori no existeix sortim
-	if (!directory.exists())
-	{
-		return true;
-	}
-
-    filesList =  directory.entryList( QDir::Files );//llista de fitxers del directori
-    for ( QStringList::Iterator it = filesList.begin(); it != filesList.end(); ++it )//per cada fitxer
-    {
-        if ( *it != "." && *it != ".." )
-        {
-            absoluteFilePath = directoryPath + "/" + (*it);
-            if ( !fileToDelete.remove (absoluteFilePath ) )  //esborrem el fitxer
-            {
-                ERROR_LOG("NO S'HA POGUT ESBORRAR EL FITXER " + absoluteFilePath);            
-                return false;
-            }
-        }
-    }
-
-    directoryList =  directory.entryList( QDir::AllDirs );//obtenim llistat de subdirectoris
-    for ( QStringList::Iterator it = directoryList.begin(); it != directoryList.end(); ++it ) //per cada subdirectori
-    {
-        if ( *it != "." && *it != ".." )
-        {
-            absoluteDirectoryPath = directoryPath + "/" + (*it);
-            if ( !deleteDirectory( absoluteDirectoryPath , true ) ) return false; //invoquem el mateix mètode per a que esborri el subdirectori ( recursivitat )
-            emit directoryDeleted();
-            QCoreApplication::processEvents();
-        }
-    }
-
-    if ( deleteRootDirectory )
-    {
-        if ( !directoryToDelete.rmdir( directoryPath ) ) //esborra el directori arrel
-        {
-            ERROR_LOG("NO S'HA POGUT ESBORRAR EL DIRECTORI " + directoryPath);
-            return false;
-        }
-    }
-    return true;
+    return result;
 }
 
 DeleteDirectory::~DeleteDirectory()
 {
+}
+
+bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory )
+{
+    bool failed = false;
+    if ( dir.exists() )//QDir::NoDotAndDotDot
+    {
+        QFileInfoList entries = dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files );
+        int count = entries.size();
+        for (int i = 0; i < count && !failed; i++)
+        {
+            QFileInfo entryInfo = entries[i];
+            QString path = entryInfo.absoluteFilePath();
+            if (entryInfo.isDir())
+            {
+                failed = removeDirectory(QDir(path),true);
+            }
+            else
+            {
+                QFile file(path);
+                if ( !file.remove() )
+                    failed = true;
+            }
+        }
+
+        if( deleteRootDirectory )
+        {
+            if ( !dir.rmdir(dir.absolutePath()) )
+                failed = true;   
+        }
+    }
+
+    return(!failed);
 }
 
 }
