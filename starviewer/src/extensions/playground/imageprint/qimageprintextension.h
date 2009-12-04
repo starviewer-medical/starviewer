@@ -14,6 +14,7 @@ class Image;
 class DicomPrintPage;
 class DicomPrintJob;
 class Volume;
+class ToolManager;
 
 class QImagePrintExtension : public QWidget , private::Ui::QImagePrintExtensionBase {
 Q_OBJECT
@@ -67,6 +68,9 @@ private:
     ///Crea inputValidators pels lineEdit de la selecció d'imatges
     void configureInputValidator();
 
+    /// Inicialitza les tools que volem tenir activades al viewer
+    void initializeViewerTools();
+
     ///Configura els controls de selecció d'imatges en funció dels nombre d'imatges
     void updateSelectionImagesValue();
 
@@ -96,7 +100,12 @@ private:
 	  per això ens podem trobar que la primera pàgina s'imprimeixi bé, i les restants no, per això passem el paràmetre printedSomePage per indica que només
       algunes de les pàgines han fallat*/
 	void showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage);
+
+private:
+    /// Gestor de tools pel viewer
+    ToolManager *m_toolManager;
 };
+
 } // end namespace udg.
 
 #endif
