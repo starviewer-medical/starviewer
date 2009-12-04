@@ -25,6 +25,28 @@ WindowLevelPresetsTool::WindowLevelPresetsTool( QViewer *viewer, QObject *parent
 //         DEBUG_LOG( "No s'ha pogut realitzar el casting a 2DViewer!!!" );
 
     setToolData( m_viewer->getWindowLevelData() );
+    m_characterIndexMap.insert('1',0);
+    m_characterIndexMap.insert('2',1);
+    m_characterIndexMap.insert('3',2);
+    m_characterIndexMap.insert('4',3);
+    m_characterIndexMap.insert('5',4);
+    m_characterIndexMap.insert('6',5);
+    m_characterIndexMap.insert('7',6);
+    m_characterIndexMap.insert('8',7);
+    m_characterIndexMap.insert('9',8);
+    m_characterIndexMap.insert('0',9);
+    // TODO això ara "va bé" en un teclat estàndard espanyol, però si el layout és per exemple anglès
+    // té molts números per no funcionar ( és a dir, les tecles estaran repartides per altres parts del teclat )
+    m_characterIndexMap.insert(33,10); // Shift + 1
+    m_characterIndexMap.insert(34,11); // Shift + 2
+    m_characterIndexMap.insert(-73,12); // Shift + 3
+    m_characterIndexMap.insert(36,13); // Shift + 4
+    m_characterIndexMap.insert(37,14); // Shift + 5
+    m_characterIndexMap.insert(38,15); // Shift + 6
+    m_characterIndexMap.insert(47,16); // Shift + 7
+    m_characterIndexMap.insert(40,17); // Shift + 8
+    m_characterIndexMap.insert(41,18); // Shift + 9
+    m_characterIndexMap.insert(61,19); // Shift + 0
 }
 
 WindowLevelPresetsTool::~WindowLevelPresetsTool()
@@ -50,55 +72,11 @@ void WindowLevelPresetsTool::applyPreset(char key)
         return;
 
     QString preset;
-    switch(key)
+    if( m_characterIndexMap.contains(key) )
     {
-    // de l'1 al 0 apliquem els window level standard que estaran ordenats alfabèticament
-    case '1':
-        preset = m_standardPresets.at(0);
-    break;
-
-    case '2':
-        preset = m_standardPresets.at(1);
-    break;
-
-    case '3':
-        preset = m_standardPresets.at(2);
-    break;
-
-    case '4':
-        preset = m_standardPresets.at(3);
-    break;
-
-    case '5':
-        preset = m_standardPresets.at(4);
-    break;
-
-    case '6':
-        preset = m_standardPresets.at(5);
-    break;
-
-    case '7':
-        preset = m_standardPresets.at(6);
-    break;
-
-    case '8':
-        preset = m_standardPresets.at(7);
-    break;
-
-    case '9':
-        preset = m_standardPresets.at(8);
-    break;
-
-    case '0':
-        preset = m_standardPresets.at(9);
-    break;
-
-    case '\'':
-        preset = m_standardPresets.at(10);
-    break;
-
-    default:
-    break;
+        int presetIndex = m_characterIndexMap.value(key);
+        if( presetIndex < m_standardPresets.count() ) 
+            preset = m_standardPresets.at(presetIndex);
     }
 
     m_myToolData->activatePreset( preset );
