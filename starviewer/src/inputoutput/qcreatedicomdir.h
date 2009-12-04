@@ -37,9 +37,6 @@ public:
      */
     void addStudies(const QList<Study *> &studies);
 
-    /// Neteja el directori temporal utilitzat crear els DICOMDIR que es gravaran en CD o DVD
-    void clearTemporaryDir();
-
     /** 
      * Comprova si l'estudi amb UID passat per paràmetre està dins la llista d'estudis pendents de passa a DICOMDIR
      * @param studyUID UID de l'estudi que s'ha de comprovar si existeix dins la llista
@@ -133,6 +130,9 @@ private:
 
     /// Actualitza la variable que comptabilitza l'espai disponible per grabar amb el dispositiu actual
     void updateAvailableSpaceToRecord();
+
+    /// Neteja el directori temporal utilitzat per crear els DICOMDIR que es gravaran en CD o DVD
+    void clearTemporaryDir();
 
 private slots:
     /// Es passa per paràmetre l'identificador del dispositiu i es fan les pertinents accions
