@@ -248,8 +248,9 @@ Patient* Q2DViewerExtension::getPatient() const
 void Q2DViewerExtension::setPatient( Patient *patient )
 {
     m_patient = patient;
-    // ara és super txapussa i només mirarà  el primer estudi
-    foreach( Study *study, m_patient->getStudies() )
+    // Ara és super txapussa i només mirarà  el primer estudi
+    Study *study = m_patient->getStudies().first();
+    if( study )
     {
         if( study->getModalities().contains("MG") || study->getModalities().contains("CR") || study->getModalities().contains("RF") || study->getModalities().contains("OP") )
         {
@@ -260,9 +261,7 @@ void Q2DViewerExtension::setPatient( Patient *patient )
         {
             m_slicingToolButton->defaultAction()->trigger();
         }
-        break;
     }
-
 }
 
 void Q2DViewerExtension::initializeTools()
