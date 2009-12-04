@@ -369,7 +369,6 @@ void QueryScreen::closeEvent( QCloseEvent* event )
     m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
 
     event->accept();
-    m_qcreateDicomdir->clearTemporaryDir();
 }
 
 void QueryScreen::readSettings()

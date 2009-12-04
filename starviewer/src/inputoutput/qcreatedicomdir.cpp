@@ -57,6 +57,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
 QCreateDicomdir::~QCreateDicomdir()
 {
+    clearTemporaryDir();
 }
 
 void QCreateDicomdir::createActions()
