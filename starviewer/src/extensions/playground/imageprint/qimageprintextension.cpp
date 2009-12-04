@@ -18,6 +18,7 @@
 #include "volume.h"
 #include "q2dviewer.h"
 #include "starviewerapplication.h"
+#include "toolmanager.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -38,6 +39,7 @@ QImagePrintExtension::QImagePrintExtension( QWidget *parent )
 
     createConnections();
     configureInputValidator();
+    initializeViewerTools();
 }
 
 QImagePrintExtension::~QImagePrintExtension()
@@ -65,9 +67,8 @@ void QImagePrintExtension::createConnections()
 
     //connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
     connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-
+    connect( m_2DView, SIGNAL( sliceChanged(int) ), m_sliceViewSlider, SLOT( setValue(int) ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
-
 }
 
 void QImagePrintExtension::configureInputValidator()
@@ -75,6 +76,23 @@ void QImagePrintExtension::configureInputValidator()
     m_intervalImagesLineEdit->setValidator(new QIntValidator(0, 99999, m_intervalImagesLineEdit));
     m_fromImageLineEdit->setValidator(new QIntValidator(0, 99999, m_fromImageLineEdit));
     m_toImageLineEdit->setValidator(new QIntValidator(0, 99999, m_toImageLineEdit));
+}
+
+void QImagePrintExtension::initializeViewerTools()
+{    
+    // creem el tool manager
+    m_toolManager = new ToolManager(this);
+    // obtenim les accions de cada tool que volem
+    m_toolManager->registerTool("SlicingTool");
+    m_toolManager->registerTool("WindowLevelTool");
+    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("SlicingKeyboardTool");
+
+    // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
+    QStringList defaultTools;
+    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "WindowLevelTool";
+    m_toolManager->triggerTools(defaultTools);
+    m_toolManager->setupRegisteredTools( m_2DView );
 }
 
 void QImagePrintExtension::setInput(Volume *input)
