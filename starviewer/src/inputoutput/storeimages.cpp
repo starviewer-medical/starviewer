@@ -41,11 +41,48 @@ void StoreImages::setConnection( PacsConnection connection )
 
 void StoreImages::setNetwork ( T_ASC_Network * network )
 {
-    m_net = network;
+    m_network = network;
 }
 
-static void progressCallback( void * /*callbackData*/ , T_DIMSE_StoreProgress *progress , T_DIMSE_C_StoreRQ * /*req*/)
+static void progressCallback( void * /*callbackData*/ , T_DIMSE_StoreProgress *progress , T_DIMSE_C_StoreRQ * /*request*/)
 {
+    //Not used
+}
+
+Status StoreImages::store( QList<Image*> imageListToStore )
+{
+    OFCondition cond = EC_Normal;
+    Status state;
+    ProcessImageSingleton* piSingleton;
+    QString statusMessage;
+
+    initialitzeImagesCounters();
+
+    //A la connexió del Pacs ja s'han establert els PresentationContext (SopClass-TransferSyntax) amb els que s'enviara les imatges
+    //If not connection has been setted, return error because we need a PACS connection
+    if ( m_association == NULL )
+    {
+        return state.setStatus( DcmtkNoConnectionError );
+    }
+
+    //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
+    piSingleton=ProcessImageSingleton::getProcessImageSingleton();
+
+    foreach(Image *imageToStore, imageListToStore)
+    {
+        storeSCU( m_association, qPrintable(imageToStore->getPath()) );
+        piSingleton->process(imageToStore->getParentSeries()->getParentStudy()->getInstanceUID(), imageToStore);
+    }
+
+    return getStatusStoreSCU(imageListToStore.count());
+}
+
+void StoreImages::initialitzeImagesCounters()
+{
+    //Inicialitzem els comptadors control d'errors 
+
+    m_numberOfStoredImagesSuccessful = 0;
+    m_numberOfStoredImagesWithWarning = 0;
 }
 
 /*
@@ -62,8 +99,8 @@ void StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
 {
     DIC_US msgId = association->nextMsgID++;
     T_ASC_PresentationContextID presentationContextID;
-    T_DIMSE_C_StoreRQ req;
-    T_DIMSE_C_StoreRSP rsp;
+    T_DIMSE_C_StoreRQ request;
+    T_DIMSE_C_StoreRSP response;
     DIC_UI sopClass;
     DIC_UI sopInstance;
     DcmDataset *statusDetail = NULL;
@@ -109,14 +146,16 @@ void StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
     else
     {
         /* prepare the transmission of data */
-        bzero((char*)&req, sizeof(req));
-        req.MessageID = msgId;
-        strcpy( req.AffectedSOPClassUID , sopClass );
-        strcpy( req.AffectedSOPInstanceUID , sopInstance );
-        req.DataSetType = DIMSE_DATASET_PRESENT;
-        req.Priority = DIMSE_PRIORITY_LOW;
+        bzero((char*)&request, sizeof(request));
+        request.MessageID = msgId;
+        strcpy( request.AffectedSOPClassUID , sopClass );
+        strcpy( request.AffectedSOPInstanceUID , sopInstance );
+        request.DataSetType = DIMSE_DATASET_PRESENT;
+        request.Priority = DIMSE_PRIORITY_LOW;
 
-        cond = DIMSE_storeUser( association , presentationContextID , &req , NULL , dcmff.getDataset() , progressCallback , NULL ,  DIMSE_BLOCKING , 0 , &rsp , &statusDetail , NULL , DU_fileSize( qPrintable(filepathToStore) ) );
+        cond = DIMSE_storeUser( association , presentationContextID , &request , NULL /*imageFileName*/, dcmff.getDataset() , progressCallback , 
+                                NULL /*callbackData */, DIMSE_BLOCKING , 0 , &response , &statusDetail , NULL /*check for cancel parameters*/ , 
+                                DU_fileSize( qPrintable(filepathToStore) ) );
 
         if (cond.bad())
         {
@@ -124,49 +163,13 @@ void StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
             ERROR_LOG("S'ha produït un error al fer el store de la imatge " + filepathToStore + " , descripció de l'error" + QString(cond.text()));
         }
 
-        processResponseFromStoreSCP(&rsp, statusDetail, filepathToStore);
+        processResponseFromStoreSCP(&response, statusDetail, filepathToStore);
 
         if ( statusDetail != NULL )
         {
             delete statusDetail;
         }
     }
-}
-
-Status StoreImages::store( QList<Image*> imageListToStore )
-{
-    OFCondition cond = EC_Normal;
-    Status state;
-    ProcessImageSingleton* piSingleton;
-    QString statusMessage;
-
-    initialitzeImagesCounters();
-
-    //A la connexió del Pacs ja s'han establert els PresentationContext (SopClass-TransferSyntax) amb els que s'enviara les imatges
-    //If not connection has been setted, return error because we need a PACS connection
-    if ( m_association == NULL )
-    {
-        return state.setStatus( DcmtkNoConnectionError );
-    }
-
-    //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
-    piSingleton=ProcessImageSingleton::getProcessImageSingleton();
-
-    foreach(Image *imageToStore, imageListToStore)
-    {
-        storeSCU( m_association, qPrintable(imageToStore->getPath()) );
-        piSingleton->process(imageToStore->getParentSeries()->getParentStudy()->getInstanceUID(), imageToStore);
-    }
-
-    return getStatusStoreSCU(imageListToStore.count());
-}
-
-void StoreImages::initialitzeImagesCounters()
-{
-    //Inicialitzem els comptadors control d'errors 
-
-    m_numberOfStoredImagesSuccessful = 0;
-    m_numberOfStoredImagesWithWarning = 0;
 }
 
 void StoreImages::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed)
@@ -183,6 +186,7 @@ void StoreImages::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmD
 
     if (response->DimseStatus == STATUS_Success)
     {
+        //La imatge s'ha enviat correctament
         m_numberOfStoredImagesSuccessful++;
         return;
     }
@@ -273,10 +277,6 @@ Status StoreImages::getStatusStoreSCU(int numberOfImagesToStore)
     }   
 
     return state;
-}
-
-StoreImages::~StoreImages()
-{
 }
 
 }

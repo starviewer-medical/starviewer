@@ -21,9 +21,6 @@ class Status;
 class PacsConnection;
 class Image;
 
-//codi d'error que retorna l'store a part del OFCondition, aquest status code també s'ha de comprovar
-static int m_lastStatusCode;
-
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -47,11 +44,9 @@ public:
     */
    Status store( QList<Image*> imageListToStore );
 
-    ~StoreImages();
-
 private :
     T_ASC_Association *m_association; // request DICOM association;
-    T_ASC_Network *m_net;
+    T_ASC_Network *m_network;
     //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning
     int m_numberOfStoredImagesSuccessful, m_numberOfStoredImagesWithWarning;
 
