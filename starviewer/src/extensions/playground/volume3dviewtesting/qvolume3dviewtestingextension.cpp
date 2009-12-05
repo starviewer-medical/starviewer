@@ -14,6 +14,7 @@
 #include "volume3dviewtestingsettings.h"
 #include "screenshottool.h"
 #include "toolproxy.h"
+#include "qexportertool.h"
 // qt
 #include <QAction>
 #include <QFileDialog>
@@ -313,6 +314,10 @@ void QVolume3DViewTestingExtension::createConnections()
 
     // temporitzador
     connect( m_timer, SIGNAL( timeout() ), SLOT( render() ) );
+
+    // per mostrar exportació
+    connect( m_screenshotsExporterToolButton, SIGNAL( clicked() ) , SLOT( showScreenshotsExporterDialog() ) );
+
 }
 
 void QVolume3DViewTestingExtension::setInput( Volume * input )
@@ -608,6 +613,12 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
 
     updateView( false );
     enableAutoUpdate();
+}
+
+void QVolume3DViewTestingExtension::showScreenshotsExporterDialog()
+{
+    QExporterTool exporter( m_3DView );
+    exporter.exec();
 }
 
 void QVolume3DViewTestingExtension::updateUiForRenderingMethod( int index )

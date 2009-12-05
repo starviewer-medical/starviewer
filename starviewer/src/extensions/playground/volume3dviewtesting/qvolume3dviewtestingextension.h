@@ -97,6 +97,7 @@ private slots:
     void setCustomStyleButtonStateBySplitter();
     void changeViewerTransferFunction();
     void applyRenderingStyle( const QModelIndex &index );
+    void showScreenshotsExporterDialog();
 
 private:
     /// El volum d'input
