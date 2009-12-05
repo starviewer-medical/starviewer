@@ -39,6 +39,7 @@ void PreviousStudiesManager::createConnections()
 void PreviousStudiesManager::queryPreviousStudies(Study *study)
 {
     PacsDeviceManager pacsDeviceManager;
+    QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(true);
 
     INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() + 
     " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
@@ -53,8 +54,16 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
     m_studyToFindPrevious = study;
 
     //Preguntem al PACS per estudis
-    m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientID(study), pacsDeviceManager.getPACSList(true));
-    m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientName(study), pacsDeviceManager.getPACSList(true));
+    if (pacsDeviceListToQuery.count() > 0)
+    {
+        m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientID(study), pacsDeviceListToQuery);
+        m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientName(study), pacsDeviceListToQuery);
+    }
+    else 
+    {
+        //Sinó hi ha cap PACS pel qual cercar per defecte fem l'emit del queryFinished
+        queryFinished();
+    }
 }
 
 void PreviousStudiesManager::cancelCurrentQuery()
