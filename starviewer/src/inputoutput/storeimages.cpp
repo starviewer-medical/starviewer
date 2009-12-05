@@ -34,13 +34,13 @@ StoreImages::StoreImages()
 {
 }
 
-void StoreImages::setConnection( PacsServer pacsServer )
+void StoreImages::setConnection(PacsServer pacsServer)
 {
     m_association = pacsServer.getConnection().getPacsConnection();
     m_timeOut = pacsServer.getPacs().getConnectionTimeout();
 }
 
-Status StoreImages::store( QList<Image*> imageListToStore )
+Status StoreImages::store(QList<Image*> imageListToStore)
 {
     OFCondition cond = EC_Normal;
     Status state;
@@ -51,9 +51,9 @@ Status StoreImages::store( QList<Image*> imageListToStore )
 
     //A la connexió del Pacs ja s'han establert els PresentationContext (SopClass-TransferSyntax) amb els que s'enviara les imatges
     //If not connection has been setted, return error because we need a PACS connection
-    if ( m_association == NULL )
+    if (m_association == NULL)
     {
-        return state.setStatus( DcmtkNoConnectionError );
+        return state.setStatus(DcmtkNoConnectionError);
     }
 
     //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
@@ -89,7 +89,7 @@ void StoreImages::initialitzeImagesCounters()
  *   association - [in] The associationiation (network connection to another DICOM application).
  *   filepathToStore - [in] Name of the file which shall be processed.
  */
-bool StoreImages::storeSCU( T_ASC_Association * association , QString filepathToStore )
+bool StoreImages::storeSCU(T_ASC_Association * association, QString filepathToStore)
 {
     DIC_US msgId = association->nextMsgID++;
     T_ASC_PresentationContextID presentationContextID;
@@ -100,42 +100,42 @@ bool StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
     DcmDataset *statusDetail = NULL;
     DcmFileFormat dcmff;
 
-    OFCondition cond = dcmff.loadFile( qPrintable( QDir::toNativeSeparators( filepathToStore ) ) );
+    OFCondition cond = dcmff.loadFile(qPrintable(QDir::toNativeSeparators(filepathToStore)));
 
     /* figure out if an error occured while the file was read*/
-    if ( cond.bad() ) 
+    if (cond.bad()) 
     {
         ERROR_LOG("No s'ha pogut obrir el fitxer " + filepathToStore);
         return false;
     }
     /* figure out which SOP class and SOP instance is encapsulated in the file */
-    if ( !DU_findSOPClassAndInstanceInDataSet( dcmff.getDataset() , sopClass , sopInstance , OFFalse ) )
+    if (!DU_findSOPClassAndInstanceInDataSet(dcmff.getDataset(), sopClass, sopInstance, OFFalse))
     {
         ERROR_LOG("No s'ha pogut obtenir el SOPClass i SOPInstance del fitxer " + filepathToStore);
         return false;
     }
 
     /* figure out which of the accepted presentation contexts should be used */
-    DcmXfer filexfer( dcmff.getDataset()->getOriginalXfer() );
+    DcmXfer filexfer(dcmff.getDataset()->getOriginalXfer());
 
     //Busquem dels presentationContextID que hem establert al connectar quin és el que hem d'utilitzar per transferir aquesta imatge
-    if ( filexfer.getXfer() != EXS_Unknown )
+    if (filexfer.getXfer() != EXS_Unknown)
     {
-        presentationContextID = ASC_findAcceptedPresentationContextID( association , sopClass , filexfer.getXferID() );
+        presentationContextID = ASC_findAcceptedPresentationContextID(association, sopClass, filexfer.getXferID());
     }
-    else presentationContextID = ASC_findAcceptedPresentationContextID( association , sopClass );
+    else presentationContextID = ASC_findAcceptedPresentationContextID(association, sopClass);
 
-    if ( presentationContextID == 0 )
+    if (presentationContextID == 0)
     {
         //No hem trobat cap presentation context vàlid dels que hem configuarat a la connexió pacsserver.cpp
-        const char *modalityName = dcmSOPClassUIDToModality( sopClass );
+        const char *modalityName = dcmSOPClassUIDToModality(sopClass);
 
-        if ( !modalityName ) modalityName = dcmFindNameOfUID( sopClass );
+        if (!modalityName) modalityName = dcmFindNameOfUID(sopClass);
 
-        if ( !modalityName ) modalityName = "unknown SOP class";
+        if (!modalityName) modalityName = "unknown SOP class";
 
-        ERROR_LOG( "No s'ha trobat un presentation context vàlid en la connexió per la modalitat : " + QString( modalityName ) 
-                   + " amb la SOPClass " + QString( sopClass )  + " pel fitxer " + filepathToStore);
+        ERROR_LOG("No s'ha trobat un presentation context vàlid en la connexió per la modalitat : " + QString(modalityName) 
+                   + " amb la SOPClass " + QString(sopClass)  + " pel fitxer " + filepathToStore);
 
         return false;
     }
@@ -144,23 +144,23 @@ bool StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
         /* prepare the transmission of data */
         bzero((char*)&request, sizeof(request));
         request.MessageID = msgId;
-        strcpy( request.AffectedSOPClassUID , sopClass );
-        strcpy( request.AffectedSOPInstanceUID , sopInstance );
+        strcpy(request.AffectedSOPClassUID, sopClass);
+        strcpy(request.AffectedSOPInstanceUID, sopInstance);
         request.DataSetType = DIMSE_DATASET_PRESENT;
         request.Priority = DIMSE_PRIORITY_LOW;
 
-        cond = DIMSE_storeUser( association , presentationContextID , &request , NULL /*imageFileName*/, dcmff.getDataset() , NULL /*progressCallback*/ , 
-                                NULL /*callbackData */, DIMSE_NONBLOCKING , m_timeOut , &response , &statusDetail , NULL /*check for cancel parameters*/ , 
-                                DU_fileSize( qPrintable(filepathToStore) ) );
+        cond = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(), NULL /*progressCallback*/, 
+                                NULL /*callbackData */, DIMSE_NONBLOCKING, m_timeOut, &response, &statusDetail, NULL /*check for cancel parameters*/, 
+                                DU_fileSize(qPrintable(filepathToStore)));
 
         if (cond.bad())
         {
-            ERROR_LOG("S'ha produït un error al fer el store de la imatge " + filepathToStore + " , descripció de l'error" + QString(cond.text()));
+            ERROR_LOG("S'ha produït un error al fer el store de la imatge " + filepathToStore + ", descripció de l'error" + QString(cond.text()));
         }
 
         processResponseFromStoreSCP(&response, statusDetail, filepathToStore);
 
-        if ( statusDetail != NULL )
+        if (statusDetail != NULL)
         {
             delete statusDetail;
         }
@@ -233,16 +233,16 @@ void StoreImages::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmD
     if (statusDetail)
     {
         // Mostrem els detalls de l'status rebut, si se'ns han proporcionat
-        if( !relatedFieldsList.isEmpty() )
+        if(!relatedFieldsList.isEmpty())
         {
             const char *text;
             INFO_LOG("Status details");
-            foreach( DcmTagKey tagKey, relatedFieldsList )
+            foreach(DcmTagKey tagKey, relatedFieldsList)
             {
                 // Fem un log per cada camp relacionat amb l'error amb el format 
                 // NomDelTag (xxxx,xxxx): ContingutDelTag
                 statusDetail->findAndGetString(tagKey, text, false);
-                INFO_LOG( QString( DcmTag(tagKey).getTagName() ) + " " + QString( tagKey.toString().c_str() ) + ": " + QString(text) );
+                INFO_LOG(QString(DcmTag(tagKey).getTagName()) + " " + QString(tagKey.toString().c_str()) + ": " + QString(text));
             } 
         }
     }
@@ -266,13 +266,13 @@ Status StoreImages::getStatusStoreSCU(int numberOfImagesToStore)
     {
         //No s'han pogut guardar les imatges
         state.setStatus(DcmkStorescuSomeImagesFailedStatus);
-        ERROR_LOG(QString("L'enviament al PACS de %1/%2 imatges ha fallat").arg(QString().setNum(numberOfImagesToStore - m_numberOfStoredImagesSuccessful + m_numberOfStoredImagesWithWarning), QString().setNum(numberOfImagesToStore)));
+        ERROR_LOG(QString("L'enviament al PACS de %1 de %2 imatges ha fallat").arg(QString().setNum(numberOfImagesToStore - m_numberOfStoredImagesSuccessful + m_numberOfStoredImagesWithWarning), QString().setNum(numberOfImagesToStore)));
     }
     else if (m_numberOfStoredImagesWithWarning > 0)
     {
         //Alguna imatge s'ha guardat amb l'Status de warning
         state.setStatus(DcmkStorescuWarningStatus);
-        WARN_LOG(QString("En l'enviament de %1/%2 imatges s'ha rebut un warning").arg(QString().setNum(m_numberOfStoredImagesWithWarning), QString().setNum(numberOfImagesToStore)));
+        WARN_LOG(QString("En l'enviament de %1 de %2 imatges s'ha rebut un warning").arg(QString().setNum(m_numberOfStoredImagesWithWarning), QString().setNum(numberOfImagesToStore)));
     }
     else 
     {

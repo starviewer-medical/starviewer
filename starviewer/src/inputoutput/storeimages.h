@@ -22,7 +22,7 @@ class Image;
 class PacsServer;
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class StoreImages{
 public:
@@ -31,13 +31,13 @@ public:
     /** This action sets the connection that we will use to connect to the pacs
      * @param   connection [in] Study's Open connection to the pacs
      */
-   void setConnection( PacsServer pacsServer );
+   void setConnection(PacsServer pacsServer);
 
    /** Guarda les imatges que s'especifiquen a la llista en el pacs establert per la connexió
     * @param ImageListStore de les imatges a enviar al PACS
     * @return indica estat del mètode
     */
-   Status store( QList<Image*> imageListToStore );
+   Status store(QList<Image*> imageListToStore);
 
 private :
     T_ASC_Association *m_association; // request DICOM association;
@@ -52,7 +52,7 @@ private :
     void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
 
     ///Envia una image al PACS amb l'associació passada per paràmetre, retorna si la imatge s'ha enviat correctament
-    bool storeSCU( T_ASC_Association * association , QString filePathToStore );
+    bool storeSCU(T_ASC_Association * association, QString filePathToStore);
 
     ///Retorna un Status indicant com ha finalitzat l'operació C-Store
     Status getStatusStoreSCU(int numberOfImagesToStore);
