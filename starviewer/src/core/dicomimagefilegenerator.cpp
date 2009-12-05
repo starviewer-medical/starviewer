@@ -73,7 +73,7 @@ bool DICOMImageFileGenerator::generateSCDICOMFiles()
         writer = DICOMWriter::newInstance();
 
         // \TODO
-        writer->setPath( m_dir.absolutePath() + "/" + image->getSOPInstanceUID() + ".dcm" );
+        writer->setPath( m_dir.absolutePath() + "/" + image->getSOPInstanceUID()  );
 
         fillPatientInfo( writer , image->getParentSeries()->getParentStudy()->getParentPatient() );
         fillStudyInfo( writer , image->getParentSeries()->getParentStudy() );
