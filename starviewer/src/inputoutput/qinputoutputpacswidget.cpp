@@ -79,7 +79,6 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
-    connect(&m_qexecuteOperationThread, SIGNAL(setErrorOperation(QString)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
     connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
     connect(&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
 
@@ -99,7 +98,6 @@ void QInputOutputPacsWidget::createConnections()
     // Label d'informació (cutre-xapussa)
     connect(&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SIGNAL(operationStateChange()));
-    connect(&m_qexecuteOperationThread, SIGNAL(setErrorOperation(QString)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(setOperationFinished(QString)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(newOperation(Operation *)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), SIGNAL(operationStateChange()));

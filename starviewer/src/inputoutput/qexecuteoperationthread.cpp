@@ -272,8 +272,6 @@ void QExecuteOperationThread::moveStudy( Operation operation )
     {
         ERROR_LOG( " S'ha produït un error al intentar connectar al PACS " + pacs.getAETitle() + ". PACS ERROR : " + state.text() );
         emit errorInStore(operation.getStudyUID(), pacs.getID(), CanNotConnectPacsToStore);
-        //emit errorConnectingPacs( operation.getPacsDevice().getID() ); semblaria que no s'utilitza
-        //emit setErrorOperation( operation.getStudyUID() );
         return;
     }
 
@@ -313,7 +311,6 @@ void QExecuteOperationThread::moveStudy( Operation operation )
                 emit errorInStore( operation.getStudyUID(), pacs.getID() , StoreUnknowStatus );
                 break;
         }
-        //emit setErrorOperation( operation.getStudyUID() );
     }
 }
 
