@@ -24,6 +24,7 @@
 #include "image.h"
 #include "series.h"
 #include "study.h"
+#include "pacsserver.h"
 
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
@@ -33,9 +34,10 @@ StoreImages::StoreImages()
 {
 }
 
-void StoreImages::setConnection( PacsConnection connection )
+void StoreImages::setConnection( PacsServer pacsServer )
 {
-    m_association = connection.getPacsConnection();
+    m_association = pacsServer.getConnection().getPacsConnection();
+    m_timeOut = pacsServer.getPacs().getConnectionTimeout();
 }
 
 Status StoreImages::store( QList<Image*> imageListToStore )
@@ -143,12 +145,11 @@ void StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
         request.Priority = DIMSE_PRIORITY_LOW;
 
         cond = DIMSE_storeUser( association , presentationContextID , &request , NULL /*imageFileName*/, dcmff.getDataset() , NULL /*progressCallback*/ , 
-                                NULL /*callbackData */, DIMSE_BLOCKING , 0 , &response , &statusDetail , NULL /*check for cancel parameters*/ , 
+                                NULL /*callbackData */, DIMSE_NONBLOCKING , m_timeOut , &response , &statusDetail , NULL /*check for cancel parameters*/ , 
                                 DU_fileSize( qPrintable(filepathToStore) ) );
 
         if (cond.bad())
         {
-            //Cal? Potser comprovant DimseStatus n'hi ha prou i no cal comprova el OFCondintion de DIMSE_storeUser
             ERROR_LOG("S'ha produït un error al fer el store de la imatge " + filepathToStore + " , descripció de l'error" + QString(cond.text()));
         }
 

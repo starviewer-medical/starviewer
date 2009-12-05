@@ -19,6 +19,7 @@ namespace udg {
 class Status;
 class PacsConnection;
 class Image;
+class PacsServer;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -30,7 +31,7 @@ public:
     /** This action sets the connection that we will use to connect to the pacs
      * @param   connection [in] Study's Open connection to the pacs
      */
-   void setConnection( PacsConnection connection );
+   void setConnection( PacsServer pacsServer );
 
    /** Guarda les imatges que s'especifiquen a la llista en el pacs establert per la connexió
     * @param ImageListStore de les imatges a enviar al PACS
@@ -42,6 +43,7 @@ private :
     T_ASC_Association *m_association; // request DICOM association;
     //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning
     int m_numberOfStoredImagesSuccessful, m_numberOfStoredImagesWithWarning;
+    int m_timeOut;
 
     ///Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
     void initialitzeImagesCounters();

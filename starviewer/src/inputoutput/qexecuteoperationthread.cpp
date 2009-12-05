@@ -283,7 +283,7 @@ void QExecuteOperationThread::moveStudy( Operation operation )
     connect(storedProcessImage, SIGNAL( imageStored(QString, int) ), this, SIGNAL( imageCommit(QString, int) ));
     connect(storedProcessImage, SIGNAL( seriesStored(QString) ), this, SIGNAL( seriesCommit(QString) ));
 
-    storeImages.setConnection( pacsConnection.getConnection() );
+    storeImages.setConnection( pacsConnection );
 
     state = storeImages.store(imagesToStoreList);
 
