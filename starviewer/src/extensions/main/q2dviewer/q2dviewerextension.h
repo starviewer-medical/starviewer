@@ -76,6 +76,9 @@ public slots:
     ///Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
     void showDicomDumpCurrentDisplayedImage();
 
+    /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
+    void showScreenshotsExporterDialog();
+
     //TODO mètode per solucionar problemes perquè la sincronització encara no està adaptada
     // a la resta de les tools
     /// Desactiva l'eina de sincronització.

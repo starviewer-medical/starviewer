@@ -26,6 +26,7 @@
 #include "screenshottool.h" 
 #include "toolproxy.h"
 #include "q2dviewersettings.h"
+#include "qexportertool.h"
 
 #include <QMenu>
 #include <QWidgetAction>
@@ -33,6 +34,7 @@
 #include <QPoint>
 #include <QGridLayout>
 #include <QProgressDialog>
+#include <QMessageBox>
 
 namespace udg {
 
@@ -144,6 +146,9 @@ void Q2DViewerExtension::createConnections()
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
     // per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
     connect( m_dicomDumpToolButton, SIGNAL( clicked() ) , SLOT( showDicomDumpCurrentDisplayedImage() ) );
+
+    // per mostrar exportació
+    connect( m_screenshotsExporterToolButton, SIGNAL( clicked() ) , SLOT( showScreenshotsExporterDialog() ) );
 
     // Connexions necessaries amb els canvis al layout
     connect( m_workingArea, SIGNAL( viewerAdded( Q2DViewerWidget * ) ), SLOT( activateNewViewer( Q2DViewerWidget * ) ) );
@@ -437,6 +442,18 @@ void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
 {
     m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( m_workingArea->getViewerSelected()->getViewer()->getCurrentDisplayedImage() );
     m_dicomDumpCurrentDisplayedImage->show();
+}
+
+void Q2DViewerExtension::showScreenshotsExporterDialog()
+{
+    if ( m_workingArea->getViewerSelected()->getViewer()->getInput() == NULL )
+    {
+        QMessageBox::warning(this, tr("Export to DICOM") , tr("This action is not allowed because the selected viewer is empty.") );
+        return;
+    }
+
+    QExporterTool exporter( m_workingArea->getViewerSelected()->getViewer() );
+    exporter.exec();
 }
 
 void Q2DViewerExtension::validePhases()
