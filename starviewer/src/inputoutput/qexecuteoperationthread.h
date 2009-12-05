@@ -92,11 +92,6 @@ signals:
     ///Indiquem que la operació serà cancel·lada
     void setCancelledOperation(QString studyInstanceUID);
 
-    /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha produït un error en la descàrrega de l'estudi
-     * @param studyUID UID de l'estudi que ha produït l'error
-     */
-    void setErrorOperation( QString studyUID );
-
     /** signal que s'emet cap a QRetrieveScreen per indicar que s'ha descarregat una nova imatge de l'estudi
      * @param studyUID UID de l'estudi que s'està descarregant
      * @param número d'imatge descarrega
@@ -111,11 +106,6 @@ signals:
      * @param studyUID UID de l'estudi que s'esta descarregat
      */
     void seriesCommit( QString );
-
-    /** signal que s'emete si s'ha produit algun error alhora de connectar amb algun pacs
-     * @param  pacsID del pacs amb que s'ha produit error
-     */
-    void errorConnectingPacs( QString );
 
     /** signal que s'emet quan s'enqua una nova operació
      * @param newOperation operació encuada
