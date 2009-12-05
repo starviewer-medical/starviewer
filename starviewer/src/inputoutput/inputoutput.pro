@@ -21,7 +21,8 @@ FORMS += qconfigurationscreenbase.ui \
     qinputoutputlocaldatabasewidgetbase.ui \
     qinputoutputpacswidgetbase.ui \
     qdicomdirconfigurationscreenbase.ui \
-    qwidgetselectpacstostoredicomimagebase.ui
+    qwidgetselectpacstostoredicomimagebase.ui \
+    qexporterbase.ui
 HEADERS += databaseconnection.h \
     pacsconnection.h \
     pacsdevicemanager.h \
@@ -85,7 +86,8 @@ HEADERS += databaseconnection.h \
     risrequestmanager.h \
     previousstudiesmanager.h \
     qwidgetselectpacstostoredicomimage.h \
-    qpreviousstudieswidget.h
+    qpreviousstudieswidget.h \
+    qexportertool.h
 SOURCES += databaseconnection.cpp \
     pacsconnection.cpp \
     pacsdevicemanager.cpp \
@@ -146,7 +148,8 @@ SOURCES += databaseconnection.cpp \
     risrequestmanager.cpp \
     previousstudiesmanager.cpp \
     qwidgetselectpacstostoredicomimage.cpp \
-    qpreviousstudieswidget.cpp
+    qpreviousstudieswidget.cpp \
+    qexportertool.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
