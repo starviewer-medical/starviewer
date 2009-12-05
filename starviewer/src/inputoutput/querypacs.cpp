@@ -46,8 +46,8 @@ void QueryPacs::foundMatchCallback(
     {
         /*Hem de comprovar si ja haviem demanat cancel·lar la Query. És degut a que tot i que demanem cancel·lar la query actual
           el PACS ens envia els dataset que havia posat a la pila de la xarxa just abans de rebre el cancel·lar la query, per això 
-         pot ser que tot i havent demanat cancel·lar la query rebem algun resultat més, per això comprovem si ja havíem demant
-         cancel·lar la query per tornar-la  demanar, quan rebem aquests resultats que ja s'havien posat a la pila de la xarxa.
+         pot ser que tot i havent demanat cancel·lar la query rebem algun resultat més, per això comprovem si ja havíem demanat
+         cancel·lar la query per no tornar-la  demanar, quan rebem aquests resultats que ja s'havien posat a la pila de la xarxa.
         http://forum.dcmtk.org/viewtopic.php?t=2143
         */
         if (!queryPacsCaller->m_cancelRequestSent)
