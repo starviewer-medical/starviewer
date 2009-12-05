@@ -61,8 +61,11 @@ Status StoreImages::store( QList<Image*> imageListToStore )
 
     foreach(Image *imageToStore, imageListToStore)
     {
-        storeSCU( m_association, qPrintable(imageToStore->getPath()) );
-        piSingleton->process(imageToStore->getParentSeries()->getParentStudy()->getInstanceUID(), imageToStore);
+        if (storeSCU(m_association, qPrintable(imageToStore->getPath())))
+        {
+            //Si l'ha imatge s'ha enviat correctament la processem
+            piSingleton->process(imageToStore->getParentSeries()->getParentStudy()->getInstanceUID(), imageToStore);
+        }
     }
 
     return getStatusStoreSCU(imageListToStore.count());
@@ -86,7 +89,7 @@ void StoreImages::initialitzeImagesCounters()
  *   association - [in] The associationiation (network connection to another DICOM application).
  *   filepathToStore - [in] Name of the file which shall be processed.
  */
-void StoreImages::storeSCU( T_ASC_Association * association , QString filepathToStore )
+bool StoreImages::storeSCU( T_ASC_Association * association , QString filepathToStore )
 {
     DIC_US msgId = association->nextMsgID++;
     T_ASC_PresentationContextID presentationContextID;
@@ -103,13 +106,13 @@ void StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
     if ( cond.bad() ) 
     {
         ERROR_LOG("No s'ha pogut obrir el fitxer " + filepathToStore);
-        return;
+        return false;
     }
     /* figure out which SOP class and SOP instance is encapsulated in the file */
     if ( !DU_findSOPClassAndInstanceInDataSet( dcmff.getDataset() , sopClass , sopInstance , OFFalse ) )
     {
         ERROR_LOG("No s'ha pogut obtenir el SOPClass i SOPInstance del fitxer " + filepathToStore);
-        return;
+        return false;
     }
 
     /* figure out which of the accepted presentation contexts should be used */
@@ -133,6 +136,8 @@ void StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
 
         ERROR_LOG( "No s'ha trobat un presentation context vàlid en la connexió per la modalitat : " + QString( modalityName ) 
                    + " amb la SOPClass " + QString( sopClass )  + " pel fitxer " + filepathToStore);
+
+        return false;
     }
     else
     {
@@ -158,6 +163,15 @@ void StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
         if ( statusDetail != NULL )
         {
             delete statusDetail;
+        }
+
+        if (cond.good() && response.DimseStatus == STATUS_Success)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
         }
     }
 }
