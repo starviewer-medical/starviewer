@@ -24,7 +24,6 @@
 #include "image.h"
 #include "series.h"
 #include "study.h"
-#include "logging.h"
 
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
@@ -37,16 +36,6 @@ StoreImages::StoreImages()
 void StoreImages::setConnection( PacsConnection connection )
 {
     m_association = connection.getPacsConnection();
-}
-
-void StoreImages::setNetwork ( T_ASC_Network * network )
-{
-    m_network = network;
-}
-
-static void progressCallback( void * /*callbackData*/ , T_DIMSE_StoreProgress *progress , T_DIMSE_C_StoreRQ * /*request*/)
-{
-    //Not used
 }
 
 Status StoreImages::store( QList<Image*> imageListToStore )
@@ -153,7 +142,7 @@ void StoreImages::storeSCU( T_ASC_Association * association , QString filepathTo
         request.DataSetType = DIMSE_DATASET_PRESENT;
         request.Priority = DIMSE_PRIORITY_LOW;
 
-        cond = DIMSE_storeUser( association , presentationContextID , &request , NULL /*imageFileName*/, dcmff.getDataset() , progressCallback , 
+        cond = DIMSE_storeUser( association , presentationContextID , &request , NULL /*imageFileName*/, dcmff.getDataset() , NULL /*progressCallback*/ , 
                                 NULL /*callbackData */, DIMSE_BLOCKING , 0 , &response , &statusDetail , NULL /*check for cancel parameters*/ , 
                                 DU_fileSize( qPrintable(filepathToStore) ) );
 
