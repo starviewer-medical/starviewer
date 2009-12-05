@@ -9,9 +9,11 @@
 
 #include <QList>
 
-//TODO són necessaris aquests structs ?
 struct T_ASC_Association;
 struct T_ASC_Network;
+struct T_DIMSE_C_StoreRSP;
+
+class DcmDataset;
 
 namespace udg {
 
@@ -48,9 +50,22 @@ public:
     ~StoreImages();
 
 private :
-    T_ASC_Association *m_assoc; // request DICOM association;
+    T_ASC_Association *m_association; // request DICOM association;
     T_ASC_Network *m_net;
+    //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning
+    int m_numberOfStoredImagesSuccessful, m_numberOfStoredImagesWithWarning;
 
+    ///Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
+    void initialitzeImagesCounters();
+
+    ///Processa un resposta del Store SCP que no ha tingut l'Status Successfull
+    void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
+
+    ///Envia una image al PACS amb l'associació passada per paràmetre
+    void storeSCU( T_ASC_Association * association , QString filePathToStore );
+
+    ///Retorna un Status indicant com ha finalitzat l'operació C-Store
+    Status getStatusStoreSCU(int numberOfImagesToStore);
 };
 
 }

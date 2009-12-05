@@ -31,9 +31,15 @@ namespace udg{
 
     const OFConditionConst DcmtkMoveFailureOrRefusedStatus(0, 1301, OF_error, "Movescu receive a failure or refused status");
 
-    const OFConditionConst DcmtkMoveWarningStatus(0, 1302, OF_error, "Movescu receive a warning stayus");
+    const OFConditionConst DcmtkMoveWarningStatus(0, 1302, OF_error, "Movescu receive a warning status");
 
-    const OFConditionConst DcmtkMovescuUnknownError(0, 1303, OF_error, "Movescu unknown error"); 
+    const OFConditionConst DcmtkMovescuUnknownError(0, 1303, OF_error, "Movescu unknown error");
+
+    const OFConditionConst DcmtkStorescuFailureStatus(0 , 1400, OF_error, "Storescu all images failed");
+
+    const OFConditionConst DcmkStorescuSomeImagesFailedStatus(0, 1401, OF_error, "Storescu some images failed");
+
+    const OFConditionConst DcmkStorescuWarningStatus(0, 1402, OF_error, "Storescu receive warning status");
 
 }; //end namespace
 #endif
