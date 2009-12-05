@@ -51,8 +51,8 @@ private :
     ///Processa un resposta del Store SCP que no ha tingut l'Status Successfull
     void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
 
-    ///Envia una image al PACS amb l'associació passada per paràmetre
-    void storeSCU( T_ASC_Association * association , QString filePathToStore );
+    ///Envia una image al PACS amb l'associació passada per paràmetre, retorna si la imatge s'ha enviat correctament
+    bool storeSCU( T_ASC_Association * association , QString filePathToStore );
 
     ///Retorna un Status indicant com ha finalitzat l'operació C-Store
     Status getStatusStoreSCU(int numberOfImagesToStore);
