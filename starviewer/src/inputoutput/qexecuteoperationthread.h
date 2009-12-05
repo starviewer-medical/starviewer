@@ -34,11 +34,11 @@ Q_OBJECT
 public:
 
     ///Es defineix els tipus d'error que podem tenir, el DatabaseError indica quan és error de Sqlite
-    enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace, PatientInconsistent, MoveDestinationAETileUnknownStatus, 
+    enum RetrieveError {DatabaseError, CanNotConnectPacsToMove, NoEnoughSpace, ErrorFreeingSpace, PatientInconsistent, MoveDestinationAETileUnknownStatus, 
                          IncomingConnectionsPortPacsInUse, MoveFailureOrRefusedStatus, MoveUnknowStatus};
 
     //MoveWarningStatus - Per a Movescu indica que alguna imatge no s'ha pogut descarrega
-    enum OperationWarning {MoveWarningStatus};
+    enum RetrieveWarning {MoveWarningStatus};
 
     //StoreFailureStatus - L'enviament de totes les imatges ha fallat
     enum StoreError {CanNotConnectPacsToStore, StoreFailureStatus, StoreUnknowStatus};
@@ -113,9 +113,9 @@ signals:
     void newOperation( Operation *newOperation );
 
     ///Signal que s'emet quan es produeix un error a l'operació de descàrrega
-    void errorInOperation(QString studyUID, QString pacsID, QExecuteOperationThread::OperationError);
+    void errorInRetrieve(QString studyUID, QString pacsID, QExecuteOperationThread::RetrieveError);
 
-    void warningInOperation(QString studyUID, QString pacsID, QExecuteOperationThread::OperationWarning);
+    void warningInRetrieve(QString studyUID, QString pacsID, QExecuteOperationThread::RetrieveWarning);
 
     ///Signal que s'emet quan s'han descarregat tots els fitxers d'un estudi
     void filesRetrieved();
@@ -166,7 +166,7 @@ private:
     void createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);
 
     ///Si es produeix un error emet un signal amb l'error i esborra el directori de l'estudi per si s'hagués pogut descarregar alguna imatge
-    void errorRetrieving(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError lastError);
+    void errorRetrieving(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveError lastError);
 
     ///Indica si l'estudi existeix a la base de dades local
     bool existStudyInLocalDatabase(QString studyInstanceUID);

@@ -79,7 +79,7 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInRetrieve(QString, QString, QExecuteOperationThread::RetrieveError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
     connect(&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
 
     connect(&m_qexecuteOperationThread, SIGNAL(setOperationFinished(QString)), m_qoperationStateScreen, SLOT(setOperationFinished(QString)));
@@ -97,17 +97,17 @@ void QInputOutputPacsWidget::createConnections()
 
     // Label d'informació (cutre-xapussa)
     connect(&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), SIGNAL(operationStateChange()));
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SIGNAL(operationStateChange()));
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInRetrieve(QString, QString, QExecuteOperationThread::RetrieveError)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(setOperationFinished(QString)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(newOperation(Operation *)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), SIGNAL(operationStateChange()));
 
     //connect tracta els errors de connexió al PACS, al descarregar/Guardar imatges
-    connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QString, QExecuteOperationThread::OperationError)));
+    connect (&m_qexecuteOperationThread, SIGNAL(errorInRetrieve(QString, QString, QExecuteOperationThread::RetrieveError)), SLOT(showQExecuteOperationThreadRetrieveError(QString, QString, QExecuteOperationThread::RetrieveError)));
     connect (&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), SLOT(showQExecuteOperationThreadStoreError(QString, QString, QExecuteOperationThread::StoreError)));
 
     //connect tracta els warning de connexió al PACS, al descarregar imatges
-    connect (&m_qexecuteOperationThread, SIGNAL(warningInOperation(QString, QString, QExecuteOperationThread::OperationWarning)), SLOT(showQExecuteOperationThreadWarning(QString, QString, QExecuteOperationThread::OperationWarning)));
+    connect (&m_qexecuteOperationThread, SIGNAL(warningInRetrieve(QString, QString, QExecuteOperationThread::RetrieveWarning)), SLOT(showQExecuteOperationThreadRetrieveWarning(QString, QString, QExecuteOperationThread::RetrieveWarning)));
     connect (&m_qexecuteOperationThread, SIGNAL(warningInStore(QString, QString, QExecuteOperationThread::StoreWarning)), SLOT(showQExecuteOperationThreadStoreWarning(QString, QString, QExecuteOperationThread::StoreWarning)));
 
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
@@ -403,7 +403,7 @@ void QInputOutputPacsWidget::errorQueryingImage(QString studyInstanceUID, QStrin
     QMessageBox::warning(this, ApplicationNameString, errorMessage);
 }
 
-void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error)
+void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveError error)
 {
     QString message;
     PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
@@ -416,7 +416,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
 
     switch (error)
     {
-        case QExecuteOperationThread::ErrorConnectingPacs :
+        case QExecuteOperationThread::CanNotConnectPacsToMove :
             message = tr("Please review the operation list screen, ");
             message += tr("%1 can't connect to PACS %2 trying to retrievev a study.\n").arg(ApplicationNameString, pacs.getAETitle());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
@@ -503,7 +503,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadStoreError(QString study
     }
 }
 
-void QInputOutputPacsWidget::showQExecuteOperationThreadWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationWarning warning)
+void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveWarning warning)
 {
     QString message;
     PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);

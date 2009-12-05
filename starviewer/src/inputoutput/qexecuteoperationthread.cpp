@@ -44,8 +44,8 @@ QExecuteOperationThread::QExecuteOperationThread(QObject *parent)
     m_qsemaphoreQueueOperationList = new QSemaphore(1);
 
     //Registrem aquest tipus per poder-ne fer signals
-    qRegisterMetaType<QExecuteOperationThread::OperationError>("QExecuteOperationThread::OperationError");
-    qRegisterMetaType<QExecuteOperationThread::OperationWarning>("QExecuteOperationThread::OperationWarning");
+    qRegisterMetaType<QExecuteOperationThread::RetrieveError>("QExecuteOperationThread::RetrieveError");
+    qRegisterMetaType<QExecuteOperationThread::RetrieveWarning>("QExecuteOperationThread::RetrieveWarning");
     qRegisterMetaType<QExecuteOperationThread::StoreError>("QExecuteOperationThread::StoreError");
     qRegisterMetaType<QExecuteOperationThread::StoreWarning>("QExecuteOperationThread::StoreWarning");
 }
@@ -171,7 +171,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     {
         ERROR_LOG( "Error al connectar al pacs " + operation.getPacsDevice().getAETitle() + ". PACS ERROR : " + state.text() );
 
-        errorRetrieving(studyUID, operation.getPacsDevice().getID(), ErrorConnectingPacs);
+        errorRetrieving(studyUID, operation.getPacsDevice().getID(), CanNotConnectPacsToMove);
         localDatabaseManager.setStudyRetrieveFinished();
 
         return;
@@ -202,7 +202,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
                 errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveFailureOrRefusedStatus);
                 break;
             case 1302://Warning Status una part de l'estudi no s'ha descarregat
-                emit warningInOperation(studyUID, operation.getPacsDevice().getID(), MoveWarningStatus);
+                emit warningInRetrieve(studyUID, operation.getPacsDevice().getID(), MoveWarningStatus);
 
                 emit filesRetrieved();//Si l'error és un warning vol dir que com a mínim hem rebut un objecte dicom, per tant el processem
                 break;
@@ -391,19 +391,19 @@ void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManage
     connect(localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
 
     //Connexions d'abortament
-    connect(this, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
-    connect(this, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
+    connect(this, SIGNAL(errorInRetrieve(QString, QString, QExecuteOperationThread::RetrieveError)), fillersThread, SLOT(quit()), Qt::DirectConnection);
+    connect(this, SIGNAL(errorInRetrieve(QString, QString, QExecuteOperationThread::RetrieveError)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
 
 	//Connexió que s'esborrarà un estudi per alliberar espai
 	connect(localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
 }
 
-void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError lastError)
+void QExecuteOperationThread::errorRetrieving(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveError lastError)
 {
     DeleteDirectory deleteDirectory;
     LocalDatabaseManager localDatabaseManager;
 
-    emit errorInOperation(studyInstanceUID, pacsID, lastError);
+    emit errorInRetrieve(studyInstanceUID, pacsID, lastError);
 
     if (lastError == QExecuteOperationThread::MoveFailureOrRefusedStatus || lastError == QExecuteOperationThread::MoveUnknowStatus ||
         lastError == QExecuteOperationThread::DatabaseError || lastError == QExecuteOperationThread::PatientInconsistent)

@@ -123,10 +123,10 @@ private slots:
     void view();
 
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
-    void showQExecuteOperationThreadError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationError error);
+    void showQExecuteOperationThreadRetrieveError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveError error);
 
     ///Ens Mostra un missatge indicant el warning produït a la QExecuteOperationThread
-    void showQExecuteOperationThreadWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationWarning warning);
+    void showQExecuteOperationThreadRetrieveWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveWarning warning);
 
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread al fer un Store
     void showQExecuteOperationThreadStoreError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreError error);
