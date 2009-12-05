@@ -45,7 +45,9 @@ QExecuteOperationThread::QExecuteOperationThread(QObject *parent)
 
     //Registrem aquest tipus per poder-ne fer signals
     qRegisterMetaType<QExecuteOperationThread::OperationError>("QExecuteOperationThread::OperationError");
-    qRegisterMetaType<QExecuteOperationThread::OperationError>("QExecuteOperationThread::OperationWarning");
+    qRegisterMetaType<QExecuteOperationThread::OperationWarning>("QExecuteOperationThread::OperationWarning");
+    qRegisterMetaType<QExecuteOperationThread::StoreError>("QExecuteOperationThread::StoreError");
+    qRegisterMetaType<QExecuteOperationThread::StoreWarning>("QExecuteOperationThread::StoreWarning");
 }
 
 QExecuteOperationThread::~QExecuteOperationThread()
@@ -250,27 +252,28 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 void QExecuteOperationThread::moveStudy( Operation operation )
 {
     Status state;
-    PacsDevice pacs;
+    PacsDevice pacs = operation.getPacsDevice();
     StoreImages storeImages;
     StarviewerProcessImageStored *storedProcessImage = new StarviewerProcessImageStored();
     ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
     QList<Image*> imagesToStoreList ;
 
-    INFO_LOG( "Preparant les dades per moure estudi " + operation.getStudyUID() + " al PACS " + operation.getPacsDevice().getAETitle() );
+    INFO_LOG( "Preparant les dades per guardar l' estudi " + operation.getStudyUID() + " al PACS " + pacs.getAETitle() );
 
     emit setOperating( operation.getStudyUID() );//Indiquem al QOperationState que comença l'enviament de les imatges
 
     imagesToStoreList = getImagesToStoreList(operation.getDicomMask());
 
-    PacsServer pacsConnection( operation.getPacsDevice() );
+    PacsServer pacsConnection( pacs );
 
     state = pacsConnection.connect( PacsServer::storeImages , PacsServer::any );
 
     if ( !state.good() )
     {
-        ERROR_LOG( " S'ha produït un error al intentar connectar al PACS " + operation.getPacsDevice().getAETitle() + ". PACS ERROR : " + state.text() );
-        emit errorConnectingPacs( operation.getPacsDevice().getID() );
-        emit setErrorOperation( operation.getStudyUID() );
+        ERROR_LOG( " S'ha produït un error al intentar connectar al PACS " + pacs.getAETitle() + ". PACS ERROR : " + state.text() );
+        emit errorInStore(operation.getStudyUID(), pacs.getID(), CanNotConnectPacsToStore);
+        //emit errorConnectingPacs( operation.getPacsDevice().getID() ); semblaria que no s'utilitza
+        //emit setErrorOperation( operation.getStudyUID() );
         return;
     }
 
@@ -290,13 +293,28 @@ void QExecuteOperationThread::moveStudy( Operation operation )
 
     if ( state.good() )
     {
-        INFO_LOG("S'ha mogut l'estudi correctament" );
         emit setOperationFinished( operation.getStudyUID() );// descarregat
     }
     else
     {
-        emit setErrorOperation( operation.getStudyUID() );
-        ERROR_LOG( "S'ha produit un error intentant guardar l'estudi : " + state.text() );
+        switch(state.code())
+        {
+            case 1400:
+                emit errorInStore( operation.getStudyUID() , pacs.getID() , StoreFailureStatus );
+                break;
+            case 1401:
+                emit warningInStore( operation.getStudyUID(), pacs.getID() , StoreSomeImagesFailureStatus );
+                emit setOperationFinished( operation.getStudyUID() );
+                break;
+            case 1402:
+                emit warningInStore( operation.getStudyUID(), pacs.getID() , StoreWarningStatus );
+                emit setOperationFinished( operation.getStudyUID() );
+                break;
+            default:
+                emit errorInStore( operation.getStudyUID(), pacs.getID() , StoreUnknowStatus );
+                break;
+        }
+        //emit setErrorOperation( operation.getStudyUID() );
     }
 }
 
