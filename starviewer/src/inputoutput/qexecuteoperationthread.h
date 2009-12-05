@@ -34,9 +34,18 @@ Q_OBJECT
 public:
 
     ///Es defineix els tipus d'error que podem tenir, el DatabaseError indica quan és error de Sqlite
-    enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace, PatientInconsistent, MoveDestinationAETileUnknownStatus, IncomingConnectionsPortPacsInUse, MoveFailureOrRefusedStatus, MoveUnknowStatus};
+    enum OperationError {DatabaseError, ErrorConnectingPacs, NoEnoughSpace, ErrorFreeingSpace, PatientInconsistent, MoveDestinationAETileUnknownStatus, 
+                         IncomingConnectionsPortPacsInUse, MoveFailureOrRefusedStatus, MoveUnknowStatus};
 
-    enum OperationWarning { MoveWarningStatus };
+    //MoveWarningStatus - Per a Movescu indica que alguna imatge no s'ha pogut descarrega
+    enum OperationWarning {MoveWarningStatus};
+
+    //StoreFailureStatus - L'enviament de totes les imatges ha fallat
+    enum StoreError {CanNotConnectPacsToStore, StoreFailureStatus, StoreUnknowStatus};
+
+    /* StoreSomeImagesFailureStatus - L'enviament d'algunes imatges ha fallat    
+       StoreWarningStatus - Per a StoreSCU indica que totes les imatges s'han enviat però per totes o alguna imatge hem rebut un warning */
+    enum StoreWarning {StoreWarningStatus, StoreSomeImagesFailureStatus};
 
     /** Constructor de la classe
       */
@@ -123,6 +132,12 @@ signals:
 
     ///Signal que s'emet per indicar que un estudi serà esborrat de la base de dades perquè no es disposa de prou espai
     void studyWillBeDeleted(QString studyInstanceUID);
+
+    //S'ha produït un error al intentar enviar un estudi al PACS
+    void errorInStore(QString studyUID, QString pacsID, QExecuteOperationThread::StoreError);
+
+    //S'ha produït un warning al enviar un estudi al PACS
+    void warningInStore(QString studyUID, QString pacsID, QExecuteOperationThread::StoreWarning);
 
 private slots:
 

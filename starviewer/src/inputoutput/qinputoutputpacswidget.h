@@ -128,6 +128,12 @@ private slots:
     ///Ens Mostra un missatge indicant el warning produït a la QExecuteOperationThread
     void showQExecuteOperationThreadWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationWarning warning);
 
+    ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread al fer un Store
+    void showQExecuteOperationThreadStoreError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreError error);
+
+    ///Ens Mostra un missatge indicant el warning produït a la QExecuteOperationThread al fer un Store
+    void showQExecuteOperationThreadStoreWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreWarning warning);
+
     ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca d'estudis
     void queryStudyResultsReceived(QList<Patient*> patients, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID);
 

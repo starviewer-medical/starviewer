@@ -81,6 +81,7 @@ void QInputOutputPacsWidget::createConnections()
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
     connect(&m_qexecuteOperationThread, SIGNAL(setErrorOperation(QString)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
     connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
 
     connect(&m_qexecuteOperationThread, SIGNAL(setOperationFinished(QString)), m_qoperationStateScreen, SLOT(setOperationFinished(QString)));
 
@@ -96,16 +97,20 @@ void QInputOutputPacsWidget::createConnections()
     connect(&m_qexecuteOperationThread, SIGNAL(retrieveStarted(QString)), SIGNAL(studyRetrieveStarted(QString)));
 
     // Label d'informació (cutre-xapussa)
+    connect(&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(setErrorOperation(QString)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(setOperationFinished(QString)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(newOperation(Operation *)), SIGNAL(operationStateChange()));
     connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), SIGNAL(operationStateChange()));
 
-    //connect tracta els errors de connexió al PACS, al descarregar imatges
+    //connect tracta els errors de connexió al PACS, al descarregar/Guardar imatges
     connect (&m_qexecuteOperationThread, SIGNAL(errorInOperation(QString, QString, QExecuteOperationThread::OperationError)), SLOT(showQExecuteOperationThreadError(QString, QString, QExecuteOperationThread::OperationError)));
+    connect (&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), SLOT(showQExecuteOperationThreadStoreError(QString, QString, QExecuteOperationThread::StoreError)));
+
     //connect tracta els warning de connexió al PACS, al descarregar imatges
     connect (&m_qexecuteOperationThread, SIGNAL(warningInOperation(QString, QString, QExecuteOperationThread::OperationWarning)), SLOT(showQExecuteOperationThreadWarning(QString, QString, QExecuteOperationThread::OperationWarning)));
+    connect (&m_qexecuteOperationThread, SIGNAL(warningInStore(QString, QString, QExecuteOperationThread::StoreWarning)), SLOT(showQExecuteOperationThreadStoreWarning(QString, QString, QExecuteOperationThread::StoreWarning)));
 
     //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
     connect(&m_qexecuteOperationThread, SIGNAL(viewStudy(QString, QString, QString)), this, SIGNAL(viewRetrievedStudy(QString)), Qt::QueuedConnection);
@@ -415,7 +420,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
     {
         case QExecuteOperationThread::ErrorConnectingPacs :
             message = tr("Please review the operation list screen, ");
-            message += tr("%1 can't connect to PACS %2 trying to retrieve or store a study.\n").arg(ApplicationNameString, pacs.getAETitle());
+            message += tr("%1 can't connect to PACS %2 trying to retrievev a study.\n").arg(ApplicationNameString, pacs.getAETitle());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("\nIf the problem persist contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
@@ -441,7 +446,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
             break;
         case QExecuteOperationThread::PatientInconsistent :
             message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred and some operations may have failed.");
+            message += tr("an error ocurred and some retrieve operations may have failed.");
             message += tr("\n%1 has not be capable of read correctly dicom information of the study.").arg(ApplicationNameString);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
@@ -472,6 +477,34 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadError(QString studyInsta
     }
 }
 
+void QInputOutputPacsWidget::showQExecuteOperationThreadStoreError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreError error)
+{
+    QString message;
+    PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
+
+    switch (error)
+    {
+        case QExecuteOperationThread::CanNotConnectPacsToStore :
+            message = tr("Please review the operation list screen, ");
+            message += tr("%1 can't connect to PACS %2 trying to store a study.\n").arg(ApplicationNameString, pacs.getAETitle());
+            message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
+            message += tr("\nIf the problem persist contact with an administrator.");
+            QMessageBox::critical(this, ApplicationNameString, message);
+            break;
+        case QExecuteOperationThread::StoreUnknowStatus:
+        case QExecuteOperationThread::StoreFailureStatus:
+            message = tr("The store of images to PACS %1 has failed.\n\n").arg(pacs.getAETitle()); 
+            message += tr("Wait a minute and try again, if the problem persist contact with an administrator.");
+            QMessageBox::critical(this, ApplicationNameString, message);
+            break;
+        default:
+            message = tr("Please review the operation list screen, an unknown error has ocurred storing a study.");
+            message += tr("\n\nClose all %1 windows and try again."
+                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+            break;
+    }
+}
+
 void QInputOutputPacsWidget::showQExecuteOperationThreadWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::OperationWarning warning)
 {
     QString message;
@@ -491,6 +524,29 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadWarning(QString studyIns
             message = tr("Some images of study %1 from PACS %2.\n").arg(studyInstanceUID, pacs.getAETitle());
             message += tr("The study is incomplet.");
             QMessageBox::warning(this, ApplicationNameString, message);
+            break;
+    }
+}
+
+void QInputOutputPacsWidget::showQExecuteOperationThreadStoreWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreWarning warning)
+{
+    QString message;
+    PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
+
+    /*TODO:S'ha de millorar els missatges d'error indicant quin estudi ha fallat amb nom de pacient i study ID, s'ha de fer que l'error emeti
+     * en comptes del studyInstanceUID l'objecte Operation que conté la informació el patientName i el studyID */
+
+    switch (warning)
+    {
+        case QExecuteOperationThread::StoreSomeImagesFailureStatus:
+            message = tr("Some images of study %1 can't be stored to PACS %2.\n\n").arg(studyInstanceUID, pacs.getAETitle());
+            message += tr("Please contact with an administrator to solve the problem.");
+            QMessageBox::warning(this, ApplicationNameString, message);
+            break;
+        case QExecuteOperationThread::StoreWarningStatus:
+            message = tr("The study %1 has been stored, but it's possible that the PACS %1 has changed some of the data of the images.").arg(pacs.getAETitle());
+            QMessageBox::warning(this, ApplicationNameString, message);
+            break;
     }
 }
 
