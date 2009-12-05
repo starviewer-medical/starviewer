@@ -227,6 +227,9 @@
          <property name="toolButtonStyle">
           <enum>Qt::ToolButtonIconOnly</enum>
          </property>
+         <property name="popupMode">
+            <enum>QToolButton::InstantPopup</enum>
+         </property>
          <property name="autoRaise">
           <bool>true</bool>
          </property>
