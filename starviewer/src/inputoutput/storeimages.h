@@ -10,7 +10,6 @@
 #include <QList>
 
 struct T_ASC_Association;
-struct T_ASC_Network;
 struct T_DIMSE_C_StoreRSP;
 
 class DcmDataset;
@@ -33,11 +32,6 @@ public:
      */
    void setConnection( PacsConnection connection );
 
-   /** Sets the network to use for retrieve the images
-    * @param Network to use
-    */
-   void setNetwork ( T_ASC_Network * network );
-
    /** Guarda les imatges que s'especifiquen a la llista en el pacs establert per la connexió
     * @param ImageListStore de les imatges a enviar al PACS
     * @return indica estat del mètode
@@ -46,7 +40,6 @@ public:
 
 private :
     T_ASC_Association *m_association; // request DICOM association;
-    T_ASC_Network *m_network;
     //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning
     int m_numberOfStoredImagesSuccessful, m_numberOfStoredImagesWithWarning;
 
