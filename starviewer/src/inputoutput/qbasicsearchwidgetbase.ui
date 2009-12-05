@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>QBasicSearchWidgetBase</class>
- <widget class="QWidget" name="QBasicSearchWidgetBase" >
+ <class>udg::QBasicSearchWidgetBase</class>
+ <widget class="QWidget" name="udg::QBasicSearchWidgetBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
