@@ -26,6 +26,13 @@ public:
     QPreviousStudiesWidget(Study * inputStudy, QWidget * parent = 0 );
     ~QPreviousStudiesWidget();
 
+signals:
+    /// S'emet només quan no hi ha altres estudis ja descarregant-se.
+    void downloadingStudies();
+
+    /// S'emet quan s'han acabat de descarregar tots els estudis demanats.
+    void studiesDownloaded();
+
 private:
     /// Creació de connexions
     void createConnections();
@@ -37,6 +44,10 @@ private:
     void insertStudyToTree(Study * study , QString pacsID  );
     /// Actualitza l'amplada del QTreeWidget per aconseguir que l'scroll horitzontal no apareixi i tota la info sigui visible.
     void updateWidthTree();
+
+    /// Metodes encarregats de controlar quan s'han d'emetre els signals \sa downloadingStudies i \sa studiesDownloaded;
+    void increaseNumberOfDownladingStudies();
+    void decreaseNumberOfDownladingStudies();
 
 private slots:
     /// Insereix els estudis a l'arbre.
@@ -77,6 +88,8 @@ private:
     QSignalMapper * m_signalMapper;
     /// Objecte utilitzat per invocar la descàrrega d'estudis.
     QueryScreen * m_queryScreen;
+    /// Ens permet saber els estudis que s'estan descarregant.
+    int m_numberOfDownloadingStudies;
 };
 
 }

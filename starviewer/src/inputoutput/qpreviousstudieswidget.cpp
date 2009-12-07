@@ -31,6 +31,7 @@ QPreviousStudiesWidget::QPreviousStudiesWidget( Study * inputStudy, QWidget *par
     m_previousStudiesManager = new PreviousStudiesManager();
     m_signalMapper = new QSignalMapper(this);
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
+    m_numberOfDownloadingStudies = 0;
 
     initializeLookinForStudiesWidget();
     initializeTree();
@@ -185,6 +186,8 @@ void QPreviousStudiesWidget::viewStudy( const QString & studyInstanceUID )
     studyInfo->statusIcon->setMovie(statusAnimation);
     statusAnimation->setFileName(":/images/loader.gif");
     statusAnimation->start();
+
+    this->increaseNumberOfDownladingStudies();
 }
 
 void QPreviousStudiesWidget::studyRetrieveStarted( QString studyInstanceUID )
@@ -211,6 +214,8 @@ void QPreviousStudiesWidget::studyRetrieveFinished( QString studyInstanceUID )
         {
             studyInfo->status = Finished;
             studyInfo->statusIcon->setPixmap( QPixmap(":/images/button_ok.png") );
+
+            this->decreaseNumberOfDownladingStudies();
         }
     }
 
@@ -228,7 +233,27 @@ void QPreviousStudiesWidget::studyRetrieveFailed( QString studyInstanceUID )
             studyInfo->status = Failed;
             studyInfo->statusIcon->setPixmap( QPixmap(":/images/cancel.png") );
             studyInfo->downloadButton->setEnabled( true );
+
+            this->decreaseNumberOfDownladingStudies();
         }
+    }
+}
+
+void QPreviousStudiesWidget::increaseNumberOfDownladingStudies()
+{
+    m_numberOfDownloadingStudies++;
+    if ( m_numberOfDownloadingStudies == 1 )
+    {
+        emit downloadingStudies();
+    }
+}
+
+void QPreviousStudiesWidget::decreaseNumberOfDownladingStudies()
+{
+    m_numberOfDownloadingStudies--;
+    if ( m_numberOfDownloadingStudies == 0 )
+    {
+        emit studiesDownloaded();
     }
 }
 
