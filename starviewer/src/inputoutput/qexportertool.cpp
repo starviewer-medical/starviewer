@@ -50,8 +50,8 @@ void QExporterTool::createConnections()
     connect( m_allImagesRadioButton , SIGNAL( clicked() ) , this , SLOT( allImagesRadioButtonClicked()  ) );
     connect( m_imagesOfCurrentPhaseRadioButton , SIGNAL( clicked() ) , this , SLOT( imageOfCurrentPhaseRadioButtonClicked()  ) );
     connect( m_phasesOfCurrentImageRadioButton , SIGNAL( clicked() ) , this , SLOT( phasesOfCurrentImageRadioButtonClicked()  ) );
-    connect( m_storeToLocalCheckBox, SIGNAL( clicked(bool) ) , this , SLOT( destinacionsChanged(bool) ) );
-    connect( m_sendToPacsCheckBox, SIGNAL( clicked(bool) ) , this , SLOT( destinacionsChanged(bool) ) );
+    connect( m_storeToLocalCheckBox, SIGNAL( clicked(bool) ) , this , SLOT( destinationsChanged(bool) ) );
+    connect( m_sendToPacsCheckBox, SIGNAL( clicked(bool) ) , this , SLOT( destinationsChanged(bool) ) );
     connect( m_sendToPacsCheckBox , SIGNAL( toggled(bool) ) , m_pacsNodeComboBox , SLOT( setEnabled(bool) ) );
 }
 
