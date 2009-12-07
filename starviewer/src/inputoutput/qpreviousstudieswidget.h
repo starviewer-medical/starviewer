@@ -82,6 +82,8 @@ private:
     QTreeWidget * m_previousStudiesTree;
     /// Widget que apareix quan s'està fent la consulta dels possibles estudis previs.
     QWidget * m_lookingForStudiesWidget;
+    /// Label per mostrar que no hi ha estudis previs.
+    QLabel * m_noPreviousStudiesLabel;
     /// Objecte encarregat de cercar estudis previs
     PreviousStudiesManager * m_previousStudiesManager;
     /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.

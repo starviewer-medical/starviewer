@@ -33,16 +33,21 @@ QPreviousStudiesWidget::QPreviousStudiesWidget( Study * inputStudy, QWidget *par
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
 
+    m_noPreviousStudiesLabel = new QLabel(this);
+    m_noPreviousStudiesLabel->setText( tr("No previous studies.") );
+
     initializeLookinForStudiesWidget();
     initializeTree();
 
     verticalLayout->addWidget( m_lookingForStudiesWidget );
+    verticalLayout->addWidget( m_noPreviousStudiesLabel );
     verticalLayout->addWidget( m_previousStudiesTree );
 
     createConnections();
 
 
     m_lookingForStudiesWidget->setVisible( true );
+    m_noPreviousStudiesLabel->setVisible( false );
     m_previousStudiesTree->setVisible( false );
 
     m_previousStudiesManager->queryPreviousStudies( inputStudy );
@@ -158,18 +163,29 @@ void QPreviousStudiesWidget::updateWidthTree()
 
 void QPreviousStudiesWidget::insertStudiesToTree(  QList<Study*> studiesList , QHash<QString, QString> hashPacsIDOfStudyInstanceUID )
 {
-    foreach( Study *study, studiesList )
+    if ( studiesList.size() > 0 )
     {
-        insertStudyToTree( study , hashPacsIDOfStudyInstanceUID[ study->getInstanceUID() ]);
+
+        foreach( Study *study, studiesList )
+        {
+            insertStudyToTree( study , hashPacsIDOfStudyInstanceUID[ study->getInstanceUID() ]);
+        }
+
+        m_previousStudiesTree->sortByColumn( 5 , Qt::DescendingOrder );
+        m_previousStudiesTree->sortByColumn( 4 , Qt::DescendingOrder );
+
+        m_previousStudiesTree->setVisible( true );
+
+        updateWidthTree();
+
+    }
+    else
+    {
+        m_noPreviousStudiesLabel->setVisible( true );
     }
 
-    m_previousStudiesTree->sortByColumn( 5 , Qt::DescendingOrder );
-    m_previousStudiesTree->sortByColumn( 4 , Qt::DescendingOrder );
-
     m_lookingForStudiesWidget->setVisible( false );
-    m_previousStudiesTree->setVisible( true );
 
-    updateWidthTree();
 }
 
 void QPreviousStudiesWidget::viewStudy( const QString & studyInstanceUID )
