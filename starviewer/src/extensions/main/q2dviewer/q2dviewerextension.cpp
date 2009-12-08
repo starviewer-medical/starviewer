@@ -29,7 +29,6 @@
 #include "qexportertool.h"
 
 #include <QMenu>
-#include <QWidgetAction>
 #include <QAction>
 #include <QPoint>
 #include <QGridLayout>
@@ -157,7 +156,7 @@ void Q2DViewerExtension::createConnections()
 
     connect( m_previousStudiesWidget, SIGNAL( downloadingStudies() ), this, SLOT( changeToPreviousStudiesDownloadingIcon() ) );
     connect( m_previousStudiesWidget, SIGNAL( studiesDownloaded() ), this, SLOT( changeToPreviousStudiesDefaultIcon() ) );
-
+    connect( m_previousStudiesToolButton, SIGNAL( clicked ( bool ) ), SLOT( showPreviousStudiesWidget() ) );
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
@@ -184,16 +183,6 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     /// Habilitem la possibilitat de buscar estudis previs.
     m_previousStudiesWidget->searchPreviousStudiesOf( m_mainVolume->getStudy() );
-
-    QMenu *previousStudiesMenu = new QMenu;
-    QWidgetAction *previousStudiesWidgetAction = new QWidgetAction(this);
-    previousStudiesWidgetAction->setDefaultWidget(m_previousStudiesWidget);
-    previousStudiesMenu->addAction(previousStudiesWidgetAction);
-
-    if ( m_previousStudiesToolButton->menu() )
-        delete m_previousStudiesToolButton->menu();
-    m_previousStudiesToolButton->setMenu( previousStudiesMenu );
-
     m_previousStudiesToolButton->setEnabled( true );
 }
 
@@ -248,6 +237,13 @@ void Q2DViewerExtension::showInteractiveImageTable()
     QPoint point = m_imageGrid->mapToGlobal( QPoint(0,0) );
     m_sliceTableGrid->move( point.x(),( point.y() + m_imageGrid->frameGeometry().height() ) );
     m_sliceTableGrid->show();
+}
+
+void Q2DViewerExtension::showPreviousStudiesWidget()
+{
+    QPoint point = m_previousStudiesToolButton->mapToGlobal( QPoint(0,0) );
+    m_previousStudiesWidget->move( point.x(),( point.y() + m_previousStudiesToolButton->frameGeometry().height() ) );
+    m_previousStudiesWidget->show();
 }
 
 Patient* Q2DViewerExtension::getPatient() const

@@ -70,6 +70,9 @@ public slots:
     ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showInteractiveImageTable();
 
+    /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
+    void showPreviousStudiesWidget();
+
     /// Mostrar la informació del volum a cada visualitzador o no.
     void showViewerInformation( bool show );
 
