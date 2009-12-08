@@ -277,6 +277,26 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="m_screenshotsExporterToolButton">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/store.png</normaloff>:/images/store.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="m_viewerInformationToolButton">
        <property name="text">
         <string>Zoom</string>
