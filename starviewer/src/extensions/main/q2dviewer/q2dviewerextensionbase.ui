@@ -210,7 +210,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/advancedSearch.png</normaloff>:/images/advancedSearch.png</iconset>
+           <normaloff>:/images/cal.png</normaloff>:/images/cal.png</iconset>
          </property>
          <property name="iconSize">
           <size>
