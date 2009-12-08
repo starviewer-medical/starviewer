@@ -122,6 +122,10 @@ private slots:
     /// Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();
 
+    /// Mètodes utilitzats per modificar la icona del botó d'estudis previs per saber si s'estan descarregat estudis sense haver d'obrir el widget.
+    void changeToPreviousStudiesDownloadingIcon();
+    void changeToPreviousStudiesDefaultIcon();
+
 private:
     /// El volum principal
     Volume *m_mainVolume;

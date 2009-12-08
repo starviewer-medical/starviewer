@@ -154,6 +154,10 @@ void Q2DViewerExtension::createConnections()
     // Connexions necessaries amb els canvis al layout
     connect( m_workingArea, SIGNAL( viewerAdded( Q2DViewerWidget * ) ), SLOT( activateNewViewer( Q2DViewerWidget * ) ) );
     connect( m_workingArea, SIGNAL( viewerSelectedChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
+
+    connect( m_previousStudiesWidget, SIGNAL( downloadingStudies() ), this, SLOT( changeToPreviousStudiesDownloadingIcon() ) );
+    connect( m_previousStudiesWidget, SIGNAL( studiesDownloaded() ), this, SLOT( changeToPreviousStudiesDefaultIcon() ) );
+
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
@@ -540,6 +544,16 @@ void Q2DViewerExtension::setHangingProtocol( int hangingProtocolNumber )
     /// Aplicació dels hanging protocols
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
     hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea );
+}
+
+void Q2DViewerExtension::changeToPreviousStudiesDownloadingIcon()
+{
+    m_previousStudiesToolButton->setIcon( QIcon( QString(":images/cal_downloading.png") ) );
+}
+
+void Q2DViewerExtension::changeToPreviousStudiesDefaultIcon()
+{
+    m_previousStudiesToolButton->setIcon( QIcon( QString(":images/cal.png") ) );
 }
 
 }
