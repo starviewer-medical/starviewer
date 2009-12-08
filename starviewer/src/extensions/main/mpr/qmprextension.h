@@ -125,6 +125,9 @@ private slots:
     void changeSelectedViewer();
     /// Efectua un screenshot sobre el visor que estigui seleccionat
     void screenShot();
+
+    /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
+    void showScreenshotsExporterDialog();
     
     /// gestiona els events de cada finestra per controlar els eixos de manipulació
     void handleAxialViewEvents( unsigned long eventID );

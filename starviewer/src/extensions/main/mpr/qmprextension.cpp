@@ -17,6 +17,7 @@
 #include "drawer.h"
 #include "mprsettings.h"
 #include "screenshottool.h" 
+#include "qexportertool.h"
 #include "patientbrowsermenu.h" 
 #include "toolproxy.h"
 // qt
@@ -250,6 +251,10 @@ void QMPRExtension::createConnections()
     connect( m_sagital2DView, SIGNAL(selected()), SLOT(changeSelectedViewer()) );
     connect( m_coronal2DView, SIGNAL(selected()), SLOT(changeSelectedViewer()) );
     connect( m_screenShotToolButton, SIGNAL( clicked() ), SLOT( screenShot() ) );
+
+    // per mostrar exportació
+    connect( m_screenshotsExporterToolButton, SIGNAL( clicked() ) , SLOT( showScreenshotsExporterDialog() ) );
+
 }
 
 void QMPRExtension::changeSelectedViewer()
@@ -298,6 +303,30 @@ void QMPRExtension::screenShot()
     else
         DEBUG_LOG("No hi ha tool d'screenshot disponible");
 }
+
+void QMPRExtension::showScreenshotsExporterDialog()
+{
+    Q2DViewer * viewer;
+    if( m_axial2DView->isActive() )
+    {
+        viewer = m_axial2DView;
+    }
+    else if( m_sagital2DView->isActive() )
+    {
+        viewer = m_sagital2DView;
+    }
+    else if( m_coronal2DView->isActive() )
+    {
+        viewer = m_coronal2DView;
+    }
+
+    if ( viewer )
+    {
+        QExporterTool exporter( viewer );
+        exporter.exec();
+    }
+}
+
 
 void QMPRExtension::showViewerInformation( bool show )
 {
