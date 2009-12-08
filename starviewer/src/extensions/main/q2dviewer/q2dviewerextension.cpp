@@ -75,6 +75,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_predefinedSlicesGrid = new MenuGridWidget(this);
     m_sliceTableGrid = new TableMenu(this);
     m_dicomDumpCurrentDisplayedImage = new QDicomDump(this);
+    m_previousStudiesWidget = new QPreviousStudiesWidget( this );
 
     readSettings();
     createConnections();
@@ -178,7 +179,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     connect( m_patient, SIGNAL( patientFused() ), SLOT(searchHangingProtocols()) );
 
     /// Habilitem la possibilitat de buscar estudis previs.
-    m_previousStudiesWidget = new QPreviousStudiesWidget( m_mainVolume->getStudy() , this );
+    m_previousStudiesWidget->searchPreviousStudiesOf( m_mainVolume->getStudy() );
 
     QMenu *previousStudiesMenu = new QMenu;
     QWidgetAction *previousStudiesWidgetAction = new QWidgetAction(this);

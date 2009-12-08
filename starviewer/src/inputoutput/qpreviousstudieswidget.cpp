@@ -20,7 +20,7 @@
 
 namespace udg {
 
-QPreviousStudiesWidget::QPreviousStudiesWidget( Study * inputStudy, QWidget *parent )
+QPreviousStudiesWidget::QPreviousStudiesWidget( QWidget *parent )
    : QFrame(parent)
 {
     setWindowFlags( Qt::Popup );
@@ -46,11 +46,9 @@ QPreviousStudiesWidget::QPreviousStudiesWidget( Study * inputStudy, QWidget *par
     createConnections();
 
 
-    m_lookingForStudiesWidget->setVisible( true );
+    m_lookingForStudiesWidget->setVisible( false );
     m_noPreviousStudiesLabel->setVisible( false );
     m_previousStudiesTree->setVisible( false );
-
-    m_previousStudiesManager->queryPreviousStudies( inputStudy );
 
 }
 
@@ -64,6 +62,28 @@ QPreviousStudiesWidget::~QPreviousStudiesWidget()
     delete m_previousStudiesManager;
     delete m_lookingForStudiesWidget;
     delete m_signalMapper;
+    delete m_noPreviousStudiesLabel;
+}
+
+void QPreviousStudiesWidget::searchPreviousStudiesOf(Study * study)
+{
+    Q_ASSERT( study );
+
+    m_lookingForStudiesWidget->setVisible( true );
+    m_noPreviousStudiesLabel->setVisible( false );
+    m_previousStudiesTree->setVisible( false );
+
+    int items = m_previousStudiesTree->topLevelItemCount();
+    for ( int i = 0 ; i < items ; i++ )
+    {
+        delete m_previousStudiesTree->takeTopLevelItem(0);
+    }
+    foreach ( QString key, m_infomationPerStudy.keys() )
+    {
+        delete m_infomationPerStudy.take( key );
+    }
+
+    m_previousStudiesManager->queryPreviousStudies( study );
 }
 
 void QPreviousStudiesWidget::createConnections()
