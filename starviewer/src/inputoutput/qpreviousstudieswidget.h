@@ -23,8 +23,13 @@ class QPreviousStudiesWidget : public QFrame
 {
 Q_OBJECT
 public:
-    QPreviousStudiesWidget(Study * inputStudy, QWidget * parent = 0 );
+    QPreviousStudiesWidget( QWidget * parent = 0 );
     ~QPreviousStudiesWidget();
+
+    /** Mètode per activar la cerca d'estudis previs. Es mostraran al widget els estudis del pacient anteriors a la data
+      * de l'estudi proporcionat. Es farà la consulta als PACS que estan seleccionats a la llista de nodes de la QueryScreen
+      */
+    void searchPreviousStudiesOf( Study * study);
 
 signals:
     /// S'emet només quan no hi ha altres estudis ja descarregant-se.
