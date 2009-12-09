@@ -313,10 +313,10 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     }
     else if( toolName == "NonClosedAngleTool" )
     {
-        toolAction->setText( tr("Non Closed Angle") );
+        toolAction->setText( tr("Open Angle") );
         toolAction->setIcon( QIcon(":/images/nonClosedAngle.png") );
         toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::NonClosedAngleTool ) );
-        statusTip = tr("Enable/Disable non closed angle tool");
+        statusTip = tr("Enable/Disable open-angle tool");
         toolTip = toolAction->text();
     }
     else if( toolName == "ClippingPlanesTool" )
