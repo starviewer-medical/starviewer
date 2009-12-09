@@ -16,7 +16,7 @@
 namespace udg {
 
 WindowLevelPresetsTool::WindowLevelPresetsTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_myToolData(0)
+ : Tool(viewer,parent), m_myToolData(0), m_defaultPresetsIndex(0)
 {
     m_toolName = "WindowLevelPresetsTool";
 //     m_hasSharedData = true;
@@ -47,6 +47,9 @@ WindowLevelPresetsTool::WindowLevelPresetsTool( QViewer *viewer, QObject *parent
     m_characterIndexMap.insert(40,17); // Shift + 8
     m_characterIndexMap.insert(41,18); // Shift + 9
     m_characterIndexMap.insert(61,19); // Shift + 0
+
+    // Cada cop que es canvïi el volum cal actualitzar la llista de ww/wl per defecte d'aquell volum (definits al DICOM)
+    connect( viewer, SIGNAL( volumeChanged(Volume *) ), SLOT( updateWindowLevelData() ) );
 }
 
 WindowLevelPresetsTool::~WindowLevelPresetsTool()
@@ -72,14 +75,46 @@ void WindowLevelPresetsTool::applyPreset(char key)
         return;
 
     QString preset;
-    if( m_characterIndexMap.contains(key) )
+
+    if( !m_characterIndexMap.contains(key) )
+    {
+        // TODO de moment fem servir la tecla "º", que en un teclat espanyol queda a l'esquerra del nº 1, però en altres teclats pot estar a qualsevol lloc
+        if ( key == -70 )
+        {
+            if( !m_defaultPresets.isEmpty() )
+            {
+                preset = m_defaultPresets.at(m_defaultPresetsIndex);
+                m_defaultPresetsIndex = (m_defaultPresetsIndex+1) % m_defaultPresets.count();
+
+                DEBUG_LOG( QString("default Preset index: %1").arg( m_defaultPresetsIndex ) );
+            }
+        }
+    }
+    else
     {
         int presetIndex = m_characterIndexMap.value(key);
         if( presetIndex < m_standardPresets.count() ) 
+        {
             preset = m_standardPresets.at(presetIndex);
+            m_defaultPresetsIndex = 0;
+        }
     }
 
     m_myToolData->activatePreset( preset );
+}
+
+void WindowLevelPresetsTool::updateWindowLevelData()
+{
+    m_defaultPresetsIndex = 0;
+    if( !m_myToolData )
+    {
+        DEBUG_LOG("No tenim tooldata de window level!");
+    }
+    else
+    {
+        m_defaultPresets.clear();
+        m_defaultPresets = m_myToolData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined );
+    }
 }
 
 void WindowLevelPresetsTool::setToolData( ToolData *toolData )
