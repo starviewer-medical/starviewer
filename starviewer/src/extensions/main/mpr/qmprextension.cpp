@@ -23,6 +23,7 @@
 // qt
 #include <QSlider> // pel control m_axialSlider
 #include <QSplitter>
+#include <QMessageBox>
 // vtk
 #include <vtkRenderer.h>
 #include <vtkMath.h> // pel vtkMath::Cross
@@ -306,7 +307,7 @@ void QMPRExtension::screenShot()
 
 void QMPRExtension::showScreenshotsExporterDialog()
 {
-    Q2DViewer * viewer;
+    Q2DViewer * viewer = 0;
     if( m_axial2DView->isActive() )
     {
         viewer = m_axial2DView;
@@ -324,6 +325,10 @@ void QMPRExtension::showScreenshotsExporterDialog()
     {
         QExporterTool exporter( viewer );
         exporter.exec();
+    }
+    else
+    {
+        QMessageBox::warning(this, tr("Export to DICOM") , tr("Please, select a viewer and try again.") );
     }
 }
 
