@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
-    <height>393</height>
+    <width>251</width>
+    <height>371</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -103,11 +103,6 @@
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="label_7">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>Number of images: </string>
            </property>
@@ -115,11 +110,6 @@
          </item>
          <item>
           <widget class="QLabel" name="m_numberOfImagesToStore">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
            <property name="text">
             <string>1</string>
            </property>
