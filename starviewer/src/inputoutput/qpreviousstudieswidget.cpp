@@ -186,13 +186,10 @@ void QPreviousStudiesWidget::insertStudiesToTree(  QList<Study*> studiesList , Q
     if ( studiesList.size() > 0 )
     {
 
-        foreach( Study *study, studiesList )
+        foreach( Study *study, orderStudiesByDateTime( studiesList , true ) )
         {
             insertStudyToTree( study , hashPacsIDOfStudyInstanceUID[ study->getInstanceUID() ]);
         }
-
-        m_previousStudiesTree->sortByColumn( 5 , Qt::DescendingOrder );
-        m_previousStudiesTree->sortByColumn( 4 , Qt::DescendingOrder );
 
         m_previousStudiesTree->setVisible( true );
 
@@ -291,6 +288,28 @@ void QPreviousStudiesWidget::decreaseNumberOfDownladingStudies()
     {
         emit studiesDownloaded();
     }
+}
+
+QList<Study*> QPreviousStudiesWidget::orderStudiesByDateTime( QList<Study*> & inputList , bool descendingOrder )
+{
+    QMultiMap<long,Study*> output;
+    long key;
+
+    foreach( Study *study, inputList )
+    {
+        if ( descendingOrder )
+        {
+            key = -study->getDateTime().toTime_t();
+        }
+        else
+        {
+            key = study->getDateTime().toTime_t();
+        }
+
+        output.insert( key , study );
+    }
+
+    return output.values();
 }
 
 }

@@ -54,6 +54,9 @@ private:
     void increaseNumberOfDownladingStudies();
     void decreaseNumberOfDownladingStudies();
 
+    /// Retorna la llista d'estudis ordenada per Data i Hora en ordre ascendent o descendent segons es vulgui.
+    QList<Study*> orderStudiesByDateTime( QList<Study*> & inputList , bool descendingOrder = false );
+
 private slots:
     /// Insereix els estudis a l'arbre.
     void insertStudiesToTree(  QList<Study*> studiesList , QHash<QString, QString> hashPacsIDOfStudyInstanceUID );
