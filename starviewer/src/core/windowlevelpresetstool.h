@@ -17,24 +17,19 @@ namespace udg {
 class Q2DViewer;
 class WindowLevelPresetsToolData;
 /**
-Tool per canviar window levels predefinits
+    Tool per canviar window levels predefinits
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class WindowLevelPresetsTool : public Tool
-{
+class WindowLevelPresetsTool : public Tool {
 Q_OBJECT
 public:
     WindowLevelPresetsTool( QViewer *viewer, QObject *parent = 0 );
-
     ~WindowLevelPresetsTool();
 
     void handleEvent( unsigned long eventID );
 
-    /**
-     * Ens retorna el nombre de presets que té carregats
-     * @return
-     */
+    /// Ens retorna el nombre de presets que té carregats
     int getNumberOfPresets() const;
 
     void setToolData( ToolData *toolData );
@@ -42,7 +37,7 @@ public:
 private:
     /**
      * Aplica el window level predeterminat per la tecla donada
-     * @param key caràcter rebut
+     * @param key Caràcter rebut
      */
     void applyPreset(char key);
 
@@ -51,10 +46,10 @@ private slots:
     void updateWindowLevelData();
 
 private:
-//     Q2DViewer *m_2DViewer;
-
+    /// Dades de window level amb tots els presets
     WindowLevelPresetsToolData *m_myToolData;
 
+    /// Llista de presets predefinits
     QStringList m_standardPresets;
     
     /// Llista de presets per defecte del volum actual
