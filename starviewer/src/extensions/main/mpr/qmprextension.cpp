@@ -778,6 +778,8 @@ void QMPRExtension::setInput( Volume *input )
     m_volume = new Volume;
     m_volume->setImages( input->getImages() );
     m_volume->setData( changeInfo->GetOutput() );
+    m_volume->setNumberOfPhases( input->getNumberOfPhases() );
+    m_volume->setNumberOfSlicesPerPhase( input->getNumberOfSlicesPerPhase() );
 
     m_volume->getSpacing( m_axialSpacing );
 
@@ -802,6 +804,8 @@ void QMPRExtension::setInput( Volume *input )
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
     sagitalResliced->setImages( m_volume->getImages() );
     sagitalResliced->setData( m_sagitalReslice->GetOutput() );
+    sagitalResliced->setNumberOfPhases( 1 );
+    sagitalResliced->setNumberOfSlicesPerPhase( 1 );
 
     m_sagital2DView->setInput( sagitalResliced );
 
@@ -809,6 +813,8 @@ void QMPRExtension::setInput( Volume *input )
     //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
     coronalResliced->setImages( m_volume->getImages() );
     coronalResliced->setData( m_coronalReslice->GetOutput() );
+    coronalResliced->setNumberOfPhases( 1 );
+    coronalResliced->setNumberOfSlicesPerPhase( 1 );
     m_coronal2DView->setInput( coronalResliced );
 }
 
