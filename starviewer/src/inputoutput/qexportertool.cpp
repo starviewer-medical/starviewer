@@ -71,7 +71,7 @@ void QExporterTool::initialize()
         }
 
         // Una sola imatge
-        if ( input->getNumberOfPhases() * input->getNumberOfSlicesPerPhase() == 1 )
+        if ( q2DViewer->getMaximumSlice() == 0 )
         {
             m_allImagesRadioButton->setVisible( false );
         }
@@ -249,8 +249,16 @@ void QExporterTool::currentImageRadioButtonClicked()
 
 void QExporterTool::allImagesRadioButtonClicked()
 {
-    Volume *volume = m_viewer->getInput();
-    m_numberOfImagesToStore->setText( QString::number( volume->getNumberOfPhases() * volume->getNumberOfSlicesPerPhase() ) );
+    Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>( m_viewer );
+
+    if ( viewer2D )
+    {
+        m_numberOfImagesToStore->setText( QString::number( viewer2D->getMaximumSlice() + 1 ) );
+    }
+    else
+    {
+        DEBUG_LOG( QString("Només està pensat per visors 2D.") );
+    }
 }
 
 void QExporterTool::imageOfCurrentPhaseRadioButtonClicked()
