@@ -11,7 +11,9 @@
 #include "drawer.h"
 #include "drawertext.h"
 #include "drawerpolygon.h"
+
 #include <QPointer>
+#include <QMessageBox>
 
 
 //vtk
@@ -47,8 +49,9 @@ MagicTool::MagicTool( QViewer *viewer, QObject *parent )
 
 MagicTool::~MagicTool()
 {
-    if ( !m_mainPolygon.isNull() )
-        delete m_mainPolygon;
+	//no fem el delete perquè si no destruiríem la línia
+    //if ( !m_mainPolygon.isNull() )
+        //delete m_mainPolygon;
 
 	m_2DViewer->setCursor(Qt::ArrowCursor);
 }
@@ -64,7 +67,14 @@ void MagicTool::handleEvent( unsigned long eventID )
     case vtkCommand::LeftButtonPressEvent:
         if(m_2DViewer->getInput()!=0)
         {
-            this->setMagicPoint(  );
+			if(m_2DViewer->getView() != Q2DViewer::Axial)
+			{
+				DEBUG_LOG("ERROR: This tool can only be used in the acquisition direction");
+			}
+			else
+			{
+				this->setMagicPoint(  );
+			}
         }
     break;
 
