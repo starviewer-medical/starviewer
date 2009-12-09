@@ -46,12 +46,22 @@ private:
      */
     void applyPreset(char key);
 
+private slots:
+    /// Actualitza la llista de window/level definits per defecte
+    void updateWindowLevelData();
+
 private:
 //     Q2DViewer *m_2DViewer;
 
     WindowLevelPresetsToolData *m_myToolData;
 
     QStringList m_standardPresets;
+    
+    /// Llista de presets per defecte del volum actual
+    QStringList m_defaultPresets;
+    
+    /// Índex de l'últim preset per defecte escollit
+    int m_defaultPresetsIndex;
 
     /// Aquest mapa ens donarà la relació entre el caràcter premut i l'índex corresponent dels presets
     QMap <char, int> m_characterIndexMap;
