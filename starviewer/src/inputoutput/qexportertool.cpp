@@ -73,7 +73,7 @@ void QExporterTool::initialize()
         }
 
         // Una sola imatge
-        if ( q2DViewer->getMaximumSlice() == 0 )
+        if ( q2DViewer->getMaximumSlice() * input->getNumberOfPhases() == 0 )
         {
             m_allImagesRadioButton->setVisible( false );
         }
@@ -261,7 +261,7 @@ void QExporterTool::allImagesRadioButtonClicked()
     if ( viewer2D )
     {
         this->generate2DPreview(0,0);
-        m_numberOfImagesToStore->setText( QString("1/%1").arg( QString::number( viewer2D->getMaximumSlice() + 1 ) ) );
+        m_numberOfImagesToStore->setText( QString("1/%1").arg( QString::number( (viewer2D->getMaximumSlice() + 1) * viewer2D->getInput()->getNumberOfPhases() ) ) );
     }
     else
     {
