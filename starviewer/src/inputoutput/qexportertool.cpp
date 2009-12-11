@@ -248,9 +248,9 @@ void QExporterTool::generateAndStoreNewSeries()
             PacsDevice device = deviceManager.getPACSDeviceByID( m_pacsNodeComboBox->itemData( m_pacsNodeComboBox->currentIndex() ).toString() );
 
             DicomMask mask;
-            mask.setStudyUID( m_viewer->getInput()->getStudy()->getInstanceUID() );
-            mask.setSeriesUID( m_viewer->getInput()->getImages().at(0)->getParentSeries()->getInstanceUID() );
-            queryScreen->storeDicomObjectsToPacs( device , m_viewer->getInput()->getStudy() , mask );
+            mask.setStudyUID( generetedVolume->getStudy()->getInstanceUID() );
+            mask.setSeriesUID( generetedVolume->getImages().at(0)->getParentSeries()->getInstanceUID() );
+            queryScreen->storeDicomObjectsToPacs( device , generetedVolume->getStudy() , mask );
         }
 
         progress.setValue( progress.value() + 1 );
