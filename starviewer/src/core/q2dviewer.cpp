@@ -804,16 +804,14 @@ void Q2DViewer::render()
 
 void Q2DViewer::resetView( CameraOrientationType view )
 {
+    // Important, cal desactivar el thickslab abans de fer m_lastView = view, sinó falla amb l'update extent
+    enableThickSlab(false);
     m_lastView = view;
     m_alignPosition = Q2DViewer::AlignCenter;
-    // TODO aquest signal el mantenim aquí i no el posem
-    // al final del mètode, com semblaria lògic, degut
-    // a que cal millorar la interacció amb QThickSlabWidget
-    // ara si es posa al final, després de resetCamera, peta
-    emit viewChanged( m_lastView );
-    // thick Slab, li indiquem la direcció de projecció
-    m_thickSlabProjectionFilter->SetProjectionDimension( m_lastView );
     resetCamera();
+    // Thick Slab, li indiquem la direcció de projecció actual
+    m_thickSlabProjectionFilter->SetProjectionDimension( m_lastView );
+    emit viewChanged( m_lastView );
 }
 
 void Q2DViewer::resetViewToAxial()

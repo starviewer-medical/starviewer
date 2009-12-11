@@ -66,7 +66,6 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
     // creem els vincles
     connect( m_currentViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( reset() ) );
     connect( m_currentViewer, SIGNAL( viewChanged(int) ), SLOT( disableProjection() ) );
-    connect( m_currentViewer, SIGNAL( slabThicknessChanged(int) ), m_slabThicknessSlider, SLOT( setValue(int) ) );
 }
 
 void QThickSlabWidget::setProjectionMode( int mode )
