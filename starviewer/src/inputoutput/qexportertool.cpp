@@ -127,6 +127,8 @@ void QExporterTool::generateAndStoreNewSeries()
     progress.setValue(0);
     qApp->processEvents();
 
+    m_viewer->getRenderWindow()->OffScreenRenderingOn();
+
     if ( m_currentImageRadioButton->isChecked() )
     {
         //Capturem la vista
@@ -203,6 +205,8 @@ void QExporterTool::generateAndStoreNewSeries()
         DEBUG_LOG( QString("Radio Button no identificat!") );
         return;
     }
+
+    m_viewer->getRenderWindow()->OffScreenRenderingOff();
 
     builder->setSeriesDescription( m_seriesDescription->text() );
 
