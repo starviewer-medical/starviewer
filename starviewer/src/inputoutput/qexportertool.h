@@ -19,7 +19,7 @@ class QExporterTool : public QDialog , private Ui::QExporterBase
 Q_OBJECT
 public:
     /// @pre el viewer no pot ser null
-    QExporterTool(  QViewer *viewer , QDialog *parent = 0 );
+    QExporterTool(  QViewer *viewer , QWidget *parent = 0 );
 
     ~QExporterTool();
 
