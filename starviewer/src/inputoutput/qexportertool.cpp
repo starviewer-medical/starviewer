@@ -27,7 +27,7 @@
 #include <QPixmap>
 namespace udg {
 
-QExporterTool::QExporterTool( QViewer *viewer, QDialog *parent )
+QExporterTool::QExporterTool( QViewer *viewer, QWidget *parent )
 : QDialog( parent )
 {
     Q_ASSERT( viewer );
