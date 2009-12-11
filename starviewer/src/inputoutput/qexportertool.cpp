@@ -20,9 +20,11 @@
 #include <vtkImageData.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
+#include <vtkPNGWriter.h>
 
 #include <QDateTime>
 #include <QMessageBox>
+#include <QPixmap>
 namespace udg {
 
 QExporterTool::QExporterTool( QViewer *viewer, QDialog *parent )
@@ -98,10 +100,14 @@ void QExporterTool::initialize()
         }
     }
 
+    //Tenim el botó de capturar la image actual clicat
+    this->currentImageRadioButtonClicked();
+
 }
+
+
 void QExporterTool::generateAndStoreNewSeries()
 {
-    
     VolumeBuilderFromCaptures *builder = new VolumeBuilderFromCaptures();
     builder->setParentStudy( m_viewer->getInput()->getStudy() );
 
@@ -244,7 +250,8 @@ vtkImageData * QExporterTool::captureCurrentView()
 
 void QExporterTool::currentImageRadioButtonClicked()
 {
-    m_numberOfImagesToStore->setText( QString("1") );
+    this->generateCurrentPreview();
+    m_numberOfImagesToStore->setText( QString("1/1") );
 }
 
 void QExporterTool::allImagesRadioButtonClicked()
@@ -253,7 +260,8 @@ void QExporterTool::allImagesRadioButtonClicked()
 
     if ( viewer2D )
     {
-        m_numberOfImagesToStore->setText( QString::number( viewer2D->getMaximumSlice() + 1 ) );
+        this->generate2DPreview(0,0);
+        m_numberOfImagesToStore->setText( QString("1/%1").arg( QString::number( viewer2D->getMaximumSlice() + 1 ) ) );
     }
     else
     {
@@ -263,12 +271,32 @@ void QExporterTool::allImagesRadioButtonClicked()
 
 void QExporterTool::imageOfCurrentPhaseRadioButtonClicked()
 {
-    m_numberOfImagesToStore->setText( QString::number( m_viewer->getInput()->getNumberOfSlicesPerPhase() ) );
+    Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>( m_viewer );
+
+    if ( viewer2D )
+    {
+        this->generate2DPreview( 0 , viewer2D->getCurrentPhase() );
+        m_numberOfImagesToStore->setText( QString("1/%1").arg( QString::number( m_viewer->getInput()->getNumberOfSlicesPerPhase() ) ) );
+    }
+    else
+    {
+        DEBUG_LOG( QString("Només està pensat per visors 2D.") );
+    }
 }
 
 void QExporterTool::phasesOfCurrentImageRadioButtonClicked()
 {
-    m_numberOfImagesToStore->setText( QString::number( m_viewer->getInput()->getNumberOfPhases() ) );
+    Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>( m_viewer );
+
+    if ( viewer2D )
+    {
+        this->generate2DPreview( viewer2D->getCurrentSlice() , 0 );        
+        m_numberOfImagesToStore->setText( QString("1/%1").arg( QString::number( m_viewer->getInput()->getNumberOfPhases() ) ) );
+    }
+    else
+    {
+        DEBUG_LOG( QString("Només està pensat per visors 2D.") );
+    }
 }
 
 void QExporterTool::destinationsChanged( bool checked )
@@ -296,5 +324,51 @@ void QExporterTool::destinationsChanged( bool checked )
     }
 }
 
+void QExporterTool::generate2DPreview(int slice, int phase)
+{
+    Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>( m_viewer );
+    
+    Q_ASSERT( viewer2D );
+
+    // Guardem la llesca i la fase acutal
+    int currentSlice = viewer2D->getCurrentSlice();
+    int currentPhase = viewer2D->getCurrentPhase();
+
+    m_viewer->getRenderWindow()->OffScreenRenderingOn();
+
+    //Assignem la llesca i la fase
+    viewer2D->setSlice( slice );
+    viewer2D->setPhase( phase );
+
+    generatePreview();
+
+    // restaurem
+    viewer2D->setSlice( currentSlice );
+    viewer2D->setPhase( currentPhase );
+
+    m_viewer->getRenderWindow()->OffScreenRenderingOff();
+}
+
+void QExporterTool::generateCurrentPreview()
+{
+    m_viewer->getRenderWindow()->OffScreenRenderingOn();
+
+    this->generatePreview();
+    
+    m_viewer->getRenderWindow()->OffScreenRenderingOff();
+}
+
+void QExporterTool::generatePreview()
+{
+    QString path = QString("%1/preview.png").arg( QDir::tempPath() );
+    vtkImageWriter * writer = vtkPNGWriter::New();
+    writer->SetInput( captureCurrentView() );
+    writer->SetFileName( qPrintable( path ) );
+    writer->Write();
+    QPixmap pixmap( path );
+    m_previewSliceLabel->setPixmap( pixmap.scaledToWidth(150) );
+
+    writer->Delete();
+}
 }
 

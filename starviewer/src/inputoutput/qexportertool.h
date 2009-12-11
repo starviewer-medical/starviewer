@@ -31,6 +31,11 @@ private:
     /// Captura l'estat actual del visor passat al constructor @sa QExporterTool.
     vtkImageData * captureCurrentView();
 
+    /// Mètodes utilitzats per la generació de previsualitzacions
+    void generateCurrentPreview();
+    void generate2DPreview(int slice, int phase);
+    void generatePreview();
+
 private slots:
     /// Generar i guardar la nova sèrie a la bdd i enviar-la al PACS si és el cas.
     void generateAndStoreNewSeries();
