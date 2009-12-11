@@ -851,6 +851,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionTypeComboBox, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseChebychevRadioButton, SIGNAL( toggled(bool) ), m_baseChebychevFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseChebychevRadioButton, SIGNAL( toggled(bool) ), m_baseChebychevFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_additiveObscuranceVomiCheckBox, SIGNAL( toggled(bool) ), m_additiveObscuranceVomiWeightLabel, SLOT( setEnabled(bool) ) );
     connect( m_additiveObscuranceVomiCheckBox, SIGNAL( toggled(bool) ), m_additiveObscuranceVomiWeightDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_contourCheckBox, SIGNAL( toggled(bool) ), m_contourDoubleSpinBox, SLOT( setEnabled(bool) ) );
@@ -875,8 +877,11 @@ void QExperimental3DExtension::createConnections()
     connect( m_opacityVomiCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityVomiChecked(bool) ) );
     connect( m_opacitySaliencyCheckBox, SIGNAL( toggled(bool) ), SLOT( opacitySaliencyChecked(bool) ) );
     connect( m_opacityFilteringCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityFilteringChecked(bool) ) );
+    connect( m_opacityChebychevCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityChebychevChecked(bool) ) );
     connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaLabel, SLOT( setEnabled(bool) ) );
     connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_chebychevCheckBox, SIGNAL( toggled(bool) ), m_chebychevFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_chebychevCheckBox, SIGNAL( toggled(bool) ), m_chebychevFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsLabel, SLOT( setEnabled(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsSpinBox, SLOT( setEnabled(bool) ) );
 
@@ -964,6 +969,8 @@ void QExperimental3DExtension::createConnections()
     // Filtering
     connect( m_filteringGaussianPushButton, SIGNAL( clicked() ), SLOT( gaussianFilter() ) );
     connect( m_filteringBoxMeanPushButton, SIGNAL( clicked() ), SLOT( boxMeanFilter() ) );
+    connect( m_chebychevGaussianPushButton, SIGNAL( clicked() ), SLOT( gaussianChebychev() ) );
+    connect( m_chebychevBoxMeanPushButton, SIGNAL( clicked() ), SLOT( boxMeanChebychev() ) );
 }
 
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
@@ -1236,6 +1243,7 @@ void QExperimental3DExtension::render()
                 break;
         }
     }
+    else if ( m_baseChebychevRadioButton->isChecked() ) m_volume->addVomi( m_chebychev, 1.0f, m_baseChebychevFactorDoubleSpinBox->value() );
 
     if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value(),
@@ -1255,6 +1263,8 @@ void QExperimental3DExtension::render()
         m_volume->addOpacity( absFiltering, m_maximumSpatialImportanceFunction, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
                                                                                 m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
     }
+    if ( m_opacityChebychevCheckBox->isChecked() ) m_volume->addOpacity( m_chebychev, 1.0f, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
+                                                                                            m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
     if ( m_filteringAmbientOcclusionCheckBox->isChecked() )
     {
         switch ( m_filteringAmbientOcclusionTypeComboBox->currentIndex() )
@@ -1276,6 +1286,8 @@ void QExperimental3DExtension::render()
                 break;
         }
     }
+    if ( m_chebychevCheckBox->isChecked() ) m_volume->addVomi( m_chebychev, 1.0f, m_chebychevFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
+                                                               m_additiveObscuranceVomiWeightDoubleSpinBox->value() );
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 
     m_viewer->render();
@@ -2733,6 +2745,7 @@ void QExperimental3DExtension::opacityVomiChecked( bool checked )
     {
         m_opacitySaliencyCheckBox->setChecked( false );
         m_opacityFilteringCheckBox->setChecked( false );
+        m_opacityChebychevCheckBox->setChecked( false );
         m_opacityLowLabel->setEnabled( true );
         m_opacityLowThresholdLabel->setEnabled( true );
         m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
@@ -2766,6 +2779,7 @@ void QExperimental3DExtension::opacitySaliencyChecked( bool checked )
     {
         m_opacityVomiCheckBox->setChecked( false );
         m_opacityFilteringCheckBox->setChecked( false );
+        m_opacityChebychevCheckBox->setChecked( false );
         m_opacityLowLabel->setEnabled( true );
         m_opacityLowThresholdLabel->setEnabled( true );
         m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
@@ -2799,6 +2813,41 @@ void QExperimental3DExtension::opacityFilteringChecked( bool checked )
     {
         m_opacityVomiCheckBox->setChecked( false );
         m_opacitySaliencyCheckBox->setChecked( false );
+        m_opacityChebychevCheckBox->setChecked( false );
+        m_opacityLowLabel->setEnabled( true );
+        m_opacityLowThresholdLabel->setEnabled( true );
+        m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
+        m_opacityLowFactorLabel->setEnabled( true );
+        m_opacityLowFactorDoubleSpinBox->setEnabled( true );
+        m_opacityHighLabel->setEnabled( true );
+        m_opacityHighThresholdLabel->setEnabled( true );
+        m_opacityHighThresholdDoubleSpinBox->setEnabled( true );
+        m_opacityHighFactorLabel->setEnabled( true );
+        m_opacityHighFactorDoubleSpinBox->setEnabled( true );
+    }
+    else
+    {
+        m_opacityLowLabel->setEnabled( false );
+        m_opacityLowThresholdLabel->setEnabled( false );
+        m_opacityLowThresholdDoubleSpinBox->setEnabled( false );
+        m_opacityLowFactorLabel->setEnabled( false );
+        m_opacityLowFactorDoubleSpinBox->setEnabled( false );
+        m_opacityHighLabel->setEnabled( false );
+        m_opacityHighThresholdLabel->setEnabled( false );
+        m_opacityHighThresholdDoubleSpinBox->setEnabled( false );
+        m_opacityHighFactorLabel->setEnabled( false );
+        m_opacityHighFactorDoubleSpinBox->setEnabled( false );
+    }
+}
+
+
+void QExperimental3DExtension::opacityChebychevChecked( bool checked )
+{
+    if ( checked )
+    {
+        m_opacityVomiCheckBox->setChecked( false );
+        m_opacitySaliencyCheckBox->setChecked( false );
+        m_opacityFilteringCheckBox->setChecked( false );
         m_opacityLowLabel->setEnabled( true );
         m_opacityLowThresholdLabel->setEnabled( true );
         m_opacityLowThresholdDoubleSpinBox->setEnabled( true );
@@ -2921,6 +2970,70 @@ void QExperimental3DExtension::boxMeanFilter()
     m_baseFilteringAmbientOcclusionRadioButton->setEnabled( true );
     m_filteringAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityFilteringCheckBox->setEnabled( true );
+
+    cast->Delete();
+}
+
+
+void QExperimental3DExtension::gaussianChebychev()
+{
+    vtkImageCast *cast = vtkImageCast::New();
+    cast->SetInput( m_volume->getImage() );
+    cast->SetOutputScalarTypeToFloat();
+    cast->Update();
+
+#ifndef CUDA_AVAILABLE
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "The Gaussian Chebychev is only implemented in CUDA. Compile with CUDA support to use it." );
+#else // CUDA_AVAILABLE
+    m_chebychev = cfGaussianChebychev( cast->GetOutput(), m_chebychevRadiusSpinBox->value() );
+#ifndef QT_NO_DEBUG
+    int size = m_volume->getSize();
+    for ( int i = 0; i < size; i++ )
+    {
+        if ( m_chebychev.at( i ) < 0.0f || m_chebychev.at( i ) > 1.0f )
+        {
+            DEBUG_LOG( QString( "chebychev[%1] = %2" ).arg( i ).arg( m_chebychev.at( i ) ) );
+        }
+    }
+#endif // QT_NO_DEBUG
+#endif // CUDA_AVAILABLE
+
+    m_vomi = m_chebychev;
+    m_maximumVomi = 1.0f;
+    m_baseVomiRadioButton->setEnabled( true );
+    m_vomiCheckBox->setEnabled( true );
+    m_opacityVomiCheckBox->setEnabled( true );
+
+    cast->Delete();
+}
+
+
+void QExperimental3DExtension::boxMeanChebychev()
+{
+    vtkImageCast *cast = vtkImageCast::New();
+    cast->SetInput( m_volume->getImage() );
+    cast->SetOutputScalarTypeToFloat();
+    cast->Update();
+
+#ifndef CUDA_AVAILABLE
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "The box mean Chebychev is only implemented in CUDA. Compile with CUDA support to use it." );
+#else // CUDA_AVAILABLE
+    m_chebychev = cfBoxMeanChebychev( cast->GetOutput(), m_chebychevRadiusSpinBox->value() );
+#ifndef QT_NO_DEBUG
+    int size = m_volume->getSize();
+    for ( int i = 0; i < size; i++ )
+    {
+        if ( m_chebychev.at( i ) < 0.0f || m_chebychev.at( i ) > 1.0f )
+        {
+            DEBUG_LOG( QString( "chebychev[%1] = %2" ).arg( i ).arg( m_chebychev.at( i ) ) );
+        }
+    }
+#endif // QT_NO_DEBUG
+#endif // CUDA_AVAILABLE
+
+    m_baseChebychevRadioButton->setEnabled( true );
+    m_chebychevCheckBox->setEnabled( true );
+    m_opacityChebychevCheckBox->setEnabled( true );
 
     cast->Delete();
 }
