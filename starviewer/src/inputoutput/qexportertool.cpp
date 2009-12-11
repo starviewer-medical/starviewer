@@ -25,6 +25,8 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QPixmap>
+#include <QProgressDialog>
+
 namespace udg {
 
 QExporterTool::QExporterTool( QViewer *viewer, QWidget *parent )
@@ -111,6 +113,19 @@ void QExporterTool::generateAndStoreNewSeries()
     VolumeBuilderFromCaptures *builder = new VolumeBuilderFromCaptures();
     builder->setParentStudy( m_viewer->getInput()->getStudy() );
 
+    QProgressDialog progress(this);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setMinimum(0);
+    if ( m_sendToPacsCheckBox->isChecked() )
+        progress.setMaximum(4);
+    else
+        progress.setMaximum(3);
+    progress.setMinimumDuration( 0 );
+    progress.setCancelButton( 0 );
+    progress.setModal(true);
+    progress.setLabelText( tr("Generating images..." ) );
+    progress.setValue(0);
+    qApp->processEvents();
 
     if ( m_currentImageRadioButton->isChecked() )
     {
@@ -193,6 +208,10 @@ void QExporterTool::generateAndStoreNewSeries()
 
     Volume * generetedVolume = builder->build();
 
+    progress.setLabelText( tr("Generating files..." ) );
+    progress.setValue( progress.value() + 1 );
+    qApp->processEvents();
+
     DICOMImageFileGenerator generator;
 
     Settings settings;
@@ -207,12 +226,19 @@ void QExporterTool::generateAndStoreNewSeries()
     {
         DEBUG_LOG ( "Fitxers generats correctament" );
 
+        progress.setLabelText( tr("Inserting into database..." ) );
+        progress.setValue( progress.value() + 1 );
+        qApp->processEvents();
+
         LocalDatabaseManager manager;
         manager.save( generetedVolume->getPatient() );
         // TODO Comprovar error
 
         if ( m_sendToPacsCheckBox->isChecked() ) //Enviem a PACS
         {
+            progress.setLabelText( tr("Sending to PACS..." ) );
+            progress.setValue( progress.value() + 1 );
+            qApp->processEvents();
             QueryScreen * queryScreen = SingletonPointer<QueryScreen>::instance();
             PacsDeviceManager deviceManager;
             PacsDevice device = deviceManager.getPACSDeviceByID( m_pacsNodeComboBox->itemData( m_pacsNodeComboBox->currentIndex() ).toString() );
@@ -223,6 +249,8 @@ void QExporterTool::generateAndStoreNewSeries()
             queryScreen->storeDicomObjectsToPacs( device , m_viewer->getInput()->getStudy() , mask );
         }
 
+        progress.setValue( progress.value() + 1 );
+        qApp->processEvents();
     }
     else
     {
