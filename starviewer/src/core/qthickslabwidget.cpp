@@ -22,6 +22,7 @@ QThickSlabWidget::QThickSlabWidget(QWidget *parent)
     m_projectionModeComboBox->addItems( items );
     m_slabThicknessSlider->setEnabled( false );
     m_slabThicknessLabel->setEnabled( false );
+    m_maximumThicknessCheckBox->setEnabled(false);
 }
 
 QThickSlabWidget::~QThickSlabWidget()
@@ -42,6 +43,7 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
         // si no teníem cap viewer fins ara creem les connexions necessàries
         connect( m_projectionModeComboBox, SIGNAL( currentIndexChanged(int) ), SLOT( applyProjectionMode(int) ) );
         connect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), SLOT( updateThicknessLabel(int) ) );
+        connect( m_maximumThicknessCheckBox, SIGNAL( toggled(bool) ), this, SLOT( enableVolumeMode(bool) ) );
     }
     else
     {
@@ -65,7 +67,8 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
 
     // creem els vincles
     connect( m_currentViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( reset() ) );
-    connect( m_currentViewer, SIGNAL( viewChanged(int) ), SLOT( disableProjection() ) );
+    connect( m_currentViewer, SIGNAL( viewChanged(int) ), SLOT( onViewChanged() ) );
+    connect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), SLOT( applyThickSlab() ) );
 }
 
 void QThickSlabWidget::setProjectionMode( int mode )
@@ -87,6 +90,7 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         m_currentViewer->enableThickSlab(false);
         m_slabThicknessSlider->setEnabled(false);
         m_slabThicknessLabel->setEnabled(false);
+        m_maximumThicknessCheckBox->setEnabled(false);
         // restaurem manualment els valors per defecte
         m_slabThicknessSlider->setValue( 2 );
         updateThicknessLabel(2);
@@ -95,7 +99,12 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
     {
         updateMaximumThickness();
         m_slabThicknessSlider->setEnabled(true);
-        m_slabThicknessLabel->setEnabled(true);
+        m_maximumThicknessCheckBox->setEnabled(true);
+        
+        if( !m_maximumThicknessCheckBox->isChecked() )
+            m_slabThicknessLabel->setEnabled(true);
+        else
+            m_slabThicknessLabel->setEnabled(false);
 
         // fem que si avancem d'un en un el valor d'slab (amb teclat o amb la roda del ratolí)
         // s'actualitzi amb el signal valueChanged()
@@ -126,7 +135,13 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
         // al canviar de mode de projecció haurem de recalcular
         QApplication::setOverrideCursor( Qt::WaitCursor );
         m_currentViewer->setSlabProjectionMode( projectionModeID );
-        m_currentViewer->setSlabThickness( m_slabThicknessSlider->value() );
+        if( m_maximumThicknessCheckBox->isChecked() )
+        {   
+            m_slabThicknessSlider->setValue( m_currentViewer->getMaximumSlice()+1 );
+        }
+        else
+            m_currentViewer->setSlabThickness( m_slabThicknessSlider->value() );
+        
         QApplication::restoreOverrideCursor();
     }
 }
@@ -174,9 +189,36 @@ void QThickSlabWidget::reset()
     this->link( m_currentViewer );
 }
 
-void QThickSlabWidget::disableProjection()
+void QThickSlabWidget::onViewChanged()
 {
-    m_projectionModeComboBox->setCurrentIndex( 0 );
+    // Si no tenim cap projecció aplicada, no cal fer res
+    if( m_projectionModeComboBox->currentText() == tr("Disabled") )
+        return;
+
+    // Quan canviem de vista, sempre que tinguem la opció marcada, mantenim el thickness màxim per aquella vista 
+    if( m_maximumThicknessCheckBox->isChecked() )
+    {
+        updateMaximumThickness();
+        // Cal forçar que es faci el thickSlab des del viewer, ja que si canviem de vista i el nombre de llesques
+        // a renderitzar és el mateix, no s'emetrà la senyal "valueChanged()" de l'slider i no s'aplicarà el thickSlab
+        m_currentViewer->setSlabThickness( m_currentViewer->getMaximumSlice()+1 );
+        m_slabThicknessSlider->setValue( m_currentViewer->getMaximumSlice()+1 );
+    }
+    else
+    {
+        m_projectionModeComboBox->setCurrentIndex( 0 );
+    }
+}
+
+void QThickSlabWidget::enableVolumeMode( bool enable )
+{
+    if( enable )
+    {
+        m_slabThicknessSlider->setValue( m_currentViewer->getMaximumSlice()+1 );
+        m_slabThicknessSlider->setEnabled(false);
+    }
+    else
+        m_slabThicknessSlider->setEnabled(true);
 }
 
 }

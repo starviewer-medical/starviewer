@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>90</width>
+    <width>106</width>
     <height>65</height>
    </rect>
   </property>
@@ -55,7 +55,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>70</width>
+       <width>500</width>
        <height>16777215</height>
       </size>
      </property>
@@ -92,6 +92,13 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="m_maximumThicknessCheckBox">
+     <property name="text">
+      <string>Max. Thickness</string>
      </property>
     </widget>
    </item>

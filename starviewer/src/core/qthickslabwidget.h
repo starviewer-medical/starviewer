@@ -76,11 +76,13 @@ protected slots:
     void onSliderReleased();
 
     /**
-     * Deshabilita la projecció, per tant es deixa
-     * d'aplicar qualsevol projecció. Es cridarà quan
-     * es fagi un reset de la vista
+     * Es cridarà quan es canvïi la vista al visor associat.
+     * Segons les opcions marcades per l'usuari desactivarà o no la projecció aplicada.
      */
-    void disableProjection();
+    void onViewChanged();
+
+    /// Si cert, posa el thickness al màxim i el manté encara que es canvïi de vista
+    void enableVolumeMode( bool enable );
 
 protected:
     /// Visualitzador linkat al widget
