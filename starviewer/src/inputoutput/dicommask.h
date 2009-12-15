@@ -355,6 +355,9 @@ public:
     /// que no s'ha fet servir
     QString getFilledMaskFields() const;
 
+    /// Ens diu si la màscara està buida o no
+    bool isEmpty();
+
 private:
 
     QString m_patientId;
