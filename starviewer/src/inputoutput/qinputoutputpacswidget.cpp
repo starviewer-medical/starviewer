@@ -295,13 +295,14 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
         return false;
     }
 
-    if (maskToQuery->isAHeavyQuery()) //Es comprova que la consulta no sigui molt llarga
+    if( maskToQuery->isEmpty() )
     {
-        QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
-                                                                     tr("This query can take a long time.\nDo you want continue?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        QMessageBox::StandardButton response;
+        response = QMessageBox::question(this, ApplicationNameString, tr("No search fields were filled.") + "\n" + tr("The query can take a long time.\nDo you want continue?"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
         return (response == QMessageBox::Yes);
     }
-    else return true;
+    else
+        return true;
 }
 
 QString QInputOutputPacsWidget::getPacsIDFromQueriedStudies(QString studyInstanceUID)

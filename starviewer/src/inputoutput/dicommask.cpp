@@ -625,6 +625,19 @@ bool DicomMask::isAHeavyQuery()
     return heavyMask;
 }
 
+bool DicomMask::isEmpty()
+{
+    bool empty = m_patientId.isEmpty() && m_patientName.isEmpty() && m_patientBirth.isEmpty() && m_patientSex.isEmpty() &&
+                 m_patientAge.isEmpty() && m_studyId.isEmpty() && m_studyDate.isEmpty() && m_studyTime.isEmpty() && 
+                 m_studyDescription.isEmpty() && m_studyModality.isEmpty() && m_studyUID.isEmpty() && m_accessionNumber.isEmpty() && 
+                 m_referringPhysiciansName.isEmpty() && m_seriesNumber.isEmpty() && m_seriesDate.isEmpty() && m_seriesTime.isEmpty() && 
+                 m_seriesModality.isEmpty() && m_seriesDescription.isEmpty() && m_seriesProtocolName.isEmpty() && m_seriesUID.isEmpty() && 
+                 m_requestedProcedureID.isEmpty() && m_scheduledProcedureStepID.isEmpty() && m_PPSStartDate.isEmpty() && 
+                 m_PPSStartTime.isEmpty() && m_SOPInstanceUID.isEmpty() && m_imageNumber.isEmpty();
+    
+    return empty;
+}
+
 QString DicomMask::getQueryRetrieveLevel()
 {
     bool isImageLevel = !getSOPInstanceUID().isNull() || !getImageNumber().isNull();
