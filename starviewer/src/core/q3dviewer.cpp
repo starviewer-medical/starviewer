@@ -182,18 +182,18 @@ Q3DViewer::~Q3DViewer()
     // eliminem tots els elements vtk creats
     if ( m_4DLinearRegressionGradientEstimator ) 
         m_4DLinearRegressionGradientEstimator->Delete();
-    m_imageData->Delete();
-    m_vtkVolume->Delete();
-    m_volumeProperty->Delete();
-    m_volumeMapper->Delete();
-    m_volumeRayCastFunction->Delete();
-    m_volumeRayCastAmbientContourFunction->Delete();
-    m_volumeRayCastDirectIlluminationContourFunction->Delete();
-    m_volumeRayCastAmbientObscuranceFunction->Delete();
-    m_volumeRayCastDirectIlluminationObscuranceFunction->Delete();
-    m_volumeRayCastAmbientContourObscuranceFunction->Delete();
-    m_volumeRayCastDirectIlluminationContourObscuranceFunction->Delete();
-    m_volumeRayCastIsosurfaceFunction->Delete();
+    if ( m_imageData ) m_imageData->Delete();
+    if ( m_vtkVolume ) m_vtkVolume->Delete();
+    if ( m_volumeProperty ) m_volumeProperty->Delete();
+    if ( m_volumeMapper ) m_volumeMapper->Delete();
+    if ( m_volumeRayCastFunction ) m_volumeRayCastFunction->Delete();
+    if ( m_volumeRayCastAmbientContourFunction ) m_volumeRayCastAmbientContourFunction->Delete();
+    if ( m_volumeRayCastDirectIlluminationContourFunction ) m_volumeRayCastDirectIlluminationContourFunction->Delete();
+    if ( m_volumeRayCastAmbientObscuranceFunction ) m_volumeRayCastAmbientObscuranceFunction->Delete();
+    if ( m_volumeRayCastDirectIlluminationObscuranceFunction ) m_volumeRayCastDirectIlluminationObscuranceFunction->Delete();
+    if ( m_volumeRayCastAmbientContourObscuranceFunction ) m_volumeRayCastAmbientContourObscuranceFunction->Delete();
+    if ( m_volumeRayCastDirectIlluminationContourObscuranceFunction ) m_volumeRayCastDirectIlluminationContourObscuranceFunction->Delete();
+    if ( m_volumeRayCastIsosurfaceFunction ) m_volumeRayCastIsosurfaceFunction->Delete();
 }
 
 void Q3DViewer::getCurrentWindowLevel( double wl[2] )
@@ -421,6 +421,14 @@ QString Q3DViewer::getRenderFunctionAsString()
 
 void Q3DViewer::setInput( Volume* volume )
 {
+    if ( !canAllocateMemory( volume->getVtkData()->GetNumberOfPoints() * sizeof(unsigned short) ) ) // unsigned short és el tipus que necessita el renderer
+    {
+        DEBUG_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
+        WARN_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
+        QMessageBox::warning( this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again.") );
+        return;
+    }
+
     if( m_clippingPlanes )
     {
         m_volumeMapper->RemoveAllClippingPlanes();
@@ -1160,6 +1168,21 @@ void Q3DViewer::setContourThreshold( double threshold )
 void Q3DViewer::setIsoValue( int isoValue )
 {
     m_volumeRayCastIsosurfaceFunction->SetIsoValue( isoValue );
+}
+
+bool Q3DViewer::canAllocateMemory( int size )
+{
+    char *p = 0;
+    try
+    {
+        p = new char[size];
+        delete[] p;
+        return true;
+    }
+    catch ( std::bad_alloc &ba )
+    {
+        return false;
+    }
 }
 
 };  // end namespace udg {

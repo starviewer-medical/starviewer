@@ -164,6 +164,9 @@ private:
     /// Coronal, però depenent del tipus de Sèrie podria ser una altra
     void setDefaultOrientationForCurrentInput();
 
+    /// Retorna cert si és possible reservar la quantitat de memòria especificada.
+    bool canAllocateMemory( int size );
+
 private slots:
     // TODO falta documentar el mètode
     void endComputeObscurance();
