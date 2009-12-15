@@ -572,59 +572,6 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
 
 }
 
-bool DicomMask::isAHeavyQuery()
-{
-    //en aquest QStringList hi posarem els noms. cognoms i strings que són potencialment candidats a donar cerques pesades
-    QStringList heavyWords;
-    
-    //\TODO per fer-ho correctament aquest "diccionari" de paraules candidates a fer cerques pesades hauria d'estar en un fitxer, de manera que l'usuari no hagi de manipular codi per afegir un nou terme.
-//     heavyWords << "joan" << "juan" << "josep" << "jose" << "ana" << "antoni" << "antonio" << "garcia" << "ez";
-    
-    bool longPeriod = false;
-    
-    QString studyDate = getStudyDate();
-    QString patientName = getPatientName();
-    
-    /// Condicions que determinen si una query és pesada:
-    /// SENSE DATA D'ESTUDI ESPECIFICADA (ANY DATE)
-    bool anyDate = studyDate.length() == 0;
-    
-    /// SENSE ESPECIFICAR NOM
-    bool noName = patientName == "*";
-        
-    /// SENSE ID DE PACIENT
-    bool noID = getPatientId() == "*";
-    
-    /// PERÍODE RELATIVAMENT LLARG 
-    if (studyDate.length() > 8)
-    {
-        QDateTime begin(QDate(studyDate.mid(0, 4).toInt(), studyDate.mid(4, 2).toInt(), studyDate.mid(6, 2).toInt()));
-        QDateTime end(QDate(studyDate.mid(10, 4).toInt(), studyDate.mid(14, 2).toInt(), studyDate.mid(16, 2).toInt()));
-        
-        //consederem com a període llarg a partir d'una setmana
-        longPeriod = end.daysTo(begin) > 7;
-    }
-
-    ///NOM CURT
-    QString nameWithoutAst =  patientName.remove(QChar('*'));
-    bool shortName = (nameWithoutAst.length() < 4);
-    
-    //EL NOM ÉS UN STRING DELS DETERMINATS COM A PESATS A L'INICI DEL MÈTODE
-    //no ho tenim en compte perquè en un hospital seran uns noms i en un altre hospital seran uns altres
-    //bool heavyName = singleWordAsName && heavyWords.contains (nameWithoutAst, Qt::CaseInsensitive); 
-    
-    ///EL NÚMERO D'ESTUDI ÉS CURT
-    QString idWithoutAst =  getPatientId().remove(QChar('*'));
-    bool shortID = idWithoutAst.length() < 3;
-    
-    //Construïm les condicions que fan que una query pugui ser pesada
-    bool noIDOrName = (noName && noID) || (shortName && shortID);
-    
-    bool heavyMask =  (anyDate  && noIDOrName) || (longPeriod && noIDOrName);
-    
-    return heavyMask;
-}
-
 bool DicomMask::isEmpty()
 {
     bool empty = m_patientId.isEmpty() && m_patientName.isEmpty() && m_patientBirth.isEmpty() && m_patientSex.isEmpty() &&
