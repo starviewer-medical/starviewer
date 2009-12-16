@@ -5,8 +5,9 @@
 #include "starviewerapplication.h"
 #include "qdicomaddprinterwidget.h"
 #include "dicomprint.h"
-
+#include "imageprintsettings.h"
 #include <QMessageBox>
+#include <QFileDialog>
 
 namespace udg {
 
@@ -27,6 +28,10 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
 
     m_maximumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
     m_minimumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
+
+    Settings settings;
+    m_spoolPathLineEdit->setText( settings.getValue( ImagePrintSettings::SpoolDirectory ).toString() );
+    connect( m_chooseSpoolPathPushButton, SIGNAL( clicked() ), SLOT( chooseSpoolPath() ) );
 
     printerSelectionChanged();
 }
@@ -390,6 +395,17 @@ void QDicomPrinterConfigurationWidget::accept()
         m_listPrintersTreeWidget->clearSelection();
         clearPrinterSettings();
         close();
+    }
+}
+
+void QDicomPrinterConfigurationWidget::chooseSpoolPath()
+{
+    QString path = QFileDialog::getExistingDirectory( this, tr( "Choose a directory..." ), m_spoolPathLineEdit->text() );
+    if( !path.isEmpty() )
+    {
+        m_spoolPathLineEdit->setText( path );
+        Settings settings;
+        settings.setValue( ImagePrintSettings::SpoolDirectory, path );
     }
 }
 

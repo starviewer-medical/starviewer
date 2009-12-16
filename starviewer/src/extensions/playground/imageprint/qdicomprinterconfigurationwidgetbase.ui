@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>604</width>
+    <width>620</width>
     <height>694</height>
    </rect>
   </property>
@@ -33,7 +33,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>581</width>
+       <width>16777215</width>
        <height>161</height>
       </size>
      </property>
@@ -251,7 +251,7 @@
      <property name="title">
       <string>Advanced Settings</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_4">
+     <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
@@ -571,6 +571,31 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Spool Path:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_11">
+        <item>
+         <widget class="QLineEdit" name="m_spoolPathLineEdit"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_chooseSpoolPathPushButton">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../../../main/main.qrc">
+            <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </widget>
    </item>
@@ -685,6 +710,8 @@
   <tabstop>m_applySettingsPushButton</tabstop>
   <tabstop>m_cancelSettingsPushButton</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../../../main/main.qrc"/>
+ </resources>
  <connections/>
 </ui>
