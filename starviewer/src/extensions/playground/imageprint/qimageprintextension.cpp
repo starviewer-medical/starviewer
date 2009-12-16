@@ -125,6 +125,7 @@ void QImagePrintExtension::configurationPrinter()
 void QImagePrintExtension::fillSelectedDicomPrinterComboBox()
 {
     DicomPrinterManager dicomPrinterManager;
+    bool noDefaultPrinter = true;
 
     m_selectedPrinterComboBox->clear();
 
@@ -144,7 +145,14 @@ void QImagePrintExtension::fillSelectedDicomPrinterComboBox()
             //Si és impressora per defecte la deixem com a impressora seleccionada
             m_selectedPrinterComboBox->setCurrentIndex(m_selectedPrinterComboBox->findData(dicomPrinter.getID()));
             selectedDicomPrinterChanged(m_selectedPrinterComboBox->findData(dicomPrinter.getID()));
+            noDefaultPrinter = false;
         }
+    }
+    // Si no hi ha cap impressora per defecte fem que quedi seleccionada la primera de la llista.
+    if ( m_selectedPrinterComboBox->count() > 0 && noDefaultPrinter )
+    {
+        m_selectedPrinterComboBox->setCurrentIndex(0);
+        selectedDicomPrinterChanged(0);
     }
 }
 
