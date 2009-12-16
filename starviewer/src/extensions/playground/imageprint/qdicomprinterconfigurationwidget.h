@@ -46,6 +46,9 @@ private slots:
     ///Slot que s'executa al prèmer el botó accept
     void accept();
 
+    /// Permet escollir i actualitzar el path de l'spool a través d'un diàleg
+    void chooseSpoolPath();
+
 private:
     ///Crea InputValidators pels LineEdit que només accepten valors numèrics
     void configureInputValidator();
