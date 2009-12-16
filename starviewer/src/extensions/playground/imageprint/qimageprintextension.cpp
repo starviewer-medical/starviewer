@@ -154,6 +154,10 @@ void QImagePrintExtension::fillSelectedDicomPrinterComboBox()
         m_selectedPrinterComboBox->setCurrentIndex(0);
         selectedDicomPrinterChanged(0);
     }
+    else if ( m_selectedPrinterComboBox->count() == 0 ) //Si no n'hi ha cap ho deshabilitem tot
+    {
+        selectedDicomPrinterChanged(-1);
+    }
 }
 
 void QImagePrintExtension::print()
@@ -286,10 +290,25 @@ void QImagePrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
 
         m_qdicomPrinterBasicSettingsWidget->setDicomPrinterBasicSettings(selectedDicomPrinter);
         m_qdicomPrinterBasicSettingsWidget->setEnabled(true);
+        m_selectionImagesFrame->setEnabled(true);
+        m_printButton->setEnabled(true);
+        m_cancelButton->setEnabled(true);
+        m_currentImageRadioButton->setEnabled(true);
+        m_selectionImageRadioButton->setEnabled(true);
+        m_numberOfCopiesSpinBox->setEnabled(true);
     }
     else
     {
+        m_hostNameLabel->setText("");
+        m_portLabel->setText("");
+
         m_qdicomPrinterBasicSettingsWidget->setEnabled(false);
+        m_selectionImagesFrame->setEnabled(false);
+        m_printButton->setEnabled(false);
+        m_cancelButton->setEnabled(false);
+        m_currentImageRadioButton->setEnabled(false);
+        m_selectionImageRadioButton->setEnabled(false);
+        m_numberOfCopiesSpinBox->setEnabled(false);
     }
 }
 
