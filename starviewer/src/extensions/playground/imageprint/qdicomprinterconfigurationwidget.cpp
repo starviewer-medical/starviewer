@@ -27,6 +27,8 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
 
     m_maximumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
     m_minimumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
+
+    printerSelectionChanged();
 }
 
 QDicomPrinterConfigurationWidget::~QDicomPrinterConfigurationWidget()
@@ -49,10 +51,16 @@ void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
         this->setAdvancedSettingsToControls(selectedDicomPrinter);
 
         m_applySettingsPushButton->setEnabled(true);
+        m_printerSettingsGroupBox->setEnabled(true);
+        m_qdicomPrinterBasicSettingsWidget->setEnabled(true);
+        m_advancedSettingsGroupBox->setEnabled(true);
     }
     else
     {
         m_applySettingsPushButton->setEnabled(false);
+        m_printerSettingsGroupBox->setEnabled(false);
+        m_qdicomPrinterBasicSettingsWidget->setEnabled(false);
+        m_advancedSettingsGroupBox->setEnabled(false);
     }
 }
 
