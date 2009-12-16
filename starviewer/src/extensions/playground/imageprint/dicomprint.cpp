@@ -20,13 +20,12 @@ namespace udg
 int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 {
     PrintDicomSpool printDicomSpool;
-    ImagePrintSettings imagePrintSettings;
+
     QStringList dcmtkStoredPrintPathFileList;
     int indexNumberOfCopies = 0, numberOfCopies, numberOfFilmSessionPrinted = 0;
     DeleteDirectory deleteDirectory;
 
 	m_lastError = Ok;
-    imagePrintSettings.init();//TODO:A on s'ha de fer l'ini ? 
 
     INFO_LOG("Han demanat imprimir imatges DICOM a la impresssora " + printer.getAETitle() + ", IP: " + printer.getHostname() + ", port: " + QString().setNum(printer.getPort()));
 
