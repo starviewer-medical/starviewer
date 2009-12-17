@@ -36,6 +36,7 @@ QImagePrintExtension::QImagePrintExtension( QWidget *parent )
 	m_factory=new DicomPrintFactory();
 	//m_tbToolBox->addItem(m_factory->getPrintingConfigurationWidget(),"PrintingConfigurationWidget");
 	//m_tbToolBox->addItem(m_factory->getPrintJobCreatorWidget(),"JobCreatorWidget");
+    m_noSupportedSeriesFrame->setVisible(false);
     fillSelectedDicomPrinterComboBox();
 
     m_printerConfigurationWidgetProof = m_factory->getPrinterConfigurationWidget();
@@ -117,6 +118,8 @@ void QImagePrintExtension::updateInput(Volume *input)
     m_intervalImagesSlider->setValue( 1 );
 
     updateSelectionImagesValue();
+
+    updateVolumeSupport();
 }
 
 void QImagePrintExtension::configurationPrinter()
@@ -293,11 +296,16 @@ void QImagePrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
 
         m_qdicomPrinterBasicSettingsWidget->setDicomPrinterBasicSettings(selectedDicomPrinter);
         m_qdicomPrinterBasicSettingsWidget->setEnabled(true);
-        m_selectionImagesFrame->setEnabled(true);
-        m_printButton->setEnabled(true);
-        m_cancelButton->setEnabled(true);
-        m_currentImageRadioButton->setEnabled(true);
-        m_selectionImageRadioButton->setEnabled(true);
+        
+        if ( ! m_noSupportedSeriesFrame->isVisible() ) // Només ho habilitarem si la serie se suporta
+        {
+            m_selectionImagesFrame->setEnabled(true);
+            m_printButton->setEnabled(true);
+            m_cancelButton->setEnabled(true);
+            m_currentImageRadioButton->setEnabled(true);
+            m_selectionImageRadioButton->setEnabled(true);
+        }
+
         m_numberOfCopiesSpinBox->setEnabled(true);
     }
     else
@@ -368,8 +376,6 @@ void QImagePrintExtension::m_fromImageLineEditTextEdited(const QString &text)
     {
         m_fromImageSlider->setValue(value);
     }
-
-    updateNumberOfDicomPrintPagesToPrint();
 }
 
 void QImagePrintExtension::m_toImageLineEditTextEdited(const QString &text)
@@ -492,6 +498,56 @@ void QImagePrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
 
 		QMessageBox::critical(this, ApplicationNameString, messageError);
 	}
+}
+
+void QImagePrintExtension::updateVolumeSupport()
+{
+    bool isNotSupported = false;
+
+    // Comprovem si té color.
+    QString pi = m_2DView->getInput()->getImages().at(0)->getPhotometricInterpretation();
+    if ( pi != "MONOCHROME1" && pi != "MONOCHROME2" )
+    {
+        m_noSupportedSeriesMissage->setText( tr("This series cannot be printed because color is not supported.") );
+        isNotSupported = true;
+    }
+    // Comprovem si és multi-frame
+    if ( m_2DView->getInput()->getImages().at(0)->isMultiFrame() )
+    {
+        m_noSupportedSeriesMissage->setText( tr("This series cannot be printed because multi-frame images are not supported.") );
+        isNotSupported = true;
+    }
+
+    if ( isNotSupported )
+    {
+        if ( !m_noSupportedSeriesFrame->isVisible() )
+        {
+            m_noSupportedSeriesFrame->setVisible(true);
+
+            m_selectionImagesFrame->setEnabled(false);
+            m_printButton->setEnabled(false);
+            m_cancelButton->setEnabled(false);
+            m_currentImageRadioButton->setEnabled(false);
+            m_selectionImageRadioButton->setEnabled(false);
+        }
+    }
+    else
+    {
+        if ( m_noSupportedSeriesFrame->isVisible() )
+        {
+            m_noSupportedSeriesFrame->setVisible(false);
+
+            //Només activem les opcions si tenim les opcions de l'impressora activats.
+            if ( m_qdicomPrinterBasicSettingsWidget->isEnabled() )
+            {
+                m_selectionImagesFrame->setEnabled(true);
+                m_printButton->setEnabled(true);
+                m_cancelButton->setEnabled(true);
+                m_currentImageRadioButton->setEnabled(true);
+                m_selectionImageRadioButton->setEnabled(true);
+            }
+        }
+    }
 }
 
 }                                      

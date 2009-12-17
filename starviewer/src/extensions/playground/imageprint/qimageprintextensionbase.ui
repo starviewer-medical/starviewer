@@ -531,6 +531,60 @@
          </spacer>
         </item>
         <item>
+         <widget class="QFrame" name="m_noSupportedSeriesFrame">
+          <property name="styleSheet">
+           <string>#m_noSupportedSeriesFrame {
+background-color: #dc8a8a;
+border-radius: 4px;
+border: 1px solid  #680000;
+}</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="m_warningIcon">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string>margin-right: 5px;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="../../../main/main.qrc">:/images/small-warning.png</pixmap>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="m_noSupportedSeriesMissage">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>This series cannot be printed.</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_11">
           <item>
            <spacer name="horizontalSpacer_10">
@@ -622,17 +676,19 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>udg::QDicomPrinterBasicSettingsWidget</class>
-   <extends>QWidget</extends>
-   <header>qdicomprinterbasicsettingswidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
   </customwidget>
+  <customwidget>
+   <class>udg::QDicomPrinterBasicSettingsWidget</class>
+   <extends>QWidget</extends>
+   <header>qdicomprinterbasicsettingswidget.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../../main/main.qrc"/>
+  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>
