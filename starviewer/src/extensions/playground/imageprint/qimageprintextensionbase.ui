@@ -139,7 +139,7 @@
             </property>
             <property name="icon">
              <iconset resource="../../../main/main.qrc">
-              <normaloff>:/images/viewmag+.png</normaloff>:/images/viewmag+.png</iconset>
+              <normaloff>:/images/printerPreferences.png</normaloff>:/images/printerPreferences.png</iconset>
             </property>
             <property name="iconSize">
              <size>
