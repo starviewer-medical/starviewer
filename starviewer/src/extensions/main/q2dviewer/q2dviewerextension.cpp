@@ -80,6 +80,13 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     createConnections();
 
     m_previousStudiesToolButton->setEnabled(false);
+    m_previousStudiesToolButton->setToolTip( tr("Search prior studies") );
+    
+    m_screenshotsExporterToolButton->setToolTip( tr("Export viewer image(s) to DICOM and send them to a PACS server") );
+    m_viewerInformationToolButton->setToolTip( tr("Show/Hide viewer's textual information") );
+    m_dicomDumpToolButton->setToolTip( tr("Dump DICOM information of the current image") );
+    m_windowLevelComboBox->setToolTip( tr("Choose Window/Level Presets") );
+    
     // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
