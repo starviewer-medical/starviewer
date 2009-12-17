@@ -50,6 +50,8 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
     m_firstInput = true;
 
     hideClutEditor();
+    m_screenshotsExporterToolButton->setToolTip( tr("Export viewer image to DICOM and send it to a PACS server") );
+    m_customStyleToolButton->setToolTip( tr("Show/Hide advanced colour options") );
 }
 
 QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
@@ -69,6 +71,7 @@ void QVolume3DViewTestingExtension::initializeTools()
     m_panToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
     m_clippingBoxToolButton->setDefaultAction( m_toolManager->registerTool("ClippingPlanesTool") );
     m_toolManager->registerTool("ScreenShotTool");
+    m_screenShotToolButton->setToolTip( m_toolManager->getRegisteredToolAction("ScreenShotTool")->toolTip() );
 
     // Action tools
     m_axialOrientationButton->setDefaultAction( m_toolManager->registerActionTool("AxialViewActionTool") );

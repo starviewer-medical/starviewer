@@ -71,6 +71,10 @@ QMPRExtension::QMPRExtension( QWidget *parent )
     // aquests els amaguem per guanyar espai
     m_windowLevelToolButton->setVisible(false);
     m_moveToolButton->setVisible(false);
+
+    m_screenshotsExporterToolButton->setToolTip( tr("Export viewer image(s) to DICOM and send them to a PACS server") );
+    m_viewerInformationToolButton->setToolTip( tr("Show/Hide viewer's textual information") );
+    m_windowLevelComboBox->setToolTip( tr("Choose Window/Level Presets") );
 }
 
 QMPRExtension::~QMPRExtension()
@@ -183,6 +187,7 @@ void QMPRExtension::initializeTools()
     m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_toolManager->registerTool("ScreenShotTool");
+    m_screenShotToolButton->setToolTip( m_toolManager->getRegisteredToolAction("ScreenShotTool")->toolTip() );
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
     m_polylineROIToolButton->setDefaultAction( m_toolManager->registerTool("PolylineROITool") );
     m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
