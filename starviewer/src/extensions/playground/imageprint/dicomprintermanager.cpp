@@ -214,7 +214,7 @@ QStringList DicomPrinterManager::getAvailableMediumTypeValues()
 QStringList DicomPrinterManager::getAvailableFilmSizeValues()
 {
     QStringList filmSizeValuesTemp;
-    filmSizeValuesTemp << "8INX10IN" << "8_5INX11IN" << "10INX12IN" << "10INX14IN" << "11INX14IN" << "11INX17IN" << "14INX14IN" << "14INX17IN" << "24CMX24CM" << "24INX30IN" << "A4" << "A3";
+    filmSizeValuesTemp << "8INX10IN" << "8_5INX11IN" << "10INX12IN" << "10INX14IN" << "11INX14IN" << "11INX17IN" << "14INX14IN" << "14INX17IN" << "24CMX24CM" << "24CMX30CM" << "A4" << "A3";
     return filmSizeValuesTemp;
 }
 
@@ -222,7 +222,7 @@ QStringList DicomPrinterManager::getAvailableFilmLayoutValues()
 {
     QStringList filmLayoutValuesTemp;
 
-    filmLayoutValuesTemp <<"STANDARD\\1,1" << "STANDARD\\1,2" << "STANDARD\\2,2" << "STANDARD\\2,3" << "STANDARD\\3,3 " << "STANDARD\\3,4" 
+    filmLayoutValuesTemp <<"STANDARD\\1,1" << "STANDARD\\1,2" << "STANDARD\\2,2" << "STANDARD\\2,3" << "STANDARD\\2,4" << "STANDARD\\3,3 " << "STANDARD\\3,4" 
                          << "STANDARD\\3,5" << "STANDARD\\4,4" << "STANDARD\\4,5" << "STANDARD\\4,6" << "STANDARD\\5,6" << "STANDARD\\5,7";
 
     return filmLayoutValuesTemp;
@@ -244,13 +244,13 @@ QStringList DicomPrinterManager::getAvailableMagnificationTypeValues()
 
 ushort DicomPrinterManager::getAvailableMaxDensityValues()
 {
-    ushort maxDensityValuesTemp = 399;
+    ushort maxDensityValuesTemp = 1000;
     return maxDensityValuesTemp;
 }
 
 ushort DicomPrinterManager::getAvailableMinDensityValues()
 {
-    ushort minDensityValues = 399;
+    ushort minDensityValues = 1000;
     return minDensityValues;
 }
 
@@ -262,21 +262,22 @@ bool DicomPrinterManager::getAvailableTrim()
 QStringList DicomPrinterManager::getAvailableBorderDensityValues()
 {
     QStringList borderDensityValuesTemp;
-    borderDensityValuesTemp << "150" << "20" << "BLACK" << "WHITE";
+    borderDensityValuesTemp << "BLACK" << "WHITE";
     return borderDensityValuesTemp;
 }
 
 QStringList DicomPrinterManager::getAvailableEmptyImageDensityValues()
 {
     QStringList emptyImageDensityValuesTemp;
-    emptyImageDensityValuesTemp << "20" << "BLACK" << "WHITE";
+    emptyImageDensityValuesTemp << "BLACK" << "WHITE";
     return emptyImageDensityValuesTemp;
 }
 
 QStringList DicomPrinterManager::getAvailableFilmDestinationValues()
 {
     QStringList filmDestinationValuesTemp;
-    filmDestinationValuesTemp << "MAGAZINE" << "PROCESSOR" << "BIN_1";
+    filmDestinationValuesTemp << "MAGAZINE" << "PROCESSOR" << "BIN_1" << "BIN_2" << "BIN_3" << "BIN_4" << "BIN_5" << "BIN_6" << "BIN_7" 
+                              << "BIN_8" << "BIN_9" << "BIN_10";
     return filmDestinationValuesTemp;
 }
 
