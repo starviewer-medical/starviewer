@@ -214,18 +214,12 @@ void QLocalDatabaseConfigurationScreen::examinateDataBaseRoot()
 
 void QLocalDatabaseConfigurationScreen::examinateCacheImagePath()
 {
-    QFileDialog *dialog = new QFileDialog( 0 , QFileDialog::tr( "Open" ) , "./" , tr( "Database Directory" ) );
-    QString path;
-
-    dialog->setFileMode( QFileDialog::DirectoryOnly );
-
-    if ( dialog->exec() == QDialog::Accepted )
+    QString path = QFileDialog::getExistingDirectory(0, tr("Choose the Cache images path..."), m_textCacheImagePath->text() );
+    if( !path.isEmpty() )
     {
-        if ( !dialog->selectedFiles().empty() ) m_textCacheImagePath->setText( dialog->selectedFiles().takeFirst() );
-        cacheImagePathEditingFinish();//afegeix la '/' al final
+        m_textCacheImagePath->setText( path );
+        cacheImagePathEditingFinish();
     }
-
-    delete dialog;
 }
 
 void QLocalDatabaseConfigurationScreen::applyChangesCache()
@@ -323,7 +317,7 @@ void QLocalDatabaseConfigurationScreen::cacheImagePathEditingFinish()
 {
     if ( !m_textCacheImagePath->text().endsWith( QDir::toNativeSeparators( "/" ) , Qt::CaseInsensitive ) )
     {
-        m_textCacheImagePath->setText( m_textCacheImagePath->text() + QDir::toNativeSeparators( "/" ) );
+        m_textCacheImagePath->setText( QDir::toNativeSeparators( m_textCacheImagePath->text()+"/" ) );
     }
 }
 
