@@ -207,7 +207,7 @@ int DicomPrinterManager::indexOfPrinterInSettings( DicomPrinter &printer )
 QStringList DicomPrinterManager::getAvailableMediumTypeValues()
 {
     QStringList mediumTypeValuesTemp;
-    mediumTypeValuesTemp << "PAPER" << "CLEAR FILM" << "BLUE FILM" << "MAMMO CLEAR FILM" << "MAMMO BLUE FILM";
+    mediumTypeValuesTemp << "" << "PAPER" << "CLEAR FILM" << "BLUE FILM" << "MAMMO CLEAR FILM" << "MAMMO BLUE FILM";
     return mediumTypeValuesTemp;
 }
 
@@ -222,7 +222,7 @@ QStringList DicomPrinterManager::getAvailableFilmLayoutValues()
 {
     QStringList filmLayoutValuesTemp;
 
-    filmLayoutValuesTemp <<"STANDARD\\1,1" << "STANDARD\\1,2" << "STANDARD\\2,2" << "STANDARD\\2,3" << "STANDARD\\2,4" << "STANDARD\\3,3 " << "STANDARD\\3,4" 
+    filmLayoutValuesTemp << "" <<"STANDARD\\1,1" << "STANDARD\\1,2" << "STANDARD\\2,2" << "STANDARD\\2,3" << "STANDARD\\2,4" << "STANDARD\\3,3 " << "STANDARD\\3,4" 
                          << "STANDARD\\3,5" << "STANDARD\\4,4" << "STANDARD\\4,5" << "STANDARD\\4,6" << "STANDARD\\5,6" << "STANDARD\\5,7";
 
     return filmLayoutValuesTemp;
@@ -231,14 +231,14 @@ QStringList DicomPrinterManager::getAvailableFilmLayoutValues()
 QStringList DicomPrinterManager::getAvailableFilmOrientationValues()
 {
     QStringList filmOrientationValuesTemp;
-    filmOrientationValuesTemp <<"PORTRAIT" << "LANDSCAPE";
+    filmOrientationValuesTemp << "" <<"PORTRAIT" << "LANDSCAPE";
     return filmOrientationValuesTemp;
 }
 
 QStringList DicomPrinterManager::getAvailableMagnificationTypeValues()
 {
     QStringList magnificationTypeValuesTemp;
-    magnificationTypeValuesTemp << "REPLICATE" << "BILINEAR" << "CUBIC" << "NONE";
+    magnificationTypeValuesTemp << "" << "REPLICATE" << "BILINEAR" << "CUBIC" << "NONE";
     return magnificationTypeValuesTemp;
 }
 
@@ -262,21 +262,21 @@ bool DicomPrinterManager::getAvailableTrim()
 QStringList DicomPrinterManager::getAvailableBorderDensityValues()
 {
     QStringList borderDensityValuesTemp;
-    borderDensityValuesTemp << "BLACK" << "WHITE";
+    borderDensityValuesTemp << "" << "BLACK" << "WHITE";
     return borderDensityValuesTemp;
 }
 
 QStringList DicomPrinterManager::getAvailableEmptyImageDensityValues()
 {
     QStringList emptyImageDensityValuesTemp;
-    emptyImageDensityValuesTemp << "BLACK" << "WHITE";
+    emptyImageDensityValuesTemp << "" << "BLACK" << "WHITE";
     return emptyImageDensityValuesTemp;
 }
 
 QStringList DicomPrinterManager::getAvailableFilmDestinationValues()
 {
     QStringList filmDestinationValuesTemp;
-    filmDestinationValuesTemp << "MAGAZINE" << "PROCESSOR" << "BIN_1" << "BIN_2" << "BIN_3" << "BIN_4" << "BIN_5" << "BIN_6" << "BIN_7" 
+    filmDestinationValuesTemp << "" << "MAGAZINE" << "PROCESSOR" << "BIN_1" << "BIN_2" << "BIN_3" << "BIN_4" << "BIN_5" << "BIN_6" << "BIN_7" 
                               << "BIN_8" << "BIN_9" << "BIN_10";
     return filmDestinationValuesTemp;
 }
@@ -284,21 +284,21 @@ QStringList DicomPrinterManager::getAvailableFilmDestinationValues()
 QStringList DicomPrinterManager::getAvailableSmoothingTypeValues()
 {
     QStringList smoothingTypeValuesTemp;
-    smoothingTypeValuesTemp << "MEDIUM" << "SHARP" << "SMOOTH";
+    smoothingTypeValuesTemp << "" << "MEDIUM" << "SHARP" << "SMOOTH";
     return smoothingTypeValuesTemp;
 }
 
 QStringList DicomPrinterManager::getAvailablePrintPriorityValues()
 {
     QStringList printPriorityValuesTemp;
-    printPriorityValuesTemp << "HIGH" << "MED" << "LOW";
+    printPriorityValuesTemp << "" << "HIGH" << "MED" << "LOW";
     return printPriorityValuesTemp;
 }
 
 QStringList DicomPrinterManager::getAvailablePolarityValues()
 {
     QStringList polarityValuesTemp;
-    polarityValuesTemp << "NORMAL" << "REVERSE";
+    polarityValuesTemp << "" << "NORMAL" << "REVERSE";
     return polarityValuesTemp;
 }
 }
