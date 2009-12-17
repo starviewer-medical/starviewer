@@ -424,7 +424,12 @@ void QCreateDicomdir::examineDicomdirPath()
 
     QString path = QFileDialog::getExistingDirectory( this, tr( "Choose an empty directory..." ), initialDirectory );
     if( !path.isEmpty() )
+    {
         m_lineEditDicomdirPath->setText(QDir::toNativeSeparators(path));
+        // Actualitzem les etiquetes que indiquen la capacitat del disc
+        updateAvailableSpaceToRecord();
+        setDicomdirSize();
+    }
 }
 
 void QCreateDicomdir::removeAllStudies()
