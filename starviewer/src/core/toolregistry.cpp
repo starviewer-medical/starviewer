@@ -207,7 +207,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Screen Shot") );
         toolAction->setIcon( QIcon(":/images/photo.png") );
         statusTip = tr("Enable/Disable Screen shot tool");
-        toolTip = toolAction->text();
+        toolTip = tr("Export a viewer screenshot to an image file format");
     }
     else if( toolName == "Rotate3DTool" )
     {
