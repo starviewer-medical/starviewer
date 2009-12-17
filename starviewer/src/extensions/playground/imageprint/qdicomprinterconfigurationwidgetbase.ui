@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Configuració de les Impressores DICOM</string>
+   <string>DICOM Printers Configuration</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
