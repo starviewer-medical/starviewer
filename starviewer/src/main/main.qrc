@@ -10,6 +10,7 @@
         <file>../interface/interface_en_GB.qm</file>
         <file>../interface/interface_es_ES.qm</file>
         <file>cache/database.sql</file>
+        <file>images/addNewPrinter.png</file>
         <file>images/addViewRight.png</file>
         <file>images/advancedSearch.png</file>
         <file>images/airbrush.png</file>
@@ -84,9 +85,11 @@
         <file>images/preferences.png</file>
         <file>images/presentationStateThumbnail.png</file>
         <file>images/printerPreferences.png</file>
+        <file>images/printerTest.png</file>
         <file>images/record.png</file>
         <file>images/referenceLines.png</file>
         <file>images/reload.png</file>
+        <file>images/removePrinter.png</file>
         <file>images/repeat.png</file>
         <file>images/restore.png</file>
         <file>images/retractFullscreen.png</file>

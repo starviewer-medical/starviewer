@@ -67,6 +67,29 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
+      <widget class="QPushButton" name="m_addPrinterPushButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Add New Printer</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/addNewPrinter.png</normaloff>:/images/addNewPrinter.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -80,54 +103,6 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_testPrinterPushButton">
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>test</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_addPrinterPushButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>40</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>+</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="m_deletePrinterPushButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -137,12 +112,33 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>40</width>
+         <width>16777215</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="text">
-        <string>-</string>
+        <string>Remove Printer</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/removePrinter.png</normaloff>:/images/removePrinter.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_testPrinterPushButton">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Test Printer</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/printerTest.png</normaloff>:/images/printerTest.png</iconset>
        </property>
       </widget>
      </item>
@@ -689,8 +685,6 @@
  <tabstops>
   <tabstop>m_listPrintersTreeWidget</tabstop>
   <tabstop>m_testPrinterPushButton</tabstop>
-  <tabstop>m_addPrinterPushButton</tabstop>
-  <tabstop>m_deletePrinterPushButton</tabstop>
   <tabstop>m_printerAetitleLineEdit</tabstop>
   <tabstop>m_printerHostnameLineEdit</tabstop>
   <tabstop>m_printerPortLineEdit</tabstop>
