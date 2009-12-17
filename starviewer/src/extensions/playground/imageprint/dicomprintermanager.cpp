@@ -214,7 +214,7 @@ QStringList DicomPrinterManager::getAvailableMediumTypeValues()
 QStringList DicomPrinterManager::getAvailableFilmSizeValues()
 {
     QStringList filmSizeValuesTemp;
-    filmSizeValuesTemp << "8INX10IN" << "8_5INX11IN" << "10INX12IN" << "10INX14IN" << "11INX14IN" << "11INX17IN" << "14INX14IN" << "14INX17IN" << "24CMX24CM" << "24CMX30CM" << "A4" << "A3";
+    filmSizeValuesTemp << "" << "8INX10IN" << "8_5INX11IN" << "10INX12IN" << "10INX14IN" << "11INX14IN" << "11INX17IN" << "14INX14IN" << "14INX17IN" << "24CMX24CM" << "24CMX30CM" << "A4" << "A3";
     return filmSizeValuesTemp;
 }
 
@@ -222,7 +222,7 @@ QStringList DicomPrinterManager::getAvailableFilmLayoutValues()
 {
     QStringList filmLayoutValuesTemp;
 
-    filmLayoutValuesTemp << "" <<"STANDARD\\1,1" << "STANDARD\\1,2" << "STANDARD\\2,2" << "STANDARD\\2,3" << "STANDARD\\2,4" << "STANDARD\\3,3 " << "STANDARD\\3,4" 
+    filmLayoutValuesTemp <<"STANDARD\\1,1" << "STANDARD\\1,2" << "STANDARD\\2,2" << "STANDARD\\2,3" << "STANDARD\\2,4" << "STANDARD\\3,3 " << "STANDARD\\3,4" 
                          << "STANDARD\\3,5" << "STANDARD\\4,4" << "STANDARD\\4,5" << "STANDARD\\4,6" << "STANDARD\\5,6" << "STANDARD\\5,7";
 
     return filmLayoutValuesTemp;
