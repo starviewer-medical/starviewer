@@ -100,6 +100,9 @@ private:
 	  per això ens podem trobar que la primera pàgina s'imprimeixi bé, i les restants no, per això passem el paràmetre printedSomePage per indica que només
       algunes de les pàgines han fallat*/
 	void showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage);
+    
+    /// Comprova si se suporta el format de la sèrie i actualitza la interfície segons convingui.
+    void updateVolumeSupport();
 
 private:
     /// Gestor de tools pel viewer
