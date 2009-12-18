@@ -40,7 +40,7 @@ private:
     double computeStandardDeviation();
 
     /// Llista amb els valors de gris per calcular la mitjana i la desviació etàndard
-    QList< double > grayValues;
+    QList< double > m_grayValues;
 };
 
 }

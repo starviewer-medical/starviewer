@@ -195,7 +195,7 @@ void PolylineROITool::computeGrayValues()
                 {
                     while ( firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex] )
                     {
-                        grayValues << (double)getGrayValue( firstIntersection );
+                        m_grayValues << (double)getGrayValue( firstIntersection );
                         numberOfVoxels++;
                         firstIntersection[intersectionIndex] += spacing[0];
                     }
@@ -204,7 +204,7 @@ void PolylineROITool::computeGrayValues()
                 {
                     while ( firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex] )
                     {
-                        grayValues << (double)getGrayValue( firstIntersection );
+                        m_grayValues << (double)getGrayValue( firstIntersection );
                         numberOfVoxels++;
                         firstIntersection[intersectionIndex] -= spacing[0];
                     }
@@ -226,12 +226,12 @@ double PolylineROITool::computeGrayMean()
 
     double mean = 0.0;
 
-    foreach ( double value, grayValues )
+    foreach ( double value, m_grayValues )
         mean += value;
 
     //no es buida la llista pq la utilitzara computeStandardDeviation()
 
-    return mean / grayValues.size();
+    return mean / m_grayValues.size();
 }
 
 double PolylineROITool::computeStandardDeviation()
@@ -242,13 +242,13 @@ double PolylineROITool::computeStandardDeviation()
 
     QList<double> deviations;
 
-    foreach ( double value, grayValues )
+    foreach ( double value, m_grayValues )
     {
         double individualDeviation = value - mean;
         deviations << ( individualDeviation * individualDeviation );
     }
 
-    grayValues.clear();
+    m_grayValues.clear();
 
     foreach ( double deviation, deviations )
         standardDeviation += deviation;
