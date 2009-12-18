@@ -227,14 +227,21 @@ QList<DicomPrintPage> QImagePrintExtension::getDicomPrintPageListToPrint()
 QList<Image*> QImagePrintExtension::getSelectedImagesToPrint()
 {
     QList<Image*> imagesToPrint, imagesVolum = m_2DView->getInput()->getImages();
-    int indexOfImage = m_fromImageSlider->value() -1;
-
-    while (indexOfImage < m_toImageSlider->value())
+    
+    if ( m_currentImageRadioButton->isChecked() )
     {
-        imagesToPrint.append(imagesVolum.at(indexOfImage));
-        indexOfImage += m_intervalImagesSlider->value();
+        imagesToPrint.append( m_2DView->getInput()->getImage( m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase() ) );
     }
+    else
+    {
+        int indexOfImage = m_fromImageSlider->value() -1;
 
+        while (indexOfImage < m_toImageSlider->value())
+        {
+            imagesToPrint.append(imagesVolum.at(indexOfImage));
+            indexOfImage += m_intervalImagesSlider->value();
+        }
+    }
     return imagesToPrint;
 }
 
