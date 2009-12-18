@@ -41,13 +41,13 @@
      <item row="0" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QToolButton" name="m_viewButton">
+        <widget class="QToolButton" name="m_retrievAndViewButton">
          <property name="text">
-          <string>View</string>
+          <string>Retrieve &amp;&amp; View</string>
          </property>
          <property name="icon">
           <iconset resource="../main/main.qrc">
-           <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
+           <normaloff>:/images/retrieveAndView.png</normaloff>:/images/retrieveAndView.png</iconset>
          </property>
          <property name="iconSize">
           <size>
