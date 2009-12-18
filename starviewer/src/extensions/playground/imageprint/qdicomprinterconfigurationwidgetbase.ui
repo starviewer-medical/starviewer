@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>620</width>
-    <height>694</height>
+    <height>642</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -573,31 +573,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Spool Path:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_11">
-        <item>
-         <widget class="QLineEdit" name="m_spoolPathLineEdit"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="m_chooseSpoolPathPushButton">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../../../main/main.qrc">
-            <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
     </widget>
    </item>
@@ -698,7 +673,6 @@
   <tabstop>m_printerPortLineEdit</tabstop>
   <tabstop>m_printerDescriptionLineEdit</tabstop>
   <tabstop>m_printerDefaultPrinterCheckBox</tabstop>
-  <tabstop>m_qdicomPrinterBasicSettingsWidget</tabstop>
   <tabstop>m_magnifactionTypeComboBox</tabstop>
   <tabstop>m_smoothingTypeComboBox</tabstop>
   <tabstop>m_borderDensityComboBox</tabstop>
@@ -709,8 +683,6 @@
   <tabstop>m_yesVisibleTrimRadioButton</tabstop>
   <tabstop>m_noVisibleTrimRadioButton</tabstop>
   <tabstop>m_configurationInformationLineEdit</tabstop>
-  <tabstop>m_spoolPathLineEdit</tabstop>
-  <tabstop>m_chooseSpoolPathPushButton</tabstop>
   <tabstop>m_advancedSettingsPushButton</tabstop>
   <tabstop>m_acceptSettingsPushButton</tabstop>
   <tabstop>m_applySettingsPushButton</tabstop>
