@@ -117,5 +117,9 @@ void QDicomAddPrinterWidget::getPrinterSettingsFromControls(DicomPrinter& printe
     printer.setPort(m_printerPortLineEdit->text().toInt());
     printer.setDescription(m_printerDescriptionLineEdit->text());
     printer.setIsDefault(m_printerDefaultPrinterCheckBox->isChecked());
+
+    /*Indiquem un valor de  FilmLayout per la impressora perquè és un camp "Mandatory" segons DICOM, escollim el primer valor
+      dels disponibles. A part d'aquest camp dels paràmetres configurables d'impressió no n'hi cap més d'obligatori*/
+    printer.setDefaultFilmLayout(printer.getAvailableFilmLayoutValues().at(0));
 }
 }    
