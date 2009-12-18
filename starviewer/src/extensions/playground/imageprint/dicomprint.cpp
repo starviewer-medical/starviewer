@@ -2,13 +2,12 @@
 
 #include <QDir>
 #include <QStringList>
+#include <QDesktopServices>
 
 #include "dicomprinter.h"
 #include "dicomprintjob.h"
 #include "createdicomprintspool.h"
 #include "printdicomspool.h"
-#include "../core/settings.h"
-#include "imageprintsettings.h"
 #include "../inputoutput/pacsdevice.h"
 #include "../inputoutput/pacsserver.h"
 #include "../inputoutput/status.h"
@@ -50,7 +49,7 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
             foreach(QString dcmtkStoredPrintPathFile, dcmtkStoredPrintPathFileList)
             {
                 INFO_LOG("Envio FilmSession a imprimir");
-                printDicomSpool.printBasicGrayscale(printer, printJob, dcmtkStoredPrintPathFile, Settings().getValue(ImagePrintSettings::SpoolDirectory).toString());
+                printDicomSpool.printBasicGrayscale(printer, printJob, dcmtkStoredPrintPathFile, getSpoolDirectory());
 				if (printDicomSpool.getLastError() != PrintDicomSpool::Ok)
 				{
 					//Si hi ha error parem
@@ -78,7 +77,7 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
     }
 
     INFO_LOG("Esborro directori spool");
-    deleteDirectory.deleteDirectory(Settings().getValue(ImagePrintSettings::SpoolDirectory).toString(), false);
+    deleteDirectory.deleteDirectory(getSpoolDirectory(), true);
 
     return numberOfFilmSessionPrinted;
 }
@@ -139,7 +138,7 @@ QStringList DicomPrint::createDicomPrintSpool(DicomPrinter printer, DicomPrintJo
         QString storedPrintPathFile;
         INFO_LOG("Creo les " + QString().setNum(dicomPrintPage.getImagesToPrint().count()) + " images de la pagina " + QString().setNum(dicomPrintPage.getPageNumber()));
         
-        storedPrintPathFile = dicomPrintSpool.createPrintSpool(printer, dicomPrintPage, Settings().getValue(ImagePrintSettings::SpoolDirectory).toString());
+        storedPrintPathFile = dicomPrintSpool.createPrintSpool(printer, dicomPrintPage, getSpoolDirectory());
 
         if (dicomPrintSpool.getLastError() == CreateDicomPrintSpool::Ok)
         {
@@ -222,5 +221,10 @@ DicomPrint::DicomPrintError DicomPrint::printDicomSpoolErrorToDicomPrintError(Pr
     return error;
 }
 
+QString DicomPrint::getSpoolDirectory()
+{
+    //Creem Spool al directori tempora del S.O.
+    return QDesktopServices::storageLocation( QDesktopServices::TempLocation ) + QDir::separator() + "DICOMSpool"; 
+}
 
 }

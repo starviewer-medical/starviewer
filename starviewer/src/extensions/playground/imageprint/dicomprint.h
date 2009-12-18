@@ -41,6 +41,9 @@ private:
     ///Transforma l'error de CreateDicomPrintSpool a un error de la classe DicomPrint
     DicomPrint::DicomPrintError printDicomSpoolErrorToDicomPrintError(PrintDicomSpool::PrintDicomSpoolError error);
 
+    ///Retorna el directori on genera l'Spool per imprimir les imatges DICOM
+    QString getSpoolDirectory();
+
 };
 }; 
 #endif
