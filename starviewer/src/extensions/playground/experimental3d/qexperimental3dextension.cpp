@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include <QStringListModel>
 #include <QTextStream>
+#include <QTime>
 
 #ifdef CUDA_AVAILABLE
 #include "cudafiltering.h"
@@ -1879,8 +1880,13 @@ void QExperimental3DExtension::computeSelectedVmi()
     connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
     connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
 
+    QTime time;
+    time.start();
     viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi, computeEvmiOpacity,
                                          computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked() );
+    int elapsed = time.elapsed();
+    DEBUG_LOG( QString( "Temps total de VOMI i altres: %1 s" ).arg( elapsed / 1000.0f ) );
+    INFO_LOG( QString( "Temps total de VOMI i altres: %1 s" ).arg( elapsed / 1000.0f ) );
 
     if ( viewpointInformationChannel.hasViewedVolume() )
     {
