@@ -15,12 +15,8 @@ QDicomAddPrinterWidget::QDicomAddPrinterWidget()
     flags = Qt::WindowMinimizeButtonHint;
     setWindowFlags( flags );
 
-    this->createConnections();
-}
-
-QDicomAddPrinterWidget::~QDicomAddPrinterWidget()
-{
-
+    createConnections();
+    configureInputValidator();
 }
 
 void QDicomAddPrinterWidget::clearInputs()
@@ -29,6 +25,7 @@ void QDicomAddPrinterWidget::clearInputs()
     m_printerHostnameLineEdit->setText("");
     m_printerPortLineEdit->setText("");
     m_printerDescriptionLineEdit->setText("");
+    m_printerDefaultPrinterCheckBox->setChecked(false);
     
     m_addButton->setEnabled(false);
 }
@@ -43,71 +40,42 @@ void QDicomAddPrinterWidget::createConnections()
     connect( m_printerPortLineEdit, SIGNAL( textChanged(const QString &) ), SLOT( enableAddButton() ) );
 }
 
+void QDicomAddPrinterWidget::configureInputValidator()
+{
+    m_printerPortLineEdit->setValidator(new QIntValidator(0, 65535, m_printerPortLineEdit));
+}
+
 // Private Slots
 void QDicomAddPrinterWidget::enableAddButton()
 {
-    QString text;
-
-    text = m_printerAetitleLineEdit->text();
-    if(text.length()==0)
+    if (m_printerAetitleLineEdit->text().length() == 0 || m_printerPortLineEdit->text().length() == 0 || 
+        m_printerHostnameLineEdit->text().length() == 0)
     {
        m_addButton->setEnabled(false);
-       return;
     }
-
-    text = m_printerHostnameLineEdit->text();
-    if(text.length()==0)
+    else
     {
-       m_addButton->setEnabled(false);
-       return;
+        m_addButton->setEnabled(true);
     }
-      
-    text = m_printerPortLineEdit->text();
-    if(text.length()==0)
-    {
-       m_addButton->setEnabled(false);
-       return;
-    }
-
-    m_addButton->setEnabled(true);
 }
 
 void QDicomAddPrinterWidget::addPrinter()
 {   
-    DicomPrinter dicomPrinter;
     DicomPrinterManager dicomPrinterManager;
-   
-    if(this->validateInputSettings())
+    DicomPrinter dicomPrinter = dicomPrinterManager.getAvailableParametersValues(m_printerAetitleLineEdit->text(),m_printerPortLineEdit->text().toInt()); 
+
+    getPrinterSettingsFromControls(dicomPrinter);
+    
+    if (!dicomPrinterManager.addPrinter(dicomPrinter))
     {
-      dicomPrinter = dicomPrinterManager.getAvailableParametersValues(m_printerAetitleLineEdit->text(),m_printerPortLineEdit->text().toInt()); 
-      this->getPrinterSettingsFromControls(dicomPrinter);
-      if ( !dicomPrinterManager.addPrinter(dicomPrinter) )
-      {
-        QMessageBox::critical(this, ApplicationNameString,  tr("Error: A printer with the same name already exists"));
-      }
-      else
-      {
-        QMessageBox::information(this, ApplicationNameString,  tr("New printer added"));
+        QString messageError = tr("%1 can't add the printer %2 because a printer with the same AETitle already exists.").arg(ApplicationNameString, dicomPrinter.getAETitle());
+        QMessageBox::critical(this, ApplicationNameString, messageError);
+    }
+    else
+    {
         emit newPrinterAddedSignal(dicomPrinter.getID());
         this->close();
-      }
     }
-}
-
-// Private Methods
-bool QDicomAddPrinterWidget::validateInputSettings()
-{       
-    bool ok;
-    int port;
-
-    port = (m_printerPortLineEdit->text()).toInt(&ok,10);
-    if ( !ok || port < 0 || port >65535)
-    {   
-        QMessageBox::critical(this, ApplicationNameString,  tr("\nPrinter Port has to be between 0 and 65535"));
-        return false;
-    }
-
-    return true;
 }
 
 void QDicomAddPrinterWidget::getPrinterSettingsFromControls(DicomPrinter& printer)
