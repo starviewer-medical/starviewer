@@ -28,6 +28,7 @@ bool DicomPrinterManager::addPrinter( DicomPrinter &printer )
     {
         Settings settings;
         settings.addListItem( DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer) );
+        printer.setID( this->getDicomPrinterList().count() - 1 );
         return true;
     }
     return false;

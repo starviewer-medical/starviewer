@@ -40,7 +40,7 @@ private slots:
     // Mostra/Amaga per pantalla la informació avançada de la impressora.
     void showAdvancedSettings();
     // Després d'afegir una impressora actualitza la llista d'impressores i et mostra la informació de la última. S'executa amb el Signal newPrinterAddedSignal
-    void showNewPrinterAdded();
+    void showNewPrinterAdded(int printerID);
     ///Slot que s'executa al prèmer el botó cancel
     void cancel();
     ///Slot que s'executa al prèmer el botó accept
@@ -77,6 +77,9 @@ private:
       * d'aquesta d'interfície i cridem aquest mètode retornarà les dades tal com les teniem guardades al settings, no retornarà les dades modificada a la 
       * interfície si no s'han aplicat els canvis i guardats al settings*/
     DicomPrinter getSelectedDicomPrinter();
+
+    /// Selecciona l'impressora de la llista que tingui l'id corresponent
+    void selectPrinter(int printerID);
 
     int m_selectedPrinterId;
     QDicomAddPrinterWidget * m_addPrinterWidget;

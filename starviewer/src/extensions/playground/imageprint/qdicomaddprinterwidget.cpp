@@ -88,7 +88,7 @@ void QDicomAddPrinterWidget::addPrinter()
       else
       {
         QMessageBox::information(this, ApplicationNameString,  tr("New printer added"));
-        emit newPrinterAddedSignal();
+        emit newPrinterAddedSignal(dicomPrinter.getID());
         this->close();
       }
     }

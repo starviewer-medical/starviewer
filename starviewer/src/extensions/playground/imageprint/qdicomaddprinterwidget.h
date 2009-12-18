@@ -25,7 +25,7 @@ public:
 signals:
 
     /// Signal que es llança quan una impressora s'ha afegit al sistema.
-    void newPrinterAddedSignal();
+    void newPrinterAddedSignal(int);
 
 public slots:
 
