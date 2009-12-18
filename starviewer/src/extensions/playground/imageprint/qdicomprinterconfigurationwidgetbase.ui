@@ -265,6 +265,9 @@
            <enum>QFrame::Sunken</enum>
           </property>
           <layout class="QFormLayout" name="formLayout">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+           </property>
            <item row="0" column="0">
             <widget class="QLabel" name="m_magnifactionTypeLabel">
              <property name="minimumSize">
@@ -280,6 +283,9 @@
            </item>
            <item row="0" column="1">
             <widget class="QComboBox" name="m_magnifactionTypeComboBox">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -295,7 +301,7 @@
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QLabel" name="m_smoothingTypeLabel">
+            <widget class="QLabel" name="m_borderDensityLabel">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -303,23 +309,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Smoothing:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="m_smoothingTypeComboBox">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
+              <string>Border Color:</string>
              </property>
             </widget>
            </item>
@@ -381,6 +371,22 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="m_borderDensityComboBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -402,7 +408,7 @@
            <item row="0" column="0">
             <layout class="QHBoxLayout" name="horizontalLayout_10">
              <item>
-              <widget class="QLabel" name="m_borderDensityLabel">
+              <widget class="QLabel" name="m_smoothingTypeLabel">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -410,12 +416,12 @@
                 </size>
                </property>
                <property name="text">
-                <string>Border Density:</string>
+                <string>Smoothing:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="m_borderDensityComboBox">
+              <widget class="QComboBox" name="m_smoothingTypeComboBox">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -443,7 +449,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>Empty Density:</string>
+                <string>Empty Image Color:</string>
                </property>
               </widget>
              </item>
@@ -684,6 +690,8 @@
  </customwidgets>
  <tabstops>
   <tabstop>m_listPrintersTreeWidget</tabstop>
+  <tabstop>m_addPrinterPushButton</tabstop>
+  <tabstop>m_deletePrinterPushButton</tabstop>
   <tabstop>m_testPrinterPushButton</tabstop>
   <tabstop>m_printerAetitleLineEdit</tabstop>
   <tabstop>m_printerHostnameLineEdit</tabstop>
@@ -692,13 +700,17 @@
   <tabstop>m_printerDefaultPrinterCheckBox</tabstop>
   <tabstop>m_qdicomPrinterBasicSettingsWidget</tabstop>
   <tabstop>m_magnifactionTypeComboBox</tabstop>
-  <tabstop>m_borderDensityComboBox</tabstop>
   <tabstop>m_smoothingTypeComboBox</tabstop>
+  <tabstop>m_borderDensityComboBox</tabstop>
   <tabstop>m_emptyDensityComboBox</tabstop>
   <tabstop>m_minimumDensitySpinBox</tabstop>
   <tabstop>m_maximumDensitySpinBox</tabstop>
   <tabstop>m_polarityComboBox</tabstop>
+  <tabstop>m_yesVisibleTrimRadioButton</tabstop>
+  <tabstop>m_noVisibleTrimRadioButton</tabstop>
   <tabstop>m_configurationInformationLineEdit</tabstop>
+  <tabstop>m_spoolPathLineEdit</tabstop>
+  <tabstop>m_chooseSpoolPathPushButton</tabstop>
   <tabstop>m_advancedSettingsPushButton</tabstop>
   <tabstop>m_acceptSettingsPushButton</tabstop>
   <tabstop>m_applySettingsPushButton</tabstop>
