@@ -17,7 +17,6 @@ Q_OBJECT
 
 public:
     QDicomAddPrinterWidget();
-    ~QDicomAddPrinterWidget();
 
     /// Esborra les dades entrades per l'usuari
     void clearInputs();
@@ -37,7 +36,11 @@ public slots:
 
 private:
 
+    ///Es creen els connexions de la interfície
     void createConnections();
+
+    ///Configurem InputValidator per alguns dels QLineEdit
+    void configureInputValidator();
 
     /// Comprova la validesa dels paràmetres entrats. Retorna false si hi ha algun paràmetre erroni.
     bool validateInputSettings();
