@@ -61,7 +61,7 @@ void EraserTool::startEraserAction()
     if (!m_polyline )
     {
         m_polyline = new DrawerPolyline;
-        m_2DViewer->getDrawer()->draw( m_polyline , Q2DViewer::Top2DPlane, m_2DViewer->getCurrentSlice() );
+        m_2DViewer->getDrawer()->draw( m_polyline , Q2DViewer::Top2DPlane );
     }
     
     m_2DViewer->getEventWorldCoordinate( m_startPoint );
