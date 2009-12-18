@@ -43,7 +43,7 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
     m_processImageSingleton->setPath( LocalDatabaseManager::getCachePath());
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputPacsWidget",this);
-    m_statsWatcher->addClicksCounter(m_viewButton);
+    m_statsWatcher->addClicksCounter(m_retrievAndViewButton);
     m_statsWatcher->addClicksCounter(m_retrieveButton);
 
     m_pacsManager = new PacsManager();
@@ -75,7 +75,7 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(retrieveSelectedStudies()));
     connect(m_studyTreeWidget, SIGNAL(imageDoubleClicked()), SLOT(retrieveSelectedStudies()));
 
-    connect(m_viewButton, SIGNAL(clicked()), SLOT(view()));
+    connect(m_retrievAndViewButton, SIGNAL(clicked()), SLOT(view()));
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
