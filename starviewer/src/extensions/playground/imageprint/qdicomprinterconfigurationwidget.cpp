@@ -186,9 +186,10 @@ void QDicomPrinterConfigurationWidget::showAdvancedSettings()
 
 }
 
-void QDicomPrinterConfigurationWidget::showNewPrinterAdded()
+void QDicomPrinterConfigurationWidget::showNewPrinterAdded(int printerID)
 {
     this->refreshPrinterList();
+    this->selectPrinter(printerID);
 }
 
 // Private Methods
@@ -202,7 +203,7 @@ void QDicomPrinterConfigurationWidget::createConnections()
     connect( m_deletePrinterPushButton , SIGNAL( clicked() ), SLOT( deletePrinter() ));
     connect( m_testPrinterPushButton , SIGNAL( clicked() ), SLOT( testPrinter() ));    
     connect( m_advancedSettingsPushButton , SIGNAL( clicked() ), SLOT( showAdvancedSettings() ));   
-    connect( m_addPrinterWidget, SIGNAL(newPrinterAddedSignal()), SLOT(showNewPrinterAdded()));
+    connect( m_addPrinterWidget, SIGNAL(newPrinterAddedSignal(int)), SLOT(showNewPrinterAdded(int)));
 }
 
 void QDicomPrinterConfigurationWidget::configureInputValidator()
@@ -226,6 +227,31 @@ void QDicomPrinterConfigurationWidget::refreshPrinterList()
         item->setText(2, dicomPrinter.getHostname());
         item->setText(3, QString::number( dicomPrinter.getPort()));
         item->setText(4, dicomPrinter.getDescription());
+    }
+}
+
+void QDicomPrinterConfigurationWidget::selectPrinter(int printerID)
+{   
+    DicomPrinterManager dicomPrinterManager;
+    QList<DicomPrinter> dicomPrintersList = dicomPrinterManager.getDicomPrinterList();
+    QList<DicomPrinter>::iterator dicomPrintersListIterator = dicomPrintersList.begin();
+
+    int i = 0;
+    bool found = false;
+
+    while( dicomPrintersListIterator != dicomPrintersList.end() && !found )
+    {
+        if ( printerID == (*dicomPrintersListIterator).getID() )
+        {
+            m_listPrintersTreeWidget->topLevelItem( i )->setSelected( true );
+            found = true;
+        }
+        else
+        {
+            i++;
+            dicomPrintersListIterator++;
+        }
+
     }
 }
 
