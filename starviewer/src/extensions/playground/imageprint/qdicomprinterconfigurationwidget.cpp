@@ -77,7 +77,8 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
 {
     DicomPrinter dicomPrinter;
     DicomPrinterManager dicomPrinterManager;
-    
+    QModelIndex selectedPrinterIndex;
+
     if (!m_listPrintersTreeWidget->selectedItems().isEmpty())
     {
         if (validatePrinterSettings())
@@ -93,8 +94,11 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
             }
             else
             {
+                /*Després guardar les modificacions de la impressora tornem a recarregar la el TreeWidget amb la llista d'impressores 
+                  i tornem a deixar com a seleccionada la impressora actual, per si l'usuari vol continuar modificant més paràmetres de configuració*/
+                selectedPrinterIndex = m_listPrintersTreeWidget->currentIndex();
                 refreshPrinterList();
-                clearPrinterSettings();
+                m_listPrintersTreeWidget->setCurrentIndex(selectedPrinterIndex);
 
                 emit printerSettingsChanged();                
                 return true;
