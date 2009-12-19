@@ -34,7 +34,6 @@ HEADERS +=  qimageprintextension.h \
             dicomprint.h \
             createdicomprintspool.h \
             printdicomspool.h \
-            imageprintsettings.h \
             qdicomaddprinterwidget.h \
             qdicomprinterbasicsettingswidget.h
             
@@ -55,7 +54,6 @@ SOURCES +=  qimageprintextension.cpp \
             dicomprint.cpp \
             createdicomprintspool.cpp \
             printdicomspool.cpp \
-            imageprintsettings.cpp \
             qdicomaddprinterwidget.cpp \
             qdicomprinterbasicsettingswidget.cpp
 

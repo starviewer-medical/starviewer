@@ -19,7 +19,6 @@
 #include "q2dviewer.h"
 #include "starviewerapplication.h"
 #include "toolmanager.h"
-#include "imageprintsettings.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -30,7 +29,6 @@ QImagePrintExtension::QImagePrintExtension( QWidget *parent )
 {	
     setupUi( this );
     // Inicialitzem els settings
-    ImagePrintSettings().init();
 
 	// Només per provar.
 	m_factory=new DicomPrintFactory();
