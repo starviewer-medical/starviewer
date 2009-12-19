@@ -45,6 +45,9 @@ private slots:
     void cancel();
     ///Slot que s'executa al prèmer el botó accept
     void accept();
+    /**Slot que s'activa quan MagnificationType canvia de valor, aquest slot activa/desactiva SmoothingType en funcio del valor de MagnificationType.
+      *SmoothingType només pot estar activat segons la normativa DICOM quan MagnificationType té com a valor "CUBIC"*/
+    void m_magnitifacationTypeComboBoxIndexChanged(const QString &magnificationTypecomboBoxValue);
 
 private:
     ///Crea InputValidators pels LineEdit que només accepten valors numèrics

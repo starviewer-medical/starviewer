@@ -238,6 +238,7 @@ QStringList DicomPrinterManager::getAvailableFilmOrientationValues()
 
 QStringList DicomPrinterManager::getAvailableMagnificationTypeValues()
 {
+    //Atenció si es canvien els valors de Magnification Type, perquè Smoothing Type només es pot configurar si MagnificationType té com a valor "CUBINC" 
     QStringList magnificationTypeValuesTemp;
     magnificationTypeValuesTemp << "" << "REPLICATE" << "BILINEAR" << "CUBIC" << "NONE";
     return magnificationTypeValuesTemp;
@@ -284,6 +285,7 @@ QStringList DicomPrinterManager::getAvailableFilmDestinationValues()
 
 QStringList DicomPrinterManager::getAvailableSmoothingTypeValues()
 {
+    //Només es pot configurar si Magnification Type té com a Valor "CUBIC"
     QStringList smoothingTypeValuesTemp;
     smoothingTypeValuesTemp << "" << "MEDIUM" << "SHARP" << "SMOOTH";
     return smoothingTypeValuesTemp;
