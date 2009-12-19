@@ -114,7 +114,7 @@ public:
     void setAvailableFilmDestinationValues(QStringList filmDestinationValues);
     QStringList getAvailableFilmDestinationValues();
 
-    ///Especifica/Retorna el smoothing type per defecte amb la que s'imprimirà
+    ///Especifica/Retorna el smoothing type per defecte amb la que s'imprimirà. Només es pot configurar si Magnification Type té com a Valor "CUBIC"
     void setDefaultSmoothingType(const QString &smoothingType);
     QString getDefaultSmoothingType() const;
     void setAvailableSmoothingTypeValues(QStringList smoothingTypeValues);

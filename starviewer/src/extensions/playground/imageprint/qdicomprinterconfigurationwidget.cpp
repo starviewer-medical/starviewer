@@ -187,10 +187,23 @@ void QDicomPrinterConfigurationWidget::showNewPrinterAdded(int printerID)
     this->selectPrinter(printerID);
 }
 
+void QDicomPrinterConfigurationWidget::m_magnitifacationTypeComboBoxIndexChanged(const QString &magnificationTypecomboBoxValue)
+{
+    //Smoothing Type només es pot escollir si el paràmetre de configuració Magnification Type té com a valor cubic
+    if (magnificationTypecomboBoxValue.toUpper() == "CUBIC")
+    {
+        m_smoothingTypeComboBox->setEnabled(true);
+    }
+    else
+    {
+        m_smoothingTypeComboBox->setEnabled(false);
+        m_smoothingTypeComboBox->setCurrentIndex(m_smoothingTypeComboBox->findText(""));//Treiem el valor que tenia a smoothingType
+    }
+}
+
 // Private Methods
 void QDicomPrinterConfigurationWidget::createConnections()
 { 
-    connect( m_listPrintersTreeWidget , SIGNAL( itemSelectionChanged() ), SLOT( printerSelectionChanged() ) );
     connect( m_addPrinterPushButton, SIGNAL( clicked() ), SLOT( addPrinter() ));
     connect( m_applySettingsPushButton , SIGNAL( clicked() ), SLOT( modifyPrinter() ));
     connect( m_acceptSettingsPushButton , SIGNAL( clicked() ), SLOT( accept() ));
@@ -198,7 +211,10 @@ void QDicomPrinterConfigurationWidget::createConnections()
     connect( m_deletePrinterPushButton , SIGNAL( clicked() ), SLOT( deletePrinter() ));
     connect( m_testPrinterPushButton , SIGNAL( clicked() ), SLOT( testPrinter() ));    
     connect( m_advancedSettingsPushButton , SIGNAL( clicked() ), SLOT( showAdvancedSettings() ));   
+
+    connect( m_listPrintersTreeWidget , SIGNAL( itemSelectionChanged() ), SLOT( printerSelectionChanged() ) );
     connect( m_addPrinterWidget, SIGNAL(newPrinterAddedSignal(int)), SLOT(showNewPrinterAdded(int)));
+    connect( m_magnifactionTypeComboBox, SIGNAL(currentIndexChanged ( const QString ) ), SLOT( m_magnitifacationTypeComboBoxIndexChanged( const QString ) ) );
 }
 
 void QDicomPrinterConfigurationWidget::configureInputValidator()
