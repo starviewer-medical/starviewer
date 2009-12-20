@@ -42,6 +42,10 @@ public:
     void setFilterPACSByService(PacsDeviceManager::FilterPACSByService);
     PacsDeviceManager::FilterPACSByService getFilterPACSByService();
 
+    ///Especifica/Retorna si els PACS que estan marcats com a PACS per cercar per defecte s'han de mostrar ressaltats. Per defecte s'hi mostren
+    void setShowQueryPacsDefaultHighlighted(bool showHighlighted);
+    bool getShowQueryPacsDefaultHighlighted();
+
 public slots:
     /// Carrega al ListView la Llista de Pacs disponibles
     void refresh();
@@ -54,6 +58,7 @@ private slots:
 private:
 
     PacsDeviceManager::FilterPACSByService m_filterPacsByService;
+    bool m_showQueryPacsDefaultHighlighted;
 };
 
 };
