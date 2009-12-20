@@ -116,7 +116,7 @@
          </column>
          <column>
           <property name="text">
-           <string>Default</string>
+           <string>Default query PACS</string>
           </property>
          </column>
          <column>
