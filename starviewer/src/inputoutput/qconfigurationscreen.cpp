@@ -79,7 +79,7 @@ void QConfigurationScreen::createConnections()
 void QConfigurationScreen::configureInputValidator()
 {
     m_textPort->setValidator( new QIntValidator(0, 65535, m_textPort) );
-    m_textLocalPort->setValidator( new QIntValidator(0, 65535, m_textPort) );
+    m_textLocalPort->setValidator( new QIntValidator(0, 65535, m_textLocalPort) );
     m_textTimeout->setValidator( new QIntValidator(0, 99, m_textTimeout) );
     m_textMaxConnections->setValidator( new QIntValidator(0, 99, m_textMaxConnections) );
 }
