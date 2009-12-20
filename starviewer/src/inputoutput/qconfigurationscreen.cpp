@@ -117,15 +117,9 @@ void QConfigurationScreen::addPacs()
 
     if (validatePacsDevice())
     {
-        pacs.setAETitle( m_textAETitle->text() );
-        pacs.setPort( m_textPort->text().toInt() );
-        pacs.setAddress( m_textAddress->text() );
-        pacs.setInstitution( m_textInstitution->text() );
-        pacs.setLocation( m_textLocation->text() );
-        pacs.setDescription( m_textDescription->text() );
-        pacs.setDefault( m_checkDefault->isChecked() );
+        pacs = getPacsDeviceFromControls();
 
-        INFO_LOG( "Afegir PACS " + m_textAETitle->text() );
+        INFO_LOG( "Afegir PACS " + pacs.getAETitle() );
 
         if ( !pacsDeviceManager.addPACS(pacs) )
         {
@@ -190,16 +184,9 @@ void QConfigurationScreen::updatePacs()
 
     if ( validatePacsDevice() )
     {
-        pacs.setAETitle( m_textAETitle->text() );
-        pacs.setPort( m_textPort->text().toInt() );
-        pacs.setAddress( m_textAddress->text() );
-        pacs.setInstitution( m_textInstitution->text() );
-        pacs.setLocation( m_textLocation->text() );
-        pacs.setDescription( m_textDescription->text() );
-        pacs.setID( m_selectedPacsID );
-        pacs.setDefault( m_checkDefault->isChecked() );
-
-        INFO_LOG( "Actualitzant dades del PACS: " + m_textAETitle->text() );
+        pacs = getPacsDeviceFromControls();
+        
+        INFO_LOG( "Actualitzant dades del PACS: " + pacs.getAETitle() );
 
         pacsDeviceManager.updatePACS(pacs);
 
@@ -266,9 +253,8 @@ void QConfigurationScreen::test()
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
         //Agafem les dades del PACS que estan el textbox per testejar
-        pacs.setAETitle( m_textAETitle->text() );
-        pacs.setPort( m_textPort->text().toInt() );
-        pacs.setAddress( m_textAddress->text() );
+        pacs = getPacsDeviceFromControls();
+
         pacsServer.setPacs( pacs );
 
         state = pacsServer.connect( PacsServer::echoPacs , PacsServer::studyLevel );
@@ -446,6 +432,22 @@ bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
 void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
 {
     m_warningFrameIncomingConnectionsPortInUse->setVisible(isIncomingConnectionsPortInUseByAnotherApplication()); ///Si està en ús el frame que conté el warning es fa visible
+}
+
+PacsDevice QConfigurationScreen::getPacsDeviceFromControls()
+{
+    PacsDevice pacsDevice;
+
+    pacsDevice.setAETitle( m_textAETitle->text() );
+    pacsDevice.setPort( m_textPort->text().toInt() );
+    pacsDevice.setAddress( m_textAddress->text() );
+    pacsDevice.setInstitution( m_textInstitution->text() );
+    pacsDevice.setLocation( m_textLocation->text() );
+    pacsDevice.setDescription( m_textDescription->text() );
+    pacsDevice.setDefault( m_checkDefault->isChecked() );
+    pacsDevice.setID( m_selectedPacsID );
+
+    return pacsDevice;
 }
 
 };
