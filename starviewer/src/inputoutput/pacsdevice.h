@@ -38,8 +38,8 @@ public:
     QString getAddress() const;
 
     /// Assigna/Retorna el port del PACS al qual ens volem connectar
-    void setPort(const QString &port);
-    QString getPort() const;
+    void setPort(int port);
+    int getPort() const;
 
     /// Assigna/Retorna l'AETitle del PACS al qual ens volem connectar
     void setAETitle(const QString &AETitle);
@@ -85,7 +85,7 @@ private:
 
 private:
     QString m_AETitle;
-    QString m_port;
+    int m_port;
     QString m_address;
     QString m_description;
     QString m_institution;

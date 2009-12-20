@@ -20,12 +20,12 @@ QString PacsDevice::getAddress() const
     return m_address;
 }
 
-void PacsDevice::setPort(const QString &port)
+void PacsDevice::setPort(int port)
 {
     m_port = port;
 }
 
-QString PacsDevice::getPort() const
+int PacsDevice::getPort() const
 {
     return m_port;
 }
@@ -115,7 +115,6 @@ QString PacsDevice::getID() const
 bool PacsDevice::isEmpty() const
 {
     if( m_AETitle.isEmpty() &&
-        m_port.isEmpty() &&
         m_address.isEmpty() &&
         m_description.isEmpty() &&
         m_institution.isEmpty() &&

@@ -93,7 +93,7 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
       que és difícil adaptar el codi perquè accepti altres objectes, a part de que les responsabilitat de la classe és sobre objectes PACS, per això
       transformem l'objecte printer a PACS per poder fer l'echo i utilitzem les classes de PACS */ 
     pacs.setAETitle(printer.getAETitle());
-    pacs.setPort(QString().setNum(printer.getPort()));
+    pacs.setPort(printer.getPort());
     pacs.setAddress(printer.getHostname());
     pacsServer.setPacs(pacs);
 
