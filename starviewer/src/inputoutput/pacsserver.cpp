@@ -416,7 +416,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond=configureMove( level );
                         if ( !cond.good() ) return state.setStatus( cond );
 
-                        state = m_pacsNetwork->createNetworkRetrieve( PacsDevice::getQueryRetrievePort() , PacsDevice::getConnectionTimeout() );
+                        state = m_pacsNetwork->createNetworkRetrieve( PacsDevice::getIncomingDICOMConnectionsPort() , PacsDevice::getConnectionTimeout() );
                         if ( !state.good() ) return state;
 
                         m_net = m_pacsNetwork->getNetworkRetrieve();

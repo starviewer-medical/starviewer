@@ -152,7 +152,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         return;
     }
 
-    int localPort = PacsDevice::getQueryRetrievePort();
+    int localPort = PacsDevice::getIncomingDICOMConnectionsPort();
     if ( Utils::isPortInUse(localPort) )
     {
         errorRetrieving(studyUID, operation.getPacsDevice().getID(), IncomingConnectionsPortPacsInUse);
