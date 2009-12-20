@@ -377,7 +377,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
     cond = ASC_setTransportLayerType(m_params, OFFalse);
     if (!cond.good()) return state.setStatus( cond );
 
-    AdrServer = constructAdrServer( m_pacs.getAddress(), m_pacs.getPort() );
+    AdrServer = constructAdrServer(modality, m_pacs );
 
     //get localhost name TODO substituir per QHostInfo::localHostName()
     gethostname( adrLocal , 255 );
@@ -458,14 +458,42 @@ void PacsServer::disconnect()
 	m_pacsNetwork->disconnect();//desconectem les adreces de xarxa
 }
 
-QString PacsServer:: constructAdrServer( QString host , int port )
+QString PacsServer:: constructAdrServer( modalityConnection modality, PacsDevice pacsDevice )
 {
 //The format is "server:port"
     QString adrServer;
 
-    adrServer.insert( 0 , host );
+    adrServer.insert( 0 , pacsDevice.getAddress() );
     adrServer.insert( adrServer.length() , ":" );
-    adrServer.insert( adrServer.length() , QString().setNum(port) );
+
+    switch (modality)
+    {
+        case PacsServer::query:
+        case PacsServer::retrieveImages:
+            adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getPort()) );
+            break;
+        case PacsServer::storeImages:
+            adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getStoreServicePort()) );
+            break;
+        case PacsServer::echoPacs:
+            if (pacsDevice.isQueryRetrieveServiceEnabled())
+            {
+                adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getPort()) );
+            }
+            else if (pacsDevice.isStoreServiceEnabled())
+            {
+                adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getStoreServicePort()) );
+            }
+            else
+            {
+                ERROR_LOG("No s'ha pogut configurar per quin port fer l'echo perquè el PACS " + pacsDevice.getAETitle() + " no té cap servei activat");
+            }
+            break;
+        default:
+            ERROR_LOG("No s'ha pogut configurar per quin port fer l'echo al PACS " + pacsDevice.getAETitle() + " perquè la modalitat de connexió és invàlida");
+    }
+
+    INFO_LOG("Pacs Adress build:" + adrServer);
 
     return adrServer;
 }

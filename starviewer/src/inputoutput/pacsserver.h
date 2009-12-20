@@ -118,7 +118,7 @@ private:
      * @param adreça del servidor
      * @param port del servidor
      */
-   QString constructAdrServer( QString , int port ); //construct PACS address
+   QString constructAdrServer( modalityConnection modality, PacsDevice pacsDevice  ); //construct PACS address
 
     /** Afegeix tots els PresentationContexts necessaris per a guardar imatges en el PACS
     * @return retorna l'estat del m�ode

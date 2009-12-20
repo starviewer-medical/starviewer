@@ -8,6 +8,8 @@ namespace udg{
 
 PacsDevice::PacsDevice()
 {
+    m_port = -1;
+    m_storeServicePort = -1;
 }
 
 void PacsDevice::setAddress(const QString &address)
@@ -112,6 +114,38 @@ QString PacsDevice::getID() const
     return m_id;
 }
 
+
+///Assigna/Retorna si podem fer consultes/descarregues al PACS
+void PacsDevice::setQueryRetrieveServiceEnabled(bool isQueryRetrieveServiceEnabled)
+{
+    m_isQueryRetrieveServiceEnabled = isQueryRetrieveServiceEnabled;
+}
+
+bool PacsDevice::isQueryRetrieveServiceEnabled() const
+{
+    return m_isQueryRetrieveServiceEnabled;
+}
+
+void PacsDevice::setStoreServiceEnabled(bool isStoreServiceEnabled)
+{
+    m_isStoreServiceEnabled = isStoreServiceEnabled;
+}
+
+bool PacsDevice::isStoreServiceEnabled() const
+{
+    return m_isStoreServiceEnabled;
+}
+
+void PacsDevice::setStoreServicePort(int storeServicePort)
+{
+    m_storeServicePort = storeServicePort;
+}
+
+int PacsDevice::getStoreServicePort() const
+{
+    return m_storeServicePort;
+}
+
 bool PacsDevice::isEmpty() const
 {
     if( m_AETitle.isEmpty() &&
@@ -132,12 +166,15 @@ bool PacsDevice::isEmpty() const
 bool PacsDevice::operator ==(const PacsDevice &device)
 {
     return m_AETitle == device.m_AETitle
-        && m_port == device.m_port
         && m_address == device.m_address
         && m_description == device.m_description
         && m_institution == device.m_institution
         && m_location == device.m_location
-        && m_id == device.m_id;
+        && m_id == device.m_id
+        && m_isQueryRetrieveServiceEnabled == device.m_isQueryRetrieveServiceEnabled
+        && m_port == device.m_port
+        && m_isStoreServiceEnabled == device.m_isStoreServiceEnabled
+        && m_storeServicePort == device.m_storeServicePort;
 }
 
 QString PacsDevice::getLocalAETitle()
