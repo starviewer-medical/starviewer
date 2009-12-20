@@ -118,7 +118,7 @@ void QConfigurationScreen::addPacs()
     if (validatePacsDevice())
     {
         pacs.setAETitle( m_textAETitle->text() );
-        pacs.setPort( m_textPort->text() );
+        pacs.setPort( m_textPort->text().toInt() );
         pacs.setAddress( m_textAddress->text() );
         pacs.setInstitution( m_textInstitution->text() );
         pacs.setLocation( m_textLocation->text() );
@@ -163,7 +163,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
         {
             //emplenem els textos
             m_textAETitle->setText( selectedPacs.getAETitle() );
-            m_textPort->setText( selectedPacs.getPort() );
+            m_textPort->setText( QString().setNum( selectedPacs.getPort() ) );
             m_textAddress->setText( selectedPacs.getAddress() );
             m_textInstitution->setText( selectedPacs.getInstitution() );
             m_textLocation->setText( selectedPacs.getLocation() );
@@ -191,7 +191,7 @@ void QConfigurationScreen::updatePacs()
     if ( validatePacsDevice() )
     {
         pacs.setAETitle( m_textAETitle->text() );
-        pacs.setPort( m_textPort->text() );
+        pacs.setPort( m_textPort->text().toInt() );
         pacs.setAddress( m_textAddress->text() );
         pacs.setInstitution( m_textInstitution->text() );
         pacs.setLocation( m_textLocation->text() );
@@ -244,7 +244,7 @@ void QConfigurationScreen::fillPacsListView()
         item->setText(0, pacs.getID());
         item->setText(1, pacs.getAETitle());
         item->setText(2, pacs.getAddress());
-        item->setText(3, pacs.getPort());
+        item->setText(3, QString().setNum(pacs.getPort()));
         item->setText(4, pacs.getInstitution());
         item->setText(5, pacs.getLocation());
         item->setText(6, pacs.getDescription());
@@ -267,7 +267,7 @@ void QConfigurationScreen::test()
 
         //Agafem les dades del PACS que estan el textbox per testejar
         pacs.setAETitle( m_textAETitle->text() );
-        pacs.setPort( m_textPort->text() );
+        pacs.setPort( m_textPort->text().toInt() );
         pacs.setAddress( m_textAddress->text() );
         pacsServer.setPacs( pacs );
 
@@ -309,6 +309,7 @@ void QConfigurationScreen::test()
 bool QConfigurationScreen::validatePacsDevice()
 {
     QString text;
+    bool portValid;
 
     //Per força tot els pacs han de tenir algun AETitle
     text = m_textAETitle->text();
@@ -328,9 +329,16 @@ bool QConfigurationScreen::validatePacsDevice()
 
     //el port ha d'estar entre 0 i 65535
     text = m_textPort->text();
-    if ( !( text.toInt( NULL , 10 ) >= 0 && text.toInt( NULL , 10 ) <= 65535 ) || text.length() ==0 )
+
+    if ( !( text.toInt( &portValid , 10 ) >= 0 && text.toInt( NULL, 10 ) <= 65535 ) || text.length() ==0 )
     {
         QMessageBox::warning( this , ApplicationNameString , tr( "PACS Port has to be between 0 and 65535" ) );
+        return false;
+    }
+
+    if (!portValid)
+    {
+        QMessageBox::warning( this , ApplicationNameString , tr( "PACS Port has to be in numeric format." ) );
         return false;
     }
 

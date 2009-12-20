@@ -166,7 +166,7 @@ Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const Pacs
 
     item["ID"] = pacsDevice.getID();
     item["AETitle"] = pacsDevice.getAETitle();
-    item["PacsPort"] = pacsDevice.getPort();
+    item["PacsPort"] = QString().setNum(pacsDevice.getPort());
     item["Location"] = pacsDevice.getLocation();
     item["Institution"] = pacsDevice.getInstitution();
     item["PacsHostname"] = pacsDevice.getAddress();
@@ -181,7 +181,7 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueM
     // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty
     pacsDevice.setID( item.value("ID").toString() );
     pacsDevice.setAETitle( item.value("AETitle" ).toString() );
-    pacsDevice.setPort( item.value("PacsPort" ).toString() );
+    pacsDevice.setPort( item.value("PacsPort" ).toString().toInt() );
     pacsDevice.setLocation( item.value("Location" ).toString() );
     pacsDevice.setInstitution( item.value("Institution" ).toString() );
     pacsDevice.setAddress( item.value("PacsHostname" ).toString() );

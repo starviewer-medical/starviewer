@@ -458,14 +458,14 @@ void PacsServer::disconnect()
 	m_pacsNetwork->disconnect();//desconectem les adreces de xarxa
 }
 
-QString PacsServer:: constructAdrServer( QString host , QString port )
+QString PacsServer:: constructAdrServer( QString host , int port )
 {
 //The format is "server:port"
     QString adrServer;
 
     adrServer.insert( 0 , host );
     adrServer.insert( adrServer.length() , ":" );
-    adrServer.insert( adrServer.length() , port );
+    adrServer.insert( adrServer.length() , QString().setNum(port) );
 
     return adrServer;
 }
