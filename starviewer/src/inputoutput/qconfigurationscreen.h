@@ -12,6 +12,7 @@
 namespace udg {
 
 class Status;
+class PacsDevice;
 
 /** Interfície que permet configurar els paràmetres del PACS
 @author marc
@@ -96,6 +97,9 @@ private:
 
     ///Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
     bool isIncomingConnectionsPortInUseByAnotherApplication();
+
+    ///A partir dels controls de la interfície retorna emplenat un objecte PacsDevice.
+    PacsDevice getPacsDeviceFromControls();
 
 private:
     QString m_selectedPacsID; /// Conté el ID del pacs seleccionat en aquell moment
