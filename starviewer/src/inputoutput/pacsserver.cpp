@@ -470,7 +470,7 @@ QString PacsServer:: constructAdrServer( modalityConnection modality, PacsDevice
     {
         case PacsServer::query:
         case PacsServer::retrieveImages:
-            adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getPort()) );
+            adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getQueryRetrieveServicePort()) );
             break;
         case PacsServer::storeImages:
             adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getStoreServicePort()) );
@@ -478,7 +478,7 @@ QString PacsServer:: constructAdrServer( modalityConnection modality, PacsDevice
         case PacsServer::echoPacs:
             if (pacsDevice.isQueryRetrieveServiceEnabled())
             {
-                adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getPort()) );
+                adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getQueryRetrieveServicePort()) );
             }
             else if (pacsDevice.isStoreServiceEnabled())
             {

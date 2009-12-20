@@ -150,7 +150,7 @@ bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
     foreach(PacsDevice pacsDevice, pacsList)
     {
         if (pacsDevice.getAETitle() == pacs.getAETitle() && 
-            pacsDevice.getPort() == pacs.getPort() &&
+            pacsDevice.getQueryRetrieveServicePort() == pacs.getQueryRetrieveServicePort() &&
             pacsDevice.getAddress() == pacs.getAddress())
         {
             return true;
@@ -166,7 +166,7 @@ Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const Pacs
 
     item["ID"] = pacsDevice.getID();
     item["AETitle"] = pacsDevice.getAETitle();
-    item["PacsPort"] = QString().setNum(pacsDevice.getPort());
+    item["PacsPort"] = QString().setNum(pacsDevice.getQueryRetrieveServicePort());
     item["Location"] = pacsDevice.getLocation();
     item["Institution"] = pacsDevice.getInstitution();
     item["PacsHostname"] = pacsDevice.getAddress();
@@ -197,7 +197,7 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueM
     {
         //Si no està guardat als settings si està activat el servei de Query/Retrieve per defecte li indiquem que està activat
         pacsDevice.setQueryRetrieveServiceEnabled(true);
-        pacsDevice.setPort( item.value("PacsPort" ).toInt() );
+        pacsDevice.setQueryRetrieveServicePort( item.value("PacsPort" ).toInt() );
     }
     else
     {
@@ -205,7 +205,7 @@ PacsDevice PacsDeviceManager::keyValueMapToPacsDevice( const Settings::KeyValueM
         
         if (pacsDevice.isQueryRetrieveServiceEnabled())
         {
-            pacsDevice.setPort( item.value( "PacsPort" ).toInt() );
+            pacsDevice.setQueryRetrieveServicePort( item.value( "PacsPort" ).toInt() );
         }
     }
 
