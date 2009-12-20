@@ -65,6 +65,18 @@ public:
     void setID(const QString &id);
     QString getID() const;
 
+    ///Assigna/Retorna si podem fer consultes/descarregues al PACS
+    void setQueryRetrieveServiceEnabled(bool isQueryRetrieveServiceEnabled);
+    bool isQueryRetrieveServiceEnabled() const;
+
+    ///Assigna/Retorna si podem enviar imatges al PACS
+    void setStoreServiceEnabled(bool isStoreServiceEnabled);
+    bool isStoreServiceEnabled() const;
+
+    ///Assigna/Retorna el port pel qual hem d'enviar imatges al PACS
+    void setStoreServicePort(int storeServicePort);
+    int getStoreServicePort() const;
+
     /// Ens diu si aquest objecte conté dades o no
     bool isEmpty() const;
     
@@ -91,6 +103,10 @@ private:
     QString m_institution;
     QString m_location;
     QString m_id;
+    bool m_isQueryRetrieveServiceEnabled;
+    bool m_isStoreServiceEnabled;
+    int m_storeServicePort;
+
 };
 
 };
