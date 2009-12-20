@@ -177,7 +177,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
             m_checkDefault->setChecked( selectedPacs.isDefault() );
             m_radioButtonQueryRetrieveServiceEnabledYes->setChecked(selectedPacs.isQueryRetrieveServiceEnabled());
             m_radioButtonQueryRetrieveServiceEnabledNo->setChecked(!selectedPacs.isQueryRetrieveServiceEnabled());
-            m_textQueryRetrieveServicePort->setText( selectedPacs.isQueryRetrieveServiceEnabled() ?  QString().setNum(selectedPacs.getPort()) : "" );
+            m_textQueryRetrieveServicePort->setText( selectedPacs.isQueryRetrieveServiceEnabled() ?  QString().setNum(selectedPacs.getQueryRetrieveServicePort()) : "" );
             m_textQueryRetrieveServicePort->setEnabled( selectedPacs.isQueryRetrieveServiceEnabled() );
             m_radioButtonStoreServiceEnabledYes->setChecked(selectedPacs.isStoreServiceEnabled());
             m_radioButtonStoreServiceEnabledNo->setChecked(!selectedPacs.isStoreServiceEnabled());
@@ -252,7 +252,7 @@ void QConfigurationScreen::fillPacsListView()
         item->setText(1, pacs.getAETitle());
         item->setText(2, pacs.getAddress());
         item->setText(3, pacs.getInstitution());
-        item->setText(4, pacs.isQueryRetrieveServiceEnabled() ? "Yes, port: " + QString().setNum(pacs.getPort()) : "No" );
+        item->setText(4, pacs.isQueryRetrieveServiceEnabled() ? "Yes, port: " + QString().setNum(pacs.getQueryRetrieveServicePort()) : "No" );
         item->setText(5, pacs.isStoreServiceEnabled() ? "Yes, port: " + QString().setNum(pacs.getStoreServicePort()) : "No");
         item->setText(6, pacs.isDefault() ? tr("Yes") : tr("No" ) );
     }
@@ -494,7 +494,7 @@ PacsDevice QConfigurationScreen::getPacsDeviceFromControls()
     pacsDevice.setDefault( m_checkDefault->isChecked() );
     pacsDevice.setID( m_selectedPacsID );
     pacsDevice.setQueryRetrieveServiceEnabled( m_radioButtonQueryRetrieveServiceEnabledYes->isChecked() );
-    pacsDevice.setPort( m_textQueryRetrieveServicePort->text().toInt() );
+    pacsDevice.setQueryRetrieveServicePort( m_textQueryRetrieveServicePort->text().toInt() );
     pacsDevice.setStoreServiceEnabled( m_radioButtonStoreServiceEnabledYes->isChecked() );
     pacsDevice.setStoreServicePort( m_textStoreServicePort->text().toInt() );
 

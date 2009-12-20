@@ -38,7 +38,7 @@ void QueryPacsJob::run()
     //creem la connexió
     PacsServer pacsServer(m_pacsDevice);
 
-    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + PacsDevice::getLocalAETitle() + "; Port Local= " + QString::number(PacsDevice::getIncomingDICOMConnectionsPort()) + "; AEPACS= " + m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + m_pacsDevice.getPort() + ";" );
+    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + PacsDevice::getLocalAETitle() + "; Port Local= " + QString::number(PacsDevice::getIncomingDICOMConnectionsPort()) + "; AEPACS= " + m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + m_pacsDevice.getQueryRetrieveServicePort() + ";" );
 
     //Establim a quin nivell farem la cerca en funció del Query Level que ens han especificat
     switch (getQueryLevel())

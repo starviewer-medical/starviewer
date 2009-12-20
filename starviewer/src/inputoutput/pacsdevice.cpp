@@ -8,7 +8,7 @@ namespace udg{
 
 PacsDevice::PacsDevice()
 {
-    m_port = -1;
+    m_queryRetrieveServicePort = -1;
     m_storeServicePort = -1;
 }
 
@@ -22,14 +22,14 @@ QString PacsDevice::getAddress() const
     return m_address;
 }
 
-void PacsDevice::setPort(int port)
+void PacsDevice::setQueryRetrieveServicePort(int queryRetrieveServicePort)
 {
-    m_port = port;
+    m_queryRetrieveServicePort = queryRetrieveServicePort;
 }
 
-int PacsDevice::getPort() const
+int PacsDevice::getQueryRetrieveServicePort() const
 {
-    return m_port;
+    return m_queryRetrieveServicePort;
 }
 
 void PacsDevice::setAETitle(const QString &AETitle)
@@ -172,7 +172,7 @@ bool PacsDevice::operator ==(const PacsDevice &device)
         && m_location == device.m_location
         && m_id == device.m_id
         && m_isQueryRetrieveServiceEnabled == device.m_isQueryRetrieveServiceEnabled
-        && m_port == device.m_port
+        && m_queryRetrieveServicePort == device.m_queryRetrieveServicePort
         && m_isStoreServiceEnabled == device.m_isStoreServiceEnabled
         && m_storeServicePort == device.m_storeServicePort;
 }
