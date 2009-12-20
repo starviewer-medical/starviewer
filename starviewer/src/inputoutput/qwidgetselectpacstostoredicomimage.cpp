@@ -12,6 +12,9 @@ QWidgetSelectPacsToStoreDicomImage::QWidgetSelectPacsToStoreDicomImage(QWidget *
 {
     setupUi( this );
     createConnections();
+
+    ///Indiquem que només volem que es mostrin els PACS que tinguin configurat el servei Store
+    m_pacsNodeList->setFilterPACSByService(PacsDeviceManager::PacsWithStoreServiceEnabled);
 }
 
 void QWidgetSelectPacsToStoreDicomImage::createConnections()

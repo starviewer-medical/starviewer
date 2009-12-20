@@ -22,6 +22,8 @@ QPacsList::QPacsList( QWidget *parent )
     m_PacsTreeView->setColumnHidden(0, true); //la columna PacsId està amagada
     m_PacsTreeView->setColumnHidden(4, true); //la columna PACSAddress està amagada
 
+    m_filterPacsByService = PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled;
+        
     refresh();
 
     // Cada cop que cliquem sobre un item el marcarem com a PACS defecte segons si queda seleccionat o no
@@ -39,7 +41,7 @@ void QPacsList::refresh()
 
     m_PacsTreeView->clear();
 
-    pacsList = pacsDeviceManager.getPACSList();
+    pacsList = pacsDeviceManager.getPACSList(m_filterPacsByService);
 
     foreach(PacsDevice pacs, pacsList)
     {
@@ -76,6 +78,16 @@ QList<PacsDevice> QPacsList::getSelectedPacs()
 void QPacsList::clearSelection()
 {
     m_PacsTreeView->clearSelection();
+}
+
+void QPacsList::setFilterPACSByService(PacsDeviceManager::FilterPACSByService filter)
+{
+    m_filterPacsByService = filter;
+}
+
+PacsDeviceManager::FilterPACSByService QPacsList::getFilterPACSByService()
+{
+    return m_filterPacsByService;
 }
 
 void QPacsList::setDefaultPACS(QTreeWidgetItem *item)

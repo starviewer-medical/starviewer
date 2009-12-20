@@ -98,7 +98,7 @@ bool PacsDeviceManager::deletePACS( const QString &pacsIDString)
     return true;
 }
 
-QList<PacsDevice> PacsDeviceManager::getPACSList( bool onlyDefault )
+QList<PacsDevice> PacsDeviceManager::getPACSList( FilterPACSByService filter, bool onlyDefault )
 {
     QList<PacsDevice> configuredPacsList;
     Settings settings;
@@ -110,7 +110,13 @@ QList<PacsDevice> PacsDeviceManager::getPACSList( bool onlyDefault )
         // depenent del paràmetre "onlyDefault" afegirem o no els pacs
         if( (onlyDefault && pacs.isDefault()) || !onlyDefault )
         {
-            configuredPacsList << pacs;
+            //Filtrem per servei si ens ho han demanat
+            if (filter == PacsDeviceManager::AllPacs || 
+                (filter == PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled && pacs.isQueryRetrieveServiceEnabled()) ||
+                (filter == PacsDeviceManager::PacsWithStoreServiceEnabled && pacs.isStoreServiceEnabled()))
+            {
+                configuredPacsList << pacs;
+            }
         }
     }
 

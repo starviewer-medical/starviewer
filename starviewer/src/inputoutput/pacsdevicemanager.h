@@ -20,6 +20,9 @@ namespace udg {
 class PacsDeviceManager{
 
 public:
+
+    enum FilterPACSByService { AllPacs, PacsWithQueryRetrieveServiceEnabled, PacsWithStoreServiceEnabled };
+
     PacsDeviceManager();
     ~PacsDeviceManager();
 
@@ -46,7 +49,7 @@ public:
     /// Ens retorna la llista de PACS configurats
     /// @param onlyDefault Amb valor true, només inclou els que estiguin marcats a consultar per defecte
     /// @return Llista de PACS configurats
-    QList<PacsDevice> getPACSList( bool onlyDefault = false );
+    QList<PacsDevice> getPACSList( FilterPACSByService filter = AllPacs, bool onlyDefault = false );
 
     /** 
      * Donat un ID de PACS, ens retorna el corresponent PacsDevice amb la seva informació

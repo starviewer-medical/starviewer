@@ -39,7 +39,7 @@ void PreviousStudiesManager::createConnections()
 void PreviousStudiesManager::queryPreviousStudies(Study *study)
 {
     PacsDeviceManager pacsDeviceManager;
-    QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(true);
+    QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
 
     INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() + 
     " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());

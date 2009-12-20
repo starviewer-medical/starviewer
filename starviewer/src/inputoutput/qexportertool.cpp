@@ -90,13 +90,13 @@ void QExporterTool::initialize()
     // Omplim la llista de pacs. En cas que sigui buida la opció d'enviar a PACS quedarà deshabilitada.
     PacsDeviceManager deviceManager;
 
-    if ( deviceManager.getPACSList().size() == 0 )
+    if ( deviceManager.getPACSList(PacsDeviceManager::PacsWithStoreServiceEnabled).size() == 0 )
     {
         m_sendToPacsCheckBox->setEnabled( false );
     }
     else
     {
-        foreach( PacsDevice device , deviceManager.getPACSList() )
+        foreach( PacsDevice device , deviceManager.getPACSList(PacsDeviceManager::PacsWithStoreServiceEnabled) )
         {
             m_pacsNodeComboBox->addItem( QString("%1 - %2").arg( device.getAETitle() , device.getDescription() ) , device.getID() );
         }
