@@ -89,7 +89,7 @@ void QConfigurationScreen::loadPacsDefaults()
     QString result;
     Settings settings;
     m_textAETitleMachine->setText( PacsDevice::getLocalAETitle() );
-    m_textLocalPort->setText( QString::number(PacsDevice::getQueryRetrievePort()) );
+    m_textLocalPort->setText( QString::number(PacsDevice::getIncomingDICOMConnectionsPort()) );
     m_textTimeout->setText( QString::number(PacsDevice::getConnectionTimeout()) );
     m_textMaxConnections->setText( QString::number(PacsDevice::getMaximumConnections()) );
 }

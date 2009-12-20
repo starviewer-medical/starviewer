@@ -74,7 +74,7 @@ public:
     static QString getLocalAETitle();
     static int getMaximumConnections();
     static int getConnectionTimeout();
-    static int getQueryRetrievePort();
+    static int getIncomingDICOMConnectionsPort();
 
 private:
     /// Ens retorna el KeyName que identifica el PACS

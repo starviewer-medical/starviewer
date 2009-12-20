@@ -159,7 +159,7 @@ int PacsDevice::getConnectionTimeout()
     return settings.getValue( InputOutputSettings::PacsConnectionTimeout ).toInt();
 }
 
-int PacsDevice::getQueryRetrievePort()
+int PacsDevice::getIncomingDICOMConnectionsPort()
 {
     Settings settings;
     return settings.getValue( InputOutputSettings::QueryRetrieveLocalPort ).toInt();

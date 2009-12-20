@@ -464,7 +464,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
-            message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsDevice::getQueryRetrievePort() );
+            message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsDevice::getIncomingDICOMConnectionsPort() );
             message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
             message += tr("\n\nIf there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
@@ -543,7 +543,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadStoreWarning(QString stu
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::StoreWarningStatus:
-            message = tr("The study %1 has been stored, but it's possible that the PACS %1 has changed some of the data of the images.").arg(pacs.getAETitle());
+            message = tr("The study %1 has been stored, but it's possible that the PACS %1 has changed some data of the images.").arg(pacs.getAETitle());
             QMessageBox::warning(this, ApplicationNameString, message);
             break;
     }
