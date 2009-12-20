@@ -10,6 +10,7 @@
 #include "ui_qpacslistbase.h"
 #include <QWidget>
 #include <QList>
+#include "pacsdevicemanager.h"
 
 namespace udg {
 
@@ -36,6 +37,10 @@ public:
 
     ///Destructor de la classe
     ~QPacsList();
+    
+    ///Especifica/Retorna per quin Filtre es filtren els PACS mostrats, per defecte si no s'especifica no es filtra.
+    void setFilterPACSByService(PacsDeviceManager::FilterPACSByService);
+    PacsDeviceManager::FilterPACSByService getFilterPACSByService();
 
 public slots:
     /// Carrega al ListView la Llista de Pacs disponibles
@@ -45,6 +50,10 @@ private slots:
     /// Fa que el PACS que està en l'item del Tree Widget quedi com a un dels PACS per defecte
     /// si aquest element està seleccionat per l'usuari
     void setDefaultPACS(QTreeWidgetItem *item);
+
+private:
+
+    PacsDeviceManager::FilterPACSByService m_filterPacsByService;
 };
 
 };
