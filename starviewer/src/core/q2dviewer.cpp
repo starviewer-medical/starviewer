@@ -1992,23 +1992,34 @@ void Q2DViewer::putCoordinateInCurrentImageBounds( double xyz[3] )
     double bounds[6];
     m_imageActor->GetBounds(bounds);    
 
-    // x bounds check
-    if( bounds[0] > xyz[0] ) // La x està per sota del mínim
-        xyz[0] = bounds[0];
-    else if( bounds[1] < xyz[0] ) // La x està per sobre del màxim
-        xyz[0] = bounds[1];
+    // Comprovarem que estigui dins dels límits 2D de la imatge
+    // Depenent de la vista en la que ens trobem, comprovarem unes coordenades o unes altres
+    if( m_lastView == Axial || m_lastView == Coronal )
+    {
+        // x bounds check
+        if( bounds[0] > xyz[0] ) // La x està per sota del mínim
+            xyz[0] = bounds[0];
+        else if( bounds[1] < xyz[0] ) // La x està per sobre del màxim
+            xyz[0] = bounds[1];
+    }
 
-    // y bounds check
-    if( bounds[2] > xyz[1] ) // La y està per sota del mínim
-        xyz[1] = bounds[2];
-    else if( bounds[3] < xyz[1] ) // La y està per sobre del màxim
-        xyz[1] = bounds[3];
+    if( m_lastView == Axial || m_lastView == Sagital )
+    {
+        // y bounds check
+        if( bounds[2] > xyz[1] ) // La y està per sota del mínim
+            xyz[1] = bounds[2];
+        else if( bounds[3] < xyz[1] ) // La y està per sobre del màxim
+            xyz[1] = bounds[3];
+    }
 
-    // z bounds check
-    if( bounds[4] > xyz[2] ) // La z està per sota del mínim
-        xyz[2] = bounds[4];
-    else if( bounds[5] < xyz[2] ) // La z està per sobre del màxim
-        xyz[2] = bounds[5];
+    if( m_lastView == Sagital || m_lastView == Coronal )
+    {
+        // z bounds check
+        if( bounds[4] > xyz[2] ) // La z està per sota del mínim
+            xyz[2] = bounds[4];
+        else if( bounds[5] < xyz[2] ) // La z està per sobre del màxim
+            xyz[2] = bounds[5];
+    }
 }
 
 vtkImageData *Q2DViewer::getCurrentSlabProjection()
