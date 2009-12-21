@@ -75,7 +75,7 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_studyTreeWidget, SIGNAL(seriesDoubleClicked()), SLOT(retrieveSelectedStudies()));
     connect(m_studyTreeWidget, SIGNAL(imageDoubleClicked()), SLOT(retrieveSelectedStudies()));
 
-    connect(m_retrievAndViewButton, SIGNAL(clicked()), SLOT(view()));
+    connect(m_retrievAndViewButton, SIGNAL(clicked()), SLOT(retrieveAndViewSelectedStudies()));
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
 
     //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
@@ -130,8 +130,8 @@ void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieveAndView.png"), tr("Retrieve && &View"), this, SLOT(view()), tr("Ctrl+V"));
-    (void) new QShortcut(action->shortcut(), this, SLOT(view()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieveAndView.png"), tr("Retrieve && &View"), this, SLOT(retrieveAndViewSelectedStudies()), tr("Ctrl+V"));
+    (void) new QShortcut(action->shortcut(), this, SLOT(retrieveAndViewSelectedStudies()));
 
     action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedStudies()), tr("Ctrl+R"));
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
@@ -222,22 +222,33 @@ void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QStr
     setQueryInProgress(true);
 }
 
-void QInputOutputPacsWidget::retrieveSelectedStudies(bool view)
+void QInputOutputPacsWidget::retrieveSelectedStudies()
 {
     if(m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
     {
         QApplication::restoreOverrideCursor();
-        if(view)
-            QMessageBox::warning(this, ApplicationNameString, tr("Select a study to view "));
-        else
-            QMessageBox::warning(this, ApplicationNameString, tr("Select a study to download "));
-
+        QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve"));
         return;
     }
 
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(view, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
+        retrieve(false, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
+    }
+}
+
+void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
+{
+    if(m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
+    {
+        QApplication::restoreOverrideCursor();
+        QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve and view"));
+        return;
+    }
+
+    foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+    {
+        retrieve(true, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
     }
 }
 
@@ -245,11 +256,6 @@ void QInputOutputPacsWidget::cancelCurrentQueries()
 {
     m_pacsManager->cancelCurrentQueries();
     setQueryInProgress(false);
-}
-
-void QInputOutputPacsWidget::view()
-{
-    retrieveSelectedStudies(true);
 }
 
 void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, Study *studyToRetrieve)
