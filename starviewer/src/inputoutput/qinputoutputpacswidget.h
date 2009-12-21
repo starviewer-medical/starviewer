@@ -116,11 +116,12 @@ private slots:
     ///Mostra les imatges d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void expandImagesOfSeries(QString studyIntanceUID, QString seriesInstanceUID);
 
-    ///Importa cap a la base de dades locals els estudis seleccionats
-    void retrieveSelectedStudies(bool view = false);
+    /// Importa cap a la base de dades local els estudis seleccionats
+    void retrieveSelectedStudies();
 
-    ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
-    void view();
+    /// Importa cap a la base de dades local els estudis seleccionats indicant 
+    /// que s'han de visualitzar immediatament un cop descarregats
+    void retrieveAndViewSelectedStudies();
 
     ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
     void showQExecuteOperationThreadRetrieveError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveError error);
