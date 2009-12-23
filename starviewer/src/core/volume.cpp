@@ -694,7 +694,7 @@ int Volume::identifyErrorMessage( const QString &errorMessage )
     else if( errorMessage.contains("The file doesn't exists") )
         return MissingFile;
     else
-        return NoError;
+        return UnknownError;
 }
 
 void Volume::createNeutralVolume()
