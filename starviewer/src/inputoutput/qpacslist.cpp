@@ -25,9 +25,6 @@ QPacsList::QPacsList( QWidget *parent )
     m_filterPacsByService = PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled;
     m_showQueryPacsDefaultHighlighted = true;        
 
-    // Cada cop que cliquem sobre un item el marcarem com a PACS defecte segons si queda seleccionat o no
-    connect( m_PacsTreeView, SIGNAL(itemClicked(QTreeWidgetItem *,int)), SLOT(setDefaultPACS(QTreeWidgetItem *)) );
-
     refresh();
 }
 
