@@ -68,10 +68,8 @@ void QConfigurationScreen::createConnections()
     connect( m_textInstitutionPhoneNumber, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
     connect( m_textInstitutionEmail, SIGNAL( textChanged(const QString &) ), SLOT( enableApplyButtons() ) );
 
-    connect(m_radioButtonQueryRetrieveServiceEnabledYes, SIGNAL(clicked()), SLOT(queryRetrieveServiceEnabledChanged()));
-    connect(m_radioButtonQueryRetrieveServiceEnabledNo, SIGNAL(clicked()), SLOT(queryRetrieveServiceEnabledChanged()));
-    connect(m_radioButtonStoreServiceEnabledYes, SIGNAL(clicked()), SLOT(storeServiceEnabledChanged()));
-    connect(m_radioButtonStoreServiceEnabledNo, SIGNAL(clicked()), SLOT(storeServiceEnabledChanged()));
+    connect(m_checkBoxQueryRetrieveEnabled, SIGNAL(stateChanged(int)), SLOT(queryRetrieveServiceEnabledChanged()));
+    connect(m_checkBoxStoreEnabled, SIGNAL(stateChanged(int)), SLOT(storeServiceEnabledChanged()));
     
     connect( m_textQueryRetrieveServicePort, SIGNAL(editingFinished()), SLOT(m_textQueryRetrieveServicePortChanged())); 
 
@@ -117,10 +115,8 @@ void QConfigurationScreen:: clear()
     m_selectedPacsID = "";
     m_textQueryRetrieveServicePort->clear();
     m_textStoreServicePort->clear();
-    m_radioButtonQueryRetrieveServiceEnabledYes->setChecked(true);
-    m_radioButtonQueryRetrieveServiceEnabledNo->setChecked(false);
-    m_radioButtonStoreServiceEnabledYes->setChecked(true);
-    m_radioButtonStoreServiceEnabledNo->setChecked(false);
+    m_checkBoxQueryRetrieveEnabled->setChecked(true);
+    m_checkBoxStoreEnabled->setChecked(true);
 }
 
 void QConfigurationScreen::addPacs()
@@ -175,12 +171,10 @@ void QConfigurationScreen::updateSelectedPACSInformation()
             m_textLocation->setText( selectedPacs.getLocation() );
             m_textDescription->setText( selectedPacs.getDescription() );
             m_checkDefault->setChecked( selectedPacs.isDefault() );
-            m_radioButtonQueryRetrieveServiceEnabledYes->setChecked(selectedPacs.isQueryRetrieveServiceEnabled());
-            m_radioButtonQueryRetrieveServiceEnabledNo->setChecked(!selectedPacs.isQueryRetrieveServiceEnabled());
+            m_checkBoxQueryRetrieveEnabled->setChecked(selectedPacs.isQueryRetrieveServiceEnabled());
             m_textQueryRetrieveServicePort->setText( selectedPacs.isQueryRetrieveServiceEnabled() ?  QString().setNum(selectedPacs.getQueryRetrieveServicePort()) : "" );
             m_textQueryRetrieveServicePort->setEnabled( selectedPacs.isQueryRetrieveServiceEnabled() );
-            m_radioButtonStoreServiceEnabledYes->setChecked(selectedPacs.isStoreServiceEnabled());
-            m_radioButtonStoreServiceEnabledNo->setChecked(!selectedPacs.isStoreServiceEnabled());
+            m_checkBoxStoreEnabled->setChecked(selectedPacs.isStoreServiceEnabled());
             m_textStoreServicePort->setText( selectedPacs.isStoreServiceEnabled() ? QString().setNum(selectedPacs.getStoreServicePort()) : ""  );
             m_textStoreServicePort->setEnabled( selectedPacs.isStoreServiceEnabled() );
         }
@@ -252,8 +246,8 @@ void QConfigurationScreen::fillPacsListView()
         item->setText(1, pacs.getAETitle());
         item->setText(2, pacs.getAddress());
         item->setText(3, pacs.getInstitution());
-        item->setText(4, pacs.isQueryRetrieveServiceEnabled() ? "Yes, port: " + QString().setNum(pacs.getQueryRetrieveServicePort()) : "No" );
-        item->setText(5, pacs.isStoreServiceEnabled() ? "Yes, port: " + QString().setNum(pacs.getStoreServicePort()) : "No");
+        item->setText(4, pacs.isQueryRetrieveServiceEnabled() ? QString().setNum(pacs.getQueryRetrieveServicePort()) : "Disabled" );
+        item->setText(5, pacs.isStoreServiceEnabled() ? QString().setNum(pacs.getStoreServicePort()) : "Disabled");
         item->setText(6, pacs.isDefault() ? tr("Yes") : tr("No" ) );
     }
 }
@@ -332,21 +326,21 @@ bool QConfigurationScreen::validatePacsDevice()
         return false;
     }
 
-    if (!m_radioButtonQueryRetrieveServiceEnabledYes->isChecked() && !m_radioButtonStoreServiceEnabledYes->isChecked())
+    if (!m_checkBoxQueryRetrieveEnabled->isChecked() && !m_checkBoxStoreEnabled->isChecked())
     {
         QMessageBox::warning( this, ApplicationNameString, tr( "At least one service, Query/Retrieve or Store has to be activated" ) );
         return false;
     }
 
-    if (m_radioButtonQueryRetrieveServiceEnabledYes->isChecked() && m_textQueryRetrieveServicePort->text().isEmpty())
+    if (m_checkBoxQueryRetrieveEnabled->isChecked() && m_textQueryRetrieveServicePort->text().isEmpty())
     {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Query/Retrieve Port has to be between 0 and 65535" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Query/Retrieve Port value has to be between 0 and 65535" ) );
         return false;
     }
 
-    if (m_radioButtonStoreServiceEnabledYes->isChecked() && m_textStoreServicePort->text().isEmpty())
+    if (m_checkBoxStoreEnabled->isChecked() && m_textStoreServicePort->text().isEmpty())
     {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Store Port has to be between 0 and 65535" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Store Port value has to be between 0 and 65535" ) );
         return false;
     }
 
@@ -458,23 +452,23 @@ void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
 
 void QConfigurationScreen::queryRetrieveServiceEnabledChanged()
 {
-    m_textQueryRetrieveServicePort->setEnabled(m_radioButtonQueryRetrieveServiceEnabledYes->isChecked());
+    m_textQueryRetrieveServicePort->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
     m_textQueryRetrieveServicePort->setText("");
 }
 
 void QConfigurationScreen::storeServiceEnabledChanged()
 {
-    m_textStoreServicePort->setEnabled(m_radioButtonStoreServiceEnabledYes->isChecked());
+    m_textStoreServicePort->setEnabled(m_checkBoxStoreEnabled->isChecked());
     /*Si ens indiquen que el servei d'Store està permés li donem el mateix port que del Query/Retrieve, ja que la majoria de 
       PACS utilitzen el mateix port per Q/R que per store*/
-    m_textStoreServicePort->setText(m_radioButtonStoreServiceEnabledYes->isChecked() ? m_textQueryRetrieveServicePort->text() : "" );
+    m_textStoreServicePort->setText(m_checkBoxStoreEnabled->isChecked() ? m_textQueryRetrieveServicePort->text() : "" );
 }
 
 void QConfigurationScreen::m_textQueryRetrieveServicePortChanged()
 {
     if (!m_textQueryRetrieveServicePort->text().isEmpty())
     {
-        if (m_radioButtonStoreServiceEnabledYes->isChecked() && m_textStoreServicePort->text().isEmpty())
+        if (m_checkBoxStoreEnabled->isChecked() && m_textStoreServicePort->text().isEmpty())
         {
             //Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat li donem per defecte el valor del port de Q/R
             m_textStoreServicePort->setText(m_textQueryRetrieveServicePort->text());
@@ -493,9 +487,9 @@ PacsDevice QConfigurationScreen::getPacsDeviceFromControls()
     pacsDevice.setDescription( m_textDescription->text() );
     pacsDevice.setDefault( m_checkDefault->isChecked() );
     pacsDevice.setID( m_selectedPacsID );
-    pacsDevice.setQueryRetrieveServiceEnabled( m_radioButtonQueryRetrieveServiceEnabledYes->isChecked() );
+    pacsDevice.setQueryRetrieveServiceEnabled( m_checkBoxQueryRetrieveEnabled->isChecked() );
     pacsDevice.setQueryRetrieveServicePort( m_textQueryRetrieveServicePort->text().toInt() );
-    pacsDevice.setStoreServiceEnabled( m_radioButtonStoreServiceEnabledYes->isChecked() );
+    pacsDevice.setStoreServiceEnabled( m_checkBoxStoreEnabled->isChecked() );
     pacsDevice.setStoreServicePort( m_textStoreServicePort->text().toInt() );
 
     return pacsDevice;
