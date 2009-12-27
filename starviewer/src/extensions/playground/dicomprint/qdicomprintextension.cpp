@@ -39,6 +39,9 @@ QDicomPrintExtension::QDicomPrintExtension( QWidget *parent )
 
     m_printerConfigurationWidgetProof = m_factory->getPrinterConfigurationWidget();
 
+    m_qTimer = new QTimer();
+    m_sentToPrintSuccessfullyFrame->setVisible(false);
+
     createConnections();
     configureInputValidator();
     initializeViewerTools();
@@ -74,6 +77,8 @@ void QDicomPrintExtension::createConnections()
     connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
     connect( m_2DView, SIGNAL( sliceChanged(int) ), m_sliceViewSlider, SLOT( setValue(int) ) );
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
+
+    connect(m_qTimer, SIGNAL(timeout()), SLOT(timeoutTimer()));
 }
 
 void QDicomPrintExtension::configureInputValidator()
@@ -167,13 +172,27 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
 void QDicomPrintExtension::print()
 {
     DicomPrint dicomPrint;
+
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	int printedPages = dicomPrint.print(getSelectedDicomPrinter(), getDicomPrintJobToPrint());
+    QApplication::restoreOverrideCursor();
 
 	if (dicomPrint.getLastError() != DicomPrint::Ok)
 	{
 		//si hem imprés una o més pàgines i hi ha error vol dir que han quedat algunes pàgines per imprimir
 		showDicomPrintError(dicomPrint.getLastError(), printedPages > 0 );
 	}
+    else
+    {
+        m_sentToPrintSuccessfullyFrame->setVisible(true);
+        //Engeguem timer per a que d'aquí 20 segons s'amagui el frame indicant que s'han enviat a imprimir correctament les imatges
+        m_qTimer->start(20000);
+    }
+}
+
+void QDicomPrintExtension::timeoutTimer()
+{
+    m_sentToPrintSuccessfullyFrame->setVisible(false);
 }
 
 DicomPrintJob QDicomPrintExtension::getDicomPrintJobToPrint()

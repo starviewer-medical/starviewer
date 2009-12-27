@@ -5,6 +5,8 @@
 #include "ui_qdicomprintextensionbase.h"
 #include "dicomprint.h"
 
+#include <QTimer>
+
 namespace udg {
 
 class ImagePrintFactory;
@@ -58,6 +60,9 @@ private slots:
     ///Envia a imprimir les imatges seleccionades a la impressora seleccionada
     void print();
 
+    ///Amaga el frame que indica que s'han enviat a imprimir correctament les imatges
+    void timeoutTimer();
+
 private:
     ImagePrintFactory		* m_factory;
     QPrinterConfigurationWidget *m_printerConfigurationWidgetProof;
@@ -107,6 +112,8 @@ private:
 private:
     /// Gestor de tools pel viewer
     ToolManager *m_toolManager;
+
+    QTimer *m_qTimer;
 };
 
 } // end namespace udg.
