@@ -101,6 +101,10 @@ private:
     /// Retorna una llista de possibles valors que pot agafar el Polarity d'uma impressora Dicom.
     QStringList getAvailablePolarityValues();
 
+    /**Ens posa totes les impressores que tenim configurades com a impressores no per defecte, és a dir cap d'elles és la 
+      *impressora seleccionada per imprimir per defecte*/
+    void setAllPrintersAsNoDefaultPrinter();
+
 private:
 
     /// Conté el nom de la secció del Settings on es guarden les dades de la impressora.

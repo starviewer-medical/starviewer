@@ -26,6 +26,13 @@ bool DicomPrinterManager::addPrinter( DicomPrinter &printer )
 {   
     if ( this->indexOfPrinterInSettings( printer ) == -1 )
     {
+        if (printer.getIsDefault())
+        {
+            /*Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora 
+              per defecte, desmarquem les altres*/
+            setAllPrintersAsNoDefaultPrinter();
+        }
+
         Settings settings;
         settings.addListItem( DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer) );
         printer.setID( this->getDicomPrinterList().count() - 1 );
@@ -40,6 +47,13 @@ bool DicomPrinterManager::updatePrinter( int &printerID, DicomPrinter &printer )
     int indexTrobat = this->indexOfPrinterInSettings(printer);
     if( indexTrobat == printerID || indexTrobat==-1 )
     {
+        if (printer.getIsDefault())
+        {
+            /*Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora 
+              per defecte, desmarquem les altres*/
+            setAllPrintersAsNoDefaultPrinter();
+        }
+
         settings.setListItem( printerID, DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer) );    
         return true;
     }
@@ -53,6 +67,19 @@ void DicomPrinterManager::deletePrinter( int &printerID )
 {
     Settings settings;
     settings.removeListItem( DicomPrinterListSectionName, printerID );
+}
+
+void DicomPrinterManager::setAllPrintersAsNoDefaultPrinter()
+{
+    Settings settings;
+    QList<DicomPrinter> dicomPrinterList = getDicomPrinterList();
+
+    //Totes les impressores guardares les posem a false
+    foreach(DicomPrinter dicomPrinter, dicomPrinterList)
+    {
+        dicomPrinter.setIsDefault(false);
+        settings.setListItem( dicomPrinter.getID() , DicomPrinterListSectionName, dicomPrinterToKeyValueMap(dicomPrinter) );    
+    }
 }
 
 DicomPrinter DicomPrinterManager::getPrinterByID( int id )
