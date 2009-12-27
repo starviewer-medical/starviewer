@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QImagePrintExtensionBase</class>
- <widget class="QWidget" name="QImagePrintExtensionBase">
+ <class>QDicomPrintExtensionBase</class>
+ <widget class="QWidget" name="QDicomPrintExtensionBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -687,6 +687,7 @@ border: 1px solid  #680000;
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>

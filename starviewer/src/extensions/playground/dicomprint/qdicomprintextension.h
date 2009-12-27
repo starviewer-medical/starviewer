@@ -1,8 +1,8 @@
 
-#ifndef UDGQIMAGEPRINTEXTENSION_H
-#define UDGQIMAGEPRINTEXTENSION_H
+#ifndef UDGQDICOMPRINTEXTENSION_H
+#define UDGQDICOMPRINTEXTENSION_H
 
-#include "ui_qimageprintextensionbase.h"
+#include "ui_qdicomprintextensionbase.h"
 #include "dicomprint.h"
 
 namespace udg {
@@ -16,12 +16,12 @@ class DicomPrintJob;
 class Volume;
 class ToolManager;
 
-class QImagePrintExtension : public QWidget , private::Ui::QImagePrintExtensionBase {
+class QDicomPrintExtension : public QWidget , private::Ui::QDicomPrintExtensionBase {
 Q_OBJECT
 
 public:
-    QImagePrintExtension( QWidget *parent = 0 );
-    ~QImagePrintExtension();
+    QDicomPrintExtension( QWidget *parent = 0 );
+    ~QDicomPrintExtension();
 
 public slots:
 
