@@ -3,7 +3,7 @@
 #include <QWidget>
 #include <QMessageBox>
 
-#include "qimageprintextension.h"
+#include "qdicomprintextension.h"
 #include "imageprintfactory.h"
 #include "dicomprintfactory.h"
 #include "qprintjobcreatorwidget.h"
@@ -25,7 +25,7 @@
 
 namespace udg {
 
-QImagePrintExtension::QImagePrintExtension( QWidget *parent )
+QDicomPrintExtension::QDicomPrintExtension( QWidget *parent )
 {	
     setupUi( this );
     // Inicialitzem els settings
@@ -47,11 +47,11 @@ QImagePrintExtension::QImagePrintExtension( QWidget *parent )
     m_2DView->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation  | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true );
 }
 
-QImagePrintExtension::~QImagePrintExtension()
+QDicomPrintExtension::~QDicomPrintExtension()
 {
 }
 
-void QImagePrintExtension::createConnections()
+void QDicomPrintExtension::createConnections()
 { 
     connect(m_configurationPrinterToolButton, SIGNAL(clicked()), SLOT(configurationPrinter()));
     connect(m_selectedPrinterComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedDicomPrinterChanged(int)));
@@ -76,14 +76,14 @@ void QImagePrintExtension::createConnections()
     connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
 }
 
-void QImagePrintExtension::configureInputValidator()
+void QDicomPrintExtension::configureInputValidator()
 {
     m_intervalImagesLineEdit->setValidator(new QIntValidator(0, 99999, m_intervalImagesLineEdit));
     m_fromImageLineEdit->setValidator(new QIntValidator(0, 99999, m_fromImageLineEdit));
     m_toImageLineEdit->setValidator(new QIntValidator(0, 99999, m_toImageLineEdit));
 }
 
-void QImagePrintExtension::initializeViewerTools()
+void QDicomPrintExtension::initializeViewerTools()
 {    
     // creem el tool manager
     m_toolManager = new ToolManager(this);
@@ -100,12 +100,12 @@ void QImagePrintExtension::initializeViewerTools()
     m_toolManager->setupRegisteredTools( m_2DView );
 }
 
-void QImagePrintExtension::setInput(Volume *input)
+void QDicomPrintExtension::setInput(Volume *input)
 {
     m_2DView->setInput(input);
 }
 
-void QImagePrintExtension::updateInput(Volume *input)
+void QDicomPrintExtension::updateInput(Volume *input)
 {
     m_sliceViewSlider->setMinimum( 0 );
     m_sliceViewSlider->setMaximum( m_2DView->getMaximumSlice() );
@@ -120,13 +120,13 @@ void QImagePrintExtension::updateInput(Volume *input)
     updateVolumeSupport();
 }
 
-void QImagePrintExtension::configurationPrinter()
+void QDicomPrintExtension::configurationPrinter()
 {
     
     m_printerConfigurationWidgetProof->show();
 }
 
-void QImagePrintExtension::fillSelectedDicomPrinterComboBox()
+void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
 {
     DicomPrinterManager dicomPrinterManager;
     bool noDefaultPrinter = true;
@@ -164,7 +164,7 @@ void QImagePrintExtension::fillSelectedDicomPrinterComboBox()
     }
 }
 
-void QImagePrintExtension::print()
+void QDicomPrintExtension::print()
 {
     DicomPrint dicomPrint;
 	int printedPages = dicomPrint.print(getSelectedDicomPrinter(), getDicomPrintJobToPrint());
@@ -176,7 +176,7 @@ void QImagePrintExtension::print()
 	}
 }
 
-DicomPrintJob QImagePrintExtension::getDicomPrintJobToPrint()
+DicomPrintJob QDicomPrintExtension::getDicomPrintJobToPrint()
 {
     DicomPrintJob dicomPrintJob;
     DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
@@ -191,7 +191,7 @@ DicomPrintJob QImagePrintExtension::getDicomPrintJobToPrint()
     return dicomPrintJob;
 }
 
-QList<DicomPrintPage> QImagePrintExtension::getDicomPrintPageListToPrint()
+QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
 {
     QList<Image*> selectedImagesToPrint = getSelectedImagesToPrint();
     QList<DicomPrintPage> dicomPrintPageList;
@@ -222,7 +222,7 @@ QList<DicomPrintPage> QImagePrintExtension::getDicomPrintPageListToPrint()
     return dicomPrintPageList;
 }
 
-QList<Image*> QImagePrintExtension::getSelectedImagesToPrint()
+QList<Image*> QDicomPrintExtension::getSelectedImagesToPrint()
 {
     QList<Image*> imagesToPrint, imagesVolum = m_2DView->getInput()->getImages();
     
@@ -243,7 +243,7 @@ QList<Image*> QImagePrintExtension::getSelectedImagesToPrint()
     return imagesToPrint;
 }
 
-int QImagePrintExtension::getNumberOfPagesToPrint()
+int QDicomPrintExtension::getNumberOfPagesToPrint()
 {
     int numberOfDicomPrintPagesToPrint = 0, numberOfImagesPerPage, numberOfImagesToPrint;
     DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
@@ -268,7 +268,7 @@ int QImagePrintExtension::getNumberOfPagesToPrint()
     return numberOfDicomPrintPagesToPrint;
 }
 
-DicomPrintPage QImagePrintExtension::fillDicomPrintPagePrintSettings(DicomPrinter dicomPrinter)
+DicomPrintPage QDicomPrintExtension::fillDicomPrintPagePrintSettings(DicomPrinter dicomPrinter)
 {
     DicomPrintPage dicomPrintPage;
 
@@ -288,7 +288,7 @@ DicomPrintPage QImagePrintExtension::fillDicomPrintPagePrintSettings(DicomPrinte
     return dicomPrintPage;
 }
 
-void QImagePrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter)
+void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter)
 {
     m_qdicomPrinterBasicSettingsWidget->clear();
 
@@ -328,30 +328,30 @@ void QImagePrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
     }
 }
 
-void QImagePrintExtension::imageSelectionModeChanged()
+void QDicomPrintExtension::imageSelectionModeChanged()
 {
     m_selectionImagesFrame->setEnabled(m_selectionImageRadioButton->isChecked());
 }
                            
-void QImagePrintExtension::m_intervalImagesSliderValueChanged(int value)
+void QDicomPrintExtension::m_intervalImagesSliderValueChanged(int value)
 {
     m_intervalImagesLineEdit->setText(QString().setNum(value));
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-void QImagePrintExtension::m_fromImageSliderValueChanged(int value)
+void QDicomPrintExtension::m_fromImageSliderValueChanged(int value)
 {
     m_fromImageLineEdit->setText(QString().setNum(value));
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-void QImagePrintExtension::m_toImageSliderValueChanged(int value)
+void QDicomPrintExtension::m_toImageSliderValueChanged(int value)
 {
     m_toImageLineEdit->setText(QString().setNum(value));
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-void QImagePrintExtension::m_intervalImagesLineEditTextEdited(const QString &text)
+void QDicomPrintExtension::m_intervalImagesLineEditTextEdited(const QString &text)
 {
     int value = text.toInt();
 
@@ -368,7 +368,7 @@ void QImagePrintExtension::m_intervalImagesLineEditTextEdited(const QString &tex
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-void QImagePrintExtension::m_fromImageLineEditTextEdited(const QString &text)
+void QDicomPrintExtension::m_fromImageLineEditTextEdited(const QString &text)
 {
     int value = text.toInt();
 
@@ -383,7 +383,7 @@ void QImagePrintExtension::m_fromImageLineEditTextEdited(const QString &text)
     }
 }
 
-void QImagePrintExtension::m_toImageLineEditTextEdited(const QString &text)
+void QDicomPrintExtension::m_toImageLineEditTextEdited(const QString &text)
 {
     int value = text.toInt();
 
@@ -400,7 +400,7 @@ void QImagePrintExtension::m_toImageLineEditTextEdited(const QString &text)
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-void QImagePrintExtension::updateNumberOfDicomPrintPagesToPrint()
+void QDicomPrintExtension::updateNumberOfDicomPrintPagesToPrint()
 {
     int numberOfDicomPrintPagesToPrint = getNumberOfPagesToPrint();
 
@@ -414,7 +414,7 @@ void QImagePrintExtension::updateNumberOfDicomPrintPagesToPrint()
     }
 }
 
-void QImagePrintExtension::updateSelectionImagesValue()
+void QDicomPrintExtension::updateSelectionImagesValue()
 {
     int tickInterval;
     int numberOfImagesOfVolume = m_2DView->getInput()->getImages().count();
@@ -449,7 +449,7 @@ void QImagePrintExtension::updateSelectionImagesValue()
     updateNumberOfDicomPrintPagesToPrint();
 }
 
-DicomPrinter QImagePrintExtension::getSelectedDicomPrinter()
+DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter()
 {
     DicomPrinter dicomPrinter;
     int indexOfSelectedDicomPrinter = m_selectedPrinterComboBox->currentIndex();
@@ -462,7 +462,7 @@ DicomPrinter QImagePrintExtension::getSelectedDicomPrinter()
     return dicomPrinter;
 }
 
-void QImagePrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage)
+void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage)
 {
 	QString messageError;
 
@@ -505,7 +505,7 @@ void QImagePrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
 	}
 }
 
-void QImagePrintExtension::updateVolumeSupport()
+void QDicomPrintExtension::updateVolumeSupport()
 {
     bool isNotSupported = false;
 

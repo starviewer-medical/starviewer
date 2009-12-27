@@ -14,7 +14,7 @@ SUBDIRS += diffusionperfusionsegmentation \
            volume3dviewtesting \
            experimental3d \
            gputesting \
-           imageprint \
+           dicomprint \
 	     dti
 include(../../extensions.inc)
 TEMPLATE = subdirs

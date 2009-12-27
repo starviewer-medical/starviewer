@@ -3,15 +3,15 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/dicomprint
 # L'objectiu � una biblioteca:
 
-FORMS += qimageprintextensionbase.ui \
+FORMS += qdicomprintextensionbase.ui \
          qdicomjobcreatorwidgetbase.ui \
          qdicomprinterconfigurationwidgetbase.ui \
          qdicomprintingconfigurationwidgetbase.ui \
          qdicomaddprinterwidgetbase.ui \
          qdicomprinterbasicsettingswidgetbase.ui
          
-HEADERS +=  qimageprintextension.h \
-            imageprintextensionmediator.h \
+HEADERS +=  qdicomprintextension.h \
+            dicomprintextensionmediator.h \
             imageprintfactory.h \
             dicomprintfactory.h \
             qprinterconfigurationwidget.h \
@@ -37,8 +37,8 @@ HEADERS +=  qimageprintextension.h \
             qdicomaddprinterwidget.h \
             qdicomprinterbasicsettingswidget.h
             
-SOURCES +=  qimageprintextension.cpp \
-            imageprintextensionmediator.cpp \
+SOURCES +=  qdicomprintextension.cpp \
+            dicomprintextensionmediator.cpp \
             dicomprintfactory.cpp \
             qdicomprinterconfigurationwidget.cpp \
             dicomprinter.cpp \
@@ -57,7 +57,7 @@ SOURCES +=  qimageprintextension.cpp \
             qdicomaddprinterwidget.cpp \
             qdicomprinterbasicsettingswidget.cpp
 
-RESOURCES += imageprint.qrc
+RESOURCES += dicomprint.qrc
 
 EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.inc)
