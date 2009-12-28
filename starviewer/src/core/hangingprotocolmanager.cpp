@@ -185,12 +185,20 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     }
 
     // Aplicar el hanging protocol trobat, si és que se n'ha trobat algun i s'ha escollit la opció d'aplicar-lo
-    if( applyBestHangingProtocol && bestHangingProtocol )
+    if( bestHangingProtocol )
     {
-        DEBUG_LOG( QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName() ) );
-        applyHangingProtocol(bestHangingProtocol,layout, patient);
-        INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
-        INFO_LOG( QString("Hanging protocol aplicat: %1").arg( bestHangingProtocol->getName() ) );
+        if( applyBestHangingProtocol )
+        {
+            DEBUG_LOG( QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName() ) );
+            applyHangingProtocol(bestHangingProtocol,layout, patient);
+            INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
+            INFO_LOG( QString("Hanging protocol aplicat: %1").arg( bestHangingProtocol->getName() ) );
+        }
+        else
+        {
+            DEBUG_LOG("S'han buscat hanging protocols, però no s'aplica cap per defecte");
+        }
+
     }
     else
     {
