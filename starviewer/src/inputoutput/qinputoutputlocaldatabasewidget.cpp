@@ -444,8 +444,8 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
                          "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DeletingFilesError:
-            message += tr("Some files can not be delete."
-                         "\nThese have to be delete manually.");
+            message += tr("Some files cannot be deleted."
+                         "\nThese files have to be deleted manually.");
             break;
         default:
             message = tr("Unknown error.");
