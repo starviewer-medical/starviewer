@@ -84,6 +84,10 @@ protected:
 	/// Mètode que crea una icona segons un hanging protocol
 	ItemMenu * createIcon( const HangingProtocol * hangingProtocol );
 
+    /// Crea el widget que conté una animació i un label que es mostrarà quan estem buscant estudis previs
+    /// per trobar hanging protocols potencials a aplicar sobre l'estudi
+    void createSearchingWidget();
+
 protected:
 
     /// Nombre de columnes a mostrar

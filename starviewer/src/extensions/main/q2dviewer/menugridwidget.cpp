@@ -25,7 +25,7 @@
 namespace udg {
 
 MenuGridWidget::MenuGridWidget( QWidget *parent )
- : QWidget( parent )
+ : QWidget( parent ), m_searchingWidget(0)
 {
     setWindowFlags(Qt::Popup);
     m_maxColumns = 5;
@@ -40,7 +40,8 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     m_gridLayoutHanging = 0;
 
     m_loadingIsShowed = false;
-
+    // Creem el widget amb l'animació de "searching"
+    createSearchingWidget();
 //     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
 //     createPredefinedGrids( m_predefinedGridsList );
 
@@ -375,42 +376,52 @@ void MenuGridWidget::setSearchingItem( bool state )
 
 void MenuGridWidget::addSearchingItem()
 {
+    // S'assumeix que el widget ha d'estar creat
+    Q_ASSERT( m_searchingWidget );
+    
     if( m_loadingIsShowed || (m_gridLayoutHanging == 0) )
         return;
         
-    // Construcció del widget
-    m_searchingWidget = new QWidget( this );
-    m_searchingWidget->setVisible( true );
-    m_searchingWidget->setGeometry ( 0, 0, 64, 64 );
-	m_searchingWidget->setMaximumWidth( 64 );
-	m_searchingWidget->setMinimumWidth( 64 );
-	m_searchingWidget->setMinimumHeight( 64 );
-	m_searchingWidget->setMaximumHeight( 64 );
-    m_searchingWidget->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,QSizePolicy::Fixed ) );
-    QVBoxLayout * verticalLayout = new QVBoxLayout( m_searchingWidget );
-
-    // Construcció del label per l'animació
-    QMovie * searchingMovie = new QMovie( m_searchingWidget );
-    searchingMovie->setFileName(QString::fromUtf8(":/images/loader.gif"));
-    QLabel * searchingLabelMovie = new QLabel( m_searchingWidget );
-    searchingLabelMovie->setMovie( searchingMovie );
-    searchingLabelMovie->setAlignment( Qt::AlignCenter );
-
-    // Construcció del label pel text
-    QLabel * searchingLabelText = new QLabel( m_searchingWidget );
-    searchingLabelText->setText( "Searching..." );
-
-    // Es col·loca dins al widget i a la graella per mostrar-ho
-    verticalLayout->addWidget(searchingLabelMovie);
-    verticalLayout->addWidget(searchingLabelText);
+    // Afegim el widget dins del layout del menú
     m_gridLayoutHanging->addWidget( m_searchingWidget, m_nextHangingProtocolColumn, m_nextHangingProtocolRow );
 	
     m_loadingColumn = m_nextHangingProtocolColumn;
 	m_loadingRow = m_nextHangingProtocolRow;
 	
-    searchingMovie->start();
-
     m_loadingIsShowed = true;
+}
+
+void MenuGridWidget::createSearchingWidget()
+{
+    if( !m_searchingWidget )
+    {
+        m_searchingWidget = new QWidget( this );
+        m_searchingWidget->setVisible( true );
+        m_searchingWidget->setGeometry ( 0, 0, 64, 64 );
+        m_searchingWidget->setMaximumWidth( 64 );
+        m_searchingWidget->setMinimumWidth( 64 );
+        m_searchingWidget->setMinimumHeight( 64 );
+        m_searchingWidget->setMaximumHeight( 64 );
+        m_searchingWidget->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,QSizePolicy::Fixed ) );
+        QVBoxLayout * verticalLayout = new QVBoxLayout( m_searchingWidget );
+
+        // Construcció del label per l'animació
+        QMovie * searchingMovie = new QMovie( m_searchingWidget );
+        searchingMovie->setFileName(QString::fromUtf8(":/images/loader.gif"));
+        QLabel * searchingLabelMovie = new QLabel( m_searchingWidget );
+        searchingLabelMovie->setMovie( searchingMovie );
+        searchingLabelMovie->setAlignment( Qt::AlignCenter );
+
+        // Construcció del label pel text
+        QLabel * searchingLabelText = new QLabel( m_searchingWidget );
+        searchingLabelText->setText( "Searching..." );
+
+        // Es col·loca dins al widget i a la graella per mostrar-ho
+        verticalLayout->addWidget(searchingLabelMovie);
+        verticalLayout->addWidget(searchingLabelText);
+
+        searchingMovie->start();
+    }
 }
 
 }
