@@ -161,6 +161,13 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
 						hangingProtocol->setIconType( reader->text().toString() );
                         reader->readNext();
                     }
+                    if( reader->name() == "hasPrevious" )
+                    {
+                        reader->readNext();
+						hangingProtocol->setPrevious( reader->text().toString().contains( "yes" ) );
+                        hangingProtocol->setHasStudiesToDownload( reader->text().toString().contains( "yes" ) );
+                        reader->readNext();
+                    }
                 }
             }
         }
@@ -231,6 +238,17 @@ HangingProtocolImageSet * HangingProtocolXMLReader::readImageSet( QXmlStreamRead
 		{
 			reader->readNext();
 			imageSet->setTypeOfItem( reader->text().toString() );
+		}
+		else if( reader->name() == "previous")
+		{
+			reader->readNext();
+            bool isPrevious = !(reader->text().toString().contains( "no" ));
+			imageSet->setIsPreviousStudy( isPrevious );
+
+            if( isPrevious )
+            {
+                imageSet->setPreviousImageSetReference( reader->text().toString().toInt() );
+            }
 		}
         else if( reader->name() == "imageSet" && reader->tokenType() == QXmlStreamReader::EndElement )
         {

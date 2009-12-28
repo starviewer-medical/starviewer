@@ -7,6 +7,7 @@
 #include "hangingprotocolimageset.h"
 #include "logging.h"
 #include "series.h"
+#include "study.h"
 
 namespace udg {
 
@@ -14,6 +15,8 @@ HangingProtocolImageSet::HangingProtocolImageSet(QObject *parent)
  : QObject(parent)
 {
     m_serieToDisplay = NULL;
+    m_isPreviousStudy = false;
+    m_downloaded = true;
 }
 
 HangingProtocolImageSet::~HangingProtocolImageSet()
@@ -80,6 +83,58 @@ void HangingProtocolImageSet::show()
         DEBUG_LOG( QString("        Usage flag: %1\n        Selector attribute: %2\n        Value representation: %3\n        selectorValueNumber: %4\n").arg(restriction.usageFlag).arg(restriction.selectorAttribute).arg(restriction.valueRepresentation).arg(restriction.selectorValueNumber) );
     }
 }
+
+void HangingProtocolImageSet::setIsPreviousStudy( bool hasPreviousStudy )
+{
+    m_isPreviousStudy = hasPreviousStudy;
+}
+
+bool HangingProtocolImageSet::isPreviousStudy()
+{
+    return m_isPreviousStudy;
+}
+
+void HangingProtocolImageSet::setDownloaded( bool option )
+{
+	m_downloaded = option;
+}
+
+bool HangingProtocolImageSet::isDownloaded()
+{
+	return m_downloaded;
+}
+
+void HangingProtocolImageSet::setPreviousStudyToDisplay( Study * study )
+{
+    m_previousStudyToDisplay = study;
+}
+
+Study * HangingProtocolImageSet::getPreviousStudyToDisplay()
+{
+	return m_previousStudyToDisplay;
+}
+
+void HangingProtocolImageSet::setPreviousStudyPacs( QString pacs )
+{
+    m_previousStudyPacs = pacs;
+}
+
+QString HangingProtocolImageSet::getPreviousStudyPacs()
+{
+    return m_previousStudyPacs;
+}
+
+void HangingProtocolImageSet::setPreviousImageSetReference( int imageSetNumber )
+{
+    m_previousImageSetReference = imageSetNumber;
+}
+
+int HangingProtocolImageSet::getPreviousImageSetReference()
+{
+    return m_previousImageSetReference;
+}
+
+
 
 }
 

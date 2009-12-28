@@ -46,6 +46,9 @@ public:
     /// Indica si s'executen queries en aquest moment
     bool isExecutingQueries();
 
+	/// Mètode per demanar que es descarregui un estudi
+    void downloadStudy( Study * study, QString pacs );
+
 signals:
 
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis previs
@@ -53,6 +56,9 @@ signals:
 
     /// Signal que s'emet per indicar que s'ha produït un error a la consulta d'estudis d'un PACS
     void errorQueryingPreviousStudies(PacsDevice pacs);
+
+	/// Signal que s'emet quan s'ha descarregat un estudi.
+	void previousStudyRetrieved(QString downloadedStudyUID);
 
 private slots:
 

@@ -11,6 +11,8 @@
 #include "dicommask.h"
 #include "patient.h"
 #include "pacsmanager.h"
+#include "queryscreen.h"
+#include "singleton.h"
 #include "pacsdevicemanager.h"
 #include "logging.h"
 
@@ -179,4 +181,11 @@ QString PreviousStudiesManager::getPreviousStudyDateMask(QDate studyDate)
 {
     return "-" + studyDate.toString("yyyyMMdd");
 }
+
+void PreviousStudiesManager::downloadStudy( Study * study, QString pacs)
+{
+    QueryScreen * queryScreen = SingletonPointer<QueryScreen>::instance();
+    queryScreen->retrieveStudy( true, pacs, study );
+}
+
 }

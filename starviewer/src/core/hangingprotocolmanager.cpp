@@ -19,12 +19,17 @@
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
 #include "dicomtagreader.h"
+#include "../inputoutput/localdatabasemanager.h"
+#include "../inputoutput/dicommask.h"
 #include "dicomdictionary.h"
 #include "identifier.h"
 #include "logging.h"
+#include "../inputoutput/previousstudiesmanager.h"
 
 #include <QList>
 #include <QDate>
+#include <QMovie>
+#include <QFlags>
 
 namespace udg {
 
@@ -96,13 +101,16 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
     m_operationsMap.insert("L\\P-A\\R", "1,1");	m_operationsMap.insert("L\\P-A\\L", "1,0");	m_operationsMap.insert("L\\P-P\\R", "3,0");
     m_operationsMap.insert("L\\P-P\\L", "3,1");	m_operationsMap.insert("L\\P-R\\A", "2,0");	m_operationsMap.insert("L\\P-L\\A", "0,1");
     m_operationsMap.insert("L\\P-R\\P", "2,1");
+
+    m_studiesDownloading = new QHash<QString, StructPreviousStudyDownloading*>();
+    m_patient = 0;
 }
 
 HangingProtocolManager::~HangingProtocolManager()
 {
 }
 
-QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient )
+QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol )
 {
     Identifier id;
     HangingProtocol *hangingProtocol;
@@ -120,7 +128,9 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     QString hangingProtocolNamesLogList; // Noms per mostrar al log
 
     QList<Series *> allSeries;
-    foreach (Study *study, patient->getStudies())
+    QList<Study *> allStudies = sortStudiesByDate( patient->getStudies() );
+
+    foreach (Study *study, allStudies )
     {
         foreach( Series *series, study->getViewableSeries() )
         {
@@ -143,7 +153,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
         seriesList.clear();
         seriesList += allSeries;// Copia de les series perquè es van eliminant de la llista al ser assignades
 
-        if( isValid( hangingProtocol, patient ) )
+        if( isValid( hangingProtocol, patient) && !hangingProtocol->hasStudiesToDownload() )
         {
             while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
             {
@@ -174,11 +184,11 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
         }
     }
 
-    // Aplicar el hanging protocol trobat, si és que se n'ha trobat algun
-    if( bestHangingProtocol )
+    // Aplicar el hanging protocol trobat, si és que se n'ha trobat algun i s'ha escollit la opció d'aplicar-lo
+    if( applyBestHangingProtocol && bestHangingProtocol )
     {
         DEBUG_LOG( QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName() ) );
-        applyHangingProtocol(bestHangingProtocol,layout);
+        applyHangingProtocol(bestHangingProtocol,layout, patient);
         INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
         INFO_LOG( QString("Hanging protocol aplicat: %1").arg( bestHangingProtocol->getName() ) );
     }
@@ -189,26 +199,27 @@ QList<HangingProtocol * > HangingProtocolManager::searchAndApplyBestHangingProto
     return candidates;
 }
 
-void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout )
+void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
 {
     Identifier id;
 
     id.setValue( hangingProtocolNumber );
     HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
-    // TODO aixpo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
+    // TODO aixo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
     // Caldria incoporar algun paràmetre per indicar quin és el visor seleccionat per defecte
     layout->setGrid(1,1);
-    applyHangingProtocol(hangingProtocol,layout);
+    applyHangingProtocol(hangingProtocol,layout, patient);
     INFO_LOG( QString("Hanging protocol aplicat: %1").arg( hangingProtocol->getName() ) );
 }
 
-void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout )
+void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient * patient )
 {
     int displaySetNumber;
     HangingProtocolImageSet *hangingProtocolImageSet;
     HangingProtocolDisplaySet *displaySet;
     Series *serie;
     Q2DViewerWidget *viewerWidget;
+    PreviousStudiesManager * previousStudiesManager = new PreviousStudiesManager();
 
     for( displaySetNumber = 0; displaySetNumber < hangingProtocol->getNumberOfDisplaySets(); displaySetNumber++ )
     {
@@ -218,24 +229,59 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
         serie = hangingProtocolImageSet->getSeriesToDisplay();
         viewerWidget = layout->addViewer( displaySet->getPosition() );
 
-        if( serie ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
-        {
-            // cal que la sèrie que escollim sigui vàlida, sinó no posarem pas res
-            if( serie->isViewable() && serie->getFirstVolume() )
+		if( hangingProtocolImageSet->isDownloaded() == false )
+		{
+            ///TODO
+            QWidget * downloadingWidget = createDownloadingWidget( layout );
+            layout->setDownloadingItem( viewerWidget, downloadingWidget );
+
+            StructPreviousStudyDownloading * structPreviousStudyDownloading = new StructPreviousStudyDownloading;
+            structPreviousStudyDownloading->widgetToDisplay = viewerWidget;
+            structPreviousStudyDownloading->downloadingWidget = downloadingWidget;
+            structPreviousStudyDownloading->layout = layout;
+            structPreviousStudyDownloading->imageSet = hangingProtocolImageSet;
+            structPreviousStudyDownloading->hangingProtocol = hangingProtocol;
+
+            m_studiesDownloading->insert( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading );            
+            m_patient = patient;
+
+            /// Fem una query no fos cas que ja s'hagues descarregat
+            LocalDatabaseManager * localDatabaseManager = new LocalDatabaseManager();
+            DicomMask dicomMask;
+            dicomMask.setStudyUID( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID() );
+            Patient * patient = localDatabaseManager->retrieve( dicomMask );
+
+            if( patient == 0 ) //Descarrega de l'estudi
             {
-                viewerWidget->setInput( serie->getFirstVolume() );
-                qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
-                if( hangingProtocolImageSet->getTypeOfItem() == "image" )
-                {
-                    viewerWidget->getViewer()->setSlice( hangingProtocolImageSet->getImageToDisplay() );
-                    applyDisplayTransformations( serie, hangingProtocolImageSet->getImageToDisplay(), viewerWidget, displaySet);
-                }
-                else
-                {
-                    applyDisplayTransformations( serie, 0, viewerWidget, displaySet);
-                }
+                connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );
+                previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
             }
-        }
+            else // No cal descarregar-lo
+            {
+                previousStudyDownloaded();
+            }
+            
+		}
+		else{
+			if( serie ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
+			{
+				// cal que la sèrie que escollim sigui vàlida, sinó no posarem pas res
+				if( serie->isViewable() && serie->getFirstVolume() )
+				{
+					viewerWidget->setInput( serie->getFirstVolume() );
+					qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+					if( hangingProtocolImageSet->getTypeOfItem() == "image" )
+					{
+						viewerWidget->getViewer()->setSlice( hangingProtocolImageSet->getImageToDisplay() );
+						applyDisplayTransformations( serie, hangingProtocolImageSet->getImageToDisplay(), viewerWidget, displaySet);
+					}
+					else
+					{
+						applyDisplayTransformations( serie, 0, viewerWidget, displaySet);
+					}
+				}
+			}
+		}
     }
 }
 
@@ -391,7 +437,7 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
         else if( restriction.selectorAttribute == "Anterior" )
         {
             int imageSetNumber = restriction.valueRepresentation.toInt();
-            if( serie->getDate() >= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getDate() )
+            if( serie->getParentStudy()->getDate() >= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getParentStudy()->getDate() )
                 valid = false;
         }
         else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
@@ -565,13 +611,207 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             {
                 Series * serie = image->getParentSeries();
                 int imageSetNumber = restriction.valueRepresentation.toInt();
-                if( serie->getDate() <= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getDate() )
+                if( serie->getParentStudy()->getDate() >= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getParentStudy()->getDate() )
                     valid = false;
             }
             i++;
         }
     }
     return valid;
+}
+
+QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs )
+{
+	HangingProtocol * hangingProtocol;
+    int numberOfItems = HangingProtocolsRepository::getRepository()->getNumberOfItems();
+    int hangingProtocolNumber;
+    QList<HangingProtocol * > previousCandidates;
+    QString hangingProtocolNamesLogList; // Noms per mostrar al log
+    Identifier id;
+    int imageSetNumber;
+    HangingProtocolImageSet *imageSet;
+    Study * previousStudy;
+    Series *serie;
+    int numberOfSeriesAssigned;
+    double adjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
+
+    QList<Series *> seriesList;
+    
+    QList<Series *> allSeries;
+    foreach (Study *study, patient->getStudies())
+    {
+        foreach( Series *series, study->getViewableSeries() )
+        {
+            allSeries.push_back(series);
+        }
+    }
+
+    for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfItems; hangingProtocolNumber++)
+    {
+        //Inicialitzacions
+        id.setValue( hangingProtocolNumber );
+        hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
+        
+        if( hangingProtocol->isPrevious() )
+        {
+            imageSetNumber = 1;
+            numberOfSeriesAssigned = 0;
+            seriesList.clear();
+            seriesList += allSeries;// Copia de les series perquè es van eliminant de la llista al ser assignades
+
+            if( isValid( hangingProtocol, patient ) )
+            {
+                while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
+                {
+                    imageSet = hangingProtocol->getImageSet( imageSetNumber );
+                    serie = 0;
+                    previousStudy = 0;
+
+                    //Cerca d'una sèrie de la forma habitual
+                    serie = searchSerie( seriesList, imageSet, hangingProtocol->getAllDiferent(), hangingProtocol );
+                    
+                    if( serie != 0 )//S'ha trobat descarregada
+                    {
+                        numberOfSeriesAssigned++; 
+                        imageSet->setDownloaded( true );
+                    }
+                    else //Es busca a la llista de pendent de descàrrega
+                    {
+                        if( imageSet->isPreviousStudy() ) // Si és de tipus prèvi, se li dóna una segona oportunitat buscant a previs
+                        {
+                            Study * referenceStudy = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() )->getSeriesToDisplay()->getParentStudy();
+                            previousStudy = searchPreviousStudy( referenceStudy, previousStudies );
+						
+                            if( previousStudy != 0 ) //S'ha trobat pendent de descarrega
+                            {
+                                numberOfSeriesAssigned++;
+                                imageSet->setDownloaded( false );
+						        imageSet->setPreviousStudyToDisplay( previousStudy );
+    						    imageSet->setPreviousStudyPacs( pacs[previousStudy->getInstanceUID()] );
+                            }
+                        }                        
+                    }
+                    imageSetNumber++;
+                }
+                adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
+
+                if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 )
+	                adjustmentOfHanging = 0.0;
+
+                if( adjustmentOfHanging > 0 )
+                {
+                    previousCandidates << hangingProtocol;
+                    hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
+                }
+            }
+        }
+    }
+
+    return previousCandidates;
+}
+
+Study * HangingProtocolManager::searchPreviousStudy( Study * referenceStudy, QList<Study*> previousStudies)
+{
+    Study * previousStudy = 0;
+    bool found = false;
+    int studyNumber = 0;
+    Study * study;
+
+    while ( !found && (studyNumber < previousStudies.size()) )
+	{
+        study = previousStudies.at( studyNumber );
+
+        if( study->getDate() < referenceStudy->getDate() )
+		{
+			previousStudy = study;
+            found = true;
+		}
+        studyNumber++;
+	}
+
+	return previousStudy;
+}
+
+void HangingProtocolManager::previousStudyDownloaded()
+{
+    // Es busca quins estudis nous hi ha
+    foreach( Study * study, m_patient->getStudies() )
+    {
+        QHash<QString, StructPreviousStudyDownloading*>::const_iterator position = m_studiesDownloading->find( study->getInstanceUID() );
+        
+        if ( position != m_studiesDownloading->end() )
+        { // Si és un estudi que esperavem que es descarregués
+
+            // Agafem l'estructura amb les dades que s'havien guardat per poder aplicar-ho
+            StructPreviousStudyDownloading * structPreviousStudyDownloading = m_studiesDownloading->value( study->getInstanceUID() );
+
+            /// Busquem la millor serie de l'estudi que ho satisfa
+            Series * series = searchSerie( study->getSeries(), structPreviousStudyDownloading->imageSet, false, structPreviousStudyDownloading->hangingProtocol);
+            
+            Q2DViewerWidget * viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
+            ViewersLayout * layout = structPreviousStudyDownloading->layout;
+            structPreviousStudyDownloading->imageSet->setDownloaded( true );
+
+            layout->quitDownloadingItem( viewerWidget, structPreviousStudyDownloading->downloadingWidget );
+
+            // S'assigna la serie al visualitzador si es que n'ha trobat alguna
+            if( series != 0)
+            {
+                viewerWidget->setInput( series->getFirstVolume() );
+            }
+
+            if( m_studiesDownloading->empty() )
+                structPreviousStudyDownloading->hangingProtocol->setHasStudiesToDownload( false );
+        }
+    }
+}
+
+QList<Study*> HangingProtocolManager::sortStudiesByDate( QList<Study*> studies )
+{
+    QList<Study*> orderedStudiesByDate;
+    int i;
+    int newest;
+
+    while( studies.size() > 0 )
+    {
+        newest = 0;
+        i = 0;
+        while( i < studies.size() )//Es busca el mesgran
+        {
+            if( studies.at(i)->getDate() > studies.at( newest )->getDate() )
+                newest = i;
+            i++;
+        }
+        orderedStudiesByDate << studies.takeAt( newest );
+    }
+    return orderedStudiesByDate;
+}
+
+
+QWidget * HangingProtocolManager::createDownloadingWidget( ViewersLayout *layout )
+{
+    QWidget * downloadingWidget = new QWidget( layout );
+    downloadingWidget->setStyleSheet( "background-color: black; color: white;" );
+    QVBoxLayout * verticalLayout = new QVBoxLayout( downloadingWidget );
+
+    QFlags<Qt::AlignmentFlag> topFlag(Qt::AlignTop);
+    QFlags<Qt::AlignmentFlag> hCenterFlag(Qt::AlignHCenter);
+    QFlags<Qt::AlignmentFlag> bottomFlag(Qt::AlignBottom);
+
+    QLabel * downloadingLabelText = new QLabel( downloadingWidget );
+    downloadingLabelText->setText( tr("Downloading previous study..." ) );
+    downloadingLabelText->setAlignment( bottomFlag|hCenterFlag );
+    verticalLayout->addWidget(downloadingLabelText);
+    QMovie * downloadingMovie = new QMovie();
+    QLabel * downloadingLabelMovie  = new QLabel( downloadingWidget );
+    downloadingLabelMovie->setMovie(downloadingMovie);
+    downloadingMovie->setFileName(QString::fromUtf8(":/images/downloading.gif"));
+
+    downloadingLabelMovie->setAlignment( topFlag|hCenterFlag );
+    verticalLayout->addWidget(downloadingLabelMovie);
+    downloadingMovie->start();
+    
+    return downloadingWidget;
 }
 
 }

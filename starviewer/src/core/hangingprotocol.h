@@ -102,6 +102,19 @@ public:
     /// Obté el tipus d'icona per representar-lo
     QString getIconType() const;
 
+    /// Posa si el hanging protocol és de previes o no
+    void setPrevious( bool isPrevious );
+
+    /// retorna si el hanging protocol te previes o no
+    bool isPrevious();
+
+    /// Posa si te estudis per descarregar
+    void setHasStudiesToDownload( bool hasStudiesToDownload );
+
+    /// Obté si el hanging protocol té estudis pendents de descarregar
+    bool hasStudiesToDownload();
+
+
 private:
 
 	/// Identificador
@@ -146,6 +159,11 @@ private:
     /// Indica el tipus d'icona per representar el hanging protocol
     QString m_iconType;
 
+    /// Informa si es un hanging protocol amb previes o no
+    bool m_hasPrevious;
+
+    /// Informa si conté estudis per descarregar
+    bool m_hasStudiesToDownload;
 };
 
 }

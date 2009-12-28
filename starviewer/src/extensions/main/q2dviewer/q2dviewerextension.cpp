@@ -22,6 +22,7 @@
 #include "qdicomdump.h"
 #include "hangingprotocolmanager.h"
 #include "statswatcher.h"
+#include "previousstudiesmanager.h"
 // per poder fer screenshots desde menú
 #include "screenshottool.h" 
 #include "toolproxy.h"
@@ -173,7 +174,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
 
     QApplication::setOverrideCursor( Qt::WaitCursor );
-    m_hangingCandidates = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
+    m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, true );
 	delete hangingProtocolManger;
 	hangingProtocolManger = 0;
     QApplication::restoreOverrideCursor();
@@ -191,17 +192,58 @@ void Q2DViewerExtension::setInput( Volume *input )
     /// Habilitem la possibilitat de buscar estudis previs.
     m_previousStudiesWidget->searchPreviousStudiesOf( m_mainVolume->getStudy() );
     m_previousStudiesToolButton->setEnabled( true );
+    
+    searchPreviousStudiesWithHangingProtocols();
+}
+
+void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
+{
+    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+    m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, true );
+	delete hangingProtocolManger;
+	hangingProtocolManger = 0;
+    QApplication::restoreOverrideCursor();
+    m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
+
+    searchPreviousStudiesWithHangingProtocols();
 }
 
 void Q2DViewerExtension::searchHangingProtocols()
 {
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
-    QApplication::setOverrideCursor( Qt::WaitCursor );
-    m_hangingCandidates = hangingProtocolManger->searchAndApplyBestHangingProtocol( m_workingArea, m_patient );
+    m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, false );
 	delete hangingProtocolManger;
 	hangingProtocolManger = 0;
-    QApplication::restoreOverrideCursor();
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
+
+    searchPreviousStudiesWithHangingProtocols();
+}
+
+void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
+{
+	m_predefinedSeriesGrid->setSearchingItem( true );
+
+	//2.- Creacio de la classe per trobar previes
+	m_previousStudiesManager = new PreviousStudiesManager();
+
+	//3.- Es connecta el signal per quan acabi
+	connect( m_previousStudiesManager, SIGNAL( queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>) ), SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>) ) );
+
+	//4.- Es busquen els previs
+    m_previousStudiesManager->queryPreviousStudies(m_patient->getStudies().first());
+
+}
+
+void Q2DViewerExtension::addPreviousHangingProtocols( QList<Study*> studies, QHash<QString, QString> qhash )
+{
+	disconnect( m_previousStudiesManager, SIGNAL( queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>) ), this, SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>) ) );
+
+	HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
+    QList<HangingProtocol * > m_hangingWidthPrevious = hangingProtocolManger->getHangingProtocolsWidthPreviousSeries( m_patient, studies, qhash );
+	m_hangingCandidates << m_hangingWidthPrevious;
+	m_predefinedSeriesGrid->addHangingItems( m_hangingWidthPrevious );
+    m_predefinedSeriesGrid->setSearchingItem( false );
 }
 
 void Q2DViewerExtension::showPredefinedGrid()
@@ -546,7 +588,7 @@ void Q2DViewerExtension::setHangingProtocol( int hangingProtocolNumber )
 {
     /// Aplicació dels hanging protocols
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
-    hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea );
+    hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea, m_patient );
 }
 
 void Q2DViewerExtension::changeToPreviousStudiesDownloadingIcon()

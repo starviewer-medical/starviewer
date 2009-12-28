@@ -12,6 +12,7 @@
 namespace udg {
 
 class Series;
+class Study;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -66,6 +67,36 @@ public:
     /// Mètode per mostrar els valors
     void show();
 
+    /// Metode per indicar si es un estudi previ o no
+    void setIsPreviousStudy( bool hasPreviousStudy );
+
+    /// Mètode per saber si te previs o no
+    bool isPreviousStudy();
+
+	/// Mètode per posar si esta descarregat o no
+	void setDownloaded( bool option );
+
+	/// Mètode per saber si està descarregat o no
+	bool isDownloaded();
+
+    /// Posa quin és l'estudi previ
+    void setPreviousStudyToDisplay( Study * study );
+
+    /// Obte l'estudi previ a mostrar. Pot estar descarregat o no.
+	Study * getPreviousStudyToDisplay();
+
+	/// Guarda el pacs on es troba l'estudi
+	void setPreviousStudyPacs( QString pacs );
+
+	/// Obté el pacs on es troba l'estudi
+	QString getPreviousStudyPacs();
+
+    /// Posa l'ImageSet del qual és previ
+    void setPreviousImageSetReference( int imageSetNumber );
+
+    /// Obté l'ImageSet del qual és previ
+    int getPreviousImageSetReference();
+
 private:
     /// Llista de restriccions que ha de complir l'Image Set
     QList<Restriction> m_listOfRestrictions;
@@ -96,6 +127,22 @@ private:
 
     /// Número d'imatge a mostrar
     int m_imageToDisplay;
+
+    /// Indica si conte un estudi previ
+    bool m_isPreviousStudy;
+
+	/// Indica si esta o no descarregat
+	bool m_downloaded;
+
+    /// Estudi previ a l'image set, sense descarregar
+    Study * m_previousStudyToDisplay;
+
+    /// Pacs origen on es troba l'estdi
+	QString m_previousStudyPacs;
+
+    /// Posa l'image set que té de referencia i del qual ha de ser previ
+    int m_previousImageSetReference;
+    
 };
 
 }
