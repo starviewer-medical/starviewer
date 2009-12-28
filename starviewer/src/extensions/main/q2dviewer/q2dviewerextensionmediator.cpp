@@ -54,8 +54,12 @@ bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget* extension)
     {
         return false;
     }
-    // Busquem i apliquem el millor hanging protocol possible
-    q2dviewerExtension->searchAndApplyBestHangingProtocol();
+    else
+    {
+        // Busquem i apliquem el millor hanging protocol possible
+        q2dviewerExtension->searchAndApplyBestHangingProtocol();
+        return true;
+    }
 }
 
 } //udg namespace
