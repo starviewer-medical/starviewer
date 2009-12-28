@@ -273,7 +273,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedStudiesLocalDatabase()
     else QMessageBox::information(this, ApplicationNameString, tr("Please select at least one study to delete"));
 }
 
-void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID)
+void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly )
 {
     DicomMask patientToProcessMask;
     Patient *patient;
@@ -314,7 +314,7 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
     if (selectedPatientsList.count() > 0)
     {
         DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
-        emit viewPatients(Patient::mergePatients(selectedPatientsList));
+        emit viewPatients(Patient::mergePatients(selectedPatientsList), loadOnly );
     }
 
     QApplication::restoreOverrideCursor();

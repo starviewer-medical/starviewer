@@ -80,15 +80,17 @@ private slots:
      * i/o fusionar o matxacar el pacient actual d'aquesta finestra.
      * La llista s'assumeix que no té pacients iguals separats, és a dir,
      * s'assumeix que cada entrada correspon a un pacient diferent, amb un o varis estudis
+     * Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
      */
-    void processInput(QList<Patient *> patientsList);
+    void processInput(QList<Patient *> patientsList, bool loadOnly = false );
 
 private:
     /// Crea les connexions de signals i slots
     void createConnections();
 
     /// Afegeix un pacient a la mainwindow tenint en compte si cal fusionar o no i si es pot reemplaçar el pacient actual ja carregat
-    void addPatientToWindow(Patient *patient, bool canReplaceActualPatient);
+    /// Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
+    void addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly = false );
 
     /// Processa el pacient donat per tal que pugui ser usat per les extensions
     //  Li crea els volums al repositori i assigna quina és la sèrie per defecte

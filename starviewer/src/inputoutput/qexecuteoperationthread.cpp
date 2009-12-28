@@ -99,6 +99,7 @@ void QExecuteOperationThread::run()
         {
             case Operation::Retrieve:
             case Operation::View:
+            case Operation::Load:
                  retrieveStudy(operation);
                  break;
             case Operation::Move:
@@ -145,6 +146,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
             errorRetrieving(studyUID, operation.getPacsDevice().getID(), NoEnoughSpace);
             cancelAllPendingOperations(Operation::Retrieve);
             cancelAllPendingOperations(Operation::View);
+            cancelAllPendingOperations(Operation::Load);
         }
         else errorRetrieving(studyUID, operation.getPacsDevice().getID(), ErrorFreeingSpace);
 
@@ -158,6 +160,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         errorRetrieving(studyUID, operation.getPacsDevice().getID(), IncomingConnectionsPortPacsInUse);
         cancelAllPendingOperations(Operation::Retrieve);
         cancelAllPendingOperations(Operation::View);
+        cancelAllPendingOperations(Operation::Load);
         localDatabaseManager.setStudyRetrieveFinished();
         
         ERROR_LOG("El port " + QString::number(localPort) + " per a connexions entrants del PACS, està en ús, no es pot descarregar l'estudi");
@@ -231,6 +234,8 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
             if ( operation.getOperation() == Operation::View )
                 emit viewStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
+            else if ( operation.getOperation() == Operation::Load )
+                emit loadStudy( operation.getDicomMask().getStudyUID(), operation.getDicomMask().getSeriesUID(), operation.getDicomMask().getSOPInstanceUID() );
         }
         else
         {

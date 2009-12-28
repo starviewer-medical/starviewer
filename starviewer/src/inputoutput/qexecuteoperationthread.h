@@ -73,6 +73,13 @@ signals:
      */
     void viewStudy( QString studyUID , QString seriesUID , QString imageUID );
 
+    /**
+     * Aquest signal s'emetrà quan volguem que un estudi descarregat s'afegeixi a les extensions però en background
+     * sense necessitat de que s'apliqui cap canvi visible en la presentació dels estudis, simplement fusionarà la informació
+     * del pacient i prou, necessari per funcionalitats com la càrrega d'estudis previs, per exemple.
+     */
+    void loadStudy( QString studyUID , QString seriesUID , QString imageUID );
+
     /** signal que s'emet cap a QRetrieveScreen per indicar que l'estudi s'està descarregant
      * @param studyUID UID de l'estudi que s'està descarregant
      */

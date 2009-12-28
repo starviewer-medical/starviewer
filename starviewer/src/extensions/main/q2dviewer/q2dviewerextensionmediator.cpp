@@ -46,4 +46,16 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const E
     return true;
 }
 
+bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget* extension)
+{
+    Q2DViewerExtension *q2dviewerExtension;
+
+    if ( !(q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension)) )
+    {
+        return false;
+    }
+    // Busquem i apliquem el millor hanging protocol possible
+    q2dviewerExtension->searchAndApplyBestHangingProtocol();
+}
+
 } //udg namespace

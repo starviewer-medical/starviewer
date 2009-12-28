@@ -110,8 +110,10 @@ void QInputOutputPacsWidget::createConnections()
     connect (&m_qexecuteOperationThread, SIGNAL(warningInRetrieve(QString, QString, QExecuteOperationThread::RetrieveWarning)), SLOT(showQExecuteOperationThreadRetrieveWarning(QString, QString, QExecuteOperationThread::RetrieveWarning)));
     connect (&m_qexecuteOperationThread, SIGNAL(warningInStore(QString, QString, QExecuteOperationThread::StoreWarning)), SLOT(showQExecuteOperationThreadStoreWarning(QString, QString, QExecuteOperationThread::StoreWarning)));
 
-    //connecta el signal que emiteix qexecuteoperationthread, per visualitzar un estudi amb aquesta classe
+    // Connecta el signal que emet qexecuteoperationthread per visualitzar un estudi amb aquesta classe
     connect(&m_qexecuteOperationThread, SIGNAL(viewStudy(QString, QString, QString)), this, SIGNAL(viewRetrievedStudy(QString)), Qt::QueuedConnection);
+    // Propaga el signal que emet qexecuteoperationthread per carregar un estudi
+    connect(&m_qexecuteOperationThread, SIGNAL(loadStudy(QString, QString, QString)), SIGNAL(loadRetrievedStudy(QString)), Qt::QueuedConnection);   
 
     connect(m_pacsManager, SIGNAL(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)), SLOT(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)));
     connect(m_pacsManager, SIGNAL(querySeriesResultsReceived(QString, QList<Series*>)), SLOT(querySeriesResultsReceived(QString , QList<Series*>)));
@@ -233,7 +235,7 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
 
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(false, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
+        retrieve(None, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
     }
 }
 
@@ -248,7 +250,7 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
 
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(true, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
+        retrieve(View, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
     }
 }
 
@@ -258,7 +260,7 @@ void QInputOutputPacsWidget::cancelCurrentQueries()
     setQueryInProgress(false);
 }
 
-void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, Study *studyToRetrieve)
+void QInputOutputPacsWidget::retrieve(RetrieveActions actionAfterRetrieve, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, Study *studyToRetrieve)
 {
     QString defaultSeriesUID;
     Operation operation;
@@ -272,15 +274,24 @@ void QInputOutputPacsWidget::retrieve(bool view, QString pacsIdToRetrieve, Dicom
     //definim l'operació
     operation.setPacsDevice(pacs);
     operation.setDicomMask(maskStudyToRetrieve);
-    if (view)
+    switch( actionAfterRetrieve )
     {
-        operation.setOperation(Operation::View);
-        operation.setPriority(Operation::Medium);//Té priorita mitjà per passar al davant de les operacions de Retrieve
-    }
-    else
-    {
-        operation.setOperation(Operation::Retrieve);
-        operation.setPriority(Operation::Low);
+        case None:
+            operation.setOperation(Operation::Retrieve);
+            operation.setPriority(Operation::Low);
+            break;
+
+        case View:
+            operation.setOperation(Operation::View);
+            // Té prioritat mitja per passar al davant de les operacions de Retrieve
+            operation.setPriority(Operation::Medium);
+            break;
+
+        case Load:
+            operation.setOperation(Operation::Load);
+            // Té prioritat mitja per passar al davant de les operacions de Retrieve
+            operation.setPriority(Operation::Medium);
+            break;
     }
     //emplenem les dades de l'operació
     operation.setPatientName(studyToRetrieve->getParentPatient()->getFullName());

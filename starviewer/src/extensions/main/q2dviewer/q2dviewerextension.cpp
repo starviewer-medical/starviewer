@@ -204,9 +204,6 @@ void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
 	delete hangingProtocolManger;
 	hangingProtocolManger = 0;
     QApplication::restoreOverrideCursor();
-    m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
-
-    searchPreviousStudiesWithHangingProtocols();
 }
 
 void Q2DViewerExtension::searchHangingProtocols()

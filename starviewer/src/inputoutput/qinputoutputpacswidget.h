@@ -38,6 +38,9 @@ class QInputOutputPacsWidget : public QWidget, private Ui::QInputOutputPacsWidge
 {
 Q_OBJECT
 public:
+    /// Definició d'accions que podem fer després d'haver donat l'ordre de descarregar estudis
+    enum RetrieveActions{ None = 0, View = 1, Load = 2};
+    
     /// Constructor de la classe
     QInputOutputPacsWidget(QWidget *parent = 0);
     ~QInputOutputPacsWidget();
@@ -58,12 +61,12 @@ public:
     void setQOperationStateScreen(QOperationStateScreen *qoperationStateScreen);
 
     /** Descarrega una estudi del pacs
-     * @param indica si l'estudi s'ha de visualitzar
+     * @param actionAfterRetrieve Indica l'acció a prendre un cop descarregat l'estudi
      * @param pacsIdToRetrieve indica l'id del Pacs del qual s'ha de descarregar l'estudi
      * @param maskStudyToRetrieve la màscara dels objectes a descarregar
      * @param studyToRetrieve L'estudi al qual pertanyen els objectes ad escarregar
      */
-    void retrieve(bool view, QString pacsIdToRetrieve, DicomMask mask, Study *studyToRetrieve);
+    void retrieve(RetrieveActions actionAfterRetrieve, QString pacsIdToRetrieve, DicomMask mask, Study *studyToRetrieve);
 
 signals:
     ///Signal que s'emet per indicar que es netegin els camps de cerca
@@ -71,6 +74,9 @@ signals:
 
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewRetrievedStudy(QString studyInstanceUID);
+    
+    /// Signal que s'emet per indicar que un cop descarregat l'estudi s'ha de carregar únicament
+    void loadRetrievedStudy(QString studyInstanceUID);
 
     ///Signal que s'emet per indicar que un estudi s'ha començat a descarregar
     void studyRetrieveStarted(QString studyInstanceUID);

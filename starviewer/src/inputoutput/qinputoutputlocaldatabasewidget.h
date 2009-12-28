@@ -56,7 +56,10 @@ public:
 
 public slots:
     ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
-    void view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID);
+    /// Afegim un terer paràmetre "loadOnly" que ens indicarà si únicament volem carregar les dades sense necessitat de fer un "view"
+    /// Així diferenciem els casos en que volem carregar dades del pacient "en background" (només fusionem dades del pacient i prou, 
+    /// sense aplicar canvis visibles sobre la interfície) útil pels casos de carregar estudis previs, per exemple.
+    void view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly = false );
 
     ///Afegeix l'estudi amb l'Study Instance UID passat per paràmetre al Widget
     void addStudyToQStudyTreeWidget(QString studyInstanceUID);
@@ -69,7 +72,8 @@ signals:
     void clearSearchTexts();
 
     ///Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
-    void viewPatients(QList<Patient*>);
+    /// Afegim un segon paràmetre per indicar si volem fer un "view" o únicament carregar en background les dades de pacient i prou
+    void viewPatients(QList<Patient*> patientsToView, bool onlyLoad);
 
     /**Signal indicant que s'han d'enviar el PACS els objectes que compleixin la màscara.
       *El primer paràmetre indica l'estudi al que pertany l'objecte a guardar, i en segon lloc la màscara per poder especificar si passar tot l'estudi o una
