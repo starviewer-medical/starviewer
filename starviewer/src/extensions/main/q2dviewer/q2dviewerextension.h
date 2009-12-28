@@ -31,6 +31,7 @@ class TableMenu;
 class QDicomDump;
 class StatsWatcher;
 class QPreviousStudiesWidget;
+class PreviousStudiesManager;
 
 /**
 Extensió que s'executarà  per defecte a l'obrir un model
@@ -103,6 +104,9 @@ private:
      */
     void initializeTools();
 
+	/// Buscar estudis prèvis
+	void searchPreviousStudiesWithHangingProtocols();
+
 private slots:
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
@@ -122,12 +126,18 @@ private slots:
     /// Mètode que tracta el canvi de visualitzador seleccionat
     void changeSelectedViewer( Q2DViewerWidget *viewerWidget );
 
-    /// Mètode que busca els hanging protocols aplicables
+    /// Mètode que busca els hanging protocols aplicables i aplica el millor de tots
+    void searchAndApplyBestHangingProtocol();
+
+    ///  Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();
 
     /// Mètodes utilitzats per modificar la icona del botó d'estudis previs per saber si s'estan descarregat estudis sense haver d'obrir el widget.
     void changeToPreviousStudiesDownloadingIcon();
     void changeToPreviousStudiesDefaultIcon();
+
+	/// Mètode que afegeix els hanging protocols amb prèvies
+	void addPreviousHangingProtocols( QList<Study*> studies, QHash<QString, QString> qhash );
 
 private:
     /// El volum principal
@@ -174,6 +184,9 @@ private:
 
     /// Widget per poder seleccionar estudis previs
     QPreviousStudiesWidget *m_previousStudiesWidget;
+
+	/// Manager per estudis previs
+	PreviousStudiesManager * m_previousStudiesManager;
 };
 
 } // end namespace udg

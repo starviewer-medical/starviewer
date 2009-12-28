@@ -22,6 +22,9 @@ SOURCES += q2dviewerextensionmediator.cpp \
 	   itemmenu.cpp \
 	   menugridwidget.cpp
 
+INCLUDEPATH += ../../../inputoutput
+DEPENDPATH += ../../../inputoutput
+
 RESOURCES += q2dviewer.qrc
 
 EXTENSION_DIR = $$PWD

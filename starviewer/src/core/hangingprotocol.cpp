@@ -21,6 +21,8 @@ HangingProtocol::HangingProtocol(QObject *parent)
     m_mask = new HangingProtocolMask();
 	m_strictness = false;
 	m_allDiferent = false;
+    m_hasPrevious = false;
+    m_hasStudiesToDownload = false;
 }
 
 
@@ -252,5 +254,26 @@ QString HangingProtocol::getIconType() const
 {
     return m_iconType;
 }
+
+void HangingProtocol::setPrevious( bool isPrevious )
+{
+    m_hasPrevious = isPrevious;
+}
+
+bool HangingProtocol::isPrevious()
+{
+    return m_hasPrevious;
+}
+
+void HangingProtocol::setHasStudiesToDownload( bool hasStudiesToDownload )
+{
+    m_hasStudiesToDownload = hasStudiesToDownload;
+}
+
+bool HangingProtocol::hasStudiesToDownload()
+{
+    return m_hasStudiesToDownload;
+}
+
 
 }

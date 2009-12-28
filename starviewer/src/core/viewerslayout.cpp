@@ -12,6 +12,7 @@
 #include <QDesktopWidget>
 #include <QSize>
 #include <QVBoxLayout>
+#include <QRect>
 
 namespace udg {
 
@@ -510,6 +511,24 @@ int ViewersLayout::getNumberOfViewers()
 Q2DViewerWidget * ViewersLayout::getViewerWidget( int number )
 {
     return m_vectorViewers.value( number );
+}
+
+void ViewersLayout::setDownloadingItem( Q2DViewerWidget * widget, QWidget * downloadingWidget )
+{
+    widget->setVisible( false );
+
+    int screen_x = this->width();
+    int screen_y = this->height();
+
+    QRect size = widget->geometry();
+    downloadingWidget->setGeometry( size.x(), size.y(), size.width(), size.height() );
+    downloadingWidget->setVisible( true );
+}
+
+void ViewersLayout::quitDownloadingItem( Q2DViewerWidget * widget, QWidget * downloadingWidget )
+{
+    downloadingWidget->setVisible( false );
+    widget->setVisible( true );
 }
 
 }

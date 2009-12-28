@@ -13,6 +13,7 @@
 class QWidget;
 class QGridLayout;
 class QGroupBox;
+class QLabel;
 
 namespace udg {
 
@@ -54,6 +55,16 @@ public:
 	/// Posa els hanging protocols que ha de representar el menú
 	void setHangingItems( QList<HangingProtocol *> listOfCandidates );
 
+    /// Afegeix hanging protocols a la llista
+    void addHangingItems( QList<HangingProtocol *> items );
+
+    /// Posa una element que informa que s'estan carregant
+    void addSearchingItem();
+
+    /// Informa de si ha de posar un element que informi que s'està carregant o no
+    void setSearchingItem( bool state );
+
+
 public slots:
 
     /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
@@ -92,7 +103,33 @@ protected:
     QWidget *m_hangingProtocolWidget;
     QWidget *m_tableGridWidget;
 
+    /// Llista de hanging protocols a mostrar
 	QList< HangingProtocol * > m_hangingItems;
+
+    /// Fila a on col·locar el següent element a la zona de hangings
+    int m_nextHangingProtocolRow;
+    
+    /// Columna a on col·locar el següent element a la zona de hangings
+    int m_nextHangingProtocolColumn;
+
+    /// Distribució regular a la zona dels hanging protocols
+    QGridLayout * m_gridLayoutHanging;
+
+    /// Indicador de si cal posar l'element de carregant o no
+    bool m_putLoadingItem;
+
+    /// Columna a on s'ha col·locat l'element de carregant
+	int m_loadingColumn;
+
+    /// Fila a on s'ha col·locat l'element de carregant
+	int m_loadingRow;
+
+    /// Widget que informa que s'esta carregant (buscant)
+	QWidget * m_searchingWidget;
+
+    /// Indicador de si el tenim visible o no
+    bool m_loadingIsShowed;
+
 };
 
 }

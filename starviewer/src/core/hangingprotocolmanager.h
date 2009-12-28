@@ -10,6 +10,8 @@
 #include <QObject>
 #include <QMap>
 #include <QList>
+#include <QHash>
+#include <QProgressDialog>
 
 namespace udg {
 
@@ -19,6 +21,7 @@ class HangingProtocolImageSet;
 class HangingProtocolDisplaySet;
 class Patient;
 class Series;
+class Study;
 class Image;
 class Q2DViewerWidget;
 class Q2DViewer;
@@ -29,15 +32,16 @@ class Q2DViewer;
 class HangingProtocolManager : public QObject {
 Q_OBJECT
 public:
+    
     HangingProtocolManager( QObject *parent = 0 );
     ~HangingProtocolManager();
 
-    /// Buscar i aplicar el millor hanging protocol
-    QList<HangingProtocol * > searchAndApplyBestHangingProtocol( ViewersLayout *layout, Patient *patient);
+    /// Buscar els hanging protocols disponibles, si applyBestHangingProtocol, a més, aplica el millor que ha trobat
+    QList<HangingProtocol * > searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol);
 
     // Aplica un hanging protocol concret, ja sigui via identificador o per instància
-    void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout );
-    void applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout * layout );
+    void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );
+    void applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout * layout, Patient * patient );
 
     /// TODO Mètode públic temporal per poder aplicar les transformacions desitjades per un viewer
     /// es fa especialment per no haver de fer noves classes ni duplicar el mapa de transformacions
@@ -46,6 +50,17 @@ public:
     /// El format de les orientacions és el mateix que el del DICOM, 2 strings separats per "\",
     /// el primer indica la direcció de les rows i el segon la direcció de les columnes
     void applyDesiredDisplayOrientation(const QString &currentOrientation, const QString &desiredOrientation, Q2DViewer *viewer);
+
+	/// Buscar hanging protocols quan es sap que hi ha previes
+	QList<HangingProtocol * > getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs );
+
+    /// Buscar els estudis previs
+    Study * searchPreviousStudy( Study * referenceStudy, QList<Study*> previousStudies);
+
+private slots:
+
+    /// S'ha descarregat un estudi previ demanat
+    void previousStudyDownloaded();
 
 private:
     /// Mira si el protocol es pot aplicar al pacient
@@ -63,9 +78,31 @@ private:
     /// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
     void applyDisplayTransformations( Series *serie,  int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet );
 
+    /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
+    QList<Study*> sortStudiesByDate( QList<Study*> studies );
+
+    /// Crea el widget que posara al visor on s'estan descarregant estudis
+    QWidget * createDownloadingWidget( ViewersLayout *layout );
+
 private:
+
+    /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi
+    /// Hem de guardar tota la informació perquè només sabem que és un previ i fins que s'hagi descarregat no podem saber quines series i imatges te
+    struct StructPreviousStudyDownloading
+    {
+        Q2DViewerWidget *widgetToDisplay; /// Widget a on s'ha de mostrar la informacio
+        QWidget *downloadingWidget; /// Widget que es crea quan s'esta esperant
+        ViewersLayout * layout; /// Layout d'on hem de treure el downloadingWidget per posar-hi el widgetToDisplay
+        HangingProtocolImageSet * imageSet; /// HangingProtocolImageSet que s'ha de satisfer, per escollir la serie descarregada que s'aplica
+        HangingProtocol * hangingProtocol; /// HangingProtocol necessari per buscar la millor serie de les descarregades
+    };
+
     /// Map per guardar les operacions de rotacio i flip per aplicar a les imatges. Valors: String posicions, nombre de rotacions, nombre flips
     QMap<QString, QString> m_operationsMap;
+
+    QHash<QString, StructPreviousStudyDownloading*> * m_studiesDownloading;
+
+    Patient * m_patient;
 };
 
 }

@@ -19,6 +19,8 @@
 #include <QLabel>
 #include <QGroupBox>
 #include <QSpacerItem>
+#include <QMovie>
+#include <QLabel>
 
 namespace udg {
 
@@ -32,6 +34,12 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     m_gridLayout = new QGridLayout( this );
     m_gridLayout->setSpacing( 6 );
     m_gridLayout->setMargin( 6 );
+
+    m_nextHangingProtocolRow = 0;
+    m_nextHangingProtocolColumn = 0;
+    m_gridLayoutHanging = 0;
+
+    m_loadingIsShowed = false;
 
 //     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
 //     createPredefinedGrids( m_predefinedGridsList );
@@ -121,11 +129,11 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 		positionColumn = 0;
 
 		m_hangingProtocolWidget = new QWidget( this );
-		QGridLayout * gridLayoutHanging = new QGridLayout();
-		gridLayoutHanging->setSpacing( 6 );
-		gridLayoutHanging->setMargin( 6 );
+		m_gridLayoutHanging = new QGridLayout();
+		m_gridLayoutHanging->setSpacing( 6 );
+		m_gridLayoutHanging->setMargin( 6 );
 		QSpacerItem * spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
-		gridLayoutHanging->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
+		m_gridLayoutHanging->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
 
 		QFrame * line_hanging = new QFrame(this);
 		line_hanging->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
@@ -141,14 +149,14 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 		hboxLayout_hanging->addWidget(label_hanging);
 	    
 		m_gridLayout->addLayout( hboxLayout_hanging, 2, 0, 1, 1 );
-		m_gridLayout->addLayout( gridLayoutHanging, 3, 0, 1, 1);
+		m_gridLayout->addLayout( m_gridLayoutHanging, 3, 0, 1, 1);
 
 		for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
 		{	
 			hangingProtocol = m_hangingItems.value( hangingProtocolNumber );
 			icon = createIcon( hangingProtocol );
 			
-			gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
+			m_gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
 			m_itemList.push_back( icon );
 			positionColumn ++;
 
@@ -159,6 +167,11 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 			}
 		}
 	}
+    m_nextHangingProtocolRow = positionRow;
+    m_nextHangingProtocolColumn = positionColumn;
+
+    if( m_putLoadingItem )
+        addSearchingItem();
 }
 
 void MenuGridWidget::createPredefinedGrids( int numSeries )
@@ -338,6 +351,66 @@ void MenuGridWidget::setHangingItems( QList<HangingProtocol *> listOfCandidates 
 {
 	m_hangingItems.clear();
 	m_hangingItems = listOfCandidates;
+}
+
+void MenuGridWidget::addHangingItems( QList<HangingProtocol *> items )
+{
+	m_hangingItems.append( items );
+}
+
+void MenuGridWidget::setSearchingItem( bool state )
+{
+    m_putLoadingItem = state;
+
+	if( state == false )
+	{
+		if( m_gridLayoutHanging != 0 )
+		{
+            m_searchingWidget->setVisible( false );
+			m_gridLayoutHanging->removeWidget( m_searchingWidget );
+            m_loadingIsShowed = false;
+		}
+	}
+}
+
+void MenuGridWidget::addSearchingItem()
+{
+    if( m_loadingIsShowed || (m_gridLayoutHanging == 0) )
+        return;
+        
+    // Construcció del widget
+    m_searchingWidget = new QWidget( this );
+    m_searchingWidget->setVisible( true );
+    m_searchingWidget->setGeometry ( 0, 0, 64, 64 );
+	m_searchingWidget->setMaximumWidth( 64 );
+	m_searchingWidget->setMinimumWidth( 64 );
+	m_searchingWidget->setMinimumHeight( 64 );
+	m_searchingWidget->setMaximumHeight( 64 );
+    m_searchingWidget->setSizePolicy( QSizePolicy( QSizePolicy::Fixed,QSizePolicy::Fixed ) );
+    QVBoxLayout * verticalLayout = new QVBoxLayout( m_searchingWidget );
+
+    // Construcció del label per l'animació
+    QMovie * searchingMovie = new QMovie( m_searchingWidget );
+    searchingMovie->setFileName(QString::fromUtf8(":/images/loader.gif"));
+    QLabel * searchingLabelMovie = new QLabel( m_searchingWidget );
+    searchingLabelMovie->setMovie( searchingMovie );
+    searchingLabelMovie->setAlignment( Qt::AlignCenter );
+
+    // Construcció del label pel text
+    QLabel * searchingLabelText = new QLabel( m_searchingWidget );
+    searchingLabelText->setText( "Searching..." );
+
+    // Es col·loca dins al widget i a la graella per mostrar-ho
+    verticalLayout->addWidget(searchingLabelMovie);
+    verticalLayout->addWidget(searchingLabelText);
+    m_gridLayoutHanging->addWidget( m_searchingWidget, m_nextHangingProtocolColumn, m_nextHangingProtocolRow );
+	
+    m_loadingColumn = m_nextHangingProtocolColumn;
+	m_loadingRow = m_nextHangingProtocolRow;
+	
+    searchingMovie->start();
+
+    m_loadingIsShowed = true;
 }
 
 }
