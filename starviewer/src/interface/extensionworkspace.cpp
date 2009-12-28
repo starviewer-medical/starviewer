@@ -37,7 +37,7 @@ void ExtensionWorkspace::createConnections()
     connect( m_closeTabButton , SIGNAL( clicked() ), this , SLOT( closeCurrentApplication() ) );
 }
 
-void ExtensionWorkspace::addApplication( QWidget *application , QString caption )
+void ExtensionWorkspace::addApplication( QWidget *application , QString caption, const QString &extensionIdentifier )
 {
     if( this->count() == 0 )
     {
@@ -46,6 +46,8 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption 
     INFO_LOG( "Afegim l'extensió: " + caption + " al workspace" );
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
+    // Afegim l'extensió a la llista d'extensions actives
+    m_activeExtensions.insert(application,extensionIdentifier);
 }
 
 void ExtensionWorkspace::removeApplication( QWidget *application )
@@ -54,6 +56,8 @@ void ExtensionWorkspace::removeApplication( QWidget *application )
     {
         INFO_LOG( "Tancant extensió: " + application->objectName() );
         this->removeTab( this->indexOf( application ) );
+        // Eliminem l'extensió de la llista d'extensions actives
+        m_activeExtensions.remove(application);
         if( this->count() < 1 )
             m_closeTabButton->hide();
     }
@@ -72,6 +76,11 @@ void ExtensionWorkspace::killThemAll()
         removeApplication( currentExtension );
         delete currentExtension;
     }
+}
+
+QMap<QWidget *,QString> ExtensionWorkspace::getActiveExtensions() const
+{
+    return m_activeExtensions;
 }
 
 void ExtensionWorkspace::closeCurrentApplication()

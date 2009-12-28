@@ -23,7 +23,7 @@ class Operation{
 public:
 
     enum OperationPriority { Low = 99, Medium = 50, High = 0 };
-    enum OperationAction { Retrieve, Print , Move, View };
+    enum OperationAction { Retrieve, Print , Move, View, Load };
 
     Operation();
 

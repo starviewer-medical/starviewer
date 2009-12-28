@@ -52,7 +52,7 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     //TODO:xapussa per a que l'starviewer escolti les peticions del RIS, com que tot el codi d'escoltar les peticions del ris està a la 
     //queryscreen l'hem d'instanciar ja a l'inici perquè ja escolti les peticions
     QueryScreenSingleton::instance();
-    connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), SLOT(processInput(QList<Patient*>)));
+    connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>,bool) ), SLOT(processInput(QList<Patient*>,bool)));
 }
 
 ExtensionHandler::~ExtensionHandler()
@@ -83,27 +83,27 @@ void ExtensionHandler::request( int who )
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), 0, 0 );
+            disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>,bool) ), 0, 0 );
             QueryScreenSingleton::instance()->showPACSTab();
-            connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), SLOT(processInput(QList<Patient*>)));
+            connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>,bool) ), SLOT(processInput(QList<Patient*>,bool)));
             break;
 
         case 8:
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), 0, 0 );
+            disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>,bool) ), 0, 0 );
             QueryScreenSingleton::instance()->openDicomdir();
-            connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), SLOT(processInput(QList<Patient*>)));
+            connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>,bool) ), SLOT(processInput(QList<Patient*>,bool)));
             break;
 
         case 10: // Mostrar local
             // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
             // dues finestres ( mirar ticket #542 ). Fem aquest petit hack perquè això no passi.
             // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), 0, 0 );
+            disconnect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>,bool) ), 0, 0 );
             QueryScreenSingleton::instance()->showLocalExams();
-            connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>) ), SLOT(processInput(QList<Patient*>)));
+            connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>,bool) ), SLOT(processInput(QList<Patient*>,bool)));
             break;
     }
 }
@@ -149,7 +149,7 @@ bool ExtensionHandler::request( const QString &who )
         {
             INFO_LOG("Activem extensió: " + who);
             mediator->initializeExtension(extension, m_extensionContext );
-            m_mainApp->getExtensionWorkspace()->addApplication(extension, requestedExtensionLabel);
+            m_mainApp->getExtensionWorkspace()->addApplication(extension, requestedExtensionLabel, who);
         }
         else
         {
@@ -322,7 +322,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
     }
 }
 
-void ExtensionHandler::processInput( QList<Patient *> patientsList )
+void ExtensionHandler::processInput( QList<Patient *> patientsList, bool loadOnly )
 {
     // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
     bool canReplaceActualPatient = true;
@@ -342,7 +342,7 @@ void ExtensionHandler::processInput( QList<Patient *> patientsList )
     foreach (Patient *patient, patientsList)
     {
         generatePatientVolumes(patient,QString());
-        this->addPatientToWindow( patient, canReplaceActualPatient );
+        this->addPatientToWindow( patient, canReplaceActualPatient, loadOnly );
         canReplaceActualPatient = false; //Un cop carregat un pacient, ja no el podem reemplaçar
     }
 }
@@ -392,7 +392,7 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
     DEBUG_LOG( QString("Patient:\n%1").arg( patient->toString() ));
 }
 
-void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient)
+void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly )
 {
     if( !m_mainApp->getCurrentPatient() )
     {
@@ -408,6 +408,19 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
         //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
         if ( m_mainApp->getExtensionWorkspace()->count() == 0 )
             openDefaultExtension();
+
+        if( !loadOnly )
+        {
+            // Hem fet un "view", per tant cal reinicialitzar les extensions que ho requereixin
+            QMap<QWidget *,QString> extensions = m_mainApp->getExtensionWorkspace()->getActiveExtensions();
+            QMapIterator<QWidget *,QString> iterator(extensions);
+            while( iterator.hasNext() )
+            {
+                iterator.next();
+                ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create( iterator.value() );
+                mediator->reinitializeExtension( iterator.key() );
+            }
+        }
     }
     else //Són diferents o no sabem diferenciar
     {

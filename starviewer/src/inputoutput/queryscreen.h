@@ -43,8 +43,12 @@ public:
       *	    ATENCIÓ!! Degut a aquesta classe és un singleton hi ha la possibilitat de que es facin signals d'estudis sol·licitats per altres 
       *	              classes, per tant cada classe que utiltizi aquest mètode i connecti amb els signals descrits anteriorment ha de mantenir de manera
       *	              interna una llista de les sol·licituds que ha fet per saber si aquell signal l'afecta o no.
+      *
+      * @param actionAfterRetrieve Indica l'acció a prendre un cop descarregat l'estudi
+      * @param pacsID Identificador del PACS des d'on es descarrega l'estudi
+      * @param study Objecte Study amb la informació de l'estudi que volem descarregar
       */
-    void retrieveStudy(bool viewStudyWhenFinished, QString pacsID, Study *study);
+    void retrieveStudy(QInputOutputPacsWidget::RetrieveActions actionAfterRetrieve, QString pacsID, Study *study);
 
 public slots:
     /// Obre un dicomdir
@@ -73,7 +77,8 @@ public slots:
 
 signals:
     /// Signal que ens indica quins pacients s'han seleccionat per visualitzar
-    void selectedPatients( QList<Patient *> selectedPatients );
+    /// Afegim un segon paràmetre per indicar si aquests pacients s'han de carregar únicament i si s'han de visualitzar
+    void selectedPatients( QList<Patient *> selectedPatients, bool loadOnly = false );
 
     ///Indica que s'ha produït un error en la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
     void studyRetrieveFailed(QString studyInstanceUID);
@@ -108,10 +113,15 @@ private slots:
     ///Mostra la pantalla QOperationStateScreen
     void showOperationStateScreen();
 
-    void viewPatients(QList<Patient*>);
+    /// Notifica quins estudis s'han escollit per carregar i/o veure
+    /// Afegim un segon paràmetre per indicar si volem fer view o únicament carregar les dades.
+    void viewPatients(QList<Patient*>, bool loadOnly = false );
 
     ///Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
     void viewRetrievedStudyFromPacs(QString studyInstanceUID);
+
+    /// Demana que es carregui un estudi descarregat. Útil per casos com el de carregar prèvies, per exemple.
+    void loadRetrievedStudyFromPacs(QString studyInstanceUID);
 
     ///Slot que s'activa quan es rep una petició del RIS per descarregar un estudi d'un determinat PACS
     void retrieveStudyFromRISRequest(QString pacsID, Study *study);

@@ -91,6 +91,8 @@ public slots:
 	// Apilicar un hanging protocol
 	void setHangingProtocol( int hangingProtocolNumber );
 
+    /// Mètode que busca els hanging protocols aplicables i aplica el millor de tots
+    void searchAndApplyBestHangingProtocol();
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -125,9 +127,6 @@ private slots:
 
     /// Mètode que tracta el canvi de visualitzador seleccionat
     void changeSelectedViewer( Q2DViewerWidget *viewerWidget );
-
-    /// Mètode que busca els hanging protocols aplicables i aplica el millor de tots
-    void searchAndApplyBestHangingProtocol();
 
     ///  Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();

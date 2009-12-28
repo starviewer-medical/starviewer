@@ -151,9 +151,11 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
 
-    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
+    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>,bool)), SLOT(viewPatients(QList<Patient*>,bool)));
 
     connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadRetrievedStudyFromPacs(QString)));
+
     ///Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
     connect(m_qInputOutputPacsWidget, SIGNAL(operationStateChange()), SLOT(updateOperationsInProgressMessage()));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
@@ -298,6 +300,15 @@ void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
     m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "");
 }
 
+void QueryScreen::loadRetrievedStudyFromPacs(QString studyInstanceUID)
+{
+    QStringList studyUIDList;
+    studyUIDList << studyInstanceUID;
+
+    //Indiquem que volem veure un estudi que està guardat a la base de dades
+    m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "", true);
+}
+
 void QueryScreen::storeDicomObjectsToPacs(PacsDevice pacsDevice, Study *studyToStore, DicomMask dicomMaskObjectsToStore)
 {
     m_qInputOutputPacsWidget->storeDicomObjectsToPacs(pacsDevice, studyToStore, dicomMaskObjectsToStore); 
@@ -324,7 +335,7 @@ void QueryScreen::refreshTab( int index )
     }
 }
 
-void QueryScreen::viewPatients(QList<Patient*> listPatientsToView)
+void QueryScreen::viewPatients(QList<Patient*> listPatientsToView, bool loadOnly )
 {
     this->close();//s'amaga per poder visualitzar la serie
 
@@ -333,7 +344,7 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView)
         m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
     }
 
-    emit selectedPatients(listPatientsToView);
+    emit selectedPatients(listPatientsToView,loadOnly);
 }
 
 void QueryScreen::showOperationStateScreen()
@@ -398,10 +409,19 @@ void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
     DicomMask maskStudyToRetrieve;
 
     maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
-    m_qInputOutputPacsWidget->retrieve( Settings().getValue( InputOutputSettings::RisRequestViewOnceRetrieved ).toBool(), pacsID, maskStudyToRetrieve, study);
+    QInputOutputPacsWidget::RetrieveActions actionAfterRetrieve;
+    if( Settings().getValue( InputOutputSettings::RisRequestViewOnceRetrieved ).toBool() )
+    {
+        actionAfterRetrieve = QInputOutputPacsWidget::View;
+    }
+    else
+    {
+        actionAfterRetrieve = QInputOutputPacsWidget::None;
+    }
+    m_qInputOutputPacsWidget->retrieve( actionAfterRetrieve, pacsID, maskStudyToRetrieve, study);
 }
 
-void QueryScreen::retrieveStudy(bool viewStudyWhenFinished, QString pacsID, Study *study)
+void QueryScreen::retrieveStudy(QInputOutputPacsWidget::RetrieveActions actionAfterRetrieve, QString pacsID, Study *study)
 {
     DicomMask maskStudyToRetrieve;
 
@@ -413,7 +433,7 @@ void QueryScreen::retrieveStudy(bool viewStudyWhenFinished, QString pacsID, Stud
 
     m_studyRequestedToRetrieveFromPublicMethod.append(study->getInstanceUID());
 
-    m_qInputOutputPacsWidget->retrieve(viewStudyWhenFinished, pacsID, maskStudyToRetrieve, study);
+    m_qInputOutputPacsWidget->retrieve(actionAfterRetrieve, pacsID, maskStudyToRetrieve, study);
 }
 
 void QueryScreen::studyRetrieveFailedSlot(QString studyInstanceUID)
