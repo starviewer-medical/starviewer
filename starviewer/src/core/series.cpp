@@ -68,6 +68,7 @@ bool Series::addImage( Image *image )
         // Cal replantejar.se si l'ordenació la fa el mètode insertImage o ho fa un fillerStep
 //         this->insertImage( image );
         m_imageSet << image;
+        m_numberOfImages += image->getNumberOfFrames();
     }
 
     return ok;
@@ -101,11 +102,22 @@ void Series::setImages( QList<Image *> imageSet )
     m_imageSet.clear();
 
     m_imageSet = imageSet;
+    // Cal fer el recompte d'imatges
+    m_numberOfImages = 0;
+    foreach( Image *image, imageSet )
+    {
+        m_numberOfImages += image->getNumberOfFrames();
+    }
 }
 
 int Series::getNumberOfImages()
 {
-    return m_imageSet.isEmpty() ? m_numberOfImages : m_imageSet.size();
+    return m_numberOfImages;
+}
+
+int Series::getNumberOfItems()
+{
+    return m_imageSet.count();
 }
 
 void Series::setNumberOfImages(int numberOfImages)

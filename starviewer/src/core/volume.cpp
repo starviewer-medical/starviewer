@@ -316,6 +316,16 @@ QList<Image *> Volume::getImages() const
     return m_imageSet;
 }
 
+int Volume::getNumberOfFrames() const
+{
+    int numberOfFrames = 0;
+    foreach(Image *image, m_imageSet )
+    {
+        numberOfFrames += image->getNumberOfFrames();
+    }
+    return numberOfFrames;
+}
+
 Study *Volume::getStudy()
 {
     if( !m_imageSet.isEmpty() )

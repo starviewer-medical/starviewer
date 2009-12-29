@@ -137,6 +137,9 @@ public:
     /// Retorna les imatges que composen el volum
     QList<Image *> getImages() const;
 
+    /// Retorna el nombre total de frames que té el volum amb els objectes Image que conté
+    int getNumberOfFrames() const;
+
     /// Mètodes ràpids per obtenir estudi/pacient al que pertany aquest volum
     Study *getStudy();
     Patient *getPatient();

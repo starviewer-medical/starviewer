@@ -104,7 +104,7 @@ void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
                                         .arg( series->getDescription().trimmed() )
                                         .arg( series->getModality().trimmed() )
                                         .arg( series->getProtocolName().trimmed() )
-                                        .arg( volume->getImages().count() )
+                                        .arg( volume->getNumberOfFrames() )
                                         );
         // Actualitzem la posició del widget amb la informació adicional
         updatePosition();

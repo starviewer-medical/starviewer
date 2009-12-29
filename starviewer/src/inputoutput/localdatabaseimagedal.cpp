@@ -155,7 +155,7 @@ QString LocalDatabaseImageDAL::buildSqlSelectCountImages(const DicomMask &imageM
 {
     QString selectSentence;
 
-    selectSentence = "Select count(*) "
+    selectSentence = "Select sum(NumberOfFrames) "
                      "from Image ";
 
     return selectSentence + buildWhereSentence(imageMaskToSelect);
