@@ -643,10 +643,11 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
     int numberOfSeriesAssigned;
     double adjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
 
-    QList<Series *> seriesList;
-    
+    QList<Series *> seriesList;    
     QList<Series *> allSeries;
-    foreach (Study *study, patient->getStudies())
+	QList<Study *> allStudies = sortStudiesByDate( patient->getStudies() );
+
+    foreach (Study *study, allStudies)
     {
         foreach( Series *series, study->getViewableSeries() )
         {

@@ -3,6 +3,7 @@
 <hangingProtocolName>Previous</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <allDifferent>yes</allDifferent>
+<strictness>yes</strictness>
 <protocol>CT</protocol>
 <hasPrevious>yes</hasPrevious>
 <restriction identifier="1">
