@@ -86,7 +86,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     Status state;
-    int imageNumberTotal = 0;
+    int totalNumberOfItems = 0;
 
     m_dicomDirPath = dicomdirPath;
 
@@ -118,7 +118,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
         studyList.append(study);
         foreach(Series *series, study->getSeries())
         {
-            imageNumberTotal += series->getNumberOfImages();
+            totalNumberOfItems += series->getNumberOfItems();
         }
     }
 
@@ -129,7 +129,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     }
 
     //sumem una imatge més per evitar que arribi el 100 % la progress bar, i així s'esperi a que es crei el dicomdir, que es fa quan s'invoca createDicomdir.Create()
-    m_progress = new QProgressDialog( tr( "Creating Dicomdir..." ) , "" , 0 , imageNumberTotal + 1 );
+    m_progress = new QProgressDialog( tr( "Creating Dicomdir..." ) , "" , 0 , totalNumberOfItems+1 );
     m_progress->setMinimumDuration( 0 );
     m_progress->setCancelButton( 0 );
     m_progress->setModal(true);
@@ -269,7 +269,7 @@ Status ConvertToDicomdir::copyStudyToDicomdirPath(Study *study)
 
     foreach(Series *series, study->getSeries()) //per cada sèrie de l'estudi, creem el directori de la sèrie
     {
-        if (series->getNumberOfImages() > 0)
+        if ( series->getNumberOfItems() > 0 )
         {
             state = copySeriesToDicomdirPath(series);
 
