@@ -98,8 +98,7 @@ QList<Image *> Series::getImages() const
 void Series::setImages( QList<Image *> imageSet )
 {
     // Buidar la llista abans d'afegir-hi la nova
-    while ( !m_imageSet.isEmpty() )
-        m_imageSet.takeFirst();
+    m_imageSet.clear();
 
     m_imageSet = imageSet;
 }
