@@ -11,6 +11,9 @@ DicomPrinter::DicomPrinter()
     m_minDensityValues = 0;
 }
 
+    /// Especifica el valor per defecte de la Densitat del Border.
+    /// Especifica una llista de  valors disponibles de la Densitat del Border.
+
  
 DicomPrinter::~DicomPrinter()
 {
@@ -76,12 +79,12 @@ QString DicomPrinter::getHostname() const
     return m_hostname;
 }
 
-void DicomPrinter::setPort(const int &port)
+void DicomPrinter::setPort(int port)
 {
     m_port = port;
 }
 
-int DicomPrinter::getPort() const
+int DicomPrinter::getPort()
 {
     return m_port;
 }
@@ -249,7 +252,7 @@ void DicomPrinter::setDefaultTrim(bool _defaultTrim)
     m_defaultTrim=_defaultTrim;
 }
 
-bool DicomPrinter::getDefaultTrim() const
+bool DicomPrinter::getDefaultTrim()
 {
     return m_defaultTrim;
 }
@@ -259,7 +262,7 @@ void DicomPrinter::setAvailableTrim(bool availableTrim)
     m_availableTrim = availableTrim;
 }
 
-bool DicomPrinter::getAvailableTrim() const
+bool DicomPrinter::getAvailableTrim()
 {
     return m_availableTrim;
 }
@@ -394,7 +397,7 @@ QString DicomPrinter::getDefaultConfigurationInformation() const
     return m_configurationInformation;
 }
 
-void DicomPrinter::setIsDefault(const bool &isDefault)
+void DicomPrinter::setIsDefault(const bool isDefault)
 {
     m_isDefaultPrinter=isDefault;
 }
