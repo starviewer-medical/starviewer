@@ -253,21 +253,8 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
             m_studiesDownloading->insert( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading );            
             m_patient = patient;
 
-            /// Fem una query no fos cas que ja s'hagues descarregat
-            LocalDatabaseManager * localDatabaseManager = new LocalDatabaseManager();
-            DicomMask dicomMask;
-            dicomMask.setStudyUID( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID() );
-            Patient * patient = localDatabaseManager->retrieve( dicomMask );
-
-            if( patient == 0 ) //Descarrega de l'estudi
-            {
-                connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );
-                previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
-            }
-            else // No cal descarregar-lo
-            {
-                previousStudyDownloaded();
-            }
+            connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );
+            previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
             
 		}
 		else{
@@ -445,7 +432,17 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
         else if( restriction.selectorAttribute == "Anterior" )
         {
             int imageSetNumber = restriction.valueRepresentation.toInt();
-            if( serie->getParentStudy()->getDate() >= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getParentStudy()->getDate() )
+
+            /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
+            Study * referenceStudy;
+            HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
+
+            if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
+                referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
+            else // L'estudi de referència és un previ que encara no s'ha descarregat
+                referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
+
+            if( serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
                 valid = false;
         }
         else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
@@ -619,7 +616,17 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             {
                 Series * serie = image->getParentSeries();
                 int imageSetNumber = restriction.valueRepresentation.toInt();
-                if( serie->getParentStudy()->getDate() >= hangingProtocol->getImageSet( imageSetNumber )->getSeriesToDisplay()->getParentStudy()->getDate() )
+
+                /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
+                Study * referenceStudy;
+                HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
+
+                if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
+                    referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
+                else // L'estudi de referència és un previ que encara no s'ha descarregat
+                    referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
+
+                if( serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
                     valid = false;
             }
             i++;
@@ -679,7 +686,7 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
                     //Cerca d'una sèrie de la forma habitual
                     serie = searchSerie( seriesList, imageSet, hangingProtocol->getAllDiferent(), hangingProtocol );
                     
-                    if( serie != 0 )//S'ha trobat descarregada
+                    if( serie != 0 )//S'ha trobat descarregada i carregada a l'estructura pacient
                     {
                         numberOfSeriesAssigned++; 
                         imageSet->setDownloaded( true );
@@ -688,7 +695,14 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
                     {
                         if( imageSet->isPreviousStudy() ) // Si és de tipus prèvi, se li dóna una segona oportunitat buscant a previs
                         {
-                            Study * referenceStudy = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() )->getSeriesToDisplay()->getParentStudy();
+                            Study * referenceStudy;
+                            HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() );
+
+                            if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
+                                referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
+                            else // L'estudi de referència és un previ que encara no s'ha descarregat
+                                referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
+
                             previousStudy = searchPreviousStudy( referenceStudy, previousStudies );
 						
                             if( previousStudy != 0 ) //S'ha trobat pendent de descarrega
@@ -698,7 +712,7 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
 						        imageSet->setPreviousStudyToDisplay( previousStudy );
     						    imageSet->setPreviousStudyPacs( pacs[previousStudy->getInstanceUID()] );
                             }
-                        }                        
+                        }
                     }
                     imageSetNumber++;
                 }
@@ -726,6 +740,7 @@ Study * HangingProtocolManager::searchPreviousStudy( Study * referenceStudy, QLi
     int studyNumber = 0;
     Study * study;
 
+    previousStudies = sortStudiesByDate( previousStudies );
     while ( !found && (studyNumber < previousStudies.size()) )
 	{
         study = previousStudies.at( studyNumber );
