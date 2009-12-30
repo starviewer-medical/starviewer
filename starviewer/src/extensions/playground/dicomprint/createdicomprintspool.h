@@ -45,7 +45,7 @@ class CreateDicomPrintSpool
 
     DicomPrintPage m_dicomPrintPage;
     DicomPrinter m_dicomPrinter;
-	DVPSStoredPrint		* m_storedPrint;
+	DVPSStoredPrint* m_storedPrint;
 	DVPresentationState * m_presentationState;
     CreateDicomPrintSpoolError m_lastError;
 };
