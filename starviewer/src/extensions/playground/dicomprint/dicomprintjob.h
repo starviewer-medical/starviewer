@@ -7,13 +7,14 @@
 #include "printjob.h"
 #include "dicomprintpage.h"
 
+namespace udg
+{   
+
 /**
 * Implementació de la interfície PrintJob per impressores Dicom en DCMTK.
 * Un PrintJob serà un objecte que contindrà la informació necessària per fer la impressió (Prioritat, Pàgines a imprimir...) 
 */
-
-namespace udg
-{   
+    
 class DicomPrintJob: public PrintJob
 {
 public:
@@ -54,14 +55,10 @@ public:
 
 private:
 
-    QString m_printPriority;
-    
-    QString m_mediumType;
-    
-    QString m_label;
-    
+    QString m_printPriority;    
+    QString m_mediumType;    
+    QString m_label;    
     QString m_filmDestination;
-
     QList<DicomPrintPage> m_listDicomPrintPage;
 };
 }; 
