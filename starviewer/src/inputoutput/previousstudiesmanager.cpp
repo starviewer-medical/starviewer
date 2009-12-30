@@ -185,7 +185,7 @@ QString PreviousStudiesManager::getPreviousStudyDateMask(QDate studyDate)
 void PreviousStudiesManager::downloadStudy( Study * study, QString pacs)
 {
     QueryScreen * queryScreen = SingletonPointer<QueryScreen>::instance();
-    queryScreen->retrieveStudy( QInputOutputPacsWidget::View, pacs, study );
+    queryScreen->retrieveStudy( QInputOutputPacsWidget::Load, pacs, study );
 }
 
 }
