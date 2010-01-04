@@ -45,7 +45,7 @@ bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory 
             QString path = entryInfo.absoluteFilePath();
             if (entryInfo.isDir())
             {
-                failed = removeDirectory(QDir(path),true);
+                failed = !removeDirectory(QDir(path),true);
             }
             else
             {
