@@ -20,11 +20,17 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
     bool result;
     result = removeDirectory( QDir(directoryPath), deleteRootDirectory );
 
-    if( result )
-        DEBUG_LOG("S'han esborrat");
-    else
-        DEBUG_LOG("Hi ha hagut errors en l'esborrat");
-
+    if( !result )
+    {
+        if (deleteRootDirectory)
+        {
+            ERROR_LOG("Hi ha hagut errors en l'esborrat del directori i del seu contingut de " + directoryPath);
+        }
+        else
+        {
+            ERROR_LOG("Hi ha hagut errors en l'esborrat del contingut del directori " + directoryPath);
+        }
+    }
     return result;
 }
 
@@ -51,14 +57,20 @@ bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory 
             {
                 QFile file(path);
                 if ( !file.remove() )
+                {
                     ok = false;
+                    ERROR_LOG("No s'ha pogut esborrar el fitxer " + path);
+                }
             }
         }
 
         if( deleteRootDirectory )
         {
             if ( !dir.rmdir(dir.absolutePath()) )
-                ok = false;   
+            {
+                ok = false;
+                ERROR_LOG("No s'ha pogut esborrar el directori " + dir.absolutePath());
+            }
         }
     }
 
