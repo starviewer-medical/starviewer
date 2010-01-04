@@ -34,35 +34,35 @@ DeleteDirectory::~DeleteDirectory()
 
 bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory )
 {
-    bool failed = false;
+    bool ok = true;
     if ( dir.exists() )//QDir::NoDotAndDotDot
     {
         QFileInfoList entries = dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files );
         int count = entries.size();
-        for (int i = 0; i < count && !failed; i++)
+        for (int i = 0; i < count && ok; i++)
         {
             QFileInfo entryInfo = entries[i];
             QString path = entryInfo.absoluteFilePath();
             if (entryInfo.isDir())
             {
-                failed = !removeDirectory(QDir(path),true);
+                ok = removeDirectory(QDir(path), true);
             }
             else
             {
                 QFile file(path);
                 if ( !file.remove() )
-                    failed = true;
+                    ok = false;
             }
         }
 
         if( deleteRootDirectory )
         {
             if ( !dir.rmdir(dir.absolutePath()) )
-                failed = true;   
+                ok = false;   
         }
     }
 
-    return(!failed);
+    return ok;
 }
 
 }
