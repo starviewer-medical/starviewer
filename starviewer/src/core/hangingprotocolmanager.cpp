@@ -25,6 +25,7 @@
 #include "identifier.h"
 #include "logging.h"
 #include "../inputoutput/previousstudiesmanager.h"
+#include "volumerepository.h"
 
 #include <QList>
 #include <QDate>
@@ -268,11 +269,11 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
 					if( hangingProtocolImageSet->getTypeOfItem() == "image" )
 					{
 						viewerWidget->getViewer()->setSlice( hangingProtocolImageSet->getImageToDisplay() );
-						applyDisplayTransformations( serie, hangingProtocolImageSet->getImageToDisplay(), viewerWidget, displaySet);
+						applyDisplayTransformations( serie, hangingProtocolImageSet->getImageToDisplay(), viewerWidget, displaySet );
 					}
 					else
 					{
-						applyDisplayTransformations( serie, 0, viewerWidget, displaySet);
+						applyDisplayTransformations( serie, 0, viewerWidget, displaySet );
 					}
 				}
 			}
@@ -650,6 +651,9 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
     int numberOfSeriesAssigned;
     double adjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
 
+    if ( previousStudies.size() == 0 )
+        return previousCandidates;
+
     QList<Series *> seriesList;    
     QList<Series *> allSeries;
 	QList<Study *> allStudies = sortStudiesByDate( patient->getStudies() );
@@ -781,7 +785,18 @@ void HangingProtocolManager::previousStudyDownloaded()
             // S'assigna la serie al visualitzador si es que n'ha trobat alguna
             if( series != 0)
             {
-                viewerWidget->setInput( series->getFirstVolume() );
+                // cal que la sèrie que escollim sigui vàlida, sinó no posarem pas res
+				if( series->isViewable() && series->getFirstVolume() )
+				{
+                    Volume *volume = VolumeRepository::getRepository()->getVolume( series->getFirstVolume()->getIdentifier() );
+					viewerWidget->setInput( volume );
+					qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+
+					if( structPreviousStudyDownloading->imageSet->getTypeOfItem() == "image" )
+					{
+						viewerWidget->getViewer()->setSlice( structPreviousStudyDownloading->imageSet->getImageToDisplay() );
+					}
+				}
             }
 
             if( m_studiesDownloading->empty() )
