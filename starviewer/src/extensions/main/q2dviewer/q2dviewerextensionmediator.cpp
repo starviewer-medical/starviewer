@@ -58,6 +58,9 @@ bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget* extension)
     {
         // Busquem i apliquem el millor hanging protocol possible
         q2dviewerExtension->searchAndApplyBestHangingProtocol();
+		//Actualitzem el widget de prèvies.
+		q2dviewerExtension->searchPreviousStudiesOfMostRecentStudy();
+
         return true;
     }
 }

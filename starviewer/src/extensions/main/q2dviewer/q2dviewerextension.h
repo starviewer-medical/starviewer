@@ -93,6 +93,9 @@ public slots:
 
     /// Mètode que busca els hanging protocols aplicables i aplica el millor de tots
     void searchAndApplyBestHangingProtocol();
+
+	/// Mètode per buscar les prèvies de l'estudi carregat més recent.
+	void searchPreviousStudiesOfMostRecentStudy();
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
