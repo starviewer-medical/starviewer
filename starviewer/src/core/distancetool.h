@@ -38,6 +38,10 @@ private:
     ///Simula la linia quan es mou el ratolí
     void simulateLine();
 
+private slots:
+    /// Inicialitza l'estat de la tool
+    void initialize();
+
 private:
     ///estat de la línia
     enum { NoPointFixed, FirstPointFixed };
