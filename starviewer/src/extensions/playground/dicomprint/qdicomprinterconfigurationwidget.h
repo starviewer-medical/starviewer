@@ -37,8 +37,6 @@ private slots:
     void deletePrinter();
     // Comprova la connexió amb una impressora entrada al sistema.
     void testPrinter();    
-    // Mostra/Amaga per pantalla la informació avançada de la impressora.
-    void showAdvancedSettings();
     // Després d'afegir una impressora actualitza la llista d'impressores i et mostra la informació de la última. S'executa amb el Signal newPrinterAddedSignal
     void showNewPrinterAdded(int printerID);
     ///Slot que s'executa al prèmer el botó cancel
@@ -69,9 +67,6 @@ private:
     // Es guarda la informació avançada de la impressió de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
     void getAdvancedSettingsFromControls(DicomPrinter& printer);
     
-    ///Mostra les opcions de configuració avançada i redimensiona la finestra
-    void showAdvancedConfigurationOptions(bool show);
-
     /**Retorna la impressora seleccionada, si no tenim cap impressora seleccionada retorna l'objecte amb les propietats buides.
       * Aquest mètode retorna la informació de la impressora com està guardada, si seleccionem una impressora, en modifiquem les dades a través 
       * d'aquesta d'interfície i cridem aquest mètode retornarà les dades tal com les teniem guardades al settings, no retornarà les dades modificada a la 
