@@ -23,7 +23,6 @@ QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
     configureInputValidator();
     refreshPrinterList();
     clearPrinterSettings();
-    showAdvancedConfigurationOptions(false);
 
     m_maximumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
     m_minimumDensitySpinBox->setSpecialValueText(tr("Automatic"));//Afegim valor "" per si no volen especificar densitat
@@ -164,23 +163,6 @@ void QDicomPrinterConfigurationWidget::testPrinter()
 
 }
 
-void QDicomPrinterConfigurationWidget::showAdvancedSettings()
-{
-    QString buttonText = tr("Advanced Settings");
-
-    showAdvancedConfigurationOptions(!m_advancedSettingsGroupBox->isVisible());
-
-    if (m_advancedSettingsGroupBox->isVisible())
-    {
-        m_advancedSettingsPushButton->setText(buttonText + " <<<");
-    }
-    else 
-    {
-        m_advancedSettingsPushButton->setText(buttonText + " >>>");
-    }
-
-}
-
 void QDicomPrinterConfigurationWidget::showNewPrinterAdded(int printerID)
 {
     this->refreshPrinterList();
@@ -210,7 +192,6 @@ void QDicomPrinterConfigurationWidget::createConnections()
     connect( m_cancelSettingsPushButton , SIGNAL( clicked() ), SLOT( cancel() ));
     connect( m_deletePrinterPushButton , SIGNAL( clicked() ), SLOT( deletePrinter() ));
     connect( m_testPrinterPushButton , SIGNAL( clicked() ), SLOT( testPrinter() ));    
-    connect( m_advancedSettingsPushButton , SIGNAL( clicked() ), SLOT( showAdvancedSettings() ));   
 
     connect( m_listPrintersTreeWidget , SIGNAL( itemSelectionChanged() ), SLOT( printerSelectionChanged() ) );
     connect( m_addPrinterWidget, SIGNAL(newPrinterAddedSignal(int)), SLOT(showNewPrinterAdded(int)));
@@ -389,10 +370,6 @@ DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()
     return selectedDicomPrinter;
 }
 
-void QDicomPrinterConfigurationWidget::showAdvancedConfigurationOptions(bool show)
-{
-    m_advancedSettingsGroupBox->setVisible(show);
-}
 
 void QDicomPrinterConfigurationWidget::cancel()
 {
