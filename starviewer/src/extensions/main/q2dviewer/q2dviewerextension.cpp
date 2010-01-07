@@ -175,8 +175,8 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     QApplication::setOverrideCursor( Qt::WaitCursor );
     m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, true );
-	delete hangingProtocolManger;
-	hangingProtocolManger = 0;
+    delete hangingProtocolManger;
+    hangingProtocolManger = 0;
     QApplication::restoreOverrideCursor();
 
     if( m_hangingCandidates.size() == 0 ) // No hi ha hanging protocols
@@ -201,8 +201,8 @@ void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
     QApplication::setOverrideCursor( Qt::WaitCursor );
     m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, true );
-	delete hangingProtocolManger;
-	hangingProtocolManger = 0;
+    delete hangingProtocolManger;
+    hangingProtocolManger = 0;
     QApplication::restoreOverrideCursor();
 }
 
@@ -210,8 +210,8 @@ void Q2DViewerExtension::searchHangingProtocols()
 {
     HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
     m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, false );
-	delete hangingProtocolManger;
-	hangingProtocolManger = 0;
+    delete hangingProtocolManger;
+    hangingProtocolManger = 0;
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
 
     searchPreviousStudiesWithHangingProtocols();
@@ -219,27 +219,27 @@ void Q2DViewerExtension::searchHangingProtocols()
 
 void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
 {
-	m_predefinedSeriesGrid->setSearchingItem( true );
+    m_predefinedSeriesGrid->setSearchingItem( true );
 
-	//2.- Creacio de la classe per trobar previes
-	m_previousStudiesManager = new PreviousStudiesManager();
+    //2.- Creacio de la classe per trobar previes
+    m_previousStudiesManager = new PreviousStudiesManager();
 
-	//3.- Es connecta el signal per quan acabi
-	connect( m_previousStudiesManager, SIGNAL( queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>) ), SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>) ) );
+    //3.- Es connecta el signal per quan acabi
+    connect( m_previousStudiesManager, SIGNAL( queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>) ), SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>) ) );
 
-	//4.- Es busquen els previs
+    //4.- Es busquen els previs
     m_previousStudiesManager->queryPreviousStudies(m_patient->getStudies().first());
 
 }
 
 void Q2DViewerExtension::addPreviousHangingProtocols( QList<Study*> studies, QHash<QString, QString> qhash )
 {
-	disconnect( m_previousStudiesManager, SIGNAL( queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>) ), this, SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>) ) );
+    disconnect( m_previousStudiesManager, SIGNAL( queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>) ), this, SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>) ) );
 
-	HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
+    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
     QList<HangingProtocol * > m_hangingWidthPrevious = hangingProtocolManger->getHangingProtocolsWidthPreviousSeries( m_patient, studies, qhash );
-	m_hangingCandidates << m_hangingWidthPrevious;
-	m_predefinedSeriesGrid->addHangingItems( m_hangingWidthPrevious );
+    m_hangingCandidates << m_hangingWidthPrevious;
+    m_predefinedSeriesGrid->addHangingItems( m_hangingWidthPrevious );
     m_predefinedSeriesGrid->setSearchingItem( false );
 }
 
@@ -413,8 +413,8 @@ void Q2DViewerExtension::activateNewViewer( Q2DViewerWidget * newViewerWidget)
      // i si cal, activem les annotacions
     if( m_viewerInformationToolButton->isChecked() )
         newViewerWidget->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
-        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
-        Q2DViewer::AcquisitionInformationAnnotation, true );
+                Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+                Q2DViewer::AcquisitionInformationAnnotation, true );
 
     connect( newViewerWidget, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 
@@ -479,9 +479,9 @@ void Q2DViewerExtension::showViewerInformation( bool show )
 
     for( numViewer = 0; numViewer < numberOfViewers; numViewer++ )
     {
-       m_workingArea->getViewerWidget( numViewer )->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
-        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
-        Q2DViewer::AcquisitionInformationAnnotation, show );
+        m_workingArea->getViewerWidget( numViewer )->getViewer()->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
+            Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+            Q2DViewer::AcquisitionInformationAnnotation, show );
     }
 }
 
@@ -600,23 +600,23 @@ void Q2DViewerExtension::changeToPreviousStudiesDefaultIcon()
 
 void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
 {
-	Study * recentStudy = NULL;
+    Study * recentStudy = NULL;
 
-	foreach ( Study * study, m_mainVolume->getPatient()->getStudies() )
-	{
-		if ( recentStudy == NULL )
-		{
-			recentStudy = study;
-		}
-		else
-		{
-			if ( study->getDateTime() > recentStudy->getDateTime() )
-			{
-				recentStudy = study;
-			}
-		}
-	}
-	m_previousStudiesWidget->searchPreviousStudiesOf( recentStudy );
+    foreach ( Study * study, m_mainVolume->getPatient()->getStudies() )
+    {
+        if ( recentStudy == NULL )
+        {
+            recentStudy = study;
+        }
+        else
+        {
+            if ( study->getDateTime() > recentStudy->getDateTime() )
+            {
+                recentStudy = study;
+            }
+        }
+    }
+    m_previousStudiesWidget->searchPreviousStudiesOf( recentStudy );
 }
 
 }
