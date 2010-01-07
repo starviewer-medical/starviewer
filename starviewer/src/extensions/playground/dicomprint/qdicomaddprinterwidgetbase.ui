@@ -13,6 +13,9 @@
     <height>135</height>
    </rect>
   </property>
+  <property name="windowTitle">
+   <string>Add new DICOM printer</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="m_printerSettingsGroupBox">
