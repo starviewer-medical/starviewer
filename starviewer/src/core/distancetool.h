@@ -40,7 +40,7 @@ private:
 
 private:
     ///estat de la línia
-    enum { NO_POINTS, FIRST_POINT };
+    enum { NoPointFixed, FirstPointFixed };
 
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
