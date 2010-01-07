@@ -39,7 +39,6 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     m_nextHangingProtocolColumn = 0;
     m_gridLayoutHanging = 0;
 
-    m_loadingIsShowed = false;
     // Creem el widget amb l'animació de "searching"
     createSearchingWidget();
 //     m_predefinedGridsList << "1x1" << "1x2" << "2x2" << "2x3" << "3x3" << "3x4" << "4x4" << "4x5";
@@ -377,7 +376,6 @@ void MenuGridWidget::setSearchingItem( bool state )
         {
             m_searchingWidget->setVisible( false );
             m_gridLayoutHanging->removeWidget( m_searchingWidget );
-            m_loadingIsShowed = false;
         }
     }
 }
@@ -387,7 +385,7 @@ void MenuGridWidget::addSearchingItem()
     // S'assumeix que el widget ha d'estar creat
     Q_ASSERT( m_searchingWidget );
     
-    if( m_loadingIsShowed || (m_gridLayoutHanging == 0) )
+    if( m_searchingWidget->isVisible() || (m_gridLayoutHanging == 0) )
         return;
         
     // Afegim el widget dins del layout del menú i el fem visible
@@ -396,8 +394,6 @@ void MenuGridWidget::addSearchingItem()
 	
     m_loadingColumn = m_nextHangingProtocolColumn;
     m_loadingRow = m_nextHangingProtocolRow;
-	
-    m_loadingIsShowed = true;
 }
 
 void MenuGridWidget::createSearchingWidget()
