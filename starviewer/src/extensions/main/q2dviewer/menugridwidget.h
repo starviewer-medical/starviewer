@@ -132,9 +132,6 @@ protected:
     /// Widget que informa que s'esta carregant (buscant)
 	QWidget * m_searchingWidget;
 
-    /// Indicador de si el tenim visible o no
-    bool m_loadingIsShowed;
-
 };
 
 }
