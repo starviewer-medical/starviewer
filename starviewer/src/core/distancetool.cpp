@@ -32,7 +32,7 @@ DistanceTool::DistanceTool( QViewer *viewer, QObject *parent )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
     m_line = NULL;
-    m_lineState = NO_POINTS;
+    m_lineState = NoPointFixed;
 }
 
 DistanceTool::~DistanceTool()
@@ -76,11 +76,11 @@ void DistanceTool::annotateNewPoint()
     m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
     //afegim el punt
-    if( m_lineState == NO_POINTS )
+    if( m_lineState == NoPointFixed )
     {
         m_line->setFirstPoint( clickedWorldPoint );
         m_line->setSecondPoint( clickedWorldPoint );
-        m_lineState = FIRST_POINT;
+        m_lineState = FirstPointFixed;
 
         m_2DViewer->getDrawer()->draw( m_line , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
@@ -127,7 +127,7 @@ void DistanceTool::annotateNewPoint()
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
-        m_lineState = NO_POINTS; //Restaurem l'm_stateLine
+        m_lineState = NoPointFixed; //Restaurem l'm_stateLine
         m_line = NULL;//Acabem la linia. Encara no sabem com s'obtindran per modificar
     }
 }
