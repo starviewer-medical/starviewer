@@ -20,7 +20,7 @@ namespace udg {
 /**
 Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 // FWD declarations
@@ -44,6 +44,7 @@ public:
     void setMaxElements( int elements );
 
     void createHangingProtocolsWidget();
+    
     /// Mètode que omple el widget amb les els grids predefinits
     void createPredefinedGrids( int numberSeries );
 
@@ -53,8 +54,8 @@ public:
     /// Elimina tot el contingut del widget
     void dropContent();
 
-	/// Posa els hanging protocols que ha de representar el menú
-	void setHangingItems( QList<HangingProtocol *> listOfCandidates );
+    /// Posa els hanging protocols que ha de representar el menú
+    void setHangingItems( QList<HangingProtocol *> listOfCandidates );
 
     /// Afegeix hanging protocols a la llista
     void addHangingItems( QList<HangingProtocol *> items );
@@ -75,15 +76,15 @@ signals:
     
     /// Emet que s'ha escollit un grid
     void selectedGrid( int , int );
-	void selectedGrid( int );
+    void selectedGrid( int );
 
 protected:
 
     /// Mètode que crea una icona de rows x columns
     ItemMenu * createIcon( int rows, int columns );
 
-	/// Mètode que crea una icona segons un hanging protocol
-	ItemMenu * createIcon( const HangingProtocol * hangingProtocol );
+    /// Mètode que crea una icona segons un hanging protocol
+    ItemMenu * createIcon( const HangingProtocol * hangingProtocol );
 
     /// Crea el widget que conté una animació i un label que es mostrarà quan estem buscant estudis previs
     /// per trobar hanging protocols potencials a aplicar sobre l'estudi
@@ -109,7 +110,7 @@ protected:
     QWidget *m_tableGridWidget;
 
     /// Llista de hanging protocols a mostrar
-	QList< HangingProtocol * > m_hangingItems;
+    QList< HangingProtocol * > m_hangingItems;
 
     /// Fila a on col·locar el següent element a la zona de hangings
     int m_nextHangingProtocolRow;
@@ -124,13 +125,13 @@ protected:
     bool m_putLoadingItem;
 
     /// Columna a on s'ha col·locat l'element de carregant
-	int m_loadingColumn;
+    int m_loadingColumn;
 
     /// Fila a on s'ha col·locat l'element de carregant
-	int m_loadingRow;
+    int m_loadingRow;
 
     /// Widget que informa que s'esta carregant (buscant)
-	QWidget * m_searchingWidget;
+    QWidget * m_searchingWidget;
 
 };
 
