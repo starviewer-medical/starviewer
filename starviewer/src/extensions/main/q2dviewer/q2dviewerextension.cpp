@@ -259,6 +259,7 @@ void Q2DViewerExtension::showPredefinedGrid()
     }
 
     m_predefinedSeriesGrid->createPredefinedGrids( numberSeries );
+    m_predefinedSeriesGrid->createHangingProtocolsWidget();
     m_predefinedSeriesGrid->show();
 
 }

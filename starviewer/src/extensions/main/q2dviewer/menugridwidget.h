@@ -43,6 +43,7 @@ public:
     /// Màxim nombre d'elements a mostrar
     void setMaxElements( int elements );
 
+    void createHangingProtocolsWidget();
     /// Mètode que omple el widget amb les els grids predefinits
     void createPredefinedGrids( int numberSeries );
 

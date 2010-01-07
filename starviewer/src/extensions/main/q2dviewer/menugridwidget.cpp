@@ -25,7 +25,7 @@
 namespace udg {
 
 MenuGridWidget::MenuGridWidget( QWidget *parent )
- : QWidget( parent ), m_searchingWidget(0)
+ : QWidget( parent ), m_searchingWidget(0), m_hangingProtocolWidget(0)
 {
     setWindowFlags(Qt::Popup);
     m_maxColumns = 5;
@@ -51,77 +51,18 @@ MenuGridWidget::~MenuGridWidget()
 {
 }
 
-void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList )
+void MenuGridWidget::createHangingProtocolsWidget()
 {
-    int width;
-    int height;
-    int rows;
-    int columns;
-    int numberPredefined;
-    QStringList values;
     ItemMenu * icon;
     int positionRow = 0;
     int positionColumn = 0;
-
-    m_predefinedGridWidget = new QWidget( this );
-    QGridLayout * gridLayoutPredefined = new QGridLayout();
-    gridLayoutPredefined->setSpacing( 6 );
-    gridLayoutPredefined->setMargin( 6 );
-    QSpacerItem * spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
-    gridLayoutPredefined->addItem(spacerItem, 0, m_maxColumns, 1, 1);
-
-    QFrame * line_predefined = new QFrame(this);
-    line_predefined->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    line_predefined->setFrameShape(QFrame::HLine);
-    line_predefined->setFrameShadow(QFrame::Sunken);
-    QLabel * label_predefined = new QLabel(this);
-    label_predefined->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-    label_predefined->setText("Grid layouts");
-    QHBoxLayout * hboxLayout_predefined = new QHBoxLayout();
-    hboxLayout_predefined->setMargin( 0 );
-    hboxLayout_predefined->setSpacing( 6 );
-    hboxLayout_predefined->addWidget(line_predefined);
-    hboxLayout_predefined->addWidget(label_predefined);
-    
-    m_gridLayout->addLayout( hboxLayout_predefined, 0, 0, 1, 1 );
-    m_gridLayout->addLayout( gridLayoutPredefined, 1, 0, 1, 1);
-    dropContent();
-
     int numberOfHangingProtocols = m_hangingItems.size();
-    int numberOfPredefinedItems = listPredefinedGridsList.size();
 
-    if( numberOfPredefinedItems >= m_maxColumns )
-    {
-        width = 70 * m_maxColumns + ( m_gridLayout->margin()*2 );
-    }
-    else
-    {
-        width = 70 * numberOfPredefinedItems + ( m_gridLayout->margin()*2 );
-    }
-
-    height = 86 *  ( ceil ( numberOfPredefinedItems/(m_maxColumns*1.0 ) ) );
-
-    m_predefinedGridWidget->resize( width, height );
-    this->resize( width+6, height+6 );
-
-    for( numberPredefined = 0; numberPredefined < listPredefinedGridsList.size(); numberPredefined++ )
-    {
-        values = listPredefinedGridsList.at( numberPredefined ).split( "x" );
-        rows = values.value( 0 ).toInt();
-        columns = values.value( 1 ).toInt();
-        icon = createIcon( rows, columns );
-        gridLayoutPredefined->addWidget( icon, positionRow, positionColumn );
-        m_itemList.push_back( icon );
-        positionColumn ++;
-
-        if( positionColumn == m_maxColumns )
-        {
-            positionColumn = 0;
-            positionRow++;
-        }
-    }
-
-    // Creació de menu per hanging protocols
+    if ( m_hangingProtocolWidget != NULL )
+        delete m_hangingProtocolWidget;
+    
+    m_hangingProtocolWidget = new QWidget( this );
+    
     if( numberOfHangingProtocols > 0 )
     {
         int hangingProtocolNumber;
@@ -129,7 +70,6 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
         positionRow = 0;
         positionColumn = 0;
 
-        m_hangingProtocolWidget = new QWidget( this );
         m_gridLayoutHanging = new QGridLayout();
         m_gridLayoutHanging->setSpacing( 6 );
         m_gridLayoutHanging->setMargin( 6 );
@@ -173,6 +113,75 @@ void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList 
 
     if( m_putLoadingItem )
         addSearchingItem();
+}
+void MenuGridWidget::createPredefinedGrids( QStringList listPredefinedGridsList )
+{
+    int width;
+    int height;
+    int rows;
+    int columns;
+    int numberPredefined;
+    QStringList values;
+    ItemMenu * icon;
+    int positionRow = 0;
+    int positionColumn = 0;
+
+    m_predefinedGridWidget = new QWidget( this );
+    QGridLayout * gridLayoutPredefined = new QGridLayout();
+    gridLayoutPredefined->setSpacing( 6 );
+    gridLayoutPredefined->setMargin( 6 );
+    QSpacerItem * spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
+    gridLayoutPredefined->addItem(spacerItem, 0, m_maxColumns, 1, 1);
+
+    QFrame * line_predefined = new QFrame(this);
+    line_predefined->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    line_predefined->setFrameShape(QFrame::HLine);
+    line_predefined->setFrameShadow(QFrame::Sunken);
+    QLabel * label_predefined = new QLabel(this);
+    label_predefined->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    label_predefined->setText("Grid layouts");
+    QHBoxLayout * hboxLayout_predefined = new QHBoxLayout();
+    hboxLayout_predefined->setMargin( 0 );
+    hboxLayout_predefined->setSpacing( 6 );
+    hboxLayout_predefined->addWidget(line_predefined);
+    hboxLayout_predefined->addWidget(label_predefined);
+    
+    m_gridLayout->addLayout( hboxLayout_predefined, 0, 0, 1, 1 );
+    m_gridLayout->addLayout( gridLayoutPredefined, 1, 0, 1, 1);
+    dropContent();
+
+    int numberOfPredefinedItems = listPredefinedGridsList.size();
+
+    if( numberOfPredefinedItems >= m_maxColumns )
+    {
+        width = 70 * m_maxColumns + ( m_gridLayout->margin()*2 );
+    }
+    else
+    {
+        width = 70 * numberOfPredefinedItems + ( m_gridLayout->margin()*2 );
+    }
+
+    height = 86 *  ( ceil ( numberOfPredefinedItems/(m_maxColumns*1.0 ) ) );
+
+    m_predefinedGridWidget->resize( width, height );
+    this->resize( width+6, height+6 );
+
+    for( numberPredefined = 0; numberPredefined < listPredefinedGridsList.size(); numberPredefined++ )
+    {
+        values = listPredefinedGridsList.at( numberPredefined ).split( "x" );
+        rows = values.value( 0 ).toInt();
+        columns = values.value( 1 ).toInt();
+        icon = createIcon( rows, columns );
+        gridLayoutPredefined->addWidget( icon, positionRow, positionColumn );
+        m_itemList.push_back( icon );
+        positionColumn ++;
+
+        if( positionColumn == m_maxColumns )
+        {
+            positionColumn = 0;
+            positionRow++;
+        }
+    }
 }
 
 void MenuGridWidget::createPredefinedGrids( int numSeries )
