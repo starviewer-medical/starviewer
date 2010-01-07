@@ -401,8 +401,8 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
     }
     else if( ( m_mainApp->getCurrentPatient()->compareTo( patient ) == Patient::SamePatients ))
     {
-        *(m_mainApp->getCurrentPatient()) += *patient;
         m_mainApp->connectPatientVolumesToNotifier(patient);
+        *(m_mainApp->getCurrentPatient()) += *patient;
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
 
         //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
