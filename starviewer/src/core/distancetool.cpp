@@ -31,8 +31,8 @@ DistanceTool::DistanceTool( QViewer *viewer, QObject *parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
-    m_line = NULL;
-    m_lineState = NoPointFixed;
+    connect( m_2DViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( initialize() ) );
+    initialize();
 }
 
 DistanceTool::~DistanceTool()
@@ -126,9 +126,8 @@ void DistanceTool::annotateNewPoint()
         text->setHorizontalJustification( "Right" );
         text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-
-        m_lineState = NoPointFixed; //Restaurem l'm_stateLine
-        m_line = NULL;//Acabem la linia. Encara no sabem com s'obtindran per modificar
+        // Reiniciem l'estat de la tool
+        initialize();
     }
 }
 
@@ -139,6 +138,12 @@ void DistanceTool::simulateLine()
 
     m_line->setSecondPoint( clickedWorldPoint );
     m_line->update( DrawerPrimitive::VTKRepresentation );
+}
+
+void DistanceTool::initialize()
+{
+    m_lineState = NoPointFixed;
+    m_line = NULL;
 }
 
 }
