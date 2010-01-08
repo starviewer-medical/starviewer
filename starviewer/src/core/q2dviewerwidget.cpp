@@ -150,6 +150,12 @@ void Q2DViewerWidget::emitSynchronize()
     emit synchronize( this, m_buttonSynchronizeAction->isChecked() );
 }
 
+void Q2DViewerWidget::setSynchronized( bool synchronized )
+{
+    m_buttonSynchronizeAction->setChecked( synchronized );
+    emitSynchronize();
+}
+
 void Q2DViewerWidget::updateSlider()
 {
     m_slider->setValue( m_2DView->getCurrentSlice() );
