@@ -39,6 +39,9 @@ public:
     /// Nom de l'arxiu DICOM que es vol llegir. Torna cert si l'arxiu s'ha pogut carregar correctament, fals altrament.
     bool setFile( QString filename );
 
+    /// Ens diu si l'arxiu assignat és vàlid com a arxiu DICOM. Si no tenim arxiu assignat retornarà fals.
+    bool canReadFile() const;
+
     /// Retorna el nom del fitxer que tracta el tag reader.
     QString getFileName() const;
 
@@ -79,6 +82,9 @@ private:
 
     /// Objecte dcmtk a través del qual obtenim la informació DICOM
     DcmDataset *m_dicomData;
+
+    /// Ens indica si l'arxiu actual és vàlid
+    bool m_hasValidFile;
 };
 
 }
