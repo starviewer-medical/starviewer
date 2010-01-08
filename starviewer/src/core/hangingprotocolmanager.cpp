@@ -250,13 +250,14 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
             structPreviousStudyDownloading->layout = layout;
             structPreviousStudyDownloading->imageSet = hangingProtocolImageSet;
             structPreviousStudyDownloading->hangingProtocol = hangingProtocol;
+            structPreviousStudyDownloading->displaySet = displaySet;
 
             m_studiesDownloading->insert( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading );            
             m_patient = patient;
 
             connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );
             previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
-            
+
         }
         else
         {
@@ -275,6 +276,11 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
                     else
                     {
                         applyDisplayTransformations( serie, 0, viewerWidget, displaySet );
+                    }
+                    if( displaySet->getToolActivation() != 0 )
+                    {
+                        if( displaySet->getToolActivation() == "synchronization" )
+                            viewerWidget->setSynchronized( true );
                     }
                 }
             }
@@ -703,19 +709,22 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
                             Study * referenceStudy;
                             HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() );
 
-                            if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
+                            if( referenceImageSet->isDownloaded() && referenceImageSet->getSeriesToDisplay() ) // L'estudi de referència està descarregat
                                 referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
                             else // L'estudi de referència és un previ que encara no s'ha descarregat
                                 referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
 
-                            previousStudy = searchPreviousStudy( referenceStudy, previousStudies );
-
-                            if( previousStudy != 0 ) //S'ha trobat pendent de descarrega
+                            if( referenceStudy )
                             {
-                                numberOfSeriesAssigned++;
-                                imageSet->setDownloaded( false );
-                                imageSet->setPreviousStudyToDisplay( previousStudy );
-                                imageSet->setPreviousStudyPacs( pacs[previousStudy->getInstanceUID()] );
+                                previousStudy = searchPreviousStudy( referenceStudy, previousStudies );
+
+                                if( previousStudy != 0 ) //S'ha trobat pendent de descarrega
+                                {
+                                    numberOfSeriesAssigned++;
+                                    imageSet->setDownloaded( false );
+                                    imageSet->setPreviousStudyToDisplay( previousStudy );
+                                    imageSet->setPreviousStudyPacs( pacs[previousStudy->getInstanceUID()] );
+                                }
                             }
                         }
                     }
@@ -796,6 +805,20 @@ void HangingProtocolManager::previousStudyDownloaded()
                     if( structPreviousStudyDownloading->imageSet->getTypeOfItem() == "image" )
                     {
                         viewerWidget->getViewer()->setSlice( structPreviousStudyDownloading->imageSet->getImageToDisplay() );
+                        applyDisplayTransformations( series, structPreviousStudyDownloading->imageSet->getImageToDisplay(), viewerWidget, structPreviousStudyDownloading->displaySet );
+                    }
+                    else
+                    {
+                        applyDisplayTransformations( series, 0, viewerWidget, structPreviousStudyDownloading->displaySet );
+                    }
+                    if( structPreviousStudyDownloading->displaySet->getToolActivation() != 0 )
+                    {
+                        if( structPreviousStudyDownloading->displaySet->getToolActivation() == "synchronization" )
+                            viewerWidget->setSynchronized( true );
+                    }
+                    else //Es desactiven les tools necessàries
+                    {
+                        viewerWidget->setSynchronized( false );
                     }
                 }
             }

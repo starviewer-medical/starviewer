@@ -32,39 +32,39 @@ HangingProtocolXMLReader::~HangingProtocolXMLReader()
 
 QList<HangingProtocol * > HangingProtocolXMLReader::read( QString path )
 {
-	QFileInfo fileToRead( path );
-	QFileInfo file;
-	QList<HangingProtocol * > protocols;
-	QList<HangingProtocol * > directoryProtocols;
-	QFileInfoList entryInfoList;
-	int numberOfFileInfo;
-	int i;
+    QFileInfo fileToRead( path );
+    QFileInfo file;
+    QList<HangingProtocol * > protocols;
+    QList<HangingProtocol * > directoryProtocols;
+    QFileInfoList entryInfoList;
+    int numberOfFileInfo;
+    int i;
 
-	if( fileToRead.isDir() )
-	{
-		QDir directory( path );
-		entryInfoList = directory.entryInfoList();
-		numberOfFileInfo = entryInfoList.size();
-		
-		for( i = 0; i < numberOfFileInfo; i++)
-		{
-			file = entryInfoList.value( i );
+    if( fileToRead.isDir() )
+    {
+        QDir directory( path );
+        entryInfoList = directory.entryInfoList();
+        numberOfFileInfo = entryInfoList.size();
+        
+        for( i = 0; i < numberOfFileInfo; i++)
+        {
+            file = entryInfoList.value( i );
 
-			if( (file.fileName() != ".") && (file.fileName() != "..") )
-			{
-				directoryProtocols = read( file.absolutePath() + QDir::toNativeSeparators( "/" ) + file.fileName() ); 
-				protocols << directoryProtocols;
-			}
-		}
-	}
-	else
-	{
-		if( fileToRead.suffix() == "xml" )
-		{
-			protocols = readFile( path );
-		}
-	}
-	return protocols;
+            if( (file.fileName() != ".") && (file.fileName() != "..") )
+            {
+                directoryProtocols = read( file.absolutePath() + QDir::toNativeSeparators( "/" ) + file.fileName() ); 
+                protocols << directoryProtocols;
+            }
+        }
+    }
+    else
+    {
+        if( fileToRead.suffix() == "xml" )
+        {
+            protocols = readFile( path );
+        }
+    }
+    return protocols;
 }
 
 QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
@@ -143,29 +143,35 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
                         listHangingProtocols.push_back( hangingProtocol );
                         break;
                     }
-					else if( reader->name() == "strictness" )
+                    else if( reader->name() == "strictness" )
                     {
                         reader->readNext();
-						hangingProtocol->setStrictness( reader->text().toString().contains( "yes" ) );
+                        hangingProtocol->setStrictness( reader->text().toString().contains( "yes" ) );
                         reader->readNext();
                     }
-					else if( reader->name() == "allDifferent" )
+                    else if( reader->name() == "allDifferent" )
                     {
                         reader->readNext();
-						hangingProtocol->setAllDiferent( reader->text().toString().contains( "yes" ) );
+                        hangingProtocol->setAllDiferent( reader->text().toString().contains( "yes" ) );
                         reader->readNext();
                     }
                     else if( reader->name() == "iconType" )
                     {
                         reader->readNext();
-						hangingProtocol->setIconType( reader->text().toString() );
+                        hangingProtocol->setIconType( reader->text().toString() );
                         reader->readNext();
                     }
                     if( reader->name() == "hasPrevious" )
                     {
                         reader->readNext();
-						hangingProtocol->setPrevious( reader->text().toString().contains( "yes" ) );
+                        hangingProtocol->setPrevious( reader->text().toString().contains( "yes" ) );
                         hangingProtocol->setHasStudiesToDownload( reader->text().toString().contains( "yes" ) );
+                        reader->readNext();
+                    }
+                    else if( reader->name() == "priority" )
+                    {
+                        reader->readNext();
+                        hangingProtocol->setPriority( reader->text().toString().toDouble() );
                         reader->readNext();
                     }
                 }
@@ -234,22 +240,22 @@ HangingProtocolImageSet * HangingProtocolXMLReader::readImageSet( QXmlStreamRead
             restriction = m_restrictionsList.value( reader->text().toString().toInt()-1 );
             imageSet->addRestriction( restriction );
         }
-		else if( reader->name() == "type")
-		{
-			reader->readNext();
-			imageSet->setTypeOfItem( reader->text().toString() );
-		}
-		else if( reader->name() == "previous")
-		{
-			reader->readNext();
+        else if( reader->name() == "type")
+        {
+            reader->readNext();
+            imageSet->setTypeOfItem( reader->text().toString() );
+        }
+        else if( reader->name() == "previous")
+        {
+            reader->readNext();
             bool isPrevious = !(reader->text().toString().contains( "no" ));
-			imageSet->setIsPreviousStudy( isPrevious );
+            imageSet->setIsPreviousStudy( isPrevious );
 
             if( isPrevious )
             {
                 imageSet->setPreviousImageSetReference( reader->text().toString().toInt() );
             }
-		}
+        }
         else if( reader->name() == "imageSet" && reader->tokenType() == QXmlStreamReader::EndElement )
         {
             break;
@@ -280,21 +286,21 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
             reader->readNext();
             displaySet->setPosition( reader->text().toString() );
         }
-		else if( reader->name() == "patientOrientation" )
+        else if( reader->name() == "patientOrientation" )
         {
             reader->readNext();
-			displaySet->setPatientOrientation( reader->text().toString() );
+            displaySet->setPatientOrientation( reader->text().toString() );
         }
-		else if( reader->name() == "reconstruction" )
-		{
-			reader->readNext();
-			displaySet->setReconstruction( reader->text().toString() );
-		}
-		else if( reader->name() == "phase" )
-		{
-			reader->readNext();
-			displaySet->setPhase( reader->text().toString() );
-		}
+        else if( reader->name() == "reconstruction" )
+        {
+            reader->readNext();
+            displaySet->setReconstruction( reader->text().toString() );
+        }
+        else if( reader->name() == "phase" )
+        {
+            reader->readNext();
+            displaySet->setPhase( reader->text().toString() );
+        }
         else if( reader->name() == "displaySet" && reader->tokenType() == QXmlStreamReader::EndElement )
         {
             break;
@@ -307,12 +313,17 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
         else if( reader->name() == "iconType" )
         {
             reader->readNext();
-			displaySet->setIconType( reader->text().toString() );
+            displaySet->setIconType( reader->text().toString() );
         }
         else if( reader->name() == "alignment" )
         {
             reader->readNext();
-			displaySet->setAlignment( reader->text().toString() );
+            displaySet->setAlignment( reader->text().toString() );
+        }
+        else if( reader->name() == "toolActivation" )
+        {
+            reader->readNext();
+            displaySet->setToolActivation( reader->text().toString() );
         }
         reader->readNext();
     }

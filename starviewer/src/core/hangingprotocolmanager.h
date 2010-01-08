@@ -27,7 +27,7 @@ class Q2DViewerWidget;
 class Q2DViewer;
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class HangingProtocolManager : public QObject {
 Q_OBJECT
@@ -51,8 +51,8 @@ public:
     /// el primer indica la direcció de les rows i el segon la direcció de les columnes
     void applyDesiredDisplayOrientation(const QString &currentOrientation, const QString &desiredOrientation, Q2DViewer *viewer);
 
-	/// Buscar hanging protocols quan es sap que hi ha previes
-	QList<HangingProtocol * > getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs );
+    /// Buscar hanging protocols quan es sap que hi ha previes
+    QList<HangingProtocol * > getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs );
 
     /// Buscar els estudis previs
     Study * searchPreviousStudy( Study * referenceStudy, QList<Study*> previousStudies);
@@ -95,6 +95,7 @@ private:
         ViewersLayout * layout; /// Layout d'on hem de treure el downloadingWidget per posar-hi el widgetToDisplay
         HangingProtocolImageSet * imageSet; /// HangingProtocolImageSet que s'ha de satisfer, per escollir la serie descarregada que s'aplica
         HangingProtocol * hangingProtocol; /// HangingProtocol necessari per buscar la millor serie de les descarregades
+        HangingProtocolDisplaySet * displaySet; /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
     };
 
     /// Map per guardar les operacions de rotacio i flip per aplicar a les imatges. Valors: String posicions, nombre de rotacions, nombre flips

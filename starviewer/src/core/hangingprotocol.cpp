@@ -19,10 +19,11 @@ HangingProtocol::HangingProtocol(QObject *parent)
 {
     m_layout = new HangingProtocolLayout();
     m_mask = new HangingProtocolMask();
-	m_strictness = false;
-	m_allDiferent = false;
+    m_strictness = false;
+    m_allDiferent = false;
     m_hasPrevious = false;
     m_hasStudiesToDownload = false;
+    m_priority = -1;
 }
 
 
@@ -174,75 +175,102 @@ void HangingProtocol::show()
 
 void HangingProtocol::setIdentifier( int id )
 {
-	m_identifier = id;
+    m_identifier = id;
 }
 
 int HangingProtocol::getIdentifier() const
 {
-	return m_identifier;
+    return m_identifier;
 }
 
 bool HangingProtocol::gratherThan( HangingProtocol * hangingToCompare )
 {
-	int i;
-	bool hasViewWithPatientOrientation_1 = false;
-	bool hasViewWithPatientOrientation_2 = false;
-	bool hasReconstruction_1 = false;
-	bool hasReconstruction_2 = false;
+    int i;
+    bool hasViewWithPatientOrientation_1 = false;
+    bool hasViewWithPatientOrientation_2 = false;
+    bool hasReconstruction_1 = false;
+    bool hasReconstruction_2 = false;
 
     if( hangingToCompare == NULL ) return true;
 
-	if( this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets() )
-		return ( this->getNumberOfDisplaySets() > hangingToCompare->getNumberOfDisplaySets() );
+    // Estratègia per saber quin té més prioritat que un altre.
+    if( this->getPriority() != -1 )
+    {
+        if ( hangingToCompare->getPriority() != -1 )
+            return this->getPriority()> hangingToCompare->getPriority(); // Tots dos tenen prioritat
+        else  // El hanging a comparar no té prioritat
+        {
+            if( this->getPriority() == 10 ) // Si la prioritat és 10 és millor
+                return true;
+            else if ( this->getPriority() == 0 ) // Si la prioritat és 0, no el volem com a millor
+                return false;
+
+            // altrament continua mirant les condicions de més avall
+        }
+    }
+    else //El hanging actual no té prioritat
+    {
+        if ( hangingToCompare->getPriority() != -1 ) //El hanging a comparar si que te prioritat
+        {
+            if( hangingToCompare->getPriority() == 10 ) // Si la prioritat és 10 és millor
+                return false;
+            else if ( hangingToCompare->getPriority() == 0 ) // Si la prioritat és 0, no el volem com a millor
+                return true;
+
+            // altrament continua mirant les condicions de més avall
+        }
+    }
+
+    if( this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets() )
+        return ( this->getNumberOfDisplaySets() > hangingToCompare->getNumberOfDisplaySets() );
     else if( this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets() )
-		return ( this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets() );
-	else
-	{
-		i = 1;
-		while( !hasViewWithPatientOrientation_1 && !hasViewWithPatientOrientation_1 && i <= this->getNumberOfDisplaySets() )
-		{
-			hasViewWithPatientOrientation_1 = !(this->getDisplaySet( i )->getPosition().isEmpty());
-			i++;
-		}
+        return ( this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets() );
+    else
+    {
+        i = 1;
+        while( !hasViewWithPatientOrientation_1 && !hasViewWithPatientOrientation_1 && i <= this->getNumberOfDisplaySets() )
+        {
+            hasViewWithPatientOrientation_1 = !(this->getDisplaySet( i )->getPosition().isEmpty());
+            i++;
+        }
 
-		i = 1;
-		while( !hasViewWithPatientOrientation_2 && !hasViewWithPatientOrientation_2 && i <= hangingToCompare->getNumberOfDisplaySets() )
-		{
-			hasViewWithPatientOrientation_2 = !(hangingToCompare->getDisplaySet( i )->getPatientOrientation().isEmpty());
-			i++;
-		}
+        i = 1;
+        while( !hasViewWithPatientOrientation_2 && !hasViewWithPatientOrientation_2 && i <= hangingToCompare->getNumberOfDisplaySets() )
+        {
+            hasViewWithPatientOrientation_2 = !(hangingToCompare->getDisplaySet( i )->getPatientOrientation().isEmpty());
+            i++;
+        }
 
-		if( hasViewWithPatientOrientation_1 == hasViewWithPatientOrientation_2)
-		{
-			if( hasReconstruction_1 == hasReconstruction_2 ) 
-			{
-				return false; /// Són iguals
-			}
-			else return hasReconstruction_1;
-		}
-		else return hasViewWithPatientOrientation_1;
-
-	}
+        if( hasViewWithPatientOrientation_1 == hasViewWithPatientOrientation_2)
+        {
+            if( hasReconstruction_1 == hasReconstruction_2 ) 
+            {
+                return false; /// Són iguals
+            }
+            else return hasReconstruction_1;
+        }
+        else return hasViewWithPatientOrientation_1;
+    }
 }
 
 bool HangingProtocol::getStrictness() const
 {
-	return m_strictness;
+    return m_strictness;
 }
 
 void HangingProtocol::setStrictness( bool strictness )
 {
-	m_strictness = strictness;
+    m_strictness = strictness;
 }
 
 void HangingProtocol::setAllDiferent( bool allDiferent )
 {
-	m_allDiferent = allDiferent;
+    m_allDiferent = allDiferent;
 }
 
 bool HangingProtocol::getAllDiferent() const
 {
-	return m_allDiferent;
+    return m_allDiferent;
 }
 
 void HangingProtocol::setIconType( QString iconType )
@@ -275,5 +303,14 @@ bool HangingProtocol::hasStudiesToDownload()
     return m_hasStudiesToDownload;
 }
 
+void HangingProtocol::setPriority( double priority )
+{
+    m_priority = priority;
+}
+
+double HangingProtocol::getPriority()
+{
+    return m_priority;
+}
 
 }

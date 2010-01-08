@@ -17,7 +17,7 @@ class HangingProtocolImageSet;
 class HangingProtocolDisplaySet;
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class HangingProtocol : public QObject
 {
@@ -60,14 +60,14 @@ public:
     /// Obté el nombre total d'image sets
     int getNumberOfImageSets() const;
 
-	/// Obté el nombre total d'image sets
+    /// Obté el nombre total d'image sets
     int getNumberOfDisplaySets() const;
 
     /// Obté l'image set amb identificador "identificador"
     HangingProtocolImageSet * getImageSet( int identificador );
 
-	/// Obté el display set amb identificador "identificador"
-	HangingProtocolDisplaySet * getDisplaySet( int identificador ) const;
+    /// Obté el display set amb identificador "identificador"
+    HangingProtocolDisplaySet * getDisplaySet( int identificador ) const;
 
     /// Obté el display set corresponent a l'image set amb l'identificador detallat
     HangingProtocolDisplaySet * getDisplaySetOfImageSet( int numberOfImageSet );
@@ -75,26 +75,26 @@ public:
     /// Mètode per mostrar els valors
     void show();
 
-	/// Posar l'identificador al hanging protocol
-	void setIdentifier( int id );
+    /// Posar l'identificador al hanging protocol
+    void setIdentifier( int id );
 
-	/// Obtenir l'identificador del hanging protocol
-	int getIdentifier() const;
+    /// Obtenir l'identificador del hanging protocol
+    int getIdentifier() const;
 
-	/// Mètode per comparar hanging protocols
-	bool gratherThan( HangingProtocol * hangingToCompare );
+    /// Mètode per comparar hanging protocols
+    bool gratherThan( HangingProtocol * hangingToCompare );
 
-	/// Retorna si el mètode és estricte o no ho hes
-	bool getStrictness() const;
+    /// Retorna si el mètode és estricte o no ho hes
+    bool getStrictness() const;
 
-	/// Assigna si el mètode és estricte o no ho hes
-	void setStrictness( bool strictness );
+    /// Assigna si el mètode és estricte o no ho hes
+    void setStrictness( bool strictness );
 
-	/// Retorna si el hanging protocol ha de tenir totes les series diferents
-	bool getAllDiferent() const;
+    /// Retorna si el hanging protocol ha de tenir totes les series diferents
+    bool getAllDiferent() const;
 
-	/// Assigna si el hanging protocol ha de tenir totes les series diferents
-	void setAllDiferent( bool allDiferent );
+    /// Assigna si el hanging protocol ha de tenir totes les series diferents
+    void setAllDiferent( bool allDiferent );
 
     /// Assigna el tipus d'icona per representar-lo
     void setIconType( QString iconType );
@@ -114,11 +114,16 @@ public:
     /// Obté si el hanging protocol té estudis pendents de descarregar
     bool hasStudiesToDownload();
 
+    /// Assigna una prioritat al hanging protocol
+    void setPriority( double priority );
+
+    /// Retorna la prioritat del hanging protocol
+    double getPriority();
 
 private:
 
-	/// Identificador
-	int m_identifier;
+    /// Identificador
+    int m_identifier;
 
     /// Nom del hanging protocol
     QString m_name;
@@ -135,8 +140,8 @@ private:
     /// Data i hora de creació del hanging protocol
     QString m_dateTime;
 
-	/// Saber si es candidat
-	bool m_candidate;
+    /// Saber si es candidat
+    bool m_candidate;
 
     /// Definició de layouts
     HangingProtocolLayout * m_layout;
@@ -150,11 +155,11 @@ private:
     /// Llista de displays sets
     QList< HangingProtocolDisplaySet * > m_listOfDisplaySets;
 
-	/// Boolea que indica si és estricte o no. Si és estricte vol dir que per ser correcte tots els image sets han d'estar assignats.
-	bool m_strictness;
+    /// Boolea que indica si és estricte o no. Si és estricte vol dir que per ser correcte tots els image sets han d'estar assignats.
+    bool m_strictness;
 
-	/// Boolea que indica si les sèries han de ser totes diferents entre elles.
-	bool m_allDiferent;
+    /// Boolea que indica si les sèries han de ser totes diferents entre elles.
+    bool m_allDiferent;
 
     /// Indica el tipus d'icona per representar el hanging protocol
     QString m_iconType;
@@ -164,6 +169,9 @@ private:
 
     /// Informa si conté estudis per descarregar
     bool m_hasStudiesToDownload;
+
+    /// Prioritat del hanging protocol (per defecte -1)
+    double m_priority;
 };
 
 }

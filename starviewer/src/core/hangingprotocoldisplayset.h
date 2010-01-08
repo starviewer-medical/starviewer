@@ -12,7 +12,7 @@
 namespace udg {
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class HangingProtocolDisplaySet : public QObject
 {
@@ -34,16 +34,16 @@ public:
     /// Posar la posició del visualitzador
     void setPosition( QString position );
 
-	/// Posar la posició del pacient
-	void setPatientOrientation( QString string );
+    /// Posar la posició del pacient
+    void setPatientOrientation( QString string );
 
-	/// Posar la reconstruccio (axial, sagital, coronal)
-	void setReconstruction( QString reconstruction );
+    /// Posar la reconstruccio (axial, sagital, coronal)
+    void setReconstruction( QString reconstruction );
 
-	/// Posar la fase
-	void setPhase( QString phase );
+    /// Posar la fase
+    void setPhase( QString phase );
 
-	/// Obtenir l'identificador
+    /// Obtenir l'identificador
     int getIdentifier() const;
 
     /// Obtenir la descripcio
@@ -55,14 +55,14 @@ public:
     /// Obtenir la posició del visualitzador
     QString getPosition() const;
 
-	/// Obtenir la posició del pacient
-	QString getPatientOrientation() const;
+    /// Obtenir la posició del pacient
+    QString getPatientOrientation() const;
 
-	/// Obtenir la reconstruccio
-	QString getReconstruction() const;
+    /// Obtenir la reconstruccio
+    QString getReconstruction() const;
 
-	/// Obtenir la fase
-	QString getPhase() const;
+    /// Obtenir la fase
+    QString getPhase() const;
 
     /// Mètode per mostrar els valors
     void show();
@@ -85,6 +85,12 @@ public:
     /// Obté el costat que s'ha d'alinear la imatge
     QString getAlignment() const;
 
+    /// Assigna l'eina a activar al visualitzador
+    void setToolActivation( QString toolActive );
+    
+    /// Obté l'eina a activar al visualitzador
+    QString getToolActivation();
+
 private:
 
     /// Identificador de la seqüència
@@ -99,14 +105,14 @@ private:
     /// Posició a on es troba
     QString m_position;
 
-	/// Orientacio del pacient
-	QString m_patientOrientation;
+    /// Orientacio del pacient
+    QString m_patientOrientation;
 
-	/// Reconstruccio
-	QString m_reconstruction;
+    /// Reconstruccio
+    QString m_reconstruction;
 
-	/// Fase
-	QString m_phase;
+    /// Fase
+    QString m_phase;
 
     /// Llesca
     int m_sliceNumber;
@@ -116,6 +122,9 @@ private:
 
     /// Indica si la imatge ha d'estar alineada en algun costat
     QString m_alignment;
+
+    /// Indica la tool a activar
+    QString m_activateTool;
 };
 
 }
