@@ -309,7 +309,11 @@ Patient* DICOMDIRReader::retrieve(DicomMask maskToRetrieve)
 
     PatientFiller patientFiller;
 
-    return patientFiller.processDICOMFileList(files).first();
+    QList<Patient *> patientsList = patientFiller.processDICOMFileList(files);
+    if( patientsList.isEmpty() )
+        return NULL;
+    else
+        return patientsList.first();
 }
 
 //Per fer el match seguirem els criteris del PACS
