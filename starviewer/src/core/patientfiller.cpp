@@ -139,8 +139,8 @@ QList<Patient*> PatientFiller::processDICOMFileList(QStringList dicomFiles)
     foreach(QString dicomFile, dicomFiles)
     {
         DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFile);
-
-        this->processDICOMFile( dicomTagReader );
+        if( dicomTagReader->canReadFile() )
+            this->processDICOMFile( dicomTagReader );
 
         emit progress(++m_imageCounter);
     }
