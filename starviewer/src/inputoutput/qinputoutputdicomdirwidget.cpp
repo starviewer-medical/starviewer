@@ -240,10 +240,17 @@ void QInputOutputDicomdirWidget::view()
         else DEBUG_LOG("No s'ha pogut obtenir l'estudi amb UID " + studyInstanceUIDSelected );
     }
 
-    DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
     QApplication::restoreOverrideCursor();
-
-    emit viewPatients( Patient::mergePatients( selectedPatientsList ) );
+    
+    if( !selectedPatientsList.isEmpty() )
+    {
+        DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
+        emit viewPatients( Patient::mergePatients( selectedPatientsList ) );
+    }
+    else
+    {
+        QMessageBox::warning( this, ApplicationNameString, tr("No valid data found. Maybe some files are missing or corrupted.") );
+    }
 }
 
 void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstanceUID, DICOMDIRImporter::DICOMDIRImporterError error)
