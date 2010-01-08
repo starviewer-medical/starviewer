@@ -20,7 +20,7 @@ DicomPrintExtensionMediator::~DicomPrintExtensionMediator()
 
 DisplayableID DicomPrintExtensionMediator::getExtensionID() const
 {
-    return DisplayableID("DicomPrintExtension",tr("Dicom Print"));
+    return DisplayableID("DicomPrintExtension",tr("DICOM Print"));
 }
 
 bool DicomPrintExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
