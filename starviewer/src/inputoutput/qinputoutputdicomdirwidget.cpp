@@ -74,11 +74,12 @@ void  QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
     m_studyTreeWidget->setContextMenu( & m_contextMenuQStudyTreeWidget ); //Especifiquem que es el menu del dicomdir
 }
 
-void QInputOutputDicomdirWidget::openDicomdir()
+bool QInputOutputDicomdirWidget::openDicomdir()
 {
     Settings settings;
     QString dicomdirPath;
     Status state;
+    bool ok = false;
 
     dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr( "Open" ), settings.getValue( InputOutputSettings::LastOpenedDICOMDIRPath ).toString(), "DICOMDIR (DICOMDIR dicomdir)");
 
@@ -96,13 +97,14 @@ void QInputOutputDicomdirWidget::openDicomdir()
         {
             INFO_LOG( "Obert el dicomdir " + dicomdirPath );
             settings.setValue( InputOutputSettings::LastOpenedDICOMDIRPath, QFileInfo(dicomdirPath).dir().path() );
-        }
-
-        emit clearSearchTexts();//Netegem el filtre de cerca al obrir el dicomdir
-
-        //cerquem els estudis al dicomdir per a que es mostrin
-        queryStudy(DicomMask());
+            ok = true;
+            //cerquem els estudis al dicomdir per a que es mostrin
+            emit clearSearchTexts();//Netegem el filtre de cerca al obrir el dicomdir
+            queryStudy(DicomMask());
+        }        
     }
+
+    return ok;   
 }
 
 void QInputOutputDicomdirWidget::queryStudy( DicomMask queryMask )

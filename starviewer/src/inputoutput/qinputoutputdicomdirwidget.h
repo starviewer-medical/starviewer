@@ -44,8 +44,9 @@ public:
     void clear();
 
 public slots:
-    ///Obre un dicomdir
-    void openDicomdir();
+    /// Mostra un diàleg per escollir un arxiu de DICOMDIR i carregar-lo. 
+    /// Retorna fals si no s'ha escollit cap arxiu o l'arxiu escollit no és vàlid, cert altrament.
+    bool openDicomdir();
 
 signals:
     ///Signal que s'emet per indicar que es netegin els camps de cerca
