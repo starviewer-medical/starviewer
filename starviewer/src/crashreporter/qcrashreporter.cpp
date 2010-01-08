@@ -9,7 +9,9 @@
 #include "qcrashreporter.h"
 #include "crashreportersender.h"
 #include "../core/starviewerapplication.h"
+#include "logging.h"
 #include <QMovie>
+#include <QNetworkInterface>
 
 #ifdef WIN32
     #include <Windows.h>
@@ -39,6 +41,39 @@ QCrashReporter::QCrashReporter( const QStringList& args , QWidget *parent )
     
     m_sendReportLabel->hide();
     m_sendReportAnimation->hide();
+
+
+    // Busquem les adreces IP del host.
+    QString ipAddresses(""); 
+
+    foreach(QNetworkInterface inter, QNetworkInterface::allInterfaces())
+    {
+        if (inter.flags().testFlag(QNetworkInterface::IsRunning))
+        {
+            foreach (QNetworkAddressEntry entry, inter.addressEntries())
+            {
+                if ( inter.hardwareAddress() != "00:00:00:00:00:00" && entry.ip().toString().contains(".") && entry.ip().toString() != "127.0.0.1")
+                {
+                    if ( !ipAddresses.isEmpty() )
+                        ipAddresses += ", ";
+
+                    ipAddresses += entry.ip().toString();
+                }
+            }
+        }
+    }
+
+    QString hostInformation;
+    hostInformation = QString("%1: %2").arg(tr("IP")).arg(ipAddresses);
+
+    // En cas que estem a windows, afegim com a info del host el domini de l'usuari.
+#ifdef WIN32
+    char * userDomain = getenv ("USERDOMAIN");
+    if ( userDomain != NULL )
+        hostInformation += QString("\n%1: %2").arg( tr("User Domain") ).arg( userDomain );    
+#endif 
+
+    m_hostInformationTextEdit->setPlainText( hostInformation );
 
     connect(m_quitPushButton, SIGNAL( clicked() ), this, SLOT( quitButtonClickedSlot() ) );
     connect(m_restartPushButton, SIGNAL( clicked() ), this, SLOT( restartButtonClickedSlot() ) );
@@ -81,7 +116,15 @@ void QCrashReporter::sendReport()
     options.insert( "ProductName", ApplicationNameString );
     options.insert( "Version", StarviewerVersionString );
     options.insert( "Email", m_emailLineEdit->text() );
-    options.insert( "Comments", m_descriptionTextEdit->toPlainText() );
+
+    QString comments( m_descriptionTextEdit->toPlainText() );
+    if ( m_hostInformationCheckBox->isChecked() )
+    {
+        comments += QString("\n// %1:\n").arg(tr("Host information"));
+        comments += m_hostInformationTextEdit->toPlainText();
+    }
+
+    options.insert( "Comments", comments );
     options.insert( "CrashTime", QByteArray::number( QDateTime::currentDateTime().toTime_t() ) );
     // El valor 1 significa que es tindran en compte les condicions d'acceptacio programades al fitxer
     // de configuracio del "collector".
@@ -90,7 +133,16 @@ void QCrashReporter::sendReport()
 
     // Enviem el report només en cas de release.
 #ifdef QT_NO_DEBUG
-    CrashReporterSender::sendReport("http://starviewer.udg.edu/crashreporter/submit", m_minidumpPath, options);
+    bool success = CrashReporterSender::sendReport("http://starviewer.udg.edu/crashreporter/submit", m_minidumpPath, options);
+
+    if ( success )
+    {
+        INFO_LOG( QString("Crash report enviat: %1").arg(m_minidumpPath) );
+    }
+    else
+    {
+        ERROR_LOG( QString("Error al enviar el crash report: %1").arg(m_minidumpPath) );
+    }
 #endif
 
     m_sendReportAnimation->hide();
