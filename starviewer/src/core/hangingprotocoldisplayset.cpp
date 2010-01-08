@@ -41,7 +41,7 @@ void HangingProtocolDisplaySet::setPosition( QString position )
 
 void HangingProtocolDisplaySet::setPatientOrientation( QString orientation )
 {
-	m_patientOrientation = orientation;
+    m_patientOrientation = orientation;
 }
 
 int HangingProtocolDisplaySet::getIdentifier() const
@@ -66,27 +66,27 @@ QString HangingProtocolDisplaySet::getPosition() const
 
 QString HangingProtocolDisplaySet::getPatientOrientation() const
 {
-	return m_patientOrientation;
+    return m_patientOrientation;
 }
 
 void HangingProtocolDisplaySet::setReconstruction( QString reconstruction )
 {
-	m_reconstruction = reconstruction;
+    m_reconstruction = reconstruction;
 }
 
 QString HangingProtocolDisplaySet::getReconstruction() const
 {
-	return m_reconstruction;
+    return m_reconstruction;
 }
 
 void HangingProtocolDisplaySet::setPhase( QString phase )
 {
-	m_phase = phase;
+    m_phase = phase;
 }
-		
+
 QString HangingProtocolDisplaySet::getPhase() const
 {
-	return m_phase;
+    return m_phase;
 }
 
 void HangingProtocolDisplaySet::show()
@@ -122,6 +122,16 @@ void HangingProtocolDisplaySet::setAlignment( QString alignment )
 QString HangingProtocolDisplaySet::getAlignment() const
 {
     return m_alignment;
+}
+
+void HangingProtocolDisplaySet::setToolActivation( QString toolActive )
+{
+    m_activateTool = toolActive;
+}
+
+QString HangingProtocolDisplaySet::getToolActivation()
+{
+    return m_activateTool;
 }
 
 }
