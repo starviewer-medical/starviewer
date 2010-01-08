@@ -15,16 +15,16 @@
 
 namespace udg {
 
-DICOMTagReader::DICOMTagReader() : m_dicomData(0)
+DICOMTagReader::DICOMTagReader() : m_dicomData(0), m_hasValidFile(false)
 {
 }
 
-DICOMTagReader::DICOMTagReader(QString filename, DcmDataset *dcmDataset) : m_dicomData(0)
+DICOMTagReader::DICOMTagReader(QString filename, DcmDataset *dcmDataset) : m_dicomData(0), m_hasValidFile(false)
 {
     this->setDcmDataset(filename, dcmDataset);
 }
 
-DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0)
+DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0), m_hasValidFile(false)
 {
     this->setFile( filename );
 }
@@ -44,6 +44,7 @@ bool DICOMTagReader::setFile( QString filename )
     OFCondition status = dicomFile.loadFile( qPrintable(filename) );
     if( status.good() )
     {
+        m_hasValidFile = true;
         // eliminem l'objecte anterior si n'hi hagués
         if( m_dicomData )
         {
@@ -55,12 +56,18 @@ bool DICOMTagReader::setFile( QString filename )
     }
     else
     {
+        m_hasValidFile = false;
         DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
         ERROR_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
         return false;
     }
 
     return true;
+}
+
+bool DICOMTagReader::canReadFile() const
+{
+    return m_hasValidFile;
 }
 
 QString DICOMTagReader::getFileName() const
@@ -73,7 +80,11 @@ void DICOMTagReader::setDcmDataset(QString filename, DcmDataset *dcmDataset)
     Q_ASSERT(dcmDataset);
 
     m_filename = filename;
-
+    // Assumim que sempre serà un fitxer vàlid. 
+    /// TODO Cal fer alguna validació en aquests casos? 
+    // Potser en aquests casos el filename hauria de ser sempre buit ja que així expressem
+    // explícitament que llegim un element de memòria
+    m_hasValidFile = true;
     if (m_dicomData)
     {
         delete m_dicomData;
