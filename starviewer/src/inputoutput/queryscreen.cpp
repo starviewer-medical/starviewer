@@ -362,10 +362,11 @@ void QueryScreen::showOperationStateScreen()
 
 void QueryScreen::openDicomdir()
 {
-    m_qInputOutputDicomdirWidget->openDicomdir();
-
-    this->bringToFront();
-    m_tab->setCurrentIndex( DICOMDIRTab ); // mostre el tab del dicomdir
+    if( m_qInputOutputDicomdirWidget->openDicomdir() )
+    {
+        this->bringToFront();
+        m_tab->setCurrentIndex( DICOMDIRTab ); // mostre el tab del dicomdir
+    }
 }
 
 DicomMask QueryScreen::buildDicomMask()
