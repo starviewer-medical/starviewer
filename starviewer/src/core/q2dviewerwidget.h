@@ -48,6 +48,9 @@ public:
     //TODO solució temporal a la desactivacio de la sincronitzacio
     void disableSynchronization();
 
+    /// Activa/Desactiva la sincronització al viewer
+    void setSynchronized( bool synchronized );
+
 signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget
     void selected(Q2DViewerWidget * viewer);
