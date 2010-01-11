@@ -167,6 +167,9 @@ private:
     /// Retorna cert si és possible reservar la quantitat de memòria especificada.
     bool canAllocateMemory( int size );
 
+    /// Retorna cert si és el volum que volem visualitzar té un format compatible.
+    bool isSupportedVolume( Volume *volume );
+
 private slots:
     // TODO falta documentar el mètode
     void endComputeObscurance();

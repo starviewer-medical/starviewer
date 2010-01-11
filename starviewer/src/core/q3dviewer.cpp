@@ -421,6 +421,13 @@ QString Q3DViewer::getRenderFunctionAsString()
 
 void Q3DViewer::setInput( Volume* volume )
 {
+    if ( isSupportedVolume( volume ) )
+    {
+        DEBUG_LOG( "El format del volum no està suportat" );
+        WARN_LOG( "El format del volum no està suportat." );
+        QMessageBox::warning( this, tr("Not supported volume"), tr("Current volume cannot be opened because its format is not supported.") );
+        return;
+    }
     if ( !canAllocateMemory( volume->getVtkData()->GetNumberOfPoints() * sizeof(unsigned short) ) ) // unsigned short és el tipus que necessita el renderer
     {
         DEBUG_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
@@ -1183,6 +1190,11 @@ bool Q3DViewer::canAllocateMemory( int size )
     {
         return false;
     }
+}
+
+bool Q3DViewer::isSupportedVolume( Volume *volume )
+{
+    return volume->getVtkData()->GetNumberOfScalarComponents() != 1;
 }
 
 };  // end namespace udg {
