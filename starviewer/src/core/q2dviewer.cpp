@@ -2122,7 +2122,10 @@ void Q2DViewer::alignLeft()
     switch( m_lastView )
     {
         case Axial:
-            motionVector[0]=bounds[0]-viewerLeft[0];
+            if( m_isImageFlipped || (m_rotateFactor == 2) ) // Si la imatge està rotada o flipada, s'agafa l'altre punt
+                motionVector[0]=bounds[1]-viewerLeft[0];
+            else
+                motionVector[0]=bounds[0]-viewerLeft[0];
             break;
         case Sagital:
             motionVector[1]=bounds[2]-viewerLeft[1];
@@ -2158,7 +2161,10 @@ void Q2DViewer::alignRight()
     switch( m_lastView )
     {
         case Axial:
-            motionVector[0] = bounds[1]-viewerRight[0];
+            if( m_isImageFlipped || (m_rotateFactor == 2) ) // Si la imatge està rotada o flipada, s'agafa l'altre punt
+                motionVector[0] = bounds[0]-viewerRight[0];
+            else
+                motionVector[0] = bounds[1]-viewerRight[0];
             break;
         case Sagital:
             motionVector[1] = bounds[3]-viewerRight[1];
