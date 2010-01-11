@@ -446,11 +446,12 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
             HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
 
             if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
-                referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
+                if( referenceImageSet->getSeriesToDisplay() != 0 ) // no te sèrie anterior, per tant no és valid
+                    referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
             else // L'estudi de referència és un previ que encara no s'ha descarregat
                 referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
 
-            if( serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
+            if( (referenceStudy != 0) && serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
                 valid = false;
         }
         else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
@@ -630,11 +631,12 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
                 HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
 
                 if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
-                    referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
+                    if( referenceImageSet->getSeriesToDisplay() != 0 ) // no te sèrie anterior, per tant no és valid
+                        referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
                 else // L'estudi de referència és un previ que encara no s'ha descarregat
                     referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
 
-                if( serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
+                if( (referenceStudy != 0) && serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
                     valid = false;
             }
             i++;
