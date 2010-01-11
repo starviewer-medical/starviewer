@@ -49,13 +49,11 @@ private:
     /// Crea les connexions de signals i slots
     void createConnections();
 
+private slots:
+    /// Tanca la aplicació amb índex "index". Pensat per connectar-ho al signal de tancar pestanya
+    void closeApplicationByTabIndex(int index);
+
 private:
-    /// Botó per tancar la pestanya actual
-    QToolButton *m_closeTabButton;
-
-    /// Acció associada al tancar la pestanya
-    QAction *m_closeTabAction;
-
     /// Mapa que conté les extensions que tenim obertes, associades al seu nom
     QMap<QWidget *,QString> m_activeExtensions;
 };
