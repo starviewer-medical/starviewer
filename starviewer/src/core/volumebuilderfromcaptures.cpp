@@ -50,9 +50,8 @@ void VolumeBuilderFromCaptures::setParentStudy( Study * study )
 
 bool VolumeBuilderFromCaptures::setModality( QString modality )
 {
-    // Llista de modalitats vàlides (DICOM PS 3.3 C.7.3.1.1.1).
-    QStringList allowedModalities;
-    allowedModalities << "CR" << "CT" << "MR" << "US" << "BI" << "DD" << "ES" << "PT" << "ST" << "XA" << "RTIMAGE" << "RTSTRUCT" << "RTRECORD" << "DX" << "IO" << "GM" << "XC" << "AU" << "EPS" << "SR" << "OP" << "NM" << "OT" << "CD" << "DG" << "LS" << "RG" << "TG" << "RF" << "RTDOSE" << "RTPLAN" << "HC" << "MG" << "PX" << "SM" << "PR" << "ECG" << "HD" << "IVUS" << "SMR";
+    // Obtenim la llista de modalitats vàlides 
+    QStringList allowedModalities = Image::getSupportedModalities();
 
     if ( allowedModalities.contains( modality ) )
     {

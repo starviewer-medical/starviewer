@@ -176,6 +176,9 @@ public:
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
     static QString getProjectionLabelFromPlaneOrientation( const QString &orientation );
 
+    /// Ens retorna una llista amb les modalitats que suportem com a Image
+    static QStringList getSupportedModalities();
+
 private:
     /// Atributs DICOM
 
