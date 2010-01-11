@@ -160,10 +160,6 @@ private:
     ///Comprova que el port pel qual es reben els objectes dicom a descarregar no estigui sent utitlitzat per cap altre aplicació, si és aixì donar una missatge d'error
     void checkIncomingConnectionsPacsPortNotInUse();
 
-    ///En el cas que l'error que se li passa com a paràmetre realment sigui un error, mostrarà un missatge a l'usuari explicant-lo.
-    ///Es retorna true en el cas que hi hagi error, false si no n'hi ha.
-    bool showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat = "");
-
     ///inicialitza les variables necessaries, es cridat pel constructor
     void initialize();
 
