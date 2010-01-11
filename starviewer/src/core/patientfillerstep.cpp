@@ -7,6 +7,7 @@
 #include "patientfillerstep.h"
 #include "patientfillerinput.h"
 #include "series.h"
+#include "image.h"
 
 namespace udg {
 
@@ -30,9 +31,8 @@ bool PatientFillerStep::operator<(const PatientFillerStep &patientFillerStep) co
 
 bool PatientFillerStep::isImageSeries( Series *series )
 {
-    // TODO aquí caldria especificar quines són les modalitats que acceptem com a imatges
-    QStringList supportedModalitiesAsImage;
-    supportedModalitiesAsImage << "CT" << "MR" << "US" << "DX" << "MG" << "OT" << "RF" << "CR" << "ES" << "NM" << "DT" << "SC" << "PT" << "XA";
+    QStringList supportedModalitiesAsImage = Image::getSupportedModalities();
+
     return supportedModalitiesAsImage.contains( series->getModality() );
 }
 

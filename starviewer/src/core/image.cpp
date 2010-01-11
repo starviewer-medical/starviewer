@@ -431,4 +431,20 @@ QString Image::getProjectionLabelFromPlaneOrientation( const QString &orientatio
     return label;
 }
 
+QStringList Image::getSupportedModalities()
+{
+    // Modalitats extretes de DICOM PS 3.3 C.7.3.1.1.1
+    QStringList supportedModalities;
+    // Modalitats que sabem que són d'imatge i que en principi hem de poder suportar
+    supportedModalities << "CR" << "CT" << "MR" << "US" << "BI" << "DD" << "ES" << "PT" << "ST" << "XA" << "RTIMAGE" << "DX" << "IO" << "GM" << "XC" << "OP" << "NM" << "OT" << "CD" << "DG" << "LS" << "RG" << "TG" << "RF" << "MG" << "PX" << "SM" << "ECG" << "IVUS";
+    // Modalitats "no estàndars" però que es correspondrien amb imatges que podem suportar
+    supportedModalities << "SC";
+
+    // Aquestes modalitats en principi no són d'imatge. Les mantenim documentades per si calgués incloure-les a la llista
+    // TODO Cal comprovar si són modalitats d'imatge i eliminar-les segons el cas
+    // "RTSTRUCT" << "RTRECORD" << "EPS" << "RTDOSE" << "RTPLAN" << "HD" << "SMR" << "AU"
+
+    return supportedModalities;
+}
+
 }
