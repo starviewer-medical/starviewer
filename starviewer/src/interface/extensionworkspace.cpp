@@ -16,16 +16,11 @@ ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, QString name)
  : QTabWidget( parent )
 {
     this->setObjectName( name );
-    m_closeTabButton = 0;
+    // Fem que cada pestanya tingui el seu botonet de tancar
+    setTabsClosable(true);
 
     this->setTabPosition( QTabWidget::South );
-    m_closeTabButton = new QToolButton( this );
-    m_closeTabButton->setIcon( QIcon(":/images/tabRemove.png") );
-    m_closeTabButton->setAutoRaise( true );
-    m_closeTabButton->setIconSize( QSize(24,24) );
-    this->setCornerWidget( m_closeTabButton , Qt::BottomRightCorner );
     createConnections();
-    m_closeTabButton->hide();
 }
 
 ExtensionWorkspace::~ExtensionWorkspace()
@@ -34,15 +29,11 @@ ExtensionWorkspace::~ExtensionWorkspace()
 
 void ExtensionWorkspace::createConnections()
 {
-    connect( m_closeTabButton , SIGNAL( clicked() ), this , SLOT( closeCurrentApplication() ) );
+    connect( this, SIGNAL( tabCloseRequested(int) ), SLOT( closeApplicationByTabIndex(int) ) );
 }
 
 void ExtensionWorkspace::addApplication( QWidget *application , QString caption, const QString &extensionIdentifier )
 {
-    if( this->count() == 0 )
-    {
-        m_closeTabButton->show();
-    }
     INFO_LOG( "Afegim l'extensió: " + caption + " al workspace" );
     this->addTab( application , caption );
     this->setCurrentIndex( this->indexOf( application ) );
@@ -58,8 +49,7 @@ void ExtensionWorkspace::removeApplication( QWidget *application )
         this->removeTab( this->indexOf( application ) );
         // Eliminem l'extensió de la llista d'extensions actives
         m_activeExtensions.remove(application);
-        if( this->count() < 1 )
-            m_closeTabButton->hide();
+
     }
     else
     {
@@ -88,6 +78,11 @@ void ExtensionWorkspace::closeCurrentApplication()
     QWidget *w = this->currentWidget();
     removeApplication( w );
     delete w;
+}
+
+void ExtensionWorkspace::closeApplicationByTabIndex(int index)
+{
+    removeApplication( this->widget(index) );
 }
 
 };  // end namespace udg
