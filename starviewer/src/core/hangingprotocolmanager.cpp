@@ -442,7 +442,7 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
             int imageSetNumber = restriction.valueRepresentation.toInt();
 
             /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
-            Study * referenceStudy;
+            Study * referenceStudy = 0;
             HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
 
             if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
@@ -451,7 +451,7 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
             else // L'estudi de referència és un previ que encara no s'ha descarregat
                 referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
 
-            if( (referenceStudy != 0) && serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
+            if( (referenceStudy == 0) || (serie->getParentStudy()->getDate() >= referenceStudy->getDate()) )
                 valid = false;
         }
         else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
@@ -627,7 +627,7 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
                 int imageSetNumber = restriction.valueRepresentation.toInt();
 
                 /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
-                Study * referenceStudy;
+                Study * referenceStudy = 0;
                 HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
 
                 if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
@@ -636,7 +636,7 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
                 else // L'estudi de referència és un previ que encara no s'ha descarregat
                     referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
 
-                if( (referenceStudy != 0) && serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
+                if( (referenceStudy == 0) || (serie->getParentStudy()->getDate() >= referenceStudy->getDate()) )
                     valid = false;
             }
             i++;
@@ -708,7 +708,7 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
                     {
                         if( imageSet->isPreviousStudy() ) // Si és de tipus prèvi, se li dóna una segona oportunitat buscant a previs
                         {
-                            Study * referenceStudy;
+                            Study * referenceStudy = 0;
                             HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() );
 
                             if( referenceImageSet->isDownloaded() && referenceImageSet->getSeriesToDisplay() ) // L'estudi de referència està descarregat
@@ -716,7 +716,7 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
                             else // L'estudi de referència és un previ que encara no s'ha descarregat
                                 referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
 
-                            if( referenceStudy )
+                            if( referenceStudy != 0 )
                             {
                                 previousStudy = searchPreviousStudy( referenceStudy, previousStudies );
 
