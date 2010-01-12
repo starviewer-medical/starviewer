@@ -12,13 +12,18 @@ HEADERS += qapplicationmainwindow.h \
            appimportfile.h \
            extensionhandler.h \
            extensionworkspace.h \
-           qconfigurationdialog.h
+           qconfigurationdialog.h \
+           starviewerapplicationcommandline.h \
+           applicationcommandlineoptions.cpp
 SOURCES += qapplicationmainwindow.cpp \
            interfacesettings.cpp \
            appimportfile.cpp \
            extensionhandler.cpp \
            extensionworkspace.cpp \
-           qconfigurationdialog.cpp
+           qconfigurationdialog.cpp \
+           starviewerapplicationcommandline.cpp \
+           applicationcommandlineoptions.cpp
+           
 
 INCLUDEPATH += ../inputoutput \
                ../core

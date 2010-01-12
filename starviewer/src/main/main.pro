@@ -72,6 +72,7 @@ include(../log4cxx.inc)
 include(../cuda.inc)
 include(../compilationtype.inc)
 include(../threadweaver.inc)
+include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
 
 CONFIG -= staticlib
 

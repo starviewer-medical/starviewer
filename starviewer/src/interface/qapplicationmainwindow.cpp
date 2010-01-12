@@ -20,6 +20,8 @@
 #include "statswatcher.h"
 #include "databaseinstallation.h"
 #include "interfacesettings.h"
+#include "starviewerapplicationcommandline.h"
+#include "qstarviewersapwrapper.h"
 #include "coresettings.h" // pel LanguageLocale
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
@@ -36,15 +38,22 @@
 #include <QLocale>
 #include <QProgressDialog>
 
+#include <QPair>
 //Shortucts
 #include "shortcuts.h"
 #include "shortcutmanager.h"
 
 namespace udg{
 
+/* Per processar els opcions entrades per línia de comandes, hem d'utilitzar un Singleton de Starviewer
+Utilitzem un singletton  
+typedef SingletonPointer<StarviewerSingleApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
+
 QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     : QMainWindow( parent ), m_patient(0), m_isBetaVersion(false)
 {
+    connect(StarviewerSingleApplicationCommandLineSingleton::instance(), SIGNAL(newOptionsToRun()), SLOT(newCommandLineOptionsToRun()));
+
     this->setAttribute( Qt::WA_DeleteOnClose );
     this->setObjectName( name );
     m_extensionWorkspace = new ExtensionWorkspace( this );
@@ -550,6 +559,29 @@ void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )
             {
                 connect( volume, SIGNAL(progress(int)), SLOT( updateVolumeLoadProgressNotification(int) ) );
             }
+        }
+    }
+}
+
+void QApplicationMainWindow::newCommandLineOptionsToRun()
+{
+    QPair<StarviewerSingleApplicationCommandLine::StarviewerCommandLineOption, QString> optionValue;
+
+    while (StarviewerSingleApplicationCommandLineSingleton::instance()->takeOptionToRun(optionValue))
+    {
+        switch (optionValue.first)
+        {
+            case StarviewerSingleApplicationCommandLine::openBlankWindow:
+                INFO_LOG("Rebut argument de linia de comandes per obrir nova finestra");
+                openBlankWindow();
+                break;
+            case StarviewerSingleApplicationCommandLine::retrieveStudyFromAccessioNumber:
+                INFO_LOG("Rebut argument de linia de comandes per descarregar un estudi a traves del seu accession number");
+                QStarviewerSAPWrapper().sendRequestToLocalStarviewer(optionValue.second);
+                break;
+            default:
+                INFO_LOG("Argument de linia de comandes invalid");
+                break;
         }
     }
 }

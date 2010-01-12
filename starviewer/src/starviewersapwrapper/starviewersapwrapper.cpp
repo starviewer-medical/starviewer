@@ -11,8 +11,7 @@
 #include "../core/starviewerapplication.h"// definicions globals d'aplicació
 #include "../core/logging.h"
 #include "../inputoutput/inputoutputsettings.h"
-
-#include "qstarviewersapwrapper.h"
+#include <QProcess>
 
 /// configurem el logging
 // \TODO Còpia exacta del main.cpp de l'starviewer. Caldria refactoritzar-ho.
@@ -43,23 +42,29 @@ void printHelp()
     printf("\t Example calling 'starviewer_sapwrapper 123456' will retrieve the study with accession number 123456.\n\n");
 }
 
-///Connecta amb l'Starviewer i descarrega l'estudi amb Accession Number passat per paràmetre
+QString getStarviewerExecutableFilePath()
+{
+    #ifdef _WIN32
+        /*En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
+         *com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes 
+         * per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe" */
+
+        return "\"" + QCoreApplication::applicationDirPath() + "/starviewer.exe" + "\""; //afegim les cometes per si algun dels directori conté espai
+    #else 
+        return QCoreApplication::applicationDirPath() + "/starviewer";
+    #endif
+}
+
+///Engega un starviewer passant-li per comandes de línia el accessionNumber del estudi a descarragar
 void retrieveStudy(QString accessionNumber)
 {
-    udg::QStarviewerSAPWrapper starviewerSapWrapper;
-    bool isStarviewerRunning = false;
+    QProcess process;
+    QString starviewerCommandLine = " -accessionnumber " + accessionNumber; 
 
-    if (!starviewerSapWrapper.isStarviewerRunning())
-    {
-        isStarviewerRunning = starviewerSapWrapper.startStarviewer();   
-    }
-    else isStarviewerRunning = true;
-
-    if (isStarviewerRunning)
-    {
-        starviewerSapWrapper.sendRequestToLocalStarviewer(accessionNumber);
-    }
-    else INFO_LOG("StarviewerSAPWrapper::No es pot enviar la petició al Starviewer perquè no s'ha pogut obrir l'Starviewer");
+    /*Com que tenim implementat el QtSingleApplication a Starviewer.exe el que hem de fer simplement és executar una altra instància del Starviewer, aquesta
+      ja s'encarregarà de fer arribar la instància principal la petició de descàrrega d'un estudi*/
+    process.startDetached(getStarviewerExecutableFilePath() + starviewerCommandLine);
+    INFO_LOG("S'ha iniciat una nova instància de Starviewer");
 }
 
 int main(int argc, char *argv[])

@@ -130,6 +130,8 @@ private slots:
     /// TODO Millorar, de moment és bastant "xapussa"
     void showConfigurationDialog();
 
+    void newCommandLineOptionsToRun();
+
 private:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
