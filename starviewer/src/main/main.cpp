@@ -20,6 +20,7 @@
 #include "inputoutputsettings.h"
 #include "interfacesettings.h"
 #include "shortcuts.h"
+#include "starviewerapplicationcommandline.h"
 
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
@@ -30,6 +31,9 @@
 #include <QLocale>
 #include <QTextCodec>
 #include <QDir>
+#include <qtsingleapplication.h>
+
+typedef udg::SingletonPointer<udg::StarviewerSingleApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
 void configureLogging()
 {
@@ -95,9 +99,36 @@ void initQtPluginsDirectory()
 #endif
 }
 
+void printScreenInvalidCommandLineArguments(QString errorInvalidCommanLineArguments)
+{
+    qPrintable(QObject::tr("Starviewer - incorrect parameters"));
+    qPrintable(errorInvalidCommanLineArguments);
+}
+
+void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
+{
+    QString errorInvalidCommanLineArguments;
+
+    if (StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
+    {
+        if (!app.sendMessage(app.arguments().join(";"), 10000))
+        {
+            ERROR_LOG("No s'ha pogut enviar a la instancia principal la llista d'arguments, sembla que l'instancia principal no respon.");
+        }
+        INFO_LOG("S'ha enviat correctament a la instancia principal els arguments de la línia de comandes.");
+    }
+    else 
+    {
+        printScreenInvalidCommandLineArguments(errorInvalidCommanLineArguments);
+    }
+}
+
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    /*Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
+      una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
+     */
+    QtSingleApplication app(argc, argv);
 
     app.setOrganizationName( udg::OrganizationNameString );
     app.setOrganizationDomain( udg::OrganizationDomainString );
@@ -138,27 +169,53 @@ int main(int argc, char *argv[])
     // registrem els codecs decompressors JPEG
     DJDecoderRegistration::registerCodecs();
 
-    QPixmap splashPixmap;
-#ifdef STARVIEWER_LITE
-    splashPixmap.load(":/images/splashLite.png");
-#else
-    splashPixmap.load(":/images/splash.png");
-#endif
-    QSplashScreen *splash = new QSplashScreen( splashPixmap );
-    splash->show();
+    if (app.isRunning())
+    {
+        //Hi ha una altra instància del Starviewer executant-se
+        INFO_LOG("Hi ha una altra instancia de l'starviewer executant-se. S'enviaran els arguments de la linia de comandes a la instancia principal.");
 
-    udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
-    INFO_LOG("Creada finestra principal");
-    mainWin->show();
+        sendToFirstStarviewerInstanceCommandLineOptions(app);
+        return 0;
+    }
+    else
+    {
+        //Instància principal, no n'hi ha cap més executant-se
+        QString errorInvalidCommanLineArguments;
+        
+        udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
+        //Fem el connect per rebre els arguments de les altres instàncies
+        QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
 
-    QObject::connect( &app, SIGNAL( lastWindowClosed() ),
-                      &app, SLOT( quit() ));
-    splash->finish( mainWin );
-    delete splash;
+        if (app.arguments().count() > 1)
+        {
+            if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(app.arguments(), errorInvalidCommanLineArguments))
+            {
+                printScreenInvalidCommandLineArguments(errorInvalidCommanLineArguments);
+                return 0;
+            }
+        }
 
-    int returnValue = app.exec();
+        INFO_LOG("Creada finestra principal");
+        QPixmap splashPixmap;
+        #ifdef STARVIEWER_LITE
+        splashPixmap.load(":/images/splashLite.png");
+        #else
+        splashPixmap.load(":/images/splash.png");
+        #endif
+        QSplashScreen *splash = new QSplashScreen( splashPixmap );
+        splash->show();
 
-    udg::StatsWatcher::log("Es tanca l'aplicació");
+        mainWin->show();
 
-    return returnValue;
+        QObject::connect( &app, SIGNAL( lastWindowClosed() ),
+                          &app, SLOT( quit() ));
+        splash->finish( mainWin );
+        delete splash;
+            
+        int returnValue = app.exec();
+
+        udg::StatsWatcher::log("Es tanca l'aplicació");
+
+        return returnValue;
+    }
 }

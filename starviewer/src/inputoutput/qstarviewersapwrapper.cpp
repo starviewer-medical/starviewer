@@ -6,8 +6,8 @@
  ***************************************************************************/
 
 #include "qstarviewersapwrapper.h"
-#include "../core/logging.h"
-#include "../inputoutput/inputoutputsettings.h"
+#include "logging.h"
+#include "inputoutputsettings.h"
 
 #include <QTcpSocket>
 #include <QProcess>
@@ -66,59 +66,6 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
     }
 }
 
-bool QStarviewerSAPWrapper::isStarviewerRunning()
-{
-    Settings settings;
-    QTcpSocket tcpSocket;
-    QString locaHostAddress = "127.0.0.1";//IP del localhost
-    int starviewerRisPort = settings.getValue( InputOutputSettings::RisRequestsPort ).toInt();//Port pel que Starviewer espera peticions del RIS
-
-    INFO_LOG(QString("Comprovo si l'Starviewer està engegat. Intentaré connectar amb l'Starviewer pel port: %1").arg(QString().setNum(starviewerRisPort)));
-
-    tcpSocket.connectToHost(locaHostAddress, starviewerRisPort);//Connectem contra el localhost
-
-    if (!tcpSocket.waitForConnected(1000)) //Esperem que ens haguem connectat
-    {
-        if (tcpSocket.error() != QAbstractSocket::SocketTimeoutError)
-        {
-            errorConnecting(starviewerRisPort, tcpSocket.errorString());
-        }
-
-        INFO_LOG("QStarviewerSAPWrapper::Starviewer no ha respós, no està engegat");
-        return false;
-    }
-
-    tcpSocket.close();
-
-    INFO_LOG("QStarviewerSAPWrapper::Starviewer ha, respós està engegat");
-
-    return true;
-}
-
-bool QStarviewerSAPWrapper::startStarviewer()
-{
-    QString starviewerFilePath = getStarviewerExecutableFilePath();
-    bool starviewerRunning = false;
-    int tries = 0, maxTries = 10;
-    QProcess process;
-
-    INFO_LOG("QStarviewerSAPWrapper:Intento engegar Starviewer: " + starviewerFilePath);
-    process.startDetached(starviewerFilePath);
-
-    //Fem 10 intents per comprovar si l'Starviewer s'està executant
-    while (tries < maxTries && !starviewerRunning)
-    {
-        sleepCurrentProcess(2);//Adormim dos segons i comprovem si l'Starviewer Respón
-        starviewerRunning = isStarviewerRunning();
-        tries++;
-
-        if (!starviewerRunning)
-            INFO_LOG(QString("QStarviewerSAPWrapper:Intent %1 de %2 Starviewer encara no respón").arg(tries, maxTries));
-    }
-
-    return true;
-}
-
 QString QStarviewerSAPWrapper::getXmlPier(QString accessionNumber)
 {
     QString xml = "<?xml version='1.0' encoding='UTF-8'?><Msg Name='OpenStudies'><Param Name='AccessionNumber'>" + accessionNumber + "</Param></Msg>";
@@ -148,27 +95,4 @@ void QStarviewerSAPWrapper::errorClosing(QString errorDescription)
     ERROR_LOG("QStarviewerSAPWrapper::S'ha produit un error desconnectant del host, descripcio del error: " + errorDescription);
     printf(qPrintable(messageError));
 }
-
-void QStarviewerSAPWrapper::sleepCurrentProcess(uint secondsToSleep)
-{
-    #ifdef _WIN32
-    Sleep(secondsToSleep *1000);
-    #else
-    sleep(secondsToSleep);
-    #endif
-}
-
-QString QStarviewerSAPWrapper::getStarviewerExecutableFilePath()
-{
-    #ifdef _WIN32
-        /*En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
-         *com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes 
-         * per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe" */
-
-        return "\"" + QCoreApplication::applicationDirPath() + "/starviewer.exe" + "\""; //afegim les cometes per si algun dels directori conté espai
-    #else 
-        return QCoreApplication::applicationDirPath() + "/starviewer";
-    #endif
-}
-
 }

@@ -18,8 +18,7 @@ HEADERS = ../core/starviewerapplication.h \
           ../core/settingsparser.h \
           ../core/defaultsettings.h \
           ../core/settingsaccesslevelfilereader.h \
-          ../inputoutput/inputoutputsettings.h \
-          qstarviewersapwrapper.h
+          ../inputoutput/inputoutputsettings.h
 
 SOURCES = ../core/settingsregistry.cpp \
           ../core/settings.cpp \
@@ -27,8 +26,7 @@ SOURCES = ../core/settingsregistry.cpp \
           ../core/defaultsettings.cpp \
           ../inputoutput/inputoutputsettings.cpp \
           ../core/settingsaccesslevelfilereader.cpp \
-          starviewersapwrapper.cpp \
-          qstarviewersapwrapper.cpp
+          starviewersapwrapper.cpp 
 
 INCLUDEPATH += ../core
 

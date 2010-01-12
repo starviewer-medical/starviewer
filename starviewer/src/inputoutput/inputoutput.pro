@@ -85,6 +85,7 @@ HEADERS += databaseconnection.h \
     dicomdirburningapplication.h \
     risrequestmanager.h \
     previousstudiesmanager.h \
+    qstarviewersapwrapper.h \
     qwidgetselectpacstostoredicomimage.h \
     qpreviousstudieswidget.h \
     qexportertool.h
@@ -147,6 +148,7 @@ SOURCES += databaseconnection.cpp \
     dicomdirburningapplication.cpp \
     risrequestmanager.cpp \
     previousstudiesmanager.cpp \
+    qstarviewersapwrapper.cpp \
     qwidgetselectpacstostoredicomimage.cpp \
     qpreviousstudieswidget.cpp \
     qexportertool.cpp
