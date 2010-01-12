@@ -11,6 +11,6 @@ qtsingleapplication-uselib:!qtsingleapplication-buildlib {
 }
 
 win32 {
-    contains(CONFIG, shared):DEFINES += QT_QTSINGLEAPPLICATION_EXPORT
+    contains(TEMPLATE, lib):contains(CONFIG, shared):DEFINES += QT_QTSINGLEAPPLICATION_EXPORT
     else:qtsingleapplication-uselib:DEFINES += QT_QTSINGLEAPPLICATION_IMPORT
 }
