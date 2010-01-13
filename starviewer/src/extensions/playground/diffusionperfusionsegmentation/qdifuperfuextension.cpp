@@ -274,10 +274,14 @@ void QDifuPerfuSegmentationExtension::setDiffusionInput( Volume * input )
     m_diffusionSliceSpinBox->setMinimum( 0 );
     m_diffusionSliceSpinBox->setMaximum(m_diffusionInputVolume->getNumberOfSlicesPerPhase() - 1 );
 
-    m_selectedDiffusionImageSpinBox->setMaximum(m_diffusionInputVolume->getNumberOfPhases() -1);
+
+    disconnect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ), this, SLOT( setDiffusionImage(int) ) );
+	m_selectedDiffusionImageSpinBox->setMaximum(m_diffusionInputVolume->getNumberOfPhases() -1);
     m_selectedDiffusionImageSpinBox->setValue(m_diffusionInputVolume->getNumberOfPhases() -1);
 
     m_diffusionSliceSlider->setValue( m_diffusion2DView->getCurrentSlice() );
+	setDiffusionImage(m_diffusionInputVolume->getNumberOfPhases() - 1);
+    connect( m_selectedDiffusionImageSpinBox, SIGNAL( valueChanged(int) ), SLOT( setDiffusionImage(int) ) );
 }
 
 void QDifuPerfuSegmentationExtension::setMaxDiffusionImage( int max )
@@ -294,6 +298,9 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     m_diffusionMaxValue = (ItkImageType::PixelType)range[1];
 
     DEBUG_LOG( QString("diffusionMax=%1, diffusionMin=%2").arg(m_diffusionMaxValue).arg(m_diffusionMinValue) );
+
+    disconnect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), this, SLOT( viewThresholds(int) ) );
+    disconnect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), this, SLOT( viewThresholds(int) ) );
 
     m_strokeLowerValueSpinBox->setMinimum( m_diffusionMinValue );
     m_strokeLowerValueSpinBox->setMaximum( m_diffusionMaxValue );
@@ -317,7 +324,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_diffusion2DView->setInput( m_diffusionMainVolume );
     //m_diffusion2DView->resetWindowLevelToDefault();
-    m_diffusion2DView->render();
+    m_diffusion2DView->refresh();
 
     connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
     connect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
@@ -325,7 +332,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 
 void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
 {
-    if ( !input )
+	if ( !input )
     {
         ERROR_LOG( "setPerfusionInput: null input");
         return;
@@ -346,6 +353,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionInput( Volume * input )
     m_applyRegistrationPushButton->setEnabled( true );
 
     m_perfusionSliceSlider->setValue( m_perfusion2DView->getCurrentSlice() );
+	setPerfusionImage(m_perfusionInputVolume->getNumberOfPhases() - 1);
 }
 
 void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
