@@ -56,8 +56,13 @@ void EditorTool::initialize()
         double *range = m_2DViewer->getOverlayInput()->getVtkData()->GetScalarRange();
 
         m_outsideValue = (int)range[0];
-        m_insideValue  = (int)range[1];
-
+		if((int)range[0]!=(int)range[1])
+		{
+			m_insideValue  = (int)range[1];
+		}else{
+			//en cas que siguin iguals
+			m_insideValue  = (int)(range[0] + m_2DViewer->getCurrentColorWindow());
+		}
         int ext[6];
         int i,j,k;
         m_volumeCont = 0;
@@ -260,7 +265,7 @@ void EditorTool::setEditorPoint(  )
 
 void EditorTool::setPaintCursor()
 {
-    if(m_isLeftButtonPressed)
+    if((m_isLeftButtonPressed)&&(m_2DViewer->getOverlayInput()!=0))
     {
         setEditorPoint();
     }
