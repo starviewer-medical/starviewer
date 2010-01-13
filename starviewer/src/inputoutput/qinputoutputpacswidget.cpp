@@ -525,23 +525,15 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveWarning(QString 
 {
     QString message;
     PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
-
     /*TODO:S'ha de millorar els missatges d'error indicant quin estudi ha fallat amb nom de pacient i study ID, s'ha de fer que l'error emeti
      * en comptes del studyInstanceUID l'objecte Operation que conté la informació el patientName i el studyID */
 
-    switch (warning)
-    {
-        case QExecuteOperationThread::MoveWarningStatus :
-            message = tr("Some images of study %1 from PACS %2 can't be retrieved because may be corrupted.\n").arg(studyInstanceUID, pacs.getAETitle());
-            message += tr("The study is incomplet.");
-            QMessageBox::warning(this, ApplicationNameString, message);
-            break;
-        default:
-            message = tr("Some images of study %1 from PACS %2.\n").arg(studyInstanceUID, pacs.getAETitle());
-            message += tr("The study is incomplet.");
-            QMessageBox::warning(this, ApplicationNameString, message);
-            break;
-    }
+    // De moment només hi ha definit un sol tipus de warning, així que sempre mostrarem el mateix.
+    message = tr("There were problems to retrieve some images from study %1 from PACS %2. Those images may be missing in the local database.").arg(studyInstanceUID, pacs.getAETitle());
+    message += "\n";
+    message += tr("Try again later. If the problem persists, contact your system administrator.");
+
+    QMessageBox::warning(this, ApplicationNameString, message);
 }
 
 void QInputOutputPacsWidget::showQExecuteOperationThreadStoreWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreWarning warning)
