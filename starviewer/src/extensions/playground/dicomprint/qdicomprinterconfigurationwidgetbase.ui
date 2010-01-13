@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>620</width>
-    <height>594</height>
+    <height>691</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,7 +34,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>161</height>
+       <height>16777215</height>
       </size>
      </property>
      <column>
@@ -247,8 +247,8 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>100000</width>
-         <height>100000</height>
+         <width>16777215</width>
+         <height>100</height>
         </size>
        </property>
       </widget>
