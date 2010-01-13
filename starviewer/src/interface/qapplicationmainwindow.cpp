@@ -45,9 +45,8 @@
 
 namespace udg{
 
-/* Per processar els opcions entrades per línia de comandes, hem d'utilitzar un Singleton de Starviewer
-Utilitzem un singletton  
-typedef SingletonPointer<StarviewerSingleApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
+// Per processar els opcions entrades per línia de comandes, hem d'utilitzar un Singleton de Starviewer
+typedef SingletonPointer<StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
 QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
     : QMainWindow( parent ), m_patient(0), m_isBetaVersion(false)
@@ -565,17 +564,17 @@ void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )
 
 void QApplicationMainWindow::newCommandLineOptionsToRun()
 {
-    QPair<StarviewerSingleApplicationCommandLine::StarviewerCommandLineOption, QString> optionValue;
+    QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> optionValue;
 
     while (StarviewerSingleApplicationCommandLineSingleton::instance()->takeOptionToRun(optionValue))
     {
         switch (optionValue.first)
         {
-            case StarviewerSingleApplicationCommandLine::openBlankWindow:
+            case StarviewerApplicationCommandLine::openBlankWindow:
                 INFO_LOG("Rebut argument de linia de comandes per obrir nova finestra");
                 openBlankWindow();
                 break;
-            case StarviewerSingleApplicationCommandLine::retrieveStudyFromAccessioNumber:
+            case StarviewerApplicationCommandLine::retrieveStudyFromAccessioNumber:
                 INFO_LOG("Rebut argument de linia de comandes per descarregar un estudi a traves del seu accession number");
                 QStarviewerSAPWrapper().sendRequestToLocalStarviewer(optionValue.second);
                 break;
