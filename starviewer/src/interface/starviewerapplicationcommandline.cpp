@@ -1,4 +1,4 @@
-#include "StarviewerApplicationCommandLine.h"
+#include "starviewerapplicationcommandline.h"
 
 #include "applicationcommandlineoptions.h"
 #include "logging.h"

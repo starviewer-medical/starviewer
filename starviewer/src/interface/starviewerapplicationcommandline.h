@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGSTARVIEWERSINGLEAPPLICATIONCOMMANDLINE_H
-#define UDGSTARVIEWERSINGLEAPPLICATIONCOMMANDLINE_H
+#ifndef UDGSTARVIEWERAPPLICATIONCOMMANDLINE_H
+#define UDGSTARVIEWERAPPLICATIONCOMMANDLINE_H
 
 #include <QObject>
 #include <QPair>

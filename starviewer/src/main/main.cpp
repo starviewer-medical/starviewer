@@ -33,7 +33,7 @@
 #include <QDir>
 #include <qtsingleapplication.h>
 
-typedef udg::SingletonPointer<udg::StarviewerSingleApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
+typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
 void configureLogging()
 {
