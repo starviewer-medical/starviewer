@@ -12,8 +12,9 @@ ApplicationCommandLineOptions StarviewerApplicationCommandLine::getStarviewerApp
 {
     ApplicationCommandLineOptions starviewerCommandLineOptions;
 
+    //Configurem les opcions que Starviewer accepta des de línia de comandes
     #ifndef STARVIEWER_LITE //Opció no disponible Starviewer Lite
-    starviewerCommandLineOptions.addOption(accessionNumberOption, QObject::tr("Query the study with this accession number in the configurated default pacs and retrieve it"));
+    starviewerCommandLineOptions.addOption(accessionNumberOption, QObject::tr("Query the study with this accession number in the configurated default PACS and retrieve it"));
     #endif
 
     return starviewerCommandLineOptions;
@@ -43,9 +44,17 @@ bool StarviewerApplicationCommandLine::parseAndRun(const QString &argumentsListA
 
 bool StarviewerApplicationCommandLine::parseAndRun(const QString &argumentsListAsQString)
 {
-    QString unusedQString;
+    QString errorInvalidCommanLineArguments;
+    bool ok;
 
-    return parseAndRun(argumentsListAsQString, unusedQString);
+    ok = parseAndRun(argumentsListAsQString, errorInvalidCommanLineArguments);
+
+    if (!ok)
+    {
+        ERROR_LOG("Arguments de linia de comandes invalids: " + errorInvalidCommanLineArguments);
+    }
+
+    return ok;
 }
 
 bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QString &errorInvalidCommanLineArguments)

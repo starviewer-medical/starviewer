@@ -12,6 +12,8 @@
 
 namespace udg {
 
+const QString ApplicationCommandLineOptions::optionSelectorCharacter("-");
+
 bool ApplicationCommandLineOptions::addOption(QString optionName, QString description) 
 {
     if (!m_commandLineOptions.contains(optionName))
@@ -105,12 +107,12 @@ QString ApplicationCommandLineOptions::getParserErrorMessage()
 
 bool ApplicationCommandLineOptions::isAnOption(QString optionName)
 {
-    return optionName.startsWith("-"); //Les opcions sempre comencen "-"
+    return optionName.startsWith(optionSelectorCharacter); //Les opcions sempre comencen "-"
 }
 
 bool ApplicationCommandLineOptions::isAnArgument(QString argument)
 {
-    return !argument.startsWith("-");
+    return !argument.startsWith(optionSelectorCharacter);
 }
 
 }
