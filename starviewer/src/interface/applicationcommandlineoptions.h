@@ -58,6 +58,9 @@ public:
 
 private:
 
+    ///Conté caràcter que defineix si el paràmetre passat per línia de comandes és un option o un value 
+    static const QString optionSelectorCharacter;
+
     //Conté les opcions possibles que ens poden entrar des de la línia de comandes, i conté associada la descripció del que fa aquella opció
     QHash<QString, QString> m_commandLineOptions;
     //Conté les opcions parsejades entrades per comandes de línia amb el seu valor
