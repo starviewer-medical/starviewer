@@ -61,10 +61,10 @@ void retrieveStudy(QString accessionNumber)
     QProcess process;
     QString starviewerCommandLine = " -accessionnumber " + accessionNumber; 
 
-    /*Com que tenim implementat el QtSingleApplication a Starviewer.exe el que hem de fer simplement és executar una altra instància del Starviewer, aquesta
-      ja s'encarregarà de fer arribar la instància principal la petició de descàrrega d'un estudi*/
+    /*executem una instància del Starviewer utiltizant la opció de línia de comandes -accessionnumber "valor del accessio number"*/
+	
+	INFO_LOG("Starviewer_sapwrapper::S'iniciara nova instancia del Starviewer per demanar descarrega de l'estudi amb accession number" +  accessionNumber);
     process.startDetached(getStarviewerExecutableFilePath() + starviewerCommandLine);
-    INFO_LOG("S'ha iniciat una nova instància de Starviewer");
 }
 
 int main(int argc, char *argv[])
@@ -78,27 +78,12 @@ int main(int argc, char *argv[])
 
     configureLogging();
 
-    udg::InputOutputSettings inputOutputSettings;
-    inputOutputSettings.init();
-
     if (parametersList.count() == 2)
     {
         udg::Settings settings;
 
-        if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool()) //comprovem si el servei d'escolta del RIS està activat
-        {
-            //Hem d'agafar el segon paràmetre perquè el primer és el nom del programa
-            retrieveStudy(parametersList.at(1));
-        }
-        else 
-        {
-            QString message = QString("No es pot connectar amb %1 perquè no té activada l'opció d'escoltar les peticions del RIS").arg(udg::ApplicationNameString);
-
-            printf(qPrintable(message));
-            printf("Per activar l'opció, executeu l'Starviewer aneu al menú Eines->Configuració, allà escolliu el diàleg 'Escoltar peticions del RIS' i marqueu la opció 'Escoltar peticions del RIS pel port'");
-
-            INFO_LOG(message);
-        }
+        //Hem d'agafar el segon paràmetre perquè el primer és el nom del programa
+        retrieveStudy(parametersList.at(1));
     }
     else
     {
