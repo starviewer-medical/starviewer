@@ -46,7 +46,8 @@ bool ApplicationCommandLineOptions::parse()
     m_parserErrorMessage = "";
     argumentList.removeFirst();//Treiem el primer string que és el nom de l'aplicació;
 
-    while (!argumentList.isEmpty())
+    //Mentre hi hagi arguments per processar o no s'hagi produït un error parsegem els arguments
+    while (!argumentList.isEmpty() && m_parserErrorMessage.isEmpty())
     {
         parameter = argumentList.takeFirst();
 
@@ -61,7 +62,7 @@ bool ApplicationCommandLineOptions::parse()
                 lastParameterWasAnOption = true;
                 lastOption = parameter;
             }
-            else m_parserErrorMessage += parameter + QObject::tr(" is an invalid option.\n");
+            else m_parserErrorMessage +=  QObject::tr("Unknow option ") + optionSelectorCharacter + parameter + "\n";
         }
         else 
         {
@@ -71,7 +72,7 @@ bool ApplicationCommandLineOptions::parse()
                 //Si tenim un argument i l'últim paràmetre era un opció, vol dir aquest paràmetre és un argument
                 m_parsedOptions[lastOption] = parameter;
             }
-			else m_parserErrorMessage += parameter + QObject::tr(" ignored value.\n");
+			else m_parserErrorMessage += QObject::tr("Unexpected value ") + parameter + "\n";
 
             lastOption = "";
             lastParameterWasAnOption = false;
