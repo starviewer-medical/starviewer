@@ -99,12 +99,6 @@ void initQtPluginsDirectory()
 #endif
 }
 
-void printScreenInvalidCommandLineArguments(QString errorInvalidCommanLineArguments)
-{
-    qPrintable(QObject::tr("Starviewer - incorrect parameters"));
-    qPrintable(errorInvalidCommanLineArguments);
-}
-
 void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 {
     QString errorInvalidCommanLineArguments;
@@ -171,7 +165,7 @@ int main(int argc, char *argv[])
          *processar-los, si els arguments no són correctes no continuem i finalitzem Starviewer*/
         if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
         {
-            printScreenInvalidCommandLineArguments(errorInvalidCommanLineArguments);
+            std::cout << qPrintable(errorInvalidCommanLineArguments) << std::endl;
             ERROR_LOG("Arguments de linia de comandes invalids, error : " + errorInvalidCommanLineArguments);
             return 0;
         }
