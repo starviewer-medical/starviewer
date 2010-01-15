@@ -188,7 +188,9 @@ int main(int argc, char *argv[])
 
         if (app.arguments().count() > 1)
         {
-            if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(app.arguments(), errorInvalidCommanLineArguments))
+            /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per 
+             *executar els arguments rebuts, si els arguments no són correctes no continuem i finalitzem Starviewer*/
+            if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
             {
                 printScreenInvalidCommandLineArguments(errorInvalidCommanLineArguments);
                 return 0;
@@ -211,7 +213,14 @@ int main(int argc, char *argv[])
                           &app, SLOT( quit() ));
         splash->finish( mainWin );
         delete splash;
-            
+        
+        /*S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox, 
+          ja es llança mostrant-se la MainWindow.*/
+        if (app.arguments().count() > 1)
+        {
+            StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(app.arguments(), errorInvalidCommanLineArguments);
+        }
+
         int returnValue = app.exec();
 
         udg::StatsWatcher::log("Es tanca l'aplicació");
