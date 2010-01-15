@@ -109,18 +109,11 @@ void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 {
     QString errorInvalidCommanLineArguments;
 
-    if (StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
+    if (!app.sendMessage(app.arguments().join(";"), 10000))
     {
-        if (!app.sendMessage(app.arguments().join(";"), 10000))
-        {
-            ERROR_LOG("No s'ha pogut enviar a la instancia principal la llista d'arguments, sembla que l'instancia principal no respon.");
-        }
-        INFO_LOG("S'ha enviat correctament a la instancia principal els arguments de la línia de comandes.");
+        ERROR_LOG("No s'ha pogut enviar a la instancia principal la llista d'arguments, sembla que l'instancia principal no respon.");
     }
-    else 
-    {
-        printScreenInvalidCommandLineArguments(errorInvalidCommanLineArguments);
-    }
+    INFO_LOG("S'ha enviat correctament a la instancia principal els arguments de la línia de comandes.");
 }
 
 int main(int argc, char *argv[])
@@ -129,6 +122,7 @@ int main(int argc, char *argv[])
       una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
      */
     QtSingleApplication app(argc, argv);
+    QString errorInvalidCommanLineArguments;
 
     app.setOrganizationName( udg::OrganizationNameString );
     app.setOrganizationDomain( udg::OrganizationDomainString );
@@ -169,6 +163,20 @@ int main(int argc, char *argv[])
     // registrem els codecs decompressors JPEG
     DJDecoderRegistration::registerCodecs();
 
+    INFO_LOG("Iniciada nova instancia Starviewer amb el seguents arguments de linia de comandes " + app.arguments().join(" "));
+
+    if (app.arguments().count() > 1)
+    {
+        /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per 
+         *processar-los, si els arguments no són correctes no continuem i finalitzem Starviewer*/
+        if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
+        {
+            printScreenInvalidCommandLineArguments(errorInvalidCommanLineArguments);
+            ERROR_LOG("Arguments de linia de comandes invalids, error : " + errorInvalidCommanLineArguments);
+            return 0;
+        }
+    }
+
     if (app.isRunning())
     {
         //Hi ha una altra instància del Starviewer executant-se
@@ -180,22 +188,9 @@ int main(int argc, char *argv[])
     else
     {
         //Instància principal, no n'hi ha cap més executant-se
-        QString errorInvalidCommanLineArguments;
-        
         udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
         //Fem el connect per rebre els arguments de les altres instàncies
         QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
-
-        if (app.arguments().count() > 1)
-        {
-            /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per 
-             *executar els arguments rebuts, si els arguments no són correctes no continuem i finalitzem Starviewer*/
-            if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
-            {
-                printScreenInvalidCommandLineArguments(errorInvalidCommanLineArguments);
-                return 0;
-            }
-        }
 
         INFO_LOG("Creada finestra principal");
         QPixmap splashPixmap;
