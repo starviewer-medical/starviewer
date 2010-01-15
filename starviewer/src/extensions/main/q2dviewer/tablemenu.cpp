@@ -144,9 +144,9 @@ bool TableMenu::event( QEvent * event )
 {
     if ( event->type() == QEvent::Leave )
     {
+        hide();
         dropTable();
         initializeTable();
-        hide();
         return true;
     }
     else
@@ -162,11 +162,11 @@ void TableMenu::emitSelected( ItemMenu * selected )
     int rows = values.value( 0 ).toInt();
     int columns = values.value( 1 ).toInt();
 
-    emit selectedGrid( rows+1, columns+1 );
-
+    hide();
     dropTable();
     initializeTable();
-    hide();
+
+    emit selectedGrid( rows+1, columns+1 );
 }
 
 void TableMenu::dropTable()
