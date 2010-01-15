@@ -786,7 +786,8 @@ void HangingProtocolManager::previousStudyDownloaded()
             StructPreviousStudyDownloading * structPreviousStudyDownloading = m_studiesDownloading->value( study->getInstanceUID() );
 
             /// Busquem la millor serie de l'estudi que ho satisfa
-            Series * series = searchSerie( study->getSeries(), structPreviousStudyDownloading->imageSet, false, structPreviousStudyDownloading->hangingProtocol);
+            QList<Series *> studySeries = study->getSeries();
+            Series * series = searchSerie( studySeries, structPreviousStudyDownloading->imageSet, false, structPreviousStudyDownloading->hangingProtocol);
             
             Q2DViewerWidget * viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
             ViewersLayout * layout = structPreviousStudyDownloading->layout;
