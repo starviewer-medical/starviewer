@@ -102,6 +102,9 @@ private:
     /// Actualitza la informació que es mostra a l'usuari en el menú com a versió beta.
     void updateBetaVersionTextPosition();
 
+    ///Envia una petició per descarregar un estudi a través del seu accession number
+    void sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber);
+
 private slots:
 
     /**

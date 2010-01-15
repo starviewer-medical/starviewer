@@ -23,6 +23,8 @@
 #include "starviewerapplicationcommandline.h"
 #include "qstarviewersapwrapper.h"
 #include "coresettings.h" // pel LanguageLocale
+#include "inputoutputsettings.h"
+
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
 #include "hangingprotocolsloader.h"
@@ -576,12 +578,27 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
                 break;
             case StarviewerApplicationCommandLine::retrieveStudyFromAccessioNumber:
                 INFO_LOG("Rebut argument de linia de comandes per descarregar un estudi a traves del seu accession number");
-                QStarviewerSAPWrapper().sendRequestToLocalStarviewer(optionValue.second);
+                sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(optionValue.second);
                 break;
             default:
                 INFO_LOG("Argument de linia de comandes invalid");
                 break;
         }
+    }
+}
+
+void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber)
+{
+    Settings settings;
+
+    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
+    {
+        QStarviewerSAPWrapper().sendRequestToLocalStarviewer(accessionNumber);
+    }
+    else
+    {
+        //TODO:S'hauria de fer un missatge més genèric
+        QMessageBox::information(this, ApplicationNameString, tr("Please activate \"Listen RIS Request\" option in %1 configuration to retrieve studies from SAP.").arg(ApplicationNameString));
     }
 }
 
