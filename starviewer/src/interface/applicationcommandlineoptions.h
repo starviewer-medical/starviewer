@@ -15,10 +15,11 @@ class QString;
 namespace udg {
 
 /** Classe que ens parseja els arguments que ens entren per línia de comandes al executar l'aplicació. 
-    Els arguments de comandes de línia es composen de dos parts, la primera part s'anomena l'opció que indica quina comanda i la segona part 
-    s'anomena argument que indica amb quin valor s'ha d'executar la comanda, per exemple -accessionnumber 1234.
+    Els arguments de comandes de línia es composen de dos parts, la primera part s'anomena l'opció que indica quina comanda 
+    i la segona part s'anomena argument que indica amb quin valor s'ha d'executar la comanda, per exemple per -accessionnumber 1234 
+    accessionnumber és l'opció i 1234 l'argument.
     
-    Podem especificar opcions sense necessitar que continguin un argument tipus
+    Podem especificar opcions sense necessitar que continguin un argument tipus exeppre
         -version
 
     Podem especificar opcions amb un argument, si conté més d'un argument s'ignorarà i s'agafarà el primer 
