@@ -17,10 +17,22 @@ namespace udg {
 
 class ApplicationCommandLineOptions;
 
+/** Aquesta classe configura un objecte ApplicationCommandLineOptions amb les opcions per línia de comandes vàlides
+ * per starviewer, d'aquesta manera tenim centralitzat en un sol lloc la configuració dels paràmetres acceptats per Starviewer
+ * Aquesta classe pot ser utilitza tant per parsejar paràmetres entrats per línia de comandes a la mateixa instància o paràmetres
+ * rebuts des d'altres instàncies d'Starviewer a través de QtSingleApplication
+
+ * Ara Starviewer mateix accepta aquestes opcions:
+ *
+ *  -accessionnumber valorAccessionNumber : Cerca l'estudi amb el valor d'accession number especificat als PACS marcats per cercar per
+                                            defecte i si el troba el descarrega.
+ * (blanc)                                : Si s'executa una instància d'starviewer sense cap paràmetre s'obre starviewer amb una finestra en blanc.
+ */ 
 class StarviewerApplicationCommandLine : public QObject {
 Q_OBJECT
 public:
 
+    //Aquí definim les possibles opcions que ens poden demanar des de línia de comandes
     enum StarviewerCommandLineOption { openBlankWindow, retrieveStudyFromAccessioNumber };
 
     ///Retorna el ApplicationCommandLineOptions amb els arguments vàlids que accepta Starviewer per línia de comandes
@@ -62,7 +74,7 @@ private:
 
     static const QString accessionNumberOption;
 
-    //Guardem l'opció (argument de comanda de línies amb el seu valor*/ amb el seu valor
+    //Guardem l'opció (argument de comanda de línies) amb el seu valor
     QList<QPair<StarviewerCommandLineOption, QString> > m_commandLineOptionListToProcess;
 
     //QMutex per assegurar que dos processos accedeixin a la m_commandLineOptionListToProcess amb operacions d'escriptura
