@@ -31,13 +31,13 @@ public:
     
     /** Modifica la impressora amb identificador printerID amb els nous paràmetres guardats a newDicomPrinter.
         Retorna True si s'ha pogut modificar correctament i False si la impressora a modificar no existeix o no és vàlida. */    
-    bool updatePrinter( int &printerID, DicomPrinter &newDicomPrinter );
+    bool updatePrinter( int printerID, DicomPrinter &newDicomPrinter );
     
     /// Esborra la impressora amb identificador printerID.
-    void deletePrinter( int &printerID );
+    void deletePrinter( int printerID );
     
     /// Retorna un objecte DicomPrinter que conté les dades de la impressora amb identificador printerID.
-    DicomPrinter getPrinterByID( int pritnerID );
+    DicomPrinter getPrinterByID( int printerID );
     
     /// Retorna una llista de DicomPrinters que hi ha emmagatzemades al sistema.
     QList<DicomPrinter> getDicomPrinterList();

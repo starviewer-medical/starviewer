@@ -41,7 +41,7 @@ bool DicomPrinterManager::addPrinter( DicomPrinter &printer )
     return false;
 }
 
-bool DicomPrinterManager::updatePrinter( int &printerID, DicomPrinter &printer )
+bool DicomPrinterManager::updatePrinter( int printerID, DicomPrinter &printer )
 {
     Settings settings;
     int indexTrobat = this->indexOfPrinterInSettings(printer);
@@ -63,7 +63,7 @@ bool DicomPrinterManager::updatePrinter( int &printerID, DicomPrinter &printer )
     }
 }
 
-void DicomPrinterManager::deletePrinter( int &printerID )
+void DicomPrinterManager::deletePrinter( int printerID )
 {
     Settings settings;
     settings.removeListItem( DicomPrinterListSectionName, printerID );
