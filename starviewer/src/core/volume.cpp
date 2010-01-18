@@ -622,19 +622,20 @@ int Volume::readSingleFile( QString fileName )
         // llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage( QString( e.GetDescription() ) );
 
-        // TODO no sembla gaire correcte aquest "emit progress(100)"
+        // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
         emit progress( 100 );
     }
     catch( std::bad_alloc )
     {
         errorCode = OutOfMemory;
-        // TODO no sembla gaire correcte aquest "emit progress(100)"
+        // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
         emit progress( 100 );
     }
     
     if ( errorCode == NoError )
     {
         this->setData( m_reader->GetOutput() );
+        // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
         emit progress( 100 );
     }
     // TODO falta tractament d'errors!?
