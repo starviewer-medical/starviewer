@@ -625,6 +625,12 @@ int Volume::readSingleFile( QString fileName )
         // TODO no sembla gaire correcte aquest "emit progress(100)"
         emit progress( 100 );
     }
+    catch( std::bad_alloc )
+    {
+        errorCode = OutOfMemory;
+        // TODO no sembla gaire correcte aquest "emit progress(100)"
+        emit progress( 100 );
+    }
     
     if ( errorCode == NoError )
     {
