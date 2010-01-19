@@ -109,6 +109,8 @@ private:
     /// Comprova si se suporta el format de la sèrie i actualitza la interfície segons convingui.
     void updateVolumeSupport();
 
+    void setEnabledPrintControls(bool enabled);
+
 private:
     /// Gestor de tools pel viewer
     ToolManager *m_toolManager;
