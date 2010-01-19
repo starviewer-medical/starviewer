@@ -673,13 +673,6 @@ border: 1px solid  #680000;
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="m_cancelButton">
-            <property name="text">
-             <string>Cancel</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
        </layout>
@@ -754,6 +747,7 @@ border: 1px solid  #680000;
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
