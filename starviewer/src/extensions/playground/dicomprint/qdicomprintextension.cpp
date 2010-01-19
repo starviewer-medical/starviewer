@@ -154,14 +154,24 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
             noDefaultPrinter = false;
         }
     }
-    // Si no hi ha cap impressora per defecte fem que quedi seleccionada la primera de la llista.
-    if ( m_selectedPrinterComboBox->count() > 0 && noDefaultPrinter )
-    {
-        m_selectedPrinterComboBox->setCurrentIndex(0);
-        selectedDicomPrinterChanged(0);
+    
+    if ( m_selectedPrinterComboBox->count() > 0 )
+    { 
+        if (!m_noSupportedSeriesFrame->isVisible()) // Només ho habilitarem si la serie se suporta
+        {
+            setEnabledPrintControls(true);
+        }
+
+        // Si no hi ha cap impressora per defecte fem que quedi seleccionada la primera de la llista.
+        if ( noDefaultPrinter )
+        {
+            m_selectedPrinterComboBox->setCurrentIndex(0);
+            selectedDicomPrinterChanged(0);
+        }
     }
-    else if ( m_selectedPrinterComboBox->count() == 0 ) //Si no n'hi ha cap ho deshabilitem tot
+    else 
     {
+        setEnabledPrintControls(false);
         selectedDicomPrinterChanged(-1);
     }
 }
@@ -316,21 +326,18 @@ void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
         m_portLabel->setText(QString().setNum(selectedDicomPrinter.getPort()));
 
         m_qdicomPrinterBasicSettingsWidget->setDicomPrinterBasicSettings(selectedDicomPrinter);
-        m_qdicomPrinterBasicSettingsWidget->setEnabled(true);
-        
-        m_numberOfCopiesSpinBox->setEnabled(true);
+
+        if (!m_noSupportedSeriesFrame->isVisible())// Només ho habilitarem si la serie se suporta
+        {
+            setEnabledPrintControls(true);
+        }
     }
     else
     {
         m_hostNameLabel->setText("");
         m_portLabel->setText("");
 
-        m_qdicomPrinterBasicSettingsWidget->setEnabled(false);
-        m_selectionImagesFrame->setEnabled(false);
-        m_printButton->setEnabled(false);
-        m_currentImageRadioButton->setEnabled(false);
-        m_selectionImageRadioButton->setEnabled(false);
-        m_numberOfCopiesSpinBox->setEnabled(false);
+        setEnabledPrintControls(false);
     }
 }
 
@@ -468,6 +475,23 @@ DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter()
     return dicomPrinter;
 }
 
+void QDicomPrintExtension::setEnabledPrintControls(bool enable)
+{
+    m_selectionImagesFrame->setEnabled(enable); 
+    m_printButton->setEnabled(enable); 
+    m_currentImageRadioButton->setEnabled(enable); 
+    m_selectionImageRadioButton->setEnabled(enable); 
+    m_qdicomPrinterBasicSettingsWidget->setEnabled(enable);
+    m_numberOfCopiesSpinBox->setEnabled(enable);
+
+    /*Si ens indiquen que activem els controls d'impressió però tenim el checkbox d'imprimir només pàgina actual el frame
+      per seleccionar les imatges a imprimir el desactivem, no té sentit que estigui activat*/
+    if (enable && m_currentImageRadioButton->isChecked())
+    {
+        m_selectionImagesFrame->setEnabled(false);
+    }
+}
+
 void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage)
 {
     QString messageError;
@@ -535,10 +559,7 @@ void QDicomPrintExtension::updateVolumeSupport()
         {
             m_noSupportedSeriesFrame->setVisible(true);
 
-            m_selectionImagesFrame->setEnabled(false);
-            m_printButton->setEnabled(false);
-            m_currentImageRadioButton->setEnabled(false);
-            m_selectionImageRadioButton->setEnabled(false);
+            setEnabledPrintControls(false);
         }
     }
     else
@@ -550,10 +571,7 @@ void QDicomPrintExtension::updateVolumeSupport()
             //Només activem les opcions si tenim les opcions de l'impressora activats.
             if ( m_qdicomPrinterBasicSettingsWidget->isEnabled() )
             {
-                m_selectionImagesFrame->setEnabled(true);
-                m_printButton->setEnabled(true);
-                m_currentImageRadioButton->setEnabled(true);
-                m_selectionImageRadioButton->setEnabled(true);
+                setEnabledPrintControls(true);
             }
         }
     }
