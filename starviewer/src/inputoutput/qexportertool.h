@@ -6,6 +6,8 @@
 
 class vtkImageData;
 
+#include <vtkSmartPointer.h>
+
 namespace udg {
 
 class QViewer;
@@ -29,7 +31,7 @@ private:
     /// Inicialitza les opcions de captura segons el tipus de d'estudi. També inicialitza la llista de PACS.
     void initialize();
     /// Captura l'estat actual del visor passat al constructor @sa QExporterTool.
-    vtkImageData * captureCurrentView();
+    vtkSmartPointer<vtkImageData> captureCurrentView();
 
     /// Mètodes utilitzats per la generació de previsualitzacions
     void generateCurrentPreview();

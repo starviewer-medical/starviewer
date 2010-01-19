@@ -267,14 +267,14 @@ void QExporterTool::generateAndStoreNewSeries()
     this->close();
 }
 
-vtkImageData * QExporterTool::captureCurrentView()
+vtkSmartPointer<vtkImageData> QExporterTool::captureCurrentView()
 {
-    vtkWindowToImageFilter * windowToImageFilter = vtkWindowToImageFilter::New();
+    vtkSmartPointer<vtkWindowToImageFilter> windowToImageFilter = vtkSmartPointer<vtkWindowToImageFilter>::New();
     windowToImageFilter->SetInput( m_viewer->getRenderWindow() );
     windowToImageFilter->Update();
     windowToImageFilter->Modified();
 
-    vtkImageData *image = vtkImageData::New();
+    vtkSmartPointer<vtkImageData> image = vtkSmartPointer<vtkImageData>::New();
     image->ShallowCopy( windowToImageFilter->GetOutput() );
 
     return image;
