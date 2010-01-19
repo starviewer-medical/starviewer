@@ -144,8 +144,7 @@ QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolut
             ok = false;
             DEBUG_LOG(QString( "La imatge escalada té errors. Error: %1 ").arg( DicomImage::getString( scaledImage->getStatus())));
         }
-        // Cal esborrar la DicomImage per no tenir fugues de memòria
-        delete dicomImage;
+
     }
     else
     {
@@ -162,6 +161,10 @@ QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolut
         painter.setPen(Qt::white);
         painter.drawText(0, 0, resolution, resolution, Qt::AlignCenter | Qt::TextWordWrap, QObject::tr("Preview image not available"));
     }
+
+    // Cal esborrar la DicomImage per no tenir fugues de memòria
+    if ( dicomImage )
+        delete dicomImage;
 
     return thumbnail;
 }
