@@ -318,15 +318,6 @@ void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
         m_qdicomPrinterBasicSettingsWidget->setDicomPrinterBasicSettings(selectedDicomPrinter);
         m_qdicomPrinterBasicSettingsWidget->setEnabled(true);
         
-        if ( ! m_noSupportedSeriesFrame->isVisible() ) // Només ho habilitarem si la serie se suporta
-        {
-            m_selectionImagesFrame->setEnabled(true);
-            m_printButton->setEnabled(true);
-            m_cancelButton->setEnabled(true);
-            m_currentImageRadioButton->setEnabled(true);
-            m_selectionImageRadioButton->setEnabled(true);
-        }
-
         m_numberOfCopiesSpinBox->setEnabled(true);
     }
     else
