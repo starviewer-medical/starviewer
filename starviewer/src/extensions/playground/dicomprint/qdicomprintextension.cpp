@@ -328,7 +328,6 @@ void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomP
         m_qdicomPrinterBasicSettingsWidget->setEnabled(false);
         m_selectionImagesFrame->setEnabled(false);
         m_printButton->setEnabled(false);
-        m_cancelButton->setEnabled(false);
         m_currentImageRadioButton->setEnabled(false);
         m_selectionImageRadioButton->setEnabled(false);
         m_numberOfCopiesSpinBox->setEnabled(false);
@@ -538,7 +537,6 @@ void QDicomPrintExtension::updateVolumeSupport()
 
             m_selectionImagesFrame->setEnabled(false);
             m_printButton->setEnabled(false);
-            m_cancelButton->setEnabled(false);
             m_currentImageRadioButton->setEnabled(false);
             m_selectionImageRadioButton->setEnabled(false);
         }
@@ -554,7 +552,6 @@ void QDicomPrintExtension::updateVolumeSupport()
             {
                 m_selectionImagesFrame->setEnabled(true);
                 m_printButton->setEnabled(true);
-                m_cancelButton->setEnabled(true);
                 m_currentImageRadioButton->setEnabled(true);
                 m_selectionImageRadioButton->setEnabled(true);
             }
