@@ -20,7 +20,7 @@ QVector<float> cfBoxMeanDifference( vtkImageData *image, int radius );
 QVector<float> cfProbabilisticAmbientOcclusionGaussianChebychev( vtkImageData *image, int radius ); // estimació de P(Z >= z) amb Chebychev (variant)
 QVector<float> cfProbabilisticAmbientOcclusionBoxMeanChebychev( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb Chebychev (bona)
 QVector<float> cfProbabilisticAmbientOcclusionGaussian( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb una gaussiana
-//QVector<float> cfProbabilisticAmbientOcclusion( vtkImageData *image, int radius );  // càlcul real de P(Z >= z)
+QVector<float> cfProbabilisticAmbientOcclusionCube( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb la freqüència de Z >= z en un cub
 
 
 #ifdef __cplusplus
