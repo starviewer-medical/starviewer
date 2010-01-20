@@ -29,6 +29,8 @@ class DICOMWriter
 
 public:
 
+    virtual ~DICOMWriter();
+
     /// Crea una nova instància d'alguna de les classes que implementa la interfície
     static DICOMWriter * newInstance();
 
