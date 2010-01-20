@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>542</width>
+    <width>475</width>
     <height>874</height>
    </rect>
   </property>
@@ -715,7 +715,7 @@
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>Chebychev</string>
+               <string>Probabilistic AO (PAO)</string>
               </property>
              </widget>
             </item>
@@ -2985,10 +2985,34 @@
            </property>
           </widget>
          </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_56">
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item>
           <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGaussianPushButton">
            <property name="text">
             <string>PAO Gaussian</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionCubePushButton">
+           <property name="text">
+            <string>PAO cube</string>
            </property>
           </widget>
          </item>
