@@ -15,8 +15,10 @@ extern "C" {
 
 QVector<float> cfGaussianDifference( vtkImageData *image, int radius );
 QVector<float> cfBoxMeanDifference( vtkImageData *image, int radius );
-QVector<float> cfGaussianChebychev( vtkImageData *image, int radius );
-QVector<float> cfBoxMeanChebychev( vtkImageData *image, int radius );
+
+QVector<float> cfGaussianChebychev( vtkImageData *image, int radius );  // variant de Chebychev
+QVector<float> cfBoxMeanChebychev( vtkImageData *image, int radius );   // Chebychev autèntica
+QVector<float> cfGaussian( vtkImageData *image, int radius );   // estimació de P(Z >= z) amb una gaussiana en lloc de Chebychev
 
 
 #ifdef __cplusplus

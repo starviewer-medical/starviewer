@@ -2985,6 +2985,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="m_gaussianPushButton">
+           <property name="text">
+            <string>Gaussian</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
