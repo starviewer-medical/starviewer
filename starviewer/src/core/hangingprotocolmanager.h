@@ -62,6 +62,9 @@ private slots:
     /// S'ha descarregat un estudi previ demanat
     void previousStudyDownloaded();
 
+    /// Slot que comprova si l'error a la descarrega d'un estudi és un dels que s'estava esperan
+    void errorDowlonadingPreviousStudies(QString studyUID);
+
 private:
     /// Mira si el protocol es pot aplicar al pacient
     bool isValid( HangingProtocol *protocol, Patient *patient);

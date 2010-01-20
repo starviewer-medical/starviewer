@@ -256,8 +256,9 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
             m_patient = patient;
 
             connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );
-            previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
+            connect( previousStudiesManager, SIGNAL(errorDownloadingPreviousStudy(QString)), SLOT( errorDowlonadingPreviousStudies(QString) ) );
 
+            previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
         }
         else
         {
@@ -829,6 +830,15 @@ void HangingProtocolManager::previousStudyDownloaded()
             if( m_studiesDownloading->empty() )
                 structPreviousStudyDownloading->hangingProtocol->setHasStudiesToDownload( false );
         }
+    }
+}
+
+void HangingProtocolManager::errorDowlonadingPreviousStudies(QString studyUID)
+{
+    if( m_studiesDownloading->contains( studyUID ) )//si és un element que estavem esperant
+    {
+        StructPreviousStudyDownloading* element = m_studiesDownloading->take( studyUID ); // s'agafa i es treu de la llista
+        element->layout->quitDownloadingItem( element->widgetToDisplay, element->downloadingWidget ); // es treu el label de downloading
     }
 }
 
