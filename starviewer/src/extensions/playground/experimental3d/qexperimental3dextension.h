@@ -224,6 +224,7 @@ private slots:
     void boxMeanFilter();
     void gaussianChebychev();
     void boxMeanChebychev();
+    void gaussian();
 
 private:
 
