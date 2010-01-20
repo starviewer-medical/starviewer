@@ -16,9 +16,11 @@ extern "C" {
 QVector<float> cfGaussianDifference( vtkImageData *image, int radius );
 QVector<float> cfBoxMeanDifference( vtkImageData *image, int radius );
 
-QVector<float> cfGaussianChebychev( vtkImageData *image, int radius );  // variant de Chebychev
-QVector<float> cfBoxMeanChebychev( vtkImageData *image, int radius );   // Chebychev autèntica
-QVector<float> cfGaussian( vtkImageData *image, int radius );   // estimació de P(Z >= z) amb una gaussiana en lloc de Chebychev
+// Mètodes on calculem l'ambient occlusion com la probabilitat que un vòxel tingui un valor més baix que els del seu entorn (P(Z >= z))
+QVector<float> cfProbabilisticAmbientOcclusionGaussianChebychev( vtkImageData *image, int radius ); // estimació de P(Z >= z) amb Chebychev (variant)
+QVector<float> cfProbabilisticAmbientOcclusionBoxMeanChebychev( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb Chebychev (bona)
+QVector<float> cfProbabilisticAmbientOcclusionGaussian( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb una gaussiana
+//QVector<float> cfProbabilisticAmbientOcclusion( vtkImageData *image, int radius );  // càlcul real de P(Z >= z)
 
 
 #ifdef __cplusplus
