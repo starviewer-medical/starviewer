@@ -112,8 +112,8 @@ void PreviousStudiesManager::errorQueryingStudy(PacsDevice pacs)
       d'errors en PACS emesos*/
     if (!m_pacsDeviceIDErrorEmited.contains(pacs.getID()))
     {
-	    m_pacsDeviceIDErrorEmited.append(pacs.getID());
-	    emit errorQueryingPreviousStudies(pacs);
+        m_pacsDeviceIDErrorEmited.append(pacs.getID());
+        emit errorQueryingPreviousStudies(pacs);
     }
 }
 
