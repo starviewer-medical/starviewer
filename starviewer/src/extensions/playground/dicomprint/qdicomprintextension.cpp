@@ -568,8 +568,8 @@ void QDicomPrintExtension::updateVolumeSupport()
         {
             m_noSupportedSeriesFrame->setVisible(false);
 
-            //Només activem les opcions si tenim les opcions de l'impressora activats.
-            if ( m_qdicomPrinterBasicSettingsWidget->isEnabled() )
+            //Només activem les opcions si tenim impressores.
+            if ( m_selectedPrinterComboBox->count() > 0 )
             {
                 setEnabledPrintControls(true);
             }
