@@ -2924,7 +2924,6 @@ void QExperimental3DExtension::gaussianFilter()
     substract->SetOperationToSubtract();
     substract->Update();
 
-    // De moment ho posem com a VoMI
     vtkImageData *difference = substract->GetOutput();
     float *data = reinterpret_cast<float*>( difference->GetScalarPointer() );
     m_spatialImportanceFunction.resize( m_volume->getSize() );
