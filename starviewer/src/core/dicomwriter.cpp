@@ -12,6 +12,11 @@
 
 namespace udg {
 
+DICOMWriter::~DICOMWriter()
+{
+
+}
+
 DICOMWriter * DICOMWriter::newInstance() {
     return new DICOMWriterDCMTK();
 }
