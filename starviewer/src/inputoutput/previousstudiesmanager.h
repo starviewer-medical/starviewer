@@ -60,6 +60,9 @@ signals:
     /// Signal que s'emet quan s'ha descarregat un estudi.
     void previousStudyRetrieved(QString downloadedStudyUID);
 
+    /// Signal que s'emet per indicar que s'ha produït un error durant la descarrega d'un estudi (pot ser previ o no)
+    void errorDownloadingPreviousStudy(QString studyUID);
+
 private slots:
 
     ///Slot que s'executa quan s'ha acabat la consulta d'estudis previs a PacsManager
