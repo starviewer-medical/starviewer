@@ -719,7 +719,7 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
 
                             if( referenceStudy != 0 )
                             {
-                                previousStudy = searchPreviousStudy( referenceStudy, previousStudies );
+                                previousStudy = searchPreviousStudy( hangingProtocol, referenceStudy, previousStudies );
 
                                 if( previousStudy != 0 ) //S'ha trobat pendent de descarrega
                                 {
@@ -750,7 +750,7 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
     return previousCandidates;
 }
 
-Study * HangingProtocolManager::searchPreviousStudy( Study * referenceStudy, QList<Study*> previousStudies)
+Study * HangingProtocolManager::searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, QList<Study*> previousStudies)
 {
     Study * previousStudy = 0;
     bool found = false;
@@ -764,8 +764,18 @@ Study * HangingProtocolManager::searchPreviousStudy( Study * referenceStudy, QLi
 
         if( study->getDate() < referenceStudy->getDate() )
         {
-            previousStudy = study;
-            found = true;
+            QStringList modalities = study->getModalities();
+            int i = 0;
+
+            while( !found  && i < modalities.size() )
+            {
+                if( protocol->getHangingProtocolMask()->getProtocolList().contains( modalities.value(i) ) )
+                {
+                    previousStudy = study;
+                    found = true;
+                }
+                i++;
+            }
         }
         studyNumber++;
     }

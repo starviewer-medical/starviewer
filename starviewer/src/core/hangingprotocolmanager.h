@@ -55,7 +55,7 @@ public:
     QList<HangingProtocol * > getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs );
 
     /// Buscar els estudis previs
-    Study * searchPreviousStudy( Study * referenceStudy, QList<Study*> previousStudies);
+    Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, QList<Study*> previousStudies);
 
 private slots:
 
