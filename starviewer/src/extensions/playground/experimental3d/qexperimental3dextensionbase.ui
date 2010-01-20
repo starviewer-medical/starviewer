@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>475</width>
+    <width>542</width>
     <height>874</height>
    </rect>
   </property>
@@ -710,7 +710,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_54">
             <item>
-             <widget class="QRadioButton" name="m_baseChebychevRadioButton">
+             <widget class="QRadioButton" name="m_baseProbabilisticAmbientOcclusionRadioButton">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -720,7 +720,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="m_baseChebychevFactorLabel">
+             <widget class="QLabel" name="m_baseProbabilisticAmbientOcclusionFactorLabel">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -733,7 +733,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="m_baseChebychevFactorDoubleSpinBox">
+             <widget class="QDoubleSpinBox" name="m_baseProbabilisticAmbientOcclusionFactorDoubleSpinBox">
               <property name="enabled">
                <bool>false</bool>
               </property>
@@ -1168,12 +1168,12 @@
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="m_opacityChebychevCheckBox">
+            <widget class="QCheckBox" name="m_opacityProbabilisticAmbientOcclusionCheckBox">
              <property name="enabled">
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Chebychev</string>
+              <string>PAO</string>
              </property>
             </widget>
            </item>
@@ -1408,7 +1408,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_55">
          <item>
-          <widget class="QCheckBox" name="m_chebychevCheckBox">
+          <widget class="QCheckBox" name="m_probabilisticAmbientOcclusionCheckBox">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1418,7 +1418,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="m_chebychevFactorLabel">
+          <widget class="QLabel" name="m_probabilisticAmbientOcclusionFactorLabel">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1431,7 +1431,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="m_chebychevFactorDoubleSpinBox">
+          <widget class="QDoubleSpinBox" name="m_probabilisticAmbientOcclusionFactorDoubleSpinBox">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -2955,14 +2955,14 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_53">
          <item>
-          <widget class="QLabel" name="m_chebychevRadiusLabel">
+          <widget class="QLabel" name="m_probabilisticAmbientOcclusionRadiusLabel">
            <property name="text">
             <string>Radius</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="m_chebychevRadiusSpinBox">
+          <widget class="QSpinBox" name="m_probabilisticAmbientOcclusionRadiusSpinBox">
            <property name="minimum">
             <number>1</number>
            </property>
@@ -2972,23 +2972,23 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_chebychevGaussianPushButton">
+          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGaussianChebychevPushButton">
            <property name="text">
-            <string>Gaussian Chebychev</string>
+            <string>PAO Gaussian Chebychev</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_chebychevBoxMeanPushButton">
+          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionBoxMeanChebychevPushButton">
            <property name="text">
-            <string>Box mean Chebychev</string>
+            <string>PAO Box mean Chebychev</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_gaussianPushButton">
+          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGaussianPushButton">
            <property name="text">
-            <string>Gaussian</string>
+            <string>PAO Gaussian</string>
            </property>
           </widget>
          </item>

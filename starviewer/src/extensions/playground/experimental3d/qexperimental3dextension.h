@@ -213,7 +213,7 @@ private slots:
     void opacityVomiChecked( bool checked );
     void opacitySaliencyChecked( bool checked );
     void opacityFilteringChecked( bool checked );
-    void opacityChebychevChecked( bool checked );
+    void opacityProbabilisticAmbientOcclusionChecked( bool checked );
 
     void setVmiOneViewpointMaximum( int maximum );
 
@@ -222,9 +222,9 @@ private slots:
     // Filtering
     void gaussianFilter();
     void boxMeanFilter();
-    void gaussianChebychev();
-    void boxMeanChebychev();
-    void gaussian();
+    void probabilisticAmbientOcclusionGaussianChebychev();
+    void probabilisticAmbientOcclusionBoxMeanChebychev();
+    void probabilisticAmbientOcclusionGaussian();
 
 private:
 
@@ -261,7 +261,7 @@ private:
     // Filtering
     QVector<float> m_spatialImportanceFunction; // ΔD = G * D − D
     float m_maximumSpatialImportanceFunction;
-    QVector<float> m_chebychev;
+    QVector<float> m_probabilisticAmbientOcclusion;
 
     /// Cert quan estiguem executant el l'extensió interactivament.
     bool m_interactive;

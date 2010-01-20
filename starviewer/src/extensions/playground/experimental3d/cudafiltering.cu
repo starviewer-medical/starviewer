@@ -455,7 +455,7 @@ __global__ void finalChebychevKernel(float *result, float *result2, cudaExtent d
 }
 
 
-QVector<float> cfGaussianChebychev(vtkImageData *image, int radius)
+QVector<float> cfProbabilisticAmbientOcclusionGaussianChebychev(vtkImageData *image, int radius)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -637,7 +637,7 @@ QVector<float> cfGaussianChebychev(vtkImageData *image, int radius)
 }
 
 
-QVector<float> cfBoxMeanChebychev(vtkImageData *image, int radius)
+QVector<float> cfProbabilisticAmbientOcclusionBoxMeanChebychev(vtkImageData *image, int radius)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -841,7 +841,7 @@ __global__ void finalGaussianKernel(float *result, float *result2, cudaExtent di
 }
 
 
-QVector<float> cfGaussian(vtkImageData *image, int radius)
+QVector<float> cfProbabilisticAmbientOcclusionGaussian(vtkImageData *image, int radius)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
