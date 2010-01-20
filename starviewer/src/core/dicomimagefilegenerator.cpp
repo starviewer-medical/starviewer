@@ -99,6 +99,8 @@ bool DICOMImageFileGenerator::generateSCDICOMFiles()
 
         image->setPath( writer->getPath() );
 
+        delete writer;
+
     }
 
     return true;
