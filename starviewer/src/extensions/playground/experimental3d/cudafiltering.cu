@@ -442,11 +442,16 @@ __global__ void finalChebychevKernel(float *result, float *result2, cudaExtent d
     uint i = x + y * dims.width + z * dims.width * dims.height;
 
     float mean = result[i];         // E[Z]
-    float squaresMean = result2[i]; // E[Z²]
 
-    float variance = squaresMean - mean * mean;
-    float a = value - mean;  // z - E[Z]
-    result[i] = variance / (variance + a * a);  // Chebychev inequality
+    if (value > mean)
+    {
+        float squaresMean = result2[i]; // E[Z²]
+
+        float variance = squaresMean - mean * mean;
+        float a = value - mean;  // z - E[Z]
+        result[i] = variance / (variance + a * a);  // Chebychev inequality
+    }
+    else result[i] = 1.0f;
 }
 
 
