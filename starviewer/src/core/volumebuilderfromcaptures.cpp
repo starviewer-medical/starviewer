@@ -12,6 +12,7 @@
 #include <vtkImageAppend.h>
 #include <vtkImageData.h>
 #include <vtkImageFlip.h>
+#include <vtkSmartPointer.h>
 
 #include "volume.h"
 #include "series.h"
@@ -39,7 +40,12 @@ VolumeBuilderFromCaptures::~VolumeBuilderFromCaptures()
 void VolumeBuilderFromCaptures::addCapture( vtkImageData *data )
 {
     // \TODO Realitzem alguna comprovació o deixem que el vtkImageAppend es queixi?
-    m_vtkImageAppend->AddInput( data );
+    vtkSmartPointer<vtkImageFlip> imageFlip = vtkSmartPointer<vtkImageFlip>::New();
+    imageFlip->SetInput( data );
+    imageFlip->SetFilteredAxis(1); //Flip horitzontal
+    imageFlip->Update();
+
+    m_vtkImageAppend->AddInput( imageFlip->GetOutput() );
 }
 
 
@@ -94,15 +100,8 @@ Volume * VolumeBuilderFromCaptures::build()
     //Fem un flip horitzontal per tal utilitzar el mateix sistema de coordenades que DICOM.
     m_vtkImageAppend->Update();
 
-    vtkImageFlip * imageFlip = vtkImageFlip::New();
-    imageFlip->SetInputConnection( m_vtkImageAppend->GetOutputPort() );
-    imageFlip->SetFilteredAxis(1); //Flip horitzontal
-    imageFlip->Update();
-
     vtkImageData * newVtkData = vtkImageData::New();
-    newVtkData->ShallowCopy( imageFlip->GetOutput() );
-
-    imageFlip->Delete();
+    newVtkData->ShallowCopy( m_vtkImageAppend->GetOutput() );
 
     //Creem el nou volume
     Volume * newVolume = new Volume();
