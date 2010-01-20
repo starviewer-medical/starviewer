@@ -3004,11 +3004,9 @@ void QExperimental3DExtension::gaussianChebychev()
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_vomi = m_chebychev;
-    m_maximumVomi = 1.0f;
-    m_baseVomiRadioButton->setEnabled( true );
-    m_vomiCheckBox->setEnabled( true );
-    m_opacityVomiCheckBox->setEnabled( true );
+    m_baseChebychevRadioButton->setEnabled( true );
+    m_chebychevCheckBox->setEnabled( true );
+    m_opacityChebychevCheckBox->setEnabled( true );
 
     cast->Delete();
 }
