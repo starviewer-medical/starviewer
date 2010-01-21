@@ -238,8 +238,6 @@
  </widget>
  <resources>
   <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
-  <include location="../../../../.designer/main/main.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -302,6 +300,22 @@
     </hint>
     <hint type="destinationlabel">
      <x>171</x>
+     <y>487</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_sendReportCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_hostInformationCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>273</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>273</x>
      <y>487</y>
     </hint>
    </hints>
