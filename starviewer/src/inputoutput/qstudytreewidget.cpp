@@ -104,6 +104,8 @@ QList<DicomMask> QStudyTreeWidget::getDicomMaskOfSelectedItems()
 
 void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
 {
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
     foreach(Patient *patient, patientList)
     {
         if (patient->getNumberOfStudies() > 0)
@@ -113,6 +115,8 @@ void QStudyTreeWidget::insertPatientList( QList<Patient*> patientList )
     }
 
     m_studyTreeView->clearSelection();
+    
+    QApplication::restoreOverrideCursor();
 }
 
 void QStudyTreeWidget::insertPatient(Patient* patient)
