@@ -27,6 +27,7 @@ Status PacsNetwork::createNetworkRetrieve( int port , int timeout )
 
     if ( m_networkRetrieve == NULL )
     {
+        //Al fer inicialitzeNetwork s'obre el port local per acceptar connexions entrants DICOM
         status = ASC_initializeNetwork( NET_ACCEPTORREQUESTOR , port , timeout , &m_networkRetrieve );
         if ( !status.good() )
         {
