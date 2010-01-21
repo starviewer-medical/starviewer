@@ -421,7 +421,7 @@ QString Q3DViewer::getRenderFunctionAsString()
 
 void Q3DViewer::setInput( Volume* volume )
 {
-    if ( isSupportedVolume( volume ) )
+    if ( !isSupportedVolume( volume ) )
     {
         DEBUG_LOG( "El format del volum no està suportat" );
         WARN_LOG( "El format del volum no està suportat." );
@@ -1194,7 +1194,7 @@ bool Q3DViewer::canAllocateMemory( int size )
 
 bool Q3DViewer::isSupportedVolume( Volume *volume )
 {
-    return volume->getVtkData()->GetNumberOfScalarComponents() != 1;
+    return volume->getVtkData()->GetNumberOfScalarComponents() == 1;
 }
 
 };  // end namespace udg {
