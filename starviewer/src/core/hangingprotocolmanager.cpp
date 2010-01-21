@@ -344,22 +344,26 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
         }
         else
         {
-            imageNumber = 0;
-            listOfImages = serie->getImages();
-            numberImages = listOfImages.size();
-
-            while( !found && imageNumber < numberImages )
+            // Comprovem que la sèrie sigui de la modalitat del hanging protocol per evitar haver-ho de comprovar a cada imatge
+            if( hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( serie->getModality() ) )
             {
-                image = listOfImages.value( imageNumber );
-                if( isValidImage( image, imageSet, hangingProtocol ) )
+                imageNumber = 0;
+                listOfImages = serie->getImages();
+                numberImages = listOfImages.size();
+
+                while( !found && imageNumber < numberImages )
                 {
-                    found = true;
-                    imageSet->setImageToDisplay( imageNumber );
-                    imageSet->setSeriesToDisplay( serie );
-                    if( quitStudy )
-                        listOfSeries.removeAt(i);
+                    image = listOfImages.value( imageNumber );
+                    if( isValidImage( image, imageSet, hangingProtocol ) )
+                    {
+                        found = true;
+                        imageSet->setImageToDisplay( imageNumber );
+                        imageSet->setSeriesToDisplay( serie );
+                        if( quitStudy )
+                            listOfSeries.removeAt(i);
+                    }
+                    imageNumber++;
                 }
-                imageNumber++;
             }
             if( !found )
                 imageSet->setImageToDisplay( 0 );
@@ -575,8 +579,6 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
     bool ok = dicomReader.setFile( image->getPath() );
     if( ok )
     {
-        valid = hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( image->getParentSeries()->getModality() );
-
         while ( valid && i < numberRestrictions )
         {
             restriction = listOfRestrictions.value( i );
