@@ -416,6 +416,7 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
                         cond=configureMove( level );
                         if ( !cond.good() ) return state.setStatus( cond );
 
+                        ///Preparem la connexió amb el PACS i obrim el local port per acceptar connexions DICOM
                         state = m_pacsNetwork->createNetworkRetrieve( PacsDevice::getIncomingDICOMConnectionsPort() , PacsDevice::getConnectionTimeout() );
                         if ( !state.good() ) return state;
 
@@ -445,7 +446,18 @@ Status PacsServer::connect( modalityConnection modality , levelConnection level 
             return state.setStatus( DcmtkCanNotConnectError );
         }
     }
-    else return state.setStatus( cond );
+    else
+    {
+        /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM,
+         *com no que podrem descarregar les imatges perquè no hem pogut connectar amb el PACS per sol·licitar-ne la descarrega,
+         *tanquem el port local que espera per connexions entrants.*/
+        if ( modality == retrieveImages )
+        {
+            m_pacsNetwork->disconnect();
+        }
+
+        return state.setStatus( cond );
+    }
 
    return state.setStatus( DcmtkNoError );
 }
