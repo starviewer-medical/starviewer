@@ -3016,6 +3016,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionSpherePushButton">
+           <property name="text">
+            <string>PAO sphere</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

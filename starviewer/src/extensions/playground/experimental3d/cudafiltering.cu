@@ -1132,3 +1132,118 @@ QVector<float> cfProbabilisticAmbientOcclusionCube(vtkImageData *image, int radi
 
     return result;
 }
+
+
+__global__ void sphereFrequencyKernel(float *result, int radius, cudaExtent dims)
+{
+    uint blocksX = iDivUp(dims.width, blockDim.x);
+    uint blockX = blockIdx.x % blocksX;
+    uint blockY = blockIdx.x / blocksX;
+    uint blockZ = blockIdx.y;
+
+    uint x = blockX * blockDim.x + threadIdx.x;
+    if (x >= dims.width) return;
+    uint y = blockY * blockDim.y + threadIdx.y;
+    if (y >= dims.height) return;
+    uint z = blockZ * blockDim.z + threadIdx.z;
+    if (z >= dims.depth) return;
+
+    float fx = x + 0.5f, fy = y + 0.5f, fz = z + 0.5f;
+    float value = tex3D(gVolumeTexture, fx, fy, fz);
+    int greater = 0;    // compta quants n'hi ha de més grans o iguals que value al seu entorn
+    int count = 0;
+
+    for (int dx = -radius; dx <= radius; dx++)
+    {
+        float fx2 = fx + dx;
+
+        for (int dy = -radius; dy <= radius; dy++)
+        {
+            if (sqrtf(dx * dx + dy * dy) > radius) continue;
+
+            float fy2 = fy + dy;
+
+            for (int dz = -radius; dz <= radius; dz++)
+            {
+                if (sqrtf(dx * dx + dy * dy + dz * dz) > radius) continue;
+
+                float fz2 = fz + dz;
+                float value2 = tex3D(gVolumeTexture, fx2, fy2, fz2);
+                if (value2 >= value) greater++;
+                count++;
+            }
+        }
+    }
+
+    uint i = x + y * dims.width + z * dims.width * dims.height;
+    result[i] = ((float) greater) / count;
+}
+
+
+QVector<float> cfProbabilisticAmbientOcclusionSphere(vtkImageData *image, int radius)
+{
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start, 0);
+
+    float *data = reinterpret_cast<float*>(image->GetScalarPointer());
+    const uint VOLUME_DATA_SIZE = image->GetNumberOfPoints();
+    int *dimensions = image->GetDimensions();
+    cudaExtent volumeDataDims = make_cudaExtent(dimensions[0], dimensions[1], dimensions[2]);
+
+    // Copiar el volum a un array i associar-hi una textura
+    cudaArray *dVolumeArray;
+    cudaChannelFormatDesc channelDescVolumeArray = cudaCreateChannelDesc<float>();
+    CUDA_SAFE_CALL( cudaMalloc3DArray(&dVolumeArray, &channelDescVolumeArray, volumeDataDims) );
+    cudaMemcpy3DParms copyParams = {0};
+    copyParams.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(data), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);    // data, pitch, width, height
+    copyParams.dstArray = dVolumeArray;
+    copyParams.extent = volumeDataDims;
+    copyParams.kind = cudaMemcpyHostToDevice;
+    CUDA_SAFE_CALL( cudaMemcpy3D(&copyParams) );    // còpia síncrona perquè si un dels dos és el host ha de ser memòria reservada amb cudaMallocHost
+    //gVolumeTexture.normalized = false;                      // false (predeterminat) -> [0,N) | true -> [0,1)
+    //gVolumeTexture.filterMode = cudaFilterModePoint;        // cudaFilterModePoint (predeterminat) o cudaFilterModeLinear
+    //gVolumeTexture.addressMode[0] = cudaAddressModeClamp;   // cudaAddressModeClamp (retallar) (predeterminat) o cudaAddressModeWrap (fer la volta)
+    //gVolumeTexture.addressMode[1] = cudaAddressModeClamp;
+    //gVolumeTexture.addressMode[2] = cudaAddressModeClamp;
+    CUDA_SAFE_CALL( cudaBindTextureToArray(gVolumeTexture, dVolumeArray, channelDescVolumeArray) );
+
+    // Reservar espai pel resultat
+    float *dfResult;
+    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&dfResult), VOLUME_DATA_SIZE * sizeof(float)) );
+
+    // Preparar l'execució
+    //Block width should be a multiple of maximum coalesced write size
+    //for coalesced memory writes in convolutionRowGPU() and convolutionColumnGPU()
+    dim3 threadBlock(16, 8, 4);
+    uint blocksX = iDivUp(volumeDataDims.width, threadBlock.x);
+    uint blocksY = iDivUp(volumeDataDims.height, threadBlock.y);
+    uint blocksZ = iDivUp(volumeDataDims.depth, threadBlock.z);
+    dim3 blockGrid(blocksX * blocksY, blocksZ);
+
+    // Llancem el kernel
+    sphereFrequencyKernel<<<blockGrid, threadBlock>>>(dfResult, radius, volumeDataDims);
+    CUDA_SAFE_CALL( cudaThreadSynchronize() );
+
+    // Copiar el resultat final al host
+    QVector<float> result(VOLUME_DATA_SIZE);
+    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(result.data()), reinterpret_cast<void*>(dfResult), VOLUME_DATA_SIZE * sizeof(float), cudaMemcpyDeviceToHost) );
+
+    // Neteja
+    CUDA_SAFE_CALL( cudaFree(dfResult) );;
+    CUDA_SAFE_CALL( cudaUnbindTexture(gVolumeTexture) );
+    CUDA_SAFE_CALL( cudaFreeArray(dVolumeArray) );
+
+    cudaEventRecord(stop, 0);
+    cudaEventSynchronize(stop);
+    float elapsedTime = 0.0f;
+    cudaEventElapsedTime(&elapsedTime, start, stop);
+
+    std::cout << "pao sphere: " << elapsedTime << " ms" << std::endl;
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+
+    return result;
+}

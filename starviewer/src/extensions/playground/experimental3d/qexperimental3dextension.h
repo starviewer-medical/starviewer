@@ -226,6 +226,7 @@ private slots:
     void probabilisticAmbientOcclusionBoxMeanChebychev();
     void probabilisticAmbientOcclusionGaussian();
     void probabilisticAmbientOcclusionCube();
+    void probabilisticAmbientOcclusionSphere();
 
 private:
 
