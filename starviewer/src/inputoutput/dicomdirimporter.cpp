@@ -59,10 +59,10 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     }
 
     m_qprogressDialog = new QProgressDialog("","", 0, 0);
+    m_qprogressDialog->setModal(true);
     m_qprogressDialog->setCancelButton(0);
     m_qprogressDialog->setValue(1);
     m_qprogressDialog->setMinimumDuration(0);
-    m_qprogressDialog->setModal(true);
 
     patientFiller.moveToThread(&fillersThread);
 
