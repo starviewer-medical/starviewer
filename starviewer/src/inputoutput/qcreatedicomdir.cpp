@@ -223,8 +223,6 @@ void QCreateDicomdir::createDicomdir()
 
     Status state;
 
-    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-
     switch( m_currentDevice )
     {
         case CreateDicomdir::UsbPen:
@@ -239,7 +237,6 @@ void QCreateDicomdir::createDicomdir()
                     burnDicomdir();
                  break;
     }
-    QApplication::restoreOverrideCursor();
 }
 
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
@@ -362,6 +359,8 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         return state.setStatus( "No study selected to create the DICOMDIR", false , 3001 );
     }
 
+    QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+
     for ( int i = 0; i < dicomdirStudiesList.count(); i++ )
     {
         item = dicomdirStudiesList.at( i );
@@ -381,6 +380,8 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         }
         else
         {
+            QApplication::restoreOverrideCursor();
+
             QMessageBox::critical( this , ApplicationNameString , tr( "Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty." ).arg( m_lineEditDicomdirPath->text() ) );
             ERROR_LOG( "Error al crear el DICOMDIR ERROR : " + state.text() );
             return state;
@@ -392,6 +393,8 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     INFO_LOG( "Finalitzada la creació del DICOMDIR" );
     clearQCreateDicomdirScreen();
+
+    QApplication::restoreOverrideCursor();
 
     return state;
 }
