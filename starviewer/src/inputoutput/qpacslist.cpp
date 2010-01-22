@@ -21,7 +21,8 @@ QPacsList::QPacsList( QWidget *parent )
 
     m_PacsTreeView->setColumnHidden(0, true); //la columna PacsId està amagada
     m_PacsTreeView->setColumnHidden(4, true); //la columna PACSAddress està amagada
-
+    m_PacsTreeView->sortByColumn(1, Qt::SortOrder::AscendingOrder); //ordenem per la columna AETitle
+    
     m_filterPacsByService = PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled;
     m_showQueryPacsDefaultHighlighted = true;        
 
