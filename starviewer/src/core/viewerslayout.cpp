@@ -72,8 +72,8 @@ void ViewersLayout::restoreLayouts()
 
 	numberOfViewers = m_vectorViewers.size();
 
-	/// Creem els que calguin per ser regular si es que no hi havia cap grid predefinit
-	if( (m_totalColumns == 1) && (m_totalRows == 1) && numberOfViewers > 1)
+	/// Si tenim més visors que el grid regular que teníem construït, el regenerem.
+	if( numberOfViewers > m_totalColumns*m_totalRows )
 	{
 		m_totalColumns = ceil( sqrt( (double)numberOfViewers) );
 		m_totalRows = m_totalColumns;
