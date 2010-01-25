@@ -424,15 +424,33 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
     }
     else //Són diferents o no sabem diferenciar
     {
-        if (canReplaceActualPatient)
+        if ( !loadOnly )
         {
-            m_mainApp->setPatient(patient);
-            DEBUG_LOG("Tenim pacient i el substituim");
+            if (canReplaceActualPatient)
+            {
+                m_mainApp->setPatient(patient);
+                DEBUG_LOG("Tenim pacient i el substituim");
+            }
+            else
+            {
+                m_mainApp->setPatientInNewWindow(patient);
+                DEBUG_LOG("Tenim pacient i no ens deixen substituir-lo. L'obrim en una finestra nova.");
+            }
         }
         else
         {
-            m_mainApp->setPatientInNewWindow(patient);
-            DEBUG_LOG("Tenim pacient i no ens deixen substituir-lo. L'obrim en una finestra nova.");
+            //Alliberem la memoria dels volums generats
+            // \TODO Cal fer una discussió de si és el lloc de fer-ho i de què es fa amb el Patient que no s'assigna
+            foreach( Study *study, patient->getStudies() )
+            {
+                foreach( Series *series, study->getSeries() )
+                {
+                    foreach( Identifier id, series->getVolumesIDList()  )
+                    {
+                        VolumeRepository::getRepository()->removeVolume( id );
+                    }
+                }
+            }
         }
     }
 }
