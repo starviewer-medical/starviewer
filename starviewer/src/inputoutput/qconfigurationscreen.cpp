@@ -39,7 +39,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
     settings.restoreColumnsWidths( InputOutputSettings::ConfigurationScreenPACSList, m_PacsTreeView );
     
     m_PacsTreeView->setColumnHidden(0, true); // amaguem la columna amb l'ID del PACS que és irrellevant per l'usuari
-    m_PacsTreeView->sortByColumn(1, Qt::SortOrder::AscendingOrder);//Ordenem per AETitle
+    m_PacsTreeView->sortByColumn(1, Qt::AscendingOrder);//Ordenem per AETitle
 
     checkIncomingConnectionsPortNotInUse();
 }
