@@ -76,6 +76,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_sliceTableGrid = new TableMenu(this);
     m_dicomDumpCurrentDisplayedImage = new QDicomDump(this);
     m_previousStudiesWidget = new QPreviousStudiesWidget( this );
+    m_hangingProtocolManager = 0;
 
     readSettings();
     createConnections();
@@ -135,6 +136,9 @@ Q2DViewerExtension::~Q2DViewerExtension()
     // L'objecte es crea quan fem un setInput. Per tant, fem la comprovació.
     if ( !m_previousStudiesWidget )
         delete m_previousStudiesWidget;
+
+    if( !m_hangingProtocolManager )
+        delete m_hangingProtocolManager;
 }
 
 void Q2DViewerExtension::createConnections()
@@ -146,9 +150,9 @@ void Q2DViewerExtension::createConnections()
     connect( m_imageGrid, SIGNAL( clicked ( bool ) ), SLOT( showInteractiveImageTable() ) );
 
     // Connexions del menu
-    connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea , SLOT( setGrid( int, int ) ) );
+    connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int , int ) ), this , SLOT( setGrid( int, int ) ) );
     connect( m_predefinedSeriesGrid, SIGNAL( selectedGrid( int ) ), this, SLOT( setHangingProtocol( int ) ) );
-    connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), m_workingArea, SLOT( setGrid( int, int ) ) );
+    connect( m_seriesTableGrid, SIGNAL( selectedGrid( int , int ) ), this, SLOT( setGrid( int, int ) ) );
 
     // mostrar o no la informacio del volum a cada visualitzador
     connect( m_viewerInformationToolButton, SIGNAL( toggled( bool ) ), SLOT( showViewerInformation( bool ) ) );
@@ -171,12 +175,15 @@ void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
     /// Aplicació dels hanging protocols
-    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
+    if( m_hangingProtocolManager != 0 )
+    {
+        m_hangingProtocolManager->cancelHangingProtocolDowloading();
+        delete m_hangingProtocolManager;
+    }
+    m_hangingProtocolManager = new HangingProtocolManager();
 
     QApplication::setOverrideCursor( Qt::WaitCursor );
-    m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, true );
-    delete hangingProtocolManger;
-    hangingProtocolManger = 0;
+    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols( m_workingArea, m_patient, true );
     QApplication::restoreOverrideCursor();
 
     if( m_hangingCandidates.size() == 0 ) // No hi ha hanging protocols
@@ -198,22 +205,15 @@ void Q2DViewerExtension::setInput( Volume *input )
 
 void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
 {
-    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
     QApplication::setOverrideCursor( Qt::WaitCursor );
-    m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, true );
-    delete hangingProtocolManger;
-    hangingProtocolManger = 0;
+    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols( m_workingArea, m_patient, true );
     QApplication::restoreOverrideCursor();
 }
 
 void Q2DViewerExtension::searchHangingProtocols()
 {
-    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
-    m_hangingCandidates = hangingProtocolManger->searchHangingProtocols( m_workingArea, m_patient, false );
-    delete hangingProtocolManger;
-    hangingProtocolManger = 0;
+    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols( m_workingArea, m_patient, false );
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
-
     searchPreviousStudiesWithHangingProtocols();
 }
 
@@ -229,15 +229,13 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
 
     //4.- Es busquen els previs
     m_previousStudiesManager->queryPreviousStudies( m_mainVolume->getStudy() );
-
 }
 
 void Q2DViewerExtension::addPreviousHangingProtocols( QList<Study*> studies, QHash<QString, QString> qhash )
 {
     disconnect( m_previousStudiesManager, SIGNAL( queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>) ), this, SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>) ) );
 
-    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
-    QList<HangingProtocol * > m_hangingWidthPrevious = hangingProtocolManger->getHangingProtocolsWidthPreviousSeries( m_patient, studies, qhash );
+    QList<HangingProtocol * > m_hangingWidthPrevious = m_hangingProtocolManager->getHangingProtocolsWidthPreviousSeries( m_patient, studies, qhash );
     m_hangingCandidates << m_hangingWidthPrevious;
     m_predefinedSeriesGrid->addHangingItems( m_hangingWidthPrevious );
     m_predefinedSeriesGrid->createHangingProtocolsWidget();
@@ -585,9 +583,7 @@ void Q2DViewerExtension::disableSynchronization()
 
 void Q2DViewerExtension::setHangingProtocol( int hangingProtocolNumber )
 {
-    /// Aplicació dels hanging protocols
-    HangingProtocolManager * hangingProtocolManger = new HangingProtocolManager();
-    hangingProtocolManger->applyHangingProtocol( hangingProtocolNumber, m_workingArea, m_patient );
+    m_hangingProtocolManager->applyHangingProtocol( hangingProtocolNumber, m_workingArea, m_patient );
 }
 
 void Q2DViewerExtension::changeToPreviousStudiesDownloadingIcon()
@@ -619,6 +615,12 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
         }
     }
     m_previousStudiesWidget->searchPreviousStudiesOf( recentStudy );
+}
+
+void Q2DViewerExtension::setGrid( int rows , int columns )
+{
+    m_hangingProtocolManager->cancelHangingProtocolDowloading();
+    m_workingArea->setGrid( rows , columns );
 }
 
 }

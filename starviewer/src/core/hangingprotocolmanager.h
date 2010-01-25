@@ -57,6 +57,9 @@ public:
     /// Buscar els estudis previs
     Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, QList<Study*> previousStudies);
 
+    /// Si hi havia estudis en descàrrega, s'elimina de la llista
+    void cancelHangingProtocolDowloading();
+
 private slots:
 
     /// S'ha descarregat un estudi previ demanat
