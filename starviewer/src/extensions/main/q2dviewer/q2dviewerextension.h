@@ -96,6 +96,10 @@ public slots:
 
 	/// Mètode per buscar les prèvies de l'estudi carregat més recent.
 	void searchPreviousStudiesOfMostRecentStudy();
+
+    /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi previ està en descàrrega
+    void setGrid( int rows, int columns );
+
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -189,6 +193,9 @@ private:
 
 	/// Manager per estudis previs
 	PreviousStudiesManager * m_previousStudiesManager;
+
+    /// Manager de hanging protocols 
+    HangingProtocolManager * m_hangingProtocolManager;
 };
 
 } // end namespace udg

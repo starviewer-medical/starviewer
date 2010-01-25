@@ -109,6 +109,8 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 
 HangingProtocolManager::~HangingProtocolManager()
 {
+    cancelHangingProtocolDowloading();
+    delete m_studiesDownloading;
 }
 
 QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol )
@@ -211,11 +213,14 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
 void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
 {
     Identifier id;
-
     id.setValue( hangingProtocolNumber );
+
+    cancelHangingProtocolDowloading(); // Si hi havia algun estudi descarregant, es treu de la llista d'espera
+
     HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
     // TODO aixo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
     // Caldria incoporar algun paràmetre per indicar quin és el visor seleccionat per defecte
+    // Es buiden tots els visors per tal que no hi hagi res assignat
     layout->setGrid(1,1);
     applyHangingProtocol(hangingProtocol,layout, patient);
     INFO_LOG( QString("Hanging protocol aplicat: %1").arg( hangingProtocol->getName() ) );
@@ -900,6 +905,16 @@ QWidget * HangingProtocolManager::createDownloadingWidget( ViewersLayout *layout
     downloadingMovie->start();
     
     return downloadingWidget;
+}
+
+void HangingProtocolManager::cancelHangingProtocolDowloading()
+{
+    foreach( QString key, m_studiesDownloading->keys() )
+    {
+        StructPreviousStudyDownloading* element = m_studiesDownloading->take( key ); // S'agafa i es treu de la llista l'element que s'està esperant
+        element->layout->quitDownloadingItem( element->widgetToDisplay, element->downloadingWidget ); // es treu el label de downloading
+        delete element;
+    }
 }
 
 }
