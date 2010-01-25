@@ -3023,6 +3023,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionTangentCubePushButton">
+           <property name="text">
+            <string>PAO tangent cube</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
