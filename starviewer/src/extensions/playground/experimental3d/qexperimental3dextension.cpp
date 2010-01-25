@@ -975,6 +975,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_probabilisticAmbientOcclusionGaussianPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionGaussian() ) );
     connect( m_probabilisticAmbientOcclusionCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionCube() ) );
     connect( m_probabilisticAmbientOcclusionSpherePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionSphere() ) );
+    connect( m_probabilisticAmbientOcclusionTangentCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionTangentCube() ) );
 }
 
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
@@ -3118,6 +3119,37 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionSphere()
     QMessageBox::information( this, tr("Operation only available with CUDA"), "The PAO sphere is only implemented in CUDA. Compile with CUDA support to use it." );
 #else // CUDA_AVAILABLE
     m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionSphere( cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value() );
+#ifndef QT_NO_DEBUG
+    int size = m_volume->getSize();
+    for ( int i = 0; i < size; i++ )
+    {
+        if ( m_probabilisticAmbientOcclusion.at( i ) < 0.0f || m_probabilisticAmbientOcclusion.at( i ) > 1.0f )
+        {
+            DEBUG_LOG( QString( "pao[%1] = %2" ).arg( i ).arg( m_probabilisticAmbientOcclusion.at( i ) ) );
+        }
+    }
+#endif // QT_NO_DEBUG
+#endif // CUDA_AVAILABLE
+
+    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
+    m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
+    m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
+
+    cast->Delete();
+}
+
+
+void QExperimental3DExtension::probabilisticAmbientOcclusionTangentCube()
+{
+    vtkImageCast *cast = vtkImageCast::New();
+    cast->SetInput( m_volume->getImage() );
+    cast->SetOutputScalarTypeToFloat();
+    cast->Update();
+
+#ifndef CUDA_AVAILABLE
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "The PAO tangent cube is only implemented in CUDA. Compile with CUDA support to use it." );
+#else // CUDA_AVAILABLE
+    m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionTangentCube( cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value() );
 #ifndef QT_NO_DEBUG
     int size = m_volume->getSize();
     for ( int i = 0; i < size; i++ )
