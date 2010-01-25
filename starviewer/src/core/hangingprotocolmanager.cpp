@@ -283,10 +283,16 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
                     {
                         applyDisplayTransformations( serie, 0, viewerWidget, displaySet );
                     }
-                    if( displaySet->getToolActivation() != 0 )
+                    if( displaySet->getToolActivation() != 0 ) // Tenim tools activades per defecte des del hanging protocol
                     {
-                        if( displaySet->getToolActivation() == "synchronization" )
+                        if( displaySet->getToolActivation() == "synchronization" ) // S'activa la tool de sincronització
                             viewerWidget->setSynchronized( true );
+                        else // Es desactiva la tool de sincronització, per si estava activada
+                            viewerWidget->setSynchronized( false );
+                    }
+                    else // es desactiven totes les tools que puguin estar actives
+                    {
+                        viewerWidget->setSynchronized( false );
                     }
                 }
             }
