@@ -653,6 +653,12 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
                 if( (referenceStudy == 0) || (serie->getParentStudy()->getDate() >= referenceStudy->getDate()) )
                     valid = false;
             }
+            else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
+            {
+                Series * serie = image->getParentSeries();
+                if( serie->getNumberOfImages() < restriction.valueRepresentation.toInt() )
+                    valid = false;
+            }
             i++;
         }
     }
