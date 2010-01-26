@@ -13,21 +13,24 @@
 #include "q2dviewerwidget.h"
 #include "menugridwidget.h"
 #include "tablemenu.h"
-#include "qpreviousstudieswidget.h"
 #include "patient.h"
 #include "study.h"
 #include "toolmanager.h"
 #include "toolconfiguration.h"
 #include "windowlevelpresetstooldata.h"
 #include "qdicomdump.h"
-#include "hangingprotocolmanager.h"
 #include "statswatcher.h"
-#include "previousstudiesmanager.h"
 // per poder fer screenshots desde menú
 #include "screenshottool.h" 
 #include "toolproxy.h"
 #include "q2dviewersettings.h"
+
+#ifndef STARVIEWER_LITE
+#include "qpreviousstudieswidget.h"
+#include "hangingprotocolmanager.h"
+#include "previousstudiesmanager.h"
 #include "qexportertool.h"
+#endif
 
 #include <QMenu>
 #include <QAction>
@@ -45,9 +48,9 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     Q2DViewerSettings().init();
 
 #ifdef STARVIEWER_LITE
-    
     m_polylineButton->hide();
     m_angleToolButton->hide();
+    m_openAngleToolButton->hide();
     m_axialViewToolButton->hide();
     m_coronalViewToolButton->hide();
     m_sagitalViewToolButton->hide();
@@ -56,14 +59,10 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_thickSlabWidget->hide();
     m_referenceLinesToolButton->hide();
     m_cursor3DToolButton->hide();
-    m_flipHorizontalToolButton->setVisible(true);
-    m_flipVerticalToolButton->setVisible(true);
-
+    m_previousStudiesToolButton->hide();
+    m_screenshotsExporterToolButton->hide();
 #else
-
-    m_flipVerticalToolButton->setVisible( false );
-    m_flipHorizontalToolButton->setVisible( false );
-
+    m_hangingProtocolManager = 0;
 #endif
 
     //TODO ocultem botons que no son del tot necessaris o que no es faran servir
@@ -75,16 +74,18 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_predefinedSlicesGrid = new MenuGridWidget(this);
     m_sliceTableGrid = new TableMenu(this);
     m_dicomDumpCurrentDisplayedImage = new QDicomDump(this);
-    m_previousStudiesWidget = new QPreviousStudiesWidget( this );
-    m_hangingProtocolManager = 0;
+    
 
     readSettings();
     createConnections();
 
+#ifndef STARVIEWER_LITE
+    m_previousStudiesWidget = new QPreviousStudiesWidget( this );
     m_previousStudiesToolButton->setEnabled(false);
     m_previousStudiesToolButton->setToolTip( tr("Search prior studies") );
-    
     m_screenshotsExporterToolButton->setToolTip( tr("Export viewer image(s) to DICOM and send them to a PACS server") );
+#endif
+    
     m_viewerInformationToolButton->setToolTip( tr("Show/Hide viewer's textual information") );
     m_dicomDumpToolButton->setToolTip( tr("Dump DICOM information of the current image") );
     m_windowLevelComboBox->setToolTip( tr("Choose Window/Level Presets") );
@@ -93,9 +94,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
     initializeTools();
-
-    m_flipVerticalToolButton->setVisible(true);
-    m_flipHorizontalToolButton->setVisible(true);
 
     // incorporem estadístiques
     m_statsWatcher = new StatsWatcher("2D Extension",this);
@@ -127,18 +125,21 @@ Q2DViewerExtension::~Q2DViewerExtension()
 {
     writeSettings();
 
+#ifndef STARVIEWER_LITE
     m_hangingCandidates.clear();
-    delete m_predefinedSeriesGrid;
-    delete m_seriesTableGrid;
-    delete m_predefinedSlicesGrid;
-    delete m_sliceTableGrid;
-    delete m_dicomDumpCurrentDisplayedImage;
     // L'objecte es crea quan fem un setInput. Per tant, fem la comprovació.
     if ( !m_previousStudiesWidget )
         delete m_previousStudiesWidget;
 
     if( !m_hangingProtocolManager )
         delete m_hangingProtocolManager;
+#endif
+
+    delete m_predefinedSeriesGrid;
+    delete m_seriesTableGrid;
+    delete m_predefinedSlicesGrid;
+    delete m_sliceTableGrid;
+    delete m_dicomDumpCurrentDisplayedImage;
 }
 
 void Q2DViewerExtension::createConnections()
@@ -159,21 +160,29 @@ void Q2DViewerExtension::createConnections()
     // per mostrar la informació DICOM de la imatge que s'està veient en aquell moment
     connect( m_dicomDumpToolButton, SIGNAL( clicked() ) , SLOT( showDicomDumpCurrentDisplayedImage() ) );
 
-    // per mostrar exportació
-    connect( m_screenshotsExporterToolButton, SIGNAL( clicked() ) , SLOT( showScreenshotsExporterDialog() ) );
-
     // Connexions necessaries amb els canvis al layout
     connect( m_workingArea, SIGNAL( viewerAdded( Q2DViewerWidget * ) ), SLOT( activateNewViewer( Q2DViewerWidget * ) ) );
     connect( m_workingArea, SIGNAL( viewerSelectedChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
 
+#ifndef STARVIEWER_LITE
+    // per mostrar exportació
+    connect( m_screenshotsExporterToolButton, SIGNAL( clicked() ) , SLOT( showScreenshotsExporterDialog() ) );
+    
     connect( m_previousStudiesWidget, SIGNAL( downloadingStudies() ), this, SLOT( changeToPreviousStudiesDownloadingIcon() ) );
     connect( m_previousStudiesWidget, SIGNAL( studiesDownloaded() ), this, SLOT( changeToPreviousStudiesDefaultIcon() ) );
     connect( m_previousStudiesToolButton, SIGNAL( clicked ( bool ) ), SLOT( showPreviousStudiesWidget() ) );
+#endif
+
 }
 
 void Q2DViewerExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
+
+#ifdef STARVIEWER_LITE
+    Q2DViewerWidget *viewerWidget = m_workingArea->addViewer( "0.0\\1.0\\1.0\\0.0" );
+    viewerWidget->setInput( m_mainVolume );
+#else
     /// Aplicació dels hanging protocols
     if( m_hangingProtocolManager != 0 )
     {
@@ -201,8 +210,10 @@ void Q2DViewerExtension::setInput( Volume *input )
     searchPreviousStudiesOfMostRecentStudy();
 
     searchPreviousStudiesWithHangingProtocols();
+#endif
 }
 
+#ifndef STARVIEWER_LITE
 void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -241,6 +252,7 @@ void Q2DViewerExtension::addPreviousHangingProtocols( QList<Study*> studies, QHa
     m_predefinedSeriesGrid->createHangingProtocolsWidget();
     m_predefinedSeriesGrid->setSearchingItem( false );
 }
+#endif
 
 void Q2DViewerExtension::showPredefinedGrid()
 {
@@ -285,12 +297,14 @@ void Q2DViewerExtension::showInteractiveImageTable()
     m_sliceTableGrid->show();
 }
 
+#ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showPreviousStudiesWidget()
 {
     QPoint point = m_previousStudiesToolButton->mapToGlobal( QPoint(0,0) );
     m_previousStudiesWidget->move( point.x(),( point.y() + m_previousStudiesToolButton->frameGeometry().height() ) );
     m_previousStudiesWidget->show();
 }
+#endif
 
 Patient* Q2DViewerExtension::getPatient() const
 {
@@ -326,12 +340,14 @@ void Q2DViewerExtension::initializeTools()
     m_translateToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
     m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
     m_referenceLinesToolButton->setDefaultAction( m_toolManager->registerTool("ReferenceLinesTool") );
-    m_polylineButton->setDefaultAction( m_toolManager->registerTool( "PolylineROITool" ) );
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool( "DistanceTool" ) );
     m_eraserToolButton->setDefaultAction( m_toolManager->registerTool( "EraserTool" ) );
+#ifndef STARVIEWER_LITE
+    m_polylineButton->setDefaultAction( m_toolManager->registerTool( "PolylineROITool" ) );
     m_cursor3DToolButton->setDefaultAction( m_toolManager->registerTool("Cursor3DTool") );
     m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
     m_openAngleToolButton->setDefaultAction( m_toolManager->registerTool( "NonClosedAngleTool" ) );
+#endif
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool( "VoxelInformationTool" ) );
     // registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
     m_toolManager->registerTool("WindowLevelPresetsTool");
@@ -339,11 +355,13 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager->registerTool("SynchronizeTool");
 
     // registrem les "Action Tool"    
+#ifndef STARVIEWER_LITE
     m_sagitalViewAction = m_toolManager->registerActionTool( "SagitalViewActionTool" );
     m_coronalViewAction = m_toolManager->registerActionTool( "CoronalViewActionTool" );
     m_axialViewToolButton->setDefaultAction( m_toolManager->registerActionTool( "AxialViewActionTool" ) );
     m_sagitalViewToolButton->setDefaultAction( m_sagitalViewAction );
     m_coronalViewToolButton->setDefaultAction( m_coronalViewAction );
+#endif
     m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool( "RotateClockWiseActionTool" ) );
     m_rotateCounterClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool( "RotateCounterClockWiseActionTool" ) );
     m_flipHorizontalToolButton->setDefaultAction( m_toolManager->registerActionTool( "HorizontalFlipActionTool" ) );
@@ -353,7 +371,13 @@ void Q2DViewerExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
+
+#ifdef STARVIEWER_LITE
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "EraserTool";
+#else
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool";
+#endif
+    
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -372,10 +396,11 @@ void Q2DViewerExtension::initializeTools()
     //
     // Casos especials de Tools
     //
-
+#ifndef STARVIEWER_LITE
     // TODO de moment fem exclusiu la tool de sincronització i la de cursor 3d manualment perque la
     // sincronització no té el model de totes les tools
     connect( m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL( triggered() ), SLOT( disableSynchronization() ) );
+#endif
 
     // SCREEN SHOT TOOL
     // activem l'eina d'screen shot, que sempre estarà activa
@@ -435,7 +460,11 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
         /// enviin el senyal al visualitzador que toca.
         if( m_lastSelectedViewer )
         {
+
+#ifndef STARVIEWER_LITE
             disconnect( m_lastSelectedViewer->getViewer(), SIGNAL( volumeChanged( Volume *) ), this, SLOT( validePhases() ) );
+#endif
+
             disconnect( m_lastSelectedViewer->getViewer(), SIGNAL( viewChanged(int) ), this, SLOT( updateDICOMInformationButton(int) ) );
             // és necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>( m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool") );
@@ -446,9 +475,11 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
         }
         m_lastSelectedViewer = viewerWidget;
         Q2DViewer *selected2DViewer = viewerWidget->getViewer();
-        
+
+#ifndef STARVIEWER_LITE
         validePhases();
         connect( viewerWidget->getViewer(), SIGNAL( volumeChanged( Volume *) ), SLOT( validePhases() ) );
+#endif
         connect( viewerWidget->getViewer(), SIGNAL( viewChanged(int) ), SLOT( updateDICOMInformationButton(int) ) );
         // és necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
         ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>( viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool") );
@@ -491,6 +522,7 @@ void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
     m_dicomDumpCurrentDisplayedImage->show();
 }
 
+#ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showScreenshotsExporterDialog()
 {
     if ( m_workingArea->getViewerSelected()->getViewer()->getInput() == NULL )
@@ -516,6 +548,7 @@ void Q2DViewerExtension::validePhases()
         m_coronalViewAction->setEnabled( true );
     }
 }
+#endif
 
 void Q2DViewerExtension::updateDICOMInformationButton( int view )
 {
@@ -581,6 +614,7 @@ void Q2DViewerExtension::disableSynchronization()
     }
 }
 
+#ifndef STARVIEWER_LITE
 void Q2DViewerExtension::setHangingProtocol( int hangingProtocolNumber )
 {
     m_hangingProtocolManager->applyHangingProtocol( hangingProtocolNumber, m_workingArea, m_patient );
@@ -616,10 +650,13 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
     }
     m_previousStudiesWidget->searchPreviousStudiesOf( recentStudy );
 }
+#endif
 
 void Q2DViewerExtension::setGrid( int rows , int columns )
 {
+#ifndef STARVIEWER_LITE
     m_hangingProtocolManager->cancelHangingProtocolDowloading();
+#endif
     m_workingArea->setGrid( rows , columns );
 }
 
