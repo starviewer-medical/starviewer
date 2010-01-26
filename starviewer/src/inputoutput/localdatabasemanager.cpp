@@ -922,7 +922,6 @@ QString LocalDatabaseManager::getSeriesThumbnailPath(QString studyInstanceUID, S
 QString LocalDatabaseManager::getDatabaseFilePath() 
 {
     Settings settings;
-    QDir dir;
     
     return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::DatabaseAbsoluteFilePath ).toString() );
 }
@@ -930,7 +929,6 @@ QString LocalDatabaseManager::getDatabaseFilePath()
 QString LocalDatabaseManager::getCachePath() 
 {
     Settings settings;
-    QDir dir;
 
     return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::CachePath ).toString() );
 }
