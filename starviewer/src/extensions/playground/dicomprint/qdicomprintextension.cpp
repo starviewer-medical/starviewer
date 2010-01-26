@@ -113,8 +113,6 @@ void QDicomPrintExtension::updateInput(Volume *input)
     m_sliceViewSlider->setMaximum( m_2DView->getMaximumSlice() );
     m_sliceViewSlider->setValue( 0 );
 
-    m_intervalImagesSlider->setMinimum( 1 );
-    m_intervalImagesSlider->setMaximum( input->getImages().count() );
     m_intervalImagesSlider->setValue( 1 );
 
     updateSelectionImagesValue();

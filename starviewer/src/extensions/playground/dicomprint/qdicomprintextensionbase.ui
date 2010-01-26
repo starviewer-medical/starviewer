@@ -354,7 +354,7 @@
                  <string>1</string>
                 </property>
                 <property name="maxLength">
-                 <number>2</number>
+                 <number>3</number>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -367,10 +367,13 @@
                  <number>1</number>
                 </property>
                 <property name="maximum">
-                 <number>50</number>
+                 <number>100</number>
                 </property>
                 <property name="pageStep">
                  <number>5</number>
+                </property>
+                <property name="value">
+                 <number>1</number>
                 </property>
                 <property name="orientation">
                  <enum>Qt::Horizontal</enum>
@@ -385,7 +388,7 @@
                  <enum>QSlider::TicksBelow</enum>
                 </property>
                 <property name="tickInterval">
-                 <number>10</number>
+                 <number>5</number>
                 </property>
                </widget>
               </item>
@@ -747,6 +750,7 @@ border: 1px solid  #680000;
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
