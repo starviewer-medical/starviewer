@@ -432,15 +432,15 @@ void Q2DViewer::refreshAnnotations()
         return;
 
     if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
-	{
-		m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
+    {
+        m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
         m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
-	}
+    }
     else
-	{
-		m_cornerAnnotations->SetText( 3, "" );
+    {
+        m_cornerAnnotations->SetText( 3, "" );
         m_cornerAnnotations->SetText( 1, "" );
-	}
+    }
 
     if ( m_enabledAnnotations & Q2DViewer::RulersAnnotation )
     {
@@ -469,7 +469,7 @@ void Q2DViewer::refreshAnnotations()
     else
         m_scalarBar->VisibilityOff();
 
-	updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation );
+    updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation );
 }
 
 // TODO potser hauria de ser getCurrentSliceThickness ?
@@ -993,7 +993,7 @@ void Q2DViewer::resetCamera()
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
         }
-		updateAnnotationsInformation( Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation );
+        updateAnnotationsInformation( Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation );
         mapOrientationStringToAnnotation();
         // TODO potser això no és del tot correcte, cal fer més consistent conjuntament amb setSlice
         emit sliceChanged( m_currentSlice );
@@ -1016,7 +1016,7 @@ void Q2DViewer::setSlice( int value )
         this->checkAndUpdateSliceValue( value );
         if( isThickSlabActive() )
         {
-			m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
+            m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
             // TODO cal actualitzar aquest valor?
             m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
             //si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
@@ -1047,7 +1047,7 @@ void Q2DViewer::setPhase( int value )
             m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
         }
         this->updateDisplayExtent();
-		updateSliceAnnotationInformation();
+        updateSliceAnnotationInformation();
         emit phaseChanged( m_currentPhase );
         this->refresh();
     }
@@ -1502,7 +1502,7 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
         // informació de la finestra
         if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
         {
-			m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
+            m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
                 .arg( m_imageSizeInformation[0] )
                 .arg( m_imageSizeInformation[1] )
                 .arg( vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
@@ -1530,29 +1530,29 @@ void Q2DViewer::updatePatientAnnotationInformation()
         // informació fixa
         m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:%6\n%7\n%8")
                     .arg( series->getInstitutionName() )
-					.arg( patient->getFullName() )
-					.arg( study->getPatientAge() )
+                    .arg( patient->getFullName() )
+                    .arg( study->getPatientAge() )
                     .arg( patient->getSex() )
                     .arg( patient->getID() )
                     .arg( study->getAccessionNumber() )
                     .arg( study->getDateAsString() )
                     .arg( study->getTimeAsString() ); // TODO seria més correcte mostrar l'hora de la sèrie i inclús de la imatge
 
-		if( series->getModality() == "MG" )
-		{
-			m_lowerRightText.clear();
-		}
-		else
-		{
-                    // Si protocol i descripció coincideixen posarem el contingut de protocol
-                    // Si són diferents, els fusionarem
-                    QString protocolName, description;
-                    protocolName = series->getProtocolName();
-                    description = series->getDescription();
-                    m_lowerRightText = protocolName;
-                    if( description != protocolName )
-                            m_lowerRightText += "\n" + description;
-		}
+        if( series->getModality() == "MG" )
+        {
+            m_lowerRightText.clear();
+        }
+        else
+        {
+            // Si protocol i descripció coincideixen posarem el contingut de protocol
+            // Si són diferents, els fusionarem
+            QString protocolName, description;
+            protocolName = series->getProtocolName();
+            description = series->getDescription();
+            m_lowerRightText = protocolName;
+            if( description != protocolName )
+                m_lowerRightText += "\n" + description;
+        }
 
         m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
         m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
@@ -1672,35 +1672,35 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
     if( m_enabledAnnotations & Q2DViewer::SliceAnnotation ) // si les annotacions estan habilitades
     {
         QString lowerLeftText;
-		// TODO ara només tenim en compte de posar l'slice location si estem en la vista "original"
-		if( m_lastView == Q2DViewer::Axial )
-		{
-			Image *image = getCurrentDisplayedImage();
-			if( image )
-			{
-				QString location = image->getSliceLocation();
-				if( !location.isEmpty() )
-				{
-					lowerLeftText = tr("Loc: %1").arg( location.toDouble(), 0, 'f', 2 );
-					if( isThickSlabActive() )
-					{
-                                                // TODO Necessitaríem funcions de més alt nivell per obtenir la imatge consecutiva d'acord amb els paràmetres
-                                                // de thicknes, fases, etc
-                                                Image *secondImage = 0;
-                                                int index = ((m_currentSlice + m_slabThickness-1) * m_numberOfPhases) + m_currentPhase;
-                                                if( index >= 0 && index < m_mainVolume->getImages().count() ) // està dins del rang
-                                                {
-                                                    secondImage = m_mainVolume->getImages().at(index);
-                                                }
-						if( secondImage )
-						{
-							lowerLeftText += tr("-%1").arg( secondImage->getSliceLocation().toDouble(), 0, 'f', 2 );
-						}
-					}
-					lowerLeftText += "\n";
-				}
-			}
-		}
+        // TODO ara només tenim en compte de posar l'slice location si estem en la vista "original"
+        if( m_lastView == Q2DViewer::Axial )
+        {
+            Image *image = getCurrentDisplayedImage();
+            if( image )
+            {
+                QString location = image->getSliceLocation();
+                if( !location.isEmpty() )
+                {
+                    lowerLeftText = tr("Loc: %1").arg( location.toDouble(), 0, 'f', 2 );
+                    if( isThickSlabActive() )
+                    {
+                        // TODO Necessitaríem funcions de més alt nivell per obtenir la imatge consecutiva d'acord amb els paràmetres
+                        // de thicknes, fases, etc
+                        Image *secondImage = 0;
+                        int index = ((m_currentSlice + m_slabThickness-1) * m_numberOfPhases) + m_currentPhase;
+                        if( index >= 0 && index < m_mainVolume->getImages().count() ) // està dins del rang
+                        {
+                            secondImage = m_mainVolume->getImages().at(index);
+                        }
+                        if( secondImage )
+                        {
+                            lowerLeftText += tr("-%1").arg( secondImage->getSliceLocation().toDouble(), 0, 'f', 2 );
+                        }
+                    }
+                    lowerLeftText += "\n";
+                }
+            }
+        }
 
         if( maxPhase > 1 ) // tenim fases
         {
@@ -1758,9 +1758,9 @@ void Q2DViewer::updateDisplayExtent()
     if( !m_mainVolume->getVtkData() )
         return;
 
-	//TODO potser el càlcul de l'índex de l'imatge l'hauria de fer Volume que
-	// és qui coneix com es guarda la informació de la imatge, ja que si canviem la manera
-	// de guardar les phases, això ja no ens valdria
+    //TODO potser el càlcul de l'índex de l'imatge l'hauria de fer Volume que
+    // és qui coneix com es guarda la informació de la imatge, ja que si canviem la manera
+    // de guardar les phases, això ja no ens valdria
     // thick slab
     int sliceValue;
     if( isThickSlabActive() )
