@@ -1576,6 +1576,17 @@ void Q2DViewer::updateSliceAnnotationInformation()
     {
         m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
 
+        //En la modalitat de mamografia s'ha de mostar informació especifica de la imatge que s'està mostrant.
+        //Per tant si estem a la vista original agafem la imatge actual, altrament no mostrem cap informació.
+        if( m_lastView == Q2DViewer::Axial )
+        {
+            image = m_mainVolume->getImage(m_currentSlice);
+        }
+        else
+        {
+            image = 0;
+        }
+
         if( image )
         {
             DICOMTagReader reader( image->getPath() );
