@@ -56,11 +56,12 @@ bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget* extension)
     }
     else
     {
+#ifndef STARVIEWER_LITE
         // Busquem i apliquem el millor hanging protocol possible
         q2dviewerExtension->searchAndApplyBestHangingProtocol();
 		//Actualitzem el widget de prèvies.
 		q2dviewerExtension->searchPreviousStudiesOfMostRecentStudy();
-
+#endif
         return true;
     }
 }

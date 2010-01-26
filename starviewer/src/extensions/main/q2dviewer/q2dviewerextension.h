@@ -30,8 +30,11 @@ class MenuGridWidget;
 class TableMenu;
 class QDicomDump;
 class StatsWatcher;
+
+#ifndef STARVIEWER_LITE
 class QPreviousStudiesWidget;
 class PreviousStudiesManager;
+#endif
 
 /**
 Extensió que s'executarà  per defecte a l'obrir un model
@@ -70,8 +73,10 @@ public slots:
     ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showInteractiveImageTable();
 
+#ifndef STARVIEWER_LITE
     /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
     void showPreviousStudiesWidget();
+#endif
 
     /// Mostrar la informació del volum a cada visualitzador o no.
     void showViewerInformation( bool show );
@@ -79,14 +84,17 @@ public slots:
     ///Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
     void showDicomDumpCurrentDisplayedImage();
 
+#ifndef STARVIEWER_LITE
     /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
     void showScreenshotsExporterDialog();
+#endif
 
     //TODO mètode per solucionar problemes perquè la sincronització encara no està adaptada
     // a la resta de les tools
     /// Desactiva l'eina de sincronització.
     void disableSynchronization();
 
+#ifndef STARVIEWER_LITE
     // Apilicar un hanging protocol
     void setHangingProtocol( int hangingProtocolNumber );
 
@@ -95,6 +103,7 @@ public slots:
 
     /// Mètode per buscar les prèvies de l'estudi carregat més recent.
     void searchPreviousStudiesOfMostRecentStudy();
+#endif
 
     /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi previ està en descàrrega
     void setGrid( int rows, int columns );
@@ -112,12 +121,17 @@ private:
      */
     void initializeTools();
 
+#ifndef STARVIEWER_LITE
     /// Buscar estudis prèvis
     void searchPreviousStudiesWithHangingProtocols();
+#endif
 
 private slots:
+
+#ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
+#endif
 
     /**
      * Habilita o deshabilita el botó de Dump d'info DICOM
@@ -134,6 +148,7 @@ private slots:
     /// Mètode que tracta el canvi de visualitzador seleccionat
     void changeSelectedViewer( Q2DViewerWidget *viewerWidget );
 
+#ifndef STARVIEWER_LITE
     ///  Mètode que busca els hanging protocols aplicables
     void searchHangingProtocols();
 
@@ -143,6 +158,7 @@ private slots:
 
     /// Mètode que afegeix els hanging protocols amb prèvies
     void addPreviousHangingProtocols( QList<Study*> studies, QHash<QString, QString> qhash );
+#endif
 
 private:
     /// El volum principal
@@ -152,8 +168,11 @@ private:
     QAction *m_singleShotAction;
     QAction *m_multipleShotAction;
     QAction *m_screenShotTriggerAction;
+
+#ifndef STARVIEWER_LITE
     QAction *m_sagitalViewAction;
     QAction *m_coronalViewAction;
+#endif
 
     /// El diàleg per escollir un window level ajustat per l'usuari
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
@@ -181,12 +200,13 @@ private:
     /// ültim visualitzador seleccionat
     Q2DViewerWidget *m_lastSelectedViewer;
 
-    /// Llista de hanging protocols aplicables
-    QList<HangingProtocol * > m_hangingCandidates;
-
     /// Per fer estadístiques d'usabilitat
     StatsWatcher *m_statsWatcher;
 
+#ifndef STARVIEWER_LITE
+    /// Llista de hanging protocols aplicables
+    QList<HangingProtocol * > m_hangingCandidates;
+    
     /// Widget per poder seleccionar estudis previs
     QPreviousStudiesWidget *m_previousStudiesWidget;
 
@@ -195,6 +215,8 @@ private:
 
     /// Manager de hanging protocols 
     HangingProtocolManager * m_hangingProtocolManager;
+#endif 
+
 };
 
 } // end namespace udg
