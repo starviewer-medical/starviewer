@@ -54,8 +54,8 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_axialViewToolButton->hide();
     m_coronalViewToolButton->hide();
     m_sagitalViewToolButton->hide();
-    label_2->hide();
-    label_4->hide();
+    m_orientationButtonsLabel->hide();
+    m_thickSlabLabel->hide();
     m_thickSlabWidget->hide();
     m_referenceLinesToolButton->hide();
     m_cursor3DToolButton->hide();
