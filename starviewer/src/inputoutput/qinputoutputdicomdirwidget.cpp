@@ -18,6 +18,8 @@
 #include "patient.h"
 #include "statswatcher.h"
 #include "inputoutputsettings.h"
+#include "harddiskinformation.h"
+#include "localdatabasemanager.h"
 
 namespace udg
 {
@@ -273,9 +275,24 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::NoEnoughSpace :
-            message = tr("There is not enough space to retrieve studies, please free space.");
-            QMessageBox::warning( this , ApplicationNameString , message );
-            break;
+            {
+                HardDiskInformation hardDiskInformation;
+                Settings settings;
+                quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
+                quint64 minimumFreeSpaceRequired = quint64( settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache ).toULongLong() * 1024 );
+                message = tr("Your current database settings does not allow you to store the requested studies.");
+                message += "\n";
+                message += tr("Try to free hard disk space, delete local studies manually, change the location of stored studies or change the storage limits to be able to store studies.");
+                message += "\n\n";
+                message += tr("Current location resources:");
+                message += "\n";
+                message += "    " + tr("* Reserved disk space for system: %1Gb").arg(minimumFreeSpaceRequired/1024.0);
+                message += "\n";
+                message += "    " + tr("* Free disk space: %1Gb").arg(freeSpaceInHardDisk/1024.0);
+                
+                QMessageBox::warning( this , ApplicationNameString , message );
+                break;
+            }
         case DICOMDIRImporter::ErrorFreeingSpace :
             message = tr("An error has ocurred freeing space, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
