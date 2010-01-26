@@ -86,7 +86,7 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
      Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
     m_storedPrint->setMagnificationType(qPrintable(m_dicomPrintPage.getMagnificationType()));
 
-    if (m_dicomPrintPage.getMagnificationType().compare("CUBIC"))
+    if (m_dicomPrintPage.getMagnificationType().compare("CUBIC") == 0)
     {
         /*El Smoothing Type, tag 2010,0080 del Basic Film Box, només se li pot donar valor sir el tag Magnification Type 2010,0060 té com a valor 'CUBIC'
           Especifica el tipus de funció d'interpollació a aplicar.
