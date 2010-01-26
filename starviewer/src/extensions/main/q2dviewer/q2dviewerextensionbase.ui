@@ -117,7 +117,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="m_layoutsLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -579,7 +579,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="m_orientationButtonsLabel">
          <property name="text">
           <string>Orientation</string>
          </property>
@@ -844,7 +844,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="m_thickSlabLabel">
          <property name="text">
           <string>Thick Slab</string>
          </property>
