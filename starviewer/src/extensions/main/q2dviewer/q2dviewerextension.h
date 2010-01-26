@@ -36,13 +36,12 @@ class PreviousStudiesManager;
 /**
 Extensió que s'executarà  per defecte a l'obrir un model
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Q2DViewerExtension : public QWidget , private Ui::Q2DViewerExtensionBase {
 Q_OBJECT
 public:
     Q2DViewerExtension( QWidget *parent = 0 );
-
     ~Q2DViewerExtension();
 
     /// Li assigna el volum principal
@@ -88,14 +87,14 @@ public slots:
     /// Desactiva l'eina de sincronització.
     void disableSynchronization();
 
-	// Apilicar un hanging protocol
-	void setHangingProtocol( int hangingProtocolNumber );
+    // Apilicar un hanging protocol
+    void setHangingProtocol( int hangingProtocolNumber );
 
     /// Mètode que busca els hanging protocols aplicables i aplica el millor de tots
     void searchAndApplyBestHangingProtocol();
 
-	/// Mètode per buscar les prèvies de l'estudi carregat més recent.
-	void searchPreviousStudiesOfMostRecentStudy();
+    /// Mètode per buscar les prèvies de l'estudi carregat més recent.
+    void searchPreviousStudiesOfMostRecentStudy();
 
     /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi previ està en descàrrega
     void setGrid( int rows, int columns );
@@ -113,8 +112,8 @@ private:
      */
     void initializeTools();
 
-	/// Buscar estudis prèvis
-	void searchPreviousStudiesWithHangingProtocols();
+    /// Buscar estudis prèvis
+    void searchPreviousStudiesWithHangingProtocols();
 
 private slots:
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
@@ -142,8 +141,8 @@ private slots:
     void changeToPreviousStudiesDownloadingIcon();
     void changeToPreviousStudiesDefaultIcon();
 
-	/// Mètode que afegeix els hanging protocols amb prèvies
-	void addPreviousHangingProtocols( QList<Study*> studies, QHash<QString, QString> qhash );
+    /// Mètode que afegeix els hanging protocols amb prèvies
+    void addPreviousHangingProtocols( QList<Study*> studies, QHash<QString, QString> qhash );
 
 private:
     /// El volum principal
@@ -191,8 +190,8 @@ private:
     /// Widget per poder seleccionar estudis previs
     QPreviousStudiesWidget *m_previousStudiesWidget;
 
-	/// Manager per estudis previs
-	PreviousStudiesManager * m_previousStudiesManager;
+    /// Manager per estudis previs
+    PreviousStudiesManager * m_previousStudiesManager;
 
     /// Manager de hanging protocols 
     HangingProtocolManager * m_hangingProtocolManager;
