@@ -8,12 +8,14 @@
 <selectorAttribute>ImageType</selectorAttribute>
 <valueRepresentation>LOCALIZER</valueRepresentation>
 </restriction>
+<restriction identifier="2">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>MinimumNumberOfImages</selectorAttribute>
+<valueRepresentation>10</valueRepresentation>
+</restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
-<type>image</type>
-</imageSet>
-<imageSet identifier="2">
-<restriction>1</restriction>
+<restriction>2</restriction>
 <type>image</type>
 </imageSet>
 <displaySet identifier="1">
@@ -23,7 +25,7 @@
 <iconType>SAG</iconType>
 </displaySet>
 <displaySet identifier="2">
-<imageSetNumber>2</imageSetNumber>
+<imageSetNumber>1</imageSetNumber>
 <position>0.5\1.0\1.0\0.0</position>
 <reconstruction>AXIAL</reconstruction>
 </displaySet>
