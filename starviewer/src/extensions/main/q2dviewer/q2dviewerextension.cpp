@@ -75,10 +75,6 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_sliceTableGrid = new TableMenu(this);
     m_dicomDumpCurrentDisplayedImage = new QDicomDump(this);
     
-
-    readSettings();
-    createConnections();
-
 #ifndef STARVIEWER_LITE
     m_previousStudiesWidget = new QPreviousStudiesWidget( this );
     m_previousStudiesToolButton->setEnabled(false);
@@ -93,6 +89,9 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
+
+    readSettings();
+    createConnections();
     initializeTools();
 
     // incorporem estadístiques
