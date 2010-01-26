@@ -38,6 +38,10 @@ private:
     void generate2DPreview(int slice, int phase);
     void generatePreview();
 
+    /// Mètodes per saber si tenim suficient espai pel volum que volem generar
+    bool canAllocateEnoughMemory();
+    bool canAllocateEnoughMemory( int numberOfScreenshots );
+
 private slots:
     /// Generar i guardar la nova sèrie a la bdd i enviar-la al PACS si és el cas.
     void generateAndStoreNewSeries();

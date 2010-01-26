@@ -110,6 +110,14 @@ void QExporterTool::initialize()
 
 void QExporterTool::generateAndStoreNewSeries()
 {
+    if ( !canAllocateEnoughMemory() )
+    {
+        DEBUG_LOG( "No hi ha prou memòria per generar el nou volum." );
+        WARN_LOG( "No hi ha prou memòria per generar el nou volum." );
+        QMessageBox::warning( this, tr("No enough memory"), tr("The new volume cannot be generated because there is not enought memory. Please, select less slices or reduce the window size.") );
+        return;
+    }
+
     VolumeBuilderFromCaptures *builder = new VolumeBuilderFromCaptures();
     builder->setParentStudy( m_viewer->getInput()->getStudy() );
 
@@ -402,5 +410,61 @@ void QExporterTool::generatePreview()
 
     writer->Delete();
 }
+bool QExporterTool::canAllocateEnoughMemory()
+{
+    int numberOfScreenshots = 0;
+    if ( m_currentImageRadioButton->isChecked() )
+    {
+        numberOfScreenshots = 1;
+    }
+    else if ( m_allImagesRadioButton->isChecked() )
+    {
+        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>( m_viewer );
+
+        int maxSlice = viewer2D->getMaximumSlice() + 1;
+        int phases = viewer2D->getInput()->getNumberOfPhases();
+        numberOfScreenshots = maxSlice*phases;
+    }
+    else if ( m_imagesOfCurrentPhaseRadioButton->isChecked() )
+    {
+        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>( m_viewer );
+
+        numberOfScreenshots = viewer2D->getMaximumSlice() + 1;
+    }
+    else if ( m_phasesOfCurrentImageRadioButton->isChecked() )
+    {
+        Q2DViewer * viewer2D = qobject_cast<Q2DViewer *>( m_viewer );
+
+        numberOfScreenshots = viewer2D->getInput()->getNumberOfPhases();
+    }
+    else
+    {
+        DEBUG_LOG( QString("Radio Button no identificat!") );
+        return false;
+    }
+
+    return canAllocateEnoughMemory( numberOfScreenshots );
+}
+bool QExporterTool::canAllocateEnoughMemory(int numberOfScreenshots)
+{
+    int * windowSize = m_viewer->getRenderWindowSize();
+    // \TODO Com a mida màxima s'agafa el doble del que ocuparà el volum ja que el vtkImageAppend allotja memòria per generarà l'output. Hi posem 100MB de cortesia.
+    int size = windowSize[0] * windowSize[1] * numberOfScreenshots * 3 * sizeof(unsigned char) * 2 + 1024*1024*100;
+    
+    DEBUG_LOG( QString("Sizeof = %1").arg( size ) );
+    
+    char *p = 0;
+    try
+    {
+        p = new char[size];
+        delete[] p;
+        return true;
+    }
+    catch ( std::bad_alloc &ba )
+    {
+        return false;
+    }
+}
+
 }
 
