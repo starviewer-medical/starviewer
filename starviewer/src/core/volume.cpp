@@ -241,7 +241,13 @@ int Volume::getNumberOfPhases() const
 Volume *Volume::getPhaseVolume( int index )
 {
     Volume *result = NULL;
-    if( index >= 0 && index < m_numberOfPhases )
+    if( m_numberOfPhases == 1 )
+    {
+        // Si només tenim una sola fase, retornem totes les imatges que conté el volum
+        result = new Volume();
+        result->setImages( m_imageSet );
+    }
+    else if( index >= 0 && index < m_numberOfPhases )
     {
         result = new Volume();
         // Obtenim el nombre d'imatges per fase
