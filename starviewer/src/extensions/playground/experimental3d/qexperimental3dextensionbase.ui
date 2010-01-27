@@ -3023,10 +3023,34 @@
            </property>
           </widget>
          </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_57">
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item>
           <widget class="QPushButton" name="m_probabilisticAmbientOcclusionTangentCubePushButton">
            <property name="text">
             <string>PAO tangent cube</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionVarianceTangentCubePushButton">
+           <property name="text">
+            <string>PAO variance tangent cube</string>
            </property>
           </widget>
          </item>

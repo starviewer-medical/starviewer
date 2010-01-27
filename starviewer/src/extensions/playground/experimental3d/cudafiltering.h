@@ -23,6 +23,7 @@ QVector<float> cfProbabilisticAmbientOcclusionGaussian( vtkImageData *image, int
 QVector<float> cfProbabilisticAmbientOcclusionCube( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb la freqüència de Z >= z en un cub
 QVector<float> cfProbabilisticAmbientOcclusionSphere( vtkImageData *image, int radius );    // estimació de P(Z >= z) amb la freqüència de Z >= z en una esfera
 QVector<float> cfProbabilisticAmbientOcclusionTangentCube( vtkImageData *image, int radius );   // estimació de P(Z >= z) amb el mètode del cub tangent (László)
+QVector<float> cfProbabilisticAmbientOcclusionVarianceTangentCube( vtkImageData *image, int radius );   // estimació de P(Z >= z) amb Chebychev i cub tangent (László)
 
 
 #ifdef __cplusplus
