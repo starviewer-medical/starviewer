@@ -26,7 +26,7 @@ class NonClosedAngleTool : public Tool
 Q_OBJECT
 public:
  ///possibles estats de la tool
-    enum { NONE, FIRST_LINE_FIXED, SECOND_LINE_FIXED };
+    enum { None, FirstLineFixed, SecondLineFixed };
 
     NonClosedAngleTool( QViewer *viewer, QObject *parent = 0 );
 
@@ -50,7 +50,7 @@ private:
 
 private:
     ///Estats de la línia segons els punts
-    enum { NO_POINTS, FIRST_POINT };
+    enum { NoPoints, FirstPoint };
 
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;

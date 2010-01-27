@@ -29,13 +29,13 @@ NonClosedAngleTool::NonClosedAngleTool( QViewer *viewer, QObject *parent )
 
     m_firstLine = NULL;
     m_secondLine = NULL;
-    m_state = NONE;
-    m_lineState = NO_POINTS;
+    m_state = None;
+    m_lineState = NoPoints;
 }
 
 NonClosedAngleTool::~NonClosedAngleTool()
 {
-    if ( m_state != NONE )
+    if ( m_state != None )
     {
         if ( m_firstLine )
             delete m_firstLine;
@@ -56,7 +56,7 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
                 {
                     this->annotateLinePoints();
 
-                    if ( m_state == SECOND_LINE_FIXED )
+                    if ( m_state == SecondLineFixed )
                     {
                         computeAngle();
                         //Acabem les línies
@@ -64,7 +64,7 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
                         m_secondLine = NULL;
 
                         //Restaurem m_state
-                        m_state = NONE;
+                        m_state = None;
                     }
 
                     m_2DViewer->getDrawer()->refresh();
@@ -74,9 +74,9 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
 
         case vtkCommand::MouseMoveEvent:
 
-            if( m_firstLine && m_state == NONE )
+            if( m_firstLine && m_state == None )
                 this->simulateLine(m_firstLine);
-            else if ( m_secondLine && m_state == FIRST_LINE_FIXED )
+            else if ( m_secondLine && m_state == FirstLineFixed )
                 this->simulateLine(m_secondLine);
 
             m_2DViewer->getDrawer()->refresh();
@@ -90,10 +90,10 @@ void NonClosedAngleTool::annotateLinePoints()
     DrawerLine *line;
 
     //creem primera o segona línies
-    if ( ( m_state == NONE && m_lineState == NO_POINTS ) ||
-        ( m_state == FIRST_LINE_FIXED && m_lineState == NO_POINTS ) )
+    if ( ( m_state == None && m_lineState == NoPoints ) ||
+        ( m_state == FirstLineFixed && m_lineState == NoPoints ) )
         line = new DrawerLine;
-    else if ( m_state == NONE )
+    else if ( m_state == None )
         line = m_firstLine;
     else
         line = m_secondLine;
@@ -102,13 +102,13 @@ void NonClosedAngleTool::annotateLinePoints()
     m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
     //afegim el punt
-    if( m_lineState == NO_POINTS )
+    if( m_lineState == NoPoints )
     {
         line->setFirstPoint( clickedWorldPoint );
         line->setSecondPoint( clickedWorldPoint );
-        m_lineState = FIRST_POINT;
+        m_lineState = FirstPoint;
 
-        if ( m_state == NONE )
+        if ( m_state == None )
             m_firstLine = line;
         else
             m_secondLine = line;
@@ -121,12 +121,12 @@ void NonClosedAngleTool::annotateLinePoints()
 
         line->update( DrawerPrimitive::VTKRepresentation );
 
-        m_lineState = NO_POINTS;
+        m_lineState = NoPoints;
 
-        if ( m_state == NONE )
-            m_state = FIRST_LINE_FIXED;
+        if ( m_state == None )
+            m_state = FirstLineFixed;
         else
-            m_state = SECOND_LINE_FIXED;
+            m_state = SecondLineFixed;
     }
 }
 
