@@ -35,13 +35,10 @@ NonClosedAngleTool::NonClosedAngleTool( QViewer *viewer, QObject *parent )
 
 NonClosedAngleTool::~NonClosedAngleTool()
 {
-    if ( m_state != None )
-    {
-        if ( m_firstLine )
-            delete m_firstLine;
-        if ( m_secondLine )
-            delete m_secondLine;
-    }
+    if ( m_firstLine )
+        delete m_firstLine;
+    if ( m_secondLine )
+        delete m_secondLine;
 }
 
 void NonClosedAngleTool::handleEvent( long unsigned eventID )
