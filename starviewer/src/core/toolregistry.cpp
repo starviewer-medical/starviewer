@@ -363,6 +363,7 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
     {
         action->setText( tr("Clear") );
         action->setIcon ( QIcon(":/images/clearCurrentViewAnnotations.png") );
+        action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ClearCurrentViewAnnotationsTool ) );
         statusTip = tr("Clear primitives from viewer");
         toolTip = statusTip;
 

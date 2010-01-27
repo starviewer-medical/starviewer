@@ -35,6 +35,7 @@ const QString Shortcuts::RotateClockWiseTool( ShortcutsBase + "RotateClockWiseTo
 const QString Shortcuts::RotateCounterClockWiseTool( ShortcutsBase + "RotateCounterClockWiseTool" );
 const QString Shortcuts::HorizontalFlipTool( ShortcutsBase + "HorizontalFlipTool" );
 const QString Shortcuts::VerticalFlipTool( ShortcutsBase + "VerticalFlipTool" );
+const QString Shortcuts::ClearCurrentViewAnnotationsTool( ShortcutsBase + "ClearCurrentViewAnnotationsActionTool" );
 
 const QString Shortcuts::NewWindow( ShortcutsBase + "NewWindow" );
 const QString Shortcuts::OpenFile( ShortcutsBase + "OpenFile" );
@@ -172,6 +173,10 @@ void Shortcuts::init()
     shortcutsList.append( QString("J") );
     settingsRegistry->addSetting( VerticalFlipTool, shortcutsList );
 
+    shortcutsList.clear();
+    shortcutsList.append( QString("Ctrl+E") );
+    settingsRegistry->addSetting( ClearCurrentViewAnnotationsTool, shortcutsList );
+    
     shortcutsList.clear();
     shortcutsList.append( QKeySequence( QKeySequence::New ).toString() );
     settingsRegistry->addSetting( NewWindow, shortcutsList );

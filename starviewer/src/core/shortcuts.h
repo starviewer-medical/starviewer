@@ -42,6 +42,7 @@ public:
     static const QString RotateCounterClockWiseTool;
     static const QString HorizontalFlipTool;
     static const QString VerticalFlipTool;
+    static const QString ClearCurrentViewAnnotationsTool;
 
     static const QString NewWindow;
     static const QString OpenFile;
