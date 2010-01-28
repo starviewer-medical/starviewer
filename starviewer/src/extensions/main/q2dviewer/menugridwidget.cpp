@@ -323,7 +323,7 @@ void MenuGridWidget::setMaxElements( int elements )
 
 void MenuGridWidget::emitSelected( ItemMenu * selected )
 {
-
+    hide();
     if( selected->getData().contains(",") )// És un grid regular
     {
         QStringList values = ( selected->getData() ).split( "," );
@@ -338,7 +338,6 @@ void MenuGridWidget::emitSelected( ItemMenu * selected )
         i = selected->getData().toInt();
         emit selectedGrid( selected->getData().toInt() );
     }
-    hide();
 }
 
 void MenuGridWidget::dropContent()
