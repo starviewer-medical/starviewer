@@ -195,8 +195,6 @@ void RetrieveImages::storeSCPCallback(
                 ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + imageFilenameToSave + ", error: " + stateSaveImage.text()); 
             }
 
-            DICOMTagReader *dicomTagReader = new DICOMTagReader(imageFilenameToSave, new DcmDataset((**imageDataSet)));
-
             /* should really check the image to make sure it is consistent, that its sopClass and sopInstance correspond with those in
             * the request.
             */
@@ -222,6 +220,7 @@ void RetrieveImages::storeSCPCallback(
                     ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
                 }
             }
+            DICOMTagReader *dicomTagReader = new DICOMTagReader(imageFilenameToSave, cbdata->dcmff->getAndRemoveDataset() );
             piSingleton->process(dicomTagReader->getAttributeByName(DICOMStudyInstanceUID), dicomTagReader);
         }
     }
