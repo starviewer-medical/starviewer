@@ -123,6 +123,11 @@ void QueryScreen::initialize()
     {
         m_risRequestManager = new RISRequestManager();
     }
+    else
+    {
+        m_risRequestManager = NULL;
+    }
+
 #endif
 
 }
@@ -144,7 +149,10 @@ void QueryScreen::createConnections()
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
 
     #ifndef STARVIEWER_LITE
-    connect(m_risRequestManager, SIGNAL(retrieveStudyFromRISRequest(QString, Study*)), SLOT(retrieveStudyFromRISRequest(QString, Study*)));
+    if (m_risRequestManager != NULL)
+    {
+        connect(m_risRequestManager, SIGNAL(retrieveStudyFromRISRequest(QString, Study*)), SLOT(retrieveStudyFromRISRequest(QString, Study*)));
+    }
     #endif
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
