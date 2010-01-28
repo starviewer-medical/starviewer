@@ -35,7 +35,7 @@ void RetrieveImages::setConnection( PacsConnection connection )
     m_assoc = connection.getPacsConnection();
 }
 
-void RetrieveImages::setNetwork ( T_ASC_Network * network )
+void RetrieveImages::setNetwork( T_ASC_Network * network )
 {
     m_net = network;
 }
@@ -45,14 +45,12 @@ void RetrieveImages:: setMask( DicomMask mask )
     m_mask = mask.getDicomMask();
 }
 
-OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Association ** assoc )
+OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet, T_ASC_Association ** assoc )
 {
-    const char* knownAbstractSyntaxes[] = {
-        UID_VerificationSOPClass
-    };
+    const char* knownAbstractSyntaxes[] = { UID_VerificationSOPClass };
 
     //default value from movescu.cpp
-    OFCmdUnsignedInt  opt_maxPDU = ASC_DEFAULTMAXPDU;
+    OFCmdUnsignedInt opt_maxPDU = ASC_DEFAULTMAXPDU;
 
     const char* transferSyntaxes[] = { NULL , NULL , NULL , NULL };
     int numTransferSyntaxes;
@@ -86,20 +84,13 @@ OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Associa
         numTransferSyntaxes = 3;
 #endif
 
-
         /* accept the Verification SOP Class if presented */
-        cond = ASC_acceptContextsWithPreferredTransferSyntaxes(
-            (*assoc)->params ,
-            knownAbstractSyntaxes , DIM_OF(knownAbstractSyntaxes) ,
-            transferSyntaxes , numTransferSyntaxes );
+        cond = ASC_acceptContextsWithPreferredTransferSyntaxes( (*assoc)->params, knownAbstractSyntaxes, DIM_OF(knownAbstractSyntaxes), transferSyntaxes, numTransferSyntaxes );
 
         if ( cond.good() )
         {
             /* the array of Storage SOP Class UIDs comes from dcuid.h */
-            cond = ASC_acceptContextsWithPreferredTransferSyntaxes(
-                (*assoc)->params ,
-                dcmAllStorageSOPClassUIDs , numberOfAllDcmStorageSOPClassUIDs ,
-                transferSyntaxes , numTransferSyntaxes );
+            cond = ASC_acceptContextsWithPreferredTransferSyntaxes( (*assoc)->params, dcmAllStorageSOPClassUIDs, numberOfAllDcmStorageSOPClassUIDs,                transferSyntaxes, numTransferSyntaxes );
         }
     }
 
@@ -114,7 +105,7 @@ OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet , T_ASC_Associa
     return cond;
 }
 
-void RetrieveImages::moveCallback( void *callbackData , T_DIMSE_C_MoveRQ *req, int responseCount , T_DIMSE_C_MoveRSP *response )
+void RetrieveImages::moveCallback( void *callbackData, T_DIMSE_C_MoveRQ *req, int responseCount, T_DIMSE_C_MoveRSP *response )
 {
     Q_UNUSED( req );
     Q_UNUSED( responseCount );
@@ -126,42 +117,32 @@ void RetrieveImages::moveCallback( void *callbackData , T_DIMSE_C_MoveRQ *req, i
     myCallbackData = ( MyCallbackInfo* )callbackData;
 }
 
-OFCondition RetrieveImages::echoSCP(
-  T_ASC_Association * assoc ,
-  T_DIMSE_Message * msg ,
-  T_ASC_PresentationContextID presID )
+OFCondition RetrieveImages::echoSCP( T_ASC_Association * assoc, T_DIMSE_Message * msg,T_ASC_PresentationContextID presID )
 {
+    // The echo succeeded
+    OFCondition cond = DIMSE_sendEchoResponse( assoc , presID , &msg->msg.CEchoRQ , STATUS_Success , NULL );
+    if ( cond.bad() )
+    {
+        DimseCondition::dump( cond );
+    }
 
-  /* the echo succeeded !! */
-  OFCondition cond = DIMSE_sendEchoResponse( assoc , presID , &msg->msg.CEchoRQ , STATUS_Success , NULL );
-  if ( cond.bad() )
-  {
-    DimseCondition::dump( cond );
-  }
-
-  return cond;
+    return cond;
 }
 
-void RetrieveImages::storeSCPCallback(
-    /* in */
-    void *callbackData ,
-    T_DIMSE_StoreProgress *progress ,    /* progress state */
-    T_DIMSE_C_StoreRQ *req ,             /* original store request */
-    char *imageFileName, DcmDataset **imageDataSet , /* being received into */
-    /* out */
-    T_DIMSE_C_StoreRSP *rsp ,            /* final store response */
-    DcmDataset **statusDetail )
+void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *req, char *imageFileName, DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *rsp, DcmDataset **statusDetail )
 {
+    // Paràmetres d'entrada: callbackData, progress, req, imageFileName, imageDataSet
+    // Paràmetres de sortida: rsp, statusDetail
     Q_UNUSED( imageFileName );
     DIC_UI sopClass;
     DIC_UI sopInstance;
     /* I found their default value in movescu.cpp */
-    OFBool            opt_correctUIDPadding = OFFalse;
-    E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
+    OFBool opt_correctUIDPadding = OFFalse;
+    E_TransferSyntax opt_writeTransferSyntax = EXS_Unknown;
 
     if ( progress->state == DIMSE_StoreEnd ) //si el paquest és de finalització d'una imatge hem de guardar-le
     {
-        *statusDetail = NULL;    /* no status detail */
+        *statusDetail = NULL; /* no status detail */
 
         /*
         * An appropriate status code is already set in the resp structure, it need not be success.
@@ -200,7 +181,7 @@ void RetrieveImages::storeSCPCallback(
             */
             if ( rsp->DimseStatus == STATUS_Success )
             {
-            /* which SOP class and SOP instance ? */
+                /* which SOP class and SOP instance ? */
                 if (! DU_findSOPClassAndInstanceInDataSet( *imageDataSet , sopClass , sopInstance , opt_correctUIDPadding ) )
                 {
                     rsp->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
@@ -231,23 +212,21 @@ void RetrieveImages::storeSCPCallback(
 OFCondition RetrieveImages::save(StoreCallbackData *storeCallbackData, QString imageFileNameToSave)
 {
     OFBool opt_useMetaheader = OFTrue;
-    E_EncodingType    opt_sequenceType = EET_ExplicitLength;
-    E_GrpLenEncoding  opt_groupLength = EGL_recalcGL;
+    E_EncodingType opt_sequenceType = EET_ExplicitLength;
+    E_GrpLenEncoding opt_groupLength = EGL_recalcGL;
     E_PaddingEncoding opt_paddingType = EPD_withoutPadding;
-    OFCmdUnsignedInt  opt_filepad = 0;
-    OFCmdUnsignedInt  opt_itempad = 0;
-    E_TransferSyntax  opt_writeTransferSyntax = EXS_Unknown;
+    OFCmdUnsignedInt opt_filepad = 0;
+    OFCmdUnsignedInt opt_itempad = 0;
+    E_TransferSyntax opt_writeTransferSyntax = EXS_Unknown;
 
     E_TransferSyntax xfer = opt_writeTransferSyntax;
     if (xfer == EXS_Unknown) 
         xfer = storeCallbackData->dcmff->getDataset()->getOriginalXfer();
 
-    return storeCallbackData->dcmff->saveFile(
-            qPrintable(QDir::toNativeSeparators(imageFileNameToSave)),
-            xfer, opt_sequenceType, opt_groupLength, opt_paddingType, (Uint32)opt_filepad, (Uint32)opt_itempad, !opt_useMetaheader );
+    return storeCallbackData->dcmff->saveFile( qPrintable(QDir::toNativeSeparators(imageFileNameToSave)), xfer, opt_sequenceType, opt_groupLength, opt_paddingType, (Uint32)opt_filepad, (Uint32)opt_itempad, !opt_useMetaheader );
 }
 
-OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc , T_DIMSE_Message *msg , T_ASC_PresentationContextID presID )
+OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc, T_DIMSE_Message *msg, T_ASC_PresentationContextID presID )
 {
     OFCondition cond = EC_Normal;
     T_DIMSE_C_StoreRQ *req;
@@ -263,13 +242,13 @@ OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc , T_DIMSE_Message
 
     DcmDataset *dset = dcmff.getDataset();
 
-    cond = DIMSE_storeProvider( assoc , presID , req , (char *)NULL , opt_useMetaheader , &dset , storeSCPCallback , ( void* ) &callbackData , DIMSE_BLOCKING , 0 );
+    cond = DIMSE_storeProvider( assoc, presID, req, (char *)NULL, opt_useMetaheader, &dset, storeSCPCallback, ( void* ) &callbackData, DIMSE_BLOCKING, 0 );
 
     if ( cond.bad() )
     {
-      DimseCondition::dump( cond );
-      /* remove file */
-      unlink( imageFileName );
+        DimseCondition::dump( cond );
+        /* remove file */
+        unlink( imageFileName );
     }
     return cond;
 }
@@ -278,13 +257,13 @@ OFCondition RetrieveImages::subOpSCP( T_ASC_Association **subAssoc )
 {
     //ens convertim com en un servidor el PACS ens envai comandes que nosaltres hem de fer en aquest
     //CAS ENS POT DEMANAR UN ECHO O QUE GUARDER UNA IMATGE
-    T_DIMSE_Message     msg;
+    T_DIMSE_Message msg;
     T_ASC_PresentationContextID presID;
 
     if ( !ASC_dataWaiting( *subAssoc , 0 ) ) 
         return DIMSE_NODATAAVAILABLE;
 
-    OFCondition cond = DIMSE_receiveCommand( *subAssoc , DIMSE_BLOCKING , 0 , &presID , &msg , NULL );
+    OFCondition cond = DIMSE_receiveCommand( *subAssoc, DIMSE_BLOCKING, 0, &presID, &msg, NULL );
 
     if ( cond == EC_Normal )
     {
@@ -327,7 +306,7 @@ OFCondition RetrieveImages::subOpSCP( T_ASC_Association **subAssoc )
     return cond;
 }
 
-void RetrieveImages::subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network *aNet , T_ASC_Association **subAssoc )
+void RetrieveImages::subOpCallback(void * /*subOpCallbackData*/, T_ASC_Network *aNet , T_ASC_Association **subAssoc )
 {
     if ( aNet == NULL )
     {
@@ -347,12 +326,12 @@ void RetrieveImages::subOpCallback(void * /*subOpCallbackData*/ , T_ASC_Network 
 Status RetrieveImages::retrieve()
 {
     T_ASC_PresentationContextID presId;
-    T_DIMSE_C_MoveRQ    req;
-    T_DIMSE_C_MoveRSP   rsp;
-    DIC_US              msgId = m_assoc->nextMsgID++;
-    DcmDataset          *rspIds = NULL;
-    DcmDataset          *statusDetail = NULL;
-    MyCallbackInfo      callbackData;
+    T_DIMSE_C_MoveRQ req;
+    T_DIMSE_C_MoveRSP rsp;
+    DIC_US msgId = m_assoc->nextMsgID++;
+    DcmDataset *rspIds = NULL;
+    DcmDataset *statusDetail = NULL;
+    MyCallbackInfo callbackData;
     Status state;
 
     //If not connection has been setted, return error because we need a PACS connection
@@ -376,16 +355,13 @@ Status RetrieveImages::retrieve()
     callbackData.presId = presId;
 
     req.MessageID = msgId;
-    strcpy( req.AffectedSOPClassUID , UID_MOVEStudyRootQueryRetrieveInformationModel );
+    strcpy( req.AffectedSOPClassUID, UID_MOVEStudyRootQueryRetrieveInformationModel );
     req.Priority = DIMSE_PRIORITY_MEDIUM;
     req.DataSetType = DIMSE_DATASET_PRESENT;
     // set the destination of the images to us
-    ASC_getAPTitles( m_assoc->params, req.MoveDestination , NULL , NULL );
+    ASC_getAPTitles( m_assoc->params, req.MoveDestination, NULL, NULL );
 
-    OFCondition cond = DIMSE_moveUser( m_assoc , presId , &req , m_mask ,
-        moveCallback , &callbackData , DIMSE_BLOCKING , 0 ,
-        m_net , subOpCallback , NULL ,
-        &rsp , &statusDetail , &rspIds );
+    OFCondition cond = DIMSE_moveUser( m_assoc, presId, &req, m_mask, moveCallback, &callbackData, DIMSE_BLOCKING, 0, m_net, subOpCallback, NULL, &rsp, &statusDetail, &rspIds );
 
     if (rsp.DimseStatus != STATUS_Success)
     {
