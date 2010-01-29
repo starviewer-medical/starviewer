@@ -783,6 +783,7 @@ void QMPRExtension::setInput( Volume *input )
     vtkImageChangeInformation *changeInfo = vtkImageChangeInformation::New();
     changeInfo->SetInput( input->getVtkData() );
     changeInfo->SetOutputOrigin( .0, .0, .0 );
+    changeInfo->Update();
 
     // TODO es crea un nou volum cada cop!
     m_volume = new Volume;
