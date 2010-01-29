@@ -483,15 +483,11 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
 
 void HangingProtocolManager::applyDisplayTransformations( Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
 {
-    DICOMTagReader dicomReader;
-    if( dicomReader.setFile( serie->getImages()[imageNumber]->getPath() ) )
-    {
-        //dicomReader.getAttributeByName( DICOMPatientOrientation )
-        QVector<QString> labels = viewer->getViewer()->getCurrentDisplayedImageOrientationLabels();
-        applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3], displaySet->getPatientOrientation(), viewer->getViewer() );
-    }
-
     viewer->getViewer()->automaticRefresh( false );
+    
+    QVector<QString> labels = viewer->getViewer()->getCurrentDisplayedImageOrientationLabels();
+    applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3], displaySet->getPatientOrientation(), viewer->getViewer() );
+    
     //Posem la imatge al mig
     viewer->getViewer()->setAlignPosition( Q2DViewer::AlignCenter );
 
