@@ -172,6 +172,10 @@ DicomMask QBasicSearchWidget::buildDicomMask()
             {
                 mask.setSeriesModality("XA");
             }
+            else if (m_checkXC->isChecked())
+            {
+                mask.setSeriesModality("XC");
+            }
             else if (m_checkOtherModality->isChecked())
             {
                 mask.setSeriesModality(m_textOtherModality->text());
