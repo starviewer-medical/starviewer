@@ -20,6 +20,11 @@ mac* {
     ICON = images/starviewer.icns
 }
 
+# Definim que per sistemes de compilació windows basats en visual studio 
+# s'activi el flag /LARGEADDRESSAWARE, que permet que es puguin fer servir
+# més de 2Gb de memòria per procés. Això serà efectiu en sistemes de 64 bits
+win32-msvc2008:QMAKE_LFLAGS += /LARGEADDRESSAWARE
+
 include(../extensions.inc)
 
 # Funció per afegir una llibreria estàtica com a dependència
