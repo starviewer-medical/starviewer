@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>477</width>
-    <height>874</height>
+    <height>901</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -1443,6 +1443,43 @@
            </property>
            <property name="value">
             <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_59">
+         <item>
+          <widget class="QCheckBox" name="m_opacityProbabilisticAmbientOcclusionVarianceCheckBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Opacity (PAO variance)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="m_opacityProbabilisticAmbientOcclusionVarianceMaxLabel">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Max variance</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="m_opacityProbabilisticAmbientOcclusionVarianceMaxDoubleSpinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="maximum">
+            <double>100.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -2953,132 +2990,155 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_53">
-         <item>
-          <widget class="QLabel" name="m_probabilisticAmbientOcclusionRadiusLabel">
-           <property name="text">
-            <string>Radius</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="m_probabilisticAmbientOcclusionRadiusSpinBox">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>10</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGaussianChebychevPushButton">
-           <property name="text">
-            <string>PAO Gaussian Chebychev</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionBoxMeanChebychevPushButton">
-           <property name="text">
-            <string>PAO Box mean Chebychev</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_56">
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGaussianPushButton">
-           <property name="text">
-            <string>PAO Gaussian</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionCubePushButton">
-           <property name="text">
-            <string>PAO cube</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionSpherePushButton">
-           <property name="text">
-            <string>PAO sphere</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_57">
-         <item>
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionTangentCubePushButton">
-           <property name="text">
-            <string>PAO tangent cube</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionVarianceTangentCubePushButton">
-           <property name="text">
-            <string>PAO variance tangent cube</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_58">
-         <item>
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGradientPushButton">
-           <property name="text">
-            <string>PAO gradient</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QGroupBox" name="m_probabilisticAmbientOcclusionGroupBox">
+         <property name="title">
+          <string>Probabilistic Ambient Occlusion (PAO)</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_14">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_53">
+            <item>
+             <widget class="QLabel" name="m_probabilisticAmbientOcclusionRadiusLabel">
+              <property name="text">
+               <string>Radius</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="m_probabilisticAmbientOcclusionRadiusSpinBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGaussianChebychevPushButton">
+              <property name="text">
+               <string>PAO Gaussian Chebychev</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionBoxMeanChebychevPushButton">
+              <property name="text">
+               <string>PAO Box mean Chebychev</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_56">
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGaussianPushButton">
+              <property name="text">
+               <string>PAO Gaussian</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionCubePushButton">
+              <property name="text">
+               <string>PAO cube</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionSpherePushButton">
+              <property name="text">
+               <string>PAO sphere</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_57">
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionTangentCubePushButton">
+              <property name="text">
+               <string>PAO tangent cube</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionVarianceTangentCubePushButton">
+              <property name="text">
+               <string>PAO variance tangent cube</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_58">
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionGradientPushButton">
+              <property name="text">
+               <string>PAO gradient</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionVariancePushButton">
+              <property name="text">
+               <string>PAO variance</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_7">

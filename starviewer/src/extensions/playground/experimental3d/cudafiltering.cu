@@ -1786,3 +1786,169 @@ QVector<float> cfProbabilisticAmbientOcclusionVarianceTangentCube(vtkImageData *
 
     return result;
 }
+
+
+QVector<float> cfProbabilisticAmbientOcclusionVariance(const QVector<float> &probabilisticAmbientOcclusion, int radius, int *dimensions)
+{
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start, 0);
+
+    cudaStream_t stream1, stream2;
+    cudaStreamCreate(&stream1);
+    cudaStreamCreate(&stream2);
+
+    const uint VOLUME_DATA_SIZE = probabilisticAmbientOcclusion.size();
+    cudaExtent volumeDataDims = make_cudaExtent(dimensions[0], dimensions[1], dimensions[2]);
+
+    // Copiar el volum a un array i associar-hi una textura
+    cudaArray *dVolumeArray;
+    cudaChannelFormatDesc channelDescVolumeArray = cudaCreateChannelDesc<float>();
+    CUDA_SAFE_CALL( cudaMalloc3DArray(&dVolumeArray, &channelDescVolumeArray, volumeDataDims) );
+    cudaMemcpy3DParms copyParams = {0};
+    copyParams.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(const_cast<float*>(probabilisticAmbientOcclusion.data())), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);    // data, pitch, width, height
+    copyParams.dstArray = dVolumeArray;
+    copyParams.extent = volumeDataDims;
+    copyParams.kind = cudaMemcpyHostToDevice;
+    CUDA_SAFE_CALL( cudaMemcpy3D(&copyParams) );    // còpia síncrona perquè si un dels dos és el host ha de ser memòria reservada amb cudaMallocHost
+    //gVolumeTexture.normalized = false;                      // false (predeterminat) -> [0,N) | true -> [0,1)
+    //gVolumeTexture.filterMode = cudaFilterModePoint;        // cudaFilterModePoint (predeterminat) o cudaFilterModeLinear
+    //gVolumeTexture.addressMode[0] = cudaAddressModeClamp;   // cudaAddressModeClamp (retallar) (predeterminat) o cudaAddressModeWrap (fer la volta)
+    //gVolumeTexture.addressMode[1] = cudaAddressModeClamp;
+    //gVolumeTexture.addressMode[2] = cudaAddressModeClamp;
+    CUDA_SAFE_CALL( cudaBindTextureToArray(gVolumeTexture, dVolumeArray, channelDescVolumeArray) );
+
+    // Reservar espai pel resultat
+    float *dfResult;
+    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&dfResult), VOLUME_DATA_SIZE * sizeof(float)) );
+
+    // Preparar l'execució
+    //Block width should be a multiple of maximum coalesced write size
+    //for coalesced memory writes in convolutionRowGPU() and convolutionColumnGPU()
+    dim3 threadBlock(16, 8, 4);
+    uint blocksX = iDivUp(volumeDataDims.width, threadBlock.x);
+    uint blocksY = iDivUp(volumeDataDims.height, threadBlock.y);
+    uint blocksZ = iDivUp(volumeDataDims.depth, threadBlock.z);
+    dim3 blockGrid(blocksX * blocksY, blocksZ);
+
+    // Calcular volum al quadrat
+    squareKernel<<<blockGrid, threadBlock, 0, stream2>>>(dfResult, volumeDataDims); // generem el volum al quadrat a l'stream 2
+
+    // Mentrestant, al host...
+
+    // Crear un segon array pel volum al quadrat, amb la seva textura corresponent
+    cudaArray *dVolume2Array;
+    cudaChannelFormatDesc channelDescVolume2Array = cudaCreateChannelDesc<float>();
+    CUDA_SAFE_CALL( cudaMalloc3DArray(&dVolume2Array, &channelDescVolume2Array, volumeDataDims) );
+    //gVolume2Texture.normalized = false;                     // false (predeterminat) -> [0,N) | true -> [0,1)
+    //gVolume2Texture.filterMode = cudaFilterModePoint;       // cudaFilterModePoint (predeterminat) o cudaFilterModeLinear
+    //gVolume2Texture.addressMode[0] = cudaAddressModeClamp;  // cudaAddressModeClamp (retallar) (predeterminat) o cudaAddressModeWrap (fer la volta)
+    //gVolume2Texture.addressMode[1] = cudaAddressModeClamp;
+    //gVolume2Texture.addressMode[2] = cudaAddressModeClamp;
+    CUDA_SAFE_CALL( cudaBindTextureToArray(gVolume2Texture, dVolume2Array, channelDescVolume2Array) );
+
+    // En aquest temps suposem que ja ha acabat el kernel d'abans (stream 2)
+    cudaStreamSynchronize(stream2);
+
+    // Copiem el resultat a l'array del volum al quadrat
+    cudaMemcpy3DParms copyParams2 = {0};
+    copyParams2.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(dfResult), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);   // data, pitch, width, height
+    copyParams2.dstArray = dVolume2Array;
+    copyParams2.extent = volumeDataDims;
+    copyParams2.kind = cudaMemcpyDeviceToDevice;
+    CUDA_SAFE_CALL_NO_SYNC( cudaMemcpy3DAsync(&copyParams2, stream2) ); // còpia a l'stream 2
+
+    // Reservar espai per l'altre resultat
+    float *dfResult2;
+    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&dfResult2), VOLUME_DATA_SIZE * sizeof(float)) );
+
+    // Calcular kernel
+    const int KERNEL_WIDTH = 2 * radius + 1;
+    QVector<float> kernel(KERNEL_WIDTH);
+    kernel.fill(1.0f / KERNEL_WIDTH);
+    std::cout << "kernel:";
+    for (int i = 0; i < KERNEL_WIDTH; i++) std::cout << " " << kernel[i];
+    std::cout << std::endl;
+    float *dfKernel;
+    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&dfKernel), KERNEL_WIDTH * sizeof(float)) );
+    // Aquest és molt petit, o sigui que el podem fer síncron
+    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(dfKernel), reinterpret_cast<void*>(kernel.data()), KERNEL_WIDTH * sizeof(float), cudaMemcpyHostToDevice) );
+
+    // Aquí ja hauria d'haver acabat la còpia d'abans (stream 2)
+    cudaStreamSynchronize(stream2);
+
+    // A partir d'aquí comença la diversió:
+    // Executarem els dos filtratges en paral·lel, en streams diferents, perquè mentre un filtra l'altre copiï memòria i viceversa.
+    // Així podem aconseguir una execució més ràpida (en teoria).
+    // Som-hi doncs...
+
+    // Executar per X1
+    convolutionXKernel<<<blockGrid, threadBlock, 0, stream1>>>(dfResult, dfKernel, radius, volumeDataDims, false);
+    // Executar per X2
+    convolutionXKernel<<<blockGrid, threadBlock, 0, stream2>>>(dfResult2, dfKernel, radius, volumeDataDims, true);
+
+    // Copiar el resultat a l'array (1)
+    copyParams.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(dfResult), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);    // data, pitch, width, height
+    copyParams.kind = cudaMemcpyDeviceToDevice;
+    cudaStreamSynchronize(stream1);
+    CUDA_SAFE_CALL_NO_SYNC( cudaMemcpy3DAsync(&copyParams, stream1) );
+    // Copiar el resultat a l'array (2)
+    copyParams2.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(dfResult2), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);  // data, pitch, width, height
+    cudaStreamSynchronize(stream2);
+    CUDA_SAFE_CALL_NO_SYNC( cudaMemcpy3DAsync(&copyParams2, stream2) );
+
+    // Executar per Y1
+    cudaStreamSynchronize(stream1);
+    convolutionYKernel<<<blockGrid, threadBlock, 0, stream1>>>(dfResult, dfKernel, radius, volumeDataDims, false);
+    // Executar per Y2
+    cudaStreamSynchronize(stream2);
+    convolutionYKernel<<<blockGrid, threadBlock, 0, stream2>>>(dfResult2, dfKernel, radius, volumeDataDims, true);
+
+    // Copiar el resultat a l'array (1)
+    cudaStreamSynchronize(stream1);
+    CUDA_SAFE_CALL_NO_SYNC( cudaMemcpy3DAsync(&copyParams, stream1) );
+    // Copiar el resultat a l'array (2)
+    cudaStreamSynchronize(stream2);
+    CUDA_SAFE_CALL_NO_SYNC( cudaMemcpy3DAsync(&copyParams2, stream2) );
+
+    // Executar per Z1
+    cudaStreamSynchronize(stream1);
+    convolutionZKernel<<<blockGrid, threadBlock, 0, stream1>>>(dfResult, dfKernel, radius, volumeDataDims, false);
+    // Executar per Z2
+    cudaStreamSynchronize(stream2);
+    convolutionZKernel<<<blockGrid, threadBlock, 0, stream2>>>(dfResult2, dfKernel, radius, volumeDataDims, true);
+
+    // Ara ja podem fer la passada final
+    CUDA_SAFE_CALL( cudaThreadSynchronize() );
+    finalChebychevKernel<<<blockGrid, threadBlock>>>(dfResult, dfResult2, volumeDataDims);
+    CUDA_SAFE_CALL( cudaThreadSynchronize() );
+
+    // Copiar el resultat final al host
+    QVector<float> result(VOLUME_DATA_SIZE);
+    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(result.data()), reinterpret_cast<void*>(dfResult), VOLUME_DATA_SIZE * sizeof(float), cudaMemcpyDeviceToHost) );
+
+    // Neteja
+    CUDA_SAFE_CALL( cudaFree(dfKernel) );
+    CUDA_SAFE_CALL( cudaFree(dfResult) );
+    CUDA_SAFE_CALL( cudaFree(dfResult2) );
+    CUDA_SAFE_CALL( cudaUnbindTexture(gVolumeTexture) );
+    CUDA_SAFE_CALL( cudaUnbindTexture(gVolume2Texture) );
+    CUDA_SAFE_CALL( cudaFreeArray(dVolumeArray) );
+    CUDA_SAFE_CALL( cudaFreeArray(dVolume2Array) );
+
+    cudaEventRecord(stop, 0);
+    cudaEventSynchronize(stop);
+    float elapsedTime = 0.0f;
+    cudaEventElapsedTime(&elapsedTime, start, stop);
+
+    std::cout << "pao variance: " << elapsedTime << " ms" << std::endl;
+
+    cudaStreamDestroy(stream1);
+    cudaStreamDestroy(stream2);
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+
+    return result;
+}
