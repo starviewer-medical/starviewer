@@ -981,8 +981,9 @@ void QExperimental3DExtension::createConnections()
     connect( m_probabilisticAmbientOcclusionGaussianPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionGaussian() ) );
     connect( m_probabilisticAmbientOcclusionCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionCube() ) );
     connect( m_probabilisticAmbientOcclusionSpherePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionSphere() ) );
-    connect( m_probabilisticAmbientOcclusionTangentCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionTangentCube() ) );
-    connect( m_probabilisticAmbientOcclusionVarianceTangentCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionVarianceTangentCube() ) );
+    connect( m_probabilisticAmbientOcclusionTangentSphereVariancePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionTangentSphereVariance() ) );
+    connect( m_probabilisticAmbientOcclusionTangentSphereCdfPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionTangentSphereCdf() ) );
+    connect( m_probabilisticAmbientOcclusionTangentSphereGaussianPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionTangentSphereGaussian() ) );
     connect( m_probabilisticAmbientOcclusionGradientPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionGradient() ) );
     connect( m_volumeVariancePushButton, SIGNAL( clicked() ), SLOT( volumeVariance() ) );
 }
@@ -3152,7 +3153,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionSphere()
 }
 
 
-void QExperimental3DExtension::probabilisticAmbientOcclusionTangentCube()
+void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereVariance()
 {
     vtkImageCast *cast = vtkImageCast::New();
     cast->SetInput( m_volume->getImage() );
@@ -3160,16 +3161,16 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentCube()
     cast->Update();
 
 #ifndef CUDA_AVAILABLE
-    QMessageBox::information( this, tr("Operation only available with CUDA"), "The PAO tangent cube is only implemented in CUDA. Compile with CUDA support to use it." );
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "The PAOTS variance is only implemented in CUDA. Compile with CUDA support to use it." );
 #else // CUDA_AVAILABLE
-    m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionTangentCube( cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value() );
+    m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionTangentSphereVariance( cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value() );
 #ifndef QT_NO_DEBUG
     int size = m_volume->getSize();
     for ( int i = 0; i < size; i++ )
     {
         if ( m_probabilisticAmbientOcclusion.at( i ) < 0.0f || m_probabilisticAmbientOcclusion.at( i ) > 1.0f )
         {
-            DEBUG_LOG( QString( "pao[%1] = %2" ).arg( i ).arg( m_probabilisticAmbientOcclusion.at( i ) ) );
+            DEBUG_LOG( QString( "paots[%1] = %2" ).arg( i ).arg( m_probabilisticAmbientOcclusion.at( i ) ) );
         }
     }
 #endif // QT_NO_DEBUG
@@ -3183,7 +3184,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentCube()
 }
 
 
-void QExperimental3DExtension::probabilisticAmbientOcclusionVarianceTangentCube()
+void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereCdf()
 {
     vtkImageCast *cast = vtkImageCast::New();
     cast->SetInput( m_volume->getImage() );
@@ -3191,16 +3192,47 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionVarianceTangentCube(
     cast->Update();
 
 #ifndef CUDA_AVAILABLE
-    QMessageBox::information( this, tr("Operation only available with CUDA"), "The PAO variance tangent cube is only implemented in CUDA. Compile with CUDA support to use it." );
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "The PAOTS cdf is only implemented in CUDA. Compile with CUDA support to use it." );
 #else // CUDA_AVAILABLE
-    m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionVarianceTangentCube( cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value() );
+    m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionTangentSphereCdf( cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value() );
 #ifndef QT_NO_DEBUG
     int size = m_volume->getSize();
     for ( int i = 0; i < size; i++ )
     {
         if ( m_probabilisticAmbientOcclusion.at( i ) < 0.0f || m_probabilisticAmbientOcclusion.at( i ) > 1.0f )
         {
-            DEBUG_LOG( QString( "pao[%1] = %2" ).arg( i ).arg( m_probabilisticAmbientOcclusion.at( i ) ) );
+            DEBUG_LOG( QString( "paots[%1] = %2" ).arg( i ).arg( m_probabilisticAmbientOcclusion.at( i ) ) );
+        }
+    }
+#endif // QT_NO_DEBUG
+#endif // CUDA_AVAILABLE
+
+    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
+    m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
+    m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
+
+    cast->Delete();
+}
+
+
+void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereGaussian()
+{
+    vtkImageCast *cast = vtkImageCast::New();
+    cast->SetInput( m_volume->getImage() );
+    cast->SetOutputScalarTypeToFloat();
+    cast->Update();
+
+#ifndef CUDA_AVAILABLE
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "The PAOTS Gaussian is only implemented in CUDA. Compile with CUDA support to use it." );
+#else // CUDA_AVAILABLE
+    m_probabilisticAmbientOcclusion = cfProbabilisticAmbientOcclusionTangentSphereGaussian( cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value() );
+#ifndef QT_NO_DEBUG
+    int size = m_volume->getSize();
+    for ( int i = 0; i < size; i++ )
+    {
+        if ( m_probabilisticAmbientOcclusion.at( i ) < 0.0f || m_probabilisticAmbientOcclusion.at( i ) > 1.0f )
+        {
+            DEBUG_LOG( QString( "paots[%1] = %2" ).arg( i ).arg( m_probabilisticAmbientOcclusion.at( i ) ) );
         }
     }
 #endif // QT_NO_DEBUG

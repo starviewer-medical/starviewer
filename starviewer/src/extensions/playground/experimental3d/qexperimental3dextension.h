@@ -228,8 +228,9 @@ private slots:
     void probabilisticAmbientOcclusionGaussian();
     void probabilisticAmbientOcclusionCube();
     void probabilisticAmbientOcclusionSphere();
-    void probabilisticAmbientOcclusionTangentCube();
-    void probabilisticAmbientOcclusionVarianceTangentCube();
+    void probabilisticAmbientOcclusionTangentSphereVariance();
+    void probabilisticAmbientOcclusionTangentSphereCdf();
+    void probabilisticAmbientOcclusionTangentSphereGaussian();
     // Per modular opacitat
     void probabilisticAmbientOcclusionGradient();
     void volumeVariance();
