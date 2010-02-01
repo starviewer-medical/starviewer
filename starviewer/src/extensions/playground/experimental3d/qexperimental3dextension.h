@@ -229,6 +229,7 @@ private slots:
     void probabilisticAmbientOcclusionSphere();
     void probabilisticAmbientOcclusionTangentCube();
     void probabilisticAmbientOcclusionVarianceTangentCube();
+    void probabilisticAmbientOcclusionGradient();
 
 private:
 
