@@ -924,15 +924,7 @@ QVector<float> cfProbabilisticAmbientOcclusionGaussian(vtkImageData *image, int 
     // Calcular kernel
     const int KERNEL_WIDTH = 2 * radius + 1;
     QVector<float> kernel(KERNEL_WIDTH);
-    float kernelSum = 0.0f;
-    float sigma = radius / 3.0f;
-    for (int i = 0; i < KERNEL_WIDTH; i++)
-    {
-        float f = static_cast<float>(i - radius) / sigma;
-        kernel[i] = expf(-f * f / 2.0f);
-        kernelSum += kernel.at(i);
-    }
-    for (int i = 0; i < KERNEL_WIDTH; i++) kernel[i] /= kernelSum;
+    kernel.fill(1.0f / KERNEL_WIDTH);
     std::cout << "kernel:";
     for (int i = 0; i < KERNEL_WIDTH; i++) std::cout << " " << kernel[i];
     std::cout << std::endl;
