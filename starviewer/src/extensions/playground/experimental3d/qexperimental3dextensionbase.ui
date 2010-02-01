@@ -3142,16 +3142,23 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionTangentCubePushButton">
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionTangentSphereVariancePushButton">
               <property name="text">
-               <string>PAO tangent cube</string>
+               <string>PAOTS variance</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionVarianceTangentCubePushButton">
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionTangentSphereCdfPushButton">
               <property name="text">
-               <string>PAO variance tangent cube</string>
+               <string>PAOTS cdf</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionTangentSphereGaussianPushButton">
+              <property name="text">
+               <string>PAOTS Gaussian</string>
               </property>
              </widget>
             </item>

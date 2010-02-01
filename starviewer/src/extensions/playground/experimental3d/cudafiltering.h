@@ -22,8 +22,9 @@ QVector<float> cfProbabilisticAmbientOcclusionBoxMeanChebychev( vtkImageData *im
 QVector<float> cfProbabilisticAmbientOcclusionGaussian( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb una gaussiana
 QVector<float> cfProbabilisticAmbientOcclusionCube( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb la freqüència de Z >= z en un cub
 QVector<float> cfProbabilisticAmbientOcclusionSphere( vtkImageData *image, int radius );    // estimació de P(Z >= z) amb la freqüència de Z >= z en una esfera
-QVector<float> cfProbabilisticAmbientOcclusionTangentCube( vtkImageData *image, int radius );   // estimació de P(Z >= z) amb el mètode del cub tangent (László)
-QVector<float> cfProbabilisticAmbientOcclusionVarianceTangentCube( vtkImageData *image, int radius );   // estimació de P(Z >= z) amb Chebychev i cub tangent (László)
+QVector<float> cfProbabilisticAmbientOcclusionTangentSphereVariance( vtkImageData *image, int radius ); // estimació de P(Z >= z) amb Chebychev i cub tangent (László)
+QVector<float> cfProbabilisticAmbientOcclusionTangentSphereCdf( vtkImageData *image, int radius );  // estimació de P(Z >= z) amb el mètode del cub tangent (László)
+QVector<float> cfProbabilisticAmbientOcclusionTangentSphereGaussian( vtkImageData *image, int radius ); // estimació de P(Z >= z) amb la cdf d'una gaussiana
 // Variància del volum
 QVector<float> cfVolumeVariance( vtkImageData *image, int radius ); // variància del volum
 
