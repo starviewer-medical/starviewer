@@ -852,6 +852,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionTypeComboBox, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionGammaLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionGammaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_additiveObscuranceVomiCheckBox, SIGNAL( toggled(bool) ), m_additiveObscuranceVomiWeightLabel, SLOT( setEnabled(bool) ) );
@@ -881,6 +883,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_opacityProbabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityProbabilisticAmbientOcclusionChecked(bool) ) );
     connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaLabel, SLOT( setEnabled(bool) ) );
     connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_probabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_probabilisticAmbientOcclusionGammaLabel, SLOT( setEnabled(bool) ) );
+    connect( m_probabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_probabilisticAmbientOcclusionGammaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_probabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_probabilisticAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_probabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_probabilisticAmbientOcclusionFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_opacityProbabilisticAmbientOcclusionVarianceCheckBox, SIGNAL( toggled(bool) ), m_opacityProbabilisticAmbientOcclusionVarianceMaxLabel, SLOT( setEnabled(bool) ) );
@@ -1253,7 +1257,8 @@ void QExperimental3DExtension::render()
                 break;
         }
     }
-    else if ( m_baseProbabilisticAmbientOcclusionRadioButton->isChecked() ) m_volume->addVomi( m_probabilisticAmbientOcclusion, 1.0f, m_baseProbabilisticAmbientOcclusionFactorDoubleSpinBox->value() );
+    else if ( m_baseProbabilisticAmbientOcclusionRadioButton->isChecked() )
+        m_volume->addVomiGamma( m_probabilisticAmbientOcclusion, 1.0f, m_baseProbabilisticAmbientOcclusionFactorDoubleSpinBox->value(), m_baseProbabilisticAmbientOcclusionGammaDoubleSpinBox->value() );
 
     if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value(),
@@ -1297,8 +1302,9 @@ void QExperimental3DExtension::render()
                 break;
         }
     }
-    if ( m_probabilisticAmbientOcclusionCheckBox->isChecked() ) m_volume->addVomi( m_probabilisticAmbientOcclusion, 1.0f, m_probabilisticAmbientOcclusionFactorDoubleSpinBox->value(),
-                                                                                   m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value() );
+    if ( m_probabilisticAmbientOcclusionCheckBox->isChecked() )
+        m_volume->addVomiGamma( m_probabilisticAmbientOcclusion, 1.0f, m_probabilisticAmbientOcclusionFactorDoubleSpinBox->value(), m_probabilisticAmbientOcclusionGammaDoubleSpinBox->value(),
+                                m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value() );
     if ( m_opacityProbabilisticAmbientOcclusionVarianceCheckBox->isChecked() ) m_volume->addOpacity( m_probabilisticAmbientOcclusionVariance, m_opacityProbabilisticAmbientOcclusionVarianceMaxDoubleSpinBox->value() );
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 

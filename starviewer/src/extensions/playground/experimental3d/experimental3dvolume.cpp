@@ -27,6 +27,7 @@
 // VMI
 #include "vmivoxelshader2.h"
 #include "vomivoxelshader.h"
+#include "vomigammavoxelshader.h"
 #include "vomicoolwarmvoxelshader.h"
 #include "voxelsaliencyvoxelshader.h"
 #include "colorvomivoxelshader.h"
@@ -77,6 +78,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_coolWarmVoxelShader;
     delete m_vmiVoxelShader2;
     delete m_vomiVoxelShader;
+    delete m_vomiGammaVoxelShader;
     delete m_vomiCoolWarmVoxelShader;
     delete m_voxelSaliencyVoxelShader;
     delete m_colorVomiVoxelShader;
@@ -271,6 +273,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_obscuranceVoxelShader->setTransferFunction( transferFunction );
     m_vmiVoxelShader2->setTransferFunction( transferFunction );
     m_vomiVoxelShader->setTransferFunction( transferFunction );
+    m_vomiGammaVoxelShader->setTransferFunction( transferFunction );
     m_vomiCoolWarmVoxelShader->setTransferFunction( transferFunction );
     m_voxelSaliencyVoxelShader->setTransferFunction( transferFunction );
     m_colorVomiVoxelShader->setTransferFunction( transferFunction );
@@ -311,6 +314,16 @@ void Experimental3DVolume::addVomi( const QVector<float> &vomi, float maximumVom
     m_vomiVoxelShader->setVomi( vomi, maximumVomi, factor );
     m_vomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) != 0 );
     m_vomiVoxelShader->setAdditive( additive, weight );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
+void Experimental3DVolume::addVomiGamma( const QVector<float> &vomi, float maximumVomi, float factor, float gamma, bool additive, float weight )
+{
+    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiGammaVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiGammaVoxelShader );
+    m_vomiGammaVoxelShader->setVomi( vomi, maximumVomi, factor, gamma );
+    m_vomiGammaVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiGammaVoxelShader ) != 0 );
+    m_vomiGammaVoxelShader->setAdditive( additive, weight );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
@@ -455,6 +468,8 @@ void Experimental3DVolume::createVoxelShaders()
     m_vmiVoxelShader2->setData( m_data, m_rangeMax, m_dataSize );
     m_vomiVoxelShader = new VomiVoxelShader();
     m_vomiVoxelShader->setData( m_data, m_rangeMax );
+    m_vomiGammaVoxelShader = new VomiGammaVoxelShader();
+    m_vomiGammaVoxelShader->setData( m_data, m_rangeMax );
     m_vomiCoolWarmVoxelShader = new VomiCoolWarmVoxelShader();
     m_vomiCoolWarmVoxelShader->setData( m_data, m_rangeMax );
     m_voxelSaliencyVoxelShader = new VoxelSaliencyVoxelShader();
