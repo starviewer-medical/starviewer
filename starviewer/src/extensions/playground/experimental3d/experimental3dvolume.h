@@ -35,6 +35,7 @@ class vtkVolumeRayCastVoxelShaderCompositeFunction;
 // VMI
 class VmiVoxelShader2;
 class VomiVoxelShader;
+class VomiGammaVoxelShader;
 class VomiCoolWarmVoxelShader;
 class VoxelSaliencyVoxelShader;
 class ColorVomiVoxelShader;
@@ -93,6 +94,7 @@ public:
     QVector<float> finishVmiSecondPass();
     float viewedVolumeInVmiSecondPass() const;
     void addVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool additive = false, float weight = 0.0f );
+    void addVomiGamma( const QVector<float> &vomi, float maximumVomi, float factor, float gamma, bool additive = false, float weight = 0.0f );
     void addVomiCoolWarm( const QVector<float> &vomi, float maximumVomi, float factor, float y, float b );
     void addColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor );
     void addVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor );
@@ -159,6 +161,8 @@ private:
     VmiVoxelShader2 *m_vmiVoxelShader2;
     /// Voxel shader que pinta les VoMI.
     VomiVoxelShader *m_vomiVoxelShader;
+    /// Voxel shader que pinta les VoMI amb correcció gamma.
+    VomiGammaVoxelShader *m_vomiGammaVoxelShader;
     /// Voxel shader que pinta les VoMI amb cool-warm shading.
     VomiCoolWarmVoxelShader *m_vomiCoolWarmVoxelShader;
     /// Voxel shader que pinta les voxel saliencies.

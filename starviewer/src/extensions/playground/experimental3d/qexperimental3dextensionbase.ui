@@ -720,6 +720,32 @@
              </widget>
             </item>
             <item>
+             <widget class="QLabel" name="m_baseProbabilisticAmbientOcclusionGammaLabel">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>γ</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDoubleSpinBox" name="m_baseProbabilisticAmbientOcclusionGammaDoubleSpinBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximum">
+               <double>100.000000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLabel" name="m_baseProbabilisticAmbientOcclusionFactorLabel">
               <property name="enabled">
                <bool>false</bool>
@@ -1418,6 +1444,32 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="m_probabilisticAmbientOcclusionGammaLabel">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>γ</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="m_probabilisticAmbientOcclusionGammaDoubleSpinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="maximum">
+            <double>100.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="m_probabilisticAmbientOcclusionFactorLabel">
            <property name="enabled">
             <bool>false</bool>
@@ -1478,8 +1530,14 @@
            <property name="enabled">
             <bool>false</bool>
            </property>
+           <property name="minimum">
+            <double>0.010000000000000</double>
+           </property>
            <property name="maximum">
             <double>100.000000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
            </property>
           </widget>
          </item>
