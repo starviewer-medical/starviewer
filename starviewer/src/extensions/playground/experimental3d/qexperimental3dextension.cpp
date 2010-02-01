@@ -977,6 +977,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_probabilisticAmbientOcclusionSpherePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionSphere() ) );
     connect( m_probabilisticAmbientOcclusionTangentCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionTangentCube() ) );
     connect( m_probabilisticAmbientOcclusionVarianceTangentCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionVarianceTangentCube() ) );
+    connect( m_probabilisticAmbientOcclusionGradientPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionGradient() ) );
 }
 
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
@@ -1269,8 +1270,9 @@ void QExperimental3DExtension::render()
         m_volume->addOpacity( absFiltering, m_maximumSpatialImportanceFunction, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
                                                                                 m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
     }
-    if ( m_opacityProbabilisticAmbientOcclusionCheckBox->isChecked() ) m_volume->addOpacity( m_probabilisticAmbientOcclusion, 1.0f, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
-                                                                                             m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
+    if ( m_opacityProbabilisticAmbientOcclusionCheckBox->isChecked() )
+        m_volume->addOpacity( m_probabilisticAmbientOcclusion, 1.0f, m_opacityLowThresholdDoubleSpinBox->value(), m_opacityLowFactorDoubleSpinBox->value(),
+                                                                     m_opacityHighThresholdDoubleSpinBox->value(), m_opacityHighFactorDoubleSpinBox->value() );
     if ( m_filteringAmbientOcclusionCheckBox->isChecked() )
     {
         switch ( m_filteringAmbientOcclusionTypeComboBox->currentIndex() )
@@ -3199,6 +3201,16 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionVarianceTangentCube(
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 
     cast->Delete();
+}
+
+
+void QExperimental3DExtension::probabilisticAmbientOcclusionGradient()
+{
+    m_voxelSaliencies = m_volume->computeVomiGradient( m_probabilisticAmbientOcclusion );
+    m_maximumSaliency = 1.0f;
+    m_baseVoxelSalienciesRadioButton->setEnabled( true );
+    m_opacityLabel->setEnabled( true );
+    m_opacitySaliencyCheckBox->setEnabled( true );
 }
 
 
