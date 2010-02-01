@@ -230,9 +230,9 @@ private slots:
     void probabilisticAmbientOcclusionSphere();
     void probabilisticAmbientOcclusionTangentCube();
     void probabilisticAmbientOcclusionVarianceTangentCube();
-    // Càlculs sobre PAO
+    // Per modular opacitat
     void probabilisticAmbientOcclusionGradient();
-    void probabilisticAmbientOcclusionVariance();
+    void volumeVariance();
 
 private:
 
@@ -270,7 +270,7 @@ private:
     QVector<float> m_spatialImportanceFunction; // ΔD = G * D − D
     float m_maximumSpatialImportanceFunction;
     QVector<float> m_probabilisticAmbientOcclusion;
-    QVector<float> m_probabilisticAmbientOcclusionVariance;
+    QVector<float> m_volumeVariance;
 
     /// Cert quan estiguem executant el l'extensió interactivament.
     bool m_interactive;

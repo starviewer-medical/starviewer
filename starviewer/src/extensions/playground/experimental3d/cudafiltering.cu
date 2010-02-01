@@ -1780,7 +1780,7 @@ QVector<float> cfProbabilisticAmbientOcclusionVarianceTangentCube(vtkImageData *
 }
 
 
-QVector<float> cfProbabilisticAmbientOcclusionVariance(const QVector<float> &probabilisticAmbientOcclusion, int radius, int *dimensions)
+QVector<float> cfVolumeVariance(vtkImageData *image, int radius)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -1791,7 +1791,9 @@ QVector<float> cfProbabilisticAmbientOcclusionVariance(const QVector<float> &pro
     cudaStreamCreate(&stream1);
     cudaStreamCreate(&stream2);
 
-    const uint VOLUME_DATA_SIZE = probabilisticAmbientOcclusion.size();
+    float *data = reinterpret_cast<float*>(image->GetScalarPointer());
+    const uint VOLUME_DATA_SIZE = image->GetNumberOfPoints();
+    int *dimensions = image->GetDimensions();
     cudaExtent volumeDataDims = make_cudaExtent(dimensions[0], dimensions[1], dimensions[2]);
 
     // Copiar el volum a un array i associar-hi una textura
@@ -1799,7 +1801,7 @@ QVector<float> cfProbabilisticAmbientOcclusionVariance(const QVector<float> &pro
     cudaChannelFormatDesc channelDescVolumeArray = cudaCreateChannelDesc<float>();
     CUDA_SAFE_CALL( cudaMalloc3DArray(&dVolumeArray, &channelDescVolumeArray, volumeDataDims) );
     cudaMemcpy3DParms copyParams = {0};
-    copyParams.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(const_cast<float*>(probabilisticAmbientOcclusion.data())), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);    // data, pitch, width, height
+    copyParams.srcPtr = make_cudaPitchedPtr(reinterpret_cast<void*>(data), dimensions[0] * sizeof(float), dimensions[0], dimensions[1]);    // data, pitch, width, height
     copyParams.dstArray = dVolumeArray;
     copyParams.extent = volumeDataDims;
     copyParams.kind = cudaMemcpyHostToDevice;
@@ -1934,7 +1936,7 @@ QVector<float> cfProbabilisticAmbientOcclusionVariance(const QVector<float> &pro
     float elapsedTime = 0.0f;
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
-    std::cout << "pao variance: " << elapsedTime << " ms" << std::endl;
+    std::cout << "volume variance: " << elapsedTime << " ms" << std::endl;
 
     cudaStreamDestroy(stream1);
     cudaStreamDestroy(stream2);
