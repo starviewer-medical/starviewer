@@ -887,8 +887,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_probabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_probabilisticAmbientOcclusionGammaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_probabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_probabilisticAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_probabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_probabilisticAmbientOcclusionFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_opacityProbabilisticAmbientOcclusionVarianceCheckBox, SIGNAL( toggled(bool) ), m_opacityProbabilisticAmbientOcclusionVarianceMaxLabel, SLOT( setEnabled(bool) ) );
-    connect( m_opacityProbabilisticAmbientOcclusionVarianceCheckBox, SIGNAL( toggled(bool) ), m_opacityProbabilisticAmbientOcclusionVarianceMaxDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_opacityVarianceCheckBox, SIGNAL( toggled(bool) ), m_opacityVarianceMaxLabel, SLOT( setEnabled(bool) ) );
+    connect( m_opacityVarianceCheckBox, SIGNAL( toggled(bool) ), m_opacityVarianceMaxDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsLabel, SLOT( setEnabled(bool) ) );
     connect( m_celShadingCheckBox, SIGNAL( toggled(bool) ), m_celShadingQuantumsSpinBox, SLOT( setEnabled(bool) ) );
 
@@ -984,7 +984,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_probabilisticAmbientOcclusionTangentCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionTangentCube() ) );
     connect( m_probabilisticAmbientOcclusionVarianceTangentCubePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionVarianceTangentCube() ) );
     connect( m_probabilisticAmbientOcclusionGradientPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionGradient() ) );
-    connect( m_probabilisticAmbientOcclusionVariancePushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionVariance() ) );
+    connect( m_volumeVariancePushButton, SIGNAL( clicked() ), SLOT( volumeVariance() ) );
 }
 
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
@@ -1305,7 +1305,7 @@ void QExperimental3DExtension::render()
     if ( m_probabilisticAmbientOcclusionCheckBox->isChecked() )
         m_volume->addVomiGamma( m_probabilisticAmbientOcclusion, 1.0f, m_probabilisticAmbientOcclusionFactorDoubleSpinBox->value(), m_probabilisticAmbientOcclusionGammaDoubleSpinBox->value(),
                                 m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value() );
-    if ( m_opacityProbabilisticAmbientOcclusionVarianceCheckBox->isChecked() ) m_volume->addOpacity( m_probabilisticAmbientOcclusionVariance, m_opacityProbabilisticAmbientOcclusionVarianceMaxDoubleSpinBox->value() );
+    if ( m_opacityVarianceCheckBox->isChecked() ) m_volume->addOpacity( m_volumeVariance, m_opacityVarianceMaxDoubleSpinBox->value() );
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 
     m_viewer->render();
@@ -3224,28 +3224,32 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionGradient()
 }
 
 
-void QExperimental3DExtension::probabilisticAmbientOcclusionVariance()
+void QExperimental3DExtension::volumeVariance()
 {
-    if ( m_probabilisticAmbientOcclusion.isEmpty() ) return;
+    vtkImageCast *cast = vtkImageCast::New();
+    cast->SetInput( m_volume->getImage() );
+    cast->SetOutputScalarTypeToFloat();
+    cast->Update();
 
 #ifndef CUDA_AVAILABLE
-    QMessageBox::information( this, tr("Operation only available with CUDA"), "The PAO variance is only implemented in CUDA. Compile with CUDA support to use it." );
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "The volume variance is only implemented in CUDA. Compile with CUDA support to use it." );
 #else // CUDA_AVAILABLE
-    int *dimensions = m_volume->getImage()->GetDimensions();
-    m_probabilisticAmbientOcclusionVariance = cfProbabilisticAmbientOcclusionVariance( m_probabilisticAmbientOcclusion, m_probabilisticAmbientOcclusionRadiusSpinBox->value(), dimensions );
+    m_volumeVariance = cfVolumeVariance( cast->GetOutput(), m_probabilisticAmbientOcclusionRadiusSpinBox->value() );
 #ifndef QT_NO_DEBUG
     int size = m_volume->getSize();
     for ( int i = 0; i < size; i++ )
     {
-        if ( m_probabilisticAmbientOcclusionVariance.at( i ) < 0.0f )
+        if ( m_volumeVariance.at( i ) < 0.0f )
         {
-            DEBUG_LOG( QString( "paov[%1] = %2" ).arg( i ).arg( m_probabilisticAmbientOcclusionVariance.at( i ) ) );
+            DEBUG_LOG( QString( "vv[%1] = %2" ).arg( i ).arg( m_volumeVariance.at( i ) ) );
         }
     }
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_opacityProbabilisticAmbientOcclusionVarianceCheckBox->setEnabled( true );
+    m_opacityVarianceCheckBox->setEnabled( true );
+
+    cast->Delete();
 }
 
 

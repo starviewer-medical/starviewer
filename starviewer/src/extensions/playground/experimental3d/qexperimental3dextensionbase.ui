@@ -1503,17 +1503,17 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_59">
          <item>
-          <widget class="QCheckBox" name="m_opacityProbabilisticAmbientOcclusionVarianceCheckBox">
+          <widget class="QCheckBox" name="m_opacityVarianceCheckBox">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Opacity (PAO variance)</string>
+            <string>Opacity (variance)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="m_opacityProbabilisticAmbientOcclusionVarianceMaxLabel">
+          <widget class="QLabel" name="m_opacityVarianceMaxLabel">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -1526,7 +1526,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="m_opacityProbabilisticAmbientOcclusionVarianceMaxDoubleSpinBox">
+          <widget class="QDoubleSpinBox" name="m_opacityVarianceMaxDoubleSpinBox">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -3187,9 +3187,9 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="m_probabilisticAmbientOcclusionVariancePushButton">
+             <widget class="QPushButton" name="m_volumeVariancePushButton">
               <property name="text">
-               <string>PAO variance</string>
+               <string>Volume variance</string>
               </property>
              </widget>
             </item>
