@@ -350,6 +350,14 @@ void Experimental3DVolume::addOpacity( const QVector<float> &data, float maximum
 }
 
 
+void Experimental3DVolume::addOpacity( const QVector<float> &data, float maximum )
+{
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_opacityVoxelShader );
+    m_opacityVoxelShader->setData( data, maximum, 1.0f, 1.0f, std::numeric_limits<float>::infinity(), 1.0f );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
 QVector<float> Experimental3DVolume::computeVomiGradient( const QVector<float> &vomi )
 {
     vtkFloatArray *vomiArray = vtkFloatArray::New();

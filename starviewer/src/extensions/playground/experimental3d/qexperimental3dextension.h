@@ -222,6 +222,7 @@ private slots:
     // Filtering
     void gaussianFilter();
     void boxMeanFilter();
+    // Càlculs de PAO
     void probabilisticAmbientOcclusionGaussianChebychev();
     void probabilisticAmbientOcclusionBoxMeanChebychev();
     void probabilisticAmbientOcclusionGaussian();
@@ -229,7 +230,9 @@ private slots:
     void probabilisticAmbientOcclusionSphere();
     void probabilisticAmbientOcclusionTangentCube();
     void probabilisticAmbientOcclusionVarianceTangentCube();
+    // Càlculs sobre PAO
     void probabilisticAmbientOcclusionGradient();
+    void probabilisticAmbientOcclusionVariance();
 
 private:
 
@@ -267,6 +270,7 @@ private:
     QVector<float> m_spatialImportanceFunction; // ΔD = G * D − D
     float m_maximumSpatialImportanceFunction;
     QVector<float> m_probabilisticAmbientOcclusion;
+    QVector<float> m_probabilisticAmbientOcclusionVariance;
 
     /// Cert quan estiguem executant el l'extensió interactivament.
     bool m_interactive;
