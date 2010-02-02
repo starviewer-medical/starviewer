@@ -1806,6 +1806,7 @@ __global__ void finalTangentSphereGaussianKernel(float *result, int radius, cuda
     float mean = tex3D(gVolumeTexture, cx, cy, cz); // E[Z]
     float squaresMean = tex3D(gVolume2Texture, cx, cy, cz); // E[Z²]
     float variance = squaresMean - mean * mean;
+    if (variance > -0.001f && variance < 0.0f) variance = 0.0f; // per evitar nans
 
     uint i = x + y * dims.width + z * dims.width * dims.height;
 
