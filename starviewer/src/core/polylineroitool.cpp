@@ -87,7 +87,6 @@ void PolylineROITool::computeGrayValues()
     int endPosition;
     double *firstIntersection;
     double *secondIntersection;
-    int numberOfVoxels = 0;
     QList<double*> intersectionList;
     QList<int> indexList;
     double rayP1[3];
@@ -206,7 +205,6 @@ void PolylineROITool::computeGrayValues()
                     while ( firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex] )
                     {
                         m_grayValues << (double)getGrayValue( firstIntersection );
-                        numberOfVoxels++;
                         firstIntersection[intersectionIndex] += horizontalSpacingIncrement;
                     }
                 }
@@ -215,7 +213,6 @@ void PolylineROITool::computeGrayValues()
                     while ( firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex] )
                     {
                         m_grayValues << (double)getGrayValue( firstIntersection );
-                        numberOfVoxels++;
                         firstIntersection[intersectionIndex] -= horizontalSpacingIncrement;
                     }
                 }
