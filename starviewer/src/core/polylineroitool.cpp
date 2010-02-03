@@ -114,6 +114,8 @@ void PolylineROITool::computeGrayValues()
     double *bounds = m_roiPolygon->getBounds();
 	double *spacing = m_2DViewer->getInput()->getSpacing();
 
+    double horizontalSpacingIncrement;
+    double verticalSpacingIncrement;
 	int rayPointIndex;
 	int intersectionIndex;
 	switch( currentView )
@@ -129,6 +131,9 @@ void PolylineROITool::computeGrayValues()
 		rayPointIndex = 1;
 		intersectionIndex = 0;
 		verticalLimit = bounds[3];
+
+        horizontalSpacingIncrement = spacing[0];
+        verticalSpacingIncrement = spacing[1];
 	break;
 
 	case Q2DViewer::Sagital:
@@ -143,6 +148,8 @@ void PolylineROITool::computeGrayValues()
 		intersectionIndex = 2;
 		verticalLimit = bounds[3];
 
+        horizontalSpacingIncrement = spacing[1];
+        verticalSpacingIncrement = spacing[2];
 	break;
 
 	case Q2DViewer::Coronal:
@@ -156,6 +163,9 @@ void PolylineROITool::computeGrayValues()
 		rayPointIndex = 2;
 		intersectionIndex = 0;
 		verticalLimit = bounds[5];
+
+        horizontalSpacingIncrement = spacing[0];
+        verticalSpacingIncrement = spacing[2];
 	break;
 	}
 
@@ -197,7 +207,7 @@ void PolylineROITool::computeGrayValues()
                     {
                         m_grayValues << (double)getGrayValue( firstIntersection );
                         numberOfVoxels++;
-                        firstIntersection[intersectionIndex] += spacing[0];
+                        firstIntersection[intersectionIndex] += horizontalSpacingIncrement;
                     }
                 }
                 else //de dreta cap a esquerra
@@ -206,7 +216,7 @@ void PolylineROITool::computeGrayValues()
                     {
                         m_grayValues << (double)getGrayValue( firstIntersection );
                         numberOfVoxels++;
-                        firstIntersection[intersectionIndex] -= spacing[0];
+                        firstIntersection[intersectionIndex] -= horizontalSpacingIncrement;
                     }
                 }
             }
@@ -215,8 +225,8 @@ void PolylineROITool::computeGrayValues()
             DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!" );
 
         //fem el següent pas en la coordenada que escombrem
-		rayP1[rayPointIndex] += spacing[1];
-        rayP2[rayPointIndex] += spacing[1];
+        rayP1[rayPointIndex] += verticalSpacingIncrement;
+        rayP2[rayPointIndex] += verticalSpacingIncrement;
     }
 }
 
