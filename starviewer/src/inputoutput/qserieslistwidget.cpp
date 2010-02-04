@@ -67,6 +67,7 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
 
     item->setText(text);
     item->setIcon(icon);
+    item->setToolTip(text);
 
     /* A l'status Tip de cada item es guarda la UID de la serie, ja que aquest camp no el vull mostrar i no tinc
    enlloc per amagar-lo, ho utilitzo per identificar la sèrie */
