@@ -89,8 +89,8 @@ void PolylineROITool::computeGrayValues()
     double *secondIntersection;
     QList<double*> intersectionList;
     QList<int> indexList;
-    double rayP1[3];
-    double rayP2[3];
+    double sweepLineBeginPoint[3];
+    double sweepLineEndPoint[3];
     double verticalLimit;
 	int currentView = m_2DViewer->getView();
 
@@ -115,19 +115,19 @@ void PolylineROITool::computeGrayValues()
 
     double horizontalSpacingIncrement;
     double verticalSpacingIncrement;
-	int rayPointIndex;
+	int sweepLineCoordinateIndex;
 	int intersectionIndex;
 	switch( currentView )
 	{
 	case Q2DViewer::Axial:
-		rayP1[0] = bounds[0];//xmin
-		rayP1[1] = bounds[2];//y
-		rayP1[2] = bounds[4];//z
-		rayP2[0] = bounds[1];//xmax
-		rayP2[1] = bounds[2];//y
-		rayP2[2] = bounds[4];//z
+		sweepLineBeginPoint[0] = bounds[0];//xmin
+		sweepLineBeginPoint[1] = bounds[2];//y
+		sweepLineBeginPoint[2] = bounds[4];//z
+		sweepLineEndPoint[0] = bounds[1];//xmax
+		sweepLineEndPoint[1] = bounds[2];//y
+		sweepLineEndPoint[2] = bounds[4];//z
 
-		rayPointIndex = 1;
+		sweepLineCoordinateIndex = 1;
 		intersectionIndex = 0;
 		verticalLimit = bounds[3];
 
@@ -136,14 +136,14 @@ void PolylineROITool::computeGrayValues()
 	break;
 
 	case Q2DViewer::Sagital:
-		rayP1[0] = bounds[0];//xmin
-		rayP1[1] = bounds[2];//ymin
-		rayP1[2] = bounds[4];//zmin
-		rayP2[0] = bounds[0];//xmin
-		rayP2[1] = bounds[2];//ymin
-		rayP2[2] = bounds[5];//zmax
+		sweepLineBeginPoint[0] = bounds[0];//xmin
+		sweepLineBeginPoint[1] = bounds[2];//ymin
+		sweepLineBeginPoint[2] = bounds[4];//zmin
+		sweepLineEndPoint[0] = bounds[0];//xmin
+		sweepLineEndPoint[1] = bounds[2];//ymin
+		sweepLineEndPoint[2] = bounds[5];//zmax
 
-		rayPointIndex = 1;
+		sweepLineCoordinateIndex = 1;
 		intersectionIndex = 2;
 		verticalLimit = bounds[3];
 
@@ -152,14 +152,14 @@ void PolylineROITool::computeGrayValues()
 	break;
 
 	case Q2DViewer::Coronal:
-		rayP1[0] = bounds[0];//xmin
-		rayP1[1] = bounds[2];//ymin
-		rayP1[2] = bounds[4];//zmin
-		rayP2[0] = bounds[1];//xmax
-		rayP2[1] = bounds[2];//ymin
-		rayP2[2] = bounds[4];//zmin
+		sweepLineBeginPoint[0] = bounds[0];//xmin
+		sweepLineBeginPoint[1] = bounds[2];//ymin
+		sweepLineBeginPoint[2] = bounds[4];//zmin
+		sweepLineEndPoint[0] = bounds[1];//xmax
+		sweepLineEndPoint[1] = bounds[2];//ymin
+		sweepLineEndPoint[2] = bounds[4];//zmin
 
-		rayPointIndex = 2;
+		sweepLineCoordinateIndex = 2;
 		intersectionIndex = 0;
 		verticalLimit = bounds[5];
 
@@ -169,21 +169,21 @@ void PolylineROITool::computeGrayValues()
 	}
 
     int intersectionState;
-	while( rayP1[rayPointIndex] <= verticalLimit )
+	while( sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit )
     {
         intersectionList.clear();
         indexList.clear();
         for ( i = 0; i < numberOfSegments; i++ )
         {
-            if( (rayP1[rayPointIndex] <= segmentsStartPoints.at(i)[rayPointIndex] && rayP1[rayPointIndex] >= segmentsEndPoints.at(i)[rayPointIndex])
-            || (rayP1[rayPointIndex] >= segmentsStartPoints.at(i)[rayPointIndex] && rayP1[rayPointIndex] <= segmentsEndPoints.at(i)[rayPointIndex]) )
+            if( (sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] && sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsEndPoints.at(i)[sweepLineCoordinateIndex])
+            || (sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] && sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsEndPoints.at(i)[sweepLineCoordinateIndex]) )
                 indexList << i;
         }
         
         //obtenim les interseccions entre tots els segments de la ROI i el raig actual
         foreach (int segment, indexList)
         {
-            double *foundPoint = MathTools::infiniteLinesIntersection( (double *)segmentsStartPoints.at(segment), (double *)segmentsEndPoints.at(segment), rayP1, rayP2, intersectionState );
+            double *foundPoint = MathTools::infiniteLinesIntersection( (double *)segmentsStartPoints.at(segment), (double *)segmentsEndPoints.at(segment), sweepLineBeginPoint, sweepLineEndPoint, intersectionState );
             if( intersectionState == MathTools::LinesIntersect )
                 intersectionList << foundPoint;
         }
@@ -222,8 +222,8 @@ void PolylineROITool::computeGrayValues()
             DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!" );
 
         //fem el següent pas en la coordenada que escombrem
-        rayP1[rayPointIndex] += verticalSpacingIncrement;
-        rayP2[rayPointIndex] += verticalSpacingIncrement;
+        sweepLineBeginPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
+        sweepLineEndPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
     }
 }
 
