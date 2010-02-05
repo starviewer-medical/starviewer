@@ -115,58 +115,58 @@ void PolylineROITool::computeGrayValues()
 
     double horizontalSpacingIncrement;
     double verticalSpacingIncrement;
-	int sweepLineCoordinateIndex;
-	int intersectionIndex;
-	switch( currentView )
-	{
-	case Q2DViewer::Axial:
-		sweepLineBeginPoint[0] = bounds[0];//xmin
-		sweepLineBeginPoint[1] = bounds[2];//y
-		sweepLineBeginPoint[2] = bounds[4];//z
-		sweepLineEndPoint[0] = bounds[1];//xmax
-		sweepLineEndPoint[1] = bounds[2];//y
-		sweepLineEndPoint[2] = bounds[4];//z
+    int sweepLineCoordinateIndex;
+    int intersectionIndex;
+    switch( currentView )
+    {
+    case Q2DViewer::Axial:
+        sweepLineBeginPoint[0] = bounds[0];//xmin
+        sweepLineBeginPoint[1] = bounds[2];//y
+        sweepLineBeginPoint[2] = bounds[4];//z
+        sweepLineEndPoint[0] = bounds[1];//xmax
+        sweepLineEndPoint[1] = bounds[2];//y
+        sweepLineEndPoint[2] = bounds[4];//z
 
-		sweepLineCoordinateIndex = 1;
-		intersectionIndex = 0;
-		verticalLimit = bounds[3];
+        sweepLineCoordinateIndex = 1;
+        intersectionIndex = 0;
+        verticalLimit = bounds[3];
 
         horizontalSpacingIncrement = spacing[0];
         verticalSpacingIncrement = spacing[1];
-	break;
+        break;
 
-	case Q2DViewer::Sagital:
-		sweepLineBeginPoint[0] = bounds[0];//xmin
-		sweepLineBeginPoint[1] = bounds[2];//ymin
-		sweepLineBeginPoint[2] = bounds[4];//zmin
-		sweepLineEndPoint[0] = bounds[0];//xmin
-		sweepLineEndPoint[1] = bounds[2];//ymin
-		sweepLineEndPoint[2] = bounds[5];//zmax
+    case Q2DViewer::Sagital:
+        sweepLineBeginPoint[0] = bounds[0];//xmin
+        sweepLineBeginPoint[1] = bounds[2];//ymin
+        sweepLineBeginPoint[2] = bounds[4];//zmin
+        sweepLineEndPoint[0] = bounds[0];//xmin
+        sweepLineEndPoint[1] = bounds[2];//ymin
+        sweepLineEndPoint[2] = bounds[5];//zmax
 
-		sweepLineCoordinateIndex = 1;
-		intersectionIndex = 2;
-		verticalLimit = bounds[3];
+        sweepLineCoordinateIndex = 1;
+        intersectionIndex = 2;
+        verticalLimit = bounds[3];
 
         horizontalSpacingIncrement = spacing[1];
         verticalSpacingIncrement = spacing[2];
-	break;
+        break;
 
-	case Q2DViewer::Coronal:
-		sweepLineBeginPoint[0] = bounds[0];//xmin
-		sweepLineBeginPoint[1] = bounds[2];//ymin
-		sweepLineBeginPoint[2] = bounds[4];//zmin
-		sweepLineEndPoint[0] = bounds[1];//xmax
-		sweepLineEndPoint[1] = bounds[2];//ymin
-		sweepLineEndPoint[2] = bounds[4];//zmin
+    case Q2DViewer::Coronal:
+        sweepLineBeginPoint[0] = bounds[0];//xmin
+        sweepLineBeginPoint[1] = bounds[2];//ymin
+        sweepLineBeginPoint[2] = bounds[4];//zmin
+        sweepLineEndPoint[0] = bounds[1];//xmax
+        sweepLineEndPoint[1] = bounds[2];//ymin
+        sweepLineEndPoint[2] = bounds[4];//zmin
 
-		sweepLineCoordinateIndex = 2;
-		intersectionIndex = 0;
-		verticalLimit = bounds[5];
+        sweepLineCoordinateIndex = 2;
+        intersectionIndex = 0;
+        verticalLimit = bounds[5];
 
         horizontalSpacingIncrement = spacing[0];
         verticalSpacingIncrement = spacing[2];
-	break;
-	}
+        break;
+    }
 
     int intersectionState;
 	while( sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit )
