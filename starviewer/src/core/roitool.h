@@ -44,6 +44,12 @@ protected:
     /// Polígon que defineix la ROI
     QPointer<DrawerPolygon> m_roiPolygon;
 
+    /// Controlarà si cal o no recalcular les dades estadístiques
+    /// Quan modifiquem la roi (afegint punts, creant una de nova, etc) el valor serà true
+    /// Un cop s'hagin calculat, serà false fins que no es torni a modificar
+    /// Per defecte el valor és true
+    bool m_hasToComputeStatisticsData;
+
 private:
     /// Ens permet anotar el següent punt de la polilínia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
     void annotateNewPoint();

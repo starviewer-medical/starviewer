@@ -30,17 +30,18 @@ private:
     /// Mètode per escriure a pantalla les dades calculades.
     void printData();
 
-    /// Mètode per buscar els valors de gris que serviran per calcular la mitjana i la desviació estàndard
-    void computeGrayValues();
+    /// Calcula les dades estadístiques de la ROI. 
+    /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
+    void computeStatisticsData();
 
-    /// Mètode per calcular la mitjana de gris de la regió del polyline
-    double computeGrayMean();
-
-    /// Mètode per calcular la desviació estàndard de gris de la regió del polyline
-    double computeStandardDeviation();
-
-    /// Llista amb els valors de gris per calcular la mitjana i la desviació etàndard
+    /// Llista amb els valors de gris per calcular la mitjana i la desviació estàndard i altres dades estadístiques si cal.
     QList< double > m_grayValues;
+
+    /// Mitjana de valors de la ROI
+    double m_mean;
+
+    /// Desviació estàndar de la ROI
+    double m_standardDeviation;
 };
 
 }

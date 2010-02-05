@@ -17,7 +17,7 @@
 namespace udg {
 
 PolylineROITool::PolylineROITool( QViewer *viewer, QObject *parent )
- : ROITool(viewer, parent)
+ : ROITool(viewer, parent), m_mean(0.0), m_standardDeviation(0.0)
 {
     m_toolName = "PolylineROITool";
     m_hasSharedData = false;
@@ -72,7 +72,9 @@ void PolylineROITool::printData()
         else        
             areaUnits = "mm2";
 
-        text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_roiPolygon->computeArea( m_2DViewer->getView() ), 0, 'f', 0 ).arg(areaUnits).arg( this->computeGrayMean(), 0, 'f', 2 ).arg( this->computeStandardDeviation(), 0, 'f', 2 ) );
+        // Calculem les dades estadístiques
+        computeStatisticsData();
+        text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_roiPolygon->computeArea( m_2DViewer->getView() ), 0, 'f', 0 ).arg(areaUnits).arg( m_mean, 0, 'f', 2 ).arg( m_standardDeviation, 0, 'f', 2 ) );
 
         text->setAttachmentPoint( intersection );
         text->update( DrawerPrimitive::VTKRepresentation );
@@ -80,8 +82,12 @@ void PolylineROITool::printData()
     }
 }
 
-void PolylineROITool::computeGrayValues()
+void PolylineROITool::computeStatisticsData()
 {
+    // Només cal calcular les dades si és necessari
+    if( !m_hasToComputeStatisticsData )
+        return;
+    
     int i;
     int initialPosition;
     int endPosition;
@@ -172,6 +178,8 @@ void PolylineROITool::computeGrayValues()
     }
 
     int intersectionState;
+    // Inicialitzem la llista de valors de gris
+    m_grayValues.clear();
 	while( sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit )
     {
         intersectionList.clear();
@@ -229,44 +237,32 @@ void PolylineROITool::computeGrayValues()
         sweepLineBeginPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
         sweepLineEndPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
     }
-}
-
-double PolylineROITool::computeGrayMean()
-{
-    computeGrayValues();
-
-    double mean = 0.0;
-
+    // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
+    
+    // Mitjana
+    m_mean = 0.0;
     foreach ( double value, m_grayValues )
-        mean += value;
-
-    //no es buida la llista pq la utilitzara computeStandardDeviation()
-
-    return mean / m_grayValues.size();
-}
-
-double PolylineROITool::computeStandardDeviation()
-{
-    // no cal computeGrayValues(); ja ho ha fet computeGrayMean, que sempre es crida just abans
-    double standardDeviation = 0.0;
-    double mean = computeGrayMean();
-
+        m_mean += value;
+    
+    m_mean = m_mean / m_grayValues.size();
+    
+    // Desviació estàndar
+    m_standardDeviation = 0.0;
     QList<double> deviations;
-
     foreach ( double value, m_grayValues )
     {
-        double individualDeviation = value - mean;
+        double individualDeviation = value - m_mean;
         deviations << ( individualDeviation * individualDeviation );
     }
 
-    m_grayValues.clear();
-
     foreach ( double deviation, deviations )
-        standardDeviation += deviation;
+        m_standardDeviation += deviation;
 
-    standardDeviation /= deviations.size();
+    m_standardDeviation /= deviations.size();
+    m_standardDeviation = std::sqrt( m_standardDeviation );
 
-    return std::sqrt( standardDeviation );
+    // Ja s'han calculat les dades estadístiques
+    m_hasToComputeStatisticsData = false;
 }
 
 }
