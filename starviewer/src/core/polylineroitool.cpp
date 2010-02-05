@@ -94,7 +94,7 @@ void PolylineROITool::computeGrayValues()
     double verticalLimit;
 	int currentView = m_2DViewer->getView();
 
-    //el nombre de segments és el mateix que el nombre de punts del polígon
+    // El nombre de segments és el mateix que el nombre de punts del polígon
     int numberOfSegments = m_roiPolygon->getNumberOfPoints()-1;
 
     // Llistes de punts inicials i finals de cada segement
@@ -110,6 +110,9 @@ void PolylineROITool::computeGrayValues()
         segmentsEndPoints << p2;
     }
 
+    // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
+    // Aquesta línia produirà unes interseccions amb els segments del polígon
+    // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
     double *bounds = m_roiPolygon->getBounds();
 	double *spacing = m_2DViewer->getInput()->getSpacing();
 
@@ -121,11 +124,11 @@ void PolylineROITool::computeGrayValues()
     {
     case Q2DViewer::Axial:
         sweepLineBeginPoint[0] = bounds[0];//xmin
-        sweepLineBeginPoint[1] = bounds[2];//y
-        sweepLineBeginPoint[2] = bounds[4];//z
+        sweepLineBeginPoint[1] = bounds[2];//ymin
+        sweepLineBeginPoint[2] = bounds[4];//zmin
         sweepLineEndPoint[0] = bounds[1];//xmax
-        sweepLineEndPoint[1] = bounds[2];//y
-        sweepLineEndPoint[2] = bounds[4];//z
+        sweepLineEndPoint[1] = bounds[2];//ymin
+        sweepLineEndPoint[2] = bounds[4];//zmin
 
         sweepLineCoordinateIndex = 1;
         intersectionCoordinateIndex = 0;
@@ -180,7 +183,7 @@ void PolylineROITool::computeGrayValues()
                 intersectedSegmentsIndexList << i;
         }
         
-        //obtenim les interseccions entre tots els segments de la ROI i el raig actual
+        // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
         foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
             double *foundPoint = MathTools::infiniteLinesIntersection( (double *)segmentsStartPoints.at(segmentIndex), (double *)segmentsEndPoints.at(segmentIndex), sweepLineBeginPoint, sweepLineEndPoint, intersectionState );
@@ -199,8 +202,9 @@ void PolylineROITool::computeGrayValues()
                 firstIntersection = intersectionList.at( initialPosition );
                 secondIntersection = intersectionList.at( endPosition );
 
-                //Tractem els dos sentits de les interseccions
-                if (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])//d'esquerra cap a dreta
+                // Tractem els dos sentits de les interseccions
+                // D'esquerra cap a dreta
+                if (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])
                 {
                     while ( firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex] )
                     {
@@ -208,7 +212,7 @@ void PolylineROITool::computeGrayValues()
                         firstIntersection[intersectionCoordinateIndex] += horizontalSpacingIncrement;
                     }
                 }
-                else //de dreta cap a esquerra
+                else // I de dreta cap a esquerra
                 {
                     while ( firstIntersection[intersectionCoordinateIndex] >= secondIntersection[intersectionCoordinateIndex] )
                     {
@@ -221,7 +225,7 @@ void PolylineROITool::computeGrayValues()
         else
             DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!" );
 
-        //fem el següent pas en la coordenada que escombrem
+        // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
         sweepLineBeginPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
         sweepLineEndPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
     }
