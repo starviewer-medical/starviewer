@@ -88,7 +88,7 @@ void PolylineROITool::computeGrayValues()
     double *firstIntersection;
     double *secondIntersection;
     QList<double*> intersectionList;
-    QList<int> indexList;
+    QList<int> intersectedSegmentsIndexList;
     double sweepLineBeginPoint[3];
     double sweepLineEndPoint[3];
     double verticalLimit;
@@ -116,7 +116,7 @@ void PolylineROITool::computeGrayValues()
     double horizontalSpacingIncrement;
     double verticalSpacingIncrement;
     int sweepLineCoordinateIndex;
-    int intersectionIndex;
+    int intersectionCoordinateIndex;
     switch( currentView )
     {
     case Q2DViewer::Axial:
@@ -128,7 +128,7 @@ void PolylineROITool::computeGrayValues()
         sweepLineEndPoint[2] = bounds[4];//z
 
         sweepLineCoordinateIndex = 1;
-        intersectionIndex = 0;
+        intersectionCoordinateIndex = 0;
         verticalLimit = bounds[3];
 
         horizontalSpacingIncrement = spacing[0];
@@ -144,7 +144,7 @@ void PolylineROITool::computeGrayValues()
         sweepLineEndPoint[2] = bounds[5];//zmax
 
         sweepLineCoordinateIndex = 1;
-        intersectionIndex = 2;
+        intersectionCoordinateIndex = 2;
         verticalLimit = bounds[3];
 
         horizontalSpacingIncrement = spacing[1];
@@ -160,7 +160,7 @@ void PolylineROITool::computeGrayValues()
         sweepLineEndPoint[2] = bounds[4];//zmin
 
         sweepLineCoordinateIndex = 2;
-        intersectionIndex = 0;
+        intersectionCoordinateIndex = 0;
         verticalLimit = bounds[5];
 
         horizontalSpacingIncrement = spacing[0];
@@ -172,18 +172,18 @@ void PolylineROITool::computeGrayValues()
 	while( sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit )
     {
         intersectionList.clear();
-        indexList.clear();
+        intersectedSegmentsIndexList.clear();
         for ( i = 0; i < numberOfSegments; i++ )
         {
             if( (sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] && sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsEndPoints.at(i)[sweepLineCoordinateIndex])
             || (sweepLineBeginPoint[sweepLineCoordinateIndex] >= segmentsStartPoints.at(i)[sweepLineCoordinateIndex] && sweepLineBeginPoint[sweepLineCoordinateIndex] <= segmentsEndPoints.at(i)[sweepLineCoordinateIndex]) )
-                indexList << i;
+                intersectedSegmentsIndexList << i;
         }
         
         //obtenim les interseccions entre tots els segments de la ROI i el raig actual
-        foreach (int segment, indexList)
+        foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
-            double *foundPoint = MathTools::infiniteLinesIntersection( (double *)segmentsStartPoints.at(segment), (double *)segmentsEndPoints.at(segment), sweepLineBeginPoint, sweepLineEndPoint, intersectionState );
+            double *foundPoint = MathTools::infiniteLinesIntersection( (double *)segmentsStartPoints.at(segmentIndex), (double *)segmentsEndPoints.at(segmentIndex), sweepLineBeginPoint, sweepLineEndPoint, intersectionState );
             if( intersectionState == MathTools::LinesIntersect )
                 intersectionList << foundPoint;
         }
@@ -200,20 +200,20 @@ void PolylineROITool::computeGrayValues()
                 secondIntersection = intersectionList.at( endPosition );
 
                 //Tractem els dos sentits de les interseccions
-                if (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])//d'esquerra cap a dreta
+                if (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])//d'esquerra cap a dreta
                 {
-                    while ( firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex] )
+                    while ( firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex] )
                     {
                         m_grayValues << (double)getGrayValue( firstIntersection );
-                        firstIntersection[intersectionIndex] += horizontalSpacingIncrement;
+                        firstIntersection[intersectionCoordinateIndex] += horizontalSpacingIncrement;
                     }
                 }
                 else //de dreta cap a esquerra
                 {
-                    while ( firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex] )
+                    while ( firstIntersection[intersectionCoordinateIndex] >= secondIntersection[intersectionCoordinateIndex] )
                     {
                         m_grayValues << (double)getGrayValue( firstIntersection );
-                        firstIntersection[intersectionIndex] -= horizontalSpacingIncrement;
+                        firstIntersection[intersectionCoordinateIndex] -= horizontalSpacingIncrement;
                     }
                 }
             }
