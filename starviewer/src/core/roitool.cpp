@@ -17,7 +17,7 @@
 namespace udg {
 
 ROITool::ROITool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent)
+ : Tool(viewer, parent), m_hasToComputeStatisticsData(true)
 {
     m_toolName = "ROITool";
     m_hasSharedData = false;
@@ -98,6 +98,9 @@ void ROITool::annotateNewPoint()
     // Afegim el punt de la polilínia que estem pintant
     m_mainPolyline->addPoint( pickedPoint );
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
+
+    // Com que estem afegint punts cal indicar que si és necessari recalcular les dades estadístiques
+    m_hasToComputeStatisticsData = true;
 }
 
 void ROITool::simulateClosingPolyline()
