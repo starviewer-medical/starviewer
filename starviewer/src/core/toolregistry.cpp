@@ -361,8 +361,8 @@ QPair< QAction *, QString > ToolRegistry::getActionToolPair( const QString &acti
     }
     else if ( actionToolName == "ClearCurrentViewAnnotationsActionTool" )
     {
-        action->setText( tr("Clear") );
-        action->setIcon ( QIcon(":/images/clearCurrentViewAnnotations.png") );
+        action->setText( tr("All of current viewer") );
+        action->setIcon ( QIcon(":/images/eraserViewer.png") );
         action->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ClearCurrentViewAnnotationsTool ) );
         statusTip = tr("Clear primitives from viewer");
         toolTip = statusTip;
