@@ -78,6 +78,7 @@ void PolylineROITool::printData()
 
         text->setAttachmentPoint( intersection );
         text->update( DrawerPrimitive::VTKRepresentation );
+        text->shadowOn();
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
 }

@@ -270,6 +270,7 @@ void AngleTool::finishDrawing()
     // afegim l'annotació textual
     DrawerText *text = new DrawerText;
     text->setText( tr("%1 degrees").arg( m_currentAngle,0,'f',1) );
+    text->shadowOn();
     placeText( text );
     m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 }
