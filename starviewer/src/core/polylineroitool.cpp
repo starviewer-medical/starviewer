@@ -102,20 +102,25 @@ void PolylineROITool::computeStatisticsData()
 	int currentView = m_2DViewer->getView();
 
     // El nombre de segments és el mateix que el nombre de punts del polígon
-    int numberOfSegments = m_roiPolygon->getNumberOfPoints()-1;
+    int numberOfSegments = m_roiPolygon->getNumberOfPoints();
 
     // Llistes de punts inicials i finals de cada segement
     QVector<const double *> segmentsStartPoints;
     QVector<const double *> segmentsEndPoints;
 
     // Creem els diferents segments
-    for ( i = 0; i < numberOfSegments; i++ )
+    for ( i = 0; i < numberOfSegments-1; i++ )
     {
         const double *p1 = m_roiPolygon->getVertix(i);
         const double *p2 = m_roiPolygon->getVertix(i+1);
         segmentsStartPoints.append( p1 );
         segmentsEndPoints << p2;
     }
+    // Cal afegir l'últim segment que es correspondria amb el segment de l'últim punt al primer
+    const double *p1 = m_roiPolygon->getVertix(numberOfSegments-1);
+    const double *p2 = m_roiPolygon->getVertix(0);
+    segmentsStartPoints.append( p1 );
+    segmentsEndPoints << p2;
 
     // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
     // Aquesta línia produirà unes interseccions amb els segments del polígon
@@ -197,9 +202,27 @@ void PolylineROITool::computeStatisticsData()
         {
             double *foundPoint = MathTools::infiniteLinesIntersection( (double *)segmentsStartPoints.at(segmentIndex), (double *)segmentsEndPoints.at(segmentIndex), sweepLineBeginPoint, sweepLineEndPoint, intersectionState );
             if( intersectionState == MathTools::LinesIntersect )
-                intersectionList << foundPoint;
+            {
+                // Cal ordenar les interseccions en la direcció horitzontal per tal que el recompte de píxels es faci correctament
+                bool found = false;
+                int i = 0;
+                while(!found && i<intersectionList.count() )
+                {
+                    if( foundPoint[intersectionCoordinateIndex] > intersectionList.at(i)[intersectionCoordinateIndex] )
+                    {
+                        intersectionList.insert(i,foundPoint);
+                        found = true;
+                    }
+                    else
+                        i++;
+                }
+                // Si tots els punts són més grans, cal inserir la intersecció al final
+                if( !found )
+                    intersectionList << foundPoint;
+            }
         }
 
+        // Fem el recompte de píxels
         if ( (intersectionList.count() % 2)==0 )
         {
             int limit = intersectionList.count()/2;
@@ -232,7 +255,7 @@ void PolylineROITool::computeStatisticsData()
             }
         }
         else
-            DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!" );
+            DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI ÉS IMPARELL!!" );
 
         // Desplacem la línia d'escombrat en la direcció que toca tant com espaiat de píxel tinguem en aquella direcció
         sweepLineBeginPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
