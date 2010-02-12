@@ -93,6 +93,34 @@ public slots:
     /// Desa l'exploratory tour a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveExploratoryTour( QString fileName = QString() );
 
+    // Per VMIi etc.
+    /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveViewedVolumeI( QString fileName = QString() );
+    /// Carrega la viewpoint entropy des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadViewpointEntropyI( QString fileName = QString() );
+    /// Desa la viewpoint entropy a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveViewpointEntropyI( QString fileName = QString() );
+    /// Carrega l'entropia des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadEntropyI( QString fileName = QString() );
+    /// Desa l'entropia a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveEntropyI( QString fileName = QString() );
+     /// Carrega la VMIi des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVmii( QString fileName = QString() );
+    /// Desa la VMIi a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVmii( QString fileName = QString() );
+    /// Carrega la informació mútua des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadMii( QString fileName = QString() );
+    /// Desa la informació mútua a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveMii( QString fileName = QString() );
+    /// Carrega les inestabilitats de les vistes des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadViewpointUnstabilitiesI( QString fileName = QString() );
+    /// Desa les inestabilitats de les vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveViewpointUnstabilitiesI( QString fileName = QString() );
+    /// Carrega l'IMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadImi( QString fileName = QString() );
+    /// Desa l'IMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveImi( QString fileName = QString() );
+
 private:
 
     /// Carrega dades de tipus float del fitxer al float. Retorna cert si tot va bé i fals si hi ha error.
@@ -201,6 +229,7 @@ private slots:
 
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
+    void computeSelectedVmii();
 
     void tourBestViews();
     void guidedTour();
@@ -216,6 +245,7 @@ private slots:
     void opacityProbabilisticAmbientOcclusionChecked( bool checked );
 
     void setVmiOneViewpointMaximum( int maximum );
+    void setVmiiOneViewpointMaximum( int maximum );
 
     void getFileNameToSaveTour();
 
@@ -266,6 +296,15 @@ private:
     QList< QPair<int, Vector3> > m_exploratoryTour;
     QVector<float> m_voxelSaliencies;
     float m_maximumSaliency;
+
+    QVector<float> m_viewedVolumeI;
+    QVector<float> m_viewpointEntropyI;
+    float m_entropyI;
+    QVector<float> m_vmii;
+    float m_mii;
+    QVector<float> m_viewpointUnstabilitiesI;
+    QVector<float> m_imi;
+    float m_maximumImi;
 
     // Filtering
     QVector<float> m_spatialImportanceFunction; // ΔD = G * D − D

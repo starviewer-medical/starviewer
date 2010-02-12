@@ -28,7 +28,9 @@ HEADERS += experimental3dextensionmediator.h \
     viewpointinformationchannel.h \
     filteringambientocclusionvoxelshader.h \
     filteringambientocclusionmapvoxelshader.h \
-    vomigammavoxelshader.h
+    vomigammavoxelshader.h \
+    viewpointintensityinformationchannel.h \
+    imivoxelshader.h
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
     experimental3dsettings.cpp \
@@ -52,18 +54,23 @@ SOURCES += experimental3dextensionmediator.cpp \
     viewpointinformationchannel.cpp \
     filteringambientocclusionvoxelshader.cpp \
     filteringambientocclusionmapvoxelshader.cpp \
-    vomigammavoxelshader.cpp
+    vomigammavoxelshader.cpp \
+    viewpointintensityinformationchannel.cpp \
+    imivoxelshader.cpp
 RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
 cuda { 
     HEADERS += cudaviewpointinformationchannel.h \
         qcudarenderwindow.h \
-        cudafiltering.h
+        cudafiltering.h \
+        cudaviewpointintensityinformationchannel.h
     SOURCES += qcudarenderwindow.cpp
     CUSOURCES += cudaviewpointinformationchannel.cu \
-        cudafiltering.cu
+        cudafiltering.cu \
+        cudaviewpointintensityinformationchannel.cu
     OTHER_FILES += cudaviewpointinformationchannel.cu \
-        cudafiltering.cu
+        cudafiltering.cu \
+        cudaviewpointintensityinformationchannel.cu
 }
 include(../../basicconfextensions.inc)
 include(../../../cuda.inc)

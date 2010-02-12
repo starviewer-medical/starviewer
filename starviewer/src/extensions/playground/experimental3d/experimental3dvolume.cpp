@@ -32,6 +32,7 @@
 #include "voxelsaliencyvoxelshader.h"
 #include "colorvomivoxelshader.h"
 #include "opacityvoxelshader.h"
+#include "imivoxelshader.h"
 
 #include "filteringambientocclusionvoxelshader.h"
 #include "filteringambientocclusionmapvoxelshader.h"
@@ -277,6 +278,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_vomiCoolWarmVoxelShader->setTransferFunction( transferFunction );
     m_voxelSaliencyVoxelShader->setTransferFunction( transferFunction );
     m_colorVomiVoxelShader->setTransferFunction( transferFunction );
+    m_imiVoxelShader->setTransferFunction( transferFunction );
     m_coolWarmVoxelShader->setTransferFunction( transferFunction );
     m_filteringAmbientOcclusionMapVoxelShader->setTransferFunction( transferFunction );
 }
@@ -343,6 +345,16 @@ void Experimental3DVolume::addColorVomi( const QVector<Vector3Float> &colorVomi,
     if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorVomiVoxelShader );
     m_colorVomiVoxelShader->setColorVomi( colorVomi, maximumColorVomi, factor );
     m_colorVomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) != 0 );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
+void Experimental3DVolume::addImi( const QVector<float> &imi, float maximumImi, float factor, bool additive, float weight )
+{
+    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_imiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_imiVoxelShader );
+    m_imiVoxelShader->setImi( imi, maximumImi, factor );
+    m_imiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_imiVoxelShader ) != 0 );
+    m_imiVoxelShader->setAdditive( additive, weight );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
@@ -477,6 +489,8 @@ void Experimental3DVolume::createVoxelShaders()
     m_colorVomiVoxelShader = new ColorVomiVoxelShader();
     m_colorVomiVoxelShader->setData( m_data, m_rangeMax );
     m_opacityVoxelShader = new OpacityVoxelShader();
+    m_imiVoxelShader = new ImiVoxelShader();
+    m_imiVoxelShader->setData( m_data, m_rangeMax );
     m_coolWarmVoxelShader = new CoolWarmVoxelShader();
     m_coolWarmVoxelShader->setData( m_data, m_rangeMax );
     m_filteringAmbientOcclusionVoxelShader = new FilteringAmbientOcclusionVoxelShader();
