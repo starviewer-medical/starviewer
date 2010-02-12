@@ -73,7 +73,7 @@
                </font>
               </property>
               <property name="text">
-               <string>HostName:</string>
+               <string>Hostname:</string>
               </property>
              </widget>
             </item>
@@ -135,7 +135,7 @@
           <item row="1" column="4">
            <widget class="QToolButton" name="m_configurationPrinterToolButton">
             <property name="text">
-             <string>Configure printers</string>
+             <string>Configure DICOM printers</string>
             </property>
             <property name="icon">
              <iconset resource="../../../main/main.qrc">
@@ -620,7 +620,7 @@ border: 1px solid  #680000;
              <item row="0" column="2">
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Images sent to print successfully</string>
+                <string>Images sent to DICOM print successfully.</string>
                </property>
               </widget>
              </item>
