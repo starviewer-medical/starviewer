@@ -120,7 +120,26 @@ void DistanceTool::annotateNewPoint()
         }
         else
         {
-            text->setText( tr("%1 mm").arg( m_line->computeDistance(), 0, 'f', 2 ) );
+            double distance;
+            //En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte. \TODO S'hauria d'unificar.
+            if ( m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US" )
+            {
+                double * firstPoint = m_line->getFirstPoint();
+                double * secondPoint = m_line->getSecondPoint();
+
+                double * spacing = m_2DViewer->getInput()->getSpacing();
+                
+                double xx = ( firstPoint[0] - secondPoint[0] ) / spacing[0] * pixelSpacing[0];
+                double yy = ( firstPoint[1] - secondPoint[1] ) / spacing[1] * pixelSpacing[1];
+                double value = std::pow(xx, 2) + std::pow(yy, 2);
+                distance = std::sqrt(value);
+            }
+            else
+            {
+                distance = m_line->computeDistance();
+            }
+
+            text->setText( tr("%1 mm").arg( distance, 0, 'f', 2 ) );
         }
         text->setAttachmentPoint( leftPoint );
         text->setHorizontalJustification( "Right" );
