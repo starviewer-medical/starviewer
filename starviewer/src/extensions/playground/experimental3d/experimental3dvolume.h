@@ -40,6 +40,7 @@ class VomiCoolWarmVoxelShader;
 class VoxelSaliencyVoxelShader;
 class ColorVomiVoxelShader;
 class OpacityVoxelShader;
+class ImiVoxelShader;
 
 class FilteringAmbientOcclusionVoxelShader;
 class FilteringAmbientOcclusionMapVoxelShader;
@@ -97,6 +98,7 @@ public:
     void addVomiGamma( const QVector<float> &vomi, float maximumVomi, float factor, float gamma, bool additive = false, float weight = 0.0f );
     void addVomiCoolWarm( const QVector<float> &vomi, float maximumVomi, float factor, float y, float b );
     void addColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor );
+    void addImi( const QVector<float> &imi, float maximumImi, float factor, bool additive = false, float weight = 0.0f );
     void addVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor );
     void addOpacity( const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor );
     void addOpacity( const QVector<float> &data, float maximum );
@@ -171,6 +173,8 @@ private:
     ColorVomiVoxelShader *m_colorVomiVoxelShader;
     /// Voxel shader que modifica l'opacitat segons la VoMI o la saliency.
     OpacityVoxelShader *m_opacityVoxelShader;
+    /// Voxel shader que pinta les IMI.
+    ImiVoxelShader *m_imiVoxelShader;
 
     FilteringAmbientOcclusionVoxelShader *m_filteringAmbientOcclusionVoxelShader;
     FilteringAmbientOcclusionMapVoxelShader *m_filteringAmbientOcclusionMapVoxelShader;

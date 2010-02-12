@@ -14,6 +14,7 @@
 #include "vector3.h"
 #include "viewpointgenerator.h"
 #include "viewpointinformationchannel.h"
+#include "viewpointintensityinformationchannel.h"
 #include "volumereslicer.h"
 #include "experimental3dsettings.h"
 
@@ -119,7 +120,7 @@ void QExperimental3DExtension::loadViewpointEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::ViewPointEntropyDir, tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointEntropyDir, tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
@@ -132,7 +133,7 @@ void QExperimental3DExtension::saveViewpointEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewPointEntropyDir, tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::ViewpointEntropyDir, tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -611,6 +612,209 @@ void QExperimental3DExtension::saveExploratoryTour( QString fileName )
 }
 
 
+void QExperimental3DExtension::saveViewedVolumeI( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( Experimental3DSettings::ViewedVolumeIntensityDir, tr("Save viewed volume"), tr("Text files (*.txt);;All files (*)"), "txt" );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( !saveFloatDataAsText( m_viewedVolumeI, fileName, QString( "volume(v%1) = %2" ), 1 ) && m_interactive )
+        QMessageBox::warning( this, tr("Can't save viewed volume"), QString( tr("Can't save viewed volume to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadViewpointEntropyI( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointEntropyIntensityDir, tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_viewpointEntropyI ) ) m_saveViewpointEntropyIPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint entropy"), QString( tr("Can't load viewpoint entropy from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveViewpointEntropyI( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( Experimental3DSettings::ViewpointEntropyIntensityDir, tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointEntropyI, fileName, QString( "H(I|v%1) = %2" ), 1 );
+    else error = !saveData( m_viewpointEntropyI, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint entropy"), QString( tr("Can't save viewpoint entropy to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadEntropyI( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( Experimental3DSettings::EntropyIntensityDir, tr("Load entropy"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadFloatData( fileName, m_entropyI ) ) m_saveEntropyIPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load entropy"), QString( tr("Can't load entropy from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveEntropyI( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName =getFileNameToSave( Experimental3DSettings::EntropyIntensityDir, tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_entropyI, fileName, QString( "H(I) = %1" ) );
+    else error = !saveFloatData( m_entropyI, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save entropy"), QString( tr("Can't save entropy to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadVmii( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointMutualInformationIntensityDir, tr("Load VMIi"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_vmii ) ) m_saveVmiiPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VMIi"), QString( tr("Can't load VMIi from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveVmii( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( Experimental3DSettings::ViewpointMutualInformationIntensityDir, tr("Save VMIi"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_vmii, fileName, QString( "VMIi(v%1) = %2" ), 1 );
+    else error = !saveData( m_vmii, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save VMIi"), QString( tr("Can't save VMIi to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadMii( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( Experimental3DSettings::MutualInformationIntensityDir, tr("Load MIi"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadFloatData( fileName, m_mii ) ) m_saveMiiPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load MIi"), QString( tr("Can't load MIi from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveMii( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( Experimental3DSettings::MutualInformationIntensityDir, tr("Save MIi"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_mii, fileName, QString( "I(V;I) = %1" ) );
+    else error = !saveFloatData( m_mii, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save MIi"), QString( tr("Can't save MIi to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadViewpointUnstabilitiesI( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointUnstabilitiesIntensityDir, tr("Load viewpoint unstabilities"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_viewpointUnstabilitiesI ) ) m_saveViewpointUnstabilitiesIPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint unstabilities"), QString( tr("Can't load viewpoint unstabilities from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveViewpointUnstabilitiesI( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( Experimental3DSettings::ViewpointUnstabilitiesIntensityDir, tr("Save viewpoint unstabilities"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    bool error;
+
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointUnstabilitiesI, fileName, QString( "U(v%1) = %2" ), 1 );
+    else error = !saveData( m_viewpointUnstabilitiesI, fileName );
+
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint unstabilities"), QString( tr("Can't save viewpoint unstabilities to file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::loadImi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToLoad( Experimental3DSettings::IntensityMutualInformationDir, tr("Load IMI"), tr("Data files (*.dat);;All files (*)") );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( loadData( fileName, m_imi ) )
+    {
+        int nIntensities = m_imi.size();
+        m_maximumImi = 0.0f;
+
+        for ( int j = 0; j < nIntensities; j++ ) if ( m_imi.at( j ) > m_maximumImi ) m_maximumImi = m_imi.at( j );
+
+        m_baseImiRadioButton->setEnabled( true );
+//        m_baseImiCoolWarmRadioButton->setEnabled( true );
+//        m_imiCheckBox->setEnabled( true );
+//        m_imiCoolWarmCheckBox->setEnabled( true );
+//        m_opacityLabel->setEnabled( true );
+//        m_opacityImiCheckBox->setEnabled( true );
+        m_saveImiPushButton->setEnabled( true );
+//        m_imiGradientPushButton->setEnabled( true );
+    }
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load IMI"), QString( tr("Can't load IMI from file ") ) + fileName );
+}
+
+
+void QExperimental3DExtension::saveImi( QString fileName )
+{
+    if ( fileName.isEmpty() )
+    {
+        fileName = getFileNameToSave( Experimental3DSettings::IntensityMutualInformationDir, tr("Save IMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
+        if ( fileName.isNull() ) return;
+    }
+
+    if ( !saveData( m_imi, fileName ) && m_interactive ) QMessageBox::warning( this, tr("Can't save IMI"), QString( tr("Can't save IMI to file ") ) + fileName );
+}
+
+
 bool QExperimental3DExtension::loadFloatData( const QString &fileName, float &data )
 {
     QFile file( fileName );
@@ -847,6 +1051,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseVomiCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseVomiCoolWarmFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseImiRadioButton, SIGNAL( toggled(bool) ), m_baseImiFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseImiRadioButton, SIGNAL( toggled(bool) ), m_baseImiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionTypeComboBox, SLOT( setEnabled(bool) ) );
@@ -970,6 +1176,24 @@ void QExperimental3DExtension::createConnections()
     connect( m_exploratoryTourPushButton, SIGNAL( clicked() ), SLOT( exploratoryTour() ) );
     connect( m_vomiGradientPushButton, SIGNAL( clicked() ), SLOT( computeVomiGradient() ) );
 
+    // VMIi
+    connect( m_vmiiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setVmiiOneViewpointMaximum(int) ) );
+    connect( m_vmiiOneViewpointCheckBox, SIGNAL( toggled(bool) ), m_vmiiOneViewpointSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_saveViewedVolumeIPushButton, SIGNAL( clicked() ), SLOT( saveViewedVolumeI() ) );
+    connect( m_loadViewpointEntropyIPushButton, SIGNAL( clicked() ), SLOT( loadViewpointEntropyI() ) );
+    connect( m_saveViewpointEntropyIPushButton, SIGNAL( clicked() ), SLOT( saveViewpointEntropyI() ) );
+    connect( m_loadEntropyIPushButton, SIGNAL( clicked() ), SLOT( loadEntropyI() ) );
+    connect( m_saveEntropyIPushButton, SIGNAL( clicked() ), SLOT( saveEntropyI() ) );
+    connect( m_loadVmiiPushButton, SIGNAL( clicked() ), SLOT( loadVmii() ) );
+    connect( m_saveVmiiPushButton, SIGNAL( clicked() ), SLOT( saveVmii() ) );
+    connect( m_loadMiiPushButton, SIGNAL( clicked() ), SLOT( loadMii() ) );
+    connect( m_saveMiiPushButton, SIGNAL( clicked() ), SLOT( saveMii() ) );
+    connect( m_loadViewpointUnstabilitiesIPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilitiesI() ) );
+    connect( m_saveViewpointUnstabilitiesIPushButton, SIGNAL( clicked() ), SLOT( saveViewpointUnstabilitiesI() ) );
+    connect( m_loadImiPushButton, SIGNAL( clicked() ), SLOT( loadImi() ) );
+    connect( m_saveImiPushButton, SIGNAL( clicked() ), SLOT( saveImi() ) );
+    connect( m_computeVmiiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmii() ) );
+
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
 
@@ -988,6 +1212,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_volumeVariancePushButton, SIGNAL( clicked() ), SLOT( volumeVariance() ) );
 }
 
+
 QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter )
 {
     Settings settings;
@@ -1003,6 +1228,7 @@ QString QExperimental3DExtension::getFileNameToLoad( const QString &settingsDirK
 
     return fileName;
 }
+
 
 QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix )
 {
@@ -1024,11 +1250,13 @@ QString QExperimental3DExtension::getFileNameToSave( const QString &settingsDirK
     return fileName;
 }
 
+
 void QExperimental3DExtension::loadTransferFunction()
 {
     QString transferFunctionFileName = getFileNameToLoad( Experimental3DSettings::TransferFunctionDir, tr("Load transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)") );
     if ( !transferFunctionFileName.isNull() ) loadTransferFunction( transferFunctionFileName );
 }
+
 
 void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
 {
@@ -1234,9 +1462,10 @@ void QExperimental3DExtension::render()
     //else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
     else if ( m_baseVomiCoolWarmRadioButton->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_baseVomiCoolWarmFactorDoubleSpinBox->value(),
                                                                                       m_baseVomiCoolWarmYDoubleSpinBox->value(), m_baseVomiCoolWarmBDoubleSpinBox->value() );
-    //else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
+    else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
+    else if ( m_baseImiRadioButton->isChecked() ) m_volume->addImi( m_imi, m_maximumImi, m_baseImiFactorDoubleSpinBox->value() );
     else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
-    else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVomi( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
+    //else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVomi( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
     else if ( m_baseFilteringAmbientOcclusionRadioButton->isChecked() )
     {
         switch ( m_baseFilteringAmbientOcclusionTypeComboBox->currentIndex() )
@@ -2009,6 +2238,193 @@ void QExperimental3DExtension::computeSelectedVmi()
     m_viewer->setCamera( position, focus, up );
 
     setCursor( QCursor( Qt::ArrowCursor ) );
+}
+
+
+void QExperimental3DExtension::computeSelectedVmii()
+{
+#ifndef CUDA_AVAILABLE
+    QMessageBox::information( this, tr("Operation only available with CUDA"), "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them." );
+#else // CUDA_AVAILABLE
+    // Què ha demanat l'usuari
+    bool computeViewpointEntropy = m_computeViewpointEntropyICheckBox->isChecked();
+    bool computeEntropy = m_computeEntropyICheckBox->isChecked();
+    bool computeVmii = m_computeVmiiCheckBox->isChecked();
+    bool computeMii = m_computeMiiCheckBox->isChecked();
+    bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesICheckBox->isChecked();
+    bool computeImi = m_computeImiCheckBox->isChecked();
+//    bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
+//    bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
+//    bool computeEvmiOpacity = m_computeEvmiOpacityCheckBox->isChecked();
+//    bool computeEvmiVomi = m_computeEvmiVomiCheckBox->isChecked();
+//    bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
+//    bool computeGuidedTour = m_computeGuidedTourCheckBox->isChecked();
+//    bool computeExploratoryTour = m_computeExploratoryTourCheckBox->isChecked();
+
+    // Si no hi ha res a calcular marxem
+    if ( !computeViewpointEntropy && !computeEntropy && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi /*&& !computeViewpointVomi && !computeColorVomi && !computeEvmiOpacity
+         && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour*/ ) return;
+
+    setCursor( QCursor( Qt::WaitCursor ) );
+
+    // Obtenir direccions
+    Vector3 position, focus, up;
+    m_viewer->getCamera( position, focus, up );
+    float distance = ( position - focus ).length();
+    ViewpointGenerator viewpointGenerator = m_vmiiViewpointDistributionWidget->viewpointGenerator( distance );
+
+    // Viewpoint Intensity Information Channel
+    ViewpointIntensityInformationChannel viewpointIntensityInformationChannel( viewpointGenerator, m_volume, m_viewer, m_transferFunctionEditor->transferFunction() );
+
+    // Paleta de colors per la color VoMI
+//    if ( computeColorVomi ) viewpointInformationChannel.setColorVomiPalette( m_colorVomiPalette );
+
+    // Funció de transferència per l'EVMI amb opacitat
+//    if ( computeEvmiOpacity )
+//    {
+//        if ( m_computeEvmiOpacityUseOtherPushButton->isChecked() ) viewpointInformationChannel.setEvmiOpacityTransferFunction( m_evmiOpacityTransferFunction );
+//        else viewpointInformationChannel.setEvmiOpacityTransferFunction( m_transferFunctionEditor->transferFunction() );
+//    }
+
+    // Paràmetres extres per calcular les millors vistes (els passem sempre perquè tinguin algun valor, per si s'ha de calcular el guided tour per exemple)
+//    viewpointInformationChannel.setBestViewsParameters( m_computeBestViewsNRadioButton->isChecked(), m_computeBestViewsNSpinBox->value(), m_computeBestViewsThresholdDoubleSpinBox->value() );
+
+    // Llindar per calcular l'exploratory tour
+//    viewpointInformationChannel.setExploratoryTourThreshold( m_computeExploratoryTourThresholdDoubleSpinBox->value() );
+
+    // Filtratge de punts de vista
+    if ( m_vmiiOneViewpointCheckBox->isChecked() )
+    {
+        int nViewpoints = m_vmiiViewpointDistributionWidget->numberOfViewpoints();
+        int selectedViewpoint = m_vmiiOneViewpointSpinBox->value() - 1;
+
+        QVector<bool> filter( nViewpoints );
+
+        filter[selectedViewpoint] = true;
+
+        QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
+        for ( int i = 0; i < neighbours.size(); i++ ) filter[neighbours.at( i )] = true;
+
+        viewpointIntensityInformationChannel.filterViewpoints( filter );
+    }
+
+    connect( &viewpointIntensityInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiiTotalProgressBar, SLOT( setMaximum(int) ) );
+    connect( &viewpointIntensityInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiiTotalProgressBar, SLOT( repaint() ) ); // no sé per què però cal això perquè s'actualitzi quan toca
+    connect( &viewpointIntensityInformationChannel, SIGNAL( totalProgress(int) ), m_vmiiTotalProgressBar, SLOT( setValue(int) ) );
+    connect( &viewpointIntensityInformationChannel, SIGNAL( partialProgress(int) ), m_vmiiProgressBar, SLOT( setValue(int) ) );
+
+    QTime time;
+    time.start();
+    viewpointIntensityInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmii, computeMii, computeViewpointUnstabilities, computeImi, /*computeViewpointVomi, computeColorVomi, computeEvmiOpacity,
+                                         computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour,*/ m_vmiiDisplayCheckBox->isChecked() );
+    int elapsed = time.elapsed();
+    DEBUG_LOG( QString( "Temps total de VMIi i altres: %1 s" ).arg( elapsed / 1000.0f ) );
+    INFO_LOG( QString( "Temps total de VMIi i altres: %1 s" ).arg( elapsed / 1000.0f ) );
+
+    if ( viewpointIntensityInformationChannel.hasViewedVolume() )
+    {
+        m_viewedVolumeI = viewpointIntensityInformationChannel.viewedVolume();
+        m_saveViewedVolumeIPushButton->setEnabled( true );
+    }
+
+    if ( computeViewpointEntropy )
+    {
+        m_viewpointEntropyI = viewpointIntensityInformationChannel.viewpointEntropy();
+        m_saveViewpointEntropyIPushButton->setEnabled( true );
+    }
+
+    if ( computeEntropy )
+    {
+        m_entropyI = viewpointIntensityInformationChannel.entropy();
+        m_saveEntropyIPushButton->setEnabled( true );
+    }
+
+    if ( computeVmii )
+    {
+        m_vmii = viewpointIntensityInformationChannel.vmii();
+        m_saveVmiiPushButton->setEnabled( true );
+    }
+
+    if ( computeMii )
+    {
+        m_mii = viewpointIntensityInformationChannel.mii();
+        m_saveMiiPushButton->setEnabled( true );
+    }
+
+    if ( computeViewpointUnstabilities )
+    {
+        m_viewpointUnstabilitiesI = viewpointIntensityInformationChannel.viewpointUnstabilities();
+        m_saveViewpointUnstabilitiesIPushButton->setEnabled( true );
+    }
+
+    if ( computeImi )
+    {
+        m_imi = viewpointIntensityInformationChannel.imi();
+        m_maximumImi = viewpointIntensityInformationChannel.maximumImi();
+        m_baseImiRadioButton->setEnabled( true );
+//        m_baseImiCoolWarmRadioButton->setEnabled( true );
+//        m_imiCheckBox->setEnabled( true );
+//        m_imiCoolWarmCheckBox->setEnabled( true );
+//        m_opacityLabel->setEnabled( true );
+//        m_opacityImiCheckBox->setEnabled( true );
+        m_saveImiPushButton->setEnabled( true );
+//        m_imiGradientPushButton->setEnabled( true );
+    }
+
+//    if ( computeViewpointVomi )
+//    {
+//        m_viewpointVomi = viewpointInformationChannel.viewpointVomi();
+//        m_saveViewpointVomiPushButton->setEnabled( true );
+//    }
+//
+//    if ( computeColorVomi )
+//    {
+//        m_colorVomi = viewpointInformationChannel.colorVomi();
+//        m_maximumColorVomi = viewpointInformationChannel.maximumColorVomi();
+//        m_baseColorVomiRadioButton->setEnabled( true );
+//        m_colorVomiCheckBox->setEnabled( true );
+//        m_saveColorVomiPushButton->setEnabled( true );
+//    }
+//
+//    if ( computeEvmiOpacity )
+//    {
+//        m_evmiOpacity = viewpointInformationChannel.evmiOpacity();
+//        m_saveEvmiOpacityPushButton->setEnabled( true );
+//    }
+//
+//    if ( computeEvmiVomi )
+//    {
+//        m_evmiVomi = viewpointInformationChannel.evmiVomi();
+//        m_saveEvmiVomiPushButton->setEnabled( true );
+//    }
+//
+//    if ( computeBestViews )
+//    {
+//        m_bestViews = viewpointInformationChannel.bestViews();
+//        m_saveBestViewsPushButton->setEnabled( true );
+//        m_tourBestViewsPushButton->setEnabled( true );
+//    }
+//
+//    if ( computeGuidedTour )
+//    {
+//        m_guidedTour = viewpointInformationChannel.guidedTour();
+//        m_saveGuidedTourPushButton->setEnabled( true );
+//        m_guidedTourPushButton->setEnabled( true );
+//    }
+//
+//    if ( computeExploratoryTour )
+//    {
+//        m_exploratoryTour = viewpointInformationChannel.exploratoryTour();
+//        m_saveExploratoryTourPushButton->setEnabled( true );
+//        m_exploratoryTourPushButton->setEnabled( true );
+//    }
+
+    // Restaurem els paràmetres normals (en realitat només cal si es fa amb CPU)
+//    render();
+//    m_viewer->setCamera( position, focus, up );
+
+    setCursor( QCursor( Qt::ArrowCursor ) );
+#endif // CUDA_AVAILABLE
 }
 
 
@@ -2902,6 +3318,12 @@ void QExperimental3DExtension::opacityProbabilisticAmbientOcclusionChecked( bool
 void QExperimental3DExtension::setVmiOneViewpointMaximum( int maximum )
 {
     m_vmiOneViewpointSpinBox->setMaximum( maximum );
+}
+
+
+void QExperimental3DExtension::setVmiiOneViewpointMaximum( int maximum )
+{
+    m_vmiiOneViewpointSpinBox->setMaximum( maximum );
 }
 
 

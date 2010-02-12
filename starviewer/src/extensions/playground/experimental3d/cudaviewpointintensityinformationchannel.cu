@@ -2,7 +2,7 @@
 
 #include "qcudarenderwindow.h"
 
-#include "cudaviewpointinformationchannel.h"
+#include "cudaviewpointintensityinformationchannel.h"
 
 #include <iostream>
 
@@ -22,7 +22,7 @@
 
 
 static const uint PARTITIONS = 1;  // en quants trossos es parteix la imatge en cada dimensió (per reduir col·lisions)
-static const int VOLUME_MULTIPLIER = 1000000;  // multiplicador del volum a l'hora de convertir-lo en enter
+static const int VOLUME_MULTIPLIER = 100000;  // multiplicador del volum a l'hora de convertir-lo en enter
 
 
 // volum
@@ -37,11 +37,11 @@ texture<float4, 1> gTransferFunctionTexture;    // podríem passar amb un sol fl
 static int *gdiHistogram;
 static float *gdfHistogram;
 
-// p(O|v) * totalViewedVolume
+// p(I|v) * totalViewedVolume
 texture<float, 1> gViewedVolumesTexture;    // textura de l'histograma de reals
 
 // mida del volum
-static uint gVolumeDataSize;
+static uint gIntensityRange;
 static cudaExtent gVolumeDataDims;
 static float3 gVolumeDims;
 
@@ -122,7 +122,7 @@ __device__ uint rgbaFloatToInt(float4 rgba)
 }
 
 
-__global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, int *histogram, cudaExtent volumeDataDims, float3 volumeDims, float3x4 invViewMatrix, uint partitions, int volumeMultiplier)
+__global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, int *histogram, float3 volumeDims, float3x4 invViewMatrix, uint partitions, int volumeMultiplier)
 {
     const int MAX_STEPS = 512;
     const float OPAQUE_ALPHA = 0.9f;
@@ -190,12 +190,7 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
 
                 if (volume > 0.0f)
                 {
-                    // TODO de moment posem aquest min per controlar quan una coordenada és exactament 1, però potser hi ha una manera més bonica de fer-ho
-                    int vx = min((int) (pos.x * volumeDataDims.width), volumeDataDims.width - 1);
-                    int vy = min((int) (pos.y * volumeDataDims.height), volumeDataDims.height - 1);
-                    int vz = min((int) (pos.z * volumeDataDims.depth), volumeDataDims.depth - 1);
-                    int offset = vx + vy * volumeDataDims.width + vz * volumeDataDims.width * volumeDataDims.height;
-                    //int offset = (int)(pos.x * volumeDataDims.width) + (int)(pos.y * volumeDataDims.height) * volumeDataDims.width + (int)(pos.z * volumeDataDims.depth) * volumeDataDims.width + volumeDataDims.height;
+                    int offset = (int) sample;
 
                     int iVolume = (int) (volume * volumeMultiplier);
                     atomicAdd(histogram + offset, iVolume);
@@ -207,7 +202,7 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
                     sum.z += col.z * col.w * remainingOpacity;
                     remainingOpacity *= 1.0f - col.w;
                     sum.w = 1.0f - remainingOpacity;
-                    
+
                     if (sum.w >= OPAQUE_ALPHA) break;
                 }
 
@@ -215,17 +210,6 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
 
                 if (t > tfar) break;
             }
-
-
-            /*sum.x = maxSample / 1000.0f;
-            sum.y = maxSample / 2000.0f;
-            sum.z = maxSample / 4000.0f;
-            sum.w = 1.0f;*/
-
-            /*sum.x = maxSample;
-            sum.y = maxSample;
-            sum.z = maxSample;
-            sum.w = 1.0f;*/
 
             if (image)
             {
@@ -238,34 +222,20 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
 }
 
 
-__global__ void histogramToFloatKernel(int *iHistogram, float *fHistogram, cudaExtent volumeDataDims, int volumeMultiplier)
+__global__ void histogramToFloatKernel(int *iHistogram, float *fHistogram, uint range, int volumeMultiplier)
 {
-    //uint i = blockIdx.x * blockDim.x + threadIdx.x;
-    //if (i >= volumeDataSize) return;
-
-    uint blocksX = (volumeDataDims.width + blockDim.x - 1) / blockDim.x;
-    uint blockX = blockIdx.x % blocksX;
-    uint blockY = blockIdx.x / blocksX;
-    uint blockZ = blockIdx.y;
-
-    uint x = blockX * blockDim.x + threadIdx.x;
-    if (x >= volumeDataDims.width) return;
-    uint y = blockY * blockDim.y + threadIdx.y;
-    if (y >= volumeDataDims.height) return;
-    uint z = blockZ * blockDim.z + threadIdx.z;
-    if (z >= volumeDataDims.depth) return;
-
-    uint i = x + y * volumeDataDims.width + z * volumeDataDims.width * volumeDataDims.height;
+    uint i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i >= range) return;
 
     float divisor = volumeMultiplier;
     fHistogram[i] = iHistogram[i] / divisor;
 }
 
 
-void cvicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunction, int renderSize, int displaySize, QColor backgroundColor, bool display)
+void cviicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunction, int renderSize, int displaySize, QColor backgroundColor, bool display)
 {
     ushort *data = reinterpret_cast<unsigned short*>(image->GetScalarPointer());
-    gVolumeDataSize = image->GetNumberOfPoints();
+    gIntensityRange = static_cast<uint>(image->GetScalarRange()[1]) + 1;
     int *dimensions = image->GetDimensions();
     gVolumeDataDims = make_cudaExtent(dimensions[0], dimensions[1], dimensions[2]);
     double *spacing = image->GetSpacing();
@@ -322,11 +292,11 @@ void cvicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunct
     CUDA_SAFE_CALL( cudaBindTextureToArray(gTransferFunctionTexture, gdTransferFunctionArray, channelDescTransferFunctionArray) );
 
     // create histogram
-    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdiHistogram), gVolumeDataSize * sizeof(int)) );
-    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdfHistogram), gVolumeDataSize * sizeof(float)) );
+    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdiHistogram), gIntensityRange * sizeof(int)) );
+    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdfHistogram), gIntensityRange * sizeof(float)) );
 
-    // histogram texture (p(O|v) * totalViewedVolume)
-    CUDA_SAFE_CALL( cudaBindTexture(0, gViewedVolumesTexture, reinterpret_cast<void*>(gdfHistogram), gViewedVolumesTexture.channelDesc, gVolumeDataSize * sizeof(float)) );
+    // histogram texture (p(I|v) * totalViewedVolume)
+    CUDA_SAFE_CALL( cudaBindTexture(0, gViewedVolumesTexture, reinterpret_cast<void*>(gdfHistogram), gViewedVolumesTexture.channelDesc, gIntensityRange * sizeof(float)) );
 
     // create render window
     gDisplay = display;
@@ -346,14 +316,14 @@ void cvicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunct
 }
 
 
-QVector<float> cvicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix)
+QVector<float> cviicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
     cudaEventRecord(start, 0);
 
-    CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdiHistogram), 0, gVolumeDataSize * sizeof(int)) );   // buidar histograma
+    CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdiHistogram), 0, gIntensityRange * sizeof(int)) );  // buidar histograma
 
     // map PBO to get CUDA device pointer
     uint *pbo = 0;
@@ -363,30 +333,15 @@ QVector<float> cvicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix)
         CUDA_SAFE_CALL( cudaMemset(pbo, 0, gRenderSize * gRenderSize * sizeof(uint)) );   // això és per esborrar-lo
     }
 
-    //CUDA_SAFE_CALL(cudaMemset((void*)histogram, 0, volumeSize.width * volumeSize.height * volumeSize.depth * sizeof(ushort)));
-
     // call CUDA kernel, writing results to FBO
     dim3 blockSize(16, 16);
     dim3 gridSize(gRenderSize / blockSize.x / PARTITIONS, gRenderSize / blockSize.y / PARTITIONS);
     float3x4 invViewMatrix;
-    /*invViewMatrix.f[0] = make_float4(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2], modelViewMatrix[0][3]);
-    invViewMatrix.f[1] = make_float4(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2], modelViewMatrix[1][3]);
-    invViewMatrix.f[2] = make_float4(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2], modelViewMatrix[2][3]);*/
     invViewMatrix.f[0] = make_float4(viewMatrix[0][0], viewMatrix[0][1], viewMatrix[0][2], viewpoint.x);
     invViewMatrix.f[1] = make_float4(viewMatrix[1][0], viewMatrix[1][1], viewMatrix[1][2], viewpoint.y);
     invViewMatrix.f[2] = make_float4(viewMatrix[2][0], viewMatrix[2][1], viewMatrix[2][2], viewpoint.z);
-    /*std::cout << "modelViewMatrix = " << std::endl;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++) std::cout << modelViewMatrix[i][j] << " ";
-        std::cout << std::endl;
-    }
-    std::cout << "invViewMatrix =" << std::endl
-              << invViewMatrix.f[0].x << " " << invViewMatrix.f[0].y << " " << invViewMatrix.f[0].z << " " << invViewMatrix.f[0].w << std::endl
-              << invViewMatrix.f[1].x << " " << invViewMatrix.f[1].y << " " << invViewMatrix.f[1].z << " " << invViewMatrix.f[1].w << std::endl
-              << invViewMatrix.f[2].x << " " << invViewMatrix.f[2].y << " " << invViewMatrix.f[2].z << " " << invViewMatrix.f[2].w << std::endl;*/
 
-    rayCastKernel<<<gridSize, blockSize>>>(pbo, gRenderSize, gRenderSize, gdiHistogram, gVolumeDataDims, gVolumeDims, invViewMatrix, PARTITIONS, VOLUME_MULTIPLIER);
+    rayCastKernel<<<gridSize, blockSize>>>(pbo, gRenderSize, gRenderSize, gdiHistogram, gVolumeDims, invViewMatrix, PARTITIONS, VOLUME_MULTIPLIER);
     //CUT_CHECK_ERROR( "kernel failed" );
     cudaError_t err = cudaGetLastError();
     if (cudaSuccess != err) std::cout << "ray cast kernel failed: " << cudaGetErrorString(err) << std::endl;
@@ -410,26 +365,20 @@ QVector<float> cvicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix)
 
 
     cudaEventRecord(start, 0);
-    /*
-    dim3 blockSize2(512);
-    uint zo = gVolumeDataSize % blockSize2.x == 0 ? 0 : 1;
-    dim3 gridSize2(gVolumeDataSize / blockSize2.x + zo);
-    */
-    dim3 blockSize2(8, 8, 8);
-    uint blocksX = (gVolumeDataDims.width + blockSize2.x - 1) / blockSize2.x;
-    uint blocksY = (gVolumeDataDims.height + blockSize2.y - 1) / blockSize2.y;
-    uint blocksZ = (gVolumeDataDims.depth + blockSize2.z - 1) / blockSize2.z;
-    dim3 gridSize2(blocksX * blocksY, blocksZ);
 
-    histogramToFloatKernel<<<gridSize2, blockSize2>>>(gdiHistogram, gdfHistogram, gVolumeDataDims, VOLUME_MULTIPLIER);
+    dim3 blockSize2(512);
+    uint zo = gIntensityRange % blockSize2.x == 0 ? 0 : 1;
+    dim3 gridSize2(gIntensityRange / blockSize2.x + zo);
+
+    histogramToFloatKernel<<<gridSize2, blockSize2>>>(gdiHistogram, gdfHistogram, gIntensityRange, VOLUME_MULTIPLIER);
     //CUT_CHECK_ERROR( "kernel failed" );
     /*cudaError_t*/ err = cudaGetLastError();
     if (cudaSuccess != err) std::cout << "int->float kernel failed: " << cudaGetErrorString(err) << std::endl;
     err = cudaThreadSynchronize();
     if (cudaSuccess != err) std::cout << "sync after int->float kernel failed: " << cudaGetErrorString(err) << std::endl;
 
-    QVector<float> histogram(gVolumeDataSize);
-    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(histogram.data()), reinterpret_cast<void*>(gdfHistogram), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost) );
+    QVector<float> histogram(gIntensityRange);
+    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(histogram.data()), reinterpret_cast<void*>(gdfHistogram), gIntensityRange * sizeof(float), cudaMemcpyDeviceToHost) );
 
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
@@ -439,12 +388,12 @@ QVector<float> cvicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix)
     std::cout << "ray cast: " << elapsedTime1 << " ms + " << elapsedTime2 << " ms" << std::endl;
 
     cudaEventDestroy(start);
-    cudaEventDestroy(stop);    
+    cudaEventDestroy(stop);
 
     return histogram;
 }
 
-void cvicCleanupRayCast()
+void cviicCleanupRayCast()
 {
     CUDA_SAFE_CALL( cudaUnbindTexture(gVolumeTexture) );
     CUDA_SAFE_CALL( cudaFreeArray(gdVolumeArray) );
@@ -462,45 +411,34 @@ void cvicCleanupRayCast()
 
 
 
-//////////////////////////////////////////////////////////////////////////////////// p(Z) ////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// p(I) ////////////////////////////////////////////////////////////////////////////////////
 
 
 
-static float *gdVoxelProbabilities;
-texture<float, 1> gVoxelProbabilitiesTexture;
+static float *gdIntensityProbabilities;
+texture<float, 1> gIntensityProbabilitiesTexture;
 
 
-__global__ void voxelProbabilitiesKernel(float pv, float totalViewedVolume, cudaExtent volumeDataDims, float *voxelProbabilities)
+__global__ void intensityProbabilitiesKernel(float pv, float totalViewedVolume, uint range, float *intensityProbabilities)
 {
-    uint blocksX = (volumeDataDims.width + blockDim.x - 1) / blockDim.x;
-    uint blockX = blockIdx.x % blocksX;
-    uint blockY = blockIdx.x / blocksX;
-    uint blockZ = blockIdx.y;
+    uint i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i >= range) return;
 
-    uint x = blockX * blockDim.x + threadIdx.x;
-    if (x >= volumeDataDims.width) return;
-    uint y = blockY * blockDim.y + threadIdx.y;
-    if (y >= volumeDataDims.height) return;
-    uint z = blockZ * blockDim.z + threadIdx.z;
-    if (z >= volumeDataDims.depth) return;
+    float piv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
 
-    uint i = x + y * volumeDataDims.width + z * volumeDataDims.width * volumeDataDims.height;
-
-    float pzv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
-
-    voxelProbabilities[i] += pv * pzv;
+    intensityProbabilities[i] += pv * piv;
 }
 
 
-void cvicSetupVoxelProbabilities()
+void cviicSetupIntensityProbabilities()
 {
-    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdVoxelProbabilities), gVolumeDataSize * sizeof(float)) );
-    CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdVoxelProbabilities), 0, gVolumeDataSize * sizeof(float)) );
-    CUDA_SAFE_CALL( cudaBindTexture(0, gVoxelProbabilitiesTexture, reinterpret_cast<void*>(gdVoxelProbabilities), gVoxelProbabilitiesTexture.channelDesc, gVolumeDataSize * sizeof(float)) );
+    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdIntensityProbabilities), gIntensityRange * sizeof(float)) );
+    CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdIntensityProbabilities), 0, gIntensityRange * sizeof(float)) );
+    CUDA_SAFE_CALL( cudaBindTexture(0, gIntensityProbabilitiesTexture, reinterpret_cast<void*>(gdIntensityProbabilities), gIntensityProbabilitiesTexture.channelDesc, gIntensityRange * sizeof(float)) );
 }
 
 
-void cvicAccumulateVoxelProbabilities( float viewProbability, float totalViewedVolume )
+void cviicAccumulateIntensityProbabilities( float viewProbability, float totalViewedVolume )
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -509,75 +447,63 @@ void cvicAccumulateVoxelProbabilities( float viewProbability, float totalViewedV
 
     // Kernel
 
-    dim3 blockSize(8, 8, 8);
-    uint blocksX = (gVolumeDataDims.width + blockSize.x - 1) / blockSize.x;
-    uint blocksY = (gVolumeDataDims.height + blockSize.y - 1) / blockSize.y;
-    uint blocksZ = (gVolumeDataDims.depth + blockSize.z - 1) / blockSize.z;
-    dim3 gridSize(blocksX * blocksY, blocksZ);
+    dim3 blockSize(512);
+    uint zo = gIntensityRange % blockSize.x == 0 ? 0 : 1;
+    dim3 gridSize(gIntensityRange / blockSize.x + zo);
 
-    voxelProbabilitiesKernel<<<gridSize, blockSize>>>(viewProbability, totalViewedVolume, gVolumeDataDims, gdVoxelProbabilities);
-    CUT_CHECK_ERROR( "voxel probabilities kernel failed" );
+    intensityProbabilitiesKernel<<<gridSize, blockSize>>>(viewProbability, totalViewedVolume, gIntensityRange, gdIntensityProbabilities);
+    CUT_CHECK_ERROR( "intensity probabilities kernel failed" );
 
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
     float elapsedTime = 0.0f;
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
-    std::cout << "p(Z): " << elapsedTime << " ms" << std::endl;
+    std::cout << "p(I): " << elapsedTime << " ms" << std::endl;
 
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
 }
 
 
-QVector<float> cvicGetVoxelProbabilities()
+QVector<float> cviicGetIntensityProbabilities()
 {
-    QVector<float> voxelProbabilities( gVolumeDataSize );
-    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(voxelProbabilities.data()), reinterpret_cast<void*>(gdVoxelProbabilities), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost) );
-    return voxelProbabilities;
+    QVector<float> intensityProbabilities( gIntensityRange );
+    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(intensityProbabilities.data()), reinterpret_cast<void*>(gdIntensityProbabilities), gIntensityRange * sizeof(float), cudaMemcpyDeviceToHost) );
+    return intensityProbabilities;
 }
 
 
-void cvicCleanupVoxelProbabilities()
+void cviicCleanupIntensityProbabilities()
 {
-    CUDA_SAFE_CALL( cudaUnbindTexture(gVoxelProbabilitiesTexture) );
-    CUDA_SAFE_CALL( cudaFree(gdVoxelProbabilities) );
+    CUDA_SAFE_CALL( cudaUnbindTexture(gIntensityProbabilitiesTexture) );
+    CUDA_SAFE_CALL( cudaFree(gdIntensityProbabilities) );
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////////// VoMI ////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// IMI ////////////////////////////////////////////////////////////////////////////////////
 
 
 
-static float *gdVomi = 0;
-static float3 *gdColorVomi = 0;
+static float *gdImi = 0;
+//static float3 *gdColorVomi = 0;
 
 
-__global__ void vomiKernel(float pv, float totalViewedVolume, cudaExtent volumeDataDims, float *vomi)
+__global__ void imiKernel(float pv, float totalViewedVolume, uint range, float *imi)
 {
-    uint blocksX = (volumeDataDims.width + blockDim.x - 1) / blockDim.x;
-    uint blockX = blockIdx.x % blocksX;
-    uint blockY = blockIdx.x / blocksX;
-    uint blockZ = blockIdx.y;
+    uint i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i >= range) return;
 
-    uint x = blockX * blockDim.x + threadIdx.x;
-    if (x >= volumeDataDims.width) return;
-    uint y = blockY * blockDim.y + threadIdx.y;
-    if (y >= volumeDataDims.height) return;
-    uint z = blockZ * blockDim.z + threadIdx.z;
-    if (z >= volumeDataDims.depth) return;
+    float pi = tex1Dfetch(gIntensityProbabilitiesTexture, i);
+    float piv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
+    float pvi = pv * piv / pi;
 
-    uint i = x + y * volumeDataDims.width + z * volumeDataDims.width * volumeDataDims.height;
-
-    float pz = tex1Dfetch(gVoxelProbabilitiesTexture, i);
-    float pzv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
-    float pvz = pv * pzv / pz;
-
-    if ( pvz > 0.0f ) vomi[i] += pvz * log2f( pvz / pv );
+    if ( pvi > 0.0f ) imi[i] += pvi * log2f( pvi / pv );
 }
 
 
+/*
 __global__ void colorVomiKernel(float pv, float3 color, float totalViewedVolume, cudaExtent volumeDataDims, float3 *colorVomi)
 {
     uint blocksX = (volumeDataDims.width + blockDim.x - 1) / blockDim.x;
@@ -600,25 +526,28 @@ __global__ void colorVomiKernel(float pv, float3 color, float totalViewedVolume,
 
     if ( pvz > 0.0f ) colorVomi[i] += pvz * log2f( pvz / pv ) * color;
 }
+*/
 
 
-void cvicSetupVomi(bool vomi, bool colorVomi)
+void cviicSetupImi(/*bool vomi, bool colorVomi*/)
 {
-    if (vomi)
+    //if (vomi)
     {
-        CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdVomi), gVolumeDataSize * sizeof(float)) );
-        CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdVomi), 0, gVolumeDataSize * sizeof(float)) );
+        CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdImi), gIntensityRange * sizeof(float)) );
+        CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdImi), 0, gIntensityRange * sizeof(float)) );
     }
 
+    /*
     if (colorVomi)
     {
         CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdColorVomi), gVolumeDataSize * sizeof(float3)) );
         CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdColorVomi), 0, gVolumeDataSize * sizeof(float3)) );
     }
+    */
 }
 
 
-void cvicAccumulateVomi(float viewProbability, float totalViewedVolume)
+void cviicAccumulateImi(float viewProbability, float totalViewedVolume)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -627,27 +556,26 @@ void cvicAccumulateVomi(float viewProbability, float totalViewedVolume)
 
     // Kernel
 
-    dim3 blockSize(8, 8, 8);
-    uint blocksX = (gVolumeDataDims.width + blockSize.x - 1) / blockSize.x;
-    uint blocksY = (gVolumeDataDims.height + blockSize.y - 1) / blockSize.y;
-    uint blocksZ = (gVolumeDataDims.depth + blockSize.z - 1) / blockSize.z;
-    dim3 gridSize(blocksX * blocksY, blocksZ);
+    dim3 blockSize(512);
+    uint zo = gIntensityRange % blockSize.x == 0 ? 0 : 1;
+    dim3 gridSize(gIntensityRange / blockSize.x + zo);
 
-    vomiKernel<<<gridSize, blockSize>>>(viewProbability, totalViewedVolume, gVolumeDataDims, gdVomi);
-    CUT_CHECK_ERROR( "vomi kernel failed" );
+    imiKernel<<<gridSize, blockSize>>>(viewProbability, totalViewedVolume, gIntensityRange, gdImi);
+    CUT_CHECK_ERROR( "imi kernel failed" );
 
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
     float elapsedTime = 0.0f;
     cudaEventElapsedTime(&elapsedTime, start, stop);
 
-    std::cout << "VoMI: " << elapsedTime << " ms" << std::endl;
+    std::cout << "IMI: " << elapsedTime << " ms" << std::endl;
 
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
 }
 
 
+/*
 void cvicAccumulateColorVomi(float viewProbability, const Vector3Float &viewColor, float totalViewedVolume)
 {
     cudaEvent_t start, stop;
@@ -678,33 +606,38 @@ void cvicAccumulateColorVomi(float viewProbability, const Vector3Float &viewColo
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
 }
+*/
 
 
-QVector<float> cvicGetVomi()
+QVector<float> cviicGetImi()
 {
-    QVector<float> vomi( gVolumeDataSize );
-    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(vomi.data()), reinterpret_cast<void*>(gdVomi), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost) );
-    return vomi;
+    QVector<float> imi( gIntensityRange );
+    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(imi.data()), reinterpret_cast<void*>(gdImi), gIntensityRange * sizeof(float), cudaMemcpyDeviceToHost) );
+    return imi;
 }
 
 
+/*
 QVector<Vector3Float> cvicGetColorVomi()
 {
     QVector<Vector3Float> colorVomi( gVolumeDataSize );
     CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(colorVomi.data()), reinterpret_cast<void*>(gdColorVomi), gVolumeDataSize * sizeof(float3), cudaMemcpyDeviceToHost) );
     return colorVomi;
 }
+*/
 
 
-void cvicCleanupVomi()
+void cviicCleanupImi()
 {
-    if (gdVomi)
+    //if (gdImi)
     {
-        CUDA_SAFE_CALL( cudaFree(gdVomi) );
+        CUDA_SAFE_CALL( cudaFree(gdImi) );
     }
 
+    /*
     if (gdColorVomi)
     {
         CUDA_SAFE_CALL( cudaFree(gdColorVomi) );
     }
+    */
 }
