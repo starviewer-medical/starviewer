@@ -49,7 +49,7 @@
      </column>
      <column>
       <property name="text">
-       <string>HostName</string>
+       <string>Hostname</string>
       </property>
      </column>
      <column>

@@ -102,7 +102,7 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
     }
     else
     {
-        QMessageBox::information(this, ApplicationNameString, tr("A printer is not selected. To Add a new printer click at button '+'."));
+        QMessageBox::information(this, ApplicationNameString, tr("No printer is selected to apply the changes."));
     }
 
     return false;
@@ -142,14 +142,12 @@ void QDicomPrinterConfigurationWidget::testPrinter()
 
             switch(dicomPrint.getLastError())
             {
-                case DicomPrint::CanNotConnectToDicomPrinter :
-                    messageError = tr("Printer %1 doesn't respond.\nBe sure that the IP and AETitle are correct.").arg(selectedDicomPrinter.getAETitle());
-                    break;
                 case DicomPrint::NotRespondedAsExpected :
-                    messageError = tr("Printer %1 doesn't respond correclty.\nBe sure that the IP and AETitle are correct." ).arg(selectedDicomPrinter.getAETitle());
+                    messageError = tr("Printer %1 doesn't respond correclty.\nBe sure that hostname and AETitle are correct." ).arg(selectedDicomPrinter.getAETitle());
                     break;
+                case DicomPrint::CanNotConnectToDicomPrinter :
                 default:
-                    messageError = tr("Printer %1 doesn't respond.\nBe sure that the IP and AETitle are correct." ).arg(selectedDicomPrinter.getAETitle());
+                    messageError = tr("Printer %1 doesn't respond.\nBe sure that hostname and AETitle are correct." ).arg(selectedDicomPrinter.getAETitle());
                     break;
             }
 
@@ -158,7 +156,7 @@ void QDicomPrinterConfigurationWidget::testPrinter()
     }
     else
     {
-        QMessageBox::information( this , tr("Information") , tr("To test a Printer it is necessary to select an printer of the list.") );
+        QMessageBox::information( this , ApplicationNameString, tr("No printer is selected to test.") );
     }
 
 }
@@ -254,14 +252,14 @@ bool QDicomPrinterConfigurationWidget::validatePrinterSettings()
     text = m_printerAetitleLineEdit->text();
     if ( text.length() == 0 )
     {
-        QMessageBox::warning( this , ApplicationNameString , tr("AETitle field can't be empty") );
+        QMessageBox::warning( this , ApplicationNameString , tr("AETitle field can't be empty.") );
         return false;
     }
     
     text = m_printerHostnameLineEdit->text();
     if ( text.length() == 0 )
     {
-        QMessageBox::warning( this , ApplicationNameString , tr ( "Incorrect server address" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr ( "Hostname can't be empty." ) );
         return false;
     }
 
@@ -269,7 +267,7 @@ bool QDicomPrinterConfigurationWidget::validatePrinterSettings()
     text = m_printerPortLineEdit->text();
     if ( !( text.toInt( NULL , 10 ) >= 0 && text.toInt( NULL , 10 ) <= 65535 ) || text.length() ==0 )
     {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Printer Port has to be between 0 and 65535" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Printer port value has to be between 0 and 65535." ) );
         return false;
     }
     return true;

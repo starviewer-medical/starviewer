@@ -502,30 +502,30 @@ void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
         }
         else 
         {
-            messageError = tr("The film can't be printed because ");
+            messageError = tr("The images can't be printed because ");
         }
 
         switch (error)
         {
             case DicomPrint::CanNotConnectToDicomPrinter:
                 messageError += tr("the printer doesn't respond.\n\n");
-                messageError += tr("Be sure that your are connected on the network and the printer network parameters are correct.");
+                messageError += tr("Be sure the computer is connected on the network and the printer network parameters are correct.");
                 break;
             case DicomPrint::ErrorSendingDicomPrintJob:
                 messageError += tr("the printer doesn't respond as expected.\n\n");
-                messageError += tr("In most cases this error is produced because the printer doesn't accept some of the print configuration parameters.");
-                messageError += tr("Check printer DICOM Conformance to be sure that the printer accepts all your print configuration parameters.");
+                messageError += tr("In most cases this error is produced because the printer doesn't support some of the print configuration parameters.");
+                messageError += tr("Check printer DICOM Conformance to be sure that it accepts all your print parameters.");
                 break;
             case DicomPrint::ErrorCreatingPrintSpool:
                 messageError += tr("%1 can't create print spool.").arg(ApplicationNameString);
                 break;
             case DicomPrint::ErrorLoadingImagesToPrint:
                 messageError += tr("%1 can't load some of the images to print.\n\n").arg(ApplicationNameString );
-                messageError += tr("Close image print tab and try again to print.");
+                messageError += tr("Close 'DICOM print' tab and try it again.");
                 break;
             case DicomPrint::UnknowError:
             default:
-                messageError += tr("and unknow error has produced.");
+                messageError += tr("an unknow error has produced.");
                 break;
         }
 
