@@ -1528,6 +1528,10 @@ void Q2DViewer::updatePatientAnnotationInformation()
         Patient *patient = study->getParentPatient();
 
         // informació fixa
+        QString seriesTime = series->getTimeAsString();
+        if( seriesTime.isEmpty() )
+            seriesTime = "--:--";
+
         m_upperRightText = tr("%1\n%2\n%3 %4 %5\nAcc:%6\n%7\n%8")
                     .arg( series->getInstitutionName() )
                     .arg( patient->getFullName() )
@@ -1536,7 +1540,7 @@ void Q2DViewer::updatePatientAnnotationInformation()
                     .arg( patient->getID() )
                     .arg( study->getAccessionNumber() )
                     .arg( study->getDateAsString() )
-                    .arg( study->getTimeAsString() ); // TODO seria més correcte mostrar l'hora de la sèrie i inclús de la imatge
+                    .arg( seriesTime );
 
         if( series->getModality() == "MG" )
         {
@@ -1663,6 +1667,24 @@ void Q2DViewer::updateSliceAnnotationInformation()
     {
         this->updateSliceAnnotation( value+1, m_maxSliceValue+1 );
     }
+    // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
+    // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada
+    // Si la imatge és multiframe de moment no afegirem la informació de la hora del frame, per tant només es veurà la de la sèrie
+    if( m_lastView == Axial && image->getNumberOfFrames() == 1 )
+    {
+        Image *currentImage = getCurrentDisplayedImage();
+        if( currentImage )
+        {
+            QString imageTime = "\n"+currentImage->getContentTimeAsString();
+            if( imageTime.isEmpty() )
+                imageTime = "--:--";
+            m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText + imageTime ) );
+        }
+        else
+            m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
+    }
+    else
+        m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
 }
 
 void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase, int maxPhase )
