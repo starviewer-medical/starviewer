@@ -15,6 +15,8 @@
 #include "series.h"
 #include "image.h"
 #include "logging.h"
+#include "dicomtagreader.h"
+#include "dicomdictionary.h"
 
 // fem servir dcmtk per l'escalat de les imatges dicom
 #include "dcmtk/dcmimgle/dcmimage.h"
@@ -73,86 +75,113 @@ QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolut
     QImage thumbnail;
     bool ok = false;
 
-    //carreguem el fitxer dicom a escalar
-    DicomImage *dicomImage = new DicomImage(qPrintable(imageFileName));
-
-    if(dicomImage == NULL)
+    // Ens hem trobat que per algunes imatges que contenen Overlays, la DICOMImage no es pot crear. 
+    // Els casos que hem trobat estan descrits al ticket #1121
+    // La solució adoptada ara mateix és que si trobem que la imatge conté algun dels tags següents, 
+    // descartem la creació del thumbnail i en creem un de "neutre" indicant que no s'ha pogut crear aquest
+    // En quant siguem capaços de tornar a llegir aquestes imatges sense problema, aquesta comprovació desapareixerà
+    QList<DICOMTag> tags;
+    tags << DICOMOverlayRows << DICOMOverlayColumns << DICOMOverlayType << DICOMOverlayOrigin << DICOMOverlayBitsAllocated << DICOMOverlayBitPosition <<  DICOMOverlayData;
+    DICOMTagReader reader(imageFileName);
+    bool overlayRestriction = false;
+    foreach( DICOMTag tag, tags )
     {
-        ok = false;
-        DEBUG_LOG("Memòria insuficient per carregar l'imatge DICOM al fer el thumbnail");
+        if( reader.tagExists(tag) )
+        {
+            overlayRestriction = true;
+            ok = false;
+            DEBUG_LOG( QString("Found Tag: %1,%2. Overlay restriction applied. Preview image won't be available.").arg(tag.getGroup(),0,16).arg(tag.getElement(),0,16) );
+        }
     }
-    else if(dicomImage->getStatus() == EIS_Normal)
+    if( !overlayRestriction )
     {
-        dicomImage->hideAllOverlays();
-        dicomImage->setMinMaxWindow(1);
-        //escalem l'imatge
-        DicomImage *scaledImage;
-        //Escalem pel cantó més gran
-        unsigned long width, height;
-        if(dicomImage->getWidth() < dicomImage->getHeight())
-        {
-            width = 0;
-            height = resolution;
-        }
-        else
-        {
-            width = resolution;
-            height = 0;
-        }
-        scaledImage = dicomImage->createScaledImage(width,height, 1, 1);
-        if( scaledImage == NULL)
+        //carreguem el fitxer dicom a escalar
+        DicomImage *dicomImage = new DicomImage(qPrintable(imageFileName));
+
+        if(dicomImage == NULL)
         {
             ok = false;
-            DEBUG_LOG("La imatge escalada s'ha retornat com a nul");
+            DEBUG_LOG("Memòria insuficient per carregar l'imatge DICOM al fer el thumbnail");
         }
-        else if(scaledImage->getStatus() == EIS_Normal)
+        else if(dicomImage->getStatus() == EIS_Normal)
         {
-            // el següent codi crea una imatge pgm a memòria i carreguem aquest buffer directament al pixmap
-            // obtingut de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
-            // get image extension
-            const int width = (int)(scaledImage->getWidth());
-            const int height = (int)(scaledImage->getHeight());
-            char header[32];
-            // create PGM header
-            sprintf(header, "P5\n%i %i\n255\n", width, height);
-            const int offset = strlen(header);
-            const unsigned int length = width * height + offset;
-            // create output buffer for DicomImage class
-            Uint8 *buffer = new Uint8[length];
-            if (buffer != NULL)
+            dicomImage->hideAllOverlays();
+            dicomImage->setMinMaxWindow(1);
+            //escalem l'imatge
+            DicomImage *scaledImage;
+            //Escalem pel cantó més gran
+            unsigned long width, height;
+            if(dicomImage->getWidth() < dicomImage->getHeight())
             {
-                // copy PGM header to buffer
-                OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)header, buffer, offset);
-                if (scaledImage->getOutputData((void *)(buffer + offset), length, 8))
-                {
-                    if(thumbnail.loadFromData((const unsigned char *)buffer, length, "PGM"))
-                    {
-                        ok = true;
-                    }
-                    else
-                        DEBUG_LOG(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Ha fallat :(");
-
-                }
-                // delete temporary pixel buffer
-                delete[] buffer;
-                // Cal esborrar la DicomImage per no tenir fugues de memòria
-                delete scaledImage;
+                width = 0;
+                height = resolution;
             }
+            else
+            {
+                width = resolution;
+                height = 0;
+            }
+            scaledImage = dicomImage->createScaledImage(width,height, 1, 1);
+            if( scaledImage == NULL)
+            {
+                ok = false;
+                DEBUG_LOG("La imatge escalada s'ha retornat com a nul");
+            }
+            else if(scaledImage->getStatus() == EIS_Normal)
+            {
+                // el següent codi crea una imatge pgm a memòria i carreguem aquest buffer directament al pixmap
+                // obtingut de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
+                // get image extension
+                const int width = (int)(scaledImage->getWidth());
+                const int height = (int)(scaledImage->getHeight());
+                char header[32];
+                // create PGM header
+                sprintf(header, "P5\n%i %i\n255\n", width, height);
+                const int offset = strlen(header);
+                const unsigned int length = width * height + offset;
+                // create output buffer for DicomImage class
+                Uint8 *buffer = new Uint8[length];
+                if (buffer != NULL)
+                {
+                    // copy PGM header to buffer
+                    OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)header, buffer, offset);
+                    if (scaledImage->getOutputData((void *)(buffer + offset), length, 8))
+                    {
+                        if(thumbnail.loadFromData((const unsigned char *)buffer, length, "PGM"))
+                        {
+                            ok = true;
+                        }
+                        else
+                            DEBUG_LOG(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Ha fallat :(");
+
+                    }
+                    // delete temporary pixel buffer
+                    delete[] buffer;
+                    // Cal esborrar la DicomImage per no tenir fugues de memòria
+                    delete scaledImage;
+                }
+            }
+            else
+            {
+                ok = false;
+                DEBUG_LOG(QString( "La imatge escalada té errors. Error: %1 ").arg( DicomImage::getString( scaledImage->getStatus())));
+            }
+
         }
         else
         {
             ok = false;
-            DEBUG_LOG(QString( "La imatge escalada té errors. Error: %1 ").arg( DicomImage::getString( scaledImage->getStatus())));
+            DEBUG_LOG(QString("Error en carregar la DicomImage. Error: %1 ").arg(DicomImage::getString( dicomImage->getStatus())));
         }
 
-    }
-    else
-    {
-        ok = false;
-        DEBUG_LOG(QString("Error en carregar la DicomImage. Error: %1 ").arg(DicomImage::getString( dicomImage->getStatus())));
+        // Cal esborrar la DicomImage per no tenir fugues de memòria
+        if ( dicomImage )
+            delete dicomImage;
+
     }
 
-    if(!ok) // no hem pogut generar el thumbnail, creem un de buit
+    // Si no hem pogut generar el thumbnail, creem un de buit
+    if(!ok)
     {
         thumbnail = QImage(resolution, resolution, QImage::Format_RGB32);
         thumbnail.fill(Qt::black);
@@ -161,10 +190,6 @@ QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolut
         painter.setPen(Qt::white);
         painter.drawText(0, 0, resolution, resolution, Qt::AlignCenter | Qt::TextWordWrap, QObject::tr("Preview image not available"));
     }
-
-    // Cal esborrar la DicomImage per no tenir fugues de memòria
-    if ( dicomImage )
-        delete dicomImage;
 
     return thumbnail;
 }
