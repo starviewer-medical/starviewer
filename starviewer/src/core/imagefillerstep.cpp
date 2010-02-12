@@ -153,6 +153,30 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
         {
             value = dicomReader->getAttributeByName( DICOMImagerPixelSpacing );
         }
+
+        if ( modality == "US" )
+        {
+            if ( dicomReader->tagExists( DICOMSequenceOfUltrasoundRegions ) ) // Ho hem de comprovar perquè és opcional.
+            {
+                int physicalUnitsX = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalUnitsXDirection ).at(0).toInt();
+                int physicalUnitsY = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalUnitsYDirection ).at(0).toInt();
+
+                if ( physicalUnitsX == 3 && physicalUnitsY == 3) // 3 significa que les unitats son cm
+                {
+                    double physicalDeltaX = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalDeltaX ).at(0).toDouble();
+                    double physicalDeltaY = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalDeltaY ).at(0).toDouble();
+                    
+                    physicalDeltaX = std::abs( physicalDeltaX )* 10.;
+                    physicalDeltaY = std::abs( physicalDeltaY ) * 10.;
+
+                    value = QString("%1").arg(physicalDeltaX);
+                    value += "\\";
+                    value += QString("%1").arg(physicalDeltaY);
+                    DEBUG_LOG( QString("Pixel Spacing Ultrasound: %1").arg(value) );
+                }
+            }
+        }
+
         QStringList list;
         if ( !value.isEmpty() )
         {
