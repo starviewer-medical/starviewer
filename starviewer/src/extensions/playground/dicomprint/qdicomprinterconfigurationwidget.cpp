@@ -263,13 +263,6 @@ bool QDicomPrinterConfigurationWidget::validatePrinterSettings()
         return false;
     }
 
-    //el port ha d'estar entre 0 i 65535
-    text = m_printerPortLineEdit->text();
-    if ( !( text.toInt( NULL , 10 ) >= 0 && text.toInt( NULL , 10 ) <= 65535 ) || text.length() ==0 )
-    {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Printer port value has to be between 0 and 65535." ) );
-        return false;
-    }
     return true;
 }
 
