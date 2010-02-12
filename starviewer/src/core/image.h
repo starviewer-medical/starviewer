@@ -152,6 +152,9 @@ public:
     QDate getRetrievedDate();
     QTime getRetrievedTime();
 
+    /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
+    QString getContentTimeAsString() const;
+    
     /// afegeix un objecte imatge a la imatge
     void addReferencedImage( Image *image );
 
