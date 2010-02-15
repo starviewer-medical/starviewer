@@ -274,14 +274,16 @@ void QApplicationMainWindow::switchFullScreen( bool full )
 {
     if( full )
     {
-        this->showFullScreen();
+        if( !this->isFullScreen() )
+            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
         m_fullScreenAction->setText( tr("Retract Full Screen") );
         m_fullScreenAction->setStatusTip( tr("Switch To Normal Screen") );
         m_fullScreenAction->setIcon( QIcon(":/images/retractFullscreen.png") );
     }
     else
     {
-        this->showNormal();
+        if( this->isFullScreen() )
+            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
         m_fullScreenAction->setText( tr("Show Full Screen") );
         m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
         m_fullScreenAction->setIcon( QIcon(":/images/fullscreen.png") );
