@@ -128,8 +128,8 @@ void Cursor3DTool::updatePosition()
         double * dicomWorldPosition = new double[4];
         double coordinates[3];
         double xyz[3];
-        ImagePlane * currentPlane;
-        Image *image;
+        ImagePlane * currentPlane = NULL;
+        Image *image = NULL;
 
         //Cal fer els càlculs per passar del món VTK al mon que té el DICOM per guardar el punt en dicom a les dades compartides de la tool.
         // 1.- Trobar el punt correcte en el món VTK
@@ -143,6 +143,7 @@ void Cursor3DTool::updatePosition()
             double *spacing = m_2DViewer->getInput()->getSpacing();
             double *origin = m_2DViewer->getInput()->getOrigin();
 
+            int numberOfVolumeImages = m_2DViewer->getInput()->getImages().count();
             switch( m_2DViewer->getView() )
             {
                 case Q2DViewer::Axial:
@@ -153,49 +154,63 @@ void Cursor3DTool::updatePosition()
 
                 case Q2DViewer::Sagital:
                     xyz[0] = origin[0] + (slice * spacing[0]);
-                    image = m_2DViewer->getInput()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
-                    currentPlane = new ImagePlane();
-                    currentPlane->fillFromImage( image);
+                    if( index[2] < numberOfVolumeImages )
+                    {
+                        image = m_2DViewer->getInput()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
+                        currentPlane = new ImagePlane();
+                        currentPlane->fillFromImage( image);
+                    }
                     break;
 
                 case Q2DViewer::Coronal:
                     xyz[1] = origin[1] + (slice * spacing[1]);
-                    image = m_2DViewer->getInput()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
-                    currentPlane = new ImagePlane();
-                    currentPlane->fillFromImage( image);
+                    if( index[2] < numberOfVolumeImages )
+                    {
+                        image = m_2DViewer->getInput()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
+                        currentPlane = new ImagePlane();
+                        currentPlane->fillFromImage( image);
+                    }
                     break;
             }
 
-            // 3.- Construim la matiu per mapejar l'index del píxel del DICOM a un punt del món real
-            double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneOrigin[3];
-            currentPlane->getRowDirectionVector( currentPlaneRowVector );
-            currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
-            currentPlane->getOrigin( currentPlaneOrigin );
-
-            vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
-            projectionMatrix->Identity();
-            int row;
-            for( row = 0; row < 3; row++ )
+            if( currentPlane )
             {
-                projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ])*spacing[0]);
-                projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ])*spacing[1]);
-                projectionMatrix->SetElement(row,2, 0.0);
-                projectionMatrix->SetElement(row,3, currentPlaneOrigin[row]);
+                // 3.- Construim la matiu per mapejar l'index del píxel del DICOM a un punt del món real
+                double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneOrigin[3];
+                currentPlane->getRowDirectionVector( currentPlaneRowVector );
+                currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
+                currentPlane->getOrigin( currentPlaneOrigin );
+
+                vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
+                projectionMatrix->Identity();
+                int row;
+                for( row = 0; row < 3; row++ )
+                {
+                    projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ])*spacing[0]);
+                    projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ])*spacing[1]);
+                    projectionMatrix->SetElement(row,2, 0.0);
+                    projectionMatrix->SetElement(row,3, currentPlaneOrigin[row]);
+                }
+
+                // 3.- Mappeig de l'índex del píxel al món real
+                dicomWorldPosition[0] = (double)index[0];
+                dicomWorldPosition[1] = (double)index[1];
+                dicomWorldPosition[2] = (double)index[2];
+                dicomWorldPosition[3] = 1.0;
+                projectionMatrix->MultiplyPoint( dicomWorldPosition, dicomWorldPosition );// Matriu * punt
+
+                // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
+                m_crossHair->setCentrePoint( xyz[0], xyz[1], xyz[2] );
+                m_crossHair->setVisibility( true );
+                m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+                m_2DViewer->refresh();
+                m_myData->setOriginPointPosition( dicomWorldPosition ); // Punt al món real (DICOM)
             }
-
-            // 3.- Mappeig de l'índex del píxel al món real
-            dicomWorldPosition[0] = (double)index[0];
-            dicomWorldPosition[1] = (double)index[1];
-            dicomWorldPosition[2] = (double)index[2];
-            dicomWorldPosition[3] = 1.0;
-            projectionMatrix->MultiplyPoint( dicomWorldPosition, dicomWorldPosition );// Matriu * punt
-
-            // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
-            m_crossHair->setCentrePoint( xyz[0], xyz[1], xyz[2] );
-            m_crossHair->setVisibility( true );
-            m_crossHair->update( DrawerPrimitive::VTKRepresentation );
-            m_2DViewer->refresh();
-            m_myData->setOriginPointPosition( dicomWorldPosition ); // Punt al món real (DICOM)
+            else
+            {
+                DEBUG_LOG("The requested plane is not available, maybe due to poor multiframe support.");
+                INFO_LOG("No es pot actualitzar la posició del cursor 3D perquè no podem obtenir el pla corresponent.");
+            }
         }
     }
 }
