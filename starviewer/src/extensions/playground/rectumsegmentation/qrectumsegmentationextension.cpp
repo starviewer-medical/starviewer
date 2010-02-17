@@ -178,13 +178,17 @@ void QRectumSegmentationExtension::createConnections()
 void QRectumSegmentationExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
-
-    // \TODO ara ho fem "a saco" per?s'hauria de millorar
-    m_2DView->setInput( m_mainVolume );
+    m_2DView->setInput( input );
+	this->updateInputFeatures(input);
     m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
     //m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlayToBlend();
+    m_2DView->render();
 
+}
+
+void QRectumSegmentationExtension::updateInputFeatures( Volume *input )
+{
     int* dim;
     dim = m_mainVolume->getDimensions();
     m_sliceViewSlider->setMinimum(0);
@@ -275,7 +279,6 @@ void QRectumSegmentationExtension::ApplyMethod( )
     }
     m_lesionMaskVolume->setImages(m_mainVolume->getImages());
     m_segMethod->setMask(m_lesionMaskVolume);
-    //std::cout<<"Inici Apply method!!"<<std::endl;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_segMethod->setInsideMaskValue ( m_insideValue );
     m_segMethod->setOutsideMaskValue( m_outsideValue );
@@ -319,7 +322,6 @@ void QRectumSegmentationExtension::ApplyMethod( )
     m_regionToolButton->setChecked(false);
     m_editorToolButton->defaultAction()->trigger();
     QApplication::restoreOverrideCursor();
-    //std::cout<<"Fi Apply method!!"<<std::endl;
 }
 
 void QRectumSegmentationExtension::strokeEventHandler( unsigned long id )
@@ -391,7 +393,6 @@ void QRectumSegmentationExtension::setSeedPosition(double x, double y, double z)
 
 void QRectumSegmentationExtension::setRegionOfInterest( )
 {
-    //std::cout<<"SetRegionOfInterest"<<std::endl;
     double pos[3];
     m_2DView->getEventWorldCoordinate(pos);
     m_initialRegionPoint[0]= pos[0];
@@ -452,7 +453,6 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
 
 void QRectumSegmentationExtension::setReleaseRegionOfInterest( )
 {
-    //std::cout<<"FinalRegionOfInterest"<<std::endl;
     m_isRegionSet=true;
     m_isRegionSetting=false;
     m_viewROICheckBox->setEnabled(true);
@@ -742,13 +742,10 @@ void QRectumSegmentationExtension::toolChanged( int but )
 {
     if( but == m_toolsButtonGroup->id(m_regionToolButton) )
     {
-        std::cout<<"toolChanged: Region Action"<<but<<std::endl;
-        std::cout<<"--> Seed Button"<<m_toolsButtonGroup->id(m_seedToolButton)<<std::endl;
         m_toolManager->disableAllToolsTemporarily();
     }
     else
     {
-        std::cout<<"toolChanged: Tool Action"<<std::endl;
         m_toolManager->undoDisableAllToolsTemporarily();
         m_regionToolButton->setChecked(false);        
     }

@@ -30,7 +30,7 @@ public:
 
     void applyMethodNextSlice( unsigned int slice, int step );
 
-    void regionGrowingRecursive( int indexX, int indexY );
+    void regionGrowingRecursive( int indexX, int indexY, int prof );
 
     /// Neteja els casos propers al crani
     double applyCleanSkullMethod();

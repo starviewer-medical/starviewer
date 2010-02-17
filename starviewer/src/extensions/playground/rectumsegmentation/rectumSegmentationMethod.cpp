@@ -479,7 +479,7 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
 			//Primer ho desem en atributs de la classe així ja no s'ha de passar per paràmetre
 			m_maskrecursive = regionThreshold;
 			m_imrecursive = binaryDilate->GetOutput();
-            this->regionGrowingRecursive( itDilate.GetIndex()[0], itDilate.GetIndex()[1]);
+            this->regionGrowingRecursive( itDilate.GetIndex()[0], itDilate.GetIndex()[1],0);
         }
         ++itDilate;
         ++itPrevious;
@@ -528,7 +528,7 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
     return;
 }
 
-void rectumSegmentationMethod::regionGrowingRecursive(int indexX, int indexY )
+void rectumSegmentationMethod::regionGrowingRecursive(int indexX, int indexY , int prof)
 {
     itk::ImageRegionIteratorWithIndex< InternalImageType > itIm( m_imrecursive, m_imrecursive->GetLargestPossibleRegion());
     itk::ImageRegionIteratorWithIndex< InternalImageType > itMask( m_maskrecursive, m_maskrecursive->GetLargestPossibleRegion());
@@ -540,18 +540,18 @@ void rectumSegmentationMethod::regionGrowingRecursive(int indexX, int indexY )
     itMask.SetIndex(index);
     //if((itIm.Get()>=m_lowerThreshold)&&(itIm.Get()<=m_upperThreshold)&&(itMask.Get()!=m_insideMaskValue))
     //if((itIm.Get()==m_insideMaskValue)&&(itMask.Get()!=m_insideMaskValue))
-    if((itIm.Get()==m_insideMaskValue)&&(itMask.Get()!=m_insideMaskValue)&& (indexX>=m_minROI[0])&&(indexX<=m_maxROI[0])&&(indexY>=m_minROI[1])&&(indexY<=m_maxROI[1]))
+    if((itIm.Get()==m_insideMaskValue)&&(itMask.Get()!=m_insideMaskValue)&& (indexX>=m_minROI[0])&&(indexX<=m_maxROI[0])&&(indexY>=m_minROI[1])&&(indexY<=m_maxROI[1])&&prof<=2000)
     {
         //std::cout<<"->Set "<<std::endl;
         itMask.Set(m_insideMaskValue);
         if(indexX+1 < (int)m_maskrecursive->GetLargestPossibleRegion().GetSize()[0])
-            regionGrowingRecursive( indexX + 1, indexY );
+            regionGrowingRecursive( indexX + 1, indexY, prof +1);
         if(indexX > 0)
-            regionGrowingRecursive( indexX - 1, indexY );
+            regionGrowingRecursive( indexX - 1, indexY, prof +1 );
         if(indexY+1 < (int)m_maskrecursive->GetLargestPossibleRegion().GetSize()[1])
-            regionGrowingRecursive( indexX, indexY + 1 );
+            regionGrowingRecursive( indexX, indexY + 1, prof +1 );
         if(indexY > 0)
-            regionGrowingRecursive( indexX, indexY - 1 );
+            regionGrowingRecursive( indexX, indexY - 1, prof +1 );
     }
     else
     {
