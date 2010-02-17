@@ -70,7 +70,11 @@ void DistanceTool::handleEvent( long unsigned eventID )
 void DistanceTool::annotateNewPoint()
 {
     if ( !m_line )
+    {
         m_line = new DrawerLine;
+        // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
+        m_line->increaseReferenceCount();
+    }
 
     double clickedWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
@@ -162,6 +166,11 @@ void DistanceTool::simulateLine()
 
 void DistanceTool::initialize()
 {
+    if( m_line )
+    {
+        // Així alliberem la primitiva perquè pugui ser esborrada
+        m_line->decreaseReferenceCount();
+    }
     m_lineState = NoPointFixed;
     m_line = NULL;
 }

@@ -125,6 +125,8 @@ void AngleTool::findInitialDegreeArc()
 void AngleTool::annotateFirstPoint()
 {
     m_mainPolyline = new DrawerPolyline;
+    // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
+    m_mainPolyline->increaseReferenceCount();
     m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
     double clickedWorldPoint[3];
@@ -147,6 +149,8 @@ void AngleTool::fixFirstSegment()
 
     //creem la polilínia per a dibuixar l'arc de circumferència i l'afegim al drawer
     m_circlePolyline = new DrawerPolyline;
+    // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
+    m_circlePolyline->increaseReferenceCount();
     m_2DViewer->getDrawer()->draw( m_circlePolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 }
 
@@ -264,6 +268,9 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
 
 void AngleTool::finishDrawing()
 {
+    // Així alliberem les primitives perquè puguin ser esborrades
+    m_mainPolyline->decreaseReferenceCount();
+    m_circlePolyline->decreaseReferenceCount();
     // eliminem l'arc de circumferència (s'esborra automàticament del drawer)
     delete m_circlePolyline;
 
