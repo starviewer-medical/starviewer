@@ -65,7 +65,7 @@ public:
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
     /// Calcula l'àrea del polígon
-    double computeArea( int view );
+    double computeArea( int view, double * spacing = NULL );
 
 public slots:
     void update( int representation );

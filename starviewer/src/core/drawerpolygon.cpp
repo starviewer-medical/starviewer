@@ -374,8 +374,21 @@ bool DrawerPolygon::isInsideOfBounds( double p1[3], double p2[3], int view )
     return ( allPointsAreInside );
 }
 
-double DrawerPolygon::computeArea( int view )
+double DrawerPolygon::computeArea( int view, double *spacing )
 {
+    double volumeSpacing[3];
+    if ( spacing == NULL )
+    {
+        volumeSpacing[0] = volumeSpacing[1] = volumeSpacing[2] = 1.0;
+    }
+    else
+    {
+        volumeSpacing[0] = spacing[0];
+        volumeSpacing[1] = spacing[1];
+        volumeSpacing[2] = spacing[2];
+    }
+
+
     // Mètode extret de http://alienryderflex.com/polygon_area/
     
     // Obtenim els índexs x,y depenent de la vista en que estan projectats els punts
@@ -409,7 +422,7 @@ double DrawerPolygon::computeArea( int view )
         if( j == numberOfPoints ) 
             j = 0;
     
-        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex]) * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex]);
+        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex])*volumeSpacing[xIndex] * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex])*volumeSpacing[yIndex];
     }
 
     // En el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
