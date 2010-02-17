@@ -64,7 +64,10 @@ private slots:
     /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition(double x, double y, double z);
 
-    void setRegionOfInterest( );
+	/// actulitza els controls quan es canvia l'input
+	void updateInputFeatures( Volume *input );
+
+	void setRegionOfInterest( );
     void setMovingRegionOfInterest( );
     void setReleaseRegionOfInterest( );
     void viewRegionState(int st);
