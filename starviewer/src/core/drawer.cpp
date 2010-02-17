@@ -90,41 +90,19 @@ void Drawer::draw( DrawerPrimitive *primitive, int plane, int slice )
 
 void Drawer::clearViewer()
 {
-    QList<DrawerPrimitive*> list;
-    QMultiMap< int, DrawerPrimitive *>::const_iterator it;
+    QMultiMap< int, DrawerPrimitive *> primitivesContainer;
     switch( m_currentPlane )
     {
     case QViewer::AxialPlane:
-        it = m_axialPrimitives.find( m_currentSlice );
-        while( it != m_axialPrimitives.end() && it.key() == m_currentSlice )
-        {
-            list << it.value();
-            it++;
-        }
-        //elimina les primitives del contenidor
-        m_axialPrimitives.remove( m_currentSlice );
+        primitivesContainer = m_axialPrimitives;
     break;
 
     case QViewer::SagitalPlane:
-        it = m_sagitalPrimitives.find( m_currentSlice );
-        while( it != m_sagitalPrimitives.end() && it.key() == m_currentSlice )
-        {
-            list << it.value();
-            it++;
-        }
-        //elimina les primitives del contenidor
-        m_sagitalPrimitives.remove( m_currentSlice );
+        primitivesContainer = m_sagitalPrimitives;
     break;
 
     case QViewer::CoronalPlane:
-        it = m_coronalPrimitives.find( m_currentSlice );
-        while( it != m_coronalPrimitives.end() && it.key() == m_currentSlice )
-        {
-            list << it.value();
-            it++;
-        }
-        //elimina les primitives del contenidor
-        m_coronalPrimitives.remove( m_currentSlice );
+        primitivesContainer = m_coronalPrimitives;
     break;
 
     case QViewer::Top2DPlane:
@@ -138,17 +116,15 @@ void Drawer::clearViewer()
     break;
     }
 
+    // Obtenim les primitives de la vista i llesca actuals
+    QList<DrawerPrimitive*> list = primitivesContainer.values(m_currentSlice);
+    // Eliminem totes aquelles primitives que estiguin a la llista i que no tinguin "propietaris"
+    // Al fer delete es cridarà el mètode erasePrimitive() que ja s'encarrega de fer la "feina bruta"
     foreach(DrawerPrimitive *primitive, list)
     {
-        // TODO atenció amb aquest tractament pel sucedani d'smart pointer.
-        // només esborrarem si ningú és propietari
         if( !primitive->hasOwners() )
-        {
-            m_2DViewer->getRenderer()->RemoveViewProp( primitive->getAsVtkProp() );
             delete primitive;
-        }
     }
-
     refresh();
 }
 
