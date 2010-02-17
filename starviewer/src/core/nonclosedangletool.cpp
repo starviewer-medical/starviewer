@@ -56,9 +56,14 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
                     if ( m_state == SecondLineFixed )
                     {
                         computeAngle();
+                        // Així alliberem les primitives perquè puguin ser esborrades
+                        m_firstLine->decreaseReferenceCount();
+                        m_secondLine->decreaseReferenceCount();
+                        m_middleLine->decreaseReferenceCount();
                         //Acabem les línies
                         m_firstLine = NULL;
                         m_secondLine = NULL;
+                        m_middleLine = NULL;
 
                         //Restaurem m_state
                         m_state = None;
@@ -89,7 +94,11 @@ void NonClosedAngleTool::annotateLinePoints()
     //creem primera o segona línies
     if ( ( m_state == None && m_lineState == NoPoints ) ||
         ( m_state == FirstLineFixed && m_lineState == NoPoints ) )
+    {
         line = new DrawerLine;
+        // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+        line->increaseReferenceCount();
+    }
     else if ( m_state == None )
         line = m_firstLine;
     else
@@ -141,6 +150,8 @@ void NonClosedAngleTool::computeAngle()
     if ( !m_middleLine )
     {
         m_middleLine = new DrawerLine;
+        // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+        m_middleLine->increaseReferenceCount();
     }
     m_middleLine->setLinePattern(DrawerPrimitive::DiscontinuousLinePattern);
 
@@ -227,8 +238,6 @@ void NonClosedAngleTool::computeAngle()
     text->shadowOn();
     m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     m_2DViewer->getDrawer()->refresh();
-
-    m_middleLine = NULL;
 }
 
 void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angleText )

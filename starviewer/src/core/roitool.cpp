@@ -82,11 +82,15 @@ void ROITool::annotateNewPoint()
     if (!m_mainPolyline )
     {
         m_mainPolyline = new DrawerPolyline;
+        // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+        m_mainPolyline->increaseReferenceCount();
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
     if(!m_roiPolygon)
     {
         m_roiPolygon = new DrawerPolygon;
+        // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+        m_roiPolygon->increaseReferenceCount();
     }
 
     double pickedPoint[3];
@@ -112,6 +116,8 @@ void ROITool::simulateClosingPolyline()
     if (!m_closingPolyline )
     {
         m_closingPolyline = new DrawerPolyline;
+        // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+        m_closingPolyline->increaseReferenceCount();
         m_closingPolyline->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
         m_2DViewer->getDrawer()->draw( m_closingPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
@@ -166,6 +172,10 @@ Volume::VoxelType ROITool::getGrayValue( double *coords )
 
 void ROITool::closeForm()
 {
+    // Així alliberem les primitives perquè puguin ser esborrades
+    m_closingPolyline->decreaseReferenceCount();
+    m_mainPolyline->decreaseReferenceCount();
+    m_roiPolygon->decreaseReferenceCount();
     // Eliminem les polilínies amb les que hem simulat el dibuix de la ROI
     delete m_closingPolyline;
     delete m_mainPolyline;
