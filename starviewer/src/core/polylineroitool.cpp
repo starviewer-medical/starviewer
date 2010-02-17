@@ -67,14 +67,37 @@ void PolylineROITool::printData()
         // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
         const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
         QString areaUnits;
+        double spacing[3];
         if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
+        {
+            // Si no coneixem l'spacing ho mostrem en pixels.
+            double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
+            spacing[0] = 1.0 / vtkSpacing[0];
+            spacing[1] = 1.0 / vtkSpacing[1];
+            spacing[2] = 1.0 / vtkSpacing[2];
+
             areaUnits = "px2";
+        }
         else        
+        {
+            // HACK Es fa aquesta comprovació perquè en US les vtk no agafen correctament el pixel spacing.
+            if ( m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US" )
+            {
+                double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
+                spacing[0] = pixelSpacing[0] / vtkSpacing[0];
+                spacing[1] = pixelSpacing[1] / vtkSpacing[1];
+                spacing[2] = 1.0 / vtkSpacing[2];
+            }
+            else
+            {
+                spacing[0] = spacing[1] = spacing[2] = 1.0;
+            }
             areaUnits = "mm2";
+        }
 
         // Calculem les dades estadístiques
         computeStatisticsData();
-        text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_roiPolygon->computeArea( m_2DViewer->getView() ), 0, 'f', 0 ).arg(areaUnits).arg( m_mean, 0, 'f', 2 ).arg( m_standardDeviation, 0, 'f', 2 ) );
+        text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_roiPolygon->computeArea( m_2DViewer->getView(), spacing ), 0, 'f', 0 ).arg(areaUnits).arg( m_mean, 0, 'f', 2 ).arg( m_standardDeviation, 0, 'f', 2 ) );
 
         text->setAttachmentPoint( intersection );
         text->update( DrawerPrimitive::VTKRepresentation );
