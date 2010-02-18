@@ -257,13 +257,16 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
             structPreviousStudyDownloading->hangingProtocol = hangingProtocol;
             structPreviousStudyDownloading->displaySet = displaySet;
 
+            bool isDownloading = m_studiesDownloading->contains( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID() );
+
             m_studiesDownloading->insert( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading );            
             m_patient = patient;
 
             connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );
             connect( previousStudiesManager, SIGNAL(errorDownloadingPreviousStudy(QString)), SLOT( errorDowlonadingPreviousStudies(QString) ) );
 
-            previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
+            if( !isDownloading )
+                previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
         }
         else
         {
