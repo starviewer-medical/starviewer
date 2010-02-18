@@ -103,7 +103,7 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
     m_operationsMap.insert("L\\P-P\\L", "3,1");	m_operationsMap.insert("L\\P-R\\A", "2,0");	m_operationsMap.insert("L\\P-L\\A", "0,1");
     m_operationsMap.insert("L\\P-R\\P", "2,1");
 
-    m_studiesDownloading = new QHash<QString, StructPreviousStudyDownloading*>();
+    m_studiesDownloading = new QMultiHash<QString, StructPreviousStudyDownloading*>();
     m_patient = 0;
 }
 
@@ -800,17 +800,22 @@ Study * HangingProtocolManager::searchPreviousStudy( HangingProtocol * protocol 
 
 void HangingProtocolManager::previousStudyDownloaded()
 {
+    int i;
+
     // Es busca quins estudis nous hi ha
     foreach( Study * study, m_patient->getStudies() )
     {
-        QHash<QString, StructPreviousStudyDownloading*>::const_iterator position = m_studiesDownloading->find( study->getInstanceUID() );
-        
-        if ( position != m_studiesDownloading->end() )
-        { // Si és un estudi que esperavem que es descarregués
+        if( m_studiesDownloading->empty() )
+            return;
+
+        QList<StructPreviousStudyDownloading*> values = m_studiesDownloading->values( study->getInstanceUID() );
+
+        for (int i = 0; i < values.size(); i++)
+        { // Per cada estudi que esperàvem que es descarregués
 
             // Agafem l'estructura amb les dades que s'havien guardat per poder aplicar-ho
-            StructPreviousStudyDownloading * structPreviousStudyDownloading = m_studiesDownloading->value( study->getInstanceUID() );
-
+            StructPreviousStudyDownloading * structPreviousStudyDownloading = values.at(i);
+            
             /// Busquem la millor serie de l'estudi que ho satisfa
             QList<Series *> studySeries = study->getSeries();
             Series * series = searchSerie( studySeries, structPreviousStudyDownloading->imageSet, false, structPreviousStudyDownloading->hangingProtocol);
@@ -851,6 +856,8 @@ void HangingProtocolManager::previousStudyDownloaded()
                     }
                 }
             }
+
+            m_studiesDownloading->remove( study->getInstanceUID() );
 
             if( m_studiesDownloading->empty() )
                 structPreviousStudyDownloading->hangingProtocol->setHasStudiesToDownload( false );

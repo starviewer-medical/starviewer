@@ -10,7 +10,7 @@
 #include <QObject>
 #include <QMap>
 #include <QList>
-#include <QHash>
+#include <QMultiHash>
 #include <QProgressDialog>
 
 namespace udg {
@@ -107,7 +107,7 @@ private:
     /// Map per guardar les operacions de rotacio i flip per aplicar a les imatges. Valors: String posicions, nombre de rotacions, nombre flips
     QMap<QString, QString> m_operationsMap;
 
-    QHash<QString, StructPreviousStudyDownloading*> * m_studiesDownloading;
+    QMultiHash<QString, StructPreviousStudyDownloading*> * m_studiesDownloading;
 
     Patient * m_patient;
 };
