@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="MamoPreviousMLOL">
+<hangingProtocolName>MLO-L Prev</hangingProtocolName>
+<numberScreens>1</numberScreens>
+<allDifferent>yes</allDifferent>
+<strictness>yes</strictness>
+<protocol>MG</protocol>
+<hasPrevious>yes</hasPrevious>
+<restriction identifier="1">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>ImageLaterality</selectorAttribute>
+<valueRepresentation>L</valueRepresentation>
+</restriction>
+<restriction identifier="2">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>CodeMeaning</selectorAttribute>
+<valueRepresentation>medio-lateral</valueRepresentation>
+</restriction>
+<restriction identifier="3">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>Anterior</selectorAttribute>
+<valueRepresentation>1</valueRepresentation>
+</restriction>
+<imageSet identifier="1">
+<restriction>1</restriction>
+<restriction>2</restriction>
+<type>image</type>
+</imageSet>
+<imageSet identifier="2">
+<restriction>1</restriction>
+<restriction>2</restriction>
+<restriction>3</restriction>
+<type>image</type>
+<previous>1</previous>
+</imageSet>
+<displaySet identifier="1">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\1.0\0.5\0.0</position>
+<iconType>MLO_R</iconType>
+<patientOrientation>P\F</patientOrientation>
+<alignment>right</alignment>
+</displaySet>
+<displaySet identifier="2">
+<imageSetNumber>2</imageSetNumber>
+<position>0.5\1.0\1.0\0.0</position>
+<iconType>MLO_L</iconType>
+<alignment>left</alignment>
+</displaySet>
+</hangingProtocol>
