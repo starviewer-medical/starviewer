@@ -32,7 +32,12 @@ VoxelInformationTool::VoxelInformationTool( QViewer *viewer, QObject *parent )
 
 VoxelInformationTool::~VoxelInformationTool()
 {
-    delete m_caption;
+    if( m_caption )
+    {
+        // Així alliberem la primitiva perquè pugui ser esborrada
+        m_caption->decreaseReferenceCount();
+        delete m_caption;
+    }
 }
 
 void VoxelInformationTool::handleEvent( unsigned long eventID )
@@ -59,9 +64,14 @@ void VoxelInformationTool::handleEvent( unsigned long eventID )
 
 void VoxelInformationTool::createCaption()
 {
-    m_caption = new DrawerText;
-    m_caption->shadowOn();
-    m_2DViewer->getDrawer()->draw( m_caption, Q2DViewer::Top2DPlane );
+    if( !m_caption )
+    {
+        m_caption = new DrawerText;
+        // Així evitem que durant l'ús de l'eina la primitiva pugui ser esborrada per events externs
+        m_caption->increaseReferenceCount();
+        m_caption->shadowOn();
+        m_2DViewer->getDrawer()->draw( m_caption, Q2DViewer::Top2DPlane );
+    }
 }
 
 void VoxelInformationTool::updateVoxelInformation()
