@@ -1667,24 +1667,28 @@ void Q2DViewer::updateSliceAnnotationInformation()
     {
         this->updateSliceAnnotation( value+1, m_maxSliceValue+1 );
     }
-    // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
-    // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada
-    // Si la imatge és multiframe de moment no afegirem la informació de la hora del frame, per tant només es veurà la de la sèrie
-    if( m_lastView == Axial && image->getNumberOfFrames() == 1 )
+    // Si aquestes annotacions estan activades, llavors li afegim la informació de la hora de la sèrie i la imatge
+    if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
     {
-        Image *currentImage = getCurrentDisplayedImage();
-        if( currentImage )
+        // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
+        // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada
+        // Si la imatge és multiframe de moment no afegirem la informació de la hora del frame, per tant només es veurà la de la sèrie
+        if( m_lastView == Axial && image->getNumberOfFrames() == 1 )
         {
-            QString imageTime = "\n"+currentImage->getContentTimeAsString();
-            if( imageTime.isEmpty() )
-                imageTime = "--:--";
-            m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText + imageTime ) );
+            Image *currentImage = getCurrentDisplayedImage();
+            if( currentImage )
+            {
+                QString imageTime = "\n"+currentImage->getContentTimeAsString();
+                if( imageTime.isEmpty() )
+                    imageTime = "--:--";
+                m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText + imageTime ) );
+            }
+            else
+                m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
         }
         else
             m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
     }
-    else
-        m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText ) );
 }
 
 void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase, int maxPhase )
