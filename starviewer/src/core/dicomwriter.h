@@ -7,7 +7,6 @@
 #ifndef UDGDICOMWRITER_H
 #define UDGDICOMWRITER_H
 
-
 #include <QString>
 
 namespace udg {
@@ -42,7 +41,7 @@ public:
     virtual void addValueAttribute(DICOMValueAttribute * attribute) = 0;
 
     /// Afegir una sequencia al fitxer DICOM
-    virtual void addSequenceAttribute(DICOMSequenceAttribute * attribute) = 0;
+    virtual bool addSequenceAttribute(DICOMSequenceAttribute * attribute) = 0;
 
     /// Generar el fitxer
     virtual bool write() = 0;
