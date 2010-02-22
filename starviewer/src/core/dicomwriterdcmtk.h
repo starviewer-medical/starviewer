@@ -10,6 +10,8 @@
 #include "dicomwriter.h"
 
 class DcmDataset;
+class DcmSequenceOfItems;
+class DcmFileFormat;
 
 namespace udg {
 
@@ -30,13 +32,18 @@ public:
     virtual void addValueAttribute(DICOMValueAttribute * attribute);
 
     /// Afegir una sequencia al fitxer DICOM
-    virtual void addSequenceAttribute(DICOMSequenceAttribute * attribute);
+    virtual bool addSequenceAttribute(DICOMSequenceAttribute * attribute);
 
     /// Generar el fitxer
     virtual bool write();
 
 private:
-    DcmDataset * m_dataset;
+
+    /// Genera els elements d'una seqüència
+    DcmSequenceOfItems * generateDcmSequenceOfItems( DICOMSequenceAttribute * sequenceAttribute );
+
+private:
+    DcmFileFormat * m_fileFormat;
 };
 
 }
