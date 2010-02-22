@@ -5,7 +5,7 @@ namespace udg {
 
 
 ObscuranceVoxelShader::ObscuranceVoxelShader()
- : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_ambientColors( 0 ), m_obscurance( 0 ), m_factor( 1.0 ), m_lowFilter( 0.0 ), m_highFilter( 1.0 ), m_combine( true ), m_additive( false ), m_additiveWeight( 0.0 )
+ : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_ambientColors( 0 ), m_obscurance( 0 ), m_factor( 1.0 ), m_lowFilter( 0.0 ), m_highFilter( 1.0 ), m_additive( false ), m_additiveWeight( 0.0 )
 {
 }
 
@@ -47,12 +47,6 @@ void ObscuranceVoxelShader::setFactor( double factor )
 void ObscuranceVoxelShader::setFilters( double low, double high )
 {
     m_lowFilter = low; m_highFilter = high;
-}
-
-
-void ObscuranceVoxelShader::setCombine( bool on )
-{
-    m_combine = on;
 }
 
 

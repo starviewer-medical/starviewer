@@ -23,6 +23,7 @@
 #include "volume.h"
 #include "vtk4DLinearRegressionGradientEstimator.h"
 #include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
+#include "whitevoxelshader.h"
 
 // VMI
 #include "vmivoxelshader2.h"
@@ -78,6 +79,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_obscuranceVoxelShader;
     delete m_colorBleedingVoxelShader;
     delete m_coolWarmVoxelShader;
+    delete m_whiteVoxelShader;
     delete m_vmiVoxelShader2;
     delete m_vomiVoxelShader;
     delete m_vomiGammaVoxelShader;
@@ -87,6 +89,7 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_opacityVoxelShader;
     delete m_filteringAmbientOcclusionVoxelShader;
     delete m_filteringAmbientOcclusionMapVoxelShader;
+    delete m_filteringAmbientOcclusionStipplingVoxelShader;
     m_mapper->Delete();
     m_property->Delete();
     m_volume->Delete();
@@ -227,6 +230,13 @@ void Experimental3DVolume::addCoolWarm( float b, float y, float alpha, float bet
 }
 
 
+void Experimental3DVolume::addWhite()
+{
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_whiteVoxelShader );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
 void Experimental3DVolume::addContour( double threshold )
 {
     m_shaderVolumeRayCastFunction->AddVoxelShader( m_contourVoxelShader );
@@ -252,7 +262,6 @@ void Experimental3DVolume::addObscurance( Obscurance *obscurance, double factor,
         m_obscuranceVoxelShader->setObscurance( obscurance );
         m_obscuranceVoxelShader->setFactor( factor );
         m_obscuranceVoxelShader->setFilters( filterLow, filterHigh );
-        m_obscuranceVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_obscuranceVoxelShader ) != 0 );
         m_obscuranceVoxelShader->setAdditive( additive, weight );
     }
     else
@@ -272,6 +281,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
     m_ambientVoxelShader->setTransferFunction( transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
+    m_whiteVoxelShader->setTransferFunction( transferFunction );
     m_obscuranceVoxelShader->setTransferFunction( transferFunction );
     m_vmiVoxelShader2->setTransferFunction( transferFunction );
     m_vomiVoxelShader->setTransferFunction( transferFunction );
@@ -482,6 +492,8 @@ void Experimental3DVolume::createVoxelShaders()
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
     m_directIlluminationVoxelShader->setData( m_data, m_rangeMax );
     m_contourVoxelShader = new ContourVoxelShader();
+    m_whiteVoxelShader = new WhiteVoxelShader();
+    m_whiteVoxelShader->setData( m_data, m_rangeMax );
     m_celShadingVoxelShader = new CelShadingVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
     m_obscuranceVoxelShader->setData( m_data, m_rangeMax );

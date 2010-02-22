@@ -33,7 +33,6 @@ public:
     void setFactor( double factor );
     /// Assigna els filtres d'obscurances: per sota de \a low es considera 0 i per sobre de \a high es considera 1.
     void setFilters( double low, double high );
-    void setCombine( bool on );
     void setAdditive( bool on, double weight );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
@@ -61,7 +60,6 @@ protected:
     const Obscurance *m_obscurance;
     double m_factor;
     double m_lowFilter, m_highFilter;
-    bool m_combine;
     bool m_additive;
     double m_additiveWeight;
 
@@ -91,10 +89,7 @@ inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, int off
     //Q_ASSERT( m_data );
     Q_ASSERT( m_obscurance );
 
-    HdrColor color( 1.0f, 1.0f, 1.0f );
-
-    if ( m_combine ) color = baseColor;
-    else color.alpha = m_ambientColors[m_data[offset]].alpha;
+    HdrColor color = baseColor;
 
     if ( !color.isTransparent() && !color.isBlack() )
     {
@@ -130,16 +125,7 @@ inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, const V
     double weights[8];
     bool offsetsAndWeights = false;
 
-    HdrColor color( 1.0f, 1.0f, 1.0f );
-
-    if ( m_combine ) color = baseColor;
-    else
-    {
-        interpolator->getOffsetsAndWeights( position, offsets, weights );
-        offsetsAndWeights = true;
-        double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
-        color.alpha = m_ambientColors[static_cast<int>(value)].alpha;
-    }
+    HdrColor color = baseColor;
 
     if ( !color.isTransparent() && !color.isBlack() )
     {
