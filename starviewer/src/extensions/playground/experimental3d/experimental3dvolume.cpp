@@ -287,7 +287,6 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_vomiVoxelShader->setTransferFunction( transferFunction );
     m_vomiGammaVoxelShader->setTransferFunction( transferFunction );
     m_voxelSaliencyVoxelShader->setTransferFunction( transferFunction );
-    m_colorVomiVoxelShader->setTransferFunction( transferFunction );
     m_imiVoxelShader->setTransferFunction( transferFunction );
     m_coolWarmVoxelShader->setTransferFunction( transferFunction );
     m_filteringAmbientOcclusionMapVoxelShader->setTransferFunction( transferFunction );
@@ -354,7 +353,6 @@ void Experimental3DVolume::addColorVomi( const QVector<Vector3Float> &colorVomi,
 {
     if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorVomiVoxelShader );
     m_colorVomiVoxelShader->setColorVomi( colorVomi, maximumColorVomi, factor );
-    m_colorVomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) != 0 );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
@@ -506,7 +504,6 @@ void Experimental3DVolume::createVoxelShaders()
     m_voxelSaliencyVoxelShader = new VoxelSaliencyVoxelShader();
     m_voxelSaliencyVoxelShader->setData( m_data, m_rangeMax );
     m_colorVomiVoxelShader = new ColorVomiVoxelShader();
-    m_colorVomiVoxelShader->setData( m_data, m_rangeMax );
     m_opacityVoxelShader = new OpacityVoxelShader();
     m_imiVoxelShader = new ImiVoxelShader();
     m_imiVoxelShader->setData( m_data, m_rangeMax );
