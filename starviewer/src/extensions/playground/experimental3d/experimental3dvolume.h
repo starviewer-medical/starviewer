@@ -31,6 +31,7 @@ class TransferFunction;
 class Volume;
 class vtk4DLinearRegressionGradientEstimator;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
+class WhiteVoxelShader;
 
 // VMI
 class VmiVoxelShader2;
@@ -81,6 +82,8 @@ public:
     void addLighting( bool diffuse = false, bool specular = false, double specularPower = 0.0 );
     /// Afegeix cool-warm shading.
     void addCoolWarm( float b, float y, float alpha, float beta );
+    /// Afegeix pintar el volum en blanc.
+    void addWhite();
     /// Afegeix contorn al shading.
     void addContour( double threshold = 0.0 );
     /// Afegeix cel-shading amb el nombre de quantums especificat.
@@ -156,6 +159,8 @@ private:
     CelShadingVoxelShader *m_celShadingVoxelShader;
     /// Voxel shader de cool-warm.
     CoolWarmVoxelShader *m_coolWarmVoxelShader;
+    /// Voxel shader blanc.
+    WhiteVoxelShader *m_whiteVoxelShader;
     /// Voxel shader d'obscurances.
     ObscuranceVoxelShader *m_obscuranceVoxelShader;
     /// Voxel shader de color bleeding.
