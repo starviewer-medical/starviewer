@@ -121,15 +121,13 @@ inline HdrColor ObscuranceVoxelShader::nvShade( const Vector3 &position, const V
     Q_ASSERT( m_data );
     Q_ASSERT( m_obscurance );
 
-    int offsets[8];
-    double weights[8];
-    bool offsetsAndWeights = false;
-
     HdrColor color = baseColor;
 
     if ( !color.isTransparent() && !color.isBlack() )
     {
-        if ( !offsetsAndWeights ) interpolator->getOffsetsAndWeights( position, offsets, weights );
+        int offsets[8];
+        double weights[8];
+        interpolator->getOffsetsAndWeights( position, offsets, weights );
 
         double obscurance;
         if ( m_obscurance->isDoublePrecision() )
