@@ -11,10 +11,12 @@
 #include <QList>
 
 class DcmDataset;
+class DcmSequenceOfItems;
 
 namespace udg {
 
 class DICOMTag;
+class DICOMSequenceAttribute;
 
 /**
    Classe encarregada de la lectura d'informació de fitxers DICOM.
@@ -75,6 +77,14 @@ public:
     /// seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
     QStringList getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element );
     QStringList getSequenceAttributeByName( QList<DICOMTag> embeddedSequencesTags, DICOMTag attributeTag );
+
+    /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
+    DICOMSequenceAttribute * getSequenceAttribute( DICOMTag sequenceTag );
+
+private:
+
+    /// Converteix una seqüència de DCMTK a una seqüència pròpia.
+    DICOMSequenceAttribute * convertToDICOMSequenceAttribute( DcmSequenceOfItems * dcmtkSequence );
 
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació
