@@ -408,7 +408,6 @@ void QExperimental3DExtension::loadColorVomi( QString fileName )
             if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
         }
 
-        m_baseColorVomiRadioButton->setEnabled( true );
         m_colorVomiCheckBox->setEnabled( true );
         m_saveColorVomiPushButton->setEnabled( true );
     }
@@ -1035,8 +1034,6 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBetaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseVomiRadioButton, SIGNAL( toggled(bool) ), m_baseVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorLabel, SLOT( setEnabled(bool) ) );
-    connect( m_baseColorVomiRadioButton, SIGNAL( toggled(bool) ), m_baseColorVomiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseImiRadioButton, SIGNAL( toggled(bool) ), m_baseImiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseImiRadioButton, SIGNAL( toggled(bool) ), m_baseImiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
@@ -1450,7 +1447,6 @@ void QExperimental3DExtension::render()
     else if ( m_baseWhiteRadioButton->isChecked() ) m_volume->addWhite();
     else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVomi( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
     //else if ( m_baseVomiRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value() );
-    else if ( m_baseColorVomiRadioButton->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_baseColorVomiFactorDoubleSpinBox->value() );
     else if ( m_baseImiRadioButton->isChecked() ) m_volume->addImi( m_imi, m_maximumImi, m_baseImiFactorDoubleSpinBox->value() );
     else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
     //else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVomi( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
@@ -2164,7 +2160,6 @@ void QExperimental3DExtension::computeSelectedVmi()
     {
         m_colorVomi = viewpointInformationChannel.colorVomi();
         m_maximumColorVomi = viewpointInformationChannel.maximumColorVomi();
-        m_baseColorVomiRadioButton->setEnabled( true );
         m_colorVomiCheckBox->setEnabled( true );
         m_saveColorVomiPushButton->setEnabled( true );
     }
@@ -2727,22 +2722,6 @@ bool QExperimental3DExtension::programRenderingBaseShading( int lineNumber, cons
             else
             {
                 logProgramError( lineNumber, "No es pot activar VoMI", line );
-                return false;
-            }
-        }
-    }
-    else if ( base == "cvomi" )
-    {
-        if ( run )
-        {
-            if ( m_baseColorVomiRadioButton->isEnabled() )
-            {
-                m_baseColorVomiRadioButton->setChecked( true );
-                if ( words.size() > 2 ) m_baseColorVomiFactorDoubleSpinBox->setValue( words.at( 2 ).toDouble() );
-            }
-            else
-            {
-                logProgramError( lineNumber, "No es pot activar color VoMI", line );
                 return false;
             }
         }
