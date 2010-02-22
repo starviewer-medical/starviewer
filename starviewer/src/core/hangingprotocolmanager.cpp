@@ -432,20 +432,6 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
             bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
             valid = contains ^ match;
         }
-        else if( restriction.selectorAttribute == "ScanOptions" )
-        {
-            Image *image = serie->getImages().value( 0 );
-            if( image )
-            {
-                dicomReader.setFile( image->getPath() );
-                if( dicomReader.getAttributeByName( DICOMScanOptions ) != restriction.valueRepresentation )
-                    valid = false;
-            }
-            else
-            {
-                valid = false;
-            }
-        }
         else if( restriction.selectorAttribute == "PatientName" )
         {
             if( serie->getParentStudy()->getParentPatient()->getFullName() != restriction.valueRepresentation )
