@@ -9,6 +9,8 @@
 
 #include "dicomtag.h"
 
+#include <QString>
+
 namespace udg {
 
 DICOMTag::DICOMTag()
@@ -49,6 +51,11 @@ unsigned int DICOMTag::getGroup()
 unsigned int DICOMTag::getElement()
 {
     return m_element;
+}
+
+QString DICOMTag::toString()
+{
+    return QString("(%1,%2)").arg( QString::number(m_group,16).rightJustified(4,'0') ).arg( QString::number(m_element,16).rightJustified(4,'0') );
 }
 
 }

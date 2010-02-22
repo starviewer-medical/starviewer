@@ -6,7 +6,10 @@
  ***************************************************************************/
 #include "dicomsequenceattribute.h"
 
-#include "dicomitem.h"
+#include "dicomsequenceitem.h"
+#include "dicomtag.h"
+
+#include <QString>
 
 namespace udg {
 
@@ -18,7 +21,10 @@ DICOMSequenceAttribute::DICOMSequenceAttribute()
 
 DICOMSequenceAttribute::~DICOMSequenceAttribute()
 {
-
+//    while ( ! m_itemList.isEmpty() )
+//    {
+//        delete m_itemList.takeLast();
+//    }
 }
 
 bool DICOMSequenceAttribute::isValueAttribute()
@@ -31,9 +37,32 @@ bool DICOMSequenceAttribute::isSequenceAttribute()
     return true;
 }
 
-void DICOMSequenceAttribute::addItem( DICOMItem * item )
+void DICOMSequenceAttribute::addItem( DICOMSequenceItem * item )
 {
     m_itemList.append( item );
 }
+
+QList<DICOMSequenceItem*> DICOMSequenceAttribute::getItems()
+{
+    return m_itemList;
+}
+
+QString DICOMSequenceAttribute::toString()
+{
+    QString result;
+
+    result = getTag()->toString() + ": (SQ) ->";
+
+    foreach( DICOMSequenceItem *item, m_itemList )
+    {
+        result += "\n" + item->toString();
+    }
+
+    //Per aconseguir la identació
+    result.replace( QString("\n"), QString("\n  ") );
+
+    return result;
+}
+
 
 }

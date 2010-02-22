@@ -7,8 +7,7 @@
 #ifndef UDGDICOMATTRIBUTE_H
 #define UDGDICOMATTRIBUTE_H
 
-#include <QObject>
-#include <QString>
+class QString;
 
 namespace udg {
 
@@ -21,7 +20,7 @@ public:
 
     DICOMAttribute();
 
-    ~DICOMAttribute();
+    virtual ~DICOMAttribute();
 
     void setTag( DICOMTag tag );
 
@@ -30,6 +29,8 @@ public:
     virtual bool isValueAttribute() = 0;
 
     virtual bool isSequenceAttribute() = 0;
+
+    virtual QString toString() = 0;
 
 private:
 

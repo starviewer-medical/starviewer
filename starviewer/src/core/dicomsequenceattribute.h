@@ -8,11 +8,14 @@
 #define UDGDICOMSEQUENCEATTRIBUTE_H
 
 #include "dicomattribute.h"
+
 #include <QList>
+
+class QString;
 
 namespace udg {
 
-class DICOMItem;
+class DICOMSequenceItem;
 
 class DICOMSequenceAttribute : public DICOMAttribute
 {
@@ -23,15 +26,24 @@ public:
 
     ~DICOMSequenceAttribute();
    
-    bool isValueAttribute();
+    /// Retorna sempre fals
+    virtual bool isValueAttribute();
 
-    bool isSequenceAttribute();
+    /// Retorna sempre cert
+    virtual bool isSequenceAttribute();
 
-    void addItem( DICOMItem * item );
+    /// Afegeix un item a la llista
+    void addItem( DICOMSequenceItem * item );
+
+    /// Retorna la llista sencera d'items
+    QList<DICOMSequenceItem*> getItems();
+
+    /// Retorna la sequència llegible
+    QString toString();
 
 private:
 
-    QList<DICOMItem*> m_itemList;
+    QList<DICOMSequenceItem*> m_itemList;
 };
 
 }

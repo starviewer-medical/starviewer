@@ -5,8 +5,8 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "dicomattribute.h"
-
 #include "dicomtag.h"
+
 
 namespace udg {
 
