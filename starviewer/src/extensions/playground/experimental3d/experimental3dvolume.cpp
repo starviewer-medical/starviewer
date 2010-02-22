@@ -334,7 +334,6 @@ void Experimental3DVolume::addVomiGamma( const QVector<float> &vomi, float maxim
 {
     if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiGammaVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiGammaVoxelShader );
     m_vomiGammaVoxelShader->setVomi( vomi, maximumVomi, factor, gamma );
-    m_vomiGammaVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiGammaVoxelShader ) != 0 );
     m_vomiGammaVoxelShader->setAdditive( additive, weight );
     m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }

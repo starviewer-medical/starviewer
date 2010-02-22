@@ -1045,10 +1045,6 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseFilteringAmbientOcclusionStipplingRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionStipplingThresholdDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionStipplingRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionStipplingFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionStipplingRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionStipplingFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionGammaLabel, SLOT( setEnabled(bool) ) );
-    connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionGammaDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
-    connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_additiveObscuranceVomiCheckBox, SIGNAL( toggled(bool) ), m_additiveObscuranceVomiWeightLabel, SLOT( setEnabled(bool) ) );
     connect( m_additiveObscuranceVomiCheckBox, SIGNAL( toggled(bool) ), m_additiveObscuranceVomiWeightDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_contourCheckBox, SIGNAL( toggled(bool) ), m_contourDoubleSpinBox, SLOT( setEnabled(bool) ) );
@@ -1477,8 +1473,6 @@ void QExperimental3DExtension::render()
         m_volume->addFilteringAmbientOcclusionStippling( absFiltering, m_maximumSpatialImportanceFunction, m_baseFilteringAmbientOcclusionStipplingThresholdDoubleSpinBox->value(),
                                                          m_baseFilteringAmbientOcclusionStipplingFactorDoubleSpinBox->value() );
     }
-    else if ( m_baseProbabilisticAmbientOcclusionRadioButton->isChecked() )
-        m_volume->addVomiGamma( m_probabilisticAmbientOcclusion, 1.0f, m_baseProbabilisticAmbientOcclusionFactorDoubleSpinBox->value(), m_baseProbabilisticAmbientOcclusionGammaDoubleSpinBox->value() );
 
     if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value(),
@@ -3393,7 +3387,6 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionGaussianChebychev()
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
     m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 
@@ -3424,7 +3417,6 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionBoxMeanChebychev()
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
     m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 
@@ -3455,7 +3447,6 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionGaussian()
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
     m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 
@@ -3486,7 +3477,6 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionCube()
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
     m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 
@@ -3517,7 +3507,6 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionSphere()
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
     m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 
@@ -3548,7 +3537,6 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereVarianc
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
     m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 
@@ -3579,7 +3567,6 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereCdf()
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
     m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 
@@ -3610,7 +3597,6 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereGaussia
 #endif // QT_NO_DEBUG
 #endif // CUDA_AVAILABLE
 
-    m_baseProbabilisticAmbientOcclusionRadioButton->setEnabled( true );
     m_probabilisticAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityProbabilisticAmbientOcclusionCheckBox->setEnabled( true );
 

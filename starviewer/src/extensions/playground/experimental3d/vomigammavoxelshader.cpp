@@ -5,7 +5,7 @@ namespace udg {
 
 
 VomiGammaVoxelShader::VomiGammaVoxelShader()
- : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_ambientColors( 0 ), m_maximumVomi( 1.0f ), m_vomiFactor( 1.0f ), m_gamma( 1.0f ), m_combine( false ), m_additive( false ), m_additiveWeight( 0.0 )
+ : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_ambientColors( 0 ), m_maximumVomi( 1.0f ), m_vomiFactor( 1.0f ), m_gamma( 1.0f ), m_additive( false ), m_additiveWeight( 0.0 )
 {
 }
 
@@ -38,12 +38,6 @@ void VomiGammaVoxelShader::setVomi( const QVector<float> &vomi, float maximumVom
     m_maximumVomi = maximumVomi;
     m_vomiFactor = vomiFactor;
     m_gamma = gamma;
-}
-
-
-void VomiGammaVoxelShader::setCombine( bool on )
-{
-    m_combine = on;
 }
 
 
