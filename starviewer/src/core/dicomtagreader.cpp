@@ -5,13 +5,18 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "dicomtagreader.h"
+
 #include "logging.h"
 #include "singleton.h"
 #include "dicomtag.h"
+#include "dicomsequenceattribute.h"
+#include "dicomvalueattribute.h"
+#include "dicomsequenceitem.h"
 #include <QStringList>
 
 #include <dcmtk/dcmdata/dcfilefo.h>
 #include <dcmtk/dcmdata/dcsequen.h>
+//#include <dcmtk/dcmdata/dctag.h>
 
 namespace udg {
 
@@ -270,6 +275,82 @@ QStringList DICOMTagReader::getSequenceAttributeByName( QList<DICOMTag> embedded
 //     }
 
     return result;
+}
+
+DICOMSequenceAttribute * DICOMTagReader::getSequenceAttribute( DICOMTag sequenceTag )
+{
+    
+    if( !m_dicomData )
+    {
+        DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string-list buida.");
+        return NULL; 
+    }
+    // Convertim els DICOMTag al format de dcmtk, que serà qui farà la feina
+    DcmTagKey dcmtkSequenceTag( sequenceTag.getGroup(), sequenceTag.getElement() );
+    
+    QStringList result;
+    // obtenim els atributs de cada item d'una seqüència de "primer nivell"
+    DcmSequenceOfItems *sequence = NULL;
+
+    OFCondition status = m_dicomData->findAndGetSequence( dcmtkSequenceTag, sequence, OFTrue );
+
+    if( status.good() )
+    {
+        DEBUG_LOG( QString("Cerquem sequencia") );
+        return convertToDICOMSequenceAttribute( sequence );
+    }
+    else if( QString(status.text()) != "Tag Not Found" )
+        DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( dcmtkSequenceTag.toString().c_str() ).arg( status.text() ) );
+        
+
+    return NULL;
+}
+
+DICOMSequenceAttribute * DICOMTagReader::convertToDICOMSequenceAttribute( DcmSequenceOfItems * dcmtkSequence )
+{
+    DICOMSequenceAttribute * sequenceAttribute = new DICOMSequenceAttribute();
+    DcmVR sequenceVR("SQ");
+
+    sequenceAttribute->setTag( DICOMTag(dcmtkSequence->getGTag(),dcmtkSequence->getETag()) );
+
+    for(unsigned int i = 0; i < dcmtkSequence->card(); i++ )
+    {
+        DICOMSequenceItem * dicomItem = new DICOMSequenceItem();
+        DcmItem *dcmtkItem = dcmtkSequence->getItem( i );
+        for(unsigned int j = 0; j < dcmtkItem->card() ; j++ )
+        {
+            DcmElement *element = dcmtkItem->getElement( j );
+            
+            
+            if( sequenceVR.isEquivalent( element->getTag().getVR() ) ) // És una Sequence of Items
+            {
+                dicomItem->addAttribute( convertToDICOMSequenceAttribute( OFstatic_cast(DcmSequenceOfItems *,element) ) );
+            }
+            else 
+            {
+                OFString value;
+                OFCondition status = element->getOFStringArray( value );
+
+                if( status.good() )
+                {
+                    DICOMTag tag(element->getGTag(),element->getETag());
+                    
+                    DICOMValueAttribute * valueAttribute = new DICOMValueAttribute();
+                    valueAttribute->setTag( tag );
+                    valueAttribute->setValue( QString( value.c_str() ) );
+
+                    dicomItem->addAttribute( valueAttribute );
+                }
+                else if( QString(status.text()) != "Tag Not Found" )
+                {
+                    DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( element->getTag().toString().c_str()  ).arg( status.text() ) );
+                }
+            }
+        }
+        sequenceAttribute->addItem( dicomItem );
+    }
+
+    return sequenceAttribute;
 }
 
 }
