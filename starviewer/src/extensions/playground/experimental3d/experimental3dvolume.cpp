@@ -36,6 +36,7 @@
 
 #include "filteringambientocclusionvoxelshader.h"
 #include "filteringambientocclusionmapvoxelshader.h"
+#include "filteringambientocclusionstipplingvoxelshader.h"
 
 
 namespace udg {
@@ -281,6 +282,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
     m_imiVoxelShader->setTransferFunction( transferFunction );
     m_coolWarmVoxelShader->setTransferFunction( transferFunction );
     m_filteringAmbientOcclusionMapVoxelShader->setTransferFunction( transferFunction );
+    m_filteringAmbientOcclusionStipplingVoxelShader->setTransferFunction( transferFunction );
 }
 
 
@@ -430,6 +432,14 @@ void Experimental3DVolume::addFilteringAmbientOcclusionMap( const QVector<float>
 }
 
 
+void Experimental3DVolume::addFilteringAmbientOcclusionStippling( const QVector<float> &filteringAmbientOcclusion, float maximum, float threshold, float factor )
+{
+    m_shaderVolumeRayCastFunction->AddVoxelShader( m_filteringAmbientOcclusionStipplingVoxelShader );
+    m_filteringAmbientOcclusionStipplingVoxelShader->setFilteringAmbientOcclusion( filteringAmbientOcclusion, maximum, threshold, factor );
+    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+}
+
+
 void Experimental3DVolume::createImage( vtkImageData *image )
 {
     // sembla que el volum arriba sempre com a short
@@ -496,6 +506,8 @@ void Experimental3DVolume::createVoxelShaders()
     m_filteringAmbientOcclusionVoxelShader = new FilteringAmbientOcclusionVoxelShader();
     m_filteringAmbientOcclusionMapVoxelShader = new FilteringAmbientOcclusionMapVoxelShader();
     m_filteringAmbientOcclusionMapVoxelShader->setData( m_data, m_rangeMax );
+    m_filteringAmbientOcclusionStipplingVoxelShader = new FilteringAmbientOcclusionStipplingVoxelShader();
+    m_filteringAmbientOcclusionStipplingVoxelShader->setData( m_data, m_rangeMax );
 }
 
 

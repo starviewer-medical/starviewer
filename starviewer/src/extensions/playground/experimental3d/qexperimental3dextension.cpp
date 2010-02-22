@@ -1058,6 +1058,10 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionTypeComboBox, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseFilteringAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseFilteringAmbientOcclusionStipplingRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionStipplingThresholdLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseFilteringAmbientOcclusionStipplingRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionStipplingThresholdDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect( m_baseFilteringAmbientOcclusionStipplingRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionStipplingFactorLabel, SLOT( setEnabled(bool) ) );
+    connect( m_baseFilteringAmbientOcclusionStipplingRadioButton, SIGNAL( toggled(bool) ), m_baseFilteringAmbientOcclusionStipplingFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionGammaLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionGammaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseProbabilisticAmbientOcclusionRadioButton, SIGNAL( toggled(bool) ), m_baseProbabilisticAmbientOcclusionFactorLabel, SLOT( setEnabled(bool) ) );
@@ -1087,6 +1091,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_opacitySaliencyCheckBox, SIGNAL( toggled(bool) ), SLOT( opacitySaliencyChecked(bool) ) );
     connect( m_opacityFilteringCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityFilteringChecked(bool) ) );
     connect( m_opacityProbabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), SLOT( opacityProbabilisticAmbientOcclusionChecked(bool) ) );
+    connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionTypeComboBox, SLOT( setEnabled(bool) ) );
     connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaLabel, SLOT( setEnabled(bool) ) );
     connect( m_filteringAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_filteringAmbientOcclusionLambdaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_probabilisticAmbientOcclusionCheckBox, SIGNAL( toggled(bool) ), m_probabilisticAmbientOcclusionGammaLabel, SLOT( setEnabled(bool) ) );
@@ -1486,6 +1491,12 @@ void QExperimental3DExtension::render()
                 }
                 break;
         }
+    }
+    else if ( m_baseFilteringAmbientOcclusionStipplingRadioButton->isChecked() )
+    {
+        QVector<float> absFiltering = QtConcurrent::blockingMapped( m_spatialImportanceFunction, qAbs<float> );
+        m_volume->addFilteringAmbientOcclusionStippling( absFiltering, m_maximumSpatialImportanceFunction, m_baseFilteringAmbientOcclusionStipplingThresholdDoubleSpinBox->value(),
+                                                         m_baseFilteringAmbientOcclusionStipplingFactorDoubleSpinBox->value() );
     }
     else if ( m_baseProbabilisticAmbientOcclusionRadioButton->isChecked() )
         m_volume->addVomiGamma( m_probabilisticAmbientOcclusion, 1.0f, m_baseProbabilisticAmbientOcclusionFactorDoubleSpinBox->value(), m_baseProbabilisticAmbientOcclusionGammaDoubleSpinBox->value() );
@@ -3385,6 +3396,7 @@ void QExperimental3DExtension::gaussianFilter()
 #endif // CUDA_AVAILABLE
 
     m_baseFilteringAmbientOcclusionRadioButton->setEnabled( true );
+    m_baseFilteringAmbientOcclusionStipplingRadioButton->setEnabled( true );
     m_filteringAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityFilteringCheckBox->setEnabled( true );
 
@@ -3413,6 +3425,7 @@ void QExperimental3DExtension::boxMeanFilter()
 #endif // CUDA_AVAILABLE
 
     m_baseFilteringAmbientOcclusionRadioButton->setEnabled( true );
+    m_baseFilteringAmbientOcclusionStipplingRadioButton->setEnabled( true );
     m_filteringAmbientOcclusionCheckBox->setEnabled( true );
     m_opacityFilteringCheckBox->setEnabled( true );
 

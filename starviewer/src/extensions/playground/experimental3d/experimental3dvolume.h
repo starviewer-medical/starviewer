@@ -44,6 +44,7 @@ class ImiVoxelShader;
 
 class FilteringAmbientOcclusionVoxelShader;
 class FilteringAmbientOcclusionMapVoxelShader;
+class FilteringAmbientOcclusionStipplingVoxelShader;
 
 
 class Experimental3DVolume {
@@ -106,6 +107,7 @@ public:
 
     void addFilteringAmbientOcclusion( const QVector<float> &filteringAmbientOcclusion, float maximum, float lambda );
     void addFilteringAmbientOcclusionMap( const QVector<float> &filteringAmbientOcclusion, float maximum, float factor );
+    void addFilteringAmbientOcclusionStippling( const QVector<float> &filteringAmbientOcclusion, float maximum, float threshold, float factor );
 
 private:
 
@@ -178,6 +180,7 @@ private:
 
     FilteringAmbientOcclusionVoxelShader *m_filteringAmbientOcclusionVoxelShader;
     FilteringAmbientOcclusionMapVoxelShader *m_filteringAmbientOcclusionMapVoxelShader;
+    FilteringAmbientOcclusionStipplingVoxelShader *m_filteringAmbientOcclusionStipplingVoxelShader;
 
     /// Mapper.
     vtkVolumeRayCastMapper *m_mapper;
