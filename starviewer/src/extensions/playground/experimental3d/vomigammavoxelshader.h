@@ -28,7 +28,6 @@ public:
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
     void setVomi( const QVector<float> &vomi, float maximumVomi, float vomiFactor, float gamma );
-    void setCombine( bool on );
     void setAdditive( bool on, float weight );
 
     /// Retorna el color corresponent al vòxel a la posició offset.
@@ -57,7 +56,6 @@ protected:
     float m_maximumVomi;
     float m_vomiFactor;
     float m_gamma;
-    bool m_combine;
     bool m_additive;
     float m_additiveWeight;
 
@@ -84,10 +82,7 @@ inline HdrColor VomiGammaVoxelShader::nvShade( const Vector3 &position, int offs
 
     Q_ASSERT( m_data );
 
-    HdrColor color( 1.0f, 1.0f, 1.0f );
-
-    if ( m_combine ) color = baseColor;
-    else color.alpha = m_ambientColors[m_data[offset]].alpha;
+    HdrColor color = baseColor;
 
     if ( !color.isTransparent() && !color.isBlack() )
     {
@@ -115,24 +110,14 @@ inline HdrColor VomiGammaVoxelShader::nvShade( const Vector3 &position, const Ve
     Q_ASSERT( interpolator );
     Q_ASSERT( m_data );
 
-    int offsets[8];
-    double weights[8];
-    bool offsetsAndWeights = false;
 
-    HdrColor color( 1.0f, 1.0f, 1.0f );
-
-    if ( m_combine ) color = baseColor;
-    else
-    {
-        interpolator->getOffsetsAndWeights( position, offsets, weights );
-        offsetsAndWeights = true;
-        double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
-        color.alpha = m_ambientColors[static_cast<int>(value)].alpha;
-    }
+    HdrColor color = baseColor;
 
     if ( !color.isTransparent() && !color.isBlack() )
     {
-        if ( !offsetsAndWeights ) interpolator->getOffsetsAndWeights( position, offsets, weights );
+        int offsets[8];
+        double weights[8];
+        interpolator->getOffsetsAndWeights( position, offsets, weights );
 
         float vomi = m_vomiFactor * TrilinearInterpolator::interpolate<float>( m_vomi.constData(), offsets, weights ) / m_maximumVomi;
         float gray = std::pow( qMax( 1.0f - vomi, 0.0f ), m_gamma );
