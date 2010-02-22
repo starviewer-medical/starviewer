@@ -30,7 +30,8 @@ HEADERS += experimental3dextensionmediator.h \
     filteringambientocclusionmapvoxelshader.h \
     vomigammavoxelshader.h \
     viewpointintensityinformationchannel.h \
-    imivoxelshader.h
+    imivoxelshader.h \
+    filteringambientocclusionstipplingvoxelshader.h
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
     experimental3dsettings.cpp \
@@ -56,7 +57,8 @@ SOURCES += experimental3dextensionmediator.cpp \
     filteringambientocclusionmapvoxelshader.cpp \
     vomigammavoxelshader.cpp \
     viewpointintensityinformationchannel.cpp \
-    imivoxelshader.cpp
+    imivoxelshader.cpp \
+    filteringambientocclusionstipplingvoxelshader.cpp
 RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
 cuda { 
