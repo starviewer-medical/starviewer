@@ -7,6 +7,7 @@
 #ifndef UDGDICOMTAG_H
 #define UDGDICOMTAG_H
 
+class QString;
 
 namespace udg {
 
@@ -33,6 +34,9 @@ public:
     /// Assignar/Obtenir el valor de element
     void setElement( unsigned int element );
     unsigned int getElement();
+
+    /// Retorna el tag en forma de text.
+    QString toString();
 
 private:
     unsigned int m_group;

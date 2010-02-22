@@ -7,8 +7,9 @@
 #ifndef UDGDICOMVALUEATTRIBUTE_H
 #define UDGDICOMVALUEATTRIBUTE_H
 
-#include <QVariant>
 #include "dicomattribute.h"
+#include <QVariant>
+
 
 namespace udg {
 
@@ -27,6 +28,8 @@ public:
     virtual bool isValueAttribute();
 
     virtual bool isSequenceAttribute();
+    
+    QString toString();
 
     void setValue( int value );
     void setValue( unsigned int value );

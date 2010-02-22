@@ -202,7 +202,7 @@ HEADERS += extensionfactory.h \
     dicomattribute.h \
     dicomvalueattribute.h \
     dicomsequenceattribute.h \
-    dicomitem.h \
+    dicomsequenceitem.h \
     dicomtag.h \
     dicomwriter.h \
     dicomwriterdcmtk.h \
@@ -373,7 +373,7 @@ SOURCES += extensionmediator.cpp \
     dicomattribute.cpp \
     dicomvalueattribute.cpp \
     dicomsequenceattribute.cpp \
-    dicomitem.cpp \
+    dicomsequenceitem.cpp \
     dicomtag.cpp \
     dicomwriter.cpp \
     dicomwriterdcmtk.cpp \

@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "dicomvalueattribute.h"
 
+#include "dicomtag.h"
+
 #include <QVariant>
 #include <QDate>
 
@@ -30,6 +32,11 @@ bool DICOMValueAttribute::isValueAttribute()
 bool DICOMValueAttribute::isSequenceAttribute()
 {
     return false;
+}
+
+QString DICOMValueAttribute::toString()
+{
+    return QString("%1: %2").arg( getTag()->toString() ).arg( getValueAsQString() );
 }
 
 void DICOMValueAttribute::setValue( int value )
