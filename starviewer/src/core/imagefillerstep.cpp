@@ -143,57 +143,15 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
     {
         image->setSOPInstanceUID( dicomReader->getAttributeByName( DICOMSOPInstanceUID ) );
         image->setInstanceNumber( dicomReader->getAttributeByName( DICOMInstanceNumber ) );
+        // Calculem el pixel spacing
+        computePixelSpacing(image,dicomReader);
 
         QString value;
-
-        // \TODO Txapussa per sortir del pas. Serveix per calcular correctament el PixelSpacing
-        QString modality = dicomReader->getAttributeByName( DICOMModality );
-        if ( modality == "CT" || modality == "MR")
-        {
-            value = dicomReader->getAttributeByName( DICOMPixelSpacing );
-        }
-        else
-        {
-            value = dicomReader->getAttributeByName( DICOMImagerPixelSpacing );
-        }
-
-        if ( modality == "US" )
-        {
-            if ( dicomReader->tagExists( DICOMSequenceOfUltrasoundRegions ) ) // Ho hem de comprovar perquè és opcional.
-            {
-                int physicalUnitsX = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalUnitsXDirection ).at(0).toInt();
-                int physicalUnitsY = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalUnitsYDirection ).at(0).toInt();
-
-                if ( physicalUnitsX == 3 && physicalUnitsY == 3) // 3 significa que les unitats son cm
-                {
-                    double physicalDeltaX = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalDeltaX ).at(0).toDouble();
-                    double physicalDeltaY = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalDeltaY ).at(0).toDouble();
-                    
-                    physicalDeltaX = std::abs( physicalDeltaX )* 10.;
-                    physicalDeltaY = std::abs( physicalDeltaY ) * 10.;
-
-                    value = QString("%1").arg(physicalDeltaX);
-                    value += "\\";
-                    value += QString("%1").arg(physicalDeltaY);
-                    DEBUG_LOG( QString("Pixel Spacing Ultrasound: %1").arg(value) );
-                }
-            }
-        }
-
-        QStringList list;
-        if ( !value.isEmpty() )
-        {
-            list = value.split( "\\" );
-            if( list.size() == 2 )
-                image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
-            else
-                DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada. Madalitat de la imatge: [" + modality + "]" );
-        }
-
         value = dicomReader->getAttributeByName( DICOMSliceThickness );
         if( !value.isEmpty() )
             image->setSliceThickness( value.toDouble() );
 
+        QStringList list;
         value = dicomReader->getAttributeByName( DICOMImageOrientationPatient );
         list = value.split( "\\" );
         if( list.size() == 6 )
@@ -241,7 +199,7 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
             if( !value.isEmpty() )
                 image->setPatientOrientation( value );
             else
-                DEBUG_LOG("No s'ha pogut trobar informació d'orientació del pacient, ni ImageOrientationPatient ni PatientOrientation. Modalitat de la imatge: [" + modality + "]");
+                DEBUG_LOG("No s'ha pogut trobar informació d'orientació del pacient, ni ImageOrientationPatient ni PatientOrientation. Modalitat de la imatge: [" + dicomReader->getAttributeByName(DICOMModality) + "]");
         }
         value = dicomReader->getAttributeByName( DICOMImagePositionPatient );
         if( !value.isEmpty() )
@@ -255,7 +213,7 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
         }
         else
         {
-            DEBUG_LOG("La imatge no conté informació de l'origen. Modalitat: [" + modality + "]");
+            DEBUG_LOG("La imatge no conté informació de l'origen. Modalitat: [" + dicomReader->getAttributeByName(DICOMModality) + "]");
         }
 
         image->setSamplesPerPixel( dicomReader->getAttributeByName( DICOMSamplesPerPixel ).toInt() );
@@ -324,6 +282,56 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
     }
 
     return ok;
+}
+
+void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomReader )
+{
+    Q_ASSERT(image);
+    Q_ASSERT(dicomReader);
+    
+    QString value;
+    // \TODO Txapussa per sortir del pas. Serveix per calcular correctament el PixelSpacing
+    QString modality = dicomReader->getAttributeByName( DICOMModality );
+    if ( modality == "CT" || modality == "MR")
+    {
+        value = dicomReader->getAttributeByName( DICOMPixelSpacing );
+    }
+    else if ( modality == "US" )
+    {
+        if ( dicomReader->tagExists( DICOMSequenceOfUltrasoundRegions ) ) // Ho hem de comprovar perquè és opcional.
+        {
+            int physicalUnitsX = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalUnitsXDirection ).at(0).toInt();
+            int physicalUnitsY = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalUnitsYDirection ).at(0).toInt();
+
+            if ( physicalUnitsX == 3 && physicalUnitsY == 3) // 3 significa que les unitats son cm
+            {
+                double physicalDeltaX = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalDeltaX ).at(0).toDouble();
+                double physicalDeltaY = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalDeltaY ).at(0).toDouble();
+                
+                physicalDeltaX = std::abs( physicalDeltaX )* 10.;
+                physicalDeltaY = std::abs( physicalDeltaY ) * 10.;
+
+                value = QString("%1").arg(physicalDeltaX);
+                value += "\\";
+                value += QString("%1").arg(physicalDeltaY);
+                DEBUG_LOG( QString("Pixel Spacing Ultrasound: %1").arg(value) );
+            }
+        }
+    }
+    else // Per altres modalitats li assignarem a partir d'aquest tag
+    {
+        value = dicomReader->getAttributeByName( DICOMImagerPixelSpacing );
+    }
+    
+    QStringList list;
+    if ( !value.isEmpty() )
+    {
+        list = value.split( "\\" );
+        if( list.size() == 2 )
+            image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
+        else
+            DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada. Modalitat de la imatge: [" + modality + "]" );
+    }
 }
 
 QString ImageFillerStep::mapDirectionCosinesToOrientationString( double vector[3] )
