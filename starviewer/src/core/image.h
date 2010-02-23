@@ -156,6 +156,11 @@ public:
     void setImageType( const QString &imageType );
     QString getImageType() const;
     
+    /// Assignar/Obtenir la descripció del tipus de frame. 
+    /// En cas d'imatges single-frame el seu valor serà idèntic a Image Type
+    void setFrameType( const QString &frameType );
+    QString getFrameType() const;
+
     /// Assignar/Obtenir la viewPosition
     void setViewPosition( const QString &viewPosition );
     QString getViewPosition() const;
@@ -167,6 +172,10 @@ public:
     /// Assignar/Obtenir la descripció del View Code. De moment només s'aplicarà per imatges de mammografia.
     void setViewCodeMeaning( const QString &viewCodeMeaning );
     QString getViewCodeMeaning() const;
+    
+    /// Assignar/Obtenir el número de frame
+    void setFrameNumber( int frameNumber );
+    int getFrameNumber() const;
     
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getContentTimeAsString() const;
@@ -274,8 +283,12 @@ private:
     QString m_sliceLocation;
 
     /// Tipus d'imatge. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
-    /// Es troba al mòdul General Image C.7.6.1. No es troba a les imatges de tipus enhanced.
+    /// Es troba al mòdul General Image C.7.6.1 i als mòduls Enhanced MR/CT/XA/XRF Image (C.8.13.1/C.8.15.2/C.8.19.2)
     QString m_imageType;
+    
+    /// Tipus de frame. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
+    /// El podem trobar a MR Image Frame Type C.8.13.5.1 i CT Image Frame Type C.8.15.3.1. Per més info consultar C.8.16.1 Image Type and Frame Type
+    QString m_frameType;
     
     /**
         Vista radiogràfica associada a Patient Position. El trobem als mòduls CR Series (C.8.1.1) i DX Positioning (C.8.11.5)
@@ -309,6 +322,9 @@ private:
         que també fan ús d'aquest tag per guardar aquest tipus d'informació amb altres possibles valors específics.
     */
     QString m_viewCodeMeaning;
+    
+    /// Número de frame
+    int m_frameNumber;
     
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
