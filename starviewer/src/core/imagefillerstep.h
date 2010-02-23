@@ -43,6 +43,11 @@ private:
     bool processImage( Image *image );
     bool processImage( Image *image , DICOMTagReader *dicomReader );
 
+    /// Calcula el pixel spacing i se l'assigna a l'image donada en cas de que aquest es pugui calcular
+    /// @param image Image a la que li assignarem el pixel spacing
+    /// @param dicomReader Reader de DICOM que conté la font de dades de la Image associada
+    void computePixelSpacing( Image *image, DICOMTagReader *dicomReader );
+    
     /// Helper method per obtenir l'string corresponent a un direction cosines. Donat un vector de direcció determina la seva etiqueta d'orientació R,L,A,P,S,I
     QString mapDirectionCosinesToOrientationString( double vector[3] );
 };
