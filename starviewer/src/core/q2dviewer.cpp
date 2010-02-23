@@ -14,6 +14,9 @@
 #include "patient.h"
 #include "imageplane.h"
 #include "dicomtagreader.h" // per les annotacions de mamo
+#include "dicomsequenceitem.h"
+#include "dicomsequenceattribute.h"
+#include "dicomvalueattribute.h"
 #include "dicomdictionary.h"
 // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
 #include "hangingprotocolmanager.h"
@@ -1597,7 +1600,30 @@ void Q2DViewer::updateSliceAnnotationInformation()
             QString laterality = reader.getAttributeByName( DICOMImageLaterality );
             QString desiredOrientation;
 
-            QStringList tagValue = reader.getSequenceAttributeByName( DICOMViewCodeSequence, DICOMCodeMeaning );
+            QString tagValue;
+            // TODO Quan s'insereixi la propietat ViewCodeMeaning a la base de dades aquest codi
+            // s'haurà de substituir per una simple crida Image::getViewCodeMeaning()
+            DICOMSequenceAttribute *viewCodeSequence = reader.getSequenceAttribute(DICOMViewCodeSequence);
+            if( viewCodeSequence )
+            {
+                QList<DICOMSequenceItem *> items = viewCodeSequence->getItems();
+                // Per definició, només hauríem de tenir un ítem
+                switch( items.count() )
+                {
+                case 0:
+                    DEBUG_LOG("ViewCodeSequence no té cap ítem o no existeix");
+                    break;
+                
+                case 1:
+                    tagValue = items.at(0)->getValueAttribute(DICOMCodeMeaning)->getValueAsQString();
+                    break;
+                
+                default:
+                    DEBUG_LOG("ViewCodeSequence té més d'un ítem!");
+                    break;
+                }
+            }
+
             if( ! tagValue.isEmpty() )
             {
                 QString projection = tagValue.at(0);
