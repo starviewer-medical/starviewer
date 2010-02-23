@@ -13,6 +13,9 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
+#include "dicomsequenceattribute.h"
+#include "dicomsequenceitem.h"
+#include "dicomvalueattribute.h"
 
 #include <cmath> // pel fabs
 #include <QApplication> //Per el process events, TODO Treure i fer amb threads.
@@ -285,6 +288,35 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
         {
             image->setSliceLocation( dicomReader->getAttributeByName( DICOMSliceLocation ) );
         }
+
+        image->setImageType( dicomReader->getAttributeByName( DICOMImageType ) );
+        value = dicomReader->getAttributeByName( DICOMImageLaterality );
+        if( !value.isEmpty() )
+            image->setImageLaterality( value.at(0) );
+        // De moment només ho aprofitarem per mammografia, però pot ser vàlid per altres modalitats
+        DICOMSequenceAttribute *viewCodeSequence = dicomReader->getSequenceAttribute(DICOMViewCodeSequence);
+        if( viewCodeSequence )
+        {
+            QList<DICOMSequenceItem *> items = viewCodeSequence->getItems();
+            // Per definició, només hauríem de tenir un ítem
+            switch( items.count() )
+            {
+            case 0:
+                DEBUG_LOG("ViewCodeSequence no té cap ítem o no existeix");
+                break;
+            
+            case 1:
+                image->setViewCodeMeaning( dynamic_cast<DICOMValueAttribute *>(items.at(0)->getAttribute(DICOMCodeMeaning))->getValueAsQString() );
+                break;
+            
+            default:
+                DEBUG_LOG("ViewCodeSequence té més d'un ítem!");
+                break;
+            }
+        }
+        
+        // Només pel cas que sigui DX tindrem aquest atribut a nivell d'imatge
+        image->setViewPosition( dicomReader->getAttributeByName( DICOMViewPosition ) );
     }
     else
     {
