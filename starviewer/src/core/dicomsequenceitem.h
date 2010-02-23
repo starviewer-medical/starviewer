@@ -12,6 +12,8 @@
 namespace udg {
 
 class DICOMAttribute;
+class DICOMValueAttribute;
+class DICOMSequenceAttribute;
 class DICOMTag;
 
 class DICOMSequenceItem {
@@ -28,6 +30,14 @@ public:
 
     /// Retorna l'atribut associat al tag passat per parametre. Si no disposa d'ell retorna null.
     DICOMAttribute * getAttribute(DICOMTag tag);
+
+    /// Retorna l'atribut associat al tag passat per paràmetre.
+    /// Si no disposa d'ell o el tag no és un valor retorna null.
+    DICOMValueAttribute * getValueAttribute(DICOMTag tag);
+
+    /// Retorna l'atribut associat al tag passat per paràmetre.
+    /// Si no disposa d'ell o el tag no és un retorna null.
+    DICOMSequenceAttribute * getSequenceAttribute(DICOMTag tag);
 
     /// Retorna el contingut de l'item en forma de text. Útil per analitzar el contingut.
     QString toString();

@@ -7,6 +7,8 @@
 #include "dicomsequenceitem.h"
 
 #include "dicomattribute.h"
+#include "dicomvalueattribute.h"
+#include "dicomsequenceattribute.h"
 #include "dicomtag.h"
 
 #include <QString>
@@ -49,6 +51,48 @@ QList<DICOMAttribute*> DICOMSequenceItem::getAttributes()
 DICOMAttribute * DICOMSequenceItem::getAttribute(DICOMTag tag)
 {
     return m_attributeList.value( tag.toString() );
+}
+
+DICOMValueAttribute * DICOMSequenceItem::getValueAttribute(DICOMTag tag)
+{
+    DICOMAttribute * attribute = this->getAttribute( tag );
+
+    if ( attribute )
+    {
+        if ( attribute->isValueAttribute() )
+        {
+            return dynamic_cast<DICOMValueAttribute *>( attribute );
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+DICOMSequenceAttribute * DICOMSequenceItem::getSequenceAttribute(DICOMTag tag)
+{
+    DICOMAttribute * attribute = this->getAttribute( tag );
+
+    if ( attribute )
+    {
+        if ( attribute->isSequenceAttribute() )
+        {
+            return dynamic_cast<DICOMSequenceAttribute *>( attribute );
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 QString DICOMSequenceItem::toString()
