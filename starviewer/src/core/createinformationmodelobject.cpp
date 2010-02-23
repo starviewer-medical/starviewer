@@ -75,6 +75,9 @@ Series *CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReade
     /// Atributs necessaris pels hanging protocols
     series->setBodyPartExamined(dicomTagReader->getAttributeByName(DICOMBodyPartExamined));
     series->setViewPosition(dicomTagReader->getAttributeByName(DICOMViewPosition));
+    QString laterality = dicomTagReader->getAttributeByName(DICOMLaterality);
+    if( !laterality.isEmpty() )
+        series->setLaterality( laterality.at(0) );
 
     return series;
 }
