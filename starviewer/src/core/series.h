@@ -196,6 +196,10 @@ public:
     void setPerformedProcedureStepStartTime( const QString &startTime );
     QString getPerformedProcedureStepStartTime() const;
 
+    /// Assigna/Obté la lateralitat de la sèrie
+    void setLaterality( const QChar &laterality );
+    QChar getLaterality() const;
+
     /// Retorna el nombre de volums dels que es composa la sèrie.
     int getNumberOfVolumes();
 
@@ -321,6 +325,14 @@ private:
 
     /// Part de l'anatomia del pacient usat com a referència. Veure C.7.4.1.1.2, només per propòsits d'annotació. (0020,1040) Tipus 2
     QString m_positionReferenceIndicator;
+
+    /** 
+      Lateralitat de la part del cos examinada. Requerit si aquesta és aparellada i no tenim Image o Frame Laterality.
+      Valors definits:
+      R = right
+      L = left
+    */
+    QChar m_laterality;
 
     /// Indica si la sèrie està marcada com a seleccionada o no
     bool m_selected;
