@@ -105,14 +105,14 @@ void QDicomDumpMRWidget::setImageDicomTagsValue( Image *currentImage )
 
         if (dicomReader.tagExists( 0x2001, 0x1082 )) //Tag Turbo-Factor
         {
-            m_labelPhilipsEPIFactorValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x1082 ) );
+            m_labelPhilipsEPIFactorValue->setText( dicomReader.getAttributeByName( DICOMTag(0x2001, 0x1082) ) );
         }        
         else
             m_labelPhilipsEPIFactorValue->setText( NotAvailableValue );
 
         if (dicomReader.tagExists( 0x2001, 0x1013 )) //Tag EPI-Factor
         {
-            m_labelPhilipsTurboFactorValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x1013 ) );
+            m_labelPhilipsTurboFactorValue->setText( dicomReader.getAttributeByName( DICOMTag(0x2001, 0x1013) ) );
         }
         else
             m_labelPhilipsTurboFactorValue->setText( NotAvailableValue );
@@ -126,14 +126,14 @@ void QDicomDumpMRWidget::setImageDicomTagsValue( Image *currentImage )
 
         if (dicomReader.tagExists( 0x2001, 0x1003 )) //Tag B-Factor
         {
-            m_labelPhilipsBFactorValue->setText( QString::number( dicomReader.getAttributeByTag( 0x2001, 0x1003 ).toDouble() , 'f' , 1 ) );
+            m_labelPhilipsBFactorValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x2001, 0x1003) ).toDouble() , 'f' , 1 ) );
         }
         else
             m_labelPhilipsBFactorValue->setText( NotAvailableValue );
 
         if (dicomReader.tagExists( 0x2001, 0x100b )) //Tag Image Position
         {
-            m_labelPhilipsSpacialPlaneValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x100b ) );
+            m_labelPhilipsSpacialPlaneValue->setText( dicomReader.getAttributeByName( DICOMTag(0x2001, 0x100b) ) );
         }
         else
             m_labelPhilipsSpacialPlaneValue->setText( NotAvailableValue );
@@ -158,14 +158,14 @@ void QDicomDumpMRWidget::setSeriesDicomTagsValue( Series *currentSeries )
     {
         if ( dicomReader.tagExists( 0x2001, 0x1020 ) )
         {
-            m_labelPhilipsScanningTechniqueValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x1020 ) );
+            m_labelPhilipsScanningTechniqueValue->setText( dicomReader.getAttributeByName( DICOMTag(0x2001, 0x1020) ) );
         }
         else
             m_labelPhilipsScanningTechniqueValue->setText( NotAvailableValue );
 
         if ( dicomReader.tagExists( 0x2001, 0x1060 ) )
         {
-            m_labelPhilipsNumberOfStacksValue->setText( dicomReader.getAttributeByTag( 0x2001, 0x1060 ) );
+            m_labelPhilipsNumberOfStacksValue->setText( dicomReader.getAttributeByName( DICOMTag(0x2001, 0x1060) ) );
         }
         else
             m_labelPhilipsNumberOfStacksValue->setText( NotAvailableValue );

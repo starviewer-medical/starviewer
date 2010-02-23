@@ -84,14 +84,14 @@ void QDicomDumpCTLocalizerWidget::setImageDicomTagsValue(Image *currentImage)
 
         if (dicomReader.tagExists( 0x01f1, 0x1008 )) //Tag Scan Length
         {
-            m_labelPhilipsScanLengthValue->setText( QString::number( dicomReader.getAttributeByTag( 0x01f1, 0x1008 ).toDouble() , 'f' , 2 ) +  QString( tr( " mm" ) ) );
+            m_labelPhilipsScanLengthValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1008) ).toDouble() , 'f' , 2 ) +  QString( tr( " mm" ) ) );
         }
         else
             m_labelPhilipsScanLengthValue->setText( NotAvailableValue );
 
         if (dicomReader.tagExists( 0x01f1, 0x1032 )) //Tag View Convention
         {
-            m_labelPhilipsViewConventionValue->setText( dicomReader.getAttributeByTag( 0x01f1, 0x1032 ) );
+            m_labelPhilipsViewConventionValue->setText( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1032) ) );
         }
         else
             m_labelPhilipsViewConventionValue->setText( NotAvailableValue );
