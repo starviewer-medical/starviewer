@@ -21,7 +21,7 @@
 namespace udg {
 
 Image::Image(QObject *parent)
- : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_numberOfFrames(1), m_parentSeries(NULL)
+ : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_parentSeries(NULL)
 {
     m_pixelSpacing[0] = 0.;
     m_pixelSpacing[1] = 0.;
@@ -35,22 +35,22 @@ Image::~Image()
 
 void Image::setSOPInstanceUID( QString uid )
 {
-    m_SOPInstanceUID = uid;
+    m_dataSource.setSOPInstanceUID(uid);
 }
 
 QString Image::getSOPInstanceUID() const
 {
-    return m_SOPInstanceUID;
+    return m_dataSource.getSOPInstanceUID();
 }
 
 void Image::setInstanceNumber( QString number )
 {
-    m_instanceNumber = number;
+    m_dataSource.setInstanceNumber(number);
 }
 
 QString Image::getInstanceNumber() const
 {
-    return m_instanceNumber;
+    return m_dataSource.getInstanceNumber();
 }
 
 void Image::setImageOrientationPatient( double orientation[6] )
@@ -267,20 +267,17 @@ int Image::getNumberOfWindowLevels()
 
 void Image::setNumberOfFrames( int frames )
 {
-    m_numberOfFrames = frames;
+    m_dataSource.setNumberOfFrames(frames);
 }
 
 int Image::getNumberOfFrames() const
 {
-    return m_numberOfFrames;
+    return m_dataSource.getNumberOfFrames();
 }
 
 bool Image::isMultiFrame() const
 {
-    if( getNumberOfFrames() > 1 )
-        return true;
-    else
-        return false;
+    return m_dataSource.isMultiFrame();
 }
 
 void Image::addWindowLevelExplanation( QString explanation )
@@ -325,12 +322,12 @@ QTime Image::getRetrievedTime()
 
 void Image::setImageType( const QString &imageType )
 {
-    m_imageType = imageType;
+    m_dataSource.setImageType(imageType);
 }
 
 QString Image::getImageType() const
 {
-    return m_imageType;
+    return m_dataSource.getImageType();
 }
 
 void Image::setFrameType( const QString &frameType )
@@ -388,7 +385,7 @@ QString Image::getContentTimeAsString() const
     // TODO Ara hem de llegir de disc, ja que aquesta informació no s'obté dels fillers steps i tampoc s'insereix a la base de dades.
     // TODO Aquest codi està duplicat de qdicomdump.cpp. Caldria unificar en algun lloc el formatat d'aquestes dades
     QString time;
-    DICOMTagReader reader( m_path );
+    DICOMTagReader reader( m_sourceData.getFilePath() );
     time = reader.getAttributeByName( DICOMContentTime );
     if( !time.isEmpty() )
     {
@@ -422,12 +419,12 @@ Series *Image::getParentSeries() const
 
 void Image::setPath( QString path )
 {
-    m_path = path;
+    m_dataSource.setFilePath(path);
 }
 
 QString Image::getPath() const
 {
-    return m_path;
+    return m_dataSource.getFilePath();
 }
 
 void Image::addReferencedImage( Image *image )
