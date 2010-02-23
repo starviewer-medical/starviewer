@@ -323,6 +323,46 @@ QTime Image::getRetrievedTime()
     return m_retrieveTime;
 }
 
+void Image::setImageType( const QString &imageType )
+{
+    m_imageType = imageType;
+}
+
+QString Image::getImageType() const
+{
+    return m_imageType;
+}
+
+void Image::setViewPosition( const QString &viewPosition )
+{
+    m_viewPosition = viewPosition;
+}
+
+QString Image::getViewPosition() const
+{
+    return m_viewPosition;
+}
+
+void Image::setImageLaterality( const QChar &imageLaterality )
+{
+    m_imageLaterality = imageLaterality;
+}
+
+QChar Image::getImageLaterality() const
+{
+    return m_imageLaterality;
+}
+
+void Image::setViewCodeMeaning( const QString &viewCodeMeaning )
+{
+    m_viewCodeMeaning = viewCodeMeaning;
+}
+
+QString Image::getViewCodeMeaning() const
+{
+    return m_viewCodeMeaning;
+}
+
 QString Image::getContentTimeAsString() const
 {
     // TODO Ara hem de llegir de disc, ja que aquesta informació no s'obté dels fillers steps i tampoc s'insereix a la base de dades.

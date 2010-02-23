@@ -152,6 +152,22 @@ public:
     QDate getRetrievedDate();
     QTime getRetrievedTime();
 
+    /// Assignar/Obtenir la descripció del tipus d'imatge
+    void setImageType( const QString &imageType );
+    QString getImageType() const;
+    
+    /// Assignar/Obtenir la viewPosition
+    void setViewPosition( const QString &viewPosition );
+    QString getViewPosition() const;
+
+    /// Assignar/Obtenir la lateritat de la imatge
+    void setImageLaterality( const QChar &imageLaterality );
+    QChar getImageLaterality() const;
+
+    /// Assignar/Obtenir la descripció del View Code. De moment només s'aplicarà per imatges de mammografia.
+    void setViewCodeMeaning( const QString &viewCodeMeaning );
+    QString getViewCodeMeaning() const;
+    
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getContentTimeAsString() const;
     
@@ -257,6 +273,43 @@ private:
       */
     QString m_sliceLocation;
 
+    /// Tipus d'imatge. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
+    /// Es troba al mòdul General Image C.7.6.1. No es troba a les imatges de tipus enhanced.
+    QString m_imageType;
+    
+    /**
+        Vista radiogràfica associada a Patient Position. El trobem als mòduls CR Series (C.8.1.1) i DX Positioning (C.8.11.5)
+        Valors definits:
+        AP = Anterior/Posterior
+        PA = Posterior/Anterior
+        LL = Left Lateral
+        RL = Right Lateral
+        RLD = Right Lateral Decubitus
+        LLD = Left Lateral Decubitus
+        RLO = Right Lateral Oblique
+        LLO = Left Lateral Oblique
+    */
+    QString m_viewPosition;
+    
+    /**
+        Lateralitat de la possiblement aparellada part del cos examinada.
+        El trobem als mòduls DX Anatomy (C.8.11.2 ), Mammography Image (C.8.11.7), Intra-oral Image (C.8.11.9) i Ocular Region Imaged (C.8.17.5)
+        També el trobem al mòdul Frame Anatomy (C.7.6.16.2.8) comú a tots els enhanced, però el tag s'anomena Frame Laterality en comptes d'Image Laterality.
+        Valors definits:
+        R = right
+        L = left
+        U = unpaired
+        B = both left and right
+    */
+    QChar m_imageLaterality;
+    
+    /**
+        Descripció del tipus de vista de la imatge. El seu ús l'aplicarem bàsicament pels casos de mammografia definits a 
+        PS 3.16 - Context ID 4014 (cranio-caudal, medio-lateral oblique, etc...) però podríem extendre el seu ús a d'altres tipus d'imatge
+        que també fan ús d'aquest tag per guardar aquest tipus d'informació amb altres possibles valors específics.
+    */
+    QString m_viewCodeMeaning;
+    
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
 

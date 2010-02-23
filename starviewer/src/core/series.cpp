@@ -385,6 +385,16 @@ QString Series::getPerformedProcedureStepStartTime() const
     return m_performedProcedureStepStartTime;
 }
 
+void Series::setLaterality( const QChar &laterality )
+{
+    m_laterality = laterality;
+}
+
+QChar Series::getLaterality() const
+{
+    return m_laterality;
+}
+
 int Series::getNumberOfVolumes()
 {
     return m_volumesList.size();
