@@ -3,6 +3,7 @@
 namespace udg {
 
 ImageDataSource::ImageDataSource()
+: m_numberOfFrames(1)
 {
 }
 
