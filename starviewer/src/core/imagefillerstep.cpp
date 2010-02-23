@@ -264,7 +264,7 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
                 break;
             
             case 1:
-                image->setViewCodeMeaning( dynamic_cast<DICOMValueAttribute *>(items.at(0)->getAttribute(DICOMCodeMeaning))->getValueAsQString() );
+                image->setViewCodeMeaning( items.at(0)->getValueAttribute(DICOMCodeMeaning)->getValueAsQString() );
                 break;
             
             default:
@@ -298,23 +298,30 @@ void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomRe
     }
     else if ( modality == "US" )
     {
-        if ( dicomReader->tagExists( DICOMSequenceOfUltrasoundRegions ) ) // Ho hem de comprovar perquè és opcional.
+        DICOMSequenceAttribute *ultraSoundsRegionsSequence = dicomReader->getSequenceAttribute(DICOMSequenceOfUltrasoundRegions);
+        if( ultraSoundsRegionsSequence ) // Ho hem de comprovar perquè és opcional.
         {
-            int physicalUnitsX = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalUnitsXDirection ).at(0).toInt();
-            int physicalUnitsY = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalUnitsYDirection ).at(0).toInt();
-
-            if ( physicalUnitsX == 3 && physicalUnitsY == 3) // 3 significa que les unitats son cm
+            // Aquesta seqüència pot tenir més d'un ítem. TODO Nosaltres només tractem el primer, però ho hauríem de fer per tots, 
+            // ja que defineix més d'una regió i podríem estar obtenint informació equivocada
+            QList<DICOMSequenceItem *> items = ultraSoundsRegionsSequence->getItems();
+            if( !items.isEmpty() )
             {
-                double physicalDeltaX = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalDeltaX ).at(0).toDouble();
-                double physicalDeltaY = dicomReader->getSequenceAttributeByName( DICOMSequenceOfUltrasoundRegions, DICOMPhysicalDeltaY ).at(0).toDouble();
-                
-                physicalDeltaX = std::abs( physicalDeltaX )* 10.;
-                physicalDeltaY = std::abs( physicalDeltaY ) * 10.;
+                int physicalUnitsX = items.at(0)->getValueAttribute(DICOMPhysicalUnitsXDirection)->getValueAsInt();
+                int physicalUnitsY = items.at(0)->getValueAttribute(DICOMPhysicalUnitsYDirection)->getValueAsInt();
 
-                value = QString("%1").arg(physicalDeltaX);
-                value += "\\";
-                value += QString("%1").arg(physicalDeltaY);
-                DEBUG_LOG( QString("Pixel Spacing Ultrasound: %1").arg(value) );
+                if ( physicalUnitsX == 3 && physicalUnitsY == 3) // 3 significa que les unitats son cm
+                {
+                    double physicalDeltaX = items.at(0)->getValueAttribute(DICOMPhysicalDeltaX)->getValueAsDouble();
+                    double physicalDeltaY = items.at(0)->getValueAttribute(DICOMPhysicalDeltaY)->getValueAsDouble();
+
+                    physicalDeltaX = std::abs( physicalDeltaX )* 10.;
+                    physicalDeltaY = std::abs( physicalDeltaY ) * 10.;
+
+                    value = QString("%1").arg(physicalDeltaX);
+                    value += "\\";
+                    value += QString("%1").arg(physicalDeltaY);
+                    DEBUG_LOG( QString("Pixel Spacing Ultrasound: %1").arg(value) );
+                }
             }
         }
     }

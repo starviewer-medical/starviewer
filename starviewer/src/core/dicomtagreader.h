@@ -67,17 +67,6 @@ public:
     /// Retornarà QString buit si no es troba el tag o el tag estigui buit.
     QString getAttributeByName( DICOMTag tag );
 
-    /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència. Tindrem tants valors d'aquell atribut com
-    /// items tingui la seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
-    QStringList getSequenceAttributeByTag( unsigned int sequenceGroup, unsigned int sequenceElement, unsigned int group, unsigned int element );
-    QStringList getSequenceAttributeByName( DICOMTag sequenceTag, DICOMTag attributeTag );
-
-    /// Retorna la llista de valors que pot tenir un atribut dins d'una seqüència aniuada. Donem la llista aniuada de
-    /// seqüències i l'atribut que volem de la última seqüència. Tindrem tants valors d'aquell atribut com items tingui la
-    /// seqüència. El primer paràmetre és el tag de la seqüència i el segon és el tag de l'atribut
-    QStringList getSequenceAttributeByTag( QList<unsigned int *> embeddedSequencesTags, unsigned int group, unsigned int element );
-    QStringList getSequenceAttributeByName( QList<DICOMTag> embeddedSequencesTags, DICOMTag attributeTag );
-
     /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
     DICOMSequenceAttribute * getSequenceAttribute( DICOMTag sequenceTag );
 

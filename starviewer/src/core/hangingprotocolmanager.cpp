@@ -26,6 +26,9 @@
 #include "logging.h"
 #include "../inputoutput/previousstudiesmanager.h"
 #include "volumerepository.h"
+#include "dicomsequenceitem.h"
+#include "dicomsequenceattribute.h"
+#include "dicomvalueattribute.h"
 
 #include <QList>
 #include <QDate>
@@ -605,10 +608,33 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             }
             else if( restriction.selectorAttribute == "CodeMeaning" )
             {
-                QStringList tagValue =  dicomReader.getSequenceAttributeByName( DICOMViewCodeSequence, DICOMCodeMeaning );
+                QString tagValue;
+                // TODO Quan s'insereixi la propietat ViewCodeMeaning a la base de dades aquest codi
+                // s'haurà de substituir per una simple crida Image::getViewCodeMeaning()
+                DICOMSequenceAttribute *viewCodeSequence = dicomReader.getSequenceAttribute(DICOMViewCodeSequence);
+                if( viewCodeSequence )
+                {
+                    QList<DICOMSequenceItem *> items = viewCodeSequence->getItems();
+                    // Per definició, només hauríem de tenir un ítem
+                    switch( items.count() )
+                    {
+                    case 0:
+                        DEBUG_LOG("ViewCodeSequence no té cap ítem o no existeix");
+                        break;
+                    
+                    case 1:
+                        tagValue = items.at(0)->getValueAttribute(DICOMCodeMeaning)->getValueAsQString();
+                        break;
+                    
+                    default:
+                        DEBUG_LOG("ViewCodeSequence té més d'un ítem!");
+                        break;
+                    }
+                }
+
                 bool match = ( restriction.usageFlag  == HangingProtocolImageSet::Match );
 
-                if( tagValue.isEmpty() || !( tagValue.at(0).contains( restriction.valueRepresentation ) ) )
+                if( !( tagValue.contains( restriction.valueRepresentation ) ) )
                     valid = false;
 
                 if( !match ) valid = !valid;// just el cas contrari
