@@ -109,16 +109,6 @@ bool DICOMTagReader::tagExists( DICOMTag tag )
     }
 }
 
-bool DICOMTagReader::tagExists( unsigned int group, unsigned int element )
-{
-    return this->tagExists( DICOMTag(group,element) );
-}
-
-QString DICOMTagReader::getAttributeByTag( unsigned int group, unsigned int element )
-{
-    return getAttributeByName( DICOMTag(group,element) );
-}
-
 QString DICOMTagReader::getAttributeByName( DICOMTag tag )
 {
     if( !m_dicomData )
