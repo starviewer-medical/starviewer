@@ -6,6 +6,7 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         edemasegmentation \
                         landmarkregistration \
                         vsireconstruction \
+                        angiosubstraction \
                         perfusionmapreconstruction \
                         glialestimation \
                         rectumsegmentation \
@@ -13,7 +14,7 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         experimental3d \
                         gputesting \
                         dicomprint \
-                        dti
+						dti
 
 #CONTRIB_EXTENSIONS =
 

@@ -8,6 +8,7 @@ SUBDIRS += diffusionperfusionsegmentation \
            edemasegmentation \
            landmarkregistration \
            vsireconstruction \
+           angiosubstraction \
            perfusionmapreconstruction \
            glialestimation \
            rectumsegmentation \
