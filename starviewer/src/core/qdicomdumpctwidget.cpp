@@ -88,21 +88,21 @@ void QDicomDumpCTWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelExposureTimeValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1008 )) //Tag Scan Length
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1008) )) //Tag Scan Length
         {
             m_labelPhilipsScanLengthValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1008) ).toDouble() , 'f' , 2 ) +  QString( tr( " mm" ) ) );
         }
         else
             m_labelPhilipsScanLengthValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1027 )) //Tag Rotation Time
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1027) )) //Tag Rotation Time
         {
             m_labelPhilipsRotationTimeValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1027) ).toDouble() , 'f' , 2 ) +  QString( tr( " s" ) ) );
         }
         else
             m_labelPhilipsRotationTimeValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1032 )) //Tag View Convention
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1032) )) //Tag View Convention
         {
             m_labelPhilipsViewConventionValue->setText( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1032) ) );
         }
@@ -116,14 +116,14 @@ void QDicomDumpCTWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelFilterTypeValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x104b )) //Tag Collimation
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x104b) )) //Tag Collimation
         {
             m_labelPhilipsCollimationValue->setText( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x104b) ) );
         }
         else
             m_labelPhilipsCollimationValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1033 )) //Tag CycleTime
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1033) )) //Tag CycleTime
         {
             m_labelPhilipsCycleTimeValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1033) ).toDouble() , 'f' , 2 ) +  QString( tr( " s" ) ) );
         }
@@ -137,7 +137,7 @@ void QDicomDumpCTWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelTiltValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1028 )) //Tag Table Increment
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1028) )) //Tag Table Increment
         {
             m_labelPhilipsTableIncrementValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1028) ).toDouble() , 'f' , 2 ) +  QString( tr( " mm" ) ) );
         }
