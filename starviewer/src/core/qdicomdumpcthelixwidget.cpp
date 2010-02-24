@@ -81,21 +81,21 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelTableHeightValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x00e1, 0x1050)) //Tag Scan time
+        if (dicomReader.tagExists( DICOMTag(0x00e1, 0x1050) )) //Tag Scan time
         {
             m_labelPhilipsScanTimeValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x00e1, 0x1050) ).toDouble() , 'f' , 2 ) +  QString( tr( " s" ) ) );
         }
         else
             m_labelPhilipsScanTimeValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1008 )) //Tag Scan Length
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1008) )) //Tag Scan Length
         {
             m_labelPhilipsScanLengthValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1008) ).toDouble() , 'f' , 2 ) +  QString( tr( " mm" ) ) );
         }
         else
             m_labelPhilipsScanLengthValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1026)) //Tag Pitch
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1026) )) //Tag Pitch
         {
             m_labelPhilipsPitchValue->setText( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1026) ) +  QString( tr( " " ) ) );
         }
@@ -109,21 +109,21 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelSpacingBetweenSlicesValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1007 )) //Tag table speed
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1007) )) //Tag table speed
         {
             m_labelPhilipsTableSpeedValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1007) ).toDouble() , 'f' , 0 ) +  QString( tr( " mm/s" ) ) );
         }
         else
             m_labelPhilipsTableSpeedValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1027 )) //Tag Rotation Time
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1027) )) //Tag Rotation Time
         {
             m_labelPhilipsRotationTimeValue->setText( QString::number( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1027) ).toDouble() , 'f' , 2 ) +  QString( tr( " s" ) ) );
         }
         else
             m_labelPhilipsRotationTimeValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x1032 )) //Tag View Convention
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x1032) )) //Tag View Convention
         {
             m_labelPhilipsViewConventionValue->setText( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x1032) ) );
         }
@@ -137,7 +137,7 @@ void QDicomDumpCTHelixWidget::setImageDicomTagsValue( Image *currentImage )
         else
             m_labelFilterTypeValue->setText( NotAvailableValue );
 
-        if (dicomReader.tagExists( 0x01f1, 0x104b )) //Tag Collimation
+        if (dicomReader.tagExists( DICOMTag(0x01f1, 0x104b) )) //Tag Collimation
         {
             m_labelPhilipsCollimationValue->setText( dicomReader.getAttributeByName( DICOMTag(0x01f1, 0x104b) ) );
         }
