@@ -14,8 +14,6 @@
 #include <QStringList>
 #include <QPixmap>
 
-#include "imagedatasource.h"
-
 namespace udg {
 
 class Series;
@@ -212,6 +210,14 @@ public:
 private:
     /// Atributs DICOM
 
+    /// identificador de la imatge/arxiu. (0008,0018)
+    QString m_SOPInstanceUID;
+
+    /// Informació general de la imatge. C.7.6 General Image Module - PS 3.3.
+
+    /// Nombre que identifica la imatge. (0020,0013) Tipus 2
+    QString m_instanceNumber;
+
     /// Direcció de les files i columnes de la imatge ( LR/AP/SI ). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i Image Position(Patient)(0020,0032). Veure C.6.7.1.1.1. (0020,0020) Tipus 2C.
     QString m_patientOrientation;
 
@@ -265,6 +271,9 @@ private:
     /// "Explicació" dels window levels, texte descriptiu.(0028,1055) Tipus 3.
     QStringList m_windowLevelExplanationList;
 
+    /// Nombre de frames de la imatge. (0028,0008) Tipus 1
+    int m_numberOfFrames;
+
     //TODO millorar definició
     /** Situació especial de la llesca en mm. (0020,1041)
         SC->tipus 3
@@ -273,6 +282,10 @@ private:
       */
     QString m_sliceLocation;
 
+    /// Tipus d'imatge. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
+    /// Es troba al mòdul General Image C.7.6.1 i als mòduls Enhanced MR/CT/XA/XRF Image (C.8.13.1/C.8.15.2/C.8.19.2)
+    QString m_imageType;
+    
     /// Tipus de frame. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
     /// El podem trobar a MR Image Frame Type C.8.13.5.1 i CT Image Frame Type C.8.15.3.1. Per més info consultar C.8.16.1 Image Type and Frame Type
     QString m_frameType;
@@ -316,8 +329,8 @@ private:
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
 
-    /// Conté les dades font de la imatge
-    ImageDataSource m_dataSource;
+    /// el path absolut de la imatge
+    QString m_path;
 
     ///Data en que la imatge s'ha descarregat a la base de dades local
     QDate m_retrievedDate;
