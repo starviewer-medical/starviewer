@@ -288,6 +288,8 @@ private:
     
     /// Tipus de frame. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
     /// El podem trobar a MR Image Frame Type C.8.13.5.1 i CT Image Frame Type C.8.15.3.1. Per més info consultar C.8.16.1 Image Type and Frame Type
+    /// El valor d'aquest camp podrà diferir del d'Image Type en el cas que el primer valor d'Image Type sigui MIXED, que seria el cas en que aquest
+    /// Image pertanyi a un conjunt d'Images "multiframe" i que els frames tinguin diferents valors d'Image Type (imatges derived amb original ,per exemple
     QString m_frameType;
     
     /**
