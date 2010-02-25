@@ -59,7 +59,6 @@ HEADERS += extensionfactory.h \
     vtkAtamaiPolyDataToImageStencil2.h \
     shutterfilter.h \
     image.h \
-    imagedatasource.h \
     dicomtagreader.h \
     patientfiller.h \
     patientfillerstep.h \
@@ -241,7 +240,6 @@ SOURCES += extensionmediator.cpp \
     vtkAtamaiPolyDataToImageStencil2.cxx \
     shutterfilter.cpp \
     image.cpp \
-    imagedatasource.cpp \
     dicomtagreader.cpp \
     patientfiller.cpp \
     patientfillerstep.cpp \

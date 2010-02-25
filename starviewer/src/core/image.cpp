@@ -35,22 +35,22 @@ Image::~Image()
 
 void Image::setSOPInstanceUID( QString uid )
 {
-    m_dataSource.setSOPInstanceUID(uid);
+    m_SOPInstanceUID = uid;
 }
 
 QString Image::getSOPInstanceUID() const
 {
-    return m_dataSource.getSOPInstanceUID();
+    return m_SOPInstanceUID;
 }
 
 void Image::setInstanceNumber( QString number )
 {
-    m_dataSource.setInstanceNumber(number);
+    m_instanceNumber = number;
 }
 
 QString Image::getInstanceNumber() const
 {
-    return m_dataSource.getInstanceNumber();
+    return m_instanceNumber;
 }
 
 void Image::setImageOrientationPatient( double orientation[6] )
@@ -267,17 +267,20 @@ int Image::getNumberOfWindowLevels()
 
 void Image::setNumberOfFrames( int frames )
 {
-    m_dataSource.setNumberOfFrames(frames);
+    m_numberOfFrames = frames;
 }
 
 int Image::getNumberOfFrames() const
 {
-    return m_dataSource.getNumberOfFrames();
+    return m_numberOfFrames;
 }
 
 bool Image::isMultiFrame() const
 {
-    return m_dataSource.isMultiFrame();
+    if( getNumberOfFrames() > 1 )
+        return true;
+    else
+        return false;
 }
 
 void Image::addWindowLevelExplanation( QString explanation )
@@ -322,12 +325,12 @@ QTime Image::getRetrievedTime()
 
 void Image::setImageType( const QString &imageType )
 {
-    m_dataSource.setImageType(imageType);
+    m_imageType = imageType;
 }
 
 QString Image::getImageType() const
 {
-    return m_dataSource.getImageType();
+    return m_imageType;
 }
 
 void Image::setFrameType( const QString &frameType )
@@ -385,7 +388,7 @@ QString Image::getContentTimeAsString() const
     // TODO Ara hem de llegir de disc, ja que aquesta informació no s'obté dels fillers steps i tampoc s'insereix a la base de dades.
     // TODO Aquest codi està duplicat de qdicomdump.cpp. Caldria unificar en algun lloc el formatat d'aquestes dades
     QString time;
-    DICOMTagReader reader( m_dataSource.getFilePath() );
+    DICOMTagReader reader( m_path );
     time = reader.getAttributeByName( DICOMContentTime );
     if( !time.isEmpty() )
     {
@@ -419,12 +422,12 @@ Series *Image::getParentSeries() const
 
 void Image::setPath( QString path )
 {
-    m_dataSource.setFilePath(path);
+    m_path = path;
 }
 
 QString Image::getPath() const
 {
-    return m_dataSource.getFilePath();
+    return m_path;
 }
 
 void Image::addReferencedImage( Image *image )
