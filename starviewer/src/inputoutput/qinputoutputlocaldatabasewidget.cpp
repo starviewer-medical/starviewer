@@ -91,7 +91,7 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
     action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()), tr("Ctrl+M"));
     (void) new QShortcut(action->shortcut(), this, SLOT(addSelectedStudiesToCreateDicomdirList()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Store to PACS"), this, SLOT(selectedStudiesStoreToPacs()), tr("Ctrl+S"));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()), tr("Ctrl+S"));
     (void) new QShortcut(action->shortcut(), this, SLOT(selectedStudiesStoreToPacs()));
 #endif
     m_studyTreeWidget->setContextMenu(&m_contextMenuQStudyTreeWidget);//Especifiquem que és el menú per la cache
@@ -343,7 +343,7 @@ void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
     if (m_studyTreeWidget->getSelectedStudies().count() == 0)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to store to PACS."));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to send to PACS."));
     }
     else 
     {
@@ -425,8 +425,7 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
 
         case LocalDatabaseManager::DatabaseLocked:
             message += tr("The database is blocked by another %1 window."
-                         "\nClose all the others %1 windows and try again."
-                         "\n\nIf you want to open different %1's windows always choose the 'New' option from the File menu.").arg(ApplicationNameString);
+                         "\nClose all the others %1 windows and try again.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
 			message += tr("%1 database is corrupted.").arg(ApplicationNameString);

@@ -92,12 +92,12 @@ bool QInputOutputDicomdirWidget::openDicomdir()
         QApplication::restoreOverrideCursor();
         if ( !state.good() )
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Error openning dicomdir" ) );
-            ERROR_LOG( "Error al obrir el dicomdir " + dicomdirPath + state.text() );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Error openning DICOMDIR" ) );
+            ERROR_LOG( "Error al obrir el DICOMDIR " + dicomdirPath + state.text() );
         }
         else
         {
-            INFO_LOG( "Obert el dicomdir " + dicomdirPath );
+            INFO_LOG( "Obert el DICOMDIR " + dicomdirPath );
             settings.setValue( InputOutputSettings::LastOpenedDICOMDIRPath, QFileInfo(dicomdirPath).dir().path() );
             ok = true;
             //cerquem els estudis al dicomdir per a que es mostrin
@@ -123,13 +123,13 @@ void QInputOutputDicomdirWidget::queryStudy( DicomMask queryMask )
         QApplication::restoreOverrideCursor();
         if ( state.code() == 1302 ) //Aquest és l'error quan no tenim un dicomdir obert l'ig
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Before search you have to open a dicomdir." ) );
-            ERROR_LOG( "No s'ha obert cap directori dicomdir " + state.text() );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Before search you have to open a DICOMDIR." ) );
+            ERROR_LOG( "No s'ha obert cap directori DICOMDIR " + state.text() );
         }
         else
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Error quering in dicomdir" ) );
-            ERROR_LOG( "Error cercant estudis al dicomdir " + state.text() );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Error quering in DICOMDIR" ) );
+            ERROR_LOG( "Error cercant estudis al DICOMDIR " + state.text() );
         }
         return;
     }
@@ -265,7 +265,7 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
     {
         case DICOMDIRImporter::ErrorOpeningDicomdir :
             message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
-            message += tr("the dicomdir could not be opened. Be sure that the dicomdir path is correct.\n");
+            message += tr("the DICOMDIR could not be opened. Be sure that the DICOMDIR path is correct.\n");
             message += tr("\n\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
@@ -280,9 +280,9 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
                 Settings settings;
                 quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
                 quint64 minimumFreeSpaceRequired = quint64( settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache ).toULongLong() * 1024 );
-                message = tr("Your current database settings does not allow you to store the requested studies.");
+                message = tr("The study can't be imported because there isn't enough space.");
                 message += "\n";
-                message += tr("Try to free hard disk space, delete local studies manually, change the location of stored studies or change the storage limits to be able to store studies.");
+                message += tr("Try to free hard disk space, delete local studies or change in %1 configuration the size of reserved disk space for system to be able to import the study.").arg(ApplicationNameString);
                 message += "\n\n";
                 message += tr("Current location resources:");
                 message += "\n";
@@ -312,14 +312,14 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
             break;
        case DICOMDIRImporter::DicomdirInconsistent :
             message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
-            message += tr("has ocurred an error. This dicomdir is inconsistent, can't be imported.");
+            message += tr("has ocurred an error. This DICOMDIR is inconsistent, can't be imported.");
             message += tr("\n\nPlease contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
       case DICOMDIRImporter::Ok :
             break;
         default:
-            message = tr("An unknown error has ocurred importing dicomdir.");
+            message = tr("An unknown error has ocurred importing DICOMDIR.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
