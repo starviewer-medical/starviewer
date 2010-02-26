@@ -383,6 +383,16 @@ int Image::getFrameNumber() const
     return m_frameNumber;
 }
 
+void Image::setContentTime( const QString &contentTime )
+{
+    m_contentTime = contentTime;
+}
+
+QString Image::getContentTime() const
+{
+    return m_contentTime;
+}
+
 QString Image::getContentTimeAsString() const
 {
     // TODO Ara hem de llegir de disc, ja que aquesta informació no s'obté dels fillers steps i tampoc s'insereix a la base de dades.
