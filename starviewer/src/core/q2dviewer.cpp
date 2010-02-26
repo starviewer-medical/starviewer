@@ -1704,7 +1704,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
             Image *currentImage = getCurrentDisplayedImage();
             if( currentImage )
             {
-                QString imageTime = "\n"+currentImage->getContentTimeAsString();
+                QString imageTime = "\n"+currentImage->getFormattedContentTime();
                 if( imageTime.isEmpty() )
                     imageTime = "--:--";
                 m_cornerAnnotations->SetText( 3, qPrintable( m_upperRightText + imageTime ) );
