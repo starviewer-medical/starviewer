@@ -177,6 +177,10 @@ public:
     void setFrameNumber( int frameNumber );
     int getFrameNumber() const;
     
+    /// Assignar/Obtenir el Content Time ( moment de creació de les dades )
+    void setContentTime( const QString &contentTime );
+    QString getContentTime() const;
+
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getContentTimeAsString() const;
     
@@ -327,6 +331,9 @@ private:
     
     /// Número de frame
     int m_frameNumber;
+    
+    /// Moment en el que es va crear el pixel data
+    QString m_contentTime;
     
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
