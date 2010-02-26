@@ -194,21 +194,10 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     else
         m_labelImageDateValue->setText( NotAvailableValue );
 
-    value = dicomReader.getAttributeByName( DICOMContentTime );
+    value = currentImage->getFormattedContentTime();
     if( !value.isEmpty() )
     {
-        // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
-        value = value.remove(":");
-
-        QStringList split = value.split(".");
-        QTime convertedTime = QTime::fromString(split[0], "hhmmss");
-
-        if (split.size() == 2) // Té fracció al final
-        {
-            // Trunquem a milisegons i no a milionèssimes de segons
-            convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
-        }
-        m_labelImageTimeValue->setText(convertedTime.toString(Qt::LocaleDate));
+        m_labelImageTimeValue->setText(value);
     }
     else
         m_labelImageTimeValue->setText( NotAvailableValue );

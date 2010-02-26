@@ -396,7 +396,6 @@ QString Image::getContentTime() const
 QString Image::getFormattedContentTime() const
 {
     // TODO Ara hem de llegir de disc, ja que aquesta informació no s'obté dels fillers steps i tampoc s'insereix a la base de dades.
-    // TODO Aquest codi està duplicat de qdicomdump.cpp. Caldria unificar en algun lloc el formatat d'aquestes dades
     QString time;
     DICOMTagReader reader( m_path );
     time = reader.getAttributeByName( DICOMContentTime );
