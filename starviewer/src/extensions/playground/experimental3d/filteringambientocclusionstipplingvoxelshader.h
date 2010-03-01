@@ -85,12 +85,12 @@ inline HdrColor FilteringAmbientOcclusionStipplingVoxelShader::nvShade( const Ve
     {
         float ao = m_filteringAmbientOcclusion.at( offset ) / m_maximumFilteringAmbientOcclusion;
 
-        if ( ao > m_filteringAmbientOcclusionThreshold )
+        if ( ao < m_filteringAmbientOcclusionThreshold )
         {
             float f = m_filteringAmbientOcclusionFactor * ao;
             f = qBound( 0.0f, f, 1.0f );
 
-            if ( f > qrand() / (double)RAND_MAX ) color.red = color.green = color.blue = 0.0f;
+            if ( f < qrand() / (double)RAND_MAX ) color.red = color.green = color.blue = 0.0f;
             else color.red = color.green = color.blue = 1.0f;
         }
     }
@@ -120,12 +120,12 @@ inline HdrColor FilteringAmbientOcclusionStipplingVoxelShader::nvShade( const Ve
     {
         float ao = TrilinearInterpolator::interpolate<float>( m_filteringAmbientOcclusion.constData(), offsets, weights ) / m_maximumFilteringAmbientOcclusion;
 
-        if ( ao > m_filteringAmbientOcclusionThreshold )
+        if ( ao < m_filteringAmbientOcclusionThreshold )
         {
             float f = m_filteringAmbientOcclusionFactor * ao;
             f = qBound( 0.0f, f, 1.0f );
 
-            if ( f > qrand() / (double)RAND_MAX ) color.red = color.green = color.blue = 0.0f;
+            if ( f < qrand() / (double)RAND_MAX ) color.red = color.green = color.blue = 0.0f;
             else color.red = color.green = color.blue = 1.0f;
         }
     }
