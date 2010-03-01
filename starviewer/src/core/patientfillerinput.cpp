@@ -227,6 +227,16 @@ Image * PatientFillerInput::getCurrentImage()
     return m_currentImage;
 }
 
+void PatientFillerInput::setCurrentImages(const QList<Image *> &images)
+{
+    m_currentImages = images;
+}
+
+QList<Image *> PatientFillerInput::getCurrentImages()
+{
+    return m_currentImages;
+}
+
 void PatientFillerInput::setCurrentSeries(Series *series)
 {
     m_currentSeries = series;
