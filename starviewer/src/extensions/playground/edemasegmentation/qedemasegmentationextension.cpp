@@ -178,49 +178,44 @@ void QEdemaSegmentationExtension::createConnections()
 
 void QEdemaSegmentationExtension::setInput( Volume *input )
 {
-    //m_mainVolume = new Volume();
-    //Prova pel mètode de FastMarching
-/*    typedef itk::LinearInterpolateImageFunction< Volume::ItkImageType, double > InterpolatorType;
-    typedef itk::ResampleImageFilter<Volume::ItkImageType,Volume::ItkImageType> ResampleImageFilterType;
-
-    InterpolatorType::Pointer interpolator = InterpolatorType::New();
-    ResampleImageFilterType::Pointer resample    = ResampleImageFilterType::New();
-
-    Volume::ItkImageType::SizeType size = input->getItkData()->GetLargestPossibleRegion().GetSize();
-    size[0]=size[0]/2;
-    size[1]=size[1]*(input->getItkData()->GetSpacing()[1]/(2*input->getItkData()->GetSpacing()[0]));
-    size[2]=size[2]*(input->getItkData()->GetSpacing()[2]/(2*input->getItkData()->GetSpacing()[0]));
-
-    double spacing[3];
-    //Posem que l'espaiat sigui el mateix en totes direccions
-    spacing[0]=2*input->getItkData()->GetSpacing()[0];
-    spacing[1]=2*input->getItkData()->GetSpacing()[0];
-    spacing[2]=2*input->getItkData()->GetSpacing()[0];
-
-    std::cout<<"spacing: "<<spacing[0]<<" "<<spacing[1]<<" "<<spacing[2]<<std::endl;
-    std::cout<<"size: "<<size[0]<<" "<<size[1]<<" "<<size[2]<<std::endl;
-    interpolator->SetInputImage(input->getItkData());
-    resample->SetInput(input->getItkData());
-    resample->SetInterpolator(interpolator.GetPointer());
-    resample->SetSize(size);
-    resample->SetOutputOrigin(input->getItkData()->GetOrigin());
-    resample->SetOutputSpacing(spacing);
-    resample->SetDefaultPixelValue( 100 );
-
-    resample->Update();
-
-    m_mainVolume->setData(resample->GetOutput());
-    m_mainVolume->getVtkData()->Update();
-    */
-    //Descomentar això quan no vulguem la prova!!!!!
     m_mainVolume = input;
+    //Esborrem els volum per si hem fet un canvi de sèrie
+    if(m_filteredVolume)
+    {
+        delete m_filteredVolume;
+        m_filteredVolume = 0;
+    }
+    if(m_lesionMaskVolume)
+    {
+        delete m_lesionMaskVolume;
+        m_lesionMaskVolume = 0;
+    }
+    if(m_ventriclesMaskVolume)
+    {
+        delete m_ventriclesMaskVolume;
+        m_ventriclesMaskVolume = 0;
+    }
+
+    if(m_imageThreshold)
+    {
+        m_imageThreshold->Delete();
+        m_imageThreshold = 0;
+    }
+    if(m_edemaMaskVolume)
+    {
+        delete m_edemaMaskVolume;
+        m_edemaMaskVolume = 0;
+    }
+
+    m_toolManager->triggerTool("SlicingTool");
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_mainVolume );
     m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
-    //m_2DView->resetWindowLevelToDefault();
-    m_2DView->setOverlayToBlend();
-
+	//això ho fem per indicar que no hi ha cap overlay
+    m_2DView->setNoOverlay();
+	//m_2DView->setOverlayInput(m_lesionMaskVolume);
+    
     int* dim;
     dim = m_mainVolume->getDimensions();
     DEBUG_LOG( QString("dims Vol: %1, %2, %3").arg(dim[0]).arg(dim[1]).arg(dim[2]) );
@@ -236,8 +231,8 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_2DView->getDefaultWindowLevel( wl );
     m_insideValue  = (int) wl[0];
     m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
-    m_insideValue  = 255;
-    m_outsideValue = 0;
+    //m_insideValue  = 255;
+    //m_outsideValue = 0;
 
     // obtenim els valors mínim i màxim del volum
     m_minValue = m_mainVolume->getVtkData()->GetScalarRange()[0];
@@ -267,33 +262,6 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_lowerValueVentriclesSlider->setValue(15);
     m_upperValueVentriclesSlider->setValue(150);
 
-    //Esborrem els volum per si hem fet un canvi de sèrie
-    if(m_filteredVolume)
-    {
-        delete m_filteredVolume;
-        m_filteredVolume = 0;
-    }
-    if(m_lesionMaskVolume)
-    {
-        delete m_lesionMaskVolume;
-        m_lesionMaskVolume = 0;
-    }
-    if(m_ventriclesMaskVolume)
-    {
-        delete m_ventriclesMaskVolume;
-        m_ventriclesMaskVolume = 0;
-    }
-
-    if(m_imageThreshold)
-    {
-        m_imageThreshold->Delete();
-        m_imageThreshold = 0;
-    }
-    if(m_edemaMaskVolume)
-    {
-        delete m_edemaMaskVolume;
-        m_edemaMaskVolume = 0;
-    }
 }
 
 void QEdemaSegmentationExtension::applyFilterMainImage()
@@ -390,8 +358,12 @@ void QEdemaSegmentationExtension::applyVentriclesMethod()
     if( !m_imageThreshold )
     {
         m_imageThreshold = vtkImageThreshold::New();
-    }
-    m_imageThreshold->SetInput( m_mainVolume->getVtkData() );
+    }else{
+		m_imageThreshold->Delete();
+		m_imageThreshold = vtkImageThreshold::New();
+	}
+	
+	m_imageThreshold->SetInput( m_mainVolume->getVtkData() );
     m_lowerVentriclesValue = m_lowerValueVentriclesSlider->value();
     m_upperVentriclesValue = m_upperValueVentriclesSlider->value();
     m_imageThreshold->ThresholdBetween( m_lowerVentriclesValue,  m_upperVentriclesValue);
@@ -405,6 +377,7 @@ void QEdemaSegmentationExtension::applyVentriclesMethod()
     this->viewVentriclesOverlay();
     m_applyEdemaMethodButton->setEnabled(true);
 
+    m_toolManager->triggerTool("EditorTool");
 }
 
 void QEdemaSegmentationExtension::applyEdemaMethod()
