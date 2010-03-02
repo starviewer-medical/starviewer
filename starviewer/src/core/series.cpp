@@ -591,16 +591,6 @@ QTime Series::getRetrievedTime()
     return m_retrieveTime;
 }
 
-void Series::insertImage( Image *image )
-{
-    int i = 0;
-    while( i < m_imageSet.size() && m_imageSet.at(i)->getInstanceNumber().toInt() < image->getInstanceNumber().toInt() )
-    {
-        i++;
-    }
-    m_imageSet.insert( i, image );
-}
-
 int Series::findImageIndex( QString sopInstanceUID )
 {
     int i = 0;

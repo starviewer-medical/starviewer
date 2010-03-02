@@ -267,14 +267,6 @@ public slots:
 
 private:
     /**
-     * Inserta una imatge a la llista d'imatges ordenat pel criteri d'ordenació d'imatges
-     * TODO falta definir quina és l'estrategia d'ordenació per defecte
-     * Pre: se presuposa que s'ha comprovat anteriorment que la imatge no existeix a la llista
-     * @param image
-     */
-    void insertImage( Image *image );
-
-    /**
      * Troba l'índex de la imatge amb el sopInstanceUID donat a la llista d'imatges
      * @param sopInstanceUID l'uid de la imatge que volem trobar
      * @return L'índex d'aquella imatge dins de la llista, -1 si no existeix la imatge amb aquell uid.
