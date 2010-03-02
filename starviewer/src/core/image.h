@@ -184,6 +184,9 @@ public:
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getFormattedContentTime() const;
     
+    /// Ens retorna la clau que identifica la imatge
+    QString getKeyIdentifier() const;
+    
     /// afegeix un objecte imatge a la imatge
     void addReferencedImage( Image *image );
 

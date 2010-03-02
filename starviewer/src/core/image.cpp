@@ -418,6 +418,11 @@ QString Image::getFormattedContentTime() const
     return time;
 }
 
+QString Image::getKeyIdentifier() const
+{
+    return m_SOPInstanceUID + "#" + m_frameNumber;
+}
+
 void Image::setParentSeries( Series *series )
 {
     m_parentSeries = series;
