@@ -230,6 +230,9 @@ private slots:
     /// Calcula les mesures del grup VMI seleccionades.
     void computeSelectedVmi();
     void computeSelectedVmii();
+    void generateColorTransferFunctionFromImi();
+    void generateOpacityTransferFunctionFromImi();
+    void generateTransferFunctionFromImi();
 
     void tourBestViews();
     void guidedTour();

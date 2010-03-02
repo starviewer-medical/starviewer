@@ -796,6 +796,9 @@ void QExperimental3DExtension::loadImi( QString fileName )
 //        m_opacityImiCheckBox->setEnabled( true );
         m_saveImiPushButton->setEnabled( true );
 //        m_imiGradientPushButton->setEnabled( true );
+        m_colorTransferFunctionFromImiPushButton->setEnabled( true );
+        m_opacityTransferFunctionFromImiPushButton->setEnabled( true );
+        m_transferFunctionFromImiPushButton->setEnabled( true );
     }
     else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load IMI"), QString( tr("Can't load IMI from file ") ) + fileName );
 }
@@ -1177,6 +1180,9 @@ void QExperimental3DExtension::createConnections()
     connect( m_loadImiPushButton, SIGNAL( clicked() ), SLOT( loadImi() ) );
     connect( m_saveImiPushButton, SIGNAL( clicked() ), SLOT( saveImi() ) );
     connect( m_computeVmiiPushButton, SIGNAL( clicked() ), SLOT( computeSelectedVmii() ) );
+    connect( m_colorTransferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateColorTransferFunctionFromImi() ) );
+    connect( m_opacityTransferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateOpacityTransferFunctionFromImi() ) );
+    connect( m_transferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateTransferFunctionFromImi() ) );
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -2327,6 +2333,9 @@ void QExperimental3DExtension::computeSelectedVmii()
 //        m_opacityImiCheckBox->setEnabled( true );
         m_saveImiPushButton->setEnabled( true );
 //        m_imiGradientPushButton->setEnabled( true );
+        m_colorTransferFunctionFromImiPushButton->setEnabled( true );
+        m_opacityTransferFunctionFromImiPushButton->setEnabled( true );
+        m_transferFunctionFromImiPushButton->setEnabled( true );
     }
 
 //    if ( computeViewpointVomi )
@@ -3640,6 +3649,74 @@ void QExperimental3DExtension::volumeVariance()
     m_opacityVarianceCheckBox->setEnabled( true );
 
     cast->Delete();
+}
+
+
+void QExperimental3DExtension::generateColorTransferFunctionFromImi()
+{
+    if ( m_imi.isEmpty() ) return;
+
+    TransferFunction imiTransferFunction = m_transferFunctionEditor->transferFunction();
+    imiTransferFunction.clearColor();
+    imiTransferFunction.setName( "IMI color transfer function" );
+    int nIntensities = m_volume->getRangeMax() + 1;
+
+    for ( int i = 0; i < nIntensities; i++ )
+    {
+        float imi = m_imi.at( i ) / m_maximumImi;
+        float red = imi > 0.8f ? 1.0f : imi > 0.6f ? 5.0f * ( imi - 0.6f ) : imi > 0.2f ? 0.0f : 1.0f - 5.0f * imi;
+        float green = imi > 0.8f ? 1.0f - 5.0f * ( imi - 0.8f ) : imi > 0.4f ? 1.0f : imi > 0.2f ? 5.0f * ( imi - 0.2f ) : 0.0f;
+        float blue = imi > 0.6f ? 0.0f : imi > 0.4f ? 1.0f - 5.0f * ( imi - 0.4f ) : 1.0f;
+        imiTransferFunction.addPointToColor( i, QColor::fromRgbF( red, green, blue ) );
+    }
+
+    m_transferFunctionEditor->setTransferFunction( imiTransferFunction.simplify() );
+    setTransferFunction();
+
+}
+
+
+void QExperimental3DExtension::generateOpacityTransferFunctionFromImi()
+{
+    if ( m_imi.isEmpty() ) return;
+
+    TransferFunction imiTransferFunction = m_transferFunctionEditor->transferFunction();
+    imiTransferFunction.clearOpacity();
+    imiTransferFunction.setName( "IMI opacity transfer function" );
+    int nIntensities = m_volume->getRangeMax() + 1;
+
+    for ( int i = 0; i < nIntensities; i++ )
+    {
+        float imi = m_imi.at( i ) / m_maximumImi;
+        imiTransferFunction.addPointToOpacity( i, imi );
+    }
+
+    m_transferFunctionEditor->setTransferFunction( imiTransferFunction.simplify() );
+    setTransferFunction();
+
+}
+
+
+void QExperimental3DExtension::generateTransferFunctionFromImi()
+{
+    if ( m_imi.isEmpty() ) return;
+
+    TransferFunction imiTransferFunction;
+    imiTransferFunction.setName( "IMI transfer function" );
+    int nIntensities = m_volume->getRangeMax() + 1;
+
+    for ( int i = 0; i < nIntensities; i++ )
+    {
+        float imi = m_imi.at( i ) / m_maximumImi;
+        float red = imi > 0.8f ? 1.0f : imi > 0.6f ? 5.0f * ( imi - 0.6f ) : imi > 0.2f ? 0.0f : 1.0f - 5.0f * imi;
+        float green = imi > 0.8f ? 1.0f - 5.0f * ( imi - 0.8f ) : imi > 0.4f ? 1.0f : imi > 0.2f ? 5.0f * ( imi - 0.2f ) : 0.0f;
+        float blue = imi > 0.6f ? 0.0f : imi > 0.4f ? 1.0f - 5.0f * ( imi - 0.4f ) : 1.0f;
+        imiTransferFunction.addPoint( i, QColor::fromRgbF( red, green, blue, imi ) );
+    }
+
+    m_transferFunctionEditor->setTransferFunction( imiTransferFunction.simplify() );
+    setTransferFunction();
+
 }
 
 
