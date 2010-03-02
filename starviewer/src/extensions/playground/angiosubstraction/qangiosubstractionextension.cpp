@@ -14,6 +14,7 @@
 #include "study.h"
 #include "patient.h"
 #include "toolmanager.h"
+#include "toolconfiguration.h"
 #include "patientbrowsermenu.h"
 #include "angiosubstractionsettings.h"
 
@@ -104,11 +105,20 @@ void QAngioSubstractionExtension::createConnections()
     disconnect( m_2DView_1->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView_1->getViewer(), SLOT( setInput( Volume * ) ) );
     disconnect( m_2DView_2->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView_2->getViewer(), SLOT( setInput( Volume * ) ) );
     connect( m_2DView_1->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput( Volume * ) ) );
+    connect( m_imageSelectorSpinBox, SIGNAL( valueChanged(int) ), SLOT( computeDifferenceImage( int ) ) );
+    connect( m_2DView_1, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
+    connect( m_2DView_2, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
 }
 
 void QAngioSubstractionExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
+
+	//Desactivem la sincronització perquè si no quan es canvia l'input no funciona correctament
+	m_2DView_1->setSynchronized(false);
+	m_2DView_2->setSynchronized(false);
+	//this->synchronization( m_2DView_1, false );
+	//this->synchronization( m_2DView_2, false );
 
 	//eliminem l'anterior m_differenceVolume si n'hi ha
 	if(m_differenceVolume){
@@ -119,22 +129,25 @@ void QAngioSubstractionExtension::setInput( Volume *input )
 
 	//Compute the new difference Volume
 	m_2DView_1->getViewer()->setInput(m_mainVolume);
-	m_imageSelectorSpinBox->setMinimum(0);
-	m_imageSelectorSpinBox->setMaximum(m_mainVolume->getDimensions()[2] - 1);
+	m_imageSelectorSpinBox->setMinimum(1);
+	m_imageSelectorSpinBox->setMaximum(m_mainVolume->getDimensions()[2]);
+	m_imageSelectorSpinBox->setValue(1);
 
 	computeDifferenceImage( m_imageSelectorSpinBox->value() );
 
-	m_2DView_2->getViewer()->setInput(m_differenceVolume);
-
-	m_2DView_1->setSynchronized( true );
-	m_2DView_2->setSynchronized( true );
-
+	//Només actualitzem l'1 perquè el 2 ja es fa en l'acció computeDifferenceImage
+	//Això es fa així perquè l'acció està lligasda a un connect
 	m_2DView_1->getViewer()->refresh();
-	m_2DView_2->getViewer()->refresh();
+
+	m_2DView_1->setSynchronized(true);
+	m_2DView_2->setSynchronized(true);
+	//this->synchronization( m_2DView_1, true );
+	//this->synchronization( m_2DView_2, true );
 }
 
 void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
 {
+	DEBUG_LOG(QString("Init computeDifferenceImage: %1").arg(imageid));
 	int i,j,k;
     //Allocating memory for the output image
     Volume::ItkImageType::RegionType region;
@@ -147,7 +160,9 @@ void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
     region.SetIndex(start);
     Volume::ItkImageType::Pointer difImage = Volume::ItkImageType::New();
     difImage->SetRegions( region );
-    difImage->Allocate();
+    difImage->SetSpacing( m_mainVolume->getItkData()->GetSpacing() );
+	difImage->Allocate();
+	//std::cout<<region<<std::endl;
 
 	typedef itk::ImageRegionIterator<Volume::ItkImageType> Iterator;
     Iterator difIter( difImage, difImage->GetBufferedRegion() );
@@ -158,10 +173,11 @@ void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
     Volume::ItkImageType::IndexType initialSlice;
 	initialSlice[0] = start[0];
 	initialSlice[1] = start[1];
-	initialSlice[2] = start[2] + imageid;
+	initialSlice[2] = start[2] + imageid - 1; //Perquè la primera imatge és la 1
 
 	difIter.GoToBegin();
     imIter.GoToBegin();
+	int max=0, value;
     for (k=0;k<size[2];k++)
     {
 	    baseIter.SetIndex(initialSlice);
@@ -169,7 +185,10 @@ void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
         {
             for (i=0;i<size[0];i++)
             {
-                difIter.Set(abs(imIter.Get()-baseIter.Get()));
+				value = imIter.Get()-baseIter.Get();
+                difIter.Set(value);
+				if(value>max)max=value;
+				if(value<-max)max=-value;
                 ++difIter;
                 ++imIter;
                 ++baseIter;
@@ -185,6 +204,26 @@ void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
 	}
     m_differenceVolume->setData(difImage);
 
+	m_2DView_2->getViewer()->setInput(m_differenceVolume);
+	m_2DView_2->getViewer()->setWindowLevel((double)2*max,0.0);
+
+	m_2DView_2->getViewer()->refresh();
+}
+
+void QAngioSubstractionExtension::synchronization( Q2DViewerWidget * viewer, bool active )
+{
+    if( active )
+    {
+        // Per defecte sincronitzem només la tool de slicing
+        ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
+        synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
+        m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool", synchronizeConfiguration );
+        m_toolManager->activateTool("SynchronizeTool");
+    }
+    else
+    {
+        m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
+    }
 }
 
 void QAngioSubstractionExtension::angioEventHandler( unsigned long id )

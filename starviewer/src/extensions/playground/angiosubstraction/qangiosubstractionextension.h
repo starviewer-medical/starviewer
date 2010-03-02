@@ -41,9 +41,6 @@ private:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-	/// Calcula la imatge diferència respecte la imatge imageid
-	void computeDifferenceImage( int imageid );
-
 	/// Guarda i llegeix les característiques
     void readSettings();
     void writeSettings();
@@ -52,6 +49,12 @@ private slots:
 
      /// gestiona els events del m_2DView
     void angioEventHandler( unsigned long id );
+
+	/// Calcula la imatge diferència respecte la imatge imageid
+	void computeDifferenceImage( int imageid );
+
+	///Permet sincronitzar els dos viewers
+	void synchronization( Q2DViewerWidget * viewer, bool active );
 
 private:
     /// El volum principal
