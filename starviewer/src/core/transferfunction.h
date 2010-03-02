@@ -134,6 +134,9 @@ public:
     /// Retorna una funció de transferència equivalent on hi ha els mateixos punts de color que d'opacitat (és a dir, l'opacitat no està definida per un x que el color no, i viceversa).
     TransferFunction normalize() const;
 
+    /// Retorna una funció de transferència equivalent amb el mínim nombre de punts definits (és a dir, si hi ha una sèrie de punts que defineixen una línia, es queda només amb els extrems).
+    TransferFunction simplify() const;
+
 private:
     /// Nom de la funció de transferència.
     QString m_name;

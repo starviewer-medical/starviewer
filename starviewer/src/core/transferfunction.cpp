@@ -397,7 +397,35 @@ TransferFunction TransferFunction::normalize() const
         normalized.addPoint( it.key(), it.value() );
     }
 
+    normalized.m_name = m_name;
+
     return normalized;
+}
+
+
+TransferFunction TransferFunction::simplify() const
+{
+    TransferFunction simplified = *this;
+
+    QMapIterator<double, QColor> itc( m_color );
+    while ( itc.hasNext() )
+    {
+        itc.next();
+        TransferFunction tentative = simplified;
+        tentative.removePointFromColor( itc.key() );
+        if ( tentative.getColor( itc.key() ) == simplified.getColor( itc.key() ) ) simplified = tentative;
+    }
+
+    QMapIterator<double, double> ito( m_opacity );
+    while ( ito.hasNext() )
+    {
+        ito.next();
+        TransferFunction tentative = simplified;
+        tentative.removePointFromOpacity( ito.key() );
+        if ( tentative.getOpacity( ito.key() ) == simplified.getOpacity( ito.key() ) ) simplified = tentative;
+    }
+
+    return simplified;
 }
 
 
