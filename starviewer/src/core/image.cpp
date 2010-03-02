@@ -21,7 +21,7 @@
 namespace udg {
 
 Image::Image(QObject *parent)
- : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_parentSeries(NULL), m_frameNumber(0)
+ : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16), m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_parentSeries(NULL), m_frameNumber(0), m_phaseNumber(0), m_volumeNumberInSeries(0), m_orderNumberInVolume(0)
 {
     m_pixelSpacing[0] = 0.;
     m_pixelSpacing[1] = 0.;
@@ -383,14 +383,44 @@ int Image::getFrameNumber() const
     return m_frameNumber;
 }
 
-void Image::setContentTime( const QString &contentTime )
+void Image::setPhaseNumber( int phaseNumber )
 {
-    m_contentTime = contentTime;
+    m_phaseNumber = phaseNumber;
 }
 
-QString Image::getContentTime() const
+int Image::getPhaseNumber() const
 {
-    return m_contentTime;
+    return m_phaseNumber;
+}
+
+void Image::setVolumeNumberInSeries(int volumeNumberInSeries)
+{
+    m_volumeNumberInSeries = volumeNumberInSeries;
+}
+
+int Image::getVolumeNumberInSeries() const
+{
+    return m_volumeNumberInSeries;
+}
+
+void Image::setOrderNumberInVolume(int orderNumberInVolume)
+{
+    m_orderNumberInVolume = orderNumberInVolume;
+}
+
+int Image::getOrderNumberInVolume() const
+{
+    return m_orderNumberInVolume;
+}
+
+void Image::setImageTime( const QString &imageTime )
+{
+    m_imageTime = imageTime ;
+}
+
+QString Image::getImageTime() const
+{
+    return m_imageTime;
 }
 
 QString Image::getFormattedContentTime() const

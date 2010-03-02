@@ -176,10 +176,22 @@ public:
     /// Assignar/Obtenir el número de frame
     void setFrameNumber( int frameNumber );
     int getFrameNumber() const;
+
+    ///Assignar/Obtenir el número de fase
+    void setPhaseNumber (int phaseNumber);
+    int getPhaseNumber() const;
+
+    ///Assigna/Obtenir el número de volum al qual pertany la imatge dins la sèrie
+    void setVolumeNumberInSeries (int volumeNumberInSeries); 
+    int getVolumeNumberInSeries() const;
+
+    ///Assignar/Obtenir el número que ocupa la imatge dins volum
+    void setOrderNumberInVolume(int orderNumberInVolume);
+    int getOrderNumberInVolume() const;
     
     /// Assignar/Obtenir el Content Time ( moment de creació de les dades )
-    void setContentTime( const QString &contentTime );
-    QString getContentTime() const;
+    void setImageTime( const QString &imageTime );
+    QString getImageTime() const;
 
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
     QString getFormattedContentTime() const;
@@ -335,8 +347,17 @@ private:
     /// Número de frame
     int m_frameNumber;
     
+    ///Número de fase de la imatge
+    int m_phaseNumber;
+
+    ///Número de volum al qual pertany la imatge dins la sèrie
+    int m_volumeNumberInSeries;
+
+    ///Número d'ordre de la imatge dins el vo
+    int m_orderNumberInVolume;
+
     /// Moment en el que es va crear el pixel data
-    QString m_contentTime;
+    QString m_imageTime;
     
     //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
