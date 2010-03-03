@@ -412,7 +412,6 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile( DICOMTagReader *dicomR
             DEBUG_LOG("No hem trobat la per-frame Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
             ERROR_LOG("No hem trobat la per-frame Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
         }
-        // TODO És necessari buscar els mateixos tags a la Shared Functional Groups Sequence????
     }
     else
     {
@@ -453,7 +452,6 @@ void ImageFillerStep::fillFunctionalGroupsInformation( Image *image, DICOMSequen
                 if( dicomValue )
                 {
                     QString spacing = dicomValue->getValueAsQString();
-                    DEBUG_LOG("Enhanced Pixel Spacing: " +spacing);
                     if ( !spacing.isEmpty() )
                     {
                         QStringList list = spacing.split( "\\" );
@@ -471,7 +469,6 @@ void ImageFillerStep::fillFunctionalGroupsInformation( Image *image, DICOMSequen
                 if( dicomValue )
                 {
                     image->setSliceThickness( dicomValue->getValueAsDouble() );
-                    DEBUG_LOG( QString("Enhanced Slice thickness: %1").arg(dicomValue->getValueAsDouble()) );
                 }
             }
         }
@@ -496,7 +493,6 @@ void ImageFillerStep::fillFunctionalGroupsInformation( Image *image, DICOMSequen
                     double orientation[6];
                     imageOrientationPatientStringToDoubleVector(dicomValue->getValueAsQString(),orientation);
                     image->setImageOrientationPatient( orientation );
-                    DEBUG_LOG("Enhanced Image Orientation (Patient): " + dicomValue->getValueAsQString() );
                     // Calculem el "Patient Orientation" a partir del vector d'orientació
                     image->setPatientOrientation( makePatientOrientationFromImageOrientationPatient( orientation ) );
                 }
@@ -636,8 +632,8 @@ void ImageFillerStep::fillFunctionalGroupsInformation( Image *image, DICOMSequen
                 }
                 else
                 {
-                    DEBUG_LOG("No s'ha trobat el tag Calculated Anatomy Thickness en una seqüència que se suposa que l'ha de tenir!");
-                    ERROR_LOG("No s'ha trobat el tag Calculated Anatomy Thickness en una seqüència que se suposa que l'ha de tenir!");
+                    DEBUG_LOG("No s'ha trobat el tag Patient Orientation en una seqüència que se suposa que l'ha de tenir!");
+                    ERROR_LOG("No s'ha trobat el tag Patient Orientation en una seqüència que se suposa que l'ha de tenir!");
                 }
             }
         }
@@ -721,7 +717,6 @@ void ImageFillerStep::fillFunctionalGroupsInformation( Image *image, DICOMSequen
             if( dicomValue )
             {
                 image->setImageLaterality( dicomValue->getValueAsQString().at(0) );
-                DEBUG_LOG(">>>>>>>>>Frame laterality::::::: " + dicomValue->getValueAsQString() );
             }
             else
             {
