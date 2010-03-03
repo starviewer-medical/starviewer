@@ -146,9 +146,6 @@ public:
     /// Si la imatge ja existeix al conjunt retorna fals, cert altrament
     bool addImage( Image *image );
 
-    /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
-    Image *getImage( QString SOPInstanceUID );
-
     /**
      * Ens diu si existeix una imatge amb aquest identificador a la llista
      * @param identifier identificador d'imatge que busquem
