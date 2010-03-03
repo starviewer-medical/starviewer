@@ -54,28 +54,6 @@ bool ImageFillerStep::fill()
     return ok;
 }
 
-bool ImageFillerStep::fillIndividually()
-{
-    Q_ASSERT(m_input);
-
-    bool ok = false;
-
-    DICOMTagReader * dicomReader = m_input->getDICOMFile();
-
-    Image *image = new Image;
-    image->setPath( dicomReader->getFileName() );
-
-    if( processImage( image , dicomReader ) )
-    {
-        ok = true;
-        m_input->getCurrentSeries()->addImage( image );
-        m_input->setCurrentImage( image );
-        m_input->addLabelToSeries("ImageFillerStep", m_input->getCurrentSeries() );
-    }
-
-    return ok;
-}
-
 void ImageFillerStep::processPatient( Patient *patient )
 {
     QList<Study *> studyList = patient->getStudies();
@@ -134,34 +112,155 @@ bool ImageFillerStep::processImage( Image *image )
     return processImage( image , &dicomReader );
 }
 
-bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader )
+bool ImageFillerStep::fillIndividually()
 {
+    Q_ASSERT(m_input);
 
-    // comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData
+    bool ok = false;
+
+    DICOMTagReader *dicomReader = m_input->getDICOMFile();
+
+    if( dicomReader )
+    {
+        ok = true;
+        QList<Image *> generatedImages = processDICOMFile(dicomReader);
+        if( !generatedImages.isEmpty() )
+        {
+            m_input->setCurrentImages( generatedImages );
+            m_input->addLabelToSeries("ImageFillerStep", m_input->getCurrentSeries() );
+            // TODO Aquesta assignació es fa simplement per mantenir la compatibilitat amb el sistema antic
+            // El mètode "setCurrentImage" ha de desaparèixer i conseqüentment aquesta assignació
+            m_input->setCurrentImage( generatedImages.first() );
+        }
+    }
+
+    return ok;
+}
+
+QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
+{
+    Q_ASSERT( dicomReader );
+    
+    QList<Image *> generatedImages;
     bool ok = dicomReader->tagExists( DICOMPixelData );
     if( ok )
     {
-        image->setSOPInstanceUID( dicomReader->getAttributeByName( DICOMSOPInstanceUID ) );
-        image->setInstanceNumber( dicomReader->getAttributeByName( DICOMInstanceNumber ) );
+        // Comprovem si la imatge és enhanced o no per tal de cridar el mètode específic més adient
+        QString sopClassUID = dicomReader->getAttributeByName( DICOMSOPClassUID );
+        if( sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage )
+        {
+            generatedImages = processEnhancedDICOMFile(dicomReader);
+        }
+        else
+        {
+            int numberOfFrames = 1;
+            if( dicomReader->tagExists( DICOMNumberOfFrames ) )
+            {
+                numberOfFrames = dicomReader->getAttributeByName( DICOMNumberOfFrames ).toInt();
+            }
+            for( int frameNumber=0; frameNumber<numberOfFrames; frameNumber++ ) 
+            {
+                Image *image = new Image();
+                if( processImage(image,dicomReader) )
+                {
+                    image->setFrameNumber( frameNumber );
+                    generatedImages << image;
+                    m_input->getCurrentSeries()->addImage( image );
+                }
+            }   
+        }
+    }
+    return generatedImages;
+}
+
+bool ImageFillerStep::fillCommonImageInformation( Image *image, DICOMTagReader *dicomReader )
+{
+    Q_ASSERT( image );
+    Q_ASSERT( dicomReader );
+    
+    // El path on es troba la imatge a disc
+    image->setPath( dicomReader->getFileName() );
+    
+    // C.12.1 SOP Common Module
+    image->setSOPInstanceUID( dicomReader->getAttributeByName( DICOMSOPInstanceUID ) );
+    image->setInstanceNumber( dicomReader->getAttributeByName( DICOMInstanceNumber ) );
+
+    // C.7.6.3 Image Pixel Module
+    image->setSamplesPerPixel( dicomReader->getAttributeByName( DICOMSamplesPerPixel ).toInt() );
+    image->setPhotometricInterpretation( dicomReader->getAttributeByName( DICOMPhotometricInterpretation ) );
+    image->setRows( dicomReader->getAttributeByName( DICOMRows ).toInt() );
+    image->setColumns( dicomReader->getAttributeByName( DICOMColumns ).toInt() );
+    image->setBitsAllocated( dicomReader->getAttributeByName( DICOMBitsAllocated ).toInt() );
+    image->setBitsStored( dicomReader->getAttributeByName( DICOMBitsStored ).toInt() );
+    image->setPixelRepresentation( dicomReader->getAttributeByName( DICOMPixelRepresentation ).toInt() );
+    
+    // C.7.6.1 General Image Module (present a totes les modalitats no enhanced, excepte 3D XA, 3D CF i OPT) 
+    // C.8.13.1 Enhanced MR Image Module
+    // C.8.15.2 Enhanced CT Image Module 
+    // C.8.19.2 Enhanced XA/XRF Image Module 
+    image->setImageType( dicomReader->getAttributeByName( DICOMImageType ) );
+    // TODO per defecte li posem la mateixa informació a Frame Type, que en cas que sigui diferent es canviaria
+    // TODO potser ImageType hauria de ser un atribut de VolumeDescriptor
+
+    // En el cas d'XA/XRF el pixel spacing vindrà especificat per totes les imatges per igual (no cal fer un recorregut pre-frame)
+    QString sopClassUID = m_input->getDICOMFile()->getAttributeByName( DICOMSOPClassUID );
+    if( sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage )
+    {
+        //
+        // XA/XRF Acquisition Module - C.8.19.3
+        // És requerit si el primer valor d'ImageType == ORIGINAL
+        // Pot estar present encara que no es compleixi la condició anterior.
+        //
+
+        //
+        // Obtenim el Pixel Spacing (Imager Pixel Spacing (1))
+        //
+        if( dicomReader->tagExists(DICOMImagerPixelSpacing) )
+        {
+            QString spacing = dicomReader->getAttributeByName(DICOMImagerPixelSpacing);
+            if ( !spacing.isEmpty() )
+            {
+                QStringList list;
+                list = spacing.split( "\\" );
+                if( list.size() == 2 )
+                    image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
+                else
+                    DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada.");
+            }
+        }
+    }
+    
+    return true;
+}
+
+bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader )
+{
+    Q_ASSERT( image );
+    Q_ASSERT( dicomReader );
+    
+    // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la comprovació quan llegim fitxer a fitxer
+    bool ok = dicomReader->tagExists( DICOMPixelData );
+    if( ok )
+    {
+        // Omplim la informació comuna
+        fillCommonImageInformation(image,dicomReader);
+        
         // Calculem el pixel spacing
         computePixelSpacing(image,dicomReader);
 
+        // Calculem propietats del pla imatge
         QString value;
         value = dicomReader->getAttributeByName( DICOMSliceThickness );
         if( !value.isEmpty() )
             image->setSliceThickness( value.toDouble() );
 
-        QStringList list;
-        value = dicomReader->getAttributeByName( DICOMImageOrientationPatient );
-        list = value.split( "\\" );
-        if( list.size() == 6 )
+        if( dicomReader->tagExists(DICOMImageOrientationPatient) )
         {
             double orientation[6];
-            for( int i = 0; i < 6; i++ )
-            {
-                orientation[ i ] = list.at( i ).toDouble();
-            }
-            image->setImageOrientationPatient( orientation );
+            value = dicomReader->getAttributeByName( DICOMImageOrientationPatient );
+            // Passem l'string llegit a un vector de doubles
+            imageOrientationPatientStringToDoubleVector(value,orientation);
+            image->setImageOrientationPatient( orientation );   
 
             // cerquem l'string amb la orientació del pacient
             value = dicomReader->getAttributeByName( DICOMPatientOrientation );
@@ -169,23 +268,7 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
                 image->setPatientOrientation( value );
             else  // si no tenim aquest valor, el calculem a partir dels direction cosines
             {
-                // I ara ens disposem a crear l'string amb l'orientació del pacient
-                double *orientation = (double *)image->getImageOrientationPatient();
-                double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
-                for( int i = 0; i < 3; i++ )
-                {
-                    dirCosinesX[i] = orientation[i];
-                    dirCosinesY[i] = orientation[3+i];
-                    dirCosinesZ[i] = orientation[6+i];
-                }
-                QString patientOrientationString;
-                // \TODO potser el delimitador hauria de ser '\' en comptes de ','
-                patientOrientationString = this->mapDirectionCosinesToOrientationString( dirCosinesX );
-                patientOrientationString += "\\";
-                patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesY );
-                patientOrientationString += "\\";
-                patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesZ );
-                image->setPatientOrientation( patientOrientationString );
+                image->setPatientOrientation( makePatientOrientationFromImageOrientationPatient( orientation ) );
             }
         }
         else
@@ -204,7 +287,7 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
         value = dicomReader->getAttributeByName( DICOMImagePositionPatient );
         if( !value.isEmpty() )
         {
-            list = value.split("\\");
+            QStringList list = value.split("\\");
             if( list.size() == 3 )
             {
                 double position[3] = { list.at(0).toDouble(), list.at(1).toDouble(), list.at(2).toDouble() };
@@ -216,14 +299,7 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
             DEBUG_LOG("La imatge no conté informació de l'origen. Modalitat: [" + dicomReader->getAttributeByName(DICOMModality) + "]");
         }
 
-        image->setSamplesPerPixel( dicomReader->getAttributeByName( DICOMSamplesPerPixel ).toInt() );
-        image->setPhotometricInterpretation( dicomReader->getAttributeByName( DICOMPhotometricInterpretation ) );
-        image->setRows( dicomReader->getAttributeByName( DICOMRows ).toInt() );
-        image->setColumns( dicomReader->getAttributeByName( DICOMColumns ).toInt() );
-        image->setBitsAllocated( dicomReader->getAttributeByName( DICOMBitsAllocated ).toInt() );
-        image->setBitsStored( dicomReader->getAttributeByName( DICOMBitsStored ).toInt() );
-        image->setPixelRepresentation( dicomReader->getAttributeByName( DICOMPixelRepresentation ).toInt() );
-
+        // Propietats de ww/wl i del grayscale pipeline
         value = dicomReader->getAttributeByName( DICOMRescaleSlope );
         if( value.toDouble() == 0 )
             image->setRescaleSlope( 1. );
@@ -239,15 +315,12 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
         // i després les respectives descripcions si n'hi ha
         image->setWindowLevelExplanations( dicomReader->getAttributeByName( DICOMWindowCenterWidthExplanation ).split("\\") );
 
-        int frames = dicomReader->getAttributeByName( DICOMNumberOfFrames ).toInt();
-        image->setNumberOfFrames( frames ? frames : 1 );
-
         if (dicomReader->tagExists( DICOMSliceLocation ))
         {
             image->setSliceLocation( dicomReader->getAttributeByName( DICOMSliceLocation ) );
         }
 
-        image->setImageType( dicomReader->getAttributeByName( DICOMImageType ) );
+        // Propietats útils pels hanging protocols
         value = dicomReader->getAttributeByName( DICOMImageLaterality );
         if( !value.isEmpty() )
             image->setImageLaterality( value.at(0) );
@@ -282,6 +355,381 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
     }
 
     return ok;
+}
+
+QList<Image *> ImageFillerStep::processEnhancedDICOMFile( DICOMTagReader *dicomReader )
+{
+    Q_ASSERT( dicomReader );
+    
+    QList<Image *> generatedImages;
+    // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la comprovació quan llegim fitxer a fitxer
+    if( dicomReader->tagExists( DICOMPixelData ) )
+    {
+        int numberOfFrames = dicomReader->getAttributeByName( DICOMNumberOfFrames ).toInt();
+        
+        for(int frameNumber=0; frameNumber<numberOfFrames; frameNumber++)
+        {
+            Image *image = new Image();
+            fillCommonImageInformation(image,dicomReader);
+            image->setFrameNumber( frameNumber );
+            generatedImages << image;
+            m_input->getCurrentSeries()->addImage( image );
+        }
+
+        // Tractem la Shared Functional Groups Sequence
+        DICOMSequenceAttribute *sharedFunctionalGroupsSequence = dicomReader->getSequenceAttribute( DICOMSharedFunctionalGroupsSequence );
+        if( sharedFunctionalGroupsSequence )
+        {
+            // Aquesta seqüència pot contenir un ítem o cap
+            QList<DICOMSequenceItem *> sharedItems = sharedFunctionalGroupsSequence->getItems();
+            if( !sharedItems.isEmpty() )
+            {
+                foreach( Image *image, generatedImages )
+                {
+                    fillFunctionalGroupsInformation(image,sharedItems.first());
+                }
+            }
+        }
+        else
+        {
+            DEBUG_LOG("No hem trobat la Shared Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
+            ERROR_LOG("No hem trobat la Shared Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
+        }
+        // Tractem la Per-Frame Functional Groups Sequence
+        DICOMSequenceAttribute *perFrameFunctionalGroupsSequence = dicomReader->getSequenceAttribute( DICOMPerFrameFunctionalGroupsSequence );
+        if( perFrameFunctionalGroupsSequence )
+        {
+            QList<DICOMSequenceItem *> perFrameItems = perFrameFunctionalGroupsSequence->getItems();
+            int frameNumber = 0;
+            foreach(DICOMSequenceItem *item, perFrameItems)
+            {
+                fillFunctionalGroupsInformation(generatedImages.at(frameNumber),item);
+                frameNumber++;
+            }
+        }
+        else
+        {
+            DEBUG_LOG("No hem trobat la per-frame Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
+            ERROR_LOG("No hem trobat la per-frame Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
+        }
+        // TODO És necessari buscar els mateixos tags a la Shared Functional Groups Sequence????
+    }
+    else
+    {
+        DEBUG_LOG( "L'arxiu [" + dicomReader->getFileName() + "] no conté el tag PixelData" );
+    }
+
+    return generatedImages;
+}
+
+void ImageFillerStep::fillFunctionalGroupsInformation( Image *image, DICOMSequenceItem *frameItem )
+{
+    Q_ASSERT( image );
+    Q_ASSERT( frameItem );
+
+    // Hi ha alguns atributs que els haurem de buscar en llocs diferents segons la modalitat
+    QString sopClassUID = m_input->getDICOMFile()->getAttributeByName( DICOMSOPClassUID );
+
+    //
+    // Atributs de CT i MR
+    //
+    if( sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage )
+    {
+        //
+        // Pixel Measures Module - C.7.6.16.2.1
+        //
+        DICOMSequenceAttribute *pixelMeasuresSequence = frameItem->getSequenceAttribute( DICOMPixelMeasuresSequence );
+        if( pixelMeasuresSequence )
+        {
+            // Segons DICOM només es permet que contingui un sol ítem
+            QList<DICOMSequenceItem *> pixelMeasuresItems = pixelMeasuresSequence->getItems();
+            if( !pixelMeasuresItems.empty() )
+            {
+                DICOMSequenceItem *item = pixelMeasuresItems.at(0);
+                //
+                // Obtenim el Pixel Spacing (1C)
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMPixelSpacing);
+                if( dicomValue )
+                {
+                    QString spacing = dicomValue->getValueAsQString();
+                    DEBUG_LOG("Enhanced Pixel Spacing: " +spacing);
+                    if ( !spacing.isEmpty() )
+                    {
+                        QStringList list = spacing.split( "\\" );
+                        if( list.size() == 2 )
+                            image->setPixelSpacing( list.at(0).toDouble(), list.at(1).toDouble() );
+                        else
+                            DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada" );
+                    }
+                }
+
+                //
+                // Obtenim l'Slice Thickness (1C)
+                //
+                dicomValue = item->getValueAttribute(DICOMSliceThickness);
+                if( dicomValue )
+                {
+                    image->setSliceThickness( dicomValue->getValueAsDouble() );
+                    DEBUG_LOG( QString("Enhanced Slice thickness: %1").arg(dicomValue->getValueAsDouble()) );
+                }
+            }
+        }
+
+        //
+        // Plane Orientation Module - C.7.6.16.2.4
+        //
+        DICOMSequenceAttribute *planeOrientationSequence = frameItem->getSequenceAttribute( DICOMPlaneOrientationSequence );
+        if( planeOrientationSequence )
+        {
+            // Segons DICOM només es permet que contingui un sol ítem
+            QList<DICOMSequenceItem *> planeOrientationItems = planeOrientationSequence->getItems();
+            if( !planeOrientationItems.empty() )
+            {
+                DICOMSequenceItem *item = planeOrientationItems.at(0);
+                //
+                // Obtenim Image Orientation (Patient) (1C) + assignació del "Patient Orientation"
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMImageOrientationPatient);
+                if( dicomValue )
+                {
+                    double orientation[6];
+                    imageOrientationPatientStringToDoubleVector(dicomValue->getValueAsQString(),orientation);
+                    image->setImageOrientationPatient( orientation );
+                    DEBUG_LOG("Enhanced Image Orientation (Patient): " + dicomValue->getValueAsQString() );
+                    // Calculem el "Patient Orientation" a partir del vector d'orientació
+                    image->setPatientOrientation( makePatientOrientationFromImageOrientationPatient( orientation ) );
+                }
+            }
+        }
+
+        //
+        // Plane Position Module - C.7.6.16.2.3
+        //
+        DICOMSequenceAttribute *planePositionSequence = frameItem->getSequenceAttribute( DICOMPlanePositionSequence );
+        if( planePositionSequence )
+        {
+            // Segons DICOM només es permet que contingui un sol ítem
+            QList<DICOMSequenceItem *> planePositionItems = planePositionSequence->getItems();
+            if( !planePositionItems.empty() )
+            {
+                DICOMSequenceItem *item = planePositionItems.at(0);
+                //
+                // Obtenim Image Position (Patient) (1C)
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMImagePositionPatient);
+                if( dicomValue )
+                {
+                    QString imagePositionPatientString = dicomValue->getValueAsQString();
+                    if( !imagePositionPatientString.isEmpty() )
+                    {
+                        QStringList list = imagePositionPatientString.split("\\");
+                        if( list.size() == 3 )
+                        {
+                            double position[3] = { list.at(0).toDouble(), list.at(1).toDouble(), list.at(2).toDouble() };
+                            image->setImagePositionPatient( position );
+                        }
+                    }
+                    else
+                    {
+                        DEBUG_LOG("El valor està buit quan hauria de contenir algun valor!");
+                    }
+                }
+            }
+        }
+        
+        //
+        // CT Pixel Value Transformation Module - C.8.15.3.10 - Enhanced CT
+        // Pixel Value Transformation Module - C.7.6.16.2.9 - Enhanced MR
+        //
+        // Contenen la mateixa informació. El primer és simplement l'especialització pels CT
+        //
+        DICOMSequenceAttribute *pixelValueTransformationSequence = frameItem->getSequenceAttribute( DICOMPixelValueTransformationSequence );
+        if( pixelValueTransformationSequence )
+        {
+            // Segons DICOM només es permet que contingui un sol ítem
+            QList<DICOMSequenceItem *> pixelValueTransformationItems = pixelValueTransformationSequence->getItems();
+            if( !pixelValueTransformationItems.empty() )
+            {
+                DICOMSequenceItem *item = pixelValueTransformationItems.at(0);
+                //
+                // Obtenim Rescale Intercept (1)
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMRescaleIntercept);
+                if( dicomValue )
+                {
+                    image->setRescaleIntercept( dicomValue->getValueAsDouble() );
+                }
+                else
+                {
+                    DEBUG_LOG("Falta el tag RescaleIntercept que hauria d'estar present!");
+                    ERROR_LOG("Falta el tag RescaleIntercept que hauria d'estar present!");
+                }
+                //
+                // Obtenim Rescale Slope (1)
+                //
+                dicomValue = item->getValueAttribute(DICOMRescaleSlope);
+                if( dicomValue )
+                {
+                    image->setRescaleSlope( dicomValue->getValueAsDouble() );
+                }
+                else
+                {
+                    DEBUG_LOG("Falta el tag RescaleSlope que hauria d'estar present!");
+                    ERROR_LOG("Falta el tag RescaleSlope que hauria d'estar present!");
+                }
+            }
+        }
+    }
+    //
+    // Atributs d'XA i XRF
+    //
+    else if( sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage )
+    {
+        //
+        // X-Ray Object Thickness Macro - C.8.19.6.7
+        // 
+        DICOMSequenceAttribute *objectThicknessSequence = frameItem->getSequenceAttribute( DICOMObjectThicknessSequence );
+        if( objectThicknessSequence )
+        {
+            // Segons DICOM només es permet que contingui un sol ítem
+            QList<DICOMSequenceItem *> objectThicknessItems = objectThicknessSequence->getItems();
+            if( !objectThicknessItems.empty() )
+            {
+                DICOMSequenceItem *item = objectThicknessItems.at(0);
+                //
+                // Obtenim Calculated Anatomy Thickness (1)
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMCalculatedAnatomyThickness);
+                if( dicomValue )
+                {
+                    image->setSliceThickness( dicomValue->getValueAsDouble() );
+                }
+                else
+                {
+                    DEBUG_LOG("No s'ha trobat el tag Calculated Anatomy Thickness en una seqüència que se suposa que l'ha de tenir!");
+                    ERROR_LOG("No s'ha trobat el tag Calculated Anatomy Thickness en una seqüència que se suposa que l'ha de tenir!");
+                }
+            }
+        }
+
+        //
+        // Patient Orientation in Frame Macro - C.7.6.16.2.15
+        // Requerit si C-arm Positioner Tabletop Relationship està present i és igual a YES
+        // Podria estar present tot i que no es compleixi l'anterior condició
+        //
+        DICOMSequenceAttribute *patientOrientationInFrameSequence = frameItem->getSequenceAttribute( DICOMPatientOrientationInFrameSequence );
+        if( patientOrientationInFrameSequence )
+        {
+            // Segons DICOM només es permet que contingui un sol ítem
+            QList<DICOMSequenceItem *> patientOrientationInFrameItems = patientOrientationInFrameSequence->getItems();
+            if( !patientOrientationInFrameItems.empty() )
+            {
+                DICOMSequenceItem *item = patientOrientationInFrameItems.at(0);
+                //
+                // Obtenim Patient Orientation (1)
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMPatientOrientation);
+                if( dicomValue )
+                {
+                    image->setPatientOrientation( dicomValue->getValueAsQString() );
+                }
+                else
+                {
+                    DEBUG_LOG("No s'ha trobat el tag Calculated Anatomy Thickness en una seqüència que se suposa que l'ha de tenir!");
+                    ERROR_LOG("No s'ha trobat el tag Calculated Anatomy Thickness en una seqüència que se suposa que l'ha de tenir!");
+                }
+            }
+        }
+    }
+
+    //
+    // A continuació llegim els tags/mòduls que es troben a totes les modalitats enhanced (MR/CT/XA/XRF)
+    //
+    
+    //
+    // Frame VOI LUT Macro (C.7.6.16.2.10 )
+    //
+    DICOMSequenceAttribute *frameVOILUTSequence = frameItem->getSequenceAttribute( DICOMFrameVOILUTSequence );
+    if( frameVOILUTSequence )
+    {
+        // Segons DICOM només es permet que contingui un sol ítem
+        QList<DICOMSequenceItem *> frameVOILUTItems = frameVOILUTSequence->getItems();
+        if( !frameVOILUTItems.empty() )
+        {
+            DICOMSequenceItem *item = frameVOILUTItems.at(0);
+            //
+            // Obtenim Window Center (1)
+            //
+            DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMWindowCenter);
+            QStringList windowLevelList;
+            if( dicomValue )
+            {
+                windowLevelList = dicomValue->getValueAsQString().split("\\");
+            }
+            else
+            {
+                DEBUG_LOG("No s'ha trobat el tag Window Center en un arxiu que se suposa que l'ha de tenir!");
+                ERROR_LOG("No s'ha trobat el tag Window Center en un arxiu que se suposa que l'ha de tenir!");
+            }
+
+            //
+            // Obtenim Window Width (1)
+            //
+            dicomValue = item->getValueAttribute(DICOMWindowWidth);
+            QStringList windowWidthList;
+            if( dicomValue )
+            {
+                windowWidthList = dicomValue->getValueAsQString().split("\\");
+            }
+            else
+            {
+                DEBUG_LOG("No s'ha trobat el tag Window Width en un arxiu que se suposa que l'ha de tenir!");
+                ERROR_LOG("No s'ha trobat el tag Window Width en un arxiu que se suposa que l'ha de tenir!");
+            }
+
+            //
+            // Obtenim Window Explanations (3)
+            //
+            dicomValue = item->getValueAttribute(DICOMWindowCenterWidthExplanation);
+            if( dicomValue )
+            {
+                image->setWindowLevelExplanations( dicomValue->getValueAsQString().split("\\") );
+            }
+        }
+    }
+
+    //
+    // Atributs que fem servir pels hanging protocols
+    //
+
+    //
+    // Frame Anatomy Module (C.7.6.16.2.8)
+    //
+    DICOMSequenceAttribute *frameAnatomySequence = frameItem->getSequenceAttribute( DICOMFrameAnatomySequence );
+    if( frameAnatomySequence )
+    {
+        // Segons DICOM només es permet que contingui un sol ítem
+        QList<DICOMSequenceItem *> frameAnatomyItems = frameAnatomySequence->getItems();
+        if( !frameAnatomyItems.empty() )
+        {
+            DICOMSequenceItem *item = frameAnatomyItems.at(0);
+            //
+            // Obtenim Frame Laterality (1)
+            //
+            DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMFrameLaterality);
+            if( dicomValue )
+            {
+                image->setImageLaterality( dicomValue->getValueAsQString().at(0) );
+                DEBUG_LOG(">>>>>>>>>Frame laterality::::::: " + dicomValue->getValueAsQString() );
+            }
+            else
+            {
+                DEBUG_LOG("No s'ha trobat el tag Frame Laterality en una seqüència que se suposa que l'ha de tenir!");
+                ERROR_LOG("No s'ha trobat el tag Frame Laterality en una seqüència que se suposa que l'ha de tenir!");
+            }
+        }
+    }   
 }
 
 void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomReader )
@@ -339,6 +787,44 @@ void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomRe
         else
             DEBUG_LOG("No s'ha trobat cap valor de pixel spacing definit de forma estàndar esperada. Modalitat de la imatge: [" + modality + "]" );
     }
+}
+
+void ImageFillerStep::imageOrientationPatientStringToDoubleVector( const QString &imageOrientationPatientString, double imageOrientationPatient[6] )
+{
+    QStringList list = imageOrientationPatientString.split("\\");
+    
+    if( list.size() == 6 )
+    {
+        for( int i=0; i<6; i++ )
+        {
+            imageOrientationPatient[i] = list.at(i).toDouble();
+        }
+    }
+    else
+    {
+        DEBUG_LOG("Image Orientation (Patient) no té els 6 elements esperats. Inconsistència DICOM.");
+        ERROR_LOG("Image Orientation (Patient) no té els 6 elements esperats. Inconsistència DICOM.");
+    }
+}
+
+QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient( const double imageOrientationPatient[6] )
+{
+    double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
+    for( int i = 0; i < 3; i++ )
+    {
+        dirCosinesX[i] = imageOrientationPatient[i];
+        dirCosinesY[i] = imageOrientationPatient[3+i];
+        dirCosinesZ[i] = imageOrientationPatient[6+i];
+    }
+    QString patientOrientationString;
+    // \TODO potser el delimitador hauria de ser '\' en comptes de ','
+    patientOrientationString = this->mapDirectionCosinesToOrientationString( dirCosinesX );
+    patientOrientationString += "\\";
+    patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesY );
+    patientOrientationString += "\\";
+    patientOrientationString += this->mapDirectionCosinesToOrientationString( dirCosinesZ );
+
+    return patientOrientationString;
 }
 
 QString ImageFillerStep::mapDirectionCosinesToOrientationString( double vector[3] )

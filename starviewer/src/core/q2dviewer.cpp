@@ -1697,9 +1697,8 @@ void Q2DViewer::updateSliceAnnotationInformation()
     if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
     {
         // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
-        // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada
-        // Si la imatge és multiframe de moment no afegirem la informació de la hora del frame, per tant només es veurà la de la sèrie
-        if( m_lastView == Axial && image->getNumberOfFrames() == 1 )
+        // i tenim informació de la hora d'adquisició de la imatge, la incloem en la informació mostrada        
+        if( m_lastView == Axial )
         {
             Image *currentImage = getCurrentDisplayedImage();
             if( currentImage )

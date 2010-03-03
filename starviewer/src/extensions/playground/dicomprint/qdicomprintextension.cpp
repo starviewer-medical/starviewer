@@ -545,10 +545,17 @@ void QDicomPrintExtension::updateVolumeSupport()
         isNotSupported = true;
     }
     // Comprovem si és multi-frame
-    if ( m_2DView->getInput()->getImages().at(0)->isMultiFrame() )
+    // Si les imatges tenen el mateix path, és que són multi-frame
+    // TODO això no deixa de ser un hack temporal. Quan millorem el disseny tindrem millors mètodes per esbrinar això.
+    QList<Image *> imageList = m_2DView->getInput()->getImages();
+    if( imageList.count() > 1 )
     {
-        m_noSupportedSeriesMissage->setText( tr("This series cannot be printed because multi-frame images are not supported.") );
-        isNotSupported = true;
+        // Comprovant la primera i segona imatges n'hi ha prou
+        if( imageList.at(0)->getPath() == imageList.at(1)->getPath() )
+        {
+            m_noSupportedSeriesMissage->setText( tr("This series cannot be printed because multi-frame images are not supported.") );
+            isNotSupported = true;
+        }
     }
 
     if ( isNotSupported )

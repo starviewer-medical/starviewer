@@ -122,13 +122,6 @@ public:
     /// Ens retorna el nombre de window levels que tenim
     int getNumberOfWindowLevels();
 
-    /// Assigna/Obté el nombre de frames de la imatge
-    void setNumberOfFrames( int frames );
-    int getNumberOfFrames() const;
-
-    /// Ens diu si la imatge és de tipus multi-frame
-    bool isMultiFrame() const;
-
     /// Assignar/Obtenir textes descriptius dels window level
     void addWindowLevelExplanation( QString explanation );
     void setWindowLevelExplanations( const QStringList &explanations );

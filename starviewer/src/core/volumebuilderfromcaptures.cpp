@@ -198,7 +198,6 @@ Volume * VolumeBuilderFromCaptures::build()
         currentImage->setHighBit( highBit );
         currentImage->setColumns( columns );
         currentImage->setInstanceNumber( QString::number(i+1) );
-        currentImage->setNumberOfFrames( 1 );
         currentImage->setPhotometricInterpretation( photometricInterpretation );
         currentImage->setPixelRepresentation( pixelRepresentation );
         currentImage->setPixelSpacing( spacing[0], spacing[1] );

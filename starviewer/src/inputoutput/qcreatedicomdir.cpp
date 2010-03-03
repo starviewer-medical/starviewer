@@ -745,17 +745,17 @@ quint64 QCreateDicomdir::getStudySizeInBytes(bool transferSyntaxInLittleEndian, 
 quint64 QCreateDicomdir::getImageSizeInBytesInLittleEndianTransferSyntax(Image *image)
 {
     /*Per calcular la mida que ocupa el pixel Data un estudi en LittleEndian és  
-        size = numberOfFrames * (bits-allocated / 8) * rows * columns * samples-per-pixel;
+        size = (bits-allocated / 8) * rows * columns * samples-per-pixel;
         size += size % 2;
-      Llavors hem d'afegir la capçalera que és frame count * dicom header size */
+      Llavors hem d'afegir la capçalera => dicom header size */
 
     quint64 imageSizeInBytesInLittleEndianTransferSyntax = 0;
 
-    imageSizeInBytesInLittleEndianTransferSyntax = image->getNumberOfFrames() * ( image->getBitsAllocated() / 8) * image->getRows() * image->getColumns() * image->getSamplesPerPixel();
+    imageSizeInBytesInLittleEndianTransferSyntax = ( image->getBitsAllocated() / 8) * image->getRows() * image->getColumns() * image->getSamplesPerPixel();
     imageSizeInBytesInLittleEndianTransferSyntax += imageSizeInBytesInLittleEndianTransferSyntax % 2;
 
     //afegim el tamany de la capçalera
-    imageSizeInBytesInLittleEndianTransferSyntax += image->getNumberOfFrames() * dicomHeaderSizeBytes;
+    imageSizeInBytesInLittleEndianTransferSyntax += dicomHeaderSizeBytes;
 
     return imageSizeInBytesInLittleEndianTransferSyntax;
 }
