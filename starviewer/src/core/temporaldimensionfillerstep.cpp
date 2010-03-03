@@ -15,6 +15,7 @@
 #include "image.h"
 #include <QStringList>
 
+
 namespace udg {
 
 TemporalDimensionFillerStep::TemporalDimensionFillerStep()
@@ -25,11 +26,20 @@ TemporalDimensionFillerStep::TemporalDimensionFillerStep()
 
 TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
 {
-    SeriesInfo *seriesInfo;
+    VolumeInfo * volumeInfo;
+    QHash< int , VolumeInfo * > * volumeHash;
+
     foreach ( Series * key , TemporalDimensionInternalInfo.keys() )
     {
-        seriesInfo = TemporalDimensionInternalInfo.take(key);
-        delete seriesInfo;
+        volumeHash = TemporalDimensionInternalInfo.take(key);
+
+        foreach ( int volumeNumber, volumeHash->keys() )
+        {
+            volumeInfo = volumeHash->take( volumeNumber );
+            delete volumeInfo;
+        }
+        
+        delete volumeHash;
     }
 }
 
@@ -56,44 +66,53 @@ bool TemporalDimensionFillerStep::fill()
 
 bool TemporalDimensionFillerStep::fillIndividually()
 {
-    SeriesInfo *seriesInfo;
-
-    if ( TemporalDimensionInternalInfo.contains( m_input->getCurrentSeries() ))
+    VolumeInfo *volumeInfo;
+    bool volumeInfoInitialized = false;
+    
+    //Obtenim el VolumeInfo. Si no existeix en generem un de nou i l'afegim a l'estructura.
+    if ( TemporalDimensionInternalInfo.contains( m_input->getCurrentSeries() ) )
     {
-        seriesInfo = TemporalDimensionInternalInfo.value( m_input->getCurrentSeries() );
-        seriesInfo->numberOfImages++;
-        if ( !seriesInfo->isCTLocalizer )
+        QHash< int , VolumeInfo * > *volumeHash = TemporalDimensionInternalInfo.value( m_input->getCurrentSeries() );
+       
+        if ( volumeHash->contains( m_input->getCurrentVolumeNumber() ) )
         {
-			QString imagePositionPatient = m_input->getDICOMFile()->getAttributeByName( DICOMImagePositionPatient);
-			if( !imagePositionPatient.isEmpty() )
-			{
-				if ( seriesInfo->firstImagePosition == imagePositionPatient )
-				{
-					seriesInfo->numberOfPhases++;
-				}
-			}
+            volumeInfoInitialized = true;
+            volumeInfo = volumeHash->value( m_input->getCurrentVolumeNumber() );
+        }
+        else
+        {
+            volumeInfo = new VolumeInfo;        
+            volumeHash->insert( m_input->getCurrentVolumeNumber() , volumeInfo );
         }
     }
     else
     {
-        seriesInfo = new SeriesInfo;
-        TemporalDimensionInternalInfo.insert( m_input->getCurrentSeries() , seriesInfo );
-
-        seriesInfo->numberOfPhases = 1;
-        seriesInfo->numberOfImages = 1;
-        seriesInfo->isCTLocalizer = false;
+        QHash< int , VolumeInfo * > * volumeHash = new QHash< int , VolumeInfo * >();
+        volumeInfo = new VolumeInfo;
+        volumeHash->insert( m_input->getCurrentVolumeNumber() , volumeInfo );
+        TemporalDimensionInternalInfo.insert( m_input->getCurrentSeries() , volumeHash );
+    }
+    
+    //Si el VolumeInfo és nou, l'inicialitzem.
+    if ( !volumeInfoInitialized )
+    {
+        volumeInfo->numberOfPhases = 1;
+        volumeInfo->numberOfImages = 0;
+        volumeInfo->isCTLocalizer = false;
+        volumeInfo->firstImagePosition = "";
 
         // en el cas del CT ens interessa saber si és localizer
+        // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin està barretjats amb la resta.
         if( m_input->getCurrentSeries()->getModality() == "CT" )
         {
-            QString value = m_input->getDICOMFile()->getAttributeByName( DICOMImageType );
+            QString value = m_input->getCurrentImages().at(0)->getImageType();
             QStringList valueList = value.split( "\\" );
             if( valueList.count() >= 3 )
             {
                 if( valueList.at(2) == "LOCALIZER" )
                 {
                     DEBUG_LOG("La serie amb uid " + m_input->getCurrentSeries()->getInstanceUID() + " no és dinàmica (És un CT LOCALIZER)" );
-                    seriesInfo->isCTLocalizer = true;
+                    volumeInfo->isCTLocalizer = true;
                 }
             }
             else
@@ -103,13 +122,43 @@ bool TemporalDimensionFillerStep::fillIndividually()
                 DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + m_input->getCurrentImage()->getSOPInstanceUID() + " de la serie " + m_input->getCurrentSeries()->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
             }
         }
-
-        if ( ! seriesInfo->isCTLocalizer )
+    }
+    
+    // Si és CTLocalizer no cal recorre totes les imatges ja que només ens interessa saber quantes n'hem d'afegir al VolumeInfo.
+    if ( volumeInfo->isCTLocalizer )
+    {
+        volumeInfo->numberOfImages += m_input->getCurrentImages().count();
+    }
+    else
+    {
+        foreach ( Image * image, m_input->getCurrentImages() )
         {
-            seriesInfo->firstImagePosition = m_input->getDICOMFile()->getAttributeByName( DICOMImagePositionPatient );
+            const double * imagePositionPatient = image->getImagePositionPatient();
+            
+            if( !(imagePositionPatient[0] == 0. &&  imagePositionPatient[1] == 0. && imagePositionPatient[2] == 0.) )
+	        {
+		        QString imagePositionPatientString = QString("%1\\%2\\%3").arg(imagePositionPatient[0])
+                                                                          .arg(imagePositionPatient[1])
+                                                                          .arg(imagePositionPatient[2]);
+
+                if ( volumeInfo->firstImagePosition.isEmpty() )
+                {
+                    volumeInfo->firstImagePosition = imagePositionPatientString;
+                }
+                else
+                {
+                    if ( volumeInfo->firstImagePosition == imagePositionPatientString )
+		            {
+			            volumeInfo->numberOfPhases++;
+		            }
+                }
+	        }
+
+            volumeInfo->numberOfImages++;
         }
     }
 
+    
     m_input->addLabelToSeries("TemporalDimensionFillerStep", m_input->getCurrentSeries() );
 
     return true;
@@ -117,18 +166,55 @@ bool TemporalDimensionFillerStep::fillIndividually()
 
 void TemporalDimensionFillerStep::postProcessing()
 {
-    SeriesInfo *seriesInfo;
+    int currentVolume = -1;
+    int currentPhase;
+    int numberOfPhases;
+
     foreach ( Series * key , TemporalDimensionInternalInfo.keys() )
     {
-        seriesInfo = TemporalDimensionInternalInfo.take(key);
-        key->setNumberOfPhases( seriesInfo->numberOfPhases );
-        key->setNumberOfSlicesPerPhase( seriesInfo->numberOfImages / seriesInfo->numberOfPhases );
-        if ( seriesInfo->numberOfPhases > 1 )
+        QHash< int , VolumeInfo * > *volumeHash = TemporalDimensionInternalInfo.take( key );
+       
+        foreach( Image *image, key->getImages() )
         {
-            DEBUG_LOG("La sèrie " + key->getInstanceUID() + " és dinàmica");
+            if ( currentVolume != image->getVolumeNumberInSeries() )
+            {
+                currentVolume = image->getVolumeNumberInSeries();
+                if ( volumeHash->contains( currentVolume ) )
+                {
+                    VolumeInfo * volumeInfo = volumeHash->take( currentVolume );
+                
+                    numberOfPhases = volumeInfo->numberOfPhases;
+                    // L'esborrem perquè ja no el necessitarem més
+                    if ( volumeInfo )
+                        delete volumeInfo;
+                }
+                else
+                {
+                    numberOfPhases = 1;
+
+                    ERROR_LOG(QString("El volume %1 de la sèrie %2 no ha estat processat! Considerem que no és dinàmic").arg(currentVolume).arg(key->getInstanceUID()));
+                    DEBUG_LOG(QString("El volume %1 de la sèrie %2 no ha estat processat! Considerem que no és dinàmic").arg(currentVolume).arg(key->getInstanceUID()));
+                }
+
+                currentPhase = 0;
+
+                if ( numberOfPhases > 1 )
+                {
+                    DEBUG_LOG(QString("El volume %1 de la serie %2 és dinamic").arg(currentVolume).arg(key->getInstanceUID()) );
+                }
+
+            }
+
+            image->setPhaseNumber( currentPhase );
+
+            currentPhase++;
+            if ( currentPhase == numberOfPhases )
+                currentPhase = 0;
         }
 
-        delete seriesInfo;
+        currentVolume = -1;
+        
+        delete volumeHash;
     }
 }
 

@@ -37,7 +37,7 @@ public:
 
 private:
 
-    struct SeriesInfo
+    struct VolumeInfo
     {
         int numberOfPhases;
         int numberOfImages;
@@ -49,7 +49,7 @@ private:
     void processSeries( Series *series );
 
     /// Estructura que s'utiliza en cas que es processi l'step individiualment per fitxers.
-    QHash< Series *, SeriesInfo *> TemporalDimensionInternalInfo;
+    QHash< Series *, QHash< int, VolumeInfo *>* > TemporalDimensionInternalInfo;
 };
 
 }
