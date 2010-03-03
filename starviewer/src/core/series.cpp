@@ -97,7 +97,18 @@ int Series::getNumberOfImages()
 
 int Series::getNumberOfItems()
 {
-    return m_imageSet.count();
+    int numberOfItems = 0;
+    QString lastPath;
+    foreach( Image *image, m_imageSet )
+    {
+        if( lastPath != image->getPath() )
+        {
+            numberOfItems++;
+        }
+        lastPath = image->getPath();
+    }
+    
+    return numberOfItems;
 }
 
 bool Series::hasImages() const
