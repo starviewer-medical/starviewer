@@ -93,6 +93,10 @@ public:
     void setCurrentSeries(Series *series);
     Series *getCurrentSeries();
 
+    /// Afegir / Obtenir el volum de les imatges que s'han de processar.
+    void setCurrentVolumeNumber(int volumeNumber);
+    int getCurrentVolumeNumber();
+
 private:
     /// Llista de pacients a omplir
     QList<Patient *> m_patientList;
@@ -122,6 +126,9 @@ private:
 
     /// Guardem la sèrie del fitxer que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
     Series *m_currentSeries;
+
+    /// Guardem el volume number de la sèrie que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
+    int m_currentVolumeNumber;
 };
 
 }

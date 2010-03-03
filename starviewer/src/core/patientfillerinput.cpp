@@ -11,7 +11,7 @@
 
 namespace udg {
 
-PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentImage(0), m_currentSeries(0)
+PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentImage(0), m_currentSeries(0), m_currentVolumeNumber(0)
 {
 }
 
@@ -245,6 +245,16 @@ void PatientFillerInput::setCurrentSeries(Series *series)
 Series * PatientFillerInput::getCurrentSeries()
 {
     return m_currentSeries;
+}
+
+void PatientFillerInput::setCurrentVolumeNumber(int volumeNumber)
+{
+    m_currentVolumeNumber = volumeNumber;
+}
+
+int PatientFillerInput::getCurrentVolumeNumber()
+{
+    return m_currentVolumeNumber;
 }
 
 }
