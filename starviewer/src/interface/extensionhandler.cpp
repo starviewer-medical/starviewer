@@ -356,7 +356,7 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
         foreach(Series *series, study->getViewableSeries() )
         {
             int currentVolumeNumber;
-            QMap<int,QList<Image *>> volumesImages;
+            QMap<int,QList<Image *> > volumesImages;
             foreach( Image *image, series->getImages() )
             {
                 currentVolumeNumber = image->getVolumeNumberInSeries();
