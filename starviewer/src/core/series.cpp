@@ -74,7 +74,7 @@ bool Series::addImage( Image *image )
     return ok;
 }
 
-bool Series::imageExists( QString identifier )
+bool Series::imageExists( const QString &identifier )
 {
     if( this->findImageIndex(identifier) != -1 )
         return true;
@@ -582,7 +582,7 @@ QTime Series::getRetrievedTime()
     return m_retrieveTime;
 }
 
-int Series::findImageIndex( QString identifier )
+int Series::findImageIndex( const QString &identifier )
 {
     int i = 0;
     bool found = false;
