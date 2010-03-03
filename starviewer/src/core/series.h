@@ -150,11 +150,11 @@ public:
     Image *getImage( QString SOPInstanceUID );
 
     /**
-     * Ens diu si existeix una imatge amb aquest sopInstanceUID a la llista
-     * @param sopInstanceUID l'uid que busquem
+     * Ens diu si existeix una imatge amb aquest identificador a la llista
+     * @param identifier identificador d'imatge que busquem
      * @return Cert si existeix, fals altrament
      */
-    bool imageExists( QString sopInstanceUID );
+    bool imageExists( QString identifier );
 
     /// Retorna una llista de totes les imatges de la sèrie
     QList<Image *> getImages() const;
@@ -267,11 +267,11 @@ public slots:
 
 private:
     /**
-     * Troba l'índex de la imatge amb el sopInstanceUID donat a la llista d'imatges
-     * @param sopInstanceUID l'uid de la imatge que volem trobar
-     * @return L'índex d'aquella imatge dins de la llista, -1 si no existeix la imatge amb aquell uid.
+     * Troba l'índex de la imatge amb el identificadir donat a la llista d'imatges
+     * @param identifier L'identificador de la imatge que volem trobar
+     * @return L'índex d'aquella imatge dins de la llista, -1 si no existeix la imatge amb aquell identificador.
      */
-    int findImageIndex( QString sopInstanceUID );
+    int findImageIndex( QString identifier );
 
 private:
     /// Identificació única del tipus de SOP. Veure PS 3.4 per conèixer el possibles valors que pot tenir.

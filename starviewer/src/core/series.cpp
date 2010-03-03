@@ -50,16 +50,16 @@ Study *Series::getParentStudy() const
 bool Series::addImage( Image *image )
 {
     bool ok = true;
-    QString uid = image->getSOPInstanceUID();
-    if( uid.isEmpty() )
+    QString imageIdentifierKey = image->getKeyIdentifier();
+    if( imageIdentifierKey.isEmpty() )
     {
         ok = false;
-        DEBUG_LOG("L'uid de la imatge està buit! No la podem insertar per inconsistent");
+        DEBUG_LOG("L'identificador de la imatge està buit! No la podem insertar per inconsistent");
     }
-    else if( this->imageExists(uid) )
+    else if( this->imageExists(imageIdentifierKey) )
     {
         ok = false;
-        DEBUG_LOG("Ja existeix una imatge amb aquest mateix SOPInstanceUID:: " + uid );
+        DEBUG_LOG("Ja existeix una imatge amb aquest mateix identificador:: " + imageIdentifierKey );
     }
     else
     {
@@ -83,9 +83,9 @@ Image *Series::getImage( QString SOPInstanceUID )
         return NULL;
 }
 
-bool Series::imageExists( QString sopInstanceUID )
+bool Series::imageExists( QString identifier )
 {
-    if( this->findImageIndex(sopInstanceUID) != -1 )
+    if( this->findImageIndex(identifier) != -1 )
         return true;
     else
         return false;
@@ -591,13 +591,13 @@ QTime Series::getRetrievedTime()
     return m_retrieveTime;
 }
 
-int Series::findImageIndex( QString sopInstanceUID )
+int Series::findImageIndex( QString identifier )
 {
     int i = 0;
     bool found = false;
     while( i < m_imageSet.size() && !found )
     {
-        if( m_imageSet.at(i)->getSOPInstanceUID() == sopInstanceUID )
+        if( m_imageSet.at(i)->getKeyIdentifier() == identifier )
             found = true;
         else
             i++;
