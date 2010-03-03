@@ -294,11 +294,19 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
     m_dicomDirSeriesPath = m_dicomDirStudyPath + seriesName;
     seriesDir.mkdir( m_dicomDirSeriesPath );
 
+    // HACK per evitar els casos en que siguin imatges procedents d'un multiframe
+    // que copiem més d'una vegada un arxiu
+    QString lastPath;
     foreach(Image *imageToCopy, series->getImages())
     {
-        state = copyImageToDicomdirPath( imageToCopy );
-
-        if ( !state.good() ) break;
+        if( lastPath != imageToCopy->getPath() )
+        {
+            lastPath = imageToCopy->getPath();
+            state = copyImageToDicomdirPath( imageToCopy );
+            
+            if ( !state.good() ) 
+                break;
+        }
     }
 
     return state;
