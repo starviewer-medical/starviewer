@@ -45,7 +45,6 @@ void TestDicomObjects::printImage(Image *imageToPrint)
     DEBUG_LOG("WindowLevelExplanations: " + imageToPrint->getWindowLevelExplanation(0));
     DEBUG_LOG("SliceLocation: " + imageToPrint->getSliceLocation());
     DEBUG_LOG("RescaleIntercept: " + QString().setNum(imageToPrint->getRescaleIntercept(), 'g', 10));
-    DEBUG_LOG("NumberOfFrames: " + QString().setNum(imageToPrint->getNumberOfFrames(), 10));
     DEBUG_LOG("PhotometricInterpretation: " + imageToPrint->getPhotometricInterpretation());
 }
 

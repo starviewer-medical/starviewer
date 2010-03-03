@@ -98,7 +98,8 @@ Volume::VtkImageTypePointer Volume::getVtkData()
         QStringList fileList;
         foreach (Image *image, m_imageSet)
         {
-            fileList << image->getPath();
+            if( !fileList.contains( image->getPath() ) )// Evitem afegir més vegades l'arxiu si aquest és multiframe
+                fileList << image->getPath();
         }
         if( !fileList.isEmpty() )
         {
@@ -324,12 +325,7 @@ QList<Image *> Volume::getImages() const
 
 int Volume::getNumberOfFrames() const
 {
-    int numberOfFrames = 0;
-    foreach(Image *image, m_imageSet )
-    {
-        numberOfFrames += image->getNumberOfFrames();
-    }
-    return numberOfFrames;
+    return m_imageSet.count();
 }
 
 Study *Volume::getStudy()

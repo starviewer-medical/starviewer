@@ -355,36 +355,43 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
         // Per cada sèrie, si les seves imatges són multiframe o de mides diferents entre sí aniran en volums separats
         foreach(Series *series, study->getViewableSeries() )
         {
-            QList<Image *> volumeImages;
+            int currentVolumeNumber;
+            QMap<int,QList<Image *>> volumesImages;
             foreach( Image *image, series->getImages() )
             {
-                // TODO amb aquest sistema podria ser que tinguéssim una sèrie amb una o més imatges multiframe 
-                // barrejades amb una o més imatges single-frame que en els passos dels fillers steps s'haguéssin
-                // comptabilitzat amb fases, per tant, els hi assignaríem un rang erroni de fases i llesqes per fase
-                // És un cas extrem i extrany, però que ningú ens diu que no pugui passar.
-                // Tenir-ho en compte per en un futur fer la implementació adequada
-                if( image->isMultiFrame() )
+                currentVolumeNumber = image->getVolumeNumberInSeries();
+                if( volumesImages.contains(currentVolumeNumber) )
                 {
-                    Volume *volume = new Volume;
-                    volume->addImage(image);
-                    volume->setNumberOfPhases(1);
-                    volume->setNumberOfSlicesPerPhase( image->getNumberOfFrames() );
-                    volume->setThumbnail( image->getThumbnail() );
-                    series->addVolume( volume );
+                    volumesImages[currentVolumeNumber] << image;
                 }
                 else
                 {
-                    volumeImages << image;
+                    QList<Image *> newImageList;
+                    newImageList << image;
+                    volumesImages.insert( currentVolumeNumber, newImageList );
                 }
             }
-
-            if( !volumeImages.isEmpty() )
+            typedef QList<Image *> ImageListType;
+            foreach( ImageListType imageList, volumesImages )
             {
+                int numberOfPhases = 1;
+                bool found = false;
+                int i = 0;
+                while( !found && i<imageList.count()-1 )
+                {
+                    if( imageList.at(i+1)->getPhaseNumber() > imageList.at(i)->getPhaseNumber() )
+                        numberOfPhases++;
+                    else
+                        found = true;
+                    i++;
+                }
+                int numberOfSlicesPerPhase = imageList.count() / numberOfPhases;
+
                 Volume *volume = new Volume;
-                volume->setImages( volumeImages );
-                volume->setNumberOfPhases( series->getNumberOfPhases() );
-                volume->setNumberOfSlicesPerPhase( series->getNumberOfSlicesPerPhase() );
-                volume->setThumbnail( volumeImages.at(volumeImages.count()/2)->getThumbnail() );
+                volume->setImages( imageList );
+                volume->setNumberOfPhases( numberOfPhases );
+                volume->setNumberOfSlicesPerPhase( numberOfSlicesPerPhase );
+                volume->setThumbnail( imageList.at(imageList.count()/2)->getThumbnail() );
                 series->addVolume(volume);
             }
         }

@@ -53,7 +53,6 @@ Image* TestDatabase::getImage()
     //newImage->addWindowLevelExplanation("21");
     //newImage->setSliceLocation("22");
     newImage->setRescaleIntercept(23.21);
-    newImage->setNumberOfFrames(24);
     newImage->setPhotometricInterpretation("25");
 
 
@@ -83,7 +82,6 @@ Image * TestDatabase::getImage2()
     newImage->addWindowLevelExplanation("22");
     newImage->setSliceLocation("23");
     newImage->setRescaleIntercept(24.321);
-    newImage->setNumberOfFrames(25);
     newImage->setPhotometricInterpretation("26");
 
     return newImage;

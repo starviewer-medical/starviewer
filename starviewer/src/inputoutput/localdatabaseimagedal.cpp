@@ -121,7 +121,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setWindowLevelExplanations(getWindowLevelExplanationAsQStringList(reply[18 + row * columns]));
     image->setSliceLocation(reply[20 + row * columns]);
     image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
-    image->setNumberOfFrames(QString(reply[22 + row * columns]).toInt());
+    // Hem eliminat image->setNumberOfFrames(QString(reply[22 + row * columns]).toInt()); ja que Image ja no contindrà aquesta informació
     image->setPhotometricInterpretation(reply[23 + row * columns]);
     image->setRetrievedDate(QDate().fromString(reply[25 + row * columns], "yyyyMMdd"));
     image->setRetrievedTime(QTime().fromString(reply[26 + row * columns], "hhmmss"));
@@ -197,7 +197,7 @@ QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage, int orderNumberIn
                             .arg("")
                             .arg( DatabaseConnection::formatStringToValidSQLSyntax( newImage->getSliceLocation() ) )
                             .arg( newImage->getRescaleIntercept() )
-                            .arg( newImage->getNumberOfFrames() )
+                            .arg( 1 ) // TODO Aquest camp ha de desaparèixer de la BDD (NumberOfFrames) 
                             .arg( DatabaseConnection::formatStringToValidSQLSyntax( newImage->getPhotometricInterpretation() ) )
                             .arg( orderNumberInSeries )
                             .arg( newImage->getRetrievedDate().toString("yyyyMMdd") )
@@ -234,7 +234,7 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate, int orderNum
                                               "SOPInstanceReferenceImage = '%19',"
                                               "SliceLocation = '%20',"
                                               "RescaleIntercept = '%21', "
-                                              "NumberOfFrames = '%22', "
+                                              "NumberOfFrames = '%22', " // TODO Aquest camp ha de desaparèixer de la BDD
                                               "PhotometricInterpretation = '%23', "
                                               "OrderNumberInSeries = '%24', "
                                               "RetrievedDate = '%25', "
@@ -262,7 +262,7 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate, int orderNum
                             .arg("")
                             .arg( DatabaseConnection::formatStringToValidSQLSyntax( imageToUpdate->getSliceLocation() ) )
                             .arg( imageToUpdate->getRescaleIntercept() )
-                            .arg( imageToUpdate->getNumberOfFrames() )
+                            .arg( 1 ) // TODO Aquest camp ha de desaparèixer de la BDD
                             .arg( DatabaseConnection::formatStringToValidSQLSyntax( imageToUpdate->getPhotometricInterpretation() ) )
                             .arg( orderNumberInSeries )
                             .arg( imageToUpdate->getRetrievedDate().toString("yyyyMMdd"))
