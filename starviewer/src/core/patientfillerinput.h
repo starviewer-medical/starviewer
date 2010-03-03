@@ -81,10 +81,6 @@ public:
     ///Obtenim el DICOMTagReader emmagatzemat.
     DICOMTagReader *getDICOMFile();
 
-    /// Afegir / Obtenir la imatge que s'ha de processar.
-    void setCurrentImage(Image *image);
-    Image *getCurrentImage();
-
     /// Assignar/Obtenir la llista d'imatges que s'han de processar.
     void setCurrentImages(const QList<Image *> &images);
     QList<Image *> getCurrentImages();
@@ -116,10 +112,6 @@ private:
 
     /// Atribut que s'utilitza per executar els fillers individualment.
     DICOMTagReader *m_dicomFile;
-
-    /// Guardem la imatge que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
-    /// TODO acabarà substituïda pel conjunt m_currentImages
-    Image *m_currentImage;
 
     /// Guarda les imatges que els fillers han de processar.
     QList<Image *> m_currentImages;

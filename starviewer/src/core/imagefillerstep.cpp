@@ -128,9 +128,6 @@ bool ImageFillerStep::fillIndividually()
         {
             m_input->setCurrentImages( generatedImages );
             m_input->addLabelToSeries("ImageFillerStep", m_input->getCurrentSeries() );
-            // TODO Aquesta assignació es fa simplement per mantenir la compatibilitat amb el sistema antic
-            // El mètode "setCurrentImage" ha de desaparèixer i conseqüentment aquesta assignació
-            m_input->setCurrentImage( generatedImages.first() );
         }
     }
 

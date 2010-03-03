@@ -11,7 +11,7 @@
 
 namespace udg {
 
-PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentImage(0), m_currentSeries(0), m_currentVolumeNumber(0)
+PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0), m_currentVolumeNumber(0)
 {
 }
 
@@ -215,16 +215,6 @@ void PatientFillerInput::setDICOMFile(DICOMTagReader *dicomTagReader)
 DICOMTagReader * PatientFillerInput::getDICOMFile()
 {
     return m_dicomFile;
-}
-
-void PatientFillerInput::setCurrentImage(Image *image)
-{
-    m_currentImage = image;
-}
-
-Image * PatientFillerInput::getCurrentImage()
-{
-    return m_currentImage;
 }
 
 void PatientFillerInput::setCurrentImages(const QList<Image *> &images)

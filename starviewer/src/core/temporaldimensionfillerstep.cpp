@@ -105,7 +105,8 @@ bool TemporalDimensionFillerStep::fillIndividually()
         // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin està barretjats amb la resta.
         if( m_input->getCurrentSeries()->getModality() == "CT" )
         {
-            QString value = m_input->getCurrentImages().at(0)->getImageType();
+            Image *currentImage = m_input->getCurrentImages().at(0);
+            QString value = currentImage->getImageType();
             QStringList valueList = value.split( "\\" );
             if( valueList.count() >= 3 )
             {
@@ -119,7 +120,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
             {
                 // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
                 // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
-                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + m_input->getCurrentImage()->getSOPInstanceUID() + " de la serie " + m_input->getCurrentSeries()->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
+                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + currentImage->getSOPInstanceUID() + " de la serie " + m_input->getCurrentSeries()->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
             }
         }
     }
