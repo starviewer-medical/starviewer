@@ -74,15 +74,6 @@ bool Series::addImage( Image *image )
     return ok;
 }
 
-Image *Series::getImage( QString SOPInstanceUID )
-{
-    int index = this->findImageIndex(SOPInstanceUID);
-    if( index != -1 )
-        return m_imageSet[index];
-    else
-        return NULL;
-}
-
 bool Series::imageExists( QString identifier )
 {
     if( this->findImageIndex(identifier) != -1 )
