@@ -66,6 +66,9 @@ public:
     /// que l'execució d'una comanda SQL sigui incorrecta
     static QString formatStringToValidSQLSyntax( QString string );
 
+    ///Formata un qchar perquè no contingui caràcters estranys o Nulls que pugin fer que la sentència sql sigui incorrecte
+    static QString formatQCharToValidSQLSyntax( QChar qchar);
+
 private :
 
     sqlite3 *m_databaseConnection;
