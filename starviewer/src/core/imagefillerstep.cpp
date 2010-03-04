@@ -247,48 +247,40 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
     bool ok = dicomReader->tagExists( DICOMPixelData );
     if( ok )
     {
+        QString value;
+        
         // Omplim la informació comuna
         fillCommonImageInformation(image,dicomReader);
         
         // Calculem el pixel spacing
         computePixelSpacing(image,dicomReader);
 
+        //
         // Calculem propietats del pla imatge
-        QString value;
+        //
+        
+        //
+        // Propietats d'Image Plane Module (C.7.6.2) (Requerit per CT,MR i PET)
+        //
+        
+        //
+        // Obtenim Slice Thickness, tipus 2
+        //
         value = dicomReader->getValueAttributeAsQString( DICOMSliceThickness );
         if( !value.isEmpty() )
             image->setSliceThickness( value.toDouble() );
 
-        if( dicomReader->tagExists(DICOMImageOrientationPatient) )
+        //
+        // Obtenim Slice Location, tipus 3
+        //
+        if (dicomReader->tagExists( DICOMSliceLocation ))
         {
-            double orientation[6];
-            value = dicomReader->getValueAttributeAsQString( DICOMImageOrientationPatient );
-            // Passem l'string llegit a un vector de doubles
-            imageOrientationPatientStringToDoubleVector(value,orientation);
-            image->setImageOrientationPatient( orientation );   
+            image->setSliceLocation( dicomReader->getValueAttributeAsQString( DICOMSliceLocation ) );
+        }
 
-            // cerquem l'string amb la orientació del pacient
-            value = dicomReader->getValueAttributeAsQString( DICOMPatientOrientation );
-            if( !value.isEmpty() )
-                image->setPatientOrientation( value );
-            else  // si no tenim aquest valor, el calculem a partir dels direction cosines
-            {
-                image->setPatientOrientation( makePatientOrientationFromImageOrientationPatient( orientation ) );
-            }
-        }
-        else
-        {
-            /* Si la modalitat no requereix el image plane module ( CR per exemple ) no disposem de ImageOrientationPatient.
-             * Això fa que el tag PatientOrientation no s'ompli.El PatientOrientation es necessari en cas que no hi hagi
-             * ImageOrientationPatient i ImagePositionPatient.
-             */
-            // \TODO Part afegida per sortir del pas. S'hauria de refer aquesta part tenint mes en compte la dependencia de tags
-            value = dicomReader->getValueAttributeAsQString( DICOMPatientOrientation );
-            if( !value.isEmpty() )
-                image->setPatientOrientation( value );
-            else
-                DEBUG_LOG("No s'ha pogut trobar informació d'orientació del pacient, ni ImageOrientationPatient ni PatientOrientation. Modalitat de la imatge: [" + dicomReader->getValueAttributeAsQString(DICOMModality) + "]");
-        }
+        //
+        // Obtenim Image Position (Patient), tipus 1
+        //
         value = dicomReader->getValueAttributeAsQString( DICOMImagePositionPatient );
         if( !value.isEmpty() )
         {
@@ -299,12 +291,46 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
                 image->setImagePositionPatient( position );
             }
         }
+
+        //
+        // Obtenim Image Orientation (Patient), tipus 1
+        //
+        if( dicomReader->tagExists(DICOMImageOrientationPatient) )
+        {
+            double orientation[6];
+            value = dicomReader->getValueAttributeAsQString( DICOMImageOrientationPatient );
+            // Passem l'string llegit a un vector de doubles
+            imageOrientationPatientStringToDoubleVector(value,orientation);
+            image->setImageOrientationPatient( orientation );   
+
+            // Cerquem l'string amb la orientació del pacient
+            value = dicomReader->getValueAttributeAsQString( DICOMPatientOrientation );
+            if( !value.isEmpty() )
+                image->setPatientOrientation( value );
+            else  // Si no tenim aquest valor, el calculem a partir dels direction cosines
+            {
+                image->setPatientOrientation( makePatientOrientationFromImageOrientationPatient( orientation ) );
+            }
+        }
         else
         {
-            DEBUG_LOG("La imatge no conté informació de l'origen. Modalitat: [" + dicomReader->getValueAttributeAsQString(DICOMModality) + "]");
+            //
+            // General Image Module (C.7.6.1) 
+            // Requerit a pràcticament totes les modalitats no-enhanced, conté el tag Patient Orientation
+            //
+
+            // Com que no tenim ImageOrientationPatient no podem generar la informació de Patient Orientation
+            // Per tant, anem a buscar el valor del tag PatientOrientation, de tipus 2C
+            value = dicomReader->getValueAttributeAsQString( DICOMPatientOrientation );
+            if( !value.isEmpty() )
+                image->setPatientOrientation( value );
         }
 
-        // Propietats de ww/wl i del grayscale pipeline
+        //
+        // Obtenim dades del Grayscale Pipeline
+        //
+
+        // Obtenim Rescale Slope i Rescale Intercept, tipus 1/1C segons el mòdul
         value = dicomReader->getValueAttributeAsQString( DICOMRescaleSlope );
         if( value.toDouble() == 0 )
             image->setRescaleSlope( 1. );
@@ -312,18 +338,20 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
             image->setRescaleSlope( value.toDouble() );
 
         image->setRescaleIntercept( dicomReader->getValueAttributeAsQString( DICOMRescaleIntercept ).toDouble() );
-        // llegim els window levels
+
+        //
+        // Llegim els valors de window level, tipus 1C
+        // Aquests es troben a VOI LUT Module (C.11.2)
+        // El mòdul és opcional a CR, CT, MR, NM, US, US MF, SC, XA, RF, RF IM i PET
+        // i és condicional a SC MF GB, SC MF GW, DX, MG i IO
+        //
         QStringList windowWidthList = dicomReader->getValueAttributeAsQString( DICOMWindowWidth ).split("\\");
         QStringList windowLevelList = dicomReader->getValueAttributeAsQString( DICOMWindowCenter ).split("\\");
         for( int i = 0; i < windowWidthList.size(); i++ )
             image->addWindowLevel( windowWidthList.at(i).toDouble(), windowLevelList.at(i).toDouble() );
-        // i després les respectives descripcions si n'hi ha
-        image->setWindowLevelExplanations( dicomReader->getValueAttributeAsQString( DICOMWindowCenterWidthExplanation ).split("\\") );
 
-        if (dicomReader->tagExists( DICOMSliceLocation ))
-        {
-            image->setSliceLocation( dicomReader->getValueAttributeAsQString( DICOMSliceLocation ) );
-        }
+        // Llegim les respectives descripcions de ww/wl si n'hi ha (tipus 3)
+        image->setWindowLevelExplanations( dicomReader->getValueAttributeAsQString( DICOMWindowCenterWidthExplanation ).split("\\") );
 
         // Propietats útils pels hanging protocols
         value = dicomReader->getValueAttributeAsQString( DICOMImageLaterality );
@@ -744,15 +772,25 @@ void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomRe
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
     
+    //
+    // Obtenim el pixel spacing segons la modalitat que estem tractant
+    //
     QString value;
-    // \TODO Txapussa per sortir del pas. Serveix per calcular correctament el PixelSpacing
     QString modality = dicomReader->getValueAttributeAsQString( DICOMModality );
-    if ( modality == "CT" || modality == "MR")
+
+    //
+    // Per modalitats CT, MR i PET el pixel spacing el trobem 
+    // a Image Plane Module (C.7.6.2), al tag Pixel Spacing, tipus 1
+    //
+    if ( modality == "CT" || modality == "MR" || modality == "PET" )
     {
         value = dicomReader->getValueAttributeAsQString( DICOMPixelSpacing );
     }
     else if ( modality == "US" )
     {
+        //
+        // En el cas de la modalitat US, hem de fer alguns càlculs extra per tal obtenir un pixel spacing aproximat
+        //
         DICOMSequenceAttribute *ultraSoundsRegionsSequence = dicomReader->getSequenceAttribute(DICOMSequenceOfUltrasoundRegions);
         if( ultraSoundsRegionsSequence ) // Ho hem de comprovar perquè és opcional.
         {
@@ -782,7 +820,15 @@ void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomRe
     }
     else // Per altres modalitats li assignarem a partir d'aquest tag
     {
+        // Als mòduls CR Image (C.8.1.2), X-Ray Acquisition (C.8.7.2), DX Detector (C.8.11.4), 
+        // XA/XRF Acquisition (C.8.19.3), X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i 
+        // X-Ray 3D Craniofacial Image Contributing Sources (C.8.21.2.2)
+        // podem trobar el tag ImagerPixelSpacing, que segons el mòdul serà de tipus 1,1C ó 3
         value = dicomReader->getValueAttributeAsQString( DICOMImagerPixelSpacing );
+
+        // TODO en els casos de X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i 
+        // X-Ray 3D Craniofacial Image Contributing Sources (C.8.21.2.2), aquest tag es troba dins de 
+        // la seqüència Contributing Sources Sequence, que de moment no tractarem
     }
     
     QStringList list;
