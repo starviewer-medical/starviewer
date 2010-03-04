@@ -63,7 +63,14 @@ void DatabaseConnection::rollbackTransaction()
 
 QString DatabaseConnection::formatStringToValidSQLSyntax( QString string )
 {
-    return string.replace( "'", "''" );
+    return string.isNull() ? "" : string.replace( "'", "''" );
+}
+
+QString DatabaseConnection::formatQCharToValidSQLSyntax( QChar qchar )
+{
+    /*Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
+     com a valor un caràcter estrany en comptes de QString("") */
+    return qchar.isNull() ? "": QString(qchar);
 }
 
 sqlite3* DatabaseConnection::getConnection()
