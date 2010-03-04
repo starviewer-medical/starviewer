@@ -59,7 +59,7 @@ void QueryPacs::foundMatchCallback(
     else
     {
         DICOMTagReader *dicomTagReader = new DICOMTagReader("", responseIdentifiers);
-        QString queryRetrieveLevel = dicomTagReader->getAttributeByName( DICOMQueryRetrieveLevel );
+        QString queryRetrieveLevel = dicomTagReader->getValueAttributeAsQString( DICOMQueryRetrieveLevel );
 
         //en el cas que l'objecte que cercàvem fos un estudi afegi
         if ( queryRetrieveLevel == "STUDY" )
@@ -167,7 +167,7 @@ void QueryPacs::cancelQuery(T_DIMSE_C_FindRQ *request)
 
 void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
 {
-    if (!m_hashPacsIDOfStudyInstanceUID.contains(dicomTagReader->getAttributeByName(DICOMStudyInstanceUID)))
+    if (!m_hashPacsIDOfStudyInstanceUID.contains(dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID)))
     {
         Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
         Study *study = CreateInformationModelObject::createStudy(dicomTagReader);

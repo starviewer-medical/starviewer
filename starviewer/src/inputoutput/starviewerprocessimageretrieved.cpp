@@ -20,13 +20,13 @@ StarviewerProcessImageRetrieved::StarviewerProcessImageRetrieved() : ProcessImag
 
 void StarviewerProcessImageRetrieved::process(DICOMTagReader *dicomTagReader)
 {
-    QString seriesInstanceUID = dicomTagReader->getAttributeByName(DICOMSeriesInstanceUID);
+    QString seriesInstanceUID = dicomTagReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
 
     if (m_seriesInstanceUIDLastImageRetrieved.isEmpty())
     {
         //Cas de la primera imatge descarregada
         m_seriesInstanceUIDLastImageRetrieved = seriesInstanceUID;
-        m_studyInstanceUIDRetrieved = dicomTagReader->getAttributeByName(DICOMStudyInstanceUID);
+        m_studyInstanceUIDRetrieved = dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID);
     }
     else if (m_seriesInstanceUIDLastImageRetrieved != seriesInstanceUID)
     {
@@ -36,7 +36,7 @@ void StarviewerProcessImageRetrieved::process(DICOMTagReader *dicomTagReader)
         if (!m_seriesInstanceUIDListRetrieved.contains(m_seriesInstanceUIDLastImageRetrieved))
         {
             m_seriesInstanceUIDListRetrieved.append(m_seriesInstanceUIDLastImageRetrieved);
-            emit seriesRetrieved(dicomTagReader->getAttributeByName(DICOMStudyInstanceUID));
+            emit seriesRetrieved(dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID));
         }
         
         //Si la imatge descarregada actual té un UID de serie diferent que l'anterior

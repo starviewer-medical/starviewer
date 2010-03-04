@@ -87,9 +87,9 @@ void DICOMFileClassifierFillerStep::classifyFile()
     Q_ASSERT(m_dicomReader);
 
     // primer recopilem tota la informació que ens permet ubicar l'arxiu dins de l'estructura
-    QString patientID = m_dicomReader->getAttributeByName( DICOMPatientID );
-    QString studyUID = m_dicomReader->getAttributeByName( DICOMStudyInstanceUID );
-    QString seriesUID = m_dicomReader->getAttributeByName( DICOMSeriesInstanceUID );
+    QString patientID = m_dicomReader->getValueAttributeAsQString( DICOMPatientID );
+    QString studyUID = m_dicomReader->getValueAttributeAsQString( DICOMStudyInstanceUID );
+    QString seriesUID = m_dicomReader->getValueAttributeAsQString( DICOMSeriesInstanceUID );
 
     // fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell
     // d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més
