@@ -14,7 +14,7 @@ namespace udg{
 const QString StarviewerVersionString("0.9.0.devel");
 
 //Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
-const int StarviewerDatabaseRevisionRequired(3095);
+const int StarviewerDatabaseRevisionRequired(5114);
 
 const QString OrganizationNameString("GILab");
 const QString OrganizationDomainString("starviewer.udg.edu");
