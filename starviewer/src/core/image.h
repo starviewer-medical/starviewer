@@ -149,11 +149,6 @@ public:
     void setImageType( const QString &imageType );
     QString getImageType() const;
     
-    /// Assignar/Obtenir la descripció del tipus de frame. 
-    /// En cas d'imatges single-frame el seu valor serà idèntic a Image Type
-    void setFrameType( const QString &frameType );
-    QString getFrameType() const;
-
     /// Assignar/Obtenir la viewPosition
     void setViewPosition( const QString &viewPosition );
     QString getViewPosition() const;
@@ -296,13 +291,8 @@ private:
 
     /// Tipus d'imatge. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
     /// Es troba al mòdul General Image C.7.6.1 i als mòduls Enhanced MR/CT/XA/XRF Image (C.8.13.1/C.8.15.2/C.8.19.2)
+    /// En el cas d'imatges Enhanced CT/MR l'omplirem amb el valor FrameType contingut al functional group CT/MR Image Frame Type
     QString m_imageType;
-    
-    /// Tipus de frame. Ens pot definir si es tracta d'un localizer, per exemple. Conté els valors separats per '\\'
-    /// El podem trobar a MR Image Frame Type C.8.13.5.1 i CT Image Frame Type C.8.15.3.1. Per més info consultar C.8.16.1 Image Type and Frame Type
-    /// El valor d'aquest camp podrà diferir del d'Image Type en el cas que el primer valor d'Image Type sigui MIXED, que seria el cas en que aquest
-    /// Image pertanyi a un conjunt d'Images "multiframe" i que els frames tinguin diferents valors d'Image Type (imatges derived amb original ,per exemple
-    QString m_frameType;
     
     /**
         Vista radiogràfica associada a Patient Position. El trobem als mòduls CR Series (C.8.1.1) i DX Positioning (C.8.11.5)
