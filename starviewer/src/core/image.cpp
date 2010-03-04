@@ -315,16 +315,6 @@ QString Image::getImageType() const
     return m_imageType;
 }
 
-void Image::setFrameType( const QString &frameType )
-{
-    m_frameType = frameType;
-}
-
-QString Image::getFrameType() const
-{
-    return m_frameType;
-}
-
 void Image::setViewPosition( const QString &viewPosition )
 {
     m_viewPosition = viewPosition;
