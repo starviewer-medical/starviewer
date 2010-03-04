@@ -33,13 +33,13 @@ public:
      * @param dades de la imatge
      * @return retorna estat del mètode
      */
-    void insert(Image *newImage, int orderNumberInSeries);
+    void insert(Image *newImage);
 
     /// Esborra les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
     void del(const DicomMask &imageMaskToDelete);
 
     ///Actualitza la imatge passada per paràmetre
-    void update(Image *imageToUpdate, int orderNumberInSeries);
+    void update(Image *imageToUpdate);
 
     ///Selecciona les imatges que compleixen la màscara, només es té en compte de la màscara el StudyUID, SeriesUID i SOPInstanceUID
     QList<Image*> query(const DicomMask &imageMaskToSelect);
@@ -76,10 +76,10 @@ private :
     QString buildSqlSelectCountImages(const DicomMask &imageMaskToSelect);
 
     ///Genera la sentència sql per inserir la nova imatge a la base de dades
-    QString buildSqlInsert(Image *newImage, int OrderNumberInSeries);
+    QString buildSqlInsert(Image *newImage);
 
     ///Genera la sentència sql per updatar la imatge a la base de dades
-    QString buildSqlUpdate(Image *imageToUpdate, int OrderNumberInSeries);
+    QString buildSqlUpdate(Image *imageToUpdate);
 
     ///Genera la sentencia Sql per esborrar Imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID 
     QString buildSqlDelete(const DicomMask &imageMaskToDelete);

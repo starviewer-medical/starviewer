@@ -646,7 +646,6 @@ int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series
 
 int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime)
 {
-    int imageOrderInSeries = 0;
     int status = SQLITE_OK;
 
     foreach(Image* imageToSave, listImageToSave)
@@ -654,12 +653,10 @@ int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*
         imageToSave->setRetrievedDate(currentDate);
         imageToSave->setRetrievedTime(currentTime);
 
-        status = saveImage(dbConnect, imageToSave, imageOrderInSeries);
+        status = saveImage(dbConnect, imageToSave);
 
         if (status != SQLITE_OK) 
             return status;
-
-        imageOrderInSeries++;
     }
 
     return status;
@@ -707,16 +704,16 @@ int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *seri
     return seriesDAL.getLastError();
 }
 
-int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageToSave, int imageOrderInSeries)
+int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageToSave)
 {
     LocalDatabaseImageDAL imageDAL;
 
     imageDAL.setDatabaseConnection(dbConnect);
 
-    imageDAL.insert(imageToSave, imageOrderInSeries);
+    imageDAL.insert(imageToSave);
 
     ///Si el pacient ja existia actualitzem la seva informació
-    if (imageDAL.getLastError() == SQLITE_CONSTRAINT) imageDAL.update(imageToSave, imageOrderInSeries);
+    if (imageDAL.getLastError() == SQLITE_CONSTRAINT) imageDAL.update(imageToSave);
 
     return imageDAL.getLastError();
 }
