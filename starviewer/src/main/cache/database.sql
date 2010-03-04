@@ -6,7 +6,7 @@
 
 CREATE TABLE DatabaseRevision
 (
-  Revision TEXT
+  Revision                      TEXT
 ); 
 
 -- Per actualitzar el número de revisió amb el del commit substituir $Rev$Rev$, la DatabaseRevision agafarà automàticament com a valor 
@@ -16,94 +16,94 @@ INSERT INTO DatabaseRevision (Revision) VALUES ('$Rev$');
 
 CREATE TABLE Patient
 ( 
-  ID				TEXT PRIMARY KEY,
-  Name	 			TEXT,
-  BirthDate			TEXT,
-  Sex				TEXT
+  ID                            TEXT PRIMARY KEY,
+  Name                          TEXT,
+  BirthDate                     TEXT,
+  Sex                           TEXT
 );
 
 
 CREATE TABLE Study
 (
-  InstanceUID			TEXT PRIMARY KEY,
-  PatientID			TEXT NOT NULL,
-  ID				TEXT NOT NULL,
-  PatientAge			TEXT,
-  PatientWeigth 		REAL,
-  PatientHeigth 		REAL,
-  Modalities			TEXT,
-  Date				TEXT,
-  Time				TEXT,
-  AccessionNumber		TEXT,
-  Description			TEXT,
-  ReferringPhysicianName	TEXT,
-  LastAccessDate		TEXT,
-  RetrievedDate			TEXT,
-  RetrievedTime			TEXT,
-  State				INTEGER	
+  InstanceUID                   TEXT PRIMARY KEY,
+  PatientID                     TEXT NOT NULL,
+  ID                            TEXT NOT NULL,
+  PatientAge                    TEXT,
+  PatientWeigth                 REAL,
+  PatientHeigth                 REAL,
+  Modalities                    TEXT,
+  Date                          TEXT,
+  Time                          TEXT,
+  AccessionNumber               TEXT,
+  Description                   TEXT,
+  ReferringPhysicianName        TEXT,
+  LastAccessDate                TEXT,
+  RetrievedDate                 TEXT,
+  RetrievedTime                 TEXT,
+  State                         INTEGER	
 );
 
 CREATE TABLE Series
 (
-  InstanceUID			TEXT PRIMARY KEY,
-  StudyInstanceUID		TEXT,
-  Number			TEXT,
-  Modality			TEXT,
-  Date				TEXT,
-  Time				TEXT,
-  InstitutionName		TEXT,
-  PatientPosition		TEXT,
-  ProtocolName			TEXT,
-  Description			TEXT,
-  FrameOfReferenceUID		TEXT,
-  PositionReferenceIndicator	TEXT,
-  BodyPartExaminated		TEXT,
-  ViewPosition			TEXT,
-  Manufacturer			TEXT,
-  Laterality            TEXT,
-  RetrievedDate			TEXT,
-  RetrievedTime			TEXT,
-  State				INTEGER
+  InstanceUID                   TEXT PRIMARY KEY,
+  StudyInstanceUID              TEXT,
+  Number                        TEXT,
+  Modality                      TEXT,
+  Date                          TEXT,
+  Time                          TEXT,
+  InstitutionName               TEXT,
+  PatientPosition               TEXT,
+  ProtocolName                  TEXT,
+  Description                   TEXT,
+  FrameOfReferenceUID           TEXT,
+  PositionReferenceIndicator    TEXT,
+  BodyPartExaminated            TEXT,
+  ViewPosition                  TEXT,
+  Manufacturer                  TEXT,
+  Laterality                    TEXT,
+  RetrievedDate                 TEXT,
+  RetrievedTime                 TEXT,
+  State                         INTEGER
 );
 
 CREATE INDEX  IndexSeries_StudyInstanceUID ON Series (StudyInstanceUID); 
 
 CREATE TABLE Image
 (
-  SOPInstanceUID		TEXT,
-  FrameNumber           INTEGER,
-  StudyInstanceUID		TEXT,
-  SeriesInstanceUID		TEXT,
-  InstanceNumber		TEXT,
-  ImageOrientationPatient	TEXT,
-  PatientOrientation		TEXT,
-  PixelSpacing			TEXT,
-  SliceThickness		REAL,
-  PatientPosition		TEXT,
-  SamplesPerPixel		INTEGER,
-  Rows				INTEGER,
-  Columns			INTEGER,
-  BitsAllocated 		INTEGER,
-  BitsStored			INTEGER,
-  PixelRepresentation		INTEGER,
-  RescaleSlope			REAL,
-  WindowLevelWidth		TEXT,
-  WindowLevelCenter		TEXT,
-  WindowLevelExplanations	TEXT,
-  SliceLocation 		TEXT,
-  RescaleIntercept		REAL,
-  PhotometricInterpretation	TEXT,
-  ImageType             TEXT,
-  ViewPosition          TEXT,
-  ImageLaterality       TEXT,
-  ViewCodeMeaning       TEXT,
-  PhaseNumber           INTEGER,
-  ImageTime           TEXT,
-  VolumeNumberInSeries  INTEGER,
-  OrderNumberInVolume		INTEGER,
-  RetrievedDate			TEXT,
-  RetrievedTime			TEXT,
-  State				INTEGER ,
+  SOPInstanceUID                TEXT,
+  FrameNumber                   INTEGER,
+  StudyInstanceUID              TEXT,
+  SeriesInstanceUID             TEXT,
+  InstanceNumber                TEXT,
+  ImageOrientationPatient       TEXT,
+  PatientOrientation            TEXT,
+  PixelSpacing                  TEXT,
+  SliceThickness                REAL,
+  PatientPosition               TEXT,
+  SamplesPerPixel               INTEGER,
+  Rows                          INTEGER,
+  Columns                       INTEGER,
+  BitsAllocated                 INTEGER,
+  BitsStored                    INTEGER,
+  PixelRepresentation           INTEGER,
+  RescaleSlope                  REAL,
+  WindowLevelWidth              TEXT,
+  WindowLevelCenter             TEXT,
+  WindowLevelExplanations       TEXT,
+  SliceLocation                 TEXT,
+  RescaleIntercept              REAL,
+  PhotometricInterpretation     TEXT,
+  ImageType                     TEXT,
+  ViewPosition                  TEXT,
+  ImageLaterality               TEXT,
+  ViewCodeMeaning               TEXT,
+  PhaseNumber                   INTEGER,
+  ImageTime                     TEXT,
+  VolumeNumberInSeries          INTEGER,
+  OrderNumberInVolume           INTEGER,
+  RetrievedDate	                TEXT,
+  RetrievedTime	                TEXT,
+  State	                        INTEGER ,
   PRIMARY KEY ('SOPInstanceUID', 'FrameNumber')
 );
 
