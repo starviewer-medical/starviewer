@@ -204,10 +204,8 @@ bool ImageFillerStep::fillCommonImageInformation( Image *image, DICOMTagReader *
     // C.8.15.2 Enhanced CT Image Module 
     // C.8.19.2 Enhanced XA/XRF Image Module 
     image->setImageType( dicomReader->getValueAttributeAsQString( DICOMImageType ) );
-    // TODO per defecte li posem la mateixa informació a Frame Type, que en cas que sigui diferent es canviaria
-    // TODO potser ImageType hauria de ser un atribut de VolumeDescriptor
 
-    // En el cas d'XA/XRF el pixel spacing vindrà especificat per totes les imatges per igual (no cal fer un recorregut pre-frame)
+    // En el cas d'XA/XRF el pixel spacing vindrà especificat per totes les imatges per igual (no cal fer un recorregut per-frame)
     QString sopClassUID = m_input->getDICOMFile()->getValueAttributeAsQString( DICOMSOPClassUID );
     if( sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage )
     {
