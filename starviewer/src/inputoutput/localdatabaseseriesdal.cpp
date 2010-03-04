@@ -96,13 +96,12 @@ Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
     series->setDescription(reply[9 + row * columns]);
     series->setFrameOfReferenceUID(reply[10 + row * columns]);
     series->setPositionReferenceIndicator(reply[11 + row * columns]);
-    series->setNumberOfPhases(QString(reply[12 + row * columns]).toInt());
-    series->setNumberOfSlicesPerPhase(QString(reply[13 + row * columns]).toInt());
-    series->setBodyPartExamined(reply[14 + row * columns]);
-    series->setViewPosition(reply[15 + row * columns]);
-    series->setManufacturer(reply[16 + row * columns]);
-    series->setRetrievedDate(QDate().fromString(reply[17 + row * columns], "yyyyMMdd"));
-    series->setRetrievedTime(QTime().fromString(reply[18 + row * columns], "hhmmss"));
+    series->setBodyPartExamined(reply[12 + row * columns]);
+    series->setViewPosition(reply[13 + row * columns]);
+    series->setManufacturer(reply[14 + row * columns]);
+    series->setLaterality(reply[15 + row * columns][0]);//Laterality és un char
+    series->setRetrievedDate(QDate().fromString(reply[16 + row * columns], "yyyyMMdd"));
+    series->setRetrievedTime(QTime().fromString(reply[17 + row * columns], "hhmmss"));
     series->setImagesPath(LocalDatabaseManager::getCachePath() + "/" + studyInstanceUID + "/" + series->getInstanceUID());
 
     return series;
@@ -112,8 +111,8 @@ QString LocalDatabaseSeriesDAL::buildSqlSelect(const DicomMask &seriesMaskToSele
 {
     QString selectSentence = "Select InstanceUID, StudyInstanceUID, Number, Modality, Date, Time, InstitutionName, "
                                     "PatientPosition, ProtocolName, Description, FrameOfReferenceUID, PositionReferenceIndicator, "
-                                    "NumberOfPhases, NumberOfSlicesPerPhase, BodyPartExaminated, ViewPosition, "
-                                    "Manufacturer, RetrievedDate, RetrievedTime, State "
+                                    "BodyPartExaminated, ViewPosition,  Manufacturer, Laterality, RetrievedDate, "
+                                    "RetrievedTime, State "
                               "From Series ";
 
     return selectSentence + buildWhereSentence(seriesMaskToSelect);
@@ -123,11 +122,12 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
 {
     QString insertSentence = QString ("Insert into Series   (InstanceUID, StudyInstanceUID, Number, Modality, Date, Time, "
                                                             "InstitutionName, PatientPosition, ProtocolName, Description, "
-                                                            "FrameOfReferenceUID, PositionReferenceIndicator, NumberOfPhases, "
-                                                            "NumberOfSlicesPerPhase, BodyPartExaminated, ViewPosition, "
-                                                            "Manufacturer, RetrievedDate, RetrievedTime, State) "
-                                                    "values ('%1', '%2', '%3', '%4', '%5', '%6', '%7', '%8', '%9', '%10', '%11', "
-                                                            "'%12', %13, %14, '%15', '%16', '%17', '%18', '%19', %20)")
+                                                            "FrameOfReferenceUID, PositionReferenceIndicator, BodyPartExaminated, ViewPosition, "
+                                                            "Manufacturer, Laterality, RetrievedDate, RetrievedTime, State) "
+                                                    "values ('%1', '%2', '%3', '%4', '%5', '%6', "
+                                                            "'%7', '%8', '%9', '%10', "
+                                                            "'%11', '%12', '%13', '%14', "
+                                                            "'%15', '%16', '%17', '%18', %19)")
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getInstanceUID() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getParentStudy()->getInstanceUID() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getSeriesNumber() ) )
@@ -140,11 +140,10 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getDescription() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getFrameOfReferenceUID() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getPositionReferenceIndicator() ) )
-                                    .arg( newSeries->getNumberOfPhases() )
-                                    .arg( newSeries->getNumberOfSlicesPerPhase() )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getBodyPartExamined() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getViewPosition() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getManufacturer() ) )
+                                    .arg( DatabaseConnection::formatQCharToValidSQLSyntax( newSeries->getLaterality() ) )                                    
                                     .arg( newSeries->getRetrievedDate().toString("yyyyMMdd") )
                                     .arg( newSeries->getRetrievedTime().toString("hhmmss") )
                                     .arg("0");
@@ -165,15 +164,14 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *seriesToUpdate)
                                                         "Description = '%9', "
                                                         "FrameOfReferenceUID = '%10', "
                                                         "PositionReferenceIndicator = '%11', "
-                                                        "NumberOfPhases = %12, "
-                                                        "NumberOfSlicesPerPhase = %13, "
-                                                        "BodyPartExaminated = '%14', "
-                                                        "ViewPosition = '%15', "
-                                                        "Manufacturer = '%16', "
-                                                        "RetrievedDate = '%17', "
-                                                        "RetrievedTime = '%18', "
-                                                        "State = '%19' "
-                                                 "Where InstanceUID = '%20'")
+                                                        "BodyPartExaminated = '%12', "
+                                                        "ViewPosition = '%13', "
+                                                        "Manufacturer = '%14', "
+                                                        "Laterality = '%15', "
+                                                        "RetrievedDate = '%16', "
+                                                        "RetrievedTime = '%17', "
+                                                        "State = '%18' "
+                                                 "Where InstanceUID = '%19'")
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getParentStudy()->getInstanceUID() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getSeriesNumber() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getModality() ) )
@@ -185,11 +183,10 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *seriesToUpdate)
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getDescription() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getFrameOfReferenceUID() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getPositionReferenceIndicator() ) )
-                                    .arg( seriesToUpdate->getNumberOfPhases() )
-                                    .arg( seriesToUpdate->getNumberOfSlicesPerPhase() )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getBodyPartExamined() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getViewPosition() ) )
                                     .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getManufacturer() ) )
+                                    .arg( DatabaseConnection::formatQCharToValidSQLSyntax( seriesToUpdate->getLaterality() ) )
                                     .arg( seriesToUpdate->getRetrievedDate().toString("yyyyMMdd") )
                                     .arg( seriesToUpdate->getRetrievedTime().toString("hhmmss") )
                                     .arg("0")

@@ -9,7 +9,10 @@ CREATE TABLE DatabaseRevision
   Revision TEXT
 ); 
 
-INSERT INTO DatabaseRevision (Revision) VALUES ('$Rev$');
+-- Per actualitzar el número de revisió amb el del commit substituir $Rev$Rev$, la DatabaseRevision agafarà automàticament com a valor 
+-- la revisió en que s'ha fet el commit amb el canvi a la base de dades.
+
+INSERT INTO DatabaseRevision (Revision) VALUES ('$Rev$'); 
 
 CREATE TABLE Patient
 ( 
@@ -54,11 +57,10 @@ CREATE TABLE Series
   Description			TEXT,
   FrameOfReferenceUID		TEXT,
   PositionReferenceIndicator	TEXT,
-  NumberOfPhases		INTEGER,
-  NumberOfSlicesPerPhase	INTEGER,
   BodyPartExaminated		TEXT,
   ViewPosition			TEXT,
   Manufacturer			TEXT,
+  Laterality            TEXT,
   RetrievedDate			TEXT,
   RetrievedTime			TEXT,
   State				INTEGER
@@ -68,7 +70,8 @@ CREATE INDEX  IndexSeries_StudyInstanceUID ON Series (StudyInstanceUID);
 
 CREATE TABLE Image
 (
-  SOPInstanceUID		TEXT PRIMARY KEY,
+  SOPInstanceUID		TEXT,
+  FrameNumber           INTEGER,
   StudyInstanceUID		TEXT,
   SeriesInstanceUID		TEXT,
   InstanceNumber		TEXT,
@@ -87,15 +90,23 @@ CREATE TABLE Image
   WindowLevelWidth		TEXT,
   WindowLevelCenter		TEXT,
   WindowLevelExplanations	TEXT,
-  SOPInstanceReferenceImage	TEXT,
   SliceLocation 		TEXT,
   RescaleIntercept		REAL,
-  NumberOfFrames		INTEGER,
   PhotometricInterpretation	TEXT,
-  OrderNumberInSeries		INTEGER,
+  ImageType             TEXT,
+  ViewPosition          TEXT,
+  ImageLaterality       TEXT,
+  ViewCodeMeaning       TEXT,
+  PhaseNumber           INTEGER,
+  ImageTime           TEXT,
+  VolumeNumberInSeries  INTEGER,
+  OrderNumberInVolume		INTEGER,
   RetrievedDate			TEXT,
   RetrievedTime			TEXT,
-  State				INTEGER		
+  State				INTEGER ,
+  PRIMARY KEY ('SOPInstanceUID', 'FrameNumber')
 );
 
+--TODO:Comprovar si s'utilitzarà l'index IndexImage_StudyInstanceUIDSeriesInstanceUID després dels canvis fets a la BD
 CREATE INDEX  IndexImage_StudyInstanceUIDSeriesInstanceUID ON Image (StudyInstanceUID,SeriesInstanceUID); 
+CREATE INDEX  IndexImage_SOPInstanceUIDOrderNumberInVolume ON Image (SOPInstanceUID, OrderNumberInVolume); 

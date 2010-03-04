@@ -141,7 +141,7 @@ private:
     ///Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
     int saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave);
     ///Guarda la imatge a la base de dades, si ja existeix li actualitza la informació
-    int saveImage(DatabaseConnection *dbConnect, Image *imageToSave, int imageOrderInSeries);
+    int saveImage(DatabaseConnection *dbConnect, Image *imageToSave);
 
     ///Esborra el pacient que compleixi amb la màscara a esborrar. A la màscara hem d'indicar el UID de l'estudi a esborrar i comprova si el pacient el qual pertany l'estudi té més d'un estudi, si és així no l'esborrar, si només en té un l'esborra
     int delPatientOfStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
