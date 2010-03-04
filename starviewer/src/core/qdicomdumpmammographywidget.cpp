@@ -82,22 +82,22 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
         //
         // TODO aquest tag es podria arribar a incloure com a genèric
         if( dicomReader.tagExists( DICOMOperatorsName ) )
-            m_operatorsNameValueLabel->setText( dicomReader.getAttributeByName( DICOMOperatorsName ) );
+            m_operatorsNameValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMOperatorsName ) );
         else
             m_operatorsNameValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMCompressionForce ) )
-            m_compressionForceValueLabel->setText( dicomReader.getAttributeByName( DICOMCompressionForce ) + " Newtons" );
+            m_compressionForceValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMCompressionForce ) + " Newtons" );
         else
             m_compressionForceValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMBodyPartThickness ) )
-            m_bodyPartThicknessValueLabel->setText( dicomReader.getAttributeByName( DICOMBodyPartThickness ) + " mm" );
+            m_bodyPartThicknessValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMBodyPartThickness ) + " mm" );
         else
             m_bodyPartThicknessValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMPositionerPrimaryAngle ) )
-            m_positionerPrimaryAngleValueLabel->setText( dicomReader.getAttributeByName( DICOMPositionerPrimaryAngle ) + "º" );
+            m_positionerPrimaryAngleValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMPositionerPrimaryAngle ) + "º" );
         else
             m_positionerPrimaryAngleValueLabel->setText(NotAvailableValue);
                 
@@ -105,37 +105,37 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
         // Equipment information
         //
         if( dicomReader.tagExists( DICOMManufacturer ) )
-            m_manufacturerValueLabel->setText( dicomReader.getAttributeByName( DICOMManufacturer ) );
+            m_manufacturerValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMManufacturer ) );
         else
             m_manufacturerValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMInstitutionName ) )
-            m_institutionNameValueLabel->setText( dicomReader.getAttributeByName( DICOMInstitutionName ) );
+            m_institutionNameValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMInstitutionName ) );
         else
             m_institutionNameValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMInstitutionAddress ) )
-            m_institutionAddressValueLabel->setText( dicomReader.getAttributeByName( DICOMInstitutionAddress ) );
+            m_institutionAddressValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMInstitutionAddress ) );
         else
             m_institutionAddressValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMManufacturersModelName ) )
-            m_manufacturersModelNameValueLabel->setText( dicomReader.getAttributeByName( DICOMManufacturersModelName ) );
+            m_manufacturersModelNameValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMManufacturersModelName ) );
         else
             m_manufacturersModelNameValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMDeviceSerialNumber ) )
-            m_deviceSerialNumberValueLabel->setText( dicomReader.getAttributeByName( DICOMDeviceSerialNumber ) );
+            m_deviceSerialNumberValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMDeviceSerialNumber ) );
         else
             m_deviceSerialNumberValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMDetectorID ) )
-            m_detectorIDValueLabel->setText( dicomReader.getAttributeByName( DICOMDetectorID ) );
+            m_detectorIDValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMDetectorID ) );
         else
             m_detectorIDValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMSoftwareVersions ) )
-            m_softwareVersionsValueLabel->setText( dicomReader.getAttributeByName( DICOMSoftwareVersions ) );
+            m_softwareVersionsValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMSoftwareVersions ) );
         else
             m_softwareVersionsValueLabel->setText(NotAvailableValue);
 
@@ -143,43 +143,43 @@ void QDicomDumpMammographyWidget::dumpDICOMInformation( Image *currentImage )
         // X-Ray acquisition dose information
         //
         if( dicomReader.tagExists( DICOMKVP ) )
-            m_kiloVoltagePeakValueLabel->setText( dicomReader.getAttributeByName( DICOMKVP ) + " kV" );
+            m_kiloVoltagePeakValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMKVP ) + " kV" );
         else
             m_kiloVoltagePeakValueLabel->setText(NotAvailableValue);
 
         // L'exposure l'obtenim en miliAmpers/segon(mAs). Si els volguéssim en microAmpers/segon, caldria fer servir el tag DICOMExposureInMicroAs
         if( dicomReader.tagExists( DICOMExposure ) )
-            m_exposureValueLabel->setText( dicomReader.getAttributeByName( DICOMExposure ) + " mAs" );
+            m_exposureValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMExposure ) + " mAs" );
         else
             m_exposureValueLabel->setText(NotAvailableValue);
 
         if( dicomReader.tagExists( DICOMExposureTime ) )
-            m_exposureTimeValueLabel->setText( dicomReader.getAttributeByName( DICOMExposureTime ) + " ms" );
+            m_exposureTimeValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMExposureTime ) + " ms" );
         else
             m_exposureTimeValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMFilterMaterial ) )
-            m_filterMaterialValueLabel->setText( dicomReader.getAttributeByName( DICOMFilterMaterial ) );
+            m_filterMaterialValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMFilterMaterial ) );
         else
             m_filterMaterialValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMAnodeTargetMaterial ) )
-            m_anodeTargetMaterialValueLabel->setText( dicomReader.getAttributeByName( DICOMAnodeTargetMaterial ) );
+            m_anodeTargetMaterialValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMAnodeTargetMaterial ) );
         else
             m_anodeTargetMaterialValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMRelativeXRayExposure ) )
-            m_relativeExposureValueLabel->setText( dicomReader.getAttributeByName( DICOMRelativeXRayExposure ) );
+            m_relativeExposureValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMRelativeXRayExposure ) );
         else
             m_relativeExposureValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMOrganDose ) )
-            m_organDoseValueLabel->setText( dicomReader.getAttributeByName( DICOMOrganDose ) + " dGy" );
+            m_organDoseValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMOrganDose ) + " dGy" );
         else
             m_organDoseValueLabel->setText(NotAvailableValue);
     
         if( dicomReader.tagExists( DICOMEntranceDoseInmGy ) )
-            m_entranceDoseValueLabel->setText( dicomReader.getAttributeByName( DICOMEntranceDoseInmGy ) + " mGy" );
+            m_entranceDoseValueLabel->setText( dicomReader.getValueAttributeAsQString( DICOMEntranceDoseInmGy ) + " mGy" );
         else
             m_entranceDoseValueLabel->setText(NotAvailableValue);
     }

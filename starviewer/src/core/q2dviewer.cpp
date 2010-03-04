@@ -1597,7 +1597,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
         if( image )
         {
             DICOMTagReader reader( image->getPath() );
-            QString laterality = reader.getAttributeByName( DICOMImageLaterality );
+            QString laterality = reader.getValueAttributeAsQString( DICOMImageLaterality );
             QString desiredOrientation;
 
             QString tagValue;

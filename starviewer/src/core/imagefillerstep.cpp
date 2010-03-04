@@ -143,7 +143,7 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
     if( ok )
     {
         // Comprovem si la imatge és enhanced o no per tal de cridar el mètode específic més adient
-        QString sopClassUID = dicomReader->getAttributeByName( DICOMSOPClassUID );
+        QString sopClassUID = dicomReader->getValueAttributeAsQString( DICOMSOPClassUID );
         if( sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage || sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage )
         {
             generatedImages = processEnhancedDICOMFile(dicomReader);
@@ -153,7 +153,7 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
             int numberOfFrames = 1;
             if( dicomReader->tagExists( DICOMNumberOfFrames ) )
             {
-                numberOfFrames = dicomReader->getAttributeByName( DICOMNumberOfFrames ).toInt();
+                numberOfFrames = dicomReader->getValueAttributeAsQString( DICOMNumberOfFrames ).toInt();
                 // Si la imatge és multiframe i és la segona que ens trobem, augmentarem el número que identifica l'actual volum
                 if( numberOfFrames > 1 && m_input->getCurrentVolumeNumber() != 0 )
                 {
@@ -187,28 +187,28 @@ bool ImageFillerStep::fillCommonImageInformation( Image *image, DICOMTagReader *
     image->setPath( dicomReader->getFileName() );
     
     // C.12.1 SOP Common Module
-    image->setSOPInstanceUID( dicomReader->getAttributeByName( DICOMSOPInstanceUID ) );
-    image->setInstanceNumber( dicomReader->getAttributeByName( DICOMInstanceNumber ) );
+    image->setSOPInstanceUID( dicomReader->getValueAttributeAsQString( DICOMSOPInstanceUID ) );
+    image->setInstanceNumber( dicomReader->getValueAttributeAsQString( DICOMInstanceNumber ) );
 
     // C.7.6.3 Image Pixel Module
-    image->setSamplesPerPixel( dicomReader->getAttributeByName( DICOMSamplesPerPixel ).toInt() );
-    image->setPhotometricInterpretation( dicomReader->getAttributeByName( DICOMPhotometricInterpretation ) );
-    image->setRows( dicomReader->getAttributeByName( DICOMRows ).toInt() );
-    image->setColumns( dicomReader->getAttributeByName( DICOMColumns ).toInt() );
-    image->setBitsAllocated( dicomReader->getAttributeByName( DICOMBitsAllocated ).toInt() );
-    image->setBitsStored( dicomReader->getAttributeByName( DICOMBitsStored ).toInt() );
-    image->setPixelRepresentation( dicomReader->getAttributeByName( DICOMPixelRepresentation ).toInt() );
+    image->setSamplesPerPixel( dicomReader->getValueAttributeAsQString( DICOMSamplesPerPixel ).toInt() );
+    image->setPhotometricInterpretation( dicomReader->getValueAttributeAsQString( DICOMPhotometricInterpretation ) );
+    image->setRows( dicomReader->getValueAttributeAsQString( DICOMRows ).toInt() );
+    image->setColumns( dicomReader->getValueAttributeAsQString( DICOMColumns ).toInt() );
+    image->setBitsAllocated( dicomReader->getValueAttributeAsQString( DICOMBitsAllocated ).toInt() );
+    image->setBitsStored( dicomReader->getValueAttributeAsQString( DICOMBitsStored ).toInt() );
+    image->setPixelRepresentation( dicomReader->getValueAttributeAsQString( DICOMPixelRepresentation ).toInt() );
     
     // C.7.6.1 General Image Module (present a totes les modalitats no enhanced, excepte 3D XA, 3D CF i OPT) 
     // C.8.13.1 Enhanced MR Image Module
     // C.8.15.2 Enhanced CT Image Module 
     // C.8.19.2 Enhanced XA/XRF Image Module 
-    image->setImageType( dicomReader->getAttributeByName( DICOMImageType ) );
+    image->setImageType( dicomReader->getValueAttributeAsQString( DICOMImageType ) );
     // TODO per defecte li posem la mateixa informació a Frame Type, que en cas que sigui diferent es canviaria
     // TODO potser ImageType hauria de ser un atribut de VolumeDescriptor
 
     // En el cas d'XA/XRF el pixel spacing vindrà especificat per totes les imatges per igual (no cal fer un recorregut pre-frame)
-    QString sopClassUID = m_input->getDICOMFile()->getAttributeByName( DICOMSOPClassUID );
+    QString sopClassUID = m_input->getDICOMFile()->getValueAttributeAsQString( DICOMSOPClassUID );
     if( sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage )
     {
         //
@@ -222,7 +222,7 @@ bool ImageFillerStep::fillCommonImageInformation( Image *image, DICOMTagReader *
         //
         if( dicomReader->tagExists(DICOMImagerPixelSpacing) )
         {
-            QString spacing = dicomReader->getAttributeByName(DICOMImagerPixelSpacing);
+            QString spacing = dicomReader->getValueAttributeAsQString(DICOMImagerPixelSpacing);
             if ( !spacing.isEmpty() )
             {
                 QStringList list;
@@ -255,20 +255,20 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
 
         // Calculem propietats del pla imatge
         QString value;
-        value = dicomReader->getAttributeByName( DICOMSliceThickness );
+        value = dicomReader->getValueAttributeAsQString( DICOMSliceThickness );
         if( !value.isEmpty() )
             image->setSliceThickness( value.toDouble() );
 
         if( dicomReader->tagExists(DICOMImageOrientationPatient) )
         {
             double orientation[6];
-            value = dicomReader->getAttributeByName( DICOMImageOrientationPatient );
+            value = dicomReader->getValueAttributeAsQString( DICOMImageOrientationPatient );
             // Passem l'string llegit a un vector de doubles
             imageOrientationPatientStringToDoubleVector(value,orientation);
             image->setImageOrientationPatient( orientation );   
 
             // cerquem l'string amb la orientació del pacient
-            value = dicomReader->getAttributeByName( DICOMPatientOrientation );
+            value = dicomReader->getValueAttributeAsQString( DICOMPatientOrientation );
             if( !value.isEmpty() )
                 image->setPatientOrientation( value );
             else  // si no tenim aquest valor, el calculem a partir dels direction cosines
@@ -283,13 +283,13 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
              * ImageOrientationPatient i ImagePositionPatient.
              */
             // \TODO Part afegida per sortir del pas. S'hauria de refer aquesta part tenint mes en compte la dependencia de tags
-            value = dicomReader->getAttributeByName( DICOMPatientOrientation );
+            value = dicomReader->getValueAttributeAsQString( DICOMPatientOrientation );
             if( !value.isEmpty() )
                 image->setPatientOrientation( value );
             else
-                DEBUG_LOG("No s'ha pogut trobar informació d'orientació del pacient, ni ImageOrientationPatient ni PatientOrientation. Modalitat de la imatge: [" + dicomReader->getAttributeByName(DICOMModality) + "]");
+                DEBUG_LOG("No s'ha pogut trobar informació d'orientació del pacient, ni ImageOrientationPatient ni PatientOrientation. Modalitat de la imatge: [" + dicomReader->getValueAttributeAsQString(DICOMModality) + "]");
         }
-        value = dicomReader->getAttributeByName( DICOMImagePositionPatient );
+        value = dicomReader->getValueAttributeAsQString( DICOMImagePositionPatient );
         if( !value.isEmpty() )
         {
             QStringList list = value.split("\\");
@@ -301,32 +301,32 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
         }
         else
         {
-            DEBUG_LOG("La imatge no conté informació de l'origen. Modalitat: [" + dicomReader->getAttributeByName(DICOMModality) + "]");
+            DEBUG_LOG("La imatge no conté informació de l'origen. Modalitat: [" + dicomReader->getValueAttributeAsQString(DICOMModality) + "]");
         }
 
         // Propietats de ww/wl i del grayscale pipeline
-        value = dicomReader->getAttributeByName( DICOMRescaleSlope );
+        value = dicomReader->getValueAttributeAsQString( DICOMRescaleSlope );
         if( value.toDouble() == 0 )
             image->setRescaleSlope( 1. );
         else
             image->setRescaleSlope( value.toDouble() );
 
-        image->setRescaleIntercept( dicomReader->getAttributeByName( DICOMRescaleIntercept ).toDouble() );
+        image->setRescaleIntercept( dicomReader->getValueAttributeAsQString( DICOMRescaleIntercept ).toDouble() );
         // llegim els window levels
-        QStringList windowWidthList = dicomReader->getAttributeByName( DICOMWindowWidth ).split("\\");
-        QStringList windowLevelList = dicomReader->getAttributeByName( DICOMWindowCenter ).split("\\");
+        QStringList windowWidthList = dicomReader->getValueAttributeAsQString( DICOMWindowWidth ).split("\\");
+        QStringList windowLevelList = dicomReader->getValueAttributeAsQString( DICOMWindowCenter ).split("\\");
         for( int i = 0; i < windowWidthList.size(); i++ )
             image->addWindowLevel( windowWidthList.at(i).toDouble(), windowLevelList.at(i).toDouble() );
         // i després les respectives descripcions si n'hi ha
-        image->setWindowLevelExplanations( dicomReader->getAttributeByName( DICOMWindowCenterWidthExplanation ).split("\\") );
+        image->setWindowLevelExplanations( dicomReader->getValueAttributeAsQString( DICOMWindowCenterWidthExplanation ).split("\\") );
 
         if (dicomReader->tagExists( DICOMSliceLocation ))
         {
-            image->setSliceLocation( dicomReader->getAttributeByName( DICOMSliceLocation ) );
+            image->setSliceLocation( dicomReader->getValueAttributeAsQString( DICOMSliceLocation ) );
         }
 
         // Propietats útils pels hanging protocols
-        value = dicomReader->getAttributeByName( DICOMImageLaterality );
+        value = dicomReader->getValueAttributeAsQString( DICOMImageLaterality );
         if( !value.isEmpty() )
             image->setImageLaterality( value.at(0) );
         // De moment només ho aprofitarem per mammografia, però pot ser vàlid per altres modalitats
@@ -352,7 +352,7 @@ bool ImageFillerStep::processImage( Image *image , DICOMTagReader * dicomReader 
         }
         
         // Només pel cas que sigui DX tindrem aquest atribut a nivell d'imatge
-        image->setViewPosition( dicomReader->getAttributeByName( DICOMViewPosition ) );
+        image->setViewPosition( dicomReader->getValueAttributeAsQString( DICOMViewPosition ) );
     }
     else
     {
@@ -370,7 +370,7 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile( DICOMTagReader *dicomR
     // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la comprovació quan llegim fitxer a fitxer
     if( dicomReader->tagExists( DICOMPixelData ) )
     {
-        int numberOfFrames = dicomReader->getAttributeByName( DICOMNumberOfFrames ).toInt();
+        int numberOfFrames = dicomReader->getValueAttributeAsQString( DICOMNumberOfFrames ).toInt();
         // Si és la segona imatge enhanced que ens trobem, augmentarem el número que identifica l'actual volum
         if( m_input->getCurrentSeries()->getImages().count() > 1 )
         {
@@ -439,7 +439,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation( Image *image, DICOMSequen
     Q_ASSERT( frameItem );
 
     // Hi ha alguns atributs que els haurem de buscar en llocs diferents segons la modalitat
-    QString sopClassUID = m_input->getDICOMFile()->getAttributeByName( DICOMSOPClassUID );
+    QString sopClassUID = m_input->getDICOMFile()->getValueAttributeAsQString( DICOMSOPClassUID );
 
     //
     // Atributs de CT i MR
@@ -746,10 +746,10 @@ void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomRe
     
     QString value;
     // \TODO Txapussa per sortir del pas. Serveix per calcular correctament el PixelSpacing
-    QString modality = dicomReader->getAttributeByName( DICOMModality );
+    QString modality = dicomReader->getValueAttributeAsQString( DICOMModality );
     if ( modality == "CT" || modality == "MR")
     {
-        value = dicomReader->getAttributeByName( DICOMPixelSpacing );
+        value = dicomReader->getValueAttributeAsQString( DICOMPixelSpacing );
     }
     else if ( modality == "US" )
     {
@@ -782,7 +782,7 @@ void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomRe
     }
     else // Per altres modalitats li assignarem a partir d'aquest tag
     {
-        value = dicomReader->getAttributeByName( DICOMImagerPixelSpacing );
+        value = dicomReader->getValueAttributeAsQString( DICOMImagerPixelSpacing );
     }
     
     QStringList list;

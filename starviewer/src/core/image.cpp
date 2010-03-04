@@ -410,7 +410,7 @@ QString Image::getFormattedContentTime() const
     // TODO Ara hem de llegir de disc, ja que aquesta informació no s'obté dels fillers steps i tampoc s'insereix a la base de dades.
     QString time;
     DICOMTagReader reader( m_path );
-    time = reader.getAttributeByName( DICOMContentTime );
+    time = reader.getValueAttributeAsQString( DICOMContentTime );
     if( !time.isEmpty() )
     {
         // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac

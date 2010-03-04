@@ -234,7 +234,7 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
     {
         // aquest valor és de tipus 3 al mòdul General Image, però consta com a tipus 1 a
         // gairebé totes les modalitats. Només consta com a tipus 2 per la modalitat US
-        QString value = dicomReader.getAttributeByName( DICOMImageType );
+        QString value = dicomReader.getValueAttributeAsQString( DICOMImageType );
         if( series->getModality() == "CT" ) // en el cas del CT ens interessa saber si és localizer
         {
             QStringList valueList = value.split( "\\" );
@@ -251,20 +251,20 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
             {
                 // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
                 // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
-                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + dicomReader.getAttributeByName(DICOMSOPInstanceUID ) + " de la serie " + series->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
+                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + dicomReader.getValueAttributeAsQString(DICOMSOPInstanceUID ) + " de la serie " + series->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
             }
         }
     }
     if ( !localizer )
     {
-        QString imagePositionPatient = dicomReader.getAttributeByName( DICOMImagePositionPatient );
+        QString imagePositionPatient = dicomReader.getValueAttributeAsQString( DICOMImagePositionPatient );
 
         if( !imagePositionPatient.isEmpty() )
         {
             while ( !found && phases < list.count() )
             {
                 dicomReader.setFile( list[phases] );
-                if ( imagePositionPatient == dicomReader.getAttributeByName( DICOMImagePositionPatient  ) )
+                if ( imagePositionPatient == dicomReader.getValueAttributeAsQString( DICOMImagePositionPatient  ) )
                 {
                     phases++;
                 }

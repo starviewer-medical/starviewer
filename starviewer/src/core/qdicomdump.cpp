@@ -84,7 +84,7 @@ void QDicomDump::setCurrentDisplayedImage ( Image *currentImage )
 
             if ( ok )
             {
-                QString imageType = dicomReader.getAttributeByName( DICOMImageType );
+                QString imageType = dicomReader.getValueAttributeAsQString( DICOMImageType );
 
                 if ( imageType.contains( "LOCALIZER" , Qt::CaseInsensitive ) )// Es tracta d'un survey
                 {
@@ -185,7 +185,7 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     DICOMTagReader dicomReader;
     bool ok = dicomReader.setFile( currentImage->getPath() );
 
-    QString value = dicomReader.getAttributeByName( DICOMContentDate );
+    QString value = dicomReader.getValueAttributeAsQString( DICOMContentDate );
     if( !value.isEmpty() )
     {
         // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format yyyy.MM.dd

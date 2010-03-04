@@ -200,7 +200,7 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
                 }
             }
             DICOMTagReader *dicomTagReader = new DICOMTagReader(imageFilenameToSave, cbdata->dcmff->getAndRemoveDataset() );
-            piSingleton->process(dicomTagReader->getAttributeByName(DICOMStudyInstanceUID), dicomTagReader);
+            piSingleton->process(dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID), dicomTagReader);
         }
     }
 

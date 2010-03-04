@@ -109,7 +109,7 @@ bool DICOMTagReader::tagExists( DICOMTag tag )
     }
 }
 
-QString DICOMTagReader::getAttributeByName( DICOMTag tag )
+QString DICOMTagReader::getValueAttributeAsQString( DICOMTag tag )
 {
     if( !m_dicomData )
     {
