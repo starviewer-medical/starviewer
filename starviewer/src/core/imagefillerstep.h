@@ -55,7 +55,9 @@ private:
     /// image i dicomReader han de ser objectes vàlids.
     bool fillCommonImageInformation( Image *image, DICOMTagReader *dicomReader );
 
-    /// Omple l'image donat amb la informació "per-frame" continguda en l'ítem proporcionat
+    /// Omple l'image donat amb la informació dels functional groups continguts en l'ítem proporcionat
+    /// Aquest mètode està pensat per fer-se servir amb els ítems obtinguts 
+    /// tant amb la Shared Functional Groups Sequence com amb la Per-Frame Functional Groups Sequence
     void fillFunctionalGroupsInformation( Image *image, DICOMSequenceItem *frameItem );
 
     /// Transforma l'string que obtenim del tag ImageOrientationPatient a un vector de doubles
