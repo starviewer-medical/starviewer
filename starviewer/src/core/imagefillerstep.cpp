@@ -154,17 +154,25 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
             if( dicomReader->tagExists( DICOMNumberOfFrames ) )
             {
                 numberOfFrames = dicomReader->getAttributeByName( DICOMNumberOfFrames ).toInt();
+                // Si la imatge és multiframe i és la segona que ens trobem, augmentarem el número que identifica l'actual volum
+                if( numberOfFrames > 1 && m_input->getCurrentVolumeNumber() != 0 )
+                {
+                    m_input->setCurrentVolumeNumber( m_input->getCurrentVolumeNumber()+1 );
+                }
             }
             for( int frameNumber=0; frameNumber<numberOfFrames; frameNumber++ ) 
             {
                 Image *image = new Image();
                 if( processImage(image,dicomReader) )
                 {
+                    // Li assignem el nº de frame i el nº de volum al que pertany
                     image->setFrameNumber( frameNumber );
+                    image->setVolumeNumberInSeries( m_input->getCurrentVolumeNumber() );
+
                     generatedImages << image;
                     m_input->getCurrentSeries()->addImage( image );
                 }
-            }   
+            }
         }
     }
     return generatedImages;
@@ -363,12 +371,19 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile( DICOMTagReader *dicomR
     if( dicomReader->tagExists( DICOMPixelData ) )
     {
         int numberOfFrames = dicomReader->getAttributeByName( DICOMNumberOfFrames ).toInt();
-        
+        // Si és la segona imatge enhanced que ens trobem, augmentarem el número que identifica l'actual volum
+        if( m_input->getCurrentSeries()->getImages().count() > 1 )
+        {
+            m_input->setCurrentVolumeNumber( m_input->getCurrentVolumeNumber()+1 );
+        }
         for(int frameNumber=0; frameNumber<numberOfFrames; frameNumber++)
         {
             Image *image = new Image();
             fillCommonImageInformation(image,dicomReader);
+            // Li assignem el nº de frame i el nº de volum al que pertany
             image->setFrameNumber( frameNumber );
+            image->setVolumeNumberInSeries( m_input->getCurrentVolumeNumber() );
+            
             generatedImages << image;
             m_input->getCurrentSeries()->addImage( image );
         }
