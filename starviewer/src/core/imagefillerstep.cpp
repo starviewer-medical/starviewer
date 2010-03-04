@@ -473,6 +473,47 @@ void ImageFillerStep::fillFunctionalGroupsInformation( Image *image, DICOMSequen
     if( sopClassUID == UIDEnhancedCTImageStorage || sopClassUID == UIDEnhancedMRImageStorage )
     {
         //
+        // Per obtenir el Frame Type, haurem de seleccionar la seqüència adient, segons la modalitat
+        //
+        DICOMSequenceAttribute *imageFrameTypeSequence = 0;
+        if( sopClassUID == UIDEnhancedCTImageStorage )
+        {
+            //
+            // CT Image Frame Type (C.8.15.3.1)
+            //
+            imageFrameTypeSequence = frameItem->getSequenceAttribute( DICOMCTImageFrameTypeSequence );
+        }
+        else
+        {
+            // MR Image Frame Type (C.8.13.5.1)
+            imageFrameTypeSequence = frameItem->getSequenceAttribute( DICOMMRImageFrameTypeSequence );
+        }
+        
+        // Un cop seleccionada la seqüència adient, obtenim els valors
+        if( imageFrameTypeSequence )
+        {
+            // Segons DICOM només es permet que contingui un sol ítem
+            QList<DICOMSequenceItem *> imageFrameTypeItems = imageFrameTypeSequence->getItems();
+            if( !imageFrameTypeItems.empty() )
+            {
+                DICOMSequenceItem *item = imageFrameTypeItems.at(0);
+                //
+                // Obtenim el Frame Type (1)
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMFrameType);
+                if( dicomValue )
+                {
+                    image->setImageType( dicomValue->getValueAsQString() );
+                }
+                else
+                {
+                    DEBUG_LOG("Falta el tag FrameType que hauria d'estar present!");
+                    ERROR_LOG("Falta el tag FrameType que hauria d'estar present!");
+                }
+            }
+        }
+
+        //
         // Pixel Measures Module - C.7.6.16.2.1
         //
         DICOMSequenceAttribute *pixelMeasuresSequence = frameItem->getSequenceAttribute( DICOMPixelMeasuresSequence );
