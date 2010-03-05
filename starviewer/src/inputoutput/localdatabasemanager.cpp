@@ -302,7 +302,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     return retrievedPatient;
 }
 
-void LocalDatabaseManager::del(const QString &studyInstanceToDelete)
+void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
 {
     DatabaseConnection dbConnect;
     DicomMask studyMaskToDelete;
@@ -442,7 +442,7 @@ void LocalDatabaseManager::deleteOldStudies()
 
     foreach(Study *study, studyListToDelete)
     {
-        del(study->getInstanceUID());
+        deleteStudy(study->getInstanceUID());
         if (getLastError() != LocalDatabaseManager::Ok)
             break;
 
@@ -587,7 +587,7 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
 
         if (queryStudy(studyMask).count() > 0)
         {
-            del(studyNotFullRetrieved);
+            deleteStudy(studyNotFullRetrieved);
         }//No s'ha arribat a inserir a la bd
         else 
         {
@@ -837,7 +837,7 @@ void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
 		emit studyWillBeDeleted(studyToDelete->getInstanceUID());
         MbytesErased += HardDiskInformation::getDirectorySizeInBytes(LocalDatabaseManager::getCachePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
 		
-        del(studyToDelete->getInstanceUID());
+        deleteStudy(studyToDelete->getInstanceUID());
         if (getLastError() != LocalDatabaseManager::Ok)
             break;
 
