@@ -167,6 +167,9 @@ public:
     /// Equival al nombre d'arxius que conté la sèrie
     int getNumberOfItems();
     
+    ///Especificia el número d'imatges: necessari per quan omplim desde la bdd   	 	 
+    void setNumberOfImages(int numberOfImages);
+    
     /// Indica si una sèrie té imatges
     bool hasImages() const;
 
@@ -355,6 +358,9 @@ private:
     QDate m_retrievedDate;
     QTime m_retrieveTime;
 
+    /// Número d'imatges de la sèrie. Fem el recompte manualment per quan consultem de la BDD
+    int m_numberOfImages;
+    
     ///Guarda el thumbnail de la sèrie
     QPixmap m_seriesThumbnail;
 

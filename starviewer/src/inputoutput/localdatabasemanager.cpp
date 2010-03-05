@@ -171,6 +171,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
     LocalDatabaseSeriesDAL seriesDAL;
     LocalDatabaseImageDAL imageDAL;
     QList<Series*> queryResult;
+    DicomMask maskToCountNumberOfImage = seriesMaskToQuery;
 
     dbConnect.open();
     seriesDAL.setDatabaseConnection(&dbConnect);
@@ -185,6 +186,17 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
         return queryResult;
     }
 
+    // Consultem el número d'imatges de la Sèrie
+    foreach(Series *series, queryResult)
+    {
+        maskToCountNumberOfImage.setSeriesUID(series->getInstanceUID());
+        series->setNumberOfImages(imageDAL.count(maskToCountNumberOfImage));
+
+        if (imageDAL.getLastError() != SQLITE_OK)
+        {
+            break;
+        }
+    }
     setLastError(imageDAL.getLastError());
 
     dbConnect.close();

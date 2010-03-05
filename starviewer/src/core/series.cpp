@@ -18,7 +18,7 @@
 namespace udg {
 
 Series::Series(QObject *parent)
- : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfPhases(1), m_numberOfSlicesPerPhase(1)
+ : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfPhases(1), m_numberOfSlicesPerPhase(1), m_numberOfImages(0)
 {
 }
 
@@ -65,6 +65,7 @@ bool Series::addImage( Image *image )
     {
         image->setParentSeries( this );
         m_imageSet << image;
+        m_numberOfImages++;
     }
 
     return ok;
@@ -88,11 +89,17 @@ void Series::setImages( QList<Image *> imageSet )
     // Buidar la llista abans d'afegir-hi la nova
     m_imageSet.clear();
     m_imageSet = imageSet;
+    m_numberOfImages = m_imageSet.count();
 }
 
 int Series::getNumberOfImages()
 {
-    return m_imageSet.count();
+    return m_numberOfImages;
+}
+
+void Series::setNumberOfImages(int numberOfImages)
+{
+    m_numberOfImages = numberOfImages;
 }
 
 int Series::getNumberOfItems()
