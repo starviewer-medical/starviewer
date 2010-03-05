@@ -259,7 +259,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedStudiesLocalDatabase()
                 }
                 else
                 {
-                    localDatabaseManager.del(studyToDelete->getInstanceUID());
+                    localDatabaseManager.deleteStudy(studyToDelete->getInstanceUID());
                     if (showDatabaseManagerError(localDatabaseManager.getLastError()))
                         break;
 

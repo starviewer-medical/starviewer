@@ -56,7 +56,7 @@ public:
     Patient* retrieve(const DicomMask &maskToRetrieve);
 
     ///Esborra de la base de dades i del disc l'estudi passat per paràmetre
-    void del(const QString &studyInstanceUIDToDelete);
+    void deleteStudy(const QString &studyInstanceUIDToDelete);
 
     ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
     void clear();
