@@ -155,7 +155,7 @@ QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect
                                     "OrderNumberInVolume, RetrievedDate, RetrievedTime, State "
                             "from Image ";
 
-    orderSentence = " order by SOPInstanceUID, VolumeNumberInSeries, OrderNumberInVolume";
+    orderSentence = " order by VolumeNumberInSeries, OrderNumberInVolume";
 
     return selectSentence + buildWhereSentence(imageMaskToSelect) + orderSentence;
 }
