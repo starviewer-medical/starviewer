@@ -18,7 +18,7 @@
 namespace udg {
 
 Series::Series(QObject *parent)
- : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfPhases(1), m_numberOfSlicesPerPhase(1), m_numberOfImages(0)
+ : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfImages(0)
 {
 }
 
@@ -532,26 +532,6 @@ bool Series::isViewable() const
         return false;
     else
         return true;
-}
-
-void Series::setNumberOfPhases( int phases )
-{
-    m_numberOfPhases = phases;
-}
-
-int Series::getNumberOfPhases() const
-{
-    return m_numberOfPhases;
-}
-
-void Series::setNumberOfSlicesPerPhase( int slices )
-{
-    m_numberOfSlicesPerPhase = slices;
-}
-
-int Series::getNumberOfSlicesPerPhase() const
-{
-    return m_numberOfSlicesPerPhase;
 }
 
 void Series::setManufacturer( QString manufacturer )

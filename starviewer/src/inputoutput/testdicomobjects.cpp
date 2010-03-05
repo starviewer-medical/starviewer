@@ -61,8 +61,6 @@ void TestDicomObjects::printSeries(Series *seriesToPrint)
     DEBUG_LOG("Description: " + seriesToPrint->getDescription());
     DEBUG_LOG("FrameOfReferenceUID " + seriesToPrint->getFrameOfReferenceUID());
     DEBUG_LOG("PositionReferenceIndicator: " + seriesToPrint->getPositionReferenceIndicator());
-    DEBUG_LOG("NumberOfPhases: " + QString().setNum(seriesToPrint->getNumberOfPhases(), 10));
-    DEBUG_LOG("NumberOfSlicesPerPhase: " + QString().setNum(seriesToPrint->getNumberOfSlicesPerPhase(), 10));
     DEBUG_LOG("BodyPartExaminated: " + seriesToPrint->getBodyPartExamined());
     DEBUG_LOG("ViewPosition: " + seriesToPrint->getViewPosition());
     DEBUG_LOG("Manufacturer: " + seriesToPrint->getManufacturer());

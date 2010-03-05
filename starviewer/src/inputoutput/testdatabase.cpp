@@ -126,8 +126,6 @@ Series* TestDatabase::getSeries2()
     newSeries->setDescription("9");
     newSeries->setFrameOfReferenceUID("1.2.3.5");
     //newSeries->setPositionReferenceIndicator("10");
-    newSeries->setNumberOfPhases(11);
-    newSeries->setNumberOfSlicesPerPhase(12);
     newSeries->setBodyPartExamined("13");
     //newSeries->setViewPosition("14");
     newSeries->setManufacturer("15");

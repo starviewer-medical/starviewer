@@ -1422,7 +1422,7 @@ bool QGlialEstimationExtension::findProbableSeries( )
                 //slicespost = series->getFirstVolume()->getDimensions()[3];
             }
             //DEBUG_LOG(series->getDescription());
-            if(series->getDescription().contains("DIFUSIO", Qt::CaseInsensitive) && series->getFirstVolume() && (series->getNumberOfPhases() > 1) ) // && slicesDSC < series->getFirstVolume()->getDimensions()[3])
+            if(series->getDescription().contains("DIFUSIO", Qt::CaseInsensitive) && series->getFirstVolume() && (series->getFirstVolume()->getNumberOfPhases() > 1) ) // && slicesDSC < series->getFirstVolume()->getDimensions()[3])
             {
                 m_difuLineEdit->clear();
                 m_difuLineEdit->insert(series->getDescription());
