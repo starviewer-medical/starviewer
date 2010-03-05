@@ -154,8 +154,8 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
             if( dicomReader->tagExists( DICOMNumberOfFrames ) )
             {
                 numberOfFrames = dicomReader->getValueAttributeAsQString( DICOMNumberOfFrames ).toInt();
-                // Si la imatge és multiframe i és la segona que ens trobem, augmentarem el número que identifica l'actual volum
-                if( numberOfFrames > 1 && m_input->getCurrentVolumeNumber() != 0 )
+                // Si la imatge és multiframe augmentarem el número que identifica l'actual volum
+                if( numberOfFrames > 1 )
                 {
                     m_input->setCurrentVolumeNumber( m_input->getCurrentVolumeNumber()+1 );
                 }
