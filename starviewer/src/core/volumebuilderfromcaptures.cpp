@@ -209,11 +209,8 @@ Volume * VolumeBuilderFromCaptures::build()
     // Es fa després d'haver inserit les imatges perquè el nou Volume activi el flag de dades carregades.
     newVolume->setData( newVtkData );
 
-    newSeries->setNumberOfPhases( 1 );
-    newSeries->setNumberOfSlicesPerPhase( newSeries->getImages().count() );
-
     newVolume->setNumberOfPhases( 1 );
-    newVolume->setNumberOfSlicesPerPhase( newSeries->getNumberOfSlicesPerPhase() );
+    newVolume->setNumberOfSlicesPerPhase( newSeries->getImages().count() );
 
     //Informació de DEBUG
     DEBUG_LOG( QString("\nNova sèrie generada:") +

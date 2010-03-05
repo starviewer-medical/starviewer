@@ -255,6 +255,7 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
             }
         }
     }
+    // TODO falta assignar el número de fase a cada imatge!
     if ( !localizer )
     {
         QString imagePositionPatient = dicomReader.getValueAttributeAsQString( DICOMImagePositionPatient );
@@ -278,8 +279,6 @@ void TemporalDimensionFillerStep::processSeries( Series *series )
         slices = list.count() / phases;
     }
 
-    series->setNumberOfPhases( phases );
-    series->setNumberOfSlicesPerPhase( slices );
     m_input->addLabelToSeries("TemporalDimensionFillerStep", series );
 }
 

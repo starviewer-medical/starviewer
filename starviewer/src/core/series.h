@@ -120,14 +120,6 @@ public:
     void setViewPosition( QString viewPosition );
     QString getViewPosition() const;
 
-    /// Assignar/Obtenir el número de fases
-    void setNumberOfPhases( int phases );
-    int getNumberOfPhases() const;
-
-    /// Assignar/Obtenir el número de llesques per fases
-    void setNumberOfSlicesPerPhase( int slices );
-    int getNumberOfSlicesPerPhase() const;
-
     ///Assigna/Obté el nom del fabricat de l'equip amb el que s'ha n capturar les imatges de la sèrie
     void setManufacturer( QString manufactures );
     QString getManufacturer() const;
@@ -341,9 +333,6 @@ private:
 
     /// Estudi pare
     Study *m_parentStudy;
-
-    /// Número de fases i número de llesques per fase per poder tractar sèries dinàmiques
-    int m_numberOfPhases, m_numberOfSlicesPerPhase;
 
     /// Part del cos examinada. (0018,015). Tipus 2/3, segons modalitat
     QString m_bodyPartExamined;

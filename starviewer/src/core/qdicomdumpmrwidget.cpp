@@ -10,6 +10,7 @@
 #include "series.h"
 #include "dicomtagreader.h"
 #include "dicomdictionary.h"
+#include "volume.h"
 
 namespace udg {
 
@@ -171,7 +172,11 @@ void QDicomDumpMRWidget::setSeriesDicomTagsValue( Series *currentSeries )
             m_labelPhilipsNumberOfStacksValue->setText( NotAvailableValue );
     }
 
-    m_labelPhilipsDynamicScansValue->setText( QString::number( currentSeries->getNumberOfPhases() , 10 ) );
+    // Per saber el número de fases, assumim que tenim un únic volum i li assignem el número de fases d'aquest
+    if( currentSeries->getFirstVolume() )
+    {
+        m_labelPhilipsDynamicScansValue->setText( QString::number( currentSeries->getFirstVolume()->getNumberOfPhases() , 10 ) );
+    }
 
     if ( currentSeries->getProtocolName() != "" )
     {
