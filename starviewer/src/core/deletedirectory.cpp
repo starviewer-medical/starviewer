@@ -8,6 +8,7 @@
 #include "logging.h"
 
 #include <QDir>
+#include <QCoreApplication>
 
 namespace udg {
 
@@ -60,6 +61,11 @@ bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory 
                 {
                     ok = false;
                     ERROR_LOG("No s'ha pogut esborrar el fitxer " + path);
+                }
+                else
+                {
+                    emit directoryDeleted();
+                    QCoreApplication::processEvents();
                 }
             }
         }

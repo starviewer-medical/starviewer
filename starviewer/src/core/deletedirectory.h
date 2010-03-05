@@ -33,6 +33,9 @@ public:
 
     ~DeleteDirectory();
 
+signals:
+    void directoryDeleted();
+
 private:
     bool removeDirectory(const QDir &dir, bool deleteRootDirectory);
 
