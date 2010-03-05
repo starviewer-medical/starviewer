@@ -104,6 +104,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     Image *image = new Image();
 
     image->setSOPInstanceUID(reply[0 + row * columns]);
+    image->setFrameNumber( QString(reply[1 + row * columns]).toInt() );
     image->setInstanceNumber(reply[4 + row * columns]);
     image->setImageOrientationPatient(getImageOrientationPatientAsDouble(reply[5 + row * columns ]));
     image->setPatientOrientation(reply[6 + row * columns]);
