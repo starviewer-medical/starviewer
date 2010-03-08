@@ -47,6 +47,9 @@ class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase
 {
 Q_OBJECT
 public:
+    
+    enum ItemTreeLevels { StudyLevel = 0, SeriesLevel = 1, ImageLevel = 2 };
+
     //Object Name s'utilitza per guardar El NomPacient, Serie + Identificador Sèrie i Imatge + Identificador Image
     enum ColumnIndex{ ObjectName = 0, PatientID = 1, PatientAge = 2, Description = 3, Modality = 4, Date = 5, Time = 6,
     PACSId = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
@@ -117,6 +120,10 @@ public:
 
     ///Per cada element selecciona Study/Series/Imatge retorna la seva DicomMask
     QList<DicomMask> getDicomMaskOfSelectedItems();
+
+    ///Assigna/Obté el nivell màxim fins el que es poden expandir els items que es mostren a QStudyTreeWiget, per defecte s'expandeix fins a nivell d'Image
+    void setMaximumExpandTreeItemsLevel(QStudyTreeWidget::ItemTreeLevels maximumExpandTreeItemsLevel);
+    QStudyTreeWidget::ItemTreeLevels getMaximumExpandTreeItemsLevel();
 
 protected:
     /** Mostra el menu contextual
@@ -236,6 +243,8 @@ private:
     QIcon m_openFolder , m_closeFolder , m_iconSeries;
 
     QList<Study*> m_insertedStudyList;
+
+    QStudyTreeWidget::ItemTreeLevels m_maximumExpandTreeItemsLevel;
 };
 
 }; // end namespace

@@ -49,6 +49,9 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
     createConnections();
 
     m_studyTreeView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+
+    //Indiquem que el nivell màxim que per defecte es pot expedir l'arbre Study/Series/Image és fins a nivell d'Image
+    m_maximumExpandTreeItemsLevel = ImageLevel;
 }
 
 QStudyTreeWidget::~QStudyTreeWidget()
@@ -140,7 +143,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
 
     foreach(Study *studyToInsert, patient->getStudies())
     {
-        QTreeWidgetItem *item = new QTreeWidgetItem(), *expandableItem = new QTreeWidgetItem(); 
+        QTreeWidgetItem *item = new QTreeWidgetItem(); 
 
         item->setIcon(ObjectName, m_closeFolder);
         item->setText(ObjectName, patient->getFullName());
@@ -157,14 +160,18 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(Type , "STUDY");//indiquem de que es tracta d'un estudi
         item->setText(RefPhysName, studyToInsert->getReferringPhysiciansName());
 
-        /* degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
-           una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
-           consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
-         */
-        expandableItem->setText(Type, "EXPANDABLE_ITEM");
-
-        item->addChild(expandableItem);
-
+        //Comprovem si el TreeItem s'ha d'expandir en funció del nivell màxim que ens han indicat que ens podem expandir
+        if (m_maximumExpandTreeItemsLevel > StudyLevel)
+        {
+            /* degut que per cada item estudi tenim items fills que són series, i que consultar les series per cada estudi és
+               una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
+               consultar l'usuari quan es facin un expand d'estudi, però per a que apareixi el botó "+" de desplegar l'estudi inserim un item en blanc
+             */
+            QTreeWidgetItem *expandableItem = new QTreeWidgetItem();
+            
+            expandableItem->setText(Type, "EXPANDABLE_ITEM");
+            item->addChild(expandableItem);
+        }
         qtreeWidgetItemList.append(item);
 
         //Inserim l'estudi a la llista d'estudis
@@ -188,7 +195,7 @@ void QStudyTreeWidget::insertSeriesList(QString studyInstanceUID, QList<Series*>
 
 QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
 {
-    QTreeWidgetItem *seriesItem = new QTreeWidgetItem(), *expandableItem = new QTreeWidgetItem();
+    QTreeWidgetItem *seriesItem = new QTreeWidgetItem();
 
     seriesItem->setIcon(ObjectName, m_iconSeries);
     //Li fem un padding per poder ordenar la columna, ja que s'ordena per String
@@ -211,13 +218,18 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     seriesItem->setText(ReqProcID , series->getRequestedProcedureID());
     seriesItem->setText(SchedProcStep , series->getScheduledProcedureStepID());
 
-    /* degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
-    una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
-    consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
-    */
-    expandableItem->setText(Type, "EXPANDABLE_ITEM");
-    seriesItem->addChild(expandableItem);
+    //Comprovem si el TreeItem s'ha d'expandir en funció del nivell màxim que ens han indicat que ens podem expandir
+    if (m_maximumExpandTreeItemsLevel > SeriesLevel)
+    {
+        /* degut que per cada item serie tenim items fills que són imatges, i que consultar les imatges per cada sèrie és
+        una operació costosa (per exemple quan es consulta al pacs) només inserirem les sèries per a que les pugui
+        consultar l'usuari quan es facin un expand de la sèrie, però per a que apareixi el botó "+" de desplegar la sèrie inserim un item en blanc
+        */
+        QTreeWidgetItem *expandableItem = new QTreeWidgetItem();
 
+        expandableItem->setText(Type, "EXPANDABLE_ITEM");
+        seriesItem->addChild(expandableItem);
+    }
     return seriesItem;
 }
 
@@ -242,6 +254,16 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
         seriesItem->addChildren(qTreeWidgetItemImageList);
     }
     else DEBUG_LOG("NO S'HA POGUT TROBAR LA SERIE A LA QUE S'HAVIA D'INSERIR LA IMATGE");
+}
+
+void QStudyTreeWidget::setMaximumExpandTreeItemsLevel(QStudyTreeWidget::ItemTreeLevels maximumExpandTreeItemsLevel)
+{
+    m_maximumExpandTreeItemsLevel = maximumExpandTreeItemsLevel;
+}
+
+QStudyTreeWidget::ItemTreeLevels QStudyTreeWidget::getMaximumExpandTreeItemsLevel()
+{
+    return m_maximumExpandTreeItemsLevel;
 }
 
 QString QStudyTreeWidget::formatAge( const QString age )
