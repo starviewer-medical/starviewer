@@ -40,6 +40,7 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
     //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
     m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
+    m_studyTreeWidget->setMaximumExpandTreeItemsLevel(QStudyTreeWidget::SeriesLevel);
 
     m_qwidgetSelectPacsToStoreDicomImage = new QWidgetSelectPacsToStoreDicomImage();
 
