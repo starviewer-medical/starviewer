@@ -397,16 +397,13 @@ QString Image::getImageTime() const
 
 QString Image::getFormattedContentTime() const
 {
-    // TODO Ara hem de llegir de disc, ja que aquesta informació no s'obté dels fillers steps i tampoc s'insereix a la base de dades.
-    QString time;
-    DICOMTagReader reader( m_path );
-    time = reader.getValueAttributeAsQString( DICOMContentTime );
-    if( !time.isEmpty() )
+    QString formattedTime = m_imageTime;
+    if( !formattedTime.isEmpty() )
     {
         // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
-        time = time.remove(":");
+        formattedTime = formattedTime.remove(":");
 
-        QStringList split = time.split(".");
+        QStringList split = formattedTime.split(".");
         QTime convertedTime = QTime::fromString(split[0], "hhmmss");
 
         if (split.size() == 2) // Té fracció al final
@@ -414,10 +411,10 @@ QString Image::getFormattedContentTime() const
             // Trunquem a milisegons i no a milionèssimes de segons
             convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
         }
-        time = convertedTime.toString("HH:mm:ss");
+        formattedTime = convertedTime.toString("HH:mm:ss");
     }
 
-    return time;
+    return formattedTime;
 }
 
 QString Image::getKeyIdentifier() const

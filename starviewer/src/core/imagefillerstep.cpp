@@ -205,6 +205,11 @@ bool ImageFillerStep::fillCommonImageInformation( Image *image, DICOMTagReader *
     // C.8.19.2 Enhanced XA/XRF Image Module 
     image->setImageType( dicomReader->getValueAttributeAsQString( DICOMImageType ) );
 
+    // Obtenim l'hora en que es va crear/obtenir la píxel data
+    // C.7.6.1 General Image Module (present a totes les modalitats no enhanced, excepte 3D XA, 3D CF i OPT)
+    // C.7.6.16 Multi-Frame Functional Groups Module
+    image->setImageTime( dicomReader->getValueAttributeAsQString( DICOMContentTime ) );
+    
     // En el cas d'XA/XRF el pixel spacing vindrà especificat per totes les imatges per igual (no cal fer un recorregut per-frame)
     QString sopClassUID = m_input->getDICOMFile()->getValueAttributeAsQString( DICOMSOPClassUID );
     if( sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage )
