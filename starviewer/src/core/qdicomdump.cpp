@@ -194,7 +194,7 @@ void QDicomDump::setCommonImageTagsValue( Image *currentImage )
     else
         m_labelImageDateValue->setText( NotAvailableValue );
 
-    value = currentImage->getFormattedContentTime();
+    value = currentImage->getFormattedImageTime();
     if( !value.isEmpty() )
     {
         m_labelImageTimeValue->setText(value);

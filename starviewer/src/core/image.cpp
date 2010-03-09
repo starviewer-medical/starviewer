@@ -395,7 +395,7 @@ QString Image::getImageTime() const
     return m_imageTime;
 }
 
-QString Image::getFormattedContentTime() const
+QString Image::getFormattedImageTime() const
 {
     QString formattedTime = m_imageTime;
     if( !formattedTime.isEmpty() )
