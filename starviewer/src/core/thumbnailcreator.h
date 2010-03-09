@@ -11,11 +11,13 @@
 class QImage;
 class QPixmap;
 class QString;
+class DicomImage;
 
 namespace udg {
 
 class Series;
 class Image;
+class DICOMTagReader;
 
 class ThumbnailCreator
 {
@@ -31,6 +33,13 @@ private :
 
     ///Crea el thumbnail d'un objecte dicom que sigui una imatge
     QImage createImageThumbnail(QString imageFileName, int resolution = 100);
+    
+    /// Crea el thumbnail a partir d'una DicomImage
+    QImage createThumbnail(DicomImage *dicomImage, int resolution = 100);
+    
+    /// Comprova que el dataset compleixi els requisitis necessaris per poder fer un thumbnail
+    /// Retorna true si és un dataset vàlid, false altrament
+    bool isSuitableForThumbnailCreation(DICOMTagReader *reader) const;
 
 };
 
