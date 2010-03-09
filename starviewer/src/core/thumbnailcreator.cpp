@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "thumbnailcreator.h"
 
 #include <QObject>
@@ -22,10 +21,8 @@
 #include "dcmtk/dcmimgle/dcmimage.h"
 #include "dcmtk/ofstd/ofbmanip.h"
 
-namespace udg
-{
+namespace udg {
 
-    ///Crea un thumbnail a partir de les imatges de la sèrie
 QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
 {
     QImage thumbnail;
@@ -77,7 +74,7 @@ QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolut
     DICOMTagReader reader( imageFileName );
     if( isSuitableForThumbnailCreation(&reader) )
     {
-        //carreguem el fitxer dicom a escalar
+        // Carreguem el fitxer dicom a escalar
         DicomImage *dicomImage = new DicomImage( qPrintable(imageFileName) );
         thumbnail = createThumbnail(dicomImage,resolution);
         
@@ -103,9 +100,9 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
     {
         dicomImage->hideAllOverlays();
         dicomImage->setMinMaxWindow(1);
-        //escalem l'imatge
+        // Escalem la imatge
         DicomImage *scaledImage;
-        //Escalem pel cantó més gran
+        // Escalem pel cantó més gran
         unsigned long width, height;
         if(dicomImage->getWidth() < dicomImage->getHeight())
         {
@@ -125,21 +122,20 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
         }
         else if(scaledImage->getStatus() == EIS_Normal)
         {
-            // el següent codi crea una imatge pgm a memòria i carreguem aquest buffer directament al pixmap
-            // obtingut de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
-            // get image extension
+            // El següent codi crea una imatge pgm a memòria i carreguem aquest buffer directament al pixmap
+            // Obtingut de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
             const int width = (int)(scaledImage->getWidth());
             const int height = (int)(scaledImage->getHeight());
             char header[32];
-            // create PGM header
+            // Create PGM header
             sprintf(header, "P5\n%i %i\n255\n", width, height);
             const int offset = strlen(header);
             const unsigned int length = width * height + offset;
-            // create output buffer for DicomImage class
+            // Create output buffer for DicomImage class
             Uint8 *buffer = new Uint8[length];
             if (buffer != NULL)
             {
-                // copy PGM header to buffer
+                // Copy PGM header to buffer
                 OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)header, buffer, offset);
                 if (scaledImage->getOutputData((void *)(buffer + offset), length, 8))
                 {
@@ -151,7 +147,7 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
                         DEBUG_LOG(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Ha fallat :(");
 
                 }
-                // delete temporary pixel buffer
+                // Delete temporary pixel buffer
                 delete[] buffer;
                 // Cal esborrar la DicomImage per no tenir fugues de memòria
                 delete scaledImage;
@@ -162,7 +158,6 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
             ok = false;
             DEBUG_LOG(QString( "La imatge escalada té errors. Error: %1 ").arg( DicomImage::getString( scaledImage->getStatus())));
         }
-
     }
     else
     {

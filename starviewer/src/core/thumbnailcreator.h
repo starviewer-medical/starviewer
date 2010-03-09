@@ -4,7 +4,6 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #ifndef UDGTHUMBNAILCREATOR_H
 #define UDGTHUMBNAILCREATOR_H
 
@@ -18,19 +17,16 @@ class Series;
 class Image;
 class DICOMTagReader;
 
-class ThumbnailCreator
-{
+class ThumbnailCreator {
 public:
-
-    ///Crea un thumbnail a partir de les imatges de la sèrie
+    /// Crea un thumbnail a partir de les imatges de la sèrie
     QImage getThumbnail(const Series *series, int resolution = 100);
 
-    ///Crea el thumbnail de la imatge passada per paràmetre
+    /// Crea el thumbnail de la imatge passada per paràmetre
     QImage getThumbnail(const Image *image, int resolution = 100);
 
-private :
-
-    ///Crea el thumbnail d'un objecte dicom que sigui una imatge
+private:
+    /// Crea el thumbnail d'un objecte dicom que sigui una imatge
     QImage createImageThumbnail(QString imageFileName, int resolution = 100);
     
     /// Crea el thumbnail a partir d'una DicomImage
