@@ -182,7 +182,7 @@ public:
     QString getImageTime() const;
 
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
-    QString getFormattedContentTime() const;
+    QString getFormattedImageTime() const;
     
     /// Ens retorna la clau que identifica la imatge
     QString getKeyIdentifier() const;
