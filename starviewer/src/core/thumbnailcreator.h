@@ -9,7 +9,6 @@
 #define UDGTHUMBNAILCREATOR_H
 
 class QImage;
-class QPixmap;
 class QString;
 class DicomImage;
 
