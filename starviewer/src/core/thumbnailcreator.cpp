@@ -20,6 +20,7 @@
 // fem servir dcmtk per l'escalat de les imatges dicom
 #include "dcmtk/dcmimgle/dcmimage.h"
 #include "dcmtk/ofstd/ofbmanip.h"
+#include <dcdatset.h>
 
 namespace udg {
 
@@ -67,6 +68,11 @@ QImage ThumbnailCreator::getThumbnail(const Image *image, int resolution)
     return createImageThumbnail(image->getPath(), resolution);
 }
 
+QImage ThumbnailCreator::getThumbnail(DICOMTagReader *reader, int resolution)
+{
+    return createThumbnail(reader,resolution);
+}
+
 QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolution)
 {
     QImage thumbnail;
@@ -76,6 +82,24 @@ QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolut
     {
         // Carreguem el fitxer dicom a escalar
         DicomImage *dicomImage = new DicomImage( qPrintable(imageFileName) );
+        thumbnail = createThumbnail(dicomImage,resolution);
+        
+        // Cal esborrar la DicomImage per no tenir fugues de memòria
+        if ( dicomImage )
+            delete dicomImage;
+    }
+
+    return thumbnail;
+}
+
+QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)
+{
+    QImage thumbnail;
+    
+    if( isSuitableForThumbnailCreation(reader) )
+    {
+        // Carreguem el fitxer dicom a escalar
+        DicomImage *dicomImage = new DicomImage(reader->getDcmDataset(), reader->getDcmDataset()->getOriginalXfer() );
         thumbnail = createThumbnail(dicomImage,resolution);
         
         // Cal esborrar la DicomImage per no tenir fugues de memòria

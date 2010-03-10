@@ -52,6 +52,9 @@ public:
     /// del DcmDataset passa a ser el DICOMTagReader.
     void setDcmDataset(QString filename, DcmDataset *dcmDataset);
 
+    /// Retorna el Dataset de dcmtk que es fa servir internament
+    DcmDataset *getDcmDataset() const;
+    
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
     bool tagExists( DICOMTag tag );
 

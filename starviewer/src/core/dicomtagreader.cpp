@@ -98,6 +98,11 @@ void DICOMTagReader::setDcmDataset(QString filename, DcmDataset *dcmDataset)
     m_dicomData = dcmDataset;
 }
 
+DcmDataset *DICOMTagReader::getDcmDataset() const
+{
+    return m_dicomData;
+}
+
 bool DICOMTagReader::tagExists( DICOMTag tag )
 {
     if( m_dicomData )
