@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "patientbrowsermenuextendeditem.h"
 
+#include "thumbnailcreator.h"
+
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QPainter>
@@ -29,7 +31,7 @@ void PatientBrowserMenuExtendedItem::createInitialWidget()
 {
     QVBoxLayout * verticalLayout = new QVBoxLayout( this );
     m_icon = new QLabel( this );
-    m_icon->setPixmap( this->makeEmptyThumbnail() );
+    m_icon->setPixmap( QPixmap::fromImage(ThumbnailCreator::makeEmptyThumbnailWithCustomText(NoItemText)) );
     m_icon->setAlignment( Qt::AlignCenter );
     verticalLayout->addWidget( m_icon );
 
@@ -47,18 +49,6 @@ void PatientBrowserMenuExtendedItem::setPixmap( const QPixmap &pixmap )
 void PatientBrowserMenuExtendedItem::setText( const QString &text )
 {
     m_text->setText( text );
-}
-
-QPixmap PatientBrowserMenuExtendedItem::makeEmptyThumbnail()
-{
-    QPixmap pixmap(100,100);
-    pixmap.fill(Qt::black);
-
-    QPainter painter(&pixmap);
-    painter.setPen(Qt::white);
-    painter.drawText(0, 0, 100, 100, Qt::AlignCenter | Qt::TextWordWrap, NoItemText );
-
-    return pixmap;
 }
 
 bool PatientBrowserMenuExtendedItem::event( QEvent * event )

@@ -28,6 +28,9 @@ public:
     /// Obté el thumbnail a partir del DICOMTagReader
     QImage getThumbnail(DICOMTagReader *reader, int resolution = 100);
 
+    /// Crea un thumbnail buit personalitzat amb el text que li donem
+    static QImage makeEmptyThumbnailWithCustomText(const QString &text, int resolution = 100);
+
 private:
     /// Crea el thumbnail d'un objecte dicom que sigui una imatge
     QImage createImageThumbnail(QString imageFileName, int resolution = 100);
