@@ -49,7 +49,7 @@ bool TemporalDimensionFillerStep::fill()
     if( m_input )
     {
         QStringList requiredLabels;
-        requiredLabels << "ImageFillerStep";
+        requiredLabels << "ImageFillerStep" << "OrderImagesFillerStep";
         QList<Series *> seriesList = m_input->getSeriesWithLabels( requiredLabels );
         foreach( Series *series, seriesList )
         {
