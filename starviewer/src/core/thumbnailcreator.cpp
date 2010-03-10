@@ -51,12 +51,7 @@ QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
         else
         {
             // si la sèrie no conté imatges en el thumbnail ho indicarem
-            thumbnail = QImage(resolution, resolution, QImage::Format_RGB32);
-            thumbnail.fill(Qt::black);
-
-            QPainter painter(&thumbnail);
-            painter.setPen(Qt::white);
-            painter.drawText(0, 0, 100, 100, Qt::AlignCenter | Qt::TextWordWrap, QObject::tr("No Images Available"));
+            thumbnail = makeEmptyThumbnailWithCustomText(QObject::tr("No Images Available"));
         }
     }
 
@@ -71,6 +66,20 @@ QImage ThumbnailCreator::getThumbnail(const Image *image, int resolution)
 QImage ThumbnailCreator::getThumbnail(DICOMTagReader *reader, int resolution)
 {
     return createThumbnail(reader,resolution);
+}
+
+QImage ThumbnailCreator::makeEmptyThumbnailWithCustomText(const QString &text, int resolution)
+{
+	QImage thumbnail;
+	
+	thumbnail = QImage(resolution, resolution, QImage::Format_RGB32);
+    thumbnail.fill(Qt::black);
+
+    QPainter painter(&thumbnail);
+    painter.setPen(Qt::white);
+    painter.drawText(0, 0, resolution, resolution, Qt::AlignCenter | Qt::TextWordWrap, text);
+
+    return thumbnail;
 }
 
 QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolution)
@@ -192,12 +201,7 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
     // Si no hem pogut generar el thumbnail, creem un de buit
     if(!ok)
     {
-        thumbnail = QImage(resolution, resolution, QImage::Format_RGB32);
-        thumbnail.fill(Qt::black);
-
-        QPainter painter( &thumbnail);
-        painter.setPen(Qt::white);
-        painter.drawText(0, 0, resolution, resolution, Qt::AlignCenter | Qt::TextWordWrap, QObject::tr("Preview image not available"));
+        thumbnail = makeEmptyThumbnailWithCustomText(QObject::tr("Preview image not available"));
     }
 
     return thumbnail;

@@ -37,9 +37,6 @@ private:
     /// Crea el widget inicial sense cap informació
     void createInitialWidget();
 
-    /// Crea un thumbnail buit, amb un texte apropiat
-    QPixmap makeEmptyThumbnail();
-
 private:
     /// Label que conté el text addicional a mostrar
     QLabel *m_text;
