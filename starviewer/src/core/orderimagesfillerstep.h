@@ -50,11 +50,11 @@ private:
     void setOrderedImagesIntoSeries( Series *series );
 
     /// Estructura per guardar les imatges ordenades
-    //  NormalVector    Distance    InstanceNumber
-    QMap< QString, QMap< double , QMap< int , Image* >* >* > *m_orderedImageSet;
+    //  NormalVector    Distance    InstanceNumber0FrameNumber
+    QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* > *m_orderedImageSet;
 
-    //     Series        Volume     NormalVector    Distance    InstanceNumber
-    QHash< Series *, QMap< int, QMap< QString, QMap< double , QMap< int , Image* >* >* >* >* > OrderImagesInternalInfo;
+    //     Series        Volume     NormalVector    Distance  InstanceNumber0FrameNumber
+    QHash< Series *, QMap< int, QMap< QString, QMap< double , QMap< unsigned long , Image* >* >* >* >* > OrderImagesInternalInfo;
 };
 
 }
