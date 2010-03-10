@@ -309,7 +309,6 @@ void QConfigurationScreen::test()
 bool QConfigurationScreen::validatePacsDevice()
 {
     QString text;
-    bool portValid;
 
     //Per força tot els pacs han de tenir algun AETitle
     text = m_textAETitle->text();
