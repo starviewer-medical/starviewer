@@ -25,9 +25,15 @@ public:
     /// Crea el thumbnail de la imatge passada per paràmetre
     QImage getThumbnail(const Image *image, int resolution = 100);
 
+    /// Obté el thumbnail a partir del DICOMTagReader
+    QImage getThumbnail(DICOMTagReader *reader, int resolution = 100);
+
 private:
     /// Crea el thumbnail d'un objecte dicom que sigui una imatge
     QImage createImageThumbnail(QString imageFileName, int resolution = 100);
+
+    /// Crea el thumbnail a partir d'un DICOMTagReader
+    QImage createThumbnail(DICOMTagReader *reader, int resolution = 100);
     
     /// Crea el thumbnail a partir d'una DicomImage
     QImage createThumbnail(DicomImage *dicomImage, int resolution = 100);
