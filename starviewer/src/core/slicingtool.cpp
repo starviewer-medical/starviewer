@@ -31,7 +31,7 @@ SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
 
     // cada cop que canvïi l'input cal fer algunes inicialitzacions
     connect( m_2DViewer, SIGNAL(volumeChanged(Volume *) ), SLOT( inputChanged(Volume *) ) );
-    chooseBestDefaultScrollMode( m_2DViewer->getInput() );
+    inputChanged( m_2DViewer->getInput() );
 }
 
 SlicingTool::~SlicingTool()
