@@ -51,6 +51,12 @@ private:
     /// Mètode específic per processar els arxius que siguin de tipus Enhanced
     QList<Image *> processEnhancedDICOMFile( DICOMTagReader *dicomReader );
     
+    /// Donat un dicomReader guardem a la cache el corresponent thumbnail. 
+    /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius
+    /// multiframe i enhanced ja que actualment és molt costós perquè hem de carregar tot el volum
+    /// a memòria i aquí podem aprofitar que el dataset està a memòria evitant la càrrega posterior
+    void saveMultiframeThumbnail(DICOMTagReader *dicomReader);
+    
     /// Omple la informació comú a totes les imatges.
     /// image i dicomReader han de ser objectes vàlids.
     bool fillCommonImageInformation( Image *image, DICOMTagReader *dicomReader );

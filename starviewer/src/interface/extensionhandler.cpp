@@ -391,7 +391,7 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
                 volume->setImages( imageList );
                 volume->setNumberOfPhases( numberOfPhases );
                 volume->setNumberOfSlicesPerPhase( numberOfSlicesPerPhase );
-                volume->setThumbnail( imageList.at(imageList.count()/2)->getThumbnail() );
+                volume->setThumbnail( imageList.at(imageList.count()/2)->getThumbnail(true) );
                 series->addVolume(volume);
             }
         }

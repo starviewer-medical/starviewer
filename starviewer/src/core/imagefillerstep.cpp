@@ -16,9 +16,11 @@
 #include "dicomsequenceattribute.h"
 #include "dicomsequenceitem.h"
 #include "dicomvalueattribute.h"
+#include "thumbnailcreator.h"
 
 #include <cmath> // pel fabs
 #include <QApplication> //Per el process events, TODO Treure i fer amb threads.
+#include <QFileInfo>
 
 namespace udg {
 
@@ -174,8 +176,29 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
                 }
             }
         }
+
+        if( generatedImages.count() > 1 )
+        {
+            // Com que la imatge és multiframe (tant si és enhanced com si no) creem els corresponents thumbnails i els guardem a la cache
+            saveMultiframeThumbnail( dicomReader );
+        }
     }
     return generatedImages;
+}
+
+void ImageFillerStep::saveMultiframeThumbnail(DICOMTagReader *dicomReader)
+{
+    Q_ASSERT( dicomReader );
+    
+    int volumeNumber = m_input->getCurrentVolumeNumber();
+    QString thumbnailPath = QFileInfo(dicomReader->getFileName()).absolutePath();
+
+    ThumbnailCreator thumbnailCreator;
+    thumbnailCreator.getThumbnail( dicomReader ).save( QString("%1/thumbnail%2.pgm").arg(thumbnailPath).arg(volumeNumber), "PGM" );
+
+    // Si és el primer thumbnail, també creem el thumbnail ordinari que s'havia fet sempre
+    if( volumeNumber == 0 )
+        thumbnailCreator.getThumbnail( dicomReader ).save( QString("%1/thumbnail.pgm").arg(thumbnailPath), "PGM" );
 }
 
 bool ImageFillerStep::fillCommonImageInformation( Image *image, DICOMTagReader *dicomReader )

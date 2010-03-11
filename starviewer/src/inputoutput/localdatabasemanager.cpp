@@ -864,10 +864,16 @@ void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceT
 void LocalDatabaseManager::createSeriesThumbnails(Study *studyToGenerateSeriesThumbnails)
 {
     ThumbnailCreator thumbnailCreator;
+    QString thumbnailFilePath;
 
     foreach(Series *series, studyToGenerateSeriesThumbnails->getSeries())
     {
-        thumbnailCreator.getThumbnail(series).save(getSeriesThumbnailPath(studyToGenerateSeriesThumbnails->getInstanceUID(), series), "PGM");
+        // Només crearem el thumbnail si aquest no s'ha creat encara
+        thumbnailFilePath = getSeriesThumbnailPath(studyToGenerateSeriesThumbnails->getInstanceUID(), series);
+        if( !QFileInfo( thumbnailFilePath ).exists() )
+        {
+            thumbnailCreator.getThumbnail(series).save( thumbnailFilePath, "PGM" );
+        }
     }
 }
 
