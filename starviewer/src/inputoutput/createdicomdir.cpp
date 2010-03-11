@@ -16,7 +16,6 @@
 
 #include "status.h"
 #include "logging.h"
-#include "dicomtagreader.h"
 
 #if defined (HAVE_WINDOWS_H) || defined(HAVE_FNMATCH_H)
 #define PATTERN_MATCHING_AVAILABLE
