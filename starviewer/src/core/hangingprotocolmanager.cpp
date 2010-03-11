@@ -18,17 +18,12 @@
 #include "hangingprotocolmask.h"
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
-#include "../inputoutput/localdatabasemanager.h"
-#include "../inputoutput/dicommask.h"
 #include "identifier.h"
 #include "logging.h"
 #include "../inputoutput/previousstudiesmanager.h"
 #include "volumerepository.h"
 
-#include <QList>
-#include <QDate>
 #include <QMovie>
-#include <QFlags>
 
 namespace udg {
 
