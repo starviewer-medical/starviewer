@@ -201,10 +201,12 @@ public:
 
     /**
      * El mètode ens retorna el thumbnail de la imatge. Es crearà el primer cop que es demani
+     * @param getFromCache Si és cert intentarà carregar el thumbnail si es troba creat a la cache. 
+     *                     Altrament, simplement comprobarà que no estigui creat a memòria i prou
      * @param resolution La resolució amb la que volem el thumbnail
      * @return Un QPixmap amb el thumbnail
      */
-    QPixmap getThumbnail(int resolution = 100);
+    QPixmap getThumbnail(bool getFromCache = false, int resolution = 100);
 
     /// Ens diu quin és el pla de projecció d'una imatge segons les etiquetes d'orientació (R/L,A/P,F/H)
     /// El format serà "direccióFiles\\direccióColumnes"
