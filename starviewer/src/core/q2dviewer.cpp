@@ -13,11 +13,6 @@
 #include "study.h"
 #include "patient.h"
 #include "imageplane.h"
-#include "dicomtagreader.h" // per les annotacions de mamo
-#include "dicomsequenceitem.h"
-#include "dicomsequenceattribute.h"
-#include "dicomvalueattribute.h"
-#include "dicomdictionary.h"
 // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
 #include "hangingprotocolmanager.h"
 //thickslab
@@ -1596,87 +1591,58 @@ void Q2DViewer::updateSliceAnnotationInformation()
 
         if( image )
         {
-            DICOMTagReader reader( image->getPath() );
-            QString laterality = reader.getValueAttributeAsQString( DICOMImageLaterality );
+            QString projection = image->getViewCodeMeaning();
+            /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
+            // TODO tenir-ho carregat en arxius, maps, etc..
+            // TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
+            if( projection == "medio-lateral" )
+                projection = "ML";
+            else if( projection == "medio-lateral oblique" )
+                projection = "MLO";
+            else if( projection == "latero-medial" )
+                projection = "LM";
+            else if( projection == "latero-medial oblique" )
+                projection = "LMO";
+            else if( projection == "cranio-caudal" )
+                projection = "CC";
+            else if( projection == "caudo-cranial (from below)" )
+                projection = "FB";
+            else if( projection == "superolateral to inferomedial oblique" )
+                projection = "SIO";
+            else if( projection == "exaggerated cranio-caudal" )
+                projection = "XCC";
+            else if( projection == "cranio-caudal exaggerated laterally" )
+                projection = "XCCL";
+            else if( projection == "cranio-caudal exaggerated medially" )
+                projection = "XCCM";
+
+            // S'han de seguir les recomanacions IHE de presentació d'imatges de Mammografia
+            // IHE Techincal Framework Vol. 2 revision 8.0, apartat 4.16.4.2.2.1.1.2 Image Orientation and Justification
             QString desiredOrientation;
-
-            QString tagValue;
-            // TODO Quan s'insereixi la propietat ViewCodeMeaning a la base de dades aquest codi
-            // s'haurà de substituir per una simple crida Image::getViewCodeMeaning()
-            DICOMSequenceAttribute *viewCodeSequence = reader.getSequenceAttribute(DICOMViewCodeSequence);
-            if( viewCodeSequence )
+            QString laterality = image->getImageLaterality();
+            if( projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB" )
             {
-                QList<DICOMSequenceItem *> items = viewCodeSequence->getItems();
-                // Per definició, només hauríem de tenir un ítem
-                switch( items.count() )
-                {
-                case 0:
-                    DEBUG_LOG("ViewCodeSequence no té cap ítem o no existeix");
-                    break;
-                
-                case 1:
-                    tagValue = items.at(0)->getValueAttribute(DICOMCodeMeaning)->getValueAsQString();
-                    break;
-                
-                default:
-                    DEBUG_LOG("ViewCodeSequence té més d'un ítem!");
-                    break;
-                }
+                if( laterality == "L" )
+                    desiredOrientation = "A\\R";
+                else if( laterality == "R" )
+                    desiredOrientation = "P\\L";
+            }
+            else if( projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO" )
+            {
+                if( laterality == "L" )
+                    desiredOrientation = "A\\F";
+                else if( laterality == "R" )
+                    desiredOrientation = "P\\F";
+            }
+            else
+            {
+                DEBUG_LOG("Projecció no tractada! :: " + projection );
             }
 
-            if( ! tagValue.isEmpty() )
-            {
-                QString projection = tagValue.at(0);
-                /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
-                // TODO tenir-ho carregat en arxius, maps, etc..
-                // TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
-                if( projection == "medio-lateral" )
-                    projection = "ML";
-                else if( projection == "medio-lateral oblique" )
-                    projection = "MLO";
-                else if( projection == "latero-medial" )
-                    projection = "LM";
-                else if( projection == "latero-medial oblique" )
-                    projection = "LMO";
-                else if( projection == "cranio-caudal" )
-                    projection = "CC";
-                else if( projection == "caudo-cranial (from below)" )
-                    projection = "FB";
-                else if( projection == "superolateral to inferomedial oblique" )
-                    projection = "SIO";
-                else if( projection == "exaggerated cranio-caudal" )
-                    projection = "XCC";
-                else if( projection == "cranio-caudal exaggerated laterally" )
-                    projection = "XCCL";
-                else if( projection == "cranio-caudal exaggerated medially" )
-                    projection = "XCCM";
-
-                // S'han de seguir les recomanacions IHE de presentació d'imatges de Mammografia
-                // IHE Techincal Framework Vol. 2 revision 8.0, apartat 4.16.4.2.2.1.1.2 Image Orientation and Justification
-                if( projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB" )
-                {
-                    if( laterality == "L" )
-                        desiredOrientation = "A\\R";
-                    else if( laterality == "R" )
-                        desiredOrientation = "P\\L";
-                }
-                else if( projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO" )
-                {
-                    if( laterality == "L" )
-                        desiredOrientation = "A\\F";
-                    else if( laterality == "R" )
-                        desiredOrientation = "P\\F";
-                }
-                else
-                {
-                    DEBUG_LOG("Projecció no tractada! :: " + projection );
-                }
-
-                m_lowerRightText = laterality + " " + projection;
-                // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
-                QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
-                m_hangingProtocolManager->applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3] , desiredOrientation, this);
-            }
+            m_lowerRightText = laterality + " " + projection;
+            // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
+            QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
+            m_hangingProtocolManager->applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3] , desiredOrientation, this);
         }
         else
             m_lowerRightText.clear();
