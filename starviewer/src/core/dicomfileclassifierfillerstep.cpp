@@ -116,8 +116,8 @@ void DICOMFileClassifierFillerStep::classifyFile()
     {
         series = CreateInformationModelObject::createSeries(m_dicomReader);
         study->addSeries( series );
-        // Per cada sèrie reiniciem el número de volum
-        m_input->setCurrentVolumeNumber(0);
+        // Per cada sèrie reiniciem el número de volum multiframe
+        m_input->resetCurrentMultiframeVolumeNumber();
     }
     series->addFilePath( m_dicomReader->getFileName() );
 

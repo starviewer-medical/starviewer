@@ -153,15 +153,19 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
         else
         {
             int numberOfFrames = 1;
+            int volumeNumber = m_input->getSingleFrameVolumeNumber();
             if( dicomReader->tagExists( DICOMNumberOfFrames ) )
             {
                 numberOfFrames = dicomReader->getValueAttributeAsQString( DICOMNumberOfFrames ).toInt();
                 // Si és la segona imatge multiframe que ens trobem, augmentarem el número que identifica l'actual volum
                 if( m_input->getCurrentSeries()->getImages().count() > 1 )
                 {
-                    m_input->setCurrentVolumeNumber( m_input->getCurrentVolumeNumber()+1 );
+                    m_input->increaseCurrentMultiframeVolumeNumber();
                 }
+                volumeNumber = m_input->getCurrentMultiframeVolumeNumber();
             }
+            m_input->setCurrentVolumeNumber( volumeNumber );
+            
             for( int frameNumber=0; frameNumber<numberOfFrames; frameNumber++ ) 
             {
                 Image *image = new Image();
@@ -169,7 +173,7 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
                 {
                     // Li assignem el nº de frame i el nº de volum al que pertany
                     image->setFrameNumber( frameNumber );
-                    image->setVolumeNumberInSeries( m_input->getCurrentVolumeNumber() );
+                    image->setVolumeNumberInSeries( volumeNumber );
 
                     generatedImages << image;
                     m_input->getCurrentSeries()->addImage( image );
@@ -197,7 +201,7 @@ void ImageFillerStep::saveMultiframeThumbnail(DICOMTagReader *dicomReader)
     thumbnailCreator.getThumbnail( dicomReader ).save( QString("%1/thumbnail%2.pgm").arg(thumbnailPath).arg(volumeNumber), "PGM" );
 
     // Si és el primer thumbnail, també creem el thumbnail ordinari que s'havia fet sempre
-    if( volumeNumber == 0 )
+    if( volumeNumber == 1 )
         thumbnailCreator.getThumbnail( dicomReader ).save( QString("%1/thumbnail.pgm").arg(thumbnailPath), "PGM" );
 }
 
@@ -428,8 +432,10 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile( DICOMTagReader *dicomR
         // Si és la segona imatge enhanced que ens trobem, augmentarem el número que identifica l'actual volum
         if( m_input->getCurrentSeries()->getImages().count() > 1 )
         {
-            m_input->setCurrentVolumeNumber( m_input->getCurrentVolumeNumber()+1 );
+            m_input->increaseCurrentMultiframeVolumeNumber();
         }
+        m_input->setCurrentVolumeNumber( m_input->getCurrentMultiframeVolumeNumber() );
+        
         for(int frameNumber=0; frameNumber<numberOfFrames; frameNumber++)
         {
             Image *image = new Image();

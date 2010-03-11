@@ -89,9 +89,22 @@ public:
     void setCurrentSeries(Series *series);
     Series *getCurrentSeries();
 
-    /// Afegir / Obtenir el volum de les imatges que s'han de processar.
+    /// Reinicialitza el número de volum (multiframe) actual
+    void resetCurrentMultiframeVolumeNumber();
+    
+    /// Incrementa el número de volum (multiframe) actual
+    void increaseCurrentMultiframeVolumeNumber();
+    
+    /// Retorna el número de volum (multiframe) actual
+    int getCurrentMultiframeVolumeNumber() const;
+    
+    /// Retorna el corresponent número de volum pel conjunt d'imatges single frame
+    int getSingleFrameVolumeNumber() const;
+
+    /// Assigna/Retorna el número de volum actual que estem tractant, necessari pels 
+    /// passos posteriors a l'ImageFillerStep
     void setCurrentVolumeNumber(int volumeNumber);
-    int getCurrentVolumeNumber();
+    int getCurrentVolumeNumber() const;
 
 private:
     /// Llista de pacients a omplir
@@ -121,6 +134,9 @@ private:
 
     /// Guardem el volume number de la sèrie que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
     int m_currentVolumeNumber;
+
+    /// Manté el número actual de volum pel subconjunt de volums multiframe
+    int m_currentMultiframeVolumeNumber;
 };
 
 }
