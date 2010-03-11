@@ -778,8 +778,6 @@ Study * HangingProtocolManager::searchPreviousStudy( HangingProtocol * protocol 
 
 void HangingProtocolManager::previousStudyDownloaded()
 {
-    int i;
-
     // Es busca quins estudis nous hi ha
     foreach( Study * study, m_patient->getStudies() )
     {
