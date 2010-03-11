@@ -20,8 +20,9 @@
 #include "hangingprotocoldisplayset.h"
 #include "identifier.h"
 #include "logging.h"
-#include "../inputoutput/previousstudiesmanager.h"
 #include "volumerepository.h"
+// Necessari per poder anar a buscar prèvies
+#include "../inputoutput/previousstudiesmanager.h"
 
 #include <QMovie>
 
