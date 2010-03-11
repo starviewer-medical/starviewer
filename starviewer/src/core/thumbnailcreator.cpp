@@ -24,6 +24,8 @@
 
 namespace udg {
 
+const QString PreviewNotAvailableText( QObject::tr("Preview image not available") );
+
 QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
 {
     QImage thumbnail;
@@ -101,6 +103,11 @@ QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)
         // Cal esborrar la DicomImage per no tenir fugues de memòria
         if ( dicomImage )
             delete dicomImage;
+    }
+    else
+    {
+        // Creem thumbnail alternatiu indicant que no es pot mostrar una imatge de preview
+        thumbnail = makeEmptyThumbnailWithCustomText( PreviewNotAvailableText );
     }
 
     return thumbnail;
@@ -188,7 +195,7 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
     // Si no hem pogut generar el thumbnail, creem un de buit
     if(!ok)
     {
-        thumbnail = makeEmptyThumbnailWithCustomText(QObject::tr("Preview image not available"));
+        thumbnail = makeEmptyThumbnailWithCustomText( PreviewNotAvailableText );
     }
 
     return thumbnail;
