@@ -84,21 +84,8 @@ QImage ThumbnailCreator::makeEmptyThumbnailWithCustomText(const QString &text, i
 
 QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolution)
 {
-    QImage thumbnail;
-
     DICOMTagReader reader( imageFileName );
-    if( isSuitableForThumbnailCreation(&reader) )
-    {
-        // Carreguem el fitxer dicom a escalar
-        DicomImage *dicomImage = new DicomImage( qPrintable(imageFileName) );
-        thumbnail = createThumbnail(dicomImage,resolution);
-        
-        // Cal esborrar la DicomImage per no tenir fugues de memòria
-        if ( dicomImage )
-            delete dicomImage;
-    }
-
-    return thumbnail;
+    return createThumbnail(&reader);
 }
 
 QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)
