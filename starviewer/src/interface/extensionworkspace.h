@@ -49,6 +49,11 @@ private:
     /// Crea les connexions de signals i slots
     void createConnections();
 
+    /// Especifica si es fa servir o no el color de fons fosc
+    /// Útil perquè l'usuari no s'enlluerni al estar en habitacions fosques i aparegui l'aplicació per primera vegada
+    /// si es té un theme del SO amb colors clars (surt tota una finestra amb 2 pantalles de diagnòstic blanques)
+    void setDarkBackgroundColorEnabled(bool value);
+
 private slots:
     /// Tanca la aplicació amb índex "index". Pensat per connectar-ho al signal de tancar pestanya
     void closeApplicationByTabIndex(int index);

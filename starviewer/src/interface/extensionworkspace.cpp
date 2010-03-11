@@ -20,6 +20,8 @@ ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, QString name)
     setTabsClosable(true);
 
     this->setTabPosition( QTabWidget::South );
+    this->setDarkBackgroundColorEnabled(true);
+
     createConnections();
 }
 
@@ -32,6 +34,18 @@ void ExtensionWorkspace::createConnections()
     connect( this, SIGNAL( tabCloseRequested(int) ), SLOT( closeApplicationByTabIndex(int) ) );
 }
 
+void ExtensionWorkspace::setDarkBackgroundColorEnabled(bool enabled)
+{
+    if (enabled)
+    {
+        this->setStyleSheet("QTabWidget QStackedWidget { background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #222222, stop: 1 #333333); }");
+    }
+    else
+    {
+        this->setStyleSheet("");
+    }
+}
+
 void ExtensionWorkspace::addApplication( QWidget *application , QString caption, const QString &extensionIdentifier )
 {
     INFO_LOG( "Afegim l'extensió: " + caption + " al workspace" );
@@ -39,6 +53,8 @@ void ExtensionWorkspace::addApplication( QWidget *application , QString caption,
     this->setCurrentIndex( this->indexOf( application ) );
     // Afegim l'extensió a la llista d'extensions actives
     m_activeExtensions.insert(application,extensionIdentifier);
+
+    this->setDarkBackgroundColorEnabled(false);
 }
 
 void ExtensionWorkspace::removeApplication( QWidget *application )
@@ -49,6 +65,11 @@ void ExtensionWorkspace::removeApplication( QWidget *application )
         this->removeTab( this->indexOf( application ) );
         // Eliminem l'extensió de la llista d'extensions actives
         m_activeExtensions.remove(application);
+
+        if (m_activeExtensions.count() <= 0)
+        {
+            this->setDarkBackgroundColorEnabled(true);
+        }
 
     }
     else
