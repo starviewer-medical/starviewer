@@ -18,17 +18,12 @@
 #include "hangingprotocolmask.h"
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
-#include "dicomtagreader.h"
 #include "../inputoutput/localdatabasemanager.h"
 #include "../inputoutput/dicommask.h"
-#include "dicomdictionary.h"
 #include "identifier.h"
 #include "logging.h"
 #include "../inputoutput/previousstudiesmanager.h"
 #include "volumerepository.h"
-#include "dicomsequenceitem.h"
-#include "dicomsequenceattribute.h"
-#include "dicomvalueattribute.h"
 
 #include <QList>
 #include <QDate>
@@ -401,7 +396,6 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
     QList< HangingProtocolImageSet::Restriction > listOfRestrictions = imageSet->getRestrictions();
     int numberRestrictions = listOfRestrictions.size();
     HangingProtocolImageSet::Restriction restriction;
-    DICOMTagReader dicomReader;
 
     valid = (serie->getModality() != "PR"); // Els presentation states per defecte no es mostren
 
@@ -568,111 +562,85 @@ void HangingProtocolManager::applyDesiredDisplayOrientation(const QString &curre
 
 bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )
 {
+    if( !image )
+    {
+        DEBUG_LOG("La imatge passada és NUL·LA! Retornem fals.");
+        return false;
+    }
+
     bool valid = true;
     int i = 0;
     QList< HangingProtocolImageSet::Restriction > listOfRestrictions = imageSet->getRestrictions();
     int numberRestrictions = listOfRestrictions.size();
     HangingProtocolImageSet::Restriction restriction;
-    DICOMTagReader dicomReader;
 
-    bool ok = dicomReader.setFile( image->getPath() );
-    if( ok )
+    while ( valid && i < numberRestrictions )
     {
-        while ( valid && i < numberRestrictions )
+        restriction = listOfRestrictions.value( i );
+        if( restriction.selectorAttribute == "ViewPosition" )
         {
-            restriction = listOfRestrictions.value( i );
-            if( restriction.selectorAttribute == "ViewPosition" )
-            {
-                //if( ! dicomReader.getValueAttributeAsQString( DICOMViewPosition ).contains( restriction.valueRepresentation) )
-                //    valid = false;
-
-                QString viewPosition = dicomReader.getValueAttributeAsQString( DICOMViewPosition );
-                bool contains = viewPosition.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
-                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
-                valid = contains ^ match;
-            }
-            else if( restriction.selectorAttribute == "ImageLaterality" )
-            {
-                if( dicomReader.getValueAttributeAsQString( DICOMImageLaterality ) != restriction.valueRepresentation )
-                    valid = false;
-            }
-            else if( restriction.selectorAttribute == "Laterality" )
-            {
-                if( dicomReader.getValueAttributeAsQString( DICOMLaterality ) != restriction.valueRepresentation )
-                    valid = false;
-            }
-            else if( restriction.selectorAttribute == "PatientOrientation" )
-            {
-                if( !image->getPatientOrientation().contains( restriction.valueRepresentation ) )
-                    valid = false;
-            }
-            else if( restriction.selectorAttribute == "CodeMeaning" )
-            {
-                QString tagValue;
-                // TODO Quan s'insereixi la propietat ViewCodeMeaning a la base de dades aquest codi
-                // s'haurà de substituir per una simple crida Image::getViewCodeMeaning()
-                DICOMSequenceAttribute *viewCodeSequence = dicomReader.getSequenceAttribute(DICOMViewCodeSequence);
-                if( viewCodeSequence )
-                {
-                    QList<DICOMSequenceItem *> items = viewCodeSequence->getItems();
-                    // Per definició, només hauríem de tenir un ítem
-                    switch( items.count() )
-                    {
-                    case 0:
-                        DEBUG_LOG("ViewCodeSequence no té cap ítem o no existeix");
-                        break;
-                    
-                    case 1:
-                        tagValue = items.at(0)->getValueAttribute(DICOMCodeMeaning)->getValueAsQString();
-                        break;
-                    
-                    default:
-                        DEBUG_LOG("ViewCodeSequence té més d'un ítem!");
-                        break;
-                    }
-                }
-
-                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::Match );
-
-                if( !( tagValue.contains( restriction.valueRepresentation ) ) )
-                    valid = false;
-
-                if( !match ) valid = !valid;// just el cas contrari
-            }
-            else if( restriction.selectorAttribute == "ImageType" )
-            {
-                QString imageType = dicomReader.getValueAttributeAsQString( DICOMImageType );
-                bool isLocalyzer = imageType.contains( restriction.valueRepresentation, Qt::CaseInsensitive );
-                bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
-                valid = isLocalyzer ^ match;
-            }
-            else if( restriction.selectorAttribute == "Anterior" )
-            {
-                Series * serie = image->getParentSeries();
-                int imageSetNumber = restriction.valueRepresentation.toInt();
-
-                /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
-                Study * referenceStudy = 0;
-                HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
-
-                if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
-                    if( referenceImageSet->getSeriesToDisplay() != 0 ) // no te sèrie anterior, per tant no és valid
-                        referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
-                else // L'estudi de referència és un previ que encara no s'ha descarregat
-                    referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
-
-                if( (referenceStudy == 0) || (serie->getParentStudy()->getDate() >= referenceStudy->getDate()) )
-                    valid = false;
-            }
-            else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
-            {
-                Series * serie = image->getParentSeries();
-                if( serie->getNumberOfImages() < restriction.valueRepresentation.toInt() )
-                    valid = false;
-            }
-            i++;
+            bool contains = image->getViewPosition().contains( restriction.valueRepresentation, Qt::CaseInsensitive );
+            bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
+            valid = contains ^ match;
         }
+        else if( restriction.selectorAttribute == "ImageLaterality" )
+        {
+            if( QString(image->getImageLaterality()) != restriction.valueRepresentation.at(0) )
+                valid = false;
+        }
+        else if( restriction.selectorAttribute == "Laterality" )
+        {
+            // Atenció! Aquest atribut està definit a nivell de sèries
+            if( QString(image->getParentSeries()->getLaterality()) != restriction.valueRepresentation )
+                valid = false;
+        }
+        else if( restriction.selectorAttribute == "PatientOrientation" )
+        {
+            if( !image->getPatientOrientation().contains( restriction.valueRepresentation ) )
+                valid = false;
+        }
+        else if( restriction.selectorAttribute == "CodeMeaning" ) // TODO es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
+        {
+            bool match = ( restriction.usageFlag  == HangingProtocolImageSet::Match );
+
+            if( !( image->getViewCodeMeaning().contains( restriction.valueRepresentation ) ) )
+                valid = false;
+
+            if( !match ) valid = !valid;// just el cas contrari
+        }
+        else if( restriction.selectorAttribute == "ImageType" )
+        {
+            bool isLocalyzer = image->getImageType().contains( restriction.valueRepresentation, Qt::CaseInsensitive );
+            bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
+            valid = isLocalyzer ^ match;
+        }
+        else if( restriction.selectorAttribute == "Anterior" )
+        {
+            Series * serie = image->getParentSeries();
+            int imageSetNumber = restriction.valueRepresentation.toInt();
+
+            /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
+            Study * referenceStudy = 0;
+            HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
+
+            if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
+                if( referenceImageSet->getSeriesToDisplay() != 0 ) // no te sèrie anterior, per tant no és valid
+                    referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
+            else // L'estudi de referència és un previ que encara no s'ha descarregat
+                referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
+
+            if( (referenceStudy == 0) || (serie->getParentStudy()->getDate() >= referenceStudy->getDate()) )
+                valid = false;
+        }
+        else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
+        {
+            Series * serie = image->getParentSeries();
+            if( serie->getNumberOfImages() < restriction.valueRepresentation.toInt() )
+                valid = false;
+        }
+        i++;
     }
+    
     return valid;
 }
 
