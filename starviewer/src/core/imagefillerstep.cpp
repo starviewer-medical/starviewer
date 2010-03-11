@@ -857,7 +857,6 @@ void ImageFillerStep::computePixelSpacing( Image *image, DICOMTagReader *dicomRe
                     value = QString("%1").arg(physicalDeltaX);
                     value += "\\";
                     value += QString("%1").arg(physicalDeltaY);
-                    DEBUG_LOG( QString("Pixel Spacing Ultrasound: %1").arg(value) );
                 }
             }
         }
