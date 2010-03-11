@@ -143,6 +143,11 @@ void QThickSlabWidget::applyProjectionMode( int comboItem )
             m_currentViewer->setSlabThickness( m_slabThicknessSlider->value() );
         
         QApplication::restoreOverrideCursor();
+
+        // Cal mantenir l'slider disabled si el checkbox de màxim thickness està habilitat, 
+        // ja que al aplicar una projecció nova es pot tornar a habilitar al fer el setValue()
+        if( m_maximumThicknessCheckBox->isChecked() )
+            m_slabThicknessSlider->setEnabled(false);
     }
 }
 
