@@ -91,7 +91,7 @@
          </column>
          <column>
           <property name="text">
-           <string>AETitle</string>
+           <string>AE Title</string>
           </property>
          </column>
          <column>
@@ -106,12 +106,12 @@
          </column>
          <column>
           <property name="text">
-           <string>Q/R Port</string>
+           <string>Q/R port</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Send Port</string>
+           <string>Send port</string>
           </property>
          </column>
          <column>
@@ -241,7 +241,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="textLabel1_2">
              <property name="text">
-              <string>AE Title :</string>
+              <string>AE Title:</string>
              </property>
             </widget>
            </item>
@@ -255,7 +255,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="textLabel3_5">
              <property name="text">
-              <string>Address :</string>
+              <string>Address:</string>
              </property>
             </widget>
            </item>
@@ -265,7 +265,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="textLabel4_2">
              <property name="text">
-              <string>Q/R Service :</string>
+              <string>Q/R service:</string>
              </property>
             </widget>
            </item>
@@ -336,7 +336,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="textLabel4_3">
              <property name="text">
-              <string>Send Service :</string>
+              <string>Send service:</string>
              </property>
             </widget>
            </item>
@@ -389,7 +389,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="textLabel6_7">
              <property name="text">
-              <string>Institution :</string>
+              <string>Institution:</string>
              </property>
             </widget>
            </item>
@@ -399,7 +399,7 @@
            <item row="1" column="0">
             <widget class="QLabel" name="textLabel7_6">
              <property name="text">
-              <string>Location :</string>
+              <string>Location:</string>
              </property>
             </widget>
            </item>
@@ -409,7 +409,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="textLabel8_6">
              <property name="text">
-              <string>Description :</string>
+              <string>Description:</string>
              </property>
             </widget>
            </item>
@@ -419,7 +419,7 @@
            <item row="3" column="1">
             <widget class="QCheckBox" name="m_checkDefault">
              <property name="text">
-              <string>Mark as default query PACS</string>
+              <string>Default query PACS</string>
              </property>
             </widget>
            </item>
@@ -519,7 +519,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Incoming connections port :</string>
+            <string>Incoming connections port:</string>
            </property>
           </widget>
          </item>
@@ -545,7 +545,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Max. simultaneous connections :</string>
+            <string>Max. simultaneous connections:</string>
            </property>
           </widget>
          </item>
@@ -666,7 +666,7 @@
          <item row="0" column="1">
           <widget class="QLabel" name="textLabel3">
            <property name="text">
-            <string>AETitle Local Machine :</string>
+            <string>AE Title Local Machine:</string>
            </property>
           </widget>
          </item>
@@ -837,7 +837,7 @@
            <item row="4" column="2">
             <widget class="QLabel" name="label_9">
              <property name="text">
-              <string>Phone Number :</string>
+              <string>Phone Number:</string>
              </property>
             </widget>
            </item>
@@ -864,14 +864,14 @@
            <item row="2" column="2">
             <widget class="QLabel" name="label_6">
              <property name="text">
-              <string>ZIP Code :</string>
+              <string>ZIP Code:</string>
              </property>
             </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
-              <string>City :</string>
+              <string>City:</string>
              </property>
             </widget>
            </item>
@@ -921,7 +921,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="label_7">
              <property name="text">
-              <string>Country :</string>
+              <string>Country:</string>
              </property>
             </widget>
            </item>
@@ -935,7 +935,7 @@
            <item row="4" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>EMail :</string>
+              <string>EMail:</string>
              </property>
             </widget>
            </item>
@@ -1046,6 +1046,7 @@
   <tabstop>m_buttonApplyPacs</tabstop>
  </tabstops>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
