@@ -85,8 +85,8 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
     action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()), tr("Ctrl+V"));
     (void) new QShortcut(action->shortcut(), this, SLOT(viewFromQStudyTreeWidget()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedStudiesLocalDatabase()), Qt::Key_Delete);
-    (void) new QShortcut(action->shortcut(), this, SLOT(deleteSelectedStudiesLocalDatabase()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()), Qt::Key_Delete);
+    (void) new QShortcut(action->shortcut(), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
 
 #ifndef STARVIEWER_LITE
     action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()), tr("Ctrl+M"));
@@ -234,38 +234,62 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
     }
 }
 
-void QInputOutputLocalDatabaseWidget::deleteSelectedStudiesLocalDatabase()
+void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
 {
-    QList<Study*> selectedStudiesToDelete = m_studyTreeWidget->getSelectedStudies();
+    QList<DicomMask> selectedDicomMaskToDelete = m_studyTreeWidget->getDicomMaskOfSelectedItems();
 
-    if(!selectedStudiesToDelete.isEmpty())
+    if(!selectedDicomMaskToDelete.isEmpty())
     {
         QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
-                                                                           tr("Are you sure you want to delete the selected Studies?"),
+                                                                           tr("Are you sure you want to delete the selected Items?"),
                                                                            QMessageBox::Yes | QMessageBox::No,
                                                                            QMessageBox::No);
         if (response  == QMessageBox::Yes)
         {
-            //Posem el cursor en espera
             QApplication::setOverrideCursor(Qt::WaitCursor);
-
             LocalDatabaseManager localDatabaseManager;
 
-            foreach(Study *studyToDelete, selectedStudiesToDelete)
+            foreach(DicomMask dicomMaskToDelete, selectedDicomMaskToDelete)
             {
-                if(m_qcreateDicomdir->studyExists(studyToDelete->getInstanceUID()))
+                if(m_qcreateDicomdir->studyExists(dicomMaskToDelete.getStudyUID()))
                 {
-                    QMessageBox::warning(this, ApplicationNameString,
-                    tr("The study %1 of patient %2 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.").arg(studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName()));
+                    Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyUID());
+                    QString warningMessage;
+                    
+                    if (dicomMaskToDelete.getSeriesUID().isEmpty())
+                    {
+                        warningMessage = tr("The study %1 of patient %2 is in use by the DICOMDIR List. If you want to delete "
+                                            "this study you should remove it from the DICOMDIR List first.")
+                                         .arg(studyToDelete->getID() , studyToDelete->getParentPatient()->getFullName());
+                    }
+                    else
+                    {   //TODO:Hauriem de mostar el Series ID en lloc del Series UID
+                        warningMessage = tr("The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete "
+                                            "this series you should remove the study from the DICOMDIR List first.")
+                                         .arg(dicomMaskToDelete.getSeriesUID(), studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
+                    }
+
+                    QMessageBox::warning(this, ApplicationNameString, warningMessage);
                 }
                 else
                 {
-                    localDatabaseManager.deleteStudy(studyToDelete->getInstanceUID());
-                    if (showDatabaseManagerError(localDatabaseManager.getLastError()))
-                        break;
+                    if (!dicomMaskToDelete.getSeriesUID().isEmpty())
+                    {
+                        localDatabaseManager.deleteSeries(dicomMaskToDelete.getStudyUID(), dicomMaskToDelete.getSeriesUID());
 
-                    m_seriesListWidget->clear();
-                    m_studyTreeWidget->removeStudy(studyToDelete->getInstanceUID());
+                        m_seriesListWidget->removeSeries(dicomMaskToDelete.getSeriesUID());
+                        m_studyTreeWidget->removeSeries(dicomMaskToDelete.getStudyUID(), dicomMaskToDelete.getSeriesUID());
+                    }
+                    else
+                    {
+                        localDatabaseManager.deleteStudy(dicomMaskToDelete.getStudyUID());
+
+                        m_seriesListWidget->clear();
+                        m_studyTreeWidget->removeStudy(dicomMaskToDelete.getStudyUID());
+                    }
+                    
+                    if (showDatabaseManagerError(localDatabaseManager.getLastError()))
+                    break;
                 }
             }
             QApplication::restoreOverrideCursor();

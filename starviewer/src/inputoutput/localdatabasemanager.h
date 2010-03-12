@@ -58,6 +58,10 @@ public:
     ///Esborra de la base de dades i del disc l'estudi passat per paràmetre
     void deleteStudy(const QString &studyInstanceUIDToDelete);
 
+    /**Esborra la sèrie passada per paràmetre, si l'estudi al qual pertany la sèrie només té aquesta també s'esborra l'estudi, ja que no té cap sentit tenir un estudi
+      * sense sèries inserit a la BD*/
+    void deleteSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID);
+
     ///Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
     void clear();
 
@@ -162,6 +166,8 @@ private:
 
     ///Esborra l'estudi del disc dur
     void deleteStudyFromHardDisk(const QString &studyInstanceToDelete);
+    ///Esborra la sèrie del disc dur
+    void deleteSeriesFromHardDisk(const QString &studyInstanceToDelete, const QString &seriesInstanceToDelete);
 
     ///Crea i guarda el thumbnails de les sèries de l'estudi al directori on estan guardades les imatges de cada serie
     void createSeriesThumbnails(Study *studyToGenerateSeriesThumbnails);

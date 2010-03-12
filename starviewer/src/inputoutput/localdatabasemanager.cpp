@@ -359,6 +359,56 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     deleteStudyFromHardDisk(studyInstanceToDelete);
 }
 
+void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID)
+{
+    DatabaseConnection dbConnect;
+    DicomMask seriesMaskToDelete, studyMask;
+    int status;
+
+    INFO_LOG("S'esborrara de la base de dades la sèrie : " + seriesInstanceUID + " de l'estudi " + studyInstanceUID);
+    if (studyInstanceUID.isEmpty() || seriesInstanceUID.isEmpty())
+        return;
+
+    seriesMaskToDelete.setStudyUID(studyInstanceUID);
+    seriesMaskToDelete.setSeriesUID(seriesInstanceUID);
+    studyMask.setStudyUID(studyInstanceUID);
+
+    if (querySeries(studyMask).count() == 1)
+    {
+        //Si només té una sèrie esborrem tot l'estudi
+        INFO_LOG("L'estudi de la serie a esborrar nomes te aquesta serie, per tant s'esborrara l'estudi sencer.");
+        deleteStudy(studyInstanceUID);
+    }
+    else
+    {
+        dbConnect.open();
+        dbConnect.beginTransaction();
+
+        status = delSeries(&dbConnect, seriesMaskToDelete);
+        if (status != SQLITE_OK) 
+        {
+            dbConnect.rollbackTransaction();
+            setLastError(status);
+            dbConnect.close();
+            return;
+        }
+
+        status = delImage(&dbConnect, seriesMaskToDelete);
+        if (status != SQLITE_OK) 
+        {
+            dbConnect.rollbackTransaction();
+            setLastError(status);
+            dbConnect.close();
+            return;
+        }
+
+        dbConnect.endTransaction();
+        dbConnect.close();
+
+        deleteSeriesFromHardDisk(studyInstanceUID, seriesInstanceUID);
+    }
+}
+
 void LocalDatabaseManager::clear()
 {
     DicomMask maskToDelete;//creem màscara buida, ho esborrarà tot
@@ -755,27 +805,31 @@ int LocalDatabaseManager::delPatientOfStudy(DatabaseConnection *dbConnect, const
     if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
         return localDatabaseStudyDAL.getLastError();
 
-    if (patientList.count() == 1) 
+    if (patientList.count() > 0) 
     {
-        patientID = patientList.at(0)->getID();
+        patientID = patientList.at(0)->getID(); //Per un mateix studyUID no podem trobar més d'un pacient
         delete patientList.at(0);//esborrem el pacient no el necessitem més
+
+        //busquem quants estudis té el pacient
+        numberOfStudies = localDatabaseStudyDAL.countHowManyStudiesHaveAPatient(patientID);
+        if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
+            return localDatabaseStudyDAL.getLastError();
+
+        if (numberOfStudies == 1) //si només té un estudi l'esborrem
+        {
+            DicomMask patientMaskToDelete;
+            patientMaskToDelete.setPatientId(patientID);
+
+            return delPatient(dbConnect, patientMaskToDelete);
+        }
+        else return localDatabaseStudyDAL.getLastError();
+
     }
     else 
-        return -1;
-
-    //busquem quants estudis té el pacient
-    numberOfStudies = localDatabaseStudyDAL.countHowManyStudiesHaveAPatient(patientID);
-    if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
-        return localDatabaseStudyDAL.getLastError();
-
-    if (numberOfStudies == 1) //si només té un estudi l'esborrem
     {
-        DicomMask patientMaskToDelete;
-        patientMaskToDelete.setPatientId(patientID);
-
-        return delPatient(dbConnect, patientMaskToDelete);
+        //No s'ha trobat pacient a esborrar
+        return localDatabaseStudyDAL.getLastError();
     }
-    else return localDatabaseStudyDAL.getLastError();
 }
 
 int LocalDatabaseManager::delPatient(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
@@ -855,7 +909,19 @@ void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceT
 {
     DeleteDirectory deleteDirectory;
 
+    //TODO:El Path del directori no s'hauria de calcular aquí
     if (!deleteDirectory.deleteDirectory(getStudyPath(studyInstanceToDelete), true))
+        m_lastError = LocalDatabaseManager::DeletingFilesError;
+    else
+       m_lastError = LocalDatabaseManager::Ok;
+}
+
+void LocalDatabaseManager::deleteSeriesFromHardDisk(const QString &studyInstanceUID, const QString &seriesInstanceUID)
+{
+    DeleteDirectory deleteDirectory;
+
+    //TODO:El Path del directori no s'hauria de calcular aquí
+    if (!deleteDirectory.deleteDirectory(getStudyPath(studyInstanceUID) + QDir::separator() + seriesInstanceUID, true))
         m_lastError = LocalDatabaseManager::DeletingFilesError;
     else
        m_lastError = LocalDatabaseManager::Ok;
