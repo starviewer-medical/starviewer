@@ -37,6 +37,9 @@ public:
     ///Retorna l'estudi uid de la sèrie seeleccionada
     QString getCurrentStudyUID();
 
+    ///Esborra de la llista la serie amb el UID passat per paràmetre
+    void removeSeries( const QString &seriesInstanceUID);
+
 public slots:
     ///Estableix quina és la série seleccionada
     void setCurrentSeries( const QString &seriesUID );
