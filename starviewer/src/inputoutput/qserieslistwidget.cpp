@@ -106,6 +106,24 @@ void QSeriesListWidget::setCurrentSeries( const QString &seriesUID )
     if ( stop ) m_seriesListWidget->setCurrentItem( llistaSeries.at( index ) );
 }
 
+void QSeriesListWidget::removeSeries( const QString &seriesInstanceUID )
+{
+    int index = 0;
+    bool stop = false;
+    QList<QListWidgetItem *> llistaSeries =  m_seriesListWidget->findItems ( "" , Qt::MatchContains );
+
+    while ( !stop && index < llistaSeries.count() )
+    {
+        if ( llistaSeries.at( index )->statusTip() == seriesInstanceUID )
+        {
+            stop = true;
+        }
+        else index++;
+    }
+
+    if ( stop ) delete llistaSeries.at( index );
+}
+
 void QSeriesListWidget::clicked( QListWidgetItem *item )
 {
      if ( item != NULL ) emit( selectedSeriesIcon( item->statusTip() ) );
