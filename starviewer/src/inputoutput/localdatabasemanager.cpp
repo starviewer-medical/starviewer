@@ -318,7 +318,7 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     dbConnect.open();
     dbConnect.beginTransaction();
 
-    status = delPatientOfStudy(&dbConnect, studyMaskToDelete);
+    status = deletePatientOfStudyFromDatabase(&dbConnect, studyMaskToDelete);
     if (status != SQLITE_OK) 
     {
         dbConnect.rollbackTransaction();
@@ -327,7 +327,7 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
         return;
     }
 
-    status = delStudy(&dbConnect, studyMaskToDelete);
+    status = deleteStudyFromDatabase(&dbConnect, studyMaskToDelete);
     if (status != SQLITE_OK) 
     {
         dbConnect.rollbackTransaction();
@@ -336,7 +336,7 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
         return;
     }
 
-    status = delSeries(&dbConnect, studyMaskToDelete);
+    status = deleteSeriesFromDatabase(&dbConnect, studyMaskToDelete);
     if (status != SQLITE_OK) 
     {
         dbConnect.rollbackTransaction();
@@ -345,7 +345,7 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
         return;
     }
 
-    status = delImage(&dbConnect, studyMaskToDelete);
+    status = deleteImageFromDatabase(&dbConnect, studyMaskToDelete);
     if (status != SQLITE_OK) 
     {
         dbConnect.rollbackTransaction();
@@ -384,7 +384,7 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
         dbConnect.open();
         dbConnect.beginTransaction();
 
-        status = delSeries(&dbConnect, seriesMaskToDelete);
+        status = deleteSeriesFromDatabase(&dbConnect, seriesMaskToDelete);
         if (status != SQLITE_OK) 
         {
             dbConnect.rollbackTransaction();
@@ -393,7 +393,7 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
             return;
         }
 
-        status = delImage(&dbConnect, seriesMaskToDelete);
+        status = deleteImageFromDatabase(&dbConnect, seriesMaskToDelete);
         if (status != SQLITE_OK) 
         {
             dbConnect.rollbackTransaction();
@@ -419,7 +419,7 @@ void LocalDatabaseManager::clear()
     dbConnect.open();
     dbConnect.beginTransaction();
 
-    status = delPatient(&dbConnect, maskToDelete);
+    status = deletePatientFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
         dbConnect.rollbackTransaction();
@@ -429,7 +429,7 @@ void LocalDatabaseManager::clear()
     }
 
     //esborrem tots els estudis
-    status = delStudy(&dbConnect, maskToDelete);
+    status = deleteStudyFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
         dbConnect.rollbackTransaction();
@@ -439,7 +439,7 @@ void LocalDatabaseManager::clear()
     }
 
     //esborrem totes les series
-    status = delSeries(&dbConnect, maskToDelete);
+    status = deleteSeriesFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
         dbConnect.rollbackTransaction();
@@ -449,7 +449,7 @@ void LocalDatabaseManager::clear()
     }
 
     //esborrem totes les imatges 
-    status = delImage(&dbConnect, maskToDelete);
+    status = deleteImageFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
         dbConnect.rollbackTransaction();
@@ -790,7 +790,7 @@ void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
     }
 }
 
-int LocalDatabaseManager::delPatientOfStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL;
     QList<Patient*> patientList;
@@ -820,7 +820,7 @@ int LocalDatabaseManager::delPatientOfStudy(DatabaseConnection *dbConnect, const
             DicomMask patientMaskToDelete;
             patientMaskToDelete.setPatientId(patientID);
 
-            return delPatient(dbConnect, patientMaskToDelete);
+            return deletePatientFromDatabase(dbConnect, patientMaskToDelete);
         }
         else return localDatabaseStudyDAL.getLastError();
 
@@ -832,7 +832,7 @@ int LocalDatabaseManager::delPatientOfStudy(DatabaseConnection *dbConnect, const
     }
 }
 
-int LocalDatabaseManager::delPatient(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+int LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabasePatientDAL localDatabasePatientDAL;
 
@@ -842,7 +842,7 @@ int LocalDatabaseManager::delPatient(DatabaseConnection *dbConnect, const DicomM
     return localDatabasePatientDAL.getLastError();
 }
 
-int LocalDatabaseManager::delStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+int LocalDatabaseManager::deleteStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL;
 
@@ -852,7 +852,7 @@ int LocalDatabaseManager::delStudy(DatabaseConnection *dbConnect, const DicomMas
     return localDatabaseStudyDAL.getLastError();
 }
 
-int LocalDatabaseManager::delSeries(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+int LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseSeriesDAL localDatabaseSeriesDAL;
 
@@ -862,7 +862,7 @@ int LocalDatabaseManager::delSeries(DatabaseConnection *dbConnect, const DicomMa
     return localDatabaseSeriesDAL.getLastError();
 }
 
-int LocalDatabaseManager::delImage(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+int LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseImageDAL localDatabaseImageDAL;
 

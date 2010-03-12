@@ -148,15 +148,15 @@ private:
     int saveImage(DatabaseConnection *dbConnect, Image *imageToSave);
 
     ///Esborra el pacient que compleixi amb la màscara a esborrar. A la màscara hem d'indicar el UID de l'estudi a esborrar i comprova si el pacient el qual pertany l'estudi té més d'un estudi, si és així no l'esborrar, si només en té un l'esborra
-    int delPatientOfStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    int deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra el pacient que compleix la màscara passada per paràmetre, només es té en compte el patientID
-    int delPatient(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    int deletePatientFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra el l'estudi que compleixi amb la màscara a esborrar
-    int delStudy(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    int deleteStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra la serie que compleixi amb la màscara a esborrar
-    int delSeries(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    int deleteSeriesFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra la imatge que compleixi amb la màscara a esborrar
-    int delImage(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    int deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
 
     ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
     void deleteRetrievedObjects(Patient *failedPatient);
