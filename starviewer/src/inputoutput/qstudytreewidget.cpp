@@ -479,6 +479,32 @@ void QStudyTreeWidget::removeStudy( QString studyInstanceUIDToRemove )
 	m_studyTreeView->clearSelection();
 }
 
+void QStudyTreeWidget::removeSeries( const QString &studyInstanceUID, const QString &seriesInstanceUID )
+{
+    foreach( QTreeWidgetItem *studyItem, m_studyTreeView->findItems( studyInstanceUID, Qt::MatchExactly, UID ) )
+    {
+        bool seriesDeleted = false;
+
+        for( int index = 0; index < studyItem->childCount(); index++ )
+        {
+            if ( studyItem->child(index)->text(UID) == seriesInstanceUID )
+            {
+                delete studyItem->takeChild(index);
+                seriesDeleted = true;
+            }
+        }
+
+        if (studyItem->childCount() == 0 && seriesDeleted)
+        {
+            /*Si després d'esborrar la sèrie l'estudi no té cap fill esborrem el QTreeWidgeItem estudi, no té sentit tenir un estudi sol 
+              si no té series*/
+            delete studyItem;
+        }
+    }
+
+	m_studyTreeView->clearSelection();
+}
+
 void QStudyTreeWidget::setCurrentSeries( QString seriesUID )
 {
     //busquem l'estudi a la que pertany la sèrie

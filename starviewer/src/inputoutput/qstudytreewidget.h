@@ -80,6 +80,11 @@ public:
      */
     void removeStudy( QString StudyInstanceUIDToRemove );
 
+    /** Esborra la sèrie del QStudyTreeWidget, si és l'única sèrie de l'estudi també esborra l'estudi, no té sentit tenir una estudi sense
+     *  series al TreeWidget
+     */
+    void removeSeries(const QString &studyInstanceUIDToRemove, const QString &seriesInstanceUIDToRemove);
+
     /** Ordena per columna
      * @param Indica la columna per la que s'ha d'ordenar
      */
