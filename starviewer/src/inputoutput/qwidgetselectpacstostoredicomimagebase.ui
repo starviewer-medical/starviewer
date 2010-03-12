@@ -14,13 +14,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Select Pacs to store DICOM Image</string>
+   <string>Send DICOM objects to PACS</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Select at which PACS the DICOM images have to be stored:</string>
+      <string>Select at which PACS the DICOM files have to be sent:</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -93,7 +93,7 @@
      <item>
       <widget class="QPushButton" name="m_storeButton">
        <property name="text">
-        <string>Store</string>
+        <string>Send</string>
        </property>
       </widget>
      </item>

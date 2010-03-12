@@ -114,7 +114,7 @@ void QExporterTool::generateAndStoreNewSeries()
     {
         DEBUG_LOG( "No hi ha prou memòria per generar el nou volum." );
         WARN_LOG( "No hi ha prou memòria per generar el nou volum." );
-        QMessageBox::warning( this, tr("No enough memory"), tr("The new volume cannot be generated because there is not enought memory. Please, select less slices or reduce the window size.") );
+        QMessageBox::warning( this, tr("No enough memory"), tr("The new volume cannot be generated because there is not enough memory. Please, select less slices or reduce the window size.") );
         return;
     }
 

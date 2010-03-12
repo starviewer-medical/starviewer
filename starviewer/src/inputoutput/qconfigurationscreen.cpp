@@ -322,25 +322,25 @@ bool QConfigurationScreen::validatePacsDevice()
     text = m_textAddress->text();
     if ( text.length() == 0 )
     {
-        QMessageBox::warning( this , ApplicationNameString , tr ( "Incorrect server address" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr ( "Incorrect server address." ) );
         return false;
     }
 
     if (!m_checkBoxQueryRetrieveEnabled->isChecked() && !m_checkBoxStoreEnabled->isChecked())
     {
-        QMessageBox::warning( this, ApplicationNameString, tr( "At least one service, Query/Retrieve or Store has to be activated" ) );
+        QMessageBox::warning( this, ApplicationNameString, tr( "At least one of the service Query/Retrieve or Send has to be enabled." ) );
         return false;
     }
 
     if (m_checkBoxQueryRetrieveEnabled->isChecked() && m_textQueryRetrieveServicePort->text().isEmpty())
     {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Query/Retrieve Port value has to be between 0 and 65535" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Query/Retrieve Port value has to be between 0 and 65535." ) );
         return false;
     }
 
     if (m_checkBoxStoreEnabled->isChecked() && m_textStoreServicePort->text().isEmpty())
     {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Store Port value has to be between 0 and 65535" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Send Port value has to be between 0 and 65535." ) );
         return false;
     }
 
@@ -348,7 +348,7 @@ bool QConfigurationScreen::validatePacsDevice()
     text = m_textInstitution->text();
     if ( text.length() == 0 )
     {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Institution field can't be empty" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Institution field can't be empty." ) );
         return false;
     }
 

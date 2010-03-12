@@ -198,15 +198,15 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
     if( notAddedStudies.size() > 0 || existingStudies.size() > 0 )
     {
         QString message;
-        message = tr("The following studies were not added to the DICOMDIR list for the following reasons");
+        message = tr("The following studies were not added to the DICOMDIR list for the following reasons:");
         if( existingStudies.size() > 0 )
         {
-            message += tr("\n\n*Already exist in the list\n\n");
+            message += tr("\n\n\t- Already exist in the list.\n");
             message += existingStudies.join("\n");
         }
         if( notAddedStudies.size() > 0 )
         {
-            message += tr("\n\n*Exceed the device available space\n\n");
+            message += tr("\n\n\t- Not enough space on the device.\n");
             message += notAddedStudies.join("\n");
         }
         QMessageBox::warning(0, ApplicationNameString, message );
@@ -532,13 +532,13 @@ void QCreateDicomdir::openBurningApplication(bool createIsoResult)
         
         if( !dicomdirBurningApplication.burnIsoImageFile() )
         {
-            QMessageBox::critical(this, tr("DICOMDIR Burning Failure"), tr("There was an error during the burning of the ISO image file. ") + dicomdirBurningApplication.getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
+            QMessageBox::critical(this, tr("DICOMDIR Burning Failure"), tr("There was an error during the burning of the DICOMDIR ISO image file.\n") + dicomdirBurningApplication.getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
             ERROR_LOG( "Error al gravar la imatge ISO amb descripció: " + dicomdirBurningApplication.getLastErrorDescription() );
         }
     }
     else
     {
-        QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the ISO image file. ") + m_isoImageFileCreator->getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
+        QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the DICOMDIR ISO image file. ") + m_isoImageFileCreator->getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
         ERROR_LOG( "Error al crear ISO amb descripció: " + m_isoImageFileCreator->getLastErrorDescription() );
     }
     delete m_isoImageFileCreator;
@@ -664,7 +664,7 @@ void QCreateDicomdir::deviceChanged( int index )
             setDicomdirSize();
             if ( m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes )
             {
-                QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of the device is %1 Mb" ).arg(m_availableSpaceToRecordInBytes/(1024*1024)) );
+                QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb." ).arg(m_availableSpaceToRecordInBytes/(1024*1024)) );
             }
 
             break;
@@ -691,7 +691,7 @@ void QCreateDicomdir::deviceChanged( int index )
 
                 if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
                 {
-                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb" ).arg(maximumDeviceCapacity) );
+                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb." ).arg(maximumDeviceCapacity) );
                 }
             }
             else
