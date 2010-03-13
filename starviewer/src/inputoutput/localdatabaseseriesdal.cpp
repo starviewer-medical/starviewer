@@ -128,22 +128,22 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
                                                             "'%7', '%8', '%9', '%10', "
                                                             "'%11', '%12', '%13', '%14', "
                                                             "'%15', '%16', '%17', '%18', %19)")
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getInstanceUID() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getParentStudy()->getInstanceUID() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getSeriesNumber() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getModality() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getInstanceUID() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getParentStudy()->getInstanceUID() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getSeriesNumber() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getModality() ) )
                                     .arg( newSeries->getDate().toString("yyyyMMdd") )
                                     .arg( newSeries->getTime().toString("hhmmss") )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getInstitutionName() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getPatientPosition() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getProtocolName() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getDescription() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getFrameOfReferenceUID() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getPositionReferenceIndicator() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getBodyPartExamined() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getViewPosition() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( newSeries->getManufacturer() ) )
-                                    .arg( DatabaseConnection::formatQCharToValidSQLSyntax( newSeries->getLaterality() ) )                                    
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getInstitutionName() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getPatientPosition() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getProtocolName() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getDescription() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getFrameOfReferenceUID() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getPositionReferenceIndicator() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getBodyPartExamined() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getViewPosition() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getManufacturer() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newSeries->getLaterality() ) )                                    
                                     .arg( newSeries->getRetrievedDate().toString("yyyyMMdd") )
                                     .arg( newSeries->getRetrievedTime().toString("hhmmss") )
                                     .arg("0");
@@ -172,25 +172,25 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *seriesToUpdate)
                                                         "RetrievedTime = '%17', "
                                                         "State = '%18' "
                                                  "Where InstanceUID = '%19'")
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getParentStudy()->getInstanceUID() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getSeriesNumber() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getModality() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getParentStudy()->getInstanceUID() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getSeriesNumber() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getModality() ) )
                                     .arg( seriesToUpdate->getDate().toString("yyyyMMdd") )
                                     .arg( seriesToUpdate->getTime().toString("hhmmss") )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getInstitutionName() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getPatientPosition() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getProtocolName() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getDescription() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getFrameOfReferenceUID() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getPositionReferenceIndicator() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getBodyPartExamined() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getViewPosition() ) )
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getManufacturer() ) )
-                                    .arg( DatabaseConnection::formatQCharToValidSQLSyntax( seriesToUpdate->getLaterality() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getInstitutionName() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getPatientPosition() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getProtocolName() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getDescription() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getFrameOfReferenceUID() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getPositionReferenceIndicator() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getBodyPartExamined() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getViewPosition() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getManufacturer() ) )
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getLaterality() ) )
                                     .arg( seriesToUpdate->getRetrievedDate().toString("yyyyMMdd") )
                                     .arg( seriesToUpdate->getRetrievedTime().toString("hhmmss") )
                                     .arg("0")
-                                    .arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesToUpdate->getInstanceUID() ) );
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getInstanceUID() ) );
 
     return updateSentence;
 }
@@ -205,7 +205,7 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
     QString whereSentence = "";
 
     if (!seriesMask.getStudyUID().isEmpty()) 
-        whereSentence = QString("where StudyInstanceUID = '%1'").arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesMask.getStudyUID() ) );
+        whereSentence = QString("where StudyInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesMask.getStudyUID() ) );
 
     if (!seriesMask.getSeriesUID().isEmpty())
     {
@@ -214,7 +214,7 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
         else
             whereSentence += " and ";
 
-        whereSentence += QString(" InstanceUID = '%1'").arg( DatabaseConnection::formatStringToValidSQLSyntax( seriesMask.getSeriesUID() ) );
+        whereSentence += QString(" InstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesMask.getSeriesUID() ) );
     }
 
     return whereSentence;
