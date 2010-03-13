@@ -48,8 +48,8 @@ public slots:
     /// Slot que esborra l'estudi seleccionat de la llista
     void removeSelectedStudy();
 
-    /// Slot que esborra tots els estudis de la llista
-    void removeAllStudies();
+    /// Slot que esborra tots els estudis de la llista i reinicia les variables de tamany del DICOMDIR
+    void resetDICOMDIRList();
 
     /// Slot que s'activa quan es fa click al botó examinar, obre filedialog, per especificar a quina carpeta es vol guardar el DICOMDIR
     void examineDicomdirPath();

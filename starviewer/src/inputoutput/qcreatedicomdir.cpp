@@ -41,8 +41,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
     m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
 
-    m_dicomdirSizeBytes = 0;
-    setDicomdirSize();
+    resetDICOMDIRList();
 
     // Crear les accions
     createActions();
@@ -112,7 +111,7 @@ void QCreateDicomdir::createActions()
 void QCreateDicomdir::createConnections()
 {
     connect( m_buttonRemove , SIGNAL( clicked() ) , this , SLOT( removeSelectedStudy() ) );
-    connect( m_buttonRemoveAll , SIGNAL( clicked() ) , this , SLOT( removeAllStudies() ) );
+    connect( m_buttonRemoveAll , SIGNAL( clicked() ) , this , SLOT( resetDICOMDIRList() ) );
     connect( m_buttonExamineDisk , SIGNAL( clicked() ) , this , SLOT( examineDicomdirPath() ) );
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
 }
@@ -404,8 +403,7 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
     m_dicomdirStudiesList->clear();
     m_lineEditDicomdirPath->clear();
 
-    m_dicomdirSizeBytes = 0;
-    setDicomdirSize();// Reiniciem la barra de progrés
+    resetDICOMDIRList();
 }
 
 void QCreateDicomdir::examineDicomdirPath()
@@ -445,7 +443,7 @@ void QCreateDicomdir::examineDicomdirPath()
     }
 }
 
-void QCreateDicomdir::removeAllStudies()
+void QCreateDicomdir::resetDICOMDIRList()
 {
     m_dicomdirSizeBytes = 0;
     m_dicomdirStudiesList->clear();
