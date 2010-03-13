@@ -245,7 +245,7 @@ void QStudyTreeWidget::insertImageList(QString studyInstanceUID, QString seriesI
             newImageItem = new QTreeWidgetItem();
 
             newImageItem->setIcon(ObjectName, m_iconSeries);
-            newImageItem->setText(ObjectName, tr("Image %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
+            newImageItem->setText(ObjectName, tr("File %1").arg(paddingLeft(image->getInstanceNumber(), 4)));//Li fem un padding per poder ordenar la columna, ja que s'ordena per String
             newImageItem->setText(UID, image->getSOPInstanceUID());
             newImageItem->setText(Type, "IMAGE"); //indiquem que es tracta d'una imatge
             qTreeWidgetItemImageList.append(newImageItem);
