@@ -141,7 +141,7 @@ void LocalDatabasePatientDAL::logError(const QString &sqlSentence)
     //Ingnorem l'error de clau duplicada
     if (getLastError() != SQLITE_CONSTRAINT)
     {
-        ERROR_LOG("S'ha produït l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() + ", al executar la següent sentència sql " + sqlSentence);
+        ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() + ", al executar la seguent sentencia sql " + sqlSentence);
     }
 }
 

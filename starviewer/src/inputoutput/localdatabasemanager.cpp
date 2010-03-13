@@ -60,7 +60,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
 
     if (newPatient == NULL)
     {
-        ERROR_LOG("No es pot inserir a la base de dades l'estudi que s'ha descarregat, perquè el patient és nul");
+        ERROR_LOG("No es pot inserir a la base de dades l'estudi que s'ha descarregat, perque el patient es null");
         m_lastError = PatientInconsistent;
         dbConnect.close();
         return;
@@ -308,7 +308,7 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     DicomMask studyMaskToDelete;
     int status;
 
-    INFO_LOG("S'esborrarà de la base de dades l'estudi: " + studyInstanceToDelete);
+    INFO_LOG("S'esborrara de la base de dades l'estudi: " + studyInstanceToDelete);
 
     if (studyInstanceToDelete.isEmpty())
         return;
@@ -365,7 +365,7 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
     DicomMask seriesMaskToDelete, studyMask;
     int status;
 
-    INFO_LOG("S'esborrara de la base de dades la sèrie : " + seriesInstanceUID + " de l'estudi " + studyInstanceUID);
+    INFO_LOG("S'esborrara de la base de dades la serie : " + seriesInstanceUID + " de l'estudi " + studyInstanceUID);
     if (studyInstanceUID.isEmpty() || seriesInstanceUID.isEmpty())
         return;
 
@@ -564,7 +564,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
 
         if (settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool())
         {
-            INFO_LOG("s'intentarà esborrar estudis vells per alliberar suficient espai");
+            INFO_LOG("s'intentara esborrar estudis vells per alliberar suficient espai");
 
             //No hi ha suficient espai indiquem quina és la quantitat de Mb d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar l'espai míninm necessari (minimumSpaceRequired - freeSpaceInHardDisk), més una quantitat fixa, per assegurar que disposem de prou espai per descarregar estudis grans, i no haver d'estar en cada descarrega alliberant espai
             MbytesToFree = (minimumSpaceRequired - freeSpaceInHardDisk) + MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk;
@@ -572,7 +572,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
             freeSpaceDeletingStudies(MbytesToFree);
             if (getLastError() != LocalDatabaseManager::Ok)
             {
-                ERROR_LOG("S'ha produït un error intentant alliberar espai");
+                ERROR_LOG("S'ha produit un error intentant alliberar espai");
                 return false;
             }
 
@@ -629,7 +629,7 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
     {
         QString studyNotFullRetrieved = settings.getValue(InputOutputSettings::RetrievingStudy).toString();
 
-        INFO_LOG("L'estudi " + studyNotFullRetrieved + " s'estava descarregant al tancar-se la última execució de l'starviewer, per mantenir la integritat s'esborraran les imatges que se n'havien descarregat fins al moment");
+        INFO_LOG("L'estudi " + studyNotFullRetrieved + " s'estava descarregant al tancar-se la ultima execucio de l'Starviewer, per mantenir la integritat s'esborraran les imatges que se n'havien descarregat fins al moment");
 
         //Es pot donarper si es dona el cas que s'hagués arribat a inserir l'estudi i just abans d'indicar que la descàrrega de l'estudi havia finalitzat a través del mètode setStudyRetrieveFinished, s'hagués tancat l'starviewer per tant el mètode el detectaria com que l'estudi estés a mig descarregar quan realment està descarregat, per això comprovem si l'estudi existeix i si és el cas l'esborrem per deixa la base de dades en un estat consistent
         DicomMask studyMask;

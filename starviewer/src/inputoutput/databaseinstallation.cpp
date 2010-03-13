@@ -53,13 +53,13 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         if(!isDatabaseFileWritable())
         {
             // TODO què fem? cal retornar fals? Avisar a l'usuari?
-            ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura. no podrem guardar estudis nous ni modificar els ja existents");
+            ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura, no podrem guardar estudis nous ni modificar els ja existents.");
 			m_errorMessage.append( tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString) );
         }
 
         if (localDatabaseManager.isDatabaseCorrupted())
         {
-            INFO_LOG("La base de dades està corrupte " + LocalDatabaseManager::getDatabaseFilePath());
+            INFO_LOG("La base de dades esta corrupte " + LocalDatabaseManager::getDatabaseFilePath());
             if (!repairDatabase())
             {
                 ERROR_LOG("NO S'HA POGUT REPARAR LA BASE DE DADES");
@@ -76,7 +76,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
 	}
 
     INFO_LOG("Estat de la base de dades correcte ");
-    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisió " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
+    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
     return true;
 }
 
@@ -97,7 +97,7 @@ bool DatabaseInstallation::checkLocalImagePath()
         QFileInfo imagePathInfo( LocalDatabaseManager::getCachePath() );
         if( !imagePathInfo.isWritable() )
         {
-            ERROR_LOG("El directori de la cache d'imatges no té permisos d'escriptura: " + LocalDatabaseManager::getCachePath() );
+            ERROR_LOG("El directori de la cache d'imatges no te permisos d'escriptura: " + LocalDatabaseManager::getCachePath() );
 			m_errorMessage.append( tr("\nYou don't have write permissions on cache image directory. You couldn't retrieve or import new studies.") );
             return false;
         }
@@ -129,7 +129,7 @@ bool DatabaseInstallation::checkDatabaseRevision()
 
     if (localDatabaseManager.getDatabaseRevision() != StarviewerDatabaseRevisionRequired)
     {
-        INFO_LOG("La revisió actual de la base de dades és " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versió d'" + ApplicationNameString + " és necessària la " + QString().setNum(StarviewerDatabaseRevisionRequired) + ", es procedirà a actualitzar la base de dades");
+        INFO_LOG("La revisio actual de la base de dades es " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versio d'" + ApplicationNameString + " és necessaria la " + QString().setNum(StarviewerDatabaseRevisionRequired) + ", es procedira a actualitzar la base de dades");
 
         return updateDatabaseRevision();
     }
@@ -145,12 +145,12 @@ bool DatabaseInstallation::repairDatabase()
     localDatabaseManager.compact();
     if (localDatabaseManager.isDatabaseCorrupted())
     {
-        INFO_LOG("No s'ha pogut reparar la base de dades, s'intentarà reinstal·lar la base de dades");
+        INFO_LOG("No s'ha pogut reparar la base de dades, s'intentara reinstal·lar la base de dades");
         //Si la base de dades continua corrupte l'hem de reinstal·lar
         QMessageBox::critical(0, ApplicationNameString, tr("%1 can't repair database, it will be reinstalled.\n\nAll local studies retrieved and imported will be deleted.").arg(ApplicationNameString) );
         if (!reinstallDatabase())
         {
-            ERROR_LOG("No s'ha pogut reinstal·lar la base de dades");
+            ERROR_LOG("No s'ha pogut reinstal.lar la base de dades");
             QMessageBox::critical(0, ApplicationNameString , tr("%1 can't reinstall database, be sure you have write permissions on database directory").arg(ApplicationNameString));
             return false;
         }
@@ -216,7 +216,7 @@ bool DatabaseInstallation::updateDatabaseRevision()
 
     if (!status)
     {
-        ERROR_LOG("HA FALLAT L'ACTUALITZACIÓ DE LA BASE DE DADES");
+        ERROR_LOG("HA FALLAT L'ACTUALITZACIO DE LA BASE DE DADES");
     }
 
     return status;
