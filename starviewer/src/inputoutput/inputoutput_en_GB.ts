@@ -231,61 +231,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="36"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;DICOMDIR creation configuration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="42"/>
+        <source>DICOMDIR creation configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="65"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="67"/>
         <source>Convert all images to little endian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="80"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="82"/>
         <source>Burning application configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="109"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="111"/>
         <source>Application path :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="131"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="133"/>
         <source>Examine disk to find the database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="153"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="155"/>
         <source>Application parameters :</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="163"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="165"/>
         <source>Download from here:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="170"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="172"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="208"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="210"/>
         <source>Use different parameters for CD and DVD burning:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="220"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="222"/>
         <source>CD parameters:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="249"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="251"/>
         <source>DVD parameters:</source>
         <translation type="unfinished"></translation>
     </message>
