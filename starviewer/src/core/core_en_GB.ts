@@ -4,12 +4,12 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="thumbnailcreator.cpp" line="59"/>
+        <location filename="thumbnailcreator.cpp" line="56"/>
         <source>No Images Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="thumbnailcreator.cpp" line="163"/>
+        <location filename="thumbnailcreator.cpp" line="27"/>
         <source>Preview image not available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19,7 +19,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="patientbrowsermenuextendeditem.cpp" line="16"/>
+        <location filename="patientbrowsermenuextendeditem.cpp" line="18"/>
         <source>No Item Selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -29,7 +29,7 @@
         <location filename="qdicomdumpctlocalizerwidget.cpp" line="16"/>
         <location filename="qdicomdumpctwidget.cpp" line="16"/>
         <location filename="qdicomdumpmammographywidget.cpp" line="14"/>
-        <location filename="qdicomdumpmrwidget.cpp" line="16"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="17"/>
         <source>N/A</source>
         <translation type="unfinished"></translation>
     </message>
@@ -68,7 +68,7 @@
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="272"/>
+        <location filename="angletool.cpp" line="279"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,13 +76,21 @@
 <context>
     <name>udg::DistanceTool</name>
     <message>
-        <location filename="distancetool.cpp" line="123"/>
+        <location filename="distancetool.cpp" line="146"/>
         <source>%1 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="distancetool.cpp" line="119"/>
+        <location filename="distancetool.cpp" line="123"/>
         <source>%1 px</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::HangingProtocolManager</name>
+    <message>
+        <location filename="hangingprotocolmanager.cpp" line="887"/>
+        <source>Downloading previous study...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -103,13 +111,13 @@
 <context>
     <name>udg::MagicTool</name>
     <message>
-        <location filename="magictool.cpp" line="291"/>
+        <location filename="magictool.cpp" line="301"/>
         <source>Area: %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="magictool.cpp" line="473"/>
-        <location filename="magictool.cpp" line="493"/>
+        <location filename="magictool.cpp" line="483"/>
+        <location filename="magictool.cpp" line="503"/>
         <source>Magic Factor: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -117,17 +125,17 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="224"/>
+        <location filename="nonclosedangletool.cpp" line="232"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="220"/>
+        <location filename="nonclosedangletool.cpp" line="228"/>
         <source>0.0 degrees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="222"/>
+        <location filename="nonclosedangletool.cpp" line="230"/>
         <source>Skew lines.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -183,7 +191,7 @@
 <context>
     <name>udg::PolylineROITool</name>
     <message>
-        <location filename="polylineroitool.cpp" line="76"/>
+        <location filename="polylineroitool.cpp" line="100"/>
         <source>Area: %1 %2
 Mean: %3
 St.Dev.: %4</source>
@@ -195,32 +203,32 @@ Mean: %2</oldsource>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1709"/>
+        <location filename="q2dviewer.cpp" line="1735"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1727"/>
+        <location filename="q2dviewer.cpp" line="1753"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1700"/>
+        <location filename="q2dviewer.cpp" line="1726"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1720"/>
+        <location filename="q2dviewer.cpp" line="1746"/>
         <source>Slice: %1-%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1734"/>
+        <location filename="q2dviewer.cpp" line="1760"/>
         <source> Thickness: %1 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1507"/>
+        <location filename="q2dviewer.cpp" line="1503"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation type="unfinished"></translation>
@@ -236,12 +244,12 @@ Acc:%6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1675"/>
+        <location filename="q2dviewer.cpp" line="1701"/>
         <source>Loc: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1688"/>
+        <location filename="q2dviewer.cpp" line="1714"/>
         <source>-%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -280,14 +288,34 @@ Acc:%6
 <context>
     <name>udg::Q3DViewer</name>
     <message>
-        <location filename="q3dviewer.cpp" line="587"/>
-        <location filename="q3dviewer.cpp" line="665"/>
+        <location filename="q3dviewer.cpp" line="428"/>
+        <source>Not supported volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewer.cpp" line="428"/>
+        <source>Current volume cannot be opened because its format is not supported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewer.cpp" line="435"/>
+        <source>Volume too large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewer.cpp" line="435"/>
+        <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewer.cpp" line="602"/>
+        <location filename="q3dviewer.cpp" line="680"/>
         <source>Can&apos;t apply rendering style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="587"/>
-        <location filename="q3dviewer.cpp" line="665"/>
+        <location filename="q3dviewer.cpp" line="602"/>
+        <location filename="q3dviewer.cpp" line="680"/>
         <source>The system hasn&apos;t enough memory to apply properly this rendering style with this volume.
 Shading will be disabled, it won&apos;t render as expected.</source>
         <translation type="unfinished"></translation>
@@ -304,13 +332,23 @@ Shading will be disabled, it won&apos;t render as expected.</source>
 <context>
     <name>udg::QCINEControllerBase</name>
     <message>
-        <location filename="qcinecontrollerbase.ui" line="13"/>
+        <location filename="qcinecontrollerbase.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcinecontrollerbase.ui" line="39"/>
+        <location filename="qcinecontrollerbase.ui" line="40"/>
         <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcinecontrollerbase.ui" line="71"/>
+        <source>Loop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcinecontrollerbase.ui" line="85"/>
+        <source>Boomerang</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -886,25 +924,25 @@ Shading will be disabled, it won&apos;t render as expected.</source>
 <context>
     <name>udg::QDicomDumpMRWidget</name>
     <message>
-        <location filename="qdicomdumpmrwidget.cpp" line="66"/>
-        <location filename="qdicomdumpmrwidget.cpp" line="148"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="67"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="149"/>
         <source> mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpmrwidget.cpp" line="73"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="74"/>
         <source> %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpmrwidget.cpp" line="80"/>
-        <location filename="qdicomdumpmrwidget.cpp" line="87"/>
-        <location filename="qdicomdumpmrwidget.cpp" line="94"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="81"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="88"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="95"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdumpmrwidget.cpp" line="101"/>
+        <location filename="qdicomdumpmrwidget.cpp" line="102"/>
         <source> degrees</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1277,25 +1315,26 @@ Environment variable(logFilePath): %2</source>
     <name>udg::QThickSlabWidget</name>
     <message>
         <location filename="qthickslabwidget.cpp" line="21"/>
-        <location filename="qthickslabwidget.cpp" line="81"/>
+        <location filename="qthickslabwidget.cpp" line="83"/>
+        <location filename="qthickslabwidget.cpp" line="200"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="21"/>
-        <location filename="qthickslabwidget.cpp" line="113"/>
+        <location filename="qthickslabwidget.cpp" line="121"/>
         <source>MIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="21"/>
-        <location filename="qthickslabwidget.cpp" line="117"/>
+        <location filename="qthickslabwidget.cpp" line="125"/>
         <source>MinIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="21"/>
-        <location filename="qthickslabwidget.cpp" line="121"/>
+        <location filename="qthickslabwidget.cpp" line="129"/>
         <source>Average</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1310,6 +1349,11 @@ Environment variable(logFilePath): %2</source>
     <message>
         <location filename="qthickslabwidgetbase.ui" line="91"/>
         <source>2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qthickslabwidgetbase.ui" line="101"/>
+        <source>Max. Thickness</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1450,6 +1494,11 @@ It&apos;s recommended you save them in an empty folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="toolregistry.cpp" line="210"/>
+        <source>Export a viewer screenshot to an image file format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="toolregistry.cpp" line="214"/>
         <source>3D Rotation</source>
         <translation type="unfinished"></translation>
@@ -1552,101 +1601,101 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="364"/>
-        <source>Clear</source>
+        <source>All of current viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="366"/>
+        <location filename="toolregistry.cpp" line="367"/>
         <source>Clear primitives from viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="373"/>
+        <location filename="toolregistry.cpp" line="374"/>
         <source>Invert WL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="376"/>
+        <location filename="toolregistry.cpp" line="377"/>
         <source>Invert window level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="383"/>
+        <location filename="toolregistry.cpp" line="384"/>
         <source>Axial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="386"/>
+        <location filename="toolregistry.cpp" line="387"/>
         <source>Switch to Axial View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="393"/>
+        <location filename="toolregistry.cpp" line="394"/>
         <source>Sagital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="396"/>
+        <location filename="toolregistry.cpp" line="397"/>
         <source>Switch to Saggital View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="403"/>
+        <location filename="toolregistry.cpp" line="404"/>
         <source>Coronal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="406"/>
+        <location filename="toolregistry.cpp" line="407"/>
         <source>Switch to Coronal View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="413"/>
+        <location filename="toolregistry.cpp" line="414"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="416"/>
+        <location filename="toolregistry.cpp" line="417"/>
         <source>Rotate the image in clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="417"/>
+        <location filename="toolregistry.cpp" line="418"/>
         <source>Clockwise rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="423"/>
+        <location filename="toolregistry.cpp" line="424"/>
         <source>Rotate Counter Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="426"/>
+        <location filename="toolregistry.cpp" line="427"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="427"/>
+        <location filename="toolregistry.cpp" line="428"/>
         <source>Counter-clockwise rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="433"/>
+        <location filename="toolregistry.cpp" line="434"/>
         <source>Horizontal Flip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="436"/>
+        <location filename="toolregistry.cpp" line="437"/>
         <source>Flip the image horizontally</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="443"/>
+        <location filename="toolregistry.cpp" line="444"/>
         <source>Vertical Flip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="446"/>
+        <location filename="toolregistry.cpp" line="447"/>
         <source>Flip the image vertically</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1739,44 +1788,46 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="316"/>
-        <source>Non Closed Angle</source>
+        <source>Open Angle</source>
+        <oldsource>Non Closed Angle</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="319"/>
-        <source>Enable/Disable non closed angle tool</source>
+        <source>Enable/Disable open-angle tool</source>
+        <oldsource>Enable/Disable non closed angle tool</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::Volume</name>
     <message>
-        <location filename="volume.cpp" line="111"/>
+        <location filename="volume.cpp" line="112"/>
         <source>Out of memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="111"/>
+        <location filename="volume.cpp" line="112"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="118"/>
+        <location filename="volume.cpp" line="119"/>
         <source>Missing Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="118"/>
+        <location filename="volume.cpp" line="119"/>
         <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="125"/>
+        <location filename="volume.cpp" line="126"/>
         <source>Unkwown Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="125"/>
+        <location filename="volume.cpp" line="126"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
         <translation type="unfinished"></translation>
     </message>
