@@ -6,27 +6,27 @@
     <message>
         <location filename="../interface/qconfigurationdialogbase.ui" line="86"/>
         <source>Show Advanced Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar Opciones Avanzadas</translation>
     </message>
     <message>
         <location filename="../interface/qconfigurationdialogbase.ui" line="109"/>
         <source>&amp;Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aceptar</translation>
     </message>
     <message>
         <location filename="../interface/qconfigurationdialogbase.ui" line="112"/>
         <source>Alt+B</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../interface/qconfigurationdialogbase.ui" line="125"/>
         <source>&amp;Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cancelar</translation>
     </message>
     <message>
         <location filename="../interface/qconfigurationdialogbase.ui" line="128"/>
         <source>Alt+C</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -34,221 +34,221 @@
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="26"/>
         <source>PACS Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración del PACS</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="58"/>
         <source>PACS Servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidores PACS</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="89"/>
         <source>PacsId</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="94"/>
         <source>AE Title</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="99"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección IP</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="104"/>
         <source>Institution</source>
-        <translation type="unfinished"></translation>
+        <translation>Institución</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="109"/>
         <source>Q/R port</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto Q/R</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="114"/>
         <source>Send port</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto de envío</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="119"/>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="422"/>
         <source>Default query PACS</source>
-        <translation type="unfinished"></translation>
+        <translation>PACS a consultar por defecto</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="153"/>
         <source>Delete selected Pacs</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar PACS seleccionado</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="156"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="166"/>
         <source>Test if selected Pacs is alive</source>
-        <translation type="unfinished"></translation>
+        <translation>Probar si el PACS seleccionado está activo</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="169"/>
         <source>Test</source>
-        <translation type="unfinished"></translation>
+        <translation>Probar</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="199"/>
         <source>Modify selected PACS Server/Add new PACS Server:</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificar servidor PACS seleccionado/Añadir nuevo servidor PACS:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="244"/>
         <source>AE Title:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="258"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección IP:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="268"/>
         <source>Q/R service:</source>
-        <translation type="unfinished"></translation>
+        <translation>Servicio Q/R:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="277"/>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="307"/>
         <source>Port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="339"/>
         <source>Send service:</source>
-        <translation type="unfinished"></translation>
+        <translation>Servicio de envío:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="346"/>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="356"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitado</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="392"/>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="931"/>
         <source>Institution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Institución:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="402"/>
         <source>Location:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ubicación:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="412"/>
         <source>Description:</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripción:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="467"/>
         <source>Add the new Pacs to the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir el nuevo PACS a la lista</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="470"/>
         <source>Add as new server</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir como servidor nuevo</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="477"/>
         <source>Update the parameters of the selected Pacs</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizar los parámetros del PACS seleccionado</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="480"/>
         <source>Update configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizar configuración</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="490"/>
         <source>Local Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración Local</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="522"/>
         <source>Incoming connections port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto para conexiones entrantes:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="548"/>
         <source>Max. simultaneous connections:</source>
-        <translation type="unfinished"></translation>
+        <translation>Máximas conexiones simultáneas:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="604"/>
         <source>&lt;b&gt;This port is in use by another application.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Este puerto está en uso por otra aplicación.&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="646"/>
         <source>Max. seconds for Timeout:</source>
-        <translation type="unfinished"></translation>
+        <translation>Segundos para &lt;i&gt;Timeout&lt;/i&gt;:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="669"/>
         <source>AE Title Local Machine:</source>
-        <translation type="unfinished"></translation>
+        <translation>AE Title Local:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="720"/>
         <source>Local DICOM Configuration:</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración DICOM Local:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="770"/>
         <source>Apply changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar cambios</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="776"/>
         <source>Apply Changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar Cambios</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="840"/>
         <source>Phone Number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Número de teléfono:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="867"/>
         <source>ZIP Code:</source>
-        <translation type="unfinished"></translation>
+        <translation>Código Postal:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="874"/>
         <source>City:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciudad:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="901"/>
         <source>Address: </source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="924"/>
         <source>Country:</source>
-        <translation type="unfinished"></translation>
+        <translation>País:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="938"/>
         <source>EMail:</source>
-        <translation type="unfinished"></translation>
+        <translation>Correo electrónico:</translation>
     </message>
     <message>
         <location filename="../inputoutput/qconfigurationscreenbase.ui" line="975"/>
         <source>Local Institution information:</source>
-        <translation type="unfinished"></translation>
+        <translation>Información de la Institución Local:</translation>
     </message>
 </context>
 <context>
@@ -286,7 +286,7 @@
     <message>
         <location filename="qcrashreporterbase.ui" line="156"/>
         <source>Send additional host information. This information will be sent:</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar información adicional. Se enviará la siguiente información:</translation>
     </message>
     <message>
         <location filename="qcrashreporterbase.ui" line="194"/>
