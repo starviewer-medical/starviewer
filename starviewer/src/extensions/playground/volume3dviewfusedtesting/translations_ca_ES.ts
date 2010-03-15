@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="ca">
+<!DOCTYPE TS>
+<TS version="2.0" language="ca">
 <context>
     <name>QClutEditorDialogBase</name>
     <message>
@@ -34,120 +35,125 @@
     </message>
 </context>
 <context>
-    <name>QTransferFunctionEditorByValuesBase</name>
-    <message>
-        <location filename="../../../core/qtransferfunctioneditorbyvaluesbase.ui" line="50"/>
-        <source>Add</source>
-        <translation>Afegir</translation>
-    </message>
-    <message>
-        <location filename="../../../core/qtransferfunctioneditorbyvaluesbase.ui" line="57"/>
-        <source>Remove</source>
-        <translation>Eliminar</translation>
-    </message>
-    <message>
-        <location filename="../../../core/qtransferfunctioneditorbyvaluesbase.ui" line="30"/>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-</context>
-<context>
-    <name>QTransferFunctionIntervalEditorBase</name>
-    <message>
-        <location filename="../../../core/qtransferfunctionintervaleditorbase.ui" line="55"/>
-        <source>Select color...</source>
-        <translation>Seleccina un color...</translation>
-    </message>
-    <message>
-        <location filename="../../../core/qtransferfunctionintervaleditorbase.ui" line="22"/>
-        <source>Interval</source>
-        <translation>Interval</translation>
-    </message>
-</context>
-<context>
     <name>QVolume3DViewFusedTestingExtensionBase</name>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="46"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="137"/>
         <source>Axial</source>
         <translation>Axial</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="74"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="165"/>
         <source>Sagital</source>
         <translation>Sagital</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="102"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="193"/>
         <source>Coronal</source>
         <translation>Coronal</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="184"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="275"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="212"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="303"/>
         <source>Rotate</source>
         <translation>Rotació</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="240"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="331"/>
         <source>Pan</source>
         <translation>Moure</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="452"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="457"/>
+        <source>Edit Fused CLUT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="552"/>
+        <source>Contouring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="586"/>
         <source>Rendering Method</source>
         <translation>Mètode de renderització</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="408"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="547"/>
         <source>Ray Casting</source>
         <translation>Ray Casting</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="413"/>
-        <source>MIP</source>
-        <translation>MIP</translation>
-    </message>
-    <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="418"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="557"/>
         <source>Texture 3D</source>
         <translation>Textura 3D</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="423"/>
-        <source>Texture 2D</source>
-        <translation>Textura 2D</translation>
-    </message>
-    <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="428"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="562"/>
         <source>Iso Surface</source>
         <translation>Iso superfície</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="156"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="247"/>
         <source>Orientation</source>
         <translation>Orientació</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="294"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="52"/>
+        <source>Open Secondary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="73"/>
+        <source>Apply Fusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="81"/>
+        <source>Property Fusion 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="86"/>
+        <source>Property Fusion 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="91"/>
+        <source>P &amp; G Fusion 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="96"/>
+        <source>P &amp; G Fusion 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="101"/>
+        <source>Color Fusion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="109"/>
+        <source>Fused Model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="385"/>
         <source>Mouse Function</source>
         <translation>Funció del mouse</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="330"/>
-        <source>Presets</source>
-        <translation>Per defecte</translation>
-    </message>
-    <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="342"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="413"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="435"/>
         <source>Edit CLUT</source>
         <translation>Editor de CLUT</translation>
     </message>
     <message>
-        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="382"/>
+        <location filename="qvolume3dviewfusedtestingextensionbase.ui" line="505"/>
         <source>CLUT</source>
         <translation></translation>
     </message>
@@ -160,6 +166,7 @@
         <translation>Carregar CLUT</translation>
     </message>
     <message>
+        <location filename="qcluteditordialog.cpp" line="79"/>
         <location filename="qcluteditordialog.cpp" line="102"/>
         <source>Transfer function files (*.tf);;All files (*)</source>
         <translation>Fitxers de funcions de transferència (*.tf);;Tots els fitxers(*)</translation>
@@ -171,17 +178,22 @@
     </message>
 </context>
 <context>
-    <name>udg::QTransferFunctionEditorByGradient</name>
+    <name>udg::QVolume3DViewFusedTestingExtension</name>
     <message>
-        <location filename="../../../core/qtransferfunctioneditorbygradient.cpp" line="57"/>
-        <source>Name</source>
-        <translation>Nom</translation>
+        <location filename="qvolume3dviewfusedtestingextension.cpp" line="321"/>
+        <source>Open secondary file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qvolume3dviewfusedtestingextension.cpp" line="321"/>
+        <source>MetaImage Files (*.mhd)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>udg::Volume3DViewFusedTestingExtensionMediator</name>
     <message>
-        <location filename="volume3dviewtestingextensionmediator.cpp" line="27"/>
+        <location filename="volume3dviewfusedtestingextensionmediator.cpp" line="27"/>
         <source>Fused 3D Viewer</source>
         <translation>Visualitzador 3D Fusionat</translation>
     </message>
