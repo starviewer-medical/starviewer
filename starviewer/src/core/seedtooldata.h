@@ -14,6 +14,7 @@
 namespace udg {
 
 class DrawerPoint;
+class Volume;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -30,6 +31,9 @@ public:
 
     QVector<double> getSeedPosition( );
     DrawerPoint* getPoint( );
+    void setPoint( DrawerPoint* p = NULL);
+    Volume* getVolume( );
+    void setVolume( Volume* vol);
 
 private:
     ///Hi guardem la posició de la llavor
@@ -37,6 +41,9 @@ private:
 
     /// Punt que es dibuixa
     DrawerPoint *m_point;
+
+    /// Volume que es visualitza
+    Volume* m_volume;
 
 };
 
