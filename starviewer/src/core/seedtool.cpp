@@ -8,7 +8,6 @@
 #include "seedtooldata.h"
 #include "q2dviewer.h"
 #include "drawerpoint.h"
-#include "volume.h"
 #include "drawer.h"
 #include "logging.h"
 // Vtk's
@@ -31,6 +30,8 @@ SeedTool::SeedTool( QViewer *viewer, QObject *parent ) : Tool( viewer, parent )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
 
     m_state = NONE;
+    m_drawn = false;
+    m_myData->setVolume( m_2DViewer->getInput() );
 }
 
 SeedTool::~SeedTool()
@@ -66,6 +67,22 @@ void SeedTool::setToolData(ToolData * data)
         // creem de nou les dades
         m_toolData = data;
         m_myData = qobject_cast<SeedToolData *>(data);
+        //si tenim dades vol dir que ja hem pintat abans la seed si el volume ha canviat
+        if(m_2DViewer->getInput() != m_myData->getVolume())
+        {
+            //canvi de input
+            m_drawn = false;
+            m_myData->setVolume( m_2DViewer->getInput() );
+            //si tenim dades vol dir que el viewer ha eliminat el punt pel que el posem a 0 perquè es torni a crear
+            m_myData->setPoint( NULL );
+        }else{
+            //canvi de tool
+            m_drawn = true;
+            m_2DViewer->getDrawer()->erasePrimitive(m_myData->getPoint());
+            m_myData->setPoint(NULL);
+            m_myData->setSeedPosition(m_myData->getSeedPosition());
+            m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        }
     }
 }
 
@@ -112,7 +129,17 @@ void SeedTool::updateSeedPosition()
         m_2DViewer->setSeedPosition( xyz );
         emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
         
-        m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        if(!m_drawn)
+        {
+            m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+            m_drawn = true;
+        }else{
+            m_myData->getPoint()->update( DrawerPrimitive::VTKRepresentation );
+            m_2DViewer->refresh();
+            //m_2DViewer->getDrawer()->refresh();
+        }
+
+        //m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
 }
 

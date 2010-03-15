@@ -68,6 +68,9 @@ private:
     /// Dades específiques de la tool
     SeedToolData *m_myData;
 
+    /// Bool per saber si està pintada o no (si l'hem enviat al drawer)
+    bool m_drawn;
+
 };
 
 

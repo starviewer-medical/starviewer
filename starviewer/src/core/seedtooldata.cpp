@@ -7,6 +7,7 @@
 #include "seedtooldata.h"
 #include "logging.h"
 #include "drawerpoint.h"
+#include "volume.h"
 
 
 namespace udg {
@@ -54,6 +55,21 @@ QVector<double> SeedToolData::getSeedPosition( )
 DrawerPoint* SeedToolData::getPoint( )
 {
     return m_point;
+}
+
+void SeedToolData::setPoint( DrawerPoint* p )
+{
+    m_point = p;
+}
+
+Volume* SeedToolData::getVolume( )
+{
+    return m_volume;
+}
+
+void SeedToolData::setVolume( Volume* vol )
+{
+    m_volume = vol;
 }
 
 }
