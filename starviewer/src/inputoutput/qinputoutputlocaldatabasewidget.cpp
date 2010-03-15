@@ -251,7 +251,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
 
             foreach(DicomMask dicomMaskToDelete, selectedDicomMaskToDelete)
             {
-                if(m_qcreateDicomdir->studyExists(dicomMaskToDelete.getStudyUID()))
+                if(m_qcreateDicomdir->studyExistsInDICOMDIRList(dicomMaskToDelete.getStudyUID()))
                 {
                     Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyUID());
                     QString warningMessage;
