@@ -16,12 +16,12 @@
     <message>
         <location filename="coresettings.cpp" line="55"/>
         <source>PNG (*.png)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="patientbrowsermenuextendeditem.cpp" line="18"/>
         <source>No Item Selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Ningún Ítem Seleccionado</translation>
     </message>
     <message>
         <location filename="qdicomdump.cpp" line="25"/>
@@ -31,7 +31,8 @@
         <location filename="qdicomdumpmammographywidget.cpp" line="14"/>
         <location filename="qdicomdumpmrwidget.cpp" line="17"/>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>No disponible</translatorcomment>
+        <translation>N/D</translation>
     </message>
 </context>
 <context>
@@ -91,7 +92,7 @@
     <message>
         <location filename="hangingprotocolmanager.cpp" line="887"/>
         <source>Downloading previous study...</source>
-        <translation type="unfinished"></translation>
+        <translation>Descargando estudio previo...</translation>
     </message>
 </context>
 <context>
@@ -137,7 +138,7 @@
     <message>
         <location filename="nonclosedangletool.cpp" line="230"/>
         <source>Skew lines.</source>
-        <translation type="unfinished"></translation>
+        <translation>Líneas cruzadas.</translation>
     </message>
 </context>
 <context>
@@ -301,22 +302,22 @@ Acc:%6
     <message>
         <location filename="q3dviewer.cpp" line="428"/>
         <source>Not supported volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen no soportado</translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="428"/>
         <source>Current volume cannot be opened because its format is not supported.</source>
-        <translation type="unfinished"></translation>
+        <translation>El volumen actual no se puede abrir ya que su formato no está soportado.</translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="435"/>
         <source>Volume too large</source>
-        <translation type="unfinished"></translation>
+        <translation>Volumen demasiado grande</translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="435"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>El volumen actual es demasiado grande. Pro favor, seleccioe otro volumen o cierrel las aplicaciones aboertas e inténtelo de nuevo.</translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="602"/>
@@ -356,12 +357,12 @@ El sombreado se deshabilitará i, por lo tanto, la visualización no será la es
     <message>
         <location filename="qcinecontrollerbase.ui" line="71"/>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qcinecontrollerbase.ui" line="85"/>
         <source>Boomerang</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qcinecontrollerbase.ui" line="134"/>
@@ -1078,7 +1079,7 @@ El sombreado se deshabilitará i, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="41"/>
@@ -1088,12 +1089,12 @@ El sombreado se deshabilitará i, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="57"/>
         <source>Positioner Primary Angle:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="73"/>
         <source>Body Part Thickness:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grosor de la parte del cuerpo:</translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="89"/>
@@ -1153,17 +1154,17 @@ El sombreado se deshabilitará i, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="228"/>
         <source>Entrance Dose:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dosis de entrada:</translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="244"/>
         <source>kVp:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="260"/>
         <source>Anode Target Material:</source>
-        <translation type="unfinished"></translation>
+        <translation>Material del ánodo:</translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="267"/>
@@ -1367,7 +1368,7 @@ Variable de entorno(logFilePath): %2</translation>
     <message>
         <location filename="qthickslabwidgetbase.ui" line="101"/>
         <source>Max. Thickness</source>
-        <translation type="unfinished"></translation>
+        <translation>Grosor Máximo</translation>
     </message>
 </context>
 <context>
@@ -1489,12 +1490,12 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="198"/>
         <source>Magic</source>
-        <translation type="unfinished"></translation>
+        <translation>Mágica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="202"/>
         <source>Enable/Disable Magic tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar/Deshabilitar Herramienta Mágica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="207"/>
@@ -1509,7 +1510,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="210"/>
         <source>Export a viewer screenshot to an image file format</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporta una captura de pantalla de un visor a un formato de archivo de imagen</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="214"/>
@@ -1544,7 +1545,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="240"/>
         <source>Reference Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Líneas de Referencia</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="244"/>
@@ -1569,7 +1570,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="255"/>
         <source>Synchronize</source>
-        <translation type="unfinished"></translation>
+        <translation>Sincroniza</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="259"/>
@@ -1590,127 +1591,127 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="292"/>
         <source>3D Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Cursor 3D</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="324"/>
         <source>Clipping Planes</source>
-        <translation type="unfinished"></translation>
+        <translation>Planos de Corte</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="327"/>
         <source>Enable/Disable the clipping planes tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar/Deshabilitar la herramienta de planos de corte</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="354"/>
         <source>Restore</source>
-        <translation type="unfinished"></translation>
+        <translation>Restablecer</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="357"/>
         <source>Restore to initial state</source>
-        <translation type="unfinished"></translation>
+        <translation>Restablecer al estado inicial</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="364"/>
         <source>All of current viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Todo del visor actual</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="367"/>
         <source>Clear primitives from viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar primitivas del visor</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="374"/>
         <source>Invert WL</source>
-        <translation type="unfinished"></translation>
+        <translation>Invertir escala de grises</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="377"/>
         <source>Invert window level</source>
-        <translation type="unfinished"></translation>
+        <translation>Invertir escala de grises</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="384"/>
         <source>Axial</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="387"/>
         <source>Switch to Axial View</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar a vista Axial</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="394"/>
         <source>Sagital</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="397"/>
         <source>Switch to Saggital View</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar a vista Sagital</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="404"/>
         <source>Coronal</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="407"/>
         <source>Switch to Coronal View</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar a vista Coronal</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="414"/>
         <source>Rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="417"/>
         <source>Rotate the image in clockwise direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar la imagen en sentido horario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="418"/>
         <source>Clockwise rotation</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotación en sentido horario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="424"/>
         <source>Rotate Counter Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar en Sentido Anti-horario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="427"/>
         <source>Rotate the image in counter clockwise direction</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotar la imagen en setido anti-horario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="428"/>
         <source>Counter-clockwise rotation</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotación en sentido anti-horario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="434"/>
         <source>Horizontal Flip</source>
-        <translation type="unfinished"></translation>
+        <translation>Flip Horizontal</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="437"/>
         <source>Flip the image horizontally</source>
-        <translation type="unfinished"></translation>
+        <translation>Voltear la imagen horizontalmente</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="444"/>
         <source>Vertical Flip</source>
-        <translation type="unfinished"></translation>
+        <translation>Flip Vertical</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="447"/>
         <source>Flip the image vertically</source>
-        <translation type="unfinished"></translation>
+        <translation>Voltear la imagen verticalmente</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="158"/>
@@ -1752,7 +1753,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="275"/>
         <source>Temporal ROI</source>
-        <translation type="unfinished"></translation>
+        <translation>ROI Temporal</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="279"/>
@@ -1803,13 +1804,13 @@ It&apos;s recommended you save them in an empty folder.</source>
         <location filename="toolregistry.cpp" line="316"/>
         <source>Open Angle</source>
         <oldsource>Non Closed Angle</oldsource>
-        <translation type="unfinished">Ángulo no cerrado</translation>
+        <translation>Ángulo Abierto</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="319"/>
         <source>Enable/Disable open-angle tool</source>
         <oldsource>Enable/Disable non closed angle tool</oldsource>
-        <translation type="unfinished">Activar/Desactivar la herramienta de ángulo no cerrado</translation>
+        <translation>Activar/Desactivar la herramienta de ángulos abiertos</translation>
     </message>
 </context>
 <context>
