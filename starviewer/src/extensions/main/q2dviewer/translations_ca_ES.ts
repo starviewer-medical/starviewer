@@ -36,7 +36,7 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="85"/>
         <source>Show/Hide viewer&apos;s textual information</source>
-        <translation>Mostrar/Esconder la información textual de los visores</translation>
+        <translation>Mostrar/Amagar la informació textual dels visors</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="86"/>
