@@ -42,7 +42,7 @@ public:
      * @param studyUID UID de l'estudi que s'ha de comprovar si existeix dins la llista
      * @return indica si existeix l'estudi a la llista d'estudis pendents de passa a DICOMDIR
      */
-    bool studyExists( QString studyUID );
+    bool studyExistsInDICOMDIRList( QString studyUID );
 
 public slots:
     /// Slot que esborra l'estudi seleccionat de la llista
@@ -72,7 +72,7 @@ private:
     void createContextMenu();
 
     /// Dóna valor a l'etiqueta que indica l'espai que ocupa el DICOMDIR
-    void setDicomdirSize();
+    void showDICOMDIRSize();
 
     /**
      * Comprova si hi ha suficient espai lliure al disc dur per crear el DICOMDIR, comprova que l'espai 
@@ -132,7 +132,7 @@ private:
     void updateAvailableSpaceToRecord();
 
     /// Neteja el directori temporal utilitzat per crear els DICOMDIR que es gravaran en CD o DVD
-    void clearTemporaryDir();
+    void clearTemporaryDICOMDIRPath();
 
 private slots:
     /// Es passa per paràmetre l'identificador del dispositiu i es fan les pertinents accions
@@ -204,6 +204,9 @@ private:
 
     /// Retorna el que ocuparà la imatge passada per paràmetre en transfer syntax Little Endian, la mida que retorna és un càlcul aproximat del que ocuparà
     quint64 getImageSizeInBytesInLittleEndianTransferSyntax(Image *image);
+
+    ///Retorna el path temporal on poder crear el DICOMDIR
+    QString getTemporaryDICOMDIRPath();
 
 };
 

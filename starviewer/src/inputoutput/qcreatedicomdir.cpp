@@ -56,7 +56,7 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
 QCreateDicomdir::~QCreateDicomdir()
 {
-    clearTemporaryDir();
+    clearTemporaryDICOMDIRPath();
 }
 
 void QCreateDicomdir::createActions()
@@ -116,7 +116,7 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
 }
 
-void QCreateDicomdir::setDicomdirSize()
+void QCreateDicomdir::showDICOMDIRSize()
 {
     QString sizeOfDicomdirText, sizeText;
     double sizeInMb;
@@ -161,7 +161,7 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     foreach( Study *study, studies )
     {
-        if ( !studyExists( study->getInstanceUID() ) )
+        if ( !studyExistsInDICOMDIRList( study->getInstanceUID() ) )
         {
             // \TODO Xapussa perquè ara, a primera instància, continui funcionant amb les classes Study i demés. Caldria unificar el tema
             // "a quin directori està aquest study"?
@@ -176,7 +176,7 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
                 //Afegim la informació de l'estudi a la llista
                 QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
                 m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
-                setDicomdirSize(); // aquí o al final?
+                showDICOMDIRSize(); // aquí o al final?
             
                 Patient *patient = study->getParentPatient();
                 item->setText( 0, patient->getFullName() );
@@ -241,17 +241,11 @@ void QCreateDicomdir::createDicomdir()
 Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 {
     QDir temporaryDirPath;
-    QString dicomdirPath;
+    QString dicomdirPath = getTemporaryDICOMDIRPath();
     Status state;
 
-    // Per la norma del IHE el dicomdir ha d'estar situat dins el directori DICOMDIR
-    dicomdirPath = QDir::tempPath() + "/DICOMDIR";
     // Si el directori dicomdir ja existeix al temporal l'esborrem
-    if ( temporaryDirPath.exists( dicomdirPath ) )
-    {
-        DeleteDirectory delDirectory;
-        delDirectory.deleteDirectory( dicomdirPath , true );
-    }
+    clearTemporaryDICOMDIRPath();
 
     INFO_LOG( "Iniciant la creació del DICOMDIR en cd-dvd al directori temporal " + dicomdirPath );
 
@@ -275,7 +269,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     // Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
 
-    if ( m_lineEditDicomdirPath->text().length() == 0 )
+    if ( m_lineEditDicomdirPath->text().isEmpty() == 0 )
     {
         QMessageBox::information( this , ApplicationNameString , tr( "No directory specified to create the DICOMDIR" ) );
         return;
@@ -439,7 +433,7 @@ void QCreateDicomdir::examineDicomdirPath()
         m_lineEditDicomdirPath->setText(QDir::toNativeSeparators(path));
         // Actualitzem les etiquetes que indiquen la capacitat del disc
         updateAvailableSpaceToRecord();
-        setDicomdirSize();
+        showDICOMDIRSize();
     }
 }
 
@@ -447,7 +441,7 @@ void QCreateDicomdir::resetDICOMDIRList()
 {
     m_dicomdirSizeBytes = 0;
     m_dicomdirStudiesList->clear();
-    setDicomdirSize();
+    showDICOMDIRSize();
 }
 
 void QCreateDicomdir::removeSelectedStudy()
@@ -460,7 +454,7 @@ void QCreateDicomdir::removeSelectedStudy()
         foreach(QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
             m_dicomdirSizeBytes -= getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), selectedStudy->text(7));//La columna 7 de m_dicomdirStudiesList conté Study Instance UID
-            setDicomdirSize();
+            showDICOMDIRSize();
 
             delete selectedStudy;
         }
@@ -469,7 +463,7 @@ void QCreateDicomdir::removeSelectedStudy()
     else QMessageBox::information(this, ApplicationNameString, tr("Please select a study to remove of the list."));
 }
 
-bool QCreateDicomdir::studyExists( QString studyUID )
+bool QCreateDicomdir::studyExistsInDICOMDIRList( QString studyUID )
 {
     QList<QTreeWidgetItem *> dicomdirStudiesList( m_dicomdirStudiesList ->findItems( studyUID , Qt::MatchExactly, 7 ) );
 
@@ -484,10 +478,8 @@ void QCreateDicomdir::burnDicomdir()
 {
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
-    QString dicomdirPath, isoPath;
+    QString dicomdirPath = getTemporaryDICOMDIRPath(), isoPath;
 
-    // Indiquem al directori del qual volem generar una imatge
-    dicomdirPath = QDir::tempPath() + "/DICOMDIR";
     // Indiquem al directori i nom de la imatge a crear
     isoPath = dicomdirPath + "/dicomdir.iso";
 
@@ -590,14 +582,11 @@ bool QCreateDicomdir::enoughFreeSpace( QString path )
     else return true;
 }
 
-void QCreateDicomdir::clearTemporaryDir()
+void QCreateDicomdir::clearTemporaryDICOMDIRPath()
 {
-    QString dicomdirPath, logMessage;
-    QDir temporaryDirPath;
+    QString dicomdirPath = getTemporaryDICOMDIRPath();
 
-    dicomdirPath = QDir::tempPath() + "/DICOMDIR";
-
-    if ( temporaryDirPath.exists( dicomdirPath ) )
+    if ( QFile::exists( dicomdirPath ) )
     {
         DeleteDirectory delDirectory;
         delDirectory.deleteDirectory( dicomdirPath , true );
@@ -659,7 +648,7 @@ void QCreateDicomdir::deviceChanged( int index )
         case CreateDicomdir::UsbPen:
         case CreateDicomdir::HardDisk:
             m_stackedWidget->setCurrentIndex(1);
-            setDicomdirSize();
+            showDICOMDIRSize();
             if ( m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes )
             {
                 QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb." ).arg(m_availableSpaceToRecordInBytes/(1024*1024)) );
@@ -673,19 +662,12 @@ void QCreateDicomdir::deviceChanged( int index )
             if (checkDICOMDIRBurningApplicationConfiguration())
             {
                 //La configuració de l'aplicació per gravar cd/dvd és vàlida
-                if (m_currentDevice == CreateDicomdir::CdRom) 
-                {
-                    maximumDeviceCapacity = CDRomSizeMb;
-                }
-                else
-                {
-                    maximumDeviceCapacity = DVDRomSizeMb;
-                }
+                maximumDeviceCapacity = m_currentDevice == CreateDicomdir::CdRom ? CDRomSizeMb : DVDRomSizeMb;
                 
                 m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
                 
                 m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
-                setDicomdirSize();//El cridem per refrescar la barra de progrés
+                showDICOMDIRSize();//El cridem per refrescar la barra de progrés
 
                 if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
                 {
@@ -783,6 +765,11 @@ void QCreateDicomdir::updateAvailableSpaceToRecord()
             m_availableSpaceToRecordInBytes = DVDRomSizeBytes;
             break;
     }
+}
+
+QString QCreateDicomdir::getTemporaryDICOMDIRPath()
+{
+    return QDir::tempPath() + "/DICOMDIR";
 }
 
 }
