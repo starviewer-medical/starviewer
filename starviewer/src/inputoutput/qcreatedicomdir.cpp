@@ -269,7 +269,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     // Comprovem si el directori ja es un dicomdir, si és el cas demanem a l'usuari si el desitja sobreecriue o, els estudis seleccionats s'afegiran ja al dicomdir existent
 
-    if ( m_lineEditDicomdirPath->text().isEmpty() == 0 )
+    if ( m_lineEditDicomdirPath->text().isEmpty() )
     {
         QMessageBox::information( this , ApplicationNameString , tr( "No directory specified to create the DICOMDIR" ) );
         return;
