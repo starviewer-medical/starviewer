@@ -456,8 +456,17 @@ p, li { white-space: pre-wrap; }
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
+  <tabstop>m_checkBoxConvertDICOMDIRImagesToLittleEndian</tabstop>
   <tabstop>m_textBurningApplicationPath</tabstop>
   <tabstop>m_buttonExaminateBurningApplication</tabstop>
+  <tabstop>m_textBurningApplicationParameters</tabstop>
+  <tabstop>m_checkBoxHasDifferentCDDVDParameteres</tabstop>
+  <tabstop>m_textBurningApplicationCDParameters</tabstop>
+  <tabstop>m_textBurningApplicationDVDParameters</tabstop>
+  <tabstop>m_checkBoxCopyFolderContentToDICOMDIRCdDvd</tabstop>
+  <tabstop>m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk</tabstop>
+  <tabstop>m_textDICOMDIRFolderPathToCopy</tabstop>
+  <tabstop>m_buttonExaminateDICOMDIRFolderPathToCopy</tabstop>
  </tabstops>
  <resources>
   <include location="../main/main.qrc"/>
