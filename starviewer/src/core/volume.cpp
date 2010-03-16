@@ -636,11 +636,19 @@ int Volume::readSingleFile( QString fileName )
     
     if ( errorCode == NoError )
     {
-        // HACK En els casos que les imatges siguin enhanced, les gdcm no omplen correctament l'origen
-        // i és per això que li assignem l'origen que hem llegit correctament a Image
+        // HACK En els casos que les imatges siguin enhanced, les gdcm no omplen correctament
+        // ni l'origen ni l'sapcing x,y i és per això que li assignem l'origen  i l'spacing 
+        // que hem llegit correctament a Image
         // TODO Quan solucionem correctament el ticket #1166 (actualització a gdcm 2.0.x) aquesta assignació desapareixerà
         if( !m_imageSet.isEmpty() )
+        {
             m_reader->GetOutput()->SetOrigin( m_imageSet.first()->getImagePositionPatient() );
+            double spacing[3];
+            spacing[0] = m_imageSet.first()->getPixelSpacing()[0];
+            spacing[1] = m_imageSet.first()->getPixelSpacing()[1];
+            spacing[2] = m_reader->GetOutput()->GetSpacing()[2];
+            m_reader->GetOutput()->SetSpacing( spacing );
+        }
         this->setData( m_reader->GetOutput() );
         // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
         emit progress( 100 );
