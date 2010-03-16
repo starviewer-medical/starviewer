@@ -208,7 +208,8 @@ HEADERS += extensionfactory.h \
     dicomwriterdcmtk.h \
     dicomfilegenerator.h \
     dicomdictionary.h \
-    dicomimagefilegenerator.h
+    dicomimagefilegenerator.h \
+    copydirectory.h 
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -378,7 +379,8 @@ SOURCES += extensionmediator.cpp \
     dicomwriter.cpp \
     dicomwriterdcmtk.cpp \
     dicomfilegenerator.cpp \
-    dicomimagefilegenerator.cpp
+    dicomimagefilegenerator.cpp \
+    copydirectory.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
