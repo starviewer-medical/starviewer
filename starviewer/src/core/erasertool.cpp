@@ -27,6 +27,7 @@ EraserTool::EraserTool( QViewer *viewer, QObject *parent )
 
     reset();
     connect( m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()) );
+    connect( m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(reset()) );
 }
 
 EraserTool::~EraserTool()
