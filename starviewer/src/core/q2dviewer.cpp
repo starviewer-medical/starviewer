@@ -400,7 +400,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     }
     else
     {
-        DEBUG_LOG("L'orientació del pacient conté un nombre incorrecte d'elements:[" + QString::number(list.size()) + "]. No s'aplicaran annotacions de referència sobre la imatge");
+        DEBUG_LOG("La imatge actual no conté etiqueta d'orientació vàlida: " + orientation );
     }
     return labelsVector;
 }
