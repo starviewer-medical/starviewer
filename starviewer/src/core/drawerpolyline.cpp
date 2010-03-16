@@ -42,11 +42,11 @@ DrawerPolyline::~DrawerPolyline()
 
 void DrawerPolyline::addPoint( double point[3] )
 {
-    double *array = new double[3];
+    double *localPoint = new double[3];
     for( int i = 0; i<3; i++ )
-        array[i] = point[i];
+        localPoint[i] = point[i];
 
-    m_pointsList << array;
+    m_pointsList << localPoint;
     emit changed();
 }
 
