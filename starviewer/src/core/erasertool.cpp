@@ -16,7 +16,7 @@
 namespace udg {
 
 EraserTool::EraserTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent)
+ : Tool(viewer,parent), m_polyline(0)
 {
     m_toolName = "EraserTool";
     m_hasSharedData = false;
@@ -156,7 +156,12 @@ void EraserTool::erasePrimitive()
 
 void EraserTool::reset()
 {
-    m_polyline = NULL;
+    if ( m_polyline )
+    {
+        delete m_polyline;
+        m_polyline = NULL;
+    }
+
     m_state = None;
 }
 
