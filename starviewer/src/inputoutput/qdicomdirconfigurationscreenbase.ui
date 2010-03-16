@@ -29,8 +29,8 @@
    <iconset resource="../main/main.qrc">
     <normaloff>:/images/cdrom.png</normaloff>:/images/cdrom.png</iconset>
   </property>
-  <layout class="QVBoxLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
@@ -43,8 +43,11 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -64,13 +67,13 @@
      <item>
       <widget class="QCheckBox" name="m_checkBoxConvertDICOMDIRImagesToLittleEndian">
        <property name="text">
-        <string>Convert all images to little endian</string>
+        <string>Convert all images to Little Endian</string>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item>
+   <item row="3" column="0">
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
@@ -83,7 +86,7 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item row="4" column="0" colspan="2">
     <layout class="QVBoxLayout">
      <property name="leftMargin">
       <number>10</number>
@@ -108,7 +111,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Application path :</string>
+          <string>Application path:</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>
@@ -130,7 +133,7 @@
          <item>
           <widget class="QPushButton" name="m_buttonExaminateBurningApplication">
            <property name="toolTip">
-            <string>Examine disk to find the database</string>
+            <string>Examine disk to find the application</string>
            </property>
            <property name="text">
             <string/>
@@ -152,7 +155,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Application parameters :</string>
+          <string>Application parameters:</string>
          </property>
         </widget>
        </item>
@@ -273,7 +276,138 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;Copy folder content to DICOMDIR&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>12</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="m_checkBoxCopyFolderContentToDICOMDIRCdDvd">
+         <property name="text">
+          <string>Copy folder content to  DICOMDIR CD/DVD</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk">
+         <property name="text">
+          <string>Copy folder content to DICOMDIR Usb/Harddisk</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>12</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="textLabel1_10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>90</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Folder to copy to DICOMDIR:</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::RichText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="m_textDICOMDIRFolderPathToCopy">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="m_buttonExaminateDICOMDIRFolderPathToCopy">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string>Examine disk to find the application</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../main/main.qrc">
+           <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="1">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -282,6 +416,38 @@
       <size>
        <width>20</width>
        <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="0">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>10</height>
       </size>
      </property>
     </spacer>
@@ -304,12 +470,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>219</x>
-     <y>217</y>
+     <x>286</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
-     <x>429</x>
-     <y>186</y>
+     <x>575</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>
@@ -320,12 +486,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>280</x>
-     <y>217</y>
+     <x>347</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
-     <x>505</x>
-     <y>154</y>
+     <x>575</x>
+     <y>229</y>
     </hint>
    </hints>
   </connection>
@@ -336,12 +502,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>160</x>
-     <y>206</y>
+     <x>227</x>
+     <y>202</y>
     </hint>
     <hint type="destinationlabel">
-     <x>237</x>
-     <y>113</y>
+     <x>383</x>
+     <y>175</y>
     </hint>
    </hints>
   </connection>

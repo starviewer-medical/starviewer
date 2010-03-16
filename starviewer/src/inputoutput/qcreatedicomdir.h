@@ -188,6 +188,9 @@ private:
     /// Variable que ens diu quin és el dispositiu seleccionat en aquell moment
     CreateDicomdir::recordDeviceDicomDir m_currentDevice;
 
+    /// Variable que indica si a la mida del DICOMDIR s'hi ha sumat el tamany que ocupa la carpeta a copiar el DICOMDIR
+    bool m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize;
+
     /**
      * Indica si la configuració és correcte per poder gravar el DICOMDIR en un CD o DVD. No comprova que sigui 
      * un programa vàlid, simplement comprova que la ruta ens ha indicat com programa per gravar CD/DVD existeix
@@ -208,6 +211,18 @@ private:
     ///Retorna el path temporal on poder crear el DICOMDIR
     QString getTemporaryDICOMDIRPath();
 
+    ///Retorna la mida del visor de la carpeta a copiar al DICOMDIR, si no tenim cap carpeta configurada al Settings, retorna 0
+    quint64 getFolderToCopyToDICOMDIRSizeInBytes();
+
+    /** Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode indica si aquesta carpeta
+        s'ha de copiar al DICOMDIR.*/
+    bool haveToCopyFolderContentToDICOMDIR();
+
+    /** Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode té en compte la mida d'aquesta carpeta
+      * i en funció de si s'ha de copiar o no el contingut de la carpeta i el dispositiu actualitza la mida del DICODIR afegint/restant
+      * la mida de la carpeta a copiar.
+      */
+    void updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
 };
 
 }

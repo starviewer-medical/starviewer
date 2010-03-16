@@ -51,6 +51,9 @@ const QString InputOutputSettings::DICOMDIRBurningApplicationCDParametersKey( DI
 const QString InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationDVDParameters" );
 const QString InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey( DICOMDIRBaseKey + "DICOMDIRBurningApplicationHasDifferentCDDVDParameters" );
 const QString InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey( DICOMDIRBaseKey + "ConvertDICOMDIRImagesToLittleEndian" );
+const QString InputOutputSettings::DICOMDIRFolderPathToCopy( DICOMDIRBaseKey + "DICOMDIRFolderPathToCopy");
+const QString InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd( DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRCdDvd" );
+const QString InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk( DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRUsbHardDisk" );
 
 InputOutputSettings::InputOutputSettings()
 {
@@ -105,6 +108,11 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( DICOMDIRBurningApplicationDVDParametersKey, "--nosplash --dvdimage %1" );
     settingsRegistry->addSetting( DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, true );
 #endif
+
+    settingsRegistry->addSetting( DICOMDIRFolderPathToCopy, "" );
+    settingsRegistry->addSetting( CopyFolderContentToDICOMDIRCdDvd, false );
+    settingsRegistry->addSetting( CopyFolderContentToDICOMDIRUsbHardDisk, false );
+
 }
 
 } // end namespace udg 
