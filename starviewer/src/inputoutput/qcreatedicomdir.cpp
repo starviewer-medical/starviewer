@@ -29,6 +29,7 @@
 #include "dicommask.h"
 #include "image.h"
 #include "dicomdirburningapplication.h"
+#include "copydirectory.h"
 
 namespace udg {
 
@@ -157,7 +158,7 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
     qint64 studySizeBytes;
     Status state;
     Settings settings;
-    
+
     QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
     foreach( Study *study, studies )
     {
@@ -176,7 +177,6 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
                 //Afegim la informació de l'estudi a la llista
                 QTreeWidgetItem* item = new QTreeWidgetItem( m_dicomdirStudiesList );
                 m_dicomdirSizeBytes = m_dicomdirSizeBytes + studySizeBytes;
-                showDICOMDIRSize(); // aquí o al final?
             
                 Patient *patient = study->getParentPatient();
                 item->setText( 0, patient->getFullName() );
@@ -193,6 +193,9 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
             existingStudies << study->getInstanceUID();
     }
     QApplication::restoreOverrideCursor();
+
+    updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
+    showDICOMDIRSize();
 
     if( notAddedStudies.size() > 0 || existingStudies.size() > 0 )
     {
@@ -384,6 +387,16 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
     if ( m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )
         convertToDicomdir.createReadmeTxt();
 
+    if (haveToCopyFolderContentToDICOMDIR())
+    {
+        INFO_LOG("Es copiarà al DICOMDIR el contingut de la carpeta " + settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+        //TODO:Aquest tall de codi s'hauria de copiar a una Manager de DICOMDIR no hauria d'estar aquí a la UI
+        if (!CopyDirectory::copyDirectory(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString(), dicomdirPath + "/Extras"))
+        {
+            ERROR_LOG(QString("No s'ha pogut copiar el visor DICOM %1 al DICOMDIR %2").arg(Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString(), dicomdirPath));
+        }
+    }
+
     INFO_LOG( "Finalitzada la creació del DICOMDIR" );
     clearQCreateDicomdirScreen();
 
@@ -441,6 +454,8 @@ void QCreateDicomdir::resetDICOMDIRList()
 {
     m_dicomdirSizeBytes = 0;
     m_dicomdirStudiesList->clear();
+    m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize = false;
+
     showDICOMDIRSize();
 }
 
@@ -454,11 +469,20 @@ void QCreateDicomdir::removeSelectedStudy()
         foreach(QTreeWidgetItem *selectedStudy, m_dicomdirStudiesList->selectedItems())
         {
             m_dicomdirSizeBytes -= getStudySizeInBytes(settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool(), selectedStudy->text(7));//La columna 7 de m_dicomdirStudiesList conté Study Instance UID
-            showDICOMDIRSize();
 
             delete selectedStudy;
         }
         QApplication::restoreOverrideCursor();
+
+        if (m_dicomdirStudiesList->findItems( "*" , Qt::MatchWildcard, 0 ).count() == 0)
+        {
+            //Si no tenim cap estudi reiniciem les variables que controlen la Llista de DICOMDIR
+            resetDICOMDIRList();
+        }
+        else
+
+        updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
+        showDICOMDIRSize();
     }
     else QMessageBox::information(this, ApplicationNameString, tr("Please select a study to remove of the list."));
 }
@@ -642,13 +666,20 @@ void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 void QCreateDicomdir::deviceChanged( int index )
 {
     m_currentDevice = (CreateDicomdir::recordDeviceDicomDir) index;
+
     updateAvailableSpaceToRecord();
+    /*Starviewer donoa la possibilitat de copiar al contingut d'una carpeta als DICOMDIR que es generen^,
+     Cridem aquest mètode perquè en funció del dispositu potser que es copïi o no la carpeta al DICOMDIR per tant s'ha d'actualitzar
+     la mida del DICOMDIR*/
+    updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
+    showDICOMDIRSize();//El cridem per refrescar la barra de progrés   
+    
     switch( m_currentDevice )
     {
         case CreateDicomdir::UsbPen:
         case CreateDicomdir::HardDisk:
             m_stackedWidget->setCurrentIndex(1);
-            showDICOMDIRSize();
+
             if ( m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes )
             {
                 QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb." ).arg(m_availableSpaceToRecordInBytes/(1024*1024)) );
@@ -667,7 +698,6 @@ void QCreateDicomdir::deviceChanged( int index )
                 m_stackedWidget->setCurrentIndex(0);//Indiquem que es mostri la barra de progrés
                 
                 m_progressBarOcupat->setMaximum(maximumDeviceCapacity);
-                showDICOMDIRSize();//El cridem per refrescar la barra de progrés
 
                 if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
                 {
@@ -770,6 +800,59 @@ void QCreateDicomdir::updateAvailableSpaceToRecord()
 QString QCreateDicomdir::getTemporaryDICOMDIRPath()
 {
     return QDir::tempPath() + "/DICOMDIR";
+}
+
+quint64 QCreateDicomdir::getFolderToCopyToDICOMDIRSizeInBytes()
+{
+    Settings settings;
+    int size = 0;
+
+    if (settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toBool())
+    {
+        QString folderPathToCopy = settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString();
+
+        if (QFile::exists(folderPathToCopy))
+        {
+            size = HardDiskInformation().getDirectorySizeInBytes(folderPathToCopy);
+        }
+    }
+
+    return size;
+}
+
+bool QCreateDicomdir::haveToCopyFolderContentToDICOMDIR()
+{
+    Settings settings;
+    bool copyFolderContentToDICOMDIRCdDvd = settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool();
+    bool copyFolderContentToDICOMDIRUsbHardDisk = settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool();
+
+    //S'ha de copiar el visor DICOM si està configurat així als settings i el dispositiu actual és cd/dvd
+    return (copyFolderContentToDICOMDIRCdDvd &&  (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom)) || 
+        (copyFolderContentToDICOMDIRUsbHardDisk &&  (m_currentDevice == CreateDicomdir::UsbPen || m_currentDevice == CreateDicomdir::HardDisk));
+}
+
+void QCreateDicomdir::updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize()
+{
+    QList<QTreeWidgetItem*> dicomdirStudies = m_dicomdirStudiesList->findItems( "*" , Qt::MatchWildcard, 0 );
+
+    if (haveToCopyFolderContentToDICOMDIR() &&  dicomdirStudies.count() > 0 &&
+        !m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize)
+    {
+        /*Si hem de copiar el contingut de la carpeta al DICOMDIR, tenim un estudi o més i no l'havíem tingut en compte 
+          la mida de la carpeta a copiar en el tamany del DICOMDIR, li afegim*/
+        m_dicomdirSizeBytes += getFolderToCopyToDICOMDIRSizeInBytes();
+        m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize = true;
+    }
+
+    if (!haveToCopyFolderContentToDICOMDIR() &&  dicomdirStudies.count() > 0 &&
+        m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize)
+    {
+        /*Si no hem de copiar el contingut de la carpeta al DICOMDIR, tenim un estudi o més i l'havíem tingut en compte 
+          la mida de la carpeta a copiar en el tamany del DICOMDIR, li restem*/
+
+        m_dicomdirSizeBytes -= getFolderToCopyToDICOMDIRSizeInBytes();
+        m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize = false;        
+    }
 }
 
 }

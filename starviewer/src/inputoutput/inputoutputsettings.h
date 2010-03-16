@@ -70,7 +70,12 @@ public:
     static const QString DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey;
     /// CheckBox per saber si cal convertir les imatges del DICOMDIR a little endian
     static const QString ConvertDICOMDIRImagesToLittleEndianKey;
-
+    ///Path del directori del que s'ha de copiar el visor DICOMDIR
+    static const QString DICOMDIRFolderPathToCopy;
+    /// Checkbox per saber si cal copiar el contingut del directori que apunta el setting DICOMDIRFolderPathToCopy als CD/DVD DICOMDIR
+    static const QString CopyFolderContentToDICOMDIRCdDvd;
+    /// Checkbox per saber si cal copiar el contingut del directori que apunta el setting DICOMDIRFolderPathToCopy als Usb/HardDisk DICOMDIR
+    static const QString CopyFolderContentToDICOMDIRUsbHardDisk;
 };
 
 } // end namespace udg 

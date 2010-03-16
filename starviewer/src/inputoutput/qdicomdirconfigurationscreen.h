@@ -33,13 +33,19 @@ public slots:
 private slots:
     /// Mostra un QDialog per especificar on es troba el programa de gravació en el disc dur
     void examinateDICOMDIRBurningApplicationPath();
+    
+    /// Mostra QDialog que permet especificar el directori on es troba el contingut que s'ha de copiar al crear un DICOMDIR
+    void examinateDICOMDIRFolderPathToCopy();
+
+    ///Slot que s'activa quan ens canvi l'estat dels checkbox que indiquen si s'ha de copiar el contingut de la carpeta al DICOMDIR
+    void checkBoxCopyFolderContentToDICOMDIRToggled();
 
 private:
     /// Crea els connects dels signals i slots
     void createConnections();
 
     /// Carrega les dades de configuració del programa de gravació
-    void loadBurningDefaults();
+    void loadDICOMDIRDefaults();
 
     /// Aplica els canvis fets a la configuració del programa de gravació
     void applyChangesDICOMDIR();

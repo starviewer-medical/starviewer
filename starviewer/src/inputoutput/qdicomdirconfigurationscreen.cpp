@@ -19,7 +19,7 @@ namespace udg {
 QDICOMDIRConfigurationScreen::QDICOMDIRConfigurationScreen( QWidget *parent ) : QWidget(parent)
 {
     setupUi( this );
-    loadBurningDefaults();
+    loadDICOMDIRDefaults();
     createConnections();
 }
 
@@ -31,9 +31,13 @@ void QDICOMDIRConfigurationScreen::createConnections()
 {
     // Connecta el boto examinar programa de gravació amb el dialog per escollir el path del programa
     connect( m_buttonExaminateBurningApplication , SIGNAL( clicked() ), SLOT( examinateDICOMDIRBurningApplicationPath() ) );
+    connect( m_buttonExaminateDICOMDIRFolderPathToCopy , SIGNAL( clicked() ), SLOT( examinateDICOMDIRFolderPathToCopy() ) );
+
+    connect( m_checkBoxCopyFolderContentToDICOMDIRCdDvd , SIGNAL( toggled(bool) ), SLOT ( checkBoxCopyFolderContentToDICOMDIRToggled() ) );
+    connect( m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk , SIGNAL( toggled(bool) ), SLOT ( checkBoxCopyFolderContentToDICOMDIRToggled() ) );
 }
 
-void QDICOMDIRConfigurationScreen::loadBurningDefaults()
+void QDICOMDIRConfigurationScreen::loadDICOMDIRDefaults()
 {
     Settings settings;
 
@@ -73,6 +77,11 @@ void QDICOMDIRConfigurationScreen::loadBurningDefaults()
             }
         }
     }
+
+    m_checkBoxCopyFolderContentToDICOMDIRCdDvd->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool());
+    m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool());
+    m_textDICOMDIRFolderPathToCopy->setText(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+    checkBoxCopyFolderContentToDICOMDIRToggled();
 }
 
 bool QDICOMDIRConfigurationScreen::validateChanges()
@@ -97,9 +106,13 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
         }
     }
 
-    if ( !valid ) 
+    if ( m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() || m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked() )
     {
-        QMessageBox::information(this, ApplicationNameString, messageBoxText);
+        if ( m_textDICOMDIRFolderPathToCopy->text().isEmpty() || !QFile::exists( m_textDICOMDIRFolderPathToCopy->text() ) )
+        {
+            QMessageBox::warning( this, ApplicationNameString, tr( "Invalid path of folder to copy to DICOMDIR.") );
+            return false;
+        }
     }
 
     return valid;
@@ -147,6 +160,24 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
     delete dialog;
 }
 
+void QDICOMDIRConfigurationScreen::examinateDICOMDIRFolderPathToCopy()
+{
+    QString folderPathToCopy = QFileDialog::getExistingDirectory(0, tr("Folder to copy to DICOMDIR..."), m_textDICOMDIRFolderPathToCopy->text() );
+
+    if (!folderPathToCopy.isEmpty())
+    {
+        m_textDICOMDIRFolderPathToCopy->setText( QDir::toNativeSeparators(folderPathToCopy) );
+    }
+}
+
+void QDICOMDIRConfigurationScreen::checkBoxCopyFolderContentToDICOMDIRToggled()
+{
+    bool enabled = m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() || m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked();
+    
+    m_textDICOMDIRFolderPathToCopy->setEnabled(enabled);
+    m_buttonExaminateDICOMDIRFolderPathToCopy->setEnabled(enabled);
+}
+
 void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
 {
     Settings settings;
@@ -157,6 +188,9 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey, m_textBurningApplicationDVDParameters->text() );
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, m_checkBoxHasDifferentCDDVDParameteres->isChecked() );
     settings.setValue( InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey, m_checkBoxConvertDICOMDIRImagesToLittleEndian->isChecked() );
+    settings.setValue( InputOutputSettings::DICOMDIRFolderPathToCopy, m_textDICOMDIRFolderPathToCopy->text() );
+    settings.setValue( InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd, m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() );
+    settings.setValue( InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk, m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked() );
 
     if ( m_textBurningApplicationPath->isModified() )
     {
@@ -177,6 +211,12 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
     {
         INFO_LOG( "Es modificarà el parametres del programa de gravació (referent a la gravació en DVD) per " + m_textBurningApplicationDVDParameters->text() );
     }
+
+    if ( m_textDICOMDIRFolderPathToCopy->isModified() )
+    {
+        INFO_LOG( "Es modificarà el path del directori a copiar al DICOMDIR " + m_textDICOMDIRFolderPathToCopy->text() );
+    }
+
 }
 
 };
