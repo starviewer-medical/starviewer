@@ -16,7 +16,7 @@
 namespace udg {
 
 EraserTool::EraserTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_polyline(0)
+ : Tool(viewer,parent), m_state(0), m_polyline(0)
 {
     m_toolName = "EraserTool";
     m_hasSharedData = false;
@@ -25,9 +25,7 @@ EraserTool::EraserTool( QViewer *viewer, QObject *parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
-    reset();
     connect( m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()) );
-    connect( m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(reset()) );
 }
 
 EraserTool::~EraserTool()
@@ -50,6 +48,7 @@ void EraserTool::handleEvent( unsigned long eventID )
 
         case vtkCommand::LeftButtonReleaseEvent:
             erasePrimitive();
+            reset();
         break;
 
         default:
@@ -146,12 +145,6 @@ void EraserTool::erasePrimitive()
     }
     else
         m_2DViewer->getDrawer()->erasePrimitivesInsideBounds( m_startPoint, m_endPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-
-    m_polyline->deleteAllPoints();
-    m_polyline->update( DrawerPrimitive::VTKRepresentation );
-    m_2DViewer->getDrawer()->refresh();
-
-    m_state = None;
 }
 
 void EraserTool::reset()
