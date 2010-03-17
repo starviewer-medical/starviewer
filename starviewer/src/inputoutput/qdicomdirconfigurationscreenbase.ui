@@ -392,7 +392,7 @@ p, li { white-space: pre-wrap; }
           <bool>false</bool>
          </property>
          <property name="toolTip">
-          <string>Examine disk to find the application</string>
+          <string>Examine disk to find the folder to copy to DICOMDIR</string>
          </property>
          <property name="text">
           <string/>
