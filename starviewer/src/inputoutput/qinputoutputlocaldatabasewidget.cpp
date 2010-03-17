@@ -246,7 +246,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                                                                            QMessageBox::No);
         if (response  == QMessageBox::Yes)
         {
-            QApplication::setOverrideCursor(Qt::WaitCursor);
+            QApplication::setOverrideCursor(Qt::BusyCursor);
             LocalDatabaseManager localDatabaseManager;
 
             foreach(DicomMask dicomMaskToDelete, selectedDicomMaskToDelete)
