@@ -26,6 +26,7 @@
 #include "processimagesingleton.h"
 #include "localdatabasemanager.h"
 #include "pacsmanager.h"
+#include "harddiskinformation.h"
 
 namespace udg
 {
@@ -442,9 +443,17 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::NoEnoughSpace :
-            message = tr("There is not enough space to retrieve studies, please free space.");
-            message += tr("\nAll pending retrieve operations will be cancelled.");
-            QMessageBox::warning(this, ApplicationNameString, message);
+            {
+                Settings settings;
+                HardDiskInformation hardDiskInformation;
+                quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
+                quint64 minimumSpaceRequired = quint64( settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache ).toULongLong() * 1024 );
+                message = tr("There is not enough space to retrieve studies, please free space or change your Local Database settings.");
+                message += tr("\nAll pending retrieve operations will be cancelled.");
+                message += tr("\n\nAvailable space in Disk: %1 Mb").arg(freeSpaceInHardDisk);
+                message += tr("\nMinimum space required in Disk to retrieve studies: %1 Mb").arg(minimumSpaceRequired);
+                QMessageBox::warning(this, ApplicationNameString, message);
+            }
             break;
         case QExecuteOperationThread::ErrorFreeingSpace :
             message = tr("Please review the operation list screen, ");
