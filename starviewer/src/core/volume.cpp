@@ -643,11 +643,16 @@ int Volume::readSingleFile( QString fileName )
         if( !m_imageSet.isEmpty() )
         {
             m_reader->GetOutput()->SetOrigin( m_imageSet.first()->getImagePositionPatient() );
-            double spacing[3];
-            spacing[0] = m_imageSet.first()->getPixelSpacing()[0];
-            spacing[1] = m_imageSet.first()->getPixelSpacing()[1];
-            spacing[2] = m_reader->GetOutput()->GetSpacing()[2];
-            m_reader->GetOutput()->SetSpacing( spacing );
+            // Cal tenir en compte si la imatge original conté informació d'spacing vàlida per fer l'assignació
+            const double *imageSpacing = m_imageSet.first()->getPixelSpacing();
+            if( imageSpacing[0] > 0.0 )
+            {
+                double spacing[3];
+                spacing[0] = imageSpacing[0];
+                spacing[1] = imageSpacing[1];
+                spacing[2] = m_reader->GetOutput()->GetSpacing()[2];
+                m_reader->GetOutput()->SetSpacing( spacing );
+            }
         }
         this->setData( m_reader->GetOutput() );
         // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
