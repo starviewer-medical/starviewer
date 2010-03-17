@@ -30,6 +30,8 @@ EraserTool::EraserTool( QViewer *viewer, QObject *parent )
 
 EraserTool::~EraserTool()
 {
+    if ( m_polyline )
+        delete m_polyline;
 }
 
 void EraserTool::handleEvent( unsigned long eventID )
