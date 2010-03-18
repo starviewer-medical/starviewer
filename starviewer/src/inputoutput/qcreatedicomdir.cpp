@@ -280,6 +280,8 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     INFO_LOG ( "Iniciant la creació del DICOMDIR en discdur o usb al directori " + dicomdirPath );
 
+    /*TODO:El codi de comprova si el directori és un DICOMDIR hauria d'estar a una DICOMDIRManager, la UI no ha de saber
+      quins elements componen un DICOMDIR*/
     if ( dicomdirPathIsADicomdir( dicomdirPath ) )
     {
         switch ( QMessageBox::question( this ,
@@ -368,30 +370,29 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( !state.good() )
     {
-        if ( state.code() == 4001 ) // Alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
-        {
-            QApplication::restoreOverrideCursor();
-            QMessageBox::information( this , ApplicationNameString, tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them." ) );
-            QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
-        }
-        if ( state.code() == 4002 )
-        {
-            QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because can't copy the content of %2 to the DICOMDIR. Be sure you have read permissions in the directory, or "
-                                                                     "choose not copy folder content to DICOMDIR option in DICOMDIR configuration." )
-                .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
-        }
-        else
-        {
-            QApplication::restoreOverrideCursor();
+        QApplication::restoreOverrideCursor();
 
-            QMessageBox::critical( this , ApplicationNameString , tr( "Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty." ).arg( m_lineEditDicomdirPath->text() ) );
-            ERROR_LOG( "Error al crear el DICOMDIR ERROR : " + state.text() );
-            return state;
+        switch ( state.code() )
+        {
+            case 4001: // Alguna de les imatges no compleix l'estandard dicom però es pot continuar endavant
+                QMessageBox::information( this , ApplicationNameString, tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them." ) );
+                break;
+            case 4002:
+                QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because can't copy the content of '%2' to the DICOMDIR. Be sure you have read permissions in the directory, or "
+                    "choose not copy folder content to DICOMDIR option in DICOMDIR configuration." )
+                    .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
+                break;
+            case 4003:
+                QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because the folder to copy to DICOMDIR '%2' contents an item called DICOMDIR o DICOM."
+                    "\n\nRemove it from the directory or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.")
+                    .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
+                break;
+            default :
+                QMessageBox::critical( this , ApplicationNameString , tr( "Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty." ).arg( m_lineEditDicomdirPath->text() ) );
+                ERROR_LOG( "Error al crear el DICOMDIR ERROR : " + state.text() );
+                return state;
         }
     }
-
-    if ( m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )
-        convertToDicomdir.createReadmeTxt();
 
     INFO_LOG( "Finalitzada la creació del DICOMDIR" );
     clearQCreateDicomdirScreen();
