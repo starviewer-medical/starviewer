@@ -152,22 +152,25 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     //una vegada copiada les imatges les creem
     state = createDicomdir( m_dicomDirPath , selectedDevice );
 
-    m_progress->close();
-
     if ( !state.good() && state.code() != 4001 )// l'error 4001 és que les imatges no compleixen l'estàndard al 100, però el dicomdir es pot utilitzar
     {
         DeleteDirectory().deleteDirectory( m_dicomDirPath , false );
     }
-
-    if (copyFolderContent)
+    else
     {
-        if (!copyFolderContentToDICOMDIR())
+        if (copyFolderContent)
         {
-            DeleteDirectory().deleteDirectory( m_dicomDirPath, false);
-            state.setStatus("", false, 4002);
-            return state;
+            if (!copyFolderContentToDICOMDIR())
+            {
+                m_progress->close();
+                DeleteDirectory().deleteDirectory( m_dicomDirPath, false);
+                state.setStatus("", false, 4002);
+                return state;
+            }
         }
     }
+
+    m_progress->close();
 
     return state;
 }
