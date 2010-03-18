@@ -62,6 +62,11 @@ public:
     void setConvertDicomdirImagesToLittleEndian(bool convertDicomdirImagesToLittleEndian);
     bool getConvertDicomdirImagesToLittleEndian();
 
+    /**Starviewer pot copiar el contingut d'un directori especificat per l'usuari al DICOMDIR que es crea. Aquest directori ha de complir
+       un requeriment: que no contingui cap fitxer ni carpeta que s'anomeni DICOMDIR o DICOM.
+       Aquest mètode ens comprova que es compleixi aquest requeriment.*/
+    bool AreValidRequirementsOfFolderContentToCopyToDICOMDIR(QString path);
+
 private:
     /** Estructura que conté la informació d'un estudi a convertir a dicomdir. 
       * És necessari guardar el Patient ID perquè segons la normativa de l'IHE, 
@@ -101,7 +106,7 @@ private:
      */
     Status copyImageToDicomdirPath(Image *image);
 
-    /// Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copai el contingut de la carpeta al DICOMDIR
+    ///Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copia el contingut de la carpeta al DICOMDIR
     bool copyFolderContentToDICOMDIR();
 
 private:

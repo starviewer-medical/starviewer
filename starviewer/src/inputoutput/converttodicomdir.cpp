@@ -95,6 +95,12 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
 
     m_dicomDirPath = dicomdirPath;
 
+    if (!AreValidRequirementsOfFolderContentToCopyToDICOMDIR(Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()))
+    {
+        state.setStatus("", false, 4003);
+        return state;
+    }
+
     DicomMask studyMask;
     QList<Study*> studyList;
 
@@ -160,6 +166,9 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     {
         if (copyFolderContent)
         {
+            /*Copiar el contingut del directory s'ha de fer una vegada s'hagi creat el DICOMDIR, perquè si dcmtk detecta al directori on s'ha de crear
+              el DICOMDIR que hi ha fitxers no DICOM fallarà.*/
+
             if (!copyFolderContentToDICOMDIR())
             {
                 m_progress->close();
@@ -220,6 +229,15 @@ void ConvertToDicomdir::setConvertDicomdirImagesToLittleEndian(bool convertDicom
 bool ConvertToDicomdir::getConvertDicomdirImagesToLittleEndian()
 {
     return m_convertDicomdirImagesToLittleEndian;
+}
+
+bool ConvertToDicomdir::AreValidRequirementsOfFolderContentToCopyToDICOMDIR(QString path)
+{
+    QDir dir(path);
+    QStringList directoryContent = dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
+
+    return !directoryContent.contains("DICOMDIR", Qt::CaseInsensitive) &&
+           !directoryContent.contains("DICOM", Qt::CaseInsensitive);
 }
 
 Status ConvertToDicomdir::copyStudiesToDicomdirPath(QList<Study*> studyList)
