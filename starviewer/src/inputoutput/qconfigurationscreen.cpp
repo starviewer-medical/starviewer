@@ -27,6 +27,7 @@ QConfigurationScreen::QConfigurationScreen( QWidget *parent ) : QWidget(parent)
 
     fillPacsListView(); //emplena el listview amb les dades dels pacs, que tenim configurats
     loadPacsDefaults();
+    loadInstitutionInformation();
     m_buttonApplyPacs->setEnabled(false);
     m_configurationChanged = false;
 
@@ -101,9 +102,18 @@ void QConfigurationScreen::loadPacsDefaults()
     m_textMaxConnections->setText( QString::number(PacsDevice::getMaximumConnections()) );
 }
 
-/************************************************************************************************************************/
-/*                                              PACS DEVICE                                                             */
-/************************************************************************************************************************/
+void QConfigurationScreen::loadInstitutionInformation()
+{
+    Settings settings;
+
+    m_textInstitutionName->setText(settings.getValue(InputOutputSettings::InstitutionName).toString());
+    m_textInstitutionAddress->setText(settings.getValue(InputOutputSettings::InstitutionAddress).toString());
+    m_textInstitutionTown->setText(settings.getValue(InputOutputSettings::InstitutionTown).toString());
+    m_textInstitutionZipCode->setText(settings.getValue(InputOutputSettings::InstitutionZipCode).toString());
+    m_textInstitutionCountry->setText(settings.getValue(InputOutputSettings::InstitutionCountry).toString());
+    m_textInstitutionEmail->setText(settings.getValue(InputOutputSettings::InstitutionEmail).toString());
+    m_textInstitutionPhoneNumber->setText(settings.getValue(InputOutputSettings::InstitutionPhoneNumber).toString());
+}
 
 void QConfigurationScreen:: clear()
 {
@@ -392,6 +402,7 @@ bool QConfigurationScreen::applyChanges()
             if (response == QMessageBox::No) return false;
         }
         applyChangesPacs();
+        applyChangesInstitutionInformation();
         m_configurationChanged = false;
 
         return true;
@@ -431,6 +442,46 @@ void QConfigurationScreen::applyChangesPacs()
     }
 
     m_buttonApplyPacs->setEnabled( false );
+}
+
+void QConfigurationScreen::applyChangesInstitutionInformation()
+{
+    Settings settings;
+
+    if (m_textInstitutionName->isModified())
+    {
+        settings.setValue(InputOutputSettings::InstitutionName, m_textInstitutionName->text());
+    }
+
+    if (m_textInstitutionAddress->isModified())
+    {
+        settings.setValue(InputOutputSettings::InstitutionAddress, m_textInstitutionAddress->text());
+    }
+
+    if (m_textInstitutionTown->isModified())
+    {
+        settings.setValue(InputOutputSettings::InstitutionTown, m_textInstitutionTown->text());
+    }
+
+    if (m_textInstitutionZipCode->isModified())
+    {
+        settings.setValue(InputOutputSettings::InstitutionZipCode, m_textInstitutionZipCode->text());
+    }
+
+    if (m_textInstitutionCountry->isModified())
+    {
+        settings.setValue(InputOutputSettings::InstitutionCountry, m_textInstitutionCountry->text());
+    }
+
+    if (m_textInstitutionEmail->isModified())
+    {
+        settings.setValue(InputOutputSettings::InstitutionEmail, m_textInstitutionEmail->text());
+    }
+
+    if (m_textInstitutionPhoneNumber->isModified())
+    {
+        settings.setValue(InputOutputSettings::InstitutionPhoneNumber, m_textInstitutionPhoneNumber->text());
+    }
 }
 
 void QConfigurationScreen::enableApplyButtons()

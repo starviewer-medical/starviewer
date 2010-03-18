@@ -76,6 +76,15 @@ public:
     static const QString CopyFolderContentToDICOMDIRCdDvd;
     /// Checkbox per saber si cal copiar el contingut del directori que apunta el setting DICOMDIRFolderPathToCopy als Usb/HardDisk DICOMDIR
     static const QString CopyFolderContentToDICOMDIRUsbHardDisk;
+
+    //Informació Institució
+    static const QString InstitutionName;
+    static const QString InstitutionTown;
+    static const QString InstitutionAddress;
+    static const QString InstitutionZipCode;
+    static const QString InstitutionCountry;
+    static const QString InstitutionPhoneNumber;
+    static const QString InstitutionEmail;
 };
 
 } // end namespace udg 

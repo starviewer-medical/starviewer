@@ -102,8 +102,14 @@ private:
     /// Emplena els textboxs amb les dades del PACS
     void loadPacsDefaults();
 
+    ///Emplena els textbox amb la informació de la Institució
+    void loadInstitutionInformation();
+
     /// Guarda els canvis a la configuració dels paràmetres del PACS
     void applyChangesPacs();
+
+    ///Guarda els canvis fets a la informació de la institució
+    void applyChangesInstitutionInformation();
 
     ///Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
     bool isIncomingConnectionsPortInUseByAnotherApplication();
