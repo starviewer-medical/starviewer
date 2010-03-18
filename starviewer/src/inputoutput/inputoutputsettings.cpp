@@ -55,6 +55,15 @@ const QString InputOutputSettings::DICOMDIRFolderPathToCopy( DICOMDIRBaseKey + "
 const QString InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd( DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRCdDvd" );
 const QString InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk( DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRUsbHardDisk" );
 
+const QString InstitutionInformationBase("InstitutionInformation/");
+const QString InputOutputSettings::InstitutionName( InstitutionInformationBase + "InstitutionName");
+const QString InputOutputSettings::InstitutionTown( InstitutionInformationBase + "InstitutionTown");
+const QString InputOutputSettings::InstitutionAddress( InstitutionInformationBase + "InstitutionAddress");
+const QString InputOutputSettings::InstitutionZipCode( InstitutionInformationBase + "InstitutionZipCode");
+const QString InputOutputSettings::InstitutionCountry( InstitutionInformationBase + "InstitutionCountry");
+const QString InputOutputSettings::InstitutionPhoneNumber( InstitutionInformationBase + "InstitutionPhoneNumber");
+const QString InputOutputSettings::InstitutionEmail( InstitutionInformationBase + "InstitutionEmail");
+
 InputOutputSettings::InputOutputSettings()
 {
 }
