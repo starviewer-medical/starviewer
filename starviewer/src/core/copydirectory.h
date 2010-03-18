@@ -18,14 +18,8 @@ namespace udg {
 class CopyDirectory{
 public:
 
-    /**Copia el directori origen al directori destí. Si la còpia falla al copiar algun fitxer o directori esborra del directori destí
-       tot el que s'havia copiat fins el moment*/
+    ///Copia el directori origen al directori destí
     static bool copyDirectory(const QString &sourceDirectory, const QString &sourceDestination);
-
-private:
-    
-    ///Mètode recursiu per copiar directoris
-    static bool copyDirectoryRecursive(const QString &sourceDirectory, const QString &sourceDestination);
 
 };
 

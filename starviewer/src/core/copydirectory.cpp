@@ -12,19 +12,6 @@ namespace udg
 
 bool CopyDirectory::copyDirectory(const QString &sourceDirectoryPath, const QString &destinationDirectoryPath)
 {
-    if (!copyDirectoryRecursive(sourceDirectoryPath, destinationDirectoryPath))
-    {
-        //Si ha fallat al copiar esborrem tot el que s'hagi pogut copiat al destí, per no deixar el directori destí inconsistent
-        DeleteDirectory().deleteDirectory(destinationDirectoryPath, true);
-        ERROR_LOG(QString("No s'ha pogut copiar el directori %1 a %2").arg(sourceDirectoryPath, destinationDirectoryPath));
-        return false;
-    }
-
-    return true;
-}
-
-bool CopyDirectory::copyDirectoryRecursive(const QString &sourceDirectoryPath, const QString &destinationDirectoryPath)
-{
     QDir sourceDirectory(sourceDirectoryPath), destinationDirectory(destinationDirectoryPath);
     QStringList files, directories;
 
@@ -63,7 +50,7 @@ bool CopyDirectory::copyDirectoryRecursive(const QString &sourceDirectoryPath, c
     {
         QString sourceSubDirectory = sourceDirectoryPath + QDir::separator() + directories[i];
         QString destinationSubDirectory = destinationDirectoryPath + QDir::separator() + directories[i];
-        if (!copyDirectoryRecursive(sourceSubDirectory, destinationSubDirectory))
+        if (!copyDirectory(sourceSubDirectory, destinationSubDirectory))
         {
             return false;
         }
