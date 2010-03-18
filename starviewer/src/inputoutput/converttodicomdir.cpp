@@ -20,6 +20,8 @@
 #include "patient.h"
 #include "study.h"
 #include "image.h"
+#include "inputoutputsettings.h"
+#include "copydirectory.h"
 
 namespace udg {
 
@@ -82,7 +84,7 @@ void ConvertToDicomdir::addStudy( const QString &studyUID )
     else m_studiesToConvert.push_back( studyToConvert );//en aquest cas val al final
 }
 
-Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice )
+Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent)
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     Status state;
@@ -148,9 +150,23 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     state = createDicomdir( m_dicomDirPath , selectedDevice );
 
     m_progress->close();
+
     if ( !state.good() && state.code() != 4001 )// l'error 4001 és que les imatges no compleixen l'estàndard al 100, però el dicomdir es pot utilitzar
     {
         deleteStudies();
+    }
+
+    if (copyFolderContent)
+    {
+        if (!copyFolderContentToDICOMDIR())
+        {
+            state.setStatus("", false, 4002);
+            return state;
+        }
+        else
+        {
+            DeleteDirectory().deleteDirectory( m_dicomDirPath , true );
+        }
     }
 
     return state;
@@ -369,6 +385,23 @@ void ConvertToDicomdir::createReadmeTxt()
     out << "E-mail contact : " << OrganizationEmailString << "\n";
 
     file.close();
+}
+
+bool ConvertToDicomdir::copyFolderContentToDICOMDIR()
+{
+    //TODO:Aquest tall de codi s'hauria de copiar a una Manager de DICOMDIR no hauria d'estar aquí a la UI
+    QString folderToCopyPath = Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString();
+    bool ok = true;
+
+    INFO_LOG("Es copiara al DICOMDIR el contingut de la carpeta " + folderToCopyPath);
+
+    if (!CopyDirectory::copyDirectory(folderToCopyPath, m_dicomDirPath))
+    {
+        ERROR_LOG(QString("No s'ha pogut copiar el visor DICOM %1 al DICOMDIR %2").arg(folderToCopyPath, m_dicomDirPath));
+        ok = false;
+    }
+
+    return ok;
 }
 
 }
