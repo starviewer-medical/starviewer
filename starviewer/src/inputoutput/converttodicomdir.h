@@ -43,11 +43,13 @@ public:
      */
     void addStudy ( const QString &studyUID );
 
-    /** Converteix a dicomdir en el path especificat els estudis que hi ha a la llista
+    /** Converteix a DICOMDIR en el path especificat els estudis que hi ha a la llista. ATENCIÓ!!! Si en el directori destí ja hi ha 
+     *  una carpeta que es digui DICOM o un fitxer que es digui DICOMDIR els esborra.
      * @param dicomdirPath directori on es guardarà el dicomdir
+     * @param indica si s'ha de copiar el contingut del directori guardat al settings InputOutputSettings::DICOMDIRFolderPathToCopy al DICOMDIR
      * @return Indica l'estat en què finalitza el mètode
      */
-    Status convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice );
+    Status convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent );
 
     /** Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
       * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
@@ -75,7 +77,7 @@ private:
      * @param selectedDevice dispositiu on es crearà el dicomdir
      * @return  estat del mètode
      */
-    Status createDicomdir( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice );
+    Status createDicomdir( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice);
 
     /// Copia els estudis seleccionats per passar a dicomdir, al directori desti
     Status copyStudiesToDicomdirPath(QList<Study*> studyList);
@@ -100,6 +102,9 @@ private:
 
     /// Esborra els estudis creats en el dicomdir, en el cas que s'haig produít algun error, per deixar el directori on s'havia de crear el dicomdir amb l'estat original
     void deleteStudies();
+
+    /// Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copai el contingut de la carpeta al DICOMDIR
+    bool copyFolderContentToDICOMDIR();
 
 private:
     QList<StudyToConvert> m_studiesToConvert;

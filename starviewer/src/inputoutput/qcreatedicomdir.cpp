@@ -364,7 +364,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         INFO_LOG( "L'estudi " + item->text( 7 ) + " s'afegirà al DICOMDIR " );
     }
 
-    state = convertToDicomdir.convert(dicomdirPath, m_currentDevice);
+    state = convertToDicomdir.convert(dicomdirPath, m_currentDevice, haveToCopyFolderContentToDICOMDIR());
 
     if ( !state.good() )
     {
@@ -373,6 +373,12 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
             QApplication::restoreOverrideCursor();
             QMessageBox::information( this , ApplicationNameString, tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them." ) );
             QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
+        }
+        if ( state.code() == 4002 )
+        {
+            QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because can't copy the content of %2 to the DICOMDIR. Be sure you have read permissions in the directory, or "
+                                                                     "choose not copy folder content to DICOMDIR option in DICOMDIR configuration." )
+                .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
         }
         else
         {
@@ -386,16 +392,6 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
 
     if ( m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom )
         convertToDicomdir.createReadmeTxt();
-
-    if (haveToCopyFolderContentToDICOMDIR())
-    {
-        INFO_LOG("Es copiarà al DICOMDIR el contingut de la carpeta " + settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
-        //TODO:Aquest tall de codi s'hauria de copiar a una Manager de DICOMDIR no hauria d'estar aquí a la UI
-        if (!CopyDirectory::copyDirectory(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString(), dicomdirPath + "/Extras"))
-        {
-            ERROR_LOG(QString("No s'ha pogut copiar el visor DICOM %1 al DICOMDIR %2").arg(Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString(), dicomdirPath));
-        }
-    }
 
     INFO_LOG( "Finalitzada la creació del DICOMDIR" );
     clearQCreateDicomdirScreen();
