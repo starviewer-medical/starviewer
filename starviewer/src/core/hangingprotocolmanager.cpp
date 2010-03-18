@@ -356,7 +356,7 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
             if( hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( serie->getModality() ) )
             {
                 imageNumber = 0;
-                listOfImages = serie->getImages();
+                listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
                 numberImages = listOfImages.size();
 
                 while( !found && imageNumber < numberImages )
@@ -454,7 +454,7 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
         }
         else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
         {
-            if( serie->getNumberOfImages() < restriction.valueRepresentation.toInt() )
+            if( serie->getFirstVolume()->getImages().size() < restriction.valueRepresentation.toInt() )
                 valid = false;
         }
         i++;
@@ -631,7 +631,7 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
         else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
         {
             Series * serie = image->getParentSeries();
-            if( serie->getNumberOfImages() < restriction.valueRepresentation.toInt() )
+            if( serie->getFirstVolume()->getImages().size() < restriction.valueRepresentation.toInt() )
                 valid = false;
         }
         i++;
