@@ -177,6 +177,8 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
                 return state;
             }
         }
+
+        createReadmeTxt();
     }
 
     m_progress->close();
@@ -386,14 +388,53 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 
 void ConvertToDicomdir::createReadmeTxt()
 {
+    Settings settings;
     QString readmeFilePath = m_dicomDirPath + "/README.TXT";
     QFile file( readmeFilePath );
+
+    if (file.exists()) 
+    {
+        /*Si el fitxer ja existeix vol dir que l'hem copiat del contingut la carpeta que s'ha copiar al crear un DICOMDIR
+          en aquest cas mantenim el Readme.txt existent i no generem el nostre*/
+        return;
+    }
 
     if ( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) return;
 
     QTextStream out( &file );
-    out << "The dicomdir has been generated with " << ApplicationNameString << " Version " << StarviewerVersionString << "\n";
+    out << "The DICOMDIR has been generated with " << ApplicationNameString << " Version " << StarviewerVersionString << "\n";
     out << "E-mail contact : " << OrganizationEmailString << "\n";
+    out << ApplicationNameString << " is not responsible for DICOMDIR content." << "\n\n";
+
+    if (!settings.getValue(InputOutputSettings::InstitutionName).toString().isEmpty())
+    {
+        out << "The DICOMDIR has been created by: " << settings.getValue(InputOutputSettings::InstitutionName).toString() << "\n"; 
+        
+        if (!settings.getValue(InputOutputSettings::InstitutionAddress).toString().isEmpty())
+        {
+            out << settings.getValue(InputOutputSettings::InstitutionAddress).toString() << "\n";
+        }
+        if (!settings.getValue(InputOutputSettings::InstitutionZipCode).toString().isEmpty())
+        {
+            out << settings.getValue(InputOutputSettings::InstitutionZipCode).toString() << " - ";
+        }
+        if (!settings.getValue(InputOutputSettings::InstitutionTown).toString().isEmpty())
+        {
+            out << settings.getValue(InputOutputSettings::InstitutionTown).toString() << "\n";
+        }
+        if (!settings.getValue(InputOutputSettings::InstitutionCountry).toString().isEmpty())
+        {
+            out << settings.getValue(InputOutputSettings::InstitutionCountry).toString() << "\n";
+        }
+        if (!settings.getValue(InputOutputSettings::InstitutionPhoneNumber).toString().isEmpty())
+        {
+            out << settings.getValue(InputOutputSettings::InstitutionPhoneNumber).toString() << "\n";
+        }
+        if (!settings.getValue(InputOutputSettings::InstitutionEmail).toString().isEmpty())
+        {
+            out << settings.getValue(InputOutputSettings::InstitutionEmail).toString() << "\n";
+        }
+    }
 
     file.close();
 }
