@@ -35,14 +35,28 @@ ROITool::ROITool( QViewer *viewer, QObject *parent )
 
 ROITool::~ROITool()
 {
+    bool hasToRefresh = false;
+    // Cal decrementar el reference count perquè 
+    // l'annotació s'esborri si "matem" l'eina
     if ( !m_mainPolyline.isNull() )
+    {
+        m_mainPolyline->decreaseReferenceCount();
         delete m_mainPolyline;
+        hasToRefresh = true;
+    }
 
     if ( !m_closingPolyline.isNull() )
+    {
+        m_closingPolyline->decreaseReferenceCount();
         delete m_closingPolyline;
+        hasToRefresh = true;
+    }
 
     if ( !m_roiPolygon.isNull() )
         delete m_roiPolygon;
+
+    if( hasToRefresh )
+        m_2DViewer->refresh();
 }
 
 void ROITool::handleEvent( long unsigned eventID )
