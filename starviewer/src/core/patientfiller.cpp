@@ -55,9 +55,12 @@ void PatientFiller::registerSteps()
 {
     m_registeredSteps.append(new ImageFillerStep() );
     m_registeredSteps.append(new DICOMFileClassifierFillerStep() );
-    m_registeredSteps.append(new TemporalDimensionFillerStep() );
     m_registeredSteps.append(new MHDFileClassifierStep() );
     m_registeredSteps.append(new OrderImagesFillerStep() );
+    // \TODO Donat que al postProcessing no tenim política d'etiquetes, s'ha posat el Temporal al final
+    // perquè necessita que s'hagi executat l'Order abans. S'hauria de millorar.
+    m_registeredSteps.append(new TemporalDimensionFillerStep() );
+    
 	// TODO encara no hi ha suport a KINs i Presentation States, per tant
 	// fins que no tinguem suport i implementem correctament els respectius 
 	// filler steps no caldrà afegir-los dins del pipeline
