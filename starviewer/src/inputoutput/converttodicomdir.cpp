@@ -84,6 +84,9 @@ void ConvertToDicomdir::addStudy( const QString &studyUID )
     else m_studiesToConvert.push_back( studyToConvert );//en aquest cas val al final
 }
 
+/*TODO:Si la creació del DICOMDIR Falla aquest mètode esborra el contingut del directori on s'havia de crear el DICOMDIR, al fer això
+       la classe abans de crear el DICOMDIR hauria de comprovar que el directori està buit, perquè sinó podríem eliminar contingut del usuari.
+       Ara aquesta comprovació es fa a la QCreateDicomdir i s'hauria de fer aquí*/
 Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent)
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
@@ -126,7 +129,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
 
     if ( !state.good() )
     {
-        deleteStudies();
+        DeleteDirectory().deleteDirectory( m_dicomDirPath , false );
         return state;
     }
 
@@ -142,7 +145,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     if ( !state.good() )
     {
         m_progress->close();
-        deleteStudies();
+        DeleteDirectory().deleteDirectory( m_dicomDirPath , false );
         return state;
     }
 
@@ -153,19 +156,16 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
 
     if ( !state.good() && state.code() != 4001 )// l'error 4001 és que les imatges no compleixen l'estàndard al 100, però el dicomdir es pot utilitzar
     {
-        deleteStudies();
+        DeleteDirectory().deleteDirectory( m_dicomDirPath , false );
     }
 
     if (copyFolderContent)
     {
         if (!copyFolderContentToDICOMDIR())
         {
+            DeleteDirectory().deleteDirectory( m_dicomDirPath, false);
             state.setStatus("", false, 4002);
             return state;
-        }
-        else
-        {
-            DeleteDirectory().deleteDirectory( m_dicomDirPath , true );
         }
     }
 
@@ -361,16 +361,6 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
     m_progress->repaint();
 
     return state;
-}
-
-void ConvertToDicomdir::deleteStudies()
-{
-    DeleteDirectory deleteDirectory;
-
-    while ( !m_patientDirectories.isEmpty() )
-    {
-        deleteDirectory.deleteDirectory( m_patientDirectories.takeFirst() , true );
-    }
 }
 
 void ConvertToDicomdir::createReadmeTxt()
