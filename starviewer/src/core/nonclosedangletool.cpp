@@ -35,10 +35,25 @@ NonClosedAngleTool::NonClosedAngleTool( QViewer *viewer, QObject *parent )
 
 NonClosedAngleTool::~NonClosedAngleTool()
 {
+    bool hasToRefresh = false;
+    // Cal decrementar el reference count perquè 
+    // l'annotació s'esborri si "matem" l'eina
     if ( m_firstLine )
+    {
+        m_firstLine->decreaseReferenceCount();
         delete m_firstLine;
+        hasToRefresh = true;
+    }
+    
     if ( m_secondLine )
+    {
+        m_secondLine->decreaseReferenceCount();
         delete m_secondLine;
+        hasToRefresh = true;
+    }
+
+    if( hasToRefresh )
+        m_2DViewer->refresh();
 }
 
 void NonClosedAngleTool::handleEvent( long unsigned eventID )

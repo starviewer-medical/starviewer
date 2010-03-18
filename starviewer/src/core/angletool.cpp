@@ -34,10 +34,25 @@ AngleTool::~AngleTool()
 {
     if ( m_state != NONE )
     {
+        bool hasToRefresh = false;
+        // Cal decrementar el reference count perquè 
+        // l'annotació s'esborri si "matem" l'eina
         if ( m_mainPolyline )
+        {
+            m_mainPolyline->decreaseReferenceCount();
             delete m_mainPolyline;
+            hasToRefresh = true;
+        }
+        
         if ( m_circlePolyline )
+        {
+            m_circlePolyline->decreaseReferenceCount();
             delete m_circlePolyline;
+            hasToRefresh = true;
+        }
+
+        if( hasToRefresh )
+            m_2DViewer->refresh();
     }
 }
 

@@ -37,10 +37,18 @@ DistanceTool::DistanceTool( QViewer *viewer, QObject *parent )
 
 DistanceTool::~DistanceTool()
 {
+    bool hasToRefresh = false;
+    // Cal decrementar el reference count perquè 
+    // l'annotació s'esborri si "matem" l'eina
     if ( m_line )
     {
+        m_line->decreaseReferenceCount();
         delete m_line;
+        hasToRefresh = true;
     }
+
+    if( hasToRefresh )
+        m_2DViewer->refresh();
 }
 
 void DistanceTool::handleEvent( long unsigned eventID )
