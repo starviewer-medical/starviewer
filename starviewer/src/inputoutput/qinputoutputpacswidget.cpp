@@ -523,7 +523,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadStoreError(QString study
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         default:
-            message = tr("Please review the operation list screen, an unknown error has ocurred storing a study.");
+            message = tr("Please review the operation list screen, an unknown error has ocurred storing a study to PACS %1.").arg(pacs.getAETitle());
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;

@@ -378,13 +378,13 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
                 QMessageBox::information( this , ApplicationNameString, tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them." ) );
                 break;
             case 4002:
-                QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because can't copy the content of '%2' to the DICOMDIR. Be sure you have read permissions in the directory, or "
-                    "choose not copy folder content to DICOMDIR option in DICOMDIR configuration." )
+                QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because can't copy the content of '%2' to the DICOMDIR. Be sure you have read permissions in the directory or "
+                    "uncheck copy folder content to DICOMDIR option in DICOMDIR configuration." )
                     .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
                 break;
             case 4003:
                 QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because the folder to copy to DICOMDIR '%2' contents an item called DICOMDIR o DICOM."
-                    "\n\nRemove it from the directory or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.")
+                    "\n\nRemove it from the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.")
                     .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
                 break;
             default :
