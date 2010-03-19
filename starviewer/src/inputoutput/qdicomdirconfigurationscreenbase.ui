@@ -317,7 +317,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Additional folder to copy with</string>
+      <string>Additional folder to copy</string>
      </property>
     </widget>
    </item>
