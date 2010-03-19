@@ -9,12 +9,12 @@
         <translation>Servidors PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="467"/>
+        <location filename="qconfigurationscreenbase.ui" line="473"/>
         <source>Add the new Pacs to the list</source>
         <translation>Afegeix el nou Pacs a la llista</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="477"/>
+        <location filename="qconfigurationscreenbase.ui" line="483"/>
         <source>Update the parameters of the selected Pacs</source>
         <translation>Actualitzar els paràmetres del Pacs seleccionat</translation>
     </message>
@@ -22,27 +22,6 @@
         <location filename="qconfigurationscreenbase.ui" line="156"/>
         <source>Delete</source>
         <translation>Esborrar</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="94"/>
-        <source>AE Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="109"/>
-        <source>Q/R port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="114"/>
-        <source>Send port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="119"/>
-        <location filename="qconfigurationscreenbase.ui" line="422"/>
-        <source>Default query PACS</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="169"/>
@@ -55,9 +34,27 @@
         <translation>Testeja si el Pacs respon</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="776"/>
+        <location filename="qconfigurationscreenbase.ui" line="250"/>
+        <source>AE Title:</source>
+        <oldsource>AE Title :</oldsource>
+        <translation>AE Title:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="264"/>
+        <source>Address:</source>
+        <oldsource>Address :</oldsource>
+        <translation>Adreça:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="1029"/>
         <source>Apply Changes</source>
         <translation>Aplicar canvis</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="94"/>
+        <source>AE Title</source>
+        <oldsource>AETitle</oldsource>
+        <translation>AE Title</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="99"/>
@@ -70,7 +67,7 @@
         <translation>Institució</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="770"/>
+        <location filename="qconfigurationscreenbase.ui" line="1023"/>
         <source>Apply changes</source>
         <translation>Aplica els canvis</translation>
     </message>
@@ -80,7 +77,103 @@
         <translation>Esborra el Pacs seleccionat</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="490"/>
+        <location filename="qconfigurationscreenbase.ui" line="109"/>
+        <source>Q/R port</source>
+        <oldsource>Q/R Port</oldsource>
+        <translation>Port Q/R</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="114"/>
+        <source>Send port</source>
+        <oldsource>Send Port</oldsource>
+        <translation>Port send</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="119"/>
+        <location filename="qconfigurationscreenbase.ui" line="428"/>
+        <source>Default query PACS</source>
+        <oldsource>Mark as default query PACS</oldsource>
+        <translation>Cercar per defecte al PACS</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="205"/>
+        <source>Modify selected PACS Server/Add new PACS Server</source>
+        <translation>Modificar el PACS seleccionat/Afegir nou PACS</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="274"/>
+        <source>Q/R service:</source>
+        <oldsource>Q/R Service :</oldsource>
+        <translation>Servei Q/R:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="283"/>
+        <location filename="qconfigurationscreenbase.ui" line="313"/>
+        <source>Port:</source>
+        <translation>Port:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="345"/>
+        <source>Send service:</source>
+        <oldsource>Send Service :</oldsource>
+        <translation>Servei Send:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="352"/>
+        <location filename="qconfigurationscreenbase.ui" line="362"/>
+        <source>Enabled</source>
+        <translation>Disponible</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="398"/>
+        <location filename="qconfigurationscreenbase.ui" line="939"/>
+        <source>Institution:</source>
+        <oldsource>Institution :</oldsource>
+        <translation>Institució:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="508"/>
+        <source>Local DICOM Configuration</source>
+        <translation>Configuració local DICOM</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="771"/>
+        <source>Institution contact information</source>
+        <oldsource>Institution information</oldsource>
+        <translation type="unfinished">Informació de contacte de la Institució</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="866"/>
+        <source>ZIP Code:</source>
+        <oldsource>ZIP Code :</oldsource>
+        <translation>Codi postal: </translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="932"/>
+        <source>Country:</source>
+        <oldsource>Country :</oldsource>
+        <translation>País:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="833"/>
+        <source>Phone Number:</source>
+        <oldsource>Phone Number :</oldsource>
+        <translation>Número de telèfon:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="408"/>
+        <source>Location:</source>
+        <oldsource>Location :</oldsource>
+        <translation>Localització:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="418"/>
+        <source>Description:</source>
+        <oldsource>Description :</oldsource>
+        <translation>Descripció:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="496"/>
         <source>Local Configuration</source>
         <translation>Configuració Local</translation>
     </message>
@@ -90,75 +183,54 @@
         <translation>Configuració del PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="199"/>
-        <source>Modify selected PACS Server/Add new PACS Server:</source>
-        <translation>Modificar el Servidor PACS escollit/Afegir un nou servidor PACS:</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="470"/>
+        <location filename="qconfigurationscreenbase.ui" line="476"/>
         <source>Add as new server</source>
         <translation>Afegir com a nou servidor</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="480"/>
+        <location filename="qconfigurationscreenbase.ui" line="486"/>
         <source>Update configuration</source>
         <translation>Actualitzar la configuració</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="669"/>
+        <location filename="qconfigurationscreenbase.ui" line="551"/>
+        <source>Incoming connections port:</source>
+        <oldsource>Incoming connections port :</oldsource>
+        <translation>Port de connexions entrants:</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="698"/>
         <source>AE Title Local Machine:</source>
-        <translation type="unfinished"></translation>
+        <oldsource>AETitle Local Machine:</oldsource>
+        <translation>AE Title de la màquina local:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="720"/>
-        <source>Local DICOM Configuration:</source>
-        <translation>Carregar la configuració DICOM:</translation>
+        <location filename="qconfigurationscreenbase.ui" line="577"/>
+        <source>Max. simultaneous connections:</source>
+        <oldsource>Max. simultaneous connections :</oldsource>
+        <translation>Nombre màxim de connexions simultànies:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="646"/>
+        <location filename="qconfigurationscreenbase.ui" line="675"/>
         <source>Max. seconds for Timeout:</source>
         <translation>Màxim de segons de Timeout:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="840"/>
-        <source>Phone Number:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="867"/>
-        <source>ZIP Code:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="874"/>
+        <location filename="qconfigurationscreenbase.ui" line="873"/>
         <source>City:</source>
-        <translation type="unfinished"></translation>
+        <oldsource>City :</oldsource>
+        <translation>Ciutat:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="924"/>
-        <source>Country:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="938"/>
-        <source>EMail:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="975"/>
-        <source>Local Institution information:</source>
-        <translation>Informació de la institució local:</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="901"/>
+        <location filename="qconfigurationscreenbase.ui" line="906"/>
         <source>Address: </source>
         <translation>Adreça: </translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="392"/>
-        <location filename="qconfigurationscreenbase.ui" line="931"/>
-        <source>Institution:</source>
-        <translation>Institució:</translation>
+        <location filename="qconfigurationscreenbase.ui" line="946"/>
+        <source>EMail:</source>
+        <oldsource>EMail :</oldsource>
+        <translation>Correu electrònic:</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="89"/>
@@ -166,59 +238,7 @@
         <translation>Pacs </translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="244"/>
-        <source>AE Title:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="258"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="268"/>
-        <source>Q/R service:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="277"/>
-        <location filename="qconfigurationscreenbase.ui" line="307"/>
-        <source>Port:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="339"/>
-        <source>Send service:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="346"/>
-        <location filename="qconfigurationscreenbase.ui" line="356"/>
-        <source>Enabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="402"/>
-        <source>Location:</source>
-        <translation type="unfinished">Localització:</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="412"/>
-        <source>Description:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="522"/>
-        <source>Incoming connections port:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="548"/>
-        <source>Max. simultaneous connections:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="604"/>
+        <location filename="qconfigurationscreenbase.ui" line="633"/>
         <source>&lt;b&gt;This port is in use by another application.&lt;/b&gt;</source>
         <translation>&lt;b&gt;Aquest port està sent utilitzat per una altra aplicació.&lt;/b&gt;</translation>
     </message>
@@ -228,76 +248,107 @@
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="26"/>
         <source>DICOMDIR Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuració DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="36"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;DICOMDIR creation configuration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="42"/>
+        <source>DICOMDIR creation configuration</source>
+        <translation>Configuració creació DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="65"/>
-        <source>Convert all images to little endian</source>
-        <translation type="unfinished"></translation>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="70"/>
+        <source>Convert all images to Little Endian</source>
+        <oldsource>Convert all images to little endian</oldsource>
+        <translation>Convertir totes les imatges a Little Endian</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="80"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="101"/>
         <source>Burning application configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuració de l&apos;aplicació de gravació de Cd/Dvd</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="109"/>
-        <source>Application path :</source>
-        <translation type="unfinished"></translation>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="130"/>
+        <source>Application path:</source>
+        <oldsource>Application path :</oldsource>
+        <translation>Ruta aplicació:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="131"/>
-        <source>Examine disk to find the database</source>
-        <translation type="unfinished">Examinar el disc per trobar la base de dades</translation>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="152"/>
+        <source>Examine disk to find the application</source>
+        <oldsource>Examine disk to find the database</oldsource>
+        <translation>Examinar el disc per trobar l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="153"/>
-        <source>Application parameters :</source>
-        <translation type="unfinished"></translation>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="174"/>
+        <source>Application parameters:</source>
+        <oldsource>Application parameters :</oldsource>
+        <translation>Paràmetres de l&apos;aplicació:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="163"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="184"/>
         <source>Download from here:</source>
-        <translation type="unfinished"></translation>
+        <translation>Descarrega&apos;l des d&apos;aquí:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="170"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="191"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="208"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="229"/>
         <source>Use different parameters for CD and DVD burning:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilitzar paràmetres diferents per gravar CD i DVD:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="220"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="241"/>
         <source>CD parameters:</source>
-        <translation type="unfinished"></translation>
+        <translation>Paràmetres CD:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="249"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="270"/>
         <source>DVD parameters:</source>
-        <translation type="unfinished"></translation>
+        <translation>Paràmetres DVD:</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="320"/>
+        <source>Additional folder to copy</source>
+        <oldsource>Additional folder to copy with</oldsource>
+        <translation type="unfinished">Copiar el directori</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="353"/>
+        <source>Copy additional folder content when creating DICOMDIR on these supports</source>
+        <translation>Copiar el contingut de la carpeta quan es creï un DICOMDIR en els suports</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="359"/>
+        <source>USB Drive or Hard Disk</source>
+        <translation>Memòria USB o Disc dur</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="366"/>
+        <source>CD or DVD</source>
+        <translation>CD o DVD</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="408"/>
+        <source>Additional content folder:</source>
+        <translation>Copiar el contingut del directori:</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="431"/>
+        <source>Examine disk to find the folder to copy to DICOMDIR</source>
+        <translation>Examinar el disc per trobar el directori a copiar al DICOMDIR</translation>
     </message>
 </context>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="126"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="145"/>
         <location filename="qinputoutputdicomdirwidget.cpp" line="86"/>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="200"/>
         <source>Open</source>
-        <translation type="unfinished">Obrir</translation>
+        <translation>Obrir</translation>
     </message>
 </context>
 <context>
@@ -420,50 +471,55 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="495"/>
+        <location filename="qcreatedicomdir.cpp" line="508"/>
         <source>Creating DICOMDIR Image...</source>
-        <translation type="unfinished">Creant la Imatge del DICOMDIR...</translation>
+        <translation>Creant la Imatge del DICOMDIR...</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="69"/>
         <source>The iso path &quot;%1&quot; that we want to burn doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>The iso path %1 that we want to burn doesn&apos;t exist.</oldsource>
+        <translation>La imatge &quot;%1&quot; que es vol gravar no existeix.</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="80"/>
         <source>The burn application path &quot;%1&quot; doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>The burn application path %1 doesn&apos;t exist.</oldsource>
+        <translation>La ruta de l&apos;aplicació de gravació &quot;%1&quot; no existeix.</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="113"/>
-        <source>An error occurred with the iso image file burn process.</source>
-        <translation type="unfinished"></translation>
+        <source>An error occurred during the iso image file burn process.</source>
+        <oldsource>An error occurred with the iso image file burn process.</oldsource>
+        <translation>S&apos;ha produït un error gravant la imatge del DICOMDIR.</translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="81"/>
         <source>The input path &quot;%1&quot; that we want to turn into an ISO image doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>The input path %1 that we want to turn into an ISO image doesn&apos;t exist.</oldsource>
+        <translation>El directori d&apos;entrada &quot;%1&quot; per generar la imatge no existeix.</translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="93"/>
         <source>The directory &quot;%1&quot; where you want to save ISO image file doesn&apos;t exist.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>The directory %1 where you want to save ISO image file doesn&apos;t exist.</oldsource>
+        <translation>El directori &quot;%1&quot; on s&apos;ha de generar la imatge no existeix.</translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="103"/>
         <location filename="isoimagefilecreator.cpp" line="113"/>
         <source>You don&apos;t have permissions to write in the output iso image directory &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>No tens permisos d&apos;escriptura per generar la imatge en el directori &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="146"/>
         <source>The mkisofs program cannot be found on the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;ha pogut trobar l&apos;aplicació mkisofs.</translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="172"/>
         <source>An error occurred with the iso image file create process.</source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;ha produït un error generant la imatge.</translation>
     </message>
 </context>
 <context>
@@ -499,28 +555,30 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="17"/>
         <source>Send DICOM objects to PACS</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Select Pacs to store DICOM Image</oldsource>
+        <translation>Enviament objectes DICOM al PACS</translation>
     </message>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="23"/>
         <source>Select at which PACS the DICOM files have to be sent:</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Select at which PACS the DICOM objects have to be sent:</oldsource>
+        <translation>Seleccioneu a quin PACS s&apos;han d&apos;enviar els fitxers DICOM:</translation>
     </message>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="96"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar</translation>
     </message>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="119"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel·lar</translation>
+        <translation>Cancel·lar</translation>
     </message>
 </context>
 <context>
     <name>udg::ConvertToDicomdir</name>
     <message>
-        <location filename="converttodicomdir.cpp" line="132"/>
+        <location filename="converttodicomdir.cpp" line="143"/>
         <source>Creating Dicomdir...</source>
         <translation>Creant DICOMDIR...</translation>
     </message>
@@ -609,88 +667,88 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="13"/>
         <source>Advanced search</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca avançada</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="37"/>
         <source>Study</source>
-        <translation type="unfinished">Estudi</translation>
+        <translation>Estudi</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="55"/>
         <source>UID Study</source>
-        <translation type="unfinished">UID Estudi</translation>
+        <translation>UID Estudi</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="65"/>
         <location filename="qadvancedsearchwidgetbase.ui" line="241"/>
         <source>Time</source>
-        <translation type="unfinished">Hora</translation>
+        <translation>Hora</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="104"/>
         <source>Study Modalities</source>
-        <translation type="unfinished">Modalitats d&apos;estudi</translation>
+        <translation>Modalitats d&apos;estudi</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="114"/>
         <source>Referring Physicians Name</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="130"/>
         <source>Accession Number</source>
-        <translation type="unfinished">Número d&apos;accés</translation>
+        <translation>Número d&apos;accés</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="140"/>
         <source>Study ID</source>
-        <translation type="unfinished">ID Estudi</translation>
+        <translation>ID Estudi</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="158"/>
         <source>Series</source>
-        <translation type="unfinished">Sèries</translation>
+        <translation>Sèries</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="176"/>
         <source>Series number</source>
-        <translation type="unfinished">Número de sèrie</translation>
+        <translation>Número de sèrie</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="186"/>
         <source>Req. Proc. ID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="208"/>
         <source>Sche. Proc. Step ID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="231"/>
         <source>UID Series</source>
-        <translation type="unfinished">UID Serie</translation>
+        <translation>UID Serie</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="251"/>
         <source>Proc. Perf. Start Date</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="275"/>
         <source>Image</source>
-        <translation type="unfinished">Imatge</translation>
+        <translation>Imatge</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="287"/>
         <source>Instance Number</source>
-        <translation type="unfinished">Número d&apos;instància</translation>
+        <translation>Número d&apos;instància</translation>
     </message>
     <message>
         <location filename="qadvancedsearchwidgetbase.ui" line="297"/>
         <source>SOP Instance UID</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -698,292 +756,297 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="14"/>
         <source>Basic search</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca bàsica</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="46"/>
         <source>Patient</source>
-        <translation type="unfinished">Pacient</translation>
+        <translation>Pacient</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="74"/>
         <source>Patient Name</source>
-        <translation type="unfinished">Nom Pacient</translation>
+        <translation>Nom Pacient</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="90"/>
         <source>Patient ID</source>
-        <translation type="unfinished">ID Pacient</translation>
+        <translation>ID Pacient</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="155"/>
         <source>Study Date</source>
-        <translation type="unfinished">Data de l&apos;estudi</translation>
+        <translation>Data de l&apos;estudi</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="175"/>
         <source>Any date</source>
-        <translation type="unfinished">Qualsevol data</translation>
+        <translation>Qualsevol data</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="188"/>
         <source>Today</source>
-        <translation type="unfinished">Avui</translation>
+        <translation>Avui</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="195"/>
         <source>Yesterday</source>
-        <translation type="unfinished">Ahir</translation>
+        <translation>Ahir</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="202"/>
         <source>Last Week</source>
-        <translation type="unfinished">Última Setmana</translation>
+        <translation>Última Setmana</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="232"/>
         <source>Custom:</source>
-        <translation type="unfinished">A mida:</translation>
+        <translation>A mida:</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="282"/>
         <source>From</source>
-        <translation type="unfinished">Des de</translation>
+        <translation>Des de</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="324"/>
         <source>To</source>
-        <translation type="unfinished">Fins</translation>
+        <translation>Fins</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="373"/>
         <source>Series Modality</source>
-        <translation type="unfinished">Modalitat Sèrie</translation>
+        <translation>Modalitat Sèrie</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="393"/>
         <source>All</source>
-        <translation type="unfinished">Tots</translation>
+        <translation>Tots</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="409"/>
         <source>Computerized Radiography</source>
-        <translation type="unfinished">Radiografia computeritzada</translation>
+        <translation>Radiografia computeritzada</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="412"/>
         <source>CR</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="422"/>
         <source>ES</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="432"/>
         <source>Nuclear Medicine</source>
-        <translation type="unfinished">Medicina Nuclear</translation>
+        <translation>Medicina Nuclear</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="435"/>
         <source>NM</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="445"/>
         <source>Radiography Fluoroscopy</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="448"/>
         <source>RF</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="458"/>
         <source>XA</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="468"/>
         <source>Computerized Tomography</source>
-        <translation type="unfinished">Tomografia computeritzada</translation>
+        <translation>Tomografia computeritzada</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="474"/>
         <source>CT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="484"/>
         <source>MG</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="494"/>
         <source> Dental Technician</source>
-        <translation type="unfinished"> Dental</translation>
+        <translation>Dental</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="497"/>
         <source>DT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="507"/>
         <source>SC</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="517"/>
         <source>XC</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="527"/>
         <source>Direct Radiography</source>
-        <translation type="unfinished">Radiografia directa</translation>
+        <translation>Radiografia directa</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="530"/>
         <source>DX</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="540"/>
         <source>Magnetic Resonance</source>
-        <translation type="unfinished">Ressonància magnètica</translation>
+        <translation>Ressonància magnètica</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="543"/>
         <source>MR</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="553"/>
         <source>Penetrant Test</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="556"/>
         <source>PT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="566"/>
         <source>Ultrasounds</source>
-        <translation type="unfinished">Ultrasons</translation>
+        <translation>Ultrasons</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="569"/>
         <source>US</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="585"/>
         <source>Other</source>
-        <translation type="unfinished">Altres</translation>
+        <translation>Altres</translation>
     </message>
 </context>
 <context>
     <name>udg::QConfigurationScreen</name>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="317"/>
+        <location filename="qconfigurationscreen.cpp" line="327"/>
         <source>AETitle field can&apos;t be empty</source>
         <translation>El camp AETitle no pot estar buit</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="366"/>
+        <location filename="qconfigurationscreen.cpp" line="361"/>
+        <source>Institution field can&apos;t be empty.</source>
+        <oldsource>Institution field can&apos;t be empty</oldsource>
+        <translation>El camp institució no pot estar buit.</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="376"/>
         <source>Local Port has to be between 0 and 65535</source>
         <translation>El port local ha d&apos;estar entre 0 i 65535</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="375"/>
+        <location filename="qconfigurationscreen.cpp" line="385"/>
         <source>Maximum simultaenious connections has to be between 1 and 15</source>
         <translation>El nombre màxim de connexions simultànies ha de ser entre 1 i 15</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="306"/>
+        <location filename="qconfigurationscreen.cpp" line="316"/>
         <source>Information</source>
         <translation>Informació</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="252"/>
+        <location filename="qconfigurationscreen.cpp" line="262"/>
         <source>Yes</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="252"/>
+        <location filename="qconfigurationscreen.cpp" line="262"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="196"/>
+        <location filename="qconfigurationscreen.cpp" line="206"/>
         <source>Select a PACS to update</source>
         <translation>Seleccioneu un PACS per actualitzar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="220"/>
+        <location filename="qconfigurationscreen.cpp" line="230"/>
         <source>Select a PACS to delete</source>
         <translation>Seleccioneu un PACS per esborrar</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="292"/>
+        <location filename="qconfigurationscreen.cpp" line="302"/>
         <source>Test of PACS &quot;%1&quot; is correct</source>
         <translation>El test del PACS &quot;%1&quot; és correcte</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="306"/>
+        <location filename="qconfigurationscreen.cpp" line="316"/>
         <source>To test a PACS it is necessary to select an item of the list.</source>
         <translation>Per fer un test d&apos;un PACS és necessari seleccionar-ne un de la llista.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="136"/>
+        <location filename="qconfigurationscreen.cpp" line="335"/>
+        <source>Incorrect server address.</source>
+        <oldsource>Incorrect server address</oldsource>
+        <translation>Adreça de servidor incorrecte.</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="146"/>
         <source>This PACS already exists.</source>
         <translation>Aquest PACS ja està donat d&apos;alta.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="278"/>
+        <location filename="qconfigurationscreen.cpp" line="288"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond.
 Be sure that the IP and AETitle of the PACS are correct.</source>
         <translation>PACS &quot;%1&quot; no respon.
 Assegureu-vos que la IP i el AETitle del PACS siguin correctes.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="299"/>
+        <location filename="qconfigurationscreen.cpp" line="309"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond correclty.
 Be sure that the IP and AETitle of the PACS are correct.</source>
         <translation>PACS &quot;%1&quot; no has respós de la forma esperada.
 Assegureu-vos que la IP i el AETitle del PACS siguin correctes.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="325"/>
-        <source>Incorrect server address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="331"/>
+        <location filename="qconfigurationscreen.cpp" line="341"/>
         <source>At least one of the service Query/Retrieve or Send has to be enabled.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>At least one of the service Query/Retrieve or Send has to be activated</oldsource>
+        <translation>Al menys un dels serveis Query/Retrieve o Send s&apos;ha de marcar com a disponible.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="337"/>
+        <location filename="qconfigurationscreen.cpp" line="347"/>
         <source>Query/Retrieve Port value has to be between 0 and 65535.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Query/Retrieve Port value has to be between 0 and 65535</oldsource>
+        <translation>El valor del camp Port Query/Retrieve ha de ser entre 0 i 65535.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="343"/>
+        <location filename="qconfigurationscreen.cpp" line="353"/>
         <source>Send Port value has to be between 0 and 65535.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Send Port value has to be between 0 and 65535</oldsource>
+        <translation>El valor del camp Port Send ha de ser entre 0 i 65535.</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="351"/>
-        <source>Institution field can&apos;t be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="389"/>
+        <location filename="qconfigurationscreen.cpp" line="399"/>
         <source>The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes ?</source>
         <translation>El port %1 per connexions entrants és utilitzat per una altra aplicació. Esteu segurs que voleu aplicar els canvis ?</translation>
     </message>
@@ -991,243 +1054,278 @@ Assegureu-vos que la IP i el AETitle del PACS siguin correctes.</translation>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="291"/>
-        <location filename="qcreatedicomdir.cpp" line="314"/>
+        <location filename="qcreatedicomdir.cpp" line="290"/>
+        <location filename="qcreatedicomdir.cpp" line="313"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="291"/>
-        <location filename="qcreatedicomdir.cpp" line="314"/>
+        <location filename="qcreatedicomdir.cpp" line="290"/>
+        <location filename="qcreatedicomdir.cpp" line="313"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="312"/>
+        <location filename="qcreatedicomdir.cpp" line="311"/>
         <source>Create directory ?</source>
         <translation>Crear el directori ?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="319"/>
+        <location filename="qcreatedicomdir.cpp" line="318"/>
         <source>Can&apos;t create the directory. Please check users permissions.</source>
         <translation>No es pot crear el directori. Si us plau reviseu els permisos d&apos;usuari.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="469"/>
+        <location filename="qcreatedicomdir.cpp" line="484"/>
         <source>Please select a study to remove of the list.</source>
         <translation>Si us plau seleccioni l&apos;estudi que vol esborrar de la llista.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="68"/>
+        <location filename="qcreatedicomdir.cpp" line="69"/>
         <source>CD-ROM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="69"/>
+        <location filename="qcreatedicomdir.cpp" line="70"/>
         <source>Record DICOMDIR on a CD-ROM device</source>
         <translation>Gravar DICOMDIR a un dispositiu de CD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="77"/>
+        <location filename="qcreatedicomdir.cpp" line="78"/>
         <source>DVD-ROM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="78"/>
+        <location filename="qcreatedicomdir.cpp" line="79"/>
         <source>Record DICOMDIR on a DVD-ROM device</source>
         <translation>Gravar DICOMDIR a un dispositiu de DVD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="86"/>
+        <location filename="qcreatedicomdir.cpp" line="87"/>
         <source>Hard Disk</source>
         <translation>Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="87"/>
+        <location filename="qcreatedicomdir.cpp" line="88"/>
         <source>Record DICOMDIR on a Hard Disk</source>
         <translation>Gravar DICOMDIR al Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="95"/>
+        <location filename="qcreatedicomdir.cpp" line="96"/>
         <source>Pen Drive</source>
         <translation>Memòria Extraible USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="96"/>
+        <location filename="qcreatedicomdir.cpp" line="97"/>
         <source>Record DICOMDIR on a USB Pen drive device</source>
         <translation>Gravar DICOMDIR a un dispositiu extern USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="260"/>
+        <location filename="qcreatedicomdir.cpp" line="257"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation>No es pot crear el directori temporal per crear el DICOMDIR. Si us plau, revisi els permisos d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="289"/>
+        <location filename="qcreatedicomdir.cpp" line="288"/>
         <source>Create DICOMDIR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="290"/>
+        <location filename="qcreatedicomdir.cpp" line="289"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation>El directori conté un DICOMDIR, vols sobreescriure i esborrar tots els fitxers del directori?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="313"/>
+        <location filename="qcreatedicomdir.cpp" line="312"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation>El directori DICOMDIR no existeix. Desitges crear-lo?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="347"/>
+        <location filename="qcreatedicomdir.cpp" line="346"/>
         <source>Not enough free space to create DICOMDIR. Please free space.</source>
         <translation>No hi ha suficient espai per crear el DICOMDIR. Si us plau allibereu espai.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="280"/>
+        <location filename="qcreatedicomdir.cpp" line="277"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation>Cap directori especificat per a crear el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="357"/>
+        <location filename="qcreatedicomdir.cpp" line="356"/>
         <source>Please, first select the studies you want to create a DICOMDIR.</source>
         <translation>Esculli primer els estudis amb els que vol crear el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="377"/>
+        <location filename="qcreatedicomdir.cpp" line="378"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
         <translation>Algunes de les imatges no compleixen al 100% l&apos;estàndar DICOM. És possible que alguns visualitzadors tinguin problemes per a mostrar-les.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="384"/>
+        <location filename="qcreatedicomdir.cpp" line="391"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</source>
         <translation>Error creant el DICOMDIR. Asseguris que té permisos a %1 i que el directori és buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="611"/>
+        <location filename="qcreatedicomdir.cpp" line="621"/>
         <source>
 Error Number: %1</source>
         <translation>
 Codi d&apos;error: %1</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="552"/>
+        <location filename="qcreatedicomdir.cpp" line="565"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation>No s&apos;ha pogut iniciar el procés [ %1 ]. O bé el programa invocat no està instal·lat o bé no teniu prou permisos per invocar el programa.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="131"/>
+        <location filename="qcreatedicomdir.cpp" line="132"/>
         <source>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</source>
-        <translation type="unfinished"></translation>
+        <translation>Mida DICOMDIR: %1 Mb aproximadament - Espai disponible %2 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="135"/>
+        <location filename="qcreatedicomdir.cpp" line="136"/>
         <source>DICOMDIR size: %1 Mb - Available Space: %2 Mb</source>
-        <translation type="unfinished"></translation>
+        <translation>Mida DICOMDIR: %1 Mb - Espai disponible %2 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="149"/>
+        <location filename="qcreatedicomdir.cpp" line="150"/>
         <source>%1 Mb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="200"/>
-        <source>The following studies were not added to the DICOMDIR list for the following reasons:</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Mb</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="203"/>
+        <source>The following studies were not added to the DICOMDIR list for the following reasons:</source>
+        <oldsource>The following studies were not added to the DICOMDIR list for the following reasons</oldsource>
+        <translation>Els següents estudis no s&apos;han afegit a llista de DICOMDIR pel següents motius:</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="206"/>
         <source>
 
 	- Already exist in the list.
 </source>
-        <translation type="unfinished"></translation>
+        <oldsource>
+
+*Already exist in the list
+
+</oldsource>
+        <translation>
+
+	- Ja existeix a la llista.
+</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="208"/>
+        <location filename="qcreatedicomdir.cpp" line="211"/>
         <source>
 
 	- Not enough space on the device.
 </source>
-        <translation type="unfinished"></translation>
+        <oldsource>
+
+*Exceed the device available space
+
+</oldsource>
+        <translation>	- No hi ha suficient espai lliure en el dispositiu.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="219"/>
+        <location filename="qcreatedicomdir.cpp" line="222"/>
         <source>DICOMDIR creation aborted.
  The selected studies exceed the available space for the current device.</source>
+        <translation>Creació DICOMDIR abortada.
+Els estudis seleccionats excedeixen l&apos;espai disponible en el dispositiu.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="381"/>
+        <source>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.</source>
+        <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory, or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="533"/>
+        <location filename="qcreatedicomdir.cpp" line="386"/>
+        <source>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR o DICOM.
+
+Remove it from the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.</source>
+        <oldsource>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR o DICOM.
+
+Remove it from the directory or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
         <source>DICOMDIR Burning Failure</source>
-        <translation type="unfinished"></translation>
+        <translation>Error al grabar DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="533"/>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
+        <location filename="qcreatedicomdir.cpp" line="552"/>
+        <location filename="qcreatedicomdir.cpp" line="591"/>
+        <source>Please, contact your system administrator to solve this problem.</source>
+        <oldsource>There was an error during the creation of the ISO image file. </oldsource>
+        <translation>Si us plau, contacti amb el seu administrador de sistemes per solucionar aquest problema.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>S&apos;ha produït un error durant la gravació de la image ISO amb el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="539"/>
+        <location filename="qcreatedicomdir.cpp" line="552"/>
         <source>There was an error during the creation of the DICOMDIR ISO image file. </source>
-        <translation type="unfinished"></translation>
+        <translation>Se ha producido un error al crear la imagen ISO del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="556"/>
+        <location filename="qcreatedicomdir.cpp" line="569"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation>El procés [ %1 ] s&apos;ha penjat després d&apos;haver-se iniciat correctament.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="564"/>
+        <location filename="qcreatedicomdir.cpp" line="577"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava escriure al procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigui executant o pot ser que s&apos;hagi tancat.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="568"/>
+        <location filename="qcreatedicomdir.cpp" line="581"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava llegir del procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigués executant.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="665"/>
+        <location filename="qcreatedicomdir.cpp" line="682"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of the device is %1 Mb</oldsource>
+        <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat del dispositiu és de %1 Mb.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="692"/>
+        <location filename="qcreatedicomdir.cpp" line="701"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb</oldsource>
+        <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat d&apos;un cd és de %1 Mb.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="699"/>
+        <location filename="qcreatedicomdir.cpp" line="708"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>La configuració de l&apos;aplicació per gravar DICOMDIR no és correcte.
+Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt; DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="539"/>
-        <location filename="qcreatedicomdir.cpp" line="578"/>
+        <location filename="qcreatedicomdir.cpp" line="552"/>
+        <location filename="qcreatedicomdir.cpp" line="591"/>
         <source>DICOMDIR Creation Failure</source>
         <translation>Fallada en la Creació del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="578"/>
+        <location filename="qcreatedicomdir.cpp" line="591"/>
         <source>There was an error during the creation of the DICOMDIR</source>
         <translation>Hi ha hagut un error durant la creació del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="533"/>
-        <location filename="qcreatedicomdir.cpp" line="539"/>
-        <location filename="qcreatedicomdir.cpp" line="578"/>
-        <source>Please, contact your system administrator to solve this problem.</source>
-        <translation>Si us plau, contacti amb l&apos;administrador del sistema per solucionar aquest problema.</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="304"/>
+        <location filename="qcreatedicomdir.cpp" line="303"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
         <translation>El directori de destí no està buit, si us plau escolliu un directori buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="436"/>
+        <location filename="qcreatedicomdir.cpp" line="440"/>
         <source>Choose an empty directory...</source>
         <translation>Escolliu un directori buit...</translation>
     </message>
@@ -1380,21 +1478,37 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
 <context>
     <name>udg::QDICOMDIRConfigurationScreen</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="82"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="92"/>
         <source>Some configuration options are not valid:
 </source>
-        <translation type="unfinished">Algunes de les opcionsd de configuració no són vàlides:
+        <translation>Algunes de les opcions de configuració no són vàlides:
 </translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="88"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="98"/>
         <source>Invalid burning application path.</source>
+        <translation>Ruta de l&apos;aplicació de gravació invàlida.</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="105"/>
+        <source>Burning application path has to be an executable file.</source>
+        <translation>La ruta de l&apos;aplicació de gravació ha d&apos;apuntar a un fitxer executable.</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="114"/>
+        <source>Invalid path of folder to copy to DICOMDIR.</source>
+        <translation>Ruta inválida del directorio a copiar al DICOMDIR.</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="119"/>
+        <source>Invalid content of the folder to copy to DICOMDIR, This folder can&apos;t contains any item called DICOM or DICOMDIR.</source>
+        <oldsource>Invalid content of the folder to copy to DICOMDIR. This folder can&apos;t contains any item called DICOM or DICOMDIR.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="95"/>
-        <source>Burning application path has to be an executable file.</source>
-        <translation type="unfinished"></translation>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="171"/>
+        <source>Folder to copy to DICOMDIR...</source>
+        <translation>Directori a copiar al DICOMDIR...</translation>
     </message>
 </context>
 <context>
@@ -1402,72 +1516,72 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     <message>
         <location filename="qexporterbase.ui" line="20"/>
         <source>Exporter</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="35"/>
         <source>Series description:</source>
-        <translation type="unfinished"></translation>
+        <translation>Descripció sèrie:</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="56"/>
         <source>Images to store:</source>
-        <translation type="unfinished"></translation>
+        <translation>Imatges a enviar:</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="63"/>
         <source>Current image only</source>
-        <translation type="unfinished"></translation>
+        <translation>Imatge actual</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="73"/>
         <source>All images of current phase</source>
-        <translation type="unfinished"></translation>
+        <translation>Totes les imatges de la fase actual</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="83"/>
         <source>All phases of current image</source>
-        <translation type="unfinished"></translation>
+        <translation>Totes les fases de la imatge actual</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="93"/>
         <source>All images of the series</source>
-        <translation type="unfinished"></translation>
+        <translation>Totes les imatges de la sèrie</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="135"/>
         <source>Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Previsualització</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="149"/>
         <source>1/1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="178"/>
         <source>Destination:</source>
-        <translation type="unfinished"></translation>
+        <translation>Destinació:</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="185"/>
         <source>Store to local database</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar a la base de dades local</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="195"/>
         <source>Send to PACS node:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="262"/>
         <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel·lar</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="269"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar</translation>
     </message>
 </context>
 <context>
@@ -1475,42 +1589,42 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     <message>
         <location filename="qexportertool.cpp" line="117"/>
         <source>No enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation>No hi ha suficient memòria lliure</translation>
     </message>
     <message>
         <location filename="qexportertool.cpp" line="117"/>
         <source>The new volume cannot be generated because there is not enough memory. Please, select less slices or reduce the window size.</source>
-        <translation type="unfinished"></translation>
+        <translation>El nou volum no s&apos;ha pogut generar perquè no hi a suficient memòria lliure. Si us plau seleccioni menys llesques o redueixi la mida de la finestra.</translation>
     </message>
     <message>
         <location filename="qexportertool.cpp" line="134"/>
         <source>Generating images...</source>
-        <translation type="unfinished"></translation>
+        <translation>Generant imatges...</translation>
     </message>
     <message>
         <location filename="qexportertool.cpp" line="223"/>
         <source>Generating files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Generant arxius...</translation>
     </message>
     <message>
         <location filename="qexportertool.cpp" line="241"/>
         <source>Inserting into database...</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserint a la base de dades...</translation>
     </message>
     <message>
         <location filename="qexportertool.cpp" line="251"/>
         <source>Sending to PACS...</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviant al PACS...</translation>
     </message>
     <message>
         <location filename="qexportertool.cpp" line="270"/>
         <source>Export to DICOM</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportar a DICOM</translation>
     </message>
     <message>
         <location filename="qexportertool.cpp" line="270"/>
         <source>The new series has not able to be generated.</source>
-        <translation type="unfinished"></translation>
+        <translation>La nova sèrie no s&apos;ha pogut generar.</translation>
     </message>
 </context>
 <context>
@@ -1518,77 +1632,84 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="70"/>
         <source>&amp;View</source>
-        <translation type="unfinished">&amp;Visualitzar</translation>
+        <translation>&amp;Visualitzar</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="70"/>
         <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+V</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="73"/>
         <source>&amp;Import</source>
-        <translation type="unfinished">&amp;Importar</translation>
+        <translation>&amp;Importar</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="73"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="95"/>
         <source>Error openning DICOMDIR</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Error openning dicomdir</oldsource>
+        <translation>Error obrint el DICOMDIR</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="126"/>
         <source>Before search you have to open a DICOMDIR.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Before search you have to open a dicomdir.</oldsource>
+        <translation>Abans de cercar heu d&apos;obrir un DICOMDIR.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="131"/>
         <source>Error quering in DICOMDIR</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Error quering in dicomdir</oldsource>
+        <translation>Error consultant el DICOMDIR</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="140"/>
         <source>No study match found.</source>
-        <translation type="unfinished">No s&apos;han trobat coincidències.</translation>
+        <translation>No s&apos;han trobat coincidències.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="164"/>
         <source>No series match for this study.
 </source>
-        <translation type="unfinished">No s&apos;han trobat sèries per aquest estudi.</translation>
+        <translation>No s&apos;han trobat sèries per aquest estudi.
+</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="179"/>
         <source>No images match for this series.
 </source>
-        <translation type="unfinished">No s&apos;han trobat imatges per aquesta sèrie.
+        <translation>No s&apos;han trobat imatges per aquesta sèrie.
 </translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="226"/>
         <source>Select at least one study to view</source>
-        <translation type="unfinished">Seleccioni almenys un estudi a visualitzar</translation>
+        <translation>Seleccioni almenys un estudi a visualitzar</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="256"/>
         <source>No valid data found. Maybe some files are missing or corrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;han trobat dades vàlides. Potser algun dels fitxers no existeixen o estan corruptes.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="267"/>
         <location filename="qinputoutputdicomdirwidget.cpp" line="314"/>
         <source>Trying to import study with UID %1 </source>
-        <translation type="unfinished">Intentant importar l&apos;estudi amb UID %1 </translation>
+        <translation>Intentant importar l&apos;estudi amb UID %1 </translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="268"/>
         <source>the DICOMDIR could not be opened. Be sure that the DICOMDIR path is correct.
 </source>
-        <translation type="unfinished"></translation>
+        <oldsource>the dicomdir could not be opened. Be sure that the dicomdir path is correct.
+</oldsource>
+        <translation>no s&apos;ha pogut obrir el DICOMDIR. Assegureu-vos que la ruta del dicomdir és correcte.
+</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="269"/>
@@ -1596,44 +1717,46 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <source>
 
 If the problem persist contact with an administrator.</source>
-        <translation type="unfinished">
+        <translation>
 
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="273"/>
         <source>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</source>
-        <translation type="unfinished">Alguns fitxers del estudi amb UID %2 no s&apos;han pogut importar. Assegureu-vos que teniu permisos en el directori de la cache del %1.</translation>
+        <translation>Alguns fitxers del estudi amb UID %2 no s&apos;han pogut importar. Assegureu-vos que teniu permisos en el directori de la cache del %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="283"/>
         <source>The study can&apos;t be imported because there isn&apos;t enough space.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Your current database settings does not allow you to import the requested studies because there isn&apos;t enough space.</oldsource>
+        <translation>L&apos;estudi no s&apos;ha pogut importar perquè no teniu suficient espai lliure.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="285"/>
         <source>Try to free hard disk space, delete local studies or change in %1 configuration the size of reserved disk space for system to be able to import the study.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Try to free hard disk space, delete local studies or change in configuration the size of reserved disk space for system to be able to import the study.</oldsource>
+        <translation>Intenteu alliberar espei, esborreu estudis locals o canvieu la mida de l&apos;espai reservat pel sistema a la configuració del %1 per poder importar l&apos;estudi.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="287"/>
         <source>Current location resources:</source>
-        <translation type="unfinished"></translation>
+        <translation>Recursos actuals:</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="289"/>
         <source>* Reserved disk space for system: %1Gb</source>
-        <translation type="unfinished"></translation>
+        <translation>* Espai reservat pel sistema: %1Gb</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="291"/>
         <source>* Free disk space: %1Gb</source>
-        <translation type="unfinished"></translation>
+        <translation>Espai lliure al disc: %1Gb</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="297"/>
         <source>An error has ocurred freeing space, some studies can&apos;t be imported.</source>
-        <translation type="unfinished">S&apos;ha porduït un error alliberant espai, alguns estudis no s&apos;han pogut importar.</translation>
+        <translation>S&apos;ha porduït un error alliberant espai, alguns estudis no s&apos;han pogut importar.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="298"/>
@@ -1643,7 +1766,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 
 Close all %1 windows and try again.
 If the problem persist contact with an administrator.</source>
-        <translation type="unfinished">
+        <translation>
 
 Tanqueu totes les finestres del %1 i torneu-ho a intentar.
 Si el problema persisteix contacteu amb un administrador.</translation>
@@ -1651,40 +1774,42 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="303"/>
         <source>A database error has ocurred, some studies can&apos;t be imported.</source>
-        <translation type="unfinished">S&apos;ha produït un error a la base de dades, alguns estudis no s&apos;han pogut importar.</translation>
+        <translation>S&apos;ha produït un error a la base de dades, alguns estudis no s&apos;han pogut importar.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="309"/>
         <source>The study with UID %2 can&apos;t be imported, because %1 has not been capable of read correctly dicom information of the study.</source>
-        <translation type="unfinished">L&apos;estudi amb UID %2 no s&apos;ha pogut importar, perquè %1 no ha estat capaç de llegir correctament la informació dicom de l&apos;estudi.</translation>
+        <translation>L&apos;estudi amb UID %2 no s&apos;ha pogut importar, perquè %1 no ha estat capaç de llegir correctament la informació dicom de l&apos;estudi.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="310"/>
         <source>
 
 The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
-        <translation type="unfinished">
+        <translation>
 
 L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau poseu-vos en contacte amb l&apos;equip del %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="315"/>
         <source>has ocurred an error. This DICOMDIR is inconsistent, can&apos;t be imported.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>has ocurred an error. This dicomdir is inconsistent, can&apos;t be imported.</oldsource>
+        <translation>s&apos;ha produït un error. El DICOMDIR és inconsistent, no es pot importar.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="316"/>
         <source>
 
 Please contact with %1 team.</source>
-        <translation type="unfinished">
+        <translation>
 
 Si us plau contacteu amb l&apos;equip del %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="322"/>
         <source>An unknown error has ocurred importing DICOMDIR.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>An unknown error has ocurred importing dicomdir.</oldsource>
+        <translation>S&apos;ha produït un error desconegut important el DICOMDIR.</translation>
     </message>
 </context>
 <context>
@@ -1692,22 +1817,22 @@ Si us plau contacteu amb l&apos;equip del %1.</translation>
     <message>
         <location filename="qinputoutputdicomdirwidgetbase.ui" line="13"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidgetbase.ui" line="55"/>
         <source>View</source>
-        <translation type="unfinished">Visualitzar</translation>
+        <translation>Visualitzar</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidgetbase.ui" line="74"/>
         <source>Import</source>
-        <translation type="unfinished">Importar</translation>
+        <translation>Importar</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidgetbase.ui" line="106"/>
         <source>Open DICOMDIR</source>
-        <translation type="unfinished">Obrir DICOMDIR</translation>
+        <translation>Obrir DICOMDIR</translation>
     </message>
 </context>
 <context>
@@ -1715,106 +1840,113 @@ Si us plau contacteu amb l&apos;equip del %1.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="85"/>
         <source>&amp;View</source>
-        <translation type="unfinished">&amp;Visualitzar</translation>
+        <translation>&amp;Visualitzar</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="85"/>
         <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+V</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="88"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished">&amp;Esborrar</translation>
+        <translation>&amp;Esborrar</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="92"/>
         <source>Send to DICOMDIR List</source>
-        <translation type="unfinished">Enviar a la llista de DICOMDIR</translation>
+        <translation>Enviar a la llista de DICOMDIR</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="92"/>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="95"/>
         <source>Send to PACS</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Store to PACS</oldsource>
+        <translation>Enviar al PACS</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="95"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="139"/>
         <source>No study match found.</source>
-        <translation type="unfinished">No s&apos;han trobat coincidències.</translation>
+        <translation>No s&apos;han trobat coincidències.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="186"/>
         <source>No series match for this study.
 </source>
-        <translation type="unfinished">No s&apos;han trobat sèries per aquest estudi.</translation>
+        <translation>No s&apos;han trobat sèries per aquest estudi.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="208"/>
         <source>No images match for this study.
 </source>
-        <translation type="unfinished">No s&apos;han trobat imatges per aquest estudi.
+        <translation>No s&apos;han trobat imatges per aquest estudi.
 </translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="244"/>
         <source>Are you sure you want to delete the selected Items?</source>
-        <translation type="unfinished"></translation>
+        <translation>Està segur que vol eliminar els elements seleccionats?</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="261"/>
         <source>The study %1 of patient %2 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;estudi %1 del pacient %2 està a la llista de DICOMDIR. Si el vol esborrar primer l&apos;haurà de treure&apos;l de la llista de DICOMDIR.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="267"/>
         <source>The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete this series you should remove the study from the DICOMDIR List first.</source>
-        <translation type="unfinished"></translation>
+        <translation>La sèrie amb UID %1 de l&apos;estudi %2, pacient %3 està la llista de DICOMDIR. Si vol esborrar la sèrie hauria de treure l&apos;estudi de la llista de DICOMDIR.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="298"/>
         <source>Please select at least one study to delete</source>
-        <translation type="unfinished">Si us plau seleccioni almenys un estudi a esborrar</translation>
+        <translation>Si us plau seleccioni al menys un estudi a esborrar</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="309"/>
         <source>Select at least one study to view</source>
-        <translation type="unfinished">Seleccioni almenys un estudi a visualitzar</translation>
+        <translation>Seleccioni al menys un estudi a visualitzar</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="371"/>
         <source>Select at least one study to send to PACS.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>Select at least one study to store to PACS.</oldsource>
+        <translation>Seleccioni al menys un estudi per enviar al PACS.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="420"/>
         <source>deleting old studies</source>
-        <translation type="unfinished">esborrar estudis vells</translation>
+        <translation>esborrar estudis vells</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="444"/>
         <source>An error has ocurred while </source>
-        <translation type="unfinished">S&apos;ha produït un error al </translation>
+        <translation>S&apos;ha produït un error al </translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="452"/>
         <source>The database is blocked by another %1 window.
 Close all the others %1 windows and try again.</source>
-        <translation type="unfinished"></translation>
+        <oldsource>The database is blocked by another %1 window.
+Close all the others %1 windows and try again.
+
+If you want to open different %1&apos;s windows always choose the &apos;New&apos; option from the File menu.</oldsource>
+        <translation>La base de dades està bloquejada per una altra finestra del %1.
+Tanqueu totes les altres finestres del %1 i torneu-ho a intentar.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="456"/>
         <source>%1 database is corrupted.</source>
-        <translation type="unfinished">La base de dades del %1 està corrupte.</translation>
+        <translation>La base de dades del %1 està corrupte.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="457"/>
@@ -1824,7 +1956,7 @@ Close all the others %1 windows and try again.</source>
 Close all %1 windows and try again.
 
 If the problem persist contact with an administrator.</source>
-        <translation type="unfinished">
+        <translation>
 Tanqueu totes les finestres del %1 i torneu-ho a intentar.
 
 Si el problema persisteix contacteu amb un administrador.</translation>
@@ -1832,23 +1964,24 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="461"/>
         <source>%1 database syntax error.</source>
-        <translation type="unfinished">Error de sintaxis a la base de dades del %1.</translation>
+        <translation>Error de sintaxis a la base de dades del %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="466"/>
         <source>An internal error occurs with %1 database.</source>
-        <translation type="unfinished">S&apos;ha produït un error intern accedint a la base de dades del %1.</translation>
+        <translation>S&apos;ha produït un error intern accedint a la base de dades del %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="471"/>
         <source>Some files cannot be deleted.
 These files have to be deleted manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alguns fitxers no s&apos;ha pogut esborrar.
+Aquests hauran de ser esborrats de forma manual.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="475"/>
         <source>Unknown error.</source>
-        <translation type="unfinished">Error desconegut.</translation>
+        <translation>Error desconegut.</translation>
     </message>
 </context>
 <context>
@@ -1861,291 +1994,317 @@ These files have to be deleted manually.</source>
     <message>
         <location filename="qinputoutputlocaldatabasewidgetbase.ui" line="74"/>
         <source>View</source>
-        <translation type="unfinished">Visualitzar</translation>
+        <translation>Visualitzar</translation>
     </message>
 </context>
 <context>
     <name>udg::QInputOutputPacsWidget</name>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="135"/>
+        <location filename="qinputoutputpacswidget.cpp" line="136"/>
         <source>Retrieve &amp;&amp; &amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>Descarregar &amp;&amp; &amp;Visualitzar</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="135"/>
+        <location filename="qinputoutputpacswidget.cpp" line="136"/>
         <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+V</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="138"/>
+        <location filename="qinputoutputpacswidget.cpp" line="139"/>
         <source>&amp;Retrieve</source>
-        <translation type="unfinished">&amp;Descarregar</translation>
+        <translation>&amp;Descarregar</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="138"/>
+        <location filename="qinputoutputpacswidget.cpp" line="139"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="148"/>
+        <location filename="qinputoutputpacswidget.cpp" line="149"/>
         <source>You have to select at least one PACS to query.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha de seleccionar com a mínim un PACS per a consultar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="232"/>
+        <location filename="qinputoutputpacswidget.cpp" line="233"/>
         <source>Select a study to retrieve</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccioni un estudi per descarregar</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="247"/>
+        <location filename="qinputoutputpacswidget.cpp" line="248"/>
         <source>Select a study to retrieve and view</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccioni un estudi per descarregar i visualitzar</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="311"/>
+        <location filename="qinputoutputpacswidget.cpp" line="312"/>
         <source>Please select a PACS to query</source>
-        <translation type="unfinished">Selecciona un Pacs a consultar
+        <translation>Selecciona un Pacs a consultar</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="319"/>
+        <source>No search fields were filled.</source>
+        <translation>No s&apos;han introduït criteris de cerca.</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="319"/>
+        <source>The query can take a long time.
+Do you want continue?</source>
+        <translation>La cerca pot tardar bastants minuts.
+Esta segur que vol continuar?</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="377"/>
+        <source>No series match for this study %1.
+</source>
+        <translation>No s&apos;han trobat sèries de l&apos;estudi %1.
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="318"/>
-        <source>No search fields were filled.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputpacswidget.cpp" line="318"/>
-        <source>The query can take a long time.
-Do you want continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputpacswidget.cpp" line="376"/>
-        <source>No series match for this study %1.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputpacswidget.cpp" line="386"/>
+        <location filename="qinputoutputpacswidget.cpp" line="387"/>
         <source>No images match series %1.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;han trobat imatges de la sèrie %1.
+</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="400"/>
+        <location filename="qinputoutputpacswidget.cpp" line="401"/>
         <source>%1 can&apos;t query to PACS %2 from %3.
 Be sure that your computer is connected on network and the PACS parameters are correct.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputpacswidget.cpp" line="410"/>
-        <source>%1 can&apos;t query series from study %2 to PACS %3 from %4.
-</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 no pot cercar al PACS %2 de %3.
+Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="411"/>
-        <location filename="qinputoutputpacswidget.cpp" line="419"/>
-        <source>Be sure that your computer is connected on network and the PACS parameters are correct.</source>
-        <translation type="unfinished"></translation>
+        <source>%1 can&apos;t query series from study %2 to PACS %3 from %4.
+</source>
+        <translation>%1 no pot cercar les sèries de l&apos;estudi %2 del PACS %3 de %4.
+</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="418"/>
+        <location filename="qinputoutputpacswidget.cpp" line="412"/>
+        <location filename="qinputoutputpacswidget.cpp" line="420"/>
+        <source>Be sure that your computer is connected on network and the PACS parameters are correct.</source>
+        <translation>Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="419"/>
         <source>%1 can&apos;t query images from series %2 to PACS %3 from %4.
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputpacswidget.cpp" line="438"/>
-        <location filename="qinputoutputpacswidget.cpp" line="450"/>
-        <location filename="qinputoutputpacswidget.cpp" line="457"/>
-        <location filename="qinputoutputpacswidget.cpp" line="464"/>
-        <location filename="qinputoutputpacswidget.cpp" line="471"/>
-        <location filename="qinputoutputpacswidget.cpp" line="478"/>
-        <location filename="qinputoutputpacswidget.cpp" line="504"/>
-        <source>Please review the operation list screen, </source>
-        <translation type="unfinished">Si us plau reviseu la llista de peticions, </translation>
+        <translation>%1 no pot cercar les imatges de la sèrie %2 del PACS %3 de %4.
+</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="439"/>
-        <source>%1 can&apos;t connect to PACS %2 trying to retrievev a study.
-</source>
-        <translation type="unfinished"></translation>
+        <location filename="qinputoutputpacswidget.cpp" line="459"/>
+        <location filename="qinputoutputpacswidget.cpp" line="466"/>
+        <location filename="qinputoutputpacswidget.cpp" line="473"/>
+        <location filename="qinputoutputpacswidget.cpp" line="480"/>
+        <location filename="qinputoutputpacswidget.cpp" line="487"/>
+        <location filename="qinputoutputpacswidget.cpp" line="513"/>
+        <source>Please review the operation list screen, </source>
+        <translation>Si us plau reviseu la llista de peticions, </translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="440"/>
-        <location filename="qinputoutputpacswidget.cpp" line="506"/>
-        <source>
-Be sure that your computer is connected on network and the PACS parameters are correct.</source>
-        <translation type="unfinished"></translation>
+        <source>%1 can&apos;t connect to PACS %2 trying to retrievev a study.
+</source>
+        <translation>%1 no ha pogut connectar amb el PACS %2 al intentar descarregar un estudi.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="441"/>
-        <location filename="qinputoutputpacswidget.cpp" line="507"/>
+        <location filename="qinputoutputpacswidget.cpp" line="515"/>
+        <source>
+Be sure that your computer is connected on network and the PACS parameters are correct.</source>
+        <translation>
+Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="442"/>
+        <location filename="qinputoutputpacswidget.cpp" line="516"/>
         <source>
 If the problem persist contact with an administrator.</source>
-        <translation type="unfinished">
+        <translation>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="445"/>
-        <source>There is not enough space to retrieve studies, please free space.</source>
-        <translation type="unfinished">No hi ha suficient espai lliure per descarregar estudis, si us plau allibereu espai.</translation>
-    </message>
-    <message>
-        <location filename="qinputoutputpacswidget.cpp" line="446"/>
-        <source>
-All pending retrieve operations will be cancelled.</source>
-        <translation type="unfinished">
-Totes les operacions pendents seran cancel·lades.</translation>
-    </message>
-    <message>
         <location filename="qinputoutputpacswidget.cpp" line="451"/>
-        <source>an error ocurred freeing space and some operations may have failed.</source>
-        <translation type="unfinished">s&apos;ha produït un error alliberant espai, algunes operacions poden haver fallat.</translation>
+        <source>There is not enough space to retrieve studies, please free space or change your Local Database settings.</source>
+        <translation>No hi ha suficient espai lliure per descarregar estudis, si us plau alliberi espai o canviï les preferències de la base de dades local.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="452"/>
-        <location filename="qinputoutputpacswidget.cpp" line="459"/>
-        <location filename="qinputoutputpacswidget.cpp" line="491"/>
-        <location filename="qinputoutputpacswidget.cpp" line="518"/>
+        <source>
+All pending retrieve operations will be cancelled.</source>
+        <translation>
+Totes les operacions pendents seran cancel·lades.</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="453"/>
+        <source>
+
+Available space in Disk: %1 Mb</source>
+        <translation>Espai disponible al disc: %1 Mb</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="454"/>
+        <source>
+Minimum space required in Disk to retrieve studies: %1 Mb</source>
+        <translation>
+Espai mínim requerit en el disc per descarregar estudis: %1 Mb</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="460"/>
+        <source>an error ocurred freeing space and some operations may have failed.</source>
+        <translation>s&apos;ha produït un error alliberant espai, algunes operacions poden haver fallat.</translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="461"/>
+        <location filename="qinputoutputpacswidget.cpp" line="468"/>
+        <location filename="qinputoutputpacswidget.cpp" line="500"/>
+        <location filename="qinputoutputpacswidget.cpp" line="527"/>
         <source>
 
 Close all %1 windows and try again.
 If the problem persist contact with an administrator.</source>
-        <translation type="unfinished">
+        <translation>
 
 Tanqueu totes les finestres del %1 i torneu-ho a intentar.
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="458"/>
+        <location filename="qinputoutputpacswidget.cpp" line="467"/>
         <source>a database error ocurred and some operations may have failed.</source>
-        <translation type="unfinished">s&apos;ha produït un error a la base de dades, algunes operacions poden haver fallat.</translation>
+        <translation>s&apos;ha produït un error a la base de dades, algunes operacions poden haver fallat.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="465"/>
+        <location filename="qinputoutputpacswidget.cpp" line="474"/>
         <source>an error ocurred and some retrieve operations may have failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>s&apos;ha produït un error i algunes de les operacions de descàrrega poden haver fallat.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="466"/>
+        <location filename="qinputoutputpacswidget.cpp" line="475"/>
         <source>
 %1 has not be capable of read correctly dicom information of the study.</source>
-        <translation type="unfinished">
+        <translation>
 %1 no ha estat capaç de llegir correctament la informació dicom del estudi.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="467"/>
+        <location filename="qinputoutputpacswidget.cpp" line="476"/>
         <source>
 
 The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
-        <translation type="unfinished">
+        <translation>
 
 L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau poseu-vos en contacte amb l&apos;equip del %1.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="472"/>
+        <location filename="qinputoutputpacswidget.cpp" line="481"/>
         <source>PACS %1 doesn&apos;t recognize your computer&apos;s AETitle %2 and some studies can&apos;t be retrieved.</source>
-        <translation type="unfinished">PACS %1 no ha reconegut el AETitle %2 del vostre ordinador, alguns estudis no han pogut ser descarregats.</translation>
+        <translation>PACS %1 no ha reconegut el AETitle %2 del vostre ordinador, alguns estudis no han pogut ser descarregats.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="473"/>
+        <location filename="qinputoutputpacswidget.cpp" line="482"/>
         <source>
 
 Contact with an administrador to register your computer to the PACS.</source>
-        <translation type="unfinished">
+        <translation>
 
 Contacteu amb un administrador per registre el vostre ordinador al PACS.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="479"/>
+        <location filename="qinputoutputpacswidget.cpp" line="488"/>
         <source>PACS %1 doesn&apos;t respond as expected and %2 can&apos;t process the request for retrieving images.
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="480"/>
+        <location filename="qinputoutputpacswidget.cpp" line="489"/>
         <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
-        <translation type="unfinished"></translation>
+        <translation>La causa del error pot ser que  les imatges demanades estiguin corruptes o que el port de connexions entrants del PACS no estigui correctament configurat.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="484"/>
+        <location filename="qinputoutputpacswidget.cpp" line="493"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
-        <translation type="unfinished">Port %1 per connexions entrants des del PACS és utilitzat per una altra aplicació.</translation>
+        <translation>Port %1 per connexions entrants des del PACS és utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="485"/>
+        <location filename="qinputoutputpacswidget.cpp" line="494"/>
         <source>
 
 %1 can&apos;t retrieve the studies, all pending retrieve operations will be cancelled.</source>
-        <translation type="unfinished">
+        <translation>
 
 %1 no pot descarregar l&apos;estudi, totes les descàrregues pendents seran cancel·lades.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="486"/>
+        <location filename="qinputoutputpacswidget.cpp" line="495"/>
         <source>
 
 If there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.</source>
-        <translation type="unfinished">
+        <translation>
 
 Si hi ha una altra finestra del %1 descarregant estudis del PACS, si us plau espereu fins que hagi acabat les descarregues i torneu-ho a intentar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="490"/>
+        <location filename="qinputoutputpacswidget.cpp" line="499"/>
         <source>Please review the operation list screen, an unknown error has ocurred retrieving a study.</source>
-        <translation type="unfinished">Si us plau reviseu la llista de peticions, s&apos;ha produït un error desconegut descarregant un estudi.</translation>
+        <translation>Si us plau reviseu la llista de peticions, s&apos;ha produït un error desconegut descarregant un estudi.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="505"/>
+        <location filename="qinputoutputpacswidget.cpp" line="514"/>
         <source>%1 can&apos;t connect to PACS %2 trying to store a study.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>%1 no ha pogut connectar amb el PACS %2 intentant enviar un estudi.
+</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="512"/>
+        <location filename="qinputoutputpacswidget.cpp" line="521"/>
         <source>The store of images to PACS %1 has failed.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;enviament d&apos;imatges al PACS %1 ha fallat.
+
+</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="513"/>
+        <location filename="qinputoutputpacswidget.cpp" line="522"/>
         <source>Wait a minute and try again, if the problem persist contact with an administrator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Espereu uns minuts i torneu-ho a intentar, si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="517"/>
-        <source>Please review the operation list screen, an unknown error has ocurred storing a study.</source>
-        <translation type="unfinished"></translation>
+        <location filename="qinputoutputpacswidget.cpp" line="526"/>
+        <source>Please review the operation list screen, an unknown error has ocurred storing a study to PACS %1.</source>
+        <oldsource>Please review the operation list screen, an unknown error has ocurred storing a study.</oldsource>
+        <translation>Si us plau reviseu la llista d&apos;operacions, s&apos;ha produït un error desconegut enviant un estudi %1.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="532"/>
+        <location filename="qinputoutputpacswidget.cpp" line="541"/>
         <source>There were problems to retrieve some images from study %1 from PACS %2. Those images may be missing in the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="534"/>
+        <location filename="qinputoutputpacswidget.cpp" line="543"/>
         <source>Try again later. If the problem persists, contact your system administrator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Torneu-ho a intentar més tard. Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="550"/>
+        <location filename="qinputoutputpacswidget.cpp" line="559"/>
         <source>Some images of study %1 can&apos;t be stored to PACS %2.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Algunes de les imatges del estudi %1 no s&apos;han pogut enviar al PACS %2.
+
+</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="551"/>
+        <location filename="qinputoutputpacswidget.cpp" line="560"/>
         <source>Please contact with an administrator to solve the problem.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si us plau contacteu amb un administrador per resoldre el problema.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="555"/>
+        <location filename="qinputoutputpacswidget.cpp" line="564"/>
         <source>The study %1 has been stored, but it&apos;s possible that the PACS %1 has changed some data of the images.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;estudi %1 s&apos;ha enviat correctament, pero és possible que el PACS %1 hagi canviat dades d&apos;alguna de les imatges.</translation>
     </message>
 </context>
 <context>
@@ -2158,27 +2317,27 @@ Si hi ha una altra finestra del %1 descarregant estudis del PACS, si us plau esp
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="46"/>
         <source>Retrieve &amp;&amp; View</source>
-        <translation type="unfinished"></translation>
+        <translation>Descarregar &amp;&amp; Visualitzar</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="66"/>
         <source>Retrieve</source>
-        <translation type="unfinished">Descarregar</translation>
+        <translation>Descarregar</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="111"/>
         <source>Query in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca en progrés</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="118"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="130"/>
         <source>Cancel query</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancel·lar cerca</translation>
     </message>
 </context>
 <context>
@@ -2258,7 +2417,7 @@ Si hi ha una altra finestra del %1 descarregant estudis del PACS, si us plau esp
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="217"/>
         <source>Choose the Cache images path...</source>
-        <translation type="unfinished"></translation>
+        <translation>Escolliu el directori de la cache d&apos;imatges...</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="266"/>
@@ -2407,7 +2566,7 @@ Codi d&apos;error: %1</translation>
     <message>
         <location filename="qoperationstatescreenbase.ui" line="85"/>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers</translation>
     </message>
     <message>
         <location filename="qoperationstatescreenbase.ui" line="90"/>
@@ -2451,37 +2610,37 @@ Codi d&apos;error: %1</translation>
     <message>
         <location filename="qpreviousstudieswidget.cpp" line="37"/>
         <source>No previous studies.</source>
-        <translation type="unfinished"></translation>
+        <translation>No té estudis previs.</translation>
     </message>
     <message>
         <location filename="qpreviousstudieswidget.cpp" line="103"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="qpreviousstudieswidget.cpp" line="103"/>
         <source>Date</source>
-        <translation type="unfinished">Data</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <location filename="qpreviousstudieswidget.cpp" line="103"/>
         <source>Hour</source>
-        <translation type="unfinished">Hora</translation>
+        <translation>Hora</translation>
     </message>
     <message>
         <location filename="qpreviousstudieswidget.cpp" line="103"/>
         <source>Modality</source>
-        <translation type="unfinished">Modalitat</translation>
+        <translation>Modalitat</translation>
     </message>
     <message>
         <location filename="qpreviousstudieswidget.cpp" line="103"/>
         <source>Description</source>
-        <translation type="unfinished">Descripció</translation>
+        <translation>Descripció</translation>
     </message>
     <message>
         <location filename="qpreviousstudieswidget.cpp" line="130"/>
         <source>Looking for previous studies...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cercant estudis previs...</translation>
     </message>
 </context>
 <context>
@@ -2530,7 +2689,7 @@ Codi d&apos;error: %1</translation>
     <message>
         <location filename="qstudytreewidget.cpp" line="248"/>
         <source>File %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Arxiu %1</translation>
     </message>
     <message>
         <location filename="qstudytreewidget.cpp" line="156"/>
@@ -2730,38 +2889,39 @@ Si l&apos;error s&apos;ha produït al obrir una nova finestra del %1, tanqueu aq
     <message>
         <location filename="risrequestmanager.cpp" line="104"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
-        <translation type="unfinished">%2 no pot executar la petició del RIS, perquè no ha trobat l&apos;estudi amb l&apos;accession number %1 en els PACS escollits per defecte.</translation>
+        <translation>%2 no pot executar la petició del RIS, perquè no ha trobat l&apos;estudi amb l&apos;accession number %1 en els PACS escollits per defecte.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="121"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of this PACS are correct</source>
-        <translation type="unfinished"></translation>
+        <translation>Processant la petició del RIS, no s&apos;ha pogut consultar al PACS %1 de %2.
+Asseguris que la IP i el AETitle del PACS siguin correctes.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="136"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
-        <translation type="unfinished">Starviewer no pot escoltar les peticions del RIS pel port %1, ja que el port està sent utilitzat per una altra aplicació.</translation>
+        <translation>Starviewer no pot escoltar les peticions del RIS pel port %1, ja que el port està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="137"/>
         <source>
 
 If the error has ocurred when openned new %1&apos;s windows, close this window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
-        <translation type="unfinished">
+        <translation>
 
 Si l&apos;error s&apos;ha produït al obrir una nova finestra del %1, tanqueu aquesta finestra. Per obrir una nova finestra del %1 heu d&apos;escollir l&apos;opció &apos;Nou&apos; del menú Arxiu.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="140"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
-        <translation type="unfinished">No es poden escoltar peticions del RIS pel port %1, s&apos;ha produït un error desconegut.</translation>
+        <translation>No es poden escoltar peticions del RIS pel port %1, s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="141"/>
         <source>
 If the problem persist contact with an administrator.</source>
-        <translation type="unfinished">
+        <translation>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
 </context>

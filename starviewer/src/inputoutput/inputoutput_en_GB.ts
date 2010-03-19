@@ -9,39 +9,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="467"/>
+        <location filename="qconfigurationscreenbase.ui" line="473"/>
         <source>Add the new Pacs to the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="477"/>
+        <location filename="qconfigurationscreenbase.ui" line="483"/>
         <source>Update the parameters of the selected Pacs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="156"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="94"/>
-        <source>AE Title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="109"/>
-        <source>Q/R port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="114"/>
-        <source>Send port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="119"/>
-        <location filename="qconfigurationscreenbase.ui" line="422"/>
-        <source>Default query PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -55,13 +34,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="776"/>
+        <location filename="qconfigurationscreenbase.ui" line="250"/>
+        <source>AE Title:</source>
+        <oldsource>AE Title :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="264"/>
+        <source>Address:</source>
+        <oldsource>Address :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="1029"/>
         <source>Apply Changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="490"/>
+        <location filename="qconfigurationscreenbase.ui" line="496"/>
         <source>Local Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="94"/>
+        <source>AE Title</source>
+        <oldsource>AETitle</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -75,7 +72,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="770"/>
+        <location filename="qconfigurationscreenbase.ui" line="1023"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -85,79 +82,153 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qconfigurationscreenbase.ui" line="109"/>
+        <source>Q/R port</source>
+        <oldsource>Q/R Port</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="114"/>
+        <source>Send port</source>
+        <oldsource>Send Port</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="119"/>
+        <location filename="qconfigurationscreenbase.ui" line="428"/>
+        <source>Default query PACS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="205"/>
+        <source>Modify selected PACS Server/Add new PACS Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="274"/>
+        <source>Q/R service:</source>
+        <oldsource>Q/R Service :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="283"/>
+        <location filename="qconfigurationscreenbase.ui" line="313"/>
+        <source>Port:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="345"/>
+        <source>Send service:</source>
+        <oldsource>Send Service :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="352"/>
+        <location filename="qconfigurationscreenbase.ui" line="362"/>
+        <source>Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="398"/>
+        <location filename="qconfigurationscreenbase.ui" line="939"/>
+        <source>Institution:</source>
+        <oldsource>Institution :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="508"/>
+        <source>Local DICOM Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="771"/>
+        <source>Institution contact information</source>
+        <oldsource>Institution information</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="866"/>
+        <source>ZIP Code:</source>
+        <oldsource>ZIP Code :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="932"/>
+        <source>Country:</source>
+        <oldsource>Country :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="833"/>
+        <source>Phone Number:</source>
+        <oldsource>Phone Number :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="408"/>
+        <source>Location:</source>
+        <oldsource>Location :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="418"/>
+        <source>Description:</source>
+        <oldsource>Description :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qconfigurationscreenbase.ui" line="26"/>
         <source>PACS Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="199"/>
-        <source>Modify selected PACS Server/Add new PACS Server:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="470"/>
+        <location filename="qconfigurationscreenbase.ui" line="476"/>
         <source>Add as new server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="480"/>
+        <location filename="qconfigurationscreenbase.ui" line="486"/>
         <source>Update configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="669"/>
+        <location filename="qconfigurationscreenbase.ui" line="551"/>
+        <source>Incoming connections port:</source>
+        <oldsource>Incoming connections port :</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="698"/>
         <source>AE Title Local Machine:</source>
+        <oldsource>AETitle Local Machine:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="720"/>
-        <source>Local DICOM Configuration:</source>
+        <location filename="qconfigurationscreenbase.ui" line="577"/>
+        <source>Max. simultaneous connections:</source>
+        <oldsource>Max. simultaneous connections :</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="646"/>
+        <location filename="qconfigurationscreenbase.ui" line="675"/>
         <source>Max. seconds for Timeout:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="840"/>
-        <source>Phone Number:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="867"/>
-        <source>ZIP Code:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="874"/>
+        <location filename="qconfigurationscreenbase.ui" line="873"/>
         <source>City:</source>
+        <oldsource>City :</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="924"/>
-        <source>Country:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="938"/>
-        <source>EMail:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="975"/>
-        <source>Local Institution information:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="901"/>
+        <location filename="qconfigurationscreenbase.ui" line="906"/>
         <source>Address: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="392"/>
-        <location filename="qconfigurationscreenbase.ui" line="931"/>
-        <source>Institution:</source>
+        <location filename="qconfigurationscreenbase.ui" line="946"/>
+        <source>EMail:</source>
+        <oldsource>EMail :</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -166,59 +237,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="244"/>
-        <source>AE Title:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="258"/>
-        <source>Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="268"/>
-        <source>Q/R service:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="277"/>
-        <location filename="qconfigurationscreenbase.ui" line="307"/>
-        <source>Port:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="339"/>
-        <source>Send service:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="346"/>
-        <location filename="qconfigurationscreenbase.ui" line="356"/>
-        <source>Enabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="402"/>
-        <source>Location:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="412"/>
-        <source>Description:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="522"/>
-        <source>Incoming connections port:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="548"/>
-        <source>Max. simultaneous connections:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="604"/>
+        <location filename="qconfigurationscreenbase.ui" line="633"/>
         <source>&lt;b&gt;This port is in use by another application.&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -236,60 +255,95 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="67"/>
-        <source>Convert all images to little endian</source>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="70"/>
+        <source>Convert all images to Little Endian</source>
+        <oldsource>Convert all images to little endian</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="82"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="101"/>
         <source>Burning application configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="111"/>
-        <source>Application path :</source>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="130"/>
+        <source>Application path:</source>
+        <oldsource>Application path :</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="133"/>
-        <source>Examine disk to find the database</source>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="152"/>
+        <source>Examine disk to find the application</source>
+        <oldsource>Examine disk to find the database</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="155"/>
-        <source>Application parameters :</source>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="174"/>
+        <source>Application parameters:</source>
+        <oldsource>Application parameters :</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="165"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="184"/>
         <source>Download from here:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="172"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="191"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="210"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="229"/>
         <source>Use different parameters for CD and DVD burning:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="222"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="241"/>
         <source>CD parameters:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="251"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="270"/>
         <source>DVD parameters:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="320"/>
+        <source>Additional folder to copy</source>
+        <oldsource>Additional folder to copy with</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="353"/>
+        <source>Copy additional folder content when creating DICOMDIR on these supports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="359"/>
+        <source>USB Drive or Hard Disk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="366"/>
+        <source>CD or DVD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="408"/>
+        <source>Additional content folder:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="431"/>
+        <source>Examine disk to find the folder to copy to DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="126"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="145"/>
         <location filename="qinputoutputdicomdirwidget.cpp" line="86"/>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="200"/>
         <source>Open</source>
@@ -416,39 +470,45 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="495"/>
+        <location filename="qcreatedicomdir.cpp" line="508"/>
         <source>Creating DICOMDIR Image...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="69"/>
         <source>The iso path &quot;%1&quot; that we want to burn doesn&apos;t exist.</source>
+        <oldsource>The iso path %1 that we want to burn doesn&apos;t exist.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="80"/>
         <source>The burn application path &quot;%1&quot; doesn&apos;t exist.</source>
+        <oldsource>The burn application path %1 doesn&apos;t exist.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="113"/>
-        <source>An error occurred with the iso image file burn process.</source>
+        <source>An error occurred during the iso image file burn process.</source>
+        <oldsource>An error occurred with the iso image file burn process.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="81"/>
         <source>The input path &quot;%1&quot; that we want to turn into an ISO image doesn&apos;t exist.</source>
+        <oldsource>The input path %1 that we want to turn into an ISO image doesn&apos;t exist.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="93"/>
         <source>The directory &quot;%1&quot; where you want to save ISO image file doesn&apos;t exist.</source>
+        <oldsource>The directory %1 where you want to save ISO image file doesn&apos;t exist.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="103"/>
         <location filename="isoimagefilecreator.cpp" line="113"/>
         <source>You don&apos;t have permissions to write in the output iso image directory &quot;%1&quot;.</source>
+        <oldsource>You don&apos;t have permissions to write in the output iso image directory %1.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -495,11 +555,13 @@
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="17"/>
         <source>Send DICOM objects to PACS</source>
+        <oldsource>Select Pacs to store DICOM Image</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="23"/>
         <source>Select at which PACS the DICOM files have to be sent:</source>
+        <oldsource>Select at which PACS the DICOM objects have to be sent:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -516,7 +578,7 @@
 <context>
     <name>udg::ConvertToDicomdir</name>
     <message>
-        <location filename="converttodicomdir.cpp" line="132"/>
+        <location filename="converttodicomdir.cpp" line="143"/>
         <source>Creating Dicomdir...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -876,99 +938,104 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
 <context>
     <name>udg::QConfigurationScreen</name>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="317"/>
+        <location filename="qconfigurationscreen.cpp" line="327"/>
         <source>AETitle field can&apos;t be empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="366"/>
+        <location filename="qconfigurationscreen.cpp" line="361"/>
+        <source>Institution field can&apos;t be empty.</source>
+        <oldsource>Institution field can&apos;t be empty</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="376"/>
         <source>Local Port has to be between 0 and 65535</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="375"/>
+        <location filename="qconfigurationscreen.cpp" line="385"/>
         <source>Maximum simultaenious connections has to be between 1 and 15</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="306"/>
+        <location filename="qconfigurationscreen.cpp" line="316"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="252"/>
+        <location filename="qconfigurationscreen.cpp" line="262"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="252"/>
+        <location filename="qconfigurationscreen.cpp" line="262"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="196"/>
+        <location filename="qconfigurationscreen.cpp" line="206"/>
         <source>Select a PACS to update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="220"/>
+        <location filename="qconfigurationscreen.cpp" line="230"/>
         <source>Select a PACS to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="292"/>
+        <location filename="qconfigurationscreen.cpp" line="302"/>
         <source>Test of PACS &quot;%1&quot; is correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="306"/>
+        <location filename="qconfigurationscreen.cpp" line="316"/>
         <source>To test a PACS it is necessary to select an item of the list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="136"/>
+        <location filename="qconfigurationscreen.cpp" line="335"/>
+        <source>Incorrect server address.</source>
+        <oldsource>Incorrect server address</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreen.cpp" line="146"/>
         <source>This PACS already exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="278"/>
+        <location filename="qconfigurationscreen.cpp" line="288"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond.
 Be sure that the IP and AETitle of the PACS are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="299"/>
+        <location filename="qconfigurationscreen.cpp" line="309"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond correclty.
 Be sure that the IP and AETitle of the PACS are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="325"/>
-        <source>Incorrect server address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="331"/>
+        <location filename="qconfigurationscreen.cpp" line="341"/>
         <source>At least one of the service Query/Retrieve or Send has to be enabled.</source>
+        <oldsource>At least one of the service Query/Retrieve or Send has to be activated</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="337"/>
+        <location filename="qconfigurationscreen.cpp" line="347"/>
         <source>Query/Retrieve Port value has to be between 0 and 65535.</source>
+        <oldsource>Query/Retrieve Port value has to be between 0 and 65535</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="343"/>
+        <location filename="qconfigurationscreen.cpp" line="353"/>
         <source>Send Port value has to be between 0 and 65535.</source>
+        <oldsource>Send Port value has to be between 0 and 65535</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreen.cpp" line="351"/>
-        <source>Institution field can&apos;t be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreen.cpp" line="389"/>
+        <location filename="qconfigurationscreen.cpp" line="399"/>
         <source>The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -976,242 +1043,272 @@ Be sure that the IP and AETitle of the PACS are correct.</source>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="291"/>
-        <location filename="qcreatedicomdir.cpp" line="314"/>
+        <location filename="qcreatedicomdir.cpp" line="290"/>
+        <location filename="qcreatedicomdir.cpp" line="313"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="291"/>
-        <location filename="qcreatedicomdir.cpp" line="314"/>
+        <location filename="qcreatedicomdir.cpp" line="290"/>
+        <location filename="qcreatedicomdir.cpp" line="313"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="312"/>
+        <location filename="qcreatedicomdir.cpp" line="311"/>
         <source>Create directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="319"/>
+        <location filename="qcreatedicomdir.cpp" line="318"/>
         <source>Can&apos;t create the directory. Please check users permissions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="469"/>
+        <location filename="qcreatedicomdir.cpp" line="484"/>
         <source>Please select a study to remove of the list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="68"/>
+        <location filename="qcreatedicomdir.cpp" line="69"/>
         <source>CD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="69"/>
+        <location filename="qcreatedicomdir.cpp" line="70"/>
         <source>Record DICOMDIR on a CD-ROM device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="77"/>
+        <location filename="qcreatedicomdir.cpp" line="78"/>
         <source>DVD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="78"/>
+        <location filename="qcreatedicomdir.cpp" line="79"/>
         <source>Record DICOMDIR on a DVD-ROM device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="86"/>
+        <location filename="qcreatedicomdir.cpp" line="87"/>
         <source>Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="87"/>
+        <location filename="qcreatedicomdir.cpp" line="88"/>
         <source>Record DICOMDIR on a Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="95"/>
+        <location filename="qcreatedicomdir.cpp" line="96"/>
         <source>Pen Drive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="96"/>
+        <location filename="qcreatedicomdir.cpp" line="97"/>
         <source>Record DICOMDIR on a USB Pen drive device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="260"/>
+        <location filename="qcreatedicomdir.cpp" line="257"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="289"/>
+        <location filename="qcreatedicomdir.cpp" line="288"/>
         <source>Create DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="290"/>
+        <location filename="qcreatedicomdir.cpp" line="289"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="313"/>
+        <location filename="qcreatedicomdir.cpp" line="312"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="347"/>
+        <location filename="qcreatedicomdir.cpp" line="346"/>
         <source>Not enough free space to create DICOMDIR. Please free space.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="280"/>
+        <location filename="qcreatedicomdir.cpp" line="277"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="357"/>
+        <location filename="qcreatedicomdir.cpp" line="356"/>
         <source>Please, first select the studies you want to create a DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="377"/>
+        <location filename="qcreatedicomdir.cpp" line="378"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="384"/>
+        <location filename="qcreatedicomdir.cpp" line="391"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="611"/>
-        <source>
-Error Number: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="552"/>
-        <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="131"/>
-        <source>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="135"/>
-        <source>DICOMDIR size: %1 Mb - Available Space: %2 Mb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="149"/>
-        <source>%1 Mb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="200"/>
-        <source>The following studies were not added to the DICOMDIR list for the following reasons:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="203"/>
-        <source>
-
-	- Already exist in the list.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="208"/>
-        <source>
-
-	- Not enough space on the device.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="219"/>
-        <source>DICOMDIR creation aborted.
- The selected studies exceed the available space for the current device.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="533"/>
-        <source>DICOMDIR Burning Failure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="533"/>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="539"/>
+        <location filename="qcreatedicomdir.cpp" line="621"/>
+        <source>
+Error Number: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="565"/>
+        <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="132"/>
+        <source>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="136"/>
+        <source>DICOMDIR size: %1 Mb - Available Space: %2 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="150"/>
+        <source>%1 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="203"/>
+        <source>The following studies were not added to the DICOMDIR list for the following reasons:</source>
+        <oldsource>The following studies were not added to the DICOMDIR list for the following reasons</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="206"/>
+        <source>
+
+	- Already exist in the list.
+</source>
+        <oldsource>
+
+*Already exist in the list
+
+</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="211"/>
+        <source>
+
+	- Not enough space on the device.
+</source>
+        <oldsource>
+
+*Exceed the device available space
+
+</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="222"/>
+        <source>DICOMDIR creation aborted.
+ The selected studies exceed the available space for the current device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="381"/>
+        <source>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.</source>
+        <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory, or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="386"/>
+        <source>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR o DICOM.
+
+Remove it from the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.</source>
+        <oldsource>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR o DICOM.
+
+Remove it from the directory or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
+        <source>DICOMDIR Burning Failure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="546"/>
+        <location filename="qcreatedicomdir.cpp" line="552"/>
+        <location filename="qcreatedicomdir.cpp" line="591"/>
+        <source>Please, contact your system administrator to solve this problem.</source>
+        <oldsource>There was an error during the creation of the ISO image file. </oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="552"/>
         <source>There was an error during the creation of the DICOMDIR ISO image file. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="556"/>
+        <location filename="qcreatedicomdir.cpp" line="569"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="564"/>
+        <location filename="qcreatedicomdir.cpp" line="577"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="568"/>
+        <location filename="qcreatedicomdir.cpp" line="581"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="665"/>
+        <location filename="qcreatedicomdir.cpp" line="682"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</source>
+        <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="692"/>
+        <location filename="qcreatedicomdir.cpp" line="701"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb.</source>
+        <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="699"/>
+        <location filename="qcreatedicomdir.cpp" line="708"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="539"/>
-        <location filename="qcreatedicomdir.cpp" line="578"/>
+        <location filename="qcreatedicomdir.cpp" line="552"/>
+        <location filename="qcreatedicomdir.cpp" line="591"/>
         <source>DICOMDIR Creation Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="578"/>
+        <location filename="qcreatedicomdir.cpp" line="591"/>
         <source>There was an error during the creation of the DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="533"/>
-        <location filename="qcreatedicomdir.cpp" line="539"/>
-        <location filename="qcreatedicomdir.cpp" line="578"/>
-        <source>Please, contact your system administrator to solve this problem.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="304"/>
+        <location filename="qcreatedicomdir.cpp" line="303"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="436"/>
+        <location filename="qcreatedicomdir.cpp" line="440"/>
         <source>Choose an empty directory...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1364,19 +1461,35 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
 <context>
     <name>udg::QDICOMDIRConfigurationScreen</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="82"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="92"/>
         <source>Some configuration options are not valid:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="88"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="98"/>
         <source>Invalid burning application path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="95"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="105"/>
         <source>Burning application path has to be an executable file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="114"/>
+        <source>Invalid path of folder to copy to DICOMDIR.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="119"/>
+        <source>Invalid content of the folder to copy to DICOMDIR, This folder can&apos;t contains any item called DICOM or DICOMDIR.</source>
+        <oldsource>Invalid content of the folder to copy to DICOMDIR. This folder can&apos;t contains any item called DICOM or DICOMDIR.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="171"/>
+        <source>Folder to copy to DICOMDIR...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1521,16 +1634,19 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="95"/>
         <source>Error openning DICOMDIR</source>
+        <oldsource>Error openning dicomdir</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="126"/>
         <source>Before search you have to open a DICOMDIR.</source>
+        <oldsource>Before search you have to open a dicomdir.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="131"/>
         <source>Error quering in DICOMDIR</source>
+        <oldsource>Error quering in dicomdir</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1570,6 +1686,8 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <location filename="qinputoutputdicomdirwidget.cpp" line="268"/>
         <source>the DICOMDIR could not be opened. Be sure that the DICOMDIR path is correct.
 </source>
+        <oldsource>the dicomdir could not be opened. Be sure that the dicomdir path is correct.
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1588,11 +1706,13 @@ If the problem persist contact with an administrator.</source>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="283"/>
         <source>The study can&apos;t be imported because there isn&apos;t enough space.</source>
+        <oldsource>Your current database settings does not allow you to import the requested studies because there isn&apos;t enough space.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="285"/>
         <source>Try to free hard disk space, delete local studies or change in %1 configuration the size of reserved disk space for system to be able to import the study.</source>
+        <oldsource>Try to free hard disk space, delete local studies or change in configuration the size of reserved disk space for system to be able to import the study.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1645,6 +1765,7 @@ The study may be corrupted, if It is not corrupted please contact with %1 team.<
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="315"/>
         <source>has ocurred an error. This DICOMDIR is inconsistent, can&apos;t be imported.</source>
+        <oldsource>has ocurred an error. This dicomdir is inconsistent, can&apos;t be imported.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1657,6 +1778,7 @@ Please contact with %1 team.</source>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="322"/>
         <source>An unknown error has ocurred importing DICOMDIR.</source>
+        <oldsource>An unknown error has ocurred importing dicomdir.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1713,6 +1835,7 @@ Please contact with %1 team.</source>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="95"/>
         <source>Send to PACS</source>
+        <oldsource>Store to PACS</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1765,6 +1888,7 @@ Please contact with %1 team.</source>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="371"/>
         <source>Select at least one study to send to PACS.</source>
+        <oldsource>Select at least one study to store to PACS.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1781,6 +1905,10 @@ Please contact with %1 team.</source>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="452"/>
         <source>The database is blocked by another %1 window.
 Close all the others %1 windows and try again.</source>
+        <oldsource>The database is blocked by another %1 window.
+Close all the others %1 windows and try again.
+
+If you want to open different %1&apos;s windows always choose the &apos;New&apos; option from the File menu.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1836,144 +1964,157 @@ These files have to be deleted manually.</source>
 <context>
     <name>udg::QInputOutputPacsWidget</name>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="135"/>
+        <location filename="qinputoutputpacswidget.cpp" line="136"/>
         <source>Retrieve &amp;&amp; &amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="135"/>
+        <location filename="qinputoutputpacswidget.cpp" line="136"/>
         <source>Ctrl+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="138"/>
+        <location filename="qinputoutputpacswidget.cpp" line="139"/>
         <source>&amp;Retrieve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="138"/>
+        <location filename="qinputoutputpacswidget.cpp" line="139"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="148"/>
+        <location filename="qinputoutputpacswidget.cpp" line="149"/>
         <source>You have to select at least one PACS to query.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="232"/>
+        <location filename="qinputoutputpacswidget.cpp" line="233"/>
         <source>Select a study to retrieve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="247"/>
+        <location filename="qinputoutputpacswidget.cpp" line="248"/>
         <source>Select a study to retrieve and view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="311"/>
+        <location filename="qinputoutputpacswidget.cpp" line="312"/>
         <source>Please select a PACS to query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="318"/>
+        <location filename="qinputoutputpacswidget.cpp" line="319"/>
         <source>No search fields were filled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="318"/>
+        <location filename="qinputoutputpacswidget.cpp" line="319"/>
         <source>The query can take a long time.
 Do you want continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="376"/>
+        <location filename="qinputoutputpacswidget.cpp" line="377"/>
         <source>No series match for this study %1.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="386"/>
+        <location filename="qinputoutputpacswidget.cpp" line="387"/>
         <source>No images match series %1.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="400"/>
+        <location filename="qinputoutputpacswidget.cpp" line="401"/>
         <source>%1 can&apos;t query to PACS %2 from %3.
 Be sure that your computer is connected on network and the PACS parameters are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="410"/>
+        <location filename="qinputoutputpacswidget.cpp" line="411"/>
         <source>%1 can&apos;t query series from study %2 to PACS %3 from %4.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="411"/>
-        <location filename="qinputoutputpacswidget.cpp" line="419"/>
+        <location filename="qinputoutputpacswidget.cpp" line="412"/>
+        <location filename="qinputoutputpacswidget.cpp" line="420"/>
         <source>Be sure that your computer is connected on network and the PACS parameters are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="418"/>
+        <location filename="qinputoutputpacswidget.cpp" line="419"/>
         <source>%1 can&apos;t query images from series %2 to PACS %3 from %4.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="438"/>
-        <location filename="qinputoutputpacswidget.cpp" line="450"/>
-        <location filename="qinputoutputpacswidget.cpp" line="457"/>
-        <location filename="qinputoutputpacswidget.cpp" line="464"/>
-        <location filename="qinputoutputpacswidget.cpp" line="471"/>
-        <location filename="qinputoutputpacswidget.cpp" line="478"/>
-        <location filename="qinputoutputpacswidget.cpp" line="504"/>
+        <location filename="qinputoutputpacswidget.cpp" line="439"/>
+        <location filename="qinputoutputpacswidget.cpp" line="459"/>
+        <location filename="qinputoutputpacswidget.cpp" line="466"/>
+        <location filename="qinputoutputpacswidget.cpp" line="473"/>
+        <location filename="qinputoutputpacswidget.cpp" line="480"/>
+        <location filename="qinputoutputpacswidget.cpp" line="487"/>
+        <location filename="qinputoutputpacswidget.cpp" line="513"/>
         <source>Please review the operation list screen, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="439"/>
+        <location filename="qinputoutputpacswidget.cpp" line="440"/>
         <source>%1 can&apos;t connect to PACS %2 trying to retrievev a study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="440"/>
-        <location filename="qinputoutputpacswidget.cpp" line="506"/>
+        <location filename="qinputoutputpacswidget.cpp" line="441"/>
+        <location filename="qinputoutputpacswidget.cpp" line="515"/>
         <source>
 Be sure that your computer is connected on network and the PACS parameters are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="441"/>
-        <location filename="qinputoutputpacswidget.cpp" line="507"/>
+        <location filename="qinputoutputpacswidget.cpp" line="442"/>
+        <location filename="qinputoutputpacswidget.cpp" line="516"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="445"/>
-        <source>There is not enough space to retrieve studies, please free space.</source>
+        <location filename="qinputoutputpacswidget.cpp" line="451"/>
+        <source>There is not enough space to retrieve studies, please free space or change your Local Database settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="446"/>
+        <location filename="qinputoutputpacswidget.cpp" line="452"/>
         <source>
 All pending retrieve operations will be cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="451"/>
+        <location filename="qinputoutputpacswidget.cpp" line="453"/>
+        <source>
+
+Available space in Disk: %1 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="454"/>
+        <source>
+Minimum space required in Disk to retrieve studies: %1 Mb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qinputoutputpacswidget.cpp" line="460"/>
         <source>an error ocurred freeing space and some operations may have failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="452"/>
-        <location filename="qinputoutputpacswidget.cpp" line="459"/>
-        <location filename="qinputoutputpacswidget.cpp" line="491"/>
-        <location filename="qinputoutputpacswidget.cpp" line="518"/>
+        <location filename="qinputoutputpacswidget.cpp" line="461"/>
+        <location filename="qinputoutputpacswidget.cpp" line="468"/>
+        <location filename="qinputoutputpacswidget.cpp" line="500"/>
+        <location filename="qinputoutputpacswidget.cpp" line="527"/>
         <source>
 
 Close all %1 windows and try again.
@@ -1981,123 +2122,124 @@ If the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="458"/>
+        <location filename="qinputoutputpacswidget.cpp" line="467"/>
         <source>a database error ocurred and some operations may have failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="465"/>
+        <location filename="qinputoutputpacswidget.cpp" line="474"/>
         <source>an error ocurred and some retrieve operations may have failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="466"/>
+        <location filename="qinputoutputpacswidget.cpp" line="475"/>
         <source>
 %1 has not be capable of read correctly dicom information of the study.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="467"/>
+        <location filename="qinputoutputpacswidget.cpp" line="476"/>
         <source>
 
 The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="472"/>
+        <location filename="qinputoutputpacswidget.cpp" line="481"/>
         <source>PACS %1 doesn&apos;t recognize your computer&apos;s AETitle %2 and some studies can&apos;t be retrieved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="473"/>
+        <location filename="qinputoutputpacswidget.cpp" line="482"/>
         <source>
 
 Contact with an administrador to register your computer to the PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="479"/>
+        <location filename="qinputoutputpacswidget.cpp" line="488"/>
         <source>PACS %1 doesn&apos;t respond as expected and %2 can&apos;t process the request for retrieving images.
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="480"/>
+        <location filename="qinputoutputpacswidget.cpp" line="489"/>
         <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="484"/>
+        <location filename="qinputoutputpacswidget.cpp" line="493"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="485"/>
+        <location filename="qinputoutputpacswidget.cpp" line="494"/>
         <source>
 
 %1 can&apos;t retrieve the studies, all pending retrieve operations will be cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="486"/>
+        <location filename="qinputoutputpacswidget.cpp" line="495"/>
         <source>
 
 If there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="490"/>
+        <location filename="qinputoutputpacswidget.cpp" line="499"/>
         <source>Please review the operation list screen, an unknown error has ocurred retrieving a study.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="505"/>
+        <location filename="qinputoutputpacswidget.cpp" line="514"/>
         <source>%1 can&apos;t connect to PACS %2 trying to store a study.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="512"/>
+        <location filename="qinputoutputpacswidget.cpp" line="521"/>
         <source>The store of images to PACS %1 has failed.
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="513"/>
+        <location filename="qinputoutputpacswidget.cpp" line="522"/>
         <source>Wait a minute and try again, if the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="517"/>
-        <source>Please review the operation list screen, an unknown error has ocurred storing a study.</source>
+        <location filename="qinputoutputpacswidget.cpp" line="526"/>
+        <source>Please review the operation list screen, an unknown error has ocurred storing a study to PACS %1.</source>
+        <oldsource>Please review the operation list screen, an unknown error has ocurred storing a study.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="532"/>
+        <location filename="qinputoutputpacswidget.cpp" line="541"/>
         <source>There were problems to retrieve some images from study %1 from PACS %2. Those images may be missing in the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="534"/>
+        <location filename="qinputoutputpacswidget.cpp" line="543"/>
         <source>Try again later. If the problem persists, contact your system administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="550"/>
+        <location filename="qinputoutputpacswidget.cpp" line="559"/>
         <source>Some images of study %1 can&apos;t be stored to PACS %2.
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="551"/>
+        <location filename="qinputoutputpacswidget.cpp" line="560"/>
         <source>Please contact with an administrator to solve the problem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="555"/>
+        <location filename="qinputoutputpacswidget.cpp" line="564"/>
         <source>The study %1 has been stored, but it&apos;s possible that the PACS %1 has changed some data of the images.</source>
         <translation type="unfinished"></translation>
     </message>
