@@ -116,7 +116,7 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
         }
         else if ( !ConvertToDicomdir().AreValidRequirementsOfFolderContentToCopyToDICOMDIR( m_textDICOMDIRFolderPathToCopy->text() ) )
         {//Comprovem que el directori no tingui cap item que es digui DICOM o DICOMDIR
-            QMessageBox::warning( this, ApplicationNameString, tr( "Invalid content of the folder to copy to DICOMDIR. This folder can't contains any item called DICOM or DICOMDIR.") );
+            QMessageBox::warning( this, ApplicationNameString, tr( "Invalid content of the folder to copy to DICOMDIR, This folder can't contains any item called DICOM or DICOMDIR.") );
             return false;
         }
     }
