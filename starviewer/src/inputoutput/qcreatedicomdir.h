@@ -150,7 +150,7 @@ private:
     static const quint64 DVDRomSizeBytes;
 
     /// Indiquem de mitjana que ocupa una capçalera dicom d'una imatge, en el ticket #766 indiquem com s'ha obtingut el càcul
-    static const int dicomHeaderSizeBytes;
+    static const int DicomHeaderSizeBytes;
 
     /// Mida en bytes del que ocupen els estudis que es volen incloure en el DICOMDIR
     quint64 m_dicomdirSizeBytes;
