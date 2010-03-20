@@ -182,7 +182,7 @@ void QApplicationMainWindow::createActions()
     m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
 
     m_localDatabaseAction = new QAction(this);
-    m_localDatabaseAction->setText( tr("&Local Database Studies") );
+    m_localDatabaseAction->setText( tr("&Local Database Studies...") );
     m_localDatabaseAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenLocalDatabaseStudies ) );
     m_localDatabaseAction->setStatusTip( tr("Browse Local Database Studies") );
     m_localDatabaseAction->setIcon( QIcon(":/images/database.png") );

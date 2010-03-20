@@ -231,7 +231,8 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="185"/>
-        <source>&amp;Local Database Studies</source>
+        <source>&amp;Local Database Studies...</source>
+        <oldsource>&amp;Local Database Studies</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
