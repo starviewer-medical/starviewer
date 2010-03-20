@@ -33,6 +33,12 @@
 
 namespace udg {
 
+const int QCreateDicomdir::CDRomSizeMb = 700;
+const int QCreateDicomdir::DVDRomSizeMb = 4800;
+const quint64 QCreateDicomdir::CDRomSizeBytes = ( quint64 ) CDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
+const quint64 QCreateDicomdir::DVDRomSizeBytes = ( quint64 ) DVDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
+const int QCreateDicomdir::dicomHeaderSizeBytes = 23000;
+
 QCreateDicomdir::QCreateDicomdir(QWidget *parent)
  : QDialog(parent)
 {
