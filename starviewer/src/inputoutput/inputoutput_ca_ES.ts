@@ -471,7 +471,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="508"/>
+        <location filename="qcreatedicomdir.cpp" line="514"/>
         <source>Creating DICOMDIR Image...</source>
         <translation>Creant la Imatge del DICOMDIR...</translation>
     </message>
@@ -1054,152 +1054,152 @@ Assegureu-vos que la IP i el AETitle del PACS siguin correctes.</translation>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="290"/>
-        <location filename="qcreatedicomdir.cpp" line="313"/>
+        <location filename="qcreatedicomdir.cpp" line="296"/>
+        <location filename="qcreatedicomdir.cpp" line="319"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="290"/>
-        <location filename="qcreatedicomdir.cpp" line="313"/>
+        <location filename="qcreatedicomdir.cpp" line="296"/>
+        <location filename="qcreatedicomdir.cpp" line="319"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="311"/>
+        <location filename="qcreatedicomdir.cpp" line="317"/>
         <source>Create directory ?</source>
         <translation>Crear el directori ?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="318"/>
+        <location filename="qcreatedicomdir.cpp" line="324"/>
         <source>Can&apos;t create the directory. Please check users permissions.</source>
         <translation>No es pot crear el directori. Si us plau reviseu els permisos d&apos;usuari.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="484"/>
+        <location filename="qcreatedicomdir.cpp" line="490"/>
         <source>Please select a study to remove of the list.</source>
         <translation>Si us plau seleccioni l&apos;estudi que vol esborrar de la llista.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="69"/>
+        <location filename="qcreatedicomdir.cpp" line="75"/>
         <source>CD-ROM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="70"/>
+        <location filename="qcreatedicomdir.cpp" line="76"/>
         <source>Record DICOMDIR on a CD-ROM device</source>
         <translation>Gravar DICOMDIR a un dispositiu de CD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="78"/>
+        <location filename="qcreatedicomdir.cpp" line="84"/>
         <source>DVD-ROM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="79"/>
+        <location filename="qcreatedicomdir.cpp" line="85"/>
         <source>Record DICOMDIR on a DVD-ROM device</source>
         <translation>Gravar DICOMDIR a un dispositiu de DVD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="87"/>
+        <location filename="qcreatedicomdir.cpp" line="93"/>
         <source>Hard Disk</source>
         <translation>Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="88"/>
+        <location filename="qcreatedicomdir.cpp" line="94"/>
         <source>Record DICOMDIR on a Hard Disk</source>
         <translation>Gravar DICOMDIR al Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="96"/>
+        <location filename="qcreatedicomdir.cpp" line="102"/>
         <source>Pen Drive</source>
         <translation>Memòria Extraible USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="97"/>
+        <location filename="qcreatedicomdir.cpp" line="103"/>
         <source>Record DICOMDIR on a USB Pen drive device</source>
         <translation>Gravar DICOMDIR a un dispositiu extern USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="257"/>
+        <location filename="qcreatedicomdir.cpp" line="263"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation>No es pot crear el directori temporal per crear el DICOMDIR. Si us plau, revisi els permisos d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="288"/>
+        <location filename="qcreatedicomdir.cpp" line="294"/>
         <source>Create DICOMDIR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="289"/>
+        <location filename="qcreatedicomdir.cpp" line="295"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation>El directori conté un DICOMDIR, vols sobreescriure i esborrar tots els fitxers del directori?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="312"/>
+        <location filename="qcreatedicomdir.cpp" line="318"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation>El directori DICOMDIR no existeix. Desitges crear-lo?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="346"/>
+        <location filename="qcreatedicomdir.cpp" line="352"/>
         <source>Not enough free space to create DICOMDIR. Please free space.</source>
         <translation>No hi ha suficient espai per crear el DICOMDIR. Si us plau allibereu espai.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="277"/>
+        <location filename="qcreatedicomdir.cpp" line="283"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation>Cap directori especificat per a crear el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="356"/>
+        <location filename="qcreatedicomdir.cpp" line="362"/>
         <source>Please, first select the studies you want to create a DICOMDIR.</source>
         <translation>Esculli primer els estudis amb els que vol crear el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="378"/>
+        <location filename="qcreatedicomdir.cpp" line="384"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
         <translation>Algunes de les imatges no compleixen al 100% l&apos;estàndar DICOM. És possible que alguns visualitzadors tinguin problemes per a mostrar-les.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="391"/>
+        <location filename="qcreatedicomdir.cpp" line="397"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</source>
         <translation>Error creant el DICOMDIR. Asseguris que té permisos a %1 i que el directori és buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="621"/>
+        <location filename="qcreatedicomdir.cpp" line="627"/>
         <source>
 Error Number: %1</source>
         <translation>
 Codi d&apos;error: %1</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="565"/>
+        <location filename="qcreatedicomdir.cpp" line="571"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation>No s&apos;ha pogut iniciar el procés [ %1 ]. O bé el programa invocat no està instal·lat o bé no teniu prou permisos per invocar el programa.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="132"/>
+        <location filename="qcreatedicomdir.cpp" line="138"/>
         <source>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</source>
         <translation>Mida DICOMDIR: %1 Mb aproximadament - Espai disponible %2 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="136"/>
+        <location filename="qcreatedicomdir.cpp" line="142"/>
         <source>DICOMDIR size: %1 Mb - Available Space: %2 Mb</source>
         <translation>Mida DICOMDIR: %1 Mb - Espai disponible %2 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="150"/>
+        <location filename="qcreatedicomdir.cpp" line="156"/>
         <source>%1 Mb</source>
         <translation>%1 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="203"/>
+        <location filename="qcreatedicomdir.cpp" line="209"/>
         <source>The following studies were not added to the DICOMDIR list for the following reasons:</source>
         <oldsource>The following studies were not added to the DICOMDIR list for the following reasons</oldsource>
         <translation>Els següents estudis no s&apos;han afegit a llista de DICOMDIR pel següents motius:</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="206"/>
+        <location filename="qcreatedicomdir.cpp" line="212"/>
         <source>
 
 	- Already exist in the list.
@@ -1215,7 +1215,7 @@ Codi d&apos;error: %1</translation>
 </translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="211"/>
+        <location filename="qcreatedicomdir.cpp" line="217"/>
         <source>
 
 	- Not enough space on the device.
@@ -1228,20 +1228,20 @@ Codi d&apos;error: %1</translation>
         <translation>	- No hi ha suficient espai lliure en el dispositiu.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="222"/>
+        <location filename="qcreatedicomdir.cpp" line="228"/>
         <source>DICOMDIR creation aborted.
  The selected studies exceed the available space for the current device.</source>
         <translation>Creació DICOMDIR abortada.
 Els estudis seleccionats excedeixen l&apos;espai disponible en el dispositiu.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="381"/>
+        <location filename="qcreatedicomdir.cpp" line="387"/>
         <source>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.</source>
         <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory, or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="386"/>
+        <location filename="qcreatedicomdir.cpp" line="392"/>
         <source>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR o DICOM.
 
 Remove it from the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.</source>
@@ -1251,81 +1251,81 @@ Remove it from the directory or choose not copy folder content to DICOMDIR optio
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="546"/>
+        <location filename="qcreatedicomdir.cpp" line="552"/>
         <source>DICOMDIR Burning Failure</source>
         <translation>Error al grabar DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="546"/>
         <location filename="qcreatedicomdir.cpp" line="552"/>
-        <location filename="qcreatedicomdir.cpp" line="591"/>
+        <location filename="qcreatedicomdir.cpp" line="558"/>
+        <location filename="qcreatedicomdir.cpp" line="597"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <oldsource>There was an error during the creation of the ISO image file. </oldsource>
         <translation>Si us plau, contacti amb el seu administrador de sistemes per solucionar aquest problema.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="546"/>
+        <location filename="qcreatedicomdir.cpp" line="552"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
         <translation>S&apos;ha produït un error durant la gravació de la image ISO amb el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="552"/>
+        <location filename="qcreatedicomdir.cpp" line="558"/>
         <source>There was an error during the creation of the DICOMDIR ISO image file. </source>
         <translation>Se ha producido un error al crear la imagen ISO del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="569"/>
+        <location filename="qcreatedicomdir.cpp" line="575"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation>El procés [ %1 ] s&apos;ha penjat després d&apos;haver-se iniciat correctament.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="577"/>
+        <location filename="qcreatedicomdir.cpp" line="583"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava escriure al procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigui executant o pot ser que s&apos;hagi tancat.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="581"/>
+        <location filename="qcreatedicomdir.cpp" line="587"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava llegir del procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigués executant.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="682"/>
+        <location filename="qcreatedicomdir.cpp" line="688"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</source>
         <oldsource>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of the device is %1 Mb</oldsource>
         <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat del dispositiu és de %1 Mb.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="701"/>
+        <location filename="qcreatedicomdir.cpp" line="707"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb.</source>
         <oldsource>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb</oldsource>
         <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat d&apos;un cd és de %1 Mb.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="708"/>
+        <location filename="qcreatedicomdir.cpp" line="714"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation>La configuració de l&apos;aplicació per gravar DICOMDIR no és correcte.
 Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt; DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="552"/>
-        <location filename="qcreatedicomdir.cpp" line="591"/>
+        <location filename="qcreatedicomdir.cpp" line="558"/>
+        <location filename="qcreatedicomdir.cpp" line="597"/>
         <source>DICOMDIR Creation Failure</source>
         <translation>Fallada en la Creació del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="591"/>
+        <location filename="qcreatedicomdir.cpp" line="597"/>
         <source>There was an error during the creation of the DICOMDIR</source>
         <translation>Hi ha hagut un error durant la creació del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="303"/>
+        <location filename="qcreatedicomdir.cpp" line="309"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
         <translation>El directori de destí no està buit, si us plau escolliu un directori buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="440"/>
+        <location filename="qcreatedicomdir.cpp" line="446"/>
         <source>Choose an empty directory...</source>
         <translation>Escolliu un directori buit...</translation>
     </message>

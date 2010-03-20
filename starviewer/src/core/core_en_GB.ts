@@ -68,7 +68,7 @@
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="279"/>
+        <location filename="angletool.cpp" line="294"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,12 +76,12 @@
 <context>
     <name>udg::DistanceTool</name>
     <message>
-        <location filename="distancetool.cpp" line="146"/>
+        <location filename="distancetool.cpp" line="154"/>
         <source>%1 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="distancetool.cpp" line="123"/>
+        <location filename="distancetool.cpp" line="131"/>
         <source>%1 px</source>
         <translation type="unfinished"></translation>
     </message>
@@ -125,17 +125,17 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="232"/>
+        <location filename="nonclosedangletool.cpp" line="247"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="228"/>
+        <location filename="nonclosedangletool.cpp" line="243"/>
         <source>0.0 degrees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="230"/>
+        <location filename="nonclosedangletool.cpp" line="245"/>
         <source>Skew lines.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1315,26 +1315,26 @@ Environment variable(logFilePath): %2</source>
     <name>udg::QThickSlabWidget</name>
     <message>
         <location filename="qthickslabwidget.cpp" line="21"/>
-        <location filename="qthickslabwidget.cpp" line="83"/>
-        <location filename="qthickslabwidget.cpp" line="200"/>
+        <location filename="qthickslabwidget.cpp" line="90"/>
+        <location filename="qthickslabwidget.cpp" line="207"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="21"/>
-        <location filename="qthickslabwidget.cpp" line="121"/>
+        <location filename="qthickslabwidget.cpp" line="128"/>
         <source>MIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="21"/>
-        <location filename="qthickslabwidget.cpp" line="125"/>
+        <location filename="qthickslabwidget.cpp" line="132"/>
         <source>MinIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="21"/>
-        <location filename="qthickslabwidget.cpp" line="129"/>
+        <location filename="qthickslabwidget.cpp" line="136"/>
         <source>Average</source>
         <translation type="unfinished"></translation>
     </message>
