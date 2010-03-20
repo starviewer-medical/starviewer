@@ -37,7 +37,7 @@ const int QCreateDicomdir::CDRomSizeMb = 700;
 const int QCreateDicomdir::DVDRomSizeMb = 4800;
 const quint64 QCreateDicomdir::CDRomSizeBytes = ( quint64 ) CDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
 const quint64 QCreateDicomdir::DVDRomSizeBytes = ( quint64 ) DVDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
-const int QCreateDicomdir::dicomHeaderSizeBytes = 23000;
+const int QCreateDicomdir::DicomHeaderSizeBytes = 23000;
 
 QCreateDicomdir::QCreateDicomdir(QWidget *parent)
  : QDialog(parent)
@@ -768,7 +768,7 @@ quint64 QCreateDicomdir::getImageSizeInBytesInLittleEndianTransferSyntax(Image *
     imageSizeInBytesInLittleEndianTransferSyntax += imageSizeInBytesInLittleEndianTransferSyntax % 2;
 
     //afegim el tamany de la capçalera
-    imageSizeInBytesInLittleEndianTransferSyntax += dicomHeaderSizeBytes;
+    imageSizeInBytesInLittleEndianTransferSyntax += DicomHeaderSizeBytes;
 
     return imageSizeInBytesInLittleEndianTransferSyntax;
 }
