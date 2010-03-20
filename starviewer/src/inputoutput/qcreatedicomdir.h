@@ -143,14 +143,14 @@ private slots:
 
 private:
     /// Constants per definir les mides de CD/DVD i disc
-    static const int CDRomSizeMb = 700;
-    static const int DVDRomSizeMb = 4800;
+    static const int CDRomSizeMb;
+    static const int DVDRomSizeMb;
 
-    static const quint64 CDRomSizeBytes = ( quint64 ) CDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
-    static const quint64 DVDRomSizeBytes = ( quint64 ) DVDRomSizeMb * ( quint64 ) ( 1024 * 1024 );
+    static const quint64 CDRomSizeBytes;
+    static const quint64 DVDRomSizeBytes;
 
     /// Indiquem de mitjana que ocupa una capçalera dicom d'una imatge, en el ticket #766 indiquem com s'ha obtingut el càcul
-    static const int dicomHeaderSizeBytes = 23000;
+    static const int dicomHeaderSizeBytes;
 
     /// Mida en bytes del que ocupen els estudis que es volen incloure en el DICOMDIR
     quint64 m_dicomdirSizeBytes;
