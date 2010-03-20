@@ -45,6 +45,6 @@ LIBS += -L$${ITKLIBDIR} \
 win32 {
  LIBS += -litktiff \
          -litkpng \
-         -litknetlib \
+         -litkv3p_netlib \
          -litkzlib
 }
