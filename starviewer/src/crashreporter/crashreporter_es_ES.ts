@@ -59,7 +59,7 @@
     <message>
         <location filename="../core/coresettings.cpp" line="55"/>
         <source>PNG (*.png)</source>
-        <translation type="unfinished"></translation>
+        <translation>PNG (*.png)</translation>
     </message>
 </context>
 <context>
@@ -92,17 +92,19 @@
     <message>
         <location filename="qcrashreporter.cpp" line="67"/>
         <source>IP</source>
-        <translation type="unfinished"></translation>
+        <translation>IP</translation>
     </message>
     <message>
         <location filename="qcrashreporter.cpp" line="73"/>
         <source>User Domain</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>No s&apos;ha de traduïr!</translatorcomment>
+        <translation>User Domain</translation>
     </message>
     <message>
         <location filename="qcrashreporter.cpp" line="123"/>
         <source>Host information</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>No s&apos;ha de traduïr!</translatorcomment>
+        <translation>Host information</translation>
     </message>
 </context>
 </TS>
