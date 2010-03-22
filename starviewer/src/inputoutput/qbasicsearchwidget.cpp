@@ -37,8 +37,6 @@ void QBasicSearchWidget::initialize()
 {
     m_fromStudyDate->setDate(QDate::currentDate());
     m_toStudyDate->setDate(QDate::currentDate());
-
-    m_patientNameText->setFocus();
 }
 
 void QBasicSearchWidget::clear()
