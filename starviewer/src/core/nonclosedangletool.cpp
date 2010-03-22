@@ -188,19 +188,23 @@ void NonClosedAngleTool::computeAngle()
     dist3 = MathTools::getDistance3D(intersection, p3);
     dist4 = MathTools::getDistance3D(intersection, p4);
 
+    // Per calcular el vectors directors farem servir la intersecció i el punt 
+    // més llunyà a la intersecció de cada recta ja que si per alguna casualitat
+    // l'usuari fa coincidir un dels punts de cada recta, la distància seria de 0 
+    // i com a conseqüència l'angle calculat ens sortiria Nan 
     if ( dist1 <= dist2 )
     {
         if ( dist3 <= dist4 )
         {
-            vd1 = MathTools::directorVector( p1, intersection );
-            vd2 = MathTools::directorVector( p3, intersection );
+            vd1 = MathTools::directorVector( p2, intersection );
+            vd2 = MathTools::directorVector( p4, intersection );
             m_middleLine->setFirstPoint(p1);
             m_middleLine->setSecondPoint(p3);
         }
         else
         {
-            vd1 = MathTools::directorVector( p1, intersection );
-            vd2 = MathTools::directorVector( p4, intersection );
+            vd1 = MathTools::directorVector( p2, intersection );
+            vd2 = MathTools::directorVector( p3, intersection );
             m_middleLine->setFirstPoint(p1);
             m_middleLine->setSecondPoint(p4);
         }
@@ -209,15 +213,15 @@ void NonClosedAngleTool::computeAngle()
     {
         if ( dist3 <= dist4 )
         {
-            vd1 = MathTools::directorVector( p2, intersection );
-            vd2 = MathTools::directorVector( p3, intersection );
+            vd1 = MathTools::directorVector( p1, intersection );
+            vd2 = MathTools::directorVector( p4, intersection );
             m_middleLine->setFirstPoint(p2);
             m_middleLine->setSecondPoint(p3);
         }
         else
         {
-            vd1 = MathTools::directorVector( p2, intersection );
-            vd2 = MathTools::directorVector( p4, intersection );
+            vd1 = MathTools::directorVector( p1, intersection );
+            vd2 = MathTools::directorVector( p3, intersection );
             m_middleLine->setFirstPoint(p2);
             m_middleLine->setSecondPoint(p4);
         }
