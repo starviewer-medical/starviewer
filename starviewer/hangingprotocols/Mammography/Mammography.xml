@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="PriorMamographyMLO">
-<hangingProtocolName>PREVI MLO</hangingProtocolName>
+<hangingProtocol name="Mammography">
+<hangingProtocolName>Mammo</hangingProtocolName>
 <numberScreens>1</numberScreens>
-<strictness>yes</strictness>
 <protocol>MG</protocol>
 <restriction identifier="1">
 <usageFlag>MATCH</usageFlag>
@@ -17,64 +16,57 @@
 <restriction identifier="3">
 <usageFlag>MATCH</usageFlag>
 <selectorAttribute>CodeMeaning</selectorAttribute>
-<valueRepresentation>medio-lateral</valueRepresentation>
+<valueRepresentation>cranio-caudal</valueRepresentation>
 </restriction>
 <restriction identifier="4">
 <usageFlag>MATCH</usageFlag>
-<selectorAttribute>Anterior</selectorAttribute>
-<valueRepresentation>1</valueRepresentation>
-</restriction>
-<restriction identifier="5">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>Anterior</selectorAttribute>
-<valueRepresentation>2</valueRepresentation>
+<selectorAttribute>CodeMeaning</selectorAttribute>
+<valueRepresentation>medio-lateral</valueRepresentation>
 </restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
-<restriction>3</restriction>
+<restriction>4</restriction>
 <type>image</type>
-<alignment>right</alignment>
 </imageSet>
 <imageSet identifier="2">
 <restriction>2</restriction>
-<restriction>3</restriction>
+<restriction>4</restriction>
 <type>image</type>
-<alignment>left</alignment>
 </imageSet>
 <imageSet identifier="3">
 <restriction>1</restriction>
 <restriction>3</restriction>
-<restriction>4</restriction>
 <type>image</type>
-<alignment>right</alignment>
 </imageSet>
 <imageSet identifier="4">
 <restriction>2</restriction>
 <restriction>3</restriction>
-<restriction>5</restriction>
 <type>image</type>
-<alignment>left</alignment>
 </imageSet>
 <displaySet identifier="1">
 <imageSetNumber>1</imageSetNumber>
 <position>0.0\1.0\0.5\0.5</position>
 <iconType>MLO_R</iconType>
+<alignment>right</alignment>
 </displaySet>
 <displaySet identifier="2">
 <imageSetNumber>2</imageSetNumber>
 <position>0.5\1.0\1.0\0.5</position>
 <patientOrientation>A\F</patientOrientation>
 <iconType>MLO_L</iconType>
+<alignment>left</alignment>
 </displaySet>
 <displaySet identifier="3">
 <imageSetNumber>3</imageSetNumber>
 <position>0.0\0.5\0.5\0.0</position>
-<iconType>MLO_R</iconType>
+<iconType>CC_R</iconType>
+<alignment>right</alignment>
 </displaySet>
 <displaySet identifier="4">
 <imageSetNumber>4</imageSetNumber>
 <position>0.5\0.5\1.0\0.0</position>
-<patientOrientation>A\F</patientOrientation>
-<iconType>MLO_L</iconType>
+<patientOrientation>A\R</patientOrientation>
+<iconType>CC_L</iconType>
+<alignment>left</alignment>
 </displaySet>
 </hangingProtocol>

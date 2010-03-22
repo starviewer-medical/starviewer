@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="MamographyPrevious">
-<hangingProtocolName>Mamo Prev</hangingProtocolName>
+<hangingProtocol name="MammographyPrevious">
+<hangingProtocolName>MammoPrev</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <protocol>MG</protocol>
 <hasPrevious>yes</hasPrevious>

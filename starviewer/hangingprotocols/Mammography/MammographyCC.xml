@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="MamographyCC">
+<hangingProtocol name="MammographyCC">
 <hangingProtocolName>CC</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <protocol>MG</protocol>
