@@ -123,12 +123,12 @@ void DistanceTool::annotateNewPoint()
         DrawerText * text = new DrawerText;
         // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
         // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
+        double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
         const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
 
         if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
         {
-            double * spacing = m_2DViewer->getInput()->getSpacing();
-            text->setText( tr("%1 px").arg( m_line->computeDistance( spacing ), 0, 'f', 0 ) );
+            text->setText( tr("%1 px").arg( m_line->computeDistance( vtkSpacing ), 0, 'f', 0 ) );
         }
         else
         {
@@ -139,10 +139,8 @@ void DistanceTool::annotateNewPoint()
                 double * firstPoint = m_line->getFirstPoint();
                 double * secondPoint = m_line->getSecondPoint();
 
-                double * spacing = m_2DViewer->getInput()->getSpacing();
-                
-                double xx = ( firstPoint[0] - secondPoint[0] ) / spacing[0] * pixelSpacing[0];
-                double yy = ( firstPoint[1] - secondPoint[1] ) / spacing[1] * pixelSpacing[1];
+                double xx = ( firstPoint[0] - secondPoint[0] ) / vtkSpacing[0] * pixelSpacing[0];
+                double yy = ( firstPoint[1] - secondPoint[1] ) / vtkSpacing[1] * pixelSpacing[1];
                 double value = std::pow(xx, 2) + std::pow(yy, 2);
                 distance = std::sqrt(value);
             }
