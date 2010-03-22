@@ -1,7 +1,8 @@
 # Aquí cal afegir les extensions que volem que s'incloguin a l'executable
 #
 
-PLAYGROUND_EXTENSIONS = volume3dviewtesting
+PLAYGROUND_EXTENSIONS = volume3dviewtesting \
+                        dicomprint
 
 #CONTRIB_EXTENSIONS =
 
