@@ -132,19 +132,35 @@ void DistanceTool::annotateNewPoint()
         }
         else
         {
+            bool distanceIsComputed = false;
             double distance;
-            //En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte. \TODO S'hauria d'unificar.
+            // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte. \TODO S'hauria d'unificar.
+            // Podem tenir imatges de la mateixa sèrie amb spacings diferents
             if ( m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US" )
             {
-                double * firstPoint = m_line->getFirstPoint();
-                double * secondPoint = m_line->getSecondPoint();
+                Image *image = m_2DViewer->getCurrentDisplayedImage();
+                if( image )
+                {
+                    const double *usSpacing = image->getPixelSpacing();
+                    double * firstPoint = m_line->getFirstPoint();
+                    double * secondPoint = m_line->getSecondPoint();
 
-                double xx = ( firstPoint[0] - secondPoint[0] ) / vtkSpacing[0] * pixelSpacing[0];
-                double yy = ( firstPoint[1] - secondPoint[1] ) / vtkSpacing[1] * pixelSpacing[1];
-                double value = std::pow(xx, 2) + std::pow(yy, 2);
-                distance = std::sqrt(value);
+                    double xx = ( firstPoint[0] - secondPoint[0] ) / vtkSpacing[0] * usSpacing[0];
+                    double yy = ( firstPoint[1] - secondPoint[1] ) / vtkSpacing[1] * usSpacing[1];
+                    double value = std::pow(xx, 2) + std::pow(yy, 2);
+                    distance = std::sqrt(value);
+                    distanceIsComputed = true;
+                }
+                else
+                {
+                    // S'ha aplicat una reconstrucció, per tant l'spacing que es donarà serà el de vtk
+                    // TODO això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per 
+                    // modalitats en les que les reconstruccions no tinguin sentit
+                    distanceIsComputed = false;
+                }
             }
-            else
+
+            if( !distanceIsComputed )
             {
                 distance = m_line->computeDistance();
             }
