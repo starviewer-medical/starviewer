@@ -11,7 +11,6 @@
         <file>../interface/interface_es_ES.qm</file>
         <file>cache/database.sql</file>
         <file>images/addNewPrinter.png</file>
-        <file>images/addViewRight.png</file>
         <file>images/advancedSearch.png</file>
         <file>images/airbrush.png</file>
         <file>images/angle.png</file>
@@ -26,7 +25,6 @@
         <file>images/CC_L.png</file>
         <file>images/CC_R.png</file>
         <file>images/cdrom.png</file>
-        <file>images/cineRecord.png</file>
         <file>images/clear.png</file>
         <file>images/clutEdit.png</file>
         <file>images/coronal.png</file>
@@ -54,10 +52,7 @@
         <file>images/folderopen.png</file>
         <file>images/fullscreen.png</file>
         <file>images/grid.png</file>
-        <file>images/grid_3_2.png</file>
-        <file>images/grid_2_3.png</file>
         <file>images/harddrive.png</file>
-        <file>images/icon.png</file>
         <file>images/info.png</file>
         <file>images/invertWL.png</file>
         <file>images/kinThumbnail.png</file>
@@ -68,7 +63,6 @@
         <file>images/MLO_L.png</file>
         <file>images/mouse.png</file>
         <file>images/move.png</file>
-        <file>images/mpr3D.png</file>
         <file>images/new.png</file>
         <file>images/nonClosedAngle.png</file>
         <file>images/open.png</file>
@@ -89,7 +83,6 @@
         <file>images/printerTest.png</file>
         <file>images/record.png</file>
         <file>images/referenceLines.png</file>
-        <file>images/reload.png</file>
         <file>images/removePrinter.png</file>
         <file>images/repeat.png</file>
         <file>images/restore.png</file>
@@ -103,29 +96,20 @@
         <file>images/sagital.png</file>
         <file>images/search.png</file>
         <file>images/seed.png</file>
-        <file>images/sequenceBegin.png</file>
-        <file>images/sequenceEnd.png</file>
         <file>images/series.png</file>
-        <file>images/singleView.png</file>
         <file>images/slicecursor.png</file>
         <file>images/slicing.png</file>
         <file>images/small-warning.png</file>
         <file>images/splash.png</file>
         <file>images/splashLite.png</file>
         <file>images/starviewer.png</file>
-        <file>images/stop.png</file>
         <file>images/store.png</file>
         <file>images/structuredReportThumbnail.png</file>
         <file>images/synchronize.png</file>
         <file>images/usbpendrive.png</file>
-        <file>images/verticalWidget.png</file>
         <file>images/view.png</file>
         <file>images/view_left_right.png</file>
-        <file>images/view_sidetree.png</file>
-        <file>images/view_top_bottom.png</file>
         <file>images/viewerInfo.png</file>
-        <file>images/viewmag+.png</file>
-        <file>images/viewmag-.png</file>
         <file>images/voxelInformation.png</file>
         <file>images/windowLevel.png</file>
         <file>images/zoom.png</file>
