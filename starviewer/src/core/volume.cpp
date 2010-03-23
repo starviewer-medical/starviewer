@@ -604,16 +604,14 @@ void Volume::inputDestructor()
 
 int Volume::readSingleFile( QString fileName )
 {
-    ProgressCommand::Pointer observer = ProgressCommand::New();
-    m_reader->AddObserver( itk::ProgressEvent(), observer );
-
     int errorCode = NoError;
 
-    m_reader->SetFileName( qPrintable(fileName) );
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName( qPrintable(fileName) );
     emit progress(0);
     try
     {
-        m_reader->Update();
+        reader->Update();
     }
     catch ( itk::ExceptionObject & e )
     {
@@ -642,7 +640,7 @@ int Volume::readSingleFile( QString fileName )
         // TODO Quan solucionem correctament el ticket #1166 (actualització a gdcm 2.0.x) aquesta assignació desapareixerà
         if( !m_imageSet.isEmpty() )
         {
-            m_reader->GetOutput()->SetOrigin( m_imageSet.first()->getImagePositionPatient() );
+            reader->GetOutput()->SetOrigin( m_imageSet.first()->getImagePositionPatient() );
             // Cal tenir en compte si la imatge original conté informació d'spacing vàlida per fer l'assignació
             const double *imageSpacing = m_imageSet.first()->getPixelSpacing();
             if( imageSpacing[0] > 0.0 )
@@ -650,11 +648,12 @@ int Volume::readSingleFile( QString fileName )
                 double spacing[3];
                 spacing[0] = imageSpacing[0];
                 spacing[1] = imageSpacing[1];
-                spacing[2] = m_reader->GetOutput()->GetSpacing()[2];
-                m_reader->GetOutput()->SetSpacing( spacing );
+                spacing[2] = reader->GetOutput()->GetSpacing()[2];
+                reader->GetOutput()->SetSpacing( spacing );
             }
         }
-        this->setData( m_reader->GetOutput() );
+        
+        this->setData( reader->GetOutput() );
         // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
         emit progress( 100 );
     }
