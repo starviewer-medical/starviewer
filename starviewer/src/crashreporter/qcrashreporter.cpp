@@ -180,7 +180,6 @@ bool QCrashReporter::restart(const char * path)
     
     wchar_t command[MAX_PATH * 3 + 6];
     wcscpy_s( command, pathWchar);
-    wcscat_s( command, L" \"" );
 
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
