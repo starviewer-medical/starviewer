@@ -7,6 +7,8 @@
 #ifndef UDGVOLUME_CPP
 #define UDGVOLUME_CPP
 
+#include "dicomtagreader.h"
+#include "dicomdictionary.h"
 #include "dicomimagereader.h"
 #include "dicomimagereadervtk.h"
 #include "dicomimagereaderdcmtk.h"
@@ -648,7 +650,17 @@ int Volume::readSingleFile( QString fileName )
                 double spacing[3];
                 spacing[0] = imageSpacing[0];
                 spacing[1] = imageSpacing[1];
-                spacing[2] = reader->GetOutput()->GetSpacing()[2];
+                // HACK ticket #1204 - Degut a bugs en les gdcm integrades amb itk, l'spacing between slices no es calcula
+                // correctament i se li assigna l'slice thickness al z-spacing. Una solució temporal i ràpida és llegir el tag
+                // Spacing Between Slices i actualitzar el z-spacing, si aquest tag existeix
+                // El cost de llegir aquest tag per un fitxer de 320 imatges és d'uns 470 milisegons aproximadament 
+                // TODO un cop actualitzats a gdcm 2.0.x, aquest HACK serà innecessari
+                DICOMTagReader *dicomReader = new DICOMTagReader( m_imageSet.first()->getPath() );
+                double zSpacing = dicomReader->getValueAttributeAsQString(DICOMSpacingBetweenSlices).toDouble();
+                if( zSpacing == 0.0 )
+                    zSpacing = reader->GetOutput()->GetSpacing()[2];
+                
+                spacing[2] = zSpacing;                
                 reader->GetOutput()->SetSpacing( spacing );
             }
         }
