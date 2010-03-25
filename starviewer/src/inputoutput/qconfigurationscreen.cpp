@@ -505,6 +505,12 @@ void QConfigurationScreen::queryRetrieveServiceEnabledChanged()
 {
     m_textQueryRetrieveServicePort->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
     m_textQueryRetrieveServicePort->setText("");
+    m_checkDefault->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());//"Default query PACS" no té sentit que estigui activat si no es pot fer query en el PACS
+
+    if (!m_checkBoxQueryRetrieveEnabled->isChecked())
+    {
+        m_checkDefault->setChecked(false);
+    }
 }
 
 void QConfigurationScreen::storeServiceEnabledChanged()
