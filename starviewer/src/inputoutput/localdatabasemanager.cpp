@@ -478,6 +478,8 @@ void LocalDatabaseManager::deleteOldStudies()
     //Comprovem si tenim activada la opció d'esborra estudis vells, sino es així no fem res
     if (!settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool()) return;
 
+    INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1).toString("dd/MM/yyyy"));
+
     dbConnect.open();
     studyDAL.setDatabaseConnection(&dbConnect);
     studyListToDelete = studyDAL.query(oldStudiesMask, LocalDatabaseManager::LastAccessDateSelectedStudies);
@@ -488,6 +490,11 @@ void LocalDatabaseManager::deleteOldStudies()
     {
         dbConnect.close();
         return;
+    }
+
+    if (studyListToDelete.count() == 0)
+    {
+        INFO_LOG("No hi ha estudis vells per esborrar");
     }
 
     foreach(Study *study, studyListToDelete)
@@ -823,10 +830,10 @@ int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *d
             return deletePatientFromDatabase(dbConnect, patientMaskToDelete);
         }
         else return localDatabaseStudyDAL.getLastError();
-
     }
     else 
     {
+        ERROR_LOG("No s'ha trobat cap pacient a esborrar");
         //No s'ha trobat pacient a esborrar
         return localDatabaseStudyDAL.getLastError();
     }
@@ -981,6 +988,12 @@ void LocalDatabaseManager::setLastError(int sqliteLastError)
         m_lastError = DatabaseCorrupted;
     }
     else m_lastError = DatabaseError;
+
+    //El valor dels errors es pot consultar a http://www.sqlite.org/c3ref/c_abort.html
+    if (sqliteLastError != SQLITE_OK)
+    {
+        ERROR_LOG("Codi error base de dades " + QString().setNum(sqliteLastError));
+    }
 }
 
 QString LocalDatabaseManager::getSeriesThumbnailPath(QString studyInstanceUID, Series *series)
