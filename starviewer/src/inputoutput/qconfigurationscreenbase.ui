@@ -294,7 +294,7 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="2">
+             <item row="0" column="4">
               <spacer name="horizontalSpacer_2">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -324,7 +324,7 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
+             <item row="1" column="4">
               <spacer name="horizontalSpacer">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -332,6 +332,29 @@
                <property name="sizeHint" stdset="0">
                 <size>
                  <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="3">
+              <widget class="QCheckBox" name="m_checkDefault">
+               <property name="text">
+                <string>Default query PACS</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>10</width>
                  <height>20</height>
                 </size>
                </property>
@@ -423,11 +446,17 @@
             <widget class="QLineEdit" name="m_textDescription"/>
            </item>
            <item row="3" column="1">
-            <widget class="QCheckBox" name="m_checkDefault">
-             <property name="text">
-              <string>Default query PACS</string>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-            </widget>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>
@@ -1048,12 +1077,12 @@
   <tabstop>m_textAddress</tabstop>
   <tabstop>m_checkBoxQueryRetrieveEnabled</tabstop>
   <tabstop>m_textQueryRetrieveServicePort</tabstop>
+  <tabstop>m_checkDefault</tabstop>
   <tabstop>m_checkBoxStoreEnabled</tabstop>
   <tabstop>m_textStoreServicePort</tabstop>
   <tabstop>m_textInstitution</tabstop>
   <tabstop>m_textLocation</tabstop>
   <tabstop>m_textDescription</tabstop>
-  <tabstop>m_checkDefault</tabstop>
   <tabstop>m_buttonAddPacs</tabstop>
   <tabstop>m_buttonUpdatePacs</tabstop>
   <tabstop>m_textAETitleMachine</tabstop>
