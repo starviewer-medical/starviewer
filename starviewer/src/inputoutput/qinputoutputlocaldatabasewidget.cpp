@@ -275,6 +275,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                 {
                     if (!dicomMaskToDelete.getSeriesUID().isEmpty())
                     {
+                        INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache la serie %1 de l'estudi %2").arg(dicomMaskToDelete.getSeriesUID(), dicomMaskToDelete.getStudyUID()));
                         localDatabaseManager.deleteSeries(dicomMaskToDelete.getStudyUID(), dicomMaskToDelete.getSeriesUID());
 
                         m_seriesListWidget->removeSeries(dicomMaskToDelete.getSeriesUID());
@@ -282,6 +283,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                     }
                     else
                     {
+                        INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache l'estudi %1").arg(dicomMaskToDelete.getStudyUID()));
                         localDatabaseManager.deleteStudy(dicomMaskToDelete.getStudyUID());
 
                         m_seriesListWidget->clear();
