@@ -33,13 +33,13 @@ public:
 
 private:
     /// Crea el thumbnail d'un objecte dicom que sigui una imatge
-    QImage createImageThumbnail(QString imageFileName, int resolution = 100);
+    QImage createImageThumbnail(QString imageFileName, int resolution);
 
     /// Crea el thumbnail a partir d'un DICOMTagReader
-    QImage createThumbnail(DICOMTagReader *reader, int resolution = 100);
+    QImage createThumbnail(DICOMTagReader *reader, int resolution);
     
     /// Crea el thumbnail a partir d'una DicomImage
-    QImage createThumbnail(DicomImage *dicomImage, int resolution = 100);
+    QImage createThumbnail(DicomImage *dicomImage, int resolution);
     
     /// Comprova que el dataset compleixi els requisitis necessaris per poder fer un thumbnail
     /// Retorna true si és un dataset vàlid, false altrament
