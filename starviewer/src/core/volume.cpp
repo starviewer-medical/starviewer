@@ -759,10 +759,21 @@ void Volume::createNeutralVolume()
     m_imageDataVTK->SetScalarTypeToShort();
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();
-    // ATENCIÓ memset posa el valor (segon paràmetre) interpretat com
-    // unsigned char i el nombre de blocs de memòria són indicats en bytes, 
-    // per això multipliquem per 2
-    memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
+    // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
+    signed short * scalarPointer = (signed short *) m_imageDataVTK->GetScalarPointer();
+    signed short value;
+    for( int i=0; i<10; i++ )
+    {
+        value = 150-i*20;
+        if( i>4 )
+            value = 150-(10-i-1)*20;
+
+        for( int j = 0; j<10; j++ )
+        {            
+            *scalarPointer = value;
+            *scalarPointer++;
+        }
+    }
     // Quan creem el volum neutre indiquem que només tenim 1 sola fase 
     // TODO potser s'haurien de crear tantes fases com les que indiqui la sèrie?
     this->setNumberOfPhases( 1 );
