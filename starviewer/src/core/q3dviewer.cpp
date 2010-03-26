@@ -421,20 +421,8 @@ QString Q3DViewer::getRenderFunctionAsString()
 
 void Q3DViewer::setInput( Volume* volume )
 {
-    if ( !isSupportedVolume( volume ) )
-    {
-        DEBUG_LOG( "El format del volum no està suportat" );
-        WARN_LOG( "El format del volum no està suportat." );
-        QMessageBox::warning( this, tr("Not supported volume"), tr("Current volume cannot be opened because its format is not supported.") );
+    if( !checkInputVolume(volume) )
         return;
-    }
-    if ( !canAllocateMemory( volume->getVtkData()->GetNumberOfPoints() * sizeof(unsigned short) ) ) // unsigned short és el tipus que necessita el renderer
-    {
-        DEBUG_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
-        WARN_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
-        QMessageBox::warning( this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again.") );
-        return;
-    }
 
     if( m_clippingPlanes )
     {
@@ -1175,6 +1163,43 @@ void Q3DViewer::setContourThreshold( double threshold )
 void Q3DViewer::setIsoValue( int isoValue )
 {
     m_volumeRayCastIsosurfaceFunction->SetIsoValue( isoValue );
+}
+
+bool Q3DViewer::checkInputVolume( Volume *volume )
+{
+    if( !volume )
+    {
+        DEBUG_LOG("El volum és NUL");
+        WARN_LOG("El volum és NUL");
+        return false;
+    }
+    
+    // Comprovem si tenim imatges
+    if( volume->getImages().isEmpty() )
+    {
+        DEBUG_LOG("El volum no conté imatges");
+        WARN_LOG("El volum no conté imatges");
+        return false;
+    }
+
+    // Comprovem que el volum que volem carregar càpiga a memòria 
+    if ( !volume->fitsIntoMemory() )
+    {
+        DEBUG_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
+        WARN_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
+        QMessageBox::warning( this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again.") );
+        return false;
+    }
+
+    if ( !isSupportedVolume( volume ) )
+    {
+        DEBUG_LOG( "El format del volum no està suportat" );
+        WARN_LOG( "El format del volum no està suportat." );
+        QMessageBox::warning( this, tr("Not supported volume"), tr("Current volume cannot be opened because its format is not supported.") );
+        return false;
+    }
+
+    return true;
 }
 
 bool Q3DViewer::canAllocateMemory( int size )
