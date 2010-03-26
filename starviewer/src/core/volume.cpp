@@ -768,6 +768,30 @@ void Volume::createNeutralVolume()
     this->setNumberOfPhases( 1 );
 }
 
+bool Volume::fitsIntoMemory()
+{
+    if( m_dataLoaded )
+        return true;
+    
+    unsigned long long int size = 0;
+    foreach( Image *image, m_imageSet )
+    {
+        size += image->getColumns() * image->getRows() * sizeof( VoxelType );
+    }
+
+    char *p = 0;
+    try
+    {
+        p = new char[size];
+        delete[] p;
+        return true;
+    }
+    catch ( std::bad_alloc &ba )
+    {
+        return false;
+    }
+}
+
 };
 
 #endif
