@@ -21,6 +21,7 @@
 #include "interfacesettings.h"
 #include "shortcuts.h"
 #include "starviewerapplicationcommandline.h"
+#include "applicationcommandlineoptions.h"
 
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
@@ -31,6 +32,7 @@
 #include <QLocale>
 #include <QTextCodec>
 #include <QDir>
+#include <QMessageBox>
 #include <qtsingleapplication.h>
 
 typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
@@ -162,12 +164,22 @@ int main(int argc, char *argv[])
     if (app.arguments().count() > 1)
     {
         /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per 
-         *processar-los, si els arguments no són correctes no continuem i finalitzem Starviewer*/
+         *processar-los, si els arguments no són correctes mostre QMessagebox si hi ha una altra instància d'Starviewer finalitzem aquí.*/
         if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
         {
-            std::cout << qPrintable(errorInvalidCommanLineArguments) << std::endl;
+            QString invalidCommandLine = QObject::tr("Invalid command line: ") + errorInvalidCommanLineArguments + "\n";
+            invalidCommandLine += QObject::tr("usage: %1 [options]").arg(udg::ApplicationNameString) + "\n\n";
+            invalidCommandLine += QObject::tr("Options:") + "\n";
+            invalidCommandLine += StarviewerSingleApplicationCommandLineSingleton::instance()->getStarviewerApplicationCommandLineOptions().getOptionsDescription();
+
+            QMessageBox::warning(NULL, udg::ApplicationNameString, invalidCommandLine);
+
             ERROR_LOG("Arguments de linia de comandes invalids, error : " + errorInvalidCommanLineArguments);
-            return 0;
+
+            if (app.isRunning()) //Si ja hi ha una altra instància execuntat-se donem el missatge d'error i tanquem Starviewer
+            {
+                return 0;
+            }
         }
     }
 
