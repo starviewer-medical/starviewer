@@ -106,6 +106,18 @@ QString ApplicationCommandLineOptions::getParserErrorMessage()
     return m_parserErrorMessage;
 }
 
+QString ApplicationCommandLineOptions::getOptionsDescription()
+{
+    QString optionsDescription;
+
+    foreach(QString option, m_commandLineOptions.keys())
+    {
+        optionsDescription +=  optionSelectorCharacter + option.leftJustified(25, ' ') + m_commandLineOptions[option] + "\n";
+    }
+
+    return optionsDescription;
+}
+
 bool ApplicationCommandLineOptions::isAnOption(QString optionName)
 {
     return optionName.startsWith(optionSelectorCharacter); //Les opcions sempre comencen "-"
