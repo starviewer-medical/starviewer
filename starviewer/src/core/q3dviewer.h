@@ -164,6 +164,9 @@ private:
     /// Coronal, però depenent del tipus de Sèrie podria ser una altra
     void setDefaultOrientationForCurrentInput();
 
+    /// Comprova si el volum és vàlid com a input. Retorna cert si és així, fals altrament
+    bool checkInputVolume( Volume *volume );
+    
     /// Retorna cert si és possible reservar la quantitat de memòria especificada.
     bool canAllocateMemory( int size );
 
