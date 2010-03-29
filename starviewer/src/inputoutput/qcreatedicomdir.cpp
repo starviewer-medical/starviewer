@@ -679,7 +679,6 @@ void QCreateDicomdir::deviceChanged( int index )
      Cridem aquest mètode perquè en funció del dispositu potser que es copïi o no la carpeta al DICOMDIR per tant s'ha d'actualitzar
      la mida del DICOMDIR*/
     updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
-    showDICOMDIRSize();//El cridem per refrescar la barra de progrés   
     
     switch( m_currentDevice )
     {
@@ -724,6 +723,8 @@ void QCreateDicomdir::deviceChanged( int index )
 
             break;
     }
+
+    showDICOMDIRSize();//El cridem per refrescar la barra de progrés   
 }
 
 bool QCreateDicomdir::checkDICOMDIRBurningApplicationConfiguration()
