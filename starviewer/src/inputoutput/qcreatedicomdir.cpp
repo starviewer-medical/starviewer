@@ -56,6 +56,8 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
 
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
+    m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool());
+    m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool());
 
     // Per defecte creem els dicomdir al discdur
     m_hardDiskAction->trigger();
@@ -121,6 +123,8 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonRemoveAll , SIGNAL( clicked() ) , this , SLOT( resetDICOMDIRList() ) );
     connect( m_buttonExamineDisk , SIGNAL( clicked() ) , this , SLOT( examineDicomdirPath() ) );
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
+    connect( m_copyFolderContentToDICOMDIRCdDvdCheckBox , SIGNAL( stateChanged(int) ) , this , SLOT( copyContentFolderToDICOMDIRCheckBoxsStateChanged() ) );
+    connect( m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox , SIGNAL( stateChanged(int) ) , this , SLOT( copyContentFolderToDICOMDIRCheckBoxsStateChanged() ) );
 }
 
 void QCreateDicomdir::showDICOMDIRSize()
@@ -825,13 +829,9 @@ quint64 QCreateDicomdir::getFolderToCopyToDICOMDIRSizeInBytes()
 
 bool QCreateDicomdir::haveToCopyFolderContentToDICOMDIR()
 {
-    Settings settings;
-    bool copyFolderContentToDICOMDIRCdDvd = settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool();
-    bool copyFolderContentToDICOMDIRUsbHardDisk = settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool();
-
     //S'ha de copiar el visor DICOM si està configurat així als settings i el dispositiu actual és cd/dvd
-    return (copyFolderContentToDICOMDIRCdDvd &&  (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom)) || 
-        (copyFolderContentToDICOMDIRUsbHardDisk &&  (m_currentDevice == CreateDicomdir::UsbPen || m_currentDevice == CreateDicomdir::HardDisk));
+    return (m_copyFolderContentToDICOMDIRCdDvdCheckBox->isChecked() &&  (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom)) || 
+        (m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->isChecked() && (m_currentDevice == CreateDicomdir::UsbPen || m_currentDevice == CreateDicomdir::HardDisk));
 }
 
 void QCreateDicomdir::updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize()
@@ -858,4 +858,9 @@ void QCreateDicomdir::updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize()
     }
 }
 
+void QCreateDicomdir::copyContentFolderToDICOMDIRCheckBoxsStateChanged()
+{
+    updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
+    showDICOMDIRSize();
+}
 }
