@@ -134,7 +134,7 @@ void QCreateDicomdir::showDICOMDIRSize()
     Settings settings;
 
     sizeInMb = m_dicomdirSizeBytes / ( 1024.0 * 1024 );//passem a Mb
-    sizeText.setNum( sizeInMb , 'f' , 2 );
+    sizeText.setNum( sizeInMb , 'f' , 0 );
 
     //Si les imatges s'han de convertir a LittleEndian obtenim el tamany que ocuparà l'estudi de manera aproximada
     if (settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool())
@@ -154,8 +154,6 @@ void QCreateDicomdir::showDICOMDIRSize()
         m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
 
     m_progressBarOcupat->repaint();
-
-    sizeText.setNum( sizeInMb , 'f' , 0 );
 
     sizeOfDicomdirText = tr("%1 Mb").arg( sizeText );
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
