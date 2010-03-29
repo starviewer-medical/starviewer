@@ -141,6 +141,10 @@ private slots:
     /// Slot que s'activa quan s'ha acabat de generar la imatge del DICOMDIR i per tant es pot executar el programa de gravació
     void openBurningApplication(bool createIsoResult);
 
+    ///Slot que s'activa quan es canvia el valor d'alguns dels checkbox que indiquen si s'ha de copiar el contingut de la carpeta auxiliar al DICOMDIR
+	///Actualitza el tamany del DICOMDIR en funció de si s'ha de copiar o no la carpeta auxiliar al DICOMDIR
+    void copyContentFolderToDICOMDIRCheckBoxsStateChanged();
+
 private:
     /// Constants per definir les mides de CD/DVD i disc
     static const int CDRomSizeMb;
