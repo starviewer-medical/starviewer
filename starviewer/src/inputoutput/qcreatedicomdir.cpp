@@ -786,9 +786,8 @@ void QCreateDicomdir::updateAvailableSpaceToRecord()
         case CreateDicomdir::HardDisk:
             if( path.isEmpty() || !QDir(path).exists() )
             {
-                QFileInfoList drives = QDir::drives();
-                m_lineEditDicomdirPath->setText( drives.first().absolutePath() );
-                path = m_lineEditDicomdirPath->text();
+                m_lineEditDicomdirPath->setText( QDir::toNativeSeparators( QDir::rootPath() ) );
+                path = QDir::rootPath();
             }
             m_availableSpaceToRecordInBytes = diskInfo.getNumberOfFreeBytes(path);
             break;
