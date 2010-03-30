@@ -89,10 +89,12 @@ QViewer::QViewer( QWidget *parent )
 
 QViewer::~QViewer()
 {
-    m_windowToImageFilter->Delete();
-    delete m_vtkWidget;
+    // Cal que la eliminació del vtkWidget sigui al final ja que els altres
+    // objectes que eliminem en poden fer ús durant la seva destrucció
     delete m_toolProxy;
     delete m_patientBrowserMenu;
+    m_windowToImageFilter->Delete();
+    delete m_vtkWidget;
 }
 
 vtkRenderWindowInteractor *QViewer::getInteractor()
