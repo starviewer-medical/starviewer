@@ -418,14 +418,14 @@
        <item>
         <widget class="QLineEdit" name="m_textDICOMDIRFolderPathToCopy">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="m_buttonExaminateDICOMDIRFolderPathToCopy">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="toolTip">
           <string>Examine disk to find the folder to copy to DICOMDIR</string>

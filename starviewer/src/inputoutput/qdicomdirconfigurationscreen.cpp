@@ -82,7 +82,6 @@ void QDICOMDIRConfigurationScreen::loadDICOMDIRDefaults()
     m_checkBoxCopyFolderContentToDICOMDIRCdDvd->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool());
     m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool());
     m_textDICOMDIRFolderPathToCopy->setText(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
-    checkBoxCopyFolderContentToDICOMDIRToggled();
 }
 
 bool QDICOMDIRConfigurationScreen::validateChanges()
@@ -109,7 +108,18 @@ bool QDICOMDIRConfigurationScreen::validateChanges()
 
     if ( m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() || m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked() )
     {
-        if ( m_textDICOMDIRFolderPathToCopy->text().isEmpty() || !QFile::exists( m_textDICOMDIRFolderPathToCopy->text() ) )
+        //Si ens han indiquen que s'ha de copiar el contingut del DICOMDIR en algun dispostiu és obligatori indicar el Path
+        if ( m_textDICOMDIRFolderPathToCopy->text().isEmpty() )
+        {
+            QMessageBox::warning( this, ApplicationNameString, tr( "You have to indicate the path of folder to copy to DICOMDIR.") );
+            return false;
+        }
+
+    }
+
+    if ( m_textDICOMDIRFolderPathToCopy->isModified() && !m_textDICOMDIRFolderPathToCopy->text().isEmpty() )
+    {
+        if ( !QFile::exists( m_textDICOMDIRFolderPathToCopy->text() ) )
         {
             QMessageBox::warning( this, ApplicationNameString, tr( "Invalid path of folder to copy to DICOMDIR.") );
             return false;
@@ -174,14 +184,6 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRFolderPathToCopy()
     {
         m_textDICOMDIRFolderPathToCopy->setText( QDir::toNativeSeparators(folderPathToCopy) );
     }
-}
-
-void QDICOMDIRConfigurationScreen::checkBoxCopyFolderContentToDICOMDIRToggled()
-{
-    bool enabled = m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() || m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked();
-    
-    m_textDICOMDIRFolderPathToCopy->setEnabled(enabled);
-    m_buttonExaminateDICOMDIRFolderPathToCopy->setEnabled(enabled);
 }
 
 void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
