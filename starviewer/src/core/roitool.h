@@ -60,6 +60,10 @@ private:
     /// Mètode que tanca la forma de la polilínia que s'ha dibuixat
     void closeForm();
 
+private slots:
+    /// Inicialitza l'estat de la tool
+    void initialize();
+
 private:
     /// Polilínia principal: és la polilínia que ens marca la forma que hem anat editant.
     QPointer<DrawerPolyline> m_mainPolyline;
