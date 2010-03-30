@@ -59,6 +59,7 @@ void DatabaseConnection::rollbackTransaction()
 {
     sqlite3_exec(m_databaseConnection, "ROLLBACK", 0, 0, 0);
     m_transactionLock->release();
+    INFO_LOG("S'ha cancel.lat transaccio de la BD");
 }
 
 QString DatabaseConnection::formatTextToValidSQLSyntax( QString string )
