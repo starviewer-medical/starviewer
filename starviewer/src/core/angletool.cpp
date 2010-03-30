@@ -20,7 +20,7 @@
 namespace udg {
 
 AngleTool::AngleTool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent), m_mainPolyline(NULL), m_circlePolyline(NULL), m_state(NONE)
+ : Tool(viewer, parent), m_mainPolyline(NULL), m_circlePolyline(NULL), m_state(None)
 {
     m_toolName = "AngleTool";
     m_hasSharedData = false;
@@ -34,7 +34,7 @@ AngleTool::AngleTool( QViewer *viewer, QObject *parent )
 
 AngleTool::~AngleTool()
 {
-    if ( m_state != NONE )
+    if ( m_state != None )
     {
         bool hasToRefresh = false;
         // Cal decrementar el reference count perquè 
@@ -68,9 +68,9 @@ void AngleTool::handleEvent( long unsigned eventID )
             {
                 if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
                 {
-                    if ( m_state == NONE )
+                    if ( m_state == None )
                         this->annotateFirstPoint();
-                    else if ( m_state == FIRST_POINT_FIXED )
+                    else if ( m_state == FirstPointFixed )
                     {
                         this->fixFirstSegment();
                         this->findInitialDegreeArc();
@@ -78,7 +78,7 @@ void AngleTool::handleEvent( long unsigned eventID )
                     else
                     {
                         //voldrem enregistrar l'últim punt, pertant posem l'estat a none
-                        m_state = NONE;
+                        m_state = None;
                         finishDrawing();
                     }
                     m_2DViewer->getDrawer()->refresh();
@@ -154,15 +154,15 @@ void AngleTool::annotateFirstPoint()
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 
     //actualitzem l'estat de la tool
-    m_state = FIRST_POINT_FIXED;
+    m_state = FirstPointFixed;
 }
 
 void AngleTool::fixFirstSegment()
 {
     m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 
-    //posem l'estat de la tool a CENTER_FIXED, així haurà agafat l'últim valor.
-    m_state = CENTER_FIXED;
+    //posem l'estat de la tool a CenterFixed, així haurà agafat l'últim valor.
+    m_state = CenterFixed;
 
     //creem la polilínia per a dibuixar l'arc de circumferència i l'afegim al drawer
     m_circlePolyline = new DrawerPolyline;
@@ -260,23 +260,23 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
     if( !m_mainPolyline )
         return;
 
-    if( m_state != NONE )
+    if( m_state != None )
     {
         // agafem la coordenada de pantalla
         double clickedWorldPoint[3];
         m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
         int pointIndex;
-        if( m_state == FIRST_POINT_FIXED )
+        if( m_state == FirstPointFixed )
             pointIndex = 1;
-        else if( m_state == CENTER_FIXED )
+        else if( m_state == CenterFixed )
             pointIndex = 2;
 
         // assignem el segon o tercer punt de l'angle segons l'estat
         m_mainPolyline->setPoint( pointIndex, clickedWorldPoint );
         m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 
-        if( m_state == CENTER_FIXED )
+        if( m_state == CenterFixed )
             drawCircle();
         
         m_2DViewer->getDrawer()->refresh();
@@ -393,7 +393,7 @@ void AngleTool::initialize()
 
     m_mainPolyline = NULL;
     m_circlePolyline = NULL;
-    m_state = NONE;
+    m_state = None;
 }
 
 }

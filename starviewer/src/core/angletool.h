@@ -26,7 +26,7 @@ class AngleTool : public Tool
 Q_OBJECT
 public:
     /// Possibles estats de la tool
-    enum { CENTER_FIXED, FIRST_POINT_FIXED, NONE };
+    enum { CenterFixed, FirstPointFixed, None };
     
     AngleTool( QViewer *viewer, QObject *parent = 0 );
     ~AngleTool();
