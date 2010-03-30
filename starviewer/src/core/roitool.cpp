@@ -17,7 +17,7 @@
 namespace udg {
 
 ROITool::ROITool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent), m_hasToComputeStatisticsData(true)
+ : Tool(viewer, parent), m_roiPolygon(0), m_hasToComputeStatisticsData(true), m_mainPolyline(0), m_closingPolyline(0)
 {
     m_toolName = "ROITool";
     m_hasSharedData = false;
@@ -28,9 +28,7 @@ ROITool::ROITool( QViewer *viewer, QObject *parent )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
     }
 
-    m_closingPolyline = NULL;
-    m_mainPolyline = NULL;
-    m_roiPolygon = NULL;
+    connect( m_2DViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( initialize() ) );
 }
 
 ROITool::~ROITool()
@@ -203,6 +201,29 @@ void ROITool::closeForm()
 
     // Un cop fets els càlculs, fem el punter nul per poder controlar si podem fer una nova roi o no
     // No fem delete, perquè sinó això faria que s'esborrés del drawer
+    m_roiPolygon = NULL;
+}
+
+void ROITool::initialize()
+{
+    // Alliberem les primitives perquè puguin ser esborrades
+    if ( !m_mainPolyline.isNull() )
+    {
+        m_mainPolyline->decreaseReferenceCount();
+        delete m_mainPolyline;
+    }
+
+    if ( !m_closingPolyline.isNull() )
+    {
+        m_closingPolyline->decreaseReferenceCount();
+        delete m_closingPolyline;
+    }
+
+    if ( !m_roiPolygon.isNull() )
+        delete m_roiPolygon;
+    
+    m_closingPolyline = NULL;
+    m_mainPolyline = NULL;
     m_roiPolygon = NULL;
 }
 
