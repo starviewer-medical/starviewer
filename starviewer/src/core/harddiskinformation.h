@@ -79,7 +79,7 @@ private:
     quint64 getFreeBytesPlataformEspecific(QString path);
 
     /// Loggeja l'últim error segons la plataforma 
-    void logLastError();
+    void logLastError(const QString &additionalInformation);
 
 };
 

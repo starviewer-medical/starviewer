@@ -94,7 +94,7 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
 
     if (existsError)
     {
-        logLastError();
+        logLastError("getTotalBytesPlataformEspecific: " + path);
         total = 0;
     }
 
@@ -126,14 +126,14 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
 
     if(existsError)
     {
-        logLastError();
+        logLastError("getFreeBytesPlataformEspecific: " + path);
         total = 0;
     }
 
     return total;
 }
 
-void HardDiskInformation::logLastError()
+void HardDiskInformation::logLastError(const QString &additionalInformation)
 {
     QString qtErrorMessage;
 #ifdef Q_OS_WIN32
@@ -151,8 +151,7 @@ void HardDiskInformation::logLastError()
     // TODO implementar per altres sistemes ( MAC, LINUX )
     qtErrorMessage = "TODO! No tenim implementat l'obtenció del missatge d'error en aquest sistema operatiu";
 #endif // Q_OS_WIN32
-    DEBUG_LOG( "Error: " + qtErrorMessage );
-    ERROR_LOG( "Error: " + qtErrorMessage );
+    ERROR_LOG( "Error: " + qtErrorMessage + ". " + additionalInformation);
 }
 
 }; //end udg namespace
