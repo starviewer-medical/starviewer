@@ -485,7 +485,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
         case QExecuteOperationThread::MoveUnknowStatus :
         case QExecuteOperationThread::MoveFailureOrRefusedStatus :
             message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 doesn't respond as expected and %2 can't process the request for retrieving images.\n\n").arg(pacs.getAETitle(), ApplicationNameString);
+            message += tr("%1 can't retrieve images of study %2 because PACS %3 doesn't respond as expected.\n\n").arg(ApplicationNameString, studyInstanceUID, pacs.getAETitle());
             message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
