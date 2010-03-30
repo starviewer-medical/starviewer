@@ -542,12 +542,12 @@ PacsDevice QConfigurationScreen::getPacsDeviceFromControls()
     pacsDevice.setInstitution( m_textInstitution->text() );
     pacsDevice.setLocation( m_textLocation->text() );
     pacsDevice.setDescription( m_textDescription->text() );
-    pacsDevice.setDefault( m_checkDefault->isChecked() );
     pacsDevice.setID( m_selectedPacsID );
     pacsDevice.setQueryRetrieveServiceEnabled( m_checkBoxQueryRetrieveEnabled->isChecked() );
     pacsDevice.setQueryRetrieveServicePort( m_textQueryRetrieveServicePort->text().toInt() );
     pacsDevice.setStoreServiceEnabled( m_checkBoxStoreEnabled->isChecked() );
     pacsDevice.setStoreServicePort( m_textStoreServicePort->text().toInt() );
+    pacsDevice.setDefault( m_checkDefault->isChecked() );
 
     return pacsDevice;
 }
