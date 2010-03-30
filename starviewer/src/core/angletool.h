@@ -56,6 +56,10 @@ private:
     /// Calcula la correcta posició del caption de l'angle segons els punts de l'angle
     void placeText( DrawerText *angleText );
 
+private slots:
+    /// Inicialitza l'estat de la tool
+    void initialize();
+
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
