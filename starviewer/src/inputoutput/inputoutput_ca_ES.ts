@@ -9,12 +9,12 @@
         <translation>Servidors PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="473"/>
+        <location filename="qconfigurationscreenbase.ui" line="502"/>
         <source>Add the new Pacs to the list</source>
         <translation>Afegeix el nou Pacs a la llista</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="483"/>
+        <location filename="qconfigurationscreenbase.ui" line="512"/>
         <source>Update the parameters of the selected Pacs</source>
         <translation>Actualitzar els paràmetres del Pacs seleccionat</translation>
     </message>
@@ -46,7 +46,7 @@
         <translation>Adreça:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1029"/>
+        <location filename="qconfigurationscreenbase.ui" line="1058"/>
         <source>Apply Changes</source>
         <translation>Aplicar canvis</translation>
     </message>
@@ -67,7 +67,7 @@
         <translation>Institució</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1023"/>
+        <location filename="qconfigurationscreenbase.ui" line="1052"/>
         <source>Apply changes</source>
         <translation>Aplica els canvis</translation>
     </message>
@@ -90,7 +90,7 @@
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="119"/>
-        <location filename="qconfigurationscreenbase.ui" line="428"/>
+        <location filename="qconfigurationscreenbase.ui" line="343"/>
         <source>Default query PACS</source>
         <oldsource>Mark as default query PACS</oldsource>
         <translation>Cercar per defecte al PACS</translation>
@@ -113,67 +113,67 @@
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="345"/>
+        <location filename="qconfigurationscreenbase.ui" line="368"/>
         <source>Send service:</source>
         <oldsource>Send Service :</oldsource>
         <translation>Servei Send:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="352"/>
-        <location filename="qconfigurationscreenbase.ui" line="362"/>
+        <location filename="qconfigurationscreenbase.ui" line="375"/>
+        <location filename="qconfigurationscreenbase.ui" line="385"/>
         <source>Enabled</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="398"/>
-        <location filename="qconfigurationscreenbase.ui" line="939"/>
+        <location filename="qconfigurationscreenbase.ui" line="421"/>
+        <location filename="qconfigurationscreenbase.ui" line="968"/>
         <source>Institution:</source>
         <oldsource>Institution :</oldsource>
         <translation>Institució:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="508"/>
+        <location filename="qconfigurationscreenbase.ui" line="537"/>
         <source>Local DICOM Configuration</source>
         <translation>Configuració local DICOM</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="771"/>
+        <location filename="qconfigurationscreenbase.ui" line="800"/>
         <source>Institution contact information</source>
         <oldsource>Institution information</oldsource>
-        <translation type="unfinished">Informació de contacte de la Institució</translation>
+        <translation>Informació de contacte de la Institució</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="866"/>
+        <location filename="qconfigurationscreenbase.ui" line="895"/>
         <source>ZIP Code:</source>
         <oldsource>ZIP Code :</oldsource>
         <translation>Codi postal: </translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="932"/>
+        <location filename="qconfigurationscreenbase.ui" line="961"/>
         <source>Country:</source>
         <oldsource>Country :</oldsource>
         <translation>País:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="833"/>
+        <location filename="qconfigurationscreenbase.ui" line="862"/>
         <source>Phone Number:</source>
         <oldsource>Phone Number :</oldsource>
         <translation>Número de telèfon:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="408"/>
+        <location filename="qconfigurationscreenbase.ui" line="431"/>
         <source>Location:</source>
         <oldsource>Location :</oldsource>
         <translation>Localització:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="418"/>
+        <location filename="qconfigurationscreenbase.ui" line="441"/>
         <source>Description:</source>
         <oldsource>Description :</oldsource>
         <translation>Descripció:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="496"/>
+        <location filename="qconfigurationscreenbase.ui" line="525"/>
         <source>Local Configuration</source>
         <translation>Configuració Local</translation>
     </message>
@@ -183,51 +183,51 @@
         <translation>Configuració del PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="476"/>
+        <location filename="qconfigurationscreenbase.ui" line="505"/>
         <source>Add as new server</source>
         <translation>Afegir com a nou servidor</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="486"/>
+        <location filename="qconfigurationscreenbase.ui" line="515"/>
         <source>Update configuration</source>
         <translation>Actualitzar la configuració</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="551"/>
+        <location filename="qconfigurationscreenbase.ui" line="580"/>
         <source>Incoming connections port:</source>
         <oldsource>Incoming connections port :</oldsource>
         <translation>Port de connexions entrants:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="698"/>
+        <location filename="qconfigurationscreenbase.ui" line="727"/>
         <source>AE Title Local Machine:</source>
         <oldsource>AETitle Local Machine:</oldsource>
         <translation>AE Title de la màquina local:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="577"/>
+        <location filename="qconfigurationscreenbase.ui" line="606"/>
         <source>Max. simultaneous connections:</source>
         <oldsource>Max. simultaneous connections :</oldsource>
         <translation>Nombre màxim de connexions simultànies:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="675"/>
+        <location filename="qconfigurationscreenbase.ui" line="704"/>
         <source>Max. seconds for Timeout:</source>
         <translation>Màxim de segons de Timeout:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="873"/>
+        <location filename="qconfigurationscreenbase.ui" line="902"/>
         <source>City:</source>
         <oldsource>City :</oldsource>
         <translation>Ciutat:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="906"/>
+        <location filename="qconfigurationscreenbase.ui" line="935"/>
         <source>Address: </source>
         <translation>Adreça: </translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="946"/>
+        <location filename="qconfigurationscreenbase.ui" line="975"/>
         <source>EMail:</source>
         <oldsource>EMail :</oldsource>
         <translation>Correu electrònic:</translation>
@@ -238,7 +238,7 @@
         <translation>Pacs </translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="633"/>
+        <location filename="qconfigurationscreenbase.ui" line="662"/>
         <source>&lt;b&gt;This port is in use by another application.&lt;/b&gt;</source>
         <translation>&lt;b&gt;Aquest port està sent utilitzat per una altra aplicació.&lt;/b&gt;</translation>
     </message>
@@ -311,9 +311,9 @@
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="320"/>
-        <source>Additional folder to copy</source>
-        <oldsource>Additional folder to copy with</oldsource>
-        <translation type="unfinished">Copiar el directori</translation>
+        <source>Copy the content of folder to DICOMDIR</source>
+        <oldsource>Additional folder to copy to DICOMDIR</oldsource>
+        <translation>Copiar el contingut del directori al DICOMDIR</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="353"/>
@@ -332,7 +332,8 @@
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="408"/>
-        <source>Additional content folder:</source>
+        <source>Folder path to copy content:</source>
+        <oldsource>Folder to copy path:</oldsource>
         <translation>Copiar el contingut del directori:</translation>
     </message>
     <message>
@@ -344,7 +345,7 @@
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="145"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="155"/>
         <location filename="qinputoutputdicomdirwidget.cpp" line="86"/>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="200"/>
         <source>Open</source>
@@ -471,7 +472,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="514"/>
+        <location filename="qcreatedicomdir.cpp" line="536"/>
         <source>Creating DICOMDIR Image...</source>
         <translation>Creant la Imatge del DICOMDIR...</translation>
     </message>
@@ -1054,152 +1055,158 @@ Assegureu-vos que la IP i el AETitle del PACS siguin correctes.</translation>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="296"/>
-        <location filename="qcreatedicomdir.cpp" line="319"/>
+        <location filename="qcreatedicomdir.cpp" line="318"/>
+        <location filename="qcreatedicomdir.cpp" line="341"/>
         <source>&amp;Yes</source>
         <translation>&amp;Si</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="296"/>
-        <location filename="qcreatedicomdir.cpp" line="319"/>
+        <location filename="qcreatedicomdir.cpp" line="318"/>
+        <location filename="qcreatedicomdir.cpp" line="341"/>
         <source>&amp;No</source>
         <translation>&amp;No</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="317"/>
+        <location filename="qcreatedicomdir.cpp" line="339"/>
         <source>Create directory ?</source>
         <translation>Crear el directori ?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="324"/>
+        <location filename="qcreatedicomdir.cpp" line="346"/>
         <source>Can&apos;t create the directory. Please check users permissions.</source>
         <translation>No es pot crear el directori. Si us plau reviseu els permisos d&apos;usuari.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="490"/>
+        <location filename="qcreatedicomdir.cpp" line="512"/>
         <source>Please select a study to remove of the list.</source>
         <translation>Si us plau seleccioni l&apos;estudi que vol esborrar de la llista.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="75"/>
+        <location filename="qcreatedicomdir.cpp" line="97"/>
         <source>CD-ROM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="76"/>
+        <location filename="qcreatedicomdir.cpp" line="98"/>
         <source>Record DICOMDIR on a CD-ROM device</source>
         <translation>Gravar DICOMDIR a un dispositiu de CD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="84"/>
+        <location filename="qcreatedicomdir.cpp" line="106"/>
         <source>DVD-ROM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="85"/>
+        <location filename="qcreatedicomdir.cpp" line="107"/>
         <source>Record DICOMDIR on a DVD-ROM device</source>
         <translation>Gravar DICOMDIR a un dispositiu de DVD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="93"/>
+        <location filename="qcreatedicomdir.cpp" line="115"/>
         <source>Hard Disk</source>
         <translation>Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="94"/>
+        <location filename="qcreatedicomdir.cpp" line="116"/>
         <source>Record DICOMDIR on a Hard Disk</source>
         <translation>Gravar DICOMDIR al Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="102"/>
+        <location filename="qcreatedicomdir.cpp" line="124"/>
         <source>Pen Drive</source>
         <translation>Memòria Extraible USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="103"/>
+        <location filename="qcreatedicomdir.cpp" line="125"/>
         <source>Record DICOMDIR on a USB Pen drive device</source>
         <translation>Gravar DICOMDIR a un dispositiu extern USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="263"/>
+        <location filename="qcreatedicomdir.cpp" line="285"/>
         <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
         <translation>No es pot crear el directori temporal per crear el DICOMDIR. Si us plau, revisi els permisos d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="294"/>
+        <location filename="qcreatedicomdir.cpp" line="316"/>
         <source>Create DICOMDIR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="295"/>
+        <location filename="qcreatedicomdir.cpp" line="317"/>
         <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
         <translation>El directori conté un DICOMDIR, vols sobreescriure i esborrar tots els fitxers del directori?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="318"/>
+        <location filename="qcreatedicomdir.cpp" line="340"/>
         <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
         <translation>El directori DICOMDIR no existeix. Desitges crear-lo?</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="352"/>
+        <location filename="qcreatedicomdir.cpp" line="374"/>
         <source>Not enough free space to create DICOMDIR. Please free space.</source>
         <translation>No hi ha suficient espai per crear el DICOMDIR. Si us plau allibereu espai.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="283"/>
+        <location filename="qcreatedicomdir.cpp" line="305"/>
         <source>No directory specified to create the DICOMDIR</source>
         <translation>Cap directori especificat per a crear el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="362"/>
+        <location filename="qcreatedicomdir.cpp" line="384"/>
         <source>Please, first select the studies you want to create a DICOMDIR.</source>
         <translation>Esculli primer els estudis amb els que vol crear el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="384"/>
+        <location filename="qcreatedicomdir.cpp" line="406"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
         <translation>Algunes de les imatges no compleixen al 100% l&apos;estàndar DICOM. És possible que alguns visualitzadors tinguin problemes per a mostrar-les.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="397"/>
+        <location filename="qcreatedicomdir.cpp" line="419"/>
         <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</source>
         <translation>Error creant el DICOMDIR. Asseguris que té permisos a %1 i que el directori és buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="627"/>
+        <location filename="qcreatedicomdir.cpp" line="649"/>
         <source>
 Error Number: %1</source>
         <translation>
 Codi d&apos;error: %1</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="571"/>
+        <location filename="qcreatedicomdir.cpp" line="593"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation>No s&apos;ha pogut iniciar el procés [ %1 ]. O bé el programa invocat no està instal·lat o bé no teniu prou permisos per invocar el programa.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="138"/>
+        <location filename="qcreatedicomdir.cpp" line="74"/>
+        <location filename="qcreatedicomdir.cpp" line="75"/>
+        <source>Copy the content of &quot;%1&quot; to DICOMDIR.</source>
+        <translation>Copiar el contingut de &quot;%1&quot; al DICOMDIR.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="162"/>
         <source>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</source>
         <translation>Mida DICOMDIR: %1 Mb aproximadament - Espai disponible %2 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="142"/>
+        <location filename="qcreatedicomdir.cpp" line="166"/>
         <source>DICOMDIR size: %1 Mb - Available Space: %2 Mb</source>
         <translation>Mida DICOMDIR: %1 Mb - Espai disponible %2 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="156"/>
+        <location filename="qcreatedicomdir.cpp" line="178"/>
         <source>%1 Mb</source>
         <translation>%1 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="209"/>
+        <location filename="qcreatedicomdir.cpp" line="231"/>
         <source>The following studies were not added to the DICOMDIR list for the following reasons:</source>
         <oldsource>The following studies were not added to the DICOMDIR list for the following reasons</oldsource>
         <translation>Els següents estudis no s&apos;han afegit a llista de DICOMDIR pel següents motius:</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="212"/>
+        <location filename="qcreatedicomdir.cpp" line="234"/>
         <source>
 
 	- Already exist in the list.
@@ -1215,7 +1222,7 @@ Codi d&apos;error: %1</translation>
 </translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="217"/>
+        <location filename="qcreatedicomdir.cpp" line="239"/>
         <source>
 
 	- Not enough space on the device.
@@ -1228,104 +1235,106 @@ Codi d&apos;error: %1</translation>
         <translation>	- No hi ha suficient espai lliure en el dispositiu.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="228"/>
+        <location filename="qcreatedicomdir.cpp" line="250"/>
         <source>DICOMDIR creation aborted.
  The selected studies exceed the available space for the current device.</source>
         <translation>Creació DICOMDIR abortada.
 Els estudis seleccionats excedeixen l&apos;espai disponible en el dispositiu.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="387"/>
-        <source>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.</source>
-        <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory, or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.</oldsource>
-        <translation type="unfinished"></translation>
+        <location filename="qcreatedicomdir.cpp" line="409"/>
+        <source>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos;. Be sure you have read permissions in the directory or uncheck copy folder content option.</source>
+        <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
+        <translation>%1 no ha creat el DICOMDIR perquè no s&apos;ha pogut copiar el contingut de &apos;%2&apos;. Asseguris que té permisos de lectura sobre el directori o desmarqui l&apos;opció de copiar el contingut del directori.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="392"/>
-        <source>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR o DICOM.
+        <location filename="qcreatedicomdir.cpp" line="414"/>
+        <source>%1 can&apos;t create the DICOMDIR because the folder to copy &apos;%2&apos; contents an item called DICOMDIR or DICOM.
 
-Remove it from the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.</source>
-        <oldsource>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR o DICOM.
+Remove it from the directory or uncheck copy folder content option.</source>
+        <oldsource>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR or DICOM.
 
-Remove it from the directory or choose not copy folder content to DICOMDIR option in DICOMDIR configuration.</oldsource>
-        <translation type="unfinished"></translation>
+Remove it from the directory or uncheck copy folder content to DICOMDIR option.</oldsource>
+        <translation>%1 no ha creat el DICOMDIR perquè el contingut del directori a copiar &apos;%2&apos; conté elements amb nom DICOMDIR o DICOM.
+
+Esborreu aquests elements del directori o desmarqueu l&apos;opció de copiar el contingut de la carpeta.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="552"/>
+        <location filename="qcreatedicomdir.cpp" line="574"/>
         <source>DICOMDIR Burning Failure</source>
         <translation>Error al grabar DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="552"/>
-        <location filename="qcreatedicomdir.cpp" line="558"/>
-        <location filename="qcreatedicomdir.cpp" line="597"/>
+        <location filename="qcreatedicomdir.cpp" line="574"/>
+        <location filename="qcreatedicomdir.cpp" line="580"/>
+        <location filename="qcreatedicomdir.cpp" line="619"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <oldsource>There was an error during the creation of the ISO image file. </oldsource>
         <translation>Si us plau, contacti amb el seu administrador de sistemes per solucionar aquest problema.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="552"/>
+        <location filename="qcreatedicomdir.cpp" line="574"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
         <translation>S&apos;ha produït un error durant la gravació de la image ISO amb el DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="558"/>
+        <location filename="qcreatedicomdir.cpp" line="580"/>
         <source>There was an error during the creation of the DICOMDIR ISO image file. </source>
         <translation>Se ha producido un error al crear la imagen ISO del DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="575"/>
+        <location filename="qcreatedicomdir.cpp" line="597"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation>El procés [ %1 ] s&apos;ha penjat després d&apos;haver-se iniciat correctament.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="583"/>
+        <location filename="qcreatedicomdir.cpp" line="605"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava escriure al procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigui executant o pot ser que s&apos;hagi tancat.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="587"/>
+        <location filename="qcreatedicomdir.cpp" line="609"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation>Hi ha hagut algun error quan s&apos;intentava llegir del procés [ %1 ]. Per exemple, el procés pot ser que no s&apos;estigués executant.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="688"/>
+        <location filename="qcreatedicomdir.cpp" line="709"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</source>
         <oldsource>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of the device is %1 Mb</oldsource>
         <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat del dispositiu és de %1 Mb.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="707"/>
+        <location filename="qcreatedicomdir.cpp" line="728"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb.</source>
         <oldsource>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb</oldsource>
         <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat d&apos;un cd és de %1 Mb.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="714"/>
+        <location filename="qcreatedicomdir.cpp" line="735"/>
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation>La configuració de l&apos;aplicació per gravar DICOMDIR no és correcte.
 Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt; DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="558"/>
-        <location filename="qcreatedicomdir.cpp" line="597"/>
+        <location filename="qcreatedicomdir.cpp" line="580"/>
+        <location filename="qcreatedicomdir.cpp" line="619"/>
         <source>DICOMDIR Creation Failure</source>
         <translation>Fallada en la Creació del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="597"/>
+        <location filename="qcreatedicomdir.cpp" line="619"/>
         <source>There was an error during the creation of the DICOMDIR</source>
         <translation>Hi ha hagut un error durant la creació del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="309"/>
+        <location filename="qcreatedicomdir.cpp" line="331"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
         <translation>El directori de destí no està buit, si us plau escolliu un directori buit.</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="446"/>
+        <location filename="qcreatedicomdir.cpp" line="468"/>
         <source>Choose an empty directory...</source>
         <translation>Escolliu un directori buit...</translation>
     </message>
@@ -1338,139 +1347,146 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
         <translation>Crear DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="69"/>
+        <location filename="qcreatedicomdirbase.ui" line="63"/>
         <source>Patient ID</source>
         <translation>ID Pacient</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="64"/>
+        <location filename="qcreatedicomdirbase.ui" line="58"/>
         <source>Patient Name</source>
         <translation>Nom Pacient</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="84"/>
+        <location filename="qcreatedicomdirbase.ui" line="78"/>
         <source>Modality</source>
         <translation>Modalitat</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="89"/>
+        <location filename="qcreatedicomdirbase.ui" line="83"/>
         <source>Study Date</source>
         <translation>Data de l&apos;estudi</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="94"/>
+        <location filename="qcreatedicomdirbase.ui" line="88"/>
         <source>Study Time</source>
         <translation>Hora de l&apos;estudi</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="79"/>
+        <location filename="qcreatedicomdirbase.ui" line="73"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="99"/>
+        <location filename="qcreatedicomdirbase.ui" line="93"/>
         <source>studyUID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="128"/>
+        <location filename="qcreatedicomdirbase.ui" line="122"/>
         <source>Remove selected study of the list</source>
         <translation>Esborra l&apos;estudi seleccionat de la llista</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="131"/>
+        <location filename="qcreatedicomdirbase.ui" line="125"/>
         <source>Remove</source>
         <translation>Esborrar</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="157"/>
+        <location filename="qcreatedicomdirbase.ui" line="151"/>
         <source>Remove All</source>
         <translation>Esborrar tots</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="154"/>
+        <location filename="qcreatedicomdirbase.ui" line="148"/>
         <source>Remove all the studies of the list</source>
         <translation>Esborra tots els estudis de la llista</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="36"/>
+        <location filename="qcreatedicomdirbase.ui" line="30"/>
         <source>DICOMDIR List</source>
         <translation>Llista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="188"/>
+        <location filename="qcreatedicomdirbase.ui" line="182"/>
         <source>Create DICOMDIR on...</source>
         <translation>Crear DICOMDIR a...</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="74"/>
+        <location filename="qcreatedicomdirbase.ui" line="68"/>
         <source>Age</source>
         <translation>Edat</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="238"/>
+        <location filename="qcreatedicomdirbase.ui" line="388"/>
         <source>Used space</source>
         <translation>Espai utilitzat</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="267"/>
+        <location filename="qcreatedicomdirbase.ui" line="417"/>
         <source>650 Mb</source>
         <translation>650 Mb</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="289"/>
+        <location filename="qcreatedicomdirbase.ui" line="427"/>
+        <location filename="qcreatedicomdirbase.ui" line="493"/>
+        <source>Copy folder content</source>
+        <oldsource>Copy additional folder content</oldsource>
+        <translation>Copiar el contingut del directori</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="486"/>
         <source>The size of the DICOMDIR is XX Mb</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="369"/>
+        <location filename="qcreatedicomdirbase.ui" line="525"/>
         <source>Creates the Dicomdir with the selected studies</source>
         <translation>Crea el Dicomdir dels estudis seleccionats</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="372"/>
+        <location filename="qcreatedicomdirbase.ui" line="528"/>
         <source>Create</source>
         <translation>Crear</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="379"/>
+        <location filename="qcreatedicomdirbase.ui" line="535"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="417"/>
-        <location filename="qcreatedicomdirbase.ui" line="460"/>
-        <location filename="qcreatedicomdirbase.ui" line="543"/>
+        <location filename="qcreatedicomdirbase.ui" line="204"/>
+        <location filename="qcreatedicomdirbase.ui" line="247"/>
+        <location filename="qcreatedicomdirbase.ui" line="330"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="443"/>
+        <location filename="qcreatedicomdirbase.ui" line="230"/>
         <source>CD-ROM</source>
         <translation>CD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="483"/>
+        <location filename="qcreatedicomdirbase.ui" line="270"/>
         <source>DVD-ROM</source>
         <translation>DVD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="500"/>
+        <location filename="qcreatedicomdirbase.ui" line="287"/>
         <source>disk</source>
         <translation>disc</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="526"/>
+        <location filename="qcreatedicomdirbase.ui" line="313"/>
         <source>Hard Disk</source>
         <translation>Disc Dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="566"/>
+        <location filename="qcreatedicomdirbase.ui" line="353"/>
         <source>Pen Drive</source>
         <translation>Memòria Extraible USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="315"/>
+        <location filename="qcreatedicomdirbase.ui" line="457"/>
         <source>Location:</source>
         <translation>Localització:</translation>
     </message>
@@ -1478,35 +1494,40 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
 <context>
     <name>udg::QDICOMDIRConfigurationScreen</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="92"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="91"/>
         <source>Some configuration options are not valid:
 </source>
         <translation>Algunes de les opcions de configuració no són vàlides:
 </translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="98"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="97"/>
         <source>Invalid burning application path.</source>
         <translation>Ruta de l&apos;aplicació de gravació invàlida.</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="105"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="104"/>
         <source>Burning application path has to be an executable file.</source>
         <translation>La ruta de l&apos;aplicació de gravació ha d&apos;apuntar a un fitxer executable.</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreen.cpp" line="114"/>
+        <source>You have to indicate the path of folder to copy to DICOMDIR.</source>
+        <translation>S&apos;ha d&apos;indicar la ruta del directori a copiar al DICOMDIR.</translation>
+    </message>
+    <message>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="124"/>
         <source>Invalid path of folder to copy to DICOMDIR.</source>
         <translation>Ruta inválida del directorio a copiar al DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="119"/>
-        <source>Invalid content of the folder to copy to DICOMDIR, This folder can&apos;t contains any item called DICOM or DICOMDIR.</source>
-        <oldsource>Invalid content of the folder to copy to DICOMDIR. This folder can&apos;t contains any item called DICOM or DICOMDIR.</oldsource>
-        <translation type="unfinished"></translation>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="129"/>
+        <source>Invalid content of the folder to copy to DICOMDIR, this folder can&apos;t contains any item called DICOM or DICOMDIR.</source>
+        <oldsource>Invalid content of the folder to copy to DICOMDIR, This folder can&apos;t contains any item called DICOM or DICOMDIR.</oldsource>
+        <translation>El contingut del directori a copiar al DICOMDIR conté elements invàlid,.aquest directori no pot contenir elements anomenats DICOM o DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="171"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="181"/>
         <source>Folder to copy to DICOMDIR...</source>
         <translation>Directori a copiar al DICOMDIR...</translation>
     </message>
@@ -1907,33 +1928,33 @@ Si us plau contacteu amb l&apos;equip del %1.</translation>
         <translation>La sèrie amb UID %1 de l&apos;estudi %2, pacient %3 està la llista de DICOMDIR. Si vol esborrar la sèrie hauria de treure l&apos;estudi de la llista de DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="298"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="300"/>
         <source>Please select at least one study to delete</source>
         <translation>Si us plau seleccioni al menys un estudi a esborrar</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="309"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="311"/>
         <source>Select at least one study to view</source>
         <translation>Seleccioni al menys un estudi a visualitzar</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="371"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="373"/>
         <source>Select at least one study to send to PACS.</source>
         <oldsource>Select at least one study to store to PACS.</oldsource>
         <translation>Seleccioni al menys un estudi per enviar al PACS.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="420"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="422"/>
         <source>deleting old studies</source>
         <translation>esborrar estudis vells</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="444"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="446"/>
         <source>An error has ocurred while </source>
         <translation>S&apos;ha produït un error al </translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="452"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="454"/>
         <source>The database is blocked by another %1 window.
 Close all the others %1 windows and try again.</source>
         <oldsource>The database is blocked by another %1 window.
@@ -1944,14 +1965,14 @@ If you want to open different %1&apos;s windows always choose the &apos;New&apos
 Tanqueu totes les altres finestres del %1 i torneu-ho a intentar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="456"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="458"/>
         <source>%1 database is corrupted.</source>
         <translation>La base de dades del %1 està corrupte.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="457"/>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="462"/>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="467"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="459"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="464"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="469"/>
         <source>
 Close all %1 windows and try again.
 
@@ -1962,24 +1983,24 @@ Tanqueu totes les finestres del %1 i torneu-ho a intentar.
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="461"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="463"/>
         <source>%1 database syntax error.</source>
         <translation>Error de sintaxis a la base de dades del %1.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="466"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="468"/>
         <source>An internal error occurs with %1 database.</source>
         <translation>S&apos;ha produït un error intern accedint a la base de dades del %1.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="471"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="473"/>
         <source>Some files cannot be deleted.
 These files have to be deleted manually.</source>
         <translation>Alguns fitxers no s&apos;ha pogut esborrar.
 Aquests hauran de ser esborrats de forma manual.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="475"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="477"/>
         <source>Unknown error.</source>
         <translation>Error desconegut.</translation>
     </message>
@@ -1989,7 +2010,7 @@ Aquests hauran de ser esborrats de forma manual.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidgetbase.ui" line="13"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidgetbase.ui" line="74"/>
@@ -2212,10 +2233,15 @@ Contacteu amb un administrador per registre el vostre ordinador al PACS.</transl
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="488"/>
-        <source>PACS %1 doesn&apos;t respond as expected and %2 can&apos;t process the request for retrieving images.
+        <source>%1 can&apos;t retrieve images of study %2 because PACS %3 doesn&apos;t respond as expected.
 
 </source>
-        <translation type="unfinished"></translation>
+        <oldsource>%1 can&apos;t retrieve images of Study %2 because PACS %3 doesn&apos;t respond as expected.
+
+</oldsource>
+        <translation>%1 no ha pogut descarregar les imatges de l&apos;estudi %2 perquè el PACS %3 no has respòs com s&apos;esperava.
+
+</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="489"/>
@@ -2280,7 +2306,7 @@ Si hi ha una altra finestra del %1 descarregant estudis del PACS, si us plau esp
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="541"/>
         <source>There were problems to retrieve some images from study %1 from PACS %2. Those images may be missing in the local database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi han hagut problemes per descarregar algunes imatges de l&apos;estudi %1 del PACS %2, pot ser que aquestes no s&apos;hagin descarregat.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="543"/>
@@ -2312,7 +2338,7 @@ Si hi ha una altra finestra del %1 descarregant estudis del PACS, si us plau esp
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidgetbase.ui" line="46"/>
