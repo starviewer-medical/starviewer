@@ -46,26 +46,46 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     setWindowFlags( this->windowFlags() ^ Qt::WindowContextHelpButtonHint );
     QString sizeOfDicomdirText;
 
-    m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
-
     resetDICOMDIRList();
 
     // Crear les accions
     createActions();
     createConnections();
 
-    Settings settings;
-    settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
-    m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool());
-    m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool());
-
-    // Per defecte creem els dicomdir al discdur
-    m_hardDiskAction->trigger();
+    initializeControls();
 }
 
 QCreateDicomdir::~QCreateDicomdir()
 {
     clearTemporaryDICOMDIRPath();
+}
+
+void QCreateDicomdir::initializeControls()
+{
+    Settings settings;
+    settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
+
+    m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
+
+    if (!settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString().isEmpty())
+    {
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setEnabled(true);
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(true);
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setText( tr("Copy the content of \"%1\" to DICOMDIR.").arg( QDir::toNativeSeparators( settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy).toString() ) ) );
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setText( tr("Copy the content of \"%1\" to DICOMDIR.").arg( QDir::toNativeSeparators( settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) ) );
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool());
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool());
+
+    }
+    else
+    {
+        //Si no ens han especificat Path a copiar descativem els checkbox
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setEnabled(false);
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(false);
+    }
+
+    // Per defecte creem els dicomdir al discdur
+    m_hardDiskAction->trigger();
 }
 
 void QCreateDicomdir::createActions()

@@ -65,6 +65,10 @@ protected:
     void closeEvent( QCloseEvent* ce );
 
 private:
+
+    ///Inicialitza els controls de la interfície
+    void initializeControls();
+
     /// Crea les connexions de signals i slots de la interfície
     void createConnections();
 
