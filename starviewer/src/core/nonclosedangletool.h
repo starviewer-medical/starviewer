@@ -48,6 +48,10 @@ private:
     ///calcula la correcta posició del caption de l'angle segons els punts de l'angle
     void textPosition( double *p1, double *p2, DrawerText *angleText );
 
+private slots:
+    /// Inicialitza l'estat de la tool
+    void initialize();
+
 private:
     ///Estats de la línia segons els punts
     enum { NoPoints, FirstPoint };

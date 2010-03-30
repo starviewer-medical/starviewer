@@ -28,6 +28,8 @@ AngleTool::AngleTool( QViewer *viewer, QObject *parent )
     m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
+    
+    connect( m_2DViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( initialize() ) );
 }
 
 AngleTool::~AngleTool()
@@ -373,4 +375,25 @@ void AngleTool::placeText( DrawerText *angleText )
         }
     }
 }
+
+void AngleTool::initialize()
+{
+    // Alliberem les primitives perquè puguin ser esborrades
+    if( m_mainPolyline )
+    {
+        m_mainPolyline->decreaseReferenceCount();
+        delete m_mainPolyline;
+    }
+    
+    if( m_circlePolyline )
+    {
+        m_circlePolyline->decreaseReferenceCount();
+        delete m_circlePolyline;
+    }
+
+    m_mainPolyline = NULL;
+    m_circlePolyline = NULL;
+    m_state = NONE;
+}
+
 }

@@ -18,7 +18,7 @@
 namespace udg {
 
 NonClosedAngleTool::NonClosedAngleTool( QViewer *viewer, QObject *parent )
- : Tool(viewer, parent)
+ : Tool(viewer, parent), m_firstLine(0), m_secondLine(0), m_state(None), m_lineState(NoPoints)
 {
     m_toolName = "NonClosedAngleTool";
     m_hasSharedData = false;
@@ -27,10 +27,7 @@ NonClosedAngleTool::NonClosedAngleTool( QViewer *viewer, QObject *parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
 
-    m_firstLine = NULL;
-    m_secondLine = NULL;
-    m_state = None;
-    m_lineState = NoPoints;
+    connect( m_2DViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( initialize() ) );
 }
 
 NonClosedAngleTool::~NonClosedAngleTool()
@@ -291,6 +288,27 @@ void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angle
 
     angleText->setAttachmentPoint(position);
 
+}
+
+void NonClosedAngleTool::initialize()
+{
+    // Alliberem les primitives perquè puguin ser esborrades
+    if( m_firstLine )
+    {
+        m_firstLine->decreaseReferenceCount();
+        delete m_firstLine;
+    }
+    
+    if( m_secondLine )
+    {
+        m_secondLine->decreaseReferenceCount();
+        delete m_secondLine;
+    }
+    
+    m_firstLine = NULL;
+    m_secondLine = NULL;
+    m_state = None;
+    m_lineState = NoPoints;
 }
 
 }
