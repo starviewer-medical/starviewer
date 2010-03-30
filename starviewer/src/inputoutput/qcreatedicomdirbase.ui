@@ -424,7 +424,7 @@
           <item row="1" column="0" colspan="2">
            <widget class="QCheckBox" name="m_copyFolderContentToDICOMDIRCdDvdCheckBox">
             <property name="text">
-             <string>Copy additional folder content</string>
+             <string>Copy folder content</string>
             </property>
            </widget>
           </item>
@@ -490,7 +490,7 @@
           <item>
            <widget class="QCheckBox" name="m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox">
             <property name="text">
-             <string>Copy additional content folder</string>
+             <string>Copy folder content</string>
             </property>
            </widget>
           </item>
