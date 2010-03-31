@@ -20,7 +20,7 @@ class TranslateTool : public Tool
 {
 Q_OBJECT
 public:
-    enum { NONE , TRANSLATING };
+    enum { None , Translating };
     TranslateTool( QViewer *viewer, QObject *parent = 0 );
     ~TranslateTool();
 
