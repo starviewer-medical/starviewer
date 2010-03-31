@@ -38,7 +38,6 @@ public:
      * @param viewer El viewer al que volem assignar les tools suportades
      * @param toolsList Llista de noms de tools que li volem assignar
      */
-    // TODO es podria renombrar a setSupportedTools()
     void setViewerTools( QViewer *viewer, const QStringList &toolsList );
 
     /**
@@ -95,7 +94,6 @@ public:
     /// Queda pendent una millora "conceptual" sobre aquest aspecte
     void triggerTools( const QStringList &toolsList );
     void triggerTool( const QString &toolName );
-    // alres noms addStarterTool(s), setStarterTools(), markStartTools(), setInitialTools()
 
     /**
      * Afegim una llista de tools dins d'un grup exclusiu.
@@ -148,14 +146,13 @@ public slots:
 
     /**
      * Activa/Desactiva la tool especificada en tots els viewers registrats
-     * Aquests mètodes són de més baix nivell
      * @param toolName Nom de la tool a activar/desactivar
      */
     void activateTool( const QString &toolName );
     void deactivateTool( const QString &toolName );
-    // TODO altres noms switchOn/OffTool() turnOn/OffTool(), enable/disableTool().
 
 private slots:
+
     /**
      * Quan es dispara l'acció d'una tool, aquest slot la rep i a partir del seu nom
      * esbrina si l'acció ha estat d'activar o desactivar la tool (isChecked())
@@ -163,7 +160,6 @@ private slots:
      * @param toolName Nom de la tool disparada
      */
     void triggeredToolAction( const QString &toolName );
-    // TODO altres noms: checkToolActivation()
 
     /**
      * Comprova per cada tool registrada, si l'acció associada està checked o no per activar/desactivar
@@ -171,7 +167,6 @@ private slots:
      * i volem que s'activin les mateixes tools que estan actives en els altres viewers.
      */
     void refreshConnections();
-    // TODO altres noms checkToolsToActivate()
 
 private:
     /// Registre que ens proporcionarà tools i accions associades

@@ -20,7 +20,7 @@ namespace udg {
 TranslateTool::TranslateTool( QViewer *viewer, QObject *parent )
  : Tool(viewer,parent)
 {
-    m_state = None;
+    m_state = NONE;
     m_toolName = "TranslateTool";
     // ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT( m_viewer );
@@ -53,13 +53,13 @@ void TranslateTool::handleEvent( unsigned long eventID )
 
 void TranslateTool::startTranslate()
 {
-    m_state = Translating;
+    m_state = TRANSLATING;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
 }
 
 void TranslateTool::doTranslate()
 {
-    if( m_state == Translating )
+    if( m_state == TRANSLATING )
     {
 		m_viewer->setCursor( QCursor(QPixmap(":/images/move.png")) );
         this->pan();
@@ -83,7 +83,7 @@ void TranslateTool::pan()
 void TranslateTool::endTranslate()
 {
     m_viewer->setCursor( Qt::ArrowCursor );
-    m_state = None;
+    m_state = NONE;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
     m_viewer->refresh();
 }
