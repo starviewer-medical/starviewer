@@ -192,6 +192,8 @@ Volume * VolumeBuilderFromCaptures::build()
         newSeries->addImage( currentImage );
         newVolume->addImage( currentImage );
         currentImage->setParentSeries( newSeries );
+		currentImage->setOrderNumberInVolume( i );
+		currentImage->setVolumeNumberInSeries( 0 );
 
         currentImage->setBitsAllocated( bitsAllocated );
         currentImage->setBitsStored( bitsStored );

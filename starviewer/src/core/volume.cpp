@@ -7,6 +7,8 @@
 #ifndef UDGVOLUME_CPP
 #define UDGVOLUME_CPP
 
+#include "dicomtagreader.h"
+#include "dicomdictionary.h"
 #include "dicomimagereader.h"
 #include "dicomimagereadervtk.h"
 #include "dicomimagereaderdcmtk.h"
@@ -604,16 +606,14 @@ void Volume::inputDestructor()
 
 int Volume::readSingleFile( QString fileName )
 {
-    ProgressCommand::Pointer observer = ProgressCommand::New();
-    m_reader->AddObserver( itk::ProgressEvent(), observer );
-
     int errorCode = NoError;
 
-    m_reader->SetFileName( qPrintable(fileName) );
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetFileName( qPrintable(fileName) );
     emit progress(0);
     try
     {
-        m_reader->Update();
+        reader->Update();
     }
     catch ( itk::ExceptionObject & e )
     {
@@ -642,7 +642,7 @@ int Volume::readSingleFile( QString fileName )
         // TODO Quan solucionem correctament el ticket #1166 (actualització a gdcm 2.0.x) aquesta assignació desapareixerà
         if( !m_imageSet.isEmpty() )
         {
-            m_reader->GetOutput()->SetOrigin( m_imageSet.first()->getImagePositionPatient() );
+            reader->GetOutput()->SetOrigin( m_imageSet.first()->getImagePositionPatient() );
             // Cal tenir en compte si la imatge original conté informació d'spacing vàlida per fer l'assignació
             const double *imageSpacing = m_imageSet.first()->getPixelSpacing();
             if( imageSpacing[0] > 0.0 )
@@ -650,11 +650,22 @@ int Volume::readSingleFile( QString fileName )
                 double spacing[3];
                 spacing[0] = imageSpacing[0];
                 spacing[1] = imageSpacing[1];
-                spacing[2] = m_reader->GetOutput()->GetSpacing()[2];
-                m_reader->GetOutput()->SetSpacing( spacing );
+                // HACK ticket #1204 - Degut a bugs en les gdcm integrades amb itk, l'spacing between slices no es calcula
+                // correctament i se li assigna l'slice thickness al z-spacing. Una solució temporal i ràpida és llegir el tag
+                // Spacing Between Slices i actualitzar el z-spacing, si aquest tag existeix
+                // El cost de llegir aquest tag per un fitxer de 320 imatges és d'uns 470 milisegons aproximadament 
+                // TODO un cop actualitzats a gdcm 2.0.x, aquest HACK serà innecessari
+                DICOMTagReader *dicomReader = new DICOMTagReader( m_imageSet.first()->getPath() );
+                double zSpacing = dicomReader->getValueAttributeAsQString(DICOMSpacingBetweenSlices).toDouble();
+                if( zSpacing == 0.0 )
+                    zSpacing = reader->GetOutput()->GetSpacing()[2];
+                
+                spacing[2] = zSpacing;                
+                reader->GetOutput()->SetSpacing( spacing );
             }
         }
-        this->setData( m_reader->GetOutput() );
+        
+        this->setData( reader->GetOutput() );
         // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
         emit progress( 100 );
     }
@@ -748,13 +759,48 @@ void Volume::createNeutralVolume()
     m_imageDataVTK->SetScalarTypeToShort();
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();
-    // ATENCIÓ memset posa el valor (segon paràmetre) interpretat com
-    // unsigned char i el nombre de blocs de memòria són indicats en bytes, 
-    // per això multipliquem per 2
-    memset( m_imageDataVTK->GetScalarPointer(), 100, 10*10*1*2 );
+    // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
+    signed short * scalarPointer = (signed short *) m_imageDataVTK->GetScalarPointer();
+    signed short value;
+    for( int i=0; i<10; i++ )
+    {
+        value = 150-i*20;
+        if( i>4 )
+            value = 150-(10-i-1)*20;
+
+        for( int j = 0; j<10; j++ )
+        {            
+            *scalarPointer = value;
+            *scalarPointer++;
+        }
+    }
     // Quan creem el volum neutre indiquem que només tenim 1 sola fase 
     // TODO potser s'haurien de crear tantes fases com les que indiqui la sèrie?
     this->setNumberOfPhases( 1 );
+}
+
+bool Volume::fitsIntoMemory()
+{
+    if( m_dataLoaded )
+        return true;
+    
+    unsigned long long int size = 0;
+    foreach( Image *image, m_imageSet )
+    {
+        size += image->getColumns() * image->getRows() * sizeof( VoxelType );
+    }
+
+    char *p = 0;
+    try
+    {
+        p = new char[size];
+        delete[] p;
+        return true;
+    }
+    catch ( std::bad_alloc &ba )
+    {
+        return false;
+    }
 }
 
 };

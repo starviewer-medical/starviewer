@@ -317,7 +317,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Additional folder to copy</string>
+      <string>Copy the content of folder to DICOMDIR</string>
      </property>
     </widget>
    </item>
@@ -405,7 +405,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Additional content folder:</string>
+          <string>Folder path to copy content:</string>
          </property>
          <property name="textFormat">
           <enum>Qt::RichText</enum>
@@ -418,14 +418,14 @@
        <item>
         <widget class="QLineEdit" name="m_textDICOMDIRFolderPathToCopy">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="m_buttonExaminateDICOMDIRFolderPathToCopy">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="toolTip">
           <string>Examine disk to find the folder to copy to DICOMDIR</string>

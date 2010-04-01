@@ -638,21 +638,24 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
 {
     Study * recentStudy = NULL;
 
-    foreach ( Study * study, m_mainVolume->getPatient()->getStudies() )
+    if( m_mainVolume ) // Només busquem si hi ha el volum principal
     {
-        if ( recentStudy == NULL )
+        foreach ( Study * study, m_mainVolume->getPatient()->getStudies() )
         {
-            recentStudy = study;
-        }
-        else
-        {
-            if ( study->getDateTime() > recentStudy->getDateTime() )
+            if ( recentStudy == NULL )
             {
                 recentStudy = study;
             }
+            else
+            {
+                if ( study->getDateTime() > recentStudy->getDateTime() )
+                {
+                    recentStudy = study;
+                }
+            }
         }
+        m_previousStudiesWidget->searchPreviousStudiesOf( recentStudy );
     }
-    m_previousStudiesWidget->searchPreviousStudiesOf( recentStudy );
 }
 #endif
 

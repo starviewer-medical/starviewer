@@ -172,14 +172,14 @@ Settings::KeyValueMapType PacsDeviceManager::pacsDeviceToKeyValueMap( const Pacs
 
     item["ID"] = pacsDevice.getID();
     item["AETitle"] = pacsDevice.getAETitle();
-    item["PacsPort"] = QString().setNum(pacsDevice.getQueryRetrieveServicePort());
+    item["PacsPort"] = QString::number(pacsDevice.getQueryRetrieveServicePort());
     item["Location"] = pacsDevice.getLocation();
     item["Institution"] = pacsDevice.getInstitution();
     item["PacsHostname"] = pacsDevice.getAddress();
     item["Description"] = pacsDevice.getDescription();
     item["QueryRetrieveServiceEnabled"] = pacsDevice.isQueryRetrieveServiceEnabled();
     item["StoreServiceEnabled"] = pacsDevice.isStoreServiceEnabled();
-    item["StoreServicePort"] = pacsDevice.getStoreServicePort();
+    item["StoreServicePort"] = QString::number(pacsDevice.getStoreServicePort());
 
     return item;
 }

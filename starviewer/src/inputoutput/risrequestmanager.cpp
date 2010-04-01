@@ -82,11 +82,23 @@ void RISRequestManager::queryStudyResultsReceived(QList<Patient*> patientsList, 
     {
         foreach(Study *study, patient->getStudies())
         {
-            INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1 , PacsId %2").arg( study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
-
-            //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
-            emit retrieveStudyFromRISRequest(hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()] , study);
-            m_foundRISRequestStudy = true;
+            /*Degut al bug que es descriu al ticket #1042, es fa que només es descarregui el primer estudi trobat a la cerca de PACS
+              Si trobem més d'un estudi que compleixi la cerca, es descarrega el primer i executem la pipeline per carregar l'estudi i visualitzar-lo, de mentres
+    	      s'executa,si el segon és petit i es descarrega ràpidament, executa la pipeline de carregar l'estudi mentre el primer encara l'està executant 
+              per carregar i visualitzar l'estudi l'Starviewer peta. Sembla que també hi haurien problemes perquè mentre s'estan passant els fillers del primer 
+              estudi descarregat, el segona descàrrega matxaca els fitxers del a primera descàrrega.*/
+            if (!m_foundRISRequestStudy)
+            {
+                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1 , PacsId %2").arg( study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
+          
+                //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
+                emit retrieveStudyFromRISRequest(hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()] , study);
+                m_foundRISRequestStudy = true;
+            }
+            else
+            {
+                WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero nomes es baixara el primer estudi trobat").arg(study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
+            }
         }
     }
 }

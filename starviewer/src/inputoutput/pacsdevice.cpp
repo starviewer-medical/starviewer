@@ -203,7 +203,7 @@ int PacsDevice::getIncomingDICOMConnectionsPort()
 
 QString PacsDevice::getKeyName() const
 {
-    return m_AETitle + m_address;
+    return m_AETitle + m_address + ":" + QString::number(m_queryRetrieveServicePort);
 }
 
 QStringList PacsDevice::getDefaultPACSKeyNamesList() const
@@ -223,7 +223,10 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
             if( item.contains(".") )// El camp "default" té aquesta clau
             {
                 if( item.value(".").toString() == "S" )
-                    pacsList << item.value("AETitle").toString() + item.value("PacsHostname").toString();
+                {
+                    // Hem de fer servir els mateixos camps i format que al mètode PacsDevice::getKeyName()
+                    pacsList << item.value("AETitle").toString() + item.value("PacsHostname").toString() + ":" + item.value("PacsPort").toString();
+                }
             }
         }
         if( pacsList.isEmpty() )

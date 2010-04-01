@@ -15,6 +15,7 @@ namespace udg
 QDeleteOldStudiesThread::QDeleteOldStudiesThread(QObject *parent)
  : QThread(parent)
 {
+    m_lastError = LocalDatabaseManager::Ok;
 }
 
 void QDeleteOldStudiesThread::deleteOldStudies()

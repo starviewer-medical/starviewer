@@ -46,24 +46,46 @@ QCreateDicomdir::QCreateDicomdir(QWidget *parent)
     setWindowFlags( this->windowFlags() ^ Qt::WindowContextHelpButtonHint );
     QString sizeOfDicomdirText;
 
-    m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
-
     resetDICOMDIRList();
 
     // Crear les accions
     createActions();
     createConnections();
 
-    Settings settings;
-    settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
-
-    // Per defecte creem els dicomdir al discdur
-    m_hardDiskAction->trigger();
+    initializeControls();
 }
 
 QCreateDicomdir::~QCreateDicomdir()
 {
     clearTemporaryDICOMDIRPath();
+}
+
+void QCreateDicomdir::initializeControls()
+{
+    Settings settings;
+    settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
+
+    m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
+
+    if (!settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString().isEmpty())
+    {
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setEnabled(true);
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(true);
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setText( tr("Copy the content of \"%1\" to DICOMDIR.").arg( QDir::toNativeSeparators( settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy).toString() ) ) );
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setText( tr("Copy the content of \"%1\" to DICOMDIR.").arg( QDir::toNativeSeparators( settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) ) );
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool());
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool());
+
+    }
+    else
+    {
+        //Si no ens han especificat Path a copiar descativem els checkbox
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setEnabled(false);
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(false);
+    }
+
+    // Per defecte creem els dicomdir al discdur
+    m_hardDiskAction->trigger();
 }
 
 void QCreateDicomdir::createActions()
@@ -121,6 +143,8 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonRemoveAll , SIGNAL( clicked() ) , this , SLOT( resetDICOMDIRList() ) );
     connect( m_buttonExamineDisk , SIGNAL( clicked() ) , this , SLOT( examineDicomdirPath() ) );
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
+    connect( m_copyFolderContentToDICOMDIRCdDvdCheckBox , SIGNAL( stateChanged(int) ) , this , SLOT( copyContentFolderToDICOMDIRCheckBoxsStateChanged() ) );
+    connect( m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox , SIGNAL( stateChanged(int) ) , this , SLOT( copyContentFolderToDICOMDIRCheckBoxsStateChanged() ) );
 }
 
 void QCreateDicomdir::showDICOMDIRSize()
@@ -130,7 +154,7 @@ void QCreateDicomdir::showDICOMDIRSize()
     Settings settings;
 
     sizeInMb = m_dicomdirSizeBytes / ( 1024.0 * 1024 );//passem a Mb
-    sizeText.setNum( sizeInMb , 'f' , 2 );
+    sizeText.setNum( sizeInMb , 'f' , 0 );
 
     //Si les imatges s'han de convertir a LittleEndian obtenim el tamany que ocuparà l'estudi de manera aproximada
     if (settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool())
@@ -150,8 +174,6 @@ void QCreateDicomdir::showDICOMDIRSize()
         m_progressBarOcupat->setValue( m_progressBarOcupat->maximum() );
 
     m_progressBarOcupat->repaint();
-
-    sizeText.setNum( sizeInMb , 'f' , 0 );
 
     sizeOfDicomdirText = tr("%1 Mb").arg( sizeText );
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
@@ -384,13 +406,13 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
                 QMessageBox::information( this , ApplicationNameString, tr( "Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them." ) );
                 break;
             case 4002:
-                QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because can't copy the content of '%2' to the DICOMDIR. Be sure you have read permissions in the directory or "
-                    "uncheck copy folder content to DICOMDIR option in DICOMDIR configuration." )
+                QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because can't copy the content of '%2'. Be sure you have read permissions in the directory or "
+                    "uncheck copy folder content option." )
                     .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
                 break;
             case 4003:
-                QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because the folder to copy to DICOMDIR '%2' contents an item called DICOMDIR o DICOM."
-                    "\n\nRemove it from the directory or uncheck copy folder content to DICOMDIR option in DICOMDIR configuration.")
+                QMessageBox::warning( this , ApplicationNameString , tr( "%1 can't create the DICOMDIR because the folder to copy '%2' contents an item called DICOMDIR or DICOM."
+                    "\n\nRemove it from the directory or uncheck copy folder content option.")
                     .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
                 break;
             default :
@@ -675,7 +697,6 @@ void QCreateDicomdir::deviceChanged( int index )
      Cridem aquest mètode perquè en funció del dispositu potser que es copïi o no la carpeta al DICOMDIR per tant s'ha d'actualitzar
      la mida del DICOMDIR*/
     updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
-    showDICOMDIRSize();//El cridem per refrescar la barra de progrés   
     
     switch( m_currentDevice )
     {
@@ -720,6 +741,8 @@ void QCreateDicomdir::deviceChanged( int index )
 
             break;
     }
+
+    showDICOMDIRSize();//El cridem per refrescar la barra de progrés   
 }
 
 bool QCreateDicomdir::checkDICOMDIRBurningApplicationConfiguration()
@@ -783,9 +806,8 @@ void QCreateDicomdir::updateAvailableSpaceToRecord()
         case CreateDicomdir::HardDisk:
             if( path.isEmpty() || !QDir(path).exists() )
             {
-                QFileInfoList drives = QDir::drives();
-                m_lineEditDicomdirPath->setText( drives.first().absolutePath() );
-                path = m_lineEditDicomdirPath->text();
+                m_lineEditDicomdirPath->setText( QDir::toNativeSeparators( QDir::rootPath() ) );
+                path = QDir::rootPath();
             }
             m_availableSpaceToRecordInBytes = diskInfo.getNumberOfFreeBytes(path);
             break;
@@ -825,13 +847,9 @@ quint64 QCreateDicomdir::getFolderToCopyToDICOMDIRSizeInBytes()
 
 bool QCreateDicomdir::haveToCopyFolderContentToDICOMDIR()
 {
-    Settings settings;
-    bool copyFolderContentToDICOMDIRCdDvd = settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool();
-    bool copyFolderContentToDICOMDIRUsbHardDisk = settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool();
-
     //S'ha de copiar el visor DICOM si està configurat així als settings i el dispositiu actual és cd/dvd
-    return (copyFolderContentToDICOMDIRCdDvd &&  (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom)) || 
-        (copyFolderContentToDICOMDIRUsbHardDisk &&  (m_currentDevice == CreateDicomdir::UsbPen || m_currentDevice == CreateDicomdir::HardDisk));
+    return (m_copyFolderContentToDICOMDIRCdDvdCheckBox->isChecked() &&  (m_currentDevice == CreateDicomdir::CdRom || m_currentDevice == CreateDicomdir::DvdRom)) || 
+        (m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->isChecked() && (m_currentDevice == CreateDicomdir::UsbPen || m_currentDevice == CreateDicomdir::HardDisk));
 }
 
 void QCreateDicomdir::updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize()
@@ -858,4 +876,9 @@ void QCreateDicomdir::updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize()
     }
 }
 
+void QCreateDicomdir::copyContentFolderToDICOMDIRCheckBoxsStateChanged()
+{
+    updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
+    showDICOMDIRSize();
+}
 }

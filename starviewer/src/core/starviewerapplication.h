@@ -27,6 +27,7 @@ const QString OrganizationDomainString("starviewer.udg.edu");
 #endif
 
 const QString OrganizationEmailString("starviewer@ima.udg.edu");
+const QString OrganizationWebURL("http://starviewer.udg.edu");
 
 // Paths per defecte on es guarden configuracions i arxius d'usuari
 /// Path base per a dades d'usuari

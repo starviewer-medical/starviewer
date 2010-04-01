@@ -505,6 +505,12 @@ void QConfigurationScreen::queryRetrieveServiceEnabledChanged()
 {
     m_textQueryRetrieveServicePort->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
     m_textQueryRetrieveServicePort->setText("");
+    m_checkDefault->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());//"Default query PACS" no té sentit que estigui activat si no es pot fer query en el PACS
+
+    if (!m_checkBoxQueryRetrieveEnabled->isChecked())
+    {
+        m_checkDefault->setChecked(false);
+    }
 }
 
 void QConfigurationScreen::storeServiceEnabledChanged()
@@ -536,12 +542,12 @@ PacsDevice QConfigurationScreen::getPacsDeviceFromControls()
     pacsDevice.setInstitution( m_textInstitution->text() );
     pacsDevice.setLocation( m_textLocation->text() );
     pacsDevice.setDescription( m_textDescription->text() );
-    pacsDevice.setDefault( m_checkDefault->isChecked() );
     pacsDevice.setID( m_selectedPacsID );
     pacsDevice.setQueryRetrieveServiceEnabled( m_checkBoxQueryRetrieveEnabled->isChecked() );
     pacsDevice.setQueryRetrieveServicePort( m_textQueryRetrieveServicePort->text().toInt() );
     pacsDevice.setStoreServiceEnabled( m_checkBoxStoreEnabled->isChecked() );
     pacsDevice.setStoreServicePort( m_textStoreServicePort->text().toInt() );
+    pacsDevice.setDefault( m_checkDefault->isChecked() );
 
     return pacsDevice;
 }

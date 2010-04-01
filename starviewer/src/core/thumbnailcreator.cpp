@@ -48,7 +48,7 @@ QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
 
         if (numberOfImages > 0)
         {
-            thumbnail = createImageThumbnail(series->getImages()[numberOfImages / 2 ]->getPath());
+            thumbnail = createImageThumbnail(series->getImages()[numberOfImages / 2 ]->getPath(), resolution);
         }
         else
         {
@@ -87,7 +87,7 @@ QImage ThumbnailCreator::makeEmptyThumbnailWithCustomText(const QString &text, i
 QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolution)
 {
     DICOMTagReader reader( imageFileName );
-    return createThumbnail(&reader);
+    return createThumbnail(&reader,resolution);
 }
 
 QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)

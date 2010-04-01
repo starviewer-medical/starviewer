@@ -26,7 +26,7 @@ class AngleTool : public Tool
 Q_OBJECT
 public:
     /// Possibles estats de la tool
-    enum { CENTER_FIXED, FIRST_POINT_FIXED, NONE };
+    enum { CenterFixed, FirstPointFixed, None };
     
     AngleTool( QViewer *viewer, QObject *parent = 0 );
     ~AngleTool();
@@ -55,6 +55,10 @@ private:
     
     /// Calcula la correcta posició del caption de l'angle segons els punts de l'angle
     void placeText( DrawerText *angleText );
+
+private slots:
+    /// Inicialitza l'estat de la tool
+    void initialize();
 
 private:
     /// Viewer 2D sobre el qual treballem
