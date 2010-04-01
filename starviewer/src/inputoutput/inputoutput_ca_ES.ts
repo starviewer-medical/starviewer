@@ -2922,7 +2922,7 @@ Si l&apos;error s&apos;ha produït al obrir una nova finestra del %1, tanqueu aq
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>Processant la petició del RIS, no s&apos;ha pogut consultar al PACS %1 de %2.
-Asseguris que la IP i el AETitle del PACS siguin correctes.</translation>
+Asseguris que la IP i el AETitle del PACS siguin correctes</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="148"/>

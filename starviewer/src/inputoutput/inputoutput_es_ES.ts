@@ -2047,12 +2047,12 @@ Estos archivos se tendran que borrar de forma manual.</translation>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="233"/>
         <source>Select a study to retrieve</source>
-        <translation>Seleccione un estudio a descargar.</translation>
+        <translation>Seleccione un estudio a descargar</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="248"/>
         <source>Select a study to retrieve and view</source>
-        <translation>Selectione un estudio para descargar y visualizar.</translation>
+        <translation>Selectione un estudio para descargar y visualizar</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="312"/>
@@ -2242,8 +2242,7 @@ Contacte con un administrador para registrar su ordenador al PACS.</translation>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="489"/>
         <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
-        <translation>%1 no puede consultar al PACS %2 de %3.
-Asegúrese que su ordenador está conectado a la red y que los parámetros del PACS sean correctos.</translation>
+        <translation>El error puede ser debido a que la imágenes pedidas estén corruptas o que el puerto de conexiones entrantes del PACS no esté correctamente configurado.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="493"/>
@@ -2916,7 +2915,7 @@ Si el error se ha producido al abrir una nueva ventana del %1, cierre esta venta
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>Procesando la petición del RIS, no se ha podido consultar al PACS %1 de %2.
-Asegurese que la IP i el AETitle del PACS son correctos.</translation>
+Asegurese que la IP i el AETitle del PACS son correctos</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="148"/>
