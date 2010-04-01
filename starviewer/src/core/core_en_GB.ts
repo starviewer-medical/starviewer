@@ -68,7 +68,7 @@
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="294"/>
+        <location filename="angletool.cpp" line="296"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,7 +76,7 @@
 <context>
     <name>udg::DistanceTool</name>
     <message>
-        <location filename="distancetool.cpp" line="154"/>
+        <location filename="distancetool.cpp" line="168"/>
         <source>%1 mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -125,17 +125,17 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="247"/>
+        <location filename="nonclosedangletool.cpp" line="248"/>
         <source>%1 degrees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="243"/>
+        <location filename="nonclosedangletool.cpp" line="244"/>
         <source>0.0 degrees</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="245"/>
+        <location filename="nonclosedangletool.cpp" line="246"/>
         <source>Skew lines.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -288,34 +288,34 @@ Acc:%6
 <context>
     <name>udg::Q3DViewer</name>
     <message>
-        <location filename="q3dviewer.cpp" line="428"/>
+        <location filename="q3dviewer.cpp" line="1198"/>
         <source>Not supported volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="428"/>
+        <location filename="q3dviewer.cpp" line="1198"/>
         <source>Current volume cannot be opened because its format is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="435"/>
+        <location filename="q3dviewer.cpp" line="1190"/>
         <source>Volume too large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="435"/>
+        <location filename="q3dviewer.cpp" line="1190"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="602"/>
-        <location filename="q3dviewer.cpp" line="680"/>
+        <location filename="q3dviewer.cpp" line="590"/>
+        <location filename="q3dviewer.cpp" line="668"/>
         <source>Can&apos;t apply rendering style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="602"/>
-        <location filename="q3dviewer.cpp" line="680"/>
+        <location filename="q3dviewer.cpp" line="590"/>
+        <location filename="q3dviewer.cpp" line="668"/>
         <source>The system hasn&apos;t enough memory to apply properly this rendering style with this volume.
 Shading will be disabled, it won&apos;t render as expected.</source>
         <translation type="unfinished"></translation>
@@ -1368,12 +1368,12 @@ Environment variable(logFilePath): %2</source>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="686"/>
+        <location filename="qviewer.cpp" line="688"/>
         <source>Default %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="667"/>
+        <location filename="qviewer.cpp" line="669"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1802,32 +1802,32 @@ It&apos;s recommended you save them in an empty folder.</source>
 <context>
     <name>udg::Volume</name>
     <message>
-        <location filename="volume.cpp" line="112"/>
+        <location filename="volume.cpp" line="114"/>
         <source>Out of memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="112"/>
+        <location filename="volume.cpp" line="114"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="119"/>
+        <location filename="volume.cpp" line="121"/>
         <source>Missing Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="119"/>
+        <location filename="volume.cpp" line="121"/>
         <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="126"/>
+        <location filename="volume.cpp" line="128"/>
         <source>Unkwown Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="126"/>
+        <location filename="volume.cpp" line="128"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
         <translation type="unfinished"></translation>
     </message>

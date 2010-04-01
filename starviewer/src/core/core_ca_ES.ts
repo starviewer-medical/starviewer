@@ -69,7 +69,7 @@
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="294"/>
+        <location filename="angletool.cpp" line="296"/>
         <source>%1 degrees</source>
         <translation>%1 graus</translation>
     </message>
@@ -77,7 +77,7 @@
 <context>
     <name>udg::DistanceTool</name>
     <message>
-        <location filename="distancetool.cpp" line="154"/>
+        <location filename="distancetool.cpp" line="168"/>
         <source>%1 mm</source>
         <translation>%1 mm</translation>
     </message>
@@ -126,17 +126,17 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="247"/>
+        <location filename="nonclosedangletool.cpp" line="248"/>
         <source>%1 degrees</source>
         <translation>%1 graus</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="243"/>
+        <location filename="nonclosedangletool.cpp" line="244"/>
         <source>0.0 degrees</source>
         <translation>0.0 graus</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="245"/>
+        <location filename="nonclosedangletool.cpp" line="246"/>
         <source>Skew lines.</source>
         <translation>Línies creuades.</translation>
     </message>
@@ -300,34 +300,34 @@ Acc:%6
 <context>
     <name>udg::Q3DViewer</name>
     <message>
-        <location filename="q3dviewer.cpp" line="428"/>
+        <location filename="q3dviewer.cpp" line="1198"/>
         <source>Not supported volume</source>
         <translation>Volum no suportat</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="428"/>
+        <location filename="q3dviewer.cpp" line="1198"/>
         <source>Current volume cannot be opened because its format is not supported.</source>
         <translation>El volum actual no es pot obrir perquè el seu format no està suportat.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="435"/>
+        <location filename="q3dviewer.cpp" line="1190"/>
         <source>Volume too large</source>
         <translation>Volum massa gros</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="435"/>
+        <location filename="q3dviewer.cpp" line="1190"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
         <translation>El volum actual és massa gran. Si us plau, seleccioni un altre volum o tenquil les aplicacions obertes i intenti-ho de nou.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="602"/>
-        <location filename="q3dviewer.cpp" line="680"/>
+        <location filename="q3dviewer.cpp" line="590"/>
+        <location filename="q3dviewer.cpp" line="668"/>
         <source>Can&apos;t apply rendering style</source>
         <translation>No es pot aplicar l&apos;estil de visualització</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="602"/>
-        <location filename="q3dviewer.cpp" line="680"/>
+        <location filename="q3dviewer.cpp" line="590"/>
+        <location filename="q3dviewer.cpp" line="668"/>
         <source>The system hasn&apos;t enough memory to apply properly this rendering style with this volume.
 Shading will be disabled, it won&apos;t render as expected.</source>
         <translation>El sistema no té prou memòria per aplicar correctament aquest estil amb aquest volum.
@@ -1382,12 +1382,12 @@ Variable d&apos;entorn(logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="686"/>
+        <location filename="qviewer.cpp" line="688"/>
         <source>Default %1</source>
         <translation>Per defecte %1</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="667"/>
+        <location filename="qviewer.cpp" line="669"/>
         <source>Default</source>
         <translation>Per defecte</translation>
     </message>
@@ -1816,32 +1816,32 @@ It&apos;s recommended you save them in an empty folder.</source>
 <context>
     <name>udg::Volume</name>
     <message>
-        <location filename="volume.cpp" line="112"/>
+        <location filename="volume.cpp" line="114"/>
         <source>Out of memory</source>
         <translation>No hi ha prou memòria</translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="112"/>
+        <location filename="volume.cpp" line="114"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
         <translation>No hi ha prou memòria per carregar les sèries escollides. Tanca totes les finestres obertes de l&apos;%1, restaura l&apos;aplicació i torna-ho a intentar. Si el problema persisteix, es pot solucionar afegint més memòria RAM o canviant el sistema a 64 bits.</translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="119"/>
+        <location filename="volume.cpp" line="121"/>
         <source>Missing Files</source>
         <translation>Falten fitxers</translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="119"/>
+        <location filename="volume.cpp" line="121"/>
         <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
         <translation>%1 no pot trobar els fitxers d&apos;aquestes sèries. Potser s&apos;han eliminat o són incorrectes.</translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="126"/>
+        <location filename="volume.cpp" line="128"/>
         <source>Unkwown Error</source>
         <translation>Error esconegut</translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="126"/>
+        <location filename="volume.cpp" line="128"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
         <translation>%1 ha trobat un error inesperat al llegir aquestes sèries. No s&apos;ha carregat les dades de les sèries.</translation>
     </message>

@@ -43,9 +43,9 @@
     </message>
     <message>
         <location filename="starviewerapplicationcommandline.cpp" line="17"/>
-        <source>Query the study with this accession number in the configured default PACS and retrieve it</source>
-        <oldsource>Query the study with this accession number in the configurated default PACS and retrieve it</oldsource>
-        <translation>Consultar y descargar el estudio con este accession number a los PACS configurados por defecto</translation>
+        <source>Retrieve the study with the accession number from the query default PACS.</source>
+        <oldsource>Query the study with this accession number in the configured default PACS and retrieve it</oldsource>
+        <translation type="unfinished">Consultar y descargar el estudio con este accession number a los PACS configurados por defecto</translation>
     </message>
 </context>
 <context>
@@ -281,12 +281,22 @@
         <translation>Cambiar al lenguage %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="550"/>
+        <location filename="qapplicationmainwindow.cpp" line="514"/>
+        <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="515"/>
+        <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="552"/>
         <source>Beta version</source>
         <translation>Versión Beta</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="621"/>
+        <location filename="qapplicationmainwindow.cpp" line="623"/>
         <source>Please activate &quot;Listen RIS Request&quot; option in %1 configuration to retrieve studies from SAP.</source>
         <translation>Por favor, active la opción &quot;Escuchar Peticiones del RIS&quot; en el panel de configuración de %1 para poder recibir estudios del SAP.</translation>
     </message>
@@ -336,12 +346,12 @@
         <translation>&lt;p&gt;Versión: %1 &lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="515"/>
+        <location filename="qapplicationmainwindow.cpp" line="517"/>
         <source>About %1</source>
         <translation>Sobre %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="551"/>
+        <location filename="qapplicationmainwindow.cpp" line="553"/>
         <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 and it is being made available for testing purposes only.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our testing members that are helping us to improve this software. Current users of this version should not expect all of the extensions to work properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve our software, please, report any found bug or any other feature request you have to us.&lt;/p&gt;&lt;h3&gt;We really appreciate that you give us your feedback!&lt;/h3&gt;</source>
         <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Ésta es una versión previa de %1 que ha sido creada con el objetivo de testear de la aplicación.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Ésta versión va destinada a los radiólogos y a nuestro equipo de pruebas para ayudar a mejorar el software. No se puede esperar a que todas las extensiones funcionen de forma correcta. &lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si quieres ayudarnos a mejorar nuestra aplicación, por favor, haznos saber cualquier problema encontrado o petición de mejora.&lt;/p&gt;&lt;h3&gt;Agradecemos tus comentarios.&lt;/h3&gt;</translation>
     </message>
