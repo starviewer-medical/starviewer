@@ -45,7 +45,7 @@
         <location filename="starviewerapplicationcommandline.cpp" line="17"/>
         <source>Retrieve the study with the accession number from the query default PACS.</source>
         <oldsource>Query the study with this accession number in the configured default PACS and retrieve it</oldsource>
-        <translation type="unfinished">Consultar y descargar el estudio con este accession number a los PACS configurados por defecto</translation>
+        <translation>Consultar y descargar el estudio con este accession number a los PACS configurados por defecto.</translation>
     </message>
 </context>
 <context>
@@ -283,12 +283,12 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="514"/>
         <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;E-mail de soporte: &lt;a href=&quot;mailto:%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="515"/>
         <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="552"/>
