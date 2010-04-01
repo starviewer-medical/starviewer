@@ -791,6 +791,11 @@ void QMPRExtension::setInput( Volume *input )
     m_volume->setData( changeInfo->GetOutput() );
     m_volume->setNumberOfPhases( input->getNumberOfPhases() );
     m_volume->setNumberOfSlicesPerPhase( input->getNumberOfSlicesPerPhase() );
+    // Cal que li indiquem l'identificador que hi ha al repositori de volums per 
+    // tal que quan mostrem el menú de pacient se'ns mostri en negreta el volum actual
+    // Això no deixa de ser un HACK que deixarà d'existir quan no li fem la transformació 
+    // inicial de l'origen al volum quan tinguem llest el nou mòdul d'MPR
+    m_volume->setIdentifier( input->getIdentifier() );
 
     m_volume->getSpacing( m_axialSpacing );
 
