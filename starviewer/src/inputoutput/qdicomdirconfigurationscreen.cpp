@@ -33,9 +33,6 @@ void QDICOMDIRConfigurationScreen::createConnections()
     // Connecta el boto examinar programa de gravació amb el dialog per escollir el path del programa
     connect( m_buttonExaminateBurningApplication , SIGNAL( clicked() ), SLOT( examinateDICOMDIRBurningApplicationPath() ) );
     connect( m_buttonExaminateDICOMDIRFolderPathToCopy , SIGNAL( clicked() ), SLOT( examinateDICOMDIRFolderPathToCopy() ) );
-
-    connect( m_checkBoxCopyFolderContentToDICOMDIRCdDvd , SIGNAL( toggled(bool) ), SLOT ( checkBoxCopyFolderContentToDICOMDIRToggled() ) );
-    connect( m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk , SIGNAL( toggled(bool) ), SLOT ( checkBoxCopyFolderContentToDICOMDIRToggled() ) );
 }
 
 void QDICOMDIRConfigurationScreen::loadDICOMDIRDefaults()
