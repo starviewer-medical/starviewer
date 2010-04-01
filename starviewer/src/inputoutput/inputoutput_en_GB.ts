@@ -344,7 +344,7 @@
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="155"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="152"/>
         <location filename="qinputoutputdicomdirwidget.cpp" line="86"/>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="200"/>
         <source>Open</source>
@@ -1475,39 +1475,39 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
 <context>
     <name>udg::QDICOMDIRConfigurationScreen</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="91"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="88"/>
         <source>Some configuration options are not valid:
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="97"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="94"/>
         <source>Invalid burning application path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="104"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="101"/>
         <source>Burning application path has to be an executable file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="114"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="111"/>
         <source>You have to indicate the path of folder to copy to DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="124"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="121"/>
         <source>Invalid path of folder to copy to DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="129"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="126"/>
         <source>Invalid content of the folder to copy to DICOMDIR, this folder can&apos;t contains any item called DICOM or DICOMDIR.</source>
         <oldsource>Invalid content of the folder to copy to DICOMDIR, This folder can&apos;t contains any item called DICOM or DICOMDIR.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="181"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="178"/>
         <source>Folder to copy to DICOMDIR...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2831,35 +2831,35 @@ If the error has ocurred when openned new %1&apos;s windows, close this window. 
 <context>
     <name>udg::RISRequestManager</name>
     <message>
-        <location filename="risrequestmanager.cpp" line="104"/>
+        <location filename="risrequestmanager.cpp" line="116"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="121"/>
+        <location filename="risrequestmanager.cpp" line="133"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="136"/>
+        <location filename="risrequestmanager.cpp" line="148"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="137"/>
+        <location filename="risrequestmanager.cpp" line="149"/>
         <source>
 
 If the error has ocurred when openned new %1&apos;s windows, close this window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="140"/>
+        <location filename="risrequestmanager.cpp" line="152"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="141"/>
+        <location filename="risrequestmanager.cpp" line="153"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>

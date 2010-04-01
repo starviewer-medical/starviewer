@@ -344,7 +344,7 @@
 <context>
     <name>QFileDialog</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="155"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="152"/>
         <location filename="qinputoutputdicomdirwidget.cpp" line="86"/>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="200"/>
         <source>Open</source>
@@ -1494,40 +1494,40 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
 <context>
     <name>udg::QDICOMDIRConfigurationScreen</name>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="91"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="88"/>
         <source>Some configuration options are not valid:
 </source>
         <translation>Algunas opciones de configuración no son válidas:
 </translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="97"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="94"/>
         <source>Invalid burning application path.</source>
         <translation>Ruta de la aplicación de grabación inválida.</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="104"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="101"/>
         <source>Burning application path has to be an executable file.</source>
         <translation>La ruta de la aplicación de grabación tiene que apuntar a un archivo executable.</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="114"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="111"/>
         <source>You have to indicate the path of folder to copy to DICOMDIR.</source>
         <translation>Se tiene que indicar la ruta del directorio a copiar al DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="124"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="121"/>
         <source>Invalid path of folder to copy to DICOMDIR.</source>
         <translation>Ruta inválida del directorio a copiar al DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="129"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="126"/>
         <source>Invalid content of the folder to copy to DICOMDIR, this folder can&apos;t contains any item called DICOM or DICOMDIR.</source>
         <oldsource>Invalid content of the folder to copy to DICOMDIR, This folder can&apos;t contains any item called DICOM or DICOMDIR.</oldsource>
         <translation>El directorio a copiar al DICOMDIR contiene elementos inválidos, este directorio no puede contener elementos con nombre DICOM o DICOMDIR.</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreen.cpp" line="181"/>
+        <location filename="qdicomdirconfigurationscreen.cpp" line="178"/>
         <source>Folder to copy to DICOMDIR...</source>
         <translation>Directorio a copiar al DICOMDIR...</translation>
     </message>
@@ -2047,12 +2047,12 @@ Estos archivos se tendran que borrar de forma manual.</translation>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="233"/>
         <source>Select a study to retrieve</source>
-        <translation>Seleccione un estudio a descargar.</translation>
+        <translation>Seleccione un estudio a descargar</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="248"/>
         <source>Select a study to retrieve and view</source>
-        <translation>Selectione un estudio para descargar y visualizar.</translation>
+        <translation>Selectione un estudio para descargar y visualizar</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="312"/>
@@ -2242,8 +2242,7 @@ Contacte con un administrador para registrar su ordenador al PACS.</translation>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="489"/>
         <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
-        <translation>%1 no puede consultar al PACS %2 de %3.
-Asegúrese que su ordenador está conectado a la red y que los parámetros del PACS sean correctos.</translation>
+        <translation>El error puede ser debido a que la imágenes pedidas estén corruptas o que el puerto de conexiones entrantes del PACS no esté correctamente configurado.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="493"/>
@@ -2907,24 +2906,24 @@ Si el error se ha producido al abrir una nueva ventana del %1, cierre esta venta
 <context>
     <name>udg::RISRequestManager</name>
     <message>
-        <location filename="risrequestmanager.cpp" line="104"/>
+        <location filename="risrequestmanager.cpp" line="116"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation>%2 no puede ejecutar la petición del RIS, porque no se ha encontrado ningún estudio con el accession number %1 en los PACS seleccionados por defecto.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="121"/>
+        <location filename="risrequestmanager.cpp" line="133"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>Procesando la petición del RIS, no se ha podido consultar al PACS %1 de %2.
-Asegurese que la IP i el AETitle del PACS son correctos.</translation>
+Asegurese que la IP i el AETitle del PACS son correctos</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="136"/>
+        <location filename="risrequestmanager.cpp" line="148"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation>No se pueden escuchar las peticiones del RIS por el puerto %1, este puerto es utilitzado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="137"/>
+        <location filename="risrequestmanager.cpp" line="149"/>
         <source>
 
 If the error has ocurred when openned new %1&apos;s windows, close this window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
@@ -2933,12 +2932,12 @@ If the error has ocurred when openned new %1&apos;s windows, close this window. 
 Si el error se ha producido al abrir una nueva ventana del %1, cierre esta ventana. Para abrir una nueva ventana del %1 tiene que hacerlo des del menú Archivo con la opción &apos;Nuevo&apos;.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="140"/>
+        <location filename="risrequestmanager.cpp" line="152"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation>No se pueden escuchar peticiones del RIS por el puerto %1, se ha producido un error de red desconocido.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="141"/>
+        <location filename="risrequestmanager.cpp" line="153"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation>
