@@ -24,7 +24,7 @@ class SlicingTool : public Tool
 Q_OBJECT
 public:
     /// estats de la tool
-    enum { NONE , SLICING };
+    enum { None , Slicing };
 
     SlicingTool( QViewer *viewer, QObject *parent = 0 );
     ~SlicingTool();
