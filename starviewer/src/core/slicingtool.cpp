@@ -19,7 +19,7 @@ namespace udg {
 SlicingTool::SlicingTool( QViewer *viewer, QObject *parent )
  : Tool(viewer,parent), m_slicingMode(SliceMode), m_mouseMovement(false), m_numberOfImages(1), m_screenSize(0), m_inputHasPhases(false), m_forcePhaseMode(false)
 {
-    m_state = NONE;
+    m_state = None;
     m_toolName = "SlicingTool";
     m_startPosition[0] = 0;
     m_startPosition[1] = 0;
@@ -129,7 +129,7 @@ void SlicingTool::handleEvent( unsigned long eventID )
 
 void SlicingTool::startSlicing()
 {
-    m_state = SLICING;
+    m_state = Slicing;
     m_2DViewer->getEventPosition( m_startPosition );
 	// calculem el nombre d'imatges que manipulem
     computeImagesForScrollMode();
@@ -138,7 +138,7 @@ void SlicingTool::startSlicing()
 
 void SlicingTool::doSlicing()
 {
-    if( m_state == SLICING )
+    if( m_state == Slicing )
     {
 		Q_ASSERT( m_screenSize );
 		m_viewer->setCursor( QCursor(QPixmap(":/images/slicing.png")) );
@@ -167,14 +167,14 @@ void SlicingTool::doSlicing()
 void SlicingTool::endSlicing()
 {
     m_viewer->setCursor( Qt::ArrowCursor );
-    m_state = NONE;
+    m_state = None;
 }
 
 void SlicingTool::inputChanged( Volume *input )
 {
     chooseBestDefaultScrollMode(input);
     m_mouseMovement = false;
-    m_state = NONE;
+    m_state = None;
     m_inputHasPhases = false;
     if( input )
     {
