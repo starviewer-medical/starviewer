@@ -18,7 +18,7 @@ namespace udg {
 ZoomTool::ZoomTool( QViewer *viewer, QObject *parent )
  : Tool(viewer,parent)
 {
-    m_state = NONE;
+    m_state = None;
     m_toolName = "ZoomTool";
     // ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT( m_viewer );
@@ -65,13 +65,13 @@ void ZoomTool::handleEvent( unsigned long eventID )
 
 void ZoomTool::startZoom()
 {
-    m_state = ZOOMING;
+    m_state = Zooming;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
 }
 
 void ZoomTool::doZoom()
 {
-    if( m_state == ZOOMING )
+    if( m_state == Zooming )
     {
 		m_viewer->setCursor( QCursor( QPixmap(":/images/zoom.png") ) );
         double *center = m_viewer->getRenderer()->GetCenter();
@@ -85,7 +85,7 @@ void ZoomTool::doZoom()
 void ZoomTool::endZoom()
 {
     m_viewer->setCursor( Qt::ArrowCursor );
-    m_state = NONE;
+    m_state = None;
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
 	m_viewer->refresh(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
 }
