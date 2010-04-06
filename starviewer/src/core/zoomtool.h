@@ -20,7 +20,7 @@ class ZoomTool : public Tool
 {
 Q_OBJECT
 public:
-    enum { NONE , ZOOMING };
+    enum { None , Zooming };
     ZoomTool( QViewer *viewer, QObject *parent = 0 );
 
     ~ZoomTool();
