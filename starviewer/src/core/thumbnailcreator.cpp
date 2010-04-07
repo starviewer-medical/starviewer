@@ -208,6 +208,12 @@ bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) co
         DEBUG_LOG("El DICOMTagReader donat és NUL!");
         return false;
     }
+
+    if( !reader->getDcmDataset() )
+    {
+        DEBUG_LOG("El DICOMTagReader no té cap DcmDataset assignat, no podem generar el thumbnail.");
+        return false;
+    }
     
     bool suitable = true;
 
