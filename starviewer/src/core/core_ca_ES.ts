@@ -317,7 +317,7 @@ Acc:%6
     <message>
         <location filename="q3dviewer.cpp" line="1190"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
-        <translation>El volum actual és massa gran. Si us plau, seleccioni un altre volum o tanqui les aplicacions obertes i intenti-ho de nou.</translation>
+        <translation>El volum actual és massa gros. Si us plau, seleccioni un altre volum o tanqui les aplicacions obertes i intenti-ho de nou.</translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="590"/>
@@ -424,7 +424,7 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qdicomdumpbase.ui" line="110"/>
         <source>Patient ID :</source>
-        <translation>ID pacient :</translation>
+        <translation>ID del pacient :</translation>
     </message>
     <message>
         <location filename="qdicomdumpbase.ui" line="130"/>
@@ -454,7 +454,7 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qdicomdumpbase.ui" line="223"/>
         <source>Image Time :</source>
-        <translation>Temps imatge :</translation>
+        <translation>Temps de la imatge :</translation>
     </message>
     <message>
         <location filename="qdicomdumpbase.ui" line="236"/>
@@ -464,7 +464,7 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qdicomdumpbase.ui" line="271"/>
         <source>Ok</source>
-        <translation>Ok</translation>
+        <translation>D&apos;acord</translation>
     </message>
 </context>
 <context>
@@ -594,7 +594,7 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qdicomdumpcthelixwidgetbase.ui" line="267"/>
         <source>Reconstruction Diameter:</source>
-        <translation>Diametre de reconstrucció:</translation>
+        <translation>Diàmetre de reconstrucció:</translation>
     </message>
     <message>
         <location filename="qdicomdumpcthelixwidgetbase.ui" line="290"/>
@@ -901,7 +901,7 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qdicomdumpctwidgetbase.ui" line="339"/>
         <source>Reconstruction Diameter:</source>
-        <translation>Diametre de reconstrucció:</translation>
+        <translation>Diàmetre de reconstrucció:</translation>
     </message>
     <message>
         <location filename="qdicomdumpctwidgetbase.ui" line="386"/>
@@ -1084,7 +1084,7 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="41"/>
         <source>Compression Force:</source>
-        <translation>Força de Compressió:</translation>
+        <translation>Força de compressió:</translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="57"/>
@@ -1446,7 +1446,7 @@ Variable d&apos;entorn(logFilePath): %2</translation>
     <message>
         <location filename="screenshottool.cpp" line="89"/>
         <source>Save multiple screenshots as...</source>
-        <translation>Guardar múltiples imatges com...</translation>
+        <translation>Guardar múltiples captures com...</translation>
     </message>
     <message>
         <location filename="screenshottool.cpp" line="88"/>
@@ -1485,7 +1485,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="193"/>
         <source>Put Seed tool</source>
-        <translation>Situa l&apos;eina de Llavors</translation>
+        <translation>Situa l&apos;eina de llavor</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="198"/>
@@ -1495,7 +1495,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="202"/>
         <source>Enable/Disable Magic tool</source>
-        <translation>Habilitar/Deshabilitar Eina Màgica</translation>
+        <translation>Habilitar/Deshabilitar l&apos;eina màgica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="207"/>
@@ -1520,7 +1520,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="217"/>
         <source>Enable/Disable 3D Rotation tool</source>
-        <translation>Activar/Desactivar l&apos;eina de Rotació 3D</translation>
+        <translation>Activar/Desactivar l&apos;eina de rotació 3D</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="225"/>
@@ -1555,7 +1555,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="247"/>
         <source>Enable voxel information over cursor</source>
-        <translation>Activar informació voxes sota el cursor</translation>
+        <translation>Activar informació voxel sota el cursor</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="252"/>
@@ -1575,7 +1575,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="259"/>
         <source>Window Level Presets tool</source>
-        <translation></translation>
+        <translation>Window Level</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="260"/>
@@ -1596,7 +1596,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="324"/>
         <source>Clipping Planes</source>
-        <translation>Plans de Tall</translation>
+        <translation>Plans de tall</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="327"/>
@@ -1611,7 +1611,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="357"/>
         <source>Restore to initial state</source>
-        <translation>Restablir a l&apos;estat inciial</translation>
+        <translation>Restablir a l&apos;estat incial</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="364"/>
@@ -1681,7 +1681,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="424"/>
         <source>Rotate Counter Clockwise</source>
-        <translation>Rotar en Sentit Anti-horari</translation>
+        <translation>Rotar en sentit Anti-horari</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="427"/>
@@ -1716,7 +1716,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="158"/>
         <source>Scroll</source>
-        <translation>Scroll</translation>
+        <translation>Canvi de tall</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="161"/>
@@ -1731,7 +1731,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="182"/>
         <source>Pan</source>
-        <translation></translation>
+        <translation>Moure</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="222"/>
@@ -1778,7 +1778,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="295"/>
         <source>Enable/Disable Cursor 3D tool</source>
-        <translation>Habilitar/Deshabilitar eina de Cursor 3D</translation>
+        <translation>Habilitar/Deshabilitar eina de cursor 3D</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="300"/>
@@ -1838,7 +1838,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volume.cpp" line="128"/>
         <source>Unkwown Error</source>
-        <translation>Error esconegut</translation>
+        <translation>Error desconegut</translation>
     </message>
     <message>
         <location filename="volume.cpp" line="128"/>
