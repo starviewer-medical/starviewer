@@ -20,6 +20,7 @@ public:
     static const QString LogViewerGeometry;
     static const QString UserHangingProtocolsPath;
     static const QString RegisterStatLogs;
+    static const QString DefaultToolTextSize;
     
     static const QString NumberOfDirectionsForLowQualityObscurances;
     static const QString FunctionForLowQualityObscurances;
