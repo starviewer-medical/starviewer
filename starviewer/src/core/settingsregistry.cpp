@@ -46,10 +46,9 @@ Settings::Properties SettingsRegistry::getProperties( const QString &key )
 
 void SettingsRegistry::loadAccesLevelTable()
 {
-    // Al directori on s'instal·la l'aplicació tenim una carpeta "config" on tindrem
+    // Al directori on s'instal·la l'aplicació tindrem
     // un .ini que definirà els nivells d'accés de cada settings
-    // TODO aquesta ubicació encara no és definitiva
-    QString filePath = qApp->applicationDirPath() +  "/config/settingsAccessLevel.ini";
+    QString filePath = qApp->applicationDirPath() +  "/settingsAccessLevel.ini";
     QFile file(filePath);
     if( !file.exists() )
     {
