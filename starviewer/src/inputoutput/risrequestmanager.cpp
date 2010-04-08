@@ -146,7 +146,6 @@ void RISRequestManager::showListenRISRequestThreadError(ListenRISRequestThread::
     {
         case ListenRISRequestThread::RisPortInUse :
             message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
-            message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case ListenRISRequestThread::UnknownNetworkError :
             message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(risPort);
