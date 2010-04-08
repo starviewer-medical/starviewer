@@ -90,7 +90,7 @@
 <context>
     <name>udg::HangingProtocolManager</name>
     <message>
-        <location filename="hangingprotocolmanager.cpp" line="887"/>
+        <location filename="hangingprotocolmanager.cpp" line="898"/>
         <source>Downloading previous study...</source>
         <translation>Descarregant estudi previ...</translation>
     </message>
@@ -317,7 +317,7 @@ Acc:%6
     <message>
         <location filename="q3dviewer.cpp" line="1190"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
-        <translation>El volum actual és massa gran. Si us plau, seleccioni un altre volum o tenquil les aplicacions obertes i intenti-ho de nou.</translation>
+        <translation>El volum actual és massa gran. Si us plau, seleccioni un altre volum o tanqui les aplicacions obertes i intenti-ho de nou.</translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="590"/>

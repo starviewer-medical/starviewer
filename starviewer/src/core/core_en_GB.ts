@@ -89,7 +89,7 @@
 <context>
     <name>udg::HangingProtocolManager</name>
     <message>
-        <location filename="hangingprotocolmanager.cpp" line="887"/>
+        <location filename="hangingprotocolmanager.cpp" line="898"/>
         <source>Downloading previous study...</source>
         <translation type="unfinished"></translation>
     </message>
