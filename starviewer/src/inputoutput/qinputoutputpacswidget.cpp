@@ -492,7 +492,6 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
         case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
             message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsDevice::getIncomingDICOMConnectionsPort() );
             message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
-            message += tr("\n\nIf there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         default:
