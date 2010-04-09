@@ -73,6 +73,9 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     m_qpopUpRisRequestsScreen->setAccessionNumber(maskRISRequest.getAccessionNumber());
     m_qpopUpRisRequestsScreen->show();
 
+    // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
+    // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant 
+    // un message box, fent un log o el que calgui segons la ocasió.
     QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
     if ( queryablePACS.isEmpty() )
     {
