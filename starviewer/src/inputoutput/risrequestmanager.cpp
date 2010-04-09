@@ -141,7 +141,7 @@ void RISRequestManager::errorQueryingStudy(PacsDevice pacsDeviceError)
 {
     QString errorMessage;
 
-    errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure that the IP and AETitle of this PACS are correct")
+    errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure that the IP and AETitle of It are correct.")
         .arg(pacsDeviceError.getAETitle())
         .arg(pacsDeviceError.getInstitution());
 

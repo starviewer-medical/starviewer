@@ -10,13 +10,15 @@
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="502"/>
-        <source>Add the new Pacs to the list</source>
-        <translation>Añadir un nuevo Pacs a la lista</translation>
+        <source>Add the new PACS to the list</source>
+        <oldsource>Add the new Pacs to the list</oldsource>
+        <translation>Añade un nuevo PACS a la lista</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="512"/>
-        <source>Update the parameters of the selected Pacs</source>
-        <translation>Actualizar los parámetros del Pacs seleccionado</translation>
+        <source>Update the parameters of the selected PACS</source>
+        <oldsource>Update the parameters of the selected Pacs</oldsource>
+        <translation>Actualiza los parámetros del PACS seleccionado</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="156"/>
@@ -30,8 +32,9 @@
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="166"/>
-        <source>Test if selected Pacs is alive</source>
-        <translation>Comprobar si los Pacs seleccionados están &quot;vivos&quot;</translation>
+        <source>Test if selected PACS is alive</source>
+        <oldsource>Test if selected Pacs is alive</oldsource>
+        <translation>Comprueva si los PACS seleccionados responden</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="250"/>
@@ -41,14 +44,17 @@
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="264"/>
+        <location filename="qconfigurationscreenbase.ui" line="935"/>
         <source>Address:</source>
         <oldsource>Address :</oldsource>
         <translation>Dirección:</translation>
     </message>
     <message>
+        <location filename="qconfigurationscreenbase.ui" line="1052"/>
         <location filename="qconfigurationscreenbase.ui" line="1058"/>
-        <source>Apply Changes</source>
-        <translation>Aplicar Cambios</translation>
+        <source>Apply changes</source>
+        <oldsource>Apply Changes</oldsource>
+        <translation>Aplicar cambios</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="94"/>
@@ -67,14 +73,10 @@
         <translation>Institución</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="1052"/>
-        <source>Apply changes</source>
-        <translation>Aplicar cambios</translation>
-    </message>
-    <message>
         <location filename="qconfigurationscreenbase.ui" line="153"/>
-        <source>Delete selected Pacs</source>
-        <translation>Borra el pacs seleccionado</translation>
+        <source>Delete selected PACS</source>
+        <oldsource>Delete selected Pacs</oldsource>
+        <translation>Borra el PACS seleccionado</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="109"/>
@@ -221,11 +223,6 @@
         <translation>Ciudad:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="935"/>
-        <source>Address: </source>
-        <translation>Dirección: </translation>
-    </message>
-    <message>
         <location filename="qconfigurationscreenbase.ui" line="975"/>
         <source>EMail:</source>
         <oldsource>EMail :</oldsource>
@@ -239,7 +236,7 @@
     <message>
         <location filename="qconfigurationscreenbase.ui" line="662"/>
         <source>&lt;b&gt;This port is in use by another application.&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Este puerto es utilitzado por otra aplicación.&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Este puerto esta siendo utilitzado por otra aplicación.&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -256,9 +253,9 @@
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="70"/>
-        <source>Convert all images to Little Endian</source>
-        <oldsource>Convert all images to little endian</oldsource>
-        <translation>Convertir todas las imágenes a Little Endian</translation>
+        <source>Convert all images to Explicit Little Endian</source>
+        <oldsource>Convert all images to Little Endian</oldsource>
+        <translation>Convertir todas las imágenes a Explicit Little Endian</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="101"/>
@@ -285,8 +282,9 @@
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="184"/>
-        <source>Download from here:</source>
-        <translation>Descargar des de aquí:</translation>
+        <source>Download from:</source>
+        <oldsource>Download from here:</oldsource>
+        <translation>Descargar des de:</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="191"/>
@@ -360,8 +358,8 @@
     </message>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="46"/>
-        <source>Apply Changes</source>
-        <translation>Aplicar Cambios</translation>
+        <source>Apply changes</source>
+        <translation>Aplicar cambios</translation>
     </message>
     <message>
         <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="92"/>
@@ -395,7 +393,7 @@
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="205"/>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="208"/>
         <source>Compact Database</source>
-        <translation>Compactar base de Datos</translation>
+        <translation>Compactar base de datos</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="231"/>
@@ -409,8 +407,9 @@
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="287"/>
-        <source>Apply the canges</source>
-        <translation>Aplicar Cambios</translation>
+        <source>Apply the changes</source>
+        <oldsource>Apply the canges</oldsource>
+        <translation>Aplica los cambios</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="293"/>
@@ -419,8 +418,9 @@
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="310"/>
-        <source>Minimum space required in harddisk to retrieve dicom objects:</source>
-        <translation>Espacio mínimo requerido para descargar objetos dicom:</translation>
+        <source>Minimum space required in harddisk to retrieve DICOM objects:</source>
+        <oldsource>Minimum space required in harddisk to retrieve dicom objects:</oldsource>
+        <translation>Espacio mínimo requerido para descargar objetos DICOM:</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="333"/>
@@ -449,23 +449,25 @@
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="498"/>
-        <source>Database path :</source>
-        <translation>Ruta Base de Datos :</translation>
+        <source>Database path:</source>
+        <oldsource>Database path :</oldsource>
+        <translation>Ruta base de datos:</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="517"/>
-        <source>Cache images path :</source>
-        <translation>Ruta de las imágenes de Cache:</translation>
+        <source>Cache images path:</source>
+        <oldsource>Cache images path :</oldsource>
+        <translation>Ruta caché de imágenes:</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="534"/>
         <source>Examine disk to find the database</source>
-        <translation>Examinar el disco para encontrar la base de datos</translation>
+        <translation>Examina el disco para encontrar la base de datos</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="550"/>
         <source>Examine disk to find the directory to save the retrieved images</source>
-        <translation>Examinar disco para encontrar el directorio donde almacenar las imágenes recibidas</translation>
+        <translation>Examina disco para encontrar el directorio donde almacenar las imágenes recibidas</translation>
     </message>
 </context>
 <context>
@@ -510,7 +512,7 @@
         <location filename="isoimagefilecreator.cpp" line="113"/>
         <source>You don&apos;t have permissions to write in the output iso image directory &quot;%1&quot;.</source>
         <oldsource>You don&apos;t have permissions to write in the output iso image directory %1.</oldsource>
-        <translation>No tienes permisos de escritura para generar la imagen en el directorio &quot;%1&quot;.</translation>
+        <translation>No tiene permisos de escritura para generar la imagen en el directorio &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="146"/>
@@ -548,7 +550,7 @@
     <message>
         <location filename="qpacslistbase.ui" line="106"/>
         <source>PacsId</source>
-        <translation></translation>
+        <translation>PacsId</translation>
     </message>
 </context>
 <context>
@@ -563,7 +565,7 @@
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="23"/>
         <source>Select at which PACS the DICOM files have to be sent:</source>
         <oldsource>Select at which PACS the DICOM objects have to be sent:</oldsource>
-        <translation>Seleccione a que PACS se quiere enviar los archivos DICOM:</translation>
+        <translation>Seleccione a que PACS quiere enviar los archivos DICOM:</translation>
     </message>
     <message>
         <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="96"/>
@@ -580,8 +582,9 @@
     <name>udg::ConvertToDicomdir</name>
     <message>
         <location filename="converttodicomdir.cpp" line="143"/>
-        <source>Creating Dicomdir...</source>
-        <translation>Creando Dicomdir...</translation>
+        <source>Creating DICOMDIR...</source>
+        <oldsource>Creating Dicomdir...</oldsource>
+        <translation>Creando DICOMDIR...</translation>
     </message>
 </context>
 <context>
@@ -589,7 +592,7 @@
     <message>
         <location filename="dicomdirimporter.cpp" line="135"/>
         <source>Importing study of </source>
-        <translation>Importando el estudio </translation>
+        <translation>Importando el estudio de</translation>
     </message>
 </context>
 <context>
@@ -625,9 +628,11 @@ Todos los estudios descargados e importados seran borrados.</translation>
     <message>
         <location filename="databaseinstallation.cpp" line="46"/>
         <source>
-Can&apos;t create database, be sure you have write permissions on database directory</source>
+Can&apos;t create database, be sure you have write permissions on database directory.</source>
+        <oldsource>
+Can&apos;t create database, be sure you have write permissions on database directory</oldsource>
         <translation>
-No se puede crear la base de datos, asegurese que tenga permisos en el directorio de la base de datos</translation>
+No se puede crear la base de datos, asegúrese que tenga permisos en el directorio de la base de datos.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="57"/>
@@ -646,20 +651,23 @@ La base de datos está corrupta y no puede ser reparada. Por favor contacte con 
     <message>
         <location filename="databaseinstallation.cpp" line="90"/>
         <source>
-Can&apos;t create the cache image directory. Please check users permissions</source>
-        <translation>No se puede crear el directorio de la caché de imagenes. Por favor comprueve los permisos de usuario</translation>
+Can&apos;t create the cache image directory. Please check users permissions.</source>
+        <oldsource>
+Can&apos;t create the cache image directory. Please check users permissions</oldsource>
+        <translation>No se puede crear el directorio de la caché de imágenes. Por favor comprueve los permisos de usuario.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="154"/>
-        <source>%1 can&apos;t reinstall database, be sure you have write permissions on database directory</source>
-        <translation>%1 no puede reinstalar la base de datos, asegurese que tenga permisos de escritura en el directorio de la base de datos</translation>
+        <source>%1 can&apos;t reinstall database, be sure you have write permissions on database directory.</source>
+        <oldsource>%1 can&apos;t reinstall database, be sure you have write permissions on database directory</oldsource>
+        <translation>%1 no puede reinstalar la base de datos, asegúrese que tenga permisos de escritura en el directorio de la base de datos.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="101"/>
         <source>
 You don&apos;t have write permissions on cache image directory. You couldn&apos;t retrieve or import new studies.</source>
         <translation>
-No tiene permisos de escritura en el directorio de la caché de imagenes. No podrá descargar o importar nuevos estudios.</translation>
+No tiene permisos de escritura en el directorio de la caché de imágenes. No podrá descargar o importar nuevos estudios.</translation>
     </message>
 </context>
 <context>
@@ -866,7 +874,7 @@ No tiene permisos de escritura en el directorio de la caché de imagenes. No pod
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="468"/>
         <source>Computerized Tomography</source>
-        <translation>Tomografia computerizada</translation>
+        <translation>Tomografía Computerizada</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="474"/>
@@ -901,7 +909,7 @@ No tiene permisos de escritura en el directorio de la caché de imagenes. No pod
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="527"/>
         <source>Direct Radiography</source>
-        <translation>Radiografía directa</translation>
+        <translation>Radiografía Directa</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="530"/>
@@ -911,7 +919,7 @@ No tiene permisos de escritura en el directorio de la caché de imagenes. No pod
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="540"/>
         <source>Magnetic Resonance</source>
-        <translation>Resonancia magnética</translation>
+        <translation>Resonancia Magnética</translation>
     </message>
     <message>
         <location filename="qbasicsearchwidgetbase.ui" line="543"/>
@@ -948,8 +956,9 @@ No tiene permisos de escritura en el directorio de la caché de imagenes. No pod
     <name>udg::QConfigurationScreen</name>
     <message>
         <location filename="qconfigurationscreen.cpp" line="327"/>
-        <source>AETitle field can&apos;t be empty</source>
-        <translation>El AETitle no puede estar vacio</translation>
+        <source>AETitle field can&apos;t be empty.</source>
+        <oldsource>AETitle field can&apos;t be empty</oldsource>
+        <translation>El campo AETitle no puede estar vacio.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="361"/>
@@ -959,13 +968,15 @@ No tiene permisos de escritura en el directorio de la caché de imagenes. No pod
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="376"/>
-        <source>Local Port has to be between 0 and 65535</source>
-        <translation>El puerto local tiene que estar entre 0 y 65535</translation>
+        <source>Local Port value has to be between 0 and 65535.</source>
+        <oldsource>Local Port has to be between 0 and 65535</oldsource>
+        <translation>El puerto local tiene que estar entre 0 y 65535.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="385"/>
-        <source>Maximum simultaenious connections has to be between 1 and 15</source>
-        <translation>El número máximo de conexiones simultáneas tiene que ser entre 1 y 15</translation>
+        <source>Maximum simultaenious connections has to be between 1 and 15.</source>
+        <oldsource>Maximum simultaenious connections has to be between 1 and 15</oldsource>
+        <translation>El número máximo de conexiones simultáneas tiene que ser entre 1 y 15.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="316"/>
@@ -984,13 +995,15 @@ No tiene permisos de escritura en el directorio de la caché de imagenes. No pod
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="206"/>
-        <source>Select a PACS to update</source>
-        <translation>Seleccione un PACS para actualizar</translation>
+        <source>Select a PACS to update.</source>
+        <oldsource>Select a PACS to update</oldsource>
+        <translation>Seleccione un PACS para actualizar.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="230"/>
-        <source>Select a PACS to delete</source>
-        <translation>Seleccione un Pacs para borrar</translation>
+        <source>Select a PACS to delete.</source>
+        <oldsource>Select a PACS to delete</oldsource>
+        <translation>Seleccione un PACS para borrar.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="302"/>
@@ -1016,16 +1029,20 @@ No tiene permisos de escritura en el directorio de la caché de imagenes. No pod
     <message>
         <location filename="qconfigurationscreen.cpp" line="288"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond.
-Be sure that the IP and AETitle of the PACS are correct.</source>
+Be sure that the IP and AETitle of It are correct.</source>
+        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond.
+Be sure that the IP and AETitle of it are correct.</oldsource>
         <translation>PACS &quot;%1&quot; no responde.
-Asegurese que la IP y el AETitle del PACS sean correctos.</translation>
+Asegúrese que la IP y el AETitle de este sean correctos.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="309"/>
         <source>PACS &quot;%1&quot; doesn&apos;t respond correclty.
-Be sure that the IP and AETitle of the PACS are correct.</source>
+Be sure that the IP and AETitle of It are correct.</source>
+        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correclty.
+Be sure that the IP and AETitle of it are correct.</oldsource>
         <translation>PACS &quot;%1&quot; no ha respondido de la forma esperada.
-Asegurese que la IP y el AETitle del PACS sean correctos.</translation>
+Asegúrese que la IP y el AETitle de este sean correctos.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="341"/>
@@ -1047,8 +1064,9 @@ Asegurese que la IP y el AETitle del PACS sean correctos.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="399"/>
-        <source>The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes ?</source>
-        <translation>El puerto %1 para las conexiones entrantes es utilizado por otra aplicación. ¿ Está seguro que quiere aplicar los cambios ?</translation>
+        <source>The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes?</source>
+        <oldsource>The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes ?</oldsource>
+        <translation>El puerto %1 para las conexiones entrantes es utilizado por otra aplicación. ¿Está seguro que quiere aplicar los cambios?</translation>
     </message>
 </context>
 <context>
@@ -1067,8 +1085,9 @@ Asegurese que la IP y el AETitle del PACS sean correctos.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="339"/>
-        <source>Create directory ?</source>
-        <translation>¿ Crear directorio ?</translation>
+        <source>Create directory?</source>
+        <oldsource>Create directory ?</oldsource>
+        <translation>¿Crear directorio?</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="346"/>
@@ -1122,8 +1141,9 @@ Asegurese que la IP y el AETitle del PACS sean correctos.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="285"/>
-        <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</source>
-        <translation>No se puede crear el directorio temporal para crear el DICOMDIR. Por favor compruebe los permisos de usuario</translation>
+        <source>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission.</source>
+        <oldsource>Can&apos;t create the temporary directory to create DICOMDIR. Please check users permission</oldsource>
+        <translation>No se puede crear el directorio temporal para crear el DICOMDIR. Por favor compruebe los permisos de usuario.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="316"/>
@@ -1132,12 +1152,14 @@ Asegurese que la IP y el AETitle del PACS sean correctos.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="317"/>
-        <source>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?</source>
-        <translation>El directorio contiene un DICOMDIR, ¿quiere sobreescribirlo y borrar todos los archivos en el directorio?</translation>
+        <source>The directory contains a DICOMDIR. Do you want to overwrite and delete all the files in the directory?</source>
+        <oldsource>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory?</oldsource>
+        <translation>El directorio contiene un DICOMDI. ¿Quiere sobreescribirlo y borrar todos los archivos en el directorio?</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="340"/>
-        <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</source>
+        <source>The DICOMDIR directory doesn&apos;t exists. Do you want to create it?</source>
+        <oldsource>The DICOMDIR directory doesn&apos;t exists. Do you want to create it ?</oldsource>
         <translation>El directorio del DICOMDIR no existe. ¿Quiere crearlo?</translation>
     </message>
     <message>
@@ -1147,8 +1169,9 @@ Asegurese que la IP y el AETitle del PACS sean correctos.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="305"/>
-        <source>No directory specified to create the DICOMDIR</source>
-        <translation>No se especificó el directorio donde crear el DICOMDIR</translation>
+        <source>No directory specified to create the DICOMDIR.</source>
+        <oldsource>No directory specified to create the DICOMDIR</oldsource>
+        <translation>No se especificó el directorio donde crear el DICOMDIR.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="384"/>
@@ -1158,18 +1181,25 @@ Asegurese que la IP y el AETitle del PACS sean correctos.</translation>
     <message>
         <location filename="qcreatedicomdir.cpp" line="406"/>
         <source>Some images are not 100 % DICOM compliant. It could be possible that some viewers have problems to visualize them.</source>
-        <translation>Algunas de las imágenes no cumplen al 100% el estándar DICOM. Es posible que algunos visualizadores tengan problemas para mostrarlas.</translation>
+        <translation>Algunas de las imágenes no cumplen al 100% el estándar DICOM. Es posible que algunos visualizadores tengan problemas para visualizarlas.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="419"/>
-        <source>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</source>
-        <translation>Error creando el DICOMDIR. Asegúrese que tiene permisos en %1 y que el directorio está vacío.</translation>
+        <source>Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty.</source>
+        <oldsource>Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty.</oldsource>
+        <translation>Error creando el DICOMDIR. Asegúrese que tiene permisos de escritura en %1 y que el directorio está vacío.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="574"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
         <translation>Se ha producido un error en la grabación en CD/DVD del DICOMDIR.</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="580"/>
+        <location filename="qcreatedicomdir.cpp" line="619"/>
+        <source>DICOMDIR creation failure</source>
+        <translation>Error creando DICOMDIR</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="649"/>
@@ -1263,7 +1293,7 @@ Remove it from the directory or uncheck copy folder content option.</source>
 Remove it from the directory or uncheck copy folder content to DICOMDIR option.</oldsource>
         <translation>%1 no ha creado el DICOMDIR, porqué el contenido del directorio a copiar &apos;%2&apos; contiene un elemento con nombre DICOMDIR o DICOM.
 
-Borre estos elementos del directorio o desmarque la opción copiar el contenido del directorio.</translation>
+Borre estos elementos del directorio o desactive la opción copiar el contenido del directorio.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="574"/>
@@ -1299,6 +1329,11 @@ Borre estos elementos del directorio o desmarque la opción copiar el contenido 
         <translation>Ha habido algún error cuando se intentaba leer del proceso [ %1 ]. Por ejemplo, puede que el proceso no se esté ejecutando.</translation>
     </message>
     <message>
+        <location filename="qcreatedicomdir.cpp" line="619"/>
+        <source>There was an error during the creation of the DICOMDIR.</source>
+        <translation>Se produjo un error durante la creació del DICOMDIR.</translation>
+    </message>
+    <message>
         <location filename="qcreatedicomdir.cpp" line="709"/>
         <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</source>
         <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb</oldsource>
@@ -1315,18 +1350,7 @@ Borre estos elementos del directorio o desmarque la opción copiar el contenido 
         <source>Invalid DICOMDIR burning application configuration.
 It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation>La configuración de la aplicación para grabar DICOMDIR no es correcta.
-Especifique una configuración válida en el menú Herramientas -&gt; Configuracion -&gt; DICOMDIR.</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="580"/>
-        <location filename="qcreatedicomdir.cpp" line="619"/>
-        <source>DICOMDIR Creation Failure</source>
-        <translation>Fallo en la creación de DICOMDIR</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="619"/>
-        <source>There was an error during the creation of the DICOMDIR</source>
-        <translation>Hubo un error durante la creación del DICOMDIR</translation>
+Especifique una configuración válida en el menú Herramientas -&gt; Configuración -&gt; DICOMDIR.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="331"/>
@@ -1379,7 +1403,7 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
     <message>
         <location filename="qcreatedicomdirbase.ui" line="93"/>
         <source>studyUID</source>
-        <translation></translation>
+        <translation>UID Estudio</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="122"/>
@@ -1440,8 +1464,9 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="525"/>
-        <source>Creates the Dicomdir with the selected studies</source>
-        <translation>Crea un Dicomdir de los estudios seleccionados</translation>
+        <source>Creates a DICOMDIR with the selected studies</source>
+        <oldsource>Creates the DICOMDIR with the selected studies</oldsource>
+        <translation>Crea un DICOMDIR con estudios seleccionados</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="528"/>
@@ -1483,7 +1508,7 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
     <message>
         <location filename="qcreatedicomdirbase.ui" line="353"/>
         <source>Pen Drive</source>
-        <translation>Dispositivo extraible USB</translation>
+        <translation>Dispositivo extraíble USB</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="457"/>
@@ -1547,7 +1572,7 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
     <message>
         <location filename="qexporterbase.ui" line="56"/>
         <source>Images to store:</source>
-        <translation>Imagenes a enviar:</translation>
+        <translation>Imágenes a enviar:</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="63"/>
@@ -1557,7 +1582,7 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
     <message>
         <location filename="qexporterbase.ui" line="73"/>
         <source>All images of current phase</source>
-        <translation>Todas las imagenes de la fase actual</translation>
+        <translation>Todas las imágenes de la fase actual</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="83"/>
@@ -1567,7 +1592,7 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
     <message>
         <location filename="qexporterbase.ui" line="93"/>
         <source>All images of the series</source>
-        <translation>Todas las imagenes de la serie</translation>
+        <translation>Todas las imágenes de la serie</translation>
     </message>
     <message>
         <location filename="qexporterbase.ui" line="135"/>
@@ -1704,18 +1729,19 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
         <location filename="qinputoutputdicomdirwidget.cpp" line="179"/>
         <source>No images match for this series.
 </source>
-        <translation>No se han encontrado imagenes para esta serie.
+        <translation>No se han encontrado imágenes para esta serie.
 </translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="226"/>
-        <source>Select at least one study to view</source>
-        <translation>Seleccione al menos un estudio para visualizar</translation>
+        <source>Select at least one study to view.</source>
+        <oldsource>Select at least one study to view</oldsource>
+        <translation>Seleccione al menos un estudio para visualizar.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="256"/>
         <source>No valid data found. Maybe some files are missing or corrupted.</source>
-        <translation>No se han encontrado datos válidos. Puede ser que algunas imagenes no existan o esten corruptas.</translation>
+        <translation>No se han encontrado datos válidos. Puede ser que algunas imágenes no existan o esten corruptas.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="267"/>
@@ -1725,11 +1751,11 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="268"/>
-        <source>the DICOMDIR could not be opened. Be sure that the DICOMDIR path is correct.
+        <source>the DICOMDIR file could not be opened, be sure that its path is correct.
 </source>
-        <oldsource>the dicomdir could not be opened. Be sure that the dicomdir path is correct.
+        <oldsource>the DICOMDIR file could not be opened. Be sure that the DICOMDIR path is correct.
 </oldsource>
-        <translation>el DICOMDIR no se ha podido abrir. Asegúrese que la ruta del dicomdir está correcta.
+        <translation>el archivol DICOMDIR no se ha podido abrir, asegúrese que la ruta a este correcta.
 </translation>
     </message>
     <message>
@@ -1745,7 +1771,7 @@ Si el problema persiste contacte con un administrador.</translation>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="273"/>
         <source>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</source>
-        <translation>Algunos archivos del estudio con UID %2 no se han podido importar. Asegurese que tiene permisos en el directorio de la caché de %1.</translation>
+        <translation>Algunos archivos del estudio con UID %2 no se han podido importar. Asegúrese que tiene permisos en el directorio de la caché de %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="283"/>
@@ -1798,8 +1824,9 @@ Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="309"/>
-        <source>The study with UID %2 can&apos;t be imported, because %1 has not been capable of read correctly dicom information of the study.</source>
-        <translation>El estudio con UID %2 no se ha podido ser importar, porque %1 no ha sido capaz de leer correctamente la información del estudio.</translation>
+        <source>The study with UID %2 can&apos;t be imported, because %1 has not been capable of read correctly DICOM information of the study.</source>
+        <oldsource>The study with UID %2 can&apos;t be imported, because %1 has not been capable of read correctly dicom information of the study.</oldsource>
+        <translation>El estudio con UID %2 no se ha podido ser importar, porque %1 no ha sido capaz de leer correctamente la información DICOM del estudio.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="310"/>
@@ -1908,7 +1935,7 @@ Por favor contacte con el equipo de %1.</translation>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="208"/>
         <source>No images match for this study.
 </source>
-        <translation>No se han encontrado imagenes para este estudio.
+        <translation>No se han encontrado imágenes para este estudio.
 </translation>
     </message>
     <message>
@@ -1919,28 +1946,30 @@ Por favor contacte con el equipo de %1.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="261"/>
         <source>The study %1 of patient %2 is in use by the DICOMDIR List. If you want to delete this study you should remove it from the DICOMDIR List first.</source>
-        <translation>El estudio %1 del paciente %2 está en la lista de DICOMDIR. Si desea borrar este estudio tendria que quitarlo de la lista.</translation>
+        <translation>El estudio %1 del paciente %2 está en la lista de DICOMDIR. Si desea borrar este estudio tendría que quitarlo de la lista.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="267"/>
         <source>The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete this series you should remove the study from the DICOMDIR List first.</source>
-        <translation>La serie con el UID %1 del estudio %2, paciente %3 está en la lista de DICOMDIR. Si desea borrar está serie tiene que quitar el estudio de la lista de DICOMDIR.</translation>
+        <translation>La serie con el UID %1 del estudio %2, paciente %3 está en la lista de DICOMDIR. Si desea borrar está serie tiene que quitar el estudio de la lista.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="300"/>
-        <source>Please select at least one study to delete</source>
-        <translation>Seleccione almenos un estudio a borrar</translation>
+        <source>Please select at least one item to delete.</source>
+        <oldsource>Please select at least one object to delete.</oldsource>
+        <translation>Seleccione almenos un elemento a borrar.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="311"/>
-        <source>Select at least one study to view</source>
-        <translation>Seleccione al menos un estudio para visualizar</translation>
+        <source>Select at least one study to view.</source>
+        <oldsource>Select at least one study to view</oldsource>
+        <translation>Seleccione al menos un estudio para visualizar.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="373"/>
-        <source>Select at least one study to send to PACS.</source>
-        <oldsource>Select at least one study to store to PACS.</oldsource>
-        <translation>Seleccione al menos un estudio para enviar al PACS.</translation>
+        <source>Select at least one item to send to PACS.</source>
+        <oldsource>Select at least one object to send to PACS.</oldsource>
+        <translation>Seleccione al menos un elemento para enviar al PACS.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="422"/>
@@ -1950,7 +1979,7 @@ Por favor contacte con el equipo de %1.</translation>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="446"/>
         <source>An error has ocurred while </source>
-        <translation>Se ha produciodo un error </translation>
+        <translation>Se ha producido un error </translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="454"/>
@@ -2046,18 +2075,21 @@ Estos archivos se tendran que borrar de forma manual.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="233"/>
-        <source>Select a study to retrieve</source>
-        <translation>Seleccione un estudio a descargar</translation>
+        <source>Select a study to retrieve.</source>
+        <oldsource>Select a study to retrieve-</oldsource>
+        <translation>Seleccione un estudio a descargar.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="248"/>
-        <source>Select a study to retrieve and view</source>
-        <translation>Selectione un estudio para descargar y visualizar</translation>
+        <source>Select a study to retrieve and view.</source>
+        <oldsource>Select a study to retrieve and view-</oldsource>
+        <translation>Seleccione un estudio para descargar y visualizar.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="312"/>
-        <source>Please select a PACS to query</source>
-        <translation>Seleccione un Pacs a consultar</translation>
+        <source>Please select a PACS to query.</source>
+        <oldsource>Please select a PACS to query</oldsource>
+        <translation>Seleccione un PACS a consultar.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="319"/>
@@ -2200,9 +2232,11 @@ Si el problema persiste contacte con un administrador.</translation>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="475"/>
         <source>
-%1 has not be capable of read correctly dicom information of the study.</source>
+%1 has not be capable of read correctly DICOM information of the study.</source>
+        <oldsource>
+%1 has not be capable of read correctly dicom information of the study.</oldsource>
         <translation>
-%1 no es capaz de leer correctamente la información dicom del estudio.</translation>
+%1 no es capaz de leer correctamente la información DICOM del estudio.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="476"/>
@@ -2256,7 +2290,7 @@ Contacte con un administrador para registrar su ordenador al PACS.</translation>
 %1 can&apos;t retrieve the studies, all pending retrieve operations will be cancelled.</source>
         <translation>
 
-%1 no puede descargar los estudios, todos los estudios pendientes de descargar seran cancelados.</translation>
+%1 no puede descargar los estudios, todos los estudios pendientes de descargar serán cancelados.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="495"/>
@@ -2274,16 +2308,21 @@ Si hay alguna otra ventana de %1 descargando estudios del PACS, por favor espere
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="514"/>
-        <source>%1 can&apos;t connect to PACS %2 trying to store a study.
+        <source>%1 can&apos;t connect to PACS %2 trying to store DICOM files.
 </source>
-        <translation>%1 no ha podido conectar con el PACS %2 al intentar enviar un estudio.</translation>
+        <oldsource>%1 can&apos;t connect to PACS %2 trying to store files.
+</oldsource>
+        <translation>%1 no ha podido conectar con el PACS %2 al intentar enviar los archivos DICOM.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="521"/>
-        <source>The store of images to PACS %1 has failed.
+        <source>The store of DICOM files to PACS %1 has failed.
 
 </source>
-        <translation>El envio de imagenes al PACS %1 ha fallado.
+        <oldsource>The store of files to PACS %1 has failed.
+
+</oldsource>
+        <translation>El envio de archivos DICOM al PACS %1 ha fallado.
 
 </translation>
     </message>
@@ -2294,14 +2333,14 @@ Si hay alguna otra ventana de %1 descargando estudios del PACS, por favor espere
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="526"/>
-        <source>Please review the operation list screen, an unknown error has ocurred storing a study to PACS %1.</source>
-        <oldsource>Please review the operation list screen, an unknown error has ocurred storing a study.</oldsource>
-        <translation>Por favor revise la lista de operaciones, se ha producido un error desconocido enviando un estudio %1.</translation>
+        <source>Please review the operation list screen, an unknown error has ocurred storing files to PACS %1.</source>
+        <oldsource>Please review the operation list screen, an unknown error has ocurred storing a study to PACS %1.</oldsource>
+        <translation>Por favor revise la lista de operaciones, se ha producido un error desconocido enviando archivos al PACS %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="541"/>
         <source>There were problems to retrieve some images from study %1 from PACS %2. Those images may be missing in the local database.</source>
-        <translation>Se han producido problemas al descargar algunas imagenes del estudio %1 del PACS %2. Puede ser que estas imágenes no se hayan descargado.</translation>
+        <translation>Se han producido problemas al descargar algunas imágenes del estudio %1 del PACS %2. Puede ser que estas imágenes no se hayan descargado.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="543"/>
@@ -2310,10 +2349,13 @@ Si hay alguna otra ventana de %1 descargando estudios del PACS, por favor espere
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="559"/>
-        <source>Some images of study %1 can&apos;t be stored to PACS %2.
+        <source>Some DICOM files of study %1 can&apos;t be stored to PACS %2.
 
 </source>
-        <translation>Algunas imágenes del estudio %1 no se han podido enviar al PACS %2.
+        <oldsource>Some images of study %1 can&apos;t be stored to PACS %2.
+
+</oldsource>
+        <translation>Algunas archivos DICOM del estudio %1 no se han podido enviar al PACS %2.
 
 </translation>
     </message>
@@ -2385,13 +2427,15 @@ Si hay alguna otra ventana de %1 descargando estudios del PACS, por favor espere
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="116"/>
-        <source>Create directory ?</source>
-        <translation>¿ Crear directorio ?</translation>
+        <source>Create directory?</source>
+        <oldsource>Create directory ?</oldsource>
+        <translation>¿Crear directorio?</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="117"/>
-        <source>The cache image directory doesn&apos;t exists. Do you want to create it ?</source>
-        <translation>El directorio de la caché de imagenes no existe. ¿ Desea crearlo ?</translation>
+        <source>The cache image directory doesn&apos;t exists. Do you want to create it?</source>
+        <oldsource>The cache image directory doesn&apos;t exists. Do you want to create it ?</oldsource>
+        <translation>El directorio de la caché de imagenes no existe. ¿Desea crearlo?</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="118"/>
@@ -2440,8 +2484,9 @@ Si hay alguna otra ventana de %1 descargando estudios del PACS, por favor espere
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="266"/>
-        <source>Are you sure you want to delete all Studies of the cache ?</source>
-        <translation>¿ Está seguro que desea borrar todos los estudios de la caché ?</translation>
+        <source>Are you sure you want to delete all Studies of the cache?</source>
+        <oldsource>Are you sure you want to delete all Studies of the cache ?</oldsource>
+        <translation>¿Está seguro que desea borrar todos los estudios de la caché?</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="283"/>
@@ -2828,7 +2873,7 @@ Código de error: %1</translation>
 %1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</source>
         <translation>
 
-%1 no puede descarar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %2 o cambie el puerto para conexiones entrantes del PACS des de la pantalla de configuración.</translation>
+%1 no puede descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %2 o cambie el puerto para conexiones entrantes del PACS des de la pantalla de configuración.</translation>
     </message>
 </context>
 <context>
@@ -2897,44 +2942,46 @@ Código de error: %1</translation>
 <context>
     <name>udg::RISRequestManager</name>
     <message>
-        <location filename="risrequestmanager.cpp" line="79"/>
+        <location filename="risrequestmanager.cpp" line="82"/>
         <source>The RIS request could not be performed.</source>
         <translation>No se pudo realizar la petición del RIS.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="79"/>
+        <location filename="risrequestmanager.cpp" line="82"/>
         <source>There are no configured PACS to query.</source>
         <translation>No hay ningún PACS configurado para consultar.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="79"/>
+        <location filename="risrequestmanager.cpp" line="82"/>
         <source>Please, check your PACS settings.</source>
         <translation>Por favor, compruebe la configuración de PACS.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="124"/>
+        <location filename="risrequestmanager.cpp" line="127"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation>%2 no puede ejecutar la petición del RIS, porque no se ha encontrado ningún estudio con el accession number %1 en los PACS seleccionados por defecto.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="141"/>
+        <location filename="risrequestmanager.cpp" line="144"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
-Be sure that the IP and AETitle of this PACS are correct</source>
+Be sure that the IP and AETitle of It are correct.</source>
+        <oldsource>Processing the RIS request, can&apos;t query PACS %1 from %2.
+Be sure that the IP and AETitle of It are correct</oldsource>
         <translation>Procesando la petición del RIS, no se ha podido consultar al PACS %1 de %2.
-Asegurese que la IP i el AETitle del PACS son correctos</translation>
-    </message>
-    <message>
-        <location filename="risrequestmanager.cpp" line="156"/>
-        <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
-        <translation>No se pueden escuchar las peticiones del RIS por el puerto %1, este puerto es utilitzado por otra aplicación.</translation>
+Asegúrese que la IP y el AETitle de este sean correctos.</translation>
     </message>
     <message>
         <location filename="risrequestmanager.cpp" line="159"/>
+        <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
+        <translation>No se pueden escuchar las peticiones del RIS por el puerto %1, este puerto está siendo utilitzado por otra aplicación.</translation>
+    </message>
+    <message>
+        <location filename="risrequestmanager.cpp" line="162"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation>No se pueden escuchar peticiones del RIS por el puerto %1, se ha producido un error de red desconocido.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="160"/>
+        <location filename="risrequestmanager.cpp" line="163"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation>

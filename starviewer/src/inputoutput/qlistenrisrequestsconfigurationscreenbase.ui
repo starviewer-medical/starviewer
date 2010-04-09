@@ -43,7 +43,7 @@
      <item>
       <widget class="QPushButton" name="m_buttonApplyListenRisConfiguration" >
        <property name="text" >
-        <string>Apply Changes</string>
+        <string>Apply changes</string>
        </property>
       </widget>
      </item>

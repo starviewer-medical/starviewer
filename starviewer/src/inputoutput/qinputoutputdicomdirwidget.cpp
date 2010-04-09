@@ -223,7 +223,7 @@ void QInputOutputDicomdirWidget::view()
 
     if(selectedStudiesInstanceUID.isEmpty())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view"));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view."));
         return;
     }
 
@@ -265,7 +265,7 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
     {
         case DICOMDIRImporter::ErrorOpeningDicomdir :
             message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
-            message += tr("the DICOMDIR could not be opened. Be sure that the DICOMDIR path is correct.\n");
+            message += tr("the DICOMDIR file could not be opened, be sure that its path is correct.\n");
             message += tr("\n\nIf the problem persist contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
@@ -306,7 +306,7 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case DICOMDIRImporter::PatientInconsistent :
-            message = tr("The study with UID %2 can't be imported, because %1 has not been capable of read correctly dicom information of the study.").arg(ApplicationNameString, studyInstanceUID);
+            message = tr("The study with UID %2 can't be imported, because %1 has not been capable of read correctly DICOM information of the study.").arg(ApplicationNameString, studyInstanceUID);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
