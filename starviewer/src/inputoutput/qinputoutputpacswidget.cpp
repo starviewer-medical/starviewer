@@ -526,6 +526,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadStoreError(QString study
             message = tr("Please review the operation list screen, an unknown error has ocurred storing files to PACS %1.").arg(pacs.getAETitle());
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+            QMessageBox::critical(this, ApplicationNameString, message);
             break;
     }
 }
