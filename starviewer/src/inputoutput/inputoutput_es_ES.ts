@@ -1983,24 +1983,21 @@ Por favor contacte con el equipo de %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="454"/>
-        <source>The database is blocked by another %1 window.
-Close all the others %1 windows and try again.</source>
+        <source>The database is blocked by another process.</source>
         <oldsource>The database is blocked by another %1 window.
-Close all the others %1 windows and try again.
-
-If you want to open different %1&apos;s windows always choose the &apos;New&apos; option from the File menu.</oldsource>
-        <translation>La base de datos está bloqueada por otra ventana del %1.
-Cierre todas las otras ventanas de %1 y vuelva a intentarlo.</translation>
+Close all the others %1 windows and try again.</oldsource>
+        <translation>La base de datos está bloqueada por otro proceso.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="458"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="459"/>
         <source>%1 database is corrupted.</source>
         <translation>La base de datos del %1 está corrupta.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="459"/>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="464"/>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="469"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="455"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="460"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="465"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="470"/>
         <source>
 Close all %1 windows and try again.
 
@@ -2011,24 +2008,24 @@ Cierre todas las ventanas de %1 y vuelva a intentarlo
 Si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="463"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="464"/>
         <source>%1 database syntax error.</source>
         <translation>Error de sintaxis en la base de datos de %1.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="468"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="469"/>
         <source>An internal error occurs with %1 database.</source>
         <translation>Se ha producido un error interno desconocido en la base de datos de %1.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="473"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="474"/>
         <source>Some files cannot be deleted.
 These files have to be deleted manually.</source>
         <translation>Algunos archivos no se han podido borrar.
 Estos archivos se tendran que borrar de forma manual.</translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="477"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="478"/>
         <source>Unknown error.</source>
         <translation>Error desconocido.</translation>
     </message>
@@ -2148,7 +2145,7 @@ Asegúrese que su ordenador está conectado a la red y que los parámetros del P
         <location filename="qinputoutputpacswidget.cpp" line="473"/>
         <location filename="qinputoutputpacswidget.cpp" line="480"/>
         <location filename="qinputoutputpacswidget.cpp" line="487"/>
-        <location filename="qinputoutputpacswidget.cpp" line="513"/>
+        <location filename="qinputoutputpacswidget.cpp" line="512"/>
         <source>Please review the operation list screen, </source>
         <translation>Por favor revise la lista de peticiones, </translation>
     </message>
@@ -2160,7 +2157,7 @@ Asegúrese que su ordenador está conectado a la red y que los parámetros del P
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="441"/>
-        <location filename="qinputoutputpacswidget.cpp" line="515"/>
+        <location filename="qinputoutputpacswidget.cpp" line="514"/>
         <source>
 Be sure that your computer is connected on network and the PACS parameters are correct.</source>
         <translation>
@@ -2168,7 +2165,7 @@ Asegúrese de que su ordenador está conectado a la red y que los parámetros de
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="442"/>
-        <location filename="qinputoutputpacswidget.cpp" line="516"/>
+        <location filename="qinputoutputpacswidget.cpp" line="515"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation>
@@ -2208,8 +2205,8 @@ Espacio mínimo requerido para descargar estudios: %1 Mb</translation>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="461"/>
         <location filename="qinputoutputpacswidget.cpp" line="468"/>
-        <location filename="qinputoutputpacswidget.cpp" line="500"/>
-        <location filename="qinputoutputpacswidget.cpp" line="527"/>
+        <location filename="qinputoutputpacswidget.cpp" line="499"/>
+        <location filename="qinputoutputpacswidget.cpp" line="526"/>
         <source>
 
 Close all %1 windows and try again.
@@ -2293,21 +2290,12 @@ Contacte con un administrador para registrar su ordenador al PACS.</translation>
 %1 no puede descargar los estudios, todos los estudios pendientes de descargar serán cancelados.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="495"/>
-        <source>
-
-If there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.</source>
-        <translation>
-
-Si hay alguna otra ventana de %1 descargando estudios del PACS, por favor espere hasta que haya terminado las descargas y vuelva a intentarlo.</translation>
-    </message>
-    <message>
-        <location filename="qinputoutputpacswidget.cpp" line="499"/>
+        <location filename="qinputoutputpacswidget.cpp" line="498"/>
         <source>Please review the operation list screen, an unknown error has ocurred retrieving a study.</source>
         <translation>Por favor revise la lista de peticiones, se ha producido un error desconocido descargando un estudio.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="514"/>
+        <location filename="qinputoutputpacswidget.cpp" line="513"/>
         <source>%1 can&apos;t connect to PACS %2 trying to store DICOM files.
 </source>
         <oldsource>%1 can&apos;t connect to PACS %2 trying to store files.
@@ -2315,7 +2303,7 @@ Si hay alguna otra ventana de %1 descargando estudios del PACS, por favor espere
         <translation>%1 no ha podido conectar con el PACS %2 al intentar enviar los archivos DICOM.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="521"/>
+        <location filename="qinputoutputpacswidget.cpp" line="520"/>
         <source>The store of DICOM files to PACS %1 has failed.
 
 </source>
@@ -2327,12 +2315,12 @@ Si hay alguna otra ventana de %1 descargando estudios del PACS, por favor espere
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="522"/>
+        <location filename="qinputoutputpacswidget.cpp" line="521"/>
         <source>Wait a minute and try again, if the problem persist contact with an administrator.</source>
         <translation>Espere unos minutos y vuelva a intentarlo, si el problema persiste contacte con un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="526"/>
+        <location filename="qinputoutputpacswidget.cpp" line="525"/>
         <source>Please review the operation list screen, an unknown error has ocurred storing files to PACS %1.</source>
         <oldsource>Please review the operation list screen, an unknown error has ocurred storing a study to PACS %1.</oldsource>
         <translation>Por favor revise la lista de operaciones, se ha producido un error desconocido enviando archivos al PACS %1.</translation>

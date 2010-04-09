@@ -451,8 +451,9 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
             return false;
 
         case LocalDatabaseManager::DatabaseLocked:
-            message += tr("The database is blocked by another %1 window."
-                         "\nClose all the others %1 windows and try again.").arg(ApplicationNameString);
+            message += tr("The database is blocked by another process.");
+            message += tr("\nClose all %1 windows and try again."
+                         "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
 			message += tr("%1 database is corrupted.").arg(ApplicationNameString);
