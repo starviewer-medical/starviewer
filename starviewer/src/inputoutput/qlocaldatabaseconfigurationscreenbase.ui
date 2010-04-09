@@ -284,7 +284,7 @@
         <bool>false</bool>
        </property>
        <property name="toolTip" >
-        <string>Apply the canges</string>
+        <string>Apply the changes</string>
        </property>
        <property name="layoutDirection" >
         <enum>Qt::RightToLeft</enum>
@@ -307,7 +307,7 @@
      <item>
       <widget class="QLabel" name="textLabel3_7" >
        <property name="text" >
-        <string>Minimum space required in harddisk to retrieve dicom objects:</string>
+        <string>Minimum space required in harddisk to retrieve DICOM objects:</string>
        </property>
       </widget>
      </item>
@@ -495,7 +495,7 @@
           </size>
          </property>
          <property name="text" >
-          <string>Database path :</string>
+          <string>Database path:</string>
          </property>
          <property name="textFormat" >
           <enum>Qt::RichText</enum>
@@ -514,7 +514,7 @@
           </size>
          </property>
          <property name="text" >
-          <string>Cache images path :</string>
+          <string>Cache images path:</string>
          </property>
         </widget>
        </item>

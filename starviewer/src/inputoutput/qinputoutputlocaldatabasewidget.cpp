@@ -297,7 +297,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
             QApplication::restoreOverrideCursor();
         }
     }
-    else QMessageBox::information(this, ApplicationNameString, tr("Please select at least one study to delete"));
+    else QMessageBox::information(this, ApplicationNameString, tr("Please select at least one item to delete."));
 }
 
 void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly )
@@ -308,7 +308,7 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
 
     if(selectedStudiesInstanceUID.isEmpty())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view"));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view."));
         return;
     }
 
@@ -370,7 +370,7 @@ void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
 {
     if (m_studyTreeWidget->getSelectedStudies().count() == 0)
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to send to PACS."));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select at least one item to send to PACS."));
     }
     else 
     {

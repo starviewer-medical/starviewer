@@ -522,7 +522,7 @@
         <item>
          <widget class="QPushButton" name="m_buttonCreateDicomdir">
           <property name="toolTip">
-           <string>Creates the Dicomdir with the selected studies</string>
+           <string>Creates a DICOMDIR with the selected studies</string>
           </property>
           <property name="text">
            <string>Create</string>

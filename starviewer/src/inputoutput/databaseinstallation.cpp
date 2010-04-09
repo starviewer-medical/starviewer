@@ -43,7 +43,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         if (!createDatabaseFile())
         {
             ERROR_LOG("Error no s'ha pogut crear la base de dades a " + LocalDatabaseManager::getDatabaseFilePath());
-			m_errorMessage.append( tr("\nCan't create database, be sure you have write permissions on database directory") );
+			m_errorMessage.append( tr("\nCan't create database, be sure you have write permissions on database directory.") );
             isCorrect = false;
         }
     }
@@ -87,7 +87,7 @@ bool DatabaseInstallation::checkLocalImagePath()
         if (!createLocalImageDir())
         {
             ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + LocalDatabaseManager::getCachePath());
-			m_errorMessage.append( tr("\nCan't create the cache image directory. Please check users permissions") );
+			m_errorMessage.append( tr("\nCan't create the cache image directory. Please check users permissions.") );
             return false;
         }
     }
@@ -151,7 +151,7 @@ bool DatabaseInstallation::repairDatabase()
         if (!reinstallDatabase())
         {
             ERROR_LOG("No s'ha pogut reinstal.lar la base de dades");
-            QMessageBox::critical(0, ApplicationNameString , tr("%1 can't reinstall database, be sure you have write permissions on database directory").arg(ApplicationNameString));
+            QMessageBox::critical(0, ApplicationNameString , tr("%1 can't reinstall database, be sure you have write permissions on database directory.").arg(ApplicationNameString));
             return false;
         }
         else return true;

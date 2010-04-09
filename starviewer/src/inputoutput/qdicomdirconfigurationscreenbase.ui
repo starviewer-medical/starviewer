@@ -67,7 +67,7 @@
      <item>
       <widget class="QCheckBox" name="m_checkBoxConvertDICOMDIRImagesToLittleEndian">
        <property name="text">
-        <string>Convert all images to Little Endian</string>
+        <string>Convert all images to Explicit Little Endian</string>
        </property>
       </widget>
      </item>
@@ -181,7 +181,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="m_burningApplicationDownloadURLLabel">
          <property name="text">
-          <string>Download from here:</string>
+          <string>Download from:</string>
          </property>
         </widget>
        </item>
