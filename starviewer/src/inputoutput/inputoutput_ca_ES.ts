@@ -2837,15 +2837,6 @@ Codi d&apos;error: %1</translation>
 
 %1 no pot descarregar estudis del PACS si el port està en ús, si us plau tanqueu l&apos;aplicació que està utilitzant el port %2 o canvieu el port per connexions entrants en la pantalla de configuració.</translation>
     </message>
-    <message>
-        <location filename="queryscreen.cpp" line="196"/>
-        <source>
-
-If the error has ocurred when openned new %1&apos;s windows, close this window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
-        <translation>
-
-Si l&apos;error s&apos;ha produït al obrir una nova finestra del %1, tanqueu aquesta finestra. Per obrir una nova finestra del %1 heu d&apos;escollir l&apos;opció &apos;Nou&apos; del menú Arxiu.</translation>
-    </message>
 </context>
 <context>
     <name>udg::QueryScreenBase</name>
@@ -2913,38 +2904,44 @@ Si l&apos;error s&apos;ha produït al obrir una nova finestra del %1, tanqueu aq
 <context>
     <name>udg::RISRequestManager</name>
     <message>
-        <location filename="risrequestmanager.cpp" line="116"/>
+        <location filename="risrequestmanager.cpp" line="79"/>
+        <source>The RIS request could not be performed.</source>
+        <translation>No s&apos;ha pogut realitzar la petició del RIS.</translation>
+    </message>
+    <message>
+        <location filename="risrequestmanager.cpp" line="79"/>
+        <source>There are no configured PACS to query.</source>
+        <translation>No hi ha cap PACS configurat per a consultar.</translation>
+    </message>
+    <message>
+        <location filename="risrequestmanager.cpp" line="79"/>
+        <source>Please, check your PACS settings.</source>
+        <translation>Si us plau, comprovi la configuració de PACS.</translation>
+    </message>
+    <message>
+        <location filename="risrequestmanager.cpp" line="124"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation>%2 no pot executar la petició del RIS, perquè no ha trobat l&apos;estudi amb l&apos;accession number %1 en els PACS escollits per defecte.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="133"/>
+        <location filename="risrequestmanager.cpp" line="141"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation>Processant la petició del RIS, no s&apos;ha pogut consultar al PACS %1 de %2.
 Asseguris que la IP i el AETitle del PACS siguin correctes</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="148"/>
+        <location filename="risrequestmanager.cpp" line="156"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation>Starviewer no pot escoltar les peticions del RIS pel port %1, ja que el port està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="149"/>
-        <source>
-
-If the error has ocurred when openned new %1&apos;s windows, close this window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
-        <translation>
-
-Si l&apos;error s&apos;ha produït al obrir una nova finestra del %1, tanqueu aquesta finestra. Per obrir una nova finestra del %1 heu d&apos;escollir l&apos;opció &apos;Nou&apos; del menú Arxiu.</translation>
-    </message>
-    <message>
-        <location filename="risrequestmanager.cpp" line="152"/>
+        <location filename="risrequestmanager.cpp" line="159"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation>No es poden escoltar peticions del RIS pel port %1, s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="153"/>
+        <location filename="risrequestmanager.cpp" line="160"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation>

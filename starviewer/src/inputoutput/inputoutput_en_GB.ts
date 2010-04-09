@@ -2757,13 +2757,6 @@ Error Number: %1</source>
 %1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="queryscreen.cpp" line="196"/>
-        <source>
-
-If the error has ocurred when openned new %1&apos;s windows, close this window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::QueryScreenBase</name>
@@ -2831,35 +2824,43 @@ If the error has ocurred when openned new %1&apos;s windows, close this window. 
 <context>
     <name>udg::RISRequestManager</name>
     <message>
-        <location filename="risrequestmanager.cpp" line="116"/>
+        <location filename="risrequestmanager.cpp" line="79"/>
+        <source>The RIS request could not be performed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="risrequestmanager.cpp" line="79"/>
+        <source>There are no configured PACS to query.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="risrequestmanager.cpp" line="79"/>
+        <source>Please, check your PACS settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="risrequestmanager.cpp" line="124"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="133"/>
+        <location filename="risrequestmanager.cpp" line="141"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of this PACS are correct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="148"/>
+        <location filename="risrequestmanager.cpp" line="156"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="149"/>
-        <source>
-
-If the error has ocurred when openned new %1&apos;s windows, close this window. To open new %1 window you have to choose the &apos;New&apos; option from the File menu.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="risrequestmanager.cpp" line="152"/>
+        <location filename="risrequestmanager.cpp" line="159"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="153"/>
+        <location filename="risrequestmanager.cpp" line="160"/>
         <source>
 If the problem persist contact with an administrator.</source>
         <translation type="unfinished"></translation>
