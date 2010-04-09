@@ -66,14 +66,22 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
     INFO_LOG("Comencem a cercar l'estudi sol·licitat pel RIS amb accession number " + maskRISRequest.getAccessionNumber());
-
-    //Inicialitzem a fals indicant que pel moment no s'ha trobat cap estudi que compleixi amb la màscara de cerca enviada pel RIS
+    // Inicialitzem a fals indicant que pel moment no s'ha trobat cap estudi que compleixi amb la màscara de cerca enviada pel RIS
     m_foundRISRequestStudy = false;
-    m_qpopUpRisRequestsScreen->setAccessionNumber(maskRISRequest.getAccessionNumber()); //Mostrem el popUP amb l'accession number
 
+    // Mostrem el popUP amb l'accession number
+    m_qpopUpRisRequestsScreen->setAccessionNumber(maskRISRequest.getAccessionNumber());
     m_qpopUpRisRequestsScreen->show();
 
-    m_pacsManager->queryStudy(maskRISRequest, PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true));
+    QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
+    if ( queryablePACS.isEmpty() )
+    {
+        QMessageBox::information(0, ApplicationNameString, tr("The RIS request could not be performed.") + "\n\n" + tr("There are no configured PACS to query.") + "\n" + tr("Please, check your PACS settings.") );
+    }
+    else
+    {
+        m_pacsManager->queryStudy(maskRISRequest, queryablePACS);
+    }
 }
 
 void RISRequestManager::queryStudyResultsReceived(QList<Patient*> patientsList, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID)
