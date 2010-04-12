@@ -266,12 +266,12 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
         case DICOMDIRImporter::ErrorOpeningDicomdir :
             message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
             message += tr("the DICOMDIR file could not be opened, be sure that its path is correct.\n");
-            message += tr("\n\nIf the problem persist contact with an administrator.");
+            message += tr("\n\nIf the problem persists contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::ErrorCopyingFiles :
             message = tr("Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.").arg(ApplicationNameString, studyInstanceUID);
-            message += tr("\n\nIf the problem persist contact with an administrator.");
+            message += tr("\n\nIf the problem persists contact with an administrator.");
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::NoEnoughSpace :
@@ -296,13 +296,13 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
         case DICOMDIRImporter::ErrorFreeingSpace :
             message = tr("An error has ocurred freeing space, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::DatabaseError :
             message = tr("A database error has ocurred, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
        case DICOMDIRImporter::PatientInconsistent :
@@ -321,7 +321,7 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
         default:
             message = tr("An unknown error has ocurred importing DICOMDIR.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
     }
 }

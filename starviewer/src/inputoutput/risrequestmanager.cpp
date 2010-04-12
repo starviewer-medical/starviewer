@@ -160,7 +160,7 @@ void RISRequestManager::showListenRISRequestThreadError(ListenRISRequestThread::
             break;
         case ListenRISRequestThread::UnknownNetworkError :
             message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(risPort);
-            message += tr("\nIf the problem persist contact with an administrator.");
+            message += tr("\nIf the problem persists contact with an administrator.");
             break;
     }
 

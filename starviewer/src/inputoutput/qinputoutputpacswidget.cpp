@@ -439,7 +439,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
             message = tr("Please review the operation list screen, ");
             message += tr("%1 can't connect to PACS %2 trying to retrievev a study.\n").arg(ApplicationNameString, pacs.getAETitle());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persist contact with an administrator.");
+            message += tr("\nIf the problem persists contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::NoEnoughSpace :
@@ -459,14 +459,14 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred freeing space and some operations may have failed.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::DatabaseError :
             message = tr("Please review the operation list screen, ");
             message += tr("a database error ocurred and some operations may have failed.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::PatientInconsistent :
@@ -497,7 +497,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
         default:
             message = tr("Please review the operation list screen, an unknown error has ocurred retrieving a study.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
     }
 }
 
@@ -512,7 +512,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadStoreError(QString study
             message = tr("Please review the operation list screen, ");
             message += tr("%1 can't connect to PACS %2 trying to store DICOM files.\n").arg(ApplicationNameString, pacs.getAETitle());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persist contact with an administrator.");
+            message += tr("\nIf the problem persists contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::StoreUnknowStatus:
@@ -524,7 +524,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadStoreError(QString study
         default:
             message = tr("Please review the operation list screen, an unknown error has ocurred storing files to PACS %1.").arg(pacs.getAETitle());
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
     }
