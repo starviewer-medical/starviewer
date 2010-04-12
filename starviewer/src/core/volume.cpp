@@ -540,7 +540,7 @@ void Volume::readDifferentSizeImagesIntoOneVolume( const QStringList &filenames 
         m_reader->SetFileName( qPrintable(file) );
         try
         {
-            m_reader->Update();
+            m_reader->UpdateLargestPossibleRegion();
         }
         catch ( itk::ExceptionObject & e )
         {
