@@ -617,8 +617,8 @@ int Volume::readSingleFile( QString fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        ERROR_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
-                .arg( QFileInfo( fileName ).dir().path() )
+        ERROR_LOG( QString("Excepció llegint l'arxiu [%1] Descripció: [%2]")
+                .arg( fileName )
                 .arg( e.GetDescription() )
                 );
         // llegim el missatge d'error per esbrinar de quin error es tracta
