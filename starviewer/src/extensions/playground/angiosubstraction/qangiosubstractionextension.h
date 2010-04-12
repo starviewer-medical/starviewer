@@ -53,6 +53,12 @@ private slots:
 	/// Calcula la imatge diferència respecte la imatge imageid
 	void computeDifferenceImage( int imageid );
 
+    void computeAutomateSingleImage( );
+
+    /// Funció que a partir d'una llesca i una translació ens calcula la diferència
+    void computeSingleImageDifference( );
+
+
 	///Permet sincronitzar els dos viewers
 	void synchronization( Q2DViewerWidget * viewer, bool active );
 

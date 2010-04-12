@@ -103,6 +103,8 @@ HEADERS += extensionfactory.h \
     synchronizetool.h \
     synchronizetooldata.h \
     windowlevelpresetstool.h \
+    transdifferencetool.h \
+    transdifferencetooldata.h \
     drawer.h \
     drawerprimitive.h \
     drawerpolygon.h \
@@ -285,6 +287,8 @@ SOURCES += extensionmediator.cpp \
     synchronizetool.cpp \
     synchronizetooldata.cpp \
     windowlevelpresetstool.cpp \
+    transdifferencetool.cpp \
+    transdifferencetooldata.cpp \
     drawer.cpp \
     drawerprimitive.cpp \
     drawerpolygon.cpp \

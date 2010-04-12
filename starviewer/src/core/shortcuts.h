@@ -43,6 +43,7 @@ public:
     static const QString HorizontalFlipTool;
     static const QString VerticalFlipTool;
     static const QString ClearCurrentViewAnnotationsTool;
+    static const QString TransDifferenceTool;
 
     static const QString NewWindow;
     static const QString OpenFile;

@@ -36,6 +36,7 @@ const QString Shortcuts::RotateCounterClockWiseTool( ShortcutsBase + "RotateCoun
 const QString Shortcuts::HorizontalFlipTool( ShortcutsBase + "HorizontalFlipTool" );
 const QString Shortcuts::VerticalFlipTool( ShortcutsBase + "VerticalFlipTool" );
 const QString Shortcuts::ClearCurrentViewAnnotationsTool( ShortcutsBase + "ClearCurrentViewAnnotationsActionTool" );
+const QString Shortcuts::TransDifferenceTool( ShortcutsBase + "TransDifferenceActionTool" );
 
 const QString Shortcuts::NewWindow( ShortcutsBase + "NewWindow" );
 const QString Shortcuts::OpenFile( ShortcutsBase + "OpenFile" );
@@ -176,6 +177,10 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append( QString("Ctrl+E") );
     settingsRegistry->addSetting( ClearCurrentViewAnnotationsTool, shortcutsList );
+    
+    shortcutsList.clear();
+    shortcutsList.append( QString("") ); //\TODO
+    settingsRegistry->addSetting( TransDifferenceTool, shortcutsList );
     
     shortcutsList.clear();
     shortcutsList.append( QKeySequence( QKeySequence::New ).toString() );

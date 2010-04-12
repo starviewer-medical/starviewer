@@ -31,6 +31,7 @@
 #include "editortool.h"
 #include "nonclosedangletool.h"
 #include "clippingplanestool.h"
+#include "transdifferencetool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -138,6 +139,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "ClippingPlanesTool" )
     {
         tool = new ClippingPlanesTool( viewer );
+    }
+    else if( toolName == "TransDifferenceTool" )
+    {
+        tool = new TransDifferenceTool( viewer );
     }
     else
     {
@@ -325,6 +330,14 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setIcon( QIcon(":/images/clippingBox.png") );
         toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::ClippingPlanesTool ) );
         statusTip = tr("Enable/Disable the clipping planes tool");
+        toolTip = toolAction->text();
+    }
+    else if( toolName == "TransDifferenceTool" )
+    {
+        toolAction->setText( tr("Translation Difference") );
+        toolAction->setIcon( QIcon(":/images/move.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::TransDifferenceTool ) );
+        statusTip = tr("Enable/Disable the translation difference tool");
         toolTip = toolAction->text();
     }
     else
