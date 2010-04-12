@@ -282,7 +282,7 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
             Status state;
             state.setStatus(tr("The cache cannot be deleted, an unknown error has ocurred."
                                "\nTry to close all %1 windows and try again."
-                               "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString), false, -1);
+                               "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString), false, -1);
             showDatabaseErrorMessage( state );
         }
         else QMessageBox::information( this, ApplicationNameString, "All studies have been deleted successfully");
@@ -307,7 +307,7 @@ void QLocalDatabaseConfigurationScreen::compactCache()
         Status state;
         state.setStatus(tr("The database cannot be compacted, an unknown error has ocurred."
                 "\nTry to close all %1 windows and try again."
-                "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString), false, -1);
+                "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString), false, -1);
         showDatabaseErrorMessage( state );
     }
     else QMessageBox::information( this, ApplicationNameString, "Starviewer database has been compacted successfully.");

@@ -1763,7 +1763,10 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
         <location filename="qinputoutputdicomdirwidget.cpp" line="274"/>
         <source>
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 
 Si el problema persiste contacte con un administrador.</translation>
@@ -1811,7 +1814,11 @@ Si el problema persiste contacte con un administrador.</translation>
         <source>
 
 Close all %1 windows and try again.
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+Close all %1 windows and try again.
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 
 Cierre todas las ventanas de %1 y vuelva a intentarlo.
@@ -2001,7 +2008,11 @@ Close all the others %1 windows and try again.</oldsource>
         <source>
 Close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+Close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 Cierre todas las ventanas de %1 y vuelva a intentarlo
 
@@ -2167,7 +2178,9 @@ Asegúrese de que su ordenador está conectado a la red y que los parámetros de
         <location filename="qinputoutputpacswidget.cpp" line="442"/>
         <location filename="qinputoutputpacswidget.cpp" line="515"/>
         <source>
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 Si el problema persiste contacte con un administrador.</translation>
     </message>
@@ -2210,7 +2223,11 @@ Espacio mínimo requerido para descargar estudios: %1 Mb</translation>
         <source>
 
 Close all %1 windows and try again.
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+Close all %1 windows and try again.
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 
 Cierre todas las ventanas de %1 y vuelva a intentarlo.
@@ -2481,7 +2498,11 @@ Contacte con un administrador para registrar su ordenador al PACS.</translation>
         <source>The cache cannot be deleted, an unknown error has ocurred.
 Try to close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>The cache cannot be deleted, an unknown error has ocurred.
+Try to close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation>No se puede borrar la caché, se ha producido un error desconocido.
 Intente cerrar todas las ventanas del %1 y vuelva a intentarlo.
 
@@ -2492,7 +2513,11 @@ Si el problema persiste contacte con un administrador.</translation>
         <source>The database cannot be compacted, an unknown error has ocurred.
 Try to close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>The database cannot be compacted, an unknown error has ocurred.
+Try to close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation>No se puede compactar la base de datos, se ha producido un error desconocido.
 Intente cerrar todas las ventanas del %1 y vuelva a intentarlo.
 
@@ -2971,7 +2996,9 @@ Asegúrese que la IP y el AETitle de este sean correctos.</translation>
     <message>
         <location filename="risrequestmanager.cpp" line="163"/>
         <source>
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 Si el problema persiste contacte con un administrador.</translation>
     </message>

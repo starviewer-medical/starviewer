@@ -1763,7 +1763,10 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
         <location filename="qinputoutputdicomdirwidget.cpp" line="274"/>
         <source>
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 
 Si el problema persisteix contacteu amb un administrador.</translation>
@@ -1812,7 +1815,11 @@ Si el problema persisteix contacteu amb un administrador.</translation>
         <source>
 
 Close all %1 windows and try again.
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+Close all %1 windows and try again.
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 
 Tanqueu totes les finestres del %1 i torneu-ho a intentar.
@@ -2002,7 +2009,11 @@ Close all the others %1 windows and try again.</oldsource>
         <source>
 Close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+Close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 Tanqueu totes les finestres del %1 i torneu-ho a intentar.
 
@@ -2171,7 +2182,9 @@ Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres 
         <location filename="qinputoutputpacswidget.cpp" line="442"/>
         <location filename="qinputoutputpacswidget.cpp" line="515"/>
         <source>
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
@@ -2214,7 +2227,11 @@ Espai mínim requerit en el disc per descarregar estudis: %1 Mb</translation>
         <source>
 
 Close all %1 windows and try again.
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+Close all %1 windows and try again.
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 
 Tanqueu totes les finestres del %1 i torneu-ho a intentar.
@@ -2488,7 +2505,11 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
         <source>The cache cannot be deleted, an unknown error has ocurred.
 Try to close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>The cache cannot be deleted, an unknown error has ocurred.
+Try to close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation>No es pot esborrar la caché, s&apos;ha produït un error desconegut.
 Intenteu tancar totes les finestres del %1 i torneu-ho a provar.
 
@@ -2499,7 +2520,11 @@ Si el problema persisteix contacteu amb un administrador.</translation>
         <source>The database cannot be compacted, an unknown error has ocurred.
 Try to close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>The database cannot be compacted, an unknown error has ocurred.
+Try to close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation>No es pot compactar la base de dades, s&apos;ha produït un error desconegut.
 Intenteu tancar totes les finestres del %1 i torneu-ho a intentar.
 
@@ -2978,7 +3003,9 @@ Asseguris que la IP i el AETitle d &apos;aquest siguin correctes.</translation>
     <message>
         <location filename="risrequestmanager.cpp" line="163"/>
         <source>
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+If the problem persist contact with an administrator.</oldsource>
         <translation>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>

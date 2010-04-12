@@ -1740,7 +1740,10 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <location filename="qinputoutputdicomdirwidget.cpp" line="274"/>
         <source>
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1787,7 +1790,11 @@ If the problem persist contact with an administrator.</source>
         <source>
 
 Close all %1 windows and try again.
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+Close all %1 windows and try again.
+If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1969,7 +1976,11 @@ Close all the others %1 windows and try again.</oldsource>
         <source>
 Close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+Close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2127,7 +2138,9 @@ Be sure that your computer is connected on network and the PACS parameters are c
         <location filename="qinputoutputpacswidget.cpp" line="442"/>
         <location filename="qinputoutputpacswidget.cpp" line="515"/>
         <source>
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2167,7 +2180,11 @@ Minimum space required in Disk to retrieve studies: %1 Mb</source>
         <source>
 
 Close all %1 windows and try again.
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+
+Close all %1 windows and try again.
+If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2420,7 +2437,11 @@ Contact with an administrador to register your computer to the PACS.</source>
         <source>The cache cannot be deleted, an unknown error has ocurred.
 Try to close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>The cache cannot be deleted, an unknown error has ocurred.
+Try to close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2428,7 +2449,11 @@ If the problem persist contact with an administrator.</source>
         <source>The database cannot be compacted, an unknown error has ocurred.
 Try to close all %1 windows and try again.
 
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>The database cannot be compacted, an unknown error has ocurred.
+Try to close all %1 windows and try again.
+
+If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2900,7 +2925,9 @@ Be sure that the IP and AETitle of It are correct</oldsource>
     <message>
         <location filename="risrequestmanager.cpp" line="163"/>
         <source>
-If the problem persist contact with an administrator.</source>
+If the problem persists contact with an administrator.</source>
+        <oldsource>
+If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
