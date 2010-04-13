@@ -351,11 +351,16 @@ void QueryScreen::refreshTab( int index )
 
 void QueryScreen::viewPatients(QList<Patient*> listPatientsToView, bool loadOnly )
 {
-    this->close();//s'amaga per poder visualitzar la serie
-
-    if (m_operationStateScreen->isVisible())
+    // Si fem un "view" amagarem les finestres de la QueryScreen perquè
+    // l'aplicació i les extensions siguin visibles, altrament no amagarem res
+    if( !loadOnly )
     {
-        m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
+        this->close();//s'amaga per poder visualitzar la serie
+
+        if (m_operationStateScreen->isVisible())
+        {
+            m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
+        }
     }
 
     emit selectedPatients(listPatientsToView,loadOnly);
