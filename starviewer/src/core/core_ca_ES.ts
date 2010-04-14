@@ -1716,7 +1716,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="158"/>
         <source>Scroll</source>
-        <translation>Canvi de tall</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="161"/>
