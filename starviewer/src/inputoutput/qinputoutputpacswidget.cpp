@@ -249,22 +249,9 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
         return;
     }
 
-    bool firstStudy = true;
-    RetrieveActions actionAfterRetrieve;
-
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        if ( firstStudy )
-        {
-            actionAfterRetrieve = View;
-            firstStudy = false;
-        }
-        else
-        {
-            actionAfterRetrieve = Load;
-        }
-
-        retrieve(actionAfterRetrieve, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
+        retrieve(View, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
     }
 }
 
