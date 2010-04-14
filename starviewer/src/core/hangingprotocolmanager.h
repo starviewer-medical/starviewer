@@ -37,7 +37,7 @@ public:
     ~HangingProtocolManager();
 
     /// Buscar els hanging protocols disponibles, si applyBestHangingProtocol, a més, aplica el millor que ha trobat
-    QList<HangingProtocol * > searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol);
+    QList<HangingProtocol * > searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol, int *indexOfBestHangingProtocol = NULL);
 
     // Aplica un hanging protocol concret, ja sigui via identificador o per instància
     void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );

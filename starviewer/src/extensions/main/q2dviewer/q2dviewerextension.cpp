@@ -190,8 +190,16 @@ void Q2DViewerExtension::setInput( Volume *input )
     }
     m_hangingProtocolManager = new HangingProtocolManager();
 
+    connect( m_patient, SIGNAL( patientFused() ), SLOT(searchHangingProtocols()) );
+
     QApplication::setOverrideCursor( Qt::WaitCursor );
-    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols( m_workingArea, m_patient, true );
+    int bestHangingProtocolIndex;
+    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols( m_workingArea, m_patient, false, &bestHangingProtocolIndex );
+    
+    if ( bestHangingProtocolIndex > -1 )
+    {
+        m_hangingProtocolManager->applyHangingProtocol( m_hangingCandidates[bestHangingProtocolIndex], m_workingArea, m_patient );
+    }
     QApplication::restoreOverrideCursor();
 
     if( m_hangingCandidates.size() == 0 ) // No hi ha hanging protocols
@@ -201,8 +209,6 @@ void Q2DViewerExtension::setInput( Volume *input )
     }
     m_workingArea->setViewerSelected( m_workingArea->getViewerWidget(0) );
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
-
-    connect( m_patient, SIGNAL( patientFused() ), SLOT(searchHangingProtocols()) );
 
     /// Habilitem la possibilitat de buscar estudis previs.
     m_previousStudiesToolButton->setEnabled( true );
