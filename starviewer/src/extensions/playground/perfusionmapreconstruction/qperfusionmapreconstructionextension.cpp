@@ -25,6 +25,8 @@
 #include "toolproxy.h"
 #include "polylinetemporalroitool.h" 
 #include "polylinetemporalroitooldata.h" 
+#include "seedtool.h"
+#include "seedtooldata.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -67,6 +69,7 @@ const double QPerfusionMapReconstructionExtension::TR = 1.5;
 
 QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWidget *parent )
  : QWidget( parent ), m_mainVolume(0), m_DSCVolume(0), m_isLeftButtonPressed(false), m_mapCalculator(0), m_aifDrawPoint(0)
+, m_seedToolData(0)
 {
     setupUi( this );
     PerfusionMapReconstructionSettings().init();
@@ -101,6 +104,7 @@ void QPerfusionMapReconstructionExtension::initializeTools()
     m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
+    m_seedToolButton->setDefaultAction( m_toolManager->registerTool("SeedTool") );
     m_roiToolButton->setDefaultAction( m_toolManager->registerTool("PolylineTemporalROITool") );
     m_toolManager->registerTool("SynchronizeTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
@@ -112,7 +116,7 @@ void QPerfusionMapReconstructionExtension::initializeTools()
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineTemporalROITool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool" << "PolylineTemporalROITool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -124,20 +128,25 @@ void QPerfusionMapReconstructionExtension::initializeTools()
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
     // registrem al manager les tools que van amb el viewer principal
-    m_toolManager->setupRegisteredTools( m_2DView );
+    m_toolManager->setupRegisteredTools( m_2DView->getViewer() );
 
     // Action Tools
     m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
-    m_toolManager->enableRegisteredActionTools( m_2DView );
+    m_toolManager->enableRegisteredActionTools( m_2DView->getViewer() );
+
+	m_seedToolButton->setText("AIF position");
+
+	//Inicialitzem les dades de la seed tool
+    m_toolManager->triggerTool("SeedTool");
+    m_seedToolData = static_cast<SeedToolData*> ( m_2DView->getViewer()->getToolProxy()->getTool("SeedTool")->getToolData() );
+    m_toolManager->triggerTool("SlicingTool");
 }
 
 void QPerfusionMapReconstructionExtension::createConnections()
 {
-  connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( eventHandler(unsigned long) ) );
-  connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-  connect( m_2DView, SIGNAL( sliceChanged(int) ) , m_sliceViewSlider , SLOT( setValue(int) ) );
-  connect( m_2DView, SIGNAL( sliceChanged(int) ) , SLOT( paintMeanSlice(int) ) );
-  connect( m_2DView, SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
+  connect( m_2DView->getViewer(), SIGNAL( eventReceived( unsigned long ) ), SLOT( eventHandler(unsigned long) ) );
+  connect( m_2DView->getViewer(), SIGNAL( sliceChanged(int) ) , SLOT( paintMeanSlice(int) ) );
+  //connect( m_2DView->getViewer(), SIGNAL( volumeChanged(Volume *) ), SLOT( setInput( Volume * ) ) );
   connect( m_chooseDSCPushButton, SIGNAL( clicked() ), SLOT( contextMenuDSCRelease() ) );
   connect( m_computePerfusionPushButton, SIGNAL( clicked() ), SLOT( computePerfusionMap() ) );
   //connect( m_filterPushButton, SIGNAL( clicked() ), SLOT( applyFilterMapImage() ) );
@@ -154,6 +163,11 @@ void QPerfusionMapReconstructionExtension::setInput( Volume *input )
     {
         //std::cout<<"Tot ok!!"<<std::endl;
     }
+
+	if(m_DSCVolume != m_2DView->getViewer()->getInput() )
+	{
+		m_2DView->getViewer()->setInput(m_DSCVolume);
+	}
 }
 
 
@@ -166,27 +180,27 @@ void QPerfusionMapReconstructionExtension::changeMap( int value )
     switch(value)
     {
     case 0:     //CBV
-        m_2DView->getDrawer()->removeAllPrimitives();
-        m_2DView->setInput( m_mapCalculator->getCBVVolume() );
-        this->createColorMap(m_mapCalculator->getCBVImage(), m_2DView);
+        m_2DView->getViewer()->getDrawer()->removeAllPrimitives();
+        m_2DView->getViewer()->setInput( m_mapCalculator->getCBVVolume() );
+        this->createColorMap(m_mapCalculator->getCBVImage(), m_2DView->getViewer());
         // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte
 /*        pos[0] = m_aifIndex[0]*m_map0Volume->getSpacing()[0] + m_map0Volume->getOrigin()[0];
         pos[1] = m_aifIndex[1]*m_map0Volume->getSpacing()[1] + m_map0Volume->getOrigin()[1];
         pos[2] = m_aifIndex[2]*m_map0Volume->getSpacing()[2] + m_map0Volume->getOrigin()[2];*/
        break;
     case 1:     //CBF
-        m_2DView->getDrawer()->removeAllPrimitives();
-        m_2DView->setInput( m_mapCalculator->getCBFVolume() );
-        this->createColorMap( m_mapCalculator->getCBFImage(), m_2DView);
+        m_2DView->getViewer()->getDrawer()->removeAllPrimitives();
+        m_2DView->getViewer()->setInput( m_mapCalculator->getCBFVolume() );
+        this->createColorMap( m_mapCalculator->getCBFImage(), m_2DView->getViewer());
         // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte
 /*        pos[0] = m_aifIndex[0]*m_map2Volume->getSpacing()[0] + m_map2Volume->getOrigin()[0];
         pos[1] = m_aifIndex[1]*m_map2Volume->getSpacing()[1] + m_map2Volume->getOrigin()[1];
         pos[2] = m_aifIndex[2]*m_map2Volume->getSpacing()[2] + m_map2Volume->getOrigin()[2];*/
         break;
     case 2:     //MTT
-        m_2DView->getDrawer()->removeAllPrimitives();
-        m_2DView->setInput( m_mapCalculator->getMTTVolume() );
-        this->createColorMap( m_mapCalculator->getMTTImage(), m_2DView);
+        m_2DView->getViewer()->getDrawer()->removeAllPrimitives();
+        m_2DView->getViewer()->setInput( m_mapCalculator->getMTTVolume() );
+        this->createColorMap( m_mapCalculator->getMTTImage(), m_2DView->getViewer());
         // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte
 /*        pos[0] = m_aifIndex[0]*m_map1Volume->getSpacing()[0] + m_map1Volume->getOrigin()[0];
         pos[1] = m_aifIndex[1]*m_map1Volume->getSpacing()[1] + m_map1Volume->getOrigin()[1];
@@ -209,6 +223,14 @@ void QPerfusionMapReconstructionExtension::changeMap( int value )
 void QPerfusionMapReconstructionExtension::computePerfusionMap( )
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
+	if(m_seedToolData)
+	{
+		if(m_seedToolData->getPoint())
+		{
+			//QVector<int> aifpos (m_seedToolData->getSeedPosition( ));
+			m_mapCalculator->setAIFIndex( m_seedToolData->getSeedPosition( )[0], m_seedToolData->getSeedPosition( )[1], m_seedToolData->getSeedPosition( )[2]);
+		}
+	}
     m_mapCalculator->setDSCVolume(m_DSCVolume);
     m_mapCalculator->run();
 
@@ -225,7 +247,7 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
 	//li diem a la roi tool quin és els valors de deltaR
     m_roiToolButton->defaultAction()->trigger();
 	PolylineTemporalROITool* roiTool = 
-		static_cast<PolylineTemporalROITool*> (m_2DView->getToolProxy()->getTool("PolylineTemporalROITool"));
+		static_cast<PolylineTemporalROITool*> (m_2DView->getViewer()->getToolProxy()->getTool("PolylineTemporalROITool"));
 	PolylineTemporalROIToolData* roiData = static_cast<PolylineTemporalROIToolData*>(roiTool->getToolData());
 	if(!roiData->temporalImageHasBeenDefined())
 	{
@@ -245,21 +267,21 @@ void QPerfusionMapReconstructionExtension::paintMap( )
     switch(m_mapViewComboBox->currentIndex())
     {
     case 0:     //CBV
-        m_2DView->setInput( m_mapCalculator->getCBVVolume() );
-        m_2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
-        this->createColorMap(m_mapCalculator->getCBVImage(), m_2DView);
+        m_2DView->getViewer()->setInput( m_mapCalculator->getCBVVolume() );
+        m_2DView->getViewer()->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
+        this->createColorMap(m_mapCalculator->getCBVImage(), m_2DView->getViewer());
         break;
     case 1:     //CBF
-        m_2DView->setInput( m_mapCalculator->getCBFVolume() );
-        m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
+        m_2DView->getViewer()->setInput( m_mapCalculator->getCBFVolume() );
+        m_2DView->getViewer()->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
         //m_2DView->resetWindowLevelToDefault();
-        this->createColorMap(m_mapCalculator->getCBFImage(), m_2DView);
+        this->createColorMap(m_mapCalculator->getCBFImage(), m_2DView->getViewer());
         break;
     case 2:     //MTT
-        m_2DView->setInput( m_mapCalculator->getMTTVolume() );
-        m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
+        m_2DView->getViewer()->setInput( m_mapCalculator->getMTTVolume() );
+        m_2DView->getViewer()->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
         //m_2DView->resetWindowLevelToDefault();
-        this->createColorMap(m_mapCalculator->getMTTImage(), m_2DView);
+        this->createColorMap(m_mapCalculator->getMTTImage(), m_2DView->getViewer());
         break;
     default:
         break;
@@ -304,7 +326,6 @@ void QPerfusionMapReconstructionExtension::paintMap( )
     DEBUG_LOG(QString( "TEMPS COMPUTANT FINDING AIF : %1ms " ).arg( findAiftime ) );
     DEBUG_LOG(QString( "TEMPS COMPUTANT PERFUSION TIME : %1ms " ).arg( computePerfusiontime ) );
 */
-    m_sliceViewSlider->setMaximum(m_2DView->getInput()->getDimensions()[2] - 1);
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap( )
@@ -342,9 +363,9 @@ void QPerfusionMapReconstructionExtension::createColorMap( )
     unsigned char tuple2[4] = { 1, 1, 1, 1 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple2 );
 
-    m_2DView->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    m_2DView->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
 
-    m_2DView->setWindowLevel(1.0, m_mapMin - 1.0);
+    m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
     //Potser això fa que es recalculi dues vegades??
     //m_2DView->setWindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2);
 }
@@ -384,9 +405,9 @@ void QPerfusionMapReconstructionExtension::createColorMap2( )
     //unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    m_2DView->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
 
-    m_2DView->setWindowLevel(1.0, m_mapMin - 1.0);
+    m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
     //Potser això fa que es recalculi dues vegades??
     //m_2DView_4->setWindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2);
 }
@@ -419,7 +440,7 @@ void QPerfusionMapReconstructionExtension::createColorMap( double window, double
     table->SetTupleValue( 0, tuple );
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    m_2DView->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap(DoubleImageType::Pointer image, Q2DViewer* viewer)
@@ -879,7 +900,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         CurvatureFlowImageFilterType::Pointer smoothing = CurvatureFlowImageFilterType::New();
 
         //incaster->SetInput( m_map2Volume->getItkData() );
-        incaster->SetInput( m_2DView->getInput()->getItkData() );
+        incaster->SetInput( m_2DView->getViewer()->getInput()->getItkData() );
         smoothing->SetInput( incaster->GetOutput() );
         outcaster->SetInput( smoothing->GetOutput() );
 
@@ -941,12 +962,11 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
             //std::cerr << excep << std::endl;
         }
         //m_mapVolume->getVtkData()->Update();
-        m_2DView->setInput( mapVolume );
+        m_2DView->getViewer()->setInput( mapVolume );
         //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
-        m_2DView->removeAnnotation(Q2DViewer::NoAnnotation);
+        m_2DView->getViewer()->removeAnnotation(Q2DViewer::NoAnnotation);
         //m_2DView->resetWindowLevelToDefault();
-        this->createColorMap(auxImage, m_2DView);
-        m_2DView->setSlice( m_sliceViewSlider->value() );
+        this->createColorMap(auxImage, m_2DView->getViewer());
         QApplication::restoreOverrideCursor();
 
     }
@@ -987,12 +1007,12 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
         Volume* cbvMapVolume = m_mapCalculator->getCBVVolume();
         PerfusionMapCalculatorMainThread::DoubleTemporalImageType::Pointer signalImage = m_mapCalculator->getDeltaRImage();
 
-        if( m_2DView->getCurrentCursorImageCoordinate(pos) )
+        if( m_2DView->getViewer()->getCurrentCursorImageCoordinate(pos) )
         {
             int index[3];
             index[0] = (int)((pos[0]- cbvMapVolume->getOrigin()[0])/cbvMapVolume->getSpacing()[0]);
             index[1] = (int)((pos[1]- cbvMapVolume->getOrigin()[1])/cbvMapVolume->getSpacing()[1]);
-            index[2] = m_2DView->getCurrentSlice();
+            index[2] = m_2DView->getViewer()->getCurrentSlice();
             DoubleTemporalImageType::IndexType indexTemp;
             indexTemp[1] = index[0];
             indexTemp[2] = index[1];
@@ -1017,9 +1037,9 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
             m_graphicplot->setMinY(-0.01);
             //m_graphicplot->setHold(true);
             m_graphicplot->setData( signal );
-            if(m_meanseries.size() > m_2DView->getCurrentSlice())
+            if(m_meanseries.size() > m_2DView->getViewer()->getCurrentSlice())
             {
-                m_graphicplot->setData( m_meanseries[m_2DView->getCurrentSlice()], 1 );
+                m_graphicplot->setData( m_meanseries[m_2DView->getViewer()->getCurrentSlice()], 1 );
                 m_graphicplot->setPaintingFeatures(Qt::red, 1.5, 1);
             }
         }
@@ -1041,7 +1061,7 @@ void QPerfusionMapReconstructionExtension::paintMeanSlice( int slice )
 void QPerfusionMapReconstructionExtension::paintROIData(  )
 {
 	DEBUG_LOG("pointROIData");
-	PolylineTemporalROIToolData* data = static_cast<PolylineTemporalROIToolData*>(m_2DView->getToolProxy()->getTool("PolylineTemporalROITool")->getToolData());
+	PolylineTemporalROIToolData* data = static_cast<PolylineTemporalROIToolData*>(m_2DView->getViewer()->getToolProxy()->getTool("PolylineTemporalROITool")->getToolData());
 	m_graphicplot->setData( data->getMeanVector(), 2 );
 	m_graphicplot->setPaintingFeatures(Qt::green, 1.5, 2);
 	/*for(int j=0;j<data->getMeanVector().size();j++)
