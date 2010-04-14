@@ -28,6 +28,7 @@ class Volume;
 class ToolManager;
 class DrawerPoint;
 class PerfusionMapCalculatorMainThread;
+class SeedToolData;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -114,7 +115,10 @@ private:
     /// Tool manager
     ToolManager *m_toolManager;
 
-    ///Calculadora de mapes de perfusió
+	/// Dades de la seed Tool per saber quin és l'arterial input function
+	SeedToolData *m_seedToolData;
+    
+	///Calculadora de mapes de perfusió
     PerfusionMapCalculatorMainThread* m_mapCalculator;
 
     DrawerPoint* m_aifDrawPoint;
