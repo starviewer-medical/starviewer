@@ -70,7 +70,7 @@ void AppImportFile::openDirectory( bool recursively )
     if ( !directoryName.isEmpty() )
     {
         INFO_LOG( "S'escaneja el directori: " + directoryName + " per obrir els estudis que hi contingui" );
-        m_workingDicomDirectory = QFileInfo( directoryName ).dir().path();
+        m_workingDicomDirectory = directoryName;
         writeSettings();
 
         // llista on guardarem tots els arxius compatibles que hi ha als directoris

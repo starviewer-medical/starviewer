@@ -230,7 +230,7 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
     if(m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve"));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve."));
         return;
     }
 
@@ -245,13 +245,26 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
     if(m_studyTreeWidget->getSelectedStudiesUID().isEmpty())
     {
         QApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve and view"));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select a study to retrieve and view."));
         return;
     }
 
+    bool firstStudy = true;
+    RetrieveActions actionAfterRetrieve;
+
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(View, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
+        if ( firstStudy )
+        {
+            actionAfterRetrieve = View;
+            firstStudy = false;
+        }
+        else
+        {
+            actionAfterRetrieve = Load;
+        }
+
+        retrieve(actionAfterRetrieve, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
     }
 }
 
@@ -309,7 +322,7 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
 {
     if (pacsToQuery.isEmpty()) //es comprova que hi hagi pacs seleccionats
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Please select a PACS to query"));
+        QMessageBox::warning(this, ApplicationNameString, tr("Please select a PACS to query."));
         return false;
     }
 
@@ -439,7 +452,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
             message = tr("Please review the operation list screen, ");
             message += tr("%1 can't connect to PACS %2 trying to retrievev a study.\n").arg(ApplicationNameString, pacs.getAETitle());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persist contact with an administrator.");
+            message += tr("\nIf the problem persists contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::NoEnoughSpace :
@@ -459,20 +472,20 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred freeing space and some operations may have failed.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::DatabaseError :
             message = tr("Please review the operation list screen, ");
             message += tr("a database error ocurred and some operations may have failed.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::PatientInconsistent :
             message = tr("Please review the operation list screen, ");
             message += tr("an error ocurred and some retrieve operations may have failed.");
-            message += tr("\n%1 has not be capable of read correctly dicom information of the study.").arg(ApplicationNameString);
+            message += tr("\n%1 has not be capable of read correctly DICOM information of the study.").arg(ApplicationNameString);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
@@ -492,13 +505,12 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString st
         case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
             message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsDevice::getIncomingDICOMConnectionsPort() );
             message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
-            message += tr("\n\nIf there is another %1 window retrieving studies from the PACS please wait until those retrieving has finished and try again.").arg(ApplicationNameString);
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         default:
             message = tr("Please review the operation list screen, an unknown error has ocurred retrieving a study.");
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
     }
 }
 
@@ -511,21 +523,22 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadStoreError(QString study
     {
         case QExecuteOperationThread::CanNotConnectPacsToStore :
             message = tr("Please review the operation list screen, ");
-            message += tr("%1 can't connect to PACS %2 trying to store a study.\n").arg(ApplicationNameString, pacs.getAETitle());
+            message += tr("%1 can't connect to PACS %2 trying to store DICOM files.\n").arg(ApplicationNameString, pacs.getAETitle());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persist contact with an administrator.");
+            message += tr("\nIf the problem persists contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case QExecuteOperationThread::StoreUnknowStatus:
         case QExecuteOperationThread::StoreFailureStatus:
-            message = tr("The store of images to PACS %1 has failed.\n\n").arg(pacs.getAETitle()); 
+            message = tr("The store of DICOM files to PACS %1 has failed.\n\n").arg(pacs.getAETitle()); 
             message += tr("Wait a minute and try again, if the problem persist contact with an administrator.");
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         default:
-            message = tr("Please review the operation list screen, an unknown error has ocurred storing a study to PACS %1.").arg(pacs.getAETitle());
+            message = tr("Please review the operation list screen, an unknown error has ocurred storing files to PACS %1.").arg(pacs.getAETitle());
             message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persist contact with an administrator.").arg(ApplicationNameString);
+                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            QMessageBox::critical(this, ApplicationNameString, message);
             break;
     }
 }
@@ -556,7 +569,7 @@ void QInputOutputPacsWidget::showQExecuteOperationThreadStoreWarning(QString stu
     switch (warning)
     {
         case QExecuteOperationThread::StoreSomeImagesFailureStatus:
-            message = tr("Some images of study %1 can't be stored to PACS %2.\n\n").arg(studyInstanceUID, pacs.getAETitle());
+            message = tr("Some DICOM files of study %1 can't be stored to PACS %2.\n\n").arg(studyInstanceUID, pacs.getAETitle());
             message += tr("Please contact with an administrator to solve the problem.");
             QMessageBox::warning(this, ApplicationNameString, message);
             break;

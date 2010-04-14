@@ -6,7 +6,7 @@
     <message>
         <location filename="thumbnailcreator.cpp" line="56"/>
         <source>No Images Available</source>
-        <translation>No hay imagen disponible</translation>
+        <translation>No hay imágenes disponibles</translation>
     </message>
     <message>
         <location filename="thumbnailcreator.cpp" line="27"/>
@@ -90,7 +90,7 @@
 <context>
     <name>udg::HangingProtocolManager</name>
     <message>
-        <location filename="hangingprotocolmanager.cpp" line="887"/>
+        <location filename="hangingprotocolmanager.cpp" line="898"/>
         <source>Downloading previous study...</source>
         <translation>Descargando estudio previo...</translation>
     </message>
@@ -114,13 +114,13 @@
     <message>
         <location filename="magictool.cpp" line="301"/>
         <source>Area: %1 %2</source>
-        <translation></translation>
+        <translation>Área: %1 %2</translation>
     </message>
     <message>
         <location filename="magictool.cpp" line="483"/>
         <location filename="magictool.cpp" line="503"/>
         <source>Magic Factor: %1</source>
-        <translation>Factor Magico: %1</translation>
+        <translation>Factor Mágico: %1</translation>
     </message>
 </context>
 <context>
@@ -201,7 +201,7 @@ Mean: %3
 St.Dev.: %4</source>
         <oldsource>Area: %1 px2
 Mean: %2</oldsource>
-        <translation>Area: %1 %2
+        <translation>Área: %1 %2
 Media: %3
 Desv.Std.:%4</translation>
     </message>
@@ -317,7 +317,7 @@ Acc:%6
     <message>
         <location filename="q3dviewer.cpp" line="1190"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
-        <translation>El volumen actual es demasiado grande. Pro favor, seleccioe otro volumen o cierrel las aplicaciones aboertas e inténtelo de nuevo.</translation>
+        <translation>El volumen actual es demasiado grande. Por favor, seleccione otro volumen o cierre las aplicaciones abiertas e inténtelo de nuevo.</translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="590"/>
@@ -331,7 +331,7 @@ Acc:%6
         <source>The system hasn&apos;t enough memory to apply properly this rendering style with this volume.
 Shading will be disabled, it won&apos;t render as expected.</source>
         <translation>El sistema no tiene suficiente memoria para aplicar este estilo de visualización a este volumen.
-El sombreado se deshabilitará i, por lo tanto, la visualización no será la esperada.</translation>
+El sombreado se deshabilitará y, por lo tanto, la visualización no será la esperada.</translation>
     </message>
 </context>
 <context>
@@ -594,7 +594,7 @@ El sombreado se deshabilitará i, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpcthelixwidgetbase.ui" line="267"/>
         <source>Reconstruction Diameter:</source>
-        <translation>Diametro de reconstrucción:</translation>
+        <translation>Diámetro de reconstrucción:</translation>
     </message>
     <message>
         <location filename="qdicomdumpcthelixwidgetbase.ui" line="290"/>
@@ -725,7 +725,7 @@ El sombreado se deshabilitará i, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="190"/>
         <source>Reconstruction Diameter:</source>
-        <translation>Diametro de reconstrucción:</translation>
+        <translation>Diámetro de reconstrucción:</translation>
     </message>
     <message>
         <location filename="qdicomdumpctlocalizerwidgetbase.ui" line="213"/>
@@ -1084,7 +1084,7 @@ El sombreado se deshabilitará i, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="41"/>
         <source>Compression Force:</source>
-        <translation>Fuerza de Compresión:</translation>
+        <translation>Fuerza de compresión:</translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="57"/>
@@ -1229,7 +1229,7 @@ El sombreado se deshabilitará i, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="395"/>
         <source>Device Serial Number:</source>
-        <translation>Número de serie del equipol:</translation>
+        <translation>Número de serie del equipo:</translation>
     </message>
     <message>
         <location filename="qdicomdumpmammographywidgetbase.ui" line="402"/>
@@ -1452,7 +1452,7 @@ Variable de entorno(logFilePath): %2</translation>
         <location filename="screenshottool.cpp" line="88"/>
         <source>You&apos;re going to save several screenshots at one time.
 It&apos;s recommended you save them in an empty folder.</source>
-        <translation>Está a punto de guardar diversas capturas de pantalla a la vez.Se recomienda que las guarde en una carpeta vacía.</translation>
+        <translation>Está a punto de guardar diversas capturas de pantalla a la vez.Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
 </context>
 <context>
@@ -1485,7 +1485,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="193"/>
         <source>Put Seed tool</source>
-        <translation>Situa la herramienta de Semilla</translation>
+        <translation>Situa la herramienta de semilla</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="198"/>
@@ -1495,7 +1495,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="202"/>
         <source>Enable/Disable Magic tool</source>
-        <translation>Habilitar/Deshabilitar Herramienta Mágica</translation>
+        <translation>Habilitar/Deshabilitar la herramienta mágica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="207"/>
@@ -1520,7 +1520,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="217"/>
         <source>Enable/Disable 3D Rotation tool</source>
-        <translation>Activar/Desactivar la herramienta de Rotación 3D</translation>
+        <translation>Activar/Desactivar la herramienta de rotación 3D</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="225"/>
@@ -1540,12 +1540,12 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="239"/>
         <source>Enable/Disable Reference Lines tool</source>
-        <translation>Activar/Desactivar la herramienta de Reference Lines</translation>
+        <translation>Activar/Desactivar la herramienta de líneas de referencia</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="240"/>
         <source>Reference Lines</source>
-        <translation>Líneas de Referencia</translation>
+        <translation>Líneas de referencia</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="244"/>
@@ -1575,12 +1575,12 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="259"/>
         <source>Window Level Presets tool</source>
-        <translation>Herramienta de valores por defecto de Window Level</translation>
+        <translation>Herramienta de valores por defecto de window level</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="260"/>
         <source>Enable/Disable Window Level Presets tool</source>
-        <translation>Activar/Desactivar la herramienta de valores por defecto de Window Level</translation>
+        <translation>Activar/Desactivar la herramienta de valores por defecto de window level</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="267"/>
@@ -1596,7 +1596,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="324"/>
         <source>Clipping Planes</source>
-        <translation>Planos de Corte</translation>
+        <translation>Planos de corte</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="327"/>
@@ -1681,12 +1681,12 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="424"/>
         <source>Rotate Counter Clockwise</source>
-        <translation>Rotar en Sentido Anti-horario</translation>
+        <translation>Rotar en sentido Anti-horario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="427"/>
         <source>Rotate the image in counter clockwise direction</source>
-        <translation>Rotar la imagen en setido anti-horario</translation>
+        <translation>Rotar la imagen en sentido anti-horario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="428"/>
@@ -1696,7 +1696,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="434"/>
         <source>Horizontal Flip</source>
-        <translation>Flip Horizontal</translation>
+        <translation>Flip horizontal</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="437"/>
@@ -1706,7 +1706,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="444"/>
         <source>Vertical Flip</source>
-        <translation>Flip Vertical</translation>
+        <translation>Flip vertical</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="447"/>
@@ -1721,7 +1721,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="161"/>
         <source>Enable/Disable scroll tool</source>
-        <translation>Activar/Desactivar la herramienta scroll</translation>
+        <translation>Activar/Desactivar la herramienta de cambio de corte</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="166"/>
@@ -1731,7 +1731,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="182"/>
         <source>Pan</source>
-        <translation></translation>
+        <translation>Mover</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="222"/>
@@ -1778,7 +1778,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="295"/>
         <source>Enable/Disable Cursor 3D tool</source>
-        <translation>Habilitar/Deshabilitar herramienta de Cursor 3D</translation>
+        <translation>Habilitar/Deshabilitar herramienta de cursor 3D</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="300"/>
@@ -1793,7 +1793,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="308"/>
         <source>Editor</source>
-        <translation>Editar</translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="311"/>
@@ -1804,7 +1804,7 @@ It&apos;s recommended you save them in an empty folder.</source>
         <location filename="toolregistry.cpp" line="316"/>
         <source>Open Angle</source>
         <oldsource>Non Closed Angle</oldsource>
-        <translation>Ángulo Abierto</translation>
+        <translation>Ángulo abierto</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="319"/>

@@ -108,7 +108,7 @@ Volume::VtkImageTypePointer Volume::getVtkData()
             switch( this->readFiles( fileList ) )
             {
             case OutOfMemory: 
-                ERROR_LOG( "No podem carregar els arxius següents perquè no caben a memòria\n" + fileList.join("\n") );
+                WARN_LOG( "No podem carregar els arxius següents perquè no caben a memòria\n" + fileList.join("\n") );
                 createNeutralVolume();
                 m_dataLoaded = true;
                 QMessageBox::warning( 0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg( ApplicationNameString ) );
@@ -540,11 +540,11 @@ void Volume::readDifferentSizeImagesIntoOneVolume( const QStringList &filenames 
         m_reader->SetFileName( qPrintable(file) );
         try
         {
-            m_reader->Update();
+            m_reader->UpdateLargestPossibleRegion();
         }
         catch ( itk::ExceptionObject & e )
         {
-            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
+            WARN_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
                     .arg( QFileInfo( filenames.at(0) ).dir().path() )
                     .arg( e.GetDescription() )
                     );
@@ -617,8 +617,8 @@ int Volume::readSingleFile( QString fileName )
     }
     catch ( itk::ExceptionObject & e )
     {
-        ERROR_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
-                .arg( QFileInfo( fileName ).dir().path() )
+        WARN_LOG( QString("Excepció llegint l'arxiu [%1] Descripció: [%2]")
+                .arg( fileName )
                 .arg( e.GetDescription() )
                 );
         // llegim el missatge d'error per esbrinar de quin error es tracta
@@ -703,7 +703,7 @@ int Volume::readFiles( QStringList filenames )
         }
         catch ( itk::ExceptionObject & e )
         {
-            ERROR_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
+            WARN_LOG( QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
                 .arg( QFileInfo( filenames.at(0) ).dir().path() )
                 .arg( e.GetDescription() )
                 );

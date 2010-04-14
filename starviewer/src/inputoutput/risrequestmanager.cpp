@@ -66,14 +66,25 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
     INFO_LOG("Comencem a cercar l'estudi sol·licitat pel RIS amb accession number " + maskRISRequest.getAccessionNumber());
-
-    //Inicialitzem a fals indicant que pel moment no s'ha trobat cap estudi que compleixi amb la màscara de cerca enviada pel RIS
+    // Inicialitzem a fals indicant que pel moment no s'ha trobat cap estudi que compleixi amb la màscara de cerca enviada pel RIS
     m_foundRISRequestStudy = false;
-    m_qpopUpRisRequestsScreen->setAccessionNumber(maskRISRequest.getAccessionNumber()); //Mostrem el popUP amb l'accession number
 
+    // Mostrem el popUP amb l'accession number
+    m_qpopUpRisRequestsScreen->setAccessionNumber(maskRISRequest.getAccessionNumber());
     m_qpopUpRisRequestsScreen->show();
 
-    m_pacsManager->queryStudy(maskRISRequest, PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true));
+    // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
+    // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant 
+    // un message box, fent un log o el que calgui segons la ocasió.
+    QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
+    if ( queryablePACS.isEmpty() )
+    {
+        QMessageBox::information(0, ApplicationNameString, tr("The RIS request could not be performed.") + "\n\n" + tr("There are no configured PACS to query.") + "\n" + tr("Please, check your PACS settings.") );
+    }
+    else
+    {
+        m_pacsManager->queryStudy(maskRISRequest, queryablePACS);
+    }
 }
 
 void RISRequestManager::queryStudyResultsReceived(QList<Patient*> patientsList, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID)
@@ -130,7 +141,7 @@ void RISRequestManager::errorQueryingStudy(PacsDevice pacsDeviceError)
 {
     QString errorMessage;
 
-    errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure that the IP and AETitle of this PACS are correct")
+    errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure that the IP and AETitle of It are correct.")
         .arg(pacsDeviceError.getAETitle())
         .arg(pacsDeviceError.getInstitution());
 
@@ -146,11 +157,10 @@ void RISRequestManager::showListenRISRequestThreadError(ListenRISRequestThread::
     {
         case ListenRISRequestThread::RisPortInUse :
             message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
-            message += tr("\n\nIf the error has ocurred when openned new %1's windows, close this window. To open new %1 window you have to choose the 'New' option from the File menu.").arg(ApplicationNameString);
             break;
         case ListenRISRequestThread::UnknownNetworkError :
             message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(risPort);
-            message += tr("\nIf the problem persist contact with an administrator.");
+            message += tr("\nIf the problem persists contact with an administrator.");
             break;
     }
 

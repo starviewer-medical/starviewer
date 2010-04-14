@@ -17,6 +17,9 @@ const QString CoreSettings::LogViewerGeometry("logViewerDialogGeometry");
 const QString CoreSettings::UserHangingProtocolsPath("Hanging-Protocols/path");
 const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
+// Mida per defecte de la font de les annotacions
+const QString CoreSettings::DefaultToolTextSize("Tools/DefaultTextSize");
+
 // Paràmetres d'obscurances
 const QString ObscurancesBase("3DViewer/obscurances/");
 const QString LowQualityObscurancesBase( ObscurancesBase + "low/" );
@@ -56,7 +59,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting( UserHangingProtocolsPath, UserHangingProtocolsPath );
     settingsRegistry->addSetting( RegisterStatLogs, false );
     settingsRegistry->addSetting( LanguageLocale, QLocale::system().name() );
-    
+    settingsRegistry->addSetting( DefaultToolTextSize, 14 );
 }
 
 } // end namespace udg 

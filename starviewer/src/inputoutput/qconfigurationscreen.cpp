@@ -203,7 +203,7 @@ void QConfigurationScreen::updatePacs()
 
     if ( m_selectedPacsID == "" )
     {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Select a PACS to update" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Select a PACS to update." ) );
         return;
     }
 
@@ -227,7 +227,7 @@ void QConfigurationScreen::deletePacs()
 
     if ( m_selectedPacsID == "" )
     {
-        QMessageBox::warning( this , ApplicationNameString , tr( "Select a PACS to delete" ) );
+        QMessageBox::warning( this , ApplicationNameString , tr( "Select a PACS to delete." ) );
         return;
     }
 
@@ -285,7 +285,7 @@ void QConfigurationScreen::test()
 
         if ( !state.good() )
         {
-            message = tr( "PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAETitle() );
+            message = tr( "PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of It are correct." ).arg( pacs.getAETitle() );
 
             QApplication::restoreOverrideCursor();
             QMessageBox::warning( this , ApplicationNameString , message );
@@ -306,7 +306,7 @@ void QConfigurationScreen::test()
             }
             else
             {
-                message = tr( "PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of the PACS are correct." ).arg( pacs.getAETitle() );
+                message = tr( "PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of It are correct." ).arg( pacs.getAETitle() );
                 QMessageBox::warning( this , ApplicationNameString , message );
                 INFO_LOG( "Doing echo PACS " + pacs.getAETitle() + " doesn't responds correctly. PACS ERROR : " + state.text() );
             }
@@ -324,7 +324,7 @@ bool QConfigurationScreen::validatePacsDevice()
     text = m_textAETitle->text();
     if ( text.length() == 0 )
     {
-         QMessageBox::warning( this , ApplicationNameString , tr("AETitle field can't be empty") );
+         QMessageBox::warning( this , ApplicationNameString , tr("AETitle field can't be empty.") );
         return false;
     }
 
@@ -373,7 +373,7 @@ bool QConfigurationScreen::validateChanges()
     {
         if ( m_textLocalPort->text().toInt( NULL , 10 ) < 0 || m_textLocalPort->text().toInt( NULL , 10 ) > 65535 )
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Local Port has to be between 0 and 65535" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Local Port value has to be between 0 and 65535." ) );
             return false;
         }
     }
@@ -382,7 +382,7 @@ bool QConfigurationScreen::validateChanges()
     {
         if ( m_textMaxConnections->text().toInt( NULL , 10 ) < 1 || m_textMaxConnections->text().toInt( NULL , 10 ) > 15 )
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Maximum simultaenious connections has to be between 1 and 15" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Maximum simultaenious connections has to be between 1 and 15." ) );
             return false;
         }
     }
@@ -396,7 +396,7 @@ bool QConfigurationScreen::applyChanges()
     {
         if (isIncomingConnectionsPortInUseByAnotherApplication() && m_textLocalPort->isModified())
         {
-            QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr( "The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes ?" ).arg(m_textLocalPort->text()),
+            QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString, tr( "The port %1 for incoming connections is in use by another application. Are you sure you want to apply the changes?" ).arg(m_textLocalPort->text()),
                                                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
             if (response == QMessageBox::No) return false;

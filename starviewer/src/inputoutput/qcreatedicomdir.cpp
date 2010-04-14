@@ -282,7 +282,7 @@ Status QCreateDicomdir::createDicomdirOnCdOrDvd()
 
     if ( !temporaryDirPath.mkpath( dicomdirPath ) ) // Creem el directori temporal
     {
-        QMessageBox::critical( this , ApplicationNameString , tr( "Can't create the temporary directory to create DICOMDIR. Please check users permission" ) );
+        QMessageBox::critical( this , ApplicationNameString , tr( "Can't create the temporary directory to create DICOMDIR. Please check users permission." ) );
         ERROR_LOG( "Error al crear directori " + dicomdirPath );
         return state.setStatus( "Can't create temporary DICOMDIR", false , 3002 );
     }
@@ -302,7 +302,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
 
     if ( m_lineEditDicomdirPath->text().isEmpty() )
     {
-        QMessageBox::information( this , ApplicationNameString , tr( "No directory specified to create the DICOMDIR" ) );
+        QMessageBox::information( this , ApplicationNameString , tr( "No directory specified to create the DICOMDIR." ) );
         return;
     }
 
@@ -314,7 +314,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
     {
         switch ( QMessageBox::question( this ,
                 tr( "Create DICOMDIR" ) ,
-                tr( "The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory ?" ) ,
+                tr( "The directory contains a DICOMDIR. Do you want to overwrite and delete all the files in the directory?" ) ,
                 tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
         {
             case 0: // Si vol sobreescriure, esborrem el contingut del directori
@@ -336,8 +336,8 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
         if ( !directoryDicomdirPath.exists() ) // Si el directori no existiex, preguntem si el vol crear
         {
                 switch ( QMessageBox::question( this ,
-                        tr( "Create directory ?" ) ,
-                        tr( "The DICOMDIR directory doesn't exists. Do you want to create it ?" ) ,
+                        tr( "Create directory?" ) ,
+                        tr( "The DICOMDIR directory doesn't exists. Do you want to create it?" ) ,
                         tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
                 {
                     case 0:
@@ -416,7 +416,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
                     .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
                 break;
             default :
-                QMessageBox::critical( this , ApplicationNameString , tr( "Error creating DICOMDIR. Be sure you have user permissions in %1 and the directory is empty." ).arg( m_lineEditDicomdirPath->text() ) );
+                QMessageBox::critical( this , ApplicationNameString , tr( "Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty." ).arg( m_lineEditDicomdirPath->text() ) );
                 ERROR_LOG( "Error al crear el DICOMDIR ERROR : " + state.text() );
                 return state;
         }
@@ -577,7 +577,7 @@ void QCreateDicomdir::openBurningApplication(bool createIsoResult)
     }
     else
     {
-        QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the DICOMDIR ISO image file. ") + m_isoImageFileCreator->getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
+        QMessageBox::critical(this, tr("DICOMDIR creation failure"), tr("There was an error during the creation of the DICOMDIR ISO image file. ") + m_isoImageFileCreator->getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
         ERROR_LOG( "Error al crear ISO amb descripció: " + m_isoImageFileCreator->getLastErrorDescription() );
     }
     delete m_isoImageFileCreator;
@@ -616,7 +616,7 @@ void QCreateDicomdir::showProcessErrorMessage( const QProcess &process, QString 
             default: 
                 break;
     }
-    QMessageBox::critical(this, tr("DICOMDIR Creation Failure"), tr("There was an error during the creation of the DICOMDIR") + "\n\n" + errorMessage + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
+    QMessageBox::critical(this, tr("DICOMDIR creation failure"), tr("There was an error during the creation of the DICOMDIR.") + "\n\n" + errorMessage + "\n\n" + tr("Please, contact your system administrator to solve this problem.") );
 
 }
 

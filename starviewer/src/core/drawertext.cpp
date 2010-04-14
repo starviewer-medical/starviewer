@@ -8,6 +8,7 @@
 #include "logging.h"
 #include "mathtools.h"
 #include "q2dviewer.h"
+#include "coresettings.h"
 // vtk
 #include <vtkTextProperty.h>
 #include <vtkTextActor.h>
@@ -15,7 +16,7 @@
 
 namespace udg {
 
-DrawerText::DrawerText(QObject *parent) : DrawerPrimitive(parent), m_horizontalJustification( "Centered" ), m_verticalJustification( "Centered" ), m_border( false ), m_fontFamily( "Arial" ), m_fontSize( 14 ), m_shadow( false ), m_italic( false ), m_bold( false ), m_height( 0.05 ), m_width( 0.09 ), m_scaled( false ), m_padding( 0 ), m_vtkActor(0)
+DrawerText::DrawerText(QObject *parent) : DrawerPrimitive(parent), m_horizontalJustification( "Centered" ), m_verticalJustification( "Centered" ), m_border( false ), m_fontFamily( "Arial" ), m_fontSize( Settings().getValue(CoreSettings::DefaultToolTextSize).toInt() ), m_shadow( false ), m_italic( false ), m_bold( false ), m_height( 0.05 ), m_width( 0.09 ), m_scaled( false ), m_padding( 0 ), m_vtkActor(0)
 {
 }
 

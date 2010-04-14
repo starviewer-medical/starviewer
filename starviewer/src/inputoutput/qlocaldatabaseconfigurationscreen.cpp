@@ -113,8 +113,8 @@ bool QLocalDatabaseConfigurationScreen::validateChanges()
         if ( !dir.exists(m_textCacheImagePath->text() ) )
         {
             switch ( QMessageBox::question( this ,
-                    tr( "Create directory ?" ) ,
-                    tr( "The cache image directory doesn't exists. Do you want to create it ?" ) ,
+                    tr( "Create directory?" ) ,
+                    tr( "The cache image directory doesn't exists. Do you want to create it?" ) ,
                     tr( "&Yes" ) , tr( "&No" ) , 0 , 1 ) )
             {
                 case 0:
@@ -263,7 +263,7 @@ void QLocalDatabaseConfigurationScreen::applyChangesCache()
 void QLocalDatabaseConfigurationScreen::deleteStudies()
 {
     QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
-                                                                       tr("Are you sure you want to delete all Studies of the cache ?"),
+                                                                       tr("Are you sure you want to delete all Studies of the cache?"),
                                                                        QMessageBox::Yes | QMessageBox::No,
                                                                        QMessageBox::No);
     if(response == QMessageBox::Yes)
@@ -282,7 +282,7 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
             Status state;
             state.setStatus(tr("The cache cannot be deleted, an unknown error has ocurred."
                                "\nTry to close all %1 windows and try again."
-                               "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString), false, -1);
+                               "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString), false, -1);
             showDatabaseErrorMessage( state );
         }
         else QMessageBox::information( this, ApplicationNameString, "All studies have been deleted successfully");
@@ -307,10 +307,10 @@ void QLocalDatabaseConfigurationScreen::compactCache()
         Status state;
         state.setStatus(tr("The database cannot be compacted, an unknown error has ocurred."
                 "\nTry to close all %1 windows and try again."
-                "\n\nIf the problem persist contact with an administrator.").arg(ApplicationNameString), false, -1);
+                "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString), false, -1);
         showDatabaseErrorMessage( state );
     }
-    else QMessageBox::information( this, ApplicationNameString, "Starviewer database has been compacted successfully");
+    else QMessageBox::information( this, ApplicationNameString, "Starviewer database has been compacted successfully.");
 }
 
 void QLocalDatabaseConfigurationScreen::cacheImagePathEditingFinish()
