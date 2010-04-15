@@ -1676,7 +1676,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="418"/>
         <source>Clockwise rotation</source>
-        <translation>Rotació en setit horari</translation>
+        <translation>Rotació en sentit horari</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="424"/>
