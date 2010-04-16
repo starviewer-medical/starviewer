@@ -335,7 +335,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     else if( toolName == "TransDifferenceTool" )
     {
         toolAction->setText( tr("Translation Difference") );
-        toolAction->setIcon( QIcon(":/images/move.png") );
+        toolAction->setIcon( QIcon(":/images/moveDifference.png") );
         toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::TransDifferenceTool ) );
         statusTip = tr("Enable/Disable the translation difference tool");
         toolTip = toolAction->text();
