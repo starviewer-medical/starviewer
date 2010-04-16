@@ -37,6 +37,12 @@ public:
     /// Assigna les dades pròpies de la seed (persistent data)
     void setToolData(ToolData * data);
 
+    ///Inicialitza i calcula tota la imatge diferència
+    void initializeDifferenceImage( );
+
+    ///Assigna una determinada translació a una llesca
+    void setSingleDifferenceImage(int dx, int dy);
+
 /// \TODO potser aquests mètodes slots passen a ser públics
 private slots:
     /// Comença la translació
@@ -49,7 +55,10 @@ private slots:
     void endTransDifference();
 
     /// Calcula la imatge diferència
-    void computeDifferenceImage( int dx, int dy );
+    void computeSingleDifferenceImage(int dx, int dy, int slice = -1);
+
+    /// Incrementa els valors dels paràmeters a la tranformació actual
+    void increaseSingleDifferenceImage(int dx, int dy);
 
 private:
     /// Dades específiques de la tool
@@ -59,9 +68,7 @@ private:
     Q2DViewer *m_2DViewer;
 
     /// valors per controlar la translació
-    int m_currentTranslationX, m_currentTranslationY;
     int m_startPosition[2];
-    int m_currentPosition[2];
     int m_dx,m_dy;
     
     /// estats d'execució de la tool

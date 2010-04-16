@@ -53,14 +53,21 @@
 #include <itkImageFileWriter.h>
 #include <itkRescaleIntensityImageFilter.h>
 #include <itkResampleImageFilter.h>
+#include <itkMutualInformationImageToImageMetric.h>
+#include <itkGradientDescentOptimizer.h>
+#include <itkNormalizeImageFilter.h>
+#include <itkDiscreteGaussianImageFilter.h>
 
 namespace udg {
 
 QAngioSubstractionExtension::QAngioSubstractionExtension( QWidget *parent )
- : QWidget( parent ), m_mainVolume(0), m_differenceVolume(0)
+ : QWidget( parent ), m_mainVolume(0), m_differenceVolume(0), m_tdToolData(0)
 {
     setupUi( this );
     AngioSubstractionSettings().init();
+
+    //De moment amaguem el botó d'autoregistration perquè no acaba de funcionar
+    m_autoRegistrationToolButton->setVisible(false);
 
     initializeTools();
     createConnections();
@@ -124,8 +131,7 @@ void QAngioSubstractionExtension::createConnections()
     connect( m_imageSelectorSpinBox, SIGNAL( valueChanged(int) ), SLOT( computeDifferenceImage( int ) ) );
     connect( m_2DView_1, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
     connect( m_2DView_2, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
-    connect( m_autoRegistrationToolButton, SIGNAL( clicked() ), SLOT( computeAutomateSingleImage( ) ) );
-    connect( m_applyTranslationToolButton, SIGNAL( clicked() ), SLOT( computeSingleImageDifference( ) ) );
+    //connect( m_autoRegistrationToolButton, SIGNAL( clicked() ), SLOT( computeAutomateSingleImage( ) ) );
 }
 
 void QAngioSubstractionExtension::setInput( Volume *input )
@@ -135,8 +141,6 @@ void QAngioSubstractionExtension::setInput( Volume *input )
 	//Desactivem la sincronització perquè si no quan es canvia l'input no funciona correctament
 	m_2DView_1->setSynchronized(false);
 	m_2DView_2->setSynchronized(false);
-	//this->synchronization( m_2DView_1, false );
-	//this->synchronization( m_2DView_2, false );
 
 	//eliminem l'anterior m_differenceVolume si n'hi ha
 	if(m_differenceVolume){
@@ -153,77 +157,43 @@ void QAngioSubstractionExtension::setInput( Volume *input )
 
 	computeDifferenceImage( m_imageSelectorSpinBox->value() );
 
-    //Actualitzem les dades de la transdifference tool
-    m_toolManager->triggerTool("TransDifferenceTool");
-    TransDifferenceToolData *tdToolData = static_cast<TransDifferenceToolData*> ( m_2DView_2->getViewer()->getToolProxy()->getTool("TransDifferenceTool")->getToolData() );
-    tdToolData->setInputVolume(m_mainVolume);
-    tdToolData->setDifferenceVolume(m_differenceVolume);
-    tdToolData->setReferenceSlice( m_imageSelectorSpinBox->value() );
-    m_toolManager->triggerTool("SlicingTool");
-
 	//Només actualitzem l'1 perquè el 2 ja es fa en l'acció computeDifferenceImage
-	//Això es fa així perquè l'acció està lligasda a un connect
+	//Això es fa així perquè l'acció està lligada a un connect
 	m_2DView_1->getViewer()->refresh();
 
 	m_2DView_1->setSynchronized(true);
 	m_2DView_2->setSynchronized(true);
+
+    m_2DView_2->getViewer()->disableContextMenu();
+    m_2DView_1->getViewer()->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
+    m_2DView_2->getViewer()->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
 }
 
 
 void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
 {
-    QApplication::setOverrideCursor( Qt::WaitCursor );
-	DEBUG_LOG(QString("Init computeDifferenceImage: %1").arg(imageid));
-	int i,j,k;
-    int max=0;
-
-    //Allocating memory for the output image
-    int ext[6];
-    m_mainVolume->getWholeExtent(ext);
-    vtkImageData *imdif = vtkImageData::New();
-    //imdif->CopyInformation(m_mainVolume->getVtkData());
-    imdif->CopyTypeSpecificInformation(m_mainVolume->getVtkData());
-    imdif->SetExtent(ext);
-
-    //Creem l'index que ens indica quin és el primer voxel de la imatge de la que restem
-    int indexRef[3];
-    indexRef[0]=ext[0];
-    indexRef[1]=ext[2];
-    indexRef[2]=imageid - 1;
-
-    Volume::VoxelType *valueRef, *valueMov, *valueDif;
-
-    valueMov = m_mainVolume->getScalarPointer();
-    valueDif = (Volume::VoxelType *)imdif->GetScalarPointer();
-    for (k=ext[4];k<=ext[5];k++)
+    if(m_mainVolume == 0)
     {
-        //Reiniciem el punter a la imatge de referència
-        valueRef = m_mainVolume->getScalarPointer(indexRef);
-        for (j=ext[2];j<=ext[3];j++)
-        {
-            for (i=ext[0];i<=ext[1];i++)
-            {
-                (*valueDif) = (*valueMov) - (*valueRef);
- 				if((*valueDif)>max)max=(*valueDif);
-				if((*valueDif)<-max)max=-(*valueDif);
-                valueRef++;
-                valueMov++;
-                valueDif++;
-            }
-        }
+        DEBUG_LOG("ERROR: Estem inicialitzant la diferència sense tenir input!");
+        return;
     }
 
-	//Converting the VTK data to volume
-    if(m_differenceVolume == 0){
-        m_differenceVolume = new Volume();
-        m_differenceVolume->setImages( m_mainVolume->getImages() );
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+	//DEBUG_LOG(QString("Init computeDifferenceImage: %1").arg(imageid));
+    
+    //Actualitzem les dades de la transdifference tool
+    m_toolManager->triggerTool("TransDifferenceTool");
+    TransDifferenceTool* tdTool = static_cast<TransDifferenceTool*> ( m_2DView_2->getViewer()->getToolProxy()->getTool("TransDifferenceTool"));
+    if(m_tdToolData == 0){
+        m_tdToolData = static_cast<TransDifferenceToolData*> ( tdTool->getToolData() );
     }
-    m_differenceVolume->setData(imdif);
-
-	m_2DView_2->getViewer()->setInput(m_differenceVolume);
-	m_2DView_2->getViewer()->setWindowLevel((double)2*max,0.0);
-
-	m_2DView_2->getViewer()->refresh();
+    if(m_tdToolData->getInputVolume() != m_mainVolume){
+        m_tdToolData->setInputVolume(m_mainVolume);
+    }
+    m_tdToolData->setReferenceSlice( imageid );
+    tdTool->initializeDifferenceImage();
+    m_toolManager->triggerTool("SlicingTool");
+    
     QApplication::restoreOverrideCursor();
 }
 
@@ -235,15 +205,175 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
 
     typedef itk::Image< PixelType, Dimension >  FixedImageType;
     typedef itk::Image< PixelType, Dimension >  MovingImageType;
+    typedef   float     InternalPixelType;
+    typedef itk::Image< InternalPixelType, Dimension > InternalImageType;
+
+    typedef itk::TranslationTransform< double, Dimension > TransformType;
+    typedef itk::GradientDescentOptimizer                  OptimizerType;
+    typedef itk::LinearInterpolateImageFunction< 
+                                    InternalImageType,
+                                    double             > InterpolatorType;
+    typedef itk::ImageRegistrationMethod< 
+                                    InternalImageType, 
+                                    InternalImageType >  RegistrationType;
+    typedef itk::MutualInformationImageToImageMetric< 
+                                          InternalImageType, 
+                                          InternalImageType >    MetricType;
+
+    TransformType::Pointer      transform     = TransformType::New();
+    OptimizerType::Pointer      optimizer     = OptimizerType::New();
+    InterpolatorType::Pointer   interpolator  = InterpolatorType::New();
+    RegistrationType::Pointer   registration  = RegistrationType::New();
+
+    registration->SetOptimizer(     optimizer     );
+    registration->SetTransform(     transform     );
+    registration->SetInterpolator(  interpolator  );
+
+    MetricType::Pointer         metric        = MetricType::New();
+    registration->SetMetric( metric  );
+    metric->SetFixedImageStandardDeviation(  0.4 );
+    metric->SetMovingImageStandardDeviation( 0.4 );
+    metric->SetNumberOfSpatialSamples( 50 );
+
+    typedef itk::ExtractImageFilter< Volume::ItkImageType, FixedImageType > FilterType;
+    
+    FilterType::Pointer extractFixedImageFilter = FilterType::New();
+    Volume::ItkImageType::RegionType inputRegion = m_mainVolume->getItkData()->GetLargestPossibleRegion();
+    Volume::ItkImageType::SizeType size = inputRegion.GetSize();
+    //Dividim la mida per dos per tal de quedar-nos només amb la part central
+    // ja que si no ens registre el background
+    size[0] = size[0] / 2;
+    size[1] = size[1] / 2;
+    size[2] = 0;
+    Volume::ItkImageType::IndexType start = inputRegion.GetIndex();
+    const unsigned int sliceReference = m_imageSelectorSpinBox->value();
+    //comencem a un quart de la imatge
+    start[0] = size[0] / 2;
+    start[1] = size[1] / 2;
+    start[2] = sliceReference;
+    Volume::ItkImageType::RegionType desiredRegion;
+    desiredRegion.SetSize(  size  );
+    desiredRegion.SetIndex( start );
+    extractFixedImageFilter->SetExtractionRegion( desiredRegion );
+    extractFixedImageFilter->SetInput( m_mainVolume->getItkData() );
+    extractFixedImageFilter->Update();
+
+    FilterType::Pointer extractMovingImageFilter = FilterType::New();
+    Volume::ItkImageType::IndexType startMoving = inputRegion.GetIndex();
+    const unsigned int sliceNumber = m_2DView_1->getViewer()->getCurrentSlice();
+    startMoving[0] = size[0] / 2;
+    startMoving[1] = size[1] / 2;
+    startMoving[2] = sliceNumber;
+    Volume::ItkImageType::RegionType desiredMovingRegion;
+    desiredMovingRegion.SetSize(  size  );
+    desiredMovingRegion.SetIndex( startMoving );
+    extractMovingImageFilter->SetExtractionRegion( desiredMovingRegion );
+    extractMovingImageFilter->SetInput( m_mainVolume->getItkData() );
+    extractMovingImageFilter->Update();
+
+    typedef itk::NormalizeImageFilter< 
+                                FixedImageType, 
+                                InternalImageType 
+                                        > FixedNormalizeFilterType;
+
+    typedef itk::NormalizeImageFilter< 
+                                MovingImageType, 
+                                InternalImageType 
+                                              > MovingNormalizeFilterType;
+
+    FixedNormalizeFilterType::Pointer fixedNormalizer = 
+                                            FixedNormalizeFilterType::New();
+
+    MovingNormalizeFilterType::Pointer movingNormalizer =
+                                            MovingNormalizeFilterType::New();
+    typedef itk::DiscreteGaussianImageFilter<
+                                      InternalImageType, 
+                                      InternalImageType
+                                                    > GaussianFilterType;
+
+    GaussianFilterType::Pointer fixedSmoother  = GaussianFilterType::New();
+    GaussianFilterType::Pointer movingSmoother = GaussianFilterType::New();
+
+    fixedSmoother->SetVariance( 2.0 );
+    movingSmoother->SetVariance( 2.0 );
+    fixedNormalizer->SetInput(  extractFixedImageFilter->GetOutput() );
+    movingNormalizer->SetInput( extractMovingImageFilter->GetOutput() );
+
+    fixedSmoother->SetInput( fixedNormalizer->GetOutput() );
+    movingSmoother->SetInput( movingNormalizer->GetOutput() );
+
+    registration->SetFixedImage(    fixedSmoother->GetOutput()    );
+    registration->SetMovingImage(   movingSmoother->GetOutput()   );
+
+    fixedNormalizer->Update();
+    registration->SetFixedImageRegion( 
+       fixedNormalizer->GetOutput()->GetBufferedRegion() );
+
+    typedef RegistrationType::ParametersType ParametersType;
+    ParametersType initialParameters( transform->GetNumberOfParameters() );
+
+    initialParameters[0] = 0.0;  // Initial offset in mm along X
+    initialParameters[1] = 0.0;  // Initial offset in mm along Y
+
+    registration->SetInitialTransformParameters( initialParameters );
+
+    optimizer->SetLearningRate( 20.0 );
+    optimizer->SetNumberOfIterations( 200 );
+    optimizer->MaximizeOn();
+
+    try 
+    { 
+        registration->StartRegistration(); 
+    } 
+    catch( itk::ExceptionObject & err ) 
+    { 
+        std::cout << "ExceptionObject caught !" << std::endl; 
+        std::cout << err << std::endl; 
+        return;
+    } 
+
+    ParametersType finalParameters = registration->GetLastTransformParameters();
+
+    double TranslationAlongX = finalParameters[0];
+    double TranslationAlongY = finalParameters[1];
+
+    unsigned int numberOfIterations = optimizer->GetCurrentIteration();
+
+    double bestValue = optimizer->GetValue();
+
+
+    // Print out results
+    //
+    DEBUG_LOG(QString( "Result = " ));
+    DEBUG_LOG(QString( " Translation X = %1").arg( TranslationAlongX ) );
+    DEBUG_LOG(QString( " Translation Y = %1").arg( TranslationAlongY ) );
+    DEBUG_LOG(QString( " Iterations    = %1").arg( numberOfIterations ) );
+    DEBUG_LOG(QString( " Metric value  = %1").arg( bestValue ) );
+    double spacing[3];
+    m_mainVolume->getSpacing( spacing );
+    DEBUG_LOG(QString( " Translation X (in px) = %1").arg( TranslationAlongX / spacing[0] ) );
+    DEBUG_LOG(QString( " Translation Y (in px) = %1").arg( TranslationAlongY / spacing[1] ) );
+
+    //Actualitzem les dades de la transdifference tool
+    m_toolManager->triggerTool("TransDifferenceTool");
+    TransDifferenceTool* tdTool = static_cast<TransDifferenceTool*> ( m_2DView_2->getViewer()->getToolProxy()->getTool("TransDifferenceTool"));
+    if(m_tdToolData == 0){
+        m_tdToolData = static_cast<TransDifferenceToolData*> ( tdTool->getToolData() );
+    }
+    if(m_tdToolData->getInputVolume() != m_mainVolume){
+        m_tdToolData->setInputVolume(m_mainVolume);
+    }
+    tdTool->setSingleDifferenceImage(TranslationAlongX / spacing[0],TranslationAlongY / spacing[1]);
+    m_toolManager->triggerTool("SlicingTool");
+    
+
+/*    typedef itk::Image< PixelType, Dimension >  FixedImageType;
+    typedef itk::Image< PixelType, Dimension >  MovingImageType;
     typedef itk::TranslationTransform< double, Dimension > TransformType;
     typedef itk::RegularStepGradientDescentOptimizer       OptimizerType;
     typedef itk::MattesMutualInformationImageToImageMetric< 
                                           FixedImageType, 
                                           MovingImageType >    MetricType;
-/*    typedef itk::MeanSquaresImageToImageMetric< 
-                                    FixedImageType, 
-                                    MovingImageType >    MetricType;
-    */
     typedef itk:: LinearInterpolateImageFunction< 
                                     MovingImageType,
                                     double          >    InterpolatorType;
@@ -377,123 +507,12 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     caster->SetInput( resample->GetOutput() );
     writer->SetInput( caster->GetOutput() );
     writer->Update();
-
-    //Pintem la diferència al volume 
-    //ho fem amb vtk pq és més ràpid
-/*    Volume::VoxelType *valueRef, *valueMov, *valueDif;
-    int index[3];
-
-    for(i=-m_editorSize;i<=m_editorSize;i++)
-    {
-        for(j=-m_editorSize;j<=m_editorSize;j++)
-        {
-            index[0]=centralIndex[0]+i;
-            index[1]=centralIndex[1]+j;
-            value = m_2DViewer->getOverlayInput()->getScalarPointer(index);
-            if(value && ((*value) != m_insideValue) )
-            {
-                (*value) = m_insideValue;
-                m_volumeCont++;
-            }
-        }
-    }
-	typedef itk::ImageRegionIteratorWithIndex<Volume::ItkImageType> IteratorWithIndex;
-    IteratorWithIndex difIter( difImage, difImage->GetBufferedRegion() );
-    IteratorWithIndex imIter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
-    IteratorWithIndex baseIter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
-
-    Volume::ItkImageType::IndexType initialSlice;
-	initialSlice[0] = start[0];
-	initialSlice[1] = start[1];
-	initialSlice[2] = sliceNumber;
-    difIter.SetIndex(initialSlice);
-    baseIter.SetIndex(initialSlice);
-
-    initialSlice[2] = sliceNumber;
-    imIter.SetIndex(initialSlice);
-	int value;
-    for (j=0;j<size[1];j++)
-    {
-        for (i=0;i<size[0];i++)
-        {
-		    value = imIter.Get()-baseIter.Get();
-            difIter.Set(value);
-            ++difIter;
-            ++imIter;
-            ++baseIter;
-        }
-    }
-
-	//Converting the ITK data to volume
-	if(m_differenceVolume == 0){
-		m_differenceVolume = new Volume();
-		m_differenceVolume->setImages( m_mainVolume->getImages() );
-	}
-    m_differenceVolume->setData(difImage);
-
-	m_2DView_2->getViewer()->setInput(m_differenceVolume);
-	m_2DView_2->getViewer()->setWindowLevel((double)2*max,0.0);
-
-	m_2DView_2->getViewer()->refresh();
 */
+
     QApplication::restoreOverrideCursor();
 
 }
 
-void QAngioSubstractionExtension::computeSingleImageDifference(  )
-{
-    QApplication::setOverrideCursor( Qt::WaitCursor );
-    //Simplifiquem dient que la translació només pot ser per múltiples del píxel
-    //Pintem la diferència al volume a la llesca "slice"
-    //ho fem amb vtk pq és més ràpid
-    Volume::VoxelType *valueRef, *valueMov, *valueDif;
-    int indexRef[3];
-    int indexMov[3];
-    int indexDif[3];
-
-    //De moment ho treiem de l'spinbox
-    int tx = m_xTranslationSpinBox->value();
-    int ty = m_yTranslationSpinBox->value();
-
-    indexRef[2]=m_imageSelectorSpinBox->value();
-    indexMov[2]=m_2DView_1->getViewer()->getCurrentSlice();
-    indexDif[2]=m_2DView_1->getViewer()->getCurrentSlice();
-
-    Volume::ItkImageType::SizeType size = m_mainVolume->getItkData()->GetBufferedRegion().GetSize();
-
-    int i,j;
-    int imax,imin;
-    int jmax,jmin;
-
-    imin = tx < 0 ? 0 : tx ;
-    imax = tx < 0 ? size[0]+tx : size[0] ;
-    jmin = ty < 0 ? 0 : ty ;
-    jmax = ty < 0 ? size[1]+ty : size[1] ;
-
-    indexRef[0]=imin;
-    indexMov[0]=imin-tx;
-    indexDif[0]=imin;
-    for(j=jmin;j<jmax;j++)
-    {
-        indexRef[1]=j;
-        indexMov[1]=j-ty;
-        indexDif[1]=j;
-        valueRef = m_mainVolume->getScalarPointer(indexRef);
-        valueMov = m_mainVolume->getScalarPointer(indexMov);
-        valueDif = m_differenceVolume->getScalarPointer(indexDif);
-        for(i=imin;i<imax;i++)
-        {
-            (*valueDif) = (*valueMov) - (*valueRef);
-            valueRef++;
-            valueMov++;
-            valueDif++;
-        }
-    }
-    //Això ho fem perquè ens refresqui la imatge diferència que hem modificat
-    m_2DView_2->getViewer()->getWindowLevelMapper()->Modified();
-    m_2DView_2->getViewer()->refresh();
-    QApplication::restoreOverrideCursor();
-}
 
 
 void QAngioSubstractionExtension::synchronization( Q2DViewerWidget * viewer, bool active )
@@ -510,31 +529,6 @@ void QAngioSubstractionExtension::synchronization( Q2DViewerWidget * viewer, boo
     {
         m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
     }
-}
-
-void QAngioSubstractionExtension::angioEventHandler( unsigned long id )
-{
-    switch( id )
-    {
-    case vtkCommand::MouseMoveEvent:
-        //setPaintCursor();
-    break;
-
-    case vtkCommand::LeftButtonPressEvent:
-        //leftButtonEventHandler();
-    break;
-
-    case vtkCommand::LeftButtonReleaseEvent:
-        //setLeftButtonOff();
-    break;
-
-    case vtkCommand::RightButtonPressEvent:
-    break;
-
-    default:
-    break;
-    }
-
 }
 
 void QAngioSubstractionExtension::readSettings()

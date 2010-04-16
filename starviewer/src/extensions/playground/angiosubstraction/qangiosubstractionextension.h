@@ -21,6 +21,7 @@ namespace udg {
 // FWD declarations
 class Volume;
 class ToolManager;
+class TransDifferenceToolData;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -47,17 +48,11 @@ private:
 
 private slots:
 
-     /// gestiona els events del m_2DView
-    void angioEventHandler( unsigned long id );
-
 	/// Calcula la imatge diferència respecte la imatge imageid
 	void computeDifferenceImage( int imageid );
 
+    /// Calcula automàticament (registre) la imatge diferència respecte la imatge imageid
     void computeAutomateSingleImage( );
-
-    /// Funció que a partir d'una llesca i una translació ens calcula la diferència
-    void computeSingleImageDifference( );
-
 
 	///Permet sincronitzar els dos viewers
 	void synchronization( Q2DViewerWidget * viewer, bool active );
@@ -69,6 +64,11 @@ private:
 
     /// Tool manager
     ToolManager *m_toolManager;
+    TransDifferenceToolData *m_tdToolData;
+
+    /// Dades de les transformacions aplicades a cada llesca
+    QVector< QPair<int,int> > m_sliceTranslations;
+
 };
 
 } // end namespace udg

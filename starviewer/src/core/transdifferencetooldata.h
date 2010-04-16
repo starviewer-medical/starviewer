@@ -65,16 +65,19 @@ public:
     /// Set la llesca de referència
     void setReferenceSlice( int sl ){m_referenceSlice = sl;}
 
+    void setActualDisplacement(int dx, int dy){emit actualDisplacement(dx,dy);}
+
+    void setFinalDisplacement(int dx, int dy){emit finalDisplacement(dx,dy);}
 
 public slots:
 
-    /// Per canviar les dades de sincronitzacio del pan
-    //void setPan( double motionVector[3] );
-
 signals:
 
-    /// Signal que s'emet quan el pan canvia
-    //void panChanged();
+    /// envia el desplaçament que s'ha fet des de la posició d'origen
+    void actualDisplacement(int,int);
+
+    /// envia el desplaçament que s'ha fet des de la posició d'origen
+    void finalDisplacement(int,int);
 
 private:
 
@@ -84,6 +87,8 @@ private:
     ///Dades del volum original i la diferència
     Volume* m_inputVolume;
     Volume* m_differenceVolume;
+
+    int m_dx,m_dy;
 
     ///Slice de referència
     int m_referenceSlice;
