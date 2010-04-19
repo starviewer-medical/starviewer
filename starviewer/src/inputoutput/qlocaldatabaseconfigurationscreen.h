@@ -15,7 +15,7 @@ class Status;
 
 /** Widget en el que es configuren els paràmetres de la Base de Dades local
 */
-class QLocalDatabaseConfigurationScreen : public QWidget, private ::Ui::QLocalDatabaseConfigurationScreenBase
+class QLocalDatabaseConfigurationScreen : public QWidget, private Ui::QLocalDatabaseConfigurationScreenBase
 {
 Q_OBJECT
 

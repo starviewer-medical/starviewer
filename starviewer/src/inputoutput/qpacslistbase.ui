@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QPacsListBase</class>
- <widget class="QWidget" name="QPacsListBase">
+ <class>udg::QPacsListBase</class>
+ <widget class="QWidget" name="udg::QPacsListBase">
   <property name="geometry">
    <rect>
     <x>0</x>

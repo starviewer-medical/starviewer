@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>QLocalDatabaseConfigurationScreenBase</class>
- <widget class="QWidget" name="QLocalDatabaseConfigurationScreenBase" >
+ <class>udg::QLocalDatabaseConfigurationScreenBase</class>
+ <widget class="QWidget" name="udg::QLocalDatabaseConfigurationScreenBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
