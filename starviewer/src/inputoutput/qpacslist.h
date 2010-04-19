@@ -21,7 +21,7 @@ class PacsDevice;
 @author marc
 */
 
-class QPacsList : public QWidget, private ::Ui::QPacsListBase
+class QPacsList : public QWidget, private Ui::QPacsListBase
 {
 Q_OBJECT
 public:

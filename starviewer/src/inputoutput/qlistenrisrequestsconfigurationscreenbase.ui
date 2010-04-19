@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>QListenRisRequestsConfigurationScreenBase</class>
- <widget class="QWidget" name="QListenRisRequestsConfigurationScreenBase" >
+ <class>udg::QListenRisRequestsConfigurationScreenBase</class>
+ <widget class="QWidget" name="udg::QListenRisRequestsConfigurationScreenBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

@@ -17,7 +17,7 @@ class PacsDevice;
 /** Interfície que permet configurar els paràmetres del PACS
 @author marc
 */
-class QConfigurationScreen : public QWidget, private ::Ui::QConfigurationScreenBase
+class QConfigurationScreen : public QWidget, private Ui::QConfigurationScreenBase
 {
 Q_OBJECT
 public:
