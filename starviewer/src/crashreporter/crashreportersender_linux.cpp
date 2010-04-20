@@ -7,6 +7,7 @@
 
 #include "crashreportersender.h"
 
+#include <cstdio>
 #include <string>
 #include <map>
 
