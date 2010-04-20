@@ -38,6 +38,7 @@
 #include <sys/utsname.h>
 #include <sys/wait.h>
 
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <string.h>

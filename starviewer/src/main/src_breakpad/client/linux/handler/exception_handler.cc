@@ -35,6 +35,7 @@
 #include <unistd.h>
 
 #include <cassert>
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
 #include <linux/limits.h>
