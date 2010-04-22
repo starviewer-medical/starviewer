@@ -869,7 +869,7 @@ void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
 
     delDirectory.deleteDirectory(seriesDirectory, true);
 
-    if (delDirectory.isDirectoryEmpty())
+    if (delDirectory.isDirectoryEmpty(studyPath))
     {
         /*Si el directori de l'estudi està buit, vol dir que només s'havia descarregat la sèrie que ha fallat al guardar la base de dades,
          per tant si només esborrèssim el directori de la sèrie, quedaria el directori pare de l'estudi buit, per això comprovem si aquest 
