@@ -126,8 +126,6 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         dbConnect.close();
         return;
     }
-    else
-        dbConnect.endTransaction();
 
     Study *studyParent = seriesToSave->getParentStudy();
     studyParent->setRetrievedDate(currentDate);
@@ -156,6 +154,10 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         setLastError(status);
         dbConnect.close();
         return;
+    }
+    else
+    {
+        dbConnect.endTransaction();
     }
 
     dbConnect.close();
