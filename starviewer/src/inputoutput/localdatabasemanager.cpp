@@ -49,9 +49,6 @@ LocalDatabaseManager::LocalDatabaseManager()
 
 void LocalDatabaseManager::save(Patient *newPatient)
 {
-    DeleteDirectory delDirectory;
-    QDate currentDate = QDate::currentDate();
-    QTime currentTime = QTime::currentTime();
     DatabaseConnection dbConnect;
     int status = SQLITE_OK;
 
@@ -69,7 +66,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
     ///Guardem primer els estudis
     if (newPatient->getStudies().count() > 0)
     {
-        status = saveStudies(&dbConnect, newPatient->getStudies(), currentDate, currentTime);
+        status = saveStudies(&dbConnect, newPatient->getStudies(), QDate::currentDate(), QTime::currentTime());
 
         if (status != SQLITE_OK) 
         {
