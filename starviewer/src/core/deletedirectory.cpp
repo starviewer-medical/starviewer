@@ -16,6 +16,10 @@ DeleteDirectory::DeleteDirectory()
 {
 }
 
+DeleteDirectory::~DeleteDirectory()
+{
+}
+
 bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDirectory)
 {
     bool result;
@@ -35,8 +39,11 @@ bool DeleteDirectory::deleteDirectory(QString directoryPath, bool deleteRootDire
     return result;
 }
 
-DeleteDirectory::~DeleteDirectory()
+bool DeleteDirectory::isDirectoryEmpty(const QString &path)
 {
+    QDir dir(path);
+
+    return dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files ).count() == 0;
 }
 
 bool DeleteDirectory::removeDirectory(const QDir &dir, bool deleteRootDirectory )

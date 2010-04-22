@@ -863,10 +863,19 @@ void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
 
 void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
 {
-   DeleteDirectory delDirectory;
-   QString seriesDirectory = LocalDatabaseManager::getCachePath() + failedSeries->getParentStudy()->getInstanceUID() + QDir::separator() + failedSeries->getInstanceUID();
+    DeleteDirectory delDirectory;
+    QString studyPath = LocalDatabaseManager::getCachePath() + failedSeries->getParentStudy()->getInstanceUID();
+    QString seriesDirectory = studyPath + QDir::separator() + failedSeries->getInstanceUID();
 
-   delDirectory.deleteDirectory(seriesDirectory, true);
+    delDirectory.deleteDirectory(seriesDirectory, true);
+
+    if (delDirectory.isDirectoryEmpty())
+    {
+        /*Si el directori de l'estudi està buit, vol dir que només s'havia descarregat la sèrie que ha fallat al guardar la base de dades,
+         per tant si només esborrèssim el directori de la sèrie, quedaria el directori pare de l'estudi buit, per això comprovem si aquest 
+         directori és buit, i si és així també s'esborra aquest, perquè no ens quedi un directori d'un estudi buit*/
+        delDirectory.deleteDirectory(studyPath, true);
+    }
 }
 
 int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
