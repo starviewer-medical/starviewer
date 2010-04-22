@@ -243,7 +243,7 @@ void QExporterTool::generateAndStoreNewSeries()
         qApp->processEvents();
 
         LocalDatabaseManager manager;
-        manager.save( generetedVolume->getPatient() );
+        manager.save( generetedVolume->getImages().at(0)->getParentSeries() );
         // TODO Comprovar error
 
         if ( m_sendToPacsCheckBox->isChecked() ) //Enviem a PACS
