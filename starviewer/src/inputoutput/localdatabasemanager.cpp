@@ -95,8 +95,75 @@ void LocalDatabaseManager::save(Patient *newPatient)
 
     foreach(Study *study, newPatient->getStudies())
     {
-        createSeriesThumbnails(study);
+        createStudyThumbnails(study);
     }
+
+    setLastError(status);
+}
+
+void LocalDatabaseManager::save(Series *seriesToSave)
+{
+    QDate currentDate = QDate::currentDate();
+    QTime currentTime = QTime::currentTime();
+    DatabaseConnection dbConnect;
+    int status = SQLITE_OK;
+
+    dbConnect.open();
+    dbConnect.beginTransaction(); 
+
+    if (seriesToSave == NULL)
+    {
+        ERROR_LOG("No es pot inserir a la base de dades la serie perque te valor null");
+        m_lastError = PatientInconsistent;
+        dbConnect.close();
+        return;
+    }
+
+    status = savePatient(&dbConnect, seriesToSave->getParentStudy()->getParentPatient());
+
+    if (status != SQLITE_OK) 
+    {
+        dbConnect.rollbackTransaction();
+        deleteRetrievedObjects(seriesToSave);
+        setLastError(status);
+        dbConnect.close();
+        return;
+    }
+    else
+        dbConnect.endTransaction();
+
+    Study *studyParent = seriesToSave->getParentStudy();
+    studyParent->setRetrievedDate(currentDate);
+    studyParent->setRetrievedTime(currentTime);
+
+    status = saveStudy(&dbConnect, studyParent);
+
+    if (status != SQLITE_OK) 
+    {
+        dbConnect.rollbackTransaction();
+        deleteRetrievedObjects(seriesToSave);
+        setLastError(status);
+        dbConnect.close();
+        return;
+    }
+
+    QList<Series*> seriesList;
+    seriesList.append(seriesToSave);
+
+    saveSeries(&dbConnect, seriesList, currentDate, currentTime);
+    
+    if (status != SQLITE_OK) 
+    {
+        dbConnect.rollbackTransaction();
+        deleteRetrievedObjects(seriesToSave);
+        setLastError(status);
+        dbConnect.close();
+        return;
+    }
+
+    dbConnect.close();
+
+    createSeriesThumbnail(seriesToSave);
 
     setLastError(status);
 }
@@ -797,6 +864,14 @@ void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
     }
 }
 
+void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
+{
+   DeleteDirectory delDirectory;
+   QString seriesDirectory = LocalDatabaseManager::getCachePath() + failedSeries->getParentStudy()->getInstanceUID() + QDir::separator() + failedSeries->getInstanceUID();
+
+   delDirectory.deleteDirectory(seriesDirectory, true);
+}
+
 int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL;
@@ -934,19 +1009,24 @@ void LocalDatabaseManager::deleteSeriesFromHardDisk(const QString &studyInstance
        m_lastError = LocalDatabaseManager::Ok;
 }
 
-void LocalDatabaseManager::createSeriesThumbnails(Study *studyToGenerateSeriesThumbnails)
+void LocalDatabaseManager::createStudyThumbnails(Study *studyToGenerateSeriesThumbnails)
+{
+    foreach(Series *series, studyToGenerateSeriesThumbnails->getSeries())
+    {
+        createSeriesThumbnail(series);
+    }
+}
+
+void LocalDatabaseManager::createSeriesThumbnail(Series *seriesToGenerateThumbnail)
 {
     ThumbnailCreator thumbnailCreator;
     QString thumbnailFilePath;
 
-    foreach(Series *series, studyToGenerateSeriesThumbnails->getSeries())
+    // Només crearem el thumbnail si aquest no s'ha creat encara
+    thumbnailFilePath = getSeriesThumbnailPath(seriesToGenerateThumbnail->getParentStudy()->getInstanceUID(), seriesToGenerateThumbnail);
+    if( !QFileInfo( thumbnailFilePath ).exists() )
     {
-        // Només crearem el thumbnail si aquest no s'ha creat encara
-        thumbnailFilePath = getSeriesThumbnailPath(studyToGenerateSeriesThumbnails->getInstanceUID(), series);
-        if( !QFileInfo( thumbnailFilePath ).exists() )
-        {
-            thumbnailCreator.getThumbnail(series).save( thumbnailFilePath, "PGM" );
-        }
+        thumbnailCreator.getThumbnail(seriesToGenerateThumbnail).save( thumbnailFilePath, "PGM" );
     }
 }
 
