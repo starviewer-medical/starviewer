@@ -144,6 +144,7 @@ void MagicTool::setMagicPoint(  )
 		}
 
 		//Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
+		//this->paintRegionMask();
 		this->paintRegionMask();
 
 		//Trobem els punts frontera i creem el polígon
@@ -154,8 +155,6 @@ void MagicTool::setMagicPoint(  )
     }
 }
 
-
-
 void MagicTool::paintRegionMask()
 {
     double pos[3];
@@ -163,6 +162,9 @@ void MagicTool::paintRegionMask()
     double spacing[3];
     int index[3];
     int ext[6];
+    int i;
+    bool trobat;
+    QVector<int> movements;
     m_2DViewer->getInput()->getWholeExtent(ext);
 
 	m_2DViewer->getCurrentCursorImageCoordinate(pos);
@@ -172,47 +174,111 @@ void MagicTool::paintRegionMask()
     index[1]=(int)((((double)pos[1]-origin[1])/spacing[1])+0.5);
     index[2]=m_2DViewer->getCurrentSlice();
 
-	m_a=index[0];
-	m_b=index[1];
-	m_c=m_2DViewer->getCurrentSlice();
-    m_2DViewer->getInput()->getWholeExtent(m_ext);
+	int a=index[0];
+	int b=index[1];
+	int c=m_2DViewer->getCurrentSlice();
+    //m_2DViewer->getInput()->getWholeExtent(m_ext);
 	m_input = m_2DViewer->getInput()->getVtkData();
-	m_i=0;
-	
-    paintRegionMaskRecursive( );
-}
+	//m_i=0;
 
-void MagicTool::paintRegionMaskRecursive()
-{
-	m_i++;
-	//No hi posem iguals perquè les vores no ens les posi i evitem problemes a l'hora de pintar el contorn
-    if((m_a>m_ext[0])&&(m_a<m_ext[1])&&(m_b>m_ext[2])&&(m_b<m_ext[3])&&(!m_mask[m_b*m_ext[1]+m_a])&&(m_i<40000))
+    //Initial voxel
+	Volume::VoxelType *value = (Volume::VoxelType *)m_input->GetScalarPointer(a,b,c);
+    if (((*value) >= m_lowerlevel)&&((*value) <= m_upperlevel)){
+        m_mask[b*ext[1]+a] = true;
+    }else{
+        return;
+    }
+    //First movement
+    i = 0;
+    trobat = false;
+    while(i<4 && !(trobat))
     {
-		Volume::VoxelType *value = (Volume::VoxelType *)m_input->GetScalarPointer(m_a,m_b,m_c);
-        if (((*value) >= m_lowerlevel)&&((*value) <= m_upperlevel))
+        this->doMovement(a,b,i);
+    	value = (Volume::VoxelType *)m_input->GetScalarPointer(a,b,c);
+        if (((*value) >= m_lowerlevel)&&((*value) <= m_upperlevel)){
+            m_mask[b*ext[1]+a] = true;
+            trobat = true;
+            movements.push_back(i);
+        }
+        if(!trobat) this->undoMovement(a,b,i);
+        i++;
+    }
+
+    //main loop
+    i = 0;
+    while(movements.size()>0)
+    {
+        trobat = false;
+        while(i<4 && !(trobat))
         {
-			//m_fout<<m_i<<": "<<m_a<<", "<<m_b<<", "<<m_c<<std::endl;
-            m_mask[m_b*m_ext[1]+m_a] = true;
-			//a+1, b
-			m_a++;
-            paintRegionMaskRecursive( );
-			m_a--;
-			//a-1, b
-			m_a--;
-            paintRegionMaskRecursive( );
-			m_a++;
-			//a, b+1
-			m_b++;
-            paintRegionMaskRecursive( );
-			m_b--;
-			//a, b-1
-			m_b--;
-            paintRegionMaskRecursive( );
-			m_b++;
+            this->doMovement(a,b,i);
+            if((a > ext[0])&&(a < ext[1])&&(b > ext[2])&&(b < ext[3]))
+            {
+    	        value = (Volume::VoxelType *)m_input->GetScalarPointer(a,b,c);
+                if (((*value) >= m_lowerlevel)&&((*value) <= m_upperlevel)&&(!m_mask[b*ext[1]+a])){
+                    m_mask[b*ext[1]+a] = true;
+                    trobat = true;
+                    movements.push_back(i);
+                    i = 0;
+                }
+            }
+            if(!trobat){
+                this->undoMovement(a,b,i);
+                i++;
+            }
+        }
+        if(!trobat){
+            this->undoMovement(a,b,movements.back());
+            i=movements.back();
+            i++;
+            movements.pop_back();
         }
     }
-	m_i--;
 }
+
+void MagicTool::doMovement(int &a, int &b, int movement)
+{
+    switch(movement)
+    {
+        case 0: //up
+            a++;
+            break;
+        case 1://down
+            a--;
+            break;
+        case 2:
+            b++;
+            break;
+        case 3:
+            b--;
+            break;
+        default:
+            DEBUG_LOG("Invalid movement");
+    }
+}
+
+void MagicTool::undoMovement(int &a, int &b, int movement)
+{
+    switch(movement)
+    {
+        case 0: //up
+            a--;
+            break;
+        case 1://down
+            a++;
+            break;
+        case 2:
+            b--;
+            break;
+        case 3:
+            b++;
+            break;
+        default:
+            DEBUG_LOG("Invalid movement");
+    }
+}
+
+
 
 void MagicTool::detectBorder()
 {
