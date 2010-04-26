@@ -47,15 +47,23 @@ private:
     void setMagicPoint();
 
     /**
-     * Esborra una porció conectada de la màscara (en 2D) 
+     * Versió iterativa del region Growing
      */
     void paintRegionMask();
 
     /**
-     * Crida recursiva de la funció eraseRegionMask 
-     * @param a, @param b, @param c índex del volum de la màscara que estem mirant en cada crida
+     * Fer un moviment dses d'un índex cap a una direcció
+     * @param a, @param b índex del volum de la màscara que estem mirant en cada crida
+     * @param movement direcció en el moviment
      */
-    void paintRegionMaskRecursive( );
+    void doMovement(int &a, int &b, int movement);
+
+    /**
+     * Desfer un moviment dses d'un índex cap a una direcció
+     * @param a, @param b índex del volum de la màscara que estem mirant en cada crida
+     * @param movement direcció en el moviment
+     */
+    void undoMovement(int &a, int &b, int movement);
 
     /**
      * Detecta les vores 
