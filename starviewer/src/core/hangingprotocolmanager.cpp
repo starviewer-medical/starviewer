@@ -168,7 +168,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
             if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 )
                 adjustmentOfHanging = 0.0;
 
-            if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol->gratherThan(bestHangingProtocol) ) )
+            if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
             {
                 bestHangingProtocol = hangingProtocol;
                 bestAdjustmentOfHanging = adjustmentOfHanging;

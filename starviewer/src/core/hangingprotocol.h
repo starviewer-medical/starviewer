@@ -82,7 +82,7 @@ public:
     int getIdentifier() const;
 
     /// Mètode per comparar hanging protocols
-    bool gratherThan( HangingProtocol * hangingToCompare );
+    bool isBetterThan( HangingProtocol * hangingToCompare );
 
     /// Retorna si el mètode és estricte o no ho hes
     bool getStrictness() const;
