@@ -85,7 +85,7 @@ public:
     bool isBetterThan( HangingProtocol * hangingToCompare );
 
     /// Retorna si el mètode és estricte o no ho hes
-    bool getStrictness() const;
+    bool isStrict() const;
 
     /// Assigna si el mètode és estricte o no ho hes
     void setStrictness( bool strictness );
