@@ -412,13 +412,12 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
         *(m_mainApp->getCurrentPatient()) += *patient;
         DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
 
-       
+        //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
+        if ( m_mainApp->getExtensionWorkspace()->count() == 0 )
+            openDefaultExtension();
+
         if( !loadOnly )
         {
-             //mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
-            if ( m_mainApp->getExtensionWorkspace()->count() == 0 )
-                openDefaultExtension();
-
             // Hem fet un "view", per tant cal reinicialitzar les extensions que ho requereixin
             QMap<QWidget *,QString> extensions = m_mainApp->getExtensionWorkspace()->getActiveExtensions();
             QMapIterator<QWidget *,QString> iterator(extensions);

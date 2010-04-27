@@ -107,12 +107,11 @@ HangingProtocolManager::~HangingProtocolManager()
     delete m_studiesDownloading;
 }
 
-QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol, int *bestHangingProtocolIndex )
+QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol )
 {
     Identifier id;
     HangingProtocol *hangingProtocol;
     HangingProtocol *bestHangingProtocol = NULL;
-    int indexOfBestHangingProtocol = -1;
     double adjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
     double bestAdjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfItems = HangingProtocolsRepository::getRepository()->getNumberOfItems();
@@ -173,7 +172,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
             {
                 bestHangingProtocol = hangingProtocol;
                 bestAdjustmentOfHanging = adjustmentOfHanging;
-                indexOfBestHangingProtocol = candidates.size();
             }
             if( adjustmentOfHanging > 0 )
             {
@@ -203,12 +201,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     {
         INFO_LOG( QString("No s'ha trobat cap hanging protocol") );
     }
-
-    if ( bestHangingProtocolIndex != NULL )
-    {
-        *bestHangingProtocolIndex = indexOfBestHangingProtocol;
-    }
-
     return candidates;
 }
 
