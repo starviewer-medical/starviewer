@@ -63,11 +63,11 @@ public:
     /// Obté el nombre total d'image sets
     int getNumberOfDisplaySets() const;
 
-    /// Obté l'image set amb identificador "identificador"
-    HangingProtocolImageSet * getImageSet( int identificador );
+    /// Obté l'image set amb identificador "identifier"
+    HangingProtocolImageSet * getImageSet( int identifier );
 
-    /// Obté el display set amb identificador "identificador"
-    HangingProtocolDisplaySet * getDisplaySet( int identificador ) const;
+    /// Obté el display set amb identificador "identifier"
+    HangingProtocolDisplaySet * getDisplaySet( int identifier ) const;
 
     /// Obté el display set corresponent a l'image set amb l'identificador detallat
     HangingProtocolDisplaySet * getDisplaySetOfImageSet( int numberOfImageSet );

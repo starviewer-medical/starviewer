@@ -86,7 +86,7 @@ int HangingProtocol::getNumberOfDisplaySets() const
     return m_listOfDisplaySets.size();
 }
 
-HangingProtocolImageSet * HangingProtocol::getImageSet( int identificador )
+HangingProtocolImageSet * HangingProtocol::getImageSet( int identifier )
 {
     HangingProtocolImageSet * imageSet = 0;
     bool found = false;
@@ -95,7 +95,7 @@ HangingProtocolImageSet * HangingProtocol::getImageSet( int identificador )
 
     while( !found && i < numberOfImageSets )
     {
-        if( m_listOfImageSets.value( i )->getIdentifier() == identificador )
+        if( m_listOfImageSets.value( i )->getIdentifier() == identifier )
         {
             found = true;
             imageSet = m_listOfImageSets.value( i );
@@ -106,7 +106,7 @@ HangingProtocolImageSet * HangingProtocol::getImageSet( int identificador )
     return imageSet;
 }
 
-HangingProtocolDisplaySet * HangingProtocol::getDisplaySet( int identificador ) const
+HangingProtocolDisplaySet * HangingProtocol::getDisplaySet( int identifier ) const
 {
     HangingProtocolDisplaySet * displaySet = 0;
     bool found = false;
@@ -115,7 +115,7 @@ HangingProtocolDisplaySet * HangingProtocol::getDisplaySet( int identificador ) 
 
     while( !found && i < numberOfDisplaySets )
     {
-        if( m_listOfDisplaySets.value( i )->getIdentifier() == identificador )
+        if( m_listOfDisplaySets.value( i )->getIdentifier() == identifier )
         {
             found = true;
             displaySet = m_listOfDisplaySets.value( i );
