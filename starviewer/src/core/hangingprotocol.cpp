@@ -253,7 +253,7 @@ bool HangingProtocol::isBetterThan( HangingProtocol * hangingToCompare )
     }
 }
 
-bool HangingProtocol::getStrictness() const
+bool HangingProtocol::isStrict() const
 {
     return m_strictness;
 }

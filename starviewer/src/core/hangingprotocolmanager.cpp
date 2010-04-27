@@ -165,7 +165,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
             }
             adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
-            if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 )
+            if( hangingProtocol->isStrict() && adjustmentOfHanging != 1.0 )
                 adjustmentOfHanging = 0.0;
 
             if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
@@ -729,7 +729,7 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
                 }
                 adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
-                if( hangingProtocol->getStrictness() && adjustmentOfHanging != 1.0 )
+                if( hangingProtocol->isStrict() && adjustmentOfHanging != 1.0 )
                     adjustmentOfHanging = 0.0;
 
                 if( adjustmentOfHanging > 0 )
