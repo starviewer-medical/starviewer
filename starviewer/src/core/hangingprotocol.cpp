@@ -183,7 +183,7 @@ int HangingProtocol::getIdentifier() const
     return m_identifier;
 }
 
-bool HangingProtocol::gratherThan( HangingProtocol * hangingToCompare )
+bool HangingProtocol::isBetterThan( HangingProtocol * hangingToCompare )
 {
     int i;
     bool hasViewWithPatientOrientation_1 = false;
