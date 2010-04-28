@@ -16,26 +16,24 @@ class Q2DViewer;
 class DrawerLine;
 
 /**
-Eina de distancies.
+    Eina de distancies.
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class DistanceTool : public Tool
-{
+class DistanceTool : public Tool {
 Q_OBJECT
 public:
     DistanceTool( QViewer *viewer, QObject *parent = 0 );
-
     ~DistanceTool();
 
-    ///funcio manejadora dels events passats.
+    /// Funcio manejadora dels events passats.
     void handleEvent( long unsigned eventID );
 
 private:
-    /// ens permet anotar el seguent punt de la polilinia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
+    /// Ens permet anotar el seguent punt de la polilinia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
     void annotateNewPoint();
 
-    ///Simula la linia quan es mou el ratolí
+    /// Simula la linia quan es mou el ratolí
     void simulateLine();
 
 private slots:
@@ -43,7 +41,7 @@ private slots:
     void initialize();
 
 private:
-    ///estat de la línia
+    /// Estat de la línia
     enum { NoPointFixed, FirstPointFixed };
 
     /// Viewer 2D sobre el qual treballem
@@ -52,7 +50,7 @@ private:
     /// Línia que es dibuixa
     QPointer<DrawerLine> m_line;
 
-    ///estat de la línia
+    /// Estat de la línia
     int m_lineState;
 
 };
