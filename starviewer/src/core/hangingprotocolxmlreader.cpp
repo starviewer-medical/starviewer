@@ -184,6 +184,8 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
         }
     }
 
+    delete reader;
+
     return listHangingProtocols;
 }
 
