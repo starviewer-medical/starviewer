@@ -44,13 +44,13 @@ void QueryPacsJob::run()
     switch (getQueryLevel())
     {
         case study:
-            m_queryStatus = pacsServer.connect(PacsServer::query, PacsServer::studyLevel);
+            m_queryStatus = pacsServer.connect(PacsServer::query);
             break;
         case series:
-            m_queryStatus = pacsServer.connect(PacsServer::query, PacsServer::seriesLevel);
+            m_queryStatus = pacsServer.connect(PacsServer::query);
             break;
         case image:
-            m_queryStatus = pacsServer.connect(PacsServer::query, PacsServer::imageLevel);
+            m_queryStatus = pacsServer.connect(PacsServer::query);
             break;
     }
 

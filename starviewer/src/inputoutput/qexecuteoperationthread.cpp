@@ -169,7 +169,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
 
 
     PacsServer pacsConnection(operation.getPacsDevice());//connemtem al pacs
-    state = pacsConnection.connect(PacsServer::retrieveImages,PacsServer::studyLevel);
+    state = pacsConnection.connect(PacsServer::retrieveImages);
     if (!state.good())
     {
         ERROR_LOG( "Error al connectar al pacs " + operation.getPacsDevice().getAETitle() + ". PACS ERROR : " + state.text() );
@@ -271,7 +271,7 @@ void QExecuteOperationThread::moveStudy( Operation operation )
 
     PacsServer pacsConnection( pacs );
 
-    state = pacsConnection.connect( PacsServer::storeImages , PacsServer::any );
+    state = pacsConnection.connect( PacsServer::storeImages );
 
     if ( !state.good() )
     {
