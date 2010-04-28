@@ -17,35 +17,32 @@ class DrawerLine;
 class DrawerText;
 
 /**
-Tool per calcular angles
+    Tool per calcular angles
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class NonClosedAngleTool : public Tool
-{
+class NonClosedAngleTool : public Tool {
 Q_OBJECT
 public:
- ///possibles estats de la tool
+    /// Possibles estats de la tool
     enum { None, FirstLineFixed, SecondLineFixed };
 
     NonClosedAngleTool( QViewer *viewer, QObject *parent = 0 );
-
     ~NonClosedAngleTool();
 
-    ///funcio manejadora dels events passats.
     void handleEvent( long unsigned eventID );
 
 private:
-    /// ens permet anotar els punts de les línies.
+    /// Ens permet anotar els punts de les línies.
     void annotateLinePoints();
 
-    /// ens simula la linia que estem dibuixant respecte el punt on està el mouse.
+    /// Ens simula la linia que estem dibuixant respecte el punt on està el mouse.
     void simulateLine(DrawerLine *line);
 
     /// Calcula l'angle de les dues línies dibuixades
     void computeAngle();
 
-    ///calcula la correcta posició del caption de l'angle segons els punts de l'angle
+    /// Calcula la correcta posició del caption de l'angle segons els punts de l'angle
     void textPosition( double *p1, double *p2, DrawerText *angleText );
 
 private slots:
@@ -53,25 +50,25 @@ private slots:
     void initialize();
 
 private:
-    ///Estats de la línia segons els punts
+    /// Estats de la línia segons els punts
     enum { NoPoints, FirstPoint };
 
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
-    ///primera línia
+    /// Primera línia
     QPointer<DrawerLine> m_firstLine;
 
-    ///segona línia
+    /// Segona línia
     QPointer<DrawerLine> m_secondLine;
 
-    ///línia d'unió
+    /// Línia d'unió
     QPointer<DrawerLine> m_middleLine;
 
-    ///estat de la tool
+    /// Estat de la tool
     int m_state;
 
-    ///estat d'una línia
+    /// Estat d'una línia
     int m_lineState;
 };
 

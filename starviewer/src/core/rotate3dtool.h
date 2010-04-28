@@ -16,23 +16,20 @@ namespace udg {
 class QViewer;
 
 /**
-Eina per rotacions tridimensionals ( pensat per visors 3D )
+    Eina per rotacions tridimensionals ( pensat per visors 3D )
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class Rotate3DTool : public Tool
-{
+class Rotate3DTool : public Tool {
 Q_OBJECT
 public:
-
     enum { None , Rotating, Spinning };
-    Rotate3DTool( QViewer *viewer, QObject *parent = 0 );
 
+    Rotate3DTool( QViewer *viewer, QObject *parent = 0 );
     ~Rotate3DTool();
 
     void handleEvent( unsigned long eventID );
 
-/// \TODO potser aquests mètodes slots passen a ser públics
 private slots:
     /// Comença el translate
     void startRotate3D();
@@ -44,10 +41,10 @@ private slots:
     void endRotate3D();
     
 private:
-    /// interactor style que omplirem en el constructor depenent del visor
+    /// Interactor style que omplirem en el constructor depenent del visor
     vtkInteractorStyle *m_interactorStyle;
     
-    ///estat de la tool
+    /// Estat de la tool
     int m_state;
 };
 

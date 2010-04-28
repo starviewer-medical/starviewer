@@ -17,26 +17,24 @@ class DrawerPoint;
 class Volume;
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class SeedToolData : public ToolData
-{
+class SeedToolData : public ToolData {
 Q_OBJECT
 public:
     SeedToolData(QObject *parent = 0);
-
     ~SeedToolData();
 
     void setSeedPosition(QVector<double> pos);
 
-    QVector<double> getSeedPosition( );
-    DrawerPoint* getPoint( );
+    QVector<double> getSeedPosition();
+    DrawerPoint* getPoint();
     void setPoint( DrawerPoint* p = NULL);
-    Volume* getVolume( );
+    Volume* getVolume();
     void setVolume( Volume* vol);
 
 private:
-    ///Hi guardem la posició de la llavor
+    /// Hi guardem la posició de la llavor
     QVector<double> m_position;
 
     /// Punt que es dibuixa

@@ -18,16 +18,14 @@ class DrawerText;
 class Volume;
 
 /**
-Tool per mostrar la informació del voxel (coordenades i valor ) en un visualitzador 2D
+    Tool per mostrar la informació del voxel (coordenades i valor ) en un visualitzador 2D
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class VoxelInformationTool : public Tool
-{
+class VoxelInformationTool : public Tool {
 Q_OBJECT
 public:
     VoxelInformationTool( QViewer *viewer, QObject *parent = 0 );
-
     ~VoxelInformationTool();
 
     void handleEvent( unsigned long eventID );
@@ -47,15 +45,15 @@ private:
     /// Ens retorna les dimensions de la pantalla
     int *viewportDimensions();
 
-    ///ens dóna la posició corretgida del caption
+    /// Ens dóna la posició corretgida del caption
     void correctPositionOfCaption( int position[2] );
 
-    ///Les següents 3 funcions ens diuen si excedim els límits del viewport
+    /// Les següents 3 funcions ens diuen si excedim els límits del viewport
     bool captionExceedsViewportTopLimit();
     bool captionExceedsViewportRightLimit();
     bool captionExceedsViewportLimits();
 
-    ///situa el text del caption
+    /// Situa el text del caption
     void placeText( double textPosition[3] );
 
 private:

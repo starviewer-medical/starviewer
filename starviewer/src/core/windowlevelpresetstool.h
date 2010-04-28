@@ -16,10 +16,11 @@ namespace udg {
 
 class Q2DViewer;
 class WindowLevelPresetsToolData;
+
 /**
     Tool per canviar window levels predefinits
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class WindowLevelPresetsTool : public Tool {
 Q_OBJECT

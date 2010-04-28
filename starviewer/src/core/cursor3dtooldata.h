@@ -14,16 +14,14 @@ namespace udg {
 class ImagePlane;
         
 /**
-Classe que guarda les dades compartides per la tool de cursor 3D.
+    Classe que guarda les dades compartides per la tool de cursor 3D.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class Cursor3DToolData : public ToolData
-{
+class Cursor3DToolData : public ToolData {
 Q_OBJECT
 public:
     Cursor3DToolData(QObject *parent = 0);
-
     ~Cursor3DToolData();
 
     /**
@@ -52,7 +50,6 @@ public:
 
     /**
     * Visibilitat del cursor
-    *
     */
     void setVisible( bool visibility );
 

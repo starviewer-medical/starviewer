@@ -15,12 +15,11 @@ class Q2DViewer;
 class Volume;
 
 /**
-Tool per la sincronització de llesques a partir de teclat
+    Tool per la sincronització de llesques a partir de teclat
 
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class SlicingKeyboardTool : public Tool
-{
+class SlicingKeyboardTool : public Tool {
 Q_OBJECT
 public:
 
@@ -30,7 +29,6 @@ public:
     void handleEvent( unsigned long eventID );
 
 private:
-
     /// Ens guardem aquest punter per ser més còmode
     Q2DViewer *m_2DViewer;
 };

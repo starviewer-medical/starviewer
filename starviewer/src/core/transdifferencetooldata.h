@@ -17,29 +17,27 @@ class Q2DViewer;
 class Volume;
 
 /**
-Classe per guardar les dades de la tool de diferència amb translació.
+    Classe per guardar les dades de la tool de diferència amb translació.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class TransDifferenceToolData : public ToolData
-{
+class TransDifferenceToolData : public ToolData {
 Q_OBJECT
 public:
     TransDifferenceToolData();
-
     ~TransDifferenceToolData();
 
     /// Set del volum d'entrada
     void setInputVolume(Volume* input);
 
     /// Get del volum d'entrada
-    Volume* getInputVolume( ){return m_inputVolume;}
+    Volume* getInputVolume(){return m_inputVolume;}
 
     /// Set del volum diferència
     void setDifferenceVolume(Volume* input);
 
     /// Get del volum diferència
-    Volume* getDifferenceVolume( ){return m_differenceVolume;}
+    Volume* getDifferenceVolume(){return m_differenceVolume;}
 
     /// Get X de la translacio
     int getSliceTranslationX( int sl ){return m_sliceTranslations[sl].first;}
@@ -72,15 +70,13 @@ public:
 public slots:
 
 signals:
-
-    /// envia el desplaçament que s'ha fet des de la posició d'origen
+    /// Envia el desplaçament que s'ha fet des de la posició d'origen
     void actualDisplacement(int,int);
 
-    /// envia el desplaçament que s'ha fet des de la posició d'origen
+    /// Envia el desplaçament que s'ha fet des de la posició d'origen
     void finalDisplacement(int,int);
 
 private:
-
     /// Dades de les transformacions aplicades a cada llesca
     QVector< QPair<int,int> > m_sliceTranslations;
 
@@ -90,7 +86,7 @@ private:
 
     int m_dx,m_dy;
 
-    ///Slice de referència
+    /// Slice de referència
     int m_referenceSlice;
 };
 

@@ -15,17 +15,14 @@ class Q2DViewer;
 class SynchronizeToolData;
 
 /**
-Tool de sincronització entre visualitzadors.
+    Tool de sincronització entre visualitzadors.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class SynchronizeTool : public Tool
-{
+class SynchronizeTool : public Tool {
 Q_OBJECT
 public:
-
     SynchronizeTool( QViewer *viewer, QObject *parent = 0 );
-
     ~SynchronizeTool();
 
     void handleEvent( unsigned long eventID );
@@ -40,7 +37,6 @@ public:
     virtual ToolData *getToolData() const;
 
 private slots:
-
     /// Posa l'increment a les dades
     void setIncrement( int slice );
 
@@ -65,7 +61,6 @@ private slots:
     /// Aplica els canvis de pan
     void applyPanChanges();
 private:
-
     /// Llesca anterior per saber l'increment
     int m_lastSlice;
 

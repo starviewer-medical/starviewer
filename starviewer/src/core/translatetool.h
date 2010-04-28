@@ -12,12 +12,11 @@
 namespace udg {
 
 /**
-Eina per moure la posició de la càmera en escena d'un viewer
+    Eina per moure la posició de la càmera en escena d'un viewer
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class TranslateTool : public Tool
-{
+class TranslateTool : public Tool {
 Q_OBJECT
 public:
     enum { None , Translating };
@@ -27,7 +26,7 @@ public:
     void handleEvent( unsigned long eventID );
 
 private:
-    /// realitza la feina de desplaçament
+    /// Realitza la feina de desplaçament
     void pan();
 
 private slots:

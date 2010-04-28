@@ -21,18 +21,16 @@ class DrawerPolygon;
 class DrawerLine;
 
 /**
-Tool per aplicar reference lines
+    Tool per aplicar reference lines
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ReferenceLinesTool : public Tool
-{
+class ReferenceLinesTool : public Tool {
 Q_OBJECT
 public:
     enum { SingleImage, AllImages };
 
     ReferenceLinesTool( QViewer *viewer, QObject *parent = 0 );
-
     ~ReferenceLinesTool();
 
     /**
