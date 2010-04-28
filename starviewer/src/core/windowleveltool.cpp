@@ -10,7 +10,6 @@
 #include "windowlevelpresetstooldata.h"
 
 #include <vtkCommand.h>
-#include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderWindow.h>
 

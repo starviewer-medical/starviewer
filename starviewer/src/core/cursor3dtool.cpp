@@ -17,9 +17,7 @@
 #include "drawercrosshair.h"
 #include "drawer.h"
 // vtk
-#include <vtkPlane.h>
 #include <vtkCommand.h>
-#include <vtkImageData.h>
 #include <vtkMatrix4x4.h>
 
 namespace udg {
