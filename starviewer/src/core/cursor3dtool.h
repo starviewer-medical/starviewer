@@ -9,12 +9,6 @@
 
 #include "tool.h"
 
-// fwd declarations
-class vtkMatrix4x4;
-class vtkSphereSource;
-class vtkActor;
-class vtkPolyDataMapper;
-
 namespace udg {
 
 class Cursor3DToolData;
