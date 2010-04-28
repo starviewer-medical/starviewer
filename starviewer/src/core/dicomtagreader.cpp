@@ -103,7 +103,7 @@ DcmDataset *DICOMTagReader::getDcmDataset() const
     return m_dicomData;
 }
 
-bool DICOMTagReader::tagExists( DICOMTag tag )
+bool DICOMTagReader::tagExists( const DICOMTag &tag )
 {
     if( m_dicomData )
         return m_dicomData->tagExists( DcmTagKey(tag.getGroup(),tag.getElement()) );
@@ -114,7 +114,7 @@ bool DICOMTagReader::tagExists( DICOMTag tag )
     }
 }
 
-QString DICOMTagReader::getValueAttributeAsQString( DICOMTag tag )
+QString DICOMTagReader::getValueAttributeAsQString( const DICOMTag &tag )
 {
     if( !m_dicomData )
     {
@@ -144,7 +144,7 @@ QString DICOMTagReader::getValueAttributeAsQString( DICOMTag tag )
     return result;
 }
 
-DICOMSequenceAttribute * DICOMTagReader::getSequenceAttribute( DICOMTag sequenceTag )
+DICOMSequenceAttribute * DICOMTagReader::getSequenceAttribute( const DICOMTag &sequenceTag )
 {
     
     if( !m_dicomData )
