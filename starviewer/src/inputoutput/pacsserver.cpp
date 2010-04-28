@@ -5,6 +5,7 @@
 #include <ofcond.h>
 #include <assoc.h>
 #include "dcmtk/dcmdata/dcdebug.h"
+#include <QHostInfo>
 
 #include "pacsdevice.h"
 #include "status.h"
@@ -321,7 +322,6 @@ OFBool PacsServer::isaListMember( OFList<OFString>& list , OFString& string )
 Status PacsServer::connect( modalityConnection modality)
 {
     OFCondition cond;
-    char adrLocal[255];
     Status state;
     QString AdrServer;
 
@@ -341,11 +341,8 @@ Status PacsServer::connect( modalityConnection modality)
 
     AdrServer = constructAdrServer(modality, m_pacs );
 
-    //get localhost name TODO substituir per QHostInfo::localHostName()
-    gethostname( adrLocal , 255 );
-
     // the DICOM server accepts connections at server.nowhere.com port
-    cond = ASC_setPresentationAddresses( m_params , adrLocal , qPrintable(AdrServer) );
+    cond = ASC_setPresentationAddresses( m_params , qPrintable(QHostInfo::localHostName()), qPrintable(AdrServer) );
     if ( !cond.good() ) return state.setStatus( cond );
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
