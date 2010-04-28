@@ -26,8 +26,7 @@ class DICOMSequenceAttribute;
 
    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class DICOMTagReader
-{
+class DICOMTagReader {
 public:
     DICOMTagReader();
     /// Constructor per nom de fitxer.
@@ -68,7 +67,6 @@ public:
     DICOMSequenceAttribute * getSequenceAttribute( const DICOMTag &sequenceTag );
 
 private:
-
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
     DICOMSequenceAttribute * convertToDICOMSequenceAttribute( DcmSequenceOfItems * dcmtkSequence );
 
