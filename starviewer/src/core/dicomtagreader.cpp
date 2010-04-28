@@ -11,8 +11,9 @@
 #include "dicomsequenceattribute.h"
 #include "dicomvalueattribute.h"
 #include "dicomsequenceitem.h"
+// Qt
 #include <QStringList>
-
+// dcmtk
 #include <dcmtk/dcmdata/dcfilefo.h>
 
 namespace udg {
