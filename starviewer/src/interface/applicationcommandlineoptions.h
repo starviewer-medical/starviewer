@@ -19,13 +19,13 @@ namespace udg {
     i la segona part s'anomena argument que indica amb quin valor s'ha d'executar la comanda, per exemple per -accessionnumber 1234 
     accessionnumber és l'opció i 1234 l'argument.
     
-    Podem especificar opcions sense necessitar que continguin un argument tipus exeppre
+    Podem especificar opcions sense necessitar que continguin un argument
         -version
 
     Podem especificar opcions amb un argument, si conté més d'un argument s'ignorarà i s'agafarà el primer 
         -accessionnumber 1234
 
-    Aquesta classe és casesensitivie
+    Aquesta classe és case sensitive
     */
 
 class ApplicationCommandLineOptions {
@@ -33,7 +33,7 @@ class ApplicationCommandLineOptions {
 public:
 
     ///Permet afegir un argument que acceptarem com a vàlid per la comanda de línies. Retorna fals si ja existeix l'argument 
-    bool addOption(QString optionName, QString description);
+    bool addOption(QString optionName, bool optionArgumentIsRequired, QString description);
 
     /**Especifica la llista d'arguments a parsejar, si hi ha alguna opció de més que no s'ha definit o alguna opció té
        més d'un valor es retorna fals indicant que no s'ha parsejat correctament l'argument */
@@ -62,11 +62,17 @@ public:
 
 private:
 
+    typedef struct Option
+    {
+        QString name, description;
+        bool argumentIsRequired;
+    };
+
     ///Conté caràcter que defineix si el paràmetre passat per línia de comandes és un option o un value 
     static const QString optionSelectorCharacter;
 
     //Conté les opcions possibles que ens poden entrar des de la línia de comandes, i conté associada la descripció del que fa aquella opció
-    QHash<QString, QString> m_commandLineOptions;
+    QHash<QString, Option> m_commandLineOptions;
     //Conté les opcions parsejades entrades per comandes de línia amb el seu valor
     QHash<QString, QString> m_parsedOptions;
     //argumens de la línia de comandes a persajar
