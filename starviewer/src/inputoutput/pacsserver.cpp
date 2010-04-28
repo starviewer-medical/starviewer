@@ -128,28 +128,16 @@ OFCondition PacsServer::configureMove()
 
 OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params , int pid , const char* abstractSyntax )
 {
-    /*
-    ** We prefer to use Explicitly encoded transfer syntaxes.
-    ** If we are running on a Little Endian machine we prefer
-    ** LittleEndianExplicitTransferSyntax to BigEndianTransferSyntax.
-    ** Some SCP implementations will just select the first transfer
-    ** syntax they support (this is not part of the standard) so
-    ** organise the proposed transfer syntaxes to take advantage
-    ** of such behaviour.
-    **
-    ** The presentation pids proposed here are only used for
-    ** C-FIND and C-MOVE, so there is no need to support compressed
-    ** transmission.
-    */
+    /* We prefer to use Explicitly encoded transfer syntaxes. If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
+    to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
+    organise the proposed transfer syntaxes to take advantage of such behaviour.
+    The presentation pids proposed here are only used for C-FIND and C-MOVE, so there is no need to support compressed transmission. */
+
     T_ASC_PresentationContextID presentationContextID = pid;
-
     const char* transferSyntaxes[] = { NULL , NULL , NULL };
-    int numTransferSyntaxes = 0;
 
-    /* We prefer explicit transfer syntaxes.
-     * If we are running on a Little Endian machine we prefer
-     * LittleEndianExplicitTransferSyntax to BigEndianTransferSyntax.
-     */
+    /*We prefer explicit transfer syntaxes.
+     If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax to BigEndianTransferSyntax. */
     if ( gLocalByteOrder  ==  EBO_LittleEndian )  /* defined in dcxfer.h */
     {
         transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
@@ -161,9 +149,8 @@ OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *m_params , 
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
     }
     transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
-    numTransferSyntaxes = 3;
 
-    return ASC_addPresentationContext( m_params , presentationContextID , abstractSyntax , transferSyntaxes , numTransferSyntaxes );
+    return ASC_addPresentationContext( m_params , presentationContextID , abstractSyntax , transferSyntaxes , 3 /*number of TransferSyntaxes*/ );
 }
 
 OFCondition PacsServer::configureStore()
@@ -178,25 +165,15 @@ OFCondition PacsServer::configureStore()
  */
 OFCondition PacsServer::addStoragePresentationContexts()
 {
-    /*
-     * Each SOP Class will be proposed in two presentation contexts (unless
-     * the opt_combineProposedTransferSyntaxes global variable is true).
-     * The command line specified a preferred transfer syntax to use.
-     * This prefered transfer syntax will be proposed in one
-     * presentation context and a set of alternative (fallback) transfer
-     * syntaxes will be proposed in a different presentation context.
-     *
-     * Generally, we prefer to use Explicitly encoded transfer syntaxes
-     * and if running on a Little Endian machine we prefer
-     * LittleEndianExplicitTransferSyntax to BigEndianTransferSyntax.
-     * Some SCP implementations will just select the first transfer
-     * syntax they support (this is not part of the standard) so
-     * organise the proposed transfer syntaxes to take advantage
-     * of such behaviour.
-     */
+    /*Each SOP Class will be proposed in two presentation contexts (unless the opt_combineProposedTransferSyntaxes global variable is true).
+     The command line specified a preferred transfer syntax to use. This prefered transfer syntax will be proposed in one presentation context 
+     and a set of alternative (fallback) transfer syntaxes will be proposed in a different presentation context.
+     
+     Generally, we prefer to use Explicitly encoded transfer syntaxes and if running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
+     to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
+     organise the proposed transfer syntaxes to take advantage of such behaviour. */
 
-    OFList<OFString> sopClasses;
-    OFList<OFString> fallbackSyntaxes;
+    OFList<OFString> sopClasses, fallbackSyntaxes;
     OFString preferredTransferSyntax;
 
     ///Indiquem que con Transfer syntax preferida volem utilitzar JpegLossless
@@ -210,12 +187,14 @@ OFCondition PacsServer::addStoragePresentationContexts()
     OFListIterator( OFString ) s_end;
 
     /*Afegim totes les classes SOP de transfarència d'imatges. com que desconeixem de quina modalitat són
-     * les imatges alhora de preparar la connexió les hi incloem totes les modalitats. Si alhora de connectar sabèssim de quina modalitat és l'estudi només caldria afegir-hi la de la motalitat de l'estudi
-    /*Les sopClass o també conegudes com AbstractSyntax és equivalent amb el Move quina acció volem fer per exemple 
-     * UID_MOVEStudyRootQueryRetrieveInformationModel , en el case del move, en el cas de StoreScu, el sopClass que tenim van en 
-     * funció del tipus d'imatge per exemple tenim ComputedRadiographyImageStorage, CTImageStore, etc.. aquestes sopClass indiquen 
-     * quin tipus d'imatge anirem a guardar, per això sinó sabem de quin tipus de SOPClass són les imatges que anem a guardar al 
-     * PACS, li indiquem una llista per defecte que cobreix la gran majoria i més comuns de SOPClass que existeixen */
+     les imatges alhora de preparar la connexió les hi incloem totes les modalitats. Si alhora de connectar sabèssim de quina modalitat és 
+     l'estudi només caldria afegir-hi la de la motalitat de l'estudi
+     
+     Les sopClass o també conegudes com AbstractSyntax és equivalent amb el Move quina acció volem fer per exemple 
+     UID_MOVEStudyRootQueryRetrieveInformationModel , en el case del move, en el cas de StoreScu, el sopClass que tenim van en funció del tipus d'imatge 
+     per exemple tenim ComputedRadiographyImageStorage, CTImageStore, etc.. aquestes sopClass indiquen  quin tipus d'imatge anirem a guardar, per això sinó 
+     sabem de quin tipus de SOPClass són les imatges que anem a guardar al PACS, li indiquem una llista per defecte que cobreix la gran majoria i més 
+     comuns de SOPClass que existeixen */
 
     /*Amb l'Abstract syntax o SOPClass definim quina operació volem fer, i amb els transfer syntax indiquem amb quin protocol es farà
      * la transfarència de les dades, LittleEndian, JPegLossLess, etc.. */
@@ -223,7 +202,6 @@ OFCondition PacsServer::addStoragePresentationContexts()
     /* TODO Si que la podem arribar a saber la transfer syntax, només hem de mirar la SOPClassUID de cada imatge a enviar, mirar
      * codi storescu.cc a partir de la línia 639
      */
-    //Les SOPClasses també són conegudes com les Ab
     for ( int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++ )
     {
         sopClasses.push_back( dcmShortSCUStorageSOPClassUIDs[i] );
@@ -290,7 +268,7 @@ OFCondition PacsServer::addPresentationContext( int presentationContextId , cons
         ++s_cur;
     }
 
-    OFCondition cond = ASC_addPresentationContext(m_params , presentationContextId ,        abstractSyntax.c_str() , transferSyntaxes , transferSyntaxCount , ASC_SC_ROLE_DEFAULT);
+    OFCondition cond = ASC_addPresentationContext(m_params , presentationContextId , abstractSyntax.c_str() , transferSyntaxes , transferSyntaxCount , ASC_SC_ROLE_DEFAULT);
 
     delete[] transferSyntaxes;
     return cond;
@@ -323,7 +301,6 @@ Status PacsServer::connect( modalityConnection modality)
 {
     OFCondition cond;
     Status state;
-    QString AdrServer;
 
     //create the parameters of the connection
     cond = ASC_createAssociationParameters( &m_params , ASC_DEFAULTMAXPDU );
@@ -339,10 +316,8 @@ Status PacsServer::connect( modalityConnection modality)
     cond = ASC_setTransportLayerType(m_params, OFFalse);
     if (!cond.good()) return state.setStatus( cond );
 
-    AdrServer = constructAdrServer(modality, m_pacs );
-
     // the DICOM server accepts connections at server.nowhere.com port
-    cond = ASC_setPresentationAddresses( m_params , qPrintable(QHostInfo::localHostName()), qPrintable(AdrServer) );
+    cond = ASC_setPresentationAddresses( m_params , qPrintable(QHostInfo::localHostName()), qPrintable(constructPacsServerAddress(modality, m_pacs )) );
     if ( !cond.good() ) return state.setStatus( cond );
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
@@ -429,31 +404,28 @@ void PacsServer::disconnect()
 	m_pacsNetwork->disconnect();//desconectem les adreces de xarxa
 }
 
-QString PacsServer:: constructAdrServer( modalityConnection modality, PacsDevice pacsDevice )
+QString PacsServer::constructPacsServerAddress( modalityConnection modality, PacsDevice pacsDevice )
 {
-//The format is "server:port"
-    QString adrServer;
-
-    adrServer.insert( 0 , pacsDevice.getAddress() );
-    adrServer.insert( adrServer.length() , ":" );
+    //The format is "server:port"
+    QString pacsServerAddress = pacsDevice.getAddress() + ":";
 
     switch (modality)
     {
         case PacsServer::query:
         case PacsServer::retrieveImages:
-            adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getQueryRetrieveServicePort()) );
+            pacsServerAddress += QString().setNum( pacsDevice.getQueryRetrieveServicePort() );
             break;
         case PacsServer::storeImages:
-            adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getStoreServicePort()) );
+            pacsServerAddress += QString().setNum( pacsDevice.getStoreServicePort() );
             break;
         case PacsServer::echoPacs:
             if (pacsDevice.isQueryRetrieveServiceEnabled())
             {
-                adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getQueryRetrieveServicePort()) );
+                pacsServerAddress +=  QString().setNum( pacsDevice.getQueryRetrieveServicePort() );
             }
             else if (pacsDevice.isStoreServiceEnabled())
             {
-                adrServer.insert( adrServer.length() , QString().setNum(pacsDevice.getStoreServicePort()) );
+                pacsServerAddress += QString().setNum( pacsDevice.getStoreServicePort() );
             }
             else
             {
@@ -464,9 +436,9 @@ QString PacsServer:: constructAdrServer( modalityConnection modality, PacsDevice
             ERROR_LOG("No s'ha pogut configurar per quin port fer l'echo al PACS " + pacsDevice.getAETitle() + " perquè la modalitat de connexió és invàlida");
     }
 
-    INFO_LOG("Pacs Adress build:" + adrServer);
+    INFO_LOG("Pacs Adress build:" + pacsServerAddress);
 
-    return adrServer;
+    return pacsServerAddress;
 }
 
 void PacsServer:: setPacs( PacsDevice p )
