@@ -76,6 +76,7 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
     HangingProtocolImageSet * imageSet;
     HangingProtocolDisplaySet * displaySet;
     QList<HangingProtocol * > listHangingProtocols;
+    QList<HangingProtocolImageSet::Restriction> restrictionList;
 
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(0, tr("Hanging protocol XML File"),
@@ -97,7 +98,7 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
             {
                 hangingProtocol = new HangingProtocol();
                 protocols.clear();
-                m_restrictionsList.clear();
+                restrictionList.clear();
 
                 while( !reader->atEnd() )
                 {
@@ -125,11 +126,11 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
                     else if( reader->name() == "restriction")
                     {
                         restriction = readRestriction( reader );
-                        m_restrictionsList << restriction;
+                        restrictionList << restriction;
                     }
                     else if( reader->name() == "imageSet")
                     {
-                        imageSet = readImageSet( reader );
+                        imageSet = readImageSet( reader , restrictionList );
                         hangingProtocol->addImageSet( imageSet );
                     }
                     else if( reader->name() == "displaySet")
@@ -225,7 +226,7 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction( 
     return restriction;
 }
 
-HangingProtocolImageSet * HangingProtocolXMLReader::readImageSet( QXmlStreamReader * reader )
+HangingProtocolImageSet * HangingProtocolXMLReader::readImageSet( QXmlStreamReader * reader , const QList<HangingProtocolImageSet::Restriction>  & restrictionList )
 {
 
     HangingProtocolImageSet * imageSet = new HangingProtocolImageSet();
@@ -239,7 +240,7 @@ HangingProtocolImageSet * HangingProtocolXMLReader::readImageSet( QXmlStreamRead
         if( reader->name() == "restriction" )
         {
             reader->readNext();
-            restriction = m_restrictionsList.value( reader->text().toString().toInt()-1 );
+            restriction = restrictionList.value( reader->text().toString().toInt()-1 );
             imageSet->addRestriction( restriction );
         }
         else if( reader->name() == "type")

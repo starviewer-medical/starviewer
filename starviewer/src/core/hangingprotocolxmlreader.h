@@ -42,14 +42,11 @@ private:
     HangingProtocolImageSet::Restriction readRestriction( QXmlStreamReader * reader );
 
     /// Llegeix un image set
-    HangingProtocolImageSet * readImageSet( QXmlStreamReader * reader );
+    HangingProtocolImageSet * readImageSet( QXmlStreamReader * reader , const QList<HangingProtocolImageSet::Restriction>  & restrictionList );
 
     /// Llegeix un display set
     HangingProtocolDisplaySet * readDisplaySet( QXmlStreamReader * reader );
 
-private:
-
-    QList<HangingProtocolImageSet::Restriction> m_restrictionsList;
 };
 
 }
