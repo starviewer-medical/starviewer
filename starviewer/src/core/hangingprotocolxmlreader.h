@@ -12,7 +12,6 @@
 #include <QXmlStreamReader>
 
 #include "hangingprotocolimageset.h"
-#include "logging.h"
 
 namespace udg {
 
