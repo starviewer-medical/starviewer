@@ -20,7 +20,7 @@ namespace udg {
 TransDifferenceTool::TransDifferenceTool( QViewer *viewer, QObject *parent )  
 : Tool( viewer, parent )
 {
-    m_state = NONE;
+    m_state = None;
     m_toolName = "TransDifferenceTool";
     m_hasPersistentData = true;
 
@@ -49,7 +49,7 @@ void TransDifferenceTool::handleEvent( unsigned long eventID )
     break;
 
     case vtkCommand::MouseMoveEvent:
-        if( m_state == MOVING && m_myData->getInputVolume()!= 0 && m_myData->getDifferenceVolume() != 0)
+        if( m_state == Moving && m_myData->getInputVolume()!= 0 && m_myData->getDifferenceVolume() != 0)
             this->doTransDifference();
     break;
 
@@ -112,7 +112,7 @@ void TransDifferenceTool::setToolData(ToolData * data)
 
 void TransDifferenceTool::startTransDifference()
 {
-    m_state = MOVING;
+    m_state = Moving;
     m_viewer->getEventPosition( m_startPosition );
     m_dx=0;
     m_dy=0;
@@ -139,7 +139,7 @@ void TransDifferenceTool::endTransDifference()
 {
     //DEBUG_LOG("End moving");
     m_viewer->setCursor( Qt::ArrowCursor );
-    m_state = NONE;
+    m_state = None;
     m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(),m_dx);
     m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(),m_dy);
     m_viewer->refresh(); // necessari perquè es torni a renderitzar a alta resolució en el 3D

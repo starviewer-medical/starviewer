@@ -23,7 +23,7 @@ class TransDifferenceTool : public Tool
 Q_OBJECT
 public:
     /// estats de la tool
-    enum { NONE , MOVING };
+    enum { None , Moving };
 
     TransDifferenceTool( QViewer *viewer, QObject *parent = 0 );
 

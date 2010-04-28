@@ -212,7 +212,7 @@ private:
     Q3DViewer *m_mipViewer;
 
     /// Estat en el que es troba la manipulació de plans
-    enum { NONE , ROTATING , PUSHING };
+    enum { None , Rotating , Pushing };
     int m_state;
 
     /// ToolManager per configurar l'entorn de tools de l'extensió

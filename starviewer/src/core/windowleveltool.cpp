@@ -19,7 +19,7 @@ namespace udg {
 WindowLevelTool::WindowLevelTool( QViewer *viewer, QObject *parent )  
 : Tool( viewer, parent )
 {
-    m_state = NONE;
+    m_state = None;
     m_toolName = "WindowLevelTool";
     // ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT( m_viewer );
@@ -38,7 +38,7 @@ void WindowLevelTool::handleEvent( unsigned long eventID )
     break;
 
     case vtkCommand::MouseMoveEvent:
-        if( m_state == WINDOWLEVELING )
+        if( m_state == WindowLevelling )
             this->doWindowLevel();
     break;
 
@@ -53,7 +53,7 @@ void WindowLevelTool::handleEvent( unsigned long eventID )
 
 void WindowLevelTool::startWindowLevel()
 {
-    m_state = WINDOWLEVELING;
+    m_state = WindowLevelling;
     double wl[2];
     m_viewer->getCurrentWindowLevel(wl);
     m_initialWindow = wl[0];
@@ -123,7 +123,7 @@ void WindowLevelTool::doWindowLevel()
 void WindowLevelTool::endWindowLevel()
 {
     m_viewer->setCursor( Qt::ArrowCursor );
-    m_state = NONE;
+    m_state = None;
 	m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
 	m_viewer->refresh(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
 }
