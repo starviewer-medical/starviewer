@@ -281,7 +281,7 @@ void QConfigurationScreen::test()
 
         pacsServer.setPacs( pacs );
 
-        state = pacsServer.connect( PacsServer::echoPacs , PacsServer::studyLevel );
+        state = pacsServer.connect( PacsServer::echoPacs );
 
         if ( !state.good() )
         {

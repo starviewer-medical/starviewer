@@ -97,7 +97,7 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
     pacs.setAddress(printer.getHostname());
     pacsServer.setPacs(pacs);
 
-    state = pacsServer.connect(PacsServer::echoPacs , PacsServer::studyLevel);
+    state = pacsServer.connect(PacsServer::echoPacs);
 
     //TODO: Si no reconeix el nostre aetitle no retornem l'error correcte, indique association rejected
     if (!state.good())

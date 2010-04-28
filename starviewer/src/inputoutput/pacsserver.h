@@ -29,9 +29,6 @@ public:
 
     enum modalityConnection { query , retrieveImages , echoPacs, storeImages };
 
-    //any it's only can be used with echoPacs modality
-    enum levelConnection { patientLevel , studyLevel , seriesLevel , any , imageLevel };
-
     /** Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
      */
@@ -42,10 +39,9 @@ public:
 
     /** Aquesta funció ens intenta connectar al PACS
      * @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges
-     * @param l Especifica a quin nivell durem a terme l'objectiu especificat al paràmetre anterior. A nivell de  Pacient,estudi o sèrie. Per comprendre millor els nivells  consultar la documentació del dicom Càpitol 4. C.6
      * @return retorna l'estat de la connexió
      */
-    Status connect( modalityConnection , levelConnection );
+    Status connect( modalityConnection );
 
     /** Ens permet fer un echo al PACS. Per defecte per qualsevol modalitat de connexió bé sigui busca informació o descarregar imatges per defecte permet fer un echo, per comprovar si els PACS està viu
      * @return retorna l'estatus del echo
@@ -90,18 +86,16 @@ private:
    OFCondition configureEcho();
 
     /** Aquesta funció privada, configura els paràmetres de la connexió per especificar, que el motiu de la nostre connexió és buscar informació.
-     * @param Especifiquem a quin nivell volem buscar la informació, de pacient, d'estudi o de sèrie
      * @return retorna l'estat de la configuració
      */
-   OFCondition configureFind( levelConnection );
+   OFCondition configureFind();
 
     /** Aquesta funció privada permet configurar la connexió per a descarregar imatges al ordinador local. IMPORTANT!!! Abans de connectar s'ha d'invocar la funció setLocalhostPort
-     * @param Especifiquem a quin nivell volem descarregar les imatges, de pacient, d'estudi o de sèrie
      * @return retorna l'estat de la configuracióDUL_PRESENTATIONCONTEXTID
      */
-   OFCondition configureMove( levelConnection );
+   OFCondition configureMove();
 
-    /** Aquesta funci�privada permet configurar la connexi�per a guardar estudis en el pacs.
+    /** Aquesta funció privada permet configurar la connexió per a guardar estudis en el pacs.
      * @return retorna l'estat de la configuració
      */
     OFCondition configureStore();
@@ -121,7 +115,7 @@ private:
    QString constructAdrServer( modalityConnection modality, PacsDevice pacsDevice  ); //construct PACS address
 
     /** Afegeix tots els PresentationContexts necessaris per a guardar imatges en el PACS
-    * @return retorna l'estat del m�ode
+    * @return retorna l'estat del mètode
     */
     OFCondition addStoragePresentationContexts();
 
