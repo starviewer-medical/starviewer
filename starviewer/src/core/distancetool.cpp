@@ -17,7 +17,6 @@
 // Vtk's
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
-#include <vtkLine.h>
 
 namespace udg {
 
