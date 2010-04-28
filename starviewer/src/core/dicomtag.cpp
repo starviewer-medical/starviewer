@@ -43,17 +43,17 @@ void DICOMTag::setElement( unsigned int element )
     m_element = element;
 }
 
-unsigned int DICOMTag::getGroup()
+unsigned int DICOMTag::getGroup() const
 {
     return m_group;
 }
 
-unsigned int DICOMTag::getElement()
+unsigned int DICOMTag::getElement() const
 {
     return m_element;
 }
 
-QString DICOMTag::toString()
+QString DICOMTag::toString() const
 {
     return QString("(%1,%2)").arg( QString::number(m_group,16).rightJustified(4,'0') ).arg( QString::number(m_element,16).rightJustified(4,'0') );
 }

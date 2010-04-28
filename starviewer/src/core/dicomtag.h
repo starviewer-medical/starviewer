@@ -29,14 +29,14 @@ public:
 
     /// Assignar/Obtenir el valor del group
     void setGroup( unsigned int group );
-    unsigned int getGroup();
+    unsigned int getGroup() const;
 
     /// Assignar/Obtenir el valor de element
     void setElement( unsigned int element );
-    unsigned int getElement();
+    unsigned int getElement() const;
 
     /// Retorna el tag en forma de text.
-    QString toString();
+    QString toString() const;
 
 private:
     unsigned int m_group;
