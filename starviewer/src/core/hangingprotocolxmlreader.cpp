@@ -302,7 +302,7 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
         else if( reader->name() == "phase" )
         {
             reader->readNext();
-            displaySet->setPhase( reader->text().toString() );
+            displaySet->setPhase( reader->text().toString().toInt() );
         }
         else if( reader->name() == "displaySet" && reader->tokenType() == QXmlStreamReader::EndElement )
         {
