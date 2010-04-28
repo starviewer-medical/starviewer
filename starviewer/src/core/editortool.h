@@ -18,15 +18,14 @@ class Volume;
 class EditorToolData;
 
 /**
-Tool que serveix per editar el volum sobreposat en un visor 2D
+    Tool que serveix per editar el volum sobreposat en un visor 2D
 
     @author Laboratori de Gràfics i Imatge  ( GILab ) <vismed@ima.udg.es>
 */
-class EditorTool : public Tool
-{
+class EditorTool : public Tool {
 Q_OBJECT
 public:
-    /// estats de la tool
+    /// Estats de la tool
     enum { NoEditor , Paint , Erase , EraseSlice , EraseRegion };
 
     EditorTool( QViewer *viewer, QObject *parent = 0 );
@@ -39,10 +38,7 @@ public:
      */
     ToolData* getToolData() const;
 
-//private slots:
-
 private:
-
     /**
      * Pinta el quadrat vert si fa falta (estats Paint i Erase) a la posició del cursor
      * si el botó esquerre està premut també es fa l'acció de pintar
@@ -127,7 +123,6 @@ private slots:
     void initialize();
 
 private:
-
     /// Ens guardem aquest punter per ser més còmode
     Q2DViewer *m_2DViewer;
 
@@ -137,7 +132,9 @@ private:
 
     ///Mida de la tool
     int m_editorSize;
+    
     vtkActor *m_squareActor;
+    
     //\TODO:Aquesta variable no caldria, ja que hauria d'estar només al ToolData
     int m_volumeCont;
     EditorToolData* m_myData;

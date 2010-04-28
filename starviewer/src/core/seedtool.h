@@ -15,22 +15,19 @@ class Q2DViewer;
 class SeedToolData;
 
 /**
-Eina que serveix per posar llavors en un visor 2D
+    Eina que serveix per posar llavors en un visor 2D
 
-  @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class SeedTool : public Tool
-{
+class SeedTool : public Tool {
 Q_OBJECT
 public:
-    /// estats de la tool
+    /// Estats de la tool
     enum { None , Seeding };
 
     SeedTool(QViewer *viewer, QObject *parent = 0 );
-
     ~SeedTool();
 
-    ///funcio manejadora dels events passats.
     void handleEvent( long unsigned eventID );
 
     /// Retorna les dades pròpies de la seed
@@ -62,7 +59,7 @@ private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
-    ///estat de la tool
+    /// Estat de la tool
     int m_state;
 
     /// Dades específiques de la tool

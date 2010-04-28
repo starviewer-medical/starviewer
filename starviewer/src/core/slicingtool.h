@@ -15,15 +15,14 @@ class Q2DViewer;
 class Volume;
 
 /**
-Tool que serveix per fer slicing en un visor 2D
+    Tool que serveix per fer slicing en un visor 2D
 
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class SlicingTool : public Tool
-{
+class SlicingTool : public Tool {
 Q_OBJECT
 public:
-    /// estats de la tool
+    /// Estats de la tool
     enum { None , Slicing };
 
     SlicingTool( QViewer *viewer, QObject *parent = 0 );
@@ -79,19 +78,19 @@ private:
     /// De moment podrà tenir els valors SliceMode o PhaseMode, per defecte SliceMode
     int m_slicingMode;
 
-    /// estats d'execució de la tool
+    /// Estats d'execució de la tool
     int m_state;
 
-    /// indica si entre event i event hi ha hagut moviment del ratolí
+    /// Indica si entre event i event hi ha hagut moviment del ratolí
     bool m_mouseMovement;
 
 	/// Nombre d'imatges ( ja siguin fases o llesques ) del volum sobre el que fem slicing
     /// útil per calcular l'increment proporcional de llesques
     int m_numberOfImages;
 	
-	/// mida de la pantalla
-	/// útil per calcular l'increment proporcional de llesques
-	int *m_screenSize;
+    /// Mida de la pantalla
+    /// Útil per calcular l'increment proporcional de llesques
+    int *m_screenSize;
 
     /// Ens indica si l'input actual té fases. S'actualitza cada cop que es canvia d'input
     bool m_inputHasPhases;
@@ -100,7 +99,7 @@ private:
     bool m_forcePhaseMode;
 
     /// NOMÉS PER ESTADÍSTIQUES
-    // compta el nombre de passos (endavant o enrera) que es fan seguits amb la rodeta
+    /// Compta el nombre de passos (endavant o enrera) que es fan seguits amb la rodeta
     QString m_wheelSteps;
     QString m_scrollSteps;
 };

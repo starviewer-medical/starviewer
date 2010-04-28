@@ -14,29 +14,27 @@
 namespace udg {
 
 /**
-Conté les dades de diversos valors predefinits de window level.
-Dins d'aquests valors, en podem tenir diverses procedències, com per exemple
-- Els que defineix la informació DICOM de la imatge que s'està visualitzant en aquell moment
-- Un conjunt estàndar predefinit, com per exemple valors pre-establerts de diferents teixits CT
-- Valors definits per l'usuari
-- Altres...
+    Conté les dades de diversos valors predefinits de window level.
+    Dins d'aquests valors, en podem tenir diverses procedències, com per exemple
+    - Els que defineix la informació DICOM de la imatge que s'està visualitzant en aquell moment
+    - Un conjunt estàndar predefinit, com per exemple valors pre-establerts de diferents teixits CT
+    - Valors definits per l'usuari
+    - Altres...
 
-Aquests valors predefinits es poden afegir o treure dinàmicament.
-Aquests valors poden ser afegits a través de la lectura d'algun tipus de format ( Settings, XML, parelles atribut-valor, com en fitxers ".ini", etc )
+    Aquests valors predefinits es poden afegir o treure dinàmicament.
+    Aquests valors poden ser afegits a través de la lectura d'algun tipus de format ( Settings, XML, parelles atribut-valor, com en fitxers ".ini", etc )
 
-Cada valor vindrà definit per una descripció textual més el parell de valors WL/WW, com per exemple "Bone CT", WL: 500, WW: 2000.
-La descripció serà tractada com a camp clau, per tant no hi poden haver dos presets amb el mateix nom.
+    Cada valor vindrà definit per una descripció textual més el parell de valors WL/WW, com per exemple "Bone CT", WL: 500, WW: 2000.
+    La descripció serà tractada com a camp clau, per tant no hi poden haver dos presets amb el mateix nom.
 
-Per poder fer una diferenciació de la procedència de cada valor, es poden crear certs grups com ja s'ha anomenat abans.
+    Per poder fer una diferenciació de la procedència de cada valor, es poden crear certs grups com ja s'ha anomenat abans.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class WindowLevelPresetsToolData : public ToolData
-{
+class WindowLevelPresetsToolData : public ToolData {
 Q_OBJECT
 public:
     WindowLevelPresetsToolData(QObject *parent = 0);
-
     ~WindowLevelPresetsToolData();
 
     /// Etiquetes per cada agrupació de presets
@@ -124,9 +122,9 @@ signals:
 private:
     typedef struct WindowLevelStruct
     {
-        /// valors de window level del preset en sí
+        /// Valors de window level del preset en sí
         double m_window, m_level;
-        /// grup al que pertany
+        /// Grup al que pertany
         int m_group;
     };
 

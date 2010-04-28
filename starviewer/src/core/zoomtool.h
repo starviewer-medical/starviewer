@@ -16,18 +16,16 @@ class QViewer;
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ZoomTool : public Tool
-{
+class ZoomTool : public Tool {
 Q_OBJECT
 public:
     enum { None , Zooming };
-    ZoomTool( QViewer *viewer, QObject *parent = 0 );
 
+    ZoomTool( QViewer *viewer, QObject *parent = 0 );
     ~ZoomTool();
 
     void handleEvent( unsigned long eventID );
 
-/// \TODO potser aquests mètodes slots passen a ser públics
 private slots:
     /// Comença el zoom
     void startZoom();

@@ -7,8 +7,6 @@
 #ifndef UDGPOLYLINETEMPORALROITOOLDATA_H
 #define UDGPOLYLINETEMPORALROITOOLDATA_H
 
-//#include "polylineroitool.h"
-
 #include "tooldata.h"
 
 #include <itkImage.h>
@@ -17,43 +15,40 @@
 
 namespace udg {
 
-
 /**
-	@author Laboratori de Gràfics i Imatge  ( GILab ) <vismed@ima.udg.es>
+    @author Laboratori de Gràfics i Imatge  ( GILab ) <vismed@ima.udg.es>
 */
-class PolylineTemporalROIToolData : public ToolData
-{
+class PolylineTemporalROIToolData : public ToolData {
 Q_OBJECT
 public:
     PolylineTemporalROIToolData(QObject *parent = 0);
-
     ~PolylineTemporalROIToolData();
 
-	//Declaració de tipus
-    //typedef PolylineTemporalROITool::TemporalImageType TemporalImageType;
+    /// Declaració de tipus
+    // typedef PolylineTemporalROITool::TemporalImageType TemporalImageType;
     typedef itk::Image<double, 4> TemporalImageType;
 
-    ///Li passem la imatge d'on ha de treure les dades
+    /// Li passem la imatge d'on ha de treure les dades
     void setTemporalImage(TemporalImageType::Pointer a) {std::cout<<"Set TemporalImage!!"<<std::endl; 
 														m_temporalImage = a;m_temporalImageHasBeenDefined = true;}
-	TemporalImageType::Pointer getTemporalImage( ){return m_temporalImage;}
+    TemporalImageType::Pointer getTemporalImage(){return m_temporalImage;}
 
-	bool temporalImageHasBeenDefined( ){return m_temporalImageHasBeenDefined;}
+    bool temporalImageHasBeenDefined(){return m_temporalImageHasBeenDefined;}
 
-	void setMeanVector( QVector<double> m );
-	QVector<double> getMeanVector( ){return m_mean;}
+    void setMeanVector( QVector<double> m );
+    QVector<double> getMeanVector(){return m_mean;}
 
 signals:
-	/// s'emet quan s'assigna un nou vector de dades
-    void dataChanged( );
+    /// S'emet quan s'assigna un nou vector de dades
+    void dataChanged();
 
 private:
-	/// Vector on hi desarem la mitjana temporal
-	QVector<double> m_mean;
+    /// Vector on hi desarem la mitjana temporal
+    QVector<double> m_mean;
 
-	/// Imatge amb les dades temporals
+    /// Imatge amb les dades temporals
     TemporalImageType::Pointer m_temporalImage;
-	bool m_temporalImageHasBeenDefined;
+    bool m_temporalImageHasBeenDefined;
 
 };
 

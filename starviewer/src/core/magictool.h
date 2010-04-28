@@ -23,24 +23,19 @@ class DrawerText;
 class DrawerPolygon;
 
 /**
-Tool que serveix per editar el volum sobreposat en un visor 2D
+    Tool que serveix per editar el volum sobreposat en un visor 2D
 
     @author Laboratori de Gràfics i Imatge  ( GILab ) <vismed@ima.udg.es>
 */
-class MagicTool : public Tool
-{
+class MagicTool : public Tool {
 Q_OBJECT
 public:
-
     MagicTool( QViewer *viewer, QObject *parent = 0 );
     ~MagicTool();
 
     void handleEvent( unsigned long eventID );
 
-//private slots:
-
 private:
-
     /**
      * Crida a la generació de la regió màgica
      */
@@ -98,30 +93,30 @@ private slots:
     void initialize();
 
 private:
-
     /// Ens guardem aquest punter per ser més còmode
     Q2DViewer *m_2DViewer;
 
     ///Mida de la tool
     int m_magicSize;
-	QVector<bool> m_mask;
+	
+    QVector<bool> m_mask;
 
-	double m_magicFactor;
+    double m_magicFactor;
 
-	int m_lowerlevel;
-	int m_upperlevel;
+    int m_lowerlevel;
+    int m_upperlevel;
 
-	int m_a;
-	int m_b;
-	int m_c;
-	int m_i;
+    int m_a;
+    int m_b;
+    int m_c;
+    int m_i;
     int m_ext[6];
 
-	DrawerText * m_text;
+    DrawerText * m_text;
 
-	vtkImageData * m_input;
+    vtkImageData * m_input;
 
-	/// Polígon principal: és la polígon que ens marca la forma que hem segmentat
+    /// Polígon principal: és la polígon que ens marca la forma que hem segmentat
     QPointer<DrawerPolygon> m_mainPolygon;
 };
 

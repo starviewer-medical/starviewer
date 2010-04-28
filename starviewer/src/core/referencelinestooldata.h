@@ -14,16 +14,14 @@ namespace udg {
 class ImagePlane;
 
 /**
-Dades corresponents a la Tool de reference lines
+    Dades corresponents a la Tool de reference lines
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ReferenceLinesToolData : public ToolData
-{
+class ReferenceLinesToolData : public ToolData {
 Q_OBJECT
 public:
     ReferenceLinesToolData(QObject *parent = 0);
-
     ~ReferenceLinesToolData();
 
     /**

@@ -14,16 +14,14 @@ namespace udg {
 class Q2DViewer;
 
 /**
-Classe per guardar les dades de la tool de sincronització.
+    Classe per guardar les dades de la tool de sincronització.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class SynchronizeToolData : public ToolData
-{
+class SynchronizeToolData : public ToolData {
 Q_OBJECT
 public:
     SynchronizeToolData();
-
     ~SynchronizeToolData();
 
     /// Obtenir l'increment de llesca
@@ -40,7 +38,6 @@ public:
     double* getPan();
 
 public slots:
-
     /// Per canviar les dades de sincronitzacio de llesques
     void setIncrement( double value );
 
@@ -54,7 +51,6 @@ public slots:
     void setPan( double motionVector[3] );
 
 signals:
-
     /// Signal que s'emet quan les dades de l'increment de llesca canvien
     void sliceChanged();
 
@@ -68,7 +64,6 @@ signals:
     void panChanged();
 
 private:
-
     /// Dades per la sincronització de l'slicing. Distància recorreguda
     double m_increment;
 

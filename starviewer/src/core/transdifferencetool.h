@@ -12,21 +12,19 @@
 namespace udg {
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class Q2DViewer;
 class TransDifferenceToolData;
 
-class TransDifferenceTool : public Tool
-{
+class TransDifferenceTool : public Tool {
 Q_OBJECT
 public:
-    /// estats de la tool
+    /// Estats de la tool
     enum { None , Moving };
 
     TransDifferenceTool( QViewer *viewer, QObject *parent = 0 );
-
     ~TransDifferenceTool();
 
     void handleEvent( unsigned long eventID );
@@ -37,13 +35,12 @@ public:
     /// Assigna les dades pròpies de la seed (persistent data)
     void setToolData(ToolData * data);
 
-    ///Inicialitza i calcula tota la imatge diferència
+    /// Inicialitza i calcula tota la imatge diferència
     void initializeDifferenceImage( );
 
-    ///Assigna una determinada translació a una llesca
+    /// Assigna una determinada translació a una llesca
     void setSingleDifferenceImage(int dx, int dy);
 
-/// \TODO potser aquests mètodes slots passen a ser públics
 private slots:
     /// Comença la translació
     void startTransDifference();
@@ -67,11 +64,11 @@ private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
-    /// valors per controlar la translació
+    /// Valors per controlar la translació
     int m_startPosition[2];
     int m_dx,m_dy;
     
-    /// estats d'execució de la tool
+    /// Estats d'execució de la tool
     int m_state;
 };
 

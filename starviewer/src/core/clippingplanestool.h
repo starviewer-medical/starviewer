@@ -17,8 +17,7 @@ class Q3DViewer;
     Mostra un widget que permet rotar, traslladar i manipular els plans de 
     la bounding box del volum del visor 3D
 */
-class ClippingPlanesTool : public Tool
-{
+class ClippingPlanesTool : public Tool {
 Q_OBJECT
 public:
     ClippingPlanesTool( QViewer *viewer, QObject *parent = 0 );

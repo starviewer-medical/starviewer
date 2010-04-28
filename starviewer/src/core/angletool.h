@@ -19,10 +19,9 @@ class DrawerText;
 /**
     Tool per calcular angles
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class AngleTool : public Tool
-{
+class AngleTool : public Tool {
 Q_OBJECT
 public:
     /// Possibles estats de la tool
@@ -70,7 +69,7 @@ private:
     /// Polilínia de la circumferència de l'angle.
     QPointer<DrawerPolyline> m_circlePolyline;
         
-    ///estat de la tool
+    /// Estat de la tool
     int m_state;
 
     /// Graus que formen inicialment el primer segement amb un segment horitzontal fictici

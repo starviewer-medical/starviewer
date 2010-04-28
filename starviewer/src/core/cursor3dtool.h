@@ -16,19 +16,17 @@ class Q2DViewer;
 class DrawerCrossHair;
 
 /**
-Implementació de la tool del cursor 3D.
+    Implementació de la tool del cursor 3D.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class Cursor3DTool : public Tool
-{
+class Cursor3DTool : public Tool {
 Q_OBJECT
 public:
-    /// estats de la tool
+    /// Estats de la tool
     enum { None , Computing };
 
     Cursor3DTool( QViewer *viewer, QObject *parent = 0 );
-
     ~Cursor3DTool();
 
     /**
