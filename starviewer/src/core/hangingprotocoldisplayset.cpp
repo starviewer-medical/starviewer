@@ -13,6 +13,7 @@ HangingProtocolDisplaySet::HangingProtocolDisplaySet(QObject *parent)
  : QObject(parent)
 {
     m_sliceNumber = -1;
+    m_phase = -1;
 }
 
 HangingProtocolDisplaySet::~HangingProtocolDisplaySet()
@@ -79,12 +80,12 @@ QString HangingProtocolDisplaySet::getReconstruction() const
     return m_reconstruction;
 }
 
-void HangingProtocolDisplaySet::setPhase( QString phase )
+void HangingProtocolDisplaySet::setPhase( int phase )
 {
     m_phase = phase;
 }
 
-QString HangingProtocolDisplaySet::getPhase() const
+int HangingProtocolDisplaySet::getPhase() const
 {
     return m_phase;
 }

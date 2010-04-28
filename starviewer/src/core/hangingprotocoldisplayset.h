@@ -41,7 +41,7 @@ public:
     void setReconstruction( QString reconstruction );
 
     /// Posar la fase
-    void setPhase( QString phase );
+    void setPhase( int phase );
 
     /// Obtenir l'identificador
     int getIdentifier() const;
@@ -62,7 +62,7 @@ public:
     QString getReconstruction() const;
 
     /// Obtenir la fase
-    QString getPhase() const;
+    int getPhase() const;
 
     /// Mètode per mostrar els valors
     void show();
@@ -112,7 +112,7 @@ private:
     QString m_reconstruction;
 
     /// Fase
-    QString m_phase;
+    int m_phase;
 
     /// Llesca
     int m_sliceNumber;

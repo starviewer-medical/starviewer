@@ -494,10 +494,10 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
         }
     }
 
-    QString phase = displaySet->getPhase();
-    if( !phase.isEmpty() )
+    int phase = displaySet->getPhase();
+    if( phase > -1 )
     {
-        viewer->getViewer()->setPhase( phase.toInt() );
+        viewer->getViewer()->setPhase( phase );
     }
 
     int sliceNumber = displaySet->getSlice();
