@@ -25,7 +25,7 @@ class Rotate3DTool : public Tool
 Q_OBJECT
 public:
 
-    enum { NONE , ROTATING, SPINNING };
+    enum { None , Rotating, Spinning };
     Rotate3DTool( QViewer *viewer, QObject *parent = 0 );
 
     ~Rotate3DTool();

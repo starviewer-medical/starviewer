@@ -23,7 +23,7 @@ class WindowLevelTool : public Tool
 Q_OBJECT
 public:
     /// estats de la tool
-    enum { NONE , WINDOWLEVELING };
+    enum { None , WindowLevelling };
 
     WindowLevelTool( QViewer *viewer, QObject *parent = 0 );
 

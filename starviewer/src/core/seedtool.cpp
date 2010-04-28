@@ -29,7 +29,7 @@ SeedTool::SeedTool( QViewer *viewer, QObject *parent ) : Tool( viewer, parent )
     if( !m_2DViewer )
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className() );
 
-    m_state = NONE;
+    m_state = None;
     m_drawn = false;
     m_myData->setVolume( m_2DViewer->getInput() );
 }
@@ -90,7 +90,7 @@ void SeedTool::setSeed()
 {
     Q_ASSERT( m_2DViewer );
     
-    m_state=SEEDING;
+    m_state=Seeding;
     updateSeedPosition();
 }
 
@@ -98,7 +98,7 @@ void SeedTool::doSeeding()
 {
     Q_ASSERT( m_2DViewer );
 
-    if( m_state==SEEDING )
+    if( m_state==Seeding )
     {
         updateSeedPosition();
     }
@@ -106,7 +106,7 @@ void SeedTool::doSeeding()
 
 void SeedTool::endSeeding()
 {
-    m_state = NONE;
+    m_state = None;
 }
 
 void SeedTool::updateSeedPosition()

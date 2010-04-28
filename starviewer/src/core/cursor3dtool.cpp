@@ -82,13 +82,13 @@ void Cursor3DTool::handleEvent( long unsigned eventID )
             break;
 
         case vtkCommand::MouseMoveEvent:
-            if( m_state == CALCULATING )
+            if( m_state == Computing )
             {
                 updatePosition();
             }
             break;
         case vtkCommand::LeftButtonReleaseEvent:
-            if( m_state == CALCULATING )
+            if( m_state == Computing )
             {
                 removePosition();
             }
@@ -99,7 +99,7 @@ void Cursor3DTool::handleEvent( long unsigned eventID )
 void Cursor3DTool::initializePosition()
 {
     m_viewer->setCursor( QCursor( Qt::BlankCursor ) );
-    m_state = CALCULATING;
+    m_state = Computing;
 
     if ( !m_crossHair )
     {
@@ -217,7 +217,7 @@ void Cursor3DTool::updatePosition()
 
 void Cursor3DTool::removePosition()
 {
-    m_state = NONE;
+    m_state = None;
     m_viewer->setCursor( Qt::ArrowCursor );
 
     /// S'ha demanat que el cursor no desparegui al deixar de clicar.
@@ -323,7 +323,7 @@ void Cursor3DTool::refreshReferenceViewerData()
 
 void Cursor3DTool::hideCrossHair()
 {
-    if( m_2DViewer->isActive() && m_state == NONE )
+    if( m_2DViewer->isActive() && m_state == None )
     {
         m_crossHair->setVisibility( false );
         m_crossHair->update( DrawerPrimitive::VTKRepresentation );

@@ -31,7 +31,7 @@ class Cursor3DTool : public Tool
 Q_OBJECT
 public:
     /// estats de la tool
-    enum { NONE , CALCULATING };
+    enum { None , Computing };
 
     Cursor3DTool( QViewer *viewer, QObject *parent = 0 );
 

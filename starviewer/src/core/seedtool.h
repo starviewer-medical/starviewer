@@ -24,7 +24,7 @@ class SeedTool : public Tool
 Q_OBJECT
 public:
     /// estats de la tool
-    enum { NONE , SEEDING };
+    enum { None , Seeding };
 
     SeedTool(QViewer *viewer, QObject *parent = 0 );
 
