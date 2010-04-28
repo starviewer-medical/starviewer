@@ -14,7 +14,7 @@
 // Qt
 #include <QStringList>
 // dcmtk
-#include <dcmtk/dcmdata/dcfilefo.h>
+#include <dcfilefo.h>
 
 namespace udg {
 
