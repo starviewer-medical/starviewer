@@ -24,12 +24,12 @@ DICOMTagReader::DICOMTagReader() : m_dicomData(0), m_hasValidFile(false)
 {
 }
 
-DICOMTagReader::DICOMTagReader(QString filename, DcmDataset *dcmDataset) : m_dicomData(0), m_hasValidFile(false)
+DICOMTagReader::DICOMTagReader(const QString &filename, DcmDataset *dcmDataset) : m_dicomData(0), m_hasValidFile(false)
 {
     this->setDcmDataset(filename, dcmDataset);
 }
 
-DICOMTagReader::DICOMTagReader( QString filename ) : m_dicomData(0), m_hasValidFile(false)
+DICOMTagReader::DICOMTagReader( const QString &filename ) : m_dicomData(0), m_hasValidFile(false)
 {
     this->setFile( filename );
 }
@@ -40,7 +40,7 @@ DICOMTagReader::~DICOMTagReader()
         delete m_dicomData;
 }
 
-bool DICOMTagReader::setFile( QString filename )
+bool DICOMTagReader::setFile( const QString &filename )
 {
     DcmFileFormat dicomFile;
 
@@ -80,7 +80,7 @@ QString DICOMTagReader::getFileName() const
     return m_filename;
 }
 
-void DICOMTagReader::setDcmDataset(QString filename, DcmDataset *dcmDataset)
+void DICOMTagReader::setDcmDataset(const QString &filename, DcmDataset *dcmDataset)
 {
     Q_ASSERT(dcmDataset);
 
