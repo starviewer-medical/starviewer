@@ -7,7 +7,6 @@
 #include "dicomtagreader.h"
 
 #include "logging.h"
-#include "singleton.h"
 #include "dicomtag.h"
 #include "dicomsequenceattribute.h"
 #include "dicomvalueattribute.h"
@@ -15,8 +14,6 @@
 #include <QStringList>
 
 #include <dcmtk/dcmdata/dcfilefo.h>
-#include <dcmtk/dcmdata/dcsequen.h>
-//#include <dcmtk/dcmdata/dctag.h>
 
 namespace udg {
 
