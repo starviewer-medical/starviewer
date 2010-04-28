@@ -8,7 +8,6 @@
 #define UDGDICOMTAGREADER_H
 
 #include <QString>
-#include <QList>
 
 class DcmDataset;
 class DcmSequenceOfItems;
