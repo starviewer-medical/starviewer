@@ -86,7 +86,7 @@ static double minimum( double a, double b);
 static double maximum( double a, double b);
 
 /// Arrel cúbica.
-inline static double cbrt( double x )
+inline static double cubeRoot( double x )
 {
     return std::pow( x, 1.0 / 3.0 );
 }
