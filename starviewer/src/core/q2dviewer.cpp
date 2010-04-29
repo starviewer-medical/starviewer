@@ -13,6 +13,7 @@
 #include "study.h"
 #include "patient.h"
 #include "imageplane.h"
+#include "mathtools.h"
 // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
 #include "hangingprotocolmanager.h"
 //thickslab
@@ -25,7 +26,6 @@
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCamera.h>
-#include <vtkMath.h> // per ::Round()
 // composició d'imatges
 #include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h>
@@ -1503,8 +1503,8 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
             m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
                 .arg( m_imageSizeInformation[0] )
                 .arg( m_imageSizeInformation[1] )
-                .arg( vtkMath::Round( m_windowLevelLUTMapper->GetWindow() ) )
-                .arg( vtkMath::Round( m_windowLevelLUTMapper->GetLevel() ) );
+                .arg( MathTools::roundToNearestInteger( m_windowLevelLUTMapper->GetWindow() ) )
+                .arg( MathTools::roundToNearestInteger( m_windowLevelLUTMapper->GetLevel() ) );
         }
         else
             m_upperLeftText = "";

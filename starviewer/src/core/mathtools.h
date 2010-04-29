@@ -109,6 +109,9 @@ static double *infiniteLinesIntersection(double *p1, double *p2, double *p3, dou
 /// ens retorna el valor truncat
 static double trunc( double x);
 
+/// Arrodoneix un nombre real a l'enter més proper
+static int roundToNearestInteger( double x );
+
 /// Determines whether the two floating-point values f1 and f2 are close enough together that they can be considered equal.
 inline static bool closeEnough(float f1, float f2)
 {
