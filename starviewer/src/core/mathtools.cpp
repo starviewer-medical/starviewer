@@ -352,4 +352,10 @@ double MathTools::trunc( double x)
 {
     return std::floor( x );
 }
+
+int MathTools::roundToNearestInteger( double x )
+{
+    return vtkMath::Round(x);
+}
+
 }; // end namespace udg
