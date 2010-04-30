@@ -9,13 +9,8 @@
 #include "series.h"
 #include "logging.h"
 #include "thumbnailcreator.h"
-#include "dicomtagreader.h"
-#include "dicomdictionary.h"
 #include "mathtools.h"
 
-#include <QStringList>
-#include <QPainter>
-#include <QBuffer>
 #include <QFileInfo>
 
 namespace udg {
