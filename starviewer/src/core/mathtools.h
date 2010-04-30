@@ -10,8 +10,12 @@
 namespace udg{
 
 /**
-    Aquest arxiu recull tot tipus de funcions matemàtiques útils
-*/
+ *
+ *  Aquesta classe és un recull de funcions matemàtiques de caràcter general.
+ *  Inclou la declaració de constants (Pi, Nombre E, ...), operacions aritmètiques,
+ *  operacions amb vectors, etc.
+ *
+ */
 class MathTools {
 public:
     enum IntersectionResults{ ParallelLines, SkewIntersection, LinesIntersect };
@@ -43,16 +47,21 @@ static double truncate( double x);
 /// Arrodoneix un nombre real a l'enter més proper
 static int roundToNearestInteger( double x );
 
+/// Transforma el valor passat per paràmetre de graus a radians i vice-versa
 static float degreesToRadians(float degrees);
 static float radiansToDegrees(float radians);
 
-/// Logaritme en base 2
+/// Calcula el logaritme en base 2
+/// @param x Valor del que es calcula el logaritme
+/// @param zero Si cert, en cas que x sigui 0, ens retornarà 0, altrament
+///             farà el càlcul igualment del logaritme sense fer aquesta comprovació
 static double logTwo(const double x, const bool zero = true);
 
 /// Arrel cúbica
 static double cubeRoot( double x );
 
-/// Determines whether the two floating-point values f1 and f2 are close enough together that they can be considered equal.
+/// Determina si podem considerar pràcticament iguals els dos 
+/// valors passats per paràmetre si la seva diferència és menor al valor d'Epsilon 
 static bool closeEnough(float f1, float f2);
 
 /// Distància entre punts 2D i 3D
@@ -89,19 +98,17 @@ static double *infiniteLinesIntersection(double *p1, double *p2, double *p3, dou
 /// A partir del segment determinat pels dos punts passats com a paràmetres, calcula un dels possibles vectors directors
 static double* directorVector( const double point1[3], const double point2[3] );
 
-/// Calcula el modul d'un vector
+/// Calcula el mòdul d'un vector
 static double modulus( double vector[3] );
 
-/// Producte escalar dels dos vectors passats per parametre
+/// Producte escalar dels dos vectors passats per paràmetre
 static double dotProduct( double vector1[3], double vector2[3] );
 
-/// Producte vectorial dels dos vectors directors passats per paràmetre.
+/// Producte vectorial dels dos vectors directors passats per paràmetre
 static double *crossProduct( double vectorDirector1[3], double vectorDirector2[3] );
 
-/// Calcula l'angle entre dos vectors. Retorna el valor en radians
+/// Calcula l'angle entre dos vectors. Retorna el valor en radians o graus
 static double angleInRadians( double vec1[3] , double vec2[3] );
-
-/// Calcula l'angle entre dos vectors. Retorna el valor en graus
 static double angleInDegrees( double vec1[3] , double vec2[3] );
 
 };
