@@ -113,7 +113,7 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     // Sembla més fàcil la segona opció
     double point[3] , vector[3];
     planeIntersection( p , n , q , m , point , vector );
-    //càlcul intersecció línia pla
+    // Càlcul intersecció línia pla
     // Línia representada per punt i vector(p,t), pla per punt(origen) i normal (r,n), q és la intersecció
     // q = p + (pr·n)t / (t·n)
 
@@ -122,8 +122,7 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     point2[1] = point[1] + vector[1];
     point2[2] = point[2] + vector[2];
 
-    // li donem una recta definida per dos punts , i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
-
+    // Li donem una recta definida per dos punts , i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
     if( vtkPlane::IntersectWithLine( point , point2 , t , r ,  tt , intersectionPoint ) == 0 )
     {
         // si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
@@ -223,11 +222,12 @@ double MathTools::getDistance3D( const double firstPoint[3], const double second
 
 double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
 {
-    /* Solution by Wolfram Mathematics
-    *
-    *   http://mathworld.wolfram.com/Line-LineIntersection.html
-    *
-    */
+    /** 
+     *  Solution by Wolfram Mathematics
+     *
+     *   http://mathworld.wolfram.com/Line-LineIntersection.html
+     *
+     */
     double *intersection;
 
     intersection = new double[3];
