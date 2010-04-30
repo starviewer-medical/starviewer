@@ -31,18 +31,6 @@ static const double Epsilon;
 /// Logaritme en base 2
 static double logTwo(const double x, const bool zero = true);
 
-/// Càlcul de l'entropia binària
-static double binaryEntropy(const double p);
-
-/// Divisió reals
-static double divReal( const double dividend, const double divisor, const bool zero = true, const double value = 0);
-
-/// Definim un rang pel que un nombre pot considerar-se 0
-inline static double zero(const double x)
-{
-  return (- MathTools::Epsilon < x && x < + MathTools::Epsilon ) ? 0 : x;
-}
-
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians
 static double angleInRadians( double vec1[3] , double vec2[3] );
 
