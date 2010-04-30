@@ -200,23 +200,6 @@ double* MathTools::crossProduct( double vectorDirector1[3], double vectorDirecto
     return vp;
 }
 
-int MathTools::getSign( double number )
-{
-    int sign;
-
-    if (number < 0. )
-        sign = NegativeSign;
-    else
-        sign = PositiveSign;
-
-    return sign;
-}
-
-bool MathTools::haveSameSign( double numberA, double numberB )
-{
-    return ( getSign( numberA ) == getSign( numberB ) );
-}
-
 ///ens retorna el mínim dels dos valors
 double MathTools::minimum( double a, double b)
 {

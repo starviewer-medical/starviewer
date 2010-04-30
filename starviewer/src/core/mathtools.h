@@ -43,12 +43,6 @@ inline static double zero(const double x)
   return (- MathTools::Epsilon < x && x < + MathTools::Epsilon ) ? 0 : x;
 }
 
-/// Retorna el signe del número passat per paràmetre
-static int getSign( double number );
-
-/// Ens diu si els dos nombres passats per paràmetre tenen el mateix signe.
-static bool haveSameSign( double numberA, double numberB );
-
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians
 static double angleInRadians( double vec1[3] , double vec2[3] );
 
