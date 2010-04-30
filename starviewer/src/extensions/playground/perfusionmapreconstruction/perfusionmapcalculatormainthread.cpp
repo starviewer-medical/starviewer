@@ -64,12 +64,13 @@ void PerfusionMapCalculatorMainThread::run()
     this->computeDeltaR();
     deltaRtime += time.elapsed();
     time.restart();
+	//\TODO: Si m_AIFIsSet només caldria calcular el moment 0!!!
+    DEBUG_LOG("Compute Moments");
+    this->computeMoments();
+    momentstime += time.elapsed();
+    time.restart();
     if( !m_AIFIsSet )
     {
-        DEBUG_LOG("Compute Moments");
-        this->computeMoments();
-        momentstime += time.elapsed();
-        time.restart();
         DEBUG_LOG("Find AIF");
         this->findAIF();
         findAiftime += time.elapsed();
@@ -666,6 +667,7 @@ void PerfusionMapCalculatorMainThread::updateAIF( )
     indexTemp[2] = m_aifIndex[1];
     indexTemp[3] = m_aifIndex[2];
     int t, tend = m_DSCVolume->getNumberOfPhases();
+    m_aif.resize( tend );
     DEBUG_LOG(QString("Tend AIF: %1").arg(tend));
     for (t=0;t<tend;t++)
     {

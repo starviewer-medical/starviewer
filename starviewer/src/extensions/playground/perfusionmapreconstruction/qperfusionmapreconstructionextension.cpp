@@ -27,6 +27,9 @@
 #include "polylinetemporalroitooldata.h" 
 #include "seedtool.h"
 #include "seedtooldata.h"
+#include "dicomtag.h"
+#include "dicomtagreader.h"
+#include "dicomdictionary.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -80,6 +83,7 @@ QPerfusionMapReconstructionExtension::QPerfusionMapReconstructionExtension( QWid
     createConnections();
     readSettings();
 
+	m_2DView->getViewer()->disableContextMenu();
     m_graphicplot->setTitle("DeltaR signal");
     m_graphicplot->setAutoLimits();
     m_aifplot->setTitle("AIF");
@@ -159,15 +163,26 @@ void QPerfusionMapReconstructionExtension::setInput( Volume *input )
 {
     m_mainVolume = input;
 
-    if (this->findProbableSeries( ) )
+	//Aquí s'assigna l'm_DSCVolume
+    if ( this->findProbableSeries( ) )
     {
         //std::cout<<"Tot ok!!"<<std::endl;
+		m_2DView->getViewer()->setInput( m_DSCVolume );
+		DICOMTagReader dicomReader;
+		bool ok = dicomReader.setFile( m_DSCVolume->getImage(0,0)->getPath() );
+		if( !ok )
+		{
+			DEBUG_LOG("No s'ha pogut obrir amb el tagReader l'arxiu: " + m_DSCVolume->getImage(0,0)->getPath() );
+			return;
+		}else{
+			QString s = dicomReader.getValueAttributeAsQString( DICOMRepetitionTime );
+			DEBUG_LOG("Valor RepetitionTime: " + s );
+			m_newTR = s.toDouble();
+			s = dicomReader.getValueAttributeAsQString( DICOMEchoTime );
+			DEBUG_LOG("Valor EchoTime: " + s );
+			m_newTE = s.toDouble();
+		}
     }
-
-	if(m_DSCVolume != m_2DView->getViewer()->getInput() )
-	{
-		m_2DView->getViewer()->setInput(m_DSCVolume);
-	}
 }
 
 
@@ -228,7 +243,14 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
 		if(m_seedToolData->getPoint())
 		{
 			//QVector<int> aifpos (m_seedToolData->getSeedPosition( ));
-			m_mapCalculator->setAIFIndex( m_seedToolData->getSeedPosition( )[0], m_seedToolData->getSeedPosition( )[1], m_seedToolData->getSeedPosition( )[2]);
+			int index[3];
+	        Volume* inputVolume = m_2DView->getViewer()->getInput();
+            index[0] = (int)((m_seedToolData->getSeedPosition( )[0]- inputVolume->getOrigin()[0])/inputVolume->getSpacing()[0]);
+            index[1] = (int)((m_seedToolData->getSeedPosition( )[1]- inputVolume->getOrigin()[1])/inputVolume->getSpacing()[1]);
+            index[2] = (int)((m_seedToolData->getSeedPosition( )[2]- inputVolume->getOrigin()[2])/inputVolume->getSpacing()[2])/inputVolume->getNumberOfPhases();
+			m_mapCalculator->setAIFIndex( index[0], index[1], index[2]);
+			DEBUG_LOG(QString("SetAIFIndex [%1,%2,%3]").arg(index[0]).arg( index[1]).arg(index[2]));
+			DEBUG_LOG(QString("SetAIFPos [%1,%2,%3]").arg(m_seedToolData->getSeedPosition( )[0]).arg( m_seedToolData->getSeedPosition( )[1]).arg(m_seedToolData->getSeedPosition( )[2]));
 		}
 	}
     m_mapCalculator->setDSCVolume(m_DSCVolume);
@@ -245,7 +267,7 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
     std::cout<<"Max = "<<minmaxCalc->GetMaximum()<<", min = "<<minmaxCalc->GetMinimum()<<std::endl;*/
 
 	//li diem a la roi tool quin és els valors de deltaR
-    m_roiToolButton->defaultAction()->trigger();
+    m_toolManager->triggerTool("PolylineTemporalROITool");
 	PolylineTemporalROITool* roiTool = 
 		static_cast<PolylineTemporalROITool*> (m_2DView->getViewer()->getToolProxy()->getTool("PolylineTemporalROITool"));
 	PolylineTemporalROIToolData* roiData = static_cast<PolylineTemporalROIToolData*>(roiTool->getToolData());
@@ -255,7 +277,7 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap( )
 		connect( roiData, SIGNAL( dataChanged( ) ), SLOT( paintROIData( ) ) );
 	}
 	roiData->setTemporalImage(m_mapCalculator->getDeltaRImage());
-    m_slicingToolButton->defaultAction()->trigger();
+    m_toolManager->triggerTool("SlicingTool");
 
 
     QApplication::restoreOverrideCursor();
@@ -979,6 +1001,9 @@ void QPerfusionMapReconstructionExtension::eventHandler( unsigned long id )
     {
     case vtkCommand::MouseMoveEvent:
         paintCursorSignal();
+		if(m_seedToolButton->isChecked()){
+			paintAIFSignal();
+		}
     break;
 
     case vtkCommand::LeftButtonPressEvent:
@@ -1019,7 +1044,6 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
             indexTemp[3] = index[2];
             int t, tend = m_DSCVolume->getNumberOfPhases();
             QVector<double> signal(tend);
-            QPolygonF p;
         
             double minsig = 100000.0;
             double maxsig = -100000.0;
@@ -1042,6 +1066,49 @@ void QPerfusionMapReconstructionExtension::paintCursorSignal( )
                 m_graphicplot->setData( m_meanseries[m_2DView->getViewer()->getCurrentSlice()], 1 );
                 m_graphicplot->setPaintingFeatures(Qt::red, 1.5, 1);
             }
+        }
+    }    
+}
+
+void QPerfusionMapReconstructionExtension::paintAIFSignal( )
+{
+    if(m_2DView->getViewer()->getInput())    //Si hi ha alguna cosa al viewer
+    {
+        double pos[3];
+        Volume* inputVolume = m_2DView->getViewer()->getInput();
+        
+        if( m_2DView->getViewer()->getCurrentCursorImageCoordinate(pos) )
+        {
+            int index[3];
+			//pressuposem que tots els models tenen la mateixa resolució i que l'index serà a dins
+            index[0] = (int)((pos[0]- inputVolume->getOrigin()[0])/inputVolume->getSpacing()[0]);
+            index[1] = (int)((pos[1]- inputVolume->getOrigin()[1])/inputVolume->getSpacing()[1]);
+			//Presuposem que estan ordenades primer totes les fases de la 1a llesca, després totes les fases de la 2a llesca, etc.
+            index[2] = m_2DView->getViewer()->getCurrentSlice()*m_DSCVolume->getNumberOfPhases();
+			DEBUG_LOG(QString("Pos: [%1,%2]").arg(pos[0]).arg(pos[1]));
+			DEBUG_LOG(QString("Origin: [%1,%2]").arg(m_DSCVolume->getOrigin()[0]).arg(m_DSCVolume->getOrigin()[1]));
+			//DEBUG_LOG(QString("Origin Map: [%1,%2]").arg(m_mapCalculator->getCBVVolume()->getOrigin()[0]).arg(m_mapCalculator->getCBVVolume()->getOrigin()[1]));
+			DEBUG_LOG(QString("Spacing: [%1,%2]").arg(m_DSCVolume->getSpacing()[0]).arg(m_DSCVolume->getSpacing()[1]));
+			DEBUG_LOG(QString("Index: [%1,%2]").arg(index[0]).arg(index[1]));
+			DEBUG_LOG(QString("Valor index inicial:%1").arg(index[2]));
+            DoubleTemporalImageType::IndexType indexTemp;
+            int t, tend = m_DSCVolume->getNumberOfPhases();
+			DEBUG_LOG(QString("tend:%1").arg(tend));
+            QVector<double> signal(tend);
+        
+			int ext[6];
+			inputVolume->getWholeExtent(ext);
+			if(index[0]>=ext[0] && index[0]<=ext[1] && index[1]>=ext[2] && index[1]<=ext[3])
+			{
+				for (t=0;t<tend;t++)
+				{
+					signal[t] = (double)(*(m_DSCVolume->getScalarPointer(index[0],index[1],index[2])));
+					index[2]++;
+			   }
+
+				//m_graphicplot->setHold(true);
+				m_aifplot->setData( signal );
+			}
         }
     }    
 }
@@ -1103,13 +1170,26 @@ void QPerfusionMapReconstructionExtension::setVolume(Volume *volume)
     m_DSCLineEdit->clear();
     m_DSCLineEdit->insert( volume->getImage(0)->getParentSeries()->getDescription() );
     m_DSCVolume = volume;
+	m_2DView->getViewer()->setInput( m_DSCVolume );
+	DICOMTagReader dicomReader;
+	bool ok = dicomReader.setFile( m_DSCVolume->getImage(0,0)->getPath() );
+	if( !ok )
+	{
+		DEBUG_LOG("No s'ha pogut obrir amb el tagReader l'arxiu: " + m_DSCVolume->getImage(0,0)->getPath() );
+		return;
+	}else{
+		QString s = dicomReader.getValueAttributeAsQString( DICOMRepetitionTime );
+		DEBUG_LOG("Valor RepetitionTime: " + s );
+		m_newTR = s.toDouble();
+		s = dicomReader.getValueAttributeAsQString( DICOMEchoTime );
+		DEBUG_LOG("Valor EchoTime: " + s );
+		m_newTE = s.toDouble();
+	}
 }
 
 bool QPerfusionMapReconstructionExtension::findProbableSeries( )
 {
     bool findDSC=false;
-    bool findpre=false;
-    bool findpost=false;
     foreach( Study *study, m_mainVolume->getPatient()->getStudies() )
     {
         foreach( Series *series, study->getSeries() )
@@ -1125,7 +1205,7 @@ bool QPerfusionMapReconstructionExtension::findProbableSeries( )
             }
         }
     }
-    return (findDSC && findpre && findpost);
+    return (findDSC);
 }
 
 
