@@ -199,13 +199,13 @@ double DrawerLine::computeDistance( double * spacing )
         double firstPoint[3];
         double secondPoint[3];
 
-        firstPoint[0] = MathTools::trunc( m_firstPoint[0]/spacing[0] );
-        firstPoint[1] = MathTools::trunc( m_firstPoint[1]/spacing[1] );
-        firstPoint[2] = MathTools::trunc( m_firstPoint[2]/spacing[2] );
+        firstPoint[0] = MathTools::truncate( m_firstPoint[0]/spacing[0] );
+        firstPoint[1] = MathTools::truncate( m_firstPoint[1]/spacing[1] );
+        firstPoint[2] = MathTools::truncate( m_firstPoint[2]/spacing[2] );
 
-        secondPoint[0] = MathTools::trunc( m_secondPoint[0]/spacing[0] );
-        secondPoint[1] = MathTools::trunc( m_secondPoint[1]/spacing[1] );
-        secondPoint[2] = MathTools::trunc( m_secondPoint[2]/spacing[2] );
+        secondPoint[0] = MathTools::truncate( m_secondPoint[0]/spacing[0] );
+        secondPoint[1] = MathTools::truncate( m_secondPoint[1]/spacing[1] );
+        secondPoint[2] = MathTools::truncate( m_secondPoint[2]/spacing[2] );
 
         distance = MathTools::getDistance3D( firstPoint, secondPoint );
     }

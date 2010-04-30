@@ -348,7 +348,7 @@ double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
 
 }
 
-double MathTools::trunc( double x)
+double MathTools::truncate( double x)
 {
     return std::floor( x );
 }
