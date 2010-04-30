@@ -4,20 +4,17 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
 
 #include <cmath>
 
+namespace udg{
+
 /**
     Aquest arxiu recull tot tipus de funcions matemàtiques útils
 */
-
-namespace udg{
-
-class MathTools{
-
+class MathTools {
 public:
     enum Sign{ PositiveSign, NegativeSign };
     enum IntersectionResults{ LinesOverlap, ParallelLines, SkewIntersection, LinesIntersect };
@@ -28,7 +25,6 @@ static const long double ReversePiNumberLong;
 static const double PiNumber;
 static const long double PiNumberLong;
 static const long double PiNumberDivBy2Long;
-
 
 /// Epsilon, nombre extremadament petit
 static double Epsilon() { return 1E-9; };
@@ -48,14 +44,15 @@ inline static double zero(const double x)
   return (- MathTools::Epsilon() < x && x < + MathTools::Epsilon() ) ? 0 : x;
 }
 
-///retorna el signe del número passat per paràmetre
+/// Retorna el signe del número passat per paràmetre
 static int getSign( double number );
 
-///ens diu si els dos nombres passats per paràmetre tenen el mateix signe.
+/// Ens diu si els dos nombres passats per paràmetre tenen el mateix signe.
 static bool haveSameSign( double numberA, double numberB );
 
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians
 static double angleInRadians( double vec1[3] , double vec2[3] );
+
 /// Calcula l'angle entre dos vectors. Retorna el valor en graus
 static double angleInDegrees( double vec1[3] , double vec2[3] );
 
@@ -67,22 +64,22 @@ static int planeIntersection( double p[3] , double n[3], double q[3] , double m[
 /// Retorna 0 si ... -1 si ... perquè són paral·lels , altrament >0
 static int planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] );
 
-///a partir del segment determinat pels dos punts passats com a paràmetres, calcula un dels possibles vectors directors
+/// A partir del segment determinat pels dos punts passats com a paràmetres, calcula un dels possibles vectors directors
 static double* directorVector( const double point1[3], const double point2[3] );
 
-///calcula el modul d'un vector
+/// Calcula el modul d'un vector
 static double modulus( double vector[3] );
 
-///producte escalar dels dos vectors passats per parametre
+/// Producte escalar dels dos vectors passats per parametre
 static double dotProduct( double vector1[3], double vector2[3] );
 
-///producte vectorial dels dos vectors directors passats per paràmetre.
-static double* crossProduct( double vectorDirector1[3], double vectorDirector2[3] );
+/// Producte vectorial dels dos vectors directors passats per paràmetre.
+static double *crossProduct( double vectorDirector1[3], double vectorDirector2[3] );
 
-///ens retorna el mínim dels dos valors
+/// Ens retorna el mínim dels dos valors
 static double minimum( double a, double b);
 
-///ens retorna el màxim dels dos valors
+/// Ens retorna el màxim dels dos valors
 static double maximum( double a, double b);
 
 /// Arrel cúbica.
@@ -91,7 +88,7 @@ inline static double cubeRoot( double x )
     return std::pow( x, 1.0 / 3.0 );
 }
 
-/// distància entre punts 2D i 3D
+/// Distància entre punts 2D i 3D
 static double getDistance2D( const double firstPoint[2], const double secondPoint[2] );
 static double getDistance3D( const double firstPoint[3], const double secondPoint[3] );
 
@@ -106,7 +103,7 @@ static double getDistance3D( const double firstPoint[3], const double secondPoin
 */
 static double *infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state);
 
-/// ens retorna el valor truncat
+/// Ens retorna el valor truncat
 static double trunc( double x);
 
 /// Arrodoneix un nombre real a l'enter més proper
