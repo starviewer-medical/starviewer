@@ -52,11 +52,11 @@ Quaternion Quaternion::slerp(const Quaternion &a, const Quaternion &b, float t)
     float scale0 = 0.0f;
     float scale1 = 0.0f;
 
-    if ((1.0f + cosom) > MathTools::Epsilon())
+    if ((1.0f + cosom) > MathTools::Epsilon)
     {
         // 'a' and 'b' quaternions are not opposite each other.
 
-        if ((1.0f - cosom) > MathTools::Epsilon())
+        if ((1.0f - cosom) > MathTools::Epsilon)
         {
             // Standard case - slerp.
             omega = acosf(cosom);
