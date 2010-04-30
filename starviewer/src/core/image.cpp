@@ -11,13 +11,12 @@
 #include "thumbnailcreator.h"
 #include "dicomtagreader.h"
 #include "dicomdictionary.h"
+#include "mathtools.h"
 
 #include <QStringList>
 #include <QPainter>
 #include <QBuffer>
 #include <QFileInfo>
-
-#include <vtkMath.h> // pel ::Cross()
 
 namespace udg {
 
@@ -58,9 +57,8 @@ void Image::setImageOrientationPatient( double orientation[6] )
 {
     memcpy( m_imageOrientationPatient, orientation, 6*sizeof(double) );
 
-    double normal[3];
     // calculem la Z
-    vtkMath::Cross( &orientation[0] , &orientation[3] , normal );
+    double *normal = MathTools::crossProduct( &orientation[0] , &orientation[3] );
 
     memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
 }
@@ -69,9 +67,9 @@ void Image::setImageOrientationPatient( double xVector[3], double yVector[3] )
 {
     memcpy( m_imageOrientationPatient, xVector, 3*sizeof(double) );
     memcpy( &m_imageOrientationPatient[3], yVector, 3*sizeof(double) );
-    double normal[3];
+
     // calculem la Z
-    vtkMath::Cross( xVector , yVector , normal );
+    double *normal = MathTools::crossProduct( xVector , yVector );
 
     memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
 }
