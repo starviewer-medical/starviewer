@@ -7,8 +7,6 @@
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
 
-#include <cmath>
-
 namespace udg{
 
 /**
@@ -64,10 +62,7 @@ static double minimum( double a, double b);
 static double maximum( double a, double b);
 
 /// Arrel cúbica.
-inline static double cubeRoot( double x )
-{
-    return std::pow( x, 1.0 / 3.0 );
-}
+static double cubeRoot( double x );
 
 /// Distància entre punts 2D i 3D
 static double getDistance2D( const double firstPoint[2], const double secondPoint[2] );
@@ -91,20 +86,10 @@ static double truncate( double x);
 static int roundToNearestInteger( double x );
 
 /// Determines whether the two floating-point values f1 and f2 are close enough together that they can be considered equal.
-inline static bool closeEnough(float f1, float f2)
-{
-    return fabsf((f1 - f2) / ((f2 == 0.0f) ? 1.0f : f2)) < Epsilon;
-}
+static bool closeEnough(float f1, float f2);
 
-inline static float degreesToRadians(float degrees)
-{
-    return (degrees * PiNumber) / 180.0f;
-}
-
-inline static float radiansToDegrees(float radians)
-{
-    return (radians * 180.0f) / PiNumber;
-}
+static float degreesToRadians(float degrees);
+static float radiansToDegrees(float radians);
 
 };
 
