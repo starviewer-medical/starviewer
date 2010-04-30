@@ -6,6 +6,8 @@
  ***************************************************************************/
 #include "mathtools.h"
 #include "logging.h"
+
+#include <cmath>
 #include <vtkMath.h>
 #include <vtkPlane.h>
 
@@ -197,6 +199,11 @@ double MathTools::maximum( double a, double b)
     return max;
 }
 
+double MathTools::cubeRoot( double x )
+{
+    return std::pow( x, 1.0 / 3.0 );
+}
+
 double MathTools::getDistance2D( const double firstPoint[2], const double secondPoint[2] )
 {
     double xx = firstPoint[0] - secondPoint[0];
@@ -300,6 +307,21 @@ double MathTools::truncate( double x)
 int MathTools::roundToNearestInteger( double x )
 {
     return vtkMath::Round(x);
+}
+
+bool MathTools::closeEnough(float f1, float f2)
+{
+    return fabsf((f1 - f2) / ((f2 == 0.0f) ? 1.0f : f2)) < Epsilon;
+}
+
+float MathTools::degreesToRadians(float degrees)
+{
+    return (degrees * PiNumber) / 180.0f;
+}
+
+float MathTools::radiansToDegrees(float radians)
+{
+    return (radians * 180.0f) / PiNumber;
 }
 
 }; // end namespace udg
