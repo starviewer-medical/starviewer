@@ -4,19 +4,14 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-
 #include "mathtools.h"
 #include "logging.h"
 #include <vtkMath.h>
 #include <vtkPlane.h>
+
 namespace udg{
 
-
-/**
-* DEFINICIÓ DE CONSTANTS
-**/
-
-
+/// Definició de constants
 const double MathTools::NumberEBase2Logarithm = 1.4426950408889634074;          /* log_2 e */
 const long double MathTools::ReversePiNumberLong = 0.3183098861837906715377675267450287L;  /* 1/pi */
 const double MathTools::PiNumber = 3.14159265358979323846;  /* pi */
@@ -24,7 +19,6 @@ const long double MathTools::PiNumberLong = 3.14159265358979323846;  /* pi */
 const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;  /* pi/2 */
 const double MathTools::Epsilon = 1E-9;
 
- ///logaritme en base 2
 double MathTools::logTwo(const double x, const bool zero)
 {
     if (x < 0)
@@ -55,13 +49,12 @@ double MathTools::angleInDegrees( double vec1[3] , double vec2[3] )
 
 int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] )
 {
-
     if( angleInDegrees( n , m ) == 0.0 )
     {
         return 0;
     }
     //
-    // solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 64
+    // Solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 64
     // pla1 definit per (p,n); p: punt del pla, p.ex. origen; n: normal
     // pla2 definit per (q,m); q: punt del pla, p.ex. origen; m: normal
     // línia d'intersecció (r,t); r: punt de la recta que pertany a tots dos plans; t: vector director
@@ -87,7 +80,6 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     pq[1] = q[1] - p[1] ;
     pq[2] = q[2] - p[2];
 
-
     pqDotm = vtkMath::Dot( pq , m );
     dot_u_m = vtkMath::Dot( u , m );
     sum[0] = ( pqDotm * u[0] ) / dot_u_m;
@@ -104,7 +96,7 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
 int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] )
 {
     //
-    // solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 65
+    // Solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 65
     // pla1 definit per (p,n); p: punt del pla, p.ex. origen, n: normal del pla
     // pla2 definit per (q,m);
     // pla3 definit per (r,t);
@@ -128,7 +120,6 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     point2[1] = point[1] + vector[1];
     point2[2] = point[2] + vector[2];
 
-
     // li donem una recta definida per dos punts , i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
 
     if( vtkPlane::IntersectWithLine( point , point2 , t , r ,  tt , intersectionPoint ) == 0 )
@@ -141,7 +132,6 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
         }
         else
             return 0;
-
     }
 
     return 1;
@@ -175,7 +165,6 @@ double* MathTools::crossProduct( double vectorDirector1[3], double vectorDirecto
     return vp;
 }
 
-///ens retorna el mínim dels dos valors
 double MathTools::minimum( double a, double b)
 {
     double min;
@@ -192,7 +181,6 @@ double MathTools::minimum( double a, double b)
     return min;
 }
 
-///ens retorna el màxim dels dos valors
 double MathTools::maximum( double a, double b)
 {
     double max;
@@ -240,10 +228,10 @@ double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
     intersection[1] = 0;
     intersection[2] = 0;
 
-    //Line 1: x = x1 + (x2 - x1)s
-    //Line 2: x = x3 + (x4 - x3)t
+    // Line 1: x = x1 + (x2 - x1)s
+    // Line 2: x = x3 + (x4 - x3)t
     double s;
-    //director vectors for each line
+    // Director vectors for each line
     double dv1[3], dv2[3], dv3[3];
 
     dv1[0] = p2[0] - p1[0];
@@ -258,13 +246,13 @@ double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
     dv3[1] = p3[1] - p1[1];
     dv3[2] = p3[2] - p1[2];
 
-    //coplanarity test
+    // Coplanarity test
     double *cross;
     cross = MathTools::crossProduct(dv1,dv2);
 
     double dot = MathTools::dotProduct(dv1, cross);
 
-    //coplanarity check
+    // Coplanarity check
     if ( MathTools::closeEnough(dot,0.0) )
     {
         double *numerator1, *numerator2, *denominator1;
@@ -295,10 +283,8 @@ double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
             state = LinesIntersect;
             return intersection;
         }
-
     }
-    else
-    //Skew Lines
+    else // Skew Lines
     {
         state = SkewIntersection;
         return intersection;
