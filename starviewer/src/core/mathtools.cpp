@@ -43,31 +43,6 @@ double MathTools::logTwo(const double x, const bool zero)
     }
 }
 
-/// Càlcul de l'entropia binària
-double MathTools::binaryEntropy(const double p)
-{
-    if ( p < 0 || p > 1 )
-    {
-        WARN_LOG( QString("MathTools::binaryEntropy >> Value [%1] out of range (0..1) -> ").arg(p) );
-    }
-
-    return - p * MathTools::logTwo(p) - (1 - p) * MathTools::logTwo(1 - p) ;
-}
-
-double MathTools::divReal( const double dividend,  const double divisor, const bool zero, const double value )
-{
-    if (zero)
-    {
-        return (divisor == 0) ? value : dividend / divisor;
-    }
-    else
-    {
-        if (divisor == 0)
-            WARN_LOG( "MathTools::divReal >> Division by zero" );
-        return dividend / divisor;
-    }
-}
-
 double MathTools::angleInRadians( double vec1[3] , double vec2[3] )
 {
     return acos( vtkMath::Dot( vec1,vec2 ) / ( vtkMath::Norm(vec1)*vtkMath::Norm(vec2) ) );
