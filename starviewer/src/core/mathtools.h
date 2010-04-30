@@ -25,9 +25,8 @@ static const long double ReversePiNumberLong;
 static const double PiNumber;
 static const long double PiNumberLong;
 static const long double PiNumberDivBy2Long;
-
 /// Epsilon, nombre extremadament petit
-static double Epsilon() { return 1E-9; };
+static const double Epsilon;
 
 /// Logaritme en base 2
 static double logTwo(const double x, const bool zero = true);
@@ -41,7 +40,7 @@ static double divReal( const double dividend, const double divisor, const bool z
 /// Definim un rang pel que un nombre pot considerar-se 0
 inline static double zero(const double x)
 {
-  return (- MathTools::Epsilon() < x && x < + MathTools::Epsilon() ) ? 0 : x;
+  return (- MathTools::Epsilon < x && x < + MathTools::Epsilon ) ? 0 : x;
 }
 
 /// Retorna el signe del número passat per paràmetre
@@ -112,7 +111,7 @@ static int roundToNearestInteger( double x );
 /// Determines whether the two floating-point values f1 and f2 are close enough together that they can be considered equal.
 inline static bool closeEnough(float f1, float f2)
 {
-    return fabsf((f1 - f2) / ((f2 == 0.0f) ? 1.0f : f2)) < Epsilon();
+    return fabsf((f1 - f2) / ((f2 == 0.0f) ? 1.0f : f2)) < Epsilon;
 }
 
 inline static float degreesToRadians(float degrees)

@@ -22,7 +22,7 @@ const long double MathTools::ReversePiNumberLong = 0.318309886183790671537767526
 const double MathTools::PiNumber = 3.14159265358979323846;  /* pi */
 const long double MathTools::PiNumberLong = 3.14159265358979323846;  /* pi */
 const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;  /* pi/2 */
-
+const double MathTools::Epsilon = 1E-9;
 
  ///logaritme en base 2
 double MathTools::logTwo(const double x, const bool zero)
