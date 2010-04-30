@@ -104,7 +104,7 @@ static double getDistance3D( const double firstPoint[3], const double secondPoin
 static double *infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state);
 
 /// Ens retorna el valor truncat
-static double trunc( double x);
+static double truncate( double x);
 
 /// Arrodoneix un nombre real a l'enter més proper
 static int roundToNearestInteger( double x );
