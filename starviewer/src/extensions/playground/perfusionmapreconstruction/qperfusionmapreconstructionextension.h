@@ -84,7 +84,10 @@ private slots:
     /// gestiona els events del moviment del cursor
     void paintCursorSignal( );
 
-    /// pinta la mitjana del deltaR de cada llesca
+	/// pinta senyal temporal si la llavor està activada
+	void paintAIFSignal( );
+
+	/// pinta la mitjana del deltaR de cada llesca
     void paintMeanSlice( int slice );
 
     /// pinta les dades de la ROI
@@ -124,7 +127,12 @@ private:
     DrawerPoint* m_aifDrawPoint;
     int m_aifIndex[3];
     int m_aifSlice;
-    //DeltaR mitjana per cada llesca
+
+	///Valors de l'echo time i repetition time
+	double m_newTR;
+	double m_newTE;
+
+	//DeltaR mitjana per cada llesca
     QVector<QVector<double> > m_meanseries;
 };
 
