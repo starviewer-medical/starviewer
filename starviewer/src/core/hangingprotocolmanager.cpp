@@ -470,9 +470,6 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     QVector<QString> labels = viewer->getViewer()->getCurrentDisplayedImageOrientationLabels();
     applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3], displaySet->getPatientOrientation(), viewer->getViewer() );
     
-    //Posem la imatge al mig
-    viewer->getViewer()->setAlignPosition( Q2DViewer::AlignCenter );
-
     QString reconstruction = displaySet->getReconstruction();
     if( !reconstruction.isEmpty() )
     {
