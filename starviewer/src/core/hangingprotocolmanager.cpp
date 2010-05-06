@@ -163,20 +163,23 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
                 }
                 imageSetNumber++;
             }
+
             adjustmentOfCurrentHangingProtocol = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
             if( hangingProtocol->isStrict() && adjustmentOfCurrentHangingProtocol != 1.0 )
                 adjustmentOfCurrentHangingProtocol = 0.0;
 
-            if( (adjustmentOfCurrentHangingProtocol >= adjustmentOfBestHangingProtocol) && (adjustmentOfCurrentHangingProtocol > 0.0) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
-            {
-                bestHangingProtocol = hangingProtocol;
-                adjustmentOfBestHangingProtocol = adjustmentOfCurrentHangingProtocol;
-            }
-            if( adjustmentOfCurrentHangingProtocol > 0 )
+            if( adjustmentOfCurrentHangingProtocol > 0.0 )
             {
                 candidates << hangingProtocol;
                 hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
+
+                // Actualitzem el millor hanging protocol
+                if( (adjustmentOfCurrentHangingProtocol >= adjustmentOfBestHangingProtocol) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
+                {
+                    bestHangingProtocol = hangingProtocol;
+                    adjustmentOfBestHangingProtocol = adjustmentOfCurrentHangingProtocol;
+                }
             }
         }
     }
