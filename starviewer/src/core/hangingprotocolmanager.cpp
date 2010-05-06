@@ -112,7 +112,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     Identifier id;
     HangingProtocol *hangingProtocol;
     HangingProtocol *bestHangingProtocol = NULL;
-    double adjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
+    double adjustmentOfCurrentHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     double bestAdjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
     int hangingProtocolNumber;
@@ -163,17 +163,17 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
                 }
                 imageSetNumber++;
             }
-            adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
+            adjustmentOfCurrentHangingProtocol = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
 
-            if( hangingProtocol->isStrict() && adjustmentOfHanging != 1.0 )
-                adjustmentOfHanging = 0.0;
+            if( hangingProtocol->isStrict() && adjustmentOfCurrentHangingProtocol != 1.0 )
+                adjustmentOfCurrentHangingProtocol = 0.0;
 
-            if( (adjustmentOfHanging >= bestAdjustmentOfHanging) && (adjustmentOfHanging > 0.0) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
+            if( (adjustmentOfCurrentHangingProtocol >= bestAdjustmentOfHanging) && (adjustmentOfCurrentHangingProtocol > 0.0) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
             {
                 bestHangingProtocol = hangingProtocol;
-                bestAdjustmentOfHanging = adjustmentOfHanging;
+                bestAdjustmentOfHanging = adjustmentOfCurrentHangingProtocol;
             }
-            if( adjustmentOfHanging > 0 )
+            if( adjustmentOfCurrentHangingProtocol > 0 )
             {
                 candidates << hangingProtocol;
                 hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
