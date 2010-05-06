@@ -113,7 +113,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     HangingProtocol *hangingProtocol;
     HangingProtocol *bestHangingProtocol = NULL;
     double adjustmentOfCurrentHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
-    double bestAdjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
+    double adjustmentOfBestHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
     int hangingProtocolNumber;
     int imageSetNumber;
@@ -168,10 +168,10 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
             if( hangingProtocol->isStrict() && adjustmentOfCurrentHangingProtocol != 1.0 )
                 adjustmentOfCurrentHangingProtocol = 0.0;
 
-            if( (adjustmentOfCurrentHangingProtocol >= bestAdjustmentOfHanging) && (adjustmentOfCurrentHangingProtocol > 0.0) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
+            if( (adjustmentOfCurrentHangingProtocol >= adjustmentOfBestHangingProtocol) && (adjustmentOfCurrentHangingProtocol > 0.0) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
             {
                 bestHangingProtocol = hangingProtocol;
-                bestAdjustmentOfHanging = adjustmentOfCurrentHangingProtocol;
+                adjustmentOfBestHangingProtocol = adjustmentOfCurrentHangingProtocol;
             }
             if( adjustmentOfCurrentHangingProtocol > 0 )
             {
