@@ -115,7 +115,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     double adjustmentOfCurrentHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     double adjustmentOfBestHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
-    int hangingProtocolNumber;
     int imageSetNumber;
     HangingProtocolImageSet *imageSet;
     Series *serie;
@@ -135,7 +134,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
 
     // Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
     // Aprofitem per assignar ja les series, per millorar el rendiment
-    for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols ; hangingProtocolNumber++)
+    for( int hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols ; hangingProtocolNumber++)
     {
         //Inicialitzacions
         id.setValue( hangingProtocolNumber );
