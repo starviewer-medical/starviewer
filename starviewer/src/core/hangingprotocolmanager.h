@@ -86,7 +86,7 @@ private:
     void applyDisplayTransformations( Series *serie,  int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet );
 
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
-    QList<Study*> sortStudiesByDate( QList<Study*> studies );
+    QList<Study*> sortStudiesByDate( const QList<Study*> & studies );
 
     /// Crea el widget que posara al visor on s'estan descarregant estudis
     QWidget * createDownloadingWidget( ViewersLayout *layout );

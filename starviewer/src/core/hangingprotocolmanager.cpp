@@ -847,25 +847,16 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(QString studyUID)
     }
 }
 
-QList<Study*> HangingProtocolManager::sortStudiesByDate( QList<Study*> studies )
+QList<Study*> HangingProtocolManager::sortStudiesByDate( const QList<Study*> & studies )
 {
-    QList<Study*> orderedStudiesByDate;
-    int i;
-    int newest;
+    QMultiMap<long,Study*> sortedStudiesByDate;
 
-    while( studies.size() > 0 )
+    foreach( Study *study, studies )
     {
-        newest = 0;
-        i = 0;
-        while( i < studies.size() )//Es busca el mesgran
-        {
-            if( studies.at(i)->getDate() > studies.at( newest )->getDate() )
-                newest = i;
-            i++;
-        }
-        orderedStudiesByDate << studies.takeAt( newest );
+        // Es posa la data en negatiu per ordenar els estudies de gran a petit
+        sortedStudiesByDate.insert( -study->getDateTime().toTime_t() , study );
     }
-    return orderedStudiesByDate;
+    return sortedStudiesByDate.values();
 }
 
 
