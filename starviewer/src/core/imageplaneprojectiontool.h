@@ -1,0 +1,140 @@
+#ifndef UDGIMAGEPLANEPROJECTIONTOOL_H
+#define UDGIMAGEPLANEPROJECTIONTOOL_H
+
+#include "tool.h"
+
+#include <QMap>
+
+class QStringList;
+class vtkImageReslice;
+
+namespace udg {
+
+class ToolConfiguration;
+class ToolData;
+class ImagePlaneProjectionToolData;
+class Q2DViewer;
+class ImagePlane;
+class DrawerLine;
+class Volume;
+
+class ImagePlaneProjectionTool : public Tool
+{
+Q_OBJECT
+public:
+    ImagePlaneProjectionTool( QViewer *viewer, QObject *parent = 0 );
+    ~ImagePlaneProjectionTool();
+
+    void handleEvent( long unsigned eventID );
+
+    /// Assignem una configuracio
+    void setConfiguration( ToolConfiguration *configuration );
+
+    /// Sobrescriu la funció del pare per assignar-li noves connexions
+    void setToolData( ToolData *data );
+
+private slots:
+    /// Actualitza el volum compartit amb la resta de visors amb la tool activa
+    /// Es crida cada cop que el viewer canvïi d'input 
+    void updateVolume( Volume *volume );
+    
+    /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
+    /// Es crida cada cop que el viewer canvïi d'input
+    void initializeImagePlanes();
+    
+    /// Actualitza el pla projectat de cada línia de l'actual viewer amb la tool configurada com a productor 
+    /// i ho modifica a les dades compartides
+    /// Es crida cada cop que al viewer canvïi d'input, l'imatge o l'slab
+    void updateProjections();
+
+    /// Comprova si s'ha modificat el pla projectat per la línia associada a l'actual viewer amb la tool configurada com a consumidor 
+    void checkProjectedLineBindUpdated( QString nameProjectedLine );
+
+private:
+    /// Comprova que els valors assignats a la configuració siguin correctes
+    void checkValuesConfiguration( ToolConfiguration *configuration );
+    void checkConfigurationProducer( ToolConfiguration *configuration );
+    void checkConfigurationConsumer( ToolConfiguration *configuration );
+
+    /// Aplica els valors de configuració a la tool
+    void applyConfiguration();
+
+    /// Inicialitza el reslice del viewer amb la tool configurada com a consumidor
+    void initReslice();
+
+    /// Inicialitza les linies projectades al viewer quan la tool està configurada com a productor
+    void initProjectedLines();
+
+    // Inicialitza el pla projectat per una linia de projecció de la tool
+    // S'assigna un espaiat, dimensions i límits en funció del tipus d'orientació
+    void initializeImagePlane( DrawerLine *projectedLine );
+
+    /// Actualitza la projecció de la línia indicada amb el pla indicat
+    /// També actualitza el pla projectat per la línia a les dades compartides de la tool
+    void updateProjection( DrawerLine *projectedLine, ImagePlane *imagePlane );
+    void updateProjection( DrawerLine *projectedLine, ImagePlane *imagePlane, bool projectedLineDrawed );
+
+    /// Modifica el reslice de l'actual viewer amb la tool configurada com a consumidor perquè
+    /// mostri el pla que toca
+    void updateReslice();
+
+    /// Actualitza les dades compartides assignant el pla projectat de cada línia del viewer amb la tool configurada com a productor
+    void initToolDataProducer();
+
+    /// Actualitza el viewer amb la tool configurada com a consumidor perquè mostri el pla projectat per la seva línia associada
+    void showImagePlaneProjectedLineBind();
+
+    /// Determina si s'està manipulant la línia projectada o no
+    void detectManipulationProjectedLine();
+
+    /// Rota la línia de projecció
+    void rotateProjectedLine();
+
+    /// Obté l'eix de rotació del pla projectat sobre el viewer
+    void getRotationAxisImagePlane( ImagePlane *imagePlane, double axis[3] );
+
+    /// Rota el pla projectat sobre el viewer pel seu centre
+    void rotateMiddleImagePlane( ImagePlane *imagePlane, double degrees , double rotationAxis[3] );
+
+    /// Desplaça la línia de projecció
+    void pushProjectedLine();
+
+    void releaseProjectedLine();
+
+private:
+    /// El volum al que se li practica l'MPR
+    Volume *m_volume;
+    
+    /// Dades específiques de la tool
+    ImagePlaneProjectionToolData *m_myData;
+    
+    /// Viewer 2D sobre el qual treballem
+    Q2DViewer *m_2DViewer;
+
+    /// Linies projectades: cadascuna indica la intersecció entre un pla projectat que representen i el pla actual del Viewer
+    /// Per cada línia es guarda el nom identificador i la seva orientació inicial
+    QMap< DrawerLine *, QStringList > m_projectedLines;
+
+    /// Línia de projecció que està manipulant l'usuari
+    DrawerLine *m_pickedProjectedLine;
+
+    /// Nom de la línia de projecció que està manipulant l'usuari
+    QString m_pickedProjectedLineName;
+
+    /// Nom identificatiu de la linia de projecció que fa modificar el pla mostrat al viewer amb la tool configurada 
+    /// com a consumidor. (La línia estarà mostrada a un viewer amb la tool configurada com a productor)
+    QString m_nameProjectedLineBind;
+
+    /// Reslice del viewer amb la tool configurada com a consumidor
+    vtkImageReslice *m_reslice;
+
+    /// Estat en el que es troba la manipulació de la línia projectada que es manipula
+    enum { NONE , ROTATING , PUSHING };
+    int m_state;
+
+    /// Per controlar el moviment de la línia projectada a partir de l'interacció de l'usuari
+    double m_initialPickX , m_initialPickY;
+};
+}
+
+#endif
