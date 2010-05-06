@@ -125,14 +125,10 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     QString hangingProtocolNamesLogList; // Noms per mostrar al log
 
     QList<Series *> allSeries;
-    QList<Study *> allStudies = sortStudiesByDate( patient->getStudies() );
 
-    foreach (Study *study, allStudies )
+    foreach ( Study *study , sortStudiesByDate( patient->getStudies() ) )
     {
-        foreach( Series *series, study->getViewableSeries() )
-        {
-            allSeries.push_back(series);
-        }
+        allSeries += study->getViewableSeries();
     }
 
     int numberOfSeriesAssigned;
