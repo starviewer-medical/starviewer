@@ -89,6 +89,34 @@ public:
      */
     QString toString( bool verbose = false );
 
+    /**
+     * Ens dóna els punts d'intersecció entre el pla localitzador passat per paràmetre i el pla
+     * @param planeToIntersect pla que volem fer intersectar amb el pla
+     * @param firstIntersectionPoint[] primer punt d'intersecció trobat ( si n'hi ha )
+     * @param secondIntersectionPoint[] segon punt d'intersecció trobat ( si n'hi ha )
+     * @return el nombre d'interseccions trobades
+     */
+    int getIntersections( ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3] );
+
+    /**
+     * Quan es modifica algun dels vectors directors del pla es modifica el centre.
+     */
+    void ImagePlane::updateCenter();
+
+    void ImagePlane::getCenter( double center[3] );
+
+    /**
+     * Assigna un nou centre al pla i per tant modifica l'origen, els dos vectors de direcció (row i column) i el vector normal.
+     */
+    void ImagePlane::setCenter( double x, double y, double z );
+    void ImagePlane::setCenter( double center[3] );
+
+    /**
+     * Trasllada el pla en la direcció de la normal en la distància especificada.
+     * Valors negatius mouen el pla en la direcció oposada.
+     */
+    void ImagePlane::push( double distance );
+    
 private:
     /// Vectors que defineixen el pla
     double m_rowDirectionVector[3], m_columnDirectionVector[3], m_normal[3];
@@ -104,6 +132,9 @@ private:
 
     /// Gruix del pla
     double m_thickness;
+
+    /// Centre del pla
+    double m_center[3];
 };
 
 }

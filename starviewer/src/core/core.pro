@@ -181,6 +181,7 @@ HEADERS += extensionfactory.h \
     obscurance.h \
     viewpointgenerator.h \
     thumbnailcreator.h \
+    imageplaneprojectiontool.h \
     nonclosedangletool.h \
     abortrendercommand.h \
     roitool.h \
@@ -211,6 +212,7 @@ HEADERS += extensionfactory.h \
     dicomfilegenerator.h \
     dicomdictionary.h \
     dicomimagefilegenerator.h \
+    imageplaneprojectiontooldata.h \
     copydirectory.h 
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
@@ -357,6 +359,7 @@ SOURCES += extensionmediator.cpp \
     obscurance.cpp \
     viewpointgenerator.cpp \
     thumbnailcreator.cpp \
+    imageplaneprojectiontool.cpp \
     nonclosedangletool.cpp \
     abortrendercommand.cpp \
     roitool.cpp \
@@ -384,6 +387,7 @@ SOURCES += extensionmediator.cpp \
     dicomwriterdcmtk.cpp \
     dicomfilegenerator.cpp \
     dicomimagefilegenerator.cpp \
+    imageplaneprojectiontooldata.cpp \
     copydirectory.cpp
 TEMPLATE = lib
 DESTDIR = ./

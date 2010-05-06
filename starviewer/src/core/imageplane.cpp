@@ -7,7 +7,9 @@
 #include "imageplane.h"
 #include "image.h"
 #include <QString>
+// Vtk's
 #include <vtkMath.h>
+#include <vtkPlane.h>
 
 namespace udg {
 
@@ -33,6 +35,8 @@ void ImagePlane::setRowDirectionVector( double x, double y, double z )
     m_rowDirectionVector[1] = y;
     m_rowDirectionVector[2] = z;
     vtkMath::Cross( m_rowDirectionVector, m_columnDirectionVector, m_normal );
+    vtkMath::Normalize(m_normal);
+    updateCenter();
 }
 
 void ImagePlane::setColumnDirectionVector( const double vector[3] )
@@ -46,6 +50,8 @@ void ImagePlane::setColumnDirectionVector( double x, double y, double z )
     m_columnDirectionVector[1] = y;
     m_columnDirectionVector[2] = z;
     vtkMath::Cross( m_rowDirectionVector, m_columnDirectionVector, m_normal );
+    vtkMath::Normalize(m_normal);
+    updateCenter();
 }
 
 void ImagePlane::getRowDirectionVector( double vector[3] )
@@ -265,6 +271,102 @@ QString ImagePlane::toString( bool verbose )
     }
 
     return result;
+}
+
+int ImagePlane::getIntersections( ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3] )
+{
+    double t;
+    int numberOfIntersections = 0;
+    double localizerNormalVector[3], localizerOrigin[3];
+    planeToIntersect->getNormalVector( localizerNormalVector );
+    planeToIntersect->getOrigin( localizerOrigin );
+
+    QList< QVector<double> > upperPlaneBounds = this->getUpperBounds();
+
+    QVector<double> tlhc = upperPlaneBounds.at(0);
+    QVector<double> trhc = upperPlaneBounds.at(1);
+    QVector<double> brhc = upperPlaneBounds.at(2);
+    QVector<double> blhc = upperPlaneBounds.at(3);
+
+
+    // Primera "paral·lela" (X)
+    if( vtkPlane::IntersectWithLine( (double *)tlhc.data(), (double *)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
+        numberOfIntersections++;
+    if( vtkPlane::IntersectWithLine( (double *)brhc.data(), (double *)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
+        numberOfIntersections++;
+
+    if( numberOfIntersections == 0 ) // provar amb la segona "paral·lela" (Y)
+    {
+        if( vtkPlane::IntersectWithLine( (double *)trhc.data(), (double *)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint ) )
+            numberOfIntersections++;
+
+        if( vtkPlane::IntersectWithLine( (double *)blhc.data(), (double *)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint ) )
+            numberOfIntersections++;
+    }
+
+    return numberOfIntersections;
+}
+
+void ImagePlane::updateCenter()
+{
+    for( int i = 0; i<3; i++ )
+    {
+        m_center[i] = m_origin[i] + 0.5 * ( m_rowDirectionVector[i] + m_columnDirectionVector[i] );
+    }
+}
+
+void ImagePlane::getCenter( double center[3] )
+{
+    center[0] = m_center[0];
+    center[1] = m_center[1];
+    center[2] = m_center[2];
+}
+
+void ImagePlane::setCenter( double x, double y, double z )
+{
+    double center[3];
+    center[0] = x; 
+    center[1] = y; 
+    center[2] = z;
+    this->setCenter(center);
+}
+
+void ImagePlane::setCenter( double center[3] )
+{
+    if ( m_center[0] == center[0] && m_center[1] == center[1] && m_center[2] == center[2] )
+    {
+        return; //no change
+    }
+    else
+    {
+        int i;
+        
+        for ( i=0; i < 3; i++ )
+        {
+            m_center[i] = center[i];
+            m_origin[i] = m_center[i] - 0,5*(m_rowDirectionVector[i] + m_columnDirectionVector[i]);
+        }
+    }
+}
+
+void ImagePlane::push( double distance )
+{
+    if ( distance == 0.0 )
+    {
+        return;
+    }
+
+    int i;
+
+    for ( i=0; i < 3; i++ )
+    {
+        m_origin[i] += distance * this->m_normal[i];
+    }
+    // set the new center
+    for ( i=0; i < 3; i++ )
+    {
+        m_center[i] = m_origin[i] + 0.5*(m_rowDirectionVector[i] + m_columnDirectionVector[i]);
+    }
 }
 
 }

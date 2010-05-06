@@ -29,6 +29,7 @@
 #include "cursor3dtool.h"
 #include "angletool.h"
 #include "editortool.h"
+#include "imageplaneprojectiontool.h"
 #include "nonclosedangletool.h"
 #include "clippingplanestool.h"
 #include "transdifferencetool.h"
@@ -131,6 +132,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "EditorTool" )
     {
         tool = new EditorTool( viewer );
+    }
+    else if( toolName == "ImagePlaneProjectionTool" )
+    {
+        tool = new ImagePlaneProjectionTool( viewer );
     }
     else if( toolName == "NonClosedAngleTool" )
     {
@@ -315,6 +320,11 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::EditorTool ) );
         statusTip = tr("Enable/Disable editor tool");
         toolTip = toolAction->text();
+    }
+    else if( toolName == "ImagePlaneProjectionTool" )
+    {
+        toolAction->setText( tr("Image Plane Projection") );
+        toolAction->setStatusTip( tr("Enable/Disable image plane projection tool") );
     }
     else if( toolName == "NonClosedAngleTool" )
     {
