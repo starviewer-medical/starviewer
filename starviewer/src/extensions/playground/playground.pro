@@ -4,6 +4,7 @@
 # L'objectiu �s un subdirectori del projecte
 
 SUBDIRS += diffusionperfusionsegmentation \
+           curvedmpr \
            mpr2d \
            edemasegmentation \
            landmarkregistration \
