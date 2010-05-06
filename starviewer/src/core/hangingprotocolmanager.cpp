@@ -109,7 +109,6 @@ HangingProtocolManager::~HangingProtocolManager()
 
 QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol )
 {
-    Identifier id;
     HangingProtocol *hangingProtocol;
     HangingProtocol *bestHangingProtocol = NULL;
     double adjustmentOfCurrentHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
@@ -137,8 +136,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     for( int hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols ; hangingProtocolNumber++)
     {
         //Inicialitzacions
-        id.setValue( hangingProtocolNumber );
-        hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
+        hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
         numberOfSeriesAssigned = 0;
         imageSetNumber = 1;
         serie = 0;
