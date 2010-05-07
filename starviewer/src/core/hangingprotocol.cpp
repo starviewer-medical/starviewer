@@ -86,6 +86,11 @@ int HangingProtocol::getNumberOfDisplaySets() const
     return m_listOfDisplaySets.size();
 }
 
+QList<HangingProtocolImageSet *> HangingProtocol::getImageSets() const
+{
+    return m_listOfImageSets;
+}
+
 HangingProtocolImageSet * HangingProtocol::getImageSet( int identifier )
 {
     HangingProtocolImageSet * imageSet = 0;

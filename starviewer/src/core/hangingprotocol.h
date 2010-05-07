@@ -63,6 +63,9 @@ public:
     /// Obté el nombre total d'image sets
     int getNumberOfDisplaySets() const;
 
+    /// Obté la llista d'image sets
+    QList<HangingProtocolImageSet *> HangingProtocol::getImageSets() const;
+
     /// Obté l'image set amb identificador "identifier"
     HangingProtocolImageSet * getImageSet( int identifier );
 
