@@ -131,28 +131,6 @@ HangingProtocolDisplaySet * HangingProtocol::getDisplaySet( int identifier ) con
     return displaySet;
 }
 
-HangingProtocolDisplaySet * HangingProtocol::getDisplaySetOfImageSet( int numberOfImageSet )
-{
-
-    HangingProtocolDisplaySet * displaySet = 0;
-    bool found = false;
-    int i = 0;
-    int numberOfDisplaySets = m_listOfDisplaySets.size();
-
-    while( !found && i < numberOfDisplaySets )
-    {
-        if( m_listOfDisplaySets.value( i )->getImageSetNumber() == numberOfImageSet )
-        {
-            found = true;
-            displaySet = m_listOfDisplaySets.value( i );
-        }
-        i++;
-    }
-
-    return displaySet;
-
-}
-
 void HangingProtocol::show()
 {
     DEBUG_LOG( QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\nLevel: %3\nCreator: %4\nDate: %5\n").arg(m_name).arg(m_description).arg(m_level).arg(m_creator).arg(m_dateTime) );
