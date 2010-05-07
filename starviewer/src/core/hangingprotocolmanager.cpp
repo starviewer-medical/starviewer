@@ -114,7 +114,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     double adjustmentOfCurrentHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     double adjustmentOfBestHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
-    int imageSetNumber;
     HangingProtocolImageSet *imageSet;
     Series *serie;
 
@@ -138,14 +137,13 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
         //Inicialitzacions
         hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
         numberOfSeriesAssigned = 0;
-        imageSetNumber = 1;
         serie = 0;
         seriesList.clear();
         seriesList += allSeries;// Copia de les series perquè es van eliminant de la llista al ser assignades
 
         if( isValid( hangingProtocol, patient) && !hangingProtocol->hasStudiesToDownload() )
         {
-            while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
+            for ( int imageSetNumber = 1; imageSetNumber <= hangingProtocol->getNumberOfImageSets(); imageSetNumber++ )
             {
                 imageSet = hangingProtocol->getImageSet( imageSetNumber );
                 serie = searchSerie( seriesList, imageSet, hangingProtocol->getAllDiferent(), hangingProtocol );
@@ -154,7 +152,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
                 {
                     numberOfSeriesAssigned++;
                 }
-                imageSetNumber++;
             }
 
             adjustmentOfCurrentHangingProtocol = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
