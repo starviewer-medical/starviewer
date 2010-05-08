@@ -128,37 +128,36 @@ void QMPR2DExtension::initializeTools()
     m_windowLevelToolButton->defaultAction()->trigger();
 
     
-    //Assignem al viewer m_axial2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a productor
-    //Productor
+    // Assignem al viewer m_axial2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a productor
     ToolConfiguration *imagePlaneProjectionToolViwerAxialConfig= new ToolConfiguration();
     imagePlaneProjectionToolViwerAxialConfig->addAttribute( "typeConfiguration", QString ( "PRODUCER" ) );
     imagePlaneProjectionToolViwerAxialConfig->addAttribute( "numProjectedLines", 2 );    
-    imagePlaneProjectionToolViwerAxialConfig->addAttribute( "namesProjectedLines", QVariant( ( QStringList () << "CORONAL_LINE" << "SAGITAL_LINE" ) ) );
-    imagePlaneProjectionToolViwerAxialConfig->addAttribute( "initOrientationsProjectedLines", QVariant(  ( QStringList () << "CORONAL" << "SAGITAL" ) ) );
+    imagePlaneProjectionToolViwerAxialConfig->addAttribute( "namesProjectedLines", QVariant( ( QStringList () << "HORIZONTAL_LINE" << "VERTICAL_LINE" ) ) );
+    imagePlaneProjectionToolViwerAxialConfig->addAttribute( "initOrientationsProjectedLines", QVariant(  ( QStringList () << "HORIZONTAL" << "VERTICAL" ) ) );
     QList< QVariant > axialColorsList;
     imagePlaneProjectionToolViwerAxialConfig->addAttribute( "colorsProjectedLines", QVariant(  ( axialColorsList << Qt::red << Qt::blue ) ) );
     m_toolManager->setViewerTool( m_axial2DView, "ImagePlaneProjectionTool", imagePlaneProjectionToolViwerAxialConfig );
 
-    //Assignem al viewer m_coronal2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a consumidor
+    // Assignem al viewer m_coronal2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a consumidor
     ToolConfiguration *imagePlaneProjectionToolViewerCoronalConfig= new ToolConfiguration();
     imagePlaneProjectionToolViewerCoronalConfig->addAttribute( "typeConfiguration", QString ( "CONSUMER" ) );
-    imagePlaneProjectionToolViewerCoronalConfig->addAttribute( "nameProjectedLine", QString ( "CORONAL_LINE" ) );
+    imagePlaneProjectionToolViewerCoronalConfig->addAttribute( "nameProjectedLine", QString ( "HORIZONTAL_LINE" ) );
     m_toolManager->setViewerTool( m_coronal2DView, "ImagePlaneProjectionTool", imagePlaneProjectionToolViewerCoronalConfig );
 
-    //Assignem al viewer m_sagital2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a productor & consumidor
+    // Assignem al viewer m_sagital2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a productor & consumidor
     ToolConfiguration *imagePlaneProjectionToolViewerSagitalConfig= new ToolConfiguration();
-    imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "typeConfiguration", QString ( "CONSUMER" ) );
-    //imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "numProjectedLines", QVariant( 1 ) );    
-    //imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "namesProjectedLines", QVariant( ( QStringList () << "AXIAL_LINE" ) ) );
-    //imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "initOrientationsProjectedLines", QVariant(  ( QStringList () << "AXIAL" ) ) );
-    //QList< QVariant > sagitalColorsList;
-    //imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "colorsProjectedLines", QVariant(  ( sagitalColorsList << Qt::green ) ) );
-    //Consumidor
-    imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "nameProjectedLine", QString ( "SAGITAL_LINE" ) );
+    imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "typeConfiguration", QString ( "PRODUCER&CONSUMER" ) );
+    // Productor
+    imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "numProjectedLines", QVariant( 1 ) );    
+    imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "namesProjectedLines", QVariant( ( QStringList () << "HORIZONTAL_LINE" ) ) );
+    imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "initOrientationsProjectedLines", QVariant(  ( QStringList () << "HORIZONTAL" ) ) );
+    QList< QVariant > sagitalColorsList;
+    imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "colorsProjectedLines", QVariant(  ( sagitalColorsList << Qt::red ) ) );
+    // Consumidor
+    imagePlaneProjectionToolViewerSagitalConfig->addAttribute( "nameProjectedLine", QString ( "VERTICAL_LINE" ) );
     m_toolManager->setViewerTool( m_sagital2DView, "ImagePlaneProjectionTool", imagePlaneProjectionToolViewerSagitalConfig );
 
-    m_toolManager->getRegisteredToolAction("ImagePlaneProjectionTool")->trigger();
-    //m_toolManager->activateTool("ImagePlaneProjectionTool");   
+    m_toolManager->getRegisteredToolAction("ImagePlaneProjectionTool")->trigger();   
 
     // registrem al manager les tools que van als diferents viewers
     initializeDefaultTools();

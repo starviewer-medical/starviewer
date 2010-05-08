@@ -103,7 +103,7 @@ void ImagePlaneProjectionTool::checkConfigurationProducer( ToolConfiguration *co
 
     foreach ( QString orientation, initOrientationsProjectedLines ) 
     {
-        if ( orientation != QString("AXIAL") && orientation != QString("SAGITAL") && orientation != QString("CORONAL") )
+        if ( orientation != QString("HORIZONTAL") && orientation != QString("VERTICAL") )
         {
             DEBUG_LOG( QString("ImagePlaneProjectionTool: No s'ha indicat un identificador d'orientació correcte.") );
             return;
@@ -321,9 +321,9 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
 
         // Ajust de la mida del pla a les dimensions de la corresponent orientació
         QString orientation = infoProjectedLine.at( 1 );
-        if ( orientation == QString("SAGITAL") )
+        if ( orientation == QString("VERTICAL") )
         {
-            DEBUG_LOG(QString("sagital orientation"));
+            DEBUG_LOG(QString("vertical orientation"));
             //YZ, x-normal
             // No cal sumar spacings perquè ja ho fa a dins l'imagePlane
             maxYBound = sqrt( ( ( double ) zDepth*zDepth + rows*rows ) );
@@ -343,9 +343,9 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
 
             DEBUG_LOG(imagePlane->toString(true));
         }
-        else if ( orientation == QString("CORONAL") )
+        else if ( orientation == QString("HORIZONTAL") )
         {
-            DEBUG_LOG(QString("coronal orientation"));
+            DEBUG_LOG(QString("horizontal orientation"));
             //ZX, y-normal
             // No cal sumar spacings perquè ja ho fa a dins l'imagePlane
             maxZBound = sqrt( ( ( double ) columns*columns + zDepth*zDepth ) );
