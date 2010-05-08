@@ -897,9 +897,6 @@ void ImagePlaneProjectionTool::detectManipulationProjectedLine()
     
         distanceToProjectedLine = projectedLine->getDistanceToPoint( point );
 
-        double *r1 = projectedLine->getFirstPoint();
-        double *r2 = projectedLine->getSecondPoint();
-
         // donem una "tolerància" mínima
         if( distanceToProjectedLine < 50.0 )
         {
