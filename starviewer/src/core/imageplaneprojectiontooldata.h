@@ -36,7 +36,9 @@ public:
     ImagePlane *getProjectedLineImagePlane( QString projectedLineName );
 
 signals:
-    
+    /// Senyal que indica que s'ha modificat el volum de treball
+    void volumeChanged( Volume * );
+
     /// Senyal que indica que s'ha modificat el pla projectat per la línia identificada amb el nom passat per paràmetre
     /// Els viewers consumer associats a la línia amb aquest nom canviaran el pla projectat quan rebin aquesta senyal
     void imagePlaneUpdated( QString projectedLineName );
