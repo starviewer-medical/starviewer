@@ -553,194 +553,52 @@ void ImagePlaneProjectionTool::updateReslice( Volume *volume )
         return;
     }
 
+    // Baixem la resolució
     m_reslice->SetInterpolationModeToNearestNeighbor();
 
     ImagePlane *imagePlane = m_myData->getProjectedLineImagePlane( m_nameProjectedLineBind );
 
-    DEBUG_LOG(QString("Image plane updateReslice"));
-    DEBUG_LOG(imagePlane->toString(true));
-
-    // Calculate appropriate pixel spacing for the reslicing
-    double spacing[3];
-    volume->getSpacing( spacing );
-
-    int i;
-
-    // Origen del volum de dades
-    double origin[3];
-    volume->getOrigin( origin );
-
-    // Obtenim l'extensió(àrea) del volum
-    int extent[6];
-    volume->getWholeExtent(extent);
-
-    double bounds[] = { origin[0] + spacing[0]*extent[0], //xmin
-                        origin[0] + spacing[0]*extent[1], //xmax
-                        origin[1] + spacing[1]*extent[2], //ymin
-                        origin[1] + spacing[1]*extent[3], //ymax
-                        origin[2] + spacing[2]*extent[4], //zmin
-                        origin[2] + spacing[2]*extent[5] };//zmax
-
-    for ( i = 0; i <= 4; i += 2 ) // reverse bounds if necessary
-    {
-        if ( bounds[i] > bounds[i+1] )
-        {
-            double t = bounds[i+1];
-            bounds[i+1] = bounds[i];
-            bounds[i] = t;
-        }
-    }
-
-    double abs_normal[3];
-    imagePlane->getNormalVector(abs_normal);
-
-    double nmax = 0.0;
-    int k = 0;
-    for ( i = 0; i < 3; i++ )
-    {
-        abs_normal[i] = fabs(abs_normal[i]);
-        if ( abs_normal[i]>nmax )
-        {
-            nmax = abs_normal[i];
-            k = i;
-        }
-    }
-
-    double planeCenter[3];
-    imagePlane->getCenter(planeCenter);
+    // Obtenim els vectors directors dels tres eixos de l'image plane que volem mostrar
+    double xDirectionVector[3], yDirectionVector[3], zDirectionVector[3];
+    imagePlane->getRowDirectionVector( xDirectionVector );
+    imagePlane->getColumnDirectionVector( yDirectionVector );
+    imagePlane->getNormalVector( zDirectionVector );
     
-    // Force the plane to lie within the true image bounds along its normal
-    //
-    if ( planeCenter[k] > bounds[2*k+1] )
-    {
-        planeCenter[k] = bounds[2*k+1];
-    }
-    else if ( planeCenter[k] < bounds[2*k] )
-    {
-        planeCenter[k] = bounds[2*k];
-    }
-    imagePlane->setCenter(planeCenter);
+    // Assignem a la matriu ResliceAxes els eixos de la llesca de sortida
+    m_reslice->SetResliceAxesDirectionCosines( xDirectionVector, yDirectionVector, zDirectionVector );
 
-    // obtenim els vectors
-    double planeAxis1[3], planeAxis2[3], rowDirectionVector[3], columnDirectionVector[3];
-    imagePlane->getRowDirectionVector( rowDirectionVector );
-    imagePlane->getColumnDirectionVector( columnDirectionVector );
+    double origin[3];
+    imagePlane->getOrigin(origin);
 
-    planeAxis1[0] = rowDirectionVector[0];
-    planeAxis1[1] = rowDirectionVector[1];
-    planeAxis1[2] = rowDirectionVector[2];
+    DEBUG_LOG(QString("Origen imagePlane = [%1,%2,%3]").arg(origin[0]).arg(origin[1]).arg(origin[2]));
 
-    planeAxis2[0] = columnDirectionVector[0];
-    planeAxis2[1] = columnDirectionVector[1];
-    planeAxis2[2] = columnDirectionVector[2];
+    // Especifiquem quin ha de ser el punt d'origen de la matriu ResliceAxes
+    m_reslice->SetResliceAxesOrigin( origin );
 
-    // The x,y dimensions of the plane
-    //
-    double planeSizeX = vtkMath::Normalize( planeAxis1 );
-    double planeSizeY = vtkMath::Normalize( planeAxis2 );
-
-    double normal[3];
-    imagePlane->getNormalVector( normal );
-
-    // Generate the slicing matrix
-    //
-    // Podria ser membre de classe, com era originariament o passar per paràmetre
-    // Aquesta matriu serveix per indicar els eixos dels voxels de sortida
-    // - Primera columna: vector indicant l'eix de les x (x1, x2, x3, 1)
-    // - Segona columna: vector indicant l'eix de les y (y1, y2, y3, 1)
-    // - Tercera columna: vector indicant l'eix de les z (z1, z2, z3, 1)
-    // - Quarta columna: vector indicant l'origen dels eixos
-    vtkMatrix4x4 *resliceAxes = vtkMatrix4x4::New();
-    resliceAxes->Identity();
-    for ( i = 0; i < 3; i++ )
-    {
-        resliceAxes->SetElement(0,i,planeAxis1[i]);
-        resliceAxes->SetElement(1,i,planeAxis2[i]);
-        resliceAxes->SetElement(2,i,normal[i]);
-    }
-
-    double planeOrigin[4];
-    imagePlane->getOrigin(planeOrigin);
-    planeOrigin[3] = 1.0;
-    double originXYZW[4];
-    resliceAxes->MultiplyPoint(planeOrigin,originXYZW);
-
-    resliceAxes->Transpose();
-    double neworiginXYZW[4];
-    double point[] =  {originXYZW[0],originXYZW[1],originXYZW[2],originXYZW[3]};
-    resliceAxes->MultiplyPoint(point,neworiginXYZW);
-
-    resliceAxes->SetElement(0,3,neworiginXYZW[0]);
-    resliceAxes->SetElement(1,3,neworiginXYZW[1]);
-    resliceAxes->SetElement(2,3,neworiginXYZW[2]);
-
-    // Assignem la matriu d'eixos al nostre vtkImageReslice
-    m_reslice->SetResliceAxes( resliceAxes );
-
-    double spacingX = fabs(planeAxis1[0]*spacing[0])+\
-                      fabs(planeAxis1[1]*spacing[1])+\
-                      fabs(planeAxis1[2]*spacing[2]);
-
-    double spacingY = fabs(planeAxis2[0]*spacing[0])+\
-                    fabs(planeAxis2[1]*spacing[1])+\
-                    fabs(planeAxis2[2]*spacing[2]);
-
-
-    // Pad extent up to a power of two for efficient texture mapping
-
-    // make sure we're working with valid values
-    double realExtentX = ( spacingX == 0 ) ? 0 : planeSizeX / spacingX;
-
-    int extentX;
-    // Sanity check the input data:
-    // * if realExtentX is too large, extentX will wrap
-    // * if spacingX is 0, things will blow up.
-    // * if realExtentX is naturally 0 or < 0, the padding will yield an
-    //   extentX of 1, which is also not desirable if the input data is invalid.
-    if (realExtentX > (VTK_INT_MAX >> 1) || realExtentX < 1)
-    {
-        WARN_LOG( "Invalid X extent. [" + QString::number( realExtentX ) + "] Perhaps the input data is empty?" );
-        extentX = 0;
-    }
-    else
-    {
-        extentX = 1;
-        while (extentX < realExtentX)
-        {
-            extentX = extentX << 1;
-        }
-    }
-
-    // make sure extentY doesn't wrap during padding
-    double realExtentY = ( spacingY == 0 ) ? 0 : planeSizeY / spacingY;
-
-    int extentY;
-    if (realExtentY > (VTK_INT_MAX >> 1) || realExtentY < 1)
-    {
-        WARN_LOG( "Invalid Y extent. [" + QString::number( realExtentY ) + "] Perhaps the input data is empty?" );
-        extentY = 0;
-    }
-    else
-    {
-        extentY = 1;
-        while (extentY < realExtentY)
-        {
-            extentY = extentY << 1;
-        }
-    }
+    double spacing[2];
+    imagePlane->getSpacing(spacing);
+    double thickness = imagePlane->getThickness();
 
     // Indiquem la distància entre les llesques de sortida que es podran anar obtenint.
-    m_reslice->SetOutputSpacing( planeSizeX/extentX , planeSizeY/extentY , 1 );
+    m_reslice->SetOutputSpacing( spacing[0] , spacing[1] , 1 ); // obtenim una única llesca thickness = 1
+
     // Indiquem quin ha de ser considerat l'origen de les llesques de sortida
-    m_reslice->SetOutputOrigin( 0.0 , 0.0 , 0.0 );
-    // Gruix de les llesques de sortida
-    m_reslice->SetOutputExtent( 0 , extentX-1 , 0 , extentY-1 , 0 , 0 ); // obtenim una única llesca
+    //m_reslice->SetOutputOrigin( origin[0] , origin[1] , origin[2] );
+    m_reslice->SetOutputOrigin( 0 , 0 , 0 );
+
+    double rows = imagePlane->getRows();
+    double columns = imagePlane->getColumns();
+
+    // Límits de les llesques de sortida
+    m_reslice->SetOutputExtent( 0 , columns - 1 , 0 , rows - 1 , 0 , 0 );
+
     // Fem efectius els canvis fets anteriorment sobre el vtkImageReslace
     m_reslice->Update();
 
-    //TODO 
-    // No se si cal aquesta interpolació
+    // Tornem ha augmentar la resolució
     m_reslice->SetInterpolationModeToCubic();
+
+    // Visualitzem els canvis al viewer
     m_2DViewer->refresh();
 }
 
