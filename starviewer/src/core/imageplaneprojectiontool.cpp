@@ -260,19 +260,19 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
         ImagePlane *imagePlane = new ImagePlane();
 
         int extent[6];
-        volume->getWholeExtent(extent);
+        m_volume->getWholeExtent(extent);
         double origin[3];
-        volume->getOrigin(origin);
+        m_volume->getOrigin(origin);
         double spacing[3];
-        volume->getSpacing(spacing);
+        m_volume->getSpacing(spacing);
 
         // Prevent obscuring voxels by offsetting the plane geometry
-        double xbounds[] = {origin[0] + spacing[0] * (extent[0] - 0.5) ,
-                            origin[0] + spacing[0] * (extent[1] + 0.5)};
-        double ybounds[] = {origin[1] + spacing[1] * (extent[2] - 0.5),
-                            origin[1] + spacing[1] * (extent[3] + 0.5)};
-        double zbounds[] = {origin[2] + spacing[2] * (extent[4] - 0.5),
-                            origin[2] + spacing[2] * (extent[5] + 0.5)};
+        double xbounds[] = {origin[0] + spacing[0] * extent[0] ,
+                            origin[0] + spacing[0] * extent[1]};
+        double ybounds[] = {origin[1] + spacing[1] * extent[2],
+                            origin[1] + spacing[1] * extent[3]};
+        double zbounds[] = {origin[2] + spacing[2] * extent[4],
+                            origin[2] + spacing[2] * extent[5]};
 
         if ( spacing[0] < 0.0 )
         {
@@ -297,46 +297,51 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
         double imageOrigin[3], point1[3], point2[3];
         double *rowDirectionVector, *columnDirectionVector;
 
+        // Ajust de la mida del pla a les dimensions de la corresponent orientació
         QString orientation = infoProjectedLine.at( 1 );
         if ( orientation == QString("AXIAL") )
         {
             DEBUG_LOG(QString(" orientation axial"));
-            //XY, z-normal : vista axial , en principi d'aquesta vista nomès canviarem la llesca
+            //XY, z-normal : vista axial
             maxXBound = sqrt( xbounds[1]*xbounds[1] + ybounds[1]*ybounds[1] );
             maxYBound = sqrt( xbounds[1]*xbounds[1] + ybounds[1]*ybounds[1] );
 
+            /* VERTEX 4 (No funciona)*/
             imageOrigin[0] = xbounds[0];
-            imageOrigin[1] = ybounds[1];
+            imageOrigin[1] = ybounds[0];
             imageOrigin[2] = zbounds[1];
 
             point1[0] = xbounds[1];
-            point1[1] = ybounds[1];
+            point1[1] = ybounds[0];
             point1[2] = zbounds[1];
 
             point2[0] = xbounds[0];
-            point2[1] = ybounds[0];
+            point2[1] = ybounds[1];
             point2[2] = zbounds[1];
 
             imagePlane->setOrigin( imageOrigin );
             imagePlane->setRows(maxXBound);
             imagePlane->setColumns(maxYBound);
-            imagePlane->setSpacing(spacing[1],spacing[2]);
+            imagePlane->setSpacing(spacing[0],spacing[1]);
 
             rowDirectionVector = MathTools::directorVector( imageOrigin, point1 );
             imagePlane->setRowDirectionVector( rowDirectionVector  );
 
             columnDirectionVector = MathTools::directorVector( imageOrigin, point2 );
             imagePlane->setColumnDirectionVector( columnDirectionVector );
+
+            imagePlane->push( 0.5 *( zbounds[1] - zbounds[0] ) );
+
+            DEBUG_LOG(imagePlane->toString());
         }
-        else if ( orientation == QString("SAGITAL") )
+        else if ( orientation == QString("VERTICAL") )
         {
             DEBUG_LOG(QString(" orientation sagital"));
             //YZ, x-normal : vista sagital
-            // estem ajustant la mida del pla a les dimensions d'aquesta orientació
-            // TODO podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
             maxYBound = sqrt( ybounds[1]*ybounds[1] + zbounds[1]*zbounds[1] );
             maxZBound = sqrt( ybounds[1]*ybounds[1] + zbounds[1]*zbounds[1] );
 
+            /* VERTEX 4 */
             imageOrigin[0] = xbounds[0];
             imageOrigin[1] = ybounds[0];
             imageOrigin[2] = zbounds[1];
@@ -348,7 +353,7 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
             point2[0] = xbounds[0];
             point2[1] = ybounds[0];
             point2[2] = zbounds[0];
-
+            
             imagePlane->setOrigin( imageOrigin );
             imagePlane->setRows(maxYBound);
             imagePlane->setColumns(maxZBound);
@@ -362,29 +367,25 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
 
             imagePlane->push( -0.5 * ( xbounds[1] - xbounds[0] ) );
         }
-        else if ( orientation == QString("CORONAL") )
+        else if ( orientation == QString("HORIZONTAL") )
         {
             DEBUG_LOG(QString(" orientation coronal"));
             //ZX, y-normal : vista coronal
-            // estem ajustant la mida del pla a les dimensions d'aquesta orientació
-            // TODO podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
-            // TODO comprovar si és correcte aquest ajustament de mides
-            maxZBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
-            maxXBound = sqrt( ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1] );
-            double diffXBound = maxXBound - xbounds[1];
-            double diffZBound = maxZBound - zbounds[1];
-
-            imageOrigin[0] = xbounds[0] - diffXBound*0.5;
+            maxZBound = sqrt( zbounds[1]*zbounds[1] + xbounds[1]*xbounds[1] );
+            maxXBound = sqrt( zbounds[1]*zbounds[1] + xbounds[1]*xbounds[1] );
+            
+            /* VERTEX 4 */
+            imageOrigin[0] = xbounds[0];
             imageOrigin[1] = ybounds[0];
-            imageOrigin[2] = zbounds[1] + diffZBound*0.5;
+            imageOrigin[2] = zbounds[1];
 
-            point1[0] = xbounds[1] + diffXBound*0.5;
+            point1[0] = xbounds[1];
             point1[1] = ybounds[0];
-            point1[2] = zbounds[1] + diffZBound*0.5;
+            point1[2] = zbounds[1];
 
-            point2[0] = xbounds[0] - diffXBound*0.5;
+            point2[0] = xbounds[0];
             point2[1] = ybounds[0];
-            point2[2] = zbounds[0] - diffZBound*0.5;
+            point2[2] = zbounds[0];
 
             imagePlane->setOrigin( imageOrigin );
             imagePlane->setRows(maxXBound);
