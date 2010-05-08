@@ -85,6 +85,7 @@ void ImagePlane::setOrigin( double x, double y, double z )
     m_origin[0] = x;
     m_origin[1] = y;
     m_origin[2] = z;
+    updateCenter();
 }
 
 void ImagePlane::getOrigin( double origin[3] )
@@ -103,6 +104,7 @@ void ImagePlane::setSpacing( double x, double y )
 {
     m_spacing[0] = x;
     m_spacing[1] = y;
+    updateCenter();
 }
 
 void ImagePlane::getSpacing( double spacing[2] )
@@ -114,6 +116,7 @@ void ImagePlane::getSpacing( double spacing[2] )
 void ImagePlane::setThickness( double thickness )
 {
     m_thickness = thickness;
+    updateCenter();
 }
 
 double ImagePlane::getThickness() const
@@ -124,11 +127,13 @@ double ImagePlane::getThickness() const
 void ImagePlane::setRows( int rows )
 {
     m_rows = rows;
+    updateCenter();
 }
 
 void ImagePlane::setColumns( int columns )
 {
     m_columns = columns;
+    updateCenter();
 }
 
 int ImagePlane::getRows() const
