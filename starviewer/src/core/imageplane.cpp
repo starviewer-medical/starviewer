@@ -319,7 +319,7 @@ void ImagePlane::updateCenter()
 {
     for( int i = 0; i<3; i++ )
     {
-        m_center[i] = m_origin[i] + 0.5 * ( m_rowDirectionVector[i] + m_columnDirectionVector[i] );
+        m_center[i] = m_origin[i] + 0.5 * ( m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i]*this->getColumnLength() );
     }
 }
 
@@ -352,7 +352,7 @@ void ImagePlane::setCenter( double center[3] )
         for ( i=0; i < 3; i++ )
         {
             m_center[i] = center[i];
-            m_origin[i] = m_center[i] - 0,5*(m_rowDirectionVector[i] + m_columnDirectionVector[i]);
+            m_origin[i] = m_center[i] - 0,5*(m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength() );
         }
     }
 }
@@ -373,7 +373,7 @@ void ImagePlane::push( double distance )
     // set the new center
     for ( i=0; i < 3; i++ )
     {
-        m_center[i] = m_origin[i] + 0.5*(m_rowDirectionVector[i] + m_columnDirectionVector[i]);
+        m_center[i] = m_origin[i] + 0.5*(m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength() );
     }
 }
 
