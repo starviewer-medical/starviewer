@@ -250,8 +250,9 @@ void ImagePlaneProjectionTool::initializeImagePlanesCheckingData()
 void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
 {
     // Inicialitzem el pla que ha de projectar la tool sobre el Viewer configurat com a productor
-        
-    if ( m_volume != NULL )
+    Volume *volume = m_myData->getVolume();    
+
+    if ( volume != NULL )
     {
         QStringList infoProjectedLine = m_projectedLines[ projectedLine ];
         
@@ -259,11 +260,11 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
         ImagePlane *imagePlane = new ImagePlane();
 
         int extent[6];
-        m_volume->getWholeExtent(extent);
+        volume->getWholeExtent(extent);
         double origin[3];
-        m_volume->getOrigin(origin);
+        volume->getOrigin(origin);
         double spacing[3];
-        m_volume->getSpacing(spacing);
+        volume->getSpacing(spacing);
 
         // Prevent obscuring voxels by offsetting the plane geometry
         double xbounds[] = {origin[0] + spacing[0] * (extent[0] - 0.5) ,
