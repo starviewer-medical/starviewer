@@ -250,7 +250,8 @@ void ImagePlaneProjectionTool::initializeImagePlanesCheckingData()
 void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
 {
     // Inicialitzem el pla que ha de projectar la tool sobre el Viewer configurat com a productor
-    Volume *volume = m_myData->getVolume();    
+    
+    Volume *volume = m_myData->getVolume();
 
     if ( volume != NULL )
     {
@@ -259,147 +260,110 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine )
         // Pla que ha de projectar la tool sobre el viewer 
         ImagePlane *imagePlane = new ImagePlane();
 
-        int extent[6];
-        m_volume->getWholeExtent(extent);
-        double origin[3];
-        m_volume->getOrigin(origin);
+        // Imatges que composen el volum de dades 
+        QList<Image*> images;
+        images = volume->getImages();
+
+        // Límits i orientació de la primera imatge del volum 
+        Image *firtImage;
+        firtImage = images.at(0);
+
+        ImagePlane *firstImagePlane = new ImagePlane();
+        firstImagePlane->fillFromImage(firtImage);
+        DEBUG_LOG(QString("first image"));
+        DEBUG_LOG(firstImagePlane->toString(true));
+
+        QList< QVector<double> > boundsFirstImagePlane;
+        boundsFirstImagePlane = firstImagePlane->getCentralBounds();
+        QVector<double> tlhcFirstImagePlane = boundsFirstImagePlane.at(0);
+        QVector<double> trhcFirstImagePlane = boundsFirstImagePlane.at(1);
+        QVector<double> brhcFirstImagePlane = boundsFirstImagePlane.at(2);
+        QVector<double> blhcFirstImagePlane = boundsFirstImagePlane.at(3);
+
+        double rowDirectionVector[3];
+        firstImagePlane->getRowDirectionVector(rowDirectionVector);
+        int rows = firstImagePlane->getRows();
+        double rowLength = firstImagePlane->getRowLength();
+
+        double columnDirectionVector[3];
+        firstImagePlane->getColumnDirectionVector(columnDirectionVector);
+        int columns = firstImagePlane->getColumns();
+        double columnLength = firstImagePlane->getColumnLength();
+
+        // L'espaiat cal obtenir-lo del volum perquè no disposem de la distància entre imatges d'una altra manera
         double spacing[3];
-        m_volume->getSpacing(spacing);
+        volume->getSpacing(spacing);
 
-        // Prevent obscuring voxels by offsetting the plane geometry
-        double xbounds[] = {origin[0] + spacing[0] * extent[0] ,
-                            origin[0] + spacing[0] * extent[1]};
-        double ybounds[] = {origin[1] + spacing[1] * extent[2],
-                            origin[1] + spacing[1] * extent[3]};
-        double zbounds[] = {origin[2] + spacing[2] * extent[4],
-                            origin[2] + spacing[2] * extent[5]};
-
-        if ( spacing[0] < 0.0 )
-        {
-            double t = xbounds[0];
-            xbounds[0] = xbounds[1];
-            xbounds[1] = t;
-        }
-        if ( spacing[1] < 0.0 )
-        {
-            double t = ybounds[0];
-            ybounds[0] = ybounds[1];
-            ybounds[1] = t;
-        }
-        if ( spacing[2] < 0.0 )
-        {
-            double t = zbounds[0];
-            zbounds[0] = zbounds[1];
-            zbounds[1] = t;
-        }
+        // Informació sobre la mida i direcció de la pila d'imatges
+        int zDepth;
+        zDepth = images.size();
+        double zDirectionVector[3];
+        volume->getStackDirection(zDirectionVector);
         
+        // Límits de l'última imatge del volum 
+        Image *lastImage;
+        lastImage = images.at(zDepth-1);
+
+        ImagePlane *lastImagePlane = new ImagePlane();
+        lastImagePlane->fillFromImage(lastImage);
+        DEBUG_LOG(QString("last image"));
+        DEBUG_LOG(lastImagePlane->toString(true));
+
+        QList< QVector<double> > boundsLastImagePlane;
+        boundsLastImagePlane = lastImagePlane->getCentralBounds();
+        QVector<double> tlhcLastImagePlane = boundsLastImagePlane.at(0);
+        QVector<double> trhcLasttImagePlane = boundsLastImagePlane.at(1);
+        QVector<double> brhcLastImagePlane = boundsLastImagePlane.at(2);
+        QVector<double> blhcLastImagePlane = boundsLastImagePlane.at(3);
+
         double maxXBound, maxYBound, maxZBound;
-        double imageOrigin[3], point1[3], point2[3];
-        double *rowDirectionVector, *columnDirectionVector;
+        double imageOrigin[3];
 
         // Ajust de la mida del pla a les dimensions de la corresponent orientació
         QString orientation = infoProjectedLine.at( 1 );
-        if ( orientation == QString("AXIAL") )
+        if ( orientation == QString("SAGITAL") )
         {
-            DEBUG_LOG(QString(" orientation axial"));
-            //XY, z-normal : vista axial
-            maxXBound = sqrt( xbounds[1]*xbounds[1] + ybounds[1]*ybounds[1] );
-            maxYBound = sqrt( xbounds[1]*xbounds[1] + ybounds[1]*ybounds[1] );
-
-            /* VERTEX 4 (No funciona)*/
-            imageOrigin[0] = xbounds[0];
-            imageOrigin[1] = ybounds[0];
-            imageOrigin[2] = zbounds[1];
-
-            point1[0] = xbounds[1];
-            point1[1] = ybounds[0];
-            point1[2] = zbounds[1];
-
-            point2[0] = xbounds[0];
-            point2[1] = ybounds[1];
-            point2[2] = zbounds[1];
-
-            imagePlane->setOrigin( imageOrigin );
-            imagePlane->setRows(maxXBound);
-            imagePlane->setColumns(maxYBound);
-            imagePlane->setSpacing(spacing[0],spacing[1]);
-
-            rowDirectionVector = MathTools::directorVector( imageOrigin, point1 );
-            imagePlane->setRowDirectionVector( rowDirectionVector  );
-
-            columnDirectionVector = MathTools::directorVector( imageOrigin, point2 );
-            imagePlane->setColumnDirectionVector( columnDirectionVector );
-
-            imagePlane->push( 0.5 *( zbounds[1] - zbounds[0] ) );
-
-            DEBUG_LOG(imagePlane->toString());
-        }
-        else if ( orientation == QString("VERTICAL") )
-        {
-            DEBUG_LOG(QString(" orientation sagital"));
-            //YZ, x-normal : vista sagital
-            maxYBound = sqrt( ybounds[1]*ybounds[1] + zbounds[1]*zbounds[1] );
-            maxZBound = sqrt( ybounds[1]*ybounds[1] + zbounds[1]*zbounds[1] );
-
-            /* VERTEX 4 */
-            imageOrigin[0] = xbounds[0];
-            imageOrigin[1] = ybounds[0];
-            imageOrigin[2] = zbounds[1];
-
-            point1[0] = xbounds[0];
-            point1[1] = ybounds[1];
-            point1[2] = zbounds[1];
-
-            point2[0] = xbounds[0];
-            point2[1] = ybounds[0];
-            point2[2] = zbounds[0];
+            DEBUG_LOG(QString("sagital orientation"));
+            //YZ, x-normal
+            // No cal sumar spacings perquè ja ho fa a dins l'imagePlane
+            maxYBound = sqrt( ( ( double ) zDepth*zDepth + rows*rows ) );
+            maxZBound = sqrt( ( ( double ) zDepth*zDepth + rows*rows ) );
+            
+            imageOrigin[0] = tlhcLastImagePlane[0] + rowDirectionVector[0] * rowLength / 2;
+            imageOrigin[1] = tlhcLastImagePlane[1] + rowDirectionVector[1] * rowLength / 2;
+            imageOrigin[2] = tlhcLastImagePlane[2] + rowDirectionVector[2] * rowLength / 2;
             
             imagePlane->setOrigin( imageOrigin );
-            imagePlane->setRows(maxYBound);
-            imagePlane->setColumns(maxZBound);
-            imagePlane->setSpacing(spacing[1],spacing[2]);
+            imagePlane->setRows( zDepth );
+            imagePlane->setColumns( rows );
+            imagePlane->setSpacing( spacing[1], spacing[2] );
+            imagePlane->setThickness( spacing[0] );
+            imagePlane->setRowDirectionVector( columnDirectionVector );
+            imagePlane->setColumnDirectionVector( -zDirectionVector[0], -zDirectionVector[1], -zDirectionVector[2] );
 
-            rowDirectionVector = MathTools::directorVector( imageOrigin, point1 );
-            imagePlane->setRowDirectionVector( rowDirectionVector  );
-
-            columnDirectionVector = MathTools::directorVector( imageOrigin, point2 );
-            imagePlane->setColumnDirectionVector( columnDirectionVector );
-
-            imagePlane->push( -0.5 * ( xbounds[1] - xbounds[0] ) );
+            DEBUG_LOG(imagePlane->toString(true));
         }
-        else if ( orientation == QString("HORIZONTAL") )
+        else if ( orientation == QString("CORONAL") )
         {
-            DEBUG_LOG(QString(" orientation coronal"));
-            //ZX, y-normal : vista coronal
-            maxZBound = sqrt( zbounds[1]*zbounds[1] + xbounds[1]*xbounds[1] );
-            maxXBound = sqrt( zbounds[1]*zbounds[1] + xbounds[1]*xbounds[1] );
+            DEBUG_LOG(QString("coronal orientation"));
+            //ZX, y-normal
+            // No cal sumar spacings perquè ja ho fa a dins l'imagePlane
+            maxZBound = sqrt( ( ( double ) columns*columns + zDepth*zDepth ) );
+            maxXBound = sqrt( ( ( double ) columns*columns + zDepth*zDepth ) );
+
+            imageOrigin[0] = tlhcLastImagePlane[0] + columnDirectionVector[0] * columnLength / 2;
+            imageOrigin[1] = tlhcLastImagePlane[1] + columnDirectionVector[1] * columnLength / 2;
+            imageOrigin[2] = tlhcLastImagePlane[2] + columnDirectionVector[2] * columnLength / 2;
             
-            /* VERTEX 4 */
-            imageOrigin[0] = xbounds[0];
-            imageOrigin[1] = ybounds[0];
-            imageOrigin[2] = zbounds[1];
-
-            point1[0] = xbounds[1];
-            point1[1] = ybounds[0];
-            point1[2] = zbounds[1];
-
-            point2[0] = xbounds[0];
-            point2[1] = ybounds[0];
-            point2[2] = zbounds[0];
-
             imagePlane->setOrigin( imageOrigin );
-            imagePlane->setRows(maxXBound);
-            imagePlane->setColumns(maxZBound);
-            imagePlane->setSpacing(spacing[0],spacing[2]);
+            imagePlane->setRows( zDepth );
+            imagePlane->setColumns( columns );
+            imagePlane->setSpacing( spacing[0], spacing[2] );
+            imagePlane->setThickness( spacing[1] );
+            imagePlane->setRowDirectionVector( rowDirectionVector );
+            imagePlane->setColumnDirectionVector( -zDirectionVector[0], -zDirectionVector[1], -zDirectionVector[2] );
 
-            rowDirectionVector = MathTools::directorVector( imageOrigin, point1 );
-            imagePlane->setRowDirectionVector( rowDirectionVector  );
-
-            columnDirectionVector = MathTools::directorVector( imageOrigin, point2 );
-            imagePlane->setColumnDirectionVector( columnDirectionVector );
-
-            // posem a la llesca central
-            imagePlane->push(  0.5 * ( ybounds[1] - ybounds[0] ) );
+            DEBUG_LOG(imagePlane->toString(true));
         }
         
         // Quan es modifica l'ImagePlane de la tool s'actualitza la projecció de la línia corresponent
