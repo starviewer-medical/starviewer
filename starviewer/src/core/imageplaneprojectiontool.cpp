@@ -135,7 +135,7 @@ void ImagePlaneProjectionTool::applyConfiguration()
     }
 
     QString typeConfiguration = m_toolConfiguration->getValue( "typeConfiguration" ).toString();
-    if ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    if ( typeConfiguration == QString( "PRODUCER" ) )
     {
         // Cada cop que el viewer canvïi d'input s'ha d'actualitzar el volum compartit amb la resta de visors amb la tool activa
         connect( m_2DViewer, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateVolume( Volume * ) ) );
@@ -146,8 +146,24 @@ void ImagePlaneProjectionTool::applyConfiguration()
         // Cada cop que el viewer canvïi l'imatge o l'slab s'ha d'actualitzar el pla projectat per cada línia de projecció de la tool
         connect( m_2DViewer, SIGNAL( sliceChanged( int ) ), SLOT( updateProjections()) );
         connect( m_2DViewer, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateProjections()) );
+    }
+
+    if ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        // Quan es modifica el pla projectar per una línia d'un viewer amb la tool configurada com a productor
+        // cal comprovar si algun altre visor productor té alguna línia amb la mateixa orientació que cal actualitzar
+        // ( X visors diferents poden haver de mostrar línies amb el mateix pla de projecció )
+        connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkImagePlaneBindUpdated( QString ) ) );
 
         initProjectedLines();
+    }
+
+    if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        // Quan es modifica el volum de treball a les dades compartides els visors amb la tool configurada com a 
+        // productor i consumidor inicialitzen el pla projectat per cada línia de projecció de la tool comprovant
+        // primer si ja existeix a les dades un pla per la orientació corresponent.
+        connect( m_myData, SIGNAL( volumeChanged( Volume * ) ), SLOT( initializeImagePlanesCheckingData() ) );
     }
     
     if ( typeConfiguration == QString( "CONSUMER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
@@ -173,19 +189,18 @@ void ImagePlaneProjectionTool::initProjectedLines()
     QList< QVariant> colorsProjectedLines = m_toolConfiguration->getValue( "colorsProjectedLines" ).toList();
 
     //TODO
-    // S'han de netejar les lines mostrades i tornar-les a inicialitzar. Que passarà amb les de references lines??????
+    // S'han de netejar les lines mostrades i tornar-les a inicialitzar. Què passarà amb les de references lines??????
     m_2DViewer->getDrawer()->clearViewer();
     
-    // Inicialitzem l'imagePlane representat per cada linia de projecció, la dibuixem 
-    // i actualitzem les dades compartides indicant el pla projectat
+    // Inicialitzem les diferents línies de projecció visibles al viewer
     for ( int i = 0; i < names.length(); i++)
     {
         QString name = names.at( i );
         QString orientation = orientations.at( i );
-        DEBUG_LOG( "Nom: " + name + " Orient: " + orientation );
         DrawerLine *projectedLine = new DrawerLine();
         projectedLine->setColor( colorsProjectedLines.at(i).value<QColor>() );
         m_projectedLines.insert( projectedLine, ( QStringList () << name << orientation ) );
+        m_imagePlanes.insert( name, new ImagePlane() );
     }
 }
 
@@ -208,6 +223,27 @@ void ImagePlaneProjectionTool::initializeImagePlanes( )
     {
         iterator.next();
         initializeImagePlane( iterator.key() );
+    }
+}
+
+void ImagePlaneProjectionTool::initializeImagePlanesCheckingData()
+{
+    QMapIterator< DrawerLine *, QStringList > iterator( m_projectedLines );
+    while ( iterator.hasNext() ) 
+    {
+        iterator.next();
+        DrawerLine *projectedLine = iterator.key();
+        QString name = iterator.value().at(0);
+        ImagePlane *imagePlane;
+        imagePlane = m_myData->getProjectedLineImagePlane( name );
+        if ( imagePlane != NULL )
+        {
+            updateProjection( projectedLine, imagePlane, true );
+        }
+        else
+        {
+            initializeImagePlane( projectedLine );
+        }
     }
 }
 
@@ -391,7 +427,17 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
 
 void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, ImagePlane *imagePlane, bool projectedLineDrawed )
 {
-    ImagePlane *localizerPlane = m_2DViewer->getCurrentImagePlane();
+    ImagePlane *localizerPlane;
+
+    QString typeConfiguration = m_toolConfiguration->getValue( "typeConfiguration" ).toString();
+    if ( typeConfiguration == QString("PRODUCER") )
+    {
+        localizerPlane = m_2DViewer->getCurrentImagePlane();
+    }
+    else if ( typeConfiguration == QString("PRODUCER&CONSUMER") )
+    {
+        localizerPlane = m_myData->getProjectedLineImagePlane( m_nameProjectedLineBind );
+    }
 
     if( !(imagePlane && localizerPlane) )
         return;
@@ -443,6 +489,7 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
             // Actualitzem l'imagePlane projectat per la línia a les dades compartides de la tool
             QStringList infoProjectedLine = m_projectedLines[ projectedLine ];
             QString name = infoProjectedLine.at( 0 );
+            m_imagePlanes.insert( name, imagePlane );
             m_myData->setProjectedLineImagePlane( name, imagePlane );
         }
         else
@@ -464,6 +511,30 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
     }
 
     m_2DViewer->getDrawer()->refresh();
+}
+
+void ImagePlaneProjectionTool:: checkImagePlaneBindUpdated( QString nameProjectedLine )
+{
+    if ( m_imagePlanes.contains( nameProjectedLine ) )
+    {
+        ImagePlane *myImagePlane = m_imagePlanes.value( nameProjectedLine );
+        ImagePlane *myDataImagePlane = m_myData->getProjectedLineImagePlane( nameProjectedLine );
+        if ( myImagePlane != myDataImagePlane )
+        {
+            QMapIterator< DrawerLine *, QStringList > iterator( m_projectedLines );
+            bool searched = false;
+            DrawerLine *projectedLine;
+            while ( iterator.hasNext() && !searched ) 
+            {
+                iterator.next();
+                projectedLine = iterator.key();
+                QString name = iterator.value().at(0);
+                searched = ( nameProjectedLine == name );
+            }
+
+            if ( searched ) updateProjection( projectedLine, myDataImagePlane, true );
+        }
+    }
 }
 
 void ImagePlaneProjectionTool::checkProjectedLineBindUpdated( QString nameProjectedLine )
@@ -717,25 +788,44 @@ void ImagePlaneProjectionTool::setToolData(ToolData * data)
 
     QString typeConfiguration = m_toolConfiguration->getValue( "typeConfiguration" ).toString();
 
-    if ( typeConfiguration == QString( "CONSUMER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    // Desfem els vincles anteriors
+    if ( typeConfiguration == QString( "PRODUCER" ) )
     {
-        // Desfem els vincles anteriors
-        disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkProjectedLineBindUpdated( QString ) ) );
-        delete m_myData;
+        disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkImagePlaneBindUpdated( QString ) ) );
     }
+    if ( typeConfiguration == QString( "CONSUMER" ) )
+    {
+        disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkProjectedLineBindUpdated( QString ) ) );
+    }
+    if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        disconnect( m_myData, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( initializeImagePlanesCheckingData() ) );
+        disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkImagePlaneBindUpdated( QString ) ) );
+        disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkProjectedLineBindUpdated( QString ) ) );
+    }
+
+    delete m_myData;
 
     // Creem de nou les dades
     m_toolData = data;
     m_myData = qobject_cast<ImagePlaneProjectionToolData *>(data);
     Volume *volume = m_myData->getVolume();
     
-    if ( volume!= NULL && ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) ) )
+    if ( m_volume != NULL && typeConfiguration == QString( "PRODUCER" ) )
     {
         // Quan es modifiquen les dades compartides de la tool cal tornar-les a actualitzar assignant 
-        // el pla projectat de cada línia del viewer
-        initToolDataProducer();
+        // el volum i el pla projectat de cada línia del viewer
+        updateVolume( m_volume );
+        initializeImagePlanes();
     }
 
+    if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        connect( m_myData, SIGNAL( volumeChanged( Volume * ) ), SLOT( initializeImagePlanesCheckingData() ) );
+        connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkImagePlaneBindUpdated( QString ) ) );
+        initializeImagePlanesCheckingData();
+    }
+    
     if ( typeConfiguration == QString( "CONSUMER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
     {
         connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkProjectedLineBindUpdated( QString ) ) );
@@ -747,12 +837,6 @@ void ImagePlaneProjectionTool::setToolData(ToolData * data)
             showImagePlaneProjectedLineBind();
         }
     }
-}
-
-void ImagePlaneProjectionTool::initToolDataProducer()
-{
-    updateVolume( m_volume );
-    initializeImagePlanes();
 }
 
 void ImagePlaneProjectionTool::handleEvent( long unsigned eventID )

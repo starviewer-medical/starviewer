@@ -41,6 +41,10 @@ private slots:
     /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
     /// Es crida cada cop que el viewer canvïi d'input
     void initializeImagePlanes();
+
+    /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor&consumidor
+    /// Es crida cada cop que es modifica el volum de les dades compartides
+    void initializeImagePlanesCheckingData();
     
     /// Actualitza el pla projectat de cada línia de l'actual viewer amb la tool configurada com a productor 
     /// i ho modifica a les dades compartides
@@ -49,6 +53,10 @@ private slots:
 
     /// Comprova si s'ha modificat el pla projectat per la línia associada a l'actual viewer amb la tool configurada com a consumidor 
     void checkProjectedLineBindUpdated( QString nameProjectedLine );
+
+    /// Comprova si cal actualitzar el pla projectat per alguna línia associada perquè un altre viewer amb la tool configurada com
+    /// a productor ha manipulat una línia amb la mateixa orientació
+    void checkImagePlaneBindUpdated( QString nameProjectedLine );
 
 private:
     /// Comprova que els valors assignats a la configuració siguin correctes
@@ -77,9 +85,6 @@ private:
     /// Modifica el reslice de l'actual viewer amb la tool configurada com a consumidor perquè
     /// mostri el pla que toca
     void updateReslice( Volume *volume );
-
-    /// Actualitza les dades compartides assignant el pla projectat de cada línia del viewer amb la tool configurada com a productor
-    void initToolDataProducer();
 
     /// Actualitza el viewer amb la tool configurada com a consumidor perquè mostri el pla projectat per la seva línia associada
     void showImagePlaneProjectedLineBind();
@@ -114,6 +119,10 @@ private:
     /// Linies projectades: cadascuna indica la intersecció entre un pla projectat que representen i el pla actual del Viewer
     /// Per cada línia es guarda el nom identificador i la seva orientació inicial
     QMap< DrawerLine *, QStringList > m_projectedLines;
+
+    /// Plans projectats per cadascuna de les línies incloses al viewer producer
+    /// Per cada línia existirà un nom identificatiu i a aquest se li associarà el pla que projecta
+    QMap< QString, ImagePlane *> m_imagePlanes;
 
     /// Línia de projecció que està manipulant l'usuari
     DrawerLine *m_pickedProjectedLine;
