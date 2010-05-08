@@ -166,6 +166,7 @@ void QMPR2DExtension::initializeTools()
 void QMPR2DExtension::initializeDefaultTools()
 {
     QStringList toolsList1, toolsList2;
+    // Comentat perquè un cop finalitzada la implementació es comprovarà si es poden activar.
 //  toolsList1 << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
     toolsList1 << "ImagePlaneProjectionTool";
     toolsList2 << "ZoomTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
