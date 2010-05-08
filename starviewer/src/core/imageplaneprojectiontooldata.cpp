@@ -17,6 +17,7 @@ ImagePlaneProjectionToolData::~ImagePlaneProjectionToolData()
 void ImagePlaneProjectionToolData::setVolume( Volume *volume )
 {
     m_volume = volume;
+    emit volumeChanged( m_volume );
 }
 
 Volume * ImagePlaneProjectionToolData::getVolume()
