@@ -486,32 +486,32 @@ void ImagePlaneProjectionTool::showImagePlaneProjectedLineBind()
             // S'ha modificat el volum amb el que s'ha de treballar als visors que tenen activada la tool,
             // per tant cal inicialitzar el reslice
             m_volume = volume;
-            initReslice();
+            initReslice( volume );
         }
         else
         {
-            updateReslice();
+            updateReslice( volume );
         }
     }
 }
 
 
-void ImagePlaneProjectionTool::initReslice()
+void ImagePlaneProjectionTool::initReslice( Volume *volume )
 {
-    m_reslice->SetInput( m_volume->getVtkData() );
+    m_reslice->SetInput( volume->getVtkData() );
 
-    updateReslice();
+    updateReslice( volume );
 
     // Assignem la informació de la sèrie, estudis, pacient...
     Volume *volumeResliced = new Volume;
-    volumeResliced->setImages( m_volume->getImages() );
+    volumeResliced->setImages( volume->getImages() );
     volumeResliced->setData( m_reslice->GetOutput() );
     m_2DViewer->setInput( volumeResliced ); 
 }
 
-void ImagePlaneProjectionTool::updateReslice()
+void ImagePlaneProjectionTool::updateReslice( Volume *volume )
 {
-    if ( m_volume == NULL || !m_reslice ||  !( vtkImageData::SafeDownCast( m_reslice->GetInput() ) ) )
+    if ( volume == NULL || !m_reslice ||  !( vtkImageData::SafeDownCast( m_reslice->GetInput() ) ) )
     {
         return;
     }
@@ -525,17 +525,17 @@ void ImagePlaneProjectionTool::updateReslice()
 
     // Calculate appropriate pixel spacing for the reslicing
     double spacing[3];
-    m_volume->getSpacing( spacing );
+    volume->getSpacing( spacing );
 
     int i;
 
     // Origen del volum de dades
     double origin[3];
-    m_volume->getOrigin( origin );
+    volume->getOrigin( origin );
 
     // Obtenim l'extensió(àrea) del volum
     int extent[6];
-    m_volume->getWholeExtent(extent);
+    volume->getWholeExtent(extent);
 
     double bounds[] = { origin[0] + spacing[0]*extent[0], //xmin
                         origin[0] + spacing[0]*extent[1], //xmax

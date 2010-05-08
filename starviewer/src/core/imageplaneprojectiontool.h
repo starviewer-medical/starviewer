@@ -60,7 +60,7 @@ private:
     void applyConfiguration();
 
     /// Inicialitza el reslice del viewer amb la tool configurada com a consumidor
-    void initReslice();
+    void initReslice( Volume *volume );
 
     /// Inicialitza les linies projectades al viewer quan la tool està configurada com a productor
     void initProjectedLines();
@@ -76,7 +76,7 @@ private:
 
     /// Modifica el reslice de l'actual viewer amb la tool configurada com a consumidor perquè
     /// mostri el pla que toca
-    void updateReslice();
+    void updateReslice( Volume *volume );
 
     /// Actualitza les dades compartides assignant el pla projectat de cada línia del viewer amb la tool configurada com a productor
     void initToolDataProducer();
