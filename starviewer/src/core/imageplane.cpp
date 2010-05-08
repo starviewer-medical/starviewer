@@ -263,8 +263,11 @@ QString ImagePlane::toString( bool verbose )
     result += QString("\nRow Vector: %1, %2, %3").arg(m_rowDirectionVector[0]).arg(m_rowDirectionVector[1]).arg(m_rowDirectionVector[2]);
     result += QString("\nColumn Vector: %1, %2, %3").arg(m_columnDirectionVector[0]).arg(m_columnDirectionVector[1]).arg(m_columnDirectionVector[2]);
     result += QString("\nNormal Vector: %1, %2, %3").arg(m_normal[0]).arg(m_normal[1]).arg(m_normal[2]);
+    result += QString("\nCenter: %1, %2, %3").arg(m_center[0]).arg(m_center[1]).arg(m_center[2]);
     result += QString("\nSpacing: %1, %2").arg( m_spacing[0] ).arg( m_spacing[1] );
     result += QString("\nThickness: %1").arg(m_thickness);
+    result += QString("\nRow length: %1").arg(getRowLength());
+    result += QString("\nColumn length: %1").arg(getColumnLength());
 
     if( verbose )
     {
