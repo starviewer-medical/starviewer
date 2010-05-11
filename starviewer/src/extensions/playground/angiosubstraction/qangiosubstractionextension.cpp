@@ -6,13 +6,7 @@
  ***************************************************************************/
 #include "qangiosubstractionextension.h"
 
-#include "volume.h"
 #include "logging.h"
-#include "q2dviewer.h"
-#include "series.h"
-#include "image.h"
-#include "study.h"
-#include "patient.h"
 #include "transdifferencetool.h"
 #include "transdifferencetooldata.h"
 #include "toolproxy.h"
@@ -21,38 +15,11 @@
 #include "patientbrowsermenu.h"
 #include "angiosubstractionsettings.h"
 
-//TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
-#include "../interface/qapplicationmainwindow.h"
-
-//Qt
-#include <QString>
-#include <QAction>
-#include <QToolBar>
-#include <QMessageBox>
-#include <QContextMenuEvent>
-
-// VTK
-#include <vtkCommand.h>
-#include <vtkLookupTable.h>
-#include <vtkImageMapToWindowLevelColors.h>
-#include <vtkRenderer.h>
-#include <vtkImageData.h>
-
 // ITK
-#include <itkImage.h>
-#include <itkImageFileWriter.h>
-#include <itkCurvatureFlowImageFilter.h>
-#include <itkCastImageFilter.h>
 #include <itkImageRegistrationMethod.h>
 #include <itkTranslationTransform.h>
-#include <itkMeanSquaresImageToImageMetric.h>
-#include <itkMattesMutualInformationImageToImageMetric.h>
 #include <itkLinearInterpolateImageFunction.h>
-#include <itkRegularStepGradientDescentOptimizer.h>
 #include <itkExtractImageFilter.h>
-#include <itkImageFileWriter.h>
-#include <itkRescaleIntensityImageFilter.h>
-#include <itkResampleImageFilter.h>
 #include <itkMutualInformationImageToImageMetric.h>
 #include <itkGradientDescentOptimizer.h>
 #include <itkNormalizeImageFilter.h>
