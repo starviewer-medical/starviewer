@@ -81,6 +81,7 @@ void QGlialEstimationExtension::initializeTools()
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SynchronizeTool");
+    m_toolManager->getRegisteredToolAction("SynchronizeTool")->setChecked(true);
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -104,6 +105,14 @@ void QGlialEstimationExtension::initializeTools()
     // sincronització no té el model de totes les tools
     connect( m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL( triggered() ), SLOT( disableSynchronization() ) );
 
+    // Afegim l'eina de sincronització pels viewers existents
+    // Per defecte només configurem la sincronització a nivell d'scroll
+    ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
+    synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
+    for( int i=0; i<m_viewersLayout->getNumberOfViewers(); i++ )
+    {
+        m_toolManager->setViewerTool( m_viewersLayout->getViewerWidget(i)->getViewer(), "SynchronizeTool", synchronizeConfiguration );
+    }
     // Configurem els visors amb les tools configurades
     m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(0)->getViewer() );
     m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(1)->getViewer() );
@@ -1527,28 +1536,14 @@ void QGlialEstimationExtension::activateNewViewer( Q2DViewerWidget * newViewerWi
         Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
         Q2DViewer::AcquisitionInformationAnnotation, true );
 
-    connect( newViewerWidget, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
-}
+    // Afegim l'eina de sincronització pel nou viewer
+    // Per defecte només configurem la sincronització a nivell d'scroll
+    ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
+    synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
+    m_toolManager->setViewerTool( newViewerWidget->getViewer(), "SynchronizeTool", synchronizeConfiguration );
 
-void QGlialEstimationExtension::synchronization( Q2DViewerWidget * viewer, bool active )
-{
-    if( active )
-    {
-        // Per defecte sincronitzem només la tool de slicing
-        ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
-        synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
-        m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool", synchronizeConfiguration );
-        m_toolManager->activateTool("SynchronizeTool");
-
-        // TODO si el cursor 3d està seleccionat, el deseleccionem. 
-        // Solució temporal, hauríem d'incorporar algun mecanisme a ToolManager per gestionar aquests casos
-        if( m_cursor3DToolButton->isChecked () ) // TODO en comptes de comprovar si la tool està activada via "botó" es podria incorporar algun mecanisme a ToolManager que ens digués si una tool està activada o no
-            m_toolManager->triggerTool("SlicingTool");
-    }
-    else
-    {
-        m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
-    }
+    // li indiquem les tools que li hem configurat per defecte a tothom
+    m_toolManager->setupRegisteredTools( newViewerWidget->getViewer() );
 }
 
 void QGlialEstimationExtension::disableSynchronization()
@@ -1564,8 +1559,7 @@ void QGlialEstimationExtension::disableSynchronization()
     for( numViewer = 0; numViewer < numberOfViewers; numViewer++ )
     {
         viewer =  m_viewersLayout->getViewerWidget( numViewer );
-        m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
-        viewer->disableSynchronization();
+        viewer->enableSynchronization(false);
     }
 }
 

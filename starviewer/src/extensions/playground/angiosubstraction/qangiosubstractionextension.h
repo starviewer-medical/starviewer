@@ -54,9 +54,6 @@ private slots:
     /// Calcula automàticament (registre) la imatge diferència respecte la imatge imageid
     void computeAutomateSingleImage( );
 
-	///Permet sincronitzar els dos viewers
-	void synchronization( Q2DViewerWidget * viewer, bool active );
-
 private:
     /// El volum principal
     Volume *m_mainVolume;

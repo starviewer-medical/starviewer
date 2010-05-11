@@ -91,8 +91,9 @@ void QAngioSubstractionExtension::initializeTools()
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
     m_transDifferenceToolButton->setDefaultAction( m_toolManager->registerTool("TransDifferenceTool") );
-    m_toolManager->registerTool("SynchronizeTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
+    m_toolManager->registerTool("SynchronizeTool");
+    m_toolManager->getRegisteredToolAction("SynchronizeTool")->setChecked(true);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
@@ -112,6 +113,13 @@ void QAngioSubstractionExtension::initializeTools()
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
 
+    // Configurem la sincronització dels visors
+    // Per defecte només configurem la sincronització a nivell d'scroll
+    ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
+    synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
+    m_toolManager->setViewerTool( m_2DView_1->getViewer(), "SynchronizeTool", synchronizeConfiguration );
+    m_toolManager->setViewerTool( m_2DView_2->getViewer(), "SynchronizeTool", synchronizeConfiguration );
+    
     // posem a punt les tools pels visors
     m_toolManager->setupRegisteredTools( m_2DView_1->getViewer() );
     m_toolManager->setupRegisteredTools( m_2DView_2->getViewer() );
@@ -129,8 +137,6 @@ void QAngioSubstractionExtension::createConnections()
     disconnect( m_2DView_2->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView_2->getViewer(), SLOT( setInput( Volume * ) ) );
     connect( m_2DView_1->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput( Volume * ) ) );
     connect( m_imageSelectorSpinBox, SIGNAL( valueChanged(int) ), SLOT( computeDifferenceImage( int ) ) );
-    connect( m_2DView_1, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
-    connect( m_2DView_2, SIGNAL( synchronize( Q2DViewerWidget *, bool ) ), SLOT( synchronization( Q2DViewerWidget *, bool ) ) );
     //connect( m_autoRegistrationToolButton, SIGNAL( clicked() ), SLOT( computeAutomateSingleImage( ) ) );
 }
 
@@ -139,8 +145,8 @@ void QAngioSubstractionExtension::setInput( Volume *input )
     m_mainVolume = input;
 
 	//Desactivem la sincronització perquè si no quan es canvia l'input no funciona correctament
-	m_2DView_1->setSynchronized(false);
-	m_2DView_2->setSynchronized(false);
+    m_2DView_1->enableSynchronization(false);
+    m_2DView_2->enableSynchronization(false);
 
 	//eliminem l'anterior m_differenceVolume si n'hi ha
 	if(m_differenceVolume){
@@ -161,8 +167,8 @@ void QAngioSubstractionExtension::setInput( Volume *input )
 	//Això es fa així perquè l'acció està lligada a un connect
 	m_2DView_1->getViewer()->refresh();
 
-	m_2DView_1->setSynchronized(true);
-	m_2DView_2->setSynchronized(true);
+    m_2DView_1->enableSynchronization(true);
+    m_2DView_2->enableSynchronization(true);
 
     m_2DView_2->getViewer()->disableContextMenu();
     m_2DView_1->getViewer()->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
@@ -511,24 +517,6 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
 
     QApplication::restoreOverrideCursor();
 
-}
-
-
-
-void QAngioSubstractionExtension::synchronization( Q2DViewerWidget * viewer, bool active )
-{
-    if( active )
-    {
-        // Per defecte sincronitzem només la tool de slicing
-        ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
-        synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
-        m_toolManager->setViewerTool( viewer->getViewer(), "SynchronizeTool", synchronizeConfiguration );
-        m_toolManager->activateTool("SynchronizeTool");
-    }
-    else
-    {
-        m_toolManager->removeViewerTool( viewer->getViewer(), "SynchronizeTool" );
-    }
 }
 
 void QAngioSubstractionExtension::readSettings()
