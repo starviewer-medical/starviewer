@@ -110,7 +110,6 @@ void QPerfusionMapReconstructionExtension::initializeTools()
     m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
     m_seedToolButton->setDefaultAction( m_toolManager->registerTool("SeedTool") );
     m_roiToolButton->setDefaultAction( m_toolManager->registerTool("PolylineTemporalROITool") );
-    m_toolManager->registerTool("SynchronizeTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
