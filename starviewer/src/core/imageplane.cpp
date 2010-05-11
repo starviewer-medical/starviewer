@@ -20,6 +20,36 @@ ImagePlane::ImagePlane()
     setColumnDirectionVector( 0., 1., 0. );
 }
 
+ImagePlane::ImagePlane( ImagePlane *imagePlane )
+{
+    m_rowDirectionVector[0] = imagePlane->m_rowDirectionVector[0];
+    m_rowDirectionVector[1] = imagePlane->m_rowDirectionVector[1];
+    m_rowDirectionVector[2] = imagePlane->m_rowDirectionVector[2];
+
+    m_columnDirectionVector[0] = imagePlane->m_columnDirectionVector[0];
+    m_columnDirectionVector[1] = imagePlane->m_columnDirectionVector[1];
+    m_columnDirectionVector[2] = imagePlane->m_columnDirectionVector[2];
+
+    m_normal[0] = imagePlane->m_normal[0];
+    m_normal[1] = imagePlane->m_normal[1];
+    m_normal[2] = imagePlane->m_normal[2];
+
+    m_origin[0] = imagePlane->m_origin[0];
+    m_origin[1] = imagePlane->m_origin[1];
+    m_origin[2] = imagePlane->m_origin[2];
+
+    m_center[0] = imagePlane->m_center[0];
+    m_center[1] = imagePlane->m_center[1];
+    m_center[2] = imagePlane->m_center[2];
+
+    m_spacing[0] = imagePlane->m_spacing[0];
+    m_spacing[1] = imagePlane->m_spacing[1];
+
+    m_rows = imagePlane->getRows();
+    m_columns = imagePlane->getColumns();
+    m_thickness = imagePlane->getThickness();
+}
+
 ImagePlane::~ImagePlane()
 {
 }

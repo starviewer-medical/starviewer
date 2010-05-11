@@ -34,14 +34,11 @@ public:
     void setToolData( ToolData *data );
 
 private slots:
+    /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
     /// Actualitza el volum compartit amb la resta de visors amb la tool activa
     /// Es crida cada cop que el viewer canvïi d'input 
-    void updateVolume( Volume *volume );
+    void initializeImagePlanesUpdteVolume( Volume *volume );
     
-    /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
-    /// Es crida cada cop que el viewer canvïi d'input
-    void initializeImagePlanes();
-
     /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor&consumidor
     /// Es crida cada cop que es modifica el volum de les dades compartides
     void initializeImagePlanesCheckingData();
@@ -75,12 +72,12 @@ private:
 
     // Inicialitza el pla projectat per una linia de projecció de la tool
     // S'assigna un espaiat, dimensions i límits en funció del tipus d'orientació
-    void initializeImagePlane( DrawerLine *projectedLine );
+    void initializeImagePlane( DrawerLine *projectedLine, Volume *volume );
 
     /// Actualitza la projecció de la línia indicada amb el pla indicat
     /// També actualitza el pla projectat per la línia a les dades compartides de la tool
     void updateProjection( DrawerLine *projectedLine, ImagePlane *imagePlane );
-    void updateProjection( DrawerLine *projectedLine, ImagePlane *imagePlane, bool projectedLineDrawed );
+    void updateProjection( DrawerLine *projectedLine, ImagePlane *imagePlane, bool projectedLineDrawed, bool updateToolData );
 
     /// Modifica el reslice de l'actual viewer amb la tool configurada com a consumidor perquè
     /// mostri el pla que toca

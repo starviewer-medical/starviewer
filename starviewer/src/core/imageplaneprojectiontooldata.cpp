@@ -17,7 +17,6 @@ ImagePlaneProjectionToolData::~ImagePlaneProjectionToolData()
 void ImagePlaneProjectionToolData::setVolume( Volume *volume )
 {
     m_volume = volume;
-    emit volumeChanged( m_volume );
 }
 
 Volume * ImagePlaneProjectionToolData::getVolume()
@@ -34,6 +33,11 @@ void ImagePlaneProjectionToolData::setProjectedLineImagePlane( QString projected
 ImagePlane * ImagePlaneProjectionToolData::getProjectedLineImagePlane( QString projectedLineName )
 {
     return m_imagePlanes[ projectedLineName ];
+}
+
+void ImagePlaneProjectionToolData::emitDataInitialized()
+{
+    emit dataInitialized();
 }
 
 }
