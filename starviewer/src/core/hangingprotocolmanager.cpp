@@ -115,7 +115,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     double adjustmentOfBestHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
 
-    QList<HangingProtocol * > candidates;
+    QList<HangingProtocol * > outputHangingProtocolList;
     QString hangingProtocolNamesLogList; // Noms per mostrar al log
 
     QList<Series *> allSeries;
@@ -155,7 +155,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
 
             if( adjustmentOfCurrentHangingProtocol > 0.0 )
             {
-                candidates << hangingProtocol;
+                outputHangingProtocolList << hangingProtocol;
                 hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
 
                 // Actualitzem el millor hanging protocol
@@ -188,7 +188,7 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     {
         INFO_LOG( QString("No s'ha trobat cap hanging protocol") );
     }
-    return candidates;
+    return outputHangingProtocolList;
 }
 
 void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
