@@ -270,13 +270,13 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
                     if( displaySet->getToolActivation() != 0 ) // Tenim tools activades per defecte des del hanging protocol
                     {
                         if( displaySet->getToolActivation() == "synchronization" ) // S'activa la tool de sincronització
-                            viewerWidget->setSynchronized( true );
+                            viewerWidget->enableSynchronization(true);
                         else // Es desactiva la tool de sincronització, per si estava activada
-                            viewerWidget->setSynchronized( false );
+                            viewerWidget->enableSynchronization(false);
                     }
                     else // es desactiven totes les tools que puguin estar actives
                     {
-                        viewerWidget->setSynchronized( false );
+                        viewerWidget->enableSynchronization(false);
                     }
                 }
             }
@@ -809,11 +809,11 @@ void HangingProtocolManager::previousStudyDownloaded()
                     if( structPreviousStudyDownloading->displaySet->getToolActivation() != 0 )
                     {
                         if( structPreviousStudyDownloading->displaySet->getToolActivation() == "synchronization" )
-                            viewerWidget->setSynchronized( true );
+                            viewerWidget->enableSynchronization(true);
                     }
                     else //Es desactiven les tools necessàries
                     {
-                        viewerWidget->setSynchronized( false );
+                        viewerWidget->enableSynchronization(false);
                     }
                 }
             }

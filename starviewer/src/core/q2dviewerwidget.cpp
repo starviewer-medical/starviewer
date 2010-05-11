@@ -10,6 +10,8 @@
 #include "series.h"
 #include "image.h"
 #include "statswatcher.h"
+#include "synchronizetool.h"
+#include "toolproxy.h"
 
 #include <QAction>
 #include <QPalette>
@@ -74,7 +76,7 @@ void Q2DViewerWidget::createConnections()
 
     connect( m_2DView, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateSlider() ) );
 
-    connect( m_buttonSynchronizeAction, SIGNAL( triggered() ), SLOT( emitSynchronize() ) );
+    connect( m_buttonSynchronizeAction, SIGNAL( toggled(bool) ), SLOT( enableSynchronization(bool) ) );
 }
 
 void Q2DViewerWidget::updateProjectionLabel()
@@ -145,15 +147,27 @@ void Q2DViewerWidget::setDefaultAction( QAction *synchronizeAction )
     m_synchronizeButton->setDefaultAction( synchronizeAction );
 }
 
-void Q2DViewerWidget::emitSynchronize()
+void Q2DViewerWidget::enableSynchronization(bool enable)
 {
-    emit synchronize( this, m_buttonSynchronizeAction->isChecked() );
-}
-
-void Q2DViewerWidget::setSynchronized( bool synchronized )
-{
-    m_buttonSynchronizeAction->setChecked( synchronized );
-    emitSynchronize();
+    if( m_buttonSynchronizeAction->isChecked() != enable )
+    {
+        // Ens han invocat el mètode directament, no s'ha fet clicant el botó
+        // Això farà invocar aquest mètode de nou passant per "l'else"
+        m_buttonSynchronizeAction->setChecked(enable);
+    }
+    else
+    {
+        SynchronizeTool *synchronizeTool = dynamic_cast<SynchronizeTool *>( getViewer()->getToolProxy()->getTool("SynchronizeTool") );
+        if( synchronizeTool )
+        {
+            synchronizeTool->setEnabled(enable);
+        }
+        else
+        {
+            DEBUG_LOG("El viewer no té registrada l'eina de sincronització, per tant no es pot activar la sincronització");
+            // TODO deixar el botó en estat "un-checked"?
+        }
+    }
 }
 
 void Q2DViewerWidget::updateSlider()
@@ -165,12 +179,6 @@ void Q2DViewerWidget::resetSliderRangeAndValue()
 {
     m_slider->setMaximum( m_2DView->getMaximumSlice() - m_2DView->getSlabThickness()+ 1 );
     m_slider->setValue( m_2DView->getCurrentSlice() );
-}
-
-void Q2DViewerWidget::disableSynchronization()
-{
-    //TODO solució temporal per desactivar la tool de sincronitzacio
-     m_synchronizeButton->defaultAction()->setChecked( false );
 }
 
 void Q2DViewerWidget::resizeEvent ( QResizeEvent * event )

@@ -44,19 +44,14 @@ public:
 
     void setInput( Volume *input );
 
-    ///Desactiva la sincronització del viewer
-    //TODO solució temporal a la desactivacio de la sincronitzacio
-    void disableSynchronization();
-
-    /// Activa/Desactiva la sincronització al viewer
-    void setSynchronized( bool synchronized );
+public slots:
+    /// Habilita o deshabilita l'eina de sincronització en el visor, si aquest la té registrada
+    /// Aquest mètode es podrà invocar al clicar sobré el botó de sincronització o bé cridant-lo directament
+    void enableSynchronization(bool enable);
 
 signals:
     /// Aquest senyal s'emetrà quan el mouse entri al widget
     void selected(Q2DViewerWidget * viewer);
-
-    /// Senyal que s'emetra quan es seleccioni al boto de sincronitzar
-    void synchronize( Q2DViewerWidget *, bool );
 
     /// Senyal que s'emet quan es fa un resize del visualitzador
     void resized();
@@ -83,9 +78,6 @@ private slots:
 
     /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
     void emitSelectedViewer();
-
-    /// Quan s'activa el boto de sincronitzar
-    void emitSynchronize();
 
     /// actualitza correctament el valor de l'slider quan hi ha thick slab
     void updateSlider();

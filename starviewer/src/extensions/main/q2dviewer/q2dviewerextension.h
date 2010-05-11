@@ -139,9 +139,6 @@ private slots:
      */
     void updateDICOMInformationButton( int view );
 
-    /// Activa la sincronització al visualitzador
-    void synchronization( Q2DViewerWidget *, bool );
-
     /// Mètode que tracta el nou visualitzador afegit
     void activateNewViewer( Q2DViewerWidget *newViewerWidget );
 
