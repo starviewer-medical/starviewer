@@ -168,12 +168,6 @@ int HangingProtocol::getIdentifier() const
 
 bool HangingProtocol::isBetterThan( HangingProtocol * hangingToCompare )
 {
-    int i;
-    bool hasViewWithPatientOrientation_1 = false;
-    bool hasViewWithPatientOrientation_2 = false;
-    bool hasReconstruction_1 = false;
-    bool hasReconstruction_2 = false;
-
     if( hangingToCompare == NULL ) return true;
 
     // Estratègia per saber quin té més prioritat que un altre.
@@ -208,32 +202,8 @@ bool HangingProtocol::isBetterThan( HangingProtocol * hangingToCompare )
         return ( this->getNumberOfDisplaySets() > hangingToCompare->getNumberOfDisplaySets() );
     else if( this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets() )
         return ( this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets() );
-    else
-    {
-        i = 1;
-        while( !hasViewWithPatientOrientation_1 && !hasViewWithPatientOrientation_1 && i <= this->getNumberOfDisplaySets() )
-        {
-            hasViewWithPatientOrientation_1 = !(this->getDisplaySet( i )->getPosition().isEmpty());
-            i++;
-        }
-
-        i = 1;
-        while( !hasViewWithPatientOrientation_2 && !hasViewWithPatientOrientation_2 && i <= hangingToCompare->getNumberOfDisplaySets() )
-        {
-            hasViewWithPatientOrientation_2 = !(hangingToCompare->getDisplaySet( i )->getPatientOrientation().isEmpty());
-            i++;
-        }
-
-        if( hasViewWithPatientOrientation_1 == hasViewWithPatientOrientation_2)
-        {
-            if( hasReconstruction_1 == hasReconstruction_2 ) 
-            {
-                return false; /// Són iguals
-            }
-            else return hasReconstruction_1;
-        }
-        else return hasViewWithPatientOrientation_1;
-    }
+    
+    return false;
 }
 
 bool HangingProtocol::isStrict() const
