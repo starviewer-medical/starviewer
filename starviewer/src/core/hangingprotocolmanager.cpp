@@ -114,11 +114,8 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     double adjustmentOfCurrentHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     double adjustmentOfBestHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
-    HangingProtocolImageSet *imageSet;
-    Series *serie;
 
     QList<HangingProtocol * > candidates;
-    QList<Series *> seriesList;
     QString hangingProtocolNamesLogList; // Noms per mostrar al log
 
     QList<Series *> allSeries;
@@ -136,19 +133,16 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     {
         //Inicialitzacions
         hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
-        numberOfSeriesAssigned = 0;
-        serie = 0;
-        seriesList.clear();
-        seriesList += allSeries;// Copia de les series perquè es van eliminant de la llista al ser assignades
 
         if( isValid( hangingProtocol, patient) && !hangingProtocol->hasStudiesToDownload() )
         {
-            for ( int imageSetNumber = 1; imageSetNumber <= hangingProtocol->getNumberOfImageSets(); imageSetNumber++ )
+            QList<Series *> candidateSeries = allSeries; // Copia de les series perquè es van eliminant de la llista al ser assignades
+            
+            numberOfSeriesAssigned = 0;
+            
+            foreach ( HangingProtocolImageSet * imageSet, hangingProtocol->getImageSets() )
             {
-                imageSet = hangingProtocol->getImageSet( imageSetNumber );
-                serie = searchSerie( seriesList, imageSet, hangingProtocol->getAllDiferent(), hangingProtocol );
-
-                if( serie != 0 )
+                if( searchSerie( candidateSeries, imageSet , hangingProtocol->getAllDiferent(), hangingProtocol ) )
                 {
                     numberOfSeriesAssigned++;
                 }
