@@ -170,32 +170,20 @@ bool HangingProtocol::isBetterThan( HangingProtocol * hangingToCompare )
 {
     if( hangingToCompare == NULL ) return true;
 
-    // Estratègia per saber quin té més prioritat que un altre.
-    if( this->getPriority() != -1 )
+    if ( this->getPriority() != -1 && hangingToCompare->getPriority() != -1 ) 
     {
-        if ( hangingToCompare->getPriority() != -1 )
-            return this->getPriority()> hangingToCompare->getPriority(); // Tots dos tenen prioritat
-        else  // El hanging a comparar no té prioritat
-        {
-            if( this->getPriority() == 10 ) // Si la prioritat és 10 és millor
-                return true;
-            else if ( this->getPriority() == 0 ) // Si la prioritat és 0, no el volem com a millor
-                return false;
-
-            // altrament continua mirant les condicions de més avall
-        }
+        // Si tots 2 tenen prioritat definida els fem competir
+        return this->getPriority() > hangingToCompare->getPriority();
     }
-    else //El hanging actual no té prioritat
+    else
     {
-        if ( hangingToCompare->getPriority() != -1 ) //El hanging a comparar si que te prioritat
-        {
-            if( hangingToCompare->getPriority() == 10 ) // Si la prioritat és 10 és millor
-                return false;
-            else if ( hangingToCompare->getPriority() == 0 ) // Si la prioritat és 0, no el volem com a millor
-                return true;
+        //Si un des 2 hangings no té la prioritat definida, la prioritat només serveix  
+        //per dir si un hanging ha de ser el més o el menys aconsellat.
+        if ( this->getPriority() == 10 || hangingToCompare->getPriority() == 0)
+            return true;
 
-            // altrament continua mirant les condicions de més avall
-        }
+        if ( this->getPriority() == 0 || hangingToCompare->getPriority() == 10)
+            return false; 
     }
 
     if( this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets() )
