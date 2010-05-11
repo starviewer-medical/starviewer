@@ -22,6 +22,8 @@ class ImagePlane{
 public:
     ImagePlane();
 
+    ImagePlane( ImagePlane *imagePlane );
+
     ~ImagePlane();
 
     void setRowDirectionVector( const double vector[3] );
