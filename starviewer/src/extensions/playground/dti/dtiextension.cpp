@@ -47,7 +47,6 @@ void DTIExtension::initializeTools()
     // registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
-    m_toolManager->registerTool("SynchronizeTool");
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;

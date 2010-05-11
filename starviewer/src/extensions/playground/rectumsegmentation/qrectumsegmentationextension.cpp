@@ -120,7 +120,6 @@ void QRectumSegmentationExtension::initializeTools()
     m_seedToolButton->setDefaultAction( m_toolManager->registerTool("SeedTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_editorToolButton->setDefaultAction( m_toolManager->registerTool("EditorTool") );
-    m_toolManager->registerTool("SynchronizeTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton 

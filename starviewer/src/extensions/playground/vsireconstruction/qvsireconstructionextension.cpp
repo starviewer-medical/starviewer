@@ -67,7 +67,6 @@ void QVSIReconstructionExtension::initializeTools()
     m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
-    m_toolManager->registerTool("SynchronizeTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
