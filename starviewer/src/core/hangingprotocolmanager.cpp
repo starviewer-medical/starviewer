@@ -218,7 +218,6 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
 
     foreach ( HangingProtocolDisplaySet *displaySet , hangingProtocol->getDisplaySets() )
     {
-        serie = 0;
         hangingProtocolImageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
         serie = hangingProtocolImageSet->getSeriesToDisplay();
         viewerWidget = layout->addViewer( displaySet->getPosition() );
