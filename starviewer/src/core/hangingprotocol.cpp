@@ -91,6 +91,11 @@ QList<HangingProtocolImageSet *> HangingProtocol::getImageSets() const
     return m_listOfImageSets;
 }
 
+QList<HangingProtocolDisplaySet *> HangingProtocol::getDisplaySets() const
+{
+    return m_listOfDisplaySets;
+}
+
 HangingProtocolImageSet * HangingProtocol::getImageSet( int identifier )
 {
     HangingProtocolImageSet * imageSet = 0;
