@@ -204,9 +204,7 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 
 void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient * patient )
 {
-    int displaySetNumber;
     HangingProtocolImageSet *hangingProtocolImageSet;
-    HangingProtocolDisplaySet *displaySet;
     Series *serie;
     Q2DViewerWidget *viewerWidget;
     PreviousStudiesManager * previousStudiesManager = new PreviousStudiesManager();
@@ -218,10 +216,9 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
     // Es buiden tots els visors per tal que no hi hagi res assignat
     layout->setGrid(1,1);
 
-    for( displaySetNumber = 0; displaySetNumber < hangingProtocol->getNumberOfDisplaySets(); displaySetNumber++ )
+    foreach ( HangingProtocolDisplaySet *displaySet , hangingProtocol->getDisplaySets() )
     {
         serie = 0;
-        displaySet = hangingProtocol->getDisplaySet( displaySetNumber + 1 );
         hangingProtocolImageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
         serie = hangingProtocolImageSet->getSeriesToDisplay();
         viewerWidget = layout->addViewer( displaySet->getPosition() );
