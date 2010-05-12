@@ -66,6 +66,9 @@ public:
     /// Obté la llista d'image sets
     QList<HangingProtocolImageSet *> getImageSets() const;
 
+    /// Obté la llista de display sets
+    QList<HangingProtocolDisplaySet *> getDisplaySets() const;
+
     /// Obté l'image set amb identificador "identifier"
     HangingProtocolImageSet * getImageSet( int identifier );
 
