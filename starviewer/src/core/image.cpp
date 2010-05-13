@@ -53,7 +53,8 @@ void Image::setImageOrientationPatient( double orientation[6] )
     memcpy( m_imageOrientationPatient, orientation, 6*sizeof(double) );
 
     // calculem la Z
-    double *normal = MathTools::crossProduct( &orientation[0] , &orientation[3] );
+    double normal[3];
+    MathTools::crossProduct( &orientation[0] , &orientation[3], normal );
 
     memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
 }
@@ -64,7 +65,8 @@ void Image::setImageOrientationPatient( double xVector[3], double yVector[3] )
     memcpy( &m_imageOrientationPatient[3], yVector, 3*sizeof(double) );
 
     // calculem la Z
-    double *normal = MathTools::crossProduct( xVector , yVector );
+    double normal[3];
+    MathTools::crossProduct( xVector , yVector, normal );
 
     memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
 }

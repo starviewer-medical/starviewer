@@ -95,7 +95,7 @@ void AngleTool::handleEvent( long unsigned eventID )
 void AngleTool::findInitialDegreeArc()
 {
     //Per saber quin l'angle inicial, cal calcular l'angle que forma el primer segment anotat i un segment fictici totalment horitzontal.
-    double horizontalP2[3], *vd1, *vd2, *pv;
+    double horizontalP2[3], *vd1, *vd2, pv[3];
     double *p1 = m_mainPolyline->getPoint( 0 );
     double *p2 = m_mainPolyline->getPoint( 1 );
 
@@ -126,7 +126,7 @@ void AngleTool::findInitialDegreeArc()
 
     horizontalP2[coord1] += 10.0;
     vd2 = MathTools::directorVector( horizontalP2, p2 );
-    pv = MathTools::crossProduct(vd1, vd2);
+    MathTools::crossProduct(vd1, vd2, pv);
 
     if ( pv[depthCoord] > 0 )
     {
@@ -209,8 +209,9 @@ void AngleTool::drawCircle()
     // calculem el rang de les iteracions per pintar l'angle correctament
     initialAngle = 360 - m_initialDegreeArc;
     finalAngle = int(360 - ( m_currentAngle+m_initialDegreeArc ) );
-        
-    double *pv = MathTools::crossProduct(firstSegment, secondSegment);
+    
+    double pv[3];
+    MathTools::crossProduct(firstSegment, secondSegment, pv);
     if ( pv[depthCoord] > 0 )
     {
         finalAngle = int(m_currentAngle-m_initialDegreeArc);
