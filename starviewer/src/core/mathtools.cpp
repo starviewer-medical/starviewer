@@ -75,8 +75,8 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     // r = p + Dot(p-q)*u / Dot(u,m)
     //
     double u[3];
-    vtkMath::Cross( n , m , t );
-    vtkMath::Cross( n , t , u );
+    MathTools::crossProduct( n , m , t );
+    MathTools::crossProduct( n , t , u );
 
     double pq[3] , sum[3] , pqDotm , dot_u_m;
 
