@@ -68,15 +68,6 @@ void PatientFiller::registerSteps()
 	//m_registeredSteps.append(new PresentationStateFillerStep() );
 }
 
-void PatientFiller::processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input)
-{
-    QTime time;
-    patientFillerStep->setInput(input);
-    time.start();
-    patientFillerStep->fill();
-    DEBUG_LOG( QString(patientFillerStep->name() + " ha trigat: %1 ").arg( time.elapsed() ));
-}
-
 void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
 {
     Q_ASSERT(dicomTagReader);

@@ -24,48 +24,6 @@ PresentationStateFillerStep::~PresentationStateFillerStep()
 {
 }
 
-bool PresentationStateFillerStep::fill()
-{
-    bool ok = false;
-    // processarem cadascun dels pacients que hi hagi en l'input i per cadascun totes les sèries que siguin de tipus imatge
-    if( m_input )
-    {
-        unsigned int i = 0;
-        while( i < m_input->getNumberOfPatients() )
-        {
-            Patient *patient = m_input->getPatient( i );
-            this->processPatient( patient );
-            i++;
-        }
-    }
-    else
-        DEBUG_LOG("No tenim input!");
-
-    return ok;
-}
-
-void PresentationStateFillerStep::processPatient( Patient *patient )
-{
-    QList<Study *> studyList = patient->getStudies();
-    foreach( Study *study, studyList )
-    {
-        QList<Series *> seriesList = study->getSeries();
-        foreach( Series *series, seriesList )
-        {
-            this->processSeries( series );
-        }
-    }
-}
-
-void PresentationStateFillerStep::processSeries( Series *series )
-{
-    if( isPresentationStateSeries(series) )
-    {
-        // TODO recopilar tots els elements presentation state i processar-los
-        m_input->addLabelToSeries("PresentationStateFillerStep", series );
-    }
-}
-
 void PresentationStateFillerStep::processPresentationState()
 {
     DICOMTagReader dicomReader;

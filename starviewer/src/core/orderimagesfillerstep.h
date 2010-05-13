@@ -30,8 +30,6 @@ public:
 
     ~OrderImagesFillerStep();
 
-    bool fill();
-
     bool fillIndividually();
 
     void postProcessing();
@@ -40,7 +38,6 @@ public:
 
 private:
     /// Mètodes per processar la informació específica de series
-    void processSeries( Series *series );
     void processImage( Image *image );
 
     /// Mètode per calcular la distància a on es troba la llesca

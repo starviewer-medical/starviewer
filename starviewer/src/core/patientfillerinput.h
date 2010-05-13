@@ -68,9 +68,6 @@ public:
     /// Retorna true en el cas que es tinguin tots els labels (ja sigui a nivell de sèrie o global)
     bool hasAllLabels(QStringList requiredLabelsList) const;
 
-    /// Retorna les series que continguin almenys les etiquetes contingudes en la llista d'etiquetes que li passem
-    QList<Series *> getSeriesWithLabels( QStringList labels );
-
     /// Buida totes les llistes d'etiquetes.
     void initializeAllLabels();
 

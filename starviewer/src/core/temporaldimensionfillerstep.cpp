@@ -42,27 +42,6 @@ TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
     }
 }
 
-bool TemporalDimensionFillerStep::fill()
-{
-    bool ok = false;
-    if( m_input )
-    {
-        QStringList requiredLabels;
-        requiredLabels << "ImageFillerStep" << "OrderImagesFillerStep";
-        QList<Series *> seriesList = m_input->getSeriesWithLabels( requiredLabels );
-        foreach( Series *series, seriesList )
-        {
-            this->processSeries( series );
-        }
-    }
-    else
-    {
-        DEBUG_LOG("No tenim input!");
-    }
-
-    return ok;
-}
-
 bool TemporalDimensionFillerStep::fillIndividually()
 {
     VolumeInfo *volumeInfo;
@@ -216,69 +195,6 @@ void TemporalDimensionFillerStep::postProcessing()
         
         delete volumeHash;
     }
-}
-
-void TemporalDimensionFillerStep::processSeries( Series *series )
-{
-    bool found = false;
-    int phases = 1;
-    int slices = 0;
-    bool localizer = false;
-
-    QStringList list = series->getImagesPathList();
-    DICOMTagReader dicomReader( list[0] );
-
-    // si és un localizer no el considerarem que tingui fases
-    if (dicomReader.tagExists( DICOMImageType ))
-    {
-        // aquest valor és de tipus 3 al mòdul General Image, però consta com a tipus 1 a
-        // gairebé totes les modalitats. Només consta com a tipus 2 per la modalitat US
-        QString value = dicomReader.getValueAttributeAsQString( DICOMImageType );
-        if( series->getModality() == "CT" ) // en el cas del CT ens interessa saber si és localizer
-        {
-            QStringList valueList = value.split( "\\" );
-            if( valueList.count() >= 3 )
-            {
-                if( valueList.at(2) == "LOCALIZER" )
-                {
-                    DEBUG_LOG("La serie amb uid " + series->getInstanceUID() + " no és dinàmica (És un CT LOCALIZER)" );
-                    slices = series->getImages().count();
-                    localizer = true;
-                }
-            }
-            else
-            {
-                // TODO aquesta comprovació s'ha afegit perquè hem trobat un cas en que aquestes dades apareixen incoherents
-                // tot i així, lo seu seria disposar d'alguna eina que comprovés si les dades són consistents o no.
-                DEBUG_LOG( "ERROR: Inconsistència DICOM: La imatge " + dicomReader.getValueAttributeAsQString(DICOMSOPInstanceUID ) + " de la serie " + series->getInstanceUID() + " té el camp ImageType que és tipus 1, amb un nombre incorrecte d'elements: Valor del camp:: [" + value + "]" );
-            }
-        }
-    }
-    // TODO falta assignar el número de fase a cada imatge!
-    if ( !localizer )
-    {
-        QString imagePositionPatient = dicomReader.getValueAttributeAsQString( DICOMImagePositionPatient );
-
-        if( !imagePositionPatient.isEmpty() )
-        {
-            while ( !found && phases < list.count() )
-            {
-                dicomReader.setFile( list[phases] );
-                if ( imagePositionPatient == dicomReader.getValueAttributeAsQString( DICOMImagePositionPatient  ) )
-                {
-                    phases++;
-                }
-                else
-                {
-                    found = true;
-                }
-            }
-        }
-
-        slices = list.count() / phases;
-    }
-
-    m_input->addLabelToSeries("TemporalDimensionFillerStep", series );
 }
 
 }

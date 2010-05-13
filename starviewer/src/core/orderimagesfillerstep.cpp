@@ -51,28 +51,6 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
     }
 }
 
-bool OrderImagesFillerStep::fill()
-{
-    bool ok = false;
-    if( m_input )
-    {
-        QStringList requiredLabels;
-        m_orderedImageSet = new QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* >();
-        requiredLabels << "ImageFillerStep";
-        QList<Series *> seriesList = m_input->getSeriesWithLabels( requiredLabels );
-        foreach( Series *series, seriesList )
-        {
-            this->processSeries( series );
-        }
-    }
-    else
-    {
-        DEBUG_LOG("No tenim input!");
-    }
-
-    return ok;
-}
-
 bool OrderImagesFillerStep::fillIndividually()
 {
     QMap< int , QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* >* >*  volumesInSeries;
@@ -117,20 +95,6 @@ void OrderImagesFillerStep::postProcessing()
     {
         setOrderedImagesIntoSeries(key);
     }
-}
-
-void OrderImagesFillerStep::processSeries( Series *series )
-{
-    QList<Image *> imageList = series->getImages();
-
-    foreach( Image *image, imageList )
-    {
-        this->processImage( image );
-    }
-
-    setOrderedImagesIntoSeries( series );
-
-    m_input->addLabelToSeries("OrderImagesFillerStep", series );
 }
 
 void OrderImagesFillerStep::processImage( Image *image )

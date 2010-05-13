@@ -29,8 +29,6 @@ public:
 
     ~ImageFillerStep();
 
-    bool fill();
-
     bool fillIndividually();
 
     void postProcessing() {}
@@ -38,10 +36,7 @@ public:
     QString name() {  return "ImageFillerStep";  }
 
 private:
-    /// Mètodes per processar la informació específica de pacient,series i imatge
-    void processPatient( Patient *patient );
-    void processSeries( Series *series );
-    bool processImage( Image *image );
+    /// Mètode per processar la informació específica de pacient,series i imatge
     bool processImage( Image *image , DICOMTagReader *dicomReader );
 
     /// Mètode encarregat de processar el fitxer DICOM per extreure'n el conjunt de les imatges
