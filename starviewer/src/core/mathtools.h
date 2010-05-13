@@ -28,6 +28,8 @@ static const long double ReversePiNumberLong;
 static const double PiNumber;
 static const long double PiNumberLong;
 static const long double PiNumberDivBy2Long;
+static const double DegreesToRadiansAsDouble;
+static const double RadiansToDegreesAsDouble;
 /// Epsilon, nombre extremadament petit
 static const double Epsilon;
 

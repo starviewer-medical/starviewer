@@ -15,7 +15,6 @@
 //vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
-#include <vtkMath.h> // pel vtkMath::DoubleDegreesToRadians()
 
 namespace udg {
 
@@ -226,7 +225,7 @@ void AngleTool::drawCircle()
     m_circlePolyline->deleteAllPoints();
     for ( int i = initialAngle; i > finalAngle; i-- )
     {
-        degreesIncrease = i*1.0*vtkMath::DoubleDegreesToRadians();
+        degreesIncrease = i*1.0*MathTools::DegreesToRadiansAsDouble;
         newPoint = new double[3];
 
         switch( view )

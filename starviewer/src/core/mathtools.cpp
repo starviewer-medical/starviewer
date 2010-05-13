@@ -20,6 +20,8 @@ const double MathTools::PiNumber = 3.14159265358979323846;  /* pi */
 const long double MathTools::PiNumberLong = 3.14159265358979323846;  /* pi */
 const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;  /* pi/2 */
 const double MathTools::Epsilon = 1E-9;
+const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
+const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
 
 double MathTools::logTwo(const double x, const bool zero)
 {
@@ -46,7 +48,7 @@ double MathTools::angleInRadians( double vec1[3] , double vec2[3] )
 
 double MathTools::angleInDegrees( double vec1[3] , double vec2[3] )
 {
-    return angleInRadians( vec1 , vec2 ) * vtkMath::DoubleRadiansToDegrees();
+    return angleInRadians( vec1 , vec2 ) * MathTools::RadiansToDegreesAsDouble;
 }
 
 int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] )
