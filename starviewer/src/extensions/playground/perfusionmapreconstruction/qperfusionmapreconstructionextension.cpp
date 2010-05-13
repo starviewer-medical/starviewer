@@ -28,7 +28,6 @@
 #include "seedtool.h"
 #include "seedtooldata.h"
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"

@@ -15,7 +15,6 @@
 #include "image.h"
 #include "logging.h"
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 
 // fem servir dcmtk per l'escalat de les imatges dicom
 #include "dcmtk/dcmimgle/dcmimage.h"
