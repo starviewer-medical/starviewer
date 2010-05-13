@@ -28,12 +28,6 @@ public:
     void postProcessing(){}
 
     QString name() {  return "MHDFileClassifierStep";  }
-
-private:
-    /// Donat un arxiu el classifica dins de pacient.
-    /// Retorna fals si no el pot classificar, és a dir, no és un arxiu que es pugui parsejar com a MHD, cert altrament.
-    bool classifyFile( QString file );
-
 };
 
 }

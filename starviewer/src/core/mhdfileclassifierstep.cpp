@@ -10,7 +10,6 @@
 #include "patientfillerinput.h"
 #include "patient.h"
 #include "image.h"
-#include "volume.h"
 
 #include <QDateTime>
 #include <QFileInfo>
@@ -31,31 +30,10 @@ MHDFileClassifierStep::~MHDFileClassifierStep()
 
 bool MHDFileClassifierStep::fillIndividually()
 {
-    bool ok = false;
-    // processarem cadascun dels arxius de l'input i els anirem col·locant a Patient
-    if( m_input )
-    {
-        ok = true;
-        QStringList fileList = m_input->getFilesList();
-        foreach( QString file, fileList )
-        {
-            if( !classifyFile( file ) )
-            {
-                ok = false;
-                break;
-            }
-        }
-        if( ok )
-            m_input->addLabel("MHDFileClassifierStep");
-    }
-    else
-        DEBUG_LOG("No tenim input!");
+    Q_ASSERT(m_input);
 
-    return ok;
-}
+    QString file = m_input->getFile();
 
-bool MHDFileClassifierStep::classifyFile( QString file )
-{
     // primer comprovem si l'arxiu es pot processar
     bool ok = false;
     vtkMetaImageReader *mhdReader = vtkMetaImageReader::New();
@@ -86,7 +64,7 @@ bool MHDFileClassifierStep::classifyFile( QString file )
         // abans de res comprovar que l'arxiu no estigui ja classificat
         // comprovem primer que l'arxiu no estigui ja dins de l'estructura, el qual vol dir que ja l'han classificat
         bool found = false;
-        int i = 0;
+        unsigned int i = 0;
         while( i < m_input->getNumberOfPatients() && !found )
         {
             found = m_input->getPatient( i )->hasFile( file );
@@ -163,6 +141,8 @@ bool MHDFileClassifierStep::classifyFile( QString file )
 //         image->setBitsAllocated( ? );
 //         image->setBitsStored( ? );
         series->addImage( image );
+
+        m_input->addLabelToSeries("MHDFileClassifierStep", series);
     }
 
     return ok;

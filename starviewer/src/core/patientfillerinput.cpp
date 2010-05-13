@@ -84,16 +84,9 @@ unsigned int PatientFillerInput::getNumberOfPatients()
     return m_patientList.size();
 }
 
-void PatientFillerInput::setFilesList( QStringList files )
+void PatientFillerInput::setFile(QString file)
 {
-    if( !files.isEmpty() )
-    {
-        // si hi ha dades de pacients buidem la llista
-        if( !m_patientList.isEmpty() )
-            m_patientList.clear();
-
-        m_fileList = files;
-    }
+    m_file = file;
 }
 
 QList<Patient*> PatientFillerInput::getPatientsList()
@@ -101,9 +94,9 @@ QList<Patient*> PatientFillerInput::getPatientsList()
     return m_patientList;
 }
 
-QStringList PatientFillerInput::getFilesList() const
+QString PatientFillerInput::getFile() const
 {
-    return m_fileList;
+    return m_file;
 }
 
 void PatientFillerInput::addLabel( QString label )
