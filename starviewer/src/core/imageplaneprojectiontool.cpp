@@ -14,7 +14,6 @@
 // Vtk's
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkMath.h>
 #include <vtkTransform.h>
 #include <vtkImageReslice.h>
 // Qt's
@@ -828,7 +827,7 @@ void ImagePlaneProjectionTool::rotateProjectedLine()
     axis[1] *= dot;
     axis[2] *= dot;
 
-    vtkMath::Normalize( axis );
+    MathTools::normalize( axis );
     this->rotateMiddleImagePlane( imagePlane, degrees , axis );
 
     this->updateProjection( m_pickedProjectedLine, imagePlane );

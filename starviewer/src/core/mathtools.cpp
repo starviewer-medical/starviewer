@@ -167,6 +167,11 @@ void MathTools::crossProduct( double vectorDirector1[3], double vectorDirector2[
     crossProductVector[2] = vectorDirector1[0]*vectorDirector2[1] - vectorDirector1[1]*vectorDirector2[0];
 }
 
+double MathTools::normalize( double vector[3] )
+{
+    return vtkMath::Normalize(vector);
+}
+
 double MathTools::minimum( double a, double b)
 {
     double min;

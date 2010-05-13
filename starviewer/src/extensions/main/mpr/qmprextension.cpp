@@ -26,7 +26,6 @@
 #include <QMessageBox>
 // vtk
 #include <vtkRenderer.h>
-#include <vtkMath.h>
 #include <vtkAxisActor2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPlaneSource.h>
@@ -553,8 +552,7 @@ void QMPRExtension::rotateAxialViewAxisActor()
     axis[0] *= dot;
     axis[1] *= dot;
     axis[2] *= dot;
-    // TODO fer la normalització amb un mètode de MathTools
-    vtkMath::Normalize( axis );
+    MathTools::normalize( axis );
     rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
     updateControls();
@@ -645,8 +643,7 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     axis[0] *= dot;
     axis[1] *= dot;
     axis[2] *= dot;
-    // TODO fer la normalització amb un mètode de MathTools
-    vtkMath::Normalize( axis );
+    MathTools::normalize( axis );
     rotateMiddle( degrees , axis , m_pickedActorPlaneSource );
     updatePlanes();
     updateControls();
@@ -1178,9 +1175,8 @@ void QMPRExtension::updatePlane( vtkPlaneSource *planeSource , vtkImageReslice *
 
     // The x,y dimensions of the plane
     //
-    // TODO fer la normalització amb un mètode de MathTools
-    double planeSizeX = vtkMath::Normalize( planeAxis1 );
-    double planeSizeY = vtkMath::Normalize( planeAxis2 );
+    double planeSizeX = MathTools::normalize( planeAxis1 );
+    double planeSizeY = MathTools::normalize( planeAxis2 );
 
     double normal[3];
     planeSource->GetNormal( normal );
@@ -1377,7 +1373,7 @@ bool QMPRExtension::isParallel( double axis[3] )
 
 void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane )
 {
-//     vtkMath::Normalize( rotationAxis );
+//     MathTools::normalize( rotationAxis );
     m_transform->Identity();
     m_transform->Translate( plane->GetCenter()[0], plane->GetCenter()[1], plane->GetCenter()[2] );
     m_transform->RotateWXYZ( degrees , rotationAxis );
@@ -1396,8 +1392,7 @@ void QMPRExtension::rotateMiddle( double degrees , double rotationAxis[3] ,  vtk
 void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneSource* plane )
 {
 //    Normalitzem l'eix de rotació, serà molt millor per les operacions a fer
-    // TODO fer la normalització amb un mètode de MathTools
-    vtkMath::Normalize( rotationAxis );
+    MathTools::normalize( rotationAxis );
 
     if( isParallel( rotationAxis ) )
     {

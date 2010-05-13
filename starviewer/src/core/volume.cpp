@@ -20,7 +20,6 @@
 #include <vtkExtractVOI.h>
 #include <vtkImageChangeInformation.h>
 #include <vtkDICOMImageReader.h>
-#include <vtkMath.h>
 
 // ITK
 #include <itkTileImageFilter.h>
@@ -423,7 +422,7 @@ void Volume::getStackDirection( double direction[3], int stack )
         const double *secondOrigin = secondImage->getImagePositionPatient();
         // calculem la direcció real de com estan apilades
         double *zDirection = MathTools::directorVector( firstOrigin, secondOrigin );
-        vtkMath::Normalize( zDirection );
+        MathTools::normalize( zDirection );
         for( int i=0; i<3; i++ )
             direction[i] = zDirection[i];
     }
