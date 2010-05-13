@@ -19,7 +19,7 @@
 #include "study.h"
 #include "image.h"
 
-#include "dcmtk/dcmdata/dcuid.h"
+#include <dcmtk/dcmdata/dcuid.h>
 
 namespace udg {
 
