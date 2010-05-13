@@ -29,7 +29,7 @@ MHDFileClassifierStep::~MHDFileClassifierStep()
 {
 }
 
-bool MHDFileClassifierStep::fill()
+bool MHDFileClassifierStep::fillIndividually()
 {
     bool ok = false;
     // processarem cadascun dels arxius de l'input i els anirem col·locant a Patient
