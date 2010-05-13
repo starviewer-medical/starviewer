@@ -7,7 +7,6 @@
 #include "dicomfileclassifierfillerstep.h"
 #include "logging.h"
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 #include "patientfillerinput.h"
 #include "patient.h"
 #include "study.h"

@@ -7,7 +7,6 @@
 #include "series.h"
 #include "image.h"
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 
 namespace udg{
 

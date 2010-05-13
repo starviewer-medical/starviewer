@@ -10,7 +10,6 @@
 #include "patient.h"
 #include "logging.h"
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 #include "qdicomdumpmammographywidget.h"
 #include "qdicomdumpctlocalizerwidget.h"
 #include "qdicomdumpcthelixwidget.h"

@@ -20,7 +20,6 @@
 #include "dicommask.h"
 #include "logging.h"
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 
 namespace udg{
 

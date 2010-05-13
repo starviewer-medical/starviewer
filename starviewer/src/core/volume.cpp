@@ -8,7 +8,6 @@
 #define UDGVOLUME_CPP
 
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 #include "dicomimagereader.h"
 #include "dicomimagereadervtk.h"
 #include "dicomimagereaderdcmtk.h"
