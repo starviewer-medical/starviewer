@@ -103,21 +103,21 @@ public:
     /**
      * Quan es modifica algun dels vectors directors del pla es modifica el centre.
      */
-    void ImagePlane::updateCenter();
+    void updateCenter();
 
-    void ImagePlane::getCenter( double center[3] );
+    void getCenter( double center[3] );
 
     /**
      * Assigna un nou centre al pla i per tant modifica l'origen, els dos vectors de direcció (row i column) i el vector normal.
      */
-    void ImagePlane::setCenter( double x, double y, double z );
-    void ImagePlane::setCenter( double center[3] );
+    void setCenter( double x, double y, double z );
+    void setCenter( double center[3] );
 
     /**
      * Trasllada el pla en la direcció de la normal en la distància especificada.
      * Valors negatius mouen el pla en la direcció oposada.
      */
-    void ImagePlane::push( double distance );
+    void push( double distance );
     
 private:
     /// Vectors que defineixen el pla
