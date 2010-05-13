@@ -106,26 +106,6 @@ QStringList PatientFillerInput::getFilesList() const
     return m_fileList;
 }
 
-void PatientFillerInput::addFile( QString filename )
-{
-    if( !m_fileList.contains(filename) )
-        m_fileList << filename;
-}
-
-void PatientFillerInput::removeFile( QString filename )
-{
-    bool found = false;
-    QMutableStringListIterator iterator( m_fileList );
-    while( iterator.hasNext() && !found )
-    {
-        if( iterator.next() == filename )
-        {
-            found = true;
-            iterator.remove();
-        }
-    }
-}
-
 void PatientFillerInput::addLabel( QString label )
 {
     if( !m_globalLabels.contains(label) )
