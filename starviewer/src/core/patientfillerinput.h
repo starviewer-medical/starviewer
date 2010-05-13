@@ -46,19 +46,17 @@ public:
     /// Retorna la llista de Patients que tenim.
     QList<Patient*> getPatientsList();
 
-    /// Assigna/Obté la llista d'arxius. A l'assignar els arxius, s'esborren les dades de pacient que hi puguin haver-hi
-    /// ja que es considera que donar tota la llista d'arxius és com un 'reset'
-    void setFilesList( QStringList files );
-    QStringList getFilesList() const;
+    /// Assigna/Obté l'arxiu a tractar. TODO: De moment és independent del setDICOMFile i només té sentit per fitxers
+    /// no DICOM, com els fitxers MHD. Per DICOM cal utilitzar setDICOMFile(DICOMTagReader*).
+    void setFile(QString file);
+    QString getFile() const;
 
     /// Afegim etiquetes a nivell global/Series
     void addLabel( QString label );
     void addLabelToSeries( QString label, Series *series );
 
-    /**
-     * Obtenim totes les etiquetes que s'han aplicat fins al moment, tant a nivell global com a nivell de sèries
-     * @return Una llista composada per les etiquetes globals i de series
-     */
+    /// Obtenim totes les etiquetes que s'han aplicat fins al moment, tant a nivell global com a nivell de sèries.
+    /// Retorna una llista composada per les etiquetes globals i de series
     QStringList getLabels() const;
 
     /// Retorna true en el cas que es tinguin tots els labels (ja sigui a nivell de sèrie o global)
@@ -67,11 +65,10 @@ public:
     /// Buida totes les llistes d'etiquetes.
     void initializeAllLabels();
 
-    ///Afegim un DICOMTagReader. Aquest mètode esborrarà l'objecte que es tenia guardat
-    ///anteriorment fent que no es pugui utilitzar més. Pren el control absolut de l'objecte.
+    /// S'indica/obté quin serà el DICOMTagReader a processar. Aquest mètode esborrarà l'objecte que es tenia guardat
+    /// anteriorment fent que no es pugui utilitzar més: es pren el control absolut de l'objecte.
+    /// Per objectes no dicom, cal utilitzar set/getFile(QString)
     void setDICOMFile(DICOMTagReader *dicomTagReader);
-
-    ///Obtenim el DICOMTagReader emmagatzemat.
     DICOMTagReader *getDICOMFile();
 
     /// Assignar/Obtenir la llista d'imatges que s'han de processar.
@@ -103,8 +100,8 @@ private:
     /// Llista de pacients a omplir
     QList<Patient *> m_patientList;
 
-    /// Llista d'arxius que cal tractar per omplir la llista de pacients
-    QStringList m_fileList;
+    /// Arxius que cal tractar per omplir la llista de pacients
+    QString m_file;
 
     /// Llista d'etiquetes assignades a nivell global
     QStringList m_globalLabels;

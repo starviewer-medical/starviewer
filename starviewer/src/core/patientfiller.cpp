@@ -134,10 +134,17 @@ QList<Patient*> PatientFiller::processDICOMFileList(QStringList dicomFiles)
     if(dicomFiles.first().contains(".mhd"))
     {
         PatientFillerInput patientFillerInput;
-        patientFillerInput.setFilesList(dicomFiles);
-        MHDFileClassifierStep mhdFileClassiferStep;
-        mhdFileClassiferStep.setInput(&patientFillerInput);
-        mhdFileClassiferStep.fillIndividually();
+        foreach(QString file, dicomFiles)
+        {
+            patientFillerInput.setFile(file);
+
+            MHDFileClassifierStep mhdFileClassiferStep;
+            mhdFileClassiferStep.setInput(&patientFillerInput);
+            if(!mhdFileClassiferStep.fillIndividually())
+            {
+                ERROR_LOG("No s'ha pogut processar un fitxer MHD: " + file);
+            }
+        }
 
         return patientFillerInput.getPatientsList();
     }
