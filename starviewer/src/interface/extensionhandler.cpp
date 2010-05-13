@@ -31,8 +31,6 @@
 // PACS --------------------------------------------
 #include "queryscreen.h"
 #include "patientfiller.h"
-#include "patientfillerinput.h"
-#include "mhdfileclassifierstep.h"
 
 namespace udg {
 
@@ -221,26 +219,12 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
     progressDialog.setLabelText( tr("Loading, please wait...") );
     progressDialog.setCancelButton( 0 );
 
-
     qApp->processEvents();
-    QList<Patient*> patientsList;
-    if(inputFiles.first().contains(".mhd"))
-    {
-        PatientFillerInput patientFillerInput;
-        patientFillerInput.setFilesList(inputFiles);
-        MHDFileClassifierStep mhdFileClassiferStep;
-        mhdFileClassiferStep.setInput(&patientFillerInput);
-        mhdFileClassiferStep.fill();
+    PatientFiller patientFiller;
+    connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
 
-        patientsList = patientFillerInput.getPatientsList();
-    }
-    else
-    {
-        PatientFiller patientFiller;
-        connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
+    QList<Patient*> patientsList = patientFiller.processDICOMFileList(inputFiles);
 
-        patientsList = patientFiller.processDICOMFileList(inputFiles);
-    }
     progressDialog.close();
 
     unsigned int numberOfPatients = patientsList.size();

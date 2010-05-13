@@ -17,7 +17,6 @@ namespace udg {
 
 // Fordward Declarations
 class QApplicationMainWindow;
-class PatientFillerInput;
 class AppImportFile;
 
 /**
