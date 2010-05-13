@@ -27,7 +27,6 @@
 #include "polylinetemporalroitooldata.h" 
 #include "seedtool.h"
 #include "seedtooldata.h"
-#include "dicomtag.h"
 #include "dicomtagreader.h"
 #include "dicomdictionary.h"
 

@@ -24,7 +24,6 @@
 #include "pacsconnection.h"
 #include "databaseconnection.h"
 #include "patientfiller.h"
-#include "dicomtagreader.h"
 #include "localdatabasemanagerthreaded.h"
 #include "qthreadrunwithexec.h"
 #include "deletedirectory.h"
