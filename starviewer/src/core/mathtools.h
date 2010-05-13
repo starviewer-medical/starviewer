@@ -106,8 +106,8 @@ static double modulus( double vector[3] );
 /// Producte escalar dels dos vectors passats per paràmetre
 static double dotProduct( double vector1[3], double vector2[3] );
 
-/// Producte vectorial dels dos vectors directors passats per paràmetre
-static double *crossProduct( double vectorDirector1[3], double vectorDirector2[3] );
+/// Calcula el producte vectorial dels dos vectors directors passats per paràmetre i ens deixa el resultat en el tercer paràmetre
+static void crossProduct( double vectorDirector1[3], double vectorDirector2[3], double crossProductVector[3] );
 
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians o graus
 static double angleInRadians( double vec1[3] , double vec2[3] );
