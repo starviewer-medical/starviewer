@@ -27,9 +27,7 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCamera.h>
 // composició d'imatges
-#include <vtkImageCheckerboard.h>
 #include <vtkImageBlend.h>
-#include <vtkImageRectilinearWipe.h>
 // anotacions
 #include <vtkCornerAnnotation.h>
 #include <vtkAxisActor2D.h>
@@ -56,11 +54,8 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
-: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::CheckerBoard ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::Blend ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
-    // CheckerBoard
-    // el nombre de divisions per defecte, serà de 2, per simplificar
-    m_divisions[0] = m_divisions[1] = m_divisions[2] = 2;
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
 
@@ -715,10 +710,6 @@ void Q2DViewer::setInput( Volume *volume )
 void Q2DViewer::setOverlayInput( Volume *volume )
 {
     m_overlayVolume = volume;
-
-    // \TODO s'hauria d'eliminar aquests objectes en algun punt (veure cas del blend)
-    vtkImageCheckerboard *imageCheckerBoard = vtkImageCheckerboard::New();
-    vtkImageRectilinearWipe *wipe = vtkImageRectilinearWipe::New();
     // \TODO hauríem d'actualitzar valors que es calculen al setInput de la variable m_overlay!
     switch( m_overlay )
     {
@@ -726,16 +717,6 @@ void Q2DViewer::setOverlayInput( Volume *volume )
         // actualitzem el viewer
         m_windowLevelLUTMapper->RemoveAllInputs();
         m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
-        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
-    break;
-
-    case CheckerBoard:
-        imageCheckerBoard->SetInput1( m_mainVolume->getVtkData() );
-        imageCheckerBoard->SetInput2( m_overlayVolume->getVtkData() );
-        imageCheckerBoard->SetNumberOfDivisions( m_divisions );
-        // actualitzem el pipeline
-        m_windowLevelLUTMapper->SetInputConnection( imageCheckerBoard->GetOutputPort() );
-        //updateDisplayExtent?
         // \TODO hauríem d'actualitzar valors que es calculen al setInput!
     break;
 
@@ -752,14 +733,6 @@ void Q2DViewer::setOverlayInput( Volume *volume )
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
     break;
 
-    case RectilinearWipe:
-        wipe->SetInput( 0 , m_mainVolume->getVtkData() );
-        wipe->SetInput( 1 , m_overlayVolume->getVtkData() );
-        wipe->SetPosition(20,20);
-        wipe->SetWipeToUpperLeft();
-        m_windowLevelLUTMapper->SetInput( wipe->GetOutput() );
-        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
-    break;
     }
     emit overlayChanged();
 }
@@ -771,17 +744,12 @@ void Q2DViewer::isOverlayModified( )
     case None:
     break;
 
-    case CheckerBoard:
-    break;
-
     case Blend:
         // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
         m_blender->Modified();
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
     break;
 
-    case RectilinearWipe:
-    break;
     }
     emit overlayModified();
 }
@@ -1070,16 +1038,6 @@ void Q2DViewer::setNoOverlay()
 void Q2DViewer::setOverlayToBlend()
 {
     setOverlay( Q2DViewer::Blend );
-}
-
-void Q2DViewer::setOverlayToCheckerBoard()
-{
-    setOverlay( Q2DViewer::CheckerBoard );
-}
-
-void Q2DViewer::setOverlayToRectilinearWipe()
-{
-    setOverlay( Q2DViewer::RectilinearWipe );
 }
 
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
@@ -1460,32 +1418,6 @@ void Q2DViewer::reset()
 {
     //\TODO: completar, encara és incomplert
     resetViewToAxial();
-}
-
-void Q2DViewer::setDivisions( int x , int y , int z )
-{
-    m_divisions[0] = x;
-    m_divisions[1] = y;
-    m_divisions[2] = z;
-}
-
-void Q2DViewer::setDivisions( int data[3] )
-{
-    m_divisions[0] = data[0];
-    m_divisions[1] = data[1];
-    m_divisions[2] = data[2];
-}
-
-int* Q2DViewer::getDivisions( void )
-{
-    return m_divisions;
-}
-
-void Q2DViewer::getDivisions( int data[3] )
-{
-    data[0] = m_divisions[0];
-    data[1] = m_divisions[1];
-    data[2] = m_divisions[2];
 }
 
 void Q2DViewer::setSeedPosition( double pos[3] )

@@ -46,8 +46,8 @@ Q2DViewer* visor = new Q2DViewer();
 visor->setInput( volum );
 
 En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat amb el mètode setOverlayInput().
-Quan solapem volums tenim 3 maneres de solapar aquests volums, amb un patró de checkerboard, aplicant un blending o un rectilinearWipe,
-en aquest cas hauríem de fer servir el mètode setOverlay() indicant una de les opcions, Blend, CheckerBoard o RectilinearWipe
+Quan solapem volums tenim 1 manera de solapar aquests volums, aplicant un blending,
+en aquest cas hauríem de fer servir el mètode setOverlay() indicant una de les opcions (de moment únicament Blend)
 \TODO acabar la doc sobre solapament
 
 Per defecte el visualitzador mostra la primera imatge en Axial. Per les altres vistes (Sagital i Coronal) mostraria la imatge central
@@ -62,7 +62,7 @@ class Q2DViewer : public QViewer{
 Q_OBJECT
 public:
     /// tipus de fusió dels models
-    enum OverlayType{ None, Blend , CheckerBoard , RectilinearWipe };
+    enum OverlayType{ None, Blend };
 
     /// Alineament de la imatge (dreta, esquerre, centrat)
     enum AlignPosition{ AlignCenter, AlignRight, AlignLeft };
@@ -90,17 +90,6 @@ public:
     /// Canviem l'opacitat del volum solapat
     /// TODO refactoritzar el mètode a setOverlayOpacity() que és l'expressió correcta
     void setOpacityOverlay( double op );
-
-    // Mètodes específics checkerboard
-    /// Obtenim el nombre de divisions
-    /// TODO set/getDivisions no es fa servir enlloc, es podria
-    /// donar com a funcionalitat obsoleta i eliminar-la, ja que ara mateix únicament fa nosa
-    int *getDivisions();
-    void getDivisions( int data[3] );
-
-    /// Indiquem el nombre de divisions del checkerboard
-    void setDivisions( int data[3] );
-    void setDivisions( int x , int y , int z );
 
     /// Obté el window level actual de la imatge
     /// TODO els mètodes no es criden enlloc, mirar si són necessaris o no
@@ -270,12 +259,10 @@ public slots:
     /// canvia la fase en que es veuen les llesques si n'hi ha
     void setPhase( int value );
 
-    /// indica el tipu de solapament dels volums, per defecte checkerboard
+    /// indica el tipu de solapament dels volums, per defecte blending
     void setOverlay( OverlayType overlay );
     void setNoOverlay();
     void setOverlayToBlend();
-    void setOverlayToCheckerBoard();
-    void setOverlayToRectilinearWipe();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
@@ -449,9 +436,6 @@ protected:
 
     /// Opacitat del segon volume
     double m_opacityOverlay;
-
-    /// El nombre de divisions per cada dimensió
-    int m_divisions[3];
 
     /// El picker per agafar punts de la imatge
     vtkPropPicker *m_imagePointPicker;
