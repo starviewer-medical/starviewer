@@ -43,7 +43,7 @@ double MathTools::logTwo(const double x, const bool zero)
 
 double MathTools::angleInRadians( double vec1[3] , double vec2[3] )
 {
-    return acos( vtkMath::Dot( vec1,vec2 ) / ( vtkMath::Norm(vec1)*vtkMath::Norm(vec2) ) );
+    return acos( MathTools::dotProduct( vec1,vec2 ) / ( vtkMath::Norm(vec1)*vtkMath::Norm(vec2) ) );
 }
 
 double MathTools::angleInDegrees( double vec1[3] , double vec2[3] )
@@ -84,8 +84,8 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     pq[1] = q[1] - p[1] ;
     pq[2] = q[2] - p[2];
 
-    pqDotm = vtkMath::Dot( pq , m );
-    dot_u_m = vtkMath::Dot( u , m );
+    pqDotm = MathTools::dotProduct( pq , m );
+    dot_u_m = MathTools::dotProduct( u , m );
     sum[0] = ( pqDotm * u[0] ) / dot_u_m;
     sum[1] = ( pqDotm * u[1] ) / dot_u_m;
     sum[2] = ( pqDotm * u[2] ) / dot_u_m;

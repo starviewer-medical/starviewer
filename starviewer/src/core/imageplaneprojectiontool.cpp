@@ -822,7 +822,7 @@ void ImagePlaneProjectionTool::rotateProjectedLine()
 
     vtkMath::Cross( vec1 , vec2 , direction );
     this->getRotationAxisImagePlane( imagePlane, axis );
-    double dot = vtkMath::Dot( direction , axis );
+    double dot = MathTools::dotProduct( direction , axis );
 
     axis[0] *= dot;
     axis[1] *= dot;
@@ -905,7 +905,7 @@ void ImagePlaneProjectionTool::pushProjectedLine()
 
     double normal[3];
     imagePlane->getNormalVector( normal );
-    imagePlane->push( vtkMath::Dot( v, normal ) );
+    imagePlane->push( MathTools::dotProduct( v, normal ) );
 
     this->updateProjection( m_pickedProjectedLine, imagePlane );
 
