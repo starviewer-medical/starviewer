@@ -51,10 +51,6 @@ public:
     void setFilesList( QStringList files );
     QStringList getFilesList() const;
 
-    /// Afegeix/esborra un arxiu a la llista. No hi haurà elements repetits a la llista ja qu es comprova abans d0afegir
-    void addFile( QString filename );
-    void removeFile( QString filename );
-
     /// Afegim etiquetes a nivell global/Series
     void addLabel( QString label );
     void addLabelToSeries( QString label, Series *series );
