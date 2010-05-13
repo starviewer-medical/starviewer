@@ -339,7 +339,11 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     // és a dir, al preguntar a Volume, getImage(index) ell ens retorna la imatge que toca i ja comprova rangs si cal
     // i no ens retorna la llista d'imatges a saco
     index = ( index >= m_mainVolume->getImages().size() ) ? 0 : index;
-    QString orientation = m_mainVolume->getImages().at(index)->getPatientOrientation();
+    
+    QString orientation;
+    Image *image = m_mainVolume->getImage(index);
+    if( image )
+        orientation = image->getPatientOrientation();
     // tenim les orientacions originals de la imatge en una llista
     QStringList list = orientation.split("\\");
 
@@ -955,7 +959,7 @@ void Q2DViewer::resetCamera()
             scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
 
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-            position = m_mainVolume->getImages().first()->getParentSeries()->getPatientPosition();
+            position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
                 m_rotateFactor = (m_rotateFactor+2) % 4 ;
 
@@ -982,7 +986,7 @@ void Q2DViewer::resetCamera()
             scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
 
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-            position = m_mainVolume->getImages().first()->getParentSeries()->getPatientPosition();
+            position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
                 m_rotateFactor = (m_rotateFactor+2) % 4 ;
 
@@ -1201,7 +1205,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
 
             case Sagital: // YZ TODO encara no esta comprovat que aquest pla sigui correcte
             {
-                Image *image = m_mainVolume->getImages().first();
+                Image *image = m_mainVolume->getImage(0);
                 if( image )
                 {
                     imagePlane = new ImagePlane();
@@ -1239,7 +1243,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
 
             case Coronal: // XZ TODO encara no esta comprovat que aquest pla sigui correcte
             {
-                Image *image = m_mainVolume->getImages().first();
+                Image *image = m_mainVolume->getImage(0);
                 if( image )
                 {
                     imagePlane = new ImagePlane();
@@ -1329,7 +1333,7 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
         // cal sumar l'origen de la primera imatge, o el que seria el mateix, l'origen de m_mainVolume
         //
         // TODO provar si amb l'origen de m_mainVolume també funciona bé
-        Image *firstImage = m_mainVolume->getImages().at(0);
+        Image *firstImage = m_mainVolume->getImage(0);
         const double *ori = firstImage->getImagePositionPatient();
 
         // segons si hem fet una reconstrucció ortogonal haurem de fer
@@ -1703,12 +1707,7 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
                     {
                         // TODO Necessitaríem funcions de més alt nivell per obtenir la imatge consecutiva d'acord amb els paràmetres
                         // de thicknes, fases, etc
-                        Image *secondImage = 0;
-                        int index = ((m_currentSlice + m_slabThickness-1) * m_numberOfPhases) + m_currentPhase;
-                        if( index >= 0 && index < m_mainVolume->getImages().count() ) // està dins del rang
-                        {
-                            secondImage = m_mainVolume->getImages().at(index);
-                        }
+                        Image *secondImage = m_mainVolume->getImage(m_currentSlice + m_slabThickness-1, m_currentPhase);
                         if( secondImage )
                         {
                             lowerLeftText += tr("-%1").arg( secondImage->getSliceLocation().toDouble(), 0, 'f', 2 );
@@ -1827,12 +1826,12 @@ void Q2DViewer::applyGrayscalePipeline()
 {
     DEBUG_LOG( "*** Grayscale Transform Pipeline Begin ***" );
     DEBUG_LOG( QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6")
-    .arg( m_mainVolume->getImages().at(0)->getBitsAllocated() )
-    .arg( m_mainVolume->getImages().at(0)->getBitsStored() )
+    .arg( m_mainVolume->getImage(0)->getBitsAllocated() )
+    .arg( m_mainVolume->getImage(0)->getBitsStored() )
     .arg( m_mainVolume->getVtkData()->GetScalarRange()[0] )
     .arg( m_mainVolume->getVtkData()->GetScalarRange()[1] )
-    .arg( m_mainVolume->getImages().at(0)->getPixelRepresentation() )
-    .arg( m_mainVolume->getImages().at(0)->getPhotometricInterpretation() )
+    .arg( m_mainVolume->getImage(0)->getPixelRepresentation() )
+    .arg( m_mainVolume->getImage(0)->getPhotometricInterpretation() )
                      );
     // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
     if( isThickSlabActive() )

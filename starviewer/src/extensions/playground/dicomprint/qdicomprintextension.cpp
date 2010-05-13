@@ -538,7 +538,7 @@ void QDicomPrintExtension::updateVolumeSupport()
     bool isNotSupported = false;
 
     // Comprovem si té color.
-    QString pi = m_2DView->getInput()->getImages().at(0)->getPhotometricInterpretation();
+    QString pi = m_2DView->getInput()->getImage(0)->getPhotometricInterpretation();
     if ( pi != "MONOCHROME1" && pi != "MONOCHROME2" )
     {
         m_noSupportedSeriesMissage->setText( tr("This series cannot be printed because color is not supported.") );

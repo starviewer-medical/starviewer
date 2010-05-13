@@ -1581,7 +1581,7 @@ void QGlialEstimationExtension::setVolumeT1( Volume * volume)
     itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::Pointer minmaxCalc;
 
     m_T1LineEdit->clear();
-    m_T1LineEdit->insert(volume->getImages().first()->getParentSeries()->getDescription());
+    m_T1LineEdit->insert(volume->getImage(0)->getParentSeries()->getDescription());
     m_T1Volume = volume;
 
     minmaxCalc = itk::MinimumMaximumImageCalculator< Volume::ItkImageType >::New();
@@ -1600,7 +1600,7 @@ void QGlialEstimationExtension::setVolumeT1( Volume * volume)
 void QGlialEstimationExtension::setVolumePerfu( Volume * volume )
 {
     m_perfuLineEdit->clear();
-    m_perfuLineEdit->insert(volume->getImages().first()->getParentSeries()->getDescription());
+    m_perfuLineEdit->insert(volume->getImage(0)->getParentSeries()->getDescription());
     m_perfuVolume = volume;
     this->computeCBV();
     m_viewersLayout->getViewerWidget(1)->setInput( m_mapVolume );
@@ -1609,21 +1609,21 @@ void QGlialEstimationExtension::setVolumePerfu( Volume * volume )
 void QGlialEstimationExtension::setVolumeFlair( Volume * volume )
 {
     m_FLAIRLineEdit->clear();
-    m_FLAIRLineEdit->insert(volume->getImages().first()->getParentSeries()->getDescription());
+    m_FLAIRLineEdit->insert(volume->getImage(0)->getParentSeries()->getDescription());
     m_FLAIRVolume = volume;
 }
 
 void QGlialEstimationExtension::setVolumeDifu( Volume * volume )
 {
     m_difuLineEdit->clear();
-    m_difuLineEdit->insert(volume->getImages().first()->getParentSeries()->getDescription());
+    m_difuLineEdit->insert(volume->getImage(0)->getParentSeries()->getDescription());
     m_difuVolume = volume;
 }
 
 void QGlialEstimationExtension::setVolumeSpectrum( Volume * volume )
 {
     m_spectrumLineEdit->clear();
-    m_spectrumLineEdit->insert(volume->getImages().first()->getParentSeries()->getDescription());
+    m_spectrumLineEdit->insert(volume->getImage(0)->getParentSeries()->getDescription());
     m_spectrumVolume = volume;
 }
 

@@ -154,7 +154,7 @@ void Cursor3DTool::updatePosition()
                     xyz[0] = origin[0] + (slice * spacing[0]);
                     if( index[2] < numberOfVolumeImages )
                     {
-                        image = m_2DViewer->getInput()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
+                        image = m_2DViewer->getInput()->getImage(index[2]); //La llesca sempre és l'index[2] del DICOM
                         currentPlane = new ImagePlane();
                         currentPlane->fillFromImage( image);
                     }
@@ -164,7 +164,7 @@ void Cursor3DTool::updatePosition()
                     xyz[1] = origin[1] + (slice * spacing[1]);
                     if( index[2] < numberOfVolumeImages )
                     {
-                        image = m_2DViewer->getInput()->getImages().at( index[2] ); //La llesca sempre és l'index[2] del DICOM
+                        image = m_2DViewer->getInput()->getImage(index[2]); //La llesca sempre és l'index[2] del DICOM
                         currentPlane = new ImagePlane();
                         currentPlane->fillFromImage( image);
                     }
