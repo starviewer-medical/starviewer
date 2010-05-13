@@ -33,8 +33,6 @@ public:
 
     ~DICOMFileClassifierFillerStep();
 
-    bool fill();
-
     bool fillIndividually();
 
     void postProcessing() {}
@@ -42,10 +40,6 @@ public:
     QString name() {  return "DICOMFileClassifierFillerStep";  }
 
 private:
-    /// Donat un arxiu el classifica dins de pacient.
-    /// Retorna fals si no el pot classificar, és a dir, no és un arxiu que es pugui parsejar com a DICOM, cert altrament.
-    bool classifyFile( QString file );
-
     /// Classifica l'arxiu que tenim al lector de tags. Presuposa que es treballa amb un lector correcte.
     void classifyFile();
 

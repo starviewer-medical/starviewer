@@ -26,8 +26,6 @@ public:
 
     ~PresentationStateFillerStep();
 
-    bool fill();
-
     bool fillIndividually(){return false;};
 
     void postProcessing(){};
@@ -35,9 +33,6 @@ public:
     QString name() {  return "PresentationStateFillerStep";  }
 
 private:
-    /// Mètodes per processar la informació específica de pacient,series i imatge
-    void processPatient( Patient *patient );
-    void processSeries( Series *series );
     // TODO mètode per implementar
     void processPresentationState();
 

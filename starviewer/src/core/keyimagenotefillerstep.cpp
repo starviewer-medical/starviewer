@@ -24,48 +24,6 @@ KeyImageNoteFillerStep::~KeyImageNoteFillerStep()
 {
 }
 
-bool KeyImageNoteFillerStep::fill()
-{
-    bool ok = false;
-    // processarem cadascun dels pacients que hi hagi en l'input i per cadascun totes les sèries que siguin de tipus imatge
-    if( m_input )
-    {
-        unsigned int i = 0;
-        while( i < m_input->getNumberOfPatients() )
-        {
-            Patient *patient = m_input->getPatient( i );
-            this->processPatient( patient );
-            i++;
-        }
-    }
-    else
-        DEBUG_LOG("No tenim input!");
-
-    return ok;
-}
-
-void KeyImageNoteFillerStep::processPatient( Patient *patient )
-{
-    QList<Study *> studyList = patient->getStudies();
-    foreach( Study *study, studyList )
-    {
-        QList<Series *> seriesList = study->getSeries();
-        foreach( Series *series, seriesList )
-        {
-            this->processSeries( series );
-        }
-    }
-}
-
-void KeyImageNoteFillerStep::processSeries( Series *series )
-{
-    if( isKeyImageNoteSeries(series) )
-    {
-        // TODO recollir tots els elements key image note i processar-los
-        m_input->addLabelToSeries("KeyImageNoteFillerStep", series );
-    }
-}
-
 void KeyImageNoteFillerStep::processKeyImageNote()
 {
     DICOMTagReader dicomReader;

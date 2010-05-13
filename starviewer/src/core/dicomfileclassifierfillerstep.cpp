@@ -28,31 +28,6 @@ DICOMFileClassifierFillerStep::~DICOMFileClassifierFillerStep()
 {
 }
 
-bool DICOMFileClassifierFillerStep::fill()
-{
-    bool ok = false;
-    // processarem cadascun dels arxius de l'input i els anirem col·locant a Patient
-    if( m_input )
-    {
-        ok = true;
-        QStringList fileList = m_input->getFilesList();
-        foreach( QString file, fileList )
-        {
-            if (classifyFile(file))
-            {
-                m_input->addLabel("DICOMFileClassifierFillerStep");
-            }
-            qApp->processEvents();
-        }
-    }
-    else
-    {
-        DEBUG_LOG("No tenim input!");
-    }
-
-    return ok;
-}
-
 bool DICOMFileClassifierFillerStep::fillIndividually()
 {
     Q_ASSERT(m_input);
@@ -63,22 +38,6 @@ bool DICOMFileClassifierFillerStep::fillIndividually()
     m_input->addLabel("DICOMFileClassifierFillerStep");
 
     return true;
-}
-
-bool DICOMFileClassifierFillerStep::classifyFile( QString file )
-{
-    // no està classificat per tal l'hem de tractar
-    bool ok = m_dicomReader->setFile( file );
-    if( ok )
-    {
-        classifyFile();
-    }
-    else
-    {
-        DEBUG_LOG("Error en llegir l'arxiu: " + file );
-    }
-
-    return ok;
 }
 
 void DICOMFileClassifierFillerStep::classifyFile()

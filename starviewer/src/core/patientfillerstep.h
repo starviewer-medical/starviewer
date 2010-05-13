@@ -39,12 +39,7 @@ public:
     PriorityFlags getPriority() const { return m_priority; }
 
     /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el
-    /// que li toca retorna fals, true altrament
-    virtual bool fill() = 0;
-
-    /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el
-    /// que li toca retorna fals, true altrament. Es diferencia del fill() en que aquest s'ha d'utilitzar
-    /// quan es passen els steps individualment per fitxers.
+    /// que li toca retorna fals, true altrament. S'ha d'utilitzar passant els steps individualment fitxer a fitxer.
     virtual bool fillIndividually() = 0;
 
     /// Al executar els steps individualment per cada fitxer, és possible que alguns steps necessitin fer quelcom

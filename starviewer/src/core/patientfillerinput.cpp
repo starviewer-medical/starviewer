@@ -160,32 +160,6 @@ bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
     return true;
 }
 
-QList<Series *> PatientFillerInput::getSeriesWithLabels( QStringList labels )
-{
-    QList<Series *> resultSeries;
-    bool ok;
-    foreach( Series *series, m_seriesLabels.uniqueKeys() )
-    {
-        QStringList currentSeriesLabelList = m_seriesLabels.values( series );
-        ok = true;
-        int i = 0;
-        while( i < labels.size() && ok )
-        {
-            if( !currentSeriesLabelList.contains( labels.at(i) ) )
-            {
-                ok = false;
-            }
-            i++;
-        }
-        if( ok )
-        {
-            // afegir la sèrie a la llista
-            resultSeries << series;
-        }
-    }
-    return resultSeries;
-}
-
 void PatientFillerInput::initializeAllLabels()
 {
     while(!m_allLabels.isEmpty())

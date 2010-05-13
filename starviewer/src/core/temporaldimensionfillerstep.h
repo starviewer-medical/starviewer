@@ -27,8 +27,6 @@ public:
 
     ~TemporalDimensionFillerStep();
 
-    bool fill();
-
     bool fillIndividually();
 
     void postProcessing();
@@ -44,9 +42,6 @@ private:
         bool isCTLocalizer;
         QString firstImagePosition;
     };
-
-    /// Mètodes per processar la informació específica de series
-    void processSeries( Series *series );
 
     /// Estructura que s'utiliza en cas que es processi l'step individiualment per fitxers.
     QHash< Series *, QHash< int, VolumeInfo *>* > TemporalDimensionInternalInfo;

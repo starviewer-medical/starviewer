@@ -68,9 +68,6 @@ private:
     // \TODO això en un futur ho farà una classe registradora, ara es fa tot aquí per conveniència
     void registerSteps();
 
-    /// Processa un PatientFillerStep amb les dades d'input
-    void processPatientFillerStep(PatientFillerStep *patientFillerStep, PatientFillerInput *input);
-
 private:
     /// Registre d'steps
     QList<PatientFillerStep *> m_registeredSteps;
