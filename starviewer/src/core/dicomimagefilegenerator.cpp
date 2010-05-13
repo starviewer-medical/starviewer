@@ -16,7 +16,6 @@
 #include "patient.h"
 #include "dicomwriter.h"
 #include "dicomvalueattribute.h"
-#include "dicomtag.h"
 #include <vtkImageData.h>
 
 namespace udg {
