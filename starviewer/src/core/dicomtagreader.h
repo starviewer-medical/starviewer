@@ -56,10 +56,8 @@ public:
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
     bool tagExists( const DICOMTag &tag );
 
-    /// Mètode igual que l'anterior però es cerca pel nom a través dels define's de dcmtk. Aquests defines
-    /// es poden trobar a /usr/include/dcmtk/dcmdata/dcdeftag.h. Cal haver fet un ús correcte de l'objecte m_dicomData.
-    /// Exemple: getValueAttributeAsQString(DCMPatientOrientation);  //Seria equivalent a l'anterior
-    /// Retornarà QString buit si no es troba el tag o el tag estigui buit.
+    /// Obté el valor de l'atribut demanat i ens el retorna com a QString
+    /// Si no es troba el tag es retornarà un QString buit
     QString getValueAttributeAsQString( const DICOMTag &tag );
 
     /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
