@@ -1419,18 +1419,18 @@ void QMPRExtension::rotate( double degrees , double rotationAxis[3] ,  vtkPlaneS
         lp = sqrt( rotationAxis[1]*rotationAxis[1] + rotationAxis[2]*rotationAxis[2] );
         alpha = asin( rotationAxis[1] / lp ) ;
 //         alpha = acos( rotationAxis[2] / lp );
-        m_transform->RotateX( -alpha * vtkMath::DoubleRadiansToDegrees()  ); // o RotateWXYZ( alpha , [1,0,0])
+        m_transform->RotateX( -alpha * MathTools::RadiansToDegreesAsDouble  ); // o RotateWXYZ( alpha , [1,0,0])
     // (3)
         double beta , l;
         l = sqrt( rotationAxis[0]*rotationAxis[0] + rotationAxis[1]*rotationAxis[1] + rotationAxis[2]*rotationAxis[2] );
         beta =  asin( rotationAxis[0] );
-        m_transform->RotateY( beta * vtkMath::DoubleRadiansToDegrees()  ); // o RotateWXYZ( beta , [0,1,0])
+        m_transform->RotateY( beta * MathTools::RadiansToDegreesAsDouble  ); // o RotateWXYZ( beta , [0,1,0])
     // (4)
         m_transform->RotateZ( degrees ); // o RotateWXYZ( degrees , [0,0,1])
     // (5)
-        m_transform->RotateY( -beta * vtkMath::DoubleRadiansToDegrees() ); // o RotateWXYZ( -beta , [0,1,0])
+        m_transform->RotateY( -beta * MathTools::RadiansToDegreesAsDouble ); // o RotateWXYZ( -beta , [0,1,0])
     // (6)
-        m_transform->RotateX( alpha * vtkMath::DoubleRadiansToDegrees()  ); // o RotateWXYZ( -alpha , [1,0,0])
+        m_transform->RotateX( alpha * MathTools::RadiansToDegreesAsDouble  ); // o RotateWXYZ( -alpha , [1,0,0])
     // (7)
         m_transform->Translate( -m_intersectionPoint[0], -m_intersectionPoint[1], -m_intersectionPoint[2] );
 
