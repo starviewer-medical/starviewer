@@ -137,7 +137,7 @@ QList<Patient*> PatientFiller::processDICOMFileList(QStringList dicomFiles)
         patientFillerInput.setFilesList(dicomFiles);
         MHDFileClassifierStep mhdFileClassiferStep;
         mhdFileClassiferStep.setInput(&patientFillerInput);
-        mhdFileClassiferStep.fill();
+        mhdFileClassiferStep.fillIndividually();
 
         return patientFillerInput.getPatientsList();
     }

@@ -23,9 +23,7 @@ public:
 
     ~MHDFileClassifierStep();
 
-    bool fill();
-
-    bool fillIndividually(){return false;}
+    bool fillIndividually();
 
     void postProcessing(){}
 
