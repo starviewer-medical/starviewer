@@ -10,7 +10,6 @@
 #include <QSemaphore>
 
 #include "processimage.h"
-#include "dicomtagreader.h"
 
 namespace udg {
 

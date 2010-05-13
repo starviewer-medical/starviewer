@@ -7,7 +7,6 @@
 #include "orderimagesfillerstep.h"
 #include "logging.h"
 #include "patientfillerinput.h"
-#include "dicomtagreader.h"
 #include "patient.h"
 #include "study.h"
 #include "series.h"
