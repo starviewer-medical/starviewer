@@ -109,6 +109,9 @@ static double dotProduct( double vector1[3], double vector2[3] );
 /// Calcula el producte vectorial dels dos vectors directors passats per paràmetre i ens deixa el resultat en el tercer paràmetre
 static void crossProduct( double vectorDirector1[3], double vectorDirector2[3], double crossProductVector[3] );
 
+/// Normalitza el vector passat per paràmetre
+static double normalize( double vector[3] );
+
 /// Calcula l'angle entre dos vectors. Retorna el valor en radians o graus
 static double angleInRadians( double vec1[3] , double vec2[3] );
 static double angleInDegrees( double vec1[3] , double vec2[3] );

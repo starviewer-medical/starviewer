@@ -9,7 +9,6 @@
 #include "mathtools.h"
 #include <QString>
 // Vtk's
-#include <vtkMath.h>
 #include <vtkPlane.h>
 
 namespace udg {
@@ -66,7 +65,7 @@ void ImagePlane::setRowDirectionVector( double x, double y, double z )
     m_rowDirectionVector[1] = y;
     m_rowDirectionVector[2] = z;
     MathTools::crossProduct( m_rowDirectionVector, m_columnDirectionVector, m_normal );
-    vtkMath::Normalize(m_normal);
+    MathTools::normalize(m_normal);
     updateCenter();
 }
 
@@ -81,7 +80,7 @@ void ImagePlane::setColumnDirectionVector( double x, double y, double z )
     m_columnDirectionVector[1] = y;
     m_columnDirectionVector[2] = z;
     MathTools::crossProduct( m_rowDirectionVector, m_columnDirectionVector, m_normal );
-    vtkMath::Normalize(m_normal);
+    MathTools::normalize(m_normal);
     updateCenter();
 }
 
