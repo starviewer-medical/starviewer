@@ -8,6 +8,8 @@
 #define UDGDICOMTAGREADER_H
 
 #include <QString>
+// Pràcticament sempre que volguem fer servir aquesta classe farem ús del diccionari
+#include "dicomdictionary.h"
 
 class DcmDataset;
 class DcmSequenceOfItems;

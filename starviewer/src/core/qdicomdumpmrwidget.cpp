@@ -9,7 +9,6 @@
 #include "image.h"
 #include "series.h"
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 #include "volume.h"
 
 namespace udg {

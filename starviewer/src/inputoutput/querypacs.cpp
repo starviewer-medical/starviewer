@@ -17,7 +17,6 @@
 #include "patient.h"
 #include "createinformationmodelobject.h"
 #include "dicomtagreader.h"
-#include "dicomdictionary.h"
 #include "pacsdevicemanager.h"
 #include "logging.h"
 
