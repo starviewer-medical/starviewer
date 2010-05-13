@@ -42,7 +42,7 @@ bool DICOMImageFileGenerator::generateDICOMFiles()
     Q_ASSERT( m_input );
 
     // Analitzem el SOP Class UID per saber si sabem generar el tipus de fitxers
-    QString sopClass = m_input->getImages().at(0)->getParentSeries()->getSOPClassUID();
+    QString sopClass = m_input->getImage(0)->getParentSeries()->getSOPClassUID();
 
     if ( sopClass  ==  UIDSecondaryCaptureImageStorage )
     {

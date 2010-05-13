@@ -228,7 +228,7 @@ void QExporterTool::generateAndStoreNewSeries()
 
     Settings settings;
 
-    QString dirPath = settings.getValue( InputOutputSettings::CachePath ).toString() + "/" + generetedVolume->getStudy()->getInstanceUID() + "/" + generetedVolume->getImages().at(0)->getParentSeries()->getInstanceUID();
+    QString dirPath = settings.getValue( InputOutputSettings::CachePath ).toString() + "/" + generetedVolume->getStudy()->getInstanceUID() + "/" + generetedVolume->getImage(0)->getParentSeries()->getInstanceUID();
     generator.setDirPath( dirPath );
     generator.setInput( generetedVolume );
 
@@ -243,7 +243,7 @@ void QExporterTool::generateAndStoreNewSeries()
         qApp->processEvents();
 
         LocalDatabaseManager manager;
-        manager.save( generetedVolume->getImages().at(0)->getParentSeries() );
+        manager.save( generetedVolume->getImage(0)->getParentSeries() );
         // TODO Comprovar error
 
         if ( m_sendToPacsCheckBox->isChecked() ) //Enviem a PACS
@@ -257,7 +257,7 @@ void QExporterTool::generateAndStoreNewSeries()
 
             DicomMask mask;
             mask.setStudyUID( generetedVolume->getStudy()->getInstanceUID() );
-            mask.setSeriesUID( generetedVolume->getImages().at(0)->getParentSeries()->getInstanceUID() );
+            mask.setSeriesUID( generetedVolume->getImage(0)->getParentSeries()->getInstanceUID() );
             queryScreen->storeDicomObjectsToPacs( device , generetedVolume->getStudy() , mask );
         }
 

@@ -675,14 +675,14 @@ void QViewer::updateWindowLevelData()
     // primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
     int index = m_mainVolume->getImages().count()/2;
 
-    int wlCount = m_mainVolume->getImages().at( index )->getNumberOfWindowLevels();
+    int wlCount = m_mainVolume->getImage(index)->getNumberOfWindowLevels();
 
     if( wlCount > 0)
     {
         for( int i = 0; i < wlCount; i++ )
         {
-            QPair<double, double> windowLevel = m_mainVolume->getImages().at(index)->getWindowLevel( i );
-            QString description = m_mainVolume->getImages().at(index)->getWindowLevelExplanation( i );
+            QPair<double, double> windowLevel = m_mainVolume->getImage(index)->getWindowLevel( i );
+            QString description = m_mainVolume->getImage(index)->getWindowLevelExplanation( i );
             if( description.isEmpty() )
             {
                 description = tr("Default %1").arg(i);
