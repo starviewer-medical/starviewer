@@ -42,9 +42,6 @@
 #include <vtkCell.h>
 #include <vtkPropPicker.h>
 #include <vtkImageActor.h>
-// displayed area
-#include <vtkImageChangeInformation.h>
-#include <vtkImageResample.h>
 // grayscale pipeline
 #include <vtkImageMapToWindowLevelColors.h>
 // projeccio de punts
