@@ -7,7 +7,6 @@
 #include "dicomtagreader.h"
 
 #include "logging.h"
-#include "dicomtag.h"
 #include "dicomsequenceattribute.h"
 #include "dicomvalueattribute.h"
 #include "dicomsequenceitem.h"

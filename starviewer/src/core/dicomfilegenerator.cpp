@@ -14,7 +14,6 @@
 #include "study.h"
 #include "series.h"
 #include "dicomdictionary.h"
-#include "dicomtag.h"
 #include "dicomvalueattribute.h"
 
 namespace udg {
