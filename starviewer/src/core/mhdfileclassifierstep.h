@@ -25,9 +25,9 @@ public:
 
     bool fill();
 
-    bool fillIndividually(){return false;};
+    bool fillIndividually(){return false;}
 
-    void postProcessing(){};
+    void postProcessing(){}
 
     QString name() {  return "MHDFileClassifierStep";  }
 
