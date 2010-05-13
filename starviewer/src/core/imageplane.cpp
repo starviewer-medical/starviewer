@@ -6,6 +6,7 @@
  ***************************************************************************/
 #include "imageplane.h"
 #include "image.h"
+#include "mathtools.h"
 #include <QString>
 // Vtk's
 #include <vtkMath.h>
@@ -64,7 +65,7 @@ void ImagePlane::setRowDirectionVector( double x, double y, double z )
     m_rowDirectionVector[0] = x;
     m_rowDirectionVector[1] = y;
     m_rowDirectionVector[2] = z;
-    vtkMath::Cross( m_rowDirectionVector, m_columnDirectionVector, m_normal );
+    MathTools::crossProduct( m_rowDirectionVector, m_columnDirectionVector, m_normal );
     vtkMath::Normalize(m_normal);
     updateCenter();
 }
@@ -79,7 +80,7 @@ void ImagePlane::setColumnDirectionVector( double x, double y, double z )
     m_columnDirectionVector[0] = x;
     m_columnDirectionVector[1] = y;
     m_columnDirectionVector[2] = z;
-    vtkMath::Cross( m_rowDirectionVector, m_columnDirectionVector, m_normal );
+    MathTools::crossProduct( m_rowDirectionVector, m_columnDirectionVector, m_normal );
     vtkMath::Normalize(m_normal);
     updateCenter();
 }

@@ -26,7 +26,7 @@
 #include <QMessageBox>
 // vtk
 #include <vtkRenderer.h>
-#include <vtkMath.h> // pel vtkMath::Cross
+#include <vtkMath.h>
 #include <vtkAxisActor2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPlaneSource.h>
@@ -546,8 +546,7 @@ void QMPRExtension::rotateAxialViewAxisActor()
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
-    // TODO canviar per MathTools::crossProduct()
-    vtkMath::Cross( vec1 , vec2 , direction );
+    MathTools::crossProduct( vec1 , vec2 , direction );
     this->getRotationAxis( m_pickedActorPlaneSource , axis );
     double dot = MathTools::dotProduct( direction , axis );
 
@@ -636,8 +635,7 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
-    // TODO canviar per MathTools::crossProduct()
-    vtkMath::Cross( vec1 , vec2 , direction );
+    MathTools::crossProduct( vec1 , vec2 , direction );
     axis[0] = m_pickedActorPlaneSource->GetPoint1()[0] - m_pickedActorPlaneSource->GetOrigin()[0];
     axis[1] = m_pickedActorPlaneSource->GetPoint1()[1] - m_pickedActorPlaneSource->GetOrigin()[1];
     axis[2] = m_pickedActorPlaneSource->GetPoint1()[2] - m_pickedActorPlaneSource->GetOrigin()[2];

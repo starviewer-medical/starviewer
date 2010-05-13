@@ -820,7 +820,7 @@ void ImagePlaneProjectionTool::rotateProjectedLine()
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
-    vtkMath::Cross( vec1 , vec2 , direction );
+    MathTools::crossProduct( vec1 , vec2 , direction );
     this->getRotationAxisImagePlane( imagePlane, axis );
     double dot = MathTools::dotProduct( direction , axis );
 
