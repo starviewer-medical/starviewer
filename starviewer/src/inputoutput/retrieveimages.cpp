@@ -164,7 +164,7 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
                 xfer = ( *imageDataSet )->getOriginalXfer();
 
             //Guardem la imatge
-            OFCondition stateSaveImage = save(cbdata, imageFilenameToSave);
+            OFCondition stateSaveImage = save(cbdata->dcmff, imageFilenameToSave);
             
             if ( stateSaveImage.bad() )
             {
@@ -206,21 +206,17 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
     return;
 }
 
-OFCondition RetrieveImages::save(StoreCallbackData *storeCallbackData, QString imageFileNameToSave)
+OFCondition RetrieveImages::save(DcmFileFormat *fileRetrieved, QString imageFileNameToSave)
 {
-    OFBool opt_useMetaheader = OFTrue;
-    E_EncodingType opt_sequenceType = EET_ExplicitLength;
-    E_GrpLenEncoding opt_groupLength = EGL_recalcGL;
-    E_PaddingEncoding opt_paddingType = EPD_withoutPadding;
-    OFCmdUnsignedInt opt_filepad = 0;
-    OFCmdUnsignedInt opt_itempad = 0;
-    E_TransferSyntax opt_writeTransferSyntax = EXS_Unknown;
+    OFBool useMetaheader = OFTrue;
+    E_EncodingType sequenceType = EET_ExplicitLength;
+    E_GrpLenEncoding groupLength = EGL_recalcGL;
+    E_PaddingEncoding paddingType = EPD_withoutPadding;
+    Uint32 filePadding = 0, itemPadding = 0;
+    E_TransferSyntax transferSyntaxFile = fileRetrieved->getDataset()->getOriginalXfer();
 
-    E_TransferSyntax xfer = opt_writeTransferSyntax;
-    if (xfer == EXS_Unknown) 
-        xfer = storeCallbackData->dcmff->getDataset()->getOriginalXfer();
-
-    return storeCallbackData->dcmff->saveFile( qPrintable(QDir::toNativeSeparators(imageFileNameToSave)), xfer, opt_sequenceType, opt_groupLength, opt_paddingType, (Uint32)opt_filepad, (Uint32)opt_itempad, !opt_useMetaheader );
+    return fileRetrieved->saveFile(qPrintable( QDir::toNativeSeparators(imageFileNameToSave) ), transferSyntaxFile, sequenceType, groupLength, 
+        paddingType, filePadding, itemPadding, !useMetaheader);
 }
 
 OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc, T_DIMSE_Message *msg, T_ASC_PresentationContextID presID )
