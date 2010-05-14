@@ -8,7 +8,6 @@
 #define UDGHANGINGPROTOCOLMANAGER_H
 
 #include <QObject>
-#include <QMap>
 #include <QList>
 #include <QMultiHash>
 #include <QProgressDialog>
@@ -42,14 +41,6 @@ public:
     // Aplica un hanging protocol concret, ja sigui via identificador o per instància
     void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );
     void applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout * layout, Patient * patient );
-
-    /// TODO Mètode públic temporal per poder aplicar les transformacions desitjades per un viewer
-    /// es fa especialment per no haver de fer noves classes ni duplicar el mapa de transformacions
-    /// i per poder aplicar-ho ràpidament sobre mamo. S'ha de plantejar bé on hauria d'anar tot això
-    /// Donada la orientació actual i la desitjada, aplica sobre el viewer donat les transformacions pertinents
-    /// El format de les orientacions és el mateix que el del DICOM, 2 strings separats per "\",
-    /// el primer indica la direcció de les rows i el segon la direcció de les columnes
-    void applyDesiredDisplayOrientation(const QString &currentOrientation, const QString &desiredOrientation, Q2DViewer *viewer);
 
     /// Buscar hanging protocols quan es sap que hi ha previes
     QList<HangingProtocol * > getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs );
@@ -104,9 +95,6 @@ private:
         HangingProtocol * hangingProtocol; /// HangingProtocol necessari per buscar la millor serie de les descarregades
         HangingProtocolDisplaySet * displaySet; /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
     };
-
-    /// Map per guardar les operacions de rotacio i flip per aplicar a les imatges. Valors: String posicions, nombre de rotacions, nombre flips
-    QMap<QString, QString> m_operationsMap;
 
     QMultiHash<QString, StructPreviousStudyDownloading*> * m_studiesDownloading;
 

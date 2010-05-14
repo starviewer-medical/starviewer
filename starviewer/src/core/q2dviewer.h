@@ -32,8 +32,7 @@ class Volume;
 class Image;
 class Drawer;
 class ImagePlane;
-// TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
-class HangingProtocolManager;
+class ImageOrientationOperationsMapper;
 
 /**
 
@@ -318,6 +317,9 @@ public slots:
     // Posa la posició d'alineament de la imatge (dreta, esquerre, centrat )
     void setAlignPosition( AlignPosition alignPosition );
 
+    /// Aplica les transformacions 2D necessàries sobre la imatge actual perquè aquesta tingui la orientació indicada
+    void applyDesiredOrientation(const QString &orientation);
+
 signals:
     /// envia la nova llesca en la que ens trobem
     void sliceChanged(int);
@@ -515,8 +517,8 @@ private:
     /// Indica quin tipus de projecció apliquem sobre l'slab
     int m_slabProjectionMode;
 
-    // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
-    HangingProtocolManager *m_hangingProtocolManager;
+    // Conté el mapeig d'operacions a fer quan voelm passar d'una orientació a un altre
+    ImageOrientationOperationsMapper *m_imageOrientationOperationsMapper;
 
     /// Posició a on s'ha d'alinear la imatge ( dreta, esquerre o centrat )
     AlignPosition m_alignPosition;

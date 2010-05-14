@@ -14,8 +14,7 @@
 #include "patient.h"
 #include "imageplane.h"
 #include "mathtools.h"
-// TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
-#include "hangingprotocolmanager.h"
+#include "imageorientationoperationsmapper.h"
 //thickslab
 #include "vtkProjectionImageFilter.h"
 
@@ -73,8 +72,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_drawer = new Drawer( this );
     connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
 
-    // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
-    m_hangingProtocolManager = new HangingProtocolManager(this);
+    m_imageOrientationOperationsMapper = new ImageOrientationOperationsMapper();
 
     m_alignPosition = Q2DViewer::AlignCenter;
 }
@@ -1573,9 +1571,8 @@ void Q2DViewer::updateSliceAnnotationInformation()
             }
 
             m_lowerRightText = laterality + " " + projection;
-            // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
-            QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
-            m_hangingProtocolManager->applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3] , desiredOrientation, this);
+            // Apliquem la orientació que volem
+            applyDesiredOrientation( desiredOrientation );
         }
         else
             m_lowerRightText.clear();
@@ -2149,6 +2146,26 @@ void Q2DViewer::setAlignPosition( AlignPosition alignPosition )
         m_alignPosition = Q2DViewer::AlignCenter;
         break;
     }
+}
+
+void Q2DViewer::applyDesiredOrientation(const QString &orientation)
+{
+    QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
+    QStringList desiredOrientationList = orientation.split("\\");
+    QString desiredTop, desiredLeft;
+    if ( desiredOrientationList.count() == 2 )
+    {
+        desiredTop = desiredOrientationList.at(0);
+        desiredLeft = desiredOrientationList.at(1);
+    }
+    m_imageOrientationOperationsMapper->setInitialOrientation( labels[2], labels[3] );
+    m_imageOrientationOperationsMapper->setDesiredOrientation( desiredTop, desiredLeft );
+    
+    // TODO ara mateix fet així és ineficient ja que es poden cridar fins a dos cops updateCamera() innecessàriament
+    // Caldria refactoritzar els mètodes de rotació i flip per aplicar aquests canvis requerint un únic updateCamera()
+    rotateClockWise( m_imageOrientationOperationsMapper->getNumberOfClockwiseTurnsToApply() );
+    if( m_imageOrientationOperationsMapper->requiresVerticalFlip() )
+        verticalFlip();
 }
 
 };  // end namespace udg

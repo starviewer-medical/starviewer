@@ -213,6 +213,7 @@ HEADERS += extensionfactory.h \
     dicomdictionary.h \
     dicomimagefilegenerator.h \
     imageplaneprojectiontooldata.h \
+    imageorientationoperationsmapper.h \
     copydirectory.h 
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
@@ -388,6 +389,7 @@ SOURCES += extensionmediator.cpp \
     dicomfilegenerator.cpp \
     dicomimagefilegenerator.cpp \
     imageplaneprojectiontooldata.cpp \
+    imageorientationoperationsmapper.cpp \
     copydirectory.cpp
 TEMPLATE = lib
 DESTDIR = ./
