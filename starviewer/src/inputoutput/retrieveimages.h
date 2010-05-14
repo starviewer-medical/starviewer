@@ -52,28 +52,16 @@ class RetrieveImages
 public:
    RetrieveImages();
 
-   /** 
-    * This action sets the connection that we will use to connect to the pacs
-    * @param connection [in] Study's Open connection to the pacs
-    */
+   ///This action sets the connection that we will use to connect to the pacs
    void setConnection(PacsConnection connection);
 
-   /** 
-    * Sets the network to use for retrieve the images
-    * @param Network to use
-    */
+   ///Sets the network to use for retrieve the images
    void setNetwork(T_ASC_Network * network);
 
-    /** 
-     * This action sets the mask that we will use to retrieve the image in to the pacs.
-     * @param mask Màscara de cerca
-     */
+    ///This action sets the mask that we will use to retrieve the image in to the pacs.
    void setMask( DicomMask mask );
 
-   /** 
-    * Download the study's Image
-    * @return state of the method
-    */
+   ///Starts the download
    Status retrieve();
 
 private:
@@ -83,33 +71,22 @@ private:
     DcmDataset *m_mask;
 
     /// En aquesta funció acceptem la connexió que se'ns sol·licita per transmetre'ns imatges, i indiquem quins transfer syntax suportem
-    static OFCondition acceptSubAssoc( T_ASC_Network * aNet, T_ASC_Association ** assoc );
+    static OFCondition acceptSubAssociation( T_ASC_Network * associationNetwork, T_ASC_Association ** association );
 
-    static void moveCallback( void *callbackData, T_DIMSE_C_MoveRQ *req, int responseCount, T_DIMSE_C_MoveRSP *response );
+    static void moveCallback( void *callbackData, T_DIMSE_C_MoveRQ *moveRequest, int responseCount, T_DIMSE_C_MoveRSP *moveResponse );
 
     /// Responem a una petició d'echo
-    static OFCondition echoSCP( T_ASC_Association * assoc, T_DIMSE_Message * msg, T_ASC_PresentationContextID presID );
+    static OFCondition echoSCP( T_ASC_Association * association, T_DIMSE_Message * dimseMessage, T_ASC_PresentationContextID presentationContextID );
 
-    /** 
-     * Aquesta funció s'encarrega de guardar cada trama DICOM que rebem
-     * Paràmetres d'entrada
-     * @param callbackData 
-     * @param progress Progress state
-     * @param req Original store request
-     * @param imageFileName
-     * @param imageDataSet Being received into
-     * Paràmetres de sortida
-     * @param rsp Final store response
-     * @param statusDetail
-     */
-    static void storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *req, char *imageFileName, DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *rsp, DcmDataset **statusDetail );
+    ///Aquesta funció s'encarrega de guardar cada trama DICOM que rebem
+    static void storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *storeRequest, char *imageFileName, DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *storeResponse, DcmDataset **statusDetail );
 
-    static OFCondition storeSCP( T_ASC_Association *assoc, T_DIMSE_Message *msg, T_ASC_PresentationContextID presID );
+    static OFCondition storeSCP( T_ASC_Association *association, T_DIMSE_Message *messagge, T_ASC_PresentationContextID presentationContextID );
 
     /// Accepta la connexió que ens fa el PACS, per convertir-nos en un scp
-    static OFCondition subOpSCP( T_ASC_Association **subAssoc );
+    static OFCondition subOperationSCP( T_ASC_Association **subAssociation );
 
-    static void subOpCallback( void * /*subOpCallbackData*/, T_ASC_Network *aNet, T_ASC_Association **subAssoc );
+    static void subOperationCallback( void * /*subOperationCallbackData*/, T_ASC_Network *associationNetwork, T_ASC_Association **subAssociation );
 
     /// Guarda una composite instance descarregada
     static OFCondition save(DcmFileFormat *fileRetrieved, QString imageFileNameToSave);
@@ -118,7 +95,7 @@ private:
     static QString getCompositeInstanceFileName(DcmDataset *imageDataset);
 
     /// En cas d'error processa la resposta rebuda per part del SCP, grava l'error el log i el retorna en forma d'objecte Status
-    Status processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *response, DcmDataset *statusDetail);
+    Status processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail);
 };
 
 };
