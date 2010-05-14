@@ -11,7 +11,6 @@
 
 // FWD declarations
 class QAction;
-class vtkCommand;
 
 namespace udg {
 
