@@ -114,8 +114,7 @@ OFCondition RetrieveImages::echoSCP( T_ASC_Association * association, T_DIMSE_Me
     OFCondition condition = DIMSE_sendEchoResponse( association , presentationContextID , &dimseMessage->msg.CEchoRQ , STATUS_Success , NULL );
     if ( condition.bad() )
     {
-        //TODO:Substituir per ERROR_LOG
-        DimseCondition::dump( condition );
+        ERROR_LOG("El PACS ens ha sol·licitat un echo durant la descàrrega però la resposta a aquest ha fallat");
     }
 
     return condition;
@@ -296,7 +295,6 @@ Status RetrieveImages::retrieve()
     T_DIMSE_C_MoveRQ moveRequest;
     T_DIMSE_C_MoveRSP moveResponse;
     DIC_US messageId = m_assoc->nextMsgID++;
-    DcmDataset *responseIdentifiers = NULL;
     DcmDataset *statusDetail = NULL;
     MyCallbackInfo callbackData;
     Status state;
@@ -329,7 +327,7 @@ Status RetrieveImages::retrieve()
     ASC_getAPTitles( m_assoc->params, moveRequest.MoveDestination, NULL, NULL );
 
     OFCondition condition = DIMSE_moveUser( m_assoc, presentationContextID, &moveRequest, m_mask, moveCallback, &callbackData, DIMSE_BLOCKING, 0, 
-        m_net, subOperationCallback, NULL, &moveResponse, &statusDetail, &responseIdentifiers );
+        m_net, subOperationCallback, NULL, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/ );
 
     if (moveResponse.DimseStatus != STATUS_Success)
     {
@@ -341,9 +339,6 @@ Status RetrieveImages::retrieve()
     /* dump status detail information if there is some */
     if ( statusDetail != NULL )
         delete statusDetail;
-
-    if ( responseIdentifiers != NULL ) 
-        delete responseIdentifiers ;
 
     return state;
 }
