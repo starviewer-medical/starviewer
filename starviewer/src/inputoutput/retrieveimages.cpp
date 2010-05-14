@@ -42,19 +42,16 @@ void RetrieveImages:: setMask( DicomMask mask )
     m_mask = mask.getDicomMask();
 }
 
-OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet, T_ASC_Association ** assoc )
+OFCondition RetrieveImages::acceptSubAssociation( T_ASC_Network * associationNetwork, T_ASC_Association ** association )
 {
     const char* knownAbstractSyntaxes[] = { UID_VerificationSOPClass };
-
-    //default value from movescu.cpp
-    OFCmdUnsignedInt opt_maxPDU = ASC_DEFAULTMAXPDU;
 
     const char* transferSyntaxes[] = { NULL , NULL , NULL , NULL };
     int numTransferSyntaxes;
 
-    OFCondition cond = ASC_receiveAssociation( aNet , assoc , opt_maxPDU );
+    OFCondition condition = ASC_receiveAssociation( associationNetwork , association , ASC_DEFAULTMAXPDU );
 
-    if ( cond.good() )
+    if ( condition.good() )
     {
 #ifndef DISABLE_COMPRESSION_EXTENSION
         // Si disposem de compressio la demanem, i podrem accelerar el temps de
@@ -82,24 +79,25 @@ OFCondition RetrieveImages::acceptSubAssoc( T_ASC_Network * aNet, T_ASC_Associat
 #endif
 
         /* accept the Verification SOP Class if presented */
-        cond = ASC_acceptContextsWithPreferredTransferSyntaxes( (*assoc)->params, knownAbstractSyntaxes, DIM_OF(knownAbstractSyntaxes), transferSyntaxes, numTransferSyntaxes );
+        condition = ASC_acceptContextsWithPreferredTransferSyntaxes( (*association)->params, knownAbstractSyntaxes, DIM_OF(knownAbstractSyntaxes), transferSyntaxes, numTransferSyntaxes );
 
-        if ( cond.good() )
+        if ( condition.good() )
         {
             /* the array of Storage SOP Class UIDs comes from dcuid.h */
-            cond = ASC_acceptContextsWithPreferredTransferSyntaxes( (*assoc)->params, dcmAllStorageSOPClassUIDs, numberOfAllDcmStorageSOPClassUIDs,                transferSyntaxes, numTransferSyntaxes );
+            condition = ASC_acceptContextsWithPreferredTransferSyntaxes( (*association)->params, dcmAllStorageSOPClassUIDs, numberOfAllDcmStorageSOPClassUIDs,                transferSyntaxes, numTransferSyntaxes );
         }
     }
 
-    if ( cond.good() ) 
-        cond = ASC_acknowledgeAssociation( *assoc );
-
-    if ( cond.bad() )
+    if ( condition.good() ) 
     {
-        ASC_dropAssociation( *assoc );
-        ASC_destroyAssociation( assoc );
+        condition = ASC_acknowledgeAssociation( *association );
     }
-    return cond;
+    else
+    {
+        ASC_dropAssociation( *association );
+        ASC_destroyAssociation( association );
+    }
+    return condition;
 }
 
 void RetrieveImages::moveCallback( void *callbackData, T_DIMSE_C_MoveRQ *req, int responseCount, T_DIMSE_C_MoveRSP *response )
@@ -107,61 +105,45 @@ void RetrieveImages::moveCallback( void *callbackData, T_DIMSE_C_MoveRQ *req, in
     Q_UNUSED( req );
     Q_UNUSED( responseCount );
     Q_UNUSED( response );
-    
-    OFCondition cond = EC_Normal;
-    MyCallbackInfo *myCallbackData;
-
-    myCallbackData = ( MyCallbackInfo* )callbackData;
+    //TODO:Aquest mètode s'haurà d'utilitzar quan implementem la cancel·lació de descàrregues    
 }
 
-OFCondition RetrieveImages::echoSCP( T_ASC_Association * assoc, T_DIMSE_Message * msg,T_ASC_PresentationContextID presID )
+OFCondition RetrieveImages::echoSCP( T_ASC_Association * association, T_DIMSE_Message * dimseMessage,T_ASC_PresentationContextID presentationContextID )
 {
     // The echo succeeded
-    OFCondition cond = DIMSE_sendEchoResponse( assoc , presID , &msg->msg.CEchoRQ , STATUS_Success , NULL );
-    if ( cond.bad() )
+    OFCondition condition = DIMSE_sendEchoResponse( association , presentationContextID , &dimseMessage->msg.CEchoRQ , STATUS_Success , NULL );
+    if ( condition.bad() )
     {
-        DimseCondition::dump( cond );
+        //TODO:Substituir per ERROR_LOG
+        DimseCondition::dump( condition );
     }
 
-    return cond;
+    return condition;
 }
 
-void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *req, char *imageFileName, DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *rsp, DcmDataset **statusDetail )
+void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *storeRequest, char *imageFileName, DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *storeResponse, DcmDataset **statusDetail )
 {
     // Paràmetres d'entrada: callbackData, progress, req, imageFileName, imageDataSet
     // Paràmetres de sortida: rsp, statusDetail
     Q_UNUSED( imageFileName );
-    DIC_UI sopClass;
-    DIC_UI sopInstance;
-    /* I found their default value in movescu.cpp */
-    OFBool opt_correctUIDPadding = OFFalse;
-    E_TransferSyntax opt_writeTransferSyntax = EXS_Unknown;
+    DIC_UI sopClass, sopInstance;
+    OFBool correctUIDPadding = OFFalse;
 
     if ( progress->state == DIMSE_StoreEnd ) //si el paquest és de finalització d'una imatge hem de guardar-le
     {
         *statusDetail = NULL; /* no status detail */
 
-        /*
-        * An appropriate status code is already set in the resp structure, it need not be success.
-        * For example, if the caller has already detected an out of resources problem then the
-        * status will reflect this.  The callback function is still called to allow cleanup.
-        */
         if ( (imageDataSet) && ( *imageDataSet ) )
         {
             QString imageFilenameToSave = getCompositeInstanceFileName(*imageDataSet);
 
             StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
-            //procés que farà el tractament de la imatge descarregada de la nostre aplicació, 
-            // en el cas de l'starviewer guardar a la cache,i augmentarà comptador de descarregats
+            //procés que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentarà comptador de descarregats
             ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();
             // obtenim l'UID d'estudi de l'objecte descarregat que posteriorment fem servir
             const char *text;
             (*imageDataSet)->findAndGetString( DCM_StudyInstanceUID , text , false );
             QString retrievedDatasetStudyUID( text );
-
-            E_TransferSyntax xfer = opt_writeTransferSyntax;
-            if (xfer == EXS_Unknown) 
-                xfer = ( *imageDataSet )->getOriginalXfer();
 
             //Guardem la imatge
             OFCondition stateSaveImage = save(cbdata->dcmff, imageFilenameToSave);
@@ -169,31 +151,30 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
             if ( stateSaveImage.bad() )
             {
                 piSingleton->setError( retrievedDatasetStudyUID );
-                rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
+                storeResponse->DimseStatus = STATUS_STORE_Refused_OutOfResources;
                 ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + imageFilenameToSave + ", error: " + stateSaveImage.text()); 
             }
 
             /* should really check the image to make sure it is consistent, that its sopClass and sopInstance correspond with those in
-            * the request.
-            */
-            if ( rsp->DimseStatus == STATUS_Success )
+            * the request. */
+            if ( storeResponse->DimseStatus == STATUS_Success )
             {
                 /* which SOP class and SOP instance ? */
-                if (! DU_findSOPClassAndInstanceInDataSet( *imageDataSet , sopClass , sopInstance , opt_correctUIDPadding ) )
+                if (! DU_findSOPClassAndInstanceInDataSet( *imageDataSet , sopClass , sopInstance , correctUIDPadding ) )
                 {
-                    rsp->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
+                    storeResponse->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
                     piSingleton->setError( retrievedDatasetStudyUID );
                     ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(cbdata->imageFileName));
                 }
-                else if ( strcmp( sopClass , req->AffectedSOPClassUID ) != 0)
+                else if ( strcmp( sopClass , storeRequest->AffectedSOPClassUID ) != 0)
                 {
-                    rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
+                    storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
                     piSingleton->setError( retrievedDatasetStudyUID );
                     ERROR_LOG(QString("No concorda la sop class rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
                 }
-                else if ( strcmp( sopInstance , req->AffectedSOPInstanceUID ) != 0 )
+                else if ( strcmp( sopInstance , storeRequest->AffectedSOPInstanceUID ) != 0 )
                 {
-                    rsp->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
+                    storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
                     piSingleton->setError( retrievedDatasetStudyUID );
                     ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
                 }
@@ -202,8 +183,6 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
             piSingleton->process(dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID), dicomTagReader);
         }
     }
-
-    return;
 }
 
 OFCondition RetrieveImages::save(DcmFileFormat *fileRetrieved, QString imageFileNameToSave)
@@ -219,110 +198,105 @@ OFCondition RetrieveImages::save(DcmFileFormat *fileRetrieved, QString imageFile
         paddingType, filePadding, itemPadding, !useMetaheader);
 }
 
-OFCondition RetrieveImages::storeSCP( T_ASC_Association *assoc, T_DIMSE_Message *msg, T_ASC_PresentationContextID presID )
+OFCondition RetrieveImages::storeSCP( T_ASC_Association *association, T_DIMSE_Message *msg, T_ASC_PresentationContextID presentationContextID )
 {
-    OFCondition cond = EC_Normal;
-    T_DIMSE_C_StoreRQ *req;
+    T_DIMSE_C_StoreRQ *storeRequest = &msg->msg.CStoreRQ;
     char imageFileName[2048];
-    req = &msg->msg.CStoreRQ;
-    OFBool opt_useMetaheader = OFTrue; // I found its default value in movescu.cpp */
-
+    OFBool useMetaheader = OFTrue;
     StoreCallbackData callbackData;
-    callbackData.assoc = assoc;
-    callbackData.imageFileName = req->AffectedSOPInstanceUID;
-    DcmFileFormat dcmff;
-    callbackData.dcmff = &dcmff;
+    DcmFileFormat retrievedFile;
+    DcmDataset *retrievedDataset = retrievedFile.getDataset();
 
-    DcmDataset *dset = dcmff.getDataset();
+    callbackData.assoc = association;
+    callbackData.imageFileName = storeRequest->AffectedSOPInstanceUID;
+    callbackData.dcmff = &retrievedFile;
 
-    cond = DIMSE_storeProvider( assoc, presID, req, (char *)NULL, opt_useMetaheader, &dset, storeSCPCallback, ( void* ) &callbackData, DIMSE_BLOCKING, 0 );
+    OFCondition condition = DIMSE_storeProvider( association, presentationContextID, storeRequest, (char *)NULL, useMetaheader, &retrievedDataset, storeSCPCallback, ( void* ) &callbackData, DIMSE_BLOCKING, 0 );
 
-    if ( cond.bad() )
+    if ( condition.bad() )
     {
-        DimseCondition::dump( cond );
         /* remove file */
         unlink( imageFileName );
     }
-    return cond;
+
+    return condition;
 }
 
-OFCondition RetrieveImages::subOpSCP( T_ASC_Association **subAssoc )
+OFCondition RetrieveImages::subOperationSCP( T_ASC_Association **subAssociation )
 {
-    //ens convertim com en un servidor el PACS ens envai comandes que nosaltres hem de fer en aquest
-    //CAS ENS POT DEMANAR UN ECHO O QUE GUARDER UNA IMATGE
-    T_DIMSE_Message msg;
-    T_ASC_PresentationContextID presID;
+    //ens convertim com en un servii el PACS ens peticions que nosaltres hem de respondre, ens pot demanar descar una imatge o fer un echo
+    T_DIMSE_Message dimseMessage;
+    T_ASC_PresentationContextID presentationContextID;
 
-    if ( !ASC_dataWaiting( *subAssoc , 0 ) ) 
+    if ( !ASC_dataWaiting( *subAssociation , 0 ) ) 
         return DIMSE_NODATAAVAILABLE;
 
-    OFCondition cond = DIMSE_receiveCommand( *subAssoc, DIMSE_BLOCKING, 0, &presID, &msg, NULL );
+    OFCondition condition = DIMSE_receiveCommand( *subAssociation, DIMSE_BLOCKING, 0, &presentationContextID, &dimseMessage, NULL );
 
-    if ( cond == EC_Normal )
+    if ( condition == EC_Normal )
     {
-        switch ( msg.CommandField )
+        switch ( dimseMessage.CommandField )
         {
         case DIMSE_C_STORE_RQ:
-            cond = storeSCP( *subAssoc , &msg , presID );
+            condition = storeSCP( *subAssociation , &dimseMessage, presentationContextID );
             break;
         case DIMSE_C_ECHO_RQ:
-            cond = echoSCP( *subAssoc , &msg , presID );
+            condition = echoSCP( *subAssociation , &dimseMessage , presentationContextID);
             break;
         default:
-            cond = DIMSE_BADCOMMANDTYPE;
+            condition = DIMSE_BADCOMMANDTYPE;
             break;
         }
     }
     /* clean up on association termination */
-    if ( cond == DUL_PEERREQUESTEDRELEASE )
+    if ( condition == DUL_PEERREQUESTEDRELEASE )
     {
-        cond = ASC_acknowledgeRelease( *subAssoc );
-        ASC_dropSCPAssociation( *subAssoc );
-        ASC_destroyAssociation( subAssoc );
-        return cond;
+        condition = ASC_acknowledgeRelease( *subAssociation );
+        ASC_dropSCPAssociation( *subAssociation );
+        ASC_destroyAssociation( subAssociation );
+        return condition;
     }
-    else if ( cond == DUL_PEERABORTEDASSOCIATION )
+    else if ( condition == DUL_PEERABORTEDASSOCIATION )
     {
+        INFO_LOG("El PACS ha abortat la connexió");
     }
-    else if ( cond != EC_Normal )
+    else if ( condition != EC_Normal )
     {
-        DimseCondition::dump( cond );
-        /* some kind of error so abort the association */
-        cond = ASC_abortAssociation( *subAssoc );
+        condition = ASC_abortAssociation( *subAssociation );
     }
 
-    if ( cond != EC_Normal )
+    if ( condition != EC_Normal )
     {
-        ASC_dropAssociation( *subAssoc );
-        ASC_destroyAssociation( subAssoc );
+        ASC_dropAssociation( *subAssociation );
+        ASC_destroyAssociation( subAssociation );
     }
-    return cond;
+    return condition;
 }
 
-void RetrieveImages::subOpCallback(void * /*subOpCallbackData*/, T_ASC_Network *aNet , T_ASC_Association **subAssoc )
+void RetrieveImages::subOperationCallback(void * /*subOperationCallbackData*/, T_ASC_Network *associationNetwork , T_ASC_Association **subAssociation )
 {
-    if ( aNet == NULL )
+    if ( associationNetwork == NULL )
     {
         return;   /* help no net ! */
     }
 
-    if ( *subAssoc == NULL )
+    if ( *subAssociation == NULL )
     {
-        acceptSubAssoc( aNet , subAssoc );
+        acceptSubAssociation( associationNetwork , subAssociation );
     }
     else
     {
-        subOpSCP( subAssoc );
+        subOperationSCP( subAssociation );
     }
 }
 
 Status RetrieveImages::retrieve()
 {
-    T_ASC_PresentationContextID presId;
-    T_DIMSE_C_MoveRQ req;
-    T_DIMSE_C_MoveRSP rsp;
-    DIC_US msgId = m_assoc->nextMsgID++;
-    DcmDataset *rspIds = NULL;
+    T_ASC_PresentationContextID presentationContextID;
+    T_DIMSE_C_MoveRQ moveRequest;
+    T_DIMSE_C_MoveRSP moveResponse;
+    DIC_US messageId = m_assoc->nextMsgID++;
+    DcmDataset *responseIdentifiers = NULL;
     DcmDataset *statusDetail = NULL;
     MyCallbackInfo callbackData;
     Status state;
@@ -340,40 +314,41 @@ Status RetrieveImages::retrieve()
     }
 
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
-    presId = ASC_findAcceptedPresentationContextID( m_assoc , UID_MOVEStudyRootQueryRetrieveInformationModel );
-    if ( presId == 0 ) 
+    presentationContextID = ASC_findAcceptedPresentationContextID( m_assoc , UID_MOVEStudyRootQueryRetrieveInformationModel );
+    if ( presentationContextID == 0 ) 
         return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
     
     callbackData.assoc = m_assoc;
-    callbackData.presId = presId;
+    callbackData.presId = presentationContextID;
 
-    req.MessageID = msgId;
-    strcpy( req.AffectedSOPClassUID, UID_MOVEStudyRootQueryRetrieveInformationModel );
-    req.Priority = DIMSE_PRIORITY_MEDIUM;
-    req.DataSetType = DIMSE_DATASET_PRESENT;
+    moveRequest.MessageID = messageId;
+    strcpy( moveRequest.AffectedSOPClassUID, UID_MOVEStudyRootQueryRetrieveInformationModel );
+    moveRequest.Priority = DIMSE_PRIORITY_MEDIUM;
+    moveRequest.DataSetType = DIMSE_DATASET_PRESENT;
     // set the destination of the images to us
-    ASC_getAPTitles( m_assoc->params, req.MoveDestination, NULL, NULL );
+    ASC_getAPTitles( m_assoc->params, moveRequest.MoveDestination, NULL, NULL );
 
-    OFCondition cond = DIMSE_moveUser( m_assoc, presId, &req, m_mask, moveCallback, &callbackData, DIMSE_BLOCKING, 0, m_net, subOpCallback, NULL, &rsp, &statusDetail, &rspIds );
+    OFCondition condition = DIMSE_moveUser( m_assoc, presentationContextID, &moveRequest, m_mask, moveCallback, &callbackData, DIMSE_BLOCKING, 0, 
+        m_net, subOperationCallback, NULL, &moveResponse, &statusDetail, &responseIdentifiers );
 
-    if (rsp.DimseStatus != STATUS_Success)
+    if (moveResponse.DimseStatus != STATUS_Success)
     {
         //Si hi hagut un error el gravem al log, i el transformem a l'objecte Status
-        state = processErrorResponseFromMoveSCP(&rsp, statusDetail);
+        state = processErrorResponseFromMoveSCP(&moveResponse, statusDetail);
     }
-    else state.setStatus(cond);
+    else state.setStatus(condition);
 
     /* dump status detail information if there is some */
     if ( statusDetail != NULL )
         delete statusDetail;
 
-    if ( rspIds != NULL ) 
-        delete rspIds;
+    if ( responseIdentifiers != NULL ) 
+        delete responseIdentifiers ;
 
     return state;
 }
 
-Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *response, DcmDataset *statusDetail)
+Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail)
 {
     Status state;
     QList< DcmTagKey > relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
@@ -387,20 +362,20 @@ Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *respon
 
     // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
     
-    if (response->DimseStatus == STATUS_Success)
+    if (moveResponse->DimseStatus == STATUS_Success)
     {
         state.setStatus("",true,0);
         return state;
     }
 
-    switch(response->DimseStatus)
+    switch(moveResponse->DimseStatus)
     {
         case STATUS_MOVE_Refused_OutOfResourcesNumberOfMatches: // 0xa701
             // Refused: Out of Resources – Unable to calculate number of matches
             // Related Fields DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_ErrorComment;
 
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             state.setStatus(DcmtkMoveFailureOrRefusedStatus);
             break;
 
@@ -411,7 +386,7 @@ Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *respon
             relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfCompletedSuboperations;
             relatedFieldsList << DCM_NumberOfFailedSuboperations << DCM_NumberOfWarningSuboperations;
 
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             state.setStatus(DcmtkMoveFailureOrRefusedStatus);
             break;
 
@@ -421,7 +396,7 @@ Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *respon
             relatedFieldsList << DCM_ErrorComment;
 
             // El PACS no ens té registrat amb el nostre AETitle
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             state.setStatus(DcmtkMoveDestionationUnknown);
             break;
 
@@ -431,7 +406,7 @@ Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *respon
             // Related fields DCM_OffendingElement (0000,0901) DCM_ErrorComment (0000,0902)
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
 
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             state.setStatus(DcmtkMoveFailureOrRefusedStatus);
             break;
 
@@ -440,12 +415,12 @@ Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *respon
             // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
             relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations  << DCM_NumberOfWarningSuboperations;
 
-            WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripció rebuda: " + QString(DU_cmoveStatusString(response->DimseStatus)));
+            WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripció rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             state.setStatus(DcmtkMoveWarningStatus);
             break;
 
         default:
-            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(response->DimseStatus)));
+            ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
             state.setStatus(DcmtkMovescuUnknownError);
             break;
