@@ -93,7 +93,7 @@ private:
     Volume *m_mainVolume;
 
     /// Acció del boto de sincronitzar
-    QAction * m_buttonSynchronizeAction;
+    QAction * m_synchronizeButtonAction;
 
     /// Per fer estadístiques
     StatsWatcher *m_statsWatcher;
