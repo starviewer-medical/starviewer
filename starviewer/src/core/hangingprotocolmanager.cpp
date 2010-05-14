@@ -31,72 +31,6 @@ namespace udg {
 HangingProtocolManager::HangingProtocolManager(QObject *parent)
  : QObject( parent )
 {
-    // Mappeig de les operacions per la vista sagital
-    m_operationsMap.insert("A\\F-A\\H", "0,1"); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
-    m_operationsMap.insert("A\\F-P\\F", "2,1"); m_operationsMap.insert("A\\F-P\\H", "2,0"); m_operationsMap.insert("A\\F-H\\A", "1,0");
-    m_operationsMap.insert("A\\F-F\\A", "3,1"); m_operationsMap.insert("A\\F-F\\P", "3,0"); m_operationsMap.insert("A\\F-H\\P", "1,1");
-
-    m_operationsMap.insert("A\\H-A\\F", "0,1"); m_operationsMap.insert("A\\H-P\\F", "2,0"); m_operationsMap.insert("A\\H-P\\H", "2,1");
-    m_operationsMap.insert("A\\H-F\\A", "1,0"); m_operationsMap.insert("A\\H-H\\A", "3,1"); m_operationsMap.insert("A\\H-F\\P", "1,1");
-    m_operationsMap.insert("A\\H-H\\P", "3,0");
-
-    m_operationsMap.insert("P\\F-A\\F", "2,1"); m_operationsMap.insert("P\\F-A\\H", "2,0"); m_operationsMap.insert("P\\F-P\\H", "0,1");
-    m_operationsMap.insert("P\\F-F\\A", "3,0"); m_operationsMap.insert("P\\F-H\\A", "1,1"); m_operationsMap.insert("P\\F-F\\P", "3,1");
-    m_operationsMap.insert("P\\F-H\\P", "1,0");
-
-    m_operationsMap.insert("P\\H-A\\F", "2,0"); m_operationsMap.insert("P\\H-A\\H", "2,1"); m_operationsMap.insert("P\\H-P\\F", "0,1");
-    m_operationsMap.insert("P\\H-F\\A", "1,1"); m_operationsMap.insert("P\\H-H\\A", "3,0"); m_operationsMap.insert("P\\H-F\\P", "1,0");
-    m_operationsMap.insert("P\\H-H\\P", "3,1");
-
-    m_operationsMap.insert("F\\A-A\\F", "3,1"); m_operationsMap.insert("F\\A-A\\H", "3,0"); m_operationsMap.insert("F\\A-P\\F", "1,0");
-    m_operationsMap.insert("F\\A-P\\H", "1,1"); m_operationsMap.insert("F\\A-H\\A", "2,1"); m_operationsMap.insert("F\\A-F\\P", "0,1");
-    m_operationsMap.insert("F\\A-H\\P", "2,0");
-
-    m_operationsMap.insert("H\\A-A\\F", "3,0"); m_operationsMap.insert("H\\A-A\\H", "3,1"); m_operationsMap.insert("H\\A-P\\F", "1,1");
-    m_operationsMap.insert("H\\A-P\\H", "1,0"); m_operationsMap.insert("H\\A-F\\A", "2,1"); m_operationsMap.insert("H\\A-F\\P", "2,0");
-    m_operationsMap.insert("H\\A-H\\P", "0,1");
-
-    m_operationsMap.insert("F\\P-A\\F", "1,0"); m_operationsMap.insert("F\\P-A\\H", "1,1"); m_operationsMap.insert("F\\P-P\\F", "3,1");
-    m_operationsMap.insert("F\\P-P\\H", "3,0"); m_operationsMap.insert("F\\P-F\\A", "0,1"); m_operationsMap.insert("F\\P-H\\A", "2,0");
-    m_operationsMap.insert("F\\P-H\\P", "2,1");
-
-    m_operationsMap.insert("S\\P-A\\F", "3,1"); m_operationsMap.insert("S\\P-A\\H", "1,0"); m_operationsMap.insert("S\\P-P\\F", "3,0");
-    m_operationsMap.insert("S\\P-P\\S", "1,1"); m_operationsMap.insert("S\\P-F\\A", "2,0"); m_operationsMap.insert("S\\P-H\\A", "0,1");
-    m_operationsMap.insert("S\\P-F\\P", "2,1");
-
-    // Mappeig de les operacions per la vista axial
-    m_operationsMap.insert("A\\R-A\\L", "0,1");	m_operationsMap.insert("A\\R-P\\R", "2,1");	m_operationsMap.insert("A\\R-P\\L", "2,0");
-    m_operationsMap.insert("A\\R-R\\A", "3,1");	m_operationsMap.insert("A\\R-L\\A", "1,0");	m_operationsMap.insert("A\\R-R\\P", "3,0");
-    m_operationsMap.insert("A\\R-L\\P", "1,1");
-
-    m_operationsMap.insert("A\\L-A\\R", "0,1");	m_operationsMap.insert("A\\L-P\\R", "2,0");	m_operationsMap.insert("A\\L-P\\L", "2,1");
-    m_operationsMap.insert("A\\L-R\\A", "1,0");	m_operationsMap.insert("A\\L-L\\A", "3,1");	m_operationsMap.insert("A\\L-R\\P", "1,1");
-    m_operationsMap.insert("A\\L-L\\P", "3,0");
-
-    m_operationsMap.insert("P\\R-A\\R", "2,1");	m_operationsMap.insert("P\\R-A\\L", "2,0");	m_operationsMap.insert("P\\R-P\\L", "0,1");
-    m_operationsMap.insert("P\\R-R\\A", "3,0");	m_operationsMap.insert("P\\R-L\\A", "1,1");	m_operationsMap.insert("P\\R-R\\P", "3,1");
-    m_operationsMap.insert("P\\R-L\\P", "1,0");
-
-    m_operationsMap.insert("P\\L-A\\R", "2,0");	m_operationsMap.insert("P\\L-A\\L", "2,1");	m_operationsMap.insert("P\\L-P\\R", "0,1");
-    m_operationsMap.insert("P\\L-R\\A", "1,1");	m_operationsMap.insert("P\\L-L\\A", "3,0");	m_operationsMap.insert("P\\L-R\\P", "1,0");
-    m_operationsMap.insert("P\\L-L\\P", "3,1");
-
-    m_operationsMap.insert("R\\A-A\\R", "3,1");	m_operationsMap.insert("R\\A-A\\L", "3,0");	m_operationsMap.insert("R\\A-P\\R", "1,0");
-    m_operationsMap.insert("R\\A-P\\L", "1,1");	m_operationsMap.insert("R\\A-L\\A", "2,1");	m_operationsMap.insert("R\\A-R\\P", "0,1");
-    m_operationsMap.insert("R\\A-L\\P", "2,0");
-
-    m_operationsMap.insert("L\\A-A\\R", "3,0");	m_operationsMap.insert("L\\A-A\\L", "3,1");	m_operationsMap.insert("L\\A-P\\R", "1,1");
-    m_operationsMap.insert("L\\A-P\\L", "1,0");	m_operationsMap.insert("L\\A-R\\A", "2,1");	m_operationsMap.insert("L\\A-R\\P", "2,0");
-    m_operationsMap.insert("L\\A-L\\P", "0,1");
-
-    m_operationsMap.insert("R\\P-A\\R", "1,0");	m_operationsMap.insert("R\\P-A\\L", "1,1");	m_operationsMap.insert("R\\P-P\\R", "3,1");
-    m_operationsMap.insert("R\\P-P\\L", "3,0");	m_operationsMap.insert("R\\P-R\\A", "0,1");	m_operationsMap.insert("R\\P-L\\A", "2,0");
-    m_operationsMap.insert("R\\P-L\\P", "2,1");
-
-    m_operationsMap.insert("L\\P-A\\R", "1,1");	m_operationsMap.insert("L\\P-A\\L", "1,0");	m_operationsMap.insert("L\\P-P\\R", "3,0");
-    m_operationsMap.insert("L\\P-P\\L", "3,1");	m_operationsMap.insert("L\\P-R\\A", "2,0");	m_operationsMap.insert("L\\P-L\\A", "0,1");
-    m_operationsMap.insert("L\\P-R\\P", "2,1");
-
     m_studiesDownloading = new QMultiHash<QString, StructPreviousStudyDownloading*>();
     m_patient = 0;
 }
@@ -451,9 +385,9 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
 void HangingProtocolManager::applyDisplayTransformations( Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
 {
     viewer->getViewer()->automaticRefresh( false );
-    
-    QVector<QString> labels = viewer->getViewer()->getCurrentDisplayedImageOrientationLabels();
-    applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3], displaySet->getPatientOrientation(), viewer->getViewer() );
+    // Apliquem la orientació desitjada
+    // TODO potser seria més correcte aplicar-la després d'haver aplicat la reconstrucció
+    viewer->getViewer()->applyDesiredOrientation(displaySet->getPatientOrientation());
     
     QString reconstruction = displaySet->getReconstruction();
     if( !reconstruction.isEmpty() )
@@ -512,30 +446,6 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
 
     viewer->getViewer()->automaticRefresh( true );
     viewer->getViewer()->refresh();
-}
-
-void HangingProtocolManager::applyDesiredDisplayOrientation(const QString &currentOrientation, const QString &desiredOrientation, Q2DViewer *viewer)
-{
-    if( !currentOrientation.isEmpty() && !desiredOrientation.isEmpty() )
-    {
-        // TODO al tanto, patient orientation podria tenir més d'una lletra per row!
-        // per exemple RA\AL en un tall que sigui oblicu
-        // per evitar això i no fer una llista enorme de transformacions,
-        // agafarem només la primera lletra del row i de la columna
-        QStringList rowColumn = currentOrientation.split("\\");
-        QString mapIndex = rowColumn.at(0).left(1) + "\\" + rowColumn.at(1).left(1) + "-" + desiredOrientation;
-        QString operations = m_operationsMap.value( mapIndex );
-
-        if( !operations.isEmpty() )
-        {
-            QStringList listOfOperations = operations.split(",");
-            // apliquem les transformacions d'imatge necessàries
-            // per visualitzar correctament la imatge
-            viewer->rotateClockWise( listOfOperations[0].toInt() ); // apliquem el nombre de rotacions
-            if( listOfOperations[1].toInt() )
-                viewer->verticalFlip(); // apliquem el flip vertical si cal
-        }
-    }
 }
 
 bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )

@@ -34,6 +34,7 @@ class StatsWatcher;
 #ifndef STARVIEWER_LITE
 class QPreviousStudiesWidget;
 class PreviousStudiesManager;
+class HangingProtocolManager;
 #endif
 
 /**
