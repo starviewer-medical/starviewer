@@ -23,12 +23,12 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     setAutoFillBackground( true );
 
     // Creació de l'acció del boto de sincronitzar.
-    m_buttonSynchronizeAction = new QAction( 0 );
-    m_buttonSynchronizeAction->setText( tr("Synchronize tool") );
-    m_buttonSynchronizeAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
-    m_buttonSynchronizeAction->setIcon( QIcon(":/images/synchronize.png") );
-    m_buttonSynchronizeAction->setCheckable( true );
-    m_synchronizeButton->setDefaultAction( m_buttonSynchronizeAction );
+    m_synchronizeButtonAction = new QAction( 0 );
+    m_synchronizeButtonAction->setText( tr("Synchronize tool") );
+    m_synchronizeButtonAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
+    m_synchronizeButtonAction->setIcon( QIcon(":/images/synchronize.png") );
+    m_synchronizeButtonAction->setCheckable( true );
+    m_synchronizeButton->setDefaultAction( m_synchronizeButtonAction );
     m_synchronizeButton->setEnabled( false );
 
     createConnections();
@@ -74,7 +74,7 @@ void Q2DViewerWidget::createConnections()
 
     connect( m_2DView, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateSlider() ) );
 
-    connect( m_buttonSynchronizeAction, SIGNAL( toggled(bool) ), SLOT( enableSynchronization(bool) ) );
+    connect( m_synchronizeButtonAction, SIGNAL( toggled(bool) ), SLOT( enableSynchronization(bool) ) );
 }
 
 void Q2DViewerWidget::updateProjectionLabel()
@@ -147,11 +147,11 @@ void Q2DViewerWidget::setDefaultAction( QAction *synchronizeAction )
 
 void Q2DViewerWidget::enableSynchronization(bool enable)
 {
-    if( m_buttonSynchronizeAction->isChecked() != enable )
+    if( m_synchronizeButtonAction->isChecked() != enable )
     {
         // Ens han invocat el mètode directament, no s'ha fet clicant el botó
         // Això farà invocar aquest mètode de nou passant per "l'else"
-        m_buttonSynchronizeAction->setChecked(enable);
+        m_synchronizeButtonAction->setChecked(enable);
     }
     else
     {
