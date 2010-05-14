@@ -7,8 +7,6 @@
 #include "q2dviewerwidget.h"
 #include "volume.h"
 #include "logging.h"
-#include "series.h"
-#include "image.h"
 #include "statswatcher.h"
 #include "synchronizetool.h"
 #include "toolproxy.h"
