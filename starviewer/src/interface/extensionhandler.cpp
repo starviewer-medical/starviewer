@@ -236,7 +236,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
         return;
     }
 
-    DEBUG_LOG( QString("getNumberOfPatients: %1").arg( numberOfPatients ) );
+    DEBUG_LOG( QString("NumberOfPatients: %1").arg( numberOfPatients ) );
 
     QList<int> correctlyLoadedPatients;
 
