@@ -263,13 +263,6 @@ void Q2DViewer::createScalarBar()
     m_scalarBar->SetLookupTable( lookup );
 }
 
-void Q2DViewer::updateScalarBar()
-{
-    Q_ASSERT( m_scalarBar );
-    vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetWindow( m_windowLevelLUTMapper->GetWindow() );
-    vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetLevel( m_windowLevelLUTMapper->GetLevel() );
-}
-
 void Q2DViewer::rotateClockWise( int times )
 {
     // almenys ha de ser 1 ( +90º )
@@ -1061,7 +1054,12 @@ void Q2DViewer::setWindowLevel( double window , double level )
         m_windowLevelLUTMapper->SetWindow( window );
         m_windowLevelLUTMapper->SetLevel( level );
         updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation );
-        updateScalarBar();
+        // Actualitzem la Scalar bar si aquesta és visible
+        if ( m_enabledAnnotations & Q2DViewer::ScalarBarAnnotation )
+        {
+            vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetWindow( m_windowLevelLUTMapper->GetWindow() );
+            vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetLevel( m_windowLevelLUTMapper->GetLevel() );
+        }
         this->refresh();
         emit windowLevelChanged( window , level );
     }

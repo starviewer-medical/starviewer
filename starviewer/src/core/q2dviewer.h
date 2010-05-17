@@ -375,9 +375,6 @@ private:
     /// Crea la barra de valors
     void createScalarBar();
 
-    /// Actualitza la barra de valors
-    void updateScalarBar();
-
     /// crea les anotacions de l'orientació del pacient
     void createOrientationAnnotations();
 
