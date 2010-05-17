@@ -102,6 +102,7 @@ Q2DViewer::~Q2DViewer()
     // no ens hauria d'afectar
     // HACK imposem que s'esborri primer el drawer
     delete m_drawer;
+    delete m_imageOrientationOperationsMapper;
 }
 
 void Q2DViewer::createAnnotations()
