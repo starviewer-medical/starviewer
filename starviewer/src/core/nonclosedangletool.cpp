@@ -92,7 +92,7 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
             else if ( m_secondLine && m_state == FirstLineFixed )
                 this->simulateLine(m_secondLine);
 
-            m_2DViewer->getDrawer()->refresh();
+            m_2DViewer->refresh();
 
         break;
     }

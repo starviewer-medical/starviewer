@@ -512,7 +512,7 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
         }
     }
 
-    m_2DViewer->getDrawer()->refresh();
+    m_2DViewer->refresh();
 }
 
 void ImagePlaneProjectionTool:: checkImagePlaneBindUpdated( QString nameProjectedLine )
