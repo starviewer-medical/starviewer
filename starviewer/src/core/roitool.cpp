@@ -68,7 +68,6 @@ void ROITool::handleEvent( long unsigned eventID )
                 {
                 case 0: // Single-click o primer click d'un doble click. Afegim un nou punt a la ROI
                     annotateNewPoint();
-                    m_2DViewer->getDrawer()->refresh();
                     break;
 
                 case 1: // Doble-click, si tenim més de 2 punts, llavors tanquem la ROI

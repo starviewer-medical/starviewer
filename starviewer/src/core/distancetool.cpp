@@ -60,7 +60,6 @@ void DistanceTool::handleEvent( long unsigned eventID )
                 if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
                 {
                     this->annotateNewPoint();
-                    m_2DViewer->getDrawer()->refresh();
                 }
             }
             break;
