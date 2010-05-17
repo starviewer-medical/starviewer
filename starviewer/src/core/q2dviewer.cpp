@@ -884,6 +884,10 @@ void Q2DViewer::resetCamera()
             camera->SetFocalPoint(0,0,0);
             camera->SetPosition(1,0,0); // -1 if medical ?
             camera->SetViewUp(0,0,1);
+            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+            position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
+            if( position == "FFP" || position == "HFP" )
+                rotate(2);
             camera->SetRoll( -m_rotateFactor*90. -90. );
 
             // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
@@ -894,11 +898,6 @@ void Q2DViewer::resetCamera()
             // ajustem la imatge al viewport
             m_imageActor->GetBounds( bounds );
             scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
-
-            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-            position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
-            if( position == "FFP" || position == "HFP" )
-                rotate(2);
 
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
@@ -912,6 +911,13 @@ void Q2DViewer::resetCamera()
             camera->SetPosition(0,-1,0); // 1 if medical ?
             camera->SetViewUp(0,0,1);
             camera->SetRoll( -m_rotateFactor*90. );
+            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+            position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
+            if( position == "FFP" || position == "HFP" )
+            {
+                rotate(2);
+                horizontalFlip();
+            }
 
             // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
             checkAndUpdateSliceValue(m_maxSliceValue/2);
@@ -921,11 +927,6 @@ void Q2DViewer::resetCamera()
             // ajustem la imatge al viewport
             m_imageActor->GetBounds( bounds );
             scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
-
-            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-            position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
-            if( position == "FFP" || position == "HFP" )
-                rotate(2);
 
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
