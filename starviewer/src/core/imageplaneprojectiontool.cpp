@@ -187,7 +187,7 @@ void ImagePlaneProjectionTool::initProjectedLines()
 
     //TODO
     // S'han de netejar les lines mostrades i tornar-les a inicialitzar. Què passarà amb les de references lines??????
-    m_2DViewer->getDrawer()->clearViewer();
+    m_2DViewer->clearViewer();
     
     // Inicialitzem les diferents línies de projecció visibles al viewer
     for ( int i = 0; i < names.length(); i++)
@@ -210,7 +210,7 @@ void ImagePlaneProjectionTool::initializeImagePlanesUpdteVolume( Volume *volume 
 
     //TODO
     // S'han de netejar les lines mostrades i tornar-les a inicialitzar. Que passarà amb les de references lines??????
-    m_2DViewer->getDrawer()->clearViewer();
+    m_2DViewer->clearViewer();
     
     // Inicialitzem l'imagePlane representat per cada linia de projecció, la dibuixem 
     // i actualitzem les dades compartides indicant el pla projectat
@@ -230,7 +230,7 @@ void ImagePlaneProjectionTool::initializeImagePlanesCheckingData()
 {
     //TODO
     // S'han de netejar les lines mostrades i tornar-les a inicialitzar. Que passarà amb les de references lines??????
-    m_2DViewer->getDrawer()->clearViewer();
+    m_2DViewer->clearViewer();
 
     QMapIterator< DrawerLine *, QStringList > iterator( m_projectedLines );
     while ( iterator.hasNext() ) 
