@@ -134,9 +134,10 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
 
         if ( (imageDataSet) && ( *imageDataSet ) )
         {
-            QString imageFilenameToSave = getCompositeInstanceFileName(*imageDataSet);
+            StoreSCPCallbackData *storeSCPCallbackData = ( StoreSCPCallbackData* ) callbackData;
+            RetrieveImages *retrieveImages = storeSCPCallbackData->retrieveImages;
+            QString dicomFileAbsolutePath = retrieveImages ->getAbsoluteFilePathCompositeInstance(*imageDataSet, storeSCPCallbackData->fileName);
 
-            StoreCallbackData *cbdata = ( StoreCallbackData* ) callbackData;
             //procés que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentarà comptador de descarregats
             ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();
             // obtenim l'UID d'estudi de l'objecte descarregat que posteriorment fem servir
@@ -145,13 +146,13 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
             QString retrievedDatasetStudyUID( text );
 
             //Guardem la imatge
-            OFCondition stateSaveImage = save(cbdata->dcmff, imageFilenameToSave);
+            OFCondition stateSaveImage = retrieveImages->save(storeSCPCallbackData->dcmFileFormat, dicomFileAbsolutePath);
             
             if ( stateSaveImage.bad() )
             {
                 piSingleton->setError( retrievedDatasetStudyUID );
                 storeResponse->DimseStatus = STATUS_STORE_Refused_OutOfResources;
-                ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + imageFilenameToSave + ", error: " + stateSaveImage.text()); 
+                ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + dicomFileAbsolutePath + ", error: " + stateSaveImage.text()); 
             }
 
             /* should really check the image to make sure it is consistent, that its sopClass and sopInstance correspond with those in
@@ -163,28 +164,28 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
                     piSingleton->setError( retrievedDatasetStudyUID );
-                    ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(cbdata->imageFileName));
+                    ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(storeSCPCallbackData->fileName));
                 }
                 else if ( strcmp( sopClass , storeRequest->AffectedSOPClassUID ) != 0)
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
                     piSingleton->setError( retrievedDatasetStudyUID );
-                    ERROR_LOG(QString("No concorda la sop class rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
+                    ERROR_LOG(QString("No concorda la sop class rebuda amb la sol·licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
                 }
                 else if ( strcmp( sopInstance , storeRequest->AffectedSOPInstanceUID ) != 0 )
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
                     piSingleton->setError( retrievedDatasetStudyUID );
-                    ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(cbdata->imageFileName));
+                    ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
                 }
             }
-            DICOMTagReader *dicomTagReader = new DICOMTagReader(imageFilenameToSave, cbdata->dcmff->getAndRemoveDataset() );
+            DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFileAbsolutePath, storeSCPCallbackData->dcmFileFormat->getAndRemoveDataset() );
             piSingleton->process(dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID), dicomTagReader);
         }
     }
 }
 
-OFCondition RetrieveImages::save(DcmFileFormat *fileRetrieved, QString imageFileNameToSave)
+OFCondition RetrieveImages::save(DcmFileFormat *fileRetrieved, QString dicomFileAbsolutePath)
 {
     OFBool useMetaheader = OFTrue;
     E_EncodingType sequenceType = EET_ExplicitLength;
@@ -193,29 +194,29 @@ OFCondition RetrieveImages::save(DcmFileFormat *fileRetrieved, QString imageFile
     Uint32 filePadding = 0, itemPadding = 0;
     E_TransferSyntax transferSyntaxFile = fileRetrieved->getDataset()->getOriginalXfer();
 
-    return fileRetrieved->saveFile(qPrintable( QDir::toNativeSeparators(imageFileNameToSave) ), transferSyntaxFile, sequenceType, groupLength, 
+    return fileRetrieved->saveFile(qPrintable( QDir::toNativeSeparators(dicomFileAbsolutePath) ), transferSyntaxFile, sequenceType, groupLength, 
         paddingType, filePadding, itemPadding, !useMetaheader);
 }
 
 OFCondition RetrieveImages::storeSCP( T_ASC_Association *association, T_DIMSE_Message *msg, T_ASC_PresentationContextID presentationContextID )
 {
     T_DIMSE_C_StoreRQ *storeRequest = &msg->msg.CStoreRQ;
-    char imageFileName[2048];
     OFBool useMetaheader = OFTrue;
-    StoreCallbackData callbackData;
+    StoreSCPCallbackData storeSCPCallbackData;
     DcmFileFormat retrievedFile;
     DcmDataset *retrievedDataset = retrievedFile.getDataset();
 
-    callbackData.assoc = association;
-    callbackData.imageFileName = storeRequest->AffectedSOPInstanceUID;
-    callbackData.dcmff = &retrievedFile;
+    storeSCPCallbackData.dcmFileFormat = &retrievedFile;
+    storeSCPCallbackData.retrieveImages = this;
+    storeSCPCallbackData.fileName = storeRequest->AffectedSOPInstanceUID;
 
-    OFCondition condition = DIMSE_storeProvider( association, presentationContextID, storeRequest, (char *)NULL, useMetaheader, &retrievedDataset, storeSCPCallback, ( void* ) &callbackData, DIMSE_BLOCKING, 0 );
+    OFCondition condition = DIMSE_storeProvider( association, presentationContextID, storeRequest, NULL, useMetaheader, &retrievedDataset, storeSCPCallback, 
+        ( void* ) &storeSCPCallbackData, DIMSE_BLOCKING, 0 );
 
     if ( condition.bad() )
     {
         /* remove file */
-        unlink( imageFileName );
+        unlink( qPrintable(storeSCPCallbackData.fileName) );
     }
 
     return condition;
@@ -272,8 +273,9 @@ OFCondition RetrieveImages::subOperationSCP( T_ASC_Association **subAssociation 
     return condition;
 }
 
-void RetrieveImages::subOperationCallback(void * /*subOperationCallbackData*/, T_ASC_Network *associationNetwork , T_ASC_Association **subAssociation )
+void RetrieveImages::subOperationCallback(void * subOperationCallbackData, T_ASC_Network *associationNetwork , T_ASC_Association **subAssociation )
 {
+    RetrieveImages *retrieveImages = (RetrieveImages*) subOperationCallbackData;
     if ( associationNetwork == NULL )
     {
         return;   /* help no net ! */
@@ -281,11 +283,11 @@ void RetrieveImages::subOperationCallback(void * /*subOperationCallbackData*/, T
 
     if ( *subAssociation == NULL )
     {
-        acceptSubAssociation( associationNetwork , subAssociation );
+        retrieveImages->acceptSubAssociation( associationNetwork , subAssociation );
     }
     else
     {
-        subOperationSCP( subAssociation );
+        retrieveImages->subOperationSCP( subAssociation );
     }
 }
 
@@ -296,7 +298,6 @@ Status RetrieveImages::retrieve()
     T_DIMSE_C_MoveRSP moveResponse;
     DIC_US messageId = m_assoc->nextMsgID++;
     DcmDataset *statusDetail = NULL;
-    MyCallbackInfo callbackData;
     Status state;
 
     //If not connection has been setted, return error because we need a PACS connection
@@ -316,9 +317,6 @@ Status RetrieveImages::retrieve()
     if ( presentationContextID == 0 ) 
         return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
     
-    callbackData.assoc = m_assoc;
-    callbackData.presId = presentationContextID;
-
     moveRequest.MessageID = messageId;
     strcpy( moveRequest.AffectedSOPClassUID, UID_MOVEStudyRootQueryRetrieveInformationModel );
     moveRequest.Priority = DIMSE_PRIORITY_MEDIUM;
@@ -326,8 +324,8 @@ Status RetrieveImages::retrieve()
     // set the destination of the images to us
     ASC_getAPTitles( m_assoc->params, moveRequest.MoveDestination, NULL, NULL );
 
-    OFCondition condition = DIMSE_moveUser( m_assoc, presentationContextID, &moveRequest, m_mask, moveCallback, &callbackData, DIMSE_BLOCKING, 0, 
-        m_net, subOperationCallback, NULL, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/ );
+    OFCondition condition = DIMSE_moveUser( m_assoc, presentationContextID, &moveRequest, m_mask, moveCallback, NULL, DIMSE_BLOCKING, 0, 
+        m_net, subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/ );
 
     if (moveResponse.DimseStatus != STATUS_Success)
     {
@@ -441,7 +439,7 @@ Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *moveRe
     return state;
 }
 
-QString RetrieveImages::getCompositeInstanceFileName(DcmDataset *imageDataset)
+QString RetrieveImages::getAbsoluteFilePathCompositeInstance(DcmDataset *imageDataset, QString fileName)
 {
     QString studyPath, seriesPath;
     QDir directory;
@@ -461,9 +459,7 @@ QString RetrieveImages::getCompositeInstanceFileName(DcmDataset *imageDataset)
     if ( !directory.exists( seriesPath ) ) 
         directory.mkdir( seriesPath );
 
-    imageDataset->findAndGetString( DCM_SOPInstanceUID , text , false );
-
-    return seriesPath + "/" + text;
+    return seriesPath + "/" + fileName;
 }
 
 }
