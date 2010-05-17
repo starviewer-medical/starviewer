@@ -673,7 +673,7 @@ void QViewer::updateWindowLevelData()
     // agafem el window level de la imatge central per evitar problemes
     // de que tinguem diferents windows levels a cada imatge i el de la
     // primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
-    int index = m_mainVolume->getImages().count()/2;
+    int index = m_mainVolume->getNumberOfSlicesPerPhase()/2;
 
     int wlCount = m_mainVolume->getImage(index)->getNumberOfWindowLevels();
 
