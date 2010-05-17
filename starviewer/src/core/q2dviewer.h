@@ -281,9 +281,6 @@ public slots:
     /// tantes "times" com li indiquem, per defecte sempre serà 1 "time"
     void rotateCounterClockWise( int times = 1 );
 
-    /// Aplica una rotació absoluta de (90º * factor) mod 360 sobre la imatge. Per tant es fa la rotació com si la imatge estigués amb una rotació inicial de 0º
-    void setRotationFactor( int factor );
-
     /// Aplica un flip horitzontal/vertical sobre la imatge. El flip vertical es farà com una rotació de 180º seguida d'un flip horitzontal
     void horizontalFlip();
     void verticalFlip();

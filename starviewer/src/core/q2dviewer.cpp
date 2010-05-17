@@ -304,12 +304,6 @@ void Q2DViewer::rotateCounterClockWise( int times )
     updateCamera();
 }
 
-void Q2DViewer::setRotationFactor( int factor )
-{
-    m_rotateFactor = factor;
-    updateCamera();
-}
-
 void Q2DViewer::horizontalFlip()
 {
     m_applyFlip = true;
