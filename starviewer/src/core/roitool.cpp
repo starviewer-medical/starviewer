@@ -82,7 +82,7 @@ void ROITool::handleEvent( long unsigned eventID )
             if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
             {
                 this->simulateClosingPolyline();
-                m_2DViewer->getDrawer()->refresh();
+                m_2DViewer->refresh();
             }
         break;
     }

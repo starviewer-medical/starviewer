@@ -229,7 +229,7 @@ void QPerfusionMapReconstructionExtension::changeMap( int value )
     std::cout<<m_2DView->getView()<<std::endl;
     */
     //m_2DView->getDrawer()->draw(m_aifDrawPoint, m_2DView->getView(), m_aifSlice);
-    //m_2DView->getDrawer()->refresh();
+    //m_2DView->refresh();
 }
 
 void QPerfusionMapReconstructionExtension::computePerfusionMap( )

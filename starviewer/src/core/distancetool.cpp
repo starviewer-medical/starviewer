@@ -67,7 +67,7 @@ void DistanceTool::handleEvent( long unsigned eventID )
             if( m_line )
             {
                 this->simulateLine();
-                m_2DViewer->getDrawer()->refresh();
+                m_2DViewer->refresh();
             }
             break;
     }
