@@ -439,47 +439,6 @@ QString Image::getPath() const
     return m_path;
 }
 
-void Image::addReferencedImage( Image *image )
-{
-    QString uid = image->getSOPInstanceUID();
-    if( uid.isEmpty() )
-    {
-        DEBUG_LOG("L'uid de la imatge està buit! No la podem insertar per inconsistent");
-    }
-    else
-    {
-        m_referencedImageSequence.push_back( image );
-    }
-
-}
-
-Image *Image::getReferencedImage( QString SOPInstanceUID ) const
-{
-    int i = 0;
-    bool found = false;
-    while( i < m_referencedImageSequence.size() && !found )
-    {
-        if( m_referencedImageSequence.at(i)->getSOPInstanceUID() == SOPInstanceUID )
-            found = true;
-        else
-            i++;
-    }
-    if( !found )
-        return 0;
-    else
-        return m_referencedImageSequence.at(i);
-}
-
-QList<Image *> Image::getReferencedImages() const
-{
-    return m_referencedImageSequence;
-}
-
-bool Image::hasReferencedImages() const
-{
-    return ! m_referencedImageSequence.isEmpty();
-}
-
 QPixmap Image::getThumbnail(bool getFromCache, int resolution)
 {
     ThumbnailCreator thumbnailCreator;

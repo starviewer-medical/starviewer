@@ -186,18 +186,6 @@ public:
     
     /// Ens retorna la clau que identifica la imatge
     QString getKeyIdentifier() const;
-    
-    /// afegeix un objecte imatge a la imatge
-    void addReferencedImage( Image *image );
-
-    /// obté l'objecte imatge pel sopInstanceUID donat. Si no existeix cap imatge amb aquest UID es retorna NUL
-    Image *getReferencedImage( QString SOPInstanceUID ) const;
-
-    /// Retorna una llista de totes les imatges relacionades amb la imatge
-    QList<Image *> getReferencedImages() const;
-
-    /// Indica si una imatge té imatges relacionades
-    bool hasReferencedImages() const;
 
     /**
      * El mètode ens retorna el thumbnail de la imatge. Es crearà el primer cop que es demani
@@ -356,9 +344,6 @@ private:
 
     /// La sèrie pare
     Series *m_parentSeries;
-
-    /// Llista de les imatges relacionades amb l'actual. Estan ordenades amb el mateix ordre que estan al DICOM
-    QList<Image *> m_referencedImageSequence;
 
     /// Cache de la imatge de previsualització
     QPixmap m_thumbnail;
