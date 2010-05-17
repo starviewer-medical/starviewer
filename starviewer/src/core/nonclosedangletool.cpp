@@ -81,7 +81,6 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
                         m_state = None;
                     }
 
-                    m_2DViewer->getDrawer()->refresh();
                 }
             }
         break;
@@ -253,7 +252,6 @@ void NonClosedAngleTool::computeAngle()
     text->update( DrawerPrimitive::VTKRepresentation );
     text->shadowOn();
     m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-    m_2DViewer->getDrawer()->refresh();
 }
 
 void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angleText )

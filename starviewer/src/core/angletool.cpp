@@ -80,7 +80,6 @@ void AngleTool::handleEvent( long unsigned eventID )
                         m_state = None;
                         finishDrawing();
                     }
-                    m_2DViewer->getDrawer()->refresh();
                 }
             }
 
