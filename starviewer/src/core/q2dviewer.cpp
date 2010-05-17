@@ -269,14 +269,7 @@ void Q2DViewer::rotateClockWise( int times )
     if( times <= 0 )
         return;
 
-    if( m_isImageFlipped )
-    {
-        m_rotateFactor = (m_rotateFactor-times) % 4 ;
-    }
-    else
-    {
-        m_rotateFactor = (m_rotateFactor+times) % 4 ;
-    }
+    rotate(times);
     updateCamera();
 }
 
@@ -286,14 +279,7 @@ void Q2DViewer::rotateCounterClockWise( int times )
     if( times <= 0 )
         return;
 
-    if( m_isImageFlipped )
-    {
-        m_rotateFactor = (m_rotateFactor+times) % 4 ;
-    }
-    else
-    {
-        m_rotateFactor = (m_rotateFactor-times) % 4 ;
-    }
+    rotate(-times);
     updateCamera();
 }
 
@@ -305,7 +291,7 @@ void Q2DViewer::horizontalFlip()
 
 void Q2DViewer::verticalFlip()
 {
-    m_rotateFactor = (m_rotateFactor + 2) % 4 ;
+    rotate(2);
     horizontalFlip();
 }
 
@@ -831,7 +817,7 @@ void Q2DViewer::updateCamera()
             // veure si en el refactoring podem fer-ho d'una forma millor
             case Sagital:
             case Coronal:
-                m_rotateFactor = (m_rotateFactor - 2) % 4;
+                rotate(-2);
                 break;
 
             default:
@@ -912,7 +898,7 @@ void Q2DViewer::resetCamera()
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
-                m_rotateFactor = (m_rotateFactor+2) % 4 ;
+                rotate(2);
 
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
@@ -939,7 +925,7 @@ void Q2DViewer::resetCamera()
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
-                m_rotateFactor = (m_rotateFactor+2) % 4 ;
+                rotate(2);
 
             //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
@@ -2159,6 +2145,19 @@ void Q2DViewer::applyDesiredOrientation(const QString &orientation)
     rotateClockWise( m_imageOrientationOperationsMapper->getNumberOfClockwiseTurnsToApply() );
     if( m_imageOrientationOperationsMapper->requiresVerticalFlip() )
         verticalFlip();
+}
+
+void Q2DViewer::rotate(int times)
+{
+    // Si és zero no cal fer res
+    if( times == 0 )
+        return;
+
+    // Si la imatge està invertida per efecte mirall el sentit de les rotacions serà el contrari
+    if( m_isImageFlipped )
+        times = -times;
+
+    m_rotateFactor = (m_rotateFactor+times) % 4;
 }
 
 };  // end namespace udg
