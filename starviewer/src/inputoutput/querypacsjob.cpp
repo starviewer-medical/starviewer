@@ -40,19 +40,7 @@ void QueryPacsJob::run()
 
     INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + PacsDevice::getLocalAETitle() + "; Port Local= " + QString::number(PacsDevice::getIncomingDICOMConnectionsPort()) + "; AEPACS= " + m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + m_pacsDevice.getQueryRetrieveServicePort() + ";" );
 
-    //Establim a quin nivell farem la cerca en funció del Query Level que ens han especificat
-    switch (getQueryLevel())
-    {
-        case study:
-            m_queryStatus = pacsServer.connect(PacsServer::query);
-            break;
-        case series:
-            m_queryStatus = pacsServer.connect(PacsServer::query);
-            break;
-        case image:
-            m_queryStatus = pacsServer.connect(PacsServer::query);
-            break;
-    }
+    m_queryStatus = pacsServer.connect(PacsServer::query);
 
     if ( !m_queryStatus.good() )
     {
