@@ -116,7 +116,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     {
         DEBUG_LOG( QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName() ) );
         applyHangingProtocol(bestHangingProtocol,layout, patient);
-        INFO_LOG( QString("Hanging protocol aplicat: %1").arg( bestHangingProtocol->getName() ) );
     }
 
     return outputHangingProtocolList;
@@ -130,7 +129,6 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
     HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
 
     applyHangingProtocol(hangingProtocol,layout, patient);
-    INFO_LOG( QString("Hanging protocol aplicat: %1").arg( hangingProtocol->getName() ) );
 }
 
 void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient * patient )
@@ -211,6 +209,8 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
             }
         }
     }
+
+    INFO_LOG( QString("Hanging protocol aplicat: %1").arg( hangingProtocol->getName() ) );
 }
 
 bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patient)
