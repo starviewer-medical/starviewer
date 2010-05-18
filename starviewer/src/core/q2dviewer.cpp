@@ -942,24 +942,8 @@ void Q2DViewer::resetCamera()
         mapOrientationStringToAnnotation();
         
         // Ajustem la imatge al viewport
-        double bounds[6];
-        switch( m_lastView )
-        {
-        case Axial:
-            m_imageActor->GetBounds( bounds );
-            scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
-        break;
+        fitImageIntoViewport();
 
-        case Sagital:
-            m_imageActor->GetBounds( bounds );
-            scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
-        break;
-
-        case Coronal:
-            m_imageActor->GetBounds( bounds );
-            scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
-        break;
-        }
         // Hem d'indicar l'slice changed al final per evitar el flickering que abans comentàvem
         emit sliceChanged( m_currentSlice );
     }
@@ -1040,22 +1024,7 @@ void Q2DViewer::resizeEvent( QResizeEvent *resize )
     Q_UNUSED(resize);
     if( m_mainVolume )
     {
-        double bounds[6];
-        // ajustem la imatge al viewport
-        m_imageActor->GetBounds( bounds );
-        switch( m_lastView )
-        {
-            case Axial:
-                scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
-            break;
-
-            case Sagital:
-                scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
-            break;
-            case Coronal:
-                scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
-            break;
-        }
+        fitImageIntoViewport();
     }
 }
 
@@ -2184,6 +2153,26 @@ void Q2DViewer::rotate(int times)
         times = -times;
 
     m_rotateFactor = (m_rotateFactor+times) % 4;
+}
+
+void Q2DViewer::fitImageIntoViewport()
+{
+    double bounds[6];
+    // Ajustem l'actor d'imatge al viewport
+    m_imageActor->GetBounds( bounds );
+    switch( m_lastView )
+    {
+        case Axial:
+            scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
+        break;
+
+        case Sagital:
+            scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
+        break;
+        case Coronal:
+            scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
+        break;
+    }
 }
 
 };  // end namespace udg
