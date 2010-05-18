@@ -215,28 +215,18 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
 
 bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patient)
 {
-    bool valid = false;
-    bool found = false;
-    int i;
-
     foreach (Study *study, patient->getStudies())
     {
-        QList<QString> listOfModalities = study->getModalitiesAsSingleString().split("/");
-        found = false;
-        i = 0;
-
-        while( !found  && i < listOfModalities.size() )
+        foreach ( QString modality, study->getModalitiesAsSingleString().split("/") )
         {
-            if( protocol->getHangingProtocolMask()->getProtocolList().contains( listOfModalities.value(i) ) )
+            if( protocol->getHangingProtocolMask()->getProtocolList().contains( modality ) )
             {
-                valid = true;
-                found = true;
+                return true;
             }
-            i++;
         }
     }
 
-    return valid;
+    return false;
 }
 
 Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol )
