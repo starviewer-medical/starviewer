@@ -372,9 +372,6 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
 void HangingProtocolManager::applyDisplayTransformations( Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
 {
     viewer->getViewer()->automaticRefresh( false );
-    // Apliquem la orientació desitjada
-    // TODO potser seria més correcte aplicar-la després d'haver aplicat la reconstrucció
-    viewer->getViewer()->applyDesiredOrientation(displaySet->getPatientOrientation());
     
     QString reconstruction = displaySet->getReconstruction();
     if( !reconstruction.isEmpty() )
@@ -397,6 +394,9 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
         }
     }
 
+    // Apliquem la orientació desitjada
+    viewer->getViewer()->applyDesiredOrientation(displaySet->getPatientOrientation());
+    
     int phase = displaySet->getPhase();
     if( phase > -1 )
     {
