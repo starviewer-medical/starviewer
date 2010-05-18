@@ -408,6 +408,9 @@ private:
     /// es fa servir per posar els valors correctes a les variables internes que controlen com està girada la imatge.
     void rotate(int times);
 
+    /// S'encarrega d'encaixar la imatge actual a la mida del viewport
+    void fitImageIntoViewport();
+
 private slots:
     /// Actualitza les transformacions de càmera ( de moment rotació i flip )
     void updateCamera();
