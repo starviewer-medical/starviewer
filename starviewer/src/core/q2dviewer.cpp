@@ -342,7 +342,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
             // HACK FLIP de moment necessitem fer aquest truc. Durant el refactoring caldria
             // veure si es pot fer d'una manera millor
             if( m_isImageFlipped )
-                index -= 2;
+                index += 2;
 
             labelsVector[ (0 + index) % 4 ] =  this->getOppositeOrientationLabel( list.at(1) ); // esquerra
             labelsVector[ (2 + index) % 4 ] =  list.at(1); // dreta
@@ -354,7 +354,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
             // HACK FLIP de moment necessitem fer aquest truc. Durant el refactoring caldria
             // veure si es pot fer d'una manera millor
             if( m_isImageFlipped )
-                index -= 2;
+                index += 2;
 
             labelsVector[ (0 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(0) ); // esquerra
             labelsVector[ (2 + index) % 4 ] = list.at(0); // dreta
@@ -855,87 +855,112 @@ void Q2DViewer::resetCamera()
         vtkCamera *camera = getActiveCamera();
         Q_ASSERT( camera );
 
-        double bounds[6];
+        int initialSliceIndex = 0;
+        double cameraViewUp[3] = {0.0,0.0,0.0};
+        double cameraPosition[3] = {0.0,0.0,0.0};
+        double cameraRoll = 0.0;
+        double cameraAzimuth = 0.0;
         QString position;
+
         switch( m_lastView )
         {
         case Axial:
-            // ajustem la càmera
-            camera->SetFocalPoint(0,0,0);
-            camera->SetViewUp(0,-1,0);
-            camera->SetPosition(0,0,-1);
-            camera->SetRoll( -m_rotateFactor*90. + 180. );
+            // Paràmetres de la càmera
+            cameraViewUp[1] = -1.0;
+            cameraPosition[2] = -1.0;
+            cameraRoll = 180.0;
+            // Indiquem quina és la llesca inicial
+            initialSliceIndex = 0;
 
-            // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
-            checkAndUpdateSliceValue(0);
-            updateDisplayExtent();
-            getRenderer()->ResetCamera();
-
-            // ajustem la imatge al viewport
-            m_imageActor->GetBounds( bounds );
-            scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
-
+            // Obtenim la mida de la matriu de la imatge (files i columnes)
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[1];
         break;
 
         case Sagital:
-            // ajustem la càmera
-            camera->SetFocalPoint(0,0,0);
-            camera->SetPosition(1,0,0); // -1 if medical ?
-            camera->SetViewUp(0,0,1);
-            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
-            position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
-            if( position == "FFP" || position == "HFP" )
-                rotate(2);
-            camera->SetRoll( -m_rotateFactor*90. -90. );
-
-            // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
-            checkAndUpdateSliceValue(m_maxSliceValue/2);
-            updateDisplayExtent();
-            getRenderer()->ResetCamera();
-
-            // ajustem la imatge al viewport
-            m_imageActor->GetBounds( bounds );
-            scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
-
-            //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
-            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
-            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
-
-        break;
-
-        case Coronal:
-            // ajustem la càmera
-            camera->SetFocalPoint(0,0,0);
-            camera->SetPosition(0,-1,0); // 1 if medical ?
-            camera->SetViewUp(0,0,1);
-            camera->SetRoll( -m_rotateFactor*90. );
+            // Paràmetres de la càmera
+            cameraViewUp[2] = 1.0;
+            cameraPosition[0] = 1.0;
             // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
             {
-                rotate(2);
-                horizontalFlip();
+                cameraRoll = 90.0;
+                m_rotateFactor = 2;
             }
+            else
+                cameraRoll = -90.0;
+            
+            // Indiquem quina és la llesca inicial
+            initialSliceIndex = m_maxSliceValue/2;
 
-            // posicionem la imatge TODO no ho fem amb setSlice() perquè introdueix flickering
-            checkAndUpdateSliceValue(m_maxSliceValue/2);
-            updateDisplayExtent();
-            getRenderer()->ResetCamera();
+            // Obtenim la mida de la matriu de la imatge (files i columnes)
+            m_imageSizeInformation[0] = m_mainVolume->getDimensions()[1];
+            m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
+        break;
 
-            // ajustem la imatge al viewport
-            m_imageActor->GetBounds( bounds );
-            scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
+        case Coronal:
+            // Paràmetres de la càmera
+            cameraViewUp[2] = 1.0;
+            cameraPosition[1] = -1.0;
+            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+            position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
+            if( position == "FFP" || position == "HFP" )
+            {
+                cameraRoll = 180.0;
+                cameraAzimuth = 180.0;
+                m_isImageFlipped = true;
+            }
+            else
+                cameraRoll = 0.0;
 
-            //\TODO hauria de ser a partir de main_volume o a partir de l'output del viewer
+            // Indiquem quina és la llesca inicial
+            initialSliceIndex = m_maxSliceValue/2;
+
+            // Obtenim la mida de la matriu de la imatge (files i columnes)
             m_imageSizeInformation[0] = m_mainVolume->getDimensions()[0];
             m_imageSizeInformation[1] = m_mainVolume->getDimensions()[2];
         break;
         }
+
+        // Ajustem la càmera
+        camera->SetFocalPoint(0,0,0);
+        camera->SetViewUp(cameraViewUp);
+        camera->SetPosition(cameraPosition);
+        camera->SetRoll(cameraRoll);
+        if( cameraAzimuth != 0.0 )
+            camera->Azimuth(cameraAzimuth);
+
+        // Posicionem la imatge 
+        // TODO No ho fem amb setSlice() perquè introdueix flickering degut a 
+        // l'emit sliceChanged() que provoca un refresh() a través del Drawer. 
+        // Cal veure com evitar aquesta duplicació de codi de setSlice() perquè tot segueixi funcionant igual
+        checkAndUpdateSliceValue(initialSliceIndex);
+        updateDisplayExtent();
+        getRenderer()->ResetCamera(); // Aquesta línia és de més a més (adicional al codi de setSlice()!)
         updateAnnotationsInformation( Q2DViewer::SliceAnnotation | Q2DViewer::WindowInformationAnnotation );
         mapOrientationStringToAnnotation();
-        // TODO potser això no és del tot correcte, cal fer més consistent conjuntament amb setSlice
+        
+        // Ajustem la imatge al viewport
+        double bounds[6];
+        switch( m_lastView )
+        {
+        case Axial:
+            m_imageActor->GetBounds( bounds );
+            scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
+        break;
+
+        case Sagital:
+            m_imageActor->GetBounds( bounds );
+            scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
+        break;
+
+        case Coronal:
+            m_imageActor->GetBounds( bounds );
+            scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
+        break;
+        }
+        // Hem d'indicar l'slice changed al final per evitar el flickering que abans comentàvem
         emit sliceChanged( m_currentSlice );
     }
     else
