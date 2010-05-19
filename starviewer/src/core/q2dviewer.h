@@ -285,9 +285,6 @@ public slots:
     void horizontalFlip();
     void verticalFlip();
 
-    /// Re-inicia la càmera en la vista actual. Posa els paràmetres de rotació, zoom, desplaçament, flip, etc. als seus valors inicials
-    void resetCamera();
-
     // TODO aquests mètodes també haurien d'estar en versió QString!
     /**
      * Li indiquem quin mode de projecció volem aplicar sobre l'slab
@@ -400,6 +397,9 @@ private:
     /// TODO És públic únicament perquè el fa servir el presentation state attacher. Podria ser protected o private.
     void applyGrayscalePipeline();
 
+    /// Re-inicia la càmera en la vista actual. Posa els paràmetres de rotació, zoom, desplaçament, flip, etc. als seus valors inicials
+    void resetCamera();
+    
     /// thick slab
     void computeRangeAndSlice( int newSlabThickness );
 
