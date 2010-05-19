@@ -48,10 +48,10 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     const QString AnteriorHead("A\\H");
     const QString PosteriorFeet("P\\F");
     const QString PosteriorHead("P\\H");
-    const QString HeadAnterior("H\\A");
-    const QString HeadPosterior("H\\P");
     const QString FeetAnterior("F\\A");
     const QString FeetPosterior("F\\P");
+    const QString HeadAnterior("H\\A");
+    const QString HeadPosterior("H\\P");
 
     m_orientationMappingTable.insert(AnteriorFeet + "-" + AnteriorHead, "0,1"); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
     m_orientationMappingTable.insert(AnteriorFeet + "-" + PosteriorFeet, "2,1");
@@ -93,14 +93,6 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(FeetAnterior + "-" + FeetPosterior, "0,1");
     m_orientationMappingTable.insert(FeetAnterior + "-" + HeadPosterior, "2,0");
 
-    m_orientationMappingTable.insert(HeadAnterior + "-" + AnteriorFeet, "3,0");
-    m_orientationMappingTable.insert(HeadAnterior + "-" + AnteriorHead, "3,1");
-    m_orientationMappingTable.insert(HeadAnterior + "-" + PosteriorFeet, "1,1");
-    m_orientationMappingTable.insert(HeadAnterior + "-" + PosteriorHead, "1,0");
-    m_orientationMappingTable.insert(HeadAnterior + "-" + FeetAnterior, "2,1");
-    m_orientationMappingTable.insert(HeadAnterior + "-" + FeetPosterior, "2,0");
-    m_orientationMappingTable.insert(HeadAnterior + "-" + HeadPosterior, "0,1");
-
     m_orientationMappingTable.insert(FeetPosterior + "-" + AnteriorFeet, "1,0");
     m_orientationMappingTable.insert(FeetPosterior + "-" + AnteriorHead, "1,1");
     m_orientationMappingTable.insert(FeetPosterior + "-" + PosteriorFeet, "3,1");
@@ -108,6 +100,14 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(FeetPosterior + "-" + FeetAnterior, "0,1");
     m_orientationMappingTable.insert(FeetPosterior + "-" + HeadAnterior, "2,0");
     m_orientationMappingTable.insert(FeetPosterior + "-" + HeadPosterior, "2,1");
+
+    m_orientationMappingTable.insert(HeadAnterior + "-" + AnteriorFeet, "3,0");
+    m_orientationMappingTable.insert(HeadAnterior + "-" + AnteriorHead, "3,1");
+    m_orientationMappingTable.insert(HeadAnterior + "-" + PosteriorFeet, "1,1");
+    m_orientationMappingTable.insert(HeadAnterior + "-" + PosteriorHead, "1,0");
+    m_orientationMappingTable.insert(HeadAnterior + "-" + FeetAnterior, "2,1");
+    m_orientationMappingTable.insert(HeadAnterior + "-" + FeetPosterior, "2,0");
+    m_orientationMappingTable.insert(HeadAnterior + "-" + HeadPosterior, "0,1");
 
     m_orientationMappingTable.insert(HeadPosterior + "-" + AnteriorFeet, "3,1");
     m_orientationMappingTable.insert(HeadPosterior + "-" + AnteriorHead, "1,0");
@@ -168,14 +168,6 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(RightAnterior + "-" + RightPosterior, "0,1");
     m_orientationMappingTable.insert(RightAnterior + "-" + LeftPosterior, "2,0");
 
-    m_orientationMappingTable.insert(LeftAnterior + "-" + AnteriorRight, "3,0");
-    m_orientationMappingTable.insert(LeftAnterior + "-" + AnteriorLeft, "3,1");
-    m_orientationMappingTable.insert(LeftAnterior + "-" + PosteriorRight, "1,1");
-    m_orientationMappingTable.insert(LeftAnterior + "-" + PosteriorLeft, "1,0");
-    m_orientationMappingTable.insert(LeftAnterior + "-" + RightAnterior, "2,1");
-    m_orientationMappingTable.insert(LeftAnterior + "-" + RightPosterior, "2,0");
-    m_orientationMappingTable.insert(LeftAnterior + "-" + LeftPosterior, "0,1");
-
     m_orientationMappingTable.insert(RightPosterior + "-" + AnteriorRight, "1,0");
     m_orientationMappingTable.insert(RightPosterior + "-" + AnteriorLeft, "1,1");
     m_orientationMappingTable.insert(RightPosterior + "-" + PosteriorRight, "3,1");
@@ -183,6 +175,14 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(RightPosterior + "-" + RightAnterior, "0,1");
     m_orientationMappingTable.insert(RightPosterior + "-" + LeftAnterior, "2,0");
     m_orientationMappingTable.insert(RightPosterior + "-" + LeftPosterior, "2,1");
+
+    m_orientationMappingTable.insert(LeftAnterior + "-" + AnteriorRight, "3,0");
+    m_orientationMappingTable.insert(LeftAnterior + "-" + AnteriorLeft, "3,1");
+    m_orientationMappingTable.insert(LeftAnterior + "-" + PosteriorRight, "1,1");
+    m_orientationMappingTable.insert(LeftAnterior + "-" + PosteriorLeft, "1,0");
+    m_orientationMappingTable.insert(LeftAnterior + "-" + RightAnterior, "2,1");
+    m_orientationMappingTable.insert(LeftAnterior + "-" + RightPosterior, "2,0");
+    m_orientationMappingTable.insert(LeftAnterior + "-" + LeftPosterior, "0,1");
 
     m_orientationMappingTable.insert(LeftPosterior + "-" + AnteriorRight, "1,1");
     m_orientationMappingTable.insert(LeftPosterior + "-" + AnteriorLeft, "1,0");
