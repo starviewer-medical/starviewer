@@ -45,8 +45,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
 {
     HangingProtocol *hangingProtocol;
     HangingProtocol *bestHangingProtocol = NULL;
-    double adjustmentOfCurrentHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
-    double adjustmentOfBestHangingProtocol = 0.0; // Inicialment pensem que no existeix cap hanging
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
 
     QList<HangingProtocol * > outputHangingProtocolList;
@@ -82,21 +80,32 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
                 }
             }
 
-            adjustmentOfCurrentHangingProtocol = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
+            bool isValidHangingProtocol = false;
 
-            if( hangingProtocol->isStrict() && adjustmentOfCurrentHangingProtocol != 1.0 )
-                adjustmentOfCurrentHangingProtocol = 0.0;
+            if( hangingProtocol->isStrict() )
+            {
+                if ( numberOfSeriesAssigned == hangingProtocol->getNumberOfImageSets() )
+                {
+                    isValidHangingProtocol = true;
+                }
+            }
+            else
+            {
+                if ( numberOfSeriesAssigned > 0 )
+                {
+                    isValidHangingProtocol = true;
+                }
+            }
 
-            if( adjustmentOfCurrentHangingProtocol > 0.0 )
+            if( isValidHangingProtocol )
             {
                 outputHangingProtocolList << hangingProtocol;
                 hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
 
                 // Actualitzem el millor hanging protocol
-                if( (adjustmentOfCurrentHangingProtocol >= adjustmentOfBestHangingProtocol) && (hangingProtocol->isBetterThan(bestHangingProtocol) ) )
+                if( hangingProtocol->isBetterThan(bestHangingProtocol) )
                 {
                     bestHangingProtocol = hangingProtocol;
-                    adjustmentOfBestHangingProtocol = adjustmentOfCurrentHangingProtocol;
                 }
             }
         }

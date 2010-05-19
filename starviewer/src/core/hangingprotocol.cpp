@@ -175,6 +175,9 @@ bool HangingProtocol::isBetterThan( HangingProtocol * hangingToCompare )
 {
     if( hangingToCompare == NULL ) return true;
 
+    if ( this->countFilledImageSets()/(double)this->getNumberOfImageSets() < hangingToCompare->countFilledImageSets()/(double)hangingToCompare->getNumberOfImageSets() ) 
+        return false;
+
     if ( this->getPriority() != -1 && hangingToCompare->getPriority() != -1 ) 
     {
         // Si tots 2 tenen prioritat definida els fem competir
@@ -197,6 +200,20 @@ bool HangingProtocol::isBetterThan( HangingProtocol * hangingToCompare )
         return ( this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets() );
     
     return false;
+}
+
+int HangingProtocol::countFilledImageSets() const
+{
+    int count = 0;
+    foreach (HangingProtocolImageSet *imageSet, this->getImageSets() )
+    {
+        if ( imageSet->getSeriesToDisplay() )
+        {
+            count++;
+        }
+    }
+
+    return count;
 }
 
 bool HangingProtocol::isStrict() const
