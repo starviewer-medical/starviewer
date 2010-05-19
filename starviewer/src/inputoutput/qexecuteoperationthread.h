@@ -23,9 +23,9 @@ class Status;
 class LocalDatabaseManagerThreaded;
 class PatientFiller;
 class QThreadRunWithExec;
-class StarviewerProcessImageRetrieved;
 class LocalDatabaseManager;
 class Image;
+class RetrieveImages;
 
 class QExecuteOperationThread : public QThread
 {
@@ -144,6 +144,10 @@ private slots:
 	///emet el signa del que un estudi serà esborrar studyWillBeDeleted
 	void studyWillBeDeletedSlot(QString studyInstanceUID);
 
+    /**Emet signal ImageCommit, aquest SLOT és provisional, es crea per adaptar la QExecuteOperationThread a la nova StoreImages que ara emet signals
+        per indicar que ha enviat una imatge, en comptes d'utilitzar la classe StarviewerProcessStoredImage per comunicar-se*/
+    void DICOMFileSent(Image *image, int numberOfImagesSent);
+
 private:
 
     /** Descarrega un estudi, segons els paràmetres a operation, si l'estudi s'ha de visualitzar
@@ -170,7 +174,7 @@ private:
     void cancelAllPendingOperations(Operation::OperationAction cancelPendingOperations);
 
     //Crea les connexions de signals i slots necessaries per a descarregar un estudi
-    void createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved);
+    void createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, RetrieveImages *retrieveImages);
 
     ///Si es produeix un error emet un signal amb l'error i esborra el directori de l'estudi per si s'hagués pogut descarregar alguna imatge
     void errorRetrieving(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveError lastError);

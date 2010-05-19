@@ -28,7 +28,6 @@ class Status;
 class PacsDevice;
 class Study;
 class QOperationStateScreen;
-class ProcessImageSingleton;
 class PacsManager;
 
 /** 
@@ -170,7 +169,6 @@ private:
     QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
     QExecuteOperationThread m_qexecuteOperationThread;
     QOperationStateScreen *m_qoperationStateScreen;
-    ProcessImageSingleton *m_processImageSingleton;
     PacsManager *m_pacsManager;
 
     StatsWatcher *m_statsWatcher;

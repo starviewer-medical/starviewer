@@ -8,6 +8,7 @@
 #define UDGSTOREIMAGES_H
 
 #include <QList>
+#include <QObject>
 
 struct T_ASC_Association;
 struct T_DIMSE_C_StoreRSP;
@@ -24,7 +25,8 @@ class PacsServer;
 /**
 	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class StoreImages{
+class StoreImages: public QObject{
+Q_OBJECT
 public:
     StoreImages();
 
@@ -39,11 +41,16 @@ public:
     */
    Status store(QList<Image*> imageListToStore);
 
+signals:
+   ///Sinal que indica que s'ha fet l'enviament de la imatge passada per paràmetre al PACS, i el número d'imatges que es porten enviades
+   void DICOMFileSent(Image *image, int numberOfImagesSent);
+
 private :
     T_ASC_Association *m_association; // request DICOM association;
     //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning
     int m_numberOfStoredImagesSuccessful, m_numberOfStoredImagesWithWarning;
     int m_timeOut;
+    int m_numberOfImagesSent;//Indica quantes imatges s'han enviat
 
     ///Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
     void initialitzeImagesCounters();

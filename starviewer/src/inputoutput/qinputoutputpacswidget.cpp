@@ -23,7 +23,6 @@
 #include "pacsdevicemanager.h"
 #include "study.h"
 #include "qoperationstatescreen.h"
-#include "processimagesingleton.h"
 #include "localdatabasemanager.h"
 #include "pacsmanager.h"
 #include "harddiskinformation.h"
@@ -39,9 +38,6 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 
     Settings settings;
     settings.restoreColumnsWidths( InputOutputSettings::PacsStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
-
-    m_processImageSingleton = ProcessImageSingleton::getProcessImageSingleton();
-    m_processImageSingleton->setPath( LocalDatabaseManager::getCachePath());
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputPacsWidget",this);
     m_statsWatcher->addClicksCounter(m_retrievAndViewButton);
