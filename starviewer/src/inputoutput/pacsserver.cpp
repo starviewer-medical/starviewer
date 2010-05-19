@@ -1,7 +1,6 @@
 #include "pacsserver.h"
 
 #include <dimse.h>
-#include <ofstring.h>
 #include <ofcond.h>
 #include <assoc.h>
 #include <QHostInfo>
@@ -17,13 +16,13 @@ namespace udg{
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 
-PacsServer::PacsServer(PacsDevice p)
+PacsServer::PacsServer(PacsDevice pacsDevice)
 {
     // Variable global de dcmtk per evitar el dnslookup, que dona problemes de lentitu a windows.
     // TODO: Al fer refactoring aquesta inicialització hauria de quedar en un lloc central de configuracions per dcmtk.
     dcmDisableGethostbyaddr.set(OFTrue);
 
-    m_pacs = p;
+    m_pacs = pacsDevice;
     m_net = NULL;
     m_associationParameters = NULL;
     m_dicomAssociation = NULL;
@@ -150,16 +149,16 @@ OFCondition PacsServer::addStoragePresentationContexts()
      to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
      organise the proposed transfer syntaxes to take advantage of such behaviour. */
 
-    OFList<OFString> sopClasses, fallbackSyntaxes;
-    OFString preferredTransferSyntax;
+    QList<QString> sopClasses;
+    QList<const char*> fallbackSyntaxes;
+    const char *preferredTransferSyntax;
 
     ///Indiquem que con Transfer syntax preferida volem utilitzar JpegLossless
     preferredTransferSyntax = UID_JPEGProcess14SV1TransferSyntax;
 
-    fallbackSyntaxes.push_back( UID_LittleEndianExplicitTransferSyntax );
-    fallbackSyntaxes.push_back( UID_BigEndianExplicitTransferSyntax );
-    fallbackSyntaxes.push_back( UID_LittleEndianImplicitTransferSyntax );
-
+    fallbackSyntaxes.append(UID_LittleEndianExplicitTransferSyntax);
+    fallbackSyntaxes.append(UID_BigEndianExplicitTransferSyntax);
+    fallbackSyntaxes.append(UID_LittleEndianImplicitTransferSyntax);
 
     /*Afegim totes les classes SOP de transfarència d'imatges. com que desconeixem de quina modalitat són
      les imatges alhora de preparar la connexió les hi incloem totes les modalitats. Si alhora de connectar sabèssim de quina modalitat és 
@@ -180,28 +179,27 @@ OFCondition PacsServer::addStoragePresentationContexts()
     for ( int i = 0; i < numberOfDcmShortSCUStorageSOPClassUIDs; i++ )
     {
         // comprovem que no hi hagi que cap SOPClas duplicada
-        if (!isAListMember(sopClasses, dcmShortSCUStorageSOPClassUIDs[i]))
+        if (!sopClasses.contains(QString(dcmShortSCUStorageSOPClassUIDs[i])))
         {
-            sopClasses.push_back( dcmShortSCUStorageSOPClassUIDs[i] );
+            sopClasses.append(QString(dcmShortSCUStorageSOPClassUIDs[i]));
         }
     }
 
     OFCondition cond = EC_Normal;
     int pid = 3; // presentation context id ha de començar el 3 pq el 1 és el echo
-    OFListIterator( OFString ) s_cur = sopClasses.begin();
-    OFListIterator( OFString ) s_end = sopClasses.end();
 
     /*Creem un presentation context per cada SOPClass que tinguem, indicant per cada SOPClass quina transfer syntax utilitzarem*/
     /*En el cas del Store amb el presentation Context indiquem que per cada tipus d'imatge que volem guardar SOPClass amb quins 
      *transfer syntax ens podem comunicar, llavors el PACS ens indicarà si ell pot guardar aquest tipus de SOPClass, i amb quin
      *transfer syntax li hem d'enviar la imatge*/
-    while ( s_cur != s_end && cond.good() )
+
+    foreach(QString sopClass, sopClasses)
     {
         // No poden haver més de 255 presentation context
         if ( pid > 255 ) return ASC_BADPRESENTATIONCONTEXTID;
 
         // sop class with preferred transfer syntax
-        cond = addPresentationContext(pid, *s_cur, preferredTransferSyntax);
+        cond = addPresentationContext(pid, sopClass, preferredTransferSyntax);
         pid += 2;   /* only odd presentation context id's */
 
         if ( fallbackSyntaxes.size() > 0 )
@@ -209,54 +207,34 @@ OFCondition PacsServer::addStoragePresentationContexts()
             if ( pid > 255 ) return ASC_BADPRESENTATIONCONTEXTID;
 
             // sop class with fallback transfer syntax
-            cond = addPresentationContext( pid , *s_cur , fallbackSyntaxes );
+            cond = addPresentationContext( pid , sopClass, fallbackSyntaxes );
             pid += 2;       /* only odd presentation context id's */
         }
-        ++s_cur;
     }
 
     return cond;
 }
 
-OFCondition PacsServer::addPresentationContext( int presentationContextId , const OFString& abstractSyntax , const  OFList<OFString>& transferSyntaxList)
+OFCondition PacsServer::addPresentationContext( int presentationContextId , const QString &abstractSyntax , QList<const char*> transferSyntaxList)
 {
     // create an array of supported/possible transfer syntaxes
     const char** transferSyntaxes = new const char*[transferSyntaxList.size()];
     int transferSyntaxCount = 0;
-    OFListConstIterator( OFString ) s_cur = transferSyntaxList.begin();
-    OFListConstIterator( OFString ) s_end = transferSyntaxList.end();
 
-    while ( s_cur != s_end )
+    foreach(const char *transferSyntax, transferSyntaxList)
     {
-        transferSyntaxes[transferSyntaxCount++] = ( *s_cur ).c_str();
-        ++s_cur;
+        transferSyntaxes[transferSyntaxCount++] = transferSyntax;
     }
 
-    OFCondition cond = ASC_addPresentationContext(m_associationParameters , presentationContextId , abstractSyntax.c_str() , transferSyntaxes , transferSyntaxCount , ASC_SC_ROLE_DEFAULT);
+    OFCondition cond = ASC_addPresentationContext(m_associationParameters , presentationContextId , qPrintable(abstractSyntax) , transferSyntaxes , transferSyntaxCount , ASC_SC_ROLE_DEFAULT);
 
     delete[] transferSyntaxes;
     return cond;
 }
 
-OFCondition PacsServer::addPresentationContext( int presentationContextId , const OFString& abstractSyntax , const OFString& transferSyntax )
+OFCondition PacsServer::addPresentationContext( int presentationContextId , const QString &abstractSyntax , const char *transferSyntax )
 {
-    const char* c_p = transferSyntax.c_str();
-    return ASC_addPresentationContext( m_associationParameters , presentationContextId ,       abstractSyntax.c_str() , &c_p , 1 , ASC_SC_ROLE_DEFAULT );
-}
-
-bool PacsServer::isAListMember( OFList<OFString>& list , OFString stringToCheck )
-{
-    OFListIterator( OFString ) cur = list.begin();
-    OFListIterator( OFString ) end = list.end();
-    bool found = false;
-
-    while ( cur != end && !found )
-    {
-        found = (stringToCheck == *cur);
-        ++cur;
-    }
-
-    return found;
+    return ASC_addPresentationContext( m_associationParameters , presentationContextId, qPrintable(abstractSyntax) , &transferSyntax, 1 , ASC_SC_ROLE_DEFAULT );
 }
 
 Status PacsServer::connect( modalityConnection modality)
