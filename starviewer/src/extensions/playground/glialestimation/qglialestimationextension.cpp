@@ -178,7 +178,6 @@ void QGlialEstimationExtension::setInput( Volume *input )
         m_T1ValueSlider->setMaximum( m_maxT1Value );
 
         m_viewersLayout->getViewerWidget(0)->setInput( m_T1Volume );
-        m_viewersLayout->getViewerWidget(0)->getViewer()->resetCamera();
         //m_2DView_1->removeAnnotation(Q2DViewer::AllAnnotation);
     }
     if(m_perfuVolume != 0)
