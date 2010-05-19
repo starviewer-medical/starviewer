@@ -74,8 +74,8 @@ public:
 private:
 
    T_ASC_Network *m_net; // network struct, contains DICOM upper layer FSM etc.
-   T_ASC_Parameters *m_params; // parameters of association request
-   T_ASC_Association *m_assoc; // request DICOM association;
+   T_ASC_Parameters *m_associationParameters; // parameters of association request
+   T_ASC_Association *m_dicomAssociation; // request DICOM association;
    PacsNetwork *m_pacsNetwork; //configures the T_ASC_Network
 
    PacsDevice m_pacs;
@@ -119,7 +119,6 @@ private:
     */
     OFCondition addStoragePresentationContexts();
 
-
     /** Afageix un objecte SOP a la connexió amb el PACS
      * @param presentationContextId número de pid
      * @param abstractSyntax classe SOP a afegir
@@ -127,7 +126,6 @@ private:
      * @return estat del mètode
      */
     OFCondition addPresentationContext( int presentationContextId, const OFString& abstractSyntax, const  OFList<OFString>& transferSyntaxList);
-
 
     /** Afageix un objecte SOP a la connexió amb el PACS
      * @param presentationContextId número de pid
@@ -137,13 +135,12 @@ private:
      */
     OFCondition addPresentationContext(int presentationContextId, const OFString& abstractSyntax, const OFString& transferSyntax);
 
-
     /** comprova si un OFString pertany dins una llista
      * @param list llista
      * @param string string a comprovar si existeix a lla llista
      * @return indica is l'string està dins la llista
      */
-    OFBool isaListMember(OFList<OFString>& list, OFString& string);
+    bool isAListMember(OFList<OFString>& list, OFString stringToCheck);
 };
 };
 #endif
