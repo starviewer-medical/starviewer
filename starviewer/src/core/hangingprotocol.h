@@ -125,6 +125,11 @@ public:
 
 private:
 
+    /// Retorna el número de ImageSets que tenen una sèrie assignada
+    int countFilledImageSets() const;
+
+private:
+
     /// Identificador
     int m_identifier;
 
