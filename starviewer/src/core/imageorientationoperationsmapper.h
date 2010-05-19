@@ -47,6 +47,10 @@ private:
     /// Actualitza les operacions a realitzar segons les orientacions introduides
     void updateOperations();
 
+    /// Ens retorna l'etiqueta d'orientació en el format intern estipulat
+    /// Per exemple, les etiquetes "S" i "I" (Superior i Inferior) es passen als equivalents Head ("H") i Feet ("F")
+    QString formatOrientationLabel( const QString &label );
+
 private:
     /// Orientacions inicial i desitjada
     QString m_initialOrientation;

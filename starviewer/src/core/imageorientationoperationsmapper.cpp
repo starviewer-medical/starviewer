@@ -16,13 +16,13 @@ ImageOrientationOperationsMapper::~ImageOrientationOperationsMapper()
 
 void ImageOrientationOperationsMapper::setInitialOrientation( const QString &topLabel, const QString &leftLabel )
 {
-    m_initialOrientation = topLabel+"\\"+leftLabel;
+    m_initialOrientation = formatOrientationLabel(topLabel+"\\"+leftLabel);
     m_hasToUpdateOperations = true;
 }
     
 void ImageOrientationOperationsMapper::setDesiredOrientation( const QString &topLabel, const QString &leftLabel )
 {
-    m_desiredOrientation = topLabel+"\\"+leftLabel;
+    m_desiredOrientation = formatOrientationLabel(topLabel+"\\"+leftLabel);
     m_hasToUpdateOperations = true;
 }
 
@@ -52,13 +52,6 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     const QString HeadPosterior("H\\P");
     const QString FeetAnterior("F\\A");
     const QString FeetPosterior("F\\P");
-    // Superior ("S") és equivalent a Head ("H")
-    // TODO en comptes de duplicar entrades equivalents, 
-    // el que es podria fer és que quan ens introdueixin l'etiqueta "S" 
-    // la substituïm internament per "H". El mateix passaria per l'etiqueta "I"
-    // (Inferior) equivalent a "F" (Feet)
-    const QString SuperiorPosterior("S\\P");
-    const QString PosteriorSuperior("P\\S");
 
     m_orientationMappingTable.insert(AnteriorFeet + "-" + AnteriorHead, "0,1"); // per passar de AF -> AH calen 0 rotacions i 1 flip vertical
     m_orientationMappingTable.insert(AnteriorFeet + "-" + PosteriorFeet, "2,1");
@@ -116,13 +109,13 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(FeetPosterior + "-" + HeadAnterior, "2,0");
     m_orientationMappingTable.insert(FeetPosterior + "-" + HeadPosterior, "2,1");
 
-    m_orientationMappingTable.insert(SuperiorPosterior + "-" + AnteriorFeet, "3,1");
-    m_orientationMappingTable.insert(SuperiorPosterior + "-" + AnteriorHead, "1,0");
-    m_orientationMappingTable.insert(SuperiorPosterior + "-" + PosteriorFeet, "3,0");
-    m_orientationMappingTable.insert(SuperiorPosterior + "-" + PosteriorSuperior, "1,1");
-    m_orientationMappingTable.insert(SuperiorPosterior + "-" + FeetAnterior, "2,0");
-    m_orientationMappingTable.insert(SuperiorPosterior + "-" + HeadAnterior, "0,1");
-    m_orientationMappingTable.insert(SuperiorPosterior + "-" + FeetPosterior, "2,1");
+    m_orientationMappingTable.insert(HeadPosterior + "-" + AnteriorFeet, "3,1");
+    m_orientationMappingTable.insert(HeadPosterior + "-" + AnteriorHead, "1,0");
+    m_orientationMappingTable.insert(HeadPosterior + "-" + PosteriorFeet, "3,0");
+    m_orientationMappingTable.insert(HeadPosterior + "-" + PosteriorHead, "1,1");
+    m_orientationMappingTable.insert(HeadPosterior + "-" + FeetAnterior, "2,0");
+    m_orientationMappingTable.insert(HeadPosterior + "-" + HeadAnterior, "0,1");
+    m_orientationMappingTable.insert(HeadPosterior + "-" + FeetPosterior, "2,1");
 
     // Mappeig de les operacions per la vista axial
     // Definim les etiquetes possibles d'orientació
@@ -230,6 +223,17 @@ void ImageOrientationOperationsMapper::updateOperations()
         m_verticalFlip = false;
     }
     m_hasToUpdateOperations = false;    
+}
+
+QString ImageOrientationOperationsMapper::formatOrientationLabel( const QString &label )
+{
+    QString labelCopy = label;
+    
+    // Substituim les etiquetes Superior i Inferior pels seus equivalents
+    labelCopy.replace("S","H");
+    labelCopy.replace("I","F");
+    
+    return labelCopy;
 }
 
 } // end namespace udg
