@@ -388,7 +388,6 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
     m_perfusion2DView->getWindowLevelMapper()->SetLookupTable( m_perfusionHueLut );
-    m_perfusion2DView->render();
 }
 
 void QDifuPerfuSegmentationExtension::setMaxPerfusionImage( int max )
@@ -730,7 +729,6 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
 
         m_perfusionSliceSlider->setValue(m_diffusionSliceSlider->value());
         m_perfusion2DView->setSlice( m_perfusionSliceSlider->value());
-        m_perfusion2DView->render();
 
         m_computeBlackpointEstimationPushButton->setEnabled( true );
         m_saveRegisteredPerfusionPushButton->setEnabled( true );
@@ -810,7 +808,6 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 //     imageCast->SetOutputScalarTypeToUnsignedChar();
 //     m_perfusionOverlay->SetInput( imageCast->GetOutput() );
 //     m_perfusion2DView->setWindowLevel( 255.0, 0.0 );
-//     m_perfusion2DView->render();
 
 
 //     Volume * resultat = new Volume();

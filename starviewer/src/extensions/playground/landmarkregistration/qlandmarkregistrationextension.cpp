@@ -193,7 +193,6 @@ void QLandmarkRegistrationExtension::setInput( Volume *input )
 
     m_2DView->setCursor(Qt::CrossCursor);
     m_2DView_2->setCursor(Qt::CrossCursor);
-    m_2DView->render();
 }
 
 void QLandmarkRegistrationExtension::setPhase( int phase )
@@ -202,9 +201,6 @@ void QLandmarkRegistrationExtension::setPhase( int phase )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_firstVolume );
-
-    m_2DView->render();
-
 }
 
 void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
@@ -236,8 +232,6 @@ void QLandmarkRegistrationExtension::setSecondInput( Volume *input )
     m_sliceSpinBox_2->setMinimum(0);
     m_sliceSpinBox_2->setMaximum(dim[2]-1);
     m_sliceViewSlider_2->setValue(m_2DView_2->getCurrentSlice());
-
-    m_2DView_2->render();
 }
 
 void QLandmarkRegistrationExtension::setSecondPhase( int phase )
@@ -246,9 +240,6 @@ void QLandmarkRegistrationExtension::setSecondPhase( int phase )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView_2->setInput( m_secondVolume );
-
-    m_2DView_2->render();
-
 }
 
 void QLandmarkRegistrationExtension::applyMethod()
@@ -950,7 +941,7 @@ void QLandmarkRegistrationExtension::setOpacity( int op )
 
     m_2DView_2->setOpacityOverlay(((double)op)/100.0);
     m_2DView_2->setOverlayInput(m_registeredVolume);
-    m_2DView_2->render();
+    m_2DView_2->refresh();
 }
 
 void QLandmarkRegistrationExtension::seed1Activated( int row, int aux)
@@ -1309,7 +1300,6 @@ void QLandmarkRegistrationExtension::loadVolume(  )
         
             m_2DView->setCursor(Qt::CrossCursor);
             m_2DView_2->setCursor(Qt::CrossCursor);
-            m_2DView->render();
             reader->Delete();
         }
     }
@@ -1361,8 +1351,8 @@ void QLandmarkRegistrationExtension::restore(  )
 
     m_tryAgainPushButton->setEnabled(false);
 
-    m_2DView->render();
-    m_2DView_2->render();
+    m_2DView->refresh();
+    m_2DView_2->refresh();
 
 }
 
@@ -1384,8 +1374,8 @@ void QLandmarkRegistrationExtension::tryAgain(  )
         m_opacityLabel->setEnabled(false);
     }
 
-    m_2DView->render();
-    m_2DView_2->render();
+    m_2DView->refresh();
+    m_2DView_2->refresh();
 
 }
 }

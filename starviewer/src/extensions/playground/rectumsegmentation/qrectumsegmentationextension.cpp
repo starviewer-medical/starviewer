@@ -182,8 +182,6 @@ void QRectumSegmentationExtension::setInput( Volume *input )
     m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
     //m_2DView->resetWindowLevelToDefault();
     m_2DView->setOverlayToBlend();
-    m_2DView->render();
-
 }
 
 void QRectumSegmentationExtension::updateInputFeatures( Volume *input )
@@ -230,8 +228,6 @@ void QRectumSegmentationExtension::updateInputFeatures( Volume *input )
     //empirical values!!
     //m_lowerValueSlider->setValue(35);   //Ara ho fem pel QtDesigner
     //m_upperValueSlider->setValue(170);  //Ara ho fem pel QtDesigner
-
-    m_2DView->render();
 }
 
 void QRectumSegmentationExtension::ApplyFilterMainImage( )
