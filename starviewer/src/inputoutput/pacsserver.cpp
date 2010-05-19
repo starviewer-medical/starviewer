@@ -4,10 +4,8 @@
 #include <ofstring.h>
 #include <ofcond.h>
 #include <assoc.h>
-#include "dcmtk/dcmdata/dcdebug.h"
 #include <QHostInfo>
 
-#include "pacsdevice.h"
 #include "status.h"
 #include "pacsconnection.h"
 #include "pacsnetwork.h"
