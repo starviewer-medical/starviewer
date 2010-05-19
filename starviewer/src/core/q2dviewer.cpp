@@ -1546,7 +1546,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
 
             m_lowerRightText = laterality + " " + projection;
             // Apliquem la orientació que volem
-            applyDesiredOrientation( desiredOrientation );
+            setImageOrientation( desiredOrientation );
         }
         else
             m_lowerRightText.clear();
@@ -2122,7 +2122,7 @@ void Q2DViewer::setAlignPosition( AlignPosition alignPosition )
     }
 }
 
-void Q2DViewer::applyDesiredOrientation(const QString &orientation)
+void Q2DViewer::setImageOrientation(const QString &orientation)
 {
     QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
     QStringList desiredOrientationList = orientation.split("\\");

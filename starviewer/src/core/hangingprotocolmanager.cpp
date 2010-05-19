@@ -404,7 +404,7 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     }
 
     // Apliquem la orientació desitjada
-    viewer->getViewer()->applyDesiredOrientation(displaySet->getPatientOrientation());
+    viewer->getViewer()->setImageOrientation(displaySet->getPatientOrientation());
     
     int phase = displaySet->getPhase();
     if( phase > -1 )

@@ -315,7 +315,9 @@ public slots:
     void setAlignPosition( AlignPosition alignPosition );
 
     /// Aplica les transformacions 2D necessàries sobre la imatge actual perquè aquesta tingui la orientació indicada
-    void applyDesiredOrientation(const QString &orientation);
+    /// La orientació indicada ha de ser possible de conseguir mitjançant operacions de rotació i flip. En cas que no 
+    /// existeixin combinacions possibles, no es canviarà la orientació de la imatge
+    void setImageOrientation(const QString &orientation);
 
 signals:
     /// envia la nova llesca en la que ens trobem
