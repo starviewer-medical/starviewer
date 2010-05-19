@@ -12,9 +12,6 @@
 #include "qexecuteoperationthread.h"
 #include "pacsserver.h"
 #include "retrieveimages.h"
-#include "processimagesingleton.h"
-#include "starviewerprocessimageretrieved.h"
-#include "starviewerprocessimagestored.h"
 #include "harddiskinformation.h"
 #include "errordcmtk.h"
 #include "logging.h"
@@ -117,7 +114,6 @@ void QExecuteOperationThread::run()
 //descarrega un estudi
 void QExecuteOperationThread::retrieveStudy(Operation operation)
 {
-    StarviewerProcessImageRetrieved *sProcessImg = new StarviewerProcessImageRetrieved();
     QString studyUID = operation.getStudyUID();
     Status state,retState;
     LocalDatabaseManager localDatabaseManager;
@@ -125,12 +121,12 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     PatientFiller patientFiller;
     QThreadRunWithExec fillersThread;
     patientFiller.moveToThread( &fillersThread );
-    ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
+    RetrieveImages retrieveImages;
 
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsDevice().getAETitle() ) );
 
     //creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
-    createRetrieveStudyConnections(&localDatabaseManager, &localDatabaseManagerThreaded, &patientFiller, &fillersThread, sProcessImg);
+    createRetrieveStudyConnections(&localDatabaseManager, &localDatabaseManagerThreaded, &patientFiller, &fillersThread, &retrieveImages);
 
     localDatabaseManager.setStudyRetrieving(studyUID);
     //s'indica que comença la descarrega de l'estudi al qOperationStateScreen
@@ -180,13 +176,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     }
 
     //passem els parametres a la classe retrieveImages
-    RetrieveImages retrieveImages;
     retrieveImages.setConnection( pacsConnection.getConnection() );
     retrieveImages.setMask( operation.getDicomMask() );
     retrieveImages.setNetwork( pacsConnection.getNetwork() );
-
-    //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges descarregades
-    piSingleton->addNewProcessImage(studyUID, sProcessImg);
 
     localDatabaseManagerThreaded.start();
     fillersThread.start();
@@ -248,9 +240,6 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     }
 
     localDatabaseManager.setStudyRetrieveFinished();
-    //esborrem el processImage de la llista de processImage encarregat de processar la informació per cada imatge descarregada
-    piSingleton->delProcessImage( studyUID );
-    delete sProcessImg; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
 }
 
 void QExecuteOperationThread::moveStudy( Operation operation )
@@ -258,8 +247,6 @@ void QExecuteOperationThread::moveStudy( Operation operation )
     Status state;
     PacsDevice pacs = operation.getPacsDevice();
     StoreImages storeImages;
-    StarviewerProcessImageStored *storedProcessImage = new StarviewerProcessImageStored();
-    ProcessImageSingleton *piSingleton = ProcessImageSingleton::getProcessImageSingleton();
     QList<Image*> imagesToStoreList ;
 
     INFO_LOG( "Preparant les dades per guardar l' estudi " + operation.getStudyUID() + " al PACS " + pacs.getAETitle() );
@@ -279,18 +266,11 @@ void QExecuteOperationThread::moveStudy( Operation operation )
         return;
     }
 
-    //afegim a la ProcssesImageSingletton quin objecte s'encarregarrà de processar les imatges guardades
-    piSingleton->addNewProcessImage( operation.getStudyUID(), storedProcessImage );
-
-    connect(storedProcessImage, SIGNAL( imageStored(QString, int) ), this, SIGNAL( imageCommit(QString, int) ));
-    connect(storedProcessImage, SIGNAL( seriesStored(QString) ), this, SIGNAL( seriesCommit(QString) ));
+    connect(&storeImages, SIGNAL( DICOMFileSent(Image *, int) ), this, SLOT( DICOMFileSent(Image *, int) ) );
 
     storeImages.setConnection( pacsConnection );
 
     state = storeImages.store(imagesToStoreList);
-
-    piSingleton->delProcessImage( operation.getStudyUID() );
-    delete storedProcessImage; // el delete és necessari perquè al fer el delete storedProcessImage envia al signal de que l'última sèrie ha estat descarregada
 
     if ( state.good() )
     {
@@ -377,15 +357,13 @@ void QExecuteOperationThread::cancelAllPendingOperations(Operation::OperationAct
     m_qsemaphoreQueueOperationList->release();
 }
 
-void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager,LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, StarviewerProcessImageRetrieved *starviewerProcessImageRetrieved)
+void QExecuteOperationThread::createRetrieveStudyConnections(LocalDatabaseManager *localDatabaseManager,LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread, RetrieveImages *retrieveImages)
 {
     connect(patientFiller, SIGNAL( progress(int) ), this, SIGNAL( currentProcessingStudyImagesRetrievedChanged(int) ));
 
     //Connexions entre la descarrega i el processat dels fitxers
-    connect(starviewerProcessImageRetrieved, SIGNAL( fileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
+    connect(retrieveImages, SIGNAL( DICOMFileRetrieved(DICOMTagReader*) ), patientFiller, SLOT( processDICOMFile(DICOMTagReader*) ));
     connect(this, SIGNAL( filesRetrieved() ), patientFiller, SLOT( finishDICOMFilesProcess() ));
-
-    connect(starviewerProcessImageRetrieved, SIGNAL(seriesRetrieved(QString)), this, SLOT (seriesRetrieved(QString)));
 
     //Connexió entre el processat i l'insersió al a BD
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( save(Patient *) ), Qt::DirectConnection);
@@ -492,6 +470,11 @@ void QExecuteOperationThread::seriesRetrieved(QString studyInstanceUID)
 void QExecuteOperationThread::studyWillBeDeletedSlot(QString studyInstanceUID)
 {
     emit studyWillBeDeleted(studyInstanceUID);
+}
+
+void QExecuteOperationThread::DICOMFileSent(Image *image, int numberOfImagesSent)
+{
+    emit imageCommit(image->getParentSeries()->getParentStudy()->getInstanceUID(), numberOfImagesSent);
 }
 
 }

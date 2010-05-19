@@ -21,6 +21,7 @@
 #define RETRIEVEIMAGES
 
 #include <QString>
+#include <QObject>
 
 #include "ofcond.h"
 #include "assoc.h"
@@ -47,8 +48,9 @@ class DICOMTagReader;
 /** 
     This class helps to interactive with the pacs, retrieve images that match with the mask
  */
-class RetrieveImages
+class RetrieveImages: public QObject
 {
+Q_OBJECT
 public:
    RetrieveImages();
 
@@ -63,6 +65,11 @@ public:
 
    ///Starts the download
    Status retrieve();
+
+signals:
+
+   ///Signal que indica que s'ha descarregat un fitxer
+   void DICOMFileRetrieved(DICOMTagReader *dicomTagReader);
 
 private:
     /// Request DICOM association;

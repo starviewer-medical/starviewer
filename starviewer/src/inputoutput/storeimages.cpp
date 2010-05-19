@@ -17,7 +17,6 @@
 #include <QDir>
 
 #include "status.h"
-#include "processimagesingleton.h"
 #include "logging.h"
 #include "pacsconnection.h"
 #include "errordcmtk.h"
@@ -44,7 +43,6 @@ Status StoreImages::store(QList<Image*> imageListToStore)
 {
     OFCondition cond = EC_Normal;
     Status state;
-    ProcessImageSingleton* piSingleton;
     QString statusMessage;
 
     initialitzeImagesCounters();
@@ -56,15 +54,14 @@ Status StoreImages::store(QList<Image*> imageListToStore)
         return state.setStatus(DcmtkNoConnectionError);
     }
 
-    //proces que farà el tractament de la imatge enviada des de la nostra aplicació, en el cas de l'starviewer informar a QOperationStateScreen que s'ha guardar una imatge més
-    piSingleton=ProcessImageSingleton::getProcessImageSingleton();
-
     foreach(Image *imageToStore, imageListToStore)
     {
         if (storeSCU(m_association, qPrintable(imageToStore->getPath())))
         {
             //Si l'ha imatge s'ha enviat correctament la processem
-            piSingleton->process(imageToStore->getParentSeries()->getParentStudy()->getInstanceUID(), imageToStore);
+            //TODO:m_numberOfImagesSent també comptabilitzat imatges que l'enviament ha fallat, les hauria de comptar?
+            m_numberOfImagesSent++;
+            emit DICOMFileSent(imageToStore, m_numberOfImagesSent);
         }
     }
 
@@ -73,10 +70,11 @@ Status StoreImages::store(QList<Image*> imageListToStore)
 
 void StoreImages::initialitzeImagesCounters()
 {
-    //Inicialitzem els comptadors control d'errors 
+    //Inicialitzem els comptadors 
 
     m_numberOfStoredImagesSuccessful = 0;
     m_numberOfStoredImagesWithWarning = 0;
+    m_numberOfImagesSent = 0;
 }
 
 /*

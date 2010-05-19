@@ -29,8 +29,6 @@ HEADERS += databaseconnection.h \
     pacsnetwork.h \
     pacsdevice.h \
     pacsserver.h \
-    processimage.h \
-    processimagesingleton.h \
     retrieveimages.h \
     status.h \
     struct.h \
@@ -41,8 +39,6 @@ HEADERS += databaseconnection.h \
     createdicomdir.h \
     dicomdirreader.h \
     storeimages.h \
-    starviewerprocessimagestored.h \
-    starviewerprocessimageretrieved.h \
     querypacs.h \
     dicommask.h \
     dicomdirimporter.h \
@@ -95,8 +91,6 @@ SOURCES += databaseconnection.cpp \
     pacsnetwork.cpp \
     pacsdevice.cpp \
     pacsserver.cpp \
-    processimage.cpp \
-    processimagesingleton.cpp \
     retrieveimages.cpp \
     status.cpp \
     operation.cpp \
@@ -106,8 +100,6 @@ SOURCES += databaseconnection.cpp \
     createdicomdir.cpp \
     dicomdirreader.cpp \
     storeimages.cpp \
-    starviewerprocessimagestored.cpp \
-    starviewerprocessimageretrieved.cpp \
     querypacs.cpp \
     dicommask.cpp \
     dicomdirimporter.cpp \

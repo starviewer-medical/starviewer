@@ -11,7 +11,6 @@
 #include <QDir>
 
 #include "struct.h"
-#include "processimagesingleton.h"
 #include "status.h"
 #include "logging.h"
 #include "errordcmtk.h"
@@ -138,19 +137,11 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
             RetrieveImages *retrieveImages = storeSCPCallbackData->retrieveImages;
             QString dicomFileAbsolutePath = retrieveImages ->getAbsoluteFilePathCompositeInstance(*imageDataSet, storeSCPCallbackData->fileName);
 
-            //procés que farà el tractament de la imatge descarregada de la nostre aplicació, en el cas de l'starviewer guardar a la cache,i augmentarà comptador de descarregats
-            ProcessImageSingleton* piSingleton = ProcessImageSingleton::getProcessImageSingleton();
-            // obtenim l'UID d'estudi de l'objecte descarregat que posteriorment fem servir
-            const char *text;
-            (*imageDataSet)->findAndGetString( DCM_StudyInstanceUID , text , false );
-            QString retrievedDatasetStudyUID( text );
-
             //Guardem la imatge
             OFCondition stateSaveImage = retrieveImages->save(storeSCPCallbackData->dcmFileFormat, dicomFileAbsolutePath);
             
             if ( stateSaveImage.bad() )
             {
-                piSingleton->setError( retrievedDatasetStudyUID );
                 storeResponse->DimseStatus = STATUS_STORE_Refused_OutOfResources;
                 ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + dicomFileAbsolutePath + ", error: " + stateSaveImage.text()); 
             }
@@ -163,24 +154,21 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
                 if (! DU_findSOPClassAndInstanceInDataSet( *imageDataSet , sopClass , sopInstance , correctUIDPadding ) )
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
-                    piSingleton->setError( retrievedDatasetStudyUID );
                     ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(storeSCPCallbackData->fileName));
                 }
                 else if ( strcmp( sopClass , storeRequest->AffectedSOPClassUID ) != 0)
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    piSingleton->setError( retrievedDatasetStudyUID );
                     ERROR_LOG(QString("No concorda la sop class rebuda amb la sol·licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
                 }
-                else if ( strcmp( sopInstance , storeRequest->AffectedSOPInstanceUID ) != 0 )
+                else if ( strcmp( sopInstance , storeRequest->AffectedSOPInstanceUID ) != 0)
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    piSingleton->setError( retrievedDatasetStudyUID );
                     ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
                 }
             }
             DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFileAbsolutePath, storeSCPCallbackData->dcmFileFormat->getAndRemoveDataset() );
-            piSingleton->process(dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID), dicomTagReader);
+            emit retrieveImages->DICOMFileRetrieved(dicomTagReader);
         }
     }
 }
