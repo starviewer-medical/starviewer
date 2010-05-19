@@ -21,8 +21,6 @@
 #include "pacsconnection.h"
 #include "errordcmtk.h"
 #include "image.h"
-#include "series.h"
-#include "study.h"
 #include "pacsserver.h"
 
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
