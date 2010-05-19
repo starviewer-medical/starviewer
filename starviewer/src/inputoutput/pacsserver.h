@@ -2,14 +2,11 @@
 #define PACSSERVER
 
 
-#include <oflist.h>
-
 #include "pacsdevice.h"
 
 struct T_ASC_Network;
 struct T_ASC_Parameters;
 struct T_ASC_Association;
-class OFString;
 class OFCondition;
 class QString;
 
@@ -125,7 +122,7 @@ private:
      * @param transferSyntaxList
      * @return estat del mètode
      */
-    OFCondition addPresentationContext( int presentationContextId, const OFString& abstractSyntax, const  OFList<OFString>& transferSyntaxList);
+    OFCondition addPresentationContext( int presentationContextId, const QString &abstractSyntax, QList<const char*> transferSyntaxList);
 
     /** Afageix un objecte SOP a la connexió amb el PACS
      * @param presentationContextId número de pid
@@ -133,14 +130,7 @@ private:
      * @param transferSyntax
      * @return estat del mètode
      */
-    OFCondition addPresentationContext(int presentationContextId, const OFString& abstractSyntax, const OFString& transferSyntax);
-
-    /** comprova si un OFString pertany dins una llista
-     * @param list llista
-     * @param string string a comprovar si existeix a lla llista
-     * @return indica is l'string està dins la llista
-     */
-    bool isAListMember(OFList<OFString>& list, OFString stringToCheck);
+    OFCondition addPresentationContext(int presentationContextId, const QString &abstractSyntax, const char *transferSyntax);
 };
 };
 #endif
