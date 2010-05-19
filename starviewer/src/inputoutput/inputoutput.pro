@@ -31,7 +31,6 @@ HEADERS += databaseconnection.h \
     pacsserver.h \
     retrieveimages.h \
     status.h \
-    struct.h \
     operation.h \
     qexecuteoperationthread.h \
     converttodicomdir.h \

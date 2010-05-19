@@ -10,7 +10,6 @@
 
 #include <QDir>
 
-#include "struct.h"
 #include "status.h"
 #include "logging.h"
 #include "errordcmtk.h"
