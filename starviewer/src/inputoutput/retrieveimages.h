@@ -22,9 +22,8 @@
 
 #include <QString>
 #include <QObject>
-
-#include "ofcond.h"
-#include "assoc.h"
+#include <ofcond.h>
+#include <assoc.h>
 
 struct T_ASC_Network;
 struct T_DIMSE_C_MoveRQ;
@@ -33,7 +32,6 @@ struct T_DIMSE_C_StoreRQ;
 struct T_DIMSE_StoreProgress;
 struct T_DIMSE_C_StoreRSP;
 struct T_DIMSE_Message;
-struct StoreCallbackData;
 
 class DcmDataset;
 class DcmFileFormat;
