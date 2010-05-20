@@ -554,13 +554,6 @@ void Q3DViewer::render()
     }
 }
 
-void Q3DViewer::reset()
-{
-    // \TODO implementar tot el que falti
-    setDefaultOrientationForCurrentInput();
-    this->resetOrientation();
-}
-
 void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
 {
     m_transferFunction = transferFunction;

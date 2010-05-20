@@ -247,8 +247,6 @@ public slots:
     void invertWindowLevel();
 
     virtual void render();
-    // TODO donar aquest per deprecated i fer servir restore() en comptes
-    void reset();
 
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);

@@ -88,7 +88,7 @@ public slots:
     void planeInteraction();
 
     virtual void render();
-    void reset();
+
 
 protected:
     /// Els respectius volums sobre cada pla de reslice
