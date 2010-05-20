@@ -43,7 +43,6 @@ HangingProtocolManager::~HangingProtocolManager()
 
 QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient)
 {
-    HangingProtocol *hangingProtocol;
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
 
     QList<HangingProtocol * > outputHangingProtocolList;
@@ -63,7 +62,7 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
     for( int hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols ; hangingProtocolNumber++)
     {
         //Inicialitzacions
-        hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
+        HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
 
         if( isModalityCompatible(hangingProtocol, patient) && !hangingProtocol->hasStudiesToDownload() )
         {
