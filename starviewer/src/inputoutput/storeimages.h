@@ -56,8 +56,8 @@ private :
     Status getStatusStoreSCU(int numberOfImagesToStore);
 
 private: 
-    //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning
-    int m_numberOfStoredImagesSuccessful, m_numberOfStoredImagesWithWarning, m_numberOfImagesSent;//Indica quantes imatges s'han enviat
+    //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning/Total d'imatges que s'ha enviat
+    int m_numberOfStoredImagesSuccessful, m_numberOfStoredImagesWithWarning, m_numberOfImagesSent;
     PacsDevice m_pacs;
 
 };
