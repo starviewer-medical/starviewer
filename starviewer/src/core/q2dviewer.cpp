@@ -726,19 +726,6 @@ void Q2DViewer::setOverlayOpacity( double opacity )
     m_overlayOpacity = opacity;
 }
 
-void Q2DViewer::render()
-{
-    // si tenim dades
-    if( m_mainVolume )
-    {
-        getRenderer()->Render();
-    }
-    else
-    {
-        DEBUG_LOG( "::render() : No hi ha cap volum per visualitzar" );
-    }
-}
-
 void Q2DViewer::resetView( CameraOrientationType view )
 {
     // Important, cal desactivar el thickslab abans de fer m_lastView = view, sinó falla amb l'update extent
@@ -828,7 +815,7 @@ void Q2DViewer::updateCamera()
         }
         emit cameraChanged();
         mapOrientationStringToAnnotation();
-        this->refresh();
+        this->render();
     }
     else
     {
@@ -931,7 +918,7 @@ void Q2DViewer::resetCamera()
 
         // Posicionem la imatge 
         // TODO No ho fem amb setSlice() perquè introdueix flickering degut a 
-        // l'emit sliceChanged() que provoca un refresh() a través del Drawer. 
+        // l'emit sliceChanged() que provoca un render() a través del Drawer. 
         // Cal veure com evitar aquesta duplicació de codi de setSlice() perquè tot segueixi funcionant igual
         checkAndUpdateSliceValue(initialSliceIndex);
         updateDisplayExtent();
@@ -996,7 +983,7 @@ void Q2DViewer::setPhase( int value )
         this->updateDisplayExtent();
         updateSliceAnnotationInformation();
         emit phaseChanged( m_currentPhase );
-        this->refresh();
+        this->render();
     }
 }
 
@@ -1039,7 +1026,7 @@ void Q2DViewer::setWindowLevel( double window , double level )
             vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetWindow( m_windowLevelLUTMapper->GetWindow() );
             vtkWindowLevelLookupTable::SafeDownCast( m_scalarBar->GetLookupTable() )->SetLevel( m_windowLevelLUTMapper->GetLevel() );
         }
-        this->refresh();
+        this->render();
         emit windowLevelChanged( window , level );
     }
     else
@@ -1706,7 +1693,7 @@ void Q2DViewer::enableAnnotation( AnnotationFlags annotation, bool enable )
         m_enabledAnnotations =  m_enabledAnnotations & ~annotation;
 
     refreshAnnotations();
-    this->refresh();
+    this->render();
 }
 
 void Q2DViewer::removeAnnotation( AnnotationFlags annotation )
@@ -1745,7 +1732,7 @@ void Q2DViewer::setSlabProjectionMode( int projectionMode )
     m_slabProjectionMode = projectionMode;
     m_thickSlabProjectionFilter->SetAccumulatorType( static_cast<AccumulatorFactory::AccumulatorType>( m_slabProjectionMode ) );
     updateDisplayExtent();
-    this->refresh();
+    this->render();
 }
 
 int Q2DViewer::getSlabProjectionMode() const
@@ -1769,7 +1756,7 @@ void Q2DViewer::setSlabThickness( int thickness )
         applyGrayscalePipeline();
         updateDisplayExtent();
         updateSliceAnnotationInformation();
-        this->refresh();
+        this->render();
     }
     if ( m_slabThickness > 1 && !isThickSlabActive() ) // la comprovacio es per constuir el pipeline nomes el primer cop
     {
@@ -1787,7 +1774,7 @@ void Q2DViewer::setSlabThickness( int thickness )
         m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
         updateDisplayExtent();
         updateSliceAnnotationInformation();
-        this->refresh();
+        this->render();
     }
 
     // TODO és del tot correcte que vagi aquí aquesta crida?
@@ -2002,7 +1989,7 @@ void Q2DViewer::restore()
     this->m_isRefreshActive = true;
     this->setAlignPosition( m_alignPosition );
 
-    this->refresh();
+    this->render();
 }
 
 void Q2DViewer::clearViewer()

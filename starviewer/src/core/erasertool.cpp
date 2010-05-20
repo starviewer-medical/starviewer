@@ -136,7 +136,7 @@ void EraserTool::drawAreaOfErasure()
     //actualitzem els atributs de la polilinia
     m_polyline->update( DrawerPrimitive::VTKRepresentation );
 
-    m_2DViewer->refresh();
+    m_2DViewer->render();
 }
 
 void EraserTool::erasePrimitive()

@@ -246,8 +246,6 @@ public slots:
     /// Canvia el WW del visualitzador, per tal de canviar els blancs per negres, i el negres per blancs
     void invertWindowLevel();
 
-    virtual void render();
-
     /// canvia la llesca que veiem de la vista actual
     void setSlice(int value);
 

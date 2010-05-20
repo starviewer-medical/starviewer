@@ -324,7 +324,7 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
     // TODO ara ho fem "a saco" però s'hauria de millorar
     m_diffusion2DView->setInput( m_diffusionMainVolume );
     //m_diffusion2DView->resetWindowLevelToDefault();
-    m_diffusion2DView->refresh();
+    m_diffusion2DView->render();
 
     connect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
     connect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds(int) ) );
@@ -454,7 +454,7 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
     m_diffusionOpacityLabel->setEnabled( true );
     m_diffusionOpacitySlider->setEnabled( true );
 
-    m_diffusion2DView->refresh();
+    m_diffusion2DView->render();
 }
 
 void QDifuPerfuSegmentationExtension::viewThresholds(int i)
@@ -489,7 +489,7 @@ void QDifuPerfuSegmentationExtension::viewThresholds2()
     imageCast->Delete();
 
 
-    m_perfusion2DView->refresh();
+    m_perfusion2DView->render();
 }
 
 void QDifuPerfuSegmentationExtension::setSeedPosition(double x, double y, double z)
@@ -865,7 +865,7 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
     //m_perfusion2DView->setOverlapMethodToBlend();
     m_perfusion2DView->setOverlapMethodToNone();
     m_perfusion2DView->setOverlayInput( m_penombraMaskVolume );
-    m_perfusion2DView->refresh();
+    m_perfusion2DView->render();
     //Posem els 2 viewers a la mateixa llesca i els sincronitzem
     m_diffusion2DView->setSlice( m_perfusionSliceSlider->value());
     m_synchroCheckBox->setChecked(true);
@@ -902,7 +902,7 @@ void QDifuPerfuSegmentationExtension::applyFilterDiffusionImage()
     m_diffusionMainVolume = filteredVolume;
 
     m_diffusion2DView->setInput( m_diffusionMainVolume );
-    m_diffusion2DView->refresh();
+    m_diffusion2DView->render();
 
     m_filterDiffusionPushButton->setEnabled( false );
 
@@ -915,14 +915,14 @@ void QDifuPerfuSegmentationExtension::setDiffusionOpacity( int opacity )
     {
         m_diffusion2DView->setOverlayOpacity(((double)opacity)/100.0);
         m_diffusion2DView->setOverlayInput(m_activedMaskVolume);
-        m_diffusion2DView->refresh();
+        m_diffusion2DView->render();
     }
 }
 
 void QDifuPerfuSegmentationExtension::setPerfusionOpacity( int opacity )
 {
     m_perfusionOverlay->SetOpacity( opacity / 100.0 );
-    m_perfusion2DView->refresh();
+    m_perfusion2DView->render();
 }
 
 
@@ -934,7 +934,7 @@ void QDifuPerfuSegmentationExtension::viewLesionOverlay()
         m_diffusion2DView->setOverlapMethodToBlend();
         m_diffusion2DView->setOverlayOpacity(((double)m_diffusionOpacitySlider->value())/100.0);
         m_diffusion2DView->setOverlayInput(m_strokeMaskVolume);
-        m_diffusion2DView->refresh();
+        m_diffusion2DView->render();
     }
 }
 
@@ -946,7 +946,7 @@ void QDifuPerfuSegmentationExtension::viewVentriclesOverlay()
         m_diffusion2DView->setOverlapMethodToBlend();
         m_diffusion2DView->setOverlayOpacity(((double)m_diffusionOpacitySlider->value())/100.0);
         m_diffusion2DView->setOverlayInput(m_ventriclesMaskVolume);
-        m_diffusion2DView->refresh();
+        m_diffusion2DView->render();
     }
 }
 
@@ -958,7 +958,7 @@ void QDifuPerfuSegmentationExtension::viewVentriclesOverlay(int a)
         m_diffusion2DView->setOverlapMethodToBlend();
         m_diffusion2DView->setOverlayOpacity(((double)m_diffusionOpacitySlider->value())/100.0);
         m_diffusion2DView->setOverlayInput(m_ventriclesMaskVolume);
-        m_diffusion2DView->refresh();
+        m_diffusion2DView->render();
     }
 }
 
@@ -1009,7 +1009,7 @@ void QDifuPerfuSegmentationExtension::synchronizeSlices( bool sync )
 void QDifuPerfuSegmentationExtension::setPerfusionSlice( int slice )
 {
     if ( m_perfusionOverlay ) m_perfusionOverlay->SetZSlice( slice );
-    m_perfusion2DView->refresh();
+    m_perfusion2DView->render();
 }
 
 void QDifuPerfuSegmentationExtension::computePenombraVolume( const QString & name)
@@ -1286,7 +1286,7 @@ void QDifuPerfuSegmentationExtension::updatePenombraVolume()
         m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
         m_perfusion2DView->setOverlapMethodToNone();
         m_perfusion2DView->setOverlayInput( m_penombraMaskVolume );
-        m_perfusion2DView->refresh();
+        m_perfusion2DView->render();
 
     }
 }

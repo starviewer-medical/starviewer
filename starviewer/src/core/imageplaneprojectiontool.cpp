@@ -512,7 +512,7 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
         }
     }
 
-    m_2DViewer->refresh();
+    m_2DViewer->render();
 }
 
 void ImagePlaneProjectionTool:: checkImagePlaneBindUpdated( QString nameProjectedLine )
@@ -633,7 +633,7 @@ void ImagePlaneProjectionTool::updateReslice( Volume *volume )
     m_reslice->SetInterpolationModeToCubic();
 
     // Visualitzem els canvis al viewer
-    m_2DViewer->refresh();
+    m_2DViewer->render();
 }
 
 void ImagePlaneProjectionTool::setToolData(ToolData * data)

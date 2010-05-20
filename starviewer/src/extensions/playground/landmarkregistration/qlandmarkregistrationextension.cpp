@@ -528,7 +528,7 @@ void QLandmarkRegistrationExtension::applyMethod()
     //     m_2DView->setOverlayInput(m_registeredVolume);
     //     m_opacityOverlaySlider->setEnabled(true);
     //     m_opacityLabel->setEnabled(true);
-    //     m_2DView->refresh();
+    //     m_2DView->render();
 
 
     m_2DView_2->setOverlapMethodToBlend();
@@ -537,7 +537,7 @@ void QLandmarkRegistrationExtension::applyMethod()
     m_opacityOverlaySlider->setEnabled(true);
     m_opacityLabel->setEnabled(true);
     m_tryAgainPushButton->setEnabled(true);
-    m_2DView_2->refresh();
+    m_2DView_2->render();
 
     QApplication::restoreOverrideCursor();
     DEBUG_LOG("EndApply");
@@ -671,14 +671,14 @@ void QLandmarkRegistrationExtension::mouseMoveEventHandler( int idVolume )
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 0, newItem);
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 1, newItem2);
             m_seedList1TableWidget->setItem(m_idSelectedSeed, 2, newItem3);
-            m_2DView->refresh();
+            m_2DView->render();
         }
         else    // idVolume == 2
         {
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 0, newItem);
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 1, newItem2);
             m_seedList2TableWidget->setItem(m_idSelectedSeed, 2, newItem3);
-            m_2DView_2->refresh();
+            m_2DView_2->render();
         }
     }
 }
@@ -744,7 +744,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
 
             m_2DView->getRenderer()-> AddViewProp( pointActor );
             m_seedActorVector1.push_back(pointActor);
-            m_2DView->refresh();
+            m_2DView->render();
 
             //connect( m_2DView , SIGNAL( sliceChanged(int) ), SLOT( sliceChanged(int) ) );
 
@@ -759,7 +759,7 @@ void QLandmarkRegistrationExtension::setNewSeedPosition( int idVolume )
 
             m_2DView_2->getRenderer()-> AddViewProp( pointActor );
             m_seedActorVector2.push_back(pointActor);
-            m_2DView_2->refresh();
+            m_2DView_2->render();
         }
 
     pointMapper -> Delete();
@@ -815,7 +815,7 @@ void QLandmarkRegistrationExtension::rightButtonPressEventHandler( int idVolume 
             it++;
             itList++;
         }
-        m_2DView->refresh();
+        m_2DView->render();
     }
     else        // idVolume == 2
     {
@@ -842,7 +842,7 @@ void QLandmarkRegistrationExtension::rightButtonPressEventHandler( int idVolume 
             itList++;
             it++;
         }
-        m_2DView_2->refresh();
+        m_2DView_2->render();
     }
 }
 
@@ -899,7 +899,7 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
             m_2DView->getRenderer()->RemoveViewProp( m_selectedActor );
             m_2DView->getRenderer()->AddViewProp( pointActor );
             m_seedActorVector1[m_idSelectedSeed] = pointActor;
-            m_2DView->refresh();
+            m_2DView->render();
         }
         else    // idVolume == 2
         {
@@ -909,7 +909,7 @@ void QLandmarkRegistrationExtension::rightButtonReleaseEventHandler( int idVolum
             m_2DView_2->getRenderer()->RemoveViewProp( m_selectedActor );
             m_2DView_2->getRenderer()->AddViewProp( pointActor );
             m_seedActorVector2[m_idSelectedSeed] = pointActor;
-            m_2DView_2->refresh();
+            m_2DView_2->render();
         }
         pointMapper->Delete();
         point->Delete();
@@ -922,7 +922,7 @@ void QLandmarkRegistrationExtension::viewFirstVolume( )
 /*    QSize mida = layoutWidget_2->size();
     mida.setWidth(1);
     layoutWidget_2->resize(mida);
-    m_verticalSplitter->refresh();*/
+    m_verticalSplitter->render();*/
 //    int min, max;
 //    m_verticalSplitter->getRange(0,&min,&max);
 //    std::cout<<"Splitter: "<<min<<" "<<max<<std::endl;
@@ -937,11 +937,11 @@ void QLandmarkRegistrationExtension::setOpacity( int op )
 {
     //     m_2DView->setOverlayOpacity(((double)op)/100.0);
     //     m_2DView->setOverlayInput(m_registeredVolume);
-    //     m_2DView->refresh();
+    //     m_2DView->render();
 
     m_2DView_2->setOverlayOpacity(((double)op)/100.0);
     m_2DView_2->setOverlayInput(m_registeredVolume);
-    m_2DView_2->refresh();
+    m_2DView_2->render();
 }
 
 void QLandmarkRegistrationExtension::seed1Activated( int row, int aux)
@@ -967,7 +967,7 @@ void QLandmarkRegistrationExtension::seed1Activated( int row, int aux)
         m_seedLastActor1 = row;
         //m_2DView->setSlice(m_seedSliceVector1[row]);
         m_sliceViewSlider->setValue(m_seedSliceVector1[row]);
-        m_2DView->refresh();
+        m_2DView->render();
     }
     if(aux != -1)
     {
@@ -987,7 +987,7 @@ void QLandmarkRegistrationExtension::seed2Activated( int row, int aux)
         }
         m_seedLastActor2 = row;
         m_2DView_2->setSlice(m_seedSliceVector2[row]);
-        m_2DView_2->refresh();
+        m_2DView_2->render();
     }
     if(aux != -1)
     {
@@ -1031,7 +1031,7 @@ void QLandmarkRegistrationExtension::sliceChanged1( int s )
         itActor++;
         it++;
     }
-    m_2DView->refresh();
+    m_2DView->render();
     //std::cout<<"CurrentSlice:"<<m_2DView->getCurrentSlice()<<std::endl;
 /*    double pos[3];
     std::cout<<"ChapusSlice:"<<(int)((pos[2]/m_firstVolume->getSpacing()[2])+0.5)<<std::endl;*/
@@ -1057,7 +1057,7 @@ void QLandmarkRegistrationExtension::sliceChanged2( int s )
         itActor++;
         it++;
     }
-    m_2DView_2->refresh();
+    m_2DView_2->render();
 }
 
 void QLandmarkRegistrationExtension::saveTransform(  )
@@ -1218,7 +1218,7 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         m_2DView_2->setOverlayInput(m_registeredVolume);
         m_opacityOverlaySlider->setEnabled(true);
         m_opacityLabel->setEnabled(true);
-        m_2DView_2->refresh();
+        m_2DView_2->render();
 
         QApplication::restoreOverrideCursor();
         //std::cout<<"EndApply"<<std::endl;
@@ -1351,8 +1351,8 @@ void QLandmarkRegistrationExtension::restore(  )
 
     m_tryAgainPushButton->setEnabled(false);
 
-    m_2DView->refresh();
-    m_2DView_2->refresh();
+    m_2DView->render();
+    m_2DView_2->render();
 
 }
 
@@ -1374,8 +1374,8 @@ void QLandmarkRegistrationExtension::tryAgain(  )
         m_opacityLabel->setEnabled(false);
     }
 
-    m_2DView->refresh();
-    m_2DView_2->refresh();
+    m_2DView->render();
+    m_2DView_2->render();
 
 }
 }

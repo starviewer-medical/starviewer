@@ -90,7 +90,8 @@ public slots:
     void orientationMarkerOn();
     void orientationMarkerOff();
 
-    virtual void render();
+    /// Aplica el mètode de rendering actual.
+    void applyCurrentRenderingMethod();
 
     /// Li assignem la funció de transferència que volem aplicar
     void setTransferFunction( TransferFunction *transferFunction );

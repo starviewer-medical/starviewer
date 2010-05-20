@@ -444,7 +444,7 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     }
 
     viewer->getViewer()->automaticRefresh( true );
-    viewer->getViewer()->refresh();
+    viewer->getViewer()->render();
 }
 
 bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )

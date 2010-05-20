@@ -567,11 +567,11 @@ void QMPRExtension::releaseAxialViewAxisActor()
         this->setCursor( QCursor( Qt::ArrowCursor ) );
         if( m_pickedActorPlaneSource == m_sagitalPlaneSource )
         {
-            m_sagital2DView->refresh();
+            m_sagital2DView->render();
         }
         else
         {
-            m_coronal2DView->refresh();
+            m_coronal2DView->render();
         }
         m_state = None;
         m_pickedActorReslice = 0;
@@ -655,7 +655,7 @@ void QMPRExtension::releaseSagitalViewAxisActor()
     {
         this->setCursor( QCursor( Qt::ArrowCursor ) );
         m_pickedActorReslice->SetInterpolationModeToCubic();
-        m_coronal2DView->refresh();
+        m_coronal2DView->render();
         m_state = None;
         m_pickedActorReslice = 0;
         m_pickedActorPlaneSource = 0;
@@ -1076,9 +1076,9 @@ void QMPRExtension::updateControls()
     m_thickSlabOverAxialActor->SetPosition2( position2[0] , position2[1] );
 
 //     Repintem l'escena
-    m_axial2DView->refresh();
-    m_sagital2DView->refresh();
-    m_coronal2DView->refresh();
+    m_axial2DView->render();
+    m_sagital2DView->render();
+    m_coronal2DView->render();
 }
 
 void QMPRExtension::updateIntersectionPoint()

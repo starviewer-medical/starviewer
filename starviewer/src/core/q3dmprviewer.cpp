@@ -250,11 +250,6 @@ void Q3DMPRViewer::createOutline()
     }
 }
 
-void Q3DMPRViewer::render()
-{
-    m_renderer->Render();
-}
-
 void Q3DMPRViewer::resetViewToAxial()
 {
     this->resetPlanes();

@@ -242,7 +242,7 @@ void QRectumSegmentationExtension::ApplyFilterMainImage( )
         m_segMethod->applyFilter(m_filteredVolume);
         m_segMethod->setVolume(m_filteredVolume);
         m_2DView->setInput( m_filteredVolume );
-        m_2DView->refresh();
+        m_2DView->render();
         //delete m_mainVolume;
         QApplication::restoreOverrideCursor();
     }
@@ -438,7 +438,7 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest( )
         squareRegionActor->VisibilityOn();
         m_2DView->getRenderer()->AddViewProp( squareRegionActor );
         m_2DView->getRenderer()->ResetCameraClippingRange();
-        m_2DView->refresh();
+        m_2DView->render();
 
         squareMapper->Delete();
         points->Delete();
@@ -459,12 +459,12 @@ void QRectumSegmentationExtension::viewRegionState(int st)
     if(st==Qt::Unchecked)
     {
         squareRegionActor->VisibilityOff();
-        m_2DView->refresh();
+        m_2DView->render();
     }
     else
     {
         squareRegionActor->VisibilityOn();
-        m_2DView->refresh();
+        m_2DView->render();
     }
 }
 
@@ -479,7 +479,7 @@ void QRectumSegmentationExtension::setOpacity( int op )
     {
         m_2DView->setOverlayOpacity(((double)op)/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
-        m_2DView->refresh();
+        m_2DView->render();
     }
 }
 
@@ -584,7 +584,7 @@ void QRectumSegmentationExtension::viewThresholds()
 //     m_2DView->setOverlapMethodToBlend();
 //     m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
 //     m_2DView->setOverlayInput(m_lesionMaskVolume);
-//     m_2DView->refresh();
+//     m_2DView->render();
 
 }
 
@@ -596,7 +596,7 @@ void QRectumSegmentationExtension::viewLesionOverlay()
         m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlapMethodToBlend();
         m_2DView->setOverlayInput(m_lesionMaskVolume);
-        m_2DView->refresh();
+        m_2DView->render();
     }
 }
 

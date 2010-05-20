@@ -50,7 +50,7 @@ NonClosedAngleTool::~NonClosedAngleTool()
     }
 
     if( hasToRefresh )
-        m_2DViewer->refresh();
+        m_2DViewer->render();
 }
 
 void NonClosedAngleTool::handleEvent( long unsigned eventID )
@@ -92,7 +92,7 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
             else if ( m_secondLine && m_state == FirstLineFixed )
                 this->simulateLine(m_secondLine);
 
-            m_2DViewer->refresh();
+            m_2DViewer->render();
 
         break;
     }

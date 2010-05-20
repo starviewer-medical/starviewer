@@ -314,7 +314,7 @@ void Q3DViewer::setWindowLevel( double window , double level )
         if(!pointInZero)  m_transferFunction->addPointToOpacity( 0, 0.0 );
         if(!pointInRange) m_transferFunction->addPointToOpacity( m_range, 0.0 );
 
-        this->render();
+        this->applyCurrentRenderingMethod();
         emit windowLevelChanged( window , level );
         emit transferFunctionChanged ();
     }
@@ -508,12 +508,12 @@ void Q3DViewer::setInput( Volume* volume )
 
     m_firstRender = true;
 
-    render();
+    applyCurrentRenderingMethod();
     // indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
 }
 
-void Q3DViewer::render()
+void Q3DViewer::applyCurrentRenderingMethod()
 {
     if( m_mainVolume )
     {
@@ -550,7 +550,7 @@ void Q3DViewer::render()
     }
     else
     {
-        WARN_LOG("Q3DViewer:: Cridant a render() sense haver donat cap input");
+        WARN_LOG("Q3DViewer:: Cridant a applyCurrentRenderingMethod() sense haver donat cap input");
     }
 }
 
@@ -582,7 +582,7 @@ void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
             ERROR_LOG( QString( "Excepció al voler aplicar shading en el volum: " ) + e.what() );
             QMessageBox::warning( this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected.") );
             this->setShading( false );
-            this->render();
+            this->applyCurrentRenderingMethod(); // TODO Comprovar si seria suficient amb un render()
         }
     }
 }
@@ -711,7 +711,7 @@ void Q3DViewer::renderRayCasting()
     setTransferFunction( new TransferFunction( *transferFunction ) );
     delete transferFunction;
 
-    m_vtkWidget->GetRenderWindow()->Render();
+    render();
 }
 
 void Q3DViewer::renderRayCastingObscurance()
@@ -769,7 +769,7 @@ void Q3DViewer::renderRayCastingObscurance()
     setTransferFunction( new TransferFunction( *transferFunction ) );
     delete transferFunction;
 
-    m_vtkWidget->GetRenderWindow()->Render();
+    render();
 }
 
 void Q3DViewer::renderMIP3D()
@@ -824,7 +824,7 @@ void Q3DViewer::renderMIP3D()
 
     mipFunction->Delete();
 
-    m_vtkWidget->GetRenderWindow()->Render();
+    render();
 }
 
 void Q3DViewer::renderContouring()
@@ -876,7 +876,7 @@ void Q3DViewer::renderContouring()
         reverse->Delete();
     }
 
-    m_vtkWidget->GetRenderWindow()->Render();
+    render();
 }
 
 void Q3DViewer::renderIsoSurface()
@@ -931,7 +931,7 @@ void Q3DViewer::renderIsoSurface()
     m_vtkVolume->SetMapper( m_volumeMapper );
     m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastIsosurfaceFunction );
 
-    m_vtkWidget->GetRenderWindow()->Render();
+    render();
 }
 
 void Q3DViewer::renderTexture2D()
@@ -967,7 +967,7 @@ void Q3DViewer::renderTexture2D()
     setTransferFunction( new TransferFunction( *transferFunction ) );
     delete transferFunction;
 
-    m_vtkWidget->GetRenderWindow()->Render();
+    render();
 }
 
 void Q3DViewer::renderTexture3D()
@@ -991,7 +991,7 @@ void Q3DViewer::renderTexture3D()
     setTransferFunction( new TransferFunction( *transferFunction ) );
     delete transferFunction;
 
-    m_vtkWidget->GetRenderWindow()->Render();
+    render();
 }
 
 void Q3DViewer::resetViewToAxial()

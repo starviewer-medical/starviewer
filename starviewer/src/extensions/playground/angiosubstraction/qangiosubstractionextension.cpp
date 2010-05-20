@@ -132,7 +132,7 @@ void QAngioSubstractionExtension::setInput( Volume *input )
 
 	//Només actualitzem l'1 perquè el 2 ja es fa en l'acció computeDifferenceImage
 	//Això es fa així perquè l'acció està lligada a un connect
-	m_2DView_1->getViewer()->refresh();
+	m_2DView_1->getViewer()->render();
 
     m_2DView_1->enableSynchronization(true);
     m_2DView_2->enableSynchronization(true);
