@@ -1122,8 +1122,8 @@ void QGlialEstimationExtension::applyRegistration(  )
         m_viewersLayout->getViewerWidget(2)->setInput( fixedVolume );
         m_viewersLayout->getViewerWidget(2)->getViewer()->setWindowLevel(fixedWindow, fixedLevel);
 
-        m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayToBlend();
-        m_viewersLayout->getViewerWidget(2)->getViewer()->setOpacityOverlay( m_opacityRegistrationSlider->value() / 100.0 );
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlapMethodToBlend();
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayOpacity( m_opacityRegistrationSlider->value() / 100.0 );
         m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayInput( m_registeredVolume );
 
         m_viewersLayout->getViewerWidget(2)->getViewer()->refresh();
@@ -1186,9 +1186,9 @@ void QGlialEstimationExtension::viewT1Thresholds(int value)
     m_T1MaskVolume->setImages( m_T1Volume->getImages() );
     m_T1MaskVolume->setData( imageThreshold->GetOutput() );
 
-    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayToBlend();
-    m_viewersLayout->getViewerWidget(0)->getViewer()->setOpacityOverlay( m_T1MaskOpacitySlider->value() / 100.0 );
-    //m_2DView_1->setOpacityOverlay( 0.5 );
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlapMethodToBlend();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayOpacity( m_T1MaskOpacitySlider->value() / 100.0 );
+    //m_2DView_1->setOverlayOpacity( 0.5 );
     m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayInput( m_T1MaskVolume );
 
     m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
@@ -1200,7 +1200,7 @@ void QGlialEstimationExtension::viewT1Thresholds(int value)
 
 void QGlialEstimationExtension::setT1MaskOpacity( int opacity )
 {
-    m_viewersLayout->getViewerWidget(0)->getViewer()->setOpacityOverlay(((double)opacity)/100.0);
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayOpacity(((double)opacity)/100.0);
     m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayInput(m_T1MaskVolume);
     m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
 }
@@ -1246,8 +1246,8 @@ void QGlialEstimationExtension::applyT1Segmentation()
     //Compte Phases!!!!!!!!
     m_T1Cont = (int)(m_T1VolumeCont / (m_T1Volume->getSpacing()[0]*m_T1Volume->getSpacing()[1]*m_T1Volume->getSpacing()[2]));
 
-    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayToBlend();
-    m_viewersLayout->getViewerWidget(0)->getViewer()->setOpacityOverlay( m_T1MaskOpacitySlider->value() / 100.0 );
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlapMethodToBlend();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayOpacity( m_T1MaskOpacitySlider->value() / 100.0 );
     m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayInput( m_T1MaskVolume );
 
     m_T1MaskOpacityLabel->setEnabled( true );
@@ -1459,7 +1459,7 @@ void QGlialEstimationExtension::setRegistrationOpacity(int op)
 {
     if( m_viewersLayout->getViewerWidget(2)->getViewer()->getInput() != 0 )
     {
-        m_viewersLayout->getViewerWidget(2)->getViewer()->setOpacityOverlay(((double)op)/100.0);
+        m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayOpacity(((double)op)/100.0);
         m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayInput(m_registeredVolume);
         m_viewersLayout->getViewerWidget(2)->getViewer()->refresh();
     }

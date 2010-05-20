@@ -50,7 +50,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
-: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlay( Q2DViewer::Blend ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
+: QViewer( parent ), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlapMethod( Q2DViewer::Blend ), m_sideRuler(0), m_bottomRuler(0), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode( AccumulatorFactory::Maximum )
 {
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
@@ -680,7 +680,7 @@ void Q2DViewer::setOverlayInput( Volume *volume )
 {
     m_overlayVolume = volume;
     // \TODO hauríem d'actualitzar valors que es calculen al setInput de la variable m_overlay!
-    switch( m_overlay )
+    switch( m_overlapMethod )
     {
     case None:
         // actualitzem el viewer
@@ -696,7 +696,7 @@ void Q2DViewer::setOverlayInput( Volume *volume )
             m_blender->SetInput(0, m_mainVolume->getVtkData());
         }
         m_blender->SetInput(1, m_overlayVolume->getVtkData());
-        m_blender->SetOpacity( 1, 1.0 - m_opacityOverlay );
+        m_blender->SetOpacity( 1, 1.0 - m_overlayOpacity );
         // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
         m_blender->Modified();
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
@@ -706,9 +706,14 @@ void Q2DViewer::setOverlayInput( Volume *volume )
     emit overlayChanged();
 }
 
-void Q2DViewer::isOverlayModified( )
+Volume *Q2DViewer::getOverlayInput()
 {
-    switch( m_overlay )
+    return m_overlayVolume;
+}
+
+void Q2DViewer::updateOverlay()
+{
+    switch( m_overlapMethod )
     {
     case None:
     break;
@@ -723,9 +728,9 @@ void Q2DViewer::isOverlayModified( )
     emit overlayModified();
 }
 
-void Q2DViewer::setOpacityOverlay ( double op )
+void Q2DViewer::setOverlayOpacity( double opacity )
 {
-    m_opacityOverlay=op;
+    m_overlayOpacity = opacity;
 }
 
 void Q2DViewer::render()
@@ -1002,21 +1007,21 @@ void Q2DViewer::setPhase( int value )
     }
 }
 
-void Q2DViewer::setOverlay( OverlayType overlay )
+void Q2DViewer::setOverlapMethod( OverlapMethod method )
 {
-    m_overlay = overlay;
+    m_overlapMethod = method;
 }
 
-void Q2DViewer::setNoOverlay()
+void Q2DViewer::setOverlapMethodToNone()
 {
-    setOverlay( Q2DViewer::None );
+    setOverlapMethod( Q2DViewer::None );
     m_windowLevelLUTMapper->RemoveAllInputs();
     m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
 }
 
-void Q2DViewer::setOverlayToBlend()
+void Q2DViewer::setOverlapMethodToBlend()
 {
-    setOverlay( Q2DViewer::Blend );
+    setOverlapMethod( Q2DViewer::Blend );
 }
 
 void Q2DViewer::resizeEvent( QResizeEvent *resize )
