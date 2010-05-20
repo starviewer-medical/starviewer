@@ -17,21 +17,13 @@
 #include "dicommask.h"
 #include "logging.h"
 #include "dicomtagreader.h"
+#include "pacsserver.h"
 
 namespace udg{
 
-RetrieveImages::RetrieveImages()
+RetrieveImages::RetrieveImages(PacsDevice pacs)
 {
-}
-
-void RetrieveImages::setConnection(PacsConnection connection)
-{
-    m_assoc = connection.getPacsConnection();
-}
-
-void RetrieveImages::setNetwork(T_ASC_Network * network)
-{
-    m_net = network;
+    m_pacs = pacs;
 }
 
 void RetrieveImages:: setMask(DicomMask mask)
@@ -283,13 +275,17 @@ Status RetrieveImages::retrieve()
     T_ASC_PresentationContextID presentationContextID;
     T_DIMSE_C_MoveRQ moveRequest;
     T_DIMSE_C_MoveRSP moveResponse;
-    DIC_US messageId = m_assoc->nextMsgID++;
     DcmDataset *statusDetail = NULL;
     Status state;
+    PacsServer pacsServer(m_pacs);
 
-    //If not connection has been setted, return error because we need a PACS connection
-    if (m_assoc == NULL)
+    //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei de retrieve configurat
+    state = pacsServer.connect( PacsServer::retrieveImages );
+    
+    if ( !state.good() )
     {
+        ERROR_LOG( " S'ha produit un error al intentar connectar al PACS per fer un retrieve. AETitle: " + m_pacs.getAETitle() + ", IP: " + m_pacs.getAddress() +
+            ", port: " + QString().setNum(m_pacs.getQueryRetrieveServicePort()) + ", Descripcio error : " + state.text() );
         return state.setStatus(DcmtkNoConnectionError);
     }
 
@@ -298,21 +294,25 @@ Status RetrieveImages::retrieve()
     {
         return state.setStatus(DcmtkNoMaskError);
     }
-
+    
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
-    presentationContextID = ASC_findAcceptedPresentationContextID(m_assoc, UID_MOVEStudyRootQueryRetrieveInformationModel);
+    T_ASC_Association *association = pacsServer.getConnection().getPacsConnection(); 
+    presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
     if (presentationContextID == 0) 
         return state.setStatus(DIMSE_NOVALIDPRESENTATIONCONTEXTID);
-    
+
+    DIC_US messageId = association->nextMsgID++;
+
     moveRequest.MessageID = messageId;
     strcpy(moveRequest.AffectedSOPClassUID, UID_MOVEStudyRootQueryRetrieveInformationModel);
     moveRequest.Priority = DIMSE_PRIORITY_MEDIUM;
     moveRequest.DataSetType = DIMSE_DATASET_PRESENT;
-    // set the destination of the images to us
-    ASC_getAPTitles(m_assoc->params, moveRequest.MoveDestination, NULL, NULL);
 
-    OFCondition condition = DIMSE_moveUser(m_assoc, presentationContextID, &moveRequest, m_mask, moveCallback, NULL, DIMSE_BLOCKING, 0, 
-        m_net, subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
+    // set the destination of the images to us
+    ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
+
+    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, m_mask, moveCallback, NULL, DIMSE_BLOCKING, 0, 
+        pacsServer.getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
 
     if (moveResponse.DimseStatus != STATUS_Success)
     {
@@ -324,6 +324,8 @@ Status RetrieveImages::retrieve()
     /* dump status detail information if there is some */
     if (statusDetail != NULL)
         delete statusDetail;
+
+    pacsServer.disconnect();
 
     return state;
 }
