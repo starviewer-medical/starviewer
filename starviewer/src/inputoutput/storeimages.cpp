@@ -23,38 +23,39 @@
 #include "image.h"
 #include "pacsserver.h"
 
-/*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
- *de comunicació amb el PACS es fessin en mode verbose */
 namespace udg {
 
-StoreImages::StoreImages()
+StoreImages::StoreImages(PacsDevice pacsDevice)
 {
+    m_pacs = pacsDevice;
 }
 
-void StoreImages::setConnection(PacsServer pacsServer)
+PacsDevice StoreImages::getPacs()
 {
-    m_association = pacsServer.getConnection().getPacsConnection();
-    m_timeOut = pacsServer.getPacs().getConnectionTimeout();
+    return m_pacs;
 }
-
 Status StoreImages::store(QList<Image*> imageListToStore)
 {
     OFCondition cond = EC_Normal;
     Status state;
     QString statusMessage;
+    PacsServer pacsConnection( m_pacs );
 
-    initialitzeImagesCounters();
-
-    //A la connexió del Pacs ja s'han establert els PresentationContext (SopClass-TransferSyntax) amb els que s'enviara les imatges
-    //If not connection has been setted, return error because we need a PACS connection
-    if (m_association == NULL)
+    //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
+    state = pacsConnection.connect( PacsServer::storeImages );
+    
+    if ( !state.good() )
     {
+        ERROR_LOG( " S'ha produit un error al intentar connectar al PACS per fer un send. AETitle: " + m_pacs.getAETitle() + ", IP: " + m_pacs.getAddress() +
+            ", port: " + QString().setNum(m_pacs.getStoreServicePort()) + ", Descripcio error : " + state.text() );
         return state.setStatus(DcmtkNoConnectionError);
     }
 
+    initialitzeImagesCounters();
+
     foreach(Image *imageToStore, imageListToStore)
     {
-        if (storeSCU(m_association, qPrintable(imageToStore->getPath())))
+        if (storeSCU(pacsConnection.getConnection(), qPrintable(imageToStore->getPath())))
         {
             //Si l'ha imatge s'ha enviat correctament la processem
             //TODO:m_numberOfImagesSent també comptabilitzat imatges que l'enviament ha fallat, les hauria de comptar?
@@ -62,6 +63,8 @@ Status StoreImages::store(QList<Image*> imageListToStore)
             emit DICOMFileSent(imageToStore, m_numberOfImagesSent);
         }
     }
+
+    pacsConnection.disconnect();
 
     return getStatusStoreSCU(imageListToStore.count());
 }
@@ -85,8 +88,9 @@ void StoreImages::initialitzeImagesCounters()
  *   association - [in] The associationiation (network connection to another DICOM application).
  *   filepathToStore - [in] Name of the file which shall be processed.
  */
-bool StoreImages::storeSCU(T_ASC_Association * association, QString filepathToStore)
+bool StoreImages::storeSCU(PacsConnection pacsConnection, QString filepathToStore)
 {
+    T_ASC_Association * association = pacsConnection.getPacsConnection();
     DIC_US msgId = association->nextMsgID++;
     T_ASC_PresentationContextID presentationContextID;
     T_DIMSE_C_StoreRQ request;
@@ -146,8 +150,8 @@ bool StoreImages::storeSCU(T_ASC_Association * association, QString filepathToSt
         request.Priority = DIMSE_PRIORITY_LOW;
 
         cond = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(), NULL /*progressCallback*/, 
-                                NULL /*callbackData */, DIMSE_NONBLOCKING, m_timeOut, &response, &statusDetail, NULL /*check for cancel parameters*/, 
-                                DU_fileSize(qPrintable(filepathToStore)));
+            NULL /*callbackData */, DIMSE_NONBLOCKING, m_pacs.getConnectionTimeout(), &response, &statusDetail, NULL /*check for cancel parameters*/, 
+            DU_fileSize(qPrintable(filepathToStore)));
 
         if (cond.bad())
         {
