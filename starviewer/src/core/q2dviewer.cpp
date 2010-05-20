@@ -679,31 +679,18 @@ void Q2DViewer::setInput( Volume *volume )
 void Q2DViewer::setOverlayInput( Volume *volume )
 {
     m_overlayVolume = volume;
-    // \TODO hauríem d'actualitzar valors que es calculen al setInput de la variable m_overlay!
-    switch( m_overlapMethod )
+    if( m_overlapMethod == Blend )
     {
-    case None:
-        // actualitzem el viewer
-        m_windowLevelLUTMapper->RemoveAllInputs();
-        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
-        // \TODO hauríem d'actualitzar valors que es calculen al setInput!
-    break;
-
-    case Blend:
-        if (m_blender==0)
+        if( !m_blender )
         {
             m_blender = vtkImageBlend::New();
             m_blender->SetInput(0, m_mainVolume->getVtkData());
         }
         m_blender->SetInput(1, m_overlayVolume->getVtkData());
         m_blender->SetOpacity( 1, 1.0 - m_overlayOpacity );
-        // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
-        m_blender->Modified();
-        m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
-    break;
-
-    }
-    emit overlayChanged();
+    }    
+    updateOverlay();
+    emit overlayChanged();    
 }
 
 Volume *Q2DViewer::getOverlayInput()
@@ -716,15 +703,21 @@ void Q2DViewer::updateOverlay()
     switch( m_overlapMethod )
     {
     case None:
+        // Actualitzem el pipeline
+        m_windowLevelLUTMapper->RemoveAllInputs();
+        m_windowLevelLUTMapper->SetInput( m_mainVolume->getVtkData() );
+        // TODO aquest procediment és possible que sigui insuficient, 
+        // caldria unficar el pipeline en un mateix mètode
     break;
 
     case Blend:
-        // \TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
+        // TODO Revisar la manera de donar-li l'input d'un blending al visualitzador
+        // Aquest procediment podria ser insuficent de cares a com estigui construit el pipeline
         m_blender->Modified();
         m_windowLevelLUTMapper->SetInputConnection( m_blender->GetOutputPort() );
     break;
-
     }
+
     emit overlayModified();
 }
 
