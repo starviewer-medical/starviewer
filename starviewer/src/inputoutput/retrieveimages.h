@@ -81,6 +81,9 @@ private:
     /// Retorna el nom del fitxer amb que s'ha de guardar l'objecte descarregat, composa el path on s'ha de guardar + el nom del fitxer, si el path on s'ha de guardar la imatge no existeix el crea
     QString getAbsoluteFilePathCompositeInstance(DcmDataset *imageDataset, QString fileName);
 
+    ///Configura l'objecte MoveRequest per la descàrrega de fitxers DICOM
+    T_DIMSE_C_MoveRQ getConfiguredMoveRequest(T_ASC_Association *association);
+
     /// En cas d'error processa la resposta rebuda per part del SCP, grava l'error el log i el retorna en forma d'objecte Status
     Status processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail);
 

@@ -268,7 +268,6 @@ void RetrieveImages::subOperationCallback(void * subOperationCallbackData, T_ASC
 Status RetrieveImages::retrieve(DicomMask dicomMask)
 {
     T_ASC_PresentationContextID presentationContextID;
-    T_DIMSE_C_MoveRQ moveRequest;
     T_DIMSE_C_MoveRSP moveResponse;
     DcmDataset *statusDetail = NULL;
     Status state;
@@ -288,16 +287,12 @@ Status RetrieveImages::retrieve(DicomMask dicomMask)
     T_ASC_Association *association = pacsServer.getConnection().getPacsConnection(); 
     presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
     if (presentationContextID == 0) 
+    {
         return state.setStatus(DIMSE_NOVALIDPRESENTATIONCONTEXTID);
-
-    DIC_US messageId = association->nextMsgID++;
-
-    moveRequest.MessageID = messageId;
-    strcpy(moveRequest.AffectedSOPClassUID, UID_MOVEStudyRootQueryRetrieveInformationModel);
-    moveRequest.Priority = DIMSE_PRIORITY_MEDIUM;
-    moveRequest.DataSetType = DIMSE_DATASET_PRESENT;
+    }
 
     // set the destination of the images to us
+    T_DIMSE_C_MoveRQ moveRequest = getConfiguredMoveRequest(association); 
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
     OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, NULL, DIMSE_BLOCKING, 0, 
@@ -317,6 +312,19 @@ Status RetrieveImages::retrieve(DicomMask dicomMask)
     pacsServer.disconnect();
 
     return state;
+}
+
+T_DIMSE_C_MoveRQ RetrieveImages::getConfiguredMoveRequest(T_ASC_Association *association)
+{
+    T_DIMSE_C_MoveRQ moveRequest;
+    DIC_US messageId = association->nextMsgID++;
+
+    moveRequest.MessageID = messageId;
+    strcpy(moveRequest.AffectedSOPClassUID, UID_MOVEStudyRootQueryRetrieveInformationModel);
+    moveRequest.Priority = DIMSE_PRIORITY_MEDIUM;
+    moveRequest.DataSetType = DIMSE_DATASET_PRESENT;
+
+    return moveRequest;
 }
 
 Status RetrieveImages::processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail)
