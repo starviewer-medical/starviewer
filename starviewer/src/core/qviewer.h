@@ -195,9 +195,6 @@ public slots:
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews(){ m_grabList.clear(); };
 
-    /// Crida que re-inicia a l'estat incial el visor
-    virtual void reset() = 0;
-
     /// Obté el window/level per defecte. Si no se n'especifica cap amb setDefaultWindowLevel
     /// agafa un window/level que permeti veure correctament el Volum.
     void getDefaultWindowLevel( double windowLevel[2] );

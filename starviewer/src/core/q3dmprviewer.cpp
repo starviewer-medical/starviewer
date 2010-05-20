@@ -254,16 +254,6 @@ void Q3DMPRViewer::render()
     m_renderer->Render();
 }
 
-void Q3DMPRViewer::reset()
-{
-    // \TODO implementar
-    this->resetViewToAxial();
-    this->setAxialVisibility( true );
-    this->setSagitalVisibility( true );
-    this->setCoronalVisibility( true );
-    this->resetWindowLevelToDefault();
-}
-
 void Q3DMPRViewer::resetViewToAxial()
 {
     this->resetPlanes();

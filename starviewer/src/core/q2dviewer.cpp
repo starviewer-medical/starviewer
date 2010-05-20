@@ -1381,12 +1381,6 @@ Q2DViewer::CameraOrientationType Q2DViewer::getView() const
     return m_lastView;
 }
 
-void Q2DViewer::reset()
-{
-    //\TODO: completar, encara és incomplert
-    resetViewToAxial();
-}
-
 void Q2DViewer::setSeedPosition( double pos[3] )
 {
     emit seedPositionChanged(pos[0], pos[1], pos[2]);
