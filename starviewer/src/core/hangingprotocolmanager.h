@@ -42,6 +42,9 @@ public:
     void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );
     void applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout * layout, Patient * patient );
 
+    /// Aplica el millor hanging protocol de la llista donada
+    void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
+
     /// Buscar hanging protocols quan es sap que hi ha previes
     QList<HangingProtocol * > getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs );
 
