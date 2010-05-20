@@ -53,11 +53,8 @@ Q_OBJECT
 public:
     RetrieveImages(PacsDevice pacs);
 
-    ///This action sets the mask that we will use to retrieve the image in to the pacs.
-    void setMask(DicomMask mask);
-
     ///Starts the download
-    Status retrieve();
+    Status retrieve(DicomMask dicomMask);
 
 signals:
 
@@ -98,7 +95,6 @@ private:
 
 private:
     /// Request DICOM association;
-    DcmDataset *m_mask;
     PacsDevice m_pacs;
 
     struct StoreSCPCallbackData

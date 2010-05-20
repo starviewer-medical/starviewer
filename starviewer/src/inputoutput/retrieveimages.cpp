@@ -26,11 +26,6 @@ RetrieveImages::RetrieveImages(PacsDevice pacs)
     m_pacs = pacs;
 }
 
-void RetrieveImages:: setMask(DicomMask mask)
-{
-    m_mask = mask.getDicomMask();
-}
-
 OFCondition RetrieveImages::acceptSubAssociation(T_ASC_Network * associationNetwork, T_ASC_Association ** association)
 {
     const char* knownAbstractSyntaxes[] = {UID_VerificationSOPClass};
@@ -270,7 +265,7 @@ void RetrieveImages::subOperationCallback(void * subOperationCallbackData, T_ASC
     }
 }
 
-Status RetrieveImages::retrieve()
+Status RetrieveImages::retrieve(DicomMask dicomMask)
 {
     T_ASC_PresentationContextID presentationContextID;
     T_DIMSE_C_MoveRQ moveRequest;
@@ -289,12 +284,6 @@ Status RetrieveImages::retrieve()
         return state.setStatus(DcmtkNoConnectionError);
     }
 
-    //If not mask has been setted, return error, we need a search mask
-    if (m_mask == NULL)
-    {
-        return state.setStatus(DcmtkNoMaskError);
-    }
-    
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
     T_ASC_Association *association = pacsServer.getConnection().getPacsConnection(); 
     presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
@@ -311,7 +300,7 @@ Status RetrieveImages::retrieve()
     // set the destination of the images to us
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
-    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, m_mask, moveCallback, NULL, DIMSE_BLOCKING, 0, 
+    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, NULL, DIMSE_BLOCKING, 0, 
         pacsServer.getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
 
     if (moveResponse.DimseStatus != STATUS_Success)

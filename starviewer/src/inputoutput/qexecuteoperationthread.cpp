@@ -162,11 +162,9 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         return;
     }
 
-    retrieveImages.setMask( operation.getDicomMask() );
-
     localDatabaseManagerThreaded.start();
     fillersThread.start();
-    retState = retrieveImages.retrieve();
+    retState = retrieveImages.retrieve(operation.getDicomMask());
 
     if (!retState.good())
     {
