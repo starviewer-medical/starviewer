@@ -65,7 +65,7 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
         //Inicialitzacions
         hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
 
-        if( isValid( hangingProtocol, patient) && !hangingProtocol->hasStudiesToDownload() )
+        if( isModalityCompatible(hangingProtocol, patient) && !hangingProtocol->hasStudiesToDownload() )
         {
             QList<Series *> candidateSeries = allSeries; // Copia de les series perquè es van eliminant de la llista al ser assignades
             
@@ -226,7 +226,7 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
     INFO_LOG( QString("Hanging protocol aplicat: %1").arg( hangingProtocol->getName() ) );
 }
 
-bool HangingProtocolManager::isValid( HangingProtocol *protocol, Patient *patient)
+bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, Patient *patient)
 {
     foreach (Study *study, patient->getStudies())
     {
@@ -575,7 +575,7 @@ QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPrevio
             seriesList.clear();
             seriesList += allSeries;// Copia de les series perquè es van eliminant de la llista al ser assignades
 
-            if( isValid( hangingProtocol, patient ) )
+            if( isModalityCompatible(hangingProtocol, patient) )
             {
                 while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
                 {
