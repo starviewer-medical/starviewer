@@ -155,7 +155,7 @@ void Drawer::refresh()
         show( m_currentPlane, m_currentSlice );
     }
     // si no s'ha complert cap altre premisa, cal refrescar el que hi hagi en el pla actual i en el top
-    m_2DViewer->refresh();
+    m_2DViewer->render();
 }
 
 void Drawer::removeAllPrimitives()
@@ -255,7 +255,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
         found = true;
         m_top2DPlanePrimitives.removeAt( m_top2DPlanePrimitives.indexOf(primitive) );
         m_2DViewer->getRenderer()->RemoveViewProp( primitive->getAsVtkProp() );
-        m_2DViewer->refresh();
+        m_2DViewer->render();
     }
 }
 

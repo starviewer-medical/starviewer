@@ -457,7 +457,7 @@ void QVolume3DViewTestingExtension::enableObscuranceRendering( bool on )
 void QVolume3DViewTestingExtension::render()
 {
     this->setCursor( QCursor(Qt::WaitCursor) );
-    m_3DView->render();
+    m_3DView->applyCurrentRenderingMethod();
     this->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
@@ -718,7 +718,7 @@ void QVolume3DViewTestingExtension::updateView( bool fast )
         m_3DView->getRenderWindow()->SetDesiredUpdateRate( m_3DView->getInteractor()->GetDesiredUpdateRate() );
     }
 
-    m_3DView->render();
+    m_3DView->applyCurrentRenderingMethod();
 
     if ( fast ) m_3DView->getRenderWindow()->SetDesiredUpdateRate( m_3DView->getInteractor()->GetStillUpdateRate() );
 

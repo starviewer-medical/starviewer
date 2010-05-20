@@ -54,7 +54,7 @@ void VoxelInformationTool::handleEvent( unsigned long eventID )
     case vtkCommand::LeaveEvent:
         m_caption->visibilityOff();
         m_caption->update(DrawerPrimitive::VTKRepresentation);
-        m_2DViewer->refresh();
+        m_2DViewer->render();
     break;
 
     default:
@@ -89,7 +89,7 @@ void VoxelInformationTool::updateVoxelInformation()
         m_caption->visibilityOff();
         m_caption->update(DrawerPrimitive::VTKRepresentation);
     }
-    m_2DViewer->refresh();
+    m_2DViewer->render();
 }
 
 void VoxelInformationTool::inputChanged(Volume *volume)

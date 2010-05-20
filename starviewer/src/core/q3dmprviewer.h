@@ -87,9 +87,6 @@ public slots:
     /// chapussa per agafar els events dels image plane widgets i enviar una senya conforme han canviat \TODO mirar si es pot millorar un mètode en comptes de fer això
     void planeInteraction();
 
-    virtual void render();
-
-
 protected:
     /// Els respectius volums sobre cada pla de reslice
     Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;

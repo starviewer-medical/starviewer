@@ -130,7 +130,7 @@ void TransDifferenceTool::doTransDifference()
 
     this->increaseSingleDifferenceImage( m_dx, m_dy);
 
-	m_viewer->refresh(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+	m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
 }
 
 void TransDifferenceTool::endTransDifference()
@@ -140,7 +140,7 @@ void TransDifferenceTool::endTransDifference()
     m_state = None;
     m_myData->increaseSliceTranslationX(m_2DViewer->getCurrentSlice(),m_dx);
     m_myData->increaseSliceTranslationY(m_2DViewer->getCurrentSlice(),m_dy);
-    m_viewer->refresh(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+    m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
 }
 
 void TransDifferenceTool::initializeDifferenceImage( )
@@ -195,7 +195,7 @@ void TransDifferenceTool::initializeDifferenceImage( )
 	m_2DViewer->setInput(differenceVolume);
 	m_2DViewer->setWindowLevel((double)2*max,0.0);
 
-	m_2DViewer->refresh();
+	m_2DViewer->render();
 }
 
 void TransDifferenceTool::increaseSingleDifferenceImage(int dx, int dy)
@@ -320,7 +320,7 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
     if(slice == -1)
     {
         m_2DViewer->getWindowLevelMapper()->Modified();
-        m_2DViewer->refresh();
+        m_2DViewer->render();
     }
 }
 

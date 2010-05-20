@@ -135,7 +135,7 @@ void SeedTool::updateSeedPosition()
             m_drawn = true;
         }else{
             m_myData->getPoint()->update( DrawerPrimitive::VTKRepresentation );
-            m_2DViewer->refresh();
+            m_2DViewer->render();
         }
 
         //m_2DViewer->getDrawer()->draw( m_myData->getPoint() , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );

@@ -400,7 +400,7 @@ bool QViewer::record( const QString &baseName, RecordFileFormatType format )
         return false;
 }
 
-void QViewer::refresh()
+void QViewer::render()
 {
     if( m_isRefreshActive )
     {
@@ -436,7 +436,7 @@ void QViewer::zoom( double factor )
 
         emit cameraChanged();
         emit zoomFactorChanged( factor );
-        this->refresh();
+        this->render();
     }
     else
         DEBUG_LOG( "::zoom(double factor): El renderer és NUL!" );
@@ -472,7 +472,7 @@ void QViewer::pan( double motionVector[3] )
 
     emit cameraChanged();
     emit panChanged( motionVector );
-    this->refresh();
+    this->render();
 }
 
 void QViewer::scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY )
@@ -737,7 +737,7 @@ void QViewer::setCameraOrientation( int orientation )
             break;
         }
         this->getRenderer()->ResetCamera();
-        this->refresh();
+        this->render();
     }
 }
 

@@ -1126,7 +1126,7 @@ void QGlialEstimationExtension::applyRegistration(  )
         m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayOpacity( m_opacityRegistrationSlider->value() / 100.0 );
         m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayInput( m_registeredVolume );
 
-        m_viewersLayout->getViewerWidget(2)->getViewer()->refresh();
+        m_viewersLayout->getViewerWidget(2)->getViewer()->render();
 
 
     }
@@ -1191,7 +1191,7 @@ void QGlialEstimationExtension::viewT1Thresholds(int value)
     //m_2DView_1->setOverlayOpacity( 0.5 );
     m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayInput( m_T1MaskVolume );
 
-    m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->render();
     //m_T1OpacityLabel->setEnabled( true );
     //m_T1OpacitySlider->setEnabled( true );
 
@@ -1202,7 +1202,7 @@ void QGlialEstimationExtension::setT1MaskOpacity( int opacity )
 {
     m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayOpacity(((double)opacity)/100.0);
     m_viewersLayout->getViewerWidget(0)->getViewer()->setOverlayInput(m_T1MaskVolume);
-    m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->render();
 }
 
 void QGlialEstimationExtension::setT1SeedPosition (double x,double y,double z)
@@ -1273,7 +1273,7 @@ void QGlialEstimationExtension::applyT1Segmentation()
     m_lesionViewAction->trigger();
     this->viewLesionOverlay();
 */
-    m_viewersLayout->getViewerWidget(0)->getViewer()->refresh();
+    m_viewersLayout->getViewerWidget(0)->getViewer()->render();
 
     QApplication::restoreOverrideCursor();
 }
@@ -1461,7 +1461,7 @@ void QGlialEstimationExtension::setRegistrationOpacity(int op)
     {
         m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayOpacity(((double)op)/100.0);
         m_viewersLayout->getViewerWidget(2)->getViewer()->setOverlayInput(m_registeredVolume);
-        m_viewersLayout->getViewerWidget(2)->getViewer()->refresh();
+        m_viewersLayout->getViewerWidget(2)->getViewer()->render();
     }
 }
 

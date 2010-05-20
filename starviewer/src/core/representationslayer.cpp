@@ -97,7 +97,7 @@ void RepresentationsLayer::clearViewer()
         delete representation;
     }
 
-    m_2DViewer->refresh();
+    m_2DViewer->render();
 }
 
 void RepresentationsLayer::clearAll()

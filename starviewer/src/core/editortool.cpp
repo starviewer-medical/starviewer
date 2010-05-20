@@ -154,7 +154,7 @@ void EditorTool::increaseState()
         m_editorState = EraseRegion;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/eraseregioncursor.png") ) );
         m_squareActor->VisibilityOff();
-        m_2DViewer->refresh();
+        m_2DViewer->render();
     break;
 
     case EraseRegion:
@@ -192,7 +192,7 @@ void EditorTool::decreaseState()
         m_editorState = EraseSlice;
         m_2DViewer->setCursor( QCursor( QPixmap(":/images/slicecursor.png") ) );
         m_squareActor->VisibilityOff();
-        m_2DViewer->refresh();
+        m_2DViewer->render();
     break;
 
     case Erase:
@@ -258,7 +258,7 @@ void EditorTool::setEditorPoint(  )
             }
             m_myData->setVolumeVoxels(m_volumeCont);
             m_2DViewer->updateOverlay();
-            m_2DViewer->refresh();
+            m_2DViewer->render();
         }
     }
 }
@@ -313,7 +313,7 @@ void EditorTool::setPaintCursor()
   
         m_2DViewer->getRenderer()->AddViewProp( m_squareActor );
         m_2DViewer->getRenderer()->ResetCameraClippingRange();
-        m_2DViewer->refresh();
+        m_2DViewer->render();
   
         squareMapper->Delete();
         points->Delete();

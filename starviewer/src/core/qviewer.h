@@ -119,9 +119,6 @@ public:
     /// TODO de moment només accepta format MPEG
     bool record( const QString &baseName, RecordFileFormatType format = MPEG2 );
 
-    /// Refresca l'escena amb el RenderWindowInteractor. És sobretot per haver d'escriure menys.
-    void refresh();
-
     /**
      * Fa zoom sobre l'escena amb el factor donat
      * @param factor Factor de zoom que volem aplicar a la càmera
@@ -184,7 +181,7 @@ public slots:
     void eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command );
 
     /// Força l'execució de la visualització
-    virtual void render() = 0;
+    void render();
 
     /**
      * Assignem si aquest visualitzador és actiu, és a dir, amb el que s'està interactuant

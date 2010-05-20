@@ -53,7 +53,7 @@ AngleTool::~AngleTool()
         }
 
         if( hasToRefresh )
-            m_2DViewer->refresh();
+            m_2DViewer->render();
     }
 }
 
@@ -278,7 +278,7 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
         if( m_state == CenterFixed )
             drawCircle();
         
-        m_2DViewer->refresh();
+        m_2DViewer->render();
     }
 }
 
