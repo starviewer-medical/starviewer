@@ -46,7 +46,6 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
 
     QList<HangingProtocol * > outputHangingProtocolList;
-    QString hangingProtocolNamesLogList; // Noms per mostrar al log
 
     QList<Series *> allSeries;
 
@@ -95,14 +94,18 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
             if( isValidHangingProtocol )
             {
                 outputHangingProtocolList << hangingProtocol;
-                hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
             }
         }
     }
 
-    if ( hangingProtocolNamesLogList.size() > 0 )
+    if (outputHangingProtocolList.size() > 0)
     {
-        INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
+        QString infoLog; // Noms per mostrar al log
+        foreach (HangingProtocol *hangingProtocol, outputHangingProtocolList)
+        {
+            infoLog += QString("%1, ").arg( hangingProtocol->getName() );
+        }
+        INFO_LOG( QString("Hanging protocols carregats: %1").arg( infoLog ) );
     }
     else
     {
