@@ -36,9 +36,7 @@ PacsDevice StoreImages::getPacs()
 }
 Status StoreImages::store(QList<Image*> imageListToStore)
 {
-    OFCondition cond = EC_Normal;
     Status state;
-    QString statusMessage;
     PacsServer pacsConnection( m_pacs );
 
     //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
@@ -100,10 +98,10 @@ bool StoreImages::storeSCU(PacsConnection pacsConnection, QString filepathToStor
     DcmDataset *statusDetail = NULL;
     DcmFileFormat dcmff;
 
-    OFCondition cond = dcmff.loadFile(qPrintable(QDir::toNativeSeparators(filepathToStore)));
+    OFCondition condition = dcmff.loadFile(qPrintable(QDir::toNativeSeparators(filepathToStore)));
 
     /* figure out if an error occured while the file was read*/
-    if (cond.bad()) 
+    if (condition.bad()) 
     {
         ERROR_LOG("No s'ha pogut obrir el fitxer " + filepathToStore);
         return false;
@@ -149,13 +147,13 @@ bool StoreImages::storeSCU(PacsConnection pacsConnection, QString filepathToStor
         request.DataSetType = DIMSE_DATASET_PRESENT;
         request.Priority = DIMSE_PRIORITY_LOW;
 
-        cond = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(), NULL /*progressCallback*/, 
+        condition = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(), NULL /*progressCallback*/, 
             NULL /*callbackData */, DIMSE_NONBLOCKING, m_pacs.getConnectionTimeout(), &response, &statusDetail, NULL /*check for cancel parameters*/, 
             DU_fileSize(qPrintable(filepathToStore)));
 
-        if (cond.bad())
+        if (condition.bad())
         {
-            ERROR_LOG("S'ha produït un error al fer el store de la imatge " + filepathToStore + ", descripció de l'error" + QString(cond.text()));
+            ERROR_LOG("S'ha produït un error al fer el store de la imatge " + filepathToStore + ", descripció de l'error" + QString(condition.text()));
         }
 
         processResponseFromStoreSCP(&response, statusDetail, filepathToStore);
@@ -165,14 +163,7 @@ bool StoreImages::storeSCU(PacsConnection pacsConnection, QString filepathToStor
             delete statusDetail;
         }
 
-        if (cond.good() && response.DimseStatus == STATUS_Success)
-        {
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
+        return condition.good() && response.DimseStatus == STATUS_Success;
     }
 }
 
