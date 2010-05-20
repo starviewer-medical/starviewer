@@ -50,24 +50,24 @@ class RetrieveImages: public QObject
 {
 Q_OBJECT
 public:
-   RetrieveImages();
+    RetrieveImages();
 
-   ///This action sets the connection that we will use to connect to the pacs
-   void setConnection(PacsConnection connection);
+    ///This action sets the connection that we will use to connect to the pacs
+    void setConnection(PacsConnection connection);
 
-   ///Sets the network to use for retrieve the images
-   void setNetwork(T_ASC_Network * network);
+    ///Sets the network to use for retrieve the images
+    void setNetwork(T_ASC_Network * network);
 
     ///This action sets the mask that we will use to retrieve the image in to the pacs.
-   void setMask(DicomMask mask);
+    void setMask(DicomMask mask);
 
-   ///Starts the download
-   Status retrieve();
+    ///Starts the download
+    Status retrieve();
 
 signals:
 
-   ///Signal que indica que s'ha descarregat un fitxer
-   void DICOMFileRetrieved(DICOMTagReader *dicomTagReader);
+    ///Signal que indica que s'ha descarregat un fitxer
+    void DICOMFileRetrieved(DICOMTagReader *dicomTagReader);
 
 private:
 
