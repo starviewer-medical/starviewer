@@ -44,7 +44,6 @@ HangingProtocolManager::~HangingProtocolManager()
 QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol )
 {
     HangingProtocol *hangingProtocol;
-    HangingProtocol *bestHangingProtocol = NULL;
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
 
     QList<HangingProtocol * > outputHangingProtocolList;
@@ -101,12 +100,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
             {
                 outputHangingProtocolList << hangingProtocol;
                 hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
-
-                // Actualitzem el millor hanging protocol
-                if( hangingProtocol->isBetterThan(bestHangingProtocol) )
-                {
-                    bestHangingProtocol = hangingProtocol;
-                }
             }
         }
     }
@@ -121,13 +114,30 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     }
 
     // Aplicar el hanging protocol trobat, si és que se n'ha trobat algun i s'ha escollit la opció d'aplicar-lo
-    if( applyBestHangingProtocol && bestHangingProtocol )
+    if( applyBestHangingProtocol )
     {
-        DEBUG_LOG( QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName() ) );
-        applyHangingProtocol(bestHangingProtocol,layout, patient);
+        setBestHangingProtocol(patient, outputHangingProtocolList, layout);
     }
 
     return outputHangingProtocolList;
+}
+
+void HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout)
+{
+    HangingProtocol *bestHangingProtocol = NULL;
+    foreach (HangingProtocol *hangingProtocol, hangingProtocolList)
+    {
+        if( hangingProtocol->isBetterThan(bestHangingProtocol) )
+        {
+            bestHangingProtocol = hangingProtocol;
+        }
+    }
+
+    if (bestHangingProtocol)
+    {
+        DEBUG_LOG( QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName() ) );
+        applyHangingProtocol(bestHangingProtocol, layout, patient);
+    }
 }
 
 void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
