@@ -46,7 +46,7 @@ visor->setInput( volum );
 
 En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat amb el mètode setOverlayInput().
 Quan solapem volums tenim 1 manera de solapar aquests volums, aplicant un blending,
-en aquest cas hauríem de fer servir el mètode setOverlay() indicant una de les opcions (de moment únicament Blend)
+en aquest cas hauríem de fer servir el mètode setOverlapMethod() indicant una de les opcions (de moment únicament Blend)
 \TODO acabar la doc sobre solapament
 
 Per defecte el visualitzador mostra la primera imatge en Axial. Per les altres vistes (Sagital i Coronal) mostraria la imatge central
@@ -60,8 +60,8 @@ que faran visible o invisible l'anotació indicada. Per defecte el flag és \c A
 class Q2DViewer : public QViewer{
 Q_OBJECT
 public:
-    /// tipus de fusió dels models
-    enum OverlayType{ None, Blend };
+    /// Tipus de solapament dels models
+    enum OverlapMethod{ None, Blend };
 
     /// Alineament de la imatge (dreta, esquerre, centrat)
     enum AlignPosition{ AlignCenter, AlignRight, AlignLeft };
@@ -77,18 +77,16 @@ public:
     /// Ens retorna la vista que tenim en aquells moments del volum
     CameraOrientationType getView() const;
 
-    /// Afegim el volum solapat
+    /// Assigna/Retorna el volum solapat
     void setOverlayInput( Volume *volume );
+    Volume *getOverlayInput();
 
-    /// Afegim el volum solapat
-    Volume *getOverlayInput( void ) { return m_overlayVolume; }
+    /// Indiquem que cal actualitzar l'Overlay actual
+    void updateOverlay();
 
-    /// Diem al viewer que s'ha modificat l'overlay per tal que refresqui correctament
-    void isOverlayModified();
-
-    /// Canviem l'opacitat del volum solapat
-    /// TODO refactoritzar el mètode a setOverlayOpacity() que és l'expressió correcta
-    void setOpacityOverlay( double op );
+    /// Assignem l'opacitat del volum solapat. 
+    /// Els valors podran anar de 0.0 a 1.0, on 0.0 és transparent i 1.0 és completament opac.
+    void setOverlayOpacity( double opacity );
 
     /// Obté el window level actual de la imatge
     /// TODO els mètodes no es criden enlloc, mirar si són necessaris o no
@@ -258,10 +256,10 @@ public slots:
     /// canvia la fase en que es veuen les llesques si n'hi ha
     void setPhase( int value );
 
-    /// indica el tipu de solapament dels volums, per defecte blending
-    void setOverlay( OverlayType overlay );
-    void setNoOverlay();
-    void setOverlayToBlend();
+    /// Indica el tipu de solapament dels volums, per defecte blending
+    void setOverlapMethod( OverlapMethod method );
+    void setOverlapMethodToNone();
+    void setOverlapMethodToBlend();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
     void enableAnnotation( AnnotationFlags annotation, bool enable = true );
@@ -439,8 +437,8 @@ protected:
     /// Aquest és el blender per veure imatges fusionades
     vtkImageBlend* m_blender;
 
-    /// Opacitat del segon volume
-    double m_opacityOverlay;
+    /// Opacitat del volum solapat
+    double m_overlayOpacity;
 
     /// El picker per agafar punts de la imatge
     vtkPropPicker *m_imagePointPicker;
@@ -455,7 +453,7 @@ private:
     AnnotationFlags m_enabledAnnotations;
 
     /// Tipus de solapament dels volums en cas que en tinguem més d'un
-    OverlayType m_overlay;
+    OverlapMethod m_overlapMethod;
 
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;

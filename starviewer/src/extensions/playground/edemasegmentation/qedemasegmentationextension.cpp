@@ -213,7 +213,7 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     m_2DView->setInput( m_mainVolume );
     m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
 	//això ho fem per indicar que no hi ha cap overlay
-    m_2DView->setNoOverlay();
+    m_2DView->setOverlapMethodToNone();
 	//m_2DView->setOverlayInput(m_lesionMaskVolume);
     
     int* dim;
@@ -327,8 +327,8 @@ void QEdemaSegmentationExtension::applyMethod()
 
     DEBUG_LOG("FI apply filter!!");
 
-    m_2DView->setOverlayToBlend();
-    m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
+    m_2DView->setOverlapMethodToBlend();
+    m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
     m_2DView->setOverlayInput(m_lesionMaskVolume);
 
     m_resultsLineEdit->clear();
@@ -442,7 +442,7 @@ void QEdemaSegmentationExtension::setOpacity( int op )
 {
     if(m_activedMaskVolume)
     {
-        m_2DView->setOpacityOverlay(((double)op)/100.0);
+        m_2DView->setOverlayOpacity(((double)op)/100.0);
         m_2DView->setOverlayInput(m_activedMaskVolume);
         m_2DView->refresh();
     }
@@ -521,8 +521,8 @@ void QEdemaSegmentationExtension::viewEdemaOverlay()
         m_activedMaskVolume = m_edemaMaskVolume;
         m_activedCont = &m_edemaCont;
         m_activedVolume = &m_edemaVolume;
-        m_2DView->setOverlayToBlend();
-        m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
+        m_2DView->setOverlapMethodToBlend();
+        m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_edemaMaskVolume);
         m_2DView->refresh();
     }
@@ -535,8 +535,8 @@ void QEdemaSegmentationExtension::viewLesionOverlay()
         m_activedMaskVolume = m_lesionMaskVolume;
         m_activedCont = &m_cont;
         m_activedVolume = &m_volume;
-        m_2DView->setOverlayToBlend();
-        m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
+        m_2DView->setOverlapMethodToBlend();
+        m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
         m_2DView->refresh();
         DEBUG_LOG( QString("Extent les: %1 %2 %3 %4 %5 %6").arg( m_lesionMaskVolume->getWholeExtent()[0] ).arg( m_lesionMaskVolume->getWholeExtent()[1] ).arg( m_lesionMaskVolume->getWholeExtent()[2] ).arg( m_lesionMaskVolume->getWholeExtent()[3] ).arg( m_lesionMaskVolume->getWholeExtent()[4] ).arg( m_lesionMaskVolume->getWholeExtent()[5] ) );
@@ -551,8 +551,8 @@ void QEdemaSegmentationExtension::viewVentriclesOverlay()
         m_activedMaskVolume = m_ventriclesMaskVolume;
         m_activedCont = &m_ventriclesCont;
         m_activedVolume = &m_ventriclesVolume;
-        m_2DView->setOverlayToBlend();
-        m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
+        m_2DView->setOverlapMethodToBlend();
+        m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_ventriclesMaskVolume);
         m_2DView->refresh();
     }

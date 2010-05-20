@@ -523,16 +523,16 @@ void QLandmarkRegistrationExtension::applyMethod()
 //------------------------------------------------------------------------------
 
 
-    //     m_2DView->setOverlayToBlend();
-    //     m_2DView->setOpacityOverlay(((double)m_opacityOverlaySlider->value())/100.0);
+    //     m_2DView->setOverlapMethodToBlend();
+    //     m_2DView->setOverlayOpacity(((double)m_opacityOverlaySlider->value())/100.0);
     //     m_2DView->setOverlayInput(m_registeredVolume);
     //     m_opacityOverlaySlider->setEnabled(true);
     //     m_opacityLabel->setEnabled(true);
     //     m_2DView->refresh();
 
 
-    m_2DView_2->setOverlayToBlend();
-    m_2DView_2->setOpacityOverlay(((double)m_opacityOverlaySlider->value())/100.0);
+    m_2DView_2->setOverlapMethodToBlend();
+    m_2DView_2->setOverlayOpacity(((double)m_opacityOverlaySlider->value())/100.0);
     m_2DView_2->setOverlayInput(m_registeredVolume);
     m_opacityOverlaySlider->setEnabled(true);
     m_opacityLabel->setEnabled(true);
@@ -935,11 +935,11 @@ void QLandmarkRegistrationExtension::viewSecondVolume( )
 
 void QLandmarkRegistrationExtension::setOpacity( int op )
 {
-    //     m_2DView->setOpacityOverlay(((double)op)/100.0);
+    //     m_2DView->setOverlayOpacity(((double)op)/100.0);
     //     m_2DView->setOverlayInput(m_registeredVolume);
     //     m_2DView->refresh();
 
-    m_2DView_2->setOpacityOverlay(((double)op)/100.0);
+    m_2DView_2->setOverlayOpacity(((double)op)/100.0);
     m_2DView_2->setOverlayInput(m_registeredVolume);
     m_2DView_2->refresh();
 }
@@ -1213,8 +1213,8 @@ void QLandmarkRegistrationExtension::loadTransform(  )
         m_registeredVolume->setImages( m_firstVolume->getImages() );
         m_registeredVolume->setData( resampleFilter->GetOutput() );
 
-        m_2DView_2->setOverlayToBlend();
-        m_2DView_2->setOpacityOverlay(((double)m_opacityOverlaySlider->value())/100.0);
+        m_2DView_2->setOverlapMethodToBlend();
+        m_2DView_2->setOverlayOpacity(((double)m_opacityOverlaySlider->value())/100.0);
         m_2DView_2->setOverlayInput(m_registeredVolume);
         m_opacityOverlaySlider->setEnabled(true);
         m_opacityLabel->setEnabled(true);
@@ -1344,7 +1344,7 @@ void QLandmarkRegistrationExtension::restore(  )
 
     if(m_registeredVolume != 0)
     {
-        m_2DView_2->setNoOverlay();
+        m_2DView_2->setOverlapMethodToNone();
         m_opacityOverlaySlider->setEnabled(false);
         m_opacityLabel->setEnabled(false);
     }
@@ -1369,7 +1369,7 @@ void QLandmarkRegistrationExtension::tryAgain(  )
     m_seedSliceVectorReg.clear();
     if(m_registeredVolume != 0)
     {
-        m_2DView_2->setNoOverlay();
+        m_2DView_2->setOverlapMethodToNone();
         m_opacityOverlaySlider->setEnabled(false);
         m_opacityLabel->setEnabled(false);
     }

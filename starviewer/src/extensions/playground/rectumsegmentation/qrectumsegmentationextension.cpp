@@ -181,7 +181,7 @@ void QRectumSegmentationExtension::setInput( Volume *input )
 	this->updateInputFeatures(input);
     m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
     //m_2DView->resetWindowLevelToDefault();
-    m_2DView->setOverlayToBlend();
+    m_2DView->setOverlapMethodToBlend();
 }
 
 void QRectumSegmentationExtension::updateInputFeatures( Volume *input )
@@ -477,7 +477,7 @@ void QRectumSegmentationExtension::setOpacity( int op )
 {
     if(m_lesionMaskVolume != 0)
     {
-        m_2DView->setOpacityOverlay(((double)op)/100.0);
+        m_2DView->setOverlayOpacity(((double)op)/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
         m_2DView->refresh();
     }
@@ -581,8 +581,8 @@ void QRectumSegmentationExtension::viewThresholds()
 
     this->viewLesionOverlay();
 
-//     m_2DView->setOverlayToBlend();
-//     m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
+//     m_2DView->setOverlapMethodToBlend();
+//     m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
 //     m_2DView->setOverlayInput(m_lesionMaskVolume);
 //     m_2DView->refresh();
 
@@ -593,8 +593,8 @@ void QRectumSegmentationExtension::viewLesionOverlay()
     if(m_lesionMaskVolume != 0)
     {
         m_lesionMaskVolume = m_lesionMaskVolume;
-        m_2DView->setOpacityOverlay(((double)m_opacitySlider->value())/100.0);
-        m_2DView->setOverlayToBlend();
+        m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
+        m_2DView->setOverlapMethodToBlend();
         m_2DView->setOverlayInput(m_lesionMaskVolume);
         m_2DView->refresh();
     }
