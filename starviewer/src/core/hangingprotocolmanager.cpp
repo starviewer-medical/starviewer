@@ -55,8 +55,6 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
         allSeries += study->getViewableSeries();
     }
 
-    int numberOfSeriesAssigned;
-
     // Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
     // Aprofitem per assignar ja les series, per millorar el rendiment
     for( int hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols ; hangingProtocolNumber++)
@@ -67,14 +65,13 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
         if( isModalityCompatible(hangingProtocol, patient) && !hangingProtocol->hasStudiesToDownload() )
         {
             QList<Series *> candidateSeries = allSeries; // Copia de les series perquè es van eliminant de la llista al ser assignades
-            
-            numberOfSeriesAssigned = 0;
-            
+            int numberOfFilledImageSets = 0;
+
             foreach ( HangingProtocolImageSet * imageSet, hangingProtocol->getImageSets() )
             {
                 if( searchSerie( candidateSeries, imageSet , hangingProtocol->getAllDiferent(), hangingProtocol ) )
                 {
-                    numberOfSeriesAssigned++;
+                    numberOfFilledImageSets++;
                 }
             }
 
@@ -82,14 +79,14 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
 
             if( hangingProtocol->isStrict() )
             {
-                if ( numberOfSeriesAssigned == hangingProtocol->getNumberOfImageSets() )
+                if ( numberOfFilledImageSets == hangingProtocol->getNumberOfImageSets() )
                 {
                     isValidHangingProtocol = true;
                 }
             }
             else
             {
-                if ( numberOfSeriesAssigned > 0 )
+                if ( numberOfFilledImageSets > 0 )
                 {
                     isValidHangingProtocol = true;
                 }
