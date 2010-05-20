@@ -404,7 +404,7 @@ void QViewer::render()
 {
     if( m_isRefreshActive )
     {
-        this->getInteractor()->Render();
+        this->getRenderWindow()->Render();
     }
 }
 
