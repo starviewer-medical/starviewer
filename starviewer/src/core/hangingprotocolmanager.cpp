@@ -41,7 +41,7 @@ HangingProtocolManager::~HangingProtocolManager()
     delete m_studiesDownloading;
 }
 
-QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( ViewersLayout *layout, Patient *patient, bool applyBestHangingProtocol )
+QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient)
 {
     HangingProtocol *hangingProtocol;
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
@@ -111,12 +111,6 @@ QList<HangingProtocol * > HangingProtocolManager::searchHangingProtocols( Viewer
     else
     {
         INFO_LOG( QString("No s'ha trobat cap hanging protocol") );
-    }
-
-    // Aplicar el hanging protocol trobat, si és que se n'ha trobat algun i s'ha escollit la opció d'aplicar-lo
-    if( applyBestHangingProtocol )
-    {
-        setBestHangingProtocol(patient, outputHangingProtocolList, layout);
     }
 
     return outputHangingProtocolList;
