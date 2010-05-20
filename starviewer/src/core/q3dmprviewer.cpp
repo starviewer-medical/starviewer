@@ -74,6 +74,9 @@ Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
  : QViewer( parent )
 {
     this->initializePlanes();
+    // Assignem el color de fons de pantalla
+    // TODO Podríem tenir un mètode genèric per fer això
+    m_renderer->SetBackground( 0.4392, 0.5020, 0.5647 );
     // interacció
     m_axialPlaneVisible = true;
     m_sagitalPlaneVisible = true;
@@ -249,8 +252,6 @@ void Q3DMPRViewer::createOutline()
 
 void Q3DMPRViewer::render()
 {
-    // Indiquem el color de fons, blau cel, \TODO això podria anar al inicialitzar-se i prou
-    m_renderer->SetBackground( 0.4392, 0.5020, 0.5647 );
     m_renderer->Render();
 }
 
