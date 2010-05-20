@@ -9,7 +9,6 @@
 
 #include <diutil.h>
 #include <dcfilefo.h>
-#include <ofconapp.h>
 #include <assoc.h>
 #include <dcmtk/dcmdata/dctagkey.h>
 #include <dcmtk/dcmdata/dcdeftag.h>
