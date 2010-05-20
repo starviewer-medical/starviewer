@@ -29,7 +29,7 @@ public:
     /** Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
      */
-    PacsServer(PacsDevice);
+    PacsServer(PacsDevice pacsDevice);
 
     /// Constructor buit de la classe
     PacsServer();
@@ -48,7 +48,7 @@ public:
     /** Estableix un pacs per a la connexió
      * @param Pacs amb els paràmetres per a la connexió
      */
-    void setPacs(PacsDevice);
+    void setPacs(PacsDevice pacsDevice);
 
     /** retorna els paràmetres del PACS
      * @return paràmetres del Pacs
@@ -106,11 +106,6 @@ private:
      */
     QString constructPacsServerAddress(modalityConnection modality, PacsDevice pacsDevice ); //construct PACS address
 
-    /** Afegeix tots els PresentationContexts necessaris per a guardar imatges en el PACS
-    * @return retorna l'estat del mètode
-    */
-    OFCondition addStoragePresentationContexts();
-
     /** Afageix un objecte SOP a la connexió amb el PACS
      * @param presentationContextId número de pid
      * @param abstractSyntax classe SOP a afegir
@@ -129,7 +124,7 @@ private:
 
 private:
 
-    T_ASC_Network *m_net; // network struct, contains DICOM upper layer FSM etc.
+    T_ASC_Network *m_associationNetwork; // network struct, contains DICOM upper layer FSM etc.
     T_ASC_Parameters *m_associationParameters; // parameters of association request
     T_ASC_Association *m_dicomAssociation; // request DICOM association;
     PacsNetwork *m_pacsNetwork; //configures the T_ASC_Network

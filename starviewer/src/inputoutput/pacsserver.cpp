@@ -23,7 +23,7 @@ PacsServer::PacsServer(PacsDevice pacsDevice)
     dcmDisableGethostbyaddr.set(OFTrue);
 
     m_pacs = pacsDevice;
-    m_net = NULL;
+    m_associationNetwork = NULL;
     m_associationParameters = NULL;
     m_dicomAssociation = NULL;
     m_pacsNetwork = new PacsNetwork();
@@ -31,7 +31,7 @@ PacsServer::PacsServer(PacsDevice pacsDevice)
 
 PacsServer::PacsServer()
 {
-    m_net = NULL;
+    m_associationNetwork = NULL;
     m_associationParameters = NULL;
     m_dicomAssociation = NULL;
     m_pacsNetwork = new PacsNetwork();
@@ -44,11 +44,11 @@ Status PacsServer::echo()
 
     DIC_US id = m_dicomAssociation->nextMsgID++; // generate next message ID
     DIC_US status; // DIMSE status of C-ECHO-RSP will be stored here
-    DcmDataset *sd = NULL; // status detail will be stored here
-    // send C-ECHO-RQ and handle response
-    status_echo=DIMSE_echoUser(m_dicomAssociation, id, DIMSE_BLOCKING, 0, &status, &sd);
+    DcmDataset *dcmDataset = NULL;
 
-    delete sd; // we don't care about status detail
+    status_echo = DIMSE_echoUser(m_dicomAssociation, id, DIMSE_BLOCKING, 0, &status, &dcmDataset);
+
+    delete dcmDataset; // we don't care about status detail
 
     return state.setStatus(status_echo);
 }
@@ -56,15 +56,15 @@ Status PacsServer::echo()
 OFCondition PacsServer::configureEcho()
 {
     const char* transferSyntaxes[] = {UID_LittleEndianImplicitTransferSyntax};
-    int pid = 1; //pid always has to be odd
+    int presentationContextID = 1; //presentationContextID always has to be odd
 
-    return ASC_addPresentationContext(m_associationParameters, pid, UID_VerificationSOPClass, transferSyntaxes, DIM_OF( transferSyntaxes) );
+    return ASC_addPresentationContext(m_associationParameters, presentationContextID, UID_VerificationSOPClass, transferSyntaxes, DIM_OF( transferSyntaxes) );
 }
 
 OFCondition PacsServer::configureFind()
 {
     const char* transferSyntaxes[] = {NULL, NULL, UID_LittleEndianImplicitTransferSyntax};
-    int pid = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
+    int presentationContextID = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
 
     /* gLocalByteOrder is defined in dcxfer.h */
     if (gLocalByteOrder == EBO_LittleEndian)
@@ -80,12 +80,13 @@ OFCondition PacsServer::configureFind()
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
     }
 
-    return ASC_addPresentationContext(m_associationParameters, pid, UID_FINDStudyRootQueryRetrieveInformationModel, transferSyntaxes, DIM_OF(transferSyntaxes));
+    return ASC_addPresentationContext(m_associationParameters, presentationContextID, UID_FINDStudyRootQueryRetrieveInformationModel, transferSyntaxes, 
+        DIM_OF(transferSyntaxes));
 }
 
 OFCondition PacsServer::configureMove()
 {
-    int pid = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
+    int presentationContextID = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
     const char* transferSyntaxes[] = { NULL, NULL, UID_LittleEndianImplicitTransferSyntax };
     OFCondition status;
 
@@ -102,17 +103,17 @@ OFCondition PacsServer::configureMove()
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
     }
 
-   return addPresentationContextMove(m_associationParameters, pid, UID_MOVEStudyRootQueryRetrieveInformationModel);
+   return addPresentationContextMove(m_associationParameters, presentationContextID, UID_MOVEStudyRootQueryRetrieveInformationModel);
 }
 
-OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *associationParameters, int pid, const char* abstractSyntax)
+OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *associationParameters, int presentationContextID, const char* abstractSyntax)
 {
     /* We prefer to use Explicitly encoded transfer syntaxes. If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
     to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
     organise the proposed transfer syntaxes to take advantage of such behaviour.
-    The presentation pids proposed here are only used for C-FIND and C-MOVE, so there is no need to support compressed transmission. */
+    The presentation presentationContextIDs proposed here are only used for C-FIND and C-MOVE, so there is no need to support compressed transmission. */
 
-    T_ASC_PresentationContextID presentationContextID = pid;
+    T_ASC_PresentationContextID associationPresentationContextID = presentationContextID;
     const char* transferSyntaxes[] = { NULL, NULL, NULL };
 
     /*We prefer explicit transfer syntaxes.
@@ -129,17 +130,12 @@ OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *association
     }
     transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
 
-    return ASC_addPresentationContext(associationParameters, presentationContextID, abstractSyntax, transferSyntaxes, 3 /*number of TransferSyntaxes*/);
-}
-
-OFCondition PacsServer::configureStore()
-{
-    return addStoragePresentationContexts();
+    return ASC_addPresentationContext(associationParameters, associationPresentationContextID, abstractSyntax, transferSyntaxes, 3 /*number of TransferSyntaxes*/);
 }
 
 /*TODO Estudiar si el millor transferSyntax per defecte és UID_LittleEndianExplicitTransferSyntax o com els cas del move és el JPegLossLess
  */
-OFCondition PacsServer::addStoragePresentationContexts()
+OFCondition PacsServer::configureStore()
 {
     /*Each SOP Class will be proposed in two presentation contexts (unless the opt_combineProposedTransferSyntaxes global variable is true).
      The command line specified a preferred transfer syntax to use. This prefered transfer syntax will be proposed in one presentation context 
@@ -185,8 +181,8 @@ OFCondition PacsServer::addStoragePresentationContexts()
         }
     }
 
-    OFCondition cond = EC_Normal;
-    int pid = 3; // presentation context id ha de començar el 3 pq el 1 és el echo
+    OFCondition condition = EC_Normal;
+    int presentationContextID = 3; // presentation context id ha de començar el 3 pq el 1 és el echo
 
     /*Creem un presentation context per cada SOPClass que tinguem, indicant per cada SOPClass quina transfer syntax utilitzarem*/
     /*En el cas del Store amb el presentation Context indiquem que per cada tipus d'imatge que volem guardar SOPClass amb quins 
@@ -196,23 +192,23 @@ OFCondition PacsServer::addStoragePresentationContexts()
     foreach(QString sopClass, sopClasses)
     {
         // No poden haver més de 255 presentation context
-        if (pid > 255) return ASC_BADPRESENTATIONCONTEXTID;
+        if (presentationContextID > 255) return ASC_BADPRESENTATIONCONTEXTID;
 
         // sop class with preferred transfer syntax
-        cond = addPresentationContext(pid, sopClass, preferredTransferSyntax);
-        pid += 2;   /* only odd presentation context id's */
+        condition = addPresentationContext(presentationContextID, sopClass, preferredTransferSyntax);
+        presentationContextID += 2;   /* only odd presentation context id's */
 
         if (fallbackSyntaxes.size() > 0)
         {
-            if (pid > 255) return ASC_BADPRESENTATIONCONTEXTID;
+            if (presentationContextID > 255) return ASC_BADPRESENTATIONCONTEXTID;
 
             // sop class with fallback transfer syntax
-            cond = addPresentationContext(pid, sopClass, fallbackSyntaxes);
-            pid += 2;       /* only odd presentation context id's */
+            condition = addPresentationContext(presentationContextID, sopClass, fallbackSyntaxes);
+            presentationContextID += 2;       /* only odd presentation context id's */
         }
     }
 
-    return cond;
+    return condition;
 }
 
 OFCondition PacsServer::addPresentationContext(int presentationContextId, const QString &abstractSyntax, QList<const char*> transferSyntaxList)
@@ -226,10 +222,11 @@ OFCondition PacsServer::addPresentationContext(int presentationContextId, const 
         transferSyntaxes[transferSyntaxCount++] = transferSyntax;
     }
 
-    OFCondition cond = ASC_addPresentationContext(m_associationParameters, presentationContextId, qPrintable(abstractSyntax), transferSyntaxes, transferSyntaxCount, ASC_SC_ROLE_DEFAULT);
+    OFCondition condition = ASC_addPresentationContext(m_associationParameters, presentationContextId, qPrintable(abstractSyntax), transferSyntaxes, 
+        transferSyntaxCount, ASC_SC_ROLE_DEFAULT);
 
     delete[] transferSyntaxes;
-    return cond;
+    return condition;
 }
 
 OFCondition PacsServer::addPresentationContext(int presentationContextId, const QString &abstractSyntax, const char *transferSyntax)
@@ -239,12 +236,12 @@ OFCondition PacsServer::addPresentationContext(int presentationContextId, const 
 
 Status PacsServer::connect(modalityConnection modality)
 {
-    OFCondition cond;
+    OFCondition condition;
     Status state;
 
     //create the parameters of the connection
-    cond = ASC_createAssociationParameters(&m_associationParameters, ASC_DEFAULTMAXPDU);
-    if (!cond.good()) return state.setStatus(cond);
+    condition = ASC_createAssociationParameters(&m_associationParameters, ASC_DEFAULTMAXPDU);
+    if (!condition.good()) return state.setStatus(condition);
 
     // set calling and called AE titles
     ASC_setAPTitles(m_associationParameters, qPrintable(PacsDevice::getLocalAETitle()), qPrintable(m_pacs.getAETitle()), NULL);
@@ -253,12 +250,13 @@ Status PacsServer::connect(modalityConnection modality)
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
     /* available the user is able to request an encrypted,secure connection. */
     //defineix el nivell de seguretat de la connexió en aquest cas diem que no utilitzem cap nivell de seguretat
-    cond = ASC_setTransportLayerType(m_associationParameters, OFFalse);
-    if (!cond.good()) return state.setStatus(cond);
+    condition = ASC_setTransportLayerType(m_associationParameters, OFFalse);
+    if (!condition.good()) return state.setStatus(condition);
 
     // the DICOM server accepts connections at server.nowhere.com port
-    cond = ASC_setPresentationAddresses(m_associationParameters, qPrintable(QHostInfo::localHostName()), qPrintable(constructPacsServerAddress(modality, m_pacs)));
-    if (!cond.good()) return state.setStatus(cond);
+    condition = ASC_setPresentationAddresses(m_associationParameters, qPrintable( QHostInfo::localHostName()), 
+        qPrintable( constructPacsServerAddress(modality, m_pacs) ) );
+    if (!condition.good()) return state.setStatus(condition);
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
     int timeout = PacsDevice::getConnectionTimeout();
@@ -267,52 +265,52 @@ Status PacsServer::connect(modalityConnection modality)
     switch (modality)
     {
         case echoPacs : //configure echo
-                        cond = configureEcho();
-                        if (!cond.good()) return state.setStatus(cond);
+                        condition = configureEcho();
+                        if (!condition.good()) return state.setStatus(condition);
 
                         state = m_pacsNetwork->createNetworkQuery(timeout);
                         if (!state.good()) return state;
 
-                        m_net = m_pacsNetwork->getNetworkQuery();
+                        m_associationNetwork = m_pacsNetwork->getNetworkQuery();
 
                         break;
         case query :    //configure the find paramaters depending on modality connection
-                        cond = configureFind();
-                        if (!cond.good()) return state.setStatus(cond);
+                        condition = configureFind();
+                        if (!condition.good()) return state.setStatus(condition);
 
                         state = m_pacsNetwork->createNetworkQuery(timeout);
                         if (!state.good()) return state;
 
-                        m_net = m_pacsNetwork->getNetworkQuery();
+                        m_associationNetwork = m_pacsNetwork->getNetworkQuery();
 
                         break;
         case retrieveImages : //configure the move paramaters depending on modality connection
-                        cond=configureMove();
-                        if (!cond.good()) return state.setStatus(cond);
+                        condition=configureMove();
+                        if (!condition.good()) return state.setStatus(condition);
 
                         ///Preparem la connexió amb el PACS i obrim el local port per acceptar connexions DICOM
                         state = m_pacsNetwork->createNetworkRetrieve(PacsDevice::getIncomingDICOMConnectionsPort(), PacsDevice::getConnectionTimeout());
                         if (!state.good()) return state;
 
-                        m_net = m_pacsNetwork->getNetworkRetrieve();
+                        m_associationNetwork = m_pacsNetwork->getNetworkRetrieve();
 
                         break;
         case storeImages :
-                        cond = configureStore();
-                        if (!cond.good()) return state.setStatus(cond);
+                        condition = configureStore();
+                        if (!condition.good()) return state.setStatus(condition);
 
                         state = m_pacsNetwork->createNetworkQuery(timeout);
                         if (!state.good()) return state;
 
-                        m_net = m_pacsNetwork->getNetworkQuery();
+                        m_associationNetwork = m_pacsNetwork->getNetworkQuery();
 
                         break;
     }
 
     //try to connect
-    cond = ASC_requestAssociation(m_net, m_associationParameters, &m_dicomAssociation);
+    condition = ASC_requestAssociation(m_associationNetwork, m_associationParameters, &m_dicomAssociation);
 
-    if (cond.good())
+    if (condition.good())
     {
         if (ASC_countAcceptedPresentationContexts(m_associationParameters)  ==  0)
         {
@@ -330,7 +328,7 @@ Status PacsServer::connect(modalityConnection modality)
             m_pacsNetwork->disconnect();
         }
 
-        return state.setStatus(cond);
+        return state.setStatus(condition);
     }
 
    return state.setStatus(DcmtkNoError);
@@ -400,7 +398,7 @@ PacsConnection PacsServer::getConnection()
 
 T_ASC_Network * PacsServer::getNetwork()
 {
-    return m_net;
+    return m_associationNetwork;
 }
 
 }
