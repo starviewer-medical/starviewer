@@ -246,7 +246,7 @@ void QExecuteOperationThread::moveStudy( Operation operation )
 {
     Status state;
     PacsDevice pacs = operation.getPacsDevice();
-    StoreImages storeImages;
+    StoreImages storeImages(pacs);
     QList<Image*> imagesToStoreList ;
 
     INFO_LOG( "Preparant les dades per guardar l' estudi " + operation.getStudyUID() + " al PACS " + pacs.getAETitle() );
@@ -255,20 +255,7 @@ void QExecuteOperationThread::moveStudy( Operation operation )
 
     imagesToStoreList = getImagesToStoreList(operation.getDicomMask());
 
-    PacsServer pacsConnection( pacs );
-
-    state = pacsConnection.connect( PacsServer::storeImages );
-
-    if ( !state.good() )
-    {
-        ERROR_LOG( " S'ha produït un error al intentar connectar al PACS " + pacs.getAETitle() + ". PACS ERROR : " + state.text() );
-        emit errorInStore(operation.getStudyUID(), pacs.getID(), CanNotConnectPacsToStore);
-        return;
-    }
-
     connect(&storeImages, SIGNAL( DICOMFileSent(Image *, int) ), this, SLOT( DICOMFileSent(Image *, int) ) );
-
-    storeImages.setConnection( pacsConnection );
 
     state = storeImages.store(imagesToStoreList);
 
@@ -280,6 +267,9 @@ void QExecuteOperationThread::moveStudy( Operation operation )
     {
         switch(state.code())
         {
+            case 1120:
+                emit errorInStore( operation.getStudyUID(), pacs.getID(), CanNotConnectPacsToStore );
+                break;
             case 1400:
                 emit errorInStore( operation.getStudyUID() , pacs.getID() , StoreFailureStatus );
                 break;
