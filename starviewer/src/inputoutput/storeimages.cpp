@@ -36,10 +36,10 @@ PacsDevice StoreImages::getPacs()
 Status StoreImages::store(QList<Image*> imageListToStore)
 {
     Status state;
-    PacsServer pacsConnection( m_pacs );
+    PacsServer pacsServer( m_pacs );
 
     //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
-    state = pacsConnection.connect( PacsServer::storeImages );
+    state = pacsServer.connect( PacsServer::storeImages );
     
     if ( !state.good() )
     {
@@ -52,7 +52,7 @@ Status StoreImages::store(QList<Image*> imageListToStore)
 
     foreach(Image *imageToStore, imageListToStore)
     {
-        if (storeSCU(pacsConnection.getConnection(), qPrintable(imageToStore->getPath())))
+        if (storeSCU(pacsServer.getConnection(), qPrintable(imageToStore->getPath())))
         {
             //Si l'ha imatge s'ha enviat correctament la processem
             //TODO:m_numberOfImagesSent també comptabilitzat imatges que l'enviament ha fallat, les hauria de comptar?
@@ -61,7 +61,7 @@ Status StoreImages::store(QList<Image*> imageListToStore)
         }
     }
 
-    pacsConnection.disconnect();
+    pacsServer.disconnect();
 
     return getStatusStoreSCU(imageListToStore.count());
 }
