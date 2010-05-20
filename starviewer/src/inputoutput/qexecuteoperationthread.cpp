@@ -121,7 +121,7 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
     PatientFiller patientFiller;
     QThreadRunWithExec fillersThread;
     patientFiller.moveToThread( &fillersThread );
-    RetrieveImages retrieveImages;
+    RetrieveImages retrieveImages(operation.getPacsDevice());
 
     INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg( studyUID ).arg( operation.getPacsDevice().getAETitle() ) );
 
@@ -162,33 +162,19 @@ void QExecuteOperationThread::retrieveStudy(Operation operation)
         return;
     }
 
-
-    PacsServer pacsConnection(operation.getPacsDevice());//connemtem al pacs
-    state = pacsConnection.connect(PacsServer::retrieveImages);
-    if (!state.good())
-    {
-        ERROR_LOG( "Error al connectar al pacs " + operation.getPacsDevice().getAETitle() + ". PACS ERROR : " + state.text() );
-
-        errorRetrieving(studyUID, operation.getPacsDevice().getID(), CanNotConnectPacsToMove);
-        localDatabaseManager.setStudyRetrieveFinished();
-
-        return;
-    }
-
-    //passem els parametres a la classe retrieveImages
-    retrieveImages.setConnection( pacsConnection.getConnection() );
     retrieveImages.setMask( operation.getDicomMask() );
-    retrieveImages.setNetwork( pacsConnection.getNetwork() );
 
     localDatabaseManagerThreaded.start();
     fillersThread.start();
     retState = retrieveImages.retrieve();
-    pacsConnection.disconnect();
 
     if (!retState.good())
     {
         switch(retState.code())
         {
+            case 1120:
+                emit errorRetrieving( operation.getStudyUID(), operation.getPacsDevice().getID(), CanNotConnectPacsToMove );
+                break;
             case 1300://Move Destination Unknow
                 errorRetrieving(studyUID, operation.getPacsDevice().getID(), MoveDestinationAETileUnknownStatus);
                 break;

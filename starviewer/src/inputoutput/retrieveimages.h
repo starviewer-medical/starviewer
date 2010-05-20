@@ -25,7 +25,8 @@
 #include <ofcond.h>
 #include <assoc.h>
 
-struct T_ASC_Network;
+#include "pacsdevice.h"
+
 struct T_DIMSE_C_MoveRQ;
 struct T_DIMSE_C_MoveRSP;
 struct T_DIMSE_C_StoreRQ;
@@ -50,13 +51,7 @@ class RetrieveImages: public QObject
 {
 Q_OBJECT
 public:
-    RetrieveImages();
-
-    ///This action sets the connection that we will use to connect to the pacs
-    void setConnection(PacsConnection connection);
-
-    ///Sets the network to use for retrieve the images
-    void setNetwork(T_ASC_Network * network);
+    RetrieveImages(PacsDevice pacs);
 
     ///This action sets the mask that we will use to retrieve the image in to the pacs.
     void setMask(DicomMask mask);
@@ -103,9 +98,8 @@ private:
 
 private:
     /// Request DICOM association;
-    T_ASC_Association *m_assoc; 
-    T_ASC_Network *m_net;
     DcmDataset *m_mask;
+    PacsDevice m_pacs;
 
     struct StoreSCPCallbackData
     {
