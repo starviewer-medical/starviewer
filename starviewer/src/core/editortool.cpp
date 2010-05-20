@@ -257,7 +257,7 @@ void EditorTool::setEditorPoint(  )
                 }
             }
             m_myData->setVolumeVoxels(m_volumeCont);
-            m_2DViewer->isOverlayModified();
+            m_2DViewer->updateOverlay();
             m_2DViewer->refresh();
         }
     }
