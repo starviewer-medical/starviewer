@@ -64,7 +64,7 @@ private slots:
 
 private:
     /// Mira si el protocol es pot aplicar al pacient
-    bool isValid( HangingProtocol *protocol, Patient *patient);
+    bool isModalityCompatible(HangingProtocol *protocol, Patient *patient);
 
     // Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
     Series *searchSerie( QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol );
