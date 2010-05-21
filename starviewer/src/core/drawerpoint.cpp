@@ -15,10 +15,10 @@
 
 namespace udg {
 
-DrawerPoint::DrawerPoint(QObject *parent) : DrawerPrimitive(parent), m_sphereRadius(2.0), m_pointActor(NULL)
+DrawerPoint::DrawerPoint(QObject *parent) 
+: DrawerPrimitive(parent), m_sphereRadius(2.0), m_pointActor(NULL)
 {
 }
-
 
 DrawerPoint::~DrawerPoint()
 {
@@ -46,7 +46,7 @@ vtkProp *DrawerPoint::getAsVtkProp()
 {
     if( !m_pointActor )
     {
-        // creem el pipeline de l'm_vtkActor
+        // Creem el pipeline de l'm_vtkActor
         m_pointActor = vtkActor::New();
         m_pointSphere = vtkSphereSource::New();
         m_pointMapper = vtkPolyDataMapper::New();
@@ -54,10 +54,9 @@ vtkProp *DrawerPoint::getAsVtkProp()
         m_pointActor->SetMapper( m_pointMapper );
     }
 
-    // li donem els atributs
+    // Li donem els atributs
     m_pointSphere-> SetCenter(m_position);
 
-    //std::cout<<"center point: "<<m_pointSphere-> GetCenter()<<std::endl;
     updateVtkActorProperties();
 
     return m_pointActor;
@@ -80,7 +79,7 @@ void DrawerPoint::updateVtkProp()
 {
     if( m_pointActor )
     {
-        //assignem les propietats del punt
+        // Assignem les propietats del punt
         m_pointSphere-> SetCenter(m_position);
         updateVtkActorProperties();
         this->setModified(false);
@@ -95,19 +94,19 @@ void DrawerPoint::updateVtkActorProperties()
 {
     vtkProperty *properties = m_pointActor->GetProperty();
 
-    // sistema de coordenades
+    // Sistema de coordenades
     //m_pointMapper->SetTransformCoordinate( this->getVtkCoordinateObject() );
 
-    //Assignem gruix de l'esfera
+    // Assignem gruix de l'esfera
     m_pointSphere->SetRadius( m_sphereRadius );
 
-    //Assignem opacitat al punt
+    // Assignem opacitat al punt
     properties->SetOpacity( m_opacity );
 
-    //mirem la visibilitat de l'm_vtkActor
+    // Mirem la visibilitat de l'm_vtkActor
     m_pointActor->SetVisibility( this->isVisible() );
 
-    //Assignem color
+    // Assignem color
     QColor color = this->getColor();
     properties->SetColor( color.redF(), color.greenF(), color.blueF() );
 }
@@ -122,7 +121,7 @@ bool DrawerPoint::isInsideOfBounds( double p1[3], double p2[3], int view )
     double minX, maxX, minY, maxY;
     bool inside;
 
-    //determinem x i y màximes i mínimes segons la vista
+    // Determinem x i y màximes i mínimes segons la vista
     switch( view )
     {
         case Q2DViewer::AxialPlane:

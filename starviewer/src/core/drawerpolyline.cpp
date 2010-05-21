@@ -95,13 +95,13 @@ vtkProp *DrawerPolyline::getAsVtkProp()
     if( !m_vtkActor )
     {
         buildVtkPoints();
-        // creem el pipeline de l'm_vtkActor
+        // Creem el pipeline de l'm_vtkActor
         m_vtkActor = vtkActor2D::New();
         m_vtkMapper = vtkPolyDataMapper2D::New();
 
         m_vtkActor->SetMapper( m_vtkMapper );
         m_vtkMapper->SetInput( m_vtkPolydata );
-        // li donem els atributs
+        // Li donem els atributs
         updateVtkActorProperties();
     }
     return m_vtkActor;
@@ -150,12 +150,12 @@ void DrawerPolyline::buildVtkPoints()
         m_vtkCellArray = vtkCellArray::New();
     }
 
-    //especifiquem el nombre de vèrtexs que té la polilinia
+    // Especifiquem el nombre de vèrtexs que té la polilinia
     int numberOfVertices = m_pointsList.count();
     m_vtkCellArray->InsertNextCell( numberOfVertices );
     m_vtkPoints->SetNumberOfPoints( numberOfVertices );
 
-    //donem els punts
+    // Donem els punts
     int i = 0;
     foreach( double *vertix, m_pointsList )
     {
@@ -164,7 +164,7 @@ void DrawerPolyline::buildVtkPoints()
         i++;
     }
 
-    //assignem els punts al polydata
+    // Assignem els punts al polydata
     m_vtkPolydata->SetPoints( m_vtkPoints );
 
     m_vtkPolydata->SetLines( m_vtkCellArray );
@@ -172,17 +172,17 @@ void DrawerPolyline::buildVtkPoints()
 
 void DrawerPolyline::updateVtkActorProperties()
 {
-    // sistema de coordenades
+    // Sistema de coordenades
     m_vtkMapper->SetTransformCoordinate( this->getVtkCoordinateObject() );
-    // estil de la línia
+    // Estil de la línia
     m_vtkActor->GetProperty()->SetLineStipplePattern( m_linePattern );
-    //Assignem gruix de la línia
+    // Assignem gruix de la línia
     m_vtkActor->GetProperty()->SetLineWidth( m_lineWidth );
-    //Assignem opacitat de la línia
+    // Assignem opacitat de la línia
     m_vtkActor->GetProperty()->SetOpacity( m_opacity );
-    //mirem la visibilitat de l'm_vtkActor
+    // Mirem la visibilitat de l'm_vtkActor
     m_vtkActor->SetVisibility( this->isVisible() );
-    //Assignem color
+    // Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
 }
@@ -206,14 +206,14 @@ double DrawerPolyline::getDistanceToPoint( double *point3D )
 
     if ( !m_pointsList.isEmpty() )
     {
-        //mirem si el polígon conté com a últim punt el primer punt, és a dir, si està tancat o no.
-        //ens cal que sigui tancat per a dibuixar tots els segments reals que el formen.
+        // Mirem si el polígon conté com a últim punt el primer punt, és a dir, si està tancat o no.
+        // Ens cal que sigui tancat per a dibuixar tots els segments reals que el formen.
         QList< double* > auxList;
         auxList += m_pointsList;
 
         if ( auxList.first()[0] != auxList.last()[0] || auxList.first()[1] != auxList.last()[1] || auxList.first()[2] != auxList.last()[2] )
         {
-            //si el primer i últim punt no són iguals, dupliquem el primer punt.
+            // Si el primer i últim punt no són iguals, dupliquem el primer punt.
             auxList << auxList.first();
         }
 
@@ -252,7 +252,7 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
     int numberOfPoints = m_pointsList.count();
     bool allPointsAreInside = true;
 
-    //determinem x i y màximes i mínimes segons la vista
+    // Determinem x i y màximes i mínimes segons la vista
     switch( view )
     {
         case Q2DViewer::AxialPlane:

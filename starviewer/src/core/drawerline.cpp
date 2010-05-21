@@ -17,8 +17,10 @@
 
 namespace udg {
 
-DrawerLine::DrawerLine(QObject *parent) : DrawerPrimitive(parent), m_vtkLineSource(0), m_vtkActor(0), m_vtkMapper(0)
-{}
+DrawerLine::DrawerLine(QObject *parent) 
+: DrawerPrimitive(parent), m_vtkLineSource(0), m_vtkActor(0), m_vtkMapper(0)
+{
+}
 
 DrawerLine::~DrawerLine()
 {
@@ -66,19 +68,19 @@ vtkProp *DrawerLine::getAsVtkProp()
 {
     if( !m_vtkActor )
     {
-        // creem el pipeline de l'm_vtkActor
+        // Creem el pipeline de l'm_vtkActor
         m_vtkActor = vtkActor2D::New();
         m_vtkLineSource = vtkLineSource::New();
         m_vtkMapper = vtkPolyDataMapper2D::New();
 
-        //assignem els punts a la línia
+        // Assignem els punts a la línia
         m_vtkLineSource->SetPoint1( m_firstPoint );
         m_vtkLineSource->SetPoint2( m_secondPoint );
 
         m_vtkActor->SetMapper( m_vtkMapper );
         m_vtkMapper->SetInputConnection( m_vtkLineSource->GetOutputPort() );
 
-        // li donem els atributs
+        // Li donem els atributs
         updateVtkActorProperties();
     }
     return m_vtkActor;
@@ -101,7 +103,7 @@ void DrawerLine::updateVtkProp()
 {
     if( m_vtkActor )
     {
-        //assignem els punts a la línia
+        // Assignem els punts a la línia
         m_vtkLineSource->SetPoint1( m_firstPoint );
         m_vtkLineSource->SetPoint2( m_secondPoint );
         updateVtkActorProperties();
@@ -117,22 +119,22 @@ void DrawerLine::updateVtkActorProperties()
 {
     vtkProperty2D *properties = m_vtkActor->GetProperty();
 
-    // sistema de coordenades
+    // Sistema de coordenades
     m_vtkMapper->SetTransformCoordinate( this->getVtkCoordinateObject() );
 
-    // estil de la línia
+    // Estil de la línia
     properties->SetLineStipplePattern( m_linePattern );
 
-    //Assignem gruix de la línia
+    // Assignem gruix de la línia
     properties->SetLineWidth( m_lineWidth );
 
-    //Assignem opacitat de la línia
+    // Assignem opacitat de la línia
     properties->SetOpacity( m_opacity );
 
-    //mirem la visibilitat de l'm_vtkActor
+    // Mirem la visibilitat de l'm_vtkActor
     m_vtkActor->SetVisibility( this->isVisible() );
 
-    //Assignem color
+    // Assignem color
     QColor color = this->getColor();
     properties->SetColor( color.redF(), color.greenF(), color.blueF() );
 }
@@ -222,7 +224,7 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
     double minX, maxX, minY, maxY;
     bool inside;
 
-    //determinem x i y màximes i mínimes segons la vista
+    // Determinem x i y màximes i mínimes segons la vista
     switch( view )
     {
         case Q2DViewer::AxialPlane:
