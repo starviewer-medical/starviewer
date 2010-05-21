@@ -68,7 +68,7 @@ public:
     double computeArea( int view, double * spacing = NULL );
 
 public slots:
-    void update( int representation );
+    void update();
 
 protected slots:
     void updateVtkProp();

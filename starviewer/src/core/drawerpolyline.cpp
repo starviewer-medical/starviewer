@@ -112,9 +112,9 @@ double* DrawerPolyline::getPolylineBounds()
     return m_vtkPolydata->GetBounds();
 }
 
-void DrawerPolyline::update( int representation )
+void DrawerPolyline::update()
 {
-    switch( representation )
+    switch( m_internalRepresentation )
     {
     case VTKRepresentation:
         updateVtkProp();

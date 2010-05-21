@@ -27,9 +27,6 @@ class DrawerPrimitive : public QObject
 {
 Q_OBJECT
 public:
-    /// tipus de representació que podem usar per construir la Primitiva en escena
-    enum RepresentationType{ VTKRepresentation, OpenGLRepresentation };
-
     DrawerPrimitive(QObject *parent = 0);
     ~DrawerPrimitive();
 
@@ -145,10 +142,11 @@ public:
 public slots:
     /**
      * Mètode virtual que implementarà cada primitiva i que actualitzarà les representacions
-     * com cal, segons s'indiqui. Ara mateix, el 100% dels casos serà VTK.
-     * @param representation Tipus de representació a actualitzar (VTK, OpenGL, etc)
+     * internament. Ara mateix, el 100% dels casos serà VTK.
+     * TODO Si volem que es puguin tenir diverses representacions segons la plataforma
+     * caldria implementar-ho amb algun patró tipus Factory
      */
-    virtual void update( int representation ) = 0;
+    virtual void update() = 0;
 
 signals:
     /// s'emet quan alguna de les propietats ha canviat
@@ -180,6 +178,12 @@ protected:
     vtkCoordinate *getVtkCoordinateObject();
 
 protected:
+    /// Tipus de representació que podem usar per construir la Primitiva en escena
+    enum RepresentationType{ VTKRepresentation, OpenGLRepresentation };
+    
+    /// Representació interna que es fa servir per la primitiva
+    RepresentationType m_internalRepresentation;
+    
     /// Defineix si la primitiva és visible o no
     bool m_isVisible;
 

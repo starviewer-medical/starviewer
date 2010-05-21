@@ -62,9 +62,9 @@ vtkProp *DrawerPoint::getAsVtkProp()
     return m_pointActor;
 }
 
-void DrawerPoint::update( int representation )
+void DrawerPoint::update()
 {
-    switch( representation )
+    switch( m_internalRepresentation )
     {
     case VTKRepresentation:
         updateVtkProp();

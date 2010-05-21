@@ -285,7 +285,7 @@ void Drawer::hide( int plane, int slice )
         if( primitive->isVisible() )
         {
             primitive->visibilityOff();
-            primitive->update( DrawerPrimitive::VTKRepresentation );
+            primitive->update();
         }
     }
 }
@@ -316,7 +316,7 @@ void Drawer::show( int plane, int slice )
         if( primitive->isModified() || !primitive->isVisible() )
         {
             primitive->visibilityOn();
-            primitive->update( DrawerPrimitive::VTKRepresentation );
+            primitive->update();
         }
     }
 }
@@ -334,7 +334,7 @@ void Drawer::hideGroup(const QString &groupName)
         if( primitive->isModified() || primitive->isVisible() )
         {
             primitive->visibilityOff();
-            primitive->update( DrawerPrimitive::VTKRepresentation );
+            primitive->update();
         }
     }
     this->refresh();
@@ -348,7 +348,7 @@ void Drawer::showGroup(const QString &groupName)
         if( primitive->isModified() || !primitive->isVisible() )
         {
             primitive->visibilityOn();
-            primitive->update( DrawerPrimitive::VTKRepresentation );
+            primitive->update();
         }
     }
     this->refresh();

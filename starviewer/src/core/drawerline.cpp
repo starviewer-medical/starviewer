@@ -86,9 +86,9 @@ vtkProp *DrawerLine::getAsVtkProp()
     return m_vtkActor;
 }
 
-void DrawerLine::update( int representation )
+void DrawerLine::update()
 {
-    switch( representation )
+    switch( m_internalRepresentation )
     {
     case VTKRepresentation:
         updateVtkProp();

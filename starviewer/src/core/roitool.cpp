@@ -108,7 +108,7 @@ void ROITool::annotateNewPoint()
     if( firstPoint ) // L'afegim a l'escena
         m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     else // Actualitzem l'estructura interna
-        m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
+        m_mainPolyline->update();
 
     if(!m_roiPolygon)
     {
@@ -148,7 +148,7 @@ void ROITool::simulateClosingPolyline()
         m_closingPolyline->setPoint(1,pickedPoint);
         m_closingPolyline->setPoint(2,m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
         // Actualitzem els atributs de la polilínia
-        m_closingPolyline->update( DrawerPrimitive::VTKRepresentation );
+        m_closingPolyline->update();
     }
 }
 

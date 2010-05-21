@@ -248,7 +248,7 @@ void AngleTool::drawCircle()
         m_circlePolyline->addPoint( newPoint );
     }
 
-    m_circlePolyline->update( DrawerPrimitive::VTKRepresentation );
+    m_circlePolyline->update();
 }
 
 void AngleTool::simulateCorrespondingSegmentOfAngle()
@@ -270,7 +270,7 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
 
         // assignem el segon o tercer punt de l'angle segons l'estat
         m_mainPolyline->setPoint( pointIndex, clickedWorldPoint );
-        m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
+        m_mainPolyline->update();
 
         if( m_state == CenterFixed )
             drawCircle();
