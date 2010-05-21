@@ -42,7 +42,7 @@
 namespace udg {
 
 QViewer::QViewer( QWidget *parent )
- : QWidget( parent ), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isRefreshActive(true), m_isActive(false),
+ : QWidget( parent ), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isRenderingEnabled(true), m_isActive(false),
    m_hasDefaultWindowLevelDefined(false)
 {
     //TODO: De moment es desactiven els warnings en release i windows perquè no apareixi la finestra vtkOutputWindow
@@ -402,7 +402,7 @@ bool QViewer::record( const QString &baseName, RecordFileFormatType format )
 
 void QViewer::render()
 {
-    if( m_isRefreshActive )
+    if( m_isRenderingEnabled )
     {
         this->getRenderWindow()->Render();
     }
@@ -765,9 +765,9 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
     }
 }
 
-void QViewer::automaticRefresh( bool enable )
+void QViewer::enableRendering( bool enable )
 {
-    m_isRefreshActive = enable;
+    m_isRenderingEnabled = enable;
 }
 
 PatientBrowserMenu *QViewer::getPatientBrowserMenu() const
