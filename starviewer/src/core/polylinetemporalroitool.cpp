@@ -83,7 +83,6 @@ void PolylineTemporalROITool::start()
         }
         
         text->setAttatchmentPoint( intersection );
-        text->update( DrawerPrimitive::VTKRepresentation );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
  */
     }

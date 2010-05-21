@@ -140,25 +140,22 @@ void AngleTool::findInitialDegreeArc()
 void AngleTool::annotateFirstPoint()
 {
     m_mainPolyline = new DrawerPolyline;
+
+    // Obtenim el punt clickat
+    double clickedWorldPoint[3];
+    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
+    // Afegim el punt a la polilínia
+    m_mainPolyline->addPoint( clickedWorldPoint );
     // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
     m_mainPolyline->increaseReferenceCount();
     m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
-    double clickedWorldPoint[3];
-    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
-
-    //afegim el punt
-    m_mainPolyline->addPoint( clickedWorldPoint );
-    m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
-
-    //actualitzem l'estat de la tool
+    // Actualitzem l'estat de la tool
     m_state = FirstPointFixed;
 }
 
 void AngleTool::fixFirstSegment()
 {
-    m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
-
     //posem l'estat de la tool a CenterFixed, així haurà agafat l'últim valor.
     m_state = CenterFixed;
 

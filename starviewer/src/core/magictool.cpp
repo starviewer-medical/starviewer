@@ -81,8 +81,6 @@ void MagicTool::handleEvent( unsigned long eventID )
     case vtkCommand::MouseMoveEvent:
 		if(m_text->isVisible() && m_2DViewer->getInput()!=0)
         {
-			m_text->setVisibility(false);
-		    m_text->update( DrawerPrimitive::VTKRepresentation );
 			m_2DViewer->getDrawer()->erasePrimitive( m_text );
         }
     break;
@@ -369,7 +367,6 @@ void MagicTool::detectBorder()
 	double pos[3];
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     text->setAttachmentPoint( pos );
-    text->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
 
@@ -551,7 +548,6 @@ void MagicTool::increaseMagicSize()
 	m_2DViewer->getCurrentCursorImageCoordinate(pos);
 	m_text->setAttachmentPoint( pos );
 	m_text->setVisibility(true);
-    m_text->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->getDrawer()->draw( m_text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 }
 
@@ -571,7 +567,6 @@ void MagicTool::decreaseMagicSize()
 	m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_text->setAttachmentPoint( pos );
 	m_text->setVisibility(true);
-    m_text->update( DrawerPrimitive::VTKRepresentation );
     m_2DViewer->getDrawer()->draw( m_text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 }
 

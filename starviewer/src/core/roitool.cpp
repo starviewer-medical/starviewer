@@ -90,29 +90,34 @@ void ROITool::handleEvent( long unsigned eventID )
 
 void ROITool::annotateNewPoint()
 {
+    double pickedPoint[3];
+    m_2DViewer->getEventWorldCoordinate(pickedPoint);
+    m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
+    
+    bool firstPoint = false;
     if (!m_mainPolyline )
     {
+        firstPoint = true;
         m_mainPolyline = new DrawerPolyline;
         // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
         m_mainPolyline->increaseReferenceCount();
-        m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     }
+    // Afegim el punt de la nova polilínia
+    m_mainPolyline->addPoint( pickedPoint );
+    
+    if( firstPoint ) // L'afegim a l'escena
+        m_2DViewer->getDrawer()->draw( m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    else // Actualitzem l'estructura interna
+        m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
+
     if(!m_roiPolygon)
     {
         m_roiPolygon = new DrawerPolygon;
         // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
         m_roiPolygon->increaseReferenceCount();
     }
-
-    double pickedPoint[3];
-    m_2DViewer->getEventWorldCoordinate(pickedPoint);
-    m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
-    
     // Afegim el punt al polígon de la ROI
     m_roiPolygon->addVertix( pickedPoint );
-    // Afegim el punt de la polilínia que estem pintant
-    m_mainPolyline->addPoint( pickedPoint );
-    m_mainPolyline->update( DrawerPrimitive::VTKRepresentation );
 
     // Com que estem afegint punts cal indicar que si és necessari recalcular les dades estadístiques
     m_hasToComputeStatisticsData = true;
@@ -142,10 +147,9 @@ void ROITool::simulateClosingPolyline()
         // Modifiquem els punts que han canviat
         m_closingPolyline->setPoint(1,pickedPoint);
         m_closingPolyline->setPoint(2,m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
+        // Actualitzem els atributs de la polilínia
+        m_closingPolyline->update( DrawerPrimitive::VTKRepresentation );
     }
-
-    // Actualitzem els atributs de la polilínia
-    m_closingPolyline->update( DrawerPrimitive::VTKRepresentation );
 }
 
 Volume::VoxelType ROITool::getGrayValue( double *coords )
@@ -193,7 +197,6 @@ void ROITool::closeForm()
 
     // Dibuixem el polígon resultant
     m_2DViewer->getDrawer()->draw( m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-    m_roiPolygon->update( DrawerPrimitive::VTKRepresentation );
 
     // Indiquem que hem finalitzat les tasques de dibuix
     emit finished();

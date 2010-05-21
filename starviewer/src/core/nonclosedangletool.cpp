@@ -249,7 +249,6 @@ void NonClosedAngleTool::computeAngle()
 
     textPosition( m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text );
 
-    text->update( DrawerPrimitive::VTKRepresentation );
     text->shadowOn();
     m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 }

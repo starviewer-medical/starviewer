@@ -60,12 +60,6 @@ void EraserTool::handleEvent( unsigned long eventID )
 
 void EraserTool::startEraserAction()
 {
-    if (!m_polyline )
-    {
-        m_polyline = new DrawerPolyline;
-        m_2DViewer->getDrawer()->draw( m_polyline , Q2DViewer::Top2DPlane );
-    }
-    
     m_2DViewer->getEventWorldCoordinate( m_startPoint );
     /*
         la següent inicialització de l'm_endPoint és per la distància que es calcula al mètode erasePrimitive(). El primer cop que es calcula,   aquest punt no tindrà valor i, per tant, ens donaria error
@@ -74,11 +68,11 @@ void EraserTool::startEraserAction()
     m_endPoint[1] = m_startPoint[1];
     m_endPoint[2] = m_startPoint[2];
 
-    //afegim el punt
-    m_polyline->addPoint( m_startPoint );
-
-    //actualitzem els atributs de la polilinia
-    m_polyline->update( DrawerPrimitive::VTKRepresentation );
+    if (!m_polyline )
+    {
+        m_polyline = new DrawerPolyline;
+        m_2DViewer->getDrawer()->draw( m_polyline , Q2DViewer::Top2DPlane );
+    }
 
     m_state = StartClick;
 }

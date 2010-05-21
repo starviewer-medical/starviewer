@@ -167,7 +167,6 @@ void DistanceTool::annotateNewPoint()
         }
         text->setAttachmentPoint( leftPoint );
         text->setHorizontalJustification( "Right" );
-        text->update( DrawerPrimitive::VTKRepresentation );
         text->shadowOn();
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
         // Reiniciem l'estat de la tool
