@@ -466,20 +466,16 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
             
             projectedLine->setFirstPoint( firstIntersectionPoint );
             projectedLine->setSecondPoint( secondIntersectionPoint );
-
-            if ( !projectedLineDrawed )
-            {
-                m_2DViewer->getDrawer()->draw( projectedLine, Q2DViewer::Top2DPlane );
-            }
-
             if ( !projectedLine->isVisible() )
             {
                 projectedLine->visibilityOn();
             }
 
-            projectedLine->update( DrawerPrimitive::VTKRepresentation );
+            if ( !projectedLineDrawed )
+                m_2DViewer->getDrawer()->draw( projectedLine, Q2DViewer::Top2DPlane );
+            else
+                projectedLine->update( DrawerPrimitive::VTKRepresentation );
 
-            
             QStringList infoProjectedLine = m_projectedLines[ projectedLine ];
             QString name = infoProjectedLine.at( 0 );
 
