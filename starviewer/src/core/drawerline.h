@@ -16,23 +16,21 @@ class vtkPolyDataMapper2D;
 namespace udg {
 
 /**
-Primitiva de línia per al Drawer
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-class DrawerLine : public DrawerPrimitive
-{
+ *
+ *  Primitiva de línia per al Drawer
+ *
+ */
+class DrawerLine : public DrawerPrimitive {
 Q_OBJECT
 public:
     DrawerLine(QObject *parent = 0);
-
     ~DrawerLine();
 
-    ///Afegim el primer punt de la línia
+    /// Afegim el primer punt de la línia
     void setFirstPoint( double point[3] );
     void setFirstPoint( double x, double y, double z );
 
-    ///Afegim el segon punt de la línia
+    /// Afegim el segon punt de la línia
     void setSecondPoint( double point[3] );
     void setSecondPoint( double x, double y, double z );
 
@@ -53,10 +51,10 @@ public:
     /// Calcula la distancia entre punt i punt
     double computeDistance( double * spacing = NULL);
 
-    ///calcula la distància que té respecte al punt passat per paràmetre
+    /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
 
-    ///mira si està dins dels límits que marquen els punts
+    /// Mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
 public slots:

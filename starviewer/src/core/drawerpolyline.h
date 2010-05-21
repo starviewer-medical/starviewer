@@ -18,16 +18,14 @@ class vtkPolyDataMapper2D;
 namespace udg {
 
 /**
-Primitiva de polilínia pel Drawer
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-class DrawerPolyline : public DrawerPrimitive
-{
+ *
+ *  Primitiva de polilínia pel Drawer
+ *
+ */
+class DrawerPolyline : public DrawerPrimitive {
 Q_OBJECT
 public:
     DrawerPolyline(QObject *parent = 0);
-
     ~DrawerPolyline();
 
     /**
@@ -52,25 +50,25 @@ public:
      */
     void removePoint( int i );
 
-    ///ens retorna la polilínia com a objecte VTK de representació
+    /// Retorna la polilínia com a objecte VTK de representació
     vtkProp *getAsVtkProp();
 
-    ///ens retorna el nombre de punts que te la polilinia
+    /// Retorna el nombre de punts que te la polilinia
     int getNumberOfPoints();
 
-    ///ens retorna l'i-essim punt de la polilinia en cas de que existeixi.
+    /// Retorna l'i-essim punt de la polilinia en cas de que existeixi.
     double* getPoint( int position );
 
-    ///esborra tots els punts de la polilinia
+    /// Esborra tots els punts de la polilinia
     void deleteAllPoints();
 
-    /// retorna els valors minims i maxims de les coordenades de la polilinia
+    /// Retorna els valors minims i maxims de les coordenades de la polilinia
     double* getPolylineBounds();
 
-    ///calcula la distància que té respecte al punt passat per paràmetre
+    /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
 
-    ///mira si està dins dels límits que marquen els punts
+    /// Mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
 public slots:
@@ -86,7 +84,7 @@ private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
 
-    ///ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment de la polilínia
+    /// Ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment de la polilínia
     bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
 
     /// Mètode que intercanvia els punts de sentit antihorari a horari

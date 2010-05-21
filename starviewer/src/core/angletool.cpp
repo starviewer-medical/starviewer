@@ -12,7 +12,7 @@
 #include "drawerpolyline.h"
 #include "drawertext.h"
 #include "mathtools.h"
-//vtk
+// VTK
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
@@ -76,7 +76,7 @@ void AngleTool::handleEvent( long unsigned eventID )
                     }
                     else
                     {
-                        //voldrem enregistrar l'últim punt, pertant posem l'estat a none
+                        // Voldrem enregistrar l'últim punt, pertant posem l'estat a none
                         m_state = None;
                         finishDrawing();
                     }
@@ -93,7 +93,7 @@ void AngleTool::handleEvent( long unsigned eventID )
 
 void AngleTool::findInitialDegreeArc()
 {
-    //Per saber quin l'angle inicial, cal calcular l'angle que forma el primer segment anotat i un segment fictici totalment horitzontal.
+    // Per saber quin l'angle inicial, cal calcular l'angle que forma el primer segment anotat i un segment fictici totalment horitzontal.
     double horizontalP2[3], *vd1, *vd2, pv[3];
     double *p1 = m_mainPolyline->getPoint( 0 );
     double *p2 = m_mainPolyline->getPoint( 1 );
@@ -156,10 +156,10 @@ void AngleTool::annotateFirstPoint()
 
 void AngleTool::fixFirstSegment()
 {
-    //posem l'estat de la tool a CenterFixed, així haurà agafat l'últim valor.
+    // Posem l'estat de la tool a CenterFixed, així haurà agafat l'últim valor.
     m_state = CenterFixed;
 
-    //creem la polilínia per a dibuixar l'arc de circumferència i l'afegim al drawer
+    // Creem la polilínia per a dibuixar l'arc de circumferència i l'afegim al drawer
     m_circlePolyline = new DrawerPolyline;
     // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
     m_circlePolyline->increaseReferenceCount();
@@ -175,12 +175,12 @@ void AngleTool::drawCircle()
     double *circleCentre = m_mainPolyline->getPoint(1);
     double *lastPoint = m_mainPolyline->getPoint(2);
 
-    // calculem l'angle que formen els dos segments
+    // Calculem l'angle que formen els dos segments
     double *firstSegment = MathTools::directorVector( firstPoint, circleCentre );
     double *secondSegment = MathTools::directorVector( lastPoint, circleCentre );
     m_currentAngle = MathTools::angleInDegrees( firstSegment, secondSegment );
     
-    // calculem el radi de l'arc de circumferència que mesurarà
+    // Calculem el radi de l'arc de circumferència que mesurarà
     // un quart del segment més curt dels dos que formen l'angle
     double distance1 = MathTools::getDistance3D( firstPoint, circleCentre );
     double distance2 = MathTools::getDistance3D( circleCentre, lastPoint );
@@ -202,7 +202,7 @@ void AngleTool::drawCircle()
             break;
     }
 
-    // calculem el rang de les iteracions per pintar l'angle correctament
+    // Calculem el rang de les iteracions per pintar l'angle correctament
     initialAngle = 360 - m_initialDegreeArc;
     finalAngle = int(360 - ( m_currentAngle+m_initialDegreeArc ) );
     
@@ -258,7 +258,7 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
 
     if( m_state != None )
     {
-        // agafem la coordenada de pantalla
+        // Agafem la coordenada de pantalla
         double clickedWorldPoint[3];
         m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
@@ -268,7 +268,7 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
         else if( m_state == CenterFixed )
             pointIndex = 2;
 
-        // assignem el segon o tercer punt de l'angle segons l'estat
+        // Assignem el segon o tercer punt de l'angle segons l'estat
         m_mainPolyline->setPoint( pointIndex, clickedWorldPoint );
         m_mainPolyline->update();
 
@@ -284,7 +284,7 @@ void AngleTool::finishDrawing()
     // Així alliberem les primitives perquè puguin ser esborrades
     m_mainPolyline->decreaseReferenceCount();
     m_circlePolyline->decreaseReferenceCount();
-    // eliminem l'arc de circumferència (s'esborra automàticament del drawer)
+    // Eliminem l'arc de circumferència (s'esborra automàticament del drawer)
     delete m_circlePolyline;
 
     // afegim l'annotació textual
@@ -321,7 +321,7 @@ void AngleTool::placeText( DrawerText *angleText )
             break;
     }
 
-    //mirem on estan horitzontalment els punts p1 i p3 respecte del p2
+    // Mirem on estan horitzontalment els punts p1 i p3 respecte del p2
     if ( p1[0] <= p2[0] )
     {
         angleText->setHorizontalJustification( "Left" );

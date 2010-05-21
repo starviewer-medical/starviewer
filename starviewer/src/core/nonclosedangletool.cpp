@@ -11,7 +11,7 @@
 #include "drawerline.h"
 #include "drawertext.h"
 #include "mathtools.h"
-//vtk
+// VTK
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
@@ -72,12 +72,12 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
                         m_firstLine->decreaseReferenceCount();
                         m_secondLine->decreaseReferenceCount();
                         m_middleLine->decreaseReferenceCount();
-                        //Acabem les línies
+                        // Acabem les línies
                         m_firstLine = NULL;
                         m_secondLine = NULL;
                         m_middleLine = NULL;
 
-                        //Restaurem m_state
+                        // Restaurem m_state
                         m_state = None;
                     }
 
@@ -102,7 +102,7 @@ void NonClosedAngleTool::annotateLinePoints()
 {
     DrawerLine *line;
 
-    //creem primera o segona línies
+    // Creem primera o segona línies
     if ( ( m_state == None && m_lineState == NoPoints ) ||
         ( m_state == FirstLineFixed && m_lineState == NoPoints ) )
     {
@@ -118,7 +118,7 @@ void NonClosedAngleTool::annotateLinePoints()
     double clickedWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
-    //afegim el punt
+    // Afegim el punt
     if( m_lineState == NoPoints )
     {
         line->setFirstPoint( clickedWorldPoint );
@@ -135,7 +135,6 @@ void NonClosedAngleTool::annotateLinePoints()
     else
     {
         line->setSecondPoint( clickedWorldPoint );
-
         line->update();
 
         m_lineState = NoPoints;
@@ -152,7 +151,7 @@ void NonClosedAngleTool::simulateLine(DrawerLine *line)
     double clickedWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
     line->setSecondPoint( clickedWorldPoint );
-    //Actualitzem viewer
+    // Actualitzem viewer
     line->update();
 }
 
@@ -223,7 +222,7 @@ void NonClosedAngleTool::computeAngle()
         }
     }
 
-    //dibuixem la línia auxiliar
+    // Dibuixem la línia auxiliar
     m_2DViewer->getDrawer()->draw( m_middleLine , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 
     for (int i = 0; i < 3; i++)
@@ -246,9 +245,7 @@ void NonClosedAngleTool::computeAngle()
     else
         text->setText( tr("%1 degrees").arg( angle,0,'f',1) );
 
-
     textPosition( m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text );
-
     text->shadowOn();
     m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 }
@@ -284,7 +281,6 @@ void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angle
     position[zCoordinate] = p1[zCoordinate];
 
     angleText->setAttachmentPoint(position);
-
 }
 
 void NonClosedAngleTool::initialize()
