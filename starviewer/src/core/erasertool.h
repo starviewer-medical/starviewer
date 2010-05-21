@@ -12,7 +12,7 @@
 namespace udg {
 
 class Q2DViewer;
-class DrawerPolyline;
+class DrawerPolygon;
 
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -55,8 +55,8 @@ private:
     /// Darrer punt de l'àrea d'esborrat
     double m_endPoint[3];
     
-    /// Polilínia que ens marca la zona d'esborrat.
-    DrawerPolyline *m_polyline;
+    /// Polígon que ens marca la zona d'esborrat.
+    DrawerPolygon *m_polygon;
 };
 
 }
