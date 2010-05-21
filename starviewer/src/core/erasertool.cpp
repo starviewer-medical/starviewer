@@ -8,7 +8,7 @@
 #include "q2dviewer.h"
 #include "logging.h"
 #include "drawer.h"
-#include "drawerpolyline.h"
+#include "drawerpolygon.h"
 #include "mathtools.h"
 // vtk
 #include <vtkCommand.h>
@@ -16,7 +16,7 @@
 namespace udg {
 
 EraserTool::EraserTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_state(0), m_polyline(0)
+ : Tool(viewer,parent), m_state(0), m_polygon(0)
 {
     m_toolName = "EraserTool";
     m_hasSharedData = false;
@@ -30,8 +30,8 @@ EraserTool::EraserTool( QViewer *viewer, QObject *parent )
 
 EraserTool::~EraserTool()
 {
-    if ( m_polyline )
-        delete m_polyline;
+    if ( m_polygon )
+        delete m_polygon;
 }
 
 void EraserTool::handleEvent( unsigned long eventID )
@@ -44,7 +44,7 @@ void EraserTool::handleEvent( unsigned long eventID )
 
         case vtkCommand::MouseMoveEvent:
 
-            if ( m_polyline && m_state == StartClick )
+            if ( m_polygon && m_state == StartClick )
                 drawAreaOfErasure();
         break;
 
@@ -68,10 +68,14 @@ void EraserTool::startEraserAction()
     m_endPoint[1] = m_startPoint[1];
     m_endPoint[2] = m_startPoint[2];
 
-    if (!m_polyline )
+    if (!m_polygon )
     {
-        m_polyline = new DrawerPolyline;
-        m_2DViewer->getDrawer()->draw( m_polyline , Q2DViewer::Top2DPlane );
+        m_polygon = new DrawerPolygon;
+        m_polygon->addVertix( m_startPoint );
+        m_polygon->addVertix( m_startPoint );
+        m_polygon->addVertix( m_startPoint );
+        m_polygon->addVertix( m_startPoint );
+        m_2DViewer->getDrawer()->draw( m_polygon , Q2DViewer::Top2DPlane );
     }
 
     m_state = StartClick;
@@ -83,14 +87,6 @@ void EraserTool::drawAreaOfErasure()
     
     m_2DViewer->getEventWorldCoordinate( m_endPoint );
 
-    if ( m_polyline->getNumberOfPoints() > 1 )
-    {
-        m_polyline->removePoint( 4 );
-        m_polyline->removePoint( 3 );
-        m_polyline->removePoint( 2 );
-        m_polyline->removePoint( 1 );
-    }
-    
     //calculem el segon punt i el tercer
     switch( m_2DViewer->getView() )
     {
@@ -122,13 +118,13 @@ void EraserTool::drawAreaOfErasure()
             p3[2] = m_startPoint[2];
             break;
     }
-    m_polyline->addPoint( p2 );
-    m_polyline->addPoint( m_endPoint );
-    m_polyline->addPoint( p3 );
-    m_polyline->addPoint( m_startPoint );
+    m_polygon->setVertix( 0, p2 );
+    m_polygon->setVertix( 1, m_endPoint );
+    m_polygon->setVertix( 2, p3 );
+    m_polygon->setVertix( 3, m_startPoint );
 
     //actualitzem els atributs de la polilinia
-    m_polyline->update();
+    m_polygon->update();
 
     m_2DViewer->render();
 }
@@ -145,10 +141,10 @@ void EraserTool::erasePrimitive()
 
 void EraserTool::reset()
 {
-    if ( m_polyline )
+    if ( m_polygon )
     {
-        delete m_polyline;
-        m_polyline = NULL;
+        delete m_polygon;
+        m_polygon = NULL;
     }
 
     m_state = None;
