@@ -43,7 +43,6 @@ void EraserTool::handleEvent( unsigned long eventID )
         break;
 
         case vtkCommand::MouseMoveEvent:
-
             if ( m_polygon && m_state == StartClick )
                 drawAreaOfErasure();
         break;
@@ -61,9 +60,8 @@ void EraserTool::handleEvent( unsigned long eventID )
 void EraserTool::startEraserAction()
 {
     m_2DViewer->getEventWorldCoordinate( m_startPoint );
-    /*
-        la següent inicialització de l'm_endPoint és per la distància que es calcula al mètode erasePrimitive(). El primer cop que es calcula,   aquest punt no tindrà valor i, per tant, ens donaria error
-    */
+    /// La següent inicialització de l'm_endPoint és per la distància que es calcula al mètode erasePrimitive(). 
+    /// El primer cop que es calcula, aquest punt no tindrà valor i, per tant, ens donaria error
     m_endPoint[0] = m_startPoint[0];
     m_endPoint[1] = m_startPoint[1];
     m_endPoint[2] = m_startPoint[2];
@@ -87,7 +85,7 @@ void EraserTool::drawAreaOfErasure()
     
     m_2DViewer->getEventWorldCoordinate( m_endPoint );
 
-    //calculem el segon punt i el tercer
+    // Calculem el segon punt i el tercer
     switch( m_2DViewer->getView() )
     {
         case Q2DViewer::AxialPlane:
@@ -122,8 +120,7 @@ void EraserTool::drawAreaOfErasure()
     m_polygon->setVertix( 1, m_endPoint );
     m_polygon->setVertix( 2, p3 );
     m_polygon->setVertix( 3, m_startPoint );
-
-    //actualitzem els atributs de la polilinia
+    // Actualitzem els atributs de la polilinia
     m_polygon->update();
 
     m_2DViewer->render();

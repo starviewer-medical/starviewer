@@ -16,22 +16,18 @@ class vtkCoordinate;
 namespace udg {
 
 /**
-Classe base de les primitives que pintarà la classe Drawer
-
-Defineix les propietats que poden tenir les primitives i
-els mètodes per obtenir aquesta primitiva en diferents formats (vtk, opengl, etc)
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-class DrawerPrimitive : public QObject
-{
+ *
+ *  Classe base de les primitives que pintarà la classe Drawer
+ *
+ *  Defineix les propietats que poden tenir les primitives i els mètodes
+ *  per obtenir aquesta primitiva en diferents formats (vtk, opengl, etc)
+ *
+ */
+class DrawerPrimitive : public QObject {
 Q_OBJECT
 public:
     DrawerPrimitive(QObject *parent = 0);
     ~DrawerPrimitive();
-
-    // mètodes per definir les propietats de la primitiva, com color, tipus de línia,
-    // visibilitat, etc
 
     /**
      * Mètodes per configurar la visibilitat de la primitiva
@@ -81,7 +77,7 @@ public:
     void setOpacity( double opacity );
     double getOpacity() const;
 
-    // mètodes per construir l'objecte a representar gràficament
+    // Mètodes per construir l'objecte a representar gràficament
     /**
      * Construeix l'objecte vtk que representa aquesta primitiva
      * Retornem un vtkProp, el qual ens permet poder retornar tant vtkActor, vtkActor2D o vtkPropAssembly
@@ -98,8 +94,8 @@ public:
     bool isModified() const;
 
     /**
-    * Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
-    */
+     * Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
+     */
     virtual double getDistanceToPoint( double *point3D )=0;
 
     /**
@@ -149,10 +145,10 @@ public slots:
     virtual void update() = 0;
 
 signals:
-    /// s'emet quan alguna de les propietats ha canviat
+    /// S'emet quan alguna de les propietats ha canviat
     void changed();
 
-    /// s'emet just quan s'invoca el destructor
+    /// S'emet just quan s'invoca el destructor
     void dying( DrawerPrimitive * );
 
 protected slots:
@@ -196,7 +192,7 @@ protected:
     /// Controla si cal omplir les formes tancades amb el color per defecte. Per defecte no s'omplen
     bool m_isFilled;
 
-    /// patró de la línia
+    /// Patró de la línia
     int m_linePattern;
 
     /// Ample de la línia. Per defecte 1.0
@@ -209,7 +205,7 @@ protected:
     bool m_modified;
 
 private:
-    /// portarà el control de reference count ( sucedani d'smart pointer(TM) )
+    /// Portarà el control de reference count ( sucedani d'smart pointer(TM) )
     int m_referenceCount;
 };
 

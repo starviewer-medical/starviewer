@@ -10,26 +10,23 @@
 #include "drawerprimitive.h"
 #include "drawerline.h"
 
-// fwd declarations
+// Forward declarations
 class vtkPropAssembly;
 
 namespace udg {
 
 /**
-Primitiva que dibuixa un "Crosshair", és a dir, una creueta per situar un punt.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-class DrawerCrossHair : public DrawerPrimitive
-{
+ *
+ *  Primitiva que dibuixa un "Crosshair", és a dir, una creueta per situar un punt.
+ *
+ */
+class DrawerCrossHair : public DrawerPrimitive {
 Q_OBJECT
 public:
-    
     DrawerCrossHair( QObject *parent = 0 );
-
     ~DrawerCrossHair();
 
-    ///Afegim el primer punt de la línia
+    /// Afegim el primer punt de la línia
     void setCentrePoint( double x, double y, double z );
 
     vtkPropAssembly *getAsVtkPropAssembly();
@@ -57,14 +54,13 @@ private:
     /// Centre de la crosshair.
     double m_centrePoint[3];
 
-    ///Linies per construir el crosshair
+    /// Línies per construir el crosshair
     DrawerLine * m_lineUp;
     DrawerLine * m_lineDown;
     DrawerLine * m_lineLeft;
     DrawerLine * m_lineRight;
     DrawerLine * m_lineFront;
     DrawerLine * m_lineBack;
-    
 
     vtkPropAssembly *m_vtkPropAssembly;
 };

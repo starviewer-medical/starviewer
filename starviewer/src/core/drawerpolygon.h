@@ -18,16 +18,14 @@ class vtkPolyDataMapper2D;
 namespace udg {
 
 /**
-Primitiva de polígon per al Drawer
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-class DrawerPolygon : public DrawerPrimitive
-{
+ *
+ *  Primitiva de polígon per al Drawer
+ *
+ */
+class DrawerPolygon : public DrawerPrimitive {
 Q_OBJECT
 public:
     DrawerPolygon(QObject *parent = 0);
-
     ~DrawerPolygon();
 
     /**
@@ -58,10 +56,10 @@ public:
     /// Retorna les coordenades del cub que envolta el polígon
     double *getBounds();
     
-    ///calcula la distància que té respecte al punt passat per paràmetre
+    /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
 
-    ///mira si està dins dels límits que marquen els punts
+    /// Mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
     /// Calcula l'àrea del polígon
@@ -80,7 +78,7 @@ private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
 
-    ///ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment del polígon
+    /// Ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment del polígon
     bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
 
 private:
