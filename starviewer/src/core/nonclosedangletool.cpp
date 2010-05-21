@@ -136,7 +136,7 @@ void NonClosedAngleTool::annotateLinePoints()
     {
         line->setSecondPoint( clickedWorldPoint );
 
-        line->update( DrawerPrimitive::VTKRepresentation );
+        line->update();
 
         m_lineState = NoPoints;
 
@@ -153,7 +153,7 @@ void NonClosedAngleTool::simulateLine(DrawerLine *line)
     m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
     line->setSecondPoint( clickedWorldPoint );
     //Actualitzem viewer
-    line->update( DrawerPrimitive::VTKRepresentation );
+    line->update();
 }
 
 void NonClosedAngleTool::computeAngle()

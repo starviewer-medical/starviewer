@@ -200,7 +200,7 @@ void Cursor3DTool::updatePosition()
                 // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
                 m_crossHair->setCentrePoint( xyz[0], xyz[1], xyz[2] );
                 m_crossHair->setVisibility( true );
-                m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+                m_crossHair->update();
                 m_2DViewer->render();
                 m_myData->setOriginPointPosition( dicomWorldPosition ); // Punt al món real (DICOM)
             }
@@ -220,7 +220,7 @@ void Cursor3DTool::removePosition()
 
     /// S'ha demanat que el cursor no desparegui al deixar de clicar.
 //     m_crossHair->setVisibility( false );
-//     m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+//     m_crossHair->update();
 //     m_2DViewer->render();
 //     m_myData->setVisible( false );
 }
@@ -257,7 +257,7 @@ void Cursor3DTool::updateProjectedPoint()
                 m_crossHair->setVisibility( false );
             }
         }
-        m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+        m_crossHair->update();
         m_2DViewer->render();
     }
 }
@@ -282,7 +282,7 @@ void Cursor3DTool::projectPoint()
                 m_crossHair->setVisibility( false );
             }
 
-            m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+            m_crossHair->update();
             m_2DViewer->render();
         }
 }
@@ -324,7 +324,7 @@ void Cursor3DTool::hideCrossHair()
     if( m_2DViewer->isActive() && m_state == None )
     {
         m_crossHair->setVisibility( false );
-        m_crossHair->update( DrawerPrimitive::VTKRepresentation );
+        m_crossHair->update();
         m_2DViewer->render();
         m_myData->setVisible( false );
     }

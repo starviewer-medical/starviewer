@@ -61,7 +61,7 @@ public:
 
 public slots:
 
-    void update( int representation );
+    void update();
 
 protected slots:
     void updateVtkProp();

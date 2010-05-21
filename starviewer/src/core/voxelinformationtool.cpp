@@ -53,7 +53,7 @@ void VoxelInformationTool::handleEvent( unsigned long eventID )
 
     case vtkCommand::LeaveEvent:
         m_caption->visibilityOff();
-        m_caption->update(DrawerPrimitive::VTKRepresentation);
+        m_caption->update();
         m_2DViewer->render();
     break;
 
@@ -87,7 +87,7 @@ void VoxelInformationTool::updateVoxelInformation()
     else
     {
         m_caption->visibilityOff();
-        m_caption->update(DrawerPrimitive::VTKRepresentation);
+        m_caption->update();
     }
     m_2DViewer->render();
 }
@@ -121,7 +121,7 @@ void VoxelInformationTool::placeText( double textPosition[3] )
         m_caption->visibilityOn();
         m_caption->setAttachmentPoint(xyz);
         m_caption->setText( QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg( voxelValue ) );
-        m_caption->update(DrawerPrimitive::VTKRepresentation);
+        m_caption->update();
     }
     else
         DEBUG_LOG("No s'ha trobat valor de la imatge");

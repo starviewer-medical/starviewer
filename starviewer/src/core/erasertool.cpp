@@ -128,7 +128,7 @@ void EraserTool::drawAreaOfErasure()
     m_polyline->addPoint( m_startPoint );
 
     //actualitzem els atributs de la polilinia
-    m_polyline->update( DrawerPrimitive::VTKRepresentation );
+    m_polyline->update();
 
     m_2DViewer->render();
 }

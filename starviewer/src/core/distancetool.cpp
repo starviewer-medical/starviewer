@@ -98,7 +98,7 @@ void DistanceTool::annotateNewPoint()
     {
         m_line->setSecondPoint( clickedWorldPoint );
 
-        m_line->update( DrawerPrimitive::VTKRepresentation );
+        m_line->update();
 
         //Posem el text
         double *leftPoint = m_line->getLeftPoint( m_2DViewer->getView() );
@@ -180,7 +180,7 @@ void DistanceTool::simulateLine()
     m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
     m_line->setSecondPoint( clickedWorldPoint );
-    m_line->update( DrawerPrimitive::VTKRepresentation );
+    m_line->update();
 }
 
 void DistanceTool::initialize()

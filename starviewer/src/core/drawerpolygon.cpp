@@ -99,9 +99,9 @@ vtkProp *DrawerPolygon::getAsVtkProp()
     return m_vtkActor;
 }
 
-void DrawerPolygon::update( int representation )
+void DrawerPolygon::update()
 {
-    switch( representation )
+    switch( m_internalRepresentation )
     {
     case VTKRepresentation:
         updateVtkProp();

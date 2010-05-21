@@ -474,7 +474,7 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
             if ( !projectedLineDrawed )
                 m_2DViewer->getDrawer()->draw( projectedLine, Q2DViewer::Top2DPlane );
             else
-                projectedLine->update( DrawerPrimitive::VTKRepresentation );
+                projectedLine->update();
 
             QStringList infoProjectedLine = m_projectedLines[ projectedLine ];
             QString name = infoProjectedLine.at( 0 );
@@ -495,7 +495,7 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
             if( projectedLine->isVisible() )
             {
                 projectedLine->visibilityOff();
-                projectedLine->update( DrawerPrimitive::VTKRepresentation );
+                projectedLine->update();
             }
         }
     }
@@ -504,7 +504,7 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
         if( projectedLine->isVisible() )
         {
             projectedLine->visibilityOff();
-            projectedLine->update( DrawerPrimitive::VTKRepresentation );
+            projectedLine->update();
         }
     }
 

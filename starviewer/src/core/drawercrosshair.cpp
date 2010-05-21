@@ -96,26 +96,26 @@ vtkProp * DrawerCrossHair::getAsVtkProp()
 }
 
 
-void DrawerCrossHair::update( int representation )
+void DrawerCrossHair::update()
 {
-    m_lineUp->update( representation );
-    m_lineDown->update( representation );
-    m_lineLeft->update( representation );
-    m_lineRight->update( representation );
-    m_lineBack->update( representation );
-    m_lineFront->update( representation );
+    m_lineUp->update();
+    m_lineDown->update();
+    m_lineLeft->update();
+    m_lineRight->update();
+    m_lineBack->update();
+    m_lineFront->update();
 }
 
 void DrawerCrossHair::updateVtkProp()
 {
     if( m_vtkPropAssembly )
     {
-        m_lineUp->update( VTKRepresentation );
-        m_lineDown->update( VTKRepresentation );
-        m_lineLeft->update( VTKRepresentation );
-        m_lineRight->update( VTKRepresentation );
-        m_lineBack->update( VTKRepresentation );
-        m_lineFront->update( VTKRepresentation );
+        m_lineUp->update();
+        m_lineDown->update();
+        m_lineLeft->update();
+        m_lineRight->update();
+        m_lineBack->update();
+        m_lineFront->update();
 
         this->setModified(false);
     }
