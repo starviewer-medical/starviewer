@@ -251,9 +251,8 @@ void Q2DViewerExtension::addPreviousHangingProtocols( QList<Study*> studies, QHa
 {
     disconnect( m_previousStudiesManager, SIGNAL( queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>) ), this, SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>) ) );
 
-    QList<HangingProtocol * > m_hangingWidthPrevious = m_hangingProtocolManager->getHangingProtocolsWidthPreviousSeries( m_patient, studies, qhash );
-    m_hangingCandidates << m_hangingWidthPrevious;
-    m_predefinedSeriesGrid->addHangingItems( m_hangingWidthPrevious );
+    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies, qhash);
+    m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
     m_predefinedSeriesGrid->createHangingProtocolsWidget();
     m_predefinedSeriesGrid->setSearchingItem( false );
 }

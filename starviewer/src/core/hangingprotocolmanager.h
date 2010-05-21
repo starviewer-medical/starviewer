@@ -35,8 +35,9 @@ public:
     HangingProtocolManager( QObject *parent = 0 );
     ~HangingProtocolManager();
 
-    /// Buscar els hanging protocols disponibles, si applyBestHangingProtocol, a més, aplica el millor que ha trobat
+    /// Buscar els hanging protocols disponibles
     QList<HangingProtocol *> searchHangingProtocols(Patient *patient);
+    QList<HangingProtocol *> searchHangingProtocols(Patient *patient, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
 
     // Aplica un hanging protocol concret, ja sigui via identificador o per instància
     void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );
@@ -44,9 +45,6 @@ public:
 
     /// Aplica el millor hanging protocol de la llista donada
     void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
-
-    /// Buscar hanging protocols quan es sap que hi ha previes
-    QList<HangingProtocol * > getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs );
 
     /// Buscar els estudis previs
     Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, QList<Study*> previousStudies);

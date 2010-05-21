@@ -43,6 +43,14 @@ HangingProtocolManager::~HangingProtocolManager()
 
 QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient)
 {
+    QList<Study*> previousStudies;
+    QHash<QString, QString> originOfPreviousStudies;
+
+    return searchHangingProtocols(patient, previousStudies, originOfPreviousStudies);
+}
+
+QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
+{
     int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
 
     QList<HangingProtocol * > outputHangingProtocolList;
@@ -61,7 +69,7 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
         //Inicialitzacions
         HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
 
-        if( isModalityCompatible(hangingProtocol, patient) && !hangingProtocol->hasStudiesToDownload() )
+        if( isModalityCompatible(hangingProtocol, patient) )
         {
             QList<Series *> candidateSeries = allSeries; // Copia de les series perquè es van eliminant de la llista al ser assignades
             int numberOfFilledImageSets = 0;
@@ -71,6 +79,37 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
                 if( searchSerie( candidateSeries, imageSet , hangingProtocol->getAllDiferent(), hangingProtocol ) )
                 {
                     numberOfFilledImageSets++;
+
+                    if ( imageSet->isPreviousStudy() )
+                    {
+                        imageSet->setDownloaded( true );
+                    }
+                }
+                else
+                {
+                    if( imageSet->isPreviousStudy() ) // Si és de tipus prèvi, se li dóna una segona oportunitat buscant a previs
+                    {
+                        Study *referenceStudy = 0, *previousStudy = 0;
+                        HangingProtocolImageSet *referenceImageSet = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() );
+
+                        if( referenceImageSet->isDownloaded() && referenceImageSet->getSeriesToDisplay() ) // L'estudi de referència està descarregat
+                            referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
+                        else // L'estudi de referència és un previ que encara no s'ha descarregat
+                            referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
+
+                        if(referenceStudy)
+                        {
+                            previousStudy = searchPreviousStudy(hangingProtocol, referenceStudy, previousStudies);
+
+                            if(previousStudy) //S'ha trobat pendent de descarrega
+                            {
+                                numberOfFilledImageSets++;
+                                imageSet->setDownloaded( false );
+                                imageSet->setPreviousStudyToDisplay( previousStudy );
+                                imageSet->setPreviousStudyPacs( originOfPreviousStudies[previousStudy->getInstanceUID()] );
+                            }
+                        }
+                    }
                 }
             }
 
@@ -529,110 +568,6 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
     }
     
     return valid;
-}
-
-QList<HangingProtocol * > HangingProtocolManager::getHangingProtocolsWidthPreviousSeries( Patient * patient, QList<Study*> previousStudies, QHash<QString, QString> pacs )
-{
-    HangingProtocol * hangingProtocol;
-    int numberOfItems = HangingProtocolsRepository::getRepository()->getNumberOfItems();
-    int hangingProtocolNumber;
-    QList<HangingProtocol * > previousCandidates;
-    QString hangingProtocolNamesLogList; // Noms per mostrar al log
-    Identifier id;
-    int imageSetNumber;
-    HangingProtocolImageSet *imageSet;
-    Study * previousStudy;
-    Series *serie;
-    int numberOfSeriesAssigned;
-    double adjustmentOfHanging = 0.0; // Inicialment pensem que no existeix cap hanging
-
-    if ( previousStudies.size() == 0 )
-        return previousCandidates;
-
-    QList<Series *> seriesList;    
-    QList<Series *> allSeries;
-    QList<Study *> allStudies = sortStudiesByDate( patient->getStudies() );
-
-    foreach (Study *study, allStudies)
-    {
-        foreach( Series *series, study->getViewableSeries() )
-        {
-            allSeries.push_back(series);
-        }
-    }
-
-    for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfItems; hangingProtocolNumber++)
-    {
-        //Inicialitzacions
-        id.setValue( hangingProtocolNumber );
-        hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
-        
-        if( hangingProtocol->isPrevious() )
-        {
-            imageSetNumber = 1;
-            numberOfSeriesAssigned = 0;
-            seriesList.clear();
-            seriesList += allSeries;// Copia de les series perquè es van eliminant de la llista al ser assignades
-
-            if( isModalityCompatible(hangingProtocol, patient) )
-            {
-                while( imageSetNumber <= hangingProtocol->getNumberOfImageSets() )
-                {
-                    imageSet = hangingProtocol->getImageSet( imageSetNumber );
-                    serie = 0;
-                    previousStudy = 0;
-
-                    //Cerca d'una sèrie de la forma habitual
-                    serie = searchSerie( seriesList, imageSet, hangingProtocol->getAllDiferent(), hangingProtocol );
-                    
-                    if( serie != 0 )//S'ha trobat descarregada i carregada a l'estructura pacient
-                    {
-                        numberOfSeriesAssigned++; 
-                        imageSet->setDownloaded( true );
-                    }
-                    else //Es busca a la llista de pendent de descàrrega
-                    {
-                        if( imageSet->isPreviousStudy() ) // Si és de tipus prèvi, se li dóna una segona oportunitat buscant a previs
-                        {
-                            Study * referenceStudy = 0;
-                            HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() );
-
-                            if( referenceImageSet->isDownloaded() && referenceImageSet->getSeriesToDisplay() ) // L'estudi de referència està descarregat
-                                referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
-                            else // L'estudi de referència és un previ que encara no s'ha descarregat
-                                referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
-
-                            if( referenceStudy != 0 )
-                            {
-                                previousStudy = searchPreviousStudy( hangingProtocol, referenceStudy, previousStudies );
-
-                                if( previousStudy != 0 ) //S'ha trobat pendent de descarrega
-                                {
-                                    numberOfSeriesAssigned++;
-                                    imageSet->setDownloaded( false );
-                                    imageSet->setPreviousStudyToDisplay( previousStudy );
-                                    imageSet->setPreviousStudyPacs( pacs[previousStudy->getInstanceUID()] );
-                                }
-                            }
-                        }
-                    }
-                    imageSetNumber++;
-                }
-                adjustmentOfHanging = ((double)numberOfSeriesAssigned)/hangingProtocol->getNumberOfImageSets();
-
-                if( hangingProtocol->isStrict() && adjustmentOfHanging != 1.0 )
-                    adjustmentOfHanging = 0.0;
-
-                if( adjustmentOfHanging > 0 )
-                {
-                    previousCandidates << hangingProtocol;
-                    hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) ); // Afegim el hanging a la llista pel log
-                }
-            }
-        }
-    }
-
-    return previousCandidates;
 }
 
 Study * HangingProtocolManager::searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, QList<Study*> previousStudies)
