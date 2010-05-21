@@ -167,8 +167,10 @@ public:
      */
     void setWindowLevelData( WindowLevelPresetsToolData *windowLevelData );
 
-    // Activar o desactivar el refresh automatic
-    void automaticRefresh( bool enable );
+    /// Habilita/deshabilita que els renderings es facin efectius
+    /// Útil en els casos en que necessitem fer diverses operacions de 
+    /// visualització però no volem que aquestes es facin efectives fins que no ho indiquem
+    void enableRendering( bool enable );
 
     /// Ens retorna el menú de pacient amb el que s'escull l'input
     PatientBrowserMenu *getPatientBrowserMenu() const;
@@ -309,8 +311,8 @@ protected:
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
 
-    /// Escollir si hi ha activat el renderitzat del viewer
-    bool m_isRefreshActive;
+    /// Indica si hem de fer l'acció de renderitzar o no
+    bool m_isRenderingEnabled;
 
     /// Menú de pacient a través del qual podem escollir l'input del viewer
     PatientBrowserMenu *m_patientBrowserMenu;

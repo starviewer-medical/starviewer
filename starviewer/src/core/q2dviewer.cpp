@@ -592,8 +592,8 @@ void Q2DViewer::setInput( Volume *volume )
         m_drawer->removeAllPrimitives();
 
     // HACK
-    // Desactivem el refresh per tal de millorar l'eficiencia del setInput ja que altrament es renderitza multiples vegades
-    this->m_isRefreshActive = false;
+    // Desactivem el rendering per tal de millorar l'eficiència del setInput ja que altrament es renderitza múltiples vegades
+    enableRendering(false);
 
     // TODO caldria fer netejar? bloquejar? per tal que quedi en negre mentres es carrega el nou volum?
     m_mainVolume = volume;
@@ -670,8 +670,8 @@ void Q2DViewer::setInput( Volume *volume )
     // actualitzem la informació de window level
     this->updateWindowLevelData();
     // HACK
-    // S'activa el refresh per tal de que es renderitzi el visualitzador
-    this->m_isRefreshActive = true;
+    // S'activa el rendering de nou per tal de que es renderitzi l'escena
+    enableRendering(true);
     // indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
 }
@@ -1977,8 +1977,9 @@ void Q2DViewer::restore()
         m_drawer->removeAllPrimitives();
 
     // HACK
-    // Desactivem el refresh per tal de millorar l'eficiencia del setInput ja que altrament es renderitza multiples vegades
-    this->m_isRefreshActive = false;
+    // Desactivem el rendering per tal de millorar l'eficiència de tornar a executar el pipeline, 
+    // ja que altrament es renderitza múltiples vegades i provoca efectes indesitjats com el flickering
+    enableRendering(false);
 
     this->applyGrayscalePipeline();
     this->resetView( m_lastView );
@@ -1986,7 +1987,7 @@ void Q2DViewer::restore()
     this->updateWindowLevelData();
 
     // Activem el refresh i refresquem
-    this->m_isRefreshActive = true;
+    enableRendering(true);
     this->setAlignPosition( m_alignPosition );
 
     this->render();

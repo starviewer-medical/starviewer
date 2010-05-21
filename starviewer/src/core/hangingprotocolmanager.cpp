@@ -383,7 +383,7 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
 
 void HangingProtocolManager::applyDisplayTransformations( Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
 {
-    viewer->getViewer()->automaticRefresh( false );
+    viewer->getViewer()->enableRendering( false );
     
     QString reconstruction = displaySet->getReconstruction();
     if( !reconstruction.isEmpty() )
@@ -443,7 +443,7 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
         viewer->getViewer()->setAlignPosition( Q2DViewer::AlignCenter );
     }
 
-    viewer->getViewer()->automaticRefresh( true );
+    viewer->getViewer()->enableRendering( true );
     viewer->getViewer()->render();
 }
 
