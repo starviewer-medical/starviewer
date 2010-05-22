@@ -1,3 +1,9 @@
+/***************************************************************************
+ *   Copyright (C) 2010 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *                                                                         *
+ *   Universitat de Girona                                                 *
+ ***************************************************************************/
 #include "imageplaneprojectiontool.h"
 #include "imageplaneprojectiontooldata.h"
 #include "q2dviewer.h"
@@ -333,8 +339,8 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine, 
             imagePlane->setOrigin( imageOrigin );
             imagePlane->setRows( zDepth );
             imagePlane->setColumns( rows );
-            imagePlane->setSpacing( spacing[1], spacing[2] );
-            imagePlane->setThickness( spacing[0] );
+            imagePlane->setSpacing( spacing[0], spacing[2] );
+            imagePlane->setThickness( spacing[1] );
             imagePlane->setRowDirectionVector( columnDirectionVector );
             imagePlane->setColumnDirectionVector( -zDirectionVector[0], -zDirectionVector[1], -zDirectionVector[2] );
         }
@@ -352,8 +358,8 @@ void ImagePlaneProjectionTool::initializeImagePlane( DrawerLine *projectedLine, 
             imagePlane->setOrigin( imageOrigin );
             imagePlane->setRows( zDepth );
             imagePlane->setColumns( columns );
-            imagePlane->setSpacing( spacing[0], spacing[2] );
-            imagePlane->setThickness( spacing[1] );
+            imagePlane->setSpacing( spacing[1], spacing[2] );
+            imagePlane->setThickness( spacing[0] );
             imagePlane->setRowDirectionVector( rowDirectionVector );
             imagePlane->setColumnDirectionVector( -zDirectionVector[0], -zDirectionVector[1], -zDirectionVector[2] );
         }
@@ -914,4 +920,4 @@ void ImagePlaneProjectionTool::releaseProjectedLine()
     m_2DViewer->setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
-}
+}  //  end namespace udg

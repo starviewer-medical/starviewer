@@ -126,7 +126,6 @@ void QMPR2DExtension::initializeTools()
     m_slicingToolButton->defaultAction()->trigger();
     m_moveToolButton->defaultAction()->trigger();
     m_windowLevelToolButton->defaultAction()->trigger();
-
     
     // Assignem al viewer m_axial2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a productor
     ToolConfiguration *imagePlaneProjectionToolViwerAxialConfig= new ToolConfiguration();
@@ -253,4 +252,4 @@ void QMPR2DExtension::writeSettings()
     settings.saveGeometry( MPR2DSettings::VerticalSplitterGeometry, m_verticalSplitter );
 }
 
-};  // end namespace udg
+};  //  end namespace udg

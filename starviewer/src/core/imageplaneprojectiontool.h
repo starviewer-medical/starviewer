@@ -1,3 +1,9 @@
+/***************************************************************************
+ *   Copyright (C) 2010 by Grup de Gràfics de Girona                       *
+ *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *                                                                         *
+ *   Universitat de Girona                                                 *
+ ***************************************************************************/
 #ifndef UDGIMAGEPLANEPROJECTIONTOOL_H
 #define UDGIMAGEPLANEPROJECTIONTOOL_H
 
@@ -141,6 +147,6 @@ private:
     /// Per controlar el moviment de la línia projectada a partir de l'interacció de l'usuari
     double m_initialPickX , m_initialPickY;
 };
-}
+}  // end namespace udg
 
 #endif
