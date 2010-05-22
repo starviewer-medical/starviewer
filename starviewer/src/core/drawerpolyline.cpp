@@ -349,4 +349,9 @@ bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
     return ( allPointsAreInside );
 }
 
+QList< double* > DrawerPolyline::getPointsList()
+{
+    return m_pointsList;
+}
+
 }

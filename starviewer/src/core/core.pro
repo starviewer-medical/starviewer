@@ -214,7 +214,8 @@ HEADERS += extensionfactory.h \
     dicomimagefilegenerator.h \
     imageplaneprojectiontooldata.h \
     imageorientationoperationsmapper.h \
-    copydirectory.h 
+    copydirectory.h \
+    linepathtool.h 
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -390,7 +391,8 @@ SOURCES += extensionmediator.cpp \
     dicomimagefilegenerator.cpp \
     imageplaneprojectiontooldata.cpp \
     imageorientationoperationsmapper.cpp \
-    copydirectory.cpp
+    copydirectory.cpp \
+    linepathtool.cpp 
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
