@@ -20,11 +20,7 @@ namespace udg {
 class Volume;
 class ToolManager;
 /**
-Extensió encarregada de fer l'MPR 2D
-
-@author Grup de Gràfics de Girona  ( GGG )
-
-\TODO Afegir l'interacció de l'usuari. Per rotar i traslladar els plans podem seguir com a model el que fan els mètodes vtkImagePlaneWidget::Spin() i vtkImagePlaneWidget::Translate()
+    Extensió encarregada de fer l'MPR 2D
 */
 class QMPR2DExtension : public QWidget , private Ui::QMPR2DExtensionBase {
 Q_OBJECT
