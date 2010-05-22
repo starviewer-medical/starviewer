@@ -33,6 +33,7 @@
 #include "nonclosedangletool.h"
 #include "clippingplanestool.h"
 #include "transdifferencetool.h"
+#include "linepathtool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -148,6 +149,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "TransDifferenceTool" )
     {
         tool = new TransDifferenceTool( viewer );
+    }
+    else if( toolName == "LinePathTool" )
+    {
+        tool = new LinePathTool( viewer );
     }
     else
     {
@@ -349,6 +354,11 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::TransDifferenceTool ) );
         statusTip = tr("Enable/Disable the translation difference tool");
         toolTip = toolAction->text();
+    }
+    else if( toolName == "LinePathTool" )
+    {
+        toolAction->setText( tr("Line Path") );
+        toolAction->setStatusTip( tr("Enable/Disable line path tool") );
     }
     else
     {

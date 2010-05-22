@@ -71,6 +71,9 @@ public:
     /// Mira si està dins dels límits que marquen els punts
     bool isInsideOfBounds( double p1[3], double p2[3], int view );
 
+    ///  Retorna la llista de punts de la polilínia
+    QList< double* > getPointsList();
+
 public slots:
     void update();
 
