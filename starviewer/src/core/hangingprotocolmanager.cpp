@@ -184,10 +184,7 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 
 void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient * patient )
 {
-    HangingProtocolImageSet *hangingProtocolImageSet;
-    Series *serie;
-    Q2DViewerWidget *viewerWidget;
-    PreviousStudiesManager * previousStudiesManager = new PreviousStudiesManager();
+    PreviousStudiesManager *previousStudiesManager = new PreviousStudiesManager();
 
     cancelHangingProtocolDowloading(); // Si hi havia algun estudi descarregant, es treu de la llista d'espera
 
@@ -198,9 +195,9 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
 
     foreach ( HangingProtocolDisplaySet *displaySet , hangingProtocol->getDisplaySets() )
     {
-        hangingProtocolImageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
-        serie = hangingProtocolImageSet->getSeriesToDisplay();
-        viewerWidget = layout->addViewer( displaySet->getPosition() );
+        HangingProtocolImageSet *hangingProtocolImageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
+        Series *serie = hangingProtocolImageSet->getSeriesToDisplay();
+        Q2DViewerWidget *viewerWidget = layout->addViewer( displaySet->getPosition() );
 
         if( hangingProtocolImageSet->isDownloaded() == false )
         {
