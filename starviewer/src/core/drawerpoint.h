@@ -32,7 +32,8 @@ public:
     void setPosition( double point[3] );
     void setPosition( QVector<double> point );
 
-    void setSphereRadius( double r) {m_sphereRadius=r;}
+    /// Li assignem el radi a la circumferència que defineix el punt
+    void setRadius( double radius );
 
     vtkProp *getAsVtkProp();
 
@@ -56,7 +57,9 @@ private:
 private:
     /// Posició del punt
     double m_position[3];
-    double m_sphereRadius;
+
+    /// Radi de la circumferència amb la que dibuixem el punt
+    double m_pointRadius;
 
     /// Actor que dibuixa la llavor
     vtkActor *m_pointActor;
