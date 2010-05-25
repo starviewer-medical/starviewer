@@ -101,10 +101,6 @@ void DistanceTool::annotateNewPoint()
         m_line->update();
 
         //Posem el text
-        int view = m_2DViewer->getView();
-        double *leftPoint = m_line->getLeftPoint( view );
-        leftPoint[ Q2DViewer::getXIndexForView( view ) ] -= 2.;
-
         DrawerText * text = new DrawerText;
         // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
         // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
@@ -152,6 +148,25 @@ void DistanceTool::annotateNewPoint()
 
             text->setText( tr("%1 mm").arg( distance, 0, 'f', 2 ) );
         }
+
+        // Coloquem el texte a prop del punt que quedi més a l'esquerra de la línia
+        int i;
+        int xIndex = Q2DViewer::getXIndexForView( m_2DViewer->getView() );
+        double leftPoint[3];
+        double *firstPoint = m_line->getFirstPoint();
+        double *secondPoint = m_line->getSecondPoint();
+
+        if ( firstPoint[xIndex] <= secondPoint[xIndex] )
+        {
+            for (i = 0; i < 3; i++)
+                leftPoint[i] = firstPoint[i]; 
+        }
+        else
+        {
+            for (i = 0; i < 3; i++)
+                leftPoint[i] = secondPoint[i]; 
+        }
+        leftPoint[xIndex] -= 2.;
         text->setAttachmentPoint( leftPoint );
         text->setHorizontalJustification( "Right" );
         text->shadowOn();

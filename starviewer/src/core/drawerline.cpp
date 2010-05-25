@@ -150,26 +150,6 @@ double *DrawerLine::getMiddlePoint()
     return middlePoint;
 }
 
-double *DrawerLine::getLeftPoint( int view )
-{
-    double * point = new double[3];
-    int i;
-    int xIndex = Q2DViewer::getXIndexForView(view);
-
-    if ( m_firstPoint[xIndex] <= m_secondPoint[xIndex] )
-    {
-        for (i = 0; i < 3; i++)
-            point[i] = m_firstPoint[i]; 
-    }
-    else
-    {
-        for (i = 0; i < 3; i++)
-            point[i] = m_secondPoint[i]; 
-    }
-
-    return point;
-}
-
 double DrawerLine::computeDistance( double * spacing )
 {
     double distance;
