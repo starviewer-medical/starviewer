@@ -24,8 +24,6 @@
 // Necessari per poder anar a buscar prèvies
 #include "../inputoutput/previousstudiesmanager.h"
 
-#include <QMovie>
-
 namespace udg {
 
 HangingProtocolManager::HangingProtocolManager(QObject *parent)
@@ -203,14 +201,10 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
 
         if( hangingProtocolImageSet->isDownloaded() == false )
         {
-            ///TODO
-            QWidget * downloadingWidget = createDownloadingWidget( layout );
-            layout->setDownloadingItem( viewerWidget, downloadingWidget );
+            viewerWidget->enableDownloadingState();
 
             StructPreviousStudyDownloading * structPreviousStudyDownloading = new StructPreviousStudyDownloading;
             structPreviousStudyDownloading->widgetToDisplay = viewerWidget;
-            structPreviousStudyDownloading->downloadingWidget = downloadingWidget;
-            structPreviousStudyDownloading->layout = layout;
             structPreviousStudyDownloading->imageSet = hangingProtocolImageSet;
             structPreviousStudyDownloading->hangingProtocol = hangingProtocol;
             structPreviousStudyDownloading->displaySet = displaySet;
@@ -622,10 +616,9 @@ void HangingProtocolManager::previousStudyDownloaded()
             Series * series = searchSerie( studySeries, structPreviousStudyDownloading->imageSet, false, structPreviousStudyDownloading->hangingProtocol);
             
             Q2DViewerWidget * viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
-            ViewersLayout * layout = structPreviousStudyDownloading->layout;
             structPreviousStudyDownloading->imageSet->setDownloaded( true );
 
-            layout->quitDownloadingItem( viewerWidget, structPreviousStudyDownloading->downloadingWidget );
+            viewerWidget->disableDownloadingState();
 
             // S'assigna la serie al visualitzador si es que n'ha trobat alguna
             if( series != 0)
@@ -671,7 +664,7 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(QString studyUID)
     if( m_studiesDownloading->contains( studyUID ) )//si és un element que estavem esperant
     {
         StructPreviousStudyDownloading* element = m_studiesDownloading->take( studyUID ); // s'agafa i es treu de la llista
-        element->layout->quitDownloadingItem( element->widgetToDisplay, element->downloadingWidget ); // es treu el label de downloading
+        element->widgetToDisplay->disableDownloadingState();
     }
 }
 
@@ -687,39 +680,12 @@ QList<Study*> HangingProtocolManager::sortStudiesByDate( const QList<Study*> & s
     return sortedStudiesByDate.values();
 }
 
-
-QWidget * HangingProtocolManager::createDownloadingWidget( ViewersLayout *layout )
-{
-    QWidget * downloadingWidget = new QWidget( layout );
-    downloadingWidget->setStyleSheet( "background-color: black; color: white;" );
-    QVBoxLayout * verticalLayout = new QVBoxLayout( downloadingWidget );
-
-    QFlags<Qt::AlignmentFlag> topFlag(Qt::AlignTop);
-    QFlags<Qt::AlignmentFlag> hCenterFlag(Qt::AlignHCenter);
-    QFlags<Qt::AlignmentFlag> bottomFlag(Qt::AlignBottom);
-
-    QLabel * downloadingLabelText = new QLabel( downloadingWidget );
-    downloadingLabelText->setText( tr("Downloading previous study..." ) );
-    downloadingLabelText->setAlignment( bottomFlag|hCenterFlag );
-    verticalLayout->addWidget(downloadingLabelText);
-    QMovie * downloadingMovie = new QMovie();
-    QLabel * downloadingLabelMovie  = new QLabel( downloadingWidget );
-    downloadingLabelMovie->setMovie(downloadingMovie);
-    downloadingMovie->setFileName(QString::fromUtf8(":/images/downloading.gif"));
-
-    downloadingLabelMovie->setAlignment( topFlag|hCenterFlag );
-    verticalLayout->addWidget(downloadingLabelMovie);
-    downloadingMovie->start();
-    
-    return downloadingWidget;
-}
-
 void HangingProtocolManager::cancelHangingProtocolDowloading()
 {
     foreach( QString key, m_studiesDownloading->keys() )
     {
         StructPreviousStudyDownloading* element = m_studiesDownloading->take( key ); // S'agafa i es treu de la llista l'element que s'està esperant
-        element->layout->quitDownloadingItem( element->widgetToDisplay, element->downloadingWidget ); // es treu el label de downloading
+        element->widgetToDisplay->disableDownloadingState(); // es treu el label de downloading
         delete element;
     }
 }

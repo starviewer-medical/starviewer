@@ -81,9 +81,6 @@ private:
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
     QList<Study*> sortStudiesByDate( const QList<Study*> & studies );
 
-    /// Crea el widget que posara al visor on s'estan descarregant estudis
-    QWidget * createDownloadingWidget( ViewersLayout *layout );
-
 private:
 
     /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi
@@ -91,8 +88,6 @@ private:
     struct StructPreviousStudyDownloading
     {
         Q2DViewerWidget *widgetToDisplay; /// Widget a on s'ha de mostrar la informacio
-        QWidget *downloadingWidget; /// Widget que es crea quan s'esta esperant
-        ViewersLayout * layout; /// Layout d'on hem de treure el downloadingWidget per posar-hi el widgetToDisplay
         HangingProtocolImageSet * imageSet; /// HangingProtocolImageSet que s'ha de satisfer, per escollir la serie descarregada que s'aplica
         HangingProtocol * hangingProtocol; /// HangingProtocol necessari per buscar la millor serie de les descarregades
         HangingProtocolDisplaySet * displaySet; /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
