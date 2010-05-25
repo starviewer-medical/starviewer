@@ -42,9 +42,6 @@ public:
     /// Retorna el segon punt de la línia
     double *getSecondPoint(){return m_secondPoint;};
 
-    /// Obté el punt mig de la linia
-    double *getMiddlePoint();
-
     /// Calcula la distancia entre punt i punt
     double computeDistance( double * spacing = NULL);
 

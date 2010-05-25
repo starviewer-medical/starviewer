@@ -62,9 +62,6 @@ public:
     /// Esborra tots els punts de la polilinia
     void deleteAllPoints();
 
-    /// Retorna els valors minims i maxims de les coordenades de la polilinia
-    double* getPolylineBounds();
-
     /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
 

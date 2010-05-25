@@ -139,17 +139,6 @@ void DrawerLine::updateVtkActorProperties()
     properties->SetColor( color.redF(), color.greenF(), color.blueF() );
 }
 
-double *DrawerLine::getMiddlePoint()
-{
-    double * middlePoint = new double[3];
-
-    middlePoint[0] = ( m_firstPoint[0] + m_secondPoint[0] ) / 2;
-    middlePoint[1] = ( m_firstPoint[1] + m_secondPoint[1] ) / 2;
-    middlePoint[2] = ( m_firstPoint[2] + m_secondPoint[2] ) / 2;
-
-    return middlePoint;
-}
-
 double DrawerLine::computeDistance( double * spacing )
 {
     double distance;
