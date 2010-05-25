@@ -43,6 +43,10 @@ public:
 
     void setInput( Volume *input );
 
+    /// Activa/Desactiva l'estat de descarrega.
+    void enableDownloadingState();
+    void disableDownloadingState();
+
 public slots:
     /// Habilita o deshabilita l'eina de sincronització en el visor, si aquest la té registrada
     /// Aquest mètode es podrà invocar al clicar sobré el botó de sincronització o bé cridant-lo directament
@@ -65,6 +69,9 @@ protected:
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
+
+    /// Crea el widget que es mostra quan s'ha activat l'estat de descarrega
+    void createDownloadingWidget();
 
 private slots:
     /// Aquest slot es cridarà quan es faci alguna acció sobre l'slider
@@ -97,6 +104,9 @@ private:
 
     /// Per fer estadístiques
     StatsWatcher *m_statsWatcher;
+
+    /// Widget utilitzat per mostrar que s'està descarregant la info que s'ha de mostrar
+    QWidget * m_downloadingWidget;
 };
 
 };

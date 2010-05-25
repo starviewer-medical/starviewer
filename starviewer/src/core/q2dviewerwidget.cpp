@@ -13,6 +13,7 @@
 
 #include <QAction>
 #include <QPalette>
+#include <QMovie>
 
 namespace udg {
 
@@ -30,6 +31,8 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_synchronizeButtonAction->setCheckable( true );
     m_synchronizeButton->setDefaultAction( m_synchronizeButtonAction );
     m_synchronizeButton->setEnabled( false );
+
+    m_downloadingWidget = 0;
 
     createConnections();
     m_viewText->setText( QString() );
@@ -183,6 +186,53 @@ void Q2DViewerWidget::resizeEvent ( QResizeEvent * event )
 {
     QFrame::resizeEvent( event );
     emit resized();
+}
+
+void Q2DViewerWidget::disableDownloadingState()
+{
+    if ( m_downloadingWidget )
+    {
+        m_downloadingWidget->setVisible( false );
+    }
+}
+
+void Q2DViewerWidget::enableDownloadingState()
+{
+    if ( !m_downloadingWidget )
+    {
+        createDownloadingWidget();
+    }
+
+    m_downloadingWidget->setVisible( false );
+
+    QRect size = this->geometry();
+    m_downloadingWidget->setGeometry( size.x(), size.y(), size.width(), size.height() );
+    m_downloadingWidget->setVisible( true );
+}
+
+void Q2DViewerWidget::createDownloadingWidget()
+{
+    m_downloadingWidget = new QWidget( this->parentWidget() );
+    m_downloadingWidget->setStyleSheet("background-color: black; color: white;");
+    QVBoxLayout *verticalLayout = new QVBoxLayout(m_downloadingWidget);
+
+    QFlags<Qt::AlignmentFlag> topFlag(Qt::AlignTop);
+    QFlags<Qt::AlignmentFlag> hCenterFlag(Qt::AlignHCenter);
+    QFlags<Qt::AlignmentFlag> bottomFlag(Qt::AlignBottom);
+
+    QLabel *downloadingLabelText = new QLabel( m_downloadingWidget );
+    downloadingLabelText->setText( tr("Downloading previous study...") );
+    downloadingLabelText->setAlignment( bottomFlag|hCenterFlag );
+    verticalLayout->addWidget(downloadingLabelText);
+    QMovie *downloadingMovie = new QMovie();
+    QLabel *downloadingLabelMovie = new QLabel(m_downloadingWidget);
+    downloadingLabelMovie->setMovie(downloadingMovie);
+    downloadingMovie->setFileName(QString::fromUtf8(":/images/downloading.gif"));
+
+    downloadingLabelMovie->setAlignment( topFlag|hCenterFlag );
+    verticalLayout->addWidget(downloadingLabelMovie);
+    downloadingMovie->start();
+
 }
 
 }

@@ -36,12 +36,6 @@ public:
     /// Obtenir el visualitzador numero "number".
     Q2DViewerWidget * getViewerWidget( int number );
 
-    /// Posa al lloc del widget un item que informa que s'esta descarregant
-    void setDownloadingItem( Q2DViewerWidget * widget, QWidget * downloadingWidget );
-
-    /// Treu el loading item i restaure el widget
-    void quitDownloadingItem( Q2DViewerWidget * widget, QWidget * downloading );
-
 public slots:
     ///Canviar el nombre de files i columnes
     void addColumns( int columns = 1 );
