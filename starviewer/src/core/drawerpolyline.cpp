@@ -107,11 +107,6 @@ vtkProp *DrawerPolyline::getAsVtkProp()
     return m_vtkActor;
 }
 
-double* DrawerPolyline::getPolylineBounds()
-{
-    return m_vtkPolydata->GetBounds();
-}
-
 void DrawerPolyline::update()
 {
     switch( m_internalRepresentation )
