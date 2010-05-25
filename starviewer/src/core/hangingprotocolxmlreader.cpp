@@ -166,7 +166,6 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
                     {
                         reader->readNext();
                         hangingProtocol->setPrevious( reader->text().toString().contains( "yes" ) );
-                        hangingProtocol->setHasStudiesToDownload( reader->text().toString().contains( "yes" ) );
                         reader->readNext();
                     }
                     else if( reader->name() == "priority" )

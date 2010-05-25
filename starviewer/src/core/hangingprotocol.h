@@ -111,12 +111,6 @@ public:
     /// retorna si el hanging protocol te previes o no
     bool isPrevious();
 
-    /// Posa si te estudis per descarregar
-    void setHasStudiesToDownload( bool hasStudiesToDownload );
-
-    /// Obté si el hanging protocol té estudis pendents de descarregar
-    bool hasStudiesToDownload();
-
     /// Assigna una prioritat al hanging protocol
     void setPriority( double priority );
 
@@ -174,9 +168,6 @@ private:
 
     /// Informa si es un hanging protocol amb previes o no
     bool m_hasPrevious;
-
-    /// Informa si conté estudis per descarregar
-    bool m_hasStudiesToDownload;
 
     /// Prioritat del hanging protocol (per defecte -1)
     double m_priority;
