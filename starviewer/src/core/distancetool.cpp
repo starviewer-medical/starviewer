@@ -85,7 +85,7 @@ void DistanceTool::annotateNewPoint()
     double clickedWorldPoint[3];
     m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
-    //afegim el punt
+    // Afegim el punt
     if( m_lineState == NoPointFixed )
     {
         m_line->setFirstPoint( clickedWorldPoint );
@@ -97,10 +97,9 @@ void DistanceTool::annotateNewPoint()
     else
     {
         m_line->setSecondPoint( clickedWorldPoint );
-
         m_line->update();
 
-        //Posem el text
+        // Posem el text
         DrawerText * text = new DrawerText;
         // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
         // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
