@@ -82,40 +82,21 @@ void EraserTool::startEraserAction()
 void EraserTool::drawAreaOfErasure()
 {
     double p2[3], p3[3];
+    int xIndex, yIndex, zIndex;
     
     m_2DViewer->getEventWorldCoordinate( m_endPoint );
+    Q2DViewer::getXYZIndexesForView( xIndex, yIndex, zIndex, m_2DViewer->getView() );
 
     // Calculem el segon punt i el tercer
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::AxialPlane:
-            p2[0] = m_endPoint[0];
-            p2[1] = m_startPoint[1];
-            p2[2] = m_2DViewer->getCurrentSlice();
+    p2[xIndex] = m_endPoint[xIndex];
+    p2[yIndex] = m_startPoint[yIndex];
+    p2[zIndex] = m_2DViewer->getCurrentSlice();
 
-            p3[0] = m_startPoint[0];
-            p3[1] = m_endPoint[1];
-            p3[2] = m_2DViewer->getCurrentSlice();
-            break;
-        case Q2DViewer::SagitalPlane:
-            p2[0] = m_2DViewer->getCurrentSlice();
-            p2[1] = m_startPoint[1];
-            p2[2] = m_endPoint[2];
+    p3[xIndex] = m_startPoint[xIndex];
+    p3[yIndex] = m_endPoint[yIndex];
+    p3[zIndex] = m_2DViewer->getCurrentSlice();
 
-            p3[0] = m_2DViewer->getCurrentSlice();
-            p3[1] = m_endPoint[1];
-            p3[2] = m_startPoint[2];
-            break;
-        case Q2DViewer::CoronalPlane:
-            p2[0] = m_startPoint[0];
-            p2[1] = m_2DViewer->getCurrentSlice();
-            p2[2] = m_endPoint[2];
-
-            p3[0] = m_endPoint[0];
-            p3[1] = m_2DViewer->getCurrentSlice();
-            p3[2] = m_startPoint[2];
-            break;
-    }
+    // Assignem els punts del polígon
     m_polygon->setVertix( 0, p2 );
     m_polygon->setVertix( 1, m_endPoint );
     m_polygon->setVertix( 2, p3 );

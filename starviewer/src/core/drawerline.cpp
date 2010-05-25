@@ -154,38 +154,19 @@ double *DrawerLine::getLeftPoint( int view )
 {
     double * point = new double[3];
     int i;
+    int xIndex = Q2DViewer::getXIndexForView(view);
 
-    switch( view )
+    if ( m_firstPoint[xIndex] <= m_secondPoint[xIndex] )
     {
-        case Q2DViewer::Axial:
-        case Q2DViewer::Coronal:
-            
-            if ( m_firstPoint[0] <= m_secondPoint[0] )
-            {
-                for (i = 0; i < 3; i++)
-                    point[i] = m_firstPoint[i]; 
-            }
-            else
-            {
-                for (i = 0; i < 3; i++)
-                    point[i] = m_secondPoint[i]; 
-            }
-            break;
-            
-        case Q2DViewer::Sagital:
-            if ( m_firstPoint[1] <= m_secondPoint[1] )
-            {
-                for (i = 0; i < 3; i++)
-                    point[i] = m_firstPoint[i]; 
-            }
-            else
-            {
-                for (i = 0; i < 3; i++)
-                    point[i] = m_secondPoint[i]; 
-            }
-            break;
+        for (i = 0; i < 3; i++)
+            point[i] = m_firstPoint[i]; 
     }
-    
+    else
+    {
+        for (i = 0; i < 3; i++)
+            point[i] = m_secondPoint[i]; 
+    }
+
     return point;
 }
 
@@ -223,83 +204,33 @@ bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
 {
     double minX, maxX, minY, maxY;
     bool inside;
+    int xIndex = Q2DViewer::getXIndexForView(view);
+    int yIndex = Q2DViewer::getYIndexForView(view);
 
-    // Determinem x i y màximes i mínimes segons la vista
-    switch( view )
+    if ( p1[xIndex] < p2[xIndex] )
     {
-        case Q2DViewer::AxialPlane:
-            if ( p1[0] < p2[0] )
-            {
-                minX = p1[0];
-                maxX = p2[0];
-            }
-            else
-            {
-                maxX = p1[0];
-                minX = p2[0];
-            }
-
-            if ( p1[1] < p2[1] )
-            {
-                minY = p1[1];
-                maxY = p2[1];
-            }
-            else
-            {
-                maxY = p1[1];
-                minY = p2[1];
-            }
-            inside = ( m_firstPoint[0] <= maxX && m_firstPoint[0] >= minX && m_firstPoint[1] <= maxY && m_firstPoint[1] >= minY && m_secondPoint[0] <= maxX && m_secondPoint[0] >= minX && m_secondPoint[1] <= maxY && m_secondPoint[1] >= minY );
-            break;
-        case Q2DViewer::SagitalPlane:
-            if ( p1[2] < p2[2] )
-            {
-                minX = p1[2];
-                maxX = p2[2];
-            }
-            else
-            {
-                maxX = p1[2];
-                minX = p2[2];
-            }
-
-            if ( p1[1] < p2[1] )
-            {
-                minY = p1[1];
-                maxY = p2[1];
-            }
-            else
-            {
-                maxY = p1[1];
-                minY = p2[1];
-            }
-            inside = ( m_firstPoint[2] <= maxX && m_firstPoint[2] >= minX && m_firstPoint[1] <= maxY && m_firstPoint[1] >= minY && m_secondPoint[2] <= maxX && m_secondPoint[2] >= minX && m_secondPoint[1] <= maxY && m_secondPoint[1] >= minY );
-            break;
-        case Q2DViewer::CoronalPlane:
-            if ( p1[0] < p2[0] )
-            {
-                minX = p1[0];
-                maxX = p2[0];
-            }
-            else
-            {
-                maxX = p1[0];
-                minX = p2[0];
-            }
-
-            if ( p1[2] < p2[2] )
-            {
-                minY = p1[2];
-                maxY = p2[2];
-            }
-            else
-            {
-                maxY = p1[2];
-                minY = p2[2];
-            }
-            inside = ( m_firstPoint[0] <= maxX && m_firstPoint[0] >= minX && m_firstPoint[2] <= maxY && m_firstPoint[2] >= minY && m_secondPoint[0] <= maxX && m_secondPoint[0] >= minX && m_secondPoint[2] <= maxY && m_secondPoint[2] >= minY );
-            break;
+        minX = p1[xIndex];
+        maxX = p2[xIndex];
     }
+    else
+    {
+        maxX = p1[xIndex];
+        minX = p2[xIndex];
+    }
+
+    if ( p1[yIndex] < p2[yIndex] )
+    {
+        minY = p1[yIndex];
+        maxY = p2[yIndex];
+    }
+    else
+    {
+        maxY = p1[yIndex];
+        minY = p2[yIndex];
+    }
+
+    inside = ( m_firstPoint[xIndex] <= maxX && m_firstPoint[xIndex] >= minX && m_firstPoint[yIndex] <= maxY && m_firstPoint[yIndex] >= minY && m_secondPoint[xIndex] <= maxX && m_secondPoint[xIndex] >= minX && m_secondPoint[yIndex] <= maxY && m_secondPoint[yIndex] >= minY );
+
     return ( inside );
 }
 }

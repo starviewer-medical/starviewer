@@ -169,7 +169,7 @@ void AngleTool::fixFirstSegment()
 void AngleTool::drawCircle()
 {
     double degreesIncrease, *newPoint, radius;
-    int initialAngle, finalAngle, depthCoord;
+    int initialAngle, finalAngle;
 
     double *firstPoint = m_mainPolyline->getPoint(0);
     double *circleCentre = m_mainPolyline->getPoint(1);
@@ -186,29 +186,16 @@ void AngleTool::drawCircle()
     double distance2 = MathTools::getDistance3D( circleCentre, lastPoint );
     radius = MathTools::minimum( distance1, distance2 ) / 4.0;
 
-    int view = m_2DViewer->getView();
-    switch( view )
-    {
-        case QViewer::AxialPlane:
-            depthCoord = 2;
-            break;
-
-        case QViewer::SagitalPlane:
-            depthCoord = 0;
-            break;
-
-        case QViewer::CoronalPlane:
-            depthCoord = 1;
-            break;
-    }
-
     // Calculem el rang de les iteracions per pintar l'angle correctament
     initialAngle = 360 - m_initialDegreeArc;
     finalAngle = int(360 - ( m_currentAngle+m_initialDegreeArc ) );
-    
+
     double pv[3];
     MathTools::crossProduct(firstSegment, secondSegment, pv);
-    if ( pv[depthCoord] > 0 )
+
+    int view = m_2DViewer->getView();
+    int zIndex = Q2DViewer::getZIndexForView(view);
+    if ( pv[zIndex] > 0 )
     {
         finalAngle = int(m_currentAngle-m_initialDegreeArc);
     }
@@ -225,6 +212,15 @@ void AngleTool::drawCircle()
         degreesIncrease = i*1.0*MathTools::DegreesToRadiansAsDouble;
         newPoint = new double[3];
 
+        /*
+            TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així, 
+            no se'ns dibuixa l'arc de circumferència que ens esperem sobre la vista coronal.
+            Potser és degut a com obtenim els punts o per una altra causa. Caldria mirar-ho 
+            per així evitar la consciència del pla en el que ens trobem
+            newPoint[xIndex] = cos( degreesIncrease )*radius + circleCentre[xIndex];
+            newPoint[yIndex] = sin( degreesIncrease )*radius + circleCentre[yIndex];
+            newPoint[zIndex] = 0.0;
+        */
         switch( view )
         {
             case QViewer::AxialPlane:
@@ -301,25 +297,10 @@ void AngleTool::placeText( DrawerText *angleText )
     double *p2 = m_mainPolyline->getPoint(1);
     double *p3 = m_mainPolyline->getPoint(2);
     double position[3];
-    int i, horizontalCoord, verticalCoord;
-
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::Axial:
-            horizontalCoord = 0;
-            verticalCoord = 1;
-            break;
-
-        case Q2DViewer::Sagital:
-            horizontalCoord = 1;
-            verticalCoord = 2;
-            break;
-
-        case Q2DViewer::Coronal:
-            horizontalCoord = 0;
-            verticalCoord = 2;
-            break;
-    }
+    int i;
+    int view = m_2DViewer->getView();
+    int horizontalCoord = Q2DViewer::getXIndexForView(view);
+    int verticalCoord = Q2DViewer::getYIndexForView(view);
 
     // Mirem on estan horitzontalment els punts p1 i p3 respecte del p2
     if ( p1[0] <= p2[0] )

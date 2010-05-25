@@ -158,26 +158,11 @@ Volume::VoxelType ROITool::getGrayValue( double *coords )
     double *spacing = m_2DViewer->getInput()->getSpacing();
     int index[3];
 
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::Axial:
-            index[0] = (int)((coords[0] - origin[0])/spacing[0]);
-            index[1] = (int)((coords[1] - origin[1])/spacing[1]);
-            index[2] = m_2DViewer->getCurrentSlice();
-            break;
-
-        case Q2DViewer::Sagital:
-            index[0] = m_2DViewer->getCurrentSlice();
-            index[1] = (int)((coords[1] - origin[1])/spacing[1]);
-            index[2] = (int)((coords[2] - origin[2])/spacing[2]);
-            break;
-
-        case Q2DViewer::Coronal:
-            index[0] = (int)((coords[0] - origin[0])/spacing[0]);
-            index[1] = m_2DViewer->getCurrentSlice();
-            index[2] = (int)((coords[2] - origin[2])/spacing[2]);
-            break;
-    }
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView( xIndex, yIndex, zIndex, m_2DViewer->getView() );
+    index[xIndex] = (int)((coords[xIndex] - origin[xIndex])/spacing[xIndex]);
+    index[yIndex] = (int)((coords[yIndex] - origin[yIndex])/spacing[yIndex]);
+    index[zIndex] = m_2DViewer->getCurrentSlice();
 
     if ( m_2DViewer->isThickSlabActive() )
         return *((Volume::VoxelType *)m_2DViewer->getCurrentSlabProjection()->GetScalarPointer(index));

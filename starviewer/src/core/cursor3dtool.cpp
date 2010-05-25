@@ -140,29 +140,18 @@ void Cursor3DTool::updatePosition()
             int slice = m_2DViewer->getCurrentSlice();
             double *spacing = m_2DViewer->getInput()->getSpacing();
             double *origin = m_2DViewer->getInput()->getOrigin();
+            int zIndex = Q2DViewer::getZIndexForView( m_2DViewer->getView() );
 
-            int numberOfVolumeImages = m_2DViewer->getInput()->getImages().count();
+            xyz[zIndex] = origin[zIndex] + (slice * spacing[zIndex]);
             switch( m_2DViewer->getView() )
             {
                 case Q2DViewer::Axial:
-
-                    xyz[2] = origin[2] + (slice * spacing[2]);
                     currentPlane = m_2DViewer->getCurrentImagePlane();
                     break;
 
                 case Q2DViewer::Sagital:
-                    xyz[0] = origin[0] + (slice * spacing[0]);
-                    if( index[2] < numberOfVolumeImages )
-                    {
-                        image = m_2DViewer->getInput()->getImage(index[2]); //La llesca sempre és l'index[2] del DICOM
-                        currentPlane = new ImagePlane();
-                        currentPlane->fillFromImage( image);
-                    }
-                    break;
-
                 case Q2DViewer::Coronal:
-                    xyz[1] = origin[1] + (slice * spacing[1]);
-                    if( index[2] < numberOfVolumeImages )
+                    if( index[2] < m_2DViewer->getInput()->getImages().count() )
                     {
                         image = m_2DViewer->getInput()->getImage(index[2]); //La llesca sempre és l'index[2] del DICOM
                         currentPlane = new ImagePlane();
