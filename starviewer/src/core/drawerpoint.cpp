@@ -16,7 +16,7 @@
 namespace udg {
 
 DrawerPoint::DrawerPoint(QObject *parent) 
-: DrawerPrimitive(parent), m_sphereRadius(2.0), m_pointActor(NULL)
+: DrawerPrimitive(parent), m_pointRadius(2.0), m_pointActor(NULL)
 {
 }
 
@@ -40,6 +40,11 @@ void DrawerPoint::setPosition( QVector<double> point )
     m_position[2]=point[2];
 
     emit changed();
+}
+
+void DrawerPoint::setRadius( double radius )
+{
+    m_pointRadius = radius;
 }
 
 vtkProp *DrawerPoint::getAsVtkProp()
@@ -98,7 +103,7 @@ void DrawerPoint::updateVtkActorProperties()
     //m_pointMapper->SetTransformCoordinate( this->getVtkCoordinateObject() );
 
     // Assignem gruix de l'esfera
-    m_pointSphere->SetRadius( m_sphereRadius );
+    m_pointSphere->SetRadius( m_pointRadius );
 
     // Assignem opacitat al punt
     properties->SetOpacity( m_opacity );
