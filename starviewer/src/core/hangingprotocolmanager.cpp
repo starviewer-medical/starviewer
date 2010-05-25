@@ -652,9 +652,6 @@ void HangingProtocolManager::previousStudyDownloaded()
             }
 
             m_studiesDownloading->remove( study->getInstanceUID() );
-
-            if( m_studiesDownloading->empty() )
-                structPreviousStudyDownloading->hangingProtocol->setHasStudiesToDownload( false );
         }
     }
 }

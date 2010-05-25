@@ -22,7 +22,6 @@ HangingProtocol::HangingProtocol(QObject *parent)
     m_strictness = false;
     m_allDiferent = false;
     m_hasPrevious = false;
-    m_hasStudiesToDownload = false;
     m_priority = -1;
 }
 
@@ -254,16 +253,6 @@ void HangingProtocol::setPrevious( bool isPrevious )
 bool HangingProtocol::isPrevious()
 {
     return m_hasPrevious;
-}
-
-void HangingProtocol::setHasStudiesToDownload( bool hasStudiesToDownload )
-{
-    m_hasStudiesToDownload = hasStudiesToDownload;
-}
-
-bool HangingProtocol::hasStudiesToDownload()
-{
-    return m_hasStudiesToDownload;
 }
 
 void HangingProtocol::setPriority( double priority )
