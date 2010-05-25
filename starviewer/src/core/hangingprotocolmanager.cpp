@@ -33,12 +33,16 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 {
     m_studiesDownloading = new QMultiHash<QString, StructPreviousStudyDownloading*>();
     m_patient = 0;
+    m_previousStudiesManager = new PreviousStudiesManager();
+
+    connect(m_previousStudiesManager, SIGNAL( errorDownloadingPreviousStudy(QString) ), SLOT( errorDowlonadingPreviousStudies(QString) ) );
 }
 
 HangingProtocolManager::~HangingProtocolManager()
 {
     cancelHangingProtocolDowloading();
     delete m_studiesDownloading;
+    delete m_previousStudiesManager;
 }
 
 QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient)
@@ -184,8 +188,6 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 
 void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient * patient )
 {
-    PreviousStudiesManager *previousStudiesManager = new PreviousStudiesManager();
-
     cancelHangingProtocolDowloading(); // Si hi havia algun estudi descarregant, es treu de la llista d'espera
 
     // TODO aixo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
@@ -219,10 +221,9 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
             m_patient = patient;
 
             connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );
-            connect( previousStudiesManager, SIGNAL(errorDownloadingPreviousStudy(QString)), SLOT( errorDowlonadingPreviousStudies(QString) ) );
 
             if( !isDownloading )
-                previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
+                m_previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
         }
         else
         {
