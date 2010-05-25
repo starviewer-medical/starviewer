@@ -379,6 +379,73 @@ QString Q2DViewer::getCurrentPlaneProjectionLabel() const
     return Image::getProjectionLabelFromPlaneOrientation( labels[0]+"\\"+labels[1] );
 }
 
+void Q2DViewer::getXYZIndexesForView( int &x, int &y, int &z, int view )
+{
+    x = Q2DViewer::getXIndexForView(view);
+    y = Q2DViewer::getYIndexForView(view);
+    z = Q2DViewer::getZIndexForView(view);
+}
+
+int Q2DViewer::getXIndexForView( int view )
+{
+    int x;
+    switch( view )
+    {
+        case Q2DViewer::Axial:
+            x = 0;
+            break;
+
+        case Q2DViewer::Sagital:
+            x = 1;
+            break;
+
+        case Q2DViewer::Coronal:
+            x = 0;
+            break;
+    }
+    return x;
+}
+
+int Q2DViewer::getYIndexForView( int view )
+{
+    int y;
+    switch( view )
+    {
+        case Q2DViewer::Axial:
+            y = 1;
+            break;
+
+        case Q2DViewer::Sagital:
+            y = 2;
+            break;
+
+        case Q2DViewer::Coronal:
+            y = 2;
+            break;
+    }
+    return y;
+}
+
+int Q2DViewer::getZIndexForView( int view )
+{
+    int z;
+    switch( view )
+    {
+        case Q2DViewer::Axial:
+            z = 2;
+            break;
+
+        case Q2DViewer::Sagital:
+            z = 0;
+            break;
+
+        case Q2DViewer::Coronal:
+            z = 1;
+            break;
+    }
+    return z;
+}
+
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
     // obtenim els labels que estem veient en aquest moment

@@ -267,102 +267,38 @@ bool DrawerPolygon::isPointIncludedInLineBounds( double point[3], double *lineP1
 bool DrawerPolygon::isInsideOfBounds( double p1[3], double p2[3], int view )
 {
     double minX, maxX, minY, maxY;
-
     int numberOfPoints = m_pointsList.count();
     bool allPointsAreInside = true;
+    int xIndex = Q2DViewer::getXIndexForView(view);
+    int yIndex = Q2DViewer::getYIndexForView(view);
 
-    // Determinem x i y màximes i mínimes segons la vista
-    switch( view )
+    if ( p1[xIndex] < p2[xIndex] )
     {
-        case Q2DViewer::AxialPlane:
-            if ( p1[0] < p2[0] )
-            {
-                minX = p1[0];
-                maxX = p2[0];
-            }
-            else
-            {
-                maxX = p1[0];
-                minX = p2[0];
-            }
+        minX = p1[xIndex];
+        maxX = p2[xIndex];
+    }
+    else
+    {
+        maxX = p1[xIndex];
+        minX = p2[xIndex];
+    }
 
-            if ( p1[1] < p2[1] )
-            {
-                minY = p1[1];
-                maxY = p2[1];
-            }
-            else
-            {
-                maxY = p1[1];
-                minY = p2[1];
-            }
+    if ( p1[yIndex] < p2[yIndex] )
+    {
+        minY = p1[yIndex];
+        maxY = p2[yIndex];
+    }
+    else
+    {
+        maxY = p1[yIndex];
+        minY = p2[yIndex];
+    }
 
-            for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
-            {
-                QVector<double> currentPoint = m_pointsList.at( i );
-                if ( currentPoint[0] >= maxX || currentPoint[0] <= minX || currentPoint[1] >= maxY || currentPoint[1] <= minY )
-                    allPointsAreInside = false;
-            }
-            break;
-        case Q2DViewer::SagitalPlane:
-            if ( p1[2] < p2[2] )
-            {
-                minX = p1[2];
-                maxX = p2[2];
-            }
-            else
-            {
-                maxX = p1[2];
-                minX = p2[2];
-            }
-
-            if ( p1[1] < p2[1] )
-            {
-                minY = p1[1];
-                maxY = p2[1];
-            }
-            else
-            {
-                maxY = p1[1];
-                minY = p2[1];
-            }
-
-            for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
-            {
-                QVector<double> currentPoint = m_pointsList.at( i );
-                if ( currentPoint[2] >= maxX || currentPoint[2] <= minX || currentPoint[1] >= maxY || currentPoint[1] <= minY )
-                    allPointsAreInside = false;
-            }
-            break;
-        case Q2DViewer::CoronalPlane:
-            if ( p1[0] < p2[0] )
-            {
-                minX = p1[0];
-                maxX = p2[0];
-            }
-            else
-            {
-                maxX = p1[0];
-                minX = p2[0];
-            }
-
-            if ( p1[2] < p2[2] )
-            {
-                minY = p1[2];
-                maxY = p2[2];
-            }
-            else
-            {
-                maxY = p1[2];
-                minY = p2[2];
-            }
-            for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
-            {
-                QVector<double> currentPoint = m_pointsList.at( i );
-                if ( currentPoint[0] >= maxX || currentPoint[0] <= minX || currentPoint[2] >= maxY || currentPoint[2] <= minY )
-                    allPointsAreInside = false;
-            }
-            break;
+    for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
+    {
+        QVector<double> currentPoint = m_pointsList.at( i );
+        if ( currentPoint[xIndex] >= maxX || currentPoint[xIndex] <= minX || currentPoint[yIndex] >= maxY || currentPoint[yIndex] <= minY )
+            allPointsAreInside = false;
     }
 
     return ( allPointsAreInside );
@@ -384,26 +320,8 @@ double DrawerPolygon::computeArea( int view, double *spacing )
     // Mètode extret de http://alienryderflex.com/polygon_area/
     
     // Obtenim els índexs x,y depenent de la vista en que estan projectats els punts
-    // TODO Eliminar aquesta dependència amb la vista del 2D Viewer
-    int xIndex, yIndex;
-    switch( view )
-    {
-        case Q2DViewer::Axial:
-            xIndex = 0;
-            yIndex = 1;
-            break;
-
-        case Q2DViewer::Sagital:
-            xIndex = 2;
-            yIndex = 1;
-            break;
-
-        case Q2DViewer::Coronal:
-            xIndex = 0;
-            yIndex = 2;
-            break;
-    }
-
+    int xIndex = Q2DViewer::getXIndexForView(view);
+    int yIndex = Q2DViewer::getYIndexForView(view);
     // Realitzem el càlcul de l'àrea
     double area = 0.0;
     int j = 0;

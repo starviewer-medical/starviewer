@@ -329,28 +329,13 @@ QVector<double> PolylineTemporalROITool::getGraySerie( double *coords, int size 
     double *origin = m_2DViewer->getInput()->getOrigin();
     double *spacing = m_2DViewer->getInput()->getSpacing();
     itk::Index<4> index;
+    int xIndex, yIndex, zIndex;
 	int i;
 
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::Axial:
-            index[1] = (int)((coords[0] - origin[0])/spacing[0]);
-            index[2] = (int)((coords[1] - origin[1])/spacing[1]);
-            index[3] = m_2DViewer->getCurrentSlice();
-            break;
-
-        case Q2DViewer::Sagital:
-            index[1] = m_2DViewer->getCurrentSlice();
-            index[2] = (int)((coords[1] - origin[1])/spacing[1]);
-            index[3] = (int)((coords[2] - origin[2])/spacing[2]);
-            break;
-
-        case Q2DViewer::Coronal:
-            index[1] = (int)((coords[0] - origin[0])/spacing[0]);
-            index[2] = m_2DViewer->getCurrentSlice();
-            index[3] = (int)((coords[2] - origin[2])/spacing[2]);
-            break;
-    }
+    Q2DViewer::getXYZIndexesForView( xIndex, yIndex, zIndex, m_2DViewer->getView() );
+    index[xIndex+1] = (int)((coords[xIndex] - origin[xIndex])/spacing[xIndex]);
+    index[yIndex+1] = (int)((coords[yIndex] - origin[yIndex])/spacing[yIndex]);
+    index[zIndex+1] = m_2DViewer->getCurrentSlice();
 
 	for(i=0;i<size;i++)
 	{

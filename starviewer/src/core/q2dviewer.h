@@ -223,6 +223,14 @@ public:
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
     QString getCurrentPlaneProjectionLabel() const;
 
+    /// Obté els índexs dels eixos de coordenades corresponents a la vista 2D indicada
+    /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir 
+    /// la corresponent projecció sobre la vista 2D sobre la que estem operant
+    static void getXYZIndexesForView( int &x, int &y, int &z, int view );
+    static int getXIndexForView( int view );
+    static int getYIndexForView( int view );
+    static int getZIndexForView( int view );
+
     /// Retorna el filtre de mapeig de window level.
     /// TODO El fan servir les extensions que necessiten aplicar una escala de colors
     /// sobre la imatge. Caldria pensar en un mètode de poder aplicar color sense exposar

@@ -101,22 +101,9 @@ void DistanceTool::annotateNewPoint()
         m_line->update();
 
         //Posem el text
-        double *leftPoint = m_line->getLeftPoint( m_2DViewer->getView() );
-
-        switch( m_2DViewer->getView() )
-        {
-            case Q2DViewer::Axial:
-                leftPoint[0] -= 2.;
-                break;
-
-            case Q2DViewer::Sagital:
-                leftPoint[1] -= 2.;
-                break;
-
-            case Q2DViewer::Coronal:
-                leftPoint[0] -= 2.;
-                break;
-        }
+        int view = m_2DViewer->getView();
+        double *leftPoint = m_line->getLeftPoint( view );
+        leftPoint[ Q2DViewer::getXIndexForView( view ) ] -= 2.;
 
         DrawerText * text = new DrawerText;
         // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm

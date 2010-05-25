@@ -255,27 +255,7 @@ void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angle
     double position[3];
     int horizontalCoord, verticalCoord, zCoordinate;
 
-    switch( m_2DViewer->getView() )
-    {
-        case Q2DViewer::Axial:
-            horizontalCoord = 0;
-            verticalCoord = 1;
-            zCoordinate = 2;
-            break;
-
-        case Q2DViewer::Sagital:
-            horizontalCoord = 1;
-            verticalCoord = 2;
-            zCoordinate = 0;
-            break;
-
-        case Q2DViewer::Coronal:
-            horizontalCoord = 0;
-            verticalCoord = 2;
-            zCoordinate = 1;
-            break;
-    }
-
+    Q2DViewer::getXYZIndexesForView( horizontalCoord, verticalCoord, zCoordinate, m_2DViewer->getView() );
     position[horizontalCoord] = ( p1[horizontalCoord] + p2[horizontalCoord] ) / 2.0;
     position[verticalCoord] = ( p1[verticalCoord] + p2[verticalCoord] ) / 2.0;
     position[zCoordinate] = p1[zCoordinate];
