@@ -24,6 +24,7 @@ class Study;
 class Image;
 class Q2DViewerWidget;
 class Q2DViewer;
+class PreviousStudiesManager;
 
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -100,6 +101,9 @@ private:
     QMultiHash<QString, StructPreviousStudyDownloading*> * m_studiesDownloading;
 
     Patient * m_patient;
+
+    /// Objecte utilitzat per descarregar estudis previs. No es fa servir QueryScreen per problemes de dependències entre carpetes.
+    PreviousStudiesManager *m_previousStudiesManager;
 };
 
 }
