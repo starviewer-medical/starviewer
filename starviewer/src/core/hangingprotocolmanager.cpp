@@ -524,16 +524,15 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
 
 Study * HangingProtocolManager::searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, const QList<Study*> &previousStudies)
 {
-    Study * previousStudy = 0;
+    Study *previousStudy = 0;
     bool found = false;
     int studyNumber = 0;
-    Study * study;
 
     QList<Study*> sortedPreviousStudies = sortStudiesByDate( previousStudies );
 
     while ( !found && (studyNumber < sortedPreviousStudies.size()) )
     {
-        study = sortedPreviousStudies.at( studyNumber );
+        Study *study = sortedPreviousStudies.at( studyNumber );
 
         if( study->getDate() < referenceStudy->getDate() )
         {
