@@ -48,7 +48,7 @@ public:
     void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
 
     /// Buscar els estudis previs
-    Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, QList<Study*> previousStudies);
+    Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, const QList<Study*> &previousStudies);
 
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
     void cancelHangingProtocolDowloading();
