@@ -47,9 +47,6 @@ public:
     /// Aplica el millor hanging protocol de la llista donada
     void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
 
-    /// Buscar els estudis previs
-    Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, const QList<Study*> &previousStudies);
-
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
     void cancelHangingProtocolDowloading();
 
@@ -83,6 +80,9 @@ private:
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
     void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolImageSet *imageSet, HangingProtocolDisplaySet *displaySet);
+
+    /// Buscar els estudis previs
+    Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, const QList<Study*> &previousStudies);
 
 private:
 
