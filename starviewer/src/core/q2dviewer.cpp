@@ -1076,7 +1076,20 @@ void Q2DViewer::resizeEvent( QResizeEvent *resize )
     Q_UNUSED(resize);
     if( m_mainVolume )
     {
-        fitImageIntoViewport();
+        switch( m_alignPosition )
+        {
+        case AlignRight:
+            alignRight();
+            break;
+
+        case AlignLeft:
+            alignLeft();
+            break;
+        
+        case AlignCenter:
+            fitImageIntoViewport();
+            break;
+        }
     }
 }
 

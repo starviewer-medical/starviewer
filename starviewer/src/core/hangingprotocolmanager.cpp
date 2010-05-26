@@ -423,27 +423,16 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
         viewer->getViewer()->setSlice( sliceNumber );
     }
 
-    disconnect( viewer, SIGNAL( resized() ), viewer->getViewer(), SLOT( alignRight() ) );
-    disconnect( viewer, SIGNAL( resized() ), viewer->getViewer(), SLOT( alignLeft() ) );
-
     QString alignment = displaySet->getAlignment();
     if( !alignment.isEmpty() )
     {
         if( alignment == "right" )
-        {
             viewer->getViewer()->alignRight();
-            connect( viewer, SIGNAL( resized() ), viewer->getViewer(), SLOT( alignRight() ) );
-        }
         else if (alignment == "left" )
-        {
             viewer->getViewer()->alignLeft();
-            connect( viewer, SIGNAL( resized() ), viewer->getViewer(), SLOT( alignLeft() ) );
-        }
     }
     else
-    {
         viewer->getViewer()->setAlignPosition( Q2DViewer::AlignCenter );
-    }
 
     viewer->getViewer()->enableRendering( true );
     viewer->getViewer()->render();
