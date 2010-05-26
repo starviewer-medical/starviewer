@@ -182,12 +182,6 @@ void Q2DViewerWidget::resetSliderRangeAndValue()
     m_slider->setValue( m_2DView->getCurrentSlice() );
 }
 
-void Q2DViewerWidget::resizeEvent ( QResizeEvent * event )
-{
-    QFrame::resizeEvent( event );
-    emit resized();
-}
-
 void Q2DViewerWidget::disableDownloadingState()
 {
     if ( m_downloadingWidget )
