@@ -597,20 +597,20 @@ Study * HangingProtocolManager::searchPreviousStudy( HangingProtocol * protocol 
 
 void HangingProtocolManager::previousStudyDownloaded()
 {
+    if ( m_studiesDownloading->isEmpty() )
+    {
+        return;
+    }
+
     // Es busca quins estudis nous hi ha
     foreach( Study * study, m_patient->getStudies() )
     {
-        if( m_studiesDownloading->empty() )
-            return;
-
-        QList<StructPreviousStudyDownloading*> values = m_studiesDownloading->values( study->getInstanceUID() );
-
-        for (int i = 0; i < values.size(); i++)
+        for (int i = 0; i < m_studiesDownloading->count( study->getInstanceUID() ) ; i++)
         { // Per cada estudi que esperàvem que es descarregués
 
             // Agafem l'estructura amb les dades que s'havien guardat per poder aplicar-ho
-            StructPreviousStudyDownloading * structPreviousStudyDownloading = values.at(i);
-            
+            StructPreviousStudyDownloading * structPreviousStudyDownloading = m_studiesDownloading->take( study->getInstanceUID() );
+
             /// Busquem la millor serie de l'estudi que ho satisfa
             QList<Series *> studySeries = study->getSeries();
             Series * series = searchSerie( studySeries, structPreviousStudyDownloading->imageSet, false, structPreviousStudyDownloading->hangingProtocol);
@@ -651,7 +651,7 @@ void HangingProtocolManager::previousStudyDownloaded()
                 }
             }
 
-            m_studiesDownloading->remove( study->getInstanceUID() );
+            delete structPreviousStudyDownloading;
         }
     }
 }
