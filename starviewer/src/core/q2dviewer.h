@@ -157,6 +157,7 @@ public:
     void projectDICOMPointToCurrentDisplayedImage( const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false );
 
     /// Retorna el thickness
+    /// TODO potser un nom més correcte seria getCurrentSliceThickness() ja que podríem tenir imatges amb diferents thickness
     double getThickness();
 
     /**
