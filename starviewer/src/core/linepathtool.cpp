@@ -77,7 +77,6 @@ void LinePathTool::handlePointAddition()
         {
         case 0: // Single-click o primer click d'un doble click. Afegim un nou punt al path
             annotateNewPoint();
-            m_2DViewer->getDrawer()->refresh();
             break;
 
         case 1: // Doble-click, si tenim com a mínim dos punts llavors donem per finalitzat el path indicat
@@ -109,7 +108,10 @@ void LinePathTool::annotateNewPoint()
     if( firstPoint ) // L'afegim a l'escena
         m_2DViewer->getDrawer()->draw( m_polyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
     else // Actualitzem l'estructura interna
+    {
         m_polyline->update();
+        m_2DViewer->render();
+    }
 }
 
 void LinePathTool::closeForm()
