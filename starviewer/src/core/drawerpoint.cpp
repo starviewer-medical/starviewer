@@ -100,6 +100,8 @@ void DrawerPoint::updateVtkActorProperties()
     vtkProperty *properties = m_pointActor->GetProperty();
 
     // Sistema de coordenades
+    // TODO És un mapper 3D i per això no disposa d'aquest mètode Caldria veure si això pot suposar algun
+    // problema amb la gestió dels sistemes de coordenades
     //m_pointMapper->SetTransformCoordinate( this->getVtkCoordinateObject() );
 
     // Assignem gruix de l'esfera
