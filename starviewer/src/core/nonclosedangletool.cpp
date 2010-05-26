@@ -58,43 +58,39 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
-
-            if( m_2DViewer->getInput() )
-            {
-                if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
-                {
-                    this->annotateLinePoints();
-
-                    if ( m_state == SecondLineFixed )
-                    {
-                        computeAngle();
-                        // Així alliberem les primitives perquè puguin ser esborrades
-                        m_firstLine->decreaseReferenceCount();
-                        m_secondLine->decreaseReferenceCount();
-                        m_middleLine->decreaseReferenceCount();
-                        // Acabem les línies
-                        m_firstLine = NULL;
-                        m_secondLine = NULL;
-                        m_middleLine = NULL;
-
-                        // Restaurem m_state
-                        m_state = None;
-                    }
-
-                }
-            }
+            handlePointAddition();
         break;
 
         case vtkCommand::MouseMoveEvent:
-
-            if( m_firstLine && m_state == None )
-                this->simulateLine(m_firstLine);
-            else if ( m_secondLine && m_state == FirstLineFixed )
-                this->simulateLine(m_secondLine);
-
-            m_2DViewer->render();
-
+            handleLineDrawing();
         break;
+    }
+}
+
+void NonClosedAngleTool::handlePointAddition()
+{
+    if( m_2DViewer->getInput() )
+    {
+        if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
+        {
+            this->annotateLinePoints();
+
+            if ( m_state == SecondLineFixed )
+            {
+                computeAngle();
+                // Així alliberem les primitives perquè puguin ser esborrades
+                m_firstLine->decreaseReferenceCount();
+                m_secondLine->decreaseReferenceCount();
+                m_middleLine->decreaseReferenceCount();
+                // Acabem les línies
+                m_firstLine = NULL;
+                m_secondLine = NULL;
+                m_middleLine = NULL;
+
+                // Restaurem m_state
+                m_state = None;
+            }
+        }
     }
 }
 
@@ -146,6 +142,14 @@ void NonClosedAngleTool::annotateLinePoints()
     }
 }
 
+void NonClosedAngleTool::handleLineDrawing()
+{
+    if( m_firstLine && m_state == None )
+        this->simulateLine(m_firstLine);
+    else if ( m_secondLine && m_state == FirstLineFixed )
+        this->simulateLine(m_secondLine);
+}
+
 void NonClosedAngleTool::simulateLine(DrawerLine *line)
 {
     double clickedWorldPoint[3];
@@ -153,6 +157,7 @@ void NonClosedAngleTool::simulateLine(DrawerLine *line)
     line->setSecondPoint( clickedWorldPoint );
     // Actualitzem viewer
     line->update();
+    m_2DViewer->render();
 }
 
 void NonClosedAngleTool::computeAngle()

@@ -39,6 +39,10 @@ private:
     /// Ens permet anotar el primer vèrtex de l'angle.
     void annotateFirstPoint();
 
+    /// Gestiona quin punt de l'angle estem dibuixant. Es cridarà cada cop que 
+    /// haguem fet un clic amb el botó esquerre del mouse.
+    void handlePointAddition();
+
     /// Ens simula el segment de l'angle segons els punts annotats
     void simulateCorrespondingSegmentOfAngle();
 

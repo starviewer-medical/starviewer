@@ -64,22 +64,27 @@ void LinePathTool::handleEvent( long unsigned eventID )
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
-            if( m_2DViewer->getInput() )
-            {
-                switch( m_2DViewer->getInteractor()->GetRepeatCount() )
-                {
-                case 0: // Single-click o primer click d'un doble click. Afegim un nou punt al path
-                    annotateNewPoint();
-                    m_2DViewer->getDrawer()->refresh();
-                    break;
-
-                case 1: // Doble-click, si tenim com a mínim dos punts llavors donem per finalitzat el path indicat
-                    if( m_polyline->getNumberOfPoints() >= 2 )
-                        closeForm();
-                    break;
-                }
-            }
+            handlePointAddition();
         break;
+    }
+}
+
+void LinePathTool::handlePointAddition()
+{
+    if( m_2DViewer->getInput() )
+    {
+        switch( m_2DViewer->getInteractor()->GetRepeatCount() )
+        {
+        case 0: // Single-click o primer click d'un doble click. Afegim un nou punt al path
+            annotateNewPoint();
+            m_2DViewer->getDrawer()->refresh();
+            break;
+
+        case 1: // Doble-click, si tenim com a mínim dos punts llavors donem per finalitzat el path indicat
+            if( m_polyline->getNumberOfPoints() >= 2 )
+                closeForm();
+            break;
+        }
     }
 }
 

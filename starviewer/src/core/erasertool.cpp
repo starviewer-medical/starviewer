@@ -43,8 +43,7 @@ void EraserTool::handleEvent( unsigned long eventID )
         break;
 
         case vtkCommand::MouseMoveEvent:
-            if ( m_polygon && m_state == StartClick )
-                drawAreaOfErasure();
+            drawAreaOfErasure();
         break;
 
         case vtkCommand::LeftButtonReleaseEvent:
@@ -81,30 +80,32 @@ void EraserTool::startEraserAction()
 
 void EraserTool::drawAreaOfErasure()
 {
-    double p2[3], p3[3];
-    int xIndex, yIndex, zIndex;
-    
-    m_2DViewer->getEventWorldCoordinate( m_endPoint );
-    Q2DViewer::getXYZIndexesForView( xIndex, yIndex, zIndex, m_2DViewer->getView() );
+    if ( m_polygon && m_state == StartClick )
+    {
+        double p2[3], p3[3];
+        int xIndex, yIndex, zIndex;
 
-    // Calculem el segon punt i el tercer
-    p2[xIndex] = m_endPoint[xIndex];
-    p2[yIndex] = m_startPoint[yIndex];
-    p2[zIndex] = m_2DViewer->getCurrentSlice();
+        m_2DViewer->getEventWorldCoordinate( m_endPoint );
+        Q2DViewer::getXYZIndexesForView( xIndex, yIndex, zIndex, m_2DViewer->getView() );
 
-    p3[xIndex] = m_startPoint[xIndex];
-    p3[yIndex] = m_endPoint[yIndex];
-    p3[zIndex] = m_2DViewer->getCurrentSlice();
+        // Calculem el segon punt i el tercer
+        p2[xIndex] = m_endPoint[xIndex];
+        p2[yIndex] = m_startPoint[yIndex];
+        p2[zIndex] = m_2DViewer->getCurrentSlice();
 
-    // Assignem els punts del polígon
-    m_polygon->setVertix( 0, p2 );
-    m_polygon->setVertix( 1, m_endPoint );
-    m_polygon->setVertix( 2, p3 );
-    m_polygon->setVertix( 3, m_startPoint );
-    // Actualitzem els atributs de la polilinia
-    m_polygon->update();
+        p3[xIndex] = m_startPoint[xIndex];
+        p3[yIndex] = m_endPoint[yIndex];
+        p3[zIndex] = m_2DViewer->getCurrentSlice();
 
-    m_2DViewer->render();
+        // Assignem els punts del polígon
+        m_polygon->setVertix( 0, p2 );
+        m_polygon->setVertix( 1, m_endPoint );
+        m_polygon->setVertix( 2, p3 );
+        m_polygon->setVertix( 3, m_startPoint );
+        // Actualitzem els atributs de la polilinia
+        m_polygon->update();
+        m_2DViewer->render();
+    }
 }
 
 void EraserTool::erasePrimitive()

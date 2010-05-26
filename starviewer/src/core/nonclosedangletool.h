@@ -33,8 +33,15 @@ public:
     void handleEvent( long unsigned eventID );
 
 private:
+    /// Gestiona quin punt de l'angle estem dibuixant. Es cridarà cada cop que 
+    /// haguem fet un clic amb el botó esquerre del mouse.
+    void handlePointAddition();
+
     /// Ens permet anotar els punts de les línies.
     void annotateLinePoints();
+
+    /// Gestiona quina de les línies estem dibuixant mentres es mou el mouse
+    void handleLineDrawing();
 
     /// Ens simula la linia que estem dibuixant respecte el punt on està el mouse.
     void simulateLine(DrawerLine *line);

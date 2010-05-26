@@ -73,29 +73,24 @@ void Cursor3DTool::handleEvent( long unsigned eventID )
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
-            if( m_2DViewer->getInput() )
-            {
-                initializePosition();
-            }
+            initializePosition();
             break;
 
         case vtkCommand::MouseMoveEvent:
-            if( m_state == Computing )
-            {
-                updatePosition();
-            }
+            updatePosition();
             break;
+        
         case vtkCommand::LeftButtonReleaseEvent:
-            if( m_state == Computing )
-            {
-                removePosition();
-            }
+            removePosition();
             break;
     }
 }
 
 void Cursor3DTool::initializePosition()
 {
+    if( !m_2DViewer->getInput() )
+        return;
+    
     m_viewer->setCursor( QCursor( Qt::BlankCursor ) );
     m_state = Computing;
 
@@ -119,8 +114,9 @@ void Cursor3DTool::initializePosition()
 
 void Cursor3DTool::updatePosition()
 {
-    // en cas que no sigui el viewer que estem modificant
-    if( m_2DViewer->isActive() )
+    // En cas que no sigui el viewer que estem modificant
+    // i que l'estat sigui l'indicat
+    if( m_2DViewer->isActive() && m_state == Computing )
     {
         int index[3];
         double * dicomWorldPosition = new double[4];
@@ -204,9 +200,11 @@ void Cursor3DTool::updatePosition()
 
 void Cursor3DTool::removePosition()
 {
-    m_state = None;
-    m_viewer->setCursor( Qt::ArrowCursor );
-
+    if( m_state == Computing )
+    {
+        m_state = None;
+        m_viewer->setCursor( Qt::ArrowCursor );
+    }
     /// S'ha demanat que el cursor no desparegui al deixar de clicar.
 //     m_crossHair->setVisibility( false );
 //     m_crossHair->update();
