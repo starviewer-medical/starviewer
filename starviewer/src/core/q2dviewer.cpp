@@ -15,19 +15,17 @@
 #include "imageplane.h"
 #include "mathtools.h"
 #include "imageorientationoperationsmapper.h"
-//thickslab
+// Thickslab
 #include "vtkProjectionImageFilter.h"
-
-// include's qt
+// Qt
 #include <QResizeEvent>
-
-// include's bàsics vtk
+// Include's bàsics vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCamera.h>
-// composició d'imatges
+// Composició d'imatges
 #include <vtkImageBlend.h>
-// anotacions
+// Anotacions
 #include <vtkCornerAnnotation.h>
 #include <vtkAxisActor2D.h>
 #include <vtkTextActor.h>
@@ -36,14 +34,14 @@
 #include <vtkProp.h>
 #include <vtkScalarBarActor.h>
 #include <vtkWindowLevelLookupTable.h>
-// voxel information
+// Voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
 #include <vtkPropPicker.h>
 #include <vtkImageActor.h>
-// grayscale pipeline
+// Grayscale pipeline
 #include <vtkImageMapToWindowLevelColors.h>
-// projeccio de punts
+// Projecció de punts
 #include <vtkMatrix4x4.h>
 #include <vtkPlane.h>
 
@@ -55,11 +53,11 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
 
-    // filtre de thick slab + grayscale
+    // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
 
-    // creem anotacions i actors
+    // Creem anotacions i actors
     createAnnotations();
     m_imageActor = vtkImageActor::New();
     addActors();
@@ -68,7 +66,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_imagePointPicker = vtkPropPicker::New();
     this->getInteractor()->SetPicker( m_imagePointPicker );
     
-    //creem el drawer, passant-li com a visor l'objecte this
+    // Creem el drawer, passant-li com a visor l'objecte this
     m_drawer = new Drawer( this );
     connect( this, SIGNAL(cameraChanged()), SLOT(updateRulers()) );
 
@@ -100,22 +98,22 @@ Q2DViewer::~Q2DViewer()
     // per solucionar el ticket #539, però això denota que hi ha algun problema de
     // disseny que fa que no sigui prou robust. L'ordre en que s'esborren els objectes
     // no ens hauria d'afectar
-    // HACK imposem que s'esborri primer el drawer
+    // HACK Imposem que s'esborri primer el drawer
     delete m_drawer;
     delete m_imageOrientationOperationsMapper;
 }
 
 void Q2DViewer::createAnnotations()
 {
-    // contenidor d'anotacions
+    // Contenidor d'anotacions
     m_cornerAnnotations = vtkCornerAnnotation::New();
     m_cornerAnnotations->GetTextProperty()->SetFontFamilyToArial();
     m_cornerAnnotations->GetTextProperty()->ShadowOn();
     m_cornerAnnotations->GetTextProperty()->SetShadow(1);
 
-    // escala de colors
+    // Escala de colors
     createScalarBar();
-    // anotacions de l'orientació del pacient
+    // Anotacions de l'orientació del pacient
     createOrientationAnnotations();
     // Marcadors d'escala
     createRulers();
@@ -123,7 +121,7 @@ void Q2DViewer::createAnnotations()
 
 void Q2DViewer::createOrientationAnnotations()
 {
-    // informació de referència de la orientació del pacient
+    // Informació de referència de la orientació del pacient
     for( int i = 0; i < 4; i++ )
     {
         m_patientOrientationTextActor[i] = vtkTextActor::New();
@@ -137,7 +135,7 @@ void Q2DViewer::createOrientationAnnotations()
         m_patientOrientationTextActor[i]->GetPositionCoordinate()->SetCoordinateSystemToNormalizedViewport();
         m_patientOrientationTextActor[i]->GetPosition2Coordinate()->SetCoordinateSystemToNormalizedViewport();
     }
-    // ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
+    // Ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
     m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
     m_patientOrientationTextActor[0]->SetPosition( 0.01 , 0.5 );
 
@@ -154,7 +152,7 @@ void Q2DViewer::createOrientationAnnotations()
 
 void Q2DViewer::createRulers()
 {
-    // ruler lateral
+    // Ruler lateral
     m_sideRuler = vtkAxisActor2D::New();
     m_sideRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sideRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
@@ -172,9 +170,9 @@ void Q2DViewer::createRulers()
     m_sideRuler->TitleVisibilityOff();
     m_sideRuler->SetTickLength( 10 );
     m_sideRuler->GetProperty()->SetColor( 0 , 1 , 0 );
-    m_sideRuler->VisibilityOff(); // per defecte, fins que no hi hagi input son invisibles
+    m_sideRuler->VisibilityOff(); // Per defecte, fins que no hi hagi input son invisibles
 
-    // ruler inferior
+    // Ruler inferior
     m_bottomRuler = vtkAxisActor2D::New();
     m_bottomRuler->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_bottomRuler->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
@@ -192,9 +190,9 @@ void Q2DViewer::createRulers()
     m_bottomRuler->TitleVisibilityOff();
     m_bottomRuler->SetTickLength( 10 );
     m_bottomRuler->GetProperty()->SetColor( 0 , 1 , 0 );
-    m_bottomRuler->VisibilityOff(); // per defecte, fins que no hi hagi input son invisibles
+    m_bottomRuler->VisibilityOff(); // Per defecte, fins que no hi hagi input son invisibles
 
-    // coordenades fixes per ancorar els rulers al lateral i a la part inferior
+    // Coordenades fixes per ancorar els rulers al lateral i a la part inferior
     m_anchoredRulerCoordinates = vtkCoordinate::New();
     m_anchoredRulerCoordinates->SetCoordinateSystemToView();
     m_anchoredRulerCoordinates->SetValue( -0.95 , -0.9 , -0.95 );
@@ -253,7 +251,7 @@ void Q2DViewer::createScalarBar()
     m_scalarBar->GetLabelTextProperty()->SetJustificationToRight();
     m_scalarBar->GetLabelTextProperty()->SetFontFamilyToArial();
     m_scalarBar->GetLabelTextProperty()->ShadowOff();
-    m_scalarBar->VisibilityOff(); // inicialment sera invisible fins que no hi hagi input
+    m_scalarBar->VisibilityOff(); // Inicialment serà invisible fins que no hi hagi input
 
     // Li configurem la lookup table
     vtkWindowLevelLookupTable *lookup = vtkWindowLevelLookupTable::New();
@@ -265,7 +263,7 @@ void Q2DViewer::createScalarBar()
 
 void Q2DViewer::rotateClockWise( int times )
 {
-    // almenys ha de ser 1 ( +90º )
+    // Almenys ha de ser 1 ( +90º )
     if( times <= 0 )
         return;
 
@@ -275,7 +273,7 @@ void Q2DViewer::rotateClockWise( int times )
 
 void Q2DViewer::rotateCounterClockWise( int times )
 {
-    // almenys ha de ser 1 ( -90º )
+    // Almenys ha de ser 1 ( -90º )
     if( times <= 0 )
         return;
 
@@ -298,8 +296,8 @@ void Q2DViewer::verticalFlip()
 QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
 {
     int index = (m_lastView == Axial) ? m_currentSlice : 0;
-    // això es fa per si tenim un mhd que realment només té un arxiu (imatge) però té més llesques
-    // TODO caldria millorar l'accés a les imatges a partir del volum, per no haver de fer aquestes filigranes
+    // Això es fa per si tenim un mhd que realment només té un arxiu (imatge) però té més llesques
+    // TODO Caldria millorar l'accés a les imatges a partir del volum, per no haver de fer aquestes filigranes
     // és a dir, al preguntar a Volume, getImage(index) ell ens retorna la imatge que toca i ja comprova rangs si cal
     // i no ens retorna la llista d'imatges a saco
     index = ( index >= m_mainVolume->getImages().size() ) ? 0 : index;
@@ -308,14 +306,14 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     Image *image = m_mainVolume->getImage(index);
     if( image )
         orientation = image->getPatientOrientation();
-    // tenim les orientacions originals de la imatge en una llista
+    // Tenim les orientacions originals de la imatge en una llista
     QStringList list = orientation.split("\\");
 
     bool ok = false;
     switch( list.size() )
     {
     case 2:
-        // afegim un element neutre perque la resta segueixi funcionant be
+        // Afegim un element neutre perque la resta segueixi funcionant be
         ok = true;
         list << "";
         break;
@@ -325,41 +323,41 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     }
 
     QVector<QString> labelsVector(4);
-    // ara caldrà posar, en funció de les rotacions, flips i vista, les etiquetes en l'ordre adequat
+    // Ara caldrà posar, en funció de les rotacions, flips i vista, les etiquetes en l'ordre adequat
     if( ok )
     {
         int index = 4+m_rotateFactor;
         // 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
         if( m_lastView == Axial )
         {
-            labelsVector[ (0 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(0) ); // esquerra
-            labelsVector[ (2 + index) % 4 ] = list.at(0); // dreta
-            labelsVector[ (1 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(1) ); // a dalt
-            labelsVector[ (3 + index) % 4 ] = list.at(1); // a baix
+            labelsVector[ (0 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(0) ); // Esquerra
+            labelsVector[ (2 + index) % 4 ] = list.at(0); // Dreta
+            labelsVector[ (1 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(1) ); // A dalt
+            labelsVector[ (3 + index) % 4 ] = list.at(1); // A baix
         }
         else if( m_lastView == Sagital )
         {
-            // HACK FLIP de moment necessitem fer aquest truc. Durant el refactoring caldria
+            // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
             // veure si es pot fer d'una manera millor
             if( m_isImageFlipped )
                 index += 2;
 
-            labelsVector[ (0 + index) % 4 ] =  this->getOppositeOrientationLabel( list.at(1) ); // esquerra
-            labelsVector[ (2 + index) % 4 ] =  list.at(1); // dreta
-            labelsVector[ (1 + index) % 4 ] =  list.at(2); // a dalt
-            labelsVector[ (3 + index) % 4 ] =  this->getOppositeOrientationLabel( list.at(2) ); // a baix
+            labelsVector[ (0 + index) % 4 ] =  this->getOppositeOrientationLabel( list.at(1) ); // Esquerra
+            labelsVector[ (2 + index) % 4 ] =  list.at(1); // Dreta
+            labelsVector[ (1 + index) % 4 ] =  list.at(2); // A dalt
+            labelsVector[ (3 + index) % 4 ] =  this->getOppositeOrientationLabel( list.at(2) ); // A baix
         }
         else if( m_lastView == Coronal )
         {
-            // HACK FLIP de moment necessitem fer aquest truc. Durant el refactoring caldria
+            // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
             // veure si es pot fer d'una manera millor
             if( m_isImageFlipped )
                 index += 2;
 
-            labelsVector[ (0 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(0) ); // esquerra
-            labelsVector[ (2 + index) % 4 ] = list.at(0); // dreta
-            labelsVector[ (1 + index) % 4 ] = list.at(2); // a dalt
-            labelsVector[ (3 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(2) ); // a baix
+            labelsVector[ (0 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(0) ); // Esquerra
+            labelsVector[ (2 + index) % 4 ] = list.at(0); // Dreta
+            labelsVector[ (1 + index) % 4 ] = list.at(2); // A dalt
+            labelsVector[ (3 + index) % 4 ] = this->getOppositeOrientationLabel( list.at(2) ); // A baix
         }
         if( m_isImageFlipped )
         {
@@ -448,11 +446,11 @@ int Q2DViewer::getZIndexForView( int view )
 
 void Q2DViewer::mapOrientationStringToAnnotation()
 {
-    // obtenim els labels que estem veient en aquest moment
+    // Obtenim els labels que estem veient en aquest moment
     QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
 
-    // text actor -> 0:Esquerra, 1:Abaix , 2:Dreta, 3:A dalt
-    // labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
+    // Text actor -> 0:Esquerra, 1:Abaix , 2:Dreta, 3:A dalt
+    // Labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
     m_patientOrientationTextActor[0]->SetInput( qPrintable( labels[0] ) );
     m_patientOrientationTextActor[1]->SetInput( qPrintable( labels[3] ) );
     m_patientOrientationTextActor[2]->SetInput( qPrintable( labels[2] ) );
@@ -505,7 +503,6 @@ void Q2DViewer::refreshAnnotations()
     updateAnnotationsInformation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation );
 }
 
-// TODO potser hauria de ser getCurrentSliceThickness ?
 double Q2DViewer::getThickness()
 {
     double thickness;
@@ -513,12 +510,12 @@ double Q2DViewer::getThickness()
     {
     case Axial:
     {
-        // HACK fins que se solucioni de forma consistent el ticket #492
+        // HACK Fins que se solucioni de forma consistent el ticket #492
         if( isThickSlabActive() )
         {
-            // si hi ha thickslab, llavors el thickness es basa a partir de la
+            // Si hi ha thickslab, llavors el thickness es basa a partir de la
             // suma de l'espai entre llesques
-            // TODO repassar que això sigui del tot correcte
+            // TODO Repassar que això sigui del tot correcte
             thickness = m_mainVolume->getSpacing()[2] * m_slabThickness;
         }
         else
@@ -547,15 +544,15 @@ void Q2DViewer::getSliceRange(int &min, int &max)
 {
     if( m_mainVolume )
     {
-        if( m_numberOfPhases == 1 ) // si és un volum 3D normal...
+        if( m_numberOfPhases == 1 ) // Si és un volum 3D normal...
         {
             int *extent = m_mainVolume->getWholeExtent();
             min = extent[m_lastView * 2];
             max = extent[m_lastView * 2 + 1];
         }
-        else // si tenim 4D
+        else // Si tenim 4D
         {
-            // TODO assumim que sempre estem en axial!
+            // TODO Assumim que sempre estem en axial!
             min = 0;
             max = m_mainVolume->getNumberOfSlicesPerPhase() - 1;
         }
@@ -608,7 +605,7 @@ void Q2DViewer::addActors()
 
     vtkRenderer *renderer = getRenderer();
     Q_ASSERT( renderer );
-    // anotacions de texte
+    // Anotacions de texte
     renderer->AddViewProp( m_cornerAnnotations );
     renderer->AddViewProp( m_patientOrientationTextActor[0] );
     renderer->AddViewProp( m_patientOrientationTextActor[1] );
@@ -618,7 +615,7 @@ void Q2DViewer::addActors()
     renderer->AddViewProp( m_bottomRuler );
     renderer->AddViewProp( m_scalarBar );
     renderer->AddViewProp( m_imageActor );
-    // TODO colocar això en un lloc mes adient
+    // TODO Colocar això en un lloc mes adient
     vtkCamera *camera = getActiveCamera();
     Q_ASSERT( camera );
     camera->ParallelProjectionOn();
@@ -654,7 +651,7 @@ void Q2DViewer::setInput( Volume *volume )
     if( !volume )
         return;
 
-    //al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
+    // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if( m_mainVolume )
         m_drawer->removeAllPrimitives();
 
@@ -662,7 +659,7 @@ void Q2DViewer::setInput( Volume *volume )
     // Desactivem el rendering per tal de millorar l'eficiència del setInput ja que altrament es renderitza múltiples vegades
     enableRendering(false);
 
-    // TODO caldria fer netejar? bloquejar? per tal que quedi en negre mentres es carrega el nou volum?
+    // TODO Caldria fer neteja? bloquejar? Per tal que quedi en negre mentres es carrega el nou volum?
     m_mainVolume = volume;
     m_currentSlice = 0;
     m_currentPhase = 0;
@@ -675,8 +672,8 @@ void Q2DViewer::setInput( Volume *volume )
     m_lastSlabSlice = 0;
     m_thickSlabActive = false;
 
-    // aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
-    //No s'aplica perquè afectaria al cursor3D entre d'altres
+    // Aquí corretgim el fet que no s'hagi adquirit la imatge en un espai ortogonal
+    // No s'aplica perquè afectaria al cursor3D entre d'altres
 //     ImagePlane * currentPlane = new ImagePlane();
 //     currentPlane->fillFromImage( m_mainVolume->getImage(0,0) );
 //     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
@@ -693,7 +690,6 @@ void Q2DViewer::setInput( Volume *volume )
 //
 //     m_imageActor->SetUserMatrix(projectionMatrix);
 //     delete currentPlane;
-
 
     int extent[6];
     double origin[3], spacing[3];
@@ -716,11 +712,12 @@ void Q2DViewer::setInput( Volume *volume )
         m_blender->Delete();
         m_blender = 0;
     }
-	// obtenim valors de gris i aquestes coses
-    // aquí es crea tot el pipeline del visualitzador
+    // Obtenim valors de gris i aquestes coses
+    // Aquí es crea tot el pipeline del visualitzador
     this->applyGrayscalePipeline();
 
-    // Preparem el thickSlab // TODO cada cop que fem setInput resetejem els valors per defecte??
+    // Preparem el thickSlab 
+    // TODO Cada cop que fem setInput resetejem els valors per defecte?
     m_thickSlabProjectionFilter->SetInput( m_mainVolume->getVtkData() );
     m_thickSlabProjectionFilter->SetProjectionDimension( m_lastView );
     m_thickSlabProjectionFilter->SetAccumulatorType( (AccumulatorFactory::AccumulatorType) m_slabProjectionMode );
@@ -728,18 +725,18 @@ void Q2DViewer::setInput( Volume *volume )
     m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
     m_thickSlabProjectionFilter->SetStep( m_numberOfPhases );
 
-	updateDisplayExtent(); // TODO BUG sino fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
+    updateDisplayExtent(); // TODO BUG Si no fem aquesta crida ens peta al canviar d'input entre un que fos més gran que l'anterior
     resetViewToAxial();
 
     updatePatientAnnotationInformation();
     this->enableAnnotation( m_enabledAnnotations );
 
-    // actualitzem la informació de window level
+    // Actualitzem la informació de window level
     this->updateWindowLevelData();
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
-    // indiquem el canvi de volum
+    // Indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
 }
 
@@ -857,15 +854,15 @@ void Q2DViewer::updateCamera()
         if( m_applyFlip )
         {
             // Alternativa 1)
-            // TODO així movem la càmera, però faltaria que la imatge no es mogués de lloc
+            // TODO Així movem la càmera, però faltaria que la imatge no es mogués de lloc
             // potser implementant a la nostra manera el metode Azimuth i prenent com a centre
             // el centre de la imatge. Una altra possibilitat es contrarestar el desplaçament de la
             // camera en l'eix en que s'ha produit
             camera->Azimuth( 180 );
             switch( this->m_lastView )
             {
-            // HACK aquest hack esta relacionat amb els de mapOrientationStringToAnnotation()
-            // es un petit truc perque la imatge quedi orientada correctament. Caldria
+            // HACK Aquest hack esta relacionat amb els de mapOrientationStringToAnnotation()
+            // és un petit truc perque la imatge quedi orientada correctament. Caldria
             // veure si en el refactoring podem fer-ho d'una forma millor
             case Sagital:
             case Coronal:
@@ -894,12 +891,12 @@ void Q2DViewer::resetCamera()
 {
     if( m_mainVolume )
     {
-        // en comptes de fer servir sempre this->getMaximumSlice(), actualitzem
-        // aquest valor quan cal, és a dir, al posar input i al canviar de vista
+        // En comptes de fer servir sempre this->getMaximumSlice(), actualitzem
+        // Aquest valor quan cal, és a dir, al posar input i al canviar de vista
         // estalviant-nos crides i crides
         m_maxSliceValue = this->getMaximumSlice();
 
-        // reiniciem valors per defecte de la càmera
+        // Reiniciem valors per defecte de la càmera
         m_rotateFactor = 0;
         m_applyFlip = false;
         m_isImageFlipped = false;
@@ -933,7 +930,7 @@ void Q2DViewer::resetCamera()
             // Paràmetres de la càmera
             cameraViewUp[2] = 1.0;
             cameraPosition[0] = 1.0;
-            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+            // TODO Solució inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
             {
@@ -955,7 +952,7 @@ void Q2DViewer::resetCamera()
             // Paràmetres de la càmera
             cameraViewUp[2] = 1.0;
             cameraPosition[1] = -1.0;
-            // TODO solucio inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
+            // TODO Solució inmediata per afrontar el ticket #355, pero s'hauria de fer d'una manera mes elegant i consistent
             position = m_mainVolume->getImage(0)->getParentSeries()->getPatientPosition();
             if( position == "FFP" || position == "HFP" )
             {
@@ -1018,9 +1015,9 @@ void Q2DViewer::setSlice( int value )
         if( isThickSlabActive() )
         {
             m_thickSlabProjectionFilter->SetFirstSlice( m_firstSlabSlice * m_numberOfPhases + m_currentPhase );
-            // TODO cal actualitzar aquest valor?
+            // TODO Cal actualitzar aquest valor?
             m_thickSlabProjectionFilter->SetNumberOfSlicesToProject( m_slabThickness );
-            //si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
+            // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
             this->getDrawer()->removeAllPrimitives();
         }
         this->updateDisplayExtent();
@@ -1034,7 +1031,7 @@ void Q2DViewer::setSlice( int value )
 
 void Q2DViewer::setPhase( int value )
 {
-    // comprovació de rang
+    // Comprovació de rang
     if( m_mainVolume )
     {
         if( value < 0 )
@@ -1195,7 +1192,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
             }
             break;
 
-            case Sagital: // YZ TODO encara no esta comprovat que aquest pla sigui correcte
+            case Sagital: // YZ TODO Encara no esta comprovat que aquest pla sigui correcte
             {
                 Image *image = m_mainVolume->getImage(0);
                 if( image )
@@ -1206,13 +1203,13 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
 
                     if( vtkReconstructionHack )
                     {
-                        // retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
+                        // Retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
                         imagePlane->setRowDirectionVector( dirCosines[3], dirCosines[4], dirCosines[5] );
                         imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
                     }
                     else
                     {
-                        // això serà lo normal, retornar la autèntica direcció del pla
+                        // Això serà lo normal, retornar la autèntica direcció del pla
                         double columnVector[3];
                         m_mainVolume->getStackDirection( columnVector, 0 );
 
@@ -1225,7 +1222,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
                     imagePlane->setRows( dimensions[2] );
                     imagePlane->setColumns( dimensions[1] );
 
-                    // TODO falta esbrinar si l'origen que estem donant es bo o no
+                    // TODO Falta esbrinar si l'origen que estem donant es bo o no
                     imagePlane->setOrigin( origin[0] + sliceNumber*dirCosines[0]*spacing[0],
                                            origin[1] + sliceNumber*dirCosines[1]*spacing[0],
                                            origin[2] + sliceNumber*dirCosines[2]*spacing[0] );
@@ -1233,7 +1230,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
             }
             break;
 
-            case Coronal: // XZ TODO encara no esta comprovat que aquest pla sigui correcte
+            case Coronal: // XZ TODO Encara no esta comprovat que aquest pla sigui correcte
             {
                 Image *image = m_mainVolume->getImage(0);
                 if( image )
@@ -1243,7 +1240,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
 
                     if( vtkReconstructionHack )
                     {
-                        // retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
+                        // Retornem un fals pla, respecte el món real, però que s'ajusta més al món vtk
                         imagePlane->setRowDirectionVector( dirCosines[0], dirCosines[1], dirCosines[2] );
                         imagePlane->setColumnDirectionVector( dirCosines[6], dirCosines[7], dirCosines[8] );
                     }
@@ -1262,7 +1259,7 @@ ImagePlane *Q2DViewer::getImagePlane( int sliceNumber , int phaseNumber, bool vt
                     imagePlane->setRows( dimensions[2] );
                     imagePlane->setColumns( dimensions[0] );
 
-                    // TODO falta esbrinar si l'origen que estem donant es bo o no
+                    // TODO Falta esbrinar si l'origen que estem donant es bo o no
                     imagePlane->setOrigin( origin[0] + dirCosines[3]*sliceNumber*spacing[1],
                                            origin[1] + dirCosines[4]*sliceNumber*spacing[1],
                                            origin[2] + dirCosines[5]*sliceNumber*spacing[1]
@@ -1284,20 +1281,20 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
     // Primer es fa una  una projecció convencional del punt sobre el pla actual (DICOM)
     // Com que el mapeig de coordenades VTK va a la seva bola, necessitem corretgir el desplaçament
     // introduit per VTK respecte a les coordenades "reals" de DICOM
-    // aquest desplaçament consistirà en tornar a sumar l'origen del primer pla del volum
+    // Aquest desplaçament consistirà en tornar a sumar l'origen del primer pla del volum
     // en principi, fer-ho amb l'origen de m_mainVolume també seria correcte
     //
     ImagePlane *currentPlane = this->getCurrentImagePlane(vtkReconstructionHack);
     if( currentPlane )
     {
-        // recollim les dades del pla actual sobre el qual volem projectar el punt de l'altre pla
+        // Recollim les dades del pla actual sobre el qual volem projectar el punt de l'altre pla
         double currentPlaneRowVector[3], currentPlaneColumnVector[3], currentPlaneNormalVector[3], currentPlaneOrigin[3];
         currentPlane->getRowDirectionVector( currentPlaneRowVector );
         currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
         currentPlane->getNormalVector( currentPlaneNormalVector );
         currentPlane->getOrigin( currentPlaneOrigin );
 
-        // a partir d'aquestes dades creem la matriu de projecció,
+        // A partir d'aquestes dades creem la matriu de projecció,
         // que projectarà el punt donat sobre el pla actual
         vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
         projectionMatrix->Identity();
@@ -1308,27 +1305,27 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
             projectionMatrix->SetElement(2,column,currentPlaneNormalVector[ column ]);
         }
 
-        // un cop tenim la matriu podem fer la projeccio
+        // Un cop tenim la matriu podem fer la projeccio
         // necessitem el punt en coordenades homogenies
         double homogeneousPointToProject[4], homogeneousProjectedPoint[4];
         for( int i=0; i<3; i++ )
             homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i]; // desplacem el punt a l'origen del pla
         homogeneousPointToProject[3] = 1.0;
 
-        // projectem el punt amb la matriu
+        // Projectem el punt amb la matriu
         projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
 
         //
         // CORRECIÓ VTK!
         //
-        // a partir d'aquí cal corretgir l'error introduit pel mapeig que fan les vtk
+        // A partir d'aquí cal corretgir l'error introduit pel mapeig que fan les vtk
         // cal sumar l'origen de la primera imatge, o el que seria el mateix, l'origen de m_mainVolume
         //
         // TODO provar si amb l'origen de m_mainVolume també funciona bé
         Image *firstImage = m_mainVolume->getImage(0);
         const double *ori = firstImage->getImagePositionPatient();
 
-        // segons si hem fet una reconstrucció ortogonal haurem de fer
+        // Segons si hem fet una reconstrucció ortogonal haurem de fer
         // alguns canvis sobre la projecció
         switch( m_lastView )
         {
@@ -1341,11 +1338,12 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage( const double pointToPr
             {
                 if( vtkReconstructionHack )
                 {
-                    // HACK que serveix de parxe pels casos de crani que no van be. TODO encara està per acabar, és una primera aproximació
+                    // HACK Serveix de parxe pels casos de crani que no van bé. 
+                    // TODO Encara està per acabar, és una primera aproximació
                     projectionMatrix->SetElement(0,0,0);
                     projectionMatrix->SetElement(0,1,1);
                     projectionMatrix->SetElement(0,2,0);
-                    // projectem el punt amb la matriu
+                    // Projectem el punt amb la matriu
                     projectionMatrix->MultiplyPoint( homogeneousPointToProject, homogeneousProjectedPoint );
                 }
 
@@ -1382,10 +1380,10 @@ bool Q2DViewer::getCurrentCursorImageCoordinate( double xyz[3] )
     if( m_imagePointPicker->PickProp( position[0], position[1], getRenderer() ) )
     {
         inside = true;
-        // calculem el pixel trobat
+        // Calculem el pixel trobat
         m_imagePointPicker->GetPickPosition( xyz );
-        // calculem la profunditat correcta ja que si tenim altres actors pel mig poden interferir en la mesura
-        // TODO una altre solució possible és tenir renderers separats i en el que fem el pick només tenir-hi l'image actor 
+        // Calculem la profunditat correcta ja que si tenim altres actors pel mig poden interferir en la mesura
+        // TODO Una altre solució possible és tenir renderers separats i en el que fem el pick només tenir-hi l'image actor 
         double bounds[6];
         m_imageActor->GetDisplayBounds(bounds);
         switch( m_lastView )
@@ -1461,7 +1459,7 @@ void Q2DViewer::updateAnnotationsInformation( AnnotationFlags annotation )
     // Informació que es mostra per cada viewport
     if( annotation & Q2DViewer::WindowInformationAnnotation )
     {
-        // informació de la finestra
+        // Informació de la finestra
         if( m_enabledAnnotations & Q2DViewer::WindowInformationAnnotation )
         {
             m_upperLeftText = tr("%1 x %2\nWW: %5 WL: %6")
@@ -1483,13 +1481,13 @@ void Q2DViewer::updatePatientAnnotationInformation()
 {
     if( m_mainVolume )
     {
-        // TODO de moment només agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie
+        // TODO De moment només agafem la primera imatge perquè assumim que totes pertanyen a la mateixa sèrie
         Image *image = m_mainVolume->getImage(0);
         Series *series = image->getParentSeries();
         Study *study = series->getParentStudy();
         Patient *patient = study->getParentPatient();
 
-        // informació fixa
+        // Informació fixa
         QString seriesTime = series->getTimeAsString();
         if( seriesTime.isEmpty() )
             seriesTime = "--:--";
@@ -1527,7 +1525,6 @@ void Q2DViewer::updatePatientAnnotationInformation()
     {
         DEBUG_LOG("No hi ha un volum vàlid. No es poden inicialitzar les annotacions de texte d'informació de pacient");
     }
-
 }
 
 void Q2DViewer::updateSliceAnnotationInformation()
@@ -1542,8 +1539,8 @@ void Q2DViewer::updateSliceAnnotationInformation()
     {
         m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
 
-        //En la modalitat de mamografia s'ha de mostar informació especifica de la imatge que s'està mostrant.
-        //Per tant si estem a la vista original agafem la imatge actual, altrament no mostrem cap informació.
+        // En la modalitat de mamografia s'ha de mostar informació especifica de la imatge que s'està mostrant.
+        // Per tant si estem a la vista original agafem la imatge actual, altrament no mostrem cap informació.
         if( m_lastView == Q2DViewer::Axial )
         {
             image = m_mainVolume->getImage(m_currentSlice);
@@ -1557,8 +1554,8 @@ void Q2DViewer::updateSliceAnnotationInformation()
         {
             QString projection = image->getViewCodeMeaning();
             /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
-            // TODO tenir-ho carregat en arxius, maps, etc..
-            // TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
+            // TODO Tenir-ho carregat en arxius, maps, etc..
+            // TODO Fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
             if( projection == "medio-lateral" )
                 projection = "ML";
             else if( projection == "medio-lateral oblique" )
@@ -1622,7 +1619,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
     {
         this->updateSliceAnnotation( value+1, m_maxSliceValue+1 );
     }
-    // Si aquestes annotacions estan activades, llavors li afegim la informació de la hora de la sèrie i la imatge
+    // Si aquestes anotacions estan activades, llavors li afegim la informació de la hora de la sèrie i la imatge
     if( m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation )
     {
         // Si la vista és "AXIAL" (és a dir mostrem la imatge en l'adquisició original)
@@ -1649,10 +1646,10 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
 {
     Q_ASSERT( m_cornerAnnotations );
 
-    if( m_enabledAnnotations & Q2DViewer::SliceAnnotation ) // si les annotacions estan habilitades
+    if( m_enabledAnnotations & Q2DViewer::SliceAnnotation ) // Si les anotacions estan habilitades
     {
         QString lowerLeftText;
-        // TODO ara només tenim en compte de posar l'slice location si estem en la vista "original"
+        // TODO Ara només tenim en compte de posar l'slice location si estem en la vista "original"
         if( m_lastView == Q2DViewer::Axial )
         {
             Image *image = getCurrentDisplayedImage();
@@ -1677,13 +1674,13 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
             }
         }
 
-        if( maxPhase > 1 ) // tenim fases
+        if( maxPhase > 1 ) // Tenim fases
         {
             if( m_slabThickness > 1 )
             {
                 lowerLeftText += tr("Slice: %1-%2/%3 Phase: %4/%5")
                         .arg( currentSlice )
-                        .arg( currentSlice+m_slabThickness-1 ) // TODO potser hauríem de tenir una variable "slabRange"
+                        .arg( currentSlice+m_slabThickness-1 ) // TODO Potser hauríem de tenir una variable "slabRange"
                         .arg( maxSlice )
                         .arg( currentPhase )
                         .arg( maxPhase );
@@ -1697,13 +1694,13 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
                         .arg( maxPhase );
             }
         }
-        else // només llesques
+        else // Només llesques
         {
             if( m_slabThickness > 1 )
             {
                 lowerLeftText += tr("Slice: %1-%2/%3")
                         .arg( currentSlice )
-                        .arg( currentSlice+m_slabThickness-1 ) // TODO potser hauríem de tenir una variable "slabRange"
+                        .arg( currentSlice+m_slabThickness-1 ) // TODO Potser hauríem de tenir una variable "slabRange"
                         .arg( maxSlice );
             }
             else
@@ -1713,7 +1710,7 @@ void Q2DViewer::updateSliceAnnotation( int currentSlice, int maxSlice, int curre
                         .arg( maxSlice );
             }
         }
-        //afegim el thickness de la llesca nomes si es > 0mm
+        // Afegim el thickness de la llesca nomes si es > 0mm
         if ( this->getThickness() > 0.0 )
             lowerLeftText += tr(" Thickness: %1 mm").arg( this->getThickness(), 0, 'f', 2 );
 
@@ -1733,14 +1730,14 @@ void Q2DViewer::updateDisplayExtent()
     if( !m_mainVolume->getVtkData() )
         return;
 
-    //TODO potser el càlcul de l'índex de l'imatge l'hauria de fer Volume que
+    // TODO Potser el càlcul de l'índex de l'imatge l'hauria de fer Volume que
     // és qui coneix com es guarda la informació de la imatge, ja que si canviem la manera
     // de guardar les phases, això ja no ens valdria
-    // thick slab
+    // Thick slab
     int sliceValue;
     if( isThickSlabActive() )
     {
-        // en comptes de currentSlice podria ser m_firstSlabSlice, que és equivalent
+        // En comptes de currentSlice podria ser m_firstSlabSlice, que és equivalent
         sliceValue = m_currentSlice; // Podria ser 0, dependent de l'extent de sortida del filtre
     }
     else
@@ -1761,7 +1758,7 @@ void Q2DViewer::updateDisplayExtent()
             m_imageActor->SetDisplayExtent( sliceValue, sliceValue, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
             break;
     }
-    // TODO si separem els renderers potser caldria aplicar-ho a cada renderer?
+    // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
     getRenderer()->ResetCameraClippingRange();
 }
 
@@ -1822,27 +1819,27 @@ int Q2DViewer::getSlabProjectionMode() const
 
 void Q2DViewer::setSlabThickness( int thickness )
 {
-    //primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
+    // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
     if ( thickness != m_slabThickness )
         this->getDrawer()->removeAllPrimitives();
 
     computeRangeAndSlice( thickness );
-    // TODO comprovar aquest pipeline si és millor calcular ara o més tard
+    // TODO Comprovar aquest pipeline si és millor calcular ara o més tard
     if( m_slabThickness == 1  && isThickSlabActive() )
     {
         DEBUG_LOG("Desactivem thick Slab i resetejem pipeline normal");
         m_thickSlabActive = false;
-        // resetejem el pipeline
+        // Resetejem el pipeline
         applyGrayscalePipeline();
         updateDisplayExtent();
         updateSliceAnnotationInformation();
         this->render();
     }
-    if ( m_slabThickness > 1 && !isThickSlabActive() ) // la comprovacio es per constuir el pipeline nomes el primer cop
+    if ( m_slabThickness > 1 && !isThickSlabActive() ) // La comprovacio es per constuir el pipeline nomes el primer cop
     {
         DEBUG_LOG("Activem thick Slab i resetejem pipeline amb thickSlab");
         m_thickSlabActive = true;
-        // resetejem el pipeline
+        // Resetejem el pipeline
         applyGrayscalePipeline();
     }
 
@@ -1858,10 +1855,9 @@ void Q2DViewer::setSlabThickness( int thickness )
     }
 
     // TODO és del tot correcte que vagi aquí aquesta crida?
-    // tal com està posat se suposa que sempre el valor de thickness ha
+    // Tal com està posat se suposa que sempre el valor de thickness ha
     // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
     emit slabThicknessChanged( m_slabThickness );
-
 }
 
 int Q2DViewer::getSlabThickness() const
@@ -1884,7 +1880,7 @@ bool Q2DViewer::isThickSlabActive() const
 
 void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
 {
-    // checking del nou valor
+    // Checking del nou valor
     if( newSlabThickness < 1 )
     {
         DEBUG_LOG(" valor invàlid de thickness. Ha de ser >= 1 !!!!!");
@@ -1898,7 +1894,7 @@ void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
     if( newSlabThickness > m_maxSliceValue + 1 )
     {
         DEBUG_LOG(" el nou thickness supera el thickness màxim, tot queda igual ");
-        // TODO podríem aplicar newSlabThickness=m_maxSliceValue+1
+        // TODO Podríem aplicar newSlabThickness=m_maxSliceValue+1
         return;
     }
     if( newSlabThickness == 1 )
@@ -1908,55 +1904,55 @@ void Q2DViewer::computeRangeAndSlice( int newSlabThickness )
     }
 
     int difference = newSlabThickness - m_slabThickness;
-    // si la diferència és positiva, augmentem el thickness
+    // Si la diferència és positiva, augmentem el thickness
     if( difference > 0 )
     {
-        m_firstSlabSlice -= difference / 2; // divisió entera!
+        m_firstSlabSlice -= difference / 2; // Divisió entera!
         m_lastSlabSlice += difference / 2;
 
-        // si la diferència és senar creix més per un dels límits
+        // Si la diferència és senar creix més per un dels límits
         if( (difference % 2) != 0 )
         {
-            // si el thickness actual és parell creixem per sota
+            // Si el thickness actual és parell creixem per sota
             if( (m_slabThickness % 2) == 0 )
                 m_firstSlabSlice--;
-            else // sinó creixem per dalt
+            else // Sinó creixem per dalt
                 m_lastSlabSlice++;
         }
-        //check per si ens passem de rang superior o inferior
+        // Check per si ens passem de rang superior o inferior
         if( m_firstSlabSlice < this->getMinimumSlice() )
         {
-            // si ens passem per sota, cal compensar creixent per dalt
+            // Si ens passem per sota, cal compensar creixent per dalt
             m_lastSlabSlice = this->getMinimumSlice() + newSlabThickness - 1;
-            m_firstSlabSlice = this->getMinimumSlice(); // queda al límit inferior
+            m_firstSlabSlice = this->getMinimumSlice(); // Queda al límit inferior
         }
         else if( m_lastSlabSlice > m_maxSliceValue )
         {
-            // si ens passem per dalt, cal compensar creixent per sota
+            // Si ens passem per dalt, cal compensar creixent per sota
             m_firstSlabSlice = m_maxSliceValue - newSlabThickness + 1;
             m_lastSlabSlice = m_maxSliceValue;
         }
     }
-    else // la diferència és negativa, decreix el thickness
+    else // La diferència és negativa, decreix el thickness
     {
-        // la convertim a positiva per conveniència
+        // La convertim a positiva per conveniència
         difference *= -1;
         m_firstSlabSlice += difference / 2;
         m_lastSlabSlice -= difference / 2;
 
-        // si la diferència és senar decreix més per un dels límits
+        // Si la diferència és senar decreix més per un dels límits
         if( (difference % 2) != 0 )
         {
-            // si el thickness actual és parell decreixem per amunt
+            // Si el thickness actual és parell decreixem per amunt
             if( (m_slabThickness%2) == 0 )
                 m_lastSlabSlice--;
-            else // sinó decreixem per avall
+            else // Sinó decreixem per avall
                 m_firstSlabSlice++;
         }
     }
-    // actualitzem el thickness
+    // Actualitzem el thickness
     m_slabThickness = newSlabThickness;
-    // actualitzem la llesca
+    // Actualitzem la llesca
     m_currentSlice = m_firstSlabSlice;
 }
 
@@ -2052,7 +2048,7 @@ void Q2DViewer::restore()
     if( ! m_mainVolume )
         return;
 
-    //S'esborren les anotacions
+    // S'esborren les anotacions
     if( m_mainVolume )
         m_drawer->removeAllPrimitives();
 
@@ -2163,7 +2159,6 @@ void Q2DViewer::alignRight()
 
     pan( motionVector );
     m_alignPosition = Q2DViewer::AlignRight;
-
 }
 
 void Q2DViewer::setAlignPosition( AlignPosition alignPosition )
@@ -2235,5 +2230,5 @@ void Q2DViewer::fitImageIntoViewport()
     }
 }
 
-};  // end namespace udg
+};  // End namespace udg
 
