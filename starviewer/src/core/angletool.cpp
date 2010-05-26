@@ -62,27 +62,7 @@ void AngleTool::handleEvent( long unsigned eventID )
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
-
-            if( m_2DViewer->getInput() )
-            {
-                if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
-                {
-                    if ( m_state == None )
-                        this->annotateFirstPoint();
-                    else if ( m_state == FirstPointFixed )
-                    {
-                        this->fixFirstSegment();
-                        this->findInitialDegreeArc();
-                    }
-                    else
-                    {
-                        // Voldrem enregistrar l'últim punt, pertant posem l'estat a none
-                        m_state = None;
-                        finishDrawing();
-                    }
-                }
-            }
-
+            handlePointAddition();
         break;
 
         case vtkCommand::MouseMoveEvent:
@@ -245,6 +225,29 @@ void AngleTool::drawCircle()
     }
 
     m_circlePolyline->update();
+}
+
+void AngleTool::handlePointAddition()
+{
+    if( m_2DViewer->getInput() )
+    {
+        if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
+        {
+            if ( m_state == None )
+                this->annotateFirstPoint();
+            else if ( m_state == FirstPointFixed )
+            {
+                this->fixFirstSegment();
+                this->findInitialDegreeArc();
+            }
+            else
+            {
+                // Voldrem enregistrar l'últim punt, pertant posem l'estat a none
+                m_state = None;
+                finishDrawing();
+            }
+        }
+    }
 }
 
 void AngleTool::simulateCorrespondingSegmentOfAngle()

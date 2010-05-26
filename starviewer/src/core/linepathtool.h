@@ -35,7 +35,11 @@ private slots:
     void initialize();
 
 private:
-     /// Ens permet anotar el següent punt de la polilínia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
+    /// Gestiona quin punt de la polilínia estem dibuixant. Es cridarà cada cop que 
+    /// haguem fet un clic amb el botó esquerre del mouse.
+    void handlePointAddition();
+
+    /// Ens permet anotar el següent punt de la polilínia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
     void annotateNewPoint();
 
     /// Mètode que dóna per finalitzada la polílinia que s'ha dibuixat

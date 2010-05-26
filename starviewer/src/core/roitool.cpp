@@ -62,29 +62,30 @@ void ROITool::handleEvent( long unsigned eventID )
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
-            if( m_2DViewer->getInput() )
-            {
-                switch( m_2DViewer->getInteractor()->GetRepeatCount() )
-                {
-                case 0: // Single-click o primer click d'un doble click. Afegim un nou punt a la ROI
-                    annotateNewPoint();
-                    break;
-
-                case 1: // Doble-click, si tenim més de 2 punts, llavors tanquem la ROI
-                    if( m_mainPolyline->getNumberOfPoints() > 2 )
-                        closeForm();
-                    break;
-                }
-            }
+            handlePointAddition();
         break;
 
         case vtkCommand::MouseMoveEvent:
-            if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
-            {
-                this->simulateClosingPolyline();
-                m_2DViewer->render();
-            }
+            simulateClosingPolyline();
         break;
+    }
+}
+
+void ROITool::handlePointAddition()
+{
+    if( m_2DViewer->getInput() )
+    {
+        switch( m_2DViewer->getInteractor()->GetRepeatCount() )
+        {
+        case 0: // Single-click o primer click d'un doble click. Afegim un nou punt a la ROI
+            annotateNewPoint();
+            break;
+
+        case 1: // Doble-click, si tenim més de 2 punts, llavors tanquem la ROI
+            if( m_mainPolyline->getNumberOfPoints() > 2 )
+                closeForm();
+            break;
+        }
     }
 }
 
@@ -125,30 +126,34 @@ void ROITool::annotateNewPoint()
 
 void ROITool::simulateClosingPolyline()
 {
-    double pickedPoint[3];
-    m_2DViewer->getEventWorldCoordinate(pickedPoint);
-    m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
-
-    if (!m_closingPolyline )
+    if( m_mainPolyline && ( m_mainPolyline->getNumberOfPoints() >= 1 ) )
     {
-        m_closingPolyline = new DrawerPolyline;
-        // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
-        m_closingPolyline->increaseReferenceCount();
-        m_closingPolyline->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-        m_2DViewer->getDrawer()->draw( m_closingPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        double pickedPoint[3];
+        m_2DViewer->getEventWorldCoordinate(pickedPoint);
+        m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
 
-        // Afegim els punts que simulen aquesta polilínia
-        m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
-        m_closingPolyline->addPoint( pickedPoint );
-        m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
-    }
-    else
-    {
-        // Modifiquem els punts que han canviat
-        m_closingPolyline->setPoint(1,pickedPoint);
-        m_closingPolyline->setPoint(2,m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
-        // Actualitzem els atributs de la polilínia
-        m_closingPolyline->update();
+        if (!m_closingPolyline )
+        {
+            m_closingPolyline = new DrawerPolyline;
+            // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+            m_closingPolyline->increaseReferenceCount();
+            m_closingPolyline->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+            m_2DViewer->getDrawer()->draw( m_closingPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+
+            // Afegim els punts que simulen aquesta polilínia
+            m_closingPolyline->addPoint( m_mainPolyline->getPoint( 0 ) );
+            m_closingPolyline->addPoint( pickedPoint );
+            m_closingPolyline->addPoint( m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
+        }
+        else
+        {
+            // Modifiquem els punts que han canviat
+            m_closingPolyline->setPoint(1,pickedPoint);
+            m_closingPolyline->setPoint(2,m_mainPolyline->getPoint( m_mainPolyline->getNumberOfPoints() - 1 ) );
+            // Actualitzem els atributs de la polilínia
+            m_closingPolyline->update();
+        }
+        m_2DViewer->render();
     }
 }
 

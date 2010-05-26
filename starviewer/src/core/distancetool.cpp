@@ -55,21 +55,22 @@ void DistanceTool::handleEvent( long unsigned eventID )
     switch( eventID )
     {
         case vtkCommand::LeftButtonPressEvent:
-            if( m_2DViewer->getInput() )
-            {
-                if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
-                {
-                    this->annotateNewPoint();
-                }
-            }
+            handlePointAddition();
             break;
         case vtkCommand::MouseMoveEvent:
-            if( m_line )
-            {
-                this->simulateLine();
-                m_2DViewer->render();
-            }
+            simulateLine();
             break;
+    }
+}
+
+void DistanceTool::handlePointAddition()
+{
+    if( m_2DViewer->getInput() )
+    {
+        if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
+        {
+            this->annotateNewPoint();
+        }
     }
 }
 
@@ -165,6 +166,7 @@ void DistanceTool::annotateNewPoint()
             for (i = 0; i < 3; i++)
                 leftPoint[i] = secondPoint[i]; 
         }
+        // TODO Això no es pot solucionar amb setPadding?
         leftPoint[xIndex] -= 2.;
         text->setAttachmentPoint( leftPoint );
         text->setHorizontalJustification( "Right" );
@@ -177,11 +179,15 @@ void DistanceTool::annotateNewPoint()
 
 void DistanceTool::simulateLine()
 {
-    double clickedWorldPoint[3];
-    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
+    if( m_line )
+    {
+        double clickedWorldPoint[3];
+        m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
 
-    m_line->setSecondPoint( clickedWorldPoint );
-    m_line->update();
+        m_line->setSecondPoint( clickedWorldPoint );
+        m_line->update();
+        m_2DViewer->render();
+    }
 }
 
 void DistanceTool::initialize()

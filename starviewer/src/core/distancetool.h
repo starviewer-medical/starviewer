@@ -48,6 +48,10 @@ public:
     void handleEvent( long unsigned eventID );
 
 private:
+    /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que 
+    /// haguem fet un clic amb el botó esquerre del mouse.
+    void handlePointAddition();
+
     /// Marca un nou punt de la distància. Si la corresponent primitiva 
     /// no s'ha creat es crea abans d'afegir el nou punt.
     void annotateNewPoint();
