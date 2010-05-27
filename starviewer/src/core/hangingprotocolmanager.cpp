@@ -53,8 +53,6 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
 
 QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies)
 {
-    int numberOfHangingProtocols = HangingProtocolsRepository::getRepository()->getNumberOfItems();
-
     QList<HangingProtocol * > outputHangingProtocolList;
 
     QList<Series *> allSeries;
@@ -66,11 +64,8 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
 
     // Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
     // Aprofitem per assignar ja les series, per millorar el rendiment
-    for( int hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols ; hangingProtocolNumber++)
+    foreach (HangingProtocol *hangingProtocol, HangingProtocolsRepository::getRepository()->getItems() )
     {
-        //Inicialitzacions
-        HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
-
         if( isModalityCompatible(hangingProtocol, patient) )
         {
             QList<Series *> candidateSeries = allSeries; // Copia de les series perquè es van eliminant de la llista al ser assignades
