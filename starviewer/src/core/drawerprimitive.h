@@ -99,11 +99,10 @@ public:
     virtual double getDistanceToPoint( double *point3D )=0;
 
     /**
-     * Aquest mètode diu si la primitiva està dins dels límits especificats per paràmetre.
-     * Ens permetrà saber si una determinada primitiva està dins de la zona d'esborrat.
-     * mètode virtual pur per obligar a les subclasses que l'implementin.
+     * Ens retorna els límits de l'hexahedre que encapsula la primitiva
+     * en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
      */
-    virtual bool isInsideOfBounds( double p1[3], double p2[3], int view ) = 0;
+    virtual void getBounds(double bounds[6]) = 0;
 
     /**
      * HACK això és una solució temporal, minimitzar el seu ús a casos molt concrets!

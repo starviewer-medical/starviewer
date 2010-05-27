@@ -115,7 +115,11 @@ void EraserTool::erasePrimitive()
         m_2DViewer->getDrawer()->erasePrimitive( m_2DViewer->getDrawer()->getPrimitiveNearerToPoint( m_startPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() ) );
     }
     else
-        m_2DViewer->getDrawer()->erasePrimitivesInsideBounds( m_startPoint, m_endPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    {
+        double bounds[6];
+        m_polygon->getBounds(bounds);
+        m_2DViewer->getDrawer()->erasePrimitivesInsideBounds( bounds, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    }
 }
 
 void EraserTool::reset()

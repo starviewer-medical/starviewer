@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "drawerpolyline.h"
 #include "logging.h"
-#include "q2dviewer.h"
 #include "mathtools.h"
 // vtk
 #include <vtkPolyData.h>
@@ -240,43 +239,12 @@ bool DrawerPolyline::isPointIncludedInLineBounds( double point[3], double *lineP
     return ( MathTools::getDistance3D( point, lineP1 ) <= range || MathTools::getDistance3D( point, lineP2 ) <= range );
 }
 
-bool DrawerPolyline::isInsideOfBounds( double p1[3], double p2[3], int view )
+void DrawerPolyline::getBounds(double bounds[6])
 {
-    double minX, maxX, minY, maxY;
-    int numberOfPoints = m_pointsList.count();
-    bool allPointsAreInside = true;
-    int xIndex = Q2DViewer::getXIndexForView(view);
-    int yIndex = Q2DViewer::getYIndexForView(view);
-
-    if ( p1[xIndex] < p2[xIndex] )
-    {
-        minX = p1[xIndex];
-        maxX = p2[xIndex];
-    }
+    if ( m_vtkPolydata )
+        m_vtkPolydata->GetBounds(bounds);
     else
-    {
-        maxX = p1[xIndex];
-        minX = p2[xIndex];
-    }
-
-    if ( p1[yIndex] < p2[yIndex] )
-    {
-        minY = p1[yIndex];
-        maxY = p2[yIndex];
-    }
-    else
-    {
-        maxY = p1[yIndex];
-        minY = p2[yIndex];
-    }
-
-    for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
-    {
-        double *currentPoint = m_pointsList.at( i );
-        if ( currentPoint[xIndex] >= maxX || currentPoint[xIndex] <= minX || currentPoint[yIndex] >= maxY || currentPoint[yIndex] <= minY )
-            allPointsAreInside = false;
-    }
-    return ( allPointsAreInside );
+        memset(bounds, 0.0, sizeof(double)*6);
 }
 
 QList< double* > DrawerPolyline::getPointsList()

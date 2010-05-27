@@ -201,11 +201,6 @@ int DrawerPolygon::getNumberOfPoints() const
     return m_pointsList.count();
 }
 
-double* DrawerPolygon::getBounds()
-{
-    return m_vtkPolydata->GetBounds();
-}
-
 double DrawerPolygon::getDistanceToPoint( double *point3D )
 {
     double minDistanceLine = VTK_DOUBLE_MAX;
@@ -264,44 +259,12 @@ bool DrawerPolygon::isPointIncludedInLineBounds( double point[3], double *lineP1
             ( ( fabs( point[0] - lineP2[0] ) <= range ) && ( fabs( point[1] - lineP2[1] ) <= range ) && ( fabs(point[2] - lineP2[2] ) <= range ) ) );
 }
 
-bool DrawerPolygon::isInsideOfBounds( double p1[3], double p2[3], int view )
+void DrawerPolygon::getBounds(double bounds[6])
 {
-    double minX, maxX, minY, maxY;
-    int numberOfPoints = m_pointsList.count();
-    bool allPointsAreInside = true;
-    int xIndex = Q2DViewer::getXIndexForView(view);
-    int yIndex = Q2DViewer::getYIndexForView(view);
-
-    if ( p1[xIndex] < p2[xIndex] )
-    {
-        minX = p1[xIndex];
-        maxX = p2[xIndex];
-    }
+    if ( m_vtkPolydata )
+        m_vtkPolydata->GetBounds(bounds);
     else
-    {
-        maxX = p1[xIndex];
-        minX = p2[xIndex];
-    }
-
-    if ( p1[yIndex] < p2[yIndex] )
-    {
-        minY = p1[yIndex];
-        maxY = p2[yIndex];
-    }
-    else
-    {
-        maxY = p1[yIndex];
-        minY = p2[yIndex];
-    }
-
-    for (int i = 0; i < numberOfPoints && allPointsAreInside; i++ )
-    {
-        QVector<double> currentPoint = m_pointsList.at( i );
-        if ( currentPoint[xIndex] >= maxX || currentPoint[xIndex] <= minX || currentPoint[yIndex] >= maxY || currentPoint[yIndex] <= minY )
-            allPointsAreInside = false;
-    }
-
-    return ( allPointsAreInside );
+        memset(bounds, 0.0, sizeof(double)*6);
 }
 
 double DrawerPolygon::computeArea( int view, double *spacing )
