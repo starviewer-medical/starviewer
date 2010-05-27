@@ -203,15 +203,16 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
             structPreviousStudyDownloading->hangingProtocol = hangingProtocol;
             structPreviousStudyDownloading->displaySet = displaySet;
 
-            bool isDownloading = m_studiesDownloading->contains( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID() );
-
             m_studiesDownloading->insert( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading );            
             m_patient = patient;
 
-            connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );
+            bool isDownloading = m_studiesDownloading->contains( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID() );
 
             if( !isDownloading )
+            {
+                connect( m_patient, SIGNAL( patientFused() ), SLOT(previousStudyDownloaded() ) );   
                 m_previousStudiesManager->downloadStudy( hangingProtocolImageSet->getPreviousStudyToDisplay(), hangingProtocolImageSet->getPreviousStudyPacs() );
+            }
         }
         else
         {
@@ -548,7 +549,8 @@ void HangingProtocolManager::previousStudyDownloaded()
     // Es busca quins estudis nous hi ha
     foreach( Study * study, m_patient->getStudies() )
     {
-        for (int i = 0; i < m_studiesDownloading->count( study->getInstanceUID() ) ; i++)
+        int count = m_studiesDownloading->count( study->getInstanceUID() );
+        for (int i = 0; i < count ; i++)
         { // Per cada estudi que esperàvem que es descarregués
 
             // Agafem l'estructura amb les dades que s'havien guardat per poder aplicar-ho
