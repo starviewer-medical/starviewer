@@ -9,7 +9,7 @@
 
 #include "repositorybase.h"
 #include "identifier.h"
-#include <map>
+#include <QHash>
 
 namespace udg {
 
@@ -38,6 +38,9 @@ public:
     /// Ens retorna un item del repositori amb l'identificador que especifiquem.
     ItemType *getItem( const Identifier id );
 
+    /// Ens retorna tots els items del repositoy.
+    QList<ItemType*> getItems();
+
     /// Elimina un item del repositori
     void removeItem( const Identifier id );
 
@@ -45,14 +48,14 @@ public:
     int getNumberOfItems();
 
     /// Retorna una llista amb tots els id del repositori
-    Identifier* getIdentifierList();
+    QList<Identifier*> getIdentifiers();
 
     /// Elimina tots els elements que hi hagi al repositori
     void cleanUp();
 
 private:
 
-    typedef std::map< Identifier, ItemType*  > ItemListType;
+    typedef QHash< Identifier, ItemType*  > ItemListType;
     typedef typename ItemListType::const_iterator ItemListIteratorType;
 
     /// La llista que conté els items amb un ID

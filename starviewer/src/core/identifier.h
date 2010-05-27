@@ -54,8 +54,11 @@ public:
     Identifier operator-( const int id );
     Identifier operator-=( const Identifier & id );
     Identifier operator-=( const int id );
-    
+
     friend std::ostream & operator << ( std::ostream &out, const Identifier &id );
+    friend bool operator==(const Identifier &id1, const Identifier &id2);
+    friend unsigned int qHash(const Identifier &id);
+
 private:
     int m_id;
 };
