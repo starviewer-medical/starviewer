@@ -574,8 +574,13 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(QString studyUID)
 {
     if( m_studiesDownloading->contains( studyUID ) )//si és un element que estavem esperant
     {
-        StructPreviousStudyDownloading* element = m_studiesDownloading->take( studyUID ); // s'agafa i es treu de la llista
-        element->widgetToDisplay->disableDownloadingState();
+        int count = m_studiesDownloading->count( studyUID );
+        for (int i = 0; i < count ; i++)
+        {
+            StructPreviousStudyDownloading* element = m_studiesDownloading->take( studyUID ); // s'agafa i es treu de la llista
+            element->widgetToDisplay->disableDownloadingState();
+            delete element;
+        }
     }
 }
 
