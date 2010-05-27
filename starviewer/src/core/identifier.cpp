@@ -173,4 +173,14 @@ std::ostream& operator <<( std::ostream &out, const Identifier &id )
     return out << id.m_id;
 }
 
+bool operator==(const Identifier &id1, const Identifier &id2)
+{
+    return id1.m_id == id2.m_id;
+}
+
+unsigned int qHash(const Identifier &id)
+{
+    return static_cast<unsigned int>(id.m_id);
+}
+
 };

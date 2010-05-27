@@ -29,33 +29,20 @@ Identifier Repository< ItemType >::addItem( ItemType* item )
 template< typename ItemType >
 ItemType* Repository< ItemType >::getItem( const Identifier id )
 {
-
-    Identifier listID;
-
-    ItemListIteratorType itr;
-    itr = m_itemList.begin();
-    listID = (*itr).first; // s'ha de fer així perquè sinó dóna un error guarro
-    while( itr != m_itemList.end() && listID != id )
-    {
-        itr++;
-        listID = (*itr).first;
-    }
-
-    if( listID == id )
-    {
-        return itr->second;
-    }
-    else // \TODO aquí es podria generar una excepció
-    {
-        return 0;
-    }
-
+    return m_itemList.value(id);
 }
+
+template< typename ItemType >
+QList<ItemType*> Repository< ItemType >::getItems()
+{
+    return m_itemList.values();
+}
+
 
 template< typename ItemType >
 void Repository< ItemType >::removeItem( const Identifier id )
 {
-    m_itemList.erase( id );
+    m_itemList.remove( id );
 }
 
 template< typename ItemType >
@@ -65,46 +52,16 @@ int Repository< ItemType >::getNumberOfItems()
 }
 
 template< typename ItemType >
-Identifier *Repository< ItemType >::getIdentifierList()
+QList<Identifier*> Repository< ItemType >::getIdentifiers()
 {
-    // declarem la llista d'id's que tindrà tants elements com el map
-    Identifier *idList;
-    int listSize = m_itemList.size();
-    if( listSize == 0 )
-    {
-        idList = 0;
-    }
-    else
-    {
-        idList = new Identifier[ listSize ];
-        // creem el corresponent iterador
-        ItemListIteratorType itr;
-        itr = m_itemList.begin();
-        // recorrem amb un iterador el map i omplim al llista
-
-        int i = 0;
-        while( itr != m_itemList.end()  )
-        {
-            idList[ i ] = (*itr).first;
-            itr++;
-            i++;
-        }
-    }
-
-    return idList;
-
+    return m_itemList.keys();
 }
 
 template< typename ItemType >
 void Repository< ItemType >::cleanUp()
 {
-    //TODO Cal arreglar aquest codi, ja que elimina els items d'una llista buida.
-    
-//     int items = this->getNumberOfItems();
-//     Identifier idList[ items ];
-// 
-//     for( int i = 0; i < items; i++ )
-//         this->removeItem( idList[i] );
+    //Buida la llista però no elimina els ItemType
+    m_itemList.clear();
 }
 
 };  // end namespace udg {
