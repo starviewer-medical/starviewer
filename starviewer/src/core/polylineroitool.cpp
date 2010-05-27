@@ -49,60 +49,54 @@ void PolylineROITool::start()
 
 void PolylineROITool::printData()
 {
-    double *bounds = m_roiPolygon->getBounds();
-    if( !bounds )
+    double bounds[6];
+    m_roiPolygon->getBounds(bounds);
+    double *intersection = new double[3];
+
+    intersection[0] = (bounds[1]+bounds[0])/2.0;
+    intersection[1] = (bounds[3]+bounds[2])/2.0;
+    intersection[2] = (bounds[5]+bounds[4])/2.0;
+
+    DrawerText * text = new DrawerText;
+    // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
+    // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
+    const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
+    QString areaUnits;
+    double spacing[3];
+    if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
     {
-        DEBUG_LOG( "Bounds no definits" );
+        // Si no coneixem l'spacing ho mostrem en pixels.
+        double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
+        spacing[0] = 1.0 / vtkSpacing[0];
+        spacing[1] = 1.0 / vtkSpacing[1];
+        spacing[2] = 1.0 / vtkSpacing[2];
+
+        areaUnits = "px2";
     }
     else
     {
-        double *intersection = new double[3];
-
-        intersection[0] = (bounds[1]+bounds[0])/2.0;
-        intersection[1] = (bounds[3]+bounds[2])/2.0;
-        intersection[2] = (bounds[5]+bounds[4])/2.0;
-
-        DrawerText * text = new DrawerText;
-        // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
-        // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
-        const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
-        QString areaUnits;
-        double spacing[3];
-        if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
+        // HACK Es fa aquesta comprovació perquè en US les vtk no agafen correctament el pixel spacing.
+        if ( m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US" )
         {
-            // Si no coneixem l'spacing ho mostrem en pixels.
             double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
-            spacing[0] = 1.0 / vtkSpacing[0];
-            spacing[1] = 1.0 / vtkSpacing[1];
+            spacing[0] = pixelSpacing[0] / vtkSpacing[0];
+            spacing[1] = pixelSpacing[1] / vtkSpacing[1];
             spacing[2] = 1.0 / vtkSpacing[2];
-
-            areaUnits = "px2";
         }
-        else        
+        else
         {
-            // HACK Es fa aquesta comprovació perquè en US les vtk no agafen correctament el pixel spacing.
-            if ( m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US" )
-            {
-                double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
-                spacing[0] = pixelSpacing[0] / vtkSpacing[0];
-                spacing[1] = pixelSpacing[1] / vtkSpacing[1];
-                spacing[2] = 1.0 / vtkSpacing[2];
-            }
-            else
-            {
-                spacing[0] = spacing[1] = spacing[2] = 1.0;
-            }
-            areaUnits = "mm2";
+            spacing[0] = spacing[1] = spacing[2] = 1.0;
         }
-
-        // Calculem les dades estadístiques
-        computeStatisticsData();
-        text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_roiPolygon->computeArea( m_2DViewer->getView(), spacing ), 0, 'f', 0 ).arg(areaUnits).arg( m_mean, 0, 'f', 2 ).arg( m_standardDeviation, 0, 'f', 2 ) );
-
-        text->setAttachmentPoint( intersection );
-        text->shadowOn();
-        m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        areaUnits = "mm2";
     }
+
+    // Calculem les dades estadístiques
+    computeStatisticsData();
+    text->setText( tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg( m_roiPolygon->computeArea( m_2DViewer->getView(), spacing ), 0, 'f', 0 ).arg(areaUnits).arg( m_mean, 0, 'f', 2 ).arg( m_standardDeviation, 0, 'f', 2 ) );
+
+    text->setAttachmentPoint( intersection );
+    text->shadowOn();
+    m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
 }
 
 void PolylineROITool::computeStatisticsData()
@@ -147,7 +141,8 @@ void PolylineROITool::computeStatisticsData()
     // Traçarem una lína d'escombrat dins de la regió quadrangular que ocupa el polígon
     // Aquesta línia produirà unes interseccions amb els segments del polígon
     // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
-    double *bounds = m_roiPolygon->getBounds();
+    double bounds[6];
+    m_roiPolygon->getBounds(bounds);
 	double *spacing = m_2DViewer->getInput()->getSpacing();
 
     double horizontalSpacingIncrement;

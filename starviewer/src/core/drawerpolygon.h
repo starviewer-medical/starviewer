@@ -53,14 +53,10 @@ public:
     /// Ens retorna el nombre de punts que té el polígon
     int getNumberOfPoints() const;
 
-    /// Retorna les coordenades del cub que envolta el polígon
-    double *getBounds();
-    
     /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
 
-    /// Mira si està dins dels límits que marquen els punts
-    bool isInsideOfBounds( double p1[3], double p2[3], int view );
+    void getBounds(double [6]);
 
     /// Calcula l'àrea del polígon
     double computeArea( int view, double * spacing = NULL );

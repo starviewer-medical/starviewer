@@ -353,36 +353,12 @@ double DrawerText::getDistanceToPoint( double *point3D )
     return MathTools::getDistance3D( m_attachPoint, point3D );
 }
 
-bool DrawerText::isInsideOfBounds( double p1[3], double p2[3], int view )
+void DrawerText::getBounds(double bounds[6])
 {
-    double minX, maxX, minY, maxY;
-    bool inside;
-    int xIndex = Q2DViewer::getXIndexForView(view);
-    int yIndex = Q2DViewer::getYIndexForView(view);
-
-    if ( p1[xIndex] < p2[xIndex] )
-    {
-        minX = p1[xIndex];
-        maxX = p2[xIndex];
-    }
-    else
-    {
-        maxX = p1[xIndex];
-        minX = p2[xIndex];
-    }
-
-    if ( p1[yIndex] < p2[yIndex] )
-    {
-        minY = p1[yIndex];
-        maxY = p2[yIndex];
-    }
-    else
-    {
-        maxY = p1[yIndex];
-        minY = p2[yIndex];
-    }
-    inside = ( m_attachPoint[xIndex] <= maxX && m_attachPoint[xIndex] >= minX && m_attachPoint[yIndex] <= maxY && m_attachPoint[yIndex] >= minY );
-
-    return ( inside );
+    // TODO Ara només tenim en compte l'attach point però es podria tenir 
+    // en compte d'alguna manera la capsa que envolta el texte
+    for(int i = 0; i < 3; i++)
+        bounds[i*2] = bounds[i*2+1] = m_attachPoint[i];
 }
+
 }

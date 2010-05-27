@@ -140,13 +140,11 @@ double DrawerCrossHair::getDistanceToPoint( double *point3D )
     return ( MathTools::getDistance3D( m_centrePoint, point3D ) );
 }
 
-bool DrawerCrossHair::isInsideOfBounds( double p1[3], double p2[3], int view )
+void DrawerCrossHair::getBounds(double bounds[6])
 {
-    Q_UNUSED(p1);
-    Q_UNUSED(p2);
-    Q_UNUSED(view);
-    // TODO implementar!
-    return false;
+    // TODO Falta implementar!!! Ara tornem els bounds "buits"
+    memset(bounds, 0.0, sizeof(double)*6);
+    DEBUG_LOG("DrawerCrossHair::getBounds() no implementat!");
 }
 
 void DrawerCrossHair::setVisibility( bool visible )

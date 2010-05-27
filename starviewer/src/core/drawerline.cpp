@@ -7,7 +7,6 @@
 #include "drawerline.h"
 #include "logging.h"
 #include "mathtools.h"
-#include "q2dviewer.h"
 // vtk
 #include <vtkLineSource.h>
 #include <vtkPolyDataMapper2D.h>
@@ -169,37 +168,21 @@ double DrawerLine::getDistanceToPoint( double *point3D )
     return vtkLine::DistanceToLine( point3D , m_firstPoint , m_secondPoint );
 }
 
-bool DrawerLine::isInsideOfBounds( double p1[3], double p2[3], int view )
+void DrawerLine::getBounds(double bounds[6])
 {
-    double minX, maxX, minY, maxY;
-    bool inside;
-    int xIndex = Q2DViewer::getXIndexForView(view);
-    int yIndex = Q2DViewer::getYIndexForView(view);
-
-    if ( p1[xIndex] < p2[xIndex] )
+    for (int i = 0; i < 3; i++)
     {
-        minX = p1[xIndex];
-        maxX = p2[xIndex];
+        if ( m_firstPoint[i] < m_secondPoint[i] )
+        {
+            bounds[i*2] = m_firstPoint[i];
+            bounds[i*2+1] = m_secondPoint[i];
+        }
+        else
+        {
+            bounds[i*2] = m_secondPoint[i];
+            bounds[i*2+1] = m_firstPoint[i];
+        }
     }
-    else
-    {
-        maxX = p1[xIndex];
-        minX = p2[xIndex];
-    }
-
-    if ( p1[yIndex] < p2[yIndex] )
-    {
-        minY = p1[yIndex];
-        maxY = p2[yIndex];
-    }
-    else
-    {
-        maxY = p1[yIndex];
-        minY = p2[yIndex];
-    }
-
-    inside = ( m_firstPoint[xIndex] <= maxX && m_firstPoint[xIndex] >= minX && m_firstPoint[yIndex] <= maxY && m_firstPoint[yIndex] >= minY && m_secondPoint[xIndex] <= maxX && m_secondPoint[xIndex] >= minX && m_secondPoint[yIndex] <= maxY && m_secondPoint[yIndex] >= minY );
-
-    return ( inside );
 }
+
 }

@@ -35,7 +35,7 @@ public:
 
     double getDistanceToPoint( double *point3D );
 
-    bool isInsideOfBounds( double p1[3], double p2[3], int view );
+    void getBounds(double bounds[6]);
 
     void setVisibility( bool visible );
 

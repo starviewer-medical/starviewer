@@ -130,9 +130,8 @@ public:
     
     /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint( double *point3D );
-    
-    /// Mira si està dins dels límits que marquen els punts
-    bool isInsideOfBounds( double p1[3], double p2[3], int view );
+
+    void getBounds(double bounds[6]);
 
 public slots:
     void update();

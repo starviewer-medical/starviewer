@@ -62,7 +62,7 @@ public:
     DrawerPrimitive* getPrimitiveNearerToPoint( double point[3], int view, int slice );
 
     ///ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
-    void erasePrimitivesInsideBounds( double p1[3], double p2[3], int view, int slice );
+    void erasePrimitivesInsideBounds( double bounds[6], int view, int slice );
 
     ///ens diu el total de primitives dibuixades en totes les vistes
     int getNumberOfDrawnPrimitives();
@@ -91,6 +91,11 @@ private:
      */
     void hide( int plane, int slice );
     void show( int plane, int slice );
+
+    /**
+     * Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
+     */
+    bool isPrimitiveInside(DrawerPrimitive *primitive, int view, double bounds[6]);
 
 private:
     /// Viewer sobre el qual pintarem les primitives

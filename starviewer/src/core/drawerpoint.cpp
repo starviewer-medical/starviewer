@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "drawerpoint.h"
 #include "logging.h"
-#include "q2dviewer.h"
 // vtk
 #include <vtkPolyDataMapper.h>
 #include <vtkProperty.h>
@@ -123,38 +122,13 @@ double DrawerPoint::getDistanceToPoint( double *point3D )
     return sqrt( (point3D[0]-m_position[0])*(point3D[0]-m_position[0]) + (point3D[1]-m_position[1])*(point3D[1]-m_position[1]) + (point3D[2]-m_position[2])*(point3D[2]-m_position[2]) );
 }
 
-bool DrawerPoint::isInsideOfBounds( double p1[3], double p2[3], int view )
+void DrawerPoint::getBounds(double bounds[6])
 {
-    double minX, maxX, minY, maxY;
-    bool inside;
-    int xIndex = Q2DViewer::getXIndexForView(view);
-    int yIndex = Q2DViewer::getYIndexForView(view);
-
-    if ( p1[xIndex] < p2[xIndex] )
+    for (int i = 0; i < 3; i++)
     {
-        minX = p1[xIndex];
-        maxX = p2[xIndex];
+        bounds[i*2] = m_position[i] - m_pointRadius;
+        bounds[i*2+1] = m_position[i] + m_pointRadius;
     }
-    else
-    {
-        maxX = p1[xIndex];
-        minX = p2[xIndex];
-    }
-
-    if ( p1[yIndex] < p2[yIndex] )
-    {
-        minY = p1[yIndex];
-        maxY = p2[yIndex];
-    }
-    else
-    {
-        maxY = p1[yIndex];
-        minY = p2[yIndex];
-    }
-    inside = ( m_position[xIndex] <= maxX && m_position[xIndex] >= minX && m_position[yIndex] <= maxY && m_position[1] >= minY );
-
-    return ( inside );
 }
-
 
 }

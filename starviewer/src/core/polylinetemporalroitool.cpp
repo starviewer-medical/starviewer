@@ -53,15 +53,9 @@ void PolylineTemporalROITool::setToolData(ToolData * data)
 void PolylineTemporalROITool::start()
 {
     DEBUG_LOG("Start PolylineTemporalROI");
-
-    double *bounds = m_roiPolygon->getBounds();
-    if( !bounds )
-    {
-        DEBUG_LOG( "Bounds no definits" );
-    }
-    else
-    {
-        this->computeTemporalMean();
+    double bounds[6];
+    m_roiPolygon->getBounds(bounds);
+    this->computeTemporalMean();
 /*        double *intersection = new double[3];
 
         intersection[0] = (bounds[1]+bounds[0])/2.0;
@@ -85,7 +79,6 @@ void PolylineTemporalROITool::start()
         text->setAttatchmentPoint( intersection );
         m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
  */
-    }
 }
 
 void PolylineTemporalROITool::convertInputImageToTemporalImage()
@@ -179,7 +172,8 @@ double PolylineTemporalROITool::computeTemporalMean()
 		segments << line;
 	}
 
-	double *bounds = m_roiPolygon->getBounds();
+    double bounds[6];
+    m_roiPolygon->getBounds(bounds);
 	double *spacing = m_2DViewer->getInput()->getSpacing();
 
 	int rayPointIndex;
