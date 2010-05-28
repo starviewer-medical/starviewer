@@ -203,10 +203,10 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
             structPreviousStudyDownloading->hangingProtocol = hangingProtocol;
             structPreviousStudyDownloading->displaySet = displaySet;
 
+            bool isDownloading = m_studiesDownloading->contains( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID() );
+
             m_studiesDownloading->insert( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading );            
             m_patient = patient;
-
-            bool isDownloading = m_studiesDownloading->contains( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID() );
 
             if( !isDownloading )
             {
