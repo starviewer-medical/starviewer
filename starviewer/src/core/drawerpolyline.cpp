@@ -194,7 +194,7 @@ void DrawerPolyline::swap()
 
 double DrawerPolyline::getDistanceToPoint(double *point3D)
 {
-    double minDistanceLine = VTK_DOUBLE_MAX;
+    double minDistanceLine = MathTools::DoubleMaximumValue;
     double distance;
     bool found = false;
 
@@ -222,7 +222,7 @@ double DrawerPolyline::getDistanceToPoint(double *point3D)
             {
                 distance = vtkLine::DistanceToLine(point3D , auxList[i] , auxList[i+1]);
 
-                if ( minDistanceLine == VTK_DOUBLE_MAX )
+                if ( minDistanceLine == MathTools::DoubleMaximumValue )
                     minDistanceLine = distance;
                 else if ( distance < minDistanceLine )
                         minDistanceLine = distance;

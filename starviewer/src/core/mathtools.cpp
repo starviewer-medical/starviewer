@@ -22,6 +22,7 @@ const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916
 const double MathTools::Epsilon = 1E-9;
 const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
 const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
+const double MathTools::DoubleMaximumValue = VTK_DOUBLE_MAX;
 
 double MathTools::logTwo(const double x, const bool zero)
 {
@@ -128,7 +129,7 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     if( vtkPlane::IntersectWithLine( point , point2 , t , r ,  tt , intersectionPoint ) == 0 )
     {
         // si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
-        if( tt == VTK_DOUBLE_MAX )
+        if( tt == MathTools::DoubleMaximumValue )
         {
             DEBUG_LOG( QString("No hi ha hagut intersecció! Valor coord paramètrica: %1").arg( tt )  );
             return -1;

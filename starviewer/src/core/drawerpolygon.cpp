@@ -7,6 +7,7 @@
 #include "drawerpolygon.h"
 #include "logging.h"
 #include "q2dviewer.h"
+#include "mathtools.h"
 // vtk
 #include <vtkPolyData.h>
 #include <vtkCellArray.h>
@@ -203,7 +204,7 @@ int DrawerPolygon::getNumberOfPoints() const
 
 double DrawerPolygon::getDistanceToPoint(double *point3D)
 {
-    double minDistanceLine = VTK_DOUBLE_MAX;
+    double minDistanceLine = MathTools::DoubleMaximumValue;
     double distance, *auxPoint;
     bool found = false;
     int j;
@@ -241,7 +242,7 @@ double DrawerPolygon::getDistanceToPoint(double *point3D)
             {
                 distance = vtkLine::DistanceToLine(point3D , auxList[i] , auxList[i+1]);
 
-                if ( ( minDistanceLine != VTK_DOUBLE_MAX ) && ( distance < minDistanceLine ) )
+                if ( ( minDistanceLine != MathTools::DoubleMaximumValue ) && ( distance < minDistanceLine ) )
                         minDistanceLine = distance;
             }
         }

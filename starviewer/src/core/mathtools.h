@@ -32,6 +32,8 @@ static const double DegreesToRadiansAsDouble;
 static const double RadiansToDegreesAsDouble;
 /// Epsilon, nombre extremadament petit
 static const double Epsilon;
+/// Valor màxim d'un tipus double
+static const double DoubleMaximumValue;
 
 ///
 /// Operacions aritmètiques 
