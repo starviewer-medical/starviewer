@@ -66,7 +66,7 @@ private:
     Series *searchSerie( QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol );
 
     /// Cert si la imatge compleix les restriccions
-    bool isValidImage( Image *image, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
+    bool isValidImage(Image *image, HangingProtocolImageSet *imageSet);
 
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
     bool isValidSerie( Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
