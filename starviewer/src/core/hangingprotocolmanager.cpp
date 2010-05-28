@@ -243,16 +243,11 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
 {
     bool found = false;
     int i = 0;
-    int imageNumber = 0;
     int numberSeries = listOfSeries.size();
-    int numberImages;
-    Series *serie = 0;
-    Image *image = 0;
-    QList< Image * > listOfImages;
 
     while( !found && i < numberSeries )
     {
-        serie = listOfSeries.value( i );
+        Series *serie = listOfSeries.value( i );
 
         if( imageSet->getTypeOfItem() != "image" )
         {
@@ -271,13 +266,13 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
             // Comprovem que la sèrie sigui de la modalitat del hanging protocol per evitar haver-ho de comprovar a cada imatge
             if( hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( serie->getModality() ) )
             {
-                imageNumber = 0;
-                listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
-                numberImages = listOfImages.size();
+                int imageNumber = 0;
+                QList<Image *> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
+                int numberImages = listOfImages.size();
 
                 while( !found && imageNumber < numberImages )
                 {
-                    image = listOfImages.value( imageNumber );
+                    Image *image = listOfImages.value( imageNumber );
                     if( isValidImage( image, imageSet, hangingProtocol ) )
                     {
                         found = true;
