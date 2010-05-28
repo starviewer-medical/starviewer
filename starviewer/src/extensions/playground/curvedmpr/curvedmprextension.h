@@ -51,17 +51,6 @@ private:
     /// S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
     void initAndFillImageDataVTK( Volume *volume, QList< double * > *pointsPath, vtkImageData *imageDataVTK );
 
-    /**
-     * COPIAT del mètode getCurrentCursorImageVoxel de la classe Q2Viewer
-     * Calcula el valor del voxel allà on es troba el punt indicat
-     * @param volume. Volum de dades de treball.
-     * @param point. Coordenades [x,y,z] del punt de la imatge que volem saber el valor.
-     * @param voxelValue Valor d'entrada/sortida. Ens dóna el valor del vòxel calculat
-     * En cas que el punt indicat estigui fora dels límits de la imatge, el valor retornat serà indefinit
-     * @return Cert si el punt indicat es troba dins dels límits de la imatge, fals altrament
-     */
-    bool getPointImageVoxelValue( Volume *volume, double *point, Volume::VoxelType &voxelValue );
-
 private:
     /// El volum al que se li practica l'MPR Curvilini
     Volume *m_volume;

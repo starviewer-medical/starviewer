@@ -20,6 +20,9 @@
 #include <vtkExtractVOI.h>
 #include <vtkImageChangeInformation.h>
 #include <vtkDICOMImageReader.h>
+// Voxel information
+#include <vtkPointData.h>
+#include <vtkCell.h>
 
 // ITK
 #include <itkTileImageFilter.h>
@@ -440,6 +443,39 @@ Volume::VoxelType *Volume::getScalarPointer(int index[3])
 	return this->getScalarPointer(index[0], index[1], index[2]);
 }
 
+bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
+{
+    vtkImageData *vtkData = getVtkData();
+    if ( !vtkData )
+    {
+        DEBUG_LOG("Dades VTK nul·les!");
+        return false;
+    }
+    
+    // Use tolerance as a function of size of source data
+    double tolerance = vtkData->GetLength();
+    tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
+
+    int subCellId;
+    double parametricCoordinates[3], interpolationWeights[8];
+    bool found = false;
+
+    // Find the cell that contains q and get it
+    vtkCell *cell = vtkData->FindAndGetCell(coordinate, NULL, -1, tolerance, subCellId, parametricCoordinates, interpolationWeights);
+    if ( cell )
+    {
+        vtkPointData *pointData = vtkData->GetPointData();
+        vtkPointData *outPointData = vtkPointData::New();
+        outPointData->InterpolateAllocate(pointData, 1, 1);
+        // Interpolate the point data
+        outPointData->InterpolatePoint(pointData, 0, cell->PointIds, interpolationWeights);
+        voxelValue = outPointData->GetScalars()->GetTuple1(0);
+        found = true;
+        outPointData->Delete();
+    }
+
+    return found;
+}
 void Volume::allocateImageData()
 {
     //\TODO si les dades estan allotjades per defecte, fer un delete primer i després fer un new? o amb un ReleaseData n'hi ha prou?

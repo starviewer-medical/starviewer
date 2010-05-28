@@ -233,7 +233,7 @@ void CurvedMPRExtension::initAndFillImageDataVTK( Volume * volume, QList< double
             point[2] = point[2] + y;
 
             //DEBUG_LOG(QString("Point imatge [%1,%2,%3]").arg(point[0]).arg(point[1]).arg(point[2]));
-            if ( getPointImageVoxelValue( volume, point, voxelValue ) )
+            if ( volume->getVoxelValue(point, voxelValue) )
             {
                 //DEBUG_LOG(QString("Valor pixel %1").arg(voxelValue));
                 // S'afegeix el valor del píxel a les dades VTK
@@ -242,40 +242,6 @@ void CurvedMPRExtension::initAndFillImageDataVTK( Volume * volume, QList< double
             }
         }
     }
-}
-
-bool CurvedMPRExtension::getPointImageVoxelValue( Volume *volume, double *point, Volume::VoxelType &voxelValue )
-{
-    bool found = false;
-    if( point )
-    {
-        double tolerance;
-        int subCellId;
-        double parametricCoordinates[3], interpolationWeights[8];
-
-        vtkPointData *pointData = volume->getVtkData()->GetPointData();
-        vtkPointData* outPointData = vtkPointData::New();
-        outPointData->InterpolateAllocate( pointData , 1 , 1 );
-
-        // Use tolerance as a function of size of source data
-        tolerance = volume->getVtkData()->GetLength();
-        tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
-
-        Volume::VtkImageTypePointer dades = volume->getVtkData();
-
-        // Find the cell that contains point and get it
-        vtkCell *cell = volume->getVtkData()->FindAndGetCell( point , NULL , -1 , tolerance , subCellId , parametricCoordinates , interpolationWeights );
-        if ( cell )
-        {
-            // Interpolate the point data
-            outPointData->InterpolatePoint( pointData , 0 , cell->PointIds , interpolationWeights );
-            voxelValue = outPointData->GetScalars()->GetTuple1(0);
-            found = true;
-        }
-        outPointData->Delete();
-    }
-
-    return found;
 }
 
 }; // end namespace udg

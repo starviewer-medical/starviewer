@@ -22,6 +22,7 @@ class ToolConfiguration;
 class HangingProtocol;
 //Estructura pacient
 class Patient;
+class Study;
 //Visualitzador
 class Q2DViewerWidget;
 class Q2DViewer;
