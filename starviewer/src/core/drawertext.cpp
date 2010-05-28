@@ -171,7 +171,7 @@ void DrawerText::updateVtkActorProperties()
     m_vtkActor->SetVisibility(this->isVisible());
 }
 
-void DrawerText::setText(QString text)
+void DrawerText::setText(const QString &text)
 {
     m_text = text;
     emit changed();
@@ -224,7 +224,7 @@ QString DrawerText::getFontFamily()
     return m_fontFamily;
 }
 
-void DrawerText::setFontFamily(QString family)
+void DrawerText::setFontFamily(const QString &family)
 {
     m_fontFamily = family;
     emit changed();
@@ -304,7 +304,7 @@ bool DrawerText::hasShadow()
     return(m_shadow);
 }
 
-void DrawerText::setHorizontalJustification(QString horizontalJustification)
+void DrawerText::setHorizontalJustification(const QString &horizontalJustification)
 {
     m_horizontalJustification = horizontalJustification;
     emit changed();
@@ -315,7 +315,7 @@ QString DrawerText::getHorizontalJustification()
     return(m_horizontalJustification);
 }
 
-void DrawerText::setVerticalJustification(QString verticalJustification)
+void DrawerText::setVerticalJustification(const QString &verticalJustification)
 {
     m_verticalJustification = verticalJustification;
     emit changed();

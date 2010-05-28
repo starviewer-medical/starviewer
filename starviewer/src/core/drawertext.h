@@ -27,7 +27,7 @@ public:
     vtkProp *getAsVtkProp();
 
     /// Permet assignar el text
-    void setText(QString text);
+    void setText(const QString &text);
     
     /// Ens retorna el text que conté
     QString getText();
@@ -60,7 +60,7 @@ public:
     QString getFontFamily();
     
     /// Ens permet assignar el tipus de font
-    void setFontFamily(QString family);
+    void setFontFamily(const QString &family);
     
     /// Assigna el tamany de la font 
     void setFontSize(int size);
@@ -105,13 +105,13 @@ public:
     bool hasShadow();
     
     /// Ens permet assignar el tipus de justificació horitzontal
-    void setHorizontalJustification(QString horizontalJustification);
+    void setHorizontalJustification(const QString &horizontalJustification);
     
     /// Ens retorna el tipus de justificació horitzontal
     QString getHorizontalJustification();
     
     /// Ens permet assignar el tipus de justificació vertical
-    void setVerticalJustification(QString verticalJustification);
+    void setVerticalJustification(const QString &verticalJustification);
     
     /// Ens retorna el tipus de justificació vertical
     QString getVerticalJustification();
