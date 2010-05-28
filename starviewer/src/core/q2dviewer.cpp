@@ -23,6 +23,7 @@
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCamera.h>
+#include <vtkPropPicker.h>
 // Composició d'imatges
 #include <vtkImageBlend.h>
 // Anotacions
@@ -34,10 +35,6 @@
 #include <vtkProp.h>
 #include <vtkScalarBarActor.h>
 #include <vtkWindowLevelLookupTable.h>
-// Voxel information
-#include <vtkPointData.h>
-#include <vtkCell.h>
-#include <vtkPropPicker.h>
 #include <vtkImageActor.h>
 // Grayscale pipeline
 #include <vtkImageMapToWindowLevelColors.h>
@@ -1406,39 +1403,6 @@ bool Q2DViewer::getCurrentCursorImageCoordinate( double xyz[3] )
         DEBUG_LOG("Outside");
     }
     return inside;
-}
-
-bool Q2DViewer::getCurrentCursorImageVoxel( Volume::VoxelType &voxelValue )
-{
-    double xyz[3];
-    bool found = false;
-    if( this->getCurrentCursorImageCoordinate(xyz) )
-    {
-        double tolerance;
-        int subCellId;
-        double parametricCoordinates[3], interpolationWeights[8];
-
-        vtkPointData *pointData = m_mainVolume->getVtkData()->GetPointData();
-        vtkPointData* outPointData = vtkPointData::New();
-        outPointData->InterpolateAllocate( pointData , 1 , 1 );
-
-        // Use tolerance as a function of size of source data
-        tolerance = m_mainVolume->getVtkData()->GetLength();
-        tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
-
-        // Find the cell that contains q and get it
-        vtkCell *cell = m_mainVolume->getVtkData()->FindAndGetCell( xyz , NULL , -1 , tolerance , subCellId , parametricCoordinates , interpolationWeights );
-        if ( cell )
-        {
-            // Interpolate the point data
-            outPointData->InterpolatePoint( pointData , 0 , cell->PointIds , interpolationWeights );
-            voxelValue = outPointData->GetScalars()->GetTuple1(0);
-            found = true;
-        }
-        outPointData->Delete();
-    }
-
-    return found;
 }
 
 Q2DViewer::CameraOrientationType Q2DViewer::getView() const

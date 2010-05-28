@@ -8,6 +8,7 @@
 #include "q2dviewer.h"
 #include "logging.h"
 #include "transdifferencetooldata.h"
+#include "volume.h"
 
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>

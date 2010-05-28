@@ -116,7 +116,10 @@ void VoxelInformationTool::placeText( double textPosition[3] )
     xyz[2] = worldPoint[2];
 
     Volume::VoxelType voxelValue;
-    if( m_2DViewer->getCurrentCursorImageVoxel(voxelValue) )
+    double currentCursorPosition[3];
+    m_2DViewer->getCurrentCursorImageCoordinate(currentCursorPosition);
+    
+    if( m_2DViewer->getInput()->getVoxelValue(currentCursorPosition, voxelValue) )
     {
         m_caption->visibilityOn();
         m_caption->setAttachmentPoint(xyz);

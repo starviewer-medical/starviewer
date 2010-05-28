@@ -14,7 +14,7 @@
 #include "toolconfiguration.h"
 #include "patientbrowsermenu.h"
 #include "angiosubstractionsettings.h"
-
+#include "volume.h"
 // ITK
 #include <itkImageRegistrationMethod.h>
 #include <itkTranslationTransform.h>

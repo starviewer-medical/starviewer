@@ -172,6 +172,12 @@ public:
     VoxelType *getScalarPointer(int x = 0, int y = 0, int z = 0);
     VoxelType *getScalarPointer(int index[3]);
 
+    /// Donada una coordenada de món, ens dóna el valor del vòxel corresponent.
+    /// Si la coordenada està dins del volum retorna true, false altrament.
+    /// TODO S'espera que la coordenada sigui dins del món VTK! 
+    /// Caldria determinar si ha de ser així o hauria de ser DICOM o en un altre sistema.
+    bool getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue);
+
     /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert
     bool fitsIntoMemory();
 
