@@ -72,7 +72,7 @@ private:
     bool isValidImage(Image *image, HangingProtocolImageSet *imageSet);
 
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
-    bool isValidSerie( Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol );
+    bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
 
     /// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
     /// TODO Els paràmetres serie i imageNumber no es fan servir per res. Estan posats per una implementació futura o és que realment són innecessaris?
