@@ -229,7 +229,7 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, Pat
     {
         foreach ( QString modality, study->getModalities() )
         {
-            if( protocol->getHangingProtocolMask()->getProtocolList().contains( modality ) )
+            if( isModalityCompatible(protocol, modality) )
             {
                 return true;
             }
@@ -237,6 +237,11 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, Pat
     }
 
     return false;
+}
+
+bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, const QString &modality)
+{
+    return protocol->getHangingProtocolMask()->getProtocolList().contains( modality );
 }
 
 Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol )
@@ -298,7 +303,7 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
             else
             {
                 // Comprovem que la sèrie sigui de la modalitat del hanging protocol per evitar haver-ho de comprovar a cada imatge
-                if( hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( serie->getModality() ) )
+                if( isModalityCompatible(hangingProtocol, serie->getModality() ) )
                 {
                     int imageNumber = 0;
                     QList<Image *> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
@@ -343,7 +348,7 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
 
     if( valid )
     {
-        valid = hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( serie->getModality() );
+        valid = isModalityCompatible(hangingProtocol, serie->getModality() );
     }
     
     while ( valid && i < numberRestrictions )
@@ -523,7 +528,7 @@ Study * HangingProtocolManager::searchPreviousStudy( HangingProtocol * protocol 
         {
             foreach(QString modality, study->getModalities() )
             {
-                if( protocol->getHangingProtocolMask()->getProtocolList().contains(modality) )
+                if( isModalityCompatible(protocol, modality) )
                 {
                     return study;
                 }
