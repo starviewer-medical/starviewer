@@ -21,7 +21,7 @@ class DrawerPrimitive;
 class Drawer : public QObject {
 Q_OBJECT
 public:
-    Drawer( Q2DViewer *viewer, QObject *parent = 0 );
+    Drawer(Q2DViewer *viewer, QObject *parent = 0);
     ~Drawer();
 
     /**
@@ -99,10 +99,10 @@ private:
     Q2DViewer *m_2DViewer;
 
     /// Contenidors de primitives per cada pla possible
-    QMultiMap< int, DrawerPrimitive *> m_axialPrimitives;
-    QMultiMap< int, DrawerPrimitive *> m_sagitalPrimitives;
-    QMultiMap< int, DrawerPrimitive *> m_coronalPrimitives;
-    QList< DrawerPrimitive * > m_top2DPlanePrimitives;
+    QMultiMap<int, DrawerPrimitive *> m_axialPrimitives;
+    QMultiMap<int, DrawerPrimitive *> m_sagitalPrimitives;
+    QMultiMap<int, DrawerPrimitive *> m_coronalPrimitives;
+    QList<DrawerPrimitive *> m_top2DPlanePrimitives;
 
     /// Pla i llesca en el que es troba en aquell moment el 2D Viewer. Serveix per controlar
     /// els canvis de llesca i de pla, per saber quines primitives hem de netejar
