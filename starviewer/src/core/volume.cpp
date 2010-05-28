@@ -7,6 +7,13 @@
 #ifndef UDGVOLUME_CPP
 #define UDGVOLUME_CPP
 
+#include "volume.h"
+
+#include "logging.h"
+#include "image.h"
+#include "series.h"
+#include "study.h"
+#include "patient.h"
 #include "dicomtagreader.h"
 #include "dicomimagereader.h"
 #include "dicomimagereadervtk.h"
@@ -14,7 +21,6 @@
 #include "dicomimagereaderitkgdcm.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
-
 // VTK
 #include <vtkImageData.h>
 #include <vtkExtractVOI.h>
@@ -23,17 +29,8 @@
 // Voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
-
 // ITK
 #include <itkTileImageFilter.h>
-
-#include "volume.h"
-#include "logging.h"
-#include "image.h"
-#include "series.h"
-#include "study.h"
-#include "patient.h"
-
 // Esxtra per INPUT
 #include <QFileInfo>
 #include <QDir>
@@ -64,7 +61,8 @@ Volume::Volume(VtkImageTypePointer vtkImage, QObject *parent)
 void Volume::init()
 {
     m_numberOfPhases = 1;
-    // \TODO és millor crear un objecte o assignar-li NUL a l'inicialitzar? Així potser és més segur des del punt de vista de si li demanem propietats al volum com origen, espaiat, etc
+    // TODO És millor crear un objecte o assignar-li NUL a l'inicialitzar? 
+    // Així potser és més segur des del punt de vista de si li demanem propietats al volum com origen, espaiat, etc
     m_imageDataVTK = vtkImageData::New();
 
     m_itkToVtkFilter = ItkToVtkFilterType::New();
@@ -116,14 +114,14 @@ Volume::VtkImageTypePointer Volume::getVtkData()
                 break;
 
             case MissingFile:
-                //Fem el mateix que en el cas OutOfMemory, canviant el missatge d'error
+                // Fem el mateix que en el cas OutOfMemory, canviant el missatge d'error
                 createNeutralVolume();
                 m_dataLoaded = true;
                 QMessageBox::warning(0, tr("Missing Files"), tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString) );
                 break;
 
             case UnknownError:
-                // hi ha hagut un error no controlat, creem el volum neutral per evitar desastres majors
+                // Hi ha hagut un error no controlat, creem el volum neutral per evitar desastres majors
                 createNeutralVolume();
                 m_dataLoaded = true;
                 QMessageBox::warning(0, tr("Unkwown Error"), tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString) );
@@ -156,7 +154,7 @@ void Volume::setData(ItkImageTypePointer itkImage)
 
 void Volume::setData(VtkImageTypePointer vtkImage)
 {
-    // \TODO fer còpia local, no només punter-> com fer-ho?
+    // TODO Fer còpia local, no només punter-> com fer-ho?
     if ( m_imageDataVTK )
         m_imageDataVTK->ReleaseData();
     m_imageDataVTK = vtkImage;
@@ -401,8 +399,8 @@ Image *Volume::getImage(int sliceNumber, int phaseNumber) const
 
 void Volume::getStackDirection(double direction[3], int stack)
 {
-    // TODO encara no suportem múltiples stacks!!!!
-    // fem el tractament com si només hi hagués un sol
+    // TODO Encara no suportem múltiples stacks!!!!
+    // Fem el tractament com si només hi hagués un sol
     Q_UNUSED(stack);
     Image *firstImage = this->getImage(0);
     Image *secondImage = this->getImage(1);
@@ -433,13 +431,13 @@ void Volume::getStackDirection(double direction[3], int stack)
 
 Volume::VoxelType *Volume::getScalarPointer(int x, int y, int z)
 {
-	// TODO caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
+	// TODO Caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
 	return (Volume::VoxelType *)this->getVtkData()->GetScalarPointer(x,y,z);
 }
 
 Volume::VoxelType *Volume::getScalarPointer(int index[3])
 {
-	// TODO caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
+	// TODO Caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
 	return this->getScalarPointer(index[0], index[1], index[2]);
 }
 
@@ -478,7 +476,7 @@ bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
 }
 void Volume::allocateImageData()
 {
-    //\TODO si les dades estan allotjades per defecte, fer un delete primer i després fer un new? o amb un ReleaseData n'hi ha prou?
+    // TODO Si les dades estan allotjades per defecte, fer un delete primer i després fer un new? o amb un ReleaseData n'hi ha prou?
     m_imageDataVTK->Delete();
     m_imageDataVTK = vtkImageData::New();
 
@@ -494,7 +492,7 @@ void Volume::allocateImageData()
     spacing[2] = m_imageSet.at(0)->getSliceThickness();
     m_imageDataVTK->SetSpacing(spacing);
     m_imageDataVTK->SetDimensions(m_imageSet.at(0)->getRows(), m_imageSet.at(0)->getColumns(), m_imageSet.size() );
-    //\TODO de moment assumim que sempre seran ints i ho mapejem així,potser més endavant podria canviar, però és el tipus que tenim fixat desde les itk
+    // TODO De moment assumim que sempre seran ints i ho mapejem així,potser més endavant podria canviar, però és el tipus que tenim fixat desde les itk
     m_imageDataVTK->SetScalarTypeToShort();
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();
@@ -540,8 +538,7 @@ void Volume::loadSlicesWithReaders(int method)
         .arg(m_imageDataVTK->GetIncrements()[0])
         .arg(m_imageDataVTK->GetIncrements()[1])
         .arg(m_imageDataVTK->GetIncrements()[2])
-        .arg(m_imageDataVTK->GetDimensions()[0]*m_imageDataVTK->GetDimensions()[1]*m_imageDataVTK->GetScalarSize() )
-   );
+        .arg(m_imageDataVTK->GetDimensions()[0]*m_imageDataVTK->GetDimensions()[1]*m_imageDataVTK->GetScalarSize() ) );
     reader->setInputImages(m_imageSet);
     reader->setBufferPointer(m_imageDataVTK->GetScalarPointer() );
     reader->setSliceByteIncrement(m_imageDataVTK->GetIncrements()[2]*m_imageDataVTK->GetScalarSize() );
@@ -551,10 +548,10 @@ void Volume::loadSlicesWithReaders(int method)
 void Volume::readDifferentSizeImagesIntoOneVolume(const QStringList &filenames)
 {
     int errorCode = NoError;
-    // declarem el filtre de tiling
+    // Declarem el filtre de tiling
     typedef itk::TileImageFilter< ItkImageType, ItkImageType  > TileFilterType;
     TileFilterType::Pointer tileFilter = TileFilterType::New();
-    // inicialitzem les seves variables
+    // Inicialitzem les seves variables
     // El layout ens serveix per indicar cap on creix la cua. En aquest cas volem fer creixer la coordenada Z
     TileFilterType::LayoutArrayType layout;
     layout[0] = 1;
@@ -566,10 +563,10 @@ void Volume::readDifferentSizeImagesIntoOneVolume(const QStringList &filenames)
     int progressIncrement = static_cast<int>((1.0/(double)filenames.count()) * 100);
 
     m_reader->SetImageIO(m_gdcmIO);
-    foreach(QString file, filenames)
+    foreach (QString file, filenames)
     {
         emit progress(progressCount);
-        // declarem la imatge que volem carregar
+        // Declarem la imatge que volem carregar
         ItkImageType::Pointer itkImage;
         m_reader->SetFileName(qPrintable(file));
         try
@@ -583,7 +580,7 @@ void Volume::readDifferentSizeImagesIntoOneVolume(const QStringList &filenames)
                     .arg(e.GetDescription() )
                    );
 
-            // llegim el missatge d'error per esbrinar de quin error es tracta
+            // Llegim el missatge d'error per esbrinar de quin error es tracta
             errorCode = identifyErrorMessage(QString(e.GetDescription()));
         }
         if ( errorCode == NoError )
@@ -591,7 +588,7 @@ void Volume::readDifferentSizeImagesIntoOneVolume(const QStringList &filenames)
             itkImage = m_reader->GetOutput();
             m_reader->GetOutput()->DisconnectPipeline();
         }
-        // TODO no es fa tractament d'errors!
+        // TODO No es fa tractament d'errors!
 
         // Un cop llegit el block, fem el tiling
         tileFilter->PushBackInput(itkImage);
@@ -618,7 +615,7 @@ void Volume::inputConstructor()
 
     if ( !m_progressSignalAdaptor )
         m_progressSignalAdaptor = new itk::QtSignalAdaptor();
-    //   Connect the adaptor as an observer of a Filter's event
+    // Connect the adaptor as an observer of a Filter's event
     m_seriesReader->AddObserver(itk::ProgressEvent(), m_progressSignalAdaptor->GetCommand() );
 //
 //  Connect the adaptor's Signal to the Qt Widget Slot
@@ -655,7 +652,7 @@ int Volume::readSingleFile(QString fileName)
                 .arg(fileName)
                 .arg(e.GetDescription())
                );
-        // llegim el missatge d'error per esbrinar de quin error es tracta
+        // Llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage(QString(e.GetDescription()) );
 
         // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
@@ -671,7 +668,7 @@ int Volume::readSingleFile(QString fileName)
     if ( errorCode == NoError )
     {
         // HACK En els casos que les imatges siguin enhanced, les gdcm no omplen correctament
-        // ni l'origen ni l'sapcing x,y i és per això que li assignem l'origen  i l'spacing 
+        // ni l'origen ni l'sapcing x,y i és per això que li assignem l'origen i l'spacing 
         // que hem llegit correctament a Image
         // TODO Quan solucionem correctament el ticket #1166 (actualització a gdcm 2.0.x) aquesta assignació desapareixerà
         if ( !m_imageSet.isEmpty() )
@@ -703,7 +700,7 @@ int Volume::readSingleFile(QString fileName)
         // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
         emit progress(100);
     }
-    // TODO falta tractament d'errors!?
+    // TODO Falta tractament d'errors!?
     return errorCode;
 }
 
@@ -719,10 +716,10 @@ int Volume::readFiles(QStringList filenames)
 
     if ( filenames.size() > 1 )
     {
-        // això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
+        // Això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
         m_seriesReader->SetImageIO(m_gdcmIO);
 
-        // convertim la QStringList al format std::vector< std::string > que s'esperen les itk
+        // Convertim la QStringList al format std::vector< std::string > que s'esperen les itk
         std::vector< std::string > stlFilenames;
         for (int i = 0; i < filenames.size(); i++)
         {
@@ -741,7 +738,7 @@ int Volume::readFiles(QStringList filenames)
                 .arg(QFileInfo(filenames.at(0)).dir().path() )
                 .arg(e.GetDescription() )
                );
-            // llegim el missatge d'error per esbrinar de quin error es tracta
+            // Llegim el missatge d'error per esbrinar de quin error es tracta
             errorCode = identifyErrorMessage(QString(e.GetDescription()) );
         }
         switch ( errorCode )
@@ -752,13 +749,12 @@ int Volume::readFiles(QStringList filenames)
             break;
 
         case SizeMismatch:
-            // TODO això es podria fer a ::getVtkData o ja està bé aquí?
+            // TODO Això es podria fer a ::getVtkData o ja està bé aquí?
             errorCode = NoError;
             readDifferentSizeImagesIntoOneVolume(filenames);
             emit progress(100);
             break;
         }
-        
     }
     else
     {
@@ -809,7 +805,7 @@ void Volume::createNeutralVolume()
         }
     }
     // Quan creem el volum neutre indiquem que només tenim 1 sola fase 
-    // TODO potser s'haurien de crear tantes fases com les que indiqui la sèrie?
+    // TODO Potser s'haurien de crear tantes fases com les que indiqui la sèrie?
     this->setNumberOfPhases(1);
 }
 
@@ -819,7 +815,7 @@ bool Volume::fitsIntoMemory()
         return true;
     
     unsigned long long int size = 0;
-    foreach(Image *image, m_imageSet)
+    foreach (Image *image, m_imageSet)
     {
         size += image->getColumns() * image->getRows() * sizeof(VoxelType);
     }
