@@ -29,45 +29,21 @@ Drawer::~Drawer()
 
 void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
 {
+    // Inicialment la primitiva no serà visible fins que no es comprovi el contrari
+    primitive->setVisibility(false);
+
     switch ( plane )
     {
     case QViewer::AxialPlane:
         m_axialPrimitives.insert(slice, primitive);
-        if ( m_2DViewer->getView() == Q2DViewer::Axial )
-        {
-            if ( slice < 0 || m_2DViewer->getCurrentSlice() == slice )
-                primitive->setVisibility(true);
-            else
-                primitive->setVisibility(false);
-        }
-        else
-            primitive->setVisibility(false);
     break;
 
     case QViewer::SagitalPlane:
         m_sagitalPrimitives.insert(slice, primitive);
-        if ( m_2DViewer->getView() == Q2DViewer::Sagital )
-        {
-            if ( slice < 0 || m_2DViewer->getCurrentSlice() == slice )
-                primitive->setVisibility(true);
-            else
-                primitive->setVisibility(false);
-        }
-        else
-            primitive->setVisibility(false);
     break;
 
     case QViewer::CoronalPlane:
         m_coronalPrimitives.insert(slice, primitive);
-        if ( m_2DViewer->getView() == Q2DViewer::Coronal )
-        {
-            if ( slice < 0 || m_2DViewer->getCurrentSlice() == slice )
-                primitive->setVisibility(true);
-            else
-                primitive->setVisibility(false);
-        }
-        else
-            primitive->setVisibility(false);
     break;
 
     case QViewer::Top2DPlane:
@@ -80,12 +56,23 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
         return;
     break;
     }
+
+    // En el cas que el pla sigui Axial/Sagital/Coronal, cal comprovar 
+    // la visibilitat de la primitiva segons la llesca
+    if ( m_2DViewer->getView() == plane && plane != QViewer::Top2DPlane )
+    {
+        if ( slice < 0 || m_2DViewer->getCurrentSlice() == slice )
+            primitive->setVisibility(true);
+    }
+    
+    // Procedim a "pintar-la"
     vtkProp *prop = primitive->getAsVtkProp();
     if ( prop )
     {
         connect(primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(erasePrimitive(DrawerPrimitive *)) );
         m_2DViewer->getRenderer()->AddViewProp(prop);
-        refresh();
+        if( primitive->isVisible() )
+            m_2DViewer->render();
     }
 }
 
