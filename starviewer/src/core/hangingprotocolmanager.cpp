@@ -227,7 +227,7 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, Pat
 {
     foreach (Study *study, patient->getStudies())
     {
-        foreach ( QString modality, study->getModalitiesAsSingleString().split("/") )
+        foreach ( QString modality, study->getModalities() )
         {
             if( protocol->getHangingProtocolMask()->getProtocolList().contains( modality ) )
             {
