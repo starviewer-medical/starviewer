@@ -32,8 +32,8 @@ public:
      * Afegim un vèrtex al polígon.
      * @param point[] Punt que defineix el vèrtex del polígon
      */
-    void addVertix( double point[3] );
-    void addVertix( double x, double y, double z );
+    void addVertix(double point[3]);
+    void addVertix(double x, double y, double z);
 
     /**
      * Assigna el valor del vèrtex i-éssim del polígon. En aquest cas equival a
@@ -42,8 +42,8 @@ public:
      * @param i índex del vèrtex que volem modificar
      * @param point[] coordenades del vèrtex
      */
-    void setVertix( int i, double point[3] );
-    void setVertix( int i, double x, double y, double z );
+    void setVertix(int i, double point[3]);
+    void setVertix(int i, double x, double y, double z);
 
     /// Ens retorna l'i-èssim vèrtex del polígon. Si l'índex està fora de rang ens retornarà un array sense inicialitzar
     const double *getVertix(int i);
@@ -54,12 +54,12 @@ public:
     int getNumberOfPoints() const;
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint( double *point3D );
+    double getDistanceToPoint(double *point3D);
 
     void getBounds(double [6]);
 
     /// Calcula l'àrea del polígon
-    double computeArea( int view, double * spacing = NULL );
+    double computeArea(int view, double * spacing = NULL);
 
 public slots:
     void update();
@@ -75,7 +75,7 @@ private:
     void updateVtkActorProperties();
 
     /// Ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment del polígon
-    bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
+    bool isPointIncludedInLineBounds(double point[3], double *p1, double *p2);
 
 private:
     /// Llista de punts del polígon

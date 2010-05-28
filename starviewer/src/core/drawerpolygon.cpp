@@ -30,12 +30,12 @@ DrawerPolygon::~DrawerPolygon()
     emit dying(this);
 }
 
-void DrawerPolygon::addVertix( double point[3] )
+void DrawerPolygon::addVertix(double point[3])
 {
-    this->addVertix( point[0], point[1], point[2] );
+    this->addVertix(point[0], point[1], point[2]);
 }
 
-void DrawerPolygon::addVertix( double x, double y, double z )
+void DrawerPolygon::addVertix(double x, double y, double z)
 {
     QVector<double> array(3);
 
@@ -47,15 +47,15 @@ void DrawerPolygon::addVertix( double x, double y, double z )
     emit changed();
 }
 
-void DrawerPolygon::setVertix( int i, double point[3] )
+void DrawerPolygon::setVertix(int i, double point[3])
 {
-    this->setVertix( i , point[0], point[1], point[2] );
+    this->setVertix(i , point[0], point[1], point[2]);
 }
 
-void DrawerPolygon::setVertix( int i, double x, double y, double z )
+void DrawerPolygon::setVertix(int i, double x, double y, double z)
 {
     if( i >= m_pointsList.count() || i < 0 )
-        addVertix( x, y, z );
+        addVertix(x, y, z);
     else
     {
         QVector<double> array(3);
@@ -91,8 +91,8 @@ vtkProp *DrawerPolygon::getAsVtkProp()
         m_vtkActor = vtkActor2D::New();
         m_vtkMapper = vtkPolyDataMapper2D::New();
 
-        m_vtkActor->SetMapper( m_vtkMapper );
-        m_vtkMapper->SetInput( m_vtkPolydata );
+        m_vtkActor->SetMapper(m_vtkMapper);
+        m_vtkMapper->SetInput(m_vtkPolydata);
         // Li donem els atributs
         updateVtkActorProperties();
     }
@@ -150,50 +150,50 @@ void DrawerPolygon::buildVtkPoints()
     }
 
     // Especifiquem el nombre de vèrtexs que té el polígon
-    int numberOfVertices = m_pointsList.count() + ( extraVertix ? 1 : 0 );
-    m_vtkCellArray->InsertNextCell( numberOfVertices );
-    m_vtkPoints->SetNumberOfPoints( numberOfVertices );
+    int numberOfVertices = m_pointsList.count() + ( extraVertix ? 1 : 0);
+    m_vtkCellArray->InsertNextCell(numberOfVertices);
+    m_vtkPoints->SetNumberOfPoints(numberOfVertices);
 
     // Donem els punts/vèrtexs
     int i = 0;
-    foreach( QVector<double> vertix, m_pointsList )
+    foreach (QVector<double> vertix, m_pointsList)
     {
-        m_vtkPoints->InsertPoint( i, vertix.data() );
-        m_vtkCellArray->InsertCellPoint( i );
+        m_vtkPoints->InsertPoint(i, vertix.data());
+        m_vtkCellArray->InsertCellPoint(i);
         i++;
     }
 
     if( extraVertix )
     {
         // Tornem a afegir el primer punt
-        m_vtkPoints->InsertPoint( numberOfVertices-1, m_pointsList.at(0).data() );
-        m_vtkCellArray->InsertCellPoint( numberOfVertices-1 );
+        m_vtkPoints->InsertPoint(numberOfVertices-1, m_pointsList.at(0).data());
+        m_vtkCellArray->InsertCellPoint(numberOfVertices-1);
     }
     // Assignem els punts al polydata
-    m_vtkPolydata->SetPoints( m_vtkPoints );
+    m_vtkPolydata->SetPoints(m_vtkPoints);
     // Comprovem si la forma està "plena" o no
     if ( this->isFilled() )
-        m_vtkPolydata->SetPolys( m_vtkCellArray );
+        m_vtkPolydata->SetPolys(m_vtkCellArray);
     else
-        m_vtkPolydata->SetLines( m_vtkCellArray );
+        m_vtkPolydata->SetLines(m_vtkCellArray);
 }
 
 void DrawerPolygon::updateVtkActorProperties()
 {
     // Sistema de coordenades
-    m_vtkMapper->SetTransformCoordinate( this->getVtkCoordinateObject() );
+    m_vtkMapper->SetTransformCoordinate(this->getVtkCoordinateObject());
     // Estil de la línia
-    m_vtkActor->GetProperty()->SetLineStipplePattern( m_linePattern );
+    m_vtkActor->GetProperty()->SetLineStipplePattern(m_linePattern);
     // Assignem gruix de la línia
-    m_vtkActor->GetProperty()->SetLineWidth( m_lineWidth );
+    m_vtkActor->GetProperty()->SetLineWidth(m_lineWidth);
     // Assignem opacitat de la línia
-    m_vtkActor->GetProperty()->SetOpacity( m_opacity );
+    m_vtkActor->GetProperty()->SetOpacity(m_opacity);
     // Mirem la visibilitat de l'm_vtkActor
-    m_vtkActor->SetVisibility( this->isVisible() );
+    m_vtkActor->SetVisibility(this->isVisible());
 
     // Assignem color
     QColor color = this->getColor();
-    m_vtkActor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
+    m_vtkActor->GetProperty()->SetColor(color.redF(), color.greenF(), color.blueF());
 }
 
 int DrawerPolygon::getNumberOfPoints() const
@@ -201,7 +201,7 @@ int DrawerPolygon::getNumberOfPoints() const
     return m_pointsList.count();
 }
 
-double DrawerPolygon::getDistanceToPoint( double *point3D )
+double DrawerPolygon::getDistanceToPoint(double *point3D)
 {
     double minDistanceLine = VTK_DOUBLE_MAX;
     double distance, *auxPoint;
@@ -214,11 +214,11 @@ double DrawerPolygon::getDistanceToPoint( double *point3D )
         // Ens cal que sigui tancat per a dibuixar tots els segments reals que el formen.
         QList< double* > auxList;
 
-        foreach( QVector< double > point, m_pointsList )
+        foreach(QVector< double > point, m_pointsList)
         {
             auxPoint = new double[3];
 
-            for( j=0; j < 3; j++ )
+            for (j=0; j < 3; j++)
                 auxPoint[j] = point[j];
 
             auxList << auxPoint;
@@ -230,16 +230,16 @@ double DrawerPolygon::getDistanceToPoint( double *point3D )
             auxList << auxList.first();
         }
 
-        for ( int i = 0; ( i < auxList.count() - 1 ) && !found ; i++ )
+        for (int i = 0; (i < auxList.count() - 1) && !found ; i++)
         {
-            if ( isPointIncludedInLineBounds( point3D, auxList[i], auxList[i+1] ) )
+            if ( isPointIncludedInLineBounds(point3D, auxList[i], auxList[i+1]) )
             {
                 minDistanceLine = 0.0;
                 found = true;
             }
             else
             {
-                distance = vtkLine::DistanceToLine( point3D , auxList[i] , auxList[i+1] );
+                distance = vtkLine::DistanceToLine(point3D , auxList[i] , auxList[i+1]);
 
                 if ( ( minDistanceLine != VTK_DOUBLE_MAX ) && ( distance < minDistanceLine ) )
                         minDistanceLine = distance;
@@ -249,7 +249,7 @@ double DrawerPolygon::getDistanceToPoint( double *point3D )
     return minDistanceLine;
 }
 
-bool DrawerPolygon::isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 )
+bool DrawerPolygon::isPointIncludedInLineBounds(double point[3], double *lineP1, double *lineP2)
 {
     double range = 5.0;
 
@@ -267,7 +267,7 @@ void DrawerPolygon::getBounds(double bounds[6])
         memset(bounds, 0.0, sizeof(double)*6);
 }
 
-double DrawerPolygon::computeArea( int view, double *spacing )
+double DrawerPolygon::computeArea(int view, double *spacing)
 {
     double volumeSpacing[3];
     if ( spacing == NULL )
@@ -289,7 +289,7 @@ double DrawerPolygon::computeArea( int view, double *spacing )
     double area = 0.0;
     int j = 0;
     int numberOfPoints = m_pointsList.count();
-    for( int i=0; i<numberOfPoints; i++ ) 
+    for (int i=0; i<numberOfPoints; i++ ) 
     {
         j++; 
         if( j == numberOfPoints ) 
@@ -306,8 +306,8 @@ double DrawerPolygon::computeArea( int view, double *spacing )
         area *= -1;
         // Intercanviem els punts de la QList
         // TODO Cal realment fer això?
-        for ( int i = 0; i < (int)(numberOfPoints/2); i++ )
-            m_pointsList.swap( i, (numberOfPoints-1)-i );
+        for (int i = 0; i < (int)(numberOfPoints/2); i++)
+            m_pointsList.swap(i, (numberOfPoints-1)-i);
     }
 
     return area*0.5;

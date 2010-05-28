@@ -32,7 +32,7 @@ public:
     /**
      * Mètodes per configurar la visibilitat de la primitiva
      */
-    virtual void setVisibility( bool visible );
+    virtual void setVisibility(bool visible);
     void visibilityOn();
     void visibilityOff();
     bool isVisible() const;
@@ -42,39 +42,39 @@ public:
      * Mètodes per configurar el sistema de coordenades en que es troben
      * els punts que defineixen la primitiva. Per defecte el sistema seran coordenades de món
      */
-    void setCoordinateSystem( int system );
+    void setCoordinateSystem(int system);
     int getCoordinateSystem() const;
 
     /**
      * Mètodes per configurar el color
      */
-    void setColor( QColor color );
+    void setColor(QColor color);
     QColor getColor() const;
 
     /**
      * Mètodes per configurar si la forma es pinta amb color de fons o no.
      * Aquest atribut només tindrà sentit per formes tancades
      */
-    void setFilled( bool fill );
+    void setFilled(bool fill);
     bool isFilled() const;
 
     enum LinePatternType{ ContinuousLinePattern = 0xFFFF, DiscontinuousLinePattern = 0xFF00 };
     /**
      * Mètodes per configurar el patró de la línia
      */
-    void setLinePattern( int pattern );
+    void setLinePattern(int pattern);
     int getLinePattern() const;
 
     /**
      * Assigna/Obté l'amplada de la línia
      */
-    void setLineWidth( double width );
+    void setLineWidth(double width);
     double getLineWidth() const;
 
     /**
      * Assigna/Obté l'opacitat de l'objecte
      */
-    void setOpacity( double opacity );
+    void setOpacity(double opacity);
     double getOpacity() const;
 
     // Mètodes per construir l'objecte a representar gràficament
@@ -96,7 +96,7 @@ public:
     /**
      * Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
      */
-    virtual double getDistanceToPoint( double *point3D )=0;
+    virtual double getDistanceToPoint(double *point3D )=0;
 
     /**
      * Ens retorna els límits de l'hexahedre que encapsula la primitiva
@@ -148,7 +148,7 @@ signals:
     void changed();
 
     /// S'emet just quan s'invoca el destructor
-    void dying( DrawerPrimitive * );
+    void dying(DrawerPrimitive *);
 
 protected slots:
     /**
@@ -161,7 +161,7 @@ protected slots:
      * Li diem si està modificat o no
      * @param modified
      */
-    void setModified( bool modified = true );
+    void setModified(bool modified = true);
 
 protected:
     /**

@@ -16,12 +16,9 @@ class Q2DViewer;
 class DrawerPrimitive;
 
 /**
-Classe encarregada de pintar els objectes de primitiva gràfica en el viewer assignat
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    Classe encarregada de pintar els objectes de primitiva gràfica en el viewer assignat
 */
-class Drawer : public QObject
-{
+class Drawer : public QObject {
 Q_OBJECT
 public:
     Drawer( Q2DViewer *viewer, QObject *parent = 0 );
@@ -36,7 +33,7 @@ public:
      * @param plane Pla sobre el qual volem pintar la primitiva
      * @param slice Llesca a la que adjuntem la primitiva
      */
-    void draw( DrawerPrimitive *primitive, int plane, int slice = -1 );
+    void draw(DrawerPrimitive *primitive, int plane, int slice = -1);
 
     /**
     * Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
@@ -48,23 +45,23 @@ public:
      * @param primitive Primitiva que volem afegir
      * @param groupName nom del grup on la volem incloure
      */
-    void addToGroup( DrawerPrimitive *primitive, const QString &groupName );
+    void addToGroup(DrawerPrimitive *primitive, const QString &groupName);
 
     /**
      * Mostra/amaga les primitives que hi ha en un determinat grup
      * @param groupName nom del grup que volem mostrar/amagar
      */
-    void hideGroup( const QString &groupName );
-    void showGroup( const QString &groupName );
+    void hideGroup(const QString &groupName);
+    void showGroup(const QString &groupName);
 
-    ///ens retorna la primitiva més propera la punt especificat, dins d'un llindar. Si no en troba cap, retorna nul.
-    ///especifiquem el pla i la llesca perquè així acotem més la cerca de primitives properes i no cal mirar per totes les possibles.
-    DrawerPrimitive* getPrimitiveNearerToPoint( double point[3], int view, int slice );
+    /// Ens retorna la primitiva més propera la punt especificat, dins d'un llindar. Si no en troba cap, retorna nul.
+    /// Especifiquem el pla i la llesca perquè així acotem més la cerca de primitives properes i no cal mirar per totes les possibles.
+    DrawerPrimitive* getPrimitiveNearerToPoint(double point[3], int view, int slice);
 
-    ///ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
-    void erasePrimitivesInsideBounds( double bounds[6], int view, int slice );
+    /// Ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
+    void erasePrimitivesInsideBounds(double bounds[6], int view, int slice);
 
-    ///ens diu el total de primitives dibuixades en totes les vistes
+    /// Ens diu el total de primitives dibuixades en totes les vistes
     int getNumberOfDrawnPrimitives();
 
 public slots:
@@ -78,9 +75,9 @@ public slots:
      * i l'elimina de l'escena on s'estava pintant
      * @param primitive Primitiva que volem deixar de controlar
      */
-    void erasePrimitive( DrawerPrimitive *primitive );
+    void erasePrimitive(DrawerPrimitive *primitive);
 
-    ///esborra totes les primitives registrades al drawer.
+    /// Esborra totes les primitives registrades al drawer.
     void removeAllPrimitives();
 
 private:
@@ -89,8 +86,8 @@ private:
      * @param plane Pla sobre que volem mostrar/amagar les primitives
      * @param slice Llesca dins d'aquell pla. En el cas que el pla sigui Top2DPlane, slice no es té en compte
      */
-    void hide( int plane, int slice );
-    void show( int plane, int slice );
+    void hide(int plane, int slice);
+    void show(int plane, int slice);
 
     /**
      * Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
