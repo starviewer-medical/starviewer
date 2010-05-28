@@ -32,7 +32,7 @@ public:
      * Afegim un punt a la polilínia.
      * @param point[] Punt que defineix el punt
      */
-    void addPoint( double point[3] );
+    void addPoint(double point[3]);
 
     /**
      * Assigna el valor del punt i-éssim de la polilínia. En aquest cas equival a
@@ -41,14 +41,14 @@ public:
      * @param i índex del point que volem modificar
      * @param point[] coordenades del point
      */
-    void setPoint( int i, double point[3] );
+    void setPoint(int i, double point[3]);
 
     /**
      * Elimina el punt i-éssim de la polilínia. Si 'i' està fora de rang,
      * no s'esborrarà cap punt de la polilínia.
      * @param i índex del point que volem modificar
      */
-    void removePoint( int i );
+    void removePoint(int i);
 
     /// Retorna la polilínia com a objecte VTK de representació
     vtkProp *getAsVtkProp();
@@ -57,17 +57,17 @@ public:
     int getNumberOfPoints();
 
     /// Retorna l'i-essim punt de la polilinia en cas de que existeixi.
-    double* getPoint( int position );
+    double* getPoint(int position);
 
     /// Esborra tots els punts de la polilinia
     void deleteAllPoints();
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint( double *point3D );
+    double getDistanceToPoint(double *point3D);
 
     void getBounds(double bounds[6]);
 
-    ///  Retorna la llista de punts de la polilínia
+    /// Retorna la llista de punts de la polilínia
     QList< double* > getPointsList();
 
 public slots:
@@ -84,7 +84,7 @@ private:
     void updateVtkActorProperties();
 
     /// Ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment de la polilínia
-    bool isPointIncludedInLineBounds( double point[3], double *p1, double *p2 );
+    bool isPointIncludedInLineBounds(double point[3], double *p1, double *p2);
 
     /// Mètode que intercanvia els punts de sentit antihorari a horari
     void swap();

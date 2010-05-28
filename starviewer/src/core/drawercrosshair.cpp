@@ -38,35 +38,35 @@ DrawerCrossHair::~DrawerCrossHair()
     }
 }
 
-void DrawerCrossHair::setCentrePoint( double x, double y, double z )
+void DrawerCrossHair::setCentrePoint(double x, double y, double z)
 {
     m_centrePoint[0] = x;
     m_centrePoint[1] = y;
     m_centrePoint[2] = z;
 
     // Assignem els punts a la línia 1
-    m_lineUp->setFirstPoint( m_centrePoint[0], m_centrePoint[1]-6, m_centrePoint[2] );
-    m_lineUp->setSecondPoint( m_centrePoint[0], m_centrePoint[1]-1, m_centrePoint[2] );
+    m_lineUp->setFirstPoint(m_centrePoint[0], m_centrePoint[1]-6, m_centrePoint[2]);
+    m_lineUp->setSecondPoint(m_centrePoint[0], m_centrePoint[1]-1, m_centrePoint[2]);
 
     // Assignem els punts a la línia 2
-    m_lineDown->setFirstPoint( m_centrePoint[0], m_centrePoint[1]+6, m_centrePoint[2] );
-    m_lineDown->setSecondPoint( m_centrePoint[0], m_centrePoint[1]+1, m_centrePoint[2] );
+    m_lineDown->setFirstPoint(m_centrePoint[0], m_centrePoint[1]+6, m_centrePoint[2]);
+    m_lineDown->setSecondPoint(m_centrePoint[0], m_centrePoint[1]+1, m_centrePoint[2]);
 
     // Assignem els punts a la línia 3
-    m_lineLeft->setFirstPoint( m_centrePoint[0]-6, m_centrePoint[1], m_centrePoint[2] );
-    m_lineLeft->setSecondPoint( m_centrePoint[0]-1, m_centrePoint[1], m_centrePoint[2] );
+    m_lineLeft->setFirstPoint(m_centrePoint[0]-6, m_centrePoint[1], m_centrePoint[2]);
+    m_lineLeft->setSecondPoint(m_centrePoint[0]-1, m_centrePoint[1], m_centrePoint[2]);
 
     // Assignem els punts a la línia 4
-    m_lineRight->setFirstPoint( m_centrePoint[0]+6, m_centrePoint[1], m_centrePoint[2] );
-    m_lineRight->setSecondPoint( m_centrePoint[0]+1, m_centrePoint[1], m_centrePoint[2] );
+    m_lineRight->setFirstPoint(m_centrePoint[0]+6, m_centrePoint[1], m_centrePoint[2]);
+    m_lineRight->setSecondPoint(m_centrePoint[0]+1, m_centrePoint[1], m_centrePoint[2]);
 
     // Assignem els punts a la línia 5
-    m_lineBack->setFirstPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-6 );
-    m_lineBack->setSecondPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-1 );
+    m_lineBack->setFirstPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-6);
+    m_lineBack->setSecondPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-1);
 
     // Assignem els punts a la línia 6
-    m_lineFront->setFirstPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+6 );
-    m_lineFront->setSecondPoint( m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+1 );
+    m_lineFront->setFirstPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+6);
+    m_lineFront->setSecondPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+1);
 
     emit changed();
 }
@@ -80,19 +80,19 @@ vtkPropAssembly * DrawerCrossHair::getAsVtkPropAssembly()
         // Li donem els atributs
         updateVtkActorProperties();
 
-        m_vtkPropAssembly->AddPart( m_lineUp->getAsVtkProp() );
-        m_vtkPropAssembly->AddPart( m_lineDown->getAsVtkProp() );
-        m_vtkPropAssembly->AddPart( m_lineLeft->getAsVtkProp() );
-        m_vtkPropAssembly->AddPart( m_lineRight->getAsVtkProp() );
-        m_vtkPropAssembly->AddPart( m_lineBack->getAsVtkProp() );
-        m_vtkPropAssembly->AddPart( m_lineFront->getAsVtkProp() );
+        m_vtkPropAssembly->AddPart(m_lineUp->getAsVtkProp());
+        m_vtkPropAssembly->AddPart(m_lineDown->getAsVtkProp());
+        m_vtkPropAssembly->AddPart(m_lineLeft->getAsVtkProp());
+        m_vtkPropAssembly->AddPart(m_lineRight->getAsVtkProp());
+        m_vtkPropAssembly->AddPart(m_lineBack->getAsVtkProp());
+        m_vtkPropAssembly->AddPart(m_lineFront->getAsVtkProp());
     }
     return m_vtkPropAssembly;
 }
 
 vtkProp * DrawerCrossHair::getAsVtkProp()
 {
-    return (vtkProp * ) getAsVtkPropAssembly();
+    return (vtkProp *) getAsVtkPropAssembly();
 }
 
 
@@ -127,17 +127,17 @@ void DrawerCrossHair::updateVtkProp()
 
 void DrawerCrossHair::updateVtkActorProperties()
 {
-    m_lineUp->setLineWidth( 2.0 );
-    m_lineDown->setLineWidth( 2.0 );
-    m_lineLeft->setLineWidth( 2.0 );
-    m_lineRight->setLineWidth( 2.0 );
-    m_lineBack->setLineWidth( 2.0 );
-    m_lineFront->setLineWidth( 2.0 );
+    m_lineUp->setLineWidth(2.0);
+    m_lineDown->setLineWidth(2.0);
+    m_lineLeft->setLineWidth(2.0);
+    m_lineRight->setLineWidth(2.0);
+    m_lineBack->setLineWidth(2.0);
+    m_lineFront->setLineWidth(2.0);
 }
 
-double DrawerCrossHair::getDistanceToPoint( double *point3D )
+double DrawerCrossHair::getDistanceToPoint(double *point3D)
 {
-    return ( MathTools::getDistance3D( m_centrePoint, point3D ) );
+    return (MathTools::getDistance3D(m_centrePoint, point3D));
 }
 
 void DrawerCrossHair::getBounds(double bounds[6])
@@ -147,15 +147,15 @@ void DrawerCrossHair::getBounds(double bounds[6])
     DEBUG_LOG("DrawerCrossHair::getBounds() no implementat!");
 }
 
-void DrawerCrossHair::setVisibility( bool visible )
+void DrawerCrossHair::setVisibility(bool visible)
 {
     m_isVisible = visible;
-    m_lineUp->setVisibility( visible );
-    m_lineDown->setVisibility( visible );
-    m_lineLeft->setVisibility( visible );
-    m_lineRight->setVisibility( visible );
-    m_lineBack->setVisibility( visible );
-    m_lineFront->setVisibility( visible );
+    m_lineUp->setVisibility(visible);
+    m_lineDown->setVisibility(visible);
+    m_lineLeft->setVisibility(visible);
+    m_lineRight->setVisibility(visible);
+    m_lineBack->setVisibility(visible);
+    m_lineFront->setVisibility(visible);
     emit changed();
 }
 

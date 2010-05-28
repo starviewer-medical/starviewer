@@ -17,7 +17,7 @@
 namespace udg {
 
 DrawerText::DrawerText(QObject *parent) 
-: DrawerPrimitive(parent), m_horizontalJustification( "Centered" ), m_verticalJustification( "Centered" ), m_border( false ), m_fontFamily( "Arial" ), m_fontSize( Settings().getValue(CoreSettings::DefaultToolTextSize).toInt() ), m_shadow( false ), m_italic( false ), m_bold( false ), m_height( 0.05 ), m_width( 0.09 ), m_scaled( false ), m_padding( 0 ), m_vtkActor(0)
+: DrawerPrimitive(parent), m_horizontalJustification("Centered"), m_verticalJustification("Centered"), m_border(false), m_fontFamily("Arial"), m_fontSize(Settings().getValue(CoreSettings::DefaultToolTextSize).toInt()), m_shadow(false), m_italic(false), m_bold(false), m_height(0.05), m_width(0.09), m_scaled(false), m_padding(0), m_vtkActor(0)
 {
 }
 
@@ -29,9 +29,9 @@ DrawerText::~DrawerText()
         m_vtkActor->Delete();
 }
 
-void DrawerText::setAttachmentPoint( double point[3] )
+void DrawerText::setAttachmentPoint(double point[3])
 {
-    for( int i = 0; i<3; i++ )
+    for (int i = 0; i<3; i++)
         m_attachPoint[i] = point[i];
 
     emit changed();
@@ -39,16 +39,16 @@ void DrawerText::setAttachmentPoint( double point[3] )
 
 vtkProp *DrawerText::getAsVtkProp()
 {
-    if( !m_vtkActor )
+    if ( !m_vtkActor )
     {
         // Creem el pipeline de l'm_vtkActor
         m_vtkActor = vtkCaptionActor2D::New();
 
         // Assignem el text
-        m_vtkActor->SetCaption( qPrintable ( m_text ) );
+        m_vtkActor->SetCaption(qPrintable(m_text));
 
         // Assignem la posició en pantalla
-        m_vtkActor->SetAttachmentPoint( m_attachPoint );
+        m_vtkActor->SetAttachmentPoint(m_attachPoint);
 
         // Li donem els atributs
         updateVtkActorProperties();
@@ -58,7 +58,7 @@ vtkProp *DrawerText::getAsVtkProp()
 
 void DrawerText::update()
 {
-    switch( m_internalRepresentation )
+    switch ( m_internalRepresentation )
     {
         case VTKRepresentation:
             updateVtkProp();
@@ -74,9 +74,9 @@ void DrawerText::updateVtkProp()
     if( m_vtkActor )
     {
         // Assignem el text
-        m_vtkActor->SetCaption( qPrintable ( m_text ) );
+        m_vtkActor->SetCaption(qPrintable(m_text));
         // Assignem la posició en pantalla
-        m_vtkActor->SetAttachmentPoint( m_attachPoint );
+        m_vtkActor->SetAttachmentPoint(m_attachPoint);
         updateVtkActorProperties();
         this->setModified(false);
     }
@@ -91,7 +91,7 @@ void DrawerText::updateVtkActorProperties()
     vtkTextProperty *properties = m_vtkActor->GetCaptionTextProperty();
 
     // Sistema de coordenades
-    m_vtkActor->GetAttachmentPointCoordinate()->SetReferenceCoordinate( this->getVtkCoordinateObject() );
+    m_vtkActor->GetAttachmentPointCoordinate()->SetReferenceCoordinate(this->getVtkCoordinateObject());
 
     // Mirem si s'ha d'escalar el text
     if ( m_scaled )
@@ -100,15 +100,15 @@ void DrawerText::updateVtkActorProperties()
         m_vtkActor->GetTextActor()->ScaledTextOff();
 
     // Mirem l'opacitat
-    properties->SetOpacity( m_opacity );
+    properties->SetOpacity(m_opacity);
 
     // Assignem color
-    properties->SetColor( m_color.redF(), m_color.greenF(), m_color.blueF() );
+    properties->SetColor(m_color.redF(), m_color.greenF(), m_color.blueF() );
 
-    m_vtkActor->SetPadding( m_padding );
-    m_vtkActor->SetPosition( -1.0 , -1.0 );
-    m_vtkActor->SetHeight( m_height );
-    m_vtkActor->SetWidth( m_width );
+    m_vtkActor->SetPadding(m_padding);
+    m_vtkActor->SetPosition(-1.0 , -1.0);
+    m_vtkActor->SetHeight(m_height);
+    m_vtkActor->SetWidth(m_width);
 
     // Deshabilitem la línia que va des del punt de situació al text
     m_vtkActor->LeaderOff();
@@ -132,10 +132,10 @@ void DrawerText::updateVtkActorProperties()
     else if ( m_fontFamily == "Times" )
         properties->SetFontFamilyToTimes();
     else
-        DEBUG_LOG( "Tipus de font no reconegut a l'intentar crear text!!" );
+        DEBUG_LOG("Tipus de font no reconegut a l'intentar crear text!!");
 
     // Assignem el tamany de la font
-    properties->SetFontSize( m_fontSize );
+    properties->SetFontSize(m_fontSize);
 
     // Assignem el tipus de justificació horitzontal
     if ( m_horizontalJustification == "Left" )
@@ -146,7 +146,7 @@ void DrawerText::updateVtkActorProperties()
         properties->SetJustificationToRight();
     else
     {
-        DEBUG_LOG( "Tipus de justificació horitzontal no reconegut a l'intentar crear text!!" );
+        DEBUG_LOG("Tipus de justificació horitzontal no reconegut a l'intentar crear text!!");
     }
 
     // Assignem el tipus de justificació vertical
@@ -158,7 +158,7 @@ void DrawerText::updateVtkActorProperties()
         properties->SetVerticalJustificationToBottom();
     else
     {
-        DEBUG_LOG( "Tipus de justificació vertical no reconegut a l'intentar crear text!!" );
+        DEBUG_LOG("Tipus de justificació vertical no reconegut a l'intentar crear text!!");
     }
 
     // Mirem si el text té fons o no
@@ -168,10 +168,10 @@ void DrawerText::updateVtkActorProperties()
          m_vtkActor->BorderOff();
 
     // Mirem la visibilitat de l'actor
-    m_vtkActor->SetVisibility( this->isVisible() );
+    m_vtkActor->SetVisibility(this->isVisible());
 }
 
-void DrawerText::setText( QString text )
+void DrawerText::setText(QString text)
 {
     m_text = text;
     emit changed();
@@ -179,25 +179,25 @@ void DrawerText::setText( QString text )
 
 QString DrawerText::getText()
 {
-    return( m_text );
+    return(m_text);
 }
 
 double* DrawerText::getAttachmentPoint()
 {
-    return( m_attachPoint );
+    return(m_attachPoint);
 }
 
 void DrawerText::borderOn()
 {
-    borderEnabled( true );
+    borderEnabled(true);
 }
 
 void DrawerText::borderOff()
 {
-    borderEnabled( false );
+    borderEnabled(false);
 }
 
-void DrawerText::borderEnabled( bool enabled )
+void DrawerText::borderEnabled(bool enabled)
 {
     m_border = enabled;
     emit changed();
@@ -205,10 +205,10 @@ void DrawerText::borderEnabled( bool enabled )
 
 bool DrawerText::isBorderEnabled()
 {
-    return( m_border );
+    return(m_border);
 }
 
-void DrawerText::setPadding( int padding )
+void DrawerText::setPadding(int padding)
 {
     m_padding = padding;
     emit changed();
@@ -216,7 +216,7 @@ void DrawerText::setPadding( int padding )
 
 int DrawerText::getPadding()
 {
-    return( m_padding );
+    return(m_padding);
 }
 
 QString DrawerText::getFontFamily()
@@ -224,13 +224,13 @@ QString DrawerText::getFontFamily()
     return m_fontFamily;
 }
 
-void DrawerText::setFontFamily( QString family )
+void DrawerText::setFontFamily(QString family)
 {
     m_fontFamily = family;
     emit changed();
 }
 
-void DrawerText::setFontSize( int size )
+void DrawerText::setFontSize(int size)
 {
     m_fontSize = size;
     emit changed();
@@ -238,20 +238,20 @@ void DrawerText::setFontSize( int size )
 
 int DrawerText::getFontSize()
 {
-    return( m_fontSize );
+    return(m_fontSize);
 }
 
 void DrawerText::boldOn()
 {
-    bold( true );
+    bold(true);
 }
 
 void DrawerText::boldOff()
 {
-    bold( false );
+    bold(false);
 }
 
-void DrawerText::bold( bool bold )
+void DrawerText::bold(bool bold)
 {
     m_bold = bold;
     emit changed();
@@ -259,20 +259,20 @@ void DrawerText::bold( bool bold )
 
 bool DrawerText::isBold()
 {
-    return( m_bold );
+    return(m_bold);
 }
 
 void DrawerText::italicOn()
 {
-    italic( true );
+    italic(true);
 }
 
 void DrawerText::italicOff()
 {
-    italic( false );
+    italic(false);
 }
 
-void DrawerText::italic( bool italic )
+void DrawerText::italic(bool italic)
 {
     m_italic = italic;
     emit changed();
@@ -280,20 +280,20 @@ void DrawerText::italic( bool italic )
 
 bool DrawerText::isItalic()
 {
-    return( m_italic );
+    return(m_italic);
 }
 
 void DrawerText::shadowOn()
 {
-    setShadow( true );
+    setShadow(true);
 }
 
 void DrawerText::shadowOff()
 {
-    setShadow( false );
+    setShadow(false);
 }
 
-void DrawerText::setShadow( bool shadow )
+void DrawerText::setShadow(bool shadow)
 {
     m_shadow = shadow;
     emit changed();
@@ -301,10 +301,10 @@ void DrawerText::setShadow( bool shadow )
 
 bool DrawerText::hasShadow()
 {
-    return( m_shadow );
+    return(m_shadow);
 }
 
-void DrawerText::setHorizontalJustification( QString horizontalJustification )
+void DrawerText::setHorizontalJustification(QString horizontalJustification)
 {
     m_horizontalJustification = horizontalJustification;
     emit changed();
@@ -312,10 +312,10 @@ void DrawerText::setHorizontalJustification( QString horizontalJustification )
 
 QString DrawerText::getHorizontalJustification()
 {
-    return( m_horizontalJustification );
+    return(m_horizontalJustification);
 }
 
-void DrawerText::setVerticalJustification( QString verticalJustification )
+void DrawerText::setVerticalJustification(QString verticalJustification)
 {
     m_verticalJustification = verticalJustification;
     emit changed();
@@ -323,20 +323,20 @@ void DrawerText::setVerticalJustification( QString verticalJustification )
 
 QString DrawerText::getVerticalJustification()
 {
-    return( m_verticalJustification );
+    return(m_verticalJustification);
 }
 
 void DrawerText::scaledTextOn()
 {
-    scaledText( true );
+    scaledText(true);
 }
 
 void DrawerText::scaledTextOff()
 {
-    scaledText( false );
+    scaledText(false);
 }
 
-void DrawerText::scaledText( bool scaled )
+void DrawerText::scaledText(bool scaled)
 {
     m_scaled = scaled;
     emit changed();
@@ -344,20 +344,20 @@ void DrawerText::scaledText( bool scaled )
 
 bool DrawerText::isTextScaled()
 {
-    return( m_scaled );
+    return(m_scaled);
     emit changed();
 }
 
-double DrawerText::getDistanceToPoint( double *point3D )
+double DrawerText::getDistanceToPoint(double *point3D)
 {
-    return MathTools::getDistance3D( m_attachPoint, point3D );
+    return MathTools::getDistance3D(m_attachPoint, point3D);
 }
 
 void DrawerText::getBounds(double bounds[6])
 {
     // TODO Ara només tenim en compte l'attach point però es podria tenir 
     // en compte d'alguna manera la capsa que envolta el texte
-    for(int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
         bounds[i*2] = bounds[i*2+1] = m_attachPoint[i];
 }
 

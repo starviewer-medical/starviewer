@@ -143,7 +143,7 @@ void PolylineROITool::computeStatisticsData()
     // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
-	double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *spacing = m_2DViewer->getInput()->getSpacing();
 
     double horizontalSpacingIncrement;
     double verticalSpacingIncrement;
@@ -152,12 +152,12 @@ void PolylineROITool::computeStatisticsData()
     switch( currentView )
     {
     case Q2DViewer::Axial:
-        sweepLineBeginPoint[0] = bounds[0];//xmin
-        sweepLineBeginPoint[1] = bounds[2];//ymin
-        sweepLineBeginPoint[2] = bounds[4];//zmin
-        sweepLineEndPoint[0] = bounds[1];//xmax
-        sweepLineEndPoint[1] = bounds[2];//ymin
-        sweepLineEndPoint[2] = bounds[4];//zmin
+        sweepLineBeginPoint[0] = bounds[0]; // xmin
+        sweepLineBeginPoint[1] = bounds[2]; // ymin
+        sweepLineBeginPoint[2] = bounds[4]; // zmin
+        sweepLineEndPoint[0] = bounds[1]; // xmax
+        sweepLineEndPoint[1] = bounds[2]; // ymin
+        sweepLineEndPoint[2] = bounds[4]; // zmin
 
         sweepLineCoordinateIndex = 1;
         intersectionCoordinateIndex = 0;
@@ -168,12 +168,12 @@ void PolylineROITool::computeStatisticsData()
         break;
 
     case Q2DViewer::Sagital:
-        sweepLineBeginPoint[0] = bounds[0];//xmin
-        sweepLineBeginPoint[1] = bounds[2];//ymin
-        sweepLineBeginPoint[2] = bounds[4];//zmin
-        sweepLineEndPoint[0] = bounds[0];//xmin
-        sweepLineEndPoint[1] = bounds[2];//ymin
-        sweepLineEndPoint[2] = bounds[5];//zmax
+        sweepLineBeginPoint[0] = bounds[0]; // xmin
+        sweepLineBeginPoint[1] = bounds[2]; // ymin
+        sweepLineBeginPoint[2] = bounds[4]; // zmin
+        sweepLineEndPoint[0] = bounds[0]; // xmin
+        sweepLineEndPoint[1] = bounds[2]; // ymin
+        sweepLineEndPoint[2] = bounds[5]; // zmax
 
         sweepLineCoordinateIndex = 1;
         intersectionCoordinateIndex = 2;
@@ -184,12 +184,12 @@ void PolylineROITool::computeStatisticsData()
         break;
 
     case Q2DViewer::Coronal:
-        sweepLineBeginPoint[0] = bounds[0];//xmin
-        sweepLineBeginPoint[1] = bounds[2];//ymin
-        sweepLineBeginPoint[2] = bounds[4];//zmin
-        sweepLineEndPoint[0] = bounds[1];//xmax
-        sweepLineEndPoint[1] = bounds[2];//ymin
-        sweepLineEndPoint[2] = bounds[4];//zmin
+        sweepLineBeginPoint[0] = bounds[0]; // xmin
+        sweepLineBeginPoint[1] = bounds[2]; // ymin
+        sweepLineBeginPoint[2] = bounds[4]; // zmin
+        sweepLineEndPoint[0] = bounds[1]; // xmax
+        sweepLineEndPoint[1] = bounds[2]; // ymin
+        sweepLineEndPoint[2] = bounds[4]; // zmin
 
         sweepLineCoordinateIndex = 2;
         intersectionCoordinateIndex = 0;
@@ -203,7 +203,7 @@ void PolylineROITool::computeStatisticsData()
     int intersectionState;
     // Inicialitzem la llista de valors de gris
     m_grayValues.clear();
-	while( sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit )
+    while( sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit )
     {
         intersectionList.clear();
         intersectedSegmentsIndexList.clear();

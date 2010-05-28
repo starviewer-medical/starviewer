@@ -23,21 +23,21 @@ namespace udg {
 class DrawerCrossHair : public DrawerPrimitive {
 Q_OBJECT
 public:
-    DrawerCrossHair( QObject *parent = 0 );
+    DrawerCrossHair(QObject *parent = 0);
     ~DrawerCrossHair();
 
     /// Afegim el primer punt de la línia
-    void setCentrePoint( double x, double y, double z );
+    void setCentrePoint(double x, double y, double z);
 
     vtkPropAssembly *getAsVtkPropAssembly();
 
     vtkProp *getAsVtkProp();
 
-    double getDistanceToPoint( double *point3D );
+    double getDistanceToPoint(double *point3D);
 
     void getBounds(double bounds[6]);
 
-    void setVisibility( bool visible );
+    void setVisibility(bool visible);
 
 public slots:
 

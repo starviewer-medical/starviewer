@@ -29,18 +29,18 @@ public:
     ~DrawerPoint();
 
     /// Assignem el punt
-    void setPosition( double point[3] );
-    void setPosition( QVector<double> point );
+    void setPosition(double point[3]);
+    void setPosition(QVector<double> point);
 
     /// Li assignem el radi a la circumferència que defineix el punt
-    void setRadius( double radius );
+    void setRadius(double radius);
 
     vtkProp *getAsVtkProp();
 
     void getBounds(double bounds[6]);
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint( double *point3D );
+    double getDistanceToPoint(double *point3D);
 
 public slots:
 

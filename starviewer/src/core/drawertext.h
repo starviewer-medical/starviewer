@@ -27,13 +27,13 @@ public:
     vtkProp *getAsVtkProp();
 
     /// Permet assignar el text
-    void setText( QString text );
+    void setText(QString text);
     
     /// Ens retorna el text que conté
     QString getText();
     
     /// Permet canviar el punt d'ancoratge
-    void setAttachmentPoint( double point[3] );
+    void setAttachmentPoint(double point[3]);
     
     /// Retorna el punt d'ancoratge
     double* getAttachmentPoint();
@@ -45,13 +45,13 @@ public:
     void borderOff();
     
     /// Activa / desactiva el dibuixat del requadre de la casella de text segons el paràmetre que li passem
-    void borderEnabled( bool enabled );
+    void borderEnabled(bool enabled);
     
     /// Ens diu si s'ha de dibuixar el requadre o no.
     bool isBorderEnabled();
     
     /// Assigna l'espaiat entre el text i la caixa contenidora
-    void setPadding( int padding );
+    void setPadding(int padding);
     
     /// Ens retona l'espaiat entre el text i la caixa contenidora
     int getPadding();
@@ -60,10 +60,10 @@ public:
     QString getFontFamily();
     
     /// Ens permet assignar el tipus de font
-    void setFontFamily( QString family );
+    void setFontFamily(QString family);
     
     /// Assigna el tamany de la font 
-    void setFontSize( int size );
+    void setFontSize(int size);
     
     /// Ens retona el tamany de la font
     int getFontSize();
@@ -75,7 +75,7 @@ public:
     void boldOff();
     
     /// Activa / desactiva la negreta del text
-    void bold( bool bold );
+    void bold(bool bold);
     
     /// Ens diu si està activada la negreta del text
     bool isBold();
@@ -87,7 +87,7 @@ public:
     void italicOff();
     
     /// Activa / desactiva la cursiva del text
-    void italic( bool italic );
+    void italic(bool italic);
     
     /// Ens diu si està activada la cursiva del text
     bool isItalic();
@@ -99,19 +99,19 @@ public:
     void shadowOff();
     
     /// Activa / desactiva l'ombra del text
-    void setShadow( bool shadow );
+    void setShadow(bool shadow);
     
     /// Ens diu si està activada l'ombra del text
     bool hasShadow();
     
     /// Ens permet assignar el tipus de justificació horitzontal
-    void setHorizontalJustification( QString horizontalJustification );
+    void setHorizontalJustification(QString horizontalJustification);
     
     /// Ens retorna el tipus de justificació horitzontal
     QString getHorizontalJustification();
     
     /// Ens permet assignar el tipus de justificació vertical
-    void setVerticalJustification( QString verticalJustification );
+    void setVerticalJustification(QString verticalJustification);
     
     /// Ens retorna el tipus de justificació vertical
     QString getVerticalJustification();
@@ -123,13 +123,13 @@ public:
     void scaledTextOff();
     
     /// Ens permet determinar si el text s'escala o no
-    void scaledText( bool scaled );
+    void scaledText(bool scaled);
     
     /// Ens diu si el text és escalat o no
     bool isTextScaled();
     
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint( double *point3D );
+    double getDistanceToPoint(double *point3D);
 
     void getBounds(double bounds[6]);
 

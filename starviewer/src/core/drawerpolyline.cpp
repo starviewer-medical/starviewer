@@ -39,7 +39,7 @@ DrawerPolyline::~DrawerPolyline()
         m_vtkCellArray->Delete();
 }
 
-void DrawerPolyline::addPoint( double point[3] )
+void DrawerPolyline::addPoint(double point[3])
 {
     double *localPoint = new double[3];
     for( int i = 0; i<3; i++ )
@@ -49,10 +49,10 @@ void DrawerPolyline::addPoint( double point[3] )
     emit changed();
 }
 
-void DrawerPolyline::setPoint( int i, double point[3] )
+void DrawerPolyline::setPoint(int i, double point[3])
 {
     if( i >= m_pointsList.count() || i < 0 )
-        addPoint( point );
+        addPoint(point);
     else
     {
         double *array = new double[3];
@@ -65,7 +65,7 @@ void DrawerPolyline::setPoint( int i, double point[3] )
     }
 }
 
-double* DrawerPolyline::getPoint( int position )
+double* DrawerPolyline::getPoint(int position)
 {
     if( position >= m_pointsList.count() )
     {
@@ -74,13 +74,13 @@ double* DrawerPolyline::getPoint( int position )
     }
    else
     {
-        return m_pointsList.at( position );
+        return m_pointsList.at(position);
     }
 }
 
-void DrawerPolyline::removePoint( int i )
+void DrawerPolyline::removePoint(int i)
 {
-    m_pointsList.removeAt( i );
+    m_pointsList.removeAt(i);
     emit changed();
 }
 
@@ -98,8 +98,8 @@ vtkProp *DrawerPolyline::getAsVtkProp()
         m_vtkActor = vtkActor2D::New();
         m_vtkMapper = vtkPolyDataMapper2D::New();
 
-        m_vtkActor->SetMapper( m_vtkMapper );
-        m_vtkMapper->SetInput( m_vtkPolydata );
+        m_vtkActor->SetMapper(m_vtkMapper);
+        m_vtkMapper->SetInput(m_vtkPolydata);
         // Li donem els atributs
         updateVtkActorProperties();
     }
@@ -146,39 +146,39 @@ void DrawerPolyline::buildVtkPoints()
 
     // Especifiquem el nombre de vèrtexs que té la polilinia
     int numberOfVertices = m_pointsList.count();
-    m_vtkCellArray->InsertNextCell( numberOfVertices );
-    m_vtkPoints->SetNumberOfPoints( numberOfVertices );
+    m_vtkCellArray->InsertNextCell(numberOfVertices);
+    m_vtkPoints->SetNumberOfPoints(numberOfVertices);
 
     // Donem els punts
     int i = 0;
     foreach( double *vertix, m_pointsList )
     {
-        m_vtkPoints->InsertPoint( i, vertix );
-        m_vtkCellArray->InsertCellPoint( i );
+        m_vtkPoints->InsertPoint(i, vertix);
+        m_vtkCellArray->InsertCellPoint(i);
         i++;
     }
 
     // Assignem els punts al polydata
-    m_vtkPolydata->SetPoints( m_vtkPoints );
+    m_vtkPolydata->SetPoints(m_vtkPoints);
 
-    m_vtkPolydata->SetLines( m_vtkCellArray );
+    m_vtkPolydata->SetLines(m_vtkCellArray);
 }
 
 void DrawerPolyline::updateVtkActorProperties()
 {
     // Sistema de coordenades
-    m_vtkMapper->SetTransformCoordinate( this->getVtkCoordinateObject() );
+    m_vtkMapper->SetTransformCoordinate(this->getVtkCoordinateObject());
     // Estil de la línia
-    m_vtkActor->GetProperty()->SetLineStipplePattern( m_linePattern );
+    m_vtkActor->GetProperty()->SetLineStipplePattern(m_linePattern);
     // Assignem gruix de la línia
-    m_vtkActor->GetProperty()->SetLineWidth( m_lineWidth );
+    m_vtkActor->GetProperty()->SetLineWidth(m_lineWidth);
     // Assignem opacitat de la línia
-    m_vtkActor->GetProperty()->SetOpacity( m_opacity );
+    m_vtkActor->GetProperty()->SetOpacity(m_opacity);
     // Mirem la visibilitat de l'm_vtkActor
-    m_vtkActor->SetVisibility( this->isVisible() );
+    m_vtkActor->SetVisibility(this->isVisible());
     // Assignem color
     QColor color = this->getColor();
-    m_vtkActor->GetProperty()->SetColor( color.redF(), color.greenF(), color.blueF() );
+    m_vtkActor->GetProperty()->SetColor(color.redF(), color.greenF(), color.blueF());
 }
 
 int DrawerPolyline::getNumberOfPoints()
@@ -189,10 +189,10 @@ int DrawerPolyline::getNumberOfPoints()
 void DrawerPolyline::swap()
 {
     for ( int i = 0; i < (int)(m_pointsList.count()/2); i++ )
-        m_pointsList.swap( i, (m_pointsList.count()-1)-i );
+        m_pointsList.swap(i, (m_pointsList.count()-1)-i);
 }
 
-double DrawerPolyline::getDistanceToPoint( double *point3D )
+double DrawerPolyline::getDistanceToPoint(double *point3D)
 {
     double minDistanceLine = VTK_DOUBLE_MAX;
     double distance;
@@ -213,14 +213,14 @@ double DrawerPolyline::getDistanceToPoint( double *point3D )
 
         for ( int i = 0; ( i < auxList.count() - 1 ) && !found ; i++ )
         {
-            if ( isPointIncludedInLineBounds( point3D, auxList[i], auxList[i+1] ) )
+            if ( isPointIncludedInLineBounds(point3D, auxList[i], auxList[i+1]) )
             {
                 minDistanceLine = 0.0;
                 found = true;
             }
             else
             {
-                distance = vtkLine::DistanceToLine( point3D , auxList[i] , auxList[i+1] );
+                distance = vtkLine::DistanceToLine(point3D , auxList[i] , auxList[i+1]);
 
                 if ( minDistanceLine == VTK_DOUBLE_MAX )
                     minDistanceLine = distance;
@@ -232,11 +232,11 @@ double DrawerPolyline::getDistanceToPoint( double *point3D )
     return minDistanceLine;
 }
 
-bool DrawerPolyline::isPointIncludedInLineBounds( double point[3], double *lineP1, double *lineP2 )
+bool DrawerPolyline::isPointIncludedInLineBounds(double point[3], double *lineP1, double *lineP2)
 {
     double range = 10.0;
 
-    return ( MathTools::getDistance3D( point, lineP1 ) <= range || MathTools::getDistance3D( point, lineP2 ) <= range );
+    return (MathTools::getDistance3D(point, lineP1) <= range || MathTools::getDistance3D(point, lineP2) <= range);
 }
 
 void DrawerPolyline::getBounds(double bounds[6])

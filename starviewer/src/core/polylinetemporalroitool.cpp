@@ -13,7 +13,6 @@
 //vtk
 #include <vtkPoints.h>
 #include <vtkLine.h>
-//Qt
 
 namespace udg {
 
@@ -22,7 +21,7 @@ PolylineTemporalROITool::PolylineTemporalROITool( QViewer *viewer, QObject *pare
 {
     m_toolName = "PolylineTemporalROITool";
     m_hasSharedData = false;
-	m_hasPersistentData = true;
+    m_hasPersistentData = true;
 
     m_myData = new PolylineTemporalROIToolData;
 
@@ -40,7 +39,7 @@ ToolData *PolylineTemporalROITool::getToolData() const
 
 void PolylineTemporalROITool::setToolData(ToolData * data)
 {
-    //Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
+    // Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
     if( m_myData != data )
     { 
         // creem de nou les dades
@@ -83,8 +82,8 @@ void PolylineTemporalROITool::start()
 
 void PolylineTemporalROITool::convertInputImageToTemporalImage()
 {
-	//POTSER NO CAL I NOMÉS RECORREM L'INPUT LA REGIÓ QUE EN MARCA LA ROI
-	//D'AQUESTA MANERA NO CALDRIA FER LA CÒPIA
+    // Potser no cal i només recorrem l'input la regió que en marca la roi
+    // d'aquesta manera no caldria fer la còpia
 /*
 	m_temporalImageHasBeenDefined = true;
 
@@ -113,230 +112,225 @@ void PolylineTemporalROITool::convertInputImageToTemporalImage()
 
 double PolylineTemporalROITool::computeTemporalMean()
 {
-	if (!m_myData->temporalImageHasBeenDefined())
-	{
-		return 0.0;
-	}
+    if (!m_myData->temporalImageHasBeenDefined())
+    {
+        return 0.0;
+    }
 
-	TemporalImageType::RegionType region = m_myData->getTemporalImage()->GetLargestPossibleRegion();
-	//std::cout<<"Region="<<region<<std::endl;
-	TemporalImageType::SizeType size = region.GetSize();
-	//std::cout<<"Size="<<size<<std::endl;
-	int temporalSize = size[0];
-	QVector<double> mean (temporalSize);
-	QVector<double> aux (temporalSize);
-	int i,j;
-	for(i=0;i<temporalSize;i++)
-	{
-		mean[i]=0.0;
-	}
-    
-	int subId;
-	int initialPosition;
-	int endPosition;
-	double intersectPoint[3];
-	double *firstIntersection;
-	double *secondIntersection;
-	double pcoords[3];
-	double t;
-	double p0[3];
-	double p1[3];
-	int numberOfVoxels = 0;
-	QList<double*> intersectionList;
-	QList<int> indexList;
-	vtkPoints *auxPoints;
-	double rayP1[3];
-	double rayP2[3];
-	double verticalLimit;
-	int currentView = m_2DViewer->getView();
+    TemporalImageType::RegionType region = m_myData->getTemporalImage()->GetLargestPossibleRegion();
+    //std::cout<<"Region="<<region<<std::endl;
+    TemporalImageType::SizeType size = region.GetSize();
+    //std::cout<<"Size="<<size<<std::endl;
+    int temporalSize = size[0];
+    QVector<double> mean (temporalSize);
+    QVector<double> aux (temporalSize);
+    int i,j;
+    for(i=0;i<temporalSize;i++)
+    {
+        mean[i]=0.0;
+    }
 
-	//el nombre de segments és el mateix que el nombre de punts del polígon
-	int numberOfSegments = m_roiPolygon->getNumberOfPoints()-1;
+    int subId;
+    int initialPosition;
+    int endPosition;
+    double intersectPoint[3];
+    double *firstIntersection;
+    double *secondIntersection;
+    double pcoords[3];
+    double t;
+    double p0[3];
+    double p1[3];
+    int numberOfVoxels = 0;
+    QList<double*> intersectionList;
+    QList<int> indexList;
+    vtkPoints *auxPoints;
+    double rayP1[3];
+    double rayP2[3];
+    double verticalLimit;
+    int currentView = m_2DViewer->getView();
 
-	//taula de punters a vtkLine per a representar cadascun dels segments del polígon
-	QVector<vtkLine*> segments;
+    // El nombre de segments és el mateix que el nombre de punts del polígon
+    int numberOfSegments = m_roiPolygon->getNumberOfPoints()-1;
 
-	//creem els diferents segments
-	for ( i = 0; i < numberOfSegments; i++ )
-	{
-		vtkLine *line = vtkLine::New();
-		line->GetPointIds()->SetNumberOfIds(2);
-		line->GetPoints()->SetNumberOfPoints(2);
+    // Taula de punters a vtkLine per a representar cadascun dels segments del polígon
+    QVector<vtkLine*> segments;
 
-		const double *p1 = m_roiPolygon->getVertix( i );
-		const double *p2 = m_roiPolygon->getVertix( i+1 );
+    // Creem els diferents segments
+    for ( i = 0; i < numberOfSegments; i++ )
+    {
+        vtkLine *line = vtkLine::New();
+        line->GetPointIds()->SetNumberOfIds(2);
+        line->GetPoints()->SetNumberOfPoints(2);
 
-		line->GetPoints()->InsertPoint( 0, p1 );
-		line->GetPoints()->InsertPoint( 1, p2 );
+        const double *p1 = m_roiPolygon->getVertix( i );
+        const double *p2 = m_roiPolygon->getVertix( i+1 );
 
-		segments << line;
-	}
+        line->GetPoints()->InsertPoint( 0, p1 );
+        line->GetPoints()->InsertPoint( 1, p2 );
+
+        segments << line;
+    }
 
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
-	double *spacing = m_2DViewer->getInput()->getSpacing();
+    double *spacing = m_2DViewer->getInput()->getSpacing();
 
-	int rayPointIndex;
-	int intersectionIndex;
-	switch( currentView )
-	{
-	case Q2DViewer::Axial:
-		rayP1[0] = bounds[0];//xmin
-		rayP1[1] = bounds[2];//y
-		rayP1[2] = bounds[4];//z
-		rayP2[0] = bounds[1];//xmax
-		rayP2[1] = bounds[2];//y
-		rayP2[2] = bounds[4];//z
-	
-		rayPointIndex = 1;
-		intersectionIndex = 0;
-		verticalLimit = bounds[3];
-	break;
+    int rayPointIndex;
+    int intersectionIndex;
+    switch( currentView )
+    {
+    case Q2DViewer::Axial:
+        rayP1[0] = bounds[0];// xmin
+        rayP1[1] = bounds[2];// y
+        rayP1[2] = bounds[4];// z
+        rayP2[0] = bounds[1];// xmax
+        rayP2[1] = bounds[2];// y
+        rayP2[2] = bounds[4];// z
 
-	case Q2DViewer::Sagital:
-		rayP1[0] = bounds[0];//xmin
-		rayP1[1] = bounds[2];//ymin
-		rayP1[2] = bounds[4];//zmin
-		rayP2[0] = bounds[0];//xmin
-		rayP2[1] = bounds[2];//ymin
-		rayP2[2] = bounds[5];//zmax
+        rayPointIndex = 1;
+        intersectionIndex = 0;
+        verticalLimit = bounds[3];
+    break;
 
-		rayPointIndex = 1;
-		intersectionIndex = 2;		
-		verticalLimit = bounds[3];
+    case Q2DViewer::Sagital:
+        rayP1[0] = bounds[0];// xmin
+        rayP1[1] = bounds[2];// ymin
+        rayP1[2] = bounds[4];// zmin
+        rayP2[0] = bounds[0];// xmin
+        rayP2[1] = bounds[2];// ymin
+        rayP2[2] = bounds[5];// zmax
 
-	break;
+        rayPointIndex = 1;
+        intersectionIndex = 2;		
+        verticalLimit = bounds[3];
+    break;
 
-	case Q2DViewer::Coronal:
-		rayP1[0] = bounds[0];//xmin
-		rayP1[1] = bounds[2];//ymin
-		rayP1[2] = bounds[4];//zmin
-		rayP2[0] = bounds[1];//xmax
-		rayP2[1] = bounds[2];//ymin
-		rayP2[2] = bounds[4];//zmin
+    case Q2DViewer::Coronal:
+        rayP1[0] = bounds[0];// xmin
+        rayP1[1] = bounds[2];// ymin
+        rayP1[2] = bounds[4];// zmin
+        rayP2[0] = bounds[1];// xmax
+        rayP2[1] = bounds[2];// ymin
+        rayP2[2] = bounds[4];// zmin
 
-		rayPointIndex = 2;
-		intersectionIndex = 0;
-		verticalLimit = bounds[5];		
-	break;
+        rayPointIndex = 2;
+        intersectionIndex = 0;
+        verticalLimit = bounds[5];		
+    break;
+    }
+
+    while( rayP1[rayPointIndex] <= verticalLimit )
+    {
+        intersectionList.clear();
+        indexList.clear();
+        for ( i = 0; i < numberOfSegments; i++ )
+        {
+            auxPoints = segments[i]->GetPoints();
+            auxPoints->GetPoint(0,p0);
+            auxPoints->GetPoint(1,p1);	
+            if( (rayP1[rayPointIndex] <= p0[rayPointIndex] && rayP1[rayPointIndex] >= p1[rayPointIndex]) 
+                || (rayP1[rayPointIndex] >= p0[rayPointIndex] && rayP1[rayPointIndex] <= p1[rayPointIndex]) )
+                indexList << i;
+        }
+        // Obtenim les interseccions entre tots els segments de la ROI i el raig actual
+        foreach (int segment, indexList)
+        {
+            if ( segments[segment]->IntersectWithLine(rayP1, rayP2, 0.0001, t, intersectPoint, pcoords, subId) > 0)
+            {
+                double *findedPoint = new double[3];
+                findedPoint[0] = intersectPoint[0];
+                findedPoint[1] = intersectPoint[1];
+                findedPoint[2] = intersectPoint[2];
+                intersectionList.append ( findedPoint );
+            }
+        }
+
+        if ( (intersectionList.count() % 2)==0 )
+        {
+            int limit = intersectionList.count()/2;
+            for ( i = 0; i < limit; i++ )
+            {
+                initialPosition = i * 2;
+                endPosition = initialPosition + 1;
+
+                firstIntersection = intersectionList.at( initialPosition );
+                secondIntersection = intersectionList.at( endPosition );
+
+                // Tractem els dos sentits de les interseccions
+                if (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])//d'esquerra cap a dreta
+                {
+                    while ( firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex] )
+                    {
+                        aux = this->getGraySerie( firstIntersection, temporalSize );
+                        for(j=0;j<temporalSize;j++)
+                        {
+                            mean[j] += aux[j];
+                        }
+                        numberOfVoxels++;
+                        firstIntersection[intersectionIndex] += spacing[0];
+                    }
+                }
+                else // De dreta cap a esquerra
+                {
+                    while ( firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex] )
+                    {
+                        aux = this->getGraySerie( firstIntersection, temporalSize );
+                        for(j=0;j<temporalSize;j++)
+                        {
+                            mean[j] += aux[j];
+                        }
+                        numberOfVoxels++;
+                        firstIntersection[intersectionIndex] -= spacing[0];
+                    }
+                }
+            }
+        }
+        else
+            DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!" );
+
+        // Fem el següent pas en la coordenada que escombrem
+        rayP1[rayPointIndex] += spacing[1];
+        rayP2[rayPointIndex] += spacing[1];
 	}
 
+    //std::cout<<"Num of voxels:"<<numberOfVoxels<<std::endl;
 
-	while( rayP1[rayPointIndex] <= verticalLimit )
-	{
-		intersectionList.clear();
-		indexList.clear();
-		for ( i = 0; i < numberOfSegments; i++ )
-		{
-			auxPoints = segments[i]->GetPoints();
-			auxPoints->GetPoint(0,p0);
-			auxPoints->GetPoint(1,p1);	
-			if( (rayP1[rayPointIndex] <= p0[rayPointIndex] && rayP1[rayPointIndex] >= p1[rayPointIndex]) 
-				|| (rayP1[rayPointIndex] >= p0[rayPointIndex] && rayP1[rayPointIndex] <= p1[rayPointIndex]) )
-				indexList << i;
+    for(j=0;j<temporalSize;j++)
+    {
+        mean[j] /= numberOfVoxels;
+        //std::cout<<"i: "<<j<<": "<<mean[j]<<std::endl;
+    }
 
-		}
-		//obtenim les interseccions entre tots els segments de la ROI i el raig actual
-		foreach (int segment, indexList)
-		{
-			if ( segments[segment]->IntersectWithLine(rayP1, rayP2, 0.0001, t, intersectPoint, pcoords, subId) > 0)
-			{
-				double *findedPoint = new double[3];
-				findedPoint[0] = intersectPoint[0];
-				findedPoint[1] = intersectPoint[1];
-				findedPoint[2] = intersectPoint[2];
-				intersectionList.append ( findedPoint );
-			}
-		}
+    this->m_myData->setMeanVector(mean);
 
-		if ( (intersectionList.count() % 2)==0 )
-		{
-			int limit = intersectionList.count()/2;
-			for ( i = 0; i < limit; i++ )
-			{
-				initialPosition = i * 2;
-				endPosition = initialPosition + 1;
+    // Destruim els diferents segments que hem creat per simular la roi
+    for ( i = 0; i < numberOfSegments; i++ )
+        segments[i]->Delete();
 
-				firstIntersection = intersectionList.at( initialPosition );
-				secondIntersection = intersectionList.at( endPosition );
-
-				//Tractem els dos sentits de les interseccions
-				if (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])//d'esquerra cap a dreta
-				{
-					while ( firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex] )
-					{
-						aux = this->getGraySerie( firstIntersection, temporalSize );
-						for(j=0;j<temporalSize;j++)
-						{
-							mean[j] += aux[j];
-						}
-						numberOfVoxels++;
-						firstIntersection[intersectionIndex] += spacing[0];
-					}
-				}
-				else //de dreta cap a esquerra
-				{
-					while ( firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex] )
-					{
-						aux = this->getGraySerie( firstIntersection, temporalSize );
-						for(j=0;j<temporalSize;j++)
-						{
-							mean[j] += aux[j];
-						}
-						numberOfVoxels++;
-						firstIntersection[intersectionIndex] -= spacing[0];
-					}
-				}
-			}
-		}
-		else
-			DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!" );
-
-		//fem el següent pas en la coordenada que escombrem
-		rayP1[rayPointIndex] += spacing[1];
-		rayP2[rayPointIndex] += spacing[1];
-	}
-
-	//std::cout<<"Num of voxels:"<<numberOfVoxels<<std::endl;
-
-	for(j=0;j<temporalSize;j++)
-	{
-		mean[j] /= numberOfVoxels;
-		//std::cout<<"i: "<<j<<": "<<mean[j]<<std::endl;
-	}
-
-	this->m_myData->setMeanVector(mean);
-
-	//destruim els diferents segments que hem creat per simular la roi
-	for ( i = 0; i < numberOfSegments; i++ )
-		segments[i]->Delete();
-
-	return 0.0;
-
-
+    return 0.0;
 }
 
 
 QVector<double> PolylineTemporalROITool::getGraySerie( double *coords, int size )
 {
-	QVector<double> v (size);
+    QVector<double> v (size);
     double *origin = m_2DViewer->getInput()->getOrigin();
     double *spacing = m_2DViewer->getInput()->getSpacing();
     itk::Index<4> index;
     int xIndex, yIndex, zIndex;
-	int i;
+    int i;
 
     Q2DViewer::getXYZIndexesForView( xIndex, yIndex, zIndex, m_2DViewer->getView() );
     index[xIndex+1] = (int)((coords[xIndex] - origin[xIndex])/spacing[xIndex]);
     index[yIndex+1] = (int)((coords[yIndex] - origin[yIndex])/spacing[yIndex]);
     index[zIndex+1] = m_2DViewer->getCurrentSlice();
 
-	for(i=0;i<size;i++)
-	{
-		index[0]=i;
+    for(i=0;i<size;i++)
+    {
+        index[0]=i;
         v[i]= m_myData->getTemporalImage()->GetPixel(index);
-	}
-	return v;
+    }
+    return v;
 }
 
 }

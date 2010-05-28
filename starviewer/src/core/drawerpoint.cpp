@@ -23,7 +23,7 @@ DrawerPoint::~DrawerPoint()
 {
 }
 
-void DrawerPoint::setPosition( double point[3] )
+void DrawerPoint::setPosition(double point[3])
 {
     m_position[0]=point[0];
     m_position[1]=point[1];
@@ -32,7 +32,7 @@ void DrawerPoint::setPosition( double point[3] )
     emit changed();
 }
 
-void DrawerPoint::setPosition( QVector<double> point )
+void DrawerPoint::setPosition(QVector<double> point)
 {
     m_position[0]=point[0];
     m_position[1]=point[1];
@@ -41,7 +41,7 @@ void DrawerPoint::setPosition( QVector<double> point )
     emit changed();
 }
 
-void DrawerPoint::setRadius( double radius )
+void DrawerPoint::setRadius(double radius)
 {
     m_pointRadius = radius;
 }
@@ -117,7 +117,7 @@ void DrawerPoint::updateVtkActorProperties()
     properties->SetColor( color.redF(), color.greenF(), color.blueF() );
 }
 
-double DrawerPoint::getDistanceToPoint( double *point3D )
+double DrawerPoint::getDistanceToPoint(double *point3D)
 {
     return sqrt( (point3D[0]-m_position[0])*(point3D[0]-m_position[0]) + (point3D[1]-m_position[1])*(point3D[1]-m_position[1]) + (point3D[2]-m_position[2])*(point3D[2]-m_position[2]) );
 }

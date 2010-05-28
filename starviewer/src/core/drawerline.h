@@ -27,12 +27,12 @@ public:
     ~DrawerLine();
 
     /// Afegim el primer punt de la línia
-    void setFirstPoint( double point[3] );
-    void setFirstPoint( double x, double y, double z );
+    void setFirstPoint(double point[3]);
+    void setFirstPoint(double x, double y, double z);
 
     /// Afegim el segon punt de la línia
-    void setSecondPoint( double point[3] );
-    void setSecondPoint( double x, double y, double z );
+    void setSecondPoint(double point[3]);
+    void setSecondPoint(double x, double y, double z);
 
     vtkProp *getAsVtkProp();
 
@@ -43,10 +43,10 @@ public:
     double *getSecondPoint(){return m_secondPoint;};
 
     /// Calcula la distancia entre punt i punt
-    double computeDistance( double * spacing = NULL);
+    double computeDistance(double * spacing = NULL);
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint( double *point3D );
+    double getDistanceToPoint(double *point3D);
 
     void getBounds(double bounds[6]);
 
