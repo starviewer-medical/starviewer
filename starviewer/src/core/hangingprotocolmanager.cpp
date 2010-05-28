@@ -286,11 +286,12 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
                 isCandidateSeries = false;
             }
         }
-        if (isCandidateSeries)
+
+        if (isCandidateSeries && isModalityCompatible(hangingProtocol, serie->getModality() ) )
         {
             if( imageSet->getTypeOfItem() != "image" )
             {
-                if( isValidSerie( serie, imageSet, hangingProtocol ) )
+                if( isValidSerie(serie, imageSet) )
                 {
                     found = true;
                     imageSet->setSeriesToDisplay( serie );
@@ -302,27 +303,24 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
             }
             else
             {
-                // Comprovem que la sèrie sigui de la modalitat del hanging protocol per evitar haver-ho de comprovar a cada imatge
-                if( isModalityCompatible(hangingProtocol, serie->getModality() ) )
-                {
-                    int imageNumber = 0;
-                    QList<Image *> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
-                    int numberImages = listOfImages.size();
+                int imageNumber = 0;
+                QList<Image *> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
+                int numberImages = listOfImages.size();
 
-                    while( !found && imageNumber < numberImages )
+                while( !found && imageNumber < numberImages )
+                {
+                    Image *image = listOfImages.value( imageNumber );
+                    if( isValidImage(image, imageSet) )
                     {
-                        Image *image = listOfImages.value( imageNumber );
-                        if( isValidImage(image, imageSet) )
-                        {
-                            found = true;
-                            imageSet->setImageToDisplay( imageNumber );
-                            imageSet->setSeriesToDisplay( serie );
-                            if( quitStudy )
-                                listOfSeries.removeAt(i);
-                        }
-                        imageNumber++;
+                        found = true;
+                        imageSet->setImageToDisplay( imageNumber );
+                        imageSet->setSeriesToDisplay( serie );
+                        if( quitStudy )
+                            listOfSeries.removeAt(i);
                     }
+                    imageNumber++;
                 }
+                
                 if( !found )
                     imageSet->setImageToDisplay( 0 );
             }
@@ -336,7 +334,7 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
     return 0;
 }
 
-bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )
+bool HangingProtocolManager::isValidSerie(Series *serie, HangingProtocolImageSet *imageSet)
 {
     bool valid = true;
     int i = 0;
@@ -346,11 +344,6 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
 
     valid = (serie->getModality() != "PR"); // Els presentation states per defecte no es mostren
 
-    if( valid )
-    {
-        valid = isModalityCompatible(hangingProtocol, serie->getModality() );
-    }
-    
     while ( valid && i < numberRestrictions )
     {
         restriction = listOfRestrictions.value( i );
