@@ -96,7 +96,7 @@ public:
     /**
      * Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
      */
-    virtual double getDistanceToPoint(double *point3D )=0;
+    virtual double getDistanceToPoint(double *point3D)=0;
 
     /**
      * Ens retorna els límits de l'hexahedre que encapsula la primitiva
