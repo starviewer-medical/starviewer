@@ -244,52 +244,87 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
     bool found = false;
     int i = 0;
     int numberSeries = listOfSeries.size();
+    Study * referenceStudy = 0;
+
+    if ( imageSet->isPreviousStudy() )
+    {
+        /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
+        
+        HangingProtocolImageSet *referenceImageSet = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() );
+
+        if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
+        {
+            if( referenceImageSet->getSeriesToDisplay() != 0 ) // no te sèrie anterior, per tant no és valid
+            {
+                referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
+            }
+        }
+        else // L'estudi de referència és un previ que encara no s'ha descarregat
+        {
+            referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
+        }
+
+        if( !referenceStudy )
+        {
+            return 0;
+        }
+    }
 
     while( !found && i < numberSeries )
     {
         Series *serie = listOfSeries.value( i );
-
-        if( imageSet->getTypeOfItem() != "image" )
+        bool isCandidateSeries = true;
+        if ( imageSet->isPreviousStudy() )
         {
-            if( isValidSerie( serie, imageSet, hangingProtocol ) )
+            if ( serie->getParentStudy()->getDate() >= referenceStudy->getDate() )
             {
-                found = true;
-                imageSet->setSeriesToDisplay( serie );
-                if( quitStudy )
-                {
-                    listOfSeries.removeAt(i);
-                }
+                isCandidateSeries = false;
             }
         }
-        else
+        if (isCandidateSeries)
         {
-            // Comprovem que la sèrie sigui de la modalitat del hanging protocol per evitar haver-ho de comprovar a cada imatge
-            if( hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( serie->getModality() ) )
+            if( imageSet->getTypeOfItem() != "image" )
             {
-                int imageNumber = 0;
-                QList<Image *> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
-                int numberImages = listOfImages.size();
-
-                while( !found && imageNumber < numberImages )
+                if( isValidSerie( serie, imageSet, hangingProtocol ) )
                 {
-                    Image *image = listOfImages.value( imageNumber );
-                    if( isValidImage( image, imageSet, hangingProtocol ) )
+                    found = true;
+                    imageSet->setSeriesToDisplay( serie );
+                    if( quitStudy )
                     {
-                        found = true;
-                        imageSet->setImageToDisplay( imageNumber );
-                        imageSet->setSeriesToDisplay( serie );
-                        if( quitStudy )
-                            listOfSeries.removeAt(i);
+                        listOfSeries.removeAt(i);
                     }
-                    imageNumber++;
                 }
             }
-            if( !found )
-                imageSet->setImageToDisplay( 0 );
-        }
+            else
+            {
+                // Comprovem que la sèrie sigui de la modalitat del hanging protocol per evitar haver-ho de comprovar a cada imatge
+                if( hangingProtocol->getHangingProtocolMask()->getProtocolList().contains( serie->getModality() ) )
+                {
+                    int imageNumber = 0;
+                    QList<Image *> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
+                    int numberImages = listOfImages.size();
 
-        if( found )
-            return serie;
+                    while( !found && imageNumber < numberImages )
+                    {
+                        Image *image = listOfImages.value( imageNumber );
+                        if( isValidImage(image, imageSet) )
+                        {
+                            found = true;
+                            imageSet->setImageToDisplay( imageNumber );
+                            imageSet->setSeriesToDisplay( serie );
+                            if( quitStudy )
+                                listOfSeries.removeAt(i);
+                        }
+                        imageNumber++;
+                    }
+                }
+                if( !found )
+                    imageSet->setImageToDisplay( 0 );
+            }
+
+            if( found )
+                return serie;
+        }
         i++;
     }
     imageSet->setSeriesToDisplay( 0 );//Important, no hi posem cap serie!
@@ -344,23 +379,6 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
         else if( restriction.selectorAttribute == "SeriesNumber" )
         {
             if( serie->getSeriesNumber() != restriction.valueRepresentation )
-                valid = false;
-        }
-        else if( restriction.selectorAttribute == "Anterior" )
-        {
-            int imageSetNumber = restriction.valueRepresentation.toInt();
-
-            /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
-            Study * referenceStudy = 0;
-            HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
-
-            if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
-                if( referenceImageSet->getSeriesToDisplay() != 0 ) // no te sèrie anterior, per tant no és valid
-                    referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
-            else // L'estudi de referència és un previ que encara no s'ha descarregat
-                referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
-
-            if( (referenceStudy == 0) || (serie->getParentStudy()->getDate() >= referenceStudy->getDate()) )
                 valid = false;
         }
         else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
@@ -429,7 +447,7 @@ void HangingProtocolManager::applyDisplayTransformations( Series *serie, int ima
     viewer->getViewer()->render();
 }
 
-bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet *imageSet, HangingProtocol * hangingProtocol )
+bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet *imageSet)
 {
     if( !image )
     {
@@ -482,24 +500,6 @@ bool HangingProtocolManager::isValidImage( Image *image, HangingProtocolImageSet
             bool isLocalyzer = image->getImageType().contains( restriction.valueRepresentation, Qt::CaseInsensitive );
             bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
             valid = isLocalyzer ^ match;
-        }
-        else if( restriction.selectorAttribute == "Anterior" )
-        {
-            Series * serie = image->getParentSeries();
-            int imageSetNumber = restriction.valueRepresentation.toInt();
-
-            /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
-            Study * referenceStudy = 0;
-            HangingProtocolImageSet * referenceImageSet = hangingProtocol->getImageSet( imageSetNumber );
-
-            if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
-                if( referenceImageSet->getSeriesToDisplay() != 0 ) // no te sèrie anterior, per tant no és valid
-                    referenceStudy = referenceImageSet->getSeriesToDisplay()->getParentStudy();
-            else // L'estudi de referència és un previ que encara no s'ha descarregat
-                referenceStudy = referenceImageSet->getPreviousStudyToDisplay();
-
-            if( (referenceStudy == 0) || (serie->getParentStudy()->getDate() >= referenceStudy->getDate()) )
-                valid = false;
         }
         else if( restriction.selectorAttribute == "MinimumNumberOfImages" )
         {
