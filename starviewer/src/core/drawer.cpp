@@ -8,6 +8,7 @@
 #include "q2dviewer.h"
 #include "drawerprimitive.h"
 #include "logging.h"
+#include "mathtools.h"
 //vtk
 #include <vtkRenderer.h>
 #include <QColor>
@@ -356,7 +357,7 @@ void Drawer::showGroup(const QString &groupName)
 
 DrawerPrimitive* Drawer::getPrimitiveNearerToPoint(double point[3], int view, int slice)
 {
-    double minDistance = VTK_DOUBLE_MAX;
+    double minDistance = MathTools::DoubleMaximumValue;
     double distance;
     double range = 15.0;
     QList< DrawerPrimitive *> primitivesList;
