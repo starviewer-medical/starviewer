@@ -246,7 +246,7 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, con
 
 Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol )
 {
-    bool found = false;
+    Series * selectedSeries = 0;
     int i = 0;
     int numberSeries = listOfSeries.size();
     Study * referenceStudy = 0;
@@ -275,7 +275,7 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
         }
     }
 
-    while( !found && i < numberSeries )
+    while( !selectedSeries && i < numberSeries )
     {
         Series *serie = listOfSeries.value( i );
         bool isCandidateSeries = true;
@@ -293,7 +293,7 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
             {
                 if( isValidSerie(serie, imageSet) )
                 {
-                    found = true;
+                    selectedSeries = serie;
                     imageSet->setSeriesToDisplay( serie );
                     if( quitStudy )
                     {
@@ -307,12 +307,12 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
                 QList<Image *> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
                 int numberImages = listOfImages.size();
 
-                while( !found && imageNumber < numberImages )
+                while( !selectedSeries && imageNumber < numberImages )
                 {
                     Image *image = listOfImages.value( imageNumber );
                     if( isValidImage(image, imageSet) )
                     {
-                        found = true;
+                        selectedSeries = serie;
                         imageSet->setImageToDisplay( imageNumber );
                         imageSet->setSeriesToDisplay( serie );
                         if( quitStudy )
@@ -320,18 +320,18 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
                     }
                     imageNumber++;
                 }
-                
-                if( !found )
-                    imageSet->setImageToDisplay( 0 );
             }
-
-            if( found )
-                return serie;
         }
         i++;
     }
-    imageSet->setSeriesToDisplay( 0 );//Important, no hi posem cap serie!
-    return 0;
+    
+    if (!selectedSeries)
+    {
+        imageSet->setSeriesToDisplay( 0 );//Important, no hi posem cap serie!
+        imageSet->setImageToDisplay( 0 );
+    }
+
+    return selectedSeries;
 }
 
 bool HangingProtocolManager::isValidSerie(Series *serie, HangingProtocolImageSet *imageSet)
