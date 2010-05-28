@@ -12,7 +12,6 @@
 #include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
 #include "itkVTKImageToImageFilter.h" // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
 #include <QStringList>
-
 // itk - input
 #include <itkImageFileReader.h>
 #include <itkImageSeriesReader.h>
@@ -23,7 +22,6 @@
 #include "itkQtAdaptor.h"
 #include "logging.h"
 #include "identifier.h"
-
 // Qt
 #include <QPixmap>
 
@@ -37,15 +35,14 @@ class Study;
 class Patient;
 
 /**
-    Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. Ens donarà mètodes per poder obtenir les dades en el format que volguem: ITK, VTK, etc.
+    Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. 
+    Ens donarà mètodes per poder obtenir les dades en el format que volguem: ITK, VTK, etc.
 
     Es pot inicialitzar amb dades de tipus itk o vtk amb el mètode \c setData() .
-    Per raons d'eficiència, com que el programa principalment el que farà serà visualitzar es retindran les dades en format natiu vtk. Només es convertiran a itk quan es demanin explícitament.
-
-    @author Grup de Gràfics de Girona  ( GGG )
+    Per raons d'eficiència, com que el programa principalment el que farà serà visualitzar es retindran les dades en format natiu vtk. 
+    Només es convertiran a itk quan es demanin explícitament.
 */
-class Volume : public QObject
-{
+class Volume : public QObject {
 Q_OBJECT
 public:
     /// Tipus de vòxel del volum
@@ -54,31 +51,31 @@ public:
     typedef VoxelType ItkPixelType;
     static const unsigned int VDimension = 3;
 
-    typedef itk::Image<ItkPixelType, VDimension >    ItkImageType;
-    typedef ItkImageType::Pointer  ItkImageTypePointer;
+    typedef itk::Image<ItkPixelType, VDimension> ItkImageType;
+    typedef ItkImageType::Pointer ItkImageTypePointer;
 
-    /// tipus de punter de dades vtk
+    /// Tipus de punter de dades vtk
     typedef vtkImageData *VtkImageTypePointer;
 
     /// Aquests enums indiquem quin criteri escollim per ordenar les imatges
     enum ImageOrderType{ OrderImageByNumber, OrderImageBySliceLocation, OrderImageByTemporalDimension };
 
-    Volume( QObject *parent = 0 );
-    Volume( ItkImageTypePointer itkImage, QObject *parent = 0 );
-    Volume( VtkImageTypePointer vtkImage, QObject *parent = 0 );
+    Volume(QObject *parent = 0);
+    Volume(ItkImageTypePointer itkImage, QObject *parent = 0);
+    Volume(VtkImageTypePointer vtkImage, QObject *parent = 0);
     ~Volume();
 
     /**
        Li donem les dades en format ITK
        \sa getVtkData(), getItkData()
     */
-    void setData( ItkImageTypePointer itkImage );
+    void setData(ItkImageTypePointer itkImage);
 
     /**
        Li donem les dades en format VTK
        \sa getVtkData(), getItkData()
     */
-    void setData( VtkImageTypePointer vtkImage );
+    void setData(VtkImageTypePointer vtkImage);
 
     /**
         Ens retorna la dades en format VTK
@@ -93,46 +90,46 @@ public:
     ItkImageTypePointer getItkData();
 
     /// Obté l'origen del volum
-    void getOrigin( double  xyz[3] );
+    void getOrigin(double  xyz[3]);
     double *getOrigin();
 
     /// Obté l'espaiat del model al llarg dels eixos
-    void getSpacing( double xyz[3] );
+    void getSpacing(double xyz[3]);
     double *getSpacing();
 
     /// Retorna la ¿bounding box?
-    void getWholeExtent( int extent[6] );
+    void getWholeExtent(int extent[6]);
     int *getWholeExtent();
 
     /// Retorna les dimensions del volum
     int *getDimensions();
-    void getDimensions( int dims[3] );
+    void getDimensions(int dims[3]);
 
     /// Assigna/Retorna l'identificador del volum. 
-    void setIdentifier( const Identifier &id );
+    void setIdentifier(const Identifier &id);
     Identifier getIdentifier() const;
 
     /// Assigna/Retorna el thumbnail del volum
-    void setThumbnail( const QPixmap &thumbnail );
+    void setThumbnail(const QPixmap &thumbnail);
     QPixmap getThumbnail() const;
 
     /// TODO Mètodes transitoris pels canvis de disseny del tema de fases
-    void setNumberOfPhases( int phases );
+    void setNumberOfPhases(int phases);
     int getNumberOfPhases() const;
-    Volume *getPhaseVolume( int index );
-    QList<Image *> getPhaseImages( int index );
-    void setNumberOfSlicesPerPhase( int slicesPerPhase );
+    Volume *getPhaseVolume(int index);
+    QList<Image *> getPhaseImages(int index);
+    void setNumberOfSlicesPerPhase(int slicesPerPhase);
     int getNumberOfSlicesPerPhase() const;
 
     /// Assignar/Obtenir el criteri d'ordenació de les imatges
-    void setImageOrderCriteria( unsigned int orderCriteria );
+    void setImageOrderCriteria(unsigned int orderCriteria);
     unsigned int getImageOrderCriteria() const;
 
     /// Afegim una imatge al conjunt d'imatges que composen el volum
-    void addImage( Image *image );
+    void addImage(Image *image);
 
     /// Assignem directament el conjunt d'imatges que composen aquest volum
-    void setImages( const QList<Image *> &imageList );
+    void setImages(const QList<Image *> &imageList);
 
     /// Retorna les imatges que composen el volum
     QList<Image *> getImages() const;
@@ -145,7 +142,7 @@ public:
     Patient *getPatient();
 
     /// Volcat d'informació en un string per poder-ho printar on interessi
-    QString toString( bool verbose = false );
+    QString toString(bool verbose = false);
 
     /**
      * Ens dóna la imatge corresponent a la llesca i fase donats
@@ -154,7 +151,7 @@ public:
      * @param phaseNumber fase
      * @return la imatge en cas que els índexs siguin correctes, NULL altrament
      */
-    Image *getImage( int sliceNumber, int phaseNumber = 0 ) const;
+    Image *getImage(int sliceNumber, int phaseNumber = 0) const;
 
     /**
      * Ens retorna la direcció REAL(DICOM) en la que es troben apilades
@@ -167,13 +164,13 @@ public:
      * @param stack
      * @param direction[]
      */
-    void getStackDirection( double direction[3], int stack = 0 );
+    void getStackDirection(double direction[3], int stack = 0);
 
     /// Obtenim el punter a les dades que es troben en l'índex donat
     /// És un accés a baix nivell, ja que obtenim el punter de les dades
     /// Retornem el punter transformat al tipus natiu de dades VoxelType
-    VoxelType *getScalarPointer( int x = 0, int y = 0, int z = 0 );
-    VoxelType *getScalarPointer( int index[3] );
+    VoxelType *getScalarPointer(int x = 0, int y = 0, int z = 0);
+    VoxelType *getScalarPointer(int index[3]);
 
     /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert
     bool fitsIntoMemory();
@@ -183,7 +180,7 @@ signals:
      * Emet l'estat del progrés en el que es troba la càrrega de dades del volum
      * @param progress progrés de la càrrega en una escala de 1 a 100
      */
-    void progress( int );
+    void progress(int);
 
 private:
     /// Mètode d'inicialització d'objectes comuns per als constructors
@@ -194,7 +191,7 @@ private:
     void loadWithPreAllocateAndInsert();
 
     /// carrega les llesques a partir dels objectes Image
-    void loadSlicesWithReaders( int method );
+    void loadSlicesWithReaders(int method);
 
     /// reserva l'espai per la imatge vtk segons l'input d'imatges que tenim
     void allocateImageData();
@@ -202,12 +199,12 @@ private:
     /// Donades unes imatges que tenen diferents mides, les llegim en un sol
     /// volum adaptant la mida als valors maxims de row i column. S'executarà quan volguem llegir
     /// una sèrie que conté imatges amb diferents mides
-    void readDifferentSizeImagesIntoOneVolume( const QStringList &filenames );
+    void readDifferentSizeImagesIntoOneVolume(const QStringList &filenames);
 
 private:
     /// Filtres per importar/exportar
-    typedef itk::ImageToVTKImageFilter< ItkImageType > ItkToVtkFilterType;
-    typedef itk::VTKImageToImageFilter< ItkImageType > VtkToItkFilterType;
+    typedef itk::ImageToVTKImageFilter<ItkImageType> ItkToVtkFilterType;
+    typedef itk::VTKImageToImageFilter<ItkImageType> VtkToItkFilterType;
 
     /// Les dades en format vtk
     VtkImageTypePointer m_imageDataVTK;
@@ -248,17 +245,17 @@ private:
      * @param fileName
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-    int readSingleFile( QString fileName );
+    int readSingleFile(QString fileName);
 
     /**
      * Donat un conjunt de fitxers els carrega en una única sèrie/volum
      * @param filenames
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-    int readFiles( QStringList filenames );
+    int readFiles(QStringList filenames);
 
     /// Donat un missatge d'error en un string, ens torna el codi d'error intern que sabem tractar
-    int identifyErrorMessage( const QString &errorMessage );
+    int identifyErrorMessage(const QString &errorMessage);
 
     /// S'encarrega de crear un volum "de mínims" per donar un output en casos que
     /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un 
@@ -266,18 +263,18 @@ private:
     void createNeutralVolume();
 
 private:
-    typedef itk::ImageFileReader< ItkImageType >  ReaderType;
-    typedef ReaderType::Pointer    ReaderTypePointer;
+    typedef itk::ImageFileReader<ItkImageType> ReaderType;
+    typedef ReaderType::Pointer ReaderTypePointer;
 
-    typedef itk::ImageSeriesReader< ItkImageType >     SeriesReaderType;
-    typedef itk::GDCMImageIO                        ImageIOType;
-    typedef itk::GDCMSeriesFileNames                NamesGeneratorType;
+    typedef itk::ImageSeriesReader<ItkImageType> SeriesReaderType;
+    typedef itk::GDCMImageIO ImageIOType;
+    typedef itk::GDCMSeriesFileNames NamesGeneratorType;
 
     /// El lector de sèries dicom
     SeriesReaderType::Pointer m_seriesReader;
 
     /// El lector estàndar de fitxers singulars, normalment servirà per llegir *.mhd's
-    ReaderTypePointer    m_reader;
+    ReaderTypePointer m_reader;
 
     /// el lector de DICOM
     ImageIOType::Pointer m_gdcmIO;
@@ -294,19 +291,18 @@ private:
 /**
     Classe auxiliar per monitorejar el progrés de la lectura del fitxer
 */
-class ProgressCommand : public itk::Command
-{
+class ProgressCommand : public itk::Command {
 public:
-    typedef  ProgressCommand   Self;
-    typedef  itk::Command             Superclass;
-    typedef  itk::SmartPointer<Self>  Pointer;
-    itkNewMacro( Self );
+    typedef ProgressCommand Self;
+    typedef itk::Command Superclass;
+    typedef itk::SmartPointer<Self> Pointer;
+    itkNewMacro(Self);
 
 protected:
     ProgressCommand() {};
 
 public:
-    typedef itk::ImageFileReader< Volume::ItkImageType >  ReaderType;
+    typedef itk::ImageFileReader<Volume::ItkImageType> ReaderType;
     typedef const ReaderType *ReaderTypePointer;
 
     void Execute(itk::Object *caller, const itk::EventObject & event)
@@ -316,14 +312,14 @@ public:
 
     void Execute(const itk::Object * object, const itk::EventObject & event)
     {
-        ReaderTypePointer m_reader = dynamic_cast< ReaderTypePointer >( object );
-        if( typeid( event ) == typeid( itk::ProgressEvent ) )
+        ReaderTypePointer m_reader = dynamic_cast<ReaderTypePointer>(object);
+        if ( typeid( event ) == typeid( itk::ProgressEvent ) )
         {
-            DEBUG_LOG( QString("Progressant...%1").arg( m_reader->GetProgress() ) );
+            DEBUG_LOG(QString("Progressant...%1").arg(m_reader->GetProgress()) );
         }
         else
         {
-            DEBUG_LOG( QString("No s'ha invocat ProgressEvent") );
+            DEBUG_LOG(QString("No s'ha invocat ProgressEvent"));
         }
     }
 };
