@@ -15,7 +15,6 @@
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkLine.h>
-#include "drawerline.h"
 // qt
 #include <QVector>
 
