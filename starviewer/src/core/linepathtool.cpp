@@ -119,13 +119,6 @@ void LinePathTool::closeForm()
     // Així alliberem la primitiva perquè pugui ser esborrada
     m_polyline->decreaseReferenceCount();
     
-    int i = 0;
-    for ( i = 0; i < m_polyline->getNumberOfPoints(); i++ )
-    {
-        double *point = m_polyline->getPoint( i );
-        DEBUG_LOG(QString("Point [%1,%2,%3]").arg(point[0]).arg(point[1]).arg(point[2]));
-    }
-
     // Indiquem que hem finalitzat les tasques de dibuix
     emit finished( m_polyline );
 
