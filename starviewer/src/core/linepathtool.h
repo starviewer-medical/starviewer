@@ -15,7 +15,6 @@ namespace udg {
 
 class Q2DViewer;
 class DrawerPolyline;
-class DrawerPolygon;
 
 class LinePathTool : public Tool
 {
