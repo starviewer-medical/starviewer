@@ -14,6 +14,7 @@
 #include "linepathtool.h"
 #include "mathtools.h"
 #include "drawerpolyline.h"
+#include "image.h"
 // Vtk's
 #include <vtkImageData.h>
 #include <vtkPointData.h>
@@ -92,19 +93,19 @@ void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
     Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
     Volume *volume = mainViewer->getInput();
 
-    // Es porta a terme l'MPR Curvilini per obtenir el nou volum amb la reconstrucció
-    Volume *reslicedVolume = doCurvedReslice( volume, polyline );
-
-    // Visualitzem nou volum de dades al segon viewer
+    // Obtenim volum de dades del segon viewer
     Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
-    // TODO: dóna error perquè no s'ha afegit cap punt a les dades VTK...
-    //reconstructionViewer->setInput( reslicedVolume );
+    Volume *reslicedVolume = reconstructionViewer->getInput();
+
+    // Es porta a terme l'MPR Curvilini per obtenir el nou volum amb la reconstrucció
+    doCurvedReslice( volume, polyline, reslicedVolume );
+
+    // Visualitzem al segon viewer la reconstrucció assignada al seu volum de dades
+    reconstructionViewer->render();
 }
 
-Volume* CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline )
+void CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline, Volume *reslicedVolume )
 {
-    Volume *reslicedVolume = new Volume;
-
     // Distància entre els píxels de les imatges que formen el volum
     double spacing[3];
     volume->getSpacing( spacing );
@@ -119,12 +120,8 @@ Volume* CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPoly
     vtkImageData *imageDataVTK = vtkImageData::New();
     initAndFillImageDataVTK( volume, pointsPath, imageDataVTK );
     
-    DEBUG_LOG(QString("Abans assignar data al reslicedVolume."));
-
     // S'assignen les dades VTK al nou volum
     reslicedVolume->setData( imageDataVTK );
-
-    return reslicedVolume;
 }
 
 void CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> polyline, double pixelsDistance, QList< double * > *pointsPath )
@@ -170,7 +167,7 @@ void CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> polyline, doubl
         }
 
         // S'inclou a la llista el punt actual
-        if ( previousPoint[0] != currentPoint[0] || previousPoint[1] != currentPoint[1] || previousPoint[2] != currentPoint[2] )
+        if (i == 0 || previousPoint[0] != currentPoint[0] || previousPoint[1] != currentPoint[1] || previousPoint[2] != currentPoint[2] )
         {
             //DEBUG_LOG(QString("append current point [%1,%2,%3]").arg(currentPoint[0]).arg(currentPoint[1]).arg(currentPoint[2]));
             pointsPath->append( currentPoint );
@@ -200,12 +197,13 @@ void CurvedMPRExtension::initAndFillImageDataVTK( Volume * volume, QList< double
     */
 
     double maxX = (double) pointsPath->length();
-    double maxY = (double) volume->getImages().length();
+    QList<Image*> slices = volume->getImages();
+    double maxY = (double) slices.length();
 
     imageDataVTK->SetOrigin( .0, .0, .0 );
     imageDataVTK->SetSpacing( 1., 1., 1. ); //???
     imageDataVTK->SetDimensions( maxX, maxY, 1 );
-    imageDataVTK->SetWholeExtent( 0, maxX, 0, maxY, 0, 0 );
+    imageDataVTK->SetWholeExtent( 0, maxX, 0, maxY, 0, 1 );
     imageDataVTK->SetScalarTypeToShort();
     imageDataVTK->SetNumberOfScalarComponents(1);
     imageDataVTK->AllocateScalars();
@@ -219,9 +217,13 @@ void CurvedMPRExtension::initAndFillImageDataVTK( Volume * volume, QList< double
     //DEBUG_LOG(QString("maxY %1").arg(maxY));
     //DEBUG_LOG(QString("maxX %1").arg(maxX));
 
-    // Per cada fila del nou volum (tantes files com llesques (núm. imatges))
-    for( int y = 0; y < maxY; y++ )
+    // Per cada llesca del volum (tantes files com número d'imatges)
+    QListIterator<Image*> it(slices);
+    while (it.hasNext())
     {
+        Image *slice = it.next();
+        double depth = slice->getImagePositionPatient()[2];
+
         // Obtenim el valor del pixel a la llesca actual per tots els punts indicats per 
         // l'usuari i que formen les columnes de la imatge resultat
         for ( int x = 0; x < pointsPath->size(); x++ )
@@ -229,8 +231,9 @@ void CurvedMPRExtension::initAndFillImageDataVTK( Volume * volume, QList< double
             double *point = pointsPath->at(x);
         
             Volume::VoxelType voxelValue;
+            
             // Es calcula el valor del voxel allà on es troba el punt actual a la llesca actual
-            point[2] = point[2] + y;
+            point[2] = depth;
 
             //DEBUG_LOG(QString("Point imatge [%1,%2,%3]").arg(point[0]).arg(point[1]).arg(point[2]));
             if ( volume->getVoxelValue(point, voxelValue) )

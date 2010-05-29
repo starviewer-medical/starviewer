@@ -40,9 +40,9 @@ private:
     /// Inicialitza les tools que tindrà l'extensió
     void initializeTools();
 
-    /// Porta a terme l'MPR Curvilini per obtenir el nou volum amb la reconstrucció
-    /// que cal assignar el segon viewer
-    Volume* doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline );
+    /// Porta a terme l'MPR Curvilini per assignar al reslicedVolume del segon volum i al que
+    // es modificaran les dades perque mostri la reconstrucció calculada
+    void doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline, Volume *reslicedVolume );
 
     /// Es costrueix una llista amb tots els punts que hi ha sobre la polyline indicada per
     /// l'usuari i que cal tenir en compte al fer la reconstrucció
