@@ -1925,14 +1925,14 @@ void Q2DViewer::putCoordinateInCurrentImageBounds( double xyz[3] )
     int yIndex = getYIndexForView(m_lastView);
 
     // Comprovarem que estigui dins dels límits 2D de la imatge
-    if( bounds[xIndex*2] > xyz[xIndex] ) // La x està per sota del mínim
+    if( xyz[xIndex] < bounds[xIndex*2] ) // La x està per sota del mínim
         xyz[xIndex] = bounds[xIndex*2];
-    else if( bounds[xIndex*2+1] < xyz[xIndex] ) // La x està per sobre del màxim
+    else if( xyz[xIndex] > bounds[xIndex*2+1]  ) // La x està per sobre del màxim
         xyz[xIndex] = bounds[xIndex*2+1];
 
-    if( bounds[yIndex*2] > xyz[yIndex] ) // La y està per sota del mínim
+    if( xyz[yIndex] < bounds[yIndex*2] ) // La y està per sota del mínim
         xyz[yIndex] = bounds[yIndex*2];
-    else if( bounds[yIndex*2+1] < xyz[yIndex] ) // La y està per sobre del màxim
+    else if( xyz[yIndex] > bounds[yIndex*2+1] ) // La y està per sobre del màxim
         xyz[yIndex] = bounds[yIndex*2+1];
 }
 
