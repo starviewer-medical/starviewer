@@ -61,6 +61,7 @@ Volume::Volume(VtkImageTypePointer vtkImage, QObject *parent)
 void Volume::init()
 {
     m_numberOfPhases = 1;
+    m_numberOfSlicesPerPhase = 1;
     // TODO És millor crear un objecte o assignar-li NUL a l'inicialitzar? 
     // Així potser és més segur des del punt de vista de si li demanem propietats al volum com origen, espaiat, etc
     m_imageDataVTK = vtkImageData::New();
