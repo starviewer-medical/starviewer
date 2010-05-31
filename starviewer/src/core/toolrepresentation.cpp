@@ -28,7 +28,7 @@ ToolRepresentation::~ToolRepresentation()
 
 void ToolRepresentation::refresh()
 {
-    m_drawer->refresh();
+    // TODO Mantenir els canvis que s'hagin fet a la branca sobre aquest mètode
 }
 
 }

@@ -66,11 +66,6 @@ public:
 
 public slots:
     /**
-     * Refresca les primitives que s'han de veure pel viewer segons el seu estat
-     */
-    void refresh();
-
-    /**
      * Deixa de mantenir la primitiva dins de la seva estructura interna
      * i l'elimina de l'escena on s'estava pintant
      * @param primitive Primitiva que volem deixar de controlar
@@ -93,6 +88,12 @@ private:
      * Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
      */
     bool isPrimitiveInside(DrawerPrimitive *primitive, int view, double bounds[6]);
+
+private slots:
+    /**
+     * Refresca les primitives que s'han de veure pel viewer segons el seu estat
+     */
+    void refresh();
 
 private:
     /// Viewer sobre el qual pintarem les primitives
