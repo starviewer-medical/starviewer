@@ -32,6 +32,9 @@ public slots:
     /// Assigna el volum amb el que s'aplica l'MPR Curvilini
     void setInput( Volume *input );
 
+    /// Cada cop que es canvia l'input del viewer principal cal actualitzar el volum de treball
+    void CurvedMPRExtension::upateMainVolume( Volume *volume );
+
     /// Inicia el procés de creació del reslicedVolume que caldrà visualitzar al segon viewer
     /// Es crida quan l'usuari indica la línia sobre la que caldrà projectar
     void updateReslice( QPointer<DrawerPolyline> polyline );
@@ -40,9 +43,8 @@ private:
     /// Inicialitza les tools que tindrà l'extensió
     void initializeTools();
 
-    /// Porta a terme l'MPR Curvilini per assignar al reslicedVolume del segon volum i al que
-    // es modificaran les dades perque mostri la reconstrucció calculada
-    void doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline, Volume *reslicedVolume );
+    /// Porta a terme l'MPR Curvilini retornant un nou volum al que se li ha assignat la reconstrucció calculada
+    Volume* doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline );
 
     /// Es costrueix una llista amb tots els punts que hi ha sobre la polyline indicada per
     /// l'usuari i que cal tenir en compte al fer la reconstrucció
@@ -53,7 +55,7 @@ private:
 
 private:
     /// El volum al que se li practica l'MPR Curvilini
-    Volume *m_volume;
+    Volume *m_mainVolume;
 
     /// ToolManager per configurar l'entorn de tools de l'extensió
     ToolManager *m_toolManager;
