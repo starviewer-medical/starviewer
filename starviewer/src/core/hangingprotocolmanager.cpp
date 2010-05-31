@@ -171,10 +171,7 @@ void HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QLis
 
 void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
 {
-    Identifier id;
-    id.setValue( hangingProtocolNumber );
-
-    HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
+    HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
 
     applyHangingProtocol(hangingProtocol,layout, patient);
 }
