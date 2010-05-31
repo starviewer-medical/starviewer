@@ -675,14 +675,21 @@ void QViewer::updateWindowLevelData()
     // primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
     int index = m_mainVolume->getNumberOfSlicesPerPhase()/2;
 
-    int wlCount = m_mainVolume->getImage(index)->getNumberOfWindowLevels();
-
-    if( wlCount > 0)
+    int windowLevelCount = 0;
+    Image *image = m_mainVolume->getImage(index);
+    if( image )
+        windowLevelCount = image->getNumberOfWindowLevels();
+    else
     {
-        for( int i = 0; i < wlCount; i++ )
+        DEBUG_LOG(QString("Índex [%1] fora de rang. No s'ha pogut obtenir la imatge indicada del volum actual.").arg(index) );
+    }
+
+    if( windowLevelCount > 0)
+    {
+        for( int i = 0; i < windowLevelCount; i++ )
         {
-            QPair<double, double> windowLevel = m_mainVolume->getImage(index)->getWindowLevel( i );
-            QString description = m_mainVolume->getImage(index)->getWindowLevelExplanation( i );
+            QPair<double, double> windowLevel = image->getWindowLevel( i );
+            QString description = image->getWindowLevelExplanation( i );
             if( description.isEmpty() )
             {
                 description = tr("Default %1").arg(i);
