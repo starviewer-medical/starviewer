@@ -301,22 +301,22 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
             }
             else
             {
-                int imageNumber = 0;
+                int currentImageIndex = 0;
                 QList<Image *> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
-                int numberImages = listOfImages.size();
+                int numberOfImages = listOfImages.size();
 
-                while( !selectedSeries && imageNumber < numberImages )
+                while( !selectedSeries && currentImageIndex < numberOfImages )
                 {
-                    Image *image = listOfImages.value( imageNumber );
+                    Image *image = listOfImages.value( currentImageIndex );
                     if( isValidImage(image, imageSet) )
                     {
                         selectedSeries = serie;
-                        imageSet->setImageToDisplay( imageNumber );
+                        imageSet->setImageToDisplay( currentImageIndex );
                         imageSet->setSeriesToDisplay( serie );
                         if( quitStudy )
                             listOfSeries.removeAt(currentSeriesIndex);
                     }
-                    imageNumber++;
+                    currentImageIndex++;
                 }
             }
         }
