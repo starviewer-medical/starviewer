@@ -992,6 +992,7 @@ void Q2DViewer::resetCamera()
 
         // Hem d'indicar l'slice changed al final per evitar el flickering que abans comentàvem
         emit sliceChanged( m_currentSlice );
+        render();
     }
     else
     {
@@ -1023,6 +1024,7 @@ void Q2DViewer::setSlice( int value )
         updateSliceAnnotationInformation();
         mapOrientationStringToAnnotation();
         emit sliceChanged( m_currentSlice );
+        render();
     }
 }
 

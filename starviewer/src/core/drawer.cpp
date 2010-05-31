@@ -113,7 +113,7 @@ void Drawer::clearViewer()
         if ( !primitive->hasOwners() )
             delete primitive;
     }
-    refresh();
+    m_2DViewer->render();
 }
 
 void Drawer::addToGroup(DrawerPrimitive *primitive, const QString &groupName)
@@ -142,8 +142,6 @@ void Drawer::refresh()
         m_currentPlane = m_2DViewer->getView();
         show(m_currentPlane, m_currentSlice);
     }
-    // si no s'ha complert cap altre premisa, cal refrescar el que hi hagi en el pla actual i en el top
-    m_2DViewer->render();
 }
 
 void Drawer::removeAllPrimitives()
@@ -316,6 +314,7 @@ int Drawer::getNumberOfDrawnPrimitives()
 
 void Drawer::hideGroup(const QString &groupName)
 {
+    bool hasToRender = false;
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values(groupName);
     foreach (DrawerPrimitive *primitive, primitiveList)
     {
@@ -323,13 +322,17 @@ void Drawer::hideGroup(const QString &groupName)
         {
             primitive->visibilityOff();
             primitive->update();
+            hasToRender = true;
         }
     }
-    this->refresh();
+    
+    if ( hasToRender )
+        m_2DViewer->render();
 }
 
 void Drawer::showGroup(const QString &groupName)
 {
+    bool hasToRender = false;
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values(groupName);
     foreach (DrawerPrimitive *primitive, primitiveList)
     {
@@ -337,9 +340,12 @@ void Drawer::showGroup(const QString &groupName)
         {
             primitive->visibilityOn();
             primitive->update();
+            hasToRender = true;
         }
     }
-    this->refresh();
+    
+    if ( hasToRender )
+        m_2DViewer->render();
 }
 
 DrawerPrimitive* Drawer::getPrimitiveNearerToPoint(double point[3], int view, int slice)
