@@ -244,8 +244,6 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, con
 Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol )
 {
     Series * selectedSeries = 0;
-    int i = 0;
-    int numberSeries = listOfSeries.size();
     Study * referenceStudy = 0;
 
     if ( imageSet->isPreviousStudy() )
@@ -272,9 +270,12 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
         }
     }
 
-    while( !selectedSeries && i < numberSeries )
+    int currentSeriesIndex = 0;
+    int numberOfSeries = listOfSeries.size();
+    
+    while( !selectedSeries && currentSeriesIndex < numberOfSeries )
     {
-        Series *serie = listOfSeries.value( i );
+        Series *serie = listOfSeries.value(currentSeriesIndex);
         bool isCandidateSeries = true;
         if ( imageSet->isPreviousStudy() )
         {
@@ -294,7 +295,7 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
                     imageSet->setSeriesToDisplay( serie );
                     if( quitStudy )
                     {
-                        listOfSeries.removeAt(i);
+                        listOfSeries.removeAt(currentSeriesIndex);
                     }
                 }
             }
@@ -313,13 +314,13 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
                         imageSet->setImageToDisplay( imageNumber );
                         imageSet->setSeriesToDisplay( serie );
                         if( quitStudy )
-                            listOfSeries.removeAt(i);
+                            listOfSeries.removeAt(currentSeriesIndex);
                     }
                     imageNumber++;
                 }
             }
         }
-        i++;
+        currentSeriesIndex++;
     }
     
     if (!selectedSeries)
