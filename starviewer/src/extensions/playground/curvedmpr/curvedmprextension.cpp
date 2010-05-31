@@ -34,11 +34,16 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
     
     initializeTools();
 
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+
     // Quan l'usuari indiqui la línia sobre la que caldrà projectar, llavors s'iniciarà el procés
     // de creació del reslicedVolume que caldrà visualitzar al segon viewer.
-    ToolProxy *toolProxy = m_viewersLayout->getViewerWidget(0)->getViewer()->getToolProxy();
+    ToolProxy *toolProxy = mainViewer->getToolProxy();
     LinePathTool *linePathTool = qobject_cast<LinePathTool *>( toolProxy->getTool( "LinePathTool" ) );
     connect( linePathTool, SIGNAL( finished( QPointer<DrawerPolyline> ) ), SLOT( updateReslice( QPointer<DrawerPolyline> )) );
+
+    // Cada cop que es canvia l'input del viewer principal cal actualitzar el volum de treball
+    connect( mainViewer, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateMainVolume( Volume * ) ) );
 }
 
 CurvedMPRExtension::~CurvedMPRExtension()
@@ -84,27 +89,26 @@ void CurvedMPRExtension::initializeTools()
 
 void CurvedMPRExtension::setInput( Volume *input )
 {
+    m_mainVolume = input;
     m_viewersLayout->getViewerWidget(0)->getViewer()->setInput(input);
-    m_viewersLayout->getViewerWidget(1)->getViewer()->setInput(input);
+}
+
+void CurvedMPRExtension::upateMainVolume( Volume *volume )
+{
+    m_mainVolume = volume;
 }
 
 void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
 {
-    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
-    Volume *volume = mainViewer->getInput();
-
-    // Obtenim volum de dades del segon viewer
-    Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
-    Volume *reslicedVolume = reconstructionViewer->getInput();
-
     // Es porta a terme l'MPR Curvilini per obtenir el nou volum amb la reconstrucció
-    doCurvedReslice( volume, polyline, reslicedVolume );
+    Volume *reslicedVolume = doCurvedReslice( m_mainVolume, polyline );
 
-    // Visualitzem al segon viewer la reconstrucció assignada al seu volum de dades
-    reconstructionViewer->render();
+    // Visualitzem al segon viewer la reconstrucció del nou volum de dades obtingut
+    Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
+    reconstructionViewer->setInput( reslicedVolume );
 }
 
-void CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline, Volume *reslicedVolume )
+Volume* CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline )
 {
     // Distància entre els píxels de les imatges que formen el volum
     double spacing[3];
@@ -120,8 +124,14 @@ void CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPolylin
     vtkImageData *imageDataVTK = vtkImageData::New();
     initAndFillImageDataVTK( volume, pointsPath, imageDataVTK );
     
+    // Es crea i assignen les dades d'inicialització al nou volum
+    Volume *reslicedVolume = new Volume;
+    reslicedVolume->setImages( volume->getImages() );
+    
     // S'assignen les dades VTK al nou volum
     reslicedVolume->setData( imageDataVTK );
+
+    return reslicedVolume;
 }
 
 void CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> polyline, double pixelsDistance, QList< double * > *pointsPath )
