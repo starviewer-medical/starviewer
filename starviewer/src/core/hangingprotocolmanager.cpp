@@ -293,10 +293,6 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
                 {
                     selectedSeries = serie;
                     imageSet->setSeriesToDisplay( serie );
-                    if( quitStudy )
-                    {
-                        listOfSeries.removeAt(currentSeriesIndex);
-                    }
                 }
             }
             else
@@ -313,13 +309,17 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
                         selectedSeries = serie;
                         imageSet->setImageToDisplay( currentImageIndex );
                         imageSet->setSeriesToDisplay( serie );
-                        if( quitStudy )
-                            listOfSeries.removeAt(currentSeriesIndex);
                     }
                     currentImageIndex++;
                 }
             }
         }
+
+        if( selectedSeries && quitStudy )
+        {
+            listOfSeries.removeAt(currentSeriesIndex);
+        }
+
         currentSeriesIndex++;
     }
     
