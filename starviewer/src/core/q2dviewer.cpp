@@ -1385,20 +1385,8 @@ bool Q2DViewer::getCurrentCursorImageCoordinate( double xyz[3] )
         // TODO Una altre solució possible és tenir renderers separats i en el que fem el pick només tenir-hi l'image actor 
         double bounds[6];
         m_imageActor->GetDisplayBounds(bounds);
-        switch( m_lastView )
-        {
-        case Axial:
-            xyz[2] = bounds[4];
-            break;
-
-        case Sagital:
-            xyz[0] = bounds[0];
-            break;
-
-        case Coronal:
-            xyz[1] = bounds[2];
-            break;
-        }
+        int xIndex = getXIndexForView(m_lastView);
+        xyz[xIndex] = bounds[xIndex*2];
     }
     else
     {
@@ -1709,21 +1697,14 @@ void Q2DViewer::updateDisplayExtent()
     else
         sliceValue = m_currentSlice*m_numberOfPhases + m_currentPhase;
 
-    int *wholeExtent = m_mainVolume->getWholeExtent();
-    switch( m_lastView )
-    {
-        case Axial:
-            m_imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], wholeExtent[2], wholeExtent[3], sliceValue, sliceValue );
-            break;
+    // A partir de l'extent del volum, la vista i la llesca en la que ens trobem, 
+    // calculem l'extent que li correspon a l'actor imatge
+    int zIndex = getZIndexForView(m_lastView);
+    int imageActorExtent[6];
+    m_mainVolume->getWholeExtent(imageActorExtent);
+    imageActorExtent[zIndex*2] = imageActorExtent[zIndex*2+1] = sliceValue;
+    m_imageActor->SetDisplayExtent( imageActorExtent[0], imageActorExtent[1], imageActorExtent[2], imageActorExtent[3], imageActorExtent[4], imageActorExtent[5] );
 
-        case Coronal:
-            m_imageActor->SetDisplayExtent( wholeExtent[0], wholeExtent[1], sliceValue, sliceValue, wholeExtent[4], wholeExtent[5] );
-            break;
-
-        case Sagital:
-            m_imageActor->SetDisplayExtent( sliceValue, sliceValue, wholeExtent[2], wholeExtent[3], wholeExtent[4], wholeExtent[5] );
-            break;
-    }
     // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
     getRenderer()->ResetCameraClippingRange();
 }
@@ -1940,34 +1921,19 @@ void Q2DViewer::putCoordinateInCurrentImageBounds( double xyz[3] )
     double bounds[6];
     m_imageActor->GetBounds(bounds);    
 
+    int xIndex = getXIndexForView(m_lastView);
+    int yIndex = getYIndexForView(m_lastView);
+
     // Comprovarem que estigui dins dels límits 2D de la imatge
-    // Depenent de la vista en la que ens trobem, comprovarem unes coordenades o unes altres
-    if( m_lastView == Axial || m_lastView == Coronal )
-    {
-        // x bounds check
-        if( bounds[0] > xyz[0] ) // La x està per sota del mínim
-            xyz[0] = bounds[0];
-        else if( bounds[1] < xyz[0] ) // La x està per sobre del màxim
-            xyz[0] = bounds[1];
-    }
+    if( bounds[xIndex*2] > xyz[xIndex] ) // La x està per sota del mínim
+        xyz[xIndex] = bounds[xIndex*2];
+    else if( bounds[xIndex*2+1] < xyz[xIndex] ) // La x està per sobre del màxim
+        xyz[xIndex] = bounds[xIndex*2+1];
 
-    if( m_lastView == Axial || m_lastView == Sagital )
-    {
-        // y bounds check
-        if( bounds[2] > xyz[1] ) // La y està per sota del mínim
-            xyz[1] = bounds[2];
-        else if( bounds[3] < xyz[1] ) // La y està per sobre del màxim
-            xyz[1] = bounds[3];
-    }
-
-    if( m_lastView == Sagital || m_lastView == Coronal )
-    {
-        // z bounds check
-        if( bounds[4] > xyz[2] ) // La z està per sota del mínim
-            xyz[2] = bounds[4];
-        else if( bounds[5] < xyz[2] ) // La z està per sobre del màxim
-            xyz[2] = bounds[5];
-    }
+    if( bounds[yIndex*2] > xyz[yIndex] ) // La y està per sota del mínim
+        xyz[yIndex] = bounds[yIndex*2];
+    else if( bounds[yIndex*2+1] < xyz[yIndex] ) // La y està per sobre del màxim
+        xyz[yIndex] = bounds[yIndex*2+1];
 }
 
 vtkImageData *Q2DViewer::getCurrentSlabProjection()
