@@ -28,7 +28,6 @@ HEADERS +=  qdicomprintextension.h \
             dicomprintmethod.h \
             printpage.h \
             dicomprintpage.h \
-            fakeobjects.h \
             dicomprint.h \
             createdicomprintspool.h \
             printdicomspool.h \
@@ -47,7 +46,6 @@ SOURCES +=  qdicomprintextension.cpp \
             dicomprintmethod.cpp \
             printpage.cpp \
             dicomprintpage.cpp \
-            fakeobjects.cpp \
             dicomprint.cpp \
             createdicomprintspool.cpp \
             printdicomspool.cpp \

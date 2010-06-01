@@ -53,12 +53,10 @@ HEADERS += databaseconnection.h \
     qbasicsearchwidget.h \
     localdatabasemanager.h \
     localdatabaseimagedal.h \
-    testdicomobjects.h \
     localdatabaseseriesdal.h \
     localdatabasestudydal.h \
     localdatabasepatientdal.h \
     localdatabaseutildal.h \
-    testdatabase.h \
     qdeleteoldstudiesthread.h \
     localdatabasemanagerthreaded.h \
     qthreadrunwithexec.h \
@@ -113,12 +111,10 @@ SOURCES += databaseconnection.cpp \
     qbasicsearchwidget.cpp \
     localdatabasemanager.cpp \
     localdatabaseimagedal.cpp \
-    testdicomobjects.cpp \
     localdatabaseseriesdal.cpp \
     localdatabasestudydal.cpp \
     localdatabasepatientdal.cpp \
     localdatabaseutildal.cpp \
-    testdatabase.cpp \
     qdeleteoldstudiesthread.cpp \
     localdatabasemanagerthreaded.cpp \
     databaseinstallation.cpp \
