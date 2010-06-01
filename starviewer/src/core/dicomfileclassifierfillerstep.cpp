@@ -82,13 +82,4 @@ void DICOMFileClassifierFillerStep::classifyFile()
     m_input->setCurrentSeries(series);
 }
 
-Patient *DICOMFileClassifierFillerStep::getPatient( QString patientName, QString patientID )
-{
-    Patient *patient = m_input->getPatientByName( patientName );
-    if( patient )
-        return patient;
-    else
-        return m_input->getPatientByID( patientID );
-}
-
 }

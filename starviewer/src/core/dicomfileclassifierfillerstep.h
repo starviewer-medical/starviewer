@@ -43,10 +43,6 @@ private:
     /// Classifica l'arxiu que tenim al lector de tags. Presuposa que es treballa amb un lector correcte.
     void classifyFile();
 
-    /// Retorna el pacient que cumpleixi un dels dos paràmetres.
-    /// \TODO quin seria el criteri adequat per identificar un mateix pacient? només pel nom? només per l'ID? la concatenació de nom i d'ID?
-    Patient *getPatient( QString patientName, QString patientID );
-
 private:
     /// El lector de tags que anirem fent servir per analitzar les dades
     DICOMTagReader *m_dicomReader;
