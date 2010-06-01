@@ -77,7 +77,6 @@ void DICOMFileClassifierFillerStep::classifyFile()
         // Per cada sèrie reiniciem el número de volum multiframe
         m_input->resetCurrentMultiframeVolumeNumber();
     }
-    series->addFilePath( m_dicomReader->getFileName() );
 
     m_input->setCurrentSeries(series);
 }

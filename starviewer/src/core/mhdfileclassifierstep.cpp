@@ -104,7 +104,6 @@ bool MHDFileClassifierStep::fillIndividually()
 
     QFileInfo fileInfo(file);
     series->setDescription( fileInfo.fileName() );
-    series->addFilePath( file );
     study->addSeries( series );
 
     // aquí fem el pas de l'image filler step: creem la imatge

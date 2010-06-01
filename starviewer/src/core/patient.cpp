@@ -173,7 +173,7 @@ bool Patient::hasFile( QString filename )
         QList<Series *> seriesList = study->getSeries();
         foreach( Series *series, seriesList )
         {
-            if( series->getFilesPathList().contains( filename ) )
+            if( series->getImagesPathList().contains( filename ) )
                 return true;
         }
     }
