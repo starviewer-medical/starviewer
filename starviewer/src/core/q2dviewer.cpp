@@ -1385,8 +1385,8 @@ bool Q2DViewer::getCurrentCursorImageCoordinate( double xyz[3] )
         // TODO Una altre solució possible és tenir renderers separats i en el que fem el pick només tenir-hi l'image actor 
         double bounds[6];
         m_imageActor->GetDisplayBounds(bounds);
-        int xIndex = getXIndexForView(m_lastView);
-        xyz[xIndex] = bounds[xIndex*2];
+        int zIndex = getZIndexForView(m_lastView);
+        xyz[zIndex] = bounds[zIndex*2];
     }
     else
     {
