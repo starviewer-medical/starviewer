@@ -1,6 +1,5 @@
 #include "dicomprintfactory.h"
 #include "qdicomprinterconfigurationwidget.h"
-#include "qdicomprintingconfigurationwidget.h"
 #include "qdicomjobcreatorwidget.h"
 #include "dicomprinter.h"
 #include "dicomprintmethod.h"
@@ -14,7 +13,6 @@ DicomPrintFactory::DicomPrintFactory()
     m_printMethod = new DicomPrintMethod();
     m_printerManager = new DicomPrinterManager();
     m_qPrinterconfigurationWidget = new QDicomPrinterConfigurationWidget();
-    m_qPrintingConfigurationWidget = new QDicomPrintingConfigurationWidget();
     m_qPrintJobCreatorWidget = new QDicomJobCreatorWidget();
 }
 
@@ -41,11 +39,6 @@ PrinterManager* DicomPrintFactory::getPrinterManager()
 QPrinterConfigurationWidget* DicomPrintFactory::getPrinterConfigurationWidget()
 {
     return m_qPrinterconfigurationWidget;
-}
-
-QPrintingConfigurationWidget* DicomPrintFactory::getPrintingConfigurationWidget()
-{
-    return m_qPrintingConfigurationWidget;
 }
 
 QPrintJobCreatorWidget* DicomPrintFactory::getPrintJobCreatorWidget()

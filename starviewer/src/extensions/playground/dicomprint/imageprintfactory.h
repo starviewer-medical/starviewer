@@ -29,10 +29,7 @@ public:
     
     /// Retorna el Widget encarregat de manipular la impressora (Afegir, Elimnar...)
     virtual QPrinterConfigurationWidget * getPrinterConfigurationWidget()=0;
-    
-    /// Retorna el Widget encarregat de configurar els paràmetres de la impressora per una impressió.
-    virtual QPrintingConfigurationWidget* getPrintingConfigurationWidget()=0;
-    
+
     /// Retorna el widget encarregat de configurar el PrintJob per una impressió.
     virtual QPrintJobCreatorWidget * getPrintJobCreatorWidget() =0;
 };

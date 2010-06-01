@@ -14,7 +14,6 @@ class Printer;
 class PrintMethod;
 class PrinterManager;
 class QPrinterConfigurationWidget;
-class QPrintingConfigurationWidget;
 class QPrintJobCreatorWidget;
 
 class DicomPrintFactory : public ImagePrintFactory
@@ -36,9 +35,6 @@ public:
     /// Retorna un objecte QPrinterConfigurationWidget (QDicomPrinterConfigurationWidget)
     QPrinterConfigurationWidget* getPrinterConfigurationWidget();
 
-    /// Retorna un QPrintingConfigurationWidget (QDicomPrintingConfigurationWidget)
-    QPrintingConfigurationWidget* getPrintingConfigurationWidget();
-
     /// Retorna un QPrintJobCreatorWidget (QDicomJobCreatorWidget)
     QPrintJobCreatorWidget* getPrintJobCreatorWidget();
 
@@ -51,8 +47,6 @@ private:
     PrinterManager* m_printerManager;
 
     QPrinterConfigurationWidget* m_qPrinterconfigurationWidget;
-
-    QPrintingConfigurationWidget* m_qPrintingConfigurationWidget;
 
     QPrintJobCreatorWidget* m_qPrintJobCreatorWidget;
 };

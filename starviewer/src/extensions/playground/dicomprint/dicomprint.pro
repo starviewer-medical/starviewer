@@ -6,7 +6,6 @@
 FORMS += qdicomprintextensionbase.ui \
          qdicomjobcreatorwidgetbase.ui \
          qdicomprinterconfigurationwidgetbase.ui \
-         qdicomprintingconfigurationwidgetbase.ui \
          qdicomaddprinterwidgetbase.ui \
          qdicomprinterbasicsettingswidgetbase.ui
          
@@ -21,7 +20,6 @@ HEADERS +=  qdicomprintextension.h \
             printer.h \
             dicomprinter.h \
             qprintingconfigurationwidget.h \
-            qdicomprintingconfigurationwidget.h \
             qprintjobcreatorwidget.h \
             qdicomjobcreatorwidget.h \
             printjob.h \
@@ -42,7 +40,6 @@ SOURCES +=  qdicomprintextension.cpp \
             dicomprintfactory.cpp \
             qdicomprinterconfigurationwidget.cpp \
             dicomprinter.cpp \
-            qdicomprintingconfigurationwidget.cpp \
             dicomprintermanager.cpp \
             qdicomjobcreatorwidget.cpp \
             printjob.cpp \
