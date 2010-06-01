@@ -106,6 +106,7 @@ void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
     // Visualitzem al segon viewer la reconstrucció del nou volum de dades obtingut
     Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
     reconstructionViewer->setInput( reslicedVolume );
+    reconstructionViewer->render();
 }
 
 Volume* CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline )
@@ -196,16 +197,6 @@ void CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> polyline, doubl
 void CurvedMPRExtension::initAndFillImageDataVTK( Volume * volume, QList< double* > *pointsPath, vtkImageData *imageDataVTK )
 {
     // Inicialització les dades VTK que formaran el volum de la reconstrucció.
-    /*
-    imageDataVTK->SetOrigin( .0, .0, .0 );
-    imageDataVTK->SetSpacing( 1., 1., 1. );
-    imageDataVTK->SetDimensions( 10, 10, 1 );
-    imageDataVTK->SetWholeExtent( 0, 9, 0, 9, 0, 0 );
-    imageDataVTK->SetScalarTypeToShort();
-    imageDataVTK->SetNumberOfScalarComponents(1);
-    imageDataVTK->AllocateScalars();
-    */
-
     double maxX = (double) pointsPath->length();
     QList<Image*> slices = volume->getImages();
     double maxY = (double) slices.length();
