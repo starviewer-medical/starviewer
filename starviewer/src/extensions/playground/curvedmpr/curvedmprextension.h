@@ -33,7 +33,7 @@ public slots:
     void setInput( Volume *input );
 
     /// Cada cop que es canvia l'input del viewer principal cal actualitzar el volum de treball
-    void CurvedMPRExtension::upateMainVolume( Volume *volume );
+    void upateMainVolume( Volume *volume );
 
     /// Inicia el procés de creació del reslicedVolume que caldrà visualitzar al segon viewer
     /// Es crida quan l'usuari indica la línia sobre la que caldrà projectar
