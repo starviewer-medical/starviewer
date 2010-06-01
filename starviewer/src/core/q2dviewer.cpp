@@ -40,7 +40,6 @@
 #include <vtkImageMapToWindowLevelColors.h>
 // Projecció de punts
 #include <vtkMatrix4x4.h>
-#include <vtkPlane.h>
 
 namespace udg {
 
@@ -1940,40 +1939,6 @@ vtkImageData *Q2DViewer::getCurrentSlabProjection()
 {
     return m_thickSlabProjectionFilter->GetOutput();
 }
-
-int Q2DViewer::getNearestSlice( double projectedPosition[3], double &distance )
-{
-    int i;
-    double actualDistance;
-    double minimumDistance = -1.0;
-    int minimumSlice = -1;
-    double currentPlaneOrigin[3], currentNormalVector[3];
-    ImagePlane *currentPlane = 0;
-    int maxSlice = this->getMaximumSlice();
-
-    for( i = 0; i < maxSlice ; i++ )
-    {
-        currentPlane = this->getImagePlane( i, m_currentPhase );
-
-        if( currentPlane )
-        {
-            currentPlane->getOrigin( currentPlaneOrigin );
-            currentPlane->getNormalVector( currentNormalVector );
-
-            actualDistance = vtkPlane::DistanceToPlane ( projectedPosition, currentNormalVector, currentPlaneOrigin );
-
-            if( ( actualDistance < minimumDistance ) || ( minimumDistance == -1.0 ))
-            {
-                minimumDistance = actualDistance;
-                minimumSlice = i;
-            }
-        }
-    }
-    distance = minimumDistance;
-
-    return minimumSlice;
-}
-
 
 void Q2DViewer::restore()
 {
