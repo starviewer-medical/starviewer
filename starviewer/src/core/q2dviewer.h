@@ -202,9 +202,6 @@ public:
     ///Retorna la informació de la llesca actual del visualitzador
     vtkImageData *getCurrentSlabProjection();
 
-    /// Busca la llesca que es troba més a prop del punt i retorna la distancia
-    int getNearestSlice( double point[3], double &distance );
-
     /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
     /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
     /// El primer element correspon a la esquerra de la imatge, el segon el damunt, el tercer a la dreta i el quart a sota
