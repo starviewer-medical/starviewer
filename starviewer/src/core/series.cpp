@@ -427,23 +427,6 @@ QList<Identifier> Series::getVolumesIDList() const
     return m_volumesList;
 }
 
-void Series::addFilePath(QString filePath)
-{
-    m_filesPathList.insert(filePath);
-}
-
-void Series::removeFilePath(QString filePath)
-{
-    m_filesPathList.remove(filePath);
-}
-
-QStringList Series::getFilesPathList()
-{
-   QList<QString> list = m_filesPathList.toList();
-   qSort(list);
-   return list;
-}
-
 QStringList Series::getImagesPathList()
 {
     QStringList pathList;

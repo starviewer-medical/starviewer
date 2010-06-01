@@ -211,15 +211,6 @@ public:
     /// Retorna la llista d'identificadors de volum
     QList<Identifier> getVolumesIDList() const;
 
-    /// Afegeix un fitxer a la sèrie
-    void addFilePath(QString filePath);
-
-    /// Esborra un fitxer de la sèrie
-    void removeFilePath(QString filePath);
-
-    /// Retorna la llista de fitxers DICOM que formen la sèrie sense tenir cap ordre en concret.
-    QStringList getFilesPathList();
-
     /// Llista dels noms de fitxer de les imatges
     QStringList getImagesPathList();
 
@@ -328,8 +319,6 @@ private:
     /// Llista de les Image de la serie ordenades per criteris d'ordenació com SliceLocation,InstanceNumber, etc
     /// TODO falta definir quina és l'estrategia d'ordenació per defecte
     QList<Image *> m_imageSet;
-
-    QSet<QString> m_filesPathList;
 
     /// Estudi pare
     Study *m_parentStudy;
