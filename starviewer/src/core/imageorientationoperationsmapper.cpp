@@ -53,7 +53,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     const QString HeadAnterior("H\\A");
     const QString HeadPosterior("H\\P");
 
-    m_orientationMappingTable.insert(AnteriorFeet + "-" + AnteriorHead, "2,1"); // per passar de AF -> AH calen 0 rotacions i 1 flip horitzontal
+    m_orientationMappingTable.insert(AnteriorFeet + "-" + AnteriorHead, "2,1"); // Per passar de AF -> AH calen 2 rotacions i 1 flip horitzontal
     m_orientationMappingTable.insert(AnteriorFeet + "-" + PosteriorFeet, "0,1");
     m_orientationMappingTable.insert(AnteriorFeet + "-" + PosteriorHead, "2,0");
     m_orientationMappingTable.insert(AnteriorFeet + "-" + HeadAnterior, "1,0");
