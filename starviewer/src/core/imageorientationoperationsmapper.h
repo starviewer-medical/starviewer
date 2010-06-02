@@ -36,8 +36,8 @@ public:
     /// Els valors possibles són 0, 1, 2 ó 3
     int getNumberOfClockwiseTurnsToApply();
     
-    /// Ens indica si cal aplicar un flip vertical o no
-    bool requiresVerticalFlip();
+    /// Ens indica si cal aplicar un flip horitzontal o no
+    bool requiresHorizontalFlip();
 
 private:
     /// Inicialitza els valors de la taula on mapejarem les operacions 
@@ -60,7 +60,7 @@ private:
     int m_clockwiseTurns;
 
     /// Indica si cal aplicar flip o no
-    bool m_verticalFlip;
+    bool m_horizontalFlip;
 
     /// Ens indicarà si cal trobar les rotacions i flips necessaris per la combinació actual d'orientacions
     bool m_hasToUpdateOperations;

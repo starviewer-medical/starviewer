@@ -2090,8 +2090,8 @@ void Q2DViewer::setImageOrientation(const QString &orientation)
     // TODO ara mateix fet així és ineficient ja que es poden cridar fins a dos cops updateCamera() innecessàriament
     // Caldria refactoritzar els mètodes de rotació i flip per aplicar aquests canvis requerint un únic updateCamera()
     rotateClockWise( m_imageOrientationOperationsMapper->getNumberOfClockwiseTurnsToApply() );
-    if( m_imageOrientationOperationsMapper->requiresVerticalFlip() )
-        verticalFlip();
+    if( m_imageOrientationOperationsMapper->requiresHorizontalFlip() )
+        horizontalFlip();
 }
 
 void Q2DViewer::rotate(int times)
