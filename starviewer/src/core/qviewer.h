@@ -132,16 +132,6 @@ public:
     void pan( double motionVector[3] );
 
     /**
-     * Fem un zoom del requadre definit pels paràmetres topLeft i rightBottom en coordenades de món
-     * perquè s'ajusti a la mida de la finestra
-     * @param topLeftX coordenada X superior esquerra del requadre
-     * @param topLeftY coordenada Y superior esquerra del requadre
-     * @param bottomRightX coordenada X inferior dreta del requadre
-     * @param bottomRightY coordenada Y inferior dreta del requadre
-     */
-    void scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY );
-
-    /**
      * Fem un zoom del requadre definit pels paràmetres topLeft i rightBottom en coordenades de món i en 3D
      * perquè s'ajusti a la mida de la finestra
      * @param topLeftX coordenada X superior esquerra del requadre
