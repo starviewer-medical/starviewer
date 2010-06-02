@@ -2127,7 +2127,7 @@ void Q2DViewer::fitImageIntoViewport()
     bottomCorner[zIndex] = 0.0;
 
     // Apliquem el zoom 
-    scaleToFit3D(topCorner[0], topCorner[1], topCorner[2], bottomCorner[0], bottomCorner[1], bottomCorner[2]);
+    scaleToFit3D(topCorner, bottomCorner);
 }
 
 };  // End namespace udg

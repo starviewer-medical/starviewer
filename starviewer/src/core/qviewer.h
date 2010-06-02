@@ -132,17 +132,15 @@ public:
     void pan( double motionVector[3] );
 
     /**
-     * Fem un zoom del requadre definit pels paràmetres topLeft i rightBottom en coordenades de món i en 3D
-     * perquè s'ajusti a la mida de la finestra
-     * @param topLeftX coordenada X superior esquerra del requadre
-     * @param topLeftY coordenada Y superior esquerra del requadre
-     * @param topLeftZ coordenada Z superior esquerra del requadre
-     * @param bottomRightX coordenada X inferior dreta del requadre
-     * @param bottomRightY coordenada Y inferior dreta del requadre
-     * @param bottomRightZ coordenada Z inferior dreta del requadre
+     * Fem un zoom del requadre definit pels paràmetres topCorner i bottomCorner en coordenades de món
+     * perquè s'ajusti a la mida de la finestra. 
+     * La determinació sobre quina coordenada es considera "superior" o "inferior" és relativa segons el punt de vista,
+     * el realment important és que aquestes coordenades siguin dos vèrtexs oposats dins del requadre que es vol definir
+     * @param topCorner Coordenada superior
+     * @param bottomCorner Coordenada inferior oposada a la superior
      * @param marginRate valor en percentatge del marge que es vol deixar
      */
-    void scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, double bottomRightX, double bottomRightY, double bottomRightZ, double marginRate = 0.0 );
+    void scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate = 0.0);
 
     /**
      * Ens retorna l'objecte que conté tota la informació referent al window level
