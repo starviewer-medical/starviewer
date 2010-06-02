@@ -2109,22 +2109,25 @@ void Q2DViewer::rotate(int times)
 
 void Q2DViewer::fitImageIntoViewport()
 {
+    // Obtenim els bounds de la imatge que estem visualitzant
     double bounds[6];
-    // Ajustem l'actor d'imatge al viewport
     m_imageActor->GetBounds( bounds );
-    switch( m_lastView )
-    {
-        case Axial:
-            scaleToFit3D( bounds[1], bounds[3], 0.0, bounds[0], bounds[2], 0.0 );
-        break;
 
-        case Sagital:
-            scaleToFit3D( 0.0, bounds[2], bounds[5], 0.0, bounds[3], bounds[4] );
-        break;
-        case Coronal:
-            scaleToFit3D( bounds[1], 0.0, bounds[4], bounds[0], 0.0, bounds[5] );
-        break;
-    }
+    // Obtenim les coordenades corresponents a dues puntes oposades de la imatge
+    double topCorner[3], bottomCorner[3];
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_lastView);
+
+    topCorner[xIndex] = bounds[xIndex*2];
+    topCorner[yIndex] = bounds[yIndex*2];
+    topCorner[zIndex] = 0.0;
+
+    bottomCorner[xIndex] = bounds[xIndex*2+1];
+    bottomCorner[yIndex] = bounds[yIndex*2+1];
+    bottomCorner[zIndex] = 0.0;
+
+    // Apliquem el zoom 
+    scaleToFit3D(topCorner[0], topCorner[1], topCorner[2], bottomCorner[0], bottomCorner[1], bottomCorner[2]);
 }
 
 };  // End namespace udg
