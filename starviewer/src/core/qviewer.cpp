@@ -475,15 +475,15 @@ void QViewer::pan( double motionVector[3] )
     this->render();
 }
 
-void QViewer::scaleToFit3D( double topLeftX, double topLeftY, double topLeftZ, double bottomRightX, double bottomRightY, double bottomRightZ, double marginRate )
+void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
 {
     if( !m_mainVolume )
         return;
 
     // Calcular la width i height en coordenades de display
     double displayTopLeft[3], displayBottomRight[3];
-    this->computeWorldToDisplay( topLeftX, topLeftY, topLeftZ, displayTopLeft );
-    this->computeWorldToDisplay( bottomRightX, bottomRightY, bottomRightZ, displayBottomRight );
+    this->computeWorldToDisplay( topCorner[0], topCorner[1], topCorner[2], displayTopLeft );
+    this->computeWorldToDisplay( bottomCorner[0], bottomCorner[1], bottomCorner[2], displayBottomRight );
 
     // recalculem tenint en compte el display
     double width, height;
