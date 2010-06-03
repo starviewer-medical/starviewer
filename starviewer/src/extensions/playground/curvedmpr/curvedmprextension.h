@@ -54,6 +54,11 @@ private:
     /// S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
     void initAndFillImageDataVTK(const QList<double *> &pointsPath, vtkImageData *imageDataVTK);
 
+private slots:
+    /// Cada cop que es creï de nou l'eina de traçat de línia la connectarà amb 
+    /// l'slot corresponent per obtenir la línia dibuixada
+    void updateLinePathToolConnection(bool enabled);
+
 private:
     /// El volum al que se li practica l'MPR Curvilini
     Volume *m_mainVolume;

@@ -31,19 +31,11 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
     // TODO corretgir aquesta inicialització inicial, això no hauria de ser necessari
     m_viewersLayout->addViewer( "0.0\\1.0\\1.0\\0.0" );
     m_viewersLayout->setGrid(2,1);
-    
+
     initializeTools();
 
-    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
-
-    // Quan l'usuari indiqui la línia sobre la que caldrà projectar, llavors s'iniciarà el procés
-    // de creació del reslicedVolume que caldrà visualitzar al segon viewer.
-    ToolProxy *toolProxy = mainViewer->getToolProxy();
-    LinePathTool *linePathTool = qobject_cast<LinePathTool *>( toolProxy->getTool( "LinePathTool" ) );
-    connect( linePathTool, SIGNAL( finished( QPointer<DrawerPolyline> ) ), SLOT( updateReslice( QPointer<DrawerPolyline> )) );
-
     // Cada cop que es canvia l'input del viewer principal cal actualitzar el volum de treball
-    connect( mainViewer, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateMainVolume( Volume * ) ) );
+    connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( updateMainVolume( Volume * ) ) );
 }
 
 CurvedMPRExtension::~CurvedMPRExtension()
@@ -83,8 +75,17 @@ void CurvedMPRExtension::initializeTools()
     m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(0)->getViewer() );
     m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(1)->getViewer() );
 
+    // Cal assabentar-se cada cop que es creï aquesta tool
+    // HACK Això és un hack!!! És una manera de fer que cada cop que cliquem el botó de l'eina se'ns connecti
+    // el signal que ens diu quina és la figura que s'ha dibuixat i així poder fer l'MPR Curvilini
+    // Fer servir un signal triggered o toggled de l'acció de la tool no funciona ja que primer s'executaria
+    // el nostre slot i després es crearia la tool i per tant el nostre slot sempre obtindria una Tool nul·la
+    // TODO Caldria trobar una manera de que el toolmanager ens digués quan es crea una tool d'un o varis viewers
+    // per situacions com aquesta
+    // Tenir en compte que amb aquest mètode, si s'activa la tool per shortcut, el més segur és que no funcionarà!!!
+    connect( m_linePathToolButton, SIGNAL( clicked(bool) ), SLOT( updateLinePathToolConnection(bool) ) );
     // Activem per defecte la tool LinePathTool
-    m_toolManager->getRegisteredToolAction("LinePathTool")->trigger();
+    m_linePathToolButton->click();
 }
 
 void CurvedMPRExtension::setInput( Volume *input )
@@ -245,6 +246,19 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
                 *scalarPointer++;
             }
         }
+    }
+}
+
+void CurvedMPRExtension::updateLinePathToolConnection(bool enabled)
+{
+    if ( enabled )
+    {
+        Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+        // Quan l'usuari indiqui la línia sobre la que caldrà projectar, llavors s'iniciarà el procés
+        // de creació del reslicedVolume que caldrà visualitzar al segon viewer.
+        ToolProxy *toolProxy = mainViewer->getToolProxy();
+        LinePathTool *linePathTool = qobject_cast<LinePathTool *>( toolProxy->getTool( "LinePathTool" ) );
+        connect( linePathTool, SIGNAL( finished( QPointer<DrawerPolyline> ) ), SLOT( updateReslice( QPointer<DrawerPolyline> )) );
     }
 }
 
