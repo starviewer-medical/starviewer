@@ -35,6 +35,11 @@ ImagePlane * ImagePlaneProjectionToolData::getProjectedLineImagePlane( QString p
     return m_imagePlanes[ projectedLineName ];
 }
 
+void ImagePlaneProjectionToolData::clearImagePlanesProjectedLines()
+{
+    m_imagePlanes.clear();
+}
+
 void ImagePlaneProjectionToolData::emitDataInitialized()
 {
     emit dataInitialized();

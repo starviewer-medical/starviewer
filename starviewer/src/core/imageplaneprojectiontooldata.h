@@ -35,6 +35,9 @@ public:
     /// Retorna el pla projectat per la línia identificada amb el nom passat per paràmetre
     ImagePlane *getProjectedLineImagePlane( QString projectedLineName );
 
+    /// Neteja el mapa que conté els image planes de les diferents projected lines
+    void clearImagePlanesProjectedLines();
+
     /// Fa que es llenci la senyal indicant que s'han inicialitzat les dades de treball
     void emitDataInitialized();
 

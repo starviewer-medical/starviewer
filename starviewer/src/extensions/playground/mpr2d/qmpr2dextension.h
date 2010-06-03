@@ -39,6 +39,11 @@ public slots:
     /// Canvia la distribució horitzontal de les finestres ( el que està a la dreta passa a l'esquerra i viceversa )
     void switchHorizontalLayout();
 
+private slots:
+    /// Permet activar i desactivar l'eina imagePlaneProjectionTool en funció si està actiu 
+    /// el botó de la tool o no
+    void setEnabledImagePlaneProjectionTool( QAction *action );
+
 private:
     ///Inicialitza les tools que tindrà l'extensió
     void initializeTools();
@@ -79,6 +84,10 @@ private:
 
     /// ToolManager per configurar l'entorn de tools de l'extensió
     ToolManager *m_toolManager;
+
+    // Grup exclusiu d'accions de tools que funcionen amb el botó equerra del ratolí 
+    // inclosa l'acció del botó que activa la tool ImagePlaneProjectionTool
+    QActionGroup *m_leftButtonActionGroup;
 
 };
 

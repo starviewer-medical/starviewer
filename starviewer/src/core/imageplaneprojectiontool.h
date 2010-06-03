@@ -39,6 +39,9 @@ public:
     /// Sobrescriu la funció del pare per assignar-li noves connexions
     void setToolData( ToolData *data );
 
+    /// Indica si la tool està habilitada o no
+    void setEnabled( bool enabled );
+
 private slots:
     /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
     /// Actualitza el volum compartit amb la resta de visors amb la tool activa
@@ -62,6 +65,14 @@ private slots:
     void checkImagePlaneBindUpdated( QString nameProjectedLine );
 
 private:
+    /// Activa les funcionalitats de la tool necessàries segons el tipus de configuració
+    /// (connect(signals - slots))
+    void enableConnections();
+
+    /// Desactiva les funcionalitats de la tool segons el tipus de configuració
+    /// (disconnect(signals - slots))
+    void disableConnections();
+
     /// Comprova que els valors assignats a la configuració siguin correctes
     void checkValuesConfiguration( ToolConfiguration *configuration );
     void checkConfigurationProducer( ToolConfiguration *configuration );
@@ -75,6 +86,9 @@ private:
 
     /// Inicialitza les linies projectades al viewer quan la tool està configurada com a productor
     void initProjectedLines();
+
+    /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
+    void initializeImagePlanes();
 
     // Inicialitza el pla projectat per una linia de projecció de la tool
     // S'assigna un espaiat, dimensions i límits en funció del tipus d'orientació
@@ -118,6 +132,9 @@ private:
     
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
+
+    /// Indica l'estat de la tool habilitada o deshabilitada
+    bool m_enabled;
 
     /// Linies projectades: cadascuna indica la intersecció entre un pla projectat que representen i el pla actual del Viewer
     /// Per cada línia es guarda el nom identificador i la seva orientació inicial
