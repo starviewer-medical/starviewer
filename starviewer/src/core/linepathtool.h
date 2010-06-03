@@ -44,12 +44,17 @@ private:
     /// Mètode que dóna per finalitzada la polílinia que s'ha dibuixat
     void closeForm();
 
+    /// Ens serveix per a veure dinàmicament l'evolució de la polilínia
+    void simulatePolyline();
+
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
     /// Polilínia que ens marca la forma que hem anat editant.
     QPointer<DrawerPolyline> m_polyline;
+
+    int m_numPointsAdded;
 };
 }  //  end namespace udg
 
