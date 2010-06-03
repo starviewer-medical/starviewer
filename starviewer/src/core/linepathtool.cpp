@@ -21,6 +21,7 @@ LinePathTool::LinePathTool( QViewer *viewer, QObject *parent )
 {
     m_toolName = "LinePathTool";
     m_hasSharedData = false;
+    m_numPointsAdded = 0;
 
     m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
     if( !m_2DViewer )
@@ -66,6 +67,10 @@ void LinePathTool::handleEvent( long unsigned eventID )
         case vtkCommand::LeftButtonPressEvent:
             handlePointAddition();
         break;
+
+        case vtkCommand::MouseMoveEvent:
+            simulatePolyline();
+        break;
     }
 }
 
@@ -103,7 +108,7 @@ void LinePathTool::annotateNewPoint()
     }
     
     // Afegim el punt de la polilínia que estem pintant
-    m_polyline->addPoint( pickedPoint );
+    m_polyline->setPoint( m_numPointsAdded++, pickedPoint );
 
     if( firstPoint ) // L'afegim a l'escena
         m_2DViewer->getDrawer()->draw( m_polyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
@@ -124,6 +129,24 @@ void LinePathTool::closeForm()
 
     // Eliminem la polilínia
     delete m_polyline;
+
+    m_numPointsAdded = 0;
+}
+
+void LinePathTool::simulatePolyline()
+{
+    if ( m_numPointsAdded > 0 )
+    {
+        double mousePoint[3];
+        m_2DViewer->getEventWorldCoordinate(mousePoint);
+        m_2DViewer->putCoordinateInCurrentImageBounds(mousePoint);
+
+        // Simulem que afegim el punt a la última posició de la polilínia
+        m_polyline->setPoint( m_numPointsAdded, mousePoint );
+
+        m_polyline->update();
+        m_2DViewer->render();
+    }
 }
 
 }  //  end namespace udg
