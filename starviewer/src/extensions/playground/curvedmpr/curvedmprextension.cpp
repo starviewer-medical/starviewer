@@ -31,6 +31,9 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
     // TODO corretgir aquesta inicialització inicial, això no hauria de ser necessari
     m_viewersLayout->addViewer( "0.0\\1.0\\1.0\\0.0" );
     m_viewersLayout->setGrid(2,1);
+    // Al segon viewer només li deixarem posar l'input del reslice curvilini. 
+    // L'usuari no el podrà canviar amb un volum "regular"
+    m_viewersLayout->getViewerWidget(1)->getViewer()->disableContextMenu();
 
     initializeTools();
 
