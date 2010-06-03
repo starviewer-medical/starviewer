@@ -107,6 +107,8 @@ void QMPR2DExtension::initializeTools()
     m_imagePlaneProjectionToolButton->setDefaultAction( action );
 
     m_toolManager->registerTool("ImagePlaneProjectionTool");
+
+    m_thickSlabWidget->link( m_coronal2DView );
     
     // activem l'eina de valors predefinits de window level
     QAction *windowLevelPresetsTool = m_toolManager->registerTool("WindowLevelPresetsTool");

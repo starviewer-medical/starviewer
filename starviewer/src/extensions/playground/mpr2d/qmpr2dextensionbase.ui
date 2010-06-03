@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout">
      <property name="spacing">
-      <number>6</number>
+      <number>0</number>
      </property>
      <property name="margin">
       <number>0</number>
@@ -285,6 +285,45 @@
            </property>
           </widget>
          </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>1</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="udg::QThickSlabWidget" name="m_thickSlabWidget" native="true"/>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Minimum</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>1</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
         </layout>
        </item>
        <item>
@@ -451,6 +490,12 @@
    <class>udg::QWindowLevelComboBox</class>
    <extends>QComboBox</extends>
    <header>qwindowlevelcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QThickSlabWidget</class>
+   <extends>QWidget</extends>
+   <header>qthickslabwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
