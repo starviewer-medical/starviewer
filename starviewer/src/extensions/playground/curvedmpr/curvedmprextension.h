@@ -54,6 +54,10 @@ private slots:
     /// Inicia el procés de creació del reslicedVolume que caldrà visualitzar al segon viewer
     /// Es crida quan l'usuari indica la línia sobre la que caldrà projectar
     void updateReslice( QPointer<DrawerPolyline> polyline );
+
+    /// Cada cop que es canvia el viewer seleccionat s'habiliten les tools en aquest visor
+    /// i es deshabiliten de l'altre
+    void changeSelectedViewer( Q2DViewerWidget *selectedViewer );
     
     /// Cada cop que es creï de nou l'eina de traçat de línia la connectarà amb 
     /// l'slot corresponent per obtenir la línia dibuixada

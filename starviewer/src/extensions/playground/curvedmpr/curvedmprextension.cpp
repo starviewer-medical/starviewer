@@ -39,6 +39,10 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
 
     // Cada cop que es canvia l'input del viewer principal cal actualitzar el volum de treball
     connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( updateMainVolume( Volume * ) ) );
+
+    // Cada cop que es canvia el viewer seleccionat s'habiliten les tools en aquest visor
+    // i es deshabiliten de l'altre
+    connect( m_viewersLayout, SIGNAL( viewerSelectedChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
 }
 
 CurvedMPRExtension::~CurvedMPRExtension()
@@ -50,13 +54,25 @@ void CurvedMPRExtension::initializeTools()
     // Creem el tool manager
     m_toolManager = new ToolManager(this);
     // Obtenim les accions de cada tool que volem
-    m_scrollToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
+    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
     m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
     m_polylineROIToolButton->setDefaultAction( m_toolManager->registerTool("PolylineROITool") );
     m_eraserToolButton->setDefaultAction( m_toolManager->registerTool("EraserTool") );
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_linePathToolButton->setDefaultAction( m_toolManager->registerTool("LinePathTool") );
+    m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
+    m_openAngleToolButton->setDefaultAction( m_toolManager->registerTool( "NonClosedAngleTool" ) );
+    m_axialViewToolButton->setDefaultAction( m_toolManager->registerActionTool( "AxialViewActionTool" ) );
+    m_sagitalViewToolButton->setDefaultAction( m_toolManager->registerActionTool( "SagitalViewActionTool" ) );
+    m_coronalViewToolButton->setDefaultAction( m_toolManager->registerActionTool( "CoronalViewActionTool" ) );
+    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool( "RotateClockWiseActionTool" ) );
+    m_rotateCounterClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool( "RotateCounterClockWiseActionTool" ) );
+    m_flipHorizontalToolButton->setDefaultAction( m_toolManager->registerActionTool( "HorizontalFlipActionTool" ) );
+    m_flipVerticalToolButton->setDefaultAction( m_toolManager->registerActionTool( "VerticalFlipActionTool" ) );
+    m_restoreToolButton->setDefaultAction( m_toolManager->registerActionTool( "RestoreActionTool" ) );
+    m_invertToolButton->setDefaultAction( m_toolManager->registerActionTool( "InvertWindowLevelActionTool" ) );
+
     // Tools sense botó
     m_toolManager->registerTool("WindowLevelTool");
     m_toolManager->registerTool("TranslateTool");
@@ -66,7 +82,7 @@ void CurvedMPRExtension::initializeTools()
 
     // Definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "LinePathTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "LinePathTool" << "AngleTool" << "NonClosedAngleTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
@@ -75,8 +91,12 @@ void CurvedMPRExtension::initializeTools()
     m_toolManager->triggerTools(defaultTools);
 
     // Registrem al manager les tools que van als diferents viewers
-    m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(0)->getViewer() );
-    m_toolManager->setupRegisteredTools( m_viewersLayout->getViewerWidget(1)->getViewer() );
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
+    m_toolManager->setupRegisteredTools( mainViewer );
+    m_toolManager->enableRegisteredActionTools( mainViewer );
+
+    m_thickSlabWidget->link( reconstructionViewer );
 
     // Cal assabentar-se cada cop que es creï aquesta tool
     // HACK Això és un hack!!! És una manera de fer que cada cop que cliquem el botó de l'eina se'ns connecti
@@ -103,21 +123,24 @@ void CurvedMPRExtension::updateMainVolume( Volume *volume )
 
 void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
 {
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
+
     // Assignem al cursor l'estat wait
-    m_viewersLayout->getViewerWidget(0)->getViewer()->setCursor( QCursor( Qt::WaitCursor ) );
-    m_viewersLayout->getViewerWidget(1)->getViewer()->setCursor( QCursor( Qt::WaitCursor ) );
+    mainViewer->setCursor( QCursor( Qt::WaitCursor ) );
+    reconstructionViewer->setCursor( QCursor( Qt::WaitCursor ) );
 
     // Es porta a terme l'MPR Curvilini per obtenir el nou volum amb la reconstrucció
     Volume *reslicedVolume = doCurvedReslice(polyline);
 
     // Visualitzem al segon viewer la reconstrucció del nou volum de dades obtingut
-    Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
+    
     reconstructionViewer->setInput( reslicedVolume );
     reconstructionViewer->render();
 
     // Tornem cursor a l'estat normal
-    m_viewersLayout->getViewerWidget(0)->getViewer()->setCursor( QCursor( Qt::ArrowCursor ) );
-    m_viewersLayout->getViewerWidget(1)->getViewer()->setCursor( QCursor( Qt::ArrowCursor ) );
+    mainViewer->setCursor( QCursor( Qt::ArrowCursor ) );
+    reconstructionViewer->setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
 Volume* CurvedMPRExtension::doCurvedReslice(QPointer<DrawerPolyline> polyline)
@@ -261,6 +284,23 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
         }
 
         depth += spacing;
+    }
+}
+
+void CurvedMPRExtension::changeSelectedViewer( Q2DViewerWidget *selectedWidget )
+{
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
+    
+    if ( selectedWidget == m_viewersLayout->getViewerWidget(0) )
+    {
+        m_toolManager->enableRegisteredActionTools( mainViewer );
+        m_toolManager->disableRegisteredActionTools( reconstructionViewer );
+    }
+    else
+    {
+        m_toolManager->enableRegisteredActionTools( reconstructionViewer );
+        m_toolManager->disableRegisteredActionTools( mainViewer );
     }
 }
 

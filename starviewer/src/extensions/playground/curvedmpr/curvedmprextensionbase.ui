@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
-    <height>506</height>
+    <width>1274</width>
+    <height>636</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Form1</string>
@@ -45,7 +51,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QToolButton" name="m_scrollToolButton">
+          <widget class="QToolButton" name="m_slicingToolButton">
            <property name="text">
             <string>Slicing</string>
            </property>
@@ -91,6 +97,26 @@
           </widget>
          </item>
          <item>
+          <widget class="QToolButton" name="m_polylineROIToolButton">
+           <property name="text">
+            <string>ROI</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../../../main/main.qrc">
+             <normaloff>:/images/polyline.png</normaloff>:/images/polyline.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QToolButton" name="m_distanceToolButton">
            <property name="text">
             <string>Distance</string>
@@ -114,13 +140,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="m_polylineROIToolButton">
+          <widget class="QToolButton" name="m_angleToolButton">
            <property name="text">
-            <string>ROI</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../../../main/main.qrc">
-             <normaloff>:/images/polyline.png</normaloff>:/images/polyline.png</iconset>
+            <string>Angle</string>
            </property>
            <property name="iconSize">
             <size>
@@ -128,7 +150,23 @@
              <height>32</height>
             </size>
            </property>
-           <property name="autoRaise">
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_openAngleToolButton">
+           <property name="text">
+            <string>0.Angle</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
             <bool>true</bool>
            </property>
           </widget>
@@ -201,6 +239,286 @@
       </layout>
      </item>
      <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QToolButton" name="m_axialViewToolButton">
+           <property name="text">
+            <string>Axial</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_sagitalViewToolButton">
+           <property name="text">
+            <string>Sagital</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="m_coronalViewToolButton">
+           <property name="text">
+            <string>Coronal</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextUnderIcon</enum>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QToolButton" name="m_rotateCounterClockWiseToolButton">
+         <property name="text">
+          <string>-90</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_rotateClockWiseToolButton">
+         <property name="text">
+          <string>Rotate</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_flipVerticalToolButton">
+         <property name="text">
+          <string>FlipV</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_flipHorizontalToolButton">
+         <property name="text">
+          <string>FlipH</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_restoreToolButton">
+         <property name="text">
+          <string>Restore</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_invertToolButton">
+         <property name="text">
+          <string>Invert</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../../../../../.designer/backup</normaloff>../../../../../../../../.designer/backup</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonIconOnly</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <spacer name="spacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>16</width>
+           <height>1</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="udg::QThickSlabWidget" name="m_thickSlabWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="spacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>1</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item>
       <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -243,7 +561,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <zorder></zorder>
     </widget>
    </item>
   </layout>
@@ -260,6 +577,11 @@
    <extends>QWidget</extends>
    <header>viewerslayout.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>udg::QThickSlabWidget</class>
+   <extends>QWidget</extends>
+   <header>qthickslabwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>
