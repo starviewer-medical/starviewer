@@ -14,7 +14,7 @@ HEADERS += qapplicationmainwindow.h \
            extensionworkspace.h \
            qconfigurationdialog.h \
            starviewerapplicationcommandline.h \
-           applicationcommandlineoptions.cpp
+           applicationcommandlineoptions.h
 SOURCES += qapplicationmainwindow.cpp \
            interfacesettings.cpp \
            appimportfile.cpp \
