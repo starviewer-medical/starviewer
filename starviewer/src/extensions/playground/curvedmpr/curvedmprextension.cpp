@@ -103,6 +103,10 @@ void CurvedMPRExtension::updateMainVolume( Volume *volume )
 
 void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
 {
+    // Assignem al cursor l'estat wait
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setCursor( QCursor( Qt::WaitCursor ) );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->setCursor( QCursor( Qt::WaitCursor ) );
+
     // Es porta a terme l'MPR Curvilini per obtenir el nou volum amb la reconstrucció
     Volume *reslicedVolume = doCurvedReslice(polyline);
 
@@ -110,6 +114,10 @@ void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
     Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
     reconstructionViewer->setInput( reslicedVolume );
     reconstructionViewer->render();
+
+    // Tornem cursor a l'estat normal
+    m_viewersLayout->getViewerWidget(0)->getViewer()->setCursor( QCursor( Qt::ArrowCursor ) );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
 Volume* CurvedMPRExtension::doCurvedReslice(QPointer<DrawerPolyline> polyline)
