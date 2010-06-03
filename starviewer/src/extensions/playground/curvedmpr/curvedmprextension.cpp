@@ -101,7 +101,7 @@ void CurvedMPRExtension::upateMainVolume( Volume *volume )
 void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
 {
     // Es porta a terme l'MPR Curvilini per obtenir el nou volum amb la reconstrucció
-    Volume *reslicedVolume = doCurvedReslice( m_mainVolume, polyline );
+    Volume *reslicedVolume = doCurvedReslice(polyline);
 
     // Visualitzem al segon viewer la reconstrucció del nou volum de dades obtingut
     Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
@@ -109,11 +109,12 @@ void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
     reconstructionViewer->render();
 }
 
-Volume* CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline )
+Volume* CurvedMPRExtension::doCurvedReslice(QPointer<DrawerPolyline> polyline)
 {
+    Q_ASSERT(m_mainVolume);
     // Distància entre els píxels de les imatges que formen el volum
     double spacing[3];
-    volume->getSpacing( spacing );
+    m_mainVolume->getSpacing( spacing );
     double pixelsDistance = sqrt( spacing[0] * spacing[0] + spacing[1] * spacing[1] );
 
     // Es construeix una llista amb tots els punts que hi ha sobre la polyline indicada per
@@ -122,11 +123,13 @@ Volume* CurvedMPRExtension::doCurvedReslice( Volume *volume, QPointer<DrawerPoly
 
     // S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
     vtkImageData *imageDataVTK = vtkImageData::New();
-    initAndFillImageDataVTK( volume, pointsPath, imageDataVTK );
+    initAndFillImageDataVTK(pointsPath, imageDataVTK);
     
     // Es crea i assignen les dades d'inicialització al nou volum
     Volume *reslicedVolume = new Volume;
-    reslicedVolume->setImages( volume->getImages() );
+    // TODO Aquí s'haurien d'afegir les imatges que realment s'han creat, no les del volum original
+    // Això simplement és un hack perquè pugui funcionar
+    reslicedVolume->setImages(m_mainVolume->getImages());
     
     // S'assignen les dades VTK al nou volum
     reslicedVolume->setData( imageDataVTK );
@@ -190,11 +193,12 @@ QList<double *> CurvedMPRExtension::getPointsPath(QPointer<DrawerPolyline> polyl
     return pointsPath;
 }
 
-void CurvedMPRExtension::initAndFillImageDataVTK(Volume * volume, const QList<double *> &pointsPath, vtkImageData *imageDataVTK)
+void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPath, vtkImageData *imageDataVTK)
 {
+    Q_ASSERT(m_mainVolume);
     // Inicialització les dades VTK que formaran el volum de la reconstrucció.
     double maxX = (double) pointsPath.length();
-    QList<Image*> slices = volume->getImages();
+    QList<Image*> slices = m_mainVolume->getImages();
     double maxY = (double) slices.length();
 
     imageDataVTK->SetOrigin( .0, .0, .0 );
@@ -233,7 +237,7 @@ void CurvedMPRExtension::initAndFillImageDataVTK(Volume * volume, const QList<do
             point[2] = depth;
 
             //DEBUG_LOG(QString("Point imatge [%1,%2,%3]").arg(point[0]).arg(point[1]).arg(point[2]));
-            if ( volume->getVoxelValue(point, voxelValue) )
+            if ( m_mainVolume->getVoxelValue(point, voxelValue) )
             {
                 //DEBUG_LOG(QString("Valor pixel %1").arg(voxelValue));
                 // S'afegeix el valor del píxel a les dades VTK
