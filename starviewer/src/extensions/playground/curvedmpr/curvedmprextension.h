@@ -46,12 +46,12 @@ private:
     /// Porta a terme l'MPR Curvilini retornant un nou volum al que se li ha assignat la reconstrucció calculada
     Volume* doCurvedReslice( Volume *volume, QPointer<DrawerPolyline> polyline );
 
-    /// Es costrueix una llista amb tots els punts que hi ha sobre la polyline indicada per
+    /// Retorna una llista amb tots els punts que hi ha sobre la polyline indicada per
     /// l'usuari i que cal tenir en compte al fer la reconstrucció
-    void getPointsPath( QPointer<DrawerPolyline> polyline, double pixelsDistance, QList< double * > *pointsPath );
+    QList<double *> getPointsPath(QPointer<DrawerPolyline> polyline, double pixelsDistance);
 
     /// S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
-    void initAndFillImageDataVTK( Volume *volume, QList< double * > *pointsPath, vtkImageData *imageDataVTK );
+    void initAndFillImageDataVTK(Volume *volume, const QList<double *> &pointsPath, vtkImageData *imageDataVTK);
 
 private:
     /// El volum al que se li practica l'MPR Curvilini
