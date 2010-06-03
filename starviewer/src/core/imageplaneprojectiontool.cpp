@@ -44,6 +44,8 @@ ImagePlaneProjectionTool::ImagePlaneProjectionTool( QViewer *viewer, QObject *pa
     m_state = NONE;
 
     m_volume = NULL;
+
+    m_enabled = false;
 }
 
 ImagePlaneProjectionTool::~ImagePlaneProjectionTool()
@@ -54,11 +56,135 @@ ImagePlaneProjectionTool::~ImagePlaneProjectionTool()
     }
 }
 
+void ImagePlaneProjectionTool::setEnabled( bool enabled )
+{
+    if ( !m_toolConfiguration )
+    {
+        DEBUG_LOG(QString("ImagePlaneProjectionTool: És obligatori associar a la tool una configuració correcta.") );
+        return;
+    }
+
+    QString typeConfiguration = m_toolConfiguration->getValue( "typeConfiguration" ).toString();
+
+    if ( !m_enabled && enabled )
+    {
+        // Tornem a activar els signals i slots necessàries segons el tipus de configuració de la tool
+        enableConnections();
+
+        if ( typeConfiguration == QString( "PRODUCER" ) )
+        {
+            initializeImagePlanes();
+        }
+        else if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+        {
+            initializeImagePlanesCheckingData();
+        }
+    }
+    else if ( m_enabled && !enabled )
+    {
+        // Desactivem els signals i slots creats segons el tipus de configuració de la tool
+        disableConnections();
+
+        if ( typeConfiguration == QString( "PRODUCER" ) )
+        {
+            // S'han d'esborrar els plans de projecció indicats a les dades compartides de la tool
+            m_myData->clearImagePlanesProjectedLines();
+        }
+
+        if ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+        {
+            // S'han de netejar les línies mostrades
+            m_2DViewer->clearViewer();
+            m_2DViewer->render();
+        }
+    }
+
+    m_enabled = enabled;
+}
+
+void ImagePlaneProjectionTool::enableConnections()
+{
+    if ( !m_toolConfiguration )
+    {
+        DEBUG_LOG(QString("ImagePlaneProjectionTool: És obligatori associar a la tool una configuració correcta.") );
+        return;
+    }
+
+    QString typeConfiguration = m_toolConfiguration->getValue( "typeConfiguration" ).toString();
+    if ( typeConfiguration == QString( "PRODUCER" ) )
+    {
+        // Cada cop que el viewer canvïi d'input s'ha d'inicialitzar el pla projectat per cada línia de projecció de la tool 
+        // i el volum compartit amb la resta de visors amb la tool activa
+        connect( m_2DViewer, SIGNAL( volumeChanged( Volume * ) ), SLOT( initializeImagePlanesUpdteVolume( Volume * ) ) );
+
+        // Cada cop que el viewer canvïi l'imatge o l'slab s'ha d'actualitzar el pla projectat per cada línia de projecció de la tool
+        connect( m_2DViewer, SIGNAL( sliceChanged( int ) ), SLOT( updateProjections()) );
+        connect( m_2DViewer, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateProjections()) );
+    }
+
+    if ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        // Quan es modifica el pla projectar per una línia d'un viewer amb la tool configurada com a productor
+        // cal comprovar si algun altre visor productor té alguna línia amb la mateixa orientació que cal actualitzar
+        // ( X visors diferents poden haver de mostrar línies amb el mateix pla de projecció )
+        connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkImagePlaneBindUpdated( QString ) ) );
+    }
+
+    if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        // Quan es modifica el volum de treball a les dades compartides els visors amb la tool configurada com a 
+        // productor i consumidor inicialitzen el pla projectat per cada línia de projecció de la tool comprovant
+        // primer si ja existeix a les dades un pla per la orientació corresponent.
+        connect( m_myData, SIGNAL( dataInitialized() ), SLOT( initializeImagePlanesCheckingData() ) );
+    }
+    
+    if ( typeConfiguration == QString( "CONSUMER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        // Quan es modifica el pla projectat per una línia d'un viewer amb la tool configurada com a productor
+        // cal comprovar si es tracta de la línia associada a l'actual viewer i si és així mostrar el nou pla
+        // (aquesta línia de projecció està mostrada a un viewer amb la tool configurada com a productor)
+        connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkProjectedLineBindUpdated( QString ) ) );
+    }
+}
+
+void ImagePlaneProjectionTool::disableConnections()
+{
+    if ( !m_toolConfiguration )
+    {
+        DEBUG_LOG(QString("ImagePlaneProjectionTool: És obligatori associar a la tool una configuració correcta.") );
+        return;
+    }
+
+    QString typeConfiguration = m_toolConfiguration->getValue( "typeConfiguration" ).toString();
+    if ( typeConfiguration == QString( "PRODUCER" ) )
+    {
+        disconnect( m_2DViewer, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( initializeImagePlanesUpdteVolume( Volume * ) ) );
+        disconnect( m_2DViewer, SIGNAL( sliceChanged( int ) ), this, SLOT( updateProjections()) );
+        disconnect( m_2DViewer, SIGNAL( slabThicknessChanged( int ) ), this, SLOT( updateProjections()) );
+    }
+
+    if ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkImagePlaneBindUpdated( QString ) ) );
+    }
+
+    if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        disconnect( m_myData, SIGNAL( dataInitialized() ), this, SLOT( initializeImagePlanesCheckingData() ) );
+    }
+    
+    if ( typeConfiguration == QString( "CONSUMER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
+    {
+        disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkProjectedLineBindUpdated( QString ) ) );
+    }
+}
+
 void ImagePlaneProjectionTool::setConfiguration( ToolConfiguration *configuration )
 {
     checkValuesConfiguration( configuration );
     m_toolConfiguration = configuration;
     applyConfiguration();
+    m_enabled = true;
 }
 
 void ImagePlaneProjectionTool::checkValuesConfiguration( ToolConfiguration *configuration )
@@ -139,43 +265,19 @@ void ImagePlaneProjectionTool::applyConfiguration()
         return;
     }
 
+    // Activem totes les connexions (signals-slots) de la tool segons la seva configuració
+    enableConnections();
+
     QString typeConfiguration = m_toolConfiguration->getValue( "typeConfiguration" ).toString();
-    if ( typeConfiguration == QString( "PRODUCER" ) )
-    {
-        // Cada cop que el viewer canvïi d'input s'ha d'inicialitzar el pla projectat per cada línia de projecció de la tool 
-        // i el volum compartit amb la resta de visors amb la tool activa
-        connect( m_2DViewer, SIGNAL( volumeChanged( Volume * ) ), SLOT( initializeImagePlanesUpdteVolume( Volume * ) ) );
-
-        // Cada cop que el viewer canvïi l'imatge o l'slab s'ha d'actualitzar el pla projectat per cada línia de projecció de la tool
-        connect( m_2DViewer, SIGNAL( sliceChanged( int ) ), SLOT( updateProjections()) );
-        connect( m_2DViewer, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateProjections()) );
-    }
-
     if ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
     {
-        // Quan es modifica el pla projectar per una línia d'un viewer amb la tool configurada com a productor
-        // cal comprovar si algun altre visor productor té alguna línia amb la mateixa orientació que cal actualitzar
-        // ( X visors diferents poden haver de mostrar línies amb el mateix pla de projecció )
-        connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkImagePlaneBindUpdated( QString ) ) );
-
+        // Inicialitzem les línies a projectar per la tool
         initProjectedLines();
     }
 
-    if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
-    {
-        // Quan es modifica el volum de treball a les dades compartides els visors amb la tool configurada com a 
-        // productor i consumidor inicialitzen el pla projectat per cada línia de projecció de la tool comprovant
-        // primer si ja existeix a les dades un pla per la orientació corresponent.
-        connect( m_myData, SIGNAL( dataInitialized() ), SLOT( initializeImagePlanesCheckingData() ) );
-    }
-    
     if ( typeConfiguration == QString( "CONSUMER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
     {
-        // Quan es modifica el pla projectat per una línia d'un viewer amb la tool configurada com a productor
-        // cal comprovar si es tracta de la línia associada a l'actual viewer i si és així mostrar el nou pla
-        // (aquesta línia de projecció està mostrada a un viewer amb la tool configurada com a productor)
-        connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkProjectedLineBindUpdated( QString ) ) );
-
+        // Inicialitzem el nom de la línia de projecció associada a la tool
         m_nameProjectedLineBind = m_toolConfiguration->getValue( "nameProjectedLine" ).toString();
         
         // Inicialitzem el reslice del viewer
@@ -191,8 +293,7 @@ void ImagePlaneProjectionTool::initProjectedLines()
     QStringList orientations = m_toolConfiguration->getValue( "initOrientationsProjectedLines" ).toStringList();
     QList< QVariant> colorsProjectedLines = m_toolConfiguration->getValue( "colorsProjectedLines" ).toList();
 
-    //TODO
-    // S'han de netejar les lines mostrades i tornar-les a inicialitzar. Què passarà amb les de references lines??????
+    // S'han de netejar les lines mostrades i tornar-les a inicialitzar.
     m_2DViewer->clearViewer();
     
     // Inicialitzem les diferents línies de projecció visibles al viewer
@@ -214,8 +315,12 @@ void ImagePlaneProjectionTool::initializeImagePlanesUpdteVolume( Volume *volume 
     // Guardem a les dades compartides el nou volum de treball
     m_myData->setVolume( volume );
 
-    //TODO
-    // S'han de netejar les lines mostrades i tornar-les a inicialitzar. Que passarà amb les de references lines??????
+    initializeImagePlanes();
+}
+
+void ImagePlaneProjectionTool::initializeImagePlanes( )
+{
+    // S'han de netejar les lines mostrades i tornar-les a inicialitzar.
     m_2DViewer->clearViewer();
     
     // Inicialitzem l'imagePlane representat per cada linia de projecció, la dibuixem 
@@ -224,7 +329,7 @@ void ImagePlaneProjectionTool::initializeImagePlanesUpdteVolume( Volume *volume 
     while (iterator.hasNext()) 
     {
         iterator.next();
-        initializeImagePlane( iterator.key(), volume );
+        initializeImagePlane( iterator.key(), m_myData->getVolume() );
     }
 
     // Indiquem que s'han inicialitzat les dades perquè si existeix algun visor productor&consumidor pugui
@@ -234,8 +339,7 @@ void ImagePlaneProjectionTool::initializeImagePlanesUpdteVolume( Volume *volume 
 
 void ImagePlaneProjectionTool::initializeImagePlanesCheckingData()
 {
-    //TODO
-    // S'han de netejar les lines mostrades i tornar-les a inicialitzar. Que passarà amb les de references lines??????
+    // S'han de netejar les lines mostrades i tornar-les a inicialitzar.
     m_2DViewer->clearViewer();
 
     QMapIterator< DrawerLine *, QStringList > iterator( m_projectedLines );
@@ -616,7 +720,7 @@ void ImagePlaneProjectionTool::updateReslice( Volume *volume )
     imagePlane->getSpacing(spacing);
 
     // Indiquem la distància entre les llesques de sortida que es podran anar obtenint.
-    m_reslice->SetOutputSpacing( spacing[0] , spacing[1] , 1 ); // obtenim una única llesca thickness = 1
+    m_reslice->SetOutputSpacing( spacing[0] , spacing[1] , 1 ); // thickness = 1
 
     // Indiquem quin ha de ser considerat l'origen de les llesques de sortida
     //m_reslice->SetOutputOrigin( origin[0] , origin[1] , origin[2] );
@@ -626,7 +730,7 @@ void ImagePlaneProjectionTool::updateReslice( Volume *volume )
     double columns = imagePlane->getColumns();
 
     // Límits de les llesques de sortida
-    m_reslice->SetOutputExtent( 0 , columns - 1 , 0 , rows - 1 , 0 , 0 );
+    m_reslice->SetOutputExtent( 0 , columns - 1 , 0 , rows - 1 , 0 , 0 ); // obtenim una única llesca
 
     // Fem efectius els canvis fets anteriorment sobre el vtkImageReslace
     m_reslice->Update();

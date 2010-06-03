@@ -262,6 +262,29 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QToolButton" name="m_imagePlaneProjectionToolButton">
+           <property name="text">
+            <string>Image plane projection</string>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>../../../main/images/imagePlaneProjection.png</normaloff>../../../main/images/imagePlaneProjection.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

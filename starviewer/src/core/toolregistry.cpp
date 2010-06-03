@@ -329,6 +329,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     else if( toolName == "ImagePlaneProjectionTool" )
     {
         toolAction->setText( tr("Image Plane Projection") );
+        toolAction->setIcon( QIcon(":/images/imagePlaneProjection.png") );
         toolAction->setStatusTip( tr("Enable/Disable image plane projection tool") );
     }
     else if( toolName == "NonClosedAngleTool" )
