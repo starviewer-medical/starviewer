@@ -90,11 +90,10 @@ void CurvedMPRExtension::initializeTools()
 
 void CurvedMPRExtension::setInput( Volume *input )
 {
-    m_mainVolume = input;
     m_viewersLayout->getViewerWidget(0)->getViewer()->setInput(input);
 }
 
-void CurvedMPRExtension::upateMainVolume( Volume *volume )
+void CurvedMPRExtension::updateMainVolume( Volume *volume )
 {
     m_mainVolume = volume;
 }
