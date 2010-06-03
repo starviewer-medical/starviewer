@@ -207,10 +207,14 @@ QList<double *> CurvedMPRExtension::getPointsPath(QPointer<DrawerPolyline> polyl
 void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPath, vtkImageData *imageDataVTK)
 {
     Q_ASSERT(m_mainVolume);
+
+    // Obtenim quin és l'eix de profunditat segons la vista mostrada al visor principal
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    int zIndex = mainViewer->getZIndexForView( mainViewer->getView() );
+
     // Inicialització les dades VTK que formaran el volum de la reconstrucció.
     double maxX = (double) pointsPath.length();
-    QList<Image*> slices = m_mainVolume->getImages();
-    double maxY = (double) slices.length();
+    double maxY = m_mainVolume->getDimensions()[zIndex];
 
     imageDataVTK->SetOrigin( .0, .0, .0 );
     imageDataVTK->SetSpacing( 1., 1., 1. ); //???
@@ -229,13 +233,11 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
     //DEBUG_LOG(QString("maxY %1").arg(maxY));
     //DEBUG_LOG(QString("maxX %1").arg(maxX));
 
-    // Per cada llesca del volum (tantes files com número d'imatges)
-    QListIterator<Image*> it(slices);
-    while (it.hasNext())
+    double depth = m_mainVolume->getOrigin()[zIndex];
+    double spacing = m_mainVolume->getSpacing()[zIndex];
+    
+    while ( depth <= maxY )
     {
-        Image *slice = it.next();
-        double depth = slice->getImagePositionPatient()[2];
-
         // Obtenim el valor del pixel a la llesca actual per tots els punts indicats per 
         // l'usuari i que formen les columnes de la imatge resultat
         for ( int x = 0; x < pointsPath.size(); x++ )
@@ -244,8 +246,9 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
         
             Volume::VoxelType voxelValue;
             
-            // Es calcula el valor del voxel allà on es troba el punt actual a la llesca actual
-            point[2] = depth;
+            // Es calcula el valor del voxel allà on es troba el punt actual a la profunditat 
+            // actual del volum (recordem que varia segons la vista mostrada al visor principal)
+            point[zIndex] = depth;
 
             //DEBUG_LOG(QString("Point imatge [%1,%2,%3]").arg(point[0]).arg(point[1]).arg(point[2]));
             if ( m_mainVolume->getVoxelValue(point, voxelValue) )
@@ -256,6 +259,8 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
                 *scalarPointer++;
             }
         }
+
+        depth += spacing;
     }
 }
 
