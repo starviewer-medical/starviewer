@@ -28,16 +28,9 @@ public:
     CurvedMPRExtension( QWidget *parent = 0 );
     ~CurvedMPRExtension();
 
-public slots:
+public:
     /// Assigna el volum amb el que s'aplica l'MPR Curvilini
     void setInput( Volume *input );
-
-    /// Cada cop que es canvia l'input del viewer principal cal actualitzar el volum de treball
-    void updateMainVolume( Volume *volume );
-
-    /// Inicia el procés de creació del reslicedVolume que caldrà visualitzar al segon viewer
-    /// Es crida quan l'usuari indica la línia sobre la que caldrà projectar
-    void updateReslice( QPointer<DrawerPolyline> polyline );
 
 private:
     /// Inicialitza les tools que tindrà l'extensió
@@ -55,6 +48,13 @@ private:
     void initAndFillImageDataVTK(const QList<double *> &pointsPath, vtkImageData *imageDataVTK);
 
 private slots:
+    /// Cada cop que es canvia l'input del viewer principal cal actualitzar el volum de treball
+    void updateMainVolume( Volume *volume );
+
+    /// Inicia el procés de creació del reslicedVolume que caldrà visualitzar al segon viewer
+    /// Es crida quan l'usuari indica la línia sobre la que caldrà projectar
+    void updateReslice( QPointer<DrawerPolyline> polyline );
+    
     /// Cada cop que es creï de nou l'eina de traçat de línia la connectarà amb 
     /// l'slot corresponent per obtenir la línia dibuixada
     void updateLinePathToolConnection(bool enabled);
