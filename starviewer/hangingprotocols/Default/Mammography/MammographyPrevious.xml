@@ -24,11 +24,6 @@
 <selectorAttribute>CodeMeaning</selectorAttribute>
 <valueRepresentation>medio-lateral</valueRepresentation>
 </restriction>
-<restriction identifier="5">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>Anterior</selectorAttribute>
-<valueRepresentation>1</valueRepresentation>
-</restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
 <restriction>4</restriction>
@@ -52,28 +47,24 @@
 <imageSet identifier="5">
 <restriction>1</restriction>
 <restriction>4</restriction>
-<restriction>5</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
 <imageSet identifier="6">
 <restriction>2</restriction>
 <restriction>4</restriction>
-<restriction>5</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
 <imageSet identifier="7">
 <restriction>1</restriction>
 <restriction>3</restriction>
-<restriction>5</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
 <imageSet identifier="8">
 <restriction>2</restriction>
 <restriction>3</restriction>
-<restriction>5</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
