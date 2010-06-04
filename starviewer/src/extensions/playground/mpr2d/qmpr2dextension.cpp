@@ -67,6 +67,7 @@ void QMPR2DExtension::initializeTools()
     m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
     m_toolManager->registerTool("TranslateTool");
     m_toolManager->registerTool("WindowLevelTool");
+    m_toolManager->registerTool("WindowLevelPresetsTool");
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
@@ -74,10 +75,6 @@ void QMPR2DExtension::initializeTools()
     m_eraserToolButton->setDefaultAction( m_toolManager->registerTool("EraserTool") );
 
     m_thickSlabWidget->link( m_coronal2DView );
-    
-    // activem l'eina de valors predefinits de window level
-    QAction *windowLevelPresetsTool = m_toolManager->registerTool("WindowLevelPresetsTool");
-    windowLevelPresetsTool->trigger();
 
     // definim els grups exclusius
     m_leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
@@ -103,6 +100,7 @@ void QMPR2DExtension::initializeTools()
     m_imagePlaneProjectionToolButton->defaultAction()->trigger();
     m_toolManager->getRegisteredToolAction("TranslateTool")->trigger();
     m_toolManager->getRegisteredToolAction("WindowLevelTool")->trigger();
+    m_toolManager->getRegisteredToolAction("WindowLevelPresetsTool")->trigger();
     
     // Assignem al viewer m_axial2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a productor
     ToolConfiguration *imagePlaneProjectionToolViwerAxialConfig= new ToolConfiguration();
