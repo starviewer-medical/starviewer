@@ -70,33 +70,11 @@ void ImagePlaneProjectionTool::setEnabled( bool enabled )
     {
         // Tornem a activar els signals i slots necessàries segons el tipus de configuració de la tool
         enableConnections();
-
-        if ( typeConfiguration == QString( "PRODUCER" ) )
-        {
-            initializeImagePlanes();
-        }
-        else if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
-        {
-            initializeImagePlanesCheckingData();
-        }
     }
     else if ( m_enabled && !enabled )
     {
         // Desactivem els signals i slots creats segons el tipus de configuració de la tool
         disableConnections();
-
-        if ( typeConfiguration == QString( "PRODUCER" ) )
-        {
-            // S'han d'esborrar els plans de projecció indicats a les dades compartides de la tool
-            m_myData->clearImagePlanesProjectedLines();
-        }
-
-        if ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
-        {
-            // S'han de netejar les línies mostrades
-            m_2DViewer->clearViewer();
-            m_2DViewer->render();
-        }
     }
 
     m_enabled = enabled;
@@ -315,11 +293,6 @@ void ImagePlaneProjectionTool::initializeImagePlanesUpdteVolume( Volume *volume 
     // Guardem a les dades compartides el nou volum de treball
     m_myData->setVolume( volume );
 
-    initializeImagePlanes();
-}
-
-void ImagePlaneProjectionTool::initializeImagePlanes( )
-{
     // S'han de netejar les lines mostrades i tornar-les a inicialitzar.
     m_2DViewer->clearViewer();
     

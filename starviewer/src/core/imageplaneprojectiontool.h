@@ -87,9 +87,6 @@ private:
     /// Inicialitza les linies projectades al viewer quan la tool està configurada com a productor
     void initProjectedLines();
 
-    /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
-    void initializeImagePlanes();
-
     // Inicialitza el pla projectat per una linia de projecció de la tool
     // S'assigna un espaiat, dimensions i límits en funció del tipus d'orientació
     void initializeImagePlane( DrawerLine *projectedLine, Volume *volume );
