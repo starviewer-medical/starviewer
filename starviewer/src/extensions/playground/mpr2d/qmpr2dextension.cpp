@@ -38,7 +38,6 @@ QMPR2DExtension::QMPR2DExtension( QWidget *parent )
     setupUi( this );
     MPR2DSettings().init(); 
     init();
-    createActions();
     initializeTools();
     createConnections();
     readSettings();
@@ -69,15 +68,6 @@ void QMPR2DExtension::init()
 
     m_coronal2DView->disableContextMenu();
     m_sagital2DView->disableContextMenu();
-}
-
-void QMPR2DExtension::createActions()
-{
-    m_horizontalLayoutAction = new QAction( 0 );
-    m_horizontalLayoutAction->setText( tr("Switch horizontal layout") );
-    m_horizontalLayoutAction->setStatusTip( tr("Switch horizontal layout") );
-    m_horizontalLayoutAction->setIcon( QIcon(":/images/view_left_right.png") );
-    m_horizontalLayoutToolButton->setDefaultAction( m_horizontalLayoutAction );
 }
 
 void QMPR2DExtension::initializeTools()
@@ -192,7 +182,8 @@ void QMPR2DExtension::createConnections()
     connect( m_axial2DView , SIGNAL( sliceChanged(int) ) , m_axialSlider , SLOT( setValue(int) ) );
 
     // layouts
-    connect( m_horizontalLayoutAction , SIGNAL( triggered() ), SLOT( switchHorizontalLayout() ) );
+    m_horizontalLayoutToolButton->setIcon( QIcon(":images/view_left_right.png") );
+    connect( m_horizontalLayoutToolButton , SIGNAL( clicked() ), SLOT( switchHorizontalLayout() ) );
 
     // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
     // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
