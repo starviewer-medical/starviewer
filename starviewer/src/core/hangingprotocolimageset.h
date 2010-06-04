@@ -13,6 +13,7 @@ namespace udg {
 
 class Series;
 class Study;
+class HangingProtocol;
 
 /**
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -39,6 +40,12 @@ public:
 
     /// Obtenir l'identificador de l'Image Set
     int getIdentifier() const;
+
+    /// Assignar el hanging protocol al que pertany
+    void setHangingProtocol(HangingProtocol *hangingProtocol);
+
+    /// Obtenir el hanging protocol al que pertany
+    HangingProtocol* getHangingProtocol() const ;
 
     /// Afegir una restricció
     void addRestriction( Restriction restriction );
@@ -103,6 +110,9 @@ private:
 
     /// Identificador únic de l'Image Set
     int m_identifier;
+
+    /// Hanging Protocol al que pertany
+    HangingProtocol *m_hangingProtocol;
 
     /// Categoria
     SelectorCategory m_category;

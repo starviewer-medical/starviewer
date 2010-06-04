@@ -44,7 +44,7 @@ private:
     HangingProtocolImageSet * readImageSet( QXmlStreamReader * reader , const QList<HangingProtocolImageSet::Restriction>  & restrictionList );
 
     /// Llegeix un display set
-    HangingProtocolDisplaySet * readDisplaySet( QXmlStreamReader * reader );
+    HangingProtocolDisplaySet * readDisplaySet( QXmlStreamReader * reader, HangingProtocol *hangingProtocol);
 
 };
 

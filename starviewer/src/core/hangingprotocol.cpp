@@ -68,11 +68,13 @@ void HangingProtocol::setProtocolsList( QList<QString> protocols )
 void HangingProtocol::addImageSet ( HangingProtocolImageSet * imageSet )
 {
     m_listOfImageSets.push_back( imageSet );
+    imageSet->setHangingProtocol(this);
 }
 
 void HangingProtocol::addDisplaySet ( HangingProtocolDisplaySet * displaySet )
 {
     m_listOfDisplaySets.push_back( displaySet );
+    displaySet->setHangingProtocol(this);
 }
 
 int HangingProtocol::getNumberOfImageSets() const

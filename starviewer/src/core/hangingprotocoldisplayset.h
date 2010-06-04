@@ -11,6 +11,9 @@
 
 namespace udg {
 
+class HangingProtocol;
+class HangingProtocolImageSet;
+
 /**
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
@@ -28,8 +31,17 @@ public:
     /// Posar la descripcio
     void setDescription( QString description );
 
-    /// Posar l'image set a que referencia
-    void setImageSetNumber( int number );
+    /// Assignar el seu image set
+    void setImageSet(HangingProtocolImageSet *imageSet);
+
+    /// Obtenir el seu image set
+    HangingProtocolImageSet* getImageSet() const ;
+
+    /// Assignar el hanging protocol al que pertany
+    void setHangingProtocol(HangingProtocol *hangingProtocol);
+
+    /// Obtenir el hanging protocol al que pertany
+    HangingProtocol* getHangingProtocol() const ;
 
     /// Posar la posició del visualitzador
     void setPosition( QString position );
@@ -48,9 +60,6 @@ public:
 
     /// Obtenir la descripcio
     QString getDescription() const;
-
-    /// Obtenir l'image set a que referencia
-    int getImageSetNumber() const;
 
     /// Obtenir la posició del visualitzador
     QString getPosition() const;
@@ -99,8 +108,11 @@ private:
     /// Descripció
     QString m_description;
 
-    /// Image set que referencia
-    int m_imageSetNumber;
+    /// Hanging Protocol al que pertany
+    HangingProtocol *m_hangingProtocol;
+
+    /// Punter al seu image set.
+    HangingProtocolImageSet *m_imageSet;
 
     /// Posició a on es troba
     QString m_position;

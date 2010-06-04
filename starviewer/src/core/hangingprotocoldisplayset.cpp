@@ -6,12 +6,16 @@
  ***************************************************************************/
 #include "hangingprotocoldisplayset.h"
 #include "logging.h"
+#include "hangingprotocol.h"
+#include "hangingprotocolimageset.h"
 
 namespace udg {
 
 HangingProtocolDisplaySet::HangingProtocolDisplaySet(QObject *parent)
  : QObject(parent)
 {
+    m_hangingProtocol = NULL;
+    m_imageSet = NULL;
     m_sliceNumber = -1;
     m_phase = -1;
 }
@@ -30,9 +34,25 @@ void HangingProtocolDisplaySet::setDescription( QString description )
     m_description = description;
 }
 
-void HangingProtocolDisplaySet::setImageSetNumber( int number )
+void HangingProtocolDisplaySet::setImageSet(HangingProtocolImageSet *imageSet)
 {
-    m_imageSetNumber = number;
+    m_imageSet = imageSet;
+}
+
+HangingProtocolImageSet* HangingProtocolDisplaySet::getImageSet() const
+{
+    return m_imageSet;
+}
+
+void HangingProtocolDisplaySet::setHangingProtocol(HangingProtocol *hangingProtocol)
+{
+    m_hangingProtocol = hangingProtocol;
+}
+
+
+HangingProtocol* HangingProtocolDisplaySet::getHangingProtocol() const
+{
+    return m_hangingProtocol;
 }
 
 void HangingProtocolDisplaySet::setPosition( QString position )
@@ -53,11 +73,6 @@ int HangingProtocolDisplaySet::getIdentifier() const
 QString HangingProtocolDisplaySet::getDescription() const
 {
     return m_description;
-}
-
-int HangingProtocolDisplaySet::getImageSetNumber() const
-{
-    return m_imageSetNumber;
 }
 
 QString HangingProtocolDisplaySet::getPosition() const
@@ -92,7 +107,13 @@ int HangingProtocolDisplaySet::getPhase() const
 
 void HangingProtocolDisplaySet::show()
 {
-    DEBUG_LOG( QString("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(m_imageSetNumber).arg(m_position) );
+    int imagSetIdentifier = -1;
+    if (m_imageSet)
+    {
+        imagSetIdentifier = m_imageSet->getIdentifier();
+    }
+
+    DEBUG_LOG( QString("    Identifier %1\n    Description:%2\n    ImageSetNumber: %3\n    Position: %4\n").arg(m_identifier).arg(m_description).arg(imagSetIdentifier).arg(m_position) );
 }
 
 void HangingProtocolDisplaySet::setSlice( int sliceNumber )
