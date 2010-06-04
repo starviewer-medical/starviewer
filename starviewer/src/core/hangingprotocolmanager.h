@@ -75,8 +75,7 @@ private:
     bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
 
     /// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
-    /// TODO Els paràmetres serie i imageNumber no es fan servir per res. Estan posats per una implementació futura o és que realment són innecessaris?
-    void applyDisplayTransformations( Series *serie,  int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet );
+    void applyDisplayTransformations(Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet);
 
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
     QList<Study*> sortStudiesByDate( const QList<Study*> & studies );
