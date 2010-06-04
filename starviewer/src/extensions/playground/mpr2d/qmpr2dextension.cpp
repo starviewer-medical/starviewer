@@ -6,10 +6,7 @@
  ***************************************************************************/
 #include "qmpr2dextension.h"
 #include "volume.h"
-#include "series.h"
 #include "q2dviewer.h"
-#include "mathtools.h" // per càlculs d'interseccions
-#include "qcustomwindowleveldialog.h"
 #include "logging.h"
 #include "toolmanager.h"
 #include "toolproxy.h"
@@ -21,14 +18,7 @@
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
-#include <QTextStream>
 #include <QSplitter>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QFileDialog>
-// vtk
-// pels events
-#include <vtkCommand.h>
 
 namespace udg {
 
