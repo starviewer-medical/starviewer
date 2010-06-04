@@ -40,9 +40,19 @@ public slots:
     void switchHorizontalLayout();
 
 private slots:
+    ///
+    /// TODO TOTS AQUESTS MÈTODES SÓN UN HACK!!!
+    /// Serveixen per poder fer servir l'ImageProjectionTool amb la resta de tools
+    ///
     /// Permet activar i desactivar l'eina imagePlaneProjectionTool en funció si està actiu 
     /// el botó de la tool o no
-    void setEnabledImagePlaneProjectionTool( QAction *action );
+    void setEnabledImagePlaneProjectionTool(bool enable);
+
+    /// Si una eina de botó esquerra s'ha activat desactiva l'eina d'ImageProjectionTool
+    void onLeftButtonToolToggled(bool toggled);
+
+    /// Deshabilita les eines de botó esquerre
+    void disableLeftButtonTools();
 
 private:
     ///Inicialitza les tools que tindrà l'extensió
@@ -85,10 +95,8 @@ private:
     /// ToolManager per configurar l'entorn de tools de l'extensió
     ToolManager *m_toolManager;
 
-    // Grup exclusiu d'accions de tools que funcionen amb el botó equerra del ratolí 
-    // inclosa l'acció del botó que activa la tool ImagePlaneProjectionTool
-    QActionGroup *m_leftButtonActionGroup;
-
+    /// La llista de tools que són exclusives amb el botó esquerre
+    QStringList m_leftButtonExclusiveTools;
 };
 
 };  //  end  namespace udg

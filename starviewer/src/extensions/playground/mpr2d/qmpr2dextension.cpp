@@ -111,9 +111,8 @@ void QMPR2DExtension::initializeTools()
     windowLevelPresetsTool->trigger();
 
     // definim els grups exclusius
-    QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
-    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
+    m_leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
+    m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", m_leftButtonExclusiveTools);
 
     QStringList middleButtonExclusiveTools;
     middleButtonExclusiveTools << "TranslateTool";
@@ -130,24 +129,6 @@ void QMPR2DExtension::initializeTools()
     imagePlaneProjectionToolAction->setIcon( m_toolManager->getRegisteredToolAction("ImagePlaneProjectionTool")->icon() );
     imagePlaneProjectionToolAction->setCheckable(true);
     m_imagePlaneProjectionToolButton->setDefaultAction(imagePlaneProjectionToolAction);
-    //
-    // Definim grup exclusiu especial pel funcionament d'ImagePlaneProjectionTool
-    //
-    m_leftButtonActionGroup = new QActionGroup( m_toolManager );
-    m_leftButtonActionGroup->setExclusive(true);
-    // per cada tool  de la llista obtindrem la seva acció i la farem entrar en el grup d'exclusivitat
-    foreach( QString toolName, leftButtonExclusiveTools )
-    {
-        // obtenim l'acció corresponent a aquella tool
-        QAction *toolAction = m_toolManager->getRegisteredToolAction(toolName);
-        if( toolAction )
-            m_leftButtonActionGroup->addAction( toolAction );
-        else
-            DEBUG_LOG( QString("No tenim registrada cap Action per la tool ") + toolName );
-    }
-    // registrem l'acció del botó de la tool imagePlaneProjectionTool i així aconseguim que la tool encara
-    // i pertànyer al grup exclusiu no s'elimini (necessari per mantenir la configuració de la tool)
-    m_leftButtonActionGroup->addAction(imagePlaneProjectionToolAction);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     m_imagePlaneProjectionToolButton->defaultAction()->trigger();
@@ -187,6 +168,18 @@ void QMPR2DExtension::initializeTools()
 
     // registrem al manager les tools que van als diferents viewers
     initializeDefaultTools();
+
+    //
+    // Connexions "especials" per l'ImagePlaneProjectionTool
+    //
+    // TODO Tot això és un HACK per poder fer servir les eines alhora amb l'ImagePlaneProjectionTool
+    //
+    foreach (QString toolName, m_leftButtonExclusiveTools)
+    {
+        connect(m_toolManager->getRegisteredToolAction(toolName), SIGNAL(toggled(bool)), SLOT(onLeftButtonToolToggled(bool)) );
+    }
+    connect(imagePlaneProjectionToolAction, SIGNAL(triggered()), SLOT(disableLeftButtonTools()) );
+    connect(imagePlaneProjectionToolAction, SIGNAL(toggled(bool)), SLOT(setEnabledImagePlaneProjectionTool(bool)) );
 }
 
 void QMPR2DExtension::initializeDefaultTools()
@@ -215,22 +208,6 @@ void QMPR2DExtension::createConnections()
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
     disconnect( m_axial2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_axial2DView, SLOT( setInput(Volume *) ) );
     connect( m_axial2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ) );
-
-    // Cal assabentar-se cada cop que s'activi i desactivi un botó del grup per poder
-    // habilitar i deshabilitar la tool imagePlaneProjectionTool (només activa quan el seu botó és el que està pitjat)
-    connect( m_leftButtonActionGroup, SIGNAL( triggered(QAction *) ), SLOT( setEnabledImagePlaneProjectionTool(QAction *) ) );
-}
-
-void QMPR2DExtension::setEnabledImagePlaneProjectionTool( QAction *action )
-{
-    bool enabled = false;
-    if ( m_imagePlaneProjectionToolButton->defaultAction() == action )
-    {
-        enabled = true;
-    }
-    ( qobject_cast<ImagePlaneProjectionTool *>( m_axial2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setEnabled( enabled );
-    ( qobject_cast<ImagePlaneProjectionTool *>( m_coronal2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setEnabled( enabled );
-    ( qobject_cast<ImagePlaneProjectionTool *>( m_sagital2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setEnabled( enabled );
 }
 
 void QMPR2DExtension::switchHorizontalLayout()
@@ -291,6 +268,31 @@ void QMPR2DExtension::writeSettings()
 
     settings.saveGeometry( MPR2DSettings::HorizontalSplitterGeometry, m_horizontalSplitter );
     settings.saveGeometry( MPR2DSettings::VerticalSplitterGeometry, m_verticalSplitter );
+}
+
+void QMPR2DExtension::disableLeftButtonTools()
+{
+    foreach (QString toolName, m_leftButtonExclusiveTools)
+    {
+        if ( m_toolManager->getRegisteredToolAction(toolName)->isChecked() )
+        {
+            m_toolManager->getRegisteredToolAction(toolName)->setChecked(false);
+            m_toolManager->deactivateTool(toolName);
+        }
+    }
+}
+
+void QMPR2DExtension::setEnabledImagePlaneProjectionTool(bool enable)
+{
+    ( qobject_cast<ImagePlaneProjectionTool *>( m_axial2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setEnabled( enable );
+    ( qobject_cast<ImagePlaneProjectionTool *>( m_coronal2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setEnabled( enable );
+    ( qobject_cast<ImagePlaneProjectionTool *>( m_sagital2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setEnabled( enable );
+}
+
+void QMPR2DExtension::onLeftButtonToolToggled(bool toggled)
+{
+    if ( toggled )
+        m_imagePlaneProjectionToolButton->defaultAction()->setChecked(false);
 }
 
 };  //  end namespace udg
