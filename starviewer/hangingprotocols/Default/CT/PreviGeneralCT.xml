@@ -11,18 +11,12 @@
 <selectorAttribute>ImageType</selectorAttribute>
 <valueRepresentation>LOCALIZER</valueRepresentation>
 </restriction>
-<restriction identifier="2">
-<usageFlag>MATCH</usageFlag>
-<selectorAttribute>Anterior</selectorAttribute>
-<valueRepresentation>1</valueRepresentation>
-</restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
 <type>image</type>
 </imageSet>
 <imageSet identifier="2">
 <restriction>1</restriction>
-<restriction>2</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
