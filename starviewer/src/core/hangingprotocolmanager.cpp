@@ -118,7 +118,7 @@ int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *
 
     foreach ( HangingProtocolImageSet * imageSet, hangingProtocol->getImageSets() )
     {
-        if( searchSerie( candidateSeries, imageSet , hangingProtocol->getAllDiferent(), hangingProtocol ) )
+        if( searchSerie( candidateSeries, imageSet , hangingProtocol->getAllDiferent()) )
         {
             numberOfFilledImageSets++;
 
@@ -194,7 +194,7 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
 
     foreach ( HangingProtocolDisplaySet *displaySet , hangingProtocol->getDisplaySets() )
     {
-        HangingProtocolImageSet *hangingProtocolImageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
+        HangingProtocolImageSet *hangingProtocolImageSet = displaySet->getImageSet();
         Q2DViewerWidget *viewerWidget = layout->addViewer( displaySet->getPosition() );
 
         if( hangingProtocolImageSet->isDownloaded() == false )
@@ -203,8 +203,6 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
 
             StructPreviousStudyDownloading * structPreviousStudyDownloading = new StructPreviousStudyDownloading;
             structPreviousStudyDownloading->widgetToDisplay = viewerWidget;
-            structPreviousStudyDownloading->imageSet = hangingProtocolImageSet;
-            structPreviousStudyDownloading->hangingProtocol = hangingProtocol;
             structPreviousStudyDownloading->displaySet = displaySet;
 
             bool isDownloading = m_studiesDownloading->contains( hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID() );
@@ -220,7 +218,7 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
         }
         else
         {
-            setInputToViewer(viewerWidget, hangingProtocolImageSet->getSeriesToDisplay(), hangingProtocolImageSet, displaySet);
+            setInputToViewer(viewerWidget, hangingProtocolImageSet->getSeriesToDisplay(), displaySet);
         }
     }
 
@@ -248,7 +246,7 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, con
     return protocol->getHangingProtocolMask()->getProtocolList().contains( modality );
 }
 
-Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol )
+Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy )
 {
     Series * selectedSeries = 0;
     Study * referenceStudy = 0;
@@ -257,7 +255,7 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
     {
         /// S'ha de tenir en compte que a la imatge a què es refereix pot estar pendent de descarrega (prèvia)
         
-        HangingProtocolImageSet *referenceImageSet = hangingProtocol->getImageSet( imageSet->getPreviousImageSetReference() );
+        HangingProtocolImageSet *referenceImageSet = imageSet->getHangingProtocol()->getImageSet( imageSet->getPreviousImageSetReference() );
 
         if( referenceImageSet->isDownloaded() ) // L'estudi de referència està descarregat
         {
@@ -292,7 +290,7 @@ Series * HangingProtocolManager::searchSerie( QList<Series*> &listOfSeries, Hang
             }
         }
 
-        if (isCandidateSeries && isModalityCompatible(hangingProtocol, serie->getModality() ) )
+        if (isCandidateSeries && isModalityCompatible(imageSet->getHangingProtocol(), serie->getModality() ) )
         {
             if( imageSet->getTypeOfItem() != "image" )
             {
@@ -556,14 +554,14 @@ void HangingProtocolManager::previousStudyDownloaded()
 
             /// Busquem la millor serie de l'estudi que ho satisfa
             QList<Series *> studySeries = study->getSeries();
-            Series * series = searchSerie( studySeries, structPreviousStudyDownloading->imageSet, false, structPreviousStudyDownloading->hangingProtocol);
+            Series * series = searchSerie( studySeries, structPreviousStudyDownloading->displaySet->getImageSet(), false);
             
             Q2DViewerWidget * viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
-            structPreviousStudyDownloading->imageSet->setDownloaded( true );
+            structPreviousStudyDownloading->displaySet->getImageSet()->setDownloaded( true );
 
             viewerWidget->disableDownloadingState();
 
-            setInputToViewer(viewerWidget, series, structPreviousStudyDownloading->imageSet, structPreviousStudyDownloading->displaySet);
+            setInputToViewer(viewerWidget, series, structPreviousStudyDownloading->displaySet);
 
             delete structPreviousStudyDownloading;
         }
@@ -606,7 +604,7 @@ void HangingProtocolManager::cancelHangingProtocolDowloading()
     }
 }
 
-void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolImageSet *imageSet, HangingProtocolDisplaySet *displaySet)
+void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet)
 {
     if (series)
     {
@@ -614,10 +612,10 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
         {
             viewerWidget->setInput( series->getFirstVolume() );
             qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
-            if( imageSet->getTypeOfItem() == "image" )
+            if( displaySet->getImageSet()->getTypeOfItem() == "image" )
             {
-                viewerWidget->getViewer()->setSlice( imageSet->getImageToDisplay() );
-                applyDisplayTransformations(series, imageSet->getImageToDisplay(), viewerWidget, displaySet);
+                viewerWidget->getViewer()->setSlice( displaySet->getImageSet()->getImageToDisplay() );
+                applyDisplayTransformations(series, displaySet->getImageSet()->getImageToDisplay(), viewerWidget, displaySet);
             }
             else
             {

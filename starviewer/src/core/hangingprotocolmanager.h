@@ -66,7 +66,7 @@ private:
     bool isModalityCompatible(HangingProtocol *protocol, const QString &modality);
 
     // Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
-    Series *searchSerie( QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy, HangingProtocol * hangingProtocol );
+    Series *searchSerie( QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy);
 
     /// Cert si la imatge compleix les restriccions
     bool isValidImage(Image *image, HangingProtocolImageSet *imageSet);
@@ -82,7 +82,7 @@ private:
     QList<Study*> sortStudiesByDate( const QList<Study*> & studies );
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
-    void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolImageSet *imageSet, HangingProtocolDisplaySet *displaySet);
+    void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);
 
     /// Buscar els estudis previs
     Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, const QList<Study*> &previousStudies);
@@ -97,8 +97,6 @@ private:
     struct StructPreviousStudyDownloading
     {
         Q2DViewerWidget *widgetToDisplay; /// Widget a on s'ha de mostrar la informacio
-        HangingProtocolImageSet * imageSet; /// HangingProtocolImageSet que s'ha de satisfer, per escollir la serie descarregada que s'aplica
-        HangingProtocol * hangingProtocol; /// HangingProtocol necessari per buscar la millor serie de les descarregades
         HangingProtocolDisplaySet * displaySet; /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
     };
 

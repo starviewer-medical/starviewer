@@ -8,12 +8,14 @@
 #include "logging.h"
 #include "series.h"
 #include "study.h"
+#include "hangingprotocol.h"
 
 namespace udg {
 
 HangingProtocolImageSet::HangingProtocolImageSet(QObject *parent)
  : QObject(parent)
 {
+    m_hangingProtocol = NULL;
     m_previousStudyToDisplay = NULL;
     m_serieToDisplay = NULL;
     m_isPreviousStudy = false;
@@ -32,6 +34,17 @@ void HangingProtocolImageSet::setIdentifier( int identifier)
 int HangingProtocolImageSet::getIdentifier() const
 {
     return m_identifier;
+}
+
+void HangingProtocolImageSet::setHangingProtocol(HangingProtocol *hangingProtocol)
+{
+    m_hangingProtocol = hangingProtocol;
+}
+
+
+HangingProtocol* HangingProtocolImageSet::getHangingProtocol() const
+{
+    return m_hangingProtocol;
 }
 
 void HangingProtocolImageSet::addRestriction( Restriction restriction )

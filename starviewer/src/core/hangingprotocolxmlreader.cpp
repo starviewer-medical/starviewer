@@ -135,7 +135,7 @@ QList<HangingProtocol * > HangingProtocolXMLReader::readFile( QString path )
                     }
                     else if( reader->name() == "displaySet")
                     {
-                        displaySet = readDisplaySet( reader );
+                        displaySet = readDisplaySet( reader, hangingProtocol );
                         hangingProtocol->addDisplaySet( displaySet );
                     }
                     else if( reader->name() == "hangingProtocol" && reader->tokenType() == QXmlStreamReader::EndElement )
@@ -268,7 +268,7 @@ HangingProtocolImageSet * HangingProtocolXMLReader::readImageSet( QXmlStreamRead
     return imageSet;
 }
 
-HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStreamReader * reader )
+HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStreamReader * reader, HangingProtocol *hangingProtocol)
 {
 
     HangingProtocolDisplaySet * displaySet = new HangingProtocolDisplaySet();
@@ -281,7 +281,16 @@ HangingProtocolDisplaySet * HangingProtocolXMLReader::readDisplaySet( QXmlStream
         if( reader->name() == "imageSetNumber" )
         {
             reader->readNext();
-            displaySet->setImageSetNumber( reader->text().toString().toInt() );
+
+            HangingProtocolImageSet *imageSet = hangingProtocol->getImageSet( reader->text().toString().toInt() );
+            if (imageSet)
+            {
+                displaySet->setImageSet(imageSet);
+            }
+            else
+            {
+                ERROR_LOG( QString("No s'ha trobat l'image set requerit pel display set %1.").arg( displaySet->getIdentifier() ) );
+            }
         }
         else if( reader->name() == "position" )
         {
