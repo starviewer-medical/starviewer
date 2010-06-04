@@ -33,7 +33,7 @@
 namespace udg {
 
 QMPR2DExtension::QMPR2DExtension( QWidget *parent )
- : QWidget( parent ), m_axialZeroSliceCoordinate(.0)
+ : QWidget( parent )
 {
     setupUi( this );
     MPR2DSettings().init(); 
@@ -69,15 +69,6 @@ void QMPR2DExtension::init()
 
     m_coronal2DView->disableContextMenu();
     m_sagital2DView->disableContextMenu();
-
-    /// per defecte isomètric
-    m_axialSpacing[0] = 1.;
-    m_axialSpacing[1] = 1.;
-    m_axialSpacing[2] = 1.;
-
-    m_fileSaveFilter = tr("PNG Images (*.png);;PNM Images (*.pnm);;JPEG Images (*.jpg);;TIFF Images (*.tif);;BMP Images (*.bmp);;DICOM Images (*.dcm)");
-
-    m_extensionToolsList << "ImagePlaneProjectionTool" << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
 }
 
 void QMPR2DExtension::createActions()

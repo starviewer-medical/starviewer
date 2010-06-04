@@ -77,18 +77,6 @@ private:
     void init();
 
 private:
-    /// Ens serà molt útil ens molts de càlculs i a més serà una dada constant un cop tenim l'input
-    double m_axialSpacing[3];
-
-    /// aquesta variable ens servirà per controlar on col·loquem la llesca del pla axial
-    double m_axialZeroSliceCoordinate;
-
-    /// Filtre de fitxers que es poden desar
-    QString m_fileSaveFilter;
-
-    ///conjunt de tools disponibles en aquesta extensió
-    QStringList m_extensionToolsList;
-
     /// Acció per poder controlar el layout horizontal
     QAction *m_horizontalLayoutAction;
 
