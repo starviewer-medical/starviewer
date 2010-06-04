@@ -103,7 +103,6 @@ void QMPR2DExtension::initializeTools()
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
     m_polylineROIToolButton->setDefaultAction( m_toolManager->registerTool("PolylineROITool") );
     m_eraserToolButton->setDefaultAction( m_toolManager->registerTool("EraserTool") );
-    m_imagePlaneProjectionToolButton->setDefaultAction( m_toolManager->registerTool("ImagePlaneProjectionTool") );
 
     m_thickSlabWidget->link( m_coronal2DView );
     
@@ -124,7 +123,16 @@ void QMPR2DExtension::initializeTools()
     rightButtonExclusiveTools << "WindowLevelTool";
     m_toolManager->addExclusiveToolsGroup("RighttButtonGroup", rightButtonExclusiveTools);
 
-    // Definim grup exclusiu especial
+
+    // Image Projection Tool
+    m_toolManager->registerTool("ImagePlaneProjectionTool");
+    QAction *imagePlaneProjectionToolAction = new QAction(this);
+    imagePlaneProjectionToolAction->setIcon( m_toolManager->getRegisteredToolAction("ImagePlaneProjectionTool")->icon() );
+    imagePlaneProjectionToolAction->setCheckable(true);
+    m_imagePlaneProjectionToolButton->setDefaultAction(imagePlaneProjectionToolAction);
+    //
+    // Definim grup exclusiu especial pel funcionament d'ImagePlaneProjectionTool
+    //
     m_leftButtonActionGroup = new QActionGroup( m_toolManager );
     m_leftButtonActionGroup->setExclusive(true);
     // per cada tool  de la llista obtindrem la seva acció i la farem entrar en el grup d'exclusivitat
@@ -139,15 +147,8 @@ void QMPR2DExtension::initializeTools()
     }
     // registrem l'acció del botó de la tool imagePlaneProjectionTool i així aconseguim que la tool encara
     // i pertànyer al grup exclusiu no s'elimini (necessari per mantenir la configuració de la tool)
-    QAction *toolAction = m_imagePlaneProjectionToolButton->defaultAction();
-    if( toolAction )
-    {
-        toolAction->setCheckable( true );
-        m_leftButtonActionGroup->addAction( toolAction );
-    }
-    else
-        DEBUG_LOG( QString("No existeix cap Action pel botó associat a la tool ImagePlaneProjectionTool") );
-    
+    m_leftButtonActionGroup->addAction(imagePlaneProjectionToolAction);
+
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     m_imagePlaneProjectionToolButton->defaultAction()->trigger();
     m_moveToolButton->defaultAction()->trigger();
