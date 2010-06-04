@@ -103,10 +103,7 @@ void QMPR2DExtension::initializeTools()
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
     m_polylineROIToolButton->setDefaultAction( m_toolManager->registerTool("PolylineROITool") );
     m_eraserToolButton->setDefaultAction( m_toolManager->registerTool("EraserTool") );
-    QAction *action = new QAction( this );
-    m_imagePlaneProjectionToolButton->setDefaultAction( action );
-
-    m_toolManager->registerTool("ImagePlaneProjectionTool");
+    m_imagePlaneProjectionToolButton->setDefaultAction( m_toolManager->registerTool("ImagePlaneProjectionTool") );
 
     m_thickSlabWidget->link( m_coronal2DView );
     
