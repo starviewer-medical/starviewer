@@ -393,7 +393,7 @@ bool HangingProtocolManager::isValidSerie(Series *serie, HangingProtocolImageSet
     return valid;
 }
 
-void HangingProtocolManager::applyDisplayTransformations( Series *serie, int imageNumber, Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet )
+void HangingProtocolManager::applyDisplayTransformations(Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet)
 {
     viewer->getViewer()->enableRendering( false );
     
@@ -615,12 +615,9 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
             if( displaySet->getImageSet()->getTypeOfItem() == "image" )
             {
                 viewerWidget->getViewer()->setSlice( displaySet->getImageSet()->getImageToDisplay() );
-                applyDisplayTransformations(series, displaySet->getImageSet()->getImageToDisplay(), viewerWidget, displaySet);
             }
-            else
-            {
-                applyDisplayTransformations(series, 0, viewerWidget, displaySet);
-            }
+            applyDisplayTransformations(viewerWidget, displaySet);
+
             if( !displaySet->getToolActivation().isEmpty() ) // Tenim tools activades per defecte des del hanging protocol
             {
                 if( displaySet->getToolActivation() == "synchronization" ) // S'activa la tool de sincronització
