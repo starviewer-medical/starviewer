@@ -36,8 +36,6 @@ QMPR2DExtension::QMPR2DExtension( QWidget *parent )
     m_coronal2DView->setWindowLevelData( m_axial2DView->getWindowLevelData() );
     m_sagital2DView->setWindowLevelData( m_axial2DView->getWindowLevelData() );
     m_windowLevelComboBox->selectPreset( m_axial2DView->getWindowLevelData()->getCurrentPreset() );
-
-    m_rotate3DToolButton->setVisible(false);
 }
 
 QMPR2DExtension::~QMPR2DExtension()
@@ -67,8 +65,8 @@ void QMPR2DExtension::initializeTools()
     // obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
     m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
-    m_moveToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
+    m_toolManager->registerTool("TranslateTool");
+    m_toolManager->registerTool("WindowLevelTool");
     m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
     m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
     m_distanceToolButton->setDefaultAction( m_toolManager->registerTool("DistanceTool") );
@@ -103,8 +101,8 @@ void QMPR2DExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     m_imagePlaneProjectionToolButton->defaultAction()->trigger();
-    m_moveToolButton->defaultAction()->trigger();
-    m_windowLevelToolButton->defaultAction()->trigger();
+    m_toolManager->getRegisteredToolAction("TranslateTool")->trigger();
+    m_toolManager->getRegisteredToolAction("WindowLevelTool")->trigger();
     
     // Assignem al viewer m_axial2DView els paràmetres per configurar la tool ImagePlaneProjectionTool com a productor
     ToolConfiguration *imagePlaneProjectionToolViwerAxialConfig= new ToolConfiguration();
