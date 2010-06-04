@@ -17,8 +17,6 @@
 #include "image.h"
 // Vtk's
 #include <vtkImageData.h>
-#include <vtkPointData.h>
-#include <vtkCell.h>
 
 namespace udg {
 
