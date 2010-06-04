@@ -208,7 +208,6 @@ void QMPR2DExtension::setInput( Volume *input )
 void QMPR2DExtension::readSettings()
 {
     Settings settings;
-    QString keyPrefix = "Starviewer-App-MPR/";
 
     if( settings.getValue( MPR2DSettings::HorizontalSplitterGeometry).toByteArray().isEmpty() )
     {
