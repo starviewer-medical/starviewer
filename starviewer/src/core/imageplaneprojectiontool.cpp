@@ -816,6 +816,9 @@ void ImagePlaneProjectionTool::setToolData(ToolData * data)
 
 void ImagePlaneProjectionTool::handleEvent( long unsigned eventID )
 {
+    if ( !m_enabled )
+        return;
+    
     if( !m_toolConfiguration )
     {
         DEBUG_LOG("No s'ha assignat cap configuració. La tool no funcionarà com s'espera.");
