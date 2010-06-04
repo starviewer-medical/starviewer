@@ -67,9 +67,6 @@ private:
     void readSettings();
     void writeSettings();
 
-    /// Crea les accions
-    void createActions();
-
     /// crea les connexions entre signals i slots
     void createConnections();
 
@@ -77,9 +74,6 @@ private:
     void init();
 
 private:
-    /// Acció per poder controlar el layout horizontal
-    QAction *m_horizontalLayoutAction;
-
     /// ToolManager per configurar l'entorn de tools de l'extensió
     ToolManager *m_toolManager;
 
