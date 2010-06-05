@@ -13,6 +13,7 @@
 #include "tool.h"
 #include "linepathtool.h"
 #include "mathtools.h"
+#include "drawer.h"
 #include "drawerpolyline.h"
 #include "image.h"
 // Vtk's
@@ -58,6 +59,17 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
 
 CurvedMPRExtension::~CurvedMPRExtension()
 {
+    if ( !m_upPolylineThickness.isNull() )
+    {
+        m_upPolylineThickness->decreaseReferenceCount();
+        delete m_upPolylineThickness;
+    }
+
+    if ( !m_downPolylineThickness.isNull() )
+    {
+        m_downPolylineThickness->decreaseReferenceCount();
+        delete m_downPolylineThickness;
+    }
 }
 
 void CurvedMPRExtension::initializeTools()
@@ -137,10 +149,11 @@ void CurvedMPRExtension::changeThicknessReconstruction()
 {
     m_numImages = m_thickReconstruction->text().toInt();
 
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+
     if ( m_numImages && m_numImages > 1 )
     {
         // Obtenim quin és l'eix y (de desplaçament) segons la vista mostrada al visor principal
-        Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
         int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
 
         // Distància entre els píxels de les imatges que formen el volum
@@ -159,6 +172,40 @@ void CurvedMPRExtension::changeThicknessReconstruction()
     // Per fer la reconstrucció cal que l'usuari anteriorment hagi indicat una línia
     if ( !m_lastPointsPath.isEmpty() )
     {
+        // Inicialitzem o netegem les línies que mostraran al viewer principal quins són els
+        // límits de les imatges que es reconstruiran pel nou volum
+        if (!m_upPolylineThickness )
+        {
+            // Línia thickness superior
+            m_upPolylineThickness = new DrawerPolyline;
+            m_upPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+            m_upPolylineThickness->setColor( Qt::blue );
+            m_upPolylineThickness->setLineWidth( 1 );
+            mainViewer->getDrawer()->draw( m_upPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
+
+            // Línia thickness inferior
+            m_downPolylineThickness = new DrawerPolyline;
+            m_downPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+            m_downPolylineThickness->setColor( Qt::blue );
+            m_downPolylineThickness->setLineWidth( 1 );
+            mainViewer->getDrawer()->draw( m_downPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
+
+            // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+            m_upPolylineThickness->increaseReferenceCount();
+            m_downPolylineThickness->increaseReferenceCount();
+        }
+        else
+        {
+            m_upPolylineThickness->deleteAllPoints();
+            m_upPolylineThickness->update();
+
+            m_downPolylineThickness->deleteAllPoints();
+            m_downPolylineThickness->update();
+
+            mainViewer->render();
+        }
+        
+        // Portem a terme la reconstrucció
         updateResliceWithLastPointsPath();
     }
 }
@@ -216,7 +263,8 @@ Volume* CurvedMPRExtension::doCurvedReslice( QPointer<DrawerPolyline> polyline, 
     // successives imatges.
     if ( m_numImages > 1 )
     {
-       pointsPath = getLastPointsPathForFirstImage();   
+       pointsPath = getLastPointsPathForFirstImage();
+       showThichkessPolylines();
     }
 
     // S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
@@ -243,6 +291,7 @@ QList<double *> CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> poly
     double *currentPoint;
     double *newLinePoint;
     double *pointLastPath;
+    double *pointLastPolyline;
 
     m_lastPointsPath.clear();
 
@@ -303,6 +352,11 @@ QList<double *> CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> poly
             pointLastPath[xIndex] = currentPoint[xIndex];
             pointLastPath[yIndex] = currentPoint[yIndex];
             m_lastPointsPath.append( pointLastPath );
+
+            pointLastPolyline = new double[3];
+            pointLastPolyline[xIndex] = currentPoint[xIndex];
+            pointLastPolyline[yIndex] = currentPoint[yIndex];
+            m_lastPolylinePoints.append( pointLastPolyline );
         }
 
         previousPoint = currentPoint;
@@ -337,6 +391,39 @@ QList<double *> CurvedMPRExtension::getLastPointsPathForFirstImage()
     }
 
     return pointsPathForFirstImage;
+}
+
+void CurvedMPRExtension::showThichkessPolylines()
+{
+    // Obtenim quins són els eixos x, y segons la vista mostrada al visor principal
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    int xIndex = mainViewer->getXIndexForView( mainViewer->getView() );
+    int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
+
+    // Els punts que formaran les dues polyLines seran el resultat de desplaçar a l'eix de les y
+    // els punts de la polyline indicada per l'usuari
+    double yDistanceMovement = m_maxThickness / 2;
+    double *point;
+    double *upPolylinePoint;
+    double *downPolylinePoint;
+    for ( int i = 0; i < m_lastPolylinePoints.size(); i++)
+    {
+        point = m_lastPolylinePoints.at(i);
+
+        upPolylinePoint = new double[3];
+        upPolylinePoint[xIndex] = point[xIndex];
+        upPolylinePoint[yIndex] = point[yIndex] + yDistanceMovement;
+        m_upPolylineThickness->addPoint( upPolylinePoint );
+
+        downPolylinePoint = new double[3];
+        downPolylinePoint[xIndex] = point[xIndex];
+        downPolylinePoint[yIndex] = point[yIndex] - yDistanceMovement;
+        m_downPolylineThickness->addPoint( downPolylinePoint );
+    }
+
+    m_upPolylineThickness->update();
+    m_downPolylineThickness->update();
+    mainViewer->render();
 }
 
 void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPath, vtkImageData *imageDataVTK)
