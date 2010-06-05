@@ -56,6 +56,11 @@ void QMPR2DExtension::init()
 
     m_coronal2DView->disableContextMenu();
     m_sagital2DView->disableContextMenu();
+
+    // A l'input on l'usuari pot indicar el gruix de la reconstrucció només ha d'acceptar números entre 0 i X 
+    // TODO La diagonal seria el valor màxim, cal modificar-lo cada cop que es modifica l'input...
+    QValidator *validator = new QIntValidator(0, 10000, this);
+    m_thickReconstruction->setValidator(validator);
 }
 
 void QMPR2DExtension::initializeTools()
@@ -176,6 +181,10 @@ void QMPR2DExtension::createConnections()
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
     disconnect( m_axial2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_axial2DView, SLOT( setInput(Volume *) ) );
     connect( m_axial2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput(Volume *) ) );
+
+    // Cada cop que l'usuari modifiqui el gruix indicat per fer el MIP, es modifica el thickness associat a la tool del visor
+    // on s'aplicarà el MIPs, i es torna a fer la reconstrucció tenint en compte el gruix indicat
+    connect( m_thickReconstruction, SIGNAL( returnPressed () ), SLOT( changeThicknessImagePlaneProjectionTool() ) );
 }
 
 void QMPR2DExtension::switchHorizontalLayout()
@@ -260,6 +269,12 @@ void QMPR2DExtension::onLeftButtonToolToggled(bool toggled)
 {
     if ( toggled )
         m_imagePlaneProjectionToolButton->defaultAction()->setChecked(false);
+}
+
+void QMPR2DExtension::changeThicknessImagePlaneProjectionTool()
+{
+    int thickness = m_thickReconstruction->text().toInt();
+    ( qobject_cast<ImagePlaneProjectionTool *>( m_coronal2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setThickness( thickness );
 }
 
 };  //  end namespace udg

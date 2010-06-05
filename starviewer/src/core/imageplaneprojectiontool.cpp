@@ -46,6 +46,8 @@ ImagePlaneProjectionTool::ImagePlaneProjectionTool( QViewer *viewer, QObject *pa
     m_volume = NULL;
 
     m_enabled = false;
+
+    m_thickness = 0;
 }
 
 ImagePlaneProjectionTool::~ImagePlaneProjectionTool()
@@ -703,10 +705,11 @@ void ImagePlaneProjectionTool::updateReslice( Volume *volume )
     double columns = imagePlane->getColumns();
 
     // Límits de les llesques de sortida
-    m_reslice->SetOutputExtent( 0 , columns - 1 , 0 , rows - 1 , 0 , 0 ); // obtenim una única llesca
+    m_reslice->SetOutputExtent( 0 , columns - 1 , 0 , rows - 1 , 0 , m_thickness ); // assignem el gruix indicat per l'usuari
 
     // Fem efectius els canvis fets anteriorment sobre el vtkImageReslace
     m_reslice->Update();
+    //m_reslice->UpdateWholeExtent();
 
     // Tornem ha augmentar la resolució
     m_reslice->SetInterpolationModeToCubic();
@@ -998,6 +1001,18 @@ void ImagePlaneProjectionTool::releaseProjectedLine()
 {
     m_state = NONE;
     m_2DViewer->setCursor( QCursor( Qt::ArrowCursor ) );
+}
+
+void ImagePlaneProjectionTool::setThickness( int thickness )
+{
+    if ( !m_toolConfiguration )
+    {
+        DEBUG_LOG(QString("ImagePlaneProjectionTool: És obligatori associar a la tool una configuració correcta.") );
+        return;
+    }
+
+    m_thickness = thickness;
+    updateReslice( m_myData->getVolume() );
 }
 
 }  //  end namespace udg

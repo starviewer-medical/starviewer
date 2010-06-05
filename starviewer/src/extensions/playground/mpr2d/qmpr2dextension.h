@@ -54,6 +54,10 @@ private slots:
     /// Deshabilita les eines de botó esquerre
     void disableLeftButtonTools();
 
+    /// Assigna el nou gruix indicat per l'usuari al visor configurat com a consumidor
+    /// i per tant és l'encarregat de mostrar la reconstrucció
+    void changeThicknessImagePlaneProjectionTool();
+
 private:
     ///Inicialitza les tools que tindrà l'extensió
     void initializeTools();
