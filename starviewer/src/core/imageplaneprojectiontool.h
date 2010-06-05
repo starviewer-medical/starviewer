@@ -42,6 +42,9 @@ public:
     /// Indica si la tool està habilitada o no
     void setEnabled( bool enabled );
 
+    /// Indica el gruix a tenir en compte al fer la reconstrucció
+    void setThickness( int thickness );
+
 private slots:
     /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
     /// Actualitza el volum compartit amb la resta de visors amb la tool activa
@@ -160,6 +163,9 @@ private:
 
     /// Per controlar el moviment de la línia projectada a partir de l'interacció de l'usuari
     double m_initialPickX , m_initialPickY;
+
+    /// Indica el gruix a tenir en compte al generar la reconstrucció
+    int m_thickness;
 };
 }  // end namespace udg
 
