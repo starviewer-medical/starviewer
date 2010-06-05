@@ -51,10 +51,13 @@ private:
     /// l'usuari i que cal tenir en compte al fer la reconstrucció
     QList<double *> getPointsPath( QPointer<DrawerPolyline> polyline );
 
-    // Es crida si ens han indicat que es vol reconstruir un volum amb més d'una imatge.
-    // Desplaça els punts de la línia indicada per l'usuari per equivaldre als punts del 
-    // pla de projecció que representarà la primera imatge del nou volum.  
-    QList<double *> CurvedMPRExtension::getLastPointsPathForFirstImage();
+    /// Es crida si ens han indicat que es vol reconstruir un volum amb més d'una imatge.
+    /// Desplaça els punts de la línia indicada per l'usuari per equivaldre als punts del 
+    /// pla de projecció que representarà la primera imatge del nou volum.  
+    QList<double *> getLastPointsPathForFirstImage();
+
+    /// Mostra les polylines que delimitaran el gruix indicat per l'usuari
+    void showThichkessPolylines();
 
     /// S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
     void initAndFillImageDataVTK( const QList<double *> &pointsPath, vtkImageData *imageDataVTK );
@@ -86,7 +89,10 @@ private:
     /// ToolManager per configurar l'entorn de tools de l'extensió
     ToolManager *m_toolManager;
 
-    /// Punts que formen la última línia dibuixada per l'usuari
+    /// Punts que formaven la última polyline dibuixada per l'usuari
+    QList<double *> m_lastPolylinePoints;
+
+    /// Punts calculats que formen la última línia dibuixada per l'usuari
     QList<double *> m_lastPointsPath;
 
     /// Número d'imatges que ha de contenir el volum de la reconstrucció
@@ -94,6 +100,12 @@ private:
 
     /// Distància entre la primera i la úlltima imatge que composaran la reconstrucció
     int m_maxThickness;
+
+    /// Polilínia que ens marca el límit superior del thickness indicat per l'usuari.
+    QPointer<DrawerPolyline> m_upPolylineThickness;
+
+    /// Polilínia que ens marca el límit inferior del thickness indicat per l'usuari.
+    QPointer<DrawerPolyline> m_downPolylineThickness;
 };
 
 };  //  end  namespace udg
