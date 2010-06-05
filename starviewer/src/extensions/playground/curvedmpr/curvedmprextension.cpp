@@ -41,6 +41,19 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
     // Cada cop que es canvia el viewer seleccionat s'habiliten les tools en aquest visor
     // i es deshabiliten de l'altre
     connect( m_viewersLayout, SIGNAL( viewerSelectedChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
+
+    // A l'input on l'usuari pot indicar el gruix de la reconstrucció només ha d'acceptar números entre 1 i X 
+    // TODO El màxim correspondrà al número de files o columnes del volum original
+    QValidator *validator = new QIntValidator(1, 1000, this);
+    m_thickReconstruction->setValidator(validator);
+    m_thickReconstruction->setText( "1" );
+
+    m_numImages = 1;
+    m_maxThickness = 0;
+
+    // Cada cop que l'usuari modifiqui el gruix indicat per fer el MIP, es torna a fer
+    // la reconstrucció al visor corresponent, tenint en compte la última línia indicada per l'usuari
+    connect( m_thickReconstruction, SIGNAL( returnPressed () ), SLOT( changeThicknessReconstruction() ) );
 }
 
 CurvedMPRExtension::~CurvedMPRExtension()
@@ -92,6 +105,7 @@ void CurvedMPRExtension::initializeTools()
     Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
     Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
     m_toolManager->setupRegisteredTools( mainViewer );
+    m_toolManager->setupRegisteredTools( reconstructionViewer );
     m_toolManager->enableRegisteredActionTools( mainViewer );
 
     m_thickSlabWidget->link( reconstructionViewer );
@@ -119,7 +133,50 @@ void CurvedMPRExtension::updateMainVolume( Volume *volume )
     m_mainVolume = volume;
 }
 
+void CurvedMPRExtension::changeThicknessReconstruction()
+{
+    m_numImages = m_thickReconstruction->text().toInt();
+
+    if ( m_numImages && m_numImages > 1 )
+    {
+        // Obtenim quin és l'eix y (de desplaçament) segons la vista mostrada al visor principal
+        Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+        int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
+
+        // Distància entre els píxels de les imatges que formen el volum
+        double spacing[3];
+        m_mainVolume->getSpacing( spacing );
+
+        // Calculem la distància entre la primera i la úlltima imatge que composaran la reconstrucció
+        m_maxThickness = m_numImages * spacing[yIndex];
+    }
+    else
+    {
+        m_numImages = 1;
+        m_maxThickness = 0;
+    }
+
+    // Per fer la reconstrucció cal que l'usuari anteriorment hagi indicat una línia
+    if ( !m_lastPointsPath.isEmpty() )
+    {
+        updateResliceWithLastPointsPath();
+    }
+}
+
 void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
+{
+    updateReslice( polyline, true );
+}
+
+void CurvedMPRExtension::updateResliceWithLastPointsPath()
+{
+    this->setCursor( QCursor( Qt::WaitCursor ) );
+    updateReslice( 0, false );
+    this->setCursor( QCursor( Qt::ArrowCursor ) );
+}
+
+
+void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline, bool calculatePointsPath )
 {
     Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
     Q2DViewer *reconstructionViewer = m_viewersLayout->getViewerWidget(1)->getViewer();
@@ -129,10 +186,9 @@ void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
     reconstructionViewer->setCursor( QCursor( Qt::WaitCursor ) );
 
     // Es porta a terme l'MPR Curvilini per obtenir el nou volum amb la reconstrucció
-    Volume *reslicedVolume = doCurvedReslice(polyline);
+    Volume *reslicedVolume = doCurvedReslice( polyline, calculatePointsPath );
 
     // Visualitzem al segon viewer la reconstrucció del nou volum de dades obtingut
-    
     reconstructionViewer->setInput( reslicedVolume );
     reconstructionViewer->render();
 
@@ -141,27 +197,37 @@ void CurvedMPRExtension::updateReslice( QPointer<DrawerPolyline> polyline )
     reconstructionViewer->setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
-Volume* CurvedMPRExtension::doCurvedReslice(QPointer<DrawerPolyline> polyline)
+Volume* CurvedMPRExtension::doCurvedReslice( QPointer<DrawerPolyline> polyline, bool calculatePointsPath )
 {
     Q_ASSERT(m_mainVolume);
-    // Distància entre els píxels de les imatges que formen el volum
-    double spacing[3];
-    m_mainVolume->getSpacing( spacing );
-    double pixelsDistance = sqrt( spacing[0] * spacing[0] + spacing[1] * spacing[1] );
 
-    // Es construeix una llista amb tots els punts que hi ha sobre la polyline indicada per
-    // l'usuari i que cal tenir en compte al fer la reconstrucció
-    QList<double *> pointsPath = getPointsPath(polyline, pixelsDistance);
+    QList<double *> pointsPath;
+    if ( calculatePointsPath )
+    {
+        // Es construeix una llista amb tots els punts que hi ha sobre la polyline indicada per
+        // l'usuari i que cal tenir en compte al fer la reconstrucció
+        pointsPath = getPointsPath( polyline );
+    }
+
+    // Cal tenir en compte que si ens han indicat que es vol reconstruir un volum amb més d'una imatge
+    // els punts de la línia indicada per l'usuari seran desplaçats
+    // per equivaldre als punts del pla de projecció que representarà la primera imatge.  
+    // Després s'aplicarà el desplaçament corresponent a aquests punts per generar les
+    // successives imatges.
+    if ( m_numImages > 1 )
+    {
+       pointsPath = getLastPointsPathForFirstImage();   
+    }
 
     // S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
     vtkImageData *imageDataVTK = vtkImageData::New();
-    initAndFillImageDataVTK(pointsPath, imageDataVTK);
+    initAndFillImageDataVTK( pointsPath, imageDataVTK );
     
     // Es crea i assignen les dades d'inicialització al nou volum
     Volume *reslicedVolume = new Volume;
     // TODO Aquí s'haurien d'afegir les imatges que realment s'han creat, no les del volum original
     // Això simplement és un hack perquè pugui funcionar
-    reslicedVolume->setImages(m_mainVolume->getImages());
+    reslicedVolume->setImages( m_mainVolume->getImages() );
     
     // S'assignen les dades VTK al nou volum
     reslicedVolume->setData( imageDataVTK );
@@ -169,13 +235,26 @@ Volume* CurvedMPRExtension::doCurvedReslice(QPointer<DrawerPolyline> polyline)
     return reslicedVolume;
 }
 
-QList<double *> CurvedMPRExtension::getPointsPath(QPointer<DrawerPolyline> polyline, double pixelsDistance )
+QList<double *> CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> polyline )
 {
     QList< double* > pointsList = polyline->getPointsList();
     QList<double *> pointsPath;
     double *previousPoint;
     double *currentPoint;
     double *newLinePoint;
+    double *pointLastPath;
+
+    m_lastPointsPath.clear();
+
+    // Obtenim quins són els eixos x, y segons la vista mostrada al visor principal
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    int xIndex = mainViewer->getXIndexForView( mainViewer->getView() );
+    int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
+
+    // Distància entre els píxels de les imatges que formen el volum
+    double spacing[3];
+    m_mainVolume->getSpacing( spacing );
+    double pixelsDistance = sqrt( spacing[xIndex] * spacing[xIndex] + spacing[yIndex] * spacing[yIndex] );
     
     //DEBUG_LOG(QString("PolyLine points size = %1").arg(pointsList.length()));
 
@@ -188,35 +267,42 @@ QList<double *> CurvedMPRExtension::getPointsPath(QPointer<DrawerPolyline> polyl
             // S'anoten tots els punts que hi ha sobre la línia que formen el punt anterior 
             // i l'actual de la polyline indicada per l'usuari
             // La distància entre aquests punts per defecte serà la distància entre píxels
-
             double *directorVector = MathTools::directorVector( previousPoint, currentPoint );
             double distanceLine = MathTools::getDistance3D( previousPoint, currentPoint );
             double numPointsLine = distanceLine / pixelsDistance;
 
             MathTools::normalize( directorVector );
 
-            //DEBUG_LOG(QString("DirectorVector [%1,%2,%3]").arg(directorVector[0]).arg(directorVector[1]).arg(directorVector[2]));
-
             //DEBUG_LOG(QString("numPointsLine = %1").arg(numPointsLine));
 
             for (int j = 0; j < numPointsLine - 1; j++)
             {
+                // Només ens interessa el valor del punt en les coordenades x i y ja que la z serà la que variï segons 
+                // la profunditat en que ens trobem al generar la reconstrucció.
                 newLinePoint = new double[3];
-                newLinePoint[0] = previousPoint[0] + directorVector[0] * pixelsDistance * (j + 1);
-                newLinePoint[1] = previousPoint[1] + directorVector[1] * pixelsDistance * (j + 1);
-                newLinePoint[2] = previousPoint[2] + directorVector[2] * pixelsDistance * (j + 1);
-
+                newLinePoint[xIndex] = previousPoint[xIndex] + directorVector[xIndex] * pixelsDistance * (j + 1);
+                newLinePoint[yIndex] = previousPoint[yIndex] + directorVector[yIndex] * pixelsDistance * (j + 1);
+                
                 //DEBUG_LOG(QString("New line point [%1,%2,%3]").arg(newLinePoint[0]).arg(newLinePoint[1]).arg(newLinePoint[2]));
-
                 pointsPath.append( newLinePoint );
+
+                pointLastPath = new double[3];
+                pointLastPath[xIndex] = newLinePoint[xIndex];
+                pointLastPath[yIndex] = newLinePoint[yIndex];
+                m_lastPointsPath.append( pointLastPath );
             }
         }
 
         // S'inclou a la llista el punt actual
-        if (i == 0 || previousPoint[0] != currentPoint[0] || previousPoint[1] != currentPoint[1] || previousPoint[2] != currentPoint[2] )
+        if (i == 0 || previousPoint[xIndex] != currentPoint[xIndex] || previousPoint[yIndex] != currentPoint[yIndex] )
         {
             //DEBUG_LOG(QString("append current point [%1,%2,%3]").arg(currentPoint[0]).arg(currentPoint[1]).arg(currentPoint[2]));
             pointsPath.append( currentPoint );
+
+            pointLastPath = new double[3];
+            pointLastPath[xIndex] = currentPoint[xIndex];
+            pointLastPath[yIndex] = currentPoint[yIndex];
+            m_lastPointsPath.append( pointLastPath );
         }
 
         previousPoint = currentPoint;
@@ -225,22 +311,51 @@ QList<double *> CurvedMPRExtension::getPointsPath(QPointer<DrawerPolyline> polyl
     return pointsPath;
 }
 
+QList<double *> CurvedMPRExtension::getLastPointsPathForFirstImage()
+{
+    QList<double *> pointsPathForFirstImage;
+    double *point;
+    double *newLinePoint;
+    
+    // Obtenim quins són els eixos x, y segons la vista mostrada al visor principal
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    int xIndex = mainViewer->getXIndexForView( mainViewer->getView() );
+    int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
+
+    double yDistanceMovement = m_maxThickness / 2;
+
+    for ( int i = 0; i < m_lastPointsPath.size(); i++)
+    {
+        point = m_lastPointsPath.at(i);
+
+        // Només cal desplaçar el punt per l'eix y segons la vista mostrada al visor
+        newLinePoint = new double[3];
+        newLinePoint[xIndex] = point[xIndex];
+        newLinePoint[yIndex] = point[yIndex] - yDistanceMovement;
+
+        pointsPathForFirstImage.append( newLinePoint );
+    }
+
+    return pointsPathForFirstImage;
+}
+
 void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPath, vtkImageData *imageDataVTK)
 {
     Q_ASSERT(m_mainVolume);
 
-    // Obtenim quin és l'eix de profunditat segons la vista mostrada al visor principal
+    // Obtenim quin és l'eix de profunditat i l'eix y segons la vista mostrada al visor principal
     Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
     int zIndex = mainViewer->getZIndexForView( mainViewer->getView() );
+    int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
 
     // Inicialització les dades VTK que formaran el volum de la reconstrucció.
     double maxX = (double) pointsPath.length();
     double maxY = m_mainVolume->getDimensions()[zIndex];
-
+    
     imageDataVTK->SetOrigin( .0, .0, .0 );
-    imageDataVTK->SetSpacing( 1., 1., 1. ); //???
-    imageDataVTK->SetDimensions( maxX, maxY, 1 );
-    imageDataVTK->SetWholeExtent( 0, maxX, 0, maxY, 0, 1 );
+    imageDataVTK->SetSpacing( 1., 1., 1. );
+    imageDataVTK->SetDimensions( maxX, maxY, m_numImages );
+    imageDataVTK->SetWholeExtent( 0, maxX, 0, maxY, 0, m_numImages );
     imageDataVTK->SetScalarTypeToShort();
     imageDataVTK->SetNumberOfScalarComponents(1);
     imageDataVTK->AllocateScalars();
@@ -248,19 +363,25 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
     // S'emplena el dataset del volum amb el valor dels píxels resultat de projectar en profunditat
     // la línia indicada per l'usuari
 
-    // Píxels que formen la imatge i dels quals modificarem el valor
-    signed short * scalarPointer = (signed short *) imageDataVTK->GetScalarPointer();
-
-    //DEBUG_LOG(QString("maxY %1").arg(maxY));
-    //DEBUG_LOG(QString("maxX %1").arg(maxX));
+    // Cal tenir en compte que si ens han indicat que es vol reconstruir un volum amb més d'una imatge
+    // els punts de la línia indicada per l'usuari han estat desplaçats per equivaldre als punts
+    // del pla de projecció que representarà la primera imatge.  
+    // Així doncs si és el cas, caldrà aplicar el desplaçament següent als punts calculats per generar les
+    // successives imatges.
+    double yDistanceMovement = 0;
+    if ( m_numImages > 1 )
+    {
+        yDistanceMovement = m_mainVolume->getSpacing()[yIndex];
+    }
 
     double depth = m_mainVolume->getOrigin()[zIndex];
     double spacing = m_mainVolume->getSpacing()[zIndex];
     
+    int y=0;
     while ( depth <= maxY )
     {
         // Obtenim el valor del pixel a la llesca actual per tots els punts indicats per 
-        // l'usuari i que formen les columnes de la imatge resultat
+        // l'usuari i que formen les columnes de la imatge o les imatges resultat
         for ( int x = 0; x < pointsPath.size(); x++ )
         {
             double *point = pointsPath.at(x);
@@ -271,17 +392,29 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
             // actual del volum (recordem que varia segons la vista mostrada al visor principal)
             point[zIndex] = depth;
 
-            //DEBUG_LOG(QString("Point imatge [%1,%2,%3]").arg(point[0]).arg(point[1]).arg(point[2]));
-            if ( m_mainVolume->getVoxelValue(point, voxelValue) )
+            // Es calcula el valor del voxel per cada imatge que hagim de reconstruïr i 
+            // s'apunta el valor a la posició corresponent del volum de dades
+            int idxImage = 0;
+            double initialPointY = point[yIndex];
+            while ( idxImage < m_numImages )
             {
-                //DEBUG_LOG(QString("Valor pixel %1").arg(voxelValue));
-                // S'afegeix el valor del píxel a les dades VTK
-                *scalarPointer = voxelValue;
-                *scalarPointer++;
-            }
-        }
+                // Es calcula el valor del voxel segons la imatge que estiguem reconstruïnt
+                // Per tant, si és necessari s'aplicarà el desplaçament calculat
+                point[yIndex] = initialPointY + ( yDistanceMovement * idxImage );
 
+                if ( m_mainVolume->getVoxelValue(point, voxelValue) )
+                {
+                    // Accedim a la posició del volum on es vol modificar el valor del píxel
+                    signed short * scalarPointer = (signed short *) imageDataVTK->GetScalarPointer( x, y, idxImage );
+                    *scalarPointer = voxelValue;
+                }
+                idxImage++;
+            }
+            // Perquè no afecti a les següents línies de les imatges
+            point[yIndex] = initialPointY;
+        }
         depth += spacing;
+        y++;
     }
 }
 
