@@ -40,4 +40,15 @@ void ImagePlaneProjectionToolData::emitDataInitialized()
     emit dataInitialized();
 }
 
+void ImagePlaneProjectionToolData::setProjectedLineThickness( QString projectedLineName, int thickness )
+{
+    m_projectedLinesThickness.insert( projectedLineName, thickness );
+    emit thicknessUpdated( projectedLineName );
+}
+
+int ImagePlaneProjectionToolData::getProjectedLineThickness( QString projectedLineName )
+{
+    return m_projectedLinesThickness[ projectedLineName ];
+}
+
 }
