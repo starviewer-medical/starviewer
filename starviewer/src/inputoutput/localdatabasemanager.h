@@ -36,6 +36,10 @@ public:
     ///Constructor de la classe
     LocalDatabaseManager();
 
+    /**Guarda les dades de la sèria a la BD, guarda el pacient i estudi de la sèrie, i les imatges que conté, si aquests no existeixes insereix a les dades
+      *i si alguna de les dades ja existeix l'actualitza*/
+    void save(Series *seriesToSave);
+
     ///Ens retorna els pacients que compleixen amb els criteris de la màscara, només es té en compte el patientID
     QList<Patient*> queryPatient(const DicomMask &patientMaskToQuery);
 
@@ -161,6 +165,9 @@ private:
     ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
     void deleteRetrievedObjects(Patient *failedPatient);
 
+    ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
+    void deleteRetrievedObjects(Series *failedSeries);
+
     ///Esborra estudis  fins alliberar l'espai passat per paràmetre, comença esborrant els estudisque fa més que no es visualitzen
     void freeSpaceDeletingStudies(quint64 MbytesToErase);
 
@@ -170,7 +177,10 @@ private:
     void deleteSeriesFromHardDisk(const QString &studyInstanceToDelete, const QString &seriesInstanceToDelete);
 
     ///Crea i guarda el thumbnails de les sèries de l'estudi al directori on estan guardades les imatges de cada serie
-    void createSeriesThumbnails(Study *studyToGenerateSeriesThumbnails);
+    void createStudyThumbnails(Study *studyToGenerateSeriesThumbnails);
+
+    ///Crea i guarda el thumbnail de les sèries al directori on estan guardades les imatges de la serie
+    void createSeriesThumbnail(Series *seriesToGenerateThumbnail);
 
     ///Ens emplena els thumbnails d'una llistà de sèries
     void loadSeriesThumbnail(QString studyInstanceUID, QList<Series*> series);

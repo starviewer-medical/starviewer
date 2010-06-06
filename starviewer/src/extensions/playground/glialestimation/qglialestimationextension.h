@@ -101,9 +101,6 @@ private slots:
     /// Activa el nou visualitzador
     void activateNewViewer( Q2DViewerWidget * newViewerWidget );
 
-    /// Activa la sincronitzacio
-    void synchronization( Q2DViewerWidget * viewer, bool active );
-
     /// Desactiva la sincronitzacio
     void disableSynchronization();
 

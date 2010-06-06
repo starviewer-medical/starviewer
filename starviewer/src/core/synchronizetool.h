@@ -39,6 +39,12 @@ public:
     /// Per obtenir les dades ( per compartir )
     virtual ToolData *getToolData() const;
 
+    /// Habilita o deshabilita la tool
+    /// En estat habilitat, rebrà els signals de sincronització
+    /// En estat deshabilitat, no sincronitzarà res respecte la resta
+    /// Per defecte la tool es troba en estat deshabilitat
+    void setEnabled(bool enabled);
+
 private slots:
 
     /// Posa l'increment a les dades
@@ -64,6 +70,11 @@ private slots:
 
     /// Aplica els canvis de pan
     void applyPanChanges();
+
+    /// Reseteja els paràmetres amb els que es realitza la sincronització
+    /// S'invoca quan es canvia de volum, vista o s'activa l'eina
+    void reset();
+
 private:
 
     /// Llesca anterior per saber l'increment

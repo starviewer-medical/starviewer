@@ -22,10 +22,8 @@ SynchronizeTool::SynchronizeTool( QViewer *viewer, QObject *parent )
     m_lastSlice = m_q2dviewer->getCurrentSlice();
     m_roundLostThickness = 0.0;
 
-    connect( viewer, SIGNAL( sliceChanged( int ) ), SLOT( setIncrement( int ) ) );
-    connect( viewer, SIGNAL( windowLevelChanged( double, double ) ), SLOT( setWindowLevel( double, double ) ) );
-    connect( viewer, SIGNAL( zoomFactorChanged( double ) ), SLOT( setZoomFactor( double ) ) );
-    connect( viewer, SIGNAL( panChanged( double * ) ), SLOT( setPan( double * ) ) );
+    connect( m_q2dviewer, SIGNAL( volumeChanged(Volume *) ), SLOT(reset()) );
+    connect( m_q2dviewer, SIGNAL( viewChanged(int) ), SLOT(reset()) );
 
     setToolData( new SynchronizeToolData() );
 }
@@ -52,23 +50,44 @@ void SynchronizeTool::setConfiguration( ToolConfiguration *configuration )
 void SynchronizeTool::setToolData( ToolData *data )
 {
     if( m_toolData )
-    {
-        disconnect( m_toolData, SIGNAL(sliceChanged( ) ), this, SLOT( applySliceChanges() ) );
-        disconnect( m_toolData, SIGNAL(windowLevelChanged( ) ), this, SLOT( applyWindowLevelChanges() ) );
-        disconnect( m_toolData, SIGNAL(zoomFactorChanged( ) ), this, SLOT( applyZoomFactorChanges() ) );
-        disconnect( m_toolData, SIGNAL(panChanged() ), this, SLOT( applyPanChanges() ) );
-    }
+        setEnabled(false);
+    
     this->m_toolData = dynamic_cast<SynchronizeToolData*>(data);
-
-    connect( m_toolData, SIGNAL(sliceChanged( ) ), SLOT( applySliceChanges() ) );
-    connect( m_toolData, SIGNAL(windowLevelChanged( ) ), SLOT( applyWindowLevelChanges() ) );
-    connect( m_toolData, SIGNAL(zoomFactorChanged( ) ), SLOT( applyZoomFactorChanges() ) );
-    connect( m_toolData, SIGNAL(panChanged() ), SLOT( applyPanChanges() ) );
 }
 
 ToolData * SynchronizeTool::getToolData() const
 {
     return this->m_toolData;
+}
+
+void SynchronizeTool::setEnabled(bool enabled)
+{
+    if( enabled )
+    {
+        connect( m_toolData, SIGNAL(sliceChanged() ), SLOT( applySliceChanges() ) );
+        connect( m_toolData, SIGNAL(windowLevelChanged() ), SLOT( applyWindowLevelChanges() ) );
+        connect( m_toolData, SIGNAL(zoomFactorChanged() ), SLOT( applyZoomFactorChanges() ) );
+        connect( m_toolData, SIGNAL(panChanged() ), SLOT( applyPanChanges() ) );
+
+        connect( m_q2dviewer, SIGNAL( sliceChanged(int) ), SLOT( setIncrement(int) ) );
+        connect( m_q2dviewer, SIGNAL( windowLevelChanged(double, double) ), SLOT( setWindowLevel(double, double) ) );
+        connect( m_q2dviewer, SIGNAL( zoomFactorChanged(double) ), SLOT( setZoomFactor(double) ) );
+        connect( m_q2dviewer, SIGNAL( panChanged(double *) ), SLOT( setPan(double *) ) );
+
+        reset();
+    }
+    else
+    {
+        disconnect( m_toolData, SIGNAL(sliceChanged() ), this, SLOT( applySliceChanges() ) );
+        disconnect( m_toolData, SIGNAL(windowLevelChanged() ), this, SLOT( applyWindowLevelChanges() ) );
+        disconnect( m_toolData, SIGNAL(zoomFactorChanged() ), this, SLOT( applyZoomFactorChanges() ) );
+        disconnect( m_toolData, SIGNAL(panChanged() ), this, SLOT( applyPanChanges() ) );
+
+        disconnect( m_q2dviewer, SIGNAL( sliceChanged(int) ), this, SLOT( setIncrement(int) ) );
+        disconnect( m_q2dviewer, SIGNAL( windowLevelChanged(double, double) ), this, SLOT( setWindowLevel(double, double) ) );
+        disconnect( m_q2dviewer, SIGNAL( zoomFactorChanged(double) ), this, SLOT( setZoomFactor(double) ) );
+        disconnect( m_q2dviewer, SIGNAL( panChanged(double *) ), this, SLOT( setPan(double *) ) );
+    }
 }
 
 void SynchronizeTool::setIncrement( int slice )
@@ -183,6 +202,12 @@ void SynchronizeTool::applyPanChanges()
         m_q2dviewer->pan( this->m_toolData->getPan() );
         connect( m_viewer, SIGNAL( panChanged( double * ) ), SLOT( setPan( double * ) ) );
     }
+}
+
+void SynchronizeTool::reset()
+{
+    m_lastSlice = m_q2dviewer->getCurrentSlice();
+    m_roundLostThickness = 0.0;
 }
 
 void SynchronizeTool::handleEvent( unsigned long eventID )

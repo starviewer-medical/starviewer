@@ -735,7 +735,7 @@ int Volume::readFiles( QStringList filenames )
 
 int Volume::identifyErrorMessage( const QString &errorMessage )
 {
-    if( errorMessage.contains("Size mismatch") )
+    if ( errorMessage.contains("Size mismatch") || errorMessage.contains("ImageIO returns IO region that does not fully contain the requested regionRequested") )
         return SizeMismatch;
     else if( errorMessage.contains("Failed to allocate memory for image") )
         return OutOfMemory;
