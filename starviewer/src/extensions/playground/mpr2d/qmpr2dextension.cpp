@@ -61,6 +61,7 @@ void QMPR2DExtension::init()
     // TODO La diagonal seria el valor màxim, cal modificar-lo cada cop que es modifica l'input...
     QValidator *validator = new QIntValidator(0, 10000, this);
     m_thickReconstruction->setValidator(validator);
+    m_thickReconstruction->setText( "1" );
 }
 
 void QMPR2DExtension::initializeTools()
@@ -273,8 +274,8 @@ void QMPR2DExtension::onLeftButtonToolToggled(bool toggled)
 
 void QMPR2DExtension::changeThicknessImagePlaneProjectionTool()
 {
-    int thickness = m_thickReconstruction->text().toInt();
-    ( qobject_cast<ImagePlaneProjectionTool *>( m_coronal2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setThickness( thickness );
+    int numImages = m_thickReconstruction->text().toInt();
+    ( qobject_cast<ImagePlaneProjectionTool *>( m_coronal2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setNumImagesReconstruction( numImages );
 }
 
 };  //  end namespace udg

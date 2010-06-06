@@ -9,6 +9,8 @@
 
 #include "tool.h"
 
+// Qt's
+#include <QPointer>
 #include <QMap>
 
 class QStringList;
@@ -42,8 +44,9 @@ public:
     /// Indica si la tool està habilitada o no
     void setEnabled( bool enabled );
 
-    /// Indica el gruix a tenir en compte al fer la reconstrucció
-    void setThickness( int thickness );
+    /// Indica el número d'imatges a generar al volum de reconstrucció
+    /// assignat a un visor amb la tool configurada com a consumidor
+    void setNumImagesReconstruction( int numImages );
 
 private slots:
     /// Inicialitza el pla projectat per cada línia de l'actual viewer amb la tool configurada com a productor
@@ -66,6 +69,10 @@ private slots:
     /// Comprova si cal actualitzar el pla projectat per alguna línia associada perquè un altre viewer amb la tool configurada com
     /// a productor ha manipulat una línia amb la mateixa orientació
     void checkImagePlaneBindUpdated( QString nameProjectedLine );
+
+    /// Comprova si s'ha modificat el gruix per alguna línia associada perquè l'usuari ha modifcat el número d'imatges a mostrar
+    /// a la reconstrucció al visor consumidor.
+    void checkThicknessProjectedLineUpdated( QString nameProjectedLine );
 
 private:
     /// Activa les funcionalitats de la tool necessàries segons el tipus de configuració
@@ -123,6 +130,10 @@ private:
 
     void releaseProjectedLine();
 
+    /// Mostra o amaga les línies per indicar el gruix del número d'imatges que formen el volum
+    /// reconstruït pel visor consumidor
+    void applyThicknessProjectedLine( QString nameProjectedLine, DrawerLine *projectedLine );
+
 private:
     /// El volum al que se li practica l'MPR
     Volume *m_volume;
@@ -166,6 +177,12 @@ private:
 
     /// Indica el gruix a tenir en compte al generar la reconstrucció
     int m_thickness;
+
+    /// Línia que ens marca el límit superior del thickness indicat per l'usuari.
+    QPointer<DrawerLine> m_upLineThickness;
+
+    /// Línia que ens marca el límit inferior del thickness indicat per l'usuari.
+    QPointer<DrawerLine> m_downLineThickness;
 };
 }  // end namespace udg
 

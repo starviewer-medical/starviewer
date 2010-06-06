@@ -108,6 +108,10 @@ void ImagePlaneProjectionTool::enableConnections()
         // cal comprovar si algun altre visor productor té alguna línia amb la mateixa orientació que cal actualitzar
         // ( X visors diferents poden haver de mostrar línies amb el mateix pla de projecció )
         connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkImagePlaneBindUpdated( QString ) ) );
+
+        // Quan es modifica el número d'imatges a mostrar al volum de reconstrucció d'un visor consumidor, cal mostrar
+        // el gruix agafat en la direcció del pla de projecció indicada per la corresponent línia
+        connect( m_myData, SIGNAL( thicknessUpdated( QString ) ), SLOT( checkThicknessProjectedLineUpdated( QString ) ) );
     }
 
     if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
@@ -146,6 +150,7 @@ void ImagePlaneProjectionTool::disableConnections()
     if ( typeConfiguration == QString( "PRODUCER" ) || typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
     {
         disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkImagePlaneBindUpdated( QString ) ) );
+        disconnect( m_myData, SIGNAL( thicknessUpdated( QString ) ), this, SLOT( checkThicknessProjectedLineUpdated( QString ) ) );
     }
 
     if ( typeConfiguration == QString( "PRODUCER&CONSUMER" ) )
@@ -568,7 +573,9 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
 
             // Actualitzem l'imagePlane projectat per la línia a l'objecte actual
             m_imagePlanes.insert( name, copiaImagePlane );
-                        
+                     
+            applyThicknessProjectedLine( name, projectedLine );
+
             if ( updateToolData )
             {
                 // Actualitzem l'imagePlane projectat per la línia a les dades compartides de la tool
@@ -732,6 +739,7 @@ void ImagePlaneProjectionTool::setToolData(ToolData * data)
     if ( typeConfiguration == QString( "PRODUCER" ) )
     {
         disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkImagePlaneBindUpdated( QString ) ) );
+        disconnect( m_myData, SIGNAL( thicknessUpdated( QString ) ), this, SLOT( checkThicknessProjectedLineUpdated( QString ) ) );
     }
     if ( typeConfiguration == QString( "CONSUMER" ) )
     {
@@ -742,6 +750,7 @@ void ImagePlaneProjectionTool::setToolData(ToolData * data)
         disconnect( m_myData, SIGNAL( dataInitialized() ), this, SLOT( initializeImagePlanesCheckingData() ) );
         disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkImagePlaneBindUpdated( QString ) ) );
         disconnect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), this, SLOT( checkProjectedLineBindUpdated( QString ) ) );
+        disconnect( m_myData, SIGNAL( thicknessUpdated( QString ) ), this, SLOT( checkThicknessProjectedLineUpdated( QString ) ) );
     }
 
     delete m_myData;
@@ -753,6 +762,7 @@ void ImagePlaneProjectionTool::setToolData(ToolData * data)
     if ( typeConfiguration == QString( "PRODUCER" ) )
     {
         connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkImagePlaneBindUpdated( QString ) ) );
+        connect( m_myData, SIGNAL( thicknessUpdated( QString ) ), SLOT( checkThicknessProjectedLineUpdated( QString ) ) );
 
         if ( m_volume != NULL )
         {
@@ -769,6 +779,7 @@ void ImagePlaneProjectionTool::setToolData(ToolData * data)
         {
             connect( m_myData, SIGNAL( dataInitialized() ), SLOT( initializeImagePlanesCheckingData() ) );
             connect( m_myData, SIGNAL( imagePlaneUpdated( QString ) ), SLOT( checkImagePlaneBindUpdated( QString ) ) );
+            connect( m_myData, SIGNAL( thicknessUpdated( QString ) ), SLOT( checkThicknessProjectedLineUpdated( QString ) ) );
             
             if (volume != NULL)
             {
@@ -1003,7 +1014,7 @@ void ImagePlaneProjectionTool::releaseProjectedLine()
     m_2DViewer->setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
-void ImagePlaneProjectionTool::setThickness( int thickness )
+void ImagePlaneProjectionTool::setNumImagesReconstruction( int numImages )
 {
     if ( !m_toolConfiguration )
     {
@@ -1011,8 +1022,174 @@ void ImagePlaneProjectionTool::setThickness( int thickness )
         return;
     }
 
-    m_thickness = thickness;
-    updateReslice( m_myData->getVolume() );
+    // Càlcul del gruix segons el número d'imatges indicat
+    double thickness = 1;
+    if ( numImages > 1 )
+    {
+        // Distància entre els píxels de les imatges que formen el volum
+        double spacing[3];
+        m_myData->getVolume()->getSpacing( spacing );
+
+        // Calculem la distància màxima entre la primera i la úlltima imatge que composaran la reconstrucció
+        // agafant com a referència la distància entre els píxels de les imatges del volum
+        double pixelsDistance = sqrt( spacing[0] * spacing[0] + spacing[1] * spacing[1] );
+        thickness = numImages * pixelsDistance;
+    } 
+
+    if ( thickness != m_thickness )
+    {
+        m_thickness = thickness;
+        m_myData->setProjectedLineThickness( m_nameProjectedLineBind, m_thickness );
+        updateReslice( m_myData->getVolume() );
+    }
 }
+
+void ImagePlaneProjectionTool:: checkThicknessProjectedLineUpdated( QString nameProjectedLine )
+{
+    if ( m_imagePlanes.contains( nameProjectedLine ) )
+    {
+        QMapIterator< DrawerLine *, QStringList > iterator( m_projectedLines );
+        bool searched = false;
+        DrawerLine *projectedLine;
+        while ( iterator.hasNext() && !searched ) 
+        {
+            iterator.next();
+            projectedLine = iterator.key();
+            QString name = iterator.value().at(0);
+            searched = ( nameProjectedLine == name );
+        }
+
+        if ( searched ) 
+        {
+            m_thickness = m_myData->getProjectedLineThickness( nameProjectedLine );
+            applyThicknessProjectedLine( nameProjectedLine , projectedLine );
+        }
+    }
+}
+
+void ImagePlaneProjectionTool:: applyThicknessProjectedLine( QString nameProjectedLine, DrawerLine *projectedLine )
+{
+    // Inicialitzem o netegem les línies que mostraran quins són els
+    // límits de les imatges que s'han reconstruït al visor consumidor
+    if ( !m_upLineThickness )
+    {
+        // Línia thickness superior
+        m_upLineThickness = new DrawerLine;
+        m_upLineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+        m_upLineThickness->setColor( Qt::blue );
+        m_upLineThickness->setLineWidth( 1 );
+        m_2DViewer->getDrawer()->draw( m_upLineThickness , Q2DViewer::Top2DPlane );
+
+        // Línia thickness inferior
+        m_downLineThickness = new DrawerLine;
+        m_downLineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+        m_downLineThickness->setColor( Qt::blue );
+        m_downLineThickness->setLineWidth( 1 );
+        m_2DViewer->getDrawer()->draw( m_downLineThickness , Q2DViewer::Top2DPlane );
+    }
+    else
+    {
+        m_upLineThickness->visibilityOff();
+        m_upLineThickness->update();
+
+        m_downLineThickness->visibilityOff();
+        m_downLineThickness->update();
+
+        m_2DViewer->render();
+    }
+
+    QString typeConfiguration = m_toolConfiguration->getValue( "typeConfiguration" ).toString();
+
+    //DEBUG_LOG(QString("Thickness = %1").arg(m_thickness));
+
+    // Si el gruix no és més gran que 1 no cal mostrar aquestes línies perquè 
+    // significa que el volum reconstruït només té una imatge
+    if ( m_thickness > 1 )
+    {
+        // Punts a desplaçar = punts que defineixen la línia de projecció
+        double *firstPoint = projectedLine->getFirstPoint();
+        double *secondPoint = projectedLine->getSecondPoint();
+
+        // Distància moviment
+        double distance = m_thickness / 2;
+
+        // Direcció moviment 
+        double normalVector[3];
+        if ( typeConfiguration == QString("PRODUCER") )
+        {
+            // Direcció = normal del pla indicat per la línia de projecció
+            ImagePlane *imagePlane = m_myData->getProjectedLineImagePlane( nameProjectedLine );
+            imagePlane->getNormalVector( normalVector );
+            MathTools::normalize( normalVector );
+        }
+        else if ( typeConfiguration == QString("PRODUCER&CONSUMER") )
+        {
+            if ( m_nameProjectedLineBind == "VERTICAL_LINE" )
+                {
+                    //YZ, x-normal
+                    normalVector[0] = 1;
+                    normalVector[1] = 0;
+                    normalVector[2] = 0;
+                }
+                else if ( m_nameProjectedLineBind == "HORIZONTAL_LINE" )
+                {
+                    //XZ, y-normal
+                    normalVector[0] = 0;
+                    normalVector[1] = 1;
+                    normalVector[2] = 0;
+                }
+        }
+
+        // Mostrem línia thickness superior = desplaçament positiu línia de projecció
+        double upFirstPoint[3];
+        upFirstPoint[0] = firstPoint[0] + ( distance * normalVector[0] );
+        upFirstPoint[1] = firstPoint[1] + ( distance * normalVector[1] );
+        upFirstPoint[2] = 0;
+
+        double upSecondPoint[3];
+        upSecondPoint[0] = secondPoint[0] + ( distance * normalVector[0] );
+        upSecondPoint[1] = secondPoint[1] + ( distance * normalVector[1] );
+        upSecondPoint[2] = 0;
+
+        m_upLineThickness->setFirstPoint( upFirstPoint );
+        m_upLineThickness->setSecondPoint( upSecondPoint );
+        if ( !m_upLineThickness->isVisible() )
+        {
+            m_upLineThickness->visibilityOn();
+        }
+        m_upLineThickness->update();
+
+        // Mostrem línia thickness inferior = desplaçament negatiu línia de projecció
+        double downFirstPoint[3];
+        downFirstPoint[0] = firstPoint[0] - ( distance * normalVector[0] );
+        downFirstPoint[1] = firstPoint[1] - ( distance * normalVector[1] );
+        downFirstPoint[2] = 0;
+
+        double downSecondPoint[3];
+        downSecondPoint[0] = secondPoint[0] - ( distance * normalVector[0] );
+        downSecondPoint[1] = secondPoint[1] - ( distance * normalVector[1] );
+        downSecondPoint[2] = 0;
+        m_downLineThickness->setFirstPoint( downFirstPoint );
+        m_downLineThickness->setSecondPoint( downSecondPoint );
+        if ( !m_downLineThickness->isVisible() )
+        {
+            m_downLineThickness->visibilityOn();
+        }
+        m_downLineThickness->update();
+
+        //DEBUG_LOG(QString("First point [%1,%2,%3]").arg(firstPoint[0]).arg(firstPoint[1]).arg(firstPoint[2]));
+        //DEBUG_LOG(QString("Second point [%1,%2,%3]").arg(secondPoint[0]).arg(secondPoint[1]).arg(secondPoint[2]));
+        //DEBUG_LOG(QString("Normal vector [%1,%2,%3]").arg(normalVector[0]).arg(normalVector[1]).arg(normalVector[2]));
+        //DEBUG_LOG(QString("Distance = %1").arg(distance));
+        //DEBUG_LOG(QString("First point upLine [%1,%2,%3]").arg(m_upLineThickness->getFirstPoint()[0]).arg(m_upLineThickness->getFirstPoint()[1]).arg(m_upLineThickness->getFirstPoint()[2]));
+        //DEBUG_LOG(QString("Second point upLine [%1,%2,%3]").arg(m_upLineThickness->getSecondPoint()[0]).arg(m_upLineThickness->getSecondPoint()[1]).arg(m_upLineThickness->getSecondPoint()[2]));
+        //DEBUG_LOG(QString("First point downLine [%1,%2,%3]").arg(m_downLineThickness->getFirstPoint()[0]).arg(m_downLineThickness->getFirstPoint()[1]).arg(m_downLineThickness->getFirstPoint()[2]));
+        //DEBUG_LOG(QString("Second point downLine [%1,%2,%3]").arg(m_downLineThickness->getSecondPoint()[0]).arg(m_downLineThickness->getSecondPoint()[1]).arg(m_downLineThickness->getSecondPoint()[2]));
+        
+        m_2DViewer->render();
+    }
+}
+
+
 
 }  //  end namespace udg
