@@ -917,30 +917,4 @@ void HangingProtocolManager::cancelHangingProtocolDowloading()
     }
 }
 
-void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet)
-{
-    if (series)
-    {
-        if( series->isViewable() && series->getFirstVolume() )
-        {
-            // HACK Així evitem el bug del ticket 1249 i tenim el mateix comportament que abans
-            // Deshabilitem inicialment la sincronització i només l'activem si és necessari pel hanging protocol
-            viewerWidget->enableSynchronization(false);
-            
-            viewerWidget->setInput( series->getFirstVolume() );
-            qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
-            if( displaySet->getImageSet()->getTypeOfItem() == "image" )
-            {
-                viewerWidget->getViewer()->setSlice( displaySet->getImageSet()->getImageToDisplay() );
-            }
-            applyDisplayTransformations(viewerWidget, displaySet);
-
-            if( !displaySet->getToolActivation().isEmpty() ) // Tenim tools activades per defecte des del hanging protocol
-            {
-                if( displaySet->getToolActivation() == "synchronization" ) // S'activa la tool de sincronització
-                    viewerWidget->enableSynchronization(true);
-            }
-        }
-    }
->>>>>>> .merge-right.r5728
 }
