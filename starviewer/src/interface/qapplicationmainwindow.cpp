@@ -25,6 +25,7 @@
 #include "coresettings.h" // pel LanguageLocale
 #include "inputoutputsettings.h"
 
+#include <QDebug>
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
 #include "hangingprotocolsloader.h"
@@ -643,8 +644,8 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
 
 void QApplicationMainWindow::openUserGuide()
 {
-    QString url = QCoreApplication::applicationDirPath().append(QString("/Starviewer_User_guide.pdf"));
-    QDesktopServices::openUrl(QUrl(url, QUrl::TolerantMode));
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_User_guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
 }; // end namespace udg
