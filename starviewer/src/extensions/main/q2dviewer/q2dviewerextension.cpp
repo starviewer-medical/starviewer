@@ -358,6 +358,10 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SynchronizeTool");
+    // Cal marcar l'acció de la tool com a checked perquè sempre estigui disponible
+    // Si no ho féssim, cada cop que es canviés de tool, el toolmanager faria un refreshConections() i
+    // les finestres sincronitzades es desactivarien (ticket #1236)
+    m_toolManager->getRegisteredToolAction("SynchronizeTool")->setChecked(true);
 
     // registrem les "Action Tool"    
 #ifndef STARVIEWER_LITE
