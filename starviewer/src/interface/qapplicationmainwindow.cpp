@@ -39,6 +39,7 @@
 #include <QApplication>
 #include <QLocale>
 #include <QProgressDialog>
+#include <QDesktopServices>
 
 #include <QPair>
 //Shortucts
@@ -234,6 +235,11 @@ void QApplicationMainWindow::createActions()
     m_fullScreenAction->setCheckable( true );
     connect( m_fullScreenAction , SIGNAL( toggled(bool) ) , this , SLOT( switchFullScreen(bool) ) );
 
+    m_openUserManualAction = new QAction( this );
+    m_openUserManualAction->setText( tr("User manual") );
+    m_openUserManualAction->setStatusTip( tr("Opem user manual") );
+    connect( m_openUserManualAction , SIGNAL( triggered() ) , this , SLOT( openUserManual() ) );
+
     m_logViewerAction = new QAction( this );
     m_logViewerAction->setText( tr("Show log file") );
     m_logViewerAction->setStatusTip( tr("Show log file") );
@@ -340,6 +346,8 @@ void QApplicationMainWindow::createMenus()
 
     // menú d'ajuda i suport
     m_helpMenu = menuBar()->addMenu( tr("&Help") );
+    m_helpMenu->addAction( m_openUserManualAction );
+    m_helpMenu->addSeparator();
     m_helpMenu->addAction( m_logViewerAction );
     m_helpMenu->addSeparator();
     m_helpMenu->addAction( m_aboutAction );
@@ -631,6 +639,12 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
     // ser "concurrents" carregant sèries i ens pot ocasionar problemes
     // per tant primer cal solucionar la "concurrència" per poder posar això en marxa
     // qApp->processEvents();
+}
+
+void QApplicationMainWindow::openUserManual()
+{
+    QString url = QCoreApplication::applicationDirPath().append(QString("/Manual_STARVIEWER.pdf"));
+    QDesktopServices::openUrl(QUrl(url, QUrl::TolerantMode));
 }
 
 }; // end namespace udg
