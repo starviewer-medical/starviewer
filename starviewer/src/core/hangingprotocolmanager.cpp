@@ -242,7 +242,6 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
         serie = 0;
         displaySet = hangingProtocol->getDisplaySet( displaySetNumber + 1 );
         hangingProtocolImageSet = hangingProtocol->getImageSet( displaySet->getImageSetNumber() );
-        serie = hangingProtocolImageSet->getSeriesToDisplay();
         viewerWidget = layout->addViewer( displaySet->getPosition() );
 
         if( hangingProtocolImageSet->isDownloaded() == false )
@@ -272,35 +271,7 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
         }
         else
         {
-            if( serie ) // Ens podem trobar que un viewer no tingui serie, llavors no hi posem input
-            {
-                // cal que la sèrie que escollim sigui vàlida, sinó no posarem pas res
-                if( serie->isViewable() && serie->getFirstVolume() )
-                {
-                    viewerWidget->setInput( serie->getFirstVolume() );
-                    qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
-                    if( hangingProtocolImageSet->getTypeOfItem() == "image" )
-                    {
-                        viewerWidget->getViewer()->setSlice( hangingProtocolImageSet->getImageToDisplay() );
-                        applyDisplayTransformations( serie, hangingProtocolImageSet->getImageToDisplay(), viewerWidget, displaySet );
-                    }
-                    else
-                    {
-                        applyDisplayTransformations( serie, 0, viewerWidget, displaySet );
-                    }
-                    if( displaySet->getToolActivation() != 0 ) // Tenim tools activades per defecte des del hanging protocol
-                    {
-                        if( displaySet->getToolActivation() == "synchronization" ) // S'activa la tool de sincronització
-                            viewerWidget->enableSynchronization(true);
-                        else // Es desactiva la tool de sincronització, per si estava activada
-                            viewerWidget->enableSynchronization(false);
-                    }
-                    else // es desactiven totes les tools que puguin estar actives
-                    {
-                        viewerWidget->enableSynchronization(false);
-                    }
-                }
-            }
+            setInputToViewer(viewerWidget, hangingProtocolImageSet->getSeriesToDisplay(), hangingProtocolImageSet, displaySet);
         }
     }
 }
@@ -811,36 +782,7 @@ void HangingProtocolManager::previousStudyDownloaded()
 
             layout->quitDownloadingItem( viewerWidget, structPreviousStudyDownloading->downloadingWidget );
 
-            // S'assigna la serie al visualitzador si es que n'ha trobat alguna
-            if( series != 0)
-            {
-                // cal que la sèrie que escollim sigui vàlida, sinó no posarem pas res
-                if( series->isViewable() && series->getFirstVolume() )
-                {
-                    Volume *volume = VolumeRepository::getRepository()->getVolume( series->getFirstVolume()->getIdentifier() );
-                    viewerWidget->setInput( volume );
-                    qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
-
-                    if( structPreviousStudyDownloading->imageSet->getTypeOfItem() == "image" )
-                    {
-                        viewerWidget->getViewer()->setSlice( structPreviousStudyDownloading->imageSet->getImageToDisplay() );
-                        applyDisplayTransformations( series, structPreviousStudyDownloading->imageSet->getImageToDisplay(), viewerWidget, structPreviousStudyDownloading->displaySet );
-                    }
-                    else
-                    {
-                        applyDisplayTransformations( series, 0, viewerWidget, structPreviousStudyDownloading->displaySet );
-                    }
-                    if( structPreviousStudyDownloading->displaySet->getToolActivation() != 0 )
-                    {
-                        if( structPreviousStudyDownloading->displaySet->getToolActivation() == "synchronization" )
-                            viewerWidget->enableSynchronization(true);
-                    }
-                    else //Es desactiven les tools necessàries
-                    {
-                        viewerWidget->enableSynchronization(false);
-                    }
-                }
-            }
+            setInputToViewer(viewerWidget, series, structPreviousStudyDownloading->imageSet, structPreviousStudyDownloading->displaySet);
 
             m_studiesDownloading->remove( study->getInstanceUID() );
 
@@ -917,4 +859,33 @@ void HangingProtocolManager::cancelHangingProtocolDowloading()
     }
 }
 
+void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolImageSet *imageSet, HangingProtocolDisplaySet *displaySet)
+{
+    if (series)
+    {
+        if( series->isViewable() && series->getFirstVolume() )
+        {
+            // HACK Així evitem el bug del ticket 1249 i tenim el mateix comportament que abans
+            // Deshabilitem inicialment la sincronització i només l'activem si és necessari pel hanging protocol
+            viewerWidget->enableSynchronization(false);
+            
+            viewerWidget->setInput( series->getFirstVolume() );
+            qApp->processEvents( QEventLoop::ExcludeUserInputEvents );
+            if( imageSet->getTypeOfItem() == "image" )
+            {
+                viewerWidget->getViewer()->setSlice( imageSet->getImageToDisplay() );
+                applyDisplayTransformations(series, imageSet->getImageToDisplay(), viewerWidget, displaySet);
+            }
+            else
+            {
+                applyDisplayTransformations(series, 0, viewerWidget, displaySet);
+            }
+            if( !displaySet->getToolActivation().isEmpty() ) // Tenim tools activades per defecte des del hanging protocol
+            {
+                if( displaySet->getToolActivation() == "synchronization" ) // S'activa la tool de sincronització
+                    viewerWidget->enableSynchronization(true);
+            }
+        }
+    }
+}
 }
