@@ -235,10 +235,10 @@ void QApplicationMainWindow::createActions()
     m_fullScreenAction->setCheckable( true );
     connect( m_fullScreenAction , SIGNAL( toggled(bool) ) , this , SLOT( switchFullScreen(bool) ) );
 
-    m_openUserManualAction = new QAction( this );
-    m_openUserManualAction->setText( tr("User manual") );
-    m_openUserManualAction->setStatusTip( tr("Opem user manual") );
-    connect( m_openUserManualAction , SIGNAL( triggered() ) , this , SLOT( openUserManual() ) );
+    m_openUserGuideAction = new QAction( this );
+    m_openUserGuideAction->setText( tr("User guide") );
+    m_openUserGuideAction->setStatusTip( tr("Open User guide") );
+    connect( m_openUserGuideAction , SIGNAL( triggered() ) , this , SLOT( openUserGuide() ) );
 
     m_logViewerAction = new QAction( this );
     m_logViewerAction->setText( tr("Show log file") );
@@ -346,7 +346,7 @@ void QApplicationMainWindow::createMenus()
 
     // menú d'ajuda i suport
     m_helpMenu = menuBar()->addMenu( tr("&Help") );
-    m_helpMenu->addAction( m_openUserManualAction );
+    m_helpMenu->addAction( m_openUserGuideAction );
     m_helpMenu->addSeparator();
     m_helpMenu->addAction( m_logViewerAction );
     m_helpMenu->addSeparator();
@@ -641,9 +641,9 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
     // qApp->processEvents();
 }
 
-void QApplicationMainWindow::openUserManual()
+void QApplicationMainWindow::openUserGuide()
 {
-    QString url = QCoreApplication::applicationDirPath().append(QString("/Manual_STARVIEWER.pdf"));
+    QString url = QCoreApplication::applicationDirPath().append(QString("/Starviewer_User_guide.pdf"));
     QDesktopServices::openUrl(QUrl(url, QUrl::TolerantMode));
 }
 
