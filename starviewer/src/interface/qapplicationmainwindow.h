@@ -135,6 +135,9 @@ private slots:
 
     void newCommandLineOptionsToRun();
 
+    /// Obre el manual d'usuari
+    void openUserGuide();
+
 private:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
@@ -164,6 +167,7 @@ private:
     QAction *m_fullScreenAction;
     QAction *m_logViewerAction;
     QAction *m_configurationAction;
+    QAction *m_openUserGuideAction;
 
     QLabel *m_betaVersionMenuText;
 
