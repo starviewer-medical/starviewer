@@ -226,8 +226,8 @@
             <string>Path Line</string>
            </property>
            <property name="icon">
-            <iconset resource="../../../main/main.qrc">
-             <normaloff>:/images/pencil.png</normaloff>:/images/pencil.png</iconset>
+            <iconset>
+             <normaloff>../../../main/images/linePath.png</normaloff>../../../main/images/linePath.png</iconset>
            </property>
            <property name="iconSize">
             <size>
