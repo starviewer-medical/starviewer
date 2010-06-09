@@ -15,6 +15,7 @@
 #include "patientbrowsermenu.h"
 #include "toolconfiguration.h"
 #include "imageplaneprojectiontool.h"
+#include "mathtools.h"
 // qt
 #include <QSpinBox> // pel control m_axialSpinBox
 #include <QSlider> // pel control m_axialSlider
@@ -56,12 +57,6 @@ void QMPR2DExtension::init()
 
     m_coronal2DView->disableContextMenu();
     m_sagital2DView->disableContextMenu();
-
-    // A l'input on l'usuari pot indicar el gruix de la reconstrucció només ha d'acceptar números entre 0 i X 
-    // TODO La diagonal seria el valor màxim, cal modificar-lo cada cop que es modifica l'input...
-    QValidator *validator = new QIntValidator(0, 10000, this);
-    m_thickReconstruction->setValidator(validator);
-    m_thickReconstruction->setText( "1" );
 }
 
 void QMPR2DExtension::initializeTools()
@@ -185,7 +180,16 @@ void QMPR2DExtension::createConnections()
 
     // Cada cop que l'usuari modifiqui el gruix indicat per fer el MIP, es modifica el thickness associat a la tool del visor
     // on s'aplicarà el MIPs, i es torna a fer la reconstrucció tenint en compte el gruix indicat
-    connect( m_thickReconstruction, SIGNAL( returnPressed () ), SLOT( changeThicknessImagePlaneProjectionTool() ) );
+    // Fem que si avancem d'un en un el valor d'slab (amb teclat o amb la roda del ratolí)
+    // s'actualitzi amb el signal valueChanged()
+    // si el valor es canvia arrossegant l'slider, canviem el comportament i no apliquem el nou
+    // valor de thickness fins que no fem el release
+    // Ho fem així, ja que al arrossegar es van enviant senyals de valueChanged i això feia que
+    // la resposta de l'interfície fos una mica lenta, ja que calcular el nou slab és costós
+    // TODO si el procés anés amb threads no tindríem aquest problema
+    turnOffDelayedUpdate();
+    connect( m_numberOfImagesSlider, SIGNAL( sliderPressed () ), SLOT( turnOnDelayedUpdate() ) );
+    connect( m_numberOfImagesSlider, SIGNAL( valueChanged( int ) ), SLOT( updateNumberOfImagesLabel( int ) ) );
 }
 
 void QMPR2DExtension::switchHorizontalLayout()
@@ -212,7 +216,14 @@ void QMPR2DExtension::setInput( Volume *input )
     // refrescar el controls
     m_axialSpinBox->setMinimum( extent[4] );
     m_axialSpinBox->setMaximum( extent[5] );
-    m_axialSlider->setMaximum(  extent[5] );    
+    m_axialSlider->setMaximum(  extent[5] );
+
+    // Slider per indicar el gruix de la reconstrucció només ha d'acceptar números entre 1 i 
+    // el màxim número de files o columnes del volum original
+    int rows = extent[1];
+    int columns = extent[3];
+    double max = MathTools::maximum( rows, columns );
+    m_numberOfImagesSlider->setRange( 1, max );
 }
 
 void QMPR2DExtension::readSettings()
@@ -274,8 +285,31 @@ void QMPR2DExtension::onLeftButtonToolToggled(bool toggled)
 
 void QMPR2DExtension::changeThicknessImagePlaneProjectionTool()
 {
-    int numImages = m_thickReconstruction->text().toInt();
+    int numImages = m_numberOfImagesSlider->value();
     ( qobject_cast<ImagePlaneProjectionTool *>( m_coronal2DView->getToolProxy()->getTool( "ImagePlaneProjectionTool" ) ) )->setNumImagesReconstruction( numImages );
+}
+
+void QMPR2DExtension::turnOnDelayedUpdate()
+{
+    disconnect( m_numberOfImagesSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeThicknessImagePlaneProjectionTool() ) );
+    connect( m_numberOfImagesSlider, SIGNAL( sliderReleased () ), SLOT( onSliderReleased() ) );
+}
+
+void QMPR2DExtension::turnOffDelayedUpdate()
+{
+    disconnect( m_numberOfImagesSlider, SIGNAL( sliderReleased () ), this, SLOT( onSliderReleased() ) );
+    connect( m_numberOfImagesSlider, SIGNAL( valueChanged(int) ), SLOT( changeThicknessImagePlaneProjectionTool() ) );
+}
+
+void QMPR2DExtension::onSliderReleased()
+{
+    changeThicknessImagePlaneProjectionTool();
+    turnOffDelayedUpdate();
+}
+
+void QMPR2DExtension::updateNumberOfImagesLabel(int value)
+{
+    m_numberOfImagesLabel->setText( QString::number( value ) );
 }
 
 };  //  end namespace udg
