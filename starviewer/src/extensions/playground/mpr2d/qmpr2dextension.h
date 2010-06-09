@@ -58,6 +58,15 @@ private slots:
     /// i per tant és l'encarregat de mostrar la reconstrucció
     void changeThicknessImagePlaneProjectionTool();
 
+    /// Mètodes per controlar les connexions de l'slider per indicar el número d'imatges
+    /// amb la generació de la reconstrucció
+    void turnOnDelayedUpdate();
+    void turnOffDelayedUpdate();
+    void onSliderReleased();
+
+    /// Actualitza el valor de número d'imatges que mostra el label del slider
+    void updateNumberOfImagesLabel( int value );
+
 private:
     ///Inicialitza les tools que tindrà l'extensió
     void initializeTools();
