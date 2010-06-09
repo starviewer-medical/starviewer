@@ -97,6 +97,15 @@ private slots:
     /// l'slot corresponent per obtenir la línia dibuixada
     void updateLinePathToolConnection( bool enabled );
 
+    /// Mètodes per controlar les connexions de l'slider per indicar el número d'imatges
+    /// amb la generació de la reconstrucció
+    void turnOnDelayedUpdate();
+    void turnOffDelayedUpdate();
+    void onSliderReleased();
+
+    /// Actualitza el valor de número d'imatges que mostra el label del slider
+    void updateNumberOfImagesLabel( int value );
+
 private:
     /// El volum al que se li practica l'MPR Curvilini
     Volume *m_mainVolume;

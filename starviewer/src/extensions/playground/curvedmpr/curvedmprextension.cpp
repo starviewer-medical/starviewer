@@ -56,6 +56,10 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
     // Inicialitzem les tools disponibles per cada visor
     initializeTools();
 
+    // Inicialització dades
+    m_numImages = 1;
+    m_maxThickness = 0;
+
     // Cada cop que es canvia l'input del viewer principal cal actualitzar el volum de treball
     connect( m_viewersLayout->getViewerWidget(0)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( updateMainVolume( Volume * ) ) );
 
@@ -63,18 +67,18 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
     // i es deshabiliten de l'altre
     connect( m_viewersLayout, SIGNAL( viewerSelectedChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
 
-    // A l'input on l'usuari pot indicar el gruix de la reconstrucció només ha d'acceptar números entre 1 i X 
-    // TODO El màxim correspondrà al número de files o columnes del volum original
-    QValidator *validator = new QIntValidator(1, 1000, this);
-    m_thickReconstruction->setValidator(validator);
-    m_thickReconstruction->setText( "1" );
-
-    m_numImages = 1;
-    m_maxThickness = 0;
-
     // Cada cop que l'usuari modifiqui el número d'imatges a generar al volum reconstruït, es torna a fer
     // la reconstrucció al visor corresponent, tenint en compte la última línia indicada per l'usuari
-    connect( m_thickReconstruction, SIGNAL( returnPressed () ), SLOT( changeThicknessReconstruction() ) );
+    // Fem que si avancem d'un en un el valor d'slab (amb teclat o amb la roda del ratolí)
+    // s'actualitzi amb el signal valueChanged()
+    // si el valor es canvia arrossegant l'slider, canviem el comportament i no apliquem el nou
+    // valor de thickness fins que no fem el release
+    // Ho fem així, ja que al arrossegar es van enviant senyals de valueChanged i això feia que
+    // la resposta de l'interfície fos una mica lenta, ja que calcular el nou slab és costós
+    // TODO si el procés anés amb threads no tindríem aquest problema
+    turnOffDelayedUpdate();
+    connect( m_numberOfImagesSlider, SIGNAL( sliderPressed () ), SLOT( turnOnDelayedUpdate() ) );
+    connect( m_numberOfImagesSlider, SIGNAL( valueChanged( int ) ), SLOT( updateNumberOfImagesLabel( int ) ) );
 }
 
 CurvedMPRExtension::~CurvedMPRExtension()
@@ -167,11 +171,41 @@ void CurvedMPRExtension::setInput( Volume *input )
 void CurvedMPRExtension::updateMainVolume( Volume *volume )
 {
     m_mainVolume = volume;
+    
+    // Slider per indicar el gruix de la reconstrucció només ha d'acceptar números entre 1 i 
+    // el màxim número de files o columnes del volum original
+    int *volumeExtent = m_mainVolume->getWholeExtent();
+
+    int rows = 0;
+    int columns = 0;
+    
+    // Depenent de la vista mostrada 
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    QViewer::CameraOrientationType view = mainViewer->getView();
+    if ( view == QViewer::Axial )
+    {
+        rows = volumeExtent[1];
+        columns = volumeExtent[3];
+    }
+    else if (view == QViewer::Sagital )
+    {
+        rows = volumeExtent[3];
+        columns = volumeExtent[5];
+    }
+    else if ( view == QViewer::Coronal )
+    {
+        rows = volumeExtent[1];
+        columns = volumeExtent[5];
+    }
+
+    double max = MathTools::maximum( rows, columns );
+
+    m_numberOfImagesSlider->setRange( 1, max );
 }
 
 void CurvedMPRExtension::changeThicknessReconstruction()
 {
-    int numImages = m_thickReconstruction->text().toInt();
+    int numImages = m_numberOfImagesSlider->value();
 
     if (numImages != m_numImages )
     {
@@ -200,43 +234,42 @@ void CurvedMPRExtension::changeThicknessReconstruction()
             m_maxThickness = 0;
         }
 
+        // Inicialitzem o netegem les línies que mostraran al viewer principal quins són els
+        // límits de les imatges que es reconstruiran pel nou volum, si es que cal mostrar-les
+        if (!m_upPolylineThickness )
+        {
+            // Línia thickness superior
+            m_upPolylineThickness = new DrawerPolyline;
+            m_upPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+            m_upPolylineThickness->setColor( Qt::blue );
+            m_upPolylineThickness->setLineWidth( 1 );
+            mainViewer->getDrawer()->draw( m_upPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
+
+            // Línia thickness inferior
+            m_downPolylineThickness = new DrawerPolyline;
+            m_downPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
+            m_downPolylineThickness->setColor( Qt::blue );
+            m_downPolylineThickness->setLineWidth( 1 );
+            mainViewer->getDrawer()->draw( m_downPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
+
+            // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+            m_upPolylineThickness->increaseReferenceCount();
+            m_downPolylineThickness->increaseReferenceCount();
+        }
+        else
+        {
+            m_upPolylineThickness->deleteAllPoints();
+            m_upPolylineThickness->update();
+
+            m_downPolylineThickness->deleteAllPoints();
+            m_downPolylineThickness->update();
+
+            mainViewer->render();
+        }
+
         // Per fer la reconstrucció cal que l'usuari anteriorment hagi indicat una línia
         if ( !m_lastPointsPath.isEmpty() )
         {
-            // Inicialitzem o netegem les línies que mostraran al viewer principal quins són els
-            // límits de les imatges que es reconstruiran pel nou volum
-            if (!m_upPolylineThickness )
-            {
-                // Línia thickness superior
-                m_upPolylineThickness = new DrawerPolyline;
-                m_upPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-                m_upPolylineThickness->setColor( Qt::blue );
-                m_upPolylineThickness->setLineWidth( 1 );
-                mainViewer->getDrawer()->draw( m_upPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
-
-                // Línia thickness inferior
-                m_downPolylineThickness = new DrawerPolyline;
-                m_downPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-                m_downPolylineThickness->setColor( Qt::blue );
-                m_downPolylineThickness->setLineWidth( 1 );
-                mainViewer->getDrawer()->draw( m_downPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
-
-                // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
-                m_upPolylineThickness->increaseReferenceCount();
-                m_downPolylineThickness->increaseReferenceCount();
-            }
-            else
-            {
-                m_upPolylineThickness->deleteAllPoints();
-                m_upPolylineThickness->update();
-
-                m_downPolylineThickness->deleteAllPoints();
-                m_downPolylineThickness->update();
-
-                mainViewer->render();
-            }
-            
-            // Portem a terme la reconstrucció
             updateResliceWithLastPointsPath();
         }
     }
@@ -731,6 +764,29 @@ void CurvedMPRExtension::updateLinePathToolConnection(bool enabled)
         LinePathTool *linePathTool = qobject_cast<LinePathTool *>( toolProxy->getTool( "LinePathTool" ) );
         connect( linePathTool, SIGNAL( finished( QPointer<DrawerPolyline> ) ), SLOT( updateReslice( QPointer<DrawerPolyline> )) );
     }
+}
+
+void CurvedMPRExtension::turnOnDelayedUpdate()
+{
+    disconnect( m_numberOfImagesSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeThicknessReconstruction() ) );
+    connect( m_numberOfImagesSlider, SIGNAL( sliderReleased () ), SLOT( onSliderReleased() ) );
+}
+
+void CurvedMPRExtension::turnOffDelayedUpdate()
+{
+    disconnect( m_numberOfImagesSlider, SIGNAL( sliderReleased () ), this, SLOT( onSliderReleased() ) );
+    connect( m_numberOfImagesSlider, SIGNAL( valueChanged(int) ), SLOT( changeThicknessReconstruction() ) );
+}
+
+void CurvedMPRExtension::onSliderReleased()
+{
+    changeThicknessReconstruction();
+    turnOffDelayedUpdate();
+}
+
+void CurvedMPRExtension::updateNumberOfImagesLabel(int value)
+{
+    m_numberOfImagesLabel->setText( QString::number( value ) );
 }
 
 }; // end namespace udg
