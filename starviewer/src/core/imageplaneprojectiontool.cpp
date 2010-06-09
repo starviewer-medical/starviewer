@@ -663,12 +663,6 @@ void ImagePlaneProjectionTool::initReslice( Volume *volume )
     m_reslice->SetInput( volume->getVtkData() );
 
     updateReslice( volume );
-
-    // Assignem la informació de la sèrie, estudis, pacient...
-    Volume *reslicedVolume = new Volume;
-    reslicedVolume->setImages( volume->getImages() );
-    reslicedVolume->setData( m_reslice->GetOutput() );
-    m_2DViewer->setInput( reslicedVolume );
 }
 
 void ImagePlaneProjectionTool::updateReslice( Volume *volume )
@@ -716,10 +710,17 @@ void ImagePlaneProjectionTool::updateReslice( Volume *volume )
 
     // Fem efectius els canvis fets anteriorment sobre el vtkImageReslace
     m_reslice->Update();
-    //m_reslice->UpdateWholeExtent();
-
+    
     // Tornem ha augmentar la resolució
     m_reslice->SetInterpolationModeToCubic();
+
+    // !!!Les següents quatre instruccions estaven al final del mètode initReslice,
+    // !!!però al modificar el thickness del reslice no s'actualitzava al visor
+    // Assignem la informació de la sèrie, estudis, pacient... 
+    Volume *reslicedVolume = new Volume;
+    reslicedVolume->setImages( volume->getImages() );
+    reslicedVolume->setData( m_reslice->GetOutput() );
+    m_2DViewer->setInput( reslicedVolume );
 
     // Visualitzem els canvis al viewer
     m_2DViewer->render();
@@ -1114,30 +1115,34 @@ void ImagePlaneProjectionTool:: applyThicknessProjectedLine( QString nameProject
         double distance = m_thickness / 2;
 
         // Direcció moviment 
+        double normalVectorImagePlane[3];
+        ImagePlane *imagePlane = m_myData->getProjectedLineImagePlane( nameProjectedLine );
+        imagePlane->getNormalVector( normalVectorImagePlane );
+        MathTools::normalize( normalVectorImagePlane );
         double normalVector[3];
         if ( typeConfiguration == QString("PRODUCER") )
         {
             // Direcció = normal del pla indicat per la línia de projecció
-            ImagePlane *imagePlane = m_myData->getProjectedLineImagePlane( nameProjectedLine );
-            imagePlane->getNormalVector( normalVector );
-            MathTools::normalize( normalVector );
+            normalVector[0] = normalVectorImagePlane[0];
+            normalVector[1] = normalVectorImagePlane[1];
+            normalVector[2] = normalVectorImagePlane[2];
         }
         else if ( typeConfiguration == QString("PRODUCER&CONSUMER") )
         {
             if ( m_nameProjectedLineBind == "VERTICAL_LINE" )
-                {
-                    //YZ, x-normal
-                    normalVector[0] = 1;
-                    normalVector[1] = 0;
-                    normalVector[2] = 0;
-                }
-                else if ( m_nameProjectedLineBind == "HORIZONTAL_LINE" )
-                {
-                    //XZ, y-normal
-                    normalVector[0] = 0;
-                    normalVector[1] = 1;
-                    normalVector[2] = 0;
-                }
+            {
+                //YZ, x-normal
+                normalVector[0] = normalVectorImagePlane[1];
+                normalVector[1] = normalVectorImagePlane[2];
+                normalVector[2] = normalVectorImagePlane[0];
+            }
+            else if ( m_nameProjectedLineBind == "HORIZONTAL_LINE" )
+            {
+                //XZ, y-normal
+                normalVector[0] = normalVectorImagePlane[0];
+                normalVector[1] = normalVectorImagePlane[2];
+                normalVector[2] = normalVectorImagePlane[1];
+            }
         }
 
         // Mostrem línia thickness superior = desplaçament positiu línia de projecció
