@@ -50,7 +50,7 @@ QMPR2DExtension::~QMPR2DExtension()
 void QMPR2DExtension::init()
 {
     // configurem les annotacions que volem veure
-    m_axial2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
+    m_axial2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation );
     m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation );
     m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation );
 
