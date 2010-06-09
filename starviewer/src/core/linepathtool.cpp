@@ -34,7 +34,12 @@ LinePathTool::LinePathTool( QViewer *viewer, QObject *parent )
 
 LinePathTool::~LinePathTool(void)
 {
-     bool hasToRefresh = false;
+    deletePolyLine();
+}
+
+void LinePathTool::deletePolyLine()
+{
+    bool hasToRefresh = false;
     // Cal decrementar el reference count perquè 
     // l'annotació s'esborri si "matem" l'eina
     if ( !m_polyline.isNull() )
@@ -98,6 +103,12 @@ void LinePathTool::annotateNewPoint()
     m_2DViewer->getEventWorldCoordinate(pickedPoint);
     m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
 
+    if ( m_deletePreviousPolyline )
+    {
+        deletePolyLine();
+        m_deletePreviousPolyline = false;
+    }
+
     bool firstPoint = false;
     if (!m_polyline )
     {
@@ -121,14 +132,11 @@ void LinePathTool::annotateNewPoint()
 
 void LinePathTool::closeForm()
 {
-    // Així alliberem la primitiva perquè pugui ser esborrada
-    m_polyline->decreaseReferenceCount();
-    
+    // Només s'esborrarà la línia al dibuixar-ne un altre o al destruïr la tool
+    m_deletePreviousPolyline = true;
+
     // Indiquem que hem finalitzat les tasques de dibuix
     emit finished( m_polyline );
-
-    // Eliminem la polilínia
-    delete m_polyline;
 
     m_numPointsAdded = 0;
 }
