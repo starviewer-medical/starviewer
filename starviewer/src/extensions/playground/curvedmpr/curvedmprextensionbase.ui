@@ -226,8 +226,8 @@
             <string>Path Line</string>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>../../../main/images/linePath.png</normaloff>../../../main/images/linePath.png</iconset>
+            <iconset resource="../../../main/main.qrc">
+             <normaloff>:/images/linePath.png</normaloff>:/images/linePath.png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -487,6 +487,12 @@
          </property>
          <property name="sizeType">
           <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
          </property>
         </spacer>
        </item>
