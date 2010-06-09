@@ -51,13 +51,28 @@ private:
     /// l'usuari i que cal tenir en compte al fer la reconstrucció
     QList<double *> getPointsPath( QPointer<DrawerPolyline> polyline );
 
+    /// Guarda punt calculat per la última línia dibuixada per l'usuari així
+    /// si modifica el número d'imatges a reconstruir no cal tornar-los a calcular tots
+    void addPointLastPath( double *point, int xIndex, int yIndex, int zIndex );
+
+    /// Guarda la direcció de desplaçament del punt pertanyent a la polyline dibuixada per l'usuari
+    /// Serà necessari per dibuixar línies de referències del gruix
+    void addInfoPointLastPolyline( double *point, double *directorVector, int xIndex, int yIndex, int zIndex );
+
+    // Guardem per cada segment quin és l'index de l'últim punt a desplaçar
+    // i en quina direcció s'hauran de desplaçar els punts anteriors
+    // En aquest cas aquesta direcció serà el vector director de la recta perpendicular al segment
+    // creat entre el punt anterior i l'actual
+    // vectorDirector(A,B) <-> vectorDirectorPerpendicular(-B,A)
+    void addInfoPointsSegmentMovement( double *directorVector, int idxLastPointToMove, int xIndex, int yIndex, int zIndex );
+
     /// Es crida si ens han indicat que es vol reconstruir un volum amb més d'una imatge.
     /// Desplaça els punts de la línia indicada per l'usuari per equivaldre als punts del 
     /// pla de projecció que representarà la primera imatge del nou volum.  
     QList<double *> getLastPointsPathForFirstImage();
 
     /// Mostra les polylines que delimitaran el gruix indicat per l'usuari
-    void showThichkessPolylines();
+    void showThicknessPolylines();
 
     /// S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
     void initAndFillImageDataVTK( const QList<double *> &pointsPath, vtkImageData *imageDataVTK );
@@ -90,10 +105,24 @@ private:
     ToolManager *m_toolManager;
 
     /// Punts que formaven la última polyline dibuixada per l'usuari
-    QList<double *> m_lastPolylinePoints;
+    struct InfoPointLastPolyline
+    {
+        double *point;
+        double *directorVector;
+    };
+    QList< InfoPointLastPolyline > m_lastPolylinePoints;
 
     /// Punts calculats que formen la última línia dibuixada per l'usuari
     QList<double *> m_lastPointsPath;
+
+    /// Per guardar index últim punt de cada tram i el vector director que s'haurà de seguir per desplaçar els punts anteriors
+    /// quan s'hagi de reconstruir més d'una imatge 
+    struct InfoPointsSegmentMovement
+    {
+        int idxLastPointToMove;
+        double *directorVector;
+    };
+    QList< InfoPointsSegmentMovement > m_pointsSegmentMovement;
 
     /// Número d'imatges que ha de contenir el volum de la reconstrucció
     int m_numImages;
