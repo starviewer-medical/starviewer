@@ -268,7 +268,7 @@ void CurvedMPRExtension::changeThicknessReconstruction()
         }
 
         // Per fer la reconstrucció cal que l'usuari anteriorment hagi indicat una línia
-        if ( !m_lastPointsPath.isEmpty() )
+        if ( !m_lastPolylinePoints.isEmpty() )
         {
             updateResliceWithLastPointsPath();
         }
@@ -328,25 +328,20 @@ Volume* CurvedMPRExtension::doCurvedReslice( QPointer<DrawerPolyline> polyline, 
     QList<double *> pointsPath;
     if ( calculatePointsPath )
     {
-        // Es construeix una llista amb tots els punts que hi ha sobre la polyline indicada per
-        // l'usuari i que cal tenir en compte al fer la reconstrucció
-        pointsPath = getPointsPath( polyline );
+        // Guardem els punts que ha marcat l'usuari per crear la polyline
+        // Per cada punt guardem la direcció en que s'haurà de desplaçar si s'hagués de fer una reconstrucció amb gruix
+        storeInfoPointsPolyline( polyline );
     }
 
-    // Cal tenir en compte que si ens han indicat que es vol reconstruir un volum amb més d'una imatge
-    // els punts de la línia indicada per l'usuari seran desplaçats
-    // per equivaldre als punts del pla de projecció que representarà la primera imatge.  
-    // Després s'aplicarà el desplaçament corresponent a aquests punts per generar les
-    // successives imatges.
+    // Si l'usuari vol reconstruir un volum amb més d'una imatge mostrem les polylines que delimitaran el gruix indicat 
+    /// i guardem els punts calculats per crear-les
     if ( m_numImages > 1 )
     {
-       pointsPath = getLastPointsPathForFirstImage();
-       showThicknessPolylines();
+       showThicknessPolylinesAndStorePoints();
     }
 
     // S'inicialitzen i s'emplenen les dades VTK que han de formar el volum de la reconstrucció.
-    vtkImageData *imageDataVTK = vtkImageData::New();
-    initAndFillImageDataVTK( pointsPath, imageDataVTK );
+    vtkImageData *imageDataVTK = initAndFillImageDataVTK();
     
     // Es crea i assignen les dades d'inicialització al nou volum
     Volume *reslicedVolume = new Volume;
@@ -360,21 +355,11 @@ Volume* CurvedMPRExtension::doCurvedReslice( QPointer<DrawerPolyline> polyline, 
     return reslicedVolume;
 }
 
-QList<double *> CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> polyline )
+void CurvedMPRExtension::storeInfoPointsPolyline( QPointer<DrawerPolyline> polyline )
 {
-    QList< double* > pointsList = polyline->getPointsList();
-    QList<double *> pointsPath;
-    double *previousPoint;
-    double *currentPoint;
-    double *nextPoint;
-    double *directorVector;
-    double *newLinePoint;
-
     // Netejem informació desada de la línia dibuixada anteriorment per l'usuari
-    // per guardar la dels punts actuals
     m_lastPolylinePoints.clear();
-    m_lastPointsPath.clear();
-    m_pointsSegmentMovement.clear();
+    m_directionMovementPolylinePoints.clear();
 
     // Obtenim quines són les coordenades (x,y,z) segons la vista mostrada al visor principal
     Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
@@ -382,257 +367,148 @@ QList<double *> CurvedMPRExtension::getPointsPath( QPointer<DrawerPolyline> poly
     int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
     int zIndex = mainViewer->getZIndexForView( mainViewer->getView() );
 
-    // Distància entre els píxels de les imatges que formen el volum
-    double spacing[3];
-    m_mainVolume->getSpacing( spacing );
-    double pixelsDistance = sqrt( spacing[xIndex] * spacing[xIndex] + spacing[yIndex] * spacing[yIndex] );
-    
-    //DEBUG_LOG(QString("PolyLine points size = %1").arg(pointsList.length()));
+    double *previousPoint;
+    double *currentPoint;
+    double *nextPoint;
+    double *directorVector;
 
-    int numPointsPath = -1;
+    // Guardem els punts que ha marcat l'usuari per crear la polyline
+    // Per cada punt guardem la direcció en que s'haurà de desplaçar si s'hagués de fer una reconstrucció amb gruix
+    QList< double* > pointsList = polyline->getPointsList();
 
     for ( int i = 0; i < pointsList.size(); i++)
     {
         currentPoint = pointsList.at(i);
         
-        if ( i > 0 )
-        {
-            // S'anoten tots els punts que hi ha sobre la línia que formen el punt anterior 
-            // i l'actual de la polyline indicada per l'usuari
-            // La distància entre aquests punts per defecte serà la distància entre píxels
-            directorVector = MathTools::directorVector( previousPoint, currentPoint );
-            MathTools::normalize( directorVector );
-            double distanceLine = MathTools::getDistance3D( previousPoint, currentPoint );
-            double numPointsLine = distanceLine / pixelsDistance;
-
-            //DEBUG_LOG(QString("numPointsLine = %1").arg(numPointsLine));
-
-            int j;
-            for (j = 0; j < numPointsLine - 1; j++)
-            {
-                newLinePoint = new double[3];
-                newLinePoint[xIndex] = previousPoint[xIndex] + directorVector[xIndex] * pixelsDistance * (j + 1);
-                newLinePoint[yIndex] = previousPoint[yIndex] + directorVector[yIndex] * pixelsDistance * (j + 1);
-                newLinePoint[zIndex] = previousPoint[zIndex] + directorVector[zIndex] * pixelsDistance * (j + 1);
-                
-                //DEBUG_LOG(QString("New line point [%1,%2,%3]").arg(newLinePoint[0]).arg(newLinePoint[1]).arg(newLinePoint[2]));
-                pointsPath.append( newLinePoint );
-
-                // Guardem punts calculats per la última línia dibuixada per l'usuari així
-                // si modifica el número d'imatges a reconstruir no cal tornar-los a calcular
-                addPointLastPath( newLinePoint, xIndex, yIndex, zIndex );
-
-                numPointsPath++;
-            }
-        }
-
         if ( i == 1 )
         {
-            // Guardem el primer punt indict per l'usuari i la direcció de desplaçament
-            // ja que serà necessari per dibuixar línies de referències del gruix
+            // Vector director entre el primer i el segon punt de la polyline
+            directorVector = MathTools::directorVector( previousPoint, currentPoint );
+            MathTools::normalize( directorVector );
+
+            // El primer punt s'haurà de desplaçar en direcció perpendicular a aquest vector director
             addInfoPointLastPolyline( previousPoint, directorVector, xIndex, yIndex, zIndex );
-        }
-        
-        // Guardem informació de desplaçament dels punts que toqui
-        if ( i > 0 )
-        {
-            // Guardem per cada segment quin és l'index de l'últim punt a desplaçar
-            // i en quina direcció s'hauran de desplaçar els punts anteriors.
-            int idxLastPointToMove = numPointsPath;
-            if ( (i + 1) == pointsList.size() )
-            {
-                // Si es tracta de l'últim punt de la llista llavors també li apliquem aquest desplaçament
-                idxLastPointToMove++;
-            }
-            addInfoPointsSegmentMovement( directorVector, idxLastPointToMove, xIndex, yIndex, zIndex );
-        }
-
-
-        // S'inclou a la llista el punt actual
-        if ( i == 0 
-             || previousPoint[xIndex] != currentPoint[xIndex] 
-             || previousPoint[yIndex] != currentPoint[yIndex]
-             || previousPoint[zIndex] != currentPoint[zIndex] )
-        {
-            //DEBUG_LOG(QString("append current point [%1,%2,%3]").arg(currentPoint[0]).arg(currentPoint[1]).arg(currentPoint[2]));
-            pointsPath.append( currentPoint );
-
-            // Guardem punts calculats per la última línia dibuixada per l'usuari així
-            // si modifica el número d'imatges a reconstruir no cal tornar-los a calcular
-            addPointLastPath( currentPoint, xIndex, yIndex, zIndex );
-
-            numPointsPath++;
         }
         
         if ( i > 0 )
         {
             if ( i < pointsList.size() - 1 )
             {
-                // El desplaçament dels punts finals dels segments intermitjos de la línia
-                // serà igual al vector director de la perpendicular de la línia formada pel punt anterior
+                // El desplaçament dels punts intermitjos de la polyline serà igual al vector director 
+                // de la perpendicular de la línia formada pel punt anterior
                 // i posterior a aquest.
                 nextPoint = pointsList.at(i+1);
                 directorVector = MathTools::directorVector( previousPoint, nextPoint );
                 MathTools::normalize( directorVector );
-                
-                addInfoPointsSegmentMovement( directorVector, numPointsPath, xIndex, yIndex, zIndex );
+            }
+            else
+            {
+                // L'últim punt de la polyline es tornarà a desplaçar com el primer punt
+                // en direcció perpendicular al vector director que l'uneix amb l'anterior punt
+                directorVector = MathTools::directorVector( previousPoint, currentPoint );
+                MathTools::normalize( directorVector );
             }
 
-            // Guardem els últims punts indicats per l'usuari i la direcció de desplaçament
-            // ja que serà necessari per dibuixar línies de referències del gruix
+            // Guardem el punt actual i el vector de desplaçament associat
             addInfoPointLastPolyline( currentPoint, directorVector, xIndex, yIndex, zIndex );
         }
 
         previousPoint = currentPoint;
     }
-
-    return pointsPath;
+    DEBUG_LOG(QString("-------------------"));
 }
 
-void CurvedMPRExtension::addPointLastPath( double *point, int xIndex, int yIndex, int zIndex )
-{
-    // Guardem punts calculats per la última línia dibuixada per l'usuari així
-    // si modifica el número d'imatges a reconstruir no cal tornar-los a calcular
-    double *pointLastPath = new double[3];
-
-    pointLastPath[xIndex] = point[xIndex];
-    pointLastPath[yIndex] = point[yIndex];
-    pointLastPath[zIndex] = point[zIndex];
-    
-    m_lastPointsPath.append( pointLastPath );
-}
-
-void CurvedMPRExtension::addInfoPointLastPolyline( double *point, double *directorVector, int xIndex, int yIndex, int zIndex )
+void CurvedMPRExtension::addInfoPointLastPolyline( double *p, double *dv, int xIndex, int yIndex, int zIndex )
 {
     // Guardem els últims punts indicats per l'usuari i la direcció de desplaçament
-    // ja que serà necessari per dibuixar línies de referències del gruix
-    InfoPointLastPolyline infoPointLastPolyline;
+    // que serà necessària si s'ha de fer una reconstrucció amb més d'una imatge
     
     // Coordenades del punt
-    infoPointLastPolyline.point = new double[3];
-    infoPointLastPolyline.point[xIndex] = point[xIndex];
-    infoPointLastPolyline.point[yIndex] = point[yIndex];
-    infoPointLastPolyline.point[zIndex] = point[zIndex];
+    double *point = new double[3];
+    point[xIndex] = p[xIndex];
+    point[yIndex] = p[yIndex];
+    point[zIndex] = p[zIndex];
+    m_lastPolylinePoints.append( point );
     
     // Vector de desplaçament del punt
-    infoPointLastPolyline.directorVector = new double[3];
-    infoPointLastPolyline.directorVector[xIndex] = - directorVector[yIndex];
-    infoPointLastPolyline.directorVector[yIndex] = directorVector[xIndex];
-    infoPointLastPolyline.directorVector[zIndex] = directorVector[zIndex];
+    double *directorVector = new double[3];
+    directorVector[xIndex] = - dv[yIndex];
+    directorVector[yIndex] = dv[xIndex];
+    directorVector[zIndex] = dv[zIndex];
+    m_directionMovementPolylinePoints.append( directorVector );
     
-    m_lastPolylinePoints.append( infoPointLastPolyline );
-
-    //DEBUG_LOG(QString("InfoPointLastPolyline director vector [%1,%2,%3]").arg(infoPointLastPolyline.directorVector[xIndex]).arg(infoPointLastPolyline.directorVector[yIndex]).arg(infoPointLastPolyline.directorVector[zIndex]));
-    //DEBUG_LOG(QString("InfoPointLastPolyline point [%1,%2,%3]").arg(infoPointLastPolyline.point[xIndex]).arg(infoPointLastPolyline.point[yIndex]).arg(infoPointLastPolyline.point[zIndex]));
+    DEBUG_LOG(QString("InfoPointLastPolyline director vector [%1,%2,%3]").arg(directorVector[xIndex]).arg(directorVector[yIndex]).arg(directorVector[zIndex]));
+    DEBUG_LOG(QString("InfoPointLastPolyline point [%1,%2,%3]").arg(point[xIndex]).arg(point[yIndex]).arg(point[zIndex]));
 }
 
-void CurvedMPRExtension::addInfoPointsSegmentMovement( double *directorVector, int idxLastPointToMove, int xIndex, int yIndex, int zIndex )
+
+void CurvedMPRExtension::showThicknessPolylinesAndStorePoints()
 {
-    // Guardem per cada segment quin és l'index de l'últim punt a desplaçar
-    // i en quina direcció s'hauran de desplaçar els punts anteriors
-    // En aquest cas aquesta direcció serà el vector director de la recta perpendicular al segment
-    // creat entre el punt anterior i l'actual
-    // vectorDirector(A,B) <-> vectorDirectorPerpendicular(-B,A)
-    InfoPointsSegmentMovement infoPointsSegmentMovement;
+    // Netejem informació desada anteriorment per les línies que indiquen gruix
+    m_upPolylinePoints.clear();
+    m_downPolylinePoints.clear();
 
-    // Vector director recta perpendicular
-    infoPointsSegmentMovement.directorVector = new double[3];
-    infoPointsSegmentMovement.directorVector[xIndex] = - directorVector[yIndex];
-    infoPointsSegmentMovement.directorVector[yIndex] = directorVector[xIndex];
-    infoPointsSegmentMovement.directorVector[zIndex] = directorVector[zIndex];
-    
-    // índex últim punt afegit que haurà de desplaçar-se en aquesta direcció si cal reconstruir més d'una imatge
-    infoPointsSegmentMovement.idxLastPointToMove = idxLastPointToMove; 
-    
-    m_pointsSegmentMovement.append( infoPointsSegmentMovement );
-
-    //DEBUG_LOG(QString("infoPointsSegmentMovement [%1,%2,%3, %4]").arg(infoPointsSegmentMovement.directorVector[0]).arg(infoPointsSegmentMovement.directorVector[1]).arg(infoPointsSegmentMovement.directorVector[2]).arg(infoPointsSegmentMovement.idxLastPointToMove));
-}
-
-QList<double *> CurvedMPRExtension::getLastPointsPathForFirstImage()
-{
-    QList<double *> pointsPathForFirstImage;
-    
-    // Obtenim quines són les coordenades (x,y,z) segons la vista mostrada al visor principal
-    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
-    int xIndex = mainViewer->getXIndexForView( mainViewer->getView() );
-    int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
-    int zIndex = mainViewer->getYIndexForView( mainViewer->getView() );
-
-    // Distància que caldrà desplaçar cada punt
-    double distanceMovement = m_maxThickness / 2;
-
-    // Informació de desplaçament guardada per cada tram
-    int numSegmentsProcessed = 0;
-    InfoPointsSegmentMovement infoPointsSegmentMovement = m_pointsSegmentMovement.at(numSegmentsProcessed);
-    int idxLastPointSegment = infoPointsSegmentMovement.idxLastPointToMove;
-    double *vectorDirector = infoPointsSegmentMovement.directorVector;
-    numSegmentsProcessed++;
-
-    for ( int i = 0; i < m_lastPointsPath.size(); i++)
-    {
-        if ( i == idxLastPointSegment + 1 )
-        {
-            infoPointsSegmentMovement = m_pointsSegmentMovement.at(numSegmentsProcessed);
-            idxLastPointSegment = infoPointsSegmentMovement.idxLastPointToMove;
-            vectorDirector = infoPointsSegmentMovement.directorVector;
-            numSegmentsProcessed++;
-        }
-
-        double *lastPoint = m_lastPointsPath.at(i);
-
-        // Desplacem els punts segons la direcció del vector director que li toqui al punt actual
-        double *point = new double[3];
-        point[xIndex] = lastPoint[xIndex] - ( distanceMovement * vectorDirector[xIndex] );
-        point[yIndex] = lastPoint[yIndex] - ( distanceMovement * vectorDirector[yIndex] );
-        point[zIndex] = lastPoint[zIndex] - ( distanceMovement * vectorDirector[zIndex] );
-
-        pointsPathForFirstImage.append( point );
-    }
-
-    return pointsPathForFirstImage;
-}
-
-void CurvedMPRExtension::showThicknessPolylines()
-{
     // Obtenim quines són les coordenades (x,y,z) segons la vista mostrada al visor principal
     Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
     int xIndex = mainViewer->getXIndexForView( mainViewer->getView() );
     int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
     int zIndex = mainViewer->getZIndexForView( mainViewer->getView() );
 
-    // Els punts que formaran les dues polyLines seran el resultat de desplaçar en la direcció
-    // adequada els punts de la polyline indicada per l'usuari
+    // Els punts que formaran les dues polylines d'indicació de gruix seran el resultat 
+    // de desplaçar en la direcció adequada els punts de la polyline indicada per l'usuari
     double distanceMovement = m_maxThickness / 2;
     
     for ( int i = 0; i < m_lastPolylinePoints.size(); i++)
     {
         // Informació de desplaçament guardada per cada punt de la polyline
-        InfoPointLastPolyline infoPointLastPolyline = m_lastPolylinePoints.at(i);
-        double *point = infoPointLastPolyline.point;
-        double *directorVector = infoPointLastPolyline.directorVector;
+        double *point = m_lastPolylinePoints.at(i);
+        double *directorVector = m_directionMovementPolylinePoints.at(i);
 
         double *upPolylinePoint = new double[3];
         upPolylinePoint[xIndex] = point[xIndex] + ( distanceMovement * directorVector[xIndex] );
         upPolylinePoint[yIndex] = point[yIndex] + ( distanceMovement * directorVector[yIndex] );
         upPolylinePoint[zIndex] = point[zIndex] + ( distanceMovement * directorVector[zIndex] );
         m_upPolylineThickness->addPoint( upPolylinePoint );
+        m_upPolylinePoints.append( upPolylinePoint );
 
         double *downPolylinePoint = new double[3];
         downPolylinePoint[xIndex] = point[xIndex] - ( distanceMovement * directorVector[xIndex] );
         downPolylinePoint[yIndex] = point[yIndex] - ( distanceMovement * directorVector[yIndex] );
         downPolylinePoint[zIndex] = point[zIndex] - ( distanceMovement * directorVector[zIndex] );
         m_downPolylineThickness->addPoint( downPolylinePoint );
+        m_downPolylinePoints.append( downPolylinePoint );
     }
 
     m_upPolylineThickness->update();
     m_downPolylineThickness->update();
     mainViewer->render();
+
+    DEBUG_LOG(QString("-------------------"));
+    DEBUG_LOG(QString("m_upPolylinePoints"));
+    for (int i = 0; i < m_upPolylinePoints.size(); i++ )
+    {
+        double *point = m_upPolylinePoints.at(i);
+        DEBUG_LOG(QString("Punt %1 [%2,%3,%4]").arg(i).arg(point[xIndex]).arg(point[yIndex]).arg(point[zIndex]));
+    }
+    DEBUG_LOG(QString("-------------------"));
+
+    DEBUG_LOG(QString("-------------------"));
+    DEBUG_LOG(QString("m_downPolylinePoints"));
+    for (int i = 0; i < m_downPolylinePoints.size(); i++ )
+    {
+        double *point = m_downPolylinePoints.at(i);
+        DEBUG_LOG(QString("Punt %1 [%2,%3,%4]").arg(i).arg(point[xIndex]).arg(point[yIndex]).arg(point[zIndex]));
+    }
+    DEBUG_LOG(QString("-------------------"));
 }
 
-void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPath, vtkImageData *imageDataVTK)
+vtkImageData* CurvedMPRExtension::initAndFillImageDataVTK()
 {
-    Q_ASSERT(m_mainVolume);
+    Q_ASSERT( m_mainVolume );
+
+    // S'emplena el dataset del volum amb el valor dels píxels resultat de projectar en profunditat
+    // la línia indicada per l'usuari o les N línies que caben en el gruix indicat 
+    vtkImageData *imageDataVTK = vtkImageData::New();
 
     // Obtenim quines són les coordenades (x,y,z) segons la vista mostrada al visor principal
     Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
@@ -640,9 +516,65 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
     int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
     int zIndex = mainViewer->getZIndexForView( mainViewer->getView() );
 
+    // Obtenim els punts que formen la línia que s'ha de projectar i que
+    // indica el número màxim de columnes de les imatges resultants
+    QList< double *> pointsPath;
+    double distanceMovement = 0;
+    QList< double * > firstLinePoints;
+    if ( m_numImages == 1 )
+    {
+        // Obtenim tots els punts que formen la última línia indicada per l'usuari
+        pointsPath = getPointsPath( m_lastPolylinePoints );
+    }
+    else
+    {
+        DEBUG_LOG(QString("-------------------"));
+        DEBUG_LOG(QString("Num imatges a reconstruir = %1").arg(m_numImages));
+
+        // Obtenim tots els punts que formen la línia que marca límit superior del gruix
+        QList<double *> upPolylinePointsPath = getPointsPath( m_upPolylinePoints );
+
+        DEBUG_LOG(QString("UpPolylinePointsPath = %1").arg(upPolylinePointsPath.size()));
+
+        // Obtenim tots els punts que formen la línia que marca límit inferior del gruix
+        QList<double *> downPolylinePointsPath = getPointsPath( m_downPolylinePoints );
+
+        DEBUG_LOG(QString("DownPolylinePointsPath = %1").arg(downPolylinePointsPath.size()));
+
+        // La línia que ha d'indicar el número màxim de columnes de les imatges resultat
+        // és la que té el perímetre més gran
+        pointsPath = upPolylinePointsPath;
+        if ( downPolylinePointsPath.size() > upPolylinePointsPath.size() ) 
+        {
+            pointsPath = downPolylinePointsPath;
+        }
+
+        // Cal reconstruir un volum amb més d'una imatge per tant per obtenir els punts
+        // que representarien les polylines de cada tall caldrà aplicar el següent desplaçament
+        double spacing[3];
+        m_mainVolume->getSpacing( spacing );
+        distanceMovement = sqrt( spacing[xIndex] * spacing[xIndex] + spacing[yIndex] * spacing[yIndex] );
+
+        // Els punts de referència seran els de la línia inferior, i aquests caldrà desplaçar-los
+        // en la direcció corresponent aquesta distància
+        firstLinePoints = m_downPolylinePoints;
+
+        DEBUG_LOG(QString("-------------------"));
+        DEBUG_LOG(QString("firstLinePoints"));
+        for (int i = 0; i < firstLinePoints.size(); i++ )
+        {
+            double *point = firstLinePoints.at(i);
+            DEBUG_LOG(QString("Punt %1 [%2,%3,%4]").arg(i).arg(point[xIndex]).arg(point[yIndex]).arg(point[zIndex]));
+        }
+        DEBUG_LOG(QString("-------------------"));
+    }
+
     // Inicialització les dades VTK que formaran el volum de la reconstrucció.
     double maxX = (double) pointsPath.length();
     double maxY = m_mainVolume->getDimensions()[zIndex];
+
+    DEBUG_LOG(QString("maxX = %1").arg(maxX));
+    DEBUG_LOG(QString("maxY = %1").arg(maxY));
     
     imageDataVTK->SetOrigin( .0, .0, .0 );
     imageDataVTK->SetSpacing( 1., 1., 1. );
@@ -651,68 +583,53 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
     imageDataVTK->SetScalarTypeToShort();
     imageDataVTK->SetNumberOfScalarComponents(1);
     imageDataVTK->AllocateScalars();
-
-    // S'emplena el dataset del volum amb el valor dels píxels resultat de projectar en profunditat
-    // la línia indicada per l'usuari
-
-    // Cal tenir en compte que si ens han indicat que es vol reconstruir un volum amb més d'una imatge
-    // els punts de la línia indicada per l'usuari han estat desplaçats per equivaldre als punts
-    // del pla de projecció que representarà la primera imatge.  
-    // Així doncs si és el cas, caldrà aplicar el desplaçament següent als punts calculats per generar les
-    // successives imatges i en la direcció corresponent en cada cas
-    double distanceMovement = 0;
-    if ( m_numImages > 1 )
-    {
-        // Distància entre els píxels de les imatges que formen el volum
-        double spacing[3];
-        m_mainVolume->getSpacing( spacing );
-
-        distanceMovement = sqrt( spacing[xIndex] * spacing[xIndex] + spacing[yIndex] * spacing[yIndex] );
-    }
-
+    
     // Per saber espai que ens hem de moure en profunditat en cada iteració
     double spacing = m_mainVolume->getSpacing()[zIndex];
 
-    // Informació de desplaçament guardada per cada tram
-    int numSegmentsProcessed = 0;
-    InfoPointsSegmentMovement infoPointsSegmentMovement = m_pointsSegmentMovement.at(numSegmentsProcessed);
-    int idxLastPointSegment = infoPointsSegmentMovement.idxLastPointToMove;
-    double *vectorDirector = infoPointsSegmentMovement.directorVector;
-    numSegmentsProcessed++;
-
-    // Obtenim el valor dels pixels per tots els punts indicats en cada profunditat 
-    // i ho fem a la vegada per les imatges que calgui reconstruir
-    for ( int x = 0; x < pointsPath.size(); x++ )
+    // Procediment:
+    // Per cada imatge a obtenir s'obté els punts que formen la línia de projecció
+    // i obtenim el valor de cada punt a cada profunditat, creant així les N imatges
+    // que han de composar el volum reconstruït
+    int idxImage = 0;
+    while ( idxImage < m_numImages )
     {
-        double *point = pointsPath.at(x);
-
-        // Direcció de desplaçament que li correspon al punt actual
-        if ( x == idxLastPointSegment + 1 )
+        if (idxImage > 0 )
         {
-            infoPointsSegmentMovement = m_pointsSegmentMovement.at(numSegmentsProcessed);
-            idxLastPointSegment = infoPointsSegmentMovement.idxLastPointToMove;
-            vectorDirector = infoPointsSegmentMovement.directorVector;
-            numSegmentsProcessed++;
+            // Obtenim els punts que composen la línia a projectar per la imatge actual
+            QList< double * > linePoints;
+            for ( int p = 0; p < firstLinePoints.size(); p++ )
+            {
+                double *referencePoint = firstLinePoints.at(p);
+                double *directionVector = m_directionMovementPolylinePoints.at(p);
+                
+                double *linePoint = new double[3];
+                linePoint[xIndex] = referencePoint[xIndex] + ( distanceMovement * directionVector[xIndex] * idxImage );
+                linePoint[yIndex] = referencePoint[yIndex] + ( distanceMovement * directionVector[yIndex] * idxImage );
+                linePoint[zIndex] = referencePoint[zIndex] + ( distanceMovement * directionVector[zIndex] * idxImage );
+
+                linePoints.append( linePoint );
+            }
+
+            DEBUG_LOG(QString("-------------------"));
+            DEBUG_LOG(QString("linePoints"));
+            for (int i = 0; i < linePoints.size(); i++ )
+            {
+                double *point = linePoints.at(i);
+                DEBUG_LOG(QString("Punt %1 [%2,%3,%4]").arg(i).arg(point[xIndex]).arg(point[yIndex]).arg(point[zIndex]));
+            }
+            DEBUG_LOG(QString("-------------------"));
+            
+            // Obtenim tots els punts que formen la línia delimitada per aquests punts
+            pointsPath = getPointsPath( linePoints );
         }
 
-        double xDesplacement = distanceMovement * vectorDirector[xIndex];
-        double yDesplacement = distanceMovement * vectorDirector[yIndex];
-        
-        // Es calcula el valor del voxel per cada imatge que hagim de reconstruïr i 
-        // s'apunta el valor a la posició corresponent del volum de dades
-        int idxImage = 0;
-        double initialPointX = point[xIndex];
-        double initialPointY = point[yIndex];
-        while ( idxImage < m_numImages )
+        for ( int x = 0; x < pointsPath.size(); x++ )
         {
-            // Es calcula el valor del voxel segons la imatge que estiguem reconstruïnt
-            // Per tant, si és necessari s'aplicarà el desplaçament calculat
-            point[xIndex] = initialPointX + ( xDesplacement * idxImage );
-            point[yIndex] = initialPointY + ( yDesplacement * idxImage );
-            
+            double *point = pointsPath.at(x);
+
             int y=0;
             double depth = m_mainVolume->getOrigin()[zIndex];
-            
             while ( depth <= maxY )
             {
                 // Es calcula el valor del voxel allà on es troba el punt actual a la profunditat 
@@ -731,9 +648,75 @@ void CurvedMPRExtension::initAndFillImageDataVTK(const QList<double *> &pointsPa
                 depth += spacing;
                 y++;
             }
-            idxImage++;
         }
+        idxImage++;
     }
+
+    return imageDataVTK;
+}
+
+QList<double *> CurvedMPRExtension::getPointsPath( QList<double *> linePoints )
+{
+    QList<double *> pointsPath;
+
+    // Obtenim quines són les coordenades (x,y,z) segons la vista mostrada al visor principal
+    Q2DViewer *mainViewer = m_viewersLayout->getViewerWidget(0)->getViewer();
+    int xIndex = mainViewer->getXIndexForView( mainViewer->getView() );
+    int yIndex = mainViewer->getYIndexForView( mainViewer->getView() );
+    int zIndex = mainViewer->getZIndexForView( mainViewer->getView() );
+
+    // Distància entre els píxels de les imatges que formen el volum
+    double spacing[3];
+    m_mainVolume->getSpacing( spacing );
+    double pixelsDistance = sqrt( spacing[xIndex] * spacing[xIndex] + spacing[yIndex] * spacing[yIndex] );
+    
+    double *previousPoint;
+    double *currentPoint;
+    double *directorVector;
+    double *newLinePoint;
+
+    // Obtenim tots els punts que formen la línia delimitada pels punts passats per paràmetre
+    for ( int i = 0; i < linePoints.size(); i++)
+    {
+        currentPoint = linePoints.at(i);
+        
+        if ( i > 0 )
+        {
+            // S'anoten tots els punts que hi ha sobre la línia que formen el punt anterior 
+            // i l'actual de la línia indicada per paràmetre
+            // La distància entre aquests punts per defecte serà la distància entre píxels
+            directorVector = MathTools::directorVector( previousPoint, currentPoint );
+            MathTools::normalize( directorVector );
+            double distanceLine = MathTools::getDistance3D( previousPoint, currentPoint );
+            double numPointsLine = distanceLine / pixelsDistance;
+
+            //DEBUG_LOG(QString("numPointsLine = %1").arg(numPointsLine));
+            for (int j = 0; j < numPointsLine - 1; j++)
+            {
+                newLinePoint = new double[3];
+                newLinePoint[xIndex] = previousPoint[xIndex] + directorVector[xIndex] * pixelsDistance * (j + 1);
+                newLinePoint[yIndex] = previousPoint[yIndex] + directorVector[yIndex] * pixelsDistance * (j + 1);
+                newLinePoint[zIndex] = previousPoint[zIndex] + directorVector[zIndex] * pixelsDistance * (j + 1);
+                
+                //DEBUG_LOG(QString("New line point [%1,%2,%3]").arg(newLinePoint[0]).arg(newLinePoint[1]).arg(newLinePoint[2]));
+                pointsPath.append( newLinePoint );
+            }
+        }
+
+        // S'inclou a la llista el punt actual
+        if ( i == 0 
+             || previousPoint[xIndex] != currentPoint[xIndex] 
+             || previousPoint[yIndex] != currentPoint[yIndex]
+             || previousPoint[zIndex] != currentPoint[zIndex] )
+        {
+            //DEBUG_LOG(QString("append current point [%1,%2,%3]").arg(currentPoint[0]).arg(currentPoint[1]).arg(currentPoint[2]));
+            pointsPath.append( currentPoint );
+        }
+        
+        previousPoint = currentPoint;
+    }
+
+    return pointsPath;
 }
 
 void CurvedMPRExtension::changeSelectedViewer( Q2DViewerWidget *selectedWidget )
