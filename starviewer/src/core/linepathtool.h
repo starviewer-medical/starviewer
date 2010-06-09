@@ -47,6 +47,9 @@ private:
     /// Ens serveix per a veure dinàmicament l'evolució de la polilínia
     void simulatePolyline();
 
+    /// Elimina la polyLine dibuixada
+    void deletePolyLine();
+
 private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
@@ -55,6 +58,9 @@ private:
     QPointer<DrawerPolyline> m_polyline;
 
     int m_numPointsAdded;
+
+    /// Indica si cal esborrar la polyline dibuixada anteriorment.
+    bool m_deletePreviousPolyline;
 };
 }  //  end namespace udg
 
