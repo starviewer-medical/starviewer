@@ -359,6 +359,7 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
     else if( toolName == "LinePathTool" )
     {
         toolAction->setText( tr("Line Path") );
+        toolAction->setIcon( QIcon(":/images/linePath.png") );
         toolAction->setStatusTip( tr("Enable/Disable line path tool") );
     }
     else
