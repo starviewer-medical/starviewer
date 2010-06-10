@@ -30,23 +30,6 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
     m_treeRetrieveStudy->setColumnHidden( 9 , true );//Conte el PACSJobID 
 }
 
-unsigned int QOperationStateScreen::getActiveOperationsCount()
-{
-    QList<QTreeWidgetItem *> retrieveList( m_treeRetrieveStudy->findItems( "*" , Qt::MatchWildcard, 0 ) );
-    QTreeWidgetItem *item;
-    unsigned int finalizedItems = 0;
-
-    for ( int i = 0; i < retrieveList.count();i++ )
-    {
-        item = retrieveList.at( i );
-        if ( ! isOperationFinalized(item->text(0)) )
-        {
-            ++finalizedItems;
-        }
-    }
-    return finalizedItems;
-}
-
 void QOperationStateScreen::setPacsManager(PacsManager *pacsManager)
 {
     m_pacsManager = pacsManager;
@@ -79,11 +62,6 @@ void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
         default:
             break;
     }
-}
-
-bool QOperationStateScreen::isOperationFinalized(const QString &message)
-{
-    return  message == tr("RETRIEVED") || message == tr("STORED") || message == tr("ERROR") || message == tr("CANCELLED");
 }
 
 void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)

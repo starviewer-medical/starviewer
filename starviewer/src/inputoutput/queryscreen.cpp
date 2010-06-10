@@ -157,6 +157,8 @@ void QueryScreen::createConnections()
     {
         connect(m_risRequestManager, SIGNAL(retrieveStudyFromRISRequest(QString, Study*)), SLOT(retrieveStudyFromRISRequest(QString, Study*)));
     }
+
+    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob *)), SLOT(newPACSJobEnqueued(PACSJob*)));
     #endif
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
@@ -207,20 +209,6 @@ void QueryScreen::checkDatabaseImageIntegrity()
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
     {
         ERROR_LOG("S'ha produït un error esborrant un estudi que no s'havia acabat de descarregar en la última execució");
-    }
-}
-
-void QueryScreen::updateOperationsInProgressMessage()
-{
-    if (m_operationStateScreen->getActiveOperationsCount() > 0)
-    {
-        m_operationAnimation->show();
-        m_labelOperation->show();
-    }
-    else
-    {
-        m_operationAnimation->hide();
-        m_labelOperation->hide();
     }
 }
 
@@ -488,6 +476,26 @@ void QueryScreen::studyRetrieveStartedSlot(QString studyInstanceUID)
         //és un estudi dels que ens han demanat des del mètode públic
 
         emit studyRetrieveStarted(studyInstanceUID);
+    }
+}
+
+void QueryScreen::newPACSJobEnqueued(PACSJob *pacsJob)
+{
+    if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
+    {
+        m_operationAnimation->show();
+        m_labelOperation->show();
+        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(pacsJobFinished(PACSJob*)));
+    }
+}
+
+void QueryScreen::pacsJobFinished(PACSJob *)
+{
+    if (!m_pacsManager->isExecutingPACSJob(PACSJob::SendDICOMFilesToPACSJobType) && 
+        !m_pacsManager->isExecutingPACSJob(PACSJob::RetrieveDICOMFilesFromPACSJobType))
+    {
+        m_operationAnimation->hide();
+        m_labelOperation->hide();
     }
 }
 

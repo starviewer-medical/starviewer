@@ -106,8 +106,6 @@ private slots:
      */
     void refreshTab( int index );
 
-    void updateOperationsInProgressMessage();
-
     /// Mostra/amaga els camps de cerca avançats
     void setAdvancedSearchVisible(bool visible);
 
@@ -135,6 +133,14 @@ private slots:
 
     ///Slot que s'activa quan s'inicia la descàrrega d'un estudi
     void studyRetrieveStartedSlot(QString studyInstanceUID);
+
+    /** Slot que s'activa quan s'ha encuat un nou PACSJob si aquest és d'enviament o descarrega de fitxers es mostra el gif animat que indica que
+      * s'estan processant peticions*/
+    void newPACSJobEnqueued(PACSJob *pacsJob);
+
+    /**Slot que s'activa quan un PACSJob ha finalitzat, es comprova si la PacsManager està executant més jobs de descàrrega o enviament
+      *si no n'està executant cap més s'amaga el gif animat que indica que s'està processant una petició*/
+    void pacsJobFinished(PACSJob *pacsJob);
 
 private:
 

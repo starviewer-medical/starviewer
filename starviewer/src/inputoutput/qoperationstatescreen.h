@@ -29,12 +29,8 @@ Q_OBJECT
 public:
     QOperationStateScreen( QWidget *parent = 0 );
 
-    /// Retorna el núm. d'operacions que s'estan executant
-    unsigned int getActiveOperationsCount();
-
     ///Estableix instància de PacsManager que s'encarrega de fer les peticions als PACS
     void setPacsManager(PacsManager *pacsManager);
-
 
 protected :
     /** Event que s'activa al tancar al rebren un event de tancament
@@ -42,14 +38,6 @@ protected :
      */
     void closeEvent( QCloseEvent* ce );
 
-private:
-    /// Crea les connexions pels signals i slots
-    void createConnections();
-
-    /// Indica si una operació es pot considerar com a finalitzada a partir del seu missatge d'estat
-    bool isOperationFinalized(const QString &message);
-
-//nou
 private slots:
     
     ///Slot que s'activa quan s'ha encuat un nou PACSJob insereix al QTreeWidget la informació del nou job i la posa com a Pedent de realitzar
@@ -75,6 +63,8 @@ private:
     PacsManager *m_pacsManager;
 
 private:
+    /// Crea les connexions pels signals i slots
+    void createConnections();
 
     ///Afegeix al QTreeWidget el nou job encuat, i el mostra
     void insertNewPACSJob(PACSJob *pacsJob);
