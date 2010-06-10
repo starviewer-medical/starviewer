@@ -14,11 +14,11 @@
 
 #include "patient.h"
 #include "pacsdevice.h"
+#include "pacsjob.h"
 
 namespace udg {
 
 class DicomMask;
-class PACSJob;
 
 /** Classe manager que ens permet comunicar-nos amb el PACS
 */
@@ -46,6 +46,9 @@ public:
 
     ///Encua un PACSJob per a que es processi
     void enqueuePACSJob(PACSJob *pacsJob);
+
+    ///Indica si s'executen peticions del tipus de PACSJob indicat
+    bool isExecutingPACSJob(PACSJob::PACSJobType pacsJobType);
 
 signals:
 

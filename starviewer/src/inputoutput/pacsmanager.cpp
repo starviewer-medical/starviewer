@@ -133,4 +133,20 @@ void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
     emit newPACSJobEnqueued(pacsJob);
 }
 
+bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
+{
+    switch (pacsJobType)
+    {
+        case PACSJob::SendDICOMFilesToPACSJobType:
+            return !m_sendDICOMFilesToPACSWeaver->isIdle();
+            break;
+        case PACSJob::RetrieveDICOMFilesFromPACSJobType:
+            return !m_retrieveDICOMFilesFromPACSWeaver->isIdle();
+            break;
+        default:
+            ERROR_LOG("Tipus de job in vàlid");
+            return false;
+    }
+}
+
 }; //end udg namespace
