@@ -192,7 +192,7 @@ void RetrieveDICOMFilesFromPACSJob::createRetrieveDICOMFilesConnections(LocalDat
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( save(Patient *) ), Qt::DirectConnection);
 
 	//Connexió que s'esborrarà un estudi per alliberar espai
-	connect(localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
+	//connect(localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
 
     //Connexions per finalitzar els threads
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), fillersThread, SLOT( quit() ), Qt::DirectConnection);
