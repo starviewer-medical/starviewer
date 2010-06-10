@@ -246,7 +246,7 @@ void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, Study *studyToRe
         retrievePriorityJob);
 
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PacsJobStarted(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobStarted(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJob*)));
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
 
     m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionsAfterRetrieve);
