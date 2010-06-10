@@ -28,6 +28,9 @@ class StatsWatcher;
 class QCreateDicomdir;
 class Study;
 class QWidgetSelectPacsToStoreDicomImage;
+class PACSJob;
+class SendDICOMFilesToPACSJob;
+class PacsManager;
 
 /** 
  * Widget en el que controla les operacions d'entrada/sortida de la base de dades local
@@ -41,6 +44,9 @@ public:
     QInputOutputLocalDatabaseWidget(QWidget *parent = 0);
     ~QInputOutputLocalDatabaseWidget();
 
+    ///Especifiquem l'instància de PacsManager utilitza per les operacions amb el PACS
+    void setPacsManager(PacsManager *pacsManager);
+
     ///Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask);
 
@@ -53,6 +59,9 @@ public:
 
     ///Neteja els resultats que es mostren de la cerca
     void clear();
+
+    ///Envia les imatges passades per paràmetre al PACS especificat
+    void sendDICOMFilesToPACS(PacsDevice pacsDevice, QList<Image*> images);
 
 public slots:
     ///Emet signal selectedPatients indicant que s'han seleccionat estudis per ser visualitzats
@@ -75,14 +84,6 @@ signals:
     /// Afegim un segon paràmetre per indicar si volem fer un "view" o únicament carregar en background les dades de pacient i prou
     void viewPatients(QList<Patient*> patientsToView, bool onlyLoad);
 
-    /**Signal indicant que s'han d'enviar el PACS els objectes que compleixin la màscara.
-      *El primer paràmetre indica l'estudi al que pertany l'objecte a guardar, i en segon lloc la màscara per poder especificar si passar tot l'estudi o una
-      *sèrie de l'estudi, o només una imatge*/
-    /*TODO: S'hauria de passar un objecte study que contingués només les imatges a guardar del PACS, però degut a que Operation que és l'objecte que es passa
-        a QExecuteOperationThread per indicar l'operació de guardar objectes el PACS, no se li pot especificar una llista d'objectes DICOM, sinó que se
-        li ha d'especificar la màscara dels objectes que s'han de guardar, enviem las màscara*/
-    void storeDicomObjectsToPacs(PacsDevice pacsDevice, Study *study, DicomMask dicomMask);
-
 private:
     ///Crea les connexions entre signals i slots
     void createConnections();
@@ -97,6 +98,9 @@ private:
     // TODO Aquesta responsabilitat d'esborrar els estudis vells al iniciar-se l'aplicació s'hauria de 
     // traslladar a un altre lloc, no és responsabilitat d'aquesta inferfície
     void deleteOldStudies();
+
+    ///Retorna totes les imatges d'un pacient
+    QList<Image*> getAllImagesFromPatient(Patient *patient);
 
 private slots:
     ///Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
@@ -130,15 +134,19 @@ private slots:
     void qSplitterPositionChanged();
 
     ///Guarda els estudis seleccionats al PACS que l'usuari ha seleccionat
-    void storeSelectedStudyiesToSelectedPacs();
+    void sendSelectedStudiesToSelectedPacs();
+
+    ///Slot que s'activa quan un SendDICOMFilesToPACSJob acaba
+    void sendDICOMFilesToPACSJobFinished(PACSJob *);
 
 private:
+
     QMenu m_contextMenuQStudyTreeWidget;
     QDeleteOldStudiesThread m_qdeleteOldStudiesThread;
     QCreateDicomdir *m_qcreateDicomdir;
     StatsWatcher *m_statsWatcher;
-
     QWidgetSelectPacsToStoreDicomImage *m_qwidgetSelectPacsToStoreDicomImage;
+    PacsManager *m_pacsManager;
 };
 
 };// end namespace udg

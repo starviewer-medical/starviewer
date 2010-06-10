@@ -19,6 +19,8 @@
 #include "qcreatedicomdir.h"
 #include "inputoutputsettings.h"
 #include "qwidgetselectpacstostoredicomimage.h"
+#include "pacsmanager.h"
+#include "senddicomfilestopacsjob.h"
 
 namespace udg
 {
@@ -75,7 +77,7 @@ void QInputOutputLocalDatabaseWidget::createConnections()
 
     ///Si movem el QSplitter capturem el signal per guardar la seva posició
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
-    connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(storeSelectedStudyiesToSelectedPacs()));
+    connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(sendSelectedStudiesToSelectedPacs()));
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
@@ -108,6 +110,11 @@ void QInputOutputLocalDatabaseWidget::clear()
 {
     m_studyTreeWidget->clear();
     m_seriesListWidget->clear();
+}
+
+void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
+{
+    m_pacsManager = pacsManager;
 }
 
 void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
@@ -417,6 +424,21 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudies()
     }
 }
 
+QList<Image*> QInputOutputLocalDatabaseWidget::getAllImagesFromPatient(Patient *patient)
+{
+    QList<Image*> images;
+
+    foreach(Study *study, patient->getStudies())
+    {
+        foreach(Series *series, study->getSeries())
+        {
+            images.append(series->getImages());
+        }
+    }
+
+    return images;
+}
+
 void QInputOutputLocalDatabaseWidget::deleteOldStudiesThreadFinished()
 {
     showDatabaseManagerError(m_qdeleteOldStudiesThread.getLastError(), tr("deleting old studies"));
@@ -427,13 +449,55 @@ void QInputOutputLocalDatabaseWidget::qSplitterPositionChanged()
     Settings().saveGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter );
 }
 
-void QInputOutputLocalDatabaseWidget::storeSelectedStudyiesToSelectedPacs()
+void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
 {
     foreach(PacsDevice pacsDevice, m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
     {
         foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
         {
-            emit storeDicomObjectsToPacs(pacsDevice, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()), dicomMask);
+            LocalDatabaseManager localDatabaseManager;
+            Patient *patient = localDatabaseManager.retrieve(dicomMask);
+
+            if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
+            {
+                ERROR_LOG(QString("Error a la base de dades intentar obtenir els estudis que s'han d'enviar al PACS, Error: %1; StudyUID: %2")
+                                  .arg( localDatabaseManager.getLastError() )
+                                  .arg( dicomMask.getStudyUID() ));
+
+                QString message = tr("An error ocurred with database, preparing de the DICOM files to send. The DICOM files won't be sent to PACS.");
+                message += tr("\nClose all %1 windows and try again."
+                         "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+                QMessageBox::critical(this, ApplicationNameString, message);
+            }
+            else
+            {
+                sendDICOMFilesToPACS(pacsDevice, getAllImagesFromPatient(patient));
+            }
+        }
+    }
+}
+
+void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice, QList<Image*> images)
+{
+    SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = new SendDICOMFilesToPACSJob(pacsDevice, images);
+    connect(sendDICOMFilesToPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(sendDICOMFilesToPACSJobFinished(PACSJob*)));
+    m_pacsManager->enqueuePACSJob(sendDICOMFilesToPACSJob);
+}
+
+void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *pacsJob)
+{
+    SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob );
+
+    if (sendDICOMFilesToPACSJob->getStatus() != PACSRequestStatus::OkSend)
+    {
+        if (sendDICOMFilesToPACSJob->getStatus() == PACSRequestStatus::WarningSend ||
+            sendDICOMFilesToPACSJob->getStatus() == PACSRequestStatus::SomeImagesFailedSend)
+        {
+            QMessageBox::warning(this, ApplicationNameString, sendDICOMFilesToPACSJob->getStatusDescription());
+        }
+        else
+        {
+            QMessageBox::critical(this, ApplicationNameString, sendDICOMFilesToPACSJob->getStatusDescription());
         }
     }
 }
@@ -449,7 +513,6 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
     {
         case LocalDatabaseManager::Ok:
             return false;
-
         case LocalDatabaseManager::DatabaseLocked:
             message += tr("The database is blocked by another process.");
             message += tr("\nClose all %1 windows and try again."

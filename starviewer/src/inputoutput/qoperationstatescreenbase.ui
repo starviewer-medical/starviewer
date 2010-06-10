@@ -87,7 +87,7 @@
      </column>
      <column>
       <property name="text">
-       <string>StudyUID</string>
+       <string>PACSJobID</string>
       </property>
      </column>
      <column>

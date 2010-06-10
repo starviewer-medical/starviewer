@@ -22,10 +22,10 @@
 #include "querypacs.h"
 #include "pacsdevicemanager.h"
 #include "study.h"
-#include "qoperationstatescreen.h"
 #include "localdatabasemanager.h"
 #include "pacsmanager.h"
 #include "harddiskinformation.h"
+#include "retrievedicomfilesfrompacsjob.h"
 
 namespace udg
 {
@@ -43,8 +43,6 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
     m_statsWatcher->addClicksCounter(m_retrievAndViewButton);
     m_statsWatcher->addClicksCounter(m_retrieveButton);
 
-    m_pacsManager = new PacsManager();
-
     //Preparem el QMovie per indicar quan s'estan fent consultes al PACS
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
@@ -55,6 +53,8 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 
     //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
     m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
+
+    createConnections();
 }
 
 QInputOutputPacsWidget::~QInputOutputPacsWidget()
@@ -75,53 +75,6 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_retrievAndViewButton, SIGNAL(clicked()), SLOT(retrieveAndViewSelectedStudies()));
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
 
-    //connecta els signals el qexecute operation thread amb els de qretrievescreen, per coneixer quant s'ha descarregat una imatge, serie, estudi, si hi ha error, etc..
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInRetrieve(QString, QString, QExecuteOperationThread::RetrieveError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), m_qoperationStateScreen, SLOT(setErrorOperation(QString)));
-
-    connect(&m_qexecuteOperationThread, SIGNAL(setOperationFinished(QString)), m_qoperationStateScreen, SLOT(setOperationFinished(QString)));
-
-    connect(&m_qexecuteOperationThread, SIGNAL(setOperating(QString)), m_qoperationStateScreen, SLOT(setOperating(QString)));
-    connect(&m_qexecuteOperationThread, SIGNAL(imageCommit(QString, int)), m_qoperationStateScreen, SLOT(imageCommit(QString, int)));
-    connect(&m_qexecuteOperationThread, SIGNAL(currentProcessingStudyImagesRetrievedChanged(int)), m_qoperationStateScreen, SLOT(setRetrievedImagesToCurrentProcessingStudy(int)));
-    connect(&m_qexecuteOperationThread, SIGNAL(seriesCommit(QString)), m_qoperationStateScreen, SLOT(seriesCommit(QString)));
-    connect(&m_qexecuteOperationThread, SIGNAL(newOperation(Operation *)), m_qoperationStateScreen, SLOT(insertNewOperation(Operation *)));
-    connect(&m_qexecuteOperationThread, SIGNAL(studyWillBeDeleted(QString)), SIGNAL(studyWillBeDeletedFromDatabase(QString)));
-    connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), m_qoperationStateScreen, SLOT(setCancelledOperation(QString)));
-
-    connect(&m_qexecuteOperationThread, SIGNAL(retrieveFinished(QString)), SIGNAL(studyRetrieveFinished(QString)));
-    connect(&m_qexecuteOperationThread, SIGNAL(retrieveStarted(QString)), SIGNAL(studyRetrieveStarted(QString)));
-
-    // Label d'informació (cutre-xapussa)
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), SIGNAL(operationStateChange()));
-    connect(&m_qexecuteOperationThread, SIGNAL(errorInRetrieve(QString, QString, QExecuteOperationThread::RetrieveError)), SIGNAL(operationStateChange()));
-    connect(&m_qexecuteOperationThread, SIGNAL(setOperationFinished(QString)), SIGNAL(operationStateChange()));
-    connect(&m_qexecuteOperationThread, SIGNAL(newOperation(Operation *)), SIGNAL(operationStateChange()));
-    connect(&m_qexecuteOperationThread, SIGNAL(setCancelledOperation(QString)), SIGNAL(operationStateChange()));
-
-    //connect tracta els errors de connexió al PACS, al descarregar/Guardar imatges
-    connect (&m_qexecuteOperationThread, SIGNAL(errorInRetrieve(QString, QString, QExecuteOperationThread::RetrieveError)), SLOT(showQExecuteOperationThreadRetrieveError(QString, QString, QExecuteOperationThread::RetrieveError)));
-    connect (&m_qexecuteOperationThread, SIGNAL(errorInStore(QString, QString, QExecuteOperationThread::StoreError)), SLOT(showQExecuteOperationThreadStoreError(QString, QString, QExecuteOperationThread::StoreError)));
-
-    //connect tracta els warning de connexió al PACS, al descarregar imatges
-    connect (&m_qexecuteOperationThread, SIGNAL(warningInRetrieve(QString, QString, QExecuteOperationThread::RetrieveWarning)), SLOT(showQExecuteOperationThreadRetrieveWarning(QString, QString, QExecuteOperationThread::RetrieveWarning)));
-    connect (&m_qexecuteOperationThread, SIGNAL(warningInStore(QString, QString, QExecuteOperationThread::StoreWarning)), SLOT(showQExecuteOperationThreadStoreWarning(QString, QString, QExecuteOperationThread::StoreWarning)));
-
-    // Connecta el signal que emet qexecuteoperationthread per visualitzar un estudi amb aquesta classe
-    connect(&m_qexecuteOperationThread, SIGNAL(viewStudy(QString, QString, QString)), this, SIGNAL(viewRetrievedStudy(QString)), Qt::QueuedConnection);
-    // Propaga el signal que emet qexecuteoperationthread per carregar un estudi
-    connect(&m_qexecuteOperationThread, SIGNAL(loadStudy(QString, QString, QString)), SIGNAL(loadRetrievedStudy(QString)), Qt::QueuedConnection);   
-
-    connect(m_pacsManager, SIGNAL(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)), SLOT(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)));
-    connect(m_pacsManager, SIGNAL(querySeriesResultsReceived(QString, QList<Series*>)), SLOT(querySeriesResultsReceived(QString , QList<Series*>)));
-    connect(m_pacsManager, SIGNAL(queryImageResultsReceived(QString, QString, QList<Image*>)), SLOT(queryImageResultsReceived(QString , QString ,QList<Image*>)));
-
-    connect(m_pacsManager, SIGNAL(queryFinished()), SLOT(queryFinished()));
-
-    connect(m_pacsManager, SIGNAL(errorQueryingStudy(PacsDevice)), SLOT(errorQueryingStudy(PacsDevice)));
-    connect(m_pacsManager, SIGNAL(errorQueryingSeries(QString, PacsDevice)), SLOT(errorQueryingSeries(QString, PacsDevice)));
-    connect(m_pacsManager, SIGNAL(errorQueryingImage(QString, QString, PacsDevice)), SLOT(errorQueryingImage(QString, QString, PacsDevice)));
-
     connect(m_cancelQueryButton, SIGNAL(clicked()), SLOT(cancelCurrentQueries()));
 }
 
@@ -136,6 +89,21 @@ void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 
     m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget); //Especifiquem que es el menu del dicomdir
+}
+
+void QInputOutputPacsWidget::setPacsManager(PacsManager *pacsManager)
+{
+    m_pacsManager = pacsManager;
+
+    connect(m_pacsManager, SIGNAL(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)), SLOT(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)));
+    connect(m_pacsManager, SIGNAL(querySeriesResultsReceived(QString, QList<Series*>)), SLOT(querySeriesResultsReceived(QString , QList<Series*>)));
+    connect(m_pacsManager, SIGNAL(queryImageResultsReceived(QString, QString, QList<Image*>)), SLOT(queryImageResultsReceived(QString , QString ,QList<Image*>)));
+
+    connect(m_pacsManager, SIGNAL(queryFinished()), SLOT(queryFinished()));
+
+    connect(m_pacsManager, SIGNAL(errorQueryingStudy(PacsDevice)), SLOT(errorQueryingStudy(PacsDevice)));
+    connect(m_pacsManager, SIGNAL(errorQueryingSeries(QString, PacsDevice)), SLOT(errorQueryingSeries(QString, PacsDevice)));
+    connect(m_pacsManager, SIGNAL(errorQueryingImage(QString, QString, PacsDevice)), SLOT(errorQueryingImage(QString, QString, PacsDevice)));
 }
 
 void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQuery)
@@ -165,35 +133,9 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
     }
 }
 
-void QInputOutputPacsWidget::storeDicomObjectsToPacs(PacsDevice pacsToStore, Study* studyToStore, DicomMask dicomMaskObjectsToStore)
-{
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    Operation storeStudyOperation;
-
-    storeStudyOperation.setPatientName(studyToStore->getParentPatient()->getFullName());
-    storeStudyOperation.setPatientID(studyToStore->getParentPatient()->getID());
-    storeStudyOperation.setStudyUID(studyToStore->getInstanceUID());
-    storeStudyOperation.setStudyID(studyToStore->getID());
-    storeStudyOperation.setPriority(Operation::Low);
-    storeStudyOperation.setOperation(Operation::Move);
-    storeStudyOperation.setDicomMask(dicomMaskObjectsToStore);
-    storeStudyOperation.setPacsDevice(pacsToStore);
-
-    m_qexecuteOperationThread.queueOperation(storeStudyOperation);
-
-    QApplication::restoreOverrideCursor();
-}
-
 void QInputOutputPacsWidget::clear()
 {
     m_studyTreeWidget->clear();
-}
-
-void QInputOutputPacsWidget::setQOperationStateScreen(QOperationStateScreen *qoperationStateScreen)
-{
-    m_qoperationStateScreen = qoperationStateScreen;
-
-    createConnections();
 }
 
 void QInputOutputPacsWidget::expandSeriesOfStudy(QString studyInstanceUID)
@@ -232,7 +174,7 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
 
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(None, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
+        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyUID()), dicomMask, None);
     }
 }
 
@@ -247,7 +189,7 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
 
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(View, getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), dicomMask, m_studyTreeWidget->getStudy(dicomMask.getStudyUID()));
+        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyUID()), dicomMask, View);
     }
 }
 
@@ -257,48 +199,57 @@ void QInputOutputPacsWidget::cancelCurrentQueries()
     setQueryInProgress(false);
 }
 
-void QInputOutputPacsWidget::retrieve(RetrieveActions actionAfterRetrieve, QString pacsIdToRetrieve, DicomMask maskStudyToRetrieve, Study *studyToRetrieve)
+void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobStarted(PACSJob *pacsJob)
 {
-    QString defaultSeriesUID;
-    Operation operation;
-    PacsDevice pacs;
+    emit studyRetrieveStarted((dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob))->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+}
 
-    QApplication::setOverrideCursor(QCursor (Qt::WaitCursor));
+void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
+{
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob);
 
-    //busquem els paràmetres del pacs del qual volem descarregar l'estudi
-    pacs = PacsDeviceManager().getPACSDeviceByID(pacsIdToRetrieve);
-
-    //definim l'operació
-    operation.setPacsDevice(pacs);
-    operation.setDicomMask(maskStudyToRetrieve);
-    switch( actionAfterRetrieve )
+    if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::OkRetrieve)
     {
-        case None:
-            operation.setOperation(Operation::Retrieve);
-            operation.setPriority(Operation::Low);
-            break;
+        if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveWarning)
+        {
+            QMessageBox::warning(this, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
+        }
+        else
+        {
+            QMessageBox::critical(this, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
+            emit studyRetrieveFailed(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+            return;
+        }
+    }
 
-        case View:
-            operation.setOperation(Operation::View);
-            // Té prioritat mitja per passar al davant de les operacions de Retrieve
-            operation.setPriority(Operation::Medium);
-            break;
+    emit studyRetrieveFinished(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
 
+    switch(m_actionsWhenRetrieveJobFinished.take(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
+    {
         case Load:
-            operation.setOperation(Operation::Load);
-            // Té prioritat mitja per passar al davant de les operacions de Retrieve
-            operation.setPriority(Operation::Medium);
+            emit loadRetrievedStudy(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());;
+            break;
+        case View:
+            emit viewRetrievedStudy(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+            break;
+        default:
             break;
     }
-    //emplenem les dades de l'operació
-    operation.setPatientName(studyToRetrieve->getParentPatient()->getFullName());
-    operation.setPatientID(studyToRetrieve->getParentPatient()->getID());
-    operation.setStudyID(studyToRetrieve->getID());
-    operation.setStudyUID(maskStudyToRetrieve.getStudyUID());
+}
 
-    m_qexecuteOperationThread.queueOperation(operation);
+void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, Study *studyToRetrieve, DicomMask maskStudyToRetrieve, ActionsAfterRetrieve actionsAfterRetrieve)
+{
+    PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
+    RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionsAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High : RetrieveDICOMFilesFromPACSJob::Medium;
 
-    QApplication::restoreOverrideCursor();
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, studyToRetrieve , maskStudyToRetrieve, 
+        retrievePriorityJob);
+
+    m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PacsJobStarted(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
+
+    m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionsAfterRetrieve);
 }
 
 bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)
@@ -416,151 +367,6 @@ void QInputOutputPacsWidget::errorQueryingImage(QString studyInstanceUID, QStrin
     errorMessage += tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
 
     QMessageBox::warning(this, ApplicationNameString, errorMessage);
-}
-
-void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveError error)
-{
-    QString message;
-    PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
-
-    //emitim signal cap a fora indicant que ha fallat la descàrrega de l'estudi
-    emit studyRetrieveFailed(studyInstanceUID);
-
-    /*TODO:S'ha de millorar els missatges d'error indicant quin estudi ha fallat amb nom de pacient i study ID, s'ha de fer que l'error emeti
-     * en comptes del studyInstanceUID l'objecte Operation que conté la informació el patientName i el studyID */
-
-    switch (error)
-    {
-        case QExecuteOperationThread::CanNotConnectPacsToMove :
-            message = tr("Please review the operation list screen, ");
-            message += tr("%1 can't connect to PACS %2 trying to retrievev a study.\n").arg(ApplicationNameString, pacs.getAETitle());
-            message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persists contact with an administrator.");
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::NoEnoughSpace :
-            {
-                Settings settings;
-                HardDiskInformation hardDiskInformation;
-                quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
-                quint64 minimumSpaceRequired = quint64( settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache ).toULongLong() * 1024 );
-                message = tr("There is not enough space to retrieve studies, please free space or change your Local Database settings.");
-                message += tr("\nAll pending retrieve operations will be cancelled.");
-                message += tr("\n\nAvailable space in Disk: %1 Mb").arg(freeSpaceInHardDisk);
-                message += tr("\nMinimum space required in Disk to retrieve studies: %1 Mb").arg(minimumSpaceRequired);
-                QMessageBox::warning(this, ApplicationNameString, message);
-            }
-            break;
-        case QExecuteOperationThread::ErrorFreeingSpace :
-            message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred freeing space and some operations may have failed.");
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::DatabaseError :
-            message = tr("Please review the operation list screen, ");
-            message += tr("a database error ocurred and some operations may have failed.");
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::PatientInconsistent :
-            message = tr("Please review the operation list screen, ");
-            message += tr("an error ocurred and some retrieve operations may have failed.");
-            message += tr("\n%1 has not be capable of read correctly DICOM information of the study.").arg(ApplicationNameString);
-            message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::MoveDestinationAETileUnknownStatus:
-            message = tr("Please review the operation list screen, ");
-            message += tr("PACS %1 doesn't recognize your computer's AETitle %2 and some studies can't be retrieved.").arg(pacs.getAETitle(), PacsDevice::getLocalAETitle() );
-            message += tr("\n\nContact with an administrador to register your computer to the PACS.");
-            QMessageBox::warning(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::MoveUnknowStatus :
-        case QExecuteOperationThread::MoveFailureOrRefusedStatus :
-            message = tr("Please review the operation list screen, ");
-            message += tr("%1 can't retrieve images of study %2 because PACS %3 doesn't respond as expected.\n\n").arg(ApplicationNameString, studyInstanceUID, pacs.getAETitle());
-            message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::IncomingConnectionsPortPacsInUse :
-            message = tr("Port %1 for incoming connections from PACS is already in use by another application.").arg( PacsDevice::getIncomingDICOMConnectionsPort() );
-            message += tr("\n\n%1 can't retrieve the studies, all pending retrieve operations will be cancelled.").arg(ApplicationNameString);
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        default:
-            message = tr("Please review the operation list screen, an unknown error has ocurred retrieving a study.");
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
-    }
-}
-
-void QInputOutputPacsWidget::showQExecuteOperationThreadStoreError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreError error)
-{
-    QString message;
-    PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
-
-    switch (error)
-    {
-        case QExecuteOperationThread::CanNotConnectPacsToStore :
-            message = tr("Please review the operation list screen, ");
-            message += tr("%1 can't connect to PACS %2 trying to store DICOM files.\n").arg(ApplicationNameString, pacs.getAETitle());
-            message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persists contact with an administrator.");
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::StoreUnknowStatus:
-        case QExecuteOperationThread::StoreFailureStatus:
-            message = tr("The store of DICOM files to PACS %1 has failed.\n\n").arg(pacs.getAETitle()); 
-            message += tr("Wait a minute and try again, if the problem persist contact with an administrator.");
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-        default:
-            message = tr("Please review the operation list screen, an unknown error has ocurred storing files to PACS %1.").arg(pacs.getAETitle());
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
-            QMessageBox::critical(this, ApplicationNameString, message);
-            break;
-    }
-}
-
-void QInputOutputPacsWidget::showQExecuteOperationThreadRetrieveWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveWarning warning)
-{
-    QString message;
-    PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
-    /*TODO:S'ha de millorar els missatges d'error indicant quin estudi ha fallat amb nom de pacient i study ID, s'ha de fer que l'error emeti
-     * en comptes del studyInstanceUID l'objecte Operation que conté la informació el patientName i el studyID */
-
-    // De moment només hi ha definit un sol tipus de warning, així que sempre mostrarem el mateix.
-    message = tr("There were problems to retrieve some images from study %1 from PACS %2. Those images may be missing in the local database.").arg(studyInstanceUID, pacs.getAETitle());
-    message += "\n";
-    message += tr("Try again later. If the problem persists, contact your system administrator.");
-
-    QMessageBox::warning(this, ApplicationNameString, message);
-}
-
-void QInputOutputPacsWidget::showQExecuteOperationThreadStoreWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreWarning warning)
-{
-    QString message;
-    PacsDevice pacs = PacsDeviceManager().getPACSDeviceByID(pacsID);
-
-    /*TODO:S'ha de millorar els missatges d'error indicant quin estudi ha fallat amb nom de pacient i study ID, s'ha de fer que l'error emeti
-     * en comptes del studyInstanceUID l'objecte Operation que conté la informació el patientName i el studyID */
-
-    switch (warning)
-    {
-        case QExecuteOperationThread::StoreSomeImagesFailureStatus:
-            message = tr("Some DICOM files of study %1 can't be stored to PACS %2.\n\n").arg(studyInstanceUID, pacs.getAETitle());
-            message += tr("Please contact with an administrator to solve the problem.");
-            QMessageBox::warning(this, ApplicationNameString, message);
-            break;
-        case QExecuteOperationThread::StoreWarningStatus:
-            message = tr("The study %1 has been stored, but it's possible that the PACS %1 has changed some data of the images.").arg(pacs.getAETitle());
-            QMessageBox::warning(this, ApplicationNameString, message);
-            break;
-    }
 }
 
 void QInputOutputPacsWidget::setQueryInProgress(bool queryInProgress)

@@ -18,6 +18,7 @@
 namespace udg {
 
 class DicomMask;
+class PACSJob;
 
 /** Classe manager que ens permet comunicar-nos amb el PACS
 */
@@ -43,6 +44,9 @@ public:
     ///Indica si s'executen queries en aquest moment
     bool isExecutingQueries();
 
+    ///Encua un PACSJob per a que es processi
+    void enqueuePACSJob(PACSJob *pacsJob);
+
 signals:
 
     ///Signal que s'emet quan s'han rebut resultats d'un PACS de la cerca d'estudis
@@ -66,6 +70,8 @@ signals:
     ///Signal que s'emet per indicar que s'ha produït un error a la consulta d'imatges d'un PACS
     void errorQueryingImage(QString studyInstanceUID, QString seriesInstanceUID, PacsDevice pacs);
 
+    ///Signal que s'emet per indicar que s'ha encuat un nou PACSJob
+    void newPACSJobEnqueued(PACSJob *pacsJob);
 
 private slots:
 
@@ -75,6 +81,8 @@ private slots:
 private:
 
     ThreadWeaver::Weaver* m_queryWeaver;
+    ThreadWeaver::Weaver *m_sendDICOMFilesToPACSWeaver;
+    ThreadWeaver::Weaver *m_retrieveDICOMFilesFromPACSWeaver;
 
     int m_numberOfQueryPacsJobsPending;
 

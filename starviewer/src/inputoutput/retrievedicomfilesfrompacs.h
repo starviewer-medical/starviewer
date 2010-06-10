@@ -26,6 +26,7 @@
 #include <assoc.h>
 
 #include "pacsdevice.h"
+#include "pacsrequeststatus.h"
 
 struct T_DIMSE_C_MoveRQ;
 struct T_DIMSE_C_MoveRSP;
@@ -47,19 +48,19 @@ class DICOMTagReader;
 /** 
     This class helps to interactive with the pacs, retrieve images that match with the mask
  */
-class RetrieveImages: public QObject
+class RetrieveDICOMFilesFromPACS: public QObject
 {
 Q_OBJECT
 public:
-    RetrieveImages(PacsDevice pacs);
+    RetrieveDICOMFilesFromPACS(PacsDevice pacs);
 
     ///Starts the download
-    Status retrieve(DicomMask dicomMask);
+    PACSRequestStatus::RetrieveRequestStatus retrieve(DicomMask dicomMask);
 
 signals:
 
     ///Signal que indica que s'ha descarregat un fitxer
-    void DICOMFileRetrieved(DICOMTagReader *dicomTagReader);
+    void DICOMFileRetrieved(DICOMTagReader *dicomTagReader, int numberOfImagesRetrieved);
 
 private:
 
@@ -85,7 +86,7 @@ private:
     T_DIMSE_C_MoveRQ getConfiguredMoveRequest(T_ASC_Association *association);
 
     /// En cas d'error processa la resposta rebuda per part del SCP, grava l'error el log i el retorna en forma d'objecte Status
-    Status processErrorResponseFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail);
+    PACSRequestStatus::RetrieveRequestStatus processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail);
 
     ///Callback de move, semblaria que s'executa cada vegada que s'ha descarregat una imatge
     static void moveCallback(void *callbackData, T_DIMSE_C_MoveRQ *moveRequest, int responseCount, T_DIMSE_C_MoveRSP *moveResponse);
@@ -103,9 +104,11 @@ private:
     struct StoreSCPCallbackData
     {
         DcmFileFormat *dcmFileFormat;
-        RetrieveImages *retrieveImages;
+        RetrieveDICOMFilesFromPACS *retrieveDICOMFilesFromPACS;
         QString fileName;
     };
+
+    int m_numberOfImagesRetrieved;
 
 };
 

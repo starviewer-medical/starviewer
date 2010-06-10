@@ -17,60 +17,24 @@ namespace udg {
 // fordward declarations
 class Status;
 class Operation;
+class PacsManager;
+class PACSJob;
+class RetrieveDICOMFilesFromPACSJob;
+class SendDICOMFilesToPACSJob;
+class Study;
 
 /// Interfície que implementa la llista d'operacions realitzades cap a un PACS
 class QOperationStateScreen : public QDialog , private Ui::QOperationStateScreenBase{
 Q_OBJECT
 public:
     QOperationStateScreen( QWidget *parent = 0 );
-    ~QOperationStateScreen();
 
     /// Retorna el núm. d'operacions que s'estan executant
     unsigned int getActiveOperationsCount();
 
-public slots :
-    /** Insereixu una nova operació
-     *  @param operation operació a inserir
-     */
-    void insertNewOperation( Operation *operation );
+    ///Estableix instància de PacsManager que s'encarrega de fer les peticions als PACS
+    void setPacsManager(PacsManager *pacsManager);
 
-    /** slot que s'invoca quant un StarviewerProcessImage emet un signal imageRetrieved
-     * @param uid de l'estudi que ha finalitzat una operació d'una imatge
-     * @param número d'imatges descarregades
-     */
-    void imageCommit( QString stidyUID , int numberOfImages );
-
-    /** Especifica la imatge per la que es va per l'estudy "actual" que s'està processant.
-      * Nota: Això funciona perquè les operacions només es poden fer de 1 en 1, si es fessin
-      * de forma paral·lela, s'hauria d'especificar, cada vegada, quin estudi és.
-      */
-    void setRetrievedImagesToCurrentProcessingStudy(int numberOfImages);
-
-    /** Augmenta en un el nombre de series descarregades
-     * @param UID de l'estudi que s'ha descarregat una sèrie
-     */
-    void seriesCommit( QString studyUID );
-
-    /** S'invoca quant s'ha acabat una operació. S'indica a la llista que l'operació relacionada amb l'estudi ha finalitzat
-     * @param  UID de l'estudi descarregat
-     */
-    void setOperationFinished( QString studyUID );
-
-    /** S'invoca quant es produeix algun error durant el processament de l'operació
-     * @param studyUID UID de l'estudi descarregat
-     */
-    void setErrorOperation( QString studyUID );
-
-    /** S'invoca quan es comença l'operació d'un estudi, per indicar-ho a la llista que aquell estudi ha començat l'operació
-     * @param  UID de l'estudi que es comença l'operació
-     */
-    void setOperating( QString );
-
-    ///Indica l'estat de cancel·lada a una operació
-    void setCancelledOperation(QString studyInstanceUID);
-
-    /// Neteja la llista d'estudis excepte dels que s'estant descarregant en aquells moments
-    void clearList();
 
 protected :
     /** Event que s'activa al tancar al rebren un event de tancament
@@ -82,20 +46,46 @@ private:
     /// Crea les connexions pels signals i slots
     void createConnections();
 
-    /** Esborra l'estudi enviat per parametre
-     * @param UID de l'estudi
-     */
-    void deleteStudy( QString studyUID );
-
     /// Indica si una operació es pot considerar com a finalitzada a partir del seu missatge d'estat
     bool isOperationFinalized(const QString &message);
 
-    /// Comprova si l'operació amb UID studyUID existeix a la llista. Si és així retorna
-    /// l'item, altrament ens retorna NUL
-    QTreeWidgetItem *operationExists( const QString &studyUID );
+//nou
+private slots:
+    
+    ///Slot que s'activa quan s'ha encuat un nou PACSJob insereix al QTreeWidget la informació del nou job i la posa com a Pedent de realitzar
+    void newPACSJobEnqueued(PACSJob *);
+
+    ///Slot que s'activa quan job comença, al QTreeWidget es marca aquell job com començat
+    void PACSJobStarted(PACSJob *);
+
+    ///Slot que s'activa quabn el jo ha acabat, es marca aquell Job al QTreeWidget amb l'estatus en el que ha finalitzat
+    void PACSJobFinished(PACSJob *);
+
+    ///Slot que s'activa quan job ha fet una acció amb una imatge, s'augmenta pel job al QTreeWidget el número de d'imatges
+    void DICOMFileCommit(PACSJob *pacsJob, int numberOfImages);
+
+    ///Slot que s'activa quan job ha fer una acció amb una sèrie completa, s'augmenta pel job al QTreeWidget el número de sèries
+    void DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeries);
+
+    /// Neteja la llista d'estudis excepte dels que s'estant descarregant en aquells moments
+    void clearList();
 
 private:
     QString m_currentProcessingStudyUID;
+    PacsManager *m_pacsManager;
+
+private:
+
+    ///Afegeix al QTreeWidget el nou job encuat, i el mostra
+    void insertNewPACSJob(PACSJob *pacsJob);
+ 
+    ///Retorna l'objecte Study relatiu a PACSJob, només funciona amb PACSJob de tipus RetrieveDICOMFilesFromPACSJob i SendDICOMFilesToPACSJob
+    Study *getStudyFromPACSJob(PACSJob* pacsJob);
+
+    /**Retorna un QString per mostrar-lo per la QOperationStateScreen indicant com ha finalitzat un PACSJob
+      *Per RetrieveDICOMFilesFromPACS pot retornar : RETRIEVED, CANCELLED, ERROR
+      *Per SendDICOMFilesToPACS pot retornar : SENT, CANCELLED, ERROR*/
+    QString getPACSJobStatusResume(PACSJob *pacsJob);
 };
 
 };

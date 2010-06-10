@@ -29,15 +29,13 @@ HEADERS += databaseconnection.h \
     pacsnetwork.h \
     pacsdevice.h \
     pacsserver.h \
-    retrieveimages.h \
+    retrievedicomfilesfrompacs.h \
     status.h \
-    operation.h \
-    qexecuteoperationthread.h \
     converttodicomdir.h \
     convertdicomtolittleendian.h \
     createdicomdir.h \
     dicomdirreader.h \
-    storeimages.h \
+    senddicomfilestopacs.h \
     querypacs.h \
     dicommask.h \
     dicomdirimporter.h \
@@ -81,22 +79,24 @@ HEADERS += databaseconnection.h \
     qstarviewersapwrapper.h \
     qwidgetselectpacstostoredicomimage.h \
     qpreviousstudieswidget.h \
-    qexportertool.h
+    qexportertool.h \
+    pacsjob.h \
+    senddicomfilestopacsjob.h \
+    pacsrequeststatus.h \
+    retrievedicomfilesfrompacsjob.h
 SOURCES += databaseconnection.cpp \
     pacsconnection.cpp \
     pacsdevicemanager.cpp \
     pacsnetwork.cpp \
     pacsdevice.cpp \
     pacsserver.cpp \
-    retrieveimages.cpp \
+    retrievedicomfilesfrompacs.cpp \
     status.cpp \
-    operation.cpp \
-    qexecuteoperationthread.cpp \
     converttodicomdir.cpp \
     convertdicomtolittleendian.cpp \
     createdicomdir.cpp \
     dicomdirreader.cpp \
-    storeimages.cpp \
+    senddicomfilestopacs.cpp \
     querypacs.cpp \
     dicommask.cpp \
     dicomdirimporter.cpp \
@@ -138,7 +138,10 @@ SOURCES += databaseconnection.cpp \
     qstarviewersapwrapper.cpp \
     qwidgetselectpacstostoredicomimage.cpp \
     qpreviousstudieswidget.cpp \
-    qexportertool.cpp
+    qexportertool.cpp \
+    pacsjob.cpp \
+    senddicomfilestopacsjob.cpp  \
+    retrievedicomfilesfrompacsjob.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
