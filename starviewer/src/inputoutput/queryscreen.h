@@ -18,6 +18,7 @@ class QOperationStateScreen;
 class StatsWatcher;
 class RISRequestManager;
 class PacsDevice;
+class PacsManager;
 
 /** Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
 @author marc
@@ -48,7 +49,7 @@ public:
       * @param pacsID Identificador del PACS des d'on es descarrega l'estudi
       * @param study Objecte Study amb la informació de l'estudi que volem descarregar
       */
-    void retrieveStudy(QInputOutputPacsWidget::RetrieveActions actionAfterRetrieve, QString pacsID, Study *study);
+    void retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, QString pacsID, Study *study);
 
 public slots:
     /// Obre un dicomdir
@@ -73,7 +74,7 @@ public slots:
 
     /**Guarda els objectes que compleixien la màscara passada per paràmetres de l'estudi passat per paràmetre al primer PACS 
        que es troba com a PACS per defecte*/
-    void storeDicomObjectsToPacs(PacsDevice pacsDevice, Study *studyToStore, DicomMask dicomMaskObjectsToStore);
+    void sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images);
 
 signals:
     /// Signal que ens indica quins pacients s'han seleccionat per visualitzar
@@ -189,8 +190,10 @@ private:
 
     StatsWatcher *m_statsWatcher;
 
-	///Llista per controlar la descarrega de quins estudis ha estat sol·licitada
-	QStringList m_studyRequestedToRetrieveFromPublicMethod;
+    ///Llista per controlar la descarrega de quins estudis ha estat sol·licitada
+    QStringList m_studyRequestedToRetrieveFromPublicMethod;
+    
+    PacsManager *m_pacsManager;
 };
 
 };

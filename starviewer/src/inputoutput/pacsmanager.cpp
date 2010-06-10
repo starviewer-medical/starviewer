@@ -4,6 +4,7 @@
 #include "pacsdevice.h"
 #include "logging.h"
 #include "querypacsjob.h"
+#include "pacsjob.h"
 
 namespace udg{
 
@@ -13,6 +14,13 @@ PacsManager::PacsManager()
     m_queryWeaver = new Weaver();
     m_queryWeaver->setMaximumNumberOfThreads(PacsDevice::getMaximumConnections());
     m_numberOfQueryPacsJobsPending = 0;
+    
+    m_sendDICOMFilesToPACSWeaver = new Weaver();
+    m_sendDICOMFilesToPACSWeaver->setMaximumNumberOfThreads(PacsDevice::getMaximumConnections());
+
+    m_retrieveDICOMFilesFromPACSWeaver  = new Weaver();
+    //Només podem descarregar un estudi a la vegada del PACS, per això com a número màxim de threads especifiquem 1
+    m_retrieveDICOMFilesFromPACSWeaver ->setMaximumNumberOfThreads(1);
 
     connect ( m_queryWeaver,  SIGNAL ( jobDone ( ThreadWeaver::Job* ) ), SLOT ( queryJobFinished ( ThreadWeaver::Job* ) ) );
 }
@@ -48,7 +56,6 @@ void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
 {
     QueryPacsJob *queryPacsJob = dynamic_cast<QueryPacsJob*> ( job );
     QString studyInstanceUID, seriesInstanceUID;
-
 
     //Encara haguem abortat el job, se'ns indica quan ha finalitzat per això comprovem si ha estat abortat per ignora els resultats que ens envia
     if (!queryPacsJob->isAbortRequested())
@@ -107,6 +114,23 @@ void PacsManager::cancelCurrentQueries()
 bool PacsManager::isExecutingQueries()
 {
     return !m_queryWeaver->isIdle();
+}
+
+void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
+{
+    switch (pacsJob->getPACSJobType())
+    {
+        case PACSJob::SendDICOMFilesToPACSJobType :
+            m_sendDICOMFilesToPACSWeaver->enqueue(pacsJob);
+            break;
+        case PACSJob::RetrieveDICOMFilesFromPACSJobType:
+            m_retrieveDICOMFilesFromPACSWeaver->enqueue(pacsJob);
+        default:
+            ERROR_LOG("Tipus de Job invàlid");
+            break;
+    }
+
+    emit newPACSJobEnqueued(pacsJob);
 }
 
 }; //end udg namespace

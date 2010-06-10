@@ -7,9 +7,13 @@
 #include "qoperationstatescreen.h"
 
 #include <QCloseEvent>
-#include "operation.h"
 #include "logging.h"
 #include "inputoutputsettings.h"
+#include "pacsmanager.h"
+#include "pacsjob.h"
+#include "senddicomfilestopacsjob.h"
+#include "retrievedicomfilesfrompacsjob.h"
+#include "study.h"
 
 namespace udg {
 
@@ -18,17 +22,12 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
 {
     setupUi( this );
     setWindowFlags( (this->windowFlags() | Qt::WindowMaximizeButtonHint)  ^ Qt::WindowContextHelpButtonHint  );
-    m_treeRetrieveStudy->setColumnHidden( 9 , true );//Conte l'UID de l'estudi
-    m_treeRetrieveStudy->setColumnHidden( 10 , true );//Indica quin tipus d'operació és
 
     createConnections();
 
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
-}
-
-QOperationStateScreen::~QOperationStateScreen()
-{
+    m_treeRetrieveStudy->setColumnHidden( 9 , true );//Conte el PACSJobID 
 }
 
 unsigned int QOperationStateScreen::getActiveOperationsCount()
@@ -48,69 +47,89 @@ unsigned int QOperationStateScreen::getActiveOperationsCount()
     return finalizedItems;
 }
 
+void QOperationStateScreen::setPacsManager(PacsManager *pacsManager)
+{
+    m_pacsManager = pacsManager;
+
+    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
+}
+
 void QOperationStateScreen::createConnections()
 {
     connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearList() ) );
 }
 
-void QOperationStateScreen::insertNewOperation( Operation *operation )
+void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
 {
-    bool canInsert = true;
-    // busquem si l'ítem ja es troba a la llista
-    QTreeWidgetItem *duplicateItem = operationExists( operation->getStudyUID() );
-    if( duplicateItem )
+    connect(pacsJob, SIGNAL(PACSJobStarted(PACSJob*)), SLOT(PACSJobStarted(PACSJob*))); 
+    connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(PACSJobFinished(PACSJob*))); 
+
+    switch(pacsJob->getPACSJobType())
     {
-        // si l'operació està finalitzada el treiem de la llista
-        if( isOperationFinalized( duplicateItem->text(0) ) )
-        {
-            // TODO estaria bé que en el cas que l'element aparegui com a descarregat, és a dir, l'operació 
-            // va acabar amb èxit, comprovar quant fa que es va inserir aquesta operació i advertir a l'usuari 
-            // si realment vol tornar a baixar-se l'estudi, per exemple
-            deleteStudy( operation->getStudyUID() ); //si l'estudi ja existeix a la llista l'esborrem
-        }
-        else // això vol dir que està o pendent o descarregant, per tant hem de parar i no insertar la operació
-        {
-            canInsert = false;
-        }
-    }
-
-    if( !canInsert )
-    {
-        DEBUG_LOG("L'operació amb UID: " + operation->getStudyUID() + " està pendent/descarregant per tant no s'afegeix de nou a la finestra");
-    }
-    else
-    {
-        QTreeWidgetItem* item = new QTreeWidgetItem();
-        QTime time = QTime::currentTime();
-        QString name, operationNumber;
-        QDate date = QDate::currentDate();
-
-        name.insert( 0 , operation->getPatientName() );
-        name.replace( "^" ,", ");
-
-        item->setText( 0 , tr( "PENDING" ) );
-
-        if ( operation->getOperation() == Operation::Retrieve || operation->getOperation() == Operation::View || operation->getOperation() == Operation::Load )
-        {
-            item->setText( 1 , tr( "Local" ) );
-        }
-        else item->setText( 1 , tr("Server") );
-
-        item->setText( 2 , operation->getPacsDevice().getAETitle() );
-        item->setText( 3 , operation->getPatientID() );
-        item->setText( 4 , name );
-        item->setText( 5 , date.toString("dd/MM/yyyy") );
-        item->setText( 6 , time.toString("hh:mm") );
-        item->setText( 7 , "0" ); // series
-        item->setText( 8 , "0"); //imatges
-        item->setText( 9 , operation->getStudyUID() );
-        operationNumber.setNum( operation->getOperation() , 10 );
-        item->setText( 10 , operationNumber ); // indica el tipus d'operació
-
-        m_treeRetrieveStudy->addTopLevelItem(item);
+        case PACSJob::SendDICOMFilesToPACSJobType:
+            insertNewPACSJob(pacsJob);
+            connect(dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ), SIGNAL(DICOMFileSent(PACSJob*, int)), SLOT(DICOMFileCommit(PACSJob *, int )));
+            connect(dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ), SIGNAL(DICOMSeriesSent(PACSJob*, int)), SLOT(DICOMSeriesCommit(PACSJob *, int )));
+            break;
+        case PACSJob::RetrieveDICOMFilesFromPACSJobType:
+            insertNewPACSJob(pacsJob);
+            connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ), SIGNAL(DICOMFileRetrieved(PACSJob*, int)), SLOT(DICOMFileCommit(PACSJob *, int )));
+            connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ), SIGNAL(DICOMSeriesRetrieved(PACSJob*, int)), SLOT(DICOMSeriesCommit(PACSJob *, int )));
+            break;
+        default:
+            break;
     }
 }
 
+bool QOperationStateScreen::isOperationFinalized(const QString &message)
+{
+    return  message == tr("RETRIEVED") || message == tr("STORED") || message == tr("ERROR") || message == tr("CANCELLED");
+}
+
+void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)
+{
+    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+
+    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    {
+        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
+        pacsJobItem->setText(0, pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType ? tr("RETRIEVING") : tr("SENDING") );
+    }
+}
+
+void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
+{
+    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+
+    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    {
+        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
+
+        pacsJobItem->setText(0, getPACSJobStatusResume(pacsJob) );
+    }
+}
+
+void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages)
+{
+    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+
+    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    {
+        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
+        pacsJobItem->setText(8, QString().setNum(numberOfImages));
+    }
+}
+
+void QOperationStateScreen::DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeries)
+{
+    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+
+    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    {
+        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
+        pacsJobItem->setText(7, QString().setNum(numberOfSeries));
+    }
+}
 
 void QOperationStateScreen::clearList()
 {
@@ -127,133 +146,68 @@ void QOperationStateScreen::clearList()
     }
 }
 
-void QOperationStateScreen::deleteStudy( QString studyUID )
+void QOperationStateScreen::insertNewPACSJob(PACSJob *pacsJob)
 {
-    QList<QTreeWidgetItem *> qTreeWidgetItemsToDelete( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
+    Q_ASSERT(pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType);
 
-    foreach(QTreeWidgetItem *itemToDelete, qTreeWidgetItemsToDelete)
-    {
-        m_treeRetrieveStudy->invisibleRootItem()->takeChild( m_treeRetrieveStudy->invisibleRootItem()->indexOfChild(itemToDelete) );
-    }
+    QTreeWidgetItem* item = new QTreeWidgetItem();
+    Study *study = getStudyFromPACSJob(pacsJob);
+
+    item->setText(0 , tr("PENDING") );
+    item->setText(1, pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType ? tr("Server") : tr("Local"));
+    item->setText(2 , pacsJob->getPacsDevice().getAETitle());
+    item->setText(3 , study->getParentPatient()->getID());
+    item->setText(4 , study->getParentPatient()->getFullName());
+    item->setText(5 , QDate::currentDate().toString("dd/MM/yyyy"));
+    item->setText(6 , QTime::currentTime().toString("hh:mm"));
+    item->setText(7 , "0"); // series
+    item->setText(8 , "0"); //imatges
+    item->setText(9 , QString().setNum(pacsJob->getPACSJobID()));
+
+    m_treeRetrieveStudy->addTopLevelItem(item);
 }
 
-void QOperationStateScreen::imageCommit( QString studyUID , int downloadedImages )
-{
-    QString Images;
-    QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
-    QTreeWidgetItem *item;
 
-    if  ( !qRetrieveList.isEmpty() )
+Study* QOperationStateScreen::getStudyFromPACSJob(PACSJob *pacsJob)
+{
+    Study *study = NULL;
+
+    if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType)
     {
-        item = qRetrieveList.at( 0 );
-        Images.setNum( downloadedImages , 10 );
-        item->setText( 8 , Images );
+        study = (dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ))->getStudyOfImagesToSend();
     }
+    else if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
+    {
+        study = (dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ))->getStudyToRetrieveDICOMFiles();
+    }
+
+    return study;
 }
 
-void QOperationStateScreen::setRetrievedImagesToCurrentProcessingStudy(int numberOfImages)
+QString QOperationStateScreen::getPACSJobStatusResume(PACSJob *pacsJob)
 {
-    QString Images;
-    QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems(m_currentProcessingStudyUID, Qt::MatchExactly, 9) );
-    QTreeWidgetItem *item;
-
-    if  ( !qRetrieveList.isEmpty() )
+    if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        item = qRetrieveList.at( 0 );
-        Images.setNum( numberOfImages , 10 );
-        item->setText( 8 , Images );
-    }
-}
-
-void QOperationStateScreen::seriesCommit( QString studyUID )
-{
-    QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
-    QTreeWidgetItem *item;
-    QString series;
-    int nSeries = 0;
-    bool ok;
-
-    if ( !qRetrieveList.isEmpty() )
-    {
-        item = qRetrieveList.at( 0 );
-        nSeries = item->text( 7 ).toInt( &ok , 10 ) + 1;
-        series.setNum( nSeries, 10 );
-        item->setText( 7 , series );
-    }
-}
-
-void QOperationStateScreen::setOperating( QString studyUID )
-{
-    m_currentProcessingStudyUID = studyUID;
-
-    QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
-    QTreeWidgetItem *item;
-
-    if ( !qRetrieveList.isEmpty() )
-    {
-        item = qRetrieveList.at( 0 );
-        if ( item->text( 10 ).toInt( NULL , 10 ) == Operation::View || item->text( 10 ).toInt( NULL , 10 ) == Operation::Retrieve || item->text( 10 ).toInt( NULL , 10 ) == Operation::Load )
+        if ((dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ))->getStatus() == PACSRequestStatus::OkRetrieve)
         {
-            item->setText( 0 , tr( "RETRIEVING" ) );
-        }
-        else if ( item->text( 10 ).toInt( NULL , 10 ) == Operation::Move ) item->setText( 0 , tr( "STORING" ) );
-    }
-}
-
-void QOperationStateScreen::setOperationFinished( QString studyUID )
-{
-    QList<QTreeWidgetItem *> qRetrieveList( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
-    QTreeWidgetItem *item;
-
-    if ( !qRetrieveList.isEmpty() )
-    {
-        item = qRetrieveList.at( 0 );
-        if ( item->text( 8 ) == "0" ) //si el número d'imatges processat és 0 error
-        {
-            item->setText( 0 , tr( "ERROR" ) );
+            return tr("RETRIEVED");
         }
         else
         {
-            if ( item->text( 10 ).toInt( NULL , 10 ) == Operation::View || item->text( 10 ).toInt( NULL , 10 ) == Operation::Retrieve || item->text( 10 ).toInt( NULL , 10 ) == Operation::Load )
-            {
-                item->setText( 0 , tr( "RETRIEVED" ) );
-            }
-            else if ( item->text( 10 ).toInt( NULL , 10 ) == Operation::Move ) item->setText( 0 , tr( "STORED" ) );
+            return tr("ERROR");
         }
     }
-
-    m_treeRetrieveStudy->repaint();
-}
-
-void QOperationStateScreen::setErrorOperation( QString studyUID )
-{
-    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
-    QTreeWidgetItem *item;
-
-    //hem de cridar al seriesRetrieved, perquè hem d'indicar que s'ha acabat la descarrega de l'última sèrie, ja que el starviewerprocess no sap quant acaba la descarregar de l'última sèrie
-    seriesCommit( studyUID );
-
-    if ( !qRetrieveList.isEmpty() )
+    else
     {
-        item = qRetrieveList.at( 0 );
-        item->setText( 0 , tr( "ERROR" ) );
+        if ((dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ))->getStatus() == PACSRequestStatus::OkSend)
+        {
+            return tr("SENT");
+        }
+        else
+        {
+            return tr("ERROR");
+        }
     }
-
-    m_treeRetrieveStudy->repaint();
-}
-
-void QOperationStateScreen::setCancelledOperation(QString studyInstanceUID)
-{
-    QList<QTreeWidgetItem *> qRetrieveList(m_treeRetrieveStudy->findItems(studyInstanceUID, Qt::MatchExactly, 9));
-    QTreeWidgetItem *item;
-
-    if (!qRetrieveList.isEmpty())
-    {
-        item = qRetrieveList.at(0);
-        item->setText(0, tr("CANCELLED"));
-    }
-
-    m_treeRetrieveStudy->repaint();
 }
 
 void QOperationStateScreen::closeEvent( QCloseEvent* ce )
@@ -261,36 +215,6 @@ void QOperationStateScreen::closeEvent( QCloseEvent* ce )
     Settings settings;
     settings.saveColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
     ce->accept();
-}
-
-bool QOperationStateScreen::isOperationFinalized(const QString &message)
-{
-    return  message == tr("RETRIEVED") || message == tr("STORED") || message == tr("ERROR") || message == tr("CANCELLED");
-}
-
-QTreeWidgetItem *QOperationStateScreen::operationExists( const QString &studyUID )
-{
-    QTreeWidgetItem *result = NULL;
-    QList<QTreeWidgetItem *> matchingStudies( m_treeRetrieveStudy->findItems( studyUID , Qt::MatchExactly , 9 ) );
-
-    // hauríem de tenir únicament 1 sol estudi
-    switch( matchingStudies.count() )
-    {
-    case 0:
-        // ok, no n'hi ha cap
-        break;
-
-    case 1: // ok, lo normal
-        result = matchingStudies.first();
-        break;
-         
-    default: // oops, alguna problema hi ha aquí!! però de totes maneres tornem el primer element
-        DEBUG_LOG( QString("Nombre d'estudis trobats erroni! :: %1").arg( matchingStudies.count() ) );
-        result = matchingStudies.first();
-        break;
-    }
-    
-    return result;
 }
 
 };

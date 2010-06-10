@@ -12,7 +12,6 @@
 
 #include "qpacslist.h"
 #include "inputoutputsettings.h"
-#include "operation.h"
 #include "pacsdevicemanager.h"
 #include "logging.h"
 #include "status.h"
@@ -26,6 +25,8 @@
 #include "statswatcher.h"
 #include "pacsdevice.h"
 #include "risrequestmanager.h"
+#include "pacsmanager.h"
+#include "retrievedicomfilesfrompacsjob.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -92,18 +93,21 @@ QueryScreen::~QueryScreen()
 
 void QueryScreen::initialize()
 {
+#ifndef STARVIEWER_LITE
+    m_pacsManager = new PacsManager();
+#endif
     //indiquem que la llista de Pacs no es mostra
     m_showPACSNodes = false;
     m_PACSNodes->setVisible(false);
-
+    m_qcreateDicomdir = new udg::QCreateDicomdir( this );
     /* Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
      * el QOperationStateScreen també es tancarà
      */
     m_operationStateScreen = new udg::QOperationStateScreen( this );
 
-    m_qInputOutputPacsWidget->setQOperationStateScreen(m_operationStateScreen);
-
-    m_qcreateDicomdir = new udg::QCreateDicomdir( this );
+    m_qInputOutputLocalDatabaseWidget->setPacsManager(m_pacsManager);
+    m_qInputOutputPacsWidget->setPacsManager(m_pacsManager);
+    m_operationStateScreen->setPacsManager(m_pacsManager);
 
     //Indiquem quin és la intefície encara de crear dicomdir per a que es puguin comunicar
     m_qInputOutputLocalDatabaseWidget->setQCreateDicomdir(m_qcreateDicomdir);
@@ -165,15 +169,11 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadRetrievedStudyFromPacs(QString)));
 
     ///Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
-    connect(m_qInputOutputPacsWidget, SIGNAL(operationStateChange()), SLOT(updateOperationsInProgressMessage()));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyWillBeDeletedFromDatabase(QString)), m_qInputOutputLocalDatabaseWidget , SLOT(removeStudyFromQStudyTreeWidget(QString)));
 
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinishedSlot(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailedSlot(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStartedSlot(QString)));
-
-    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(storeDicomObjectsToPacs(PacsDevice, Study*, DicomMask)), SLOT(storeDicomObjectsToPacs(PacsDevice, Study*,DicomMask)));
 }
 
 void QueryScreen::checkRequeriments()
@@ -323,9 +323,9 @@ void QueryScreen::loadRetrievedStudyFromPacs(QString studyInstanceUID)
     m_qInputOutputLocalDatabaseWidget->view(studyUIDList, "", true);
 }
 
-void QueryScreen::storeDicomObjectsToPacs(PacsDevice pacsDevice, Study *studyToStore, DicomMask dicomMaskObjectsToStore)
+void QueryScreen::sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images)
 {
-    m_qInputOutputPacsWidget->storeDicomObjectsToPacs(pacsDevice, studyToStore, dicomMaskObjectsToStore); 
+    m_qInputOutputLocalDatabaseWidget->sendDICOMFilesToPACS(pacsDevice, images);
 }
 
 void QueryScreen::refreshTab( int index )
@@ -429,7 +429,7 @@ void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
     DicomMask maskStudyToRetrieve;
 
     maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
-    QInputOutputPacsWidget::RetrieveActions actionAfterRetrieve;
+    QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve;
     if( Settings().getValue( InputOutputSettings::RisRequestViewOnceRetrieved ).toBool() )
     {
         actionAfterRetrieve = QInputOutputPacsWidget::View;
@@ -438,10 +438,11 @@ void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
     {
         actionAfterRetrieve = QInputOutputPacsWidget::None;
     }
-    m_qInputOutputPacsWidget->retrieve( actionAfterRetrieve, pacsID, maskStudyToRetrieve, study);
+
+    m_qInputOutputPacsWidget->retrieve(pacsID, study, maskStudyToRetrieve, QInputOutputPacsWidget::View);
 }
 
-void QueryScreen::retrieveStudy(QInputOutputPacsWidget::RetrieveActions actionAfterRetrieve, QString pacsID, Study *study)
+void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, QString pacsID, Study *study)
 {
     DicomMask maskStudyToRetrieve;
 
@@ -453,7 +454,7 @@ void QueryScreen::retrieveStudy(QInputOutputPacsWidget::RetrieveActions actionAf
 
     m_studyRequestedToRetrieveFromPublicMethod.append(study->getInstanceUID());
 
-    m_qInputOutputPacsWidget->retrieve(actionAfterRetrieve, pacsID, maskStudyToRetrieve, study);
+    m_qInputOutputPacsWidget->retrieve(pacsID, study, maskStudyToRetrieve, actionAfterRetrieve);
 }
 
 void QueryScreen::studyRetrieveFailedSlot(QString studyInstanceUID)

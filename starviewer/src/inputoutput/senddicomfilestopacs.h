@@ -4,29 +4,29 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGSTOREIMAGES_H
-#define UDGSTOREIMAGES_H
+#ifndef UDGSENDDICOMFILESTOPACS_H
+#define UDGSENDDICOMFILESTOPACS_H
 
 #include <QList>
 #include <QObject>
 #include "pacsdevice.h"
+#include "pacsrequeststatus.h"
 struct T_DIMSE_C_StoreRSP;
 
 class DcmDataset;
 
 namespace udg {
 
-class Status;
 class PacsConnection;
 class Image;
 
 /**
 	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class StoreImages: public QObject{
+class SendDICOMFilesToPACS: public QObject{
 Q_OBJECT
 public:
-    StoreImages(PacsDevice pacsDevice);
+    SendDICOMFilesToPACS(PacsDevice pacsDevice);
 
     ///Retorna el PACS que s'ha passat al constructor i amb el qual es fa el send de fitxers DICOM
     PacsDevice getPacs();
@@ -35,7 +35,16 @@ public:
     * @param ImageListStore de les imatges a enviar al PACS
     * @return indica estat del mètode
     */
-   Status store(QList<Image*> imageListToStore);
+    PACSRequestStatus::SendRequestStatus send(QList<Image*> imageListToSend);
+
+    ///Retorna el número d'imatges enviades correctament
+    int getNumberOfImagesSentSuccesfully();
+
+    ///Retorna el número d'imatges que l'enviament ha fallat
+    int getNumberOfImagesSentFailed();
+
+    ///Retorna el número d'imatges que s'ha enviat però han donat warning, pot donar warning per exemple en el cas que el PACS modifiqui alguna dada de la imatge
+    int getNumberOfImagesSentWarning();
 
 signals:
    ///Sinal que indica que s'ha fet l'enviament de la imatge passada per paràmetre al PACS, i el número d'imatges que es porten enviades
@@ -44,7 +53,7 @@ signals:
 private :
 
     ///Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
-    void initialitzeImagesCounters();
+    void initialitzeImagesCounters(int numberOfImagesToStore);
 
     ///Processa un resposta del Store SCP que no ha tingut l'Status Successfull
     void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
@@ -53,11 +62,11 @@ private :
     bool storeSCU(PacsConnection pacsConnection, QString filePathToStore);
 
     ///Retorna un Status indicant com ha finalitzat l'operació C-Store
-    Status getStatusStoreSCU(int numberOfImagesToStore);
+    PACSRequestStatus::SendRequestStatus getStatusStoreSCU();
 
 private: 
     //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning/Total d'imatges que s'ha enviat
-    int m_numberOfStoredImagesSuccessful, m_numberOfStoredImagesWithWarning, m_numberOfImagesSent;
+    int m_numberOfSendImagesSuccessful, m_numberOfSendImagesWithWarning, m_numberOfImagesToSend;
     PacsDevice m_pacs;
 
 };

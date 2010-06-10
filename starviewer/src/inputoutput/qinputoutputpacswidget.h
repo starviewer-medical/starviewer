@@ -13,7 +13,7 @@
 #include <QMenu>
 #include <QHash>
 
-#include "qexecuteoperationthread.h"
+#include "pacsdevice.h"
 
 // fordward declarations
 class QString;
@@ -25,10 +25,10 @@ class DicomMask;
 class Patient;
 class StatsWatcher;
 class Status;
-class PacsDevice;
 class Study;
 class QOperationStateScreen;
 class PacsManager;
+class PACSJob;
 
 /** 
  * Widget en el que controla les operacions d'entrada/sortida del PACS
@@ -37,35 +37,24 @@ class QInputOutputPacsWidget : public QWidget, private Ui::QInputOutputPacsWidge
 {
 Q_OBJECT
 public:
-    /// Definició d'accions que podem fer després d'haver donat l'ordre de descarregar estudis
-    enum RetrieveActions{ None = 0, View = 1, Load = 2};
+    /// Definició d'accions que podem fer d'haver descarregat estudis
+    enum ActionsAfterRetrieve{ None = 0, View = 1, Load = 2};
     
     /// Constructor de la classe
     QInputOutputPacsWidget(QWidget *parent = 0);
     ~QInputOutputPacsWidget();
 
+    ///Especifiquem l'instància de PacsManager utilitza per les operacions amb el PACS
+    void setPacsManager(PacsManager *pacsManager);
+
     ///Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQuery);
-
-    ///Guarda al PACS passat per paràmetre els objectes de l'estudi especificat que compleixen amb la màscara
-    /*TODO: S'hauria de passar un objecte study que contingués només les imatges a guardar del PACS, però degut a que Operation que és l'objecte que es passa
-        a QExecuteOperationThread per indicar l'operació de guardar objectes el PACS, no se li pot especificar una llista d'objectes DICOM, sinó que se
-        li ha d'especificar la màscara dels objectes que s'han de guardar, enviem las màscara*/
-    void storeDicomObjectsToPacs(PacsDevice pacs, Study *studyToStore, DicomMask dicomMaskObjectsToStore);
 
     ///Neteja els resultats de la última cerca
     void clear();
 
-    ///Especifica quina interfície s'ha d'utilitzar per comunicar l'estat de les operacions
-    void setQOperationStateScreen(QOperationStateScreen *qoperationStateScreen);
-
-    /** Descarrega una estudi del pacs
-     * @param actionAfterRetrieve Indica l'acció a prendre un cop descarregat l'estudi
-     * @param pacsIdToRetrieve indica l'id del Pacs del qual s'ha de descarregar l'estudi
-     * @param maskStudyToRetrieve la màscara dels objectes a descarregar
-     * @param studyToRetrieve L'estudi al qual pertanyen els objectes ad escarregar
-     */
-    void retrieve(RetrieveActions actionAfterRetrieve, QString pacsIdToRetrieve, DicomMask mask, Study *studyToRetrieve);
+    /// Descarrega una estudi del pacs
+    void retrieve(QString pacsIdToRetrieve, Study *studyToRetrieve, DicomMask maskStudyToRetrieve, ActionsAfterRetrieve actionAfterRetrieve);
 
 signals:
     ///Signal que s'emet per indicar que es netegin els camps de cerca
@@ -77,6 +66,7 @@ signals:
     /// Signal que s'emet per indicar que un cop descarregat l'estudi s'ha de carregar únicament
     void loadRetrievedStudy(QString studyInstanceUID);
 
+    //TODO: Els mètodes studyRetrieved han de desapareixer cada tool ha de començar a utilitzar la PACSManager
     ///Signal que s'emet per indicar que un estudi s'ha començat a descarregar
     void studyRetrieveStarted(QString studyInstanceUID);
 
@@ -85,12 +75,6 @@ signals:
 
     ///Signal que s'emet per indica que un estudi ha estat descarregat
     void studyRetrieveFinished(QString studyInstanceUID);
-
-    ///Signal que s'emet per indicar que hi hagut algun canvi en l'estat de les operacions, (s'ha cancel·lat, ha acabat, s'ha creat un de nova, ha fallat)
-    void operationStateChange();
-
-    ///Indica que un estudi serà esborrat de la base de dades local, això es produeix perquè al intentar descarregar un estudi es comprovar que no hi ha suficient espai al disc i s'esborren els estudis que fa més temps que no han estat visualitzats
-    void studyWillBeDeletedFromDatabase(QString studyInstanceUID);
 
 private:
 
@@ -128,18 +112,6 @@ private slots:
     /// que s'han de visualitzar immediatament un cop descarregats
     void retrieveAndViewSelectedStudies();
 
-    ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread, i com es pot solucionar
-    void showQExecuteOperationThreadRetrieveError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveError error);
-
-    ///Ens Mostra un missatge indicant el warning produït a la QExecuteOperationThread
-    void showQExecuteOperationThreadRetrieveWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::RetrieveWarning warning);
-
-    ///Ens Mostra un missatge indicant l'error produït a la QExecuteOperationThread al fer un Store
-    void showQExecuteOperationThreadStoreError(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreError error);
-
-    ///Ens Mostra un missatge indicant el warning produït a la QExecuteOperationThread al fer un Store
-    void showQExecuteOperationThreadStoreWarning(QString studyInstanceUID, QString pacsID, QExecuteOperationThread::StoreWarning warning);
-
     ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca d'estudis
     void queryStudyResultsReceived(QList<Patient*> patients, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID);
 
@@ -164,12 +136,18 @@ private slots:
     ///Cancel·la les consultes que s'estan executant en aquell moment
     void cancelCurrentQueries();
 
+    ///Fa signal de studyRetrieveStarted, Important!!! aquest mètode una vegada cada Tool utiltizi la PacsManager ha de desapareixer
+    void retrieveDICOMFilesFromPACSJobStarted(PACSJob *pacsJob);
+
+    ///Slot que s'activa quan finalitza un job de descàrrega d'imatges
+    void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
+
 private:
     QMenu m_contextMenuQStudyTreeWidget;
     QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
-    QExecuteOperationThread m_qexecuteOperationThread;
-    QOperationStateScreen *m_qoperationStateScreen;
     PacsManager *m_pacsManager;
+    ///Per cada job de descàrrega guardem quina acció hem de fer quan ha acabat la descàrrega
+    QHash<int,ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;
 
     StatsWatcher *m_statsWatcher;
 

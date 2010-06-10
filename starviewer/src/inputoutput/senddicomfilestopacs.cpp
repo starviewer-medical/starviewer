@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "storeimages.h"
+#include "senddicomfilestopacs.h"
 
 #include <diutil.h>
 #include <dcfilefo.h>
@@ -15,29 +15,29 @@
 
 #include <QDir>
 
-#include "status.h"
 #include "logging.h"
 #include "pacsconnection.h"
-#include "errordcmtk.h"
 #include "image.h"
 #include "pacsserver.h"
+#include "pacsrequeststatus.h"
+#include "status.h"
 
 namespace udg {
 
-StoreImages::StoreImages(PacsDevice pacsDevice)
+SendDICOMFilesToPACS::SendDICOMFilesToPACS(PacsDevice pacsDevice)
 {
     m_pacs = pacsDevice;
 }
 
-PacsDevice StoreImages::getPacs()
+PacsDevice SendDICOMFilesToPACS::getPacs()
 {
     return m_pacs;
 }
-Status StoreImages::store(QList<Image*> imageListToStore)
-{
-    Status state;
-    PacsServer pacsServer( m_pacs );
 
+PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> imageListToSend)
+{
+    PacsServer pacsServer( m_pacs );
+    Status state;
     //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
     state = pacsServer.connect( PacsServer::storeImages );
     
@@ -45,34 +45,32 @@ Status StoreImages::store(QList<Image*> imageListToStore)
     {
         ERROR_LOG( " S'ha produit un error al intentar connectar al PACS per fer un send. AETitle: " + m_pacs.getAETitle() + ", IP: " + m_pacs.getAddress() +
             ", port: " + QString().setNum(m_pacs.getStoreServicePort()) + ", Descripcio error : " + state.text() );
-        return state.setStatus(DcmtkNoConnectionError);
+        return PACSRequestStatus::CanNotConnectPACSToSend;
     }
 
-    initialitzeImagesCounters();
+    initialitzeImagesCounters(imageListToSend.count());
 
-    foreach(Image *imageToStore, imageListToStore)
+    foreach(Image *imageToStore, imageListToSend)
     {
+        INFO_LOG(QString("S'enviara al PACS %1 el fitxer %2").arg(m_pacs.getAETitle(), imageToStore->getPath()));
         if (storeSCU(pacsServer.getConnection(), qPrintable(imageToStore->getPath())))
         {
-            //Si l'ha imatge s'ha enviat correctament la processem
-            //TODO:m_numberOfImagesSent també comptabilitzat imatges que l'enviament ha fallat, les hauria de comptar?
-            m_numberOfImagesSent++;
-            emit DICOMFileSent(imageToStore, m_numberOfImagesSent);
+            emit DICOMFileSent(imageToStore, getNumberOfImagesSentSuccesfully() + this->getNumberOfImagesSentWarning());
         }
     }
 
     pacsServer.disconnect();
 
-    return getStatusStoreSCU(imageListToStore.count());
+    return getStatusStoreSCU();
 }
 
-void StoreImages::initialitzeImagesCounters()
+void SendDICOMFilesToPACS::initialitzeImagesCounters(int numberOfImagesToSend)
 {
     //Inicialitzem els comptadors 
 
-    m_numberOfStoredImagesSuccessful = 0;
-    m_numberOfStoredImagesWithWarning = 0;
-    m_numberOfImagesSent = 0;
+    m_numberOfSendImagesSuccessful = 0;
+    m_numberOfSendImagesWithWarning = 0;
+    m_numberOfImagesToSend = numberOfImagesToSend;
 }
 
 /*
@@ -85,7 +83,7 @@ void StoreImages::initialitzeImagesCounters()
  *   association - [in] The associationiation (network connection to another DICOM application).
  *   filepathToStore - [in] Name of the file which shall be processed.
  */
-bool StoreImages::storeSCU(PacsConnection pacsConnection, QString filepathToStore)
+bool SendDICOMFilesToPACS::storeSCU(PacsConnection pacsConnection, QString filepathToStore)
 {
     T_ASC_Association * association = pacsConnection.getPacsConnection();
     DIC_US msgId = association->nextMsgID++;
@@ -166,7 +164,7 @@ bool StoreImages::storeSCU(PacsConnection pacsConnection, QString filepathToStor
     }
 }
 
-void StoreImages::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed)
+void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed)
 {
     QList< DcmTagKey > relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
     QString messageErrorLog = "No s'ha pogut enviar el fitxer " + filePathDicomObjectStoredFailed + ", descripció error rebuda";
@@ -181,7 +179,7 @@ void StoreImages::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmD
     if (response->DimseStatus == STATUS_Success)
     {
         //La imatge s'ha enviat correctament
-        m_numberOfStoredImagesSuccessful++;
+        m_numberOfSendImagesSuccessful++;
         return;
     }
 
@@ -212,7 +210,7 @@ void StoreImages::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmD
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
             
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
-            m_numberOfStoredImagesWithWarning++;
+            m_numberOfSendImagesWithWarning++;
             break;
         default:
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
@@ -238,39 +236,50 @@ void StoreImages::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmD
     }
 }
 
-Status StoreImages::getStatusStoreSCU(int numberOfImagesToStore)
+PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::getStatusStoreSCU()
 {
-    Status state;
     /*El tractament d'erros d'StoreSCU és diferent del moveSCU, en moveSCU rebem un status final indicant com ha anat l'operació, mentre que 
       en storeSCU per cada imatge que s'envia és rep un status, com podem tenir al enviar un estudi, status failure, warning, ..., cap a l'usuari
       només enviarem un error i mostrarem el més crític, per exemple si tenim 5 errors Warning i un de Failure, enviarem error indica que l'enviament 
       d'algunes imatges ha fallat. */
 
-    if (m_numberOfStoredImagesSuccessful == 0)
+    if (getNumberOfImagesSentSuccesfully() == 0)
     {
-        //No hem guardat cap imatge
-        state.setStatus(DcmtkStorescuFailureStatus);
+        //No hem guardat cap imatge (Failure Status)
         ERROR_LOG("Ha fallat l'enviament de totes les imatges al PACS");
+        return PACSRequestStatus::FailureSend;
     }
-    else if (m_numberOfStoredImagesSuccessful + m_numberOfStoredImagesWithWarning < numberOfImagesToStore)
+    else if (getNumberOfImagesSentFailed() > 0)
     {
-        //No s'han pogut guardar les imatges
-        state.setStatus(DcmkStorescuSomeImagesFailedStatus);
-        ERROR_LOG(QString("L'enviament al PACS de %1 de %2 imatges ha fallat").arg(QString().setNum(numberOfImagesToStore - m_numberOfStoredImagesSuccessful + m_numberOfStoredImagesWithWarning), QString().setNum(numberOfImagesToStore)));
+        //No s'han pogut guardar les imatges (Warning Status);
+        ERROR_LOG(QString("L'enviament al PACS de %1 de %2 imatges ha fallat").arg(QString().setNum(getNumberOfImagesSentFailed()), QString().setNum(m_numberOfImagesToSend)));
+        return PACSRequestStatus::SomeImagesFailedSend;
     }
-    else if (m_numberOfStoredImagesWithWarning > 0)
+    else if (getNumberOfImagesSentWarning() > 0)
     {
         //Alguna imatge s'ha guardat amb l'Status de warning
-        state.setStatus(DcmkStorescuWarningStatus);
-        WARN_LOG(QString("En l'enviament de %1 de %2 imatges s'ha rebut un warning").arg(QString().setNum(m_numberOfStoredImagesWithWarning), QString().setNum(numberOfImagesToStore)));
+        WARN_LOG(QString("En l'enviament de %1 de %2 imatges s'ha rebut un warning").arg(QString().setNum(getNumberOfImagesSentWarning()), QString().setNum(m_numberOfImagesToSend)));
+        return PACSRequestStatus::SomeImagesFailedSend;
     }
-    else 
-    {
-        state.setStatus("",true,0);
-        INFO_LOG("Totes les imatges s'han enviat al PACS correctament");
-    }   
+    
+    INFO_LOG("Totes les imatges s'han enviat al PACS correctament");
 
-    return state;
+    return PACSRequestStatus::OkSend;
+}
+
+int SendDICOMFilesToPACS::getNumberOfImagesSentSuccesfully()
+{
+    return m_numberOfSendImagesSuccessful;
+}
+
+int SendDICOMFilesToPACS::getNumberOfImagesSentFailed()
+{
+    return m_numberOfImagesToSend - m_numberOfSendImagesSuccessful - m_numberOfSendImagesWithWarning;
+}
+
+int SendDICOMFilesToPACS::getNumberOfImagesSentWarning()
+{
+    return m_numberOfSendImagesWithWarning;
 }
 
 }
