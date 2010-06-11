@@ -125,6 +125,7 @@ void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
             break;
         case PACSJob::RetrieveDICOMFilesFromPACSJobType:
             m_retrieveDICOMFilesFromPACSWeaver->enqueue(pacsJob);
+            break;
         default:
             ERROR_LOG("Tipus de Job invàlid");
             break;
