@@ -127,7 +127,7 @@ void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
             m_retrieveDICOMFilesFromPACSWeaver->enqueue(pacsJob);
             break;
         default:
-            ERROR_LOG("Tipus de Job invàlid");
+            ERROR_LOG("Tipus de job invalid");
             break;
     }
 
@@ -145,7 +145,7 @@ bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
             return !m_retrieveDICOMFilesFromPACSWeaver->isIdle();
             break;
         default:
-            ERROR_LOG("Tipus de job in vàlid");
+            ERROR_LOG("Tipus de job invalid");
             return false;
     }
 }
