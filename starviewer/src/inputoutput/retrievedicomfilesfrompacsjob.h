@@ -67,6 +67,13 @@ signals:
     ///Signal que s'emet quan s'ha descarregat una sèrie
     void DICOMSeriesRetrieved(PACSJob *pacsJob, int numberOfSeriesRetrieved);
 
+    ///Signal que s'emet quan el DICOMTagReader està a punt per ser processats. Aquest signal és d'ús intern
+    void DICOMTagReaderReadyForProcess(DICOMTagReader *dicomTagReader);
+
+    /**Signal que indica que la descàrrega de fitxers DICOM ha finalitzat. Aquest signal es fa quan la descarrega de fitxers DICOM ha acabat però encara
+       queda processar els fillers per obtenir l'objecte Patient a guardar a la base de dades. Aquest signal és d'us intern*/
+    void DICOMFilesRetrieveFinished();
+
 private slots:
 
     ///Slot que s'activa quan s'ha descarregat una imatge, respón al signal DICOMFileRetrieved de RetrieveDICOMFilesFromPACS
@@ -104,7 +111,6 @@ private:
     QList<QString> m_retrievedSeriesInstanceUID;
     QString m_lastImageSeriesInstanceUID;
     int m_numberOfSeriesRetrieved;
-    PatientFiller *m_patientFiller;
 };
 
 };

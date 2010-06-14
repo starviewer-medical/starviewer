@@ -38,7 +38,6 @@ RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevi
 RetrieveDICOMFilesFromPACSJob::~RetrieveDICOMFilesFromPACSJob()
 {
     delete m_retrieveDICOMFilesFromPACS;
-    delete m_patientFiller;
 }
 
 PACSJob::PACSJobType RetrieveDICOMFilesFromPACSJob::getPACSJobType()
@@ -76,13 +75,13 @@ void RetrieveDICOMFilesFromPACSJob::run()
     else
     {
         LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
-        m_patientFiller = new PatientFiller();
+        PatientFiller patientFiller;
         QThreadRunWithExec fillersThread;
-        m_patientFiller->moveToThread( &fillersThread );
+        patientFiller.moveToThread( &fillersThread );
         LocalDatabaseManager localDatabaseManager;
 
         //creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
-        createRetrieveDICOMFilesConnections(&localDatabaseManager, &localDatabaseManagerThreaded, m_patientFiller, &fillersThread);
+        createRetrieveDICOMFilesConnections(&localDatabaseManager, &localDatabaseManagerThreaded, &patientFiller, &fillersThread);
 
         localDatabaseManager.setStudyRetrieving(m_dicomMaskToRetrieve.getStudyUID());
         localDatabaseManagerThreaded.start();
@@ -96,9 +95,9 @@ void RetrieveDICOMFilesFromPACSJob::run()
     
             m_numberOfSeriesRetrieved++;
             emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);//Indiquem que s'ha descarregat la última sèrie
+            emit DICOMFilesRetrieveFinished(); 
 
             //Esperem que el processat i l'insersió a la base de dades acabin
-            m_patientFiller->finishDICOMFilesProcess();
             fillersThread.wait();
             localDatabaseManagerThreaded.wait();
 
@@ -155,8 +154,13 @@ void RetrieveDICOMFilesFromPACSJob::DICOMFileRetrieved(DICOMTagReader *dicomTagR
         }
     }
 
-    //S'ha de fer després d'haver comprovat si teniem serie nova, perquè si el fem després pot ser que l'objecte DICOMTagReader ja estigui esborrat
-    m_patientFiller->processDICOMFile(dicomTagReader);
+    
+    /*Fem un emit indicat que dicomTagReader està a punt per ser processat per l'Slot processDICOMFile de PatientFiller, no podem fer un connect
+      directament entre el signal de DICOMFileRetrieved de RetrieveDICOMFileFromPACS i processDICOMFile de PatientFiller, perquè ens podríem trobar
+      que quan en aquest mètode comprova si hem descarregat una nova sèrie que DICOMTagReader ja no tingui valor, per això primer capturem el signal de 
+      RetrieveDICOMFileFromPACS comprovem si és una sèrie nova la que es descarrega i llavors fem l'emit per que PatientFiller processi el DICOMTagReader*/
+
+    emit DICOMTagReaderReadyForProcess(dicomTagReader);
 
     m_lastImageSeriesInstanceUID = seriesInstancedUIDRetrievedImage;
 }
@@ -188,6 +192,9 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::thereIsA
 
 void RetrieveDICOMFilesFromPACSJob::createRetrieveDICOMFilesConnections(LocalDatabaseManager *localDatabaseManager,LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread)
 {
+    connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader *)), patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
+    connect(this, SIGNAL(DICOMFilesRetrieveFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
+
     //Connexió entre el processat i l'insersió al a BD
     connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( save(Patient *) ), Qt::DirectConnection);
 
