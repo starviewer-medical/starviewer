@@ -572,18 +572,20 @@ double QEdemaSegmentationExtension::calculateMaskVolume()
         volume *= spacing[i];
     }
 
-    int cont;
-    EditorToolData *editorToolData = static_cast<EditorToolData*> ( m_2DView->getToolProxy()->getTool("EditorTool")->getToolData() );
-    if( editorToolData!=0 )
+    int cont = 0;
+    EditorTool *editorTool = static_cast<EditorTool *>(m_2DView->getToolProxy()->getTool("EditorTool"));
+    if ( editorTool ) 
     {
-        cont = editorToolData->getVolumeVoxels();
+        EditorToolData *editorToolData = static_cast<EditorToolData *>(editorTool->getToolData());
+        if( editorToolData!=0 )
+        {
+            cont = editorToolData->getVolumeVoxels();
+        }
+        else
+        {
+            DEBUG_LOG("No existeix la editor tool");
+        }
     }
-    else
-    {
-        DEBUG_LOG("No existeix la editor tool");
-        cont = 0;
-    }
-
     volume = volume*(double)cont;
 
     return volume;
