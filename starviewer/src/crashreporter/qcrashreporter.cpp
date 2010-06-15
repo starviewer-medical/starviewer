@@ -12,10 +12,7 @@
 #include "logging.h"
 #include <QMovie>
 #include <QNetworkInterface>
-
-#ifdef WIN32
-    #include <Windows.h>
-#endif
+#include <QProcess>
 
 namespace udg {
 
@@ -90,10 +87,15 @@ void QCrashReporter::restartButtonClickedSlot()
     maybeSendReport();
 
     QString starviewerPath = QCoreApplication::applicationDirPath() + "/" + STARVIEWER_EXE;
-    QByteArray starviewerPathByteArray = starviewerPath.toLocal8Bit();
-    const char * starviewerPathCString = starviewerPathByteArray.constData();
+#ifdef WIN32
+    /*En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
+     *com el directori C:\Program Files\Starviewer\starviewer.exe, hem de posar el path entre cometes 
+     * per a que no ho interpreti com a paràmetres, per exemple "C:\Program Files\Starviewer\starviewer.exe" */
 
-    restart( starviewerPathCString );
+     starviewerPath = "\"" + starviewerPath + "\""; //afegim les cometes per si algun dels directori conté espai
+#endif
+
+    restart( starviewerPath );
 
     close();
 }
@@ -149,57 +151,12 @@ void QCrashReporter::sendReport()
     m_sendReportLabel->hide();
 }
     
-bool QCrashReporter::restart(const char * path)
+bool QCrashReporter::restart(const QString &path)
 {
-
-#ifndef WIN32 
-
-    pid_t pid = fork();
-    
-    if (pid == -1) // el fork ha fallat
-        return false;
-    if (pid == 0) { // estem al fork
-        execl( path, path, (char*) 0 );
-        // execl substitueix aquest proces, per tant el que ve a continuació no s'hauria d'executar
-        exit(1);
-    }
-    
-    return true;
-
-#else
-    
-    //convert path to widechars, which sadly means the path name must be Latin1    
-    wchar_t pathWchar[ 256 ];
-    char* out = (char*)pathWchar;
-    const char* in = path - 1;
-    do {
-        *out++ = *++in; //latin1 chars fit in first byte of each wchar
-        *out++ = '\0';  //every second byte is NULL
-    }
-    while (*in);
-    
-    wchar_t command[MAX_PATH * 3 + 6];
-    wcscpy_s( command, pathWchar);
-
-    STARTUPINFO si;
-    PROCESS_INFORMATION pi;
-    
-    ZeroMemory( &si, sizeof(si) );
-    si.cb = sizeof(si);
-    si.dwFlags = STARTF_USESHOWWINDOW;
-    si.wShowWindow = SW_SHOWNORMAL;
-    ZeroMemory( &pi, sizeof(pi) );
-    
-    if (CreateProcess( NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
-    {
-        CloseHandle( pi.hProcess );
-        CloseHandle( pi.hThread );
-        TerminateProcess( GetCurrentProcess(), 1 );
-    }
+	QProcess process;
+	process.startDetached(path);
      
     return true;
-    
-#endif // WIN32
 }
 
 };
