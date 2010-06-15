@@ -27,7 +27,7 @@ public slots:
     void restartButtonClickedSlot();
 
 private:
-    bool restart(const char * path);
+    bool restart(const QString &path);
     void sendReport();
     void maybeSendReport();
 
