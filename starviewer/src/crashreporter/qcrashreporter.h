@@ -22,7 +22,7 @@ Q_OBJECT
 public:
     QCrashReporter( const QStringList& argv , QWidget *parent = 0);
 
-public Q_SLOTS:
+public slots:
     void quitButtonClickedSlot();
     void restartButtonClickedSlot();
 

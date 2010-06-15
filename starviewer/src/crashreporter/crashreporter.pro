@@ -5,8 +5,6 @@ TARGET = $${TARGET_STARVIEWER_CRASH_REPORTER}
 
 DESTDIR = ../../bin
 
-CONFIG += no_keywords
-
 macx {
   DESTDIR = $${DESTDIR}/$${TARGET_STARVIEWER}.app/Contents/MacOS
 }
