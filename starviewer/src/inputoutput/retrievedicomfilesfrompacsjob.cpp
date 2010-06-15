@@ -32,7 +32,9 @@ RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevi
     m_retrieveDICOMFilesFromPACS = new RetrieveDICOMFilesFromPACS(getPacsDevice());
     m_retrievePriorityJob = retrievePriorityJob;
 
-    connect(m_retrieveDICOMFilesFromPACS, SIGNAL( DICOMFileRetrieved(DICOMTagReader*, int) ), this, SLOT( DICOMFileRetrieved(DICOMTagReader*, int) ));
+	/*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
+	  no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes*/
+    connect(m_retrieveDICOMFilesFromPACS, SIGNAL( DICOMFileRetrieved(DICOMTagReader*, int) ), this, SLOT( DICOMFileRetrieved(DICOMTagReader*, int) ), Qt::DirectConnection);
 }
 
 RetrieveDICOMFilesFromPACSJob::~RetrieveDICOMFilesFromPACSJob()
