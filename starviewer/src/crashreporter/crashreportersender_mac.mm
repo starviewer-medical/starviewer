@@ -17,17 +17,17 @@ namespace udg {
 bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QString,QString> &options)
 {
  
-    NSString *urlString = [NSString stringWithCString:url.toStdString().c_str()];
-    NSString *minidumpPathString = [NSString stringWithCString:minidumpPath.toStdString().c_str()];
+    NSString *urlString = [NSString stringWithUTF8String:url.toStdString().c_str()];
+    NSString *minidumpPathString = [NSString stringWithUTF8String:minidumpPath.toStdString().c_str()];
     NSURL *uploadUrl = [NSURL URLWithString:urlString];
     HTTPMultipartUpload *ul = [[HTTPMultipartUpload alloc] initWithURL:uploadUrl];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
-    
+
     NSLog(@"Parameters:\n");
-    foreach(QString key, options.keys())
+    Q_FOREACH(QString key, options.keys())
     {
-        NSString *keyString = [NSString stringWithCString:key.toStdString().c_str()];
-        NSString *valueString = [NSString stringWithCString:options.take(key).toStdString().c_str()];
+        NSString *keyString = [NSString stringWithUTF8String:key.toStdString().c_str()];
+        NSString *valueString = [NSString stringWithUTF8String:options.take(key).toStdString().c_str()];
         [parameters setObject:valueString forKey:keyString];
         NSLog(@"Key: %@ Value: %@\n", keyString, valueString);
     }
