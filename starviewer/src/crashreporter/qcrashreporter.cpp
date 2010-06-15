@@ -43,11 +43,11 @@ QCrashReporter::QCrashReporter( const QStringList& args , QWidget *parent )
     // Busquem les adreces IP del host.
     QString ipAddresses(""); 
 
-    foreach(QNetworkInterface inter, QNetworkInterface::allInterfaces())
+    Q_FOREACH(QNetworkInterface inter, QNetworkInterface::allInterfaces())
     {
         if (inter.flags().testFlag(QNetworkInterface::IsRunning))
         {
-            foreach (QNetworkAddressEntry entry, inter.addressEntries())
+            Q_FOREACH(QNetworkAddressEntry entry, inter.addressEntries())
             {
                 if ( inter.hardwareAddress() != "00:00:00:00:00:00" && entry.ip().toString().contains(".") && entry.ip().toString() != "127.0.0.1")
                 {
