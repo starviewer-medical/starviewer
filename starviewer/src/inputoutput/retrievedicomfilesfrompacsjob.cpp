@@ -31,10 +31,6 @@ RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevi
     m_dicomMaskToRetrieve = dicomMaskToRetrieve;
     m_retrieveDICOMFilesFromPACS = new RetrieveDICOMFilesFromPACS(getPacsDevice());
     m_retrievePriorityJob = retrievePriorityJob;
-
-	/*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
-	  no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes*/
-    connect(m_retrieveDICOMFilesFromPACS, SIGNAL( DICOMFileRetrieved(DICOMTagReader*, int) ), this, SLOT( DICOMFileRetrieved(DICOMTagReader*, int) ), Qt::DirectConnection);
 }
 
 RetrieveDICOMFilesFromPACSJob::~RetrieveDICOMFilesFromPACSJob()
@@ -82,11 +78,19 @@ void RetrieveDICOMFilesFromPACSJob::run()
         patientFiller.moveToThread( &fillersThread );
         LocalDatabaseManager localDatabaseManager;
 
-        //creem les connexions de signals i slots per enllaçar les diferents classes que participen a la descàrrega
-        createRetrieveDICOMFilesConnections(&localDatabaseManager, &localDatabaseManagerThreaded, &patientFiller, &fillersThread);
+		/*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
+		  no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes*/
+		connect(m_retrieveDICOMFilesFromPACS, SIGNAL( DICOMFileRetrieved(DICOMTagReader*, int) ), this, SLOT( DICOMFileRetrieved(DICOMTagReader*, int) ), Qt::DirectConnection);
+		//Connectem amb els signals del patientFiller per processar els fitxers descarregats
+		connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader *)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
+		connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
+		//Connexió entre el processat i l'insersió al a BD
+		connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &localDatabaseManagerThreaded, SLOT( save(Patient *) ), Qt::DirectConnection);
+		//Connexions per finalitzar els threads
+		connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &fillersThread, SLOT( quit() ), Qt::DirectConnection);
+		connect(&localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), &localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
 
         localDatabaseManager.setStudyRetrieving(m_dicomMaskToRetrieve.getStudyUID());
-        localDatabaseManagerThreaded.start();
         fillersThread.start();
         
         m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_dicomMaskToRetrieve);
@@ -94,7 +98,8 @@ void RetrieveDICOMFilesFromPACSJob::run()
         if (m_retrieveRequestStatus == PACSRequestStatus::OkRetrieve || m_retrieveRequestStatus == PACSRequestStatus::RetrieveWarning)
         {
             INFO_LOG("Ha finalitzat la descàrrega de l'estudi " + m_dicomMaskToRetrieve.getStudyUID() + "del pacs " + getPacsDevice().getAETitle());
-    
+			localDatabaseManagerThreaded.start();
+
             m_numberOfSeriesRetrieved++;
             emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);//Indiquem que s'ha descarregat la última sèrie
             emit DICOMFilesRetrieveFinished(); 
@@ -118,7 +123,6 @@ void RetrieveDICOMFilesFromPACSJob::run()
         }
         else
         {
-            localDatabaseManagerThreaded.quit();
             fillersThread.quit();
             deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
         }
@@ -194,18 +198,6 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::thereIsA
 
 void RetrieveDICOMFilesFromPACSJob::createRetrieveDICOMFilesConnections(LocalDatabaseManager *localDatabaseManager,LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread)
 {
-    connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader *)), patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
-    connect(this, SIGNAL(DICOMFilesRetrieveFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
-
-    //Connexió entre el processat i l'insersió al a BD
-    connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), localDatabaseManagerThreaded, SLOT( save(Patient *) ), Qt::DirectConnection);
-
-	//Connexió que s'esborrarà un estudi per alliberar espai
-	//connect(localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), this, SLOT(studyWillBeDeletedSlot(QString)));
-
-    //Connexions per finalitzar els threads
-    connect(patientFiller, SIGNAL( patientProcessed(Patient *) ), fillersThread, SLOT( quit() ), Qt::DirectConnection);
-    connect(localDatabaseManagerThreaded, SIGNAL( operationFinished(LocalDatabaseManagerThreaded::OperationType) ), localDatabaseManagerThreaded, SLOT( quit() ), Qt::DirectConnection );
 }
 
 void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDatabase()
