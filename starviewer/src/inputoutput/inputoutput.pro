@@ -56,7 +56,6 @@ HEADERS += databaseconnection.h \
     localdatabasepatientdal.h \
     localdatabaseutildal.h \
     qdeleteoldstudiesthread.h \
-    localdatabasemanagerthreaded.h \
     qthreadrunwithexec.h \
     databaseinstallation.h \
     qlocaldatabaseconfigurationscreen.h \
@@ -116,7 +115,6 @@ SOURCES += databaseconnection.cpp \
     localdatabasepatientdal.cpp \
     localdatabaseutildal.cpp \
     qdeleteoldstudiesthread.cpp \
-    localdatabasemanagerthreaded.cpp \
     databaseinstallation.cpp \
     qlocaldatabaseconfigurationscreen.cpp \
     parsexmlrispierrequest.cpp \
