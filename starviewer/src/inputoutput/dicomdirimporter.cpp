@@ -21,7 +21,6 @@
 #include "patientfiller.h"
 #include "dicomtagreader.h"
 #include "localdatabasemanager.h"
-#include "localdatabasemanagerthreaded.h"
 #include "qthreadrunwithexec.h"
 #include "localdatabasemanager.h"
 #include "deletedirectory.h"
@@ -33,7 +32,6 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
 {
     m_lastError = Ok;
     LocalDatabaseManager localDatabaseManager;
-    LocalDatabaseManagerThreaded localDatabaseManagerThreaded;
     PatientFiller patientFiller;
     QThreadRunWithExec fillersThread;
 
@@ -67,9 +65,8 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     patientFiller.moveToThread(&fillersThread);
 
     //Creem les connexions necessàries per importar dicomdirs
-    createConnections(&patientFiller, &localDatabaseManagerThreaded, &fillersThread);
+    createConnections(&patientFiller, &localDatabaseManager, &fillersThread);
 
-    localDatabaseManagerThreaded.start();
     fillersThread.start();
 
     importStudy(studyUID, seriesUID, sopInstanceUID);
@@ -85,7 +82,6 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
 
     //Esperem que el processat i l'insersió a la base de dades acabin
     fillersThread.wait();
-    localDatabaseManagerThreaded.wait();
 
     //Comprovem que s'hagi importat correctament el nou estudi 
     if (getLastError() != Ok)
@@ -95,14 +91,14 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     else
     {
         //Comprovem que s'hagi inserit correctament el nou estudi a la base de dades
-        if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::Ok)
+        if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok)
         {
             INFO_LOG( "Estudi " + studyUID + " importat" );
             m_lastError = Ok;
         }
         else 
         {
-            if (localDatabaseManagerThreaded.getLastError() == LocalDatabaseManager::PatientInconsistent)
+            if (localDatabaseManager.getLastError() == LocalDatabaseManager::PatientInconsistent)
             {
                 //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
                 m_lastError = PatientInconsistent;
@@ -262,22 +258,22 @@ QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
 
 }
 
-void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, QThreadRunWithExec *fillersThread)
+void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThreadRunWithExec *fillersThread)
 {
     //Connexions entre la descarrega i el processat dels fitxers
     connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader*)), patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
     connect(this, SIGNAL(importFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
 
-    //Connexió entre el processat i l'insersió al a BD
-    connect(patientFiller, SIGNAL(patientProcessed(Patient*)), localDatabaseManagerThreaded, SLOT(save(Patient*)), Qt::DirectConnection);
+    /*Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el 
+      el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan en surt 
+      perquè els thread dels fillers ja ha finalitzat, ja  s'ha inserit el pacient a la base de dades.*/
+    connect(patientFiller, SIGNAL(patientProcessed(Patient*)), localDatabaseManager, SLOT(save(Patient*)), Qt::DirectConnection);
 
     //Connexions per finalitzar els threads
     connect(patientFiller, SIGNAL(patientProcessed(Patient*)), fillersThread, SLOT(quit()), Qt::DirectConnection);
-    connect(localDatabaseManagerThreaded, SIGNAL(operationFinished(LocalDatabaseManagerThreaded::OperationType)), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
 
     //Connexions d'abortament
     connect(this, SIGNAL(importAborted()), fillersThread, SLOT(quit()), Qt::DirectConnection);
-    connect(this, SIGNAL(importAborted()), localDatabaseManagerThreaded, SLOT(quit()), Qt::DirectConnection);
 }
 
 void DICOMDIRImporter::deleteFailedImportedStudy(QString studyInstanceUID)
