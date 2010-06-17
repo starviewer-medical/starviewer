@@ -91,9 +91,6 @@ private:
     ///Indica si l'estudi amb l'UID passat peràmetre ja existeix a la base de dades
     bool existStudyInLocalDatabase(QString studyInstanceUID);
 
-    ///Crea les connexions entre els diversos elements per guardar els fitxers descarregat a la Base de dades
-    void createRetrieveDICOMFilesConnections(LocalDatabaseManager *localDatabaseManager,LocalDatabaseManagerThreaded *localDatabaseManagerThreaded, PatientFiller *patientFiller, QThreadRunWithExec *fillersThread);
-
     ///Esborra els fitxers descarregats de la caché si l'estudi no existeix a la base de dades
     /*Aquest mètode està pensat en casos que la descàrrega falla i volem esborrar els fitxers descarregats, només s'esborran si l'estudi no està inserit
       a la bd, si l'estudi està inserit no l'esborrem, perquè part dels fitxers descarregats ja podien estar inserit a la base de dades per una anterior
