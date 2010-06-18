@@ -24,7 +24,9 @@ SendDICOMFilesToPACSJob::SendDICOMFilesToPACSJob(PacsDevice pacsDevice, QList<Im
     m_sendRequestStatus = PACSRequestStatus::OkSend;
     m_sendDICOMFilesToPACS = new SendDICOMFilesToPACS(pacsDevice);
 
-    connect(m_sendDICOMFilesToPACS, SIGNAL( DICOMFileSent(Image *, int) ), SLOT( DICOMFileSent(Image *, int) ) );
+    /*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
+     no s'atendria fins que la interfície estigui lliure poguent provocar comportaments incorrectes*/
+    connect(m_sendDICOMFilesToPACS, SIGNAL( DICOMFileSent(Image *, int) ), SLOT( DICOMFileSent(Image *, int) ), Qt::DirectConnection );
 }
 
 SendDICOMFilesToPACSJob::~SendDICOMFilesToPACSJob()
