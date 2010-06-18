@@ -139,6 +139,10 @@ private slots:
     ///Slot que s'activa quan un SendDICOMFilesToPACSJob acaba
     void sendDICOMFilesToPACSJobFinished(PACSJob *);
 
+    /*Cada vegada que encuem un nou Job comprovem si és un RetrieveDICOMFileFromPACSJob i si és així connectem amb el Signal StudyFromCacheWillBeDeleted
+      per si s'esborren estudis de la caché poder-los treure de la QStudyTreeWidget*/
+    void newPACSJobEnqueued(PACSJob *);
+
 private:
 
     QMenu m_contextMenuQStudyTreeWidget;
