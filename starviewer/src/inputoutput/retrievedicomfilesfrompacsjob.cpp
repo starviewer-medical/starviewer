@@ -1,6 +1,7 @@
 #include "retrievedicomfilesfrompacsjob.h"
 
 #include <QtGlobal>
+#include <QThread>
 
 #include "logging.h"
 #include "patient.h"
@@ -12,7 +13,6 @@
 #include "dicommask.h"
 #include "localdatabasemanager.h"
 #include "patientfiller.h"
-#include "qthreadrunwithexec.h"
 #include "deletedirectory.h"
 #include "utils.h"
 #include "harddiskinformation.h"
@@ -72,7 +72,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
     else
     {
         PatientFiller patientFiller;
-        QThreadRunWithExec fillersThread;
+        QThread fillersThread;
         patientFiller.moveToThread( &fillersThread );
         LocalDatabaseManager localDatabaseManager;
 
