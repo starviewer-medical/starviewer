@@ -21,6 +21,7 @@
 #include "qwidgetselectpacstostoredicomimage.h"
 #include "pacsmanager.h"
 #include "senddicomfilestopacsjob.h"
+#include "retrievedicomfilesfrompacsjob.h"
 
 namespace udg
 {
@@ -115,6 +116,7 @@ void QInputOutputLocalDatabaseWidget::clear()
 void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
 {
     m_pacsManager = pacsManager;
+    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*))); 
 }
 
 void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
@@ -499,6 +501,19 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *p
         {
             QMessageBox::critical(this, ApplicationNameString, sendDICOMFilesToPACSJob->getStatusDescription());
         }
+    }
+}
+
+void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJob *pacsJob)
+{
+    /*Connectem amb el signal RetrieveDICOMFilesFromPACSJob de que s'esborrarà un estudi de la caché per treure'ls de la QStudyTreeWidget quan se 
+      n'esborrin*/
+    /*TODO: RetrieveDICOMFilesFromPACS no hauria d'emetre aquest signal, hauria de ser una CacheManager d'aquesta manera treuriem la responsabilitat
+            de RetrieveDICOMFilesFromPACS de fer-ho, i a més no caldria connectar el signal cada vegada que fan un nou Job. Una vegada s'hagi implementar la
+            CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h" */
+    if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
+    {
+        connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ), SIGNAL(studyFromCacheWillBeDeleted(QString)), SLOT(removeStudyFromQStudyTreeWidget(QString)));
     }
 }
 

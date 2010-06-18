@@ -177,7 +177,10 @@ int RetrieveDICOMFilesFromPACSJob::priority() const
 PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::thereIsAvailableSpaceOnHardDisk()
 {
     LocalDatabaseManager localDatabaseManager;
-
+    /*TODO: Aquest signal no s'hauria de fer des d'aquesta classe sinó des d'una CacheManager, però com de moment encara no està implementada 
+            temporalment emetem el signal des d'aquí*/
+    connect(&localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), SIGNAL(studyFromCacheWillBeDeleted(QString)));
+   
     if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
     {
         if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal

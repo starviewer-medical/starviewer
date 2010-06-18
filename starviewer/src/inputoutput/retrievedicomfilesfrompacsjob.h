@@ -70,6 +70,12 @@ signals:
        queda processar els fillers per obtenir l'objecte Patient a guardar a la base de dades. Aquest signal és d'us intern*/
     void DICOMFilesRetrieveFinished();
 
+    /**Abans de descarregar un estudi es comprova si hi ha espaci suficient, si no n'hi ha s'itentan esborrar estuis de la caché local per alliberar 
+       espai, amb aquest signal s'indica que l'estudi amb instanceUID s'esborrarà de la caché*/
+    /*TODO:Aquest signal no s'hauria de fer des d'aquesta classe sinó des d'una CacheManager, però com de moment encara no està implementada 
+      temporalment emetem el signal des d'aquí*/
+    void studyFromCacheWillBeDeleted(const QString &studyInstanceUID);
+
 private slots:
 
     ///Slot que s'activa quan s'ha descarregat una imatge, respón al signal DICOMFileRetrieved de RetrieveDICOMFilesFromPACS
