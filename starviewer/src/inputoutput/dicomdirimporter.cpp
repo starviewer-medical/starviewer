@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QFile>
 #include <QString>
+#include <QThread>
 
 #include "status.h"
 #include "study.h"
@@ -21,7 +22,6 @@
 #include "patientfiller.h"
 #include "dicomtagreader.h"
 #include "localdatabasemanager.h"
-#include "qthreadrunwithexec.h"
 #include "localdatabasemanager.h"
 #include "deletedirectory.h"
 
@@ -33,7 +33,7 @@ void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString se
     m_lastError = Ok;
     LocalDatabaseManager localDatabaseManager;
     PatientFiller patientFiller;
-    QThreadRunWithExec fillersThread;
+    QThread fillersThread;
 
     //Comprovem si hi ha suficient espai lliure per importar l'estudi
     if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
@@ -258,7 +258,7 @@ QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
 
 }
 
-void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThreadRunWithExec *fillersThread)
+void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThread *fillersThread)
 {
     //Connexions entre la descarrega i el processat dels fitxers
     connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader*)), patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));

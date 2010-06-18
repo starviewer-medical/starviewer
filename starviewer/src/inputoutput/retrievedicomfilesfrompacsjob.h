@@ -23,9 +23,6 @@ namespace udg {
 class Study;
 class RetrieveDICOMFilesFromPACS;
 class PacsDevice;
-class PatientFiller;
-class QThreadRunWithExec;
-class LocalDatabaseManager;
 class DICOMTagReader;
 
 class RetrieveDICOMFilesFromPACSJob: public PACSJob

@@ -56,7 +56,6 @@ HEADERS += databaseconnection.h \
     localdatabasepatientdal.h \
     localdatabaseutildal.h \
     qdeleteoldstudiesthread.h \
-    qthreadrunwithexec.h \
     databaseinstallation.h \
     qlocaldatabaseconfigurationscreen.h \
     parsexmlrispierrequest.h \

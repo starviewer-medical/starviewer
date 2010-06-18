@@ -53,7 +53,7 @@ private:
     QProgressDialog *m_qprogressDialog;
 
     ///crea les connexions necessàries per importar dicomdir
-    void createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThreadRunWithExec *fillersThread); 
+    void createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThread *fillersThread);
 
     void importStudy(QString studyUID, QString seriesUID, QString sopInstanceUID);
 
