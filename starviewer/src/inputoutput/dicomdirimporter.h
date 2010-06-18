@@ -13,13 +13,13 @@
 #include <QProgressDialog>
 
 class QString;
+class QThread;
 
 namespace udg {
 
 class Image;
 class DICOMTagReader;
 class PatientFiller;
-class QThreadRunWithExec;
 class LocalDatabaseManager;
 
 /** Aquesta classe permet importar un dicomdir a la nostra base de dades.
