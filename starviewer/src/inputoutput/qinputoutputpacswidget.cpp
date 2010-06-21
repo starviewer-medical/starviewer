@@ -235,6 +235,10 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacs
         default:
             break;
     }
+
+    /*Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
+      que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop*/
+    pacsJob->deleteLater();
 }
 
 void QInputOutputPacsWidget::retrieve(QString pacsIDToRetrieve, Study *studyToRetrieve, DicomMask maskStudyToRetrieve, ActionsAfterRetrieve actionsAfterRetrieve)
