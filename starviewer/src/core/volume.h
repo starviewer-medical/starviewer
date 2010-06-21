@@ -28,6 +28,11 @@
 // FWD declarations
 class vtkImageData;
 
+#ifdef VTK_GDCM_SUPPORT
+class vtkGDCMImageReader;
+class vtkEventQtSlotConnect;
+#endif
+
 namespace udg {
 
 class Image;
@@ -241,6 +246,12 @@ private:
 //
 private slots:
     void slotProgress();
+
+#ifdef VTK_GDCM_SUPPORT
+    /// Captura el progrés llançat pel vtkGDCMImageReader
+    void vtkGDCMReaderProgressUpdate();
+#endif
+
 private:
     /// Tipus d'error que podem tenir
     enum { NoError = 1, SizeMismatch, InvalidFileName, MissingFile, OutOfMemory, UnknownError };
@@ -258,7 +269,13 @@ private:
      * @param filenames
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
+#ifdef VTK_GDCM_SUPPORT
+    int readFiles(QStringList filenames, bool vtkGDCMReader = false);
+    int readFilesVTKGDCM(QStringList filenames);
+#else
     int readFiles(QStringList filenames);
+#endif
+    int readFilesITKGDCM(QStringList filenames);
 
     /// Donat un missatge d'error en un string, ens torna el codi d'error intern que sabem tractar
     int identifyErrorMessage(const QString &errorMessage);
@@ -292,6 +309,12 @@ private:
     /// Traductor d'events itk en signals de Qt 
     /// per poder monitorejar el progrés de lectura d'arxius
     itk::QtSignalAdaptor *m_progressSignalAdaptor;
+
+#ifdef VTK_GDCM_SUPPORT
+    // Lector vtkGDCM + progress
+    vtkGDCMImageReader *m_vtkGDCMReader;
+    vtkEventQtSlotConnect *m_vtkQtConnections;
+#endif
 };
 
 /**
