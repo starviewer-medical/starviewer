@@ -40,6 +40,7 @@
 #include <vtkGDCMImageReader.h>
 #include <vtkStringArray.h>
 #include <vtkEventQtSlotConnect.h>
+#include <gdcmPixelFormat.h> // Només per qüestions d'informació de debug
 #endif
 
 namespace udg {
@@ -762,7 +763,7 @@ int Volume::readFilesVTKGDCM(QStringList filenames)
     }
     else
     {
-        std::cerr << "1)Reading only one file" << std::endl;
+        DEBUG_LOG("1)Reading only one file");
         m_vtkGDCMReader->SetFileName( qPrintable(filenames.first()) );    
     }
     try
@@ -771,16 +772,11 @@ int Volume::readFilesVTKGDCM(QStringList filenames)
     }
     catch( ... )
     {
-        std::cerr << "An exception was throwed while reading" << std::endl;
+        DEBUG_LOG("An exception was throwed while reading with vtkGDCMImageReader");
+        WARN_LOG("An exception was throwed while reading with vtkGDCMImageReader");
     }
-    std::cerr << "2)Reading successful" << std::endl;
-    m_imageDataVTK = m_vtkGDCMReader->GetOutput();
-    DEBUG_LOG(">>>>>>>>>>>>VTK GDCM READER<<<<<<<<<<<<<<<<<<<");
-    m_imageDataVTK->Print(std::cout);
-    m_dataLoaded = true;
-    //this->setData( m_vtkGDCMReader->GetOutput() );
-    std::cerr << "3)Well done!" << std::endl;
-
+    DEBUG_LOG("2)Reading successful");
+    DEBUG_LOG("Scalar type selected by the reader");
     switch( m_vtkGDCMReader->GetDataScalarType() )
     {
     case gdcm::PixelFormat::INT16:
@@ -796,6 +792,12 @@ int Volume::readFilesVTKGDCM(QStringList filenames)
         break;
     }
 
+    // Assignem les dades
+    this->setData(m_vtkGDCMReader->GetOutput() );
+
+    DEBUG_LOG(">>>>>>>>>>>>VTK GDCM READER - vtkImageData Output<<<<<<<<<<<<<<<<<<<");
+    m_imageDataVTK->Print(std::cout);
+    
     emit progress( 100 );
     
     return errorCode;
