@@ -657,7 +657,7 @@ void Volume::inputDestructor()
 //     m_gdcmIO->Delete();
 }
 
-int Volume::readSingleFile(QString fileName)
+int Volume::readSingleFile(const QString &fileName)
 {
     int errorCode = NoError;
 
@@ -728,7 +728,7 @@ int Volume::readSingleFile(QString fileName)
 
 #ifdef VTK_GDCM_SUPPORT
 
-int Volume::readFiles(QStringList filenames, bool vtkGDCMReader)
+int Volume::readFiles(const QStringList &filenames, bool vtkGDCMReader)
 {
     if ( vtkGDCMReader )
         return readFilesVTKGDCM(filenames);
@@ -736,7 +736,7 @@ int Volume::readFiles(QStringList filenames, bool vtkGDCMReader)
         return readFilesITKGDCM(filenames);
 }
 
-int Volume::readFilesVTKGDCM(QStringList filenames)
+int Volume::readFilesVTKGDCM(const QStringList &filenames)
 {
     DEBUG_LOG("Llegim arxius amb la interfície VTK-GDCM");
     int errorCode = NoError;
@@ -805,14 +805,14 @@ int Volume::readFilesVTKGDCM(QStringList filenames)
 
 #else
 
-int Volume::readFiles(QStringList filenames)
+int Volume::readFiles(const QStringList &filenames)
 {
     return readFilesITKGDCM(filenames);
 }
 
 #endif
 
-int Volume::readFilesITKGDCM(QStringList filenames)
+int Volume::readFilesITKGDCM(const QStringList &filenames)
 {
     DEBUG_LOG("Llegim arxius amb la interfície ITK-GDCM");
     int errorCode = NoError;
