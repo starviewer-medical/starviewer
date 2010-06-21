@@ -36,6 +36,12 @@
 #include <QDir>
 #include <QMessageBox>
 
+#ifdef VTK_GDCM_SUPPORT
+#include <vtkGDCMImageReader.h>
+#include <vtkStringArray.h>
+#include <vtkEventQtSlotConnect.h>
+#endif
+
 namespace udg {
 
 Volume::Volume(QObject *parent)
@@ -621,12 +627,26 @@ void Volume::inputConstructor()
 //
 //  Connect the adaptor's Signal to the Qt Widget Slot
     connect(m_progressSignalAdaptor, SIGNAL( Signal() ), SLOT( slotProgress() ) );
+
+#ifdef VTK_GDCM_SUPPORT
+    m_vtkGDCMReader = vtkGDCMImageReader::New();
+    // Pel progress de vtk
+    m_vtkQtConnections = vtkEventQtSlotConnect::New();
+    m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT( vtkGDCMReaderProgressUpdate() ) );
+#endif
 }
 
 void Volume::slotProgress()
 {
     emit progress( (int)(m_seriesReader->GetProgress() * 100) );
 }
+
+#ifdef VTK_GDCM_SUPPORT
+void Volume::vtkGDCMReaderProgressUpdate()
+{
+    emit progress( (int)(m_vtkGDCMReader->GetProgress()*100) );
+}
+#endif
 
 void Volume::inputDestructor()
 {
@@ -705,8 +725,94 @@ int Volume::readSingleFile(QString fileName)
     return errorCode;
 }
 
+#ifdef VTK_GDCM_SUPPORT
+
+int Volume::readFiles(QStringList filenames, bool vtkGDCMReader)
+{
+    if ( vtkGDCMReader )
+        return readFilesVTKGDCM(filenames);
+    else
+        return readFilesITKGDCM(filenames);
+}
+
+int Volume::readFilesVTKGDCM(QStringList filenames)
+{
+    DEBUG_LOG("Llegim arxius amb la interfície VTK-GDCM");
+    int errorCode = NoError;
+    if ( filenames.isEmpty() )
+    {
+        WARN_LOG( "La llista de noms de fitxer per carregar és buida" );
+        errorCode = InvalidFileName;
+        return errorCode;
+    }
+
+    // vtk - GDCM
+    // Convertim la QStringList a vtkStringArray que és l'input 
+    // que accepta vtkGDCMImageReader
+    if( filenames.size() > 1 )
+    {
+        vtkStringArray *sarray = vtkStringArray::New();
+        for(unsigned int i = 0; i<filenames.size(); i++)
+        {
+            sarray->InsertNextValue( filenames.at(i).toStdString() );
+        }
+        DEBUG_LOG("1)Reading several files");
+        m_vtkGDCMReader->SetFileNames( sarray );
+        sarray->Delete();
+    }
+    else
+    {
+        std::cerr << "1)Reading only one file" << std::endl;
+        m_vtkGDCMReader->SetFileName( qPrintable(filenames.first()) );    
+    }
+    try
+    {
+        m_vtkGDCMReader->Update();
+    }
+    catch( ... )
+    {
+        std::cerr << "An exception was throwed while reading" << std::endl;
+    }
+    std::cerr << "2)Reading successful" << std::endl;
+    m_imageDataVTK = m_vtkGDCMReader->GetOutput();
+    DEBUG_LOG(">>>>>>>>>>>>VTK GDCM READER<<<<<<<<<<<<<<<<<<<");
+    m_imageDataVTK->Print(std::cout);
+    m_dataLoaded = true;
+    //this->setData( m_vtkGDCMReader->GetOutput() );
+    std::cerr << "3)Well done!" << std::endl;
+
+    switch( m_vtkGDCMReader->GetDataScalarType() )
+    {
+    case gdcm::PixelFormat::INT16:
+        DEBUG_LOG("INT 16");
+        break;
+
+    case gdcm::PixelFormat::UINT16:
+        DEBUG_LOG("unsigned INT 16");
+        break;
+
+    default:
+        DEBUG_LOG( QString("Scalar type: %1").arg(m_vtkGDCMReader->GetDataScalarType()) );
+        break;
+    }
+
+    emit progress( 100 );
+    
+    return errorCode;
+}
+
+#else
+
 int Volume::readFiles(QStringList filenames)
 {
+    return readFilesITKGDCM(filenames);
+}
+
+#endif
+
+int Volume::readFilesITKGDCM(QStringList filenames)
+{
+    DEBUG_LOG("Llegim arxius amb la interfície ITK-GDCM");
     int errorCode = NoError;
     if ( filenames.isEmpty() )
     {
