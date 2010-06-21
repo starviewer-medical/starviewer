@@ -262,7 +262,7 @@ private:
      * @param fileName
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-    int readSingleFile(QString fileName);
+    int readSingleFile(const QString &fileName);
 
     /**
      * Donat un conjunt de fitxers els carrega en una única sèrie/volum
@@ -270,12 +270,12 @@ private:
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
 #ifdef VTK_GDCM_SUPPORT
-    int readFiles(QStringList filenames, bool vtkGDCMReader = false);
-    int readFilesVTKGDCM(QStringList filenames);
+    int readFiles(const QStringList &filenames, bool vtkGDCMReader = false);
+    int readFilesVTKGDCM(const QStringList &filenames);
 #else
-    int readFiles(QStringList filenames);
+    int readFiles(const QStringList &filenames);
 #endif
-    int readFilesITKGDCM(QStringList filenames);
+    int readFilesITKGDCM(const QStringList &filenames);
 
     /// Donat un missatge d'error en un string, ens torna el codi d'error intern que sabem tractar
     int identifyErrorMessage(const QString &errorMessage);
