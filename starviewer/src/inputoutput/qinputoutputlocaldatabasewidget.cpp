@@ -502,6 +502,10 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *p
             QMessageBox::critical(this, ApplicationNameString, sendDICOMFilesToPACSJob->getStatusDescription());
         }
     }
+
+    /*Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
+      que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop*/
+    pacsJob->deleteLater();
 }
 
 void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJob *pacsJob)
