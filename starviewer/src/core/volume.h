@@ -262,7 +262,7 @@ private:
      * @param fileName
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-    int readSingleFile(const QString &fileName);
+    int readSingleFileITKGDCM(const QString &fileName);
 
     /**
      * Donat un conjunt de fitxers els carrega en una única sèrie/volum
