@@ -247,11 +247,6 @@ private:
 private slots:
     void slotProgress();
 
-#ifdef VTK_GDCM_SUPPORT
-    /// Captura el progrés llançat pel vtkGDCMImageReader
-    void vtkGDCMReaderProgressUpdate();
-#endif
-
 private:
     /// Tipus d'error que podem tenir
     enum { NoError = 1, SizeMismatch, InvalidFileName, MissingFile, OutOfMemory, UnknownError };
