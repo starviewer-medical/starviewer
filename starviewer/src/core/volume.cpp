@@ -660,7 +660,7 @@ void Volume::inputDestructor()
 //     m_gdcmIO->Delete();
 }
 
-int Volume::readSingleFile(const QString &fileName)
+int Volume::readSingleFileITKGDCM(const QString &fileName)
 {
     int errorCode = NoError;
 
@@ -875,7 +875,7 @@ int Volume::readFilesITKGDCM(const QStringList &filenames)
     }
     else
     {
-        errorCode = this->readSingleFile(filenames.at(0));
+        errorCode = this->readSingleFileITKGDCM(filenames.at(0));
     }
     return errorCode;
 }
