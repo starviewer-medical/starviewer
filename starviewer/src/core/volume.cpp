@@ -21,6 +21,7 @@
 #include "dicomimagereaderitkgdcm.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
+#include "coresettings.h"
 // VTK
 #include <vtkImageData.h>
 #include <vtkExtractVOI.h>
@@ -728,16 +729,29 @@ int Volume::readSingleFile(const QString &fileName)
     return errorCode;
 }
 
-#ifdef VTK_GDCM_SUPPORT
-
-int Volume::readFiles(const QStringList &filenames, bool vtkGDCMReader)
+int Volume::readFiles(const QStringList &filenames)
 {
-    if ( vtkGDCMReader )
+    Settings settings;
+    QString readerLibrary = settings.getValue(CoreSettings::DICOMImageReaderLibrary).toString();
+    
+    DEBUG_LOG("DICOMImageReaderLibrary set up in settings: " + readerLibrary);
+    
+    if ( readerLibrary == "vtkGDCM" )
+#ifdef VTK_GDCM_SUPPORT
         return readFilesVTKGDCM(filenames);
-    else
+#else
+    {
+        DEBUG_LOG("vtkGDCM not installed! Reading with itkGDCM");
+        return readFilesITKGDCM(filenames);
+    }
+#endif
+    else if ( readerLibrary == "itkGDCM" )
+        return readFilesITKGDCM(filenames);
+    else // Per defecte, sinó tenim el valor definit, llegirem sempre amb itkGDCM
         return readFilesITKGDCM(filenames);
 }
 
+#ifdef VTK_GDCM_SUPPORT
 int Volume::readFilesVTKGDCM(const QStringList &filenames)
 {
     DEBUG_LOG("Llegim arxius amb la interfície VTK-GDCM");
@@ -804,14 +818,6 @@ int Volume::readFilesVTKGDCM(const QStringList &filenames)
     
     return errorCode;
 }
-
-#else
-
-int Volume::readFiles(const QStringList &filenames)
-{
-    return readFilesITKGDCM(filenames);
-}
-
 #endif
 
 int Volume::readFilesITKGDCM(const QStringList &filenames)

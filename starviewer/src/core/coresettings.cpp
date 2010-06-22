@@ -43,6 +43,8 @@ const QString CoreSettings::GradientRadiusForHighQualityObscurances( HighQuality
 
 const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale");
 
+const QString CoreSettings::DICOMImageReaderLibrary("Input/DICOMImageReaderLibrary");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -60,6 +62,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting( RegisterStatLogs, false );
     settingsRegistry->addSetting( LanguageLocale, QLocale::system().name() );
     settingsRegistry->addSetting( DefaultToolTextSize, 14 );
+    settingsRegistry->addSetting(DICOMImageReaderLibrary, "itkGDCM");
 }
 
 } // end namespace udg 
