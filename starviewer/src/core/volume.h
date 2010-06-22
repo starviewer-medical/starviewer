@@ -269,11 +269,9 @@ private:
      * @param filenames
      * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
      */
-#ifdef VTK_GDCM_SUPPORT
-    int readFiles(const QStringList &filenames, bool vtkGDCMReader = false);
-    int readFilesVTKGDCM(const QStringList &filenames);
-#else
     int readFiles(const QStringList &filenames);
+#ifdef VTK_GDCM_SUPPORT
+    int readFilesVTKGDCM(const QStringList &filenames);
 #endif
     int readFilesITKGDCM(const QStringList &filenames);
 

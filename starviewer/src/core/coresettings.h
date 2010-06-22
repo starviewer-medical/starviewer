@@ -38,6 +38,9 @@ public:
     static const QString GradientRadiusForHighQualityObscurances;
 
     static const QString LanguageLocale;
+
+    /// Indica quina llibreria fem servir per llegir arxius DICOM
+    static const QString DICOMImageReaderLibrary;
 };
 
 } // end namespace udg 
