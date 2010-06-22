@@ -631,6 +631,8 @@ void Volume::inputConstructor()
 
 #ifdef VTK_GDCM_SUPPORT
     m_vtkGDCMReader = vtkGDCMImageReader::New();
+    // Mantenim el sistema de coordenades com quan es llegeix amb itkGDCM
+    m_vtkGDCMReader->FileLowerLeftOn();
     // Pel progress de vtk
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT( vtkGDCMReaderProgressUpdate() ) );
