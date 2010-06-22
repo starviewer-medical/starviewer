@@ -803,6 +803,46 @@ int Volume::readFilesVTKGDCM(const QStringList &filenames)
         DEBUG_LOG("unsigned INT 16");
         break;
 
+    case gdcm::PixelFormat::UINT8:
+        DEBUG_LOG("unsigned INT 8");
+        break;
+
+    case gdcm::PixelFormat::INT8:
+        DEBUG_LOG("INT 8");
+        break;
+
+    case gdcm::PixelFormat::UINT12:
+        DEBUG_LOG("unsigned INT 12");
+        break;
+
+    case gdcm::PixelFormat::INT12:
+        DEBUG_LOG("INT 12");
+        break;
+
+    case gdcm::PixelFormat::UINT32: // For some DICOM files (RT or SC)
+        DEBUG_LOG("unsigned INT 32");
+        break;
+
+    case gdcm::PixelFormat::INT32: //    "   "
+        DEBUG_LOG("INT 32");
+        break;
+
+    case gdcm::PixelFormat::FLOAT16: // sure why not...
+        DEBUG_LOG("FLOAT 16");
+        break;
+
+    case gdcm::PixelFormat::FLOAT32: // good ol' 'float'
+        DEBUG_LOG("FLOAT 32");
+        break;
+
+    case gdcm::PixelFormat::FLOAT64: // aka 'double'
+        DEBUG_LOG("FLOAT 64");
+        break;
+
+    case gdcm::PixelFormat::UNKNOWN:
+        DEBUG_LOG("UNKNOWN");
+        break;
+
     default:
         DEBUG_LOG( QString("Scalar type: %1").arg(m_vtkGDCMReader->GetDataScalarType()) );
         break;
