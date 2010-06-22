@@ -636,21 +636,29 @@ void Volume::inputConstructor()
     m_vtkGDCMReader->FileLowerLeftOn();
     // Pel progress de vtk
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT( vtkGDCMReaderProgressUpdate() ) );
+    m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT( slotProgress() ) );
 #endif
 }
 
 void Volume::slotProgress()
 {
-    emit progress( (int)(m_seriesReader->GetProgress() * 100) );
-}
-
+    Settings settings;
+    QString readerLibrary = settings.getValue(CoreSettings::DICOMImageReaderLibrary).toString();
+    
+    if ( readerLibrary == "vtkGDCM" )
 #ifdef VTK_GDCM_SUPPORT
-void Volume::vtkGDCMReaderProgressUpdate()
-{
-    emit progress( (int)(m_vtkGDCMReader->GetProgress()*100) );
-}
+        emit progress( (int)(m_vtkGDCMReader->GetProgress()*100) );
+#else
+    {
+        DEBUG_LOG("vtkGDCM not installed! Progress reported via itkGDCM");
+        emit progress( (int)(m_seriesReader->GetProgress() * 100) );
+    }
 #endif
+    else if ( readerLibrary == "itkGDCM" )
+        emit progress( (int)(m_seriesReader->GetProgress() * 100) );
+    else // Per defecte, sinó tenim el valor definit, ho farem a través de itkGDCM
+        emit progress( (int)(m_seriesReader->GetProgress() * 100) );
+}
 
 void Volume::inputDestructor()
 {
