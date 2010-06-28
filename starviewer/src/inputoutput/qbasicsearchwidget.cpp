@@ -66,7 +66,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     mask.setStudyId("");
     mask.setStudyDescription("");
     mask.setStudyTime("");
-    mask.setStudyUID("");
+    mask.setStudyInstanceUID("");
     mask.setStudyModality("");
     mask.setPatientAge("");
     mask.setAccessionNumber("");
@@ -111,7 +111,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
         mask.setSeriesTime("");
         mask.setSeriesModality("");
         mask.setSeriesNumber("");
-        mask.setSeriesUID("");
+        mask.setSeriesInstanceUID("");
         mask.setRequestAttributeSequence("" , "");
         mask.setPPSStartDate("");
         mask.setPPStartTime("");

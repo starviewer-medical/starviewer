@@ -81,17 +81,17 @@ QList<DicomMask> QStudyTreeWidget::getDicomMaskOfSelectedItems()
         DicomMask dicomMask;
         if( isItemStudy( item ) ) //es un estudi
         {
-            dicomMask.setStudyUID( item->text(UID) );
+            dicomMask.setStudyInstanceUID( item->text(UID) );
         }
         else if( isItemSeries( item ) )
         {
-            dicomMask.setStudyUID( item->parent()->text(UID) );
-            dicomMask.setSeriesUID( item->text(UID) );
+            dicomMask.setStudyInstanceUID( item->parent()->text(UID) );
+            dicomMask.setSeriesInstanceUID( item->text(UID) );
         }
         else if( isItemImage( item ) )
         {
-            dicomMask.setStudyUID( item->parent()->parent()->text(UID) );
-            dicomMask.setSeriesUID( item->parent()->text(UID) );
+            dicomMask.setStudyInstanceUID( item->parent()->parent()->text(UID) );
+            dicomMask.setSeriesInstanceUID( item->parent()->text(UID) );
             dicomMask.setSOPInstanceUID( item->text(UID) );
         }
         else

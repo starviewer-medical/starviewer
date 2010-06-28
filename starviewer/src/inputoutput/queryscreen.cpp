@@ -416,7 +416,7 @@ void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
 {
     DicomMask maskStudyToRetrieve;
 
-    maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
+    maskStudyToRetrieve.setStudyInstanceUID(study->getInstanceUID());
     QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve;
     if( Settings().getValue( InputOutputSettings::RisRequestViewOnceRetrieved ).toBool() )
     {
@@ -434,7 +434,7 @@ void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve act
 {
     DicomMask maskStudyToRetrieve;
 
-    maskStudyToRetrieve.setStudyUID(study->getInstanceUID());
+    maskStudyToRetrieve.setStudyInstanceUID(study->getInstanceUID());
 
     /*QueryScreen rep un signal cada vegada que qualsevol estudis en el procés de descàrrega canvia d'estat, en principi només ha de reemetre aquests signals
       cap a fora quan és un signal que afecta un estudi sol·licitat a través d'aquest mètode públic, per això mantenim aquesta llista que ens indica els estudis 

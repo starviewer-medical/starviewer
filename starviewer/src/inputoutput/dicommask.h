@@ -112,7 +112,7 @@ public:
      * @param Study's instance UID the study to search.
      * @return state of the method
      */
-    void setStudyUID(const QString &studyUID);
+    void setStudyInstanceUID(const QString &studyInstanceUID);
 
     /** This action especified that in the search we want the Accession Number
      * @param Accession Number of the study to search.
@@ -130,7 +130,7 @@ public:
      * @param mask [in] màscara de la cerca
      * @return   Estudi UID que cerquem
      */
-    QString getStudyUID() const;
+    QString getStudyInstanceUID() const;
 
     /// Retorna el Id del pacient a filtrar
     QString getPatientId() const;
@@ -237,7 +237,7 @@ public:
      * @param Series description of the study to search. If this parameter is null it's supose that any mask is applied at this field.
      * @return estat del mètode
      */
-    void setSeriesUID(const QString &seriesUID);
+    void setSeriesInstanceUID(const QString &seriesInstanceUID);
 
     /** Estableix la seqüència per cercar per la requested atribute sequence.
      * RequestAtrributeSequence està format pel RequestedProcedureID i el procedureStepID
@@ -292,7 +292,7 @@ public:
     /** Retorna l'uid de la serie
      * @return SeriesUID
      */
-    QString getSeriesUID() const;
+    QString getSeriesInstanceUID() const;
 
     /** retorna el Requested procedures ID
      * @return requesta procedure ID
@@ -367,7 +367,7 @@ private:
     QString m_studyTime;
     QString m_studyDescription;
     QString m_studyModality; 
-    QString m_studyUID;
+    QString m_studyInstanceUID;
     QString m_accessionNumber;
     QString m_referringPhysiciansName;
     QString m_seriesNumber;
@@ -376,7 +376,7 @@ private:
     QString m_seriesModality;
     QString m_seriesDescription;
     QString m_seriesProtocolName;
-    QString m_seriesUID;
+    QString m_seriesInstanceUID;
     QString m_requestedProcedureID;
     QString m_scheduledProcedureStepID;
     QString m_PPSStartDate;

@@ -761,7 +761,7 @@ quint64 QCreateDicomdir::getStudySizeInBytes(bool transferSyntaxInLittleEndian, 
         DicomMask imageMask;
         quint64 studySizeInLittleEndianTransferSyntax = 0;
         
-        imageMask.setStudyUID(studyInstanceUID);
+        imageMask.setStudyInstanceUID(studyInstanceUID);
 
         QList<Image*> imagesOfStudy = localDatabaseManager.queryImage(imageMask);//Agafem les imatges de l'estudi per fer l'estimació del que ocuparà el dicomdir
 

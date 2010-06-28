@@ -49,7 +49,7 @@ void ConvertToDicomdir::addStudy( const QString &studyUID )
 
     LocalDatabaseManager localDatabaseManager;
     DicomMask studyMask;
-    studyMask.setStudyUID(studyUID);
+    studyMask.setStudyInstanceUID(studyUID);
     QList<Patient*> patientList = localDatabaseManager.queryPatientStudy(studyMask);
     if(localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
     {
@@ -108,7 +108,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
 
     foreach(StudyToConvert studyToConvert, m_studiesToConvert)
     {
-        studyMask.setStudyUID(studyToConvert.studyUID);
+        studyMask.setStudyInstanceUID(studyToConvert.studyUID);
         Patient *patient = localDatabaseManager.retrieve(studyMask);
         if(localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
         {

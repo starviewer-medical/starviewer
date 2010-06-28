@@ -160,7 +160,7 @@ void QInputOutputLocalDatabaseWidget::addStudyToQStudyTreeWidget(QString studyUI
     DicomMask studyMask;
     QList<Patient*> patientList;
 
-    studyMask.setStudyUID(studyUID);
+    studyMask.setStudyInstanceUID(studyUID);
     patientList = localDatabaseManager.queryPatientStudy(studyMask);
     if(showDatabaseManagerError(localDatabaseManager.getLastError()))    return;
 
@@ -185,7 +185,7 @@ void QInputOutputLocalDatabaseWidget::expandSeriesOfStudy(QString studyInstanceU
     INFO_LOG("Cerca de sèries a la font cache de l'estudi " + studyInstanceUID);
 
     //preparem la mascara i cerquem les series a la cache
-    mask.setStudyUID(studyInstanceUID);
+    mask.setStudyInstanceUID(studyInstanceUID);
     seriesList = localDatabaseManager.querySeries(mask);
 
     if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
@@ -206,8 +206,8 @@ void QInputOutputLocalDatabaseWidget::expandImagesOfSeries(QString studyInstance
 
     INFO_LOG("Cerca d'imatges a la font cache de l'estudi " + studyInstanceUID + " i serie " + seriesInstanceUID);
 
-    mask.setStudyUID(studyInstanceUID);
-    mask.setSeriesUID(seriesInstanceUID);
+    mask.setStudyInstanceUID(studyInstanceUID);
+    mask.setSeriesInstanceUID(seriesInstanceUID);
     imageList = localDatabaseManager.queryImage(mask);
 
     if(showDatabaseManagerError(localDatabaseManager.getLastError()))   return;
@@ -230,7 +230,7 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
     INFO_LOG("Cerca de sèries a la cache de l'estudi " + studyInstanceUID);
 
     //preparem la mascara i cerquem les series a la cache
-    mask.setStudyUID(studyInstanceUID);
+    mask.setStudyInstanceUID(studyInstanceUID);
 
     seriesList = localDatabaseManager.querySeries(mask);
     if (showDatabaseManagerError(localDatabaseManager.getLastError()))    return;
@@ -260,12 +260,12 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
 
             foreach(DicomMask dicomMaskToDelete, selectedDicomMaskToDelete)
             {
-                if(m_qcreateDicomdir->studyExistsInDICOMDIRList(dicomMaskToDelete.getStudyUID()))
+                if(m_qcreateDicomdir->studyExistsInDICOMDIRList(dicomMaskToDelete.getStudyInstanceUID()))
                 {
-                    Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyUID());
+                    Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyInstanceUID());
                     QString warningMessage;
                     
-                    if (dicomMaskToDelete.getSeriesUID().isEmpty())
+                    if (dicomMaskToDelete.getSeriesInstanceUID().isEmpty())
                     {
                         warningMessage = tr("The study %1 of patient %2 is in use by the DICOMDIR List. If you want to delete "
                                             "this study you should remove it from the DICOMDIR List first.")
@@ -275,28 +275,28 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                     {   //TODO:Hauriem de mostar el Series ID en lloc del Series UID
                         warningMessage = tr("The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete "
                                             "this series you should remove the study from the DICOMDIR List first.")
-                                         .arg(dicomMaskToDelete.getSeriesUID(), studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
+                                         .arg(dicomMaskToDelete.getSeriesInstanceUID(), studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
                     }
 
                     QMessageBox::warning(this, ApplicationNameString, warningMessage);
                 }
                 else
                 {
-                    if (!dicomMaskToDelete.getSeriesUID().isEmpty())
+                    if (!dicomMaskToDelete.getSeriesInstanceUID().isEmpty())
                     {
-                        INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache la serie %1 de l'estudi %2").arg(dicomMaskToDelete.getSeriesUID(), dicomMaskToDelete.getStudyUID()));
-                        localDatabaseManager.deleteSeries(dicomMaskToDelete.getStudyUID(), dicomMaskToDelete.getSeriesUID());
+                        INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache la serie %1 de l'estudi %2").arg(dicomMaskToDelete.getSeriesInstanceUID(), dicomMaskToDelete.getStudyInstanceUID()));
+                        localDatabaseManager.deleteSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
 
-                        m_seriesListWidget->removeSeries(dicomMaskToDelete.getSeriesUID());
-                        m_studyTreeWidget->removeSeries(dicomMaskToDelete.getStudyUID(), dicomMaskToDelete.getSeriesUID());
+                        m_seriesListWidget->removeSeries(dicomMaskToDelete.getSeriesInstanceUID());
+                        m_studyTreeWidget->removeSeries(dicomMaskToDelete.getStudyInstanceUID(), dicomMaskToDelete.getSeriesInstanceUID());
                     }
                     else
                     {
-                        INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache l'estudi %1").arg(dicomMaskToDelete.getStudyUID()));
-                        localDatabaseManager.deleteStudy(dicomMaskToDelete.getStudyUID());
+                        INFO_LOG(QString("L'usuari ha indicat que vol esborrar de la cache l'estudi %1").arg(dicomMaskToDelete.getStudyInstanceUID()));
+                        localDatabaseManager.deleteStudy(dicomMaskToDelete.getStudyInstanceUID());
 
                         m_seriesListWidget->clear();
-                        m_studyTreeWidget->removeStudy(dicomMaskToDelete.getStudyUID());
+                        m_studyTreeWidget->removeStudy(dicomMaskToDelete.getStudyInstanceUID());
                     }
                     
                     if (showDatabaseManagerError(localDatabaseManager.getLastError()))
@@ -327,7 +327,7 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
     {
         LocalDatabaseManager localDatabaseManager;
 
-        patientToProcessMask.setStudyUID(studyInstanceUIDSelected);
+        patientToProcessMask.setStudyInstanceUID(studyInstanceUIDSelected);
 
         patient = localDatabaseManager.retrieve(patientToProcessMask);
 
@@ -396,7 +396,7 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
     
     foreach(QString studyUID, m_studyTreeWidget->getSelectedStudiesUID())
     {
-        studyMask.setStudyUID(studyUID);
+        studyMask.setStudyInstanceUID(studyUID);
         patientList = localDatabaseManager.queryPatientStudy(studyMask);
         if(showDatabaseManagerError(localDatabaseManager.getLastError())) 
             return;
@@ -464,7 +464,7 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
             {
                 ERROR_LOG(QString("Error a la base de dades intentar obtenir els estudis que s'han d'enviar al PACS, Error: %1; StudyUID: %2")
                                   .arg( localDatabaseManager.getLastError() )
-                                  .arg( dicomMask.getStudyUID() ));
+                                  .arg( dicomMask.getStudyInstanceUID() ));
 
                 QString message = tr("An error ocurred with database, preparing de the DICOM files to send. The DICOM files won't be sent to PACS.");
                 message += tr("\nClose all %1 windows and try again."

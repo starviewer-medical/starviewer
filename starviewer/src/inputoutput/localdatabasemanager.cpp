@@ -255,7 +255,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
     // Consultem el número d'imatges de la Sèrie
     foreach(Series *series, queryResult)
     {
-        maskToCountNumberOfImage.setSeriesUID(series->getInstanceUID());
+        maskToCountNumberOfImage.setSeriesInstanceUID(series->getInstanceUID());
         series->setNumberOfImages(imageDAL.count(maskToCountNumberOfImage));
 
         if (imageDAL.getLastError() != SQLITE_OK)
@@ -268,7 +268,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
     dbConnect.close();
 
     //Carreguem els thumbnails de les series consultades
-    loadSeriesThumbnail(seriesMaskToQuery.getStudyUID(), queryResult);
+    loadSeriesThumbnail(seriesMaskToQuery.getStudyInstanceUID(), queryResult);
 
     return queryResult;
 }
@@ -327,12 +327,12 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     }
 
     //busquem les imatges per cada sèrie
-    maskImagesToRetrieve.setStudyUID(maskToRetrieve.getStudyUID());//estudi del que s'han de cercar les imatges
+    maskImagesToRetrieve.setStudyInstanceUID(maskToRetrieve.getStudyInstanceUID());//estudi del que s'han de cercar les imatges
     imageDAL.setDatabaseConnection(&dbConnect);
 
     foreach(Series *series, seriesList)
     {
-        maskImagesToRetrieve.setSeriesUID(series->getInstanceUID());//específiquem de quina sèrie de l'estudi hem de buscar les imatges
+        maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());//específiquem de quina sèrie de l'estudi hem de buscar les imatges
 
         QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
         if (imageDAL.getLastError() != SQLITE_OK) break;
@@ -342,7 +342,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
             series->addImage(image);
         }
 
-        retrievedPatient->getStudy(maskToRetrieve.getStudyUID())->addSeries(series);
+        retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID())->addSeries(series);
     }
 
     if (imageDAL.getLastError() != SQLITE_OK)
@@ -353,7 +353,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     }
 
     //Actulitzem la última data d'acces de l'estudi
-    retrievedStudy = retrievedPatient->getStudy(maskToRetrieve.getStudyUID());
+    retrievedStudy = retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID());
     studyDAL.update(retrievedStudy, QDate::currentDate());
     setLastError(studyDAL.getLastError());
 
@@ -379,7 +379,7 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     if (studyInstanceToDelete.isEmpty())
         return;
     else
-        studyMaskToDelete.setStudyUID(studyInstanceToDelete);
+        studyMaskToDelete.setStudyInstanceUID(studyInstanceToDelete);
 	
     dbConnect.open();
     dbConnect.beginTransaction();
@@ -435,9 +435,9 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
     if (studyInstanceUID.isEmpty() || seriesInstanceUID.isEmpty())
         return;
 
-    seriesMaskToDelete.setStudyUID(studyInstanceUID);
-    seriesMaskToDelete.setSeriesUID(seriesInstanceUID);
-    studyMask.setStudyUID(studyInstanceUID);
+    seriesMaskToDelete.setStudyInstanceUID(studyInstanceUID);
+    seriesMaskToDelete.setSeriesInstanceUID(seriesInstanceUID);
+    studyMask.setStudyInstanceUID(studyInstanceUID);
 
     if (querySeries(studyMask).count() == 1)
     {
@@ -706,7 +706,7 @@ void LocalDatabaseManager::checkNoStudiesRetrieving()
 
         //Es pot donarper si es dona el cas que s'hagués arribat a inserir l'estudi i just abans d'indicar que la descàrrega de l'estudi havia finalitzat a través del mètode setStudyRetrieveFinished, s'hagués tancat l'starviewer per tant el mètode el detectaria com que l'estudi estés a mig descarregar quan realment està descarregat, per això comprovem si l'estudi existeix i si és el cas l'esborrem per deixa la base de dades en un estat consistent
         DicomMask studyMask;
-        studyMask.setStudyUID(studyNotFullRetrieved);
+        studyMask.setStudyInstanceUID(studyNotFullRetrieved);
 
         if (queryStudy(studyMask).count() > 0)
         {

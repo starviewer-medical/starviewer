@@ -72,7 +72,7 @@ void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
                 else emit errorQueryingStudy(queryPacsJob->getPacsDevice());
                 break;
             case QueryPacsJob::series :
-                studyInstanceUID = queryPacsJob->getDicomMask().getStudyUID();
+                studyInstanceUID = queryPacsJob->getDicomMask().getStudyInstanceUID();
     
                 if (queryPacsJob->getStatus().good())
                 {
@@ -81,8 +81,8 @@ void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
                 else emit errorQueryingSeries(studyInstanceUID, queryPacsJob->getPacsDevice()); 
                 break;
             case QueryPacsJob::image :
-                studyInstanceUID = queryPacsJob->getDicomMask().getStudyUID();
-                seriesInstanceUID = queryPacsJob->getDicomMask().getSeriesUID();
+                studyInstanceUID = queryPacsJob->getDicomMask().getStudyInstanceUID();
+                seriesInstanceUID = queryPacsJob->getDicomMask().getSeriesInstanceUID();
     
                 if (queryPacsJob->getStatus().good())
                 {
