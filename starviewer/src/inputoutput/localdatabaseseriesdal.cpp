@@ -204,17 +204,17 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
 {
     QString whereSentence = "";
 
-    if (!seriesMask.getStudyUID().isEmpty()) 
-        whereSentence = QString("where StudyInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesMask.getStudyUID() ) );
+    if (!seriesMask.getStudyInstanceUID().isEmpty()) 
+        whereSentence = QString("where StudyInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesMask.getStudyInstanceUID() ) );
 
-    if (!seriesMask.getSeriesUID().isEmpty())
+    if (!seriesMask.getSeriesInstanceUID().isEmpty())
     {
         if (whereSentence.isEmpty()) 
             whereSentence = "where";
         else
             whereSentence += " and ";
 
-        whereSentence += QString(" InstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesMask.getSeriesUID() ) );
+        whereSentence += QString(" InstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesMask.getSeriesInstanceUID() ) );
     }
 
     return whereSentence;

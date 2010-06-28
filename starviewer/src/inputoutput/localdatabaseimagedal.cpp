@@ -314,17 +314,17 @@ QString LocalDatabaseImageDAL::buildWhereSentence(const DicomMask &imageMask)
 {
     QString whereSentence = "";
 
-    if (!imageMask.getStudyUID().isEmpty()) 
-        whereSentence = QString("where StudyInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( imageMask.getStudyUID() ) );
+    if (!imageMask.getStudyInstanceUID().isEmpty()) 
+        whereSentence = QString("where StudyInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( imageMask.getStudyInstanceUID() ) );
 
-    if (!imageMask.getSeriesUID().isEmpty())
+    if (!imageMask.getSeriesInstanceUID().isEmpty())
     {
         if (whereSentence.isEmpty()) 
             whereSentence = "where";
         else
             whereSentence += " and ";
 
-        whereSentence += QString(" SeriesInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( imageMask.getSeriesUID() ) );
+        whereSentence += QString(" SeriesInstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( imageMask.getSeriesInstanceUID() ) );
     }
 
     if (!imageMask.getSOPInstanceUID().isEmpty())

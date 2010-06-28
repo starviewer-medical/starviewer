@@ -305,7 +305,7 @@ QStringList DICOMDIRReader::getFiles( const QString &studyUID )
 
 Patient* DICOMDIRReader::retrieve(DicomMask maskToRetrieve)
 {
-    QStringList files = this->getFiles( maskToRetrieve.getStudyUID() );
+    QStringList files = this->getFiles( maskToRetrieve.getStudyInstanceUID() );
 
     PatientFiller patientFiller;
 
@@ -338,7 +338,7 @@ bool DICOMDIRReader::matchStudyToDicomMask( Study *study , DicomMask *mask )
 
 bool DICOMDIRReader::matchDicomMaskToStudyUID( DicomMask *mask , Study *study)
 {
-    return mask->getStudyUID().length() == 0 || mask->getStudyUID() == study->getInstanceUID();
+    return mask->getStudyInstanceUID().length() == 0 || mask->getStudyInstanceUID() == study->getInstanceUID();
 }
 
 bool DICOMDIRReader::matchDicomMaskToPatientId( DicomMask *mask, Patient *patient )

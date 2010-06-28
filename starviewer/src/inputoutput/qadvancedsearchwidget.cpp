@@ -68,7 +68,7 @@ DicomMask QAdvancedSearchWidget::buildDicomMask()
     mask.setStudyId(m_studyIDText->text());
     mask.setStudyDescription("");
     mask.setStudyTime(m_studyTimeText->text());
-    mask.setStudyUID(m_studyUIDText->text());
+    mask.setStudyInstanceUID(m_studyUIDText->text());
     mask.setStudyModality(m_studyModalityText->text());
     mask.setAccessionNumber(m_accessionNumberText->text());
     mask.setReferringPhysiciansName(m_referringPhysiciansNameText->text());
@@ -85,7 +85,7 @@ DicomMask QAdvancedSearchWidget::buildDicomMask()
         mask.setSeriesTime("");
         mask.setSeriesModality("");
         mask.setSeriesNumber(m_seriesNumberText->text());
-        mask.setSeriesUID(m_seriesUIDText->text());
+        mask.setSeriesInstanceUID(m_seriesUIDText->text());
         mask.setRequestAttributeSequence(m_requestedProcedureIDText->text() , m_scheduledProcedureStepIDText->text());
         mask.setPPSStartDate(m_PPStartDateText->text());
         mask.setPPStartTime(m_PPStartTimeText->text());

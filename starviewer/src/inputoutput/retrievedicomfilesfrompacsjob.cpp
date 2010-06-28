@@ -48,7 +48,7 @@ Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
 
 void RetrieveDICOMFilesFromPACSJob::run()
 {
-    INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg(m_dicomMaskToRetrieve.getStudyUID(), getPacsDevice().getAETitle()));
+    INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle()));
 
     m_numberOfSeriesRetrieved = 0;
     m_lastImageSeriesInstanceUID = "";
@@ -89,14 +89,14 @@ void RetrieveDICOMFilesFromPACSJob::run()
         //Connexions per finalitzar els threads
         connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &fillersThread, SLOT( quit() ), Qt::DirectConnection);
 
-        localDatabaseManager.setStudyRetrieving(m_dicomMaskToRetrieve.getStudyUID());
+        localDatabaseManager.setStudyRetrieving(m_dicomMaskToRetrieve.getStudyInstanceUID());
         fillersThread.start();
         
         m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_dicomMaskToRetrieve);
 
         if (m_retrieveRequestStatus == PACSRequestStatus::OkRetrieve || m_retrieveRequestStatus == PACSRequestStatus::RetrieveWarning)
         {
-            INFO_LOG("Ha finalitzat la descàrrega de l'estudi " + m_dicomMaskToRetrieve.getStudyUID() + "del pacs " + getPacsDevice().getAETitle());
+            INFO_LOG("Ha finalitzat la descàrrega de l'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + "del pacs " + getPacsDevice().getAETitle());
 
             m_numberOfSeriesRetrieved++;
             emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);//Indiquem que s'ha descarregat la última sèrie
@@ -200,17 +200,17 @@ void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDa
 {
     /*Comprovem si l'estudi està inserit a la base de dades, si és així vol dir que anteriorment s'havia descarregat un part o tot l'estudi,
      *com que ja tenim altres elements d'aquest estudi inserits a la base de dades no esborrem el directori de l'estudi*/
-    if (!existStudyInLocalDatabase(m_dicomMaskToRetrieve.getStudyUID()))
+    if (!existStudyInLocalDatabase(m_dicomMaskToRetrieve.getStudyInstanceUID()))
     {
         /*Si l'estudi no existeix a la base de dades esborrem el contingut del directori, en principi segons la normativa DICO; si rebem un status de 
          * tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb èxit */
 
-        INFO_LOG("L'estudi " + m_dicomMaskToRetrieve.getStudyUID() + " no existeix a la base de de dades, esborrem el contingut del seu directori.");
-        DeleteDirectory().deleteDirectory(LocalDatabaseManager().getStudyPath(m_dicomMaskToRetrieve.getStudyUID()), true);
+        INFO_LOG("L'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + " no existeix a la base de de dades, esborrem el contingut del seu directori.");
+        DeleteDirectory().deleteDirectory(LocalDatabaseManager().getStudyPath(m_dicomMaskToRetrieve.getStudyInstanceUID()), true);
     }
     else
     {
-        INFO_LOG("L'estudi " + m_dicomMaskToRetrieve.getStudyUID() + " existeix a la base de dades, no esborrem el contingut del seu directori.");
+        INFO_LOG("L'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + " existeix a la base de dades, no esborrem el contingut del seu directori.");
     }
 }
 
@@ -219,7 +219,7 @@ bool RetrieveDICOMFilesFromPACSJob::existStudyInLocalDatabase(QString studyInsta
     LocalDatabaseManager localDatabaseManager;
     DicomMask dicomMask;
 
-    dicomMask.setStudyUID(studyInstanceUID);
+    dicomMask.setStudyInstanceUID(studyInstanceUID);
 
     return localDatabaseManager.queryStudy(dicomMask).count() > 0;
 }

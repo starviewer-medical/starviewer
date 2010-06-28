@@ -231,7 +231,7 @@ void QInputOutputDicomdirWidget::view()
     //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
     foreach(QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
     {
-        patientToProcessMask.setStudyUID(studyInstanceUIDSelected);
+        patientToProcessMask.setStudyInstanceUID(studyInstanceUIDSelected);
         patient = m_readDicomdir.retrieve(patientToProcessMask);
 
         if(patient)

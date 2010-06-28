@@ -174,7 +174,7 @@ void QInputOutputPacsWidget::retrieveSelectedStudies()
 
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyUID()), dicomMask, None);
+        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), dicomMask, None);
     }
 }
 
@@ -189,7 +189,7 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
 
     foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
     {
-        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyUID()), dicomMask, View);
+        retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), dicomMask, View);
     }
 }
 
@@ -290,12 +290,12 @@ DicomMask QInputOutputPacsWidget::buildSeriesDicomMask(QString studyInstanceUID)
 {
     DicomMask mask;
 
-    mask.setStudyUID(studyInstanceUID);
+    mask.setStudyInstanceUID(studyInstanceUID);
     mask.setSeriesDate("");
     mask.setSeriesTime("");
     mask.setSeriesModality("");
     mask.setSeriesNumber("");
-    mask.setSeriesUID("");
+    mask.setSeriesInstanceUID("");
     mask.setPPSStartDate("");
     mask.setPPStartTime("");
     mask.setRequestAttributeSequence("", "");
@@ -307,8 +307,8 @@ DicomMask QInputOutputPacsWidget::buildImageDicomMask(QString studyInstanceUID, 
 {
     DicomMask mask;
 
-    mask.setStudyUID(studyInstanceUID);
-    mask.setSeriesUID(seriesInstanceUID);
+    mask.setStudyInstanceUID(studyInstanceUID);
+    mask.setSeriesInstanceUID(seriesInstanceUID);
     mask.setImageNumber("");
     mask.setSOPInstanceUID("");
 

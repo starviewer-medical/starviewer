@@ -120,7 +120,7 @@ void DICOMDIRImporter::importStudy(QString studyUID, QString seriesUID, QString 
 
     QDir().mkdir( studyPath );
 
-    mask.setStudyUID( studyUID );
+    mask.setStudyInstanceUID( studyUID );
 
     m_readDicomdir.readStudies( patientStudyListToImport , mask );
 

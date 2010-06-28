@@ -98,9 +98,9 @@ void DicomMask::setStudyTime(const QString &studyTime)
     m_studyTime = studyTime;
 }
 
-void DicomMask::setStudyUID(const QString &studyUID)
+void DicomMask::setStudyInstanceUID(const QString &studyInstanceUID)
 {
-    m_studyUID = studyUID;
+    m_studyInstanceUID = studyInstanceUID;
 }
 
 void DicomMask::setAccessionNumber(const QString &accessionNumber)
@@ -115,9 +115,9 @@ void DicomMask::setReferringPhysiciansName(const QString &referringPhysiciansNam
 
 /***************************************************************   GET **********************************************/
 
-QString DicomMask::getStudyUID() const
+QString DicomMask::getStudyInstanceUID() const
 {
-    return m_studyUID;
+    return m_studyInstanceUID;
 }
 
 QString DicomMask::getStudyId() const
@@ -182,9 +182,9 @@ void DicomMask::setSeriesTime(const QString &seriesTime)
     m_seriesTime = seriesTime;
 }
 
-void DicomMask::setSeriesUID(const QString &seriesUID)
+void DicomMask::setSeriesInstanceUID(const QString &seriesInstanceUID)
 {
-    m_seriesUID = seriesUID;
+    m_seriesInstanceUID = seriesInstanceUID;
 }
 
 void DicomMask::setSeriesProtocolName(const QString &seriesProtocolName)
@@ -241,9 +241,9 @@ QString DicomMask::getSeriesProtocolName() const
     return m_seriesProtocolName;
 }
 
-QString DicomMask::getSeriesUID() const
+QString DicomMask::getSeriesInstanceUID() const
 {
-    return m_seriesUID;
+    return m_seriesInstanceUID;
 }
 
 QString DicomMask::getRequestedProcedureID() const
@@ -392,10 +392,10 @@ DcmDataset* DicomMask::getDicomMask()
         maskDcmDataset->insert(elem , OFTrue);
     }
 
-    if (!getStudyUID().isNull())
+    if (!getStudyInstanceUID().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_StudyInstanceUID);
-        elem->putString(qPrintable(getStudyUID()));
+        elem->putString(qPrintable(getStudyInstanceUID()));
         maskDcmDataset->insert(elem , OFTrue);
     }
 
@@ -441,10 +441,10 @@ DcmDataset* DicomMask::getDicomMask()
         maskDcmDataset->insert(elem , OFTrue);
     }
 
-    if (!getSeriesUID().isNull())
+    if (!getSeriesInstanceUID().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_SeriesInstanceUID);
-        elem->putString(qPrintable(getSeriesUID()));
+        elem->putString(qPrintable(getSeriesInstanceUID()));
         maskDcmDataset->insert(elem , OFTrue);
     }
 
@@ -494,7 +494,7 @@ DcmDataset* DicomMask::getDicomMask()
 
 bool DicomMask::operator ==(const DicomMask &mask)
 {
-    if(   getStudyUID() == mask.getStudyUID()
+    if(   getStudyInstanceUID() == mask.getStudyInstanceUID()
         && getPatientId() == mask.getPatientId()
         && getPatientName() == mask.getPatientName()
         && getPatientBirth() == mask.getPatientBirth()
@@ -513,7 +513,7 @@ bool DicomMask::operator ==(const DicomMask &mask)
         && getSeriesDescription() == mask.getSeriesDescription()
         && getSeriesModality() == mask.getSeriesModality()
         && getSeriesProtocolName() == mask.getSeriesProtocolName()
-        && getSeriesUID() == mask.getSeriesUID()
+        && getSeriesInstanceUID() == mask.getSeriesInstanceUID()
         && getRequestedProcedureID() == mask.getRequestedProcedureID()
         && getScheduledProcedureStepID() == mask.getScheduledProcedureStepID()
         && getPPSStartDate() == mask.getPPSStartDate()
@@ -545,7 +545,7 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
     if (!mask.getStudyDescription().isNull() && getStudyDescription().isEmpty()) returnDicomMask.setStudyDescription(mask.getStudyDescription());
     if (!mask.getStudyModality().isNull() && getStudyModality().isEmpty()) returnDicomMask.setStudyModality(mask.getStudyModality());
     if (!mask.getStudyTime().isNull() && getStudyTime().isEmpty()) returnDicomMask.setStudyTime(mask.getStudyTime());
-    if (!mask.getStudyUID().isNull() && getStudyUID().isEmpty()) returnDicomMask.setStudyUID(mask.getStudyUID());
+    if (!mask.getStudyInstanceUID().isNull() && getStudyInstanceUID().isEmpty()) returnDicomMask.setStudyInstanceUID(mask.getStudyInstanceUID());
     if (!mask.getReferringPhysiciansName().isNull() && getReferringPhysiciansName().isEmpty()) returnDicomMask.setReferringPhysiciansName(mask.getReferringPhysiciansName());
     if (!mask.getAccessionNumber().isNull() && getAccessionNumber().isEmpty()) returnDicomMask.setAccessionNumber(mask.getAccessionNumber());
 
@@ -555,7 +555,7 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
     if (!mask.getSeriesNumber().isNull() && getSeriesNumber().isEmpty()) returnDicomMask.setSeriesNumber(mask.getSeriesNumber());
     if (!mask.getSeriesProtocolName().isNull() && getSeriesProtocolName().isEmpty()) returnDicomMask.setSeriesProtocolName(mask.getSeriesProtocolName());
     if (!mask.getSeriesTime().isNull() && getSeriesTime().isEmpty()) returnDicomMask.setSeriesTime(mask.getSeriesTime());
-    if (!mask.getSeriesUID().isNull() && getSeriesUID().isEmpty()) returnDicomMask.setSeriesUID(mask.getSeriesUID());
+    if (!mask.getSeriesInstanceUID().isNull() && getSeriesInstanceUID().isEmpty()) returnDicomMask.setSeriesInstanceUID(mask.getSeriesInstanceUID());
     if (!mask.getRequestedProcedureID().isNull() && getRequestedProcedureID().isEmpty() &&
         !mask.getScheduledProcedureStepID().isNull() && getScheduledProcedureStepID().isEmpty()) 
     {
@@ -576,9 +576,9 @@ bool DicomMask::isEmpty()
 {
     bool empty = m_patientId.isEmpty() && m_patientName.isEmpty() && m_patientBirth.isEmpty() && m_patientSex.isEmpty() &&
                  m_patientAge.isEmpty() && m_studyId.isEmpty() && m_studyDate.isEmpty() && m_studyTime.isEmpty() && 
-                 m_studyDescription.isEmpty() && m_studyModality.isEmpty() && m_studyUID.isEmpty() && m_accessionNumber.isEmpty() && 
+                 m_studyDescription.isEmpty() && m_studyModality.isEmpty() && m_studyInstanceUID.isEmpty() && m_accessionNumber.isEmpty() && 
                  m_referringPhysiciansName.isEmpty() && m_seriesNumber.isEmpty() && m_seriesDate.isEmpty() && m_seriesTime.isEmpty() && 
-                 m_seriesModality.isEmpty() && m_seriesDescription.isEmpty() && m_seriesProtocolName.isEmpty() && m_seriesUID.isEmpty() && 
+                 m_seriesModality.isEmpty() && m_seriesDescription.isEmpty() && m_seriesProtocolName.isEmpty() && m_seriesInstanceUID.isEmpty() && 
                  m_requestedProcedureID.isEmpty() && m_scheduledProcedureStepID.isEmpty() && m_PPSStartDate.isEmpty() && 
                  m_PPSStartTime.isEmpty() && m_SOPInstanceUID.isEmpty() && m_imageNumber.isEmpty();
     
@@ -590,7 +590,7 @@ QString DicomMask::getQueryRetrieveLevel()
     bool isImageLevel = !getSOPInstanceUID().isNull() || !getImageNumber().isNull();
     bool isSeriesLevel = !getSeriesDescription().isNull()  || !getSeriesDate().isNull() || !getSeriesModality().isNull() ||
                          !getSeriesNumber().isNull() || !getSeriesProtocolName().isNull() || !getSeriesTime().isNull() ||
-                         !getSeriesUID().isNull() || !getRequestedProcedureID().isNull() || !getScheduledProcedureStepID().isNull() ||
+                         !getSeriesInstanceUID().isNull() || !getRequestedProcedureID().isNull() || !getScheduledProcedureStepID().isNull() ||
                          !getPPSStartDate().isNull() || !getPPSStartTime().isNull();
 
     if (isImageLevel)
@@ -660,7 +660,7 @@ QString DicomMask::getFilledMaskFields() const
         maskFields += "Study_Description=[" + m_studyDescription + "] ";
     if( !QString(m_studyModality).remove("*").isEmpty() )
         maskFields += "Study_Modality=[" + m_studyModality + "] ";
-    if( !QString(m_studyUID).remove("*").isEmpty() )
+    if( !QString(m_studyInstanceUID).remove("*").isEmpty() )
         maskFields += "Study_UID=[#*#] ";
     if( !QString(m_accessionNumber).remove("*").isEmpty() )
         maskFields += "Accession_Number=[#*#] ";
@@ -678,7 +678,7 @@ QString DicomMask::getFilledMaskFields() const
         maskFields += "Series_Description=[" + m_seriesDescription + "] ";
     if( !QString(m_seriesProtocolName).remove("*").isEmpty() )
         maskFields += "Series_Protocol_Name=[" + m_seriesProtocolName + "] ";
-    if( !QString(m_seriesUID).remove("*").isEmpty() )
+    if( !QString(m_seriesInstanceUID).remove("*").isEmpty() )
         maskFields += "Series_UID=[#*#] ";
     if( !QString(m_requestedProcedureID).remove("*").isEmpty() )
         maskFields += "Requested_Procedure_ID=[#*#] ";

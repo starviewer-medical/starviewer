@@ -129,7 +129,7 @@ void ParseXmlRisPIERRequest::parseTagParam(QXmlStreamReader *xmlReader, DicomMas
 
 void ParseXmlRisPIERRequest::buildBasicDicomMask(DicomMask *mask)
 {
-    mask->setStudyUID("");
+    mask->setStudyInstanceUID("");
     mask->setStudyId("");
     mask->setPatientName("");
     mask->setPatientId("");

@@ -197,8 +197,8 @@ QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect
                             "State "
                        "From Study ";
 
-    if (!studyMaskToSelect.getStudyUID().isEmpty())
-        whereSentence = QString(" Where InstanceUID = '%1' ").arg( DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToSelect.getStudyUID() ) );
+    if (!studyMaskToSelect.getStudyInstanceUID().isEmpty())
+        whereSentence = QString(" Where InstanceUID = '%1' ").arg( DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToSelect.getStudyInstanceUID() ) );
 
     if (lastAccessDateMinor.isValid())
     {
@@ -231,8 +231,8 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
 
     whereSentence = "Where Study.PatientId = Patient.Id ";
 
-    if (!studyMaskToSelect.getStudyUID().isEmpty())
-        whereSentence += QString(" and InstanceUID = '%1' ").arg(  DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToSelect.getStudyUID() ) );
+    if (!studyMaskToSelect.getStudyInstanceUID().isEmpty())
+        whereSentence += QString(" and InstanceUID = '%1' ").arg(  DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToSelect.getStudyInstanceUID() ) );
 
     if (!studyMaskToSelect.getPatientId().isEmpty() && studyMaskToSelect.getPatientId() != "*")
     {
@@ -354,8 +354,8 @@ QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete
     QString deleteSentence, whereSentence = "";
 
     deleteSentence = "Delete From Study ";
-    if (!studyMaskToDelete.getStudyUID().isEmpty())
-        whereSentence = QString(" Where InstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToDelete.getStudyUID() ) );
+    if (!studyMaskToDelete.getStudyInstanceUID().isEmpty())
+        whereSentence = QString(" Where InstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToDelete.getStudyInstanceUID() ) );
 
     return deleteSentence + whereSentence;
 }
