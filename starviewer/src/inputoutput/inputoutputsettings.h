@@ -5,8 +5,7 @@
 
 namespace udg {
 
-class InputOutputSettings : public DefaultSettings
-{
+class InputOutputSettings : public DefaultSettings {
 public:
     InputOutputSettings();
     ~InputOutputSettings();
