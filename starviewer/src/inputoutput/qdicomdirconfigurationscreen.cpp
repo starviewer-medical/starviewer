@@ -76,8 +76,8 @@ void QDICOMDIRConfigurationScreen::loadDICOMDIRDefaults()
         }
     }
 
-    m_checkBoxCopyFolderContentToDICOMDIRCdDvd->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool());
-    m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool());
+    m_checkBoxCopyFolderContentToDICOMDIRCdDvd->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD).toBool());
+    m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIROnUSBOrHardDisk).toBool());
     m_textDICOMDIRFolderPathToCopy->setText(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
 }
 
@@ -194,8 +194,8 @@ void QDICOMDIRConfigurationScreen::applyChangesDICOMDIR()
     settings.setValue( InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, m_checkBoxHasDifferentCDDVDParameteres->isChecked() );
     settings.setValue( InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey, m_checkBoxConvertDICOMDIRImagesToLittleEndian->isChecked() );
     settings.setValue( InputOutputSettings::DICOMDIRFolderPathToCopy, m_textDICOMDIRFolderPathToCopy->text() );
-    settings.setValue( InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd, m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() );
-    settings.setValue( InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk, m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked() );
+    settings.setValue( InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD, m_checkBoxCopyFolderContentToDICOMDIRCdDvd->isChecked() );
+    settings.setValue( InputOutputSettings::CopyFolderContentToDICOMDIROnUSBOrHardDisk, m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk->isChecked() );
 
     if ( m_textBurningApplicationPath->isModified() )
     {

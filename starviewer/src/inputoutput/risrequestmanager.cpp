@@ -152,7 +152,7 @@ void RISRequestManager::showListenRISRequestThreadError(ListenRISRequestThread::
 {
     QString message;
     Settings settings;
-    int risPort = settings.getValue( InputOutputSettings::RisRequestsPort ).toInt();
+    int risPort = settings.getValue( InputOutputSettings::RISRequestsPort ).toInt();
     switch(error)
     {
         case ListenRISRequestThread::RisPortInUse :

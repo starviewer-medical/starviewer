@@ -418,7 +418,7 @@ void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
 
     maskStudyToRetrieve.setStudyInstanceUID(study->getInstanceUID());
     QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve;
-    if( Settings().getValue( InputOutputSettings::RisRequestViewOnceRetrieved ).toBool() )
+    if( Settings().getValue( InputOutputSettings::RISRequestViewOnceRetrieved ).toBool() )
     {
         actionAfterRetrieve = QInputOutputPacsWidget::View;
     }

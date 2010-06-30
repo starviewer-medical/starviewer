@@ -425,7 +425,7 @@ void QConfigurationScreen::applyChangesPacs()
     if ( m_textTimeout->isModified() )
     {
         INFO_LOG( "Modificació del valor del timeout " + m_textTimeout->text() );
-        settings.setValue(InputOutputSettings::PacsConnectionTimeout, m_textTimeout->text());
+        settings.setValue(InputOutputSettings::PACSConnectionTimeout, m_textTimeout->text());
     }
 
     if ( m_textLocalPort->isModified() )

@@ -32,7 +32,7 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths( InputOutputSettings::DicomdirStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+    settings.restoreColumnsWidths( InputOutputSettings::DICOMDIRStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget",this);
     m_statsWatcher->addClicksCounter( m_viewButton );
@@ -46,7 +46,7 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
 QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths( InputOutputSettings::DicomdirStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths( InputOutputSettings::DICOMDIRStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputDicomdirWidget::createConnections()

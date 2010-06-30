@@ -55,8 +55,8 @@ void QListenRisRequestsConfigurationScreen::loadRisConfiguration()
     m_checkBoxViewAutomaticallyStudies->setEnabled( listenToRISRequests );
     m_textPortListenRisRequests->setEnabled( listenToRISRequests );
 
-    m_checkBoxViewAutomaticallyStudies->setChecked( settings.getValue( InputOutputSettings::RisRequestViewOnceRetrieved).toBool() );
-    m_textPortListenRisRequests->setText( QString().setNum( settings.getValue( InputOutputSettings::RisRequestsPort).toInt() ) );
+    m_checkBoxViewAutomaticallyStudies->setChecked( settings.getValue( InputOutputSettings::RISRequestViewOnceRetrieved).toBool() );
+    m_textPortListenRisRequests->setText( QString().setNum( settings.getValue( InputOutputSettings::RISRequestsPort).toInt() ) );
 }
 
 bool QListenRisRequestsConfigurationScreen::validateChanges()
@@ -79,11 +79,11 @@ bool QListenRisRequestsConfigurationScreen::applyChanges()
         settings.setValue( InputOutputSettings::ListenToRISRequests, m_checkBoxListenRisRequests->isChecked() );
         if (m_textPortListenRisRequests->isModified())
         {
-            settings.setValue( InputOutputSettings::RisRequestsPort, m_textPortListenRisRequests->text().toInt() );
+            settings.setValue( InputOutputSettings::RISRequestsPort, m_textPortListenRisRequests->text().toInt() );
             m_textPortListenRisRequests->setModified(false);//Indiquem que no s'ha modfiicat perquè ja hem guardat el seu valor
         }
 
-        settings.setValue( InputOutputSettings::RisRequestViewOnceRetrieved, m_checkBoxViewAutomaticallyStudies->isChecked() );
+        settings.setValue( InputOutputSettings::RISRequestViewOnceRetrieved, m_checkBoxViewAutomaticallyStudies->isChecked() );
 
         m_buttonApplyListenRisConfiguration->setDisabled(true);
 

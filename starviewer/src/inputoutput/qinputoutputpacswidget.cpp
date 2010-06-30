@@ -37,7 +37,7 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths( InputOutputSettings::PacsStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+    settings.restoreColumnsWidths( InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputPacsWidget",this);
     m_statsWatcher->addClicksCounter(m_retrievAndViewButton);
@@ -60,7 +60,7 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 QInputOutputPacsWidget::~QInputOutputPacsWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths( InputOutputSettings::PacsStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths( InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 }
 
 void QInputOutputPacsWidget::createConnections()

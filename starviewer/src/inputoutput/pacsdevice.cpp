@@ -192,7 +192,7 @@ int PacsDevice::getMaximumConnections()
 int PacsDevice::getConnectionTimeout()
 {
     Settings settings;
-    return settings.getValue( InputOutputSettings::PacsConnectionTimeout ).toInt();
+    return settings.getValue( InputOutputSettings::PACSConnectionTimeout ).toInt();
 }
 
 int PacsDevice::getIncomingDICOMConnectionsPort()
