@@ -397,6 +397,7 @@ TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
 include(../itk.inc)
+include(../gdcm.inc)
 include(../vtk.inc)
 include(../dcmtk.inc)
 include(../log4cxx.inc)

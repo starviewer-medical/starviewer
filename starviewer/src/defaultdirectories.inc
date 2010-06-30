@@ -48,6 +48,21 @@ isEmpty(ITKINCLUDEDIR){
     win32:ITKINCLUDEDIR = C:\InsightToolkit\include\InsightToolkit
 }
 
+# GDCM Libraries
+
+GDCMLIBDIR = $$(GDCMLIBDIR)
+isEmpty(GDCMLIBDIR){
+    unix:GDCMLIBDIR = /usr/lib/gdcm
+    macx:GDCMLIBDIR = /usr/local/lib/gdcm
+    win32:GDCMLIBDIR = C:\gdcm\GDCM-2.0\lib
+}
+GDCMINCLUDEDIR = $$(GDCMINCLUDEDIR)
+isEmpty(GDCMINCLUDEDIR){
+    unix:GDCMINCLUDEDIR = /usr/include/gdcm
+    macx:GDCMINCLUDEDIR = /usr/local/include/gdcm
+    win32:GDCMINCLUDEDIR = C:\gdcm\GDCM-2.0\include\gdcm-2.0
+}
+
 # Log4cxx Libraries
 
 LOG4CXXLIBDIR = $$(LOG4CXXLIBDIR)
