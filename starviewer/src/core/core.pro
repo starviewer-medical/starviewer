@@ -14,7 +14,9 @@ FORMS += qlogviewerbase.ui \
     qtransferfunctionintervaleditorbase.ui \
     qcinecontrollerbase.ui \
     qthickslabwidgetbase.ui \
-    q2dviewerwidgetbase.ui
+    q2dviewerwidgetbase.ui \
+    keyimagenotemanagerwidgetbase.ui \
+    keyimagenotedisplayerbase.ui
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -215,7 +217,12 @@ HEADERS += extensionfactory.h \
     imageplaneprojectiontooldata.h \
     imageorientationoperationsmapper.h \
     copydirectory.h \
-    linepathtool.h 
+    linepathtool.h \
+    keyimagenote.h \
+    keyimagenotemanagerwidget.h \
+    keyimagenotedisplayer.h \
+    keyimagenotemanager.h \
+    dicomreferencedimage.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -392,7 +399,12 @@ SOURCES += extensionmediator.cpp \
     imageplaneprojectiontooldata.cpp \
     imageorientationoperationsmapper.cpp \
     copydirectory.cpp \
-    linepathtool.cpp 
+    linepathtool.cpp \
+    keyimagenote.cpp \
+    keyimagenotemanagerwidget.cpp \
+    keyimagenotedisplayer.cpp \
+    keyimagenotemanager.cpp \
+    dicomreferencedimage.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)

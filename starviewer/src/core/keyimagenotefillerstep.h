@@ -8,12 +8,13 @@
 #define UDGKEYIMAGENOTEFILLERSTEP_H
 
 #include "patientfillerstep.h"
-
+#include "keyimagenote.h"
 namespace udg {
 
 class Patient;
 class Series;
-
+class DICOMTagReader;
+class DICOMReferencedImage;
 /**
 Mòdul que s'encarrega d'omplir la informació d'objectes KIN. Un dels seus prerequisits serà que s'hagi superat el mòdul DICOMFileClassifierFillerStep. Les Series a processar han de de ser de modalitat KO.
 
@@ -26,15 +27,24 @@ public:
 
     ~KeyImageNoteFillerStep();
 
-    bool fillIndividually(){return false;};
+    bool fillIndividually();
 
     void postProcessing(){};
 
     QString name() {  return "KeyImageNoteFillerStep";  }
 
 private:
-    // TODO mètode per implementar
-    void processKeyImageNote();
+    /// Mètodes per processar la informació específica d'un Key Image Note
+    bool processKeyImageNote(KeyImageNote *keyImageNote);
+
+    /// Mètodes per a completar la informació necessaria per a crear un Key Image Note seguint l'estructura de Structured Report
+    void readSRTemplateKIN(KeyImageNote *keyImageNote, DICOMTagReader *reader); /// Lectura del template TID 2010 Key Object Selection ( PS 3.16 )
+    KeyImageNote::DocumentTitle readKeyObjectSelectionDocumentTitle(DICOMTagReader *reader); /// Lectura del DCID 7010 Key Object Selection document title
+    KeyImageNote::RejectedForQualityReasons readRejectedForQualityReasons(DICOMTagReader *reader); /// Lectura del DCID 7011 Rejected for quality reasons
+    QString readKeyObjectDescription(DICOMTagReader *reader); /// Lectura del valor del concept name Key Object Description
+    KeyImageNote::ObserverType readObserverContextType(DICOMTagReader *reader); /// Lectura del Template TID 1002 Observer Context
+    QString readObserverContextName(DICOMTagReader *reader, KeyImageNote::ObserverType type); // Lectura del Template TID 1003 o TID 1004 dependent de si es tipus persona o dispositiu
+    QList <DICOMReferencedImage*> readReferencedImagesInKIN(DICOMTagReader *reader); /// Llegeix les imatges referenciades al KIN
 };
 
 }

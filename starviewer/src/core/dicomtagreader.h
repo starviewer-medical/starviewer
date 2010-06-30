@@ -13,11 +13,13 @@
 
 class DcmDataset;
 class DcmSequenceOfItems;
+class DSRDocument;
 
 namespace udg {
 
 class DICOMTag;
 class DICOMSequenceAttribute;
+class DICOMReferencedImage;
 
 /**
    Classe encarregada de la lectura d'informació de fitxers DICOM.
@@ -65,9 +67,24 @@ public:
     /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
     DICOMSequenceAttribute * getSequenceAttribute( const DICOMTag &sequenceTag );
 
+    /// Retorna cert si existeix un node de Structured Report amb els valors dels tres paràmetres
+    bool existStructuredReportNode(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator);
+
+    /// Ens retorna el contingut del node de Structured Report si existeix, altrament retorna un QString buit
+    QString getStructuredReportNodeContent(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator);
+
+    /// Ens retorna el code value del content item d'un node CODE
+    QString getStructuredReportCodeValueOfContentItem(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator);
+
+    /// Retorna una llista de les imatges que hi ha referenciades al Structured Report
+    QList<DICOMReferencedImage*> getStructuredReportReferencedSOPInstancesUID();
+
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
     DICOMSequenceAttribute * convertToDICOMSequenceAttribute( DcmSequenceOfItems * dcmtkSequence );
+
+    /// Metode per a obtenir el document de Structured Report
+    DSRDocument* getStructuredReportDocument();
 
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació
@@ -75,6 +92,9 @@ private:
 
     /// Objecte dcmtk a través del qual obtenim la informació DICOM
     DcmDataset *m_dicomData;
+
+    /// Objecte dcmtk on ens guardem el document de Structured Report
+    DSRDocument *m_dsrdocument;
 
     /// Ens indica si l'arxiu actual és vàlid
     bool m_hasValidFile;

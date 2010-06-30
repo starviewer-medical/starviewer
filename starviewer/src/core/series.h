@@ -19,6 +19,7 @@ namespace udg {
 class Volume;
 class Image;
 class Study;
+class KeyImageNote;
 
 /**
 Classe que encapsula la sèrie d'un pacient.
@@ -148,6 +149,12 @@ public:
     /// Retorna una llista de totes les imatges de la sèrie
     QList<Image *> getImages() const;
     void setImages( QList<Image *> imageSet );
+
+    /// Afegeix un Key Image Note a la serie
+    void addKeyImageNote(KeyImageNote *keyImageNote);
+
+    /// Obte els Key Image Notes de la serie
+    QList<KeyImageNote*> getKeyImageNotes() const;
 
     /**
      * Ens diu quantes imatges té aquesta sèrie
@@ -350,6 +357,9 @@ private:
     QString m_performedProcedureStepStartDate;
     ///Perfomed procedure step start time (0040,0345) Tipus 3
     QString m_performedProcedureStepStartTime;
+
+    /// Llistat de Key Image Notes
+    QList<KeyImageNote*> m_kinSet;
 };
 
 }
