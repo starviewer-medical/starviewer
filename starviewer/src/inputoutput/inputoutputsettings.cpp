@@ -20,27 +20,27 @@ const QString InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull(CacheBase
 const QString InputOutputSettings::RetrievingStudy("/PACS/RetrievingStudy");
 const QString InputOutputSettings::DefaultPACSListToQuery("PACS/defaultPACSListToQuery");
 
-const QString RisBase("PACS/risRequests/");
-const QString InputOutputSettings::ListenToRISRequests(RisBase + "listen");
-const QString InputOutputSettings::RisRequestsPort(RisBase + "listenPort");
-const QString InputOutputSettings::RisRequestViewOnceRetrieved(RisBase + "viewAutomaticallyAStudyRetrievedFromRisRequest");
+const QString RISBase("PACS/risRequests/");
+const QString InputOutputSettings::ListenToRISRequests(RISBase + "listen");
+const QString InputOutputSettings::RISRequestsPort(RISBase + "listenPort");
+const QString InputOutputSettings::RISRequestViewOnceRetrieved(RISBase + "viewAutomaticallyAStudyRetrievedFromRisRequest");
 
 const QString InterfaceBase("PACS/interface/");
 const QString InputOutputSettings::LastOpenedDICOMDIRPath(InterfaceBase + "lastOpenedDICOMDIRPath");  
-const QString InputOutputSettings::DicomdirStudyListColumnsWidth(InterfaceBase + "studyDicomdirList/");
-const QString InputOutputSettings::CreateDicomdirStudyListColumnsWidth(InterfaceBase + "qCreateDicomdir/");
+const QString InputOutputSettings::DICOMDIRStudyListColumnsWidth(InterfaceBase + "studyDicomdirList/");
+const QString InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth(InterfaceBase + "qCreateDicomdir/");
 const QString InputOutputSettings::OperationStateColumnsWidth(InterfaceBase + "qOperationState/");
-const QString InputOutputSettings::PacsStudyListColumnsWidth(InterfaceBase + "studyPacsList/");
+const QString InputOutputSettings::PACSStudyListColumnsWidth(InterfaceBase + "studyPacsList/");
 const QString InputOutputSettings::ConfigurationScreenPACSList(InterfaceBase + "qConfigurationPacsDevice/");
 const QString InputOutputSettings::LocalDatabaseStudyList(InterfaceBase + "studyCacheList/");
 const QString InputOutputSettings::LocalDatabaseSplitterState(InterfaceBase + "queryscreen/StudyTreeSeriesListQSplitterState");
 const QString InputOutputSettings::QueryScreenGeometry(InterfaceBase + "queryscreen/geometry");
 
-const QString PacsParamBase("PACS/pacsparam/");
-const QString InputOutputSettings::QueryRetrieveLocalPort(PacsParamBase + "localPort");
-const QString InputOutputSettings::LocalAETitle(PacsParamBase + "AETitle");
-const QString InputOutputSettings::PacsConnectionTimeout(PacsParamBase + "timeout");
-const QString InputOutputSettings::MaximumPACSConnections(PacsParamBase + "MaxConnects");
+const QString PACSParametersBase("PACS/pacsparam/");
+const QString InputOutputSettings::QueryRetrieveLocalPort(PACSParametersBase + "localPort");
+const QString InputOutputSettings::LocalAETitle(PACSParametersBase + "AETitle");
+const QString InputOutputSettings::PACSConnectionTimeout(PACSParametersBase + "timeout");
+const QString InputOutputSettings::MaximumPACSConnections(PACSParametersBase + "MaxConnects");
 
 const QString InputOutputSettings::PacsListConfigurationSectionName = "PacsList";
 
@@ -52,8 +52,8 @@ const QString InputOutputSettings::DICOMDIRBurningApplicationDVDParametersKey(DI
 const QString InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey(DICOMDIRBaseKey + "DICOMDIRBurningApplicationHasDifferentCDDVDParameters");
 const QString InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey(DICOMDIRBaseKey + "ConvertDICOMDIRImagesToLittleEndian");
 const QString InputOutputSettings::DICOMDIRFolderPathToCopy(DICOMDIRBaseKey + "DICOMDIRFolderPathToCopy");
-const QString InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd(DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRCdDvd");
-const QString InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk(DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRUsbHardDisk");
+const QString InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD(DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRCdDvd");
+const QString InputOutputSettings::CopyFolderContentToDICOMDIROnUSBOrHardDisk(DICOMDIRBaseKey + "CopyFolderContentToDICOMDIRUsbHardDisk");
 
 const QString InstitutionInformationBase("InstitutionInformation/");
 const QString InputOutputSettings::InstitutionName(InstitutionInformationBase + "InstitutionName");
@@ -86,15 +86,15 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(MinimumGigaBytesToFreeIfCacheIsFull, 2);
 
     settingsRegistry->addSetting(ListenToRISRequests, true);
-    settingsRegistry->addSetting(RisRequestsPort, 11110);
-    settingsRegistry->addSetting(RisRequestViewOnceRetrieved, true);
+    settingsRegistry->addSetting(RISRequestsPort, 11110);
+    settingsRegistry->addSetting(RISRequestViewOnceRetrieved, true);
 
     settingsRegistry->addSetting(LastOpenedDICOMDIRPath, QDir::homePath());
 
     settingsRegistry->addSetting(QueryRetrieveLocalPort, 4006);
     // TODO podríem definir-lo directament amb %HOSTNAME%
     settingsRegistry->addSetting(LocalAETitle, QHostInfo::localHostName(), Settings::Parseable);
-    settingsRegistry->addSetting(PacsConnectionTimeout, 20);
+    settingsRegistry->addSetting(PACSConnectionTimeout, 20);
     settingsRegistry->addSetting(MaximumPACSConnections, 3);
 
     settingsRegistry->addSetting(ConvertDICOMDIRImagesToLittleEndianKey, false);
@@ -119,8 +119,8 @@ void InputOutputSettings::init()
 #endif
 
     settingsRegistry->addSetting(DICOMDIRFolderPathToCopy, "");
-    settingsRegistry->addSetting(CopyFolderContentToDICOMDIRCdDvd, false);
-    settingsRegistry->addSetting(CopyFolderContentToDICOMDIRUsbHardDisk, false);
+    settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnCDOrDVD, false);
+    settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnUSBOrHardDisk, false);
 
 }
 

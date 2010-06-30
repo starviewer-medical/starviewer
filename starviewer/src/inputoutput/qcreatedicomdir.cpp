@@ -63,7 +63,7 @@ QCreateDicomdir::~QCreateDicomdir()
 void QCreateDicomdir::initializeControls()
 {
     Settings settings;
-    settings.restoreColumnsWidths(InputOutputSettings::CreateDicomdirStudyListColumnsWidth,m_dicomdirStudiesList);
+    settings.restoreColumnsWidths(InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth,m_dicomdirStudiesList);
 
     m_dicomdirStudiesList->setColumnHidden( 7 , true );//Conte l'UID de l'estudi
 
@@ -73,8 +73,8 @@ void QCreateDicomdir::initializeControls()
         m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(true);
         m_copyFolderContentToDICOMDIRCdDvdCheckBox->setText( tr("Copy the content of \"%1\" to DICOMDIR.").arg( QDir::toNativeSeparators( settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy).toString() ) ) );
         m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setText( tr("Copy the content of \"%1\" to DICOMDIR.").arg( QDir::toNativeSeparators( settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) ) );
-        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRCdDvd).toBool());
-        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIRUsbHardDisk).toBool());
+        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD).toBool());
+        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIROnUSBOrHardDisk).toBool());
 
     }
     else
@@ -684,7 +684,7 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
 void QCreateDicomdir::closeEvent( QCloseEvent* ce )
 {
     Settings settings;
-    settings.saveColumnsWidths( InputOutputSettings::CreateDicomdirStudyListColumnsWidth, m_dicomdirStudiesList );
+    settings.saveColumnsWidths( InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth, m_dicomdirStudiesList );
     ce->accept();
 }
 

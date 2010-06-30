@@ -31,17 +31,17 @@ public:
     static const QString DefaultPACSListToQuery;
 
     /// Paràmetres del RIS
-    static const QString RisRequestsPort;
+    static const QString RISRequestsPort;
     static const QString ListenToRISRequests;
-    static const QString RisRequestViewOnceRetrieved;
+    static const QString RISRequestViewOnceRetrieved;
 
     /// Últim path des del que hem obert un dicomdir
     static const QString LastOpenedDICOMDIRPath;
     /// Geometria de les columnes del llistat d'estudis d'un DICOMDIR/llista d'operacions/PACS
-    static const QString DicomdirStudyListColumnsWidth;
-    static const QString CreateDicomdirStudyListColumnsWidth;
+    static const QString DICOMDIRStudyListColumnsWidth;
+    static const QString CreateDICOMDIRStudyListColumnsWidth;
     static const QString OperationStateColumnsWidth;
-    static const QString PacsStudyListColumnsWidth;
+    static const QString PACSStudyListColumnsWidth;
     static const QString ConfigurationScreenPACSList;
     static const QString LocalDatabaseStudyList;
     static const QString LocalDatabaseSplitterState;
@@ -50,7 +50,7 @@ public:
     /// Paràmetres de connexió amb un PACS
     static const QString LocalAETitle;
     static const QString QueryRetrieveLocalPort;
-    static const QString PacsConnectionTimeout;
+    static const QString PACSConnectionTimeout;
     static const QString MaximumPACSConnections;
 
     /// Llista de PACS
@@ -72,9 +72,9 @@ public:
     ///Path del directori del que s'ha de copiar el visor DICOMDIR
     static const QString DICOMDIRFolderPathToCopy;
     /// Checkbox per saber si cal copiar el contingut del directori que apunta el setting DICOMDIRFolderPathToCopy als CD/DVD DICOMDIR
-    static const QString CopyFolderContentToDICOMDIRCdDvd;
+    static const QString CopyFolderContentToDICOMDIROnCDOrDVD;
     /// Checkbox per saber si cal copiar el contingut del directori que apunta el setting DICOMDIRFolderPathToCopy als Usb/HardDisk DICOMDIR
-    static const QString CopyFolderContentToDICOMDIRUsbHardDisk;
+    static const QString CopyFolderContentToDICOMDIROnUSBOrHardDisk;
 
     //Informació Institució
     static const QString InstitutionName;
