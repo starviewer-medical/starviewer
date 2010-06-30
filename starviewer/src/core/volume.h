@@ -16,7 +16,6 @@
 #include <itkImageFileReader.h>
 #include <itkImageSeriesReader.h>
 #include <itkGDCMImageIO.h>
-#include <itkGDCMSeriesFileNames.h>
 #include <itkCommand.h>
 #include <itkSmartPointer.h>
 #include "itkQtAdaptor.h"
@@ -284,7 +283,6 @@ private:
 
     typedef itk::ImageSeriesReader<ItkImageType> SeriesReaderType;
     typedef itk::GDCMImageIO ImageIOType;
-    typedef itk::GDCMSeriesFileNames NamesGeneratorType;
 
     /// El lector de sèries dicom
     SeriesReaderType::Pointer m_seriesReader;

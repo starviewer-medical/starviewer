@@ -25,6 +25,7 @@ TEMPLATE = lib
 
 include(../vtk.inc)
 include(../itk.inc)
+include(../gdcm.inc)
 include(../dcmtk.inc)
 include(../log4cxx.inc)
 include(../compilationtype.inc)

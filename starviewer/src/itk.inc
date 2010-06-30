@@ -13,7 +13,6 @@ INCLUDEPATH += $${ITKINCLUDEDIR} \
               $${ITKINCLUDEDIR}/Utilities \
               $${ITKINCLUDEDIR}/Utilities/vxl/vcl \
               $${ITKINCLUDEDIR}/Utilities/vxl/core \
-              $${ITKINCLUDEDIR}/gdcm/src \
               $${ITKINCLUDEDIR}/Utilities/NrrdIO
 
 LIBS += -L$${ITKLIBDIR} \
@@ -29,7 +28,6 @@ LIBS += -L$${ITKLIBDIR} \
         -lITKNumerics \
         -lITKSpatialObject \
         -lITKStatistics \
-        -litkgdcm \
         -litkjpeg12 \
         -litkjpeg16 \
         -litkjpeg8 \
