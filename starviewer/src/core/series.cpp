@@ -8,6 +8,7 @@
 
 #include "study.h"
 #include "image.h"
+#include "keyimagenote.h"
 #include "logging.h"
 #include "volumerepository.h"
 #include "thumbnailcreator.h"
@@ -562,6 +563,17 @@ int Series::findImageIndex( const QString &identifier )
         i = -1;
 
     return i;
+}
+
+void Series::addKeyImageNote(KeyImageNote *keyImageNote)
+{
+    keyImageNote->setParentSeries(this);
+    m_kinSet << keyImageNote;
+}
+
+QList<KeyImageNote*> Series::getKeyImageNotes() const
+{
+    return m_kinSet;
 }
 
 }

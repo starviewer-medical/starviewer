@@ -24,6 +24,8 @@
 #include "screenshottool.h" 
 #include "toolproxy.h"
 #include "q2dviewersettings.h"
+#include "keyimagenotemanagerwidget.h"
+#include "keyimagenotemanager.h"
 
 #ifndef STARVIEWER_LITE
 #include "qpreviousstudieswidget.h"
@@ -63,6 +65,7 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
     m_screenshotsExporterToolButton->hide();
 #else
     m_hangingProtocolManager = 0;
+    m_keyImageNoteManager = 0;
 #endif
 
     //TODO ocultem botons que no son del tot necessaris o que no es faran servir
@@ -170,6 +173,8 @@ void Q2DViewerExtension::createConnections()
     connect( m_previousStudiesWidget, SIGNAL( downloadingStudies() ), this, SLOT( changeToPreviousStudiesDownloadingIcon() ) );
     connect( m_previousStudiesWidget, SIGNAL( studiesDownloaded() ), this, SLOT( changeToPreviousStudiesDefaultIcon() ) );
     connect( m_previousStudiesToolButton, SIGNAL( clicked ( bool ) ), SLOT( showPreviousStudiesWidget() ) );
+    connect( m_keyImageNoteToolButton, SIGNAL( clicked() ), SLOT( showKeyImageNoteManagerWidgetDialog() ) );
+
 #endif
 
 }
@@ -214,6 +219,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     searchPreviousStudiesOfMostRecentStudy();
 
     searchPreviousStudiesWithHangingProtocols();
+    initializeKeyImageNoteManager();
 #endif
 }
 
@@ -541,6 +547,29 @@ void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
 {
     m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( m_workingArea->getViewerSelected()->getViewer()->getCurrentDisplayedImage() );
     m_dicomDumpCurrentDisplayedImage->show();
+}
+
+void Q2DViewerExtension::initializeKeyImageNoteManager()
+{
+    if( m_keyImageNoteManager != 0 )
+    {
+        delete m_keyImageNoteManager;
+    }
+
+    m_keyImageNoteManager = new KeyImageNoteManager(m_patient);
+    m_keyImageNoteManagerWidget = new KeyImageNoteManagerWidget(m_keyImageNoteManager);
+
+}
+
+void Q2DViewerExtension::showKeyImageNoteManagerWidgetDialog()
+{
+    if( m_workingArea->getViewerSelected()->getViewer() == NULL )
+    {
+        QMessageBox::warning(this, tr("Kin Manager") , tr("This action is not allowed because the selected viewer is empty.") );
+        return;
+    }
+
+    m_keyImageNoteManagerWidget->show();
 }
 
 #ifndef STARVIEWER_LITE
