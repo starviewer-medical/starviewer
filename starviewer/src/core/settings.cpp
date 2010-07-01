@@ -16,8 +16,8 @@ Settings::Settings()
     QSettings *userSettings = new QSettings( QSettings::UserScope, OrganizationNameString, ApplicationNameString );
     QSettings *systemSettings = new QSettings( QSettings::SystemScope, OrganizationNameString, ApplicationNameString );
 
-    m_settings.insert( UserLevel, userSettings );
-    m_settings.insert( SystemLevel, systemSettings );
+    m_qsettingsObjectsMap.insert( UserLevel, userSettings );
+    m_qsettingsObjectsMap.insert( SystemLevel, systemSettings );
 }
 
 Settings::~Settings()
@@ -31,7 +31,7 @@ QVariant Settings::getValue( const QString &key ) const
     // Si estigués buit, llavors agafem el valor per defecte que tinguem al registre
     // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key) 
     // però cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
-    value = m_settings.value( SettingsRegistry::instance()->getAccessLevel(key) )->value(key);
+    value = m_qsettingsObjectsMap.value( SettingsRegistry::instance()->getAccessLevel(key) )->value(key);
     if( value == QVariant() )
     {
         value = SettingsRegistry::instance()->getDefaultValue(key);
@@ -57,7 +57,7 @@ bool Settings::contains( const QString &key ) const
 {
     // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key) 
     // però cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
-    return m_settings.value( SettingsRegistry::instance()->getAccessLevel(key) )->contains(key);
+    return m_qsettingsObjectsMap.value( SettingsRegistry::instance()->getAccessLevel(key) )->contains(key);
 }
 
 void Settings::remove( const QString &key )
@@ -243,7 +243,7 @@ void Settings::dumpKeyValueMap( const KeyValueMapType &item, QSettings *qsetting
 
 QSettings *Settings::getSettingsObject( const QString &key )
 {
-    return m_settings.value( SettingsRegistry::instance()->getAccessLevel(key) );
+    return m_qsettingsObjectsMap.value( SettingsRegistry::instance()->getAccessLevel(key) );
 }
 
 }  // end namespace udg

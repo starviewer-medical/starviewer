@@ -109,7 +109,7 @@ private:
 
 private:
     /// Objectes QSettings amb el que manipularem les configuracions
-    QMap<int, QSettings *> m_settings;
+    QMap<int, QSettings *> m_qsettingsObjectsMap;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Settings::Properties)
 } // end namespace udg
