@@ -292,16 +292,6 @@ int Volume::getNumberOfSlicesPerPhase() const
     return m_numberOfSlicesPerPhase;
 }
 
-void Volume::setImageOrderCriteria(unsigned int orderCriteria)
-{
-    m_imageOrderCriteria = orderCriteria;
-}
-
-unsigned int Volume::getImageOrderCriteria() const
-{
-    return m_imageOrderCriteria;
-}
-
 void Volume::addImage(Image *image)
 {
     if ( !m_imageSet.contains(image) )

@@ -58,9 +58,6 @@ public:
     /// Tipus de punter de dades vtk
     typedef vtkImageData *VtkImageTypePointer;
 
-    /// Aquests enums indiquem quin criteri escollim per ordenar les imatges
-    enum ImageOrderType{ OrderImageByNumber, OrderImageBySliceLocation, OrderImageByTemporalDimension };
-
     Volume(QObject *parent = 0);
     Volume(ItkImageTypePointer itkImage, QObject *parent = 0);
     Volume(VtkImageTypePointer vtkImage, QObject *parent = 0);
@@ -121,10 +118,6 @@ public:
     QList<Image *> getPhaseImages(int index);
     void setNumberOfSlicesPerPhase(int slicesPerPhase);
     int getNumberOfSlicesPerPhase() const;
-
-    /// Assignar/Obtenir el criteri d'ordenació de les imatges
-    void setImageOrderCriteria(unsigned int orderCriteria);
-    unsigned int getImageOrderCriteria() const;
 
     /// Afegim una imatge al conjunt d'imatges que composen el volum
     void addImage(Image *image);
@@ -213,9 +206,6 @@ private:
     /// Ens diu si les dades han estat carregades ja en memòria o no.
     /// Aquest membre el farem servir per aplicar el lazy loading
     bool m_dataLoaded;
-
-    /// Criteri d'ordenació de les imatges
-    unsigned int m_imageOrderCriteria;
 
     /// Conjunt d'imatges que composen el volum
     QList<Image *> m_imageSet;
