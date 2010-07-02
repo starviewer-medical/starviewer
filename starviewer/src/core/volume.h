@@ -11,12 +11,10 @@
 // Els filtres per passar itk<=>vtk: InsightApplications/auxiliary/vtk --> ho tenim a /tools
 #include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
 #include "itkVTKImageToImageFilter.h" // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
-#include <QStringList>
 // itk - input
 #include <itkImageFileReader.h>
 #include <itkImageSeriesReader.h>
 #include <itkGDCMImageIO.h>
-#include <itkSmartPointer.h>
 #include "itkQtAdaptor.h"
 #include "logging.h"
 #include "identifier.h"
@@ -297,6 +295,6 @@ private:
 #endif
 };
 
-};  // end namespace udg
+}  // end namespace udg
 
 #endif
