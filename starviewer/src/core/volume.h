@@ -16,7 +16,6 @@
 #include <itkImageFileReader.h>
 #include <itkImageSeriesReader.h>
 #include <itkGDCMImageIO.h>
-#include <itkCommand.h>
 #include <itkSmartPointer.h>
 #include "itkQtAdaptor.h"
 #include "logging.h"
@@ -296,42 +295,6 @@ private:
     vtkGDCMImageReader *m_vtkGDCMReader;
     vtkEventQtSlotConnect *m_vtkQtConnections;
 #endif
-};
-
-/**
-    Classe auxiliar per monitorejar el progrés de la lectura del fitxer
-*/
-class ProgressCommand : public itk::Command {
-public:
-    typedef ProgressCommand Self;
-    typedef itk::Command Superclass;
-    typedef itk::SmartPointer<Self> Pointer;
-    itkNewMacro(Self);
-
-protected:
-    ProgressCommand() {};
-
-public:
-    typedef itk::ImageFileReader<Volume::ItkImageType> ReaderType;
-    typedef const ReaderType *ReaderTypePointer;
-
-    void Execute(itk::Object *caller, const itk::EventObject & event)
-    {
-        Execute( (const itk::Object *)caller, event);
-    }
-
-    void Execute(const itk::Object * object, const itk::EventObject & event)
-    {
-        ReaderTypePointer m_reader = dynamic_cast<ReaderTypePointer>(object);
-        if ( typeid( event ) == typeid( itk::ProgressEvent ) )
-        {
-            DEBUG_LOG(QString("Progressant...%1").arg(m_reader->GetProgress()) );
-        }
-        else
-        {
-            DEBUG_LOG(QString("No s'ha invocat ProgressEvent"));
-        }
-    }
 };
 
 };  // end namespace udg
