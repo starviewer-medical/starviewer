@@ -196,16 +196,6 @@ private:
     /// Mètode d'inicialització d'objectes comuns per als constructors
     void init();
 
-    /// Mètodes de prova per tractar diferents models de càrrega de dades "lazy"
-    /// Allotja l'espai a memòria primer, després va inserint les imatges una a una
-    void loadWithPreAllocateAndInsert();
-
-    /// carrega les llesques a partir dels objectes Image
-    void loadSlicesWithReaders(int method);
-
-    /// reserva l'espai per la imatge vtk segons l'input d'imatges que tenim
-    void allocateImageData();
-
     /// Donades unes imatges que tenen diferents mides, les llegim en un sol
     /// volum adaptant la mida als valors maxims de row i column. S'executarà quan volguem llegir
     /// una sèrie que conté imatges amb diferents mides

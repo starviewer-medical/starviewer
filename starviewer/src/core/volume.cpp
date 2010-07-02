@@ -15,10 +15,6 @@
 #include "study.h"
 #include "patient.h"
 #include "dicomtagreader.h"
-#include "dicomimagereader.h"
-#include "dicomimagereadervtk.h"
-#include "dicomimagereaderdcmtk.h"
-#include "dicomimagereaderitkgdcm.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
 #include "coresettings.h"
@@ -482,76 +478,6 @@ bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
     }
 
     return found;
-}
-void Volume::allocateImageData()
-{
-    // TODO Si les dades estan allotjades per defecte, fer un delete primer i després fer un new? o amb un ReleaseData n'hi ha prou?
-    m_imageDataVTK->Delete();
-    m_imageDataVTK = vtkImageData::New();
-
-    // Inicialitzem les dades
-    double origin[3];
-    origin[0] = m_imageSet.at(0)->getImagePositionPatient()[0];
-    origin[1] = m_imageSet.at(0)->getImagePositionPatient()[1];
-    origin[2] = m_imageSet.at(0)->getImagePositionPatient()[2];
-    m_imageDataVTK->SetOrigin(origin);
-    double spacing[3];
-    spacing[0] = m_imageSet.at(0)->getPixelSpacing()[0];
-    spacing[1] = m_imageSet.at(0)->getPixelSpacing()[1];
-    spacing[2] = m_imageSet.at(0)->getSliceThickness();
-    m_imageDataVTK->SetSpacing(spacing);
-    m_imageDataVTK->SetDimensions(m_imageSet.at(0)->getRows(), m_imageSet.at(0)->getColumns(), m_imageSet.size() );
-    // TODO De moment assumim que sempre seran ints i ho mapejem així,potser més endavant podria canviar, però és el tipus que tenim fixat desde les itk
-    m_imageDataVTK->SetScalarTypeToShort();
-    m_imageDataVTK->SetNumberOfScalarComponents(1);
-    m_imageDataVTK->AllocateScalars();
-}
-
-void Volume::loadWithPreAllocateAndInsert()
-{
-    if ( !m_imageSet.isEmpty() )
-    {
-        this->allocateImageData();
-        this->loadSlicesWithReaders(2); // 0: vtk, 1: dcmtk, 2: itkGdcm
-        m_imageDataVTK->Update();
-        m_dataLoaded = true;
-    }
-    else
-    {
-        DEBUG_LOG("No tenim cap imatge per carregar");
-    }
-}
-
-void Volume::loadSlicesWithReaders(int method)
-{
-    DICOMImageReader *reader;
-    switch ( method )
-    {
-    case 0: // vtk
-        reader = new DICOMImageReaderVTK;
-        break;
-
-    case 1: // dcmtk
-        reader = new DICOMImageReaderDCMTK;
-        break;
-
-    case 2: // itkGDCM
-        reader = new DICOMImageReaderITKGdcm;
-        break;
-
-    default:
-        break;
-    }
-    DEBUG_LOG(QString("Scalar size: %1\nIncrements: %2,%3,%4\n Bytes per slice: %5 ")
-        .arg(m_imageDataVTK->GetScalarSize())
-        .arg(m_imageDataVTK->GetIncrements()[0])
-        .arg(m_imageDataVTK->GetIncrements()[1])
-        .arg(m_imageDataVTK->GetIncrements()[2])
-        .arg(m_imageDataVTK->GetDimensions()[0]*m_imageDataVTK->GetDimensions()[1]*m_imageDataVTK->GetScalarSize() ) );
-    reader->setInputImages(m_imageSet);
-    reader->setBufferPointer(m_imageDataVTK->GetScalarPointer() );
-    reader->setSliceByteIncrement(m_imageDataVTK->GetIncrements()[2]*m_imageDataVTK->GetScalarSize() );
-    reader->load();
 }
 
 void Volume::readDifferentSizeImagesIntoOneVolume(const QStringList &filenames)
