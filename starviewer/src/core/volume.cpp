@@ -133,12 +133,6 @@ Volume::VtkImageTypePointer Volume::getVtkData()
                 break;
             }
         }
-        /* TODO Descomentar per llegir amb classes DICOMImageReader
-        if ( !m_imageSet.isEmpty() )
-        {
-            this->loadWithPreAllocateAndInsert();
-        }
-        */
     }
     return m_imageDataVTK;
 }
