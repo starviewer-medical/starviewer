@@ -20,9 +20,6 @@
 #include "coresettings.h"
 // VTK
 #include <vtkImageData.h>
-#include <vtkExtractVOI.h>
-#include <vtkImageChangeInformation.h>
-#include <vtkDICOMImageReader.h>
 // Voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
