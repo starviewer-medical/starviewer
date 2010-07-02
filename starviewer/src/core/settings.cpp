@@ -159,7 +159,7 @@ void Settings::setList(const QString &key, const SettingListType &list)
     int index = 0;
     // escrivim la llista
     qsettings->beginWriteArray(key);
-    foreach (KeyValueMapType item, list)
+    foreach (const KeyValueMapType &item, list)
     {
         qsettings->setArrayIndex(index);
         dumpKeyValueMap(item, qsettings);
@@ -231,7 +231,7 @@ Settings::KeyValueMapType Settings::fillKeyValueMapFromKeyList(const QStringList
 
     KeyValueMapType item;
     
-    foreach (QString key, keysList)
+    foreach (const QString &key, keysList)
     {
         item[ key ] = qsettings->value(key);
     }
@@ -243,7 +243,7 @@ void Settings::dumpKeyValueMap(const KeyValueMapType &item, QSettings *qsettings
     Q_ASSERT(qsettings);
 
     QStringList keysList = item.keys();
-    foreach (QString key, keysList)
+    foreach (const QString &key, keysList)
     {
         qsettings->setValue(key, item.value(key));
     }   
