@@ -19,9 +19,9 @@ KeyImageNoteDisplayer::~KeyImageNoteDisplayer()
 
 void KeyImageNoteDisplayer::fillKeyImageNoteDisplayer()
 {
-    m_documentTitleText->setText(m_keyImageNote->getDocumentTitleAsString(m_keyImageNote->getDocumentTitle()));
-    m_documentTitleQualityReasonText->setText(m_keyImageNote->getRejectedForQualityReasonsAsString(m_keyImageNote->getRejectedForQualityReasons()));
-    m_observerContextTypeText->setText(m_keyImageNote->getObserverTypeAsString(m_keyImageNote->getObserverContextType()));
+    m_documentTitleText->setText(m_keyImageNote->getDocumentTitleAsString());
+    m_documentTitleQualityReasonText->setText(m_keyImageNote->getRejectedForQualityReasonsAsString());
+    m_observerContextTypeText->setText(m_keyImageNote->getObserverTypeAsString());
     m_observerContextNameText->setText(m_keyImageNote->getObserverContextName());
     m_keyObjectDescriptionText->setText(m_keyImageNote->getKeyObjectDescription());
 
