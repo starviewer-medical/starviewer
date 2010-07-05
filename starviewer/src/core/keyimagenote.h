@@ -108,13 +108,13 @@ public:
     void setRetrievedTime(QTime time);
 
     /// Retorna Observer Type de Key Image Note com a un QString
-    QString getObserverTypeAsString(KeyImageNote::ObserverType observerType) const;
+    QString getObserverTypeAsString() const;
 
     /// Retorna Document Title de Key Image Note com a un QString
-    QString getDocumentTitleAsString(KeyImageNote::DocumentTitle documentTitle) const;
+    QString getDocumentTitleAsString() const;
 
     /// Retorna Rejected For Quality Reasons de Key Image Note com a un QString
-    QString getRejectedForQualityReasonsAsString(KeyImageNote::RejectedForQualityReasons rejectedForQualityReasons) const;
+    QString getRejectedForQualityReasonsAsString() const;
 
 private:
     /// Obte la imatge que tenim referenciada al Key Image Note a partir de la seva referencia 

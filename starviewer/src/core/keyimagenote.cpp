@@ -249,9 +249,9 @@ QTime KeyImageNote::getRetrievedTime() const
     return m_retrieveTime;
 }
 
-QString KeyImageNote::getObserverTypeAsString(ObserverType observerType) const
+QString KeyImageNote::getObserverTypeAsString() const
 {
-  switch (observerType)
+  switch (m_observerContextType)
   {
     case KeyImageNote::Person:              
         return tr("Person");
@@ -264,9 +264,9 @@ QString KeyImageNote::getObserverTypeAsString(ObserverType observerType) const
   }
 }
 
-QString KeyImageNote::getDocumentTitleAsString(DocumentTitle documentTitle) const
+QString KeyImageNote::getDocumentTitleAsString() const
 {
-  switch (documentTitle)
+  switch (m_documentTitle)
   {
     case KeyImageNote::OfInterest:                               
         return tr("Of Interest");
@@ -297,9 +297,9 @@ QString KeyImageNote::getDocumentTitleAsString(DocumentTitle documentTitle) cons
   }
 }
 
-QString KeyImageNote::getRejectedForQualityReasonsAsString(RejectedForQualityReasons rejectedForQualityReasons) const
+QString KeyImageNote::getRejectedForQualityReasonsAsString() const
 {
-  switch (rejectedForQualityReasons)
+  switch (m_rejectedForQualityReasons)
   {
     case KeyImageNote::ImageArtifacts:                              
         return tr("Image artifact(s)");
