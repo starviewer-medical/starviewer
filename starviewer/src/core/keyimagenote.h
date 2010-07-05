@@ -120,6 +120,9 @@ private:
     /// Obte la imatge que tenim referenciada al Key Image Note a partir de la seva referencia 
     Image* getImage(DICOMReferencedImage *referencedImage);
 
+    /// Retorna una imatge si la troba a la serie altrament retorna NULL
+    Image* getDICOMReferencedImagesFromSeries(Series *serie, DICOMReferencedImage *referencedImage);
+
 private:
     /// SOP Instance UID del Key Image Note
     QString m_SOPInstanceUID;
