@@ -4,6 +4,7 @@
 #include "series.h"
 #include "keyimagenote.h"
 #include "keyimagenotemanagerwidget.h"
+
 namespace udg {
 
 KeyImageNoteManager::KeyImageNoteManager(Patient *patient)
@@ -27,9 +28,9 @@ void KeyImageNoteManager::searchKeyImageNotes()
     {
         foreach (Series *series, study->getSeries())
         {
-            if(series->getModality() == "KO")
+            if (series->getModality() == "KO")
             {
-                foreach(KeyImageNote *keyImageNote, series->getKeyImageNotes())
+                foreach (KeyImageNote *keyImageNote, series->getKeyImageNotes())
                 {
                     m_kinSet.append(keyImageNote);
                 }
@@ -38,7 +39,7 @@ void KeyImageNoteManager::searchKeyImageNotes()
     }
 }
 
-QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotes()
+QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotes() const
 {
     return m_kinSet;
 }

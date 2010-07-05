@@ -3,6 +3,7 @@
 #include "study.h"
 #include "image.h"
 #include "dicomreferencedimage.h"
+
 namespace udg {
 
 KeyImageNote::KeyImageNote()
@@ -53,15 +54,15 @@ void KeyImageNote::setObserverContextType(KeyImageNote::ObserverType contextType
     m_observerContextType = contextType;
 }
 
-QList <DICOMReferencedImage*> KeyImageNote::getReferencedSOPInstancesUID() const
+QList<DICOMReferencedImage*> KeyImageNote::getDICOMReferencedImages() const
 {
-    return m_referencedSOPInstancesUIDList;
+    return m_DICOMReferencedImages;
 }
 
 void KeyImageNote::setReferencedSOPInstancesUID(QList<DICOMReferencedImage*> &referencedImageList)
 {
-    m_referencedSOPInstancesUIDList = referencedImageList;
-    foreach(DICOMReferencedImage *referencedImage, m_referencedSOPInstancesUIDList) 
+    m_DICOMReferencedImages = referencedImageList;
+    foreach (DICOMReferencedImage *referencedImage, m_DICOMReferencedImages) 
     {
         referencedImage->setReferenceParentSOPInstanceUID(m_SOPInstanceUID);
     }
@@ -122,7 +123,7 @@ QList<Image*> KeyImageNote::getReferencedImages()
 {
     QList<Image*> referencedImages;
 
-    foreach(DICOMReferencedImage *referencedImage, m_referencedSOPInstancesUIDList) 
+    foreach (DICOMReferencedImage *referencedImage, m_DICOMReferencedImages) 
     {
         Image *image = getImage(referencedImage);
         referencedImages.append(image);
@@ -142,16 +143,16 @@ Image* KeyImageNote::getImage(DICOMReferencedImage *referencedImage)
     found = false;
     i = 0;
     
-    while(!found && i <study->getSeries().size())
+    while (!found && i < study->getSeries().size())
     {
         Series *serie = study->getSeries().value(i);
         j = 0;
         
-        while(!found && j<serie->getImages().size())
+        while (!found && j<serie->getImages().size())
         {
             Image *currentImage = serie->getImages().value(j);
             
-            if(currentImage->getSOPInstanceUID() == referencedImage->getDICOMReferencedImageSOPInstanceUID() && currentImage->getFrameNumber() == referencedImage->getFrameNumber())
+            if (currentImage->getSOPInstanceUID() == referencedImage->getDICOMReferencedImageSOPInstanceUID() && currentImage->getFrameNumber() == referencedImage->getFrameNumber())
             {
                 found = true;
                 image = currentImage;
@@ -164,7 +165,7 @@ Image* KeyImageNote::getImage(DICOMReferencedImage *referencedImage)
         i++;
     }
 
-    if(!found) // Si no la trobem generem una imatge emplenada amb tota la informació de la que disposem
+    if (!found) // Si no la trobem generem una imatge emplenada amb tota la informació de la que disposem
     {
         image = new Image();
         image->setSOPInstanceUID(referencedImage->getDICOMReferencedImageSOPInstanceUID());
@@ -194,69 +195,105 @@ void KeyImageNote::setRetrievedTime(QTime retrievedTime)
     m_retrieveTime = retrievedTime;
 }
 
-QDate KeyImageNote::getRetrievedDate()
+QDate KeyImageNote::getRetrievedDate() const
 {
     return m_retrievedDate;
 }
 
-QTime KeyImageNote::getRetrievedTime()
+QTime KeyImageNote::getRetrievedTime() const
 {
     return m_retrieveTime;
 }
 
-QString KeyImageNote::getObserverTypeAsString(ObserverType observerType)
+QString KeyImageNote::getObserverTypeAsString(ObserverType observerType) const
 {
-  switch(observerType)
+  switch (observerType)
   {
-    case KeyImageNote::Person:              return "Person";
-    case KeyImageNote::Device:              return "Device";
-    case KeyImageNote::NoneObserverType:    return "None ObserverType";
-    default:                                return "Bad ObserverType";
+    case KeyImageNote::Person:              
+        return tr("Person");
+    case KeyImageNote::Device:              
+        return tr("Device");
+    case KeyImageNote::NoneObserverType:    
+        return tr("None ObserverType");
+    default:                                
+        return tr("Bad ObserverType");
   }
 }
 
-QString KeyImageNote::getDocumentTitleAsString(DocumentTitle documentTitle)
+QString KeyImageNote::getDocumentTitleAsString(DocumentTitle documentTitle) const
 {
-  switch(documentTitle)
+  switch (documentTitle)
   {
-    case KeyImageNote::OfInterest:                               return "Of Interest";
-    case KeyImageNote::RejectedForQualityReasonsDocumentTitle:   return "Rejected for Quality Reasons";
-    case KeyImageNote::ForReferringProvider:                     return "For Referring Provider";
-    case KeyImageNote::ForSurgery:                               return "For Surgery";
-    case KeyImageNote::ForTeaching:                              return "For Teaching";
-    case KeyImageNote::ForConference:                            return "For Conference";
-    case KeyImageNote::ForTherapy:                               return "For Therapy";
-    case KeyImageNote::ForPatient:                               return "For Patient";
-    case KeyImageNote::ForPeerReview:                            return "For Peer Review";
-    case KeyImageNote::ForResearch:                              return "For Research";
-    case KeyImageNote::QualityIssue:                             return "Quality Issue";
-    case KeyImageNote::NoneDocumentTitle:                        return "None Document Title";
-    default:                                                     return "Bad DocumentTitle";
+    case KeyImageNote::OfInterest:                               
+        return tr("Of Interest");
+    case KeyImageNote::RejectedForQualityReasonsDocumentTitle:   
+        return tr("Rejected for Quality Reasons");
+    case KeyImageNote::ForReferringProvider:                     
+        return tr("For Referring Provider");
+    case KeyImageNote::ForSurgery:                               
+        return tr("For Surgery");
+    case KeyImageNote::ForTeaching:                              
+        return tr("For Teaching");
+    case KeyImageNote::ForConference:                            
+        return tr("For Conference");
+    case KeyImageNote::ForTherapy:                               
+        return tr("For Therapy");
+    case KeyImageNote::ForPatient:                               
+        return tr("For Patient");
+    case KeyImageNote::ForPeerReview:                            
+        return tr("For Peer Review");
+    case KeyImageNote::ForResearch:                              
+        return tr("For Research");
+    case KeyImageNote::QualityIssue:                             
+        return tr("Quality Issue");
+    case KeyImageNote::NoneDocumentTitle:                        
+        return tr("None Document Title");
+    default:                                                     
+        return tr("Bad DocumentTitle");
   }
 }
 
-QString KeyImageNote::getRejectedForQualityReasonsAsString(RejectedForQualityReasons rejectedForQualityReasons)
+QString KeyImageNote::getRejectedForQualityReasonsAsString(RejectedForQualityReasons rejectedForQualityReasons) const
 {
-  switch(rejectedForQualityReasons)
+  switch (rejectedForQualityReasons)
   {
-    case KeyImageNote::ImageArtifacts:                              return "Image artifact(s)";
-    case KeyImageNote::GridArtifacts:                               return "Grid artifact(s)";
-    case KeyImageNote::Positioning:                                 return "Positioning";
-    case KeyImageNote::MotionBlur:                                  return "Motion blur";
-    case KeyImageNote::UnderExposed:                                return "Under exposed";
-    case KeyImageNote::OverExposed:                                 return "Over exposed";
-    case KeyImageNote::NoImage:                                     return "No image";
-    case KeyImageNote::DetectorArtifacts:                           return "Detector artifact(s)";
-    case KeyImageNote::ArtifactsOtherThanGridOrDetectorArtifact:    return "Artifact(s) other than grid or detector artifact";
-    case KeyImageNote::MechanicalFailure:                           return "Mechanical failure";
-    case KeyImageNote::ElectricalFailure:                           return "Electrical failure";
-    case KeyImageNote::SoftwareFailure:                             return "Software failure";
-    case KeyImageNote::InappropiateImageProcessing:                 return "Inappropiate image processing";
-    case KeyImageNote::OtherFailure:                                return "Other failure";
-    case KeyImageNote::UnknownFailure:                              return "Unknown failure";
-    case KeyImageNote::DoubleExposure:                              return "Double exposure";
-    case KeyImageNote::NoneRejectedForQualityReasons:               return "None rejected for quality reasons";
-    default:                                                        return "Bad RejectedForQualityReasons";
+    case KeyImageNote::ImageArtifacts:                              
+        return tr("Image artifact(s)");
+    case KeyImageNote::GridArtifacts:                               
+        return tr("Grid artifact(s)");
+    case KeyImageNote::Positioning:                                 
+        return tr("Positioning");
+    case KeyImageNote::MotionBlur:                                  
+        return tr("Motion blur");
+    case KeyImageNote::UnderExposed:                                
+        return tr("Under exposed");
+    case KeyImageNote::OverExposed:                                 
+        return tr("Over exposed");
+    case KeyImageNote::NoImage:                                     
+        return tr("No image");
+    case KeyImageNote::DetectorArtifacts:                           
+        return tr("Detector artifact(s)");
+    case KeyImageNote::ArtifactsOtherThanGridOrDetectorArtifact:    
+        return tr("Artifact(s) other than grid or detector artifact");
+    case KeyImageNote::MechanicalFailure:                           
+        return tr("Mechanical failure");
+    case KeyImageNote::ElectricalFailure:                           
+        return tr("Electrical failure");
+    case KeyImageNote::SoftwareFailure:                             
+        return tr("Software failure");
+    case KeyImageNote::InappropiateImageProcessing:                 
+        return tr("Inappropiate image processing");
+    case KeyImageNote::OtherFailure:                                
+        return tr("Other failure");
+    case KeyImageNote::UnknownFailure:                              
+        return tr("Unknown failure");
+    case KeyImageNote::DoubleExposure:                              
+        return tr("Double exposure");
+    case KeyImageNote::NoneRejectedForQualityReasons:               
+        return tr("None rejected for quality reasons");
+    default:                                                        
+        return tr("Bad RejectedForQualityReasons");
   }
 }
+
 }

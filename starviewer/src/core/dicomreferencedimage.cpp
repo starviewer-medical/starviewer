@@ -21,7 +21,7 @@ void DICOMReferencedImage::setDICOMReferencedImageSOPInstanceUID(const QString &
     m_DICOMReferencedImageSOPInstanceUID = referencedImageSOPInstanceUID;
 }
 
-int DICOMReferencedImage::getFrameNumber()
+int DICOMReferencedImage::getFrameNumber() const
 {
     return m_frameNumber;
 }

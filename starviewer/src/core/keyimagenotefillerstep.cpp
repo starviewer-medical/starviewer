@@ -10,6 +10,7 @@
 #include "keyimagenote.h"
 #include "dicomtagreader.h"
 #include "series.h"
+
 namespace udg {
 
 KeyImageNoteFillerStep::KeyImageNoteFillerStep(): PatientFillerStep()
@@ -57,6 +58,17 @@ bool KeyImageNoteFillerStep::processKeyImageNote(KeyImageNote * keyImageNote)
 
 void KeyImageNoteFillerStep::readSRTemplateKIN(KeyImageNote *keyImageNote, DICOMTagReader *reader)
 {
+    QString sopInstanceUID = reader->getValueAttributeAsQString(DICOMSOPInstanceUID);
+    keyImageNote->setInstanceUID(sopInstanceUID);
+    
+    QString contentDate = reader->getValueAttributeAsQString(DICOMContentDate);
+    keyImageNote->setContentDate(contentDate);
+    
+    QString contentTime = reader->getValueAttributeAsQString(DICOMContentTime);
+    keyImageNote->setContentTime(contentTime);
+
+    QString instanceNumber = reader->getValueAttributeAsQString(DICOMInstanceNumber);
+    keyImageNote->setInstanceNumber(instanceNumber);
     KeyImageNote::DocumentTitle documentTitle = readKeyObjectSelectionDocumentTitle(reader);
     keyImageNote->setDocumentTitle(documentTitle);
 
@@ -78,18 +90,6 @@ void KeyImageNoteFillerStep::readSRTemplateKIN(KeyImageNote *keyImageNote, DICOM
 
     QString observerContextName = readObserverContextName(reader, observerContextType);
     keyImageNote->setObserverContextName(observerContextName);
-
-    QString sopInstanceUID = reader->getValueAttributeAsQString(DICOMSOPInstanceUID);
-    keyImageNote->setInstanceUID(sopInstanceUID);
-    
-    QString contentDate = reader->getValueAttributeAsQString(DICOMContentDate);
-    keyImageNote->setContentDate(contentDate);
-    
-    QString contentTime = reader->getValueAttributeAsQString(DICOMContentTime);
-    keyImageNote->setContentTime(contentTime);
-
-    QString instanceNumber = reader->getValueAttributeAsQString(DICOMInstanceNumber);
-    keyImageNote->setInstanceNumber(instanceNumber);
 }
 
 KeyImageNote::DocumentTitle KeyImageNoteFillerStep::readKeyObjectSelectionDocumentTitle(DICOMTagReader *reader)
@@ -101,77 +101,77 @@ KeyImageNote::DocumentTitle KeyImageNoteFillerStep::readKeyObjectSelectionDocume
     
     codeValue = "113000";
     codeMeaning = "Of Interest";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::OfInterest;
     }
 
     codeValue = "113001";
     codeMeaning = "Rejected for Quality Reasons";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::RejectedForQualityReasonsDocumentTitle;
     }
 
     codeValue = "113002";
     codeMeaning = "For Referring Provider";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::ForReferringProvider;
     }
 
     codeValue = "113003";
     codeMeaning = "For Surgery";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::ForSurgery;
     }
 
     codeValue = "113004";
     codeMeaning = "For Teaching";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::ForTeaching;
     }
 
     codeValue = "113005";
     codeMeaning = "For Conference";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::ForConference;
     }
 
     codeValue = "113006";
     codeMeaning = "For Therapy";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::ForTherapy;
     }
 
     codeValue = "113007";
     codeMeaning = "For Patient";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::ForPatient;
     }
 
     codeValue = "113008";
     codeMeaning = "For Peer Review";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::ForPeerReview;
     }
 
     codeValue = "113009";
     codeMeaning = "For Research";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::ForResearch;
     }
 
     codeValue = "113010";
     codeMeaning = "Quality Issue";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         documentTitle = KeyImageNote::QualityIssue;
     }
@@ -188,112 +188,112 @@ KeyImageNote::RejectedForQualityReasons KeyImageNoteFillerStep::readRejectedForQ
 
     codeValue = "111207";
     codeMeaning = "Image artifact(s)";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::ImageArtifacts;
     }
 
     codeValue = "111208";
     codeMeaning = "Grid artifact(s)";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::GridArtifacts;
     }
 
     codeValue = "111209";
     codeMeaning = "Positioning";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::Positioning;
     }
 
     codeValue = "111210";
     codeMeaning = "Motion blur";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::MotionBlur;
     }
 
     codeValue = "111211";
     codeMeaning = "Under exposed";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::UnderExposed;
     }
 
     codeValue = "111212";
     codeMeaning = "Over exposed";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::OverExposed;
     }
 
     codeValue = "111213";
     codeMeaning = "No image";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::NoImage;
     }
 
     codeValue = "111214";
     codeMeaning = "Detector artifacts(s)";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::DetectorArtifacts;
     }
 
     codeValue = "111215";
     codeMeaning = "Artifact(s) other than grid or detector artifact";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::ArtifactsOtherThanGridOrDetectorArtifact;
     }
 
     codeValue = "111216";
     codeMeaning = "Mechanical failure";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::MechanicalFailure;
     }
 
     codeValue = "111217";
     codeMeaning = "Electrical failure";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::ElectricalFailure;
     }
 
     codeValue = "111218";
     codeMeaning = "Software failure";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::SoftwareFailure;
     }
 
     codeValue = "111219";
     codeMeaning = "Inappropiate image processing";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::InappropiateImageProcessing;
     }
 
     codeValue = "111220";
     codeMeaning = "Other failure";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::OtherFailure;
     }
 
     codeValue = "111221";
     codeMeaning = "Unknown failure";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::UnknownFailure;
     }
 
     codeValue = "113026";
     codeMeaning = "Double exposure";
-    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator) )
+    if (reader->existStructuredReportNode(codeValue, codeMeaning, schemeDesignator))
     {
         explanation = KeyImageNote::DoubleExposure;
     }
@@ -356,7 +356,7 @@ QString KeyImageNoteFillerStep::readObserverContextName(DICOMTagReader *reader, 
 
 QList<DICOMReferencedImage*> KeyImageNoteFillerStep::readReferencedImagesInKIN(DICOMTagReader *reader)
 {
-    return reader->getStructuredReportReferencedSOPInstancesUID();
+    return reader->getDICOMReferencedImagesOfStructedReport();
 }
 
 }

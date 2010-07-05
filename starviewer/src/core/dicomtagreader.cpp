@@ -23,16 +23,16 @@ template<> const Sint32 DSRListOfItems<Sint32>::EmptyItem(0);
 
 namespace udg {
 
-DICOMTagReader::DICOMTagReader() : m_dicomData(0), m_hasValidFile(false), m_dsrdocument(0)
+DICOMTagReader::DICOMTagReader() : m_dicomData(0), m_hasValidFile(false), m_DICOMStructuredReportDocument(0)
 {
 }
 
-DICOMTagReader::DICOMTagReader(const QString &filename, DcmDataset *dcmDataset) : m_dicomData(0), m_hasValidFile(false), m_dsrdocument(0)
+DICOMTagReader::DICOMTagReader(const QString &filename, DcmDataset *dcmDataset) : m_dicomData(0), m_hasValidFile(false), m_DICOMStructuredReportDocument(0)
 {
     this->setDcmDataset(filename, dcmDataset);
 }
 
-DICOMTagReader::DICOMTagReader( const QString &filename ) : m_dicomData(0), m_hasValidFile(false), m_dsrdocument(0)
+DICOMTagReader::DICOMTagReader( const QString &filename ) : m_dicomData(0), m_hasValidFile(false), m_DICOMStructuredReportDocument(0)
 {
     this->setFile( filename );
 }
@@ -226,23 +226,23 @@ DICOMSequenceAttribute * DICOMTagReader::convertToDICOMSequenceAttribute( DcmSeq
 bool DICOMTagReader::existStructuredReportNode(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator)
 {
     DSRDocumentTree &tree = getStructuredReportDocument()->getTree();
-    return tree.gotoNamedNode( DSRCodedEntryValue( qPrintable(codeValue), qPrintable(schemeDesignator), qPrintable(codeMeaning)) );
+    return tree.gotoNamedNode(DSRCodedEntryValue(qPrintable(codeValue), qPrintable(schemeDesignator), qPrintable(codeMeaning)));
 }
 
 QString DICOMTagReader::getStructuredReportNodeContent(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator)
 {
     DSRDocumentTree &tree = getStructuredReportDocument()->getTree();
-    tree.gotoNamedNode( DSRCodedEntryValue( qPrintable(codeValue), qPrintable(schemeDesignator), qPrintable(codeMeaning)) );
+    tree.gotoNamedNode(DSRCodedEntryValue(qPrintable(codeValue), qPrintable(schemeDesignator), qPrintable(codeMeaning)));
 
     return tree.getCurrentContentItem().getStringValue().c_str();
 }
 
 DSRDocument* DICOMTagReader::getStructuredReportDocument()
 {
-    if (!m_dsrdocument)
+    if (!m_DICOMStructuredReportDocument)
     {
-        m_dsrdocument = new DSRDocument();
-        OFCondition status = m_dsrdocument->read(*getDcmDataset(), DSRTypes::RF_verboseDebugMode);
+        m_DICOMStructuredReportDocument = new DSRDocument();
+        OFCondition status = m_DICOMStructuredReportDocument->read(*getDcmDataset(), DSRTypes::RF_verboseDebugMode);
 
         if (status.bad())
         {
@@ -250,68 +250,64 @@ DSRDocument* DICOMTagReader::getStructuredReportDocument()
         }
     }
 
-    return m_dsrdocument;
+    return m_DICOMStructuredReportDocument;
 }
 
-QList<DICOMReferencedImage*> DICOMTagReader::getStructuredReportReferencedSOPInstancesUID()
+QList<DICOMReferencedImage*> DICOMTagReader::getDICOMReferencedImagesOfStructedReport()
 {
     // TODO Aquest metode no esta al lloc mes correcte, caldria posar-lo a una altra classe (pendent implementacio)
-    QList <DICOMReferencedImage*> currentRequested;
+    QList<DICOMReferencedImage*> referencedImagesOfStructuredReport;
 
-    DSRDocumentTree &tree =getStructuredReportDocument()->getTree();
-    tree.gotoRoot();
-    DSRTreeNodeCursor cursor(tree.getNode());
+    DSRDocumentTree &structuredReportTree =getStructuredReportDocument()->getTree();
+    structuredReportTree.gotoRoot();
+    DSRTreeNodeCursor cursor(structuredReportTree.getNode());
 
     if (cursor.isValid())
     {
-        DSRDocumentTreeNode *node = NULL;
-        
         while (cursor.iterate())
         {
-            node = OFstatic_cast(DSRDocumentTreeNode *, cursor.getNode());
+            DSRDocumentTreeNode *structuredReportTreeNode = OFstatic_cast(DSRDocumentTreeNode*, cursor.getNode());
 
-            if (node != NULL)
+            if (structuredReportTreeNode != NULL)
             {
-                if(node->getValueType() == DSRTypes::VT_Image)
+                if (structuredReportTreeNode->getValueType() == DSRTypes::VT_Image)
                 {
-                    OFString SOPInstance;
-                    DSRImageTreeNode *imageNode = NULL;
-                    imageNode = OFstatic_cast(DSRImageTreeNode *, node);
-                    SOPInstance = imageNode->getSOPInstanceUID();
+                    DSRImageTreeNode *imageNode = OFstatic_cast(DSRImageTreeNode *, structuredReportTreeNode);
+                    OFString SOPInstance = imageNode->getSOPInstanceUID();
                     
                     DSRImageFrameList &framesList  = imageNode->getFrameList();
                     
-                    if(!framesList.isEmpty()) // Cas multiframe
+                    if (!framesList.isEmpty()) // Cas multiframe
                     {
                         for (size_t i = 0; i < framesList.getNumberOfItems(); i++)
                         {
-                            DICOMReferencedImage *referencedImage= new DICOMReferencedImage();
+                            DICOMReferencedImage *referencedImage = new DICOMReferencedImage();
                             int frameNumber = static_cast<int>(framesList.getItem(i));
                             referencedImage->setDICOMReferencedImageSOPInstanceUID(SOPInstance.c_str());
                             referencedImage->setFrameNumber(frameNumber);
-                            currentRequested.append(referencedImage);
+                            referencedImagesOfStructuredReport.append(referencedImage);
                         }
                     }
                     else
                     {
                         DICOMReferencedImage *referencedimage= new DICOMReferencedImage();
                         referencedimage->setDICOMReferencedImageSOPInstanceUID(SOPInstance.c_str());
-                        currentRequested.append(referencedimage);
+                        referencedImagesOfStructuredReport.append(referencedimage);
                     }
                 }
             }
         }
     }
 
-    return currentRequested;
+    return referencedImagesOfStructuredReport;
 }
 
 QString DICOMTagReader::getStructuredReportCodeValueOfContentItem(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator)
 {
-    DSRDocumentTree &tree = getStructuredReportDocument()->getTree();
-    tree.gotoNamedNode(DSRCodedEntryValue(qPrintable(codeValue), qPrintable(schemeDesignator), qPrintable(codeMeaning)));
+    DSRDocumentTree &structuredReportTree = getStructuredReportDocument()->getTree();
+    structuredReportTree.gotoNamedNode(DSRCodedEntryValue(qPrintable(codeValue), qPrintable(schemeDesignator), qPrintable(codeMeaning)));
 
-    DSRCodedEntryValue code = tree.getCurrentContentItem().getCodeValue();
+    DSRCodedEntryValue code = structuredReportTree.getCurrentContentItem().getCodeValue();
 
     return code.getCodeValue().c_str();
 }

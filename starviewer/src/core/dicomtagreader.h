@@ -76,8 +76,8 @@ public:
     /// Ens retorna el code value del content item d'un node CODE
     QString getStructuredReportCodeValueOfContentItem(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator);
 
-    /// Retorna una llista de les imatges que hi ha referenciades al Structured Report
-    QList<DICOMReferencedImage*> getStructuredReportReferencedSOPInstancesUID();
+    /// Retorna els DICOM Referenced Images que hi ha referenciades al Structured Report
+    QList<DICOMReferencedImage*> getDICOMReferencedImagesOfStructedReport();
 
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
@@ -94,7 +94,7 @@ private:
     DcmDataset *m_dicomData;
 
     /// Objecte dcmtk on ens guardem el document de Structured Report
-    DSRDocument *m_dsrdocument;
+    DSRDocument *m_DICOMStructuredReportDocument;
 
     /// Ens indica si l'arxiu actual és vàlid
     bool m_hasValidFile;

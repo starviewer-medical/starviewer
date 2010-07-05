@@ -5,8 +5,7 @@
 
 namespace udg {
 
-KeyImageNoteManagerWidget::KeyImageNoteManagerWidget(KeyImageNoteManager *keyImageNoteManager, QWidget *parent)
-: QWidget(parent)
+KeyImageNoteManagerWidget::KeyImageNoteManagerWidget(KeyImageNoteManager *keyImageNoteManager, QWidget *parent): QWidget(parent)
 {
     setupUi(this);
     m_keyImageNoteManager = keyImageNoteManager;
@@ -20,12 +19,12 @@ KeyImageNoteManagerWidget::~KeyImageNoteManagerWidget()
 
 void KeyImageNoteManagerWidget::initialize()
 {
-    initializeKeyImageNoteDisplayers();
+    generateKeyImageNoteDisplayers();
 }
 
-void KeyImageNoteManagerWidget::initializeKeyImageNoteDisplayers()
+void KeyImageNoteManagerWidget::generateKeyImageNoteDisplayers()
 {
-    foreach(KeyImageNote *keyImageNote, m_keyImageNoteManager->getKeyImageNotes())
+    foreach (KeyImageNote *keyImageNote, m_keyImageNoteManager->getKeyImageNotes())
     {
         createKeyImageNoteDisplayer(keyImageNote);
     }
