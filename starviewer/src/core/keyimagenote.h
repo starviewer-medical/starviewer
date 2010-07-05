@@ -26,26 +26,26 @@ class KeyImageNote : public QObject
 Q_OBJECT
 public:
     /// Tipus d'Observador del Key Image Note
-    enum ObserverType {Person, Device, NoneObserverType};
+    enum ObserverType {Person = 121006, Device = 121007, NoneObserverType = 0};
 
     /// Tipus de Document Title definits per DICOM al DCID 7010
-    enum DocumentTitle {OfInterest, RejectedForQualityReasonsDocumentTitle, 
-                        ForReferringProvider, ForSurgery, 
-                        ForTeaching, ForConference, 
-                        ForTherapy, ForPatient,
-                        ForPeerReview, ForResearch, 
-                        QualityIssue, NoneDocumentTitle};
+    enum DocumentTitle {OfInterest = 113000, RejectedForQualityReasonsDocumentTitle =113001, 
+                        ForReferringProvider = 113002, ForSurgery = 113003, 
+                        ForTeaching = 113004, ForConference = 113005, 
+                        ForTherapy = 113006, ForPatient = 113007,
+                        ForPeerReview = 113008, ForResearch = 113009, 
+                        QualityIssue = 113010, NoneDocumentTitle = 0};
 
     /// Tipus de Rejected For Quality Reasons definits per DICOM al DCID 7011
-    enum RejectedForQualityReasons {ImageArtifacts, GridArtifacts,
-                                    Positioning, MotionBlur, 
-                                    UnderExposed, OverExposed,
-                                    NoImage, DetectorArtifacts,
-                                    ArtifactsOtherThanGridOrDetectorArtifact, MechanicalFailure,
-                                    ElectricalFailure, SoftwareFailure,
-                                    InappropiateImageProcessing, OtherFailure,
-                                    UnknownFailure, DoubleExposure,
-                                    NoneRejectedForQualityReasons};
+    enum RejectedForQualityReasons {ImageArtifacts = 111207, GridArtifacts = 111208,
+                                    Positioning = 111209, MotionBlur = 111210, 
+                                    UnderExposed = 111211, OverExposed = 111212,
+                                    NoImage = 111213, DetectorArtifacts = 111214,
+                                    ArtifactsOtherThanGridOrDetectorArtifact = 111215, MechanicalFailure = 111216,
+                                    ElectricalFailure = 111217, SoftwareFailure = 111218,
+                                    InappropiateImageProcessing = 111219, OtherFailure = 111220,
+                                    UnknownFailure = 111221, DoubleExposure = 113026,
+                                    NoneRejectedForQualityReasons = 0};
     KeyImageNote();
 
     ~KeyImageNote();
