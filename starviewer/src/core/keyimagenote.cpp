@@ -178,38 +178,17 @@ QList<Image*> KeyImageNote::getReferencedImages()
 
 Image* KeyImageNote::getImage(DICOMReferencedImage *referencedImage)
 {
-    bool found;
-    int i;
-    int j;
-    
-    Image *image;
+    Image *image = NULL;
     Study *study = m_parentSeries->getParentStudy();
-    found = false;
-    i = 0;
+    int i = 0;
     
-    while (!found && i < study->getSeries().size())
+    while (!image && i < study->getSeries().size())
     {
-        Series *serie = study->getSeries().value(i);
-        j = 0;
-        
-        while (!found && j<serie->getImages().size())
-        {
-            Image *currentImage = serie->getImages().value(j);
-            
-            if (currentImage->getSOPInstanceUID() == referencedImage->getDICOMReferencedImageSOPInstanceUID() && currentImage->getFrameNumber() == referencedImage->getFrameNumber())
-            {
-                found = true;
-                image = currentImage;
-            }
-            else
-            {
-                j++;
-            }
-        }
+        image = getDICOMReferencedImagesFromSeries(study->getSeries().value(i), referencedImage);
         i++;
     }
 
-    if (!found) // Si no la trobem generem una imatge emplenada amb tota la informació de la que disposem
+    if(!image) // Si no la trobem generem una imatge emplenada amb tota la informació de la que disposem
     {
         image = new Image();
         image->setSOPInstanceUID(referencedImage->getDICOMReferencedImageSOPInstanceUID());
@@ -219,6 +198,26 @@ Image* KeyImageNote::getImage(DICOMReferencedImage *referencedImage)
     return image;
 }
 
+Image* KeyImageNote::getDICOMReferencedImagesFromSeries(Series *serie, DICOMReferencedImage *referencedImage)
+{
+    int j = 0;
+    Image *image = NULL;
+
+    while(!image && j < serie->getImages().size())
+    {
+        Image *currentImage = serie->getImages().value(j);
+        if(currentImage->getSOPInstanceUID() == referencedImage->getDICOMReferencedImageSOPInstanceUID() && currentImage->getFrameNumber() == referencedImage->getFrameNumber())
+        {
+            image = currentImage;
+        }
+        else
+        {
+            j++;
+        }
+    }
+
+    return image;
+}
 QString KeyImageNote::getInstanceNumber() const
 {
     return m_instanceNumber;
