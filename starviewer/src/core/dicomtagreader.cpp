@@ -258,7 +258,7 @@ QList<DICOMReferencedImage*> DICOMTagReader::getDICOMReferencedImagesOfStructedR
     // TODO Aquest metode no esta al lloc mes correcte, caldria posar-lo a una altra classe (pendent implementacio)
     QList<DICOMReferencedImage*> referencedImagesOfStructuredReport;
 
-    DSRDocumentTree &structuredReportTree =getStructuredReportDocument()->getTree();
+    DSRDocumentTree &structuredReportTree = getStructuredReportDocument()->getTree();
     structuredReportTree.gotoRoot();
     DSRTreeNodeCursor cursor(structuredReportTree.getNode());
 
@@ -267,39 +267,51 @@ QList<DICOMReferencedImage*> DICOMTagReader::getDICOMReferencedImagesOfStructedR
         while (cursor.iterate())
         {
             DSRDocumentTreeNode *structuredReportTreeNode = OFstatic_cast(DSRDocumentTreeNode*, cursor.getNode());
-
-            if (structuredReportTreeNode != NULL)
+            
+            if (structuredReportTreeNode && structuredReportTreeNode->getValueType() == DSRTypes::VT_Image)
             {
-                if (structuredReportTreeNode->getValueType() == DSRTypes::VT_Image)
+                foreach (DICOMReferencedImage *referencedImage, getDicomReferencedImagesFromTreeNode(structuredReportTreeNode))
                 {
-                    DSRImageTreeNode *imageNode = OFstatic_cast(DSRImageTreeNode *, structuredReportTreeNode);
-                    OFString SOPInstance = imageNode->getSOPInstanceUID();
-                    
-                    DSRImageFrameList &framesList  = imageNode->getFrameList();
-                    
-                    if (!framesList.isEmpty()) // Cas multiframe
-                    {
-                        for (size_t i = 0; i < framesList.getNumberOfItems(); i++)
-                        {
-                            DICOMReferencedImage *referencedImage = new DICOMReferencedImage();
-                            int frameNumber = static_cast<int>(framesList.getItem(i));
-                            referencedImage->setDICOMReferencedImageSOPInstanceUID(SOPInstance.c_str());
-                            referencedImage->setFrameNumber(frameNumber);
-                            referencedImagesOfStructuredReport.append(referencedImage);
-                        }
-                    }
-                    else
-                    {
-                        DICOMReferencedImage *referencedimage= new DICOMReferencedImage();
-                        referencedimage->setDICOMReferencedImageSOPInstanceUID(SOPInstance.c_str());
-                        referencedImagesOfStructuredReport.append(referencedimage);
-                    }
+                    referencedImagesOfStructuredReport.append(referencedImage);
                 }
             }
         }
     }
 
     return referencedImagesOfStructuredReport;
+}
+
+QList<DICOMReferencedImage*> DICOMTagReader:: getDicomReferencedImagesFromTreeNode(DSRDocumentTreeNode *structuredReportTreeNode)
+{
+     QList <DICOMReferencedImage*> referencedImagesOfTreeNode;
+
+    if (structuredReportTreeNode->getValueType() == DSRTypes::VT_Image)
+    {
+        DSRImageTreeNode *imageNode = OFstatic_cast(DSRImageTreeNode*, structuredReportTreeNode);
+        OFString SOPInstance = imageNode->getSOPInstanceUID();
+        
+        DSRImageFrameList &framesList  = imageNode->getFrameList();
+        
+        if (!framesList.isEmpty()) // Cas multiframe
+        {
+            for (size_t i = 0; i < framesList.getNumberOfItems(); i++)
+            {
+                DICOMReferencedImage *referencedImage = new DICOMReferencedImage();
+                int frameNumber = static_cast<int>(framesList.getItem(i));
+                referencedImage->setDICOMReferencedImageSOPInstanceUID(SOPInstance.c_str());
+                referencedImage->setFrameNumber(frameNumber);
+                referencedImagesOfTreeNode.append(referencedImage);
+            }
+        }
+        else
+        {
+            DICOMReferencedImage *referencedimage = new DICOMReferencedImage();
+            referencedimage->setDICOMReferencedImageSOPInstanceUID(SOPInstance.c_str());
+            referencedImagesOfTreeNode.append(referencedimage);
+        }
+    }
+
+    return referencedImagesOfTreeNode;
 }
 
 QString DICOMTagReader::getStructuredReportCodeValueOfContentItem(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator)

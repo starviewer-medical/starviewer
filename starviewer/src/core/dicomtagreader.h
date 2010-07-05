@@ -14,6 +14,7 @@
 class DcmDataset;
 class DcmSequenceOfItems;
 class DSRDocument;
+class DSRDocumentTreeNode;
 
 namespace udg {
 
@@ -78,6 +79,9 @@ public:
 
     /// Retorna els DICOM Referenced Images que hi ha referenciades al Structured Report
     QList<DICOMReferencedImage*> getDICOMReferencedImagesOfStructedReport();
+
+    /// Retorna els DICOM Referenced Images referenciades a un Tree Node
+    QList<DICOMReferencedImage*> getDicomReferencedImagesFromTreeNode(DSRDocumentTreeNode *structuredReportTreeNode);
 
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
