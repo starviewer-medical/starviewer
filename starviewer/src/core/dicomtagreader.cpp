@@ -242,7 +242,7 @@ DSRDocument* DICOMTagReader::getStructuredReportDocument()
     if (!m_DICOMStructuredReportDocument)
     {
         m_DICOMStructuredReportDocument = new DSRDocument();
-        OFCondition status = m_DICOMStructuredReportDocument->read(*getDcmDataset(), DSRTypes::RF_verboseDebugMode);
+        OFCondition status = m_DICOMStructuredReportDocument->read(*getDcmDataset());
 
         if (status.bad())
         {
