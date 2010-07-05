@@ -10,24 +10,21 @@
 #include <QObject>
 #include <QDateTime>
 
-namespace udg
-{
+namespace udg {
 
 class DICOMReferencedImage;
 class Series;
 class Image;
+
 /**
 Classe que encapsula les propietats d'un Key Image Note
 
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-
 class KeyImageNote : public QObject
 {
 Q_OBJECT
-
 public:
-    
     /// Tipus d'Observador del Key Image Note
     enum ObserverType {Person, Device, NoneObserverType};
 
@@ -94,36 +91,34 @@ public:
     void setObserverContextName(const QString &contextName);
     
     /// Obtenir/Assignar els UID referenciats al Key Image Note
-    QList<DICOMReferencedImage*> getReferencedSOPInstancesUID() const;
+    QList<DICOMReferencedImage*> getDICOMReferencedImages() const;
     void setReferencedSOPInstancesUID(QList <DICOMReferencedImage*> &referencedImageList);
 
     /// Obtenir les imatges referenciades al Key Image Note
     QList<Image*> getReferencedImages();
 
     /// Obtenir/Assignar la data en que la sèrie s'ha descarregat a la base de dades Local
-    QDate getRetrievedDate();
+    QDate getRetrievedDate() const;
     void setRetrievedDate(QDate date);
 
     /// Obtenir/Assignar la hora en que la sèrie s'ha descarregat a la base de dades Local
-    QTime getRetrievedTime();
+    QTime getRetrievedTime() const;
     void setRetrievedTime(QTime time);
 
     /// Retorna Observer Type de Key Image Note com a un QString
-    QString getObserverTypeAsString(KeyImageNote::ObserverType observerType);
+    QString getObserverTypeAsString(KeyImageNote::ObserverType observerType) const;
 
     /// Retorna Document Title de Key Image Note com a un QString
-    QString getDocumentTitleAsString(KeyImageNote::DocumentTitle documentTitle);
+    QString getDocumentTitleAsString(KeyImageNote::DocumentTitle documentTitle) const;
 
     /// Retorna Rejected For Quality Reasons de Key Image Note com a un QString
-    QString getRejectedForQualityReasonsAsString(KeyImageNote::RejectedForQualityReasons rejectedForQualityReasons);
+    QString getRejectedForQualityReasonsAsString(KeyImageNote::RejectedForQualityReasons rejectedForQualityReasons) const;
 
 private:
-
     /// Obte la imatge que tenim referenciada al Key Image Note a partir de la seva referencia 
     Image* getImage(DICOMReferencedImage *referencedImage);
 
 private:
-
     /// SOP Instance UID del Key Image Note
     QString m_SOPInstanceUID;
 
@@ -143,7 +138,7 @@ private:
     QString m_observerContextName;
     
     /// Llistat de referencies d'imatges
-    QList <DICOMReferencedImage*> m_referencedSOPInstancesUIDList;
+    QList <DICOMReferencedImage*> m_DICOMReferencedImages;
 
     /// La serie pare
     Series *m_parentSeries;

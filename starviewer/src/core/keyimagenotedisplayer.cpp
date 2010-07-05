@@ -9,7 +9,7 @@ KeyImageNoteDisplayer::KeyImageNoteDisplayer(KeyImageNote *keyImageNote, QWidget
 {
     setupUi(this);
     m_keyImageNote = keyImageNote;
-    initialize();
+    fillKeyImageNoteDisplayer();
 }
 
 KeyImageNoteDisplayer::~KeyImageNoteDisplayer()
@@ -17,36 +17,27 @@ KeyImageNoteDisplayer::~KeyImageNoteDisplayer()
 
 }
 
-void KeyImageNoteDisplayer::initialize()
+void KeyImageNoteDisplayer::fillKeyImageNoteDisplayer()
 {
-    QString documentTitle = m_keyImageNote->getDocumentTitleAsString(m_keyImageNote->getDocumentTitle());
-    m_documentTitleText->setText(documentTitle);
+    m_documentTitleText->setText(m_keyImageNote->getDocumentTitleAsString(m_keyImageNote->getDocumentTitle()));
+    m_documentTitleQualityReasonText->setText(m_keyImageNote->getRejectedForQualityReasonsAsString(m_keyImageNote->getRejectedForQualityReasons()));
+    m_observerContextTypeText->setText(m_keyImageNote->getObserverTypeAsString(m_keyImageNote->getObserverContextType()));
+    m_observerContextNameText->setText(m_keyImageNote->getObserverContextName());
+    m_keyObjectDescriptionText->setText(m_keyImageNote->getKeyObjectDescription());
 
-    QString rejectedForQualityReasons = m_keyImageNote->getRejectedForQualityReasonsAsString(m_keyImageNote->getRejectedForQualityReasons());
-    m_documentTitleQualityReasonText->setText(rejectedForQualityReasons);
-
-    QString observerContextType = m_keyImageNote->getObserverTypeAsString(m_keyImageNote->getObserverContextType());
-    m_observerContextTypeText->setText(observerContextType);
-
-    QString observerContextName = m_keyImageNote->getObserverContextName();
-    m_observerContextNameText->setText(observerContextName);
-
-    QString keyObjectDescription = m_keyImageNote->getKeyObjectDescription();
-    m_keyObjectDescriptionText->setText(keyObjectDescription);
-
-    initializeReferencedImagesWidget();
+    fillReferencedImagesWidget();
 }
 
-void KeyImageNoteDisplayer::initializeReferencedImagesWidget()
+void KeyImageNoteDisplayer::fillReferencedImagesWidget()
 {
     QSize size;
-    size.setHeight(scaledImagesSizeY);
-    size.setWidth(scaledImagesSizeX);
+    size.setHeight(ScaledThumbnailsSizeY);
+    size.setWidth(ScaledThumbnailsSizeX);
     m_referencedImagesWidget->setIconSize(size);
     
     QList<Image*> referencedImages = m_keyImageNote->getReferencedImages();
 
-    foreach(Image *image, referencedImages)
+    foreach (Image *image, referencedImages)
     {
         insertImage(image);
     }
@@ -60,7 +51,7 @@ void KeyImageNoteDisplayer::insertImage(Image *image)
     item->setIcon(icon);
 
     QString text;
-    if(image->getInstanceNumber() != NULL)
+    if (image->getInstanceNumber() != NULL)
     {
         text = tr( " Image " ) + image->getInstanceNumber();
         text += "\n";

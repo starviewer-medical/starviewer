@@ -9,7 +9,7 @@
 
 #include <QObject>
 
-namespace udg{
+namespace udg {
 /**
 Classe generica que serveix per a guardar-nos UID d'una imatge, pot esser multiframe, en aquest cas tindra el numero de
 frame al qual fa referencia
@@ -29,7 +29,7 @@ public:
     void setDICOMReferencedImageSOPInstanceUID(const QString &referencedImageSOPInstanceUID);
     
     /// Obte/assigna Numero de frame al que fem referencia, si no es imatge multiframe tindra valor NULL
-    int getFrameNumber();
+    int getFrameNumber() const;
     void setFrameNumber(int frameNumber);
 
     /// Obte/assigna SOP Instance UID de l'objecte DICOM pare de la referencia
@@ -37,7 +37,6 @@ public:
     void setReferenceParentSOPInstanceUID(const QString &referenceParentSOPInstanceUID);
 
 private:
-
     /// UID de la imatge referenciada
     QString m_DICOMReferencedImageSOPInstanceUID;
 
