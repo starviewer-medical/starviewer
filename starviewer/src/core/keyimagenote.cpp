@@ -3,6 +3,7 @@
 #include "study.h"
 #include "image.h"
 #include "dicomreferencedimage.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -99,24 +100,67 @@ void KeyImageNote::setInstanceUID(const QString &uid)
     m_SOPInstanceUID = uid;
 }
 
-QString KeyImageNote::getContentDate() const
+bool KeyImageNote::setContentDate(QString date)
+{
+    return this->setContentDate(QDate::fromString(date.remove("."), "yyyyMMdd"));
+}
+
+bool KeyImageNote::setContentDate(QDate date)
+{
+    bool ok = true;
+    if(date.isValid())
+    {
+        m_contentDate = date;
+        ok = true;
+    }
+    else if(!date.isNull())
+    {
+        DEBUG_LOG("La data està en un mal format: " + date.toString( Qt::LocaleDate ) );
+        ok = false;
+    }
+    return ok;
+}
+
+bool KeyImageNote::setContentTime(QString time)
+{
+    time = time.remove(":");
+
+    QStringList split = time.split(".");
+    QTime convertedTime = QTime::fromString(split[0], "hhmmss");
+
+    if (split.size() == 2)
+    {
+        convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
+    }
+
+    return this->setContentTime(convertedTime);
+}
+
+bool KeyImageNote::setContentTime(QTime time)
+{
+    bool ok = true;
+    if (time.isValid())
+    {
+        m_contentTime = time;
+        ok = true;
+    }
+    else if(!time.isNull())
+    {
+        DEBUG_LOG( "El time està en un mal format" );
+        ok = false;
+    }
+
+    return ok;
+}
+
+QDate KeyImageNote::getContentDate()
 {
     return m_contentDate;
 }
 
-void KeyImageNote::setContentDate(const QString &contentDate)
-{
-    m_contentDate = contentDate;
-}
-
-QString KeyImageNote::getContentTime() const
+QTime KeyImageNote::getContentTime()
 {
     return m_contentTime;
-}
-
-void KeyImageNote::setContentTime(const QString &contentTime)
-{
-    m_contentTime = contentTime;
 }
 
 QList<Image*> KeyImageNote::getReferencedImages()
