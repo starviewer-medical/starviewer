@@ -9,7 +9,7 @@
 
 #include <QObject>
 #include <QDateTime>
-
+#include <QString>
 namespace udg {
 
 class DICOMReferencedImage;
@@ -57,14 +57,16 @@ public:
     /// Obtenir/Assignar el numero d'instancia
     void setInstanceNumber(const QString &instanceNumber);
     QString getInstanceNumber() const;
-
-    /// Obtenir/Assignar el Content Date ( data de creació de les dades )
-    QString getContentDate() const;
-    void setContentDate(const QString &contentDate);
     
-    /// Obtenir/Assignar el Content Time ( moment de creació de les dades )
-    void setContentTime(const QString &contentTime);
-    QString getContentTime() const;
+    /// Assignar/Obtenir la data i hora d'adquisició de la sèrie. El format de la data serà YYYYMMDD i el del
+    /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
+    ///  Retorna fals si hi ha algun error en el format
+    bool setContentDate(QString date);
+    bool setContentDate(QDate date);
+    bool setContentTime(QString time);
+    bool setContentTime(QTime time);
+    QDate getContentDate();
+    QTime getContentTime();
     
     /// Obtenir/Assignar la sèrie pare a la qual pertany
     Series* getParentSeries() const;
@@ -123,10 +125,10 @@ private:
     QString m_SOPInstanceUID;
 
     /// Data de creacio de les dades
-    QString m_contentDate;
+    QDate m_contentDate;
 
     /// Temps de creacio de les dades
-    QString m_contentTime;
+    QTime m_contentTime;
 
     /// Descripcio del Key Image Note
     QString m_keyObjectDescription;
