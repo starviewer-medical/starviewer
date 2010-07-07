@@ -11,14 +11,14 @@ namespace udg{
 PacsManager::PacsManager()
 {
     m_queryWeaver = NULL;
-    m_queryWeaver = new Weaver();
+    m_queryWeaver = new ThreadWeaver::Weaver();
     m_queryWeaver->setMaximumNumberOfThreads(PacsDevice::getMaximumConnections());
     m_numberOfQueryPacsJobsPending = 0;
     
-    m_sendDICOMFilesToPACSWeaver = new Weaver();
+    m_sendDICOMFilesToPACSWeaver = new ThreadWeaver::Weaver();
     m_sendDICOMFilesToPACSWeaver->setMaximumNumberOfThreads(PacsDevice::getMaximumConnections());
 
-    m_retrieveDICOMFilesFromPACSWeaver  = new Weaver();
+    m_retrieveDICOMFilesFromPACSWeaver  = new ThreadWeaver::Weaver();
     //Només podem descarregar un estudi a la vegada del PACS, per això com a número màxim de threads especifiquem 1
     m_retrieveDICOMFilesFromPACSWeaver ->setMaximumNumberOfThreads(1);
 
@@ -145,8 +145,36 @@ bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
             return !m_retrieveDICOMFilesFromPACSWeaver->isIdle();
             break;
         default:
-            ERROR_LOG("Tipus de job invalid");
+            ERROR_LOG("Metode isExecutingPACS ha rebut un Tipus de job invalid");
             return false;
+    }
+}
+
+void PacsManager::requestCancelPACSJob(PACSJob *pacsJob)
+{
+    /*El emit de requestedCancelPACSJob s'ha de fer abans de desencuar i requestAbort perquè sinó ens podem trobar que primer rebem el signal del PACSJob
+     PACSJobCancelledi llavors el requestedCancelPACSJob*/
+    switch (pacsJob->getPACSJobType())
+    {
+        case PACSJob::SendDICOMFilesToPACSJobType:
+            emit requestedCancelPACSJob(pacsJob);
+            if (!m_sendDICOMFilesToPACSWeaver->dequeue(pacsJob))
+            {
+                //Si no l'hem pogut desencuar vol dir que s'està executant demanem abortar el job
+                pacsJob->requestAbort();
+            }
+            break;
+        case PACSJob::RetrieveDICOMFilesFromPACSJobType:
+            emit requestedCancelPACSJob(pacsJob);
+            if (!m_retrieveDICOMFilesFromPACSWeaver->dequeue(pacsJob))
+            {
+                //Si no l'hem pogut desencuar vol dir que s'està executant demanem abortar el job
+                pacsJob->requestAbort();
+            }
+            break;
+        default:
+            ERROR_LOG("Metode requestCancel ha rebut un Tipus de job invalid");
+            return;
     }
 }
 

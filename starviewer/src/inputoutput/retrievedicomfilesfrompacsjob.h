@@ -45,9 +45,6 @@ public:
     ///Codi que executarà el job
     void run();
 
-    ///Sol·licita abortar el job
-    void requestAbort();
-
     ///Retorna l'Status del Job
     PACSRequestStatus::RetrieveRequestStatus getStatus();
 
@@ -98,6 +95,9 @@ private:
       a la bd, si l'estudi està inserit no l'esborrem, perquè part dels fitxers descarregats ja podien estar inserit a la base de dades per una anterior
       descàrrega*/
     void deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
+
+    ///Demana que es cancel·li la descarrega del job
+    void requestCancelJob();
 
 private:
 

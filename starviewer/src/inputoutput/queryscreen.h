@@ -140,7 +140,7 @@ private slots:
 
     /**Slot que s'activa quan un PACSJob ha finalitzat, es comprova si la PacsManager està executant més jobs de descàrrega o enviament
       *si no n'està executant cap més s'amaga el gif animat que indica que s'està processant una petició*/
-    void pacsJobFinished(PACSJob *pacsJob);
+    void pacsJobFinishedOrCancelled(PACSJob *pacsJob);
 
 private:
 

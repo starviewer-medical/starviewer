@@ -19,7 +19,7 @@ public:
        WarningSend: Per a StoreSCU indica que totes les imatges s'han enviat però per totes o alguna imatge hem rebut un warning, per exemple podem rebre un 
                      warning perquè el PACS ha guardat amb una transfer syntax diferent les imatges del que les havíem enviat.
        FailureSend : L'enviament de totes les imatges ha fallat*/
-    enum SendRequestStatus {OkSend, CanNotConnectPACSToSend, FailureSend, WarningSend, SomeImagesFailedSend, UnknowStatusSend};
+    enum SendRequestStatus {OkSend, CanNotConnectPACSToSend, FailureSend, WarningSend, SomeImagesFailedSend, CancelledSend, UnknowStatusSend};
 
     /*Es defineix els tipus d'error que podem tenir al descarregar fitxers DICOM:
         DatabaseError: Indica quan error de base de dades d'Starviewer
@@ -27,7 +27,7 @@ public:
         MoveWarningStatus: Ha fallat la descàrrega d'algun dels fitxers sol·licitats
         IncomingConnectionsPortPacsInUse: El port per rebre les connexions entrants per rebre els fitxers està en ús */
     enum RetrieveRequestStatus {OkRetrieve, DatabaseError, CanNotConnectPACSToRetrieve, NoEnoughSpaceToRetrieveDICOMFiles, ErrorFreeingSpace, PatientInconsistent, 
-        RetrieveDestinationAETileUnknown, IncomingConnectionsPortPACSInUse, RetrieveFailureOrRefused, RetrieveWarning, RetrieveUnknow};
+        RetrieveDestinationAETileUnknown, IncomingConnectionsPortPACSInUse, RetrieveFailureOrRefused, RetrieveWarning, RetrieveCancelled, RetrieveUnknow};
 
 };
 

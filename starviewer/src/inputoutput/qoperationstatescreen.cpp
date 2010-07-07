@@ -35,17 +35,23 @@ void QOperationStateScreen::setPacsManager(PacsManager *pacsManager)
     m_pacsManager = pacsManager;
 
     connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
+    connect(m_pacsManager, SIGNAL(requestedCancelPACSJob(PACSJob*)), SLOT(requestedCancelPACSJob(PACSJob*)));
 }
 
 void QOperationStateScreen::createConnections()
 {
-    connect( m_buttonClear , SIGNAL( clicked() ) , this , SLOT( clearList() ) );
+    connect(m_buttonClear, SIGNAL(clicked()), this, SLOT(clearList()));
+    connect(m_cancellAllRequestsButton, SIGNAL(clicked()), this, SLOT(cancelAllRequests()));
+    connect(m_cancelSelectedRequestsButton, SIGNAL(clicked()), this, SLOT(cancelSelectedRequests()));
 }
 
 void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
 {
+    m_PACSJobPendingToFinish.insert(pacsJob->getPACSJobID(), pacsJob);
+
     connect(pacsJob, SIGNAL(PACSJobStarted(PACSJob*)), SLOT(PACSJobStarted(PACSJob*))); 
     connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(PACSJobFinished(PACSJob*))); 
+    connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(PACSJobCancelled(PACSJob*)));
 
     switch(pacsJob->getPACSJobType())
     {
@@ -79,11 +85,27 @@ void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
 {
     QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
 
+    m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
+
     if  ( !qTreeWidgetPacsJobItems.isEmpty() )
     {
         QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
 
         pacsJobItem->setText(0, getPACSJobStatusResume(pacsJob) );
+    }
+}
+
+void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
+{
+    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+
+    m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
+
+    if  (!qTreeWidgetPacsJobItems.isEmpty())
+    {
+        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at(0);
+
+        pacsJobItem->setText(0, tr("CANCELLED"));
     }
 }
 
@@ -121,6 +143,33 @@ void QOperationStateScreen::clearList()
     foreach( QTreeWidgetItem *itemToClear, clearableItems )
     {
         m_treeRetrieveStudy->invisibleRootItem()->takeChild( m_treeRetrieveStudy->invisibleRootItem()->indexOfChild(itemToClear) );
+    }
+}
+
+void QOperationStateScreen::cancelAllRequests()
+{
+    INFO_LOG("CancellAllRequests");
+}
+
+void QOperationStateScreen::cancelSelectedRequests()
+{
+    foreach(QTreeWidgetItem *item, m_treeRetrieveStudy->selectedItems())
+    {
+        if (m_PACSJobPendingToFinish.contains(item->text(9).toInt()))
+        {
+            m_pacsManager->requestCancelPACSJob(m_PACSJobPendingToFinish[item->text(9).toInt()]);
+        }
+    }
+}
+
+void QOperationStateScreen::requestedCancelPACSJob(PACSJob *pacsJob)
+{
+    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+
+    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    {
+        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
+        pacsJobItem->setText(0, tr("CANCELLING"));
     }
 }
 
@@ -166,13 +215,17 @@ QString QOperationStateScreen::getPACSJobStatusResume(PACSJob *pacsJob)
 {
     if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        if ((dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ))->getStatus() == PACSRequestStatus::OkRetrieve)
+        switch((dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ))->getStatus())
         {
-            return tr("RETRIEVED");
-        }
-        else
-        {
-            return tr("ERROR");
+            case PACSRequestStatus::OkRetrieve:
+                return tr("RETRIEVED");
+                break;
+            case PACSRequestStatus::RetrieveCancelled:
+                return tr("CANCELLED");
+                break;
+            default:
+                return tr("ERROR");
+                break;
         }
     }
     else

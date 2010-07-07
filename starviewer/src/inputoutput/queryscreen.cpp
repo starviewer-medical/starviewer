@@ -485,11 +485,12 @@ void QueryScreen::newPACSJobEnqueued(PACSJob *pacsJob)
     {
         m_operationAnimation->show();
         m_labelOperation->show();
-        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(pacsJobFinished(PACSJob*)));
+        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
+        connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
     }
 }
 
-void QueryScreen::pacsJobFinished(PACSJob *)
+void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
 {
     if (!m_pacsManager->isExecutingPACSJob(PACSJob::SendDICOMFilesToPACSJobType) && 
         !m_pacsManager->isExecutingPACSJob(PACSJob::RetrieveDICOMFilesFromPACSJobType))
