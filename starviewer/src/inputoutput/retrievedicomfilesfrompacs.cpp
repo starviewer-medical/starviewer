@@ -24,6 +24,7 @@ namespace udg{
 RetrieveDICOMFilesFromPACS::RetrieveDICOMFilesFromPACS(PacsDevice pacs)
 {
     m_pacs = pacs;
+    m_abortIsRequested = false;
 }
 
 OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network * associationNetwork, T_ASC_Association ** association)
@@ -85,12 +86,26 @@ OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network * ass
     return condition;
 }
 
-void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_MoveRQ *req, int responseCount, T_DIMSE_C_MoveRSP *response)
+void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_MoveRQ *request, int responseCount, T_DIMSE_C_MoveRSP *response)
 {
-    Q_UNUSED(req);
     Q_UNUSED(responseCount);
     Q_UNUSED(response);
-    //TODO:Aquest mètode s'haurà d'utilitzar quan implementem la cancel·lació de descàrregues    
+    MoveSCPCallbackData *moveSCPCallbackData = (MoveSCPCallbackData*) callbackData;
+
+    if (moveSCPCallbackData->retrieveDICOMFilesFromPACS->m_abortIsRequested)
+    {
+        OFCondition condition = DIMSE_sendCancelRequest(moveSCPCallbackData->association, moveSCPCallbackData->presentationContextId, request->MessageID);
+       
+        if (condition.good())
+        {
+            INFO_LOG("S'ha cancel·lat la descarrega");
+        }
+        else
+        {
+            ERROR_LOG("Error al intentar cancel.lar la descarrga. Descripcio error: " + QString(condition.text()));
+        }
+    }
+
 }
 
 OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association * association, T_DIMSE_Message * dimseMessage,T_ASC_PresentationContextID presentationContextID)
@@ -275,6 +290,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     Status state;
     PacsServer pacsServer(m_pacs);
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
+    MoveSCPCallbackData moveSCPCallbackData;
 
     m_numberOfImagesRetrieved = 0;
 
@@ -297,12 +313,16 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
         return PACSRequestStatus::RetrieveFailureOrRefused;
     }
 
+    moveSCPCallbackData.association = association;
+    moveSCPCallbackData.presentationContextId = presentationContextID;
+    moveSCPCallbackData.retrieveDICOMFilesFromPACS = this;
+
     // set the destination of the images to us
     T_DIMSE_C_MoveRQ moveRequest = getConfiguredMoveRequest(association); 
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
-    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, NULL, DIMSE_BLOCKING, 0, 
-        pacsServer.getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
+    OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData, 
+        DIMSE_BLOCKING, 0, pacsServer.getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
 
     pacsServer.disconnect();
 
@@ -313,6 +333,12 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
         delete statusDetail;
 
     return retrieveRequestStatus;
+}
+
+void RetrieveDICOMFilesFromPACS::requestCancel()
+{
+    m_abortIsRequested = true;
+    INFO_LOG("S'ha sol·licitat cancel·lar la descàrrega");
 }
 
 T_DIMSE_C_MoveRQ RetrieveDICOMFilesFromPACS::getConfiguredMoveRequest(T_ASC_Association *association)
@@ -397,7 +423,10 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripció rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             retrieveRequestStatus = PACSRequestStatus::RetrieveWarning;
             break;
-
+        case STATUS_MOVE_Cancel_SubOperationsTerminatedDueToCancelIndication:
+            //L'usuari ha sol·licitat cancel·lar la descàrrega
+            retrieveRequestStatus = PACSRequestStatus::RetrieveCancelled;
+            break;
         default:
             ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca

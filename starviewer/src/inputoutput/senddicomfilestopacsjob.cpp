@@ -20,6 +20,8 @@ SendDICOMFilesToPACSJob::SendDICOMFilesToPACSJob(PacsDevice pacsDevice, QList<Im
     Q_ASSERT(imagesToSend.at (0)->getParentSeries()->getParentStudy());
     Q_ASSERT(imagesToSend.at(0)->getParentSeries()->getParentStudy()->getParentPatient());
 
+    m_sendDICOMFilesToPACS = new SendDICOMFilesToPACS(getPacsDevice());
+
     m_imagesToSend = imagesToSend;
     m_sendRequestStatus = PACSRequestStatus::OkSend;
 }
@@ -44,8 +46,6 @@ void SendDICOMFilesToPACSJob::run()
         INFO_LOG( "S'enviaran fitxers de l' estudi " + m_imagesToSend.at(0)->getParentSeries()->getParentStudy()->getInstanceUID() +
             " al PACS " + getPacsDevice().getAETitle() );
 
-        m_sendDICOMFilesToPACS = new SendDICOMFilesToPACS(getPacsDevice());
-
         /*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
          no s'atendria fins que la interfície estigui lliure poguent provocar comportaments incorrectes*/
         connect(m_sendDICOMFilesToPACS, SIGNAL( DICOMFileSent(Image *, int) ), SLOT( DICOMFileSent(Image *, int) ), Qt::DirectConnection );
@@ -62,9 +62,11 @@ void SendDICOMFilesToPACSJob::run()
     }
 }
 
-void SendDICOMFilesToPACSJob::requestAbort()
+void SendDICOMFilesToPACSJob::requestCancelJob()
 {
-    //TODO:Per implementar
+    INFO_LOG(QString("S'ha demanat la cancel·lació del Job d'enviament d'imatges de l'estudi %1 al PACS %2").arg(getStudyOfImagesToSend()->getInstanceUID(),
+        getPacsDevice().getAETitle()));
+    m_sendDICOMFilesToPACS->requestCancel();
 }
 
 PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACSJob::getStatus()
@@ -104,6 +106,10 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             break;
         case PACSRequestStatus::WarningSend:
             message = tr("The study %1 of patient %2 has been sent, but it's possible that the PACS %3 has changed some data of the images.").arg(
+                studyID, patientName, pacsAETitle);
+            break;
+        case PACSRequestStatus::CancelledSend:
+            message = tr("The sent of study %1 from patient %2 to PACS %3 has been cnacelled.").arg(
                 studyID, patientName, pacsAETitle);
             break;
         default:

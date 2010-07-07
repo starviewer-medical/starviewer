@@ -40,9 +40,6 @@ public:
     ///Codi que executarà el job
     void run();
 
-    ///Sol·licita abortar el job
-    void requestAbort();
-
     ///Retorna l'Status del Job
     PACSRequestStatus::SendRequestStatus getStatus();
 
@@ -72,6 +69,11 @@ signals:
 
     ///Signal que s'emet quan s'ha enviat un serie completa al PACS
     void DICOMSeriesSent(PACSJob*, int numberOfSeriesSent);
+
+private:
+
+    ///Sol·licita que ens cancel·li el job
+    void requestCancelJob();
 
 private slots:
 

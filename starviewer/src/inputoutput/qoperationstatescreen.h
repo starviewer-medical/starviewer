@@ -9,6 +9,8 @@
 
 #include "ui_qoperationstatescreenbase.h"
 
+#include <QHash>
+
 // fordward declarations
 class QString;
 
@@ -46,8 +48,11 @@ private slots:
     ///Slot que s'activa quan job comença, al QTreeWidget es marca aquell job com començat
     void PACSJobStarted(PACSJob *);
 
-    ///Slot que s'activa quabn el jo ha acabat, es marca aquell Job al QTreeWidget amb l'estatus en el que ha finalitzat
+    ///Slot que s'activa quan el job ha acabat, es marca aquell Job al QTreeWidget amb l'estatus en el que ha finalitzat
     void PACSJobFinished(PACSJob *);
+
+    ///Slot que s'activa quan el job ha estat cancel·lat, es marca aquell job com ha cancel·lat
+    void PACSJobCancelled(PACSJob *pacsJob);
 
     ///Slot que s'activa quan job ha fet una acció amb una imatge, s'augmenta pel job al QTreeWidget el número de d'imatges
     void DICOMFileCommit(PACSJob *pacsJob, int numberOfImages);
@@ -58,9 +63,19 @@ private slots:
     /// Neteja la llista d'estudis excepte dels que s'estant descarregant en aquells moments
     void clearList();
 
+    ///Cancel·la totes les peticions al PACS que s'estan executant o estant pendents
+    void cancelAllRequests();
+
+    ///Cancel·la les peticions seleccionades al PACS que s'estan executant o estant pendents
+    void cancelSelectedRequests();
+
+    ///Slot que s'activa quan rebem SIGNAL que s'ha demanat cancel·lar un Job
+    void requestedCancelPACSJob(PACSJob*);
+
 private:
     QString m_currentProcessingStudyUID;
     PacsManager *m_pacsManager;
+    QHash<int, PACSJob*> m_PACSJobPendingToFinish;
 
 private:
     /// Crea les connexions pels signals i slots

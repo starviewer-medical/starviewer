@@ -57,6 +57,11 @@ public:
     ///Starts the download
     PACSRequestStatus::RetrieveRequestStatus retrieve(DicomMask dicomMask);
 
+    ///Cancel·la la descàrrega. La cancel·lació de la descàrrega és assíncrona, quan l'estudi s'ha cancel·lat es retorna l'Status RetrieveCancelled
+    /*El motiu de que sigui assíncron és perquè mentre s'està processant la descàrrega d'una imatge no es pot cancel·lar la descàrrega, només es pot 
+      fer just després d'haver rebut una imatge.*/
+    void requestCancel();
+
 signals:
 
     ///Signal que indica que s'ha descarregat un fitxer
@@ -98,8 +103,6 @@ private:
     static void subOperationCallback(void * /*subOperationCallbackData*/, T_ASC_Network *associationNetwork, T_ASC_Association **subAssociation);
 
 private:
-    /// Request DICOM association;
-    PacsDevice m_pacs;
 
     struct StoreSCPCallbackData
     {
@@ -108,7 +111,19 @@ private:
         QString fileName;
     };
 
+    struct MoveSCPCallbackData
+    {
+        T_ASC_Association *association;
+        T_ASC_PresentationContextID presentationContextId;
+        RetrieveDICOMFilesFromPACS *retrieveDICOMFilesFromPACS;
+    };
+
+    /// Request DICOM association;
+    PacsDevice m_pacs;
+
     int m_numberOfImagesRetrieved;
+
+    bool m_abortIsRequested;
 
 };
 

@@ -50,6 +50,9 @@ public:
     ///Indica si s'executen peticions del tipus de PACSJob indicat
     bool isExecutingPACSJob(PACSJob::PACSJobType pacsJobType);
 
+    ///Demana que es cancel·li l'execució del PACSJob
+    void requestCancelPACSJob(PACSJob *pacsJob);
+
 signals:
 
     ///Signal que s'emet quan s'han rebut resultats d'un PACS de la cerca d'estudis
@@ -76,6 +79,9 @@ signals:
     ///Signal que s'emet per indicar que s'ha encuat un nou PACSJob
     void newPACSJobEnqueued(PACSJob *pacsJob);
 
+    ///Signal que indica que ens han demanat cancel·lar un PACSJob
+    void requestedCancelPACSJob(PACSJob *pacsJob);
+
 private slots:
 
     ///Slot que s'activa quan un job ha finalitzat
@@ -88,7 +94,6 @@ private:
     ThreadWeaver::Weaver *m_retrieveDICOMFilesFromPACSWeaver;
 
     int m_numberOfQueryPacsJobsPending;
-
 };
 
 };  //  end  namespace udg

@@ -26,6 +26,7 @@ RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevi
     Q_ASSERT(studyToRetrieveDICOMFiles);
     Q_ASSERT(studyToRetrieveDICOMFiles->getParentPatient());
 
+    m_retrieveDICOMFilesFromPACS = new RetrieveDICOMFilesFromPACS(getPacsDevice());
     m_studyToRetrieveDICOMFiles = studyToRetrieveDICOMFiles;
     m_dicomMaskToRetrieve = dicomMaskToRetrieve;
     m_retrievePriorityJob = retrievePriorityJob;
@@ -74,7 +75,6 @@ void RetrieveDICOMFilesFromPACSJob::run()
         QThread fillersThread;
         patientFiller.moveToThread( &fillersThread );
         LocalDatabaseManager localDatabaseManager;
-        m_retrieveDICOMFilesFromPACS = new RetrieveDICOMFilesFromPACS(getPacsDevice());
 
         /*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
           no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes*/
@@ -128,8 +128,11 @@ void RetrieveDICOMFilesFromPACSJob::run()
     }
 }
 
-void RetrieveDICOMFilesFromPACSJob::requestAbort()
+void RetrieveDICOMFilesFromPACSJob::requestCancelJob()
 {
+    INFO_LOG(QString("S'ha demanat la cancel·lació del Job de descarrega d'imatges de l'estudi %1 del PACS %2").arg(getStudyToRetrieveDICOMFiles()->getInstanceUID(),
+        getPacsDevice().getAETitle()));
+    m_retrieveDICOMFilesFromPACS->requestCancel();
 }
 
 PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::getStatus()
@@ -237,6 +240,9 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
     {
         case PACSRequestStatus::OkRetrieve:
             message = tr("Study %1 of patient %2 has been retrieved succesfully from PACS %3.").arg(studyID, patientName, pacsAETitle);
+            break;
+        case PACSRequestStatus::RetrieveCancelled:
+            message = tr("Retrive of study %1 of patient %2 from PACS %3 has been cancelled.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::CanNotConnectPACSToRetrieve :
             message += tr("%1 can't connect to PACS %2 trying to retrieve study %3 from patient %4.\n").arg(ApplicationNameString, pacsAETitle,

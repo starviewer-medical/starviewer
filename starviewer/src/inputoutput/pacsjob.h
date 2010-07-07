@@ -16,6 +16,7 @@
 namespace udg {
 
 using namespace ThreadWeaver;
+
 /**
     Classe base de la qual herederan totes les operacions que es facin amb el PACS. Aquesta classe conté els mètodes basics que s'han d'heredar.
 
@@ -43,13 +44,22 @@ public:
     ///Indica quin tipus de PACSJob és l'objecte
     virtual PACSJob::PACSJobType getPACSJobType() = 0;
 
-signals:
+    ///Mètode heredad de Job que serveix per cancel·lar l'execució del job actual. Si el job no s'està executant no fa res.
+    void requestAbort();
 
+    ///Mètode heredat de Job, s'executa just abans de desencuar el job, si ens densencuen vol dir que el job no s'executarà per tant
+    ///des d'aquest mètode emetem el signal PACSJobCancelled
+    void aboutToBeDequeued(WeaverInterface *weaver);
+
+signals:
     ///Signal que s'emet quan un PACSJob ha començat a executar-se
     void PACSJobStarted(PACSJob *);
 
     ///Signal que s'emet quan un PACSJob ha acabat d'executar-se
     void PACSJobFinished(PACSJob *);
+
+    ///Signal que s'emet quan un PACSJob s'ha cancel·lat
+    void PACSJobCancelled(PACSJob *);
 
 private slots:
 
@@ -59,12 +69,17 @@ private slots:
     ///Slot que s'activa quan el job actual de ThreadWeaver ha finalitzat
     void threadWeaverJobDone();
 
+private:
+
+    ///Mètode que han de reimplementar les classes filles per cancel·lar l'execució del job actual
+    virtual void requestCancelJob() = 0;
+
 private :
 
     static int m_jobIDCounter;
     int m_jobID;
     PacsDevice m_pacsDevice;
-
+    bool m_abortIsRequested;
 };
 
 };

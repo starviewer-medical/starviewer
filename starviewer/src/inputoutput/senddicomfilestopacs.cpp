@@ -27,6 +27,7 @@ namespace udg {
 SendDICOMFilesToPACS::SendDICOMFilesToPACS(PacsDevice pacsDevice)
 {
     m_pacs = pacsDevice;
+    m_abortIsRequested = false;
 }
 
 PacsDevice SendDICOMFilesToPACS::getPacs()
@@ -52,6 +53,11 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
 
     foreach(Image *imageToStore, imageListToSend)
     {
+        if (m_abortIsRequested)
+        {
+            break;
+        }
+        
         INFO_LOG(QString("S'enviara al PACS %1 el fitxer %2").arg(m_pacs.getAETitle(), imageToStore->getPath()));
         if (storeSCU(pacsServer.getConnection(), qPrintable(imageToStore->getPath())))
         {
@@ -62,6 +68,12 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
     pacsServer.disconnect();
 
     return getStatusStoreSCU();
+}
+
+void SendDICOMFilesToPACS::requestCancel()
+{
+    m_abortIsRequested = true;
+    INFO_LOG("Ens han demanat cancel·lar l'enviament d'imatges al PACS");
 }
 
 void SendDICOMFilesToPACS::initialitzeImagesCounters(int numberOfImagesToSend)
@@ -243,7 +255,12 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::getStatusStoreSCU()
       només enviarem un error i mostrarem el més crític, per exemple si tenim 5 errors Warning i un de Failure, enviarem error indica que l'enviament 
       d'algunes imatges ha fallat. */
 
-    if (getNumberOfImagesSentSuccesfully() == 0)
+    if (m_abortIsRequested)
+    {
+        INFO_LOG("S'ha abortat l'enviament d'imatges al PACS");
+        return PACSRequestStatus::CancelledSend;
+    }
+    else if (getNumberOfImagesSentSuccesfully() == 0)
     {
         //No hem guardat cap imatge (Failure Status)
         ERROR_LOG("Ha fallat l'enviament de totes les imatges al PACS");
