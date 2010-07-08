@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>475</width>
-    <height>842</height>
+    <width>530</width>
+    <height>882</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -2153,7 +2153,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_28">
          <item>
-          <widget class="QCheckBox" name="m_computeViewpointEntropyCheckBox">
+          <widget class="QCheckBox" name="m_computeVoxelsViewpointEntropyCheckBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>1</horstretch>
@@ -2161,19 +2161,19 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Viewpoint entropy</string>
+            <string>Voxels viewpoint entropy H(Z|v)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_loadViewpointEntropyPushButton">
+          <widget class="QPushButton" name="m_loadVoxelsViewpointEntropyPushButton">
            <property name="text">
             <string>Load...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_saveViewpointEntropyPushButton">
+          <widget class="QPushButton" name="m_saveVoxelsViewpointEntropyPushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -2187,7 +2187,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_29">
          <item>
-          <widget class="QCheckBox" name="m_computeEntropyCheckBox">
+          <widget class="QCheckBox" name="m_computeVoxelsEntropyCheckBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>1</horstretch>
@@ -2195,19 +2195,19 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Entropy</string>
+            <string>Voxels entropy H(Z)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_loadEntropyPushButton">
+          <widget class="QPushButton" name="m_loadVoxelsEntropyPushButton">
            <property name="text">
             <string>Load...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_saveEntropyPushButton">
+          <widget class="QPushButton" name="m_saveVoxelsEntropyPushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>
