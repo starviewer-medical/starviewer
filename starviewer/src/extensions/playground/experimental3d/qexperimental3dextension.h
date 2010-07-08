@@ -37,13 +37,13 @@ public slots:
     /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveViewedVolume( QString fileName = QString() );
     /// Carrega la viewpoint entropy des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadViewpointEntropy( QString fileName = QString() );
+    void loadVoxelsViewpointEntropy( QString fileName = QString() );
     /// Desa la viewpoint entropy a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveViewpointEntropy( QString fileName = QString() );
+    void saveVoxelsViewpointEntropy( QString fileName = QString() );
     /// Carrega l'entropia des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadEntropy( QString fileName = QString() );
+    void loadVoxelsEntropy( QString fileName = QString() );
     /// Desa l'entropia a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveEntropy( QString fileName = QString() );
+    void saveVoxelsEntropy( QString fileName = QString() );
     /// Carrega la VMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadVmi( QString fileName = QString() );
     /// Desa la VMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -280,8 +280,8 @@ private:
     Obscurance *m_obscurance;
 
     QVector<float> m_viewedVolume;
-    QVector<float> m_viewpointEntropy;
-    float m_entropy;
+    QVector<float> m_voxelsViewpointEntropy;    // H(Z|v)
+    float m_voxelsEntropy;                      // H(Z)
     QVector<float> m_vmi;
     float m_mi;
     QVector<float> m_viewpointUnstabilities;

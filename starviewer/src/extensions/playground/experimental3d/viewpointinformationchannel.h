@@ -48,12 +48,12 @@ public:
      */
     void filterViewpoints( const QVector<bool> &filter );
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
-    void compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity, bool &evmiVomi, bool &bestViews,
-                  bool &guidedTour, bool &exploratoryTour, bool display = false );
+    void compute( bool &voxelsViewpointEntropy, bool &voxelsEntropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity, bool &evmiVomi,
+                  bool &bestViews, bool &guidedTour, bool &exploratoryTour, bool display = false );
     bool hasViewedVolume() const;
     const QVector<float>& viewedVolume() const;
-    const QVector<float>& viewpointEntropy() const;
-    float entropy() const;
+    const QVector<float>& voxelsViewpointEntropy() const;   // H(Z|v)
+    float voxelsEntropy() const;                            // H(Z)
     const QVector<float>& vmi() const;
     float mi() const;
     const QVector<float>& viewpointUnstabilities() const;
@@ -79,7 +79,7 @@ private:
     QVector<float> voxelProbabilitiesInView( int i );
 
 #ifndef CUDA_AVAILABLE
-    void computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities,
+    void computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeVoxelsViewpointEntropy, bool computeVoxelsEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities,
                      bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour );
     void createVoxelProbabilitiesPerViewFiles();
     QVector<float> voxelProbabilitiesInViewCpu( int i );
@@ -87,18 +87,18 @@ private:
     float rayCastingCpu( bool computeViewProbabilities );
     void computeViewProbabilitiesCpu( float totalViewedVolume );
     void computeVoxelProbabilitiesCpu();
-    void computeViewMeasuresCpu( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity,
+    void computeViewMeasuresCpu( bool computeVoxelsViewpointEntropy, bool computeVoxelsEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity,
                                  bool computeEvmiVomi );
     void computeVomiCpu( bool computeVomi, bool computeColorVomi );
 #else // CUDA_AVAILABLE
     static Matrix4 viewMatrix( const Vector3 &viewpoint );
-    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities,
+    void computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeVoxelsViewpointEntropy, bool computeVoxelsEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities,
                       bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour,
                       bool display );
     QVector<float> voxelProbabilitiesInViewCuda( int i );
     void computeViewProbabilitiesCuda();
     void computeVoxelProbabilitiesCuda();
-    void computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity,
+    void computeViewMeasuresCuda( bool computeVoxelsViewpointEntropy, bool computeVoxelsEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity,
                                   bool computeEvmiVomi );
     void computeVomiCuda( bool computeVomi, bool computeColorVomi );
 #endif // CUDA_AVAILABLE
@@ -125,8 +125,8 @@ private:
     QVector<float> m_viewProbabilities;     // p(V)
     QVector<float> m_voxelProbabilities;    // p(Z)
 
-    QVector<float> m_viewpointEntropy;
-    float m_entropy;
+    QVector<float> m_voxelsViewpointEntropy;    // H(Z|v)
+    float m_voxelsEntropy;                      // H(Z)
     QVector<float> m_vmi;
     float m_mi;
     QVector<float> m_viewpointUnstabilities;

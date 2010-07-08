@@ -116,63 +116,63 @@ void QExperimental3DExtension::saveViewedVolume( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadViewpointEntropy( QString fileName )
+void QExperimental3DExtension::loadVoxelsViewpointEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointEntropyDir, tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::VoxelsViewpointEntropyDir, tr("Load voxels viewpoint entropy H(Z|v)"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
-    if ( loadData( fileName, m_viewpointEntropy ) ) m_saveViewpointEntropyPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint entropy"), QString( tr("Can't load viewpoint entropy from file ") ) + fileName );
+    if ( loadData( fileName, m_voxelsViewpointEntropy ) ) m_saveVoxelsViewpointEntropyPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load voxels viewpoint entropy H(Z|v)"), QString( tr("Can't load voxels viewpoint entropy H(Z|v) from file ") ) + fileName );
 }
 
 
-void QExperimental3DExtension::saveViewpointEntropy( QString fileName )
+void QExperimental3DExtension::saveVoxelsViewpointEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewpointEntropyDir, tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::VoxelsViewpointEntropyDir, tr("Save voxels viewpoint entropy H(Z|v)"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
     bool error;
 
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointEntropy, fileName, QString( "H(Z|v%1) = %2" ), 1 );
-    else error = !saveData( m_viewpointEntropy, fileName );
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_voxelsViewpointEntropy, fileName, QString( "H(Z|v%1) = %2" ), 1 );
+    else error = !saveData( m_voxelsViewpointEntropy, fileName );
 
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint entropy"), QString( tr("Can't save viewpoint entropy to file ") ) + fileName );
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save voxels viewpoint entropy H(Z|v)"), QString( tr("Can't save voxels viewpoint entropy H(Z|v) to file ") ) + fileName );
 }
 
 
-void QExperimental3DExtension::loadEntropy( QString fileName )
+void QExperimental3DExtension::loadVoxelsEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::EntropyDir, tr("Load entropy"), tr("Data files (*.dat);;All files (*)") );
+        fileName = getFileNameToLoad( Experimental3DSettings::VoxelsEntropyDir, tr("Load voxels entropy H(Z)"), tr("Data files (*.dat);;All files (*)") );
         if ( fileName.isNull() ) return;
     }
 
-    if ( loadFloatData( fileName, m_entropy ) ) m_saveEntropyPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load entropy"), QString( tr("Can't load entropy from file ") ) + fileName );
+    if ( loadFloatData( fileName, m_voxelsEntropy ) ) m_saveVoxelsEntropyPushButton->setEnabled( true );
+    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load voxels entropy H(Z)"), QString( tr("Can't load voxels entropy H(Z) from file ") ) + fileName );
 }
 
 
-void QExperimental3DExtension::saveEntropy( QString fileName )
+void QExperimental3DExtension::saveVoxelsEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName =getFileNameToSave( Experimental3DSettings::EntropyDir, tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::VoxelsEntropyDir, tr("Save voxels entropy H(Z)"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
     bool error;
 
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_entropy, fileName, QString( "H(Z) = %1" ) );
-    else error = !saveFloatData( m_entropy, fileName );
+    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_voxelsEntropy, fileName, QString( "H(Z) = %1" ) );
+    else error = !saveFloatData( m_voxelsEntropy, fileName );
 
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save entropy"), QString( tr("Can't save entropy to file ") ) + fileName );
+    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save voxels entropy H(Z)"), QString( tr("Can't save voxels entropy H(Z) to file ") ) + fileName );
 }
 
 
@@ -670,7 +670,7 @@ void QExperimental3DExtension::saveEntropyI( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName =getFileNameToSave( Experimental3DSettings::EntropyIntensityDir, tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::EntropyIntensityDir, tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -1123,10 +1123,10 @@ void QExperimental3DExtension::createConnections()
     connect( m_vmiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setVmiOneViewpointMaximum(int) ) );
     connect( m_vmiOneViewpointCheckBox, SIGNAL( toggled(bool) ), m_vmiOneViewpointSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_saveViewedVolumePushButton, SIGNAL( clicked() ), SLOT( saveViewedVolume() ) );
-    connect( m_loadViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( loadViewpointEntropy() ) );
-    connect( m_saveViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( saveViewpointEntropy() ) );
-    connect( m_loadEntropyPushButton, SIGNAL( clicked() ), SLOT( loadEntropy() ) );
-    connect( m_saveEntropyPushButton, SIGNAL( clicked() ), SLOT( saveEntropy() ) );
+    connect( m_loadVoxelsViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( loadVoxelsViewpointEntropy() ) );
+    connect( m_saveVoxelsViewpointEntropyPushButton, SIGNAL( clicked() ), SLOT( saveVoxelsViewpointEntropy() ) );
+    connect( m_loadVoxelsEntropyPushButton, SIGNAL( clicked() ), SLOT( loadVoxelsEntropy() ) );
+    connect( m_saveVoxelsEntropyPushButton, SIGNAL( clicked() ), SLOT( saveVoxelsEntropy() ) );
     connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
     connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
     connect( m_loadMiPushButton, SIGNAL( clicked() ), SLOT( loadMi() ) );
@@ -2027,8 +2027,8 @@ void QExperimental3DExtension::computePropertySaliencies()
 void QExperimental3DExtension::computeSelectedVmi()
 {
     // Què ha demanat l'usuari
-    bool computeViewpointEntropy = m_computeViewpointEntropyCheckBox->isChecked();
-    bool computeEntropy = m_computeEntropyCheckBox->isChecked();
+    bool computeVoxelsViewpointEntropy = m_computeVoxelsViewpointEntropyCheckBox->isChecked();  // H(Z|v)
+    bool computeVoxelsEntropy = m_computeVoxelsEntropyCheckBox->isChecked();                    // H(Z)
     bool computeVmi = m_computeVmiCheckBox->isChecked();
     bool computeMi = m_computeMiCheckBox->isChecked();
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesCheckBox->isChecked();
@@ -2042,7 +2042,7 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeExploratoryTour = m_computeExploratoryTourCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy && !computeEntropy && !computeVmi && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeViewpointVomi && !computeColorVomi && !computeEvmiOpacity
+    if ( !computeVoxelsViewpointEntropy && !computeVoxelsEntropy && !computeVmi && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeViewpointVomi && !computeColorVomi && !computeEvmiOpacity
          && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour ) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
@@ -2095,7 +2095,7 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     QTime time;
     time.start();
-    viewpointInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi, computeEvmiOpacity,
+    viewpointInformationChannel.compute( computeVoxelsViewpointEntropy, computeVoxelsEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi, computeEvmiOpacity,
                                          computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked() );
     int elapsed = time.elapsed();
     DEBUG_LOG( QString( "Temps total de VOMI i altres: %1 s" ).arg( elapsed / 1000.0f ) );
@@ -2107,16 +2107,16 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_saveViewedVolumePushButton->setEnabled( true );
     }
 
-    if ( computeViewpointEntropy )
+    if ( computeVoxelsViewpointEntropy )
     {
-        m_viewpointEntropy = viewpointInformationChannel.viewpointEntropy();
-        m_saveViewpointEntropyPushButton->setEnabled( true );
+        m_voxelsViewpointEntropy = viewpointInformationChannel.voxelsViewpointEntropy();
+        m_saveVoxelsViewpointEntropyPushButton->setEnabled( true );
     }
 
-    if ( computeEntropy )
+    if ( computeVoxelsEntropy )
     {
-        m_entropy = viewpointInformationChannel.entropy();
-        m_saveEntropyPushButton->setEnabled( true );
+        m_voxelsEntropy = viewpointInformationChannel.voxelsEntropy();
+        m_saveVoxelsEntropyPushButton->setEnabled( true );
     }
 
     if ( computeVmi )
@@ -2914,9 +2914,9 @@ bool QExperimental3DExtension::programVmiCheckOrUncheck( int lineNumber, const Q
     bool check = words.at( 0 ) == "vmi-check";
     const QString &checkbox = words.at( 1 );
 
-    if ( checkbox == "viewpointentropy" )
+    if ( checkbox == "voxelsviewpointentropy" )
     {
-        if ( run ) m_computeViewpointEntropyCheckBox->setChecked( check );
+        if ( run ) m_computeVoxelsViewpointEntropyCheckBox->setChecked( check );
     }
     else if ( checkbox == "vmi" )
     {
@@ -2992,14 +2992,14 @@ bool QExperimental3DExtension::programVmiLoadOrSave( int lineNumber, const QStri
     const QString &measure = words.at( 1 );
     const QString &fileName = words.at( 2 );
 
-    if ( measure == "viewpointentropy" )
+    if ( measure == "voxelsviewpointentropy" )
     {
         if ( run )
         {
-            if ( load ) loadViewpointEntropy( fileName );
+            if ( load ) loadVoxelsViewpointEntropy( fileName );
             else
             {
-                if ( m_saveViewpointEntropyPushButton->isEnabled() ) saveViewpointEntropy( fileName );
+                if ( m_saveVoxelsViewpointEntropyPushButton->isEnabled() ) saveVoxelsViewpointEntropy( fileName );
                 else
                 {
                     logProgramError( lineNumber, "No es pot desar l'entropia dels punts de vista", line );

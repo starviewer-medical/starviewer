@@ -258,18 +258,19 @@ void ViewpointInformationChannel::filterViewpoints( const QVector<bool> &filter 
 }
 
 
-void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity, bool &evmiVomi,
-                                           bool &bestViews, bool &guidedTour, bool &exploratoryTour, bool display )
+void ViewpointInformationChannel::compute( bool &voxelsViewpointEntropy, bool &voxelsEntropy, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity,
+                                           bool &evmiVomi, bool &bestViews, bool &guidedTour, bool &exploratoryTour, bool display )
 {
     // Si no hi ha res a calcular marxem
-    if ( !viewpointEntropy && !entropy && !vmi && !mi && !viewpointUnstabilities && !vomi && !viewpointVomi && !colorVomi && !evmiOpacity && !evmiVomi && !bestViews && !guidedTour && !exploratoryTour ) return;
+    if ( !voxelsViewpointEntropy && !voxelsEntropy && !vmi && !mi && !viewpointUnstabilities && !vomi && !viewpointVomi && !colorVomi && !evmiOpacity && !evmiVomi && !bestViews && !guidedTour && !exploratoryTour )
+        return;
 
     bool viewProbabilities = false;
     bool voxelProbabilities = false;
 
     // Dependències
-    if ( entropy ) viewProbabilities = true;
-    if ( entropy ) viewpointEntropy = true;
+    if ( voxelsEntropy ) viewProbabilities = true;
+    if ( voxelsEntropy ) voxelsViewpointEntropy = true;
     if ( guidedTour ) bestViews = true;
     if ( bestViews ) mi = true;
     if ( exploratoryTour ) mi = true;
@@ -285,7 +286,8 @@ void ViewpointInformationChannel::compute( bool &viewpointEntropy, bool &entropy
 
 #ifndef CUDA_AVAILABLE
     Q_UNUSED( display );
-    computeCpu( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, evmiOpacity, evmiVomi, bestViews, guidedTour, exploratoryTour );
+    computeCpu( viewProbabilities, voxelProbabilities, voxelsViewpointEntropy, voxelsEntropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, evmiOpacity, evmiVomi, bestViews, guidedTour,
+                exploratoryTour );
 #else // CUDA_AVAILABLE
     computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, evmiOpacity, evmiVomi, bestViews, guidedTour, exploratoryTour,
                  display );
@@ -305,15 +307,15 @@ const QVector<float>& ViewpointInformationChannel::viewedVolume() const
 }
 
 
-const QVector<float>& ViewpointInformationChannel::viewpointEntropy() const
+const QVector<float>& ViewpointInformationChannel::voxelsViewpointEntropy() const
 {
-    return m_viewpointEntropy;
+    return m_voxelsViewpointEntropy;
 }
 
 
-float ViewpointInformationChannel::entropy() const
+float ViewpointInformationChannel::voxelsEntropy() const
 {
-    return m_entropy;
+    return m_voxelsEntropy;
 }
 
 
@@ -408,7 +410,7 @@ QVector<float> ViewpointInformationChannel::voxelProbabilitiesInView( int i )
 #ifndef CUDA_AVAILABLE
 
 
-void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi,
+void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeVoxelsViewpointEntropy, bool computeVoxelsEntropy, bool computeVmi, bool computeMi,
                                               bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi,
                                               bool computeBestViews, bool computeGuidedTour,bool computeExploratoryTour )
 {
@@ -419,8 +421,8 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
     if ( computeViewProbabilities ) nSteps++;   // p(V)
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
     if ( computeVomi || computeColorVomi ) nSteps++;    // VoMI + color VoMI
-    // viewpoint entropy + entropy + VMI + MI + viewpoint unstabilities + viewpoint VoMI + EVMI with opacity + EVMI with VoMI
-    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeEvmiOpacity || computeEvmiVomi ) nSteps++;
+    // H(Z|v) + H(Z) + VMI + MI + viewpoint unstabilities + viewpoint VoMI + EVMI with opacity + EVMI with VoMI
+    if ( computeVoxelsViewpointEntropy || computeVoxelsEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeEvmiOpacity || computeEvmiVomi ) nSteps++;
     if ( computeBestViews ) nSteps++;   // best views
     if ( computeGuidedTour ) nSteps++;  // guided tour
     if ( computeExploratoryTour ) nSteps++; // exploratory tour
@@ -465,10 +467,10 @@ void ViewpointInformationChannel::computeCpu( bool computeViewProbabilities, boo
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    // viewpoint entropy + entropy + VMI + MI + viewpoint unstabilities + viewpoint VoMI + EVMI with opacity + EVMI with VoMI
-    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeEvmiOpacity || computeEvmiVomi )
+    // H(Z|v) + H(Z) + VMI + MI + viewpoint unstabilities + viewpoint VoMI + EVMI with opacity + EVMI with VoMI
+    if ( computeVoxelsViewpointEntropy || computeVoxelsEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeEvmiOpacity || computeEvmiVomi )
     {
-        computeViewMeasuresCpu( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeViewpointVomi, computeEvmiOpacity, computeEvmiVomi );
+        computeViewMeasuresCpu( computeVoxelsViewpointEntropy, computeVoxelsEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeViewpointVomi, computeEvmiOpacity, computeEvmiVomi );
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -702,7 +704,7 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesCpu()
 }
 
 
-void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi,
+void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeVoxelsViewpointEntropy, bool computeVoxelsEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi,
                                                           bool computeEvmiOpacity, bool computeEvmiVomi )
 {
     class ViewpointVomiThread : public QThread {
@@ -748,8 +750,8 @@ void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeViewpointE
     int nThreads = QThread::idealThreadCount();
     ViewpointVomiThread **viewpointVomiThreads;
 
-    if ( computeViewpointEntropy ) m_viewpointEntropy.resize( nViewpoints );
-    if ( computeEntropy ) m_entropy = 0.0f;
+    if ( computeVoxelsViewpointEntropy ) m_voxelsViewpointEntropy.resize( nViewpoints );
+    if ( computeVoxelsEntropy ) m_voxelsEntropy = 0.0f;
     if ( computeVmi ) m_vmi.resize( nViewpoints );
     if ( computeMi ) m_mi = 0.0f;
     if ( computeViewpointUnstabilities ) m_viewpointUnstabilities.resize( nViewpoints );
@@ -803,17 +805,17 @@ void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeViewpointE
     {
         QVector<float> voxelProbabilitiesInView = this->voxelProbabilitiesInView( i );
 
-        if ( computeViewpointEntropy )
+        if ( computeVoxelsViewpointEntropy )
         {
-            float viewpointEntropy = InformationTheory::entropy( voxelProbabilitiesInView );
-            Q_ASSERT( viewpointEntropy == viewpointEntropy );
-            m_viewpointEntropy[i] = viewpointEntropy;
-            DEBUG_LOG( QString( "H(Z|v%1) = %2" ).arg( i + 1 ).arg( viewpointEntropy ) );
+            float voxelsViewpointEntropy = InformationTheory::entropy( voxelProbabilitiesInView );
+            Q_ASSERT( voxelsViewpointEntropy == voxelsViewpointEntropy );
+            m_voxelsViewpointEntropy[i] = voxelsViewpointEntropy;
+            DEBUG_LOG( QString( "H(Z|v%1) = %2" ).arg( i + 1 ).arg( voxelsViewpointEntropy ) );
         }
 
-        if ( computeEntropy )
+        if ( computeVoxelsEntropy )
         {
-            m_entropy += m_viewProbabilities.at( i ) * m_viewpointEntropy.at( i );
+            m_voxelsEntropy += m_viewProbabilities.at( i ) * m_voxelsViewpointEntropy.at( i );
         }
 
         if ( computeVmi )
@@ -904,9 +906,9 @@ void ViewpointInformationChannel::computeViewMeasuresCpu( bool computeViewpointE
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    if ( computeEntropy )
+    if ( computeVoxelsEntropy )
     {
-        DEBUG_LOG( QString( "H(Z) = %1" ).arg( m_entropy ) );
+        DEBUG_LOG( QString( "H(Z) = %1" ).arg( m_voxelsEntropy ) );
     }
 
     if ( computeMi )
@@ -1062,7 +1064,7 @@ Matrix4 ViewpointInformationChannel::viewMatrix( const Vector3 &viewpoint )
 }
 
 
-void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi,
+void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeVoxelsViewpointEntropy, bool computeVoxelsEntropy, bool computeVmi, bool computeMi,
                                                bool computeViewpointUnstabilities, bool computeVomi, bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi,
                                                bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour, bool display )
 {
@@ -1073,8 +1075,8 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
     if ( computeViewProbabilities ) nSteps++;   // p(V)
     if ( computeVoxelProbabilities ) nSteps++;  // p(Z)
     if ( computeVomi || computeColorVomi ) nSteps++;    // VoMI + color VoMI
-    // viewpoint entropy + entropy + VMI + MI + viewpoint unstabilities + viewpoint VoMI + EVMI with opacity + EVMI with VoMI
-    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeEvmiOpacity || computeEvmiVomi ) nSteps++;
+    // H(Z|v) + H(Z) + VMI + MI + viewpoint unstabilities + viewpoint VoMI + EVMI with opacity + EVMI with VoMI
+    if ( computeVoxelsViewpointEntropy || computeVoxelsEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeEvmiOpacity || computeEvmiVomi ) nSteps++;
     if ( computeBestViews ) nSteps++;   // best views
     if ( computeGuidedTour ) nSteps++;  // guided tour
     if ( computeExploratoryTour ) nSteps++; // exploratory tour
@@ -1111,10 +1113,10 @@ void ViewpointInformationChannel::computeCuda( bool computeViewProbabilities, bo
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    // viewpoint entropy + entropy + VMI + MI + viewpoint unstabilities + viewpoint VoMI + EVMI with opacity + EVMI with VoMI
-    if ( computeViewpointEntropy || computeEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeEvmiOpacity || computeEvmiVomi )
+    // H(Z|v) + H(Z) + VMI + MI + viewpoint unstabilities + viewpoint VoMI + EVMI with opacity + EVMI with VoMI
+    if ( computeVoxelsViewpointEntropy || computeVoxelsEntropy || computeVmi || computeMi || computeViewpointUnstabilities || computeViewpointVomi || computeEvmiOpacity || computeEvmiVomi )
     {
-        computeViewMeasuresCuda( computeViewpointEntropy, computeEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeViewpointVomi, computeEvmiOpacity, computeEvmiVomi );
+        computeViewMeasuresCuda( computeVoxelsViewpointEntropy, computeVoxelsEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeViewpointVomi, computeEvmiOpacity, computeEvmiVomi );
         emit totalProgress( ++step );
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -1248,7 +1250,7 @@ void ViewpointInformationChannel::computeVoxelProbabilitiesCuda()
 }
 
 
-void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi,
+void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeVoxelsViewpointEntropy, bool computeVoxelsEntropy, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi,
                                                            bool computeEvmiOpacity, bool computeEvmiVomi )
 {
     class ViewpointVomiThread : public QThread {
@@ -1294,8 +1296,8 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
     int nThreads = QThread::idealThreadCount();
     ViewpointVomiThread **viewpointVomiThreads;
 
-    if ( computeViewpointEntropy ) m_viewpointEntropy.resize( nViewpoints );
-    if ( computeEntropy ) m_entropy = 0.0f;
+    if ( computeVoxelsViewpointEntropy ) m_voxelsViewpointEntropy.resize( nViewpoints );
+    if ( computeVoxelsEntropy ) m_voxelsEntropy = 0.0f;
     if ( computeVmi ) m_vmi.resize( nViewpoints );
     if ( computeMi ) m_mi = 0.0f;
     if ( computeViewpointUnstabilities ) m_viewpointUnstabilities.resize( nViewpoints );
@@ -1349,17 +1351,17 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
     {
         QVector<float> voxelProbabilitiesInView = this->voxelProbabilitiesInView( i );  // p(Z|v)
 
-        if ( computeViewpointEntropy )
+        if ( computeVoxelsViewpointEntropy )
         {
-            float viewpointEntropy = InformationTheory::entropy( voxelProbabilitiesInView );
-            Q_ASSERT( viewpointEntropy == viewpointEntropy );
-            m_viewpointEntropy[i] = viewpointEntropy;
-            DEBUG_LOG( QString( "H(Z|v%1) = %2" ).arg( i + 1 ).arg( viewpointEntropy ) );
+            float voxelsViewpointEntropy = InformationTheory::entropy( voxelProbabilitiesInView );
+            Q_ASSERT( voxelsViewpointEntropy == voxelsViewpointEntropy );
+            m_voxelsViewpointEntropy[i] = voxelsViewpointEntropy;
+            DEBUG_LOG( QString( "H(Z|v%1) = %2" ).arg( i + 1 ).arg( voxelsViewpointEntropy ) );
         }
 
-        if ( computeEntropy )
+        if ( computeVoxelsEntropy )
         {
-            m_entropy += m_viewProbabilities.at( i ) * m_viewpointEntropy.at( i );
+            m_voxelsEntropy += m_viewProbabilities.at( i ) * m_voxelsViewpointEntropy.at( i );
         }
 
         if ( computeVmi )
@@ -1448,9 +1450,9 @@ void ViewpointInformationChannel::computeViewMeasuresCuda( bool computeViewpoint
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
-    if ( computeEntropy )
+    if ( computeVoxelsEntropy )
     {
-        DEBUG_LOG( QString( "H(Z) = %1" ).arg( m_entropy ) );
+        DEBUG_LOG( QString( "H(Z) = %1" ).arg( m_voxelsEntropy ) );
     }
 
     if ( computeMi )
