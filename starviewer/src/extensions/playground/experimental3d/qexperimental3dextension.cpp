@@ -133,7 +133,7 @@ void QExperimental3DExtension::saveVoxelsViewpointEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( Experimental3DSettings::VoxelsViewpointEntropyDir, tr("Save voxels viewpoint entropy H(Z|v)"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::VoxelsViewpointEntropyDir, tr("Save voxels viewpoint entropy H(Z|v)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
@@ -163,7 +163,7 @@ void QExperimental3DExtension::saveVoxelsEntropy( QString fileName )
 {
     if ( fileName.isEmpty() )
     {
-        fileName = getFileNameToSave( Experimental3DSettings::VoxelsEntropyDir, tr("Save voxels entropy H(Z)"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
+        fileName = getFileNameToSave( Experimental3DSettings::VoxelsEntropyDir, tr("Save voxels entropy H(Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "dat" );
         if ( fileName.isNull() ) return;
     }
 
