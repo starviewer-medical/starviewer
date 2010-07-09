@@ -36,13 +36,13 @@ public slots:
 
     /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveViewedVolume( QString fileName = QString() );
-    /// Carrega la viewpoint entropy des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadVoxelsViewpointEntropy( QString fileName = QString() );
-    /// Desa la viewpoint entropy a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveVoxelsViewpointEntropy( QString fileName = QString() );
-    /// Carrega l'entropia des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    /// Carrega les voxels viewpoint entropies H(Z|v) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVoxelsViewpointEntropies( QString fileName = QString() );
+    /// Desa les voxels viewpoint entropies H(Z|v) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVoxelsViewpointEntropies( QString fileName = QString() );
+    /// Carrega l'entropia dels vòxels H(Z) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadVoxelsEntropy( QString fileName = QString() );
-    /// Desa l'entropia a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    /// Desa l'entropia dels vòxels H(Z) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveVoxelsEntropy( QString fileName = QString() );
     /// Carrega la VMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadVmi( QString fileName = QString() );
@@ -280,7 +280,7 @@ private:
     Obscurance *m_obscurance;
 
     QVector<float> m_viewedVolume;
-    QVector<float> m_voxelsViewpointEntropy;    // H(Z|v)
+    QVector<float> m_voxelsViewpointEntropies;  // H(Z|v)
     float m_voxelsEntropy;                      // H(Z)
     QVector<float> m_vmi;
     float m_mi;

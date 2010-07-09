@@ -17,7 +17,7 @@ public:
     static const QString TransferFunctionDir;
 
     static const QString ViewedVolumeDir;
-    static const QString VoxelsViewpointEntropyDir;
+    static const QString VoxelsViewpointEntropiesDir;
     static const QString VoxelsEntropyDir;
     static const QString ViewpointMutualInformationDir;
     static const QString MutualInformationDir;
