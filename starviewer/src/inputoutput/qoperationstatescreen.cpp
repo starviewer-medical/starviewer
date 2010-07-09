@@ -7,6 +7,8 @@
 #include "qoperationstatescreen.h"
 
 #include <QCloseEvent>
+#include <QMessageBox>
+
 #include "logging.h"
 #include "inputoutputsettings.h"
 #include "pacsmanager.h"
@@ -14,6 +16,7 @@
 #include "senddicomfilestopacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
 #include "study.h"
+#include "starviewerapplication.h"
 
 namespace udg {
 
@@ -144,12 +147,19 @@ void QOperationStateScreen::cancelAllRequests()
 
 void QOperationStateScreen::cancelSelectedRequests()
 {
-    foreach(QTreeWidgetItem *item, m_treeRetrieveStudy->selectedItems())
+    if (m_treeRetrieveStudy->selectedItems().count() > 0)
     {
-        if (m_PACSJobPendingToFinish.contains(item->text(9).toInt()))
+        foreach(QTreeWidgetItem *item, m_treeRetrieveStudy->selectedItems())
         {
-            m_pacsManager->requestCancelPACSJob(m_PACSJobPendingToFinish[item->text(9).toInt()]);
+            if (m_PACSJobPendingToFinish.contains(item->text(9).toInt()))
+            {
+                m_pacsManager->requestCancelPACSJob(m_PACSJobPendingToFinish[item->text(9).toInt()]);
+            }
         }
+    }
+    else
+    {
+        QMessageBox::information(this,ApplicationNameString, tr("You have to select at least one operation to cancel."));
     }
 }
 
