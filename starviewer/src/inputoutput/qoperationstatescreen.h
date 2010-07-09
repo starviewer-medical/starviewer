@@ -91,6 +91,9 @@ private:
       *Per RetrieveDICOMFilesFromPACS pot retornar : RETRIEVED, CANCELLED, ERROR
       *Per SendDICOMFilesToPACS pot retornar : SENT, CANCELLED, ERROR*/
     QString getPACSJobStatusResume(PACSJob *pacsJob);
+
+    ///Ens retorna un QTreeWidgetItem a partir del seu pacsJobID si no el trobem es retorna null;
+    QTreeWidgetItem* getQTreeWidgetItemByPACSJobId(int pacsJobID);
 };
 
 };

@@ -72,62 +72,53 @@ void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
 
 void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)
 {
-    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
-    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    if  (qtreeWidgetItem != NULL)
     {
-        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
-        pacsJobItem->setText(0, pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType ? tr("RETRIEVING") : tr("SENDING") );
+        qtreeWidgetItem->setText(0, pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType ? tr("RETRIEVING") : tr("SENDING") );
     }
 }
 
 void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
 {
-    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
-    m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
-
-    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    if  (qtreeWidgetItem != NULL)
     {
-        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
-
-        pacsJobItem->setText(0, getPACSJobStatusResume(pacsJob) );
+        qtreeWidgetItem->setText(0, getPACSJobStatusResume(pacsJob));
     }
 }
 
 void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
 {
-    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
+
+    if  (qtreeWidgetItem != NULL)
+    {
+        qtreeWidgetItem->setText(0, tr("CANCELLED"));
+    }
 
     m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
-
-    if  (!qTreeWidgetPacsJobItems.isEmpty())
-    {
-        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at(0);
-
-        pacsJobItem->setText(0, tr("CANCELLED"));
-    }
 }
 
 void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages)
 {
-    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
-    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    if  (qtreeWidgetItem != NULL)
     {
-        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
-        pacsJobItem->setText(8, QString().setNum(numberOfImages));
+        qtreeWidgetItem->setText(8, QString().setNum(numberOfImages));
     }
 }
 
 void QOperationStateScreen::DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeries)
 {
-    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
-    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    if  (qtreeWidgetItem != NULL)
     {
-        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
-        pacsJobItem->setText(7, QString().setNum(numberOfSeries));
+        qtreeWidgetItem->setText(7, QString().setNum(numberOfSeries));
     }
 }
 
@@ -164,12 +155,11 @@ void QOperationStateScreen::cancelSelectedRequests()
 
 void QOperationStateScreen::requestedCancelPACSJob(PACSJob *pacsJob)
 {
-    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems( QString().setNum(pacsJob->getPACSJobID()) , Qt::MatchExactly , 9 );
+    QTreeWidgetItem* qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
-    if  ( !qTreeWidgetPacsJobItems.isEmpty() )
+    if  (qtreeWidgetItem != NULL)
     {
-        QTreeWidgetItem *pacsJobItem = qTreeWidgetPacsJobItems.at( 0 );
-        pacsJobItem->setText(0, tr("CANCELLING"));
+        qtreeWidgetItem->setText(0, tr("CANCELLING"));
     }
 }
 
@@ -246,6 +236,19 @@ void QOperationStateScreen::closeEvent( QCloseEvent* ce )
     Settings settings;
     settings.saveColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
     ce->accept();
+}
+
+QTreeWidgetItem* QOperationStateScreen::getQTreeWidgetItemByPACSJobId(int pacsJobID)
+{
+    QTreeWidgetItem *qtreeWidgetItem = NULL;
+    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems(QString().setNum(pacsJobID), Qt::MatchExactly, 9);
+
+    if  (!qTreeWidgetPacsJobItems.isEmpty())
+    {
+        qtreeWidgetItem = qTreeWidgetPacsJobItems.at(0);
+    }
+
+    return qtreeWidgetItem;
 }
 
 };
