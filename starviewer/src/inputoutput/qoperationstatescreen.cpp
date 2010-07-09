@@ -9,7 +9,6 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 
-#include "logging.h"
 #include "inputoutputsettings.h"
 #include "pacsmanager.h"
 #include "pacsjob.h"
@@ -142,7 +141,10 @@ void QOperationStateScreen::clearList()
 
 void QOperationStateScreen::cancelAllRequests()
 {
-    INFO_LOG("CancellAllRequests");
+    foreach(PACSJob *pacsJob, m_PACSJobPendingToFinish.values())
+    {
+        m_pacsManager->requestCancelPACSJob(pacsJob);
+    }
 }
 
 void QOperationStateScreen::cancelSelectedRequests()
