@@ -289,8 +289,8 @@ void ViewpointInformationChannel::compute( bool &voxelsViewpointEntropies, bool 
     computeCpu( viewProbabilities, voxelProbabilities, voxelsViewpointEntropies, voxelsEntropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, evmiOpacity, evmiVomi, bestViews, guidedTour,
                 exploratoryTour );
 #else // CUDA_AVAILABLE
-    computeCuda( viewProbabilities, voxelProbabilities, viewpointEntropy, entropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, evmiOpacity, evmiVomi, bestViews, guidedTour, exploratoryTour,
-                 display );
+    computeCuda( viewProbabilities, voxelProbabilities, voxelsViewpointEntropies, voxelsEntropy, vmi, mi, viewpointUnstabilities, vomi, viewpointVomi, colorVomi, evmiOpacity, evmiVomi, bestViews, guidedTour,
+                 exploratoryTour, display );
 #endif // CUDA_AVAILABLE
 }
 

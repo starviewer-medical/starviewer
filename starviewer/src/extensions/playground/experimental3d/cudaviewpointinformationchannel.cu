@@ -67,7 +67,7 @@ struct Ray
 // intersect ray with a box
 // http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
 
-__device__ bool intersectBox(Ray ray, float3 boxmin, float3 boxmax, float *tnear, float *tfar)
+__device__ static bool intersectBox(Ray ray, float3 boxmin, float3 boxmax, float *tnear, float *tfar)
 {
     // compute intersection of ray with all six bbox planes
     float3 invRay = make_float3(1.0f) / ray.direction;
@@ -90,7 +90,7 @@ __device__ bool intersectBox(Ray ray, float3 boxmin, float3 boxmax, float *tnear
 
 
 // transform vector by matrix (no translation)
-__device__ float3 mul(const float3x4 &M, const float3 &v)
+__device__ static float3 mul(const float3x4 &M, const float3 &v)
 {
     float3 r;
     r.x = dot(v, make_float3(M.f[0]));
@@ -101,7 +101,7 @@ __device__ float3 mul(const float3x4 &M, const float3 &v)
 
 
 // transform vector by matrix with translation
-__device__ float4 mul(const float3x4 &M, const float4 &v)
+__device__ static float4 mul(const float3x4 &M, const float4 &v)
 {
     float4 r;
     r.x = dot(v, M.f[0]);
@@ -112,7 +112,7 @@ __device__ float4 mul(const float3x4 &M, const float4 &v)
 }
 
 
-__device__ uint rgbaFloatToInt(float4 rgba)
+__device__ static uint rgbaFloatToInt(float4 rgba)
 {
     rgba.x = __saturatef(rgba.x);   // clamp to [0.0, 1.0]
     rgba.y = __saturatef(rgba.y);
