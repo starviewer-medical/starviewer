@@ -23,7 +23,7 @@
       <enum>QTabWidget::West</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="m_renderingTab">
       <attribute name="title">
@@ -2153,7 +2153,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_28">
          <item>
-          <widget class="QCheckBox" name="m_computeVoxelsViewpointEntropyCheckBox">
+          <widget class="QCheckBox" name="m_computeVoxelsViewpointEntropiesCheckBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>1</horstretch>
@@ -2161,19 +2161,19 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Voxels viewpoint entropy H(Z|v)</string>
+            <string>Voxels viewpoint entropies H(Z|v)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_loadVoxelsViewpointEntropyPushButton">
+          <widget class="QPushButton" name="m_loadVoxelsViewpointEntropiesPushButton">
            <property name="text">
             <string>Load...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_saveVoxelsViewpointEntropyPushButton">
+          <widget class="QPushButton" name="m_saveVoxelsViewpointEntropiesPushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>

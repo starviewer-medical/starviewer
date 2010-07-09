@@ -8,7 +8,7 @@ const QString KeyPrefix("Experimental3D/");
 const QString Experimental3DSettings::TransferFunctionDir( KeyPrefix + "transferFunctionDir" );
 
 const QString Experimental3DSettings::ViewedVolumeDir( KeyPrefix + "viewedVolumeDir" );
-const QString Experimental3DSettings::VoxelsViewpointEntropyDir( KeyPrefix + "voxelsViewpointEntropyDir" );
+const QString Experimental3DSettings::VoxelsViewpointEntropiesDir( KeyPrefix + "voxelsViewpointEntropiesDir" );
 const QString Experimental3DSettings::VoxelsEntropyDir( KeyPrefix + "voxelsEntropyDir" );
 const QString Experimental3DSettings::ViewpointMutualInformationDir( KeyPrefix + "vmiDir" );
 const QString Experimental3DSettings::MutualInformationDir( KeyPrefix + "miDir" );
