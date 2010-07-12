@@ -118,6 +118,9 @@ static double normalize( double vector[3] );
 static double angleInRadians( double vec1[3] , double vec2[3] );
 static double angleInDegrees( double vec1[3] , double vec2[3] );
 
+/// Retorna cert si \a x és NaN.
+static bool isNaN(double x);
+
 };
 
 } // end namespace udg
