@@ -331,4 +331,9 @@ float MathTools::radiansToDegrees(float radians)
     return (radians * 180.0f) / PiNumber;
 }
 
+bool MathTools::isNaN(double x)
+{
+    return x != x;
+}
+
 }; // end namespace udg
