@@ -45,6 +45,10 @@ const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale")
 
 const QString CoreSettings::DICOMImageReaderLibrary("Input/DICOMImageReaderLibrary");
 
+//Release Notes
+const QString CoreSettings::ShowReleaseNotesFirstTime("ShowReleaseNotesFirstTime");
+const QString CoreSettings::NeverShowReleaseNotes("NeverShowReleaseNotes");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -63,6 +67,8 @@ void CoreSettings::init()
     settingsRegistry->addSetting( LanguageLocale, QLocale::system().name() );
     settingsRegistry->addSetting( DefaultToolTextSize, 14 );
     settingsRegistry->addSetting(DICOMImageReaderLibrary, "itkGDCM");
+    settingsRegistry->addSetting(ShowReleaseNotesFirstTime, true);
+    settingsRegistry->addSetting(NeverShowReleaseNotes, false);
 }
 
 } // end namespace udg 
