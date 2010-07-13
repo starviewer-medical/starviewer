@@ -10,6 +10,7 @@
 #include "series.h"
 
 #include <itkImageRegionIteratorWithIndex.h>
+#include <itkImageRegionIterator.h>
 #include <itkVnlFFTRealToComplexConjugateImageFilter.h>
 #include <itkVnlFFTComplexConjugateToRealImageFilter.h>
 
