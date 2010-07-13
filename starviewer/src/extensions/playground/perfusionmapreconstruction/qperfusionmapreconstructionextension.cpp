@@ -48,7 +48,11 @@
 // VTK
 #include <vtkCommand.h>
 #include <vtkLookupTable.h>
+#ifdef VTK_GDCM_SUPPORT
+#include <vtkImageMapToWindowLevelColors2.h> // Permet aplicar window/level amb imatges a color
+#else
 #include <vtkImageMapToWindowLevelColors.h>
+#endif
 // ITK
 #include <itkImage.h>
 #include <itkImageFileWriter.h>
