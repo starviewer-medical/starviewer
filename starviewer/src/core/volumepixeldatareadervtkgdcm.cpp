@@ -7,6 +7,8 @@
 #include <vtkStringArray.h>
 #include <vtkEventQtSlotConnect.h>
 #include <gdcmPixelFormat.h> // Només per qüestions d'informació de debug
+// Qt
+#include <QStringList>
 #endif
 
 namespace udg {
@@ -128,10 +130,10 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     }
 
     // Assignem les dades
-    this->setData(m_vtkGDCMReader->GetOutput());
+    m_vtkImageData = m_vtkGDCMReader->GetOutput();
 
     DEBUG_LOG(">>>>>>>>>>>>VTK GDCM READER - vtkImageData Output<<<<<<<<<<<<<<<<<<<");
-    m_imageDataVTK->Print(std::cout);
+    m_vtkImageData->Print(std::cout);
     
     emit progress(100);
     
