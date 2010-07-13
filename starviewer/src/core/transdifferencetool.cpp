@@ -12,7 +12,11 @@
 
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
+#ifdef VTK_GDCM_SUPPORT
+#include <vtkImageMapToWindowLevelColors2.h>
+#else
 #include <vtkImageMapToWindowLevelColors.h>
+#endif
 
 namespace udg {
 
