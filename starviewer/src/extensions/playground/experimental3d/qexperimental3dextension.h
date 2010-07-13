@@ -36,14 +36,26 @@ public slots:
 
     /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveViewedVolume( QString fileName = QString() );
-    /// Carrega les voxels viewpoint entropies H(Z|v) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadVoxelsViewpointEntropies( QString fileName = QString() );
-    /// Desa les voxels viewpoint entropies H(Z|v) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveVoxelsViewpointEntropies( QString fileName = QString() );
+    /// Carrega l'entropia dels punts de vista H(V) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadHV(QString fileName = QString());
+    /// Desa l'entropia dels punts de vista H(V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveHV(QString fileName = QString());
+    /// Carrega H(V|z) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadHVz(QString fileName = QString());
+    /// Desa H(V|z) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveHVz(QString fileName = QString());
     /// Carrega l'entropia dels vòxels H(Z) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadVoxelsEntropy( QString fileName = QString() );
+    void loadHZ(QString fileName = QString());
     /// Desa l'entropia dels vòxels H(Z) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveVoxelsEntropy( QString fileName = QString() );
+    void saveHZ(QString fileName = QString());
+    /// Carrega H(Z|v) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadHZv(QString fileName = QString());
+    /// Desa H(Z|v) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveHZv(QString fileName = QString());
+    /// Carrega H(Z|V) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadHZV(QString fileName = QString());
+    /// Desa H(Z|V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveHZV(QString fileName = QString());
     /// Carrega la VMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadVmi( QString fileName = QString() );
     /// Desa la VMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -280,8 +292,11 @@ private:
     Obscurance *m_obscurance;
 
     QVector<float> m_viewedVolume;
-    QVector<float> m_voxelsViewpointEntropies;  // H(Z|v)
-    float m_voxelsEntropy;                      // H(Z)
+    float m_HV;             // H(V)
+    QVector<float> m_HVz;   // H(V|z)
+    float m_HZ;             // H(Z)
+    QVector<float> m_HZv;   // H(Z|v)
+    float m_HZV;            // H(Z|V)
     QVector<float> m_vmi;
     float m_mi;
     QVector<float> m_viewpointUnstabilities;

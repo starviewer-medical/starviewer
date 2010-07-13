@@ -17,8 +17,11 @@ public:
     static const QString TransferFunctionDir;
 
     static const QString ViewedVolumeDir;
-    static const QString VoxelsViewpointEntropiesDir;
-    static const QString VoxelsEntropyDir;
+    static const QString HVzDir;
+    static const QString HVDir;
+    static const QString HZvDir;
+    static const QString HZVDir;
+    static const QString HZDir;
     static const QString ViewpointMutualInformationDir;
     static const QString MutualInformationDir;
     static const QString ViewpointUnstabilitiesDir;

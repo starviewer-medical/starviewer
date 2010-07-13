@@ -550,8 +550,33 @@ void cvicCleanupVoxelProbabilities()
 
 
 
+static float *gdHVz = 0;
 static float *gdVomi = 0;
 static float3 *gdColorVomi = 0;
+
+
+__global__ void HVzKernel(float pv, float totalViewedVolume, cudaExtent volumeDataDims, float *HVz)
+{
+    uint blocksX = (volumeDataDims.width + blockDim.x - 1) / blockDim.x;
+    uint blockX = blockIdx.x % blocksX;
+    uint blockY = blockIdx.x / blocksX;
+    uint blockZ = blockIdx.y;
+
+    uint x = blockX * blockDim.x + threadIdx.x;
+    if (x >= volumeDataDims.width) return;
+    uint y = blockY * blockDim.y + threadIdx.y;
+    if (y >= volumeDataDims.height) return;
+    uint z = blockZ * blockDim.z + threadIdx.z;
+    if (z >= volumeDataDims.depth) return;
+
+    uint i = x + y * volumeDataDims.width + z * volumeDataDims.width * volumeDataDims.height;
+
+    float pz = tex1Dfetch(gVoxelProbabilitiesTexture, i);
+    float pzv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
+    float pvz = pv * pzv / pz;
+
+    if (pvz > 0.0f) HVz[i] -= pvz * log2f(pvz);
+}
 
 
 __global__ void vomiKernel(float pv, float totalViewedVolume, cudaExtent volumeDataDims, float *vomi)
@@ -574,7 +599,7 @@ __global__ void vomiKernel(float pv, float totalViewedVolume, cudaExtent volumeD
     float pzv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
     float pvz = pv * pzv / pz;
 
-    if ( pvz > 0.0f ) vomi[i] += pvz * log2f( pvz / pv );
+    if (pvz > 0.0f) vomi[i] += pvz * log2f(pvz / pv);
 }
 
 
@@ -598,23 +623,58 @@ __global__ void colorVomiKernel(float pv, float3 color, float totalViewedVolume,
     float pzv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
     float pvz = pv * pzv / pz;
 
-    if ( pvz > 0.0f ) colorVomi[i] += pvz * log2f( pvz / pv ) * color;
+    if (pvz > 0.0f) colorVomi[i] += pvz * log2f(pvz / pv) * color;
 }
 
 
-void cvicSetupVomi(bool vomi, bool colorVomi)
+void cvicSetupVomi(bool HVz, bool vomi, bool colorVomi)
 {
+    if (HVz)
+    {
+        CUDA_SAFE_CALL(cudaMalloc(reinterpret_cast<void**>(&gdHVz), gVolumeDataSize * sizeof(float)));
+        CUDA_SAFE_CALL(cudaMemset(reinterpret_cast<void*>(gdHVz), 0, gVolumeDataSize * sizeof(float)));
+    }
     if (vomi)
     {
-        CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdVomi), gVolumeDataSize * sizeof(float)) );
-        CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdVomi), 0, gVolumeDataSize * sizeof(float)) );
+        CUDA_SAFE_CALL(cudaMalloc(reinterpret_cast<void**>(&gdVomi), gVolumeDataSize * sizeof(float)));
+        CUDA_SAFE_CALL(cudaMemset(reinterpret_cast<void*>(gdVomi), 0, gVolumeDataSize * sizeof(float)));
     }
 
     if (colorVomi)
     {
-        CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdColorVomi), gVolumeDataSize * sizeof(float3)) );
-        CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdColorVomi), 0, gVolumeDataSize * sizeof(float3)) );
+        CUDA_SAFE_CALL(cudaMalloc(reinterpret_cast<void**>(&gdColorVomi), gVolumeDataSize * sizeof(float3)));
+        CUDA_SAFE_CALL(cudaMemset(reinterpret_cast<void*>(gdColorVomi), 0, gVolumeDataSize * sizeof(float3)));
     }
+}
+
+
+void cvicAccumulateHVz(float viewProbability, float totalViewedVolume)
+{
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start, 0);
+
+    // Kernel
+
+    dim3 blockSize(8, 8, 8);
+    uint blocksX = (gVolumeDataDims.width + blockSize.x - 1) / blockSize.x;
+    uint blocksY = (gVolumeDataDims.height + blockSize.y - 1) / blockSize.y;
+    uint blocksZ = (gVolumeDataDims.depth + blockSize.z - 1) / blockSize.z;
+    dim3 gridSize(blocksX * blocksY, blocksZ);
+
+    HVzKernel<<<gridSize, blockSize>>>(viewProbability, totalViewedVolume, gVolumeDataDims, gdHVz);
+    CUT_CHECK_ERROR("H(V|z) kernel failed");
+
+    cudaEventRecord(stop, 0);
+    cudaEventSynchronize(stop);
+    float elapsedTime = 0.0f;
+    cudaEventElapsedTime(&elapsedTime, start, stop);
+
+    std::cout << "H(V|z): " << elapsedTime << " ms" << std::endl;
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
 }
 
 
@@ -634,7 +694,7 @@ void cvicAccumulateVomi(float viewProbability, float totalViewedVolume)
     dim3 gridSize(blocksX * blocksY, blocksZ);
 
     vomiKernel<<<gridSize, blockSize>>>(viewProbability, totalViewedVolume, gVolumeDataDims, gdVomi);
-    CUT_CHECK_ERROR( "vomi kernel failed" );
+    CUT_CHECK_ERROR("vomi kernel failed");
 
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
@@ -666,7 +726,7 @@ void cvicAccumulateColorVomi(float viewProbability, const Vector3Float &viewColo
     float3 color = make_float3(1.0f - viewColor.x, 1.0f - viewColor.y, 1.0f - viewColor.z);
 
     colorVomiKernel<<<gridSize, blockSize>>>(viewProbability, color, totalViewedVolume, gVolumeDataDims, gdColorVomi);
-    CUT_CHECK_ERROR( "color vomi kernel failed" );
+    CUT_CHECK_ERROR("color vomi kernel failed");
 
     cudaEventRecord(stop, 0);
     cudaEventSynchronize(stop);
@@ -680,31 +740,44 @@ void cvicAccumulateColorVomi(float viewProbability, const Vector3Float &viewColo
 }
 
 
+QVector<float> cvicGetHVz()
+{
+    QVector<float> HVz(gVolumeDataSize);
+    CUDA_SAFE_CALL(cudaMemcpy(reinterpret_cast<void*>(HVz.data()), reinterpret_cast<void*>(gdHVz), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost));
+    return HVz;
+}
+
+
 QVector<float> cvicGetVomi()
 {
-    QVector<float> vomi( gVolumeDataSize );
-    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(vomi.data()), reinterpret_cast<void*>(gdVomi), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost) );
+    QVector<float> vomi(gVolumeDataSize);
+    CUDA_SAFE_CALL(cudaMemcpy(reinterpret_cast<void*>(vomi.data()), reinterpret_cast<void*>(gdVomi), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost));
     return vomi;
 }
 
 
 QVector<Vector3Float> cvicGetColorVomi()
 {
-    QVector<Vector3Float> colorVomi( gVolumeDataSize );
-    CUDA_SAFE_CALL( cudaMemcpy(reinterpret_cast<void*>(colorVomi.data()), reinterpret_cast<void*>(gdColorVomi), gVolumeDataSize * sizeof(float3), cudaMemcpyDeviceToHost) );
+    QVector<Vector3Float> colorVomi(gVolumeDataSize);
+    CUDA_SAFE_CALL(cudaMemcpy(reinterpret_cast<void*>(colorVomi.data()), reinterpret_cast<void*>(gdColorVomi), gVolumeDataSize * sizeof(float3), cudaMemcpyDeviceToHost));
     return colorVomi;
 }
 
 
 void cvicCleanupVomi()
 {
+    if (gdHVz)
+    {
+        CUDA_SAFE_CALL(cudaFree(gdHVz));
+    }
+
     if (gdVomi)
     {
-        CUDA_SAFE_CALL( cudaFree(gdVomi) );
+        CUDA_SAFE_CALL(cudaFree(gdVomi));
     }
 
     if (gdColorVomi)
     {
-        CUDA_SAFE_CALL( cudaFree(gdColorVomi) );
+        CUDA_SAFE_CALL(cudaFree(gdColorVomi));
     }
 }

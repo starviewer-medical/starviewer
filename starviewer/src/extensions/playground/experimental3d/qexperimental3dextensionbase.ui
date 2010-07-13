@@ -2151,9 +2151,9 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_28">
+        <layout class="QHBoxLayout" name="horizontalLayout_47">
          <item>
-          <widget class="QCheckBox" name="m_computeVoxelsViewpointEntropiesCheckBox">
+          <widget class="QCheckBox" name="m_computeHVCheckBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>1</horstretch>
@@ -2161,19 +2161,53 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Voxels viewpoint entropies H(Z|v)</string>
+            <string>Viewpoints entropy H(V)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_loadVoxelsViewpointEntropiesPushButton">
+          <widget class="QPushButton" name="m_loadHVPushButton">
            <property name="text">
             <string>Load...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_saveVoxelsViewpointEntropiesPushButton">
+          <widget class="QPushButton" name="m_saveHVPushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Save...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_48">
+         <item>
+          <widget class="QCheckBox" name="m_computeHVzCheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>H(V|z)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_loadHVzPushButton">
+           <property name="text">
+            <string>Load...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saveHVzPushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -2187,7 +2221,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_29">
          <item>
-          <widget class="QCheckBox" name="m_computeVoxelsEntropyCheckBox">
+          <widget class="QCheckBox" name="m_computeHZCheckBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>1</horstretch>
@@ -2200,14 +2234,82 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_loadVoxelsEntropyPushButton">
+          <widget class="QPushButton" name="m_loadHZPushButton">
            <property name="text">
             <string>Load...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_saveVoxelsEntropyPushButton">
+          <widget class="QPushButton" name="m_saveHZPushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Save...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_28">
+         <item>
+          <widget class="QCheckBox" name="m_computeHZvCheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>H(Z|v)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_loadHZvPushButton">
+           <property name="text">
+            <string>Load...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saveHZvPushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Save...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_54">
+         <item>
+          <widget class="QCheckBox" name="m_computeHZVCheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>H(Z|V)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_loadHZVPushButton">
+           <property name="text">
+            <string>Load...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saveHZVPushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>

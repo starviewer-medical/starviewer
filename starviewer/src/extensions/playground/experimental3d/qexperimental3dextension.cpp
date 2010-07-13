@@ -116,63 +116,148 @@ void QExperimental3DExtension::saveViewedVolume( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadVoxelsViewpointEntropies( QString fileName )
+void QExperimental3DExtension::loadHV(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (fileName.isEmpty())
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::VoxelsViewpointEntropiesDir, tr("Load voxels viewpoint entropies H(Z|v)"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        fileName = getFileNameToLoad(Experimental3DSettings::HVDir, tr("Load viewpoints entropy H(V)"), tr("Data files (*.dat);;All files (*)"));
+        if (fileName.isNull()) return;
     }
 
-    if ( loadData( fileName, m_voxelsViewpointEntropies ) ) m_saveVoxelsViewpointEntropiesPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load voxels viewpoint entropies H(Z|v)"), QString( tr("Can't load voxels viewpoint entropies H(Z|v) from file ") ) + fileName );
+    if (loadFloatData(fileName, m_HV)) m_saveHVPushButton->setEnabled(true);
+    else if (m_interactive) QMessageBox::warning(this, tr("Can't load viewpoints entropy H(V)"), QString(tr("Can't load viewpoints entropy H(V) from file ")) + fileName);
 }
 
 
-void QExperimental3DExtension::saveVoxelsViewpointEntropies( QString fileName )
+void QExperimental3DExtension::saveHV(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (fileName.isEmpty())
     {
-        fileName = getFileNameToSave( Experimental3DSettings::VoxelsViewpointEntropiesDir, tr("Save voxels viewpoint entropies H(Z|v)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "dat" );
+        fileName = getFileNameToSave(Experimental3DSettings::HVDir, tr("Save viewpoints entropy H(V)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
+        if (fileName.isNull()) return;
+    }
+
+    bool error;
+
+    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_HV, fileName, QString("H(V) = %1"));
+    else error = !saveFloatData(m_HV, fileName);
+
+    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save viewpoints entropy H(V)"), QString(tr("Can't save viewpoints entropy H(V) to file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::loadHVz(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToLoad(Experimental3DSettings::HVzDir, tr("Load H(V|z)"), tr("Data files (*.dat);;All files (*)"));
+        if (fileName.isNull()) return;
+    }
+
+    if (loadData(fileName, m_HVz)) m_saveHVzPushButton->setEnabled(true);
+    else if (m_interactive) QMessageBox::warning(this, tr("Can't load H(V|z)"), QString(tr("Can't load H(V|z) from file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::saveHVz(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToSave(Experimental3DSettings::HVzDir, tr("Save H(V|z)"), tr("Data files (*.dat);;All files (*)"), "dat");
+        if (fileName.isNull()) return;
+    }
+
+    if (!saveData(m_HVz, fileName) && m_interactive) QMessageBox::warning(this, tr("Can't save H(V|z)"), QString(tr("Can't save H(V|z) to file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::loadHZ(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToLoad(Experimental3DSettings::HZDir, tr("Load voxels entropy H(Z)"), tr("Data files (*.dat);;All files (*)"));
+        if (fileName.isNull()) return;
+    }
+
+    if (loadFloatData(fileName, m_HZ)) m_saveHZPushButton->setEnabled(true);
+    else if (m_interactive) QMessageBox::warning(this, tr("Can't load voxels entropy H(Z)"), QString(tr("Can't load voxels entropy H(Z) from file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::saveHZ(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToSave(Experimental3DSettings::HZDir, tr("Save voxels entropy H(Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
+        if (fileName.isNull()) return;
+    }
+
+    bool error;
+
+    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_HZ, fileName, QString("H(Z) = %1"));
+    else error = !saveFloatData(m_HZ, fileName);
+
+    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save voxels entropy H(Z)"), QString(tr("Can't save voxels entropy H(Z) to file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::loadHZv(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToLoad(Experimental3DSettings::HZvDir, tr("Load H(Z|v)"), tr("Data files (*.dat);;All files (*)"));
+        if (fileName.isNull()) return;
+    }
+
+    if (loadData(fileName, m_HZv)) m_saveHZvPushButton->setEnabled(true);
+    else if (m_interactive) QMessageBox::warning(this, tr("Can't load H(Z|v)"), QString(tr("Can't load H(Z|v) from file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::saveHZv(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToSave(Experimental3DSettings::HZvDir, tr("Save H(Z|v)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
+        if (fileName.isNull()) return;
+    }
+
+    bool error;
+
+    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_HZv, fileName, QString("H(Z|v%1) = %2"), 1);
+    else error = !saveData(m_HZv, fileName);
+
+    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save H(Z|v)"), QString(tr("Can't save H(Z|v) to file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::loadHZV(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToLoad(Experimental3DSettings::HZVDir, tr("Load H(Z|V)"), tr("Data files (*.dat);;All files (*)"));
+        if (fileName.isNull()) return;
+    }
+
+    if (loadFloatData(fileName, m_HZV)) m_saveHZVPushButton->setEnabled(true);
+    else if (m_interactive) QMessageBox::warning(this, tr("Can't load H(Z|V)"), QString(tr("Can't load H(Z|V) from file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::saveHZV(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToSave(Experimental3DSettings::HZVDir, tr("Save H(Z|V)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
         if ( fileName.isNull() ) return;
     }
 
     bool error;
 
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_voxelsViewpointEntropies, fileName, QString( "H(Z|v%1) = %2" ), 1 );
-    else error = !saveData( m_voxelsViewpointEntropies, fileName );
+    if (fileName.endsWith( ".txt" )) error = !saveFloatDataAsText(m_HZV, fileName, QString("H(Z|V) = %1"));
+    else error = !saveFloatData(m_HZV, fileName);
 
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save voxels viewpoint entropies H(Z|v)"), QString( tr("Can't save voxels viewpoint entropies H(Z|v) to file ") ) + fileName );
-}
-
-
-void QExperimental3DExtension::loadVoxelsEntropy( QString fileName )
-{
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToLoad( Experimental3DSettings::VoxelsEntropyDir, tr("Load voxels entropy H(Z)"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
-    }
-
-    if ( loadFloatData( fileName, m_voxelsEntropy ) ) m_saveVoxelsEntropyPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load voxels entropy H(Z)"), QString( tr("Can't load voxels entropy H(Z) from file ") ) + fileName );
-}
-
-
-void QExperimental3DExtension::saveVoxelsEntropy( QString fileName )
-{
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::VoxelsEntropyDir, tr("Save voxels entropy H(Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_voxelsEntropy, fileName, QString( "H(Z) = %1" ) );
-    else error = !saveFloatData( m_voxelsEntropy, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save voxels entropy H(Z)"), QString( tr("Can't save voxels entropy H(Z) to file ") ) + fileName );
+    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save H(Z|V)"), QString(tr("Can't save H(Z|V) to file ")) + fileName);
 }
 
 
@@ -1123,10 +1208,16 @@ void QExperimental3DExtension::createConnections()
     connect( m_vmiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setVmiOneViewpointMaximum(int) ) );
     connect( m_vmiOneViewpointCheckBox, SIGNAL( toggled(bool) ), m_vmiOneViewpointSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_saveViewedVolumePushButton, SIGNAL( clicked() ), SLOT( saveViewedVolume() ) );
-    connect( m_loadVoxelsViewpointEntropiesPushButton, SIGNAL( clicked() ), SLOT( loadVoxelsViewpointEntropies() ) );
-    connect( m_saveVoxelsViewpointEntropiesPushButton, SIGNAL( clicked() ), SLOT( saveVoxelsViewpointEntropies() ) );
-    connect( m_loadVoxelsEntropyPushButton, SIGNAL( clicked() ), SLOT( loadVoxelsEntropy() ) );
-    connect( m_saveVoxelsEntropyPushButton, SIGNAL( clicked() ), SLOT( saveVoxelsEntropy() ) );
+    connect(m_loadHVPushButton, SIGNAL(clicked()), SLOT(loadHV()));
+    connect(m_saveHVPushButton, SIGNAL(clicked()), SLOT(saveHV()));
+    connect(m_loadHVzPushButton, SIGNAL(clicked()), SLOT(loadHVz()));
+    connect(m_saveHVzPushButton, SIGNAL(clicked()), SLOT(saveHVz()));
+    connect(m_loadHZPushButton, SIGNAL(clicked()), SLOT(loadHZ()));
+    connect(m_saveHZPushButton, SIGNAL(clicked()), SLOT(saveHZ()));
+    connect(m_loadHZvPushButton, SIGNAL(clicked()), SLOT(loadHZv()));
+    connect(m_saveHZvPushButton, SIGNAL(clicked()), SLOT(saveHZv()));
+    connect(m_loadHZVPushButton, SIGNAL(clicked()), SLOT(loadHZV()));
+    connect(m_saveHZVPushButton, SIGNAL(clicked()), SLOT(saveHZV()));
     connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
     connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
     connect( m_loadMiPushButton, SIGNAL( clicked() ), SLOT( loadMi() ) );
@@ -2027,8 +2118,11 @@ void QExperimental3DExtension::computePropertySaliencies()
 void QExperimental3DExtension::computeSelectedVmi()
 {
     // Què ha demanat l'usuari
-    bool computeVoxelsViewpointEntropies = m_computeVoxelsViewpointEntropiesCheckBox->isChecked();  // H(Z|v)
-    bool computeVoxelsEntropy = m_computeVoxelsEntropyCheckBox->isChecked();                        // H(Z)
+    bool computeHV = m_computeHVCheckBox->isChecked();      // H(V)
+    bool computeHVz = m_computeHVzCheckBox->isChecked();    // H(V|z)
+    bool computeHZ = m_computeHZCheckBox->isChecked();      // H(Z)
+    bool computeHZv = m_computeHZvCheckBox->isChecked();    // H(Z|v)
+    bool computeHZV = m_computeHZVCheckBox->isChecked();    // H(Z|V)
     bool computeVmi = m_computeVmiCheckBox->isChecked();
     bool computeMi = m_computeMiCheckBox->isChecked();
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesCheckBox->isChecked();
@@ -2042,166 +2136,185 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeExploratoryTour = m_computeExploratoryTourCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeVoxelsViewpointEntropies && !computeVoxelsEntropy && !computeVmi && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeViewpointVomi && !computeColorVomi && !computeEvmiOpacity
-         && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour ) return;
+    if (!computeHV && !computeHVz && !computeHZ && !computeHZv && !computeHZV && !computeVmi && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeViewpointVomi && !computeColorVomi
+        && !computeEvmiOpacity && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour)
+        return;
 
-    setCursor( QCursor( Qt::WaitCursor ) );
+    setCursor(QCursor(Qt::WaitCursor));
 
     // Obtenir direccions
     Vector3 position, focus, up;
-    m_viewer->getCamera( position, focus, up );
-    float distance = ( position - focus ).length();
-    ViewpointGenerator viewpointGenerator = m_vmiViewpointDistributionWidget->viewpointGenerator( distance );
+    m_viewer->getCamera(position, focus, up);
+    float distance = (position - focus).length();
+    ViewpointGenerator viewpointGenerator = m_vmiViewpointDistributionWidget->viewpointGenerator(distance);
 
     // Viewpoint Information Channel
-    ViewpointInformationChannel viewpointInformationChannel( viewpointGenerator, m_volume, m_viewer, m_transferFunctionEditor->transferFunction() );
+    ViewpointInformationChannel viewpointInformationChannel(viewpointGenerator, m_volume, m_viewer, m_transferFunctionEditor->transferFunction());
 
     // Paleta de colors per la color VoMI
-    if ( computeColorVomi ) viewpointInformationChannel.setColorVomiPalette( m_colorVomiPalette );
+    if (computeColorVomi) viewpointInformationChannel.setColorVomiPalette(m_colorVomiPalette);
 
     // Funció de transferència per l'EVMI amb opacitat
-    if ( computeEvmiOpacity )
+    if (computeEvmiOpacity)
     {
-        if ( m_computeEvmiOpacityUseOtherPushButton->isChecked() ) viewpointInformationChannel.setEvmiOpacityTransferFunction( m_evmiOpacityTransferFunction );
-        else viewpointInformationChannel.setEvmiOpacityTransferFunction( m_transferFunctionEditor->transferFunction() );
+        if (m_computeEvmiOpacityUseOtherPushButton->isChecked()) viewpointInformationChannel.setEvmiOpacityTransferFunction(m_evmiOpacityTransferFunction);
+        else viewpointInformationChannel.setEvmiOpacityTransferFunction(m_transferFunctionEditor->transferFunction());
     }
 
     // Paràmetres extres per calcular les millors vistes (els passem sempre perquè tinguin algun valor, per si s'ha de calcular el guided tour per exemple)
-    viewpointInformationChannel.setBestViewsParameters( m_computeBestViewsNRadioButton->isChecked(), m_computeBestViewsNSpinBox->value(), m_computeBestViewsThresholdDoubleSpinBox->value() );
+    viewpointInformationChannel.setBestViewsParameters(m_computeBestViewsNRadioButton->isChecked(), m_computeBestViewsNSpinBox->value(), m_computeBestViewsThresholdDoubleSpinBox->value());
 
     // Llindar per calcular l'exploratory tour
-    viewpointInformationChannel.setExploratoryTourThreshold( m_computeExploratoryTourThresholdDoubleSpinBox->value() );
+    viewpointInformationChannel.setExploratoryTourThreshold(m_computeExploratoryTourThresholdDoubleSpinBox->value());
 
     // Filtratge de punts de vista
-    if ( m_vmiOneViewpointCheckBox->isChecked() )
+    if (m_vmiOneViewpointCheckBox->isChecked())
     {
         int nViewpoints = m_vmiViewpointDistributionWidget->numberOfViewpoints();
         int selectedViewpoint = m_vmiOneViewpointSpinBox->value() - 1;
 
-        QVector<bool> filter( nViewpoints );
+        QVector<bool> filter(nViewpoints);
 
         filter[selectedViewpoint] = true;
 
-        QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
-        for ( int i = 0; i < neighbours.size(); i++ ) filter[neighbours.at( i )] = true;
+        QVector<int> neighbours = viewpointGenerator.neighbours(selectedViewpoint);
+        for (int i = 0; i < neighbours.size(); i++) filter[neighbours.at(i)] = true;
 
-        viewpointInformationChannel.filterViewpoints( filter );
+        viewpointInformationChannel.filterViewpoints(filter);
     }
 
-    connect( &viewpointInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiTotalProgressBar, SLOT( setMaximum(int) ) );
-    connect( &viewpointInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiTotalProgressBar, SLOT( repaint() ) ); // no sé per què però cal això perquè s'actualitzi quan toca
-    connect( &viewpointInformationChannel, SIGNAL( totalProgress(int) ), m_vmiTotalProgressBar, SLOT( setValue(int) ) );
-    connect( &viewpointInformationChannel, SIGNAL( partialProgress(int) ), m_vmiProgressBar, SLOT( setValue(int) ) );
+    connect(&viewpointInformationChannel, SIGNAL(totalProgressMaximum(int)), m_vmiTotalProgressBar, SLOT(setMaximum(int)));
+    connect(&viewpointInformationChannel, SIGNAL(totalProgressMaximum(int)), m_vmiTotalProgressBar, SLOT(repaint()));  // no sé per què però cal això perquè s'actualitzi quan toca
+    connect(&viewpointInformationChannel, SIGNAL(totalProgress(int)), m_vmiTotalProgressBar, SLOT(setValue(int)));
+    connect(&viewpointInformationChannel, SIGNAL(partialProgress(int)), m_vmiProgressBar, SLOT(setValue(int)));
 
     QTime time;
     time.start();
-    viewpointInformationChannel.compute( computeVoxelsViewpointEntropies, computeVoxelsEntropy, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi,
-                                         computeEvmiOpacity, computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked() );
+    viewpointInformationChannel.compute(computeHV, computeHVz, computeHZ, computeHZv, computeHZV, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeViewpointVomi, computeColorVomi,
+                                        computeEvmiOpacity, computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked());
     int elapsed = time.elapsed();
-    DEBUG_LOG( QString( "Temps total de VOMI i altres: %1 s" ).arg( elapsed / 1000.0f ) );
-    INFO_LOG( QString( "Temps total de VOMI i altres: %1 s" ).arg( elapsed / 1000.0f ) );
+    DEBUG_LOG(QString("Temps total de VOMI i altres: %1 s").arg(elapsed / 1000.0f));
+    INFO_LOG(QString("Temps total de VOMI i altres: %1 s").arg(elapsed / 1000.0f));
 
-    if ( viewpointInformationChannel.hasViewedVolume() )
+    if (viewpointInformationChannel.hasViewedVolume())
     {
         m_viewedVolume = viewpointInformationChannel.viewedVolume();
-        m_saveViewedVolumePushButton->setEnabled( true );
+        m_saveViewedVolumePushButton->setEnabled(true);
     }
 
-    if ( computeVoxelsViewpointEntropies )
+    if (computeHV)
     {
-        m_voxelsViewpointEntropies = viewpointInformationChannel.voxelsViewpointEntropies();
-        m_saveVoxelsViewpointEntropiesPushButton->setEnabled( true );
+        m_HV = viewpointInformationChannel.HV();
+        m_saveHVPushButton->setEnabled(true);
     }
 
-    if ( computeVoxelsEntropy )
+    if (computeHVz)
     {
-        m_voxelsEntropy = viewpointInformationChannel.voxelsEntropy();
-        m_saveVoxelsEntropyPushButton->setEnabled( true );
+        m_HVz = viewpointInformationChannel.HVz();
+        m_saveHVzPushButton->setEnabled(true);
     }
 
-    if ( computeVmi )
+    if (computeHZ)
+    {
+        m_HZ = viewpointInformationChannel.HZ();
+        m_saveHZPushButton->setEnabled(true);
+    }
+
+    if (computeHZv)
+    {
+        m_HZv = viewpointInformationChannel.HZv();
+        m_saveHZvPushButton->setEnabled(true);
+    }
+
+    if (computeHZV)
+    {
+        m_HZV = viewpointInformationChannel.HZV();
+        m_saveHZVPushButton->setEnabled(true);
+    }
+
+    if (computeVmi)
     {
         m_vmi = viewpointInformationChannel.vmi();
-        m_saveVmiPushButton->setEnabled( true );
+        m_saveVmiPushButton->setEnabled(true);
     }
 
-    if ( computeMi )
+    if (computeMi)
     {
         m_mi = viewpointInformationChannel.mi();
-        m_saveMiPushButton->setEnabled( true );
+        m_saveMiPushButton->setEnabled(true);
     }
 
-    if ( computeViewpointUnstabilities )
+    if (computeViewpointUnstabilities)
     {
         m_viewpointUnstabilities = viewpointInformationChannel.viewpointUnstabilities();
-        m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
+        m_saveViewpointUnstabilitiesPushButton->setEnabled(true);
     }
 
-    if ( computeVomi )
+    if (computeVomi)
     {
         m_vomi = viewpointInformationChannel.vomi();
         m_maximumVomi = viewpointInformationChannel.maximumVomi();
-        m_baseVomiRadioButton->setEnabled( true );
-        m_vomiCheckBox->setEnabled( true );
-        m_vomiCoolWarmCheckBox->setEnabled( true );
-        m_opacityLabel->setEnabled( true );
-        m_opacityVomiCheckBox->setEnabled( true );
-        m_saveVomiPushButton->setEnabled( true );
-        m_vomiGradientPushButton->setEnabled( true );
+        m_baseVomiRadioButton->setEnabled(true);
+        m_vomiCheckBox->setEnabled(true);
+        m_vomiCoolWarmCheckBox->setEnabled(true);
+        m_opacityLabel->setEnabled(true);
+        m_opacityVomiCheckBox->setEnabled(true);
+        m_saveVomiPushButton->setEnabled(true);
+        m_vomiGradientPushButton->setEnabled(true);
     }
 
-    if ( computeViewpointVomi )
+    if (computeViewpointVomi)
     {
         m_viewpointVomi = viewpointInformationChannel.viewpointVomi();
-        m_saveViewpointVomiPushButton->setEnabled( true );
+        m_saveViewpointVomiPushButton->setEnabled(true);
     }
 
-    if ( computeColorVomi )
+    if (computeColorVomi)
     {
         m_colorVomi = viewpointInformationChannel.colorVomi();
         m_maximumColorVomi = viewpointInformationChannel.maximumColorVomi();
-        m_colorVomiCheckBox->setEnabled( true );
-        m_saveColorVomiPushButton->setEnabled( true );
+        m_colorVomiCheckBox->setEnabled(true);
+        m_saveColorVomiPushButton->setEnabled(true);
     }
 
-    if ( computeEvmiOpacity )
+    if (computeEvmiOpacity)
     {
         m_evmiOpacity = viewpointInformationChannel.evmiOpacity();
-        m_saveEvmiOpacityPushButton->setEnabled( true );
+        m_saveEvmiOpacityPushButton->setEnabled(true);
     }
 
-    if ( computeEvmiVomi )
+    if (computeEvmiVomi)
     {
         m_evmiVomi = viewpointInformationChannel.evmiVomi();
-        m_saveEvmiVomiPushButton->setEnabled( true );
+        m_saveEvmiVomiPushButton->setEnabled(true);
     }
 
-    if ( computeBestViews )
+    if (computeBestViews)
     {
         m_bestViews = viewpointInformationChannel.bestViews();
-        m_saveBestViewsPushButton->setEnabled( true );
-        m_tourBestViewsPushButton->setEnabled( true );
+        m_saveBestViewsPushButton->setEnabled(true);
+        m_tourBestViewsPushButton->setEnabled(true);
     }
 
-    if ( computeGuidedTour )
+    if (computeGuidedTour)
     {
         m_guidedTour = viewpointInformationChannel.guidedTour();
-        m_saveGuidedTourPushButton->setEnabled( true );
-        m_guidedTourPushButton->setEnabled( true );
+        m_saveGuidedTourPushButton->setEnabled(true);
+        m_guidedTourPushButton->setEnabled(true);
     }
 
-    if ( computeExploratoryTour )
+    if (computeExploratoryTour)
     {
         m_exploratoryTour = viewpointInformationChannel.exploratoryTour();
-        m_saveExploratoryTourPushButton->setEnabled( true );
-        m_exploratoryTourPushButton->setEnabled( true );
+        m_saveExploratoryTourPushButton->setEnabled(true);
+        m_exploratoryTourPushButton->setEnabled(true);
     }
 
     // Restaurem els paràmetres normals (en realitat només cal si es fa amb CPU)
     render();
-    m_viewer->setCamera( position, focus, up );
+    m_viewer->setCamera(position, focus, up);
 
-    setCursor( QCursor( Qt::ArrowCursor ) );
+    setCursor(QCursor(Qt::ArrowCursor));
 }
 
 
@@ -2914,9 +3027,9 @@ bool QExperimental3DExtension::programVmiCheckOrUncheck( int lineNumber, const Q
     bool check = words.at( 0 ) == "vmi-check";
     const QString &checkbox = words.at( 1 );
 
-    if ( checkbox == "voxelsviewpointentropies" )
+    if ( checkbox == "HZv" )
     {
-        if ( run ) m_computeVoxelsViewpointEntropiesCheckBox->setChecked( check );
+        if ( run ) m_computeHZvCheckBox->setChecked( check );
     }
     else if ( checkbox == "vmi" )
     {
@@ -2992,14 +3105,14 @@ bool QExperimental3DExtension::programVmiLoadOrSave( int lineNumber, const QStri
     const QString &measure = words.at( 1 );
     const QString &fileName = words.at( 2 );
 
-    if ( measure == "voxelsviewpointentropies" )
+    if ( measure == "HZv" )
     {
         if ( run )
         {
-            if ( load ) loadVoxelsViewpointEntropies( fileName );
+            if ( load ) loadHZv( fileName );
             else
             {
-                if ( m_saveVoxelsViewpointEntropiesPushButton->isEnabled() ) saveVoxelsViewpointEntropies( fileName );
+                if ( m_saveHZvPushButton->isEnabled() ) saveHZv( fileName );
                 else
                 {
                     logProgramError( lineNumber, "No es pot desar l'entropia dels punts de vista", line );
