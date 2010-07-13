@@ -11,11 +11,6 @@
 // Els filtres per passar itk<=>vtk: InsightApplications/auxiliary/vtk --> ho tenim a /tools
 #include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
 #include "itkVTKImageToImageFilter.h" // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
-// itk - input
-#include <itkImageFileReader.h>
-#include <itkImageSeriesReader.h>
-#include <itkGDCMImageIO.h>
-#include "itkQtAdaptor.h"
 #include "logging.h"
 #include "identifier.h"
 // Qt
@@ -24,16 +19,12 @@
 // FWD declarations
 class vtkImageData;
 
-#ifdef VTK_GDCM_SUPPORT
-class vtkGDCMImageReader;
-class vtkEventQtSlotConnect;
-#endif
-
 namespace udg {
 
 class Image;
 class Study;
 class Patient;
+class VolumeReader;
 
 /**
     Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. 
@@ -175,6 +166,13 @@ public:
     /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert
     bool fitsIntoMemory();
 
+    /// S'encarrega de crear un volum "de mínims" per donar un output en casos que
+    /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un 
+    /// volum neutre per evitar que l'aplicació peti en casos d'error no controlats
+    /// TODO Aquest mètode potser s'hauria de transformar en una subclasse de Volume que 
+    /// únicament creïi aquest tipu de volum
+    void createNeutralVolume();
+
 signals:
     /**
      * Emet l'estat del progrés en el que es troba la càrrega de dades del volum
@@ -185,11 +183,6 @@ signals:
 private:
     /// Mètode d'inicialització d'objectes comuns per als constructors
     void init();
-
-    /// Donades unes imatges que tenen diferents mides, les llegim en un sol
-    /// volum adaptant la mida als valors maxims de row i column. S'executarà quan volguem llegir
-    /// una sèrie que conté imatges amb diferents mides
-    void readDifferentSizeImagesIntoOneVolume(const QStringList &filenames);
 
 private:
     /// Filtres per importar/exportar
@@ -216,73 +209,12 @@ private:
     /// Thumbnail del volum
     QPixmap m_thumbnail;
 
-//
-// TOT AIXÒ ESTÀ PER L'ADAPTACIÓ D'INPUT NOMÉS!
-// TODO tot això és temporal, quan es faci la lectura tal i com volem desapareixerà tot aquest codi
-//
-private slots:
-    void slotProgress();
-
-private:
-    /// Tipus d'error que podem tenir
-    enum { NoError = 1, SizeMismatch, InvalidFileName, MissingFile, OutOfMemory, UnknownError };
-    void inputConstructor();
-    void inputDestructor();
-    /**
-     * Carrega un volum a partir del nom de fitxer que se li passi
-     * @param fileName
-     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
-     */
-    int readSingleFileITKGDCM(const QString &fileName);
-
-    /**
-     * Donat un conjunt de fitxers els carrega en una única sèrie/volum
-     * @param filenames
-     * @return noError en cas que tot hagi anat bé, el tipus d'error altrament
-     */
-    int readFiles(const QStringList &filenames);
-#ifdef VTK_GDCM_SUPPORT
-    int readFilesVTKGDCM(const QStringList &filenames);
-#endif
-    int readFilesITKGDCM(const QStringList &filenames);
-
-    /// Donat un missatge d'error en un string, ens torna el codi d'error intern que sabem tractar
-    int identifyErrorMessage(const QString &errorMessage);
-
-    /// S'encarrega de crear un volum "de mínims" per donar un output en casos que
-    /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un 
-    /// volum neutre per evitar que l'aplicació peti en casos d'error no controlats
-    void createNeutralVolume();
-
-private:
-    typedef itk::ImageFileReader<ItkImageType> ReaderType;
-    typedef ReaderType::Pointer ReaderTypePointer;
-
-    typedef itk::ImageSeriesReader<ItkImageType> SeriesReaderType;
-    typedef itk::GDCMImageIO ImageIOType;
-
-    /// El lector de sèries dicom
-    SeriesReaderType::Pointer m_seriesReader;
-
-    /// El lector estàndar de fitxers singulars, normalment servirà per llegir *.mhd's
-    ReaderTypePointer m_reader;
-
-    /// el lector de DICOM
-    ImageIOType::Pointer m_gdcmIO;
+    /// Classe per llegir les dades del volum
+    VolumeReader *m_volumeReader;
 
     /// TODO membre temporal per la transició al tractament de fases
     int m_numberOfPhases;
     int m_numberOfSlicesPerPhase;
-
-    /// Traductor d'events itk en signals de Qt 
-    /// per poder monitorejar el progrés de lectura d'arxius
-    itk::QtSignalAdaptor *m_progressSignalAdaptor;
-
-#ifdef VTK_GDCM_SUPPORT
-    // Lector vtkGDCM + progress
-    vtkGDCMImageReader *m_vtkGDCMReader;
-    vtkEventQtSlotConnect *m_vtkQtConnections;
-#endif
 };
 
 }  // end namespace udg

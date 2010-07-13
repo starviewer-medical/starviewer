@@ -9,33 +9,19 @@
 
 #include "volume.h"
 
+#include "volumereader.h"
 #include "logging.h"
 #include "image.h"
 #include "series.h"
 #include "study.h"
 #include "patient.h"
-#include "dicomtagreader.h"
 #include "mathtools.h"
-#include "starviewerapplication.h"
 #include "coresettings.h"
 // VTK
 #include <vtkImageData.h>
 // Voxel information
 #include <vtkPointData.h>
 #include <vtkCell.h>
-// ITK
-#include <itkTileImageFilter.h>
-// Esxtra per INPUT
-#include <QFileInfo>
-#include <QDir>
-#include <QMessageBox>
-
-#ifdef VTK_GDCM_SUPPORT
-#include <vtkGDCMImageReader.h>
-#include <vtkStringArray.h>
-#include <vtkEventQtSlotConnect.h>
-#include <gdcmPixelFormat.h> // Només per qüestions d'informació de debug
-#endif
 
 namespace udg {
 
@@ -67,16 +53,18 @@ void Volume::init()
     // Així potser és més segur des del punt de vista de si li demanem propietats al volum com origen, espaiat, etc
     m_imageDataVTK = vtkImageData::New();
 
+    // Preparem el lector de volums
+    m_volumeReader = new VolumeReader();
+    connect(m_volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
+    
     m_itkToVtkFilter = ItkToVtkFilterType::New();
     m_vtkToItkFilter = VtkToItkFilterType::New();
     m_dataLoaded = false;
-    m_progressSignalAdaptor = 0;
-    inputConstructor();
 }
 
 Volume::~Volume()
 {
-    inputDestructor();
+    delete m_volumeReader;
 }
 
 Volume::ItkImageTypePointer Volume::getItkData()
@@ -95,41 +83,9 @@ Volume::ItkImageTypePointer Volume::getItkData()
 
 Volume::VtkImageTypePointer Volume::getVtkData()
 {
-    if ( !m_dataLoaded )
+    if (!m_dataLoaded)
     {
-        // TODO Ara mateix llegim a partir de Input. Més endavant s'haurà de llegir a partir de les classes DICOMImageReader
-        QStringList fileList;
-        foreach (Image *image, m_imageSet)
-        {
-            if ( !fileList.contains(image->getPath()) )// Evitem afegir més vegades l'arxiu si aquest és multiframe
-                fileList << image->getPath();
-        }
-        if ( !fileList.isEmpty() )
-        {
-            switch ( this->readFiles(fileList) )
-            {
-            case OutOfMemory: 
-                WARN_LOG("No podem carregar els arxius següents perquè no caben a memòria\n" + fileList.join("\n") );
-                createNeutralVolume();
-                m_dataLoaded = true;
-                QMessageBox::warning(0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg(ApplicationNameString) );
-                break;
-
-            case MissingFile:
-                // Fem el mateix que en el cas OutOfMemory, canviant el missatge d'error
-                createNeutralVolume();
-                m_dataLoaded = true;
-                QMessageBox::warning(0, tr("Missing Files"), tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString) );
-                break;
-
-            case UnknownError:
-                // Hi ha hagut un error no controlat, creem el volum neutral per evitar desastres majors
-                createNeutralVolume();
-                m_dataLoaded = true;
-                QMessageBox::warning(0, tr("Unkwown Error"), tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString) );
-                break;
-            }
-        }
+        m_volumeReader->read(this);
     }
     return m_imageDataVTK;
 }
@@ -461,392 +417,6 @@ bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
     return found;
 }
 
-void Volume::readDifferentSizeImagesIntoOneVolume(const QStringList &filenames)
-{
-    int errorCode = NoError;
-    // Declarem el filtre de tiling
-    typedef itk::TileImageFilter< ItkImageType, ItkImageType  > TileFilterType;
-    TileFilterType::Pointer tileFilter = TileFilterType::New();
-    // Inicialitzem les seves variables
-    // El layout ens serveix per indicar cap on creix la cua. En aquest cas volem fer creixer la coordenada Z
-    TileFilterType::LayoutArrayType layout;
-    layout[0] = 1;
-    layout[1] = 1;
-    layout[2] = 0;
-    tileFilter->SetLayout(layout);
-
-    int progressCount = 0;
-    int progressIncrement = static_cast<int>((1.0/(double)filenames.count()) * 100);
-
-    m_reader->SetImageIO(m_gdcmIO);
-    foreach (QString file, filenames)
-    {
-        emit progress(progressCount);
-        // Declarem la imatge que volem carregar
-        ItkImageType::Pointer itkImage;
-        m_reader->SetFileName(qPrintable(file));
-        try
-        {
-            m_reader->UpdateLargestPossibleRegion();
-        }
-        catch (itk::ExceptionObject & e)
-        {
-            WARN_LOG(QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
-                    .arg(QFileInfo(filenames.at(0)).dir().path() )
-                    .arg(e.GetDescription() )
-                   );
-
-            // Llegim el missatge d'error per esbrinar de quin error es tracta
-            errorCode = identifyErrorMessage(QString(e.GetDescription()));
-        }
-        if ( errorCode == NoError )
-        {
-            itkImage = m_reader->GetOutput();
-            m_reader->GetOutput()->DisconnectPipeline();
-        }
-        // TODO No es fa tractament d'errors!
-
-        // Un cop llegit el block, fem el tiling
-        tileFilter->PushBackInput(itkImage);
-        progressCount += progressIncrement;
-    }
-    tileFilter->Update();
-    this->setData(tileFilter->GetOutput() );
-    emit progress(100);
-}
-
-//
-//
-//
-// PART ADAPTADA d'INPUT
-// TODO tot això és temporal, quan es faci la lectura tal i com volem desapareixerà tot aquest codi
-//
-//
-void Volume::inputConstructor()
-{
-    m_reader = ReaderType::New();
-    m_seriesReader = SeriesReaderType::New();
-
-    m_gdcmIO = ImageIOType::New();
-
-    if ( !m_progressSignalAdaptor )
-        m_progressSignalAdaptor = new itk::QtSignalAdaptor();
-    // Connect the adaptor as an observer of a Filter's event
-    m_seriesReader->AddObserver(itk::ProgressEvent(), m_progressSignalAdaptor->GetCommand() );
-//
-//  Connect the adaptor's Signal to the Qt Widget Slot
-    connect(m_progressSignalAdaptor, SIGNAL( Signal() ), SLOT( slotProgress() ) );
-
-#ifdef VTK_GDCM_SUPPORT
-    m_vtkGDCMReader = vtkGDCMImageReader::New();
-    // Mantenim el sistema de coordenades com quan es llegeix amb itkGDCM
-    m_vtkGDCMReader->FileLowerLeftOn();
-    // Pel progress de vtk
-    m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT( slotProgress() ) );
-#endif
-}
-
-void Volume::slotProgress()
-{
-    Settings settings;
-    QString readerLibrary = settings.getValue(CoreSettings::DICOMImageReaderLibrary).toString();
-    
-    if ( readerLibrary == "vtkGDCM" )
-#ifdef VTK_GDCM_SUPPORT
-        emit progress( (int)(m_vtkGDCMReader->GetProgress()*100) );
-#else
-    {
-        DEBUG_LOG("vtkGDCM not installed! Progress reported via itkGDCM");
-        emit progress( (int)(m_seriesReader->GetProgress() * 100) );
-    }
-#endif
-    else if ( readerLibrary == "itkGDCM" )
-        emit progress( (int)(m_seriesReader->GetProgress() * 100) );
-    else // Per defecte, sinó tenim el valor definit, ho farem a través de itkGDCM
-        emit progress( (int)(m_seriesReader->GetProgress() * 100) );
-}
-
-void Volume::inputDestructor()
-{
-    delete m_progressSignalAdaptor;
-//     m_seriesReader->Delete();
-//     m_reader->Delete();
-//     m_gdcmIO->Delete();
-}
-
-int Volume::readSingleFileITKGDCM(const QString &fileName)
-{
-    int errorCode = NoError;
-
-    ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName(qPrintable(fileName));
-    emit progress(0);
-    try
-    {
-        reader->Update();
-    }
-    catch (itk::ExceptionObject & e)
-    {
-        WARN_LOG(QString("Excepció llegint l'arxiu [%1] Descripció: [%2]")
-                .arg(fileName)
-                .arg(e.GetDescription())
-               );
-        // Llegim el missatge d'error per esbrinar de quin error es tracta
-        errorCode = identifyErrorMessage(QString(e.GetDescription()) );
-
-        // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
-        emit progress(100);
-    }
-    catch (std::bad_alloc)
-    {
-        errorCode = OutOfMemory;
-        // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
-        emit progress(100);
-    }
-    
-    if ( errorCode == NoError )
-    {
-        // HACK En els casos que les imatges siguin enhanced, les gdcm no omplen correctament
-        // ni l'origen ni l'sapcing x,y i és per això que li assignem l'origen i l'spacing 
-        // que hem llegit correctament a Image
-        // TODO Quan solucionem correctament el ticket #1166 (actualització a gdcm 2.0.x) aquesta assignació desapareixerà
-        if ( !m_imageSet.isEmpty() )
-        {
-            reader->GetOutput()->SetOrigin(m_imageSet.first()->getImagePositionPatient());
-            // Cal tenir en compte si la imatge original conté informació d'spacing vàlida per fer l'assignació
-            const double *imageSpacing = m_imageSet.first()->getPixelSpacing();
-            if ( imageSpacing[0] > 0.0 )
-            {
-                double spacing[3];
-                spacing[0] = imageSpacing[0];
-                spacing[1] = imageSpacing[1];
-                // HACK ticket #1204 - Degut a bugs en les gdcm integrades amb itk, l'spacing between slices no es calcula
-                // correctament i se li assigna l'slice thickness al z-spacing. Una solució temporal i ràpida és llegir el tag
-                // Spacing Between Slices i actualitzar el z-spacing, si aquest tag existeix
-                // El cost de llegir aquest tag per un fitxer de 320 imatges és d'uns 470 milisegons aproximadament 
-                // TODO un cop actualitzats a gdcm 2.0.x, aquest HACK serà innecessari
-                DICOMTagReader *dicomReader = new DICOMTagReader(m_imageSet.first()->getPath());
-                double zSpacing = dicomReader->getValueAttributeAsQString(DICOMSpacingBetweenSlices).toDouble();
-                if ( zSpacing == 0.0 )
-                    zSpacing = reader->GetOutput()->GetSpacing()[2];
-                
-                spacing[2] = zSpacing;                
-                reader->GetOutput()->SetSpacing(spacing);
-            }
-        }
-        
-        this->setData(reader->GetOutput());
-        // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
-        emit progress(100);
-    }
-    // TODO Falta tractament d'errors!?
-    return errorCode;
-}
-
-int Volume::readFiles(const QStringList &filenames)
-{
-    Settings settings;
-    QString readerLibrary = settings.getValue(CoreSettings::DICOMImageReaderLibrary).toString();
-    
-    DEBUG_LOG("DICOMImageReaderLibrary set up in settings: " + readerLibrary);
-    
-    if ( readerLibrary == "vtkGDCM" )
-#ifdef VTK_GDCM_SUPPORT
-        return readFilesVTKGDCM(filenames);
-#else
-    {
-        DEBUG_LOG("vtkGDCM not installed! Reading with itkGDCM");
-        return readFilesITKGDCM(filenames);
-    }
-#endif
-    else if ( readerLibrary == "itkGDCM" )
-        return readFilesITKGDCM(filenames);
-    else // Per defecte, sinó tenim el valor definit, llegirem sempre amb itkGDCM
-        return readFilesITKGDCM(filenames);
-}
-
-#ifdef VTK_GDCM_SUPPORT
-int Volume::readFilesVTKGDCM(const QStringList &filenames)
-{
-    DEBUG_LOG("Llegim arxius amb la interfície VTK-GDCM");
-    int errorCode = NoError;
-    if ( filenames.isEmpty() )
-    {
-        WARN_LOG( "La llista de noms de fitxer per carregar és buida" );
-        errorCode = InvalidFileName;
-        return errorCode;
-    }
-
-    // vtk - GDCM
-    // Convertim la QStringList a vtkStringArray que és l'input 
-    // que accepta vtkGDCMImageReader
-    if( filenames.size() > 1 )
-    {
-        vtkStringArray *sarray = vtkStringArray::New();
-        for(unsigned int i = 0; i<filenames.size(); i++)
-        {
-            sarray->InsertNextValue( filenames.at(i).toStdString() );
-        }
-        DEBUG_LOG("1)Reading several files");
-        m_vtkGDCMReader->SetFileNames( sarray );
-        sarray->Delete();
-    }
-    else
-    {
-        DEBUG_LOG("1)Reading only one file");
-        m_vtkGDCMReader->SetFileName( qPrintable(filenames.first()) );    
-    }
-    try
-    {
-        m_vtkGDCMReader->Update();
-    }
-    catch( ... )
-    {
-        DEBUG_LOG("An exception was throwed while reading with vtkGDCMImageReader");
-        WARN_LOG("An exception was throwed while reading with vtkGDCMImageReader");
-    }
-    DEBUG_LOG("2)Reading successful");
-    DEBUG_LOG("Scalar type selected by the reader");
-    switch( m_vtkGDCMReader->GetDataScalarType() )
-    {
-    case gdcm::PixelFormat::INT16:
-        DEBUG_LOG("INT 16");
-        break;
-
-    case gdcm::PixelFormat::UINT16:
-        DEBUG_LOG("unsigned INT 16");
-        break;
-
-    case gdcm::PixelFormat::UINT8:
-        DEBUG_LOG("unsigned INT 8");
-        break;
-
-    case gdcm::PixelFormat::INT8:
-        DEBUG_LOG("INT 8");
-        break;
-
-    case gdcm::PixelFormat::UINT12:
-        DEBUG_LOG("unsigned INT 12");
-        break;
-
-    case gdcm::PixelFormat::INT12:
-        DEBUG_LOG("INT 12");
-        break;
-
-    case gdcm::PixelFormat::UINT32: // For some DICOM files (RT or SC)
-        DEBUG_LOG("unsigned INT 32");
-        break;
-
-    case gdcm::PixelFormat::INT32: //    "   "
-        DEBUG_LOG("INT 32");
-        break;
-
-    case gdcm::PixelFormat::FLOAT16: // sure why not...
-        DEBUG_LOG("FLOAT 16");
-        break;
-
-    case gdcm::PixelFormat::FLOAT32: // good ol' 'float'
-        DEBUG_LOG("FLOAT 32");
-        break;
-
-    case gdcm::PixelFormat::FLOAT64: // aka 'double'
-        DEBUG_LOG("FLOAT 64");
-        break;
-
-    case gdcm::PixelFormat::UNKNOWN:
-        DEBUG_LOG("UNKNOWN");
-        break;
-
-    default:
-        DEBUG_LOG( QString("Scalar type: %1").arg(m_vtkGDCMReader->GetDataScalarType()) );
-        break;
-    }
-
-    // Assignem les dades
-    this->setData(m_vtkGDCMReader->GetOutput() );
-
-    DEBUG_LOG(">>>>>>>>>>>>VTK GDCM READER - vtkImageData Output<<<<<<<<<<<<<<<<<<<");
-    m_imageDataVTK->Print(std::cout);
-    
-    emit progress( 100 );
-    
-    return errorCode;
-}
-#endif
-
-int Volume::readFilesITKGDCM(const QStringList &filenames)
-{
-    DEBUG_LOG("Llegim arxius amb la interfície ITK-GDCM");
-    int errorCode = NoError;
-    if ( filenames.isEmpty() )
-    {
-        WARN_LOG("La llista de noms de fitxer per carregar és buida");
-        errorCode = InvalidFileName;
-        return errorCode;
-    }
-
-    if ( filenames.size() > 1 )
-    {
-        // Això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
-        m_seriesReader->SetImageIO(m_gdcmIO);
-
-        // Convertim la QStringList al format std::vector< std::string > que s'esperen les itk
-        std::vector< std::string > stlFilenames;
-        for (int i = 0; i < filenames.size(); i++)
-        {
-            stlFilenames.push_back(filenames.at(i).toStdString());
-        }
-
-        m_seriesReader->SetFileNames(stlFilenames);
-
-        try
-        {
-            m_seriesReader->Update();
-        }
-        catch (itk::ExceptionObject & e)
-        {
-            WARN_LOG(QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]")
-                .arg(QFileInfo(filenames.at(0)).dir().path() )
-                .arg(e.GetDescription() )
-               );
-            // Llegim el missatge d'error per esbrinar de quin error es tracta
-            errorCode = identifyErrorMessage(QString(e.GetDescription()) );
-        }
-        switch ( errorCode )
-        {
-        case NoError:
-            this->setData(m_seriesReader->GetOutput());
-            emit progress(100);
-            break;
-
-        case SizeMismatch:
-            // TODO Això es podria fer a ::getVtkData o ja està bé aquí?
-            errorCode = NoError;
-            readDifferentSizeImagesIntoOneVolume(filenames);
-            emit progress(100);
-            break;
-        }
-    }
-    else
-    {
-        errorCode = this->readSingleFileITKGDCM(filenames.at(0));
-    }
-    return errorCode;
-}
-
-int Volume::identifyErrorMessage(const QString &errorMessage)
-{
-    if ( errorMessage.contains("Size mismatch") || errorMessage.contains("ImageIO returns IO region that does not fully contain the requested regionRequested") )
-        return SizeMismatch;
-    else if ( errorMessage.contains("Failed to allocate memory for image") )
-        return OutOfMemory;
-    else if ( errorMessage.contains("The file doesn't exists") )
-        return MissingFile;
-    else
-        return UnknownError;
-}
-
 void Volume::createNeutralVolume()
 {
     if ( m_imageDataVTK )
@@ -879,6 +449,9 @@ void Volume::createNeutralVolume()
     // Quan creem el volum neutre indiquem que només tenim 1 sola fase 
     // TODO Potser s'haurien de crear tantes fases com les que indiqui la sèrie?
     this->setNumberOfPhases(1);
+    
+    // Indiquem que hem carregat les dades
+    m_dataLoaded = true;
 }
 
 bool Volume::fitsIntoMemory()

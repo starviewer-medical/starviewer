@@ -40,6 +40,10 @@ HEADERS += extensionfactory.h \
     logging.h \
     deletedirectory.h \
     volume.h \
+    volumereader.h \
+    volumepixeldatareader.h \
+    volumepixeldatareadervtkgdcm.h \
+    volumepixeldatareaderitkgdcm.h \
     volumerepository.h \
     identifier.h \
     repositorybase.h \
@@ -232,6 +236,10 @@ SOURCES += extensionmediator.cpp \
     harddiskinformation.cpp \
     deletedirectory.cpp \
     volume.cpp \
+    volumereader.cpp \
+    volumepixeldatareader.cpp \
+    volumepixeldatareadervtkgdcm.cpp \
+    volumepixeldatareaderitkgdcm.cpp \
     volumerepository.cpp \
     identifier.cpp \
     repositorybase.cpp \
