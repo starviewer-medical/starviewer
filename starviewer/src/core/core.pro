@@ -77,10 +77,6 @@ HEADERS += extensionfactory.h \
     keyimagenotefillerstep.h \
     temporaldimensionfillerstep.h \
     createinformationmodelobject.h \
-    dicomimagereader.h \
-    dicomimagereaderitkgdcm.h \
-    dicomimagereadervtk.h \
-    dicomimagereaderdcmtk.h \
     patientbrowsermenu.h \
     patientbrowsermenubasicitem.h \
     patientbrowsermenuextendeditem.h \
@@ -275,10 +271,6 @@ SOURCES += extensionmediator.cpp \
     keyimagenotefillerstep.cpp \
     temporaldimensionfillerstep.cpp \
     createinformationmodelobject.cpp \
-    dicomimagereader.cpp \
-    dicomimagereaderitkgdcm.cpp \
-    dicomimagereadervtk.cpp \
-    dicomimagereaderdcmtk.cpp \
     patientbrowsermenu.cpp \
     patientbrowsermenubasicitem.cpp \
     patientbrowsermenuextendeditem.cpp \
