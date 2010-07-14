@@ -81,13 +81,31 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
     QStringList fileList;
     QList<Image *> imageSet = volume->getImages();
 
-    // TODO De moment sempre llegirem amb ITKGDCM
+    // TODO De moment, per defecte llegirem amb ITK-GDCM
+    // tret que es doni una condició que ho canvïi
     m_suitablePixelDataReader = ITKGDCMPixelDataReader;
 
+    bool containsDifferentSizeImages = false;
+    bool containsColorImages = false;
+    int imageSize[2];
+    if (!imageSet.empty())
+    {
+        imageSize[0] = imageSet.first()->getRows();
+        imageSize[1] = imageSet.first()->getColumns();
+    }
+    
     foreach (Image *image, imageSet)
     {
         if (!fileList.contains(image->getPath())) // Evitem afegir més vegades l'arxiu si aquest és multiframe
+        {
             fileList << image->getPath();
+        }
+
+        // Comprovem que no tingui imatges de diferents mides
+        if (imageSize[0] != image->getRows() || imageSize[1] != image->getColumns())
+        {
+            containsDifferentSizeImages = true;
+        }
 
 #ifdef VTK_GDCM_SUPPORT
         // Comprovem si es tracta d'una imatge a color
@@ -95,9 +113,20 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
         photometricInterpretation = image->getPhotometricInterpretation();
         if (photometricInterpretation == "PALETTE COLOR" || photometricInterpretation == "RGB" || photometricInterpretation == "YBR_FULL" || photometricInterpretation == "YBR_FULL_422" || photometricInterpretation == "YBR_PARTIAL_422" || photometricInterpretation == "YBR_PARTIAL_420" || photometricInterpretation == "YBR_ICT" || photometricInterpretation == "YBR_RCT")
         {
-            m_suitablePixelDataReader = VTKGDCMPixelDataReader;
+            containsColorImages = true;
             DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
         }
+#endif
+    }
+
+    if (!containsDifferentSizeImages && containsColorImages)
+    {
+#ifdef VTK_GDCM_SUPPORT
+        // Si conté imatges de color i totes són de la mateixa mida les llegirem amb VTK-GDCM
+        m_suitablePixelDataReader = VTKGDCMPixelDataReader;
+#else
+        // Sense VTK-GDCM seguiran sent les ITK-GDCM, no ens queda cap altre
+        m_suitablePixelDataReader = ITKGDCMPixelDataReader;
 #endif
     }
 
