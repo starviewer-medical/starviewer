@@ -66,8 +66,8 @@ public:
     bool setContentDate(QDate date);
     bool setContentTime(QString time);
     bool setContentTime(QTime time);
-    QDate getContentDate();
-    QTime getContentTime();
+    QDate getContentDate() const;
+    QTime getContentTime() const;
     
     /// Obtenir/Assignar la sèrie pare a la qual pertany
     Series* getParentSeries() const;

@@ -153,12 +153,12 @@ bool KeyImageNote::setContentTime(QTime time)
     return ok;
 }
 
-QDate KeyImageNote::getContentDate()
+QDate KeyImageNote::getContentDate() const
 {
     return m_contentDate;
 }
 
-QTime KeyImageNote::getContentTime()
+QTime KeyImageNote::getContentTime() const
 {
     return m_contentTime;
 }
