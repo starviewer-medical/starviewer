@@ -81,7 +81,9 @@ HEADERS += databaseconnection.h \
     pacsjob.h \
     senddicomfilestopacsjob.h \
     pacsrequeststatus.h \
-    retrievedicomfilesfrompacsjob.h
+    retrievedicomfilesfrompacsjob.h \
+    localdatabasedicomreferencedimagedal.h \
+    localdatabasekeyimagenotedal.h
 SOURCES += databaseconnection.cpp \
     pacsconnection.cpp \
     pacsdevicemanager.cpp \
@@ -138,7 +140,9 @@ SOURCES += databaseconnection.cpp \
     qexportertool.cpp \
     pacsjob.cpp \
     senddicomfilestopacsjob.cpp  \
-    retrievedicomfilesfrompacsjob.cpp
+    retrievedicomfilesfrompacsjob.cpp \
+    localdatabasedicomreferencedimagedal.cpp \
+    localdatabasekeyimagenotedal.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib

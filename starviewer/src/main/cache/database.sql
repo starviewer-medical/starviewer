@@ -107,6 +107,34 @@ CREATE TABLE Image
   PRIMARY KEY ('SOPInstanceUID', 'FrameNumber')
 );
 
+CREATE TABLE KeyImageNote
+(
+  SOPInstanceUID                   TEXT PRIMARY KEY,
+  StudyInstanceUID                 TEXT,
+  SeriesInstanceUID                TEXT,
+  InstanceNumber                   TEXT,
+  ContentDate                      TEXT,
+  ContentTime                      TEXT,
+  DocumentTitle                    TEXT,
+  RejectedForQualityReasons        TEXT,
+  Description                      TEXT,
+  ObserverContextType              TEXT,
+  ObserverContextName              TEXT,
+  RetrievedDate                    TEXT,
+  RetrievedTime                    TEXT,
+  State                            INTEGER
+);
+
+CREATE TABLE DICOMReferencedImage
+(
+  DICOMReferencedImageSOPInstanceUID    TEXT,
+  FrameNumber                           INTEGER,
+  ReferenceParentSOPInstanceUID         TEXT,
+  ReferenceParentStudyInstanceUID       TEXT,
+  ReferenceParentSeriesInstanceUID      TEXT,
+  PRIMARY KEY ('DICOMReferencedImageSOPInstanceUID', 'FrameNumber', 'ReferenceParentSOPInstanceUID')
+);
+
 --TODO:Comprovar si s'utilitzarà l'index IndexImage_StudyInstanceUIDSeriesInstanceUID després dels canvis fets a la BD
 CREATE INDEX  IndexImage_StudyInstanceUIDSeriesInstanceUID ON Image (StudyInstanceUID,SeriesInstanceUID); 
 CREATE INDEX  IndexImage_SOPInstanceUIDOrderNumberInVolume ON Image (SOPInstanceUID, OrderNumberInVolume); 

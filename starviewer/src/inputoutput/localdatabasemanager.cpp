@@ -16,6 +16,8 @@
 #include "localdatabasestudydal.h"
 #include "localdatabasepatientdal.h"
 #include "localdatabaseutildal.h"
+#include "localdatabasekeyimagenotedal.h"
+#include "localdatabasedicomreferencedimagedal.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "sqlite3.h"
@@ -25,6 +27,8 @@
 #include "starviewerapplication.h"
 #include "harddiskinformation.h"
 #include "thumbnailcreator.h"
+#include "keyimagenote.h"
+#include "dicomreferencedimage.h"
 
 namespace udg
 {
@@ -330,19 +334,31 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     maskImagesToRetrieve.setStudyInstanceUID(maskToRetrieve.getStudyInstanceUID());//estudi del que s'han de cercar les imatges
     imageDAL.setDatabaseConnection(&dbConnect);
 
-    foreach(Series *series, seriesList)
+    foreach (Series *series, seriesList)
     {
         maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());//específiquem de quina sèrie de l'estudi hem de buscar les imatges
 
-        QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
-        if (imageDAL.getLastError() != SQLITE_OK) break;
+         if (series->getModality() == "KO")
+         {
+            int status = retrieveKeyImageNotes(dbConnect, series, maskImagesToRetrieve);
 
-        foreach(Image *image, images)
-        {
-            series->addImage(image);
-        }
+            if (status != SQLITE_OK)
+            {
+                break;
+            }
+         }
+         else
+         {
+            QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
+            if (imageDAL.getLastError() != SQLITE_OK) break;
 
-        retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID())->addSeries(series);
+            foreach (Image *image, images)
+            {
+                series->addImage(image);
+            }
+         }
+
+         retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID())->addSeries(series);
     }
 
     if (imageDAL.getLastError() != SQLITE_OK)
@@ -420,6 +436,24 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
         return;
     }
 
+    status = deleteKeyImageNoteFromDatabase(&dbConnect, studyMaskToDelete);
+    if (status != SQLITE_OK) 
+    {
+        dbConnect.rollbackTransaction();
+        setLastError(status);
+        dbConnect.close();
+        return;
+    }
+
+    status = deleteDICOMReferencedImageFromDatabase(&dbConnect, studyMaskToDelete);
+    if (status != SQLITE_OK) 
+    {
+        dbConnect.rollbackTransaction();
+        setLastError(status);
+        dbConnect.close();
+        return;
+    }
+
     dbConnect.endTransaction();
     dbConnect.close();
     deleteStudyFromHardDisk(studyInstanceToDelete);
@@ -460,6 +494,24 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
         }
 
         status = deleteImageFromDatabase(&dbConnect, seriesMaskToDelete);
+        if (status != SQLITE_OK) 
+        {
+            dbConnect.rollbackTransaction();
+            setLastError(status);
+            dbConnect.close();
+            return;
+        }
+
+        status = deleteKeyImageNoteFromDatabase(&dbConnect, seriesMaskToDelete);
+        if (status != SQLITE_OK) 
+        {
+            dbConnect.rollbackTransaction();
+            setLastError(status);
+            dbConnect.close();
+            return;
+        }
+
+        status = deleteDICOMReferencedImageFromDatabase(&dbConnect, seriesMaskToDelete);
         if (status != SQLITE_OK) 
         {
             dbConnect.rollbackTransaction();
@@ -516,6 +568,26 @@ void LocalDatabaseManager::clear()
 
     //esborrem totes les imatges 
     status = deleteImageFromDatabase(&dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        dbConnect.rollbackTransaction();
+        setLastError(status);
+        dbConnect.close();
+        return;
+    }
+
+     // esborrem tots els key image notes
+    status = deleteKeyImageNoteFromDatabase(&dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        dbConnect.rollbackTransaction();
+        setLastError(status);
+        dbConnect.close();
+        return;
+    }
+
+    // esborrem tots els DICOM Referenced Images
+    status = deleteDICOMReferencedImageFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
         dbConnect.rollbackTransaction();
@@ -760,8 +832,16 @@ int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series
 
     foreach(Series* seriesToSave, listSeriesToSave)
     {
-        ///primer guardem les imatges
-        status = saveImages(dbConnect, seriesToSave->getImages(), currentDate, currentTime);
+
+        if (seriesToSave->getModality() == "KO")
+        {
+            status = saveKeyImageNotes(dbConnect, seriesToSave->getKeyImageNotes(), currentDate, currentTime);
+        }
+        else
+        {
+            ///primer guardem les imatges
+            status = saveImages(dbConnect, seriesToSave->getImages(), currentDate, currentTime);
+        }
 
         if (status != SQLITE_OK)
             break;
@@ -792,6 +872,43 @@ int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*
 
         if (status != SQLITE_OK) 
             return status;
+    }
+
+    return status;
+}
+
+int LocalDatabaseManager::saveKeyImageNotes(DatabaseConnection *dbConnect, QList<KeyImageNote*> listKeyImageNoteToSave, const QDate &currentDate, const QTime &currentTime)
+{
+    int status = SQLITE_OK;
+
+    foreach (KeyImageNote *keyImageNoteToSave, listKeyImageNoteToSave)
+    {
+        keyImageNoteToSave->setRetrievedDate(currentDate);
+        keyImageNoteToSave->setRetrievedTime(currentTime);
+
+        status = saveKeyImageNote(dbConnect, keyImageNoteToSave);
+
+        if (status != SQLITE_OK)
+        {
+            return status;
+        }
+    }
+
+    return status;
+}
+
+int LocalDatabaseManager::saveDICOMReferencedImages(DatabaseConnection *dbConnect, QList<DICOMReferencedImage*> listDICOMReferencedImageToSave, Series *seriesOfParentObject)
+{
+    int status = SQLITE_OK;
+
+    foreach (DICOMReferencedImage *DICOMReferencedImageToSave, listDICOMReferencedImageToSave)
+    {
+        status = saveDICOMReferencedImage(dbConnect, DICOMReferencedImageToSave, seriesOfParentObject);
+
+        if (status != SQLITE_OK)
+        {
+            return status;
+        }
     }
 
     return status;
@@ -851,6 +968,40 @@ int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageT
     if (imageDAL.getLastError() == SQLITE_CONSTRAINT) imageDAL.update(imageToSave);
 
     return imageDAL.getLastError();
+}
+
+int LocalDatabaseManager::saveKeyImageNote(DatabaseConnection *dbConnect, KeyImageNote *keyImageNoteToSave)
+{
+    LocalDatabaseKeyImageNoteDAL keyImageNoteDAL;
+
+    keyImageNoteDAL.setDatabaseConnection(dbConnect);
+    keyImageNoteDAL.insert(keyImageNoteToSave);
+
+    int status;
+    if (keyImageNoteDAL.getLastError() == SQLITE_OK)
+    {
+        status = saveDICOMReferencedImages(dbConnect, keyImageNoteToSave->getDICOMReferencedImages(), keyImageNoteToSave->getParentSeries());
+    }
+
+    /// Si el Key Image Note ja existia actualitzem la seva informació
+    if (keyImageNoteDAL.getLastError() == SQLITE_CONSTRAINT) 
+    {
+        keyImageNoteDAL.update(keyImageNoteToSave);
+        status = keyImageNoteDAL.getLastError();
+    }
+        
+    return status;
+}
+
+int LocalDatabaseManager::saveDICOMReferencedImage(DatabaseConnection *dbConnect, DICOMReferencedImage *DICOMReferencedImageToSave, Series *seriesOfParentObject)
+{
+    LocalDatabaseDICOMReferencedImageDAL DICOMReferencedImageDAL;
+
+    DICOMReferencedImageDAL.setDatabaseConnection(dbConnect);
+
+    DICOMReferencedImageDAL.insert(DICOMReferencedImageToSave, seriesOfParentObject);
+
+    return DICOMReferencedImageDAL.getLastError();
 }
 
 void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
@@ -962,6 +1113,25 @@ int LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection *dbConnect,
     return localDatabaseImageDAL.getLastError();
 }
 
+int LocalDatabaseManager::deleteKeyImageNoteFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+{
+    LocalDatabaseKeyImageNoteDAL localDatabaseKeyImageNoteDAL;
+
+    localDatabaseKeyImageNoteDAL.setDatabaseConnection(dbConnect);
+    localDatabaseKeyImageNoteDAL.del(maskToDelete);
+
+    return localDatabaseKeyImageNoteDAL.getLastError();
+}
+
+int LocalDatabaseManager::deleteDICOMReferencedImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+{
+    LocalDatabaseDICOMReferencedImageDAL localDatabaseDICOMReferencedImageDAL;
+
+    localDatabaseDICOMReferencedImageDAL.setDatabaseConnection(dbConnect);
+    localDatabaseDICOMReferencedImageDAL.del(maskToDelete);
+
+    return localDatabaseDICOMReferencedImageDAL.getLastError();
+}
 void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
 {
     DicomMask oldStudiesMask;
@@ -1103,4 +1273,47 @@ QString LocalDatabaseManager::getCachePath()
     return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::CachePath ).toString() );
 }
 
+int LocalDatabaseManager::retrieveDICOMReferencedImageInKeyImageNote(DatabaseConnection &dbConnect, KeyImageNote *keyImageNote) 
+{
+    LocalDatabaseDICOMReferencedImageDAL localDataBaseDICOMReferencedImageDAL;
+    localDataBaseDICOMReferencedImageDAL.setDatabaseConnection(&dbConnect);
+
+    DicomMask maskDICOMReferencedImagesToRetrieve;
+    maskDICOMReferencedImagesToRetrieve.setSOPInstanceUID(keyImageNote->getInstanceUID());
+
+    QList<DICOMReferencedImage*> DICOMReferencedImages = localDataBaseDICOMReferencedImageDAL.query(maskDICOMReferencedImagesToRetrieve);
+
+    if (localDataBaseDICOMReferencedImageDAL.getLastError() == SQLITE_OK)
+    {
+        keyImageNote->setDICOMReferencedImages(DICOMReferencedImages);
+    }
+
+    return localDataBaseDICOMReferencedImageDAL.getLastError();
+}
+int LocalDatabaseManager::retrieveKeyImageNotes(DatabaseConnection &dbConnect, Series *series, DicomMask &maskToRetrieve)
+{
+    LocalDatabaseKeyImageNoteDAL keyImageNoteDAL;
+    keyImageNoteDAL.setDatabaseConnection(&dbConnect);
+
+    QList<KeyImageNote*> keyImageNotes = keyImageNoteDAL.query(maskToRetrieve);
+
+    if (keyImageNoteDAL.getLastError() != SQLITE_OK) 
+    {
+        return keyImageNoteDAL.getLastError();
+    }
+
+    int status = SQLITE_OK;
+    foreach (KeyImageNote *keyImageNote, keyImageNotes)
+    {
+        series->addKeyImageNote(keyImageNote);
+        status = retrieveDICOMReferencedImageInKeyImageNote(dbConnect, keyImageNote);
+
+        if (status != SQLITE_OK)
+        {
+            break;
+        }
+    }
+
+    return status;
+}
 }

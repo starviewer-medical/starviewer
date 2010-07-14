@@ -21,6 +21,8 @@ namespace udg {
 
 class DicomMask;
 class DatabaseConnection;
+class KeyImageNote;
+class DICOMReferencedImage;
 
 /** Manager de la base de dades local, permet interactuar amb tots els objectes de la base de dades
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
@@ -141,6 +143,10 @@ private:
     int saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime);
     ///Guarda a la base de dades la llista d'imatges passada per paràmetre, si alguna de les imatges ja existeix actualitza la info
     int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime);
+    /// Guarda a la base de dades la llista de Key Image Notes passada per paràmetre, si alguna dels Key Image Notes ja existeix actualitza la informacio
+    int saveKeyImageNotes(DatabaseConnection *dbConnect, QList<KeyImageNote*> listKeyImageNoteToSave, const QDate &currentDate, const QTime &currentTime);
+    /// Guarda a la base de dades la llista de DICOM Referenced Images passada per paràmetre, es passa la Serie a la que pertany l'objecte pare
+    int saveDICOMReferencedImages(DatabaseConnection *dbConnect, QList<DICOMReferencedImage*> listDICOMReferencedImagesToSave, Series *seriesOfParentObject);
 
     ///Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
     int savePatient(DatabaseConnection *dbConnect, Patient *patientToSave);
@@ -150,6 +156,10 @@ private:
     int saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave);
     ///Guarda la imatge a la base de dades, si ja existeix li actualitza la informació
     int saveImage(DatabaseConnection *dbConnect, Image *imageToSave);
+    /// Guarda el Key Image Note a la base de dades, si ja existeix li actualitza la informació
+    int saveKeyImageNote(DatabaseConnection *dbConnect, KeyImageNote *keyImageNoteToSave);
+    /// Guarda el DICOM Referenced Image a la base de dades, es passa la Serie a la que pertany l'objecte pare
+    int saveDICOMReferencedImage(DatabaseConnection *dbConnect, DICOMReferencedImage *DICOMReferencedImageToSave, Series *seriesOfParentObject);
 
     ///Esborra el pacient que compleixi amb la màscara a esborrar. A la màscara hem d'indicar el UID de l'estudi a esborrar i comprova si el pacient el qual pertany l'estudi té més d'un estudi, si és així no l'esborrar, si només en té un l'esborra
     int deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
@@ -161,6 +171,10 @@ private:
     int deleteSeriesFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     ///Esborra la imatge que compleixi amb la màscara a esborrar
     int deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    /// Esborra el key image note que compleixi amb la màscara a esborrar
+    int deleteKeyImageNoteFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    /// Esborra el DICOM Referenced Image que compleixi amb la màscara a esborrar
+    int deleteDICOMReferencedImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
 
     ///Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
     void deleteRetrievedObjects(Patient *failedPatient);
@@ -190,6 +204,11 @@ private:
 
     ///Passant un status de sqlite ens el converteix al nostra status
     void setLastError(int sqliteLastError);
+
+    /// Obte els DICOM Referenced Images referenciats a un Key Image Note i els afegeix a l'estructura
+    int retrieveDICOMReferencedImageInKeyImageNote(DatabaseConnection &dbConnect, KeyImageNote *keyImageNote);
+    /// Obte els Key Image Notes d'una Serie i els afegeix a l'estructura
+    int retrieveKeyImageNotes(DatabaseConnection &dbConnect, Series *series, DicomMask &maskToRetrieve);
 };
 
 }
