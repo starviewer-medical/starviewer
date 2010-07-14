@@ -116,7 +116,7 @@
    <item row="3" column="5">
     <widget class="QPushButton" name="m_cancelSelectedRequestsButton">
      <property name="text">
-      <string>Cancel Selecteds</string>
+      <string>Cancel Selected</string>
      </property>
     </widget>
    </item>
