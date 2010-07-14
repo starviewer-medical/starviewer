@@ -17,6 +17,7 @@ const QString Experimental3DSettings::ViewpointMutualInformationDir( KeyPrefix +
 const QString Experimental3DSettings::MutualInformationDir( KeyPrefix + "miDir" );
 const QString Experimental3DSettings::ViewpointUnstabilitiesDir( KeyPrefix + "viewpointUnstabilitiesDir" );
 const QString Experimental3DSettings::VoxelMutualInformationDir( KeyPrefix + "vomiDir" );
+const QString Experimental3DSettings::VoxelMutualInformation2Dir( KeyPrefix + "vomi2Dir" );
 const QString Experimental3DSettings::BestViewsDir( KeyPrefix + "bestViewsDir" );
 const QString Experimental3DSettings::GuidedTourDir( KeyPrefix + "guidedTourDir" );
 const QString Experimental3DSettings::ExploratoryTourDir( KeyPrefix + "exploratoryTourDir" );

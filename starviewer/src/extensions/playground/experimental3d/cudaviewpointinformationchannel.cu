@@ -781,3 +781,83 @@ void cvicCleanupVomi()
         CUDA_SAFE_CALL(cudaFree(gdColorVomi));
     }
 }
+
+
+
+//////////////////////////////////////////////////////////////////////////////////// VoMI2 ////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//static float *gdHVz = 0;  // declarat a dalt
+texture<float, 1> gHVzTexture;
+static float *gdVomi2 = 0;
+
+
+__global__ void vomi2Kernel(float HV, cudaExtent volumeDataDims, float *vomi2)
+{
+    uint blocksX = (volumeDataDims.width + blockDim.x - 1) / blockDim.x;
+    uint blockX = blockIdx.x % blocksX;
+    uint blockY = blockIdx.x / blocksX;
+    uint blockZ = blockIdx.y;
+
+    uint x = blockX * blockDim.x + threadIdx.x;
+    if (x >= volumeDataDims.width) return;
+    uint y = blockY * blockDim.y + threadIdx.y;
+    if (y >= volumeDataDims.height) return;
+    uint z = blockZ * blockDim.z + threadIdx.z;
+    if (z >= volumeDataDims.depth) return;
+
+    uint i = x + y * volumeDataDims.width + z * volumeDataDims.width * volumeDataDims.height;
+
+    float HVz = tex1Dfetch(gHVzTexture, i);
+
+    vomi2[i] = HV - HVz;
+}
+
+
+QVector<float> cvicComputeVomi2(float HV, const QVector<float> &HVz)
+{
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start, 0);
+
+    CUDA_SAFE_CALL(cudaMalloc(reinterpret_cast<void**>(&gdHVz), gVolumeDataSize * sizeof(float)));
+    CUDA_SAFE_CALL(cudaMemcpy(reinterpret_cast<void*>(gdHVz), reinterpret_cast<void*>(const_cast<float*>(HVz.data())), gVolumeDataSize * sizeof(float), cudaMemcpyHostToDevice));
+    CUDA_SAFE_CALL(cudaBindTexture(0, gHVzTexture, reinterpret_cast<void*>(gdHVz), gHVzTexture.channelDesc, gVolumeDataSize * sizeof(float)));
+
+    CUDA_SAFE_CALL(cudaMalloc(reinterpret_cast<void**>(&gdVomi2), gVolumeDataSize * sizeof(float)));
+    CUDA_SAFE_CALL(cudaMemset(reinterpret_cast<void*>(gdVomi2), 0, gVolumeDataSize * sizeof(float)));
+
+    // Kernel
+
+    dim3 blockSize(8, 8, 8);
+    uint blocksX = (gVolumeDataDims.width + blockSize.x - 1) / blockSize.x;
+    uint blocksY = (gVolumeDataDims.height + blockSize.y - 1) / blockSize.y;
+    uint blocksZ = (gVolumeDataDims.depth + blockSize.z - 1) / blockSize.z;
+    dim3 gridSize(blocksX * blocksY, blocksZ);
+
+    vomi2Kernel<<<gridSize, blockSize>>>(HV, gVolumeDataDims, gdVomi2);
+    CUT_CHECK_ERROR("vomi2 kernel failed");
+
+    QVector<float> vomi2(gVolumeDataSize);
+    CUDA_SAFE_CALL(cudaMemcpy(reinterpret_cast<void*>(vomi2.data()), reinterpret_cast<void*>(gdVomi2), gVolumeDataSize * sizeof(float), cudaMemcpyDeviceToHost));
+
+    // Clean up
+
+    CUDA_SAFE_CALL(cudaUnbindTexture(gHVzTexture));
+    CUDA_SAFE_CALL(cudaFree(gdHVz));
+    CUDA_SAFE_CALL(cudaFree(gdVomi2));
+
+    cudaEventRecord(stop, 0);
+    cudaEventSynchronize(stop);
+    float elapsedTime = 0.0f;
+    cudaEventElapsedTime(&elapsedTime, start, stop);
+
+    std::cout << "VoMI2: " << elapsedTime << " ms" << std::endl;
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+
+    return vomi2;
+}
