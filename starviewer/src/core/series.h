@@ -359,7 +359,7 @@ private:
     QString m_performedProcedureStepStartTime;
 
     /// Llistat de Key Image Notes
-    QList<KeyImageNote*> m_kinSet;
+    QList<KeyImageNote*> m_keyImageNoteSeries;
 };
 
 }

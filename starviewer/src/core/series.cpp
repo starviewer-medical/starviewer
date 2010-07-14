@@ -568,12 +568,12 @@ int Series::findImageIndex( const QString &identifier )
 void Series::addKeyImageNote(KeyImageNote *keyImageNote)
 {
     keyImageNote->setParentSeries(this);
-    m_kinSet << keyImageNote;
+    m_keyImageNoteSeries << keyImageNote;
 }
 
 QList<KeyImageNote*> Series::getKeyImageNotes() const
 {
-    return m_kinSet;
+    return m_keyImageNoteSeries;
 }
 
 }
