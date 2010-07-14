@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QString>
+
 namespace udg {
 
 class DICOMReferencedImage;
@@ -94,7 +95,7 @@ public:
     
     /// Obtenir/Assignar els UID referenciats al Key Image Note
     QList<DICOMReferencedImage*> getDICOMReferencedImages() const;
-    void setReferencedSOPInstancesUID(QList <DICOMReferencedImage*> &referencedImageList);
+    void setDICOMReferencedImages(QList <DICOMReferencedImage*> &referencedImageList);
 
     /// Obtenir les imatges referenciades al Key Image Note
     QList<Image*> getReferencedImages();

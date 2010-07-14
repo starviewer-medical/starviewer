@@ -43,7 +43,7 @@ bool KeyImageNoteFillerStep::processKeyImageNote(KeyImageNote * keyImageNote)
     DICOMTagReader *dicomReader = m_input->getDICOMFile();
     bool ok = false;
 
-    if(dicomReader)
+    if (dicomReader)
     {
         ok = true;
         readSRTemplateKIN(keyImageNote, dicomReader);
@@ -82,8 +82,8 @@ void KeyImageNoteFillerStep::readSRTemplateKIN(KeyImageNote *keyImageNote, DICOM
     QString keyObjectDescription = readKeyObjectDescription(reader);
     keyImageNote->setKeyObjectDescription(keyObjectDescription);
 
-    QList<DICOMReferencedImage*> referencedSOPInstancesUID = readReferencedImagesInKIN(reader);
-    keyImageNote->setReferencedSOPInstancesUID(referencedSOPInstancesUID);
+    QList<DICOMReferencedImage*> referencedSOPInstances = readReferencedImagesInKIN(reader);
+    keyImageNote->setDICOMReferencedImages(referencedSOPInstances);
 
     KeyImageNote::ObserverType observerContextType = readObserverContextType(reader);
     keyImageNote->setObserverContextType(observerContextType);
@@ -319,7 +319,7 @@ KeyImageNote::ObserverType KeyImageNoteFillerStep::readObserverContextType(DICOM
     QString typeCodeValue = reader->getStructuredReportCodeValueOfContentItem(codeValue, codeMeaning, schemeDesignator);
     KeyImageNote::ObserverType type = KeyImageNote::NoneObserverType;
 
-    if(typeCodeValue == "121006")
+    if (typeCodeValue == "121006")
     {
         type = KeyImageNote::Person;
     }
