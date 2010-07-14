@@ -76,6 +76,10 @@ public slots:
     void loadVomi2(QString fileName = QString());
     /// Desa la VoMI2 I₂(z;V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveVomi2(QString fileName = QString());
+    /// Carrega la VoMI3 I₃(z;V) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVomi3(QString fileName = QString());
+    /// Desa la VoMI3 I₃(z;V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVomi3(QString fileName = QString());
     /// Carrega la viewpoint VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadViewpointVomi( QString fileName = QString() );
     /// Desa la viewpoint VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -308,6 +312,8 @@ private:
     float m_maximumVomi;
     QVector<float> m_vomi2; // I₂(z;V)
     float m_maximumVomi2;
+    QVector<float> m_vomi3; // I₃(z;V)
+    float m_maximumVomi3;
     QVector<float> m_viewpointVomi;
     QVector<Vector3Float> m_colorVomiPalette;
     QVector<Vector3Float> m_colorVomi;
