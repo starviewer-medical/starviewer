@@ -39,6 +39,9 @@ private:
     /// Mètodes per processar la informació específica d'un Key Image Note
     bool processKeyImageNote(KeyImageNote *keyImageNote);
 
+    /// Lectura de les dades generals del Key Image Note i de l'Structured Report
+    void readKeyImageNote(KeyImageNote *keyImageNote, DICOMTagReader *reader);
+
     /// Mètodes per a completar la informació necessaria per a crear un Key Image Note seguint l'estructura de Structured Report
 
     /// Lectura del template TID 2010 Key Object Selection ( PS 3.16 )

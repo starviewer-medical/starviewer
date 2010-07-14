@@ -31,7 +31,6 @@ bool KeyImageNoteFillerStep::fillIndividually()
     {
         KeyImageNote *keyImageNote = new KeyImageNote();
         ok = processKeyImageNote(keyImageNote);
-        m_input->getCurrentSeries()->addKeyImageNote(keyImageNote);
         m_input->addLabelToSeries("KeyImageNoteFillerStep", m_input->getCurrentSeries());
     }
     
@@ -46,7 +45,7 @@ bool KeyImageNoteFillerStep::processKeyImageNote(KeyImageNote * keyImageNote)
     if (dicomReader)
     {
         ok = true;
-        readSRTemplateKIN(keyImageNote, dicomReader);
+        readKeyImageNote(keyImageNote, dicomReader);
     }
     else
     {
@@ -56,19 +55,20 @@ bool KeyImageNoteFillerStep::processKeyImageNote(KeyImageNote * keyImageNote)
     return ok;
 }
 
+void KeyImageNoteFillerStep::readKeyImageNote(KeyImageNote *keyImageNote, DICOMTagReader *reader)
+{
+    m_input->getCurrentSeries()->addKeyImageNote(keyImageNote);
+
+    keyImageNote->setInstanceUID(reader->getValueAttributeAsQString(DICOMSOPInstanceUID));
+    keyImageNote->setContentDate(reader->getValueAttributeAsQString(DICOMContentDate));
+    keyImageNote->setContentTime(reader->getValueAttributeAsQString(DICOMContentTime));
+    keyImageNote->setInstanceNumber(reader->getValueAttributeAsQString(DICOMInstanceNumber));
+
+    readSRTemplateKIN(keyImageNote, reader);
+}
+
 void KeyImageNoteFillerStep::readSRTemplateKIN(KeyImageNote *keyImageNote, DICOMTagReader *reader)
 {
-    QString sopInstanceUID = reader->getValueAttributeAsQString(DICOMSOPInstanceUID);
-    keyImageNote->setInstanceUID(sopInstanceUID);
-    
-    QString contentDate = reader->getValueAttributeAsQString(DICOMContentDate);
-    keyImageNote->setContentDate(contentDate);
-    
-    QString contentTime = reader->getValueAttributeAsQString(DICOMContentTime);
-    keyImageNote->setContentTime(contentTime);
-
-    QString instanceNumber = reader->getValueAttributeAsQString(DICOMInstanceNumber);
-    keyImageNote->setInstanceNumber(instanceNumber);
     KeyImageNote::DocumentTitle documentTitle = readKeyObjectSelectionDocumentTitle(reader);
     keyImageNote->setDocumentTitle(documentTitle);
 
@@ -77,19 +77,14 @@ void KeyImageNoteFillerStep::readSRTemplateKIN(KeyImageNote *keyImageNote, DICOM
     {
         documentTitleModifier = readRejectedForQualityReasons(reader);
     }
+
     keyImageNote->setRejectedForQualityReasons(documentTitleModifier);
-
-    QString keyObjectDescription = readKeyObjectDescription(reader);
-    keyImageNote->setKeyObjectDescription(keyObjectDescription);
-
-    QList<DICOMReferencedImage*> referencedSOPInstances = readReferencedImagesInKIN(reader);
-    keyImageNote->setDICOMReferencedImages(referencedSOPInstances);
+    keyImageNote->setKeyObjectDescription(readKeyObjectDescription(reader));
+    keyImageNote->setDICOMReferencedImages(readReferencedImagesInKIN(reader));
 
     KeyImageNote::ObserverType observerContextType = readObserverContextType(reader);
     keyImageNote->setObserverContextType(observerContextType);
-
-    QString observerContextName = readObserverContextName(reader, observerContextType);
-    keyImageNote->setObserverContextName(observerContextName);
+    keyImageNote->setObserverContextName(readObserverContextName(reader, observerContextType));
 }
 
 KeyImageNote::DocumentTitle KeyImageNoteFillerStep::readKeyObjectSelectionDocumentTitle(DICOMTagReader *reader)
