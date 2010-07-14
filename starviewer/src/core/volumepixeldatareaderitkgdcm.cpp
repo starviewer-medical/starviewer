@@ -118,44 +118,7 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
         setData(reader->GetOutput());
     }
     emit progress(100);
-    /*
-    if (errorCode == NoError)
-    {
-        // HACK En els casos que les imatges siguin enhanced, les gdcm no omplen correctament
-        // ni l'origen ni l'sapcing x,y i és per això que li assignem l'origen i l'spacing 
-        // que hem llegit correctament a Image
-        // TODO Quan solucionem correctament el ticket #1166 (actualització a gdcm 2.0.x) aquesta assignació desapareixerà
-        if (!m_imageSet.isEmpty())
-        {
-            reader->GetOutput()->SetOrigin(m_imageSet.first()->getImagePositionPatient());
-            // Cal tenir en compte si la imatge original conté informació d'spacing vàlida per fer l'assignació
-            const double *imageSpacing = m_imageSet.first()->getPixelSpacing();
-            if (imageSpacing[0] > 0.0)
-            {
-                double spacing[3];
-                spacing[0] = imageSpacing[0];
-                spacing[1] = imageSpacing[1];
-                // HACK ticket #1204 - Degut a bugs en les gdcm integrades amb itk, l'spacing between slices no es calcula
-                // correctament i se li assigna l'slice thickness al z-spacing. Una solució temporal i ràpida és llegir el tag
-                // Spacing Between Slices i actualitzar el z-spacing, si aquest tag existeix
-                // El cost de llegir aquest tag per un fitxer de 320 imatges és d'uns 470 milisegons aproximadament 
-                // TODO un cop actualitzats a gdcm 2.0.x, aquest HACK serà innecessari
-                DICOMTagReader *dicomReader = new DICOMTagReader(m_imageSet.first()->getPath());
-                double zSpacing = dicomReader->getValueAttributeAsQString(DICOMSpacingBetweenSlices).toDouble();
-                if ( zSpacing == 0.0 )
-                    zSpacing = reader->GetOutput()->GetSpacing()[2];
-                
-                spacing[2] = zSpacing;                
-                reader->GetOutput()->SetSpacing(spacing);
-            }
-        }
-        
-        setData(reader->GetOutput());
-        // Emetem progress 100, perquè el corresponent diàleg de progrés es tanqui
-        emit progress(100);
-    }
-    */
-    // TODO Falta tractament d'errors!?
+
     return errorCode;
 }
 
@@ -226,15 +189,6 @@ int VolumePixelDataReaderITKGDCM::identifyErrorMessage(const QString &errorMessa
     }
     else if (errorMessage.contains("A spacing of 0 is not allowed"))
     {
-        /*
-        DEBUG_LOG("spacing of 0 not allowed!!!!");
-        foreach (Image *image, m_imageSet)
-        {
-            DICOMTagReader *dicomReader = new DICOMTagReader(image->getPath());
-            DEBUG_LOG("Spacing between slices is: " + dicomReader->getValueAttributeAsQString(DICOMSpacingBetweenSlices));
-            DEBUG_LOG(QString("Slice thickness: %1").arg(image->getSliceThickness()));
-        }
-        */
         return ZeroSpacingNotAllowed;
     }
     else
