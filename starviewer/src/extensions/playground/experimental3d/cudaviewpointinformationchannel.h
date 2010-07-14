@@ -42,6 +42,8 @@ QVector<float> cvicGetVomi();
 QVector<Vector3Float> cvicGetColorVomi();
 void cvicCleanupVomi();
 
+QVector<float> cvicComputeVomi2(float HV, const QVector<float> &HVz);
+
 
 #ifdef __cplusplus
 }

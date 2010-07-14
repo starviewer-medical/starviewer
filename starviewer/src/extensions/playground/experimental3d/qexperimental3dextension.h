@@ -68,10 +68,14 @@ public slots:
     void loadViewpointUnstabilities( QString fileName = QString() );
     /// Desa les inestabilitats de les vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveViewpointUnstabilities( QString fileName = QString() );
-    /// Carrega la VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadVomi( QString fileName = QString() );
-    /// Desa la VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveVomi( QString fileName = QString() );
+    /// Carrega la VoMI I₁(z;V) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVomi(QString fileName = QString());
+    /// Desa la VoMI I₁(z;V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVomi(QString fileName = QString());
+    /// Carrega la VoMI2 I₂(z;V) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVomi2(QString fileName = QString());
+    /// Desa la VoMI2 I₂(z;V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVomi2(QString fileName = QString());
     /// Carrega la viewpoint VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadViewpointVomi( QString fileName = QString() );
     /// Desa la viewpoint VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -300,8 +304,10 @@ private:
     QVector<float> m_vmi;
     float m_mi;
     QVector<float> m_viewpointUnstabilities;
-    QVector<float> m_vomi;
+    QVector<float> m_vomi;  // I₁(z;V)
     float m_maximumVomi;
+    QVector<float> m_vomi2; // I₂(z;V)
+    float m_maximumVomi2;
     QVector<float> m_viewpointVomi;
     QVector<Vector3Float> m_colorVomiPalette;
     QVector<Vector3Float> m_colorVomi;
