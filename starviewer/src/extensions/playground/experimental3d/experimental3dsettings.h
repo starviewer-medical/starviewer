@@ -27,6 +27,7 @@ public:
     static const QString ViewpointUnstabilitiesDir;
     static const QString VoxelMutualInformationDir;
     static const QString VoxelMutualInformation2Dir;
+    static const QString VoxelMutualInformation3Dir;
     static const QString BestViewsDir;
     static const QString GuidedTourDir;
     static const QString ExploratoryTourDir;
