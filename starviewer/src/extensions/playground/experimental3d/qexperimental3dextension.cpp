@@ -261,33 +261,93 @@ void QExperimental3DExtension::saveHZV(QString fileName)
 }
 
 
-void QExperimental3DExtension::loadVmi( QString fileName )
+void QExperimental3DExtension::loadVmi(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (fileName.isEmpty())
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointMutualInformationDir, tr("Load VMI"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        fileName = getFileNameToLoad(Experimental3DSettings::ViewpointMutualInformationDir, tr("Load VMI I₁(v;Z)"), tr("Data files (*.dat);;All files (*)"));
+        if (fileName.isNull()) return;
     }
 
-    if ( loadData( fileName, m_vmi ) ) m_saveVmiPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VMI"), QString( tr("Can't load VMI from file ") ) + fileName );
+    if (loadData(fileName, m_vmi)) m_saveVmiPushButton->setEnabled(true);
+    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VMI I₁(v;Z)"), QString(tr("Can't load VMI I₁(v;Z) from file ")) + fileName);
 }
 
 
-void QExperimental3DExtension::saveVmi( QString fileName )
+void QExperimental3DExtension::saveVmi(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (fileName.isEmpty())
     {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewpointMutualInformationDir, tr("Save VMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
+        fileName = getFileNameToSave(Experimental3DSettings::ViewpointMutualInformationDir, tr("Save VMI I₁(v;Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
+        if (fileName.isNull()) return;
     }
 
     bool error;
 
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_vmi, fileName, QString( "VMI(v%1) = %2" ), 1 );
-    else error = !saveData( m_vmi, fileName );
+    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_vmi, fileName, QString("VMI(v%1) = %2"), 1);
+    else error = !saveData(m_vmi, fileName);
 
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save VMI"), QString( tr("Can't save VMI to file ") ) + fileName );
+    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save VMI I₁(v;Z)"), QString(tr("Can't save VMI I₁(v;Z) to file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::loadVmi2(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToLoad(Experimental3DSettings::ViewpointMutualInformation2Dir, tr("Load VMI2 I₂(v;Z)"), tr("Data files (*.dat);;All files (*)"));
+        if (fileName.isNull()) return;
+    }
+
+    if (loadData(fileName, m_vmi2)) m_saveVmi2PushButton->setEnabled(true);
+    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VMI2 I₂(v;Z)"), QString(tr("Can't load VMI2 I₂(v;Z) from file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::saveVmi2(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToSave(Experimental3DSettings::ViewpointMutualInformation2Dir, tr("Save VMI2 I₂(v;Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
+        if (fileName.isNull()) return;
+    }
+
+    bool error;
+
+    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_vmi2, fileName, QString("VMI2(v%1) = %2"), 1);
+    else error = !saveData(m_vmi2, fileName);
+
+    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save VMI2 I₂(v;Z)"), QString(tr("Can't save VMI2 I₂(v;Z) to file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::loadVmi3(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToLoad(Experimental3DSettings::ViewpointMutualInformation3Dir, tr("Load VMI3 I₃(v;Z)"), tr("Data files (*.dat);;All files (*)"));
+        if (fileName.isNull()) return;
+    }
+
+    if (loadData(fileName, m_vmi3)) m_saveVmi3PushButton->setEnabled(true);
+    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VMI3 I₃(v;Z)"), QString(tr("Can't load VMI3 I₃(v;Z) from file ")) + fileName);
+}
+
+
+void QExperimental3DExtension::saveVmi3(QString fileName)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToSave(Experimental3DSettings::ViewpointMutualInformation3Dir, tr("Save VMI3 I₃(v;Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
+        if (fileName.isNull()) return;
+    }
+
+    bool error;
+
+    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_vmi3, fileName, QString("VMI3(v%1) = %2"), 1);
+    else error = !saveData(m_vmi3, fileName);
+
+    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save VMI3 I₃(v;Z)"), QString(tr("Can't save VMI3 I₃(v;Z) to file ")) + fileName);
 }
 
 
@@ -1304,8 +1364,12 @@ void QExperimental3DExtension::createConnections()
     connect(m_saveHZvPushButton, SIGNAL(clicked()), SLOT(saveHZv()));
     connect(m_loadHZVPushButton, SIGNAL(clicked()), SLOT(loadHZV()));
     connect(m_saveHZVPushButton, SIGNAL(clicked()), SLOT(saveHZV()));
-    connect( m_loadVmiPushButton, SIGNAL( clicked() ), SLOT( loadVmi() ) );
-    connect( m_saveVmiPushButton, SIGNAL( clicked() ), SLOT( saveVmi() ) );
+    connect(m_loadVmiPushButton, SIGNAL(clicked()), SLOT(loadVmi()));
+    connect(m_saveVmiPushButton, SIGNAL(clicked()), SLOT(saveVmi()));
+    connect(m_loadVmi2PushButton, SIGNAL(clicked()), SLOT(loadVmi2()));
+    connect(m_saveVmi2PushButton, SIGNAL(clicked()), SLOT(saveVmi2()));
+    connect(m_loadVmi3PushButton, SIGNAL(clicked()), SLOT(loadVmi3()));
+    connect(m_saveVmi3PushButton, SIGNAL(clicked()), SLOT(saveVmi3()));
     connect( m_loadMiPushButton, SIGNAL( clicked() ), SLOT( loadMi() ) );
     connect( m_saveMiPushButton, SIGNAL( clicked() ), SLOT( saveMi() ) );
     connect( m_loadViewpointUnstabilitiesPushButton, SIGNAL( clicked() ), SLOT( loadViewpointUnstabilities() ) );
@@ -2218,7 +2282,9 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeHZ = m_computeHZCheckBox->isChecked();      // H(Z)
     bool computeHZv = m_computeHZvCheckBox->isChecked();    // H(Z|v)
     bool computeHZV = m_computeHZVCheckBox->isChecked();    // H(Z|V)
-    bool computeVmi = m_computeVmiCheckBox->isChecked();
+    bool computeVmi = m_computeVmiCheckBox->isChecked();    // I₁(v;Z)
+    bool computeVmi2 = m_computeVmi2CheckBox->isChecked();  // I₂(v;Z)
+    bool computeVmi3 = m_computeVmi3CheckBox->isChecked();  // I₃(v;Z)
     bool computeMi = m_computeMiCheckBox->isChecked();
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesCheckBox->isChecked();
     bool computeVomi = m_computeVomiCheckBox->isChecked();      // I₁(z;V)
@@ -2233,8 +2299,8 @@ void QExperimental3DExtension::computeSelectedVmi()
     bool computeExploratoryTour = m_computeExploratoryTourCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if (!computeHV && !computeHVz && !computeHZ && !computeHZv && !computeHZV && !computeVmi && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeVomi2 && !computeVomi3 && !computeViewpointVomi
-        && !computeColorVomi && !computeEvmiOpacity && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour)
+    if (!computeHV && !computeHVz && !computeHZ && !computeHZv && !computeHZV && !computeVmi && !computeVmi2 && !computeVmi3 && !computeMi && !computeViewpointUnstabilities && !computeVomi && !computeVomi2
+        && !computeVomi3 && !computeViewpointVomi && !computeColorVomi && !computeEvmiOpacity && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour)
         return;
 
     setCursor(QCursor(Qt::WaitCursor));
@@ -2287,8 +2353,9 @@ void QExperimental3DExtension::computeSelectedVmi()
 
     QTime time;
     time.start();
-    viewpointInformationChannel.compute(computeHV, computeHVz, computeHZ, computeHZv, computeHZV, computeVmi, computeMi, computeViewpointUnstabilities, computeVomi, computeVomi2, computeVomi3, computeViewpointVomi,
-                                        computeColorVomi, computeEvmiOpacity, computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour, m_vmiDisplayCheckBox->isChecked());
+    viewpointInformationChannel.compute(computeHV, computeHVz, computeHZ, computeHZv, computeHZV, computeVmi, computeVmi2, computeVmi3, computeMi, computeViewpointUnstabilities, computeVomi, computeVomi2,
+                                        computeVomi3, computeViewpointVomi, computeColorVomi, computeEvmiOpacity, computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour,
+                                        m_vmiDisplayCheckBox->isChecked());
     int elapsed = time.elapsed();
     DEBUG_LOG(QString("Temps total de VOMI i altres: %1 s").arg(elapsed / 1000.0f));
     INFO_LOG(QString("Temps total de VOMI i altres: %1 s").arg(elapsed / 1000.0f));
@@ -2333,6 +2400,18 @@ void QExperimental3DExtension::computeSelectedVmi()
     {
         m_vmi = viewpointInformationChannel.vmi();
         m_saveVmiPushButton->setEnabled(true);
+    }
+
+    if (computeVmi2)
+    {
+        m_vmi2 = viewpointInformationChannel.vmi2();
+        m_saveVmi2PushButton->setEnabled(true);
+    }
+
+    if (computeVmi3)
+    {
+        m_vmi3 = viewpointInformationChannel.vmi3();
+        m_saveVmi3PushButton->setEnabled(true);
     }
 
     if (computeMi)

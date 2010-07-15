@@ -2503,7 +2503,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>VMI</string>
+            <string>VMI I₁(v;Z)</string>
            </property>
           </widget>
          </item>
@@ -2516,6 +2516,74 @@
          </item>
          <item>
           <widget class="QPushButton" name="m_saveVmiPushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Save...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_76">
+         <item>
+          <widget class="QCheckBox" name="m_computeVmi2CheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>VMI2 I₂(v;Z)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_loadVmi2PushButton">
+           <property name="text">
+            <string>Load...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saveVmi2PushButton">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Save...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_77">
+         <item>
+          <widget class="QCheckBox" name="m_computeVmi3CheckBox">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>VMI3 I₃(v;Z)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_loadVmi3PushButton">
+           <property name="text">
+            <string>Load...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_saveVmi3PushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>
