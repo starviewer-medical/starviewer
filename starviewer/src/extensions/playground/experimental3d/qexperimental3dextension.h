@@ -309,10 +309,13 @@ private:
     float m_mi;
     QVector<float> m_viewpointUnstabilities;
     QVector<float> m_vomi;  // I₁(z;V)
+    float m_minimumVomi;
     float m_maximumVomi;
     QVector<float> m_vomi2; // I₂(z;V)
+    float m_minimumVomi2;
     float m_maximumVomi2;
     QVector<float> m_vomi3; // I₃(z;V)
+    float m_minimumVomi3;
     float m_maximumVomi3;
     QVector<float> m_viewpointVomi;
     QVector<Vector3Float> m_colorVomiPalette;
