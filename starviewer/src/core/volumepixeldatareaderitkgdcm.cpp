@@ -36,61 +36,70 @@ VolumePixelDataReaderITKGDCM::~VolumePixelDataReaderITKGDCM()
 int VolumePixelDataReaderITKGDCM::read(const QStringList &filenames)
 {
     int errorCode = NoError;
+    
     if (filenames.isEmpty())
     {
         WARN_LOG("La llista de noms de fitxer per carregar és buida");
         errorCode = InvalidFileName;
-        return errorCode;
-    }
-
-    if (filenames.size() > 1)
-    {
-        // Convertim la QStringList al format std::vector<std::string> que s'esperen les itk
-        std::vector<std::string> stlFilenames;
-        for (int i = 0; i < filenames.size(); i++)
-        {
-            stlFilenames.push_back(filenames.at(i).toStdString());
-        }
-
-        m_seriesReader->SetFileNames(stlFilenames);
-
-        try
-        {
-            m_seriesReader->Update();
-        }
-        catch (itk::ExceptionObject & e)
-        {
-            WARN_LOG(QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
-            // Llegim el missatge d'error per esbrinar de quin error es tracta
-            errorCode = identifyErrorMessage(QString(e.GetDescription()) );
-        }
-        
-        switch (errorCode)
-        {
-            case NoError:
-                setData(m_seriesReader->GetOutput());
-                break;
-
-            case SizeMismatch:
-                errorCode = NoError;
-                readDifferentSizeImagesIntoOneVolume(filenames);
-                break;
-
-            case ZeroSpacingNotAllowed:
-                errorCode = NoError;
-                // Assignem les dades llegides, aquesta excepció simplement és una mena de warning. 
-                // En el cas del z-spacing 0 es pot deure a que la informació estigui "amagada" en una seqüència privada
-                // o que realment la imatge en sí només té sentit com a 2D i no 3D
-                setData(m_seriesReader->GetOutput());
-                checkZeroSpacingException();
-                break;
-        }
     }
     else
     {
-        errorCode = readSingleFile(filenames.first());
+        if (filenames.size() > 1)
+        {
+            errorCode = readMultipleFiles(filenames);
+        }
+        else
+        {
+            errorCode = readSingleFile(filenames.first());
+        }
     }
     
+    return errorCode;
+}
+
+int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames)
+{
+    // Convertim la QStringList al format std::vector<std::string> que s'esperen les itk
+    std::vector<std::string> stlFilenames;
+    for (int i = 0; i < filenames.size(); i++)
+    {
+        stlFilenames.push_back(filenames.at(i).toStdString());
+    }
+    m_seriesReader->SetFileNames(stlFilenames);
+
+    int errorCode = NoError;
+    try
+    {
+        m_seriesReader->Update();
+    }
+    catch (itk::ExceptionObject & e)
+    {
+        WARN_LOG(QString("Excepció llegint els arxius del directori [%1] Descripció: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+        // Llegim el missatge d'error per esbrinar de quin error es tracta
+        errorCode = identifyErrorMessage(QString(e.GetDescription()) );
+    }
+    
+    switch (errorCode)
+    {
+        case NoError:
+            setData(m_seriesReader->GetOutput());
+            break;
+
+        case SizeMismatch:
+            errorCode = NoError;
+            readDifferentSizeImagesIntoOneVolume(filenames);
+            break;
+
+        case ZeroSpacingNotAllowed:
+            errorCode = NoError;
+            // Assignem les dades llegides, aquesta excepció simplement és una mena de warning. 
+            // En el cas del z-spacing 0 es pot deure a que la informació estigui "amagada" en una seqüència privada
+            // o que realment la imatge en sí només té sentit com a 2D i no 3D
+            setData(m_seriesReader->GetOutput());
+            checkZeroSpacingException();
+            break;
+    }
+
     return errorCode;
 }
 

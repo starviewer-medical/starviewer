@@ -26,7 +26,12 @@ public:
 
     int read(const QStringList &filenames);
 
-private:   
+private:
+    /// Mètode destinat a llegir quan tenim més d'un arxiu
+    /// @param filenames Llistat d'arxius a llegir
+    /// @return Codi de resultat corresponent
+    int readMultipleFiles(const QStringList &filenames);
+    
     /// Carrega un volum a partir del nom de fitxer que se li passi
     /// @param fileName
     /// @return noError en cas que tot hagi anat bé, el tipus d'error altrament
