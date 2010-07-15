@@ -75,6 +75,15 @@ int VolumePixelDataReaderITKGDCM::read(const QStringList &filenames)
                 errorCode = NoError;
                 readDifferentSizeImagesIntoOneVolume(filenames);
                 break;
+
+            case ZeroSpacingNotAllowed:
+                errorCode = NoError;
+                // Assignem les dades llegides, aquesta excepció simplement és una mena de warning. 
+                // En el cas del z-spacing 0 es pot deure a que la informació estigui "amagada" en una seqüència privada
+                // o que realment la imatge en sí només té sentit com a 2D i no 3D
+                setData(m_seriesReader->GetOutput());
+                checkZeroSpacingException();
+                break;
         }
     }
     else
@@ -107,10 +116,22 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
         errorCode = OutOfMemory;
     }
 
-    if (errorCode == NoError)
+    switch (errorCode)
     {
-        setData(reader->GetOutput());
+        case NoError:
+            setData(reader->GetOutput());
+            break;
+    
+        case ZeroSpacingNotAllowed:
+            errorCode = NoError;
+            // Assignem les dades llegides, aquesta excepció simplement és una mena de warning. 
+            // En el cas del z-spacing 0 es pot deure a que la informació estigui "amagada" en una seqüència privada
+            // o que realment la imatge en sí només té sentit com a 2D i no 3D
+            setData(reader->GetOutput());
+            checkZeroSpacingException();
+            break;
     }
+
     emit progress(100);
 
     return errorCode;
@@ -205,6 +226,30 @@ void VolumePixelDataReaderITKGDCM::setData(Volume::ItkImageTypePointer itkImage)
     }
     // Assignem l'output
     m_vtkImageData = m_itkToVtkFilter->GetOutput();
+}
+
+void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
+{
+    if (m_vtkImageData)
+    {
+        double spacing[3];
+
+        m_vtkImageData->GetSpacing(spacing);
+        DEBUG_LOG(QString("checkZeroSpacing: (x , y , z) = (%1 , %2 , %3)").arg(spacing[0]).arg(spacing[1]).arg(spacing[2]));
+
+        if (spacing[0] == 0.0 || spacing[1] == 0.0)
+        {
+            WARN_LOG(QString("x ó y spacing és 0; [x,y] = [%1,%2]. Donem el volum per vàlid igualment.").arg(spacing[0]).arg(spacing[1]));
+        }
+        else if (spacing[2] == 0.0)
+        {
+            WARN_LOG("El z-spacing de les dades llegides és 0. Possiblement la informació corresponent (SliceThikness/SpacingBetweenSlices) estigui dins de seqüències privades. Donem el volum per vàlid igualment.");
+        }
+    }
+    else
+    {
+        DEBUG_LOG("No s'han assignat les dades vtk! No podem fer cap comprovació.");
+    }
 }
 
 void VolumePixelDataReaderITKGDCM::slotProgress()
