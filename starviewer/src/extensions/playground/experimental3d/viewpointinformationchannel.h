@@ -60,10 +60,13 @@ public:
     float mi() const;
     const QVector<float>& viewpointUnstabilities() const;
     const QVector<float>& vomi() const;     // I₁(z;V)
+    float minimumVomi() const;
     float maximumVomi() const;
     const QVector<float>& vomi2() const;    // I₂(z;V)
+    float minimumVomi2() const;
     float maximumVomi2() const;
     const QVector<float>& vomi3() const;    // I₃(z;V)
+    float minimumVomi3() const;
     float maximumVomi3() const;
     const QVector<float>& viewpointVomi() const;
     const QVector<Vector3Float>& colorVomi() const;
@@ -143,10 +146,13 @@ private:
     float m_mi;
     QVector<float> m_viewpointUnstabilities;
     QVector<float> m_vomi;  // I₁(z;V)
+    float m_minimumVomi;
     float m_maximumVomi;
     QVector<float> m_vomi2; // I₂(z;V)
+    float m_minimumVomi2;
     float m_maximumVomi2;
     QVector<float> m_vomi3; // I₃(z;V)
+    float m_minimumVomi3;
     float m_maximumVomi3;
     QVector<float> m_viewpointVomi;
     QVector<Vector3Float> m_viewpointColors;

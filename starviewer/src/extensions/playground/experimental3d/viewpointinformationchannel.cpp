@@ -9,6 +9,8 @@
 #include "informationtheory.h"
 #include "logging.h"
 
+#include <limits>
+
 #ifndef CUDA_AVAILABLE
 #include <QTemporaryFile>
 #include "mathtools.h"
@@ -371,6 +373,12 @@ const QVector<float>& ViewpointInformationChannel::vomi() const
 }
 
 
+float ViewpointInformationChannel::minimumVomi() const
+{
+    return m_minimumVomi;
+}
+
+
 float ViewpointInformationChannel::maximumVomi() const
 {
     return m_maximumVomi;
@@ -383,6 +391,12 @@ const QVector<float>& ViewpointInformationChannel::vomi2() const
 }
 
 
+float ViewpointInformationChannel::minimumVomi2() const
+{
+    return m_minimumVomi2;
+}
+
+
 float ViewpointInformationChannel::maximumVomi2() const
 {
     return m_maximumVomi2;
@@ -392,6 +406,12 @@ float ViewpointInformationChannel::maximumVomi2() const
 const QVector<float>& ViewpointInformationChannel::vomi3() const
 {
     return m_vomi3;
+}
+
+
+float ViewpointInformationChannel::minimumVomi3() const
+{
+    return m_minimumVomi3;
 }
 
 
@@ -1116,7 +1136,11 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
     for (int k = 0; k < nThreads; k++) delete vomiThreads[k];
     delete[] vomiThreads;
 
-    if (computeVomi) m_maximumVomi = 0.0f;
+    if (computeVomi)
+    {
+        m_minimumVomi = std::numeric_limits<float>::infinity();
+        m_maximumVomi = -std::numeric_limits<float>::infinity();
+    }
     if (computeColorVomi) m_maximumColorVomi = 0.0f;
 
     for (int j = 0; j < nVoxels; j++)
@@ -1131,6 +1155,7 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
             float vomi = m_vomi.at(j);
             Q_ASSERT(!MathTools::isNaN(vomi));
             Q_ASSERT(vomi >= 0.0f);
+            if (vomi < m_minimumVomi) m_minimumVomi = vomi;
             if (vomi > m_maximumVomi) m_maximumVomi = vomi;
         }
 
@@ -1154,8 +1179,12 @@ void ViewpointInformationChannel::computeVomi2Cpu()
     class Vomi2Thread : public QThread {
         public:
             Vomi2Thread(float HV, const QVector<float> &HVz, QVector<float> &vomi2, int start, int end)
-                : m_HV(HV), m_HVz(HVz), m_vomi2(vomi2), m_maximumVomi2(0.0f), m_start(start), m_end(end)
+                : m_HV(HV), m_HVz(HVz), m_vomi2(vomi2), m_minimumVomi2(std::numeric_limits<float>::infinity()), m_maximumVomi2(-std::numeric_limits<float>::infinity()), m_start(start), m_end(end)
             {
+            }
+            float minimumVomi2() const
+            {
+                return m_minimumVomi2;
             }
             float maximumVomi2() const
             {
@@ -1169,6 +1198,7 @@ void ViewpointInformationChannel::computeVomi2Cpu()
                     m_vomi2[i] = m_HV - m_HVz.at(i);
                     Q_ASSERT(!MathTools::isNaN(m_vomi2.at(i)));
                     //Q_ASSERT(vomi2 >= 0.0f);  // la VoMI2 sí que pot ser negativa
+                    if (m_vomi2.at(i) < m_minimumVomi2) m_minimumVomi2 = m_vomi2.at(i);
                     if (m_vomi2.at(i) > m_maximumVomi2) m_maximumVomi2 = m_vomi2.at(i);
                 }
             }
@@ -1176,6 +1206,7 @@ void ViewpointInformationChannel::computeVomi2Cpu()
             float m_HV;
             const QVector<float> &m_HVz;
             QVector<float> &m_vomi2;
+            float m_minimumVomi2;
             float m_maximumVomi2;
             int m_start, m_end;
     };
@@ -1183,7 +1214,8 @@ void ViewpointInformationChannel::computeVomi2Cpu()
     int nVoxels = m_volume->getSize();
 
     m_vomi2.resize(nVoxels);
-    m_maximumVomi2 = 0.0f;
+    m_minimumVomi2 = std::numeric_limits<float>::infinity();
+    m_maximumVomi2 = -std::numeric_limits<float>::infinity();
 
     emit partialProgress(0);
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -1205,6 +1237,7 @@ void ViewpointInformationChannel::computeVomi2Cpu()
     for (int k = 0; k < nThreads; k++)
     {
         vomi2Threads[k]->wait();
+        if (vomi2Threads[k]->minimumVomi2() < m_minimumVomi2) m_minimumVomi2 = vomi2Threads[k]->minimumVomi2();
         if (vomi2Threads[k]->maximumVomi2() > m_maximumVomi2) m_maximumVomi2 = vomi2Threads[k]->maximumVomi2();
         delete vomi2Threads[k];
         emit partialProgress(100 * (k + 1) / nThreads);
@@ -1293,13 +1326,15 @@ void ViewpointInformationChannel::computeVomi3Cpu()
     for (int k = 0; k < nThreads; k++) delete vomi3Threads[k];
     delete[] vomi3Threads;
 
-    m_maximumVomi3 = 0.0f;
+    m_minimumVomi3 = std::numeric_limits<float>::infinity();
+    m_maximumVomi3 = -std::numeric_limits<float>::infinity();
 
     for (int j = 0; j < nVoxels; j++)
     {
         float vomi3 = m_vomi3.at(j);
         Q_ASSERT(!MathTools::isNaN(vomi3));
         //Q_ASSERT(vomi3 >= 0.0f);  // la VoMI3 sí que pot ser negativa
+        if (vomi3 < m_minimumVomi3) m_minimumVomi3 = vomi3;
         if (vomi3 > m_maximumVomi3) m_maximumVomi3 = vomi3;
     }
 }
@@ -1787,7 +1822,8 @@ void ViewpointInformationChannel::computeVomiCuda(bool computeHVz, bool computeV
     if (computeVomi)
     {
         m_vomi = cvicGetVomi();
-        m_maximumVomi = 0.0f;
+        m_minimumVomi = std::numeric_limits<float>::infinity();
+        m_maximumVomi = -std::numeric_limits<float>::infinity();
     }
 
     if (computeColorVomi)
@@ -1810,6 +1846,7 @@ void ViewpointInformationChannel::computeVomiCuda(bool computeHVz, bool computeV
             float vomi = m_vomi.at(j);
             Q_ASSERT(!MathTools::isNaN(vomi));
             Q_ASSERT(vomi >= 0.0f);
+            if (vomi < m_minimumVomi) m_minimumVomi = vomi;
             if (vomi > m_maximumVomi) m_maximumVomi = vomi;
         }
 
@@ -1840,13 +1877,15 @@ void ViewpointInformationChannel::computeVomi2Cuda()
     emit partialProgress(100);
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
 
-    m_maximumVomi2 = 0.0f;
+    m_minimumVomi2 = std::numeric_limits<float>::infinity();
+    m_maximumVomi2 = -std::numeric_limits<float>::infinity();
 
     for (int j = 0; j < nVoxels; j++)
     {
         float vomi2 = m_vomi2.at(j);
         Q_ASSERT(!MathTools::isNaN(vomi2));
         //Q_ASSERT(vomi2 >= 0.0f);  // la VoMI2 sí que pot ser negativa
+        if (vomi2 < m_minimumVomi2) m_minimumVomi2 = vomi2;
         if (vomi2 > m_maximumVomi2) m_maximumVomi2 = vomi2;
     }
 }
@@ -1880,7 +1919,8 @@ void ViewpointInformationChannel::computeVomi3Cuda()
     }
 
     m_vomi3 = cvicGetVomi3();
-    m_maximumVomi3 = 0.0f;
+    m_minimumVomi3 = std::numeric_limits<float>::infinity();
+    m_maximumVomi3 = -std::numeric_limits<float>::infinity();
 
     cvicCleanupVomi3();
 
@@ -1889,6 +1929,7 @@ void ViewpointInformationChannel::computeVomi3Cuda()
         float vomi3 = m_vomi3.at(j);
         Q_ASSERT(!MathTools::isNaN(vomi3));
         //Q_ASSERT(vomi3 >= 0.0f);  // la VoMI3 sí que pot ser negativa
+        if (vomi3 < m_minimumVomi3) m_minimumVomi3 = vomi3;
         if (vomi3 > m_maximumVomi3) m_maximumVomi3 = vomi3;
     }
 }

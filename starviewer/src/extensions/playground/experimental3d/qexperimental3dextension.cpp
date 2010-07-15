@@ -2350,7 +2350,9 @@ void QExperimental3DExtension::computeSelectedVmi()
     if (computeVomi)
     {
         m_vomi = viewpointInformationChannel.vomi();
+        m_minimumVomi = viewpointInformationChannel.minimumVomi();
         m_maximumVomi = viewpointInformationChannel.maximumVomi();
+        DEBUG_LOG(QString("range vomi1 = [%1, %2]").arg(m_minimumVomi).arg(m_maximumVomi));
         m_baseVomiRadioButton->setEnabled(true);
         m_vomiCheckBox->setEnabled(true);
         m_vomiCoolWarmCheckBox->setEnabled(true);
@@ -2363,7 +2365,9 @@ void QExperimental3DExtension::computeSelectedVmi()
     if (computeVomi2)
     {
         m_vomi2 = viewpointInformationChannel.vomi2();
+        m_minimumVomi2 = viewpointInformationChannel.minimumVomi2();
         m_maximumVomi2 = viewpointInformationChannel.maximumVomi2();
+        DEBUG_LOG(QString("range vomi2 = [%1, %2]").arg(m_minimumVomi2).arg(m_maximumVomi2));
         m_baseVomi2RadioButton->setEnabled(true);
         m_vomi2CheckBox->setEnabled(true);
         //m_vomiCoolWarmCheckBox->setEnabled(true);   /// \todo vomi2
@@ -2376,7 +2380,9 @@ void QExperimental3DExtension::computeSelectedVmi()
     if (computeVomi3)
     {
         m_vomi3 = viewpointInformationChannel.vomi3();
+        m_minimumVomi3 = viewpointInformationChannel.minimumVomi3();
         m_maximumVomi3 = viewpointInformationChannel.maximumVomi3();
+        DEBUG_LOG(QString("range vomi3 = [%1, %2]").arg(m_minimumVomi3).arg(m_maximumVomi3));
         m_baseVomi3RadioButton->setEnabled(true);
         m_vomi3CheckBox->setEnabled(true);
         //m_vomiCoolWarmCheckBox->setEnabled(true);   /// \todo vomi3
