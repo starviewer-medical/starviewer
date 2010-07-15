@@ -74,7 +74,6 @@ int VolumePixelDataReaderITKGDCM::read(const QStringList &filenames)
             case SizeMismatch:
                 errorCode = NoError;
                 readDifferentSizeImagesIntoOneVolume(filenames);
-                emit progress(100);
                 break;
         }
     }
