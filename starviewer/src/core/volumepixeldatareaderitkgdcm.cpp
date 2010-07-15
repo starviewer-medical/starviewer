@@ -45,10 +45,6 @@ int VolumePixelDataReaderITKGDCM::read(const QStringList &filenames)
 
     if (filenames.size() > 1)
     {
-        // Això és necessari per després poder demanar-li el diccionari de meta-dades i obtenir els tags del DICOM
-        // TODO Aquesta crida potser és innecessària, caldria comprovar-ho
-        //m_seriesReader->SetImageIO(m_gdcmIO);
-
         // Convertim la QStringList al format std::vector<std::string> que s'esperen les itk
         std::vector<std::string> stlFilenames;
         for (int i = 0; i < filenames.size(); i++)
@@ -76,7 +72,6 @@ int VolumePixelDataReaderITKGDCM::read(const QStringList &filenames)
                 break;
 
             case SizeMismatch:
-                // TODO Això es podria fer a ::getVtkData o ja està bé aquí?
                 errorCode = NoError;
                 readDifferentSizeImagesIntoOneVolume(filenames);
                 emit progress(100);
@@ -211,7 +206,6 @@ void VolumePixelDataReaderITKGDCM::setData(Volume::ItkImageTypePointer itkImage)
     }
     // Assignem l'output
     m_vtkImageData = m_itkToVtkFilter->GetOutput();
-    //m_itkToVtkFilter->Delete();
 }
 
 void VolumePixelDataReaderITKGDCM::slotProgress()
