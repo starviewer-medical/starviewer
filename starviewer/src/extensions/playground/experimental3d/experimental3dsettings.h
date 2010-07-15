@@ -23,6 +23,8 @@ public:
     static const QString HZVDir;
     static const QString HZDir;
     static const QString ViewpointMutualInformationDir;
+    static const QString ViewpointMutualInformation2Dir;
+    static const QString ViewpointMutualInformation3Dir;
     static const QString MutualInformationDir;
     static const QString ViewpointUnstabilitiesDir;
     static const QString VoxelMutualInformationDir;

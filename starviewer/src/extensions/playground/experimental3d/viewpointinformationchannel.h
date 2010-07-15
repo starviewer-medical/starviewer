@@ -47,8 +47,8 @@ public:
     /// \a filter Vector que conté un booleà per cada punt de vista original. Es faran servir els que estiguin a cert.
     void filterViewpoints(const QVector<bool> &filter);
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
-    void compute(bool &HV, bool &HVz, bool &HZ, bool &HZv, bool &HZV, bool &vmi, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &vomi2, bool &vomi3, bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity,
-                 bool &evmiVomi, bool &bestViews, bool &guidedTour, bool &exploratoryTour, bool display = false);
+    void compute(bool &HV, bool &HVz, bool &HZ, bool &HZv, bool &HZV, bool &vmi, bool &vmi2, bool &vmi3, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &vomi2, bool &vomi3, bool &viewpointVomi,
+                 bool &colorVomi, bool &evmiOpacity, bool &evmiVomi, bool &bestViews, bool &guidedTour, bool &exploratoryTour, bool display = false);
     bool hasViewedVolume() const;
     const QVector<float>& viewedVolume() const;
     float HV() const;                   // H(V)
@@ -56,7 +56,9 @@ public:
     float HZ() const;                   // H(Z)
     const QVector<float>& HZv() const;  // H(Z|v)
     float HZV() const;                  // H(Z|V)
-    const QVector<float>& vmi() const;
+    const QVector<float>& vmi() const;  // I₁(v;Z)
+    const QVector<float>& vmi2() const; // I₂(v;Z)
+    const QVector<float>& vmi3() const; // I₃(v;Z)
     float mi() const;
     const QVector<float>& viewpointUnstabilities() const;
     const QVector<float>& vomi() const;     // I₁(z;V)
@@ -88,28 +90,32 @@ private:
     QVector<float> voxelProbabilitiesInView(int i);
 
 #ifndef CUDA_AVAILABLE
-    void computeCpu(bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeHV, bool computeHVz, bool computeHZ, bool computeHZv, bool computeHZV, bool computeVmi, bool computeMi,
-                    bool computeViewpointUnstabilities, bool computeVomi, bool computeVomi2, bool computeVomi3, bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi,
-                    bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour);
+    void computeCpu(bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeHV, bool computeHVz, bool computeHZ, bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2, bool computeVmi3,
+                    bool computeMi, bool computeViewpointUnstabilities, bool computeVomi, bool computeVomi2, bool computeVomi3, bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity,
+                    bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour);
     void createVoxelProbabilitiesPerViewFiles();
     QVector<float> voxelProbabilitiesInViewCpu(int i);
     void deleteVoxelProbabilitiesPerViewFiles();
     float rayCastingCpu(bool computeViewProbabilities);
     void computeViewProbabilitiesAndEntropyCpu(float totalViewedVolume, bool computeHV);
     void computeVoxelProbabilitiesAndEntropyCpu(bool computeHZ);
-    void computeViewMeasuresCpu(bool computeHZv, bool computeHZV, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity, bool computeEvmiVomi);
+    void computeViewMeasuresCpu(bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity,
+                                bool computeEvmiVomi);
+    void computeVmi3Cpu();
     void computeVomiCpu(bool computeHVz, bool computeVomi, bool computeColorVomi);
     void computeVomi2Cpu();
     void computeVomi3Cpu();
 #else // CUDA_AVAILABLE
     static Matrix4 viewMatrix(const Vector3 &viewpoint);
-    void computeCuda(bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeHV, bool computeHVz, bool computeHZ, bool computeHZv, bool computeHZV, bool computeVmi, bool computeMi,
-                     bool computeViewpointUnstabilities, bool computeVomi, bool computeVomi2, bool computeVomi3, bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi,
-                     bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour, bool display);
+    void computeCuda(bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeHV, bool computeHVz, bool computeHZ, bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2,
+                     bool computeVmi3, bool computeMi, bool computeViewpointUnstabilities, bool computeVomi, bool computeVomi2, bool computeVomi3, bool computeViewpointVomi, bool computeColorVomi,
+                     bool computeEvmiOpacity, bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour, bool display);
     QVector<float> voxelProbabilitiesInViewCuda(int i);
     void computeViewProbabilitiesAndEntropyCuda(bool computeHV);
     void computeVoxelProbabilitiesAndEntropyCuda(bool computeHZ);
-    void computeViewMeasuresCuda(bool computeHZv, bool computeHZV, bool computeVmi, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity, bool computeEvmiVomi);
+    void computeViewMeasuresCuda(bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity,
+                                 bool computeEvmiVomi);
+    void computeVmi3Cuda();
     void computeVomiCuda(bool computeHVz, bool computeVomi, bool computeColorVomi);
     void computeVomi2Cuda();
     void computeVomi3Cuda();
@@ -142,7 +148,9 @@ private:
     float m_HZ;             // H(Z)
     QVector<float> m_HZv;   // H(Z|v)
     float m_HZV;            // H(Z|V)
-    QVector<float> m_vmi;
+    QVector<float> m_vmi;   // I₁(v;Z)
+    QVector<float> m_vmi2;  // I₂(v;Z)
+    QVector<float> m_vmi3;  // I₃(v;Z)
     float m_mi;
     QVector<float> m_viewpointUnstabilities;
     QVector<float> m_vomi;  // I₁(z;V)

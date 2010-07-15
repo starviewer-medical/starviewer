@@ -56,10 +56,18 @@ public slots:
     void loadHZV(QString fileName = QString());
     /// Desa H(Z|V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveHZV(QString fileName = QString());
-    /// Carrega la VMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadVmi( QString fileName = QString() );
-    /// Desa la VMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveVmi( QString fileName = QString() );
+    /// Carrega la VMI I₁(v;Z) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVmi(QString fileName = QString());
+    /// Desa la VMI I₁(v;Z) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVmi(QString fileName = QString());
+    /// Carrega la VMI2 I₂(v;Z) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVmi2(QString fileName = QString());
+    /// Desa la VMI2 I₂(v;Z) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVmi2(QString fileName = QString());
+    /// Carrega la VMI3 I₃(v;Z) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadVmi3(QString fileName = QString());
+    /// Desa la VMI3 I₃(v;Z) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveVmi3(QString fileName = QString());
     /// Carrega la informació mútua des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadMi( QString fileName = QString() );
     /// Desa la informació mútua a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -305,7 +313,9 @@ private:
     float m_HZ;             // H(Z)
     QVector<float> m_HZv;   // H(Z|v)
     float m_HZV;            // H(Z|V)
-    QVector<float> m_vmi;
+    QVector<float> m_vmi;   // I₁(v;Z)
+    QVector<float> m_vmi2;  // I₂(v;Z)
+    QVector<float> m_vmi3;  // I₃(v;Z)
     float m_mi;
     QVector<float> m_viewpointUnstabilities;
     QVector<float> m_vomi;  // I₁(z;V)
