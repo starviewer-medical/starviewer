@@ -45,6 +45,11 @@ private:
     /// al format vtk que es gestiona internament
     void setData(Volume::ItkImageTypePointer itkImage);
 
+    /// En el cas que la lectura ens retorni l'excepció "Zero spacing not allowed"
+    /// comprovem en quins eixos es produeix aquest zero spacing
+    /// S'ha d'invocar un cop s'hagi fet el setData() ja que treballa amb les dades vtk
+    void checkZeroSpacingException();
+
 private slots:
     /// Captura el senyal d'itkQtAdaptor perquè poguem notificar el progrés de la lectura
     void slotProgress();

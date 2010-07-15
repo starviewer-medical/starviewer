@@ -55,12 +55,6 @@ void VolumeReader::read(Volume *volume)
                 QMessageBox::warning(0, tr("Missing Files"), tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString));
                 break;
 
-            case VolumePixelDataReader::ZeroSpacingNotAllowed:
-                // S'ha trobat que el z-spacing és de 0 TODO De moment carreguem un volum neutre però cal oferir una millor solució: Ticket #1245
-                volume->createNeutralVolume();
-                QMessageBox::warning(0, tr("Zero-Spacing Error"), tr("%1 could not load the images because there is some image information missing. No series data has been loaded.").arg(ApplicationNameString));
-                break;
-            
             case VolumePixelDataReader::UnknownError:
                 // Hi ha hagut un error no controlat, creem el volum neutral per evitar desastres majors
                 volume->createNeutralVolume();
