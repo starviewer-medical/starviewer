@@ -48,12 +48,12 @@ QList<DICOMAttribute*> DICOMSequenceItem::getAttributes()
     return m_attributeList.values();
 }
 
-DICOMAttribute* DICOMSequenceItem::getAttribute(DICOMTag tag)
+DICOMAttribute* DICOMSequenceItem::getAttribute(const DICOMTag &tag)
 {
     return m_attributeList.value(tag.getKeyAsQString());
 }
 
-DICOMValueAttribute* DICOMSequenceItem::getValueAttribute(DICOMTag tag)
+DICOMValueAttribute* DICOMSequenceItem::getValueAttribute(const DICOMTag &tag)
 {
     DICOMAttribute *attribute = this->getAttribute(tag);
 
@@ -74,7 +74,7 @@ DICOMValueAttribute* DICOMSequenceItem::getValueAttribute(DICOMTag tag)
     }
 }
 
-DICOMSequenceAttribute* DICOMSequenceItem::getSequenceAttribute(DICOMTag tag)
+DICOMSequenceAttribute* DICOMSequenceItem::getSequenceAttribute(const DICOMTag &tag)
 {
     DICOMAttribute *attribute = this->getAttribute(tag);
 
