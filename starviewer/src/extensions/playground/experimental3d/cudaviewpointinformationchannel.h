@@ -44,8 +44,8 @@ void cvicCleanupVomi();
 
 QVector<float> cvicComputeVomi2(float HV, const QVector<float> &HVz);
 
-void cvicSetupVomi3(float HZ);
-void cvicAccumulateVomi3(float viewProbability, float totalViewedVolume, float HZv);
+void cvicSetupVomi3();
+void cvicAccumulateVomi3(float viewProbability, float totalViewedVolume, float vmi2);
 QVector<float> cvicGetVomi3();
 void cvicCleanupVomi3();
 
