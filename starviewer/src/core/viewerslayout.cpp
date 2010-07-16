@@ -311,7 +311,7 @@ void ViewersLayout::setGrid(QList<QString> positionsList)
     int screenX = this->width();
     int screenY = this->height();
 
-	m_numberOfVisibleViewers = 0;
+    m_numberOfVisibleViewers = 0;
 
     if (m_gridLayout) 
     {
@@ -334,8 +334,8 @@ void ViewersLayout::setGrid(QList<QString> positionsList)
         x2 = listOfPositions.value(2).toDouble();
         y2 = listOfPositions.value(3).toDouble();
         newViewer->setGeometry(x1*screenX, (1-y1)*screenY, (x2-x1)*screenX, (y1-y2)*screenY);
-
-		m_numberOfVisibleViewers++;
+        
+        m_numberOfVisibleViewers++;
     }
 
     m_positionsList = positionsList;
@@ -360,15 +360,15 @@ Q2DViewerWidget* ViewersLayout::addViewer(QString position)
         removeLayouts();
     }
 
-	if (m_numberOfVisibleViewers < m_vectorViewers.size())
-	{
-		newViewer = m_vectorViewers.value(m_numberOfVisibleViewers);
-	}
-	else
-	{
-		newViewer = getNewQ2DViewerWidget();
-		m_vectorViewers.push_back(newViewer);
-	}
+    if (m_numberOfVisibleViewers < m_vectorViewers.size())
+    {
+        newViewer = m_vectorViewers.value(m_numberOfVisibleViewers);
+    }
+    else
+    {
+        newViewer = getNewQ2DViewerWidget();
+        m_vectorViewers.push_back(newViewer);
+    }
 	
     listOfPositions = position.split("\\");
     x1 = listOfPositions.value(0).toDouble();
@@ -376,8 +376,8 @@ Q2DViewerWidget* ViewersLayout::addViewer(QString position)
     x2 = listOfPositions.value(2).toDouble();
     y2 = listOfPositions.value(3).toDouble();
     newViewer->setGeometry(x1*screenX, (1-y1)*screenY, ((x2-x1)*screenX), (y1-y2)*screenY);
-	newViewer->show();
-	m_numberOfVisibleViewers++;
+    newViewer->show();
+    m_numberOfVisibleViewers++;
 
     emit viewerAdded(newViewer);
     
@@ -505,7 +505,9 @@ void ViewersLayout::hideColumns(int columns)
             viewer->hide();
             emit viewerRemoved(viewer);
             if (m_selectedViewer == viewer)
+            {
                 setViewerSelected(m_vectorViewers.value(0));
+            }
         }
         columns--;
     }
