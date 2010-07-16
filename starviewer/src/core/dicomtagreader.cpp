@@ -8,6 +8,7 @@
 
 #include "logging.h"
 #include "dicomsequenceattribute.h"
+#include "dicomattribute.h"
 #include "dicomvalueattribute.h"
 #include "dicomsequenceitem.h"
 #include "dicomreferencedimage.h"
@@ -312,6 +313,38 @@ QList<DICOMReferencedImage*> DICOMTagReader:: getDicomReferencedImagesFromTreeNo
     }
 
     return referencedImagesOfTreeNode;
+}
+
+QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes()
+{
+    QList<DICOMAttribute*> attributeList;
+    DcmElement *currentElement = NULL;
+
+    for(unsigned int i = 0; i < m_dicomData->card(); i++)
+    {
+        currentElement = OFstatic_cast(DcmElement*, m_dicomData->nextInContainer(currentElement));
+
+        // Es tracta d'una seqüència
+        if(!currentElement->isLeaf())
+        {
+            DICOMSequenceAttribute *dicomSequenceAttribute = convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*, currentElement));
+            attributeList.append( dicomSequenceAttribute );
+        }
+        else
+        {
+            OFString value;
+            currentElement->getOFStringArray(value);
+
+            DICOMTag tag(currentElement->getGTag(), currentElement->getETag());
+
+            DICOMValueAttribute *dicomValueAttribute = new DICOMValueAttribute();
+            dicomValueAttribute->setTag(tag);
+            dicomValueAttribute->setValue(QString(value.c_str()));
+
+            attributeList.append(dicomValueAttribute);
+        }
+    }
+    return attributeList;
 }
 
 QString DICOMTagReader::getStructuredReportCodeValueOfContentItem(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator)
