@@ -47,9 +47,9 @@ Q3DOrientationMarker::Q3DOrientationMarker( vtkRenderWindowInteractor *interacto
     property->SetDiffuse( 0 );
     property->SetAmbient( 1 );
     property->SetColor( 0.18 , 0.28 ,  0.23 );
-    m_cubeActor->TextEdgesOn();
-    m_cubeActor->CubeOn();
-    m_cubeActor->FaceTextOn();
+    m_cubeActor->SetTextEdgesVisibility(true);
+    m_cubeActor->SetCubeVisibility(true);
+    m_cubeActor->SetFaceTextVisibility(true);
 
     property = m_cubeActor->GetXPlusFaceProperty();
     property->SetColor( 0 , 0 , 1 );
