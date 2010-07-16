@@ -1057,6 +1057,27 @@ void ViewpointInformationChannel::computeViewMeasuresCpu(bool computeHZv, bool c
         for (int k = 0; k < nThreads; k++) delete viewpointVomiThreads[k];
         delete[] viewpointVomiThreads;
     }
+
+#ifndef QT_NO_DEBUG
+    if (computeVmi || computeVmi2)
+    {
+        double sumVmi1 = 0.0, sumVmi2 = 0.0;
+        for (int i = 0; i < nViewpoints; i++)
+        {
+            float pv = m_viewProbabilities.at(i);
+            if (computeVmi) sumVmi1 += pv * m_vmi.at(i);
+            if (computeVmi2) sumVmi2 += pv * m_vmi2.at(i);
+        }
+        if (computeVmi)
+        {
+            DEBUG_LOG(QString("sum VMI1 = %1").arg(sumVmi1));
+        }
+        if (computeVmi2)
+        {
+            DEBUG_LOG(QString("sum VMI2 = %1").arg(sumVmi2));
+        }
+    }
+#endif
 }
 
 
@@ -1083,7 +1104,7 @@ void ViewpointInformationChannel::computeVmi3Cpu()
                 }
             }
         private:
-            float m_sum;
+            double m_sum;
             const QVector<float> &m_voxelProbabilitiesInView;
             const QVector<float> &m_HVz;
             int m_start, m_end;
@@ -1133,6 +1154,16 @@ void ViewpointInformationChannel::computeVmi3Cpu()
     }
 
     delete[] vmi3Threads;
+
+#ifndef QT_NO_DEBUG
+    double sumVmi3 = 0.0;
+    for (int i = 0; i < nViewpoints; i++)
+    {
+        float pv = m_viewProbabilities.at(i);
+        sumVmi3 += pv * m_vmi3.at(i);
+    }
+    DEBUG_LOG(QString("sum VMI3 = %1").arg(sumVmi3));
+#endif
 }
 
 
@@ -1281,6 +1312,19 @@ void ViewpointInformationChannel::computeVomiCpu(bool computeHVz, bool computeVo
             if (colorVomi.z > m_maximumColorVomi) m_maximumColorVomi = colorVomi.z;
         }
     }
+
+#ifndef QT_NO_DEBUG
+    if (computeVomi)
+    {
+        double sumVomi1 = 0.0;
+        for (int j = 0; j < nVoxels; j++)
+        {
+            float pz = m_voxelProbabilities.at(j);
+            sumVomi1 += pz * m_vomi.at(j);
+        }
+        DEBUG_LOG(QString("sum VoMI1 = %1").arg(sumVomi1));
+    }
+#endif
 }
 
 
@@ -1355,6 +1399,16 @@ void ViewpointInformationChannel::computeVomi2Cpu()
     }
 
     delete[] vomi2Threads;
+
+#ifndef QT_NO_DEBUG
+    double sumVomi2 = 0.0;
+    for (int j = 0; j < nVoxels; j++)
+    {
+        float pz = m_voxelProbabilities.at(j);
+        sumVomi2 += pz * m_vomi2.at(j);
+    }
+    DEBUG_LOG(QString("sum VoMI2 = %1").arg(sumVomi2));
+#endif
 }
 
 
@@ -1447,6 +1501,16 @@ void ViewpointInformationChannel::computeVomi3Cpu()
         if (vomi3 < m_minimumVomi3) m_minimumVomi3 = vomi3;
         if (vomi3 > m_maximumVomi3) m_maximumVomi3 = vomi3;
     }
+
+#ifndef QT_NO_DEBUG
+    double sumVomi3 = 0.0;
+    for (int j = 0; j < nVoxels; j++)
+    {
+        float pz = m_voxelProbabilities.at(j);
+        sumVomi3 += pz * m_vomi3.at(j);
+    }
+    DEBUG_LOG(QString("sum VoMI3 = %1").arg(sumVomi3));
+#endif
 }
 
 
@@ -1910,6 +1974,27 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
         for (int k = 0; k < nThreads; k++) delete viewpointVomiThreads[k];
         delete[] viewpointVomiThreads;
     }
+
+#ifndef QT_NO_DEBUG
+    if (computeVmi || computeVmi2)
+    {
+        double sumVmi1 = 0.0, sumVmi2 = 0.0;
+        for (int i = 0; i < nViewpoints; i++)
+        {
+            float pv = m_viewProbabilities.at(i);
+            if (computeVmi) sumVmi1 += pv * m_vmi.at(i);
+            if (computeVmi2) sumVmi2 += pv * m_vmi2.at(i);
+        }
+        if (computeVmi)
+        {
+            DEBUG_LOG(QString("sum VMI1 = %1").arg(sumVmi1));
+        }
+        if (computeVmi2)
+        {
+            DEBUG_LOG(QString("sum VMI2 = %1").arg(sumVmi2));
+        }
+    }
+#endif
 }
 
 
@@ -1936,7 +2021,7 @@ void ViewpointInformationChannel::computeVmi3Cuda()
                 }
             }
         private:
-            float m_sum;
+            double m_sum;
             const QVector<float> &m_voxelProbabilitiesInView;
             const QVector<float> &m_HVz;
             int m_start, m_end;
@@ -1986,6 +2071,16 @@ void ViewpointInformationChannel::computeVmi3Cuda()
     }
 
     delete[] vmi3Threads;
+
+#ifndef QT_NO_DEBUG
+    double sumVmi3 = 0.0;
+    for (int i = 0; i < nViewpoints; i++)
+    {
+        float pv = m_viewProbabilities.at(i);
+        sumVmi3 += pv * m_vmi3.at(i);
+    }
+    DEBUG_LOG(QString("sum VMI3 = %1").arg(sumVmi3));
+#endif
 }
 
 
@@ -2066,6 +2161,19 @@ void ViewpointInformationChannel::computeVomiCuda(bool computeHVz, bool computeV
             if (colorVomi.z > m_maximumColorVomi) m_maximumColorVomi = colorVomi.z;
         }
     }
+
+#ifndef QT_NO_DEBUG
+    if (computeVomi)
+    {
+        double sumVomi1 = 0.0;
+        for (int j = 0; j < nVoxels; j++)
+        {
+            float pz = m_voxelProbabilities.at(j);
+            sumVomi1 += pz * m_vomi.at(j);
+        }
+        DEBUG_LOG(QString("sum VoMI1 = %1").arg(sumVomi1));
+    }
+#endif
 }
 
 
@@ -2092,6 +2200,16 @@ void ViewpointInformationChannel::computeVomi2Cuda()
         if (vomi2 < m_minimumVomi2) m_minimumVomi2 = vomi2;
         if (vomi2 > m_maximumVomi2) m_maximumVomi2 = vomi2;
     }
+
+#ifndef QT_NO_DEBUG
+    double sumVomi2 = 0.0;
+    for (int j = 0; j < nVoxels; j++)
+    {
+        float pz = m_voxelProbabilities.at(j);
+        sumVomi2 += pz * m_vomi2.at(j);
+    }
+    DEBUG_LOG(QString("sum VoMI2 = %1").arg(sumVomi2));
+#endif
 }
 
 
@@ -2136,6 +2254,16 @@ void ViewpointInformationChannel::computeVomi3Cuda()
         if (vomi3 < m_minimumVomi3) m_minimumVomi3 = vomi3;
         if (vomi3 > m_maximumVomi3) m_maximumVomi3 = vomi3;
     }
+
+#ifndef QT_NO_DEBUG
+    double sumVomi3 = 0.0;
+    for (int j = 0; j < nVoxels; j++)
+    {
+        float pz = m_voxelProbabilities.at(j);
+        sumVomi3 += pz * m_vomi3.at(j);
+    }
+    DEBUG_LOG(QString("sum VoMI3 = %1").arg(sumVomi3));
+#endif
 }
 
 
