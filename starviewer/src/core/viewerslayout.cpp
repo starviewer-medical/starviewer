@@ -298,7 +298,7 @@ void ViewersLayout::setGrid(int rows, int columns)
     m_isRegular = true;
 }
 
-void ViewersLayout::setGrid(QList<QString> positionsList)
+void ViewersLayout::setGrid(const QStringList &positionsList)
 {
     Q2DViewerWidget *newViewer = 0;
     QStringList listOfPositions;
@@ -342,7 +342,7 @@ void ViewersLayout::setGrid(QList<QString> positionsList)
     m_isRegular = false;
 }
 
-Q2DViewerWidget* ViewersLayout::addViewer(QString position)
+Q2DViewerWidget* ViewersLayout::addViewer(const QString &position)
 {
     Q2DViewerWidget *newViewer = 0;
     QStringList listOfPositions;
