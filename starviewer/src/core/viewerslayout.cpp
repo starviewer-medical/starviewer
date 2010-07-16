@@ -118,14 +118,12 @@ void ViewersLayout::addColumns(int columns)
 {
     int viewerPosition = m_columns;
     Q2DViewerWidget *newViewer = 0;
-    int rows;
     
     while (columns > 0)
     {
-        rows = 0;
         m_columns += 1;
         m_totalColumns += 1;
-        while (rows < m_viewersLayout->rowCount())
+        for (int rows = 0; rows < m_viewersLayout->rowCount(); ++rows)
         {
             newViewer = getNewQ2DViewerWidget();
             m_viewersLayout->addWidget(newViewer, rows, m_totalColumns - 1);
@@ -136,7 +134,6 @@ void ViewersLayout::addColumns(int columns)
                 newViewer->hide();
                 emit viewerRemoved(newViewer);
             }
-            rows++;
         }
         viewerPosition = m_columns;
         columns--;
@@ -171,13 +168,11 @@ void ViewersLayout::removeColumns(int columns)
 {
     int viewerPosition = m_columns - 1;
     Q2DViewerWidget *oldViewer = 0;
-    int rows;
     
     while (columns > 0 && m_columns > 1)
     {
-        rows = 0;
         // Eliminem un widget de cada fila per tenir una columna menys
-        while (rows < m_viewersLayout->rowCount())
+        for (int rows = 0; rows < m_viewersLayout->rowCount(); ++rows)
         {
             oldViewer = m_vectorViewers.at(viewerPosition);
             m_viewersLayout->removeWidget(oldViewer);
@@ -188,7 +183,6 @@ void ViewersLayout::removeColumns(int columns)
             }
             delete oldViewer;
             viewerPosition += (m_columns - 1);
-            rows++;
         }
         m_columns--;
         viewerPosition = m_columns - 1;
