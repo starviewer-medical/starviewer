@@ -26,7 +26,7 @@ void DICOMAttribute::setTag(DICOMTag tag)
     m_tag->setElement(tag.getElement());
 }
 
-DICOMTag * DICOMAttribute::getTag()
+DICOMTag* DICOMAttribute::getTag()
 {
     return m_tag;
 }
