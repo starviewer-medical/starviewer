@@ -94,8 +94,8 @@ private:
     Q2DViewerWidget *m_selectedViewer;
 
     /// Nombre de files i columnes pels layouts
-    int m_rows;
-    int m_columns;
+    int m_visibleRows;
+    int m_visibleColumns;
     int m_totalRows;
     int m_totalColumns;
 
