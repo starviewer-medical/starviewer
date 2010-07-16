@@ -17,7 +17,8 @@ FORMS += qlogviewerbase.ui \
     q2dviewerwidgetbase.ui \
     keyimagenotemanagerwidgetbase.ui \
     keyimagenotedisplayerbase.ui \
-    qreleasenotesbase.ui
+    qreleasenotesbase.ui \
+    qdicomdumpbrowserbase.ui
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -224,7 +225,8 @@ HEADERS += extensionfactory.h \
     keyimagenotedisplayer.h \
     keyimagenotemanager.h \
     dicomreferencedimage.h \
-    qreleasenotes.h
+    qreleasenotes.h \
+    qdicomdumpbrowser.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -407,7 +409,8 @@ SOURCES += extensionmediator.cpp \
     keyimagenotedisplayer.cpp \
     keyimagenotemanager.cpp \
     dicomreferencedimage.cpp \
-    qreleasenotes.cpp
+    qreleasenotes.cpp \
+    qdicomdumpbrowser.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
