@@ -22,7 +22,7 @@ public:
 
     void setTag(DICOMTag tag);
 
-    DICOMTag * getTag();
+    DICOMTag* getTag();
 
     virtual bool isValueAttribute() = 0;
 
@@ -31,7 +31,7 @@ public:
     virtual QString toString() = 0;
 
 private:
-    DICOMTag * m_tag;
+    DICOMTag *m_tag;
 
 };
 
