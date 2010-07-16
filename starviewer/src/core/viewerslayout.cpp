@@ -353,19 +353,13 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 
 void ViewersLayout::resizeEvent(QResizeEvent *event)
 {
-    int numberOfElements = m_vectorViewers.size();
-    Q2DViewerWidget *viewer = 0;
-    QString geometry;
-
     QWidget::resizeEvent(event);
 
     if (!m_isRegular)
     {
-        for (int i = 0; i < numberOfElements; i++)
+        for (int i = 0; i < m_vectorViewers.size(); i++)
         {
-            viewer = m_vectorViewers.at(i);
-            geometry = m_geometriesList.at(i);
-            setViewerGeometry(viewer, geometry);
+            setViewerGeometry(m_vectorViewers.at(i), m_geometriesList.at(i));
         }
     }
 }
