@@ -26,6 +26,7 @@
 
 //Qt
 #include <QMessageBox>
+#include <QContextMenuEvent>
 
 // VTK
 #include <vtkCommand.h>
