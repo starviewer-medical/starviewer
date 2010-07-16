@@ -7,23 +7,22 @@
 #ifndef UDGVIEWERSLAYOUT_H
 #define UDGVIEWERSLAYOUT_H
 
+#include "q2dviewerwidget.h"
+
 #include <QWidget>
 #include <QList>
 #include <QResizeEvent>
-#include "q2dviewerwidget.h"
 
 namespace udg {
 
 /**
-Classe que permet crear un widget de visualitzadors amb diferents layouts
+    Classe que permet crear un widget de visualitzadors amb diferents layouts
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class ViewersLayout : public QWidget
-{
+class ViewersLayout : public QWidget {
 Q_OBJECT
 public:
-
     ViewersLayout(QWidget *parent = 0);
     ~ViewersLayout();
 
@@ -34,47 +33,47 @@ public:
     int getNumberOfViewers();
 
     /// Obtenir el visualitzador numero "number".
-    Q2DViewerWidget * getViewerWidget( int number );
+    Q2DViewerWidget* getViewerWidget(int number);
 
 public slots:
     ///Canviar el nombre de files i columnes
-    void addColumns( int columns = 1 );
-    void addRows(  int rows = 1 );
-    void removeColumns( int columns = 1 );
-    void removeRows( int rows = 1 );
-    void setGrid( int rows, int columns );
-    void showRows( int rows );
-    void hideRows( int rows );
-    void showColumns( int columns );
-    void hideColumns( int columns );
-    void setGrid( QList<QString> );
+    void addColumns(int columns = 1);
+    void addRows( int rows = 1);
+    void removeColumns(int columns = 1);
+    void removeRows(int rows = 1);
+    void setGrid(int rows, int columns);
+    void showRows(int rows);
+    void hideRows(int rows);
+    void showColumns(int columns);
+    void hideColumns(int columns);
+    void setGrid(QList<QString>);
 
     /// Afegeix un nou visualitzador
-    Q2DViewerWidget * addViewer( QString position );
+    Q2DViewerWidget* addViewer(QString position);
 
     /// Posem el widget seleccionat com a actual
-    void setViewerSelected( Q2DViewerWidget *viewer );
+    void setViewerSelected(Q2DViewerWidget *viewer);
 
 signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
-    void viewerAdded( Q2DViewerWidget * );
+    void viewerAdded(Q2DViewerWidget *viewer);
 
     /// Senyal que s'emet quan s'amaga un visualitzador
-    void viewerRemoved( Q2DViewerWidget * );
+    void viewerRemoved(Q2DViewerWidget *viewer);
 
     /// Senyal que s'emet quan el visualitzador seleccionat canvia
-    void viewerSelectedChanged( Q2DViewerWidget * );
+    void viewerSelectedChanged(Q2DViewerWidget *viewer);
 
 protected:
 	/// Tractament de l'event de canvi de tamany de la finestra
-    void resizeEvent ( QResizeEvent * event );
+    void resizeEvent(QResizeEvent *event);
 
 private:
-    // Obtenir un nou visualitzador
+    /// Obtenir un nou visualitzador
 	Q2DViewerWidget* getNewQ2DViewerWidget();
 
-	// Restaurar els layouts
-	void restoreLayouts();
+    /// Restaurar els layouts
+    void restoreLayouts();
 
 private slots:
     /// Inicialitza els layouts
@@ -84,8 +83,8 @@ private slots:
     void removeLayouts();
 
 private:
-    ///Widget contenidor general
-    QWidget * m_workingArea;
+    /// Widget contenidor general
+    QWidget *m_workingArea;
 
     /// Grids per mostrar diferents q2dviewers alhora.
     QGridLayout *m_gridLayout;
@@ -94,7 +93,7 @@ private:
     /// Visualitzador seleccionat, també sempre en tindrem un
     Q2DViewerWidget *m_selectedViewer;
 
-    /// Nombre de files i columnes per els layouts
+    /// Nombre de files i columnes pels layouts
     int m_rows;
     int m_columns;
     int m_totalRows;
@@ -108,8 +107,8 @@ private:
     /// Grid regular o no regular
     bool m_isRegular;
 
-	/// Nombre de visualitzadors visibles
-	int m_numberOfVisibleViewers;
+    /// Nombre de visualitzadors visibles
+    int m_numberOfVisibleViewers;
 };
 
 }
