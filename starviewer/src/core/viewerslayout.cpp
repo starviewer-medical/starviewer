@@ -48,7 +48,7 @@ void ViewersLayout::removeLayouts()
 {
     int numberOfViewers = m_vectorViewers.size();
 
-    for (int i = 0; i < numberOfViewers; i++)
+    for (int i = 0; i < numberOfViewers; ++i)
     {
         m_viewersLayout->removeWidget(m_vectorViewers.at(i));
     }
@@ -68,7 +68,7 @@ void ViewersLayout::restoreLayouts()
 
         if ((m_totalRows * m_totalColumns) > numberOfViewers)
         {
-            for (int i = 0; i < (m_totalRows * m_totalColumns) - numberOfViewers; i++)
+            for (int i = 0; i < (m_totalRows * m_totalColumns) - numberOfViewers; ++i)
             {
                 m_vectorViewers.push_back(getNewQ2DViewerWidget());
             }
@@ -80,15 +80,15 @@ void ViewersLayout::restoreLayouts()
     int column = 1;
     int row = 0;
     // S'amaguen tots i es deixa el principal, es tornen a posar amb layout
-    for (int i = 1; i < m_vectorViewers.size(); i++)
+    for (int i = 1; i < m_vectorViewers.size(); ++i)
     {
         m_vectorViewers.value(i)->hide();
         m_viewersLayout->addWidget(m_vectorViewers.at(i), row, column);
 
-        column++;
+        ++column;
         if (column >= m_totalColumns)
         {
-            row++;
+            ++row;
             column = 0;
         }
     }
@@ -121,8 +121,8 @@ void ViewersLayout::addColumns(int columns)
     
     while (columns > 0)
     {
-        m_visibleColumns += 1;
-        m_totalColumns += 1;
+        ++m_visibleColumns;
+        ++m_totalColumns;
         for (int rows = 0; rows < m_viewersLayout->rowCount(); ++rows)
         {
             newViewer = getNewQ2DViewerWidget();
@@ -136,7 +136,7 @@ void ViewersLayout::addColumns(int columns)
             }
         }
         viewerPosition = m_visibleColumns;
-        columns--;
+        --columns;
     }
 }
 
@@ -149,7 +149,7 @@ void ViewersLayout::addRows(int rows)
         m_visibleRows += 1;
         m_totalRows += 1;
         //Afegim tants widgets com columnes
-        for (int column = 0; column < m_totalColumns; column++)
+        for (int column = 0; column < m_totalColumns; ++column)
         {
             newViewer = getNewQ2DViewerWidget();
             m_viewersLayout->addWidget(newViewer, m_visibleRows - 1, column);
@@ -160,7 +160,7 @@ void ViewersLayout::addRows(int rows)
                 emit viewerRemoved(newViewer);
             }
         }
-        rows--;
+        --rows;
     }
 }
 
@@ -184,9 +184,9 @@ void ViewersLayout::removeColumns(int columns)
             delete oldViewer;
             viewerPosition += (m_visibleColumns - 1);
         }
-        m_visibleColumns--;
+        --m_visibleColumns;
         viewerPosition = m_visibleColumns - 1;
-        columns--;
+        --columns;
     }
 }
 
@@ -198,7 +198,7 @@ void ViewersLayout::removeRows(int rows)
     while (rows > 0 && m_visibleRows > 1)
     {
         // Eliminem tants widgets com columnes
-        for (int i = 0; i < m_visibleColumns; i++)
+        for (int i = 0; i < m_visibleColumns; ++i)
         {
             oldViewer = m_vectorViewers.at(viewerPosition);
             m_vectorViewers.remove(viewerPosition);
@@ -211,8 +211,8 @@ void ViewersLayout::removeRows(int rows)
             delete oldViewer;
             --viewerPosition;
         }
-        m_visibleRows--;
-        rows--;
+        --m_visibleRows;
+        --rows;
     }
 }
 
@@ -299,7 +299,7 @@ void ViewersLayout::setGrid(const QStringList &geometriesList)
         removeLayouts();
     }
 
-    for (int i = 0; i < numberOfElements; i++)
+    for (int i = 0; i < numberOfElements; ++i)
     {
         newViewer = m_vectorViewers.at(i);
 
@@ -311,7 +311,7 @@ void ViewersLayout::setGrid(const QStringList &geometriesList)
         geometry = geometriesList.at(i);
         setViewerGeometry(newViewer, geometry);
         
-        m_numberOfVisibleViewers++;
+        ++m_numberOfVisibleViewers;
     }
 
     m_geometriesList = geometriesList;
@@ -341,7 +341,7 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 	
     setViewerGeometry(newViewer, geometry);
     newViewer->show();
-    m_numberOfVisibleViewers++;
+    ++m_numberOfVisibleViewers;
 
     emit viewerAdded(newViewer);
     
@@ -357,7 +357,7 @@ void ViewersLayout::resizeEvent(QResizeEvent *event)
 
     if (!m_isRegular)
     {
-        for (int i = 0; i < m_vectorViewers.size(); i++)
+        for (int i = 0; i < m_vectorViewers.size(); ++i)
         {
             setViewerGeometry(m_vectorViewers.at(i), m_geometriesList.at(i));
         }
@@ -390,13 +390,13 @@ void ViewersLayout::showRows(int rows)
 
     while (rows > 0)
     {
-        for (int columnNumber = 0; columnNumber < m_visibleColumns; columnNumber++)
+        for (int columnNumber = 0; columnNumber < m_visibleColumns; ++columnNumber)
         {
             viewer = m_vectorViewers.at((m_totalColumns * m_visibleRows) + columnNumber);
             viewer->show();
         }
-        m_visibleRows++;
-        rows--;
+        ++m_visibleRows;
+        --rows;
     }
 }
 
@@ -406,8 +406,8 @@ void ViewersLayout::hideRows(int rows)
 
     while (rows > 0)
     {
-        m_visibleRows--;
-        for (int columnNumber = 0; columnNumber < m_visibleColumns; columnNumber++)
+        --m_visibleRows;
+        for (int columnNumber = 0; columnNumber < m_visibleColumns; ++columnNumber)
         {
             viewer = m_vectorViewers.at(((m_totalColumns * m_visibleRows) + columnNumber));
             viewer->hide();
@@ -417,7 +417,7 @@ void ViewersLayout::hideRows(int rows)
                 setSelectedViewer(m_vectorViewers.at(0));
             }
         }
-        rows--;
+        --rows;
     }
 }
 
@@ -427,13 +427,13 @@ void ViewersLayout::showColumns(int columns)
 
     while (columns > 0)
     {
-        for (int rowNumber = 0; rowNumber < m_visibleRows; rowNumber++)
+        for (int rowNumber = 0; rowNumber < m_visibleRows; ++rowNumber)
         {
             viewer = m_vectorViewers.at((m_totalColumns * rowNumber) + m_visibleColumns);
             viewer->show();
         }
-        m_visibleColumns++;
-        columns--;
+        ++m_visibleColumns;
+        --columns;
     }
 }
 
@@ -443,8 +443,8 @@ void ViewersLayout::hideColumns(int columns)
 
     while (columns > 0)
     {
-        m_visibleColumns--;
-        for (int rowNumber = 0; rowNumber < m_visibleRows; rowNumber++)
+        --m_visibleColumns;
+        for (int rowNumber = 0; rowNumber < m_visibleRows; ++rowNumber)
         {
             viewer = m_vectorViewers.at((m_totalColumns * rowNumber) + m_visibleColumns);
             viewer->hide();
@@ -454,7 +454,7 @@ void ViewersLayout::hideColumns(int columns)
                 setSelectedViewer(m_vectorViewers.at(0));
             }
         }
-        columns--;
+        --columns;
     }
 }
 
