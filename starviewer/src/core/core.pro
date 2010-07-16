@@ -15,8 +15,6 @@ FORMS += qlogviewerbase.ui \
     qcinecontrollerbase.ui \
     qthickslabwidgetbase.ui \
     q2dviewerwidgetbase.ui \
-    keyimagenotemanagerwidgetbase.ui \
-    keyimagenotedisplayerbase.ui \
     qreleasenotesbase.ui \
     qdicomdumpbrowserbase.ui
 TRANSLATIONS += core_ca_ES.ts \
@@ -220,11 +218,6 @@ HEADERS += extensionfactory.h \
     imageorientationoperationsmapper.h \
     copydirectory.h \
     linepathtool.h \
-    keyimagenote.h \
-    keyimagenotemanagerwidget.h \
-    keyimagenotedisplayer.h \
-    keyimagenotemanager.h \
-    dicomreferencedimage.h \
     qreleasenotes.h \
     qdicomdumpbrowser.h
 SOURCES += extensionmediator.cpp \
@@ -404,11 +397,6 @@ SOURCES += extensionmediator.cpp \
     imageorientationoperationsmapper.cpp \
     copydirectory.cpp \
     linepathtool.cpp \
-    keyimagenote.cpp \
-    keyimagenotemanagerwidget.cpp \
-    keyimagenotedisplayer.cpp \
-    keyimagenotemanager.cpp \
-    dicomreferencedimage.cpp \
     qreleasenotes.cpp \
     qdicomdumpbrowser.cpp
 TEMPLATE = lib
