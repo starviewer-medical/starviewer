@@ -20,7 +20,7 @@ public:
 
     virtual ~DICOMAttribute();
 
-    void setTag(DICOMTag tag);
+    void setTag(const DICOMTag &tag);
 
     DICOMTag* getTag();
 

@@ -29,15 +29,15 @@ public:
     QList<DICOMAttribute*> getAttributes();
 
     /// Retorna l'atribut associat al tag passat per parametre. Si no disposa d'ell retorna null.
-    DICOMAttribute* getAttribute(DICOMTag tag);
+    DICOMAttribute* getAttribute(const DICOMTag &tag);
 
     /// Retorna l'atribut associat al tag passat per paràmetre.
     /// Si no disposa d'ell o el tag no és un valor retorna null.
-    DICOMValueAttribute* getValueAttribute(DICOMTag tag);
+    DICOMValueAttribute* getValueAttribute(const DICOMTag &tag);
 
     /// Retorna l'atribut associat al tag passat per paràmetre.
     /// Si no disposa d'ell o el tag no és un retorna null.
-    DICOMSequenceAttribute* getSequenceAttribute(DICOMTag tag);
+    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &tag);
 
     /// Retorna el contingut de l'item en forma de text. Útil per analitzar el contingut.
     QString toString();

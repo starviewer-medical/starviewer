@@ -20,7 +20,7 @@ DICOMAttribute::~DICOMAttribute()
     delete m_tag;
 }
 
-void DICOMAttribute::setTag(DICOMTag tag)
+void DICOMAttribute::setTag(const DICOMTag &tag)
 {
     m_tag->setGroup(tag.getGroup());
     m_tag->setElement(tag.getElement());
