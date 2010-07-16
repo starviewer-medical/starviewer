@@ -336,7 +336,6 @@ void ViewersLayout::setGrid(QList<QString> positionsList)
         newViewer->setGeometry(x1*screenX, (1-y1)*screenY, (x2-x1)*screenX, (y1-y2)*screenY);
 
 		m_numberOfVisibleViewers++;
-        emit viewerAdded(newViewer);
     }
 
     m_positionsList = positionsList;
