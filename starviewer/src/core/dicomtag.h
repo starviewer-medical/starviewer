@@ -35,8 +35,11 @@ public:
     void setElement( unsigned int element );
     unsigned int getElement() const;
 
+    /// Obtenir el nom del tag.
+    QString getName() const;
+
     /// Retorna el tag en forma de text.
-    QString toString() const;
+    QString getKeyAsQString() const;
 
 private:
     unsigned int m_group;

@@ -51,7 +51,7 @@ QString DICOMSequenceAttribute::toString()
 {
     QString result;
 
-    result = getTag()->toString() + ": (SQ) ->";
+    result = getTag()->getKeyAsQString() + ": (SQ) ->";
 
     foreach( DICOMSequenceItem *item, m_itemList )
     {

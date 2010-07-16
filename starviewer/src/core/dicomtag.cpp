@@ -9,6 +9,8 @@
 
 #include "dicomtag.h"
 
+#include "dctag.h"
+
 #include <QString>
 
 namespace udg {
@@ -53,7 +55,12 @@ unsigned int DICOMTag::getElement() const
     return m_element;
 }
 
-QString DICOMTag::toString() const
+QString DICOMTag::getName() const
+{
+    return QString(DcmTag(m_group, m_element).getTagName());
+}
+
+QString DICOMTag::getKeyAsQString() const
 {
     return QString("(%1,%2)").arg( QString::number(m_group,16).rightJustified(4,'0') ).arg( QString::number(m_element,16).rightJustified(4,'0') );
 }
