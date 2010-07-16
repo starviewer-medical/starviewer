@@ -16,6 +16,8 @@ class DICOMValueAttribute;
 class DICOMSequenceAttribute;
 class DICOMTag;
 
+/** Classe encarregada de representar els Items de les seqüències de l'estàndard DICOM. Per treballar amb seqüències s'ha de fer ús de la classe \c DICOMSequenceAttribute.
+  */
 class DICOMSequenceItem {
 
 public:    
@@ -43,6 +45,7 @@ public:
     QString toString();
 
 private:
+    /// Atribut per emmagatzemar els artributs que conté l'item. S'utilitza un QMap per optimitzar la cerca d'atributs.
     QMap<QString,DICOMAttribute*> m_attributeList;
 };
 
