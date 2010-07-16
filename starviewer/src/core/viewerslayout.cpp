@@ -289,15 +289,8 @@ void ViewersLayout::setGrid(int rows, int columns)
 void ViewersLayout::setGrid(const QStringList &positionsList)
 {
     Q2DViewerWidget *newViewer = 0;
-    QStringList listOfPositions;
-    QString position;
+    QString geometry;
     int numberOfElements = positionsList.size();
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    int screenX = this->width();
-    int screenY = this->height();
 
     m_numberOfVisibleViewers = 0;
 
@@ -315,13 +308,8 @@ void ViewersLayout::setGrid(const QStringList &positionsList)
             newViewer = getNewQ2DViewerWidget();
             m_vectorViewers.push_back(newViewer);
         }
-        position = positionsList.at(i);
-        listOfPositions = position.split("\\");
-        x1 = listOfPositions.at(0).toDouble();
-        y1 = listOfPositions.at(1).toDouble();
-        x2 = listOfPositions.at(2).toDouble();
-        y2 = listOfPositions.at(3).toDouble();
-        newViewer->setGeometry(x1*screenX, (1 - y1)*screenY, (x2 - x1)*screenX, (y1 - y2)*screenY);
+        geometry = positionsList.at(i);
+        setViewerGeometry(newViewer, geometry);
         
         m_numberOfVisibleViewers++;
     }
@@ -333,13 +321,6 @@ void ViewersLayout::setGrid(const QStringList &positionsList)
 Q2DViewerWidget* ViewersLayout::addViewer(const QString &position)
 {
     Q2DViewerWidget *newViewer = 0;
-    QStringList listOfPositions;
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    int screenX = this->width();
-    int screenY = this->height();
 
     m_visibleRows = 0;
     m_visibleColumns = 0;
@@ -358,12 +339,7 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &position)
         m_vectorViewers.push_back(newViewer);
     }
 	
-    listOfPositions = position.split("\\");
-    x1 = listOfPositions.at(0).toDouble();
-    y1 = listOfPositions.at(1).toDouble();
-    x2 = listOfPositions.at(2).toDouble();
-    y2 = listOfPositions.at(3).toDouble();
-    newViewer->setGeometry(x1*screenX, (1 - y1)*screenY, ((x2 - x1)*screenX), (y1 - y2)*screenY);
+    setViewerGeometry(newViewer, position);
     newViewer->show();
     m_numberOfVisibleViewers++;
 
@@ -377,32 +353,19 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &position)
 
 void ViewersLayout::resizeEvent(QResizeEvent *event)
 {
-    double x1;
-    double y1;
-    double x2;
-    double y2;
     int numberOfElements = m_vectorViewers.size();
     Q2DViewerWidget *viewer = 0;
-    QStringList listOfPositions;
-    QString position;
+    QString geometry;
 
     QWidget::resizeEvent(event);
 
     if (!m_isRegular)
     {
-        int screenX = this->width();
-        int screenY = this->height();
-
         for (int i = 0; i < numberOfElements; i++)
         {
             viewer = m_vectorViewers.at(i);
-            position = m_positionsList.at(i);
-            listOfPositions = position.split("\\");
-            x1 = listOfPositions.at(0).toDouble();
-            y1 = listOfPositions.at(1).toDouble();
-            x2 = listOfPositions.at(2).toDouble();
-            y2 = listOfPositions.at(3).toDouble();
-            viewer->setGeometry(x1*screenX, (1 - y1)*screenY, (x2 - x1)*screenX, (y1 - y2)*screenY);
+            geometry = m_positionsList.at(i);
+            setViewerGeometry(viewer, geometry);
         }
     }
 }
@@ -509,6 +472,24 @@ int ViewersLayout::getNumberOfViewers()
 Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
 {
     return m_vectorViewers.at(number);
+}
+
+void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry)
+{
+    QStringList splittedGeometryList = geometry.split("\\");
+
+    double x1;
+    double y1;
+    double x2;
+    double y2;
+    x1 = splittedGeometryList.at(0).toDouble();
+    y1 = splittedGeometryList.at(1).toDouble();
+    x2 = splittedGeometryList.at(2).toDouble();
+    y2 = splittedGeometryList.at(3).toDouble();
+
+    int screenX = this->width();
+    int screenY = this->height();
+    viewer->setGeometry(x1*screenX, (1 - y1)*screenY, (x2 - x1)*screenX, (y1 - y2)*screenY);
 }
 
 }

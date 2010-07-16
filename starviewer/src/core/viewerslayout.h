@@ -75,6 +75,14 @@ private:
     /// Restaurar els layouts
     void restoreLayouts();
 
+    /// Coloca el viewer donat en la posició i mides proporcionats
+    /// @param viewer Visor que volem posicionar i ajustar dins del layout
+    /// @param geometry String amb les posicions i mides realitives corresponents al viewer
+    /// El format de geometry seran les coordenades x,y de la cantonada esquerra superior i 
+    /// ample i alçada del visor, expresats com a valors dins del rang 0.0..1.0. Cada valor anirà separat per '\\'
+    /// Per exemple, un viewer que ocupa la meitat de la pantalla s'expressaria amb un string "0\\0\\0.5\\1.0"
+    void setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry);
+
 private slots:
     /// Inicialitza els layouts
     void initLayouts();
