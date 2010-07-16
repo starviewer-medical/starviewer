@@ -67,6 +67,7 @@ i18n_release.commands = for %d in ($$I18NPROJECTS) do \
                              popd &\
                              echo touch > $$i18n_release.target
 }
-# QMAKE_EXTRA_TARGETS += i18n_update i18n_release
-# PRE_TARGETDEPS += i18n_release
-# QMAKE_CLEAN += $$I18NPROJECTS_QMFILES $$i18n_release.target
+
+QMAKE_EXTRA_TARGETS += i18n_update i18n_release
+PRE_TARGETDEPS += i18n_release
+QMAKE_CLEAN += $$I18NPROJECTS_QMFILES $$i18n_release.target
