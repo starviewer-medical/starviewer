@@ -52,8 +52,8 @@ void ViewersLayout::removeLayouts()
     {
         m_viewersLayout->removeWidget(m_vectorViewers.at(i));
     }
-	m_positionsList.clear();
-	m_numberOfVisibleViewers = 0;
+    m_positionsList.clear();
+    m_numberOfVisibleViewers = 0;
 }
 
 void ViewersLayout::restoreLayouts()
@@ -61,14 +61,14 @@ void ViewersLayout::restoreLayouts()
     int numberOfViewers = m_vectorViewers.size();
 
     /// Si tenim més visors que el grid regular que teníem construït, el regenerem.
-    if (numberOfViewers > m_totalColumns*m_totalRows)
+    if (numberOfViewers > m_totalColumns * m_totalRows)
     {
         m_totalColumns = ceil(sqrt((double)numberOfViewers));
         m_totalRows = m_totalColumns;
 
         if ((m_totalRows * m_totalColumns) > numberOfViewers)
         {
-            for (int i = 0; i < ((m_totalRows * m_totalColumns) - numberOfViewers); i++)
+            for (int i = 0; i < (m_totalRows * m_totalColumns) - numberOfViewers; i++)
             {
                 m_vectorViewers.push_back(getNewQ2DViewerWidget());
             }
@@ -128,7 +128,7 @@ void ViewersLayout::addColumns(int columns)
         while (rows < m_viewersLayout->rowCount())
         {
             newViewer = getNewQ2DViewerWidget();
-            m_viewersLayout->addWidget(newViewer, rows, m_totalColumns-1);
+            m_viewersLayout->addWidget(newViewer, rows, m_totalColumns - 1);
             m_vectorViewers.insert(viewerPosition,newViewer);
             viewerPosition += m_columns;
             if (rows >= m_rows)
@@ -155,7 +155,7 @@ void ViewersLayout::addRows(int rows)
         for (int column = 0; column < m_totalColumns; column++)
         {
             newViewer = getNewQ2DViewerWidget();
-            m_viewersLayout->addWidget(newViewer, m_rows-1, column);
+            m_viewersLayout->addWidget(newViewer, m_rows - 1, column);
             m_vectorViewers.push_back(newViewer);
             if (column >= m_columns)
             {
@@ -169,7 +169,7 @@ void ViewersLayout::addRows(int rows)
 
 void ViewersLayout::removeColumns(int columns)
 {
-    int viewerPosition = m_columns-1;
+    int viewerPosition = m_columns - 1;
     Q2DViewerWidget *oldViewer = 0;
     int rows;
     
@@ -187,18 +187,18 @@ void ViewersLayout::removeColumns(int columns)
                 setSelectedViewer(m_vectorViewers.at(0));
             }
             delete oldViewer;
-            viewerPosition += (m_columns-1);
+            viewerPosition += (m_columns - 1);
             rows++;
         }
         m_columns--;
-        viewerPosition = m_columns-1;
+        viewerPosition = m_columns - 1;
         columns--;
     }
 }
 
 void ViewersLayout::removeRows(int rows)
 {
-    int viewerPosition = m_vectorViewers.count()-1;
+    int viewerPosition = m_vectorViewers.count() - 1;
     Q2DViewerWidget *oldViewer = 0;
 
     while (rows > 0 && m_rows > 1)
@@ -215,7 +215,7 @@ void ViewersLayout::removeRows(int rows)
                 setSelectedViewer(m_vectorViewers.at(0));
             }
             delete oldViewer;
-            viewerPosition -= 1;
+            --viewerPosition;
         }
         m_rows--;
         rows--;
@@ -243,7 +243,7 @@ void ViewersLayout::setGrid(int rows, int columns)
         }
         else
         {
-            windowsToShow = rows-m_rows;
+            windowsToShow = rows - m_rows;
         }
 
         showRows(windowsToShow);
@@ -273,7 +273,7 @@ void ViewersLayout::setGrid(int rows, int columns)
         }
         else
         {
-            windowsToShow = columns-m_columns;
+            windowsToShow = columns - m_columns;
         }
 
         showColumns(windowsToShow);
@@ -347,7 +347,7 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &position)
     int screenX = this->width();
     int screenY = this->height();
 
-	m_rows = 0;
+    m_rows = 0;
     m_columns = 0;
     if (m_isRegular) 
     {
@@ -388,7 +388,7 @@ void ViewersLayout::resizeEvent(QResizeEvent *event)
     double x2;
     double y2;
     int numberOfElements = m_vectorViewers.size();
-    Q2DViewerWidget * viewer = 0;
+    Q2DViewerWidget *viewer = 0;
     QStringList listOfPositions;
     QString position;
 
