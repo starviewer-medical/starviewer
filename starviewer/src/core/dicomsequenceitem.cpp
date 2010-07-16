@@ -40,7 +40,7 @@ DICOMSequenceItem::~DICOMSequenceItem()
 
 void DICOMSequenceItem::addAttribute( DICOMAttribute * attribute )
 {
-    m_attributeList.insert( attribute->getTag()->toString(), attribute );
+    m_attributeList.insert( attribute->getTag()->getKeyAsQString(), attribute );
 }
 
 QList<DICOMAttribute*> DICOMSequenceItem::getAttributes()
@@ -50,7 +50,7 @@ QList<DICOMAttribute*> DICOMSequenceItem::getAttributes()
 
 DICOMAttribute * DICOMSequenceItem::getAttribute(DICOMTag tag)
 {
-    return m_attributeList.value( tag.toString() );
+    return m_attributeList.value( tag.getKeyAsQString() );
 }
 
 DICOMValueAttribute * DICOMSequenceItem::getValueAttribute(DICOMTag tag)

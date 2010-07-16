@@ -36,7 +36,7 @@ bool DICOMValueAttribute::isSequenceAttribute()
 
 QString DICOMValueAttribute::toString()
 {
-    return QString("%1: %2").arg( getTag()->toString() ).arg( getValueAsQString() );
+    return QString("%1: %2").arg( getTag()->getKeyAsQString() ).arg( getValueAsQString() );
 }
 
 void DICOMValueAttribute::setValue( int value )
