@@ -20,8 +20,6 @@ class Volume;
 class ToolManager;
 class ToolConfiguration;
 class HangingProtocol;
-class KeyImageNoteManager;
-class KeyImageNoteManagerWidget;
 //Estructura pacient
 class Patient;
 class Study;
@@ -87,11 +85,6 @@ public slots:
 
     ///Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
     void showDicomDumpCurrentDisplayedImage();
-
-    /// Inicialitzacio del Key Image Note Manager
-    void initializeKeyImageNoteManager();
-    /// Mostrar el widget Key Image Note Manager widget (temporal)
-    void showKeyImageNoteManagerWidgetDialog();
 
 #ifndef STARVIEWER_LITE
     /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
@@ -221,13 +214,6 @@ private:
 
     /// Manager de hanging protocols 
     HangingProtocolManager * m_hangingProtocolManager;
-
-    /// Manager de Key Image Notes
-    KeyImageNoteManager *m_keyImageNoteManager;
-
-    /// Widget de Key Image Notes
-    KeyImageNoteManagerWidget *m_keyImageNoteManagerWidget;
-
 #endif 
 
 };
