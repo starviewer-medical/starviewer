@@ -8,12 +8,6 @@
 
 #include "logging.h"
 
-// Qt's
-#include <QDesktopWidget>
-#include <QSize>
-#include <QVBoxLayout>
-#include <QRect>
-
 namespace udg {
 
 ViewersLayout::ViewersLayout(QWidget *parent) 

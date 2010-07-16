@@ -10,8 +10,8 @@
 #include "q2dviewerwidget.h"
 
 #include <QWidget>
-#include <QList>
-#include <QResizeEvent>
+
+class QResizeEvent;
 
 namespace udg {
 
