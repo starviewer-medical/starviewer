@@ -21,7 +21,7 @@ DICOMSequenceAttribute::DICOMSequenceAttribute()
 
 DICOMSequenceAttribute::~DICOMSequenceAttribute()
 {
-//    while ( ! m_itemList.isEmpty() )
+//    while (! m_itemList.isEmpty())
 //    {
 //        delete m_itemList.takeLast();
 //    }
@@ -37,9 +37,9 @@ bool DICOMSequenceAttribute::isSequenceAttribute()
     return true;
 }
 
-void DICOMSequenceAttribute::addItem( DICOMSequenceItem * item )
+void DICOMSequenceAttribute::addItem(DICOMSequenceItem *item)
 {
-    m_itemList.append( item );
+    m_itemList.append(item);
 }
 
 QList<DICOMSequenceItem*> DICOMSequenceAttribute::getItems()
@@ -53,13 +53,13 @@ QString DICOMSequenceAttribute::toString()
 
     result = getTag()->getKeyAsQString() + ": (SQ) ->";
 
-    foreach( DICOMSequenceItem *item, m_itemList )
+    foreach(DICOMSequenceItem *item, m_itemList)
     {
         result += "\n" + item->toString();
     }
 
     //Per aconseguir la identació
-    result.replace( QString("\n"), QString("\n  ") );
+    result.replace(QString("\n"), QString("\n  "));
 
     return result;
 }

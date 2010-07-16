@@ -13,16 +13,14 @@ namespace udg {
 
 class DICOMTag;
 
-class DICOMAttribute
-{
+class DICOMAttribute {
 
 public:
-
     DICOMAttribute();
 
     virtual ~DICOMAttribute();
 
-    void setTag( DICOMTag tag );
+    void setTag(DICOMTag tag);
 
     DICOMTag * getTag();
 
@@ -33,7 +31,6 @@ public:
     virtual QString toString() = 0;
 
 private:
-
     DICOMTag * m_tag;
 
 };

@@ -16,7 +16,7 @@ namespace udg {
 DICOMValueAttribute::DICOMValueAttribute()
  : DICOMAttribute()
 {
-    setValueRepresentation( DICOMValueAttribute::Unknown );
+    setValueRepresentation(DICOMValueAttribute::Unknown);
 }
 
 DICOMValueAttribute::~DICOMValueAttribute()
@@ -36,50 +36,50 @@ bool DICOMValueAttribute::isSequenceAttribute()
 
 QString DICOMValueAttribute::toString()
 {
-    return QString("%1: %2").arg( getTag()->getKeyAsQString() ).arg( getValueAsQString() );
+    return QString("%1: %2").arg(getTag()->getKeyAsQString()).arg(getValueAsQString());
 }
 
-void DICOMValueAttribute::setValue( int value )
+void DICOMValueAttribute::setValue(int value)
 {
     m_value = value;
-    setValueRepresentation( DICOMValueAttribute::Int );
+    setValueRepresentation(DICOMValueAttribute::Int);
 }
 
-void DICOMValueAttribute::setValue( unsigned int value )
+void DICOMValueAttribute::setValue(unsigned int value)
 {
     m_value = value;
-    setValueRepresentation( DICOMValueAttribute::Uint );
+    setValueRepresentation(DICOMValueAttribute::Uint);
 }
 
-void DICOMValueAttribute::setValue( double value )
+void DICOMValueAttribute::setValue(double value)
 {
     m_value = value;
-    setValueRepresentation( DICOMValueAttribute::Double );
+    setValueRepresentation(DICOMValueAttribute::Double);
 }
 
-void DICOMValueAttribute::setValue( QString value )
+void DICOMValueAttribute::setValue(QString value)
 {
     m_value = value;
-    setValueRepresentation( DICOMValueAttribute::String );
+    setValueRepresentation(DICOMValueAttribute::String);
 }
 
-void DICOMValueAttribute::setValue( QByteArray value )
+void DICOMValueAttribute::setValue(QByteArray value)
 {
     m_value = value;
-    setValueRepresentation( DICOMValueAttribute::ByteArray );
+    setValueRepresentation(DICOMValueAttribute::ByteArray);
 }
 
 
-void DICOMValueAttribute::setValue( QDate value )
+void DICOMValueAttribute::setValue(QDate value)
 {
-    m_value = value.toString( "yyyyMMdd" );;
-    setValueRepresentation( DICOMValueAttribute::Date );
+    m_value = value.toString("yyyyMMdd");
+    setValueRepresentation(DICOMValueAttribute::Date);
 }
 
-void DICOMValueAttribute::setValue( QTime value )
+void DICOMValueAttribute::setValue(QTime value)
 {
-    m_value = value.toString( "HHmmss.zzz" );;
-    setValueRepresentation( DICOMValueAttribute::Time );
+    m_value = value.toString("HHmmss.zzz");
+    setValueRepresentation(DICOMValueAttribute::Time);
 }
 
 int DICOMValueAttribute::getValueAsInt()
@@ -94,7 +94,7 @@ unsigned int DICOMValueAttribute::getValueAsUnsignedInt()
 
 float DICOMValueAttribute::getValueAsFloat()
 {
-    return static_cast<float>( m_value.toDouble() );
+    return static_cast<float>(m_value.toDouble());
 }
 
 double DICOMValueAttribute::getValueAsDouble()
@@ -128,7 +128,7 @@ DICOMValueAttribute::ValueRepresentation DICOMValueAttribute::getValueRepresenta
     return m_valueRepresentation;
 }
 
-void DICOMValueAttribute::setValueRepresentation( ValueRepresentation value )
+void DICOMValueAttribute::setValueRepresentation(ValueRepresentation value)
 {
     m_valueRepresentation = value;
 }
