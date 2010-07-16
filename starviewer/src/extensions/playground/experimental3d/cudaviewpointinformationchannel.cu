@@ -871,7 +871,7 @@ QVector<float> cvicComputeVomi2(float HV, const QVector<float> &HVz)
 static float *gdVomi3 = 0;
 
 
-__global__ void vomi3Kernel(float pv, float totalViewedVolume, float HZv, cudaExtent volumeDataDims, float *vomi3)
+__global__ void vomi3Kernel(float pv, float totalViewedVolume, float vmi2, cudaExtent volumeDataDims, float *vomi3)
 {
     uint blocksX = (volumeDataDims.width + blockDim.x - 1) / blockDim.x;
     uint blockX = blockIdx.x % blocksX;
@@ -891,19 +891,18 @@ __global__ void vomi3Kernel(float pv, float totalViewedVolume, float HZv, cudaEx
     float pzv = tex1Dfetch(gViewedVolumesTexture, i) / totalViewedVolume;
     float pvz = pv * pzv / pz;
 
-    if (pvz > 0.0f) vomi3[i] -= pvz * HZv;
+    if (pvz > 0.0f) vomi3[i] += pvz * vmi2;
 }
 
 
-void cvicSetupVomi3(float HZ)
+void cvicSetupVomi3()
 {
     CUDA_SAFE_CALL(cudaMalloc(reinterpret_cast<void**>(&gdVomi3), gVolumeDataSize * sizeof(float)));
-    QVector<float> HZVector(gVolumeDataSize, HZ);
-    CUDA_SAFE_CALL(cudaMemcpy(reinterpret_cast<void*>(gdVomi3), reinterpret_cast<void*>(const_cast<float*>(HZVector.data())), gVolumeDataSize * sizeof(float), cudaMemcpyHostToDevice));
+    CUDA_SAFE_CALL(cudaMemset(reinterpret_cast<void*>(gdVomi3), 0, gVolumeDataSize * sizeof(float)));
 }
 
 
-void cvicAccumulateVomi3(float viewProbability, float totalViewedVolume, float HZv)
+void cvicAccumulateVomi3(float viewProbability, float totalViewedVolume, float vmi2)
 {
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
@@ -918,7 +917,7 @@ void cvicAccumulateVomi3(float viewProbability, float totalViewedVolume, float H
     uint blocksZ = (gVolumeDataDims.depth + blockSize.z - 1) / blockSize.z;
     dim3 gridSize(blocksX * blocksY, blocksZ);
 
-    vomi3Kernel<<<gridSize, blockSize>>>(viewProbability, totalViewedVolume, HZv, gVolumeDataDims, gdVomi3);
+    vomi3Kernel<<<gridSize, blockSize>>>(viewProbability, totalViewedVolume, vmi2, gVolumeDataDims, gdVomi3);
     CUT_CHECK_ERROR("vomi3 kernel failed");
 
     cudaEventRecord(stop, 0);

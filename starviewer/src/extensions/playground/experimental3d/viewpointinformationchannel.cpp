@@ -272,16 +272,13 @@ void ViewpointInformationChannel::compute(bool &HV, bool &HVz, bool &HZ, bool &H
     bool voxelProbabilities = false;
 
     // Dependències
+    if (vmi3) vomi2 = true;
     if (vomi2) HV = true;
     if (vomi2) HVz = true;
-    if (vmi3) HV = true;
-    if (vmi3) HVz = true;
     if (HV) viewProbabilities = true;
     if (HVz) viewProbabilities = true;
     if (HVz) voxelProbabilities = true;
-    if (vomi3) viewProbabilities = true;
-    if (vomi3) HZ = true;
-    if (vomi3) HZv = true;
+    if (vomi3) vmi2 = true;
     if (vmi2) HZ = true;
     if (vmi2) HZv = true;
     if (HZ) voxelProbabilities = true;
@@ -1085,8 +1082,8 @@ void ViewpointInformationChannel::computeVmi3Cpu()
 {
     class Vmi3Thread : public QThread {
         public:
-            Vmi3Thread(const QVector<float> &voxelProbabilitiesInView, const QVector<float> &HVz, int start, int end)
-                : m_sum(0.0f), m_voxelProbabilitiesInView(voxelProbabilitiesInView), m_HVz(HVz), m_start(start), m_end(end)
+            Vmi3Thread(const QVector<float> &voxelProbabilitiesInView, const QVector<float> &vomi2, int start, int end)
+                : m_sum(0.0), m_voxelProbabilitiesInView(voxelProbabilitiesInView), m_vomi2(vomi2), m_start(start), m_end(end)
             {
             }
             float sum() const
@@ -1099,14 +1096,14 @@ void ViewpointInformationChannel::computeVmi3Cpu()
                 for (int i = m_start; i < m_end; i++)
                 {
                     float pzv = m_voxelProbabilitiesInView.at(i);
-                    float HVz = m_HVz.at(i);
-                    m_sum += pzv * HVz;
+                    float vomi2 = m_vomi2.at(i);
+                    m_sum += pzv * vomi2;
                 }
             }
         private:
             double m_sum;
             const QVector<float> &m_voxelProbabilitiesInView;
-            const QVector<float> &m_HVz;
+            const QVector<float> &m_vomi2;
             int m_start, m_end;
     };
 
@@ -1129,19 +1126,19 @@ void ViewpointInformationChannel::computeVmi3Cpu()
 
         for (int k = 0; k < nThreads; k++)
         {
-            vmi3Threads[k] = new Vmi3Thread(voxelProbabilitiesInView, m_HVz, start, end);
+            vmi3Threads[k] = new Vmi3Thread(voxelProbabilitiesInView, m_vomi2, start, end);
             vmi3Threads[k]->start();
             start += nVoxelsPerThread;
             end += nVoxelsPerThread;
             if (end > nVoxels) end = nVoxels;
         }
 
-        float vmi3 = m_HV;
+        float vmi3 = 0.0f;
 
         for (int k = 0; k < nThreads; k++)
         {
             vmi3Threads[k]->wait();
-            vmi3 -= vmi3Threads[k]->sum();
+            vmi3 += vmi3Threads[k]->sum();
             delete vmi3Threads[k];
         }
 
@@ -1417,14 +1414,14 @@ void ViewpointInformationChannel::computeVomi3Cpu()
     class Vomi3Thread : public QThread {
         public:
             Vomi3Thread(const QVector<float> &voxelProbabilities, QVector<float> &vomi3, int start, int end)
-                : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_HZv(0.0f), m_vomi3(vomi3), m_start(start), m_end(end)
+                : m_viewProbability(0.0f), m_voxelProbabilities(voxelProbabilities), m_vmi2(0.0f), m_vomi3(vomi3), m_start(start), m_end(end)
             {
             }
-            void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView, float HZv)
+            void setViewData(float viewProbability, const QVector<float> &voxelProbabilitiesInView, float vmi2)
             {
                 m_viewProbability = viewProbability;
                 m_voxelProbabilitiesInView = voxelProbabilitiesInView;
-                m_HZv = HZv;
+                m_vmi2 = vmi2;
             }
         protected:
             virtual void run()
@@ -1434,14 +1431,14 @@ void ViewpointInformationChannel::computeVomi3Cpu()
                     float pz = m_voxelProbabilities.at(i);
                     float pzv = m_voxelProbabilitiesInView.at(i);
                     float pvz = m_viewProbability * pzv / pz;
-                    if (pvz > 0.0f) m_vomi3[i] -= pvz * m_HZv;
+                    if (pvz > 0.0f) m_vomi3[i] += pvz * m_vmi2;
                 }
             }
         private:
             float m_viewProbability;
             const QVector<float> &m_voxelProbabilities;
             QVector<float> m_voxelProbabilitiesInView;
-            float m_HZv;
+            float m_vmi2;
             QVector<float> &m_vomi3;
             int m_start, m_end;
     };
@@ -1450,7 +1447,7 @@ void ViewpointInformationChannel::computeVomi3Cpu()
     int nVoxels = m_volume->getSize();
 
     m_vomi3.resize(nVoxels);
-    m_vomi3.fill(m_HZ);
+    m_vomi3.fill(0.0f);
 
     emit partialProgress(0);
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
@@ -1477,7 +1474,7 @@ void ViewpointInformationChannel::computeVomi3Cpu()
 
         for (int k = 0; k < nThreads; k++)
         {
-            vomi3Threads[k]->setViewData(m_viewProbabilities.at(i), voxelProbabilitiesInView, m_HZv.at(i));
+            vomi3Threads[k]->setViewData(m_viewProbabilities.at(i), voxelProbabilitiesInView, m_vmi2.at(i));
             vomi3Threads[k]->start();
         }
 
@@ -2002,8 +1999,8 @@ void ViewpointInformationChannel::computeVmi3Cuda()
 {
     class Vmi3Thread : public QThread {
         public:
-            Vmi3Thread(const QVector<float> &voxelProbabilitiesInView, const QVector<float> &HVz, int start, int end)
-                : m_sum(0.0f), m_voxelProbabilitiesInView(voxelProbabilitiesInView), m_HVz(HVz), m_start(start), m_end(end)
+            Vmi3Thread(const QVector<float> &voxelProbabilitiesInView, const QVector<float> &vomi2, int start, int end)
+                : m_sum(0.0), m_voxelProbabilitiesInView(voxelProbabilitiesInView), m_vomi2(vomi2), m_start(start), m_end(end)
             {
             }
             float sum() const
@@ -2016,14 +2013,14 @@ void ViewpointInformationChannel::computeVmi3Cuda()
                 for (int i = m_start; i < m_end; i++)
                 {
                     float pzv = m_voxelProbabilitiesInView.at(i);
-                    float HVz = m_HVz.at(i);
-                    m_sum += pzv * HVz;
+                    float vomi2 = m_vomi2.at(i);
+                    m_sum += pzv * vomi2;
                 }
             }
         private:
             double m_sum;
             const QVector<float> &m_voxelProbabilitiesInView;
-            const QVector<float> &m_HVz;
+            const QVector<float> &m_vomi2;
             int m_start, m_end;
     };
 
@@ -2046,19 +2043,19 @@ void ViewpointInformationChannel::computeVmi3Cuda()
 
         for (int k = 0; k < nThreads; k++)
         {
-            vmi3Threads[k] = new Vmi3Thread(voxelProbabilitiesInView, m_HVz, start, end);
+            vmi3Threads[k] = new Vmi3Thread(voxelProbabilitiesInView, m_vomi2, start, end);
             vmi3Threads[k]->start();
             start += nVoxelsPerThread;
             end += nVoxelsPerThread;
             if (end > nVoxels) end = nVoxels;
         }
 
-        float vmi3 = m_HV;
+        float vmi3 = 0.0f;
 
         for (int k = 0; k < nThreads; k++)
         {
             vmi3Threads[k]->wait();
-            vmi3 -= vmi3Threads[k]->sum();
+            vmi3 += vmi3Threads[k]->sum();
             delete vmi3Threads[k];
         }
 
@@ -2221,7 +2218,7 @@ void ViewpointInformationChannel::computeVomi3Cuda()
     emit partialProgress(0);
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
 
-    cvicSetupVomi3(m_HZ);
+    cvicSetupVomi3();
 
     for (int i = 0; i < nViewpoints; i++)
     {
@@ -2234,7 +2231,7 @@ void ViewpointInformationChannel::computeVomi3Cuda()
         for (int j = 0; j < nVoxels; j++) viewedVolume += histogram.at(j);
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
 
-        cvicAccumulateVomi3(pv, viewedVolume, m_HZv.at(i));
+        cvicAccumulateVomi3(pv, viewedVolume, m_vmi2.at(i));
 
         emit partialProgress(100 * (i + 1) / nViewpoints);
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
