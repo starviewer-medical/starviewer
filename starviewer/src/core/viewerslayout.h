@@ -46,10 +46,10 @@ public slots:
     void hideRows(int rows);
     void showColumns(int columns);
     void hideColumns(int columns);
-    void setGrid(const QStringList &positionsList);
+    void setGrid(const QStringList &geometriesList);
 
     /// Afegeix un nou visualitzador
-    Q2DViewerWidget* addViewer(const QString &position);
+    Q2DViewerWidget* addViewer(const QString &geometry);
 
     /// Posem el widget seleccionat com a actual
     void setSelectedViewer(Q2DViewerWidget *viewer);
@@ -110,7 +110,7 @@ private:
     /// Renderers que tenim
     QVector<Q2DViewerWidget *> m_vectorViewers;
 
-    QStringList m_positionsList;
+    QStringList m_geometriesList;
 
     /// Grid regular o no regular
     bool m_isRegular;

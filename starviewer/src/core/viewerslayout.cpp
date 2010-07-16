@@ -52,7 +52,7 @@ void ViewersLayout::removeLayouts()
     {
         m_viewersLayout->removeWidget(m_vectorViewers.at(i));
     }
-    m_positionsList.clear();
+    m_geometriesList.clear();
     m_numberOfVisibleViewers = 0;
 }
 
@@ -286,11 +286,11 @@ void ViewersLayout::setGrid(int rows, int columns)
     m_isRegular = true;
 }
 
-void ViewersLayout::setGrid(const QStringList &positionsList)
+void ViewersLayout::setGrid(const QStringList &geometriesList)
 {
     Q2DViewerWidget *newViewer = 0;
     QString geometry;
-    int numberOfElements = positionsList.size();
+    int numberOfElements = geometriesList.size();
 
     m_numberOfVisibleViewers = 0;
 
@@ -308,17 +308,17 @@ void ViewersLayout::setGrid(const QStringList &positionsList)
             newViewer = getNewQ2DViewerWidget();
             m_vectorViewers.push_back(newViewer);
         }
-        geometry = positionsList.at(i);
+        geometry = geometriesList.at(i);
         setViewerGeometry(newViewer, geometry);
         
         m_numberOfVisibleViewers++;
     }
 
-    m_positionsList = positionsList;
+    m_geometriesList = geometriesList;
     m_isRegular = false;
 }
 
-Q2DViewerWidget* ViewersLayout::addViewer(const QString &position)
+Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 {
     Q2DViewerWidget *newViewer = 0;
 
@@ -339,13 +339,13 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &position)
         m_vectorViewers.push_back(newViewer);
     }
 	
-    setViewerGeometry(newViewer, position);
+    setViewerGeometry(newViewer, geometry);
     newViewer->show();
     m_numberOfVisibleViewers++;
 
     emit viewerAdded(newViewer);
     
-    m_positionsList << position;
+    m_geometriesList << geometry;
     m_isRegular = false;
 
     return newViewer;
@@ -364,7 +364,7 @@ void ViewersLayout::resizeEvent(QResizeEvent *event)
         for (int i = 0; i < numberOfElements; i++)
         {
             viewer = m_vectorViewers.at(i);
-            geometry = m_positionsList.at(i);
+            geometry = m_geometriesList.at(i);
             setViewerGeometry(viewer, geometry);
         }
     }
