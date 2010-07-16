@@ -164,7 +164,7 @@ void Q2DViewerExtension::createConnections()
 
     // Connexions necessaries amb els canvis al layout
     connect( m_workingArea, SIGNAL( viewerAdded( Q2DViewerWidget * ) ), SLOT( activateNewViewer( Q2DViewerWidget * ) ) );
-    connect( m_workingArea, SIGNAL( viewerSelectedChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
+    connect( m_workingArea, SIGNAL( selectedViewerChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
 
 #ifndef STARVIEWER_LITE
     // per mostrar exportació
@@ -209,7 +209,7 @@ void Q2DViewerExtension::setInput( Volume *input )
         m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_hangingCandidates, m_workingArea);
     }
 
-    m_workingArea->setViewerSelected( m_workingArea->getViewerWidget(0) );
+    m_workingArea->setSelectedViewer( m_workingArea->getViewerWidget(0) );
     m_predefinedSeriesGrid->setHangingItems( m_hangingCandidates );
 
     connect( m_patient, SIGNAL( patientFused() ), SLOT(searchHangingProtocols()) );
@@ -296,7 +296,7 @@ void Q2DViewerExtension::showPredefinedImageGrid()
 {
     QPoint point = m_imageGrid->mapToGlobal( QPoint(0,0) );
     m_predefinedSlicesGrid->move( point.x(),( point.y() + m_imageGrid->frameGeometry().height() ) );
-    m_predefinedSlicesGrid->createPredefinedGrids( m_workingArea->getViewerSelected()->getViewer()->getMaximumSlice() );
+    m_predefinedSlicesGrid->createPredefinedGrids( m_workingArea->getSelectedViewer()->getViewer()->getMaximumSlice() );
     m_predefinedSlicesGrid->show();
 }
 
@@ -545,7 +545,7 @@ void Q2DViewerExtension::showViewerInformation( bool show )
 
 void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
 {
-    m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( m_workingArea->getViewerSelected()->getViewer()->getCurrentDisplayedImage() );
+    m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( m_workingArea->getSelectedViewer()->getViewer()->getCurrentDisplayedImage() );
     m_dicomDumpCurrentDisplayedImage->show();
 }
 
@@ -563,7 +563,7 @@ void Q2DViewerExtension::initializeKeyImageNoteManager()
 
 void Q2DViewerExtension::showKeyImageNoteManagerWidgetDialog()
 {
-    if( m_workingArea->getViewerSelected()->getViewer() == NULL )
+    if( m_workingArea->getSelectedViewer()->getViewer() == NULL )
     {
         QMessageBox::warning(this, tr("Kin Manager") , tr("This action is not allowed because the selected viewer is empty.") );
         return;
@@ -575,19 +575,19 @@ void Q2DViewerExtension::showKeyImageNoteManagerWidgetDialog()
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showScreenshotsExporterDialog()
 {
-    if ( m_workingArea->getViewerSelected()->getViewer()->getInput() == NULL )
+    if ( m_workingArea->getSelectedViewer()->getViewer()->getInput() == NULL )
     {
         QMessageBox::warning(this, tr("Export to DICOM") , tr("This action is not allowed because the selected viewer is empty.") );
         return;
     }
 
-    QExporterTool exporter( m_workingArea->getViewerSelected()->getViewer() );
+    QExporterTool exporter( m_workingArea->getSelectedViewer()->getViewer() );
     exporter.exec();
 }
 
 void Q2DViewerExtension::validePhases()
 {
-    if( m_workingArea->getViewerSelected()->hasPhases() )
+    if( m_workingArea->getSelectedViewer()->hasPhases() )
     {
         m_sagitalViewAction->setEnabled( false );
         m_coronalViewAction->setEnabled( false );
@@ -602,7 +602,7 @@ void Q2DViewerExtension::validePhases()
 
 void Q2DViewerExtension::updateDICOMInformationButton( int view )
 {
-    if( m_workingArea->getViewerSelected()->getViewer()->getInput() )
+    if( m_workingArea->getSelectedViewer()->getViewer()->getInput() )
     {
         if( view == Q2DViewer::Axial )
             m_dicomDumpToolButton->setEnabled(true);

@@ -19,7 +19,7 @@ DTIExtension::DTIExtension( QWidget *parent )
     setupUi( this );
 
     m_viewersLayout->addViewer( "0.0\\1.0\\1.0\\0.0" );
-    m_viewersLayout->setViewerSelected( m_viewersLayout->getViewerWidget(0) );
+    m_viewersLayout->setSelectedViewer( m_viewersLayout->getViewerWidget(0) );
 
     createConnections();
     initializeTools();

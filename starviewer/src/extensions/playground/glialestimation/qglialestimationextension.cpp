@@ -51,7 +51,7 @@ QGlialEstimationExtension::QGlialEstimationExtension( QWidget *parent )
     GlialEstimationSettings().init();
 
     m_viewersLayout->addViewer( "0.0\\1.0\\1.0\\0.0" );
-    m_viewersLayout->setViewerSelected( m_viewersLayout->getViewerWidget(0) );
+    m_viewersLayout->setSelectedViewer( m_viewersLayout->getViewerWidget(0) );
     m_viewersLayout->setGrid(2,3);
     m_layoutDirection = QGlialEstimationExtension::Horizontal;
 
