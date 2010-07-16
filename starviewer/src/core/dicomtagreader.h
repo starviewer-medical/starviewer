@@ -43,7 +43,7 @@ public:
     ~DICOMTagReader();
 
     /// Nom de l'arxiu DICOM que es vol llegir. Torna cert si l'arxiu s'ha pogut carregar correctament, fals altrament.
-    bool setFile( const QString &filename );
+    bool setFile(const QString &filename);
 
     /// Ens diu si l'arxiu assignat és vàlid com a arxiu DICOM. Si no tenim arxiu assignat retornarà fals.
     bool canReadFile() const;
@@ -57,17 +57,17 @@ public:
     void setDcmDataset(const QString &filename, DcmDataset *dcmDataset);
 
     /// Retorna el Dataset de dcmtk que es fa servir internament
-    DcmDataset *getDcmDataset() const;
+    DcmDataset* getDcmDataset() const;
     
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
-    bool tagExists( const DICOMTag &tag );
+    bool tagExists(const DICOMTag &tag);
 
     /// Obté el valor de l'atribut demanat i ens el retorna com a QString
     /// Si no es troba el tag es retornarà un QString buit
-    QString getValueAttributeAsQString( const DICOMTag &tag );
+    QString getValueAttributeAsQString(const DICOMTag &tag);
 
     /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
-    DICOMSequenceAttribute * getSequenceAttribute( const DICOMTag &sequenceTag );
+    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag);
 
     /// Retorna cert si existeix un node de Structured Report amb els valors dels tres paràmetres
     bool existStructuredReportNode(const QString &codeValue, const QString &codeMeaning, const QString &schemeDesignator);
@@ -89,7 +89,7 @@ public:
 
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
-    DICOMSequenceAttribute * convertToDICOMSequenceAttribute( DcmSequenceOfItems * dcmtkSequence );
+    DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence);
 
     /// Metode per a obtenir el document de Structured Report
     DSRDocument* getStructuredReportDocument();

@@ -33,29 +33,31 @@ DICOMTagReader::DICOMTagReader(const QString &filename, DcmDataset *dcmDataset) 
     this->setDcmDataset(filename, dcmDataset);
 }
 
-DICOMTagReader::DICOMTagReader( const QString &filename ) : m_dicomData(0), m_hasValidFile(false), m_DICOMStructuredReportDocument(0)
+DICOMTagReader::DICOMTagReader(const QString &filename) : m_dicomData(0), m_hasValidFile(false), m_DICOMStructuredReportDocument(0)
 {
-    this->setFile( filename );
+    this->setFile(filename);
 }
 
 DICOMTagReader::~DICOMTagReader()
 {
-    if( m_dicomData )
+    if (m_dicomData)
+    {
         delete m_dicomData;
+    }
 }
 
-bool DICOMTagReader::setFile( const QString &filename )
+bool DICOMTagReader::setFile(const QString &filename)
 {
     DcmFileFormat dicomFile;
 
     m_filename = filename;
 
-    OFCondition status = dicomFile.loadFile( qPrintable(filename) );
-    if( status.good() )
+    OFCondition status = dicomFile.loadFile(qPrintable(filename));
+    if (status.good())
     {
         m_hasValidFile = true;
         // eliminem l'objecte anterior si n'hi hagués
-        if( m_dicomData )
+        if (m_dicomData)
         {
             delete m_dicomData;
             m_dicomData = NULL;
@@ -66,8 +68,8 @@ bool DICOMTagReader::setFile( const QString &filename )
     else
     {
         m_hasValidFile = false;
-        DEBUG_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
-        ERROR_LOG( QString( "Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg( filename ).arg( status.text() ) );
+        DEBUG_LOG(QString("Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg(filename).arg(status.text()));
+        ERROR_LOG(QString("Error en llegir l'arxiu [%1]\nPossible causa: %2 ").arg(filename).arg(status.text()));
         return false;
     }
 
@@ -102,15 +104,17 @@ void DICOMTagReader::setDcmDataset(const QString &filename, DcmDataset *dcmDatas
     m_dicomData = dcmDataset;
 }
 
-DcmDataset *DICOMTagReader::getDcmDataset() const
+DcmDataset* DICOMTagReader::getDcmDataset() const
 {
     return m_dicomData;
 }
 
-bool DICOMTagReader::tagExists( const DICOMTag &tag )
+bool DICOMTagReader::tagExists(const DICOMTag &tag)
 {
-    if( m_dicomData )
-        return m_dicomData->tagExists( DcmTagKey(tag.getGroup(),tag.getElement()) );
+    if (m_dicomData)
+    {
+        return m_dicomData->tagExists(DcmTagKey(tag.getGroup(),tag.getElement()));
+    }
     else
     {
         DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat");
@@ -118,9 +122,9 @@ bool DICOMTagReader::tagExists( const DICOMTag &tag )
     }
 }
 
-QString DICOMTagReader::getValueAttributeAsQString( const DICOMTag &tag )
+QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag)
 {
-    if( !m_dicomData )
+    if (!m_dicomData)
     {
         DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string buida.");
         return QString();
@@ -131,8 +135,8 @@ QString DICOMTagReader::getValueAttributeAsQString( const DICOMTag &tag )
     QString result;
 
     OFString value;
-    OFCondition status = m_dicomData->findAndGetOFStringArray( dcmtkTag, value );
-    if( status.good() )
+    OFCondition status = m_dicomData->findAndGetOFStringArray(dcmtkTag, value);
+    if (status.good())
     {
         result = value.c_str();
     }
@@ -140,85 +144,85 @@ QString DICOMTagReader::getValueAttributeAsQString( const DICOMTag &tag )
     {
         if (QString(status.text()) != "Tag Not Found")
         {
-            DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
-                .arg( dcmtkTag.toString().c_str() ).arg( status.text() ) );
+            DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2")
+                .arg(dcmtkTag.toString().c_str()).arg(status.text()));
         }
     }
 
     return result;
 }
 
-DICOMSequenceAttribute * DICOMTagReader::getSequenceAttribute( const DICOMTag &sequenceTag )
+DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &sequenceTag)
 {
-    
-    if( !m_dicomData )
+    if (!m_dicomData)
     {
         DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string-list buida.");
         return NULL; 
     }
     // Convertim els DICOMTag al format de dcmtk, que serà qui farà la feina
-    DcmTagKey dcmtkSequenceTag( sequenceTag.getGroup(), sequenceTag.getElement() );
+    DcmTagKey dcmtkSequenceTag(sequenceTag.getGroup(), sequenceTag.getElement());
     
     QStringList result;
     // obtenim els atributs de cada item d'una seqüència de "primer nivell"
     DcmSequenceOfItems *sequence = NULL;
 
-    OFCondition status = m_dicomData->findAndGetSequence( dcmtkSequenceTag, sequence, OFTrue );
+    OFCondition status = m_dicomData->findAndGetSequence(dcmtkSequenceTag, sequence, OFTrue);
 
-    if( status.good() )
+    if (status.good())
     {
-        DEBUG_LOG( QString("Cerquem sequencia") );
-        return convertToDICOMSequenceAttribute( sequence );
+        DEBUG_LOG(QString("Cerquem sequencia"));
+        return convertToDICOMSequenceAttribute(sequence);
     }
-    else if( QString(status.text()) != "Tag Not Found" )
-        DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( dcmtkSequenceTag.toString().c_str() ).arg( status.text() ) );
-        
+    else if (QString(status.text()) != "Tag Not Found")
+    {
+        DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkSequenceTag.toString().c_str()).arg(status.text()));
+    }
 
     return NULL;
 }
 
-DICOMSequenceAttribute * DICOMTagReader::convertToDICOMSequenceAttribute( DcmSequenceOfItems * dcmtkSequence )
+DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence)
 {
-    DICOMSequenceAttribute * sequenceAttribute = new DICOMSequenceAttribute();
+    DICOMSequenceAttribute *sequenceAttribute = new DICOMSequenceAttribute();
     DcmVR sequenceVR("SQ");
 
-    sequenceAttribute->setTag( DICOMTag(dcmtkSequence->getGTag(),dcmtkSequence->getETag()) );
+    sequenceAttribute->setTag(DICOMTag(dcmtkSequence->getGTag(),dcmtkSequence->getETag()));
 
-    for(unsigned int i = 0; i < dcmtkSequence->card(); i++ )
+    for (unsigned int i = 0; i < dcmtkSequence->card(); i++)
     {
-        DICOMSequenceItem * dicomItem = new DICOMSequenceItem();
-        DcmItem *dcmtkItem = dcmtkSequence->getItem( i );
-        for(unsigned int j = 0; j < dcmtkItem->card() ; j++ )
+        DICOMSequenceItem *dicomItem = new DICOMSequenceItem();
+        DcmItem *dcmtkItem = dcmtkSequence->getItem(i);
+        for (unsigned int j = 0; j < dcmtkItem->card(); j++)
         {
-            DcmElement *element = dcmtkItem->getElement( j );
+            DcmElement *element = dcmtkItem->getElement(j);
             
             
-            if( sequenceVR.isEquivalent( element->getTag().getVR() ) ) // És una Sequence of Items
+            if (sequenceVR.isEquivalent(element->getTag().getVR())) // És una Sequence of Items
             {
-                dicomItem->addAttribute( convertToDICOMSequenceAttribute( OFstatic_cast(DcmSequenceOfItems *,element) ) );
+                dicomItem->addAttribute(convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*,element)));
             }
             else 
             {
                 OFString value;
-                OFCondition status = element->getOFStringArray( value );
+                OFCondition status = element->getOFStringArray(value);
 
-                if( status.good() )
+                if (status.good())
                 {
                     DICOMTag tag(element->getGTag(),element->getETag());
                     
-                    DICOMValueAttribute * valueAttribute = new DICOMValueAttribute();
-                    valueAttribute->setTag( tag );
-                    valueAttribute->setValue( QString( value.c_str() ) );
+                    DICOMValueAttribute *valueAttribute = new DICOMValueAttribute();
+                    valueAttribute->setTag(tag);
+                    valueAttribute->setValue(QString(value.c_str()));
 
-                    dicomItem->addAttribute( valueAttribute );
+                    dicomItem->addAttribute(valueAttribute);
                 }
-                else if( QString(status.text()) != "Tag Not Found" )
+                else if (QString(status.text()) != "Tag Not Found")
                 {
-                    DEBUG_LOG( QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg( element->getTag().toString().c_str()  ).arg( status.text() ) );
+                    DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(element->getTag().toString().c_str() ).arg(status.text()));
                 }
             }
         }
-        sequenceAttribute->addItem( dicomItem );
+        sequenceAttribute->addItem(dicomItem);
     }
 
     return sequenceAttribute;
@@ -247,7 +251,7 @@ DSRDocument* DICOMTagReader::getStructuredReportDocument()
 
         if (status.bad())
         {
-            ERROR_LOG(QString("S'ha produit un error al llegir el DSRDocument: " + QString(status.text())) );
+            ERROR_LOG(QString("S'ha produit un error al llegir el DSRDocument: " + QString(status.text())));
         }
     }
 
@@ -284,7 +288,7 @@ QList<DICOMReferencedImage*> DICOMTagReader::getDICOMReferencedImagesOfStructedR
 
 QList<DICOMReferencedImage*> DICOMTagReader:: getDicomReferencedImagesFromTreeNode(DSRDocumentTreeNode *structuredReportTreeNode)
 {
-     QList <DICOMReferencedImage*> referencedImagesOfTreeNode;
+    QList <DICOMReferencedImage*> referencedImagesOfTreeNode;
 
     if (structuredReportTreeNode->getValueType() == DSRTypes::VT_Image)
     {
@@ -320,15 +324,15 @@ QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes()
     QList<DICOMAttribute*> attributeList;
     DcmElement *currentElement = NULL;
 
-    for(unsigned int i = 0; i < m_dicomData->card(); i++)
+    for (unsigned int i = 0; i < m_dicomData->card(); i++)
     {
         currentElement = OFstatic_cast(DcmElement*, m_dicomData->nextInContainer(currentElement));
 
         // Es tracta d'una seqüència
-        if(!currentElement->isLeaf())
+        if (!currentElement->isLeaf())
         {
             DICOMSequenceAttribute *dicomSequenceAttribute = convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*, currentElement));
-            attributeList.append( dicomSequenceAttribute );
+            attributeList.append(dicomSequenceAttribute);
         }
         else
         {
