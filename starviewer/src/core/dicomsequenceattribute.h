@@ -17,6 +17,8 @@ namespace udg {
 
 class DICOMSequenceItem;
 
+/** Classe heredada de \class DICOMAttribute encarregada de representar el atributs DICOM de tipus seqüència. La seva utilització va molt lligada amb \class DICOMSequenceItem.
+  */
 class DICOMSequenceAttribute : public DICOMAttribute {
 
 public:
@@ -40,6 +42,7 @@ public:
     QString toString();
 
 private:
+    /// Atribut que representa la llista d'items que té la seqüència.
     QList<DICOMSequenceItem*> m_itemList;
 };
 
