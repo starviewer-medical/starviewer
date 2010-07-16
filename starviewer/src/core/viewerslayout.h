@@ -27,7 +27,7 @@ public:
     ~ViewersLayout();
 
     /// Obtenir el visualitzador seleccionat
-    Q2DViewerWidget* getViewerSelected();
+    Q2DViewerWidget* getSelectedViewer();
 
     /// Obtenir el nombre de visualitzadors
     int getNumberOfViewers();
@@ -52,7 +52,7 @@ public slots:
     Q2DViewerWidget* addViewer(const QString &position);
 
     /// Posem el widget seleccionat com a actual
-    void setViewerSelected(Q2DViewerWidget *viewer);
+    void setSelectedViewer(Q2DViewerWidget *viewer);
 
 signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
@@ -62,7 +62,7 @@ signals:
     void viewerRemoved(Q2DViewerWidget *viewer);
 
     /// Senyal que s'emet quan el visualitzador seleccionat canvia
-    void viewerSelectedChanged(Q2DViewerWidget *viewer);
+    void selectedViewerChanged(Q2DViewerWidget *viewer);
 
 protected:
 	/// Tractament de l'event de canvi de tamany de la finestra

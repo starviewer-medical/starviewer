@@ -93,12 +93,12 @@ void ViewersLayout::restoreLayouts()
         }
     }
 
-    setViewerSelected(m_vectorViewers.value(0));
+    setSelectedViewer(m_vectorViewers.value(0));
     m_rows = 1;
     m_columns = 1;
 }
 
-Q2DViewerWidget* ViewersLayout::getViewerSelected()
+Q2DViewerWidget* ViewersLayout::getSelectedViewer()
 {
     return m_selectedViewer;
 }
@@ -106,7 +106,7 @@ Q2DViewerWidget* ViewersLayout::getViewerSelected()
 Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
 {
     Q2DViewerWidget *newViewer = new Q2DViewerWidget(this);
-    connect(newViewer, SIGNAL(selected(Q2DViewerWidget *)), SLOT(setViewerSelected(Q2DViewerWidget *)));
+    connect(newViewer, SIGNAL(selected(Q2DViewerWidget *)), SLOT(setSelectedViewer(Q2DViewerWidget *)));
     // Per defecte no li posem cap annotació
     newViewer->getViewer()->removeAnnotation(Q2DViewer::AllAnnotation);
 
@@ -184,7 +184,7 @@ void ViewersLayout::removeColumns(int columns)
             m_vectorViewers.remove(viewerPosition);
             if (m_selectedViewer == oldViewer)
             {
-                setViewerSelected(m_vectorViewers.value(0));
+                setSelectedViewer(m_vectorViewers.value(0));
             }
             delete oldViewer;
             viewerPosition += (m_columns-1);
@@ -212,7 +212,7 @@ void ViewersLayout::removeRows(int rows)
             // TODO eliminar els viewers que treiem del toolManager???
             if (m_selectedViewer == oldViewer)
             {
-                setViewerSelected(m_vectorViewers.value(0));
+                setSelectedViewer(m_vectorViewers.value(0));
             }
             delete oldViewer;
             viewerPosition -= 1;
@@ -413,7 +413,7 @@ void ViewersLayout::resizeEvent(QResizeEvent *event)
     }
 }
 
-void ViewersLayout::setViewerSelected(Q2DViewerWidget *viewer)
+void ViewersLayout::setSelectedViewer(Q2DViewerWidget *viewer)
 {
     if (!viewer)
     {
@@ -429,7 +429,7 @@ void ViewersLayout::setViewerSelected(Q2DViewerWidget *viewer)
         }
         m_selectedViewer = viewer;
         m_selectedViewer->setSelected(true);
-        emit viewerSelectedChanged(m_selectedViewer);
+        emit selectedViewerChanged(m_selectedViewer);
     }
 }
 
@@ -463,7 +463,7 @@ void ViewersLayout::hideRows(int rows)
             emit viewerRemoved(viewer);
             if (m_selectedViewer == viewer)
             {
-                setViewerSelected(m_vectorViewers.value(0));
+                setSelectedViewer(m_vectorViewers.value(0));
             }
         }
         rows--;
@@ -500,7 +500,7 @@ void ViewersLayout::hideColumns(int columns)
             emit viewerRemoved(viewer);
             if (m_selectedViewer == viewer)
             {
-                setViewerSelected(m_vectorViewers.value(0));
+                setSelectedViewer(m_vectorViewers.value(0));
             }
         }
         columns--;

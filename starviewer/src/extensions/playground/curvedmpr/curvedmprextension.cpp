@@ -65,7 +65,7 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
 
     // Cada cop que es canvia el viewer seleccionat s'habiliten les tools en aquest visor
     // i es deshabiliten de l'altre
-    connect( m_viewersLayout, SIGNAL( viewerSelectedChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
+    connect( m_viewersLayout, SIGNAL( selectedViewerChanged( Q2DViewerWidget * ) ), SLOT( changeSelectedViewer( Q2DViewerWidget * ) ) );
 
     // Cada cop que l'usuari modifiqui el número d'imatges a generar al volum reconstruït, es torna a fer
     // la reconstrucció al visor corresponent, tenint en compte la última línia indicada per l'usuari
