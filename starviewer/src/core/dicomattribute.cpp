@@ -10,7 +10,7 @@
 
 namespace udg {
 
-DICOMAttribute::DICOMAttribute( )
+DICOMAttribute::DICOMAttribute()
 {
     m_tag = new DICOMTag();
 }
@@ -20,10 +20,10 @@ DICOMAttribute::~DICOMAttribute()
     delete m_tag;
 }
 
-void DICOMAttribute::setTag( DICOMTag tag )
+void DICOMAttribute::setTag(DICOMTag tag)
 {
-    m_tag->setGroup( tag.getGroup() );
-    m_tag->setElement( tag.getElement() );
+    m_tag->setGroup(tag.getGroup());
+    m_tag->setElement(tag.getElement());
 }
 
 DICOMTag * DICOMAttribute::getTag()

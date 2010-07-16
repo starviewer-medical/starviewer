@@ -14,8 +14,7 @@
 namespace udg {
 
 
-class DICOMValueAttribute : public DICOMAttribute
-{
+class DICOMValueAttribute : public DICOMAttribute {
 
 public:
 
@@ -31,14 +30,14 @@ public:
     
     QString toString();
 
-    void setValue( int value );
-    void setValue( unsigned int value );
-    void setValue( float value );
-    void setValue( double value );
-    void setValue( QString value );
-    void setValue( QByteArray value );
-    void setValue( QDate value );
-    void setValue( QTime value );
+    void setValue(int value);
+    void setValue(unsigned int value);
+    void setValue(float value);
+    void setValue(double value);
+    void setValue(QString value);
+    void setValue(QByteArray value);
+    void setValue(QDate value);
+    void setValue(QTime value);
     
     int getValueAsInt();
     unsigned int getValueAsUnsignedInt();
@@ -52,10 +51,9 @@ public:
     ValueRepresentation getValueRepresentation();
 
 protected:
-    void setValueRepresentation( ValueRepresentation value );
+    void setValueRepresentation(ValueRepresentation value);
 
 private:
-
     QVariant m_value;
 
     ValueRepresentation m_valueRepresentation;

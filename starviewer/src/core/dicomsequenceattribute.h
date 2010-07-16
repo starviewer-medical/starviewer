@@ -17,11 +17,9 @@ namespace udg {
 
 class DICOMSequenceItem;
 
-class DICOMSequenceAttribute : public DICOMAttribute
-{
+class DICOMSequenceAttribute : public DICOMAttribute {
 
 public:
-    
     DICOMSequenceAttribute();
 
     ~DICOMSequenceAttribute();
@@ -33,7 +31,7 @@ public:
     virtual bool isSequenceAttribute();
 
     /// Afegeix un item a la llista
-    void addItem( DICOMSequenceItem * item );
+    void addItem(DICOMSequenceItem *item);
 
     /// Retorna la llista sencera d'items
     QList<DICOMSequenceItem*> getItems();
@@ -42,7 +40,6 @@ public:
     QString toString();
 
 private:
-
     QList<DICOMSequenceItem*> m_itemList;
 };
 
