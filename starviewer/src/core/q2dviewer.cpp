@@ -129,7 +129,7 @@ void Q2DViewer::createOrientationAnnotations()
     for( int i = 0; i < 4; i++ )
     {
         m_patientOrientationTextActor[i] = vtkTextActor::New();
-        m_patientOrientationTextActor[i]->ScaledTextOff();
+        m_patientOrientationTextActor[i]->SetTextScaleModeToNone();
         m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize( 18 );
         m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
         m_patientOrientationTextActor[i]->GetTextProperty()->SetFontFamilyToArial();

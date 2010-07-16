@@ -95,9 +95,9 @@ void DrawerText::updateVtkActorProperties()
 
     // Mirem si s'ha d'escalar el text
     if ( m_scaled )
-        m_vtkActor->GetTextActor()->ScaledTextOn();
+        m_vtkActor->GetTextActor()->SetTextScaleModeToViewport();
     else
-        m_vtkActor->GetTextActor()->ScaledTextOff();
+        m_vtkActor->GetTextActor()->SetTextScaleModeToNone();
 
     // Mirem l'opacitat
     properties->SetOpacity(m_opacity);

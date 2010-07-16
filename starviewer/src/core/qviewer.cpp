@@ -167,7 +167,7 @@ ToolProxy *QViewer::getToolProxy() const
     return m_toolProxy;
 }
 
-void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command )
+void QViewer::eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
     // quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. \TODO ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch( event )
@@ -270,7 +270,7 @@ void QViewer::setupInteraction()
 
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     // despatxa qualsevol event-> tools
-    m_vtkQtConnections->Connect(this->getInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*, unsigned long, void*, vtkCommand*)));
+    m_vtkQtConnections->Connect(this->getInteractor(), vtkCommand::AnyEvent, this, SLOT( eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*)));
 }
 
 vtkCamera *QViewer::getActiveCamera()

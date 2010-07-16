@@ -168,7 +168,7 @@ public slots:
     virtual void setInput(Volume* volume) = 0;
 
     /// Gestiona els events que rep de la finestra
-    void eventHandler( vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command );
+    void eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command );
 
     /// Força l'execució de la visualització
     void render();

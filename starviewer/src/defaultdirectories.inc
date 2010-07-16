@@ -22,14 +22,14 @@ isEmpty(DCMTKINCLUDEDIR){
 VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
     unix:VTKLIBDIR = /usr/lib
-    macx:VTKLIBDIR = /usr/local/lib/vtk-5.0
-    win32:VTKLIBDIR = C:\vtk\vtk5.0\lib
+    macx:VTKLIBDIR = /usr/local/lib/vtk-5.6
+    win32:VTKLIBDIR = C:\vtk\vtk5.6\lib\vtk-5.6
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
 isEmpty(VTKINCLUDEDIR){
-    unix:VTKINCLUDEDIR = /usr/include/vtk-5.0
-    macx:VTKINCLUDEDIR = /usr/local/include/vtk-5.0
-    win32:VTKINCLUDEDIR = C:\vtk\vtk5.0\include\vtk-5.0
+    unix:VTKINCLUDEDIR = /usr/include/vtk-5.6
+    macx:VTKINCLUDEDIR = /usr/local/include/vtk-5.6
+    win32:VTKINCLUDEDIR = C:\vtk\vtk5.6\include\vtk-5.6
 }
 
 
