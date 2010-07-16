@@ -18,21 +18,21 @@ namespace udg {
    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class DICOMTag
-{
+class DICOMTag {
+
 public:
     DICOMTag();
-    DICOMTag( unsigned int group, unsigned int element );
-    DICOMTag( DICOMTag * tag );
+    DICOMTag(unsigned int group, unsigned int element);
+    DICOMTag(DICOMTag *tag);
 
     ~DICOMTag();
 
     /// Assignar/Obtenir el valor del group
-    void setGroup( unsigned int group );
+    void setGroup(unsigned int group);
     unsigned int getGroup() const;
 
     /// Assignar/Obtenir el valor de element
-    void setElement( unsigned int element );
+    void setElement(unsigned int element);
     unsigned int getElement() const;
 
     /// Obtenir el nom del tag.

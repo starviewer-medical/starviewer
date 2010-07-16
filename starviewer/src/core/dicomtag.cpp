@@ -9,7 +9,7 @@
 
 #include "dicomtag.h"
 
-#include "dctag.h"
+#include <dctag.h>
 
 #include <QString>
 
@@ -23,24 +23,24 @@ DICOMTag::~DICOMTag()
 {
 }
 
-DICOMTag::DICOMTag( unsigned int group, unsigned int element )
+DICOMTag::DICOMTag(unsigned int group, unsigned int element)
 {
     m_group = group;
     m_element = element;
 }
 
-DICOMTag::DICOMTag( DICOMTag * tag )
+DICOMTag::DICOMTag(DICOMTag *tag)
 {
     m_group = tag->getGroup();
     m_element = tag->getElement();
 }
 
-void DICOMTag::setGroup( unsigned int group )
+void DICOMTag::setGroup(unsigned int group)
 {
     m_group = group;
 }
 
-void DICOMTag::setElement( unsigned int element )
+void DICOMTag::setElement(unsigned int element)
 {
     m_element = element;
 }
@@ -62,7 +62,7 @@ QString DICOMTag::getName() const
 
 QString DICOMTag::getKeyAsQString() const
 {
-    return QString("(%1,%2)").arg( QString::number(m_group,16).rightJustified(4,'0') ).arg( QString::number(m_element,16).rightJustified(4,'0') );
+    return QString("(%1,%2)").arg(QString::number(m_group,16).rightJustified(4,'0')).arg(QString::number(m_element,16).rightJustified(4,'0'));
 }
 
 }
