@@ -19,6 +19,7 @@ class DSRDocumentTreeNode;
 namespace udg {
 
 class DICOMTag;
+class DICOMAttribute;
 class DICOMSequenceAttribute;
 class DICOMReferencedImage;
 
@@ -82,6 +83,9 @@ public:
 
     /// Retorna els DICOM Referenced Images referenciades a un Tree Node
     QList<DICOMReferencedImage*> getDicomReferencedImagesFromTreeNode(DSRDocumentTreeNode *structuredReportTreeNode);
+
+    /// Retorna una llista de DICOMAttribute que inclou tots els Tags d'un DcmDataset (Es dóna per suposat que el dataset serà vàlid)
+    QList<DICOMAttribute*> getDICOMAttributes();
 
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
