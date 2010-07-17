@@ -28,7 +28,7 @@ public:
 
 private slots:
     /// Es connectarà als events emesos pel widget per saber quan s'ha interactuat i així aplicar els plans de tall sobre el visor
-    void boundingBoxEventHandler(vtkObject *obj, unsigned long event, void *client_data, vtkCommand *command);
+    void boundingBoxEventHandler(vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command);
 
     /// Cada cop que s'hagi canviat l'input del visor hem de posar a punt 
     /// el widget d'acord amb el nou volum
