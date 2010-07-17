@@ -8,7 +8,6 @@ LIBS += -L$${GDCMLIBDIR} \
         -lgdcmDICT \
         -lgdcmDSED \
         -lgdcmexpat \
-        -lgdcmgetopt \
         -lgdcmIOD \
         -lgdcmjpeg8 \
         -lgdcmjpeg12 \
@@ -16,3 +15,7 @@ LIBS += -L$${GDCMLIBDIR} \
         -lgdcmMSFF \
         -lgdcmopenjpeg \
         -lgdcmzlib
+
+!macx {
+    LIBS += -lgdcmgetopt
+}
