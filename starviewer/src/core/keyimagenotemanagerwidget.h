@@ -7,6 +7,7 @@ namespace udg {
 
 class KeyImageNoteManager;
 class KeyImageNote;
+class KeyImageNoteCreatorWidget;
 
 /**
 Widget que s'encarrega de mostrar els Key Image Notes
@@ -26,6 +27,10 @@ public:
     /// Inicialitza el Key Image Note Manager Widget si no te les dades del Key Image Note Manager carregades
     void showKeyImageNoteManagerWidget();
 
+public slots:
+    /// Mostra el dialeg per a crear un Key Image Note
+    void showKeyImageNoteCreatorWidget();
+
 private:
     /// Inicialitza els Key Image Note Displayers
     void generateKeyImageNoteDisplayers();
@@ -42,6 +47,9 @@ private:
 
     /// Retorna cert o fals dependent de si hem o no carregat les dades del seu Key Image Note Manager
     bool m_isKeyImageNoteManagerDataLoaded;
+
+    /// Widget per a crear un Key Image Note
+    KeyImageNoteCreatorWidget *m_keyImageNoteCreator;
 };
 
 }

@@ -27,6 +27,10 @@ public:
     /// Afegeix una imatge a la seleccio actual si no la tenim
     void addImageToTheCurrentSelectionOfImages(Image *image);
 
+public slots:
+    /// Crea un Key Image Note donat d'alta per l'usuari
+    void createKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription);
+
 signals:
     /// Senyala que s'ha afegit una nova imatge a la seleccio
     void imageAddedToTheCurrentSelectionOfImages(Image *image);
