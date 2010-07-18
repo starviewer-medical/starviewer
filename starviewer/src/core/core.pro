@@ -224,7 +224,7 @@ HEADERS += extensionfactory.h \
     keyimagenotedisplayer.h \
     keyimagenotemanager.h \
     dicomreferencedimage.h \
-    thumbnailimagedisplayer.h \
+    thumbnailimagedisplayer.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
