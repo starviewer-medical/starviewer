@@ -2,9 +2,8 @@
 
 namespace udg {
 
-DICOMReferencedImage::DICOMReferencedImage()
+DICOMReferencedImage::DICOMReferencedImage(): m_frameNumber(0)
 {
-    m_frameNumber = NULL;
 }
 
 DICOMReferencedImage::~DICOMReferencedImage()
