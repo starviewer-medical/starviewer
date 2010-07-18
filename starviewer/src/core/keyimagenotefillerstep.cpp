@@ -73,7 +73,7 @@ void KeyImageNoteFillerStep::readSRTemplateKIN(KeyImageNote *keyImageNote, DICOM
     keyImageNote->setDocumentTitle(documentTitle);
 
     KeyImageNote::RejectedForQualityReasons documentTitleModifier = KeyImageNote::NoneRejectedForQualityReasons;
-    if (documentTitle == KeyImageNote::RejectedForQualityReasonsDocumentTitle || documentTitle == KeyImageNote::QualityIssue)
+    if (KeyImageNote::documentTitleNeedRejectedForQualityReasons(documentTitle))
     {
         documentTitleModifier = readRejectedForQualityReasons(reader);
     }

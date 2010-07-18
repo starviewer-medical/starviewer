@@ -489,4 +489,10 @@ KeyImageNote::RejectedForQualityReasons KeyImageNote::getRejectedForQualityReaso
         return KeyImageNote::NoneRejectedForQualityReasons;
     }
 }
+
+bool KeyImageNote::documentTitleNeedRejectedForQualityReasons(KeyImageNote::DocumentTitle documentTitle)
+{
+    return documentTitle == KeyImageNote::RejectedForQualityReasonsDocumentTitle || documentTitle == KeyImageNote::QualityIssue;
 }
+}
+
