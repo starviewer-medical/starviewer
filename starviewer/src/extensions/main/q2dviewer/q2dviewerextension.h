@@ -77,6 +77,18 @@ public slots:
     ///TODO S'ha de canviar el mètode per tal que no es crei l'objecte cada cop
     void showInteractiveImageTable();
 
+    /// Inicialitza el Key Image Note Manager i l'assigna al Key Image Note Manager Widget
+    void initializeKeyImageNoteManager();
+
+    /// Afegeix la imatge que s'esta visualitzant a la seleccio
+    void addCurrentDisplayedImageToSelection();
+
+    /// Desplega el Key Image Note Manager Widget
+    void toggleKeyImageNoteManagerWidget();
+
+    /// Amaga el Key Image Note Manager Widget
+    void hideKeyImageNoteManagerWidget();
+
 #ifndef STARVIEWER_LITE
     /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
     void showPreviousStudiesWidget();
@@ -88,10 +100,8 @@ public slots:
     ///Mostrar la pantalla de Dicom dump, amb informació de la imatge que es visualitza en aquell moment
     void showDicomDumpCurrentDisplayedImage();
 
-    /// Inicialitzacio del Key Image Note Manager
-    void initializeKeyImageNoteManager();
-    /// Mostrar el widget Key Image Note Manager widget (temporal)
-    void showKeyImageNoteManagerWidgetDialog();
+    /// Inicialitzem l'accio que ens permetra fer la seleccio d'imatges
+    void initializeSelectImageAction();
 
 #ifndef STARVIEWER_LITE
     /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
@@ -174,6 +184,7 @@ private:
     QAction *m_singleShotAction;
     QAction *m_multipleShotAction;
     QAction *m_screenShotTriggerAction;
+    QAction *m_selectImageAction;
 
 #ifndef STARVIEWER_LITE
     QAction *m_sagitalViewAction;
@@ -224,9 +235,6 @@ private:
 
     /// Manager de Key Image Notes
     KeyImageNoteManager *m_keyImageNoteManager;
-
-    /// Widget de Key Image Notes
-    KeyImageNoteManagerWidget *m_keyImageNoteManagerWidget;
 
 #endif 
 

@@ -8,8 +8,6 @@ namespace udg {
 class Image;
 class KeyImageNote;
 
-const int ScaledThumbnailsSizeX = 100;/// Mida de la previsualitzacio de la imatge escalada a l'eix x
-const int ScaledThumbnailsSizeY = 100;/// Mida de la previsualitzacio de la imatge escalada a l'eix y
 /**
 Widget que s'encarrega de mostrar la informacio referida a un Key Image Note
 
@@ -28,9 +26,6 @@ private:
 
     /// Emplena el widget d'imatges referenciades
     void fillReferencedImagesWidget();
-
-    /// Inserim una imatge al widget d'imatges referenciades
-    void insertImage(Image *image);
 
 private:
     /// Referencia al Key Image Note que mostrem

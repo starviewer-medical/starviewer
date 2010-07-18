@@ -3,23 +3,17 @@
 #include "study.h"
 #include "series.h"
 #include "keyimagenote.h"
-#include "keyimagenotemanagerwidget.h"
 
 namespace udg {
 
 KeyImageNoteManager::KeyImageNoteManager(Patient *patient)
 {
     m_patient = patient;
-    initialize();
+    m_KeyImageNotesOfPatientSearched = false;
 }
 
 KeyImageNoteManager::~KeyImageNoteManager()
 {
-}
-
-void KeyImageNoteManager::initialize()
-{
-   searchKeyImageNotes();
 }
 
 void KeyImageNoteManager::searchKeyImageNotes()
@@ -32,16 +26,30 @@ void KeyImageNoteManager::searchKeyImageNotes()
             {
                 foreach (KeyImageNote *keyImageNote, series->getKeyImageNotes())
                 {
-                    m_kinSet.append(keyImageNote);
+                    m_KeyImageNotesOfPatient.append(keyImageNote);
                 }
             }
         }
     }
 }
 
-QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotes() const
+QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesOfPatient()
 {
-    return m_kinSet;
+    if (!m_KeyImageNotesOfPatientSearched)
+    {
+        m_KeyImageNotesOfPatientSearched = true;
+        searchKeyImageNotes();
+    }
+
+    return m_KeyImageNotesOfPatient;
 }
 
+void KeyImageNoteManager::addImageToTheCurrentSelectionOfImages(Image *image)
+{
+    if (!m_currentSelection.contains(image))
+    {
+        m_currentSelection.append(image);
+        emit imageAddedToTheCurrentSelectionOfImages(image);
+    }
+}
 }

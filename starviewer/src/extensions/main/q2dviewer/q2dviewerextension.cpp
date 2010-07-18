@@ -66,6 +66,8 @@ Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
 #else
     m_hangingProtocolManager = 0;
     m_keyImageNoteManager = 0;
+    hideKeyImageNoteManagerWidget();
+
 #endif
 
     //TODO ocultem botons que no son del tot necessaris o que no es faran servir
@@ -173,7 +175,7 @@ void Q2DViewerExtension::createConnections()
     connect( m_previousStudiesWidget, SIGNAL( downloadingStudies() ), this, SLOT( changeToPreviousStudiesDownloadingIcon() ) );
     connect( m_previousStudiesWidget, SIGNAL( studiesDownloaded() ), this, SLOT( changeToPreviousStudiesDefaultIcon() ) );
     connect( m_previousStudiesToolButton, SIGNAL( clicked ( bool ) ), SLOT( showPreviousStudiesWidget() ) );
-    connect( m_keyImageNoteToolButton, SIGNAL( clicked() ), SLOT( showKeyImageNoteManagerWidgetDialog() ) );
+    connect(m_keyImageNoteToolButton, SIGNAL(clicked()), SLOT(toggleKeyImageNoteManagerWidget()));
 
 #endif
 
@@ -220,6 +222,9 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     searchPreviousStudiesWithHangingProtocols();
     initializeKeyImageNoteManager();
+    initializeSelectImageAction();
+
+    connect(m_patient, SIGNAL(patientFused()), SLOT(initializeKeyImageNoteManager()));
 #endif
 }
 
@@ -551,25 +556,52 @@ void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
 
 void Q2DViewerExtension::initializeKeyImageNoteManager()
 {
-    if( m_keyImageNoteManager != 0 )
+    if (m_keyImageNoteManager != 0)
     {
         delete m_keyImageNoteManager;
     }
 
     m_keyImageNoteManager = new KeyImageNoteManager(m_patient);
-    m_keyImageNoteManagerWidget = new KeyImageNoteManagerWidget(m_keyImageNoteManager);
-
+    m_keyImageNoteManagerWidget->setKeyImageNoteManager(m_keyImageNoteManager);
 }
 
-void Q2DViewerExtension::showKeyImageNoteManagerWidgetDialog()
+void Q2DViewerExtension::initializeSelectImageAction()
 {
-    if( m_workingArea->getViewerSelected()->getViewer() == NULL )
-    {
-        QMessageBox::warning(this, tr("Kin Manager") , tr("This action is not allowed because the selected viewer is empty.") );
-        return;
-    }
+    m_selectImageAction = new QAction(this);
+    m_selectImageAction->setShortcut(QKeySequence("K"));
+    addAction(m_selectImageAction);
+    connect(m_selectImageAction, SIGNAL(triggered()), SLOT(addCurrentDisplayedImageToSelection()));
+}
 
-    m_keyImageNoteManagerWidget->show();
+void Q2DViewerExtension::toggleKeyImageNoteManagerWidget()
+{
+    if (m_splitter->sizes()[1] == 0)
+    {
+        m_keyImageNoteManagerWidget->showKeyImageNoteManagerWidget();
+        m_splitter->setSizes(QList<int>() << 1 << 1 );
+    }
+    else
+    {
+        hideKeyImageNoteManagerWidget();
+    }
+}
+
+void Q2DViewerExtension::hideKeyImageNoteManagerWidget()
+{
+    m_splitter->setSizes(QList<int>() << 0 << 0);
+}
+
+void Q2DViewerExtension::addCurrentDisplayedImageToSelection()
+{
+    Image *selectedImage = m_workingArea->getViewerSelected()->getViewer()->getCurrentDisplayedImage();
+    if (qobject_cast<Image*>(selectedImage) != NULL)
+    {
+        m_keyImageNoteManager->addImageToTheCurrentSelectionOfImages(selectedImage);
+    }
+    else
+    {
+        DEBUG_LOG("No es una imatge");
+    }
 }
 
 #ifndef STARVIEWER_LITE

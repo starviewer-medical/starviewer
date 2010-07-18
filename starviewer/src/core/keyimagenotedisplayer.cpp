@@ -24,47 +24,20 @@ void KeyImageNoteDisplayer::fillKeyImageNoteDisplayer()
     m_observerContextTypeText->setText(m_keyImageNote->getObserverTypeAsString());
     m_observerContextNameText->setText(m_keyImageNote->getObserverContextName());
     m_keyObjectDescriptionText->setText(m_keyImageNote->getKeyObjectDescription());
+    m_contentDate->setText(m_keyImageNote->getContentDate().toString("dd/MM/yyyy"));
+    m_contentTime->setText(m_keyImageNote->getContentTime().toString("hh:mm"));
 
     fillReferencedImagesWidget();
 }
 
 void KeyImageNoteDisplayer::fillReferencedImagesWidget()
 {
-    QSize size;
-    size.setHeight(ScaledThumbnailsSizeY);
-    size.setWidth(ScaledThumbnailsSizeX);
-    m_referencedImagesWidget->setIconSize(size);
-    
-    QList<Image*> referencedImages = m_keyImageNote->getReferencedImages();
+    m_thumbnailImageDisplayer->setThumbnailSize(ThumbnailImageDisplayer::Medium);
 
-    foreach (Image *image, referencedImages)
+    foreach (Image *image, m_keyImageNote->getReferencedImages())
     {
-        insertImage(image);
+        m_thumbnailImageDisplayer->addImage(image);
     }
-}
-
-void KeyImageNoteDisplayer::insertImage(Image *image)
-{
-    QListWidgetItem *item = new QListWidgetItem();
-
-    QIcon icon(image->getThumbnail());
-    item->setIcon(icon);
-
-    QString text;
-    if (image->getInstanceNumber() != NULL)
-    {
-        text = tr( " Image " ) + image->getInstanceNumber();
-        text += "\n";
-        text += tr( " Series " ) + image->getParentSeries()->getSeriesNumber();
-    }
-    else
-    {
-        text = tr( " SOP Instance UID " ) + image->getSOPInstanceUID();
-        text += "\n";
-    }
-    item->setText(text);
-
-    m_referencedImagesWidget->addItem(item);
 }
 
 }

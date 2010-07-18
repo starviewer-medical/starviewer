@@ -5,11 +5,10 @@
 
 namespace udg {
 
-KeyImageNoteManagerWidget::KeyImageNoteManagerWidget(KeyImageNoteManager *keyImageNoteManager, QWidget *parent): QWidget(parent)
+KeyImageNoteManagerWidget::KeyImageNoteManagerWidget(QWidget *parent): QWidget(parent), m_keyImageNoteManager(0)
 {
     setupUi(this);
-    m_keyImageNoteManager = keyImageNoteManager;
-    initialize();
+    m_thumbnailImageDisplayer->setThumbnailSize(ThumbnailImageDisplayer::Medium);
 }
 
 KeyImageNoteManagerWidget::~KeyImageNoteManagerWidget()
@@ -17,16 +16,36 @@ KeyImageNoteManagerWidget::~KeyImageNoteManagerWidget()
 
 }
 
-void KeyImageNoteManagerWidget::initialize()
+void KeyImageNoteManagerWidget::showKeyImageNoteManagerWidget()
 {
-    generateKeyImageNoteDisplayers();
+    if (!m_isKeyImageNoteManagerDataLoaded)
+    {
+        generateKeyImageNoteDisplayers();
+        m_isKeyImageNoteManagerDataLoaded = true;
+    }
+}
+
+void KeyImageNoteManagerWidget::setKeyImageNoteManager(KeyImageNoteManager *keyImageNoteManager)
+{
+    m_keyImageNoteManager = keyImageNoteManager;
+    m_isKeyImageNoteManagerDataLoaded = false;
+    createConnections();
+}
+
+void KeyImageNoteManagerWidget::createConnections()
+{
+    connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), m_thumbnailImageDisplayer,SLOT(addImage(Image*)));
+    connect(m_keyImageNoteManager, SIGNAL(currentSelectionCleared()), m_thumbnailImageDisplayer, SLOT(clearAllThumbnails()));
 }
 
 void KeyImageNoteManagerWidget::generateKeyImageNoteDisplayers()
 {
-    foreach (KeyImageNote *keyImageNote, m_keyImageNoteManager->getKeyImageNotes())
+    if (m_keyImageNoteManager)
     {
-        createKeyImageNoteDisplayer(keyImageNote);
+        foreach (KeyImageNote *keyImageNote, m_keyImageNoteManager->getKeyImageNotesOfPatient())
+        {
+            createKeyImageNoteDisplayer(keyImageNote);
+        }
     }
 }
 
