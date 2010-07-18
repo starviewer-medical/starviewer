@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QString>
+#include <QStringList>
 
 namespace udg {
 
@@ -47,6 +48,15 @@ public:
                                     InappropiateImageProcessing = 111219, OtherFailure = 111220,
                                     UnknownFailure = 111221, DoubleExposure = 113026,
                                     NoneRejectedForQualityReasons = 0};
+
+    /// Ens retorna un llistat amb tots els possibles valors segons DICOM de Document Title i Rejected For Quality Reasons respectivament
+    static QStringList getAllDocumentTitles();
+    static QStringList getAllRejectedForQualityReasons();
+
+    /// Obtenir una instancia de DocumentTitle o de RejectedForQualityReasons a partir d'un String
+    static KeyImageNote::DocumentTitle getDocumentTitleInstanceFromString(const QString &documentTitle);
+    static KeyImageNote::RejectedForQualityReasons getRejectedForQualityReasonsInstanceFromString(const QString &rejectedForQualityReasons);
+
     KeyImageNote();
 
     ~KeyImageNote();

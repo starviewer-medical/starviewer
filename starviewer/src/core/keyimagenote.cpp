@@ -339,4 +339,154 @@ QString KeyImageNote::getRejectedForQualityReasonsAsString() const
     }
 }
 
+QStringList KeyImageNote::getAllDocumentTitles()
+{
+    QStringList documentTitles;
+
+    return documentTitles << tr("Of Interest") << tr("Rejected for Quality Reasons")
+                          << tr("For Referring Provider") << tr("For Surgery") << tr("For Teaching")
+                          << tr("For Conference") << tr("For Therapy") << tr("For Patient")
+                          << tr("For Peer Review") << tr("For Research") << tr("Quality Issue");
+}
+
+QStringList KeyImageNote::getAllRejectedForQualityReasons()
+{
+    QStringList rejectedForQualityReasons;
+
+    return rejectedForQualityReasons << tr("Image artifact(s)") << tr("Grid artifact(s)")
+                                     << tr("Positioning") << tr("Motion blur") 
+                                     << tr("Under exposed") << tr("Over exposed")
+                                     << tr("No image") << tr("Detector artifact(s)")
+                                     << tr("Artifact(s) other than grid or detector artifact")
+                                     << tr("Mechanical failure") << tr("Software failure")
+                                     << tr("Electrical failure") << tr("Inappropiate image processing")
+                                     << tr("Other failure") << tr("Unknown failure")
+                                     << tr("Double exposure");
+
+    return rejectedForQualityReasons;
+}
+
+KeyImageNote::DocumentTitle KeyImageNote::getDocumentTitleInstanceFromString(const QString &documentTitle)
+{
+    if (documentTitle == "Of Interest")
+    {
+        return KeyImageNote::OfInterest;
+    }
+    else if (documentTitle == "Rejected for Quality Reasons")
+    {
+        return KeyImageNote::RejectedForQualityReasonsDocumentTitle;
+    }
+    else if (documentTitle == "For Referring Provider")
+    {
+        return KeyImageNote::ForReferringProvider;
+    }
+    else if (documentTitle == "For Surgery")
+    {
+        return KeyImageNote::ForSurgery;
+    }
+    else if (documentTitle == "For Teaching")
+    {
+        return KeyImageNote::ForTeaching;
+    }
+    else if (documentTitle == "For Conference")
+    {
+        return KeyImageNote::ForConference;
+    }
+    else if (documentTitle == "For Therapy")
+    {
+        return KeyImageNote::ForTherapy;
+    }
+    else if (documentTitle == "For Patient")
+    {
+         return KeyImageNote::ForPatient;
+    }
+    else if (documentTitle == "For Peer Review")
+    {
+        return KeyImageNote::ForPeerReview;
+    }
+    else if (documentTitle == "For Research")
+    {
+        return KeyImageNote::ForResearch;
+    }
+    else if (documentTitle == "Quality Issue")
+    {
+        return KeyImageNote::QualityIssue;
+    }
+    else
+    {
+        return KeyImageNote::NoneDocumentTitle;    
+    }
+}
+
+KeyImageNote::RejectedForQualityReasons KeyImageNote::getRejectedForQualityReasonsInstanceFromString(const QString &rejectedForQualityReasons)
+{
+    if (rejectedForQualityReasons == "Image artifact(s)")
+    {
+        return KeyImageNote::ImageArtifacts;
+    }
+    else if (rejectedForQualityReasons == "Grid artifact(s)")
+    {
+        return KeyImageNote::GridArtifacts;
+    }
+    else if (rejectedForQualityReasons == "Positioning")
+    {
+        return KeyImageNote::Positioning;
+    }
+    else if (rejectedForQualityReasons == "Motion blur")
+    {
+        return KeyImageNote::MotionBlur;
+    }
+    else if (rejectedForQualityReasons == "Under exposed")
+    {
+        return KeyImageNote::UnderExposed;
+    }
+    else if (rejectedForQualityReasons == "Over exposed")
+    {
+        return KeyImageNote::OverExposed;
+    }
+    else if (rejectedForQualityReasons == "No image")
+    {
+        return KeyImageNote::NoImage;
+    }
+    else if (rejectedForQualityReasons == "Detector artifact(s)")
+    {
+        return KeyImageNote::DetectorArtifacts;
+    }
+    else if (rejectedForQualityReasons == "Artifact(s) other than grid or detector artifact")
+    {
+        return KeyImageNote::ArtifactsOtherThanGridOrDetectorArtifact;
+    }
+    else if (rejectedForQualityReasons == "Mechanical failure")
+    {
+        return KeyImageNote::MechanicalFailure;
+    }
+    else if (rejectedForQualityReasons == "Electrical failure")
+    {
+        return KeyImageNote::ElectricalFailure;
+    }
+    else if (rejectedForQualityReasons == "Software failure")
+    {
+        return KeyImageNote::SoftwareFailure;
+    }
+    else if (rejectedForQualityReasons == "Inappropiate image processing")
+    {
+        return KeyImageNote::InappropiateImageProcessing;
+    }
+    else if (rejectedForQualityReasons == "Other failure")
+    {
+        return KeyImageNote::OtherFailure;
+    }
+    else if (rejectedForQualityReasons == "Unknown failure")
+    {
+        return KeyImageNote::UnknownFailure;
+    }
+    else if (rejectedForQualityReasons == "Double exposure")
+    {
+        return KeyImageNote::DoubleExposure;
+    }
+    else
+    {
+        return KeyImageNote::NoneRejectedForQualityReasons;
+    }
+}
 }
