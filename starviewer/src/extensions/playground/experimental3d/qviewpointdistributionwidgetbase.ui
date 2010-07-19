@@ -6,91 +6,86 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>223</width>
-    <height>103</height>
+    <width>403</width>
+    <height>70</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
-    <widget class="QRadioButton" name="m_uniformRadioButton">
-     <property name="text">
-      <string>Uniform viewpoints</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="leftMargin">
-      <number>20</number>
-     </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="m_uniformNumberOfViewpointsLabel">
+      <widget class="QRadioButton" name="m_uniformRadioButton">
        <property name="text">
-        <string>Number of viewpoints</string>
+        <string>Uniform viewpoints</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="m_uniformNumberOfViewpointsComboBox">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <property name="text">
-         <string>4</string>
-        </property>
+        <widget class="QLabel" name="m_uniformNumberOfViewpointsLabel">
+         <property name="text">
+          <string>Number of viewpoints</string>
+         </property>
+        </widget>
        </item>
        <item>
-        <property name="text">
-         <string>6</string>
-        </property>
+        <widget class="QComboBox" name="m_uniformNumberOfViewpointsComboBox">
+         <item>
+          <property name="text">
+           <string>4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>6</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>8</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>12</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>20</string>
+          </property>
+         </item>
+        </widget>
        </item>
-       <item>
-        <property name="text">
-         <string>8</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>12</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>20</string>
-        </property>
-       </item>
-      </widget>
+      </layout>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QRadioButton" name="m_quasiUniformRadioButton">
-     <property name="text">
-      <string>Quasi-uniform viewpoints</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <property name="leftMargin">
-      <number>20</number>
-     </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="m_quasiUniformRecursionLevelLabel">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
+      <widget class="QRadioButton" name="m_quasiUniformRadioButton">
        <property name="text">
-        <string>Recursion level</string>
+        <string>Quasi-uniform viewpoints</string>
        </property>
       </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="m_quasiUniformRecursionLevelLabel">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Recursion level</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QSpinBox" name="m_quasiUniformRecursionLevelSpinBox">
          <property name="enabled">

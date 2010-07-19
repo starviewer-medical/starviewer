@@ -38,6 +38,7 @@ public:
     static const QString ProgramDir;
     static const QString TourDir;
     static const QString ViewpointVoxelMutualInformationDir;
+    static const QString ViewpointVoxelMutualInformation2Dir;
     static const QString ColorVoxelMutualInformationPaletteDir;
     static const QString ColorVoxelMutualInformationDir;
     static const QString EnhancedViewpointMutualInformationOpacityDir;

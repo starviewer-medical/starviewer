@@ -48,7 +48,7 @@ public:
     void filterViewpoints(const QVector<bool> &filter);
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
     void compute(bool &HV, bool &HVz, bool &HZ, bool &HZv, bool &HZV, bool &vmi, bool &vmi2, bool &vmi3, bool &mi, bool &viewpointUnstabilities, bool &vomi, bool &vomi2, bool &vomi3, bool &viewpointVomi,
-                 bool &colorVomi, bool &evmiOpacity, bool &evmiVomi, bool &bestViews, bool &guidedTour, bool &exploratoryTour, bool display = false);
+                 bool &viewpointVomi2, bool &colorVomi, bool &evmiOpacity, bool &evmiVomi, bool &bestViews, bool &guidedTour, bool &exploratoryTour, bool display = false);
     bool hasViewedVolume() const;
     const QVector<float>& viewedVolume() const;
     float HV() const;                   // H(V)
@@ -70,7 +70,8 @@ public:
     const QVector<float>& vomi3() const;    // I₃(z;V)
     float minimumVomi3() const;
     float maximumVomi3() const;
-    const QVector<float>& viewpointVomi() const;
+    const QVector<float>& viewpointVomi() const;    // INF
+    const QVector<float>& viewpointVomi2() const;   // INF2
     const QVector<Vector3Float>& colorVomi() const;
     float maximumColorVomi() const;
     const QVector<float>& evmiOpacity() const;
@@ -91,16 +92,16 @@ private:
 
 #ifndef CUDA_AVAILABLE
     void computeCpu(bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeHV, bool computeHVz, bool computeHZ, bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2, bool computeVmi3,
-                    bool computeMi, bool computeViewpointUnstabilities, bool computeVomi, bool computeVomi2, bool computeVomi3, bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity,
-                    bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour);
+                    bool computeMi, bool computeViewpointUnstabilities, bool computeVomi, bool computeVomi2, bool computeVomi3, bool computeViewpointVomi, bool computeViewpointVomi2, bool computeColorVomi,
+                    bool computeEvmiOpacity, bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour);
     void createVoxelProbabilitiesPerViewFiles();
     QVector<float> voxelProbabilitiesInViewCpu(int i);
     void deleteVoxelProbabilitiesPerViewFiles();
     float rayCastingCpu(bool computeViewProbabilities);
     void computeViewProbabilitiesAndEntropyCpu(float totalViewedVolume, bool computeHV);
     void computeVoxelProbabilitiesAndEntropyCpu(bool computeHZ);
-    void computeViewMeasuresCpu(bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity,
-                                bool computeEvmiVomi);
+    void computeViewMeasuresCpu(bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeViewpointVomi2,
+                                bool computeEvmiOpacity, bool computeEvmiVomi);
     void computeVmi3Cpu();
     void computeVomiCpu(bool computeHVz, bool computeVomi, bool computeColorVomi);
     void computeVomi2Cpu();
@@ -108,13 +109,13 @@ private:
 #else // CUDA_AVAILABLE
     static Matrix4 viewMatrix(const Vector3 &viewpoint);
     void computeCuda(bool computeViewProbabilities, bool computeVoxelProbabilities, bool computeHV, bool computeHVz, bool computeHZ, bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2,
-                     bool computeVmi3, bool computeMi, bool computeViewpointUnstabilities, bool computeVomi, bool computeVomi2, bool computeVomi3, bool computeViewpointVomi, bool computeColorVomi,
-                     bool computeEvmiOpacity, bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour, bool display);
+                     bool computeVmi3, bool computeMi, bool computeViewpointUnstabilities, bool computeVomi, bool computeVomi2, bool computeVomi3, bool computeViewpointVomi, bool computeViewpointVomi2,
+                     bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour, bool display);
     QVector<float> voxelProbabilitiesInViewCuda(int i);
     void computeViewProbabilitiesAndEntropyCuda(bool computeHV);
     void computeVoxelProbabilitiesAndEntropyCuda(bool computeHZ);
-    void computeViewMeasuresCuda(bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeEvmiOpacity,
-                                 bool computeEvmiVomi);
+    void computeViewMeasuresCuda(bool computeHZv, bool computeHZV, bool computeVmi, bool computeVmi2, bool computeMi, bool computeViewpointUnstabilities, bool computeViewpointVomi, bool computeViewpointVomi2,
+                                 bool computeEvmiOpacity, bool computeEvmiVomi);
     void computeVmi3Cuda();
     void computeVomiCuda(bool computeHVz, bool computeVomi, bool computeColorVomi);
     void computeVomi2Cuda();
@@ -162,7 +163,8 @@ private:
     QVector<float> m_vomi3; // I₃(z;V)
     float m_minimumVomi3;
     float m_maximumVomi3;
-    QVector<float> m_viewpointVomi;
+    QVector<float> m_viewpointVomi;     // INF
+    QVector<float> m_viewpointVomi2;    // INF2
     QVector<Vector3Float> m_viewpointColors;
     QVector<Vector3Float> m_colorVomi;
     float m_maximumColorVomi;
