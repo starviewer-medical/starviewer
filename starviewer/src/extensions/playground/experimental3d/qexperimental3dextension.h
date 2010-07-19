@@ -155,8 +155,10 @@ public slots:
 
 private:
 
-    /// Carrega dades de tipus float del fitxer al float. Retorna cert si tot va bé i fals si hi ha error.
-    static bool loadFloatData( const QString &fileName, float &data );
+    static const QString FileExtensionsDatAll;
+
+    /// Carrega dades de tipus T del fitxer a \a data. Retorna cert si s'han carregat les dades.
+    template <class T> bool loadData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, T &data);
     /// Carrega dades de tipus T del fitxer a la llista. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool loadData( const QString &fileName, QList<T> &list );
     /// Carrega dades de tipus T del fitxer al vector. Retorna cert si tot va bé i fals si hi ha error.

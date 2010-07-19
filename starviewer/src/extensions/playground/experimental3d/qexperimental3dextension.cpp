@@ -118,14 +118,10 @@ void QExperimental3DExtension::saveViewedVolume( QString fileName )
 
 void QExperimental3DExtension::loadHV(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::HVDir, tr("viewpoints entropy H(V)"), FileExtensionsDatAll, m_HV))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::HVDir, tr("Load viewpoints entropy H(V)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveHVPushButton->setEnabled(true);
     }
-
-    if (loadFloatData(fileName, m_HV)) m_saveHVPushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load viewpoints entropy H(V)"), QString(tr("Can't load viewpoints entropy H(V) from file ")) + fileName);
 }
 
 
@@ -173,14 +169,10 @@ void QExperimental3DExtension::saveHVz(QString fileName)
 
 void QExperimental3DExtension::loadHZ(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::HZDir, tr("voxels entropy H(Z)"), FileExtensionsDatAll, m_HZ))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::HZDir, tr("Load voxels entropy H(Z)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveHZPushButton->setEnabled(true);
     }
-
-    if (loadFloatData(fileName, m_HZ)) m_saveHZPushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load voxels entropy H(Z)"), QString(tr("Can't load voxels entropy H(Z) from file ")) + fileName);
 }
 
 
@@ -233,14 +225,10 @@ void QExperimental3DExtension::saveHZv(QString fileName)
 
 void QExperimental3DExtension::loadHZV(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::HZVDir, tr("H(Z|V)"), FileExtensionsDatAll, m_HZV))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::HZVDir, tr("Load H(Z|V)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveHZVPushButton->setEnabled(true);
     }
-
-    if (loadFloatData(fileName, m_HZV)) m_saveHZVPushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load H(Z|V)"), QString(tr("Can't load H(Z|V) from file ")) + fileName);
 }
 
 
@@ -351,16 +339,12 @@ void QExperimental3DExtension::saveVmi3(QString fileName)
 }
 
 
-void QExperimental3DExtension::loadMi( QString fileName )
+void QExperimental3DExtension::loadMi(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::MutualInformationDir, tr("mutual information I(V;Z)"), FileExtensionsDatAll, m_mi))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::MutualInformationDir, tr("Load MI"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveMiPushButton->setEnabled(true);
     }
-
-    if ( loadFloatData( fileName, m_mi ) ) m_saveMiPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load MI"), QString( tr("Can't load MI from file ") ) + fileName );
 }
 
 
@@ -906,16 +890,12 @@ void QExperimental3DExtension::saveViewpointEntropyI( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadEntropyI( QString fileName )
+void QExperimental3DExtension::loadEntropyI(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::EntropyIntensityDir, tr("entropy"), FileExtensionsDatAll, m_entropyI))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::EntropyIntensityDir, tr("Load entropy"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveEntropyIPushButton->setEnabled(true);
     }
-
-    if ( loadFloatData( fileName, m_entropyI ) ) m_saveEntropyIPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load entropy"), QString( tr("Can't load entropy from file ") ) + fileName );
 }
 
 
@@ -966,16 +946,12 @@ void QExperimental3DExtension::saveVmii( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadMii( QString fileName )
+void QExperimental3DExtension::loadMii(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::MutualInformationIntensityDir, tr("MIi"), FileExtensionsDatAll, m_mii))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::MutualInformationIntensityDir, tr("Load MIi"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveMiiPushButton->setEnabled(true);
     }
-
-    if ( loadFloatData( fileName, m_mii ) ) m_saveMiiPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load MIi"), QString( tr("Can't load MIi from file ") ) + fileName );
 }
 
 
@@ -1069,19 +1045,30 @@ void QExperimental3DExtension::saveImi( QString fileName )
 }
 
 
-bool QExperimental3DExtension::loadFloatData( const QString &fileName, float &data )
-{
-    QFile file( fileName );
+const QString QExperimental3DExtension::FileExtensionsDatAll(tr("Data files (*.dat);;All files (*)"));
 
-    if ( !file.open( QIODevice::ReadOnly ) )
+
+template <class T>
+bool QExperimental3DExtension::loadData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, T &data)
+{
+    if (fileName.isEmpty())
     {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
+        fileName = getFileNameToLoad(setting, QString(tr("Load %1")).arg(name), extensions);
+        if (fileName.isNull()) return false;
+    }
+
+    QFile file(fileName);
+
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        DEBUG_LOG(QString("No es pot llegir el fitxer ") + fileName + ": " + file.errorString());
+        if (m_interactive) QMessageBox::warning(this, QString(tr("Can't load %1 from file ")).arg(name).arg(fileName), file.errorString());
         return false;
     }
 
-    QDataStream in( &file );
+    QDataStream in(&file);
 
-    if ( !in.atEnd() ) in >> data;
+    if (!in.atEnd()) in >> data;
 
     file.close();
 
