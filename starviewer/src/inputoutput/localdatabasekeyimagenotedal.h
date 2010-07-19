@@ -70,7 +70,6 @@ private:
 
     /// Ultim error de Sqlite
     int m_lastSqliteError;
-
 };
 
 }

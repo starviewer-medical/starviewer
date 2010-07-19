@@ -5,14 +5,15 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "localdatabasekeyimagenotedal.h"
+
+#include <sqlite3.h>
+
 #include "keyimagenote.h"
 #include "series.h"
 #include "study.h"
 #include "dicommask.h"
 #include "databaseconnection.h"
 #include "logging.h"
-
-#include <sqlite3.h>
 
 namespace udg {
 
@@ -64,6 +65,7 @@ QList<KeyImageNote*> LocalDatabaseKeyImageNoteDAL::query(const DicomMask &keyIma
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
                                       qPrintable(buildSqlSelect(keyImageNoteMask)),
                                     &reply, &rows, &columns, error);
+
     if (getLastError() != SQLITE_OK)
     {
         logError (buildSqlSelect(keyImageNoteMask));

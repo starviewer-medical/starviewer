@@ -5,14 +5,15 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "localdatabasedicomreferencedimagedal.h"
+
+#include <sqlite3.h>
+
 #include "databaseconnection.h"
 #include "logging.h"
 #include "dicomreferencedimage.h"
 #include "dicommask.h"
 #include "series.h"
 #include "study.h"
-
-#include <sqlite3.h>
 
 namespace udg {
 
@@ -54,6 +55,7 @@ QList<DICOMReferencedImage*> LocalDatabaseDICOMReferencedImageDAL::query(const D
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
                                       qPrintable(buildSqlSelect(DICOMReferencedImageMask)),
                                     &reply, &rows, &columns, error);
+
     if (getLastError() != SQLITE_OK)
     {
         logError (buildSqlSelect(DICOMReferencedImageMask));
@@ -109,6 +111,7 @@ QString LocalDatabaseDICOMReferencedImageDAL::buildSqlInsert(DICOMReferencedImag
                                                                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(newDICOMReferencedImage->getReferenceParentSOPInstanceUID()))
                                                                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesOfParentObject->getParentStudy()->getInstanceUID()))
                                                                             .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesOfParentObject->getInstanceUID()));
+
     return insertSentence;
 }
 
