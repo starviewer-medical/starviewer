@@ -368,6 +368,8 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     return retrievedPatient;
 }
 
+/*TODO:Intentar reaprofitar part del codi de deleteSeries i clear per no haver de repetir la invocació als delete a tots els llocs
+       si s'afegeix una nova taula s'ha de posar al mètode deleteStudy, deleteSeries la invocació al delete de la nova taula*/
 void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
 {
     DatabaseConnection dbConnect;
