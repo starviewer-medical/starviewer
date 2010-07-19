@@ -20,6 +20,7 @@ Widget que s'encarrega de mostrar un llistat d'imatges amb miniatura (thumbnails
 
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
+//TODO: Aquest control s'hauria de fusionar amb QSeriesListWidget
 class ThumbnailImageDisplayer : public QWidget, private Ui::ThumbnailImageDisplayer
 {
 Q_OBJECT

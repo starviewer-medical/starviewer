@@ -22,6 +22,7 @@ Mòdul que s'encarrega d'omplir la informació d'objectes KIN. Un dels seus prer
 
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
+
 class KeyImageNoteFillerStep : public PatientFillerStep
 {
 public:
@@ -47,8 +48,12 @@ private:
     /// Lectura del template TID 2010 Key Object Selection ( PS 3.16 )
     void readSRTemplateKIN(KeyImageNote *keyImageNote, DICOMTagReader *reader);
     /// Lectura del DCID 7010 Key Object Selection document title
+    /*TODO: Ara mateix es llegeixen uns determinats CodeValue del KIN, s'hauria de mirar de canviar la forma i en comptes d'anar a buscar un determinat
+        CodeValue, s'haurien de recorre tots els code Value del KIN i comprovar si aquell CodeValue ens Interessa*/
     KeyImageNote::DocumentTitle readKeyObjectSelectionDocumentTitle(DICOMTagReader *reader);
     /// Lectura del DCID 7011 Rejected for quality reasons
+    /*TODO: Ara mateix es llegeixen uns determinats CodeValue del KIN, s'hauria de mirar de canviar la forma i en comptes d'anar a buscar un determinat
+        CodeValue, s'haurien de recorre tots els code Value del KIN i comprovar si aquell CodeValue ens Interessa*/
     KeyImageNote::RejectedForQualityReasons readRejectedForQualityReasons(DICOMTagReader *reader);
     /// Lectura del valor del concept name Key Object Description
     QString readKeyObjectDescription(DICOMTagReader *reader);
