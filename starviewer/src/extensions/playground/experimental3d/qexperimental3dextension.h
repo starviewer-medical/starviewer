@@ -271,6 +271,7 @@ private slots:
     void exploratoryTour();
 
     void computeVomiGradient();
+    void computeVomi2Gradient();
 
     void loadAndRunProgram();
 

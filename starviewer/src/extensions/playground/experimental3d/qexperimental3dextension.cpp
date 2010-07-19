@@ -471,7 +471,7 @@ void QExperimental3DExtension::loadVomi2(QString fileName)
         //m_opacityLabel->setEnabled(true);
         //m_opacityVomiCheckBox->setEnabled(true);    /// \todo vomi2
         m_saveVomi2PushButton->setEnabled(true);
-        //m_vomiGradientPushButton->setEnabled(true); /// \todo vomi2
+        m_vomi2GradientPushButton->setEnabled(true);
     }
     else if (m_interactive) QMessageBox::warning(this, tr("Can't load VoMI2 I₂(z;V)"), QString(tr("Can't load VoMI2 I₂(z;V) from file ")) + fileName);
 }
@@ -1438,7 +1438,8 @@ void QExperimental3DExtension::createConnections()
     connect( m_tourBestViewsPushButton, SIGNAL( clicked() ), SLOT( tourBestViews() ) );
     connect( m_guidedTourPushButton, SIGNAL( clicked() ), SLOT( guidedTour() ) );
     connect( m_exploratoryTourPushButton, SIGNAL( clicked() ), SLOT( exploratoryTour() ) );
-    connect( m_vomiGradientPushButton, SIGNAL( clicked() ), SLOT( computeVomiGradient() ) );
+    connect(m_vomiGradientPushButton, SIGNAL(clicked()), SLOT(computeVomiGradient()));
+    connect(m_vomi2GradientPushButton, SIGNAL(clicked()), SLOT(computeVomi2Gradient()));
 
     // VMIi
     connect( m_vmiiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setVmiiOneViewpointMaximum(int) ) );
@@ -2486,7 +2487,7 @@ void QExperimental3DExtension::computeSelectedVmi()
         //m_opacityLabel->setEnabled(true);
         //m_opacityVomiCheckBox->setEnabled(true);    /// \todo vomi2
         m_saveVomi2PushButton->setEnabled(true);
-        //m_vomiGradientPushButton->setEnabled(true); /// \todo vomi2
+        m_vomi2GradientPushButton->setEnabled(true);
     }
 
     if (computeVomi3)
@@ -2781,11 +2782,21 @@ void QExperimental3DExtension::exploratoryTour()
 
 void QExperimental3DExtension::computeVomiGradient()
 {
-    m_voxelSaliencies = m_volume->computeVomiGradient( m_vomi );
+    m_voxelSaliencies = m_volume->computeVomiGradient(m_vomi);
     m_maximumSaliency = 1.0f;
-    m_baseVoxelSalienciesRadioButton->setEnabled( true );
-    m_opacityLabel->setEnabled( true );
-    m_opacitySaliencyCheckBox->setEnabled( true );
+    m_baseVoxelSalienciesRadioButton->setEnabled(true);
+    m_opacityLabel->setEnabled(true);
+    m_opacitySaliencyCheckBox->setEnabled(true);
+}
+
+
+void QExperimental3DExtension::computeVomi2Gradient()
+{
+    m_voxelSaliencies = m_volume->computeVomiGradient(m_vomi2);
+    m_maximumSaliency = 1.0f;
+    m_baseVoxelSalienciesRadioButton->setEnabled(true);
+    m_opacityLabel->setEnabled(true);
+    m_opacitySaliencyCheckBox->setEnabled(true);
 }
 
 
