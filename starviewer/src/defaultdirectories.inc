@@ -53,13 +53,13 @@ isEmpty(ITKINCLUDEDIR){
 GDCMLIBDIR = $$(GDCMLIBDIR)
 isEmpty(GDCMLIBDIR){
     unix:GDCMLIBDIR = /usr/lib/gdcm
-    macx:GDCMLIBDIR = /usr/local/lib/gdcm
+    macx:GDCMLIBDIR = /usr/local/lib/gdcm-2.0
     win32:GDCMLIBDIR = C:\gdcm\GDCM-2.0\lib
 }
 GDCMINCLUDEDIR = $$(GDCMINCLUDEDIR)
 isEmpty(GDCMINCLUDEDIR){
     unix:GDCMINCLUDEDIR = /usr/include/gdcm
-    macx:GDCMINCLUDEDIR = /usr/local/include/gdcm
+    macx:GDCMINCLUDEDIR = /usr/local/include/gdcm-2.0
     win32:GDCMINCLUDEDIR = C:\gdcm\GDCM-2.0\include\gdcm-2.0
 }
 
