@@ -114,6 +114,7 @@ void LinePathTool::annotateNewPoint()
     {
         firstPoint = true;
         m_polyline = new DrawerPolyline;
+        m_polyline->setLineWidth( 3 );
         // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
         m_polyline->increaseReferenceCount();
     }
