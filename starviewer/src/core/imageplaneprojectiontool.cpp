@@ -47,7 +47,7 @@ ImagePlaneProjectionTool::ImagePlaneProjectionTool( QViewer *viewer, QObject *pa
 
     m_enabled = false;
 
-    m_thickness = 0;
+    m_thickness = 1;
 }
 
 ImagePlaneProjectionTool::~ImagePlaneProjectionTool()
@@ -288,6 +288,7 @@ void ImagePlaneProjectionTool::initProjectedLines()
         QString orientation = orientations.at( i );
         DrawerLine *projectedLine = new DrawerLine();
         projectedLine->setColor( colorsProjectedLines.at(i).value<QColor>() );
+        projectedLine->setLineWidth( 3 );
         m_projectedLines.insert( projectedLine, ( QStringList () << name << orientation ) );
         m_imagePlanes.insert( name, new ImagePlane() );
     }
@@ -1077,15 +1078,15 @@ void ImagePlaneProjectionTool:: applyThicknessProjectedLine( QString nameProject
         // Línia thickness superior
         m_upLineThickness = new DrawerLine;
         m_upLineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-        m_upLineThickness->setColor( Qt::blue );
-        m_upLineThickness->setLineWidth( 1 );
+        m_upLineThickness->setColor( Qt::yellow );
+        m_upLineThickness->setLineWidth( 3 );
         m_2DViewer->getDrawer()->draw( m_upLineThickness , Q2DViewer::Top2DPlane );
 
         // Línia thickness inferior
         m_downLineThickness = new DrawerLine;
         m_downLineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
-        m_downLineThickness->setColor( Qt::blue );
-        m_downLineThickness->setLineWidth( 1 );
+        m_downLineThickness->setColor( Qt::yellow );
+        m_downLineThickness->setLineWidth( 3 );
         m_2DViewer->getDrawer()->draw( m_downLineThickness , Q2DViewer::Top2DPlane );
     }
     else
