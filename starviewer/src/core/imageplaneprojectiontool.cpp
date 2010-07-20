@@ -658,7 +658,6 @@ void ImagePlaneProjectionTool::showImagePlaneProjectedLineBind()
     }
 }
 
-
 void ImagePlaneProjectionTool::initReslice( Volume *volume )
 {
     m_reslice->SetInput( volume->getVtkData() );
@@ -1195,7 +1194,5 @@ void ImagePlaneProjectionTool:: applyThicknessProjectedLine( QString nameProject
         m_2DViewer->render();
     }
 }
-
-
 
 }  //  end namespace udg
