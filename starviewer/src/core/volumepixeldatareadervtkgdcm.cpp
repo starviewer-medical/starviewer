@@ -2,28 +2,24 @@
 
 #include "logging.h"
 
-#ifdef VTK_GDCM_SUPPORT
 #include <vtkGDCMImageReader.h>
 #include <vtkStringArray.h>
 #include <vtkEventQtSlotConnect.h>
 #include <gdcmPixelFormat.h> // Només per qüestions d'informació de debug
 // Qt
 #include <QStringList>
-#endif
 
 namespace udg {
 
 VolumePixelDataReaderVTKGDCM::VolumePixelDataReaderVTKGDCM(QObject *parent)
 : VolumePixelDataReader(parent)
 {
-#ifdef VTK_GDCM_SUPPORT
     m_vtkGDCMReader = vtkGDCMImageReader::New();
     // Mantenim el sistema de coordenades com quan es llegeix amb itkGDCM
     m_vtkGDCMReader->FileLowerLeftOn();
     // Pel progress de vtk
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT(slotProgress()));
-#endif
 }
 
 VolumePixelDataReaderVTKGDCM::~VolumePixelDataReaderVTKGDCM()
@@ -34,8 +30,6 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
 {
     int errorCode = NoError;
 
-#ifdef VTK_GDCM_SUPPORT
-    
     if (filenames.isEmpty())
     {
         WARN_LOG("La llista de noms de fitxer per carregar és buida");
@@ -136,20 +130,13 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     m_vtkImageData->Print(std::cout);
     
     emit progress(100);
-    
-    
-#else
-    DEBUG_LOG("No podem llegir amb la interfície VTK-GDCM, no estan instal·lades!");
-    // TODO Assignar l'errorCode?
-#endif
+
     return errorCode;
 }
 
 void VolumePixelDataReaderVTKGDCM::slotProgress()
 {
-#ifdef VTK_GDCM_SUPPORT
     emit progress((int)(m_vtkGDCMReader->GetProgress()*100));
-#endif
 }
 
 } // End namespace udg

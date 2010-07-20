@@ -37,11 +37,7 @@
 #include <vtkWindowLevelLookupTable.h>
 #include <vtkImageActor.h>
 // Grayscale pipeline
-#ifdef VTK_GDCM_SUPPORT
 #include <vtkImageMapToWindowLevelColors2.h> // Permet aplicar window/level amb imatges a color
-#else
-#include <vtkImageMapToWindowLevelColors.h>
-#endif
 // Projecció de punts
 #include <vtkMatrix4x4.h>
 
@@ -55,11 +51,7 @@ Q2DViewer::Q2DViewer( QWidget *parent )
 
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = vtkProjectionImageFilter::New();
-#ifdef VTK_GDCM_SUPPORT
     m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors2::New();
-#else
-    m_windowLevelLUTMapper = vtkImageMapToWindowLevelColors::New();
-#endif
 
     // Creem anotacions i actors
     createAnnotations();
@@ -1006,11 +998,8 @@ void Q2DViewer::resetCamera()
         DEBUG_LOG( "Intentant canviar de vista sense haver donat un input abans..." );
     }
 }
-#ifdef VTK_GDCM_SUPPORT
+
 vtkImageMapToWindowLevelColors2 *Q2DViewer::getWindowLevelMapper() const
-#else
-vtkImageMapToWindowLevelColors *Q2DViewer::getWindowLevelMapper() const
-#endif
 {
     return m_windowLevelLUTMapper;
 }

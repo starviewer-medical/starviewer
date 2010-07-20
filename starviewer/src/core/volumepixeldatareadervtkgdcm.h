@@ -3,10 +3,8 @@
 
 #include "volumepixeldatareader.h"
 
-#ifdef VTK_GDCM_SUPPORT
 class vtkGDCMImageReader;
 class vtkEventQtSlotConnect;
-#endif
 
 namespace udg {
 
@@ -27,11 +25,9 @@ private slots:
     void slotProgress();
 
 private:
-#ifdef VTK_GDCM_SUPPORT
     // Lector vtkGDCM + progress
     vtkGDCMImageReader *m_vtkGDCMReader;
     vtkEventQtSlotConnect *m_vtkQtConnections;
-#endif
 };
 
 } // End namespace udg

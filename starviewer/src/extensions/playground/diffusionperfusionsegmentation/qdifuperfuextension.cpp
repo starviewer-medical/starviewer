@@ -22,11 +22,7 @@
 #include <vtkActor.h>
 #include <vtkImageActor.h>
 #include <vtkImageCast.h>
-#ifdef VTK_GDCM_SUPPORT
 #include <vtkImageMapToWindowLevelColors2.h>
-#else
-#include <vtkImageMapToWindowLevelColors.h>
-#endif
 #include <vtkImageThreshold.h>
 #include <vtkLookupTable.h>
 #include <vtkRenderer.h>
