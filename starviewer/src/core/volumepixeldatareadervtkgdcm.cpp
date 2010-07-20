@@ -56,6 +56,7 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
         DEBUG_LOG("Llegim un sol arxiu amb vtkGDCM");
         m_vtkGDCMReader->SetFileName(qPrintable(filenames.first()));    
     }
+    
     try
     {
         m_vtkGDCMReader->Update();
@@ -64,8 +65,9 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     {
         DEBUG_LOG("An exception was throwed while reading with vtkGDCMImageReader");
         WARN_LOG("An exception was throwed while reading with vtkGDCMImageReader");
+        errorCode = UnknownError;
     }
-    
+
     DEBUG_LOG("Scalar type selected by the reader");
     switch (m_vtkGDCMReader->GetDataScalarType())
     {
