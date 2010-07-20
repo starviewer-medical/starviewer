@@ -47,13 +47,13 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
         {
             sarray->InsertNextValue(filenames.at(i).toStdString());
         }
-        DEBUG_LOG("1)Reading several files");
+        DEBUG_LOG("Llegim diversos arxius amb vtkGDCM");
         m_vtkGDCMReader->SetFileNames(sarray);
         sarray->Delete();
     }
     else
     {
-        DEBUG_LOG("1)Reading only one file");
+        DEBUG_LOG("Llegim un sol arxiu amb vtkGDCM");
         m_vtkGDCMReader->SetFileName(qPrintable(filenames.first()));    
     }
     try
@@ -65,7 +65,6 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
         DEBUG_LOG("An exception was throwed while reading with vtkGDCMImageReader");
         WARN_LOG("An exception was throwed while reading with vtkGDCMImageReader");
     }
-    DEBUG_LOG("2)Reading successful");
     
     DEBUG_LOG("Scalar type selected by the reader");
     switch (m_vtkGDCMReader->GetDataScalarType())
@@ -119,16 +118,12 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
             break;
 
         default:
-            DEBUG_LOG(QString("Scalar type: %1").arg(m_vtkGDCMReader->GetDataScalarType()));
+            DEBUG_LOG(QString("Scalar type not listed in switch: %1").arg(m_vtkGDCMReader->GetDataScalarType()));
             break;
     }
 
     // Assignem les dades
     m_vtkImageData = m_vtkGDCMReader->GetOutput();
-
-    DEBUG_LOG(">>>>>>>>>>>>VTK GDCM READER - vtkImageData Output<<<<<<<<<<<<<<<<<<<");
-    m_vtkImageData->Print(std::cout);
-    
     emit progress(100);
 
     return errorCode;
