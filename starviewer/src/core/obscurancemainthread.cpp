@@ -98,8 +98,13 @@ void ObscuranceMainThread::run()
     int dataSize = image->GetPointData()->GetScalars()->GetSize();
     int dimensions[3];
     image->GetDimensions( dimensions );
+    vtkIdType vtkIncrements[3];
+    image->GetIncrements( vtkIncrements );
+
     int increments[3];
-    image->GetIncrements( increments );
+    increments[0] = vtkIncrements[0];
+    increments[1] = vtkIncrements[1];
+    increments[2] = vtkIncrements[2];
 
     m_obscurance = new Obscurance( dataSize, hasColor(), m_doublePrecision );
 
