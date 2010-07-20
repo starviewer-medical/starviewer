@@ -1994,7 +1994,7 @@ void ViewpointInformationChannel::computeViewMeasuresCuda(bool computeHZv, bool 
             DEBUG_LOG(QString("U(v%1) = %2").arg(i + 1).arg(viewpointUnstability));
         }
 
-        if (computeViewpointVomi)
+        if (computeViewpointVomi || computeViewpointVomi2)
         {
             float pv = m_viewProbabilities.at(i);
 
