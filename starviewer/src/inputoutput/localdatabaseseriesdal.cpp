@@ -170,7 +170,7 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *seriesToUpdate)
                                                         "Laterality = '%15', "
                                                         "RetrievedDate = '%16', "
                                                         "RetrievedTime = '%17', "
-                                                        "State = '%18' "
+                                                        "State = %18 "
                                                  "Where InstanceUID = '%19'")
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getParentStudy()->getInstanceUID() ) )
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( seriesToUpdate->getSeriesNumber() ) )
