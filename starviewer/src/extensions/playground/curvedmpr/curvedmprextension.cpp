@@ -242,14 +242,14 @@ void CurvedMPRExtension::changeThicknessReconstruction()
             m_upPolylineThickness = new DrawerPolyline;
             m_upPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
             m_upPolylineThickness->setColor( Qt::blue );
-            m_upPolylineThickness->setLineWidth( 1 );
+            m_upPolylineThickness->setLineWidth( 3 );
             mainViewer->getDrawer()->draw( m_upPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
 
             // Línia thickness inferior
             m_downPolylineThickness = new DrawerPolyline;
             m_downPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
             m_downPolylineThickness->setColor( Qt::blue );
-            m_downPolylineThickness->setLineWidth( 1 );
+            m_downPolylineThickness->setLineWidth( 3 );
             mainViewer->getDrawer()->draw( m_downPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
 
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
@@ -430,7 +430,8 @@ void CurvedMPRExtension::addInfoPointLastPolyline( double *p, double *dv, int xI
     point[zIndex] = p[zIndex];
     m_lastPolylinePoints.append( point );
     
-    // Vector de desplaçament del punt
+    // Vector de desplaçament del punt perpendicular al vector director indicat
+    // V(a,b) --> V2(-b,a)
     double *directorVector = new double[3];
     directorVector[xIndex] = - dv[yIndex];
     directorVector[yIndex] = dv[xIndex];
