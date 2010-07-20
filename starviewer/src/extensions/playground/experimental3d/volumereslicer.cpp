@@ -91,7 +91,7 @@ void VolumeReslicer::reslice( bool saveMhd, bool doClip, int maxRange )
     // Find minimum extent
     vtkImageData *resliced = reslice->GetOutput();
     unsigned short *data = reinterpret_cast<unsigned short*>( resliced->GetScalarPointer() );
-    int increments[3];
+    vtkIdType increments[3];
     resliced->GetIncrements( increments );
     int dimensions[3];
     resliced->GetDimensions( dimensions );
