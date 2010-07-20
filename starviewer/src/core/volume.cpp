@@ -741,6 +741,12 @@ int Volume::identifyErrorMessage( const QString &errorMessage )
         return OutOfMemory;
     else if( errorMessage.contains("The file doesn't exists") )
         return MissingFile;
+    else if (errorMessage.contains("A spacing of 0 is not allowed"))
+    {
+        DEBUG_LOG("Trobem excepció [A spacing of 0 is not allowed]. Llegim dades igual.");
+        WARN_LOG("Trobem excepció [A spacing of 0 is not allowed]. Llegim dades igual.");
+        return NoError;
+    }
     else
         return UnknownError;
 }
