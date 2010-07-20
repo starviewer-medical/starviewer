@@ -340,7 +340,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 
          if (series->getModality() == "KO")
          {
-            int status = retrieveKeyImageNotes(dbConnect, series, maskImagesToRetrieve);
+            int status = queryKeyImageNotes(dbConnect, series, maskImagesToRetrieve);
 
             if (status != SQLITE_OK)
             {
@@ -982,14 +982,12 @@ int LocalDatabaseManager::saveKeyImageNote(DatabaseConnection *dbConnect, KeyIma
     {
         status = saveDICOMReferencedImages(dbConnect, keyImageNoteToSave->getDICOMReferencedImages(), keyImageNoteToSave->getParentSeries());
     }
-
-    /// Si el Key Image Note ja existia actualitzem la seva informació
-    if (keyImageNoteDAL.getLastError() == SQLITE_CONSTRAINT) 
+    else if (keyImageNoteDAL.getLastError() == SQLITE_CONSTRAINT) 
     {
         keyImageNoteDAL.update(keyImageNoteToSave);
         status = keyImageNoteDAL.getLastError();
     }
-        
+
     return status;
 }
 
@@ -1273,7 +1271,7 @@ QString LocalDatabaseManager::getCachePath()
     return QDir::toNativeSeparators( settings.getValue( InputOutputSettings::CachePath ).toString() );
 }
 
-int LocalDatabaseManager::retrieveDICOMReferencedImageInKeyImageNote(DatabaseConnection &dbConnect, KeyImageNote *keyImageNote) 
+int LocalDatabaseManager::queryDICOMReferencedImageInKeyImageNote(DatabaseConnection &dbConnect, KeyImageNote *keyImageNote) 
 {
     LocalDatabaseDICOMReferencedImageDAL localDataBaseDICOMReferencedImageDAL;
     localDataBaseDICOMReferencedImageDAL.setDatabaseConnection(&dbConnect);
@@ -1290,7 +1288,7 @@ int LocalDatabaseManager::retrieveDICOMReferencedImageInKeyImageNote(DatabaseCon
 
     return localDataBaseDICOMReferencedImageDAL.getLastError();
 }
-int LocalDatabaseManager::retrieveKeyImageNotes(DatabaseConnection &dbConnect, Series *series, DicomMask &maskToRetrieve)
+int LocalDatabaseManager::queryKeyImageNotes(DatabaseConnection &dbConnect, Series *series, DicomMask &maskToRetrieve)
 {
     LocalDatabaseKeyImageNoteDAL keyImageNoteDAL;
     keyImageNoteDAL.setDatabaseConnection(&dbConnect);
@@ -1306,7 +1304,7 @@ int LocalDatabaseManager::retrieveKeyImageNotes(DatabaseConnection &dbConnect, S
     foreach (KeyImageNote *keyImageNote, keyImageNotes)
     {
         series->addKeyImageNote(keyImageNote);
-        status = retrieveDICOMReferencedImageInKeyImageNote(dbConnect, keyImageNote);
+        status = queryDICOMReferencedImageInKeyImageNote(dbConnect, keyImageNote);
 
         if (status != SQLITE_OK)
         {

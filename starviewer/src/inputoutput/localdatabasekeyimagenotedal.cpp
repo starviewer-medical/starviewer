@@ -99,10 +99,10 @@ KeyImageNote* LocalDatabaseKeyImageNoteDAL::fillKeyImageNote(char **reply, int r
     keyImageNote->setInstanceNumber(reply[3 + row * columns]);
     keyImageNote->setContentDate(QDate().fromString(reply[4 + row * columns], "yyyyMMdd"));
     keyImageNote->setContentTime(QTime().fromString(reply[5 + row * columns], "hhmmss"));
-    keyImageNote->setDocumentTitle(KeyImageNote::DocumentTitle(atoi(reply[6 + row * columns])));
-    keyImageNote->setRejectedForQualityReasons(KeyImageNote::RejectedForQualityReasons(atoi(reply[7 + row * columns])));
+    keyImageNote->setDocumentTitle(KeyImageNote::DocumentTitle(QString(reply[6 + row * columns]).toInt()));
+    keyImageNote->setRejectedForQualityReasons(KeyImageNote::RejectedForQualityReasons(QString(reply[7 + row * columns]).toInt()));
     keyImageNote->setKeyObjectDescription(reply[8 + row * columns]);
-    keyImageNote->setObserverContextType(KeyImageNote::ObserverType(atoi(reply[9 + row * columns])));
+    keyImageNote->setObserverContextType(KeyImageNote::ObserverType(QString(reply[9 + row * columns]).toInt()));
     keyImageNote->setObserverContextName(reply[10 + row * columns]);
     keyImageNote->setRetrievedDate(QDate().fromString(reply[11 + row * columns], "yyyyMMdd"));
     keyImageNote->setRetrievedTime(QTime().fromString(reply[12 + row * columns], "hhmmss"));
@@ -140,7 +140,7 @@ QString LocalDatabaseKeyImageNoteDAL::buildSqlInsert(KeyImageNote *newKeyImageNo
                                                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(newKeyImageNote->getObserverContextName()))
                                                                     .arg(newKeyImageNote->getRetrievedDate().toString("yyyyMMdd"))
                                                                     .arg(newKeyImageNote->getRetrievedTime().toString("hhmmss"))
-                                                                    .arg("0");
+                                                                    .arg(0);
 
     return insertSentence;
 }
@@ -164,16 +164,16 @@ QString LocalDatabaseKeyImageNoteDAL::buildSqlUpdate(KeyImageNote *keyImageNoteT
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(keyImageNoteToUpdate->getParentSeries()->getParentStudy()->getInstanceUID()))
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(keyImageNoteToUpdate->getParentSeries()->getInstanceUID()))
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(keyImageNoteToUpdate->getInstanceNumber()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(QString("contentDate")))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(QString("contentTime")))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(QString("documentTitle")))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(QString("rejected")))
+                                    .arg(keyImageNoteToUpdate->getContentDate().toString("yyyyMMdd"))
+                                    .arg(keyImageNoteToUpdate->getContentTime().toString("hhmmss"))
+                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(QString::number(keyImageNoteToUpdate->getDocumentTitle())))
+                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(QString::number(keyImageNoteToUpdate->getRejectedForQualityReasons())))
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(keyImageNoteToUpdate->getKeyObjectDescription()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(QString("Observer Type")))
+                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(QString::number(keyImageNoteToUpdate->getObserverContextType())))
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(keyImageNoteToUpdate->getObserverContextName()))
                                     .arg(keyImageNoteToUpdate->getRetrievedDate().toString("yyyyMMdd"))
                                     .arg(keyImageNoteToUpdate->getRetrievedTime().toString("hhmmss"))
-                                    .arg("0")
+                                    .arg(0)
                                     .arg(DatabaseConnection::formatTextToValidSQLSyntax(keyImageNoteToUpdate->getInstanceUID()));
     
     return updateSentence;

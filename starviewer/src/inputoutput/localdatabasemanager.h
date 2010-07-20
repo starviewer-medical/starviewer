@@ -206,9 +206,9 @@ private:
     void setLastError(int sqliteLastError);
 
     /// Obte els DICOM Referenced Images referenciats a un Key Image Note i els afegeix a l'estructura
-    int retrieveDICOMReferencedImageInKeyImageNote(DatabaseConnection &dbConnect, KeyImageNote *keyImageNote);
+    int queryDICOMReferencedImageInKeyImageNote(DatabaseConnection &dbConnect, KeyImageNote *keyImageNote);
     /// Obte els Key Image Notes d'una Serie i els afegeix a l'estructura
-    int retrieveKeyImageNotes(DatabaseConnection &dbConnect, Series *series, DicomMask &maskToRetrieve);
+    int queryKeyImageNotes(DatabaseConnection &dbConnect, Series *series, DicomMask &maskToRetrieve);
 };
 
 }

@@ -86,7 +86,7 @@ DICOMReferencedImage* LocalDatabaseDICOMReferencedImageDAL::fillDICOMReferencedI
     DICOMReferencedImage *referencedImage = new DICOMReferencedImage();
 
     referencedImage->setDICOMReferencedImageSOPInstanceUID(reply[0 + row * columns]);
-    referencedImage->setFrameNumber(atoi(reply[1 + row * columns]));
+    referencedImage->setFrameNumber(QString(reply[1 + row * columns]).toInt());
     referencedImage->setReferenceParentSOPInstanceUID(reply[2 + row * columns]);
 
     return referencedImage;
