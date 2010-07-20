@@ -490,7 +490,7 @@ KeyImageNote::RejectedForQualityReasons KeyImageNote::getRejectedForQualityReaso
     }
 }
 
-bool KeyImageNote::documentTitleNeedRejectedForQualityReasons(KeyImageNote::DocumentTitle documentTitle)
+bool KeyImageNote::isDocumentTitleModifiedForQualityReasonsOrIssues(KeyImageNote::DocumentTitle documentTitle)
 {
     return documentTitle == KeyImageNote::RejectedForQualityReasonsDocumentTitle || documentTitle == KeyImageNote::QualityIssue;
 }

@@ -31,7 +31,7 @@ void KeyImageNoteCreatorWidget::createConnections()
 
 void KeyImageNoteCreatorWidget::setVisibilityOfRejectedForQualityReasons(const QString &documentTitle)
 {
-    if (KeyImageNote::documentTitleNeedRejectedForQualityReasons(KeyImageNote::getDocumentTitleInstanceFromString(documentTitle)))
+    if (KeyImageNote::isDocumentTitleModifiedForQualityReasonsOrIssues(KeyImageNote::getDocumentTitleInstanceFromString(documentTitle)))
     {
         m_documentTitleQualityReasonsComboBox->setVisible(true);
         m_rejectedForQualityReasonsLabel->setVisible(true);

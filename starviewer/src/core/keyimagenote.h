@@ -128,7 +128,7 @@ public:
     QString getRejectedForQualityReasonsAsString() const;
 
     /// Ens retorna cert si el documentTitle necessita Rejected For Quality Reasons segons el que estableix DICOM
-    static bool documentTitleNeedRejectedForQualityReasons(KeyImageNote::DocumentTitle documentTitle);
+    static bool isDocumentTitleModifiedForQualityReasonsOrIssues(KeyImageNote::DocumentTitle documentTitle);
 
 private:
     /// Obte la imatge que tenim referenciada al Key Image Note a partir de la seva referencia 

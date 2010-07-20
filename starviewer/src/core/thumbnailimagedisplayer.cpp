@@ -4,6 +4,15 @@
 
 namespace udg {
 
+const int ScaledSmallThumbnailsSizeX = 50;/// Mida de la previsualitzacio de la imatge escalada a l'eix x Petita
+const int ScaledSmallThumbnailsSizeY = 50;/// Mida de la previsualitzacio de la imatge escalada a l'eix y Petita
+
+const int ScaledMediumThumbnailsSizeX = 100;/// Mida de la previsualitzacio de la imatge escalada a l'eix x Mitjana
+const int ScaledMediumThumbnailsSizeY = 100;/// Mida de la previsualitzacio de la imatge escalada a l'eix y Mitjana
+
+const int ScaledBigThumbnailsSizeX = 200;/// Mida de la previsualitzacio de la imatge escalada a l'eix x Gran
+const int ScaledBigThumbnailsSizeY = 200;/// Mida de la previsualitzacio de la imatge escalada a l'eix y Gran
+
 ThumbnailImageDisplayer::ThumbnailImageDisplayer(QWidget *parent): QWidget(parent)
 {
     setupUi(this);

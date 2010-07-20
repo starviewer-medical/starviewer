@@ -64,7 +64,7 @@ void KeyImageNoteManager::createKeyImageNote(const QString &documentTitle, const
 
     newKeyImageNote->setDocumentTitle(KeyImageNote::getDocumentTitleInstanceFromString(documentTitle));
 
-    if (KeyImageNote::documentTitleNeedRejectedForQualityReasons(newKeyImageNote->getDocumentTitle()))
+    if (KeyImageNote::isDocumentTitleModifiedForQualityReasonsOrIssues(newKeyImageNote->getDocumentTitle()))
     {
         newKeyImageNote->setRejectedForQualityReasons(KeyImageNote::getRejectedForQualityReasonsInstanceFromString(documentTitleQualityReasons));
     }
