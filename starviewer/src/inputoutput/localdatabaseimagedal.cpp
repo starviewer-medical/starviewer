@@ -264,7 +264,7 @@ QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
                                               "OrderNumberInVolume = '%29', "
                                               "RetrievedDate = '%30', "
                                               "RetrievedTime = '%31', "
-                                              "State = '%32' "
+                                              "State = %32 "
                                      "Where SOPInstanceUID = '%33' And "
                                            "FrameNumber = %34")
                             .arg( DatabaseConnection::formatTextToValidSQLSyntax( imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID() ) )
