@@ -42,14 +42,14 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     // que accepta vtkGDCMImageReader
     if (filenames.size() > 1)
     {
-        vtkStringArray *sarray = vtkStringArray::New();
-        for (unsigned int i = 0; i<filenames.size(); i++)
+        vtkStringArray *stringArray = vtkStringArray::New();
+        for (unsigned int i = 0; i < filenames.size(); i++)
         {
-            sarray->InsertNextValue(filenames.at(i).toStdString());
+            stringArray->InsertNextValue(filenames.at(i).toStdString());
         }
         DEBUG_LOG("Llegim diversos arxius amb vtkGDCM");
-        m_vtkGDCMReader->SetFileNames(sarray);
-        sarray->Delete();
+        m_vtkGDCMReader->SetFileNames(stringArray);
+        stringArray->Delete();
     }
     else
     {
