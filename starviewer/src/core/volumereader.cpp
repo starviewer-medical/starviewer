@@ -1,9 +1,7 @@
 #include "volumereader.h"
 
 #include "volumepixeldatareaderitkgdcm.h"
-#ifdef VTK_GDCM_SUPPORT
 #include "volumepixeldatareadervtkgdcm.h"
-#endif
 
 #include "volume.h"
 #include "image.h"
@@ -101,7 +99,6 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
             containsDifferentSizeImages = true;
         }
 
-#ifdef VTK_GDCM_SUPPORT
         // Comprovem si es tracta d'una imatge a color
         // TODO Caldria diferenciar també els casos en que tenim més d'una imatge de diferents mides i que alguna és de color
         photometricInterpretation = image->getPhotometricInterpretation();
@@ -110,18 +107,12 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
             containsColorImages = true;
             DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
         }
-#endif
     }
 
     if (!containsDifferentSizeImages && containsColorImages)
     {
-#ifdef VTK_GDCM_SUPPORT
         // Si conté imatges de color i totes són de la mateixa mida les llegirem amb VTK-GDCM
         m_suitablePixelDataReader = VTKGDCMPixelDataReader;
-#else
-        // Sense VTK-GDCM seguiran sent les ITK-GDCM, no ens queda cap altre
-        m_suitablePixelDataReader = ITKGDCMPixelDataReader;
-#endif
     }
 
     return fileList;
@@ -142,12 +133,11 @@ void VolumeReader::setUpReader()
             m_volumePixelDataReader = new VolumePixelDataReaderITKGDCM(this);
             DEBUG_LOG("Escollim ITK-GDCM per llegir la pixel data del volum");
             break;
-#ifdef VTK_GDCM_SUPPORT
+
         case VTKGDCMPixelDataReader:
             m_volumePixelDataReader = new VolumePixelDataReaderVTKGDCM(this);
             DEBUG_LOG("Escollim VTK-GDCM per llegir la pixel data del volum");
             break;
-#endif
     }
 
     // Connectem les senyals de notificació de progrés

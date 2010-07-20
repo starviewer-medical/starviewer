@@ -20,11 +20,7 @@ class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
 // Grayscale pipeline
-#ifdef VTK_GDCM_SUPPORT
 class vtkImageMapToWindowLevelColors2; // Permet aplicar window/level amb imatges a color
-#else
-class vtkImageMapToWindowLevelColors;
-#endif
 // Thick Slab
 class vtkProjectionImageFilter;
 
@@ -228,11 +224,7 @@ public:
     /// TODO El fan servir les extensions que necessiten aplicar una escala de colors
     /// sobre la imatge. Caldria pensar en un mètode de poder aplicar color sense exposar
     /// aquest component intern a l'exterior
-#ifdef VTK_GDCM_SUPPORT
     vtkImageMapToWindowLevelColors2 *getWindowLevelMapper() const;
-#else
-    vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
-#endif
 
 public slots:
     virtual void setInput( Volume *volume );
@@ -500,12 +492,7 @@ private:
     Drawer *m_drawer;
 
     /// objectes per a les transformacions en el pipeline d'escala de grisos
-#ifdef VTK_GDCM_SUPPORT
     vtkImageMapToWindowLevelColors2 *m_windowLevelLUTMapper;
-#else
-    vtkImageMapToWindowLevelColors *m_windowLevelLUTMapper;
-#endif
-    
 
     // Secció "ThickSlab"
     /// Nombre de llesques que composen el thickSlab

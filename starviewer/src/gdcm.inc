@@ -14,7 +14,8 @@ LIBS += -L$${GDCMLIBDIR} \
         -lgdcmjpeg16 \
         -lgdcmMSFF \
         -lgdcmopenjpeg \
-        -lgdcmzlib
+        -lgdcmzlib \
+        -lvtkgdcm
 
 !macx {
     LIBS += -lgdcmgetopt
