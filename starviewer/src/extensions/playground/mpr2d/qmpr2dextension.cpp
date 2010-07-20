@@ -152,11 +152,12 @@ void QMPR2DExtension::initializeTools()
 
 void QMPR2DExtension::initializeDefaultTools()
 {
-    QStringList toolsList1, toolsList2;
+    QStringList toolsList1, toolsList2, toolsList3;
     toolsList1 << "ImagePlaneProjectionTool";
     toolsList2 << "ImagePlaneProjectionTool" << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "WindowLevelPresetsTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
+    toolsList3 << "ImagePlaneProjectionTool" << "SlicingTool";
     m_toolManager->setViewerTools( m_axial2DView, toolsList2 );
-    m_toolManager->setViewerTools( m_coronal2DView, toolsList1 );
+    m_toolManager->setViewerTools( m_coronal2DView, toolsList3 );
     m_toolManager->setViewerTools( m_sagital2DView, toolsList1 );
 }
 
