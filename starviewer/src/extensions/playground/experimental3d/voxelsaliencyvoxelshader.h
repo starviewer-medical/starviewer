@@ -88,9 +88,34 @@ inline HdrColor VoxelSaliencyVoxelShader::nvShade( const Vector3 &position, int 
     if ( !color.isTransparent() )
     {
         float saliency = m_saliencyFactor * m_voxelSaliencies.at( offset ) / m_maximumSaliency;
-        color.red = saliency > 0.8f ? 1.0f : saliency > 0.6f ? 5.0f * ( saliency - 0.6f ) : saliency > 0.2f ? 0.0f : 1.0f - 5.0f * saliency;
-        color.green = saliency > 0.8f ? 1.0f - 5.0f * ( saliency - 0.8f ) : saliency > 0.4f ? 1.0f : saliency > 0.2f ? 5.0f * ( saliency - 0.2f ) : 0.0f;
-        color.blue = saliency > 0.6f ? 0.0f : saliency > 0.4f ? 1.0f - 5.0f * ( saliency - 0.4f ) : 1.0f;
+//        color.red = saliency > 0.8f ? 1.0f : saliency > 0.6f ? 5.0f * ( saliency - 0.6f ) : saliency > 0.2f ? 0.0f : 1.0f - 5.0f * saliency;
+//        color.green = saliency > 0.8f ? 1.0f - 5.0f * ( saliency - 0.8f ) : saliency > 0.4f ? 1.0f : saliency > 0.2f ? 5.0f * ( saliency - 0.2f ) : 0.0f;
+//        color.blue = saliency > 0.6f ? 0.0f : saliency > 0.4f ? 1.0f - 5.0f * ( saliency - 0.4f ) : 1.0f;
+
+        if (saliency < 0.25f)
+        {
+            saliency *= 4.0f;
+            color.green = saliency;
+            color.blue = 1.0f;
+        }
+        else if (saliency < 0.5f)
+        {
+            saliency = (saliency - 0.25f) * 4.0f;
+            color.green = 1.0f;
+            color.blue = 1.0f - saliency;
+        }
+        else if (saliency < 0.75f)
+        {
+            saliency = (saliency - 0.5f) * 4.0f;
+            color.red = saliency;
+            color.green = 1.0f;
+        }
+        else
+        {
+            saliency = (saliency - 0.75f) * 4.0f;
+            color.red = 1.0f;
+            color.green = 1.0f - saliency;
+        }
     }
 
     return color;
@@ -118,9 +143,34 @@ inline HdrColor VoxelSaliencyVoxelShader::nvShade( const Vector3 &position, cons
     if ( !color.isTransparent() )
     {
         float saliency = m_saliencyFactor * TrilinearInterpolator::interpolate<float>( m_voxelSaliencies.constData(), offsets, weights ) / m_maximumSaliency;
-        color.red = saliency > 0.8f ? 1.0f : saliency > 0.6f ? 5.0f * ( saliency - 0.6f ) : saliency > 0.2f ? 0.0f : 1.0f - 5.0f * saliency;
-        color.green = saliency > 0.8f ? 1.0f - 5.0f * ( saliency - 0.8f ) : saliency > 0.4f ? 1.0f : saliency > 0.2f ? 5.0f * ( saliency - 0.2f ) : 0.0f;
-        color.blue = saliency > 0.6f ? 0.0f : saliency > 0.4f ? 1.0f - 5.0f * ( saliency - 0.4f ) : 1.0f;
+//        color.red = saliency > 0.8f ? 1.0f : saliency > 0.6f ? 5.0f * ( saliency - 0.6f ) : saliency > 0.2f ? 0.0f : 1.0f - 5.0f * saliency;
+//        color.green = saliency > 0.8f ? 1.0f - 5.0f * ( saliency - 0.8f ) : saliency > 0.4f ? 1.0f : saliency > 0.2f ? 5.0f * ( saliency - 0.2f ) : 0.0f;
+//        color.blue = saliency > 0.6f ? 0.0f : saliency > 0.4f ? 1.0f - 5.0f * ( saliency - 0.4f ) : 1.0f;
+
+        if (saliency < 0.25f)
+        {
+            saliency *= 4.0f;
+            color.green = saliency;
+            color.blue = 1.0f;
+        }
+        else if (saliency < 0.5f)
+        {
+            saliency = (saliency - 0.25f) * 4.0f;
+            color.green = 1.0f;
+            color.blue = 1.0f - saliency;
+        }
+        else if (saliency < 0.75f)
+        {
+            saliency = (saliency - 0.5f) * 4.0f;
+            color.red = saliency;
+            color.green = 1.0f;
+        }
+        else
+        {
+            saliency = (saliency - 0.75f) * 4.0f;
+            color.red = 1.0f;
+            color.green = 1.0f - saliency;
+        }
     }
 
     return color;
