@@ -57,7 +57,7 @@ void ViewersLayout::removeLayouts()
 
     for( i = 0; i < numberOfViewers; i++)
     {
-        m_viewersLayout->removeWidget( m_vectorViewers.value( i ) );
+        m_viewersLayout->removeWidget(m_vectorViewers.at(i));
     }
 	m_positionsList.clear();
 	m_numberOfVisibleViewers = 0;
@@ -87,14 +87,13 @@ void ViewersLayout::restoreLayouts()
 		}
 	}
 
-	m_viewersLayout->addWidget( m_vectorViewers.value(0), 0, 0 );
+    m_viewersLayout->addWidget(m_vectorViewers.at(0), 0, 0);
 
 	// S'amaguen tots i es deixa el principal, es tornen a posar amb layout
 	for( i = 1; i < m_vectorViewers.size(); i++)
 	{
-		m_vectorViewers.value(i)->hide();
-		m_viewersLayout->addWidget( m_vectorViewers.value(i), row, column );
-
+		m_vectorViewers.at(i)->hide();
+		m_viewersLayout->addWidget(m_vectorViewers.at(i), row, column);
 		column++;
 		if( column >= m_totalColumns )
 		{
@@ -103,9 +102,9 @@ void ViewersLayout::restoreLayouts()
 		}
 	}
 
-	setViewerSelected ( m_vectorViewers.value( 0 ) );
-	m_rows = 1;
-	m_columns = 1;
+    setViewerSelected(m_vectorViewers.at(0));
+    m_rows = 1;
+    m_columns = 1;
 }
 
 Q2DViewerWidget* ViewersLayout::getViewerSelected()
@@ -190,11 +189,12 @@ void ViewersLayout::removeColumns( int columns )
         // Eliminem un widget de cada fila per tenir una columna menys
         while (rows < m_viewersLayout->rowCount() )
         {
-            oldViewer = m_vectorViewers.value(posViewer);
+            oldViewer = m_vectorViewers.at(posViewer);
             m_viewersLayout->removeWidget( oldViewer );
             m_vectorViewers.remove( posViewer );
             if ( m_selectedViewer == oldViewer )
-                setViewerSelected( m_vectorViewers.value( 0 ) );
+                setViewerSelected(m_vectorViewers.at(0));
+
             delete oldViewer;
             posViewer += (m_columns-1);
             rows++;
@@ -216,12 +216,14 @@ void ViewersLayout::removeRows( int rows )
         //Eliminem tants widgets com columnes
         for(i = 0; i < m_columns; i++)
         {
-            oldViewer = m_vectorViewers.value(posViewer);
+            oldViewer = m_vectorViewers.at(posViewer);
             m_vectorViewers.remove(posViewer);
-            m_viewersLayout->removeWidget( oldViewer );
+            m_viewersLayout->removeWidget(oldViewer);
             // TODO eliminar els viewers que treiem del toolManager???
-            if ( m_selectedViewer == oldViewer )
-                setViewerSelected( m_vectorViewers.value( 0 ) );
+            if (m_selectedViewer == oldViewer)
+            {
+                setViewerSelected(m_vectorViewers.at(0));
+            }
             delete oldViewer;
             posViewer -= 1;
         }
@@ -310,24 +312,22 @@ void ViewersLayout::setGrid( QList<QString> positionsList )
 
     for( i = 0; i < numberOfElements; i++ )
     {
-        newViewer = m_vectorViewers.value( i );
+        newViewer = m_vectorViewers.at(i);
 
         if( newViewer == 0)
         {
             newViewer = getNewQ2DViewerWidget();
             m_vectorViewers.push_back( newViewer );
         }
-        position = positionsList.value( i );
+        position = positionsList.at(i);
         listOfPositions = position.split("\\");
-        x1 = listOfPositions.value( 0 ).toDouble();
-        y1 = listOfPositions.value( 1 ).toDouble();
-        x2 = listOfPositions.value( 2 ).toDouble();
-        y2 = listOfPositions.value( 3 ).toDouble();
+        x1 = listOfPositions.at(0).toDouble();
+        y1 = listOfPositions.at(1).toDouble();
+        x2 = listOfPositions.at(2).toDouble();
+        y2 = listOfPositions.at(3).toDouble();
         newViewer->setGeometry( x1*screen_x, (1-y1)*screen_y, ((x2-x1)*screen_x), (y1-y2)*screen_y );
 
 		m_numberOfVisibleViewers++;
-
-        emit viewerAdded( newViewer );
     }
 
     m_positionsList = positionsList;
@@ -351,7 +351,7 @@ Q2DViewerWidget * ViewersLayout::addViewer( QString position )
 
 	if ( m_numberOfVisibleViewers < m_vectorViewers.size() )
 	{
-		newViewer = m_vectorViewers.value( m_numberOfVisibleViewers );
+		newViewer = m_vectorViewers.at(m_numberOfVisibleViewers);
 	}
 	else
 	{
@@ -360,10 +360,10 @@ Q2DViewerWidget * ViewersLayout::addViewer( QString position )
 	}
 	
     listOfPositions = position.split("\\");
-    x1 = listOfPositions.value( 0 ).toDouble();
-    y1 = listOfPositions.value( 1 ).toDouble();
-    x2 = listOfPositions.value( 2 ).toDouble();
-    y2 = listOfPositions.value( 3 ).toDouble();
+    x1 = listOfPositions.at(0).toDouble();
+    y1 = listOfPositions.at(1).toDouble();
+    x2 = listOfPositions.at(2).toDouble();
+    y2 = listOfPositions.at(3).toDouble();
     newViewer->setGeometry( x1*screen_x, (1-y1)*screen_y, ((x2-x1)*screen_x), (y1-y2)*screen_y );
 	newViewer->show();
 	m_numberOfVisibleViewers++;
@@ -397,13 +397,13 @@ void ViewersLayout::resizeEvent ( QResizeEvent * event )
 
         for( i = 0; i < numberOfElements; i++ )
         {
-            viewer = m_vectorViewers.value( i );
-            position = m_positionsList.value( i );
+            viewer = m_vectorViewers.at(i);
+            position = m_positionsList.at(i);
             listOfPositions = position.split("\\");
-            x1 = listOfPositions.value( 0 ).toDouble();
-            y1 = listOfPositions.value( 1 ).toDouble();
-            x2 = listOfPositions.value( 2 ).toDouble();
-            y2 = listOfPositions.value( 3 ).toDouble();
+            x1 = listOfPositions.at(0).toDouble();
+            y1 = listOfPositions.at(1).toDouble();
+            x2 = listOfPositions.at(2).toDouble();
+            y2 = listOfPositions.at(3).toDouble();
             viewer->setGeometry( x1*screen_x, (1-y1)*screen_y, (x2-x1)*screen_x, (y1-y2)*screen_y );
         }
     }
@@ -438,7 +438,7 @@ void ViewersLayout::showRows( int rows )
     {
         for( numColumn = 0; numColumn < m_columns; numColumn++ )
         {
-            viewer = m_vectorViewers.value( ( m_totalColumns*m_rows ) + numColumn );
+            viewer = m_vectorViewers.at((m_totalColumns * m_rows) + numColumn);
             viewer->show();
         }
         m_rows++;
@@ -456,11 +456,13 @@ void ViewersLayout::hideRows( int rows )
         m_rows--;
         for( numColumn = 0; numColumn < m_columns; numColumn++ )
         {
-            viewer = m_vectorViewers.value( ( ( m_totalColumns*m_rows ) + numColumn ) );
+            viewer = m_vectorViewers.at(((m_totalColumns * m_rows) + numColumn));
             viewer->hide();
-            emit viewerRemoved( viewer );
-            if ( m_selectedViewer == viewer )
-                setViewerSelected( m_vectorViewers.value( 0 ) );
+            emit viewerRemoved(viewer);
+            if (m_selectedViewer == viewer)
+            {
+                setViewerSelected(m_vectorViewers.at(0));
+            }
         }
         rows--;
     }
@@ -475,7 +477,7 @@ void ViewersLayout::showColumns( int columns )
     {
         for( numRow = 0; numRow < m_rows; numRow++ )
         {
-            viewer = m_vectorViewers.value( ( m_totalColumns*numRow ) + m_columns );
+            viewer = m_vectorViewers.at((m_totalColumns * numRow) + m_columns);
             viewer->show();
         }
         m_columns++;
@@ -493,11 +495,13 @@ void ViewersLayout::hideColumns( int columns )
         m_columns--;
         for( numRow = 0; numRow < m_rows; numRow++ )
         {
-            viewer = m_vectorViewers.value( ( m_totalColumns*numRow ) + m_columns );
+            viewer = m_vectorViewers.at((m_totalColumns * numRow) + m_columns);
             viewer->hide();
-            emit viewerRemoved( viewer );
-            if ( m_selectedViewer == viewer )
-                setViewerSelected( m_vectorViewers.value( 0 ) );
+            emit viewerRemoved(viewer);
+            if (m_selectedViewer == viewer)
+            {
+                setViewerSelected(m_vectorViewers.at(0));
+            }
         }
         columns--;
     }
@@ -510,7 +514,7 @@ int ViewersLayout::getNumberOfViewers()
 
 Q2DViewerWidget * ViewersLayout::getViewerWidget( int number )
 {
-    return m_vectorViewers.value( number );
+    return m_vectorViewers.at(number);
 }
 
 void ViewersLayout::setDownloadingItem( Q2DViewerWidget * widget, QWidget * downloadingWidget )

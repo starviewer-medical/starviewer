@@ -217,13 +217,8 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
     Identifier id;
     id.setValue( hangingProtocolNumber );
 
-    cancelHangingProtocolDowloading(); // Si hi havia algun estudi descarregant, es treu de la llista d'espera
-
     HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( id );
-    // TODO aixo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
-    // Caldria incoporar algun paràmetre per indicar quin és el visor seleccionat per defecte
-    // Es buiden tots els visors per tal que no hi hagi res assignat
-    layout->setGrid(1,1);
+
     applyHangingProtocol(hangingProtocol,layout, patient);
     INFO_LOG( QString("Hanging protocol aplicat: %1").arg( hangingProtocol->getName() ) );
 }
@@ -236,6 +231,13 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
     Series *serie;
     Q2DViewerWidget *viewerWidget;
     PreviousStudiesManager * previousStudiesManager = new PreviousStudiesManager();
+
+    cancelHangingProtocolDowloading(); // Si hi havia algun estudi descarregant, es treu de la llista d'espera
+
+    // TODO aixo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
+    // Caldria incoporar algun paràmetre per indicar quin és el visor seleccionat per defecte
+    // Es buiden tots els visors per tal que no hi hagi res assignat
+    layout->setGrid(1,1);
 
     for( displaySetNumber = 0; displaySetNumber < hangingProtocol->getNumberOfDisplaySets(); displaySetNumber++ )
     {
