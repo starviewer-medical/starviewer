@@ -7,7 +7,6 @@
 
 #include <itkImageSeriesReader.h>
 #include <itkImageFileReader.h>
-#include <itkImageSeriesReader.h>
 #include <itkGDCMImageIO.h>
 #include "itkQtAdaptor.h" // Per notificar el progrés de lectura
 #include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
