@@ -12,6 +12,7 @@
 
 class vtkColorTransferFunction;
 class vtkPiecewiseFunction;
+class vtkLookupTable;
 
 namespace udg {
 
@@ -39,6 +40,8 @@ public:
     /// Construeix una funció de transferència buida (sense punts).
     TransferFunction();
     TransferFunction( const TransferFunction & transferFunction );
+    // Constructor a partir d'un objecte vtkLookupTable
+    TransferFunction(vtkLookupTable *lookupTable);
     ~TransferFunction();
 
     /// Retorna el nom de la funció de transferència.

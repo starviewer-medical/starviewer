@@ -12,6 +12,7 @@
 // vtk
 #include <vtkColorTransferFunction.h>
 #include <vtkPiecewiseFunction.h>
+#include <vtkLookupTable.h>
 
 namespace udg {
 
@@ -35,6 +36,38 @@ TransferFunction::TransferFunction( const TransferFunction & transferFunction )
     m_colorTransferFunction = 0;
     m_opacityTransferFunction = 0;
     m_colorChanged = m_opacityChanged = true;
+}
+
+TransferFunction::TransferFunction(vtkLookupTable *lookupTable)
+{
+    m_colorTransferFunction = 0;
+    m_opacityTransferFunction = 0;
+    
+    if (lookupTable)
+    {
+        // Transformem la vtkLookupTable al nostre format
+        double range[2];
+        lookupTable->GetTableRange(range);
+        
+        // Calculem quina és la diferència entre valor i valor de la taula
+        double step = (range[1] - range[0]) / (double)lookupTable->GetNumberOfTableValues();
+        
+        // Recorrem la vtkLookupTable i inserim els valors al nostre format
+        for (double value = range[0]; value < range[1]; value += step)
+        {
+            double rgb[3];
+            double opacity;
+            lookupTable->GetColor(value, rgb);
+            opacity = lookupTable->GetOpacity(value);
+            addPointToColorRGB(value, rgb[0], rgb[1], rgb[2]);
+            addPointToOpacity(value, opacity);
+        }
+    }
+    else
+    {
+        DEBUG_LOG("No es pot construir la transfer function a través d'un objecte nul de vtkLookupTable");
+        m_changed = m_colorChanged = m_opacityChanged = true;
+    }
 }
 
 TransferFunction::~TransferFunction()
