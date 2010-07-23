@@ -70,7 +70,7 @@
 namespace udg {
 
 Q3DViewer::Q3DViewer( QWidget *parent )
- : QViewer( parent ), m_imageData( 0 ), m_vtkVolume(0), m_volumeProperty(0), m_transferFunction(0), m_newTransferFunction(0), m_clippingPlanes(0)
+ : QViewer( parent ), m_imageData( 0 ), m_vtkVolume(0), m_volumeProperty(0), m_newTransferFunction(0), m_clippingPlanes(0)
 {
     m_vtkWidget->setAutomaticImageCacheEnabled( true );
     // avortar render

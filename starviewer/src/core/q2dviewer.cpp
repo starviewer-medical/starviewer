@@ -15,6 +15,7 @@
 #include "imageplane.h"
 #include "mathtools.h"
 #include "imageorientationoperationsmapper.h"
+#include "transferfunction.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 // Qt
@@ -38,6 +39,8 @@
 #include <vtkImageActor.h>
 // Grayscale pipeline
 #include <vtkImageMapToWindowLevelColors2.h> // Permet aplicar window/level amb imatges a color
+#include <vtkScalarsToColors.h>
+#include <vtkColorTransferFunction.h>
 // Projecció de punts
 #include <vtkMatrix4x4.h>
 
@@ -1108,6 +1111,13 @@ void Q2DViewer::setWindowLevel( double window , double level )
     {
         DEBUG_LOG( "::setWindowLevel() : No tenim input " );
     }
+}
+
+void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
+{
+    m_transferFunction = transferFunction;
+    // Apliquem la funció de transferència sobre el window level mapper
+    getWindowLevelMapper()->SetLookupTable(m_transferFunction->getColorTransferFunction());
 }
 
 void Q2DViewer::getCurrentWindowLevel( double wl[2] )
