@@ -127,18 +127,7 @@ void QExperimental3DExtension::loadHV(QString fileName)
 
 void QExperimental3DExtension::saveHV(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::HVDir, tr("Save viewpoints entropy H(V)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if (fileName.isNull()) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_HV, fileName, QString("H(V) = %1"));
-    else error = !saveFloatData(m_HV, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save viewpoints entropy H(V)"), QString(tr("Can't save viewpoints entropy H(V) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::HVDir, tr("viewpoints entropy H(V)"), FileExtensionsTxtDatAll, "txt", m_HV, "H(V) = %1");
 }
 
 
@@ -178,18 +167,7 @@ void QExperimental3DExtension::loadHZ(QString fileName)
 
 void QExperimental3DExtension::saveHZ(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::HZDir, tr("Save voxels entropy H(Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if (fileName.isNull()) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_HZ, fileName, QString("H(Z) = %1"));
-    else error = !saveFloatData(m_HZ, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save voxels entropy H(Z)"), QString(tr("Can't save voxels entropy H(Z) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::HZDir, tr("voxels entropy H(Z)"), FileExtensionsTxtDatAll, "txt", m_HZ, "H(Z) = %1");
 }
 
 
@@ -234,18 +212,7 @@ void QExperimental3DExtension::loadHZV(QString fileName)
 
 void QExperimental3DExtension::saveHZV(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::HZVDir, tr("Save H(Z|V)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith( ".txt" )) error = !saveFloatDataAsText(m_HZV, fileName, QString("H(Z|V) = %1"));
-    else error = !saveFloatData(m_HZV, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save H(Z|V)"), QString(tr("Can't save H(Z|V) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::HZVDir, tr("H(Z|V)"), FileExtensionsTxtDatAll, "txt", m_HZV, "H(Z|V) = %1");
 }
 
 
@@ -350,18 +317,7 @@ void QExperimental3DExtension::loadMi(QString fileName)
 
 void QExperimental3DExtension::saveMi( QString fileName )
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::MutualInformationDir, tr("Save MI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_mi, fileName, QString( "I(V;Z) = %1" ) );
-    else error = !saveFloatData( m_mi, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save MI"), QString( tr("Can't save MI to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::MutualInformationDir, tr("mutual information I(V;Z)"), FileExtensionsTxtDatAll, "txt", m_mi, "I(V;Z) = %1");
 }
 
 
@@ -899,20 +855,9 @@ void QExperimental3DExtension::loadEntropyI(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveEntropyI( QString fileName )
+void QExperimental3DExtension::saveEntropyI(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::EntropyIntensityDir, tr("Save entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_entropyI, fileName, QString( "H(I) = %1" ) );
-    else error = !saveFloatData( m_entropyI, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save entropy"), QString( tr("Can't save entropy to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::EntropyIntensityDir, tr("entropy"), FileExtensionsTxtDatAll, "txt", m_entropyI, "H(I) = %1");
 }
 
 
@@ -955,20 +900,9 @@ void QExperimental3DExtension::loadMii(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveMii( QString fileName )
+void QExperimental3DExtension::saveMii(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::MutualInformationIntensityDir, tr("Save MIi"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_mii, fileName, QString( "I(V;I) = %1" ) );
-    else error = !saveFloatData( m_mii, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save MIi"), QString( tr("Can't save MIi to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::MutualInformationIntensityDir, tr("MIi"), FileExtensionsTxtDatAll, "txt", m_mii, "I(V;I) = %1");
 }
 
 
@@ -1046,6 +980,7 @@ void QExperimental3DExtension::saveImi( QString fileName )
 
 
 const QString QExperimental3DExtension::FileExtensionsDatAll(tr("Data files (*.dat);;All files (*)"));
+const QString QExperimental3DExtension::FileExtensionsTxtDatAll(tr("Text files (*.txt);;Data files (*.dat);;All files (*)"));
 
 
 template <class T>
@@ -1067,8 +1002,45 @@ bool QExperimental3DExtension::loadData(QString &fileName, const QString &settin
     }
 
     QDataStream in(&file);
-
     if (!in.atEnd()) in >> data;
+
+    file.close();
+
+    return true;
+}
+
+
+template <class T>
+bool QExperimental3DExtension::saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix, T &data, const QString &textFormat)
+{
+    if (fileName.isEmpty())
+    {
+        fileName = getFileNameToSave(setting, QString(tr("Save %1")).arg(name), extensions, defaultSuffix);
+        if (fileName.isNull()) return false;
+    }
+
+    bool text = fileName.endsWith(".txt");
+    QFile file(fileName);
+    QIODevice::OpenMode mode = QIODevice::WriteOnly | QIODevice::Truncate;
+    if (text) mode |= QIODevice::Text;
+
+    if (!file.open(mode))
+    {
+        DEBUG_LOG(QString("No es pot escriure al fitxer ") + fileName + ": " + file.errorString());
+        if (m_interactive) QMessageBox::warning(this, QString(tr("Can't save %1 to file ")).arg(name).arg(fileName), file.errorString());
+        return false;
+    }
+
+    if (text)
+    {
+        QTextStream out(&file);
+        out << textFormat.arg(data) << "\n";
+    }
+    else
+    {
+        QDataStream out(&file);
+        out << data;
+    }
 
     file.close();
 
@@ -1132,26 +1104,6 @@ bool QExperimental3DExtension::loadData( const QString &fileName, QVector<T> &ve
 }
 
 
-bool QExperimental3DExtension::saveFloatData( float data, const QString &fileName )
-{
-    QFile file( fileName );
-
-    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        return false;
-    }
-
-    QDataStream out( &file );
-
-    out << data;
-
-    file.close();
-
-    return true;
-}
-
-
 template <class T>
 bool QExperimental3DExtension::saveData( const QList<T> &list, const QString &fileName )
 {
@@ -1189,26 +1141,6 @@ bool QExperimental3DExtension::saveData( const QVector<T> &vector, const QString
     int n = vector.size();
 
     for ( int i = 0; i < n; i++ ) out << vector.at( i );
-
-    file.close();
-
-    return true;
-}
-
-
-bool QExperimental3DExtension::saveFloatDataAsText( float data, const QString &fileName, const QString &format )
-{
-    QFile file( fileName );
-
-    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        return false;
-    }
-
-    QTextStream out( &file );
-
-    out << format.arg( data ) << "\n";
 
     file.close();
 

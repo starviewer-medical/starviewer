@@ -69,13 +69,13 @@ public slots:
     /// Desa la VMI3 I₃(v;Z) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveVmi3(QString fileName = QString());
     /// Carrega la informació mútua des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadMi( QString fileName = QString() );
+    void loadMi(QString fileName = QString());
     /// Desa la informació mútua a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveMi( QString fileName = QString() );
+    void saveMi(QString fileName = QString());
     /// Carrega les inestabilitats de les vistes des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadViewpointUnstabilities( QString fileName = QString() );
+    void loadViewpointUnstabilities(QString fileName = QString());
     /// Desa les inestabilitats de les vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveViewpointUnstabilities( QString fileName = QString() );
+    void saveViewpointUnstabilities(QString fileName = QString());
     /// Carrega la VoMI I₁(z;V) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadVomi(QString fileName = QString());
     /// Desa la VoMI I₁(z;V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -97,80 +97,79 @@ public slots:
     /// Desa la viewpoint VoMI2 (INF2) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveViewpointVomi2(QString fileName = QString());
     /// Carrega la paleta per la color VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadColorVomiPalette( QString fileName = QString() );
+    void loadColorVomiPalette(QString fileName = QString());
     /// Carrega la color VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadColorVomi( QString fileName = QString() );
+    void loadColorVomi(QString fileName = QString());
     /// Desa la color VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveColorVomi( QString fileName = QString() );
+    void saveColorVomi(QString fileName = QString());
     /// Carrega des d'un fitxer la funció de transferència d'on s'agafarà l'opacitat per calcular l'EVMI amb opacitat. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadEvmiOpacityOtherTransferFunction( QString fileName = QString() );
+    void loadEvmiOpacityOtherTransferFunction(QString fileName = QString());
     /// Carrega l'EVMI amb opacitat des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadEvmiOpacity( QString fileName = QString() );
+    void loadEvmiOpacity(QString fileName = QString());
     /// Desa la l'EVMI amb opacitat a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveEvmiOpacity( QString fileName = QString() );
+    void saveEvmiOpacity(QString fileName = QString());
     /// Carrega l'EVMI amb VoMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadEvmiVomi( QString fileName = QString() );
+    void loadEvmiVomi(QString fileName = QString());
     /// Desa la l'EVMI amb VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveEvmiVomi( QString fileName = QString() );
+    void saveEvmiVomi(QString fileName = QString());
     /// Carrega les millors vistes des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadBestViews( QString fileName = QString() );
+    void loadBestViews(QString fileName = QString());
     /// Desa les millors vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveBestViews( QString fileName = QString() );
+    void saveBestViews(QString fileName = QString());
     /// Carrega el guided tour des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadGuidedTour( QString fileName = QString() );
+    void loadGuidedTour(QString fileName = QString());
     /// Desa el guided tour a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveGuidedTour( QString fileName = QString() );
+    void saveGuidedTour(QString fileName = QString());
     /// Carrega l'exploratory tour des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadExploratoryTour( QString fileName = QString() );
+    void loadExploratoryTour(QString fileName = QString());
     /// Desa l'exploratory tour a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveExploratoryTour( QString fileName = QString() );
+    void saveExploratoryTour(QString fileName = QString());
 
     // Per VMIi etc.
     /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveViewedVolumeI( QString fileName = QString() );
+    void saveViewedVolumeI(QString fileName = QString());
     /// Carrega la viewpoint entropy des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadViewpointEntropyI( QString fileName = QString() );
+    void loadViewpointEntropyI(QString fileName = QString());
     /// Desa la viewpoint entropy a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveViewpointEntropyI( QString fileName = QString() );
+    void saveViewpointEntropyI(QString fileName = QString());
     /// Carrega l'entropia des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadEntropyI( QString fileName = QString() );
+    void loadEntropyI(QString fileName = QString());
     /// Desa l'entropia a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveEntropyI( QString fileName = QString() );
+    void saveEntropyI(QString fileName = QString());
      /// Carrega la VMIi des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadVmii( QString fileName = QString() );
+    void loadVmii(QString fileName = QString());
     /// Desa la VMIi a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveVmii( QString fileName = QString() );
+    void saveVmii(QString fileName = QString());
     /// Carrega la informació mútua des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadMii( QString fileName = QString() );
+    void loadMii(QString fileName = QString());
     /// Desa la informació mútua a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveMii( QString fileName = QString() );
+    void saveMii(QString fileName = QString());
     /// Carrega les inestabilitats de les vistes des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadViewpointUnstabilitiesI( QString fileName = QString() );
+    void loadViewpointUnstabilitiesI(QString fileName = QString());
     /// Desa les inestabilitats de les vistes a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveViewpointUnstabilitiesI( QString fileName = QString() );
+    void saveViewpointUnstabilitiesI(QString fileName = QString());
     /// Carrega l'IMI des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadImi( QString fileName = QString() );
+    void loadImi(QString fileName = QString());
     /// Desa l'IMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveImi( QString fileName = QString() );
+    void saveImi(QString fileName = QString());
 
 private:
 
     static const QString FileExtensionsDatAll;
+    static const QString FileExtensionsTxtDatAll;
 
     /// Carrega dades de tipus T del fitxer a \a data. Retorna cert si s'han carregat les dades.
     template <class T> bool loadData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, T &data);
+    /// Desa dades de tipus T de \a data al fitxer. Retorna cert si s'han desat les dades.
+    template <class T> bool saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix, T &data, const QString &textFormat);
     /// Carrega dades de tipus T del fitxer a la llista. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool loadData( const QString &fileName, QList<T> &list );
     /// Carrega dades de tipus T del fitxer al vector. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool loadData( const QString &fileName, QVector<T> &vector );
-    /// Desa dades de tipus float del float al fitxer. Retorna cert si tot va bé i fals si hi ha error.
-    static bool saveFloatData( float data, const QString &fileName );
     /// Desa dades de tipus T de la llista al fitxer. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool saveData( const QList<T> &list, const QString &fileName );
     /// Desa dades de tipus T del vector al fitxer. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool saveData( const QVector<T> &vector, const QString &fileName );
-    /// Desa dades de tipus float del float al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
-    static bool saveFloatDataAsText( float data, const QString &fileName, const QString &format );
     /// Desa dades de tipus float del vector al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
     static bool saveFloatDataAsText( const QVector<float> &vector, const QString &fileName, const QString &format, int base = 0 );
     /// Desa dades de tipus QPair<int, Vector3> de la llista al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
