@@ -68,6 +68,7 @@ public:
 
     /// Retorna una representació del vector en forma de text.
     QString toString() const;
+    operator QString() const;
 
     /// Producte d'un escalar per un vector.
     template <class C>
@@ -244,6 +245,13 @@ template <class T>
 inline QString TVector3<T>::toString() const
 {
     return QString( "(%1, %2, %3)" ).arg( x ).arg( y ).arg( z );
+}
+
+
+template <class T>
+inline TVector3<T>::operator QString() const
+{
+    return toString();
 }
 
 

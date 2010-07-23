@@ -103,16 +103,9 @@ void QExperimental3DExtension::setNewVolume( Volume *volume )
 }
 
 
-void QExperimental3DExtension::saveViewedVolume( QString fileName )
+void QExperimental3DExtension::saveViewedVolume(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewedVolumeDir, tr("Save viewed volume"), tr("Text files (*.txt);;All files (*)"), "txt" );
-        if ( fileName.isNull() ) return;
-    }
-
-    if ( !saveFloatDataAsText( m_viewedVolume, fileName, QString( "volume(v%1) = %2" ), 1 ) && m_interactive )
-        QMessageBox::warning( this, tr("Can't save viewed volume"), QString( tr("Can't save viewed volume to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::ViewedVolumeDir, tr("viewed volume"), FileExtensionsTxtAll, "txt", m_viewedVolume, "volume(v%1) = %2", 1);
 }
 
 
@@ -142,13 +135,7 @@ void QExperimental3DExtension::loadHVz(QString fileName)
 
 void QExperimental3DExtension::saveHVz(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::HVzDir, tr("Save H(V|z)"), tr("Data files (*.dat);;All files (*)"), "dat");
-        if (fileName.isNull()) return;
-    }
-
-    if (!saveData(m_HVz, fileName) && m_interactive) QMessageBox::warning(this, tr("Can't save H(V|z)"), QString(tr("Can't save H(V|z) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::HVzDir, tr("H(V|z)"), FileExtensionsDatAll, "dat", m_HVz);
 }
 
 
@@ -178,18 +165,7 @@ void QExperimental3DExtension::loadHZv(QString fileName)
 
 void QExperimental3DExtension::saveHZv(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::HZvDir, tr("Save H(Z|v)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if (fileName.isNull()) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_HZv, fileName, QString("H(Z|v%1) = %2"), 1);
-    else error = !saveData(m_HZv, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save H(Z|v)"), QString(tr("Can't save H(Z|v) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::HZvDir, tr("H(Z|v)"), FileExtensionsTxtDatAll, "txt", m_HZv, "H(Z|v%1) = %2", 1);
 }
 
 
@@ -219,18 +195,7 @@ void QExperimental3DExtension::loadVmi(QString fileName)
 
 void QExperimental3DExtension::saveVmi(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::ViewpointMutualInformationDir, tr("Save VMI I₁(v;Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if (fileName.isNull()) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_vmi, fileName, QString("VMI(v%1) = %2"), 1);
-    else error = !saveData(m_vmi, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save VMI I₁(v;Z)"), QString(tr("Can't save VMI I₁(v;Z) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::ViewpointMutualInformationDir, tr("VMI I₁(v;Z)"), FileExtensionsTxtDatAll, "txt", m_vmi, "VMI(v%1) = %2", 1);
 }
 
 
@@ -245,18 +210,7 @@ void QExperimental3DExtension::loadVmi2(QString fileName)
 
 void QExperimental3DExtension::saveVmi2(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::ViewpointMutualInformation2Dir, tr("Save VMI2 I₂(v;Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if (fileName.isNull()) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_vmi2, fileName, QString("VMI2(v%1) = %2"), 1);
-    else error = !saveData(m_vmi2, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save VMI2 I₂(v;Z)"), QString(tr("Can't save VMI2 I₂(v;Z) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::ViewpointMutualInformation2Dir, tr("VMI2 I₂(v;Z)"), FileExtensionsTxtDatAll, "txt", m_vmi2, "VMI2(v%1) = %2", 1);
 }
 
 
@@ -271,18 +225,7 @@ void QExperimental3DExtension::loadVmi3(QString fileName)
 
 void QExperimental3DExtension::saveVmi3(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::ViewpointMutualInformation3Dir, tr("Save VMI3 I₃(v;Z)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if (fileName.isNull()) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_vmi3, fileName, QString("VMI3(v%1) = %2"), 1);
-    else error = !saveData(m_vmi3, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save VMI3 I₃(v;Z)"), QString(tr("Can't save VMI3 I₃(v;Z) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::ViewpointMutualInformation3Dir, tr("VMI3 I₃(v;Z)"), FileExtensionsTxtDatAll, "txt", m_vmi3, "VMI3(v%1) = %2", 1);
 }
 
 
@@ -310,20 +253,9 @@ void QExperimental3DExtension::loadViewpointUnstabilities(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveViewpointUnstabilities( QString fileName )
+void QExperimental3DExtension::saveViewpointUnstabilities(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewpointUnstabilitiesDir, tr("Save viewpoint unstabilities"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointUnstabilities, fileName, QString( "U(v%1) = %2" ), 1 );
-    else error = !saveData( m_viewpointUnstabilities, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint unstabilities"), QString( tr("Can't save viewpoint unstabilities to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::ViewpointUnstabilitiesDir, tr("viewpoint unstabilities"), FileExtensionsTxtDatAll, "txt", m_viewpointUnstabilities, "U(v%1) = %2", 1);
 }
 
 
@@ -349,13 +281,7 @@ void QExperimental3DExtension::loadVomi(QString fileName)
 
 void QExperimental3DExtension::saveVomi(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::VoxelMutualInformationDir, tr("Save VoMI I₁(z;V)"), tr("Data files (*.dat);;All files (*)"), "dat");
-        if (fileName.isNull()) return;
-    }
-
-    if (!saveData(m_vomi, fileName) && m_interactive) QMessageBox::warning(this, tr("Can't save VoMI I₁(z;V)"), QString(tr("Can't save VoMI I₁(z;V) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::VoxelMutualInformationDir, tr("VoMI I₁(z;V)"), FileExtensionsDatAll, "dat", m_vomi);
 }
 
 
@@ -381,13 +307,7 @@ void QExperimental3DExtension::loadVomi2(QString fileName)
 
 void QExperimental3DExtension::saveVomi2(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::VoxelMutualInformation2Dir, tr("Save VoMI2 I₂(z;V)"), tr("Data files (*.dat);;All files (*)"), "dat");
-        if (fileName.isNull()) return;
-    }
-
-    if (!saveData(m_vomi2, fileName) && m_interactive) QMessageBox::warning(this, tr("Can't save VoMI2 I₂(z;V)"), QString(tr("Can't save VoMI2 I₂(z;V) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::VoxelMutualInformation2Dir, tr("VoMI2 I₂(z;V)"), FileExtensionsDatAll, "dat", m_vomi2);
 }
 
 
@@ -413,13 +333,7 @@ void QExperimental3DExtension::loadVomi3(QString fileName)
 
 void QExperimental3DExtension::saveVomi3(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::VoxelMutualInformation3Dir, tr("Save VoMI3 I₃(z;V)"), tr("Data files (*.dat);;All files (*)"), "dat");
-        if (fileName.isNull()) return;
-    }
-
-    if (!saveData(m_vomi3, fileName) && m_interactive) QMessageBox::warning(this, tr("Can't save VoMI3 I₃(z;V)"), QString(tr("Can't save VoMI3 I₃(z;V) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::VoxelMutualInformation3Dir, tr("VoMI3 I₃(z;V)"), FileExtensionsDatAll, "dat", m_vomi3);
 }
 
 
@@ -434,18 +348,7 @@ void QExperimental3DExtension::loadViewpointVomi(QString fileName)
 
 void QExperimental3DExtension::saveViewpointVomi(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::ViewpointVoxelMutualInformationDir, tr("Save viewpoint VoMI (INF)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if (fileName.isNull()) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_viewpointVomi, fileName, QString("VVoMI(v%1) = %2"), 1);
-    else error = !saveData(m_viewpointVomi, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save viewpoint VoMI (INF)"), QString(tr("Can't save viewpoint VoMI (INF) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::ViewpointVoxelMutualInformationDir, tr("viewpoint VoMI (INF)"), FileExtensionsTxtDatAll, "txt", m_viewpointVomi, "VVoMI(v%1) = %2", 1);
 }
 
 
@@ -460,18 +363,7 @@ void QExperimental3DExtension::loadViewpointVomi2(QString fileName)
 
 void QExperimental3DExtension::saveViewpointVomi2(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToSave(Experimental3DSettings::ViewpointVoxelMutualInformation2Dir, tr("Save viewpoint VoMI2 (INF2)"), tr("Text files (*.txt);;Data files (*.dat);;All files (*)"), "txt");
-        if (fileName.isNull()) return;
-    }
-
-    bool error;
-
-    if (fileName.endsWith(".txt")) error = !saveFloatDataAsText(m_viewpointVomi2, fileName, QString("VVoMI2(v%1) = %2"), 1);
-    else error = !saveData(m_viewpointVomi2, fileName);
-
-    if (error && m_interactive) QMessageBox::warning(this, tr("Can't save viewpoint VoMI2 (INF2)"), QString(tr("Can't save viewpoint VoMI2 (INF2) to file ")) + fileName);
+    saveData(fileName, Experimental3DSettings::ViewpointVoxelMutualInformation2Dir, tr("viewpoint VoMI2 (INF2)"), FileExtensionsTxtDatAll, "txt", m_viewpointVomi2, "VVoMI2(v%1) = %2", 1);
 }
 
 
@@ -548,15 +440,9 @@ void QExperimental3DExtension::loadColorVomi(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveColorVomi( QString fileName )
+void QExperimental3DExtension::saveColorVomi(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::ColorVoxelMutualInformationDir, tr("Save color VoMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    if ( !saveData( m_colorVomi, fileName ) && m_interactive ) QMessageBox::warning( this, tr("Can't save color VoMI"), QString( tr("Can't save color VoMI to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::ColorVoxelMutualInformationDir, tr("color VoMI"), FileExtensionsDatAll, "dat", m_colorVomi);
 }
 
 
@@ -590,20 +476,9 @@ void QExperimental3DExtension::loadEvmiOpacity(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveEvmiOpacity( QString fileName )
+void QExperimental3DExtension::saveEvmiOpacity(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::EnhancedViewpointMutualInformationOpacityDir, tr("Save EVMI with opacity"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_evmiOpacity, fileName, QString( "EVMI(v%1) = %2" ), 1 );
-    else error = !saveData( m_evmiOpacity, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save EVMI with opacity"), QString( tr("Can't save EVMI with opacity to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::EnhancedViewpointMutualInformationOpacityDir, tr("EVMI with opacity"), FileExtensionsTxtDatAll, "txt", m_evmiOpacity, "EVMI(v%1) = %2", 1);
 }
 
 
@@ -616,20 +491,9 @@ void QExperimental3DExtension::loadEvmiVomi(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveEvmiVomi( QString fileName )
+void QExperimental3DExtension::saveEvmiVomi(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::EnhancedViewpointMutualInformationVoxelMutualInformationDir, tr("Save EVMI with VoMI"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_evmiVomi, fileName, QString( "EVMI(v%1) = %2" ), 1 );
-    else error = !saveData( m_evmiVomi, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save EVMI with VoMI"), QString( tr("Can't save EVMI with VoMI to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::EnhancedViewpointMutualInformationVoxelMutualInformationDir, tr("EVMI with VoMI"), FileExtensionsTxtDatAll, "txt", m_evmiVomi, "EVMI(v%1) = %2", 1);
 }
 
 
@@ -735,16 +599,9 @@ void QExperimental3DExtension::saveExploratoryTour( QString fileName )
 }
 
 
-void QExperimental3DExtension::saveViewedVolumeI( QString fileName )
+void QExperimental3DExtension::saveViewedVolumeI(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewedVolumeIntensityDir, tr("Save viewed volume"), tr("Text files (*.txt);;All files (*)"), "txt" );
-        if ( fileName.isNull() ) return;
-    }
-
-    if ( !saveFloatDataAsText( m_viewedVolumeI, fileName, QString( "volume(v%1) = %2" ), 1 ) && m_interactive )
-        QMessageBox::warning( this, tr("Can't save viewed volume"), QString( tr("Can't save viewed volume to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::ViewedVolumeIntensityDir, tr("viewed volume"), FileExtensionsTxtAll, "txt", m_viewedVolumeI, "volume(v%1) = %2", 1);
 }
 
 
@@ -757,20 +614,9 @@ void QExperimental3DExtension::loadViewpointEntropyI(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveViewpointEntropyI( QString fileName )
+void QExperimental3DExtension::saveViewpointEntropyI(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewpointEntropyIntensityDir, tr("Save viewpoint entropy"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointEntropyI, fileName, QString( "H(I|v%1) = %2" ), 1 );
-    else error = !saveData( m_viewpointEntropyI, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint entropy"), QString( tr("Can't save viewpoint entropy to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::ViewpointEntropyIntensityDir, tr("viewpoint entropy"), FileExtensionsTxtDatAll, "txt", m_viewpointEntropyI, "H(I|v%1) = %2", 1);
 }
 
 
@@ -798,20 +644,9 @@ void QExperimental3DExtension::loadVmii(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveVmii( QString fileName )
+void QExperimental3DExtension::saveVmii(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewpointMutualInformationIntensityDir, tr("Save VMIi"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_vmii, fileName, QString( "VMIi(v%1) = %2" ), 1 );
-    else error = !saveData( m_vmii, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save VMIi"), QString( tr("Can't save VMIi to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::ViewpointMutualInformationIntensityDir, tr("VMIi"), FileExtensionsTxtDatAll, "txt", m_vmii, "VMIi(v%1) = %2", 1);
 }
 
 
@@ -839,20 +674,9 @@ void QExperimental3DExtension::loadViewpointUnstabilitiesI(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveViewpointUnstabilitiesI( QString fileName )
+void QExperimental3DExtension::saveViewpointUnstabilitiesI(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::ViewpointUnstabilitiesIntensityDir, tr("Save viewpoint unstabilities"), tr("Data files (*.dat);;Text files (*.txt);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    bool error;
-
-    if ( fileName.endsWith( ".txt" ) ) error = !saveFloatDataAsText( m_viewpointUnstabilitiesI, fileName, QString( "U(v%1) = %2" ), 1 );
-    else error = !saveData( m_viewpointUnstabilitiesI, fileName );
-
-    if ( error && m_interactive ) QMessageBox::warning( this, tr("Can't save viewpoint unstabilities"), QString( tr("Can't save viewpoint unstabilities to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::ViewpointUnstabilitiesIntensityDir, tr("viewpoint unstabilities"), FileExtensionsTxtDatAll, "txt", m_viewpointUnstabilitiesI, "U(v%1) = %2", 1);
 }
 
 
@@ -880,19 +704,14 @@ void QExperimental3DExtension::loadImi(QString fileName)
 }
 
 
-void QExperimental3DExtension::saveImi( QString fileName )
+void QExperimental3DExtension::saveImi(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToSave( Experimental3DSettings::IntensityMutualInformationDir, tr("Save IMI"), tr("Data files (*.dat);;All files (*)"), "dat" );
-        if ( fileName.isNull() ) return;
-    }
-
-    if ( !saveData( m_imi, fileName ) && m_interactive ) QMessageBox::warning( this, tr("Can't save IMI"), QString( tr("Can't save IMI to file ") ) + fileName );
+    saveData(fileName, Experimental3DSettings::IntensityMutualInformationDir, tr("IMI"), FileExtensionsDatAll, "dat", m_imi);
 }
 
 
 const QString QExperimental3DExtension::FileExtensionsDatAll(tr("Data files (*.dat);;All files (*)"));
+const QString QExperimental3DExtension::FileExtensionsTxtAll(tr("Text files (*.txt);;All files (*)"));
 const QString QExperimental3DExtension::FileExtensionsTxtDatAll(tr("Text files (*.txt);;Data files (*.dat);;All files (*)"));
 
 
@@ -945,7 +764,7 @@ void QExperimental3DExtension::loadData(QDataStream &in, QVector<T> &data)
 
 
 template <class T>
-bool QExperimental3DExtension::saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix, T &data, const QString &textFormat)
+bool QExperimental3DExtension::saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix, const T &data, const QString &textFormat, int base)
 {
     if (fileName.isEmpty())
     {
@@ -968,17 +787,48 @@ bool QExperimental3DExtension::saveData(QString &fileName, const QString &settin
     if (text)
     {
         QTextStream out(&file);
-        out << textFormat.arg(data) << "\n";
+        saveData(out, data, textFormat, base);
     }
     else
     {
         QDataStream out(&file);
-        out << data;
+        saveData(out, data);
     }
 
     file.close();
 
     return true;
+}
+
+
+template <class T>
+void QExperimental3DExtension::saveData(QDataStream &out, const T &data)
+{
+    out << data;
+}
+
+
+template <class T>
+void QExperimental3DExtension::saveData(QTextStream &out, const T &data, const QString &textFormat, int base)
+{
+    Q_UNUSED(base);
+    out << textFormat.arg(data) << "\n";
+}
+
+
+template <class T>
+void QExperimental3DExtension::saveData(QDataStream &out, const QVector<T> &data)
+{
+    int n = data.size();
+    for (int i = 0; i < n; i++) out << data.at(i);
+}
+
+
+template <class T>
+void QExperimental3DExtension::saveData(QTextStream &out, const QVector<T> &data, const QString &textFormat, int base)
+{
+    int n = data.size();
+    for (int i = 0; i < n; i++) out << textFormat.arg(i + base).arg(data.at(i)) << "\n";
 }
 
 
@@ -1025,49 +875,6 @@ bool QExperimental3DExtension::saveData( const QList<T> &list, const QString &fi
     int n = list.size();
 
     for ( int i = 0; i < n; i++ ) out << list.at( i );
-
-    file.close();
-
-    return true;
-}
-
-
-template <class T>
-bool QExperimental3DExtension::saveData( const QVector<T> &vector, const QString &fileName )
-{
-    QFile file( fileName );
-
-    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        return false;
-    }
-
-    QDataStream out( &file );
-    int n = vector.size();
-
-    for ( int i = 0; i < n; i++ ) out << vector.at( i );
-
-    file.close();
-
-    return true;
-}
-
-
-bool QExperimental3DExtension::saveFloatDataAsText( const QVector<float> &vector, const QString &fileName, const QString &format, int base )
-{
-    QFile file( fileName );
-
-    if ( !file.open( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
-    {
-        DEBUG_LOG( QString( "No es pot escriure al fitxer " ) + fileName );
-        return false;
-    }
-
-    QTextStream out( &file );
-    int n = vector.size();
-
-    for ( int i = 0; i < n; i++ ) out << format.arg( i + base ).arg( vector.at( i ) ) << "\n";
 
     file.close();
 

@@ -156,6 +156,7 @@ public slots:
 private:
 
     static const QString FileExtensionsDatAll;
+    static const QString FileExtensionsTxtAll;
     static const QString FileExtensionsTxtDatAll;
 
     /// Carrega dades de tipus T del fitxer a \a data. Retorna cert si s'han carregat les dades.
@@ -163,15 +164,16 @@ private:
     template <class T> static void loadData(QDataStream &in, T &data);
     template <class T> static void loadData(QDataStream &in, QVector<T> &data);
     /// Desa dades de tipus T de \a data al fitxer. Retorna cert si s'han desat les dades.
-    template <class T> bool saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix, T &data, const QString &textFormat);
+    template <class T> bool saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix, const T &data, const QString &textFormat = QString(),
+                                     int base = 0);
+    template <class T> static void saveData(QDataStream &out, const T &data);
+    template <class T> static void saveData(QTextStream &out, const T &data, const QString &textFormat, int base);
+    template <class T> static void saveData(QDataStream &out, const QVector<T> &data);
+    template <class T> static void saveData(QTextStream &out, const QVector<T> &data, const QString &textFormat, int base);
     /// Carrega dades de tipus T del fitxer a la llista. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool loadData( const QString &fileName, QList<T> &list );
     /// Desa dades de tipus T de la llista al fitxer. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool saveData( const QList<T> &list, const QString &fileName );
-    /// Desa dades de tipus T del vector al fitxer. Retorna cert si tot va bé i fals si hi ha error.
-    template <class T> static bool saveData( const QVector<T> &vector, const QString &fileName );
-    /// Desa dades de tipus float del vector al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
-    static bool saveFloatDataAsText( const QVector<float> &vector, const QString &fileName, const QString &format, int base = 0 );
     /// Desa dades de tipus QPair<int, Vector3> de la llista al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
     static bool saveDataAsText( const QList< QPair<int, Vector3> > &list, const QString &fileName, const QString &format, int base1 = 0, int base2 = 0 );
 
