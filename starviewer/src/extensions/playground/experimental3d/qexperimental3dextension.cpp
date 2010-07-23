@@ -753,6 +753,7 @@ template <class T>
 void QExperimental3DExtension::loadData(QDataStream &in, QVector<T> &data)
 {
     data.clear();
+    data.reserve(in.device()->size() / sizeof(T));
 
     while (!in.atEnd())
     {
