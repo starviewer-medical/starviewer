@@ -28,6 +28,7 @@ class Volume;
 class Series;
 class ToolProxy;
 class WindowLevelPresetsToolData;
+class TransferFunction;
 class PatientBrowserMenu;
 
 /**
@@ -208,6 +209,10 @@ public slots:
     /// Ajusta el window/level
     virtual void setWindowLevel( double window , double level ) = 0;
 
+    /// Assigna/Obté la funció de transferència actual
+    virtual void setTransferFunction(TransferFunction *transferFunction) = 0;
+    TransferFunction* getTransferFunction() const;
+
     /// Reseteja el window level al que tingui per defecte el volum
     virtual void resetWindowLevelToDefault();
 
@@ -294,6 +299,9 @@ protected:
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
     double m_defaultWindow, m_defaultLevel;
 
+    /// Funció de transferència
+    TransferFunction *m_transferFunction;
+    
     /// Indica si hem de fer l'acció de renderitzar o no
     bool m_isRenderingEnabled;
 

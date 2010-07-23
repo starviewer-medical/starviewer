@@ -60,6 +60,8 @@ public slots:
     virtual void getCurrentWindowLevel( double wl[2] );
     /// Ajusta el window level.
     virtual void setWindowLevel( double window, double level );
+    
+    void setTransferFunction(TransferFunction *transferFunction);
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital.
     virtual void resetView( CameraOrientationType view );

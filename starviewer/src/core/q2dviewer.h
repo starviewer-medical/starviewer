@@ -259,6 +259,7 @@ public slots:
     void removeAnnotation( AnnotationFlags annotation );
 
     void setWindowLevel(double window, double level);
+    void setTransferFunction(TransferFunction *transferFunction);
 
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
     /// TODO aquest mètode hauria de quedar obsolet

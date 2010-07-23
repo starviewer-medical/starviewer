@@ -141,6 +141,11 @@ void QExperimental3DViewer::setWindowLevel( double window, double level )
     Q_UNUSED( level );
 }
 
+void QExperimental3DViewer::setTransferFunction(TransferFunction *transferFunction)
+{
+    m_transferFunction = transferFunction;
+    // TODO Aplicar la funció de transferència
+}
 
 void QExperimental3DViewer::resetView( CameraOrientationType view )
 {

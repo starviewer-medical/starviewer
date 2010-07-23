@@ -11,6 +11,7 @@
 #include "toolproxy.h"
 #include "patientbrowsermenu.h"
 #include "windowlevelpresetstooldata.h" // per poder afegir i modificar els presets que visualitzem
+#include "transferfunction.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -42,8 +43,7 @@
 namespace udg {
 
 QViewer::QViewer( QWidget *parent )
- : QWidget( parent ), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isRenderingEnabled(true), m_isActive(false),
-   m_hasDefaultWindowLevelDefined(false)
+ : QWidget( parent ), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isRenderingEnabled(true), m_isActive(false), m_hasDefaultWindowLevelDefined(false), m_transferFunction(0)
 {
     //TODO: De moment es desactiven els warnings en release i windows perquè no apareixi la finestra vtkOutputWindow
     //      però la solució bona és que els viewers no donin warnings.
@@ -557,6 +557,11 @@ void QViewer::setDefaultWindowLevel( double window, double level )
     m_defaultWindow = window;
     m_defaultLevel = level;
     m_hasDefaultWindowLevelDefined = true;
+}
+
+TransferFunction* QViewer::getTransferFunction() const
+{
+    return m_transferFunction;
 }
 
 void QViewer::resetWindowLevelToDefault()

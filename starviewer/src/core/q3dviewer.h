@@ -26,7 +26,6 @@ namespace udg {
 // FWD declarations
 class Volume;
 class Q3DOrientationMarker;
-class TransferFunction;
 class ObscuranceMainThread;
 class AmbientVoxelShader;
 class DirectIlluminationVoxelShader;
@@ -93,9 +92,7 @@ public slots:
     /// Aplica el mètode de rendering actual.
     void applyCurrentRenderingMethod();
 
-    /// Li assignem la funció de transferència que volem aplicar
-    void setTransferFunction( TransferFunction *transferFunction );
-    TransferFunction * getTransferFunction( ){return m_transferFunction;}
+    void setTransferFunction(TransferFunction *transferFunction);
     void setWindowLevel( double window , double level );
     void setNewTransferFunction( );
 
@@ -226,7 +223,6 @@ private:
     vtkVolumeRayCastIsosurfaceFunction *m_volumeRayCastIsosurfaceFunction;
 
     /// La funció de transferència que s'aplica
-    TransferFunction *m_transferFunction;
     TransferFunction *m_newTransferFunction;
 
     /// Booleà per saber si estem fent el primer render (per reiniciar l'orientació).
