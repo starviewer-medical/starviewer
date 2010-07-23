@@ -186,9 +186,6 @@ public slots:
     /// agafa un window/level que permeti veure correctament el Volum.
     void getDefaultWindowLevel( double windowLevel[2] );
 
-    // TODO convertir en mètode virtual pur?
-    // TODO Si tenim un getDefaultWindowLevel = per tothom, el mateix hauria d'haver per aquest mètode
-    // Caldria reunificar en una mateixa base tot el tractament de window level
     /// Obté el window level actual de la imatge
     virtual void getCurrentWindowLevel( double wl[2] ) = 0;
 
@@ -210,7 +207,6 @@ public slots:
     void setDefaultWindowLevel( double window, double level );
 
     /// Ajusta el window/level
-    // TODO convertir en mètode virtual pur?
     virtual void setWindowLevel( double window , double level ) = 0;
 
     /// Reseteja el window level al que tingui per defecte el volum
