@@ -133,14 +133,10 @@ void QExperimental3DExtension::saveHV(QString fileName)
 
 void QExperimental3DExtension::loadHVz(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::HVzDir, tr("H(V|z)"), FileExtensionsDatAll, m_HVz))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::HVzDir, tr("Load H(V|z)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveHVzPushButton->setEnabled(true);
     }
-
-    if (loadData(fileName, m_HVz)) m_saveHVzPushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load H(V|z)"), QString(tr("Can't load H(V|z) from file ")) + fileName);
 }
 
 
@@ -173,14 +169,10 @@ void QExperimental3DExtension::saveHZ(QString fileName)
 
 void QExperimental3DExtension::loadHZv(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::HZvDir, tr("H(Z|v)"), FileExtensionsDatAll, m_HZv))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::HZvDir, tr("Load H(Z|v)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveHZvPushButton->setEnabled(true);
     }
-
-    if (loadData(fileName, m_HZv)) m_saveHZvPushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load H(Z|v)"), QString(tr("Can't load H(Z|v) from file ")) + fileName);
 }
 
 
@@ -218,14 +210,10 @@ void QExperimental3DExtension::saveHZV(QString fileName)
 
 void QExperimental3DExtension::loadVmi(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::ViewpointMutualInformationDir, tr("VMI I₁(v;Z)"), FileExtensionsDatAll, m_vmi))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::ViewpointMutualInformationDir, tr("Load VMI I₁(v;Z)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveVmiPushButton->setEnabled(true);
     }
-
-    if (loadData(fileName, m_vmi)) m_saveVmiPushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VMI I₁(v;Z)"), QString(tr("Can't load VMI I₁(v;Z) from file ")) + fileName);
 }
 
 
@@ -248,14 +236,10 @@ void QExperimental3DExtension::saveVmi(QString fileName)
 
 void QExperimental3DExtension::loadVmi2(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::ViewpointMutualInformation2Dir, tr("VMI2 I₂(v;Z)"), FileExtensionsDatAll, m_vmi2))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::ViewpointMutualInformation2Dir, tr("Load VMI2 I₂(v;Z)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveVmi2PushButton->setEnabled(true);
     }
-
-    if (loadData(fileName, m_vmi2)) m_saveVmi2PushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VMI2 I₂(v;Z)"), QString(tr("Can't load VMI2 I₂(v;Z) from file ")) + fileName);
 }
 
 
@@ -278,14 +262,10 @@ void QExperimental3DExtension::saveVmi2(QString fileName)
 
 void QExperimental3DExtension::loadVmi3(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::ViewpointMutualInformation3Dir, tr("VMI3 I₃(v;Z)"), FileExtensionsDatAll, m_vmi3))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::ViewpointMutualInformation3Dir, tr("Load VMI3 I₃(v;Z)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveVmi3PushButton->setEnabled(true);
     }
-
-    if (loadData(fileName, m_vmi3)) m_saveVmi3PushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VMI3 I₃(v;Z)"), QString(tr("Can't load VMI3 I₃(v;Z) from file ")) + fileName);
 }
 
 
@@ -321,16 +301,12 @@ void QExperimental3DExtension::saveMi( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadViewpointUnstabilities( QString fileName )
+void QExperimental3DExtension::loadViewpointUnstabilities(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::ViewpointUnstabilitiesDir, tr("viewpoint unstabilities"), FileExtensionsDatAll, m_viewpointUnstabilities))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointUnstabilitiesDir, tr("Load viewpoint unstabilities"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveViewpointUnstabilitiesPushButton->setEnabled(true);
     }
-
-    if ( loadData( fileName, m_viewpointUnstabilities ) ) m_saveViewpointUnstabilitiesPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint unstabilities"), QString( tr("Can't load viewpoint unstabilities from file ") ) + fileName );
 }
 
 
@@ -353,13 +329,7 @@ void QExperimental3DExtension::saveViewpointUnstabilities( QString fileName )
 
 void QExperimental3DExtension::loadVomi(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToLoad(Experimental3DSettings::VoxelMutualInformationDir, tr("Load VoMI I₁(z;V)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
-    }
-
-    if (loadData(fileName, m_vomi))
+    if (loadData(fileName, Experimental3DSettings::VoxelMutualInformationDir, tr("VoMI I₁(z;V)"), FileExtensionsDatAll, m_vomi))
     {
         int nVoxels = m_vomi.size();
         m_maximumVomi = 0.0f;
@@ -374,7 +344,6 @@ void QExperimental3DExtension::loadVomi(QString fileName)
         m_saveVomiPushButton->setEnabled(true);
         m_vomiGradientPushButton->setEnabled(true);
     }
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VoMI I₁(z;V)"), QString(tr("Can't load VoMI I₁(z;V) from file ")) + fileName);
 }
 
 
@@ -392,13 +361,7 @@ void QExperimental3DExtension::saveVomi(QString fileName)
 
 void QExperimental3DExtension::loadVomi2(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToLoad(Experimental3DSettings::VoxelMutualInformation2Dir, tr("Load VoMI2 I₂(z;V)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
-    }
-
-    if (loadData(fileName, m_vomi2))
+    if (loadData(fileName, Experimental3DSettings::VoxelMutualInformation2Dir, tr("VoMI2 I₂(z;V)"), FileExtensionsDatAll, m_vomi2))
     {
         int nVoxels = m_vomi2.size();
         m_maximumVomi2 = 0.0f;
@@ -413,7 +376,6 @@ void QExperimental3DExtension::loadVomi2(QString fileName)
         m_saveVomi2PushButton->setEnabled(true);
         m_vomi2GradientPushButton->setEnabled(true);
     }
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VoMI2 I₂(z;V)"), QString(tr("Can't load VoMI2 I₂(z;V) from file ")) + fileName);
 }
 
 
@@ -431,13 +393,7 @@ void QExperimental3DExtension::saveVomi2(QString fileName)
 
 void QExperimental3DExtension::loadVomi3(QString fileName)
 {
-    if (fileName.isEmpty())
-    {
-        fileName = getFileNameToLoad(Experimental3DSettings::VoxelMutualInformation3Dir, tr("Load VoMI3 I₃(z;V)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
-    }
-
-    if (loadData(fileName, m_vomi3))
+    if (loadData(fileName, Experimental3DSettings::VoxelMutualInformation3Dir, tr("VoMI3 I₃(z;V)"), FileExtensionsDatAll, m_vomi3))
     {
         int nVoxels = m_vomi3.size();
         m_maximumVomi3 = 0.0f;
@@ -452,7 +408,6 @@ void QExperimental3DExtension::loadVomi3(QString fileName)
         m_saveVomi3PushButton->setEnabled(true);
         //m_vomiGradientPushButton->setEnabled(true); /// \todo vomi3
     }
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load VoMI3 I₃(z;V)"), QString(tr("Can't load VoMI3 I₃(z;V) from file ")) + fileName);
 }
 
 
@@ -470,14 +425,10 @@ void QExperimental3DExtension::saveVomi3(QString fileName)
 
 void QExperimental3DExtension::loadViewpointVomi(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::ViewpointVoxelMutualInformationDir, tr("viewpoint VoMI (INF)"), FileExtensionsDatAll, m_viewpointVomi))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::ViewpointVoxelMutualInformationDir, tr("Load viewpoint VoMI (INF)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveViewpointVomiPushButton->setEnabled(true);
     }
-
-    if (loadData(fileName, m_viewpointVomi)) m_saveViewpointVomiPushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load viewpoint VoMI (INF)"), QString(tr("Can't load viewpoint VoMI (INF) from file")) + fileName);
 }
 
 
@@ -500,14 +451,10 @@ void QExperimental3DExtension::saveViewpointVomi(QString fileName)
 
 void QExperimental3DExtension::loadViewpointVomi2(QString fileName)
 {
-    if (fileName.isEmpty())
+    if (loadData(fileName, Experimental3DSettings::ViewpointVoxelMutualInformation2Dir, tr("viewpoint VoMI2 (INF2)"), FileExtensionsDatAll, m_viewpointVomi2))
     {
-        fileName = getFileNameToLoad(Experimental3DSettings::ViewpointVoxelMutualInformation2Dir, tr("Load viewpoint VoMI2 (INF2)"), tr("Data files (*.dat);;All files (*)"));
-        if (fileName.isNull()) return;
+        m_saveViewpointVomi2PushButton->setEnabled(true);
     }
-
-    if (loadData(fileName, m_viewpointVomi2)) m_saveViewpointVomi2PushButton->setEnabled(true);
-    else if (m_interactive) QMessageBox::warning(this, tr("Can't load viewpoint VoMI2 (INF2)"), QString(tr("Can't load viewpoint VoMI2 (INF2) from file")) + fileName);
 }
 
 
@@ -580,31 +527,24 @@ void QExperimental3DExtension::loadColorVomiPalette( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadColorVomi( QString fileName )
+void QExperimental3DExtension::loadColorVomi(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToLoad( Experimental3DSettings::ColorVoxelMutualInformationDir, tr("Load color VoMI"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
-    }
-
-    if ( loadData( fileName, m_colorVomi ) )
+    if (loadData(fileName, Experimental3DSettings::ColorVoxelMutualInformationDir, tr("color VoMI"), FileExtensionsDatAll, m_colorVomi))
     {
         int nVoxels = m_colorVomi.size();
         m_maximumColorVomi = 0.0f;
 
-        for ( int j = 0; j < nVoxels; j++ )
+        for (int j = 0; j < nVoxels; j++)
         {
-            const Vector3Float &colorVomi = m_colorVomi.at( j );
-            if ( colorVomi.x > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.x;
-            if ( colorVomi.y > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.y;
-            if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
+            const Vector3Float &colorVomi = m_colorVomi.at(j);
+            if (colorVomi.x > m_maximumColorVomi) m_maximumColorVomi = colorVomi.x;
+            if (colorVomi.y > m_maximumColorVomi) m_maximumColorVomi = colorVomi.y;
+            if (colorVomi.z > m_maximumColorVomi) m_maximumColorVomi = colorVomi.z;
         }
 
-        m_colorVomiCheckBox->setEnabled( true );
-        m_saveColorVomiPushButton->setEnabled( true );
+        m_colorVomiCheckBox->setEnabled(true);
+        m_saveColorVomiPushButton->setEnabled(true);
     }
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load color VoMI"), QString( tr("Can't load color VoMI from file ") ) + fileName );
 }
 
 
@@ -641,16 +581,12 @@ void QExperimental3DExtension::loadEvmiOpacityOtherTransferFunction( QString fil
 }
 
 
-void QExperimental3DExtension::loadEvmiOpacity( QString fileName )
+void QExperimental3DExtension::loadEvmiOpacity(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::EnhancedViewpointMutualInformationOpacityDir, tr("EVMI with opacity"), FileExtensionsDatAll, m_evmiOpacity))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::EnhancedViewpointMutualInformationOpacityDir, tr("Load EVMI with opacity"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveEvmiOpacityPushButton->setEnabled(true);
     }
-
-    if ( loadData( fileName, m_evmiOpacity ) ) m_saveEvmiOpacityPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load EVMI with opacity"), QString( tr("Can't load EVMI with opacity from file ") ) + fileName );
 }
 
 
@@ -671,16 +607,12 @@ void QExperimental3DExtension::saveEvmiOpacity( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadEvmiVomi( QString fileName )
+void QExperimental3DExtension::loadEvmiVomi(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::EnhancedViewpointMutualInformationVoxelMutualInformationDir, tr("EVMI with VoMI"), FileExtensionsDatAll, m_evmiVomi))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::EnhancedViewpointMutualInformationVoxelMutualInformationDir, tr("Load EVMI with VoMI"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveEvmiVomiPushButton->setEnabled(true);
     }
-
-    if ( loadData( fileName, m_evmiVomi ) ) m_saveEvmiVomiPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load EVMI with VoMI"), QString( tr("Can't load EVMI with VoMI from file ") ) + fileName );
 }
 
 
@@ -816,16 +748,12 @@ void QExperimental3DExtension::saveViewedVolumeI( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadViewpointEntropyI( QString fileName )
+void QExperimental3DExtension::loadViewpointEntropyI(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::ViewpointEntropyIntensityDir, tr("viewpoint entropy"), FileExtensionsDatAll, m_viewpointEntropyI))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointEntropyIntensityDir, tr("Load viewpoint entropy"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveViewpointEntropyIPushButton->setEnabled(true);
     }
-
-    if ( loadData( fileName, m_viewpointEntropyI ) ) m_saveViewpointEntropyIPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint entropy"), QString( tr("Can't load viewpoint entropy from file ") ) + fileName );
 }
 
 
@@ -861,16 +789,12 @@ void QExperimental3DExtension::saveEntropyI(QString fileName)
 }
 
 
-void QExperimental3DExtension::loadVmii( QString fileName )
+void QExperimental3DExtension::loadVmii(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::ViewpointMutualInformationIntensityDir, tr("VMIi"), FileExtensionsDatAll, m_vmii))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointMutualInformationIntensityDir, tr("Load VMIi"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveVmiiPushButton->setEnabled(true);
     }
-
-    if ( loadData( fileName, m_vmii ) ) m_saveVmiiPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load VMIi"), QString( tr("Can't load VMIi from file ") ) + fileName );
 }
 
 
@@ -906,16 +830,12 @@ void QExperimental3DExtension::saveMii(QString fileName)
 }
 
 
-void QExperimental3DExtension::loadViewpointUnstabilitiesI( QString fileName )
+void QExperimental3DExtension::loadViewpointUnstabilitiesI(QString fileName)
 {
-    if ( fileName.isEmpty() )
+    if (loadData(fileName, Experimental3DSettings::ViewpointUnstabilitiesIntensityDir, tr("viewpoint unstabilities"), FileExtensionsDatAll, m_viewpointUnstabilitiesI))
     {
-        fileName = getFileNameToLoad( Experimental3DSettings::ViewpointUnstabilitiesIntensityDir, tr("Load viewpoint unstabilities"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
+        m_saveViewpointUnstabilitiesIPushButton->setEnabled(true);
     }
-
-    if ( loadData( fileName, m_viewpointUnstabilitiesI ) ) m_saveViewpointUnstabilitiesIPushButton->setEnabled( true );
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load viewpoint unstabilities"), QString( tr("Can't load viewpoint unstabilities from file ") ) + fileName );
 }
 
 
@@ -936,34 +856,27 @@ void QExperimental3DExtension::saveViewpointUnstabilitiesI( QString fileName )
 }
 
 
-void QExperimental3DExtension::loadImi( QString fileName )
+void QExperimental3DExtension::loadImi(QString fileName)
 {
-    if ( fileName.isEmpty() )
-    {
-        fileName = getFileNameToLoad( Experimental3DSettings::IntensityMutualInformationDir, tr("Load IMI"), tr("Data files (*.dat);;All files (*)") );
-        if ( fileName.isNull() ) return;
-    }
-
-    if ( loadData( fileName, m_imi ) )
+    if (loadData(fileName, Experimental3DSettings::IntensityMutualInformationDir, tr("IMI"), FileExtensionsDatAll, m_imi))
     {
         int nIntensities = m_imi.size();
         m_maximumImi = 0.0f;
 
         for ( int j = 0; j < nIntensities; j++ ) if ( m_imi.at( j ) > m_maximumImi ) m_maximumImi = m_imi.at( j );
 
-        m_baseImiRadioButton->setEnabled( true );
-//        m_baseImiCoolWarmRadioButton->setEnabled( true );
-//        m_imiCheckBox->setEnabled( true );
-//        m_imiCoolWarmCheckBox->setEnabled( true );
-//        m_opacityLabel->setEnabled( true );
-//        m_opacityImiCheckBox->setEnabled( true );
-        m_saveImiPushButton->setEnabled( true );
-//        m_imiGradientPushButton->setEnabled( true );
-        m_colorTransferFunctionFromImiPushButton->setEnabled( true );
-        m_opacityTransferFunctionFromImiPushButton->setEnabled( true );
-        m_transferFunctionFromImiPushButton->setEnabled( true );
+        m_baseImiRadioButton->setEnabled(true);
+//        m_baseImiCoolWarmRadioButton->setEnabled(true);
+//        m_imiCheckBox->setEnabled(true);
+//        m_imiCoolWarmCheckBox->setEnabled(true);
+//        m_opacityLabel->setEnabled(true);
+//        m_opacityImiCheckBox->setEnabled(true);
+        m_saveImiPushButton->setEnabled(true);
+//        m_imiGradientPushButton->setEnabled(true);
+        m_colorTransferFunctionFromImiPushButton->setEnabled(true);
+        m_opacityTransferFunctionFromImiPushButton->setEnabled(true);
+        m_transferFunctionFromImiPushButton->setEnabled(true);
     }
-    else if ( m_interactive ) QMessageBox::warning( this, tr("Can't load IMI"), QString( tr("Can't load IMI from file ") ) + fileName );
 }
 
 
@@ -1002,11 +915,32 @@ bool QExperimental3DExtension::loadData(QString &fileName, const QString &settin
     }
 
     QDataStream in(&file);
-    if (!in.atEnd()) in >> data;
+    loadData(in, data);
 
     file.close();
 
     return true;
+}
+
+
+template <class T>
+void QExperimental3DExtension::loadData(QDataStream &in, T &data)
+{
+    if (!in.atEnd()) in >> data;
+}
+
+
+template <class T>
+void QExperimental3DExtension::loadData(QDataStream &in, QVector<T> &data)
+{
+    data.clear();
+
+    while (!in.atEnd())
+    {
+        T datum;
+        in >> datum;
+        data << datum;
+    }
 }
 
 
@@ -1068,34 +1002,6 @@ bool QExperimental3DExtension::loadData( const QString &fileName, QList<T> &list
         T data;
         in >> data;
         list << data;
-    }
-
-    file.close();
-
-    return true;
-}
-
-
-template <class T>
-bool QExperimental3DExtension::loadData( const QString &fileName, QVector<T> &vector )
-{
-    QFile file( fileName );
-
-    if ( !file.open( QIODevice::ReadOnly ) )
-    {
-        DEBUG_LOG( QString( "No es pot llegir el fitxer " ) + fileName );
-        return false;
-    }
-
-    vector.clear();
-
-    QDataStream in( &file );
-
-    while ( !in.atEnd() )
-    {
-        T data;
-        in >> data;
-        vector << data;
     }
 
     file.close();

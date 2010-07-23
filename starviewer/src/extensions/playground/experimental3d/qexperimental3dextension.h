@@ -160,12 +160,12 @@ private:
 
     /// Carrega dades de tipus T del fitxer a \a data. Retorna cert si s'han carregat les dades.
     template <class T> bool loadData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, T &data);
+    template <class T> static void loadData(QDataStream &in, T &data);
+    template <class T> static void loadData(QDataStream &in, QVector<T> &data);
     /// Desa dades de tipus T de \a data al fitxer. Retorna cert si s'han desat les dades.
     template <class T> bool saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix, T &data, const QString &textFormat);
     /// Carrega dades de tipus T del fitxer a la llista. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool loadData( const QString &fileName, QList<T> &list );
-    /// Carrega dades de tipus T del fitxer al vector. Retorna cert si tot va bé i fals si hi ha error.
-    template <class T> static bool loadData( const QString &fileName, QVector<T> &vector );
     /// Desa dades de tipus T de la llista al fitxer. Retorna cert si tot va bé i fals si hi ha error.
     template <class T> static bool saveData( const QList<T> &list, const QString &fileName );
     /// Desa dades de tipus T del vector al fitxer. Retorna cert si tot va bé i fals si hi ha error.
