@@ -149,5 +149,19 @@ void QExperimental3DViewer::resetView( CameraOrientationType view )
     Q_UNUSED( view );
 }
 
+void QExperimental3DViewer::resetViewToAxial()
+{
+    // TODO Cal implementar, és un mètode virtual pur
+}
+
+void QExperimental3DViewer::resetViewToSagital()
+{
+    // TODO Cal implementar, és un mètode virtual pur
+}
+
+void QExperimental3DViewer::resetViewToCoronal()
+{
+    // TODO Cal implementar, és un mètode virtual pur
+}
 
 }

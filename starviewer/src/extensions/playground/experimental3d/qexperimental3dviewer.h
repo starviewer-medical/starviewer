@@ -63,6 +63,9 @@ public slots:
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital.
     virtual void resetView( CameraOrientationType view );
+    virtual void resetViewToAxial();
+    virtual void resetViewToSagital();
+    virtual void resetViewToCoronal();
 
 private:
 

@@ -190,11 +190,10 @@ public slots:
     virtual void getCurrentWindowLevel( double wl[2] ) = 0;
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
-    // TODO convertir en mètode virtual pur
     virtual void resetView( CameraOrientationType view ) = 0;
-    virtual void resetViewToAxial(){};
-    virtual void resetViewToSagital(){};
-    virtual void resetViewToCoronal(){};
+    virtual void resetViewToAxial() = 0;
+    virtual void resetViewToSagital() = 0;
+    virtual void resetViewToCoronal() = 0;
 
     /**
      * Activa o desactiva el menú de contexte
