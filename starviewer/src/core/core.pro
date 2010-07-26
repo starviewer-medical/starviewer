@@ -411,6 +411,7 @@ SOURCES += extensionmediator.cpp \
     dicomreferencedimage.cpp \
     thumbnailimagedisplayer.cpp \
     keyimagenotecreatorwidget.cpp
+INCLUDEPATH += ../inputoutput
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)

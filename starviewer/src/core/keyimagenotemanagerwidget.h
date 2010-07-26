@@ -30,15 +30,18 @@ public:
 public slots:
     /// Mostra el dialeg per a crear un Key Image Note
     void showKeyImageNoteCreatorWidget();
+    
+    /// Creacio de un Key Image Note Displayer a partir d'un Key Image Note
+    void createKeyImageNoteDisplayer(KeyImageNote *keyImageNote);
 
 private:
     /// Inicialitza els Key Image Note Displayers
     void generateKeyImageNoteDisplayers();
 
-    /// Creacio de un Key Image Note Displayer a partir d'un Key Image Note
-    void createKeyImageNoteDisplayer(KeyImageNote *keyImageNote);
+    /// Crea les connexions amb el seu Key Image Note Manager
+    void createConnectionsWithKeyImageNoteManager();
 
-    /// Crea les connexions de signals i slots del Key Image Note Manager Widget
+    /// Crea les connexions propies del Key Image Note Manager Widget
     void createConnections();
 
 private:

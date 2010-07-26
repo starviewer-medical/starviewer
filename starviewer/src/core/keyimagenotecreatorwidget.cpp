@@ -41,13 +41,11 @@ void KeyImageNoteCreatorWidget::setVisibilityOfRejectedForQualityReasons(const Q
         m_documentTitleQualityReasonsComboBox->setVisible(false);
         m_rejectedForQualityReasonsLabel->setVisible(false);
     }
-
-    adjustSize();
 }
 
 void KeyImageNoteCreatorWidget::createKeyImageNote()
 {
-    m_keyImageNoteManager->createKeyImageNote(m_documentTitleComboBox->currentText(), m_documentTitleQualityReasonsComboBox->currentText(), m_observerName->text(), m_keyObjectDescription->toPlainText());
+    m_keyImageNoteManager->generateAndStoreNewKeyImageNote(m_documentTitleComboBox->currentText(), m_documentTitleQualityReasonsComboBox->currentText(), m_observerName->text(), m_keyObjectDescription->toPlainText(), m_storeToLocalCheckBox->isChecked(), m_sendToPacsCheckBox->isChecked(), m_pacsNodeComboBox->currentText());
     setDefaultValuesOfKeyImageNoteCreatorWidget();
     close();
 }

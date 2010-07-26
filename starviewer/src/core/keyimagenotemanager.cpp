@@ -5,6 +5,9 @@
 #include "image.h"
 #include "dicomreferencedimage.h"
 #include "keyimagenote.h"
+#include "localdatabasemanager.h"
+#include "logging.h"
+#include <dcmtk/dcmdata/dcuid.h>
 
 #include <QDateTime>
 
@@ -57,9 +60,40 @@ void KeyImageNoteManager::addImageToTheCurrentSelectionOfImages(Image *image)
     }
 }
 
-void KeyImageNoteManager::createKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription)
+void KeyImageNoteManager::generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode)
 {
-    // TODO De moment nomes es recullen les dades i es crea un Key Image Note, caldra capturar on es volen guardar i guardar-ho, pendent d'implementacio
+    if (m_currentSelection.count() > 0)
+    {
+       if (allImagesInTheSameStudy())
+       {
+            Series *newKeyImageNoteSeries = createNewKeyImageNoteSeries();
+            KeyImageNote *newKeyImageNote = createNewKeyImageNote(documentTitle, documentTitleQualityReasons, observerName, keyObjectDescription);
+            newKeyImageNoteSeries->addKeyImageNote(newKeyImageNote);
+
+            if (storeToLocalDataBase)
+            {
+                storeKeyImageNoteSeriesToLocalDataBase(newKeyImageNoteSeries);
+            }
+
+            m_currentSelection.clear();
+            emit currentSelectionCleared();
+
+            m_KeyImageNotesOfPatientSearched = false;
+            emit keyImageNoteOfPatientAdded(newKeyImageNote);
+       }
+       else
+       {
+           DEBUG_LOG("No totes les imatges son del mateix estudi");
+       }
+    }
+    else
+    {
+        DEBUG_LOG("Has de seleccionar almenys una imatge");
+    }
+}
+
+KeyImageNote* KeyImageNoteManager::createNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription)
+{
     KeyImageNote *newKeyImageNote = new KeyImageNote();
 
     newKeyImageNote->setDocumentTitle(KeyImageNote::getDocumentTitleInstanceFromString(documentTitle));
@@ -73,6 +107,11 @@ void KeyImageNoteManager::createKeyImageNote(const QString &documentTitle, const
         newKeyImageNote->setRejectedForQualityReasons(KeyImageNote::NoneRejectedForQualityReasons); 
     }
 
+    newKeyImageNote->setInstanceNumber("1");
+    char instanceUid[100];
+    dcmGenerateUniqueIdentifier(instanceUid, SITE_INSTANCE_UID_ROOT);
+    newKeyImageNote->setInstanceUID(QString(instanceUid));
+
     newKeyImageNote->setObserverContextType(KeyImageNote::Person);
     newKeyImageNote->setObserverContextName(observerName);
     newKeyImageNote->setKeyObjectDescription(keyObjectDescription);
@@ -82,14 +121,55 @@ void KeyImageNoteManager::createKeyImageNote(const QString &documentTitle, const
     QList<DICOMReferencedImage*> referencedImages;
     foreach (const Image *image, m_currentSelection)
     {
-        // TODO Falta assignar UID del pare
         DICOMReferencedImage *referencedImage = new DICOMReferencedImage();
         referencedImage->setDICOMReferencedImageSOPInstanceUID(image->getSOPInstanceUID());
         referencedImage->setFrameNumber(image->getFrameNumber());
+        referencedImage->setReferenceParentSOPInstanceUID(newKeyImageNote->getInstanceUID());
+        referencedImages.append(referencedImage);
     }
 
-    m_currentSelection.clear();
-    emit currentSelectionCleared();
+    newKeyImageNote->setDICOMReferencedImages(referencedImages);
+
+    return newKeyImageNote;
+}
+
+Series* KeyImageNoteManager::createNewKeyImageNoteSeries()
+{
+    Series *newKeyImageNoteSeries = new Series();
+    Study *parentStudy = m_currentSelection[0]->getParentSeries()->getParentStudy();
+
+    newKeyImageNoteSeries->setDate(QDate::currentDate());
+    newKeyImageNoteSeries->setTime(QTime::currentTime());
+    newKeyImageNoteSeries->setSeriesNumber(QString("0000")+QString::number(parentStudy->getSeries().count()));
+    newKeyImageNoteSeries->setModality("KO");
+
+    char seriesUid[100];
+    dcmGenerateUniqueIdentifier(seriesUid, SITE_INSTANCE_UID_ROOT);
+    newKeyImageNoteSeries->setInstanceUID(QString(seriesUid));
+
+    parentStudy->addSeries(newKeyImageNoteSeries);
+
+    return newKeyImageNoteSeries;
+}
+
+void KeyImageNoteManager::storeKeyImageNoteSeriesToLocalDataBase(Series *newKeyImageNoteSeries)
+{
+    LocalDatabaseManager localDataBaseManager;
+
+    localDataBaseManager.save(newKeyImageNoteSeries);
+}
+
+bool KeyImageNoteManager::allImagesInTheSameStudy()
+{
+    Study *parentStudy = m_currentSelection[0]->getParentSeries()->getParentStudy();
+
+    int i = 1;
+    while (i < m_currentSelection.size() && parentStudy ==  m_currentSelection[i]->getParentSeries()->getParentStudy() )
+    {
+        i++;
+    }
+
+    return i == m_currentSelection.size();
 }
 
 }

@@ -10,6 +10,7 @@ KeyImageNoteManagerWidget::KeyImageNoteManagerWidget(QWidget *parent): QWidget(p
 {
     setupUi(this);
     m_thumbnailImageDisplayer->setThumbnailSize(ThumbnailImageDisplayer::Medium);
+    createConnections();
 }
 
 KeyImageNoteManagerWidget::~KeyImageNoteManagerWidget()
@@ -19,10 +20,11 @@ KeyImageNoteManagerWidget::~KeyImageNoteManagerWidget()
 
 void KeyImageNoteManagerWidget::showKeyImageNoteManagerWidget()
 {
+    Q_ASSERT(m_keyImageNoteManager);
+
     if (!m_isKeyImageNoteManagerDataLoaded)
     {
         generateKeyImageNoteDisplayers();
-        m_isKeyImageNoteManagerDataLoaded = true;
     }
 }
 
@@ -30,14 +32,19 @@ void KeyImageNoteManagerWidget::setKeyImageNoteManager(KeyImageNoteManager *keyI
 {
     m_keyImageNoteManager = keyImageNoteManager;
     m_isKeyImageNoteManagerDataLoaded = false;
-    createConnections();
+    createConnectionsWithKeyImageNoteManager();
+}
+
+void KeyImageNoteManagerWidget::createConnectionsWithKeyImageNoteManager()
+{
+    connect(m_keyImageNoteManager, SIGNAL(currentSelectionCleared()), m_thumbnailImageDisplayer, SLOT(clearAllThumbnails()));
+    connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), m_thumbnailImageDisplayer, SLOT(addImage(Image*)));
+    connect(m_keyImageNoteManager, SIGNAL(keyImageNoteOfPatientAdded(KeyImageNote*)), SLOT(createKeyImageNoteDisplayer(KeyImageNote*)));
 }
 
 void KeyImageNoteManagerWidget::createConnections()
 {
     connect(m_createKeyImageNotePushButton, SIGNAL(clicked()), SLOT(showKeyImageNoteCreatorWidget()));
-    connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), m_thumbnailImageDisplayer,SLOT(addImage(Image*)));
-    connect(m_keyImageNoteManager, SIGNAL(currentSelectionCleared()), m_thumbnailImageDisplayer, SLOT(clearAllThumbnails()));
 }
 
 void KeyImageNoteManagerWidget::generateKeyImageNoteDisplayers()
@@ -49,6 +56,8 @@ void KeyImageNoteManagerWidget::generateKeyImageNoteDisplayers()
             createKeyImageNoteDisplayer(keyImageNote);
         }
     }
+    
+    m_isKeyImageNoteManagerDataLoaded = true;
 }
 
 void KeyImageNoteManagerWidget::createKeyImageNoteDisplayer(KeyImageNote *keyImageNote)
