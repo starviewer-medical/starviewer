@@ -11,6 +11,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
+#include <QMetaEnum>
 
 namespace udg {
 
@@ -26,6 +27,10 @@ Classe que encapsula les propietats d'un Key Image Note
 class KeyImageNote : public QObject
 {
 Q_OBJECT
+Q_ENUMS(ObserverType);
+Q_ENUMS(DocumentTitle);
+Q_ENUMS(RejectedForQualityReasons);
+
 public:
     /// Tipus d'Observador del Key Image Note
     enum ObserverType {Person = 121006, Device = 121007, NoneObserverType = 0};
@@ -119,13 +124,13 @@ public:
     void setRetrievedTime(QTime time);
 
     /// Retorna Observer Type de Key Image Note com a un QString
-    QString getObserverTypeAsString() const;
+    static QString getObserverTypeAsString(KeyImageNote::ObserverType observerType);
 
     /// Retorna Document Title de Key Image Note com a un QString
-    QString getDocumentTitleAsString() const;
+    static QString getDocumentTitleAsString(KeyImageNote::DocumentTitle documentTitle);
 
     /// Retorna Rejected For Quality Reasons de Key Image Note com a un QString
-    QString getRejectedForQualityReasonsAsString() const;
+    static QString getRejectedForQualityReasonsAsString(KeyImageNote::RejectedForQualityReasons rejectedForQualityReasons);
 
     /// Ens retorna cert si el documentTitle necessita Rejected For Quality Reasons segons el que estableix DICOM
     static bool isDocumentTitleModifiedForQualityReasonsOrIssues(KeyImageNote::DocumentTitle documentTitle);

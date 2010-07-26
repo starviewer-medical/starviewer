@@ -248,9 +248,9 @@ QTime KeyImageNote::getRetrievedTime() const
     return m_retrieveTime;
 }
 
-QString KeyImageNote::getObserverTypeAsString() const
+QString KeyImageNote::getObserverTypeAsString(KeyImageNote::ObserverType observerType)
 {
-    switch (m_observerContextType)
+    switch (observerType)
     {
         case KeyImageNote::Person:
             return tr("Person");
@@ -263,9 +263,9 @@ QString KeyImageNote::getObserverTypeAsString() const
   }
 }
 
-QString KeyImageNote::getDocumentTitleAsString() const
+QString KeyImageNote::getDocumentTitleAsString(KeyImageNote::DocumentTitle documentTitle)
 {
-    switch (m_documentTitle)
+    switch (documentTitle)
     {
         case KeyImageNote::OfInterest:
             return tr("Of Interest");
@@ -296,9 +296,9 @@ QString KeyImageNote::getDocumentTitleAsString() const
     }
 }
 
-QString KeyImageNote::getRejectedForQualityReasonsAsString() const
+QString KeyImageNote::getRejectedForQualityReasonsAsString(KeyImageNote::RejectedForQualityReasons rejectedForQualityReasons)
 {
-    switch (m_rejectedForQualityReasons)
+    switch (rejectedForQualityReasons)
     {
         case KeyImageNote::ImageArtifacts:
             return tr("Image artifact(s)");
@@ -341,158 +341,133 @@ QString KeyImageNote::getRejectedForQualityReasonsAsString() const
 
 QStringList KeyImageNote::getAllDocumentTitles()
 {
-    QStringList documentTitles;
+    bool foundEnumerator = false;
+    int i = 0;
+    QMetaObject metaEnumerator = KeyImageNote::staticMetaObject;
+    QStringList enumeratorTypesList;
+    while(!foundEnumerator && i < metaEnumerator.enumeratorCount())
+    {
+        QMetaEnum enumType = metaEnumerator.enumerator(i);
+        
+        if (enumType.name() == QString("DocumentTitle"))
+        {
+            for(int j = 0; j < enumType.keyCount(); ++j)
+            {
+                KeyImageNote::DocumentTitle documentTitleElement = DocumentTitle(enumType.keyToValue(enumType.key(j)));
+                
+                if (documentTitleElement != KeyImageNote::NoneDocumentTitle)
+                {
+                    enumeratorTypesList << getDocumentTitleAsString(documentTitleElement);
+                }
+            }
+            foundEnumerator = true;
+        }
+        i++;
 
-    return documentTitles << tr("Of Interest") << tr("Rejected for Quality Reasons")
-                          << tr("For Referring Provider") << tr("For Surgery") << tr("For Teaching")
-                          << tr("For Conference") << tr("For Therapy") << tr("For Patient")
-                          << tr("For Peer Review") << tr("For Research") << tr("Quality Issue");
+    }
+    
+    return enumeratorTypesList;
 }
 
 QStringList KeyImageNote::getAllRejectedForQualityReasons()
 {
-    QStringList rejectedForQualityReasons;
-
-    return rejectedForQualityReasons << tr("Image artifact(s)") << tr("Grid artifact(s)")
-                                     << tr("Positioning") << tr("Motion blur") 
-                                     << tr("Under exposed") << tr("Over exposed")
-                                     << tr("No image") << tr("Detector artifact(s)")
-                                     << tr("Artifact(s) other than grid or detector artifact")
-                                     << tr("Mechanical failure") << tr("Software failure")
-                                     << tr("Electrical failure") << tr("Inappropiate image processing")
-                                     << tr("Other failure") << tr("Unknown failure")
-                                     << tr("Double exposure");
-
-    return rejectedForQualityReasons;
-}
-
-KeyImageNote::DocumentTitle KeyImageNote::getDocumentTitleInstanceFromString(const QString &documentTitle)
-{
-    if (documentTitle == "Of Interest")
+    bool foundEnumerator = false;
+    int i = 0;
+    QMetaObject metaEnumerator = KeyImageNote::staticMetaObject;
+    QStringList enumeratorTypesList;
+    while(!foundEnumerator && i < metaEnumerator.enumeratorCount())
     {
-        return KeyImageNote::OfInterest;
+        QMetaEnum enumType = metaEnumerator.enumerator(i);
+        
+        if (enumType.name() == QString("RejectedForQualityReasons"))
+        {
+            for(int j = 0; j < enumType.keyCount(); ++j)
+            {
+                KeyImageNote::RejectedForQualityReasons rejectedForQualityReasonsElement = RejectedForQualityReasons(enumType.keyToValue(enumType.key(j)));
+                
+                if (rejectedForQualityReasonsElement != KeyImageNote::NoneRejectedForQualityReasons)
+                {
+                    enumeratorTypesList << getRejectedForQualityReasonsAsString(rejectedForQualityReasonsElement);
+                }
+            }
+            foundEnumerator = true;
+        }
+        i++;
     }
-    else if (documentTitle == "Rejected for Quality Reasons")
-    {
-        return KeyImageNote::RejectedForQualityReasonsDocumentTitle;
-    }
-    else if (documentTitle == "For Referring Provider")
-    {
-        return KeyImageNote::ForReferringProvider;
-    }
-    else if (documentTitle == "For Surgery")
-    {
-        return KeyImageNote::ForSurgery;
-    }
-    else if (documentTitle == "For Teaching")
-    {
-        return KeyImageNote::ForTeaching;
-    }
-    else if (documentTitle == "For Conference")
-    {
-        return KeyImageNote::ForConference;
-    }
-    else if (documentTitle == "For Therapy")
-    {
-        return KeyImageNote::ForTherapy;
-    }
-    else if (documentTitle == "For Patient")
-    {
-         return KeyImageNote::ForPatient;
-    }
-    else if (documentTitle == "For Peer Review")
-    {
-        return KeyImageNote::ForPeerReview;
-    }
-    else if (documentTitle == "For Research")
-    {
-        return KeyImageNote::ForResearch;
-    }
-    else if (documentTitle == "Quality Issue")
-    {
-        return KeyImageNote::QualityIssue;
-    }
-    else
-    {
-        return KeyImageNote::NoneDocumentTitle;    
-    }
-}
-
-KeyImageNote::RejectedForQualityReasons KeyImageNote::getRejectedForQualityReasonsInstanceFromString(const QString &rejectedForQualityReasons)
-{
-    if (rejectedForQualityReasons == "Image artifact(s)")
-    {
-        return KeyImageNote::ImageArtifacts;
-    }
-    else if (rejectedForQualityReasons == "Grid artifact(s)")
-    {
-        return KeyImageNote::GridArtifacts;
-    }
-    else if (rejectedForQualityReasons == "Positioning")
-    {
-        return KeyImageNote::Positioning;
-    }
-    else if (rejectedForQualityReasons == "Motion blur")
-    {
-        return KeyImageNote::MotionBlur;
-    }
-    else if (rejectedForQualityReasons == "Under exposed")
-    {
-        return KeyImageNote::UnderExposed;
-    }
-    else if (rejectedForQualityReasons == "Over exposed")
-    {
-        return KeyImageNote::OverExposed;
-    }
-    else if (rejectedForQualityReasons == "No image")
-    {
-        return KeyImageNote::NoImage;
-    }
-    else if (rejectedForQualityReasons == "Detector artifact(s)")
-    {
-        return KeyImageNote::DetectorArtifacts;
-    }
-    else if (rejectedForQualityReasons == "Artifact(s) other than grid or detector artifact")
-    {
-        return KeyImageNote::ArtifactsOtherThanGridOrDetectorArtifact;
-    }
-    else if (rejectedForQualityReasons == "Mechanical failure")
-    {
-        return KeyImageNote::MechanicalFailure;
-    }
-    else if (rejectedForQualityReasons == "Electrical failure")
-    {
-        return KeyImageNote::ElectricalFailure;
-    }
-    else if (rejectedForQualityReasons == "Software failure")
-    {
-        return KeyImageNote::SoftwareFailure;
-    }
-    else if (rejectedForQualityReasons == "Inappropiate image processing")
-    {
-        return KeyImageNote::InappropiateImageProcessing;
-    }
-    else if (rejectedForQualityReasons == "Other failure")
-    {
-        return KeyImageNote::OtherFailure;
-    }
-    else if (rejectedForQualityReasons == "Unknown failure")
-    {
-        return KeyImageNote::UnknownFailure;
-    }
-    else if (rejectedForQualityReasons == "Double exposure")
-    {
-        return KeyImageNote::DoubleExposure;
-    }
-    else
-    {
-        return KeyImageNote::NoneRejectedForQualityReasons;
-    }
+    return enumeratorTypesList;
 }
 
 bool KeyImageNote::isDocumentTitleModifiedForQualityReasonsOrIssues(KeyImageNote::DocumentTitle documentTitle)
 {
     return documentTitle == KeyImageNote::RejectedForQualityReasonsDocumentTitle || documentTitle == KeyImageNote::QualityIssue;
 }
+
+KeyImageNote::RejectedForQualityReasons KeyImageNote::getRejectedForQualityReasonsInstanceFromString(const QString &rejectedForQualityReasons)
+{
+
+    bool foundEnumerator = false;
+    int i = 0;
+    int result = 0;
+    QMetaObject metaEnumerator = KeyImageNote::staticMetaObject;
+    
+    while(!foundEnumerator && i < metaEnumerator.enumeratorCount())
+    {
+        QMetaEnum enumType = metaEnumerator.enumerator(i);
+        
+        if (enumType.name() == QString("RejectedForQualityReasons"))
+        {
+            int j = 0;
+            while (j < enumType.keyCount() && !foundEnumerator)
+            {
+                if (getRejectedForQualityReasonsAsString(RejectedForQualityReasons(enumType.keyToValue(enumType.key(j)))) == rejectedForQualityReasons)
+                {
+                    foundEnumerator = true;
+                    result = enumType.keyToValue(enumType.key(j));
+                }
+                else
+                {
+                    j++;
+                }
+            }
+        }
+
+        i++;
+    }
+
+    return KeyImageNote::RejectedForQualityReasons(result);
 }
 
+KeyImageNote::DocumentTitle KeyImageNote::getDocumentTitleInstanceFromString(const QString &documentTitle)
+{
+    bool foundEnumerator = false;
+    int i = 0;
+    int result = 0;
+    QMetaObject metaEnumerator = KeyImageNote::staticMetaObject;
+    
+    while(!foundEnumerator && i < metaEnumerator.enumeratorCount())
+    {
+        QMetaEnum enumType = metaEnumerator.enumerator(i);
+        
+        if (enumType.name() == QString("DocumentTitle"))
+        {
+            int j = 0;
+            while (j < enumType.keyCount() && !foundEnumerator)
+            {
+                if (getDocumentTitleAsString(DocumentTitle(enumType.keyToValue(enumType.key(j)))) == documentTitle)
+                {
+                    foundEnumerator = true;
+                    result = enumType.keyToValue(enumType.key(j));
+                }
+                else
+                {
+                    j++;
+                }
+            }
+        }
+
+        i++;
+    }
+
+    return KeyImageNote::DocumentTitle(result);
+}
+}
