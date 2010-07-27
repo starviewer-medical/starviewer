@@ -27,6 +27,10 @@ public:
 public slots:
     /// Canvia el Key Image Note a mostrar
     void setKeyImageNote(KeyImageNote *keyImageNote);
+
+    /// Indica al Key Image Note Manager que s'ha de mostrar el KIN del Key Image Note displayer
+    void showKeyImageNote();
+
 private:
     /// Inicialitzacio del widget
     void fillKeyImageNoteDisplayer();

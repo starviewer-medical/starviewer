@@ -25,6 +25,7 @@ class KeyImageNoteManagerWidget;
 //Estructura pacient
 class Patient;
 class Study;
+class Image;
 //Visualitzador
 class Q2DViewerWidget;
 class Q2DViewer;
@@ -91,6 +92,10 @@ public slots:
 
     /// Indica que cal canviar de llesca
     void changeSliceOfCurrentDisplayedViewer(int slice);
+
+    /// Genera un viewer per cada imatge rebuda
+    void showKeyImageNote(QList<Image*> referencedImages);
+
 #ifndef STARVIEWER_LITE
     /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
     void showPreviousStudiesWidget();

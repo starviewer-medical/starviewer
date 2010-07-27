@@ -226,6 +226,7 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     connect(m_patient, SIGNAL(patientFused()), SLOT(initializeKeyImageNoteManager()));
     connect(m_keyImageNoteManager, SIGNAL(changeCurrentSlice(int)), SLOT(changeSliceOfCurrentDisplayedViewer(int)));
+    connect(m_keyImageNoteManager, SIGNAL(showImagesReferencedInKeyImageNote(QList<Image*>)), SLOT(showKeyImageNote(QList<Image*>)));
 
 #endif
 }
@@ -697,6 +698,17 @@ void Q2DViewerExtension::changeToPreviousStudiesDefaultIcon()
     m_previousStudiesToolButton->setIcon( QIcon( QString(":images/cal.png") ) );
 }
 
+void Q2DViewerExtension::showKeyImageNote(QList<Image*> referencedImages)
+{
+    m_workingArea->setGrid(1, referencedImages.count());
+
+    for (int j = 0; j < referencedImages.count(); j++)
+    {
+        Volume *volume = new Volume();
+        volume->addImage(referencedImages.at(j));
+        m_workingArea->getViewerWidget(j)->getViewer()->setInput(volume);
+    }
+}
 void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
 {
     Study * recentStudy = NULL;

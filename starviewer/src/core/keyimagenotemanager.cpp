@@ -197,4 +197,9 @@ void KeyImageNoteManager::changeCurrentDisplayedImage(const QString &seriesInsta
     }
 }
 
+void KeyImageNoteManager::showKeyImageNote(KeyImageNote *keyImageNote)
+{
+    emit showImagesReferencedInKeyImageNote(keyImageNote->getReferencedImages());
+}
+
 }

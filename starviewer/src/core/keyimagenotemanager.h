@@ -28,6 +28,9 @@ public:
     /// Afegeix una imatge a la seleccio actual si no la tenim
     void addImageToTheCurrentSelectionOfImages(Image *image);
 
+    /// Obte les imatges del Key Image Note disponibles i emet un senyal perque siguin visualitzades
+    void showKeyImageNote(KeyImageNote *keyImageNote);
+
 public slots:
     /// Crea un Key Image Note donat d'alta per l'usuari
     void generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode);
@@ -47,6 +50,9 @@ signals:
 
     /// Assenyala que cal posicionar-nos a la llesca
     void changeCurrentSlice(int sliceNumber);
+
+    /// Indica que cal mostrar les imatges d'un Key Image Note
+    void showImagesReferencedInKeyImageNote(QList<Image*> referencedImage);
 
 private:
     /// Cerca de tots els Key Image Notes
