@@ -15,6 +15,7 @@
 #include "editortooldata.h"
 #include "diffusionperfusionsegmentationsettings.h"
 #include "patientbrowsermenu.h"
+#include "transferfunction.h"
 // Qt
 #include <QMessageBox>
 #include <QFileDialog>
@@ -22,7 +23,6 @@
 #include <vtkActor.h>
 #include <vtkImageActor.h>
 #include <vtkImageCast.h>
-#include <vtkImageMapToWindowLevelColors2.h>
 #include <vtkImageThreshold.h>
 #include <vtkLookupTable.h>
 #include <vtkRenderer.h>
@@ -387,7 +387,9 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut( int threshold )
     table->SetTupleValue( 0, tuple );
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_perfusion2DView->getWindowLevelMapper()->SetLookupTable( m_perfusionHueLut );
+    // Transformem la vtkLookupTable a TransferFunction
+    TransferFunction *transferFunction = new TransferFunction(m_perfusionHueLut);
+    m_perfusion2DView->setTransferFunction(transferFunction);
 }
 
 void QDifuPerfuSegmentationExtension::setMaxPerfusionImage( int max )
@@ -708,7 +710,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         table->SetTupleValue( 0, tuple );
         table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-        m_perfusion2DView->getWindowLevelMapper()->SetLookupTable( hueLut );
+        TransferFunction *hueTransferFunction = new TransferFunction(hueLut);
+        m_perfusion2DView->setTransferFunction(hueTransferFunction);
 
         vtkImageCast * imageCast = vtkImageCast::New();
         imageCast->SetInput( m_diffusionRescaledVolume->getVtkData() );

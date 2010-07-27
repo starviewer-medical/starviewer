@@ -20,6 +20,7 @@
 #include "../diffusionperfusionsegmentation/itkRegistre3DAffine.h"
 #include "strokesegmentationmethod.h"
 #include "glialestimationsettings.h"
+#include "transferfunction.h"
 
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -31,7 +32,6 @@
 // VTK
 #include <vtkCommand.h>
 #include <vtkLookupTable.h>
-#include <vtkImageMapToWindowLevelColors2.h> // Permet aplicar window/level amb imatges a color
 #include <vtkImageThreshold.h>
 
 // ITK
@@ -475,7 +475,8 @@ void QGlialEstimationExtension::createColorMap( )
     //unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_viewersLayout->getViewerWidget(1)->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    m_viewersLayout->getViewerWidget(1)->getViewer()->setTransferFunction(hueTransferFunction);
 
     m_viewersLayout->getViewerWidget(1)->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
     //Potser això fa que es recalculi dues vegades??
@@ -512,7 +513,8 @@ void QGlialEstimationExtension::createColorMap( double window, double level )
     table->SetTupleValue( 0, tuple );
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_viewersLayout->getViewerWidget(1)->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    m_viewersLayout->getViewerWidget(1)->getViewer()->setTransferFunction(hueTransferFunction);
 }
 
 void QGlialEstimationExtension::computeCBV( )

@@ -28,7 +28,7 @@
 #include "seedtool.h"
 #include "seedtooldata.h"
 #include "dicomtagreader.h"
-
+#include "transferfunction.h"
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
 
@@ -48,7 +48,6 @@
 // VTK
 #include <vtkCommand.h>
 #include <vtkLookupTable.h>
-#include <vtkImageMapToWindowLevelColors2.h> // Permet aplicar window/level amb imatges a color
 // ITK
 #include <itkImage.h>
 #include <itkImageFileWriter.h>
@@ -382,7 +381,8 @@ void QPerfusionMapReconstructionExtension::createColorMap( )
     unsigned char tuple2[4] = { 1, 1, 1, 1 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple2 );
 
-    m_2DView->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 
     m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
     //Potser això fa que es recalculi dues vegades??
@@ -424,7 +424,8 @@ void QPerfusionMapReconstructionExtension::createColorMap2( )
     //unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 
     m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
     //Potser això fa que es recalculi dues vegades??
@@ -459,7 +460,8 @@ void QPerfusionMapReconstructionExtension::createColorMap( double window, double
     table->SetTupleValue( 0, tuple );
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView->getViewer()->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap(DoubleImageType::Pointer image, Q2DViewer* viewer)
@@ -532,7 +534,9 @@ void QPerfusionMapReconstructionExtension::createColorMap(DoubleImageType::Point
     //table->SetTupleValue( 0, tuple );
     //table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    viewer->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    viewer->setTransferFunction(hueTransferFunction);
+    
     viewer->setWindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0);
 }
 
@@ -606,7 +610,9 @@ void QPerfusionMapReconstructionExtension::createColorMap(Volume::ItkImageType::
     //table->SetTupleValue( 0, tuple );
     //table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    viewer->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    viewer->setTransferFunction(hueTransferFunction);
+    
     viewer->setWindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0);
 }
 
