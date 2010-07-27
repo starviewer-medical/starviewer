@@ -16,7 +16,7 @@
 #include "toolmanager.h"
 #include "patientbrowsermenu.h"
 #include "vsireconstructionsettings.h"
-
+#include "transferfunction.h"
 //TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
 
@@ -30,7 +30,6 @@
 // VTK
 #include <vtkCommand.h>
 #include <vtkLookupTable.h>
-#include <vtkImageMapToWindowLevelColors2.h>
 // ITK
 #include <itkImage.h>
 #include <itkImageFileWriter.h>
@@ -429,7 +428,8 @@ void QVSIReconstructionExtension::createColorMap( )
     //unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    m_2DView->setTransferFunction(hueTransferFunction);
 
     m_2DView->setWindowLevel(1.0, m_mapMin - 1.0);
     //Potser això fa que es recalculi dues vegades??
@@ -474,7 +474,8 @@ void QVSIReconstructionExtension::createColorMap2( )
     //unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView_4->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    m_2DView_4->setTransferFunction(hueTransferFunction);
 
     m_2DView_4->setWindowLevel(1.0, m_mapMin - 1.0);
     //Potser això fa que es recalculi dues vegades??
@@ -511,7 +512,8 @@ void QVSIReconstructionExtension::createColorMap( double window, double level )
     table->SetTupleValue( 0, tuple );
     table->SetTupleValue( table->GetNumberOfTuples() - 1, tuple );
 
-    m_2DView->getWindowLevelMapper()->SetLookupTable( mapHueLut );
+    TransferFunction *hueTransferFunction = new TransferFunction(mapHueLut);
+    m_2DView->setTransferFunction(hueTransferFunction);
 }
 
 
