@@ -225,6 +225,8 @@ void Q2DViewerExtension::setInput( Volume *input )
     initializeSelectImageAction();
 
     connect(m_patient, SIGNAL(patientFused()), SLOT(initializeKeyImageNoteManager()));
+    connect(m_keyImageNoteManager, SIGNAL(changeCurrentSlice(int)), SLOT(changeSliceOfCurrentDisplayedViewer(int)));
+
 #endif
 }
 
@@ -584,6 +586,11 @@ void Q2DViewerExtension::toggleKeyImageNoteManagerWidget()
     {
         hideKeyImageNoteManagerWidget();
     }
+}
+
+void Q2DViewerExtension::changeSliceOfCurrentDisplayedViewer(int slice)
+{
+    m_workingArea->getViewerSelected()->getViewer()->setSlice(slice);
 }
 
 void Q2DViewerExtension::hideKeyImageNoteManagerWidget()

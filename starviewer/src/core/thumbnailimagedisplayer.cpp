@@ -16,6 +16,7 @@ const int ScaledBigThumbnailsSizeY = 200;/// Mida de la previsualitzacio de la i
 ThumbnailImageDisplayer::ThumbnailImageDisplayer(QWidget *parent): QWidget(parent)
 {
     setupUi(this);
+    createConnections();
 }
 
 ThumbnailImageDisplayer::~ThumbnailImageDisplayer()
@@ -67,11 +68,28 @@ void ThumbnailImageDisplayer::addImage(Image *image)
 
     item->setText(text);
     m_listImagesDisplayer->addItem(item);
+
+    // TODO El UID de la serie cal guardar-ho d'una manera molt millor
+
+    item->setStatusTip(image->getSOPInstanceUID());
+    m_HashImageSeries[image->getSOPInstanceUID()] = image->getParentSeries()->getInstanceUID();
 }
 
 void ThumbnailImageDisplayer::clearAllThumbnails()
 {
     m_listImagesDisplayer->clear();
+}
+
+void ThumbnailImageDisplayer::createConnections()
+{
+    connect(m_listImagesDisplayer, SIGNAL(itemDoubleClicked(QListWidgetItem *)), SLOT(showItem(QListWidgetItem * )));
+}
+
+void ThumbnailImageDisplayer::showItem(QListWidgetItem *item)
+{
+    QString imageInstanceUID = item->statusTip();
+    QString seriesInstanceUID = m_HashImageSeries.value(imageInstanceUID);
+    emit show(seriesInstanceUID, imageInstanceUID);
 }
 
 }

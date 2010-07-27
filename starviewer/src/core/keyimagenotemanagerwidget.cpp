@@ -40,6 +40,7 @@ void KeyImageNoteManagerWidget::createConnectionsWithKeyImageNoteManager()
     connect(m_keyImageNoteManager, SIGNAL(currentSelectionCleared()), m_thumbnailImageDisplayer, SLOT(clearAllThumbnails()));
     connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), m_thumbnailImageDisplayer, SLOT(addImage(Image*)));
     connect(m_keyImageNoteManager, SIGNAL(keyImageNoteOfPatientAdded(KeyImageNote*)), SLOT(createKeyImageNoteDisplayer(KeyImageNote*)));
+    connect(m_thumbnailImageDisplayer, SIGNAL(show(const QString &, const QString &)), m_keyImageNoteManager, SLOT(changeCurrentDisplayedImage(const QString &, const QString &)));
 }
 
 void KeyImageNoteManagerWidget::createConnections()
@@ -49,20 +50,19 @@ void KeyImageNoteManagerWidget::createConnections()
 
 void KeyImageNoteManagerWidget::generateKeyImageNoteDisplayers()
 {
-    if (m_keyImageNoteManager)
+    foreach (KeyImageNote *keyImageNote, m_keyImageNoteManager->getKeyImageNotesOfPatient())
     {
-        foreach (KeyImageNote *keyImageNote, m_keyImageNoteManager->getKeyImageNotesOfPatient())
-        {
-            createKeyImageNoteDisplayer(keyImageNote);
-        }
+        createKeyImageNoteDisplayer(keyImageNote);
     }
-    
+
     m_isKeyImageNoteManagerDataLoaded = true;
 }
 
 void KeyImageNoteManagerWidget::createKeyImageNoteDisplayer(KeyImageNote *keyImageNote)
 {
-    KeyImageNoteDisplayer *keyImageNoteDisplayer = new KeyImageNoteDisplayer(keyImageNote);
+    KeyImageNoteDisplayer *keyImageNoteDisplayer = new KeyImageNoteDisplayer();
+    keyImageNoteDisplayer->setKeyImageNote(keyImageNote);
+    keyImageNoteDisplayer->setKeyImageNoteManager(m_keyImageNoteManager);
     m_layout->addWidget(keyImageNoteDisplayer);
 }
 

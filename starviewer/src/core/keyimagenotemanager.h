@@ -32,6 +32,9 @@ public slots:
     /// Crea un Key Image Note donat d'alta per l'usuari
     void generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode);
 
+    /// Busquem la imatge segons els parametres i enviem un senyal per a canviar la llesca que ens indica la imatge
+    void changeCurrentDisplayedImage(const QString &seriesInstanceUID, const QString &imageInstanceUID);
+
 signals:
     /// Senyala que s'ha afegit una nova imatge a la seleccio
     void imageAddedToTheCurrentSelectionOfImages(Image *image);
@@ -42,6 +45,8 @@ signals:
     /// Senyala que s'ha afegit un Key Image Note a l'estudi
     void keyImageNoteOfPatientAdded(KeyImageNote *keyImageNote);
 
+    /// Assenyala que cal posicionar-nos a la llesca
+    void changeCurrentSlice(int sliceNumber);
 
 private:
     /// Cerca de tots els Key Image Notes

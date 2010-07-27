@@ -172,4 +172,29 @@ bool KeyImageNoteManager::allImagesInTheSameStudy()
     return i == m_currentSelection.size();
 }
 
+void KeyImageNoteManager::changeCurrentDisplayedImage(const QString &seriesInstanceUID, const QString &imageInstanceUID)
+{
+    Series * series = m_patient->getSeries(seriesInstanceUID);
+
+    if (series != NULL)
+    {
+        int i = 0;
+        Image *image = NULL;
+        while (!image && i < series->getNumberOfImages())
+        {
+            if (series->getImages().at(i)->getSOPInstanceUID() == imageInstanceUID)
+            {
+                image = series->getImages().at(i);
+            }
+
+            i++;
+        }
+
+        if (image != NULL)
+        {
+            emit changeCurrentSlice(image->getOrderNumberInVolume());
+        }
+    }
+}
+
 }

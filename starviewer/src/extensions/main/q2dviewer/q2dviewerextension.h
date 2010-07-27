@@ -89,6 +89,8 @@ public slots:
     /// Amaga el Key Image Note Manager Widget
     void hideKeyImageNoteManagerWidget();
 
+    /// Indica que cal canviar de llesca
+    void changeSliceOfCurrentDisplayedViewer(int slice);
 #ifndef STARVIEWER_LITE
     /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
     void showPreviousStudiesWidget();

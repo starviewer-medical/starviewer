@@ -26,13 +26,29 @@ public:
     /// Estableix la mida de les previsualitzacions
     void setThumbnailSize(ThumbnailSize thumbnailSize);
 
- public slots:
+signals:
+
+    /// Determina que cal mostrar la icona amb la informacio de serie i imatge
+    void show(const QString &seriesInstanceUID, const QString &imageInstanceUID);
+
+public slots:
 
     /// Afegeix la previsualitzacio de la imatge image
     void addImage(Image *image);
 
     /// Elimina totes les previsualitzacions.
     void clearAllThumbnails();
+
+    /// Obte la informacio d'un item i executa el signal de mostrar
+    void showItem(QListWidgetItem *item);
+
+private:
+    /// Crea les connexions de signals i slots
+    void createConnections();
+
+private:
+/// Guardem per cada imatge a la serie que pertany
+    QHash<QString, QString> m_HashImageSeries;
 };
 
 }

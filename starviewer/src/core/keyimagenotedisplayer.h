@@ -7,6 +7,7 @@ namespace udg {
 
 class Image;
 class KeyImageNote;
+class KeyImageNoteManager;
 
 /**
 Widget que s'encarrega de mostrar la informacio referida a un Key Image Note
@@ -17,9 +18,15 @@ class KeyImageNoteDisplayer : public QWidget, private Ui::KeyImageNoteDisplayerB
 {
 Q_OBJECT
 public:
-    KeyImageNoteDisplayer(KeyImageNote *keyImageNote, QWidget *parent = 0);
+    KeyImageNoteDisplayer(QWidget *parent = 0);
     ~KeyImageNoteDisplayer();
 
+    /// Estableix amb quin Key Image Note Manager s'ha de comunicar i estableix les seves connexions
+    void setKeyImageNoteManager(KeyImageNoteManager *m_keyImageNoteManager);
+
+public slots:
+    /// Canvia el Key Image Note a mostrar
+    void setKeyImageNote(KeyImageNote *keyImageNote);
 private:
     /// Inicialitzacio del widget
     void fillKeyImageNoteDisplayer();
@@ -30,6 +37,9 @@ private:
 private:
     /// Referencia al Key Image Note que mostrem
     KeyImageNote *m_keyImageNote;
+
+    /// Referencia al Key Image Note Manager al que pertany i es comunica
+    KeyImageNoteManager *m_keyImageNoteManager;
 };
 
 }
