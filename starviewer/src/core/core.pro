@@ -18,7 +18,8 @@ FORMS += qlogviewerbase.ui \
     keyimagenotemanagerwidgetbase.ui \
     keyimagenotedisplayerbase.ui \
     keyimagenotecreatorwidgetbase.ui \
-    thumbnailimagedisplayer.ui
+    thumbnailimagedisplayer.ui \
+    keyimagenotetoolwidgetbase.ui
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -226,7 +227,9 @@ HEADERS += extensionfactory.h \
     keyimagenotemanager.h \
     dicomreferencedimage.h \
     thumbnailimagedisplayer.h \
-    keyimagenotecreatorwidget.h
+    keyimagenotecreatorwidget.h \
+    keyimagenotetool.h \
+    keyimagenotetoolwidget.h 
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -410,7 +413,9 @@ SOURCES += extensionmediator.cpp \
     keyimagenotemanager.cpp \
     dicomreferencedimage.cpp \
     thumbnailimagedisplayer.cpp \
-    keyimagenotecreatorwidget.cpp
+    keyimagenotecreatorwidget.cpp \
+    keyimagenotetool.cpp \
+    keyimagenotetoolwidget.cpp
 INCLUDEPATH += ../inputoutput
 TEMPLATE = lib
 DESTDIR = ./

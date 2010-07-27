@@ -429,6 +429,9 @@ void Q2DViewerExtension::initializeTools()
     connect( m_toolManager->getRegisteredToolAction("Cursor3DTool"), SIGNAL( triggered() ), SLOT( disableSynchronization() ) );
 #endif
 
+    m_keyImageNoteToolAction = m_toolManager->registerTool("KeyImageNoteTool");
+    m_toolManager->triggerTool("KeyImageNoteTool");
+
     // SCREEN SHOT TOOL
     // activem l'eina d'screen shot, que sempre estarà activa
     // TODO tot això es podria convertir més endavant en dues Action Tools en comptes d'aquesta Tool

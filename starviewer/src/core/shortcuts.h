@@ -56,6 +56,7 @@ public:
     static const QString CloseCurrentExtension;
     static const QString CloseApplication;
     static const QString FullScreen;
+    static const QString KeyImageNoteTool;
 
 
 };

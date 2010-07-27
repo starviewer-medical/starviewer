@@ -49,6 +49,7 @@ const QString Shortcuts::Preferences( ShortcutsBase + "Preferences" );
 const QString Shortcuts::CloseCurrentExtension( ShortcutsBase + "CloseViewer" );
 const QString Shortcuts::CloseApplication( ShortcutsBase + "CloseApp" );
 const QString Shortcuts::FullScreen( ShortcutsBase + "FullScreen" );
+const QString Shortcuts::KeyImageNoteTool( ShortcutsBase + "KeyImageNoteTool" );
 
 Shortcuts::Shortcuts()
 {
@@ -97,6 +98,10 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append( QString("D") );
     settingsRegistry->addSetting( DistanceTool, shortcutsList );
+
+    shortcutsList.clear();
+    shortcutsList.append( QString("Ctrl+K") );
+    settingsRegistry->addSetting( KeyImageNoteTool, shortcutsList );
 
     shortcutsList.clear();
     shortcutsList.append( QString("R") );

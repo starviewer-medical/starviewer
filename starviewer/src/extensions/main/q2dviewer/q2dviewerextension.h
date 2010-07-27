@@ -192,6 +192,7 @@ private:
     QAction *m_multipleShotAction;
     QAction *m_screenShotTriggerAction;
     QAction *m_selectImageAction;
+    QAction *m_keyImageNoteToolAction;
 
 #ifndef STARVIEWER_LITE
     QAction *m_sagitalViewAction;

@@ -28,6 +28,9 @@ public:
     /// Afegeix una imatge a la seleccio actual si no la tenim
     void addImageToTheCurrentSelectionOfImages(Image *image);
 
+    /// Retorna una llista de tots els Key Image Notes del Pacient en els que hi ha referenciada la imatge
+    static QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesWhereImageIsReferenced(Patient *patient, Image *image);
+
     /// Obte les imatges del Key Image Note disponibles i emet un senyal perque siguin visualitzades
     void showKeyImageNote(KeyImageNote *keyImageNote);
 
@@ -56,7 +59,7 @@ signals:
 
 private:
     /// Cerca de tots els Key Image Notes
-    void searchKeyImageNotes();
+    static QList<KeyImageNote*> searchKeyImageNotes(Patient *patient);
 
     /// Crea un nou Key Image Note a partir de les dades de parametre.
     KeyImageNote* createNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription);

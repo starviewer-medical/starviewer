@@ -23,9 +23,11 @@ KeyImageNoteManager::~KeyImageNoteManager()
 {
 }
 
-void KeyImageNoteManager::searchKeyImageNotes()
+QList<KeyImageNote*> KeyImageNoteManager::searchKeyImageNotes(Patient *patient)
 {
-    foreach (Study *study, m_patient->getStudies())
+    QList<KeyImageNote*> keyImageNotesOfPatient;
+
+    foreach (Study *study, patient->getStudies())
     {
         foreach (Series *series, study->getSeries())
         {
@@ -33,11 +35,13 @@ void KeyImageNoteManager::searchKeyImageNotes()
             {
                 foreach (KeyImageNote *keyImageNote, series->getKeyImageNotes())
                 {
-                    m_KeyImageNotesOfPatient.append(keyImageNote);
+                    keyImageNotesOfPatient.append(keyImageNote);
                 }
             }
         }
     }
+
+    return keyImageNotesOfPatient;
 }
 
 QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesOfPatient()
@@ -45,7 +49,7 @@ QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesOfPatient()
     if (!m_KeyImageNotesOfPatientSearched)
     {
         m_KeyImageNotesOfPatientSearched = true;
-        searchKeyImageNotes();
+        m_KeyImageNotesOfPatient = KeyImageNoteManager::searchKeyImageNotes(m_patient);
     }
 
     return m_KeyImageNotesOfPatient;
@@ -170,6 +174,33 @@ bool KeyImageNoteManager::allImagesInTheSameStudy()
     }
 
     return i == m_currentSelection.size();
+}
+
+QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesWhereImageIsReferenced(Patient *patient, Image *image)
+{
+    QList <KeyImageNote*> keyImageNotesOfImage;
+
+    foreach (Study *study, patient->getStudies())
+    {
+        foreach (Series *series, study->getSeries())
+        {
+            if (series->getModality() == "KO")
+            {
+                foreach (KeyImageNote *keyImageNote, series->getKeyImageNotes())
+                {
+                    foreach(DICOMReferencedImage *referencedImage, keyImageNote->getDICOMReferencedImages())
+                    {
+                        if (image->getSOPInstanceUID() == referencedImage->getDICOMReferencedImageSOPInstanceUID() && image->getFrameNumber() == referencedImage->getFrameNumber())
+                        {
+                            keyImageNotesOfImage.append(keyImageNote);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return keyImageNotesOfImage;
 }
 
 void KeyImageNoteManager::changeCurrentDisplayedImage(const QString &seriesInstanceUID, const QString &imageInstanceUID)

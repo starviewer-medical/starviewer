@@ -34,7 +34,7 @@
 #include "clippingplanestool.h"
 #include "transdifferencetool.h"
 #include "linepathtool.h"
-
+#include "keyimagenotetool.h"
 #include "shortcutmanager.h"
 #include "shortcuts.h"
 
@@ -153,6 +153,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "LinePathTool" )
     {
         tool = new LinePathTool( viewer );
+    }
+    else if( toolName == "KeyImageNoteTool" )
+    {
+        tool = new KeyImageNoteTool( viewer );
     }
     else
     {
@@ -361,6 +365,14 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Line Path") );
         toolAction->setIcon( QIcon(":/images/linePath.png") );
         toolAction->setStatusTip( tr("Enable/Disable line path tool") );
+    }
+    else if( toolName == "KeyImageNoteTool" )
+    {
+        toolAction->setText( tr("KeyImageNoteTool") );
+        toolAction->setIcon( QIcon(":/images/kin.png") );
+        toolAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::KeyImageNoteTool ) );
+        statusTip = tr("Enable/Disable KeyImageNote tool");
+        toolTip = toolAction->text();
     }
     else
     {
