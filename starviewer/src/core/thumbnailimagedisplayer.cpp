@@ -2,6 +2,8 @@
 #include "image.h"
 #include "series.h"
 
+#include <QContextMenuEvent>
+
 namespace udg {
 
 const int ScaledSmallThumbnailsSizeX = 50;/// Mida de la previsualitzacio de la imatge escalada a l'eix x Petita
@@ -92,4 +94,28 @@ void ThumbnailImageDisplayer::showItem(QListWidgetItem *item)
     emit show(seriesInstanceUID, imageInstanceUID);
 }
 
+void ThumbnailImageDisplayer::setContextMenu(QMenu *contextMenu)
+{
+    m_contextMenu = contextMenu;
+}
+
+void ThumbnailImageDisplayer::contextMenuEvent(QContextMenuEvent *event)
+{
+    if (!m_listImagesDisplayer->selectedItems().isEmpty())
+    {
+        m_contextMenu->exec(event->globalPos());
+    }
+}
+
+QStringList ThumbnailImageDisplayer::removeSelectedItems()
+{
+    QStringList removedItemsUID;
+    foreach (QListWidgetItem *item, m_listImagesDisplayer->selectedItems())
+    {
+        removedItemsUID << item->statusTip();
+        delete item;
+    }
+
+    return removedItemsUID;
+}
 }

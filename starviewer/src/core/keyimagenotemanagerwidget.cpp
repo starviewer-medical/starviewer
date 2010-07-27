@@ -4,12 +4,14 @@
 #include "keyimagenotedisplayer.h"
 #include "keyimagenotecreatorwidget.h"
 
+#include <QShortcut>
+
 namespace udg {
 
 KeyImageNoteManagerWidget::KeyImageNoteManagerWidget(QWidget *parent): QWidget(parent), m_keyImageNoteManager(0), m_keyImageNoteCreator(0)
 {
     setupUi(this);
-    m_thumbnailImageDisplayer->setThumbnailSize(ThumbnailImageDisplayer::Medium);
+    initializeThumbnailImageDisplayer();
     createConnections();
 }
 
@@ -76,4 +78,18 @@ void KeyImageNoteManagerWidget::showKeyImageNoteCreatorWidget()
     m_keyImageNoteCreator->exec();
 }
 
+void KeyImageNoteManagerWidget::initializeThumbnailImageDisplayer()
+{
+    m_thumbnailImageDisplayer->setThumbnailSize(ThumbnailImageDisplayer::Medium);
+
+    QMenu *contextMenuThumbnailImageDisplayer = new QMenu();
+    contextMenuThumbnailImageDisplayer->addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromCurrentSelection()), Qt::Key_Delete);
+    m_thumbnailImageDisplayer->setContextMenu(contextMenuThumbnailImageDisplayer);
+}
+
+void KeyImageNoteManagerWidget::deleteSelectedItemsFromCurrentSelection()
+{
+    QStringList removedItems = m_thumbnailImageDisplayer->removeSelectedItems();
+    m_keyImageNoteManager->removeItemsOfCurrentSelection(removedItems);
+}
 }

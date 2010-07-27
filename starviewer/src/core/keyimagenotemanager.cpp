@@ -233,4 +233,24 @@ void KeyImageNoteManager::showKeyImageNote(KeyImageNote *keyImageNote)
     emit showImagesReferencedInKeyImageNote(keyImageNote->getReferencedImages());
 }
 
+void KeyImageNoteManager::removeItemsOfCurrentSelection(QStringList removedItems)
+{
+    // TODO: Falta considerar el numero de frame
+    foreach (QString currentItem, removedItems)
+    {
+        bool found = false;
+        int i = 0;
+        while (!found && i < m_currentSelection.size())
+        {
+            if (m_currentSelection.at(i)->getSOPInstanceUID() == currentItem)
+            {
+                m_currentSelection.removeAt(i);
+                found = true;
+            }
+
+            i++;
+        }
+    }
+}
+
 }

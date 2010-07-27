@@ -34,6 +34,9 @@ public:
     /// Obte les imatges del Key Image Note disponibles i emet un senyal perque siguin visualitzades
     void showKeyImageNote(KeyImageNote *keyImageNote);
 
+    /// Eliminem de la seleccio actual tots aquells elements que ens especifica la llista removedItems
+    void removeItemsOfCurrentSelection(QStringList removedItems);
+
 public slots:
     /// Crea un Key Image Note donat d'alta per l'usuari
     void generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode);

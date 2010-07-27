@@ -34,6 +34,9 @@ public slots:
     /// Creacio de un Key Image Note Displayer a partir d'un Key Image Note
     void createKeyImageNoteDisplayer(KeyImageNote *keyImageNote);
 
+    /// Esborra els elements seleccionats de la meva seleccio
+    void deleteSelectedItemsFromCurrentSelection();
+
 private:
     /// Inicialitza els Key Image Note Displayers
     void generateKeyImageNoteDisplayers();
@@ -43,6 +46,9 @@ private:
 
     /// Crea les connexions propies del Key Image Note Manager Widget
     void createConnections();
+
+    /// Inicialitza el ThumbnailImageDisplayer de la meva seleccio
+    void initializeThumbnailImageDisplayer();
 
 private:
     /// Key Image Note Manager amb el qual interactua el Key Image Note Manager Widget

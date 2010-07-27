@@ -52,7 +52,7 @@
       <enum>Qt::WheelFocus</enum>
      </property>
      <property name="contextMenuPolicy">
-      <enum>Qt::NoContextMenu</enum>
+      <enum>Qt::DefaultContextMenu</enum>
      </property>
      <property name="frameShape">
       <enum>QFrame::Panel</enum>
@@ -73,7 +73,7 @@
       <enum>QAbstractItemView::NoDragDrop</enum>
      </property>
      <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
+      <enum>QAbstractItemView::MultiSelection</enum>
      </property>
      <property name="verticalScrollMode">
       <enum>QAbstractItemView::ScrollPerItem</enum>
