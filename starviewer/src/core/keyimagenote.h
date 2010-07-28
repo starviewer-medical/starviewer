@@ -110,7 +110,7 @@ public:
     
     /// Obtenir/Assignar els UID referenciats al Key Image Note
     QList<DICOMReferencedImage*> getDICOMReferencedImages() const;
-    void setDICOMReferencedImages(QList <DICOMReferencedImage*> &referencedImageList);
+    void setDICOMReferencedImages(QList<DICOMReferencedImage*> referencedImageList);
 
     /// Obtenir les imatges referenciades al Key Image Note
     QList<Image*> getReferencedImages();

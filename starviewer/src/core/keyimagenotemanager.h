@@ -29,7 +29,7 @@ public:
     void addImageToTheCurrentSelectionOfImages(Image *image);
 
     /// Retorna una llista de tots els Key Image Notes del Pacient en els que hi ha referenciada la imatge
-    static QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesWhereImageIsReferenced(Patient *patient, Image *image);
+    static QList<KeyImageNote*> getKeyImageNotesWhereImageIsReferenced(Patient *patient, Image *image);
 
     /// Obte les imatges del Key Image Note disponibles i emet un senyal perque siguin visualitzades
     void showKeyImageNote(KeyImageNote *keyImageNote);

@@ -60,7 +60,7 @@ QList<DICOMReferencedImage*> KeyImageNote::getDICOMReferencedImages() const
     return m_DICOMReferencedImages;
 }
 
-void KeyImageNote::setDICOMReferencedImages(QList<DICOMReferencedImage*> &referencedImageList)
+void KeyImageNote::setDICOMReferencedImages(QList<DICOMReferencedImage*> referencedImageList)
 {
     m_DICOMReferencedImages = referencedImageList;
     foreach (DICOMReferencedImage *referencedImage, m_DICOMReferencedImages) 
