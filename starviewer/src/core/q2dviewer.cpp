@@ -1002,11 +1002,6 @@ void Q2DViewer::resetCamera()
     }
 }
 
-vtkImageMapToWindowLevelColors2 *Q2DViewer::getWindowLevelMapper() const
-{
-    return m_windowLevelLUTMapper;
-}
-
 void Q2DViewer::setSlice( int value )
 {
     if( this->m_mainVolume && this->m_currentSlice != value )
@@ -1117,7 +1112,7 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
     m_transferFunction = transferFunction;
     // Apliquem la funció de transferència sobre el window level mapper
-    getWindowLevelMapper()->SetLookupTable(m_transferFunction->getColorTransferFunction());
+    m_windowLevelLUTMapper->SetLookupTable(m_transferFunction->getColorTransferFunction());
 }
 
 void Q2DViewer::getCurrentWindowLevel( double wl[2] )
