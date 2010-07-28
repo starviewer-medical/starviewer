@@ -35,63 +35,62 @@ class ImageOrientationOperationsMapper;
 
 /**
 
-Classe base per als visualitzadors 2D.
+    Classe base per als visualitzadors 2D.
 
-El mode d'operació habitual serà el de visualitar un sol volum.
-Normalment per poder visualitzar un volum farem el següent
-\code
-Q2DViewer* visor = new Q2DViewer();
-visor->setInput( volum );
+    El mode d'operació habitual serà el de visualitar un sol volum.
+    Normalment per poder visualitzar un volum farem el següent
+    \code
+    Q2DViewer* visor = new Q2DViewer();
+    visor->setInput(volum);
 
-En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat amb el mètode setOverlayInput().
-Quan solapem volums tenim 1 manera de solapar aquests volums, aplicant un blending,
-en aquest cas hauríem de fer servir el mètode setOverlapMethod() indicant una de les opcions (de moment únicament Blend)
-\TODO acabar la doc sobre solapament
+    En el cas que desitjem solapar dos volums haurem d'indicar el volum solapat amb el mètode setOverlayInput().
+    Quan solapem volums tenim 1 manera de solapar aquests volums, aplicant un blending,
+    en aquest cas hauríem de fer servir el mètode setOverlapMethod() indicant una de les opcions (de moment únicament Blend)
+    \TODO acabar la doc sobre solapament
 
-Per defecte el visualitzador mostra la primera imatge en Axial. Per les altres vistes (Sagital i Coronal) mostraria la imatge central
+    Per defecte el visualitzador mostra la primera imatge en Axial. Per les altres vistes (Sagital i Coronal) mostraria la imatge central
 
-Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums.
-Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation()
-que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
+    Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums.
+    Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation()
+    que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
 
-@author Grup de Gràfics de Girona  ( GGG )
+    @author Grup de Gràfics de Girona  (GGG )
 */
-class Q2DViewer : public QViewer{
+class Q2DViewer : public QViewer {
 Q_OBJECT
 public:
     /// Tipus de solapament dels models
-    enum OverlapMethod{ None, Blend };
+    enum OverlapMethod { None, Blend };
 
     /// Alineament de la imatge (dreta, esquerre, centrat)
-    enum AlignPosition{ AlignCenter, AlignRight, AlignLeft };
+    enum AlignPosition { AlignCenter, AlignRight, AlignLeft };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlag{ NoAnnotation = 0x0 , WindowInformationAnnotation = 0x1 , PatientOrientationAnnotation = 0x2 , RulersAnnotation = 0x4 , SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40,
-    AllAnnotation = 0x7F };
+    enum AnnotationFlag { NoAnnotation = 0x0, WindowInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, RulersAnnotation = 0x4, SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40, AllAnnotation = 0x7F };
     Q_DECLARE_FLAGS(AnnotationFlags, AnnotationFlag)
 
-    Q2DViewer( QWidget *parent = 0 );
+    Q2DViewer(QWidget *parent = 0);
     ~Q2DViewer();
 
     /// Ens retorna la vista que tenim en aquells moments del volum
     CameraOrientationType getView() const;
 
     /// Assigna/Retorna el volum solapat
-    void setOverlayInput( Volume *volume );
-    Volume *getOverlayInput();
+    void setOverlayInput(Volume *volume);
+    Volume* getOverlayInput();
 
     /// Indiquem que cal actualitzar l'Overlay actual
     void updateOverlay();
 
     /// Assignem l'opacitat del volum solapat. 
     /// Els valors podran anar de 0.0 a 1.0, on 0.0 és transparent i 1.0 és completament opac.
-    void setOverlayOpacity( double opacity );
+    void setOverlayOpacity(double opacity);
 
     /// Obté el window level actual de la imatge
     /// TODO els mètodes no es criden enlloc, mirar si són necessaris o no
     double getCurrentColorWindow();
     double getCurrentColorLevel();
-    void getCurrentWindowLevel( double wl[2] );
+    void getCurrentWindowLevel(double wl[2]);
 
     /// Retorna la llesca/fase actual
     int getCurrentSlice() const;
@@ -101,7 +100,7 @@ public:
      * Ens retorna el drawer per poder pintar-hi primitives
      * @return Objecte drawer del viewer
      */
-    Drawer *getDrawer() const;
+    Drawer* getDrawer() const;
 
     /**
      * Calcula la coordenada de la imatge que es troba per sota del cursor en coordenades de món
@@ -109,7 +108,7 @@ public:
      * @param xyz[] La coordenada de la imatge, en sistema de coordenades de món
      * @return Cert si el cursor es troba dins de la imatge, fals altrament
      */
-    bool getCurrentCursorImageCoordinate( double xyz[3] );
+    bool getCurrentCursorImageCoordinate(double xyz[3]);
 
     /**
      * Ens retorna la imatge que s'està visualitzant en aquell moment
@@ -117,7 +116,7 @@ public:
      * en un futur o sigui substituit per un altre
      * @return Objecte Image corresponent al que es visualitza en aquell moment. NULL si no es veu cap imatge
      */
-    Image *getCurrentDisplayedImage() const;
+    Image* getCurrentDisplayedImage() const;
 
     /**
      * Ens dóna el pla d'imatge actual que estem visualitzant
@@ -126,7 +125,7 @@ public:
      * ATENCIÓ: Només es donarà aquest paràmetre (amb valor true) en casos que realment se sàpiga el que s'està fent!
      * @return El pla imatge actual
      */
-    ImagePlane *getCurrentImagePlane( bool vtkReconstructionHack = false );
+    ImagePlane* getCurrentImagePlane(bool vtkReconstructionHack = false);
 
     /**
      * Ens dóna el pla d'imatge de la llesca
@@ -135,7 +134,7 @@ public:
      * ATENCIÓ: Només es donarà aquest paràmetre (amb valor true) en casos que realment se sàpiga el que s'està fent!
      * @return El pla imatge de la llesca
      */
-    ImagePlane *getImagePlane( int sliceNumber, int phaseNumber, bool vtkReconstructionHack = false );
+    ImagePlane* getImagePlane(int sliceNumber, int phaseNumber, bool vtkReconstructionHack = false);
 
     /**
      * donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
@@ -145,7 +144,7 @@ public:
      * @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
      * per casos en que el pla "real" no és el que volem i necessitem una petita modificació
      */
-    void projectDICOMPointToCurrentDisplayedImage( const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false );
+    void projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
 
     /// Retorna el thickness
     /// TODO potser un nom més correcte seria getCurrentSliceThickness() ja que podríem tenir imatges amb diferents thickness
@@ -159,7 +158,7 @@ public:
      */
     /// TODO podria ser protected o private, ningú necessita aquestes dades fora del visor
     void getSliceRange(int &min, int &max);
-    int *getSliceRange();
+    int* getSliceRange();
 
     /**
      * Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
@@ -197,10 +196,10 @@ public:
      * @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
      * es modificarà perquè caigui dins dels límits de la imatge
      */
-    void putCoordinateInCurrentImageBounds( double xyz[3] );
+    void putCoordinateInCurrentImageBounds(double xyz[3]);
 
     ///Retorna la informació de la llesca actual del visualitzador
-    vtkImageData *getCurrentSlabProjection();
+    vtkImageData* getCurrentSlabProjection();
 
     /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
     /// indicant on està la dreta/esquerra, cap/peu, davant/darrere del pacient
@@ -215,15 +214,15 @@ public:
     /// Obté els índexs dels eixos de coordenades corresponents a la vista 2D indicada
     /// Aquests índexs indiquen com hem d'indexar una coordenada 3D per obtenir 
     /// la corresponent projecció sobre la vista 2D sobre la que estem operant
-    static void getXYZIndexesForView( int &x, int &y, int &z, int view );
-    static int getXIndexForView( int view );
-    static int getYIndexForView( int view );
-    static int getZIndexForView( int view );
+    static void getXYZIndexesForView(int &x, int &y, int &z, int view);
+    static int getXIndexForView(int view);
+    static int getYIndexForView(int view);
+    static int getZIndexForView(int view);
 
 public slots:
-    virtual void setInput( Volume *volume );
+    virtual void setInput(Volume *volume);
 
-    void resetView( CameraOrientationType view );
+    void resetView(CameraOrientationType view);
     void resetViewToAxial();
     void resetViewToCoronal();
     void resetViewToSagital();
@@ -241,31 +240,31 @@ public slots:
     void setSlice(int value);
 
     /// canvia la fase en que es veuen les llesques si n'hi ha
-    void setPhase( int value );
+    void setPhase(int value);
 
     /// Indica el tipu de solapament dels volums, per defecte blending
-    void setOverlapMethod( OverlapMethod method );
+    void setOverlapMethod(OverlapMethod method);
     void setOverlapMethodToNone();
     void setOverlapMethodToBlend();
 
     /// Afegir o treure la visibilitat d'una anotació textual/gràfica
-    void enableAnnotation( AnnotationFlags annotation, bool enable = true );
-    void removeAnnotation( AnnotationFlags annotation );
+    void enableAnnotation(AnnotationFlags annotation, bool enable = true);
+    void removeAnnotation(AnnotationFlags annotation);
 
     void setWindowLevel(double window, double level);
     void setTransferFunction(TransferFunction *transferFunction);
 
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
     /// TODO aquest mètode hauria de quedar obsolet
-    void setSeedPosition( double pos[3] );
+    void setSeedPosition(double pos[3]);
 
     /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
     /// tantes "times" com li indiquem, per defecte sempre serà 1 "time"
-    void rotateClockWise( int times = 1 );
+    void rotateClockWise(int times = 1);
 
     /// Aplica una rotació de 90 graus en el sentit contrari a les agulles del rellotge
     /// tantes "times" com li indiquem, per defecte sempre serà 1 "time"
-    void rotateCounterClockWise( int times = 1 );
+    void rotateCounterClockWise(int times = 1);
 
     /// Aplica un flip horitzontal/vertical sobre la imatge. El flip vertical es farà com una rotació de 180º seguida d'un flip horitzontal
     void horizontalFlip();
@@ -276,26 +275,26 @@ public slots:
      * Li indiquem quin mode de projecció volem aplicar sobre l'slab
      * @param projectionMode valor que identifica quina projecció apliquem
      */
-    void setSlabProjectionMode( int projectionMode );
+    void setSlabProjectionMode(int projectionMode);
 
     /**
      * Indiquem el gruix de l'slab
      * @param thickness Nombre de llesques que formen l'slab
      */
-    void setSlabThickness( int thickness );
+    void setSlabThickness(int thickness);
 
     /**
      * Activem a desactivem l'aplicació del thick slab sobre la imatge
      * @param enable
      */
-    void enableThickSlab( bool enable = true );
+    void enableThickSlab(bool enable = true);
 
     /// Alineament de la imatge dins del visualitzador
     void alignLeft();
     void alignRight();
 
     // Posa la posició d'alineament de la imatge (dreta, esquerre, centrat )
-    void setAlignPosition( AlignPosition alignPosition );
+    void setAlignPosition(AlignPosition alignPosition);
 
     /// Aplica les transformacions 2D necessàries sobre la imatge actual perquè aquesta tingui la orientació indicada
     /// La orientació indicada ha de ser possible de conseguir mitjançant operacions de rotació i flip. En cas que no 
@@ -313,7 +312,7 @@ signals:
     void viewChanged(int);
 
     /// indica el nou window level
-    void windowLevelChanged( double window , double level );
+    void windowLevelChanged(double window , double level);
 
     /// Senyal que s'envia quan la llavor s'ha canviat
     /// TODO mirar de treure-ho i posar-ho en la tool SeedTool
@@ -331,7 +330,7 @@ signals:
 
 protected:
     /// Processem l'event de resize de la finestra Qt
-    virtual void resizeEvent( QResizeEvent *resize );
+    virtual void resizeEvent(QResizeEvent *resize);
 
 private:
     /**
@@ -340,7 +339,7 @@ private:
     void refreshAnnotations();
 
     /// Actualitzem les dades de les annotacions, per defecte totes, sinó, només les especificades
-    void updateAnnotationsInformation( AnnotationFlags annotation = Q2DViewer::AllAnnotation );
+    void updateAnnotationsInformation(AnnotationFlags annotation = Q2DViewer::AllAnnotation);
 
     /// Desglossem les actualitzacions de les diferents informacions que es mostren per pantalla
 	void updatePatientAnnotationInformation();
@@ -349,7 +348,7 @@ private:
     /// Refresca els valors de les annotacions de llesca. Si els valors referents
     /// a les fases són < 2 no es printarà informació de fases
     /// Si hi ha thick slab, mostrarà el rang d'aquest
-    void updateSliceAnnotation( int currentSlice, int maxSlice, int currentPhase = 0, int maxPhase = 0 );
+    void updateSliceAnnotation(int currentSlice, int maxSlice, int currentPhase = 0, int maxPhase = 0);
 
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
@@ -370,7 +369,7 @@ private:
     /// Per exemple, si l'etiqueta que ens donen és RPI (Right-Posterior,Inferior), el valor retornat seria LAS (Left-Anterior-Superior)
     /// Les etiquetes vàlides i els seus oposats són les següents:
     /// R:L (Right-Left), A:P (Anterior-Posterior), S:I (Superior-Inferior), H:F(Head-Feet)
-    static QString getOppositeOrientationLabel( const QString &label );
+    static QString getOppositeOrientationLabel(const QString &label);
 
     /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
     void mapOrientationStringToAnnotation();
@@ -387,10 +386,10 @@ private:
     void resetCamera();
     
     /// thick slab
-    void computeRangeAndSlice( int newSlabThickness );
+    void computeRangeAndSlice(int newSlabThickness);
 
     ///  Valida el valor d'slice donat i actualitza les variables membres pertinents, com m_currentSlice o m_firstSlabSlice
-    void checkAndUpdateSliceValue( int value );
+    void checkAndUpdateSliceValue(int value);
 
     /// Aplica el factor de rotació adient segons els girs que li indiquem. No actualitza la càmera ni l'escena, simplement
     /// es fa servir per posar els valors correctes a les variables internes que controlen com està girada la imatge.
@@ -400,7 +399,7 @@ private:
     void fitImageIntoViewport();
 
 private slots:
-    /// Actualitza les transformacions de càmera ( de moment rotació i flip )
+    /// Actualitza les transformacions de càmera (de moment rotació i flip )
     void updateCamera();
 
     /// Actualitza els rulers
@@ -433,7 +432,7 @@ protected:
 
     /// Annotacions de texte referents a informació de la sèrie
     /// (nom de pacient, protocol,descripció de sèrie, data de l'estudi, etc)
-    /// i altre informació rellevant ( nº imatge, ww/wl, etc )
+    /// i altre informació rellevant (nº imatge, ww/wl, etc )
     vtkCornerAnnotation *m_cornerAnnotations;
 
 private:
@@ -446,10 +445,10 @@ private:
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
-    /// Aquest string indica les anotacions que ens donen les referències del pacient ( Right,Left,Posterior,Anterior,Inferior,Superior) TODO aquesta variable no s'està fent servir :( decidir si ens pot resultar útil o no
+    /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior) TODO aquesta variable no s'està fent servir :(decidir si ens pot resultar útil o no
     QString m_patientOrientationText[4];
 
-    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z ( ample , alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
+    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z (ample , alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
     vtkAxisActor2D *m_sideRuler, *m_bottomRuler;
 
     /// Coordenades fixes dels rulers que els ajustaran a un dels extrems inferiors/superiors o laterals de la pantalla
@@ -509,7 +508,7 @@ private:
     // Conté el mapeig d'operacions a fer quan voelm passar d'una orientació a un altre
     ImageOrientationOperationsMapper *m_imageOrientationOperationsMapper;
 
-    /// Posició a on s'ha d'alinear la imatge ( dreta, esquerre o centrat )
+    /// Posició a on s'ha d'alinear la imatge (dreta, esquerre o centrat )
     AlignPosition m_alignPosition;
 
 };
