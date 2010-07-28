@@ -220,12 +220,6 @@ public:
     static int getYIndexForView( int view );
     static int getZIndexForView( int view );
 
-    /// Retorna el filtre de mapeig de window level.
-    /// TODO El fan servir les extensions que necessiten aplicar una escala de colors
-    /// sobre la imatge. Caldria pensar en un mètode de poder aplicar color sense exposar
-    /// aquest component intern a l'exterior
-    vtkImageMapToWindowLevelColors2 *getWindowLevelMapper() const;
-
 public slots:
     virtual void setInput( Volume *volume );
 
