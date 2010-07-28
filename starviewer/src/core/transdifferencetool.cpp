@@ -12,7 +12,6 @@
 
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
-#include <vtkImageMapToWindowLevelColors2.h>
 
 namespace udg {
 
@@ -320,8 +319,10 @@ void TransDifferenceTool::computeSingleDifferenceImage(int dx, int dy, int slice
     //Això ho fem perquè ens refresqui la imatge diferència que hem modificat
     if(slice == -1)
     {
-        m_2DViewer->getWindowLevelMapper()->Modified();
-        m_2DViewer->render();
+        // HACK Així obliguem a que es torni a executar el pipeline en el viewer i es renderitzi la nova imatge calculada
+        // TODO Caldria canviar la manera en com modifiquem les dades del volum perquè la notificació de modificació
+        // fos transparent i no ho haguem de fer una crida tant explícita com aquesta
+        differenceVolume->getVtkData()->Modified();
     }
 }
 
