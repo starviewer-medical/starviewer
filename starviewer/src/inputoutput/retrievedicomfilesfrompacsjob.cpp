@@ -94,7 +94,8 @@ void RetrieveDICOMFilesFromPACSJob::run()
         
         m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_dicomMaskToRetrieve);
 
-        if (m_retrieveRequestStatus == PACSRequestStatus::OkRetrieve || m_retrieveRequestStatus == PACSRequestStatus::RetrieveWarning)
+        if ((m_retrieveRequestStatus == PACSRequestStatus::OkRetrieve || m_retrieveRequestStatus == PACSRequestStatus::RetrieveWarning) &&
+            !this->isAbortRequested())
         {
             INFO_LOG("Ha finalitzat la descàrrega de l'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + "del pacs " + getPacsDevice().getAETitle());
 
@@ -121,6 +122,11 @@ void RetrieveDICOMFilesFromPACSJob::run()
         else
         {
             fillersThread.quit();
+            /*Esperem que el thread acabi, ja que pel que s'interpreta de la documentació, sembla que el quit del thread no es fa fins que aquest retorna
+              al eventLoop, això provoca per exemple en els casos que ens han cancel·lat la descàrrega d'un estudi, si no esperem al thread que estigui mort 
+              poguem esborrar imatges que els fillers estan processant en aquell moment mentre encara s'estan executant i peti l'Starviewer, perquè no s'ha atés el 
+              Slot quit del thread, per això esperem que aquest estigui mort a esborrar les imatges descarregades.*/
+            fillersThread.wait();
             deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
         }
 
