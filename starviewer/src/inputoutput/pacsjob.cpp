@@ -39,6 +39,11 @@ void PACSJob::requestAbort()
     requestCancelJob();
 }
 
+bool PACSJob::isAbortRequested()
+{
+    return m_abortIsRequested;
+}
+
 void PACSJob::threadWeaverJobDone()
 {
     if (!m_abortIsRequested)
