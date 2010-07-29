@@ -47,6 +47,9 @@ public:
     ///Mètode heredad de Job que serveix per cancel·lar l'execució del job actual. Si el job no s'està executant no fa res.
     void requestAbort();
 
+    ///Retorna si s'ha sol·licitat abortar el job
+    bool isAbortRequested();
+
     ///Mètode heredat de Job, s'executa just abans de desencuar el job, si ens densencuen vol dir que el job no s'executarà per tant
     ///des d'aquest mètode emetem el signal PACSJobCancelled
     void aboutToBeDequeued(WeaverInterface *weaver);
@@ -76,10 +79,10 @@ private:
 
 private :
 
+    bool m_abortIsRequested;
     static int m_jobIDCounter;
     int m_jobID;
     PacsDevice m_pacsDevice;
-    bool m_abortIsRequested;
 };
 
 };

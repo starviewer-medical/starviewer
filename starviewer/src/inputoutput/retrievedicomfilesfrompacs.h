@@ -44,6 +44,7 @@ class Status;
 class PacsConnection;
 class DicomMask;
 class DICOMTagReader;
+class PacsServer;
 
 /** 
     This class helps to interactive with the pacs, retrieve images that match with the mask
@@ -79,7 +80,7 @@ private:
     OFCondition storeSCP(T_ASC_Association *association, T_DIMSE_Message *messagge, T_ASC_PresentationContextID presentationContextID);
 
     /// Accepta la connexió que ens fa el PACS, per convertir-nos en un scp
-    OFCondition subOperationSCP(T_ASC_Association **subAssociation);
+    OFCondition subOperationSCP(T_ASC_Network *associationNetwork, T_ASC_Association **subAssociation);
 
     /// Guarda una composite instance descarregada
     OFCondition save(DcmFileFormat *fileRetrieved, QString dicomFileAbsolutePath);
@@ -120,6 +121,7 @@ private:
 
     /// Request DICOM association;
     PacsDevice m_pacs;
+    PacsServer *m_pacsServer;
 
     int m_numberOfImagesRetrieved;
 
