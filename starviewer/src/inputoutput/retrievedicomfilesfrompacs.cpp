@@ -92,7 +92,7 @@ void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_Move
     Q_UNUSED(response);
     MoveSCPCallbackData *moveSCPCallbackData = (MoveSCPCallbackData*) callbackData;
 
-/*    if (moveSCPCallbackData->retrieveDICOMFilesFromPACS->m_abortIsRequested)
+    if (moveSCPCallbackData->retrieveDICOMFilesFromPACS->m_abortIsRequested)
     {
         OFCondition condition = DIMSE_sendCancelRequest(moveSCPCallbackData->association, moveSCPCallbackData->presentationContextId, request->MessageID);
        
@@ -105,7 +105,7 @@ void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_Move
             ERROR_LOG("Error al intentar cancel.lar la descarrga. Descripcio error: " + QString(condition.text()));
         }
     }
-*/
+
 }
 
 OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association * association, T_DIMSE_Message * dimseMessage,T_ASC_PresentationContextID presentationContextID)
@@ -202,7 +202,7 @@ OFCondition RetrieveDICOMFilesFromPACS::storeSCP(T_ASC_Association *association,
     storeSCPCallbackData.fileName = storeRequest->AffectedSOPInstanceUID;
 
     OFCondition condition = DIMSE_storeProvider(association, presentationContextID, storeRequest, NULL, useMetaheader, &retrievedDataset, storeSCPCallback, 
-        (void*) &storeSCPCallbackData, DIMSE_NONBLOCKING, 10);
+        (void*) &storeSCPCallbackData, DIMSE_BLOCKING, 0);
 
     if (condition.bad())
     {
@@ -213,7 +213,7 @@ OFCondition RetrieveDICOMFilesFromPACS::storeSCP(T_ASC_Association *association,
     return condition;
 }
 
-OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Network *associationNetwork, T_ASC_Association **subAssociation)
+OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subAssociation)
 {
     //ens convertim com en un servii el PACS ens peticions que nosaltres hem de respondre, ens pot demanar descar una imatge o fer un echo
     T_DIMSE_Message dimseMessage;
@@ -222,7 +222,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Network *associati
     if (!ASC_dataWaiting(*subAssociation, 0)) 
         return DIMSE_NODATAAVAILABLE;
 
-    OFCondition condition = DIMSE_receiveCommand(*subAssociation, DIMSE_NONBLOCKING, 10, &presentationContextID, &dimseMessage, NULL);
+    OFCondition condition = DIMSE_receiveCommand(*subAssociation, DIMSE_BLOCKING, 0, &presentationContextID, &dimseMessage, NULL);
 
     if (condition == EC_Normal)
     {
@@ -254,12 +254,6 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Network *associati
     else if (condition != EC_Normal)
     {
         condition = ASC_abortAssociation(*subAssociation);
-
-    }
-    else if (m_abortIsRequested)
-    {
-        condition = ASC_abortAssociation(*subAssociation);
-        //ASC_abortAssociation(m_pacsServer->getConnection().getPacsConnection());
     }
 
     if (condition != EC_Normal)
@@ -284,7 +278,7 @@ void RetrieveDICOMFilesFromPACS::subOperationCallback(void * subOperationCallbac
     }
     else
     {
-        retrieveDICOMFilesFromPACS->subOperationSCP(associationNetwork, subAssociation);
+        retrieveDICOMFilesFromPACS->subOperationSCP(subAssociation);
     }
 }
 
@@ -294,14 +288,14 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     T_DIMSE_C_MoveRSP moveResponse;
     DcmDataset *statusDetail = NULL;
     Status state;
-    m_pacsServer = new PacsServer(m_pacs);
+    PacsServer pacsServer(m_pacs);
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
     MoveSCPCallbackData moveSCPCallbackData;
 
     m_numberOfImagesRetrieved = 0;
 
     //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei de retrieve configurat
-    state = m_pacsServer->connect( PacsServer::retrieveImages );
+    state = pacsServer.connect( PacsServer::retrieveImages );
     
     if ( !state.good() )
     {
@@ -311,7 +305,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     }
 
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
-    T_ASC_Association *association = m_pacsServer->getConnection().getPacsConnection(); 
+    T_ASC_Association *association = pacsServer.getConnection().getPacsConnection(); 
     presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
     if (presentationContextID == 0) 
     {
@@ -328,9 +322,9 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
     OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData, 
-        DIMSE_BLOCKING, 0, m_pacsServer->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
+        DIMSE_BLOCKING, 0, pacsServer.getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
 
-    m_pacsServer->disconnect();
+    pacsServer.disconnect();
 
     retrieveRequestStatus = processResponseStatusFromMoveSCP(&moveResponse, statusDetail);
 
