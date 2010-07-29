@@ -90,6 +90,8 @@ void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
     {
         qtreeWidgetItem->setText(0, getPACSJobStatusResume(pacsJob));
     }
+
+    m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
 }
 
 void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
