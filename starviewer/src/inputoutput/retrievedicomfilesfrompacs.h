@@ -44,6 +44,7 @@ class Status;
 class PacsConnection;
 class DicomMask;
 class DICOMTagReader;
+class PacsServer;
 
 /** 
     This class helps to interactive with the pacs, retrieve images that match with the mask
@@ -120,6 +121,7 @@ private:
 
     /// Request DICOM association;
     PacsDevice m_pacs;
+    PacsServer *m_pacsServer;
 
     int m_numberOfImagesRetrieved;
 

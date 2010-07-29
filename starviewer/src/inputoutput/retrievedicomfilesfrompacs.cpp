@@ -92,6 +92,9 @@ void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_Move
     Q_UNUSED(response);
     MoveSCPCallbackData *moveSCPCallbackData = (MoveSCPCallbackData*) callbackData;
 
+/*  Aquest en teoria és el codi per cancel·lar una descàrrega però el PACS del l'UDIAT no suporta les requestCancel, per tant la única manera
+    de fer-ho és com es fa en el mètode subOperationSCP que s'aborta la connexió amb el PACS.
+  
     if (moveSCPCallbackData->retrieveDICOMFilesFromPACS->m_abortIsRequested)
     {
         OFCondition condition = DIMSE_sendCancelRequest(moveSCPCallbackData->association, moveSCPCallbackData->presentationContextId, request->MessageID);
@@ -105,7 +108,7 @@ void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_Move
             ERROR_LOG("Error al intentar cancel.lar la descarrga. Descripcio error: " + QString(condition.text()));
         }
     }
-
+*/
 }
 
 OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association * association, T_DIMSE_Message * dimseMessage,T_ASC_PresentationContextID presentationContextID)
@@ -255,6 +258,29 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
     {
         condition = ASC_abortAssociation(*subAssociation);
     }
+    else if (m_abortIsRequested)
+    {
+        INFO_LOG("Abortarem les connexions amb el PACS, perque han sol.licitant cancel.lar la descarrega");
+        condition = ASC_abortAssociation(*subAssociation);
+        if (!condition.good())
+        {
+            ERROR_LOG("Error al abortar la connexió pel qual rebem les imatges" + QString(condition.text()));
+        }
+
+        /*Tanquem la connexió amb el PACS perquè segons indica la documentació DICOM al PS 3.4 (Baseline Behavior of SCP) C.4.2.3.1 si abortem
+         la connexió pel qual rebem les imatges, el comportament del PACS és desconegut, per exemple DCM4CHEE tanca la connexió amb el PACS, però
+         el RAIM_Server no la tanca i la manté fent que no sortim mai d'aquesta classe. Degut a que no es pot saber en aquesta situació com actuaran 
+         els PACS es tanca aquí la connexió amb el PACS.*/
+        condition = ASC_abortAssociation(m_pacsServer->getConnection().getPacsConnection());
+        if (!condition.good())
+        {
+            ERROR_LOG("Error al abortar la connexió pel amb el PACS" + QString(condition.text()));
+        }
+        else
+        {
+            INFO_LOG("Abortada la connexió amb el PACS");
+        }
+    }
 
     if (condition != EC_Normal)
     {
@@ -288,14 +314,14 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     T_DIMSE_C_MoveRSP moveResponse;
     DcmDataset *statusDetail = NULL;
     Status state;
-    PacsServer pacsServer(m_pacs);
+    m_pacsServer = new PacsServer(m_pacs);
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
     MoveSCPCallbackData moveSCPCallbackData;
 
     m_numberOfImagesRetrieved = 0;
 
     //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei de retrieve configurat
-    state = pacsServer.connect( PacsServer::retrieveImages );
+    state = m_pacsServer->connect( PacsServer::retrieveImages );
     
     if ( !state.good() )
     {
@@ -305,7 +331,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     }
 
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
-    T_ASC_Association *association = pacsServer.getConnection().getPacsConnection(); 
+    T_ASC_Association *association = m_pacsServer->getConnection().getPacsConnection(); 
     presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
     if (presentationContextID == 0) 
     {
@@ -322,9 +348,9 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
     OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData, 
-        DIMSE_BLOCKING, 0, pacsServer.getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
+        DIMSE_BLOCKING, 0, m_pacsServer->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
 
-    pacsServer.disconnect();
+    m_pacsServer->disconnect();
 
     retrieveRequestStatus = processResponseStatusFromMoveSCP(&moveResponse, statusDetail);
 
