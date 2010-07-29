@@ -30,6 +30,7 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
     m_treeRetrieveStudy->setColumnHidden( 9 , true );//Conte el PACSJobID 
+    m_treeRetrieveStudy->sortItems(5, Qt::AscendingOrder);//Fem que per defecte ordeni per la data d'inici de la descàrrega
 }
 
 void QOperationStateScreen::setPacsManager(PacsManager *pacsManager)
