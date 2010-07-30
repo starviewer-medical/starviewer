@@ -211,7 +211,7 @@ void Q2DViewer::updateRulers()
             m_sideRuler->SetRange(m_rulerExtent[3] , m_rulerExtent[2]);
 
             m_bottomRuler->GetPositionCoordinate()->SetValue(m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0);
-            m_bottomRuler->GetPosition2Coordinate()->SetValue(m_rulerExtent[0] , anchoredCoordinates[1] , 0.0 );
+            m_bottomRuler->GetPosition2Coordinate()->SetValue(m_rulerExtent[0] , anchoredCoordinates[1] , 0.0);
             m_bottomRuler->SetRange(m_rulerExtent[1] , m_rulerExtent[0]);
             break;
 
@@ -743,7 +743,7 @@ void Q2DViewer::setInput(Volume *volume)
     m_maxSliceValue = this->getMaximumSlice();
 
     // Això es fa per destruir el blender en cas que ja hi hagi algun input i es vulgui canviar
-    if (m_blender !=0 )
+    if (m_blender !=0)
     {
         m_blender->Delete();
         m_blender = 0;
@@ -2031,7 +2031,7 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     {
         xyz[xIndex] = bounds[xIndex * 2];
     }
-    else if (xyz[xIndex] > bounds[xIndex * 2 + 1] ) // La x està per sobre del màxim
+    else if (xyz[xIndex] > bounds[xIndex * 2 + 1]) // La x està per sobre del màxim
     {
         xyz[xIndex] = bounds[xIndex * 2 + 1];
     }
