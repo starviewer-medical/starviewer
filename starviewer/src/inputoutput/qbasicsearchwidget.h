@@ -64,6 +64,13 @@ private:
     ///Neteja el paràmetre de cerca de modalitat de serie
     void clearSeriesModality();
 
+    ///S'executa quan es mostra el widget, fa que la primera vegada que es mostri es doni el focus al lineEdit PatientName
+    void showEvent(QShowEvent * event);
+
+private:
+
+    ///Indica si s'ha mostra el widget
+    bool m_widgetHasBeenShowed;
 };
 
 }

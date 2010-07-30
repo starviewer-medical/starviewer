@@ -37,6 +37,8 @@ void QBasicSearchWidget::initialize()
 {
     m_fromStudyDate->setDate(QDate::currentDate());
     m_toStudyDate->setDate(QDate::currentDate());
+
+    m_widgetHasBeenShowed = false;
 }
 
 void QBasicSearchWidget::clear()
@@ -288,6 +290,17 @@ void QBasicSearchWidget::clearSeriesModality()
     m_textOtherModality->clear();
 }
 
+void QBasicSearchWidget::showEvent(QShowEvent * event)
+{
+    if (!m_widgetHasBeenShowed)
+    {
+        /*La primera vegada que mostrem el widget donem focus al patientName. Tot i que en teoria el TabOrder està ben definit pels controls del widget això es fa
+          per si mai ens equivoquem i s'altera el TabOrder de manera incorrecte. Com és un Widget molt utilitzat ens interessa assegurar-nos que sempre
+          en primer lloc està enfocant al PatientName, ja que és pel camp que més cerquen.*/
+        m_patientNameText->setFocus();
+        m_widgetHasBeenShowed = true;
+    }
+}
 QBasicSearchWidget::~QBasicSearchWidget()
 {
 }
