@@ -404,8 +404,12 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
         return true;
     }
     else
-#endif
+    {
         return false;
+    }
+#else
+    return false;
+#endif
 }
 
 void QViewer::render()
