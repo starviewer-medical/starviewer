@@ -289,27 +289,9 @@ void KeyImageNoteManager::generateKeyImageNoteDICOMFile(Series *newKeyImageNoteS
     // Document Title
     keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_isRoot, DSRTypes::VT_Container);
     keyImageNoteDocument->getTree().getCurrentContentItem().setConceptName(DSRCodedEntryValue(qPrintable(QString::number(keyImageNote->getDocumentTitle())), "DCM", qPrintable(keyImageNote->getDocumentTitleAsString(keyImageNote->getDocumentTitle()))));
-    
-    // Rejected For Quality Reasons
-    bool isStructuredReportDocumentInTheSecondLevel = false;
-    if (KeyImageNote::isDocumentTitleModifiedForQualityReasonsOrIssues(keyImageNote->getDocumentTitle()))
-    {   // TODO: Encara no funciona
-        keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_hasConceptMod, DSRTypes::VT_Code, DSRTypes::AM_belowCurrent);
-        keyImageNoteDocument->getTree().getCurrentContentItem().setConceptName(DSRCodedEntryValue("113011", "DCM", "Document Title Modifier"));
-        keyImageNoteDocument->getTree().getCurrentContentItem().setCodeValue(DSRCodedEntryValue(qPrintable(QString::number(keyImageNote->getRejectedForQualityReasons())), "DCM", qPrintable(keyImageNote->getRejectedForQualityReasonsAsString(keyImageNote->getRejectedForQualityReasons()))));
-        isStructuredReportDocumentInTheSecondLevel = true;
-    }
-    
-    // Observation context, de moment suposem que el tenim sempre.
-    if (isStructuredReportDocumentInTheSecondLevel)
-    {
-        keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_hasObsContext, DSRTypes::VT_Code, DSRTypes::AM_belowCurrent);
-    }
-    else
-    {
-        keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_hasObsContext, DSRTypes::VT_Code);
-    }
 
+    // Observer Type
+    keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_hasObsContext, DSRTypes::VT_Code, DSRTypes::AM_belowCurrent);
     keyImageNoteDocument->getTree().getCurrentContentItem().setConceptName(DSRCodedEntryValue("121005", "DCM", "Observer Type"));
     keyImageNoteDocument->getTree().getCurrentContentItem().setCodeValue(DSRCodedEntryValue("121006", "DCM", "Person"));
 
