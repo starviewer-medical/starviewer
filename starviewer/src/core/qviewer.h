@@ -32,53 +32,51 @@ class TransferFunction;
 class PatientBrowserMenu;
 
 /**
-Classe base per a totes les finestres de visualització
-
-@author Grup de Gràfics de Girona  ( GGG )
-*/
-class QViewer : public QWidget{
+    Classe base per a totes les finestres de visualització
+ */
+class QViewer : public QWidget {
 Q_OBJECT
 public:
     QViewer(QWidget *parent = 0);
     ~QViewer();
 
     /// Per definir els diferents plans on podem operar
-    enum PlaneType{ AxialPlane = 2, SagitalPlane = 0, CoronalPlane = 1, Top2DPlane = 3 };
+    enum PlaneType { AxialPlane = 2, SagitalPlane = 0, CoronalPlane = 1, Top2DPlane = 3 };
 
     /// Definim les diverses orientacions que podem tenir: Axial: XY, Sagital: YZ, Coronal: XZ, Other: orientació arbitrària
-    enum CameraOrientationType{ Axial = AxialPlane, Sagital = SagitalPlane, Coronal = CoronalPlane, Other };
+    enum CameraOrientationType { Axial = AxialPlane, Sagital = SagitalPlane, Coronal = CoronalPlane, Other };
 
     /// Tipus de fitxer que pot desar
-    enum FileType{ PNG , JPEG , TIFF , DICOM , PNM , META , BMP };
+    enum FileType { PNG, JPEG, TIFF, DICOM, PNM, META, BMP };
 
     /// Tipus de format de gravació de vídeo suportats
-    enum RecordFileFormatType{ MPEG2 };
+    enum RecordFileFormatType { MPEG2 };
 
     /// Retorna l'interactor renderer
-    virtual vtkRenderWindowInteractor *getInteractor();
+    virtual vtkRenderWindowInteractor* getInteractor();
 
     /// Retorna el renderer
-    virtual vtkRenderer *getRenderer();
+    virtual vtkRenderer* getRenderer();
 
     /// Ens retorna el volum d'entrada
-    virtual Volume *getInput( void ) { return m_mainVolume; }
+    virtual Volume* getInput(void) { return m_mainVolume; }
 
-    /// retorna el vtkRenderWindow
-    vtkRenderWindow *getRenderWindow();
+    /// Retorna el vtkRenderWindow
+    vtkRenderWindow* getRenderWindow();
 
     /// Retorna la mida en coordenades de pantalla (píxels?) de tot el viewport del viewer
     /// amaga la crida vtkRenderWindow::GetSize()
-    int *getRenderWindowSize();
+    int* getRenderWindowSize();
 
     /**
      * Mètodes per obtenir l'actual i/o l'anterior coordenada del cursor
      * del ratolí durant l'últim event
      * Les coordenades retornades estan en sistema de coordenades de Display
      */
-    int *getEventPosition();
-    int *getLastEventPosition();
-    void getEventPosition( int position[2] );
-    void getLastEventPosition( int position[2] );
+    int* getEventPosition();
+    int* getLastEventPosition();
+    void getEventPosition(int position[2]);
+    void getLastEventPosition(int position[2]);
     int getEventPositionX();
     int getEventPositionY();
     int getLastEventPositionX();
@@ -90,27 +88,22 @@ public:
      */
     bool isActive() const;
 
-    /**
-     * Ens retorna el ToolProxy del viewer
-     * @return ToolProxy del viewer
-     */
-    ToolProxy *getToolProxy() const;
+    /// Ens retorna el ToolProxy del viewer
+    ToolProxy* getToolProxy() const;
 
     /// Passa coordenades de display a coordenades de món i viceversa 
-    void computeDisplayToWorld( double x , double y , double z , double worldPoint[4] );
-    void computeWorldToDisplay( double x , double y , double z , double displayPoint[3] );
-    
-    /**
-     * Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
-     */
-    void getEventWorldCoordinate( double worldCoordinate[3] );
-    void getLastEventWorldCoordinate( double worldCoordinate[3] );
+    void computeDisplayToWorld(double x, double y, double z, double worldPoint[4]);
+    void computeWorldToDisplay(double x, double y, double z, double displayPoint[3]);
+
+    /// Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
+    void getEventWorldCoordinate(double worldCoordinate[3]);
+    void getLastEventWorldCoordinate(double worldCoordinate[3]);
 
     /// Fa una captura de la vista actual i la guarda en una estructura interna
     void grabCurrentView();
 
     /// Desa la llista de captures en un arxiu de diversos tipus amb el nom de fitxer base \c baseName i en format especificat per \c extension. Retorna TRUE si hi havia imatges per guardar, FALSE altrament
-    bool saveGrabbedViews( const QString &baseName , FileType extension );
+    bool saveGrabbedViews(const QString &baseName, FileType extension);
 
     /// Retorna el nombre de vistes capturades que estan desades
     int grabbedViewsCount(){ return m_grabList.size(); }
@@ -118,19 +111,19 @@ public:
     /// Grava en format de vídeo els frames que s'hagin capturat amb grabCurrentView. 
     /// Un cop gravat, esborra la llista de frames.
     /// TODO de moment només accepta format MPEG
-    bool record( const QString &baseName, RecordFileFormatType format = MPEG2 );
+    bool record(const QString &baseName, RecordFileFormatType format = MPEG2);
 
     /**
      * Fa zoom sobre l'escena amb el factor donat
      * @param factor Factor de zoom que volem aplicar a la càmera
      */
-    void zoom( double factor );
+    void zoom(double factor);
 
     /**
      * Desplaça la càmera segons el vector de moviment que li passem
      * @param motionVector[] Vector de moviment que determina cap on i quant es mou la càmera
      */
-    void pan( double motionVector[3] );
+    void pan(double motionVector[3]);
 
     /**
      * Fem un zoom del requadre definit pels paràmetres topCorner i bottomCorner en coordenades de món
@@ -148,28 +141,28 @@ public:
      * que es pot aplicar sobre aquest visor
      * @return L'objecte WindowLevelPresetsToolData
      */
-    WindowLevelPresetsToolData *getWindowLevelData() const;
+    WindowLevelPresetsToolData* getWindowLevelData() const;
 
     /**
      * Li assignem el window level data externament
      * @param windowLevelData
      */
-    void setWindowLevelData( WindowLevelPresetsToolData *windowLevelData );
+    void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
 
     /// Habilita/deshabilita que els renderings es facin efectius
     /// Útil en els casos en que necessitem fer diverses operacions de 
     /// visualització però no volem que aquestes es facin efectives fins que no ho indiquem
-    void enableRendering( bool enable );
+    void enableRendering(bool enable);
 
     /// Ens retorna el menú de pacient amb el que s'escull l'input
-    PatientBrowserMenu *getPatientBrowserMenu() const;
+    PatientBrowserMenu* getPatientBrowserMenu() const;
 
 public slots:
     /// Indiquem les dades d'entrada
-    virtual void setInput(Volume* volume) = 0;
+    virtual void setInput(Volume *volume) = 0;
 
     /// Gestiona els events que rep de la finestra
-    void eventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command );
+    void eventHandler(vtkObject *object, unsigned long vtkEvent, void *clientData, void *callData, vtkCommand *command);
 
     /// Força l'execució de la visualització
     void render();
@@ -178,36 +171,34 @@ public slots:
      * Assignem si aquest visualitzador és actiu, és a dir, amb el que s'està interactuant
      * @param active
      */
-    void setActive( bool active );
+    void setActive(bool active);
 
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews(){ m_grabList.clear(); };
 
     /// Obté el window/level per defecte. Si no se n'especifica cap amb setDefaultWindowLevel
     /// agafa un window/level que permeti veure correctament el Volum.
-    void getDefaultWindowLevel( double windowLevel[2] );
+    void getDefaultWindowLevel(double windowLevel[2]);
 
     /// Obté el window level actual de la imatge
-    virtual void getCurrentWindowLevel( double wl[2] ) = 0;
+    virtual void getCurrentWindowLevel(double wl[2]) = 0;
 
     /// Li indiquem quina vista volem del volum: Axial, Coronal o Sagital
-    virtual void resetView( CameraOrientationType view ) = 0;
+    virtual void resetView(CameraOrientationType view) = 0;
     virtual void resetViewToAxial() = 0;
     virtual void resetViewToSagital() = 0;
     virtual void resetViewToCoronal() = 0;
 
-    /**
-     * Activa o desactiva el menú de contexte
-     */
+    /// Activa o desactiva el menú de contexte
     void enableContextMenu();
     void disableContextMenu();
 
     /// Ajusta ÚNICAMENT els valors de window i level per defecte. No els aplica sobre la imatge.
     /// Mètode de conveniència pels presentation states
-    void setDefaultWindowLevel( double window, double level );
+    void setDefaultWindowLevel(double window, double level);
 
     /// Ajusta el window/level
-    virtual void setWindowLevel( double window , double level ) = 0;
+    virtual void setWindowLevel(double window, double level) = 0;
 
     /// Assigna/Obté la funció de transferència actual
     virtual void setTransferFunction(TransferFunction *transferFunction) = 0;
@@ -217,32 +208,30 @@ public slots:
     virtual void resetWindowLevelToDefault();
 
 signals:
-    /// informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
-    void eventReceived( unsigned long eventID );
+    /// Informem de l'event rebut. \TODO ara enviem el codi en vtkCommand, però podria (o hauria de) canviar per un mapeig nostre
+    void eventReceived(unsigned long eventID);
 
     /// Signal que s'emet quan s'escull una altra serie per l'input
-    void volumeChanged( Volume * );
+    void volumeChanged(Volume *volume);
 
-    /// s'emet quan els paràmetres de la càmera han canviat
+    /// S'emet quan els paràmetres de la càmera han canviat
     void cameraChanged();
 
-    /// informa que el visualitzador ha rebut un event que es considera com que aquest s'ha seleccionat
-    void selected( void );
+    /// Informa que el visualitzador ha rebut un event que es considera com que aquest s'ha seleccionat
+    void selected(void);
 
-    /// informa que s'ha canviat el zoom
-    void zoomFactorChanged( double );
+    /// Informa que s'ha canviat el zoom
+    void zoomFactorChanged(double factor);
 
-    /// informa que s'ha mogut la imatge
-    void panChanged( double * );
+    /// Informa que s'ha mogut la imatge
+    void panChanged(double *translation);
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *event);
 
     void contextMenuRelease();
 
-    /**
-     * Actualitza les dades contingudes a m_windowLevelData
-     */
+    /// Actualitza les dades contingudes a m_windowLevelData
     void updateWindowLevelData();
 
     /**
@@ -250,10 +239,10 @@ protected:
      * Si el paràmetre donat no és un dels valors enumerats vàlids, no farà res
      * @param orientation Orientació, valors enumerats que podran ser Axial, Sagital o Coronal
      */
-    void setCameraOrientation( int orientation );
+    void setCameraOrientation(int orientation);
 
     /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
-    vtkCamera *getActiveCamera();
+    vtkCamera* getActiveCamera();
 
     /**
      * Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
@@ -261,7 +250,7 @@ protected:
      * @param current Si true, ens dóna la coordenada de l'event més recent, 
      * si fals, ens dóna la coordenada anterior a l'event més recent
      */
-    void getRecentEventWorldCoordinate( double worldCoordinate[3], bool current );
+    void getRecentEventWorldCoordinate(double worldCoordinate[3], bool current);
 
     virtual void setupInteraction();
 
