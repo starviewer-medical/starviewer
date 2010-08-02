@@ -8,6 +8,12 @@
 #include "localdatabasemanager.h"
 #include "logging.h"
 #include <dcmtk/dcmdata/dcuid.h>
+#include <dcfilefo.h> // Generar DICOM
+#include <dsrdoc.h>
+#include <dcmtk/dcmdata/cmdlnarg.h>
+#include <dcmtk/dcmdata/dcdebug.h>
+#include <dcmtk/ofstd/ofstream.h>
+#include <dcmtk/ofstd/ofconapp.h>
 
 #include <QDateTime>
 
@@ -77,6 +83,11 @@ void KeyImageNoteManager::generateAndStoreNewKeyImageNote(const QString &documen
             if (storeToLocalDataBase)
             {
                 storeKeyImageNoteSeriesToLocalDataBase(newKeyImageNoteSeries);
+            }
+            
+            if (storeToPacs) // GENERAR DICOMS
+            {
+                generateKeyImageNoteDICOMFile(newKeyImageNoteSeries);
             }
 
             m_currentSelection.clear();
@@ -253,4 +264,84 @@ void KeyImageNoteManager::removeItemsOfCurrentSelection(QStringList removedItems
     }
 }
 
+void KeyImageNoteManager::generateKeyImageNoteDICOMFile(Series *newKeyImageNoteSeries)
+{
+    DSRDocument *keyImageNoteDocument = new DSRDocument(DSRTypes::DT_KeyObjectDoc);
+    KeyImageNote *keyImageNote = newKeyImageNoteSeries->getKeyImageNotes().at(0);
+    
+    // Emplenem dades del modul de Patient
+    keyImageNoteDocument->setPatientID(qPrintable(newKeyImageNoteSeries->getParentStudy()->getParentPatient()->getID()));
+    keyImageNoteDocument->setPatientsName(qPrintable(newKeyImageNoteSeries->getParentStudy()->getParentPatient()->getFullName()));
+    keyImageNoteDocument->setPatientsBirthDate(qPrintable(newKeyImageNoteSeries->getParentStudy()->getParentPatient()->getBirthDate().toString("yyyyMMdd")));
+    keyImageNoteDocument->setPatientsSex(qPrintable(newKeyImageNoteSeries->getParentStudy()->getParentPatient()->getSex()));
+
+    // Emplenem dades del modul de Study
+    keyImageNoteDocument->createNewSeriesInStudy(qPrintable(newKeyImageNoteSeries->getParentStudy()->getInstanceUID()));
+    keyImageNoteDocument->setAccessionNumber(qPrintable(newKeyImageNoteSeries->getParentStudy()->getAccessionNumber()));
+    keyImageNoteDocument->setStudyDescription(qPrintable(newKeyImageNoteSeries->getParentStudy()->getDescription()));
+    keyImageNoteDocument->setStudyID(qPrintable(newKeyImageNoteSeries->getParentStudy()->getID()));
+
+    // Emplenem dades del modul SOP Common
+    keyImageNoteDocument->setSpecificCharacterSetType(DSRTypes::CS_Latin1);
+
+    // Generem l'arbre
+
+    // Document Title
+    keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_isRoot, DSRTypes::VT_Container);
+    keyImageNoteDocument->getTree().getCurrentContentItem().setConceptName(DSRCodedEntryValue(qPrintable(QString::number(keyImageNote->getDocumentTitle())), "DCM", qPrintable(keyImageNote->getDocumentTitleAsString(keyImageNote->getDocumentTitle()))));
+    
+    // Rejected For Quality Reasons
+    bool isStructuredReportDocumentInTheSecondLevel = false;
+    if (KeyImageNote::isDocumentTitleModifiedForQualityReasonsOrIssues(keyImageNote->getDocumentTitle()))
+    {   // TODO: Encara no funciona
+        keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_hasConceptMod, DSRTypes::VT_Code, DSRTypes::AM_belowCurrent);
+        keyImageNoteDocument->getTree().getCurrentContentItem().setConceptName(DSRCodedEntryValue("113011", "DCM", "Document Title Modifier"));
+        keyImageNoteDocument->getTree().getCurrentContentItem().setCodeValue(DSRCodedEntryValue(qPrintable(QString::number(keyImageNote->getRejectedForQualityReasons())), "DCM", qPrintable(keyImageNote->getRejectedForQualityReasonsAsString(keyImageNote->getRejectedForQualityReasons()))));
+        isStructuredReportDocumentInTheSecondLevel = true;
+    }
+    
+    // Observation context, de moment suposem que el tenim sempre.
+    if (isStructuredReportDocumentInTheSecondLevel)
+    {
+        keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_hasObsContext, DSRTypes::VT_Code, DSRTypes::AM_belowCurrent);
+    }
+    else
+    {
+        keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_hasObsContext, DSRTypes::VT_Code);
+    }
+
+    keyImageNoteDocument->getTree().getCurrentContentItem().setConceptName(DSRCodedEntryValue("121005", "DCM", "Observer Type"));
+    keyImageNoteDocument->getTree().getCurrentContentItem().setCodeValue(DSRCodedEntryValue("121006", "DCM", "Person"));
+
+    keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_hasObsContext, DSRTypes::VT_PName);
+    keyImageNoteDocument->getTree().getCurrentContentItem().setConceptName(DSRCodedEntryValue("121008", "DCM", "Person Observer Name"));
+    keyImageNoteDocument->getTree().getCurrentContentItem().setStringValue(qPrintable(keyImageNote->getObserverContextName()));
+    
+    // Description
+    keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_contains, DSRTypes::VT_Text);
+    keyImageNoteDocument->getTree().getCurrentContentItem().setConceptName(DSRCodedEntryValue("113012", "DCM", "Key Object Description"));
+    keyImageNoteDocument->getTree().getCurrentContentItem().setStringValue(qPrintable(keyImageNote->getKeyObjectDescription()));
+
+    // Referenced Images
+    foreach (Image *image, keyImageNote->getReferencedImages())
+    {
+        keyImageNoteDocument->getTree().addContentItem(DSRTypes::RT_contains, DSRTypes::VT_Image);
+        keyImageNoteDocument->getTree().getCurrentContentItem().setImageReference(DSRImageReferenceValue("1.2.840.10008.5.1.4.1.1.2", qPrintable(image->getSOPInstanceUID())));
+        keyImageNoteDocument->getCurrentRequestedProcedureEvidence().addItem(keyImageNoteDocument->getStudyInstanceUID(), keyImageNoteDocument->getSeriesInstanceUID(), "1.2.840.10008.5.1.4.1.1.2", qPrintable(image->getSOPInstanceUID()));
+    }
+    
+    DcmFileFormat *fileformat = new DcmFileFormat();
+    
+    OFCondition status = keyImageNoteDocument->write(*fileformat->getDataset());
+    
+    if (status.good())
+    {
+        OFString filename = "provaDICOM.dcm";
+        fileformat->saveFile(filename.c_str(), EXS_LittleEndianExplicit);
+    }
+    else
+    {
+        DEBUG_LOG(QString("S'ha produit un error al escriure el DSRDocument: " + QString(status.text())));
+    }
+}
 }

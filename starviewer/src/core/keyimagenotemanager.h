@@ -76,6 +76,9 @@ private:
     /// Retorna cert si totes les imatges seleccionades formen part del mateix estudi.
     bool allImagesInTheSameStudy();
 
+    /// Genera el fitxer DICOM d'un Key Image Note a partir d'una serie Key Image Note
+    void generateKeyImageNoteDICOMFile(Series *newKeyImageNoteSeries);
+
 private:
     /// El pacient que estem tractant
     Patient *m_patient;
