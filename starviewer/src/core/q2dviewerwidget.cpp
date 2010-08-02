@@ -20,22 +20,22 @@ namespace udg {
 Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
  : QFrame(parent), m_mainVolume(0)
 {
-    setupUi( this );
-    setAutoFillBackground( true );
+    setupUi(this);
+    setAutoFillBackground(true);
 
     // Creació de l'acció del boto de sincronitzar.
-    m_synchronizeButtonAction = new QAction( 0 );
-    m_synchronizeButtonAction->setText( tr("Synchronize tool") );
-    m_synchronizeButtonAction->setStatusTip( tr("Enable/Disable Synchronize tool") );
-    m_synchronizeButtonAction->setIcon( QIcon(":/images/synchronize.png") );
-    m_synchronizeButtonAction->setCheckable( true );
-    m_synchronizeButton->setDefaultAction( m_synchronizeButtonAction );
-    m_synchronizeButton->setEnabled( false );
+    m_synchronizeButtonAction = new QAction(0);
+    m_synchronizeButtonAction->setText(tr("Synchronize tool"));
+    m_synchronizeButtonAction->setStatusTip(tr("Enable/Disable Synchronize tool"));
+    m_synchronizeButtonAction->setIcon(QIcon(":/images/synchronize.png"));
+    m_synchronizeButtonAction->setCheckable(true);
+    m_synchronizeButton->setDefaultAction(m_synchronizeButtonAction);
+    m_synchronizeButton->setEnabled(false);
 
     m_downloadingWidget = 0;
 
     createConnections();
-    m_viewText->setText( QString() );
+    m_viewText->setText(QString());
 
     m_statsWatcher = new StatsWatcher("Q2DViewerWidget", this);
     m_statsWatcher->addClicksCounter(m_synchronizeButton);
@@ -46,89 +46,90 @@ Q2DViewerWidget::~Q2DViewerWidget()
 {
 }
 
-void Q2DViewerWidget::updateViewerSliceAccordingToSliderAction( int action )
+void Q2DViewerWidget::updateViewerSliceAccordingToSliderAction(int action)
 {
-    switch( action )
+    switch (action)
     {
-    case QAbstractSlider::SliderMove:
-    case QAbstractSlider::SliderPageStepAdd:
-    case QAbstractSlider::SliderPageStepSub:
-        m_2DView->setSlice( m_slider->sliderPosition() );
-        break;
+        case QAbstractSlider::SliderMove:
+        case QAbstractSlider::SliderPageStepAdd:
+        case QAbstractSlider::SliderPageStepSub:
+            m_2DView->setSlice(m_slider->sliderPosition());
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 
 void Q2DViewerWidget::createConnections()
 {
-    connect( m_slider, SIGNAL( actionTriggered(int) ), SLOT( updateViewerSliceAccordingToSliderAction(int) ) );
-    connect( m_2DView , SIGNAL( sliceChanged( int ) ) , m_slider , SLOT( setValue( int ) ) );
-    connect( m_2DView , SIGNAL( sliceChanged( int ) ) , SLOT( updateProjectionLabel() ) );
-    connect( m_2DView, SIGNAL( viewChanged(int) ), SLOT( resetSliderRangeAndValue() ) );
-    connect( m_2DView, SIGNAL( slabThicknessChanged(int) ), SLOT( resetSliderRangeAndValue() ) );
+    connect(m_slider, SIGNAL(actionTriggered(int)), SLOT(updateViewerSliceAccordingToSliderAction(int)));
+    connect(m_2DView, SIGNAL(sliceChanged(int)), m_slider, SLOT(setValue(int)));
+    connect(m_2DView, SIGNAL(sliceChanged(int)), SLOT(updateProjectionLabel()));
+    connect(m_2DView, SIGNAL(viewChanged(int)), SLOT(resetSliderRangeAndValue()));
+    connect(m_2DView, SIGNAL(slabThicknessChanged(int)), SLOT(resetSliderRangeAndValue()));
 
     // HACK amb això conseguim que quan es varïi el valor de la llesca amb l'slider, el viewer es marqui com a seleccionat
-    connect( m_slider, SIGNAL( sliderPressed() ), SLOT( emitSelectedViewer() ));
+    connect(m_slider, SIGNAL(sliderPressed()), SLOT(emitSelectedViewer()));
 
-    connect( m_2DView, SIGNAL ( selected() ), SLOT( emitSelectedViewer() ) );
-    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), SLOT( updateInput( Volume *) ) );
+    connect(m_2DView, SIGNAL (selected()), SLOT(emitSelectedViewer()));
+    connect(m_2DView, SIGNAL(volumeChanged(Volume *)), SLOT(updateInput(Volume *)));
 
-    connect( m_2DView, SIGNAL( slabThicknessChanged( int ) ), SLOT( updateSlider() ) );
-
-    connect( m_synchronizeButtonAction, SIGNAL( toggled(bool) ), SLOT( enableSynchronization(bool) ) );
+    connect(m_2DView, SIGNAL(slabThicknessChanged(int)), SLOT(updateSlider()));
+    connect(m_synchronizeButtonAction, SIGNAL(toggled(bool)), SLOT(enableSynchronization(bool)));
 }
 
 void Q2DViewerWidget::updateProjectionLabel()
 {
-    m_viewText->setText( m_2DView->getCurrentPlaneProjectionLabel() );
+    m_viewText->setText(m_2DView->getCurrentPlaneProjectionLabel());
 }
 
-void Q2DViewerWidget::setInput( Volume *input )
+void Q2DViewerWidget::setInput(Volume *input)
 {
     m_mainVolume = input;
-    m_2DView->setInput( input );
+    m_2DView->setInput(input);
     updateProjectionLabel();
 }
 
-void Q2DViewerWidget::updateInput( Volume *input )
+void Q2DViewerWidget::updateInput(Volume *input)
 {
     m_mainVolume = input;
-    m_synchronizeButton->setEnabled( true );
-    m_slider->setMaximum( m_2DView->getMaximumSlice() );
+    m_synchronizeButton->setEnabled(true);
+    m_slider->setMaximum(m_2DView->getMaximumSlice());
 }
 
-void Q2DViewerWidget::mousePressEvent( QMouseEvent *event )
+void Q2DViewerWidget::mousePressEvent(QMouseEvent *mouseEvent)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(mouseEvent);
     emitSelectedViewer();
 }
 
 void Q2DViewerWidget::emitSelectedViewer()
 {
-    if( !m_2DView->isActive() )
-        emit selected( this );
+    if (!m_2DView->isActive())
+    {
+        emit selected(this);
+    }
 }
 
-void Q2DViewerWidget::setSelected( bool option )
+void Q2DViewerWidget::setSelected(bool option)
 {
-    // per defecte li donem l'aspecte de background que té l'aplicació en general
+    // Per defecte li donem l'aspecte de background que té l'aplicació en general
     // TODO podríem tenir a nivell d'aplicació centralitzat el tema de
     // gestió de les diferents paletes de l'aplicació
     QBrush brush = QApplication::palette().window();
-    if( option )
+    if (option)
     {
-		// si seleccionem el widget, li canviem el color de fons
-		brush.setColor( QColor( 85, 160, 255 ) );	
+		// Si seleccionem el widget, li canviem el color de fons
+		brush.setColor(QColor(85, 160, 255));	
     }
 	QPalette palette = this->palette();
-	palette.setBrush( QPalette::Active, QPalette::Window, brush );
-	setPalette( palette );
-    m_2DView->setActive( option );
+	palette.setBrush(QPalette::Active, QPalette::Window, brush);
+	setPalette(palette);
+    m_2DView->setActive(option);
 }
 
-Q2DViewer *Q2DViewerWidget::getViewer()
+Q2DViewer* Q2DViewerWidget::getViewer()
 {
     return m_2DView;
 }
@@ -136,21 +137,21 @@ Q2DViewer *Q2DViewerWidget::getViewer()
 bool Q2DViewerWidget::hasPhases()
 {
     int phases = 0 ;
-    if( m_mainVolume )
+    if (m_mainVolume)
     {
         phases = m_mainVolume->getNumberOfPhases();
     }
-    return ( phases > 1 ) ;
+    return (phases > 1) ;
 }
 
-void Q2DViewerWidget::setDefaultAction( QAction *synchronizeAction )
+void Q2DViewerWidget::setDefaultAction(QAction *synchronizeAction)
 {
-    m_synchronizeButton->setDefaultAction( synchronizeAction );
+    m_synchronizeButton->setDefaultAction(synchronizeAction);
 }
 
 void Q2DViewerWidget::enableSynchronization(bool enable)
 {
-    if( m_synchronizeButtonAction->isChecked() != enable )
+    if (m_synchronizeButtonAction->isChecked() != enable)
     {
         // Ens han invocat el mètode directament, no s'ha fet clicant el botó
         // Això farà invocar aquest mètode de nou passant per "l'else"
@@ -158,8 +159,8 @@ void Q2DViewerWidget::enableSynchronization(bool enable)
     }
     else
     {
-        SynchronizeTool *synchronizeTool = dynamic_cast<SynchronizeTool *>( getViewer()->getToolProxy()->getTool("SynchronizeTool") );
-        if( synchronizeTool )
+        SynchronizeTool *synchronizeTool = dynamic_cast<SynchronizeTool *>(getViewer()->getToolProxy()->getTool("SynchronizeTool"));
+        if (synchronizeTool)
         {
             synchronizeTool->setEnabled(enable);
         }
@@ -173,40 +174,40 @@ void Q2DViewerWidget::enableSynchronization(bool enable)
 
 void Q2DViewerWidget::updateSlider()
 {
-    m_slider->setValue( m_2DView->getCurrentSlice() );
+    m_slider->setValue(m_2DView->getCurrentSlice());
 }
 
 void Q2DViewerWidget::resetSliderRangeAndValue()
 {
-    m_slider->setMaximum( m_2DView->getMaximumSlice() - m_2DView->getSlabThickness()+ 1 );
-    m_slider->setValue( m_2DView->getCurrentSlice() );
+    m_slider->setMaximum(m_2DView->getMaximumSlice() - m_2DView->getSlabThickness()+ 1);
+    m_slider->setValue(m_2DView->getCurrentSlice());
 }
 
 void Q2DViewerWidget::disableDownloadingState()
 {
-    if ( m_downloadingWidget )
+    if (m_downloadingWidget)
     {
-        m_downloadingWidget->setVisible( false );
+        m_downloadingWidget->setVisible(false);
     }
 }
 
 void Q2DViewerWidget::enableDownloadingState()
 {
-    if ( !m_downloadingWidget )
+    if (!m_downloadingWidget)
     {
         createDownloadingWidget();
     }
 
-    m_downloadingWidget->setVisible( false );
+    m_downloadingWidget->setVisible(false);
 
     QRect size = this->geometry();
-    m_downloadingWidget->setGeometry( size.x(), size.y(), size.width(), size.height() );
-    m_downloadingWidget->setVisible( true );
+    m_downloadingWidget->setGeometry(size.x(), size.y(), size.width(), size.height());
+    m_downloadingWidget->setVisible(true);
 }
 
 void Q2DViewerWidget::createDownloadingWidget()
 {
-    m_downloadingWidget = new QWidget( this->parentWidget() );
+    m_downloadingWidget = new QWidget(this->parentWidget());
     m_downloadingWidget->setStyleSheet("background-color: black; color: white;");
     QVBoxLayout *verticalLayout = new QVBoxLayout(m_downloadingWidget);
 
@@ -214,19 +215,18 @@ void Q2DViewerWidget::createDownloadingWidget()
     QFlags<Qt::AlignmentFlag> hCenterFlag(Qt::AlignHCenter);
     QFlags<Qt::AlignmentFlag> bottomFlag(Qt::AlignBottom);
 
-    QLabel *downloadingLabelText = new QLabel( m_downloadingWidget );
-    downloadingLabelText->setText( tr("Downloading previous study...") );
-    downloadingLabelText->setAlignment( bottomFlag|hCenterFlag );
+    QLabel *downloadingLabelText = new QLabel(m_downloadingWidget);
+    downloadingLabelText->setText(tr("Downloading previous study..."));
+    downloadingLabelText->setAlignment(bottomFlag|hCenterFlag);
     verticalLayout->addWidget(downloadingLabelText);
     QMovie *downloadingMovie = new QMovie();
     QLabel *downloadingLabelMovie = new QLabel(m_downloadingWidget);
     downloadingLabelMovie->setMovie(downloadingMovie);
     downloadingMovie->setFileName(QString::fromUtf8(":/images/downloading.gif"));
 
-    downloadingLabelMovie->setAlignment( topFlag|hCenterFlag );
+    downloadingLabelMovie->setAlignment(topFlag|hCenterFlag);
     verticalLayout->addWidget(downloadingLabelMovie);
     downloadingMovie->start();
-
 }
 
 }
