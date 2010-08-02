@@ -112,6 +112,10 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message = tr("The sent of study %1 from patient %2 to PACS %3 has been cnacelled.").arg(
                 studyID, patientName, pacsAETitle);
             break;
+        case PACSRequestStatus::PACSConnectionBroken:
+            message = tr("The connection with PACS %1 has been broken sending the DICOM Files from study %2 of patient %3. ").arg(pacsAETitle, studyID, patientName);
+            message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
+            break;
         default:
             message = tr("An unknown error has ocurred sending DICOM files from study %1 of patient %2 to PACS %3 .").arg(
                 studyID, patientName, pacsAETitle);

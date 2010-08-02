@@ -9,6 +9,8 @@
 
 #include <QList>
 #include <QObject>
+#include <ofcond.h>
+
 #include "pacsdevice.h"
 #include "pacsrequeststatus.h"
 struct T_DIMSE_C_StoreRSP;
@@ -73,7 +75,7 @@ private:
     int m_numberOfSendImagesSuccessful, m_numberOfSendImagesWithWarning, m_numberOfImagesToSend;
     PacsDevice m_pacs;
     bool m_abortIsRequested;
-    
+    OFCondition m_lastOFCondition;
 
 };
 

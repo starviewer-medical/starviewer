@@ -19,7 +19,7 @@ public:
        WarningSend: Per a StoreSCU indica que totes les imatges s'han enviat però per totes o alguna imatge hem rebut un warning, per exemple podem rebre un 
                      warning perquè el PACS ha guardat amb una transfer syntax diferent les imatges del que les havíem enviat.
        FailureSend : L'enviament de totes les imatges ha fallat*/
-    enum SendRequestStatus {OkSend, CanNotConnectPACSToSend, FailureSend, WarningSend, SomeImagesFailedSend, CancelledSend, UnknowStatusSend};
+    enum SendRequestStatus {OkSend, CanNotConnectPACSToSend, FailureSend, WarningSend, SomeImagesFailedSend, CancelledSend, UnknowStatusSend, PACSConnectionBroken};
 
     /*Es defineix els tipus d'error que podem tenir al descarregar fitxers DICOM:
         DatabaseError: Indica quan error de base de dades d'Starviewer

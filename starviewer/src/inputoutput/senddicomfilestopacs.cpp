@@ -63,6 +63,11 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         {
             emit DICOMFileSent(imageToStore, getNumberOfImagesSentSuccesfully() + this->getNumberOfImagesSentWarning());
         }
+        else if (m_lastOFCondition == DIMSE_SENDFAILED)
+        {
+            //Si se'ns retorna un OFCondition == DIMSE_SENDFAILED, indica que s'ha perdut la connexió amb el PACS
+            break;
+        }
     }
 
     pacsServer.disconnect();
@@ -79,7 +84,6 @@ void SendDICOMFilesToPACS::requestCancel()
 void SendDICOMFilesToPACS::initialitzeImagesCounters(int numberOfImagesToSend)
 {
     //Inicialitzem els comptadors 
-
     m_numberOfSendImagesSuccessful = 0;
     m_numberOfSendImagesWithWarning = 0;
     m_numberOfImagesToSend = numberOfImagesToSend;
@@ -107,10 +111,10 @@ bool SendDICOMFilesToPACS::storeSCU(PacsConnection pacsConnection, QString filep
     DcmDataset *statusDetail = NULL;
     DcmFileFormat dcmff;
 
-    OFCondition condition = dcmff.loadFile(qPrintable(QDir::toNativeSeparators(filepathToStore)));
+    m_lastOFCondition = dcmff.loadFile(qPrintable(QDir::toNativeSeparators(filepathToStore)));
 
     /* figure out if an error occured while the file was read*/
-    if (condition.bad()) 
+    if (m_lastOFCondition.bad()) 
     {
         ERROR_LOG("No s'ha pogut obrir el fitxer " + filepathToStore);
         return false;
@@ -156,13 +160,13 @@ bool SendDICOMFilesToPACS::storeSCU(PacsConnection pacsConnection, QString filep
         request.DataSetType = DIMSE_DATASET_PRESENT;
         request.Priority = DIMSE_PRIORITY_LOW;
 
-        condition = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(), NULL /*progressCallback*/, 
+        m_lastOFCondition = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(), NULL /*progressCallback*/, 
             NULL /*callbackData */, DIMSE_NONBLOCKING, m_pacs.getConnectionTimeout(), &response, &statusDetail, NULL /*check for cancel parameters*/, 
             DU_fileSize(qPrintable(filepathToStore)));
 
-        if (condition.bad())
+        if (m_lastOFCondition.bad())
         {
-            ERROR_LOG("S'ha produït un error al fer el store de la imatge " + filepathToStore + ", descripció de l'error" + QString(condition.text()));
+            ERROR_LOG("S'ha produit un error al fer el store de la imatge " + filepathToStore + ", descripció de l'error" + QString(m_lastOFCondition.text()));
         }
 
         processResponseFromStoreSCP(&response, statusDetail, filepathToStore);
@@ -171,8 +175,8 @@ bool SendDICOMFilesToPACS::storeSCU(PacsConnection pacsConnection, QString filep
         {
             delete statusDetail;
         }
-
-        return condition.good() && response.DimseStatus == STATUS_Success;
+        
+        return m_lastOFCondition.good() && response.DimseStatus == STATUS_Success;
     }
 }
 
@@ -259,6 +263,11 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::getStatusStoreSCU()
     {
         INFO_LOG("S'ha abortat l'enviament d'imatges al PACS");
         return PACSRequestStatus::CancelledSend;
+    }
+    else if (m_lastOFCondition == DIMSE_SENDFAILED)
+    {
+        ERROR_LOG("S'ha perdut la connexio amb el PACS mentre s'enviaven els fitxers");
+        return PACSRequestStatus::PACSConnectionBroken;
     }
     else if (getNumberOfImagesSentSuccesfully() == 0)
     {
