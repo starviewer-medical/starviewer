@@ -68,6 +68,15 @@ private:
     // \TODO això en un futur ho farà una classe registradora, ara es fa tot aquí per conveniència
     void registerSteps();
 
+    /// Ens diu si la llista d'arxius conté fitxers mhd
+    bool containsMHDFiles(const QStringList &files);
+
+    /// Processa els arxius assumint que aquests són MHD i ens retorna la pertinent llista de pacients
+    QList<Patient *> processMHDFiles(const QStringList &files);
+
+    /// Processa els arxius assumint que aquests són DICOM i ens retorna la pertinent llista de pacients
+    QList<Patient *> processDICOMFiles(const QStringList &files);
+
 private:
     /// Registre d'steps
     QList<PatientFillerStep *> m_registeredSteps;
