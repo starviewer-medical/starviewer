@@ -31,41 +31,37 @@ class DICOMTagReader;
 
     No es poden utilitzar els dos mètodes de processament alhora en el mateix fitxer.
 
-    \TODO De moment hi ha la limitiació de que es pressuposa que totes les imatges que se li passen són del mateix pacient.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    TODO De moment hi ha la limitiació de que es pressuposa que totes les imatges que se li passen són del mateix pacient.
 */
 class PatientFiller : public QObject {
-    Q_OBJECT
+Q_OBJECT
 public:
     PatientFiller(QObject * parent = 0);
-
     ~PatientFiller();
 
 public slots:
-
-    ///Procem un fitxer DICOM. Ens permet anar passant fitxers un a un i, un cop acabem, cridar el mètode finishDICOMFilesProcess
-    ///per obtenir el resultat a partir del signal patientProcessed.
-    ///Es presuposa que el fitxer DICOM passat no està buit.
+    /// Processem un fitxer DICOM. Ens permet anar passant fitxers un a un i, un cop acabem, cridar el mètode finishDICOMFilesProcess
+    /// per obtenir el resultat a partir del signal patientProcessed.
+    /// Es presuposa que el fitxer DICOM passat no està buit.
     void processDICOMFile(DICOMTagReader *dicomTagReader);
 
-    ///Indica que ja hem acabat de processar fitxers i ja podem obtenir el resultat final, és a dir, l'estructura Patient omplerta.
-    ///Aquesta se'ns dona a partir del signal patientProcessed.
+    /// Indica que ja hem acabat de processar fitxers i ja podem obtenir el resultat final, és a dir, l'estructura Patient omplerta.
+    /// Aquesta se'ns dona a partir del signal patientProcessed.
     void finishDICOMFilesProcess();
 
-    ///Processa tots els fitxers que se li passin de cop, retornant la llista d'objectes Patient que es generin.
-    QList<Patient*> processFiles(const QStringList &files);
+    /// Processa tots els fitxers que se li passin de cop, retornant la llista d'objectes Patient que es generin.
+    QList<Patient *> processFiles(const QStringList &files);
 
 signals:
     /// Senyal que s'emet cada vegada que es processa un fitxer indicant quin és dintre del "lot" a processar.
     void progress(int);
 
     /// Senyal que s'emet quan en el mode asíncron s'ha acabat de processar totes les images passades.
-    void patientProcessed(Patient *);
+    void patientProcessed(Patient *patient);
 
 private:
     /// S'encarrega de registrar els mòduls/steps que processaran l'input.
-    // \TODO això en un futur ho farà una classe registradora, ara es fa tot aquí per conveniència
+    // TODO Això en un futur ho farà una classe registradora, ara es fa tot aquí per conveniència
     void registerSteps();
 
     /// Ens diu si la llista d'arxius conté fitxers mhd
