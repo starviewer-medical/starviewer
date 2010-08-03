@@ -131,40 +131,68 @@ QList<Patient*> PatientFiller::processFiles(const QStringList &files)
     // HACK per fer el cas especial dels mhd. Això està així perquè perquè el mètode
     // processDICOMFile s'espera un DICOMTagReader, que no podem crear a partir d'un mhd.
     // El filler d'mhd realment no s'està utilitzant a dintre del process de fillers com la resta.
-    if(files.first().contains(".mhd"))
+    if (containsMHDFiles(files))
     {
-        PatientFillerInput patientFillerInput;
-        foreach(QString file, files)
+        return processMHDFiles(files);
+    }
+    else
+    {
+        return processDICOMFiles(files);
+    }
+}
+
+bool PatientFiller::containsMHDFiles(const QStringList &files)
+{
+    if (!files.isEmpty())
+    {
+        return files.first().endsWith(".mhd",Qt::CaseInsensitive);
+    }
+    else
+    {
+        return false;
+    }
+}
+
+QList<Patient *> PatientFiller::processMHDFiles(const QStringList &files)
+{
+    PatientFillerInput patientFillerInput;
+    foreach (const QString &file, files)
+    {
+        patientFillerInput.setFile(file);
+
+        MHDFileClassifierStep mhdFileClassiferStep;
+        mhdFileClassiferStep.setInput(&patientFillerInput);
+        if (!mhdFileClassiferStep.fillIndividually())
         {
-            patientFillerInput.setFile(file);
-
-            MHDFileClassifierStep mhdFileClassiferStep;
-            mhdFileClassiferStep.setInput(&patientFillerInput);
-            if(!mhdFileClassiferStep.fillIndividually())
-            {
-                ERROR_LOG("No s'ha pogut processar un fitxer MHD: " + file);
-            }
+            DEBUG_LOG("No s'ha pogut processar el fitxer MHD: " + file);
+            ERROR_LOG("No s'ha pogut processar el fitxer MHD: " + file);
         }
-
-        return patientFillerInput.getPatientsList();
     }
 
+    return patientFillerInput.getPatientsList();
+}
+
+QList<Patient *> PatientFiller::processDICOMFiles(const QStringList &files)
+{
     m_imageCounter = 0;
 
-    foreach(QString dicomFile, files)
+    foreach (const QString &dicomFile, files)
     {
         DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFile);
-        if( dicomTagReader->canReadFile() )
-            this->processDICOMFile( dicomTagReader );
+        if (dicomTagReader->canReadFile())
+        {
+            this->processDICOMFile(dicomTagReader);
+        }
 
         emit progress(++m_imageCounter);
     }
 
-    foreach(PatientFillerStep *fillerStep, m_registeredSteps)
+    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
     {
         fillerStep->postProcessing();
     }
 
     return m_patientFillerInput->getPatientsList();
 }
+
 }
