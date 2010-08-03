@@ -28,7 +28,8 @@
 
 namespace udg {
 
-PatientFiller::PatientFiller(QObject * parent) : QObject(parent)
+PatientFiller::PatientFiller(QObject * parent) 
+ : QObject(parent)
 {
     registerSteps();
     m_patientFillerInput = new PatientFillerInput();
@@ -53,18 +54,18 @@ bool patientFillerMorePriorityFirst(const PatientFillerStep *s1, const PatientFi
 
 void PatientFiller::registerSteps()
 {
-    m_registeredSteps.append(new ImageFillerStep() );
-    m_registeredSteps.append(new DICOMFileClassifierFillerStep() );
-    m_registeredSteps.append(new OrderImagesFillerStep() );
+    m_registeredSteps.append(new ImageFillerStep());
+    m_registeredSteps.append(new DICOMFileClassifierFillerStep());
+    m_registeredSteps.append(new OrderImagesFillerStep());
     // \TODO Donat que al postProcessing no tenim política d'etiquetes, s'ha posat el Temporal al final
     // perquè necessita que s'hagi executat l'Order abans. S'hauria de millorar.
-    m_registeredSteps.append(new TemporalDimensionFillerStep() );
+    m_registeredSteps.append(new TemporalDimensionFillerStep());
     
-	// TODO encara no hi ha suport a KINs i Presentation States, per tant
-	// fins que no tinguem suport i implementem correctament els respectius 
-	// filler steps no caldrà afegir-los dins del pipeline
-	//m_registeredSteps.append(new KeyImageNoteFillerStep() );
-	//m_registeredSteps.append(new PresentationStateFillerStep() );
+    // TODO encara no hi ha suport a KINs i Presentation States, per tant
+    // fins que no tinguem suport i implementem correctament els respectius 
+    // filler steps no caldrà afegir-los dins del pipeline
+    //m_registeredSteps.append(new KeyImageNoteFillerStep());
+    //m_registeredSteps.append(new PresentationStateFillerStep());
 }
 
 void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
@@ -73,31 +74,32 @@ void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
 
     m_patientFillerInput->setDICOMFile(dicomTagReader);
 
-    QList<PatientFillerStep*> processedFillerSteps;
-    QList<PatientFillerStep*> candidatesFillerSteps = m_registeredSteps;
+    QList<PatientFillerStep *> processedFillerSteps;
+    QList<PatientFillerStep *> candidatesFillerSteps = m_registeredSteps;
     bool continueIterating = true;
 
     while (!candidatesFillerSteps.isEmpty() && continueIterating)
     {
-        QList<PatientFillerStep*> fillerStepsToProcess;
-        QList<PatientFillerStep*> newCandidatesFillerSteps;
+        QList<PatientFillerStep *> fillerStepsToProcess;
+        QList<PatientFillerStep *> newCandidatesFillerSteps;
         continueIterating = false;
 
         for (int i = 0; i < candidatesFillerSteps.size(); ++i)
         {
-            if (m_patientFillerInput->hasAllLabels( candidatesFillerSteps.at(i)->getRequiredLabels() ))
+            if (m_patientFillerInput->hasAllLabels(candidatesFillerSteps.at(i)->getRequiredLabels()))
             {
-                fillerStepsToProcess.append( candidatesFillerSteps.at(i) );
+                fillerStepsToProcess.append(candidatesFillerSteps.at(i));
                 continueIterating = true;
             }
             else
             {
-                newCandidatesFillerSteps.append( candidatesFillerSteps.at(i) );
+                newCandidatesFillerSteps.append(candidatesFillerSteps.at(i));
             }
         }
         candidatesFillerSteps = newCandidatesFillerSteps;
 
-        qSort(fillerStepsToProcess.begin(), fillerStepsToProcess.end(), patientFillerMorePriorityFirst); // Ordenem segons la seva prioritat
+        // Ordenem segons la seva prioritat
+        qSort(fillerStepsToProcess.begin(), fillerStepsToProcess.end(), patientFillerMorePriorityFirst);
 
         foreach (PatientFillerStep *fillerStep, fillerStepsToProcess)
         {
