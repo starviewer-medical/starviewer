@@ -45,6 +45,9 @@ private:
     /// Retorna true si és un dataset vàlid, false altrament
     bool isSuitableForThumbnailCreation(DICOMTagReader *reader) const;
 
+    /// Crea una QImage monocrom en format PGm a partir de la DicomImage proporcionada
+    /// Assumeix que la DicomImage és monocrom
+    QImage createPGMImage(DicomImage *dicomImage);
 };
 
 }

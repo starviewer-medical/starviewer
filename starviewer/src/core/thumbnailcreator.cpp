@@ -148,36 +148,24 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
         }
         else if(scaledImage->getStatus() == EIS_Normal)
         {
-            // El següent codi crea una imatge pgm a memòria i carreguem aquest buffer directament al pixmap
-            // Obtingut de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
-            const int width = (int)(scaledImage->getWidth());
-            const int height = (int)(scaledImage->getHeight());
-            char header[32];
-            // Create PGM header
-            sprintf(header, "P5\n%i %i\n255\n", width, height);
-            const int offset = strlen(header);
-            const unsigned int length = width * height + offset;
-            // Create output buffer for DicomImage class
-            Uint8 *buffer = new Uint8[length];
-            if (buffer != NULL)
+            if (scaledImage->isMonochrome())
             {
-                // Copy PGM header to buffer
-                OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)header, buffer, offset);
-                if (scaledImage->getOutputData((void *)(buffer + offset), length, 8))
+                thumbnail = createPGMImage(scaledImage);
+                if (thumbnail == QImage())
                 {
-                    if(thumbnail.loadFromData((const unsigned char *)buffer, length, "PGM"))
-                    {
-                        ok = true;
-                    }
-                    else
-                        DEBUG_LOG(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Ha fallat :(");
-
+                    ok = false;
                 }
-                // Delete temporary pixel buffer
-                delete[] buffer;
-                // Cal esborrar la DicomImage per no tenir fugues de memòria
-                delete scaledImage;
+                else
+                {
+                    ok = true;
+                }
             }
+            else
+            {
+                ok = false;
+            }
+            // Cal esborrar la DicomImage per no tenir fugues de memòria
+            delete scaledImage;
         }
         else
         {
@@ -234,6 +222,47 @@ bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) co
 
     // TODO Comprovar la modalitat també?
     return suitable;
+}
+
+QImage ThumbnailCreator::createPGMImage(DicomImage *dicomImage)
+{
+    Q_ASSERT(dicomImage);
+    Q_ASSERT(dicomImage->isMonochrome());
+    
+    // El següent codi crea una imatge pgm a memòria i carreguem aquest buffer directament al pixmap
+    // Obtingut de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
+    const int width = (int)(dicomImage->getWidth());
+    const int height = (int)(dicomImage->getHeight());
+    char header[32];
+    // Create PGM header
+    sprintf(header, "P5\n%i %i\n255\n", width, height);
+    const int offset = strlen(header);
+    
+    // QImage en la que carregarem el buffer de dades
+    QImage thumbnail;
+    // Create output buffer for DicomImage class
+    const unsigned int length = width * height + offset;
+    Uint8 *buffer = new Uint8[length];
+    if (buffer != NULL)
+    {
+        // Copy PGM header to buffer
+        OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)header, buffer, offset);
+        if (dicomImage->getOutputData((void *)(buffer + offset), length, 8))
+        {
+            if (!thumbnail.loadFromData((const unsigned char *)buffer, length, "PGM"))
+            {
+                DEBUG_LOG("La càrrega del buffer al thumbnail ha fallat :(");
+            }
+        }
+        // Delete temporary pixel buffer
+        delete[] buffer;
+    }
+    else
+    {
+        DEBUG_LOG("Memòria insuficient per crear el buffer del thumbnail!");
+    }
+
+    return thumbnail;
 }
 
 };
