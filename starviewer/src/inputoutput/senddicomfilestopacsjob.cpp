@@ -105,7 +105,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message += tr("Please contact with an administrator to solve the problem.");
             break;
         case PACSRequestStatus::WarningSend:
-            message = tr("The study %1 of patient %2 has been sent, but it's possible that the PACS %3 has changed some data of the images.").arg(
+            message = tr("The study %1 of patient %2 has been sent, but it's possible that the PACS %3 has changed some data of some images.").arg(
                 studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::CancelledSend:
