@@ -223,7 +223,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
     PatientFiller patientFiller;
     connect(&patientFiller, SIGNAL( progress(int) ), &progressDialog, SLOT( setValue(int) ));
 
-    QList<Patient*> patientsList = patientFiller.processDICOMFileList(inputFiles);
+    QList<Patient*> patientsList = patientFiller.processFiles(inputFiles);
 
     progressDialog.close();
 
