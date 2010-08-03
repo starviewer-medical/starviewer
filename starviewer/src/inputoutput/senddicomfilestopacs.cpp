@@ -286,7 +286,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::getStatusStoreSCU()
     {
         //Alguna imatge s'ha guardat amb l'Status de warning (Normalment significa que el PACS ha modificat les dades del fitxer DICOM enviat)
         WARN_LOG(QString("En l'enviament de %1 de %2 fitxers s'ha rebut un warning").arg(QString().setNum(getNumberOfDICOMFilesSentWarning()), QString().setNum(m_numberOfDICOMFilesToSend)));
-        return PACSRequestStatus::SomeDICOMFilesSentFailed;
+        return PACSRequestStatus::WarningSend;
     }
     
     INFO_LOG("Totes els fitxers s'han enviat al PACS correctament");
