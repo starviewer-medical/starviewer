@@ -23,7 +23,7 @@ class DICOMTagReader;
     que finalitzi el procés per obtenir el resultat amb finishDICOMFilesProcess. El resultat ens el donarà en el signal
     patientProcessed(Patient*).
 
-    En canvi, en el mode d'operació síncron, simplement cal cridar el mètode processDICOMFileList passant la llista de fitxers que
+    En canvi, en el mode d'operació síncron, simplement cal cridar el mètode processFiles passant la llista de fitxers que
     volem processar.
 
     El mètode asíncron està pensant per poder processar fitxers DICOM un a un a mesura que els anem obtenit en threads diferents, siguent
@@ -54,7 +54,7 @@ public slots:
     void finishDICOMFilesProcess();
 
     ///Processa tots els fitxers que se li passin de cop, retornant la llista d'objectes Patient que es generin.
-    QList<Patient*> processDICOMFileList(QStringList dicomFiles);
+    QList<Patient*> processFiles(const QStringList &files);
 
 signals:
     /// Senyal que s'emet cada vegada que es processa un fitxer indicant quin és dintre del "lot" a processar.

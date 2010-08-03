@@ -126,15 +126,15 @@ void PatientFiller::finishDICOMFilesProcess()
     m_imageCounter = 0;
 }
 
-QList<Patient*> PatientFiller::processDICOMFileList(QStringList dicomFiles)
+QList<Patient*> PatientFiller::processFiles(const QStringList &files)
 {
     // HACK per fer el cas especial dels mhd. Això està així perquè perquè el mètode
     // processDICOMFile s'espera un DICOMTagReader, que no podem crear a partir d'un mhd.
     // El filler d'mhd realment no s'està utilitzant a dintre del process de fillers com la resta.
-    if(dicomFiles.first().contains(".mhd"))
+    if(files.first().contains(".mhd"))
     {
         PatientFillerInput patientFillerInput;
-        foreach(QString file, dicomFiles)
+        foreach(QString file, files)
         {
             patientFillerInput.setFile(file);
 
@@ -151,7 +151,7 @@ QList<Patient*> PatientFiller::processDICOMFileList(QStringList dicomFiles)
 
     m_imageCounter = 0;
 
-    foreach(QString dicomFile, dicomFiles)
+    foreach(QString dicomFile, files)
     {
         DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFile);
         if( dicomTagReader->canReadFile() )

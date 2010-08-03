@@ -309,7 +309,7 @@ Patient* DICOMDIRReader::retrieve(DicomMask maskToRetrieve)
 
     PatientFiller patientFiller;
 
-    QList<Patient *> patientsList = patientFiller.processDICOMFileList(files);
+    QList<Patient *> patientsList = patientFiller.processFiles(files);
     if( patientsList.isEmpty() )
         return NULL;
     else
