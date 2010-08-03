@@ -49,7 +49,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         return PACSRequestStatus::CanNotConnectPACSToSend;
     }
 
-    initialitzeImagesCounters(imageListToSend.count());
+    initialitzeDICOMFilesCounters(imageListToSend.count());
 
     foreach(Image *imageToStore, imageListToSend)
     {
@@ -61,7 +61,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         INFO_LOG(QString("S'enviara al PACS %1 el fitxer %2").arg(m_pacs.getAETitle(), imageToStore->getPath()));
         if (storeSCU(pacsServer.getConnection(), qPrintable(imageToStore->getPath())))
         {
-            emit DICOMFileSent(imageToStore, getNumberOfImagesSentSuccesfully() + this->getNumberOfImagesSentWarning());
+            emit DICOMFileSent(imageToStore, getNumberOfDICOMFilesSentSuccesfully() + this->getNumberOfDICOMFilesSentWarning());
         }
         else if (m_lastOFCondition == DIMSE_SENDFAILED)
         {
@@ -78,15 +78,15 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
 void SendDICOMFilesToPACS::requestCancel()
 {
     m_abortIsRequested = true;
-    INFO_LOG("Ens han demanat cancel·lar l'enviament d'imatges al PACS");
+    INFO_LOG("Ens han demanat cancel·lar l'enviament dels fitxers al PACS");
 }
 
-void SendDICOMFilesToPACS::initialitzeImagesCounters(int numberOfImagesToSend)
+void SendDICOMFilesToPACS::initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend)
 {
     //Inicialitzem els comptadors 
-    m_numberOfSendImagesSuccessful = 0;
-    m_numberOfSendImagesWithWarning = 0;
-    m_numberOfImagesToSend = numberOfImagesToSend;
+    m_numberOfDICOMFilesSentSuccessfully = 0;
+    m_numberOfDICOMFilesSentWithWarning = 0;
+    m_numberOfDICOMFilesToSend = numberOfDICOMFilesToSend;
 }
 
 /*
@@ -195,7 +195,7 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
     if (response->DimseStatus == STATUS_Success)
     {
         //La imatge s'ha enviat correctament
-        m_numberOfSendImagesSuccessful++;
+        m_numberOfDICOMFilesSentSuccessfully++;
         return;
     }
 
@@ -217,7 +217,8 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
 
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
             break;
-        //coersió entre tipus, s'ha convertit un tipus a un altre tipus i es pot haver perdut dades, per exemple passar de decimal a enter
+        /*coersió entre tipus, s'ha convertit un tipus a un altre tipus i es pot haver perdut dades, per exemple passar de decimal a enter, tot i així 
+          els fitxers s'han enviat i guardat*/
         case STATUS_STORE_Warning_CoersionOfDataElements: // 0xB000 
         case STATUS_STORE_Warning_DataSetDoesNotMatchSOPClass: //0xB007
         case STATUS_STORE_Warning_ElementsDiscarded: //0xB006
@@ -226,7 +227,7 @@ void SendDICOMFilesToPACS::processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *respo
             relatedFieldsList << DCM_OffendingElement << DCM_ErrorComment;
             
             ERROR_LOG(messageErrorLog + QString(DU_cstoreStatusString(response->DimseStatus)));
-            m_numberOfSendImagesWithWarning++;
+            m_numberOfDICOMFilesSentWithWarning++;
             break;
         default:
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
@@ -269,43 +270,43 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::getStatusStoreSCU()
         ERROR_LOG("S'ha perdut la connexio amb el PACS mentre s'enviaven els fitxers");
         return PACSRequestStatus::PACSConnectionBroken;
     }
-    else if (getNumberOfImagesSentSuccesfully() == 0)
+    else if (getNumberOfDICOMFilesSentSuccesfully() == 0)
     {
         //No hem guardat cap imatge (Failure Status)
-        ERROR_LOG("Ha fallat l'enviament de totes les imatges al PACS");
+        ERROR_LOG("Ha fallat l'enviament de tots els fitxers al PACS");
         return PACSRequestStatus::FailureSend;
     }
-    else if (getNumberOfImagesSentFailed() > 0)
+    else if (getNumberOfDICOMFilesSentFailed() > 0)
     {
-        //No s'han pogut guardar les imatges (Warning Status);
-        ERROR_LOG(QString("L'enviament al PACS de %1 de %2 imatges ha fallat").arg(QString().setNum(getNumberOfImagesSentFailed()), QString().setNum(m_numberOfImagesToSend)));
-        return PACSRequestStatus::SomeImagesFailedSend;
+        //No s'han pogut guardar els fitxers
+        ERROR_LOG(QString("L'enviament al PACS de %1 de %2 fitxers ha fallat").arg(QString().setNum(getNumberOfDICOMFilesSentFailed()), QString().setNum(m_numberOfDICOMFilesToSend)));
+        return PACSRequestStatus::SomeDICOMFilesSentFailed;
     }
-    else if (getNumberOfImagesSentWarning() > 0)
+    else if (getNumberOfDICOMFilesSentWarning() > 0)
     {
-        //Alguna imatge s'ha guardat amb l'Status de warning
-        WARN_LOG(QString("En l'enviament de %1 de %2 imatges s'ha rebut un warning").arg(QString().setNum(getNumberOfImagesSentWarning()), QString().setNum(m_numberOfImagesToSend)));
-        return PACSRequestStatus::SomeImagesFailedSend;
+        //Alguna imatge s'ha guardat amb l'Status de warning (Normalment significa que el PACS ha modificat les dades del fitxer DICOM enviat)
+        WARN_LOG(QString("En l'enviament de %1 de %2 fitxers s'ha rebut un warning").arg(QString().setNum(getNumberOfDICOMFilesSentWarning()), QString().setNum(m_numberOfDICOMFilesToSend)));
+        return PACSRequestStatus::SomeDICOMFilesSentFailed;
     }
     
-    INFO_LOG("Totes les imatges s'han enviat al PACS correctament");
+    INFO_LOG("Totes els fitxers s'han enviat al PACS correctament");
 
     return PACSRequestStatus::OkSend;
 }
 
-int SendDICOMFilesToPACS::getNumberOfImagesSentSuccesfully()
+int SendDICOMFilesToPACS::getNumberOfDICOMFilesSentSuccesfully()
 {
-    return m_numberOfSendImagesSuccessful;
+    return m_numberOfDICOMFilesSentSuccessfully;
 }
 
-int SendDICOMFilesToPACS::getNumberOfImagesSentFailed()
+int SendDICOMFilesToPACS::getNumberOfDICOMFilesSentFailed()
 {
-    return m_numberOfImagesToSend - m_numberOfSendImagesSuccessful - m_numberOfSendImagesWithWarning;
+    return m_numberOfDICOMFilesToSend - m_numberOfDICOMFilesSentSuccessfully - m_numberOfDICOMFilesSentWithWarning;
 }
 
-int SendDICOMFilesToPACS::getNumberOfImagesSentWarning()
+int SendDICOMFilesToPACS::getNumberOfDICOMFilesSentWarning()
 {
-    return m_numberOfSendImagesWithWarning;
+    return m_numberOfDICOMFilesSentWithWarning;
 }
 
 }
