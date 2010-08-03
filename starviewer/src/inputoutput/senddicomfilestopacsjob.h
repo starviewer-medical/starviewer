@@ -53,15 +53,6 @@ public:
     ///Retorna l'estudi de les imatges que s'havia de guardar
     Study *getStudyOfDICOMFilesToSend();
 
-    ///Retorna el número d'imatges enviades correctament
-    int getNumberOfDICOMFilesSentSuccesfully();
-
-    ///Retorna el número d'imatges que l'enviament ha fallat
-    int getNumberOfDICOMFilesSentFailed();
-
-    ///Retorna el número d'imatges que s'ha enviat però han donat warning
-    int getNumberOfDICOMFilesSentWarning();
-
 signals:
 
     ///Signal que s'emet quan s'enviat una imatge al PACS
