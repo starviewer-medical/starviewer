@@ -156,6 +156,7 @@ bool PatientFiller::containsMHDFiles(const QStringList &files)
 QList<Patient *> PatientFiller::processMHDFiles(const QStringList &files)
 {
     PatientFillerInput patientFillerInput;
+    m_imageCounter = 0;
     foreach (const QString &file, files)
     {
         patientFillerInput.setFile(file);
@@ -167,6 +168,7 @@ QList<Patient *> PatientFiller::processMHDFiles(const QStringList &files)
             DEBUG_LOG("No s'ha pogut processar el fitxer MHD: " + file);
             ERROR_LOG("No s'ha pogut processar el fitxer MHD: " + file);
         }
+        emit progress(++m_imageCounter);
     }
 
     return patientFillerInput.getPatientsList();
