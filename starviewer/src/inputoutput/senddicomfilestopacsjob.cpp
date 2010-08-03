@@ -38,7 +38,7 @@ PACSJob::PACSJobType SendDICOMFilesToPACSJob::getPACSJobType()
 
 void SendDICOMFilesToPACSJob::run()
 {
-    m_lastImageSeriesInstanceUID = "";
+    m_lastDICOMFileSeriesInstanceUID = "";
     m_numberOfSeriesSent = 0;
 
     if (m_imagesToSend.count() > 0)
@@ -52,7 +52,7 @@ void SendDICOMFilesToPACSJob::run()
 
         m_sendRequestStatus = m_sendDICOMFilesToPACS->send(getFilesToSend());
 
-        if (m_sendRequestStatus == PACSRequestStatus::OkSend || m_sendRequestStatus == PACSRequestStatus::SomeImagesFailedSend ||
+        if (m_sendRequestStatus == PACSRequestStatus::OkSend || m_sendRequestStatus == PACSRequestStatus::SomeDICOMFilesSentFailed ||
             m_sendRequestStatus == PACSRequestStatus::WarningSend)
         {
             ///Si s'han envait imatges indiquem que s'ha enviat la última sèrie
@@ -64,7 +64,7 @@ void SendDICOMFilesToPACSJob::run()
 
 void SendDICOMFilesToPACSJob::requestCancelJob()
 {
-    INFO_LOG(QString("S'ha demanat la cancel·lació del Job d'enviament d'imatges de l'estudi %1 al PACS %2").arg(getStudyOfImagesToSend()->getInstanceUID(),
+    INFO_LOG(QString("S'ha demanat la cancel·lació del Job d'enviament d'imatges de l'estudi %1 al PACS %2").arg(getStudyOfDICOMFilesToSend()->getInstanceUID(),
         getPacsDevice().getAETitle()));
     m_sendDICOMFilesToPACS->requestCancel();
 }
@@ -79,8 +79,8 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACSJob::getStatus()
 QString SendDICOMFilesToPACSJob::getStatusDescription()
 {
     QString message;
-    QString studyID = getStudyOfImagesToSend()->getID();
-    QString patientName = getStudyOfImagesToSend()->getParentPatient()->getFullName();
+    QString studyID = getStudyOfDICOMFilesToSend()->getID();
+    QString patientName = getStudyOfDICOMFilesToSend()->getParentPatient()->getFullName();
     QString pacsAETitle = getPacsDevice().getAETitle();
 
     switch (getStatus())
@@ -99,9 +99,9 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message = tr("The send of DICOM files from study %1 of patient %2 to PACS %3 has failed.\n\n").arg(studyID, patientName, pacsAETitle); 
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
             break;
-        case PACSRequestStatus::SomeImagesFailedSend:
+        case PACSRequestStatus::SomeDICOMFilesSentFailed:
             message = tr("%1 DICOM files from study %2 of patient %3 can't be send because PACS %4 has rejected them.\n\n").arg(
-                QString().setNum(m_sendDICOMFilesToPACS->getNumberOfImagesSentFailed()), studyID, patientName, pacsAETitle);
+                QString().setNum(m_sendDICOMFilesToPACS->getNumberOfDICOMFilesSentFailed()), studyID, patientName, pacsAETitle);
             message += tr("Please contact with an administrator to solve the problem.");
             break;
         case PACSRequestStatus::WarningSend:
@@ -132,24 +132,24 @@ QList<Image*> SendDICOMFilesToPACSJob::getFilesToSend()
     return m_imagesToSend;
 }
 
-Study* SendDICOMFilesToPACSJob::getStudyOfImagesToSend()
+Study* SendDICOMFilesToPACSJob::getStudyOfDICOMFilesToSend()
 {
     return m_imagesToSend.at(0)->getParentSeries()->getParentStudy();
 }
 
-void SendDICOMFilesToPACSJob::DICOMFileSent(Image *imageSent, int numberOfImagesSent)
+void SendDICOMFilesToPACSJob::DICOMFileSent(Image *imageSent, int numberOfDICOMFilesSent)
 {
     /*Pressuposem que les imatges venen agrupades per sèries, sino és així s'ha de modificar aquest codi, perquè sinó es comptabilitzaran més series enviades
       de les que realment s'han enviat*/
-    emit DICOMFileSent(this, numberOfImagesSent);
+    emit DICOMFileSent(this, numberOfDICOMFilesSent);
 
-    if (imageSent->getParentSeries()->getInstanceUID() != m_lastImageSeriesInstanceUID && !m_lastImageSeriesInstanceUID.isEmpty())
+    if (imageSent->getParentSeries()->getInstanceUID() != m_lastDICOMFileSeriesInstanceUID && !m_lastDICOMFileSeriesInstanceUID.isEmpty())
     {
         m_numberOfSeriesSent++;
         emit DICOMSeriesSent(this, m_numberOfSeriesSent);
     }
 
-    m_lastImageSeriesInstanceUID = imageSent->getParentSeries()->getInstanceUID();
+    m_lastDICOMFileSeriesInstanceUID = imageSent->getParentSeries()->getInstanceUID();
 }
 
 };

@@ -15,11 +15,11 @@ namespace udg {
 class PACSRequestStatus {
 
 public:
-    /* SomeImagesFailedSend - L'enviament d'algunes imatges ha fallat    
+    /* SomeDICOMFilesSentFailed - L'enviament d'algunes imatges ha fallat    
        WarningSend: Per a StoreSCU indica que totes les imatges s'han enviat però per totes o alguna imatge hem rebut un warning, per exemple podem rebre un 
                      warning perquè el PACS ha guardat amb una transfer syntax diferent les imatges del que les havíem enviat.
        FailureSend : L'enviament de totes les imatges ha fallat*/
-    enum SendRequestStatus {OkSend, CanNotConnectPACSToSend, FailureSend, WarningSend, SomeImagesFailedSend, CancelledSend, UnknowStatusSend, PACSConnectionBroken};
+    enum SendRequestStatus {OkSend, CanNotConnectPACSToSend, FailureSend, WarningSend, SomeDICOMFilesSentFailed, CancelledSend, UnknowStatusSend, PACSConnectionBroken};
 
     /*Es defineix els tipus d'error que podem tenir al descarregar fitxers DICOM:
         DatabaseError: Indica quan error de base de dades d'Starviewer

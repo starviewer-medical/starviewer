@@ -44,22 +44,22 @@ public:
     void requestCancel();
 
     ///Retorna el número d'imatges enviades correctament
-    int getNumberOfImagesSentSuccesfully();
+    int getNumberOfDICOMFilesSentSuccesfully();
 
     ///Retorna el número d'imatges que l'enviament ha fallat
-    int getNumberOfImagesSentFailed();
+    int getNumberOfDICOMFilesSentFailed();
 
     ///Retorna el número d'imatges que s'ha enviat però han donat warning, pot donar warning per exemple en el cas que el PACS modifiqui alguna dada de la imatge
-    int getNumberOfImagesSentWarning();
+    int getNumberOfDICOMFilesSentWarning();
 
 signals:
    ///Sinal que indica que s'ha fet l'enviament de la imatge passada per paràmetre al PACS, i el número d'imatges que es porten enviades
-   void DICOMFileSent(Image *image, int numberOfImagesSent);
+   void DICOMFileSent(Image *image, int numberOfDICOMFilesSent);
 
 private :
 
     ///Inicialitze els comptadors d'imatges per controlar quantes han fallat/s'han enviat....
-    void initialitzeImagesCounters(int numberOfImagesToStore);
+    void initialitzeDICOMFilesCounters(int numberOfDICOMFilesToSend);
 
     ///Processa un resposta del Store SCP que no ha tingut l'Status Successfull
     void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
@@ -72,7 +72,7 @@ private :
 
 private: 
     //Indica números d'imatges enviades correctament/Imatges enviades però que ha retorna warning/Total d'imatges que s'ha enviat
-    int m_numberOfSendImagesSuccessful, m_numberOfSendImagesWithWarning, m_numberOfImagesToSend;
+    int m_numberOfDICOMFilesSentSuccessfully, m_numberOfDICOMFilesSentWithWarning, m_numberOfDICOMFilesToSend;
     PacsDevice m_pacs;
     bool m_abortIsRequested;
     OFCondition m_lastOFCondition;

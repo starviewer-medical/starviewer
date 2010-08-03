@@ -51,21 +51,21 @@ public:
     QList<Image*> getFilesToSend();
 
     ///Retorna l'estudi de les imatges que s'havia de guardar
-    Study *getStudyOfImagesToSend();
+    Study *getStudyOfDICOMFilesToSend();
 
     ///Retorna el número d'imatges enviades correctament
-    int getNumberOfImagesSentSuccesfully();
+    int getNumberOfDICOMFilesSentSuccesfully();
 
     ///Retorna el número d'imatges que l'enviament ha fallat
-    int getNumberOfImagesSentFailed();
+    int getNumberOfDICOMFilesSentFailed();
 
     ///Retorna el número d'imatges que s'ha enviat però han donat warning
-    int getNumberOfImagesSentWarning();
+    int getNumberOfDICOMFilesSentWarning();
 
 signals:
 
     ///Signal que s'emet quan s'enviat una imatge al PACS
-    void DICOMFileSent(PACSJob *, int numberOfImagesSent);
+    void DICOMFileSent(PACSJob *, int numberOfDICOMFilesSent);
 
     ///Signal que s'emet quan s'ha enviat un serie completa al PACS
     void DICOMSeriesSent(PACSJob*, int numberOfSeriesSent);
@@ -78,7 +78,7 @@ private:
 private slots:
 
     ///Slot que respón al signal de SendDICOMFilesToPACS DICOMFileSent
-    void DICOMFileSent(Image *imageSent, int numberOfImagesSent);
+    void DICOMFileSent(Image *imageSent, int numberOfDICOMFilesSent);
 
 private:
 
@@ -87,7 +87,7 @@ private:
     SendDICOMFilesToPACS *m_sendDICOMFilesToPACS;
     bool m_abortRequested;
     int m_numberOfSeriesSent;
-    QString m_lastImageSeriesInstanceUID;
+    QString m_lastDICOMFileSeriesInstanceUID;
 };
 
 };

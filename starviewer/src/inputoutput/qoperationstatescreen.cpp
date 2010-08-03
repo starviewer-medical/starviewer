@@ -206,7 +206,7 @@ Study* QOperationStateScreen::getStudyFromPACSJob(PACSJob *pacsJob)
 
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType)
     {
-        study = (dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ))->getStudyOfImagesToSend();
+        study = (dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ))->getStudyOfDICOMFilesToSend();
     }
     else if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
