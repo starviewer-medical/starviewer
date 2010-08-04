@@ -138,17 +138,17 @@ void Q2DViewer::createOrientationAnnotations()
     }
     // Ara posem la informació concreta de cadascuna de les referència d'orientació. 0-4 en sentit anti-horari, començant per 0 = esquerra de la pantalla
     m_patientOrientationTextActor[0]->GetTextProperty()->SetJustificationToLeft();
-    m_patientOrientationTextActor[0]->SetPosition(0.01 , 0.5);
+    m_patientOrientationTextActor[0]->SetPosition(0.01, 0.5);
 
     m_patientOrientationTextActor[1]->GetTextProperty()->SetJustificationToCentered();
-    m_patientOrientationTextActor[1]->SetPosition(0.5 , 0.01);
+    m_patientOrientationTextActor[1]->SetPosition(0.5, 0.01);
 
     m_patientOrientationTextActor[2]->GetTextProperty()->SetJustificationToRight();
-    m_patientOrientationTextActor[2]->SetPosition(0.99 , 0.5);
+    m_patientOrientationTextActor[2]->SetPosition(0.99, 0.5);
 
     m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[3]->GetTextProperty()->SetVerticalJustificationToTop();
-    m_patientOrientationTextActor[3]->SetPosition(0.5 , 0.99);
+    m_patientOrientationTextActor[3]->SetPosition(0.5, 0.99);
 }
 
 void Q2DViewer::createRulers()
@@ -166,11 +166,11 @@ void Q2DViewer::createRulers()
     m_sideRuler->GetLabelTextProperty()->ItalicOff();
     m_sideRuler->GetLabelTextProperty()->BoldOff();
     m_sideRuler->GetLabelTextProperty()->ShadowOff();
-    m_sideRuler->GetLabelTextProperty()->SetColor(0 , 0.7 , 0);
+    m_sideRuler->GetLabelTextProperty()->SetColor(0, 0.7, 0);
     m_sideRuler->GetLabelTextProperty()->SetFontFamilyToArial();
     m_sideRuler->TitleVisibilityOff();
     m_sideRuler->SetTickLength(10);
-    m_sideRuler->GetProperty()->SetColor(0 , 1 , 0);
+    m_sideRuler->GetProperty()->SetColor(0, 1, 0);
     m_sideRuler->VisibilityOff(); // Per defecte, fins que no hi hagi input son invisibles
 
     // Ruler inferior
@@ -186,17 +186,17 @@ void Q2DViewer::createRulers()
     m_bottomRuler->GetLabelTextProperty()->ItalicOff();
     m_bottomRuler->GetLabelTextProperty()->BoldOff();
     m_bottomRuler->GetLabelTextProperty()->ShadowOff();
-    m_bottomRuler->GetLabelTextProperty()->SetColor(0 , 0.7 , 0);
+    m_bottomRuler->GetLabelTextProperty()->SetColor(0, 0.7, 0);
     m_bottomRuler->GetLabelTextProperty()->SetFontFamilyToArial();
     m_bottomRuler->TitleVisibilityOff();
     m_bottomRuler->SetTickLength(10);
-    m_bottomRuler->GetProperty()->SetColor(0 , 1 , 0);
+    m_bottomRuler->GetProperty()->SetColor(0, 1, 0);
     m_bottomRuler->VisibilityOff(); // Per defecte, fins que no hi hagi input son invisibles
 
     // Coordenades fixes per ancorar els rulers al lateral i a la part inferior
     m_anchoredRulerCoordinates = vtkCoordinate::New();
     m_anchoredRulerCoordinates->SetCoordinateSystemToView();
-    m_anchoredRulerCoordinates->SetValue(-0.95 , -0.9 , -0.95);
+    m_anchoredRulerCoordinates->SetValue(-0.95, -0.9, -0.95);
 }
 
 void Q2DViewer::updateRulers()
@@ -206,33 +206,33 @@ void Q2DViewer::updateRulers()
     switch (m_lastView)
     {
         case Axial:
-            m_sideRuler->GetPositionCoordinate()->SetValue(anchoredCoordinates[0] , m_rulerExtent[3] , 0.0);
-            m_sideRuler->GetPosition2Coordinate()->SetValue(anchoredCoordinates[0] , m_rulerExtent[2] , 0.0);
-            m_sideRuler->SetRange(m_rulerExtent[3] , m_rulerExtent[2]);
+            m_sideRuler->GetPositionCoordinate()->SetValue(anchoredCoordinates[0], m_rulerExtent[3], 0.0);
+            m_sideRuler->GetPosition2Coordinate()->SetValue(anchoredCoordinates[0], m_rulerExtent[2], 0.0);
+            m_sideRuler->SetRange(m_rulerExtent[3], m_rulerExtent[2]);
 
-            m_bottomRuler->GetPositionCoordinate()->SetValue(m_rulerExtent[1] , anchoredCoordinates[1]  , 0.0);
-            m_bottomRuler->GetPosition2Coordinate()->SetValue(m_rulerExtent[0] , anchoredCoordinates[1] , 0.0);
-            m_bottomRuler->SetRange(m_rulerExtent[1] , m_rulerExtent[0]);
+            m_bottomRuler->GetPositionCoordinate()->SetValue(m_rulerExtent[1], anchoredCoordinates[1] , 0.0);
+            m_bottomRuler->GetPosition2Coordinate()->SetValue(m_rulerExtent[0], anchoredCoordinates[1], 0.0);
+            m_bottomRuler->SetRange(m_rulerExtent[1], m_rulerExtent[0]);
             break;
 
         case Sagital:
-            m_sideRuler->GetPositionCoordinate()->SetValue(0.0 , anchoredCoordinates[1] , m_rulerExtent[4]);
-            m_sideRuler->GetPosition2Coordinate()->SetValue(0.0 , anchoredCoordinates[1] , m_rulerExtent[5]);
-            m_sideRuler->SetRange(m_rulerExtent[4] , m_rulerExtent[5]);
+            m_sideRuler->GetPositionCoordinate()->SetValue(0.0, anchoredCoordinates[1], m_rulerExtent[4]);
+            m_sideRuler->GetPosition2Coordinate()->SetValue(0.0, anchoredCoordinates[1], m_rulerExtent[5]);
+            m_sideRuler->SetRange(m_rulerExtent[4], m_rulerExtent[5]);
 
-            m_bottomRuler->GetPositionCoordinate()->SetValue(0.0 , m_rulerExtent[3] , anchoredCoordinates[2]);
-            m_bottomRuler->GetPosition2Coordinate()->SetValue(0.0 , m_rulerExtent[2] , anchoredCoordinates[2]);
-            m_bottomRuler->SetRange(m_rulerExtent[3] , m_rulerExtent[2]);
+            m_bottomRuler->GetPositionCoordinate()->SetValue(0.0, m_rulerExtent[3], anchoredCoordinates[2]);
+            m_bottomRuler->GetPosition2Coordinate()->SetValue(0.0, m_rulerExtent[2], anchoredCoordinates[2]);
+            m_bottomRuler->SetRange(m_rulerExtent[3], m_rulerExtent[2]);
             break;
 
         case Coronal:
-            m_sideRuler->GetPositionCoordinate()->SetValue(anchoredCoordinates[0] , 0.0 , m_rulerExtent[4]);
-            m_sideRuler->GetPosition2Coordinate()->SetValue(anchoredCoordinates[0] , 0.0 , m_rulerExtent[5]);
-            m_sideRuler->SetRange(m_rulerExtent[4] , m_rulerExtent[5]);
+            m_sideRuler->GetPositionCoordinate()->SetValue(anchoredCoordinates[0], 0.0, m_rulerExtent[4]);
+            m_sideRuler->GetPosition2Coordinate()->SetValue(anchoredCoordinates[0], 0.0, m_rulerExtent[5]);
+            m_sideRuler->SetRange(m_rulerExtent[4], m_rulerExtent[5]);
 
-            m_bottomRuler->GetPositionCoordinate()->SetValue(m_rulerExtent[1] , 0.0 , anchoredCoordinates[2]);
-            m_bottomRuler->GetPosition2Coordinate()->SetValue(m_rulerExtent[0] , 0.0 , anchoredCoordinates[2]);
-            m_bottomRuler->SetRange(m_rulerExtent[1] , m_rulerExtent[0]);
+            m_bottomRuler->GetPositionCoordinate()->SetValue(m_rulerExtent[1], 0.0, anchoredCoordinates[2]);
+            m_bottomRuler->GetPosition2Coordinate()->SetValue(m_rulerExtent[0], 0.0, anchoredCoordinates[2]);
+            m_bottomRuler->SetRange(m_rulerExtent[1], m_rulerExtent[0]);
             break;
     }
 }
@@ -242,7 +242,7 @@ void Q2DViewer::createScalarBar()
     m_scalarBar = vtkScalarBarActor::New();
     m_scalarBar->SetOrientationToVertical();
     m_scalarBar->GetPositionCoordinate()->SetCoordinateSystemToView();
-    m_scalarBar->SetPosition(0.8 , -0.8);
+    m_scalarBar->SetPosition(0.8, -0.8);
     m_scalarBar->SetWidth(0.08);
     m_scalarBar->SetHeight(0.6);
     m_scalarBar->SetLabelFormat(" %.f  ");
@@ -461,7 +461,7 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     // Obtenim els labels que estem veient en aquest moment
     QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
 
-    // Text actor -> 0:Esquerra, 1:Abaix , 2:Dreta, 3:A dalt
+    // Text actor -> 0:Esquerra, 1:Abaix, 2:Dreta, 3:A dalt
     // Labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
     m_patientOrientationTextActor[0]->SetInput(qPrintable(labels[0]));
     m_patientOrientationTextActor[1]->SetInput(qPrintable(labels[3]));
@@ -1144,7 +1144,7 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
     }
 }
 
-void Q2DViewer::setWindowLevel(double window , double level)
+void Q2DViewer::setWindowLevel(double window, double level)
 {
     if (m_mainVolume)
     {
@@ -1158,7 +1158,7 @@ void Q2DViewer::setWindowLevel(double window , double level)
             vtkWindowLevelLookupTable::SafeDownCast(m_scalarBar->GetLookupTable())->SetLevel(m_windowLevelLUTMapper->GetLevel());
         }
         this->render();
-        emit windowLevelChanged(window , level);
+        emit windowLevelChanged(window, level);
     }
     else
     {
@@ -1232,7 +1232,7 @@ ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
     return this->getImagePlane(m_currentSlice, m_currentPhase, vtkReconstructionHack);
 }
 
-ImagePlane* Q2DViewer::getImagePlane(int sliceNumber , int phaseNumber, bool vtkReconstructionHack)
+ImagePlane* Q2DViewer::getImagePlane(int sliceNumber, int phaseNumber, bool vtkReconstructionHack)
 {
     ImagePlane *imagePlane = 0;
     if (m_mainVolume)
@@ -1487,7 +1487,7 @@ void Q2DViewer::updateAnnotationsInformation(AnnotationFlags annotation)
         {
             m_upperLeftText = "";
         }
-        m_cornerAnnotations->SetText(2 , qPrintable(m_upperLeftText));
+        m_cornerAnnotations->SetText(2, qPrintable(m_upperLeftText));
     }
 
     if (annotation & Q2DViewer::SliceAnnotation)
@@ -1755,11 +1755,11 @@ void Q2DViewer::updateSliceAnnotation(int currentSlice, int maxSlice, int curren
             lowerLeftText += tr(" Thickness: %1 mm").arg(this->getThickness(), 0, 'f', 2);
         }
 
-        m_cornerAnnotations->SetText(0 , qPrintable(lowerLeftText));
+        m_cornerAnnotations->SetText(0, qPrintable(lowerLeftText));
     }
     else
     {
-        m_cornerAnnotations->SetText(0 , "");
+        m_cornerAnnotations->SetText(0, "");
     }
 }
 
@@ -2139,7 +2139,7 @@ void Q2DViewer::alignLeft()
     pan(motionVector);
 
     // Canviem els rulers de posició
-    m_anchoredRulerCoordinates->SetValue(0.95 , -0.9 , -0.95);
+    m_anchoredRulerCoordinates->SetValue(0.95, -0.9, -0.95);
     m_alignPosition = Q2DViewer::AlignLeft;
 }
 

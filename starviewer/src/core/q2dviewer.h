@@ -312,7 +312,7 @@ signals:
     void viewChanged(int);
 
     /// indica el nou window level
-    void windowLevelChanged(double window , double level);
+    void windowLevelChanged(double window, double level);
 
     /// Senyal que s'envia quan la llavor s'ha canviat
     /// TODO mirar de treure-ho i posar-ho en la tool SeedTool
@@ -448,7 +448,7 @@ private:
     /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior) TODO aquesta variable no s'està fent servir :(decidir si ens pot resultar útil o no
     QString m_patientOrientationText[4];
 
-    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z (ample , alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
+    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z (ample, alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
     vtkAxisActor2D *m_sideRuler, *m_bottomRuler;
 
     /// Coordenades fixes dels rulers que els ajustaran a un dels extrems inferiors/superiors o laterals de la pantalla
