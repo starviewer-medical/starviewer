@@ -300,12 +300,9 @@ void Q2DViewer::verticalFlip()
 
 QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
 {
+    // Si no estem a la vista axial (adquisició original) obtindrem les etiquetes a
+    // través de la primera imatge
     int index = (m_lastView == Axial) ? m_currentSlice : 0;
-    // Això es fa per si tenim un mhd que realment només té un arxiu (imatge) però té més llesques
-    // TODO Caldria millorar l'accés a les imatges a partir del volum, per no haver de fer aquestes filigranes
-    // és a dir, al preguntar a Volume, getImage(index) ell ens retorna la imatge que toca i ja comprova rangs si cal
-    // i no ens retorna la llista d'imatges a saco
-    index = (index >= m_mainVolume->getImages().size()) ? 0 : index;
     
     QString orientation;
     Image *image = m_mainVolume->getImage(index);
@@ -313,6 +310,12 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     {
         orientation = image->getPatientOrientation();
     }
+    else
+    {
+        DEBUG_LOG("L'índex d'imatge actual és incorrecte o no hi ha imatges al volum. Això no hauria de passar en aquest mètode.");
+        return QVector<QString>(4);
+    }
+    
     // Tenim les orientacions originals de la imatge en una llista
     QStringList list = orientation.split("\\");
 
