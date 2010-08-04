@@ -540,9 +540,13 @@ double Q2DViewer::getThickness()
                 {
                     Image *image = getCurrentDisplayedImage();
                     if (image)
+                    {
                         thickness = image->getSliceThickness();
+                    }
                     else
+                    {
                         thickness = m_mainVolume->getSpacing()[2];
+                    }
                 }
             }
             break;
@@ -1784,7 +1788,9 @@ void Q2DViewer::updateDisplayExtent()
         sliceValue = m_currentSlice; // Podria ser 0, dependent de l'extent de sortida del filtre
     }
     else
+    {
         sliceValue = m_currentSlice * m_numberOfPhases + m_currentPhase;
+    }
 
     // A partir de l'extent del volum, la vista i la llesca en la que ens trobem, 
     // calculem l'extent que li correspon a l'actor imatge
@@ -1903,9 +1909,13 @@ int Q2DViewer::getSlabThickness() const
 void Q2DViewer::enableThickSlab(bool enable)
 {
     if (!enable)
+    {
         setSlabThickness(1);
+    }
     else
+    {
         setSlabThickness(m_slabThickness);
+    }
 }
 
 bool Q2DViewer::isThickSlabActive() const
