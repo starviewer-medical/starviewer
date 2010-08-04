@@ -5,6 +5,11 @@
 #include <vtkGDCMImageReader.h>
 #include <vtkStringArray.h>
 #include <vtkEventQtSlotConnect.h>
+#include <vtkPointData.h>
+#include <vtkLookupTable.h>
+#include <vtkImageMapToColors16.h>
+#include <vtkImageMapToColors.h>
+#include <vtkImageYBRToRGB.h>
 #include <gdcmPixelFormat.h> // Només per qüestions d'informació de debug
 // Qt
 #include <QStringList>
@@ -124,13 +129,103 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
             break;
     }
 
-    // Assignem les dades
-    m_vtkImageData = m_vtkGDCMReader->GetOutput();
+    // Processem les dades segons el tipus d'espai de color en el que estiguin definides
+    // per finalment assignar les dades a l'objecte vtkImageData
+    if (errorCode == NoError)
+    {
+        applyColorProcessing();
+    }
     emit progress(100);
 
     return errorCode;
 }
 
+void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
+{
+    //
+    // Extret de gdcmviewer.cxx (gdcm\Utilities\VTK\Applications)
+    //
+    
+    // In case of palette color, let's tell VTK to map color:
+    // MONOCHROME1 is also implemented with a lookup table
+
+    int imageFormat = m_vtkGDCMReader->GetImageFormat();
+    if (imageFormat == VTK_LOOKUP_TABLE || imageFormat == VTK_INVERSE_LUMINANCE)
+    {
+        assert(m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars() && m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
+        // Convert to color:
+        vtkLookupTable *lookupTable = m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable();
+        if (!lookupTable)
+        {
+            // This must be a Segmented Palette and on VTK 4.4 this is not supported
+            DEBUG_LOG("Not implemented. You will not see the Color LUT");
+        }
+
+        if (lookupTable->IsA("vtkLookupTable16"))
+        {
+            DEBUG_LOG("Mapejem una LUT de 16 bits");
+            vtkImageMapToColors16 *imageColorMapper16 = vtkImageMapToColors16::New();
+            imageColorMapper16->SetInput(m_vtkGDCMReader->GetOutput());
+            imageColorMapper16->SetLookupTable(m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
+            if (imageFormat == VTK_LOOKUP_TABLE)
+            {
+                DEBUG_LOG(">> Format RGB");
+                imageColorMapper16->SetOutputFormatToRGB();
+            }
+            else if (imageFormat == VTK_INVERSE_LUMINANCE)
+            {
+                DEBUG_LOG(">> Format INVERSE LUMINANCE");
+                imageColorMapper16->SetOutputFormatToLuminance();
+            }
+            imageColorMapper16->Update();
+            m_vtkImageData = imageColorMapper16->GetOutput();
+            imageColorMapper16->Register(m_vtkImageData);
+            imageColorMapper16->Delete();
+        }
+        else
+        {
+            DEBUG_LOG("Mapejem una LUT de 8 bits");
+            vtkImageMapToColors *imageColorMapper = vtkImageMapToColors::New();
+            imageColorMapper->SetInput(m_vtkGDCMReader->GetOutput());
+            imageColorMapper->SetLookupTable(m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
+            if (imageFormat == VTK_LOOKUP_TABLE)
+            {
+                DEBUG_LOG(">> Format RGB");
+                imageColorMapper->SetOutputFormatToRGB();
+            }
+            else if (imageFormat == VTK_INVERSE_LUMINANCE)
+            {
+                DEBUG_LOG(">> Format INVERSE LUMINANCE");
+                imageColorMapper->SetOutputFormatToLuminance();
+            }
+            imageColorMapper->Update();
+            m_vtkImageData = imageColorMapper->GetOutput();
+            imageColorMapper->Register(m_vtkImageData);
+            imageColorMapper->Delete();
+        }
+    }
+    else if (imageFormat == VTK_YBR)
+    {
+        DEBUG_LOG("Mapejem espai de color YBR a RGB");
+        vtkImageYBRToRGB *ybrToRGBFilter = vtkImageYBRToRGB::New();
+        ybrToRGBFilter->SetInput(m_vtkGDCMReader->GetOutput());
+        ybrToRGBFilter->Update();
+        m_vtkImageData = ybrToRGBFilter->GetOutput();
+        ybrToRGBFilter->Register(m_vtkImageData);
+        ybrToRGBFilter->Delete();
+    }
+    else if (imageFormat == VTK_RGB || imageFormat == VTK_RGBA)
+    {
+        DEBUG_LOG("Llegim directament de vtkGDCMImageReader. No cal aplicar cap mapeig adicional, les dades estan en format RGB/RGBA");
+        // easy case !
+        m_vtkImageData = m_vtkGDCMReader->GetOutput();
+    }
+    else
+    {
+        DEBUG_LOG(QString("Llegim directament de vtkGDCMImageReader. No cal aplicar cap mapeig adicional. Format d'imatge: %1").arg(imageFormat));
+        m_vtkImageData = m_vtkGDCMReader->GetOutput();
+    }
+}
 void VolumePixelDataReaderVTKGDCM::slotProgress()
 {
     emit progress((int)(m_vtkGDCMReader->GetProgress()*100));
