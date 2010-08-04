@@ -304,16 +304,21 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     // través de la primera imatge
     int index = (m_lastView == Axial) ? m_currentSlice : 0;
     
+    QVector<QString> labelsVector(4);
     QString orientation;
     Image *image = m_mainVolume->getImage(index);
     if (image)
     {
         orientation = image->getPatientOrientation();
+        if (orientation.isEmpty())
+        {
+            return labelsVector;
+        }
     }
     else
     {
         DEBUG_LOG("L'índex d'imatge actual és incorrecte o no hi ha imatges al volum. Això no hauria de passar en aquest mètode.");
-        return QVector<QString>(4);
+        return labelsVector;
     }
     
     // Tenim les orientacions originals de la imatge en una llista
@@ -322,6 +327,12 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     bool ok = false;
     switch (list.size())
     {
+        case 1:
+            // Afegim dos elements neutres perquè la resta segueixi funcionant bé
+            ok = true;
+            list << "" << "";
+            break;
+
         case 2:
             // Afegim un element neutre perque la resta segueixi funcionant be
             ok = true;
@@ -333,7 +344,6 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
             break;
     }
 
-    QVector<QString> labelsVector(4);
     // Ara caldrà posar, en funció de les rotacions, flips i vista, les etiquetes en l'ordre adequat
     if (ok)
     {
