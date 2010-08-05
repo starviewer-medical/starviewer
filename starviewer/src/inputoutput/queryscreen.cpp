@@ -134,6 +134,7 @@ void QueryScreen::initialize()
 
 #endif
 
+    m_PACSJobsPendingToFinish = 0;
 }
 
 void QueryScreen::createConnections()
@@ -487,13 +488,20 @@ void QueryScreen::newPACSJobEnqueued(PACSJob *pacsJob)
         m_labelOperation->show();
         connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
         connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
+
+        m_PACSJobsPendingToFinish++;//Indiquem que tenim un PACSJob més pendent de finalitzar
     }
 }
 
 void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
 {
-    if (!m_pacsManager->isExecutingPACSJob(PACSJob::SendDICOMFilesToPACSJobType) && 
-        !m_pacsManager->isExecutingPACSJob(PACSJob::RetrieveDICOMFilesFromPACSJobType))
+    /*No podem utilitzar isExecutingPACSJob per controlar si hi ha jobs pendents d'executar, perquè algunes vegades ens hem trobat que tot i no tenir cap job 
+    pendent d'executar, el mètode respón que hi ha algun job executant-se. Això passa algunes vegades quan s'aten el signal PACSJobFinished d'un job de seguida i
+    es pregunta al mètode isExecutingPACSJob si hi ha jobs executant-se, semblaria que tot i haver finalitzar l'últim job pendent ThreadWeaver està acabant de fer
+    alguna acció i per això indica que hi ha jobs executant-se*/
+    m_PACSJobsPendingToFinish--;
+
+    if (m_PACSJobsPendingToFinish == 0)
     {
         m_operationAnimation->hide();
         m_labelOperation->hide();
