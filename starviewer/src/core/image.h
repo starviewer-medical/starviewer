@@ -19,24 +19,20 @@ namespace udg {
 class Series;
 
 /**
-Classe que encapsula les propietats d'una imatge d'una sèrie de la classe Series
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    Classe que encapsula les propietats d'una imatge d'una sèrie de la classe Series
 */
-class Image : public QObject
-{
+class Image : public QObject {
 Q_OBJECT
 public:
     Image(QObject *parent = 0);
-
     ~Image();
 
-    /// assigna/obté el SOPInstanceUID de la imatge
-    void setSOPInstanceUID( QString uid );
+    /// Assigna/obté el SOPInstanceUID de la imatge
+    void setSOPInstanceUID(QString uid);
     QString getSOPInstanceUID() const;
 
-    /// assigna/obté l'instance number
-    void setInstanceNumber( QString number );
+    /// Assigna/obté l'instance number
+    void setInstanceNumber(QString number);
     QString getInstanceNumber() const;
 
     /**
@@ -45,12 +41,12 @@ public:
      * A partir d'aquests dos vectors, es calcula la normal del pla d'imatge
      * @param orientation[] Els valors dels vectors que defineixen el pla d'imatge.
      */
-    void setImageOrientationPatient( double orientation[6] );
-    void setImageOrientationPatient( double xVector[3], double yVector[3] );
-    const double *getImageOrientationPatient() const;
+    void setImageOrientationPatient(double orientation[6]);
+    void setImageOrientationPatient(double xVector[3], double yVector[3]);
+    const double* getImageOrientationPatient() const;
 
     /// Assignar/Obtenir l'string d'orientació del pacient
-    void setPatientOrientation( QString orientation );
+    void setPatientOrientation(QString orientation);
     QString getPatientOrientation() const;
 
      /**
@@ -61,108 +57,109 @@ public:
     QString getOrientationLabel();
 
     /// Assignar/Obtenir l'espaiat dels pixels
-    void setPixelSpacing( double x, double y );
-    const double *getPixelSpacing() const;
+    void setPixelSpacing(double x, double y);
+    const double* getPixelSpacing() const;
 
     /// Assignar/Obtenir l'slice thickness, aka espaiat de les Z
-    void setSliceThickness( double z );
+    void setSliceThickness(double z);
     double getSliceThickness() const;
 
     /// Assignar/Obtenir la posició de la imatge.
-    void setImagePositionPatient( double position[3] );
-    const double *getImagePositionPatient() const;
-	/// Mètode per obtenir la normal del pla de la imatge. 
-	/// Equivalent a demanar getImagePostionPatient() i quedar-nos 
-	/// amb els tres últims valors (índexs 6,7,8)
-	void getImagePlaneNormal( double normal[3] );
+    void setImagePositionPatient(double position[3]);
+    const double* getImagePositionPatient() const;
+	
+    /// Mètode per obtenir la normal del pla de la imatge. 
+    /// Equivalent a demanar getImagePostionPatient() i quedar-nos 
+    /// amb els tres últims valors (índexs 6,7,8)
+    void getImagePlaneNormal(double normal[3]);
 
     /// Assignar/Obtenir els samples per pixel
-    void setSamplesPerPixel( int samples );
+    void setSamplesPerPixel(int samples);
     int getSamplesPerPixel() const;
 
     /// Assignar/Obtenir la interpretació fotomètrica
-    void setPhotometricInterpretation( QString value );
+    void setPhotometricInterpretation(QString value);
     QString getPhotometricInterpretation() const;
 
     /// Assignar/Obtenir files/columnes
-    void setRows( int rows );
+    void setRows(int rows);
     int getRows() const;
-    void setColumns( int columns );
+    void setColumns(int columns);
     int getColumns() const;
 
     /// Assignar/Obtenir els bits allotjats
-    void setBitsAllocated( int bits );
+    void setBitsAllocated(int bits);
     int getBitsAllocated() const;
 
     /// Assignar/Obtenir els bits emmagatzemats
-    void setBitsStored( int bits );
+    void setBitsStored(int bits);
     int getBitsStored() const;
 
     /// Assignar/Obtenir el bit més alt
-    void setHighBit( int highBit );
+    void setHighBit(int highBit);
     int getHighBit() const;
 
     /// Assignar/Obtenir la representació dels pixels
-    void setPixelRepresentation( int representation );
+    void setPixelRepresentation(int representation);
     int getPixelRepresentation() const;
 
     /// Assignar/Obtenir els valors del rescalat de la MODALITY LUT que s'apliquen sobre la imatge
     /// la fòrmula és f(x) = a*x + b, on 'x' és el valor del pixel de la imatge, 'a' l'Slope i 'b' l'Intercept
-    void setRescaleSlope( double slope );
+    void setRescaleSlope(double slope);
     double getRescaleSlope() const;
-    void setRescaleIntercept( double intercept );
+    void setRescaleIntercept(double intercept);
     double getRescaleIntercept() const;
 
     /// Assignar/Obtenir els valors del rescalat de la VOI LUT que s'apliquen sobre la imatge
-    void addWindowLevel( double window, double level );
-    double getWindowCenter( int index = 0 ) const;
-    double getWindowWidth( int index = 0 ) const;
-    QPair<double,double> getWindowLevel( int index = 0 ) const;
+    void addWindowLevel(double window, double level);
+    double getWindowCenter(int index = 0) const;
+    double getWindowWidth(int index = 0) const;
+    QPair<double, double> getWindowLevel(int index = 0) const;
 
     /// Ens retorna el nombre de window levels que tenim
     int getNumberOfWindowLevels();
 
     /// Assignar/Obtenir textes descriptius dels window level
-    void addWindowLevelExplanation( QString explanation );
-    void setWindowLevelExplanations( const QStringList &explanations );
-    QString getWindowLevelExplanation( int index = 0 ) const;
+    void addWindowLevelExplanation(QString explanation);
+    void setWindowLevelExplanations(const QStringList &explanations);
+    QString getWindowLevelExplanation(int index = 0) const;
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
-    void setParentSeries( Series *series );
-    Series *getParentSeries() const;
+    void setParentSeries(Series *series);
+    Series* getParentSeries() const;
 
-    /// assigna/retorna el path absolut de la imatge
-    void setPath( QString path );
+    /// Assigna/retorna el path absolut de la imatge
+    void setPath(QString path);
     QString getPath() const;
 
-    ///assigna / retorna el slice location de la imatge
-    void setSliceLocation( QString sliceLocation );
+    /// Assigna / retorna el slice location de la imatge
+    void setSliceLocation(QString sliceLocation);
     QString getSliceLocation() const;
 
-    ///Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
+    /// Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
     void setRetrievedDate(QDate date);
     void setRetrievedTime(QTime time);
     QDate getRetrievedDate();
     QTime getRetrievedTime();
 
     /// Assignar/Obtenir la descripció del tipus d'imatge
-    void setImageType( const QString &imageType );
+    void setImageType(const QString &imageType);
     QString getImageType() const;
     
     /// Assignar/Obtenir la viewPosition
-    void setViewPosition( const QString &viewPosition );
+    void setViewPosition(const QString &viewPosition);
     QString getViewPosition() const;
 
     /// Assignar/Obtenir la lateritat de la imatge
-    void setImageLaterality( const QChar &imageLaterality );
+    void setImageLaterality(const QChar &imageLaterality);
     QChar getImageLaterality() const;
 
     /// Assignar/Obtenir la descripció del View Code. De moment només s'aplicarà per imatges de mammografia.
-    void setViewCodeMeaning( const QString &viewCodeMeaning );
+    void setViewCodeMeaning(const QString &viewCodeMeaning);
     QString getViewCodeMeaning() const;
     
     /// Assignar/Obtenir el número de frame
-    void setFrameNumber( int frameNumber );
+    void setFrameNumber(int frameNumber);
     int getFrameNumber() const;
 
     ///Assignar/Obtenir el número de fase
@@ -177,8 +174,8 @@ public:
     void setOrderNumberInVolume(int orderNumberInVolume);
     int getOrderNumberInVolume() const;
     
-    /// Assignar/Obtenir el Content Time ( moment de creació de les dades )
-    void setImageTime( const QString &imageTime );
+    /// Assignar/Obtenir el Content Time (moment de creació de les dades)
+    void setImageTime(const QString &imageTime);
     QString getImageTime() const;
 
     /// Ens retorna la hora en format hh:mm:ss en que va començar la creació de la imatge
@@ -199,7 +196,7 @@ public:
     /// Ens diu quin és el pla de projecció d'una imatge segons les etiquetes d'orientació (R/L,A/P,F/H)
     /// El format serà "direccióFiles\\direccióColumnes"
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
-    static QString getProjectionLabelFromPlaneOrientation( const QString &orientation );
+    static QString getProjectionLabelFromPlaneOrientation(const QString &orientation);
 
     /// Ens retorna una llista amb les modalitats que suportem com a Image
     static QStringList getSupportedModalities();
@@ -207,7 +204,7 @@ public:
 private:
     /// Atributs DICOM
 
-    /// identificador de la imatge/arxiu. (0008,0018)
+    /// Identificador de la imatge/arxiu. (0008,0018)
     QString m_SOPInstanceUID;
 
     /// Informació general de la imatge. C.7.6 General Image Module - PS 3.3.
@@ -215,12 +212,12 @@ private:
     /// Nombre que identifica la imatge. (0020,0013) Tipus 2
     QString m_instanceNumber;
 
-    /// Direcció de les files i columnes de la imatge ( LR/AP/SI ). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i Image Position(Patient)(0020,0032). Veure C.6.7.1.1.1. (0020,0020) Tipus 2C.
+    /// Direcció de les files i columnes de la imatge (LR/AP/SI). Requerit si la imatge no requereix Image Orientation(Patient)(0020,0037) i Image Position(Patient)(0020,0032). Veure C.6.7.1.1.1. (0020,0020) Tipus 2C.
     QString m_patientOrientation;
 
-    //\TODO Referenced Image Sequence (0008,1140) Tipus 3. Seqüència que referència altres imatges significativament relacionades amb aquestes, com un post-localizer per CT.
+    // TODO Referenced Image Sequence (0008,1140) Tipus 3. Seqüència que referència altres imatges significativament relacionades amb aquestes, com un post-localizer per CT.
 
-    // \TODO Icon Image Sequence (0088,0200) Tipus 3. La següent imatge d'icona és representativa d'aquesta imatge. veure C.7.6.1.1.6
+    // TODO Icon Image Sequence (0088,0200) Tipus 3. La següent imatge d'icona és representativa d'aquesta imatge. veure C.7.6.1.1.6
 
     // Image Plane Module C.6.7.2
     /// Distància física entre el centre de cada píxel (row,column) en mm. Veure 10.7.1.3. (0028,0030) Tipus 1
@@ -300,7 +297,7 @@ private:
     
     /**
         Lateralitat de la possiblement aparellada part del cos examinada.
-        El trobem als mòduls DX Anatomy (C.8.11.2 ), Mammography Image (C.8.11.7), Intra-oral Image (C.8.11.9) i Ocular Region Imaged (C.8.17.5)
+        El trobem als mòduls DX Anatomy (C.8.11.2), Mammography Image (C.8.11.7), Intra-oral Image (C.8.11.9) i Ocular Region Imaged (C.8.17.5)
         També el trobem al mòdul Frame Anatomy (C.7.6.16.2.8) comú a tots els enhanced, però el tag s'anomena Frame Laterality en comptes d'Image Laterality.
         Valors definits:
         R = right
@@ -320,22 +317,22 @@ private:
     /// Número de frame
     int m_frameNumber;
     
-    ///Número de fase de la imatge
+    /// Número de fase de la imatge
     int m_phaseNumber;
 
-    ///Número de volum al qual pertany la imatge dins la sèrie
+    /// Número de volum al qual pertany la imatge dins la sèrie
     int m_volumeNumberInSeries;
 
-    ///Número d'ordre de la imatge dins el vo
+    /// Número d'ordre de la imatge dins el vo
     int m_orderNumberInVolume;
 
     /// Moment en el que es va crear el pixel data
     QString m_imageTime;
     
-    //\TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
+    // TODO C.7.6.5 CINE MODULE: Multi-frame Cine Image
     /// Atributs NO-DICOM
 
-    /// el path absolut de la imatge
+    /// El path absolut de la imatge
     QString m_path;
 
     ///Data en que la imatge s'ha descarregat a la base de dades local
