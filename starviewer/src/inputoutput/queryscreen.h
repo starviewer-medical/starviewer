@@ -200,6 +200,8 @@ private:
     QStringList m_studyRequestedToRetrieveFromPublicMethod;
     
     PacsManager *m_pacsManager;
+
+    int m_PACSJobsPendingToFinish;//Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)
 };
 
 };
