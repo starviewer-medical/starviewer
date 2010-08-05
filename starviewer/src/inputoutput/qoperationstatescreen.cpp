@@ -29,8 +29,21 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
 
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
+    
+    QOperationStateScreen::ColunIndex sortByColumn = (QOperationStateScreen::ColunIndex) settings.getValue(InputOutputSettings::OperationStateListSortByColumn).toInt();
+    Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::OperationStateListSortOrder).toInt();
+    m_treeRetrieveStudy->sortItems(sortByColumn, sortOrderColumn);
+
     m_treeRetrieveStudy->setColumnHidden( QOperationStateScreen::PACSJobID , true );//Conte el PACSJobID 
-    m_treeRetrieveStudy->sortItems(QOperationStateScreen::Date, Qt::AscendingOrder);//Fem que per defecte ordeni per la data d'inici de la descàrrega
+}
+
+QOperationStateScreen::~QOperationStateScreen()
+{
+    Settings settings;
+
+    //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
+    settings.setValue(InputOutputSettings::OperationStateListSortByColumn, m_treeRetrieveStudy->header()->sortIndicatorSection());
+    settings.setValue(InputOutputSettings::OperationStateListSortOrder, m_treeRetrieveStudy->header()->sortIndicatorOrder());
 }
 
 void QOperationStateScreen::setPacsManager(PacsManager *pacsManager)
