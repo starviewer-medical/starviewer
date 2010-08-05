@@ -1036,7 +1036,7 @@ void LocalDatabaseManager::createSeriesThumbnail(Series *seriesToGenerateThumbna
     thumbnailFilePath = getSeriesThumbnailPath(seriesToGenerateThumbnail->getParentStudy()->getInstanceUID(), seriesToGenerateThumbnail);
     if( !QFileInfo( thumbnailFilePath ).exists() )
     {
-        thumbnailCreator.getThumbnail(seriesToGenerateThumbnail).save( thumbnailFilePath, "PGM" );
+        thumbnailCreator.getThumbnail(seriesToGenerateThumbnail).save( thumbnailFilePath, "PNG" );
     }
 }
 
@@ -1088,7 +1088,7 @@ void LocalDatabaseManager::setLastError(int sqliteLastError)
 
 QString LocalDatabaseManager::getSeriesThumbnailPath(QString studyInstanceUID, Series *series)
 {
-    return getStudyPath(studyInstanceUID) + "/" + series->getInstanceUID() + "/thumbnail.pgm";
+    return getStudyPath(studyInstanceUID) + "/" + series->getInstanceUID() + "/thumbnail.png";
 }
 
 QString LocalDatabaseManager::getDatabaseFilePath() 

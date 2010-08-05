@@ -117,11 +117,11 @@ void ImageFillerStep::saveMultiframeThumbnail(DICOMTagReader *dicomReader)
     QString thumbnailPath = QFileInfo(dicomReader->getFileName()).absolutePath();
 
     ThumbnailCreator thumbnailCreator;
-    thumbnailCreator.getThumbnail( dicomReader ).save( QString("%1/thumbnail%2.pgm").arg(thumbnailPath).arg(volumeNumber), "PGM" );
+    thumbnailCreator.getThumbnail( dicomReader ).save( QString("%1/thumbnail%2.png").arg(thumbnailPath).arg(volumeNumber), "PNG" );
 
     // Si és el primer thumbnail, també creem el thumbnail ordinari que s'havia fet sempre
     if( volumeNumber == 1 )
-        thumbnailCreator.getThumbnail( dicomReader ).save( QString("%1/thumbnail.pgm").arg(thumbnailPath), "PGM" );
+        thumbnailCreator.getThumbnail( dicomReader ).save( QString("%1/thumbnail.png").arg(thumbnailPath), "PNG" );
 }
 
 bool ImageFillerStep::fillCommonImageInformation( Image *image, DICOMTagReader *dicomReader )

@@ -454,7 +454,7 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
             // Obtenim el directori base on es pot trobar el thumbnail
             QString thumbnailPath = QFileInfo( getPath() ).absolutePath();
             // Path absolut de l'arxiu de thumbnail
-            QString thumbnailFilePath = QString("%1/thumbnail%2.pgm").arg(thumbnailPath).arg(getVolumeNumberInSeries());
+            QString thumbnailFilePath = QString("%1/thumbnail%2.png").arg(thumbnailPath).arg(getVolumeNumberInSeries());
             
             QFileInfo thumbnailFile( thumbnailFilePath );
             if( thumbnailFile.exists() )
@@ -464,7 +464,7 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
             }
             else
             {
-                thumbnailFilePath = QString("%1/thumbnail.pgm").arg(thumbnailPath);
+                thumbnailFilePath = QString("%1/thumbnail.png").arg(thumbnailPath);
                 thumbnailFile.setFile( thumbnailFilePath );
                 if ( thumbnailFile.exists() )
                 {
