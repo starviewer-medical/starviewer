@@ -1,7 +1,7 @@
 #include "createdicomprintspool.h"
 
-#include "dcmtk/dcmpstat/dviface.h"
-#include "dcmtk/dcmpstat/dvpssp.h"      /* for class DVPSStoredPrint */
+#include <dviface.h>
+#include <dvpssp.h>      /* for class DVPSStoredPrint */
 #include <dvpshlp.h>
 
 #include <QDir>

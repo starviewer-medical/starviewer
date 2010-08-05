@@ -13,7 +13,7 @@
 // definicions globals d'aplicació
 #include "starviewerapplication.h"
 // Necessaris per suportar la decodificació de jpeg i RLE
-#include "dcmtk/dcmjpeg/djdecode.h"
+#include <djdecode.h>
 #include <dcrledrg.h>
 #include "applicationtranslationsloader.h"
 

@@ -10,8 +10,8 @@
 #include <diutil.h>
 #include <dcfilefo.h>
 #include <assoc.h>
-#include <dcmtk/dcmdata/dctagkey.h>
-#include <dcmtk/dcmdata/dcdeftag.h>
+#include <dctagkey.h>
+#include <dcdeftag.h>
 
 #include <QDir>
 

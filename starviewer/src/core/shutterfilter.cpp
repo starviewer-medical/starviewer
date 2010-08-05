@@ -23,7 +23,7 @@
 // dcmtk: presentation state
 #include <dvpstat.h> // DVPresentationState
 #include <dcfilefo.h> // per carregar arxius dicom
-#include "dcmtk/dcmdata/dcdatset.h"
+#include <dcdatset.h>
 
 namespace udg {
 

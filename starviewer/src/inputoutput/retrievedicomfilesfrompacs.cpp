@@ -4,8 +4,8 @@
 #include <diutil.h>
 #include <dcfilefo.h>
 // Pels tags DcmTagKey DCM_xxxx
-#include <dcmtk/dcmdata/dctagkey.h>
-#include <dcmtk/dcmdata/dcdeftag.h>
+#include <dctagkey.h>
+#include <dcdeftag.h>
 
 #include <QDir>
 

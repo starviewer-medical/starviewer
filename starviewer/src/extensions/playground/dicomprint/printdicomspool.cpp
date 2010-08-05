@@ -1,9 +1,9 @@
 #include "printdicomspool.h"
 
-#include "dcmtk/dcmimgle/dcmimage.h" //classe DicomImage
-#include "dcmtk/dcmpstat/dvpspr.h" //classe DVPSPrintEventHandler
-#include "dcmtk/dcmpstat/dvpssp.h" //classe DVPSStoredPrint
-#include "dcmtk/dcmpstat/dvpshlp.h" //classe DVPSHelper
+#include <dcmimage.h> //classe DicomImage
+#include <dvpspr.h> //classe DVPSPrintEventHandler
+#include <dvpssp.h> //classe DVPSStoredPrint
+#include <dvpshlp.h> //classe DVPSHelper
 
 #include <QDir>
 
