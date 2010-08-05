@@ -38,6 +38,10 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 
     Settings settings;
     settings.restoreColumnsWidths( InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+    
+    QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) settings.getValue(InputOutputSettings::PACSStudyListSortByColumn).toInt();
+    Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::PACSStudyListSortOrder).toInt();
+    m_studyTreeWidget->setSortByColumn (sortByColumn, sortOrderColumn);
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputPacsWidget",this);
     m_statsWatcher->addClicksCounter(m_retrievAndViewButton);
@@ -51,9 +55,6 @@ QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent) : QWidget(parent
 
     setQueryInProgress(false);
 
-    //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
-    m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
-
     createConnections();
 }
 
@@ -61,6 +62,10 @@ QInputOutputPacsWidget::~QInputOutputPacsWidget()
 {
     Settings settings;
     settings.saveColumnsWidths( InputOutputSettings::PACSStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+
+    //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
+    settings.setValue(InputOutputSettings::PACSStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
+    settings.setValue(InputOutputSettings::PACSStudyListSortOrder, m_studyTreeWidget->getSortOrderColumn());
 }
 
 void QInputOutputPacsWidget::createConnections()

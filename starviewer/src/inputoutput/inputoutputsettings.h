@@ -46,6 +46,12 @@ public:
     static const QString LocalDatabaseStudyList;
     static const QString LocalDatabaseSplitterState;
     static const QString QueryScreenGeometry;
+    static const QString PACSStudyListSortByColumn;
+    static const QString PACSStudyListSortOrder;
+    static const QString LocalDatabaseStudyListSortByColumn;
+    static const QString LocalDatabaseStudyListSortOrder;
+    static const QString DICOMDIRStudyListSortByColumn;
+    static const QString DICOMDIRStudyListSortOrder;
 
     /// Paràmetres de connexió amb un PACS
     static const QString LocalAETitle;

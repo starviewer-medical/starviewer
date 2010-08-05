@@ -38,11 +38,13 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
     settings.restoreColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget() );
     settings.restoreGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter );
 
+    QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortByColumn).toInt();
+    Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortOrder).toInt();
+    m_studyTreeWidget->setSortByColumn (sortByColumn, sortOrderColumn);
+
     m_statsWatcher = new StatsWatcher("QueryInputOutputLocalDatabaseWidget",this);
     m_statsWatcher->addClicksCounter(m_viewButton);
 
-    //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
-    m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
     m_studyTreeWidget->setMaximumExpandTreeItemsLevel(QStudyTreeWidget::SeriesLevel);
 
     m_qwidgetSelectPacsToStoreDicomImage = new QWidgetSelectPacsToStoreDicomImage();
@@ -52,7 +54,13 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 {
-    Settings().saveColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget() );
+    Settings settings;
+    settings.saveColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget() );
+
+    //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
+    settings.setValue(InputOutputSettings::LocalDatabaseStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
+    settings.setValue(InputOutputSettings::LocalDatabaseStudyListSortOrder, m_studyTreeWidget->getSortOrderColumn());
+
 }
 
 void QInputOutputLocalDatabaseWidget::createConnections()
