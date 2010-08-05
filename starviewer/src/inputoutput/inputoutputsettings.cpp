@@ -1,9 +1,11 @@
 #include "inputoutputsettings.h"
 #include "settingsregistry.h"
 
-#include "starviewerapplication.h" // Pel UserDataRootPath
 #include <QHostInfo> // Pel "localhostName"
 #include <QDesktopServices>
+
+#include "starviewerapplication.h" // Pel UserDataRootPath
+#include "qstudytreewidget.h"
 
 namespace udg {
 
@@ -128,11 +130,11 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnCDOrDVD, false);
     settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnUSBOrHardDisk, false);
 
-    settingsRegistry->addSetting(PACSStudyListSortByColumn, 0);
+    settingsRegistry->addSetting(PACSStudyListSortByColumn, QStudyTreeWidget::ObjectName);
     settingsRegistry->addSetting(PACSStudyListSortOrder, (int) Qt::DescendingOrder);
-    settingsRegistry->addSetting(LocalDatabaseStudyListSortByColumn, 0);
+    settingsRegistry->addSetting(LocalDatabaseStudyListSortByColumn, QStudyTreeWidget::ObjectName);
     settingsRegistry->addSetting(LocalDatabaseStudyListSortOrder, Qt::DescendingOrder);
-    settingsRegistry->addSetting(DICOMDIRStudyListSortByColumn, 0);
+    settingsRegistry->addSetting(DICOMDIRStudyListSortByColumn, QStudyTreeWidget::ObjectName);
     settingsRegistry->addSetting(DICOMDIRStudyListSortOrder, Qt::DescendingOrder);
 }
 
