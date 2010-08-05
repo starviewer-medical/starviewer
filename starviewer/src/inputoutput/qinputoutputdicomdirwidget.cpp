@@ -36,7 +36,6 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
 
     QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) settings.getValue(InputOutputSettings::DICOMDIRStudyListSortByColumn).toInt();
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::DICOMDIRStudyListSortOrder).toInt();
-    DEBUG_LOG("SortOrderColumn " + QString().setNum(sortOrderColumn));
     m_studyTreeWidget->setSortByColumn (sortByColumn, sortOrderColumn);
 
     m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget",this);
