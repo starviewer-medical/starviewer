@@ -30,7 +30,7 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
     
-    QOperationStateScreen::ColunIndex sortByColumn = (QOperationStateScreen::ColunIndex) settings.getValue(InputOutputSettings::OperationStateListSortByColumn).toInt();
+    QOperationStateScreen::ColumnIndex sortByColumn = (QOperationStateScreen::ColumnIndex) settings.getValue(InputOutputSettings::OperationStateListSortByColumn).toInt();
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::OperationStateListSortOrder).toInt();
     m_treeRetrieveStudy->sortItems(sortByColumn, sortOrderColumn);
 
