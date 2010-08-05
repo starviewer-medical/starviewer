@@ -34,19 +34,25 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget( QWidget *parent ) : QWid
     Settings settings;
     settings.restoreColumnsWidths( InputOutputSettings::DICOMDIRStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
 
+    QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) settings.getValue(InputOutputSettings::DICOMDIRStudyListSortByColumn).toInt();
+    Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::DICOMDIRStudyListSortOrder).toInt();
+    DEBUG_LOG("SortOrderColumn " + QString().setNum(sortOrderColumn));
+    m_studyTreeWidget->setSortByColumn (sortByColumn, sortOrderColumn);
+
     m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget",this);
     m_statsWatcher->addClicksCounter( m_viewButton );
     m_statsWatcher->addClicksCounter( m_retrieveButton );
     m_statsWatcher->addClicksCounter( m_openDICOMDIRToolButton );
-
-    //Indiquem que el QStudyTreeWidget inicialment s'ordenarà pel la columna name
-    m_studyTreeWidget->setSortColumn(QStudyTreeWidget::ObjectName);
 }
 
 QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
 {
     Settings settings;
     settings.saveColumnsWidths( InputOutputSettings::DICOMDIRStudyListColumnsWidth, m_studyTreeWidget->getQTreeWidget() );
+
+    //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
+    settings.setValue(InputOutputSettings::DICOMDIRStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
+    settings.setValue(InputOutputSettings::DICOMDIRStudyListSortOrder, m_studyTreeWidget->getSortOrderColumn());
 }
 
 void QInputOutputDicomdirWidget::createConnections()

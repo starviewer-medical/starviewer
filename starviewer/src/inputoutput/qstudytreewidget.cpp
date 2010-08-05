@@ -301,10 +301,20 @@ void QStudyTreeWidget::clear()
     m_insertedStudyList.clear();
 }
 
-void QStudyTreeWidget::setSortColumn( int col )
+void QStudyTreeWidget::setSortByColumn(QStudyTreeWidget::ColumnIndex col, Qt::SortOrder sortOrder)
 {
-    m_studyTreeView->sortItems( col , Qt::AscendingOrder );
+    m_studyTreeView->sortItems( col , sortOrder );
     m_studyTreeView->clearSelection();
+}
+
+QStudyTreeWidget::ColumnIndex QStudyTreeWidget::getSortColumn()
+{
+    return (QStudyTreeWidget::ColumnIndex) m_studyTreeView->header()->sortIndicatorSection();;
+}
+
+Qt::SortOrder QStudyTreeWidget::getSortOrderColumn()
+{
+    return (Qt::SortOrder) m_studyTreeView->header()->sortIndicatorOrder();
 }
 
 QString QStudyTreeWidget::getCurrentStudyUID()

@@ -85,10 +85,10 @@ public:
      */
     void removeSeries(const QString &studyInstanceUIDToRemove, const QString &seriesInstanceUIDToRemove);
 
-    /** Ordena per columna
-     * @param Indica la columna per la que s'ha d'ordenar
-     */
-    void setSortColumn(int);
+    ///Indica/Retorna la columna i direcció per la que s'ordena llista 
+    void setSortByColumn(QStudyTreeWidget::ColumnIndex sortColumn, Qt::SortOrder sortOrder);
+    QStudyTreeWidget::ColumnIndex getSortColumn();
+    Qt::SortOrder getSortOrderColumn();
 
     /** Retorna el UID Study de l'estudi seleccionat
      * @return UID de l'estudi seleccionat

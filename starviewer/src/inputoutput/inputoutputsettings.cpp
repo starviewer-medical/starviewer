@@ -35,6 +35,12 @@ const QString InputOutputSettings::ConfigurationScreenPACSList(InterfaceBase + "
 const QString InputOutputSettings::LocalDatabaseStudyList(InterfaceBase + "studyCacheList/");
 const QString InputOutputSettings::LocalDatabaseSplitterState(InterfaceBase + "queryscreen/StudyTreeSeriesListQSplitterState");
 const QString InputOutputSettings::QueryScreenGeometry(InterfaceBase + "queryscreen/geometry");
+const QString InputOutputSettings::PACSStudyListSortByColumn(InterfaceBase + "studyPacsList/sortByColumn");
+const QString InputOutputSettings::PACSStudyListSortOrder(InterfaceBase + "studyPacsList/sortOrder");
+const QString InputOutputSettings::LocalDatabaseStudyListSortByColumn(InterfaceBase + "studyCacheList/sortByColumn");
+const QString InputOutputSettings::LocalDatabaseStudyListSortOrder(InterfaceBase + "studyCacheList/sortOrder");
+const QString InputOutputSettings::DICOMDIRStudyListSortByColumn(InterfaceBase + "studyDicomdirList/sortByColumn");
+const QString InputOutputSettings::DICOMDIRStudyListSortOrder(InterfaceBase + "studyDicomdirList/sortOrder");
 
 const QString PACSParametersBase("PACS/pacsparam/");
 const QString InputOutputSettings::QueryRetrieveLocalPort(PACSParametersBase + "localPort");
@@ -122,6 +128,12 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnCDOrDVD, false);
     settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnUSBOrHardDisk, false);
 
+    settingsRegistry->addSetting(PACSStudyListSortByColumn, 0);
+    settingsRegistry->addSetting(PACSStudyListSortOrder, (int) Qt::DescendingOrder);
+    settingsRegistry->addSetting(LocalDatabaseStudyListSortByColumn, 0);
+    settingsRegistry->addSetting(LocalDatabaseStudyListSortOrder, Qt::DescendingOrder);
+    settingsRegistry->addSetting(DICOMDIRStudyListSortByColumn, 0);
+    settingsRegistry->addSetting(DICOMDIRStudyListSortOrder, Qt::DescendingOrder);
 }
 
 } // end namespace udg 
