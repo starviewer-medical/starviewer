@@ -20,15 +20,15 @@ Image::Image(QObject *parent)
 {
     m_pixelSpacing[0] = 0.;
     m_pixelSpacing[1] = 0.;
-    memset( m_imageOrientationPatient, 0, 9*sizeof(double) );
-    memset( m_imagePositionPatient, 0, 3*sizeof(double) );
+    memset(m_imageOrientationPatient, 0, 9 * sizeof(double));
+    memset(m_imagePositionPatient, 0, 3 * sizeof(double));
 }
 
 Image::~Image()
 {
 }
 
-void Image::setSOPInstanceUID( QString uid )
+void Image::setSOPInstanceUID(QString uid)
 {
     m_SOPInstanceUID = uid;
 }
@@ -38,7 +38,7 @@ QString Image::getSOPInstanceUID() const
     return m_SOPInstanceUID;
 }
 
-void Image::setInstanceNumber( QString number )
+void Image::setInstanceNumber(QString number)
 {
     m_instanceNumber = number;
 }
@@ -48,27 +48,27 @@ QString Image::getInstanceNumber() const
     return m_instanceNumber;
 }
 
-void Image::setImageOrientationPatient( double orientation[6] )
+void Image::setImageOrientationPatient(double orientation[6])
 {
-    memcpy( m_imageOrientationPatient, orientation, 6*sizeof(double) );
+    memcpy(m_imageOrientationPatient, orientation, 6 * sizeof(double));
 
     // calculem la Z
     double normal[3];
-    MathTools::crossProduct( &orientation[0] , &orientation[3], normal );
+    MathTools::crossProduct(&orientation[0] , &orientation[3], normal);
 
-    memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
+    memcpy(&m_imageOrientationPatient[6], normal, 3 * sizeof(double));
 }
 
-void Image::setImageOrientationPatient( double xVector[3], double yVector[3] )
+void Image::setImageOrientationPatient(double xVector[3], double yVector[3])
 {
-    memcpy( m_imageOrientationPatient, xVector, 3*sizeof(double) );
-    memcpy( &m_imageOrientationPatient[3], yVector, 3*sizeof(double) );
+    memcpy(m_imageOrientationPatient, xVector, 3 * sizeof(double));
+    memcpy(&m_imageOrientationPatient[3], yVector, 3 * sizeof(double));
 
     // calculem la Z
     double normal[3];
-    MathTools::crossProduct( xVector , yVector, normal );
+    MathTools::crossProduct(xVector , yVector, normal);
 
-    memcpy( &m_imageOrientationPatient[6], normal, 3*sizeof(double) );
+    memcpy(&m_imageOrientationPatient[6], normal, 3 * sizeof(double));
 }
 
 const double* Image::getImageOrientationPatient() const
@@ -76,7 +76,7 @@ const double* Image::getImageOrientationPatient() const
     return m_imageOrientationPatient;
 }
 
-void Image::setPatientOrientation( QString orientation )
+void Image::setPatientOrientation(QString orientation)
 {
     m_patientOrientation = orientation;
 }
@@ -88,21 +88,21 @@ QString Image::getPatientOrientation() const
 
 QString Image::getOrientationLabel()
 {
-    return getProjectionLabelFromPlaneOrientation( m_patientOrientation );
+    return getProjectionLabelFromPlaneOrientation(m_patientOrientation);
 }
 
-void Image::setPixelSpacing( double x, double y )
+void Image::setPixelSpacing(double x, double y)
 {
     m_pixelSpacing[0] = x;
     m_pixelSpacing[1] = y;
 }
 
-const double *Image::getPixelSpacing() const
+const double* Image::getPixelSpacing() const
 {
     return m_pixelSpacing;
 }
 
-void Image::setSliceThickness( double z )
+void Image::setSliceThickness(double z)
 {
     m_sliceThickness = z;
 }
@@ -112,24 +112,24 @@ double Image::getSliceThickness() const
     return m_sliceThickness;
 }
 
-void Image::setImagePositionPatient( double position[3] )
+void Image::setImagePositionPatient(double position[3])
 {
-    memcpy( m_imagePositionPatient, position, 3*sizeof(double) );
+    memcpy(m_imagePositionPatient, position, 3*sizeof(double));
 }
 
-const double *Image::getImagePositionPatient() const
+const double* Image::getImagePositionPatient() const
 {
     return m_imagePositionPatient;
 }
 
-void Image::getImagePlaneNormal( double normal[3] )
+void Image::getImagePlaneNormal(double normal[3])
 {
 	normal[0] = m_imageOrientationPatient[6];
 	normal[1] = m_imageOrientationPatient[7];
 	normal[2] = m_imageOrientationPatient[8];
 }
 
-void Image::setSamplesPerPixel( int samples )
+void Image::setSamplesPerPixel(int samples)
 {
     m_samplesPerPixel = samples;
 }
@@ -139,7 +139,7 @@ int Image::getSamplesPerPixel() const
     return m_samplesPerPixel;
 }
 
-void Image::setPhotometricInterpretation( QString value )
+void Image::setPhotometricInterpretation(QString value)
 {
     m_photometricInterpretation = value;
 }
@@ -149,7 +149,7 @@ QString Image::getPhotometricInterpretation() const
     return m_photometricInterpretation;
 }
 
-void Image::setRows( int rows  )
+void Image::setRows(int rows )
 {
     m_rows = rows;
 }
@@ -159,7 +159,7 @@ int Image::getRows() const
     return m_rows;
 }
 
-void Image::setColumns( int columns  )
+void Image::setColumns(int columns )
 {
     m_columns = columns;
 }
@@ -169,7 +169,7 @@ int Image::getColumns() const
     return m_columns;
 }
 
-void Image::setBitsAllocated( int bits )
+void Image::setBitsAllocated(int bits)
 {
     m_bitsAllocated = bits;
 }
@@ -179,7 +179,7 @@ int Image::getBitsAllocated() const
     return m_bitsAllocated;
 }
 
-void Image::setBitsStored( int bits )
+void Image::setBitsStored(int bits)
 {
     m_bitsStored = bits;
 }
@@ -189,7 +189,7 @@ int Image::getBitsStored() const
     return m_bitsStored;
 }
 
-void Image::setHighBit( int highBit )
+void Image::setHighBit(int highBit)
 {
     m_highBit = highBit;
 }
@@ -199,7 +199,7 @@ int Image::getHighBit() const
     return m_highBit;
 }
 
-void Image::setPixelRepresentation( int representation )
+void Image::setPixelRepresentation(int representation)
 {
     m_pixelRepresentation = representation;
 }
@@ -209,7 +209,7 @@ int Image::getPixelRepresentation() const
     return m_pixelRepresentation;
 }
 
-void Image::setRescaleSlope( double slope )
+void Image::setRescaleSlope(double slope)
 {
     m_rescaleSlope = slope;
 }
@@ -219,7 +219,7 @@ double Image::getRescaleSlope() const
     return m_rescaleSlope;
 }
 
-void Image::setRescaleIntercept( double intercept )
+void Image::setRescaleIntercept(double intercept)
 {
     m_rescaleIntercept = intercept;
 }
@@ -229,7 +229,7 @@ double Image::getRescaleIntercept() const
     return m_rescaleIntercept;
 }
 
-void Image::setSliceLocation( QString sliceLocation )
+void Image::setSliceLocation(QString sliceLocation)
 {
     m_sliceLocation = sliceLocation;
 }
@@ -239,20 +239,22 @@ QString Image::getSliceLocation() const
     return m_sliceLocation;
 }
 
-void Image::addWindowLevel( double window, double level )
+void Image::addWindowLevel(double window, double level)
 {
-    QPair<double, double> windowLevel( window, level );
+    QPair<double, double> windowLevel(window, level);
     m_windowLevelList << windowLevel;
 }
 
-QPair<double,double> Image::getWindowLevel( int index ) const
+QPair<double, double> Image::getWindowLevel(int index) const
 {
-    if( index >= 0 && index < m_windowLevelList.size() )
+    if (index >= 0 && index < m_windowLevelList.size())
+    {
         return m_windowLevelList.at(index);
+    }
     else
     {
         DEBUG_LOG("Index out of range");
-        return QPair<double,double>();
+        return QPair<double, double>();
     }
 }
 
@@ -261,20 +263,22 @@ int Image::getNumberOfWindowLevels()
     return m_windowLevelList.size();
 }
 
-void Image::addWindowLevelExplanation( QString explanation )
+void Image::addWindowLevelExplanation(QString explanation)
 {
     m_windowLevelExplanationList << explanation;
 }
 
-void Image::setWindowLevelExplanations( const QStringList &explanations )
+void Image::setWindowLevelExplanations(const QStringList &explanations)
 {
     m_windowLevelExplanationList = explanations;
 }
 
-QString Image::getWindowLevelExplanation( int index ) const
+QString Image::getWindowLevelExplanation(int index) const
 {
-    if( index >= 0 && index < m_windowLevelExplanationList.size() )
+    if (index >= 0 && index < m_windowLevelExplanationList.size())
+    {
         return m_windowLevelExplanationList.at(index);
+    }
     else
     {
         return QString();
@@ -301,7 +305,7 @@ QTime Image::getRetrievedTime()
     return m_retrieveTime;
 }
 
-void Image::setImageType( const QString &imageType )
+void Image::setImageType(const QString &imageType)
 {
     m_imageType = imageType;
 }
@@ -311,7 +315,7 @@ QString Image::getImageType() const
     return m_imageType;
 }
 
-void Image::setViewPosition( const QString &viewPosition )
+void Image::setViewPosition(const QString &viewPosition)
 {
     m_viewPosition = viewPosition;
 }
@@ -321,7 +325,7 @@ QString Image::getViewPosition() const
     return m_viewPosition;
 }
 
-void Image::setImageLaterality( const QChar &imageLaterality )
+void Image::setImageLaterality(const QChar &imageLaterality)
 {
     m_imageLaterality = imageLaterality;
 }
@@ -331,7 +335,7 @@ QChar Image::getImageLaterality() const
     return m_imageLaterality;
 }
 
-void Image::setViewCodeMeaning( const QString &viewCodeMeaning )
+void Image::setViewCodeMeaning(const QString &viewCodeMeaning)
 {
     m_viewCodeMeaning = viewCodeMeaning;
 }
@@ -341,7 +345,7 @@ QString Image::getViewCodeMeaning() const
     return m_viewCodeMeaning;
 }
 
-void Image::setFrameNumber( int frameNumber )
+void Image::setFrameNumber(int frameNumber)
 {
     m_frameNumber = frameNumber;
 }
@@ -351,7 +355,7 @@ int Image::getFrameNumber() const
     return m_frameNumber;
 }
 
-void Image::setPhaseNumber( int phaseNumber )
+void Image::setPhaseNumber(int phaseNumber)
 {
     m_phaseNumber = phaseNumber;
 }
@@ -381,7 +385,7 @@ int Image::getOrderNumberInVolume() const
     return m_orderNumberInVolume;
 }
 
-void Image::setImageTime( const QString &imageTime )
+void Image::setImageTime(const QString &imageTime)
 {
     m_imageTime = imageTime ;
 }
@@ -394,7 +398,7 @@ QString Image::getImageTime() const
 QString Image::getFormattedImageTime() const
 {
     QString formattedTime = m_imageTime;
-    if( !formattedTime.isEmpty() )
+    if (!formattedTime.isEmpty())
     {
         // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
         formattedTime = formattedTime.remove(":");
@@ -405,7 +409,7 @@ QString Image::getFormattedImageTime() const
         if (split.size() == 2) // Té fracció al final
         {
             // Trunquem a milisegons i no a milionèssimes de segons
-            convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
+            convertedTime = convertedTime.addMSecs(split[1].leftJustified(3,'0',true).toInt());
         }
         formattedTime = convertedTime.toString("HH:mm:ss");
     }
@@ -418,18 +422,18 @@ QString Image::getKeyIdentifier() const
     return m_SOPInstanceUID + "#" + QString::number(m_frameNumber);
 }
 
-void Image::setParentSeries( Series *series )
+void Image::setParentSeries(Series *series)
 {
     m_parentSeries = series;
-    this->setParent( m_parentSeries );
+    this->setParent(m_parentSeries);
 }
 
-Series *Image::getParentSeries() const
+Series* Image::getParentSeries() const
 {
     return m_parentSeries;
 }
 
-void Image::setPath( QString path )
+void Image::setPath(QString path)
 {
     m_path = path;
 }
@@ -446,18 +450,18 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
 
     if (m_thumbnail.isNull())
     {
-        if( getFromCache )
+        if (getFromCache)
         {
             // Primer provem de trobar el thumbnail amb número de volum i després sense número de volum
             // Si no trobem cap fitxer, l'haurem de crear de nou
             
             // Obtenim el directori base on es pot trobar el thumbnail
-            QString thumbnailPath = QFileInfo( getPath() ).absolutePath();
+            QString thumbnailPath = QFileInfo(getPath()).absolutePath();
             // Path absolut de l'arxiu de thumbnail
             QString thumbnailFilePath = QString("%1/thumbnail%2.png").arg(thumbnailPath).arg(getVolumeNumberInSeries());
             
-            QFileInfo thumbnailFile( thumbnailFilePath );
-            if( thumbnailFile.exists() )
+            QFileInfo thumbnailFile(thumbnailFilePath);
+            if (thumbnailFile.exists())
             {
                 m_thumbnail = QPixmap(thumbnailFilePath);
                 createThumbnail = false;
@@ -465,16 +469,16 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
             else
             {
                 thumbnailFilePath = QString("%1/thumbnail.png").arg(thumbnailPath);
-                thumbnailFile.setFile( thumbnailFilePath );
-                if ( thumbnailFile.exists() )
+                thumbnailFile.setFile(thumbnailFilePath);
+                if (thumbnailFile.exists())
                 {
-                    m_thumbnail = QPixmap( thumbnailFilePath );
+                    m_thumbnail = QPixmap(thumbnailFilePath);
                     createThumbnail = false;
                 }
             }
         }
 
-        if( createThumbnail )
+        if (createThumbnail)
         {
             m_thumbnail = QPixmap::fromImage(thumbnailCreator.getThumbnail(this, resolution));
         }
@@ -482,33 +486,47 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
     return m_thumbnail;
 }
 
-QString Image::getProjectionLabelFromPlaneOrientation( const QString &orientation )
+QString Image::getProjectionLabelFromPlaneOrientation(const QString &orientation)
 {
     QString label;
     
     QStringList axisList = orientation.split("\\");
     // comprovem si tenim les annotacions esperades
-    if( axisList.count() >= 2 )
+    if (axisList.count() >= 2)
     {
         QString rowAxis = axisList.at(0).trimmed();
         QString columnAxis = axisList.at(1).trimmed();
 
-        if( !rowAxis.isEmpty() && !columnAxis.isEmpty() )
+        if (!rowAxis.isEmpty() && !columnAxis.isEmpty())
         {
-            if( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("A") || columnAxis.startsWith("P")) )
+            if ((rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("A") || columnAxis.startsWith("P")))
+            {
                 label="AXIAL";
-            else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("A") || rowAxis.startsWith("P")) )
+            }
+            else if ((columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("A") || rowAxis.startsWith("P")))
+            {
                 label="AXIAL";
-            else if ( (rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")) )
+            }
+            else if ((rowAxis.startsWith("R") || rowAxis.startsWith("L")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")))
+            {
                 label="CORONAL";
-            else if( (columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")) )
+            }
+            else if ((columnAxis.startsWith("R") || columnAxis.startsWith("L")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")))
+            {
                 label="CORONAL";
-            else if( (rowAxis.startsWith("A") || rowAxis.startsWith("P")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")) )
+            }
+            else if ((rowAxis.startsWith("A") || rowAxis.startsWith("P")) && (columnAxis.startsWith("H") || columnAxis.startsWith("F")))
+            {
                 label="SAGITAL";
-            else if( (columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")) )
+            }
+            else if ((columnAxis.startsWith("A") || columnAxis.startsWith("P")) && (rowAxis.startsWith("H") || rowAxis.startsWith("F")))
+            {
                 label="SAGITAL";
+            }
             else
+            {
                 label="OBLIQUE";
+            }
         }
         else
         {

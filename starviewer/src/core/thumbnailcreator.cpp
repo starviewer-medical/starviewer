@@ -15,7 +15,7 @@
 #include "image.h"
 #include "logging.h"
 #include "dicomtagreader.h"
-// fem servir dcmtk per l'escalat de les imatges dicom
+// Fem servir dcmtk per l'escalat de les imatges dicom
 #include <dcmimage.h>
 #include <ofbmanip.h>
 #include <dcdatset.h>
@@ -24,31 +24,30 @@
 
 namespace udg {
 
-const QString PreviewNotAvailableText( QObject::tr("Preview image not available") );
+const QString PreviewNotAvailableText(QObject::tr("Preview image not available"));
 
 QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
 {
     QImage thumbnail;
 
-    if(series->getModality() == "KO")
+    if (series->getModality() == "KO")
     {
         thumbnail.load(":/images/kinThumbnail.png");
     }
-    else if(series->getModality() == "PR")
+    else if (series->getModality() == "PR")
     {
         thumbnail.load(":/images/presentationStateThumbnail.png");
     }
-    else if(series->getModality() == "SR")
+    else if (series->getModality() == "SR")
     {
         thumbnail.load(":/images/structuredReportThumbnail.png");
     }
     else
     {
         int numberOfImages = series->getImages().size();
-
         if (numberOfImages > 0)
         {
-            thumbnail = createImageThumbnail(series->getImages()[numberOfImages / 2 ]->getPath(), resolution);
+            thumbnail = createImageThumbnail(series->getImages()[numberOfImages / 2]->getPath(), resolution);
         }
         else
         {
@@ -86,7 +85,7 @@ QImage ThumbnailCreator::makeEmptyThumbnailWithCustomText(const QString &text, i
 
 QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolution)
 {
-    DICOMTagReader reader( imageFileName );
+    DICOMTagReader reader(imageFileName);
     return createThumbnail(&reader,resolution);
 }
 
@@ -94,20 +93,22 @@ QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)
 {
     QImage thumbnail;
     
-    if( isSuitableForThumbnailCreation(reader) )
+    if (isSuitableForThumbnailCreation(reader))
     {
         // Carreguem el fitxer dicom a escalar
-        DicomImage *dicomImage = new DicomImage(reader->getDcmDataset(), reader->getDcmDataset()->getOriginalXfer() );
+        DicomImage *dicomImage = new DicomImage(reader->getDcmDataset(), reader->getDcmDataset()->getOriginalXfer());
         thumbnail = createThumbnail(dicomImage,resolution);
         
         // Cal esborrar la DicomImage per no tenir fugues de memòria
-        if ( dicomImage )
+        if (dicomImage)
+        {
             delete dicomImage;
+        }
     }
     else
     {
         // Creem thumbnail alternatiu indicant que no es pot mostrar una imatge de preview
-        thumbnail = makeEmptyThumbnailWithCustomText( PreviewNotAvailableText );
+        thumbnail = makeEmptyThumbnailWithCustomText(PreviewNotAvailableText);
     }
 
     return thumbnail;
@@ -118,12 +119,12 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
     QImage thumbnail;
     bool ok = false;
 
-    if(dicomImage == NULL)
+    if (dicomImage == NULL)
     {
         ok = false;
         DEBUG_LOG("Memòria insuficient per carregar l'imatge DICOM al fer el thumbnail o punter nul");
     }
-    else if(dicomImage->getStatus() == EIS_Normal)
+    else if (dicomImage->getStatus() == EIS_Normal)
     {
         dicomImage->hideAllOverlays();
         dicomImage->setMinMaxWindow(1);
@@ -131,7 +132,7 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
         DicomImage *scaledImage;
         // Escalem pel cantó més gran
         unsigned long width, height;
-        if(dicomImage->getWidth() < dicomImage->getHeight())
+        if (dicomImage->getWidth() < dicomImage->getHeight())
         {
             width = 0;
             height = resolution;
@@ -141,13 +142,13 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
             width = resolution;
             height = 0;
         }
-        scaledImage = dicomImage->createScaledImage(width,height, 1, 1);
-        if( scaledImage == NULL)
+        scaledImage = dicomImage->createScaledImage(width, height, 1, 1);
+        if (scaledImage == NULL)
         {
             ok = false;
             DEBUG_LOG("La imatge escalada s'ha retornat com a nul");
         }
-        else if(scaledImage->getStatus() == EIS_Normal)
+        else if (scaledImage->getStatus() == EIS_Normal)
         {
             thumbnail = convertToQImage(scaledImage);
             if (thumbnail.isNull())
@@ -166,19 +167,19 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
         else
         {
             ok = false;
-            DEBUG_LOG(QString( "La imatge escalada té errors. Error: %1 ").arg( DicomImage::getString( scaledImage->getStatus())));
+            DEBUG_LOG(QString("La imatge escalada té errors. Error: %1 ").arg(DicomImage::getString(scaledImage->getStatus())));
         }
     }
     else
     {
         ok = false;
-        DEBUG_LOG(QString("Error en carregar la DicomImage. Error: %1 ").arg(DicomImage::getString( dicomImage->getStatus())));
+        DEBUG_LOG(QString("Error en carregar la DicomImage. Error: %1 ").arg(DicomImage::getString(dicomImage->getStatus())));
     }
 
     // Si no hem pogut generar el thumbnail, creem un de buit
-    if(!ok)
+    if (!ok)
     {
-        thumbnail = makeEmptyThumbnailWithCustomText( PreviewNotAvailableText );
+        thumbnail = makeEmptyThumbnailWithCustomText(PreviewNotAvailableText);
     }
 
     return thumbnail;
@@ -186,13 +187,13 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
 
 bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) const
 {
-    if( !reader )
+    if (!reader)
     {
         DEBUG_LOG("El DICOMTagReader donat és NUL!");
         return false;
     }
 
-    if( !reader->getDcmDataset() )
+    if (!reader->getDcmDataset())
     {
         DEBUG_LOG("El DICOMTagReader no té cap DcmDataset assignat, no podem generar el thumbnail.");
         return false;
@@ -207,12 +208,12 @@ bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) co
     // En quant siguem capaços de tornar a llegir aquestes imatges sense problema, aquesta comprovació desapareixerà
     QList<DICOMTag> tags;
     tags << DICOMOverlayRows << DICOMOverlayColumns << DICOMOverlayType << DICOMOverlayOrigin << DICOMOverlayBitsAllocated << DICOMOverlayBitPosition <<  DICOMOverlayData;
-    foreach( DICOMTag tag, tags )
+    foreach(DICOMTag tag, tags)
     {
-        if( reader->tagExists(tag) )
+        if (reader->tagExists(tag))
         {
             suitable = false;
-            DEBUG_LOG( QString("Found Tag: %1,%2. Overlay restriction applied. Preview image won't be available.").arg(tag.getGroup(),0,16).arg(tag.getElement(),0,16) );
+            DEBUG_LOG(QString("Found Tag: %1,%2. Overlay restriction applied. Preview image won't be available.").arg(tag.getGroup(),0,16).arg(tag.getElement(),0,16));
         }
     }
 
