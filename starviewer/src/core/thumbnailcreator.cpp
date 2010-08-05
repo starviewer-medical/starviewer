@@ -15,10 +15,9 @@
 #include "image.h"
 #include "logging.h"
 #include "dicomtagreader.h"
-
 // fem servir dcmtk per l'escalat de les imatges dicom
-#include "dcmtk/dcmimgle/dcmimage.h"
-#include "dcmtk/ofstd/ofbmanip.h"
+#include <dcmimage.h>
+#include <ofbmanip.h>
 #include <dcdatset.h>
 
 namespace udg {
