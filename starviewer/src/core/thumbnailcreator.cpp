@@ -19,6 +19,8 @@
 #include <dcmimage.h>
 #include <ofbmanip.h>
 #include <dcdatset.h>
+// Necessari per suportar imatges de color
+#include <diregist.h>
 
 namespace udg {
 
@@ -161,7 +163,15 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
             }
             else
             {
-                ok = false;
+                thumbnail = createPPMImage(scaledImage);
+                if (thumbnail == QImage())
+                {
+                    ok = false;
+                }
+                else
+                {
+                    ok = true;
+                }
             }
             // Cal esborrar la DicomImage per no tenir fugues de memòria
             delete scaledImage;
@@ -249,6 +259,47 @@ QImage ThumbnailCreator::createPGMImage(DicomImage *dicomImage)
         if (dicomImage->getOutputData((void *)(buffer + offset), length, 8))
         {
             if (!thumbnail.loadFromData((const unsigned char *)buffer, length, "PGM"))
+            {
+                DEBUG_LOG("La càrrega del buffer al thumbnail ha fallat :(");
+            }
+        }
+        // Delete temporary pixel buffer
+        delete[] buffer;
+    }
+    else
+    {
+        DEBUG_LOG("Memòria insuficient per crear el buffer del thumbnail!");
+    }
+
+    return thumbnail;
+}
+
+QImage ThumbnailCreator::createPPMImage(DicomImage *dicomImage)
+{
+    Q_ASSERT(dicomImage);
+    Q_ASSERT(!dicomImage->isMonochrome());
+    
+    // El següent codi crea una imatge PPM a memòria i carreguem aquest buffer directament al pixmap
+    // Obtingut de http://forum.dcmtk.org/viewtopic.php?t=120&highlight=qpixmap
+    const int width = (int)(dicomImage->getWidth());
+    const int height = (int)(dicomImage->getHeight());
+    char header[32];
+    // Create PPM header
+    sprintf(header, "P6\n%i %i\n255\n", width, height);
+    const int offset = strlen(header);
+    
+    // QImage en la que carregarem el buffer de dades
+    QImage thumbnail;
+    // Create output buffer for DicomImage class
+    const unsigned int length = (width * height) * 3 + offset;
+    Uint8 *buffer = new Uint8[length];
+    if (buffer != NULL)
+    {
+        // Copy PPM header to buffer
+        OFBitmanipTemplate<Uint8>::copyMem((const Uint8 *)header, buffer, offset);
+        if (dicomImage->getOutputData((void *)(buffer + offset), length, 8))
+        {
+            if (!thumbnail.loadFromData((const unsigned char *)buffer, length, "PPM"))
             {
                 DEBUG_LOG("La càrrega del buffer al thumbnail ha fallat :(");
             }

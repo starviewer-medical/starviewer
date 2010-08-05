@@ -48,6 +48,10 @@ private:
     /// Crea una QImage monocrom en format PGm a partir de la DicomImage proporcionada
     /// Assumeix que la DicomImage és monocrom
     QImage createPGMImage(DicomImage *dicomImage);
+
+    /// Crea una QImage a color en format PPM a partir de la DicomImage proporcionada
+    /// Assumeix que la DicomImage és de color
+    QImage createPPMImage(DicomImage *dicomImage);
 };
 
 }
