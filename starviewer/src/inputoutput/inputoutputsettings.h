@@ -90,6 +90,10 @@ public:
     static const QString InstitutionCountry;
     static const QString InstitutionPhoneNumber;
     static const QString InstitutionEmail;
+
+    //Columna i ordre d'ordenació de la QOperationStateScreen
+    static const QString OperationStateListSortByColumn;
+    static const QString OperationStateListSortOrder;
 };
 
 } // end namespace udg 

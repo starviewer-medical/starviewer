@@ -6,6 +6,7 @@
 
 #include "starviewerapplication.h" // Pel UserDataRootPath
 #include "qstudytreewidget.h"
+#include "qoperationstatescreen.h"
 
 namespace udg {
 
@@ -43,6 +44,8 @@ const QString InputOutputSettings::LocalDatabaseStudyListSortByColumn(InterfaceB
 const QString InputOutputSettings::LocalDatabaseStudyListSortOrder(InterfaceBase + "studyCacheList/sortOrder");
 const QString InputOutputSettings::DICOMDIRStudyListSortByColumn(InterfaceBase + "studyDicomdirList/sortByColumn");
 const QString InputOutputSettings::DICOMDIRStudyListSortOrder(InterfaceBase + "studyDicomdirList/sortOrder");
+const QString InputOutputSettings::OperationStateListSortByColumn(InterfaceBase + "qOperationState/sortByColumn");
+const QString InputOutputSettings::OperationStateListSortOrder(InterfaceBase + "qOperationState/sortOrder");
 
 const QString PACSParametersBase("PACS/pacsparam/");
 const QString InputOutputSettings::QueryRetrieveLocalPort(PACSParametersBase + "localPort");
@@ -136,7 +139,8 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(LocalDatabaseStudyListSortOrder, Qt::DescendingOrder);
     settingsRegistry->addSetting(DICOMDIRStudyListSortByColumn, QStudyTreeWidget::ObjectName);
     settingsRegistry->addSetting(DICOMDIRStudyListSortOrder, Qt::DescendingOrder);
-}
+    settingsRegistry->addSetting(OperationStateListSortByColumn, QOperationStateScreen::Date);
+    settingsRegistry->addSetting(OperationStateListSortOrder, Qt::DescendingOrder);}
 
 } // end namespace udg 
 
