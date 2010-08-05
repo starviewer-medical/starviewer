@@ -29,8 +29,8 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
 
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::OperationStateColumnsWidth, m_treeRetrieveStudy);
-    m_treeRetrieveStudy->setColumnHidden( 9 , true );//Conte el PACSJobID 
-    m_treeRetrieveStudy->sortItems(5, Qt::AscendingOrder);//Fem que per defecte ordeni per la data d'inici de la descàrrega
+    m_treeRetrieveStudy->setColumnHidden( QOperationStateScreen::PACSJobID , true );//Conte el PACSJobID 
+    m_treeRetrieveStudy->sortItems(QOperationStateScreen::Date, Qt::AscendingOrder);//Fem que per defecte ordeni per la data d'inici de la descàrrega
 }
 
 void QOperationStateScreen::setPacsManager(PacsManager *pacsManager)
@@ -79,7 +79,7 @@ void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)
 
     if  (qtreeWidgetItem != NULL)
     {
-        qtreeWidgetItem->setText(0, pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType ? tr("RETRIEVING") : tr("SENDING") );
+        qtreeWidgetItem->setText(QOperationStateScreen::Status, pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType ? tr("RETRIEVING") : tr("SENDING") );
     }
 }
 
@@ -89,7 +89,7 @@ void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
 
     if  (qtreeWidgetItem != NULL)
     {
-        qtreeWidgetItem->setText(0, getPACSJobStatusResume(pacsJob));
+        qtreeWidgetItem->setText(QOperationStateScreen::Status, getPACSJobStatusResume(pacsJob));
     }
 
     m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
@@ -101,7 +101,7 @@ void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
 
     if  (qtreeWidgetItem != NULL)
     {
-        qtreeWidgetItem->setText(0, tr("CANCELLED"));
+        qtreeWidgetItem->setText(QOperationStateScreen::Status, tr("CANCELLED"));
     }
 
     m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
@@ -113,7 +113,7 @@ void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages
 
     if  (qtreeWidgetItem != NULL)
     {
-        qtreeWidgetItem->setText(8, QString().setNum(numberOfImages));
+        qtreeWidgetItem->setText(QOperationStateScreen::Files, QString().setNum(numberOfImages));
     }
 }
 
@@ -123,7 +123,7 @@ void QOperationStateScreen::DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeri
 
     if  (qtreeWidgetItem != NULL)
     {
-        qtreeWidgetItem->setText(7, QString().setNum(numberOfSeries));
+        qtreeWidgetItem->setText(QOperationStateScreen::Series, QString().setNum(numberOfSeries));
     }
 }
 
@@ -131,10 +131,10 @@ void QOperationStateScreen::clearList()
 {
     // seleccionem els elements que volem esborrar
     QList<QTreeWidgetItem *> clearableItems;
-    clearableItems = m_treeRetrieveStudy->findItems( tr("RETRIEVED"), Qt::MatchExactly, 0 );
-    clearableItems += m_treeRetrieveStudy->findItems( tr("STORED"), Qt::MatchExactly, 0 );
-    clearableItems += m_treeRetrieveStudy->findItems( tr("ERROR"), Qt::MatchExactly, 0 );
-    clearableItems += m_treeRetrieveStudy->findItems( tr("CANCELLED"), Qt::MatchExactly, 0 );
+    clearableItems = m_treeRetrieveStudy->findItems( tr("RETRIEVED"), Qt::MatchExactly, QOperationStateScreen::Status );
+    clearableItems += m_treeRetrieveStudy->findItems( tr("STORED"), Qt::MatchExactly, QOperationStateScreen::Status );
+    clearableItems += m_treeRetrieveStudy->findItems( tr("ERROR"), Qt::MatchExactly, QOperationStateScreen::Status );
+    clearableItems += m_treeRetrieveStudy->findItems( tr("CANCELLED"), Qt::MatchExactly, QOperationStateScreen::Status );
     // els eliminem de la llista
     foreach( QTreeWidgetItem *itemToClear, clearableItems )
     {
@@ -156,9 +156,9 @@ void QOperationStateScreen::cancelSelectedRequests()
     {
         foreach(QTreeWidgetItem *item, m_treeRetrieveStudy->selectedItems())
         {
-            if (m_PACSJobPendingToFinish.contains(item->text(9).toInt()))
+            if (m_PACSJobPendingToFinish.contains(item->text(QOperationStateScreen::PACSJobID).toInt()))
             {
-                m_pacsManager->requestCancelPACSJob(m_PACSJobPendingToFinish[item->text(9).toInt()]);
+                m_pacsManager->requestCancelPACSJob(m_PACSJobPendingToFinish[item->text(QOperationStateScreen::PACSJobID).toInt()]);
             }
         }
     }
@@ -174,7 +174,7 @@ void QOperationStateScreen::requestedCancelPACSJob(PACSJob *pacsJob)
 
     if  (qtreeWidgetItem != NULL)
     {
-        qtreeWidgetItem->setText(0, tr("CANCELLING"));
+        qtreeWidgetItem->setText(QOperationStateScreen::Status, tr("CANCELLING"));
     }
 }
 
@@ -185,16 +185,16 @@ void QOperationStateScreen::insertNewPACSJob(PACSJob *pacsJob)
     QTreeWidgetItem* item = new QTreeWidgetItem();
     Study *study = getStudyFromPACSJob(pacsJob);
 
-    item->setText(0 , tr("PENDING") );
-    item->setText(1, pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType ? tr("Server") : tr("Local"));
-    item->setText(2 , pacsJob->getPacsDevice().getAETitle());
-    item->setText(3 , study->getParentPatient()->getID());
-    item->setText(4 , study->getParentPatient()->getFullName());
-    item->setText(5 , QDate::currentDate().toString("dd/MM/yyyy"));
-    item->setText(6 , QTime::currentTime().toString("hh:mm"));
-    item->setText(7 , "0"); // series
-    item->setText(8 , "0"); //imatges
-    item->setText(9 , QString().setNum(pacsJob->getPACSJobID()));
+    item->setText(QOperationStateScreen::Status , tr("PENDING") );
+    item->setText(QOperationStateScreen::Direction, pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType ? tr("Server") : tr("Local"));
+    item->setText(QOperationStateScreen::FromTo , pacsJob->getPacsDevice().getAETitle());
+    item->setText(QOperationStateScreen::PatientID , study->getParentPatient()->getID());
+    item->setText(QOperationStateScreen::PatientName , study->getParentPatient()->getFullName());
+    item->setText(QOperationStateScreen::Date , QDate::currentDate().toString("dd/MM/yyyy"));
+    item->setText(QOperationStateScreen::Started , QTime::currentTime().toString("hh:mm"));
+    item->setText(QOperationStateScreen::Series , "0"); // series
+    item->setText(QOperationStateScreen::Files , "0"); //imatges
+    item->setText(QOperationStateScreen::PACSJobID , QString().setNum(pacsJob->getPACSJobID()));
 
     m_treeRetrieveStudy->addTopLevelItem(item);
 }
@@ -256,7 +256,7 @@ void QOperationStateScreen::closeEvent( QCloseEvent* ce )
 QTreeWidgetItem* QOperationStateScreen::getQTreeWidgetItemByPACSJobId(int pacsJobID)
 {
     QTreeWidgetItem *qtreeWidgetItem = NULL;
-    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems(QString().setNum(pacsJobID), Qt::MatchExactly, 9);
+    QList<QTreeWidgetItem *> qTreeWidgetPacsJobItems = m_treeRetrieveStudy->findItems(QString().setNum(pacsJobID), Qt::MatchExactly, QOperationStateScreen::PACSJobID);
 
     if  (!qTreeWidgetPacsJobItems.isEmpty())
     {

@@ -29,6 +29,9 @@ class Study;
 class QOperationStateScreen : public QDialog , private Ui::QOperationStateScreenBase{
 Q_OBJECT
 public:
+    
+    enum ColunIndex { Status = 0, Direction = 1, FromTo = 2, PatientID = 3, PatientName = 4, Date = 5, Started = 6, Series = 7, Files = 8, PACSJobID = 9 };
+
     QOperationStateScreen( QWidget *parent = 0 );
 
     ///Estableix instància de PacsManager que s'encarrega de fer les peticions als PACS
