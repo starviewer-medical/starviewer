@@ -80,18 +80,18 @@ public:
 
     /// Obté l'origen del volum
     void getOrigin(double  xyz[3]);
-    double *getOrigin();
+    double* getOrigin();
 
     /// Obté l'espaiat del model al llarg dels eixos
     void getSpacing(double xyz[3]);
-    double *getSpacing();
+    double* getSpacing();
 
     /// Retorna la ¿bounding box?
     void getWholeExtent(int extent[6]);
-    int *getWholeExtent();
+    int* getWholeExtent();
 
     /// Retorna les dimensions del volum
-    int *getDimensions();
+    int* getDimensions();
     void getDimensions(int dims[3]);
 
     /// Assigna/Retorna l'identificador del volum. 
@@ -105,7 +105,7 @@ public:
     /// TODO Mètodes transitoris pels canvis de disseny del tema de fases
     void setNumberOfPhases(int phases);
     int getNumberOfPhases() const;
-    Volume *getPhaseVolume(int index);
+    Volume* getPhaseVolume(int index);
     QList<Image *> getPhaseImages(int index);
     void setNumberOfSlicesPerPhase(int slicesPerPhase);
     int getNumberOfSlicesPerPhase() const;
@@ -123,8 +123,8 @@ public:
     int getNumberOfFrames() const;
 
     /// Mètodes ràpids per obtenir estudi/pacient al que pertany aquest volum
-    Study *getStudy();
-    Patient *getPatient();
+    Study* getStudy();
+    Patient* getPatient();
 
     /// Volcat d'informació en un string per poder-ho printar on interessi
     QString toString(bool verbose = false);
@@ -136,7 +136,7 @@ public:
      * @param phaseNumber fase
      * @return la imatge en cas que els índexs siguin correctes, NULL altrament
      */
-    Image *getImage(int sliceNumber, int phaseNumber = 0) const;
+    Image* getImage(int sliceNumber, int phaseNumber = 0) const;
 
     /**
      * Ens retorna la direcció REAL(DICOM) en la que es troben apilades
@@ -154,8 +154,8 @@ public:
     /// Obtenim el punter a les dades que es troben en l'índex donat
     /// És un accés a baix nivell, ja que obtenim el punter de les dades
     /// Retornem el punter transformat al tipus natiu de dades VoxelType
-    VoxelType *getScalarPointer(int x = 0, int y = 0, int z = 0);
-    VoxelType *getScalarPointer(int index[3]);
+    VoxelType* getScalarPointer(int x = 0, int y = 0, int z = 0);
+    VoxelType* getScalarPointer(int index[3]);
 
     /// Donada una coordenada de món, ens dóna el valor del vòxel corresponent.
     /// Si la coordenada està dins del volum retorna true, false altrament.
