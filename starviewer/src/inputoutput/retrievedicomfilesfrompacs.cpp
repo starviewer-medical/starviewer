@@ -327,7 +327,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     {
         ERROR_LOG( " S'ha produit un error al intentar connectar al PACS per fer un retrieve. AETitle: " + m_pacs.getAETitle() + ", IP: " + m_pacs.getAddress() +
             ", port: " + QString().setNum(m_pacs.getQueryRetrieveServicePort()) + ", Descripcio error : " + state.text() );
-        return PACSRequestStatus::CanNotConnectPACSToRetrieve;
+        return PACSRequestStatus::RetrieveCanNotConnectToPACS;
     }
 
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
@@ -396,7 +396,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
     
     if (moveResponse->DimseStatus == STATUS_Success)
     {
-        return PACSRequestStatus::OkRetrieve;
+        return PACSRequestStatus::RetrieveOk;
     }
 
     switch(moveResponse->DimseStatus)
@@ -447,7 +447,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations  << DCM_NumberOfWarningSuboperations;
 
             WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripció rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
-            retrieveRequestStatus = PACSRequestStatus::RetrieveWarning;
+            retrieveRequestStatus = PACSRequestStatus::RetrieveSomeDICOMFilesFailed;
             break;
         case STATUS_MOVE_Cancel_SubOperationsTerminatedDueToCancelIndication:
             //L'usuari ha sol·licitat cancel·lar la descàrrega
@@ -456,7 +456,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
         default:
             ERROR_LOG(messageErrorLog + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             // S'ha produït un error no contemplat. En principi no s'hauria d'arribar mai a aquesta branca
-            retrieveRequestStatus = PACSRequestStatus::RetrieveUnknow;
+            retrieveRequestStatus = PACSRequestStatus::RetrieveUnknowStatus;
             break;
     }
 

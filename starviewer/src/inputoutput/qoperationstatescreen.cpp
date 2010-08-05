@@ -222,7 +222,7 @@ QString QOperationStateScreen::getPACSJobStatusResume(PACSJob *pacsJob)
     {
         switch((dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ))->getStatus())
         {
-            case PACSRequestStatus::OkRetrieve:
+            case PACSRequestStatus::RetrieveOk:
                 return tr("RETRIEVED");
                 break;
             case PACSRequestStatus::RetrieveCancelled:
@@ -235,7 +235,7 @@ QString QOperationStateScreen::getPACSJobStatusResume(PACSJob *pacsJob)
     }
     else
     {
-        if ((dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ))->getStatus() == PACSRequestStatus::OkSend)
+        if ((dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ))->getStatus() == PACSRequestStatus::SendOk)
         {
             return tr("SENT");
         }

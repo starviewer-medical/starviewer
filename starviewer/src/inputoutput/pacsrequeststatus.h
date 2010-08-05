@@ -15,19 +15,19 @@ namespace udg {
 class PACSRequestStatus {
 
 public:
-    /* SomeDICOMFilesSentFailed - L'enviament d'algunes imatges ha fallat    
-       WarningSend: Per a StoreSCU indica que totes les imatges s'han enviat però per totes o alguna imatge hem rebut un warning, per exemple podem rebre un 
+    /* SendSomeDICOMFilesFailed - L'enviament d'algunes imatges ha fallat    
+       SendWarningForSomeImages: Per a StoreSCU indica que totes les imatges s'han enviat però per totes o alguna imatge hem rebut un warning, per exemple podem rebre un 
                      warning perquè el PACS ha guardat amb una transfer syntax diferent les imatges del que les havíem enviat.
-       FailureSend : L'enviament de totes les imatges ha fallat*/
-    enum SendRequestStatus {OkSend, CanNotConnectPACSToSend, FailureSend, WarningSend, SomeDICOMFilesSentFailed, CancelledSend, UnknowStatusSend, PACSConnectionBroken};
+       SendAllDICOMFilesFailed : L'enviament de totes les imatges ha fallat*/
+    enum SendRequestStatus {SendOk, SendCanNotConnectToPACS, SendAllDICOMFilesFailed, SendWarningForSomeImages, SendSomeDICOMFilesFailed, SendCancelled, SendUnknowStatus, SendPACSConnectionBroken};
 
     /*Es defineix els tipus d'error que podem tenir al descarregar fitxers DICOM:
-        DatabaseError: Indica quan error de base de dades d'Starviewer
+        RetrieveDatabaseError: Indica quan error de base de dades d'Starviewer
         MoveDestinationAETileUnknownStatus: El PACS no té registrat el nostre AETitle per permetre-li fer descàrregues
         MoveWarningStatus: Ha fallat la descàrrega d'algun dels fitxers sol·licitats
-        IncomingConnectionsPortPacsInUse: El port per rebre les connexions entrants per rebre els fitxers està en ús */
-    enum RetrieveRequestStatus {OkRetrieve, DatabaseError, CanNotConnectPACSToRetrieve, NoEnoughSpaceToRetrieveDICOMFiles, ErrorFreeingSpace, PatientInconsistent, 
-        RetrieveDestinationAETileUnknown, IncomingConnectionsPortPACSInUse, RetrieveFailureOrRefused, RetrieveWarning, RetrieveCancelled, RetrieveUnknow};
+        RetrieveIncomingDICOMConnectionsPortInUse: El port per rebre les connexions entrants per rebre els fitxers està en ús */
+    enum RetrieveRequestStatus {RetrieveOk, RetrieveDatabaseError, RetrieveCanNotConnectToPACS, RetrieveNoEnoughSpace, RetrieveErrorFreeingSpace, RetrievePatientInconsistent, 
+        RetrieveDestinationAETileUnknown, RetrieveIncomingDICOMConnectionsPortInUse, RetrieveFailureOrRefused, RetrieveSomeDICOMFilesFailed, RetrieveCancelled, RetrieveUnknowStatus};
 
 };
 

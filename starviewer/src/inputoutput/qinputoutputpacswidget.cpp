@@ -208,9 +208,9 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacs
 {
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob);
 
-    if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::OkRetrieve)
+    if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
     {
-        if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveWarning)
+        if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
         {
             QMessageBox::warning(this, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
         }

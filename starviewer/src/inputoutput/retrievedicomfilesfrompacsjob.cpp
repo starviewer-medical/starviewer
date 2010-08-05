@@ -57,7 +57,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
 
     m_retrieveRequestStatus = thereIsAvailableSpaceOnHardDisk();
 
-    if (m_retrieveRequestStatus != PACSRequestStatus::OkRetrieve)
+    if (m_retrieveRequestStatus != PACSRequestStatus::RetrieveOk)
     {
         return;
     }
@@ -66,7 +66,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
 
     if ( Utils::isPortInUse(localPort) )
     {
-        m_retrieveRequestStatus = PACSRequestStatus::IncomingConnectionsPortPACSInUse;
+        m_retrieveRequestStatus = PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse;
         ERROR_LOG("El port " + QString::number(localPort) + " per a connexions entrants del PACS, està en ús, no es pot descarregar l'estudi");
     }
     else
@@ -94,7 +94,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
         
         m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_dicomMaskToRetrieve);
 
-        if ((m_retrieveRequestStatus == PACSRequestStatus::OkRetrieve || m_retrieveRequestStatus == PACSRequestStatus::RetrieveWarning) &&
+        if ((m_retrieveRequestStatus == PACSRequestStatus::RetrieveOk || m_retrieveRequestStatus == PACSRequestStatus::RetrieveSomeDICOMFilesFailed) &&
             !this->isAbortRequested())
         {
             INFO_LOG("Ha finalitzat la descàrrega de l'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + "del pacs " + getPacsDevice().getAETitle());
@@ -111,11 +111,11 @@ void RetrieveDICOMFilesFromPACSJob::run()
                 if (localDatabaseManager.getLastError() == LocalDatabaseManager::PatientInconsistent)
                 {
                     //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
-                    m_retrieveRequestStatus = PACSRequestStatus::PatientInconsistent;
+                    m_retrieveRequestStatus = PACSRequestStatus::RetrievePatientInconsistent;
                 }
                 else 
                 {
-                    m_retrieveRequestStatus = PACSRequestStatus::DatabaseError;
+                    m_retrieveRequestStatus = PACSRequestStatus::RetrieveDatabaseError;
                 }
             }
         }
@@ -194,15 +194,15 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::thereIsA
     {
         if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
         {
-            return PACSRequestStatus::NoEnoughSpaceToRetrieveDICOMFiles;
+            return PACSRequestStatus::RetrieveNoEnoughSpace;
         }
         else
         {
-            return PACSRequestStatus::ErrorFreeingSpace;
+            return PACSRequestStatus::RetrieveErrorFreeingSpace;
         }
     }
 
-    return PACSRequestStatus::OkRetrieve;
+    return PACSRequestStatus::RetrieveOk;
 }
 
 void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDatabase()
@@ -244,19 +244,19 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
 
     switch (getStatus())
     {
-        case PACSRequestStatus::OkRetrieve:
+        case PACSRequestStatus::RetrieveOk:
             message = tr("Study %1 of patient %2 has been retrieved succesfully from PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCancelled:
             message = tr("Retrive of study %1 of patient %2 from PACS %3 has been cancelled.").arg(studyID, patientName, pacsAETitle);
             break;
-        case PACSRequestStatus::CanNotConnectPACSToRetrieve :
+        case PACSRequestStatus::RetrieveCanNotConnectToPACS :
             message += tr("%1 can't connect to PACS %2 trying to retrieve study %3 from patient %4.\n").arg(ApplicationNameString, pacsAETitle,
                 studyID,patientName);
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
-        case PACSRequestStatus::NoEnoughSpaceToRetrieveDICOMFiles:
+        case PACSRequestStatus::RetrieveNoEnoughSpace:
             {
                 Settings settings;
                 HardDiskInformation hardDiskInformation;
@@ -268,17 +268,17 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 message += tr("\nMinimum space required in Disk to retrieve studies: %1 Mb").arg(minimumSpaceRequired);
             }
             break;
-        case PACSRequestStatus::ErrorFreeingSpace :
+        case PACSRequestStatus::RetrieveErrorFreeingSpace :
             message += tr("An error ocurred freeing space the study %1 from patient %2 won't be retrieved.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
-        case PACSRequestStatus::DatabaseError :
+        case PACSRequestStatus::RetrieveDatabaseError :
             message += tr("Study %1 from patient %2 can't be retreived because a database error ocurred.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
-        case PACSRequestStatus::PatientInconsistent :
+        case PACSRequestStatus::RetrievePatientInconsistent :
             message += tr("\n%1 can't retrieve the study %2 from patient %3 becuase has not be capable of read correctly DICOM information of the study.").arg(
                 ApplicationNameString,  studyID, patientName);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
@@ -288,18 +288,18 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                     studyID, patientName, pacsAETitle, PacsDevice::getLocalAETitle() );
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             break;
-        case PACSRequestStatus::RetrieveUnknow:
+        case PACSRequestStatus::RetrieveUnknowStatus:
         case PACSRequestStatus::RetrieveFailureOrRefused:
             message = tr("Please review the operation list screen, ");
             message += tr("%1 can't retrieve study %2 from patient %3 because PACS %4 doesn't respond as expected.\n\n").arg(ApplicationNameString, studyID,
                 patientName, pacsAETitle);
             message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
             break;
-        case PACSRequestStatus::IncomingConnectionsPortPACSInUse :
+        case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse :
             message = tr("%1 can't retrieve study %2 from patient %3 because port %4 for incoming connections from PACS is already in use by another application.").arg( 
                 ApplicationNameString, studyID, patientName, QString().setNum(PacsDevice::getIncomingDICOMConnectionsPort()));
             break;
-        case PACSRequestStatus::RetrieveWarning:
+        case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:
             message = tr("There were problems to retrieve some images of study %1 from patient %2 from PACS %3. Those images may be missing in the local database.").arg(
                 studyID, patientName, pacsAETitle);
             message += "\n";
