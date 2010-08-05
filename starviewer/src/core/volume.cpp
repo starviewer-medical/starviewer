@@ -69,14 +69,14 @@ Volume::~Volume()
 
 Volume::ItkImageTypePointer Volume::getItkData()
 {
-    m_vtkToItkFilter->SetInput(this->getVtkData() );
+    m_vtkToItkFilter->SetInput(this->getVtkData());
     try
     {
         m_vtkToItkFilter->GetImporter()->Update();
     }
-    catch (itk::ExceptionObject & excep )
+    catch (itk::ExceptionObject & excep)
     {
-        WARN_LOG(QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription() );
+        WARN_LOG(QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription());
     }
     return m_vtkToItkFilter->GetImporter()->GetOutput();
 }
@@ -99,16 +99,18 @@ void Volume::setData(ItkImageTypePointer itkImage)
     }
     catch (itk::ExceptionObject & excep)
     {
-        WARN_LOG(QString("Excepció en el filtre itkToVtk :: Volume::setData(ItkImageTypePointer itkImage) -> ") + excep.GetDescription() );
+        WARN_LOG(QString("Excepció en el filtre itkToVtk :: Volume::setData(ItkImageTypePointer itkImage) -> ") + excep.GetDescription());
     }
-    this->setData(m_itkToVtkFilter->GetOutput() );
+    this->setData(m_itkToVtkFilter->GetOutput());
 }
 
 void Volume::setData(VtkImageTypePointer vtkImage)
 {
     // TODO Fer còpia local, no només punter-> com fer-ho?
-    if ( m_imageDataVTK )
+    if (m_imageDataVTK)
+    {
         m_imageDataVTK->ReleaseData();
+    }
     m_imageDataVTK = vtkImage;
     m_dataLoaded = true;
 }
@@ -119,7 +121,7 @@ void Volume::getOrigin(double xyz[3])
     getVtkData()->GetOrigin(xyz);
 }
 
-double *Volume::getOrigin()
+double* Volume::getOrigin()
 {
     getVtkData()->UpdateInformation();
     return getVtkData()->GetOrigin();
@@ -131,7 +133,7 @@ void Volume::getSpacing(double xyz[3])
     getVtkData()->GetSpacing(xyz);
 }
 
-double *Volume::getSpacing()
+double* Volume::getSpacing()
 {
     getVtkData()->UpdateInformation();
     return getVtkData()->GetSpacing();
@@ -143,13 +145,13 @@ void Volume::getWholeExtent(int extent[6])
     getVtkData()->GetWholeExtent(extent);
 }
 
-int *Volume::getWholeExtent()
+int* Volume::getWholeExtent()
 {
     getVtkData()->UpdateInformation();
     return getVtkData()->GetWholeExtent();
 }
 
-int *Volume::getDimensions()
+int* Volume::getDimensions()
 {
     getVtkData()->UpdateInformation();
     return getVtkData()->GetDimensions();
@@ -183,8 +185,10 @@ QPixmap Volume::getThumbnail() const
 
 void Volume::setNumberOfPhases(int phases)
 {
-    if ( phases >= 1 )
+    if (phases >= 1)
+    {
         m_numberOfPhases = phases;
+    }
 }
 
 int Volume::getNumberOfPhases() const
@@ -192,16 +196,16 @@ int Volume::getNumberOfPhases() const
     return m_numberOfPhases;
 }
 
-Volume *Volume::getPhaseVolume(int index)
+Volume* Volume::getPhaseVolume(int index)
 {
     Volume *result = NULL;
-    if ( m_numberOfPhases == 1 )
+    if (m_numberOfPhases == 1)
     {
         // Si només tenim una sola fase, retornem totes les imatges que conté el volum
         result = new Volume();
         result->setImages(m_imageSet);
     }
-    else if ( index >= 0 && index < m_numberOfPhases )
+    else if (index >= 0 && index < m_numberOfPhases)
     {
         result = new Volume();
         // Obtenim el nombre d'imatges per fase
@@ -221,7 +225,7 @@ Volume *Volume::getPhaseVolume(int index)
 QList<Image *> Volume::getPhaseImages(int index)
 {
     QList<Image *> phaseImages;
-    if ( index >= 0 && index < m_numberOfPhases )
+    if (index >= 0 && index < m_numberOfPhases)
     {
         // Obtenim el nombre d'imatges per fase
         int slices = getNumberOfSlicesPerPhase();
@@ -247,7 +251,7 @@ int Volume::getNumberOfSlicesPerPhase() const
 
 void Volume::addImage(Image *image)
 {
-    if ( !m_imageSet.contains(image) )
+    if (!m_imageSet.contains(image))
     {
         m_imageSet << image;
         m_dataLoaded = false;
@@ -271,24 +275,28 @@ int Volume::getNumberOfFrames() const
     return m_imageSet.count();
 }
 
-Study *Volume::getStudy()
+Study* Volume::getStudy()
 {
-    if ( !m_imageSet.isEmpty() )
+    if (!m_imageSet.isEmpty())
     {
         return m_imageSet.at(0)->getParentSeries()->getParentStudy();
     }
     else
+    {
         return NULL;
+    }
 }
 
-Patient *Volume::getPatient()
+Patient* Volume::getPatient()
 {
-    if ( this->getStudy() )
+    if (this->getStudy())
     {
         return this->getStudy()->getParentPatient();
     }
     else
+    {
         return NULL;
+    }
 }
 
 QString Volume::toString(bool verbose)
@@ -296,7 +304,7 @@ QString Volume::toString(bool verbose)
     Q_UNUSED(verbose);
     QString result;
 
-    if ( m_dataLoaded )
+    if (m_dataLoaded)
     {
         int dims[3];
         double origin[3];
@@ -324,13 +332,13 @@ QString Volume::toString(bool verbose)
     return result;
 }
 
-Image *Volume::getImage(int sliceNumber, int phaseNumber) const
+Image* Volume::getImage(int sliceNumber, int phaseNumber) const
 {
     Image *image = NULL;
 
-    if ( !m_imageSet.isEmpty() )
+    if (!m_imageSet.isEmpty())
     {
-        if ( (sliceNumber*m_numberOfPhases + phaseNumber) < m_imageSet.count() )
+        if ((sliceNumber*m_numberOfPhases + phaseNumber) < m_imageSet.count())
         {
             image = m_imageSet.at(sliceNumber*m_numberOfPhases + phaseNumber);
         }
@@ -346,18 +354,20 @@ void Volume::getStackDirection(double direction[3], int stack)
     Q_UNUSED(stack);
     Image *firstImage = this->getImage(0);
     Image *secondImage = this->getImage(1);
-    if ( !firstImage )
+    if (!firstImage)
     {
         DEBUG_LOG("Error gravísim. No hi ha 'primera' imatge!");
         return;
     }
 
-    if ( !secondImage )
+    if (!secondImage)
     {
         DEBUG_LOG("Només hi ha una imatge per stack! Retornem la normal del pla");
         const double *directionCosines = firstImage->getImageOrientationPatient();
-        for (int i=0; i<3; i++)
+        for (int i = 0; i < 3; i++)
+        {
             direction[i] = directionCosines[i + 6];
+        }
     }
     else
     {
@@ -366,18 +376,20 @@ void Volume::getStackDirection(double direction[3], int stack)
         // calculem la direcció real de com estan apilades
         double *zDirection = MathTools::directorVector(firstOrigin, secondOrigin);
         MathTools::normalize(zDirection);
-        for (int i=0; i<3; i++)
+        for (int i = 0; i < 3; i++)
+        {
             direction[i] = zDirection[i];
+        }
     }
 }
 
-Volume::VoxelType *Volume::getScalarPointer(int x, int y, int z)
+Volume::VoxelType* Volume::getScalarPointer(int x, int y, int z)
 {
 	// TODO Caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
 	return (Volume::VoxelType *)this->getVtkData()->GetScalarPointer(x,y,z);
 }
 
-Volume::VoxelType *Volume::getScalarPointer(int index[3])
+Volume::VoxelType* Volume::getScalarPointer(int index[3])
 {
 	// TODO Caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
 	return this->getScalarPointer(index[0], index[1], index[2]);
@@ -386,7 +398,7 @@ Volume::VoxelType *Volume::getScalarPointer(int index[3])
 bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
 {
     vtkImageData *vtkData = getVtkData();
-    if ( !vtkData )
+    if (!vtkData)
     {
         DEBUG_LOG("Dades VTK nul·les!");
         return false;
@@ -402,7 +414,7 @@ bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
 
     // Find the cell that contains q and get it
     vtkCell *cell = vtkData->FindAndGetCell(coordinate, NULL, -1, tolerance, subCellId, parametricCoordinates, interpolationWeights);
-    if ( cell )
+    if (cell)
     {
         vtkPointData *pointData = vtkData->GetPointData();
         vtkPointData *outPointData = vtkPointData::New();
@@ -419,7 +431,7 @@ bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
 
 void Volume::createNeutralVolume()
 {
-    if ( m_imageDataVTK )
+    if (m_imageDataVTK)
         m_imageDataVTK->Delete();
     // Creem un objecte vtkImageData "neutre"
     m_imageDataVTK = vtkImageData::New();
@@ -434,13 +446,15 @@ void Volume::createNeutralVolume()
     // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
     signed short * scalarPointer = (signed short *) m_imageDataVTK->GetScalarPointer();
     signed short value;
-    for (int i=0; i<10; i++)
+    for (int i = 0; i < 10; i++)
     {
         value = 150-i*20;
-        if ( i>4 )
-            value = 150-(10-i-1)*20;
+        if (i > 4)
+        {
+            value = 150 - (10 - i - 1)*20;
+        }
 
-        for (int j = 0; j<10; j++)
+        for (int j = 0; j < 10; j++)
         {            
             *scalarPointer = value;
             *scalarPointer++;
@@ -456,8 +470,10 @@ void Volume::createNeutralVolume()
 
 bool Volume::fitsIntoMemory()
 {
-    if ( m_dataLoaded )
+    if (m_dataLoaded)
+    {
         return true;
+    }
     
     unsigned long long int size = 0;
     foreach (Image *image, m_imageSet)
