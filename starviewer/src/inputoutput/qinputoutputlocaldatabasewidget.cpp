@@ -490,10 +490,10 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *p
 {
     SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob );
 
-    if (sendDICOMFilesToPACSJob->getStatus() != PACSRequestStatus::OkSend)
+    if (sendDICOMFilesToPACSJob->getStatus() != PACSRequestStatus::SendOk)
     {
-        if (sendDICOMFilesToPACSJob->getStatus() == PACSRequestStatus::WarningSend ||
-            sendDICOMFilesToPACSJob->getStatus() == PACSRequestStatus::SomeDICOMFilesSentFailed)
+        if (sendDICOMFilesToPACSJob->getStatus() == PACSRequestStatus::SendWarningForSomeImages ||
+            sendDICOMFilesToPACSJob->getStatus() == PACSRequestStatus::SendSomeDICOMFilesFailed)
         {
             QMessageBox::warning(this, ApplicationNameString, sendDICOMFilesToPACSJob->getStatusDescription());
         }
