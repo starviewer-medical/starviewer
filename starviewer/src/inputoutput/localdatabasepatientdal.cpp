@@ -14,9 +14,10 @@
 
 namespace udg {
 
-LocalDatabasePatientDAL::LocalDatabasePatientDAL()
+LocalDatabasePatientDAL::LocalDatabasePatientDAL(DatabaseConnection *dbConnection)
 {
     m_lastSqliteError = SQLITE_OK;
+    m_dbConnection = dbConnection;
 }
 
 void LocalDatabasePatientDAL::insert(Patient *newPatient)
@@ -63,11 +64,6 @@ QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
     }
 
     return patientList;
-}
-
-void LocalDatabasePatientDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
-{
-    m_dbConnection = dbConnection;
 }
 
 int LocalDatabasePatientDAL::getLastError()

@@ -15,10 +15,10 @@
 
 namespace udg {
 
-LocalDatabaseUtilDAL::LocalDatabaseUtilDAL() 
-: m_dbConnection(0)
+LocalDatabaseUtilDAL::LocalDatabaseUtilDAL(DatabaseConnection *dbConnection) 
 {
     m_lastSqliteError = SQLITE_OK;
+    m_dbConnection = dbConnection;
 }
 
 void LocalDatabaseUtilDAL::compact()
@@ -106,11 +106,6 @@ bool LocalDatabaseUtilDAL::isDatabaseCorrupted()
 QString LocalDatabaseUtilDAL::buildSqlGetDatabaseRevision()
 {
     return "select * from DatabaseRevision";
-}
-
-void LocalDatabaseUtilDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
-{
-    m_dbConnection = dbConnection;
 }
 
 int LocalDatabaseUtilDAL::getLastError()

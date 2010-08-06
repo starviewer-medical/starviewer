@@ -17,9 +17,10 @@
 
 namespace udg {
 
-LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL()
+LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection)
 {
     m_lastSqliteError = SQLITE_OK;
+    m_dbConnection = dbConnection;
 }
 
 void LocalDatabaseSeriesDAL::insert(Series *newSeries)
@@ -68,10 +69,6 @@ QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
     return seriesList;
 }
 
-void LocalDatabaseSeriesDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
-{
-    m_dbConnection = dbConnection;
-}
 
 int LocalDatabaseSeriesDAL::getLastError()
 {

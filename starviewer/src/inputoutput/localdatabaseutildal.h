@@ -22,16 +22,13 @@ class LocalDatabaseUtilDAL
 {
 public:
 
-    LocalDatabaseUtilDAL();
+    LocalDatabaseUtilDAL(DatabaseConnection *dbConnection);
 
     ///Compacta la BD
     void compact();
 
     ///retorna la revisió de la BD a la que està connectada, si no troba a quina revisió pertany retorna -1
     int getDatabaseRevision();
-
-    ///Connexió de la base de dades a utilitzar
-    void setDatabaseConnection(DatabaseConnection *dbConnection);
 
     ///Comprova si la base de dades està corrumpuda
     bool isDatabaseCorrupted();

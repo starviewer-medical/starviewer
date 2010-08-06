@@ -16,9 +16,10 @@
 
 namespace udg {
 
-LocalDatabaseStudyDAL::LocalDatabaseStudyDAL()
+LocalDatabaseStudyDAL::LocalDatabaseStudyDAL(DatabaseConnection *dbConnection)
 {
     m_lastSqliteError = SQLITE_OK;
+    m_dbConnection = dbConnection;
 }
 
 void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
@@ -135,11 +136,6 @@ int LocalDatabaseStudyDAL::countHowManyStudiesHaveAPatient(const QString &patien
     }
 
     return QString(reply[1]).toInt();
-}
-
-void LocalDatabaseStudyDAL::setDatabaseConnection(DatabaseConnection *dbConnection)
-{
-    m_dbConnection = dbConnection;
 }
 
 int LocalDatabaseStudyDAL::getLastError()
