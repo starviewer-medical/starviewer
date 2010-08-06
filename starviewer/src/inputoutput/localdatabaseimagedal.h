@@ -26,7 +26,7 @@ class LocalDatabaseImageDAL
 {
 public:
 
-    LocalDatabaseImageDAL();
+    LocalDatabaseImageDAL(DatabaseConnection *dbConnection);
 
     /** Insereix la informació d'una imatge a la caché, actualitzamt l'espai ocupat de la pool, com s'ha de fer un insert i un update aquests dos operacions es fan dins el marc d'una transaccio, per mantenir coherent l'espai de la pool ocupat. Per això tot i que accedim a dos taules, al haver-se de fer dins el marc d'una transacció, necessitem fer-les
     dins el mateix mètode. Ja que sinó ens podríem trobar que altres operacions entressin entre insertar la imatge i updatar la pool i quedessin incloses dins la tx
@@ -46,9 +46,6 @@ public:
 
     ///Compta les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
     int count(const DicomMask &imageMaskToCount);
-
-    ///Indiquem quina és la connexió a la base de dades a utilitzar
-    void setDatabaseConnection(DatabaseConnection *dbConnection);
 
     ///Retorna el codi de l'últim error que s'ha produït
     int getLastError();

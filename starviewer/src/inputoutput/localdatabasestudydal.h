@@ -22,7 +22,7 @@ class LocalDatabaseStudyDAL
 {
 public:
 
-    LocalDatabaseStudyDAL();
+    LocalDatabaseStudyDAL(DatabaseConnection *dbConnection);
 
     ///insereix el nou estudi, i insereix com LastAccessDate la data actual
     void insert(Study *newStudy, const QDate &lastAccessData);
@@ -44,9 +44,6 @@ public:
 
     ///Ens retorna quan estudis té un determinat pacient
     int countHowManyStudiesHaveAPatient(const QString &patientID);
-
-    ///Connexió de la base de dades a utilitzar
-    void setDatabaseConnection(DatabaseConnection *dbConnection);
 
     ///Retorna l'estat de la última operació realitzada
     int getLastError();

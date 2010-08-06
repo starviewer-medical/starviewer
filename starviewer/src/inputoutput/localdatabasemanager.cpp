@@ -174,11 +174,10 @@ void LocalDatabaseManager::save(Series *seriesToSave)
 QList<Patient *> LocalDatabaseManager::queryPatient(const DicomMask &patientMaskToQuery)
 {
     DatabaseConnection dbConnect;
-    LocalDatabasePatientDAL patientDAL;
+    LocalDatabasePatientDAL patientDAL(&dbConnect);
     QList<Patient*> queryResult;
 
     dbConnect.open();
-    patientDAL.setDatabaseConnection(&dbConnect);
     queryResult = patientDAL.query(patientMaskToQuery);
     setLastError(patientDAL.getLastError());
 
@@ -190,11 +189,10 @@ QList<Patient *> LocalDatabaseManager::queryPatient(const DicomMask &patientMask
 QList<Patient *> LocalDatabaseManager::queryPatientStudy(const DicomMask &patientStudyMaskToQuery)
 {
     DatabaseConnection dbConnect;
-    LocalDatabaseStudyDAL studyDAL;
+    LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Patient*> queryResult;
 
     dbConnect.open();
-    studyDAL.setDatabaseConnection(&dbConnect);
     queryResult = studyDAL.queryPatientStudy(patientStudyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
 
@@ -206,11 +204,10 @@ QList<Patient *> LocalDatabaseManager::queryPatientStudy(const DicomMask &patien
 QList<Study *> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery)
 {
     DatabaseConnection dbConnect;
-    LocalDatabaseStudyDAL studyDAL;
+    LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Study *> queryResult;
 
     dbConnect.open();
-    studyDAL.setDatabaseConnection(&dbConnect);
     queryResult = studyDAL.query(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
 
@@ -222,11 +219,10 @@ QList<Study *> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuer
 QList<Study *> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery)
 {
     DatabaseConnection dbConnect;
-    LocalDatabaseStudyDAL studyDAL;
+    LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Study *> queryResult;
 
     dbConnect.open();
-    studyDAL.setDatabaseConnection(&dbConnect);
     queryResult = studyDAL.queryOrderByLastAccessDate(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
 
@@ -238,14 +234,12 @@ QList<Study *> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const Dicom
 QList<Series *> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQuery)
 {
     DatabaseConnection dbConnect;
-    LocalDatabaseSeriesDAL seriesDAL;
-    LocalDatabaseImageDAL imageDAL;
+    LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
+    LocalDatabaseImageDAL imageDAL(&dbConnect);
     QList<Series *> queryResult;
     DicomMask maskToCountNumberOfImage = seriesMaskToQuery;
 
     dbConnect.open();
-    seriesDAL.setDatabaseConnection(&dbConnect);
-    imageDAL.setDatabaseConnection(&dbConnect);
 
     queryResult = seriesDAL.query(seriesMaskToQuery);
 
@@ -280,11 +274,10 @@ QList<Series *> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQ
 QList<Image *> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuery)
 {
     DatabaseConnection dbConnect;
-    LocalDatabaseImageDAL imageDAL;
+    LocalDatabaseImageDAL imageDAL(&dbConnect);
     QList<Image *> queryResult;
 
     dbConnect.open();
-    imageDAL.setDatabaseConnection(&dbConnect);
     queryResult = imageDAL.query(imageMaskToQuery);
     setLastError(imageDAL.getLastError());
 
@@ -295,19 +288,18 @@ QList<Image *> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuer
 
 Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 {
-    LocalDatabaseStudyDAL studyDAL;
-    LocalDatabaseSeriesDAL seriesDAL;
-    LocalDatabaseImageDAL imageDAL;
+    DatabaseConnection dbConnect;
+    LocalDatabaseStudyDAL studyDAL(&dbConnect);
+    LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
+    LocalDatabaseImageDAL imageDAL(&dbConnect);
     QList<Patient*> patientList;
     QList<Series *> seriesList;
     Patient *retrievedPatient = NULL;
     Study *retrievedStudy;
     DicomMask maskImagesToRetrieve;
-    DatabaseConnection dbConnect;
 
     // Busquem l'estudi i pacient
     dbConnect.open();
-    studyDAL.setDatabaseConnection(&dbConnect);
     patientList = studyDAL.queryPatientStudy(maskToRetrieve, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
 
     if (patientList.count() != 1) 
@@ -322,7 +314,6 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     }
 
     // Busquem les series de l'estudi
-    seriesDAL.setDatabaseConnection(&dbConnect);
     seriesList = seriesDAL.query(maskToRetrieve);
 
     if (seriesDAL.getLastError() != SQLITE_OK)
@@ -334,8 +325,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 
     // Busquem les imatges per cada sèrie
     maskImagesToRetrieve.setStudyInstanceUID(maskToRetrieve.getStudyInstanceUID());//estudi del que s'han de cercar les imatges
-    imageDAL.setDatabaseConnection(&dbConnect);
-
+    
     foreach (Series *series, seriesList)
     {
         maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());//específiquem de quina sèrie de l'estudi hem de buscar les imatges
@@ -559,8 +549,8 @@ void LocalDatabaseManager::deleteOldStudies()
     Settings settings;
     DicomMask oldStudiesMask;
     QList<Study *> studyListToDelete;
-    LocalDatabaseStudyDAL studyDAL;
     DatabaseConnection dbConnect;
+    LocalDatabaseStudyDAL studyDAL(&dbConnect);
 
     //Comprovem si tenim activada la opció d'esborra estudis vells, sino es així no fem res
     if (!settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
@@ -571,7 +561,6 @@ void LocalDatabaseManager::deleteOldStudies()
     INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1).toString("dd/MM/yyyy"));
 
     dbConnect.open();
-    studyDAL.setDatabaseConnection(&dbConnect);
     studyListToDelete = studyDAL.query(oldStudiesMask, LocalDatabaseManager::LastAccessDateSelectedStudies);
 
     setLastError(studyDAL.getLastError());
@@ -603,11 +592,10 @@ void LocalDatabaseManager::deleteOldStudies()
 
 void LocalDatabaseManager::compact()
 {
-    LocalDatabaseUtilDAL utilDAL;
     DatabaseConnection dbConnect;
+    LocalDatabaseUtilDAL utilDAL(&dbConnect);
     
     dbConnect.open();
-    utilDAL.setDatabaseConnection(&dbConnect);
     utilDAL.compact();
     setLastError(utilDAL.getLastError());
 
@@ -616,12 +604,11 @@ void LocalDatabaseManager::compact()
 
 int LocalDatabaseManager::getDatabaseRevision()
 {
-    LocalDatabaseUtilDAL utilDAL;
     DatabaseConnection dbConnect;
+    LocalDatabaseUtilDAL utilDAL(&dbConnect);
     int databaseRevision;
 
     dbConnect.open();
-    utilDAL.setDatabaseConnection(&dbConnect);
     databaseRevision = utilDAL.getDatabaseRevision();
     setLastError(utilDAL.getLastError());
 
@@ -632,12 +619,11 @@ int LocalDatabaseManager::getDatabaseRevision()
 
 bool LocalDatabaseManager::isDatabaseCorrupted()
 {
-    LocalDatabaseUtilDAL utilDAL;
     DatabaseConnection dbConnect;
+    LocalDatabaseUtilDAL utilDAL(&dbConnect);
     bool databaseCorrupted;
 
     dbConnect.open();
-    utilDAL.setDatabaseConnection(&dbConnect);
     databaseCorrupted = utilDAL.isDatabaseCorrupted();
     setLastError(utilDAL.getLastError());
 
@@ -852,9 +838,7 @@ int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image 
 
 int LocalDatabaseManager::savePatient(DatabaseConnection *dbConnect, Patient *patientToSave)
 {
-    LocalDatabasePatientDAL patientDAL;
-
-    patientDAL.setDatabaseConnection(dbConnect);
+    LocalDatabasePatientDAL patientDAL(dbConnect);
 
     patientDAL.insert(patientToSave);
 
@@ -869,9 +853,7 @@ int LocalDatabaseManager::savePatient(DatabaseConnection *dbConnect, Patient *pa
 
 int LocalDatabaseManager::saveStudy(DatabaseConnection *dbConnect, Study *studyToSave)
 {
-    LocalDatabaseStudyDAL studyDAL;
-
-    studyDAL.setDatabaseConnection(dbConnect);
+    LocalDatabaseStudyDAL studyDAL(dbConnect);
 
     studyDAL.insert(studyToSave, QDate::currentDate());
 
@@ -886,9 +868,7 @@ int LocalDatabaseManager::saveStudy(DatabaseConnection *dbConnect, Study *studyT
 
 int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave)
 {
-    LocalDatabaseSeriesDAL seriesDAL;
-
-    seriesDAL.setDatabaseConnection(dbConnect);
+    LocalDatabaseSeriesDAL seriesDAL(dbConnect);
 
     seriesDAL.insert(seriesToSave);
 
@@ -903,9 +883,7 @@ int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *seri
 
 int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageToSave)
 {
-    LocalDatabaseImageDAL imageDAL;
-
-    imageDAL.setDatabaseConnection(dbConnect);
+    LocalDatabaseImageDAL imageDAL(dbConnect);
 
     imageDAL.insert(imageToSave);
 
@@ -948,14 +926,13 @@ void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
 
 int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
-    LocalDatabaseStudyDAL localDatabaseStudyDAL;
+    LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
     QList<Patient*> patientList;
     QString patientID;
     int numberOfStudies;
 
     // Només podem esborrar el pacient si no té cap més estudi que el que s'ha d'esborrar
-    localDatabaseStudyDAL.setDatabaseConnection(dbConnect);
-
+ 
     // Com de la màscara a esborrar ens passa l'studyUID hem de buscar el patient id per aquell estudi 
     patientList = localDatabaseStudyDAL.queryPatientStudy(maskToDelete);
     if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
@@ -997,9 +974,8 @@ int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *d
 
 int LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
-    LocalDatabasePatientDAL localDatabasePatientDAL;
+    LocalDatabasePatientDAL localDatabasePatientDAL(dbConnect);
 
-    localDatabasePatientDAL.setDatabaseConnection(dbConnect);
     localDatabasePatientDAL.del(maskToDelete);
 
     return localDatabasePatientDAL.getLastError();
@@ -1007,9 +983,8 @@ int LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection *dbConnec
 
 int LocalDatabaseManager::deleteStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
-    LocalDatabaseStudyDAL localDatabaseStudyDAL;
+    LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
 
-    localDatabaseStudyDAL.setDatabaseConnection(dbConnect);
     localDatabaseStudyDAL.del(maskToDelete);
 
     return localDatabaseStudyDAL.getLastError();
@@ -1017,9 +992,8 @@ int LocalDatabaseManager::deleteStudyFromDatabase(DatabaseConnection *dbConnect,
 
 int LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
-    LocalDatabaseSeriesDAL localDatabaseSeriesDAL;
+    LocalDatabaseSeriesDAL localDatabaseSeriesDAL(dbConnect);
 
-    localDatabaseSeriesDAL.setDatabaseConnection(dbConnect);
     localDatabaseSeriesDAL.del(maskToDelete);
 
     return localDatabaseSeriesDAL.getLastError();
@@ -1027,9 +1001,8 @@ int LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection *dbConnect
 
 int LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
-    LocalDatabaseImageDAL localDatabaseImageDAL;
+    LocalDatabaseImageDAL localDatabaseImageDAL(dbConnect);
 
-    localDatabaseImageDAL.setDatabaseConnection(dbConnect);
     localDatabaseImageDAL.del(maskToDelete);
 
     return localDatabaseImageDAL.getLastError();

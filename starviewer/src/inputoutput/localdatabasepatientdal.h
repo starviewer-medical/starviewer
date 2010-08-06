@@ -23,7 +23,7 @@ class LocalDatabasePatientDAL
 {
 public:
 
-    LocalDatabasePatientDAL();
+    LocalDatabasePatientDAL(DatabaseConnection *dbConnection);
 
     ///insereix el nou pacient
     void insert(Patient *newPatient);
@@ -36,9 +36,6 @@ public:
 
     ///Cerca els pacients que compleixen amb els criteris de la màscara de cerca, només té en compte el Patient Id
     QList<Patient*> query(const DicomMask &patientMaskToQuery);
-
-    ///Connexió de la base de dades a utilitzar
-    void setDatabaseConnection(DatabaseConnection *dbConnection);
 
     ///Retorna l'estat de la última operació realitzada
     int getLastError();

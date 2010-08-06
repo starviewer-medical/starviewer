@@ -24,7 +24,7 @@ class LocalDatabaseSeriesDAL
 {
 
 public:
-    LocalDatabaseSeriesDAL();
+    LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection);
 
     ///insereix la nova sèrie
     void insert(Series *newSeries);
@@ -37,9 +37,6 @@ public:
 
     ///Cerca les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
     QList<Series*> query(const DicomMask &seriesMaskToQuery);
-
-    ///Connexió de la base de dades a utilitzar
-    void setDatabaseConnection(DatabaseConnection *dbConnection);
 
     ///Retorna l'estat de la última operació realitzada
     int getLastError();

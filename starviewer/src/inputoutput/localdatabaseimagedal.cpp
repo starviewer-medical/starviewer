@@ -21,9 +21,10 @@
 
 namespace udg {
 
-LocalDatabaseImageDAL::LocalDatabaseImageDAL()
+LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection)
 {
     m_lastSqliteError = SQLITE_OK;
+    m_dbConnection = dbConnection;
 }
 
 void LocalDatabaseImageDAL::insert(Image *newImage)
@@ -87,11 +88,6 @@ int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
     }
 
     return QString(reply[1]).toInt();
-}
-
-void LocalDatabaseImageDAL::setDatabaseConnection(DatabaseConnection *dbConnect)
-{
-    m_dbConnection = dbConnect;
 }
 
 int LocalDatabaseImageDAL::getLastError()
