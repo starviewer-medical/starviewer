@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+class DSRDocument;
+
 namespace udg {
 
 class Patient;
@@ -75,16 +77,25 @@ private:
     Series* createNewKeyImageNoteSeries();
 
     /// Guarda a la BD local la serie creada amb el nou Key Image Note
-    void storeKeyImageNoteSeriesToLocalDataBase(Series *newKeyImageNoteSeries);
+    bool storeKeyImageNoteSeriesToLocalDataBase(Series *newKeyImageNoteSeries);
 
     /// Retorna cert si totes les imatges seleccionades formen part del mateix estudi.
     bool allImagesInTheSameStudy();
 
-    /// Genera el fitxer DICOM d'un Key Image Note a partir d'una serie Key Image Note
-    void generateKeyImageNoteDICOMFile(Series *newKeyImageNoteSeries);
+    /// Genera el fitxer DICOM d'un Key Image Note a partir d'un Key Image Note
+    DSRDocument* generateKeyImageNoteDICOMFile(Series *newKeyImageNoteSeries);
+
+    /// Desa el document de Key Image Note a la cache de DICOM i assigna el path al Key Image Note
+    bool storeKeyImageNoteDocumentToDICOMCache(DSRDocument *newKeyImageNoteDocument, KeyImageNote *newKeyImageNote);
 
     /// Retorna un volum on la imatge amb sopInstanceUID apareix
     Volume* getVolumeWhereImageIsReferenced(const QString &sopInstanceUID);
+    
+    /// Emplenem els tags de Structured Report per a generar el KIN i omplim a newKeyImageNoteSeries els UID generats
+    void fillStructuredReportCommonData(DSRDocument *newKeyImageNoteDocument, Series *newKeyImageNoteSeries);
+
+    /// Emplenem la informacio especifica del KIN definit pel TID 2010 PS 3.16 DICOM
+    void fillKeyObjectSelectionTemplate(DSRDocument *newKeyImageNoteDocument, Series *newKeyImageNoteSeries);
 
 private:
     /// El pacient que estem tractant
