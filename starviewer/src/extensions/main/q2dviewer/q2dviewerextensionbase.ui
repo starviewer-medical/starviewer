@@ -19,6 +19,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout">
@@ -1068,6 +1071,9 @@
            <width>32</width>
            <height>32</height>
           </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
          <property name="autoRaise">
           <bool>true</bool>
