@@ -28,6 +28,9 @@ public slots:
     /// Fa visible o invisible el combobox de Rejected For Quality Reasons segons el document Title seleccionat
     void setVisibilityOfRejectedForQualityReasons(const QString &documentTitle);
 
+    /// S'utilitza per actualizar diferents elements segons quines destinacions tenim seleccionades
+    void destinationsChanged(bool checked);
+
 private:
     /// Crea les connexions entre el Key Image Note Creator Widget i el seu Key Image Note Manager
     void createConnections();
