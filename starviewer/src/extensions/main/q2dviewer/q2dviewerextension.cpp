@@ -21,7 +21,8 @@
 #include "qdicomdump.h"
 #include "statswatcher.h"
 // per poder fer screenshots desde menú
-#include "screenshottool.h" 
+#include "screenshottool.h"
+#include "keyimagenotetool.h"
 #include "toolproxy.h"
 #include "q2dviewersettings.h"
 #include "keyimagenotemanagerwidget.h"
@@ -537,6 +538,9 @@ void Q2DViewerExtension::changeSelectedViewer( Q2DViewerWidget *viewerWidget )
 
         // activem les "ActionTool" pel visor seleccionat
         m_toolManager->enableRegisteredActionTools( selected2DViewer );
+
+        KeyImageNoteTool *keyImageNoteTool = dynamic_cast<KeyImageNoteTool*>(m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("KeyImageNoteTool"));
+        keyImageNoteTool->setKeyImageNoteManager(m_keyImageNoteManager);
     }
 }
 
@@ -568,6 +572,9 @@ void Q2DViewerExtension::initializeKeyImageNoteManager()
 
     m_keyImageNoteManager = new KeyImageNoteManager(m_patient);
     m_keyImageNoteManagerWidget->setKeyImageNoteManager(m_keyImageNoteManager);
+    
+    KeyImageNoteTool *keyImageNoteTool = dynamic_cast<KeyImageNoteTool*>(m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("KeyImageNoteTool"));
+    keyImageNoteTool->setKeyImageNoteManager(m_keyImageNoteManager);
 }
 
 void Q2DViewerExtension::initializeSelectImageAction()

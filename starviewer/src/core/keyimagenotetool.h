@@ -14,6 +14,7 @@ namespace udg {
 class Q2DViewer;
 class KeyImageNoteToolWidget;
 class DrawerPrimitive;
+class KeyImageNoteManager;
 
 /** Tool que s'encarrega de pintar una icona a totes les imatges
 que formen d'algun Key Image Note de l'estudi donat un volum */
@@ -29,6 +30,9 @@ public:
 
     /// Mostra el Key Image Note Tool Widget que ens informara dels KINS on es referenciada la imatge visualitzada
     void showKeyImageNoteDescriptor();
+
+    /// Estableix el Key Image Note Manager amb el que s'ha de comunicar
+    void setKeyImageNoteManager(KeyImageNoteManager *keyImageNoteManager);
 
 private slots:
     /// Inicialitzacio de la Tool
@@ -50,6 +54,9 @@ private:
 
     /// Llista dels punts que hem pintat als diferents volums
     QList<DrawerPrimitive*> m_pointsOfKeyImageNote;
+
+    /// Key Image Note Manager amb el que interactua la tool
+    KeyImageNoteManager *m_keyImageNoteManager;
 
 };
 

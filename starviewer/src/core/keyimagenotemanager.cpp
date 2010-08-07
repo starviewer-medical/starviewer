@@ -31,11 +31,9 @@ KeyImageNoteManager::~KeyImageNoteManager()
 {
 }
 
-QList<KeyImageNote*> KeyImageNoteManager::searchKeyImageNotes(Patient *patient)
+void KeyImageNoteManager::searchKeyImageNotes()
 {
-    QList<KeyImageNote*> keyImageNotesOfPatient;
-
-    foreach (Study *study, patient->getStudies())
+    foreach (Study *study, m_patient->getStudies())
     {
         foreach (Series *series, study->getSeries())
         {
@@ -43,13 +41,11 @@ QList<KeyImageNote*> KeyImageNoteManager::searchKeyImageNotes(Patient *patient)
             {
                 foreach (KeyImageNote *keyImageNote, series->getKeyImageNotes())
                 {
-                    keyImageNotesOfPatient.append(keyImageNote);
+                    m_KeyImageNotesOfPatient.append(keyImageNote);
                 }
             }
         }
     }
-
-    return keyImageNotesOfPatient;
 }
 
 QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesOfPatient()
@@ -57,7 +53,7 @@ QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesOfPatient()
     if (!m_KeyImageNotesOfPatientSearched)
     {
         m_KeyImageNotesOfPatientSearched = true;
-        m_KeyImageNotesOfPatient = KeyImageNoteManager::searchKeyImageNotes(m_patient);
+        searchKeyImageNotes();
     }
 
     return m_KeyImageNotesOfPatient;

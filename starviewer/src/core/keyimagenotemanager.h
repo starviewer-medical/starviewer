@@ -63,7 +63,7 @@ signals:
 
 private:
     /// Cerca de tots els Key Image Notes
-    static QList<KeyImageNote*> searchKeyImageNotes(Patient *patient);
+    void searchKeyImageNotes();
 
     /// Crea un nou Key Image Note a partir de les dades de parametre.
     KeyImageNote* createNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription);

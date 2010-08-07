@@ -1,6 +1,7 @@
 #include "keyimagenotetoolwidget.h"
 #include "keyimagenotedisplayer.h"
 #include "keyimagenote.h"
+#include "keyimagenotemanager.h"
 #include "series.h"
 
 namespace udg {
@@ -45,6 +46,12 @@ void KeyImageNoteToolWidget::changeKeyImageNoteDisplayed(int index)
     {
         m_keyImageNoteDisplayer->setKeyImageNote(m_keyImageNotesOfImage.at(index));
     }
+}
+
+void KeyImageNoteToolWidget::setKeyImageNoteManager(KeyImageNoteManager *keyImageNoteManager)
+{
+    m_keyImageNoteManager = keyImageNoteManager;
+    m_keyImageNoteDisplayer->setKeyImageNoteManager(m_keyImageNoteManager);
 }
 
 }

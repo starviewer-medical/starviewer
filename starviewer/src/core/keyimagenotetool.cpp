@@ -14,6 +14,8 @@
 #include "drawertext.h"
 #include "keyimagenotetoolwidget.h"
 #include "drawerprimitive.h"
+#include "study.h"
+#include "series.h"
 
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
@@ -37,7 +39,6 @@ KeyImageNoteTool::~KeyImageNoteTool()
 
 void KeyImageNoteTool::initialize()
 {
-    DEBUG_LOG("Volume changed");
     drawKeyImageNotesInVolume();
 }
 
@@ -67,7 +68,7 @@ void KeyImageNoteTool::showKeyImageNoteDescriptor()
             {
                 m_keyImageNoteToolWidget = new KeyImageNoteToolWidget();
             }
-            // Ara es fa dos cops, aquest s'ha de fer, el del hasKeyImageNoteToolWidget no!
+            m_keyImageNoteToolWidget->setKeyImageNoteManager(m_keyImageNoteManager);
             m_keyImageNoteToolWidget->setKeyImageNotes(KeyImageNoteManager::getKeyImageNotesWhereImageIsReferenced(m_2DViewer->getInput()->getPatient(), selectedImage));
             m_keyImageNoteToolWidget->exec();
         }
@@ -108,12 +109,18 @@ void KeyImageNoteTool::drawKeyImageNotesInVolume()
 
     foreach (Image *image, volume->getImages())
     {
-        if (!KeyImageNoteManager::getKeyImageNotesWhereImageIsReferenced(volume->getPatient(), image).isEmpty())
+        if (!KeyImageNoteManager::getKeyImageNotesWhereImageIsReferenced(image->getParentSeries()->getParentStudy()->getParentPatient(), image).isEmpty())
         {
             double point[3];
+            int orderNumberInVolume = image->getOrderNumberInVolume();
+
+            if (volume->getImages().count() == 1)
+            {
+                orderNumberInVolume = 0;
+            }
             point[0] = origin[0] + extent[1] * vtkSpacing[0] - 30;
             point[1] = origin[1] + extent[3] * vtkSpacing[1] - 30;
-            point[2] = origin[2] + vtkSpacing[2] * image->getOrderNumberInVolume();
+            point[2] = origin[2] + vtkSpacing[2] *orderNumberInVolume;
             
             DrawerText *keyImageNoteMark = new DrawerText;
             keyImageNoteMark->boldOn();
@@ -123,9 +130,20 @@ void KeyImageNoteTool::drawKeyImageNotesInVolume()
 
             DEBUG_LOG(qPrintable(QString("OrderNumberInVolume: %2, llesca: %6; punt (%3,%4,%5)").arg(image->getOrderNumberInVolume()).arg(point[0]).arg(point[1]).arg(point[2]).arg(image->getOrderNumberInVolume()+1)));
 
-            m_2DViewer->getDrawer()->draw(keyImageNoteMark, m_2DViewer->getView(), image->getOrderNumberInVolume());
+            m_2DViewer->getDrawer()->draw(keyImageNoteMark, m_2DViewer->getView(), orderNumberInVolume);
             m_pointsOfKeyImageNote.append(keyImageNoteMark);
         }
     }
 }
+
+void KeyImageNoteTool::setKeyImageNoteManager(KeyImageNoteManager *keyImageNoteManager)
+{
+    m_keyImageNoteManager = keyImageNoteManager;
+
+    if (m_keyImageNoteToolWidget)
+    {
+        m_keyImageNoteToolWidget->setKeyImageNoteManager(m_keyImageNoteManager);
+    }
+}
+
 }

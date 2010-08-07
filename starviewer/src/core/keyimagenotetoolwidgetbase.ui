@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>329</width>
+    <width>472</width>
     <height>268</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Key Image Note Details</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -26,20 +26,13 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>11</pointsize>
          <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
        <property name="text">
-        <string>KEY IMAGE NOTE DETAILS</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_1">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <string>Key Image Note Details</string>
        </property>
       </widget>
      </item>
@@ -47,7 +40,11 @@
       <widget class="QComboBox" name="m_keyImageNoteSelectorComboBox"/>
      </item>
      <item>
-      <widget class="udg::KeyImageNoteDisplayer" name="m_keyImageNoteDisplayer" native="true"/>
+      <widget class="udg::KeyImageNoteDisplayer" name="m_keyImageNoteDisplayer" native="true">
+       <property name="contextMenuPolicy">
+        <enum>Qt::DefaultContextMenu</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
