@@ -8,6 +8,7 @@ namespace udg {
 class KeyImageNoteManager;
 class KeyImageNote;
 class KeyImageNoteCreatorWidget;
+class KeyImageNoteDisplayer;
 
 /**
 Widget que s'encarrega de mostrar els Key Image Notes
@@ -32,10 +33,19 @@ public slots:
     void showKeyImageNoteCreatorWidget();
     
     /// Creacio de un Key Image Note Displayer a partir d'un Key Image Note
-    void createKeyImageNoteDisplayer(KeyImageNote *keyImageNote);
+    KeyImageNoteDisplayer* createKeyImageNoteDisplayer(KeyImageNote *keyImageNote);
 
     /// Esborra els elements seleccionats de la meva seleccio
     void deleteSelectedItemsFromCurrentSelection();
+
+    /// Actualitza els Key Image Note Displayers colocant el KIN passat per parametre a sobre el layout i seguidament la resta
+    void updateKeyImageNoteDisplayers(KeyImageNote *keyImageNote);
+
+    /// Mostra el widget de la meva seleccio
+    void toogleMySelectionWidget();
+
+    /// Activa / Desactiva el boto per a guardar el Kin segons tinguem o no imatges seleccionades
+    void updateCreateKeyImageNotePushButtonStatus();
 
 private:
     /// Inicialitza els Key Image Note Displayers
@@ -59,6 +69,9 @@ private:
 
     /// Widget per a crear un Key Image Note
     KeyImageNoteCreatorWidget *m_keyImageNoteCreator;
+
+    /// Llista dels Key Image Note Displayers que gestiona el Key Image Note Manager Widget
+    QList<KeyImageNoteDisplayer*> m_keyImageNoteDisplayers;
 };
 
 }

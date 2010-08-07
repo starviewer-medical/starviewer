@@ -339,4 +339,9 @@ void KeyImageNoteManager::generateKeyImageNoteDICOMFile(Series *newKeyImageNoteS
         DEBUG_LOG(QString("S'ha produit un error al escriure el DSRDocument: " + QString(status.text())));
     }
 }
+
+int KeyImageNoteManager::getNumberOfImagesInCurrentSelection()
+{
+    return m_currentSelection.count();
+}
 }

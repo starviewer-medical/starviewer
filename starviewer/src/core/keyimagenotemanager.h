@@ -38,6 +38,9 @@ public:
     /// Eliminem de la seleccio actual l'element amb UID removedUID
     void removeItemOfCurrentSelection(QString removedUID);
 
+    /// Retorna el nombre d'Imatges que te la seleccio actual.
+    int getNumberOfImagesInCurrentSelection();
+
 public slots:
     /// Crea un Key Image Note donat d'alta per l'usuari
     void generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode);
