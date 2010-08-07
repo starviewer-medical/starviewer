@@ -9,6 +9,7 @@ class Patient;
 class Image;
 class KeyImageNote;
 class Series;
+class Volume;
 
 /**
 Classe que s'encarrega de gestionar els Key Image Notes d'un pacient i mantenir la seleccio activa de l'usuari
@@ -34,15 +35,15 @@ public:
     /// Obte les imatges del Key Image Note disponibles i emet un senyal perque siguin visualitzades
     void showKeyImageNote(KeyImageNote *keyImageNote);
 
-    /// Eliminem de la seleccio actual tots aquells elements que ens especifica la llista removedItems
-    void removeItemsOfCurrentSelection(QStringList removedItems);
+    /// Eliminem de la seleccio actual l'element amb UID removedUID
+    void removeItemOfCurrentSelection(QString removedUID);
 
 public slots:
     /// Crea un Key Image Note donat d'alta per l'usuari
     void generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode);
 
     /// Busquem la imatge segons els parametres i enviem un senyal per a canviar la llesca que ens indica la imatge
-    void changeCurrentDisplayedImage(const QString &seriesInstanceUID, const QString &imageInstanceUID);
+    void changeCurrentDisplayedImage(const QString &imageInstanceUID);
 
 signals:
     /// Senyala que s'ha afegit una nova imatge a la seleccio
@@ -54,8 +55,8 @@ signals:
     /// Senyala que s'ha afegit un Key Image Note a l'estudi
     void keyImageNoteOfPatientAdded(KeyImageNote *keyImageNote);
 
-    /// Assenyala que cal posicionar-nos a la llesca
-    void changeCurrentSlice(int sliceNumber);
+    /// Assenyala que cal posicionar-nos a la llesca sliceNumber del volum volume
+    void changeCurrentSlice(Volume *volume, int sliceNumber);
 
     /// Indica que cal mostrar les imatges d'un Key Image Note
     void showImagesReferencedInKeyImageNote(QList<Image*> referencedImage);
@@ -78,6 +79,9 @@ private:
 
     /// Genera el fitxer DICOM d'un Key Image Note a partir d'una serie Key Image Note
     void generateKeyImageNoteDICOMFile(Series *newKeyImageNoteSeries);
+
+    /// Retorna un volum on la imatge amb sopInstanceUID apareix
+    Volume* getVolumeWhereImageIsReferenced(const QString &sopInstanceUID);
 
 private:
     /// El pacient que estem tractant

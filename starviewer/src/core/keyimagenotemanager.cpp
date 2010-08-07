@@ -7,6 +7,8 @@
 #include "keyimagenote.h"
 #include "localdatabasemanager.h"
 #include "logging.h"
+#include "volume.h"
+
 #include <dcmtk/dcmdata/dcuid.h>
 #include <dcfilefo.h> // Generar DICOM
 #include <dsrdoc.h>
@@ -214,29 +216,46 @@ QList<KeyImageNote*> KeyImageNoteManager::getKeyImageNotesWhereImageIsReferenced
     return keyImageNotesOfImage;
 }
 
-void KeyImageNoteManager::changeCurrentDisplayedImage(const QString &seriesInstanceUID, const QString &imageInstanceUID)
+void KeyImageNoteManager::changeCurrentDisplayedImage(const QString &imageInstanceUID)
 {
-    Series * series = m_patient->getSeries(seriesInstanceUID);
-
-    if (series != NULL)
-    {
-        int i = 0;
-        Image *image = NULL;
-        while (!image && i < series->getNumberOfImages())
+    Volume *volumeOfImage = getVolumeWhereImageIsReferenced(imageInstanceUID);
+    
+    if (volumeOfImage)
+    {   
+        int sliceOfImage;
+        foreach (Image *currentImage, volumeOfImage->getImages())
         {
-            if (series->getImages().at(i)->getSOPInstanceUID() == imageInstanceUID)
+            if (currentImage->getSOPInstanceUID() == imageInstanceUID)
             {
-                image = series->getImages().at(i);
+                sliceOfImage = currentImage->getOrderNumberInVolume();
+                break;
             }
-
-            i++;
         }
 
-        if (image != NULL)
+        emit changeCurrentSlice(volumeOfImage, sliceOfImage);
+    }
+}
+
+Volume* KeyImageNoteManager::getVolumeWhereImageIsReferenced(const QString &sopInstanceUID)
+{
+    foreach (Study *study, m_patient->getStudies())
+    {
+        foreach (Series *series, study->getSeries())
         {
-            emit changeCurrentSlice(image->getOrderNumberInVolume());
+            foreach (Volume *currentVolume, series->getVolumesList())
+            {
+                foreach (Image *currentImage, currentVolume->getImages())
+                {
+                    if (currentImage->getSOPInstanceUID() == sopInstanceUID)
+                    {
+                        return currentVolume;
+                    }
+                }
+            }
         }
     }
+
+    return NULL;
 }
 
 void KeyImageNoteManager::showKeyImageNote(KeyImageNote *keyImageNote)
@@ -244,24 +263,22 @@ void KeyImageNoteManager::showKeyImageNote(KeyImageNote *keyImageNote)
     emit showImagesReferencedInKeyImageNote(keyImageNote->getReferencedImages());
 }
 
-void KeyImageNoteManager::removeItemsOfCurrentSelection(QStringList removedItems)
+void KeyImageNoteManager::removeItemOfCurrentSelection(QString removedUID)
 {
     // TODO: Falta considerar el numero de frame
-    foreach (QString currentItem, removedItems)
+    bool found = false;
+    int i = 0;
+    while (!found && i < m_currentSelection.size())
     {
-        bool found = false;
-        int i = 0;
-        while (!found && i < m_currentSelection.size())
+        if (m_currentSelection.at(i)->getSOPInstanceUID() == removedUID)
         {
-            if (m_currentSelection.at(i)->getSOPInstanceUID() == currentItem)
-            {
-                m_currentSelection.removeAt(i);
-                found = true;
-            }
-
-            i++;
+            m_currentSelection.removeAt(i);
+            found = true;
         }
+        
+        i++;
     }
+
 }
 
 void KeyImageNoteManager::generateKeyImageNoteDICOMFile(Series *newKeyImageNoteSeries)

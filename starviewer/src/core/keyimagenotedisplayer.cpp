@@ -25,7 +25,7 @@ void KeyImageNoteDisplayer::setKeyImageNote(KeyImageNote *keyImageNote)
 void KeyImageNoteDisplayer::setKeyImageNoteManager(KeyImageNoteManager *keyImageNoteManager)
 {
     m_keyImageNoteManager = keyImageNoteManager;
-    connect(m_thumbnailImageDisplayer, SIGNAL(show(const QString &, const QString &)), m_keyImageNoteManager, SLOT(changeCurrentDisplayedImage(const QString &, const QString &)));
+    connect(m_thumbnailImageDisplayer, SIGNAL(show(const QString &)), m_keyImageNoteManager, SLOT(changeCurrentDisplayedImage(const QString &)));
     connect(m_showButton, SIGNAL(clicked()), SLOT(showKeyImageNote()));
 }
 

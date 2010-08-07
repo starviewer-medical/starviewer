@@ -35,12 +35,15 @@ void ThumbnailImageDisplayer::setThumbnailSize(ThumbnailSize thumbnailSize)
         case ThumbnailImageDisplayer::Small:
             size.setHeight(ScaledSmallThumbnailsSizeY);
             size.setWidth(ScaledSmallThumbnailsSizeX);
+            break;
         case ThumbnailImageDisplayer::Medium:
             size.setHeight(ScaledMediumThumbnailsSizeY);
             size.setWidth(ScaledMediumThumbnailsSizeX);
+            break;
         case ThumbnailImageDisplayer::Big:
             size.setHeight(ScaledBigThumbnailsSizeY);
             size.setWidth(ScaledBigThumbnailsSizeX);
+            break;
         default:
             size.setHeight(ScaledMediumThumbnailsSizeY);
             size.setWidth(ScaledMediumThumbnailsSizeX);
@@ -70,11 +73,7 @@ void ThumbnailImageDisplayer::addImage(Image *image)
 
     item->setText(text);
     m_listImagesDisplayer->addItem(item);
-
-    // TODO El UID de la serie cal guardar-ho d'una manera molt millor
-
     item->setStatusTip(image->getSOPInstanceUID());
-    m_HashImageSeries[image->getSOPInstanceUID()] = image->getParentSeries()->getInstanceUID();
 }
 
 void ThumbnailImageDisplayer::clearAllThumbnails()
@@ -90,8 +89,7 @@ void ThumbnailImageDisplayer::createConnections()
 void ThumbnailImageDisplayer::showItem(QListWidgetItem *item)
 {
     QString imageInstanceUID = item->statusTip();
-    QString seriesInstanceUID = m_HashImageSeries.value(imageInstanceUID);
-    emit show(seriesInstanceUID, imageInstanceUID);
+    emit show(imageInstanceUID);
 }
 
 void ThumbnailImageDisplayer::setContextMenu(QMenu *contextMenu)
@@ -107,15 +105,11 @@ void ThumbnailImageDisplayer::contextMenuEvent(QContextMenuEvent *event)
     }
 }
 
-QStringList ThumbnailImageDisplayer::removeSelectedItems()
+QString ThumbnailImageDisplayer::removeSelectedItems()
 {
-    QStringList removedItemsUID;
-    foreach (QListWidgetItem *item, m_listImagesDisplayer->selectedItems())
-    {
-        removedItemsUID << item->statusTip();
-        delete item;
-    }
+    QString elementRemovedUID = m_listImagesDisplayer->selectedItems().at(0)->statusTip(); 
+    delete m_listImagesDisplayer->selectedItems().at(0);
 
-    return removedItemsUID;
+    return elementRemovedUID;
 }
 }

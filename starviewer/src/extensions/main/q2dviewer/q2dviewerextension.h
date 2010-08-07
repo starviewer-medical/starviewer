@@ -90,8 +90,8 @@ public slots:
     /// Amaga el Key Image Note Manager Widget
     void hideKeyImageNoteManagerWidget();
 
-    /// Indica que cal canviar de llesca
-    void changeSliceOfCurrentDisplayedViewer(int slice);
+    /// Indica que cal canviar a la llesca slice del Volume passat per parametre
+    void changeSliceOfCurrentDisplayedViewer(Volume *volume, int slice);
 
     /// Genera un viewer per cada imatge rebuda
     void showKeyImageNote(QList<Image*> referencedImages);

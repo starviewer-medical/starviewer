@@ -20,6 +20,12 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QListWidget" name="m_listImagesDisplayer">
      <property name="enabled">
@@ -73,7 +79,7 @@
       <enum>QAbstractItemView::NoDragDrop</enum>
      </property>
      <property name="selectionMode">
-      <enum>QAbstractItemView::MultiSelection</enum>
+      <enum>QAbstractItemView::SingleSelection</enum>
      </property>
      <property name="verticalScrollMode">
       <enum>QAbstractItemView::ScrollPerItem</enum>

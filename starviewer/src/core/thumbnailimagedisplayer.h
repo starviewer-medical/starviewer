@@ -31,12 +31,12 @@ public:
     void setContextMenu(QMenu *contextMenu);
 
     // TODO: Tambe ha de tornar el numero de frame
-    /// Retorna una llista de UID amb els elements eliminats
-    QStringList removeSelectedItems();
+    /// Retorna UID de l'element eliminat
+    QString removeSelectedItems();
 
 signals:
-    /// Determina que cal mostrar la icona amb la informacio de serie i imatge
-    void show(const QString &seriesInstanceUID, const QString &imageInstanceUID);
+    /// Determina que cal mostrar la icona amb la informacio de imatge
+    void show(const QString &imageInstanceUID);
 
 public slots:
     /// Afegeix la previsualitzacio de la imatge image
@@ -58,8 +58,6 @@ protected:
 
 private:
     // TODO: Falta considerar el numero de frame, guardar-lo i retornar-lo quan faci falta
-    /// Guardem per cada imatge a la serie que pertany
-    QHash<QString, QString> m_HashImageSeries;
 
     /// Ens guardem el menu contextual
     QMenu  *m_contextMenu;

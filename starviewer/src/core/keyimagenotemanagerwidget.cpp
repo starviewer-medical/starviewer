@@ -42,7 +42,7 @@ void KeyImageNoteManagerWidget::createConnectionsWithKeyImageNoteManager()
     connect(m_keyImageNoteManager, SIGNAL(currentSelectionCleared()), m_thumbnailImageDisplayer, SLOT(clearAllThumbnails()));
     connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), m_thumbnailImageDisplayer, SLOT(addImage(Image*)));
     connect(m_keyImageNoteManager, SIGNAL(keyImageNoteOfPatientAdded(KeyImageNote*)), SLOT(createKeyImageNoteDisplayer(KeyImageNote*)));
-    connect(m_thumbnailImageDisplayer, SIGNAL(show(const QString &, const QString &)), m_keyImageNoteManager, SLOT(changeCurrentDisplayedImage(const QString &, const QString &)));
+    connect(m_thumbnailImageDisplayer, SIGNAL(show(const QString &)), m_keyImageNoteManager, SLOT(changeCurrentDisplayedImage(const QString &)));
 }
 
 void KeyImageNoteManagerWidget::createConnections()
@@ -89,7 +89,7 @@ void KeyImageNoteManagerWidget::initializeThumbnailImageDisplayer()
 
 void KeyImageNoteManagerWidget::deleteSelectedItemsFromCurrentSelection()
 {
-    QStringList removedItems = m_thumbnailImageDisplayer->removeSelectedItems();
-    m_keyImageNoteManager->removeItemsOfCurrentSelection(removedItems);
+    QString removedItem = m_thumbnailImageDisplayer->removeSelectedItems();
+    m_keyImageNoteManager->removeItemOfCurrentSelection(removedItem);
 }
 }
