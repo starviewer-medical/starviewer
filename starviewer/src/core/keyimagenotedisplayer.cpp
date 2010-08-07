@@ -31,6 +31,7 @@ void KeyImageNoteDisplayer::setKeyImageNoteManager(KeyImageNoteManager *keyImage
 
 void KeyImageNoteDisplayer::fillKeyImageNoteDisplayer()
 {
+    m_kinIdentifier->setText(tr("Key Image Note") + " " + m_keyImageNote->getInstanceNumber() + " " + tr("Series") + " " + m_keyImageNote->getParentSeries()->getSeriesNumber());
     QString titleText;
     titleText = KeyImageNote::getDocumentTitleAsString(m_keyImageNote->getDocumentTitle());
 
