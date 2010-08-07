@@ -623,7 +623,7 @@ void Q2DViewerExtension::addCurrentDisplayedImageToSelection()
     }
     else
     {
-        QMessageBox::warning(this, tr("Add image to the current selection") , tr("This action is not allowed because this is not an image") );
+        QMessageBox::warning(this, tr("Add image to the current selection") , tr("This action is not allowed because this is not an image it is a reconstruction") );
         return;
     }
 }
