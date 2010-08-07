@@ -623,7 +623,7 @@ void Q2DViewerExtension::addCurrentDisplayedImageToSelection()
     }
     else
     {
-        QMessageBox::warning(this, tr("Add image to the current selection") , tr("This action is not allowed because this is not an image, it is a reconstruction") );
+        QMessageBox::warning(this, tr("Add image to the current selection") , tr("This action is not allowed because this is not an image") );
         return;
     }
 }
@@ -716,15 +716,57 @@ void Q2DViewerExtension::changeToPreviousStudiesDefaultIcon()
 
 void Q2DViewerExtension::showKeyImageNote(QList<Image*> referencedImages)
 {
-    m_workingArea->setGrid(1, referencedImages.count());
+    double dimensions = std::floor(std::sqrt((double)referencedImages.count()));
 
-    for (int j = 0; j < referencedImages.count(); j++)
+    // Calculem les dimensions que ha de tenir el working area
+    int rows = dimensions;
+    int columns = dimensions;
+    if (rows * columns < referencedImages.count())
     {
-        Volume *volume = new Volume();
-        volume->addImage(referencedImages.at(j));
-        m_workingArea->getViewerWidget(j)->getViewer()->setInput(volume);
+        columns++;
+        if (rows * columns < referencedImages.count())
+        {
+            rows++;
+        }
+    }
+    
+    float rowSize = (float) 1 /rows;
+    float columnSize = (float) 1 /columns;
+    int currentRow = 0;
+    int currentColumn = 0;
+    float displacement = rowSize;
+
+    for (int j = 0; j < rows * columns; j++)
+    {
+        float currentColumnPosition = currentColumn * columnSize;
+        float currentColumnSize = currentColumnPosition + columnSize;
+
+        float currentRowPosition = 1 - (currentRow * rowSize);
+        float currentRowSize = 1 - displacement;
+        
+        QString position = QString("%1").arg(currentColumnPosition) + "\\" + QString("%1").arg(currentRowPosition) + "\\" + QString("%1").arg(currentColumnSize) + "\\" + QString("%1").arg(currentRowSize);
+        Q2DViewerWidget *viewerWidget = m_workingArea->addViewer(position);
+        
+        if (j < referencedImages.count())
+        {
+            Volume *volume = new Volume();
+            volume->addImage(referencedImages.at(j));
+            viewerWidget->setInput(volume);
+        }
+        
+        if (currentColumn == (columns - 1))
+        {
+            currentColumn = 0;
+            currentRow++;
+            displacement = displacement + rowSize;
+        }
+        else
+        {
+            currentColumn++;
+        }
     }
 }
+
 void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
 {
     Study * recentStudy = NULL;
