@@ -470,4 +470,14 @@ KeyImageNote::DocumentTitle KeyImageNote::getDocumentTitleInstanceFromString(con
 
     return KeyImageNote::DocumentTitle(result);
 }
+void KeyImageNote::setPath(QString path)
+{
+    m_path = path;
+}
+
+QString KeyImageNote::getPath() const
+{
+    return m_path;
+}
+
 }

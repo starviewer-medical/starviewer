@@ -135,6 +135,10 @@ public:
     /// Ens retorna cert si el documentTitle necessita Rejected For Quality Reasons segons el que estableix DICOM
     static bool isDocumentTitleModifiedForQualityReasonsOrIssues(KeyImageNote::DocumentTitle documentTitle);
 
+    /// Assigna/Retorna el path absolut de la imatge
+    void setPath(QString path);
+    QString getPath() const;
+
 private:
     /// Obte la imatge que tenim referenciada al Key Image Note a partir de la seva referencia 
     Image* getImage(DICOMReferencedImage *referencedImage);
@@ -181,6 +185,9 @@ private:
 
     /// Titol del document per motius de qualitat
     KeyImageNote::RejectedForQualityReasons m_rejectedForQualityReasons;
+
+    /// El path absolut del Key Image Note
+    QString m_path;
 };
 
 }

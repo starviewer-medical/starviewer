@@ -7,12 +7,14 @@
 #include "localdatabasekeyimagenotedal.h"
 
 #include <sqlite3.h>
+#include <QDir>
 
 #include "keyimagenote.h"
 #include "series.h"
 #include "study.h"
 #include "dicommask.h"
 #include "databaseconnection.h"
+#include "localdatabasemanager.h"
 #include "logging.h"
 
 namespace udg {
@@ -106,6 +108,7 @@ KeyImageNote* LocalDatabaseKeyImageNoteDAL::fillKeyImageNote(char **reply, int r
     keyImageNote->setObserverContextName(reply[10 + row * columns]);
     keyImageNote->setRetrievedDate(QDate().fromString(reply[11 + row * columns], "yyyyMMdd"));
     keyImageNote->setRetrievedTime(QTime().fromString(reply[12 + row * columns], "hhmmss"));
+    keyImageNote->setPath(LocalDatabaseManager::getCachePath() + reply[1 + row * columns] + QDir().separator() + reply[2 + row * columns] + QDir().separator() + reply[0 + row * columns]);
 
     return keyImageNote;
 }
