@@ -116,7 +116,7 @@ int Series::getNumberOfItems()
         lastPath = image->getPath();
     }
     
-    return numberOfItems;
+    return numberOfItems + this->getKeyImageNotes().count();
 }
 
 bool Series::hasImages() const
