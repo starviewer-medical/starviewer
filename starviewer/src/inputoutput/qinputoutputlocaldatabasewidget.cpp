@@ -22,6 +22,7 @@
 #include "pacsmanager.h"
 #include "senddicomfilestopacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
+#include "keyimagenote.h"
 
 namespace udg
 {
@@ -435,6 +436,19 @@ QList<Image*> QInputOutputLocalDatabaseWidget::getAllImagesFromPatient(Patient *
         foreach(Series *series, study->getSeries())
         {
             images.append(series->getImages());
+
+            /*TODO: Xapussa molt gran perquè pel projecte de'n Carles Soler es puguin pujar KIN's al PACS, aquest codi no es pot passar el trunk!!!!!!!!
+                    Per poder-ho passar el trunk hauríem de tenir creada la classe DICOMFile de la qual heredessin Image, KeyImageNote,...
+            */
+            foreach(KeyImageNote *keyImageNote, series->getKeyImageNotes())
+            {
+                Image *image = new Image();
+                
+                image->setParentSeries(series);
+                image->setPath(keyImageNote->getPath());
+
+                images.append(image);
+            }
         }
     }
 
