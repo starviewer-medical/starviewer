@@ -112,7 +112,7 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                                     QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(volumeNumber-1);
                                     lastProcessedImage->getThumbnail().save(path, "PNG");
                                 }
-                                saveMultiframeThumbnail(dicomReader);
+                                saveThumbnail(dicomReader);
                             }
                         }
                     }
@@ -128,13 +128,13 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
         if (generatedImages.count() > 1)
         {
             // Com que la imatge és multiframe (tant si és enhanced com si no) creem els corresponents thumbnails i els guardem a la cache
-            saveMultiframeThumbnail(dicomReader);
+            saveThumbnail(dicomReader);
         }
     }
     return generatedImages;
 }
 
-void ImageFillerStep::saveMultiframeThumbnail(DICOMTagReader *dicomReader)
+void ImageFillerStep::saveThumbnail(DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
     

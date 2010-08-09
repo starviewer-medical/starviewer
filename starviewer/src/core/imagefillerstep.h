@@ -47,7 +47,8 @@ private:
     /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius
     /// multiframe i enhanced ja que actualment és molt costós perquè hem de carregar tot el volum
     /// a memòria i aquí podem aprofitar que el dataset està a memòria evitant la càrrega posterior
-    void saveMultiframeThumbnail(DICOMTagReader *dicomReader);
+    /// Tot i així es pot fer servir en altres casos que es cregui necessari avançar la creació del thumbnail
+    void saveThumbnail(DICOMTagReader *dicomReader);
     
     /// Omple la informació comú a totes les imatges.
     /// image i dicomReader han de ser objectes vàlids.
