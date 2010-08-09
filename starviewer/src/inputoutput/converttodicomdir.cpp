@@ -22,6 +22,7 @@
 #include "image.h"
 #include "inputoutputsettings.h"
 #include "copydirectory.h"
+#include "keyimagenote.h"
 
 namespace udg {
 
@@ -348,6 +349,17 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
         }
     }
 
+    m_image = 0;
+
+    foreach(KeyImageNote *keyImageNote, series->getKeyImageNotes())
+    {
+        state = copyKeyImageNoteToDicomdirPath(keyImageNote);
+        if (!state.good()) 
+        {
+            break;
+        }
+    }
+
     return state;
 }
 
@@ -380,6 +392,34 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
         }
         else state.setStatus(QString("Can't copy image %1 to %2").arg(imageInputPath,imageOutputPath), false, 3001);
     }
+    m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
+    m_progress->repaint();
+
+    return state;
+}
+
+/*TODO:Aquest codi és duplicat de copyImageToDicomdirPath, si es volgués utilitzar en producció s'hauria de treure el codi duplicat dels dos mètodes
+    s'hauria de fer mètode de copyFileToDICOMDIR*/
+Status ConvertToDicomdir::copyKeyImageNoteToDicomdirPath(KeyImageNote *keyImageNote)
+{
+    QChar fillChar = '0';
+    //creem el nom del fitxer de l'imatge, el format és KINXXXXX, on XXXXX és el numero d'imatge dins la sèrie
+    QString kinName = QString( "/KIN%1" ).arg( m_image , 5 , 10 , fillChar );
+    QString kinInputPath, kinOutputPath;
+    Status state;
+
+    m_image++;
+
+    //Creem el path de la imatge
+    kinInputPath = keyImageNote->getPath();
+    kinOutputPath = m_dicomDirSeriesPath + kinName;
+
+    if (QFile::copy(kinInputPath, kinOutputPath))
+    {
+        state.setStatus("",true,0);
+    }
+    else state.setStatus(QString("Can't copy image %1 to %2").arg(kinInputPath, kinOutputPath), false, 3001);
+
     m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
     m_progress->repaint();
 

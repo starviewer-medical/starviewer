@@ -22,6 +22,7 @@ class Status;
 class Study;
 class Series;
 class Image;
+class KeyImageNote;
 
 /** Converteix un estudi a DICOMDIR, invocant el mètodes i classes necessàries.
   * Per crear un dicomdir, s'han de seguir les normes especificades a la IHE per PDI (portable data information) i DICOM : Aquestes normes són :
@@ -105,6 +106,10 @@ private:
      * @return Indica l'estat en què finalitza el mètode
      */
     Status copyImageToDicomdirPath(Image *image);
+
+    ///Copia un KIN al directori del directori del DICOMDIR
+    //TODO: Aquest mètode té codi duplicat de copyImageToDICOMDIRPath
+    Status copyKeyImageNoteToDicomdirPath(KeyImageNote *keyImageNote);
 
     ///Starviewer té l'opció de copiar el contingut d'una carpeta al DICOMDIR. Aquest mètode copia el contingut de la carpeta al DICOMDIR
     bool copyFolderContentToDICOMDIR();
