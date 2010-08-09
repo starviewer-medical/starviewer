@@ -109,7 +109,7 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                                 // HACK Si és la segona imatge de mida diferent, cal generar el propi thumbnail de la imatge anterior
                                 if (volumeNumber == 101)
                                 {
-                                    QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(volumeNumber-1);
+                                    QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(lastProcessedImage->getVolumeNumberInSeries());
                                     lastProcessedImage->getThumbnail().save(path, "PNG");
                                 }
                                 saveThumbnail(dicomReader);
