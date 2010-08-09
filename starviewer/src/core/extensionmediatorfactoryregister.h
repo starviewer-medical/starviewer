@@ -23,7 +23,7 @@ class ExtensionMediatorFactoryRegister
 {
 public:
     ///Mètode
-    ExtensionMediatorFactoryRegister(QString identifier)
+    ExtensionMediatorFactoryRegister(const QString &identifier)
         :GenericSingletonFactoryRegister<ExtensionMediator, FactoryType, QString, ExtensionMediatorFactory>( identifier )
     {
     }

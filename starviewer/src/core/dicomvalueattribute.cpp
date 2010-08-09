@@ -57,26 +57,26 @@ void DICOMValueAttribute::setValue(double value)
     setValueRepresentation(DICOMValueAttribute::Double);
 }
 
-void DICOMValueAttribute::setValue(QString value)
+void DICOMValueAttribute::setValue(const QString &value)
 {
     m_value = value;
     setValueRepresentation(DICOMValueAttribute::String);
 }
 
-void DICOMValueAttribute::setValue(QByteArray value)
+void DICOMValueAttribute::setValue(const QByteArray &value)
 {
     m_value = value;
     setValueRepresentation(DICOMValueAttribute::ByteArray);
 }
 
 
-void DICOMValueAttribute::setValue(QDate value)
+void DICOMValueAttribute::setValue(const QDate &value)
 {
     m_value = value.toString("yyyyMMdd");
     setValueRepresentation(DICOMValueAttribute::Date);
 }
 
-void DICOMValueAttribute::setValue(QTime value)
+void DICOMValueAttribute::setValue(const QTime &value)
 {
     m_value = value.toString("HHmmss.zzz");
     setValueRepresentation(DICOMValueAttribute::Time);

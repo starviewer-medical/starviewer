@@ -32,7 +32,7 @@ class ExtensionFactoryRegister: public GenericSingletonFactoryRegister<QWidget, 
 {
 public:
     ///Mètode
-    ExtensionFactoryRegister(QString identifier)
+    ExtensionFactoryRegister(const QString &identifier)
         :GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>( identifier )
     {
         DEBUG_LOG( "ExtensionFactoryRegister" + identifier );

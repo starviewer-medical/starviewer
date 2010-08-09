@@ -56,7 +56,7 @@ private slots:
     void previousStudyDownloaded();
 
     /// Slot que comprova si l'error a la descarrega d'un estudi és un dels que s'estava esperan
-    void errorDowlonadingPreviousStudies(QString studyUID);
+    void errorDowlonadingPreviousStudies(const QString &studyUID);
 
 private:
     /// Mira si el protocol es pot aplicar al pacient

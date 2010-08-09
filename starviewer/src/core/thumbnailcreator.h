@@ -33,7 +33,7 @@ public:
 
 private:
     /// Crea el thumbnail d'un objecte dicom que sigui una imatge
-    QImage createImageThumbnail(QString imageFileName, int resolution);
+    QImage createImageThumbnail(const QString &imageFileName, int resolution);
 
     /// Crea el thumbnail a partir d'un DICOMTagReader
     QImage createThumbnail(DICOMTagReader *reader, int resolution);

@@ -39,10 +39,10 @@ public:
     void setValue(unsigned int value);
     void setValue(float value);
     void setValue(double value);
-    void setValue(QString value);
-    void setValue(QByteArray value);
-    void setValue(QDate value);
-    void setValue(QTime value);
+    void setValue(const QString &value);
+    void setValue(const QByteArray &value);
+    void setValue(const QDate &value);
+    void setValue(const QTime &value);
     
     /// Mètodes per obtenir el valor segons el tipus
     int getValueAsInt();

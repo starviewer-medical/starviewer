@@ -25,22 +25,22 @@ HardDiskInformation::~HardDiskInformation()
 {
 }
 
-quint64 HardDiskInformation::getTotalNumberOfBytes(QString path)
+quint64 HardDiskInformation::getTotalNumberOfBytes(const QString &path)
 {
     return getTotalBytesPlataformEspecific(path);
 }
 
-quint64 HardDiskInformation::getNumberOfFreeBytes(QString path)
+quint64 HardDiskInformation::getNumberOfFreeBytes(const QString &path)
 {
     return getFreeBytesPlataformEspecific(path);
 }
 
-quint64 HardDiskInformation::getTotalNumberOfMBytes(QString path)
+quint64 HardDiskInformation::getTotalNumberOfMBytes(const QString &path)
 {
     return getTotalBytesPlataformEspecific(path) / 1048576;
 }
 
-quint64 HardDiskInformation::getNumberOfFreeMBytes(QString path)
+quint64 HardDiskInformation::getNumberOfFreeMBytes(const QString &path)
 {
     return getFreeBytesPlataformEspecific(path) / 1048576;
 }
@@ -61,7 +61,7 @@ qint64 HardDiskInformation::getDirectorySizeInBytes(const QString &directoryPath
 
     directoryList =  directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);//obtenim llistat de subdirectoris
 
-    foreach(QString subdirectory, directoryList) //per cada subdirectori
+    foreach(const QString &subdirectory, directoryList) //per cada subdirectori
     {
         directorySize += getDirectorySizeInBytes(directoryPath + "/" + subdirectory);
     } 
@@ -69,7 +69,7 @@ qint64 HardDiskInformation::getDirectorySizeInBytes(const QString &directoryPath
     return directorySize;
 }
 
-quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
+quint64 HardDiskInformation::getTotalBytesPlataformEspecific(const QString &path)
 {
     quint64 total;
     bool existsError = true;
@@ -101,7 +101,7 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(QString path)
     return total;
 }
 
-quint64 HardDiskInformation::getFreeBytesPlataformEspecific(QString path)
+quint64 HardDiskInformation::getFreeBytesPlataformEspecific(const QString &path)
 {
     quint64 total;
     bool existsError = true;

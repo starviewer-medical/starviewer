@@ -46,8 +46,8 @@ private slots:
      * Afegeix o elimina un preset de la llista
      * @param preset Preset a afegir o eliminar
      */
-    void addPreset(QString preset);
-    void removePreset(QString preset);
+    void addPreset(const QString &preset);
+    void removePreset(const QString &preset);
 
     /// Seleccionem el window level que volem aplicar com a actiu
     void setActiveWindowLevel( int value );
