@@ -28,11 +28,11 @@ public:
     ~Image();
 
     /// Assigna/obté el SOPInstanceUID de la imatge
-    void setSOPInstanceUID(QString uid);
+    void setSOPInstanceUID(const QString &uid);
     QString getSOPInstanceUID() const;
 
     /// Assigna/obté l'instance number
-    void setInstanceNumber(QString number);
+    void setInstanceNumber(const QString &number);
     QString getInstanceNumber() const;
 
     /**
@@ -46,7 +46,7 @@ public:
     const double* getImageOrientationPatient() const;
 
     /// Assignar/Obtenir l'string d'orientació del pacient
-    void setPatientOrientation(QString orientation);
+    void setPatientOrientation(const QString &orientation);
     QString getPatientOrientation() const;
 
      /**
@@ -78,7 +78,7 @@ public:
     int getSamplesPerPixel() const;
 
     /// Assignar/Obtenir la interpretació fotomètrica
-    void setPhotometricInterpretation(QString value);
+    void setPhotometricInterpretation(const QString &value);
     QString getPhotometricInterpretation() const;
 
     /// Assignar/Obtenir files/columnes
@@ -120,7 +120,7 @@ public:
     int getNumberOfWindowLevels();
 
     /// Assignar/Obtenir textes descriptius dels window level
-    void addWindowLevelExplanation(QString explanation);
+    void addWindowLevelExplanation(const QString &explanation);
     void setWindowLevelExplanations(const QStringList &explanations);
     QString getWindowLevelExplanation(int index = 0) const;
 
@@ -129,11 +129,11 @@ public:
     Series* getParentSeries() const;
 
     /// Assigna/retorna el path absolut de la imatge
-    void setPath(QString path);
+    void setPath(const QString &path);
     QString getPath() const;
 
     /// Assigna / retorna el slice location de la imatge
-    void setSliceLocation(QString sliceLocation);
+    void setSliceLocation(const QString &sliceLocation);
     QString getSliceLocation() const;
 
     /// Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local

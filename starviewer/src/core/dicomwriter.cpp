@@ -21,7 +21,7 @@ DICOMWriter * DICOMWriter::newInstance() {
     return new DICOMWriterDCMTK();
 }
 
-void DICOMWriter::setPath(QString path)
+void DICOMWriter::setPath(const QString &path)
 {
     m_path = path;
 }

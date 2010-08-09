@@ -83,7 +83,7 @@ QImage ThumbnailCreator::makeEmptyThumbnailWithCustomText(const QString &text, i
     return thumbnail;
 }
 
-QImage ThumbnailCreator::createImageThumbnail(QString imageFileName, int resolution)
+QImage ThumbnailCreator::createImageThumbnail(const QString &imageFileName, int resolution)
 {
     DICOMTagReader reader(imageFileName);
     return createThumbnail(&reader,resolution);

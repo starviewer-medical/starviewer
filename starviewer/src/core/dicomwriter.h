@@ -34,7 +34,7 @@ public:
     static DICOMWriter * newInstance();
 
     /// Assignar obtenir el path del fitxer
-    void setPath(QString path);
+    void setPath(const QString &path);
     QString getPath();
 
     /// Afegir un nou atribut basic al fitxer DICOM

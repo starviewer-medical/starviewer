@@ -522,7 +522,7 @@ Study * HangingProtocolManager::searchPreviousStudy( HangingProtocol * protocol 
     {
         if( study->getDate() < referenceStudy->getDate() )
         {
-            foreach(QString modality, study->getModalities() )
+            foreach(const QString &modality, study->getModalities() )
             {
                 if( isModalityCompatible(protocol, modality) )
                 {
@@ -568,7 +568,7 @@ void HangingProtocolManager::previousStudyDownloaded()
     }
 }
 
-void HangingProtocolManager::errorDowlonadingPreviousStudies(QString studyUID)
+void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &studyUID)
 {
     if( m_studiesDownloading->contains( studyUID ) )//si és un element que estavem esperant
     {

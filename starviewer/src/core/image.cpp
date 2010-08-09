@@ -28,7 +28,7 @@ Image::~Image()
 {
 }
 
-void Image::setSOPInstanceUID(QString uid)
+void Image::setSOPInstanceUID(const QString &uid)
 {
     m_SOPInstanceUID = uid;
 }
@@ -38,7 +38,7 @@ QString Image::getSOPInstanceUID() const
     return m_SOPInstanceUID;
 }
 
-void Image::setInstanceNumber(QString number)
+void Image::setInstanceNumber(const QString &number)
 {
     m_instanceNumber = number;
 }
@@ -76,7 +76,7 @@ const double* Image::getImageOrientationPatient() const
     return m_imageOrientationPatient;
 }
 
-void Image::setPatientOrientation(QString orientation)
+void Image::setPatientOrientation(const QString &orientation)
 {
     m_patientOrientation = orientation;
 }
@@ -139,7 +139,7 @@ int Image::getSamplesPerPixel() const
     return m_samplesPerPixel;
 }
 
-void Image::setPhotometricInterpretation(QString value)
+void Image::setPhotometricInterpretation(const QString &value)
 {
     m_photometricInterpretation = value;
 }
@@ -229,7 +229,7 @@ double Image::getRescaleIntercept() const
     return m_rescaleIntercept;
 }
 
-void Image::setSliceLocation(QString sliceLocation)
+void Image::setSliceLocation(const QString &sliceLocation)
 {
     m_sliceLocation = sliceLocation;
 }
@@ -263,7 +263,7 @@ int Image::getNumberOfWindowLevels()
     return m_windowLevelList.size();
 }
 
-void Image::addWindowLevelExplanation(QString explanation)
+void Image::addWindowLevelExplanation(const QString &explanation)
 {
     m_windowLevelExplanationList << explanation;
 }
@@ -433,7 +433,7 @@ Series* Image::getParentSeries() const
     return m_parentSeries;
 }
 
-void Image::setPath(QString path)
+void Image::setPath(const QString &path)
 {
     m_path = path;
 }

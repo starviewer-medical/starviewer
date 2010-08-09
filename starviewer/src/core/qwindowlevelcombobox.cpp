@@ -43,7 +43,7 @@ void QWindowLevelComboBox::setPresetsData( WindowLevelPresetsToolData *windowLev
     connect( m_customWindowLevelDialog, SIGNAL( windowLevel(double,double) ), m_presetsData, SLOT( setCustomWindowLevel(double,double) ) );
 }
 
-void QWindowLevelComboBox::addPreset(QString preset)
+void QWindowLevelComboBox::addPreset(const QString &preset)
 {
     int group;
     if( m_presetsData->getGroup( preset, group ) )
@@ -81,7 +81,7 @@ void QWindowLevelComboBox::addPreset(QString preset)
     }
 }
 
-void QWindowLevelComboBox::removePreset(QString preset)
+void QWindowLevelComboBox::removePreset(const QString &preset)
 {
     int index = this->findText( preset );
     if( index > -1 )
