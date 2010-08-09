@@ -72,7 +72,7 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
         else
         {
             int numberOfFrames = 1;
-            int volumeNumber = m_input->getSingleFrameVolumeNumber();
+            int volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
             if (dicomReader->tagExists(DICOMNumberOfFrames))
             {
                 numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
@@ -83,7 +83,6 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                 }
                 volumeNumber = m_input->getCurrentMultiframeVolumeNumber();
             }
-            m_input->setCurrentVolumeNumber(volumeNumber);
             
             for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++) 
             {
@@ -92,12 +91,38 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                 {
                     // Li assignem el nº de frame i el nº de volum al que pertany
                     image->setFrameNumber(frameNumber);
+
+                    // Comprovem si les imatges són de diferents mides per assignar-lis volums diferents
+                    // Això només passarà quan les imatges siguin single-frame
+                    if (numberOfFrames == 1)
+                    {
+                        if (!m_input->getCurrentSeries()->getImages().isEmpty())
+                        {
+                            // Si la imatge anterior i l'actual tenen mides diferents, aniran en un volum diferent
+                            Image *lastProcessedImage = m_input->getCurrentSeries()->getImages().last();
+                            if (lastProcessedImage->getColumns() != image->getColumns() || lastProcessedImage->getRows() != image->getRows())
+                            {
+                                m_input->increaseCurrentSingleFrameVolumeNumber();
+                                volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
+                                // Actualitzem el número actual de volum i guardem el corresponent thumbnail
+                                m_input->setCurrentVolumeNumber(volumeNumber);
+                                // HACK Si és la segona imatge de mida diferent, cal generar el propi thumbnail de la imatge anterior
+                                if (volumeNumber == 101)
+                                {
+                                    QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(volumeNumber-1);
+                                    lastProcessedImage->getThumbnail().save(path, "PNG");
+                                }
+                                saveMultiframeThumbnail(dicomReader);
+                            }
+                        }
+                    }
                     image->setVolumeNumberInSeries(volumeNumber);
 
                     generatedImages << image;
                     m_input->getCurrentSeries()->addImage(image);
                 }
             }
+            m_input->setCurrentVolumeNumber(volumeNumber);
         }
 
         if (generatedImages.count() > 1)
