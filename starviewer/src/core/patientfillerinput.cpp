@@ -11,7 +11,7 @@
 
 namespace udg {
 
-PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0), m_currentVolumeNumber(0), m_currentMultiframeVolumeNumber(1)
+PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0), m_currentVolumeNumber(0), m_currentMultiframeVolumeNumber(1), m_currentSingleFrameVolumeNumber(100)
 {
 }
 
@@ -199,10 +199,19 @@ int PatientFillerInput::getCurrentMultiframeVolumeNumber() const
     return m_currentMultiframeVolumeNumber;
 }
 
-int PatientFillerInput::getSingleFrameVolumeNumber() const
+void PatientFillerInput::resetCurrentSingleFrameVolumeNumber()
 {
-    // De moment sempre assignarem el mateix número de volum per conjunts single frame
-    return 0;
+    m_currentSingleFrameVolumeNumber = 100;
+}
+
+void PatientFillerInput::increaseCurrentSingleFrameVolumeNumber()
+{
+    ++m_currentSingleFrameVolumeNumber;
+}
+
+int PatientFillerInput::getCurrentSingleFrameVolumeNumber() const
+{
+    return m_currentSingleFrameVolumeNumber;
 }
 
 void PatientFillerInput::setCurrentVolumeNumber(int volumeNumber)

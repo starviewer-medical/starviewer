@@ -88,8 +88,14 @@ public:
     /// Retorna el número de volum (multiframe) actual
     int getCurrentMultiframeVolumeNumber() const;
     
-    /// Retorna el corresponent número de volum pel conjunt d'imatges single frame
-    int getSingleFrameVolumeNumber() const;
+    /// Reinicialitza el número de volum (single frame) actual
+    void resetCurrentSingleFrameVolumeNumber();
+    
+    /// Incrementa el número de volum (single frame) actual
+    void increaseCurrentSingleFrameVolumeNumber();
+    
+    /// Retorna el corresponent número de volum pel conjunt d'imatges single frame actual
+    int getCurrentSingleFrameVolumeNumber() const;
 
     /// Assigna/Retorna el número de volum actual que estem tractant, necessari pels 
     /// passos posteriors a l'ImageFillerStep
@@ -127,6 +133,9 @@ private:
 
     /// Manté el número actual de volum pel subconjunt de volums multiframe
     int m_currentMultiframeVolumeNumber;
+
+    /// Manté el número actual de volum pel subconjunt de volums single frame
+    int m_currentSingleFrameVolumeNumber;
 };
 
 }

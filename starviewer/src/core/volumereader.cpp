@@ -94,8 +94,13 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
         }
 
         // Comprovem que no tingui imatges de diferents mides
+        // TODO Aquesta comprovació podria desaparèixer ja que ara fem que les 
+        // imatges de diferents mides es guardin en volums diferents, per tant, hauria de
+        // ser anòmal i inesperat trobar-nos amb aquest cas. Tot i així ens serveix per evitar que
+        // si es donés el cas ens petés el programa
         if (imageSize[0] != image->getRows() || imageSize[1] != image->getColumns())
         {
+            DEBUG_LOG("Tenim imatges de diferents mides!");
             containsDifferentSizeImages = true;
         }
 
