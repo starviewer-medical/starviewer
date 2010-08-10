@@ -66,6 +66,10 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     {
         m_vtkGDCMReader->Update();
     }
+    catch (std::bad_alloc)
+    {
+        errorCode = OutOfMemory;
+    }
     catch (...)
     {
         DEBUG_LOG("An exception was throwed while reading with vtkGDCMImageReader");
