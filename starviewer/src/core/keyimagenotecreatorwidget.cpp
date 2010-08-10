@@ -1,7 +1,11 @@
 #include "keyimagenotecreatorwidget.h"
+
 #include "keyimagenotemanager.h"
 #include "keyimagenote.h"
 #include "pacsdevicemanager.h"
+#include "queryscreen.h"
+#include "singleton.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -49,8 +53,28 @@ void KeyImageNoteCreatorWidget::setVisibilityOfRejectedForQualityReasons(const Q
 
 void KeyImageNoteCreatorWidget::createKeyImageNote()
 {
-    m_keyImageNoteManager->generateAndStoreNewKeyImageNote(m_documentTitleComboBox->currentText(), m_documentTitleQualityReasonsComboBox->currentText(), m_observerName->text(), m_keyObjectDescription->toPlainText(), m_storeToLocalCheckBox->isChecked(), m_sendToPacsCheckBox->isChecked(), m_pacsNodeComboBox->currentText());
+    KeyImageNote *createdKeyImageNote = m_keyImageNoteManager->generateAndStoreNewKeyImageNote(m_documentTitleComboBox->currentText(), 
+        m_documentTitleQualityReasonsComboBox->currentText(), m_observerName->text(), m_keyObjectDescription->toPlainText(), m_storeToLocalCheckBox->isChecked(), 
+        m_sendToPacsCheckBox->isChecked(), m_pacsNodeComboBox->currentText());
+
+    if (m_sendToPacsCheckBox->isChecked())
+    {
+        PacsDeviceManager deviceManager;
+        PacsDevice device = deviceManager.getPACSDeviceByID(m_pacsNodeComboBox->itemData(m_pacsNodeComboBox->currentIndex()).toString());
+
+        //Xapussa convertim el KIN a imatge per poder-lo enviar al PACS
+        Image *image = new Image();
+        QList<Image*> imagesList;
+        image->setPath(createdKeyImageNote->getPath());
+        image->setParentSeries(createdKeyImageNote->getParentSeries());
+        imagesList.append(image);
+
+        SingletonPointer<QueryScreen>::instance()->sendDicomObjectsToPacs(device , imagesList);
+    }
+
+
     setDefaultValuesOfKeyImageNoteCreatorWidget();
+
     close();
 }
 
