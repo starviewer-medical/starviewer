@@ -69,12 +69,12 @@ void KeyImageNoteManager::addImageToTheCurrentSelectionOfImages(Image *image)
     }
 }
 
-void KeyImageNoteManager::generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode)
+KeyImageNote* KeyImageNoteManager::generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode)
 {
     if (!allImagesInTheSameStudy())
     {
         ERROR_LOG("Totes les imatges han de ser el mateix estudi per a crear un KIN");
-        return;
+        return NULL;
     }
     Series *newKeyImageNoteSeries = createNewKeyImageNoteSeries();
     KeyImageNote *newKeyImageNote = createNewKeyImageNote(documentTitle, documentTitleQualityReasons, observerName, keyObjectDescription);
@@ -85,14 +85,14 @@ void KeyImageNoteManager::generateAndStoreNewKeyImageNote(const QString &documen
     if (!storeKeyImageNoteDocumentToDICOMCache(keyImageNoteDocument, newKeyImageNote))
     {
         ERROR_LOG("No s'ha pogut guardar el fitxer DICOM del nou KIN");
-        return;
+        return NULL;
     }
     if (storeToLocalDataBase)
     {
         if (!storeKeyImageNoteSeriesToLocalDataBase(newKeyImageNoteSeries))
         {
             ERROR_LOG("No s'ha pogut guardar a la base de dades local el nou KIN");
-            return;
+            return NULL;
         }
     }
     m_currentSelection.clear();
@@ -100,6 +100,8 @@ void KeyImageNoteManager::generateAndStoreNewKeyImageNote(const QString &documen
     
     m_KeyImageNotesOfPatientSearched = false;
     emit keyImageNoteOfPatientAdded(newKeyImageNote);
+
+    return newKeyImageNote;
 }
 
 KeyImageNote* KeyImageNoteManager::createNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription)

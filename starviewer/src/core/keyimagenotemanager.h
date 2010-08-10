@@ -45,7 +45,7 @@ public:
 
 public slots:
     /// Crea un Key Image Note donat d'alta per l'usuari
-    void generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode);
+    KeyImageNote* generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode);
 
     /// Busquem la imatge segons els parametres i enviem un senyal per a canviar la llesca que ens indica la imatge
     void changeCurrentDisplayedImage(const QString &imageInstanceUID);
