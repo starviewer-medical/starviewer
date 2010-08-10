@@ -42,10 +42,13 @@ public slots:
     void updateKeyImageNoteDisplayers(KeyImageNote *keyImageNote);
 
     /// Mostra el widget de la meva seleccio
-    void toogleMySelectionWidget();
+    void showMySelectionWidget();
 
-    /// Activa / Desactiva el boto per a guardar el Kin segons tinguem o no imatges seleccionades
-    void updateCreateKeyImageNotePushButtonStatus();
+    /// Amaga el widget de la meva seleccio
+    void hideMySelectionWidget();
+
+    /// Activa / Desactiva el boto per a guardar el Kin i mostrar o no mostrar la meva seleccio segons tinguem o no imatges seleccionades
+    void updateInterfaceStatus();
 
 private:
     /// Inicialitza els Key Image Note Displayers

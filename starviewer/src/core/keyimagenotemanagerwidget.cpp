@@ -45,14 +45,15 @@ void KeyImageNoteManagerWidget::createConnectionsWithKeyImageNoteManager()
     connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), m_thumbnailImageDisplayer, SLOT(addImage(Image*)));
     connect(m_keyImageNoteManager, SIGNAL(keyImageNoteOfPatientAdded(KeyImageNote*)), SLOT(updateKeyImageNoteDisplayers(KeyImageNote*)));
     connect(m_thumbnailImageDisplayer, SIGNAL(show(const QString &)), m_keyImageNoteManager, SLOT(changeCurrentDisplayedImage(const QString &)));
-    connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), SLOT(updateCreateKeyImageNotePushButtonStatus()));
-    connect(m_keyImageNoteManager, SIGNAL(keyImageNoteOfPatientAdded(KeyImageNote*)), SLOT(toogleMySelectionWidget()));
+    connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), SLOT(updateInterfaceStatus()));
+    connect(m_keyImageNoteManager, SIGNAL(keyImageNoteOfPatientAdded(KeyImageNote*)), SLOT(hideMySelectionWidget()));
 }
 
 void KeyImageNoteManagerWidget::createConnections()
 {
     connect(m_createKeyImageNotePushButton, SIGNAL(clicked()), SLOT(showKeyImageNoteCreatorWidget()));
-    connect(m_newKeyImageNoteButton, SIGNAL(clicked()), SLOT(toogleMySelectionWidget()));
+    connect(m_newKeyImageNoteButton, SIGNAL(clicked()), SLOT(showMySelectionWidget()));
+    connect(m_cancelPushButton, SIGNAL(clicked()), SLOT(hideMySelectionWidget()));
 }
 
 void KeyImageNoteManagerWidget::generateKeyImageNoteDisplayers()
@@ -99,7 +100,7 @@ void KeyImageNoteManagerWidget::deleteSelectedItemsFromCurrentSelection()
 {
     QString removedItem = m_thumbnailImageDisplayer->removeSelectedItems();
     m_keyImageNoteManager->removeItemOfCurrentSelection(removedItem);
-    updateCreateKeyImageNotePushButtonStatus();
+    updateInterfaceStatus();
 }
 
 void KeyImageNoteManagerWidget::updateKeyImageNoteDisplayers(KeyImageNote *keyImageNote)
@@ -109,20 +110,29 @@ void KeyImageNoteManagerWidget::updateKeyImageNoteDisplayers(KeyImageNote *keyIm
     m_keyImageNoteDisplayers.append(keyImageNoteDisplayer);
 }
 
-void KeyImageNoteManagerWidget::toogleMySelectionWidget()
+void KeyImageNoteManagerWidget::showMySelectionWidget()
 {
-    if (m_splitter->sizes()[0] == 0)
+    m_splitter->setSizes(QList<int>() << 1 << 1 );
+    m_newKeyImageNoteButton->setVisible(false);
+}
+
+void KeyImageNoteManagerWidget::updateInterfaceStatus()
+{
+    m_createKeyImageNotePushButton->setEnabled(m_keyImageNoteManager->getNumberOfImagesInCurrentSelection() > 0);
+
+    if (m_keyImageNoteManager->getNumberOfImagesInCurrentSelection() > 0)
     {
-        m_splitter->setSizes(QList<int>() << 1 << 1 );
+        showMySelectionWidget();
     }
     else
     {
-        m_splitter->setSizes(QList<int>() << 0 << 1);
+        hideMySelectionWidget();
     }
 }
 
-void KeyImageNoteManagerWidget::updateCreateKeyImageNotePushButtonStatus()
+void KeyImageNoteManagerWidget::hideMySelectionWidget()
 {
-    m_createKeyImageNotePushButton->setEnabled(m_keyImageNoteManager->getNumberOfImagesInCurrentSelection() > 0);
+    m_splitter->setSizes(QList<int>() << 0 << 1);
+    m_newKeyImageNoteButton->setVisible(true);
 }
 }
