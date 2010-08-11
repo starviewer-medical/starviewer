@@ -74,9 +74,6 @@ private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
 
-    /// Ens diu  si point es correnspon amb algun dels dos punts que formen un determinat segment del polígon
-    bool isPointIncludedInLineBounds(double point[3], double *p1, double *p2);
-
 private:
     /// Llista de punts del polígon
     QList< QVector<double> > m_pointsList;
