@@ -11,22 +11,9 @@ macx {
 
 QT += network
 
-HEADERS = ../core/starviewerapplication.h \
-          ../core/logging.h \
-          ../core/settingsregistry.h \
-          ../core/settings.h \
-          ../core/settingsparser.h \
-          ../core/defaultsettings.h \
-          ../core/settingsaccesslevelfilereader.h \
-          ../inputoutput/inputoutputsettings.h
+HEADERS = ../core/starviewerapplication.h
 
-SOURCES = ../core/settingsregistry.cpp \
-          ../core/settings.cpp \
-          ../core/settingsparser.cpp \
-          ../core/defaultsettings.cpp \
-          ../inputoutput/inputoutputsettings.cpp \
-          ../core/settingsaccesslevelfilereader.cpp \
-          starviewersapwrapper.cpp 
+SOURCES = starviewersapwrapper.cpp 
 
 INCLUDEPATH += ../core
 

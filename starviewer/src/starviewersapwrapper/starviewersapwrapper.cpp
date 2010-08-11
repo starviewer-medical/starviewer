@@ -10,7 +10,6 @@
 
 #include "../core/starviewerapplication.h"// definicions globals d'aplicació
 #include "../core/logging.h"
-#include "../inputoutput/inputoutputsettings.h"
 #include <QProcess>
 
 /// configurem el logging
@@ -80,8 +79,6 @@ int main(int argc, char *argv[])
 
     if (parametersList.count() == 2)
     {
-        udg::Settings settings;
-
         //Hem d'agafar el segon paràmetre perquè el primer és el nom del programa
         retrieveStudy(parametersList.at(1));
     }
