@@ -203,60 +203,37 @@ int DrawerPolygon::getNumberOfPoints() const
 
 double DrawerPolygon::getDistanceToPoint(double *point3D)
 {
-    double minDistanceLine = MathTools::DoubleMaximumValue;
-    double distance, *auxPoint;
-    bool found = false;
-    int j;
+    double minimumDistanceFound = MathTools::DoubleMaximumValue;
+    double distance;
 
-    if ( !m_pointsList.isEmpty() )
+    if (!m_pointsList.isEmpty())
     {
-        // Mirem si el polígon conté com a últim punt el primer punt, és a dir, si està tancat o no.
-        // Ens cal que sigui tancat per a dibuixar tots els segments reals que el formen.
-        QList< double* > auxList;
-
-        foreach(QVector< double > point, m_pointsList)
+        // Recorrem tots els punts del polígon calculant la distància a cadascun dels 
+        // segments que uneixen cada vèrtex
+        int i = 0;
+        while (i < m_pointsList.count() - 1)
         {
-            auxPoint = new double[3];
-
-            for (j=0; j < 3; j++)
-                auxPoint[j] = point[j];
-
-            auxList << auxPoint;
-        }
-
-        if ( auxList.first()[0] != auxList.last()[0] || auxList.first()[1] != auxList.last()[1] || auxList.first()[2] != auxList.last()[2] )
-        {
-            // Si el primer i últim punt no són iguals, dupliquem el primer punt.
-            auxList << auxList.first();
-        }
-
-        for (int i = 0; (i < auxList.count() - 1) && !found ; i++)
-        {
-            if ( isPointIncludedInLineBounds(point3D, auxList[i], auxList[i+1]) )
+            double startPoint[3] = { m_pointsList.at(i).data()[0], m_pointsList.at(i).data()[1], m_pointsList.at(i).data()[2] };
+            double endPoint[3] = { m_pointsList.at(i + 1).data()[0], m_pointsList.at(i + 1).data()[1], m_pointsList.at(i + 1).data()[2] };
+            distance = vtkLine::DistanceToLine(point3D, startPoint, endPoint);
+            if (distance < minimumDistanceFound)
             {
-                minDistanceLine = 0.0;
-                found = true;
+                minimumDistanceFound = distance;
             }
-            else
-            {
-                distance = vtkLine::DistanceToLine(point3D , auxList[i] , auxList[i+1]);
 
-                if ( ( minDistanceLine != MathTools::DoubleMaximumValue ) && ( distance < minDistanceLine ) )
-                        minDistanceLine = distance;
-            }
+            ++i;
         }
-    }
-    return minDistanceLine;
-}
-
-bool DrawerPolygon::isPointIncludedInLineBounds(double point[3], double *lineP1, double *lineP2)
-{
-    double range = 5.0;
-
-    // Mirem si la distància entre un dels extrems del segment i el punt dóna un valor igual o iferior a un llindar determinat.
-    // Si és així, retornem cert, altrament retornem fals
-    return( ( ( fabs( point[0] - lineP1[0] ) <= range ) && ( fabs( point[1] - lineP1[1] ) <= range ) && ( fabs( point[2] - lineP1[2] ) <= range ) ) ||
-            ( ( fabs( point[0] - lineP2[0] ) <= range ) && ( fabs( point[1] - lineP2[1] ) <= range ) && ( fabs(point[2] - lineP2[2] ) <= range ) ) );
+        // Calculem la distància del segment que va de l'últim al primer punt
+        double startPoint[3] = { m_pointsList.first().data()[0], m_pointsList.first().data()[1], m_pointsList.first().data()[2] };
+        double endPoint[3] = { m_pointsList.last().data()[0], m_pointsList.last().data()[1], m_pointsList.last().data()[2] };
+        distance = vtkLine::DistanceToLine(point3D, startPoint, endPoint);
+        if (distance < minimumDistanceFound)
+        {
+            minimumDistanceFound = distance;
+        }
+    }    
+    
+    return minimumDistanceFound;
 }
 
 void DrawerPolygon::getBounds(double bounds[6])
