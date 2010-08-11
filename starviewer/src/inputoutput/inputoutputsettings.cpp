@@ -134,13 +134,13 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(CopyFolderContentToDICOMDIROnUSBOrHardDisk, false);
 
     settingsRegistry->addSetting(PACSStudyListSortByColumn, QStudyTreeWidget::ObjectName);
-    settingsRegistry->addSetting(PACSStudyListSortOrder, (int) Qt::DescendingOrder);
+    settingsRegistry->addSetting(PACSStudyListSortOrder, (int) Qt::AscendingOrder);
     settingsRegistry->addSetting(LocalDatabaseStudyListSortByColumn, QStudyTreeWidget::ObjectName);
-    settingsRegistry->addSetting(LocalDatabaseStudyListSortOrder, Qt::DescendingOrder);
+    settingsRegistry->addSetting(LocalDatabaseStudyListSortOrder, Qt::AscendingOrder);
     settingsRegistry->addSetting(DICOMDIRStudyListSortByColumn, QStudyTreeWidget::ObjectName);
-    settingsRegistry->addSetting(DICOMDIRStudyListSortOrder, Qt::DescendingOrder);
+    settingsRegistry->addSetting(DICOMDIRStudyListSortOrder, Qt::AscendingOrder);
     settingsRegistry->addSetting(OperationStateListSortByColumn, QOperationStateScreen::Date);
-    settingsRegistry->addSetting(OperationStateListSortOrder, Qt::DescendingOrder);}
+    settingsRegistry->addSetting(OperationStateListSortOrder, Qt::AscendingOrder);}
 
 } // end namespace udg 
 
