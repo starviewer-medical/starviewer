@@ -25,21 +25,25 @@ DrawerText::~DrawerText()
 {
     emit dying(this);
 
-    if ( m_vtkActor )
+    if (m_vtkActor)
+    {
         m_vtkActor->Delete();
+    }
 }
 
 void DrawerText::setAttachmentPoint(double point[3])
 {
-    for (int i = 0; i<3; i++)
+    for (int i = 0; i < 3; i++)
+    {
         m_attachPoint[i] = point[i];
+    }
 
     emit changed();
 }
 
-vtkProp *DrawerText::getAsVtkProp()
+vtkProp* DrawerText::getAsVtkProp()
 {
-    if ( !m_vtkActor )
+    if (!m_vtkActor)
     {
         // Creem el pipeline de l'm_vtkActor
         m_vtkActor = vtkCaptionActor2D::New();
@@ -58,20 +62,20 @@ vtkProp *DrawerText::getAsVtkProp()
 
 void DrawerText::update()
 {
-    switch ( m_internalRepresentation )
+    switch (m_internalRepresentation)
     {
         case VTKRepresentation:
             updateVtkProp();
-        break;
+            break;
 
         case OpenGLRepresentation:
-        break;
+            break;
     }
 }
 
 void DrawerText::updateVtkProp()
 {
-    if( m_vtkActor )
+    if (m_vtkActor)
     {
         // Assignem el text
         m_vtkActor->SetCaption(qPrintable(m_text));
@@ -94,16 +98,20 @@ void DrawerText::updateVtkActorProperties()
     m_vtkActor->GetAttachmentPointCoordinate()->SetReferenceCoordinate(this->getVtkCoordinateObject());
 
     // Mirem si s'ha d'escalar el text
-    if ( m_scaled )
+    if (m_scaled)
+    {
         m_vtkActor->GetTextActor()->SetTextScaleModeToViewport();
+    }
     else
+    {
         m_vtkActor->GetTextActor()->SetTextScaleModeToNone();
+    }
 
     // Mirem l'opacitat
     properties->SetOpacity(m_opacity);
 
     // Assignem color
-    properties->SetColor(m_color.redF(), m_color.greenF(), m_color.blueF() );
+    properties->SetColor(m_color.redF(), m_color.greenF(), m_color.blueF());
 
     m_vtkActor->SetPadding(m_padding);
     m_vtkActor->SetPosition(-1.0 , -1.0);
@@ -114,58 +122,90 @@ void DrawerText::updateVtkActorProperties()
     m_vtkActor->LeaderOff();
     m_vtkActor->ThreeDimensionalLeaderOff();
 
-    if ( m_shadow )
+    if (m_shadow)
+    {
         properties->ShadowOn();
+    }
     else
+    {
         properties->ShadowOff();
+    }
 
-    if ( m_italic )
+    if (m_italic)
+    {
         properties->ItalicOn();
+    }
     else
+    {
         properties->ItalicOff();
+    }
 
     // Assignem el tipus de font al text
-    if ( m_fontFamily == "Arial" )
+    if (m_fontFamily == "Arial")
+    {
         properties->SetFontFamilyToArial();
-    else if ( m_fontFamily == "Courier" )
+    }
+    else if (m_fontFamily == "Courier")
+    {
         properties->SetFontFamilyToCourier();
-    else if ( m_fontFamily == "Times" )
+    }
+    else if (m_fontFamily == "Times")
+    {
         properties->SetFontFamilyToTimes();
+    }
     else
+    {
         DEBUG_LOG("Tipus de font no reconegut a l'intentar crear text!!");
+    }
 
     // Assignem el tamany de la font
     properties->SetFontSize(m_fontSize);
 
     // Assignem el tipus de justificació horitzontal
-    if ( m_horizontalJustification == "Left" )
+    if (m_horizontalJustification == "Left")
+    {
         properties->SetJustificationToLeft();
-    else if ( m_horizontalJustification == "Centered" )
+    }
+    else if (m_horizontalJustification == "Centered")
+    {
         properties->SetJustificationToCentered();
-    else if ( m_horizontalJustification == "Right" )
+    }
+    else if (m_horizontalJustification == "Right")
+    {
         properties->SetJustificationToRight();
+    }
     else
     {
         DEBUG_LOG("Tipus de justificació horitzontal no reconegut a l'intentar crear text!!");
     }
 
     // Assignem el tipus de justificació vertical
-    if ( m_verticalJustification == "Top" )
+    if (m_verticalJustification == "Top")
+    {
         properties->SetVerticalJustificationToTop();
-    else if ( m_verticalJustification == "Centered" )
+    }
+    else if (m_verticalJustification == "Centered")
+    {
         properties->SetVerticalJustificationToCentered();
-    else if ( m_verticalJustification == "Bottom" )
+    }
+    else if (m_verticalJustification == "Bottom")
+    {
         properties->SetVerticalJustificationToBottom();
+    }
     else
     {
         DEBUG_LOG("Tipus de justificació vertical no reconegut a l'intentar crear text!!");
     }
 
     // Mirem si el text té fons o no
-    if ( m_border )
+    if (m_border)
+    {
          m_vtkActor->BorderOn();
-     else
-         m_vtkActor->BorderOff();
+    }
+    else
+    {
+        m_vtkActor->BorderOff();
+    }
 
     // Mirem la visibilitat de l'actor
     m_vtkActor->SetVisibility(this->isVisible());
@@ -179,12 +219,12 @@ void DrawerText::setText(const QString &text)
 
 QString DrawerText::getText()
 {
-    return(m_text);
+    return m_text;
 }
 
 double* DrawerText::getAttachmentPoint()
 {
-    return(m_attachPoint);
+    return m_attachPoint;
 }
 
 void DrawerText::borderOn()
@@ -205,7 +245,7 @@ void DrawerText::borderEnabled(bool enabled)
 
 bool DrawerText::isBorderEnabled()
 {
-    return(m_border);
+    return m_border;
 }
 
 void DrawerText::setPadding(int padding)
@@ -216,7 +256,7 @@ void DrawerText::setPadding(int padding)
 
 int DrawerText::getPadding()
 {
-    return(m_padding);
+    return m_padding;
 }
 
 QString DrawerText::getFontFamily()
@@ -238,7 +278,7 @@ void DrawerText::setFontSize(int size)
 
 int DrawerText::getFontSize()
 {
-    return(m_fontSize);
+    return m_fontSize;
 }
 
 void DrawerText::boldOn()
@@ -259,7 +299,7 @@ void DrawerText::bold(bool bold)
 
 bool DrawerText::isBold()
 {
-    return(m_bold);
+    return m_bold;
 }
 
 void DrawerText::italicOn()
@@ -280,7 +320,7 @@ void DrawerText::italic(bool italic)
 
 bool DrawerText::isItalic()
 {
-    return(m_italic);
+    return m_italic;
 }
 
 void DrawerText::shadowOn()
@@ -301,7 +341,7 @@ void DrawerText::setShadow(bool shadow)
 
 bool DrawerText::hasShadow()
 {
-    return(m_shadow);
+    return m_shadow;
 }
 
 void DrawerText::setHorizontalJustification(const QString &horizontalJustification)
@@ -312,7 +352,7 @@ void DrawerText::setHorizontalJustification(const QString &horizontalJustificati
 
 QString DrawerText::getHorizontalJustification()
 {
-    return(m_horizontalJustification);
+    return m_horizontalJustification;
 }
 
 void DrawerText::setVerticalJustification(const QString &verticalJustification)
@@ -323,7 +363,7 @@ void DrawerText::setVerticalJustification(const QString &verticalJustification)
 
 QString DrawerText::getVerticalJustification()
 {
-    return(m_verticalJustification);
+    return m_verticalJustification;
 }
 
 void DrawerText::scaledTextOn()
@@ -344,7 +384,7 @@ void DrawerText::scaledText(bool scaled)
 
 bool DrawerText::isTextScaled()
 {
-    return(m_scaled);
+    return m_scaled;
     emit changed();
 }
 
@@ -358,7 +398,9 @@ void DrawerText::getBounds(double bounds[6])
     // TODO Ara només tenim en compte l'attach point però es podria tenir 
     // en compte d'alguna manera la capsa que envolta el texte
     for (int i = 0; i < 3; i++)
-        bounds[i*2] = bounds[i*2+1] = m_attachPoint[i];
+    {
+        bounds[i * 2] = bounds[i * 2 + 1] = m_attachPoint[i];
+    }
 }
 
 }
