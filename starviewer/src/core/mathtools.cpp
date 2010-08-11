@@ -11,14 +11,14 @@
 #include <vtkMath.h>
 #include <vtkPlane.h>
 
-namespace udg{
+namespace udg {
 
 /// Definició de constants
-const double MathTools::NumberEBase2Logarithm = 1.4426950408889634074;          /* log_2 e */
-const long double MathTools::ReversePiNumberLong = 0.3183098861837906715377675267450287L;  /* 1/pi */
-const double MathTools::PiNumber = 3.14159265358979323846;  /* pi */
-const long double MathTools::PiNumberLong = 3.14159265358979323846;  /* pi */
-const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;  /* pi/2 */
+const double MathTools::NumberEBase2Logarithm = 1.4426950408889634074; // log_2 e
+const long double MathTools::ReversePiNumberLong = 0.3183098861837906715377675267450287L; // 1/pi
+const double MathTools::PiNumber = 3.14159265358979323846; // pi
+const long double MathTools::PiNumberLong = 3.14159265358979323846; // pi
+const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L; // pi/2
 const double MathTools::Epsilon = 1E-9;
 const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
 const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
@@ -27,34 +27,38 @@ const double MathTools::DoubleMaximumValue = VTK_DOUBLE_MAX;
 double MathTools::logTwo(const double x, const bool zero)
 {
     if (x < 0)
-        WARN_LOG( "MathTools::logTwo >> Log of negative number" );
+    {
+        WARN_LOG("MathTools::logTwo >> Log of negative number");
+    }
 
     if (zero)
     {
-        return (x == 0) ? 0 : double( log(double(x)) ) * NumberEBase2Logarithm;
+        return (x == 0) ? 0 : double(log(double(x))) * NumberEBase2Logarithm;
     }
     else
     {
         if (x == 0)
-            WARN_LOG( "MathTools::logTwo >> Log of zero" );
+        {
+            WARN_LOG("MathTools::logTwo >> Log of zero");
+        }
 
-        return double( log(double(x)) ) * NumberEBase2Logarithm;
+        return double(log(double(x))) * NumberEBase2Logarithm;
     }
 }
 
-double MathTools::angleInRadians( double vec1[3] , double vec2[3] )
+double MathTools::angleInRadians(double vec1[3], double vec2[3])
 {
-    return acos( MathTools::dotProduct( vec1,vec2 ) / ( vtkMath::Norm(vec1)*vtkMath::Norm(vec2) ) );
+    return acos(MathTools::dotProduct(vec1,vec2) / (vtkMath::Norm(vec1)*vtkMath::Norm(vec2)));
 }
 
-double MathTools::angleInDegrees( double vec1[3] , double vec2[3] )
+double MathTools::angleInDegrees(double vec1[3], double vec2[3])
 {
-    return angleInRadians( vec1 , vec2 ) * MathTools::RadiansToDegreesAsDouble;
+    return angleInRadians(vec1, vec2) * MathTools::RadiansToDegreesAsDouble;
 }
 
-int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] )
+int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3])
 {
-    if( angleInDegrees( n , m ) == 0.0 )
+    if (angleInDegrees(n, m) == 0.0)
     {
         return 0;
     }
@@ -76,20 +80,20 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     // r = p + Dot(p-q)*u / Dot(u,m)
     //
     double u[3];
-    MathTools::crossProduct( n , m , t );
-    MathTools::crossProduct( n , t , u );
+    MathTools::crossProduct(n, m, t);
+    MathTools::crossProduct(n, t, u);
 
-    double pq[3] , sum[3] , pqDotm , dot_u_m;
+    double pq[3], sum[3], pqDotm, dot_u_m;
 
     pq[0] = q[0] - p[0];
     pq[1] = q[1] - p[1] ;
     pq[2] = q[2] - p[2];
 
-    pqDotm = MathTools::dotProduct( pq , m );
-    dot_u_m = MathTools::dotProduct( u , m );
-    sum[0] = ( pqDotm * u[0] ) / dot_u_m;
-    sum[1] = ( pqDotm * u[1] ) / dot_u_m;
-    sum[2] = ( pqDotm * u[2] ) / dot_u_m;
+    pqDotm = MathTools::dotProduct(pq, m);
+    dot_u_m = MathTools::dotProduct(u, m);
+    sum[0] = (pqDotm * u[0]) / dot_u_m;
+    sum[1] = (pqDotm * u[1]) / dot_u_m;
+    sum[2] = (pqDotm * u[2]) / dot_u_m;
 
     r[0] = sum[0] + p[0];
     r[1] = sum[1] + p[1];
@@ -98,7 +102,7 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     return 1;
 }
 
-int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , double m[3], double r[3] , double t[3] , double intersectionPoint[3] )
+int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3], double intersectionPoint[3])
 {
     //
     // Solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 65
@@ -108,76 +112,80 @@ int MathTools::planeIntersection( double p[3] , double n[3], double q[3] , doubl
     // la intersecció serà un punt w
     // si w = p + a·n + b·m + c·t
     // llavors caldria resoldre el sistema lineal
-    // pw · n  = 0 , qw · m = 0 , rw · t = 0
+    // pw · n  = 0, qw · m = 0, rw · t = 0
     // per a, b i c
     //
     // o bé calcular la línia d'intersecció entre dos plans i el punt d'intersecció de la línia amb el pla restant
     //
     // Sembla més fàcil la segona opció
-    double point[3] , vector[3];
-    planeIntersection( p , n , q , m , point , vector );
+    double point[3], vector[3];
+    planeIntersection(p, n, q, m, point, vector);
     // Càlcul intersecció línia pla
     // Línia representada per punt i vector(p,t), pla per punt(origen) i normal (r,n), q és la intersecció
     // q = p + (pr·n)t / (t·n)
 
-    double tt , point2[3];
+    double tt, point2[3];
     point2[0] = point[0] + vector[0];
     point2[1] = point[1] + vector[1];
     point2[2] = point[2] + vector[2];
 
-    // Li donem una recta definida per dos punts , i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
-    if( vtkPlane::IntersectWithLine( point , point2 , t , r ,  tt , intersectionPoint ) == 0 )
+    // Li donem una recta definida per dos punts, i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt de la intersecció queda a intersectPoint
+    if (vtkPlane::IntersectWithLine(point, point2, t, r,  tt, intersectionPoint) == 0)
     {
         // si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
-        if( tt == MathTools::DoubleMaximumValue )
+        if (tt == MathTools::DoubleMaximumValue)
         {
-            DEBUG_LOG( QString("No hi ha hagut intersecció! Valor coord paramètrica: %1").arg( tt )  );
+            DEBUG_LOG(QString("No hi ha hagut intersecció! Valor coord paramètrica: %1").arg(tt));
             return -1;
         }
         else
+        {
             return 0;
+        }
     }
 
     return 1;
 }
 
-double* MathTools::directorVector( const double point1[3], const double point2[3] )
+double* MathTools::directorVector(const double point1[3], const double point2[3])
 {
     double *vd = new double[3];
 
     for (int i = 0; i < 3; i++)
+    {
         vd[i] = point2[i] - point1[i];
+    }
 
     return vd;
 }
 
-double MathTools::modulus( double vector[3] )
+double MathTools::modulus(double vector[3])
 {
-    return sqrt( pow(vector[0],2) + pow(vector[1],2) + pow(vector[2],2) );
+    return sqrt(pow(vector[0],2) + pow(vector[1],2) + pow(vector[2], 2));
 }
 
-double MathTools::dotProduct( double vector1[3], double vector2[3] )
+double MathTools::dotProduct(double vector1[3], double vector2[3])
 {
-    return ( (vector1[0]*vector2[0]) + (vector1[1]*vector2[1]) + (vector1[2]*vector2[2]) );
+    return ((vector1[0] * vector2[0]) + (vector1[1] * vector2[1]) + (vector1[2] * vector2[2]));
 }
 
-void MathTools::crossProduct( double vectorDirector1[3], double vectorDirector2[3], double crossProductVector[3] )
+void MathTools::crossProduct(double vectorDirector1[3], double vectorDirector2[3], double crossProductVector[3])
 {
-    crossProductVector[0] = vectorDirector1[1]*vectorDirector2[2] - vectorDirector1[2]*vectorDirector2[1]; 
-    crossProductVector[1] = vectorDirector1[2]*vectorDirector2[0] - vectorDirector1[0]*vectorDirector2[2];
-    crossProductVector[2] = vectorDirector1[0]*vectorDirector2[1] - vectorDirector1[1]*vectorDirector2[0];
+    crossProductVector[0] = vectorDirector1[1] * vectorDirector2[2] - vectorDirector1[2] * vectorDirector2[1]; 
+    crossProductVector[1] = vectorDirector1[2] * vectorDirector2[0] - vectorDirector1[0] * vectorDirector2[2];
+    crossProductVector[2] = vectorDirector1[0] * vectorDirector2[1] - vectorDirector1[1] * vectorDirector2[0];
 }
 
-double MathTools::normalize( double vector[3] )
+double MathTools::normalize(double vector[3])
 {
     return vtkMath::Normalize(vector);
 }
 
-double MathTools::minimum( double a, double b)
+double MathTools::minimum(double a, double b)
 {
     double min;
 
-    if ( a < b )
+    if (a < b)
     {
         min = a;
     }
@@ -189,11 +197,11 @@ double MathTools::minimum( double a, double b)
     return min;
 }
 
-double MathTools::maximum( double a, double b)
+double MathTools::maximum(double a, double b)
 {
     double max;
 
-    if ( a > b )
+    if (a > b)
     {
         max = a;
     }
@@ -205,26 +213,26 @@ double MathTools::maximum( double a, double b)
     return max;
 }
 
-double MathTools::cubeRoot( double x )
+double MathTools::cubeRoot(double x)
 {
-    return std::pow( x, 1.0 / 3.0 );
+    return std::pow(x, 1.0 / 3.0);
 }
 
-double MathTools::getDistance2D( const double firstPoint[2], const double secondPoint[2] )
+double MathTools::getDistance2D(const double firstPoint[2], const double secondPoint[2])
 {
     double xx = firstPoint[0] - secondPoint[0];
     double yy = firstPoint[1] - secondPoint[1];
     double value = pow(xx, 2) + pow(yy, 2);
-    return (sqrt(value));
+    return sqrt(value);
 }
 
-double MathTools::getDistance3D( const double firstPoint[3], const double secondPoint[3] )
+double MathTools::getDistance3D(const double firstPoint[3], const double secondPoint[3])
 {
     double xx = firstPoint[0] - secondPoint[0];
     double yy = firstPoint[1] - secondPoint[1];
     double zz = firstPoint[2] - secondPoint[2];
     double value = pow(xx, 2) + pow(yy, 2) + pow(zz, 2);
-    return (sqrt(value));
+    return sqrt(value);
 }
 
 double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
@@ -267,7 +275,7 @@ double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
     double dot = MathTools::dotProduct(dv1, cross);
 
     // Coplanarity check
-    if ( MathTools::closeEnough(dot,0.0) )
+    if (MathTools::closeEnough(dot,0.0))
     {
         double numerator1[3], numerator2[3], denominator1[3];
         double numerator, denominator;
@@ -281,7 +289,7 @@ double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
 
         denominator = pow(MathTools::modulus(denominator1),2);
 
-        if ( MathTools::closeEnough(denominator,0.0) )
+        if (MathTools::closeEnough(denominator,0.0))
         {
             state = ParallelLines;
             return intersection;
@@ -290,9 +298,9 @@ double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
         {
             s = numerator / denominator;
 
-            intersection[0] = p1[0] + ( s * dv1[0] );
-            intersection[1] = p1[1] + ( s * dv1[1] );
-            intersection[2] = p1[2] + ( s * dv1[2] );
+            intersection[0] = p1[0] + (s * dv1[0]);
+            intersection[1] = p1[1] + (s * dv1[1]);
+            intersection[2] = p1[2] + (s * dv1[2]);
 
             state = LinesIntersect;
             return intersection;
@@ -306,12 +314,12 @@ double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
 
 }
 
-double MathTools::truncate( double x)
+double MathTools::truncate(double x)
 {
-    return std::floor( x );
+    return std::floor(x);
 }
 
-int MathTools::roundToNearestInteger( double x )
+int MathTools::roundToNearestInteger(double x)
 {
     return vtkMath::Round(x);
 }
