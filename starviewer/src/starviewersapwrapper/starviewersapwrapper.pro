@@ -9,8 +9,6 @@ macx {
     DESTDIR = $${DESTDIR}/$${TARGET_STARVIEWER}.app/Contents/MacOS
 }
 
-QT += network
-
 HEADERS = ../core/starviewerapplication.h
 
 SOURCES = starviewersapwrapper.cpp 
