@@ -96,7 +96,7 @@ static int planeIntersection(double p[3] , double n[3], double q[3] , double m[3
 * @param p4 Segon punt de la segona recta
 * @param state Contindrà el resultat de la intersecció: ParallelLines, LinesIntersect, SkewLines (no intersecten però es creuen, estan a plans paral·lels)
 */
-static double *infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state);
+static double* infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state);
 
 ///
 /// Càlculs amb vectors
