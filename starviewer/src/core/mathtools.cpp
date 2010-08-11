@@ -242,7 +242,7 @@ double MathTools::getPointToLineDistance(double point[3], double lineFirstPoint[
     return sqrt(vtkLine::DistanceToLine(point, lineFirstPoint, lineSecondPoint));
 }
 
-double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
+double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
 {
     /** 
      *  Solution by Wolfram Mathematics
