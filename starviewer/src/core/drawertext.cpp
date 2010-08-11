@@ -385,7 +385,6 @@ void DrawerText::scaledText(bool scaled)
 bool DrawerText::isTextScaled()
 {
     return m_scaled;
-    emit changed();
 }
 
 double DrawerText::getDistanceToPoint(double *point3D)
