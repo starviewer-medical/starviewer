@@ -35,9 +35,7 @@ public:
      */
     void draw(DrawerPrimitive *primitive, int plane, int slice = -1);
 
-    /**
-    * Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
-    */
+    /// Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
     void clearViewer();
 
     /**
@@ -84,15 +82,11 @@ private:
     void hide(int plane, int slice);
     void show(int plane, int slice);
 
-    /**
-     * Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
-     */
+    /// Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
     bool isPrimitiveInside(DrawerPrimitive *primitive, int view, double bounds[6]);
 
 private slots:
-    /**
-     * Refresca les primitives que s'han de veure pel viewer segons el seu estat
-     */
+    /// Refresca les primitives que s'han de veure pel viewer segons el seu estat     
     void refresh();
 
 private:

@@ -34,13 +34,13 @@ public:
     void setSecondPoint(double point[3]);
     void setSecondPoint(double x, double y, double z);
 
-    vtkProp *getAsVtkProp();
+    vtkProp* getAsVtkProp();
 
     /// Retorna el primer punt de la línia
-    double *getFirstPoint(){return m_firstPoint;};
+    double* getFirstPoint();
 
     /// Retorna el segon punt de la línia
-    double *getSecondPoint(){return m_secondPoint;};
+    double* getSecondPoint();
 
     /// Calcula la distancia entre punt i punt
     double computeDistance(double * spacing = NULL);
@@ -51,7 +51,6 @@ public:
     void getBounds(double bounds[6]);
 
 public slots:
-
     void update();
 
 protected slots:
