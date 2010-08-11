@@ -10,6 +10,7 @@
 #include <cmath>
 #include <vtkMath.h>
 #include <vtkPlane.h>
+#include <vtkLine.h>
 
 namespace udg {
 
@@ -233,6 +234,12 @@ double MathTools::getDistance3D(const double firstPoint[3], const double secondP
     double zz = firstPoint[2] - secondPoint[2];
     double value = pow(xx, 2) + pow(yy, 2) + pow(zz, 2);
     return sqrt(value);
+}
+
+double MathTools::getPointToLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3])
+{
+    // vtkLine::DistanceToLine() ens retorna la distància al quadrat, per això fem sqrt()
+    return sqrt(vtkLine::DistanceToLine(point, lineFirstPoint, lineSecondPoint));
 }
 
 double *MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
