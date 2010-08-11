@@ -35,7 +35,7 @@ public:
     /// Li assignem el radi a la circumferència que defineix el punt
     void setRadius(double radius);
 
-    vtkProp *getAsVtkProp();
+    vtkProp* getAsVtkProp();
 
     void getBounds(double bounds[6]);
 
@@ -43,7 +43,6 @@ public:
     double getDistanceToPoint(double *point3D);
 
 public slots:
-
     void update();
 
 protected slots:

@@ -49,13 +49,15 @@ void DrawerPolygon::addVertix(double x, double y, double z)
 
 void DrawerPolygon::setVertix(int i, double point[3])
 {
-    this->setVertix(i , point[0], point[1], point[2]);
+    this->setVertix(i, point[0], point[1], point[2]);
 }
 
 void DrawerPolygon::setVertix(int i, double x, double y, double z)
 {
-    if( i >= m_pointsList.count() || i < 0 )
+    if (i >= m_pointsList.count() || i < 0)
+    {
         addVertix(x, y, z);
+    }
     else
     {
         QVector<double> array(3);
@@ -69,22 +71,22 @@ void DrawerPolygon::setVertix(int i, double x, double y, double z)
     }
 }
 
-const double *DrawerPolygon::getVertix(int i)
+const double* DrawerPolygon::getVertix(int i)
 {
-    if( i >= m_pointsList.count() || i < 0 )
+    if (i >= m_pointsList.count() || i < 0)
     {
         double *vertix = new double[3];
         return vertix;
     }
-   else
+    else
     {
         return m_pointsList.at(i).data();
     }
 }
 
-vtkProp *DrawerPolygon::getAsVtkProp()
+vtkProp* DrawerPolygon::getAsVtkProp()
 {
-    if( !m_vtkActor )
+    if (!m_vtkActor)
     {
         buildVtkPoints();
         // Creem el pipeline de l'm_vtkActor
@@ -101,21 +103,20 @@ vtkProp *DrawerPolygon::getAsVtkProp()
 
 void DrawerPolygon::update()
 {
-    switch( m_internalRepresentation )
+    switch (m_internalRepresentation)
     {
-    case VTKRepresentation:
-        updateVtkProp();
-    break;
+        case VTKRepresentation:
+            updateVtkProp();
+            break;
 
-    case OpenGLRepresentation:
-    break;
-
+        case OpenGLRepresentation:
+            break;
     }
 }
 
 void DrawerPolygon::updateVtkProp()
 {
-    if( m_vtkActor )
+    if (m_vtkActor)
     {
         m_vtkPolydata->Reset();
         buildVtkPoints();
@@ -133,16 +134,16 @@ void DrawerPolygon::buildVtkPoints()
     // Primer comprovem si el polígon és tancat. En cas que l'últim i el primer no coincideixin, l'afegim
     // TODO es podria comprovar si com a mínim té tres punts, sinó, no es pot considerar polígon
     bool extraVertix = false;
-    if( !m_pointsList.isEmpty() )
+    if (!m_pointsList.isEmpty())
     {
         double *firstPoint = m_pointsList.first().data();
         double *lastPoint = m_pointsList.last().data();
-        if ( ( firstPoint[0] != lastPoint[0] ) || ( firstPoint[1] != lastPoint[1] ) || ( firstPoint[2] != lastPoint[2] ) )
+        if ((firstPoint[0] != lastPoint[0]) || (firstPoint[1] != lastPoint[1]) || (firstPoint[2] != lastPoint[2]))
         {
             extraVertix = true;
         }
     }
-    if( !m_vtkPolydata )
+    if (!m_vtkPolydata)
     {
         m_vtkPolydata = vtkPolyData::New();
         m_vtkPoints = vtkPoints::New();
@@ -150,7 +151,7 @@ void DrawerPolygon::buildVtkPoints()
     }
 
     // Especifiquem el nombre de vèrtexs que té el polígon
-    int numberOfVertices = m_pointsList.count() + ( extraVertix ? 1 : 0);
+    int numberOfVertices = m_pointsList.count() + (extraVertix ? 1 : 0);
     m_vtkCellArray->InsertNextCell(numberOfVertices);
     m_vtkPoints->SetNumberOfPoints(numberOfVertices);
 
@@ -163,7 +164,7 @@ void DrawerPolygon::buildVtkPoints()
         i++;
     }
 
-    if( extraVertix )
+    if (extraVertix)
     {
         // Tornem a afegir el primer punt
         m_vtkPoints->InsertPoint(numberOfVertices-1, m_pointsList.at(0).data());
@@ -172,10 +173,14 @@ void DrawerPolygon::buildVtkPoints()
     // Assignem els punts al polydata
     m_vtkPolydata->SetPoints(m_vtkPoints);
     // Comprovem si la forma està "plena" o no
-    if ( this->isFilled() )
+    if (this->isFilled())
+    {
         m_vtkPolydata->SetPolys(m_vtkCellArray);
+    }
     else
+    {
         m_vtkPolydata->SetLines(m_vtkCellArray);
+    }
 }
 
 void DrawerPolygon::updateVtkActorProperties()
@@ -238,16 +243,20 @@ double DrawerPolygon::getDistanceToPoint(double *point3D)
 
 void DrawerPolygon::getBounds(double bounds[6])
 {
-    if ( m_vtkPolydata )
+    if (m_vtkPolydata)
+    {
         m_vtkPolydata->GetBounds(bounds);
+    }
     else
-        memset(bounds, 0.0, sizeof(double)*6);
+    {
+        memset(bounds, 0.0, sizeof(double) * 6);
+    }
 }
 
 double DrawerPolygon::computeArea(int view, double *spacing)
 {
     double volumeSpacing[3];
-    if ( spacing == NULL )
+    if (spacing == NULL)
     {
         volumeSpacing[0] = volumeSpacing[1] = volumeSpacing[2] = 1.0;
     }
@@ -266,25 +275,29 @@ double DrawerPolygon::computeArea(int view, double *spacing)
     double area = 0.0;
     int j = 0;
     int numberOfPoints = m_pointsList.count();
-    for (int i=0; i<numberOfPoints; i++ ) 
+    for (int i = 0; i < numberOfPoints; i++) 
     {
         j++; 
-        if( j == numberOfPoints ) 
+        if (j == numberOfPoints) 
+        {
             j = 0;
+        }
     
-        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex])*volumeSpacing[xIndex] * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex])*volumeSpacing[yIndex];
+        area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex]) * volumeSpacing[xIndex] * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex]) * volumeSpacing[yIndex];
     }
 
     // En el cas de que l'àrea de la polilínia ens doni negativa, vol dir que hem anotat els punts en sentit antihorari,
     // per això cal girar-los per tenir una disposició correcta. Cal girar-ho del vtkPoints i de la QList de la ROI
-    if ( area < 0 )
+    if (area < 0)
     {
         // Donem el resultat el valor absolut
         area *= -1;
         // Intercanviem els punts de la QList
         // TODO Cal realment fer això?
-        for (int i = 0; i < (int)(numberOfPoints/2); i++)
-            m_pointsList.swap(i, (numberOfPoints-1)-i);
+        for (int i = 0; i < (int)(numberOfPoints / 2); i++)
+        {
+            m_pointsList.swap(i, (numberOfPoints - 1) - i);
+        }
     }
 
     return area*0.5;

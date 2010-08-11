@@ -24,7 +24,7 @@ public:
     DrawerText(QObject *parent = 0);
     ~DrawerText();
 
-    vtkProp *getAsVtkProp();
+    vtkProp* getAsVtkProp();
 
     /// Permet assignar el text
     void setText(const QString &text);

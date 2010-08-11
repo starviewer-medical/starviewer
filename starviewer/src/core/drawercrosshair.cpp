@@ -32,7 +32,7 @@ DrawerCrossHair::~DrawerCrossHair()
 {
     emit dying(this);
 
-    if ( m_vtkPropAssembly )
+    if (m_vtkPropAssembly)
     {
         m_vtkPropAssembly->Delete();
     }
@@ -45,35 +45,35 @@ void DrawerCrossHair::setCentrePoint(double x, double y, double z)
     m_centrePoint[2] = z;
 
     // Assignem els punts a la línia 1
-    m_lineUp->setFirstPoint(m_centrePoint[0], m_centrePoint[1]-6, m_centrePoint[2]);
-    m_lineUp->setSecondPoint(m_centrePoint[0], m_centrePoint[1]-1, m_centrePoint[2]);
+    m_lineUp->setFirstPoint(m_centrePoint[0], m_centrePoint[1] - 6, m_centrePoint[2]);
+    m_lineUp->setSecondPoint(m_centrePoint[0], m_centrePoint[1] - 1, m_centrePoint[2]);
 
     // Assignem els punts a la línia 2
-    m_lineDown->setFirstPoint(m_centrePoint[0], m_centrePoint[1]+6, m_centrePoint[2]);
-    m_lineDown->setSecondPoint(m_centrePoint[0], m_centrePoint[1]+1, m_centrePoint[2]);
+    m_lineDown->setFirstPoint(m_centrePoint[0], m_centrePoint[1] + 6, m_centrePoint[2]);
+    m_lineDown->setSecondPoint(m_centrePoint[0], m_centrePoint[1] + 1, m_centrePoint[2]);
 
     // Assignem els punts a la línia 3
-    m_lineLeft->setFirstPoint(m_centrePoint[0]-6, m_centrePoint[1], m_centrePoint[2]);
-    m_lineLeft->setSecondPoint(m_centrePoint[0]-1, m_centrePoint[1], m_centrePoint[2]);
+    m_lineLeft->setFirstPoint(m_centrePoint[0] - 6, m_centrePoint[1], m_centrePoint[2]);
+    m_lineLeft->setSecondPoint(m_centrePoint[0] - 1, m_centrePoint[1], m_centrePoint[2]);
 
     // Assignem els punts a la línia 4
-    m_lineRight->setFirstPoint(m_centrePoint[0]+6, m_centrePoint[1], m_centrePoint[2]);
-    m_lineRight->setSecondPoint(m_centrePoint[0]+1, m_centrePoint[1], m_centrePoint[2]);
+    m_lineRight->setFirstPoint(m_centrePoint[0] + 6, m_centrePoint[1], m_centrePoint[2]);
+    m_lineRight->setSecondPoint(m_centrePoint[0] + 1, m_centrePoint[1], m_centrePoint[2]);
 
     // Assignem els punts a la línia 5
-    m_lineBack->setFirstPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-6);
-    m_lineBack->setSecondPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]-1);
+    m_lineBack->setFirstPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2] - 6);
+    m_lineBack->setSecondPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2] - 1);
 
     // Assignem els punts a la línia 6
-    m_lineFront->setFirstPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+6);
-    m_lineFront->setSecondPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2]+1);
+    m_lineFront->setFirstPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2] + 6);
+    m_lineFront->setSecondPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2] + 1);
 
     emit changed();
 }
 
-vtkPropAssembly * DrawerCrossHair::getAsVtkPropAssembly()
+vtkPropAssembly* DrawerCrossHair::getAsVtkPropAssembly()
 {
-    if( !m_vtkPropAssembly )
+    if (!m_vtkPropAssembly)
     {
         m_vtkPropAssembly = vtkPropAssembly::New();
 
@@ -90,11 +90,10 @@ vtkPropAssembly * DrawerCrossHair::getAsVtkPropAssembly()
     return m_vtkPropAssembly;
 }
 
-vtkProp * DrawerCrossHair::getAsVtkProp()
+vtkProp* DrawerCrossHair::getAsVtkProp()
 {
-    return (vtkProp *) getAsVtkPropAssembly();
+    return (vtkProp *)getAsVtkPropAssembly();
 }
-
 
 void DrawerCrossHair::update()
 {
@@ -108,7 +107,7 @@ void DrawerCrossHair::update()
 
 void DrawerCrossHair::updateVtkProp()
 {
-    if( m_vtkPropAssembly )
+    if (m_vtkPropAssembly)
     {
         m_lineUp->update();
         m_lineDown->update();
@@ -137,13 +136,13 @@ void DrawerCrossHair::updateVtkActorProperties()
 
 double DrawerCrossHair::getDistanceToPoint(double *point3D)
 {
-    return (MathTools::getDistance3D(m_centrePoint, point3D));
+    return MathTools::getDistance3D(m_centrePoint, point3D);
 }
 
 void DrawerCrossHair::getBounds(double bounds[6])
 {
     // TODO Falta implementar!!! Ara tornem els bounds "buits"
-    memset(bounds, 0.0, sizeof(double)*6);
+    memset(bounds, 0.0, sizeof(double) * 6);
     DEBUG_LOG("DrawerCrossHair::getBounds() no implementat!");
 }
 

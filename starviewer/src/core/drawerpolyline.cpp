@@ -29,21 +29,29 @@ DrawerPolyline::~DrawerPolyline()
 {
     emit dying(this);
 
-    if ( m_vtkPolydata )
+    if (m_vtkPolydata)
+    {
         m_vtkPolydata->Delete();
+    }
 
-    if ( m_vtkPoints )
+    if (m_vtkPoints)
+    {
         m_vtkPoints->Delete();
+    }
 
-    if ( m_vtkCellArray )
+    if (m_vtkCellArray)
+    {
         m_vtkCellArray->Delete();
+    }
 }
 
 void DrawerPolyline::addPoint(double point[3])
 {
     double *localPoint = new double[3];
-    for( int i = 0; i<3; i++ )
+    for (int i = 0; i < 3; i++)
+    {
         localPoint[i] = point[i];
+    }
 
     m_pointsList << localPoint;
     emit changed();
@@ -51,28 +59,32 @@ void DrawerPolyline::addPoint(double point[3])
 
 void DrawerPolyline::setPoint(int i, double point[3])
 {
-    if( i >= m_pointsList.count() || i < 0 )
+    if (i >= m_pointsList.count() || i < 0)
+    {
         addPoint(point);
+    }
     else
     {
         double *array = new double[3];
         array = m_pointsList.takeAt(i);
-        for( int j=0; j < 3; j++ )
+        for (int j = 0; j < 3; j++)
+        {
             array[j] = point[j];
+        }
 
-        m_pointsList.insert(i,array);
+        m_pointsList.insert(i, array);
         emit changed();
     }
 }
 
 double* DrawerPolyline::getPoint(int position)
 {
-    if( position >= m_pointsList.count() )
+    if (position >= m_pointsList.count())
     {
         double *array = new double[3];
         return array;
     }
-   else
+    else
     {
         return m_pointsList.at(position);
     }
@@ -89,9 +101,9 @@ void DrawerPolyline::deleteAllPoints()
     m_pointsList.clear();
 }
 
-vtkProp *DrawerPolyline::getAsVtkProp()
+vtkProp* DrawerPolyline::getAsVtkProp()
 {
-    if( !m_vtkActor )
+    if (!m_vtkActor)
     {
         buildVtkPoints();
         // Creem el pipeline de l'm_vtkActor
@@ -108,7 +120,7 @@ vtkProp *DrawerPolyline::getAsVtkProp()
 
 void DrawerPolyline::update()
 {
-    switch( m_internalRepresentation )
+    switch(m_internalRepresentation)
     {
     case VTKRepresentation:
         updateVtkProp();
@@ -122,7 +134,7 @@ void DrawerPolyline::update()
 
 void DrawerPolyline::updateVtkProp()
 {
-    if( m_vtkActor )
+    if (m_vtkActor)
     {
         m_vtkPolydata->Reset();
         buildVtkPoints();
@@ -137,7 +149,7 @@ void DrawerPolyline::updateVtkProp()
 
 void DrawerPolyline::buildVtkPoints()
 {
-    if( !m_vtkPolydata )
+    if (!m_vtkPolydata)
     {
         m_vtkPolydata = vtkPolyData::New();
         m_vtkPoints = vtkPoints::New();
@@ -151,7 +163,7 @@ void DrawerPolyline::buildVtkPoints()
 
     // Donem els punts
     int i = 0;
-    foreach( double *vertix, m_pointsList )
+    foreach (double *vertix, m_pointsList)
     {
         m_vtkPoints->InsertPoint(i, vertix);
         m_vtkCellArray->InsertCellPoint(i);
@@ -188,8 +200,10 @@ int DrawerPolyline::getNumberOfPoints()
 
 void DrawerPolyline::swap()
 {
-    for ( int i = 0; i < (int)(m_pointsList.count()/2); i++ )
-        m_pointsList.swap(i, (m_pointsList.count()-1)-i);
+    for (int i = 0; i < (int)(m_pointsList.count() / 2); i++)
+    {
+        m_pointsList.swap(i, (m_pointsList.count() - 1) - i);
+    }
 }
 
 double DrawerPolyline::getDistanceToPoint(double *point3D)
@@ -198,22 +212,22 @@ double DrawerPolyline::getDistanceToPoint(double *point3D)
     double distance;
     bool found = false;
 
-    if ( !m_pointsList.isEmpty() )
+    if (!m_pointsList.isEmpty())
     {
         // Mirem si el polígon conté com a últim punt el primer punt, és a dir, si està tancat o no.
         // Ens cal que sigui tancat per a dibuixar tots els segments reals que el formen.
-        QList< double* > auxList;
+        QList<double *> auxList;
         auxList += m_pointsList;
 
-        if ( auxList.first()[0] != auxList.last()[0] || auxList.first()[1] != auxList.last()[1] || auxList.first()[2] != auxList.last()[2] )
+        if (auxList.first()[0] != auxList.last()[0] || auxList.first()[1] != auxList.last()[1] || auxList.first()[2] != auxList.last()[2])
         {
             // Si el primer i últim punt no són iguals, dupliquem el primer punt.
             auxList << auxList.first();
         }
 
-        for ( int i = 0; ( i < auxList.count() - 1 ) && !found ; i++ )
+        for (int i = 0; (i < auxList.count() - 1) && !found ; i++)
         {
-            if ( isPointIncludedInLineBounds(point3D, auxList[i], auxList[i+1]) )
+            if (isPointIncludedInLineBounds(point3D, auxList[i], auxList[i+1]))
             {
                 minDistanceLine = 0.0;
                 found = true;
@@ -222,10 +236,14 @@ double DrawerPolyline::getDistanceToPoint(double *point3D)
             {
                 distance = vtkLine::DistanceToLine(point3D , auxList[i] , auxList[i+1]);
 
-                if ( minDistanceLine == MathTools::DoubleMaximumValue )
+                if (minDistanceLine == MathTools::DoubleMaximumValue)
+                {
                     minDistanceLine = distance;
-                else if ( distance < minDistanceLine )
-                        minDistanceLine = distance;
+                }
+                else if (distance < minDistanceLine)
+                {
+                    minDistanceLine = distance;
+                }
             }
         }
     }
@@ -241,13 +259,17 @@ bool DrawerPolyline::isPointIncludedInLineBounds(double point[3], double *lineP1
 
 void DrawerPolyline::getBounds(double bounds[6])
 {
-    if ( m_vtkPolydata )
+    if (m_vtkPolydata)
+    {
         m_vtkPolydata->GetBounds(bounds);
+    }
     else
-        memset(bounds, 0.0, sizeof(double)*6);
+    {
+        memset(bounds, 0.0, sizeof(double) * 6);
+    }
 }
 
-QList< double* > DrawerPolyline::getPointsList()
+QList<double *> DrawerPolyline::getPointsList()
 {
     return m_pointsList;
 }

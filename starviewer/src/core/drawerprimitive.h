@@ -29,51 +29,39 @@ public:
     DrawerPrimitive(QObject *parent = 0);
     ~DrawerPrimitive();
 
-    /**
-     * Mètodes per configurar la visibilitat de la primitiva
-     */
+    /// Mètodes per configurar la visibilitat de la primitiva
     virtual void setVisibility(bool visible);
     void visibilityOn();
     void visibilityOff();
     bool isVisible() const;
 
     enum { WorldCoordinateSystem, DisplayCoordinateSystem };
-    /**
-     * Mètodes per configurar el sistema de coordenades en que es troben
-     * els punts que defineixen la primitiva. Per defecte el sistema seran coordenades de món
-     */
+
+    /// Mètodes per configurar el sistema de coordenades en que es troben
+    /// els punts que defineixen la primitiva. Per defecte el sistema seran coordenades de món
     void setCoordinateSystem(int system);
     int getCoordinateSystem() const;
 
-    /**
-     * Mètodes per configurar el color
-     */
+    /// Mètodes per configurar el color
     void setColor(QColor color);
     QColor getColor() const;
 
-    /**
-     * Mètodes per configurar si la forma es pinta amb color de fons o no.
-     * Aquest atribut només tindrà sentit per formes tancades
-     */
+    /// Mètodes per configurar si la forma es pinta amb color de fons o no.
+    /// Aquest atribut només tindrà sentit per formes tancades
     void setFilled(bool fill);
     bool isFilled() const;
 
     enum LinePatternType{ ContinuousLinePattern = 0xFFFF, DiscontinuousLinePattern = 0xFF00 };
-    /**
-     * Mètodes per configurar el patró de la línia
-     */
+
+    /// Mètodes per configurar el patró de la línia
     void setLinePattern(int pattern);
     int getLinePattern() const;
 
-    /**
-     * Assigna/Obté l'amplada de la línia
-     */
+    /// Assigna/Obté l'amplada de la línia
     void setLineWidth(double width);
     double getLineWidth() const;
 
-    /**
-     * Assigna/Obté l'opacitat de l'objecte
-     */
+    /// Assigna/Obté l'opacitat de l'objecte
     void setOpacity(double opacity);
     double getOpacity() const;
 
@@ -83,7 +71,7 @@ public:
      * Retornem un vtkProp, el qual ens permet poder retornar tant vtkActor, vtkActor2D o vtkPropAssembly
      * @return El vtkProp amb el que es representa la primitiva
      */
-    virtual vtkProp *getAsVtkProp();
+    virtual vtkProp* getAsVtkProp();
 
     /**
      * Ens diu si alguna de les propietats de la primitiva han estat modificades.
@@ -93,15 +81,11 @@ public:
      */
     bool isModified() const;
 
-    /**
-     * Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
-     */
-    virtual double getDistanceToPoint(double *point3D)=0;
+    /// Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
+    virtual double getDistanceToPoint(double *point3D) = 0;
 
-    /**
-     * Ens retorna els límits de l'hexahedre que encapsula la primitiva
-     * en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
-     */
+    /// Ens retorna els límits de l'hexahedre que encapsula la primitiva
+    /// en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
     virtual void getBounds(double bounds[6]) = 0;
 
     /**
@@ -170,11 +154,11 @@ protected:
      * la primitiva en format vtk
      * @return L'objecte vtkCoordinate
      */
-    vtkCoordinate *getVtkCoordinateObject();
+    vtkCoordinate* getVtkCoordinateObject();
 
 protected:
     /// Tipus de representació que podem usar per construir la Primitiva en escena
-    enum RepresentationType{ VTKRepresentation, OpenGLRepresentation };
+    enum RepresentationType { VTKRepresentation, OpenGLRepresentation };
     
     /// Representació interna que es fa servir per la primitiva
     RepresentationType m_internalRepresentation;

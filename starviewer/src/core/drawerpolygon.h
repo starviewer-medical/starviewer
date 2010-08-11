@@ -46,9 +46,9 @@ public:
     void setVertix(int i, double x, double y, double z);
 
     /// Ens retorna l'i-èssim vèrtex del polígon. Si l'índex està fora de rang ens retornarà un array sense inicialitzar
-    const double *getVertix(int i);
+    const double* getVertix(int i);
     
-    vtkProp *getAsVtkProp();
+    vtkProp* getAsVtkProp();
 
     /// Ens retorna el nombre de punts que té el polígon
     int getNumberOfPoints() const;
@@ -59,7 +59,7 @@ public:
     void getBounds(double [6]);
 
     /// Calcula l'àrea del polígon
-    double computeArea(int view, double * spacing = NULL);
+    double computeArea(int view, double *spacing = NULL);
 
 public slots:
     void update();
@@ -76,7 +76,7 @@ private:
 
 private:
     /// Llista de punts del polígon
-    QList< QVector<double> > m_pointsList;
+    QList<QVector<double>> m_pointsList;
 
     /// Estructures de vtk, per construir el polígon
     vtkPolyData *m_vtkPolydata;

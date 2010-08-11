@@ -29,9 +29,9 @@ public:
     /// Afegim el primer punt de la línia
     void setCentrePoint(double x, double y, double z);
 
-    vtkPropAssembly *getAsVtkPropAssembly();
+    vtkPropAssembly* getAsVtkPropAssembly();
 
-    vtkProp *getAsVtkProp();
+    vtkProp* getAsVtkProp();
 
     double getDistanceToPoint(double *point3D);
 
@@ -40,7 +40,6 @@ public:
     void setVisibility(bool visible);
 
 public slots:
-
     void update();
 
 protected slots:
@@ -55,12 +54,12 @@ private:
     double m_centrePoint[3];
 
     /// Línies per construir el crosshair
-    DrawerLine * m_lineUp;
-    DrawerLine * m_lineDown;
-    DrawerLine * m_lineLeft;
-    DrawerLine * m_lineRight;
-    DrawerLine * m_lineFront;
-    DrawerLine * m_lineBack;
+    DrawerLine *m_lineUp;
+    DrawerLine *m_lineDown;
+    DrawerLine *m_lineLeft;
+    DrawerLine *m_lineRight;
+    DrawerLine *m_lineFront;
+    DrawerLine *m_lineBack;
 
     vtkPropAssembly *m_vtkPropAssembly;
 };
