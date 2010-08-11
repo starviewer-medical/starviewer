@@ -13,7 +13,6 @@
 #include <vtkActor2D.h>
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
-#include <vtkLine.h>
 // qt
 #include <QVector>
 
@@ -234,7 +233,7 @@ double DrawerPolyline::getDistanceToPoint(double *point3D)
             }
             else
             {
-                distance = vtkLine::DistanceToLine(point3D , auxList[i] , auxList[i+1]);
+                distance = MathTools::getPointToLineDistance(point3D, auxList[i], auxList[i+1]);
 
                 if (minDistanceLine == MathTools::DoubleMaximumValue)
                 {

@@ -351,7 +351,7 @@ void Drawer::showGroup(const QString &groupName)
 DrawerPrimitive* Drawer::getPrimitiveNearerToPoint(double point[3], int view, int slice)
 {
     double distance;
-    double minimumDistance = 15.0;
+    double minimumDistance = 1.0;
     QList< DrawerPrimitive *> primitivesList;
 
     DrawerPrimitive *nearestPrimitive = 0;

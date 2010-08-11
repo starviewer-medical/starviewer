@@ -12,7 +12,6 @@
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkActor2D.h>
-#include <vtkLine.h>
 
 namespace udg {
 
@@ -165,7 +164,7 @@ double DrawerLine::computeDistance(double * spacing)
 
 double DrawerLine::getDistanceToPoint(double *point3D)
 {
-    return vtkLine::DistanceToLine(point3D , m_firstPoint , m_secondPoint);
+    return MathTools::getPointToLineDistance(point3D, m_firstPoint, m_secondPoint);
 }
 
 void DrawerLine::getBounds(double bounds[6])
