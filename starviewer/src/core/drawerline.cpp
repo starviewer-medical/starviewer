@@ -24,14 +24,20 @@ DrawerLine::~DrawerLine()
 {
     emit dying(this);
 
-    if ( m_vtkActor )
+    if (m_vtkActor)
+    {
         m_vtkActor->Delete();
+    }
 
-    if ( m_vtkLineSource )
+    if (m_vtkLineSource)
+    {
         m_vtkLineSource->Delete();
+    }
 
-    if ( m_vtkMapper )
+    if (m_vtkMapper)
+    {
         m_vtkMapper->Delete();
+    }
 }
 
 void DrawerLine::setFirstPoint(double point[3])
@@ -62,9 +68,9 @@ void DrawerLine::setSecondPoint(double x, double y, double z)
     emit changed();
 }
 
-vtkProp *DrawerLine::getAsVtkProp()
+vtkProp* DrawerLine::getAsVtkProp()
 {
-    if( !m_vtkActor )
+    if (!m_vtkActor)
     {
         // Creem el pipeline de l'm_vtkActor
         m_vtkActor = vtkActor2D::New();
@@ -84,22 +90,32 @@ vtkProp *DrawerLine::getAsVtkProp()
     return m_vtkActor;
 }
 
+double* DrawerLine::getFirstPoint()
+{
+    return m_firstPoint;
+}
+
+double* DrawerLine::getSecondPoint()
+{
+    return m_secondPoint;
+}
+
 void DrawerLine::update()
 {
-    switch( m_internalRepresentation )
+    switch (m_internalRepresentation)
     {
-    case VTKRepresentation:
-        updateVtkProp();
-    break;
+        case VTKRepresentation:
+            updateVtkProp();
+            break;
 
-    case OpenGLRepresentation:
-    break;
+        case OpenGLRepresentation:
+            break;
     }
 }
 
 void DrawerLine::updateVtkProp()
 {
-    if( m_vtkActor )
+    if (m_vtkActor)
     {
         // Assignem els punts a la línia
         m_vtkLineSource->SetPoint1(m_firstPoint);
@@ -140,7 +156,7 @@ void DrawerLine::updateVtkActorProperties()
 double DrawerLine::computeDistance(double * spacing)
 {
     double distance;
-    if ( spacing == NULL )
+    if (spacing == NULL)
     {
         distance = MathTools::getDistance3D(m_firstPoint, m_secondPoint);
     }
@@ -171,15 +187,15 @@ void DrawerLine::getBounds(double bounds[6])
 {
     for (int i = 0; i < 3; i++)
     {
-        if ( m_firstPoint[i] < m_secondPoint[i] )
+        if (m_firstPoint[i] < m_secondPoint[i])
         {
-            bounds[i*2] = m_firstPoint[i];
-            bounds[i*2+1] = m_secondPoint[i];
+            bounds[i * 2] = m_firstPoint[i];
+            bounds[i * 2 + 1] = m_secondPoint[i];
         }
         else
         {
-            bounds[i*2] = m_secondPoint[i];
-            bounds[i*2+1] = m_firstPoint[i];
+            bounds[i * 2] = m_secondPoint[i];
+            bounds[i * 2 + 1] = m_firstPoint[i];
         }
     }
 }

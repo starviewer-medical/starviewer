@@ -9,7 +9,7 @@
 #include "drawerprimitive.h"
 #include "logging.h"
 #include "mathtools.h"
-//vtk
+// vtk
 #include <vtkRenderer.h>
 #include <QColor>
 
@@ -19,8 +19,8 @@ Drawer::Drawer(Q2DViewer *viewer, QObject *parent)
  : QObject(parent), m_currentPlane(0), m_currentSlice(0)
 {
     m_2DViewer = viewer;
-    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(refresh()) );
-    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(refresh()) );
+    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(refresh()));
+    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(refresh()));
 }
 
 Drawer::~Drawer()
@@ -32,76 +32,80 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
     // Inicialment la primitiva no serà visible fins que no es comprovi el contrari
     primitive->setVisibility(false);
 
-    switch ( plane )
+    switch (plane)
     {
-    case QViewer::AxialPlane:
-        m_axialPrimitives.insert(slice, primitive);
-    break;
+        case QViewer::AxialPlane:
+            m_axialPrimitives.insert(slice, primitive);
+            break;
 
-    case QViewer::SagitalPlane:
-        m_sagitalPrimitives.insert(slice, primitive);
-    break;
+        case QViewer::SagitalPlane:
+            m_sagitalPrimitives.insert(slice, primitive);
+            break;
 
-    case QViewer::CoronalPlane:
-        m_coronalPrimitives.insert(slice, primitive);
-    break;
+        case QViewer::CoronalPlane:
+            m_coronalPrimitives.insert(slice, primitive);
+            break;
 
-    case QViewer::Top2DPlane:
-        m_top2DPlanePrimitives << primitive;
-        primitive->setVisibility(true);
-    break;
+        case QViewer::Top2DPlane:
+            m_top2DPlanePrimitives << primitive;
+            primitive->setVisibility(true);
+            break;
 
-    default:
-        DEBUG_LOG("Pla no definit!");
-        return;
-    break;
+        default:
+            DEBUG_LOG("Pla no definit!");
+            return;
+            break;
     }
 
     // En el cas que el pla sigui Axial/Sagital/Coronal, cal comprovar 
     // la visibilitat de la primitiva segons la llesca
-    if ( m_2DViewer->getView() == plane && plane != QViewer::Top2DPlane )
+    if (m_2DViewer->getView() == plane && plane != QViewer::Top2DPlane)
     {
-        if ( slice < 0 || m_2DViewer->getCurrentSlice() == slice )
+        if (slice < 0 || m_2DViewer->getCurrentSlice() == slice)
+        {
             primitive->setVisibility(true);
+        }
     }
     
     // Procedim a "pintar-la"
     vtkProp *prop = primitive->getAsVtkProp();
-    if ( prop )
+    if (prop)
     {
-        connect(primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(erasePrimitive(DrawerPrimitive *)) );
+        connect(primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(erasePrimitive(DrawerPrimitive *)));
         m_2DViewer->getRenderer()->AddViewProp(prop);
-        if( primitive->isVisible() )
+        if (primitive->isVisible())
+        {
             m_2DViewer->render();
+        }
     }
 }
 
 void Drawer::clearViewer()
 {
-    QMultiMap< int, DrawerPrimitive *> primitivesContainer;
-    switch ( m_currentPlane )
+    QMultiMap<int, DrawerPrimitive *> primitivesContainer;
+    switch (m_currentPlane)
     {
-    case QViewer::AxialPlane:
-        primitivesContainer = m_axialPrimitives;
-    break;
+        case QViewer::AxialPlane:
+            primitivesContainer = m_axialPrimitives;
+            break;
 
-    case QViewer::SagitalPlane:
-        primitivesContainer = m_sagitalPrimitives;
-    break;
+        case QViewer::SagitalPlane:
+            primitivesContainer = m_sagitalPrimitives;
+            break;
 
-    case QViewer::CoronalPlane:
-        primitivesContainer = m_coronalPrimitives;
-    break;
+        case QViewer::CoronalPlane:
+            primitivesContainer = m_coronalPrimitives;
+            break;
 
-    case QViewer::Top2DPlane:
-        DEBUG_LOG("Esborrar primitives de Top2dPlane no implementat!");
-        return;
-    break;
+        case QViewer::Top2DPlane:
+            DEBUG_LOG("Esborrar primitives de Top2dPlane no implementat!");
+            return;
+            break;
 
-    default:
-        DEBUG_LOG("Pla no definit!");
-        return;
-    break;
+        default:
+            DEBUG_LOG("Pla no definit!");
+            return;
+            break;
     }
 
     // Obtenim les primitives de la vista i llesca actuals
@@ -110,25 +114,27 @@ void Drawer::clearViewer()
     // Al fer delete es cridarà el mètode erasePrimitive() que ja s'encarrega de fer la "feina bruta"
     foreach (DrawerPrimitive *primitive, list)
     {
-        if ( !primitive->hasOwners() )
+        if (!primitive->hasOwners())
+        {
             delete primitive;
+        }
     }
     m_2DViewer->render();
 }
 
 void Drawer::addToGroup(DrawerPrimitive *primitive, const QString &groupName)
 {
-    // no comprovem si ja existeix ni si està en cap altre de les llistes, no cal.
+    // No comprovem si ja existeix ni si està en cap altre de les llistes, no cal.
     m_primitiveGroups.insert(groupName, primitive);
 }
 
 void Drawer::refresh()
 {
-    if ( m_currentPlane == m_2DViewer->getView() )
+    if (m_currentPlane == m_2DViewer->getView())
     {
-        if ( m_currentSlice != m_2DViewer->getCurrentSlice() )
+        if (m_currentSlice != m_2DViewer->getCurrentSlice())
         {
-            // cal fer invisible el que es veia en aquest pla i llesca i fer visible el que hi ha a la nova llesca
+            // Cal fer invisible el que es veia en aquest pla i llesca i fer visible el que hi ha a la nova llesca
             hide(m_currentPlane, m_currentSlice);
             m_currentSlice = m_2DViewer->getCurrentSlice();
             show(m_currentPlane, m_currentSlice);
@@ -136,7 +142,7 @@ void Drawer::refresh()
     }
     else
     {
-        // cal fer invisible el que es veia en aquest pla i llesca i fer visible el que hi ha al nou pla i llesca
+        // Cal fer invisible el que es veia en aquest pla i llesca i fer visible el que hi ha al nou pla i llesca
         hide(m_currentPlane, m_currentSlice);
         m_currentSlice = m_2DViewer->getCurrentSlice();
         m_currentPlane = m_2DViewer->getView();
@@ -156,9 +162,9 @@ void Drawer::removeAllPrimitives()
 
     foreach (DrawerPrimitive *primitive, list)
     {
-        // TODO atenció amb aquest tractament pel sucedani d'smart pointer.
-        // només esborrarem si ningú és propietari
-        if ( !primitive->hasOwners() )
+        // TODO Atenció amb aquest tractament pel sucedani d'smart pointer.
+        // Només esborrarem si ningú és propietari
+        if (!primitive->hasOwners())
         {
             m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
             delete primitive;
@@ -168,22 +174,24 @@ void Drawer::removeAllPrimitives()
 
 void Drawer::erasePrimitive(DrawerPrimitive *primitive)
 {
-    if ( !primitive )
+    if (!primitive)
+    {
         return;
-    // TODO atenció amb aquest tractament pel sucedani d'smart pointer.
-    // HACK només esborrarem si ningú és propietari
-    if ( primitive->hasOwners() )
+    }
+    // TODO Atenció amb aquest tractament pel sucedani d'smart pointer.
+    // HACK Només esborrarem si ningú és propietari
+    if (primitive->hasOwners())
     {
         DEBUG_LOG("No esborrem la primitiva. Tenim propietaris");
         return;
     }
 
-    // mirem si està en algun grup
+    // Mirem si està en algun grup
     QMutableMapIterator<QString, DrawerPrimitive *> groupsIterator(m_primitiveGroups);
-    while ( groupsIterator.hasNext() )
+    while (groupsIterator.hasNext())
     {
         groupsIterator.next();
-        if ( primitive == groupsIterator.value() )
+        if (primitive == groupsIterator.value())
         {
             groupsIterator.remove();
         }
@@ -191,26 +199,27 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
 
     bool found = false;
     QMutableMapIterator< int, DrawerPrimitive * > axialIterator(m_axialPrimitives);
-    while ( axialIterator.hasNext() && !found )
+    while (axialIterator.hasNext() && !found)
     {
         axialIterator.next();
-        if ( primitive == axialIterator.value() )
+        if (primitive == axialIterator.value())
         {
             found = true;
             axialIterator.remove();
-            m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp() );
-
+            m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
         }
     }
-    // en principi una mateixa primitiva només estarà en una de les llistes
-    if ( found )
+    // En principi una mateixa primitiva només estarà en una de les llistes
+    if (found)
+    {
         return;
+    }
 
     QMutableMapIterator< int, DrawerPrimitive * > sagitalIterator(m_sagitalPrimitives);
-    while ( sagitalIterator.hasNext() && !found )
+    while (sagitalIterator.hasNext() && !found)
     {
         sagitalIterator.next();
-        if ( primitive == sagitalIterator.value() )
+        if (primitive == sagitalIterator.value())
         {
             found = true;
             sagitalIterator.remove();
@@ -218,14 +227,16 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
         }
     }
 
-    if ( found )
+    if (found)
+    {
         return;
+    }
 
     QMutableMapIterator< int, DrawerPrimitive * > coronalIterator(m_coronalPrimitives);
-    while ( coronalIterator.hasNext() && !found )
+    while (coronalIterator.hasNext() && !found)
     {
         coronalIterator.next();
-        if ( primitive == coronalIterator.value() )
+        if (primitive == coronalIterator.value())
         {
             found = true;
             coronalIterator.remove();
@@ -233,10 +244,12 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
         }
     }
 
-    if ( found )
+    if (found)
+    {
         return;
+    }
 
-    if ( m_top2DPlanePrimitives.contains(primitive) )
+    if (m_top2DPlanePrimitives.contains(primitive))
     {
         found = true;
         m_top2DPlanePrimitives.removeAt(m_top2DPlanePrimitives.indexOf(primitive));
@@ -247,28 +260,28 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
 
 void Drawer::hide(int plane, int slice)
 {
-    QList< DrawerPrimitive *> primitivesList;
-    switch ( plane )
+    QList<DrawerPrimitive *> primitivesList;
+    switch (plane)
     {
-    case QViewer::AxialPlane:
-        primitivesList = m_axialPrimitives.values(slice);
-    break;
+        case QViewer::AxialPlane:
+            primitivesList = m_axialPrimitives.values(slice);
+            break;
 
-    case QViewer::SagitalPlane:
-        primitivesList = m_sagitalPrimitives.values(slice);
-    break;
+        case QViewer::SagitalPlane:
+            primitivesList = m_sagitalPrimitives.values(slice);
+            break;
 
-    case QViewer::CoronalPlane:
-        primitivesList = m_coronalPrimitives.values(slice);
-    break;
+        case QViewer::CoronalPlane:
+            primitivesList = m_coronalPrimitives.values(slice);
+            break;
 
-    case QViewer::Top2DPlane:
-        primitivesList = m_top2DPlanePrimitives;
-    break;
+        case QViewer::Top2DPlane:
+            primitivesList = m_top2DPlanePrimitives;
+            break;
     }
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
-        if ( primitive->isVisible() )
+        if (primitive->isVisible())
         {
             primitive->visibilityOff();
             primitive->update();
@@ -279,27 +292,28 @@ void Drawer::hide(int plane, int slice)
 void Drawer::show(int plane, int slice)
 {
     QList< DrawerPrimitive *> primitivesList;
-    switch ( plane )
+    switch (plane)
     {
-    case QViewer::AxialPlane:
-        primitivesList = m_axialPrimitives.values(slice);
-    break;
+        case QViewer::AxialPlane:
+            primitivesList = m_axialPrimitives.values(slice);
+            break;
 
-    case QViewer::SagitalPlane:
-        primitivesList = m_sagitalPrimitives.values(slice);
-    break;
+        case QViewer::SagitalPlane:
+            primitivesList = m_sagitalPrimitives.values(slice);
+            break;
 
-    case QViewer::CoronalPlane:
-        primitivesList = m_coronalPrimitives.values(slice);
-    break;
+        case QViewer::CoronalPlane:
+            primitivesList = m_coronalPrimitives.values(slice);
+            break;
 
-    case QViewer::Top2DPlane:
-        primitivesList = m_top2DPlanePrimitives;
-    break;
+        case QViewer::Top2DPlane:
+            primitivesList = m_top2DPlanePrimitives;
+            break;
     }
+    
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
-        if ( primitive->isModified() || !primitive->isVisible() )
+        if (primitive->isModified() || !primitive->isVisible())
         {
             primitive->visibilityOn();
             primitive->update();
@@ -318,7 +332,7 @@ void Drawer::hideGroup(const QString &groupName)
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values(groupName);
     foreach (DrawerPrimitive *primitive, primitiveList)
     {
-        if ( primitive->isModified() || primitive->isVisible() )
+        if (primitive->isModified() || primitive->isVisible())
         {
             primitive->visibilityOff();
             primitive->update();
@@ -326,8 +340,10 @@ void Drawer::hideGroup(const QString &groupName)
         }
     }
     
-    if ( hasToRender )
+    if (hasToRender)
+    {
         m_2DViewer->render();
+    }
 }
 
 void Drawer::showGroup(const QString &groupName)
@@ -336,7 +352,7 @@ void Drawer::showGroup(const QString &groupName)
     QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values(groupName);
     foreach (DrawerPrimitive *primitive, primitiveList)
     {
-        if ( primitive->isModified() || !primitive->isVisible() )
+        if (primitive->isModified() || !primitive->isVisible())
         {
             primitive->visibilityOn();
             primitive->update();
@@ -344,40 +360,42 @@ void Drawer::showGroup(const QString &groupName)
         }
     }
     
-    if ( hasToRender )
+    if (hasToRender)
+    {
         m_2DViewer->render();
+    }
 }
 
 DrawerPrimitive* Drawer::getPrimitiveNearerToPoint(double point[3], int view, int slice)
 {
     double distance;
     double minimumDistance = 1.0;
-    QList< DrawerPrimitive *> primitivesList;
+    QList<DrawerPrimitive *> primitivesList;
 
     DrawerPrimitive *nearestPrimitive = 0;
 
-    switch ( view )
+    switch (view)
     {
-    case QViewer::AxialPlane:
-        primitivesList = m_axialPrimitives.values(slice);
-    break;
+        case QViewer::AxialPlane:
+            primitivesList = m_axialPrimitives.values(slice);
+            break;
 
-    case QViewer::SagitalPlane:
-        primitivesList = m_sagitalPrimitives.values(slice);
-    break;
+        case QViewer::SagitalPlane:
+            primitivesList = m_sagitalPrimitives.values(slice);
+            break;
 
-    case QViewer::CoronalPlane:
-        primitivesList = m_coronalPrimitives.values(slice);
-    break;
+        case QViewer::CoronalPlane:
+            primitivesList = m_coronalPrimitives.values(slice);
+            break;
 
-    default:
-    break;
+        default:
+            break;
     }
 
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
         distance = primitive->getDistanceToPoint(point);
-        if ( distance <= minimumDistance )
+        if (distance <= minimumDistance)
         {
             minimumDistance = distance;
             nearestPrimitive = primitive;
@@ -390,28 +408,30 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], int view, int slice)
 {
     QList<DrawerPrimitive *> primitivesList;
 
-    switch ( view )
+    switch (view)
     {
-    case QViewer::AxialPlane:
-        primitivesList = m_axialPrimitives.values(slice);
-        break;
+        case QViewer::AxialPlane:
+            primitivesList = m_axialPrimitives.values(slice);
+            break;
 
-    case QViewer::SagitalPlane:
-        primitivesList = m_sagitalPrimitives.values(slice);
-        break;
+        case QViewer::SagitalPlane:
+            primitivesList = m_sagitalPrimitives.values(slice);
+            break;
 
-    case QViewer::CoronalPlane:
-        primitivesList = m_coronalPrimitives.values(slice);
-        break;
+        case QViewer::CoronalPlane:
+            primitivesList = m_coronalPrimitives.values(slice);
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
-        if ( isPrimitiveInside(primitive,view,bounds) )
+        if (isPrimitiveInside(primitive,view,bounds))
+        {
             erasePrimitive(primitive);
+        }
     }
 }
 
@@ -426,7 +446,7 @@ bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, int view, double boun
     int yIndex = Q2DViewer::getYIndexForView(view);
 
     bool inside = false;
-    if ( bounds[xIndex*2] <= primitiveBounds[xIndex*2] && bounds[xIndex*2+1] >= primitiveBounds[xIndex*2+1] && bounds[yIndex*2] <= primitiveBounds[yIndex*2] && bounds[yIndex*2+1] >= primitiveBounds[yIndex*2+1] )
+    if (bounds[xIndex * 2] <= primitiveBounds[xIndex * 2] && bounds[xIndex * 2 + 1] >= primitiveBounds[xIndex * 2 + 1] && bounds[yIndex * 2] <= primitiveBounds[yIndex * 2] && bounds[yIndex * 2 + 1] >= primitiveBounds[yIndex * 2 + 1])
         inside = true;
 
     return inside;
