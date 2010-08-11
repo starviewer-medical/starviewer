@@ -168,6 +168,10 @@ private slots:
     void updateProjectionLabel();
 
 private:
+    /// Distància mínima en la que s'ha de trobar un punt per 
+    /// considerar-se prou proper per fer una operació de picking
+    static const double PickingDistanceThreshold;
+    
     /// El reslice de cada vista
     vtkImageReslice *m_sagitalReslice, *m_coronalReslice;
 

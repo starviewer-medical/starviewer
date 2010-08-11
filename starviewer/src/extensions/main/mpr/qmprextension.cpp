@@ -32,12 +32,13 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkImageReslice.h>
 #include <vtkTransform.h>
-#include <vtkLine.h>
 #include <vtkImageChangeInformation.h> // per portar a l'origen
 // pels events
 #include <vtkCommand.h>
 
 namespace udg {
+
+const double QMPRExtension::PickingDistanceThreshold = 7.0;
 
 QMPRExtension::QMPRExtension( QWidget *parent )
  : QWidget( parent ), m_axialZeroSliceCoordinate(.0)
@@ -494,14 +495,14 @@ bool QMPRExtension::detectAxialViewAxisActor()
 
     r1 = m_coronalOverAxialIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverAxialIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
+    distanceToCoronal = MathTools::getPointToLineDistance(point, r1, r2);
 
     r1 = m_sagitalOverAxialAxisActor->GetPositionCoordinate()->GetValue();
     r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
-    distanceToSagital = vtkLine::DistanceToLine( point , r1 , r2 );
+    distanceToSagital = MathTools::getPointToLineDistance(point, r1, r2);
 
     // donem una "tolerància" mínima
-    if( distanceToCoronal < 50.0 || distanceToSagital < 50.0 )
+    if( distanceToCoronal < PickingDistanceThreshold || distanceToSagital < PickingDistanceThreshold )
     {
         if( distanceToCoronal < distanceToSagital )
         {
@@ -593,10 +594,10 @@ void QMPRExtension::detectSagitalViewAxisActor()
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
+    distanceToCoronal = MathTools::getPointToLineDistance(point, r1, r2);
 
     // donem una "tolerància" mínima
-    if( distanceToCoronal < 50.0 )
+    if( distanceToCoronal < PickingDistanceThreshold )
     {
         m_pickedActorReslice = m_coronalReslice;
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
@@ -727,14 +728,14 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
 
     r1 = m_axialOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToAxial = vtkLine::DistanceToLine( point , r1 , r2 );
+    distanceToAxial = MathTools::getPointToLineDistance(point, r1, r2);
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = vtkLine::DistanceToLine( point , r1 , r2 );
+    distanceToCoronal = MathTools::getPointToLineDistance(point, r1, r2);
 
     // donem una "tolerància" mínima
-    if( distanceToCoronal < 50.0 || distanceToAxial < 50.0 )
+    if( distanceToCoronal < PickingDistanceThreshold || distanceToAxial < PickingDistanceThreshold )
     {
         this->setCursor( QCursor( Qt::OpenHandCursor ) );
         //desactivem les tools perquè no facin interferència
