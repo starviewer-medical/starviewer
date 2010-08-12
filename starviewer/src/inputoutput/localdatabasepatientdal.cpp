@@ -14,10 +14,8 @@
 
 namespace udg {
 
-LocalDatabasePatientDAL::LocalDatabasePatientDAL(DatabaseConnection *dbConnection)
+LocalDatabasePatientDAL::LocalDatabasePatientDAL(DatabaseConnection *dbConnection):LocalDatabaseBaseDAL(dbConnection)
 {
-    m_lastSqliteError = SQLITE_OK;
-    m_dbConnection = dbConnection;
 }
 
 void LocalDatabasePatientDAL::insert(Patient *newPatient)
@@ -64,11 +62,6 @@ QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
     }
 
     return patientList;
-}
-
-int LocalDatabasePatientDAL::getLastError()
-{
-    return m_lastSqliteError;
 }
 
 Patient* LocalDatabasePatientDAL::fillPatient(char **reply, int row, int columns)
@@ -131,14 +124,4 @@ QString LocalDatabasePatientDAL::buildSqlDelete(const DicomMask &patientMaskToDe
 
     return deleteSentence + whereSentence;
 }
-
-void LocalDatabasePatientDAL::logError(const QString &sqlSentence)
-{
-    //Ingnorem l'error de clau duplicada
-    if (getLastError() != SQLITE_CONSTRAINT)
-    {
-        ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() + ", al executar la seguent sentencia sql " + sqlSentence);
-    }
-}
-
 }

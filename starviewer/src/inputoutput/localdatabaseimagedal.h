@@ -10,19 +10,18 @@
 #include <QString>
 #include <QList>
 
+#include "localdatabasebasedal.h"
 #include "image.h"
-
 
 namespace udg {
 
 class DicomMask;
-class DatabaseConnection;
 
 /** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
-class LocalDatabaseImageDAL
+class LocalDatabaseImageDAL: public LocalDatabaseBaseDAL
 {
 public:
 
@@ -47,21 +46,11 @@ public:
     ///Compta les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
     int count(const DicomMask &imageMaskToCount);
 
-    ///Retorna el codi de l'últim error que s'ha produït
-    int getLastError();
-
-    ~LocalDatabaseImageDAL();
-
 private :
-
-    DatabaseConnection *m_dbConnection;
-
-    int m_lastSqliteError;
 
     double m_imageOrientationPatient[6];
     double m_pixelSpacing[2];
     double m_patientPosition[3];
-
 
     ///Emplena un l'objecte imatge de la fila passada per paràmetre
     Image *fillImage(char **reply, int row, int columns);
@@ -113,9 +102,6 @@ private :
 
     ///Emplena el windowlevel de la imatge
     void setWindowLevel(Image *selectedImage, const QString &windowLevelWidth, const QString &windowLevelCenter);
-
-    ///Ens fa un ErrorLog d'una sentència sql
-    void logError(const QString &sqlSentence);
 };
 
 }

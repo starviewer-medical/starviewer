@@ -9,20 +9,19 @@
 
 #include <QList>
 
+#include "localdatabasebasedal.h"
 #include "series.h"
 
 namespace udg {
 
 class DicomMask;
 class Series;
-class DatabaseConnection;
 
 /** Classe que conté els mètodes d'accés a la Taula series
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class LocalDatabaseSeriesDAL
+class LocalDatabaseSeriesDAL: public LocalDatabaseBaseDAL
 {
-
 public:
     LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection);
 
@@ -38,14 +37,7 @@ public:
     ///Cerca les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
     QList<Series*> query(const DicomMask &seriesMaskToQuery);
 
-    ///Retorna l'estat de la última operació realitzada
-    int getLastError();
-
 private:
-
-    DatabaseConnection *m_dbConnection;
-
-    int m_lastSqliteError;
 
     ///Construeix la sentència sql per inserir la nova sèrie
     QString buildSqlInsert(Series *newSeries);
@@ -64,9 +56,6 @@ private:
 
     ///Emplena un l'objecte series de la fila passada per paràmetre
     Series* fillSeries(char **reply, int row, int columns);
-
-    ///Ens fa un ErrorLog d'una sentència sql
-    void logError(const QString &sqlSentence);
 };
 
 }

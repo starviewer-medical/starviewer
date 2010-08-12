@@ -5,20 +5,19 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-
 #ifndef UDGLOCALDATABASEUTILDAL_H
 #define UDGLOCALDATABASEUTILDAL_H
+
+#include "localdatabasebasedal.h"
 
 class QString;
 
 namespace udg {
 
-class DatabaseConnection;
-
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class LocalDatabaseUtilDAL
+class LocalDatabaseUtilDAL: public LocalDatabaseBaseDAL
 {
 public:
 
@@ -33,21 +32,10 @@ public:
     ///Comprova si la base de dades està corrumpuda
     bool isDatabaseCorrupted();
 
-    ///Retorna l'estat de la última operació realitzada
-    int getLastError();
-
 private :
-
-    DatabaseConnection *m_dbConnection;
-
-    int m_lastSqliteError;
 
     ///Ens retorna un string amb el select a executar per retorna la revisió de la base de dades sobre la qual estem connectats
     QString buildSqlGetDatabaseRevision();
-
-    ///Ens fa un ErrorLog d'una sentència sql
-    void logError(QString sqlSentence);
-
 };
 }
 

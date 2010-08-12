@@ -15,10 +15,8 @@
 
 namespace udg {
 
-LocalDatabaseUtilDAL::LocalDatabaseUtilDAL(DatabaseConnection *dbConnection) 
+LocalDatabaseUtilDAL::LocalDatabaseUtilDAL(DatabaseConnection *dbConnection):LocalDatabaseBaseDAL(dbConnection)
 {
-    m_lastSqliteError = SQLITE_OK;
-    m_dbConnection = dbConnection;
 }
 
 void LocalDatabaseUtilDAL::compact()
@@ -106,20 +104,6 @@ bool LocalDatabaseUtilDAL::isDatabaseCorrupted()
 QString LocalDatabaseUtilDAL::buildSqlGetDatabaseRevision()
 {
     return "select * from DatabaseRevision";
-}
-
-int LocalDatabaseUtilDAL::getLastError()
-{
-    return m_lastSqliteError;
-}
-
-void LocalDatabaseUtilDAL::logError(QString sqlSentence)
-{
-    //Ingnorem l'error de clau duplicada
-    if (getLastError() != SQLITE_CONSTRAINT)
-    {
-        ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() + ", al executar la seguent sentencia sql " + sqlSentence);
-    }
 }
 
 }

@@ -21,10 +21,8 @@
 
 namespace udg {
 
-LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection)
+LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection):LocalDatabaseBaseDAL(dbConnection)
 {
-    m_lastSqliteError = SQLITE_OK;
-    m_dbConnection = dbConnection;
 }
 
 void LocalDatabaseImageDAL::insert(Image *newImage)
@@ -88,11 +86,6 @@ int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
     }
 
     return QString(reply[1]).toInt();
-}
-
-int LocalDatabaseImageDAL::getLastError()
-{
-    return m_lastSqliteError;
 }
 
 Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
@@ -472,20 +465,6 @@ void LocalDatabaseImageDAL::setWindowLevel(Image *selectedImage, const QString &
             selectedImage->addWindowLevel(listWindowLevelWidth.at(index).toDouble(), listWindowLevelCenter.at(index).toDouble());
         }
     }
-}
-
-void LocalDatabaseImageDAL::logError(const QString &sqlSentence)
-{
-    //Ingnorem l'error de clau duplicada
-    if (getLastError() != SQLITE_CONSTRAINT)
-    {
-        ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() + ", al executar la seguent sentencia sql " + sqlSentence);
-    }
-}
-
-
-LocalDatabaseImageDAL::~LocalDatabaseImageDAL()
-{
 }
 
 }
