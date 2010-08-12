@@ -9,7 +9,6 @@
 #include "logging.h"
 #include "drawer.h"
 #include "drawerpolygon.h"
-#include "mathtools.h"
 // vtk
 #include <vtkCommand.h>
 
@@ -59,28 +58,18 @@ void EraserTool::handleEvent( unsigned long eventID )
 void EraserTool::startEraserAction()
 {
     m_2DViewer->getEventWorldCoordinate( m_startPoint );
-    /// La següent inicialització de l'm_endPoint és per la distància que es calcula al mètode erasePrimitive(). 
-    /// El primer cop que es calcula, aquest punt no tindrà valor i, per tant, ens donaria error
+    // A l'agafar el primer punt inicialitzem l'start i l'end point per igual
+    // simplement per què així és més segur que no tenir un valor arbitrari a endPoint
     m_endPoint[0] = m_startPoint[0];
     m_endPoint[1] = m_startPoint[1];
     m_endPoint[2] = m_startPoint[2];
-
-    if (!m_polygon )
-    {
-        m_polygon = new DrawerPolygon;
-        m_polygon->addVertix( m_startPoint );
-        m_polygon->addVertix( m_startPoint );
-        m_polygon->addVertix( m_startPoint );
-        m_polygon->addVertix( m_startPoint );
-        m_2DViewer->getDrawer()->draw( m_polygon , Q2DViewer::Top2DPlane );
-    }
 
     m_state = StartClick;
 }
 
 void EraserTool::drawAreaOfErasure()
 {
-    if ( m_polygon && m_state == StartClick )
+    if (m_state == StartClick)
     {
         double p2[3], p3[3];
         int xIndex, yIndex, zIndex;
@@ -97,22 +86,39 @@ void EraserTool::drawAreaOfErasure()
         p3[yIndex] = m_endPoint[yIndex];
         p3[zIndex] = m_2DViewer->getCurrentSlice();
 
-        // Assignem els punts del polígon
-        m_polygon->setVertix( 0, p2 );
-        m_polygon->setVertix( 1, m_endPoint );
-        m_polygon->setVertix( 2, p3 );
-        m_polygon->setVertix( 3, m_startPoint );
-        // Actualitzem els atributs de la polilinia
-        m_polygon->update();
-        m_2DViewer->render();
+        if (!m_polygon)
+        {
+            m_polygon = new DrawerPolygon;
+            m_polygon->addVertix(p2);
+            m_polygon->addVertix(m_endPoint);
+            m_polygon->addVertix(p3);
+            m_polygon->addVertix(m_startPoint);
+            m_2DViewer->getDrawer()->draw(m_polygon, Q2DViewer::Top2DPlane);
+        }
+        else
+        {
+            // Assignem els punts del polígon
+            m_polygon->setVertix( 0, p2 );
+            m_polygon->setVertix( 1, m_endPoint );
+            m_polygon->setVertix( 2, p3 );
+            m_polygon->setVertix( 3, m_startPoint );
+            // Actualitzem els atributs de la polilinia
+            m_polygon->update();
+            m_2DViewer->render();
+        }
     }
 }
 
 void EraserTool::erasePrimitive()
 {
-    if ( MathTools::getDistance3D( m_startPoint, m_endPoint ) <= 5.0 )
+    if (!m_polygon)
     {
-        m_2DViewer->getDrawer()->erasePrimitive( m_2DViewer->getDrawer()->getPrimitiveNearerToPoint( m_startPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() ) );
+        DrawerPrimitive *primitiveToErase = m_2DViewer->getDrawer()->getPrimitiveNearerToPoint(m_startPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        if (primitiveToErase)
+        {
+            m_2DViewer->getDrawer()->erasePrimitive(primitiveToErase);
+            m_2DViewer->render();
+        }
     }
     else
     {
