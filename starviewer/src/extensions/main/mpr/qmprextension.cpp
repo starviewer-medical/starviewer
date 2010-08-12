@@ -495,11 +495,11 @@ bool QMPRExtension::detectAxialViewAxisActor()
 
     r1 = m_coronalOverAxialIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverAxialIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToLineDistance(point, r1, r2);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2);
 
     r1 = m_sagitalOverAxialAxisActor->GetPositionCoordinate()->GetValue();
     r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
-    distanceToSagital = MathTools::getPointToLineDistance(point, r1, r2);
+    distanceToSagital = MathTools::getPointToFiniteLineDistance(point, r1, r2);
 
     // donem una "tolerància" mínima
     if( distanceToCoronal < PickingDistanceThreshold || distanceToSagital < PickingDistanceThreshold )
@@ -594,7 +594,7 @@ void QMPRExtension::detectSagitalViewAxisActor()
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToLineDistance(point, r1, r2);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2);
 
     // donem una "tolerància" mínima
     if( distanceToCoronal < PickingDistanceThreshold )
@@ -728,11 +728,11 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
 
     r1 = m_axialOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToAxial = MathTools::getPointToLineDistance(point, r1, r2);
+    distanceToAxial = MathTools::getPointToFiniteLineDistance(point, r1, r2);
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToLineDistance(point, r1, r2);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2);
 
     // donem una "tolerància" mínima
     if( distanceToCoronal < PickingDistanceThreshold || distanceToAxial < PickingDistanceThreshold )

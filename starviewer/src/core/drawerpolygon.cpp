@@ -219,7 +219,7 @@ double DrawerPolygon::getDistanceToPoint(double *point3D)
         {
             double startPoint[3] = { m_pointsList.at(i).data()[0], m_pointsList.at(i).data()[1], m_pointsList.at(i).data()[2] };
             double endPoint[3] = { m_pointsList.at(i + 1).data()[0], m_pointsList.at(i + 1).data()[1], m_pointsList.at(i + 1).data()[2] };
-            distance = MathTools::getPointToLineDistance(point3D, startPoint, endPoint);
+            distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint);
             if (distance < minimumDistanceFound)
             {
                 minimumDistanceFound = distance;
@@ -230,7 +230,7 @@ double DrawerPolygon::getDistanceToPoint(double *point3D)
         // Calculem la distància del segment que va de l'últim al primer punt
         double startPoint[3] = { m_pointsList.first().data()[0], m_pointsList.first().data()[1], m_pointsList.first().data()[2] };
         double endPoint[3] = { m_pointsList.last().data()[0], m_pointsList.last().data()[1], m_pointsList.last().data()[2] };
-        distance = MathTools::getPointToLineDistance(point3D, startPoint, endPoint);
+        distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint);
         if (distance < minimumDistanceFound)
         {
             minimumDistanceFound = distance;
