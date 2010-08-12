@@ -197,61 +197,28 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
         }
     }
 
-    bool found = false;
-    QMutableMapIterator< int, DrawerPrimitive * > axialIterator(m_axialPrimitives);
-    while (axialIterator.hasNext() && !found)
+    // Busquem en el pla axial
+    if (erasePrimitiveFromContainer(primitive, m_axialPrimitives))
     {
-        axialIterator.next();
-        if (primitive == axialIterator.value())
-        {
-            found = true;
-            axialIterator.remove();
-            m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
-        }
+        // En principi una mateixa primitiva només estarà en una de les llistes
+        return;
     }
-    // En principi una mateixa primitiva només estarà en una de les llistes
-    if (found)
+
+    // Busquem en el pla sagital
+    if (erasePrimitiveFromContainer(primitive, m_sagitalPrimitives))
     {
         return;
     }
 
-    QMutableMapIterator< int, DrawerPrimitive * > sagitalIterator(m_sagitalPrimitives);
-    while (sagitalIterator.hasNext() && !found)
-    {
-        sagitalIterator.next();
-        if (primitive == sagitalIterator.value())
-        {
-            found = true;
-            sagitalIterator.remove();
-            m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
-        }
-    }
-
-    if (found)
+    // Busquem en el pla coronal
+    if (erasePrimitiveFromContainer(primitive, m_coronalPrimitives))
     {
         return;
     }
 
-    QMutableMapIterator< int, DrawerPrimitive * > coronalIterator(m_coronalPrimitives);
-    while (coronalIterator.hasNext() && !found)
-    {
-        coronalIterator.next();
-        if (primitive == coronalIterator.value())
-        {
-            found = true;
-            coronalIterator.remove();
-            m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
-        }
-    }
-
-    if (found)
-    {
-        return;
-    }
-
+    // Busquem en la capa superior
     if (m_top2DPlanePrimitives.contains(primitive))
     {
-        found = true;
         m_top2DPlanePrimitives.removeAt(m_top2DPlanePrimitives.indexOf(primitive));
         m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
         m_2DViewer->render();
@@ -451,5 +418,24 @@ bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, int view, double boun
 
     return inside;
 }
+
+bool Drawer::erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive *> &primitiveContainer)
+{
+    bool found = false;
+    QMutableMapIterator<int, DrawerPrimitive *> containerIterator(primitiveContainer);
+    while (containerIterator.hasNext() && !found)
+    {
+        containerIterator.next();
+        if (primitive == containerIterator.value())
+        {
+            found = true;
+            containerIterator.remove();
+            m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
+        }
+    }
+
+    return found;
+}
+
 
 }
