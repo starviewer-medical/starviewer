@@ -54,7 +54,7 @@ void DatabaseConnection::beginTransaction()
     sqlite3_exec(m_databaseConnection, "BEGIN IMMEDIATE", 0 , 0 , 0);
 }
 
-void DatabaseConnection::endTransaction()
+void DatabaseConnection::commitTransaction()
 {
     sqlite3_exec(m_databaseConnection, "END", 0 , 0 , 0);
     m_transactionLock->release();
