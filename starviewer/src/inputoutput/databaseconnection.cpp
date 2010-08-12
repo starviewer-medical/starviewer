@@ -45,6 +45,11 @@ void DatabaseConnection::open()
 
 void DatabaseConnection::beginTransaction()
 {
+    if (!isConnected())
+    {
+        open();
+    }
+ 
     m_transactionLock->acquire();
     sqlite3_exec(m_databaseConnection, "BEGIN IMMEDIATE", 0 , 0 , 0);
 }
@@ -76,19 +81,19 @@ QString DatabaseConnection::formatTextToValidSQLSyntax( QChar qchar )
 
 sqlite3* DatabaseConnection::getConnection()
 {
-    if (!connected()) open();
+    if (!isConnected()) open();
 
     return m_databaseConnection;
 }
 
-bool DatabaseConnection::connected()
+bool DatabaseConnection::isConnected()
 {
     return m_databaseConnection != NULL;
 }
 
 void DatabaseConnection::close()
 {
-    if ( connected() )
+    if ( isConnected() )
     {
         sqlite3_close( m_databaseConnection );
         m_databaseConnection = NULL;
