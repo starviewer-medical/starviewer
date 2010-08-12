@@ -86,7 +86,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
     }
     else
     {
-        dbConnect.endTransaction();
+        dbConnect.commitTransaction();
     }
 
     foreach (Study *study, newPatient->getStudies())
@@ -151,7 +151,7 @@ void LocalDatabaseManager::save(Series *seriesToSave)
     }
     else
     {
-        dbConnect.endTransaction();
+        dbConnect.commitTransaction();
     }
 
     createSeriesThumbnail(seriesToSave);
@@ -382,7 +382,7 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
         return;
     }
 
-    dbConnect.endTransaction();
+    dbConnect.commitTransaction();
     deleteStudyFromHardDisk(studyInstanceToDelete);
 }
 
@@ -428,7 +428,7 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
             return;
         }
 
-        dbConnect.endTransaction();
+        dbConnect.commitTransaction();
 
         deleteSeriesFromHardDisk(studyInstanceUID, seriesInstanceUID);
     }
@@ -478,7 +478,7 @@ void LocalDatabaseManager::clear()
         return;
     }
 
-    dbConnect.endTransaction();
+    dbConnect.commitTransaction();
     //esborrem tots els estudis descarregats, físicament del disc dur
     if (!delDirectory.deleteDirectory(LocalDatabaseManager::getCachePath(), false))
     {

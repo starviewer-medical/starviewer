@@ -51,7 +51,7 @@ public:
     ///i no s'arriba mai a invocar endTransaction() quan es tanqui la connexió amb la base de dades sqlite automàticament fa un rollback dels canvis.
     //TODO: S'hauria de repassar l'ubicació ja que no semblaria gaire correcte com a responsabilitat de la connexió. Quan es faci refactoring...
     void beginTransaction();
-    void endTransaction();
+    void commitTransaction();
     void rollbackTransaction();
 
     /// Formata l'string de forma que no contingui caràcters extranys que puguin fer
