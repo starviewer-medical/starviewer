@@ -292,11 +292,7 @@ bool DatabaseInstallation::createDatabaseFile()
 
     sqlTablesScript = sqlTablesScriptFile.read(sqlTablesScriptFile.size()); //el llegim
 
-    DBConnect.open();
-    if (!DBConnect.connected()) return false;
-
     status = sqlite3_exec(DBConnect.getConnection(), sqlTablesScript.constData(), 0, 0, 0); //creem les taules i els registres
-    DBConnect.close();
 
     sqlTablesScriptFile.close(); //tanquem el fitxer
 

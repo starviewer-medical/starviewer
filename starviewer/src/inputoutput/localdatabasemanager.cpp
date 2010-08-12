@@ -54,14 +54,12 @@ void LocalDatabaseManager::save(Patient *newPatient)
     DatabaseConnection dbConnect;
     int status = SQLITE_OK;
 
-    dbConnect.open();
     dbConnect.beginTransaction(); 
 
     if (newPatient == NULL)
     {
         ERROR_LOG("No es pot inserir a la base de dades l'estudi que s'ha descarregat, perque el patient es null");
         m_lastError = PatientInconsistent;
-        dbConnect.close();
         return;
     }
 
@@ -75,7 +73,6 @@ void LocalDatabaseManager::save(Patient *newPatient)
             dbConnect.rollbackTransaction();
             deleteRetrievedObjects(newPatient);
             setLastError(status);
-            dbConnect.close();
             return;
         }
     }
@@ -92,8 +89,6 @@ void LocalDatabaseManager::save(Patient *newPatient)
         dbConnect.endTransaction();
     }
 
-    dbConnect.close();
-
     foreach (Study *study, newPatient->getStudies())
     {
         createStudyThumbnails(study);
@@ -109,14 +104,12 @@ void LocalDatabaseManager::save(Series *seriesToSave)
     DatabaseConnection dbConnect;
     int status = SQLITE_OK;
 
-    dbConnect.open();
     dbConnect.beginTransaction(); 
 
     if (seriesToSave == NULL)
     {
         ERROR_LOG("No es pot inserir a la base de dades la serie perque te valor null");
         m_lastError = PatientInconsistent;
-        dbConnect.close();
         return;
     }
 
@@ -127,7 +120,6 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         dbConnect.rollbackTransaction();
         deleteRetrievedObjects(seriesToSave);
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
@@ -142,7 +134,6 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         dbConnect.rollbackTransaction();
         deleteRetrievedObjects(seriesToSave);
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
@@ -156,15 +147,12 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         dbConnect.rollbackTransaction();
         deleteRetrievedObjects(seriesToSave);
         setLastError(status);
-        dbConnect.close();
         return;
     }
     else
     {
         dbConnect.endTransaction();
     }
-
-    dbConnect.close();
 
     createSeriesThumbnail(seriesToSave);
 
@@ -177,11 +165,8 @@ QList<Patient *> LocalDatabaseManager::queryPatient(const DicomMask &patientMask
     LocalDatabasePatientDAL patientDAL(&dbConnect);
     QList<Patient*> queryResult;
 
-    dbConnect.open();
     queryResult = patientDAL.query(patientMaskToQuery);
     setLastError(patientDAL.getLastError());
-
-    dbConnect.close();
 
     return queryResult;
 }
@@ -192,11 +177,8 @@ QList<Patient *> LocalDatabaseManager::queryPatientStudy(const DicomMask &patien
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Patient*> queryResult;
 
-    dbConnect.open();
     queryResult = studyDAL.queryPatientStudy(patientStudyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
-
-    dbConnect.close();
 
     return queryResult;
 }
@@ -207,11 +189,8 @@ QList<Study *> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuer
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Study *> queryResult;
 
-    dbConnect.open();
     queryResult = studyDAL.query(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
-
-    dbConnect.close();
 
     return queryResult;
 }
@@ -222,11 +201,8 @@ QList<Study *> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const Dicom
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Study *> queryResult;
 
-    dbConnect.open();
     queryResult = studyDAL.queryOrderByLastAccessDate(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
-
-    dbConnect.close();
 
     return queryResult;
 }
@@ -239,14 +215,11 @@ QList<Series *> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQ
     QList<Series *> queryResult;
     DicomMask maskToCountNumberOfImage = seriesMaskToQuery;
 
-    dbConnect.open();
-
     queryResult = seriesDAL.query(seriesMaskToQuery);
 
     if (seriesDAL.getLastError() != SQLITE_OK)
     {
         setLastError(seriesDAL.getLastError());
-        dbConnect.close();
         return queryResult;
     }
 
@@ -263,8 +236,6 @@ QList<Series *> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQ
     }
     setLastError(imageDAL.getLastError());
 
-    dbConnect.close();
-
     // Carreguem els thumbnails de les series consultades
     loadSeriesThumbnail(seriesMaskToQuery.getStudyInstanceUID(), queryResult);
 
@@ -277,11 +248,8 @@ QList<Image *> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuer
     LocalDatabaseImageDAL imageDAL(&dbConnect);
     QList<Image *> queryResult;
 
-    dbConnect.open();
     queryResult = imageDAL.query(imageMaskToQuery);
     setLastError(imageDAL.getLastError());
-
-    dbConnect.close();
 
     return queryResult;
 }
@@ -299,13 +267,11 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     DicomMask maskImagesToRetrieve;
 
     // Busquem l'estudi i pacient
-    dbConnect.open();
     patientList = studyDAL.queryPatientStudy(maskToRetrieve, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
 
     if (patientList.count() != 1) 
     {
         setLastError(studyDAL.getLastError());
-        dbConnect.close();
         return retrievedPatient;
     }
     else
@@ -319,7 +285,6 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     if (seriesDAL.getLastError() != SQLITE_OK)
     {
         setLastError(seriesDAL.getLastError());
-        dbConnect.close();
         return new Patient();
     }
 
@@ -347,7 +312,6 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     if (imageDAL.getLastError() != SQLITE_OK)
     {
         setLastError(imageDAL.getLastError());
-        dbConnect.close();
         return new Patient();
     }
 
@@ -355,8 +319,6 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     retrievedStudy = retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID());
     studyDAL.update(retrievedStudy, QDate::currentDate());
     setLastError(studyDAL.getLastError());
-
-    dbConnect.close();
 
     //carreguem els thumbnails dels estudis
     foreach (Study *study, retrievedPatient->getStudies())
@@ -386,7 +348,6 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
         studyMaskToDelete.setStudyInstanceUID(studyInstanceToDelete);
     }
 	
-    dbConnect.open();
     dbConnect.beginTransaction();
 
     status = deletePatientOfStudyFromDatabase(&dbConnect, studyMaskToDelete);
@@ -394,7 +355,6 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     {
         dbConnect.rollbackTransaction();
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
@@ -403,7 +363,6 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     {
         dbConnect.rollbackTransaction();
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
@@ -412,7 +371,6 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     {
         dbConnect.rollbackTransaction();
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
@@ -421,12 +379,10 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     {
         dbConnect.rollbackTransaction();
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
     dbConnect.endTransaction();
-    dbConnect.close();
     deleteStudyFromHardDisk(studyInstanceToDelete);
 }
 
@@ -454,7 +410,6 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
     }
     else
     {
-        dbConnect.open();
         dbConnect.beginTransaction();
 
         status = deleteSeriesFromDatabase(&dbConnect, seriesMaskToDelete);
@@ -462,7 +417,6 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
         {
             dbConnect.rollbackTransaction();
             setLastError(status);
-            dbConnect.close();
             return;
         }
 
@@ -471,12 +425,10 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
         {
             dbConnect.rollbackTransaction();
             setLastError(status);
-            dbConnect.close();
             return;
         }
 
         dbConnect.endTransaction();
-        dbConnect.close();
 
         deleteSeriesFromHardDisk(studyInstanceUID, seriesInstanceUID);
     }
@@ -489,7 +441,6 @@ void LocalDatabaseManager::clear()
     DeleteDirectory delDirectory;
     int status;
 
-    dbConnect.open();
     dbConnect.beginTransaction();
 
     status = deletePatientFromDatabase(&dbConnect, maskToDelete);
@@ -497,7 +448,6 @@ void LocalDatabaseManager::clear()
     {
         dbConnect.rollbackTransaction();
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
@@ -507,7 +457,6 @@ void LocalDatabaseManager::clear()
     {
         dbConnect.rollbackTransaction();
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
@@ -517,7 +466,6 @@ void LocalDatabaseManager::clear()
     {
         dbConnect.rollbackTransaction();
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
@@ -527,12 +475,10 @@ void LocalDatabaseManager::clear()
     {
         dbConnect.rollbackTransaction();
         setLastError(status);
-        dbConnect.close();
         return;
     }
 
     dbConnect.endTransaction();
-    dbConnect.close();
     //esborrem tots els estudis descarregats, físicament del disc dur
     if (!delDirectory.deleteDirectory(LocalDatabaseManager::getCachePath(), false))
     {
@@ -560,14 +506,12 @@ void LocalDatabaseManager::deleteOldStudies()
 
     INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1).toString("dd/MM/yyyy"));
 
-    dbConnect.open();
     studyListToDelete = studyDAL.query(oldStudiesMask, LocalDatabaseManager::LastAccessDateSelectedStudies);
 
     setLastError(studyDAL.getLastError());
 
     if (studyDAL.getLastError() != SQLITE_OK)
     {
-        dbConnect.close();
         return;
     }
 
@@ -587,7 +531,6 @@ void LocalDatabaseManager::deleteOldStudies()
         //esborrem el punter a study
         delete study;
     } 
-    dbConnect.close();
 }
 
 void LocalDatabaseManager::compact()
@@ -595,11 +538,8 @@ void LocalDatabaseManager::compact()
     DatabaseConnection dbConnect;
     LocalDatabaseUtilDAL utilDAL(&dbConnect);
     
-    dbConnect.open();
     utilDAL.compact();
     setLastError(utilDAL.getLastError());
-
-    dbConnect.close();
 }
 
 int LocalDatabaseManager::getDatabaseRevision()
@@ -608,11 +548,8 @@ int LocalDatabaseManager::getDatabaseRevision()
     LocalDatabaseUtilDAL utilDAL(&dbConnect);
     int databaseRevision;
 
-    dbConnect.open();
     databaseRevision = utilDAL.getDatabaseRevision();
     setLastError(utilDAL.getLastError());
-
-    dbConnect.close();
 
     return databaseRevision;
 }
@@ -623,11 +560,8 @@ bool LocalDatabaseManager::isDatabaseCorrupted()
     LocalDatabaseUtilDAL utilDAL(&dbConnect);
     bool databaseCorrupted;
 
-    dbConnect.open();
     databaseCorrupted = utilDAL.isDatabaseCorrupted();
     setLastError(utilDAL.getLastError());
-
-    dbConnect.close();
 
     return databaseCorrupted;
 }
