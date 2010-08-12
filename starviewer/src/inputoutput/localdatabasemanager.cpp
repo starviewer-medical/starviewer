@@ -70,7 +70,6 @@ void LocalDatabaseManager::save(Patient *newPatient)
 
         if (status != SQLITE_OK) 
         {
-            dbConnect.rollbackTransaction();
             deleteRetrievedObjects(newPatient);
             setLastError(status);
             return;
@@ -81,7 +80,6 @@ void LocalDatabaseManager::save(Patient *newPatient)
 
     if (status != SQLITE_OK) 
     {
-        dbConnect.rollbackTransaction();
         deleteRetrievedObjects(newPatient);
     }
     else
@@ -117,7 +115,6 @@ void LocalDatabaseManager::save(Series *seriesToSave)
 
     if (status != SQLITE_OK) 
     {
-        dbConnect.rollbackTransaction();
         deleteRetrievedObjects(seriesToSave);
         setLastError(status);
         return;
@@ -131,7 +128,6 @@ void LocalDatabaseManager::save(Series *seriesToSave)
 
     if (status != SQLITE_OK) 
     {
-        dbConnect.rollbackTransaction();
         deleteRetrievedObjects(seriesToSave);
         setLastError(status);
         return;
@@ -144,7 +140,6 @@ void LocalDatabaseManager::save(Series *seriesToSave)
     
     if (status != SQLITE_OK) 
     {
-        dbConnect.rollbackTransaction();
         deleteRetrievedObjects(seriesToSave);
         setLastError(status);
         return;
@@ -353,7 +348,6 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     status = deletePatientOfStudyFromDatabase(&dbConnect, studyMaskToDelete);
     if (status != SQLITE_OK) 
     {
-        dbConnect.rollbackTransaction();
         setLastError(status);
         return;
     }
@@ -361,7 +355,6 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     status = deleteStudyFromDatabase(&dbConnect, studyMaskToDelete);
     if (status != SQLITE_OK) 
     {
-        dbConnect.rollbackTransaction();
         setLastError(status);
         return;
     }
@@ -369,7 +362,6 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     status = deleteSeriesFromDatabase(&dbConnect, studyMaskToDelete);
     if (status != SQLITE_OK) 
     {
-        dbConnect.rollbackTransaction();
         setLastError(status);
         return;
     }
@@ -377,7 +369,6 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
     status = deleteImageFromDatabase(&dbConnect, studyMaskToDelete);
     if (status != SQLITE_OK) 
     {
-        dbConnect.rollbackTransaction();
         setLastError(status);
         return;
     }
@@ -415,7 +406,6 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
         status = deleteSeriesFromDatabase(&dbConnect, seriesMaskToDelete);
         if (status != SQLITE_OK) 
         {
-            dbConnect.rollbackTransaction();
             setLastError(status);
             return;
         }
@@ -423,7 +413,6 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
         status = deleteImageFromDatabase(&dbConnect, seriesMaskToDelete);
         if (status != SQLITE_OK) 
         {
-            dbConnect.rollbackTransaction();
             setLastError(status);
             return;
         }
@@ -446,7 +435,6 @@ void LocalDatabaseManager::clear()
     status = deletePatientFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
-        dbConnect.rollbackTransaction();
         setLastError(status);
         return;
     }
@@ -455,7 +443,6 @@ void LocalDatabaseManager::clear()
     status = deleteStudyFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
-        dbConnect.rollbackTransaction();
         setLastError(status);
         return;
     }
@@ -464,7 +451,6 @@ void LocalDatabaseManager::clear()
     status = deleteSeriesFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
-        dbConnect.rollbackTransaction();
         setLastError(status);
         return;
     }
@@ -473,7 +459,6 @@ void LocalDatabaseManager::clear()
     status = deleteImageFromDatabase(&dbConnect, maskToDelete);
     if (status != SQLITE_OK)
     {
-        dbConnect.rollbackTransaction();
         setLastError(status);
         return;
     }
