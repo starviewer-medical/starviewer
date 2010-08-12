@@ -16,7 +16,7 @@
 namespace udg {
 
 EraserTool::EraserTool( QViewer *viewer, QObject *parent )
- : Tool(viewer,parent), m_state(0), m_polygon(0)
+ : Tool(viewer,parent), m_state(None), m_polygon(0)
 {
     m_toolName = "EraserTool";
     m_hasSharedData = false;
