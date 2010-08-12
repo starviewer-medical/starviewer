@@ -34,7 +34,7 @@ void DatabaseConnection::setDatabasePath(const QString &path)
 void DatabaseConnection::open()
 {
 	// Cal obrir amb UTF8 perquè l'sqlite3 nomes treballa amb aquesta codificació i sinó no troba la base de dades.
-	sqlite3_open( qPrintable( QDir::toNativeSeparators( QString(m_databasePath.toUtf8()) ) ) , &m_databaseConnection );
+	sqlite3_open(qPrintable(QDir::toNativeSeparators(QString(m_databasePath.toUtf8()))), &m_databaseConnection);
     /*En el moment que es fa el commit de les dades inserides o updates a la base de dades, sqlite bloqueja tota la base
      *de dades, per tant no es pot fer cap consulta. Indicant el busy_timeout a 10000 ms el que fem, és que si tenim una 
      *setència contra sqlite que es troba la bd o una taula bloquejada, va fent intents cada x temps per mirar si continua
@@ -51,12 +51,12 @@ void DatabaseConnection::beginTransaction()
     }
  
     m_transactionLock->acquire();
-    sqlite3_exec(m_databaseConnection, "BEGIN IMMEDIATE", 0 , 0 , 0);
+    sqlite3_exec(m_databaseConnection, "BEGIN IMMEDIATE", 0, 0, 0);
 }
 
 void DatabaseConnection::commitTransaction()
 {
-    sqlite3_exec(m_databaseConnection, "END", 0 , 0 , 0);
+    sqlite3_exec(m_databaseConnection, "END", 0, 0, 0);
     m_transactionLock->release();
 }
 
@@ -67,16 +67,16 @@ void DatabaseConnection::rollbackTransaction()
     INFO_LOG("S'ha cancel.lat transaccio de la BD");
 }
 
-QString DatabaseConnection::formatTextToValidSQLSyntax( QString string )
+QString DatabaseConnection::formatTextToValidSQLSyntax(QString string)
 {
-    return string.isNull() ? "" : string.replace( "'", "''" );
+    return string.isNull() ? "" : string.replace("'", "''");
 }
 
-QString DatabaseConnection::formatTextToValidSQLSyntax( QChar qchar )
+QString DatabaseConnection::formatTextToValidSQLSyntax(QChar qchar)
 {
     /*Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
      com a valor un caràcter estrany en comptes de QString("") */
-    return qchar.isNull() ? "": QString(qchar);
+    return qchar.isNull() ? "" : QString(qchar);
 }
 
 sqlite3* DatabaseConnection::getConnection()
@@ -93,9 +93,9 @@ bool DatabaseConnection::isConnected()
 
 void DatabaseConnection::close()
 {
-    if ( isConnected() )
+    if (isConnected())
     {
-        sqlite3_close( m_databaseConnection );
+        sqlite3_close(m_databaseConnection);
         m_databaseConnection = NULL;
     }
 }
