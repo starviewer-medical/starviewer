@@ -15,7 +15,10 @@ class Q2DViewer;
 class DrawerPolygon;
 
 /**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    Tool per esborrar primitives i annotacions de pantalla.
+    Si es fa un clic, busca la primitiva més propera al punt clicat i si està dins d'un llindar l'esborra.
+    També es pot clicar en un punt i arrossegar-lo per dibuixar un requadre, esborrant totes les primitives que
+    estiguin dins de l'àrea que delimita el requadre dibuixat.
 */
 class EraserTool : public Tool {
 Q_OBJECT
