@@ -14,50 +14,54 @@
 
 namespace udg {
 
-EraserTool::EraserTool( QViewer *viewer, QObject *parent )
+EraserTool::EraserTool(QViewer *viewer, QObject *parent)
  : Tool(viewer,parent), m_state(None), m_polygon(0)
 {
     m_toolName = "EraserTool";
     m_hasSharedData = false;
 
-    m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
-    if( !m_2DViewer )
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
+    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    if (!m_2DViewer)
+    {
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className());
+    }
 
-    connect( m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()) );
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()));
 }
 
 EraserTool::~EraserTool()
 {
-    if ( m_polygon )
+    if (m_polygon)
+    {
         delete m_polygon;
+    }
 }
 
-void EraserTool::handleEvent( unsigned long eventID )
+void EraserTool::handleEvent(unsigned long eventID)
 {
-    switch( eventID )
+    switch (eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
             startEraserAction();
-        break;
+            break;
 
         case vtkCommand::MouseMoveEvent:
             drawAreaOfErasure();
-        break;
+            break;
 
         case vtkCommand::LeftButtonReleaseEvent:
             erasePrimitive();
             reset();
-        break;
+            break;
 
         default:
-        break;
+            break;
     }
 }
 
 void EraserTool::startEraserAction()
 {
-    m_2DViewer->getEventWorldCoordinate( m_startPoint );
+    m_2DViewer->getEventWorldCoordinate(m_startPoint);
     // A l'agafar el primer punt inicialitzem l'start i l'end point per igual
     // simplement per què així és més segur que no tenir un valor arbitrari a endPoint
     m_endPoint[0] = m_startPoint[0];
@@ -74,8 +78,8 @@ void EraserTool::drawAreaOfErasure()
         double p2[3], p3[3];
         int xIndex, yIndex, zIndex;
 
-        m_2DViewer->getEventWorldCoordinate( m_endPoint );
-        Q2DViewer::getXYZIndexesForView( xIndex, yIndex, zIndex, m_2DViewer->getView() );
+        m_2DViewer->getEventWorldCoordinate(m_endPoint);
+        Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
 
         // Calculem el segon punt i el tercer
         p2[xIndex] = m_endPoint[xIndex];
@@ -98,10 +102,10 @@ void EraserTool::drawAreaOfErasure()
         else
         {
             // Assignem els punts del polígon
-            m_polygon->setVertix( 0, p2 );
-            m_polygon->setVertix( 1, m_endPoint );
-            m_polygon->setVertix( 2, p3 );
-            m_polygon->setVertix( 3, m_startPoint );
+            m_polygon->setVertix(0, p2);
+            m_polygon->setVertix(1, m_endPoint);
+            m_polygon->setVertix(2, p3);
+            m_polygon->setVertix(3, m_startPoint);
             // Actualitzem els atributs de la polilinia
             m_polygon->update();
             m_2DViewer->render();
@@ -124,13 +128,13 @@ void EraserTool::erasePrimitive()
     {
         double bounds[6];
         m_polygon->getBounds(bounds);
-        m_2DViewer->getDrawer()->erasePrimitivesInsideBounds( bounds, m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        m_2DViewer->getDrawer()->erasePrimitivesInsideBounds(bounds, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
 }
 
 void EraserTool::reset()
 {
-    if ( m_polygon )
+    if (m_polygon)
     {
         delete m_polygon;
         m_polygon = NULL;
