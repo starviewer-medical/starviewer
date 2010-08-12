@@ -180,7 +180,7 @@ double DrawerLine::computeDistance(double * spacing)
 
 double DrawerLine::getDistanceToPoint(double *point3D)
 {
-    return MathTools::getPointToLineDistance(point3D, m_firstPoint, m_secondPoint);
+    return MathTools::getPointToFiniteLineDistance(point3D, m_firstPoint, m_secondPoint);
 }
 
 void DrawerLine::getBounds(double bounds[6])

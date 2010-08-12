@@ -236,10 +236,13 @@ double MathTools::getDistance3D(const double firstPoint[3], const double secondP
     return sqrt(value);
 }
 
-double MathTools::getPointToLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3])
+double MathTools::getPointToFiniteLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3])
 {
+    double parametricCoordinate;
+    double closestPoint[3];
+
     // vtkLine::DistanceToLine() ens retorna la distància al quadrat, per això fem sqrt()
-    return sqrt(vtkLine::DistanceToLine(point, lineFirstPoint, lineSecondPoint));
+    return sqrt(vtkLine::DistanceToLine(point, lineFirstPoint, lineSecondPoint, parametricCoordinate, closestPoint));
 }
 
 double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)

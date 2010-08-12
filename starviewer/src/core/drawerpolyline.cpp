@@ -233,7 +233,7 @@ double DrawerPolyline::getDistanceToPoint(double *point3D)
             }
             else
             {
-                distance = MathTools::getPointToLineDistance(point3D, auxList[i], auxList[i+1]);
+                distance = MathTools::getPointToFiniteLineDistance(point3D, auxList[i], auxList[i+1]);
 
                 if (minDistanceLine == MathTools::DoubleMaximumValue)
                 {
