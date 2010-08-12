@@ -50,6 +50,7 @@ HEADERS += databaseconnection.h \
     qadvancedsearchwidget.h \
     qbasicsearchwidget.h \
     localdatabasemanager.h \
+    localdatabasebasedal.h \
     localdatabaseimagedal.h \
     localdatabaseseriesdal.h \
     localdatabasestudydal.h \
@@ -108,6 +109,7 @@ SOURCES += databaseconnection.cpp \
     qadvancedsearchwidget.cpp \
     qbasicsearchwidget.cpp \
     localdatabasemanager.cpp \
+    localdatabasebasedal.cpp \
     localdatabaseimagedal.cpp \
     localdatabaseseriesdal.cpp \
     localdatabasestudydal.cpp \

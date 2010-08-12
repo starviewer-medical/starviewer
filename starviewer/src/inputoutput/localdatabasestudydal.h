@@ -8,17 +8,18 @@
 #define UDGLOCALDATABASESTUDY_H
 
 #include <QList>
+
+#include "localdatabasebasedal.h"
 #include "study.h"
 
 namespace udg {
 
-class DatabaseConnection;
 class DicomMask;
 
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class LocalDatabaseStudyDAL
+class LocalDatabaseStudyDAL: public LocalDatabaseBaseDAL
 {
 public:
 
@@ -45,14 +46,7 @@ public:
     ///Ens retorna quan estudis té un determinat pacient
     int countHowManyStudiesHaveAPatient(const QString &patientID);
 
-    ///Retorna l'estat de la última operació realitzada
-    int getLastError();
-
 private :
-
-    DatabaseConnection *m_dbConnection;
-
-    int m_lastSqliteError;
 
     ///Construeix la sentència sql per inserir el nou estudi
     QString buildSqlInsert(Study *newStudy, const QDate &lastAcessDate);
@@ -77,11 +71,6 @@ private :
 
     ///Emplena un objecte Patient a partir de la fila passada per paràmetre
     Patient* fillPatient(char **reply, int row, int columns);
-
-
-    ///Ens fa un ErrorLog d'una sentència sql
-    void logError(const QString &sqlSentence);
-
 };
 }
 

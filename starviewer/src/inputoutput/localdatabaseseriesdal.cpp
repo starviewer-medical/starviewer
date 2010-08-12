@@ -17,10 +17,8 @@
 
 namespace udg {
 
-LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection)
+LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection):LocalDatabaseBaseDAL(dbConnection)
 {
-    m_lastSqliteError = SQLITE_OK;
-    m_dbConnection = dbConnection;
 }
 
 void LocalDatabaseSeriesDAL::insert(Series *newSeries)
@@ -67,12 +65,6 @@ QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
     }
 
     return seriesList;
-}
-
-
-int LocalDatabaseSeriesDAL::getLastError()
-{
-    return m_lastSqliteError;
 }
 
 Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
@@ -215,15 +207,6 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
     }
 
     return whereSentence;
-}
-
-void LocalDatabaseSeriesDAL::logError(const QString &sqlSentence)
-{
-    //Ingnorem l'error de clau duplicada
-    if (getLastError() != SQLITE_CONSTRAINT)
-    {
-        ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() + ", al executar la seguent sentencia sql " + sqlSentence);
-    }
 }
 
 }

@@ -16,10 +16,8 @@
 
 namespace udg {
 
-LocalDatabaseStudyDAL::LocalDatabaseStudyDAL(DatabaseConnection *dbConnection)
+LocalDatabaseStudyDAL::LocalDatabaseStudyDAL(DatabaseConnection *dbConnection):LocalDatabaseBaseDAL(dbConnection)
 {
-    m_lastSqliteError = SQLITE_OK;
-    m_dbConnection = dbConnection;
 }
 
 void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
@@ -136,11 +134,6 @@ int LocalDatabaseStudyDAL::countHowManyStudiesHaveAPatient(const QString &patien
     }
 
     return QString(reply[1]).toInt();
-}
-
-int LocalDatabaseStudyDAL::getLastError()
-{
-    return m_lastSqliteError;
 }
 
 Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
@@ -354,15 +347,6 @@ QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete
         whereSentence = QString(" Where InstanceUID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToDelete.getStudyInstanceUID() ) );
 
     return deleteSentence + whereSentence;
-}
-
-void LocalDatabaseStudyDAL::logError(const QString &sqlSentence)
-{
-        //Ingnorem l'error de clau duplicada
-    if (getLastError() != SQLITE_CONSTRAINT)
-    {
-        ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() + ", al executar la seguent sentencia sql " + sqlSentence);
-    }
 }
 
 }
