@@ -85,6 +85,10 @@ private:
     /// Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
     bool isPrimitiveInside(DrawerPrimitive *primitive, int view, double bounds[6]);
 
+    /// Esborra la primitiva donada del contenidor de primitives especificat. 
+    /// Si la troba l'esborra. Retorna cert si la troba, fals altrament.
+    bool erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive *> &primitiveContainer);
+
 private slots:
     /// Refresca les primitives que s'han de veure pel viewer segons el seu estat     
     void refresh();
