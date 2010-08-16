@@ -324,73 +324,42 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     return retrievedPatient;
 }
 
-// TODO Intentar reaprofitar part del codi de deleteSeries i clear per no haver de repetir la invocació als delete a tots els llocs
-// si s'afegeix una nova taula s'ha de posar al mètode deleteStudy, deleteSeries la invocació al delete de la nova taula
-void LocalDatabaseManager::deleteStudy(const QString &studyInstanceToDelete)
+void LocalDatabaseManager::deleteStudy(const QString &studyInstanceUIDToDelete)
 {
-    DatabaseConnection dbConnect;
-    DicomMask studyMaskToDelete;
-    int status;
+    INFO_LOG("S'esborrara de la base de dades l'estudi: " + studyInstanceUIDToDelete);
 
-    INFO_LOG("S'esborrara de la base de dades l'estudi: " + studyInstanceToDelete);
-
-    if (studyInstanceToDelete.isEmpty())
+    if (studyInstanceUIDToDelete.isEmpty())
     {
         return;
     }
     else
     {
-        studyMaskToDelete.setStudyInstanceUID(studyInstanceToDelete);
-    }
-	
-    dbConnect.beginTransaction();
+        DatabaseConnection dbConnect;
+        int status;
 
-    status = deletePatientOfStudyFromDatabase(&dbConnect, studyMaskToDelete);
-    if (status != SQLITE_OK) 
-    {
-        setLastError(status);
-        return;
-    }
+        dbConnect.beginTransaction();
 
-    status = deleteStudyFromDatabase(&dbConnect, studyMaskToDelete);
-    if (status != SQLITE_OK) 
-    {
-        setLastError(status);
-        return;
-    }
+        status = deleteStudyStructureFromDatabase(&dbConnect, studyInstanceUIDToDelete);
+        if (status != SQLITE_OK) 
+        {
+            setLastError(status);
+            return;
+        }
 
-    status = deleteSeriesFromDatabase(&dbConnect, studyMaskToDelete);
-    if (status != SQLITE_OK) 
-    {
-        setLastError(status);
-        return;
+        dbConnect.commitTransaction();
+        deleteStudyFromHardDisk(studyInstanceUIDToDelete);
     }
-
-    status = deleteImageFromDatabase(&dbConnect, studyMaskToDelete);
-    if (status != SQLITE_OK) 
-    {
-        setLastError(status);
-        return;
-    }
-
-    dbConnect.commitTransaction();
-    deleteStudyFromHardDisk(studyInstanceToDelete);
 }
 
 void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID)
 {
-    DatabaseConnection dbConnect;
-    DicomMask seriesMaskToDelete, studyMask;
-    int status;
-
     INFO_LOG("S'esborrara de la base de dades la serie : " + seriesInstanceUID + " de l'estudi " + studyInstanceUID);
     if (studyInstanceUID.isEmpty() || seriesInstanceUID.isEmpty())
     {
         return;
     }
 
-    seriesMaskToDelete.setStudyInstanceUID(studyInstanceUID);
-    seriesMaskToDelete.setSeriesInstanceUID(seriesInstanceUID);
+    DicomMask studyMask;
     studyMask.setStudyInstanceUID(studyInstanceUID);
 
     if (querySeries(studyMask).count() == 1)
@@ -401,25 +370,23 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
     }
     else
     {
+        DatabaseConnection dbConnect;
+        
         dbConnect.beginTransaction();
 
-        status = deleteSeriesFromDatabase(&dbConnect, seriesMaskToDelete);
-        if (status != SQLITE_OK) 
+        int status = deleteSeriesStructureFromDatabase(&dbConnect, studyInstanceUID, seriesInstanceUID);
+
+        if (status != SQLITE_OK)
         {
             setLastError(status);
             return;
         }
-
-        status = deleteImageFromDatabase(&dbConnect, seriesMaskToDelete);
-        if (status != SQLITE_OK) 
+        else
         {
-            setLastError(status);
-            return;
+            dbConnect.commitTransaction();
+
+            deleteSeriesFromHardDisk(studyInstanceUID, seriesInstanceUID);
         }
-
-        dbConnect.commitTransaction();
-
-        deleteSeriesFromHardDisk(studyInstanceUID, seriesInstanceUID);
     }
 }
 
@@ -813,6 +780,48 @@ int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageT
     }
 
     return imageDAL.getLastError();
+}
+
+int LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete)
+{
+    DicomMask maskToDelete;
+    int status;
+
+    maskToDelete.setStudyInstanceUID(studyInstanceUIDToDelete);
+
+    status = deletePatientOfStudyFromDatabase(dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        return status;
+    }
+
+    //esborrem tots els estudis
+    status = deleteStudyFromDatabase(dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        return status;
+    }
+
+    return deleteSeriesStructureFromDatabase(dbConnect, studyInstanceUIDToDelete, "");
+}
+
+int LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete, const QString &seriesIntanceUIDToDelete)
+{
+    DicomMask maskToDelete;
+    int status;
+
+    maskToDelete.setStudyInstanceUID(studyInstanceUIDToDelete);
+    maskToDelete.setSeriesInstanceUID(seriesIntanceUIDToDelete);
+
+    //esborrem totes les series
+    status = deleteSeriesFromDatabase(dbConnect, maskToDelete);
+    if (status != SQLITE_OK)
+    {
+        return status;
+    }
+
+    //esborrem totes les imatges 
+    return deleteImageFromDatabase(dbConnect, maskToDelete);
 }
 
 void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
