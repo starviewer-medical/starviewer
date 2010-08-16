@@ -44,8 +44,11 @@ public:
      */
     bool existsDatabaseFile();
 
-    ///reinstal·lar la base de dades i esborra les imatges descarregades o importades a la base de dades local
+    ///Esborra la base de dades actual i torna a crear-ne una de nova
     bool reinstallDatabase();
+
+    ///reinstal·lar la base de dades i esborra les imatges descarregades o importades a la base de dades local. Mostra un QProgressDialog mentre es neteja la cache.
+    bool removeCacheAndReinstallDatabase();
 
     ///Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals
     bool updateDatabaseRevision();

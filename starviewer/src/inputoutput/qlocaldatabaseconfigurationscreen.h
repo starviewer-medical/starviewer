@@ -44,6 +44,9 @@ private slots:
     /// Esborra tota la caché
     void deleteStudies();
 
+    ///Neteja la cache. Esborra tots els estudis de la caché i reinstal·la la base de dades
+    bool clearCache();
+
     /// Compacta la base de dades de la cache
     void compactCache();
 
