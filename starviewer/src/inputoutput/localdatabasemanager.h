@@ -40,21 +40,21 @@ public:
     void save(Series *seriesToSave);
 
     /// Ens retorna els pacients que compleixen amb els criteris de la màscara, només es té en compte el patientID
-    QList<Patient *> queryPatient(const DicomMask &patientMaskToQuery);
+    QList<Patient*> queryPatient(const DicomMask &patientMaskToQuery);
 
     /// Ens retorna els estudis que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID
-    QList<Study *> queryStudy(const DicomMask &studyMaskToQuery);
+    QList<Study*> queryStudy(const DicomMask &studyMaskToQuery);
 
     /// Ens retorna les series que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID i SeriesUID 
-    QList<Series *> querySeries(const DicomMask &seriesMaskToQuery);
+    QList<Series*> querySeries(const DicomMask &seriesMaskToQuery);
 
     /// Ens retorna les imatges que compleixen amb els criteris de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
-    QList<Image *> queryImage(const DicomMask &imageMaskToQuery);
+    QList<Image*> queryImage(const DicomMask &imageMaskToQuery);
 
     /// Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. 
     /// Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
     /// Retorna l'estructura omplerta fins al nivell d'study (no omple ni les sèries ni les imatges).
-    QList<Patient *> queryPatientStudy(const DicomMask &patientStudyMaskToQuery);
+    QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery);
 
     /// Retorna tota l'estructura Patient,Study,Series,Image, de l'estudi que compleix amb el criteri de cerca.
     /// Té en compte el Study InstanceUID, el SeriesInstanceUID i el SOP Instance UID
@@ -129,13 +129,13 @@ private:
     QList<Study*> queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery);
 
     /// Guarda a la base de dades la llista d'estudis passada per paràmetre, si algun dels estudis ja existeix actualitza la info
-    int saveStudies(DatabaseConnection *dbConnect, QList<Study *> listStudyToSave, const QDate &currentDate, const QTime &currentTime);
+    int saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime);
     
     /// Guarda a la base de dades la llista de series passada per paràmetre, si alguna de les series ja existeix actualitza la info
-    int saveSeries(DatabaseConnection *dbConnect, QList<Series *> listSeriesToSave, const QDate &currentDate, const QTime &currentTime);
+    int saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime);
     
     /// Guarda a la base de dades la llista d'imatges passada per paràmetre, si alguna de les imatges ja existeix actualitza la info
-    int saveImages(DatabaseConnection *dbConnect, QList<Image *> listImageToSave, const QDate &currentDate, const QTime &currentTime);
+    int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime);
 
     /// Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
     int savePatient(DatabaseConnection *dbConnect, Patient *patientToSave);
@@ -195,7 +195,7 @@ private:
     void createSeriesThumbnail(Series *seriesToGenerateThumbnail);
 
     /// Ens emplena els thumbnails d'una llistà de sèries
-    void loadSeriesThumbnail(QString studyInstanceUID, QList<Series *> series);
+    void loadSeriesThumbnail(QString studyInstanceUID, QList<Series*> series);
 
     /// Retorna el path + el nom del thumbnail d'una sèrie
     QString getSeriesThumbnailPath(QString studyInstanceUID, Series *series);
