@@ -67,9 +67,6 @@ public:
     /// també s'esborra l'estudi, ja que no té cap sentit tenir un estudi sense sèries inserit a la BD
     void deleteSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID);
 
-    /// Neteja totes les taules de la base de dades i esborra tots els estudis descarregats
-    void clear();
-
     /// Esborra els estudis vells que fa que superen el temps màxim que poden estar a la base de dades sense ser visualitzats.
     /// Si la opció de configuració d'esborrar els estudis vells que no han estat visualitzats en un determinat
     ///  número de dies no està activada aquest mètode no farà res

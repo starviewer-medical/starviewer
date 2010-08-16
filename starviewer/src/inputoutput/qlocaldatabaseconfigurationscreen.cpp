@@ -10,11 +10,14 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QProgressDialog>
 
 #include "localdatabasemanager.h"
 #include "starviewerapplication.h"
 #include "inputoutputsettings.h"
 #include "logging.h"
+#include "databaseinstallation.h"
+#include "deletedirectory.h"
 
 namespace udg {
 
@@ -272,12 +275,9 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-        LocalDatabaseManager localDatabaseManager;
-        localDatabaseManager.clear();
-
         QApplication::restoreOverrideCursor();
 
-        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok )
+        if (!clearCache())
         {
             Status state;
             state.setStatus(tr("The cache cannot be deleted, an unknown error has ocurred."
@@ -285,9 +285,31 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
                                "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString), false, -1);
             showDatabaseErrorMessage( state );
         }
-        else QMessageBox::information( this, ApplicationNameString, "All studies have been deleted successfully");
 
         emit configurationChanged("Pacs/CacheCleared");
+    }
+}
+
+bool QLocalDatabaseConfigurationScreen::clearCache()
+{
+    /*Esborrem les imatges que tenim a la base de dades local , i reinstal·lem la bd ja que no té sentit eliminar tots els registres i compactar-la, ja que 
+      tardaríem més que si la tornem a reinstal·lar.*/
+    DeleteDirectory deleteDirectory;
+    QProgressDialog qprogressDialog(tr("Deleting studies"), ApplicationNameString, 0, 0, this);;
+
+    qprogressDialog.setCancelButton(0);
+    qprogressDialog.setValue(1);
+    qprogressDialog.setModal(true);
+
+    connect(&deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
+    
+    if(!deleteDirectory.deleteDirectory(LocalDatabaseManager::getCachePath(), false))
+    {
+        return false;
+    }
+    else
+    {
+        return DatabaseInstallation().reinstallDatabase();
     }
 }
 

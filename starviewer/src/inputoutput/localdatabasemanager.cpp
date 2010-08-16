@@ -390,58 +390,6 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
     }
 }
 
-void LocalDatabaseManager::clear()
-{
-    DicomMask maskToDelete;//creem màscara buida, ho esborrarà tot
-    DatabaseConnection dbConnect;
-    DeleteDirectory delDirectory;
-    int status;
-
-    dbConnect.beginTransaction();
-
-    status = deletePatientFromDatabase(&dbConnect, maskToDelete);
-    if (status != SQLITE_OK)
-    {
-        setLastError(status);
-        return;
-    }
-
-    //esborrem tots els estudis
-    status = deleteStudyFromDatabase(&dbConnect, maskToDelete);
-    if (status != SQLITE_OK)
-    {
-        setLastError(status);
-        return;
-    }
-
-    //esborrem totes les series
-    status = deleteSeriesFromDatabase(&dbConnect, maskToDelete);
-    if (status != SQLITE_OK)
-    {
-        setLastError(status);
-        return;
-    }
-
-    //esborrem totes les imatges 
-    status = deleteImageFromDatabase(&dbConnect, maskToDelete);
-    if (status != SQLITE_OK)
-    {
-        setLastError(status);
-        return;
-    }
-
-    dbConnect.commitTransaction();
-    //esborrem tots els estudis descarregats, físicament del disc dur
-    if (!delDirectory.deleteDirectory(LocalDatabaseManager::getCachePath(), false))
-    {
-        m_lastError = DeletingFilesError;
-    }
-    else
-    {
-        m_lastError = Ok;
-    }
-}
-
 void LocalDatabaseManager::deleteOldStudies()
 {
     Settings settings;

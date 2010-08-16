@@ -148,7 +148,7 @@ bool DatabaseInstallation::repairDatabase()
         INFO_LOG("No s'ha pogut reparar la base de dades, s'intentara reinstal·lar la base de dades");
         //Si la base de dades continua corrupte l'hem de reinstal·lar
         QMessageBox::critical(0, ApplicationNameString, tr("%1 can't repair database, it will be reinstalled.\n\nAll local studies retrieved and imported will be deleted.").arg(ApplicationNameString) );
-        if (!reinstallDatabase())
+        if (!removeCacheAndReinstallDatabase())
         {
             ERROR_LOG("No s'ha pogut reinstal.lar la base de dades");
             QMessageBox::critical(0, ApplicationNameString , tr("%1 can't reinstall database, be sure you have write permissions on database directory.").arg(ApplicationNameString));
@@ -171,7 +171,27 @@ bool DatabaseInstallation::isDatabaseFileWritable()
 
 bool DatabaseInstallation::reinstallDatabase()
 {
-    QDir databaseFile;
+    //si existeix l'esborrem la base de dades
+    if (existsDatabaseFile())
+    {
+        if (!QFile().remove(LocalDatabaseManager::getDatabaseFilePath()))
+        {
+            return false;
+        }
+    }
+
+    if (!createDatabaseFile())
+    {
+        return false;
+    }
+    else
+    {
+        return existsDatabaseFile();
+    }
+}
+
+bool DatabaseInstallation::removeCacheAndReinstallDatabase()
+{
     DeleteDirectory *deleteDirectory = new DeleteDirectory();
 
     if (m_qprogressDialog == NULL)
@@ -180,16 +200,8 @@ bool DatabaseInstallation::reinstallDatabase()
         m_qprogressDialog = new QProgressDialog(tr ("Reinstalling database"), "", 0, 0);
         m_qprogressDialog->setCancelButton(0);
         m_qprogressDialog->setValue(1);
+        m_qprogressDialog->setModal(true);
     }
-
-    //si existeix l'esborrem la base de dades
-    if (existsDatabaseFile())
-    {
-        QFile databaseFile;
-        databaseFile.remove(LocalDatabaseManager::getDatabaseFilePath());
-    }
-
-    createDatabaseFile();
 
     //Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les, i per cada directori esborrat movem la barra de progrés
     connect(deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
@@ -198,7 +210,7 @@ bool DatabaseInstallation::reinstallDatabase()
 
     m_qprogressDialog->close();
 
-    return existsDatabaseFile();
+    return reinstallDatabase();
 }
 
 bool DatabaseInstallation::updateDatabaseRevision()
@@ -212,7 +224,7 @@ bool DatabaseInstallation::updateDatabaseRevision()
 
     /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants 
      *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
-    status = reinstallDatabase();
+    status = removeCacheAndReinstallDatabase();
 
     if (!status)
     {
