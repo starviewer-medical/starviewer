@@ -219,7 +219,10 @@ HEADERS += extensionfactory.h \
     copydirectory.h \
     linepathtool.h \
     qreleasenotes.h \
-    qdicomdumpbrowser.h
+    qdicomdumpbrowser.h \
+    filter.h \
+    filterpipeline.h \
+    vtkthresholdfilter.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -398,7 +401,10 @@ SOURCES += extensionmediator.cpp \
     copydirectory.cpp \
     linepathtool.cpp \
     qreleasenotes.cpp \
-    qdicomdumpbrowser.cpp
+    qdicomdumpbrowser.cpp \
+    filter.cpp \
+    filterpipeline.cpp \
+    vtkthresholdfilter.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
