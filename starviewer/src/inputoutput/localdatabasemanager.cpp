@@ -131,7 +131,7 @@ void LocalDatabaseManager::save(Series *seriesToSave)
             return;
         }
 
-        QList<Series *> seriesList;
+        QList<Series*> seriesList;
         seriesList.append(seriesToSave);
 
         saveSeries(&dbConnect, seriesList, currentDate, currentTime);
@@ -153,7 +153,7 @@ void LocalDatabaseManager::save(Series *seriesToSave)
     }
 }
 
-QList<Patient *> LocalDatabaseManager::queryPatient(const DicomMask &patientMaskToQuery)
+QList<Patient*> LocalDatabaseManager::queryPatient(const DicomMask &patientMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabasePatientDAL patientDAL(&dbConnect);
@@ -165,7 +165,7 @@ QList<Patient *> LocalDatabaseManager::queryPatient(const DicomMask &patientMask
     return queryResult;
 }
 
-QList<Patient *> LocalDatabaseManager::queryPatientStudy(const DicomMask &patientStudyMaskToQuery)
+QList<Patient*> LocalDatabaseManager::queryPatientStudy(const DicomMask &patientStudyMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
@@ -177,11 +177,11 @@ QList<Patient *> LocalDatabaseManager::queryPatientStudy(const DicomMask &patien
     return queryResult;
 }
 
-QList<Study *> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery)
+QList<Study*> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
-    QList<Study *> queryResult;
+    QList<Study*> queryResult;
 
     queryResult = studyDAL.query(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
@@ -189,11 +189,11 @@ QList<Study *> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuer
     return queryResult;
 }
 
-QList<Study *> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery)
+QList<Study*> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
-    QList<Study *> queryResult;
+    QList<Study*> queryResult;
 
     queryResult = studyDAL.queryOrderByLastAccessDate(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
     setLastError(studyDAL.getLastError());
@@ -201,12 +201,12 @@ QList<Study *> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const Dicom
     return queryResult;
 }
 
-QList<Series *> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQuery)
+QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
     LocalDatabaseImageDAL imageDAL(&dbConnect);
-    QList<Series *> queryResult;
+    QList<Series*> queryResult;
     DicomMask maskToCountNumberOfImage = seriesMaskToQuery;
 
     queryResult = seriesDAL.query(seriesMaskToQuery);
@@ -236,11 +236,11 @@ QList<Series *> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQ
     return queryResult;
 }
 
-QList<Image *> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuery)
+QList<Image*> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuery)
 {
     DatabaseConnection dbConnect;
     LocalDatabaseImageDAL imageDAL(&dbConnect);
-    QList<Image *> queryResult;
+    QList<Image*> queryResult;
 
     queryResult = imageDAL.query(imageMaskToQuery);
     setLastError(imageDAL.getLastError());
@@ -270,7 +270,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 
     // Busquem les series de l'estudi
     LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
-    QList<Series *> seriesList = seriesDAL.query(maskToRetrieve);
+    QList<Series*> seriesList = seriesDAL.query(maskToRetrieve);
 
     if (seriesDAL.getLastError() != SQLITE_OK)
     {
@@ -288,7 +288,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     {
         maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());//específiquem de quina sèrie de l'estudi hem de buscar les imatges
 
-        QList<Image *> images = imageDAL.query(maskImagesToRetrieve);
+        QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
         if (imageDAL.getLastError() != SQLITE_OK) 
         {
             break;
@@ -390,7 +390,7 @@ void LocalDatabaseManager::deleteOldStudies()
         
         INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1).toString("dd/MM/yyyy"));
 
-        QList<Study *> studyListToDelete = studyDAL.query(DicomMask(), LocalDatabaseManager::LastAccessDateSelectedStudies);
+        QList<Study*> studyListToDelete = studyDAL.query(DicomMask(), LocalDatabaseManager::LastAccessDateSelectedStudies);
 
         setLastError(studyDAL.getLastError());
 
@@ -569,7 +569,7 @@ bool LocalDatabaseManager::isStudyRetrieving()
     return Settings().contains(InputOutputSettings::RetrievingStudy);
 }
 
-int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study *> listStudyToSave, const QDate &currentDate, const QTime &currentTime)
+int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)
 {
     int status = SQLITE_OK;
 
@@ -598,7 +598,7 @@ int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study
     return status;
 }
 
-int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series *> listSeriesToSave, const QDate &currentDate, const QTime &currentTime)
+int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime)
 {
     int status = SQLITE_OK;
 
@@ -627,7 +627,7 @@ int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series
     return status;
 }
 
-int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image *> listImageToSave, const QDate &currentDate, const QTime &currentTime)
+int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime)
 {
     int status = SQLITE_OK;
 
@@ -940,7 +940,7 @@ void LocalDatabaseManager::createSeriesThumbnail(Series *seriesToGenerateThumbna
     }
 }
 
-void LocalDatabaseManager::loadSeriesThumbnail(QString studyInstanceUID, QList<Series *> seriesList)
+void LocalDatabaseManager::loadSeriesThumbnail(QString studyInstanceUID, QList<Series*> seriesList)
 {
     foreach (Series *series, seriesList)
     {
