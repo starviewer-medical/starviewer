@@ -181,7 +181,10 @@ OFCondition PacsServer::configureStore()
     foreach(QString sopClass, sopClasses)
     {
         // No poden haver més de 255 presentation context
-        if (presentationContextID > 255) return ASC_BADPRESENTATIONCONTEXTID;
+        if (presentationContextID > 255)
+        {
+            return ASC_BADPRESENTATIONCONTEXTID;
+        }
 
         // sop class with preferred transfer syntax
         condition = addPresentationContext(presentationContextID, sopClass, preferredTransferSyntax);
@@ -189,7 +192,10 @@ OFCondition PacsServer::configureStore()
 
         if (fallbackSyntaxes.size() > 0)
         {
-            if (presentationContextID > 255) return ASC_BADPRESENTATIONCONTEXTID;
+            if (presentationContextID > 255) 
+            {
+                return ASC_BADPRESENTATIONCONTEXTID;
+            }
 
             // sop class with fallback transfer syntax
             condition = addPresentationContext(presentationContextID, sopClass, fallbackSyntaxes);
@@ -230,7 +236,10 @@ Status PacsServer::connect(ModalityConnection modality)
 
     //create the parameters of the connection
     OFCondition condition = ASC_createAssociationParameters(&m_associationParameters, ASC_DEFAULTMAXPDU);
-    if (!condition.good()) return state.setStatus(condition);
+    if (!condition.good())
+    {
+        return state.setStatus(condition);
+    }
 
     // set calling and called AE titles
     ASC_setAPTitles(m_associationParameters, qPrintable(settings.getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_pacs.getAETitle()), NULL);
@@ -240,12 +249,18 @@ Status PacsServer::connect(ModalityConnection modality)
     /* available the user is able to request an encrypted,secure connection. */
     //defineix el nivell de seguretat de la connexió en aquest cas diem que no utilitzem cap nivell de seguretat
     condition = ASC_setTransportLayerType(m_associationParameters, OFFalse);
-    if (!condition.good()) return state.setStatus(condition);
+    if (!condition.good()) 
+    {
+        return state.setStatus(condition);
+    }
 
     // the DICOM server accepts connections at server.nowhere.com port
     condition = ASC_setPresentationAddresses(m_associationParameters, qPrintable(QHostInfo::localHostName()), 
         qPrintable(constructPacsServerAddress(modality, m_pacs)));
-    if (!condition.good()) return state.setStatus(condition);
+    if (!condition.good())
+    {
+        return state.setStatus(condition);
+    }
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
     int timeout = settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt();
@@ -255,41 +270,65 @@ Status PacsServer::connect(ModalityConnection modality)
     {
         case echoPacs: //configure echo
                         condition = configureEcho();
-                        if (!condition.good()) return state.setStatus(condition);
+                        if (!condition.good())
+                        {
+                            return state.setStatus(condition);
+                        }
 
                         state = m_pacsNetwork->createNetworkQuery(timeout);
-                        if (!state.good()) return state;
+                        if (!state.good())
+                        {
+                            return state;
+                        }
 
                         m_associationNetwork = m_pacsNetwork->getNetworkQuery();
 
                         break;
         case query:    //configure the find paramaters depending on modality connection
                         condition = configureFind();
-                        if (!condition.good()) return state.setStatus(condition);
+                        if (!condition.good()) 
+                        {
+                            return state.setStatus(condition);
+                        }
 
                         state = m_pacsNetwork->createNetworkQuery(timeout);
-                        if (!state.good()) return state;
+                        if (!state.good())
+                        {
+                            return state;
+                        }
 
                         m_associationNetwork = m_pacsNetwork->getNetworkQuery();
 
                         break;
         case retrieveImages: //configure the move paramaters depending on modality connection
-                        condition=configureMove();
-                        if (!condition.good()) return state.setStatus(condition);
+                        condition = configureMove();
+                        if (!condition.good()) 
+                        {
+                            return state.setStatus(condition);
+                        }
 
                         ///Preparem la connexió amb el PACS i obrim el local port per acceptar connexions DICOM
                         state = m_pacsNetwork->createNetworkRetrieve(settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt(), timeout);
-                        if (!state.good()) return state;
+                        if (!state.good()) 
+                        {
+                            return state;
+                        }
 
                         m_associationNetwork = m_pacsNetwork->getNetworkRetrieve();
 
                         break;
         case storeImages:
                         condition = configureStore();
-                        if (!condition.good()) return state.setStatus(condition);
+                        if (!condition.good()) 
+                        {
+                            return state.setStatus(condition);
+                        }
 
                         state = m_pacsNetwork->createNetworkQuery(timeout);
-                        if (!state.good()) return state;
+                        if (!state.good())
+                        {
+                            return state;
+                        }
 
                         m_associationNetwork = m_pacsNetwork->getNetworkQuery();
 
