@@ -62,7 +62,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
         return;
     }
 
-    int localPort = PacsDevice::getIncomingDICOMConnectionsPort();
+    int localPort = -Settings().getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt();
 
     if ( Utils::isPortInUse(localPort) )
     {
@@ -241,6 +241,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
     QString studyID = getStudyToRetrieveDICOMFiles()->getID();
     QString patientName = getStudyToRetrieveDICOMFiles()->getParentPatient()->getFullName();
     QString pacsAETitle = getPacsDevice().getAETitle();
+    Settings settings;
 
     switch (getStatus())
     {
@@ -285,7 +286,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             break;
         case PACSRequestStatus::RetrieveDestinationAETileUnknown:
             message += tr("The study %1 from patient %2 can't be retrieved because PACS %3 doesn't recognize your computer's AETitle %4.").arg(
-                    studyID, patientName, pacsAETitle, PacsDevice::getLocalAETitle() );
+                    studyID, patientName, pacsAETitle, settings.getValue(InputOutputSettings::LocalAETitle).toString());
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             break;
         case PACSRequestStatus::RetrieveUnknowStatus:
@@ -297,7 +298,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             break;
         case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse :
             message = tr("%1 can't retrieve study %2 from patient %3 because port %4 for incoming connections from PACS is already in use by another application.").arg( 
-                ApplicationNameString, studyID, patientName, QString().setNum(PacsDevice::getIncomingDICOMConnectionsPort()));
+                ApplicationNameString, studyID, patientName, settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toString());
             break;
         case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:
             message = tr("There were problems to retrieve some images of study %1 from patient %2 from PACS %3. Those images may be missing in the local database.").arg(

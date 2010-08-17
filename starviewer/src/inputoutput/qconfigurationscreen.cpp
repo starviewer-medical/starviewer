@@ -96,10 +96,11 @@ void QConfigurationScreen::loadPacsDefaults()
 {
     QString result;
     Settings settings;
-    m_textAETitleMachine->setText( PacsDevice::getLocalAETitle() );
-    m_textLocalPort->setText( QString::number(PacsDevice::getIncomingDICOMConnectionsPort()) );
-    m_textTimeout->setText( QString::number(PacsDevice::getConnectionTimeout()) );
-    m_textMaxConnections->setText( QString::number(PacsDevice::getMaximumConnections()) );
+
+    m_textAETitleMachine->setText(settings.getValue(InputOutputSettings::LocalAETitle).toString());
+    m_textLocalPort->setText(settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toString());
+    m_textTimeout->setText(settings.getValue(InputOutputSettings::PACSConnectionTimeout).toString());
+    m_textMaxConnections->setText(settings.getValue(InputOutputSettings::MaximumPACSConnections).toString());
 }
 
 void QConfigurationScreen::loadInstitutionInformation()

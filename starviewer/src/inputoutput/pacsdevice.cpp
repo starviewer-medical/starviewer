@@ -177,30 +177,6 @@ bool PacsDevice::operator ==(const PacsDevice &device)
         && m_storeServicePort == device.m_storeServicePort;
 }
 
-QString PacsDevice::getLocalAETitle()
-{
-    Settings settings;
-    return settings.getValue( InputOutputSettings::LocalAETitle ).toString();
-}
-
-int PacsDevice::getMaximumConnections()
-{
-    Settings settings;
-    return settings.getValue( InputOutputSettings::MaximumPACSConnections ).toInt();
-}
-
-int PacsDevice::getConnectionTimeout()
-{
-    Settings settings;
-    return settings.getValue( InputOutputSettings::PACSConnectionTimeout ).toInt();
-}
-
-int PacsDevice::getIncomingDICOMConnectionsPort()
-{
-    Settings settings;
-    return settings.getValue( InputOutputSettings::QueryRetrieveLocalPort ).toInt();
-}
-
 QString PacsDevice::getKeyName() const
 {
     return m_AETitle + m_address + ":" + QString::number(m_queryRetrieveServicePort);

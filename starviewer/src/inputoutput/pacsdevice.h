@@ -82,12 +82,6 @@ public:
     
     bool operator ==(const PacsDevice &device);
 
-    // TODO Aquests mètodes podrien desaparèixer. Caldria desvincular aquesta informació d'aquesta classe
-    static QString getLocalAETitle();
-    static int getMaximumConnections();
-    static int getConnectionTimeout();
-    static int getIncomingDICOMConnectionsPort();
-
 private:
     /// Ens retorna el KeyName que identifica el PACS
     QString getKeyName() const;

@@ -10,6 +10,7 @@
 #include "pacsnetwork.h"
 #include "errordcmtk.h"
 #include "logging.h"
+#include "inputoutputsettings.h"
 
 namespace udg{
 
@@ -238,13 +239,14 @@ Status PacsServer::connect(modalityConnection modality)
 {
     OFCondition condition;
     Status state;
+    Settings settings;
 
     //create the parameters of the connection
     condition = ASC_createAssociationParameters(&m_associationParameters, ASC_DEFAULTMAXPDU);
     if (!condition.good()) return state.setStatus(condition);
 
     // set calling and called AE titles
-    ASC_setAPTitles(m_associationParameters, qPrintable(PacsDevice::getLocalAETitle()), qPrintable(m_pacs.getAETitle()), NULL);
+    ASC_setAPTitles(m_associationParameters, qPrintable(settings.getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_pacs.getAETitle()), NULL);
 
     /* Set the transport layer type (type of network connection) in the params */
     /* strucutre. The default is an insecure connection; where OpenSSL is  */
@@ -259,7 +261,7 @@ Status PacsServer::connect(modalityConnection modality)
     if (!condition.good()) return state.setStatus(condition);
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
-    int timeout = PacsDevice::getConnectionTimeout();
+    int timeout = settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt();
     dcmConnectionTimeout.set(timeout);
 
     switch (modality)
@@ -289,7 +291,7 @@ Status PacsServer::connect(modalityConnection modality)
                         if (!condition.good()) return state.setStatus(condition);
 
                         ///Preparem la connexió amb el PACS i obrim el local port per acceptar connexions DICOM
-                        state = m_pacsNetwork->createNetworkRetrieve(PacsDevice::getIncomingDICOMConnectionsPort(), PacsDevice::getConnectionTimeout());
+                        state = m_pacsNetwork->createNetworkRetrieve(settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt(), timeout);
                         if (!state.good()) return state;
 
                         m_associationNetwork = m_pacsNetwork->getNetworkRetrieve();

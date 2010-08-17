@@ -10,6 +10,7 @@
 #include "dicomprintpage.h"
 #include "logging.h"
 #include "../inputoutput/pacsdevice.h"
+#include "../inputoutput/inputoutputsettings.h"
 
 namespace udg{
 
@@ -35,7 +36,7 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
            existeix un paràmetre per indicar només de comunicar-se amb Implicit, com que de moment no ens hem de comunicar amb dispositius vells
            i tots els moderns suporten Explicit indiquem false
      */
-    result = printerConnection.negotiateAssociation(NULL, qPrintable(PacsDevice::getLocalAETitle()), qPrintable(m_dicomPrinter.getAETitle()), 
+    result = printerConnection.negotiateAssociation(NULL, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_dicomPrinter.getAETitle()), 
                                                     qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(), ASC_DEFAULTMAXPDU, 
                                                     printerSupportsPresentationLUTSOPClass, printerSupportsAnnotationSOPClass, transferSyntaxImplicit);
 
@@ -262,7 +263,7 @@ DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(const QString &pathSt
         suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza dcmtk i també
         s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
      */
-    DVPSStoredPrint *storedPrint = new DVPSStoredPrint(2000, 10, qPrintable(PacsDevice::getLocalAETitle()));
+    DVPSStoredPrint *storedPrint = new DVPSStoredPrint(2000, 10, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()));
     DcmFileFormat *storedPrintDcmtkFile = NULL;
     DcmDataset *datasetStoredPrintDcmtkFile = NULL;
 
