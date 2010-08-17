@@ -5,18 +5,21 @@
 #include "logging.h"
 #include "querypacsjob.h"
 #include "pacsjob.h"
+#include "inputoutputsettings.h"
 
 namespace udg{
 
 PacsManager::PacsManager()
 {
+    Settings settings;
+
     m_queryWeaver = NULL;
     m_queryWeaver = new ThreadWeaver::Weaver();
-    m_queryWeaver->setMaximumNumberOfThreads(PacsDevice::getMaximumConnections());
+    m_queryWeaver->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
     m_numberOfQueryPacsJobsPending = 0;
     
     m_sendDICOMFilesToPACSWeaver = new ThreadWeaver::Weaver();
-    m_sendDICOMFilesToPACSWeaver->setMaximumNumberOfThreads(PacsDevice::getMaximumConnections());
+    m_sendDICOMFilesToPACSWeaver->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
 
     m_retrieveDICOMFilesFromPACSWeaver  = new ThreadWeaver::Weaver();
     //Només podem descarregar un estudi a la vegada del PACS, per això com a número màxim de threads especifiquem 1

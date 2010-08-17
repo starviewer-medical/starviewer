@@ -19,6 +19,7 @@
 #include "dicomtagreader.h"
 #include "pacsdevicemanager.h"
 #include "logging.h"
+#include "inputoutputsettings.h"
 
 namespace udg{
 
@@ -119,7 +120,7 @@ Status QueryPacs::query()
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , m_presId , &req , m_mask ,
                           foundMatchCallback , this ,
-                          DIMSE_NONBLOCKING , PacsDevice::getConnectionTimeout() ,
+                          DIMSE_NONBLOCKING , Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(),
                           &rsp , &statusDetail );
 
     /* dump status detail information if there is some */

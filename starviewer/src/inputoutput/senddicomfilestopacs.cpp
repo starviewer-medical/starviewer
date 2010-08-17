@@ -21,6 +21,7 @@
 #include "pacsserver.h"
 #include "pacsrequeststatus.h"
 #include "status.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
 
@@ -161,7 +162,7 @@ bool SendDICOMFilesToPACS::storeSCU(PacsConnection pacsConnection, QString filep
         request.Priority = DIMSE_PRIORITY_LOW;
 
         m_lastOFCondition = DIMSE_storeUser(association, presentationContextID, &request, NULL /*imageFileName*/, dcmff.getDataset(), NULL /*progressCallback*/, 
-            NULL /*callbackData */, DIMSE_NONBLOCKING, m_pacs.getConnectionTimeout(), &response, &statusDetail, NULL /*check for cancel parameters*/, 
+            NULL /*callbackData */, DIMSE_NONBLOCKING, Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &response, &statusDetail, NULL /*check for cancel parameters*/, 
             DU_fileSize(qPrintable(filepathToStore)));
 
         if (m_lastOFCondition.bad())

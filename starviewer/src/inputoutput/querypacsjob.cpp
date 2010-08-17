@@ -16,6 +16,7 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
 
@@ -37,8 +38,9 @@ void QueryPacsJob::run()
     QString missatgeLog;
     //creem la connexió
     PacsServer pacsServer(m_pacsDevice);
+    Settings settings;
 
-    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + PacsDevice::getLocalAETitle() + "; Port Local= " + QString::number(PacsDevice::getIncomingDICOMConnectionsPort()) + "; AEPACS= " + m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + m_pacsDevice.getQueryRetrieveServicePort() + ";" );
+    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; Port Local= " + settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt() + "; AEPACS= " + m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + m_pacsDevice.getQueryRetrieveServicePort() + ";" );
 
     m_queryStatus = pacsServer.connect(PacsServer::query);
 
