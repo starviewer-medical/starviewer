@@ -31,9 +31,6 @@ public:
      */
     PacsServer(PacsDevice pacsDevice);
 
-    /// Constructor buit de la classe
-    PacsServer();
-
     /** Aquesta funció ens intenta connectar al PACS
      * @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges
      * @return retorna l'estat de la connexió
@@ -44,11 +41,6 @@ public:
      * @return retorna l'estatus del echo
      */
     Status echo();//This function makes an echo to the PACS
-
-    /** Estableix un pacs per a la connexió
-     * @param Pacs amb els paràmetres per a la connexió
-     */
-    void setPacs(PacsDevice pacsDevice);
 
     /** retorna els paràmetres del PACS
      * @return paràmetres del Pacs

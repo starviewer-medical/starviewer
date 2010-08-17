@@ -86,7 +86,6 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
 {
     Status state;
     PacsDevice pacs;
-    PacsServer pacsServer;
     bool resultTest = false;;
 
     /*HACK el codi de fer echoSCU espera que li passem un PACS, com aquest codi està a PacsServer una classe orientada completament a PACS, el que implica
@@ -95,8 +94,8 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
     pacs.setAETitle(printer.getAETitle());
     pacs.setQueryRetrieveServicePort(printer.getPort());
     pacs.setAddress(printer.getHostname());
-    pacsServer.setPacs(pacs);
-
+    
+    PacsServer pacsServer(pacs);
     state = pacsServer.connect(PacsServer::echoPacs);
 
     //TODO: Si no reconeix el nostre aetitle no retornem l'error correcte, indique association rejected
