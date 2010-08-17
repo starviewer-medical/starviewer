@@ -30,14 +30,8 @@ PacsServer::PacsServer(PacsDevice pacsDevice)
     m_pacsNetwork = new PacsNetwork();
 }
 
-PacsServer::PacsServer()
-{
-    m_associationNetwork = NULL;
-    m_associationParameters = NULL;
-    m_dicomAssociation = NULL;
-    m_pacsNetwork = new PacsNetwork();
-}
-
+/*TODO: El echo hauria de ser una classe més com ho és el RetrieveDICOMFilesFromPACS o SendDICOMFilesToPACS, no té gaire sentit que la connexió la tingui el echo
+        ja que hi ha altres dispositius a part del PACS que també ens pot interessar fer un echo, per exemple una Impressora DICOM*/
 Status PacsServer::echo()
 {
     OFCondition status_echo;
@@ -379,11 +373,6 @@ QString PacsServer::constructPacsServerAddress(modalityConnection modality, Pacs
     INFO_LOG("Pacs Adress build:" + pacsServerAddress);
 
     return pacsServerAddress;
-}
-
-void PacsServer:: setPacs(PacsDevice pacsDevice)
-{
-    m_pacs = pacsDevice;
 }
 
 PacsDevice PacsServer::getPacs()

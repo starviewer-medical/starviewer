@@ -269,7 +269,6 @@ void QConfigurationScreen::test()
     Status state;
     PacsDevice pacs;
     PacsDeviceManager pacsList;
-    PacsServer pacsServer;
     QString message;
 
     //mirem que hi hagi algun element (pacs) seleccionat per a poder testejar, altrament informem de que cal seleccionar un node
@@ -278,9 +277,7 @@ void QConfigurationScreen::test()
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
         //Agafem les dades del PACS que estan el textbox per testejar
-        pacs = getPacsDeviceFromControls();
-
-        pacsServer.setPacs( pacs );
+        PacsServer pacsServer(getPacsDeviceFromControls());
 
         state = pacsServer.connect( PacsServer::echoPacs );
 
