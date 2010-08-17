@@ -17,11 +17,13 @@ struct T_ASC_Network;
 namespace udg {
 
 class Status;
+
 class PacsNetwork{
 public:
 
-	///Constructor de la classe
-	PacsNetwork();
+    PacsNetwork();
+    ///El desctructor destrueix la connexió si està oberta
+    ~PacsNetwork();
 
     /** Preparar un network per a fer l'acció de query, si el network ja existeix, els parametres de timeout i port s'ignoren i retorna el creat anterioment
      *            @param timeout dels query
@@ -37,22 +39,19 @@ public:
     /** retorna la configuració network de per fer queries
      * @return Retorna el network per fer queries
      */
-    T_ASC_Network * getNetworkQuery();
+    T_ASC_Network* getNetworkQuery();
 
     /** retorna la configuració network de per fer els retrieves
      * @return Retorna el network per fer els retrieves
      */
-    T_ASC_Network * getNetworkRetrieve();
+    T_ASC_Network* getNetworkRetrieve();
 
-	/// Desconnecta els network
+    /// Desconnecta els network
     void disconnect();
 
-    ///Destructor de la classe
-    ~PacsNetwork();
+private:
 
-private :
-
-    T_ASC_Network *m_networkQuery , *m_networkRetrieve;
+    T_ASC_Network *m_networkQuery, *m_networkRetrieve;
 
 };
 
