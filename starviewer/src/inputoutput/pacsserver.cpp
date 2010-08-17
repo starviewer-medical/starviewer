@@ -171,7 +171,7 @@ OFCondition PacsServer::configureStore()
     }
 
     OFCondition condition = EC_Normal;
-    int presentationContextID = 3; // presentation context id ha de començar el 3 pq el 1 és el echo
+    int presentationContextID = 1;
 
     //Creem un presentation context per cada SOPClass que tinguem, indicant per cada SOPClass quina transfer syntax utilitzarem
     /*En el cas del Store amb el presentation Context indiquem que per cada tipus d'imatge que volem guardar SOPClass amb quins 
