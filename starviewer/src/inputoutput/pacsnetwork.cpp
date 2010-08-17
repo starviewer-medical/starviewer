@@ -7,8 +7,8 @@
 #include "pacsnetwork.h"
 
 #include <QString>
-
 #include <assoc.h>
+
 #include "status.h"
 #include "errordcmtk.h"
 
@@ -20,82 +20,76 @@ PacsNetwork::PacsNetwork()
     m_networkRetrieve = NULL;
 }
 
-Status PacsNetwork::createNetworkRetrieve( int port , int timeout )
+PacsNetwork::~PacsNetwork()
+{
+    disconnect();
+}
+
+Status PacsNetwork::createNetworkRetrieve(int port, int timeout)
 {
     Status state;
-    OFCondition status;
 
-    if ( m_networkRetrieve == NULL )
+    if (m_networkRetrieve == NULL)
     {
         //Al fer inicialitzeNetwork s'obre el port local per acceptar connexions entrants DICOM
-        status = ASC_initializeNetwork( NET_ACCEPTORREQUESTOR , port , timeout , &m_networkRetrieve );
-        if ( !status.good() )
+        OFCondition status = ASC_initializeNetwork(NET_ACCEPTORREQUESTOR, port, timeout, &m_networkRetrieve);
+        if (!status.good())
         {
-            state.setStatus( status );
+            state.setStatus(status);
             return state;
         }
     }
 
-    return state.setStatus( DcmtkNoError );
+    return state.setStatus(DcmtkNoError);
 }
 
-Status PacsNetwork::createNetworkQuery( int timeout )
+Status PacsNetwork::createNetworkQuery(int timeout)
 {
     Status state;
-    OFCondition status;
 
-    if ( m_networkQuery == NULL )
+    if (m_networkQuery == NULL)
     {
-        status =ASC_initializeNetwork( NET_REQUESTOR , 0 , timeout , &m_networkQuery );
-        if ( !status.good() )
+        OFCondition status = ASC_initializeNetwork(NET_REQUESTOR, 0, timeout, &m_networkQuery);
+        if (!status.good())
         {
-            state.setStatus( status );
+            state.setStatus(status);
             return state;
         }
     }
 
-    return state.setStatus( DcmtkNoError );
+    return state.setStatus(DcmtkNoError);
 }
 
-T_ASC_Network * PacsNetwork::getNetworkQuery()
+T_ASC_Network* PacsNetwork::getNetworkQuery()
 {
     return m_networkQuery;
 }
 
-T_ASC_Network * PacsNetwork::getNetworkRetrieve()
+T_ASC_Network* PacsNetwork::getNetworkRetrieve()
 {
     return m_networkRetrieve;
 }
 
 void PacsNetwork::disconnect()
 {
-	OFCondition cond;
-
     //esborem la configuració de la xarxa per queries
-    if ( m_networkQuery != NULL )
-	{
-		cond = ASC_dropNetwork( &m_networkQuery ); // delete net structure
-		delete m_networkQuery;
+    if (m_networkQuery != NULL)
+    {
+        OFCondition cond = ASC_dropNetwork(&m_networkQuery); // delete net structure
+        delete m_networkQuery;
 
-		m_networkQuery = NULL;
+        m_networkQuery = NULL;
 	}
 
     //esborrem la configuració de la xarxa per retrieves
 
-    if ( m_networkRetrieve != NULL )
-	{
-		cond = ASC_dropNetwork( &m_networkRetrieve );
-		delete m_networkRetrieve;
+    if (m_networkRetrieve != NULL)
+    {
+        OFCondition cond = ASC_dropNetwork(&m_networkRetrieve);
+        delete m_networkRetrieve;
 
-		m_networkRetrieve = NULL;
-	}
-}
-
-/** Destructor de la classe
-  */
-PacsNetwork::~PacsNetwork()
-{
-    disconnect();
+        m_networkRetrieve = NULL;
+    }
 }
 
 };

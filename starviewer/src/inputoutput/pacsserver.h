@@ -24,7 +24,7 @@ class PacsServer
 
 public:
 
-    enum modalityConnection { query, retrieveImages, echoPacs, storeImages };
+    enum ModalityConnection {query, retrieveImages, echoPacs, storeImages};
 
     /** Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
@@ -35,7 +35,7 @@ public:
      * @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges
      * @return retorna l'estat de la connexió
      */
-    Status connect(modalityConnection);
+    Status connect(ModalityConnection modalityConnection);
 
     /** Ens permet fer un echo al PACS. Per defecte per qualsevol modalitat de connexió bé sigui busca informació o descarregar imatges per defecte permet fer un echo, per comprovar si els PACS està viu
      * @return retorna l'estatus del echo
@@ -55,14 +55,12 @@ public:
     /** Retorna una configuració de xarxa. Només és necessària quan l'objectiu de la connexió sigui el de descarregar imatges
      * @return retorna la configuració de la xarxa
      */
-    T_ASC_Network * getNetwork();
+    T_ASC_Network* getNetwork();
 
     /// This action close the session with PACS's machine and release all the resources
     void disconnect();
 
 private:
-
-    PacsDevice m_pacs;
 
     /** Aquesta funció és privada. És utilitzada per especificar en el PACS, que una de les possibles operacions que volem fer amb ell és un echo. Per defecte en qualsevol modalitat de connexió podrem fer un echo
      * @return retorna l'estat de la configuració
@@ -90,13 +88,13 @@ private:
      * @param Objectiu de la funcio
      * @return retorna l'estat de la funció
      */
-    OFCondition addPresentationContextMove(T_ASC_Parameters *, int, const char*);
+    OFCondition addPresentationContextMove(T_ASC_Parameters *associationParameters, int presentationContextID, const char *abstractSyntax);
 
     /** Construeix l'adreça del servidor en format ip:port, per connectar-se al PACS
      * @param adreça del servidor
      * @param port del servidor
      */
-    QString constructPacsServerAddress(modalityConnection modality, PacsDevice pacsDevice ); //construct PACS address
+    QString constructPacsServerAddress(ModalityConnection modality, PacsDevice pacsDevice); //construct PACS address
 
     /** Afageix un objecte SOP a la connexió amb el PACS
      * @param presentationContextId número de pid
@@ -116,6 +114,7 @@ private:
 
 private:
 
+    PacsDevice m_pacs;
     T_ASC_Network *m_associationNetwork; // network struct, contains DICOM upper layer FSM etc.
     T_ASC_Parameters *m_associationParameters; // parameters of association request
     T_ASC_Association *m_dicomAssociation; // request DICOM association;
