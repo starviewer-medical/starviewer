@@ -34,7 +34,6 @@ QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice , DicomMask mask, QueryLevel qu
 
 void QueryPacsJob::run()
 {
-    Status state;
     QString missatgeLog;
     //creem la connexió
     PacsServer pacsServer(m_pacsDevice);
@@ -46,7 +45,7 @@ void QueryPacsJob::run()
 
     if ( !m_queryStatus.good() )
     {
-        ERROR_LOG( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_pacsDevice.getAETitle() ).arg( state.text() ) );
+        ERROR_LOG( QString("Error al connectar al PACS %1. PACS ERROR: %2").arg( m_pacsDevice.getAETitle() ).arg( m_queryStatus.text() ) );
     }
     else
     {
