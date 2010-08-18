@@ -7,7 +7,6 @@
 
 #include "status.h"
 #include "pacsconnection.h"
-#include "pacsnetwork.h"
 #include "errordcmtk.h"
 #include "logging.h"
 #include "inputoutputsettings.h"
@@ -27,7 +26,6 @@ PacsServer::PacsServer(PacsDevice pacsDevice)
     m_associationNetwork = NULL;
     m_associationParameters = NULL;
     m_dicomAssociation = NULL;
-    m_pacsNetwork = new PacsNetwork();
 }
 
 /*TODO: El echo hauria de ser una classe més com ho és el RetrieveDICOMFilesFromPACS o SendDICOMFilesToPACS, no té gaire sentit que la connexió la tingui el echo
@@ -263,8 +261,7 @@ Status PacsServer::connect(ModalityConnection modality)
     }
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
-    int timeout = settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt();
-    dcmConnectionTimeout.set(timeout);
+    dcmConnectionTimeout.set(settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt());
 
     switch (modality)
     {
@@ -274,15 +271,6 @@ Status PacsServer::connect(ModalityConnection modality)
                         {
                             return state.setStatus(condition);
                         }
-
-                        state = m_pacsNetwork->createNetworkQuery(timeout);
-                        if (!state.good())
-                        {
-                            return state;
-                        }
-
-                        m_associationNetwork = m_pacsNetwork->getNetworkQuery();
-
                         break;
         case query:    //configure the find paramaters depending on modality connection
                         condition = configureFind();
@@ -290,15 +278,6 @@ Status PacsServer::connect(ModalityConnection modality)
                         {
                             return state.setStatus(condition);
                         }
-
-                        state = m_pacsNetwork->createNetworkQuery(timeout);
-                        if (!state.good())
-                        {
-                            return state;
-                        }
-
-                        m_associationNetwork = m_pacsNetwork->getNetworkQuery();
-
                         break;
         case retrieveImages: //configure the move paramaters depending on modality connection
                         condition = configureMove();
@@ -306,16 +285,6 @@ Status PacsServer::connect(ModalityConnection modality)
                         {
                             return state.setStatus(condition);
                         }
-
-                        ///Preparem la connexió amb el PACS i obrim el local port per acceptar connexions DICOM
-                        state = m_pacsNetwork->createNetworkRetrieve(settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt(), timeout);
-                        if (!state.good()) 
-                        {
-                            return state;
-                        }
-
-                        m_associationNetwork = m_pacsNetwork->getNetworkRetrieve();
-
                         break;
         case storeImages:
                         condition = configureStore();
@@ -323,16 +292,15 @@ Status PacsServer::connect(ModalityConnection modality)
                         {
                             return state.setStatus(condition);
                         }
-
-                        state = m_pacsNetwork->createNetworkQuery(timeout);
-                        if (!state.good())
-                        {
-                            return state;
-                        }
-
-                        m_associationNetwork = m_pacsNetwork->getNetworkQuery();
-
                         break;
+    }
+
+    //Inicialitzem l'objecte network però la connexió no s'obre fins a l'invocacació del mètode ASC_requestAssociation
+    m_associationNetwork = initializeAssociationNetwork(modality);
+
+    if (m_associationNetwork == NULL)
+    {
+        return state.setStatus(DcmtkCanNotConnectError);
     }
 
     //try to connect
@@ -353,7 +321,7 @@ Status PacsServer::connect(ModalityConnection modality)
          *tanquem el port local que espera per connexions entrants.*/
         if (modality == retrieveImages)
         {
-            m_pacsNetwork->disconnect();
+            disconnect();
         }
 
         return state.setStatus(condition);
@@ -367,7 +335,7 @@ void PacsServer::disconnect()
     ASC_releaseAssociation(m_dicomAssociation); // release association
     ASC_destroyAssociation(&m_dicomAssociation); // delete assoc structure
 
-	m_pacsNetwork->disconnect();//desconectem les adreces de xarxa
+    ASC_dropNetwork(&m_associationNetwork); //destrueix l'objecte i tanca el socket obert, fins que no es fa el drop de l'objecte no es tanca el socket obert
 }
 
 QString PacsServer::constructPacsServerAddress(ModalityConnection modality, PacsDevice pacsDevice)
@@ -405,6 +373,25 @@ QString PacsServer::constructPacsServerAddress(ModalityConnection modality, Pacs
     INFO_LOG("Pacs Adress build:" + pacsServerAddress);
 
     return pacsServerAddress;
+}
+
+T_ASC_Network* PacsServer::initializeAssociationNetwork(ModalityConnection modality)
+{
+    Settings settings;
+    //Si no es tracta d'una descarrega indiquem port 0
+    int networkPort = modality == retrieveImages ? settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt() : 0;
+    int timeout = settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt();
+    T_ASC_NetworkRole networkRole = modality == retrieveImages ? NET_ACCEPTORREQUESTOR : NET_REQUESTOR;
+    T_ASC_Network *associationNetwork;
+
+    OFCondition condition = ASC_initializeNetwork(networkRole, networkPort , timeout, &associationNetwork);
+    if (!condition.good())
+    {
+        ERROR_LOG("No s'ha pogut inicialitzar l'objecte network" + QString(condition.text()));
+        return NULL;
+    }
+
+    return associationNetwork;
 }
 
 PacsDevice PacsServer::getPacs()

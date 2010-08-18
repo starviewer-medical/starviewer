@@ -16,7 +16,6 @@ class QString;
 namespace udg{
 
 class PacsConnection;
-class PacsNetwork;
 class Status;
 
 class PacsServer
@@ -112,14 +111,17 @@ private:
      */
     OFCondition addPresentationContext(int presentationContextId, const QString &abstractSyntax, const char *transferSyntax);
 
+    ///Aquest mètode inicialitza l'objecte AssociationNetwork en funció de la modalitat amb els paràmetres del PACS, aquest mètode no obre la connexió
+    ///simplement inicialitza l'objecte amb les dades necessàries per poder obrir connexió, qui obra la connexió és al invocar el mètode
+    ///de dcmtk ASC_requestAssociation dins del mètode connect connect();
+    T_ASC_Network* initializeAssociationNetwork(ModalityConnection modality);
+
 private:
 
     PacsDevice m_pacs;
     T_ASC_Network *m_associationNetwork; // network struct, contains DICOM upper layer FSM etc.
     T_ASC_Parameters *m_associationParameters; // parameters of association request
     T_ASC_Association *m_dicomAssociation; // request DICOM association;
-    PacsNetwork *m_pacsNetwork; //configures the T_ASC_Network
-
 };
 };
 #endif
