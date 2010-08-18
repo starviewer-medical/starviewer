@@ -30,7 +30,7 @@ class QueryPacs;
 class PacsServer;
 
 /** Classe que cercar estudis en un dispositiu pacs, creant un nou job utilitzant les threadweaver
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 using namespace ThreadWeaver;
 
@@ -42,8 +42,9 @@ public:
     ///Indica a quin nivell fem la query
     enum QueryLevel { study, series, image};
 
-    /// Constructor de la classe
-    QueryPacsJob(PacsDevice parameters , DicomMask mask, QueryLevel queryLevel, QObject *parent = 0);
+    /// Constructor/Desctructor de la classe
+    QueryPacsJob(PacsDevice parameters, DicomMask mask, QueryLevel queryLevel, QObject *parent = 0);
+    ~QueryPacsJob();
 
     /// el codi d'aquest mètode es el que s'executa en un nou thread
     void run();
@@ -77,9 +78,6 @@ public:
 
     ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
     QHash<QString,QString> getHashTablePacsIDOfStudyInstanceUID();
-
-     ///Destructor de la classe
-    ~QueryPacsJob();
 
 private :
 
