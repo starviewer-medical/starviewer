@@ -40,7 +40,7 @@ void QueryPacsJob::run()
     PacsServer pacsServer(m_pacsDevice);
     Settings settings;
 
-    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; Port Local= " + settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt() + "; AEPACS= " + m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + m_pacsDevice.getQueryRetrieveServicePort() + ";" );
+    INFO_LOG( "Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; AEPACS= " + m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + QString().setNum(m_pacsDevice.getQueryRetrieveServicePort()) + ";" );
 
     m_queryStatus = pacsServer.connect(PacsServer::query);
 
