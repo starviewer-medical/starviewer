@@ -47,6 +47,8 @@ void KeyImageNoteManagerWidget::createConnectionsWithKeyImageNoteManager()
     connect(m_thumbnailImageDisplayer, SIGNAL(show(const QString &)), m_keyImageNoteManager, SLOT(changeCurrentDisplayedImage(const QString &)));
     connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), SLOT(updateInterfaceStatus()));
     connect(m_keyImageNoteManager, SIGNAL(keyImageNoteOfPatientAdded(KeyImageNote*)), SLOT(hideMySelectionWidget()));
+    connect(m_keyImageNoteManager, SIGNAL(imageOfCurrentSelectionRemoved(const QString &)), m_thumbnailImageDisplayer, SLOT(removeItem(const QString &)));
+    connect(m_keyImageNoteManager, SIGNAL(imageOfCurrentSelectionRemoved(const QString &)), SLOT(updateInterfaceStatus()));
 }
 
 void KeyImageNoteManagerWidget::createConnections()
@@ -92,7 +94,9 @@ void KeyImageNoteManagerWidget::initializeThumbnailImageDisplayer()
     m_thumbnailImageDisplayer->setThumbnailSize(ThumbnailImageDisplayer::Medium);
 
     QMenu *contextMenuThumbnailImageDisplayer = new QMenu();
-    contextMenuThumbnailImageDisplayer->addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromCurrentSelection()), Qt::Key_Delete);
+    QAction *action = contextMenuThumbnailImageDisplayer->addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromCurrentSelection()), Qt::Key_Delete);
+    (void) new QShortcut(action->shortcut(), this, SLOT(deleteSelectedItemsFromCurrentSelection()));
+
     m_thumbnailImageDisplayer->setContextMenu(contextMenuThumbnailImageDisplayer);
 }
 
@@ -134,5 +138,6 @@ void KeyImageNoteManagerWidget::hideMySelectionWidget()
 {
     m_splitter->setSizes(QList<int>() << 0 << 1);
     m_newKeyImageNoteButton->setVisible(true);
+    m_keyImageNoteManager->clearMySelection();
 }
 }

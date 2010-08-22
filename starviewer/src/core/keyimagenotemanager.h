@@ -50,6 +50,9 @@ public slots:
     /// Busquem la imatge segons els parametres i enviem un senyal per a canviar la llesca que ens indica la imatge
     void changeCurrentDisplayedImage(const QString &imageInstanceUID);
 
+    /// Neteja la meva seleccio i emet un senyal conforma s'ha fet aquesta operacio
+    void clearMySelection();
+
 signals:
     /// Senyala que s'ha afegit una nova imatge a la seleccio
     void imageAddedToTheCurrentSelectionOfImages(Image *image);
@@ -65,6 +68,9 @@ signals:
 
     /// Indica que cal mostrar les imatges d'un Key Image Note
     void showImagesReferencedInKeyImageNote(QList<Image*> referencedImage);
+
+    /// Assenyala que s'ha eliminat la imatge amb UID sopInstanceUID de la meva seleccio
+    void imageOfCurrentSelectionRemoved(const QString &sopInstanceUID);
 
 private:
     /// Cerca de tots els Key Image Notes

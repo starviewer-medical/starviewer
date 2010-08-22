@@ -67,6 +67,11 @@ void KeyImageNoteManager::addImageToTheCurrentSelectionOfImages(Image *image)
         m_currentSelection.append(image);
         emit imageAddedToTheCurrentSelectionOfImages(image);
     }
+    else
+    {
+        removeItemOfCurrentSelection(image->getSOPInstanceUID());
+        emit imageOfCurrentSelectionRemoved(image->getSOPInstanceUID());
+    }
 }
 
 KeyImageNote* KeyImageNoteManager::generateAndStoreNewKeyImageNote(const QString &documentTitle, const QString &documentTitleQualityReasons, const QString &observerName, const QString &keyObjectDescription, bool storeToLocalDataBase, bool storeToPacs, const QString &pacsNode)
@@ -95,8 +100,8 @@ KeyImageNote* KeyImageNoteManager::generateAndStoreNewKeyImageNote(const QString
             return NULL;
         }
     }
-    m_currentSelection.clear();
-    emit currentSelectionCleared();
+
+    clearMySelection();
     
     m_KeyImageNotesOfPatientSearched = false;
     emit keyImageNoteOfPatientAdded(newKeyImageNote);
@@ -257,6 +262,7 @@ void KeyImageNoteManager::removeItemOfCurrentSelection(QString removedUID)
     {
         if (m_currentSelection.at(i)->getSOPInstanceUID() == removedUID)
         {
+            emit imageOfCurrentSelectionRemoved(removedUID);
             m_currentSelection.removeAt(i);
             found = true;
         }
@@ -382,5 +388,11 @@ void KeyImageNoteManager::fillStructuredReportCommonData(DSRDocument *newKeyImag
 int KeyImageNoteManager::getNumberOfImagesInCurrentSelection()
 {
     return m_currentSelection.count();
+}
+
+void KeyImageNoteManager::clearMySelection()
+{
+    m_currentSelection.clear();
+    emit currentSelectionCleared();
 }
 }

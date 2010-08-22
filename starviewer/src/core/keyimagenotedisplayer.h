@@ -14,7 +14,7 @@ Widget que s'encarrega de mostrar la informacio referida a un Key Image Note
 
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class KeyImageNoteDisplayer : public QWidget, private Ui::KeyImageNoteDisplayerBase
+class KeyImageNoteDisplayer : public QWidget, public Ui::KeyImageNoteDisplayerBase
 {
 Q_OBJECT
 public:
