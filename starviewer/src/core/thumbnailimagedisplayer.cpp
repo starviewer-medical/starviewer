@@ -112,4 +112,24 @@ QString ThumbnailImageDisplayer::removeSelectedItems()
 
     return elementRemovedUID;
 }
+
+void ThumbnailImageDisplayer::removeItem(const QString &sopInstanceUID)
+{
+    int index = 0;
+    bool stop = false;
+    QList<QListWidgetItem *> listItems =  m_listImagesDisplayer->findItems ("" , Qt::MatchContains);
+
+    while (!stop && index < listItems.count())
+    {
+        if (listItems.at(index)->statusTip() == sopInstanceUID)
+        {
+            stop = true;
+            delete listItems.at(index);
+        }
+        else 
+        {
+            index++;
+        }
+    }
+}
 }

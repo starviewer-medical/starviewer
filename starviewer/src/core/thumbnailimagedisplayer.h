@@ -48,6 +48,9 @@ public slots:
     /// Obte la informacio d'un item i executa el signal de mostrar
     void showItem(QListWidgetItem *item);
 
+    /// Elimina l'element amb UID sopInstaceUID si existeix
+    void removeItem(const QString &sopInstanceUID);
+
 private:
     /// Crea les connexions de signals i slots
     void createConnections();
