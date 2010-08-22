@@ -38,6 +38,8 @@ void KeyImageNoteToolWidget::fillKeyImageNoteSelectorComboBox()
 void KeyImageNoteToolWidget::createConnections()
 {
     connect(m_keyImageNoteSelectorComboBox, SIGNAL(currentIndexChanged(int)), SLOT(changeKeyImageNoteDisplayed(int)));
+    connect(m_keyImageNoteDisplayer->m_thumbnailImageDisplayer, SIGNAL(show(const QString &)), SLOT(close()));
+    connect(m_keyImageNoteDisplayer->m_showButton, SIGNAL(clicked()), SLOT(close()));
 }
 
 void KeyImageNoteToolWidget::changeKeyImageNoteDisplayed(int index)
