@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
+    <width>406</width>
     <height>680</height>
    </rect>
   </property>
@@ -49,7 +49,16 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -109,6 +118,21 @@
        <bool>false</bool>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>4</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>3</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QLabel" name="m_mySelectionLabel">
          <property name="maximumSize">
@@ -137,13 +161,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>170</height>
+           <height>150</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>400</width>
-           <height>170</height>
+           <width>16777215</width>
+           <height>150</height>
           </size>
          </property>
          <property name="font">
@@ -161,6 +185,21 @@
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>3</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <spacer name="horizontalSpacer_8">
            <property name="orientation">
@@ -179,12 +218,20 @@
            <property name="text">
             <string>Cancel</string>
            </property>
+           <property name="icon">
+            <iconset resource="../main/main.qrc">
+             <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="m_createKeyImageNotePushButton">
            <property name="text">
             <string>Save as new Key Image Note</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../main/main.qrc">
+             <normaloff>:/images/filesave.png</normaloff>:/images/filesave.png</iconset>
            </property>
           </widget>
          </item>
@@ -202,6 +249,12 @@
        </property>
        <item>
         <widget class="QLabel" name="m_keyImageNotesLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="font">
           <font>
            <pointsize>11</pointsize>
@@ -270,7 +323,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>438</width>
+            <width>404</width>
             <height>370</height>
            </rect>
           </property>
@@ -326,7 +379,7 @@
               <item>
                <layout class="QVBoxLayout" name="m_layout">
                 <property name="spacing">
-                 <number>10</number>
+                 <number>5</number>
                 </property>
                </layout>
               </item>
