@@ -8,13 +8,15 @@
 #define UDGKEYIMAGENOTETOOL_H
 
 #include "tool.h"
-
+#include <QColor>
+#include <QHash>
 namespace udg {
 
 class Q2DViewer;
 class KeyImageNoteToolWidget;
 class DrawerPrimitive;
 class KeyImageNoteManager;
+class Image;
 
 /** Tool que s'encarrega de pintar una icona a totes les imatges
 que formen d'algun Key Image Note de l'estudi donat un volum */
@@ -33,6 +35,17 @@ public:
 
     /// Estableix el Key Image Note Manager amb el que s'ha de comunicar
     void setKeyImageNoteManager(KeyImageNoteManager *keyImageNoteManager);
+    
+public slots:
+
+    /// Dibuixa el text de la meva seleccio a la imatge passada per parametre
+    void drawMySelectionMark(Image *image);
+
+    /// Actualitza les marques tan del nou KIN com les de KINS de l'estudi
+    void updateMarks();
+
+    /// Elimina la marca de la meva seleccio a la imatge amb UID sopInstanceUID
+    void removeMySelectionMarkOfImage(const QString &sopInstanceUID);
 
 private slots:
     /// Inicialitzacio de la Tool
@@ -57,6 +70,9 @@ private:
 
     /// Key Image Note Manager amb el que interactua la tool
     KeyImageNoteManager *m_keyImageNoteManager;
+
+    /// Llista dels punts que indiquen que una imatge es de la meva seleccio
+    QHash<QString,DrawerPrimitive*> m_pointsOfMySelection;
 
 };
 

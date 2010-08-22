@@ -104,8 +104,6 @@ void KeyImageNoteTool::drawKeyImageNotesInVolume()
     double *origin = volume->getOrigin();
     int *extent = volume->getWholeExtent();
 
-    DEBUG_LOG(qPrintable(QString("Origin: (%1, %2, %3) ").arg(origin[0]).arg(origin[1]).arg(origin[2])));
-    DEBUG_LOG(qPrintable(QString("vtkSpacing: (%1, %2, %3)").arg(vtkSpacing[0]).arg(vtkSpacing[1]).arg(vtkSpacing[2])));
 
     foreach (Image *image, volume->getImages())
     {
@@ -128,7 +126,6 @@ void KeyImageNoteTool::drawKeyImageNotesInVolume()
             keyImageNoteMark->setText("KIN");
             keyImageNoteMark->setAttachmentPoint(point);
 
-            DEBUG_LOG(qPrintable(QString("OrderNumberInVolume: %2, llesca: %6; punt (%3,%4,%5)").arg(image->getOrderNumberInVolume()).arg(point[0]).arg(point[1]).arg(point[2]).arg(image->getOrderNumberInVolume()+1)));
 
             m_2DViewer->getDrawer()->draw(keyImageNoteMark, m_2DViewer->getView(), orderNumberInVolume);
             m_pointsOfKeyImageNote.append(keyImageNoteMark);
@@ -138,12 +135,72 @@ void KeyImageNoteTool::drawKeyImageNotesInVolume()
 
 void KeyImageNoteTool::setKeyImageNoteManager(KeyImageNoteManager *keyImageNoteManager)
 {
-    m_keyImageNoteManager = keyImageNoteManager;
-
-    if (m_keyImageNoteToolWidget)
+    if (keyImageNoteManager != NULL)
     {
-        m_keyImageNoteToolWidget->setKeyImageNoteManager(m_keyImageNoteManager);
+        m_keyImageNoteManager = keyImageNoteManager;
+        connect(m_keyImageNoteManager, SIGNAL(imageAddedToTheCurrentSelectionOfImages(Image*)), SLOT(drawMySelectionMark(Image*)));
+        connect(m_keyImageNoteManager, SIGNAL(currentSelectionCleared()), SLOT(updateMarks()));
+        connect(m_keyImageNoteManager, SIGNAL(imageOfCurrentSelectionRemoved(const QString &)), SLOT(removeMySelectionMarkOfImage(const QString &)));
+        
+        if (m_keyImageNoteToolWidget)
+        {
+            m_keyImageNoteToolWidget->setKeyImageNoteManager(m_keyImageNoteManager);
+        }
     }
 }
 
+void KeyImageNoteTool::drawMySelectionMark(Image *image)
+{
+    if (!m_pointsOfMySelection.contains(image->getSOPInstanceUID()))
+    {
+        Volume *volume = m_2DViewer->getInput();
+        double point[3];
+        double *vtkSpacing = volume->getSpacing();
+        double *origin = volume->getOrigin();
+        int *extent = volume->getWholeExtent();
+    
+        point[0] = origin[0] + extent[1] * vtkSpacing[0] - 30;
+        point[1] = origin[1] + extent[3] * vtkSpacing[1] - 40;
+        point[2] = origin[2] + vtkSpacing[2] * image->getOrderNumberInVolume();
+    
+        DrawerText *mySelectionMark = new DrawerText;
+        mySelectionMark->setColor(QColor(83,195,236));
+        mySelectionMark->boldOn();
+        mySelectionMark->shadowOn();
+        mySelectionMark->setText("NEW KIN");
+        mySelectionMark->setAttachmentPoint(point);
+    
+        m_2DViewer->getDrawer()->draw(mySelectionMark, m_2DViewer->getView(), image->getOrderNumberInVolume());
+        m_pointsOfMySelection[image->getSOPInstanceUID()] = mySelectionMark;
+    }
+}
+
+void KeyImageNoteTool::updateMarks()
+{
+    foreach (DrawerPrimitive *primitive, m_pointsOfMySelection.values())
+    {
+        m_2DViewer->getDrawer()->erasePrimitive(primitive);
+    }
+
+    m_pointsOfMySelection.clear();
+
+    foreach (DrawerPrimitive *primitive, m_pointsOfKeyImageNote)
+    {
+        m_2DViewer->getDrawer()->erasePrimitive(primitive);
+    }
+
+    m_pointsOfKeyImageNote.clear();
+    drawKeyImageNotesInVolume();
+    m_2DViewer->render();
+}
+void KeyImageNoteTool::removeMySelectionMarkOfImage(const QString &sopInstanceUID)
+{
+    if (m_pointsOfMySelection.contains(sopInstanceUID))
+    {
+        DrawerPrimitive *primitive = m_pointsOfMySelection.value(sopInstanceUID);
+        m_2DViewer->getDrawer()->erasePrimitive(primitive);
+        m_pointsOfMySelection.remove(sopInstanceUID);
+        m_2DViewer->render();
+    }
+}
 }
