@@ -575,6 +575,11 @@ void Volume::inputDestructor()
 //     m_gdcmIO->Delete();
 }
 
+void Volume::updateInformation()
+{
+    getVtkData()->UpdateInformation();
+}
+
 int Volume::readSingleFileITKGDCM(const QString &fileName)
 {
     int errorCode = NoError;

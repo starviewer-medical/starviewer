@@ -27,6 +27,7 @@
 #include "q2dviewersettings.h"
 #include "keyimagenotemanagerwidget.h"
 #include "keyimagenotemanager.h"
+#include "presentationstateattacher.h"
 
 #ifndef STARVIEWER_LITE
 #include "qpreviousstudieswidget.h"
@@ -41,7 +42,6 @@
 #include <QGridLayout>
 #include <QProgressDialog>
 #include <QMessageBox>
-
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension( QWidget *parent )
@@ -178,6 +178,15 @@ void Q2DViewerExtension::createConnections()
     connect( m_previousStudiesToolButton, SIGNAL( clicked ( bool ) ), SLOT( showPreviousStudiesWidget() ) );
     connect(m_keyImageNoteToolButton, SIGNAL(clicked()), SLOT(toggleKeyImageNoteManagerWidget()));
 
+    // Proves Presentation State
+
+    /*connect(m_dibuixaButton, SIGNAL(clicked()), SLOT(doDraw()));
+    connect(m_scaleToFit, SIGNAL(clicked()), SLOT(doScaleToFit()));
+    connect(m_Magnificient, SIGNAL(clicked()), SLOT(doMagnify()));
+    connect(m_rotacioButton, SIGNAL(clicked()), SLOT(doRotation()));*/
+
+
+
 #endif
 
 }
@@ -223,6 +232,9 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     searchPreviousStudiesWithHangingProtocols();
     initializeKeyImageNoteManager();
+
+    initializePresentationStateAttacher();
+
     initializeSelectImageAction();
 
     connect(m_keyImageNoteManager, SIGNAL(changeCurrentSlice(Volume*, int)), SLOT(changeSliceOfCurrentDisplayedViewer(Volume*, int)));
@@ -800,4 +812,33 @@ void Q2DViewerExtension::setGrid( int rows , int columns )
     m_workingArea->setGrid( rows , columns );
 }
 
+void Q2DViewerExtension::fillPresentationStatesCombobox()
+{
+    m_presentationStatesUID.clear();
+    Study *study = m_patient->getStudies().at(0);
+
+    m_presentationStateCombobox->addItem("");
+    m_presentationStatesUID.append("");
+
+    foreach(QString presentationStateDescription, study->getPresentationStatesDescriptions())
+    {
+        m_presentationStateCombobox->addItem(presentationStateDescription.split("\\").at(0));
+        m_presentationStatesUID.append(presentationStateDescription.split("\\").at(1));
+    }
+}
+
+void Q2DViewerExtension::initializePresentationStateAttacher()
+{
+    m_presentationStateAttacher = new PresentationStateAttacher(); 
+    fillPresentationStatesCombobox();
+    m_presentationStateAttacher->setQ2DViewer(m_workingArea->getViewerSelected()->getViewer());
+
+    connect(m_presentationStateCombobox, SIGNAL(currentIndexChanged(int)), SLOT(changePresentationStateApplicated()));
+}
+
+void Q2DViewerExtension::changePresentationStateApplicated()
+{
+    m_presentationStateAttacher->setFile(m_patient->getStudies().at(0)->getPresentationStatePath(m_presentationStateCombobox->currentText() + "\\" + m_presentationStatesUID.at(m_presentationStateCombobox->currentIndex())));
+
+}
 }

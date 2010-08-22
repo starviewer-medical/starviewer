@@ -9,10 +9,13 @@
 
 #include "patientfillerstep.h"
 
+class DVPresentationState;
+
 namespace udg {
 
 class Patient;
 class Series;
+class DICOMTagReader;
 
 /**
 Mòdul que s'encarrega d'omplir la informació d'objectes PresentationState. Un dels seus prerequisits serà que s'hagi superat el mòdul DICOMFileClassifierFillerStep. Les Series a processar han de de ser de modalitat PR.
@@ -26,16 +29,18 @@ public:
 
     ~PresentationStateFillerStep();
 
-    bool fillIndividually(){return false;};
+    bool fillIndividually();
 
     void postProcessing(){};
 
     QString name() {  return "PresentationStateFillerStep";  }
 
 private:
-    // TODO mètode per implementar
+    /// Processa un Presentation State
     void processPresentationState();
 
+private:
+    DVPresentationState *m_presentationStateHandler;
 };
 
 }

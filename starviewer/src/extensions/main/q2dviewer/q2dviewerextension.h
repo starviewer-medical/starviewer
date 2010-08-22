@@ -22,6 +22,7 @@ class ToolConfiguration;
 class HangingProtocol;
 class KeyImageNoteManager;
 class KeyImageNoteManagerWidget;
+class PresentationStateAttacher;
 //Estructura pacient
 class Patient;
 class Study;
@@ -81,6 +82,9 @@ public slots:
     /// Inicialitza el Key Image Note Manager i l'assigna al Key Image Note Manager Widget
     void initializeKeyImageNoteManager();
 
+    /// Inicialitza el Presentation State Attacher
+    void initializePresentationStateAttacher();
+
     /// Afegeix la imatge que s'esta visualitzant a la seleccio
     void addCurrentDisplayedImageToSelection();
 
@@ -95,6 +99,9 @@ public slots:
 
     /// Genera un viewer per cada imatge rebuda
     void showKeyImageNote(QList<Image*> referencedImages);
+    
+    /// Canvia el Presentation State aplicat
+    void changePresentationStateApplicated();
 
 #ifndef STARVIEWER_LITE
     /// Mostra el widget per poder descarregar els estudis previs de l'estudi actual
@@ -146,6 +153,9 @@ private:
      * Inicialitza les tools que tindrà l'extensió
      */
     void initializeTools();
+
+    /// Emplena la llista de Presentation States de l'estudi
+    void fillPresentationStatesCombobox();
 
 #ifndef STARVIEWER_LITE
     /// Buscar estudis prèvis
@@ -243,6 +253,12 @@ private:
 
     /// Manager de Key Image Notes
     KeyImageNoteManager *m_keyImageNoteManager;
+
+    /// Objecte que Aplica Presentation States
+    PresentationStateAttacher *m_presentationStateAttacher;
+
+    /// Guarda els UID de Presentation State
+    QStringList m_presentationStatesUID;
 
 #endif 
 

@@ -41,6 +41,9 @@
 // Projecció de punts
 #include <vtkMatrix4x4.h>
 
+#include <vtkImageChangeInformation.h>
+#include <vtkImageResample.h>
+
 namespace udg {
 
 Q2DViewer::Q2DViewer( QWidget *parent )
@@ -2128,6 +2131,115 @@ void Q2DViewer::fitImageIntoViewport()
 
     // Apliquem el zoom 
     scaleToFit3D(topCorner, bottomCorner);
+}
+
+void Q2DViewer::setMagnificationFactor(double factor)
+{
+    m_imageActor->SetScale(factor,factor,1);
+}
+
+void Q2DViewer::scaleToFit(double topLeftX, double topLeftY, double bottomRightX, double bottomRightY)
+{
+    double width, height;
+    width = fabs(topLeftX - bottomRightX);
+    height = fabs(topLeftY - bottomRightY);
+
+    int *size = this->getRenderer()->GetSize();
+    int *rendererOrigin = this->getRenderer()->GetOrigin();
+    vtkCamera *cam = this->getRenderer()->GetActiveCamera();
+
+    double min[2];
+    double rbcenter[4];
+    min[0] = bottomRightX < topLeftX ? bottomRightX : topLeftX;
+    min[1] = bottomRightY < topLeftY ? bottomRightY : topLeftY;
+
+    rbcenter[0] = min[0] + 0.5*width;
+    rbcenter[1] = min[1] + 0.5*height;
+    rbcenter[2] = 0.0;
+    rbcenter[3] = 1.0;
+
+    double invw;
+    double winCenter[3];
+    winCenter[0] = rendererOrigin[0] + 0.5*size[0];
+    winCenter[1] = rendererOrigin[1] + 0.5*size[1];
+    winCenter[2] = 0;
+
+    this->getRenderer()->SetDisplayPoint(winCenter);
+    this->getRenderer()->DisplayToView();
+    this->getRenderer()->ViewToWorld();
+
+    double worldWinCenter[4];
+    this->getRenderer()->GetWorldPoint(worldWinCenter);
+    invw = 1.0/worldWinCenter[3];
+    worldWinCenter[0] *= invw;
+    worldWinCenter[1] *= invw;
+    worldWinCenter[2] *= invw;
+
+    double translation[3];
+    translation[0] = rbcenter[0] - worldWinCenter[0];
+    translation[1] = rbcenter[1] - worldWinCenter[1];
+    translation[2] = rbcenter[2] - worldWinCenter[2];
+
+    double pos[3], fp[3];
+    cam->GetPosition(pos);
+    cam->GetFocalPoint(fp);
+
+    pos[0] += translation[0];
+    pos[1] += translation[1];
+    pos[2] += translation[2];
+    fp[0] += translation[0];
+    fp[1] += translation[1];
+    fp[2] += translation[2];
+
+    cam->SetPosition(pos);
+    cam->SetFocalPoint(fp);
+
+    // ara cal calcular la width i height en coordenades de display
+    double displayTopLeft[3], displayBottomRight[3];
+    this->computeWorldToDisplay(topLeftX, topLeftY, 0.0, displayTopLeft);
+    this->computeWorldToDisplay(bottomRightX, bottomRightY, 0.0, displayBottomRight);
+    // recalculem ara tenint en compte el display
+    width = fabs(displayTopLeft[0] - displayBottomRight[0]);
+    height = fabs(displayTopLeft[1] - displayBottomRight[1]);
+
+    if(size[0] < size[1])
+    {
+        cam->Zoom(size[0] / (float)width);
+    }
+    else
+    {
+        cam->Zoom(size[1] / (float)height);
+    }
+
+    this->getRenderer()->ResetCameraClippingRange();
+    this->getInteractor()->Render();
+}
+
+void Q2DViewer::setPixelAspectRatio(double ratio)
+{
+    if(ratio != 1.0 && ratio > 0.0)
+    {
+        m_mainVolume->updateInformation();
+        double spacing[3];
+        m_mainVolume->getSpacing(spacing);
+
+        vtkImageChangeInformation *change = vtkImageChangeInformation::New();
+        change->SetInput(m_imageActor->GetInput());
+
+        if(ratio > 1.0)
+        {
+            change->SetOutputSpacing(spacing[0] * ratio, spacing[1], spacing[2]);
+        }
+        else
+        {
+            change->SetOutputSpacing(spacing[0], spacing[1] * ratio, spacing[2]);
+            m_imageActor->SetInput(change->GetOutput());
+        }
+    }
+    else
+    {
+        DEBUG_LOG(qPrintable(QString("Ratio no aplicable: %1").arg(ratio)));
+    }
 }
 
 };  // End namespace udg

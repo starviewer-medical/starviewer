@@ -7,15 +7,17 @@
 #include "presentationstatefillerstep.h"
 #include "logging.h"
 #include "patientfillerinput.h"
-#include "patient.h"
+#include "dicomtagreader.h"
 #include "study.h"
 #include "series.h"
-#include "dicomtagreader.h"
+
+#include <dvpstat.h>
+#include <dcdatset.h>
+#include <QDir>
 
 namespace udg {
 
-PresentationStateFillerStep::PresentationStateFillerStep()
- : PatientFillerStep()
+PresentationStateFillerStep::PresentationStateFillerStep(): PatientFillerStep()
 {
     m_requiredLabelsList << "DICOMFileClassifierFillerStep";
 }
@@ -24,18 +26,34 @@ PresentationStateFillerStep::~PresentationStateFillerStep()
 {
 }
 
-void PresentationStateFillerStep::processPresentationState()
+bool PresentationStateFillerStep::fillIndividually()
 {
-    DICOMTagReader dicomReader;
-    bool ok;
-//     ok = dicomReader.setFile( presentationState->getPath() );
-    if( ok )
+    Q_ASSERT(m_input);
+
+    if (isPresentationStateSeries(m_input->getCurrentSeries()))
     {
-        //TODO per implementar
-        DEBUG_LOG("Pendent d'implementació!");
+        processPresentationState();
     }
-//     else
-//         DEBUG_LOG("No s'ha pogut obrir amb el tagReader l'arxiu: " + presentationState->getPath() );
+    
+    return true;
 }
 
+void PresentationStateFillerStep::processPresentationState()
+{
+    DICOMTagReader *dicomReader = m_input->getDICOMFile();
+    OFCondition status;
+    
+    m_presentationStateHandler = new DVPresentationState;
+    status = m_presentationStateHandler->read(*dicomReader->getDcmDataset());
+
+    if(status.good())
+    {
+        m_input->getCurrentSeries()->getParentStudy()->addPresentationState("PR: " + dicomReader->getValueAttributeAsQString(DICOMContentLabel) + "\\" + dicomReader->getValueAttributeAsQString(DICOMSOPInstanceUID), dicomReader->getFileName());
+    }
+    else
+    {
+        DEBUG_LOG("Error en la lectura del presentation state");
+    }
 }
+}
+

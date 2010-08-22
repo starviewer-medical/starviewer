@@ -21,10 +21,7 @@
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
 #include "keyimagenotefillerstep.h"
-// TODO encara no hi ha suport a Presentation States, per tant
-// fins que no tinguem suport i implementem correctament els respectius 
-// filler steps no caldrà afegir-los dins del pipeline
-//#include "presentationstatefillerstep.h"
+#include "presentationstatefillerstep.h"
 
 namespace udg {
 
@@ -58,10 +55,7 @@ void PatientFiller::registerSteps()
     m_registeredSteps.append(new MHDFileClassifierStep() );
     m_registeredSteps.append(new OrderImagesFillerStep() );
     m_registeredSteps.append(new KeyImageNoteFillerStep() );
-    // TODO encara no hi ha suport a Presentation States, per tant
-    // fins que no tinguem suport i implementem correctament els respectius 
-    // filler steps no caldrà afegir-los dins del pipeline
-    //m_registeredSteps.append(new PresentationStateFillerStep() );
+    m_registeredSteps.append(new PresentationStateFillerStep());
 
     // TODO Donat que al postProcessing no tenim política d'etiquetes, s'ha posat el Temporal al final
     // perquè necessita que s'hagi executat l'Order abans. S'hauria de millorar.

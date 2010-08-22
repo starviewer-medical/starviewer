@@ -227,6 +227,11 @@ public:
     vtkImageMapToWindowLevelColors *getWindowLevelMapper() const;
 
 public slots:
+
+    void scaleToFit( double topLeftX, double topLeftY, double bottomRightX, double bottomRightY );
+
+    void setMagnificationFactor(double factor);
+    void setPixelAspectRatio(double ratio);
     virtual void setInput( Volume *volume );
 
     void resetView( CameraOrientationType view );

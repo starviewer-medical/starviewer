@@ -137,6 +137,15 @@ public:
 
     QString toString();
 
+    /// S'afegeix una tupla de Presentation State
+    void addPresentationState(const QString &presentationStateDescription, const QString &presentationStatePath);
+
+    /// Retorna la descripcio dels diferents Presentation State
+    QList<QString> getPresentationStatesDescriptions();
+
+    /// Retorna el path del Presentation State Description passat per parametre
+    QString getPresentationStatePath(const QString &presentationStateDescription);
+
 private:
     /**
      * Inserta una serie a la llista de series ordenat per SeriesNumber.
@@ -200,6 +209,9 @@ private:
 
     /// L'entitat Patient a la qual pertany aquest estudi
     Patient *m_parentPatient;
+
+    /// Tupla on es guarda descripcio i Path de Presentation State
+    QHash <QString, QString> m_presentationStates;
 };
 
 }

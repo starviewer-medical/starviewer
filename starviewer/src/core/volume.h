@@ -63,6 +63,8 @@ public:
     Volume(VtkImageTypePointer vtkImage, QObject *parent = 0);
     ~Volume();
 
+    void updateInformation();
+
     /**
        Li donem les dades en format ITK
        \sa getVtkData(), getItkData()

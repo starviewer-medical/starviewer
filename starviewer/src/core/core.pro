@@ -229,7 +229,9 @@ HEADERS += extensionfactory.h \
     thumbnailimagedisplayer.h \
     keyimagenotecreatorwidget.h \
     keyimagenotetool.h \
-    keyimagenotetoolwidget.h 
+    keyimagenotetoolwidget.h \
+    presentationstateattacher.h \
+    q2dviewerblackboard.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -415,7 +417,9 @@ SOURCES += extensionmediator.cpp \
     thumbnailimagedisplayer.cpp \
     keyimagenotecreatorwidget.cpp \
     keyimagenotetool.cpp \
-    keyimagenotetoolwidget.cpp
+    keyimagenotetoolwidget.cpp \
+    presentationstateattacher.cpp \
+    q2dviewerblackboard.cpp
 INCLUDEPATH += ../inputoutput
 TEMPLATE = lib
 DESTDIR = ./

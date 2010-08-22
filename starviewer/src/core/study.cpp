@@ -385,4 +385,19 @@ int Study::findSeriesIndex( QString uid )
     return i;
 }
 
+void Study::addPresentationState(const QString &presentationStateDescription, const QString &presentationStatePath)
+{
+    m_presentationStates[presentationStateDescription] = presentationStatePath;
+}
+
+QList<QString> Study::getPresentationStatesDescriptions()
+{
+    return m_presentationStates.keys();
+}
+
+QString Study::getPresentationStatePath(const QString &presentationStateDescription)
+{
+    return m_presentationStates.value(presentationStateDescription);
+}
+
 }
