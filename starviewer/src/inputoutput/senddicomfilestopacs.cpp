@@ -16,7 +16,6 @@
 #include <QDir>
 
 #include "logging.h"
-#include "pacsconnection.h"
 #include "image.h"
 #include "pacsserver.h"
 #include "pacsrequeststatus.h"
@@ -100,9 +99,8 @@ void SendDICOMFilesToPACS::initialitzeDICOMFilesCounters(int numberOfDICOMFilesT
  *   association - [in] The associationiation (network connection to another DICOM application).
  *   filepathToStore - [in] Name of the file which shall be processed.
  */
-bool SendDICOMFilesToPACS::storeSCU(PacsConnection pacsConnection, QString filepathToStore)
+bool SendDICOMFilesToPACS::storeSCU(T_ASC_Association *association, QString filepathToStore)
 {
-    T_ASC_Association * association = pacsConnection.getPacsConnection();
     DIC_US msgId = association->nextMsgID++;
     T_ASC_PresentationContextID presentationContextID;
     T_DIMSE_C_StoreRQ request;

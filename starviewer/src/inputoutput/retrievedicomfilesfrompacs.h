@@ -41,7 +41,6 @@ class DcmFileFormat;
 namespace udg{
 
 class Status;
-class PacsConnection;
 class DicomMask;
 class DICOMTagReader;
 class PacsServer;

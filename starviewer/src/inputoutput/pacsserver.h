@@ -15,7 +15,6 @@ class QString;
  */
 namespace udg{
 
-class PacsConnection;
 class Status;
 
 class PacsServer
@@ -49,7 +48,7 @@ public:
     /** Retorna una connexió per a poder buscar informació, o descarregar imatges
      * @return retorna una connexió de PACS
      */
-    PacsConnection getConnection();
+    T_ASC_Association* getConnection();
 
     /** Retorna una configuració de xarxa. Només és necessària quan l'objectiu de la connexió sigui el de descarregar imatges
      * @return retorna la configuració de la xarxa
