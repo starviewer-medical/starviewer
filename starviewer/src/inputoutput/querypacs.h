@@ -35,7 +35,6 @@ struct T_DIMSE_C_FindRSP;
 
 namespace udg{
 
-class PacsConnection;
 class Status;
 class DicomMask;
 class Patient;

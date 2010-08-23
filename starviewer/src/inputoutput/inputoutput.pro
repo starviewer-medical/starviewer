@@ -24,7 +24,6 @@ FORMS += qconfigurationscreenbase.ui \
     qwidgetselectpacstostoredicomimagebase.ui \
     qexporterbase.ui
 HEADERS += databaseconnection.h \
-    pacsconnection.h \
     pacsdevicemanager.h \
     pacsdevice.h \
     pacsserver.h \
@@ -83,7 +82,6 @@ HEADERS += databaseconnection.h \
     pacsrequeststatus.h \
     retrievedicomfilesfrompacsjob.h
 SOURCES += databaseconnection.cpp \
-    pacsconnection.cpp \
     pacsdevicemanager.cpp \
     pacsdevice.cpp \
     pacsserver.cpp \

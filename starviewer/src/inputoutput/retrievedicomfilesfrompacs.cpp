@@ -11,7 +11,6 @@
 
 #include "status.h"
 #include "logging.h"
-#include "pacsconnection.h"
 #include "localdatabasemanager.h"
 #include "dicommask.h"
 #include "logging.h"
@@ -271,7 +270,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
          la connexió pel qual rebem les imatges, el comportament del PACS és desconegut, per exemple DCM4CHEE tanca la connexió amb el PACS, però
          el RAIM_Server no la tanca i la manté fent que no sortim mai d'aquesta classe. Degut a que no es pot saber en aquesta situació com actuaran 
          els PACS es tanca aquí la connexió amb el PACS.*/
-        condition = ASC_abortAssociation(m_pacsServer->getConnection().getPacsConnection());
+        condition = ASC_abortAssociation(m_pacsServer->getConnection());
         if (!condition.good())
         {
             ERROR_LOG("Error al abortar la connexió pel amb el PACS" + QString(condition.text()));
@@ -331,7 +330,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     }
 
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
-    T_ASC_Association *association = m_pacsServer->getConnection().getPacsConnection(); 
+    T_ASC_Association *association = m_pacsServer->getConnection(); 
     presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
     if (presentationContextID == 0) 
     {

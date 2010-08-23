@@ -6,7 +6,6 @@
 #include <QHostInfo>
 
 #include "status.h"
-#include "pacsconnection.h"
 #include "errordcmtk.h"
 #include "logging.h"
 #include "inputoutputsettings.h"
@@ -399,11 +398,9 @@ PacsDevice PacsServer::getPacs()
     return m_pacs;
 }
 
-PacsConnection PacsServer::getConnection()
+T_ASC_Association* PacsServer::getConnection()
 {
-    PacsConnection connection;
-    connection.setPacsConnection(m_dicomAssociation);
-    return connection;
+    return m_dicomAssociation;
 }
 
 T_ASC_Network* PacsServer::getNetwork()

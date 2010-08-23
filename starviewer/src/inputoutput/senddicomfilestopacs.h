@@ -13,13 +13,14 @@
 
 #include "pacsdevice.h"
 #include "pacsrequeststatus.h"
-struct T_DIMSE_C_StoreRSP;
 
 class DcmDataset;
 
+struct T_DIMSE_C_StoreRSP;
+struct T_ASC_Association;
+
 namespace udg {
 
-class PacsConnection;
 class Image;
 
 /**
@@ -65,7 +66,7 @@ private :
     void processResponseFromStoreSCP(T_DIMSE_C_StoreRSP *response, DcmDataset *statusDetail, QString filePathDicomObjectStoredFailed);
 
     ///Envia una image al PACS amb l'associació passada per paràmetre, retorna si la imatge s'ha enviat correctament
-    bool storeSCU(PacsConnection pacsConnection, QString filePathToStore);
+    bool storeSCU(T_ASC_Association *association, QString filePathToStore);
 
     ///Retorna un Status indicant com ha finalitzat l'operació C-Store
     PACSRequestStatus::SendRequestStatus getStatusStoreSCU();

@@ -21,7 +21,6 @@ class QString;
 
 namespace udg {
 
-class PacsConnection;
 class Patient;
 class Study;
 class Series;

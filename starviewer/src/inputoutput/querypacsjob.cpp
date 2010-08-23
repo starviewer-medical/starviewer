@@ -8,7 +8,6 @@
 
 #include <QString>
 
-#include "pacsconnection.h"
 #include "pacsserver.h"
 #include "querypacs.h"
 #include "logging.h"

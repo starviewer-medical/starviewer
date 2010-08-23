@@ -6,7 +6,6 @@
 #include <ofcond.h>
 #include <diutil.h>
 
-#include "pacsconnection.h"
 #include "status.h"
 #include "pacsserver.h"
 #include "dicommask.h"
@@ -28,7 +27,7 @@ namespace udg{
 
 void QueryPacs::setConnection(PacsServer pacsServer)
 {
-    m_assoc = pacsServer.getConnection().getPacsConnection();
+    m_assoc = pacsServer.getConnection();
     m_pacs = pacsServer.getPacs();
 }
 
