@@ -11,7 +11,6 @@
 
 namespace udg {
 
-class Status;
 class PacsDevice;
 
 /** Interfície que permet configurar els paràmetres del PACS
@@ -22,7 +21,7 @@ class QConfigurationScreen : public QWidget, private Ui::QConfigurationScreenBas
 Q_OBJECT
 public:
     /// Constructor de la classe
-    QConfigurationScreen( QWidget *parent = 0 );
+    QConfigurationScreen(QWidget *parent = 0);
 
     ///Destructor de classe
     ~QConfigurationScreen();
