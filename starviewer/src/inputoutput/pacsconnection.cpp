@@ -52,22 +52,10 @@ OFCondition PACSConnection::configureEcho()
 
 OFCondition PACSConnection::configureFind()
 {
-    const char *transferSyntaxes[] = {NULL, NULL, UID_LittleEndianImplicitTransferSyntax};
+    const char *transferSyntaxes[] = {NULL, NULL, NULL};
     int presentationContextID = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
 
-    /* gLocalByteOrder is defined in dcxfer.h */
-    if (gLocalByteOrder == EBO_LittleEndian)
-    {
-        /* we are on a little endian machine */
-        transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
-        transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-    }
-    else
-    {
-        /* we are on a big endian machine */
-        transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
-        transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
-    }
+    getTransferSyntaxForFindOrMoveConnection(transferSyntaxes);
 
     return ASC_addPresentationContext(m_associationParameters, presentationContextID, UID_FINDStudyRootQueryRetrieveInformationModel, transferSyntaxes, 
         DIM_OF(transferSyntaxes));
@@ -75,27 +63,10 @@ OFCondition PACSConnection::configureFind()
 
 OFCondition PACSConnection::configureMove()
 {
-    /* We prefer to use Explicitly encoded transfer syntaxes. If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
-    to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
-    organise the proposed transfer syntaxes to take advantage of such behaviour.
-    The presentation presentationContextIDs proposed here are only used for C-FIND and C-MOVE, so there is no need to support compressed transmission. */
-
     T_ASC_PresentationContextID associationPresentationContextID = 1;
-    const char *transferSyntaxes[] = { NULL, NULL, NULL };
+    const char *transferSyntaxes[] = {NULL, NULL, NULL};
 
-    /*We prefer explicit transfer syntaxes.
-     If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax to BigEndianTransferSyntax. */
-    if (gLocalByteOrder  ==  EBO_LittleEndian)  /* defined in dcxfer.h */
-    {
-        transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
-        transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-    }
-    else
-    {
-        transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
-        transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
-    }
-    transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
+    getTransferSyntaxForFindOrMoveConnection(transferSyntaxes);
 
     return ASC_addPresentationContext(m_associationParameters, associationPresentationContextID, UID_MOVEStudyRootQueryRetrieveInformationModel, transferSyntaxes, 3 /*number of TransferSyntaxes*/);
 }
@@ -354,6 +325,30 @@ T_ASC_Network* PACSConnection::initializeAssociationNetwork(ModalityConnection m
     }
 
     return associationNetwork;
+}
+
+void PACSConnection::getTransferSyntaxForFindOrMoveConnection(const char *transferSyntaxes[3])
+{
+    /* We prefer to use Explicitly encoded transfer syntaxes. If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
+    to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
+    organise the proposed transfer syntaxes to take advantage of such behaviour.
+    The presentation presentationContextIDs proposed here are only used for C-FIND and C-MOVE, so there is no need to support compressed transmission. */
+
+    /* gLocalByteOrder is defined in dcxfer.h */
+    if (gLocalByteOrder == EBO_LittleEndian)
+    {
+        /* we are on a little endian machine */
+        transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
+        transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
+    }
+    else
+    {
+        /* we are on a big endian machine */
+        transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
+        transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
+    }
+
+    transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
 }
 
 PacsDevice PACSConnection::getPacs()
