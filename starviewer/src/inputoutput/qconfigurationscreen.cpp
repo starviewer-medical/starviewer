@@ -267,7 +267,6 @@ void QConfigurationScreen::fillPacsListView()
 void QConfigurationScreen::test()
 {
     Status state;
-    PacsDevice pacs;
     PacsDeviceManager pacsList;
     QString message;
 
@@ -277,7 +276,8 @@ void QConfigurationScreen::test()
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
         //Agafem les dades del PACS que estan el textbox per testejar
-        PACSConnection pacsConnection(getPacsDeviceFromControls());
+        PacsDevice pacs = getPacsDeviceFromControls();
+        PACSConnection pacsConnection(pacs);
 
         state = pacsConnection.connect( PACSConnection::echoPacs );
 
