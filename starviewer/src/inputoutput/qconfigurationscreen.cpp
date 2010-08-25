@@ -292,6 +292,7 @@ void QConfigurationScreen::test()
         else
         {
             state = pacsConnection.echo();
+            pacsConnection.disconnect();
 
             QApplication::restoreOverrideCursor();
 
