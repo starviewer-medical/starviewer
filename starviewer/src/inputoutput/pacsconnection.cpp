@@ -75,33 +75,12 @@ OFCondition PACSConnection::configureFind()
 
 OFCondition PACSConnection::configureMove()
 {
-    int presentationContextID = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
-    const char *transferSyntaxes[] = { NULL, NULL, UID_LittleEndianImplicitTransferSyntax };
-
-    /* gLocalByteOrder is defined in dcxfer.h */
-    if (gLocalByteOrder  ==  EBO_LittleEndian) {
-        /* we are on a little endian machine */
-        transferSyntaxes[0] = UID_LittleEndianExplicitTransferSyntax;
-        transferSyntaxes[1] = UID_BigEndianExplicitTransferSyntax;
-    }
-    else
-    {
-        /* we are on a big endian machine */
-        transferSyntaxes[0] = UID_BigEndianExplicitTransferSyntax;
-        transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
-    }
-
-   return addPresentationContextMove(m_associationParameters, presentationContextID, UID_MOVEStudyRootQueryRetrieveInformationModel);
-}
-
-OFCondition PACSConnection::addPresentationContextMove(T_ASC_Parameters *associationParameters, int presentationContextID, const char *abstractSyntax)
-{
     /* We prefer to use Explicitly encoded transfer syntaxes. If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
     to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
     organise the proposed transfer syntaxes to take advantage of such behaviour.
     The presentation presentationContextIDs proposed here are only used for C-FIND and C-MOVE, so there is no need to support compressed transmission. */
 
-    T_ASC_PresentationContextID associationPresentationContextID = presentationContextID;
+    T_ASC_PresentationContextID associationPresentationContextID = 1;
     const char *transferSyntaxes[] = { NULL, NULL, NULL };
 
     /*We prefer explicit transfer syntaxes.
@@ -118,7 +97,7 @@ OFCondition PACSConnection::addPresentationContextMove(T_ASC_Parameters *associa
     }
     transferSyntaxes[2] = UID_LittleEndianImplicitTransferSyntax;
 
-    return ASC_addPresentationContext(associationParameters, associationPresentationContextID, abstractSyntax, transferSyntaxes, 3 /*number of TransferSyntaxes*/);
+    return ASC_addPresentationContext(m_associationParameters, associationPresentationContextID, UID_MOVEStudyRootQueryRetrieveInformationModel, transferSyntaxes, 3 /*number of TransferSyntaxes*/);
 }
 
 /*TODO Estudiar si el millor transferSyntax per defecte és UID_LittleEndianExplicitTransferSyntax o com els cas del move és el JPegLossLess
@@ -184,7 +163,7 @@ OFCondition PACSConnection::configureStore()
         }
 
         // sop class with preferred transfer syntax
-        condition = addPresentationContext(presentationContextID, sopClass, preferredTransferSyntax);
+        condition = ASC_addPresentationContext(m_associationParameters, presentationContextID, qPrintable(sopClass), &preferredTransferSyntax, 1, ASC_SC_ROLE_DEFAULT); 
         presentationContextID += 2;   /* only odd presentation context id's */
 
         if (fallbackSyntaxes.size() > 0)
@@ -219,11 +198,6 @@ OFCondition PACSConnection::addPresentationContext(int presentationContextId, co
 
     delete[] transferSyntaxes;
     return condition;
-}
-
-OFCondition PACSConnection::addPresentationContext(int presentationContextId, const QString &abstractSyntax, const char *transferSyntax)
-{
-    return ASC_addPresentationContext(m_associationParameters, presentationContextId, qPrintable(abstractSyntax), &transferSyntax, 1, ASC_SC_ROLE_DEFAULT);
 }
 
 Status PACSConnection::connect(ModalityConnection modality)
@@ -266,32 +240,21 @@ Status PACSConnection::connect(ModalityConnection modality)
     {
         case echoPacs: //configure echo
                         condition = configureEcho();
-                        if (!condition.good())
-                        {
-                            return state.setStatus(condition);
-                        }
                         break;
         case query:    //configure the find paramaters depending on modality connection
                         condition = configureFind();
-                        if (!condition.good()) 
-                        {
-                            return state.setStatus(condition);
-                        }
                         break;
         case retrieveImages: //configure the move paramaters depending on modality connection
                         condition = configureMove();
-                        if (!condition.good()) 
-                        {
-                            return state.setStatus(condition);
-                        }
                         break;
         case storeImages:
                         condition = configureStore();
-                        if (!condition.good()) 
-                        {
-                            return state.setStatus(condition);
-                        }
                         break;
+    }
+
+    if (!condition.good())
+    {
+        return state.setStatus(condition);
     }
 
     //Inicialitzem l'objecte network però la connexió no s'obre fins a l'invocacació del mètode ASC_requestAssociation
