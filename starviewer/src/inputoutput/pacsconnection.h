@@ -99,6 +99,9 @@ private:
     ///de dcmtk ASC_requestAssociation dins del mètode connect connect();
     T_ASC_Network* initializeAssociationNetwork(ModalityConnection modality);
 
+    ///Omple l'array passada per paràmetres amb la transfer syntax a utilitzar per les connexions per fer FIND o Move
+    void getTransferSyntaxForFindOrMoveConnection(const char *transferSyntaxes[3]);
+
 private:
 
     PacsDevice m_pacs;
