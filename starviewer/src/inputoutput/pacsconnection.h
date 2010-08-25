@@ -80,14 +80,6 @@ private:
      */
     OFCondition configureStore();
 
-    /** Aquesta funció privada, configura els paràmetres pel tipus de connexió per descarregat imatges segons la màquina que tinguem
-     * @param paràmetres de la connexió
-     * @param Identificador de funcio
-     * @param Objectiu de la funcio
-     * @return retorna l'estat de la funció
-     */
-    OFCondition addPresentationContextMove(T_ASC_Parameters *associationParameters, int presentationContextID, const char *abstractSyntax);
-
     /** Construeix l'adreça del servidor en format ip:port, per connectar-se al PACS
      * @param adreça del servidor
      * @param port del servidor
@@ -101,14 +93,6 @@ private:
      * @return estat del mètode
      */
     OFCondition addPresentationContext(int presentationContextId, const QString &abstractSyntax, QList<const char*> transferSyntaxList);
-
-    /** Afageix un objecte SOP a la connexió amb el PACS
-     * @param presentationContextId número de pid
-     * @param abstractSyntax classe SOP a afegir
-     * @param transferSyntax
-     * @return estat del mètode
-     */
-    OFCondition addPresentationContext(int presentationContextId, const QString &abstractSyntax, const char *transferSyntax);
 
     ///Aquest mètode inicialitza l'objecte AssociationNetwork en funció de la modalitat amb els paràmetres del PACS, aquest mètode no obre la connexió
     ///simplement inicialitza l'objecte amb les dades necessàries per poder obrir connexió, qui obra la connexió és al invocar el mètode
