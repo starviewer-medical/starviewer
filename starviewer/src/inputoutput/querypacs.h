@@ -42,7 +42,7 @@ class Study;
 class Series;
 class Image;
 class DICOMTagReader;
-class PacsServer;
+class PACSConnection;
 
 class QueryPacs
 {
@@ -51,7 +51,7 @@ public:
 
     /** Estableix la connexió a utilitzar per comunicar-se amb el PACS
       */
-    void setConnection(PacsServer pacsServer);
+    void setConnection(PACSConnection pacsConnection);
 
     /** màscara dicom a cercar
      * @param mask màscara

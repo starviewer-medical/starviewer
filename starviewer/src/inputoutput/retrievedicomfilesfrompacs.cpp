@@ -15,7 +15,7 @@
 #include "dicommask.h"
 #include "logging.h"
 #include "dicomtagreader.h"
-#include "pacsserver.h"
+#include "pacsconnection.h"
 #include "pacsrequeststatus.h"
 
 namespace udg{
@@ -270,7 +270,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
          la connexió pel qual rebem les imatges, el comportament del PACS és desconegut, per exemple DCM4CHEE tanca la connexió amb el PACS, però
          el RAIM_Server no la tanca i la manté fent que no sortim mai d'aquesta classe. Degut a que no es pot saber en aquesta situació com actuaran 
          els PACS es tanca aquí la connexió amb el PACS.*/
-        condition = ASC_abortAssociation(m_pacsServer->getConnection());
+        condition = ASC_abortAssociation(m_pacsConnection->getConnection());
         if (!condition.good())
         {
             ERROR_LOG("Error al abortar la connexió pel amb el PACS" + QString(condition.text()));
@@ -313,14 +313,14 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     T_DIMSE_C_MoveRSP moveResponse;
     DcmDataset *statusDetail = NULL;
     Status state;
-    m_pacsServer = new PacsServer(m_pacs);
+    m_pacsConnection = new PACSConnection(m_pacs);
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
     MoveSCPCallbackData moveSCPCallbackData;
 
     m_numberOfImagesRetrieved = 0;
 
     //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei de retrieve configurat
-    state = m_pacsServer->connect( PacsServer::retrieveImages );
+    state = m_pacsConnection->connect( PACSConnection::retrieveImages );
     
     if ( !state.good() )
     {
@@ -330,7 +330,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     }
 
     /* which presentation context should be used, It's important that the connection has MoveStudyRoot level */
-    T_ASC_Association *association = m_pacsServer->getConnection(); 
+    T_ASC_Association *association = m_pacsConnection->getConnection(); 
     presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
     if (presentationContextID == 0) 
     {
@@ -347,9 +347,9 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
 
     OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData, 
-        DIMSE_BLOCKING, 0, m_pacsServer->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
+        DIMSE_BLOCKING, 0, m_pacsConnection->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
 
-    m_pacsServer->disconnect();
+    m_pacsConnection->disconnect();
 
     retrieveRequestStatus = processResponseStatusFromMoveSCP(&moveResponse, statusDetail);
 

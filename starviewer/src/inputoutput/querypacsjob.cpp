@@ -8,7 +8,7 @@
 
 #include <QString>
 
-#include "pacsserver.h"
+#include "pacsconnection.h"
 #include "querypacs.h"
 #include "logging.h"
 #include "patient.h"
@@ -33,14 +33,14 @@ QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice, DicomMask mask, QueryLevel que
 
 void QueryPacsJob::run()
 {
-    PacsServer pacsServer(m_pacsDevice);
+    PACSConnection pacsConnection(m_pacsDevice);
     Settings settings;
 
     INFO_LOG("Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; AEPACS= " + 
         m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + 
         QString().setNum(m_pacsDevice.getQueryRetrieveServicePort()) + ";");
 
-    m_queryStatus = pacsServer.connect(PacsServer::query);
+    m_queryStatus = pacsConnection.connect(PACSConnection::query);
 
     if (!m_queryStatus.good())
     {
@@ -48,7 +48,7 @@ void QueryPacsJob::run()
     }
     else
     {
-        m_queryPacs->setConnection(pacsServer);
+        m_queryPacs->setConnection(pacsConnection);
         //busquem els estudis
         m_queryStatus = m_queryPacs->query(m_mask);
         if (! m_queryStatus.good() && !isAbortRequested())
@@ -60,7 +60,7 @@ void QueryPacsJob::run()
 
         INFO_LOG (QString("Thread del PACS %1 finalitzant").arg(m_pacsDevice.getAETitle()));
 
-        pacsServer.disconnect();
+        pacsConnection.disconnect();
     }
 
     //TODO:Cal?

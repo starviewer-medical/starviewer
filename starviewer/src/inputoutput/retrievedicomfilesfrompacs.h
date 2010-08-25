@@ -43,7 +43,7 @@ namespace udg{
 class Status;
 class DicomMask;
 class DICOMTagReader;
-class PacsServer;
+class PACSConnection;
 
 /** 
     This class helps to interactive with the pacs, retrieve images that match with the mask
@@ -120,7 +120,7 @@ private:
 
     /// Request DICOM association;
     PacsDevice m_pacs;
-    PacsServer *m_pacsServer;
+    PACSConnection *m_pacsConnection;
 
     int m_numberOfImagesRetrieved;
 

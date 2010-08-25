@@ -7,7 +7,7 @@
 #include <diutil.h>
 
 #include "status.h"
-#include "pacsserver.h"
+#include "pacsconnection.h"
 #include "dicommask.h"
 #include "errordcmtk.h"
 #include "image.h"
@@ -25,10 +25,10 @@ namespace udg{
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 
-void QueryPacs::setConnection(PacsServer pacsServer)
+void QueryPacs::setConnection(PACSConnection pacsConnection)
 {
-    m_assoc = pacsServer.getConnection();
-    m_pacs = pacsServer.getPacs();
+    m_assoc = pacsConnection.getConnection();
+    m_pacs = pacsConnection.getPacs();
 }
 
 void QueryPacs::foundMatchCallback(

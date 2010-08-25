@@ -17,7 +17,7 @@
 
 #include "logging.h"
 #include "image.h"
-#include "pacsserver.h"
+#include "pacsconnection.h"
 #include "pacsrequeststatus.h"
 #include "status.h"
 #include "inputoutputsettings.h"
@@ -37,10 +37,10 @@ PacsDevice SendDICOMFilesToPACS::getPacs()
 
 PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> imageListToSend)
 {
-    PacsServer pacsServer( m_pacs );
+    PACSConnection pacsConnection( m_pacs );
     Status state;
     //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei d'store configurat
-    state = pacsServer.connect( PacsServer::storeImages );
+    state = pacsConnection.connect( PACSConnection::storeImages );
     
     if ( !state.good() )
     {
@@ -59,7 +59,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         }
         
         INFO_LOG(QString("S'enviara al PACS %1 el fitxer %2").arg(m_pacs.getAETitle(), imageToStore->getPath()));
-        if (storeSCU(pacsServer.getConnection(), qPrintable(imageToStore->getPath())))
+        if (storeSCU(pacsConnection.getConnection(), qPrintable(imageToStore->getPath())))
         {
             emit DICOMFileSent(imageToStore, getNumberOfDICOMFilesSentSuccesfully() + this->getNumberOfDICOMFilesSentWarning());
         }
@@ -70,7 +70,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACS::send(QList<Image*> im
         }
     }
 
-    pacsServer.disconnect();
+    pacsConnection.disconnect();
 
     return getStatusStoreSCU();
 }
