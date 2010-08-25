@@ -155,6 +155,10 @@
            <property name="text">
             <string>Delete</string>
            </property>
+           <property name="icon">
+            <iconset resource="../main/main.qrc">
+             <normaloff>:/images/removePrinter.png</normaloff>:/images/removePrinter.png</iconset>
+           </property>
           </widget>
          </item>
         </layout>
@@ -518,7 +522,7 @@
             <string>Add the new PACS to the list</string>
            </property>
            <property name="text">
-            <string>Add as new server</string>
+            <string>Add as new PACS</string>
            </property>
           </widget>
          </item>
@@ -528,7 +532,7 @@
             <string>Update the parameters of the selected PACS</string>
            </property>
            <property name="text">
-            <string>Update configuration</string>
+            <string>Update PACS</string>
            </property>
           </widget>
          </item>
