@@ -9,7 +9,7 @@
 #include "createdicomprintspool.h"
 #include "printdicomspool.h"
 #include "../inputoutput/pacsdevice.h"
-#include "../inputoutput/pacsserver.h"
+#include "../inputoutput/pacsconnection.h"
 #include "../inputoutput/status.h"
 #include "logging.h"
 #include "deletedirectory.h" 
@@ -95,8 +95,8 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
     pacs.setQueryRetrieveServicePort(printer.getPort());
     pacs.setAddress(printer.getHostname());
     
-    PacsServer pacsServer(pacs);
-    state = pacsServer.connect(PacsServer::echoPacs);
+    PACSConnection pacsConnection(pacs);
+    state = pacsConnection.connect(PACSConnection::echoPacs);
 
     //TODO: Si no reconeix el nostre aetitle no retornem l'error correcte, indique association rejected
     if (!state.good())
@@ -106,7 +106,7 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
     }
     else
     {
-        state = pacsServer.echo();
+        state = pacsConnection.echo();
 
         if (state.good())
         {
@@ -119,7 +119,7 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
             ERROR_LOG("Doing echo to printer " + pacs.getAETitle() + " doesn't responds correctly. Error description : " + state.text());
         }
 
-        pacsServer.disconnect();
+        pacsConnection.disconnect();
     }
 
     return resultTest;

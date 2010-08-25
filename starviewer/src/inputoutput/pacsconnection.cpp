@@ -1,4 +1,4 @@
-#include "pacsserver.h"
+#include "pacsconnection.h"
 
 #include <dimse.h>
 #include <ofcond.h>
@@ -15,7 +15,7 @@ namespace udg{
 /*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
  *de comunicació amb el PACS es fessin en mode verbose */
 
-PacsServer::PacsServer(PacsDevice pacsDevice)
+PACSConnection::PACSConnection(PacsDevice pacsDevice)
 {
     // Variable global de dcmtk per evitar el dnslookup, que dona problemes de lentitu a windows.
     // TODO: Al fer refactoring aquesta inicialització hauria de quedar en un lloc central de configuracions per dcmtk.
@@ -29,7 +29,7 @@ PacsServer::PacsServer(PacsDevice pacsDevice)
 
 /*TODO: El echo hauria de ser una classe més com ho és el RetrieveDICOMFilesFromPACS o SendDICOMFilesToPACS, no té gaire sentit que la connexió la tingui el echo
         ja que hi ha altres dispositius a part del PACS que també ens pot interessar fer un echo, per exemple una Impressora DICOM*/
-Status PacsServer::echo()
+Status PACSConnection::echo()
 {
     DIC_US id = m_dicomAssociation->nextMsgID++; // generate next message ID
     DIC_US status; // DIMSE status of C-ECHO-RSP will be stored here
@@ -42,7 +42,7 @@ Status PacsServer::echo()
     return Status().setStatus(status_echo);
 }
 
-OFCondition PacsServer::configureEcho()
+OFCondition PACSConnection::configureEcho()
 {
     const char *transferSyntaxes[] = {UID_LittleEndianImplicitTransferSyntax};
     int presentationContextID = 1; //presentationContextID always has to be odd
@@ -50,7 +50,7 @@ OFCondition PacsServer::configureEcho()
     return ASC_addPresentationContext(m_associationParameters, presentationContextID, UID_VerificationSOPClass, transferSyntaxes, DIM_OF(transferSyntaxes));
 }
 
-OFCondition PacsServer::configureFind()
+OFCondition PACSConnection::configureFind()
 {
     const char *transferSyntaxes[] = {NULL, NULL, UID_LittleEndianImplicitTransferSyntax};
     int presentationContextID = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
@@ -73,7 +73,7 @@ OFCondition PacsServer::configureFind()
         DIM_OF(transferSyntaxes));
 }
 
-OFCondition PacsServer::configureMove()
+OFCondition PACSConnection::configureMove()
 {
     int presentationContextID = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
     const char *transferSyntaxes[] = { NULL, NULL, UID_LittleEndianImplicitTransferSyntax };
@@ -94,7 +94,7 @@ OFCondition PacsServer::configureMove()
    return addPresentationContextMove(m_associationParameters, presentationContextID, UID_MOVEStudyRootQueryRetrieveInformationModel);
 }
 
-OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *associationParameters, int presentationContextID, const char *abstractSyntax)
+OFCondition PACSConnection::addPresentationContextMove(T_ASC_Parameters *associationParameters, int presentationContextID, const char *abstractSyntax)
 {
     /* We prefer to use Explicitly encoded transfer syntaxes. If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
     to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
@@ -123,7 +123,7 @@ OFCondition PacsServer::addPresentationContextMove(T_ASC_Parameters *association
 
 /*TODO Estudiar si el millor transferSyntax per defecte és UID_LittleEndianExplicitTransferSyntax o com els cas del move és el JPegLossLess
  */
-OFCondition PacsServer::configureStore()
+OFCondition PACSConnection::configureStore()
 {
     /*Each SOP Class will be proposed in two presentation contexts (unless the opt_combineProposedTransferSyntaxes global variable is true).
      The command line specified a preferred transfer syntax to use. This prefered transfer syntax will be proposed in one presentation context 
@@ -203,7 +203,7 @@ OFCondition PacsServer::configureStore()
     return condition;
 }
 
-OFCondition PacsServer::addPresentationContext(int presentationContextId, const QString &abstractSyntax, QList<const char*> transferSyntaxList)
+OFCondition PACSConnection::addPresentationContext(int presentationContextId, const QString &abstractSyntax, QList<const char*> transferSyntaxList)
 {
     // create an array of supported/possible transfer syntaxes
     const char **transferSyntaxes = new const char*[transferSyntaxList.size()];
@@ -221,12 +221,12 @@ OFCondition PacsServer::addPresentationContext(int presentationContextId, const 
     return condition;
 }
 
-OFCondition PacsServer::addPresentationContext(int presentationContextId, const QString &abstractSyntax, const char *transferSyntax)
+OFCondition PACSConnection::addPresentationContext(int presentationContextId, const QString &abstractSyntax, const char *transferSyntax)
 {
     return ASC_addPresentationContext(m_associationParameters, presentationContextId, qPrintable(abstractSyntax), &transferSyntax, 1, ASC_SC_ROLE_DEFAULT);
 }
 
-Status PacsServer::connect(ModalityConnection modality)
+Status PACSConnection::connect(ModalityConnection modality)
 {
     Status state;
     Settings settings;
@@ -329,7 +329,7 @@ Status PacsServer::connect(ModalityConnection modality)
    return state.setStatus(DcmtkNoError);
 }
 
-void PacsServer::disconnect()
+void PACSConnection::disconnect()
 {
     ASC_releaseAssociation(m_dicomAssociation); // release association
     ASC_destroyAssociation(&m_dicomAssociation); // delete assoc structure
@@ -337,21 +337,21 @@ void PacsServer::disconnect()
     ASC_dropNetwork(&m_associationNetwork); //destrueix l'objecte i tanca el socket obert, fins que no es fa el drop de l'objecte no es tanca el socket obert
 }
 
-QString PacsServer::constructPacsServerAddress(ModalityConnection modality, PacsDevice pacsDevice)
+QString PACSConnection::constructPacsServerAddress(ModalityConnection modality, PacsDevice pacsDevice)
 {
     //The format is "server:port"
     QString pacsServerAddress = pacsDevice.getAddress() + ":";
 
     switch (modality)
     {
-        case PacsServer::query:
-        case PacsServer::retrieveImages:
+        case PACSConnection::query:
+        case PACSConnection::retrieveImages:
             pacsServerAddress += QString().setNum(pacsDevice.getQueryRetrieveServicePort());
             break;
-        case PacsServer::storeImages:
+        case PACSConnection::storeImages:
             pacsServerAddress += QString().setNum(pacsDevice.getStoreServicePort());
             break;
-        case PacsServer::echoPacs:
+        case PACSConnection::echoPacs:
             if (pacsDevice.isQueryRetrieveServiceEnabled())
             {
                 pacsServerAddress +=  QString().setNum(pacsDevice.getQueryRetrieveServicePort());
@@ -374,7 +374,7 @@ QString PacsServer::constructPacsServerAddress(ModalityConnection modality, Pacs
     return pacsServerAddress;
 }
 
-T_ASC_Network* PacsServer::initializeAssociationNetwork(ModalityConnection modality)
+T_ASC_Network* PACSConnection::initializeAssociationNetwork(ModalityConnection modality)
 {
     Settings settings;
     //Si no es tracta d'una descarrega indiquem port 0
@@ -393,17 +393,17 @@ T_ASC_Network* PacsServer::initializeAssociationNetwork(ModalityConnection modal
     return associationNetwork;
 }
 
-PacsDevice PacsServer::getPacs()
+PacsDevice PACSConnection::getPacs()
 {
     return m_pacs;
 }
 
-T_ASC_Association* PacsServer::getConnection()
+T_ASC_Association* PACSConnection::getConnection()
 {
     return m_dicomAssociation;
 }
 
-T_ASC_Network* PacsServer::getNetwork()
+T_ASC_Network* PACSConnection::getNetwork()
 {
     return m_associationNetwork;
 }

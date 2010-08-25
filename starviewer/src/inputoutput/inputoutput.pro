@@ -26,7 +26,7 @@ FORMS += qconfigurationscreenbase.ui \
 HEADERS += databaseconnection.h \
     pacsdevicemanager.h \
     pacsdevice.h \
-    pacsserver.h \
+    pacsconnection.h \
     retrievedicomfilesfrompacs.h \
     status.h \
     converttodicomdir.h \
@@ -84,7 +84,7 @@ HEADERS += databaseconnection.h \
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsdevice.cpp \
-    pacsserver.cpp \
+    pacsconnection.cpp \
     retrievedicomfilesfrompacs.cpp \
     status.cpp \
     converttodicomdir.cpp \

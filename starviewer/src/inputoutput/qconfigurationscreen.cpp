@@ -9,7 +9,7 @@
 #include <QMessageBox>
 #include <QDir>
 
-#include "pacsserver.h"
+#include "pacsconnection.h"
 #include "status.h"
 #include "pacsdevice.h"
 #include "pacsdevicemanager.h"
@@ -277,9 +277,9 @@ void QConfigurationScreen::test()
         QApplication::setOverrideCursor( QCursor( Qt::WaitCursor ) );
 
         //Agafem les dades del PACS que estan el textbox per testejar
-        PacsServer pacsServer(getPacsDeviceFromControls());
+        PACSConnection pacsConnection(getPacsDeviceFromControls());
 
-        state = pacsServer.connect( PacsServer::echoPacs );
+        state = pacsConnection.connect( PACSConnection::echoPacs );
 
         if ( !state.good() )
         {
@@ -291,7 +291,7 @@ void QConfigurationScreen::test()
         }
         else
         {
-            state = pacsServer.echo();
+            state = pacsConnection.echo();
 
             QApplication::restoreOverrideCursor();
 

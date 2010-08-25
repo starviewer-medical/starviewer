@@ -1,5 +1,5 @@
-#ifndef PACSSERVER
-#define PACSSERVER
+#ifndef PACSCONNECTION
+#define PACSCONNECTION
 
 
 #include "pacsdevice.h"
@@ -17,7 +17,7 @@ namespace udg{
 
 class Status;
 
-class PacsServer
+class PACSConnection
 {
 
 public:
@@ -27,7 +27,7 @@ public:
     /** Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
      */
-    PacsServer(PacsDevice pacsDevice);
+    PACSConnection(PacsDevice pacsDevice);
 
     /** Aquesta funció ens intenta connectar al PACS
      * @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges
