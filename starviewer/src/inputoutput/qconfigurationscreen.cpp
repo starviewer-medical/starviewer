@@ -130,7 +130,7 @@ void QConfigurationScreen:: clear()
 
 void QConfigurationScreen::addPacs()
 {
-    if (validatePacsDevice())
+    if (validatePacsDeviceToSave())
     {
         PacsDeviceManager pacsDeviceManager;
         PacsDevice pacs = getPacsDeviceFromControls();
@@ -198,7 +198,7 @@ void QConfigurationScreen::updatePacs()
         return;
     }
 
-    if (validatePacsDevice())
+    if (validatePacsDeviceToSave())
     {
         PacsDevice pacs = getPacsDeviceFromControls();
         
@@ -251,8 +251,7 @@ void QConfigurationScreen::fillPacsListView()
 
 void QConfigurationScreen::test()
 {
-    //mirem que hi hagi algun element (pacs) seleccionat per a poder testejar, altrament informem de que cal seleccionar un node
-    if (m_PacsTreeView->selectedItems().count() > 0)
+    if (validatePacsDeviceToEcho())
     {
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -292,22 +291,16 @@ void QConfigurationScreen::test()
             }
         }
     }
-    else
-    {
-        QMessageBox::information(this, tr("Information"), tr("To test a PACS it is necessary to select an item of the list."));
-    }
 }
 
-bool QConfigurationScreen::validatePacsDevice()
+bool QConfigurationScreen::validatePacsDeviceToEcho()
 {
-    //Per força tot els pacs han de tenir algun AETitle
     if (m_textAETitle->text().length() == 0)
     {
          QMessageBox::warning(this, ApplicationNameString, tr("AETitle field can't be empty."));
         return false;
     }
 
-    //adreça del pacs no pot estar en blanc
     if (m_textAddress->text().length() == 0)
     {
         QMessageBox::warning(this, ApplicationNameString, tr ("Incorrect server address."));
@@ -332,14 +325,26 @@ bool QConfigurationScreen::validatePacsDevice()
         return false;
     }
 
-    //la institució no pot estar en blanc
-    if (m_textInstitution->text().length() == 0)
+    return true;
+}
+
+bool QConfigurationScreen::validatePacsDeviceToSave()
+{
+    if (validatePacsDeviceToEcho())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Institution field can't be empty."));
+        //la institució no pot estar en blanc
+        if (m_textInstitution->text().length() == 0)
+        {
+            QMessageBox::warning(this, ApplicationNameString, tr("Institution field can't be empty."));
+            return false;
+        }
+
+        return true;
+    }
+    else
+    {
         return false;
     }
-
-    return true;
 }
 
 bool QConfigurationScreen::validateChanges()

@@ -78,18 +78,16 @@ private:
     /// Crea els input validators necessaris pels diferents camps d'edició.
     void configureInputValidator();
 
-    /** Comprovem que els paràmetres dels PACS siguin correctes.
-     *  1r Que el AETitle no estigui en blanc,
-     *  2n Que l'adreça del PACS no estigui en blanc,
-     *  3r Que el Port del Pacs sigui entre 0 i 65535
-     *  4t Que l'institució no estigui buida
-     * @return bool, retorna cert si tots els parametres del pacs son correctes
-     */
-    bool validatePacsDevice();
+    ///Comprova que ens hagin entrat les dades bàsiques per poguer fer un echo a un PACS.
+    ///Aquestes dades són: que tingui AETitle, que tingui adreça, que tingui un servei activat i un port entre 0 i 65535
+    bool validatePacsDeviceToEcho();
+
+    ///Valida que tinguis les dades per fer un echo invocant el mètode validateBasicPacsDeviceToEcho() i a més comprova que la institució no estigui buida
+    bool validatePacsDeviceToSave();
 
     /** Valida que els canvis de la configuració siguin correctes
      *  Port local entre 0 i 65535
-     *  Numero màxim de connexions 25
+     *  Numero màxim de connexions 15
      *  Path de la base de dades i directori dicom's existeix
      *  @return indica si els canvis son correctes
      */
