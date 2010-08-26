@@ -189,7 +189,7 @@ Status PACSConnection::connect(ModalityConnection modality)
     OFCondition condition = ASC_createAssociationParameters(&m_associationParameters, ASC_DEFAULTMAXPDU);
     if (!condition.good())
     {
-        ERROR_LOG("Error al crear els parametres de l'associacio, descripcio error: " + state.text());
+        ERROR_LOG("Error al crear els parametres de l'associacio, descripcio error: " + QString(condition.text()));
         return state.setStatus(condition);
     }
 
@@ -223,7 +223,8 @@ Status PACSConnection::connect(ModalityConnection modality)
 
     if (!condition.good())
     {
-        ERROR_LOG("S'ha produit un error al configurar la connexio, descripcio error: " + QString(condition.text())); 
+        ERROR_LOG("S'ha produit un error al configurar la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
+            constructPacsServerAddress(modality, m_pacs) + ". Descripcio error: " + QString(condition.text())); 
         return state.setStatus(condition);
     }
 
@@ -232,7 +233,8 @@ Status PACSConnection::connect(ModalityConnection modality)
 
     if (m_associationNetwork == NULL)
     {
-        ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio.");
+        ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
+            constructPacsServerAddress(modality, m_pacs));
         return state.setStatus(DcmtkCanNotConnectError);
     }
 
@@ -243,13 +245,15 @@ Status PACSConnection::connect(ModalityConnection modality)
     {
         if (ASC_countAcceptedPresentationContexts(m_associationParameters)  ==  0)
         {
-            ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats.");
+            ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
+                constructPacsServerAddress(modality, m_pacs));
             return state.setStatus(DcmtkCanNotConnectError);
         }
     }
     else
     {
-        ERROR_LOG("No s'ha pogut connectat amb el PACS, descripcio error: " + QString(condition.text()));
+        ERROR_LOG( "S'ha produit un error al intentar connectar amb el PACS. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
+            constructPacsServerAddress(modality, m_pacs)+ ". Descripcio error: " + QString(condition.text()));
 
         /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM,
          *com no que podrem descarregar les imatges perquè no hem pogut connectar amb el PACS per sol·licitar-ne la descarrega,
