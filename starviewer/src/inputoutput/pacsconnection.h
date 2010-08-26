@@ -10,9 +10,7 @@ struct T_ASC_Association;
 class OFCondition;
 class QString;
 
-/** Aquest classe és la que ens ajuda interectuar amb el pacs.
- * La classe conté les principals funcions i accions per connectar-nos en el pacs amb l'objectiu, de fer un echo, buscar informació o descarregar imatges. Alhora de connectar-nos al constructor passem els paràmetres mínim per connectar-nos. És molt important llegir molt bé la documentació d'aquesta classe per saber quins paràmetres utiltizar, si no voleu tenir problemes alhora de buscar informació,descarrega imatges
- */
+/** Aquest classe s'encarrega de configurar la connexió i connectar amb el PACS en funció del servei que li volguem sol·licitar.*/
 namespace udg{
 
 class Status;
@@ -105,9 +103,13 @@ private:
 private:
 
     PacsDevice m_pacs;
-    T_ASC_Network *m_associationNetwork; // network struct, contains DICOM upper layer FSM etc.
-    T_ASC_Parameters *m_associationParameters; // parameters of association request
-    T_ASC_Association *m_dicomAssociation; // request DICOM association;
+    //network struct, contains DICOM upper layer FSM etc. A nivell DICOM no és res és un objecte propi de DCMTK, conté paràmetres de la connexió i en el cas 
+    //descàrrega d'imatges se li indica per quin port escoltem les peticions DICOM. 
+    T_ASC_Network *m_associationNetwork; 
+    //Defineix els paràmetres de l'associació que s'utilitzarà per la comunicació entre Starviewer i el PACS, conté adreça del PACS, tipus de connexió,....
+    T_ASC_Parameters *m_associationParameters; //parameters of association request
+    //L'associació és el canal de comunicació que s'utilitza per l'intercanvi d'informació entre dispositius DICOM (és la connexió amb el PACS)
+    T_ASC_Association *m_dicomAssociation; 
 };
 };
 #endif
