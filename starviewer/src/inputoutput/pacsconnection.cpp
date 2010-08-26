@@ -11,9 +11,6 @@
 
 namespace udg{
 
-/*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
- *de comunicació amb el PACS es fessin en mode verbose */
-
 PACSConnection::PACSConnection(PacsDevice pacsDevice)
 {
     // Variable global de dcmtk per evitar el dnslookup, que dona problemes de lentitu a windows.
@@ -162,7 +159,7 @@ OFCondition PACSConnection::configureStore()
 
 OFCondition PACSConnection::addPresentationContext(int presentationContextId, const QString &abstractSyntax, QList<const char*> transferSyntaxList)
 {
-    // create an array of supported/possible transfer syntaxes
+    //create an array of supported/possible transfer syntaxes
     const char **transferSyntaxes = new const char*[transferSyntaxList.size()];
     int transferSyntaxCount = 0;
 
@@ -206,18 +203,18 @@ bool PACSConnection::connect(ModalityConnection modality)
 
     switch (modality)
     {
-        case echoPacs: //configure echo
-                        condition = configureEcho();
-                        break;
-        case query:    //configure the find paramaters depending on modality connection
-                        condition = configureFind();
-                        break;
-        case retrieveImages: //configure the move paramaters depending on modality connection
-                        condition = configureMove();
-                        break;
+        case echoPacs: 
+            condition = configureEcho();
+            break;
+        case query:
+            condition = configureFind();
+            break;
+        case retrieveImages:
+            condition = configureMove();
+            break;
         case storeImages:
-                        condition = configureStore();
-                        break;
+            condition = configureStore();
+            break;
     }
 
     if (!condition.good())
@@ -237,7 +234,7 @@ bool PACSConnection::connect(ModalityConnection modality)
         return false;
     }
 
-    //try to connect
+    //Intentem connectar
     condition = ASC_requestAssociation(m_associationNetwork, m_associationParameters, &m_dicomAssociation);
 
     if (condition.good())
@@ -254,9 +251,8 @@ bool PACSConnection::connect(ModalityConnection modality)
         ERROR_LOG( "S'ha produit un error al intentar connectar amb el PACS. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
             constructPacsServerAddress(modality, m_pacs)+ ". Descripcio error: " + QString(condition.text()));
 
-        /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM,
-         *com no que podrem descarregar les imatges perquè no hem pogut connectar amb el PACS per sol·licitar-ne la descarrega,
-         *tanquem el port local que espera per connexions entrants.*/
+        /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM, com no que podrem descarregar 
+         les imatges perquè no hem pogut connectar amb el PACS per sol·licitar-ne la descarrega, tanquem el port local que espera per connexions entrants.*/
         if (modality == retrieveImages)
         {
             disconnect();
@@ -270,10 +266,10 @@ bool PACSConnection::connect(ModalityConnection modality)
 
 void PACSConnection::disconnect()
 {
-    ASC_releaseAssociation(m_dicomAssociation); // release association
-    ASC_destroyAssociation(&m_dicomAssociation); // delete assoc structure
+    ASC_releaseAssociation(m_dicomAssociation);
+    ASC_destroyAssociation(&m_dicomAssociation);
 
-    ASC_dropNetwork(&m_associationNetwork); //destrueix l'objecte i tanca el socket obert, fins que no es fa el drop de l'objecte no es tanca el socket obert
+    ASC_dropNetwork(&m_associationNetwork); //destrueix l'objecte i tanca el socket obert, fins que no es fa el drop de l'objecte no es tanca el socket
 }
 
 QString PACSConnection::constructPacsServerAddress(ModalityConnection modality, PacsDevice pacsDevice)
