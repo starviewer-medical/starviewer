@@ -259,19 +259,17 @@ void QConfigurationScreen::test()
         PacsDevice pacs = getPacsDeviceFromControls();
         PACSConnection pacsConnection(pacs);
 
-        Status state = pacsConnection.connect(PACSConnection::echoPacs);
-
-        if (!state.good())
+        if (!pacsConnection.connect(PACSConnection::echoPacs))
         {
             QString message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of It are correct.").arg(pacs.getAETitle());
 
             QApplication::restoreOverrideCursor();
             QMessageBox::warning(this, ApplicationNameString, message);
-            INFO_LOG("Doing echo PACS " + pacs.getAETitle() + " doesn't responds. PACS ERROR : " + state.text());
+            INFO_LOG("Doing echo PACS " + pacs.getAETitle() + " doesn't responds.");
         }
         else
         {
-            state = pacsConnection.echo();
+            Status state = pacsConnection.echo();
             pacsConnection.disconnect();
 
             QApplication::restoreOverrideCursor();

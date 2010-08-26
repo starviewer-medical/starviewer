@@ -33,7 +33,7 @@ public:
      * @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges
      * @return retorna l'estat de la connexió
      */
-    Status connect(ModalityConnection modalityConnection);
+    bool connect(ModalityConnection modalityConnection);
 
     /** Ens permet fer un echo al PACS. Per defecte per qualsevol modalitat de connexió bé sigui busca informació o descarregar imatges per defecte permet fer un echo, per comprovar si els PACS està viu
      * @return retorna l'estatus del echo
