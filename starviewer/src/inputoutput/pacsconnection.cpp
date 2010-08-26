@@ -136,6 +136,10 @@ OFCondition PACSConnection::configureStore()
         // sop class with preferred transfer syntax
         condition = ASC_addPresentationContext(m_associationParameters, presentationContextID, qPrintable(sopClass), &preferredTransferSyntax, 1, ASC_SC_ROLE_DEFAULT); 
         presentationContextID += 2;   /* only odd presentation context id's */
+        if (!condition.good())
+        {
+            break;
+        }
 
         if (fallbackSyntaxes.size() > 0)
         {
@@ -147,6 +151,10 @@ OFCondition PACSConnection::configureStore()
             // sop class with fallback transfer syntax
             condition = addPresentationContext(presentationContextID, sopClass, fallbackSyntaxes);
             presentationContextID += 2;       /* only odd presentation context id's */
+            if (!condition.good())
+            {
+                break;
+            }
         }
     }
 
@@ -173,6 +181,7 @@ OFCondition PACSConnection::addPresentationContext(int presentationContextId, co
 
 Status PACSConnection::connect(ModalityConnection modality)
 {
+    //Hi ha invocacions de mètodes de dcmtk que no se'ls hi comprova el condition que retornen, perquè se'ls hi ha mirat el codi i sempre retornen EC_NORMAL
     Status state;
     Settings settings;
 
@@ -180,29 +189,18 @@ Status PACSConnection::connect(ModalityConnection modality)
     OFCondition condition = ASC_createAssociationParameters(&m_associationParameters, ASC_DEFAULTMAXPDU);
     if (!condition.good())
     {
+        ERROR_LOG("Error al crear els parametres de l'associacio, descripcio error: " + state.text());
         return state.setStatus(condition);
     }
 
     // set calling and called AE titles
     ASC_setAPTitles(m_associationParameters, qPrintable(settings.getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_pacs.getAETitle()), NULL);
 
-    /* Set the transport layer type (type of network connection) in the params */
-    /* strucutre. The default is an insecure connection; where OpenSSL is  */
-    /* available the user is able to request an encrypted,secure connection. */
     //defineix el nivell de seguretat de la connexió en aquest cas diem que no utilitzem cap nivell de seguretat
-    condition = ASC_setTransportLayerType(m_associationParameters, OFFalse);
-    if (!condition.good()) 
-    {
-        return state.setStatus(condition);
-    }
+    ASC_setTransportLayerType(m_associationParameters, OFFalse);
 
-    // the DICOM server accepts connections at server.nowhere.com port
-    condition = ASC_setPresentationAddresses(m_associationParameters, qPrintable(QHostInfo::localHostName()), 
+    ASC_setPresentationAddresses(m_associationParameters, qPrintable(QHostInfo::localHostName()), 
         qPrintable(constructPacsServerAddress(modality, m_pacs)));
-    if (!condition.good())
-    {
-        return state.setStatus(condition);
-    }
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
     dcmConnectionTimeout.set(settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt());
@@ -225,6 +223,7 @@ Status PACSConnection::connect(ModalityConnection modality)
 
     if (!condition.good())
     {
+        ERROR_LOG("S'ha produit un error al configurar la connexio, descripcio error: " + QString(condition.text())); 
         return state.setStatus(condition);
     }
 
@@ -233,6 +232,7 @@ Status PACSConnection::connect(ModalityConnection modality)
 
     if (m_associationNetwork == NULL)
     {
+        ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio.");
         return state.setStatus(DcmtkCanNotConnectError);
     }
 
@@ -249,6 +249,8 @@ Status PACSConnection::connect(ModalityConnection modality)
     }
     else
     {
+        ERROR_LOG("No s'ha pogut connectat amb el PACS, descripcio error: " + QString(condition.text()));
+
         /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM,
          *com no que podrem descarregar les imatges perquè no hem pogut connectar amb el PACS per sol·licitar-ne la descarrega,
          *tanquem el port local que espera per connexions entrants.*/
@@ -296,11 +298,11 @@ QString PACSConnection::constructPacsServerAddress(ModalityConnection modality, 
             }
             else
             {
-                ERROR_LOG("No s'ha pogut configurar per quin port fer l'echo perquè el PACS " + pacsDevice.getAETitle() + " no té cap servei activat");
+                ERROR_LOG("No s'ha pogut configurar per quin port fer l'echo perque el PACS " + pacsDevice.getAETitle() + " no te cap servei activat");
             }
             break;
         default:
-            ERROR_LOG("No s'ha pogut configurar per quin port fer l'echo al PACS " + pacsDevice.getAETitle() + " perquè la modalitat de connexió és invàlida");
+            ERROR_LOG("No s'ha pogut configurar per quin port fer l'echo al PACS " + pacsDevice.getAETitle() + " perque la modalitat de connexio és invalida");
     }
 
     INFO_LOG("Pacs Adress build:" + pacsServerAddress);
@@ -320,7 +322,7 @@ T_ASC_Network* PACSConnection::initializeAssociationNetwork(ModalityConnection m
     OFCondition condition = ASC_initializeNetwork(networkRole, networkPort , timeout, &associationNetwork);
     if (!condition.good())
     {
-        ERROR_LOG("No s'ha pogut inicialitzar l'objecte network" + QString(condition.text()));
+        ERROR_LOG("No s'ha pogut inicialitzar l'objecte network, despripcio error" + QString(condition.text()));
         return NULL;
     }
 
