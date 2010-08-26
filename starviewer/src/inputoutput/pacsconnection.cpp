@@ -6,7 +6,6 @@
 #include <QHostInfo>
 
 #include "status.h"
-#include "errordcmtk.h"
 #include "logging.h"
 #include "inputoutputsettings.h"
 
@@ -179,7 +178,7 @@ OFCondition PACSConnection::addPresentationContext(int presentationContextId, co
     return condition;
 }
 
-Status PACSConnection::connect(ModalityConnection modality)
+bool PACSConnection::connect(ModalityConnection modality)
 {
     //Hi ha invocacions de mètodes de dcmtk que no se'ls hi comprova el condition que retornen, perquè se'ls hi ha mirat el codi i sempre retornen EC_NORMAL
     Status state;
@@ -190,7 +189,7 @@ Status PACSConnection::connect(ModalityConnection modality)
     if (!condition.good())
     {
         ERROR_LOG("Error al crear els parametres de l'associacio, descripcio error: " + QString(condition.text()));
-        return state.setStatus(condition);
+        return false;
     }
 
     // set calling and called AE titles
@@ -225,7 +224,7 @@ Status PACSConnection::connect(ModalityConnection modality)
     {
         ERROR_LOG("S'ha produit un error al configurar la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
             constructPacsServerAddress(modality, m_pacs) + ". Descripcio error: " + QString(condition.text())); 
-        return state.setStatus(condition);
+        return false;
     }
 
     //Inicialitzem l'objecte network però la connexió no s'obre fins a l'invocacació del mètode ASC_requestAssociation
@@ -235,7 +234,7 @@ Status PACSConnection::connect(ModalityConnection modality)
     {
         ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
             constructPacsServerAddress(modality, m_pacs));
-        return state.setStatus(DcmtkCanNotConnectError);
+        return false;
     }
 
     //try to connect
@@ -247,7 +246,7 @@ Status PACSConnection::connect(ModalityConnection modality)
         {
             ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
                 constructPacsServerAddress(modality, m_pacs));
-            return state.setStatus(DcmtkCanNotConnectError);
+            return false;
         }
     }
     else
@@ -263,10 +262,10 @@ Status PACSConnection::connect(ModalityConnection modality)
             disconnect();
         }
 
-        return state.setStatus(condition);
+        return false;
     }
 
-   return state.setStatus(DcmtkNoError);
+   return true;
 }
 
 void PACSConnection::disconnect()

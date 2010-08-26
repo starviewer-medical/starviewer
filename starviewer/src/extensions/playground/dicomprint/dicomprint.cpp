@@ -84,7 +84,6 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 
 bool DicomPrint::echoPrinter(DicomPrinter printer)
 {
-    Status state;
     PacsDevice pacs;
     bool resultTest = false;;
 
@@ -96,17 +95,16 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
     pacs.setAddress(printer.getHostname());
     
     PACSConnection pacsConnection(pacs);
-    state = pacsConnection.connect(PACSConnection::echoPacs);
 
     //TODO: Si no reconeix el nostre aetitle no retornem l'error correcte, indique association rejected
-    if (!state.good())
+    if (!pacsConnection.connect(PACSConnection::echoPacs))
     {
         m_lastError = DicomPrint::CanNotConnectToDicomPrinter;
-        ERROR_LOG("Can't connect to printer " + pacs.getAETitle() + ". Error description : " + state.text());
+        ERROR_LOG("Can't connect to printer " + pacs.getAETitle() + " to do an echo.");
     }
     else
     {
-        state = pacsConnection.echo();
+        Status state = pacsConnection.echo();
 
         if (state.good())
         {
