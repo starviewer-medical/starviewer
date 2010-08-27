@@ -3,6 +3,7 @@
 #include <QString>
 #include <QMessageBox>
 #include <QHash>
+#include <QThread>
 
 #include "inputoutputsettings.h"
 #include "starviewerapplication.h"
@@ -17,16 +18,23 @@ namespace udg{
 
 RISRequestManager::~RISRequestManager()
 {
-    delete m_listenRISRequestThread;
+    m_listenRISRequestsQThread->terminate();
+    m_listenRISRequestsQThread->wait();
+
+    delete m_listenRISRequests;
 }
 
 void RISRequestManager::initialize()
 {
-    Settings settings;
+    m_listenRISRequestsQThread = new QThread();
+    m_listenRISRequests = new ListenRISRequests(this);
 
-    m_listenRISRequestThread = new ListenRISRequestThread(this);
+    //La classe ListenRISRequests necessita el seu propi thread perquè sempre està executant-se esperant noves peticions, si l'executes el thread principal
+    //Starviewer quedaria congelada només escoltant peticions del RIS
+    m_listenRISRequests->moveToThread(m_listenRISRequestsQThread);
+    m_listenRISRequestsQThread->start();
 
-    if (settings.getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
+    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
         m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
 
     m_pacsManager = new PacsManager();
@@ -36,8 +44,11 @@ void RISRequestManager::initialize()
 
 void RISRequestManager::createConnections()
 {
-    connect(m_listenRISRequestThread, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRISRequest(DicomMask)));
-    connect(m_listenRISRequestThread, SIGNAL(errorListening(ListenRISRequestThread::ListenRISRequestThreadError)), SLOT(showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError)));
+    connect(m_listenRISRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRISRequest(DicomMask)));
+    connect(m_listenRISRequests, SIGNAL(errorListening(ListenRISRequests::ListenRISRequestsError)), SLOT(showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError)));
+    /**Hem d'indica a la classe ListenRISRequests que pot començar a escoltar peticions a través d'un signal, perquè si ho fèssim invocant el mètode listen() directament
+       aquest seria executat pel thread que l'invoca, en canvi amb un signal aquest és atés pel thread al que pertany ListenRISRequests*/
+    connect(this, SIGNAL(listenRISRequests()), m_listenRISRequests, SLOT(listen()));
 
     connect(m_pacsManager, SIGNAL(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)), SLOT(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)));
     connect(m_pacsManager, SIGNAL(errorQueryingStudy(PacsDevice)), SLOT(errorQueryingStudy(PacsDevice)));
@@ -48,7 +59,7 @@ void RISRequestManager::listen()
 {
     initialize();
 
-    m_listenRISRequestThread->listen();
+    emit listenRISRequests();
 }
 
 void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
@@ -148,17 +159,17 @@ void RISRequestManager::errorQueryingStudy(PacsDevice pacsDeviceError)
     QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
 }
 
-void RISRequestManager::showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError error)
+void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)
 {
     QString message;
     Settings settings;
     int risPort = settings.getValue( InputOutputSettings::RISRequestsPort ).toInt();
     switch(error)
     {
-        case ListenRISRequestThread::RisPortInUse :
+        case ListenRISRequests::RisPortInUse :
             message = tr("Can't listen RIS requests on port %1, the port is in use by another application.").arg(risPort);
             break;
-        case ListenRISRequestThread::UnknownNetworkError :
+        case ListenRISRequests::UnknownNetworkError :
             message = tr("Can't listen RIS requests on port %1, an unknown network error has produced.").arg(risPort);
             message += tr("\nIf the problem persists contact with an administrator.");
             break;

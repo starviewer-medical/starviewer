@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "listenrisrequestthread.h"
+#include "listenrisrequests.h"
 
 #include <QTcpServer>
 #include <QHostAddress>
@@ -21,22 +21,19 @@
 namespace udg
 {
 
-const int ListenRISRequestThread::TimeOutToReadData = 15000;
+const int ListenRISRequests::TimeOutToReadData = 15000;
 
-ListenRISRequestThread::ListenRISRequestThread(QObject *parent):QThread(parent)
+ListenRISRequests::ListenRISRequests(QObject *parent)
 {
     qRegisterMetaType<DicomMask>("DicomMask");//Registrem la classe DicomMask per poder-ne fer un signal
-    qRegisterMetaType<ListenRISRequestThread::ListenRISRequestThreadError>("ListenRISRequestThread::ListenRISRequestThreadError");
+    qRegisterMetaType<ListenRISRequests::ListenRISRequestsError>("ListenRISRequests::ListenRISRequestsError");
+
+    m_isListeningRISRequests = false;
 }
 
-void ListenRISRequestThread::listen()
+bool ListenRISRequests::isListening()
 {
-    start(); //engeguem el thread
-}
-
-bool ListenRISRequestThread::isListen()
-{
-    return isRunning();
+    return m_isListeningRISRequests;
 }
 
 /* El motiu que el disseny d'escolta peticions del RIS no segueixi el model tradicional de serveis de xarxa, que consisteix en tenir un thread que s'encarrega
@@ -52,7 +49,7 @@ bool ListenRISRequestThread::isListen()
  *  nova connexió.
 
  */
-void ListenRISRequestThread::run()
+void ListenRISRequests::listen()
 {
     QTcpServer tcpRISServer;
     Settings settings;
@@ -62,6 +59,8 @@ void ListenRISRequestThread::run()
         networkError(&tcpRISServer);
         return;
     }
+
+    m_isListeningRISRequests = true;
 
     while (tcpRISServer.waitForNewConnection(-1)) //Esperem rebre connexions
     {
@@ -97,9 +96,11 @@ void ListenRISRequestThread::run()
     //Si sortim del bucle és que s'ha produït un error
     ERROR_LOG("S'ha produït un error esperant peticions del RIS, error: " + tcpRISServer.errorString());
     networkError(&tcpRISServer);
+
+    m_isListeningRISRequests = false;
 }
 
-void ListenRISRequestThread::processRequest(QString risRequestData)
+void ListenRISRequests::processRequest(QString risRequestData)
 {
     //com ara mateix només rebrem peticions del RIS PIER del IDI, no cal esbrinar quin tipus de petició és per defecte entenem que és petició del RIS PIER
     DicomMask mask;
@@ -117,7 +118,7 @@ void ListenRISRequestThread::processRequest(QString risRequestData)
     }
 }
 
-void ListenRISRequestThread::networkError(QTcpServer *tcpServer)
+void ListenRISRequests::networkError(QTcpServer *tcpServer)
 {
     Settings settings;
 
@@ -132,12 +133,6 @@ void ListenRISRequestThread::networkError(QTcpServer *tcpServer)
             emit errorListening(UnknownNetworkError);
             break;
     }
-}
-
-ListenRISRequestThread::~ListenRISRequestThread()
-{
-    terminate();//Parem el thread
-    wait();//Esperem que estigui parat
 }
 
 }
