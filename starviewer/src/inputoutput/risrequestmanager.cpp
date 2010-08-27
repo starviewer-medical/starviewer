@@ -82,6 +82,7 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 
     // Mostrem el popUP amb l'accession number
     m_qpopUpRisRequestsScreen->setAccessionNumber(maskRISRequest.getAccessionNumber());
+    m_qpopUpRisRequestsScreen->activateWindow();
     m_qpopUpRisRequestsScreen->show();
 
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
