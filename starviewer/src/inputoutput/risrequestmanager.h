@@ -17,8 +17,10 @@
 #include <QQueue>
 
 #include "qpopuprisrequestsscreen.h"
-#include "listenrisrequestthread.h"
+#include "listenrisrequests.h"
 #include "pacsdevice.h"
+
+class QThread;
 
 namespace udg {
 
@@ -48,6 +50,9 @@ signals:
     ///Signal que indica que s'ha descarregar un estudi sol·licitat pel RIS
     void retrieveStudyFromRISRequest(QString pacsID, Study *study);
 
+    ///Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests
+    void listenRISRequests();
+
 private slots:
 
     ///Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
@@ -66,7 +71,7 @@ private slots:
     void errorQueryingStudy(PacsDevice pacsDeviceError);
 
     ///Mostrar un missatge indicant que s'ha produït un error escoltant peticions del RIS
-    void showListenRISRequestThreadError(ListenRISRequestThread::ListenRISRequestThreadError error);
+    void showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error);
 
 private:
 
@@ -81,7 +86,7 @@ private:
      d'errors, etc.. si processim més d'una sol·licitud a la vegada, no sabríem de quina sol·licitud són els resultats o error, 
      dificultant el control de les sol·licituds*/
     QQueue<DicomMask> m_queueRISRequests;
-    ListenRISRequestThread *m_listenRISRequestThread;
+    ListenRISRequests *m_listenRISRequests;
 
     QPopUpRisRequestsScreen *m_qpopUpRisRequestsScreen;
 
@@ -94,6 +99,10 @@ private:
 
     ///Crea les connexions entre Signals i Slots
     void createConnections();
+
+private:
+
+    QThread *m_listenRISRequestsQThread;
 };
 
 };  //  end  namespace udg
