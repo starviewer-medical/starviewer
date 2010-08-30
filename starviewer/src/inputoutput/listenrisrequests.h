@@ -19,7 +19,7 @@ namespace udg {
 
 /** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS i atendre les peticions d'aquests
  *
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 
 class ListenRISRequests: public QObject
@@ -27,7 +27,7 @@ class ListenRISRequests: public QObject
 Q_OBJECT
 public:
 
-    enum ListenRISRequestsError { RisPortInUse, UnknownNetworkError };
+    enum ListenRISRequestsError {RisPortInUse, UnknownNetworkError};
 
     ListenRISRequests(QObject *parent = 0);
 
@@ -44,11 +44,9 @@ signals:
     void requestRetrieveStudy(DicomMask mask);
     
     ///Signal que s'emet indicant que s'ha produït un error escoltant peticions al RIS
-    void errorListening(ListenRISRequests::ListenRISRequestsError );
+    void errorListening(ListenRISRequests::ListenRISRequestsError);
 
 private :
-    /// Indiquem el temps d'espera (en mil·lisegons) per llegir la petició del RIS, sinó arriba en aquest temps fem time out
-    static const int TimeOutToReadData;
 
     ///Processa la petició rebuda del RIS
     void processRequest(QString risRequestData);
@@ -57,6 +55,8 @@ private :
     void networkError(QTcpServer *tcpRISServer);
 
 private:
+    /// Indiquem el temps d'espera (en mil·lisegons) per llegir la petició del RIS, sinó arriba en aquest temps fem time out
+    static const int TimeOutToReadData;
 
     bool m_isListeningRISRequests;
 };

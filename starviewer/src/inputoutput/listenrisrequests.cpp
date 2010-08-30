@@ -52,9 +52,8 @@ bool ListenRISRequests::isListening()
 void ListenRISRequests::listen()
 {
     QTcpServer tcpRISServer;
-    Settings settings;
 
-    if ( !tcpRISServer.listen(QHostAddress::Any, settings.getValue( InputOutputSettings::RISRequestsPort ).toUInt() ) )
+    if (!tcpRISServer.listen(QHostAddress::Any, Settings().getValue(InputOutputSettings::RISRequestsPort).toUInt()))
     {
         networkError(&tcpRISServer);
         return;
@@ -73,10 +72,13 @@ void ListenRISRequests::listen()
             INFO_LOG("Rebuda peticio de la IP " + tcpSocket->peerAddress().toString());
             if (tcpSocket->waitForReadyRead(TimeOutToReadData))
             {
-                risRequestData= QString(tcpSocket->readAll());
+                risRequestData = QString(tcpSocket->readAll());
                 INFO_LOG("Dades rebudes: " + risRequestData);
             }
-            else INFO_LOG("No s'ha rebut dades, error: " + tcpSocket->errorString());
+            else 
+            {
+                INFO_LOG("No s'ha rebut dades, error: " + tcpSocket->errorString());
+            }
 
             INFO_LOG("Tanco socket");
             tcpSocket->close();
@@ -89,7 +91,10 @@ void ListenRISRequests::listen()
             {
                 INFO_LOG("Hi ha connexions de RIS pendents per atendre.");
             }
-            else INFO_LOG("No hi ha connexions de RIS pendents per atendre.");
+            else 
+            {
+                INFO_LOG("No hi ha connexions de RIS pendents per atendre.");
+            }
         }
     }
 
@@ -103,13 +108,11 @@ void ListenRISRequests::listen()
 void ListenRISRequests::processRequest(QString risRequestData)
 {
     //com ara mateix només rebrem peticions del RIS PIER del IDI, no cal esbrinar quin tipus de petició és per defecte entenem que és petició del RIS PIER
-    DicomMask mask;
-
     INFO_LOG("S'intencarà processar la petició rebuda com a Xml");
 
     ParseXmlRisPIERRequest parseXml;
 
-    mask = parseXml.parseXml(risRequestData);
+    DicomMask mask = parseXml.parseXml(risRequestData);
 
     if (!parseXml.error())
     {
@@ -120,9 +123,7 @@ void ListenRISRequests::processRequest(QString risRequestData)
 
 void ListenRISRequests::networkError(QTcpServer *tcpServer)
 {
-    Settings settings;
-
-    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(settings.getValue( InputOutputSettings::RISRequestsPort ).toUInt() ) + ", error " + tcpServer->errorString());
+    ERROR_LOG("No es poden escoltar les peticions del RIS pel port " + QString().setNum(Settings().getValue(InputOutputSettings::RISRequestsPort).toUInt()) + ", error " + tcpServer->errorString());
         
     switch(tcpServer->serverError())
     {
