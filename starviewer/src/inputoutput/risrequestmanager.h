@@ -28,7 +28,6 @@ class DicomMask;
 class PacsManager;
 class Patient;
 class Study;
-class DicomMask;
 
 /** Classe manager que ens permet rebre peticions del RIS i processar-les
 */
