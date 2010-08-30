@@ -34,8 +34,7 @@ void RISRequestManager::initialize()
     m_listenRISRequests->moveToThread(m_listenRISRequestsQThread);
     m_listenRISRequestsQThread->start();
 
-    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
-        m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
+    m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
 
     m_pacsManager = new PacsManager();
 
