@@ -75,6 +75,16 @@ private slots:
 
 private:
 
+    /**Inicialitza les variables globals per escoltar i executar peticions del RIS.
+      *No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria
+      */
+    void initialize();
+
+    ///Crea les connexions entre Signals i Slots
+    void createConnections();
+
+private:
+
     ///Boolea que indica si hem trobat algun estudi que compleixi els criteris de cerca ens ha demanat el RIS
     bool m_foundRISRequestStudy; 
 
@@ -92,16 +102,7 @@ private:
 
     PacsManager *m_pacsManager;
 
-    /**Inicialitza les variables globals per escoltar i executar peticions del RIS.
-      *No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria
-      */
-    void initialize();
-
-    ///Crea les connexions entre Signals i Slots
-    void createConnections();
-
-private:
-
+    ///QThread que s'encarrega d'executar la classe escolta si arriben peticions del RIS
     QThread *m_listenRISRequestsQThread;
 };
 

@@ -88,9 +88,9 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant 
     // un message box, fent un log o el que calgui segons la ocasió.
     QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
-    if ( queryablePACS.isEmpty() )
+    if (queryablePACS.isEmpty())
     {
-        QMessageBox::information(0, ApplicationNameString, tr("The RIS request could not be performed.") + "\n\n" + tr("There are no configured PACS to query.") + "\n" + tr("Please, check your PACS settings.") );
+        QMessageBox::information(0, ApplicationNameString, tr("The RIS request could not be performed.") + "\n\n" + tr("There are no configured PACS to query.") + "\n" + tr("Please, check your PACS settings."));
     }
     else
     {
@@ -111,10 +111,10 @@ void RISRequestManager::queryStudyResultsReceived(QList<Patient*> patientsList, 
               estudi descarregat, el segona descàrrega matxaca els fitxers del a primera descàrrega.*/
             if (!m_foundRISRequestStudy)
             {
-                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1 , PacsId %2").arg( study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
+                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2").arg(study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
           
                 //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
-                emit retrieveStudyFromRISRequest(hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()] , study);
+                emit retrieveStudyFromRISRequest(hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()], study);
                 m_foundRISRequestStudy = true;
             }
             else
@@ -137,7 +137,7 @@ void RISRequestManager::queryRequestRISFinished()
         //Si no hem trobat cap estudi que coincideix llancem MessageBox
         QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.").arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
 
-        QMessageBox::information(NULL , ApplicationNameString , message);
+        QMessageBox::information(NULL, ApplicationNameString, message);
     }
 
     if (m_queueRISRequests.count() > 0)
@@ -150,9 +150,7 @@ void RISRequestManager::queryRequestRISFinished()
 
 void RISRequestManager::errorQueryingStudy(PacsDevice pacsDeviceError)
 {
-    QString errorMessage;
-
-    errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure that the IP and AETitle of It are correct.")
+    QString errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure that the IP and AETitle of It are correct.")
         .arg(pacsDeviceError.getAETitle())
         .arg(pacsDeviceError.getInstitution());
 
@@ -162,8 +160,8 @@ void RISRequestManager::errorQueryingStudy(PacsDevice pacsDeviceError)
 void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)
 {
     QString message;
-    Settings settings;
-    int risPort = settings.getValue( InputOutputSettings::RISRequestsPort ).toInt();
+    int risPort = Settings().getValue(InputOutputSettings::RISRequestsPort).toInt();
+
     switch(error)
     {
         case ListenRISRequests::RisPortInUse :
