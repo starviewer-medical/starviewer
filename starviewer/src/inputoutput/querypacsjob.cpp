@@ -41,7 +41,7 @@ void QueryPacsJob::run()
         m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + 
         QString().setNum(m_pacsDevice.getQueryRetrieveServicePort()) + ";");
 
-    if (!pacsConnection.connect(PACSConnection::query))
+    if (!pacsConnection.connect(PACSConnection::Query))
     {
         ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer query. AETitle: " + m_pacsDevice.getAETitle());
         m_queryStatus = Status().setStatus(DcmtkCanNotConnectError);

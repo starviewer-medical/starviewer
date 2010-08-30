@@ -20,7 +20,7 @@ class PACSConnection
 
 public:
 
-    enum ModalityConnection {query, retrieveImages, echoPacs, storeImages};
+    enum ModalityConnection {Query, RetrieveImages, Echo, StoreImages};
 
     /** Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
