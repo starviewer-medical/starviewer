@@ -64,6 +64,8 @@ void RISRequestManager::listen()
 void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 {
     INFO_LOG("Encuem sol·licitud de descàrrega d'un estudi del RIS amb accession number " + dicomMaskRISRequest.getAccessionNumber());
+    //Per anar atenent les descàrregues a mesura que ens arriben encuem les peticions, només fem una cerca al PACS a la vegada, una 
+    //vegada hem trobat l'estudi en algun PACS, es posa a descarregar i s'aten una altra petició
     m_queueRISRequests.enqueue(dicomMaskRISRequest);
 
     //Si tenim més d'un element ja hi ha un altre consulta d'un RIS Executant-se per tant no fem res
