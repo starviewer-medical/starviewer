@@ -203,16 +203,16 @@ bool PACSConnection::connect(ModalityConnection modality)
 
     switch (modality)
     {
-        case echoPacs: 
+        case Echo: 
             condition = configureEcho();
             break;
-        case query:
+        case Query:
             condition = configureFind();
             break;
-        case retrieveImages:
+        case RetrieveImages:
             condition = configureMove();
             break;
-        case storeImages:
+        case StoreImages:
             condition = configureStore();
             break;
     }
@@ -253,7 +253,7 @@ bool PACSConnection::connect(ModalityConnection modality)
 
         /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM, com no que podrem descarregar 
          les imatges perquè no hem pogut connectar amb el PACS per sol·licitar-ne la descarrega, tanquem el port local que espera per connexions entrants.*/
-        if (modality == retrieveImages)
+        if (modality == RetrieveImages)
         {
             disconnect();
         }
@@ -279,14 +279,14 @@ QString PACSConnection::constructPacsServerAddress(ModalityConnection modality, 
 
     switch (modality)
     {
-        case PACSConnection::query:
-        case PACSConnection::retrieveImages:
+        case PACSConnection::Query:
+        case PACSConnection::RetrieveImages:
             pacsServerAddress += QString().setNum(pacsDevice.getQueryRetrieveServicePort());
             break;
-        case PACSConnection::storeImages:
+        case PACSConnection::StoreImages:
             pacsServerAddress += QString().setNum(pacsDevice.getStoreServicePort());
             break;
-        case PACSConnection::echoPacs:
+        case PACSConnection::Echo:
             if (pacsDevice.isQueryRetrieveServiceEnabled())
             {
                 pacsServerAddress +=  QString().setNum(pacsDevice.getQueryRetrieveServicePort());
@@ -313,9 +313,9 @@ T_ASC_Network* PACSConnection::initializeAssociationNetwork(ModalityConnection m
 {
     Settings settings;
     //Si no es tracta d'una descarrega indiquem port 0
-    int networkPort = modality == retrieveImages ? settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt() : 0;
+    int networkPort = modality == RetrieveImages ? settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt() : 0;
     int timeout = settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt();
-    T_ASC_NetworkRole networkRole = modality == retrieveImages ? NET_ACCEPTORREQUESTOR : NET_REQUESTOR;
+    T_ASC_NetworkRole networkRole = modality == RetrieveImages ? NET_ACCEPTORREQUESTOR : NET_REQUESTOR;
     T_ASC_Network *associationNetwork;
 
     OFCondition condition = ASC_initializeNetwork(networkRole, networkPort , timeout, &associationNetwork);

@@ -320,7 +320,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     m_numberOfImagesRetrieved = 0;
 
     //TODO: S'hauria de comprovar que es tracti d'un PACS amb el servei de retrieve configurat
-    if (!m_pacsConnection->connect(PACSConnection::retrieveImages))
+    if (!m_pacsConnection->connect(PACSConnection::RetrieveImages))
     {
         ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer un retrieve. AETitle: " + m_pacs.getAETitle());
         return PACSRequestStatus::RetrieveCanNotConnectToPACS;

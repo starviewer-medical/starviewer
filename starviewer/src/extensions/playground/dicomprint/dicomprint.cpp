@@ -97,7 +97,7 @@ bool DicomPrint::echoPrinter(DicomPrinter printer)
     PACSConnection pacsConnection(pacs);
 
     //TODO: Si no reconeix el nostre aetitle no retornem l'error correcte, indique association rejected
-    if (!pacsConnection.connect(PACSConnection::echoPacs))
+    if (!pacsConnection.connect(PACSConnection::Echo))
     {
         m_lastError = DicomPrint::CanNotConnectToDicomPrinter;
         ERROR_LOG("Can't connect to printer " + pacs.getAETitle() + " to do an echo.");

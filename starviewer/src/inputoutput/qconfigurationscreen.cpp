@@ -259,7 +259,7 @@ void QConfigurationScreen::test()
         PacsDevice pacs = getPacsDeviceFromControls();
         PACSConnection pacsConnection(pacs);
 
-        if (!pacsConnection.connect(PACSConnection::echoPacs))
+        if (!pacsConnection.connect(PACSConnection::Echo))
         {
             QString message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of It are correct.").arg(pacs.getAETitle());
 
