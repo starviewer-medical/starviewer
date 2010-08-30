@@ -57,9 +57,6 @@ private slots:
     ///Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
     void processRISRequest(DicomMask mask);
 
-    ///Cerca en els PACS marcats per defecte la màscara que ens ha indicat el RIS
-    void queryPACSRISStudyRequest(DicomMask mask);
-
     ///SLOT que s'activa quan es reben resultats d'una cerca a un PACS, amb la màscara indicada per la petició del RIS. Si s'ha trobat un estudi que compelix la cerca es fa signal per descarregar l'estudi
     void queryStudyResultsReceived(QList<Patient*> patients, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID);
 
@@ -81,6 +78,9 @@ private:
 
     ///Crea les connexions entre Signals i Slots
     void createConnections();
+
+    ///Cerca en els PACS marcats per defecte la màscara que ens ha indicat el RIS
+    void queryPACSRISStudyRequest(DicomMask mask);
 
 private:
 
