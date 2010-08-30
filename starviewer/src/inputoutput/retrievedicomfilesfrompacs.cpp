@@ -89,11 +89,14 @@ void RetrieveDICOMFilesFromPACS::moveCallback(void *callbackData, T_DIMSE_C_Move
 {
     Q_UNUSED(responseCount);
     Q_UNUSED(response);
-    MoveSCPCallbackData *moveSCPCallbackData = (MoveSCPCallbackData*) callbackData;
+    Q_UNUSED(request);
+    Q_UNUSED(callbackData);
 
 /*  Aquest en teoria és el codi per cancel·lar una descàrrega però el PACS del l'UDIAT no suporta les requestCancel, per tant la única manera
     de fer-ho és com es fa en el mètode subOperationSCP que s'aborta la connexió amb el PACS.
   
+    MoveSCPCallbackData *moveSCPCallbackData = (MoveSCPCallbackData*) callbackData;
+
     if (moveSCPCallbackData->retrieveDICOMFilesFromPACS->m_abortIsRequested)
     {
         OFCondition condition = DIMSE_sendCancelRequest(moveSCPCallbackData->association, moveSCPCallbackData->presentationContextId, request->MessageID);

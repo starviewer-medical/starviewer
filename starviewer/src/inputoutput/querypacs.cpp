@@ -39,6 +39,9 @@ void QueryPacs::foundMatchCallback(
         DcmDataset *responseIdentifiers
         )
 {
+    Q_UNUSED(rsp);
+    Q_UNUSED(responseCount);
+
     QueryPacs* queryPacsCaller = (QueryPacs*)callbackData;
 
     if (queryPacsCaller->m_cancelQuery)
