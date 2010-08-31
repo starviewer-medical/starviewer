@@ -31,6 +31,11 @@ ListenRISRequests::ListenRISRequests(QObject *parent)
     m_isListeningRISRequests = false;
 }
 
+ListenRISRequests::~ListenRISRequests()
+{
+    m_tcpRISServer->close();
+}
+
 bool ListenRISRequests::isListening()
 {
     return m_isListeningRISRequests;
@@ -51,22 +56,22 @@ bool ListenRISRequests::isListening()
  */
 void ListenRISRequests::listen()
 {
-    QTcpServer tcpRISServer;
+    m_tcpRISServer = new QTcpServer();
 
-    if (!tcpRISServer.listen(QHostAddress::Any, Settings().getValue(InputOutputSettings::RISRequestsPort).toUInt()))
+    if (!m_tcpRISServer->listen(QHostAddress::Any, Settings().getValue(InputOutputSettings::RISRequestsPort).toUInt()))
     {
-        networkError(&tcpRISServer);
+        networkError(m_tcpRISServer);
         return;
     }
 
     m_isListeningRISRequests = true;
 
-    while (tcpRISServer.waitForNewConnection(-1)) //Esperem rebre connexions
+    while (m_tcpRISServer->waitForNewConnection(-1)) //Esperem rebre connexions
     {
         INFO_LOG("S'ha rebut una nova connexió de RIS per atendre.");
-        while (tcpRISServer.hasPendingConnections())
+        while (m_tcpRISServer->hasPendingConnections())
         {
-            QTcpSocket *tcpSocket = tcpRISServer.nextPendingConnection();
+            QTcpSocket *tcpSocket = m_tcpRISServer->nextPendingConnection();
             QString risRequestData;
 
             INFO_LOG("Rebuda peticio de la IP " + tcpSocket->peerAddress().toString());
@@ -87,7 +92,7 @@ void ListenRISRequests::listen()
 
             if (!risRequestData.isEmpty()) processRequest(risRequestData);
 
-            if (tcpRISServer.hasPendingConnections()) 
+            if (m_tcpRISServer->hasPendingConnections()) 
             {
                 INFO_LOG("Hi ha connexions de RIS pendents per atendre.");
             }

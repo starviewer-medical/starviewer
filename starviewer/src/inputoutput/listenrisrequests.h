@@ -31,6 +31,9 @@ public:
 
     ListenRISRequests(QObject *parent = 0);
 
+    ///Destructor de la classe, es tanca el socket obert esperant les peticions del RIS
+    ~ListenRISRequests();
+
     ///Indica si s'estant escoltant peticions
     bool isListening();
 
@@ -59,6 +62,8 @@ private:
     static const int TimeOutToReadData;
 
     bool m_isListeningRISRequests;
+
+    QTcpServer *m_tcpRISServer;
 };
 
 }
