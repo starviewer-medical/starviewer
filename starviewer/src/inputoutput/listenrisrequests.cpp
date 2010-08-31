@@ -104,8 +104,8 @@ void ListenRISRequests::listen()
     }
 
     //Si sortim del bucle és que s'ha produït un error
-    ERROR_LOG("S'ha produït un error esperant peticions del RIS, error: " + tcpRISServer.errorString());
-    networkError(&tcpRISServer);
+    ERROR_LOG("S'ha produït un error esperant peticions del RIS, error: " + m_tcpRISServer->errorString());
+    networkError(m_tcpRISServer);
 
     m_isListeningRISRequests = false;
 }
