@@ -22,6 +22,10 @@ RISRequestManager::~RISRequestManager()
 
     m_listenRISRequestsQThread->exit();
     m_listenRISRequestsQThread->wait();
+
+    delete m_listenRISRequestsQThread;
+    delete m_pacsManager;
+    delete m_qpopUpRisRequestsScreen;
 }
 
 void RISRequestManager::initialize()

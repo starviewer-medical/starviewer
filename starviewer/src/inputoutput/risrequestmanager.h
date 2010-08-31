@@ -33,7 +33,8 @@ class Study;
 */
 /*TODO Aquesta classe hauria de ser l'encarregada també de descarregar l'estudi que ens ha sol·licitat el ris, ara mateix 
       fa un signal i una classe externa el descarrega. Això no es podrà fer fins que s'hagi fet refactoring de la part de descarregar
-      estudis */
+      estudis. Tenir en compte que ara actualment es fa un delete de la instància PACSManager actual, quan se li passi la PACSManager des de fora
+      aquest delete s'haurà de treure*/
 class RISRequestManager: public QObject{
 Q_OBJECT
 public:
