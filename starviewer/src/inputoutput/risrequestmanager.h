@@ -15,8 +15,8 @@
 #define UDGRISREQUESTMANAGER_H
 
 #include <QQueue>
+#include <QHash>
 
-#include "qpopuprisrequestsscreen.h"
 #include "listenrisrequests.h"
 #include "pacsdevice.h"
 
@@ -28,6 +28,7 @@ class DicomMask;
 class PacsManager;
 class Patient;
 class Study;
+class QPopUpRisRequestsScreen;
 
 /** Classe manager que ens permet rebre peticions del RIS i processar-les
 */
