@@ -9,10 +9,10 @@
 #include "starviewerapplication.h"
 #include "pacsmanager.h"
 #include "pacsdevicemanager.h"
-#include "pacsdevice.h"
 #include "patient.h"
 #include "study.h"
 #include "logging.h"
+#include "qpopuprisrequestsscreen.h"
 
 namespace udg{
 
