@@ -11,7 +11,6 @@
 #include <QHostAddress>
 #include <QTcpSocket>
 #include <QMetaType>
-#include <QMessageBox>
 
 #include "parsexmlrispierrequest.h"
 #include "logging.h"

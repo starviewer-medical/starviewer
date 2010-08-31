@@ -13,7 +13,6 @@
 #include "dicommask.h"
 
 class QTcpServer;
-class QTcpSocket;
 
 namespace udg {
 
