@@ -245,13 +245,50 @@ void QCreateDicomdir::addStudies(const QList<Study *> &studies)
 
 void QCreateDicomdir::createDicomdir()
 {
+    //TODO:S'hauria de crear mètodes amb aquestes precondicions a comprovar abans de crear un DICOMDIR
     if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
     {
         QMessageBox::warning(this, ApplicationNameString, tr("DICOMDIR creation aborted.\n The selected studies exceed the available space for the current device.") );
         return;
     }
 
-    Status state;
+    ///Comprovem en funció del dispositiu a crear el DICOMDIR, si s'ha de copiar el contingut del directori escollit al DICOMDIR, si és així comprovem si l'usuari
+    ///té permisos de lectura sobre el directori i si el directori existeix, en cas que alguna d'aquestes dos condicions no es compleixi es dona la possibilitat
+    ///de continuar a l'usuari
+    if (haveToCopyFolderContentToDICOMDIR())
+    {
+        Settings settings;
+        QString message;
+        QDir qdir(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+
+        if (!qdir.exists())
+        {
+            message = tr("The directory '%1' to copy the content to DICOMDIR doesn't exist.\n\n Do you want to continue without copy the content of It?.")
+                .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+        }
+        else if (!qdir.isReadable())
+        {
+            message = tr("You don't have read permissions on directory '%'1 to copy the content of It to DICOMDIR.\n\n Do you want to continue without copy the content of it?.")
+                .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+        }
+
+        if (QMessageBox::question(this, ApplicationNameString, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No)
+        {
+            return;
+        }
+        else
+        {
+            //Si continuem sense copiar el directori desactivem l'opció.
+            if (m_currentDevice == CreateDicomdir::UsbPen || m_currentDevice == CreateDicomdir::HardDisk)
+            {
+                m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(false);
+            }
+            else
+            {
+                m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(false);
+            }
+        }
+    }
 
     switch( m_currentDevice )
     {
@@ -261,7 +298,7 @@ void QCreateDicomdir::createDicomdir()
                 break;
         case CreateDicomdir::DvdRom:
         case CreateDicomdir::CdRom: // Cd, si s'ha creat bé, executem el programa per gravar el dicomdir a cd's
-                 state = createDicomdirOnCdOrDvd();
+                 Status state = createDicomdirOnCdOrDvd();
                  // Error 4001 és el cas en que alguna imatge de l'estudi no compleix amb l'estàndard dicom tot i així el deixem gravar
                  if ( state.good() || ( !state.good() && state.code() == 4001 ) )
                     burnDicomdir();
