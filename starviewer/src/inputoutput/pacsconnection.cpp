@@ -5,7 +5,6 @@
 #include <assoc.h>
 #include <QHostInfo>
 
-#include "status.h"
 #include "logging.h"
 #include "inputoutputsettings.h"
 
@@ -21,21 +20,6 @@ PACSConnection::PACSConnection(PacsDevice pacsDevice)
     m_associationNetwork = NULL;
     m_associationParameters = NULL;
     m_dicomAssociation = NULL;
-}
-
-/*TODO: El echo hauria de ser una classe més com ho és el RetrieveDICOMFilesFromPACS o SendDICOMFilesToPACS, no té gaire sentit que la connexió la tingui el echo
-        ja que hi ha altres dispositius a part del PACS que també ens pot interessar fer un echo, per exemple una Impressora DICOM*/
-Status PACSConnection::echo()
-{
-    DIC_US id = m_dicomAssociation->nextMsgID++; // generate next message ID
-    DIC_US status; // DIMSE status of C-ECHO-RSP will be stored here
-    DcmDataset *dcmDataset = NULL;
-
-    OFCondition status_echo = DIMSE_echoUser(m_dicomAssociation, id, DIMSE_BLOCKING, 0, &status, &dcmDataset);
-
-    delete dcmDataset; // we don't care about status detail
-
-    return Status().setStatus(status_echo);
 }
 
 OFCondition PACSConnection::configureEcho()
@@ -178,7 +162,6 @@ OFCondition PACSConnection::addPresentationContext(int presentationContextId, co
 bool PACSConnection::connect(ModalityConnection modality)
 {
     //Hi ha invocacions de mètodes de dcmtk que no se'ls hi comprova el condition que retornen, perquè se'ls hi ha mirat el codi i sempre retornen EC_NORMAL
-    Status state;
     Settings settings;
 
     //create the parameters of the connection

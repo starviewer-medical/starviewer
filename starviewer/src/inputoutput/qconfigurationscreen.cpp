@@ -18,6 +18,7 @@
 #include "utils.h"
 #include "localdatabasemanager.h"
 #include "inputoutputsettings.h"
+#include "echotopacs.h"
 
 namespace udg {
 
@@ -256,37 +257,36 @@ void QConfigurationScreen::test()
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
         //Agafem les dades del PACS que estan el textbox per testejar
-        PacsDevice pacs = getPacsDeviceFromControls();
-        PACSConnection pacsConnection(pacs);
+        PacsDevice pacsDevice = getPacsDeviceFromControls();
+        EchoToPACS echoToPACS;
 
-        if (!pacsConnection.connect(PACSConnection::Echo))
+        INFO_LOG("Es fa echoSCU al PACS amb AETitle " + pacsDevice.getAETitle());
+
+        if (echoToPACS.echo(pacsDevice))
         {
-            QString message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of It are correct.").arg(pacs.getAETitle());
-
             QApplication::restoreOverrideCursor();
-            QMessageBox::warning(this, ApplicationNameString, message);
-            INFO_LOG("Doing echo PACS " + pacs.getAETitle() + " doesn't responds.");
+            QMessageBox::information(this, ApplicationNameString, tr("Test of PACS \"%1\" is correct").arg(pacsDevice.getAETitle()));
         }
         else
         {
-            Status state = pacsConnection.echo();
-            pacsConnection.disconnect();
-
             QApplication::restoreOverrideCursor();
+            QString message;
 
-            if (state.good())
+            switch(echoToPACS.getLastError())
             {
-                QString message = tr("Test of PACS \"%1\" is correct").arg(pacs.getAETitle());
-                QMessageBox::information(this, ApplicationNameString, message);
-                // TODO realment cal fer un INFO LOG d'això?
-                INFO_LOG("Test of PACS " + pacs.getAETitle() + "is correct");
+                case EchoToPACS::EchoFailed:
+                    message = tr("PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
+                    break;
+                case EchoToPACS::EchoCanNotConnectToPACS:
+                    message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
+                    break;
+                default:
+                    //No hauria de passar mai
+                    message = tr("PACS \"%1\" doesn't respond as expected, and unknow error has produced.").arg(pacsDevice.getAETitle());
+                    break;
             }
-            else
-            {
-                QString message = tr("PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of It are correct.").arg(pacs.getAETitle());
-                QMessageBox::warning(this, ApplicationNameString, message);
-                INFO_LOG("Doing echo PACS " + pacs.getAETitle() + " doesn't responds correctly. PACS ERROR : " + state.text());
-            }
+
+            QMessageBox::information(this, ApplicationNameString, message);
         }
     }
 }
