@@ -13,8 +13,6 @@ class QString;
 /** Aquest classe s'encarrega de configurar la connexió i connectar amb el PACS en funció del servei que li volguem sol·licitar.*/
 namespace udg{
 
-class Status;
-
 class PACSConnection
 {
 
@@ -32,11 +30,6 @@ public:
      * @return retorna l'estat de la connexió
      */
     bool connect(ModalityConnection modalityConnection);
-
-    /** Ens permet fer un echo al PACS. Per defecte per qualsevol modalitat de connexió bé sigui busca informació o descarregar imatges per defecte permet fer un echo, per comprovar si els PACS està viu
-     * @return retorna l'estatus del echo
-     */
-    Status echo();//This function makes an echo to the PACS
 
     /** retorna els paràmetres del PACS
      * @return paràmetres del Pacs

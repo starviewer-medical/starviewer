@@ -80,7 +80,8 @@ HEADERS += databaseconnection.h \
     pacsjob.h \
     senddicomfilestopacsjob.h \
     pacsrequeststatus.h \
-    retrievedicomfilesfrompacsjob.h
+    retrievedicomfilesfrompacsjob.h \
+    echotopacs.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsdevice.cpp \
@@ -136,7 +137,8 @@ SOURCES += databaseconnection.cpp \
     qexportertool.cpp \
     pacsjob.cpp \
     senddicomfilestopacsjob.cpp  \
-    retrievedicomfilesfrompacsjob.cpp
+    retrievedicomfilesfrompacsjob.cpp \
+    echotopacs.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib

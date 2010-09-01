@@ -9,8 +9,8 @@
 #include "createdicomprintspool.h"
 #include "printdicomspool.h"
 #include "../inputoutput/pacsdevice.h"
-#include "../inputoutput/pacsconnection.h"
 #include "../inputoutput/status.h"
+#include "../inputoutput/echotopacs.h"
 #include "logging.h"
 #include "deletedirectory.h" 
 
@@ -85,41 +85,34 @@ int DicomPrint::print(DicomPrinter printer, DicomPrintJob printJob)
 bool DicomPrint::echoPrinter(DicomPrinter printer)
 {
     PacsDevice pacs;
-    bool resultTest = false;;
+    bool resultTest = false;
+    EchoToPACS echoToPACS;
 
-    /*HACK el codi de fer echoSCU espera que li passem un PACS, com aquest codi està a PacsServer una classe orientada completament a PACS, el que implica
-      que és difícil adaptar el codi perquè accepti altres objectes, a part de que les responsabilitat de la classe és sobre objectes PACS, per això
-      transformem l'objecte printer a PACS per poder fer l'echo i utilitzem les classes de PACS */ 
+    /*HACK el codi de fer echoSCU espera que li passem un PACS, per això transformem l'objecte printer a PACS per poder fer l'echo i utilitzem 
+      les classes de PACS */ 
     pacs.setAETitle(printer.getAETitle());
     pacs.setQueryRetrieveServicePort(printer.getPort());
     pacs.setAddress(printer.getHostname());
+
+    INFO_LOG("Es fa echoSCU a la impressora amb AETitle " + printer.getAETitle());
+    resultTest = echoToPACS.echo(pacs);
     
-    PACSConnection pacsConnection(pacs);
-
-    //TODO: Si no reconeix el nostre aetitle no retornem l'error correcte, indique association rejected
-    if (!pacsConnection.connect(PACSConnection::Echo))
+    switch(echoToPACS.getLastError())
     {
-        m_lastError = DicomPrint::CanNotConnectToDicomPrinter;
-        ERROR_LOG("Can't connect to printer " + pacs.getAETitle() + " to do an echo.");
-    }
-    else
-    {
-        Status state = pacsConnection.echo();
-
-        if (state.good())
-        {
-            resultTest = true;
-            INFO_LOG("Test of printer " + pacs.getAETitle() + "is correct.");
-        }
-        else
-        {
+        case EchoToPACS::EchoOk:
+            m_lastError = DicomPrint::Ok;
+            break;
+        case EchoToPACS::EchoCanNotConnectToPACS:
+            m_lastError = DicomPrint::CanNotConnectToDicomPrinter;
+            break;
+        case EchoToPACS::EchoFailed:
             m_lastError = DicomPrint::NotRespondedAsExpected;
-            ERROR_LOG("Doing echo to printer " + pacs.getAETitle() + " doesn't responds correctly. Error description : " + state.text());
-        }
-
-        pacsConnection.disconnect();
+            break;
+        default:
+            m_lastError = DicomPrint::NotRespondedAsExpected;
+            break;
     }
-
+        
     return resultTest;
 }
 
