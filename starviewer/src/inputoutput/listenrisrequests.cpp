@@ -30,11 +30,6 @@ ListenRISRequests::ListenRISRequests()
     m_isListeningRISRequests = false;
 }
 
-ListenRISRequests::~ListenRISRequests()
-{
-    m_tcpRISServer->close();
-}
-
 bool ListenRISRequests::isListening()
 {
     return m_isListeningRISRequests;
@@ -107,6 +102,11 @@ void ListenRISRequests::listen()
     networkError(m_tcpRISServer);
 
     m_isListeningRISRequests = false;
+}
+
+void ListenRISRequests::stopListen()
+{
+    m_tcpRISServer->close();
 }
 
 void ListenRISRequests::processRequest(QString risRequestData)
