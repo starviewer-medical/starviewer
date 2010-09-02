@@ -28,7 +28,7 @@ public:
 
     enum ListenRISRequestsError {RisPortInUse, UnknownNetworkError};
 
-    ListenRISRequests(QObject *parent = 0);
+    ListenRISRequests();
 
     ///Destructor de la classe, es tanca el socket obert esperant les peticions del RIS
     ~ListenRISRequests();

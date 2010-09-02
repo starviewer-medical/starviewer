@@ -31,7 +31,7 @@ RISRequestManager::~RISRequestManager()
 void RISRequestManager::initialize()
 {
     m_listenRISRequestsQThread = new QThread();
-    m_listenRISRequests = new ListenRISRequests(this);
+    m_listenRISRequests = new ListenRISRequests();
 
     //La classe ListenRISRequests necessita el seu propi thread perquè sempre està executant-se esperant noves peticions, si l'executes el thread principal
     //Starviewer quedaria congelada només escoltant peticions del RIS
