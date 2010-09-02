@@ -1,0 +1,9 @@
+
+CHANGELOG STARVIEWER 0.10
+--------------------------
+
+ - Es permet cancel·lar des la llista de peticions la descàrrega/enviament de fitxers DICOM a un PACS, en qualsevol moment de l'operació.
+ - Es permet fer diverses operacions d'enviaments de fitxers DICOM a PACS de forma simultània, fins ara només es podia fer un enviament de fitxers DICOM a PACS
+   a la vegada.
+ - Es permet l'enviament de fitxers DICOM a un PACS de forma simultània mentre es descarreguen fitxers DICOM de qualsevol PACS, fins ara les dos operacions no 
+   es podien fer a la vegada.
