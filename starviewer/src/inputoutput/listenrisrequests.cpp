@@ -22,7 +22,7 @@ namespace udg
 
 const int ListenRISRequests::TimeOutToReadData = 15000;
 
-ListenRISRequests::ListenRISRequests(QObject *parent)
+ListenRISRequests::ListenRISRequests()
 {
     qRegisterMetaType<DicomMask>("DicomMask");//Registrem la classe DicomMask per poder-ne fer un signal
     qRegisterMetaType<ListenRISRequests::ListenRISRequestsError>("ListenRISRequests::ListenRISRequestsError");
