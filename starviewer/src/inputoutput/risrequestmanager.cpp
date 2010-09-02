@@ -18,7 +18,8 @@ namespace udg{
 
 RISRequestManager::~RISRequestManager()
 {
-    delete m_listenRISRequests;
+    m_listenRISRequests->stopListen();
+    m_listenRISRequests->deleteLater();
 
     m_listenRISRequestsQThread->exit();
     m_listenRISRequestsQThread->wait();

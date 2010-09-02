@@ -30,11 +30,11 @@ public:
 
     ListenRISRequests();
 
-    ///Destructor de la classe, es tanca el socket obert esperant les peticions del RIS
-    ~ListenRISRequests();
-
     ///Indica si s'estant escoltant peticions
     bool isListening();
+
+    ///Para l'escolta de les peticions del RIS
+    void stopListen();
 
 public slots:
 
