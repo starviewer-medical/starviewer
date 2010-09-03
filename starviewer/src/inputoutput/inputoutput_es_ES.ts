@@ -2259,7 +2259,7 @@ Código de error: %1</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="549"/>
         <source>Examine disk to find the directory to save the retrieved DICOM files</source>
-        <translation type="unfinished">Examina el disco para encontrar el directorio donde almacenar los archivos DICOM descargados</translation>
+        <translation>Examina el disco para encontrar el directorio donde almacenar los archivos DICOM descargados</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="532"/>
