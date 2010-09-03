@@ -2176,7 +2176,7 @@ Código de error: %1</translation>
 <context>
     <name>udg::QLocalDatabaseConfigurationScreenBase</name>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="27"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="26"/>
         <source>Local Database Configuration</source>
         <translation>Configuración de la base de datos</translation>
     </message>
@@ -2247,24 +2247,24 @@ Código de error: %1</translation>
         <translation>Gb de espacio libre.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="498"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="496"/>
         <source>Database path:</source>
         <translation>Ruta base de datos:</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="517"/>
-        <source>Cache images path:</source>
-        <translation>Ruta caché de imágenes:</translation>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="515"/>
+        <source>Cache DICOM files path:</source>
+        <translation>Ruta caché archivos DICOM:</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="534"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="549"/>
+        <source>Examine disk to find the directory to save the retrieved DICOM files</source>
+        <translation type="unfinished">Examina el disco para encontrar el directorio donde almacenar los archivos DICOM descargados</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="532"/>
         <source>Examine disk to find the database</source>
         <translation>Examina el disco para encontrar la base de datos</translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="550"/>
-        <source>Examine disk to find the directory to save the retrieved images</source>
-        <translation>Examina disco para encontrar el directorio donde almacenar las imágenes recibidas</translation>
     </message>
 </context>
 <context>
