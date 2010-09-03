@@ -2179,7 +2179,7 @@ Codi d&apos;error: %1</translation>
 <context>
     <name>udg::QLocalDatabaseConfigurationScreenBase</name>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="27"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="26"/>
         <source>Local Database Configuration</source>
         <translation>Configuració base de dades local</translation>
     </message>
@@ -2250,24 +2250,24 @@ Codi d&apos;error: %1</translation>
         <translation>Gb d&apos;espai lliure.</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="498"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="496"/>
         <source>Database path:</source>
         <translation>Ruta base de dades:</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="517"/>
-        <source>Cache images path:</source>
-        <translation>Ruta cache d&apos;imatges:</translation>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="515"/>
+        <source>Cache DICOM files path:</source>
+        <translation>Ruta caché fitxers DICOM:</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="534"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="549"/>
+        <source>Examine disk to find the directory to save the retrieved DICOM files</source>
+        <translation type="unfinished">Examina el disc per trobar el directori on guardar els fitxers DICOM descarregades</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="532"/>
         <source>Examine disk to find the database</source>
         <translation>Examina el disc per trobar la base de dades</translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="550"/>
-        <source>Examine disk to find the directory to save the retrieved images</source>
-        <translation>Examina el disc per trobar el directori on guardar les imatges descarregades</translation>
     </message>
 </context>
 <context>

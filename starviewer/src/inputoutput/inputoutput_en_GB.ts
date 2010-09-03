@@ -986,13 +986,6 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="268"/>
-        <location filename="qcreatedicomdir.cpp" line="274"/>
-        <source>Do you want to continue creating DICOMDIR without copy the content of it?</source>
-        <oldsource>Do you want create DICOMDIR without copy the content of it?</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="qcreatedicomdir.cpp" line="448"/>
         <source>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos;. Be sure you have read permissions in the directory or uncheck copy folder content option.</source>
         <oldsource>%1 can&apos;t create the DICOMDIR because can&apos;t copy the content of &apos;%2&apos; to the DICOMDIR. Be sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
@@ -2130,7 +2123,7 @@ Error Number: %1</source>
 <context>
     <name>udg::QLocalDatabaseConfigurationScreenBase</name>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="27"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="26"/>
         <source>Local Database Configuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2201,23 +2194,23 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="498"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="496"/>
         <source>Database path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="517"/>
-        <source>Cache images path:</source>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="515"/>
+        <source>Cache DICOM files path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="534"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="549"/>
+        <source>Examine disk to find the directory to save the retrieved DICOM files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="532"/>
         <source>Examine disk to find the database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="550"/>
-        <source>Examine disk to find the directory to save the retrieved images</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
