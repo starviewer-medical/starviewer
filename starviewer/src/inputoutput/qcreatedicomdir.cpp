@@ -263,13 +263,15 @@ void QCreateDicomdir::createDicomdir()
 
         if (!qdir.exists())
         {
-            message = tr("The directory '%1' to copy the content to DICOMDIR doesn't exist.\n\n Do you want to continue without copy the content of It?.")
+            message = tr("The directory '%1' to copy the content to DICOMDIR doesn't exist.\n\n")
                 .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+            message += tr("Do you want to continue creating DICOMDIR without copy the content of it?");
         }
         else if (!qdir.isReadable())
         {
-            message = tr("You don't have read permissions on directory '%'1 to copy the content of It to DICOMDIR.\n\n Do you want to continue without copy the content of it?.")
+            message = tr("You don't have read permissions on directory '%1' to copy the content of It to DICOMDIR.\n\n")
                 .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+            message += tr("Do you want to continue creating DICOMDIR without copy the content of it?");
         }
 
         if (QMessageBox::question(this, ApplicationNameString, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No)
