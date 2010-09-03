@@ -2262,7 +2262,7 @@ Codi d&apos;error: %1</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="549"/>
         <source>Examine disk to find the directory to save the retrieved DICOM files</source>
-        <translation type="unfinished">Examina el disc per trobar el directori on guardar els fitxers DICOM descarregades</translation>
+        <translation>Examina el disc per trobar el directori on guardar els fitxers DICOM descarregades</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="532"/>
