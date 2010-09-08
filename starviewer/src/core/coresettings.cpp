@@ -49,6 +49,11 @@ const QString CoreSettings::DICOMImageReaderLibrary("Input/DICOMImageReaderLibra
 const QString CoreSettings::ShowReleaseNotesFirstTime("ShowReleaseNotesFirstTime");
 const QString CoreSettings::NeverShowReleaseNotes("NeverShowReleaseNotes");
 
+//Comprobar noves versions
+const QString CoreSettings::LastVersionChecked("LastVersionChecked");
+const QString CoreSettings::LastVersionCheckedDate("LastVersionCheckedDate");
+const QString CoreSettings::CheckVersionInterval("CheckVersionInterval");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -69,6 +74,9 @@ void CoreSettings::init()
     settingsRegistry->addSetting(DICOMImageReaderLibrary, "itkGDCM");
     settingsRegistry->addSetting(ShowReleaseNotesFirstTime, true);
     settingsRegistry->addSetting(NeverShowReleaseNotes, false);
+    settingsRegistry->addSetting(LastVersionChecked, "");
+    settingsRegistry->addSetting(LastVersionCheckedDate, "");
+    settingsRegistry->addSetting(CheckVersionInterval, "15");
 }
 
 } // end namespace udg 

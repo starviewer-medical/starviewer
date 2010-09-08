@@ -84,7 +84,7 @@ CONFIG -= staticlib
 
 include(installextensions.inc)
 
-QT += xml opengl network webkit
+QT += xml opengl network webkit script
 
 #TODO: Qt 4.5.3 no afegeix la informacio de UI_DIR com a include a l'hora de compilar el main.cpp
 INCLUDEPATH += ../../tmp/ui
