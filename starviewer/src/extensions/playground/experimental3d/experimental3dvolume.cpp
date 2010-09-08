@@ -1,67 +1,64 @@
 #include "experimental3dvolume.h"
 
+#include "ambientvoxelshader.h"
+#include "celshadingvoxelshader.h"
+#include "colorbleedingvoxelshader.h"
+#include "colorvomivoxelshader.h"
+#include "contourvoxelshader.h"
+#include "coolwarmvoxelshader.h"
+#include "directilluminationvoxelshader.h"
+#include "filteringambientocclusionmapvoxelshader.h"
+#include "filteringambientocclusionstipplingvoxelshader.h"
+#include "filteringambientocclusionvoxelshader.h"
+#include "imivoxelshader.h"
+#include "obscurance.h"
+#include "obscurancevoxelshader.h"
+#include "opacityvoxelshader.h"
+#include "transferfunction.h"
+#include "vmivoxelshader2.h"
+#include "volume.h"
+#include "vomicoolwarmvoxelshader.h"
+#include "vomigammavoxelshader.h"
+#include "vomivoxelshader.h"
+#include "voxelsaliencyvoxelshader.h"
+#include "vtk4DLinearRegressionGradientEstimator.h"
+#include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
+#include "whitevoxelshader.h"
+
 #include <vtkEncodedGradientShader.h>
 #include <vtkFiniteDifferenceGradientEstimator.h>
 #include <vtkFloatArray.h>
 #include <vtkImageData.h>
 #include <vtkImageShiftScale.h>
+#include <vtkOpenGLGPUVolumeRayCastMapper.h>
 #include <vtkPointData.h>
 #include <vtkVolume.h>
 #include <vtkVolumeProperty.h>
-#include <vtkVolumeRayCastCompositeFunction.h>
 #include <vtkVolumeRayCastMapper.h>
-
-#include "ambientvoxelshader.h"
-#include "celshadingvoxelshader.h"
-#include "colorbleedingvoxelshader.h"
-#include "contourvoxelshader.h"
-#include "coolwarmvoxelshader.h"
-#include "directilluminationvoxelshader.h"
-#include "obscurance.h"
-#include "obscurancevoxelshader.h"
-#include "transferfunction.h"
-#include "volume.h"
-#include "vtk4DLinearRegressionGradientEstimator.h"
-#include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
-#include "whitevoxelshader.h"
-
-// VMI
-#include "vmivoxelshader2.h"
-#include "vomivoxelshader.h"
-#include "vomigammavoxelshader.h"
-#include "vomicoolwarmvoxelshader.h"
-#include "voxelsaliencyvoxelshader.h"
-#include "colorvomivoxelshader.h"
-#include "opacityvoxelshader.h"
-#include "imivoxelshader.h"
-
-#include "filteringambientocclusionvoxelshader.h"
-#include "filteringambientocclusionmapvoxelshader.h"
-#include "filteringambientocclusionstipplingvoxelshader.h"
 
 
 namespace udg {
 
 
-Experimental3DVolume::Experimental3DVolume( Volume *volume )
- : m_finiteDifferenceGradientEstimator( 0 ), m_4DLinearRegressionGradientEstimator( 0 )
+Experimental3DVolume::Experimental3DVolume(Volume *volume)
+    : m_finiteDifferenceGradientEstimator(0), m_4DLinearRegressionGradientEstimator(0)
 {
-    createImage( volume->getVtkData() );
-    createVolumeRayCastFunctions();
+    createImage(volume->getVtkData());
+    createVolumeRayCastFunction();
     createVoxelShaders();
-    createMapper();
+    createMappers();
     createProperty();
     createVolume();
 }
 
 
-Experimental3DVolume::Experimental3DVolume( vtkImageData *image )
- : m_finiteDifferenceGradientEstimator( 0 ), m_4DLinearRegressionGradientEstimator( 0 )
+Experimental3DVolume::Experimental3DVolume(vtkImageData *image)
+    : m_finiteDifferenceGradientEstimator(0), m_4DLinearRegressionGradientEstimator(0)
 {
-    createImage( image );
-    createVolumeRayCastFunctions();
+    createImage(image);
+    createVolumeRayCastFunction();
     createVoxelShaders();
-    createMapper();
+    createMappers();
     createProperty();
     createVolume();
 }
@@ -70,7 +67,6 @@ Experimental3DVolume::Experimental3DVolume( vtkImageData *image )
 Experimental3DVolume::~Experimental3DVolume()
 {
     m_image->Delete();
-    m_normalVolumeRayCastFunction->Delete();
     m_shaderVolumeRayCastFunction->Delete();
     delete m_ambientVoxelShader;
     delete m_directIlluminationVoxelShader;
@@ -90,7 +86,8 @@ Experimental3DVolume::~Experimental3DVolume()
     delete m_filteringAmbientOcclusionVoxelShader;
     delete m_filteringAmbientOcclusionMapVoxelShader;
     delete m_filteringAmbientOcclusionStipplingVoxelShader;
-    m_mapper->Delete();
+    m_cpuRayCastMapper->Delete();
+    m_gpuRayCastMapper->Delete();
     m_property->Delete();
     m_volume->Delete();
 
@@ -129,21 +126,19 @@ unsigned int Experimental3DVolume::getSize() const
 }
 
 
-void Experimental3DVolume::setInterpolation( Interpolation interpolation )
+void Experimental3DVolume::setInterpolation(Interpolation interpolation)
 {
-    switch ( interpolation )
+    switch (interpolation)
     {
         case NearestNeighbour:
             m_property->SetInterpolationTypeToNearest();
             break;
         case LinearInterpolateClassify:
             m_property->SetInterpolationTypeToLinear();
-            m_normalVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             m_shaderVolumeRayCastFunction->SetCompositeMethodToInterpolateFirst();
             break;
         case LinearClassifyInterpolate:
             m_property->SetInterpolationTypeToLinear();
-            m_normalVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             m_shaderVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             break;
     }
@@ -159,21 +154,21 @@ void Experimental3DVolume::setGradientEstimator( GradientEstimator gradientEstim
         case FiniteDifference:
             if ( !m_finiteDifferenceGradientEstimator )
                 m_finiteDifferenceGradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
-            m_mapper->SetGradientEstimator( m_finiteDifferenceGradientEstimator );
+            m_cpuRayCastMapper->SetGradientEstimator( m_finiteDifferenceGradientEstimator );
             m_finiteDifferenceGradientEstimator->SetInput( m_image );
             break;
         case FourDLInearRegression1:
             if ( !m_4DLinearRegressionGradientEstimator )
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
             m_4DLinearRegressionGradientEstimator->SetRadius( 1 );
-            m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
+            m_cpuRayCastMapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
             m_4DLinearRegressionGradientEstimator->SetInput( m_image );
             break;
         case FourDLInearRegression2:
             if ( !m_4DLinearRegressionGradientEstimator )
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
             m_4DLinearRegressionGradientEstimator->SetRadius( 2 );
-            m_mapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
+            m_cpuRayCastMapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );
             m_4DLinearRegressionGradientEstimator->SetInput( m_image );
             break;
     }
@@ -182,96 +177,96 @@ void Experimental3DVolume::setGradientEstimator( GradientEstimator gradientEstim
 
 void Experimental3DVolume::resetShadingOptions()
 {
+    m_volume->SetMapper(m_cpuRayCastMapper);
     m_shaderVolumeRayCastFunction->RemoveAllVoxelShaders();
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
 }
 
 
-void Experimental3DVolume::addLighting( bool diffuse, bool specular, double specularPower )
+void Experimental3DVolume::addLighting(bool diffuse, bool specular, double specularPower)
 {
-    if ( !diffuse )
+    if (!diffuse)
     {
-        m_shaderVolumeRayCastFunction->AddVoxelShader( m_ambientVoxelShader );
-        if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_ambientVoxelShader ) == 0 ) m_mapper->SetVolumeRayCastFunction( m_normalVolumeRayCastFunction );
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_ambientVoxelShader);
+        if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_ambientVoxelShader) == 0) m_volume->SetMapper(m_gpuRayCastMapper);
         m_property->ShadeOff();
     }
     else
     {
-        m_shaderVolumeRayCastFunction->AddVoxelShader( m_directIlluminationVoxelShader );
-        if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_directIlluminationVoxelShader ) == 0 ) m_mapper->SetVolumeRayCastFunction( m_normalVolumeRayCastFunction );
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_directIlluminationVoxelShader);
+        if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_directIlluminationVoxelShader) == 0) m_volume->SetMapper(m_gpuRayCastMapper);
         m_property->ShadeOn();
 
-        m_directIlluminationVoxelShader->setEncodedNormals( m_mapper->GetGradientEstimator()->GetEncodedNormals() );
-        vtkEncodedGradientShader *gradientShader = m_mapper->GetGradientShader();
-        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_volume ),
-                                                                  gradientShader->GetGreenDiffuseShadingTable( m_volume ),
-                                                                  gradientShader->GetBlueDiffuseShadingTable( m_volume ) );
-        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_volume ),
-                                                                   gradientShader->GetGreenSpecularShadingTable( m_volume ),
-                                                                   gradientShader->GetBlueSpecularShadingTable( m_volume ) );
+        m_directIlluminationVoxelShader->setEncodedNormals(m_cpuRayCastMapper->GetGradientEstimator()->GetEncodedNormals());
+        vtkEncodedGradientShader *gradientShader = m_cpuRayCastMapper->GetGradientShader();
+        m_directIlluminationVoxelShader->setDiffuseShadingTables(gradientShader->GetRedDiffuseShadingTable(m_volume),
+                                                                 gradientShader->GetGreenDiffuseShadingTable(m_volume),
+                                                                 gradientShader->GetBlueDiffuseShadingTable(m_volume));
+        m_directIlluminationVoxelShader->setSpecularShadingTables(gradientShader->GetRedSpecularShadingTable(m_volume),
+                                                                  gradientShader->GetGreenSpecularShadingTable(m_volume),
+                                                                  gradientShader->GetBlueSpecularShadingTable(m_volume));
 
-        if ( specular )
+        if (specular)
         {
-            m_property->SetSpecular( 1.0 );
-            m_property->SetSpecularPower( specularPower );
+            m_property->SetSpecular(1.0);
+            m_property->SetSpecularPower(specularPower);
         }
-        else m_property->SetSpecular( 0.0 );
+        else m_property->SetSpecular(0.0);
     }
 }
 
 
-void Experimental3DVolume::addCoolWarm( float b, float y, float alpha, float beta )
+void Experimental3DVolume::addCoolWarm(float b, float y, float alpha, float beta)
 {
-    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_coolWarmVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_coolWarmVoxelShader );
-    m_coolWarmVoxelShader->setGradientEstimator( gradientEstimator() );
-    m_coolWarmVoxelShader->setBYAlphaBeta( b, y, alpha, beta );
-    m_coolWarmVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_coolWarmVoxelShader ) != 0 );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_coolWarmVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_coolWarmVoxelShader);
+    m_coolWarmVoxelShader->setGradientEstimator(gradientEstimator());
+    m_coolWarmVoxelShader->setBYAlphaBeta(b, y, alpha, beta);
+    m_coolWarmVoxelShader->setCombine(m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_coolWarmVoxelShader) != 0);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
 void Experimental3DVolume::addWhite()
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_whiteVoxelShader );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_whiteVoxelShader);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addContour( double threshold )
+void Experimental3DVolume::addContour(double threshold)
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_contourVoxelShader );
-    m_contourVoxelShader->setGradientEstimator( gradientEstimator() );
-    m_contourVoxelShader->setThreshold( threshold );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_contourVoxelShader);
+    m_contourVoxelShader->setGradientEstimator(gradientEstimator());
+    m_contourVoxelShader->setThreshold(threshold);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addCelShading( int quantums )
+void Experimental3DVolume::addCelShading(int quantums)
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_celShadingVoxelShader );
-    m_celShadingVoxelShader->setQuantums( quantums );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_celShadingVoxelShader);
+    m_celShadingVoxelShader->setQuantums(quantums);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addObscurance( Obscurance *obscurance, double factor, double filterLow, double filterHigh, bool additive, double weight )
+void Experimental3DVolume::addObscurance(Obscurance *obscurance, double factor, double filterLow, double filterHigh, bool additive, double weight)
 {
-    if ( !obscurance->hasColor() )
+    if (!obscurance->hasColor())
     {
-        m_shaderVolumeRayCastFunction->AddVoxelShader( m_obscuranceVoxelShader );
-        m_obscuranceVoxelShader->setObscurance( obscurance );
-        m_obscuranceVoxelShader->setFactor( factor );
-        m_obscuranceVoxelShader->setFilters( filterLow, filterHigh );
-        m_obscuranceVoxelShader->setAdditive( additive, weight );
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_obscuranceVoxelShader);
+        m_obscuranceVoxelShader->setObscurance(obscurance);
+        m_obscuranceVoxelShader->setFactor(factor);
+        m_obscuranceVoxelShader->setFilters(filterLow, filterHigh);
+        m_obscuranceVoxelShader->setAdditive(additive, weight);
     }
     else
     {
-        m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorBleedingVoxelShader );
-        m_colorBleedingVoxelShader->setColorBleeding( obscurance );
-        m_colorBleedingVoxelShader->setFactor( factor );
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_colorBleedingVoxelShader);
+        m_colorBleedingVoxelShader->setColorBleeding(obscurance);
+        m_colorBleedingVoxelShader->setFactor(factor);
     }
 
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
@@ -296,7 +291,7 @@ void Experimental3DVolume::setTransferFunction( const TransferFunction &transfer
 
 void Experimental3DVolume::startVmiMode()
 {
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
@@ -320,73 +315,73 @@ float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
 }
 
 
-void Experimental3DVolume::addVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool additive, float weight )
+void Experimental3DVolume::addVomi(const QVector<float> &vomi, float minimumVomi, float maximumVomi, float factor, bool additive, float weight)
 {
-    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiVoxelShader );
-    m_vomiVoxelShader->setVomi( vomi, maximumVomi, factor );
-    m_vomiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiVoxelShader ) != 0 );
-    m_vomiVoxelShader->setAdditive( additive, weight );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_vomiVoxelShader);
+    m_vomiVoxelShader->setVomi(vomi, minimumVomi, maximumVomi, factor);
+    m_vomiVoxelShader->setCombine(m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiVoxelShader) != 0);
+    m_vomiVoxelShader->setAdditive(additive, weight);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addVomiGamma( const QVector<float> &vomi, float maximumVomi, float factor, float gamma, bool additive, float weight )
+void Experimental3DVolume::addVomiGamma(const QVector<float> &vomi, float maximumVomi, float factor, float gamma, bool additive, float weight)
 {
-    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiGammaVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiGammaVoxelShader );
-    m_vomiGammaVoxelShader->setVomi( vomi, maximumVomi, factor, gamma );
-    m_vomiGammaVoxelShader->setAdditive( additive, weight );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiGammaVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_vomiGammaVoxelShader);
+    m_vomiGammaVoxelShader->setVomi(vomi, maximumVomi, factor, gamma);
+    m_vomiGammaVoxelShader->setAdditive(additive, weight);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addVomiCoolWarm( const QVector<float> &vomi, float maximumVomi, float factor, float y, float b )
+void Experimental3DVolume::addVomiCoolWarm(const QVector<float> &vomi, float maximumVomi, float factor, float y, float b)
 {
-    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_vomiCoolWarmVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_vomiCoolWarmVoxelShader );
-    m_vomiCoolWarmVoxelShader->setVomi( vomi, maximumVomi, factor );
-    m_vomiCoolWarmVoxelShader->setYB( y, b );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiCoolWarmVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_vomiCoolWarmVoxelShader);
+    m_vomiCoolWarmVoxelShader->setVomi(vomi, maximumVomi, factor);
+    m_vomiCoolWarmVoxelShader->setYB(y, b);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor )
+void Experimental3DVolume::addColorVomi(const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor)
 {
-    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_colorVomiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_colorVomiVoxelShader );
-    m_colorVomiVoxelShader->setColorVomi( colorVomi, maximumColorVomi, factor );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_colorVomiVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_colorVomiVoxelShader);
+    m_colorVomiVoxelShader->setColorVomi(colorVomi, maximumColorVomi, factor);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addImi( const QVector<float> &imi, float maximumImi, float factor, bool additive, float weight )
+void Experimental3DVolume::addImi(const QVector<float> &imi, float maximumImi, float factor, bool additive, float weight)
 {
-    if ( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_imiVoxelShader ) < 0 ) m_shaderVolumeRayCastFunction->AddVoxelShader( m_imiVoxelShader );
-    m_imiVoxelShader->setImi( imi, maximumImi, factor );
-    m_imiVoxelShader->setCombine( m_shaderVolumeRayCastFunction->IndexOfVoxelShader( m_imiVoxelShader ) != 0 );
-    m_imiVoxelShader->setAdditive( additive, weight );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_imiVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_imiVoxelShader);
+    m_imiVoxelShader->setImi(imi, maximumImi, factor);
+    m_imiVoxelShader->setCombine(m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_imiVoxelShader) != 0);
+    m_imiVoxelShader->setAdditive(additive, weight);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor )
+void Experimental3DVolume::addVoxelSaliencies(const QVector<float> &voxelSaliencies, float maximumSaliency, float factor)
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_voxelSaliencyVoxelShader );
-    m_voxelSaliencyVoxelShader->setVoxelSaliencies( voxelSaliencies, maximumSaliency, factor );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_voxelSaliencyVoxelShader);
+    m_voxelSaliencyVoxelShader->setVoxelSaliencies(voxelSaliencies, maximumSaliency, factor);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addOpacity( const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor )
+void Experimental3DVolume::addOpacity(const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor)
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_opacityVoxelShader );
-    m_opacityVoxelShader->setData( data, maximum, lowThreshold, lowFactor, highThreshold, highFactor );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_opacityVoxelShader);
+    m_opacityVoxelShader->setData(data, maximum, lowThreshold, lowFactor, highThreshold, highFactor);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addOpacity( const QVector<float> &data, float maximum )
+void Experimental3DVolume::addOpacity(const QVector<float> &data, float maximum)
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_opacityVoxelShader );
-    m_opacityVoxelShader->setData( data, maximum, 1.0f, 1.0f, std::numeric_limits<float>::infinity(), 1.0f );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_opacityVoxelShader);
+    m_opacityVoxelShader->setData(data, maximum, 1.0f, 1.0f, std::numeric_limits<float>::infinity(), 1.0f);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
@@ -421,27 +416,27 @@ QVector<float> Experimental3DVolume::computeVomiGradient( const QVector<float> &
 }
 
 
-void Experimental3DVolume::addFilteringAmbientOcclusion( const QVector<float> &filteringAmbientOcclusion, float maximum, float lambda )
+void Experimental3DVolume::addFilteringAmbientOcclusion(const QVector<float> &filteringAmbientOcclusion, float maximum, float lambda)
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_filteringAmbientOcclusionVoxelShader );
-    m_filteringAmbientOcclusionVoxelShader->setFilteringAmbientOcclusion( filteringAmbientOcclusion, maximum, lambda );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_filteringAmbientOcclusionVoxelShader);
+    m_filteringAmbientOcclusionVoxelShader->setFilteringAmbientOcclusion(filteringAmbientOcclusion, maximum, lambda);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addFilteringAmbientOcclusionMap( const QVector<float> &filteringAmbientOcclusion, float maximum, float factor )
+void Experimental3DVolume::addFilteringAmbientOcclusionMap(const QVector<float> &filteringAmbientOcclusion, float maximum, float factor)
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_filteringAmbientOcclusionMapVoxelShader );
-    m_filteringAmbientOcclusionMapVoxelShader->setFilteringAmbientOcclusion( filteringAmbientOcclusion, maximum, factor );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_filteringAmbientOcclusionMapVoxelShader);
+    m_filteringAmbientOcclusionMapVoxelShader->setFilteringAmbientOcclusion(filteringAmbientOcclusion, maximum, factor);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
-void Experimental3DVolume::addFilteringAmbientOcclusionStippling( const QVector<float> &filteringAmbientOcclusion, float maximum, float threshold, float factor )
+void Experimental3DVolume::addFilteringAmbientOcclusionStippling(const QVector<float> &filteringAmbientOcclusion, float maximum, float threshold, float factor)
 {
-    m_shaderVolumeRayCastFunction->AddVoxelShader( m_filteringAmbientOcclusionStipplingVoxelShader );
-    m_filteringAmbientOcclusionStipplingVoxelShader->setFilteringAmbientOcclusion( filteringAmbientOcclusion, maximum, threshold, factor );
-    m_mapper->SetVolumeRayCastFunction( m_shaderVolumeRayCastFunction );
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_filteringAmbientOcclusionStipplingVoxelShader);
+    m_filteringAmbientOcclusionStipplingVoxelShader->setFilteringAmbientOcclusion(filteringAmbientOcclusion, maximum, threshold, factor);
+    m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
 
@@ -473,9 +468,8 @@ void Experimental3DVolume::createImage( vtkImageData *image )
 }
 
 
-void Experimental3DVolume::createVolumeRayCastFunctions()
+void Experimental3DVolume::createVolumeRayCastFunction()
 {
-    m_normalVolumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
     m_shaderVolumeRayCastFunction = vtkVolumeRayCastVoxelShaderCompositeFunction::New();
 }
 
@@ -516,11 +510,13 @@ void Experimental3DVolume::createVoxelShaders()
 }
 
 
-void Experimental3DVolume::createMapper()
+void Experimental3DVolume::createMappers()
 {
-    m_mapper = vtkVolumeRayCastMapper::New();
-    m_mapper->SetInput( m_image );
-    m_mapper->SetVolumeRayCastFunction( m_normalVolumeRayCastFunction );
+    m_cpuRayCastMapper = vtkVolumeRayCastMapper::New();
+    m_cpuRayCastMapper->SetInput(m_image);
+    m_cpuRayCastMapper->SetVolumeRayCastFunction(m_shaderVolumeRayCastFunction);
+    m_gpuRayCastMapper = vtkOpenGLGPUVolumeRayCastMapper::New();
+    m_gpuRayCastMapper->SetInput(m_image);
 }
 
 
@@ -533,12 +529,11 @@ void Experimental3DVolume::createProperty()
 void Experimental3DVolume::createVolume()
 {
     m_volume = vtkVolume::New();
-    m_volume->SetMapper( m_mapper );
-    m_volume->SetProperty( m_property );
+    m_volume->SetProperty(m_property);
 
     // Centrem el volum a (0,0,0)
     double *center = m_volume->GetCenter();
-    m_volume->AddPosition( -center[0], -center[1], -center[2] );
+    m_volume->AddPosition(-center[0], -center[1], -center[2]);
 }
 
 
@@ -556,4 +551,4 @@ vtkEncodedGradientEstimator* Experimental3DVolume::gradientEstimator() const
 }
 
 
-}
+} // namespace udg
