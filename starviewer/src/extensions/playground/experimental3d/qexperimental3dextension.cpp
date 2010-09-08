@@ -1358,10 +1358,10 @@ void QExperimental3DExtension::render()
     else if ( m_baseCoolWarmRadioButton->isChecked() ) m_volume->addCoolWarm( m_baseCoolWarmBDoubleSpinBox->value(), m_baseCoolWarmYDoubleSpinBox->value(), m_baseCoolWarmAlphaDoubleSpinBox->value(),
                                                                               m_baseCoolWarmBetaDoubleSpinBox->value() );
     else if ( m_baseWhiteRadioButton->isChecked() ) m_volume->addWhite();
-    else if (m_baseVomiRadioButton->isChecked()) m_volume->addVomi(m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
+    else if (m_baseVomiRadioButton->isChecked()) m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
     //else if (m_baseVomiRadioButton->isChecked()) m_volume->addVoxelSaliencies(m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
-    else if (m_baseVomi2RadioButton->isChecked()) m_volume->addVomi(m_vomi2, m_maximumVomi2, m_baseVomi2FactorDoubleSpinBox->value());
-    else if (m_baseVomi3RadioButton->isChecked()) m_volume->addVomi(m_vomi3, m_maximumVomi3, m_baseVomi3FactorDoubleSpinBox->value());
+    else if (m_baseVomi2RadioButton->isChecked()) m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_baseVomi2FactorDoubleSpinBox->value());
+    else if (m_baseVomi3RadioButton->isChecked()) m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_baseVomi3FactorDoubleSpinBox->value());
     else if ( m_baseImiRadioButton->isChecked() ) m_volume->addImi( m_imi, m_maximumImi, m_baseImiFactorDoubleSpinBox->value() );
     else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
     //else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVomi( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
@@ -1396,10 +1396,11 @@ void QExperimental3DExtension::render()
     if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value(),
                                                                       m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value() );
-    if (m_vomiCheckBox->isChecked()) m_volume->addVomi(m_vomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value());
-    if (m_vomi2CheckBox->isChecked()) m_volume->addVomi(m_vomi2, m_maximumVomi2, m_vomi2FactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
+    if (m_vomiCheckBox->isChecked()) m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
+                                                       m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+    if (m_vomi2CheckBox->isChecked()) m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_vomi2FactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
                                                         m_additiveObscuranceVomiWeightDoubleSpinBox->value());
-    if (m_vomi3CheckBox->isChecked()) m_volume->addVomi(m_vomi3, m_maximumVomi3, m_vomi3FactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
+    if (m_vomi3CheckBox->isChecked()) m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_vomi3FactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
                                                         m_additiveObscuranceVomiWeightDoubleSpinBox->value());
     if ( m_vomiCoolWarmCheckBox->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_vomiCoolWarmFactorDoubleSpinBox->value(),
                                                                           m_vomiCoolWarmYDoubleSpinBox->value(), m_vomiCoolWarmBDoubleSpinBox->value() );
