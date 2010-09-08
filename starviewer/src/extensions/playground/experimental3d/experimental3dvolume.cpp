@@ -182,36 +182,32 @@ void Experimental3DVolume::resetShadingOptions()
 }
 
 
-void Experimental3DVolume::addLighting(bool diffuse, bool specular, double specularPower)
+void Experimental3DVolume::addAmbientLighting()
 {
-    if (!diffuse)
-    {
-        m_shaderVolumeRayCastFunction->AddVoxelShader(m_ambientVoxelShader);
-        if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_ambientVoxelShader) == 0) m_volume->SetMapper(m_gpuRayCastMapper);
-        m_property->ShadeOff();
-    }
-    else
-    {
-        m_shaderVolumeRayCastFunction->AddVoxelShader(m_directIlluminationVoxelShader);
-        if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_directIlluminationVoxelShader) == 0) m_volume->SetMapper(m_gpuRayCastMapper);
-        m_property->ShadeOn();
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_ambientVoxelShader);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_ambientVoxelShader) == 0) m_volume->SetMapper(m_gpuRayCastMapper);
+    m_property->ShadeOff();
+}
 
-        m_directIlluminationVoxelShader->setEncodedNormals(m_cpuRayCastMapper->GetGradientEstimator()->GetEncodedNormals());
-        vtkEncodedGradientShader *gradientShader = m_cpuRayCastMapper->GetGradientShader();
-        m_directIlluminationVoxelShader->setDiffuseShadingTables(gradientShader->GetRedDiffuseShadingTable(m_volume),
-                                                                 gradientShader->GetGreenDiffuseShadingTable(m_volume),
-                                                                 gradientShader->GetBlueDiffuseShadingTable(m_volume));
-        m_directIlluminationVoxelShader->setSpecularShadingTables(gradientShader->GetRedSpecularShadingTable(m_volume),
-                                                                  gradientShader->GetGreenSpecularShadingTable(m_volume),
-                                                                  gradientShader->GetBlueSpecularShadingTable(m_volume));
 
-        if (specular)
-        {
-            m_property->SetSpecular(1.0);
-            m_property->SetSpecularPower(specularPower);
-        }
-        else m_property->SetSpecular(0.0);
-    }
+void Experimental3DVolume::addFullLighting(double ambient, double diffuse, double specular, double specularPower)
+{
+    m_shaderVolumeRayCastFunction->AddVoxelShader(m_directIlluminationVoxelShader);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_directIlluminationVoxelShader) == 0) m_volume->SetMapper(m_gpuRayCastMapper);
+    m_property->ShadeOn();
+    m_property->SetAmbient(ambient);
+    m_property->SetDiffuse(diffuse);
+    m_property->SetSpecular(specular);
+    m_property->SetSpecularPower(specularPower);
+
+    m_directIlluminationVoxelShader->setEncodedNormals(m_cpuRayCastMapper->GetGradientEstimator()->GetEncodedNormals());
+    vtkEncodedGradientShader *gradientShader = m_cpuRayCastMapper->GetGradientShader();
+    m_directIlluminationVoxelShader->setDiffuseShadingTables(gradientShader->GetRedDiffuseShadingTable(m_volume),
+                                                             gradientShader->GetGreenDiffuseShadingTable(m_volume),
+                                                             gradientShader->GetBlueDiffuseShadingTable(m_volume));
+    m_directIlluminationVoxelShader->setSpecularShadingTables(gradientShader->GetRedSpecularShadingTable(m_volume),
+                                                              gradientShader->GetGreenSpecularShadingTable(m_volume),
+                                                              gradientShader->GetBlueSpecularShadingTable(m_volume));
 }
 
 

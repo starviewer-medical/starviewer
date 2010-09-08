@@ -78,8 +78,10 @@ public:
     void setGradientEstimator(GradientEstimator gradientEstimator);
     /// Assigna les opcions predeterminades de shading: no es pinta res.
     void resetShadingOptions();
-    /// Afegeix il·luminació al shading.
-    void addLighting(bool diffuse = false, bool specular = false, double specularPower = 0.0);
+    /// Afegeix il·luminació ambient al shading.
+    void addAmbientLighting();
+    /// Afegeix il·luminació completa al shading.
+    void addFullLighting(double ambient, double diffuse, double specular, double specularPower);
     /// Afegeix cool-warm shading.
     void addCoolWarm(float b, float y, float alpha, float beta);
     /// Afegeix pintar el volum en blanc.

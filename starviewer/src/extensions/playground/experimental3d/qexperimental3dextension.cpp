@@ -906,13 +906,18 @@ bool QExperimental3DExtension::saveDataAsText( const QList< QPair<int, Vector3> 
 
 void QExperimental3DExtension::createConnections()
 {
-    connect( m_viewer, SIGNAL( volumeChanged(Volume*) ), SLOT( setNewVolume(Volume*) ) );
+    connect(m_viewer, SIGNAL(volumeChanged(Volume*)), SLOT(setNewVolume(Volume*)));
     
     // visualització
-    connect( m_backgroundColorPushButton, SIGNAL( clicked() ), SLOT( chooseBackgroundColor() ) );
-    connect( m_baseDiffuseLightingRadioButton, SIGNAL( toggled(bool) ), SLOT( enableSpecularLighting(bool) ) );
-    connect( m_baseSpecularLightingCheckBox, SIGNAL( toggled(bool) ), m_baseSpecularLightingPowerLabel, SLOT( setEnabled(bool) ) );
-    connect( m_baseSpecularLightingCheckBox, SIGNAL( toggled(bool) ), m_baseSpecularLightingPowerDoubleSpinBox, SLOT( setEnabled(bool) ) );
+    connect(m_backgroundColorPushButton, SIGNAL(clicked()), SLOT(chooseBackgroundColor()));
+    connect(m_baseFullLightingRadioButton, SIGNAL(toggled(bool)), m_baseAmbientLabel, SLOT(setEnabled(bool)));
+    connect(m_baseFullLightingRadioButton, SIGNAL(toggled(bool)), m_baseAmbientDoubleSpinBox, SLOT(setEnabled(bool)));
+    connect(m_baseFullLightingRadioButton, SIGNAL(toggled(bool)), m_baseDiffuseLabel, SLOT(setEnabled(bool)));
+    connect(m_baseFullLightingRadioButton, SIGNAL(toggled(bool)), m_baseDiffuseDoubleSpinBox, SLOT(setEnabled(bool)));
+    connect(m_baseFullLightingRadioButton, SIGNAL(toggled(bool)), m_baseSpecularLabel, SLOT(setEnabled(bool)));
+    connect(m_baseFullLightingRadioButton, SIGNAL(toggled(bool)), m_baseSpecularDoubleSpinBox, SLOT(setEnabled(bool)));
+    connect(m_baseFullLightingRadioButton, SIGNAL(toggled(bool)), m_baseSpecularPowerLabel, SLOT(setEnabled(bool)));
+    connect(m_baseFullLightingRadioButton, SIGNAL(toggled(bool)), m_baseSpecularPowerDoubleSpinBox, SLOT(setEnabled(bool)));
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmYLabel, SLOT( setEnabled(bool) ) );
@@ -1319,23 +1324,6 @@ void QExperimental3DExtension::chooseBackgroundColor()
 }
 
 
-void QExperimental3DExtension::enableSpecularLighting( bool on )
-{
-    m_baseSpecularLightingCheckBox->setEnabled( on );
-
-    if ( on )
-    {
-        m_baseSpecularLightingPowerLabel->setEnabled( m_baseSpecularLightingCheckBox->isChecked() );
-        m_baseSpecularLightingPowerDoubleSpinBox->setEnabled( m_baseSpecularLightingCheckBox->isChecked() );
-    }
-    else
-    {
-        m_baseSpecularLightingPowerLabel->setEnabled( false );
-        m_baseSpecularLightingPowerDoubleSpinBox->setEnabled( false );
-    }
-}
-
-
 float passIfNegative( float f )
 {
     return f < 0.0f ? f : 0.0f;
@@ -1344,16 +1332,16 @@ float passIfNegative( float f )
 
 void QExperimental3DExtension::render()
 {
-    m_volume->setInterpolation( static_cast<Experimental3DVolume::Interpolation>( m_interpolationComboBox->currentIndex() ) );
-    m_volume->setGradientEstimator( static_cast<Experimental3DVolume::GradientEstimator>( m_gradientEstimatorComboBox->currentIndex() ) );
+    m_volume->setInterpolation(static_cast<Experimental3DVolume::Interpolation>(m_interpolationComboBox->currentIndex()));
+    m_volume->setGradientEstimator(static_cast<Experimental3DVolume::GradientEstimator>(m_gradientEstimatorComboBox->currentIndex()));
 
     m_volume->resetShadingOptions();
 
-    if ( m_baseAmbientLightingRadioButton->isChecked() ) m_volume->addLighting();
-    else if ( m_baseDiffuseLightingRadioButton->isChecked() )
+    if (m_baseAmbientLightingRadioButton->isChecked()) m_volume->addAmbientLighting();
+    else if (m_baseFullLightingRadioButton->isChecked())
     {
         m_viewer->updateShadingTable();
-        m_volume->addLighting( true, m_baseSpecularLightingCheckBox->isChecked(), m_baseSpecularLightingPowerDoubleSpinBox->value() );
+        m_volume->addFullLighting(m_baseAmbientDoubleSpinBox->value(), m_baseDiffuseDoubleSpinBox->value(), m_baseSpecularDoubleSpinBox->value(), m_baseSpecularPowerDoubleSpinBox->value());
     }
     else if ( m_baseCoolWarmRadioButton->isChecked() ) m_volume->addCoolWarm( m_baseCoolWarmBDoubleSpinBox->value(), m_baseCoolWarmYDoubleSpinBox->value(), m_baseCoolWarmAlphaDoubleSpinBox->value(),
                                                                               m_baseCoolWarmBetaDoubleSpinBox->value() );
@@ -2696,27 +2684,6 @@ bool QExperimental3DExtension::programRenderingBaseShading( int lineNumber, cons
     if ( base == "ambient" )
     {
         if ( run ) m_baseAmbientLightingRadioButton->setChecked( true );
-    }
-    else if ( base == "diffuse" )
-    {
-        if ( run ) m_baseDiffuseLightingRadioButton->setChecked( true );
-
-        if ( words.size() > 2 )
-        {
-            if ( words.at( 2 ) == "specular" )
-            {
-                if ( run )
-                {
-                    m_baseSpecularLightingCheckBox->setChecked( true );
-                    if ( words.size() > 3 ) m_baseSpecularLightingPowerDoubleSpinBox->setValue( words.at( 3 ).toDouble() );
-                }
-            }
-            else
-            {
-                logProgramError( lineNumber, "Paràmetre/s incorrecte/s", line );
-                return false;
-            }
-        }
     }
     else if ( base == "vomi" )
     {

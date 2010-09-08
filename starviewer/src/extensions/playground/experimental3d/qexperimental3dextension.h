@@ -211,8 +211,6 @@ private slots:
 
     /// Obre un diàleg per triar el color de fons.
     void chooseBackgroundColor();
-    /// Habilita/inhabilita la il·luminació especular.
-    void enableSpecularLighting( bool on );
     /// Obre un diàleg per carregar una funció de transferència.
     void loadTransferFunction();
     /// Obre un diàleg per desar una funció de transferència.
