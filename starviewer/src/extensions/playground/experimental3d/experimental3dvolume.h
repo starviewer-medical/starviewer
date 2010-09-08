@@ -2,17 +2,17 @@
 #define UDGEXPERIMENTAL3DVOLUME_H
 
 
-#include <QVector>
-
 #include "vector3.h"
+
+#include <QVector>
 
 
 class vtkEncodedGradientEstimator;
 class vtkFiniteDifferenceGradientEstimator;
 class vtkImageData;
+class vtkOpenGLGPUVolumeRayCastMapper;
 class vtkVolume;
 class vtkVolumeProperty;
-class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastMapper;
 
 
@@ -22,32 +22,32 @@ namespace udg {
 class AmbientVoxelShader;
 class CelShadingVoxelShader;
 class ColorBleedingVoxelShader;
+class ColorVomiVoxelShader;
 class ContourVoxelShader;
 class CoolWarmVoxelShader;
 class DirectIlluminationVoxelShader;
+class FilteringAmbientOcclusionMapVoxelShader;
+class FilteringAmbientOcclusionStipplingVoxelShader;
+class FilteringAmbientOcclusionVoxelShader;
+class ImiVoxelShader;
 class Obscurance;
 class ObscuranceVoxelShader;
+class OpacityVoxelShader;
 class TransferFunction;
+class VmiVoxelShader2;
 class Volume;
+class VomiCoolWarmVoxelShader;
+class VomiGammaVoxelShader;
+class VomiVoxelShader;
+class VoxelSaliencyVoxelShader;
 class vtk4DLinearRegressionGradientEstimator;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
 class WhiteVoxelShader;
 
-// VMI
-class VmiVoxelShader2;
-class VomiVoxelShader;
-class VomiGammaVoxelShader;
-class VomiCoolWarmVoxelShader;
-class VoxelSaliencyVoxelShader;
-class ColorVomiVoxelShader;
-class OpacityVoxelShader;
-class ImiVoxelShader;
 
-class FilteringAmbientOcclusionVoxelShader;
-class FilteringAmbientOcclusionMapVoxelShader;
-class FilteringAmbientOcclusionStipplingVoxelShader;
-
-
+/**
+    Aquesta classe agrupa totes les funcions de tractament de volums de l'extensió experimental3d.
+  */
 class Experimental3DVolume {
 
 public:
@@ -57,8 +57,8 @@ public:
     /// Estimadors de gradient.
     enum GradientEstimator { FiniteDifference, FourDLInearRegression1, FourDLInearRegression2 };
 
-    Experimental3DVolume( Volume *volume );
-    Experimental3DVolume( vtkImageData *image );
+    Experimental3DVolume(Volume *volume);
+    Experimental3DVolume(vtkImageData *image);
     ~Experimental3DVolume();
 
     /// Retorna el model de vòxels principal.
@@ -73,55 +73,55 @@ public:
     unsigned int getSize() const;
 
     /// Estableix el tipus d'interpolació.
-    void setInterpolation( Interpolation interpolation );
+    void setInterpolation(Interpolation interpolation);
     /// Estableix l'estimador de gradient.
-    void setGradientEstimator( GradientEstimator gradientEstimator );
+    void setGradientEstimator(GradientEstimator gradientEstimator);
     /// Assigna les opcions predeterminades de shading: no es pinta res.
     void resetShadingOptions();
     /// Afegeix il·luminació al shading.
-    void addLighting( bool diffuse = false, bool specular = false, double specularPower = 0.0 );
+    void addLighting(bool diffuse = false, bool specular = false, double specularPower = 0.0);
     /// Afegeix cool-warm shading.
-    void addCoolWarm( float b, float y, float alpha, float beta );
+    void addCoolWarm(float b, float y, float alpha, float beta);
     /// Afegeix pintar el volum en blanc.
     void addWhite();
     /// Afegeix contorn al shading.
-    void addContour( double threshold = 0.0 );
+    void addContour(double threshold = 0.0);
     /// Afegeix cel-shading amb el nombre de quantums especificat.
-    void addCelShading( int quantums );
+    void addCelShading(int quantums);
     /// Afegeix obscurances al shading.
-    void addObscurance( Obscurance *obscurance, double factor, double filterLow, double filterHigh, bool additive = false, double weight = 0.0 );
+    void addObscurance(Obscurance *obscurance, double factor, double filterLow, double filterHigh, bool additive = false, double weight = 0.0);
     /// Estableix la funció de transferència.
-    void setTransferFunction( const TransferFunction &transferFunction );
+    void setTransferFunction(const TransferFunction &transferFunction);
 
     /// Prepara el rendering amb el voxel shader per fer càlculs de VMI.
     void startVmiMode();
     void startVmiSecondPass();
     QVector<float> finishVmiSecondPass();
     float viewedVolumeInVmiSecondPass() const;
-    void addVomi( const QVector<float> &vomi, float maximumVomi, float factor, bool additive = false, float weight = 0.0f );
-    void addVomiGamma( const QVector<float> &vomi, float maximumVomi, float factor, float gamma, bool additive = false, float weight = 0.0f );
-    void addVomiCoolWarm( const QVector<float> &vomi, float maximumVomi, float factor, float y, float b );
-    void addColorVomi( const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor );
-    void addImi( const QVector<float> &imi, float maximumImi, float factor, bool additive = false, float weight = 0.0f );
-    void addVoxelSaliencies( const QVector<float> &voxelSaliencies, float maximumSaliency, float factor );
-    void addOpacity( const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor );
-    void addOpacity( const QVector<float> &data, float maximum );
-    QVector<float> computeVomiGradient( const QVector<float> &vomi );
+    void addVomi(const QVector<float> &vomi, float minimumVomi, float maximumVomi, float factor, bool additive = false, float weight = 0.0f);
+    void addVomiGamma(const QVector<float> &vomi, float maximumVomi, float factor, float gamma, bool additive = false, float weight = 0.0f);
+    void addVomiCoolWarm(const QVector<float> &vomi, float maximumVomi, float factor, float y, float b);
+    void addColorVomi(const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor);
+    void addImi(const QVector<float> &imi, float maximumImi, float factor, bool additive = false, float weight = 0.0f);
+    void addVoxelSaliencies(const QVector<float> &voxelSaliencies, float maximumSaliency, float factor);
+    void addOpacity(const QVector<float> &data, float maximum, float lowThreshold, float lowFactor, float highThreshold, float highFactor);
+    void addOpacity(const QVector<float> &data, float maximum);
+    QVector<float> computeVomiGradient(const QVector<float> &vomi);
 
-    void addFilteringAmbientOcclusion( const QVector<float> &filteringAmbientOcclusion, float maximum, float lambda );
-    void addFilteringAmbientOcclusionMap( const QVector<float> &filteringAmbientOcclusion, float maximum, float factor );
-    void addFilteringAmbientOcclusionStippling( const QVector<float> &filteringAmbientOcclusion, float maximum, float threshold, float factor );
+    void addFilteringAmbientOcclusion(const QVector<float> &filteringAmbientOcclusion, float maximum, float lambda);
+    void addFilteringAmbientOcclusionMap(const QVector<float> &filteringAmbientOcclusion, float maximum, float factor);
+    void addFilteringAmbientOcclusionStippling(const QVector<float> &filteringAmbientOcclusion, float maximum, float threshold, float factor);
 
 private:
 
     /// Crea el model de vòxels de treball.
-    void createImage( vtkImageData *image );
-    /// Crea les volume ray cast functions.
-    void createVolumeRayCastFunctions();
+    void createImage(vtkImageData *image);
+    /// Crea la volume ray cast function.
+    void createVolumeRayCastFunction();
     /// Crea els voxel shaders.
     void createVoxelShaders();
-    /// Crea el mapper.
-    void createMapper();
+    /// Crea els mappers.
+    void createMappers();
     /// Crea la propietat.
     void createProperty();
     /// Crea el volum.
@@ -144,8 +144,6 @@ private:
     /// Mida de les dades.
     unsigned int m_dataSize;
 
-    /// Volume ray cast function principal.
-    vtkVolumeRayCastCompositeFunction *m_normalVolumeRayCastFunction;
     /// Volume ray cast function amb shaders.
     vtkVolumeRayCastVoxelShaderCompositeFunction *m_shaderVolumeRayCastFunction;
 
@@ -187,8 +185,10 @@ private:
     FilteringAmbientOcclusionMapVoxelShader *m_filteringAmbientOcclusionMapVoxelShader;
     FilteringAmbientOcclusionStipplingVoxelShader *m_filteringAmbientOcclusionStipplingVoxelShader;
 
-    /// Mapper.
-    vtkVolumeRayCastMapper *m_mapper;
+    /// Mapper per fer ray casting amb CPU.
+    vtkVolumeRayCastMapper *m_cpuRayCastMapper;
+    /// Mapper per fer ray casting amb GPU.
+    vtkOpenGLGPUVolumeRayCastMapper *m_gpuRayCastMapper;
 
     /// Propietat.
     vtkVolumeProperty *m_property;
@@ -206,7 +206,7 @@ private:
 };
 
 
-}
+} // namespace udg
 
 
-#endif
+#endif // UDGEXPERIMENTAL3DVOLUME_H
