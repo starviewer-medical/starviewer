@@ -5,7 +5,7 @@ namespace udg {
 
 
 VomiVoxelShader::VomiVoxelShader()
- : VoxelShader(), m_data( 0 ), m_maxValue( 0 ), m_ambientColors( 0 ), m_maximumVomi( 1.0f ), m_vomiFactor( 1.0f ), m_combine( false ), m_additive( false ), m_additiveWeight( 0.0 )
+ : VoxelShader(), m_data(0), m_maxValue(0), m_ambientColors(0), m_minimumVomi(0.0f), m_vomiRange(1.0f), m_vomiFactor(1.0f), m_combine(false), m_additive(false), m_additiveWeight(0.0f)
 {
 }
 
@@ -32,10 +32,11 @@ void VomiVoxelShader::setTransferFunction( const TransferFunction &transferFunct
 }
 
 
-void VomiVoxelShader::setVomi( const QVector<float> &vomi, float maximumVomi, float vomiFactor )
+void VomiVoxelShader::setVomi(const QVector<float> &vomi, float minimumVomi, float maximumVomi, float vomiFactor)
 {
     m_vomi = vomi;
-    m_maximumVomi = maximumVomi;
+    m_minimumVomi = minimumVomi;
+    m_vomiRange = maximumVomi - minimumVomi;
     m_vomiFactor = vomiFactor;
 }
 

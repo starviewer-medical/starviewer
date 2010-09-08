@@ -27,7 +27,7 @@ public:
     void setData( const unsigned short *data, unsigned short maxValue );
     /// Assigna la funció de transferència.
     void setTransferFunction( const TransferFunction &transferFunction );
-    void setVomi( const QVector<float> &vomi, float maximumVomi, float vomiFactor );
+    void setVomi(const QVector<float> &vomi, float minimumVomi, float maximumVomi, float vomiFactor);
     void setCombine( bool on );
     void setAdditive( bool on, float weight );
 
@@ -54,7 +54,8 @@ protected:
     TransferFunction m_transferFunction;
     HdrColor *m_ambientColors;
     QVector<float> m_vomi;
-    float m_maximumVomi;
+    float m_minimumVomi;
+    float m_vomiRange;
     float m_vomiFactor;
     bool m_combine;
     bool m_additive;
@@ -75,30 +76,30 @@ inline HdrColor VomiVoxelShader::shade( const Vector3 &position, const Vector3 &
 }
 
 
-inline HdrColor VomiVoxelShader::nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor )
+inline HdrColor VomiVoxelShader::nvShade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor)
 {
-    Q_UNUSED( position );
-    Q_UNUSED( direction );
-    Q_UNUSED( remainingOpacity );
+    Q_UNUSED(position);
+    Q_UNUSED(direction);
+    Q_UNUSED(remainingOpacity);
 
-    Q_ASSERT( m_data );
+    Q_ASSERT(m_data);
 
-    HdrColor color( 1.0f, 1.0f, 1.0f );
+    HdrColor color(1.0f, 1.0f, 1.0f);
 
-    if ( m_combine ) color = baseColor;
+    if (m_combine) color = baseColor;
     else color.alpha = m_ambientColors[m_data[offset]].alpha;
 
-    if ( !color.isTransparent() && !color.isBlack() )
+    if (!color.isTransparent() && !color.isBlack())
     {
-        float vomi = m_vomiFactor * m_vomi.at( offset ) / m_maximumVomi;
-        float gray = qMax( 1.0f - vomi, 0.0f );
+        float vomi = m_vomiFactor * (m_vomi.at(offset) - m_minimumVomi) / m_vomiRange;
+        float gray = qMax(1.0f - vomi, 0.0f);
 
-        if ( !m_additive ) color.multiplyColorBy( gray );
+        if (!m_additive) color.multiplyColorBy(gray);
         else
         {
             HdrColor vomiColor = m_ambientColors[m_data[offset]];
             vomiColor.alpha = 0.0f;
-            color = color.multiplyColorBy( 1.0f - m_additiveWeight ) + vomiColor.multiplyColorBy( m_additiveWeight * gray );
+            color = color.multiplyColorBy(1.0f - m_additiveWeight) + vomiColor.multiplyColorBy(m_additiveWeight * gray);
         }
     }
 
@@ -106,43 +107,43 @@ inline HdrColor VomiVoxelShader::nvShade( const Vector3 &position, int offset, c
 }
 
 
-inline HdrColor VomiVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity, const HdrColor &baseColor )
+inline HdrColor VomiVoxelShader::nvShade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity, const HdrColor &baseColor)
 {
-    Q_UNUSED( direction );
-    Q_UNUSED( remainingOpacity );
+    Q_UNUSED(direction);
+    Q_UNUSED(remainingOpacity);
 
-    Q_ASSERT( interpolator );
-    Q_ASSERT( m_data );
+    Q_ASSERT(interpolator);
+    Q_ASSERT(m_data);
 
     int offsets[8];
     double weights[8];
     bool offsetsAndWeights = false;
 
-    HdrColor color( 1.0f, 1.0f, 1.0f );
+    HdrColor color(1.0f, 1.0f, 1.0f);
 
-    if ( m_combine ) color = baseColor;
+    if (m_combine) color = baseColor;
     else
     {
-        interpolator->getOffsetsAndWeights( position, offsets, weights );
+        interpolator->getOffsetsAndWeights(position, offsets, weights);
         offsetsAndWeights = true;
-        double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
+        double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
         color.alpha = m_ambientColors[static_cast<int>(value)].alpha;
     }
 
-    if ( !color.isTransparent() && !color.isBlack() )
+    if (!color.isTransparent() && !color.isBlack())
     {
-        if ( !offsetsAndWeights ) interpolator->getOffsetsAndWeights( position, offsets, weights );
+        if (!offsetsAndWeights) interpolator->getOffsetsAndWeights(position, offsets, weights);
 
-        float vomi = m_vomiFactor * TrilinearInterpolator::interpolate<float>( m_vomi.constData(), offsets, weights ) / m_maximumVomi;
-        float gray = qMax( 1.0f - vomi, 0.0f );
+        float vomi = m_vomiFactor * (TrilinearInterpolator::interpolate<float>(m_vomi.constData(), offsets, weights) - m_minimumVomi) / m_vomiRange;
+        float gray = qMax(1.0f - vomi, 0.0f);
 
-        if ( !m_additive ) color.multiplyColorBy( gray );
+        if (!m_additive) color.multiplyColorBy(gray);
         else
         {
-            double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
+            double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
             HdrColor vomiColor = m_ambientColors[static_cast<int>(value)];
             vomiColor.alpha = 0.0f;
-            color = color.multiplyColorBy( 1.0f - m_additiveWeight ) + vomiColor.multiplyColorBy( m_additiveWeight * gray );
+            color = color.multiplyColorBy(1.0f - m_additiveWeight) + vomiColor.multiplyColorBy(m_additiveWeight * gray);
         }
     }
 
