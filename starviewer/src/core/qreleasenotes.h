@@ -11,44 +11,43 @@
 #include "ui_qreleasenotesbase.h"
 
 #include <QWidget>
+class QNetworkProxy;
 
 namespace udg {
 
-/** Aquesta classe mostrarà una finestra amb totes les novetats de la versió final.
-    Treballa sobre els settings:
-        - ShowReleaseNotesFirstTime: booleà que indica si es la primera vegada que s'obre des de l'actualització
-        - NeverShowReleaseNotes: L'usuari decideix no mostrar més els missatges de les release notes
+/** Aquesta classe s'utilitza per mostrar les release notes, conté un QWebView per tal de mostrar-les com a html.
+    Es gestionada per ApplicationVersionChecker.
   */
 class QReleaseNotes : public QWidget, Ui::QReleaseNotesBase {
 Q_OBJECT
 
 public:
-    QReleaseNotes(QWidget *parent = 0);
-    /// Quan s'hagi comprobat si es pot obrir la url, llavors es mostrara la finestra, altrament no
-    void show();
+    /// Constructor amb els atributs del QWidget on es posa (0 per que sigui una finestra nova)
+    /// i la referència al pare per tal de poder-li indicar quan es tanca la finestra
+    QReleaseNotes(QWidget *parent);
+    /// Destructor
+    ~QReleaseNotes();
+    /// Retorna si esta activat el checkbox de no mostrar més
+    bool isDontShowAnymoreChecked();
+    /// Mostra o amaga el checkbox don't show anymore
+    void setDontShowVisible(bool visible);
+    /// Determina quin url haurà d'obrir la finestra de les release notes
+    void setUrl(QUrl url);
     
-public slots:
-    /// Comproba que la url funciona
-    void checkLoadResult(bool result);
+signals:
+    // Senyal per indicar a ApplicationVersionChecker que es tanca la finestra
+    void closing();
+
+//public slots:
 
 protected:
     /// Redifinir el close event
     void closeEvent(QCloseEvent *event);
 
-private:
-    /// Genera la url local del fitxer on hi ha les release notes
-    QUrl createUrl();
+//private:
 
-    /// Guardar els settings
-    void writeSettings();
-
-private:
-    /// Atribut per indicar si s'ha trobat o no la url
-    bool m_urlNotFound;
-    /// Atribut per indicar que ja s'ha comprobat la url
-    bool m_urlChecked; 
-    // Atribut per indicar que es vol mostrar la finestra
-    bool m_intendToShow; 
+//private:
+    
 };
 
 } // end namespace udg

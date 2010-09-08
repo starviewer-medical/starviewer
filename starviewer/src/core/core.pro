@@ -16,7 +16,7 @@ FORMS += qlogviewerbase.ui \
     qthickslabwidgetbase.ui \
     q2dviewerwidgetbase.ui \
     qreleasenotesbase.ui \
-    qdicomdumpbrowserbase.ui
+    qdicomdumpbrowserbase.ui 
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -220,6 +220,7 @@ HEADERS += extensionfactory.h \
     linepathtool.h \
     qreleasenotes.h \
     qdicomdumpbrowser.h \
+    applicationversionchecker.h\
     filter.h \
     filterpipeline.h \
     vtkthresholdfilter.h
@@ -402,6 +403,7 @@ SOURCES += extensionmediator.cpp \
     linepathtool.cpp \
     qreleasenotes.cpp \
     qdicomdumpbrowser.cpp \
+    applicationversionchecker.cpp\
     filter.cpp \
     filterpipeline.cpp \
     vtkthresholdfilter.cpp
@@ -417,5 +419,6 @@ include(../compilationtype.inc)
 include(../translations.inc)
 QT += xml \
     network \
-    webkit
+    webkit \
+    script
 

@@ -42,9 +42,15 @@ public:
     /// Indica quina llibreria fem servir per llegir arxius DICOM
     static const QString DICOMImageReaderLibrary;
 
-    //Per fer que no es vegin més les Release Notes
+    /// Per fer que no es vegin més les Release Notes
     static const QString ShowReleaseNotesFirstTime;
     static const QString NeverShowReleaseNotes;
+
+    /// Comporbar si hi ha una nova versió
+    static const QString LastVersionChecked;
+    static const QString LastVersionCheckedDate;
+    /// Cada quants dies es comprovarà si hi ha una versió nova
+    static const QString CheckVersionInterval; 
 };
 
 } // end namespace udg 
