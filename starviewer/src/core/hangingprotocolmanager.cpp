@@ -38,7 +38,7 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 
 HangingProtocolManager::~HangingProtocolManager()
 {
-    cancelHangingProtocolDowloading();
+    cancelHangingProtocolDownloading();
     delete m_studiesDownloading;
     delete m_previousStudiesManager;
 }
@@ -185,7 +185,7 @@ void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, Vi
 
 void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient * patient )
 {
-    cancelHangingProtocolDowloading(); // Si hi havia algun estudi descarregant, es treu de la llista d'espera
+    cancelHangingProtocolDownloading(); // Si hi havia algun estudi descarregant, es treu de la llista d'espera
 
     // TODO aixo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
     // Caldria incoporar algun paràmetre per indicar quin és el visor seleccionat per defecte
@@ -594,7 +594,7 @@ QList<Study*> HangingProtocolManager::sortStudiesByDate( const QList<Study*> & s
     return sortedStudiesByDate.values();
 }
 
-void HangingProtocolManager::cancelHangingProtocolDowloading()
+void HangingProtocolManager::cancelHangingProtocolDownloading()
 {
     foreach( QString key, m_studiesDownloading->keys() )
     {

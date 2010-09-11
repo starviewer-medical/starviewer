@@ -185,7 +185,7 @@ void Q2DViewerExtension::setInput( Volume *input )
     /// Aplicació dels hanging protocols
     if( m_hangingProtocolManager != 0 )
     {
-        m_hangingProtocolManager->cancelHangingProtocolDowloading();
+        m_hangingProtocolManager->cancelHangingProtocolDownloading();
         delete m_hangingProtocolManager;
     }
     m_hangingProtocolManager = new HangingProtocolManager();
@@ -657,7 +657,7 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
 void Q2DViewerExtension::setGrid( int rows , int columns )
 {
 #ifndef STARVIEWER_LITE
-    m_hangingProtocolManager->cancelHangingProtocolDowloading();
+    m_hangingProtocolManager->cancelHangingProtocolDownloading();
 #endif
     m_workingArea->setGrid( rows , columns );
 }
