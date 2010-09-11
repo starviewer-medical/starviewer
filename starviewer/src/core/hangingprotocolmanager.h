@@ -48,7 +48,7 @@ public:
     void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
 
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
-    void cancelHangingProtocolDowloading();
+    void cancelHangingProtocolDownloading();
 
 private slots:
 
