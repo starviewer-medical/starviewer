@@ -13,6 +13,7 @@
 #include "study.h"
 #include "patient.h"
 #include "imageplane.h"
+#include "windowlevelpresetstooldata.h"
 // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
 #include "hangingprotocolmanager.h"
 //thickslab
@@ -2130,7 +2131,10 @@ void Q2DViewer::invertWindowLevel()
     window = wl[0]*-1;
     level = wl[1];
 
-    setWindowLevel( window, level );
+    // Això és necessari fer-ho així i no amb setWindowLevel perquè si invertim el color de la imatge sense haver modificat abans el window/level
+    // i després seleccionem un altre visor, al tornar a aquest visor, es tornaria aplicar el "default" i no el "custom"
+    // Es podria arribar a fer d'una altre manera també, atacant directament als filtres del pipeline, tal com es diu al ticket #1275
+    getWindowLevelData()->setCustomWindowLevel(window, level);
 }
 
 void Q2DViewer::alignLeft()
