@@ -124,6 +124,13 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                         processParameters << "-V"; 
                         processParameters << m_isoImageLabel;
                     }
+
+                    // Per permetre conservar noms llargs de fitxers de més de 8 caracters a part d'ISO 9660 Level 1,
+                    // s'afegeix informació en Joliet (Windows) i RockRidge (Unix)
+                    // Això donava problemes al afegir visors propis i aquests tinguessin dll's amb noms més llargs, per exemple.
+                    processParameters << "-joliet";
+                    processParameters << "-r";
+
                     processParameters << "-o"; 
                     processParameters << m_outputIsoImageFilePath; // Nom i directori on guardarem la imatge
                     processParameters << m_inputPath; // Path a convertir en iso
