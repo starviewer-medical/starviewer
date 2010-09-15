@@ -108,6 +108,7 @@ void QPreviousStudiesWidget::initializeTree()
     m_previousStudiesTree->setColumnHidden( 0 , true );
     m_previousStudiesTree->setAlternatingRowColors( true );
     m_previousStudiesTree->setUniformRowHeights( true );
+    m_previousStudiesTree->setSortingEnabled(true);
 
     // El farem visible quan rebem la llista d'estudis previs
     m_previousStudiesTree->setVisible( false );
