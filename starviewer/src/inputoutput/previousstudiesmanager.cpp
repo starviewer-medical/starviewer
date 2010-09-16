@@ -21,6 +21,7 @@ namespace udg {
 PreviousStudiesManager::PreviousStudiesManager()
 {
     m_pacsManager = new PacsManager();
+    m_studyInstanceUIDToFindPrevious = "invalid";
     createConnections();
 }
 
@@ -38,6 +39,33 @@ void PreviousStudiesManager::createConnections()
     connect(m_pacsManager, SIGNAL(errorQueryingStudy(PacsDevice)), SLOT(errorQueryingStudy(PacsDevice)));
 }
 
+void PreviousStudiesManager::queryStudies(Patient *patient)
+{
+    PacsDeviceManager pacsDeviceManager;
+    QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
+
+    INFO_LOG("Es buscaran els estudis del pacient " + patient->getFullName() + " amb ID " + patient->getID());
+
+    initializeQuery();
+
+    //Preguntem al PACS per estudis
+    if (pacsDeviceListToQuery.count() > 0)
+    {
+        DicomMask maskID = getBasicDicomMask();
+        maskID.setPatientId(patient->getID());
+        m_pacsManager->queryStudy(maskID, pacsDeviceListToQuery);
+
+        DicomMask maskName = getBasicDicomMask();
+        maskName.setPatientName(patient->getFullName());
+        m_pacsManager->queryStudy(maskName, pacsDeviceListToQuery);
+    }
+    else
+    {
+        //Sinó hi ha cap PACS pel qual cercar per defecte fem l'emit del queryFinished
+        queryFinished();
+    }
+}
+
 void PreviousStudiesManager::queryPreviousStudies(Study *study)
 {
     PacsDeviceManager pacsDeviceManager;
@@ -46,14 +74,9 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
     INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() + 
     " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
 
-    m_pacsManager->cancelCurrentQueries();//Per si hi hagués una consulta executant-se
+    initializeQuery();
 
-    ///Fem neteja de consultes anteriors
-    m_mergedHashPacsIDOfStudyInstanceUID.clear();
-    m_mergedStudyList.clear();
-    m_pacsDeviceIDErrorEmited.clear();
-
-    m_studyToFindPrevious = study;
+    m_studyInstanceUIDToFindPrevious = study->getInstanceUID();
 
     //Preguntem al PACS per estudis
     if (pacsDeviceListToQuery.count() > 0)
@@ -68,9 +91,20 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
     }
 }
 
+void PreviousStudiesManager::initializeQuery()
+{
+    m_pacsManager->cancelCurrentQueries();//Per si hi hagués una consulta executant-se
+
+    ///Fem neteja de consultes anteriors
+    m_mergedHashPacsIDOfStudyInstanceUID.clear();
+    m_mergedStudyList.clear();
+    m_pacsDeviceIDErrorEmited.clear();
+}
+
 void PreviousStudiesManager::cancelCurrentQuery()
 {
     m_pacsManager->cancelCurrentQueries();
+    m_studyInstanceUIDToFindPrevious = "invalid";
 }
 
 bool PreviousStudiesManager::isExecutingQueries()
@@ -135,7 +169,7 @@ bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)
 
 bool PreviousStudiesManager::isStudyToFindPrevious(Study *study)
 {
-    return study->getInstanceUID() == m_studyToFindPrevious->getInstanceUID();
+    return study->getInstanceUID() == m_studyInstanceUIDToFindPrevious;
 }
 
 DicomMask PreviousStudiesManager::getBasicDicomMask()

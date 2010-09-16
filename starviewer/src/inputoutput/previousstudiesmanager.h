@@ -40,6 +40,10 @@ public:
     /// Si ja s'estigués executant una consulta la cancel·laria i faria la nova consulta
     void queryPreviousStudies(Study *study);
 
+    /// Fa una consulta d'estudis del pacient assíncrona als PACS passats per paràmetre
+    /// Si ja s'estigués executant una consulta la cancel·laria i faria la nova consulta
+    void queryStudies(Patient *patient);
+
     /// Cancel·la les consultes actuals que s'estan executant, i cancel·la les consultes encuades per executar
     void cancelCurrentQuery();
 
@@ -63,6 +67,10 @@ signals:
     /// Signal que s'emet per indicar que s'ha produït un error durant la descarrega d'un estudi (pot ser previ o no)
     void errorDownloadingPreviousStudy(QString studyUID);
 
+private:
+    /// Inicialitza les variables per realitzar una nova consulta
+    void initializeQuery();
+
 private slots:
 
     ///Slot que s'executa quan s'ha acabat la consulta d'estudis previs a PacsManager
@@ -79,7 +87,7 @@ private:
     PacsManager *m_pacsManager;
     QList<Study*> m_mergedStudyList;
     QHash<QString,QString> m_mergedHashPacsIDOfStudyInstanceUID;
-    Study *m_studyToFindPrevious;
+    QString m_studyInstanceUIDToFindPrevious;
     /*Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
     *en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
     *com ja el tindrem aquesta llista ja no en farem signal*/
