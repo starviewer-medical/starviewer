@@ -14,7 +14,7 @@
         <translation>Previsualització no disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="55"/>
+        <location filename="coresettings.cpp" line="58"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -90,7 +90,7 @@
 <context>
     <name>udg::HangingProtocolManager</name>
     <message>
-        <location filename="hangingprotocolmanager.cpp" line="898"/>
+        <location filename="hangingprotocolmanager.cpp" line="839"/>
         <source>Downloading previous study...</source>
         <translation>Descarregant estudi previ...</translation>
     </message>
@@ -209,39 +209,39 @@ Desv.Std.:%4</translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1735"/>
+        <location filename="q2dviewer.cpp" line="1736"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Tall: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1753"/>
+        <location filename="q2dviewer.cpp" line="1754"/>
         <source>Slice: %1/%2</source>
         <translation>Tall: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1726"/>
+        <location filename="q2dviewer.cpp" line="1727"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Tall: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1746"/>
+        <location filename="q2dviewer.cpp" line="1747"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Tall: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1760"/>
+        <location filename="q2dviewer.cpp" line="1761"/>
         <source> Thickness: %1 mm</source>
         <translation> Gruix: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1503"/>
+        <location filename="q2dviewer.cpp" line="1504"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1533"/>
+        <location filename="q2dviewer.cpp" line="1534"/>
         <source>%1
 %2
 %3 %4 %5
@@ -256,12 +256,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1701"/>
+        <location filename="q2dviewer.cpp" line="1702"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1714"/>
+        <location filename="q2dviewer.cpp" line="1715"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -269,12 +269,12 @@ Acc:%6
 <context>
     <name>udg::Q2DViewerWidget</name>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="27"/>
+        <location filename="q2dviewerwidget.cpp" line="29"/>
         <source>Synchronize tool</source>
         <translation>Eina de sincronització</translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="28"/>
+        <location filename="q2dviewerwidget.cpp" line="30"/>
         <source>Enable/Disable Synchronize tool</source>
         <translation>Activar/Desactivar l&apos;eina de sincronització</translation>
     </message>
@@ -1844,6 +1844,16 @@ It&apos;s recommended you save them in an empty folder.</source>
         <location filename="volume.cpp" line="128"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
         <translation>%1 ha trobat un error inesperat al llegir aquestes sèries. No s&apos;ha carregat les dades de les sèries.</translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="160"/>
+        <source>Unable to read data</source>
+        <translation>No es poden llegir les dades</translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="160"/>
+        <source>%1 could not load this series data. A blank image will be loaded instead. If this problem persists, please report it to %1&apos;s support team.</source>
+        <translation>%1 no pot carregar les dades d&apos;aquesta sèrie. Es carregarà una imatge en blanc. Si el problema persisteix, si us plau, comuniqui-ho al equip de suport %1.</translation>
     </message>
 </context>
 <context>

@@ -14,7 +14,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="55"/>
+        <location filename="coresettings.cpp" line="58"/>
         <source>PNG (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -89,7 +89,7 @@
 <context>
     <name>udg::HangingProtocolManager</name>
     <message>
-        <location filename="hangingprotocolmanager.cpp" line="898"/>
+        <location filename="hangingprotocolmanager.cpp" line="839"/>
         <source>Downloading previous study...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -203,38 +203,38 @@ Mean: %2</oldsource>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1735"/>
+        <location filename="q2dviewer.cpp" line="1736"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1753"/>
+        <location filename="q2dviewer.cpp" line="1754"/>
         <source>Slice: %1/%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1726"/>
+        <location filename="q2dviewer.cpp" line="1727"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1746"/>
+        <location filename="q2dviewer.cpp" line="1747"/>
         <source>Slice: %1-%2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1760"/>
+        <location filename="q2dviewer.cpp" line="1761"/>
         <source> Thickness: %1 mm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1503"/>
+        <location filename="q2dviewer.cpp" line="1504"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1533"/>
+        <location filename="q2dviewer.cpp" line="1534"/>
         <source>%1
 %2
 %3 %4 %5
@@ -244,12 +244,12 @@ Acc:%6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1701"/>
+        <location filename="q2dviewer.cpp" line="1702"/>
         <source>Loc: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1714"/>
+        <location filename="q2dviewer.cpp" line="1715"/>
         <source>-%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -257,12 +257,12 @@ Acc:%6
 <context>
     <name>udg::Q2DViewerWidget</name>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="27"/>
+        <location filename="q2dviewerwidget.cpp" line="29"/>
         <source>Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="28"/>
+        <location filename="q2dviewerwidget.cpp" line="30"/>
         <source>Enable/Disable Synchronize tool</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1829,6 +1829,16 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volume.cpp" line="128"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="160"/>
+        <source>Unable to read data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="160"/>
+        <source>%1 could not load this series data. A blank image will be loaded instead. If this problem persists, please report it to %1&apos;s support team.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
