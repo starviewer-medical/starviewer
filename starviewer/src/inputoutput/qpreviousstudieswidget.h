@@ -43,7 +43,7 @@ private:
     /// Inicialització del QTreeWidget on es visualitzaran els estudis previs
     void initializeTree();
     /// Inicialització del widget mostrat quan s'estan cercant estudis previs.
-    void initializeLookinForStudiesWidget();
+    void initializeLookingForStudiesWidget();
     /// Insereix un estudi a l'arbre i genera el contenidor associat a aquest estudi.
     void insertStudyToTree(Study *study, QString pacsID);
     /// Actualitza l'amplada del QTreeWidget per aconseguir que l'scroll horitzontal no apareixi i tota la info sigui visible.

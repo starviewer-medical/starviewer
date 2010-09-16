@@ -35,7 +35,7 @@ QPreviousStudiesWidget::QPreviousStudiesWidget(QWidget *parent)
     m_noPreviousStudiesLabel = new QLabel(this);
     m_noPreviousStudiesLabel->setText(tr("No previous studies."));
 
-    initializeLookinForStudiesWidget();
+    initializeLookingForStudiesWidget();
     initializeTree();
 
     verticalLayout->addWidget(m_lookingForStudiesWidget);
@@ -113,7 +113,7 @@ void QPreviousStudiesWidget::initializeTree()
 
 }
 
-void QPreviousStudiesWidget::initializeLookinForStudiesWidget()
+void QPreviousStudiesWidget::initializeLookingForStudiesWidget()
 {
     QHBoxLayout *horizontalLayout = new QHBoxLayout(m_lookingForStudiesWidget);
 
