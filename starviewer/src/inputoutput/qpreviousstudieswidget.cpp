@@ -63,10 +63,48 @@ QPreviousStudiesWidget::~QPreviousStudiesWidget()
     delete m_noPreviousStudiesLabel;
 }
 
+void QPreviousStudiesWidget::updateList()
+{
+    if (!m_infomationPerStudy.isEmpty())
+    {
+        foreach (Study *study, m_patient->getStudies())
+        {
+            StudyInfo *studyInfo = m_infomationPerStudy[study->getInstanceUID()];
+
+            if (studyInfo != NULL)
+            {
+                if (studyInfo->status == Downloading)
+                {
+                    this->decreaseNumberOfDownladingStudies();
+                }
+                studyInfo->status = Finished;
+                studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+                studyInfo->downloadButton->setEnabled(false);
+            }
+        }
+    }
+}
+
 void QPreviousStudiesWidget::searchPreviousStudiesOf(Study *study)
 {
     Q_ASSERT(study);
 
+    initializeSearch();
+    m_patient = study->getParentPatient();
+    m_previousStudiesManager->queryPreviousStudies(study);
+}
+
+void QPreviousStudiesWidget::searchStudiesOf(Patient *patient)
+{
+    Q_ASSERT(patient);
+
+    initializeSearch();
+    m_patient = patient;
+    m_previousStudiesManager->queryStudies(patient);
+}
+
+void QPreviousStudiesWidget::initializeSearch()
+{
     m_lookingForStudiesWidget->setVisible(true);
     m_noPreviousStudiesLabel->setVisible(false);
     m_previousStudiesTree->setVisible(false);
@@ -80,8 +118,6 @@ void QPreviousStudiesWidget::searchPreviousStudiesOf(Study *study)
     {
         delete m_infomationPerStudy.take(key);
     }
-
-    m_previousStudiesManager->queryPreviousStudies(study);
 }
 
 void QPreviousStudiesWidget::createConnections()
@@ -186,6 +222,8 @@ void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList, QHas
         {
             insertStudyToTree(study, hashPacsIDOfStudyInstanceUID[study->getInstanceUID()]);
         }
+
+        updateList();
 
         m_previousStudiesTree->setVisible(true);
 
