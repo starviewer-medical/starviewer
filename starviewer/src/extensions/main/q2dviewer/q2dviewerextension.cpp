@@ -211,7 +211,7 @@ void Q2DViewerExtension::setInput( Volume *input )
 
     /// Habilitem la possibilitat de buscar estudis previs.
     m_previousStudiesToolButton->setEnabled( true );
-    searchPreviousStudiesOfMostRecentStudy();
+    m_previousStudiesWidget->searchStudiesOf(m_mainVolume->getPatient());
 
     searchPreviousStudiesWithHangingProtocols();
 #endif
@@ -652,6 +652,12 @@ void Q2DViewerExtension::searchPreviousStudiesOfMostRecentStudy()
         m_previousStudiesWidget->searchPreviousStudiesOf( recentStudy );
     }
 }
+
+void Q2DViewerExtension::updatePreviousStudiesWidget()
+{
+    m_previousStudiesWidget->updateList();
+}
+
 #endif
 
 void Q2DViewerExtension::setGrid( int rows , int columns )
