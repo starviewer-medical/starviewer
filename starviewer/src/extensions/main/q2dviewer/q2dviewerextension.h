@@ -105,6 +105,9 @@ public slots:
 
     /// Mètode per buscar les prèvies de l'estudi carregat més recent.
     void searchPreviousStudiesOfMostRecentStudy();
+
+    /// Mètode encarregat d'actualitzar la llista del widget d'estudis previs per marcar aquells nous estudis que s'han carregat a memòria.
+    void updatePreviousStudiesWidget();
 #endif
 
     /// Aplica un grid regular al layout, i elimina l'etiqueta si algun estudi previ està en descàrrega
