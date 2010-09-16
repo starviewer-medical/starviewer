@@ -18,6 +18,7 @@ namespace udg {
 class Study;
 class PreviousStudiesManager;
 class QueryScreen;
+class Patient;
 
 class QPreviousStudiesWidget : public QFrame
 {
@@ -29,6 +30,12 @@ public:
     /// Mètode per activar la cerca d'estudis previs. Es mostraran al widget els estudis del pacient anteriors a la data
     /// de l'estudi proporcionat. Es farà la consulta als PACS que estan seleccionats a la llista de nodes de la QueryScreen
     void searchPreviousStudiesOf(Study *study);
+
+    /// Mètode per buscar els estudis relacionat amb el pacient.
+    void searchStudiesOf(Patient *patient);
+
+    /// Actualitza la llista marcant aquells estudis que ja estan en memòria perquè sigui fàcil identificar-los i no es puguin tornar a descarregar.
+    void updateList();
 
 signals:
     /// S'emet només quan no hi ha altres estudis ja descarregant-se.
@@ -55,6 +62,8 @@ private:
 
     /// Retorna la llista d'estudis ordenada per Data i Hora en ordre ascendent o descendent segons es vulgui.
     QList<Study*> orderStudiesByDateTime(QList<Study*> &inputList, bool descendingOrder = false);
+
+    void initializeSearch();
 
 private slots:
     /// Insereix els estudis a l'arbre.
@@ -100,6 +109,8 @@ private:
     QueryScreen *m_queryScreen;
     /// Ens permet saber els estudis que s'estan descarregant.
     int m_numberOfDownloadingStudies;
+    /// Pacient associat a la última cerca feta.
+    Patient *m_patient;
 };
 
 }
