@@ -155,11 +155,21 @@ void Volume::setData( ItkImageTypePointer itkImage  )
 
 void Volume::setData( VtkImageTypePointer vtkImage )
 {
-    // \TODO fer còpia local, no només punter-> com fer-ho?
-    if( m_imageDataVTK )
-        m_imageDataVTK->ReleaseData();
-    m_imageDataVTK = vtkImage;
-    m_dataLoaded = true;
+    if (badExtentData(vtkImage))
+    {
+        QMessageBox::warning( 0, tr("Unable to read data"), tr("%1 could not load this series data. A blank image will be loaded instead. If this problem persists, please report it to %1's support team.").arg( ApplicationNameString ) );
+        vtkImage->ReleaseData();
+        createNeutralVolume();
+        m_dataLoaded = true;
+    }
+    else
+    {    
+        // \TODO fer còpia local, no només punter-> com fer-ho?
+        if( m_imageDataVTK )
+            m_imageDataVTK->ReleaseData();
+        m_imageDataVTK = vtkImage;
+        m_dataLoaded = true;
+    }
 }
 
 void Volume::getOrigin( double xyz[3] )
@@ -804,6 +814,22 @@ bool Volume::fitsIntoMemory()
         return true;
     }
     catch ( std::bad_alloc &ba )
+    {
+        return false;
+    }
+}
+
+bool Volume::badExtentData(vtkImageData *vtkImageData)
+{
+    int extent[6];
+    vtkImageData->GetWholeExtent(extent);
+    
+    if (extent[1] < 0 || extent[3] < 0 || extent[5] < 0)
+    {
+        DEBUG_LOG(QString("Bad extent data: %1,%2 .. %3,%4 .. %5,%6").arg(extent[0]).arg(extent[1]).arg(extent[2]).arg(extent[3]).arg(extent[4]).arg(extent[5]));
+        return true;
+    }
+    else
     {
         return false;
     }

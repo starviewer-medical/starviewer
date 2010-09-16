@@ -265,6 +265,10 @@ private:
     /// volum neutre per evitar que l'aplicació peti en casos d'error no controlats
     void createNeutralVolume();
 
+    /// Aquesta comprovació s'afegeix per evitar els casos del ticket #1292
+    /// Si l'extent és incorrecte en alguna de les dimensions retorna cert, fals altrament
+    bool badExtentData(vtkImageData *vtkImageData);
+
 private:
     typedef itk::ImageFileReader< ItkImageType >  ReaderType;
     typedef ReaderType::Pointer    ReaderTypePointer;
