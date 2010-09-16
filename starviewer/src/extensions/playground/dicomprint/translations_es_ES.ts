@@ -67,7 +67,7 @@
     </message>
     <message>
         <source>Images to print</source>
-        <translation>Imagenes a imprimir</translation>
+        <translation>Imágenes a imprimir</translation>
     </message>
     <message>
         <source>Current Image</source>
@@ -87,7 +87,7 @@
     </message>
     <message>
         <source>From:</source>
-        <translation>Des de:</translation>
+        <translation>Desde:</translation>
     </message>
     <message>
         <source>To:</source>
@@ -135,7 +135,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Images sent to DICOM print successfully.</source>
-        <translation>Las imagenes se han enviado correctamente a la impresora.</translation>
+        <translation>Las imágenes se han enviado correctamente a la impresora.</translation>
     </message>
 </context>
 <context>
@@ -241,7 +241,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Magnification Type:</source>
-        <translation>Tipo de Magnificación:</translation>
+        <translation>Tipo de magnificación:</translation>
     </message>
     <message>
         <source>Border Color:</source>
@@ -249,7 +249,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Minimum Density:</source>
-        <translation>Densidad Mínima:</translation>
+        <translation>Densidad mínima:</translation>
     </message>
     <message>
         <source>Polarity:</source>
@@ -261,11 +261,11 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Empty Image Color:</source>
-        <translation>Color de Imagen Vacía:</translation>
+        <translation>Color de imagen vacía:</translation>
     </message>
     <message>
         <source>Maximum Denstiy:</source>
-        <translation>Densidad Máxima:</translation>
+        <translation>Densidad máxima:</translation>
     </message>
     <message>
         <source>Trim</source>
@@ -281,7 +281,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Configuration Information:</source>
-        <translation>Información de la Configuración:</translation>
+        <translation>Información de la configuración:</translation>
     </message>
     <message>
         <source>Accept</source>
@@ -363,25 +363,25 @@ border: 1px solid  #680000;
         <source>%1 can&apos;t load some of the images to print.
 
 </source>
-        <translation>%1 no ha podido cargar algunas de las imagenes a imprimir.
+        <translation>%1 no ha podido cargar algunas de las imágenes a imprimir.
 
 </translation>
     </message>
     <message>
         <source>This series cannot be printed because color is not supported.</source>
-        <translation>No se puede imprimir está serie porque la impresión de imagenes en color no está soportada.</translation>
+        <translation>No se puede imprimir esta serie porque la impresión de imágenes en color no está soportada.</translation>
     </message>
     <message>
         <source>This series cannot be printed because multi-frame images are not supported.</source>
-        <translation>No se puede imprimir la serie porquè la impresión de imagenes multi-frame no está soportada.</translation>
+        <translation>No se puede imprimir la serie porque la impresión de imágenes multi-frame no está soportada.</translation>
     </message>
     <message>
         <source>The images can&apos;t be printed because </source>
-        <translation>Las imagenes no se pueden imprimir porque </translation>
+        <translation>Las imágenes no se pueden imprimir porque </translation>
     </message>
     <message>
         <source>In most cases this error is produced because the printer doesn&apos;t support some of the print configuration parameters.</source>
-        <translation>En la mayoria de casos este error se produce porque la impresora no soporta algunos de los parámetros de impresión.</translation>
+        <translation>En la mayoría de casos este error se produce porque la impresora no soporta algunos de los parámetros de impresión.</translation>
     </message>
     <message>
         <source>Close &apos;DICOM print&apos; tab and try it again.</source>
@@ -397,7 +397,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Be sure the computer is connected on the network and the printer network parameters are correct.</source>
-        <translation>Asegurese que el ordenador está conectado a la red y que los parámetros de red de la impresora sean correctos.</translation>
+        <translation>Asegúrese que el ordenador está conectado a la red y que los parámetros de red de la impresora sean correctos.</translation>
     </message>
 </context>
 <context>
@@ -426,13 +426,13 @@ border: 1px solid  #680000;
         <source>Printer %1 doesn&apos;t respond correclty.
 Be sure that hostname and AETitle are correct.</source>
         <translation>La impresora %1 no ha respondido correctamente.
-Asegurese que la dirección y el AETitle son correctos.</translation>
+Asegúrese que la dirección y el AETitle son correctos.</translation>
     </message>
     <message>
         <source>Printer %1 doesn&apos;t respond.
 Be sure that hostname and AETitle are correct.</source>
         <translation>La impresora %1 no ha respondido.
-Asegurese que la dirección y el AETitle son correctos.</translation>
+Asegúrese que la dirección y el AETitle son correctos.</translation>
     </message>
     <message>
         <source>AETitle field can&apos;t be empty.</source>
