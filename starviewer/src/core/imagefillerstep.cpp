@@ -164,7 +164,6 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
                 }
                 volumeNumber = m_input->getCurrentMultiframeVolumeNumber();
             }
-            m_input->setCurrentVolumeNumber( volumeNumber );
             
             for( int frameNumber=0; frameNumber<numberOfFrames; frameNumber++ ) 
             {
@@ -189,6 +188,7 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
                     m_input->getCurrentSeries()->addImage( image );
                 }
             }
+            m_input->setCurrentVolumeNumber( volumeNumber );
         }
 
         if( generatedImages.count() > 1 )
