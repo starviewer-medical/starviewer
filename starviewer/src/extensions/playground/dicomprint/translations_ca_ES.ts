@@ -172,7 +172,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextensionbase.ui" line="722"/>
         <source>Slice:</source>
-        <translation>Llesca:</translation>
+        <translation>Tall:</translation>
     </message>
 </context>
 <context>
@@ -299,7 +299,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="312"/>
         <source>Magnification Type:</source>
-        <translation>Tipus de Magnificació:</translation>
+        <translation>Tipus de magnificació:</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="344"/>
@@ -309,7 +309,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="357"/>
         <source>Minimum Density:</source>
-        <translation>Densitat Mínima:</translation>
+        <translation>Densitat mínima:</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="386"/>
@@ -324,12 +324,12 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="484"/>
         <source>Empty Image Color:</source>
-        <translation>Color d&apos;Imatge Buida:</translation>
+        <translation>Color d&apos;imatge buida:</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="517"/>
         <source>Maximum Denstiy:</source>
-        <translation>Densitat Màxima:</translation>
+        <translation>Densitat màxima:</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="544"/>
@@ -339,7 +339,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="588"/>
         <source>Configuration Information:</source>
-        <translation>Informació de la Configuració:</translation>
+        <translation>Informació de la configuració:</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="150"/>
@@ -434,7 +434,7 @@ border: 1px solid  #680000;
         <source>the printer doesn&apos;t respond.
 
 </source>
-        <translation>la impressora no respón.
+        <translation>la impressora no respon.
 
 </translation>
     </message>
@@ -449,7 +449,7 @@ border: 1px solid  #680000;
         <source>the printer doesn&apos;t respond as expected.
 
 </source>
-        <translation>la impressora no ha respós com s&apos;esperava.
+        <translation>la impressora no ha respost com s&apos;esperava.
 
 </translation>
     </message>
@@ -532,7 +532,7 @@ border: 1px solid  #680000;
 Be sure that hostname and AETitle are correct.</source>
         <oldsource>Printer %1 doesn&apos;t respond.
 Be sure that the IP and AETitle are correct.</oldsource>
-        <translation>La impressora %1 no ha respós.
+        <translation>La impressora %1 no ha respost.
 Assegureu-vos que la direcció i el AETitle són correctes.</translation>
     </message>
     <message>
@@ -552,7 +552,7 @@ Assegureu-vos que la direcció i el AETitle són correctes.</translation>
 Be sure that hostname and AETitle are correct.</source>
         <oldsource>Printer %1 doesn&apos;t respond correclty.
 Be sure that the IP and AETitle are correct.</oldsource>
-        <translation>La impressora %1 no ha respós correctament.
+        <translation>La impressora %1 no ha respost correctament.
 Assegureu-vos que la direcció i AETitle són correctes.</translation>
     </message>
     <message>
