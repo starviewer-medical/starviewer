@@ -149,7 +149,8 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
             if (stateSaveImage.bad())
             {
                 storeResponse->DimseStatus = STATUS_STORE_Refused_OutOfResources;
-                ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + dicomFileAbsolutePath + ", error: " + stateSaveImage.text()); 
+                DEBUG_LOG("No s'ha pogut guardar la imatge descarregada [" + dicomFileAbsolutePath + "], error: " + stateSaveImage.text());
+                ERROR_LOG("No s'ha pogut guardar la imatge descarregada [" + dicomFileAbsolutePath + "], error: " + stateSaveImage.text()); 
                 if (!QFile::remove(dicomFileAbsolutePath))
                 {
                     DEBUG_LOG("Ha fallat el voler esborrar el fitxer " + dicomFileAbsolutePath + " que havia fallat prèviament al voler guardar-se.");
