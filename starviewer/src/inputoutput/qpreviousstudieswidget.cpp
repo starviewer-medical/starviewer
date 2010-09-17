@@ -174,7 +174,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study, QString pacsID)
     item->setFlags(Qt::ItemIsEnabled);
 
     item->setText(3, study->getParentPatient()->getFullName());
-    item->setText(4, study->getDateAsString());
+    item->setText(4, study->getDate().toString(Qt::ISODate));
     item->setText(5, study->getTimeAsString());
     item->setText(6, study->getModalitiesAsSingleString());
     item->setText(7, study->getDescription());
