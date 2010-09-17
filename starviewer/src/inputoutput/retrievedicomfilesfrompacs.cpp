@@ -481,25 +481,40 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
 
 QString RetrieveDICOMFilesFromPACS::getAbsoluteFilePathCompositeInstance(DcmDataset *imageDataset, QString fileName)
 {
-    QString studyPath, seriesPath;
+    QString absoluteFilePath = LocalDatabaseManager::getCachePath();
     QDir directory;
     const char *text;
+    OFCondition dicomQueryStatus;
 
-    imageDataset->findAndGetString(DCM_StudyInstanceUID, text, false);
-    studyPath = LocalDatabaseManager::getCachePath() + text;
+    dicomQueryStatus = imageDataset->findAndGetString(DCM_StudyInstanceUID, text, false);
+    if (dicomQueryStatus.bad())
+    {
+        DEBUG_LOG("Ha fallat l'obtenció de l'UID d'estudi al dataset. Raó: " + QString(dicomQueryStatus.text()));
+    }
+    else
+    {
+        absoluteFilePath += QString(text) + "/";
+    }
 
     //comprovem, si el directori de l'estudi ja està creat
-    if (!directory.exists(studyPath )) 
-        directory.mkdir(studyPath);
+    if (!directory.exists(absoluteFilePath )) 
+        directory.mkdir(absoluteFilePath);
 
-    imageDataset->findAndGetString(DCM_SeriesInstanceUID, text, false);
-    seriesPath = studyPath + "/" + text;
+    dicomQueryStatus = imageDataset->findAndGetString(DCM_SeriesInstanceUID, text, false);
+    if (dicomQueryStatus.bad())
+    {
+        DEBUG_LOG("Ha fallat l'obtenció de l'UID de la sèrie al dataset. Raó: " + QString(dicomQueryStatus.text()));
+    }
+    else
+    {
+        absoluteFilePath += QString(text) + "/";
+    }
 
     //comprovem, si el directori de la sèrie ja està creat, sinó el creem
-    if (!directory.exists(seriesPath)) 
-        directory.mkdir(seriesPath);
+    if (!directory.exists(absoluteFilePath)) 
+        directory.mkdir(absoluteFilePath);
 
-    return seriesPath + "/" + fileName;
+    return absoluteFilePath + fileName;
 }
 
 }
