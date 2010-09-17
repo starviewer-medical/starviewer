@@ -1,22 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2005 by marc                                            *
- *   marc@localhost.com                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
 #ifndef RETRIEVEIMAGES
 #define RETRIEVEIMAGES
 
@@ -46,7 +27,7 @@ class DICOMTagReader;
 class PACSConnection;
 
 /** 
-    This class helps to interactive with the pacs, retrieve images that match with the mask
+    Aquesta classe s'encarrega d'interactuars amb els PACS, responent als serveis move i store
  */
 class RetrieveDICOMFilesFromPACS: public QObject {
 Q_OBJECT
@@ -81,13 +62,14 @@ private:
     /// Guarda una composite instance descarregada
     OFCondition save(DcmFileFormat *fileRetrieved, QString dicomFileAbsolutePath);
 
-    /// Retorna el nom del fitxer amb que s'ha de guardar l'objecte descarregat, composa el path on s'ha de guardar + el nom del fitxer, si el path on s'ha de guardar la imatge no existeix el crea
+    /// Retorna el nom del fitxer amb que s'ha de guardar l'objecte descarregat, composa el path on s'ha de guardar més el nom del fitxer. 
+    /// Si el path on s'ha de guardar la imatge no existeix, el crea
     QString getAbsoluteFilePathCompositeInstance(DcmDataset *imageDataset, QString fileName);
 
     /// Configura l'objecte MoveRequest per la descàrrega de fitxers DICOM
     T_DIMSE_C_MoveRQ getConfiguredMoveRequest(T_ASC_Association *association);
 
-    /// En cas d'error processa la resposta rebuda per part del SCP, grava l'error el log i el retorna en forma d'objecte Status
+    /// En cas d'error processa la resposta rebuda per part del SCP, grava l'error al log i el retorna en forma d'objecte Status
     PACSRequestStatus::RetrieveRequestStatus processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail);
 
     /// Callback de move, semblaria que s'executa cada vegada que s'ha descarregat una imatge
@@ -96,7 +78,7 @@ private:
     /// Aquesta funció s'encarrega de guardar cada trama DICOM que rebem
     static void storeSCPCallback(void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *storeRequest, char *imageFileName, DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *storeResponse, DcmDataset **statusDetail);
 
-    /// Callbac que s'ha executa quan s'inicia un suboperació de descàrrega d'imatges
+    /// Callback que s'ha executat quan s'inicia un suboperació de descàrrega d'imatges
     static void subOperationCallback(void *subOperationCallbackData, T_ASC_Network *associationNetwork, T_ASC_Association **subAssociation);
 
 private:
