@@ -150,6 +150,11 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
             {
                 storeResponse->DimseStatus = STATUS_STORE_Refused_OutOfResources;
                 ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + dicomFileAbsolutePath + ", error: " + stateSaveImage.text()); 
+                if (!QFile::remove(dicomFileAbsolutePath))
+                {
+                    DEBUG_LOG("Ha fallat el voler esborrar el fitxer " + dicomFileAbsolutePath + " que havia fallat prèviament al voler guardar-se.");
+                    ERROR_LOG("Ha fallat el voler esborrar el fitxer " + dicomFileAbsolutePath + " que havia fallat prèviament al voler guardar-se.");
+                }
             }
 
             /* should really check the image to make sure it is consistent, that its sopClass and sopInstance correspond with those in
