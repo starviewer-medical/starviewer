@@ -37,9 +37,8 @@ OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network *asso
     if (condition.good())
     {
 #ifndef DISABLE_COMPRESSION_EXTENSION
-        // Si disposem de compressio la demanem, i podrem accelerar el temps de
-        // descarrega considerablement
-        // de moment demanem la compressio lossless que tot PACS que suporti compressio ha
+        // Si disposem de compressió la demanem, i podrem accelerar el temps de descàrrega considerablement
+        // De moment demanem la compressió lossless que tot PACS que suporti compressió ha
         // de proporcionar: JPEGLossless:Hierarchical-1stOrderPrediction
         transferSyntaxes[0] = UID_JPEGProcess14SV1TransferSyntax;
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
@@ -125,11 +124,11 @@ OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association *association, 
 
 void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_StoreProgress *progress, T_DIMSE_C_StoreRQ *storeRequest, char *imageFileName, DcmDataset **imageDataSet, T_DIMSE_C_StoreRSP *storeResponse, DcmDataset **statusDetail)
 {
-    // Paràmetres d'entrada: callbackData, progress, req, imageFileName, imageDataSet
-    // Paràmetres de sortida: rsp, statusDetail
+    // Paràmetres d'entrada: callbackData, progress, storeRequest, imageFileName, imageDataSet
+    // Paràmetres de sortida: storeResponse, statusDetail
     Q_UNUSED(imageFileName);
 
-    if (progress->state == DIMSE_StoreEnd) // Si el paquest és de finalització d'una imatge hem de guardar-le
+    if (progress->state == DIMSE_StoreEnd) // Si el paquest és de finalització d'una imatge hem de guardar-la
     {
         *statusDetail = NULL; // No status detail
 
@@ -160,7 +159,7 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
             // sopClass and sopInstance correspond with those in the request.
             if (storeResponse->DimseStatus == STATUS_Success)
             {
-                // Which SOP class and SOP instance ?
+                // Which SOP class and SOP instance?
                 if (!DU_findSOPClassAndInstanceInDataSet(*imageDataSet, sopClass, sopInstance, correctUIDPadding))
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
@@ -222,7 +221,7 @@ OFCondition RetrieveDICOMFilesFromPACS::storeSCP(T_ASC_Association *association,
 
 OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subAssociation)
 {
-    // Ens convertim com en un servii el PACS ens peticions que nosaltres hem de respondre, ens pot demanar descar una imatge o fer un echo
+    // Ens convertim com en un servei. El PACS ens fa peticions que nosaltres hem de respondre, ens pot demanar descarregar una imatge o fer un echo
     T_DIMSE_Message dimseMessage;
     T_ASC_PresentationContextID presentationContextID;
 
@@ -276,7 +275,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
         }
 
         // Tanquem la connexió amb el PACS perquè segons indica la documentació DICOM al PS 3.4 (Baseline Behavior of SCP) C.4.2.3.1 si abortem
-        // la connexió pel qual rebem les imatges, el comportament del PACS és desconegut, per exemple DCM4CHEE tanca la connexió amb el PACS, però
+        // la connexió per la qual rebem les imatges, el comportament del PACS és desconegut, per exemple DCM4CHEE tanca la connexió amb el PACS, però
         // el RAIM_Server no la tanca i la manté fent que no sortim mai d'aquesta classe. Degut a que no es pot saber en aquesta situació com actuaran 
         // els PACS es tanca aquí la connexió amb el PACS.
         // condition = ASC_abortAssociation(m_pacsConnection->getConnection());
@@ -457,7 +456,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             break;
         
         case STATUS_MOVE_Cancel_SubOperationsTerminatedDueToCancelIndication:
-            //L'usuari ha sol·licitat cancel·lar la descàrrega
+            // L'usuari ha sol·licitat cancel·lar la descàrrega
             retrieveRequestStatus = PACSRequestStatus::RetrieveCancelled;
             break;
         
@@ -505,7 +504,7 @@ QString RetrieveDICOMFilesFromPACS::getAbsoluteFilePathCompositeInstance(DcmData
         absoluteFilePath += QString(instanceUID) + "/";
     }
 
-    //comprovem, si el directori de l'estudi ja està creat
+    // Comprovem, si el directori de l'estudi ja està creat
     if (!directory.exists(absoluteFilePath))
     {
         directory.mkdir(absoluteFilePath);
