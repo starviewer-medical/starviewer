@@ -28,6 +28,11 @@ ViewpointIntensityInformationChannel::ViewpointIntensityInformationChannel( cons
     m_viewpoints = m_viewpointGenerator.viewpoints();
 }
 
+void ViewpointIntensityInformationChannel::setIntensityClusteringNumberOfClusters(int numberOfClusters)
+{
+    m_numberOfIntensityClusters = numberOfClusters;
+}
+
 
 void ViewpointIntensityInformationChannel::filterViewpoints( const QVector<bool> &filter )
 {
@@ -53,11 +58,12 @@ void ViewpointIntensityInformationChannel::filterViewpoints( const QVector<bool>
 }
 
 
-void ViewpointIntensityInformationChannel::compute( bool &viewpointEntropy, bool &entropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, /*bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity, bool &evmiVomi,
-                                           bool &bestViews, bool &guidedTour, bool &exploratoryTour,*/ bool display )
+void ViewpointIntensityInformationChannel::compute(bool &viewpointEntropy, bool &entropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, /*bool &viewpointVomi,
+                                                   bool &colorVomi, bool &evmiOpacity, bool &evmiVomi, bool &bestViews, bool &guidedTour, bool &exploratoryTour,*/ bool display)
 {
     // Si no hi ha res a calcular marxem
-    if ( !viewpointEntropy && !entropy && !vmii && !mii && !viewpointUnstabilities && !imi /*&& !viewpointVomi && !colorVomi && !evmiOpacity && !evmiVomi && !bestViews && !guidedTour && !exploratoryTour*/ ) return;
+    if (!viewpointEntropy && !entropy && !vmii && !mii && !viewpointUnstabilities && !imi && !intensityClustering /*&& !viewpointVomi && !colorVomi && !evmiOpacity && !evmiVomi && !bestViews && !guidedTour
+        && !exploratoryTour*/) return;
 
     bool viewProbabilities = false;
     bool intensityProbabilities = false;
@@ -76,9 +82,11 @@ void ViewpointIntensityInformationChannel::compute( bool &viewpointEntropy, bool
 //    if ( evmiVomi ) vomi = true;
     if ( imi ) intensityProbabilities = true;
 //    if ( colorVomi ) voxelProbabilities = true;
+    if (intensityClustering) intensityProbabilities = true;
     if ( intensityProbabilities ) viewProbabilities = true;
 
-    computeCuda( viewProbabilities, intensityProbabilities, viewpointEntropy, entropy, vmii, mii, viewpointUnstabilities, imi, /*viewpointVomi, colorVomi, evmiOpacity, evmiVomi, bestViews, guidedTour, exploratoryTour,*/ display );
+    computeCuda(viewProbabilities, intensityProbabilities, viewpointEntropy, entropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, /*viewpointVomi, colorVomi, evmiOpacity, evmiVomi, bestViews,
+                guidedTour, exploratoryTour,*/ display);
 }
 
 
@@ -136,6 +144,12 @@ float ViewpointIntensityInformationChannel::maximumImi() const
 }
 
 
+QList< QList<int> > ViewpointIntensityInformationChannel::intensityClusters() const
+{
+    return m_intensityClusters;
+}
+
+
 QVector<float> ViewpointIntensityInformationChannel::intensityProbabilitiesInView( int i )
 {
     return intensityProbabilitiesInViewCuda( i );
@@ -150,9 +164,9 @@ Matrix4 ViewpointIntensityInformationChannel::viewMatrix( const Vector3 &viewpoi
 }
 
 
-void ViewpointIntensityInformationChannel::computeCuda( bool computeViewProbabilities, bool computeIntensityProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmii, bool computeMii,
-                                                        bool computeViewpointUnstabilities, bool computeImi, /*bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi,
-                                                        bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour,*/ bool display )
+void ViewpointIntensityInformationChannel::computeCuda(bool computeViewProbabilities, bool computeIntensityProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmii, bool computeMii,
+                                                       bool computeViewpointUnstabilities, bool computeImi, bool computeIntensityClustering, /*bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity,
+                                                       bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour,*/ bool display)
 {
     DEBUG_LOG( "computeCuda" );
 
@@ -166,6 +180,7 @@ void ViewpointIntensityInformationChannel::computeCuda( bool computeViewProbabil
 //    if ( computeBestViews ) nSteps++;   // best views
 //    if ( computeGuidedTour ) nSteps++;  // guided tour
 //    if ( computeExploratoryTour ) nSteps++; // exploratory tour
+    if (computeIntensityClustering) nSteps++;   // intensity clustering
 
     emit totalProgressMaximum( nSteps );
     int step = 0;
@@ -204,6 +219,14 @@ void ViewpointIntensityInformationChannel::computeCuda( bool computeViewProbabil
     {
         computeViewMeasuresCuda( computeViewpointEntropy, computeEntropy, computeVmii, computeMii, computeViewpointUnstabilities/*, computeViewpointVomi, computeEvmiOpacity, computeEvmiVomi*/ );
         emit totalProgress( ++step );
+        QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    }
+
+    // intensity clustering
+    if (computeIntensityClustering)
+    {
+        computeIntensityClusteringCuda();
+        emit totalProgress(++step);
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
 
@@ -618,6 +641,128 @@ void ViewpointIntensityInformationChannel::computeImiCuda(/* bool computeVomi, b
 //            if ( colorVomi.z > m_maximumColorVomi ) m_maximumColorVomi = colorVomi.z;
 //        }
     }
+}
+
+
+void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
+{
+    int nViewpoints = m_viewpoints.size();
+    int nIntensities = m_volume->getRangeMax() + 1;
+
+    // Construïm el vector de probabilitats dels clusters p(C): inicialment és igual a p(I)
+    QList<float> clusterProbabilities = QList<float>::fromVector(m_intensityProbabilities);    // p(C)
+
+    // Construïm la matriu p(V|C), on cada fila sigui una p(V|c): inicialment és p(V|I), on cada fila és una p(V|i)
+    QList< QVector<float> > pVC;
+    for (int j = 0; j < nIntensities; j++) pVC << QVector<float>(nViewpoints);
+    for (int i = 0; i < nViewpoints; i++)
+    {
+        QVector<float> pIv = intensityProbabilitiesInView(i);   // p(I|v)
+        for (int j = 0; j < nIntensities; j++) pVC[j][i] = pIv[j];
+    }
+
+    // Construïm el clustering inicial: un cluster per cada intensitat.
+    QList< QList<int> > clusters;   // cada element és un cluster (un cluster està representat per la llista d'intensitats que el formen)
+    for (int j = 0; j < nIntensities; j++) clusters << (QList<int>() << j); // clusters = [[0], [1], ..., [nIntensities-1]]
+
+#ifndef QT_NO_DEBUG
+    QString clustersString = "[";
+    for (int i = 0; i < clusters.size(); i++)
+    {
+        if (i > 0) clustersString += ", ";
+        clustersString += "[";
+        clustersString += QString::number(clusters[i].first());
+        if (clusters[i].size() > 1) clustersString += "-" + QString::number(clusters[i].last());
+        clustersString += "]";
+    }
+    clustersString += "]";
+    DEBUG_LOG(clustersString);
+#endif
+
+    // Calculem la pèrdua d'informació mútua per cada possible clustering
+    QList<double> mutualInformationDecrease;    // cada element és la pèrdua d'informació mútua resultat de fusionar l'element de la mateixa posició de clusters amb el següent
+    for (int j = 0; j < nIntensities - 1; j++)
+    {
+        float pci = clusterProbabilities[j];
+        float pcj = clusterProbabilities[j+1];
+        float pcij = pci + pcj;
+        mutualInformationDecrease << pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[j], pVC[j+1]);
+    }
+
+    while (clusters.size() > m_numberOfIntensityClusters)
+    {
+        // Trobem la pèrdua mínima d'informació mútua
+        int minDecreaseIndex = 0;
+        double minDecrease = mutualInformationDecrease[0];
+        for (int k = 1; k < mutualInformationDecrease.size(); k++)
+        {
+            double decrease = mutualInformationDecrease[k];
+            if (decrease < minDecrease)
+            {
+                minDecreaseIndex = k;
+                minDecrease = decrease;
+            }
+        }
+
+        // Fusionem les dues intensitats amb pèrdua mínima d'informació mútua i actualitzem les dades
+        clusters[minDecreaseIndex] << clusters[minDecreaseIndex+1]; // integrem el segon cluster c2 al primer c1
+        clusters.removeAt(minDecreaseIndex+1);  // esborrem el segon cluster c2
+        // integrem p(V|c2) a p(V|c1)
+        {
+            float pc1 = clusterProbabilities[minDecreaseIndex];     // p(c1)
+            float pc2 = clusterProbabilities[minDecreaseIndex+1];   // p(c2)
+            float pc12 = pc1 + pc2;                                 // p(c12)
+            QVector<float> &pVc1 = pVC[minDecreaseIndex];           // p(V|c1)
+            const QVector<float> &pVc2 = pVC[minDecreaseIndex+1];   // p(V|c2)
+            for (int i = 0; i < nViewpoints; i++)
+            {
+                float pvc1 = pVc1[i];   // p(v|c1)
+                float pvc2 = pVc2[i];   // p(v|c2)
+                pVc1[i] = (pc1 * pvc1 + pc2 * pvc2) / pc12;
+            }
+        }
+        pVC.removeAt(minDecreaseIndex+1);   // esborrem p(V|c2)
+        clusterProbabilities[minDecreaseIndex] += clusterProbabilities[minDecreaseIndex+1]; // integrem p(c2) a p(c1)
+        clusterProbabilities.removeAt(minDecreaseIndex+1);  // esborrem p(c2)
+        mutualInformationDecrease.removeAt(minDecreaseIndex);   // esborrem la pèrdua d'informació mútua associada a la fusió
+        // actualitzem les pèrdues d'informació pertinents
+        {
+            if (minDecreaseIndex > 0)   // anterior
+            {
+                int i = minDecreaseIndex - 1;
+                int j = minDecreaseIndex;
+                float pci = clusterProbabilities[i];
+                float pcj = clusterProbabilities[j];
+                float pcij = pci + pcj;
+                mutualInformationDecrease[i] = pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i], pVC[j]);
+            }
+            if (minDecreaseIndex < mutualInformationDecrease.size())    // següent
+            {
+                int i = minDecreaseIndex;
+                int j = minDecreaseIndex + 1;
+                float pci = clusterProbabilities[i];
+                float pcj = clusterProbabilities[j];
+                float pcij = pci + pcj;
+                mutualInformationDecrease[i] = pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i], pVC[j]);
+            }
+        }
+
+#ifndef QT_NO_DEBUG
+        QString clustersString = "[";
+        for (int i = 0; i < clusters.size(); i++)
+        {
+            if (i > 0) clustersString += ", ";
+            clustersString += "[";
+            clustersString += QString::number(clusters[i].first());
+            if (clusters[i].size() > 1) clustersString += "-" + QString::number(clusters[i].last());
+            clustersString += "]";
+        }
+        clustersString += "]";
+        DEBUG_LOG(clustersString);
+#endif
+    }
+
+    m_intensityClusters = clusters;
 }
 
 

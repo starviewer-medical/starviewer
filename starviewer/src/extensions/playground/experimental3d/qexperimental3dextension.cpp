@@ -1099,6 +1099,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_colorTransferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateColorTransferFunctionFromImi() ) );
     connect( m_opacityTransferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateOpacityTransferFunctionFromImi() ) );
     connect( m_transferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateTransferFunctionFromImi() ) );
+    connect(m_transferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(generateTransferFunctionFromIntensityClusters()));
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -2200,6 +2201,7 @@ void QExperimental3DExtension::computeSelectedVmii()
     bool computeMii = m_computeMiiCheckBox->isChecked();
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesICheckBox->isChecked();
     bool computeImi = m_computeImiCheckBox->isChecked();
+    bool computeIntensityClustering = m_computeIntensityClusteringCheckBox->isChecked();
 //    bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
 //    bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
 //    bool computeEvmiOpacity = m_computeEvmiOpacityCheckBox->isChecked();
@@ -2209,8 +2211,8 @@ void QExperimental3DExtension::computeSelectedVmii()
 //    bool computeExploratoryTour = m_computeExploratoryTourCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if ( !computeViewpointEntropy && !computeEntropy && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi /*&& !computeViewpointVomi && !computeColorVomi && !computeEvmiOpacity
-         && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour*/ ) return;
+    if (!computeViewpointEntropy && !computeEntropy && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi && !computeIntensityClustering /*&& !computeViewpointVomi && !computeColorVomi
+        && !computeEvmiOpacity && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour*/) return;
 
     setCursor( QCursor( Qt::WaitCursor ) );
 
@@ -2239,6 +2241,9 @@ void QExperimental3DExtension::computeSelectedVmii()
     // Llindar per calcular l'exploratory tour
 //    viewpointInformationChannel.setExploratoryTourThreshold( m_computeExploratoryTourThresholdDoubleSpinBox->value() );
 
+    // Nombre de clusters pel clustering d'intensitats
+    viewpointIntensityInformationChannel.setIntensityClusteringNumberOfClusters(m_computeIntensityClusteringNumberOfClustersSpinBox->value());
+
     // Filtratge de punts de vista
     if ( m_vmiiOneViewpointCheckBox->isChecked() )
     {
@@ -2262,8 +2267,8 @@ void QExperimental3DExtension::computeSelectedVmii()
 
     QTime time;
     time.start();
-    viewpointIntensityInformationChannel.compute( computeViewpointEntropy, computeEntropy, computeVmii, computeMii, computeViewpointUnstabilities, computeImi, /*computeViewpointVomi, computeColorVomi, computeEvmiOpacity,
-                                         computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour,*/ m_vmiiDisplayCheckBox->isChecked() );
+    viewpointIntensityInformationChannel.compute(computeViewpointEntropy, computeEntropy, computeVmii, computeMii, computeViewpointUnstabilities, computeImi, computeIntensityClustering, /*computeViewpointVomi,
+                                                 computeColorVomi, computeEvmiOpacity, computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour,*/ m_vmiiDisplayCheckBox->isChecked());
     int elapsed = time.elapsed();
     DEBUG_LOG( QString( "Temps total de VMIi i altres: %1 s" ).arg( elapsed / 1000.0f ) );
     INFO_LOG( QString( "Temps total de VMIi i altres: %1 s" ).arg( elapsed / 1000.0f ) );
@@ -2319,6 +2324,11 @@ void QExperimental3DExtension::computeSelectedVmii()
         m_colorTransferFunctionFromImiPushButton->setEnabled( true );
         m_opacityTransferFunctionFromImiPushButton->setEnabled( true );
         m_transferFunctionFromImiPushButton->setEnabled( true );
+    }
+
+    if (computeIntensityClustering)
+    {
+        m_intensityClusters = viewpointIntensityInformationChannel.intensityClusters();
     }
 
 //    if ( computeViewpointVomi )
@@ -3689,6 +3699,25 @@ void QExperimental3DExtension::generateTransferFunctionFromImi()
     m_transferFunctionEditor->setTransferFunction( imiTransferFunction.simplify() );
     setTransferFunction();
 
+}
+
+
+void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
+{
+    if (m_intensityClusters.isEmpty()) return;
+
+    TransferFunction clusteringTransferFunction;
+
+    for (int i = 0; i < m_intensityClusters.size(); i++)
+    {
+        QColor color(qrand() % 256, qrand() % 256, qrand() % 256);
+        double opacity = static_cast<double>(m_intensityClusters[i].first()) / m_volume->getRangeMax();
+        clusteringTransferFunction.addPoint(m_intensityClusters[i].first(), color, opacity);
+        clusteringTransferFunction.addPoint(m_intensityClusters[i].last(), color, opacity);
+    }
+
+    m_transferFunctionEditor->setTransferFunction(clusteringTransferFunction.simplify());
+    setTransferFunction();
 }
 
 
