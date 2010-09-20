@@ -41,6 +41,12 @@ public:
     /// Retorna el tag en forma de text.
     QString getKeyAsQString() const;
 
+    /// Comparar si són iguals evaluant el group i element
+    bool operator==(const DICOMTag &tag);
+
+    /// Comparar si són diferents evaluant el group i element
+    bool operator!=(const DICOMTag &tag);
+
 private:
     unsigned int m_group;
     unsigned int m_element;
