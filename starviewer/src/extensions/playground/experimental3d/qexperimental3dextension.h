@@ -266,6 +266,7 @@ private slots:
     void generateColorTransferFunctionFromImi();
     void generateOpacityTransferFunctionFromImi();
     void generateTransferFunctionFromImi();
+    void generateTransferFunctionFromIntensityClusters();
 
     void tourBestViews();
     void guidedTour();
@@ -355,6 +356,7 @@ private:
     QVector<float> m_viewpointUnstabilitiesI;
     QVector<float> m_imi;
     float m_maximumImi;
+    QList< QList<int> > m_intensityClusters;
 
     // Filtering
     QVector<float> m_spatialImportanceFunction; // ΔD = G * D − D
