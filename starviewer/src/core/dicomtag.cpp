@@ -65,6 +65,16 @@ QString DICOMTag::getKeyAsQString() const
     return QString("(%1,%2)").arg(QString::number(m_group,16).rightJustified(4,'0')).arg(QString::number(m_element,16).rightJustified(4,'0'));
 }
 
+bool DICOMTag::operator==(const DICOMTag &tag)
+{
+    return m_group == tag.m_group && m_element == tag.m_element;
+}
+
+bool DICOMTag::operator!=(const DICOMTag &tag)
+{
+    return m_group != tag.m_group || m_element != tag.m_element;
+}
+
 }
 
 #endif
