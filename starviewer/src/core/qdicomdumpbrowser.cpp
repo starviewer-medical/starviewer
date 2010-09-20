@@ -75,6 +75,8 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
 
     if (ok)
     {	
+        m_tagsListQTree->clear();
+
         QList<DICOMAttribute*> dicomAttributesList = dicomReader.getDICOMAttributes();
         
         foreach (DICOMAttribute *dicomAttribute, dicomAttributesList)
