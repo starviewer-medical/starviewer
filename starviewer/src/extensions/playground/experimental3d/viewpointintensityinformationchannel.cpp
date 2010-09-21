@@ -654,30 +654,27 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
 
     // Construïm la matriu p(V|C), on cada fila sigui una p(V|c): inicialment és p(V|I), on cada fila és una p(V|i)
     QList< QVector<float> > pVC;
-    for (int j = 0; j < nIntensities; j++) pVC << QVector<float>(nViewpoints);
+    for (int j = 0; j < nIntensities; j++) pVC << QVector<float>(nViewpoints);  // tota la matriu queda plena de zeros inicialment
     for (int i = 0; i < nViewpoints; i++)
     {
+        float pv = m_viewProbabilities[i];  // p(v)
+        if (pv == 0.0f) continue;
         QVector<float> pIv = intensityProbabilitiesInView(i);   // p(I|v)
-        for (int j = 0; j < nIntensities; j++) pVC[j][i] = pIv[j];
+        for (int j = 0; j < nIntensities; j++)
+        {
+            float piv = pIv[j]; // p(i|v)
+            if (piv == 0.0f) continue;
+            float pi = m_intensityProbabilities[j]; // p(i)
+            if (pi == 0.0f) continue;
+            float pvi = pv * piv / pi;
+            Q_ASSERT(!MathTools::isNaN(pvi));
+            pVC[j][i] = pvi;
+        }
     }
 
     // Construïm el clustering inicial: un cluster per cada intensitat.
     QList< QList<int> > clusters;   // cada element és un cluster (un cluster està representat per la llista d'intensitats que el formen)
     for (int j = 0; j < nIntensities; j++) clusters << (QList<int>() << j); // clusters = [[0], [1], ..., [nIntensities-1]]
-
-#ifndef QT_NO_DEBUG
-    QString clustersString = "[";
-    for (int i = 0; i < clusters.size(); i++)
-    {
-        if (i > 0) clustersString += ", ";
-        clustersString += "[";
-        clustersString += QString::number(clusters[i].first());
-        if (clusters[i].size() > 1) clustersString += "-" + QString::number(clusters[i].last());
-        clustersString += "]";
-    }
-    clustersString += "]";
-    DEBUG_LOG(clustersString);
-#endif
 
     // Calculem la pèrdua d'informació mútua per cada possible clustering
     QList<double> mutualInformationDecrease;    // cada element és la pèrdua d'informació mútua resultat de fusionar l'element de la mateixa posició de clusters amb el següent
@@ -686,7 +683,7 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
         float pci = clusterProbabilities[j];
         float pcj = clusterProbabilities[j+1];
         float pcij = pci + pcj;
-        mutualInformationDecrease << pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[j], pVC[j+1]);
+        mutualInformationDecrease << (pcij == 0.0f ? 0.0f : pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[j], pVC[j+1]));
     }
 
     while (clusters.size() > m_numberOfIntensityClusters)
@@ -712,13 +709,16 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
             float pc1 = clusterProbabilities[minDecreaseIndex];     // p(c1)
             float pc2 = clusterProbabilities[minDecreaseIndex+1];   // p(c2)
             float pc12 = pc1 + pc2;                                 // p(c12)
-            QVector<float> &pVc1 = pVC[minDecreaseIndex];           // p(V|c1)
-            const QVector<float> &pVc2 = pVC[minDecreaseIndex+1];   // p(V|c2)
-            for (int i = 0; i < nViewpoints; i++)
+            if (pc12 > 0.0f)    // si p(c12) = 0, llavors p(V|c1) i p(V|c2) estan plens de zeros, per tant no cal fer res
             {
-                float pvc1 = pVc1[i];   // p(v|c1)
-                float pvc2 = pVc2[i];   // p(v|c2)
-                pVc1[i] = (pc1 * pvc1 + pc2 * pvc2) / pc12;
+                QVector<float> &pVc1 = pVC[minDecreaseIndex];           // p(V|c1)
+                const QVector<float> &pVc2 = pVC[minDecreaseIndex+1];   // p(V|c2)
+                for (int i = 0; i < nViewpoints; i++)
+                {
+                    float pvc1 = pVc1[i];   // p(v|c1)
+                    float pvc2 = pVc2[i];   // p(v|c2)
+                    pVc1[i] = (pc1 * pvc1 + pc2 * pvc2) / pc12;
+                }
             }
         }
         pVC.removeAt(minDecreaseIndex+1);   // esborrem p(V|c2)
@@ -734,7 +734,7 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
                 float pci = clusterProbabilities[i];
                 float pcj = clusterProbabilities[j];
                 float pcij = pci + pcj;
-                mutualInformationDecrease[i] = pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i], pVC[j]);
+                mutualInformationDecrease[i] = (pcij == 0.0f ? 0.0f : pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i], pVC[j]));
             }
             if (minDecreaseIndex < mutualInformationDecrease.size())    // següent
             {
@@ -743,22 +743,25 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
                 float pci = clusterProbabilities[i];
                 float pcj = clusterProbabilities[j];
                 float pcij = pci + pcj;
-                mutualInformationDecrease[i] = pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i], pVC[j]);
+                mutualInformationDecrease[i] = (pcij == 0.0f ? 0.0f : pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i], pVC[j]));
             }
         }
 
 #ifndef QT_NO_DEBUG
-        QString clustersString = "[";
-        for (int i = 0; i < clusters.size(); i++)
+        if (clusters.size() % 10 == m_numberOfIntensityClusters % 10)
         {
-            if (i > 0) clustersString += ", ";
-            clustersString += "[";
-            clustersString += QString::number(clusters[i].first());
-            if (clusters[i].size() > 1) clustersString += "-" + QString::number(clusters[i].last());
+            QString clustersString = "[";
+            for (int i = 0; i < clusters.size(); i++)
+            {
+                if (i > 0) clustersString += ", ";
+                clustersString += "[";
+                clustersString += QString::number(clusters[i].first());
+                if (clusters[i].size() > 1) clustersString += "-" + QString::number(clusters[i].last());
+                clustersString += "]";
+            }
             clustersString += "]";
+            DEBUG_LOG(clustersString);
         }
-        clustersString += "]";
-        DEBUG_LOG(clustersString);
 #endif
     }
 
