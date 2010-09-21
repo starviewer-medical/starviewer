@@ -313,12 +313,6 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     studyDAL.update(retrievedStudy, QDate::currentDate());
     setLastError(studyDAL.getLastError());
 
-    //carreguem els thumbnails dels estudis
-    foreach (Study *study, retrievedPatient->getStudies())
-    {
-        loadSeriesThumbnail(study->getInstanceUID(), study->getSeries());
-    }
-
     return retrievedPatient;
 }
 
