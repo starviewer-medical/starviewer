@@ -227,7 +227,7 @@ signals:
     void panChanged(double *translation);
 
 protected:
-    virtual void contextMenuEvent(QContextMenuEvent *event);
+    virtual void contextMenuEvent(QContextMenuEvent *menuEvent);
 
     void contextMenuRelease();
 
