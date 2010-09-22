@@ -695,7 +695,7 @@ void QViewer::setCameraOrientation(int orientation)
     }
 }
 
-void QViewer::contextMenuEvent(QContextMenuEvent *event)
+void QViewer::contextMenuEvent(QContextMenuEvent *menuEvent)
 {
     if (m_contextMenuActive)
     {
@@ -717,7 +717,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *event)
         {
             selectedItem = QString::number(m_mainVolume->getIdentifier().getValue());
         }
-        m_patientBrowserMenu->popup(event->globalPos(), selectedItem); //->globalPos() ?
+        m_patientBrowserMenu->popup(menuEvent->globalPos(), selectedItem); //->globalPos() ?
     }
 }
 
