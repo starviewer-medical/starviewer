@@ -3706,14 +3706,30 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
 {
     if (m_intensityClusters.isEmpty()) return;
 
+    const TransferFunction &currentTransferFunction = m_transferFunctionEditor->transferFunction();
     TransferFunction clusteringTransferFunction;
+
+    qsrand(m_randomSeedSpinBox->value());
 
     for (int i = 0; i < m_intensityClusters.size(); i++)
     {
+        double x1 = m_intensityClusters[i].first();
+        double x2 = m_intensityClusters[i].last();
+        double x = (x1 + x2) / 2.0;
+
         QColor color(qrand() % 256, qrand() % 256, qrand() % 256);
-        double opacity = static_cast<double>(m_intensityClusters[i].first()) / m_volume->getRangeMax();
-        clusteringTransferFunction.addPoint(m_intensityClusters[i].first(), color, opacity);
-        clusteringTransferFunction.addPoint(m_intensityClusters[i].last(), color, opacity);
+
+        double opacity = 0.0;
+        if (m_transferFunctionFromIntensityClusteringOpacityDefaultMinimumRadioButton->isChecked()) opacity = x1 / m_volume->getRangeMax();
+        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked()) opacity = currentTransferFunction.getOpacity(x1);
+        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked()) opacity = currentTransferFunction.getOpacity(x);
+
+        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) clusteringTransferFunction.addPoint(x, color, opacity);
+        else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
+        {
+            clusteringTransferFunction.addPoint(x1, color, opacity);
+            clusteringTransferFunction.addPoint(x2, color, opacity);
+        }
     }
 
     m_transferFunctionEditor->setTransferFunction(clusteringTransferFunction.simplify());
