@@ -50,6 +50,14 @@ const QString Shortcuts::CloseCurrentExtension( ShortcutsBase + "CloseViewer" );
 const QString Shortcuts::CloseApplication( ShortcutsBase + "CloseApp" );
 const QString Shortcuts::FullScreen( ShortcutsBase + "FullScreen" );
 
+const QString Shortcuts::ViewSelectedStudies(ShortcutsBase + "ViewSelectedStudies");
+const QString Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies(ShortcutsBase + "ImportToLocalDatabaseSelectedDICOMDIRStudies");
+const QString Shortcuts::DeleteSelectedLocalDatabaseStudies(ShortcutsBase + "DeleteSelectedLocalDatabaseStudies");
+const QString Shortcuts::StoreSelectedStudiesToPACS(ShortcutsBase + "StoreSelectedStudiesToPACS");
+const QString Shortcuts::SendSelectedStudiesToDICOMDIRList(ShortcutsBase + "SendSelectedStudiesToDICOMDIRList");
+const QString Shortcuts::RetrieveAndViewSelectedStudies(ShortcutsBase + "RetrieveAndViewSelectedStudies");
+const QString Shortcuts::RetrieveSelectedStudies(ShortcutsBase + "RetrieveSelectedStudies");
+
 Shortcuts::Shortcuts()
 {
 }
@@ -226,6 +234,33 @@ void Shortcuts::init()
     shortcutsList.append( QString("Ctrl+Return") );
     settingsRegistry->addSetting( FullScreen, shortcutsList );
 
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+V"));
+    settingsRegistry->addSetting(ViewSelectedStudies, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+R"));
+    settingsRegistry->addSetting(ImportToLocalDatabaseSelectedDICOMDIRStudies, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QKeySequence(Qt::Key_Delete).toString());
+    settingsRegistry->addSetting(DeleteSelectedLocalDatabaseStudies, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+S"));
+    settingsRegistry->addSetting(StoreSelectedStudiesToPACS, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+M"));
+    settingsRegistry->addSetting(SendSelectedStudiesToDICOMDIRList, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+V"));
+    settingsRegistry->addSetting(RetrieveAndViewSelectedStudies, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+R"));
+    settingsRegistry->addSetting(RetrieveSelectedStudies, shortcutsList);
 }
 
 } // end namespace udg

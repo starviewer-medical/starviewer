@@ -22,6 +22,7 @@
 #include "pacsmanager.h"
 #include "senddicomfilestopacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
+#include "shortcutmanager.h"
 
 namespace udg
 {
@@ -93,17 +94,17 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()), tr("Ctrl+V"));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()), ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(viewFromQStudyTreeWidget()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()), Qt::Key_Delete);
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()), ShortcutManager::getShortcuts(Shortcuts::DeleteSelectedLocalDatabaseStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
 
 #ifndef STARVIEWER_LITE
-    action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()), tr("Ctrl+M"));
+    action = m_contextMenuQStudyTreeWidget.addAction(tr("Send to DICOMDIR List"), this, SLOT(addSelectedStudiesToCreateDicomdirList()), ShortcutManager::getShortcuts(Shortcuts::SendSelectedStudiesToDICOMDIRList).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(addSelectedStudiesToCreateDicomdirList()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()), tr("Ctrl+S"));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()), ShortcutManager::getShortcuts(Shortcuts::StoreSelectedStudiesToPACS).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(selectedStudiesStoreToPacs()));
 #endif
     m_studyTreeWidget->setContextMenu(&m_contextMenuQStudyTreeWidget);//Especifiquem que és el menú per la cache
