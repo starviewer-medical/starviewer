@@ -26,6 +26,7 @@
 #include "pacsmanager.h"
 #include "harddiskinformation.h"
 #include "retrievedicomfilesfrompacsjob.h"
+#include "shortcutmanager.h"
 
 namespace udg
 {
@@ -87,10 +88,10 @@ void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieveAndView.png"), tr("Retrieve && &View"), this, SLOT(retrieveAndViewSelectedStudies()), tr("Ctrl+V"));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieveAndView.png"), tr("Retrieve && &View"), this, SLOT(retrieveAndViewSelectedStudies()), ShortcutManager::getShortcuts(Shortcuts::RetrieveAndViewSelectedStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveAndViewSelectedStudies()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedStudies()), tr("Ctrl+R"));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Retrieve"), this, SLOT(retrieveSelectedStudies()), ShortcutManager::getShortcuts(Shortcuts::RetrieveSelectedStudies).first());
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 
     m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget); //Especifiquem que es el menu del dicomdir

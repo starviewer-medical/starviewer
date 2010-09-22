@@ -20,6 +20,7 @@
 #include "inputoutputsettings.h"
 #include "harddiskinformation.h"
 #include "localdatabasemanager.h"
+#include "shortcutmanager.h"
 
 namespace udg
 {
@@ -72,10 +73,10 @@ void  QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , tr("Ctrl+V") );
+    action = m_contextMenuQStudyTreeWidget.addAction( QIcon(":/images/view.png") , tr( "&View" ) , this , SLOT( view() ) , ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies).first() );
     (void) new QShortcut( action->shortcut() , this , SLOT( view() ) );
 
-    action = m_contextMenuQStudyTreeWidget.addAction( QIcon(":/images/retrieve.png") , tr("&Import") , this , SLOT( retrieveSelectedStudies() ) , tr("Ctrl+R") );
+    action = m_contextMenuQStudyTreeWidget.addAction( QIcon(":/images/retrieve.png") , tr("&Import") , this , SLOT( retrieveSelectedStudies() ) , ShortcutManager::getShortcuts(Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies).first() );
     (void) new QShortcut( action->shortcut() , this , SLOT( retrieveSelectedStudies() ) );
 
     m_studyTreeWidget->setContextMenu( & m_contextMenuQStudyTreeWidget ); //Especifiquem que es el menu del dicomdir

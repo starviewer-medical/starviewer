@@ -57,6 +57,13 @@ public:
     static const QString CloseApplication;
     static const QString FullScreen;
 
+    static const QString ViewSelectedStudies;
+    static const QString ImportToLocalDatabaseSelectedDICOMDIRStudies;
+    static const QString DeleteSelectedLocalDatabaseStudies;
+    static const QString StoreSelectedStudiesToPACS;
+    static const QString SendSelectedStudiesToDICOMDIRList;
+    static const QString RetrieveAndViewSelectedStudies;
+    static const QString RetrieveSelectedStudies;
 
 };
 
