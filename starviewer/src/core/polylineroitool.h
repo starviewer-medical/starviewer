@@ -14,12 +14,12 @@ namespace udg {
 /**
     Tool per calcular l'àrea i la mitjana de grisos d'un polígon fet amb ROITool
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class PolylineROITool : public ROITool {
 Q_OBJECT
 public:
-    PolylineROITool( QViewer *viewer, QObject *parent = 0 );
+    PolylineROITool(QViewer *viewer, QObject *parent = 0);
     ~PolylineROITool();
 
 private slots:
@@ -35,7 +35,7 @@ private:
     void computeStatisticsData();
 
     /// Llista amb els valors de gris per calcular la mitjana i la desviació estàndard i altres dades estadístiques si cal.
-    QList< double > m_grayValues;
+    QList<double> m_grayValues;
 
     /// Mitjana de valors de la ROI
     double m_mean;

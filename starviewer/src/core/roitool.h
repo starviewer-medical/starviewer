@@ -20,18 +20,18 @@ class DrawerPolygon;
 /**
 *   Tool per dibuixar ROIS amb polilínies
 *
-*   @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+*   @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class ROITool : public Tool {
 Q_OBJECT
 public:
-    ROITool( QViewer *viewer, QObject *parent = 0 );
+    ROITool(QViewer *viewer, QObject *parent = 0);
     ~ROITool();
 
-    void handleEvent( long unsigned eventID );
+    void handleEvent(long unsigned eventID);
 
     /// Calcula el vòxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
-    Volume::VoxelType getGrayValue( double *coords );
+    Volume::VoxelType getGrayValue(double *coords);
 
 signals:
     /// The drawing has finished
