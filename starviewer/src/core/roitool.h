@@ -14,13 +14,16 @@
 namespace udg {
 
 class Q2DViewer;
-class DrawerPolyline;
 class DrawerPolygon;
 
 /**
-*   Tool per dibuixar ROIS amb polilínies
 *
-*   @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
+*   Tool pare per totes aquelles tools destinades a crear ROIs. 
+*   S'encarrega de proporcionar els mètodes necessaris per calcular
+*   les dades estadístiques relacionades amb la ROI (àrea, mitjana, desviació estàndar).
+*   La gestió dels events i de com es dibuixa la forma de la ROI queda delegada en les
+*   tools filles. La forma final de la tool ha de quedar dibuixada amb el membre m_roiPolygon.
+*
 */
 class ROITool : public Tool {
 Q_OBJECT
@@ -28,14 +31,11 @@ public:
     ROITool(QViewer *viewer, QObject *parent = 0);
     ~ROITool();
 
-    void handleEvent(long unsigned eventID);
+    virtual void handleEvent(long unsigned eventID) = 0;
 
-    /// Calcula el vòxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
-    Volume::VoxelType getGrayValue(double *coords);
-
-signals:
-    /// The drawing has finished
-    void finished();
+protected:
+    /// Mètode per escriure a pantalla les dades calculades.
+    void printData();
 
 protected:
     /// Viewer 2D sobre el qual treballem
@@ -49,31 +49,24 @@ protected:
     /// Un cop s'hagin calculat, serà false fins que no es torni a modificar
     /// Per defecte el valor és true
     bool m_hasToComputeStatisticsData;
+    
+    /// Mitjana de valors de la ROI
+    double m_mean;
+
+    /// Desviació estàndar de la ROI
+    double m_standardDeviation;
 
 private:
-    /// Gestiona quin punt de la ROI estem dibuixant. Es cridarà cada cop que 
-    /// haguem fet un clic amb el botó esquerre del mouse.
-    void handlePointAddition();
+    /// Calcula el vòxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
+    Volume::VoxelType getGrayValue(double *coordinate);
 
-    /// Ens permet anotar el següent punt de la polilínia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
-    void annotateNewPoint();
-
-    /// Ens simula com quedaria la polilínia que estem editant si la tanquèssim. Ens serveix per a veure dinàmicament l'evolució de la polilínia.
-    void simulateClosingPolyline();
-
-    /// Mètode que tanca la forma de la polilínia que s'ha dibuixat
-    void closeForm();
-
-private slots:
-    /// Inicialitza l'estat de la tool
-    void initialize();
+    /// Calcula les dades estadístiques de la ROI. 
+    /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
+    void computeStatisticsData();
 
 private:
-    /// Polilínia principal: és la polilínia que ens marca la forma que hem anat editant.
-    QPointer<DrawerPolyline> m_mainPolyline;
-
-    /// Polilínia de tancament: es la polilínia que ens simula com quedaria la polilínia principal si es tanques, es a dir, uneix l'últim punt anotat i el primer punt de la polilínia.
-    QPointer<DrawerPolyline> m_closingPolyline;
+    /// Llista amb els valors de gris per calcular la mitjana i la desviació estàndard i altres dades estadístiques si cal.
+    QList<double> m_grayValues;
 };
 
 }
