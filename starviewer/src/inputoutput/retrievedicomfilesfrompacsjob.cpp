@@ -49,7 +49,7 @@ Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
 
 void RetrieveDICOMFilesFromPACSJob::run()
 {
-    INFO_LOG( QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle()));
+    INFO_LOG(QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle()));
 
     m_numberOfSeriesRetrieved = 0;
     m_lastImageSeriesInstanceUID = "";
@@ -64,7 +64,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
 
     int localPort = Settings().getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt();
 
-    if ( Utils::isPortInUse(localPort) )
+    if (Utils::isPortInUse(localPort))
     {
         m_retrieveRequestStatus = PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse;
         ERROR_LOG("El port " + QString::number(localPort) + " per a connexions entrants del PACS, està en ús, no es pot descarregar l'estudi");
@@ -73,21 +73,21 @@ void RetrieveDICOMFilesFromPACSJob::run()
     {
         PatientFiller patientFiller;
         QThread fillersThread;
-        patientFiller.moveToThread( &fillersThread );
+        patientFiller.moveToThread(&fillersThread);
         LocalDatabaseManager localDatabaseManager;
 
         /*S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
           no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes*/
-        connect(m_retrieveDICOMFilesFromPACS, SIGNAL( DICOMFileRetrieved(DICOMTagReader*, int) ), this, SLOT( DICOMFileRetrieved(DICOMTagReader*, int) ), Qt::DirectConnection);
+        connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader*, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader*, int)), Qt::DirectConnection);
         //Connectem amb els signals del patientFiller per processar els fitxers descarregats
         connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader *)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
         connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
         /*Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el 
           el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan surt 
           d'aquí perquè els fillers ja han acabat ja s'ha inserit el pacient a la base de dades.*/
-        connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &localDatabaseManager, SLOT( save(Patient *) ), Qt::DirectConnection);
+        connect(&patientFiller, SIGNAL(patientProcessed(Patient *)), &localDatabaseManager, SLOT(save(Patient *)), Qt::DirectConnection);
         //Connexions per finalitzar els threads
-        connect(&patientFiller, SIGNAL( patientProcessed(Patient *) ), &fillersThread, SLOT( quit() ), Qt::DirectConnection);
+        connect(&patientFiller, SIGNAL(patientProcessed(Patient *)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
 
         localDatabaseManager.setStudyRetrieving(m_dicomMaskToRetrieve.getStudyInstanceUID());
         fillersThread.start();
@@ -262,7 +262,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 Settings settings;
                 HardDiskInformation hardDiskInformation;
                 quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
-                quint64 minimumSpaceRequired = quint64( settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache ).toULongLong() * 1024 );
+                quint64 minimumSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
                 message = tr("There is not enough space to retrieve studiy %1 from patient %2, please free space or change your Local Database settings.").arg(
                     studyID, patientName);
                 message += tr("\n\nAvailable space in Disk: %1 Mb").arg(freeSpaceInHardDisk);
@@ -297,7 +297,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
             break;
         case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse :
-            message = tr("%1 can't retrieve study %2 from patient %3 because port %4 for incoming connections from PACS is already in use by another application.").arg( 
+            message = tr("%1 can't retrieve study %2 from patient %3 because port %4 for incoming connections from PACS is already in use by another application.").arg(
                 ApplicationNameString, studyID, patientName, settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toString());
             break;
         case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:
