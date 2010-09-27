@@ -62,7 +62,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
         return;
     }
 
-    int localPort = -Settings().getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt();
+    int localPort = Settings().getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt();
 
     if ( Utils::isPortInUse(localPort) )
     {
