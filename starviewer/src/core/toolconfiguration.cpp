@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "toolconfiguration.h"
 
-
 namespace udg {
 
 ToolConfiguration::ToolConfiguration(QObject *parent)
@@ -14,30 +13,28 @@ ToolConfiguration::ToolConfiguration(QObject *parent)
 {
 }
 
-
 ToolConfiguration::~ToolConfiguration()
 {
 }
 
-
-void ToolConfiguration::addAttribute( QString attributeName, QVariant value )
+void ToolConfiguration::addAttribute(QString attributeName, QVariant value)
 {
-    attributeMap.insert( attributeName, value );
+    attributeMap.insert(attributeName, value);
 }
 
-void ToolConfiguration::setValue( QString attributeName, QVariant value )
+void ToolConfiguration::setValue(QString attributeName, QVariant value)
 {
-    attributeMap.insert( attributeName, value );
+    attributeMap.insert(attributeName, value);
 }
 
-QVariant ToolConfiguration::getValue( QString attributeName )
+QVariant ToolConfiguration::getValue(QString attributeName)
 {
-    return attributeMap.value( attributeName );
+    return attributeMap.value(attributeName);
 }
 
-bool ToolConfiguration::containsValue( QString attributeName )
+bool ToolConfiguration::containsValue(QString attributeName)
 {
-    return attributeMap.contains( attributeName );
+    return attributeMap.contains(attributeName);
 }
 
 }

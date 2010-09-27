@@ -19,16 +19,14 @@ class Tool;
 class QViewer;
 
 /**
-Registre de Tools i elements associats
+    Registre de Tools i elements associats
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class ToolRegistry : public QObject
-{
+class ToolRegistry : public QObject {
 Q_OBJECT
 public:
     ToolRegistry(QObject *parent = 0);
-
     ~ToolRegistry();
 
     /**
@@ -37,14 +35,14 @@ public:
      * @param viewer
      * @return
      */
-    Tool *getTool( const QString &toolName, QViewer *viewer );
+    Tool* getTool(const QString &toolName, QViewer *viewer);
 
     /**
      * Crea una acció vàlida per aquella tool
      * @param toolName El nom de la tool de la qual volem l'acció
      * @return L'acció de la tool demanada, nul si la tool no existeix TODO o millor una QAction buida?
      */
-    QAction *getToolAction( const QString &toolName );
+    QAction* getToolAction(const QString &toolName);
 
     /**
      * Crea un parell amb l'acció de la "Action Tool" demanada més l'SLOT associat
@@ -52,7 +50,7 @@ public:
      * @return un QPair amb l'acció creada i l'string de l'SLOT a cridar. Si la "Action
      *  Tool" demanada no està registrada, retornarà un QPair amb un objecte QAction i QString buits (no NULS!)
      */
-    QPair<QAction *, QString> getActionToolPair( const QString &actionToolName );
+    QPair<QAction *, QString> getActionToolPair(const QString &actionToolName);
 };
 
 }

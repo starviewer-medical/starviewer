@@ -16,41 +16,32 @@ class ToolData;
 class QViewer;
 
 /**
-Classe base per a totes les tools
+    Classe base per a totes les tools
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class Tool : public QObject
-{
+class Tool : public QObject {
 Q_OBJECT
 public:
-    Tool( QViewer *viewer, QObject *parent = 0 );
+    Tool(QViewer *viewer, QObject *parent = 0);
     ~Tool();
 
-    /**
-     * Li assignem una configuracio, si la que te per defecte no ens val
-     * @param configuration Configuracio que li volem assignar
-     */
-    virtual void setConfiguration( ToolConfiguration *configuration );
+    /// Li assignem una configuracio, si la que te per defecte no ens val
+    /// @param configuration Configuracio que li volem assignar
+    virtual void setConfiguration(ToolConfiguration *configuration);
 
-    /**
-     * Retorna la configuracio actual de la tool
-     * TODO hauria de ser const o no?
-     */
-    ToolConfiguration *getConfiguration() const;
+    /// Retorna la configuracio actual de la tool
+    /// TODO hauria de ser const o no?
+    ToolConfiguration* getConfiguration() const;
 
-    /**
-     * Assigna les dades
-     * @param data dades que assignem a la tool
-     */
-    virtual void setToolData( ToolData *data );
+    /// Assigna les dades
+    /// @param data dades que assignem a la tool
+    virtual void setToolData(ToolData *data);
 
-    /**
-     * Ens retorna les dades de la tool
-     * @return Dades de la tool
-     * TODO hauria de ser const o no?
-     */
-    virtual ToolData *getToolData() const;
+    /// Ens retorna les dades de la tool
+    /// @return Dades de la tool
+    /// TODO hauria de ser const o no?
+    virtual ToolData* getToolData() const;
 
     /**
      * Ens determina si aquesta tool té dades compartides o no
@@ -63,20 +54,14 @@ public:
      */
     bool hasSharedData() const;
 
-    /**
-     * Ens determina si la tool té dades persistents o no
-     */
+    /// Ens determina si la tool té dades persistents o no
     bool hasPersistentData() const;
 
-    /**
-    * Retorna el nom de la tool
-    **/
+    /// Retorna el nom de la tool
     QString toolName();
 
-    /**
-    * Decideix què s'ha de fer per cada event rebut
-    **/
-    virtual void handleEvent( unsigned long eventID ) = 0;
+    /// Decideix què s'ha de fer per cada event rebut
+    virtual void handleEvent(unsigned long eventID) = 0;
 
 protected:
     /// Viewer sobre el que s'executa la tool
@@ -96,7 +81,6 @@ protected:
 
     /// Indica si la tool té dades persistents
     bool m_hasPersistentData;
-
 };
 
 }

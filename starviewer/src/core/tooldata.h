@@ -12,20 +12,18 @@
 namespace udg {
 
 /**
-Classe genèrica per a les dades d'un tool
+    Classe genèrica per a les dades d'un tool
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class ToolData : public QObject
-{
+class ToolData : public QObject {
 Q_OBJECT
 public:
     ToolData(QObject *parent = 0);
-
     ~ToolData();
 
 signals:
-    /// senyal que indica que les dades han canviat
+    /// Senyal que indica que les dades han canviat
     void changed();
 };
 
