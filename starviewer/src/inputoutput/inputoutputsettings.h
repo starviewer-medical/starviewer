@@ -55,7 +55,7 @@ public:
 
     /// Paràmetres de connexió amb un PACS
     static const QString LocalAETitle;
-    static const QString QueryRetrieveLocalPort;
+    static const QString IncomingDICOMConnectionsPort;
     static const QString PACSConnectionTimeout;
     static const QString MaximumPACSConnections;
 

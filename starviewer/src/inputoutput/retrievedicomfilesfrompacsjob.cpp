@@ -62,7 +62,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
         return;
     }
 
-    int localPort = Settings().getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt();
+    int localPort = Settings().getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt();
 
     if (Utils::isPortInUse(localPort))
     {
@@ -298,7 +298,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             break;
         case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse :
             message = tr("%1 can't retrieve study %2 from patient %3 because port %4 for incoming connections from PACS is already in use by another application.").arg(
-                ApplicationNameString, studyID, patientName, settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toString());
+                ApplicationNameString, studyID, patientName, settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString());
             break;
         case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:
             message = tr("There were problems to retrieve some images of study %1 from patient %2 from PACS %3. Those images may be missing in the local database.").arg(

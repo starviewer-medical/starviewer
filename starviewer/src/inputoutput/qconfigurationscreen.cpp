@@ -96,7 +96,7 @@ void QConfigurationScreen::loadPacsDefaults()
     Settings settings;
 
     m_textAETitleMachine->setText(settings.getValue(InputOutputSettings::LocalAETitle).toString());
-    m_textLocalPort->setText(settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toString());
+    m_textLocalPort->setText(settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString());
     m_textTimeout->setText(settings.getValue(InputOutputSettings::PACSConnectionTimeout).toString());
     m_textMaxConnections->setText(settings.getValue(InputOutputSettings::MaximumPACSConnections).toString());
 }
@@ -411,7 +411,7 @@ void QConfigurationScreen::applyChangesPacs()
     if (m_textLocalPort->isModified())
     {
         INFO_LOG("Modificació del Port d'entrada dels estudis" + m_textLocalPort->text());
-        settings.setValue(InputOutputSettings::QueryRetrieveLocalPort, m_textLocalPort->text());
+        settings.setValue(InputOutputSettings::IncomingDICOMConnectionsPort, m_textLocalPort->text());
         m_textLocalPort->setModified(false);
     }
 
