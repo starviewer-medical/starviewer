@@ -57,7 +57,7 @@ PolylineROITool::~PolylineROITool()
 
 void PolylineROITool::handleEvent(long unsigned eventID)
 {
-    switch(eventID)
+    switch (eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
             handlePointAddition();
@@ -73,7 +73,7 @@ void PolylineROITool::handlePointAddition()
 {
     if (m_2DViewer->getInput())
     {
-        switch(m_2DViewer->getInteractor()->GetRepeatCount())
+        switch (m_2DViewer->getInteractor()->GetRepeatCount())
         {
             case 0: // Single-click o primer click d'un doble click. Afegim un nou punt a la ROI
                 annotateNewPoint();
@@ -108,7 +108,7 @@ void PolylineROITool::annotateNewPoint()
     
     if (firstPoint) // L'afegim a l'escena
     {
-        m_2DViewer->getDrawer()->draw(m_mainPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        m_2DViewer->getDrawer()->draw(m_mainPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
     else // Actualitzem l'estructura interna
     {
@@ -142,7 +142,7 @@ void PolylineROITool::simulateClosingPolyline()
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
             m_closingPolyline->increaseReferenceCount();
             m_closingPolyline->setLinePattern(DrawerPrimitive::DiscontinuousLinePattern);
-            m_2DViewer->getDrawer()->draw(m_closingPolyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+            m_2DViewer->getDrawer()->draw(m_closingPolyline, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
             // Afegim els punts que simulen aquesta polilínia
             m_closingPolyline->addPoint(m_mainPolyline->getPoint(0));
@@ -152,8 +152,8 @@ void PolylineROITool::simulateClosingPolyline()
         else
         {
             // Modifiquem els punts que han canviat
-            m_closingPolyline->setPoint(1,pickedPoint);
-            m_closingPolyline->setPoint(2,m_mainPolyline->getPoint(m_mainPolyline->getNumberOfPoints() - 1));
+            m_closingPolyline->setPoint(1, pickedPoint);
+            m_closingPolyline->setPoint(2, m_mainPolyline->getPoint(m_mainPolyline->getNumberOfPoints() - 1));
             // Actualitzem els atributs de la polilínia
             m_closingPolyline->update();
         }

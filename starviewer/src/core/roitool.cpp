@@ -82,7 +82,7 @@ void ROITool::computeStatisticsData()
     QVector<const double *> segmentsEndPoints;
 
     // Creem els diferents segments
-    for (int i = 0; i < numberOfSegments-1; ++i)
+    for (int i = 0; i < numberOfSegments - 1; ++i)
     {
         const double *p1 = m_roiPolygon->getVertix(i);
         const double *p2 = m_roiPolygon->getVertix(i + 1);
@@ -277,15 +277,6 @@ void ROITool::computeStatisticsData()
 
 void ROITool::printData()
 {
-    double bounds[6];
-    m_roiPolygon->getBounds(bounds);
-    double *intersection = new double[3];
-
-    intersection[0] = (bounds[1]+bounds[0])/2.0;
-    intersection[1] = (bounds[3]+bounds[2])/2.0;
-    intersection[2] = (bounds[5]+bounds[4])/2.0;
-
-    DrawerText *text = new DrawerText;
     // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
     // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
     const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
@@ -320,9 +311,19 @@ void ROITool::printData()
 
     // Calculem les dades estadístiques
     computeStatisticsData();
+
+    DrawerText *text = new DrawerText;
     text->setText(tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg(m_roiPolygon->computeArea(m_2DViewer->getView(), spacing), 0, 'f', 0).arg(areaUnits).arg(m_mean, 0, 'f', 2).arg(m_standardDeviation, 0, 'f', 2));
 
-    text->setAttachmentPoint(intersection);
+    double bounds[6];
+    m_roiPolygon->getBounds(bounds);
+    
+    double *attachmentPoint = new double[3];
+    attachmentPoint[0] = (bounds[1] + bounds[0]) / 2.0;
+    attachmentPoint[1] = (bounds[3] + bounds[2]) / 2.0;
+    attachmentPoint[2] = (bounds[5] + bounds[4]) / 2.0;
+    
+    text->setAttachmentPoint(attachmentPoint);
     text->shadowOn();
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
