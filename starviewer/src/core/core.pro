@@ -114,6 +114,7 @@ HEADERS += extensionfactory.h \
     drawertext.h \
     drawerpolyline.h \
     polylineroitool.h \
+    ovalroitool.h \
     polylinetemporalroitool.h \
     polylinetemporalroitooldata.h \
     distancetool.h \
@@ -308,6 +309,7 @@ SOURCES += extensionmediator.cpp \
     drawertext.cpp \
     drawerpolyline.cpp \
     polylineroitool.cpp \
+    ovalroitool.cpp \
     polylinetemporalroitool.cpp \
     polylinetemporalroitooldata.cpp \
     distancetool.cpp \

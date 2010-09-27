@@ -34,6 +34,7 @@
 #include "clippingplanestool.h"
 #include "transdifferencetool.h"
 #include "linepathtool.h"
+#include "ovalroitool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -153,6 +154,10 @@ Tool *ToolRegistry::getTool( const QString &toolName, QViewer *viewer )
     else if( toolName == "LinePathTool" )
     {
         tool = new LinePathTool( viewer );
+    }
+    else if( toolName == "OvalROITool" )
+    {
+        tool = new OvalROITool(viewer);
     }
     else
     {
@@ -361,6 +366,14 @@ QAction *ToolRegistry::getToolAction( const QString &toolName )
         toolAction->setText( tr("Line Path") );
         toolAction->setIcon( QIcon(":/images/linePath.png") );
         toolAction->setStatusTip( tr("Enable/Disable line path tool") );
+    }
+    else if( toolName == "OvalROITool" )
+    {
+        toolAction->setText(tr("Oval ROI"));
+        toolAction->setIcon(QIcon(":/images/ovalROITool.png"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OvalROITool));
+        statusTip = tr("Enable/Disable Oval ROI tool");
+        toolTip = toolAction->text();
     }
     else
     {

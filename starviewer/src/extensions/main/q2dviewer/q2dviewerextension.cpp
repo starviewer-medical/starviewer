@@ -348,6 +348,12 @@ void Q2DViewerExtension::initializeTools()
     m_eraserToolButton->setDefaultAction( m_toolManager->registerTool( "EraserTool" ) );
 #ifndef STARVIEWER_LITE
     m_polylineButton->setDefaultAction( m_toolManager->registerTool( "PolylineROITool" ) );
+    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI Oval
+    m_polylineButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *roiToolMenu = new QMenu(this);
+    m_polylineButton->setMenu(roiToolMenu);
+    roiToolMenu->addAction(m_toolManager->registerTool("OvalROITool"));
+    //m_polylineButton->setDefaultAction( m_toolManager->registerTool( "OvalROITool" ) );
     m_cursor3DToolButton->setDefaultAction( m_toolManager->registerTool("Cursor3DTool") );
     m_angleToolButton->setDefaultAction( m_toolManager->registerTool( "AngleTool" ) );
     m_openAngleToolButton->setDefaultAction( m_toolManager->registerTool( "NonClosedAngleTool" ) );
@@ -388,7 +394,7 @@ void Q2DViewerExtension::initializeTools()
 #ifdef STARVIEWER_LITE
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "EraserTool";
 #else
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "OvalROITool";
 #endif
     
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
