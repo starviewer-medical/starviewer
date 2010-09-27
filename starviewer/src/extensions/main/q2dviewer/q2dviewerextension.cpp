@@ -353,7 +353,6 @@ void Q2DViewerExtension::initializeTools()
     QMenu *roiToolMenu = new QMenu(this);
     m_polylineButton->setMenu(roiToolMenu);
     roiToolMenu->addAction(m_toolManager->registerTool("OvalROITool"));
-    //m_polylineButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
     m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
     m_openAngleToolButton->setDefaultAction(m_toolManager->registerTool("NonClosedAngleTool"));
