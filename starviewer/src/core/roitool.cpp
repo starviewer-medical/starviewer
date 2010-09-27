@@ -57,6 +57,8 @@ Volume::VoxelType ROITool::getGrayValue(double *coordinate)
 
 void ROITool::computeStatisticsData()
 {
+    Q_ASSERT(m_roiPolygon);
+    
     // Només cal calcular les dades si és necessari
     if (!m_hasToComputeStatisticsData)
     {
@@ -277,6 +279,7 @@ void ROITool::computeStatisticsData()
 
 void ROITool::printData()
 {
+    Q_ASSERT(m_roiPolygon);
     // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
     // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
     const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
