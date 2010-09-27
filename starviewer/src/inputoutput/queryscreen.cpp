@@ -189,7 +189,7 @@ void QueryScreen::checkRequeriments()
 
 void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
 {
-    int localPort = Settings().getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt();
+    int localPort = Settings().getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt();
 
     if ( Utils::isPortInUse( localPort ) )
     {

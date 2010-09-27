@@ -48,7 +48,7 @@ const QString InputOutputSettings::OperationStateListSortByColumn(InterfaceBase 
 const QString InputOutputSettings::OperationStateListSortOrder(InterfaceBase + "qOperationState/sortOrder");
 
 const QString PACSParametersBase("PACS/pacsparam/");
-const QString InputOutputSettings::QueryRetrieveLocalPort(PACSParametersBase + "localPort");
+const QString InputOutputSettings::IncomingDICOMConnectionsPort(PACSParametersBase + "localPort");
 const QString InputOutputSettings::LocalAETitle(PACSParametersBase + "AETitle");
 const QString InputOutputSettings::PACSConnectionTimeout(PACSParametersBase + "timeout");
 const QString InputOutputSettings::MaximumPACSConnections(PACSParametersBase + "MaxConnects");
@@ -102,7 +102,7 @@ void InputOutputSettings::init()
 
     settingsRegistry->addSetting(LastOpenedDICOMDIRPath, QDir::homePath());
 
-    settingsRegistry->addSetting(QueryRetrieveLocalPort, 4006);
+    settingsRegistry->addSetting(IncomingDICOMConnectionsPort, 4006);
     // TODO podríem definir-lo directament amb %HOSTNAME%
     settingsRegistry->addSetting(LocalAETitle, QHostInfo::localHostName(), Settings::Parseable);
     settingsRegistry->addSetting(PACSConnectionTimeout, 20);

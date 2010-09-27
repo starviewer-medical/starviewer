@@ -296,7 +296,7 @@ T_ASC_Network* PACSConnection::initializeAssociationNetwork(ModalityConnection m
 {
     Settings settings;
     //Si no es tracta d'una descarrega indiquem port 0
-    int networkPort = modality == RetrieveImages ? settings.getValue(InputOutputSettings::QueryRetrieveLocalPort).toInt() : 0;
+    int networkPort = modality == RetrieveImages ? settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt() : 0;
     int timeout = settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt();
     T_ASC_NetworkRole networkRole = modality == RetrieveImages ? NET_ACCEPTORREQUESTOR : NET_REQUESTOR;
     T_ASC_Network *associationNetwork;
