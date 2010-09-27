@@ -145,7 +145,7 @@ void QOperationStateScreen::clearList()
     // seleccionem els elements que volem esborrar
     QList<QTreeWidgetItem *> clearableItems;
     clearableItems = m_treeRetrieveStudy->findItems( tr("RETRIEVED"), Qt::MatchExactly, QOperationStateScreen::Status );
-    clearableItems += m_treeRetrieveStudy->findItems( tr("STORED"), Qt::MatchExactly, QOperationStateScreen::Status );
+    clearableItems += m_treeRetrieveStudy->findItems( tr("SENT"), Qt::MatchExactly, QOperationStateScreen::Status );
     clearableItems += m_treeRetrieveStudy->findItems( tr("ERROR"), Qt::MatchExactly, QOperationStateScreen::Status );
     clearableItems += m_treeRetrieveStudy->findItems( tr("CANCELLED"), Qt::MatchExactly, QOperationStateScreen::Status );
     // els eliminem de la llista
