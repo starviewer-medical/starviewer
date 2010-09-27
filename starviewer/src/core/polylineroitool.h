@@ -11,10 +11,11 @@
 
 namespace udg {
 
-/**
-    Tool per calcular l'àrea i la mitjana de grisos d'un polígon fet amb ROITool
+class DrawerPolyline;
+class DrawerPolygon;
 
-	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
+/**
+    Tool per crear ROIs amb una forma lliure determinada per un polígon irregular.
 */
 class PolylineROITool : public ROITool {
 Q_OBJECT
@@ -22,26 +23,32 @@ public:
     PolylineROITool(QViewer *viewer, QObject *parent = 0);
     ~PolylineROITool();
 
+    void handleEvent(long unsigned eventID);
+
 private slots:
-    /// Fa els càlculs pertinents de la tool després d'haver rebut un signal de figura acabada
-    void start();
+    /// Inicialitza l'estat de la tool
+    void initialize();
 
 private:
-    /// Mètode per escriure a pantalla les dades calculades.
-    void printData();
+    /// Gestiona quin punt de la ROI estem dibuixant. Es cridarà cada cop que 
+    /// haguem fet un clic amb el botó esquerre del mouse.
+    void handlePointAddition();
 
-    /// Calcula les dades estadístiques de la ROI. 
-    /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
-    void computeStatisticsData();
+    /// Ens permet anotar el següent punt de la polilínia. Si la primitiva no ha sigut creada, abans d'afegir el nou punt, la crea.
+    void annotateNewPoint();
 
-    /// Llista amb els valors de gris per calcular la mitjana i la desviació estàndard i altres dades estadístiques si cal.
-    QList<double> m_grayValues;
+    /// Ens simula com quedaria la polilínia que estem editant si la tanquèssim. Ens serveix per a veure dinàmicament l'evolució de la polilínia.
+    void simulateClosingPolyline();
 
-    /// Mitjana de valors de la ROI
-    double m_mean;
+    /// Mètode que tanca la forma de la polilínia que s'ha dibuixat
+    void closeForm();
 
-    /// Desviació estàndar de la ROI
-    double m_standardDeviation;
+private:
+    /// Polilínia principal: és la polilínia que ens marca la forma que hem anat editant.
+    QPointer<DrawerPolyline> m_mainPolyline;
+
+    /// Polilínia de tancament: es la polilínia que ens simula com quedaria la polilínia principal si es tanques, es a dir, uneix l'últim punt anotat i el primer punt de la polilínia.
+    QPointer<DrawerPolyline> m_closingPolyline;
 };
 
 }
