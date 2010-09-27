@@ -8,8 +8,8 @@
 
 namespace udg {
 
-Tool::Tool( QViewer *viewer, QObject *parent )
- : QObject(parent), m_viewer(viewer), m_toolConfiguration(0), m_toolData(0), m_hasSharedData(false),m_hasPersistentData(false)
+Tool::Tool(QViewer *viewer, QObject *parent)
+ : QObject(parent), m_viewer(viewer), m_toolConfiguration(0), m_toolData(0), m_hasSharedData(false), m_hasPersistentData(false)
 {
 }
 
@@ -17,22 +17,22 @@ Tool::~Tool()
 {
 }
 
-void Tool::setConfiguration( ToolConfiguration *configuration )
+void Tool::setConfiguration(ToolConfiguration *configuration)
 {
     m_toolConfiguration = configuration;
 }
 
-ToolConfiguration *Tool::getConfiguration() const
+ToolConfiguration* Tool::getConfiguration() const
 {
     return m_toolConfiguration;
 }
 
-void Tool::setToolData( ToolData *data )
+void Tool::setToolData(ToolData *data)
 {
     m_toolData = data;
 }
 
-ToolData *Tool::getToolData() const
+ToolData* Tool::getToolData() const
 {
     return m_toolData;
 }

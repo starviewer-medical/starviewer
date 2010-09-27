@@ -22,20 +22,20 @@ ToolProxy::~ToolProxy()
     m_persistentToolDataRepository.clear();
 }
 
-void ToolProxy::addTool( Tool *tool )
+void ToolProxy::addTool(Tool *tool)
 {
-    if( !m_toolsMap.contains(tool->toolName()) )
+    if (!m_toolsMap.contains(tool->toolName()))
 	{
-        m_toolsMap.insert( tool->toolName(), tool );
+        m_toolsMap.insert(tool->toolName(), tool);
         // Si la tool demanada existeix, comprovem si té dades persistents
-        if( tool->hasPersistentData() )
+        if (tool->hasPersistentData())
         {
             // mirem si les tenim al repositori
-            ToolData *persistentData = m_persistentToolDataRepository.value( tool->toolName() );
-            if( persistentData )
+            ToolData *persistentData = m_persistentToolDataRepository.value(tool->toolName());
+            if (persistentData)
             {
                 // hi són, per tant li assignem a la tool
-                tool->setToolData( persistentData );
+                tool->setToolData(persistentData);
             }
             else
             {
@@ -51,13 +51,13 @@ void ToolProxy::addTool( Tool *tool )
     }
 }
 
-bool ToolProxy::removeTool( const QString &toolName )
+bool ToolProxy::removeTool(const QString &toolName)
 {
     bool ok = false;
-    if( m_toolsMap.contains( toolName ) )
+    if (m_toolsMap.contains(toolName))
     {
         // l'eliminem del mapa i alliberem la seva memòria
-        Tool *tool = m_toolsMap.take( toolName );
+        Tool *tool = m_toolsMap.take(toolName);
         delete tool;
         ok = true;
     }
@@ -67,35 +67,37 @@ bool ToolProxy::removeTool( const QString &toolName )
 void ToolProxy::removeAllTools()
 {
     QStringList toolsList = m_toolsMap.keys();
-    foreach( QString toolName, toolsList )
+    foreach(QString toolName, toolsList)
     {
-        Tool *tool = m_toolsMap.take( toolName );
+        Tool *tool = m_toolsMap.take(toolName);
         delete tool;
     }
 }
 
-bool ToolProxy::isToolActive( const QString &toolName )
+bool ToolProxy::isToolActive(const QString &toolName)
 {
-    return m_toolsMap.contains( toolName );
+    return m_toolsMap.contains(toolName);
 }
 
-Tool *ToolProxy::getTool( const QString &toolName ) 
+Tool* ToolProxy::getTool(const QString &toolName) 
 {
     Tool *tool = 0;
-    if( m_toolsMap.contains(toolName) )
-        tool = m_toolsMap.value( toolName );
+    if (m_toolsMap.contains(toolName))
+    {
+        tool = m_toolsMap.value(toolName);
+    }
 
     return tool;
 }
 
-void ToolProxy::forwardEvent( unsigned long eventID )
+void ToolProxy::forwardEvent(unsigned long eventID)
 {
     //no es pot fer un foreach sobre un map perquè retorna parella d'elements, per això passem tots els elements del map a una QList.
     QList<Tool *> toolsList = m_toolsMap.values();
 
-    foreach( Tool *tool, toolsList )
+    foreach(Tool *tool, toolsList)
     {
-        tool->handleEvent( eventID );
+        tool->handleEvent(eventID);
     }
 }
 

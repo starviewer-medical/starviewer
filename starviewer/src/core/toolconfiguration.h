@@ -15,43 +15,30 @@
 namespace udg {
 
 /**
-Classe encarregada de definir els atributs que configuren una tool. Els guarda de forma genèrica.
+    Classe encarregada de definir els atributs que configuren una tool. Els guarda de forma genèrica.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class ToolConfiguration : public QObject
-{
+class ToolConfiguration : public QObject {
 Q_OBJECT
 public:
     ToolConfiguration(QObject *parent = 0);
-
     ~ToolConfiguration();
 
-    /**
-    * Afegeix un atribut a la tool
-    **/
-    void addAttribute( QString attributeName, QVariant value );
+    /// Afegeix un atribut a la tool
+    void addAttribute(QString attributeName, QVariant value);
 
-    /**
-    * Posa el valor a un atribut
-    **/
-    void setValue( QString attributeName, QVariant value );
+    /// Posa el valor a un atribut
+    void setValue(QString attributeName, QVariant value);
 
-    /**
-    * Obté el valor d'un atribut
-    **/
-    QVariant getValue( QString attributeName );
+    /// Obté el valor d'un atribut
+    QVariant getValue(QString attributeName);
 
-    /**
-    * Retorna cert si conté l'atribut, fals altrament
-    **/
-    bool containsValue( QString attributeName );
+    /// Retorna cert si conté l'atribut, fals altrament
+    bool containsValue(QString attributeName);
 
 private:
-
-    /**
-    * Map per guardar els atributs amb els seus corresponents valors
-    **/
+    /// Map per guardar els atributs amb els seus corresponents valors
     QMap<QString, QVariant> attributeMap;
 };
 
