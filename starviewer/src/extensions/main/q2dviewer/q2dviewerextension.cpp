@@ -20,7 +20,7 @@
 #include "windowlevelpresetstooldata.h"
 #include "qdicomdump.h"
 #include "statswatcher.h"
-// per poder fer screenshots desde menú
+// Per poder fer screenshots desde menú
 #include "screenshottool.h" 
 #include "toolproxy.h"
 #include "q2dviewersettings.h"
@@ -65,7 +65,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_hangingProtocolManager = 0;
 #endif
 
-    //TODO ocultem botons que no son del tot necessaris o que no es faran servir
+    // TODO Ocultem botons que no son del tot necessaris o que no es faran servir
     m_windowLevelToolButton->setVisible(false);
     m_translateToolButton->setVisible(false);
 
@@ -86,7 +86,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
     m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
     
-    // TODO de moment no fem accessible aquesta funcionalitat ja que no està a punt
+    // TODO De moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
 
@@ -94,7 +94,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     createConnections();
     initializeTools();
 
-    // incorporem estadístiques
+    // Incorporem estadístiques
     m_statsWatcher = new StatsWatcher("2D Extension",this);
     m_statsWatcher->addClicksCounter(m_slicingToolButton);
     m_statsWatcher->addClicksCounter(m_zoomToolButton);
@@ -186,7 +186,7 @@ void Q2DViewerExtension::setInput(Volume *input)
     Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
     viewerWidget->setInput(m_mainVolume);
 #else
-    /// Aplicació dels hanging protocols
+    // Aplicació dels hanging protocols
     if (m_hangingProtocolManager != 0)
     {
         m_hangingProtocolManager->cancelHangingProtocolDownloading();
@@ -213,7 +213,7 @@ void Q2DViewerExtension::setInput(Volume *input)
 
     connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
 
-    /// Habilitem la possibilitat de buscar estudis previs.
+    // Habilitem la possibilitat de buscar estudis previs.
     m_previousStudiesToolButton->setEnabled(true);
     m_previousStudiesWidget->searchStudiesOf(m_mainVolume->getPatient());
 
@@ -336,9 +336,9 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
 void Q2DViewerExtension::initializeTools()
 {
-    // creem el tool manager
+    // Creem el tool manager
     m_toolManager = new ToolManager(this);
-    // obtenim les accions de cada tool que volem
+    // Obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
     m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
     m_translateToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
@@ -358,7 +358,7 @@ void Q2DViewerExtension::initializeTools()
     m_openAngleToolButton->setDefaultAction(m_toolManager->registerTool("NonClosedAngleTool"));
 #endif
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
-    // registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
+    // Registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
     m_toolManager->registerTool("WindowLevelPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SynchronizeTool");
@@ -453,7 +453,7 @@ void Q2DViewerExtension::initializeTools()
 
 void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 {
-     // i si cal, activem les annotacions
+     // I si cal, activem les annotacions
     if (m_viewerInformationToolButton->isChecked())
     {
         newViewerWidget->getViewer()->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true);
@@ -478,8 +478,8 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
     }
     if (viewerWidget != m_lastSelectedViewer)
     {
-        /// TODO Canviar aquestes connexions i desconnexions per dos mètodes el qual
-        /// enviin el senyal al visualitzador que toca.
+        // TODO Canviar aquestes connexions i desconnexions per dos mètodes el qual
+        // enviin el senyal al visualitzador que toca.
         if (m_lastSelectedViewer)
         {
 
@@ -503,7 +503,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
         connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume *)), SLOT(validePhases()));
 #endif
         connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton(int)));
-        // és necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
+        // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
         ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
         if (screenShotTool)
         {
@@ -511,7 +511,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             connect(m_multipleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(completeCapture()));
         }
 
-        // TODO potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
+        // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
         // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
         WindowLevelPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
         m_windowLevelComboBox->setPresetsData(windowLevelData);
@@ -524,7 +524,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
         m_thickSlabWidget->link(selected2DViewer);
         updateDICOMInformationButton(selected2DViewer->getView());
 
-        // activem les "ActionTool" pel visor seleccionat
+        // Activem les "ActionTool" pel visor seleccionat
         m_toolManager->enableRegisteredActionTools(selected2DViewer);
     }
 }
