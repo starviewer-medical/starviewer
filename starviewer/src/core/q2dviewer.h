@@ -429,7 +429,6 @@ private:
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
     /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior) 
-    /// TODO aquesta variable no s'està fent servir (decidir si ens pot resultar útil o no)
     QString m_patientOrientationText[4];
 
     /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z (ample, alçada i profunditat). 
