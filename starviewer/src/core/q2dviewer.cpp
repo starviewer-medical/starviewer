@@ -475,12 +475,32 @@ void Q2DViewer::mapOrientationStringToAnnotation()
     // Obtenim els labels que estem veient en aquest moment
     QVector<QString> labels = this->getCurrentDisplayedImageOrientationLabels();
 
+    for (int i = 0; i < 4; ++i)
+    {
+        m_patientOrientationText[i] = labels.at(i);
+    }
+    
     // Text actor -> 0:Esquerra, 1:Abaix, 2:Dreta, 3:A dalt
     // Labels     -> 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
-    m_patientOrientationTextActor[0]->SetInput(qPrintable(labels[0]));
-    m_patientOrientationTextActor[1]->SetInput(qPrintable(labels[3]));
-    m_patientOrientationTextActor[2]->SetInput(qPrintable(labels[2]));
-    m_patientOrientationTextActor[3]->SetInput(qPrintable(labels[1]));
+    if (!m_patientOrientationText[0].isEmpty())
+    {
+        m_patientOrientationTextActor[0]->SetInput(qPrintable(m_patientOrientationText[0]));
+    }
+    
+    if (!m_patientOrientationText[3].isEmpty())
+    {
+        m_patientOrientationTextActor[1]->SetInput(qPrintable(m_patientOrientationText[3]));
+    }
+    
+    if (!m_patientOrientationText[2].isEmpty())
+    {
+        m_patientOrientationTextActor[2]->SetInput(qPrintable(m_patientOrientationText[2]));
+    }
+
+    if (!m_patientOrientationText[1].isEmpty())
+    {
+        m_patientOrientationTextActor[3]->SetInput(qPrintable(m_patientOrientationText[1]));
+    }
 }
 
 void Q2DViewer::refreshAnnotations()
@@ -516,7 +536,14 @@ void Q2DViewer::refreshAnnotations()
     {
         for (int j = 0; j < 4; j++)
         {
-            m_patientOrientationTextActor[j]->VisibilityOn();
+            if (!m_patientOrientationText[j].isEmpty())
+            {
+                m_patientOrientationTextActor[j]->VisibilityOn();
+            }
+            else // Si l'etiqueta és buida, el mostrem invisible sempre ja que no tenim informació vàlida que mostrar
+            {
+                m_patientOrientationTextActor[j]->VisibilityOff();
+            }
         }
     }
     else
