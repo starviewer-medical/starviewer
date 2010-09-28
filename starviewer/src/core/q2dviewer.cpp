@@ -515,12 +515,16 @@ void Q2DViewer::refreshAnnotations()
     if (m_enabledAnnotations & Q2DViewer::PatientOrientationAnnotation)
     {
         for (int j = 0; j < 4; j++)
+        {
             m_patientOrientationTextActor[j]->VisibilityOn();
+        }
     }
     else
     {
         for (int j = 0; j < 4; j++)
+        {
             m_patientOrientationTextActor[j]->VisibilityOff();
+        }
     }
 
     if (m_enabledAnnotations & Q2DViewer::ScalarBarAnnotation)
@@ -1381,7 +1385,9 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
         // necessitem el punt en coordenades homogenies
         double homogeneousPointToProject[4], homogeneousProjectedPoint[4];
         for (int i=0; i<3; i++)
-            homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i]; // desplacem el punt a l'origen del pla
+        {
+            homogeneousPointToProject[i] = pointToProject[i] - currentPlaneOrigin[i]; // Desplacem el punt a l'origen del pla
+        }
         homogeneousPointToProject[3] = 1.0;
 
         // Projectem el punt amb la matriu
@@ -1564,7 +1570,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
 {
     Q_ASSERT(m_cornerAnnotations);
     Q_ASSERT(m_mainVolume);
-    // TODO de moment assumim que totes les imatges seran de la mateixa modalitat.
+    // TODO De moment assumim que totes les imatges seran de la mateixa modalitat.
     // Per evitar problemes amb el tractament de multiframe (que deixem per més endavant)
     // agafem directament la primera imatge, però cal solucionar aquest aspecte adequadament.
     Image *image = m_mainVolume->getImage(0);
@@ -1586,7 +1592,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
         if (image)
         {
             QString projection = image->getViewCodeMeaning();
-            /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
+            // PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
             // TODO Tenir-ho carregat en arxius, maps, etc..
             // TODO Fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
             if (projection == "medio-lateral")
