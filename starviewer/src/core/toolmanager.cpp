@@ -39,7 +39,7 @@ void ToolManager::setViewerTools(QViewer *viewer, const QStringList &toolsList)
     ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = NULL;
-    foreach (QString toolName, toolsList)
+    foreach (const QString &toolName, toolsList)
     {
         m_toolViewerMap.insert(toolName, pair);
     }
@@ -105,7 +105,7 @@ void ToolManager::addExclusiveToolsGroup(const QString &groupName, const QString
     // Afegim el grup al mapa
     m_toolsGroups.insert(groupName, actionGroup);
     // Per cada tool obtindrem la seva acció i la farem entrar en el grup d'exclusivitat
-    foreach (QString toolName, tools)
+    foreach (const QString &toolName, tools)
     {
         // Obtenim l'acció corresponent a aquella tool
         QAction *toolAction = getRegisteredToolAction(toolName);
@@ -142,7 +142,7 @@ QAction* ToolManager::registerActionTool(const QString &actionToolName)
 
 void ToolManager::triggerTools(const QStringList &toolsList)
 {
-    foreach (QString toolName, toolsList)
+    foreach (const QString &toolName, toolsList)
     {
         triggerTool(toolName);
     }
@@ -159,7 +159,7 @@ void ToolManager::triggerTool(const QString &toolName)
 void ToolManager::enableActionTools(QViewer *viewer, const QStringList &actionToolsList)
 {
     QPair<QAction *, QString> pair;
-    foreach (QString actionToolName, actionToolsList)
+    foreach (const QString &actionToolName, actionToolsList)
     {
         pair = m_actionToolRegistry.value(actionToolName);
         connect(pair.first, SIGNAL(triggered()), viewer, qPrintable(pair.second));
@@ -169,7 +169,7 @@ void ToolManager::enableActionTools(QViewer *viewer, const QStringList &actionTo
 void ToolManager::disableActionTools(QViewer *viewer, const QStringList &actionToolsList)
 {
     QPair<QAction *, QString> pair;
-    foreach (QString actionToolName, actionToolsList)
+    foreach (const QString &actionToolName, actionToolsList)
     {
         pair = m_actionToolRegistry.value(actionToolName);
         disconnect(pair.first, SIGNAL(triggered()), viewer, 0);
@@ -189,7 +189,7 @@ void ToolManager::disableRegisteredActionTools(QViewer *viewer)
 void ToolManager::disableAllToolsTemporarily()
 {
     QStringList toolsList = m_toolViewerMap.uniqueKeys();
-    foreach (QString toolName, toolsList)
+    foreach (const QString &toolName, toolsList)
     {
         deactivateTool(toolName);
     }
@@ -210,7 +210,7 @@ void ToolManager::activateTool(const QString &toolName)
     // Declarem aquestes variables per fer-ho més llegible
     QViewer *viewer;
     ToolConfiguration *configuration;
-    foreach (ViewerToolConfigurationPairType pair, viewerConfigList)
+    foreach (const ViewerToolConfigurationPairType &pair, viewerConfigList)
     {
         viewer = pair.first;
         configuration = pair.second;
@@ -249,7 +249,7 @@ void ToolManager::deactivateTool(const QString &toolName)
 {
     QList<ViewerToolConfigurationPairType> viewerConfigList = m_toolViewerMap.values(toolName);
 
-    foreach (ViewerToolConfigurationPairType pair, viewerConfigList)
+    foreach (const ViewerToolConfigurationPairType &pair, viewerConfigList)
     {
         // Declarem aquesta variable per fer-ho més llegible
         QViewer *viewer = pair.first;
@@ -322,7 +322,7 @@ QStringList ToolManager::getRegisteredToolsList() const
 void ToolManager::refreshConnections()
 {
     QStringList toolsList = getRegisteredToolsList();
-    foreach (QString tool, toolsList)
+    foreach (const QString &tool, toolsList)
     {
         triggeredToolAction(tool);
     }
