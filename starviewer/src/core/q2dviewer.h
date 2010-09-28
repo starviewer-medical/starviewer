@@ -168,24 +168,15 @@ public:
     int getMinimumSlice();
     int getMaximumSlice();
 
-    /**
-     * Ens indica si s'està aplicant o no thick slab
-     * @return
-     */
+    /// Ens indica si s'està aplicant o no thick slab
     bool isThickSlabActive() const;
 
-    /**
-     * Obtenim el mode de projecció del thickslab.
-     * Si el thickslab no està actiu, el valor és indefinit
-     * @return
-     */
+    /// Obtenim el mode de projecció del thickslab.
+    /// Si el thickslab no està actiu, el valor és indefinit
     int getSlabProjectionMode() const;
 
-    /**
-     * Obtenim el gruix de l'slab
-     * Si el thickslab no està actiu, el valor és indefinit
-     * @return
-     */
+    /// Obtenim el gruix de l'slab
+    /// Si el thickslab no està actiu, el valor és indefinit
     int getSlabThickness() const;
 
     /**
@@ -198,7 +189,7 @@ public:
      */
     void putCoordinateInCurrentImageBounds(double xyz[3]);
 
-    ///Retorna la informació de la llesca actual del visualitzador
+    /// Retorna la informació de la llesca actual del visualitzador
     vtkImageData* getCurrentSlabProjection();
 
     /// Retorna un vector de 4 strings en el que tenim quatre elements que representen les etiquetes
@@ -236,10 +227,10 @@ public slots:
     /// Canvia el WW del visualitzador, per tal de canviar els blancs per negres, i el negres per blancs
     void invertWindowLevel();
 
-    /// canvia la llesca que veiem de la vista actual
+    /// Canvia la llesca que veiem de la vista actual
     void setSlice(int value);
 
-    /// canvia la fase en que es veuen les llesques si n'hi ha
+    /// Canvia la fase en que es veuen les llesques si n'hi ha
     void setPhase(int value);
 
     /// Indica el tipu de solapament dels volums, per defecte blending
@@ -255,7 +246,7 @@ public slots:
     void setTransferFunction(TransferFunction *transferFunction);
 
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
-    /// TODO aquest mètode hauria de quedar obsolet
+    /// TODO Aquest mètode hauria de quedar obsolet
     void setSeedPosition(double pos[3]);
 
     /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
@@ -271,29 +262,24 @@ public slots:
     void verticalFlip();
 
     // TODO aquests mètodes també haurien d'estar en versió QString!
-    /**
-     * Li indiquem quin mode de projecció volem aplicar sobre l'slab
-     * @param projectionMode valor que identifica quina projecció apliquem
-     */
+    
+    /// Li indiquem quin mode de projecció volem aplicar sobre l'slab
+    /// @param projectionMode Valor que identifica quina projecció apliquem
     void setSlabProjectionMode(int projectionMode);
 
-    /**
-     * Indiquem el gruix de l'slab
-     * @param thickness Nombre de llesques que formen l'slab
-     */
+    /// Indiquem el gruix de l'slab
+    /// @param thickness Nombre de llesques que formen l'slab
     void setSlabThickness(int thickness);
 
-    /**
-     * Activem a desactivem l'aplicació del thick slab sobre la imatge
-     * @param enable
-     */
+    /// Activem a desactivem l'aplicació del thick slab sobre la imatge
+    /// @param enable
     void enableThickSlab(bool enable = true);
 
     /// Alineament de la imatge dins del visualitzador
     void alignLeft();
     void alignRight();
 
-    // Posa la posició d'alineament de la imatge (dreta, esquerre, centrat )
+    /// Posa la posició d'alineament de la imatge (dreta, esquerre, centrat )
     void setAlignPosition(AlignPosition alignPosition);
 
     /// Aplica les transformacions 2D necessàries sobre la imatge actual perquè aquesta tingui la orientació indicada
@@ -302,26 +288,24 @@ public slots:
     void setImageOrientation(const QString &orientation);
 
 signals:
-    /// envia la nova llesca en la que ens trobem
+    /// Envia la nova llesca en la que ens trobem
     void sliceChanged(int);
 
-    /// envia la nova fase en la que ens trobem
+    /// Envia la nova fase en la que ens trobem
     void phaseChanged(int);
 
-    /// envia la nova vista en la que ens trobem
+    /// Envia la nova vista en la que ens trobem
     void viewChanged(int);
 
-    /// indica el nou window level
+    /// Indica el nou window level
     void windowLevelChanged(double window, double level);
 
     /// Senyal que s'envia quan la llavor s'ha canviat
-    /// TODO mirar de treure-ho i posar-ho en la tool SeedTool
-    void seedPositionChanged(double,double,double);
+    /// TODO Mirar de treure-ho i posar-ho en la tool SeedTool
+    void seedPositionChanged(double x, double y, double z);    
 
-    /**
-     * S'emet quan canvia l'slab thickness
-     * @param thickness nou valor de thickness
-     */
+    /// S'emet quan canvia l'slab thickness
+    /// @param thickness Nou valor de thickness
     void slabThicknessChanged(int thickness);
 
     /// Senyal que s'envia quan ha canviat l'overlay
@@ -333,9 +317,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *resize);
 
 private:
-    /**
-     * Refresca la visibilitat de les annotacions en funció dels flags que tenim
-     */
+    /// Refresca la visibilitat de les annotacions en funció dels flags que tenim
     void refreshAnnotations();
 
     /// Actualitzem les dades de les annotacions, per defecte totes, sinó, només les especificades
@@ -353,13 +335,13 @@ private:
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
 
-    /// crea els indicadors d'escala
+    /// Crea els indicadors d'escala
     void createRulers();
 
     /// Crea la barra de valors
     void createScalarBar();
 
-    /// crea les anotacions de l'orientació del pacient
+    /// Crea les anotacions de l'orientació del pacient
     void createOrientationAnnotations();
 
     /// Afegeix tots els actors a l'escena
@@ -371,21 +353,22 @@ private:
     /// R:L (Right-Left), A:P (Anterior-Posterior), S:I (Superior-Inferior), H:F(Head-Feet)
     static QString getOppositeOrientationLabel(const QString &label);
 
-    /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. A això li afecta també si la vista és axial, sagital o coronal
+    /// A partir de l'string d'orientació del pacient mapeja les anotacions correctes segons com estem mirant el model. 
+    /// A això li afecta també si la vista és axial, sagital o coronal
     void mapOrientationStringToAnnotation();
 
     /// Actualitza les característiques dels actors dels viewports
     void updateDisplayExtent();
 
     /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat.
-    /// Això permet que el càlcul s'hagi fet en un presentation state, per exemple
+    /// Això permet que el càlcul s'hagi fet en un presentation state, per exemple.
     /// TODO És públic únicament perquè el fa servir el presentation state attacher. Podria ser protected o private.
     void applyGrayscalePipeline();
 
     /// Re-inicia la càmera en la vista actual. Posa els paràmetres de rotació, zoom, desplaçament, flip, etc. als seus valors inicials
     void resetCamera();
     
-    /// thick slab
+    /// Thick slab
     void computeRangeAndSlice(int newSlabThickness);
 
     ///  Valida el valor d'slice donat i actualitza les variables membres pertinents, com m_currentSlice o m_firstSlabSlice
@@ -409,7 +392,7 @@ protected:
     /// Actor d'imatge
     vtkImageActor *m_imageActor;
 
-    /// conserva la vista actual
+    /// Conserva la vista actual
     CameraOrientationType m_lastView;
 
     /// La llesca actual que estem visualitzant
@@ -436,7 +419,7 @@ protected:
     vtkCornerAnnotation *m_cornerAnnotations;
 
 private:
-    /// flag que ens indica quines anotacions es veuran per la finestra
+    /// Flag que ens indica quines anotacions es veuran per la finestra
     AnnotationFlags m_enabledAnnotations;
 
     /// Tipus de solapament dels volums en cas que en tinguem més d'un
@@ -445,16 +428,18 @@ private:
     /// Els strings amb els textes de cada part de la imatge
     QString m_lowerLeftText, m_lowerRightText, m_upperLeftText, m_upperRightText;
 
-    /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior) TODO aquesta variable no s'està fent servir :(decidir si ens pot resultar útil o no
+    /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior) 
+    /// TODO aquesta variable no s'està fent servir (decidir si ens pot resultar útil o no)
     QString m_patientOrientationText[4];
 
-    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z (ample, alçada i profunditat ). Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
+    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z (ample, alçada i profunditat). 
+    /// Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
     vtkAxisActor2D *m_sideRuler, *m_bottomRuler;
 
     /// Coordenades fixes dels rulers que els ajustaran a un dels extrems inferiors/superiors o laterals de la pantalla
     vtkCoordinate *m_anchoredRulerCoordinates;
 
-    /// coordenades dels extrems per cada dimensió del ruler
+    /// Coordenades dels extrems per cada dimensió del ruler
     double m_rulerExtent[6];
 
     /// Textes adicionals d'anotoació
@@ -469,7 +454,7 @@ private:
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
 
-    /// ampliació tractament dinàmic
+    /// Ampliació tractament dinàmic
     /// Nombre de fases
     int m_numberOfPhases;
 
@@ -485,7 +470,7 @@ private:
     /// Especialista en dibuixar primitives
     Drawer *m_drawer;
 
-    /// objectes per a les transformacions en el pipeline d'escala de grisos
+    /// Objectes per a les transformacions en el pipeline d'escala de grisos
     vtkImageMapToWindowLevelColors2 *m_windowLevelLUTMapper;
 
     // Secció "ThickSlab"
@@ -505,7 +490,7 @@ private:
     /// Indica quin tipus de projecció apliquem sobre l'slab
     int m_slabProjectionMode;
 
-    // Conté el mapeig d'operacions a fer quan voelm passar d'una orientació a un altre
+    /// Conté el mapeig d'operacions a fer quan voelm passar d'una orientació a un altre
     ImageOrientationOperationsMapper *m_imageOrientationOperationsMapper;
 
     /// Posició a on s'ha d'alinear la imatge (dreta, esquerre o centrat )
@@ -513,6 +498,6 @@ private:
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
-};  //  end  namespace udg
+};  //  End namespace udg
 
 #endif

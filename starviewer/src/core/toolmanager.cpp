@@ -119,20 +119,20 @@ void ToolManager::addExclusiveToolsGroup(const QString &groupName, const QString
         }
     }
     // Guarrada! TODO Aixo es un workaround per poder desactivar "automaticament" les tools dins d'un mateix grup
-    // lo correcte seria plantejar be el tema dels signals mappers o fer una implementacio propia mes elaborada
+    // Lo correcte seria plantejar be el tema dels signals mappers o fer una implementacio propia mes elaborada
     connect(actionGroup, SIGNAL(triggered(QAction *)), SLOT(refreshConnections()));
 }
 
 QAction* ToolManager::registerActionTool(const QString &actionToolName)
 {
     QPair<QAction *, QString> pair;
-    // si no està registrada la obtenim del registre i l'afegim al nostre map
+    // Si no està registrada la obtenim del registre i l'afegim al nostre map
     if (!m_actionToolRegistry.contains(actionToolName))
     {
         pair = m_toolRegistry->getActionToolPair(actionToolName);
         m_actionToolRegistry.insert(actionToolName, pair);
     }
-    else // sinó, l'agafem del nostre map i no tornem a crear l'acció
+    else // Sinó, l'agafem del nostre map i no tornem a crear l'acció
     {
         pair = m_actionToolRegistry.value(actionToolName);
     }
@@ -262,12 +262,12 @@ void ToolManager::deactivateTool(const QString &toolName)
 
 void ToolManager::triggeredToolAction(const QString &toolName)
 {
-    // TODO: Cal repassar tot això. Hauria d'anar amb llistes internes de tools activades/desactivades
+    // TODO Cal repassar tot això. Hauria d'anar amb llistes internes de tools activades/desactivades
     // obtenim l'acció que l'ha provocat
     QAction *toolAction = getRegisteredToolAction(toolName);
     if (toolAction)
     {
-        // si està checked és que s'ha d'activar, altrament desactivar
+        // Si està checked és que s'ha d'activar, altrament desactivar
         if (toolAction->isChecked())
         {
             activateTool(toolName);
@@ -288,7 +288,7 @@ QAction* ToolManager::getRegisteredToolAction(const QString &toolName)
     QAction *toolAction = 0;
     if (m_toolsActionsRegistry.contains(toolName))
     {
-        // si ja existeix l'obtenim del registre de tools/acció
+        // Si ja existeix l'obtenim del registre de tools/acció
         toolAction = m_toolsActionsRegistry.value(toolName);
     }
     return toolAction;
@@ -299,18 +299,18 @@ QAction* ToolManager::registerTool(const QString &toolName)
     QAction *toolAction;
     if (m_toolsActionsRegistry.contains(toolName))
     {
-        // si ja existeix l'obtenim del registre de tools/acció
+        // Si ja existeix l'obtenim del registre de tools/acció
         toolAction = m_toolsActionsRegistry.value(toolName);
     }
     else
     {
-        // altrament, creem l'acció associada, la connectem amb l'estructura interna i la registrem
+        // Altrament, creem l'acció associada, la connectem amb l'estructura interna i la registrem
         toolAction = m_toolRegistry->getToolAction(toolName);
         m_toolsActionSignalMapper->setMapping(toolAction, toolName);
         connect(toolAction, SIGNAL(triggered()), m_toolsActionSignalMapper, SLOT(map()));
         m_toolsActionsRegistry.insert(toolName, toolAction);
     }
-    // retornem l'acció associada
+    // Retornem l'acció associada
     return toolAction;
 }
 
