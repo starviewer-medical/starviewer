@@ -67,7 +67,7 @@ bool ToolProxy::removeTool(const QString &toolName)
 void ToolProxy::removeAllTools()
 {
     QStringList toolsList = m_toolsMap.keys();
-    foreach(QString toolName, toolsList)
+    foreach(const QString &toolName, toolsList)
     {
         Tool *tool = m_toolsMap.take(toolName);
         delete tool;

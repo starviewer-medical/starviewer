@@ -26,16 +26,16 @@ public:
     ~ToolConfiguration();
 
     /// Afegeix un atribut a la tool
-    void addAttribute(QString attributeName, QVariant value);
+    void addAttribute(const QString &attributeName, const QVariant &value);
 
     /// Posa el valor a un atribut
-    void setValue(QString attributeName, QVariant value);
+    void setValue(const QString &attributeName, const QVariant &value);
 
     /// Obté el valor d'un atribut
-    QVariant getValue(QString attributeName);
+    QVariant getValue(const QString &attributeName);
 
     /// Retorna cert si conté l'atribut, fals altrament
-    bool containsValue(QString attributeName);
+    bool containsValue(const QString &attributeName);
 
 private:
     /// Map per guardar els atributs amb els seus corresponents valors

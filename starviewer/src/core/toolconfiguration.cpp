@@ -17,22 +17,22 @@ ToolConfiguration::~ToolConfiguration()
 {
 }
 
-void ToolConfiguration::addAttribute(QString attributeName, QVariant value)
+void ToolConfiguration::addAttribute(const QString &attributeName, const QVariant &value)
 {
     attributeMap.insert(attributeName, value);
 }
 
-void ToolConfiguration::setValue(QString attributeName, QVariant value)
+void ToolConfiguration::setValue(const QString &attributeName, const QVariant &value)
 {
     attributeMap.insert(attributeName, value);
 }
 
-QVariant ToolConfiguration::getValue(QString attributeName)
+QVariant ToolConfiguration::getValue(const QString &attributeName)
 {
     return attributeMap.value(attributeName);
 }
 
-bool ToolConfiguration::containsValue(QString attributeName)
+bool ToolConfiguration::containsValue(const QString &attributeName)
 {
     return attributeMap.contains(attributeName);
 }
