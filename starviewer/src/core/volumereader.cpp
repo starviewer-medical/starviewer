@@ -107,8 +107,10 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
         // Comprovem si es tracta d'una imatge a color
         // TODO Caldria diferenciar també els casos en que tenim més d'una imatge de diferents mides i que alguna és de color
         photometricInterpretation = image->getPhotometricInterpretation();
-        if (photometricInterpretation == "PALETTE COLOR" || photometricInterpretation == "RGB" || photometricInterpretation == "YBR_FULL" || photometricInterpretation == "YBR_FULL_422" || photometricInterpretation == "YBR_PARTIAL_422" || photometricInterpretation == "YBR_PARTIAL_420" || photometricInterpretation == "YBR_ICT" || photometricInterpretation == "YBR_RCT")
+        if (!photometricInterpretation.contains("MONOCHROME"))
         {
+            // Si photometric interpretation no és ni MONOCHROME1 ni MONOCHROME2, llavors és algun tipu d'imatge a color:
+            // PALETTE COLOR, RGB YBR_FULL, YBR_FULL_422, YBR_PARTIAL_422, YBR_PARTIAL_420, YBR_ICT o YBR_RCT
             containsColorImages = true;
             DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
         }
