@@ -86,6 +86,8 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
         imageSize[1] = imageSet.first()->getColumns();
     }
     
+    bool avoidWrongPixelType = false;
+    
     foreach (Image *image, imageSet)
     {
         if (!fileList.contains(image->getPath())) // Evitem afegir més vegades l'arxiu si aquest és multiframe
@@ -114,11 +116,24 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
             containsColorImages = true;
             DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
         }
+        else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16)
+        {
+            // Aquesta comprovació es fa per evitar casos com el del ticket #1257
+            // Com que itkImage sempre s'allotja amb el tipus de pixel signed short int, 
+            // quan tenim 16 bits allocated i stored, podria ser que el rang de dades necessités
+            // que el tipus de pixel fos unsigned short int (0..65536) perquè la imatge es visualitzi correctament
+            avoidWrongPixelType = true;
+        }
     }
 
     if (!containsDifferentSizeImages && containsColorImages)
     {
         // Si conté imatges de color i totes són de la mateixa mida les llegirem amb VTK-GDCM
+        m_suitablePixelDataReader = VTKGDCMPixelDataReader;
+    }
+    else if (avoidWrongPixelType)
+    {
+        // Com que el reader de vtkGDCM decideix el tipus dinàmicament, allotjarem el tipus de pixel correcte
         m_suitablePixelDataReader = VTKGDCMPixelDataReader;
     }
 
