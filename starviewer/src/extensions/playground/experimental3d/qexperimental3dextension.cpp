@@ -3726,7 +3726,7 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
         {
             opacity = x1 / m_volume->getRangeMax();
         }
-        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked())
+        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked())    // l'opacitat serà la mínima del rang
         {
             QList<double> points = currentTransferFunction.getPointsInInterval(x1, x2);
             points.prepend(x1); points.append(x2);  // per si no hi són
@@ -3738,7 +3738,7 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
                 if (a < opacity) opacity = a;
             }
         }
-        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())
+        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())   // l'opacitat serà la mitjana de l'interval
         {
             QList<double> points = currentTransferFunction.getPointsInInterval(x1, x2);
             points.prepend(x1); points.append(x2);  // per si no hi són
