@@ -303,6 +303,8 @@ private slots:
     void probabilisticAmbientOcclusionGradient();
     void volumeVariance();
 
+    void generateInnernessProportionalOpacityTransferFunction();
+
 private:
 
     Experimental3DVolume *m_volume;

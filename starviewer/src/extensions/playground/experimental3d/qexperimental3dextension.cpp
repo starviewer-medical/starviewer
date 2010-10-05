@@ -989,6 +989,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
     connect( m_addRecentTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( addRecentTransferFunction() ) );
     connect( m_recentTransferFunctionsListView, SIGNAL( doubleClicked(const QModelIndex&) ), SLOT( setRecentTransferFunction(const QModelIndex&) ) );
+    connect(m_innernessProportionalOpacityPushButton, SIGNAL(clicked()), SLOT(generateInnernessProportionalOpacityTransferFunction()));
     connect( m_transferFunctionOkPushButton, SIGNAL( clicked() ), SLOT( setTransferFunction() ) );
 
     // càmera
@@ -3733,6 +3734,50 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
     }
 
     m_transferFunctionEditor->setTransferFunction(clusteringTransferFunction.simplify());
+    setTransferFunction();
+}
+
+
+void QExperimental3DExtension::generateInnernessProportionalOpacityTransferFunction()
+{
+    vtkImageData *image = m_volume->getImage();
+    const unsigned short *data = reinterpret_cast<unsigned short*>(image->GetScalarPointer());
+    int nVoxels = image->GetNumberOfPoints();
+    int nIntensities = m_volume->getRangeMax() + 1;
+
+    const float MissingData = -1.0;
+
+    QVector<double> maximumDistanceToCenter(nIntensities, MissingData); // distància màxima al centre de cada intensitat
+    double globalMaximumDistanceToCenter = 0.0;                         // distància màxima al centre de totes les intensitats
+
+    double center[3];
+    image->GetCenter(center);
+    Vector3 c(center[0], center[1], center[2]);
+
+    for (int i = 0; i < nVoxels; i++)
+    {
+        int intensity = data[i];
+        double point[3];
+        image->GetPoint(i, point);
+        Vector3 p(point[0], point[1], point[2]);
+        double d = (p - c).length();
+        if (d > maximumDistanceToCenter.at(intensity)) maximumDistanceToCenter[intensity] = d;
+        if (d > globalMaximumDistanceToCenter) globalMaximumDistanceToCenter = d;
+    }
+
+    const TransferFunction &currentTransferFunction = m_transferFunctionEditor->transferFunction();
+
+    TransferFunction transferFunction(currentTransferFunction);
+    transferFunction.setName(tr("Innerness-proportional opacity"));
+
+    for (int i = 0; i < nIntensities; i++)
+    {
+        if (maximumDistanceToCenter.at(i) == MissingData) continue;
+        // l'opacitat és inversament proporcional a la distància mitjana al centre, i es multiplica per l'opacitat definida a la funció actual
+        transferFunction.addPointToOpacity(i, (1.0 - (maximumDistanceToCenter.at(i) / globalMaximumDistanceToCenter)) * currentTransferFunction.getOpacity(i));
+    }
+
+    m_transferFunctionEditor->setTransferFunction(transferFunction.simplify());
     setTransferFunction();
 }
 

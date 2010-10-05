@@ -1703,6 +1703,13 @@
         </layout>
        </item>
        <item>
+        <widget class="QPushButton" name="m_innernessProportionalOpacityPushButton">
+         <property name="text">
+          <string>Innerness-proportional opacity</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="udg::QGraphicTransferFunctionEditor" name="m_transferFunctionEditor" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
@@ -4136,7 +4143,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
