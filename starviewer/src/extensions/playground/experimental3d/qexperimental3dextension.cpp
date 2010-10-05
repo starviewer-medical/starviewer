@@ -3721,9 +3721,38 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
         QColor color(qrand() % 256, qrand() % 256, qrand() % 256);
 
         double opacity = 0.0;
-        if (m_transferFunctionFromIntensityClusteringOpacityDefaultMinimumRadioButton->isChecked()) opacity = x1 / m_volume->getRangeMax();
-        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked()) opacity = currentTransferFunction.getOpacity(x1);
-        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked()) opacity = currentTransferFunction.getOpacity(x);
+
+        if (m_transferFunctionFromIntensityClusteringOpacityDefaultMinimumRadioButton->isChecked())
+        {
+            opacity = x1 / m_volume->getRangeMax();
+        }
+        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked())
+        {
+            QList<double> points = currentTransferFunction.getPointsInInterval(x1, x2);
+            points.prepend(x1); points.append(x2);  // per si no hi són
+            opacity = 1.0;
+
+            for (int j = 0; j < points.size(); j++)
+            {
+                double a = currentTransferFunction.getOpacity(points.at(j));
+                if (a < opacity) opacity = a;
+            }
+        }
+        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())
+        {
+            QList<double> points = currentTransferFunction.getPointsInInterval(x1, x2);
+            points.prepend(x1); points.append(x2);  // per si no hi són
+            opacity = 0.0;
+
+            for (int j = 1; j < points.size(); j++)
+            {
+                double a1 = currentTransferFunction.getOpacity(points.at(j - 1));
+                double a2 = currentTransferFunction.getOpacity(points.at(j));
+                opacity += (points.at(j) - points.at(j - 1)) * (a1 + a2) / 2.0;
+            }
+
+            opacity /= x2 - x1;
+        }
 
         if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) clusteringTransferFunction.addPoint(x, color, opacity);
         else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
