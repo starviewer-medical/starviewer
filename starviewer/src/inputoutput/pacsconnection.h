@@ -18,7 +18,7 @@ class PACSConnection
 
 public:
 
-    enum ModalityConnection {Query, RetrieveImages, Echo, StoreImages};
+    enum PACSServiceToRequest {Query, RetrieveDICOMFiles, Echo, SendDICOMFiles};
 
     /** Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
@@ -29,7 +29,7 @@ public:
      * @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges
      * @return retorna l'estat de la connexió
      */
-    bool connect(ModalityConnection modalityConnection);
+    bool connectToPACS(PACSServiceToRequest pacsServiceToRequest);
 
     /** retorna els paràmetres del PACS
      * @return paràmetres del Pacs
@@ -75,7 +75,7 @@ private:
      * @param adreça del servidor
      * @param port del servidor
      */
-    QString constructPacsServerAddress(ModalityConnection modality, PacsDevice pacsDevice); //construct PACS address
+    QString constructPacsServerAddress(PACSServiceToRequest pacsServiceToRequest, PacsDevice pacsDevice); //construct PACS address
 
     /** Afageix un objecte SOP a la connexió amb el PACS
      * @param presentationContextId número de pid
@@ -88,7 +88,7 @@ private:
     ///Aquest mètode inicialitza l'objecte AssociationNetwork en funció de la modalitat amb els paràmetres del PACS, aquest mètode no obre la connexió
     ///simplement inicialitza l'objecte amb les dades necessàries per poder obrir connexió, qui obra la connexió és al invocar el mètode
     ///de dcmtk ASC_requestAssociation dins del mètode connect connect();
-    T_ASC_Network* initializeAssociationNetwork(ModalityConnection modality);
+    T_ASC_Network* initializeAssociationNetwork(PACSServiceToRequest modality);
 
     ///Omple l'array passada per paràmetres amb la transfer syntax a utilitzar per les connexions per fer FIND o Move
     void getTransferSyntaxForFindOrMoveConnection(const char *transferSyntaxes[3]);
