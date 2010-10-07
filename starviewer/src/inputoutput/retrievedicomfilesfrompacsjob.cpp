@@ -304,11 +304,12 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message = tr("There were problems to retrieve some images of study %1 from patient %2 from PACS %3. Those images may be missing in the local database.").arg(
                 studyID, patientName, pacsAETitle);
             message += "\n";
-            message += tr("Try again later. If the problem persists, contact your system administrator.");
+            break;
         default:
             message = tr("An unknown error has ocurred and %1 can't retrieve study %2 from patient %3").arg(ApplicationNameString, studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            break;
     }
 
     return message;
