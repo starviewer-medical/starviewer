@@ -4,8 +4,8 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef UDGRETRIEVEDICOMFILESFROMPACS_H
-#define UDGRETRIEVEDICOMFILESFROMPACS_H
+#ifndef RETRIEVEDICOMFILESFROMPACSJOB_H
+#define RETRIEVEDICOMFILESFROMPACSJOB_H
 
 #include <QObject>
 
