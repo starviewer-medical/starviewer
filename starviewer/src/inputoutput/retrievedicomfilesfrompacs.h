@@ -1,5 +1,5 @@
-#ifndef RETRIEVEIMAGES
-#define RETRIEVEIMAGES
+#ifndef RETRIEVEDICOMFILESFROMPACS_H
+#define RETRIEVEDICOMFILESFROMPACS_H
 
 #include <QString>
 #include <QObject>
