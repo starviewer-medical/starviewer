@@ -19,7 +19,7 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
 {
     PACSConnection pacsConnection(pacsDevice);
 
-    if (pacsConnection.connect(PACSConnection::Echo))
+    if (pacsConnection.connectToPACS(PACSConnection::Echo))
     {
         DIC_US id = pacsConnection.getConnection()->nextMsgID++; // generate next message ID
         DIC_US status; // DIMSE status of C-ECHO-RSP will be stored here

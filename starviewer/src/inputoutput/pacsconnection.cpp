@@ -159,7 +159,7 @@ OFCondition PACSConnection::addPresentationContext(int presentationContextId, co
     return condition;
 }
 
-bool PACSConnection::connect(ModalityConnection modality)
+bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
 {
     //Hi ha invocacions de mètodes de dcmtk que no se'ls hi comprova el condition que retornen, perquè se'ls hi ha mirat el codi i sempre retornen EC_NORMAL
     Settings settings;
@@ -179,12 +179,12 @@ bool PACSConnection::connect(ModalityConnection modality)
     ASC_setTransportLayerType(m_associationParameters, OFFalse);
 
     ASC_setPresentationAddresses(m_associationParameters, qPrintable(QHostInfo::localHostName()), 
-        qPrintable(constructPacsServerAddress(modality, m_pacs)));
+        qPrintable(constructPacsServerAddress(pacsServiceToRequest, m_pacs)));
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
     dcmConnectionTimeout.set(settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt());
 
-    switch (modality)
+    switch (pacsServiceToRequest)
     {
         case Echo: 
             condition = configureEcho();
@@ -192,10 +192,10 @@ bool PACSConnection::connect(ModalityConnection modality)
         case Query:
             condition = configureFind();
             break;
-        case RetrieveImages:
+        case RetrieveDICOMFiles:
             condition = configureMove();
             break;
-        case StoreImages:
+        case SendDICOMFiles:
             condition = configureStore();
             break;
     }
@@ -203,17 +203,17 @@ bool PACSConnection::connect(ModalityConnection modality)
     if (!condition.good())
     {
         ERROR_LOG("S'ha produit un error al configurar la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
-            constructPacsServerAddress(modality, m_pacs) + ". Descripcio error: " + QString(condition.text())); 
+            constructPacsServerAddress(pacsServiceToRequest, m_pacs) + ". Descripcio error: " + QString(condition.text())); 
         return false;
     }
 
     //Inicialitzem l'objecte network però la connexió no s'obre fins a l'invocacació del mètode ASC_requestAssociation
-    m_associationNetwork = initializeAssociationNetwork(modality);
+    m_associationNetwork = initializeAssociationNetwork(pacsServiceToRequest);
 
     if (m_associationNetwork == NULL)
     {
         ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
-            constructPacsServerAddress(modality, m_pacs));
+            constructPacsServerAddress(pacsServiceToRequest, m_pacs));
         return false;
     }
 
@@ -225,18 +225,18 @@ bool PACSConnection::connect(ModalityConnection modality)
         if (ASC_countAcceptedPresentationContexts(m_associationParameters)  ==  0)
         {
             ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
-                constructPacsServerAddress(modality, m_pacs));
+                constructPacsServerAddress(pacsServiceToRequest, m_pacs));
             return false;
         }
     }
     else
     {
         ERROR_LOG( "S'ha produit un error al intentar connectar amb el PACS. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
-            constructPacsServerAddress(modality, m_pacs)+ ". Descripcio error: " + QString(condition.text()));
+            constructPacsServerAddress(pacsServiceToRequest, m_pacs)+ ". Descripcio error: " + QString(condition.text()));
 
         /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM, com no que podrem descarregar 
          les imatges perquè no hem pogut connectar amb el PACS per sol·licitar-ne la descarrega, tanquem el port local que espera per connexions entrants.*/
-        if (modality == RetrieveImages)
+        if (pacsServiceToRequest == RetrieveDICOMFiles)
         {
             disconnect();
         }
@@ -255,18 +255,18 @@ void PACSConnection::disconnect()
     ASC_dropNetwork(&m_associationNetwork); //destrueix l'objecte i tanca el socket obert, fins que no es fa el drop de l'objecte no es tanca el socket
 }
 
-QString PACSConnection::constructPacsServerAddress(ModalityConnection modality, PacsDevice pacsDevice)
+QString PACSConnection::constructPacsServerAddress(PACSServiceToRequest pacsServiceToRequest, PacsDevice pacsDevice)
 {
     //The format is "server:port"
     QString pacsServerAddress = pacsDevice.getAddress() + ":";
 
-    switch (modality)
+    switch (pacsServiceToRequest)
     {
         case PACSConnection::Query:
-        case PACSConnection::RetrieveImages:
+        case PACSConnection::RetrieveDICOMFiles:
             pacsServerAddress += QString().setNum(pacsDevice.getQueryRetrieveServicePort());
             break;
-        case PACSConnection::StoreImages:
+        case PACSConnection::SendDICOMFiles:
             pacsServerAddress += QString().setNum(pacsDevice.getStoreServicePort());
             break;
         case PACSConnection::Echo:
@@ -292,13 +292,13 @@ QString PACSConnection::constructPacsServerAddress(ModalityConnection modality, 
     return pacsServerAddress;
 }
 
-T_ASC_Network* PACSConnection::initializeAssociationNetwork(ModalityConnection modality)
+T_ASC_Network* PACSConnection::initializeAssociationNetwork(PACSServiceToRequest pacsServiceToRequest)
 {
     Settings settings;
     //Si no es tracta d'una descarrega indiquem port 0
-    int networkPort = modality == RetrieveImages ? settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt() : 0;
+    int networkPort = pacsServiceToRequest == RetrieveDICOMFiles ? settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt() : 0;
     int timeout = settings.getValue(InputOutputSettings::PACSConnectionTimeout).toInt();
-    T_ASC_NetworkRole networkRole = modality == RetrieveImages ? NET_ACCEPTORREQUESTOR : NET_REQUESTOR;
+    T_ASC_NetworkRole networkRole = pacsServiceToRequest == RetrieveDICOMFiles ? NET_ACCEPTORREQUESTOR : NET_REQUESTOR;
     T_ASC_Network *associationNetwork;
 
     OFCondition condition = ASC_initializeNetwork(networkRole, networkPort , timeout, &associationNetwork);
