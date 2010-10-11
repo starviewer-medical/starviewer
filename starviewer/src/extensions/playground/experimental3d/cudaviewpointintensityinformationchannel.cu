@@ -22,7 +22,7 @@
 
 
 static const uint PARTITIONS = 1;  // en quants trossos es parteix la imatge en cada dimensió (per reduir col·lisions)
-static const int VOLUME_MULTIPLIER = 100000;  // multiplicador del volum a l'hora de convertir-lo en enter
+static const int VOLUME_MULTIPLIER = 1000;  // multiplicador del volum a l'hora de convertir-lo en enter
 
 
 // volum
@@ -285,7 +285,7 @@ void cviicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunc
 
     // 1D texture parameters
     //gTransferFunctionTexture.normalized = false;                    // false (predeterminat) -> [0,N) | true -> [0,1)
-    gTransferFunctionTexture.filterMode = cudaFilterModeLinear;     // cudaFilterModePoint (predeterminat) o cudaFilterModeLinear
+    //gTransferFunctionTexture.filterMode = cudaFilterModePoint;      // cudaFilterModePoint (predeterminat) o cudaFilterModeLinear
     //gTransferFunctionTexture.addressMode[0] = cudaAddressModeClamp; // cudaAddressModeClamp (retallar) (predeterminat) o cudaAddressModeWrap (fer la volta)
 
     // bind array to 1D texture
