@@ -267,6 +267,7 @@ private slots:
     void generateOpacityTransferFunctionFromImi();
     void generateTransferFunctionFromImi();
     void generateTransferFunctionFromIntensityClusters();
+    void generateAndEvolveTransferFunctionFromIntensityClusters();
 
     void tourBestViews();
     void guidedTour();
