@@ -41,12 +41,13 @@ public:
      */
     void filterViewpoints( const QVector<bool> &filter );
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
-    void compute(bool &viewpointEntropy, bool &entropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, /*bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity,
+    void compute(bool &viewpointEntropy, bool &entropy, bool &jHVI, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, /*bool &viewpointVomi, bool &colorVomi, bool &evmiOpacity,
                  bool &evmiVomi, bool &bestViews, bool &guidedTour, bool &exploratoryTour,*/ bool display = false);
     bool hasViewedVolume() const;
     const QVector<float>& viewedVolume() const;
     const QVector<float>& viewpointEntropy() const;
     float entropy() const;
+    float jHVI() const; // H(V,I)
     const QVector<float>& vmii() const;
     float mii() const;
     const QVector<float>& viewpointUnstabilities() const;
@@ -65,14 +66,14 @@ private:
     QVector<float> intensityProbabilitiesInView( int i );
 
     static Matrix4 viewMatrix( const Vector3 &viewpoint );
-    void computeCuda(bool computeViewProbabilities, bool computeIntensityProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeVmii, bool computeMii, bool computeViewpointUnstabilities,
-                     bool computeImi, bool computeIntensityClustering, /*bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi, bool computeBestViews, bool computeGuidedTour,
-                     bool computeExploratoryTour,*/ bool display);
+    void computeCuda(bool computeViewProbabilities, bool computeIntensityProbabilities, bool computeViewpointEntropy, bool computeEntropy, bool computeJHVI, bool computeVmii, bool computeMii,
+                     bool computeViewpointUnstabilities, bool computeImi, bool computeIntensityClustering, /*bool computeViewpointVomi, bool computeColorVomi, bool computeEvmiOpacity, bool computeEvmiVomi,
+                     bool computeBestViews, bool computeGuidedTour, bool computeExploratoryTour,*/ bool display);
     QVector<float> intensityProbabilitiesInViewCuda( int i );
     void computeViewProbabilitiesCuda();
     void computeIntensityProbabilitiesCuda();
-    void computeViewMeasuresCuda( bool computeViewpointEntropy, bool computeEntropy, bool computeVmii, bool computeMii, bool computeViewpointUnstabilities/*, bool computeViewpointVomi, bool computeEvmiOpacity,
-                                  bool computeEvmiVomi*/ );
+    void computeViewMeasuresCuda(bool computeViewpointEntropy, bool computeEntropy, bool computeJHVI, bool computeVmii, bool computeMii, bool computeViewpointUnstabilities/*, bool computeViewpointVomi,
+                                 bool computeEvmiOpacity, bool computeEvmiVomi*/);
     void computeImiCuda(/* bool computeImi, bool computeColorVomi */);
     void computeIntensityClusteringCuda();
 
@@ -96,6 +97,7 @@ private:
 
     QVector<float> m_viewpointEntropy;
     float m_entropy;
+    float m_jHVI;   // H(V,I)
     QVector<float> m_vmii;
     float m_mii;
     QVector<float> m_viewpointUnstabilities;

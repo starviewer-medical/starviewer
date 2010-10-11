@@ -3850,6 +3850,40 @@
             </property>
            </widget>
           </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_84">
+            <item>
+             <widget class="QPushButton" name="m_geneticTransferFunctionFromIntensityClusteringPushButton">
+              <property name="text">
+               <string>Generate and evolve</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="m_geneticTransferFunctionFromIntensityClusteringIterationsSpinBox">
+              <property name="suffix">
+               <string> iteration/s</string>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>1000000</number>
+              </property>
+              <property name="value">
+               <number>1000</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="m_geneticTransferFunctionFromIntensityClusteringProgressBar">
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
          </layout>
         </widget>
        </item>
