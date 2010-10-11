@@ -45,8 +45,9 @@ public:
     static const QString EnhancedViewpointMutualInformationVoxelMutualInformationDir;
 
     static const QString ViewedVolumeIntensityDir;
-    static const QString ViewpointEntropyIntensityDir;
-    static const QString EntropyIntensityDir;
+    static const QString HIDir;
+    static const QString HIvDir;
+    static const QString HIVDir;
     static const QString ViewpointMutualInformationIntensityDir;
     static const QString MutualInformationIntensityDir;
     static const QString ViewpointUnstabilitiesIntensityDir;

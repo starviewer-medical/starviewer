@@ -128,15 +128,18 @@ public slots:
     // Per VMIi etc.
     /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveViewedVolumeI(QString fileName = QString());
-    /// Carrega la viewpoint entropy des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadViewpointEntropyI(QString fileName = QString());
-    /// Desa la viewpoint entropy a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveViewpointEntropyI(QString fileName = QString());
-    /// Carrega l'entropia des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void loadEntropyI(QString fileName = QString());
-    /// Desa l'entropia a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveEntropyI(QString fileName = QString());
-     /// Carrega la VMIi des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    /// Carrega l'entropia de les intensitats H(I) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadHI(QString fileName = QString());
+    /// Desa l'entropia de les intensitats H(I) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveHI(QString fileName = QString());
+    /// Carrega H(I|v) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadHIv(QString fileName = QString());
+    /// Desa H(I|v) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveHIv(QString fileName = QString());
+    /// Carrega H(I|V) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void loadHIV(QString fileName = QString());
+    /// Desa H(I|V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    void saveHIV(QString fileName = QString());
     void loadVmii(QString fileName = QString());
     /// Desa la VMIi a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveVmii(QString fileName = QString());
@@ -352,8 +355,9 @@ private:
     float m_maximumSaliency;
 
     QVector<float> m_viewedVolumeI;
-    QVector<float> m_viewpointEntropyI;
-    float m_entropyI;
+    float m_HI;             // H(I)
+    QVector<float> m_HIv;   // H(I|v)
+    float m_HIV;            // H(I|V)
     QVector<float> m_vmii;
     float m_mii;
     QVector<float> m_viewpointUnstabilitiesI;
