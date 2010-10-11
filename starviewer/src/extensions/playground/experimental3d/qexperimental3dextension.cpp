@@ -605,33 +605,48 @@ void QExperimental3DExtension::saveViewedVolumeI(QString fileName)
 }
 
 
-void QExperimental3DExtension::loadViewpointEntropyI(QString fileName)
+void QExperimental3DExtension::loadHI(QString fileName)
 {
-    if (loadData(fileName, Experimental3DSettings::ViewpointEntropyIntensityDir, tr("viewpoint entropy"), FileExtensionsDatAll, m_viewpointEntropyI))
+    if (loadData(fileName, Experimental3DSettings::HIDir, tr("intensities entropy H(I)"), FileExtensionsDatAll, m_HI))
     {
-        m_saveViewpointEntropyIPushButton->setEnabled(true);
+        m_saveHIPushButton->setEnabled(true);
     }
 }
 
 
-void QExperimental3DExtension::saveViewpointEntropyI(QString fileName)
+void QExperimental3DExtension::saveHI(QString fileName)
 {
-    saveData(fileName, Experimental3DSettings::ViewpointEntropyIntensityDir, tr("viewpoint entropy"), FileExtensionsTxtDatAll, "txt", m_viewpointEntropyI, "H(I|v%1) = %2", 1);
+    saveData(fileName, Experimental3DSettings::HIDir, tr("intensities entropy H(I)"), FileExtensionsTxtDatAll, "txt", m_HI, "H(I) = %1");
 }
 
 
-void QExperimental3DExtension::loadEntropyI(QString fileName)
+void QExperimental3DExtension::loadHIv(QString fileName)
 {
-    if (loadData(fileName, Experimental3DSettings::EntropyIntensityDir, tr("entropy"), FileExtensionsDatAll, m_entropyI))
+    if (loadData(fileName, Experimental3DSettings::HIvDir, tr("H(I|v)"), FileExtensionsDatAll, m_HIv))
     {
-        m_saveEntropyIPushButton->setEnabled(true);
+        m_saveHIvPushButton->setEnabled(true);
     }
 }
 
 
-void QExperimental3DExtension::saveEntropyI(QString fileName)
+void QExperimental3DExtension::saveHIv(QString fileName)
 {
-    saveData(fileName, Experimental3DSettings::EntropyIntensityDir, tr("entropy"), FileExtensionsTxtDatAll, "txt", m_entropyI, "H(I) = %1");
+    saveData(fileName, Experimental3DSettings::HIvDir, tr("H(I|v)"), FileExtensionsTxtDatAll, "txt", m_HIv, "H(I|v%1) = %2", 1);
+}
+
+
+void QExperimental3DExtension::loadHIV(QString fileName)
+{
+    if (loadData(fileName, Experimental3DSettings::HIVDir, tr("H(I|V)"), FileExtensionsDatAll, m_HIV))
+    {
+        m_saveHZVPushButton->setEnabled(true);
+    }
+}
+
+
+void QExperimental3DExtension::saveHIV(QString fileName)
+{
+    saveData(fileName, Experimental3DSettings::HIVDir, tr("H(I|V)"), FileExtensionsTxtDatAll, "txt", m_HIV, "H(I|V) = %1");
 }
 
 
@@ -1084,10 +1099,12 @@ void QExperimental3DExtension::createConnections()
     connect( m_vmiiViewpointDistributionWidget, SIGNAL( numberOfViewpointsChanged(int) ), SLOT( setVmiiOneViewpointMaximum(int) ) );
     connect( m_vmiiOneViewpointCheckBox, SIGNAL( toggled(bool) ), m_vmiiOneViewpointSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_saveViewedVolumeIPushButton, SIGNAL( clicked() ), SLOT( saveViewedVolumeI() ) );
-    connect( m_loadViewpointEntropyIPushButton, SIGNAL( clicked() ), SLOT( loadViewpointEntropyI() ) );
-    connect( m_saveViewpointEntropyIPushButton, SIGNAL( clicked() ), SLOT( saveViewpointEntropyI() ) );
-    connect( m_loadEntropyIPushButton, SIGNAL( clicked() ), SLOT( loadEntropyI() ) );
-    connect( m_saveEntropyIPushButton, SIGNAL( clicked() ), SLOT( saveEntropyI() ) );
+    connect(m_loadHIPushButton, SIGNAL(clicked()), SLOT(loadHI()));
+    connect(m_saveHIPushButton, SIGNAL(clicked()), SLOT(saveHI()));
+    connect(m_loadHIvPushButton, SIGNAL(clicked()), SLOT(loadHIv()));
+    connect(m_saveHIvPushButton, SIGNAL(clicked()), SLOT(saveHIv()));
+    connect(m_loadHIVPushButton, SIGNAL(clicked()), SLOT(loadHIV()));
+    connect(m_saveHIVPushButton, SIGNAL(clicked()), SLOT(saveHIV()));
     connect( m_loadVmiiPushButton, SIGNAL( clicked() ), SLOT( loadVmii() ) );
     connect( m_saveVmiiPushButton, SIGNAL( clicked() ), SLOT( saveVmii() ) );
     connect( m_loadMiiPushButton, SIGNAL( clicked() ), SLOT( loadMii() ) );
@@ -2197,137 +2214,119 @@ void QExperimental3DExtension::computeSelectedVmii()
     QMessageBox::information( this, tr("Operation only available with CUDA"), "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them." );
 #else // CUDA_AVAILABLE
     // Què ha demanat l'usuari
-    bool computeViewpointEntropy = m_computeViewpointEntropyICheckBox->isChecked();
-    bool computeEntropy = m_computeEntropyICheckBox->isChecked();
-    bool computeJHVI = false;   // H(V,I)
+    bool computeHI = m_computeHICheckBox->isChecked();      // H(I)
+    bool computeHIv = m_computeHIvCheckBox->isChecked();    // H(I|v)
+    bool computeHIV = m_computeHIVCheckBox->isChecked();    // H(I|V)
+    bool computeJointEntropy = false;                       // H(V,I)
     bool computeVmii = m_computeVmiiCheckBox->isChecked();
     bool computeMii = m_computeMiiCheckBox->isChecked();
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesICheckBox->isChecked();
     bool computeImi = m_computeImiCheckBox->isChecked();
     bool computeIntensityClustering = m_computeIntensityClusteringCheckBox->isChecked();
-//    bool computeViewpointVomi = m_computeViewpointVomiCheckBox->isChecked();
-//    bool computeColorVomi = m_computeColorVomiCheckBox->isChecked();
-//    bool computeEvmiOpacity = m_computeEvmiOpacityCheckBox->isChecked();
-//    bool computeEvmiVomi = m_computeEvmiVomiCheckBox->isChecked();
-//    bool computeBestViews = m_computeBestViewsCheckBox->isChecked();
-//    bool computeGuidedTour = m_computeGuidedTourCheckBox->isChecked();
-//    bool computeExploratoryTour = m_computeExploratoryTourCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if (!computeViewpointEntropy && !computeEntropy && !computeJHVI && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi && !computeIntensityClustering /*&& !computeViewpointVomi
-        && !computeColorVomi && !computeEvmiOpacity && !computeEvmiVomi && !computeBestViews && !computeGuidedTour && !computeExploratoryTour*/) return;
+    if (!computeHI && !computeHIv && !computeHIV && !computeJointEntropy && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi && !computeIntensityClustering) return;
 
-    setCursor( QCursor( Qt::WaitCursor ) );
+    setCursor(QCursor(Qt::WaitCursor));
 
     // Obtenir direccions
     Vector3 position, focus, up;
     m_viewer->getCamera( position, focus, up );
-    float distance = ( position - focus ).length();
-    ViewpointGenerator viewpointGenerator = m_vmiiViewpointDistributionWidget->viewpointGenerator( distance );
+    float distance = (position - focus).length();
+    ViewpointGenerator viewpointGenerator = m_vmiiViewpointDistributionWidget->viewpointGenerator(distance);
 
     // Viewpoint Intensity Information Channel
-    ViewpointIntensityInformationChannel viewpointIntensityInformationChannel( viewpointGenerator, m_volume, m_viewer, m_transferFunctionEditor->transferFunction() );
-
-    // Paleta de colors per la color VoMI
-//    if ( computeColorVomi ) viewpointInformationChannel.setColorVomiPalette( m_colorVomiPalette );
-
-    // Funció de transferència per l'EVMI amb opacitat
-//    if ( computeEvmiOpacity )
-//    {
-//        if ( m_computeEvmiOpacityUseOtherPushButton->isChecked() ) viewpointInformationChannel.setEvmiOpacityTransferFunction( m_evmiOpacityTransferFunction );
-//        else viewpointInformationChannel.setEvmiOpacityTransferFunction( m_transferFunctionEditor->transferFunction() );
-//    }
-
-    // Paràmetres extres per calcular les millors vistes (els passem sempre perquè tinguin algun valor, per si s'ha de calcular el guided tour per exemple)
-//    viewpointInformationChannel.setBestViewsParameters( m_computeBestViewsNRadioButton->isChecked(), m_computeBestViewsNSpinBox->value(), m_computeBestViewsThresholdDoubleSpinBox->value() );
-
-    // Llindar per calcular l'exploratory tour
-//    viewpointInformationChannel.setExploratoryTourThreshold( m_computeExploratoryTourThresholdDoubleSpinBox->value() );
+    ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, m_transferFunctionEditor->transferFunction());
 
     // Nombre de clusters pel clustering d'intensitats
     viewpointIntensityInformationChannel.setIntensityClusteringNumberOfClusters(m_computeIntensityClusteringNumberOfClustersSpinBox->value());
 
     // Filtratge de punts de vista
-    if ( m_vmiiOneViewpointCheckBox->isChecked() )
+    if (m_vmiiOneViewpointCheckBox->isChecked())
     {
         int nViewpoints = m_vmiiViewpointDistributionWidget->numberOfViewpoints();
         int selectedViewpoint = m_vmiiOneViewpointSpinBox->value() - 1;
 
-        QVector<bool> filter( nViewpoints );
+        QVector<bool> filter(nViewpoints);
 
         filter[selectedViewpoint] = true;
 
-        QVector<int> neighbours = viewpointGenerator.neighbours( selectedViewpoint );
-        for ( int i = 0; i < neighbours.size(); i++ ) filter[neighbours.at( i )] = true;
+        QVector<int> neighbours = viewpointGenerator.neighbours(selectedViewpoint);
+        for (int i = 0; i < neighbours.size(); i++) filter[neighbours.at(i)] = true;
 
-        viewpointIntensityInformationChannel.filterViewpoints( filter );
+        viewpointIntensityInformationChannel.filterViewpoints(filter);
     }
 
-    connect( &viewpointIntensityInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiiTotalProgressBar, SLOT( setMaximum(int) ) );
-    connect( &viewpointIntensityInformationChannel, SIGNAL( totalProgressMaximum(int) ), m_vmiiTotalProgressBar, SLOT( repaint() ) ); // no sé per què però cal això perquè s'actualitzi quan toca
-    connect( &viewpointIntensityInformationChannel, SIGNAL( totalProgress(int) ), m_vmiiTotalProgressBar, SLOT( setValue(int) ) );
-    connect( &viewpointIntensityInformationChannel, SIGNAL( partialProgress(int) ), m_vmiiProgressBar, SLOT( setValue(int) ) );
+    connect(&viewpointIntensityInformationChannel, SIGNAL(totalProgressMaximum(int)), m_vmiiTotalProgressBar, SLOT(setMaximum(int)));
+    connect(&viewpointIntensityInformationChannel, SIGNAL(totalProgressMaximum(int)), m_vmiiTotalProgressBar, SLOT(repaint())); // no sé per què però cal això perquè s'actualitzi quan toca
+    connect(&viewpointIntensityInformationChannel, SIGNAL(totalProgress(int)), m_vmiiTotalProgressBar, SLOT(setValue(int)));
+    connect(&viewpointIntensityInformationChannel, SIGNAL(partialProgress(int)), m_vmiiProgressBar, SLOT(setValue(int)));
 
     QTime time;
     time.start();
-    viewpointIntensityInformationChannel.compute(computeViewpointEntropy, computeEntropy, computeJHVI, computeVmii, computeMii, computeViewpointUnstabilities, computeImi, computeIntensityClustering,
-                                                 /*computeViewpointVomi, computeColorVomi, computeEvmiOpacity, computeEvmiVomi, computeBestViews, computeGuidedTour, computeExploratoryTour,*/
+    viewpointIntensityInformationChannel.compute(computeHI, computeHIv, computeHIV, computeJointEntropy, computeVmii, computeMii, computeViewpointUnstabilities, computeImi, computeIntensityClustering,
                                                  m_vmiiDisplayCheckBox->isChecked());
     int elapsed = time.elapsed();
-    DEBUG_LOG( QString( "Temps total de VMIi i altres: %1 s" ).arg( elapsed / 1000.0f ) );
-    INFO_LOG( QString( "Temps total de VMIi i altres: %1 s" ).arg( elapsed / 1000.0f ) );
+    DEBUG_LOG(QString("Temps total de VMIi i altres: %1 s").arg(elapsed / 1000.0f));
+    INFO_LOG(QString("Temps total de VMIi i altres: %1 s").arg(elapsed / 1000.0f));
 
-    if ( viewpointIntensityInformationChannel.hasViewedVolume() )
+    if (viewpointIntensityInformationChannel.hasViewedVolume())
     {
         m_viewedVolumeI = viewpointIntensityInformationChannel.viewedVolume();
-        m_saveViewedVolumeIPushButton->setEnabled( true );
+        m_saveViewedVolumeIPushButton->setEnabled(true);
     }
 
-    if ( computeViewpointEntropy )
+    if (computeHI)
     {
-        m_viewpointEntropyI = viewpointIntensityInformationChannel.viewpointEntropy();
-        m_saveViewpointEntropyIPushButton->setEnabled( true );
+        m_HI = viewpointIntensityInformationChannel.HI();
+        m_saveHIPushButton->setEnabled(true);
     }
 
-    if ( computeEntropy )
+    if (computeHIv)
     {
-        m_entropyI = viewpointIntensityInformationChannel.entropy();
-        m_saveEntropyIPushButton->setEnabled( true );
+        m_HIv = viewpointIntensityInformationChannel.HIv();
+        m_saveHIvPushButton->setEnabled(true);
     }
 
-    if ( computeVmii )
+    if (computeHIV)
+    {
+        m_HIV = viewpointIntensityInformationChannel.HIV();
+        m_saveHIVPushButton->setEnabled(true);
+    }
+
+    if (computeVmii)
     {
         m_vmii = viewpointIntensityInformationChannel.vmii();
-        m_saveVmiiPushButton->setEnabled( true );
+        m_saveVmiiPushButton->setEnabled(true);
     }
 
-    if ( computeMii )
+    if (computeMii)
     {
         m_mii = viewpointIntensityInformationChannel.mii();
-        m_saveMiiPushButton->setEnabled( true );
+        m_saveMiiPushButton->setEnabled(true);
     }
 
-    if ( computeViewpointUnstabilities )
+    if (computeViewpointUnstabilities)
     {
         m_viewpointUnstabilitiesI = viewpointIntensityInformationChannel.viewpointUnstabilities();
-        m_saveViewpointUnstabilitiesIPushButton->setEnabled( true );
+        m_saveViewpointUnstabilitiesIPushButton->setEnabled(true);
     }
 
-    if ( computeImi )
+    if (computeImi)
     {
         m_imi = viewpointIntensityInformationChannel.imi();
         m_maximumImi = viewpointIntensityInformationChannel.maximumImi();
-        m_baseImiRadioButton->setEnabled( true );
-//        m_baseImiCoolWarmRadioButton->setEnabled( true );
-//        m_imiCheckBox->setEnabled( true );
-//        m_imiCoolWarmCheckBox->setEnabled( true );
-//        m_opacityLabel->setEnabled( true );
-//        m_opacityImiCheckBox->setEnabled( true );
-        m_saveImiPushButton->setEnabled( true );
-//        m_imiGradientPushButton->setEnabled( true );
-        m_colorTransferFunctionFromImiPushButton->setEnabled( true );
-        m_opacityTransferFunctionFromImiPushButton->setEnabled( true );
-        m_transferFunctionFromImiPushButton->setEnabled( true );
+        m_baseImiRadioButton->setEnabled(true);
+//        m_baseImiCoolWarmRadioButton->setEnabled(true);
+//        m_imiCheckBox->setEnabled(true);
+//        m_imiCoolWarmCheckBox->setEnabled(true);
+//        m_opacityLabel->setEnabled(true);
+//        m_opacityImiCheckBox->setEnabled(true);
+        m_saveImiPushButton->setEnabled(true);
+//        m_imiGradientPushButton->setEnabled(true);
+        m_colorTransferFunctionFromImiPushButton->setEnabled(true);
+        m_opacityTransferFunctionFromImiPushButton->setEnabled(true);
+        m_transferFunctionFromImiPushButton->setEnabled(true);
     }
 
     if (computeIntensityClustering)
@@ -2335,59 +2334,7 @@ void QExperimental3DExtension::computeSelectedVmii()
         m_intensityClusters = viewpointIntensityInformationChannel.intensityClusters();
     }
 
-//    if ( computeViewpointVomi )
-//    {
-//        m_viewpointVomi = viewpointInformationChannel.viewpointVomi();
-//        m_saveViewpointVomiPushButton->setEnabled( true );
-//    }
-//
-//    if ( computeColorVomi )
-//    {
-//        m_colorVomi = viewpointInformationChannel.colorVomi();
-//        m_maximumColorVomi = viewpointInformationChannel.maximumColorVomi();
-//        m_baseColorVomiRadioButton->setEnabled( true );
-//        m_colorVomiCheckBox->setEnabled( true );
-//        m_saveColorVomiPushButton->setEnabled( true );
-//    }
-//
-//    if ( computeEvmiOpacity )
-//    {
-//        m_evmiOpacity = viewpointInformationChannel.evmiOpacity();
-//        m_saveEvmiOpacityPushButton->setEnabled( true );
-//    }
-//
-//    if ( computeEvmiVomi )
-//    {
-//        m_evmiVomi = viewpointInformationChannel.evmiVomi();
-//        m_saveEvmiVomiPushButton->setEnabled( true );
-//    }
-//
-//    if ( computeBestViews )
-//    {
-//        m_bestViews = viewpointInformationChannel.bestViews();
-//        m_saveBestViewsPushButton->setEnabled( true );
-//        m_tourBestViewsPushButton->setEnabled( true );
-//    }
-//
-//    if ( computeGuidedTour )
-//    {
-//        m_guidedTour = viewpointInformationChannel.guidedTour();
-//        m_saveGuidedTourPushButton->setEnabled( true );
-//        m_guidedTourPushButton->setEnabled( true );
-//    }
-//
-//    if ( computeExploratoryTour )
-//    {
-//        m_exploratoryTour = viewpointInformationChannel.exploratoryTour();
-//        m_saveExploratoryTourPushButton->setEnabled( true );
-//        m_exploratoryTourPushButton->setEnabled( true );
-//    }
-
-    // Restaurem els paràmetres normals (en realitat només cal si es fa amb CPU)
-//    render();
-//    m_viewer->setCamera( position, focus, up );
-
-    setCursor( QCursor( Qt::ArrowCursor ) );
+    setCursor(QCursor(Qt::ArrowCursor));
 #endif // CUDA_AVAILABLE
 }
 
@@ -3785,10 +3732,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
     const double DeltaRange = DeltaLimit * 2.0;
     int iterations = m_geneticTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
-    double bestEntropy;
-    //double bestJointEntropy;
-    //double bestMii;
-    //double bestMiiOverEntropy;
+    double bestHI;
 
     {
         // Obtenir direccions
@@ -3800,15 +3744,9 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
-        bool viewpointEntropy = false, entropy = true, jHVI = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        //bool viewpointEntropy = false, entropy = false, jHVI = true, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        //bool viewpointEntropy = false, entropy = false, jHVI = false, vmii = false, mii = true, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        //bool viewpointEntropy = false, entropy = true, jHVI = false, vmii = false, mii = true, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        viewpointIntensityInformationChannel.compute(viewpointEntropy, entropy, jHVI, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
-        bestEntropy = viewpointIntensityInformationChannel.entropy();
-        //bestJointEntropy = viewpointIntensityInformationChannel.jHVI();
-        //bestMii = viewpointIntensityInformationChannel.mii();
-        //bestMiiOverEntropy = viewpointIntensityInformationChannel.mii() / viewpointIntensityInformationChannel.entropy();
+        bool HI = true, HIv = false, HIV = false, jointEntropy = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
+        viewpointIntensityInformationChannel.compute(HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+        bestHI = viewpointIntensityInformationChannel.HI();
     }
 
     qsrand(time(0));
@@ -3850,30 +3788,15 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, evolvedTransferFunction);
-        bool viewpointEntropy = false, entropy = true, jHVI = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        //bool viewpointEntropy = false, entropy = false, jHVI = true, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        //bool viewpointEntropy = false, entropy = false, jHVI = false, vmii = false, mii = true, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        //bool viewpointEntropy = false, entropy = true, jHVI = false, vmii = false, mii = true, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        viewpointIntensityInformationChannel.compute(viewpointEntropy, entropy, jHVI, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
-        double evolvedEntropy = viewpointIntensityInformationChannel.entropy();
-        //double evolvedJointEntropy = viewpointIntensityInformationChannel.jHVI();
-        //double evolvedMii = viewpointIntensityInformationChannel.mii();
-        //double evolvedMiiOverEntropy = viewpointIntensityInformationChannel.mii() / viewpointIntensityInformationChannel.entropy();
+        bool HI = true, HIv = false, HIV = false, jointEntropy = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
+        viewpointIntensityInformationChannel.compute(HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+        double evolvedHI = viewpointIntensityInformationChannel.HI();
 
-        DEBUG_LOG(QString(".......................................... millor H(I) = %1, H(I) evolucionada = %2").arg(bestEntropy).arg(evolvedEntropy));
-        //DEBUG_LOG(QString(".......................................... millor H(V,I) = %1, H(V,I) evolucionada = %2").arg(bestJointEntropy).arg(evolvedJointEntropy));
-        //DEBUG_LOG(QString(".......................................... millor I(V;I) = %1, I(V;I) evolucionada = %2").arg(bestMii).arg(evolvedMii));
-        //DEBUG_LOG(QString(".......................................... millor I(V;I)/H(I) = %1, I(V;I)/H(I) evolucionada = %2").arg(bestMiiOverEntropy).arg(evolvedMiiOverEntropy));
+        DEBUG_LOG(QString(".......................................... millor H(I) = %1, H(I) evolucionada = %2").arg(bestHI).arg(evolvedHI));
 
-        if (evolvedEntropy > bestEntropy)
-        //if (evolvedJointEntropy > bestJointEntropy)
-        //if (evolvedMii < bestMii)
-        //if (evolvedMiiOverEntropy > bestMiiOverEntropy)
+        if (evolvedHI > bestHI)
         {
-            bestEntropy = evolvedEntropy;
-            //bestJointEntropy = evolvedJointEntropy;
-            //bestMii = evolvedMii;
-            //bestMiiOverEntropy = evolvedMiiOverEntropy;
+            bestHI = evolvedHI;
             bestTransferFunction = evolvedTransferFunction;
             m_transferFunctionEditor->setTransferFunction(bestTransferFunction.simplify());
             setTransferFunction();

@@ -36,8 +36,9 @@ const QString Experimental3DSettings::EnhancedViewpointMutualInformationOpacityD
 const QString Experimental3DSettings::EnhancedViewpointMutualInformationVoxelMutualInformationDir( KeyPrefix + "evmiVomiDir" );
 
 const QString Experimental3DSettings::ViewedVolumeIntensityDir( KeyPrefix + "viewedVolumeIDir" );
-const QString Experimental3DSettings::ViewpointEntropyIntensityDir( KeyPrefix + "viewpointEntropyIDir" );
-const QString Experimental3DSettings::EntropyIntensityDir( KeyPrefix + "entropyIDir" );
+const QString Experimental3DSettings::HIDir(KeyPrefix + "HIDir");
+const QString Experimental3DSettings::HIvDir(KeyPrefix + "HIvDir");
+const QString Experimental3DSettings::HIVDir(KeyPrefix + "HIVDir");
 const QString Experimental3DSettings::ViewpointMutualInformationIntensityDir( KeyPrefix + "vmiiDir" );
 const QString Experimental3DSettings::MutualInformationIntensityDir( KeyPrefix + "miiDir" );
 const QString Experimental3DSettings::ViewpointUnstabilitiesIntensityDir( KeyPrefix + "viewpointUnstabilitiesIDir" );
