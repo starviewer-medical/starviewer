@@ -315,7 +315,7 @@ void cvicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunct
 
     // 1D texture parameters
     //gTransferFunctionTexture.normalized = false;                    // false (predeterminat) -> [0,N) | true -> [0,1)
-    gTransferFunctionTexture.filterMode = cudaFilterModeLinear;     // cudaFilterModePoint (predeterminat) o cudaFilterModeLinear
+    //gTransferFunctionTexture.filterMode = cudaFilterModePoint;      // cudaFilterModePoint (predeterminat) o cudaFilterModeLinear
     //gTransferFunctionTexture.addressMode[0] = cudaAddressModeClamp; // cudaAddressModeClamp (retallar) (predeterminat) o cudaAddressModeWrap (fer la volta)
 
     // bind array to 1D texture
