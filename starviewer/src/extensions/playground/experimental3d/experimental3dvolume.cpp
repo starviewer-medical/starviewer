@@ -525,6 +525,7 @@ void Experimental3DVolume::createProperty()
 void Experimental3DVolume::createVolume()
 {
     m_volume = vtkVolume::New();
+    m_volume->SetMapper(m_gpuRayCastMapper);    // li hem d'assignar un mapper per poder saber el centre
     m_volume->SetProperty(m_property);
 
     // Centrem el volum a (0,0,0)
