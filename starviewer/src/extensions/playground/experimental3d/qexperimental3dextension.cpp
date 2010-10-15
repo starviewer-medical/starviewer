@@ -82,7 +82,9 @@ void QExperimental3DExtension::setInput( Volume *input )
     m_viewer->setVolume( m_volume );
 
     unsigned short max = m_volume->getRangeMax();
-    m_transferFunctionEditor->setRange( 0, max );
+    m_transferFunctionEditor->setRange(0, max);
+    m_transferFunctionEditor->syncToMax();
+
     TransferFunction defaultTransferFunction;
     defaultTransferFunction.addPoint( 0, QColor( 0, 0, 0, 0 ) );
     defaultTransferFunction.addPoint( max, QColor( 255, 255, 255, 255 ) );
@@ -93,13 +95,12 @@ void QExperimental3DExtension::setInput( Volume *input )
 }
 
 
-void QExperimental3DExtension::setNewVolume( Volume *volume )
+void QExperimental3DExtension::setNewVolume(Volume *volume)
 {
     m_viewer->removeCurrentVolume();
     delete m_volume;
-    m_volume = new Experimental3DVolume( volume );
-    m_viewer->setVolume( m_volume );
-    render();
+
+    setInput(volume);
 }
 
 
@@ -1119,6 +1120,9 @@ void QExperimental3DExtension::createConnections()
     connect( m_transferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateTransferFunctionFromImi() ) );
     connect(m_transferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(generateTransferFunctionFromIntensityClusters()));
     connect(m_geneticTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(generateAndEvolveTransferFunctionFromIntensityClusters()));
+    connect(m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
+    connect(m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
+    connect(m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -2333,6 +2337,7 @@ void QExperimental3DExtension::computeSelectedVmii()
     if (computeIntensityClustering)
     {
         m_intensityClusters = viewpointIntensityInformationChannel.intensityClusters();
+        fillWeigthsEditor();
     }
 
     setCursor(QCursor(Qt::ArrowCursor));
@@ -3729,17 +3734,29 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     //generateTransferFunctionFromIntensityClusters();
 
-    const double DeltaLimit1 = 0.05;
-    const double DeltaLimit2 = 0.1;
+    const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
+    QVector<float> weights(m_intensityClusters.size());
+    float totalWeight = 0.0f;
 
-    int iterations = m_geneticTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
-    QVector<float> weights(m_intensityClusters.size(), 1.0f / (m_intensityClusters.size() - 1));
-    weights[0] = 0.0f;
-    DEBUG_LOG("pesos:");
     for (int i = 0; i < weights.size(); i++)
     {
+        float weight = weightsTransferFunction.getOpacity(i);
+        weights[i] = weight;
+        totalWeight += weight;
+    }
+
+    DEBUG_LOG("pesos:");
+
+    for (int i = 0; i < weights.size(); i++)
+    {
+        weights[i] /= totalWeight;
         DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
     }
+
+    const double DeltaLimit1 = m_geneticTransferFunctionFromIntensityClusteringDelta1DoubleSpinBox->value();
+    const double DeltaLimit2 = m_geneticTransferFunctionFromIntensityClusteringDelta2DoubleSpinBox->value();
+
+    int iterations = m_geneticTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
     QVector<float> bestPI;
     double minimumDistance;
@@ -3887,6 +3904,45 @@ void QExperimental3DExtension::generateInnernessProportionalOpacityTransferFunct
 
     m_transferFunctionEditor->setTransferFunction(transferFunction.simplify());
     setTransferFunction();
+}
+
+
+void QExperimental3DExtension::fillWeigthsEditor()
+{
+    if (m_intensityClusters.isEmpty()) return;
+    if (m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton->isChecked()) return;
+
+    m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setRange(0, m_intensityClusters.size() - 1);
+    m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->syncToMax();
+    TransferFunction weightsTransferFunction;
+    weightsTransferFunction.addPoint(0.0, QColor(0, 0, 0, 0));
+
+    if (m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton->isChecked()) // pesos uniformes
+    {
+        double weight = 1.0 / (m_intensityClusters.size() - 1);
+
+        for (int i = 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, weight);
+    }
+    else if (m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton->isChecked()) // pesos segons la distribució al volum
+    {
+        const unsigned short *data = reinterpret_cast<unsigned short*>(m_volume->getImage()->GetScalarPointer());
+        int size = m_volume->getImage()->GetNumberOfPoints();
+        QVector<int> count(m_intensityClusters.size());
+        int total = 0;
+
+        for (int i = 0; i < size; i++)
+        {
+            if (data[i] > 0)
+            {
+                count[data[i]]++;
+                total++;
+            }
+        }
+
+        for (int i = 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, static_cast<double>(count.at(i)) / total);
+    }
+
+    m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsTransferFunction);
 }
 
 

@@ -308,6 +308,7 @@ private slots:
     void volumeVariance();
 
     void generateInnernessProportionalOpacityTransferFunction();
+    void fillWeigthsEditor();
 
 private:
 
