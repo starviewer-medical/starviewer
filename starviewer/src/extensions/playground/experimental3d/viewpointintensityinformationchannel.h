@@ -39,13 +39,14 @@ public:
     /// \a filter Vector que conté un booleà per cada punt de vista original. Es faran servir els que estiguin a cert.
     void filterViewpoints(const QVector<bool> &filter);
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
-    void compute(bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, bool display = false);
+    void compute(bool &pI, bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, bool display = false);
     bool hasViewedVolume() const;
     const QVector<float>& viewedVolume() const;
-    float HI() const;                   // H(I)
-    const QVector<float>& HIv() const;  // H(I|v)
-    float HIV() const;                  // H(I|V)
-    float jointEntropy() const;         // H(V,I)
+    const QVector<float>& intensityProbabilities() const;   // p(I)
+    float HI() const;                                       // H(I)
+    const QVector<float>& HIv() const;                      // H(I|v)
+    float HIV() const;                                      // H(I|V)
+    float jointEntropy() const;                             // H(V,I)
     const QVector<float>& vmii() const;
     float mii() const;
     const QVector<float>& viewpointUnstabilities() const;
