@@ -2214,6 +2214,7 @@ void QExperimental3DExtension::computeSelectedVmii()
     QMessageBox::information( this, tr("Operation only available with CUDA"), "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them." );
 #else // CUDA_AVAILABLE
     // Què ha demanat l'usuari
+    bool computePI = false;                                 // p(I)
     bool computeHI = m_computeHICheckBox->isChecked();      // H(I)
     bool computeHIv = m_computeHIvCheckBox->isChecked();    // H(I|v)
     bool computeHIV = m_computeHIVCheckBox->isChecked();    // H(I|V)
@@ -2225,7 +2226,7 @@ void QExperimental3DExtension::computeSelectedVmii()
     bool computeIntensityClustering = m_computeIntensityClusteringCheckBox->isChecked();
 
     // Si no hi ha res a calcular marxem
-    if (!computeHI && !computeHIv && !computeHIV && !computeJointEntropy && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi && !computeIntensityClustering) return;
+    if (computePI && !computeHI && !computeHIv && !computeHIV && !computeJointEntropy && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi && !computeIntensityClustering) return;
 
     setCursor(QCursor(Qt::WaitCursor));
 
@@ -2264,7 +2265,7 @@ void QExperimental3DExtension::computeSelectedVmii()
 
     QTime time;
     time.start();
-    viewpointIntensityInformationChannel.compute(computeHI, computeHIv, computeHIV, computeJointEntropy, computeVmii, computeMii, computeViewpointUnstabilities, computeImi, computeIntensityClustering,
+    viewpointIntensityInformationChannel.compute(computePI, computeHI, computeHIv, computeHIV, computeJointEntropy, computeVmii, computeMii, computeViewpointUnstabilities, computeImi, computeIntensityClustering,
                                                  m_vmiiDisplayCheckBox->isChecked());
     int elapsed = time.elapsed();
     DEBUG_LOG(QString("Temps total de VMIi i altres: %1 s").arg(elapsed / 1000.0f));
@@ -3728,11 +3729,20 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     //generateTransferFunctionFromIntensityClusters();
 
-    const double DeltaLimit = 0.1;
-    const double DeltaRange = DeltaLimit * 2.0;
+    const double DeltaLimit1 = 0.05;
+    const double DeltaLimit2 = 0.1;
+
     int iterations = m_geneticTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
+    QVector<float> weights(m_intensityClusters.size(), 1.0f / (m_intensityClusters.size() - 1));
+    weights[0] = 0.0f;
+    DEBUG_LOG("pesos:");
+    for (int i = 0; i < weights.size(); i++)
+    {
+        DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+    }
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
-    double bestHI;
+    QVector<float> bestPI;
+    double minimumDistance;
 
     {
         // Obtenir direccions
@@ -3740,13 +3750,14 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         m_viewer->getCamera(position, focus, up);
         float distance = (position - focus).length();
         ViewpointGenerator viewpointGenerator;
-        viewpointGenerator.setToUniform4(distance);
+        viewpointGenerator.setToUniform6(distance);
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
-        bool HI = true, HIv = false, HIV = false, jointEntropy = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        viewpointIntensityInformationChannel.compute(HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
-        bestHI = viewpointIntensityInformationChannel.HI();
+        bool pI = true, HI = false, HIv = false, HIV = false, jointEntropy = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
+        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+        bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
+        minimumDistance = InformationTheory::kullbackLeiblerDivergence(bestPI, weights);
     }
 
     qsrand(time(0));
@@ -3764,9 +3775,24 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
             double x2 = m_intensityClusters[j].last();
             double x = (x1 + x2) / 2.0;
             double opacity = bestTransferFunction.getOpacity(x);
-            double delta = DeltaRange * qrand() / RAND_MAX - DeltaLimit;
+            double pi = bestPI.at(j);
+            double w = weights.at(j);
+            double deltaMin, deltaMax;
+            // heurística: si p(i) < w(i) donem més probabilitat que augmenti l'opacitat, i viceversa
+            if (pi < w)
+            {
+                deltaMin = -DeltaLimit1;
+                deltaMax = +DeltaLimit2;
+            }
+            else
+            {
+                deltaMin = -DeltaLimit2;
+                deltaMax = +DeltaLimit1;
+            }
+            double deltaRange = deltaMax - deltaMin;
+            double delta = deltaRange * qrand() / RAND_MAX + deltaMin;
             double newOpacity = qBound(0.0, opacity + delta, 1.0);
-            DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, delta = %3, opacitat nova = %4").arg(j).arg(opacity).arg(delta).arg(newOpacity));
+            DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, delta = %3%4, opacitat nova = %5").arg(j).arg(opacity).arg(delta > 0.0 ? "+" : "").arg(delta).arg(newOpacity));
 
             if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
             {
@@ -3784,19 +3810,21 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         m_viewer->getCamera(position, focus, up);
         float distance = (position - focus).length();
         ViewpointGenerator viewpointGenerator;
-        viewpointGenerator.setToUniform4(distance);
+        viewpointGenerator.setToUniform6(distance);
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, evolvedTransferFunction);
-        bool HI = true, HIv = false, HIV = false, jointEntropy = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
-        viewpointIntensityInformationChannel.compute(HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
-        double evolvedHI = viewpointIntensityInformationChannel.HI();
+        bool pI = true, HI = false, HIv = false, HIV = false, jointEntropy = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
+        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+        const QVector<float> &evolvedPI = viewpointIntensityInformationChannel.intensityProbabilities();
+        double evolvedDistance = InformationTheory::kullbackLeiblerDivergence(evolvedPI, weights);
 
-        DEBUG_LOG(QString(".......................................... millor H(I) = %1, H(I) evolucionada = %2").arg(bestHI).arg(evolvedHI));
+        DEBUG_LOG(QString(".......................................... distància mínima = %1, distància evolucionada = %2").arg(minimumDistance).arg(evolvedDistance));
 
-        if (evolvedHI > bestHI)
+        if (evolvedDistance < minimumDistance)
         {
-            bestHI = evolvedHI;
+            bestPI = evolvedPI;
+            minimumDistance = evolvedDistance;
             bestTransferFunction = evolvedTransferFunction;
             m_transferFunctionEditor->setTransferFunction(bestTransferFunction.simplify());
             setTransferFunction();

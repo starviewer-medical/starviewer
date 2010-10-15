@@ -55,13 +55,13 @@ void ViewpointIntensityInformationChannel::filterViewpoints(const QVector<bool> 
 }
 
 
-void ViewpointIntensityInformationChannel::compute(bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, bool display)
+void ViewpointIntensityInformationChannel::compute(bool &intensityProbabilities, bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi,
+                                                   bool &intensityClustering, bool display)
 {
     // Si no hi ha res a calcular marxem
-    if (!HI && !HIv && !HIV && !jointEntropy && !vmii && !mii && !viewpointUnstabilities && !imi && !intensityClustering) return;
+    if (!intensityProbabilities && !HI && !HIv && !HIV && !jointEntropy && !vmii && !mii && !viewpointUnstabilities && !imi && !intensityClustering) return;
 
     bool viewProbabilities = false;
-    bool intensityProbabilities = false;
 
     // Dependències
     if (HI) intensityProbabilities = true;
@@ -88,6 +88,12 @@ bool ViewpointIntensityInformationChannel::hasViewedVolume() const
 const QVector<float>& ViewpointIntensityInformationChannel::viewedVolume() const
 {
     return m_viewedVolume;
+}
+
+
+const QVector<float>& ViewpointIntensityInformationChannel::intensityProbabilities() const
+{
+    return m_intensityProbabilities;
 }
 
 
