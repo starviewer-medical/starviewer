@@ -11,6 +11,8 @@ QGraphicTransferFunctionEditor::QGraphicTransferFunctionEditor( QWidget *parent 
 {
     setupUi( this );
 
+    m_basicEditor->setRange(m_minimumSpinBox->value(), m_maximumSpinBox->value());
+
     connect( m_nameLineEdit, SIGNAL( textChanged(QString) ), m_basicEditor, SLOT( setTransferFunctionName(const QString&) ) );
     connect( m_basicEditor, SIGNAL( rangeChanged(double,double) ), SLOT( setBasicRange(double,double) ) );
     connect( m_minimumSpinBox, SIGNAL( valueChanged(int) ), SLOT( setMinimum(int) ) );
