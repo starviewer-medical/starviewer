@@ -24,6 +24,8 @@ public slots:
 
     /// Assigna el rang de valors de la funció de transferència.
     void setRange( int minimum, int maximum );
+    void syncToMax();
+    void syncToVisible();
 
 private slots:
 
@@ -32,8 +34,6 @@ private slots:
     void setMinimum( int minimum );
     void setMaximum( int maximum );
     void setScroll( int scroll );
-    void syncToMax();
-    void syncToVisible();
 
 };
 
