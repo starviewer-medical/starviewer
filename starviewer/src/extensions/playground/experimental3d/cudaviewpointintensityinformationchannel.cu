@@ -21,8 +21,9 @@
 
 
 
+static const uint ParallelismFactor = 32;   // quantes entrades hi ha a l'histograma enter per cada valor d'intensitat; ajuda a augmentar el paral·lelisme reduint les col·lisions a l'hora d'escriure
 static const uint PARTITIONS = 1;  // en quants trossos es parteix la imatge en cada dimensió (per reduir col·lisions)
-static const int VOLUME_MULTIPLIER = 1000;  // multiplicador del volum a l'hora de convertir-lo en enter
+static const int VOLUME_MULTIPLIER = 10000; // multiplicador del volum a l'hora de convertir-lo en enter
 
 
 // volum
@@ -122,7 +123,7 @@ __device__ static uint rgbaFloatToInt(float4 rgba)
 }
 
 
-__global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, int *histogram, float3 volumeDims, float3x4 invViewMatrix, uint partitions, int volumeMultiplier)
+__global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, int *histogram, float3 volumeDims, float3x4 invViewMatrix, uint parallelismFactor, uint partitions, int volumeMultiplier)
 {
     const int MAX_STEPS = 512;
     const float OPAQUE_ALPHA = 0.9f;
@@ -190,7 +191,7 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
 
                 if (volume > 0.0f)
                 {
-                    int offset = (int) sample;
+                    int offset = ((int) sample) * parallelismFactor + ((threadIdx.x + threadIdx.y * blockDim.x) % parallelismFactor);
 
                     int iVolume = (int) (volume * volumeMultiplier);
                     atomicAdd(histogram + offset, iVolume);
@@ -222,13 +223,17 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
 }
 
 
-__global__ void histogramToFloatKernel(int *iHistogram, float *fHistogram, uint range, int volumeMultiplier)
+__global__ void histogramToFloatKernel(int *iHistogram, float *fHistogram, uint range, uint parallelismFactor, int volumeMultiplier)
 {
     uint i = blockIdx.x * blockDim.x + threadIdx.x;
     if (i >= range) return;
 
-    float divisor = volumeMultiplier;
-    fHistogram[i] = iHistogram[i] / divisor;
+    double divisor = volumeMultiplier;
+    double total = 0.0;
+
+    for (uint j = 0; j < parallelismFactor; j++) total += iHistogram[i * parallelismFactor + j] / divisor;
+
+    fHistogram[i] = total;
 }
 
 
@@ -292,7 +297,7 @@ void cviicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunc
     CUDA_SAFE_CALL( cudaBindTextureToArray(gTransferFunctionTexture, gdTransferFunctionArray, channelDescTransferFunctionArray) );
 
     // create histogram
-    CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdiHistogram), gIntensityRange * sizeof(int)) );
+    CUDA_SAFE_CALL(cudaMalloc(reinterpret_cast<void**>(&gdiHistogram), gIntensityRange * sizeof(int) * ParallelismFactor));
     CUDA_SAFE_CALL( cudaMalloc(reinterpret_cast<void**>(&gdfHistogram), gIntensityRange * sizeof(float)) );
 
     // histogram texture (p(I|v) * totalViewedVolume)
@@ -323,7 +328,7 @@ QVector<float> cviicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix
     cudaEventCreate(&stop);
     cudaEventRecord(start, 0);
 
-    CUDA_SAFE_CALL( cudaMemset(reinterpret_cast<void*>(gdiHistogram), 0, gIntensityRange * sizeof(int)) );  // buidar histograma
+    CUDA_SAFE_CALL(cudaMemset(reinterpret_cast<void*>(gdiHistogram), 0, gIntensityRange * sizeof(int) * ParallelismFactor));    // buidar histograma
 
     // map PBO to get CUDA device pointer
     uint *pbo = 0;
@@ -341,7 +346,7 @@ QVector<float> cviicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix
     invViewMatrix.f[1] = make_float4(viewMatrix[1][0], viewMatrix[1][1], viewMatrix[1][2], viewpoint.y);
     invViewMatrix.f[2] = make_float4(viewMatrix[2][0], viewMatrix[2][1], viewMatrix[2][2], viewpoint.z);
 
-    rayCastKernel<<<gridSize, blockSize>>>(pbo, gRenderSize, gRenderSize, gdiHistogram, gVolumeDims, invViewMatrix, PARTITIONS, VOLUME_MULTIPLIER);
+    rayCastKernel<<<gridSize, blockSize>>>(pbo, gRenderSize, gRenderSize, gdiHistogram, gVolumeDims, invViewMatrix, ParallelismFactor, PARTITIONS, VOLUME_MULTIPLIER);
     //CUT_CHECK_ERROR( "kernel failed" );
     cudaError_t err = cudaGetLastError();
     if (cudaSuccess != err) std::cout << "ray cast kernel failed: " << cudaGetErrorString(err) << std::endl;
@@ -370,7 +375,7 @@ QVector<float> cviicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix
     uint zo = gIntensityRange % blockSize2.x == 0 ? 0 : 1;
     dim3 gridSize2(gIntensityRange / blockSize2.x + zo);
 
-    histogramToFloatKernel<<<gridSize2, blockSize2>>>(gdiHistogram, gdfHistogram, gIntensityRange, VOLUME_MULTIPLIER);
+    histogramToFloatKernel<<<gridSize2, blockSize2>>>(gdiHistogram, gdfHistogram, gIntensityRange, ParallelismFactor, VOLUME_MULTIPLIER);
     //CUT_CHECK_ERROR( "kernel failed" );
     /*cudaError_t*/ err = cudaGetLastError();
     if (cudaSuccess != err) std::cout << "int->float kernel failed: " << cudaGetErrorString(err) << std::endl;
