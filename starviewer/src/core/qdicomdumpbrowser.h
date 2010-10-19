@@ -35,17 +35,11 @@ private:
     /// Crea les connexions dels signals
     void createConnections();
 
-    /// Afegeix un DICOMValueAttribute com una fulla de l'arrel de l'arbre
-    void addLeafToRoot(DICOMValueAttribute *value);
-    
-    /// Afegeix un DICOMValueAttribute com una fulla d'una branca de l'arbre
-    void addLeafToBranch(QTreeWidgetItem *branch, DICOMValueAttribute *value);
+    /// Mètode que afegeix una fulla al tronc o a una branca de l'arbre
+    void addLeaf(QTreeWidgetItem *trunkTreeItem, DICOMValueAttribute *value);
 
-    /// Afegeix un DICOMSequenceAttribute com una branca de l'arbre
-    void addBranchToRoot(DICOMSequenceAttribute *sequence);
-    
-    /// Afegeix un DICOMSequenceAttribute com una branca d'un altre branca de l'arbre
-    void addBranchToBranch(QTreeWidgetItem *branch, DICOMSequenceAttribute *sequence);
+    /// Mètode que afegeix una branca al tronc o a una branca de l'arbre
+    void addBranch(QTreeWidgetItem *trunkTreeItem, DICOMSequenceAttribute *sequence);
 };
 
 }

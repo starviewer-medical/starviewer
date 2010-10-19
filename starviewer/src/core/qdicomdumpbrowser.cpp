@@ -77,6 +77,8 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
     {	
         m_tagsListQTree->clear();
 
+        QTreeWidgetItem *rootTreeItem = m_tagsListQTree->invisibleRootItem();
+
         QList<DICOMAttribute*> dicomAttributesList = dicomReader.getDICOMAttributes();
         
         foreach (DICOMAttribute *dicomAttribute, dicomAttributesList)
@@ -84,103 +86,59 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
             if (dicomAttribute->isValueAttribute())
             {
                 DICOMValueAttribute *value = dynamic_cast<DICOMValueAttribute*>(dicomAttribute);
-                this->addLeafToRoot(value);
+                this->addLeaf(rootTreeItem, value);
             }
             else
             {
                 DICOMSequenceAttribute *sequence = dynamic_cast<DICOMSequenceAttribute*>(dicomAttribute);
-                this->addBranchToRoot(sequence);
+                this->addBranch(rootTreeItem, sequence);
             }
         }
     }
 }
 
-void QDICOMDumpBrowser::addLeafToRoot(DICOMValueAttribute *value)
-{               
-    QTreeWidgetItem *qTreeWidgetItem = new QTreeWidgetItem();
-    qTreeWidgetItem->setText(0, value->getTag()->getName());
-    qTreeWidgetItem->setText(1, value->getTag()->getKeyAsQString());
-    if (*(value->getTag()) != DICOMPixelData)
-    {
-        qTreeWidgetItem->setText(2, value->getValueAsQString());
-    }
-    m_tagsListQTree->addTopLevelItem(qTreeWidgetItem);
-}
-
-void QDICOMDumpBrowser::addLeafToBranch(QTreeWidgetItem *branch, DICOMValueAttribute *value)
-{               
-    QTreeWidgetItem *qTreeWidgetItem = new QTreeWidgetItem();
-    qTreeWidgetItem->setText(0, value->getTag()->getName());
-    qTreeWidgetItem->setText(1, value->getTag()->getKeyAsQString());
-    if (*(value->getTag()) != DICOMPixelData)
-    {
-        qTreeWidgetItem->setText(2, value->getValueAsQString());
-    }
-    branch->addChild(qTreeWidgetItem);
-}
-
-void QDICOMDumpBrowser::addBranchToRoot(DICOMSequenceAttribute *sequence)
-{   
-    QTreeWidgetItem *qTreeWidgetItemRoot = new QTreeWidgetItem();
-    qTreeWidgetItemRoot->setText(0, sequence->getTag()->getName());
-    qTreeWidgetItemRoot->setText(1, sequence->getTag()->getKeyAsQString());
-    qTreeWidgetItemRoot->setText(2, "");
-    m_tagsListQTree->addTopLevelItem(qTreeWidgetItemRoot);
-    
-    foreach (DICOMSequenceItem *sequenceItem, sequence->getItems())
-    {
-        QTreeWidgetItem *qTreeWidgetItem = new QTreeWidgetItem();
-        qTreeWidgetItem->setText(0, "Item");
-        qTreeWidgetItem->setText(1, "");
-        qTreeWidgetItem->setText(2, "");
-        qTreeWidgetItemRoot->addChild(qTreeWidgetItem);
-
-        foreach (DICOMAttribute *dicomAttribute, sequenceItem->getAttributes())
-        {
-            if (dicomAttribute->isValueAttribute())
-            {
-                DICOMValueAttribute *value = dynamic_cast<DICOMValueAttribute*>(dicomAttribute);
-                this->addLeafToBranch(qTreeWidgetItem, value);
-            }
-            else
-            {
-                DICOMSequenceAttribute *sequence = dynamic_cast<DICOMSequenceAttribute*>(dicomAttribute);
-                this->addBranchToBranch(qTreeWidgetItem, sequence);
-            }
-        }
-    }
-}
-
-void QDICOMDumpBrowser::addBranchToBranch(QTreeWidgetItem *branch, DICOMSequenceAttribute *sequence)
+void QDICOMDumpBrowser::addLeaf(QTreeWidgetItem *trunkTreeItem, DICOMValueAttribute *value)
 {
-    QTreeWidgetItem *qTreeWidgetItemRoot = new QTreeWidgetItem();
-    qTreeWidgetItemRoot->setText(0, sequence->getTag()->getName());
-    qTreeWidgetItemRoot->setText(1, sequence->getTag()->getKeyAsQString());
-    qTreeWidgetItemRoot->setText(2, "");
-    branch->addChild(qTreeWidgetItemRoot);
-    
+    QTreeWidgetItem *leafTreeItem = new QTreeWidgetItem();
+    leafTreeItem->setText(0, value->getTag()->getName());
+    leafTreeItem->setText(1, value->getTag()->getKeyAsQString());
+    if (*(value->getTag()) != DICOMPixelData)
+    {
+        leafTreeItem->setText(2, value->getValueAsQString());
+    }
+    trunkTreeItem->addChild(leafTreeItem);
+}
+
+void QDICOMDumpBrowser::addBranch(QTreeWidgetItem *trunkTreeItem, DICOMSequenceAttribute *sequence)
+{
+    QTreeWidgetItem *trunkBranchItem = new QTreeWidgetItem();
+    trunkBranchItem->setText(0, sequence->getTag()->getName());
+    trunkBranchItem->setText(1, sequence->getTag()->getKeyAsQString());
+    trunkBranchItem->setText(2, "");
+
     foreach (DICOMSequenceItem *sequenceItem, sequence->getItems())
     {
-        QTreeWidgetItem *qTreeWidgetItem = new QTreeWidgetItem();
-        qTreeWidgetItem->setText(0, "Item");
-        qTreeWidgetItem->setText(1, "");
-        qTreeWidgetItem->setText(2, "");
-        qTreeWidgetItemRoot->addChild(qTreeWidgetItem);
+        QTreeWidgetItem *qTreeSequenceItem = new QTreeWidgetItem();
+        qTreeSequenceItem->setText(0, "Item");
+        qTreeSequenceItem->setText(1, "");
+        qTreeSequenceItem->setText(2, "");
 
         foreach (DICOMAttribute *dicomAttribute, sequenceItem->getAttributes())
         {
             if (dicomAttribute->isValueAttribute())
             {
-                DICOMValueAttribute *value = dynamic_cast<DICOMValueAttribute*>(dicomAttribute);
-                this->addLeafToBranch(qTreeWidgetItem, value);
+                DICOMValueAttribute *subValue = dynamic_cast<DICOMValueAttribute*>(dicomAttribute);
+                this->addLeaf(qTreeSequenceItem, subValue);
             }
             else
             {
-                DICOMSequenceAttribute *sequence = dynamic_cast<DICOMSequenceAttribute*>(dicomAttribute);
-                this->addBranchToBranch(qTreeWidgetItem, sequence);
+                DICOMSequenceAttribute *subSequence = dynamic_cast<DICOMSequenceAttribute*>(dicomAttribute);
+                this->addBranch(qTreeSequenceItem, subSequence);
             }
         }
+        trunkBranchItem->addChild(qTreeSequenceItem);
     }
+    trunkTreeItem->addChild(trunkBranchItem);
 }
 
 };
