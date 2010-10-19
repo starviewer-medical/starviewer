@@ -3797,7 +3797,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         if (minimizeKullbackLeiblerDivergence)
         {
             bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
-            best = InformationTheory::kullbackLeiblerDivergence(bestPI, weights);
+            best = InformationTheory::kullbackLeiblerDivergence(bestPI, weights, true);
         }
         if (maximizeHIV)
         {
@@ -3904,7 +3904,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
                 DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
             }
             evolvedPI = viewpointIntensityInformationChannel.intensityProbabilities();
-            evolved = InformationTheory::kullbackLeiblerDivergence(evolvedPI, weights);
+            evolved = InformationTheory::kullbackLeiblerDivergence(evolvedPI, weights, true);
             DEBUG_LOG(QString(".......................................... distància mínima = %1, distància evolucionada = %2").arg(best).arg(evolved));
             accept = evolved < best;
         }
