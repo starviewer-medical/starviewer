@@ -3734,23 +3734,34 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     //generateTransferFunctionFromIntensityClusters();
 
+    bool minimizeKullbackLeiblerDivergence = false;
+    bool maximizeHIV = false;
+    bool maximizeMiiOverHI = false;
+    bool minimizeMiiOverHI = false;
+    bool maximizeMiiOverJointEntropy = false;
+    bool minimizeMiiOverJointEntropy = true;
+
     const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
     QVector<float> weights(m_intensityClusters.size());
-    float totalWeight = 0.0f;
 
-    for (int i = 0; i < weights.size(); i++)
+    if (minimizeKullbackLeiblerDivergence)
     {
-        float weight = weightsTransferFunction.getOpacity(i);
-        weights[i] = weight;
-        totalWeight += weight;
-    }
+        float totalWeight = 0.0f;
 
-    DEBUG_LOG("pesos:");
+        for (int i = 0; i < weights.size(); i++)
+        {
+            float weight = weightsTransferFunction.getOpacity(i);
+            weights[i] = weight;
+            totalWeight += weight;
+        }
 
-    for (int i = 0; i < weights.size(); i++)
-    {
-        weights[i] /= totalWeight;
-        DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+        DEBUG_LOG("pesos:");
+
+        for (int i = 0; i < weights.size(); i++)
+        {
+            weights[i] /= totalWeight;
+            DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+        }
     }
 
     const double DeltaLimit1 = m_geneticTransferFunctionFromIntensityClusteringDelta1DoubleSpinBox->value();
@@ -3758,8 +3769,8 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     int iterations = m_geneticTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
+    double best;
     QVector<float> bestPI;
-    double minimumDistance;
 
     {
         // Obtenir direccions
@@ -3771,10 +3782,39 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
-        bool pI = true, HI = false, HIv = false, HIV = false, jointEntropy = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
+        bool pI = minimizeKullbackLeiblerDivergence;
+        bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
+        bool HIv = false;
+        bool HIV = maximizeHIV;
+        bool jointEntropy = maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy;
+        bool vmii = false;
+        bool mii = maximizeMiiOverHI || minimizeMiiOverHI || maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy;
+        bool viewpointUnstabilities = false;
+        bool imi = false;
+        bool intensityClustering = false;
         viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
-        bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
-        minimumDistance = InformationTheory::kullbackLeiblerDivergence(bestPI, weights);
+
+        if (minimizeKullbackLeiblerDivergence)
+        {
+            bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
+            best = InformationTheory::kullbackLeiblerDivergence(bestPI, weights);
+        }
+        if (maximizeHIV)
+        {
+            best = viewpointIntensityInformationChannel.HIV();
+        }
+        if (maximizeMiiOverHI || minimizeMiiOverHI)
+        {
+            double mii = viewpointIntensityInformationChannel.mii();
+            double HI = viewpointIntensityInformationChannel.HI();
+            best = mii / HI;
+        }
+        if (maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy)
+        {
+            double mii = viewpointIntensityInformationChannel.mii();
+            double jointEntropy = viewpointIntensityInformationChannel.jointEntropy();
+            best = mii / jointEntropy;
+        }
     }
 
     qsrand(time(0));
@@ -3792,20 +3832,30 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
             double x2 = m_intensityClusters[j].last();
             double x = (x1 + x2) / 2.0;
             double opacity = bestTransferFunction.getOpacity(x);
-            double pi = bestPI.at(j);
-            double w = weights.at(j);
             double deltaMin, deltaMax;
-            // heurística: si p(i) < w(i) donem més probabilitat que augmenti l'opacitat, i viceversa
-            if (pi < w)
+
+            if (minimizeKullbackLeiblerDivergence)
             {
-                deltaMin = -DeltaLimit1;
-                deltaMax = +DeltaLimit2;
+                double pi = bestPI.at(j);
+                double w = weights.at(j);
+                // heurística: si p(i) < w(i) donem més probabilitat que augmenti l'opacitat, i viceversa
+                if (pi < w)
+                {
+                    deltaMin = -DeltaLimit1;
+                    deltaMax = +DeltaLimit2;
+                }
+                else
+                {
+                    deltaMin = -DeltaLimit2;
+                    deltaMax = +DeltaLimit1;
+                }
             }
-            else
+            if (maximizeHIV || maximizeMiiOverHI || minimizeMiiOverHI || maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy)
             {
                 deltaMin = -DeltaLimit2;
-                deltaMax = +DeltaLimit1;
+                deltaMax = +DeltaLimit2;
             }
+
             double deltaRange = deltaMax - deltaMin;
             double delta = deltaRange * qrand() / RAND_MAX + deltaMin;
             double newOpacity = qBound(0.0, opacity + delta, 1.0);
@@ -3831,17 +3881,76 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, evolvedTransferFunction);
-        bool pI = true, HI = false, HIv = false, HIV = false, jointEntropy = false, vmii = false, mii = false, viewpointUnstabilities = false, imi = false, intensityClustering = false;
+        bool pI = minimizeKullbackLeiblerDivergence;
+        bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
+        bool HIv = false;
+        bool HIV = maximizeHIV;
+        bool jointEntropy = maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy;
+        bool vmii = false;
+        bool mii = maximizeMiiOverHI || minimizeMiiOverHI || maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy;
+        bool viewpointUnstabilities = false;
+        bool imi = false;
+        bool intensityClustering = false;
         viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
-        const QVector<float> &evolvedPI = viewpointIntensityInformationChannel.intensityProbabilities();
-        double evolvedDistance = InformationTheory::kullbackLeiblerDivergence(evolvedPI, weights);
+        double evolved;
+        bool accept;
 
-        DEBUG_LOG(QString(".......................................... distància mínima = %1, distància evolucionada = %2").arg(minimumDistance).arg(evolvedDistance));
+        QVector<float> evolvedPI;
+        if (minimizeKullbackLeiblerDivergence)
+        {
+            DEBUG_LOG("pesos:");
+            for (int i = 0; i < weights.size(); i++)
+            {
+                DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+            }
+            evolvedPI = viewpointIntensityInformationChannel.intensityProbabilities();
+            evolved = InformationTheory::kullbackLeiblerDivergence(evolvedPI, weights);
+            DEBUG_LOG(QString(".......................................... distància mínima = %1, distància evolucionada = %2").arg(best).arg(evolved));
+            accept = evolved < best;
+        }
+        if (maximizeHIV)
+        {
+            evolved = viewpointIntensityInformationChannel.HIV();
+            DEBUG_LOG(QString(".......................................... H(I|V) màxima = %1, H(I|V) evolucionada = %2").arg(best).arg(evolved));
+            accept = evolved > best;
+        }
+        if (maximizeMiiOverHI || minimizeMiiOverHI)
+        {
+            double mii = viewpointIntensityInformationChannel.mii();
+            double HI = viewpointIntensityInformationChannel.HI();
+            evolved = mii / HI;
+            if (maximizeMiiOverHI)
+            {
+                DEBUG_LOG(QString(".......................................... I(V;I)/H(I) màxima = %1, I(V;I)/H(I) evolucionada = %2").arg(best).arg(evolved));
+                accept = evolved > best;
+            }
+            if (minimizeMiiOverHI)
+            {
+                DEBUG_LOG(QString(".......................................... I(V;I)/H(I) mínima = %1, I(V;I)/H(I) evolucionada = %2").arg(best).arg(evolved));
+                accept = evolved < best;
+            }
+        }
+        if (maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy)
+        {
+            double mii = viewpointIntensityInformationChannel.mii();
+            double jointEntropy = viewpointIntensityInformationChannel.jointEntropy();
+            evolved = mii / jointEntropy;
+            if (maximizeMiiOverJointEntropy)
+            {
+                DEBUG_LOG(QString(".......................................... I(V;I)/H(V,I) màxima = %1, I(V;I)/H(V,I) evolucionada = %2").arg(best).arg(evolved));
+                accept = evolved > best;
+            }
+            if (minimizeMiiOverJointEntropy)
+            {
+                DEBUG_LOG(QString(".......................................... I(V;I)/H(V,I) mínima = %1, I(V;I)/H(V,I) evolucionada = %2").arg(best).arg(evolved));
+                accept = evolved < best;
+            }
+        }
 
-        if (evolvedDistance < minimumDistance)
+        if (accept)
         {
             bestPI = evolvedPI;
-            minimumDistance = evolvedDistance;
+            best = evolved;
             bestTransferFunction = evolvedTransferFunction;
             m_transferFunctionEditor->setTransferFunction(bestTransferFunction.simplify());
             setTransferFunction();
