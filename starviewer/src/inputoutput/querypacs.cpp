@@ -117,7 +117,6 @@ Status QueryPacs::query()
     req.MessageID = msgId;
     strcpy( req.AffectedSOPClassUID , opt_abstractSyntax );
     req.DataSetType = DIMSE_DATASET_PRESENT;
-    req.Priority = DIMSE_PRIORITY_LOW;
 
     /* finally conduct transmission of data */
     OFCondition cond = DIMSE_findUser( m_assoc , m_presId , &req , m_mask ,
