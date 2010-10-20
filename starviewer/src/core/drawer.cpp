@@ -9,6 +9,8 @@
 #include "drawerprimitive.h"
 #include "logging.h"
 #include "mathtools.h"
+#include "representationslayer.h"
+
 // vtk
 #include <vtkRenderer.h>
 #include <QColor>
@@ -80,6 +82,19 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
     }
 }
 
+void Drawer::drawWorkInProgress(DrawerPrimitive *primitive)
+{
+    vtkProp *prop = primitive->getAsVtkProp();
+    if(prop)
+    {
+        connect(primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(deletePrimitive(DrawerPrimitive *)));
+        //connect(primitive, SIGNAL(dying(DrawerPrimitive *)), SLOT(erasePrimitive(DrawerPrimitive *)));
+        m_2DViewer->getRenderer()->AddViewProp(prop);
+        //refresh();
+        //this->updateRenderer();
+    }
+}
+
 void Drawer::clearViewer()
 {
     QMultiMap<int, DrawerPrimitive *> primitivesContainer;
@@ -128,6 +143,11 @@ void Drawer::addToGroup(DrawerPrimitive *primitive, const QString &groupName)
     m_primitiveGroups.insert(groupName, primitive);
 }
 
+void Drawer::updateRenderer()
+{
+    m_2DViewer->render();
+}
+
 void Drawer::refresh()
 {
     if (m_currentPlane == m_2DViewer->getView())
@@ -170,6 +190,18 @@ void Drawer::removeAllPrimitives()
             delete primitive;
         }
     }
+}
+
+void Drawer::deletePrimitive(DrawerPrimitive *primitive)
+{
+    if (!primitive)
+    {
+        return;
+    }
+
+    // Elimina les referencies a la primitiva
+    m_2DViewer->getRepresentationsLayer()->removePrimitive(primitive);
+    m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
 }
 
 void Drawer::erasePrimitive(DrawerPrimitive *primitive)
@@ -414,7 +446,9 @@ bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, int view, double boun
 
     bool inside = false;
     if (bounds[xIndex * 2] <= primitiveBounds[xIndex * 2] && bounds[xIndex * 2 + 1] >= primitiveBounds[xIndex * 2 + 1] && bounds[yIndex * 2] <= primitiveBounds[yIndex * 2] && bounds[yIndex * 2 + 1] >= primitiveBounds[yIndex * 2 + 1])
+    {
         inside = true;
+    }
 
     return inside;
 }

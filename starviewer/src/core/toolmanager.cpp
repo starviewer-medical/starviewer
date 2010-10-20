@@ -43,7 +43,7 @@ void ToolManager::setViewerTools(QViewer *viewer, const QStringList &toolsList)
     {
         m_toolViewerMap.insert(toolName, pair);
     }
-    refreshConnections(); //TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
+    refreshConnections(); // TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
 }
 
 void ToolManager::setupRegisteredTools(QViewer *viewer)
@@ -57,7 +57,7 @@ void ToolManager::setViewerTool(QViewer *viewer, const QString &toolName, ToolCo
     pair.first = viewer;
     pair.second = configuration;
     m_toolViewerMap.insert(toolName, pair);
-    refreshConnections(); //TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
+    refreshConnections(); // TODO Xapussilla, s'hauria de fer amb tractament més bo intern, amb llistes de tools actives
 }
 
 void ToolManager::removeViewerTool(QViewer *viewer, const QString &toolName)
@@ -176,6 +176,16 @@ void ToolManager::disableActionTools(QViewer *viewer, const QStringList &actionT
     }
 }
 
+void ToolManager::setLastCompatibleTool(const QString &lastCompatibleTool)
+{
+    m_lastCompatibleTool = lastCompatibleTool;
+}
+
+void ToolManager::setEditionCompatibleTools(const QStringList &compatibleTools)
+{
+    m_editionCompatibleTools = compatibleTools;
+}
+
 void ToolManager::enableRegisteredActionTools(QViewer *viewer)
 {
     enableActionTools(viewer, m_actionToolRegistry.keys());
@@ -226,6 +236,13 @@ void ToolManager::activateTool(const QString &toolName)
             {
                 tool->setConfiguration(configuration);
             }
+            // comprovem si la tool és incompatible amb el mode edició
+            if (!tool->isEditionCompatible())
+            {
+                m_incompatibleTool = toolName;
+                connect(tool, SIGNAL(finished()), this, SLOT(incompatibleToolFinished()));
+            }
+           
             // Afegim la tool al proxy
             viewer->getToolProxy()->addTool(tool);
             // Comprovem les dades per si cal donar-n'hi
@@ -248,16 +265,32 @@ void ToolManager::activateTool(const QString &toolName)
 void ToolManager::deactivateTool(const QString &toolName)
 {
     QList<ViewerToolConfigurationPairType> viewerConfigList = m_toolViewerMap.values(toolName);
+    Tool *tool = 0;
 
     foreach (const ViewerToolConfigurationPairType &pair, viewerConfigList)
     {
         // Declarem aquesta variable per fer-ho més llegible
         QViewer *viewer = pair.first;
+        // recuperem la tool
+        tool = m_toolRegistry->getTool(toolName, viewer);
+        // comprovem si la tool és incompatible amb el mode edició
+        if (!tool->isEditionCompatible())
+        {
+            disconnect(tool, SIGNAL(finished()), this, SLOT(incompatibleToolFinished()));
+        }
         // Eliminem la tool del proxy
         viewer->getToolProxy()->removeTool(toolName);
     }
     // Elinimen Shared Data d'aquesta tool
     m_sharedToolDataRepository.remove(toolName);
+}
+
+void ToolManager::saveCompatibleTool(const QString &toolName)
+{
+    if (m_editionCompatibleTools.contains(toolName))
+    {
+        m_lastCompatibleTool = toolName;
+    }
 }
 
 void ToolManager::triggeredToolAction(const QString &toolName)
@@ -271,6 +304,8 @@ void ToolManager::triggeredToolAction(const QString &toolName)
         if (toolAction->isChecked())
         {
             activateTool(toolName);
+            //Guardar si és compatible amb mode edició
+            saveCompatibleTool(toolName);
         }
         else
         {
@@ -327,5 +362,22 @@ void ToolManager::refreshConnections()
         triggeredToolAction(tool);
     }
 }
+
+void ToolManager::incompatibleToolFinished() 
+{
+    deactivateTool(m_incompatibleTool);
+    m_incompatibleTool = "";
+
+    QAction *toolAction = qobject_cast<QAction *>(m_toolsActionSignalMapper->mapping(m_lastCompatibleTool));
+    if (toolAction)
+    {
+        toolAction->trigger();
+    }
+    else
+    {
+        DEBUG_LOG(QString("No hi ha cap tool Action per la tool anomenada: ") + m_lastCompatibleTool);
+    }
+}
+
 
 }

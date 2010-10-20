@@ -17,8 +17,6 @@ class QViewer;
 
 /**
     Classe base per a totes les tools
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class Tool : public QObject {
 Q_OBJECT
@@ -60,8 +58,19 @@ public:
     /// Retorna el nom de la tool
     QString toolName();
 
+    /// Indica si la tool és compatible amb el mode edició o no
+    bool isEditionCompatible();
+    void setEditionCompatibility(bool compatibility);
+
     /// Decideix què s'ha de fer per cada event rebut
     virtual void handleEvent(unsigned long eventID) = 0;
+
+signals:
+    /// Indica que s'ha acabat l'ús de la Tool
+    void finished();
+
+    /// Signal que reenvia els events rebuts
+    void forwardEvent(long unsigned eventID);
 
 protected:
     /// Viewer sobre el que s'executa la tool
@@ -81,6 +90,10 @@ protected:
 
     /// Indica si la tool té dades persistents
     bool m_hasPersistentData;
+
+    /// Indica si es compatible amb mode edicio
+    bool m_editionCompatibility;
+
 };
 
 }

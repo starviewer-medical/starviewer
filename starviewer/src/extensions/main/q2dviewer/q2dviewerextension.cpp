@@ -348,11 +348,11 @@ void Q2DViewerExtension::initializeTools()
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
 #ifndef STARVIEWER_LITE
     m_polylineButton->setDefaultAction(m_toolManager->registerTool("PolylineROITool"));
-    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI Oval
+    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI El·líptica
     m_polylineButton->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *roiToolMenu = new QMenu(this);
     m_polylineButton->setMenu(roiToolMenu);
-    roiToolMenu->addAction(m_toolManager->registerTool("OvalROITool"));
+    roiToolMenu->addAction(m_toolManager->registerTool("EllipticROITool"));
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
     m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
     m_openAngleToolButton->setDefaultAction(m_toolManager->registerTool("NonClosedAngleTool"));
@@ -363,7 +363,7 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SynchronizeTool");
     // Cal marcar l'acció de la tool com a checked perquè sempre estigui disponible
-    // Si no ho féssim, cada cop que es canviés de tool, el toolmanager faria un refreshConections() i
+    // Si no ho fèssim, cada cop que es canviés de tool, el toolmanager faria un refreshConections() i
     // les finestres sincronitzades es desactivarien (ticket #1236)
     m_toolManager->getRegisteredToolAction("SynchronizeTool")->setChecked(true);
 
@@ -393,7 +393,7 @@ void Q2DViewerExtension::initializeTools()
 #ifdef STARVIEWER_LITE
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "EraserTool";
 #else
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "OvalROITool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticROITool";
 #endif
     
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
@@ -405,6 +405,15 @@ void Q2DViewerExtension::initializeTools()
     QStringList middleButtonExclusiveTools;
     middleButtonExclusiveTools << "TranslateTool";
     m_toolManager->addExclusiveToolsGroup("MiddleButtonGroup", middleButtonExclusiveTools);
+
+    // grup per mode edicio (Tool's compatibles)
+    QStringList editionCompatibleLeftButtonExclusiveTools;
+    editionCompatibleLeftButtonExclusiveTools << "ZoomTool" << "SlicingTool";
+    m_toolManager->setEditionCompatibleTools( editionCompatibleLeftButtonExclusiveTools );
+
+    // set default compatible Tool
+    QString compatibleTool = "SlicingTool";
+    m_toolManager->setLastCompatibleTool( compatibleTool );
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;

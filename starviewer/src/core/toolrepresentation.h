@@ -4,50 +4,101 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#ifndef TOOLREPRESENTATION_H
-#define TOOLREPRESENTATION_H
+#ifndef UDGTOOLREPRESENTATION_H
+#define UDGTOOLREPRESENTATION_H
 
 #include <QObject>
+#include <QColor>
+#include <QMultiMap>
 
 namespace udg {
 
-class QViewer;
 class DrawerPrimitive;
 class Drawer;
+class ToolHandler;
+class ToolData;
 
 /**
-Classe contenidor de ToolRepresentation
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    Classe contenidor de ToolRepresentation
 */
-class ToolRepresentation : public QObject
-{
+class ToolRepresentation : public QObject {
 Q_OBJECT
 public:
-    ToolRepresentation( Drawer *drawer, QObject *parent = 0 );
+    ToolRepresentation(Drawer *drawer, QObject *parent = 0);
     ~ToolRepresentation();
 
-    /**
-    * Rep events des de Tool per dibuixar-se
-    * @param eventID tipus d'event
-    * @param posX posició X de l'event
-    * @param posY posició Y de l'event
-    */
-    virtual void handleEvent(long unsigned eventID, double posX, double posY);
+    bool isVisible();
+
+    /// Selecciona / Deselecciona la representació
+    bool isSelected();
+    void select();
+    void deselect();
+
+    ///Mostra/Amaga la representació
+    void hide();
+    void show();
+
+    /// Fa els càlculs pertinents de la Tool
+    virtual void calculate() = 0;
+
+    QList<ToolHandler *>& getToolHandlers();
+
+    /// Retorna cert si la representació està dins els bounds, amb la corresponent vista. Fals altrament
+    bool isInsideOfBounds(double bounds[6], int view);
 
 signals:
-    void finished();
+    /// Envia signal de seleccionada
+    void selected(ToolRepresentation *toolRepresentation);
+
+    /// Mostra/Amaga els ToolHandlerWithRepresentation
+    void hideToolHandlers();
+    void showToolHandlers();
 
 protected:
-    ///Actualitza el viewer
+    /// Actualitza el viewer
     void refresh();
 
+    /// Crea els handlers
+    virtual void createHandlers() = 0;
+
+    /// Mapeja els handlers amb els punts corresponents
+    virtual QList<double *> mapHandlerToPoint(ToolHandler *toolHandler) = 0;
+
+protected slots:
+    /// Seleccionem la representació
+    void selectRepresentation();
+
+    /// Edita els vèrtexs de les DrawerPrimitive
+    void movePoint(ToolHandler *handler, double *point);
+    virtual void moveAllPoints(double *movement) = 0;
+
 protected:
-    ///Drawer del viewer amb el que es pintaran les primitives
+    /// Drawer del viewer amb el que es pintaran les primitives
     Drawer *m_drawer;
 
-    ///Llista de primitives a pintar
+    /// Definieix si la representació és visible o no
+    bool m_isVisible;
+
+    /// Defineix si la representació està seleccionada a la capa de representacions
+    bool m_isSelected;
+
+    /// Llista amb les primitives per simplificar gestions
     QList<DrawerPrimitive *> m_primitivesList;
+
+    /// Llista de ToolHandlers
+    QList<ToolHandler *> m_toolHandlers;
+
+    /// Map de ToolHandlerWithRepresentation per fer el mapping de Handler a punt
+    QMultiMap<int, ToolHandler *> m_toolHandlersMap;
+
+    /// Drawing representations colors
+    QColor m_representationColor;
+    QColor m_selectedRepresentationColor;
+    QColor m_handlerColor;
+    QColor m_selectedHandlerColor;
+
+    /// Dades de la tool
+    ToolData *m_toolData;
 };
 
 }

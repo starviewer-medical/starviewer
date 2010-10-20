@@ -35,6 +35,9 @@ public:
      */
     void draw(DrawerPrimitive *primitive, int plane, int slice = -1);
 
+    /// TODO En proves. Aquest mètode és el que se suposa que finalment serà el draw()
+    void drawWorkInProgress(DrawerPrimitive *primitive);
+
     /// Esborra totes les primitives que es veuen al visor, és a dir, en el pla i llesques actuals.
     void clearViewer();
 
@@ -62,6 +65,9 @@ public:
     /// Ens diu el total de primitives dibuixades en totes les vistes
     int getNumberOfDrawnPrimitives();
 
+    /// Repaints all on screen
+    void updateRenderer();
+
 public slots:
     /**
      * Deixa de mantenir la primitiva dins de la seva estructura interna
@@ -69,6 +75,9 @@ public slots:
      * @param primitive Primitiva que volem deixar de controlar
      */
     void erasePrimitive(DrawerPrimitive *primitive);
+
+    /// TODO En proves. Aquest és el mètode que se suposa que ha de substituir l'erasePrimitive()
+    void deletePrimitive(DrawerPrimitive *primitive);
 
     /// Esborra totes les primitives registrades al drawer.
     void removeAllPrimitives();
@@ -90,7 +99,7 @@ private:
     bool erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive *> &primitiveContainer);
 
 private slots:
-    /// Refresca les primitives que s'han de veure pel viewer segons el seu estat     
+    /// Refresca les primitives que s'han de veure pel viewer segons el seu estat
     void refresh();
 
 private:

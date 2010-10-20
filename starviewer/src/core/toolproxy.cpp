@@ -7,6 +7,9 @@
 #include "toolproxy.h"
 #include "tool.h"
 #include "tooldata.h"
+
+#include <vtkCommand.h>
+
 #include <QStringList>
 
 namespace udg {
@@ -14,6 +17,7 @@ namespace udg {
 ToolProxy::ToolProxy(QObject *parent)
  : QObject(parent)
 {
+    m_editing = false;
 }
 
 ToolProxy::~ToolProxy()
@@ -92,12 +96,27 @@ Tool* ToolProxy::getTool(const QString &toolName)
 
 void ToolProxy::forwardEvent(unsigned long eventID)
 {
-    //no es pot fer un foreach sobre un map perquè retorna parella d'elements, per això passem tots els elements del map a una QList.
-    QList<Tool *> toolsList = m_toolsMap.values();
-
-    foreach (Tool *tool, toolsList)
+    if (m_editing == false) ///Reenviem events a Tools actives
     {
-        tool->handleEvent(eventID);
+        //no es pot fer un foreach sobre un map perquè retorna parella d'elements, per això passem tots els elements del map a una QList.
+        QList<Tool *> toolsList = m_toolsMap.values();
+
+        foreach (Tool *tool, toolsList)
+        {
+            tool->handleEvent(eventID);
+        }
+    }
+}
+
+void ToolProxy::setEditionMode(bool mode)
+{
+    m_editing = mode;
+
+    if (m_editing == false)
+    {
+        // En passar m_editing a true, les Tools actives han rebut un vtkCommand::LeftButtonPressEvent
+        // així sel's passa l'event que evita que continuin pendents d'aquell
+        this->forwardEvent(vtkCommand::LeftButtonReleaseEvent);
     }
 }
 
