@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2008-2009 by Laboratori de Gràfics i Imatge  ( GILab )  *
+ *   Copyright (C) 2008-2009 by Laboratori de Gràfics i Imatge  (GILab)  *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -8,30 +8,75 @@
 #include "polylinetemporalroitooldata.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include "drawerpolygon.h"
+#include "drawerpolyline.h"
 #include "drawer.h"
-//vtk
-#include <vtkPoints.h>
-#include <vtkLine.h>
+#include "polylineroioutliner.h"
+#include "polylinetemporalroitoolrepresentation.h"
+#include "representationslayer.h"
+#include "volume.h"
 
 namespace udg {
 
-PolylineTemporalROITool::PolylineTemporalROITool( QViewer *viewer, QObject *parent )
- : PolylineROITool(viewer, parent)
+PolylineTemporalROITool::PolylineTemporalROITool(QViewer *viewer, QObject *parent)
+ : Tool(viewer, parent)
 {
     m_toolName = "PolylineTemporalROITool";
     m_hasSharedData = false;
     m_hasPersistentData = true;
 
-    m_myData = new PolylineTemporalROIToolData;
+    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    if (!m_2DViewer)
+    {
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
+    }
 
-    connect(this, SIGNAL(finished()), this, SLOT(start()));
+	m_polylineROIOutliner = new PolylineROIOutliner(m_2DViewer);
+
+	connect(this, SIGNAL(forwardEvent(long unsigned)), m_polylineROIOutliner, SLOT(handleEvent(long unsigned)));
+	connect(m_polylineROIOutliner, SIGNAL(finished(DrawerPrimitive *)), this, SLOT(outlinerFinished(DrawerPrimitive *)));
+
+	m_polyline = NULL;
+
+    // Default compatibility
+ //   this->setEditionCompatibility(false);
+ //   m_toolName = "PolylineTemporalROITool";
+ //   m_hasSharedData = false;
+ //   m_hasPersistentData = true;
+ //   m_myData = new PolylineTemporalROIToolData;
+ //   connect(this, SIGNAL(finished()), this, SLOT(start()));
 }
 
 PolylineTemporalROITool::~PolylineTemporalROITool()
 {
 }
 
+void PolylineTemporalROITool::handleEvent(long unsigned eventID)
+{
+    emit forwardEvent(eventID);
+}
+
+void PolylineTemporalROITool::outlinerFinished(DrawerPrimitive *primitive)
+{
+	disconnect(this, SIGNAL(forwardEvent(long unsigned)), m_polylineROIOutliner, SLOT(handleEvent(long unsigned)));
+    disconnect(m_polylineROIOutliner, SIGNAL(finished(DrawerPrimitive *)), this, SLOT(outlinerFinished(DrawerPrimitive *)));
+
+	delete m_polylineROIOutliner;
+
+	m_polyline = qobject_cast<DrawerPolyline *>(primitive);
+	if (!m_polyline)
+    {
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que primitive no sigui un DrawerPolyline!!!-> ") + primitive->metaObject()->className());
+    }
+
+	m_polylineTemporalROIToolRepresentation = new PolylineTemporalROIToolRepresentation(m_2DViewer->getDrawer());
+	m_polylineTemporalROIToolRepresentation->setPolyline(m_polyline);
+	m_polylineTemporalROIToolRepresentation->setParams(m_2DViewer->getView(), m_2DViewer->getCurrentSlice(), m_2DViewer->getInput()->getOrigin(), m_2DViewer->getInput()->getSpacing());
+    m_polylineTemporalROIToolRepresentation->calculate();
+	m_2DViewer->getRepresentationsLayer()->addRepresentation(m_polylineTemporalROIToolRepresentation, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+    emit finished();
+}
+
+/*
 ToolData *PolylineTemporalROITool::getToolData() const
 {
     return m_myData;
@@ -40,7 +85,7 @@ ToolData *PolylineTemporalROITool::getToolData() const
 void PolylineTemporalROITool::setToolData(ToolData * data)
 {
     // Fem aquesta comparació perquè a vegades ens passa la data que ja tenim a m_myData
-    if( m_myData != data )
+    if (m_myData != data)
     { 
         // creem de nou les dades
         m_toolData = data;
@@ -48,13 +93,20 @@ void PolylineTemporalROITool::setToolData(ToolData * data)
     }
 }
 
-
 void PolylineTemporalROITool::start()
 {
-    DEBUG_LOG("Start PolylineTemporalROI");
-    double bounds[6];
-    m_roiPolygon->getBounds(bounds);
-    this->computeTemporalMean();
+    DEBUG_LOG("Close Form! PTROI");
+    m_mainPolyline->addPoint(m_mainPolyline->getPoint(0));
+    m_mainPolyline->update();
+
+    double *bounds = m_mainPolyline->getPolylineBounds();
+    if (!bounds)
+    {
+        DEBUG_LOG("Bounds no definits");
+    }
+    else
+    {
+        this->computeTemporalMean();
 /*        double *intersection = new double[3];
 
         intersection[0] = (bounds[1]+bounds[0])/2.0;
@@ -65,19 +117,25 @@ void PolylineTemporalROITool::start()
 
         const double * pixelSpacing = m_2DViewer->getInput()->getSeries()->getImage(0)->getPixelSpacing();
 
-        if ( pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0 )
+        if (pixelSpacing[0] == 0.0 && pixelSpacing[1] == 0.0)
         {
             double * spacing = m_2DViewer->getInput()->getSpacing();
-            text->setText( tr("Area: %1 px2\nMean: %2").arg( m_roiPolygon->computeArea( m_2DViewer->getView() , spacing ), 0, 'f', 0 ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+            text->setText(tr("Area: %1 px2\nMean: %2").arg(m_mainPolyline->computeArea(m_2DViewer->getView() , spacing), 0, 'f', 0).arg(this->computeGrayMean(), 0, 'f', 2));
         }
         else
         {
-            text->setText( tr("Area: %1 mm2\nMean: %2").arg( m_roiPolygon->computeArea( m_2DViewer->getView() ) ).arg( this->computeGrayMean(), 0, 'f', 2 ) );
+            text->setText(tr("Area: %1 mm2\nMean: %2").arg(m_mainPolyline->computeArea(m_2DViewer->getView())).arg(this->computeGrayMean(), 0, 'f', 2));
         }
         
-        text->setAttatchmentPoint( intersection );
-        m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
- */
+        text->setAttatchmentPoint(intersection);
+        m_2DViewer->getDrawer()->draw(text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+ *//*
+    }
+    delete m_closingPolyline;
+
+    m_closingPolyline=NULL;
+    m_mainPolyline=NULL;
+    m_2DViewer->getDrawer()->refresh();
 }
 
 void PolylineTemporalROITool::convertInputImageToTemporalImage()
@@ -105,9 +163,9 @@ void PolylineTemporalROITool::convertInputImageToTemporalImage()
     regiont.SetIndex(startt);
 
     m_temporalImage = TemporalImageType::New();
-    m_temporalImage->SetRegions( regiont );
+    m_temporalImage->SetRegions(regiont);
     m_temporalImage->Allocate();
-*/
+*//*
 }
 
 double PolylineTemporalROITool::computeTemporalMean()
@@ -150,34 +208,33 @@ double PolylineTemporalROITool::computeTemporalMean()
     int currentView = m_2DViewer->getView();
 
     // El nombre de segments és el mateix que el nombre de punts del polígon
-    int numberOfSegments = m_roiPolygon->getNumberOfPoints()-1;
+    int numberOfSegments = m_mainPoliline->getNumberOfPoints()-1;
 
     // Taula de punters a vtkLine per a representar cadascun dels segments del polígon
     QVector<vtkLine*> segments;
 
     // Creem els diferents segments
-    for ( i = 0; i < numberOfSegments; i++ )
+    for (i = 0; i < numberOfSegments; i++)
     {
         vtkLine *line = vtkLine::New();
         line->GetPointIds()->SetNumberOfIds(2);
         line->GetPoints()->SetNumberOfPoints(2);
 
-        const double *p1 = m_roiPolygon->getVertix( i );
-        const double *p2 = m_roiPolygon->getVertix( i+1 );
+        const double *p1 = m_mainPolyline->getPoint(i);
+        const double *p2 = m_mainPolyline->getPoint(i+1);
 
-        line->GetPoints()->InsertPoint( 0, p1 );
-        line->GetPoints()->InsertPoint( 1, p2 );
+        line->GetPoints()->InsertPoint(0, p1);
+        line->GetPoints()->InsertPoint(1, p2);
 
         segments << line;
     }
 
-    double bounds[6];
-    m_roiPolygon->getBounds(bounds);
+    double *bounds = m_mainPolyline->getPolylineBounds();
     double *spacing = m_2DViewer->getInput()->getSpacing();
 
     int rayPointIndex;
     int intersectionIndex;
-    switch( currentView )
+    switch(currentView)
     {
     case Q2DViewer::Axial:
         rayP1[0] = bounds[0];// xmin
@@ -219,49 +276,49 @@ double PolylineTemporalROITool::computeTemporalMean()
     break;
     }
 
-    while( rayP1[rayPointIndex] <= verticalLimit )
+    while(rayP1[rayPointIndex] <= verticalLimit)
     {
         intersectionList.clear();
         indexList.clear();
-        for ( i = 0; i < numberOfSegments; i++ )
+        for (i = 0; i < numberOfSegments; i++)
         {
             auxPoints = segments[i]->GetPoints();
             auxPoints->GetPoint(0,p0);
             auxPoints->GetPoint(1,p1);	
-            if( (rayP1[rayPointIndex] <= p0[rayPointIndex] && rayP1[rayPointIndex] >= p1[rayPointIndex]) 
-                || (rayP1[rayPointIndex] >= p0[rayPointIndex] && rayP1[rayPointIndex] <= p1[rayPointIndex]) )
+            if ((rayP1[rayPointIndex] <= p0[rayPointIndex] && rayP1[rayPointIndex] >= p1[rayPointIndex]) 
+                || (rayP1[rayPointIndex] >= p0[rayPointIndex] && rayP1[rayPointIndex] <= p1[rayPointIndex]))
                 indexList << i;
         }
         // Obtenim les interseccions entre tots els segments de la ROI i el raig actual
         foreach (int segment, indexList)
         {
-            if ( segments[segment]->IntersectWithLine(rayP1, rayP2, 0.0001, t, intersectPoint, pcoords, subId) > 0)
+            if (segments[segment]->IntersectWithLine(rayP1, rayP2, 0.0001, t, intersectPoint, pcoords, subId) > 0)
             {
                 double *findedPoint = new double[3];
                 findedPoint[0] = intersectPoint[0];
                 findedPoint[1] = intersectPoint[1];
                 findedPoint[2] = intersectPoint[2];
-                intersectionList.append ( findedPoint );
+                intersectionList.append (findedPoint);
             }
         }
 
-        if ( (intersectionList.count() % 2)==0 )
+        if ((intersectionList.count() % 2)==0)
         {
             int limit = intersectionList.count()/2;
-            for ( i = 0; i < limit; i++ )
+            for (i = 0; i < limit; i++)
             {
                 initialPosition = i * 2;
                 endPosition = initialPosition + 1;
 
-                firstIntersection = intersectionList.at( initialPosition );
-                secondIntersection = intersectionList.at( endPosition );
+                firstIntersection = intersectionList.at(initialPosition);
+                secondIntersection = intersectionList.at(endPosition);
 
                 // Tractem els dos sentits de les interseccions
                 if (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])//d'esquerra cap a dreta
                 {
-                    while ( firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex] )
+                    while (firstIntersection[intersectionIndex] <= secondIntersection[intersectionIndex])
                     {
-                        aux = this->getGraySerie( firstIntersection, temporalSize );
+                        aux = this->getGraySerie(firstIntersection, temporalSize);
                         for(j=0;j<temporalSize;j++)
                         {
                             mean[j] += aux[j];
@@ -272,9 +329,9 @@ double PolylineTemporalROITool::computeTemporalMean()
                 }
                 else // De dreta cap a esquerra
                 {
-                    while ( firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex] )
+                    while (firstIntersection[intersectionIndex] >= secondIntersection[intersectionIndex])
                     {
-                        aux = this->getGraySerie( firstIntersection, temporalSize );
+                        aux = this->getGraySerie(firstIntersection, temporalSize);
                         for(j=0;j<temporalSize;j++)
                         {
                             mean[j] += aux[j];
@@ -286,7 +343,7 @@ double PolylineTemporalROITool::computeTemporalMean()
             }
         }
         else
-            DEBUG_LOG( "EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!" );
+            DEBUG_LOG("EL NOMBRE D'INTERSECCIONS ENTRE EL RAIG I LA ROI Ã‰S IMPARELL!!");
 
         // Fem el següent pas en la coordenada que escombrem
         rayP1[rayPointIndex] += spacing[1];
@@ -304,14 +361,14 @@ double PolylineTemporalROITool::computeTemporalMean()
     this->m_myData->setMeanVector(mean);
 
     // Destruim els diferents segments que hem creat per simular la roi
-    for ( i = 0; i < numberOfSegments; i++ )
+    for (i = 0; i < numberOfSegments; i++)
         segments[i]->Delete();
 
     return 0.0;
 }
 
 
-QVector<double> PolylineTemporalROITool::getGraySerie( double *coords, int size )
+QVector<double> PolylineTemporalROITool::getGraySerie(double *coords, int size)
 {
     QVector<double> v (size);
     double *origin = m_2DViewer->getInput()->getOrigin();
@@ -320,7 +377,7 @@ QVector<double> PolylineTemporalROITool::getGraySerie( double *coords, int size 
     int xIndex, yIndex, zIndex;
     int i;
 
-    Q2DViewer::getXYZIndexesForView( xIndex, yIndex, zIndex, m_2DViewer->getView() );
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
     index[xIndex+1] = (int)((coords[xIndex] - origin[xIndex])/spacing[xIndex]);
     index[yIndex+1] = (int)((coords[yIndex] - origin[yIndex])/spacing[yIndex]);
     index[zIndex+1] = m_2DViewer->getCurrentSlice();
@@ -332,5 +389,6 @@ QVector<double> PolylineTemporalROITool::getGraySerie( double *coords, int size 
     }
     return v;
 }
+*/
 
 }

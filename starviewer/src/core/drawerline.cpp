@@ -7,6 +7,7 @@
 #include "drawerline.h"
 #include "logging.h"
 #include "mathtools.h"
+#include "q2dviewer.h"
 // vtk
 #include <vtkLineSource.h>
 #include <vtkPolyDataMapper2D.h>
@@ -153,7 +154,24 @@ void DrawerLine::updateVtkActorProperties()
     properties->SetColor(color.redF(), color.greenF(), color.blueF());
 }
 
-double DrawerLine::computeDistance(double * spacing)
+double* DrawerLine::getLeftPoint(int view)
+{
+    double *point = new double[3];
+    int xIndex = Q2DViewer::getXIndexForView(view);
+    
+    if (m_firstPoint[xIndex] <= m_secondPoint[xIndex])
+    {
+        memcpy(point, m_firstPoint, sizeof(double) * 3);
+    }
+    else
+    {
+        memcpy(point, m_secondPoint, sizeof(double) * 3);
+    }
+
+    return point;
+}
+
+double DrawerLine::computeDistance(double *spacing)
 {
     double distance;
     if (spacing == NULL)

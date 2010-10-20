@@ -16,6 +16,7 @@
 #include "imageplane.h"
 #include "drawercrosshair.h"
 #include "drawer.h"
+#include "representationslayer.h"
 // vtk
 #include <vtkCommand.h>
 #include <vtkMatrix4x4.h>
@@ -105,7 +106,10 @@ void Cursor3DTool::initializePosition()
         m_crossHair->increaseReferenceCount();
 
         m_crossHair->setCentrePoint( xyz[0], xyz[1],xyz[2] );
-        m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
+        m_2DViewer->getRepresentationsLayer()->addPrimitive( m_crossHair, QViewer::Top2DPlane );
+        //m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
+        m_2DViewer->getDrawer()->drawWorkInProgress( m_crossHair );
+
     }
 
     m_myData->setVisible( true );
@@ -225,7 +229,9 @@ void Cursor3DTool::updateProjectedPoint()
             //HACK succedani d'Smart Pointer per tal que el drawer no elimini el crossHair quan s'activi el thickslab
             m_crossHair->increaseReferenceCount();
 
-            m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
+            m_2DViewer->getRepresentationsLayer()->addPrimitive( m_crossHair, QViewer::Top2DPlane );
+            //m_2DViewer->getDrawer()->draw( m_crossHair , QViewer::Top2DPlane );
+            m_2DViewer->getDrawer()->drawWorkInProgress( m_crossHair );
         }
 
         if( !m_myData->isVisible() )

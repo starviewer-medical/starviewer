@@ -18,9 +18,7 @@ class vtkPolyDataMapper;
 namespace udg {
 
 /**
- *
- *  Primitiva de punt
- *
+    Primitiva de punt
  */
 class DrawerPoint : public DrawerPrimitive {
 Q_OBJECT
@@ -28,12 +26,14 @@ public:
     DrawerPoint(QObject *parent = 0);
     ~DrawerPoint();
 
-    /// Assignem el punt
+    /// Assignem/Obtenim la posició del punt
     void setPosition(double point[3]);
     void setPosition(QVector<double> point);
+    double* getPosition();
 
-    /// Li assignem el radi a la circumferència que defineix el punt
-    void setRadius(double radius);
+    /// Assignem/Obtenim el radi a la circumferÃ¨ncia que defineix el punt
+    void setRadius( double r);
+    double getRadius();
 
     vtkProp* getAsVtkProp();
 
