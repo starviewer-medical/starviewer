@@ -302,10 +302,9 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
                 fileExtension = "jpg";
                 break;
 
-            // \TODO el format tiff fa petar al desar, mirar si és problema de compatibilitat del sistema o de les pròpies vtk
             case TIFF:
                 writer = vtkTIFFWriter::New();
-                fileExtension = "tif";
+                fileExtension = "tiff";
                 break;
 
             case PNM:
