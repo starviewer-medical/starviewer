@@ -137,6 +137,7 @@ Status QueryPacs::query()
 Status QueryPacs::query( DicomMask mask )
 {
     m_cancelQuery = false;
+    m_cancelRequestSent = false;
 
     m_mask = mask.getDicomMask();
 
