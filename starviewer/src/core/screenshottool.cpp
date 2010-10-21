@@ -27,12 +27,13 @@ namespace udg {
 const QString ScreenShotTool::PngFileFilter = tr("PNG (*.png)");
 const QString ScreenShotTool::JpegFileFilter = tr("Jpeg (*.jpg)");
 const QString ScreenShotTool::BmpFileFilter = tr("BMP (*.bmp)");
+const QString ScreenShotTool::TiffFileFilter = tr("TIFF (*.tiff)");
 
 ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer,parent)
 {
     m_toolName = "ScreenShotTool";
     readSettings();
-    m_fileExtensionFilters = PngFileFilter + ";;" + JpegFileFilter + ";;" + BmpFileFilter;
+    m_fileExtensionFilters = PngFileFilter + ";;" + JpegFileFilter + ";;" + BmpFileFilter + ";;" + TiffFileFilter;
     if( !viewer )
         DEBUG_LOG( "El viewer proporcionat és NUL!" );
 }
@@ -152,6 +153,10 @@ void ScreenShotTool::screenShot( bool singleShot )
         else if( m_lastScreenShotExtensionFilter == BmpFileFilter )
         {
             fileExtension = QViewer::BMP;
+        }
+        else if (m_lastScreenShotExtensionFilter == TiffFileFilter)
+        {
+            fileExtension = QViewer::TIFF;
         }
         else
         {

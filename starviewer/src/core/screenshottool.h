@@ -60,6 +60,7 @@ private:
     static const QString PngFileFilter;
     static const QString JpegFileFilter;
     static const QString BmpFileFilter;
+    static const QString TiffFileFilter;
 
     /// Path de l'última imatge guardada
     QString m_lastScreenShotPath;
