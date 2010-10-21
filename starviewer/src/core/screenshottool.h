@@ -23,16 +23,15 @@ class QViewer;
     Ctrl+A fa totes les captures possibles. En el cas que el viewer sigui el 2D, fara les captures de totes
     les imatges de la sèrie, altrament farà una captura simple
 
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class ScreenShotTool: public Tool {
 Q_OBJECT
 public:
-    ScreenShotTool(QViewer *viewer, QObject *parent = 0 );
-
+    ScreenShotTool(QViewer *viewer, QObject *parent = 0);
     ~ScreenShotTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
 public slots:
     /// Només fa captura de la imatge actual
@@ -44,7 +43,7 @@ public slots:
 private slots:
     /// Fa la captura d'imatge del viewer
     /// Si single és true fa la captura del que s'està veient, sinó ho fa per totes en cas que sigui un 2DViewer
-    void screenShot( bool singleShot = true );
+    void screenShot(bool singleShot = true);
     
     /// Llegeix les configuracions que han estat guardades
     void readSettings();
