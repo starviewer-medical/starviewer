@@ -10,10 +10,10 @@
 #include "image.h"
 #include "toolproxy.h"
 #include "patientbrowsermenu.h"
-#include "windowlevelpresetstooldata.h" // per poder afegir i modificar els presets que visualitzem
+#include "windowlevelpresetstooldata.h" // Per poder afegir i modificar els presets que visualitzem
 #include "transferfunction.h"
 
-//TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
+// TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
 
 // Qt
@@ -21,7 +21,7 @@
 #include <QContextMenuEvent>
 #include <QMessageBox>
 
-// include's vtk
+// Include's vtk
 #include <QVTKWidget.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
@@ -32,10 +32,9 @@
 #include <vtkTIFFWriter.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkEventQtSlotConnect.h>
-// necessari pel zoom
+// Necessari pel zoom
 #include <vtkCamera.h>
-// per grabar el vídeo
-
+// Per grabar el vídeo
 #ifndef Q_OS_LINUX
 #include <vtkMPEG2Writer.h>
 #endif
@@ -169,7 +168,8 @@ ToolProxy* QViewer::getToolProxy() const
 
 void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clientData, void *callData, vtkCommand *command)
 {
-    // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. \TODO ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
+    // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor. 
+    // TODO Ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch (vtkEvent)
     {
         case QVTKWidget::ContextMenuEvent:
@@ -266,7 +266,7 @@ void QViewer::setupInteraction()
 {
     Q_ASSERT(m_renderer);  
 
-    // \TODO fer això aquí? o fer-ho en el tool manager?
+    // TODO Fer això aquí? o fer-ho en el tool manager?
     this->getInteractor()->RemoveObservers(vtkCommand::LeftButtonPressEvent);
     this->getInteractor()->RemoveObservers(vtkCommand::RightButtonPressEvent);
     this->getInteractor()->RemoveObservers(vtkCommand::MouseWheelForwardEvent);
@@ -275,7 +275,7 @@ void QViewer::setupInteraction()
     this->getInteractor()->RemoveObservers(vtkCommand::CharEvent);
 
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
-    // despatxa qualsevol event-> tools
+    // Despatxa qualsevol event-> tools
     m_vtkQtConnections->Connect(this->getInteractor(), vtkCommand::AnyEvent, this, SLOT(eventHandler(vtkObject*, unsigned long, void*, void*, vtkCommand*)));
 }
 
@@ -318,26 +318,26 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
                 break;
 
             case DICOM:
-                // TODO a suportar
+                // TODO A suportar
                 DEBUG_LOG("El format DICOM encara no està suportat per guardar imatges");
                 break;
 
             case META:
-                // TODO a suportar
+                // TODO A suportar
                 DEBUG_LOG("El format META encara no està suportat per guardar imatges");
                 break;
         }
         int count = m_grabList.count();
         if (count == 1)
         {
-            // només grabem una sola imatge
+            // Només grabem una sola imatge
             writer->SetInput(m_grabList.at(0));
             writer->SetFileName(qPrintable(QString("%1.%2").arg(baseName).arg(fileExtension)));
             writer->Write();
         }
         else if (count > 1)
         {
-            // tenim més d'una imatge, per tant li afegim 
+            // Tenim més d'una imatge, per tant li afegim 
             // un índex adicional per cada imatge automàticament
             int i = 0;
             int padding = QString::number(count).size();
@@ -349,7 +349,7 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
                 i++;
             }
         }
-        // buidem la llista
+        // Buidem la llista
         m_grabList.clear();
         return true;
     }
@@ -385,13 +385,13 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
         videoWriter->Start();
 
         // TODO falta activar el procés de notificació de procés de gravació
-        //int progressIncrement = static_cast<int>((1.0/(double)count) * 100);
-        //int progress = 0;
+        // int progressIncrement = static_cast<int>((1.0/(double)count) * 100);
+        // int progress = 0;
         for (unsigned int i = 0; i < count; i++)
         {
             videoWriter->SetInput(m_grabList.at(i));
 
-            for (int j = 0; j < 3; j++) // TODO perquè un loop de 3?
+            for (int j = 0; j < 3; j++) // TODO Perquè un loop de 3?
             {
                 videoWriter->Write();
             }
@@ -421,11 +421,11 @@ void QViewer::render()
 
 void QViewer::zoom(double factor)
 {
-    // TODO potser caldria una comprovació de seguretat pel que torna cadascuna d'aquestes crides
+    // TODO Potser caldria una comprovació de seguretat pel que torna cadascuna d'aquestes crides
     vtkRenderer *renderer = getRenderer();
     if (renderer)
     {
-        // codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
+        // Codi extret de void vtkInteractorStyleTrackballCamera::Dolly(double factor)
         vtkCamera *camera = getActiveCamera();
         if (camera->GetParallelProjection())
         {
@@ -495,7 +495,7 @@ void QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
     this->computeWorldToDisplay(topCorner[0], topCorner[1], topCorner[2], displayTopLeft);
     this->computeWorldToDisplay(bottomCorner[0], bottomCorner[1], bottomCorner[2], displayBottomRight);
 
-    // recalculem tenint en compte el display
+    // Recalculem tenint en compte el display
     double width, height;
     width = fabs(displayTopLeft[0] - displayBottomRight[0]);
     height = fabs(displayTopLeft[1] - displayBottomRight[1]);
@@ -592,10 +592,10 @@ void QViewer::contextMenuRelease()
     int eventPositionY = this->getEventPositionY();
 
     int *size = this->getRenderWindowSize();
-    // remember to flip y
+    // Remember to flip y
     QPoint point = QPoint(eventPositionX, size[1]-eventPositionY);
 
-    // map to global
+    // Map to global
     QPoint globalPoint = this->mapToGlobal(point);
 //     emit showContextMenu(globalPoint);
     this->contextMenuEvent(new QContextMenuEvent(QContextMenuEvent::Mouse, point, globalPoint));
@@ -612,7 +612,7 @@ void QViewer::updateWindowLevelData()
 
     m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
 
-    // agafem el window level de la imatge central per evitar problemes
+    // Agafem el window level de la imatge central per evitar problemes
     // de que tinguem diferents windows levels a cada imatge i el de la
     // primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
     int index = m_mainVolume->getNumberOfSlicesPerPhase() / 2;
@@ -655,7 +655,7 @@ void QViewer::updateWindowLevelData()
             }
         }
     }
-    else // no n'hi ha de definits al volum, agafem el que ens doni el viewer
+    else // No n'hi ha de definits al volum, agafem el que ens doni el viewer
     {
         double windowLevel[2];
         this->getDefaultWindowLevel(windowLevel);
@@ -701,7 +701,7 @@ void QViewer::contextMenuEvent(QContextMenuEvent *menuEvent)
         // És possible que en alguns moments (quan es carrega el pacient i surten altres diàlegs)
         // no hi hagi window activa o que aquesta ni sigui una QApplicationMainWindow i ho sigui un diàleg,
         // per tant, ens pot tornar NULL i en algunes ocasions ens feia petar l'aplicació. Així ens curem en salut
-        // TODO estaria bé comprovar
+        // TODO Estaria bé comprovar
         QApplicationMainWindow *mainWindow = QApplicationMainWindow::getActiveApplicationMainWindow();
         if (!mainWindow)
         {

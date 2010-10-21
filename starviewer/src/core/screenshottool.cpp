@@ -10,7 +10,7 @@
 #include "logging.h"
 #include "volume.h"
 #include "coresettings.h"
-// definicions globals d'aplicació
+// Definicions globals d'aplicació
 #include "starviewerapplication.h"
 // vtk
 #include <vtkCommand.h>
@@ -20,7 +20,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QString>
-#include <QApplication> // pel "wait cursor"
+#include <QApplication> // Pel "wait cursor"
 
 namespace udg {
 
@@ -29,41 +29,43 @@ const QString ScreenShotTool::JpegFileFilter = tr("Jpeg (*.jpg)");
 const QString ScreenShotTool::BmpFileFilter = tr("BMP (*.bmp)");
 const QString ScreenShotTool::TiffFileFilter = tr("TIFF (*.tiff)");
 
-ScreenShotTool::ScreenShotTool( QViewer *viewer, QObject *parent ) : Tool(viewer,parent)
+ScreenShotTool::ScreenShotTool(QViewer *viewer, QObject *parent) : Tool(viewer,parent)
 {
     m_toolName = "ScreenShotTool";
     readSettings();
     m_fileExtensionFilters = PngFileFilter + ";;" + JpegFileFilter + ";;" + BmpFileFilter + ";;" + TiffFileFilter;
-    if( !viewer )
-        DEBUG_LOG( "El viewer proporcionat és NUL!" );
+    if (!viewer)
+    {
+        DEBUG_LOG("El viewer proporcionat és NUL!");
+    }
 }
 
 ScreenShotTool::~ScreenShotTool()
 {
 }
 
-void ScreenShotTool::handleEvent( unsigned long eventID )
+void ScreenShotTool::handleEvent(unsigned long eventID)
 {
-    switch( eventID )
+    switch (eventID)
     {
-    case vtkCommand::KeyPressEvent:
-    {
-        int key = m_viewer->getInteractor()->GetKeyCode();
-        // TODO cal mirar quina és la manera adequada de com gestionar el Ctrl+tecla amb vtk
-        // CTRL+s = key code 19
-        // CTRL+a = key code 1
-        switch( key )
+        case vtkCommand::KeyPressEvent:
         {
-        case 19: // Ctrl+s, "single shot"
-            this->screenShot();
-        break;
+            int key = m_viewer->getInteractor()->GetKeyCode();
+            // TODO Cal mirar quina és la manera adequada de com gestionar el Ctrl+tecla amb vtk
+            // CTRL+s = key code 19
+            // CTRL+a = key code 1
+            switch (key)
+            {
+                case 19: // Ctrl+s, "single shot"
+                    this->screenShot();
+                    break;
 
-        case 1: // Ctrl+a, "multiple shot"
-            this->screenShot(false);
-        break;
+                case 1: // Ctrl+a, "multiple shot"
+                    this->screenShot(false);
+                    break;
+            }
         }
-    }
-    break;
+        break;
     }
 }
 
@@ -77,80 +79,84 @@ void ScreenShotTool::completeCapture()
     screenShot(false);
 }
 
-void ScreenShotTool::screenShot( bool singleShot )
+void ScreenShotTool::screenShot(bool singleShot)
 {
     readSettings();
 
     QString caption;
-    if( singleShot )
+    if (singleShot)
+    {
         caption = tr("Save single screenshot as...");
+    }
     else
     {
-        QMessageBox::information( 0, tr("Information"), tr("You're going to save several screenshots at one time.\nIt's recommended you save them in an empty folder.") );
+        QMessageBox::information(0, tr("Information"), tr("You're going to save several screenshots at one time.\nIt's recommended you save them in an empty folder."));
         caption = tr("Save multiple screenshots as...");
     }
-    QString filename = QFileDialog::getSaveFileName(0, caption, m_lastScreenShotPath + "/" + compoundSelectedName(), m_fileExtensionFilters, &m_lastScreenShotExtensionFilter );
+    QString filename = QFileDialog::getSaveFileName(0, caption, m_lastScreenShotPath + "/" + compoundSelectedName(), m_fileExtensionFilters, &m_lastScreenShotExtensionFilter);
 
-    if( !filename.isEmpty() )
+    if (!filename.isEmpty())
     {
-        //mirem que el nom del fitxer no contingui coses com: nom.png, és a dir, que no es mostri l'extensió
+        // Mirem que el nom del fitxer no contingui coses com: nom.png, és a dir, que no es mostri l'extensió
         QString selectedExtension = m_lastScreenShotExtensionFilter.mid(m_lastScreenShotExtensionFilter.length() - 5, 4);
 
-        if ( filename.endsWith( selectedExtension ) )
-            filename.remove( filename.lastIndexOf( selectedExtension ), 4 );
+        if (filename.endsWith(selectedExtension))
+        {
+            filename.remove(filename.lastIndexOf(selectedExtension), 4);
+        }
 
-        //guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
-        m_lastScreenShotPath = QFileInfo( filename ).absolutePath();
-        //guardem el nom de l'ultim fitxer
-        m_lastScreenShotFileName = QFileInfo( filename ).fileName();
+        // Guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
+        m_lastScreenShotPath = QFileInfo(filename).absolutePath();
+        // Guardem el nom de l'ultim fitxer
+        m_lastScreenShotFileName = QFileInfo(filename).fileName();
 
-        QApplication::setOverrideCursor( Qt::WaitCursor );// pel que pugui trigar el procés
-        if( singleShot )
+        QApplication::setOverrideCursor(Qt::WaitCursor);// Pel que pugui trigar el procés
+        if (singleShot)
         {
             m_viewer->grabCurrentView();
         }
         else
         {
-            Q2DViewer *viewer2D = dynamic_cast< Q2DViewer * >( m_viewer );
-            if( viewer2D )
+            Q2DViewer *viewer2D = dynamic_cast< Q2DViewer * >(m_viewer);
+            if (viewer2D)
             {
                 // Tenim un  Q2DViewer, llavors podem guardar totes les imatges
 
-                // guardem la llesca i fase actual per restaurar
+                // Guardem la llesca i fase actual per restaurar
                 int currentSlice = viewer2D->getCurrentSlice();
                 int currentPhase = viewer2D->getCurrentPhase();
                 int maxSlice = viewer2D->getMaximumSlice() + 1;
                 // En cas que tinguem fases farem tantes passades com fases
                 int phases = viewer2D->getInput()->getNumberOfPhases();
-                for( int i = 0; i < maxSlice; i++ )
+                for (int i = 0; i < maxSlice; i++)
                 {
                     viewer2D->setSlice(i);
-                    for( int j = 0; j < phases; j++ )
+                    for (int j = 0; j < phases; j++)
                     {
                         viewer2D->setPhase(j);
                         viewer2D->grabCurrentView();
                     }
                 }
-                // restaurem
-                viewer2D->setSlice( currentSlice );
-                viewer2D->setPhase( currentPhase );
+                // Restaurem
+                viewer2D->setSlice(currentSlice);
+                viewer2D->setPhase(currentPhase);
             }
-            else // tenim un visor que no és 2D, per tant fem un "single shot"
+            else // Tenim un visor que no és 2D, per tant fem un "single shot"
             {
                 m_viewer->grabCurrentView();
             }
         }
-        // determinem l'extensió del fitxer
+        // Determinem l'extensió del fitxer
         QViewer::FileType fileExtension;
-        if( m_lastScreenShotExtensionFilter == PngFileFilter )
+        if (m_lastScreenShotExtensionFilter == PngFileFilter)
         {
             fileExtension = QViewer::PNG;
         }
-        else if( m_lastScreenShotExtensionFilter == JpegFileFilter )
+        else if (m_lastScreenShotExtensionFilter == JpegFileFilter)
         {
             fileExtension = QViewer::JPEG;
         }
-        else if( m_lastScreenShotExtensionFilter == BmpFileFilter )
+        else if (m_lastScreenShotExtensionFilter == BmpFileFilter)
         {
             fileExtension = QViewer::BMP;
         }
@@ -164,49 +170,55 @@ void ScreenShotTool::screenShot( bool singleShot )
             fileExtension = QViewer::PNG;
             m_lastScreenShotExtensionFilter = PngFileFilter;
         }
-        // guardem totes les imatges capturades
-        m_viewer->saveGrabbedViews( filename, fileExtension );
+        // Guardem totes les imatges capturades
+        m_viewer->saveGrabbedViews(filename, fileExtension);
         QApplication::restoreOverrideCursor();
 
         writeSettings();
     }
     else
     {
-        // cal fer alguna cosa?
-        // si està "empty" és que o bé ha cancelat o bé no ha introduit res
+        // Cal fer alguna cosa?
+        // Si està "empty" és que o bé ha cancelat o bé no ha introduit res
     }
 }
 
 QString ScreenShotTool::compoundSelectedName()
 {
-    // TODO això estaria millor si es fes amb la classe QRegExp,
+    // TODO Això estaria millor si es fes amb la classe QRegExp,
     // produint un codi molt més net i clar
     QString compoundFile = "";
 
-    if ( !m_lastScreenShotFileName.isEmpty() )
+    if (!m_lastScreenShotFileName.isEmpty())
     {
-        QChar lastChar = m_lastScreenShotFileName[m_lastScreenShotFileName.length()-1];
+        QChar lastChar = m_lastScreenShotFileName[m_lastScreenShotFileName.length() - 1];
 
-        if ( lastChar.isNumber() )
+        if (lastChar.isNumber())
         {
-            int i = m_lastScreenShotFileName.length()-1;
+            int i = m_lastScreenShotFileName.length() - 1;
 
             do
             {
                 i--;
                 lastChar = m_lastScreenShotFileName[i];
-            }while ( i > 0 && lastChar.isNumber() );
+            }while (i > 0 && lastChar.isNumber());
 
             bool ok;
-            int sufix = m_lastScreenShotFileName.right(m_lastScreenShotFileName.length()-(i+1)).toInt( &ok, 10 );
+            int sufix = m_lastScreenShotFileName.right(m_lastScreenShotFileName.length() - (i + 1)).toInt(&ok, 10);
 
-            if ( ok )
-                compoundFile = m_lastScreenShotFileName.mid(0, i+1) + QString::number(sufix+1, 10);
+            if (ok)
+            {
+                compoundFile = m_lastScreenShotFileName.mid(0, i + 1) + QString::number(sufix + 1, 10);
+            }
             else
+            {
                 compoundFile = m_lastScreenShotFileName;
+            }
         }
         else
+        {
             compoundFile = m_lastScreenShotFileName + "1";
+        }
     }
     return compoundFile;
 }
@@ -215,18 +227,18 @@ void ScreenShotTool::readSettings()
 {
     Settings settings;
     
-    m_lastScreenShotPath = settings.getValue( CoreSettings::ScreenShotToolFolder ).toString();
-    m_lastScreenShotExtensionFilter = settings.getValue( CoreSettings::ScreenShotToolFileExtension ).toString();
-    m_lastScreenShotFileName = settings.getValue( CoreSettings::ScreenShotToolFilename ).toString();
+    m_lastScreenShotPath = settings.getValue(CoreSettings::ScreenShotToolFolder).toString();
+    m_lastScreenShotExtensionFilter = settings.getValue(CoreSettings::ScreenShotToolFileExtension).toString();
+    m_lastScreenShotFileName = settings.getValue(CoreSettings::ScreenShotToolFilename).toString();
 }
 
 void ScreenShotTool::writeSettings()
 {
     Settings settings;
 
-    settings.setValue( CoreSettings::ScreenShotToolFolder, m_lastScreenShotPath );
-    settings.setValue( CoreSettings::ScreenShotToolFileExtension, m_lastScreenShotExtensionFilter );
-    settings.setValue( CoreSettings::ScreenShotToolFilename, m_lastScreenShotFileName );
+    settings.setValue(CoreSettings::ScreenShotToolFolder, m_lastScreenShotPath);
+    settings.setValue(CoreSettings::ScreenShotToolFileExtension, m_lastScreenShotExtensionFilter);
+    settings.setValue(CoreSettings::ScreenShotToolFilename, m_lastScreenShotFileName);
 }
 
 }
