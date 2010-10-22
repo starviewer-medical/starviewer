@@ -126,20 +126,14 @@ void EraserTool::drawAreaOfErasure()
 
 void EraserTool::erasePrimitive()
 {
-    if (!m_polygon)
+    if (m_polygon)
     {
-        DrawerPrimitive *primitiveToErase = m_2DViewer->getDrawer()->getPrimitiveNearerToPoint(m_startPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-        if (primitiveToErase)
-        {
-            m_2DViewer->getDrawer()->erasePrimitive(primitiveToErase);
-            m_2DViewer->render();
-        }
-    }
-    else
-    {
+        // Si s'ha dibuixat una àrea d'esborrat, procedim a eliminar les representacions contingudes
         double bounds[6];
         m_polygon->getBounds(bounds);
         m_2DViewer->getRepresentationsLayer()->removePrimitivesInsideBounds(bounds);
+        // TODO Fer-ho explícitament després o fer-ho dins del propi mètode?
+        m_2DViewer->render();
     }
 }
 
