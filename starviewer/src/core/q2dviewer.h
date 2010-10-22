@@ -13,7 +13,6 @@
 class vtkPropPicker;
 class vtkTextActor;
 class vtkCornerAnnotation;
-class vtkAxisActor2D;
 class vtkCoordinate;
 class vtkScalarBarActor;
 class vtkImageBlend;
@@ -67,7 +66,7 @@ public:
     enum AlignPosition { AlignCenter, AlignRight, AlignLeft };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlag { NoAnnotation = 0x0, WindowInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, RulersAnnotation = 0x4, SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40, AllAnnotation = 0x7F };
+    enum AnnotationFlag { NoAnnotation = 0x0, WindowInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40, AllAnnotation = 0x7F };
     Q_DECLARE_FLAGS(AnnotationFlags, AnnotationFlag)
 
     Q2DViewer(QWidget *parent = 0);
@@ -339,9 +338,6 @@ private:
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
 
-    /// Crea els indicadors d'escala
-    void createRulers();
-
     /// Crea la barra de valors
     void createScalarBar();
 
@@ -389,9 +385,6 @@ private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip )
     void updateCamera();
 
-    /// Actualitza els rulers
-    void updateRulers();
-
 protected:
     /// Actor d'imatge
     vtkImageActor *m_imageActor;
@@ -434,16 +427,6 @@ private:
 
     /// Aquest string indica les anotacions que ens donen les referències del pacient (Right,Left,Posterior,Anterior,Inferior,Superior) 
     QString m_patientOrientationText[4];
-
-    /// Marcadors que indicaran les mides relatives del model en les dimensions x,y i z (ample, alçada i profunditat). 
-    /// Al ser visor 2D en veurem només dues. Aquestes variaran en funció de la vista en la que ens trobem.
-    vtkAxisActor2D *m_sideRuler, *m_bottomRuler;
-
-    /// Coordenades fixes dels rulers que els ajustaran a un dels extrems inferiors/superiors o laterals de la pantalla
-    vtkCoordinate *m_anchoredRulerCoordinates;
-
-    /// Coordenades dels extrems per cada dimensió del ruler
-    double m_rulerExtent[6];
 
     /// Textes adicionals d'anotoació
     vtkTextActor *m_patientOrientationTextActor[4];
