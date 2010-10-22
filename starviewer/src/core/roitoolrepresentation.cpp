@@ -130,7 +130,7 @@ void ROIToolRepresentation::printData()
 
     placeText();
     m_text->shadowOn();
-    m_drawer->drawWorkInProgress(m_text);
+    m_drawer->draw(m_text);
 }
 
 void ROIToolRepresentation::placeText()

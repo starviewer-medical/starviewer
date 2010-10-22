@@ -85,7 +85,7 @@ void PolylineROIOutliner::annotateNewPoint()
     
     if (firstPoint) // L'afegim a l'escena
     {        
-        m_2DViewer->getDrawer()->drawWorkInProgress(m_mainPolyline);
+        m_2DViewer->getDrawer()->draw(m_mainPolyline);
     }
     else // Actualitzem l'estructura interna
     {
@@ -116,7 +116,7 @@ void PolylineROIOutliner::simulateClosingPolyline()
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
             m_closingPolyline->increaseReferenceCount();
             m_closingPolyline->setLinePattern(DrawerPrimitive::DiscontinuousLinePattern);
-            m_2DViewer->getDrawer()->drawWorkInProgress(m_closingPolyline);
+            m_2DViewer->getDrawer()->draw(m_closingPolyline);
 
             // Afegim els punts que simulen aquesta polilínia
             m_closingPolyline->addPoint(m_mainPolyline->getPoint(0));
@@ -147,7 +147,7 @@ void PolylineROIOutliner::closeForm()
     delete m_mainPolyline;
 
     // Dibuixem el polígon resultant
-    m_2DViewer->getDrawer()->drawWorkInProgress(m_roiPolygon);
+    m_2DViewer->getDrawer()->draw(m_roiPolygon);
 
     // TODO Cal?
     // m_2DViewer->getDrawer()->updateRenderer();

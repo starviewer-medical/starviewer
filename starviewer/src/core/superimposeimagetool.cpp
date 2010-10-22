@@ -64,7 +64,7 @@ void SuperimposeImageTool::superimposeImage()
     m_image->setView(m_2DViewer->getView());
     m_image->setOpacity(0.6);
 
-    m_2DViewer->getDrawer()->drawWorkInProgress(m_image);
+    m_2DViewer->getDrawer()->draw(m_image);
 
     m_superimposeImageToolRepresentation = new SuperimposeImageToolRepresentation(m_2DViewer->getDrawer());
     m_superimposeImageToolRepresentation->setImageData(m_image);
