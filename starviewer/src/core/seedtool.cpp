@@ -87,7 +87,7 @@ void SeedTool::setToolData(ToolData * data)
             m_2DViewer->getDrawer()->erasePrimitive(m_myData->getPoint());
             m_myData->setPoint(NULL);
             m_myData->setSeedPosition(m_myData->getSeedPosition());
-            m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+            m_2DViewer->getDrawer()->draw(m_myData->getPoint());
         }
     }
 }
@@ -136,8 +136,7 @@ void SeedTool::updateSeedPosition()
         emit seedChanged(seedPosition[0],seedPosition[1],seedPosition[2]);
         
         m_2DViewer->getRepresentationsLayer()->addPrimitive(m_myData->getPoint(), m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-        //m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-        m_2DViewer->getDrawer()->drawWorkInProgress(m_myData->getPoint());
+        m_2DViewer->getDrawer()->draw(m_myData->getPoint());
     }
 }
 
@@ -155,8 +154,7 @@ void SeedTool::setSeed(QVector<double> seedPosition, int slice)
     //DEBUG_LOG(QString("Seed Pos: [%1,%2,%3], slice = %4").arg(seedPosition[0]).arg(seedPosition[1]).arg(seedPosition[2]).arg(slice));
 
     m_2DViewer->getRepresentationsLayer()->addPrimitive(m_myData->getPoint(), m_2DViewer->getView(), slice);
-    //m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), slice);
-    m_2DViewer->getDrawer()->drawWorkInProgress(m_myData->getPoint());
+    m_2DViewer->getDrawer()->draw(m_myData->getPoint());
 }
 
 ToolData *SeedTool::getToolData() const

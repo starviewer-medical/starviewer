@@ -76,7 +76,7 @@ void EraserTool::startEraserAction()
         m_polygon->addVertix(m_startPoint);
         m_polygon->addVertix(m_startPoint);
         m_polygon->addVertix(m_startPoint);
-        m_2DViewer->getDrawer()->draw(m_polygon, Q2DViewer::Top2DPlane);
+        m_2DViewer->getDrawer()->draw(m_polygon);
     }
 
     m_state = StartClick;
@@ -108,7 +108,7 @@ void EraserTool::drawAreaOfErasure()
             m_polygon->addVertix(m_endPoint);
             m_polygon->addVertix(p3);
             m_polygon->addVertix(m_startPoint);
-            m_2DViewer->getDrawer()->draw(m_polygon, Q2DViewer::Top2DPlane);
+            m_2DViewer->getDrawer()->draw(m_polygon);
         }
         else
         {

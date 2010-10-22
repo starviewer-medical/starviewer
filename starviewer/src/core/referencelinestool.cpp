@@ -394,8 +394,7 @@ void ReferenceLinesTool::checkAvailableLines()
         {
             DrawerLine *line = createNewLine( true );
             m_2DViewer->getRepresentationsLayer()->addPrimitive( line, QViewer::Top2DPlane );
-            //m_2DViewer->getDrawer()->draw( line, QViewer::Top2DPlane );
-            m_2DViewer->getDrawer()->drawWorkInProgress( line );
+            m_2DViewer->getDrawer()->draw( line );
             m_2DViewer->getRepresentationsLayer()->addPrimitiveToGroup( line, "ReferenceLines" );
             m_backgroundProjectedIntersectionLines << line;
         }
@@ -425,8 +424,7 @@ void ReferenceLinesTool::checkAvailableLines()
         {
             DrawerLine *line = createNewLine();
             m_2DViewer->getRepresentationsLayer()->addPrimitive( line, QViewer::Top2DPlane );
-            //m_2DViewer->getDrawer()->draw( line, QViewer::Top2DPlane );
-            m_2DViewer->getDrawer()->drawWorkInProgress( line );
+            m_2DViewer->getDrawer()->draw( line );
             m_2DViewer->getRepresentationsLayer()->addPrimitiveToGroup( line, "ReferenceLines" );
             m_projectedIntersectionLines << line;
         }
