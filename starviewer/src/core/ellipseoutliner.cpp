@@ -70,7 +70,7 @@ void EllipseOutliner::simulateEllipse()
             m_ellipsePolygon = new DrawerPolygon;
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
             m_ellipsePolygon->increaseReferenceCount();
-            m_2DViewer->getDrawer()->drawWorkInProgress(m_ellipsePolygon);
+            m_2DViewer->getDrawer()->draw(m_ellipsePolygon);
         }
 
         // Actualitzem la forma i renderitzem

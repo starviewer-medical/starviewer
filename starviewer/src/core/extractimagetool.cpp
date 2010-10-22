@@ -69,7 +69,7 @@ void ExtractImageTool::extractImage()
     m_image->setBoundingPolyline(m_polyline->getPointsList());
     m_image->setOpacity(0.5);
     //m_image->applyMask();
-    m_2DViewer->getDrawer()->drawWorkInProgress(m_image);
+    m_2DViewer->getDrawer()->draw(m_image);
 
     // Pintant de negre l'imatge extreta
     /*ShutterFilter *viewerFilter = new ShutterFilter();

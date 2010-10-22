@@ -25,7 +25,7 @@ ToolHandlerRotation::ToolHandlerRotation(Drawer *drawer, double *point, QObject 
     m_point->setOpacity(0.8);
     m_point->setColor(m_color);
     m_point->update();
-    m_drawer->drawWorkInProgress(m_point);
+    m_drawer->draw(m_point);
     m_drawer->updateRenderer();
 }
 
