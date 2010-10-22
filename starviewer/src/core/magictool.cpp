@@ -351,7 +351,7 @@ void MagicTool::detectBorder()
 		direction = this->getNextDirection(direction);
 	}
 
-	m_2DViewer->getDrawer()->draw( m_mainPolygon , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    m_2DViewer->getDrawer()->draw(m_mainPolygon);
 
 	DrawerText * text = new DrawerText;
 
@@ -367,9 +367,7 @@ void MagicTool::detectBorder()
 	double pos[3];
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     text->setAttachmentPoint( pos );
-    m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
-
-
+    m_2DViewer->getDrawer()->draw(text);
 }
 
 void MagicTool::getNextIndex(int direction,int x1,int y1,int &x2,int &y2)
@@ -541,14 +539,14 @@ void MagicTool::increaseMagicSize()
 	//L'esborrem si ja l'havíem pintat
 	if(m_text->isVisible() && m_2DViewer->getInput()!=0)
     {
-		m_2DViewer->getDrawer()->erasePrimitive( m_text );
+		//m_2DViewer->getDrawer()->erasePrimitive( m_text );
     }
     m_text->setText( tr("Magic Factor: %1").arg( m_magicFactor ) );
 	double pos[3];
 	m_2DViewer->getCurrentCursorImageCoordinate(pos);
 	m_text->setAttachmentPoint( pos );
 	m_text->setVisibility(true);
-    m_2DViewer->getDrawer()->draw( m_text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    m_2DViewer->getDrawer()->draw(m_text);
 }
 
 void MagicTool::decreaseMagicSize()
@@ -560,15 +558,16 @@ void MagicTool::decreaseMagicSize()
 	//L'esborrem si ja l'havíem pintat
 	if(m_text->isVisible() && m_2DViewer->getInput()!=0)
     {
-		m_2DViewer->getDrawer()->erasePrimitive( m_text );
+        m_2DViewer->getDrawer()->erasePrimitive(m_text);
     }
     m_text->setText( tr("Magic Factor: %1").arg( m_magicFactor ) );
 	double pos[3];
 	m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_text->setAttachmentPoint( pos );
 	m_text->setVisibility(true);
-    m_2DViewer->getDrawer()->draw( m_text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    m_2DViewer->getDrawer()->draw(m_text);
 }
 
 }
+
 

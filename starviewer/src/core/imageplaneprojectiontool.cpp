@@ -563,7 +563,7 @@ void ImagePlaneProjectionTool::updateProjection( DrawerLine *projectedLine, Imag
             }
 
             if ( !projectedLineDrawed )
-                m_2DViewer->getDrawer()->draw( projectedLine, Q2DViewer::Top2DPlane );
+                m_2DViewer->getDrawer()->draw(projectedLine);
             else
                 projectedLine->update();
 
@@ -1079,14 +1079,14 @@ void ImagePlaneProjectionTool:: applyThicknessProjectedLine( QString nameProject
         m_upLineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
         m_upLineThickness->setColor( Qt::yellow );
         m_upLineThickness->setLineWidth( 3 );
-        m_2DViewer->getDrawer()->draw( m_upLineThickness , Q2DViewer::Top2DPlane );
+        m_2DViewer->getDrawer()->draw(m_upLineThickness);
 
         // Línia thickness inferior
         m_downLineThickness = new DrawerLine;
         m_downLineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
         m_downLineThickness->setColor( Qt::yellow );
         m_downLineThickness->setLineWidth( 3 );
-        m_2DViewer->getDrawer()->draw( m_downLineThickness , Q2DViewer::Top2DPlane );
+        m_2DViewer->getDrawer()->draw(m_downLineThickness);
     }
     else
     {

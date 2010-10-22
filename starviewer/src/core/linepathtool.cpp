@@ -123,7 +123,7 @@ void LinePathTool::annotateNewPoint()
     m_polyline->setPoint( m_numPointsAdded++, pickedPoint );
 
     if( firstPoint ) // L'afegim a l'escena
-        m_2DViewer->getDrawer()->draw( m_polyline , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        m_2DViewer->getDrawer()->draw(m_polyline);
     else // Actualitzem l'estructura interna
     {
         m_polyline->update();
