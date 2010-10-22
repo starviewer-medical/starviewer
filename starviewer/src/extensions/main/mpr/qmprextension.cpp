@@ -135,9 +135,8 @@ void QMPRExtension::init()
     m_coronalReslice->SetInterpolationModeToCubic();
 
     // configurem les annotacions que volem veure
-    m_axial2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
-    m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation  );
-    m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::ScalarBarAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation );
+    m_sagital2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation  );
+    m_coronal2DView->removeAnnotation( Q2DViewer::PatientOrientationAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation );
     showViewerInformation( m_viewerInformationToolButton->isChecked() );
 
     m_sagital2DView->disableContextMenu();

@@ -138,8 +138,6 @@ void QAngioSubstractionExtension::setInput( Volume *input )
     m_2DView_2->enableSynchronization(true);
 
     m_2DView_2->getViewer()->disableContextMenu();
-    m_2DView_1->getViewer()->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
-    m_2DView_2->getViewer()->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
 }
 
 

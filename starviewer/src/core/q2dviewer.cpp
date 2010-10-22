@@ -36,7 +36,6 @@
 #include <vtkTextProperty.h>
 #include <vtkProperty2D.h>
 #include <vtkProp.h>
-#include <vtkScalarBarActor.h>
 #include <vtkWindowLevelLookupTable.h>
 #include <vtkImageActor.h>
 // Grayscale pipeline
@@ -49,7 +48,7 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer(QWidget *parent)
-: QViewer(parent), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlapMethod(Q2DViewer::Blend), m_scalarBar(0), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
+: QViewer(parent), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
@@ -82,7 +81,6 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 Q2DViewer::~Q2DViewer()
 {
     // Fem delete de tots els objectes vtk dels que hem fet un ::New()
-    m_scalarBar->Delete();
     m_patientOrientationTextActor[0]->Delete();
     m_patientOrientationTextActor[1]->Delete();
     m_patientOrientationTextActor[2]->Delete();
@@ -114,8 +112,6 @@ void Q2DViewer::createAnnotations()
     m_cornerAnnotations->GetTextProperty()->ShadowOn();
     m_cornerAnnotations->GetTextProperty()->SetShadow(1);
 
-    // Escala de colors
-    createScalarBar();
     // Anotacions de l'orientació del pacient
     createOrientationAnnotations();
 }
@@ -149,31 +145,6 @@ void Q2DViewer::createOrientationAnnotations()
     m_patientOrientationTextActor[3]->GetTextProperty()->SetJustificationToCentered();
     m_patientOrientationTextActor[3]->GetTextProperty()->SetVerticalJustificationToTop();
     m_patientOrientationTextActor[3]->SetPosition(0.5, 0.99);
-}
-
-void Q2DViewer::createScalarBar()
-{
-    m_scalarBar = vtkScalarBarActor::New();
-    m_scalarBar->SetOrientationToVertical();
-    m_scalarBar->GetPositionCoordinate()->SetCoordinateSystemToView();
-    m_scalarBar->SetPosition(0.8, -0.8);
-    m_scalarBar->SetWidth(0.08);
-    m_scalarBar->SetHeight(0.6);
-    m_scalarBar->SetLabelFormat(" %.f  ");
-    m_scalarBar->SetNumberOfLabels(3);
-    m_scalarBar->GetLabelTextProperty()->ItalicOff();
-    m_scalarBar->GetLabelTextProperty()->BoldOff();
-    m_scalarBar->GetLabelTextProperty()->SetJustificationToRight();
-    m_scalarBar->GetLabelTextProperty()->SetFontFamilyToArial();
-    m_scalarBar->GetLabelTextProperty()->ShadowOff();
-    m_scalarBar->VisibilityOff(); // Inicialment serà invisible fins que no hi hagi input
-
-    // Li configurem la lookup table
-    vtkWindowLevelLookupTable *lookup = vtkWindowLevelLookupTable::New();
-    lookup->SetWindow(m_windowLevelLUTMapper->GetWindow());
-    lookup->SetLevel(m_windowLevelLUTMapper->GetLevel());
-    lookup->Build();
-    m_scalarBar->SetLookupTable(lookup);
 }
 
 void Q2DViewer::rotateClockWise(int times)
@@ -456,15 +427,6 @@ void Q2DViewer::refreshAnnotations()
         }
     }
 
-    if (m_enabledAnnotations & Q2DViewer::ScalarBarAnnotation)
-    {
-        m_scalarBar->VisibilityOn();
-    }
-    else
-    {
-        m_scalarBar->VisibilityOff();
-    }
-
     updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::SliceAnnotation);
 }
 
@@ -567,7 +529,6 @@ void Q2DViewer::addActors()
     Q_ASSERT(m_patientOrientationTextActor[1]);
     Q_ASSERT(m_patientOrientationTextActor[2]);
     Q_ASSERT(m_patientOrientationTextActor[3]);
-    Q_ASSERT(m_scalarBar);
     Q_ASSERT(m_imageActor);
 
     vtkRenderer *renderer = getRenderer();
@@ -578,7 +539,6 @@ void Q2DViewer::addActors()
     renderer->AddViewProp(m_patientOrientationTextActor[1]);
     renderer->AddViewProp(m_patientOrientationTextActor[2]);
     renderer->AddViewProp(m_patientOrientationTextActor[3]);
-    renderer->AddViewProp(m_scalarBar);
     renderer->AddViewProp(m_imageActor);
     // TODO Colocar això en un lloc mes adient
     vtkCamera *camera = getActiveCamera();
@@ -1092,12 +1052,6 @@ void Q2DViewer::setWindowLevel(double window, double level)
         m_windowLevelLUTMapper->SetWindow(window);
         m_windowLevelLUTMapper->SetLevel(level);
         updateAnnotationsInformation(Q2DViewer::WindowInformationAnnotation);
-        // Actualitzem la Scalar bar si aquesta és visible
-        if (m_enabledAnnotations & Q2DViewer::ScalarBarAnnotation)
-        {
-            vtkWindowLevelLookupTable::SafeDownCast(m_scalarBar->GetLookupTable())->SetWindow(m_windowLevelLUTMapper->GetWindow());
-            vtkWindowLevelLookupTable::SafeDownCast(m_scalarBar->GetLookupTable())->SetLevel(m_windowLevelLUTMapper->GetLevel());
-        }
         this->render();
         emit windowLevelChanged(window, level);
     }

@@ -211,8 +211,7 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput( m_mainVolume );
-    m_2DView->removeAnnotation(Q2DViewer::ScalarBarAnnotation);
-	//això ho fem per indicar que no hi ha cap overlay
+    //això ho fem per indicar que no hi ha cap overlay
     m_2DView->setOverlapMethodToNone();
 	//m_2DView->setOverlayInput(m_lesionMaskVolume);
     
