@@ -142,6 +142,8 @@ void Experimental3DVolume::setInterpolation(Interpolation interpolation)
             m_shaderVolumeRayCastFunction->SetCompositeMethodToClassifyFirst();
             break;
     }
+
+    m_image->Modified();
 }
 
 
