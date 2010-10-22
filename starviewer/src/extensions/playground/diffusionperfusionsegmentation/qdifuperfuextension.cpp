@@ -56,8 +56,6 @@ QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension( QWidget * pare
     createConnections();
     readSettings();
 
-    m_perfusion2DView->removeAnnotation( Q2DViewer::ScalarBarAnnotation );
-
     // creem el tool manager i li assignem les tools
     initializeTools();
 }

@@ -14,7 +14,6 @@ class vtkPropPicker;
 class vtkTextActor;
 class vtkCornerAnnotation;
 class vtkCoordinate;
-class vtkScalarBarActor;
 class vtkImageBlend;
 class vtkImageActor;
 class vtkImageData;
@@ -66,7 +65,7 @@ public:
     enum AlignPosition { AlignCenter, AlignRight, AlignLeft };
 
     /// Aquests flags els farem servir per decidir quines anotacions seran visibles i quines no
-    enum AnnotationFlag { NoAnnotation = 0x0, WindowInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, ScalarBarAnnotation = 0x40, AllAnnotation = 0x7F };
+    enum AnnotationFlag { NoAnnotation = 0x0, WindowInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, SliceAnnotation = 0x8, PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, AllAnnotation = 0x7F };
     Q_DECLARE_FLAGS(AnnotationFlags, AnnotationFlag)
 
     Q2DViewer(QWidget *parent = 0);
@@ -338,9 +337,6 @@ private:
     /// Crea i inicialitza totes les anotacions que apareixeran per pantalla
     void createAnnotations();
 
-    /// Crea la barra de valors
-    void createScalarBar();
-
     /// Crea les anotacions de l'orientació del pacient
     void createOrientationAnnotations();
 
@@ -433,9 +429,6 @@ private:
 
     /// Mides (x,y) de la imatge que mostrarem com informació adicional
     int m_imageSizeInformation[2];
-
-    /// Barra que mostra l'escala de colors del model que estem visualitzant \TODO quan tinguem models fusionats tindrem una o dues barres d'escala de colors?
-    vtkScalarBarActor *m_scalarBar;
 
     /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
     int m_rotateFactor;
