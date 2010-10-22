@@ -38,14 +38,12 @@ CurvedMPRExtension::CurvedMPRExtension( QWidget *parent )
     mainViewer->enableAnnotation( 
         Q2DViewer::WindowInformationAnnotation | 
         Q2DViewer::PatientOrientationAnnotation |
-        Q2DViewer::RulersAnnotation | 
         Q2DViewer::SliceAnnotation |
         Q2DViewer::AcquisitionInformationAnnotation, 
         true);
 
     reconstructionViewer->enableAnnotation( 
         Q2DViewer::WindowInformationAnnotation | 
-        Q2DViewer::RulersAnnotation | 
         Q2DViewer::SliceAnnotation,
         true);
 

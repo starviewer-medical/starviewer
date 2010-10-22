@@ -342,17 +342,17 @@ void QMPRExtension::showViewerInformation( bool show )
 {
     m_axial2DView->enableAnnotation(
         Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation |
-        Q2DViewer::RulersAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
+        Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation |
         Q2DViewer::AcquisitionInformationAnnotation
         , show );
 
     m_sagital2DView->enableAnnotation(
-        Q2DViewer::WindowInformationAnnotation | Q2DViewer::RulersAnnotation |
+        Q2DViewer::WindowInformationAnnotation |
         Q2DViewer::AcquisitionInformationAnnotation
         , show );
 
     m_coronal2DView->enableAnnotation(
-        Q2DViewer::WindowInformationAnnotation | Q2DViewer::RulersAnnotation |
+        Q2DViewer::WindowInformationAnnotation |
         Q2DViewer::AcquisitionInformationAnnotation
         , show );
 }
