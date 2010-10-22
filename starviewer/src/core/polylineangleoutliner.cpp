@@ -275,7 +275,8 @@ void PolylineAngleOutliner::simulateCorrespondingSegmentOfAngle()
 void PolylineAngleOutliner::finishDrawing()
 {
     // Eliminem l'arc de circumferència (s'esborra automàticament del drawer)
-    //delete m_circlePolyline;
+    delete m_circlePolyline;
+    m_circlePolyline = 0;
 
     emit finished(m_mainPolyline);
 }
