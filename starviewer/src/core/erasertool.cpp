@@ -53,6 +53,7 @@ void EraserTool::handleEvent(unsigned long eventID)
         case vtkCommand::LeftButtonReleaseEvent:
             erasePrimitive();
             reset();
+            m_2DViewer->render();
             break;
 
         default:
@@ -132,8 +133,6 @@ void EraserTool::erasePrimitive()
         double bounds[6];
         m_polygon->getBounds(bounds);
         m_2DViewer->getRepresentationsLayer()->removePrimitivesInsideBounds(bounds);
-        // TODO Fer-ho explícitament després o fer-ho dins del propi mètode?
-        m_2DViewer->render();
     }
 }
 
