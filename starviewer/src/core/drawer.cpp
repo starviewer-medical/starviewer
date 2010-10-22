@@ -49,8 +49,6 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
     // Elimina les referencies a la primitiva
     m_2DViewer->getRepresentationsLayer()->removePrimitive(primitive);
     m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
-    // TODO Fer-ho explícitament després o fer-ho dins del propi mètode removePrimitive()?
-    m_2DViewer->render();
 }
 
 }
