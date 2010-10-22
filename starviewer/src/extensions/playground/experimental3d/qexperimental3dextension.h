@@ -271,6 +271,7 @@ private slots:
     void generateTransferFunctionFromImi();
     void generateTransferFunctionFromIntensityClusters();
     void generateAndEvolveTransferFunctionFromIntensityClusters();
+    void fineTuneGeneticTransferFunctionFromIntensityClusters();
 
     void tourBestViews();
     void guidedTour();
