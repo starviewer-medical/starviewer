@@ -3905,7 +3905,7 @@
                <number>1000000</number>
               </property>
               <property name="value">
-               <number>1000</number>
+               <number>100</number>
               </property>
              </widget>
             </item>
@@ -3957,6 +3957,59 @@
             </item>
             <item>
              <widget class="QProgressBar" name="m_geneticTransferFunctionFromIntensityClusteringProgressBar">
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_87">
+            <item>
+             <widget class="QPushButton" name="m_fineTuneGeneticTransferFunctionFromIntensityClusteringPushButton">
+              <property name="text">
+               <string>Fine-tune</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="m_fineTuneGeneticTransferFunctionFromIntensityClusteringIterationsSpinBox">
+              <property name="suffix">
+               <string> iteration/s</string>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+              <property name="value">
+               <number>100</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="m_fineTuneGeneticTransferFunctionFromIntensityClusteringLevelComboBox">
+              <item>
+               <property name="text">
+                <string>Level 1</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Level 2</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Level 3</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QProgressBar" name="m_fineTuneGeneticTransferFunctionFromIntensityClusteringProgressBar">
               <property name="value">
                <number>0</number>
               </property>
@@ -4299,7 +4352,7 @@
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
