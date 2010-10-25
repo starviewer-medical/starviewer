@@ -20,6 +20,8 @@ class Patient;
 class Study;
 class DicomMask;
 class PacsManager;
+class PACSJob;
+class QueryPacsJob;
 
 /**Aquesta classe donat un Study demana els estudis previs en els PACS configurats per defecte, degut a que 
   *ara actualment en el PACS tenim el mateix pacients amb PatientID diferents, també a part de cercar estudis
@@ -98,16 +100,27 @@ private:
     /// Inicialitza les variables per realitzar una nova consulta
     void initializeQuery();
 
-private slots:
+    ///Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
+    ///de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
+    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob);
 
-    /// Slot que s'executa quan s'ha acabat la consulta d'estudis previs a PacsManager
+    ///Ens afegeix els estudis trobats en una llista, si algun dels estudis ja existeix a la llista perquè s'ha trobat en algun altre PACS no 
+    ///se li afegeix
+    void mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob);
+
+    /// Emet signal indicant que la consulta a un PACS ha fallat
+    void errorQueringPACS(QueryPacsJob *queryPACSJob);
+
+    ///Emet signal indicant la la consulta ha acabat
     void queryFinished();
 
-    /// Slot que s'executa quan rebem els resultats d'una cerca a un PACS
-    void queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>);
+private slots:
 
-    /// Slot que s'executa quan la consulta a un PACS a de PacsManager ha fallat
-    void errorQueryingStudy(PacsDevice);
+    ///Slot que s'activa quan finalitza un job de consulta al PACS
+    void queryPACSJobFinished(PACSJob *pacsJob);
+
+    ///Slot que s'activa quan un job de consulta al PACS és cancel·lat
+    void queryPACSJobCancelled(PACSJob *pacsJob);
 
 private:
 
@@ -119,7 +132,8 @@ private:
     *en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
     *com ja el tindrem aquesta llista ja no en farem signal*/
     QStringList m_pacsDeviceIDErrorEmited;
-
+    ///Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
+    QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
 };
 
 }

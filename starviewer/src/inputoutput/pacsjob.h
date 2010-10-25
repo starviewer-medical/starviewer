@@ -30,7 +30,7 @@ class PACSJob: public Job
 Q_OBJECT
 public:
 
-    enum PACSJobType {SendDICOMFilesToPACSJobType, RetrieveDICOMFilesFromPACSJobType};
+    enum PACSJobType {SendDICOMFilesToPACSJobType, RetrieveDICOMFilesFromPACSJobType, QueryPACS};
 
     ///Constructor de la classe
     PACSJob(PacsDevice pacsDevice);
@@ -44,7 +44,9 @@ public:
     ///Indica quin tipus de PACSJob és l'objecte
     virtual PACSJob::PACSJobType getPACSJobType() = 0;
 
-    ///Mètode heredad de Job que serveix per cancel·lar l'execució del job actual. Si el job no s'està executant no fa res.
+    ///Mètode heredad de Job que serveix per cancel·lar l'execució del job actual. Si el job no s'està executant i està encara encuant pendent d'executar-se
+    ///aquest mètode no farà res per això s'aconsella no utilitzar aquest mètode, en lloc seu utilitzar requestCancelPACSJob de PACSManager que en el cas
+    ///que el job s'estigui executa sol·licita que es pari l'execució i si està encuat el desencua perquè no s'arribi a executar.
     void requestAbort();
 
     ///Retorna si s'ha sol·licitat abortar el job

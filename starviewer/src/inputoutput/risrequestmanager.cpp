@@ -13,6 +13,7 @@
 #include "study.h"
 #include "logging.h"
 #include "qpopuprisrequestsscreen.h"
+#include "querypacsjob.h"
 
 namespace udg{
 
@@ -53,10 +54,6 @@ void RISRequestManager::createConnections()
     /**Hem d'indica a la classe ListenRISRequests que pot començar a escoltar peticions a través d'un signal, perquè si ho fèssim invocant el mètode listen() directament
        aquest seria executat pel thread que l'invoca, en canvi amb un signal aquest és atés pel thread al que pertany ListenRISRequests*/
     connect(this, SIGNAL(listenRISRequests()), m_listenRISRequests, SLOT(listen()));
-
-    connect(m_pacsManager, SIGNAL(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)), SLOT(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)));
-    connect(m_pacsManager, SIGNAL(errorQueryingStudy(PacsDevice)), SLOT(errorQueryingStudy(PacsDevice)));
-    connect(m_pacsManager, SIGNAL(queryFinished()), SLOT(queryRequestRISFinished()));
 }
 
 void RISRequestManager::listen()
@@ -101,33 +98,95 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     }
     else
     {
-        m_pacsManager->queryStudy(maskRISRequest, queryablePACS);
+        foreach(const PacsDevice &pacsDevice, queryablePACS)
+        {
+            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskRISRequest, QueryPacsJob::study));
+        }
     }
 }
 
-void RISRequestManager::queryStudyResultsReceived(QList<Patient*> patientsList, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID)
+void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
 {
-    foreach(Patient *patient, patientsList)
+    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
+    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
+    m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
+    
+    m_pacsManager->enqueuePACSJob(queryPACSJob);
+}
+
+void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
+{
+    QueryPacsJob *queryPACSJob= qobject_cast<QueryPacsJob*>(pacsJob);
+
+    if (queryPACSJob == NULL)
     {
-        foreach(Study *study, patient->getStudies())
+        ERROR_LOG("El PACSJob que ha finalitzat no és un QueryPACSJob");
+    }
+    else
+    {
+        if (!queryPACSJob->getStatus().good())
         {
-            /*Degut al bug que es descriu al ticket #1042, es fa que només es descarregui el primer estudi trobat a la cerca de PACS
-              Si trobem més d'un estudi que compleixi la cerca, es descarrega el primer i executem la pipeline per carregar l'estudi i visualitzar-lo, de mentres
-    	      s'executa,si el segon és petit i es descarrega ràpidament, executa la pipeline de carregar l'estudi mentre el primer encara l'està executant 
-              per carregar i visualitzar l'estudi l'Starviewer peta. Sembla que també hi haurien problemes perquè mentre s'estan passant els fillers del primer 
-              estudi descarregat, el segona descàrrega matxaca els fitxers del a primera descàrrega.*/
-            if (!m_foundRISRequestStudy)
+            errorQueryingStudy(queryPACSJob);
+        }
+        else
+        {
+            foreach(Patient *patient, queryPACSJob->getPatientStudyList())
             {
-                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2").arg(study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
-          
-                //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
-                emit retrieveStudyFromRISRequest(hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()], study);
-                m_foundRISRequestStudy = true;
+                foreach(Study *study, patient->getStudies())
+                {
+                    /*Degut al bug que es descriu al ticket #1042, es fa que només es descarregui el primer estudi trobat a la cerca de PACS
+                      Si trobem més d'un estudi que compleixi la cerca, es descarrega el primer i executem la pipeline per carregar l'estudi i visualitzar-lo, de mentres
+    	              s'executa,si el segon és petit i es descarrega ràpidament, executa la pipeline de carregar l'estudi mentre el primer encara l'està executant 
+                      per carregar i visualitzar l'estudi l'Starviewer peta. Sembla que també hi haurien problemes perquè mentre s'estan passant els fillers del primer 
+                      estudi descarregat, el segona descàrrega matxaca els fitxers del a primera descàrrega.*/
+                    if (!m_foundRISRequestStudy)
+                    {
+                        INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
+                  
+                        //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
+                        emit retrieveStudyFromRISRequest(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
+                        m_foundRISRequestStudy = true;
+                    }
+                    else
+                    {
+                        WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero nomes es baixara el primer estudi trobat").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
+                    }
+                }
             }
-            else
-            {
-                WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero nomes es baixara el primer estudi trobat").arg(study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
-            }
+        }
+
+        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+
+        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        queryPACSJob->deleteLater();
+
+        if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
+        {
+            queryRequestRISFinished();
+        }
+    }
+}
+
+void RISRequestManager::queryPACSJobCancelled(PACSJob *pacsJob)
+{
+    //Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
+
+    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+
+    if (queryPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que s'ha cancel·lat no és un QueryPACSJob");
+    }
+    else
+    {
+        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+
+        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        queryPACSJob->deleteLater();
+
+        if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
+        {
+            queryRequestRISFinished();
         }
     }
 }
@@ -155,11 +214,11 @@ void RISRequestManager::queryRequestRISFinished()
     }
 }
 
-void RISRequestManager::errorQueryingStudy(PacsDevice pacsDeviceError)
+void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
 {
     QString errorMessage = tr("Processing the RIS request, can't query PACS %1 from %2.\nBe sure that the IP and AETitle of It are correct.")
-        .arg(pacsDeviceError.getAETitle())
-        .arg(pacsDeviceError.getInstitution());
+        .arg(queryPACSJob->getPacsDevice().getAETitle())
+        .arg(queryPACSJob->getPacsDevice().getInstitution());
 
     QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
 }

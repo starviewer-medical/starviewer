@@ -27,6 +27,7 @@
 #include "harddiskinformation.h"
 #include "retrievedicomfilesfrompacsjob.h"
 #include "shortcutmanager.h"
+#include "querypacsjob.h"
 
 namespace udg
 {
@@ -81,7 +82,7 @@ void QInputOutputPacsWidget::createConnections()
     connect(m_retrievAndViewButton, SIGNAL(clicked()), SLOT(retrieveAndViewSelectedStudies()));
     connect(m_retrieveButton, SIGNAL(clicked()), SLOT(retrieveSelectedStudies()));
 
-    connect(m_cancelQueryButton, SIGNAL(clicked()), SLOT(cancelCurrentQueries()));
+    connect(m_cancelQueryButton, SIGNAL(clicked()), SLOT(cancelCurrentQueriesToPACS()));
 }
 
 void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
@@ -100,42 +101,169 @@ void  QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
 void QInputOutputPacsWidget::setPacsManager(PacsManager *pacsManager)
 {
     m_pacsManager = pacsManager;
-
-    connect(m_pacsManager, SIGNAL(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)), SLOT(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)));
-    connect(m_pacsManager, SIGNAL(querySeriesResultsReceived(QString, QList<Series*>)), SLOT(querySeriesResultsReceived(QString , QList<Series*>)));
-    connect(m_pacsManager, SIGNAL(queryImageResultsReceived(QString, QString, QList<Image*>)), SLOT(queryImageResultsReceived(QString , QString ,QList<Image*>)));
-
-    connect(m_pacsManager, SIGNAL(queryFinished()), SLOT(queryFinished()));
-
-    connect(m_pacsManager, SIGNAL(errorQueryingStudy(PacsDevice)), SLOT(errorQueryingStudy(PacsDevice)));
-    connect(m_pacsManager, SIGNAL(errorQueryingSeries(QString, PacsDevice)), SLOT(errorQueryingSeries(QString, PacsDevice)));
-    connect(m_pacsManager, SIGNAL(errorQueryingImage(QString, QString, PacsDevice)), SLOT(errorQueryingImage(QString, QString, PacsDevice)));
 }
 
-void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQuery)
+void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQueryList)
 {
-    if (pacsToQuery.count() == 0)
+    if (pacsToQueryList.count() == 0)
     {
         QMessageBox::information(this, ApplicationNameString, tr("You have to select at least one PACS to query."));
-
         return;
     }
 
-    if (AreValidQueryParameters(&queryMask, pacsToQuery))
+    if (AreValidQueryParameters(&queryMask, pacsToQueryList))
     {
+        cancelCurrentQueriesToPACS();
+
         m_studyTreeWidget->clear();
         m_hashPacsIDOfStudyInstanceUID.clear();
 
-        /*En el cas que ens facin una consulta d'estudis, si s'estan fent altres consultes les cancel·lem, ja que aquesta serà la 
-          consulta principal, a partir de la qual es podran fet altres consultes de series, imatges  */
-        if (m_pacsManager->isExecutingQueries())
+        foreach(const PacsDevice &pacsDeviceToQuery, pacsToQueryList)
         {
-            m_pacsManager->cancelCurrentQueries();
+            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDeviceToQuery, queryMask, QueryPacsJob::study));
+        }
+    }
+}
+
+void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
+{
+    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
+    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
+    
+    m_pacsManager->enqueuePACSJob(queryPACSJob);
+    m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
+    setQueryInProgress(true);
+}
+
+void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
+{
+    foreach(QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
+    {
+        m_pacsManager->requestCancelPACSJob(queryPACSJob);
+        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+    }
+    
+    /*Les consultes al PACS poden tarda variis segons a cancel·lar-se, ja que com està documentat hi ha PACS que una vegada un PACS rep l'orde de cancel·lació
+      envien els resultats que havien trobat fins aquell moment i després tanquen la connexió, per fer transparent això a l'usuari, ja que ell no ho notarà en
+      quin moment es cancel·len, ja amaguem el gif indicant que s'ha cancel·lat la consulta, perquè tingui la sensació que s'han cancel·lat immediatament*/
+    setQueryInProgress(false);
+}
+
+void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJob *pacsJob)
+{
+    //Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre, d'aquesta manera ens n'assabentem
+    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+
+    if (queryPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que s'ha cancel·lat no és un QueryPACSJob");
+    }
+    else
+    {
+        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+        setQueryInProgress(!m_queryPACSJobPendingExecuteOrExecuting.isEmpty());
+
+        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        queryPACSJob->deleteLater();
+    }
+}
+
+void QInputOutputPacsWidget::queryPACSJobFinished(PACSJob *pacsJob)
+{
+    QueryPacsJob *queryPACSJob= qobject_cast<QueryPacsJob*>(pacsJob);
+
+    if (queryPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que ha finalitzat no és un QueryPACSJob");
+    }
+    else
+    {
+        if (!queryPACSJob->getStatus().good())
+        {
+            showErrorQueringPACS(queryPACSJob);
+        }
+        else
+        {
+            showQueryPACSJobResults(queryPACSJob);
         }
 
-        m_pacsManager->queryStudy(queryMask, pacsToQuery);
+        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+        setQueryInProgress(!m_queryPACSJobPendingExecuteOrExecuting.isEmpty());
 
-        setQueryInProgress(true);
+        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        queryPACSJob->deleteLater();
+    }
+}
+
+void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
+{
+    if (queryPACSJob->getQueryLevel() == QueryPacsJob::study)
+    {
+        m_studyTreeWidget->insertPatientList(queryPACSJob->getPatientStudyList());
+        m_hashPacsIDOfStudyInstanceUID = m_hashPacsIDOfStudyInstanceUID.unite(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID());
+    }
+    else if (queryPACSJob->getQueryLevel() == QueryPacsJob::series)
+    {
+        QList<Series*> seriesList = queryPACSJob->getSeriesList();
+        QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID(); 
+
+        if (seriesList.isEmpty())
+        {
+            QMessageBox::information(this, ApplicationNameString, tr("No series match for this study %1.\n").arg(studyInstanceUID));
+        }
+        else
+        {
+            m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);
+        }
+    }
+    else if (queryPACSJob->getQueryLevel() == QueryPacsJob::image)
+    {
+        QList<Image*> imageList = queryPACSJob->getImageList();
+        QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID(); 
+        QString seriesInstanceUID = queryPACSJob->getDicomMask().getSeriesInstanceUID();
+
+        if (imageList.isEmpty())
+        {
+            QMessageBox::information(this, ApplicationNameString, tr("No images match series %1.\n").arg(seriesInstanceUID));
+        }
+        else 
+        {
+            m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
+        }
+    }
+}
+
+void QInputOutputPacsWidget::showErrorQueringPACS(QueryPacsJob *queryPACSJob)
+{
+    if (!queryPACSJob->getStatus().good())
+    {
+        QString errorMessage;
+
+        switch(queryPACSJob->getQueryLevel())
+        {
+            case QueryPacsJob::study:
+                errorMessage = tr("%1 can't query to PACS %2 from %3.\nBe sure that your computer is connected on network and the PACS parameters are correct.")
+                    .arg(ApplicationNameString)
+                    .arg(queryPACSJob->getPacsDevice().getAETitle())
+                    .arg(queryPACSJob->getPacsDevice().getInstitution());
+
+                QMessageBox::critical(this, ApplicationNameString, errorMessage);
+                break;
+            case QueryPacsJob::series:
+                errorMessage = tr("%1 can't query series from study %2 to PACS %3 from %4.\n")
+                    .arg(ApplicationNameString, queryPACSJob->getDicomMask().getStudyInstanceUID(), queryPACSJob->getPacsDevice().getAETitle(), queryPACSJob->getPacsDevice().getInstitution()) +
+                    tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
+
+                QMessageBox::warning(this, ApplicationNameString, errorMessage);
+                break;
+            case QueryPacsJob::image:
+                errorMessage = tr("%1 can't query images from series %2 to PACS %3 from %4.\n")
+                    .arg(ApplicationNameString, queryPACSJob->getDicomMask().getSeriesInstanceUID(), queryPACSJob->getPacsDevice().getAETitle(), queryPACSJob->getPacsDevice().getInstitution()) +
+                    tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
+
+                QMessageBox::warning(this, ApplicationNameString, errorMessage);
+                break;
+        }
     }
 }
 
@@ -147,26 +275,21 @@ void QInputOutputPacsWidget::clear()
 void QInputOutputPacsWidget::expandSeriesOfStudy(QString studyInstanceUID)
 {
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(getPacsIDFromQueriedStudies(studyInstanceUID));
-    QString pacsDescription;
+    QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
 
-    pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
+    INFO_LOG("Cercant informacio de les series de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
 
-    INFO_LOG("Cercant informacio de les sèries de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
-
-    m_pacsManager->querySeries(buildSeriesDicomMask(studyInstanceUID), pacsDevice);
-
-    setQueryInProgress(true);
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildSeriesDicomMask(studyInstanceUID), QueryPacsJob::series));
 }
 
 void QInputOutputPacsWidget::expandImagesOfSeries(QString studyInstanceUID, QString seriesInstanceUID)
 {
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(getPacsIDFromQueriedStudies(studyInstanceUID));
-    QString pacsDescription;
+    QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
 
-    pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution()  + " IP:" + pacsDevice.getAddress();
+    INFO_LOG("Cercant informacio de les imatges de la serie" + seriesInstanceUID + " de l'estudi" + studyInstanceUID + " del PACS " + pacsDescription);
 
-    m_pacsManager->queryImage(buildImageDicomMask(studyInstanceUID, seriesInstanceUID), pacsDevice);
-    setQueryInProgress(true);
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildImageDicomMask(studyInstanceUID, seriesInstanceUID), QueryPacsJob::image));
 }
 
 void QInputOutputPacsWidget::retrieveSelectedStudies()
@@ -197,12 +320,6 @@ void QInputOutputPacsWidget::retrieveAndViewSelectedStudies()
     {
         retrieve(getPacsIDFromQueriedStudies(dicomMask.getStudyInstanceUID()), m_studyTreeWidget->getStudy(dicomMask.getStudyInstanceUID()), dicomMask, View);
     }
-}
-
-void QInputOutputPacsWidget::cancelCurrentQueries()
-{
-    m_pacsManager->cancelCurrentQueries();
-    setQueryInProgress(false);
 }
 
 void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobStarted(PACSJob *pacsJob)
@@ -319,64 +436,6 @@ DicomMask QInputOutputPacsWidget::buildImageDicomMask(QString studyInstanceUID, 
     mask.setSOPInstanceUID("");
 
     return mask;
-}
-
-void QInputOutputPacsWidget::queryStudyResultsReceived(QList<Patient*> patients, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID)
-{
-    m_studyTreeWidget->insertPatientList(patients);
-    m_hashPacsIDOfStudyInstanceUID = m_hashPacsIDOfStudyInstanceUID.unite(hashTablePacsIDOfStudyInstanceUID); 
-}
-
-void QInputOutputPacsWidget::querySeriesResultsReceived(QString studyInstanceUID, QList<Series*> series)
-{
-    if (series.isEmpty())
-    {
-        QMessageBox::information(this, ApplicationNameString, tr("No series match for this study %1.\n").arg(studyInstanceUID));
-    }
-    else m_studyTreeWidget->insertSeriesList(studyInstanceUID, series);
-
-}
-
-void QInputOutputPacsWidget::queryImageResultsReceived(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> images)
-{
-    if (images.isEmpty())
-    {
-        QMessageBox::information(this, ApplicationNameString, tr("No images match series %1.\n").arg(seriesInstanceUID));
-    }
-    else m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, images);
-}
-
-void QInputOutputPacsWidget::queryFinished()
-{
-    setQueryInProgress(false);
-}
-
-void QInputOutputPacsWidget::errorQueryingStudy(PacsDevice pacsDeviceError)
-{
-    QString errorMessage;
-
-    errorMessage = tr("%1 can't query to PACS %2 from %3.\nBe sure that your computer is connected on network and the PACS parameters are correct.")
-        .arg(ApplicationNameString)
-        .arg(pacsDeviceError.getAETitle())
-        .arg(pacsDeviceError.getInstitution());
-
-    QMessageBox::critical(this, ApplicationNameString, errorMessage);
-}
-
-void QInputOutputPacsWidget::errorQueryingSeries(QString studyInstanceUID, PacsDevice pacsDeviceError)
-{
-    QString errorMessage = tr("%1 can't query series from study %2 to PACS %3 from %4.\n").arg(ApplicationNameString, studyInstanceUID, pacsDeviceError.getAETitle(), pacsDeviceError.getInstitution());
-    errorMessage += tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
-
-    QMessageBox::warning(this, ApplicationNameString, errorMessage);
-}
-
-void QInputOutputPacsWidget::errorQueryingImage(QString studyInstanceUID, QString seriesInstanceUID, PacsDevice pacsDeviceError)
-{
-    QString errorMessage = tr("%1 can't query images from series %2 to PACS %3 from %4.\n").arg(ApplicationNameString, seriesInstanceUID, pacsDeviceError.getAETitle(), pacsDeviceError.getInstitution());
-    errorMessage += tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
-
-    QMessageBox::warning(this, ApplicationNameString, errorMessage);
 }
 
 void QInputOutputPacsWidget::setQueryInProgress(bool queryInProgress)
