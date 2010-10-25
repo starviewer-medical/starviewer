@@ -10,12 +10,10 @@
 #include <QThread>
 #include <QList>
 #include <QHash>
-#include <ThreadWeaver/Job>
-#include <ThreadWeaver/Thread>
 
 #include "dicommask.h"
-#include "pacsdevice.h"
 #include "status.h"
+#include "pacsjob.h"
 
 class QString;
 
@@ -30,9 +28,8 @@ class QueryPacs;
 /** Classe que cercar estudis en un dispositiu pacs, creant un nou job utilitzant les threadweaver
 	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-using namespace ThreadWeaver;
 
-class QueryPacsJob :public Job
+class QueryPacsJob :public PACSJob
 {
     Q_OBJECT
 public:
@@ -41,14 +38,14 @@ public:
     enum QueryLevel { study, series, image};
 
     /// Constructor/Desctructor de la classe
-    QueryPacsJob(PacsDevice parameters, DicomMask mask, QueryLevel queryLevel, QObject *parent = 0);
+    QueryPacsJob(PacsDevice parameters, DicomMask mask, QueryLevel queryLevel);
     ~QueryPacsJob();
 
     /// el codi d'aquest mètode es el que s'executa en un nou thread
     void run();
 
-    ///sol·licita que es s'aborti el jo actual
-    void requestAbort();
+    ///Retorna el tipus de PACSJob que és l'objecte
+    PACSJob::PACSJobType getPACSJobType();
 
     ///Retorna la màscara sobre la que es fa la consulta
     DicomMask getDicomMask();
@@ -58,12 +55,6 @@ public:
 
     ///Retorna l'estat de la consulta
     Status getStatus();
-
-    ///Retorna el Pacs sobre el qual es fa la consulta
-    PacsDevice getPacsDevice();
-
-    ///Indica si s'ha demanaat abortar el job
-    bool isAbortRequested();
 
     ///Retorna la llista d'estudis trobats que compleixen el criteri de cerca
     QList<Patient*> getPatientStudyList();
@@ -79,11 +70,14 @@ public:
 
 private :
 
-    PacsDevice m_pacsDevice;
+    ///Demana que es cancel·li la consulta del job
+    void requestCancelJob();
+
+private :
+
     DicomMask m_mask;
     QueryPacs *m_queryPacs;
     QueryLevel m_queryLevel;
-    bool m_isAbortRequested; //Indica si s'ha demanat abortar el job
 
     Status m_queryStatus;
 };

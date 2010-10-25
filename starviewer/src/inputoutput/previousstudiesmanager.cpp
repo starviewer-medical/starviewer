@@ -15,6 +15,7 @@
 #include "singleton.h"
 #include "pacsdevicemanager.h"
 #include "logging.h"
+#include "querypacsjob.h"
 
 namespace udg {
 
@@ -22,21 +23,11 @@ PreviousStudiesManager::PreviousStudiesManager()
 {
     m_pacsManager = new PacsManager();
     m_studyInstanceUIDToFindPrevious = "invalid";
-    createConnections();
 }
 
 PreviousStudiesManager::~PreviousStudiesManager()
 {
-    m_pacsManager->cancelCurrentQueries();
-}
-
-void PreviousStudiesManager::createConnections()
-{
-    connect(m_pacsManager, SIGNAL(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)), SLOT(queryStudyResultsReceived(QList<Patient*>, QHash<QString, QString>)));
-
-    connect(m_pacsManager, SIGNAL(queryFinished()), SLOT(queryFinished()));
-
-    connect(m_pacsManager, SIGNAL(errorQueryingStudy(PacsDevice)), SLOT(errorQueryingStudy(PacsDevice)));
+    cancelCurrentQuery();
 }
 
 void PreviousStudiesManager::queryStudies(Patient *patient)
@@ -53,11 +44,15 @@ void PreviousStudiesManager::queryStudies(Patient *patient)
     {
         DicomMask maskID = getBasicDicomMask();
         maskID.setPatientId(patient->getID());
-        m_pacsManager->queryStudy(maskID, pacsDeviceListToQuery);
 
         DicomMask maskName = getBasicDicomMask();
         maskName.setPatientName(patient->getFullName());
-        m_pacsManager->queryStudy(maskName, pacsDeviceListToQuery);
+
+        foreach(const PacsDevice &pacsDevice, pacsDeviceListToQuery)
+        {
+            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskID, QueryPacsJob::study));
+            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskName, QueryPacsJob::study));
+        }
     }
     else
     {
@@ -81,8 +76,11 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
     //Preguntem al PACS per estudis
     if (pacsDeviceListToQuery.count() > 0)
     {
-        m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientID(study), pacsDeviceListToQuery);
-        m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientName(study), pacsDeviceListToQuery);
+        foreach(const PacsDevice &pacsDevice, pacsDeviceListToQuery)
+        {
+            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, getPreviousStudyDicomMaskPatientID(study), QueryPacsJob::study));
+            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, getPreviousStudyDicomMaskPatientName(study), QueryPacsJob::study));
+        }
     }
     else 
     {
@@ -93,36 +91,102 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
 
 void PreviousStudiesManager::initializeQuery()
 {
-    m_pacsManager->cancelCurrentQueries();//Per si hi hagués una consulta executant-se
-
+    cancelCurrentQuery();
+    
     ///Fem neteja de consultes anteriors
     m_mergedHashPacsIDOfStudyInstanceUID.clear();
     m_mergedStudyList.clear();
     m_pacsDeviceIDErrorEmited.clear();
 }
 
+void PreviousStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
+{
+    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
+    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
+    
+    m_pacsManager->enqueuePACSJob(queryPACSJob);
+    m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
+}
+
 void PreviousStudiesManager::cancelCurrentQuery()
 {
-    m_pacsManager->cancelCurrentQueries();
+    foreach(QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
+    {
+        m_pacsManager->requestCancelPACSJob(queryPACSJob);
+        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+    }
+    
     m_studyInstanceUIDToFindPrevious = "invalid";
 }
 
 bool PreviousStudiesManager::isExecutingQueries()
 {
-    return m_pacsManager->isExecutingQueries();
+    return !m_queryPACSJobPendingExecuteOrExecuting.isEmpty();
 }
 
-void PreviousStudiesManager::queryFinished()
+void PreviousStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
 {
-    /*Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. A diferència de la 
-      PacsManager no podem emetre els resultats que anem rebent, perquè hem de fer un merge del resultats rebuts,
-      per no tenir duplicats*/
-    emit queryPreviousStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
+    //Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
+    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+
+    if (queryPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que s'ha cancel·lat no es un QueryPACSJob");
+    }
+    else
+    {
+        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+
+        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        queryPACSJob->deleteLater();
+
+        if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
+        {
+            queryFinished();
+        }
+    }
 }
 
-void PreviousStudiesManager::queryStudyResultsReceived(QList<Patient*> patientListResults, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID)
+void PreviousStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
 {
-    foreach(Patient *patient, patientListResults)
+    QueryPacsJob *queryPACSJob= qobject_cast<QueryPacsJob*>(pacsJob);
+
+    if (queryPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que ha finalitzat no es un QueryPACSJob");
+    }
+    else
+    {
+        if (!queryPACSJob->getStatus().good())
+        {
+            errorQueringPACS(queryPACSJob);
+        }
+        else
+        {
+            mergeFoundStudiesInQuery(queryPACSJob);
+        }
+
+        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+
+        //Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
+        queryPACSJob->deleteLater();
+
+        if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
+        {
+            queryFinished();
+        }
+    }
+}
+
+void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob)
+{
+    if (queryPACSJob->getQueryLevel() != QueryPacsJob::study)
+    {
+        ///Si la consulta no era d'estudis no ens interessa, només cerquem estudis
+        return;
+    }
+
+    foreach(Patient *patient, queryPACSJob->getPatientStudyList())
     {
         foreach(Study *study, patient->getStudies())
         {
@@ -132,23 +196,33 @@ void PreviousStudiesManager::queryStudyResultsReceived(QList<Patient*> patientLi
                  *previ l'afegim*/
                 m_mergedStudyList.append(study);
 
-                m_mergedHashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()];
+                m_mergedHashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()];
             }
         }
     }
 }
 
-void PreviousStudiesManager::errorQueryingStudy(PacsDevice pacs)
+void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
 {
-    /*Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
-      dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
-      que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals 
-      d'errors en PACS emesos*/
-    if (!m_pacsDeviceIDErrorEmited.contains(pacs.getID()))
+    if (!queryPACSJob->getStatus().good())
     {
-        m_pacsDeviceIDErrorEmited.append(pacs.getID());
-        emit errorQueryingPreviousStudies(pacs);
+        /*Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
+          dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
+          que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals 
+          d'errors en PACS emesos*/
+        if (!m_pacsDeviceIDErrorEmited.contains(queryPACSJob->getPacsDevice().getID()))
+        {
+            m_pacsDeviceIDErrorEmited.append(queryPACSJob->getPacsDevice().getID());
+            emit errorQueryingPreviousStudies(queryPACSJob->getPacsDevice());
+        }
     }
+}
+
+void PreviousStudiesManager::queryFinished()
+{
+    /*Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. No podem emetre els resultats que anem rebent, 
+      perquè hem de fer un merge del resultats rebuts, per no tenir duplicats (Estudis del matiex pacient que estiguin a més d'un PACS)*/
+    emit queryPreviousStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
 }
 
 bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)

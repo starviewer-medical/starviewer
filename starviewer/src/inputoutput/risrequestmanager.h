@@ -29,6 +29,8 @@ class PacsManager;
 class Patient;
 class Study;
 class QPopUpRisRequestsScreen;
+class QueryPacsJob;
+class PACSJob;
 
 /** Classe manager que ens permet rebre peticions del RIS i processar-les
 */
@@ -59,14 +61,11 @@ private slots:
     ///Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
     void processRISRequest(DicomMask mask);
 
-    ///SLOT que s'activa quan es reben resultats d'una cerca a un PACS, amb la màscara indicada per la petició del RIS. Si s'ha trobat un estudi que compelix la cerca es fa signal per descarregar l'estudi
-    void queryStudyResultsReceived(QList<Patient*> patients, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID);
+    ///Slot que s'activa quan finalitza un job de consulta al PACS
+    void queryPACSJobFinished(PACSJob *pacsJob);
 
-    ///SLOT que s'activa quan ha finalitza la consulta de la cerca del l'estudi sol·licitat pel RIS
-    void queryRequestRISFinished();
-
-    ///Mostra un missatge indicant que s'ha produït un error al fer la consulta a un PACS
-    void errorQueryingStudy(PacsDevice pacsDeviceError);
+    ///Slot que s'activa quan un job de consulta al PACS és cancel·lat
+    void queryPACSJobCancelled(PACSJob *pacsJob);
 
     ///Mostrar un missatge indicant que s'ha produït un error escoltant peticions del RIS
     void showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error);
@@ -83,6 +82,16 @@ private:
 
     ///Cerca en els PACS marcats per defecte la màscara que ens ha indicat el RIS
     void queryPACSRISStudyRequest(DicomMask mask);
+
+    ///Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
+    ///de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
+    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPacsJob);
+
+    ///S'activa quan ha finalitzat la consulta de la cerca del l'estudi sol·licitat pel RIS, comprova si s'han trobat estudis i si és així es descarrega
+    void queryRequestRISFinished();
+
+    ///Mostra un missatge indicant que s'ha produït un error al fer la consulta a un PACS
+    void errorQueryingStudy(QueryPacsJob *queryPACSJob);
 
 private:
 
@@ -105,6 +114,10 @@ private:
 
     ///QThread que s'encarrega d'executar la classe escolta si arriben peticions del RIS
     QThread *m_listenRISRequestsQThread;
+
+    ///Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
+    QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
+
 };
 
 };  //  end  namespace udg

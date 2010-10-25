@@ -63,26 +63,30 @@ void QOperationStateScreen::createConnections()
 
 void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
 {
-    m_PACSJobPendingToFinish.insert(pacsJob->getPACSJobID(), pacsJob);
-
-    connect(pacsJob, SIGNAL(PACSJobStarted(PACSJob*)), SLOT(PACSJobStarted(PACSJob*))); 
-    connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(PACSJobFinished(PACSJob*))); 
-    connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(PACSJobCancelled(PACSJob*)));
-
-    switch(pacsJob->getPACSJobType())
+    //Els altres tipus de PACSJob no es interessen
+    if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        case PACSJob::SendDICOMFilesToPACSJobType:
-            insertNewPACSJob(pacsJob);
-            connect(dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ), SIGNAL(DICOMFileSent(PACSJob*, int)), SLOT(DICOMFileCommit(PACSJob *, int )));
-            connect(dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ), SIGNAL(DICOMSeriesSent(PACSJob*, int)), SLOT(DICOMSeriesCommit(PACSJob *, int )));
-            break;
-        case PACSJob::RetrieveDICOMFilesFromPACSJobType:
-            insertNewPACSJob(pacsJob);
-            connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ), SIGNAL(DICOMFileRetrieved(PACSJob*, int)), SLOT(DICOMFileCommit(PACSJob *, int )));
-            connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ), SIGNAL(DICOMSeriesRetrieved(PACSJob*, int)), SLOT(DICOMSeriesCommit(PACSJob *, int )));
-            break;
-        default:
-            break;
+        m_PACSJobPendingToFinish.insert(pacsJob->getPACSJobID(), pacsJob);
+
+        connect(pacsJob, SIGNAL(PACSJobStarted(PACSJob*)), SLOT(PACSJobStarted(PACSJob*))); 
+        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(PACSJobFinished(PACSJob*))); 
+        connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(PACSJobCancelled(PACSJob*)));
+
+        switch(pacsJob->getPACSJobType())
+        {
+            case PACSJob::SendDICOMFilesToPACSJobType:
+                insertNewPACSJob(pacsJob);
+                connect(dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ), SIGNAL(DICOMFileSent(PACSJob*, int)), SLOT(DICOMFileCommit(PACSJob *, int )));
+                connect(dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob ), SIGNAL(DICOMSeriesSent(PACSJob*, int)), SLOT(DICOMSeriesCommit(PACSJob *, int )));
+                break;
+            case PACSJob::RetrieveDICOMFilesFromPACSJobType:
+                insertNewPACSJob(pacsJob);
+                connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ), SIGNAL(DICOMFileRetrieved(PACSJob*, int)), SLOT(DICOMFileCommit(PACSJob *, int )));
+                connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ), SIGNAL(DICOMSeriesRetrieved(PACSJob*, int)), SLOT(DICOMSeriesCommit(PACSJob *, int )));
+                break;
+            default:
+                break;
+        }
     }
 }
 

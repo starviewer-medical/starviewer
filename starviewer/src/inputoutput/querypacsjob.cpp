@@ -20,30 +20,32 @@
 
 namespace udg {
 
-QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice, DicomMask mask, QueryLevel queryLevel, QObject *parent)
- : Job(parent)
+QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice, DicomMask mask, QueryLevel queryLevel)
+ : PACSJob(pacsDevice)
 {
     //creem l'objecte fer la query
     m_queryPacs = new QueryPacs();
     m_mask = mask;
-    m_pacsDevice = pacsDevice; 
     m_queryLevel = queryLevel;
+}
 
-    m_isAbortRequested = false;
+PACSJob::PACSJobType QueryPacsJob::getPACSJobType()
+{
+    return PACSJob::QueryPACS;
 }
 
 void QueryPacsJob::run()
 {
-    PACSConnection pacsConnection(m_pacsDevice);
+    PACSConnection pacsConnection(getPacsDevice());
     Settings settings;
 
     INFO_LOG("Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; AEPACS= " + 
-        m_pacsDevice.getAETitle() + "; PACS Adr= " + m_pacsDevice.getAddress() + "; PACS Port= " + 
-        QString().setNum(m_pacsDevice.getQueryRetrieveServicePort()) + ";");
+        getPacsDevice().getAETitle() + "; PACS Adr= " + getPacsDevice().getAddress() + "; PACS Port= " + 
+        QString().setNum(getPacsDevice().getQueryRetrieveServicePort()) + ";");
 
     if (!pacsConnection.connectToPACS(PACSConnection::Query))
     {
-        ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer query. AETitle: " + m_pacsDevice.getAETitle());
+        ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer query. AETitle: " + getPacsDevice().getAETitle());
         m_queryStatus = Status().setStatus(DcmtkCanNotConnectError);
     }
     else
@@ -55,22 +57,16 @@ void QueryPacsJob::run()
         {
             /*En el cas que hem abortat la query, i per abortar s'hagi abortat l'assocació, retorna el missatge DIMSE Failed to receive message, 
             per això comprovem si hem abortat, perquè no donem aquest missatge com error ja que és normal*/
-            ERROR_LOG(QString("Error al fer query al PACS %1. PACS ERROR: %2").arg(m_pacsDevice.getAETitle()).arg(m_queryStatus.text()));
+            ERROR_LOG(QString("Error al fer query al PACS %1. PACS ERROR: %2").arg(getPacsDevice().getAETitle()).arg(m_queryStatus.text()));
         }
 
-        INFO_LOG (QString("Thread del PACS %1 finalitzant").arg(m_pacsDevice.getAETitle()));
+        INFO_LOG (QString("Thread del PACS %1 finalitzant").arg(getPacsDevice().getAETitle()));
 
         pacsConnection.disconnect();
     }
 
     //TODO:Cal?
     setFinished(true);
-}
-
-void QueryPacsJob::requestAbort()
-{
-    m_isAbortRequested = true;
-    m_queryPacs->cancelQuery();
 }
 
 DicomMask QueryPacsJob::getDicomMask()
@@ -83,19 +79,9 @@ QueryPacsJob::QueryLevel QueryPacsJob::getQueryLevel()
     return m_queryLevel;
 }
 
-PacsDevice QueryPacsJob::getPacsDevice()
-{
-    return m_pacsDevice;
-}
-
 Status QueryPacsJob::getStatus()
 {
     return m_queryStatus;
-}
-
-bool QueryPacsJob::isAbortRequested()
-{
-    return m_isAbortRequested;
 }
 
 QList<Patient*> QueryPacsJob::getPatientStudyList()
@@ -125,6 +111,12 @@ QHash<QString,QString> QueryPacsJob::getHashTablePacsIDOfStudyInstanceUID()
 QueryPacsJob::~QueryPacsJob()
 {
     delete m_queryPacs;
+}
+
+void QueryPacsJob::requestCancelJob()
+{
+    INFO_LOG(QString("S'ha demanat la cancel·lació del Job de consulta al PACS %1").arg(getPacsDevice().getAETitle()));
+    m_queryPacs->cancelQuery();
 }
 
 }

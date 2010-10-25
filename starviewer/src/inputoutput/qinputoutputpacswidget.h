@@ -29,6 +29,7 @@ class Study;
 class QOperationStateScreen;
 class PacsManager;
 class PACSJob;
+class QueryPacsJob;
 
 /** 
  * Widget en el que controla les operacions d'entrada/sortida del PACS
@@ -98,6 +99,16 @@ private:
     ///Construeix la màscara de cerca per cercar les imatges d'una sèrie
     DicomMask buildImageDicomMask(QString studyInstanceUID, QString seriesInstanceUID);
 
+    ///Mostra per pantalla els resultats de la consulta al PACS d'un Job
+    void showQueryPACSJobResults(QueryPacsJob *queryPACSJob);
+
+    ///Mostrar un QMessageBox indicant que s'ha produït un error consultant a un PACS
+    void showErrorQueringPACS(QueryPacsJob *queryPACSJob);
+
+    ///Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
+    ///de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
+    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPacsJob);
+
 private slots:
     ///Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void expandSeriesOfStudy(QString seriesInstanceUID);
@@ -112,29 +123,11 @@ private slots:
     /// que s'han de visualitzar immediatament un cop descarregats
     void retrieveAndViewSelectedStudies();
 
-    ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca d'estudis
-    void queryStudyResultsReceived(QList<Patient*> patients, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID);
-
-    ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca de series
-    void querySeriesResultsReceived(QString studyInstanceUID, QList<Series*> series);
-
-    ///Slot que s'activa quan s'han rebut d'un PACS resultats d'una cerca d'imatges
-    void queryImageResultsReceived(QString studyInstanceUID, QString seriesInstanceUID, QList<Image*> image);
-
-    ///Slot que s'activa quan les query finalitzen crida el mètode setQueryInProgress en false
-    void queryFinished();
-
-    ///Slot que s'activa quan s'ha produït un error al consultar els estudis d'un PACS
-    void errorQueryingStudy(PacsDevice pacsDevice);
-
-    ///Slot que s'activa quan s'ha produït un error al consultar les series d'un PACS
-    void errorQueryingSeries(QString studyInstanceUID, PacsDevice pacsDevice);
-
-    ///Slot que s'activa quan s'ha produït un error al consultar les imatges d'un PACS
-    void errorQueryingImage(QString studyInstanceUID, QString seriesInstanceUID, PacsDevice pacsDevice);
-
-    ///Cancel·la les consultes que s'estan executant en aquell moment
-    void cancelCurrentQueries();
+    ///Cancel·la els QueryPACSJob que s'han llançat des d'aquesta classe i que encara no han finalitzat (cancel·la els que s'estan executant i els pendents d'executar)
+    ///La idea és donar mètode que es pugui invocar per cancel·lar les consultes actuals, per exemple s'ha llançat una consulta a 3 PACS
+    ///per cercar tots els estudis amb ID 1, si l'usuari canvia la consulta i diu que ara vol tots els estudis amb ID 2, no cal seguir endavant amb l'anterior consulta
+    ///doncs aquest mètode està pensat per aquests casos per poder cancel·lar les consultes actuals llançades des d'aquesta classe que s'estan realitzant.
+    void cancelCurrentQueriesToPACS();
 
     ///Fa signal de studyRetrieveStarted, Important!!! aquest mètode una vegada cada Tool utiltizi la PacsManager ha de desapareixer
     void retrieveDICOMFilesFromPACSJobStarted(PACSJob *pacsJob);
@@ -142,12 +135,21 @@ private slots:
     ///Slot que s'activa quan finalitza un job de descàrrega d'imatges
     void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
 
+    ///Slot que s'activa quan finalitza un job de consulta al PACS
+    void queryPACSJobFinished(PACSJob *pacsJob);
+
+    ///Slot que s'activa quan un job de consulta al PACS és cancel·lat
+    void queryPACSJobCancelled(PACSJob *pacsJob);
+
 private:
     QMenu m_contextMenuQStudyTreeWidget;
     QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID;
     PacsManager *m_pacsManager;
     ///Per cada job de descàrrega guardem quina acció hem de fer quan ha acabat la descàrrega
     QHash<int,ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;
+
+    ///Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
+    QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
 
     StatsWatcher *m_statsWatcher;
 
