@@ -76,7 +76,6 @@ private:
     QList<Image*> m_imagesToSend;
     PACSRequestStatus::SendRequestStatus m_sendRequestStatus;
     SendDICOMFilesToPACS *m_sendDICOMFilesToPACS;
-    bool m_abortRequested;
     int m_numberOfSeriesSent;
     QString m_lastDICOMFileSeriesInstanceUID;
 };
