@@ -101,7 +101,6 @@ private:
 
 private:
 
-    bool m_abortRequested;
     RetrieveDICOMFilesFromPACS *m_retrieveDICOMFilesFromPACS;
     Study *m_studyToRetrieveDICOMFiles;
     DicomMask m_dicomMaskToRetrieve;
