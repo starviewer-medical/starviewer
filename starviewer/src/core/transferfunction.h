@@ -39,7 +39,7 @@ class TransferFunction
 public:
     /// Construeix una funció de transferència buida (sense punts).
     TransferFunction();
-    TransferFunction( const TransferFunction & transferFunction );
+    TransferFunction(const TransferFunction &transferFunction);
     // Constructor a partir d'un objecte vtkLookupTable
     TransferFunction(vtkLookupTable *lookupTable);
     ~TransferFunction();
@@ -94,8 +94,8 @@ public:
     /// Esborra tots els punts d'opacitat.
     void clearOpacity();
 
-    /// Retorna els punts x de color i d'opacitat. Per accedir al valor d'un punt cal cridar get( x ).
-    QList< double > getPoints() const;
+    /// Retorna els punts x de color i d'opacitat. Per accedir al valor d'un punt cal cridar get(x).
+    QList<double>& getPoints() const;
 
     /// Retorna els punts x de color. Per accedir al valor d'un punt cal cridar getColor( x ).
     QList< double > getColorPoints() const;
@@ -119,7 +119,7 @@ public:
     /// Escriu la funció de transferència a la sortida estàndard (per a debug).
     void print() const;
 
-    TransferFunction & operator =( const TransferFunction & transferFunction );
+    TransferFunction& operator =(const TransferFunction &transferFunction);
     bool operator ==( const TransferFunction & transferFunction ) const;
 
     QVariant toVariant() const;
@@ -129,7 +129,7 @@ public:
     TransferFunction to01( double minimum, double maximum ) const;
 
     /// Retorna els punts x a l'interval [begin, end].
-    QList<double> getPointsInInterval( double begin, double end ) const;
+    QList<double> getPointsInInterval(double begin, double end) const;
 
     /// Retorna els punts x a l'interval [x-distance, x+distance].
     QList<double> getPointsNear( double x, double distance ) const;
@@ -150,8 +150,8 @@ private:
     /// Punts d'opacitat A.
     QMap< double, double > m_opacity;
 
-    /// Punts RGBA. S'actualitza només quan es necessita.
-    mutable QMap< double, QColor > m_rgba;
+    /// X amb un color o opacitat definits explícitament. S'actualitza només quan es necessita.
+    mutable QList<double> m_definedX;
 
     /// Indica si hi ha hagut canvis a la funció des de l'últim cop que s'ha actualitzat m_rgba.
     mutable bool m_changed;

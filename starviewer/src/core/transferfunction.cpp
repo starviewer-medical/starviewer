@@ -23,15 +23,14 @@ TransferFunction::TransferFunction()
     m_opacityTransferFunction = 0;
 }
 
-TransferFunction::TransferFunction( const TransferFunction & transferFunction )
+TransferFunction::TransferFunction(const TransferFunction &transferFunction)
 {
     m_name = transferFunction.name();
     m_color = transferFunction.m_color;
     m_opacity = transferFunction.m_opacity;
 
     m_changed = transferFunction.m_changed;
-    if ( !m_changed )
-        m_rgba = transferFunction.m_rgba;
+    if (!m_changed) m_definedX = transferFunction.m_definedX;
 
     m_colorTransferFunction = 0;
     m_opacityTransferFunction = 0;
@@ -72,9 +71,9 @@ TransferFunction::TransferFunction(vtkLookupTable *lookupTable)
 
 TransferFunction::~TransferFunction()
 {
-    m_rgba.clear(); /// \todo en teoria no cal, però sense això peta (???!!!)
-    if ( m_colorTransferFunction ) m_colorTransferFunction->Delete();
-    if ( m_opacityTransferFunction ) m_opacityTransferFunction->Delete();
+    m_definedX.clear(); /// \todo en teoria no cal, però sense això peta (???!!!)
+    if (m_colorTransferFunction) m_colorTransferFunction->Delete();
+    if (m_opacityTransferFunction) m_opacityTransferFunction->Delete();
 }
 
 const QString & TransferFunction::name() const
@@ -165,24 +164,23 @@ void TransferFunction::clearOpacity()
     m_changed = m_opacityChanged = true;
 }
 
-QList< double > TransferFunction::getPoints() const
+QList<double>& TransferFunction::getPoints() const
 {
-    if ( m_changed )
+    if (m_changed)
     {
-        m_rgba.clear();
+        m_definedX = m_color.keys();
+        m_definedX << m_opacity.keys();
+        qSort(m_definedX);
 
-        QList< double > ckeys = m_color.keys();
-        foreach ( double x, ckeys )
-            m_rgba[x] = get( x );
-
-        QList< double > okeys = m_opacity.keys();
-        foreach ( double x, okeys )
-            if ( !m_rgba.contains( x ) ) m_rgba[x] = get( x );
+        for (int i = 0; i < m_definedX.size() - 1; i++)
+        {
+            if (m_definedX[i] == m_definedX[i+1]) m_definedX.removeAt(i+1);
+        }
 
         m_changed = false;
     }
 
-    return m_rgba.keys();
+    return m_definedX;
 }
 
 QList< double > TransferFunction::getColorPoints() const
@@ -314,14 +312,14 @@ void TransferFunction::print() const
     }
 }
 
-TransferFunction & TransferFunction::operator =( const TransferFunction & transferFunction )
+TransferFunction& TransferFunction::operator =(const TransferFunction &transferFunction)
 {
     m_name = transferFunction.m_name;
     m_color = transferFunction.m_color;
     m_opacity = transferFunction.m_opacity;
 
     m_changed = transferFunction.m_changed;
-    if ( !m_changed ) m_rgba = transferFunction.m_rgba;
+    if (!m_changed) m_definedX = transferFunction.m_definedX;
 
     m_colorChanged = m_opacityChanged = true;
 
@@ -397,15 +395,15 @@ TransferFunction TransferFunction::to01( double minimum, double maximum ) const
 }
 
 
-QList<double> TransferFunction::getPointsInInterval( double begin, double end ) const
+QList<double> TransferFunction::getPointsInInterval(double begin, double end) const
 {
-    getPoints();    // per actualitzar m_rgba
+    getPoints();    // per actualitzar m_definedX
 
-    QMap<double, QColor>::const_iterator lowerBound = m_rgba.lowerBound( begin );
-    QMap<double, QColor>::const_iterator itEnd = m_rgba.end();
+    QList<double>::const_iterator lowerBound = qLowerBound(m_definedX, begin);
+    QList<double>::const_iterator itEnd = m_definedX.end();
     QList<double> pointsInInterval;
 
-    while ( lowerBound != itEnd && lowerBound.key() <= end ) pointsInInterval << ( lowerBound++ ).key();
+    while (lowerBound != itEnd && *lowerBound <= end) pointsInInterval << *(lowerBound++);
 
     return pointsInInterval;
 }
@@ -419,15 +417,15 @@ QList<double> TransferFunction::getPointsNear( double x, double distance ) const
 
 TransferFunction TransferFunction::normalize() const
 {
-    getPoints();    // per actualitzar m_rgba
+    getPoints();    // per actualitzar m_definedX
 
     TransferFunction normalized;
-    QMapIterator<double, QColor> it( m_rgba );
+    QListIterator<double> it(m_definedX);
 
-    while ( it.hasNext() )
+    while (it.hasNext())
     {
-        it.next();
-        normalized.addPoint( it.key(), it.value() );
+        double x = it.next();
+        normalized.addPoint(x, getColor(x), getOpacity(x));
     }
 
     normalized.m_name = m_name;
