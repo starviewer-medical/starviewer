@@ -3736,8 +3736,8 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     //generateTransferFunctionFromIntensityClusters();
 
-    bool minimizeKullbackLeiblerDivergence = false;
-    bool maximizeHIV = true;
+    bool minimizeKullbackLeiblerDivergence = true;
+    bool maximizeHIV = false;
     bool maximizeMiiOverHI = false;
     bool minimizeMiiOverHI = false;
     bool maximizeMiiOverJointEntropy = false;
@@ -3985,8 +3985,8 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
     //generateTransferFunctionFromIntensityClusters();
 
-    bool minimizeKullbackLeiblerDivergence = false;
-    bool maximizeHIV = true;
+    bool minimizeKullbackLeiblerDivergence = true;
+    bool maximizeHIV = false;
     bool maximizeMiiOverHI = false;
     bool minimizeMiiOverHI = false;
     bool maximizeMiiOverJointEntropy = false;
@@ -4078,19 +4078,20 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         double x = (x1 + x2) / 2.0;
         double opacity = bestTransferFunction.getOpacity(x);
 
-        double start, step;
+        double base, step;
+        int start, end = +10;
 
         switch (m_fineTuneGeneticTransferFunctionFromIntensityClusteringLevelComboBox->currentIndex())
         {
-            case 0: start = 0.0; step = 0.1; break;                                 // primer decimal
-            case 1: start = qFloor(10.0 * opacity) / 10.0; step = 0.01; break;      // segon decimal
-            case 2: start = qFloor(100.0 * opacity) / 100.0; step = 0.001; break;   // tercer decimal
+            case 0: base = 0.0; step = 0.1; start = 0; break;                                   // primer decimal
+            case 1: base = qFloor(10.0 * opacity) / 10.0; step = 0.01; start = -10; break;      // segon decimal
+            case 2: base = qFloor(100.0 * opacity) / 100.0; step = 0.001; start = -10; break;   // tercer decimal
         }
 
-        for (int j = 0; j <= 10; j++)
+        for (int j = start; j <= end; j++)
         {
             TransferFunction fineTunedTransferFunction(bestTransferFunction);
-            double newOpacity = qBound(0.0, start + j * step, 1.0);
+            double newOpacity = qBound(0.0, base + j * step, 1.0);
 
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, opacitat nova = %3").arg(cluster).arg(opacity).arg(newOpacity));
 
@@ -4184,6 +4185,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
                 bestPI = fineTunedPI;
                 best = fineTuned;
                 bestTransferFunction = fineTunedTransferFunction;
+                opacity = newOpacity;
                 m_transferFunctionEditor->setTransferFunction(bestTransferFunction.simplify());
                 setTransferFunction();
                 DEBUG_LOG("......................................... acceptada");
