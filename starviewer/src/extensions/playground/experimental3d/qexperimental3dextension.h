@@ -311,6 +311,9 @@ private slots:
     void generateInnernessProportionalOpacityTransferFunction();
     void fillWeigthsEditor();
 
+    void enableBaseVomi(bool on);
+    void enableVomi(bool on);
+
 private:
 
     Experimental3DVolume *m_volume;

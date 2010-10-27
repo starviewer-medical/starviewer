@@ -296,8 +296,8 @@ void QExperimental3DExtension::loadVomi2(QString fileName)
 
         for (int j = 0; j < nVoxels; j++) if (m_vomi2.at(j) > m_maximumVomi2) m_maximumVomi2 = m_vomi2.at(j);
 
-        m_baseVomi2RadioButton->setEnabled(true);
-        m_vomi2CheckBox->setEnabled(true);
+        m_baseVomiRadioButton->setEnabled(true);
+        m_vomiCheckBox->setEnabled(true);
         //m_vomiCoolWarmCheckBox->setEnabled(true);   /// \todo vomi2
         //m_opacityLabel->setEnabled(true);
         //m_opacityVomiCheckBox->setEnabled(true);    /// \todo vomi2
@@ -322,8 +322,8 @@ void QExperimental3DExtension::loadVomi3(QString fileName)
 
         for (int j = 0; j < nVoxels; j++) if (m_vomi3.at(j) > m_maximumVomi3) m_maximumVomi3 = m_vomi3.at(j);
 
-        m_baseVomi3RadioButton->setEnabled(true);
-        m_vomi3CheckBox->setEnabled(true);
+        m_baseVomiRadioButton->setEnabled(true);
+        m_vomiCheckBox->setEnabled(true);
         //m_vomiCoolWarmCheckBox->setEnabled(true);   /// \todo vomi3
         //m_opacityLabel->setEnabled(true);
         //m_opacityVomiCheckBox->setEnabled(true);    /// \todo vomi3
@@ -943,12 +943,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmAlphaDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBetaLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseCoolWarmRadioButton, SIGNAL( toggled(bool) ), m_baseCoolWarmBetaDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect(m_baseVomiRadioButton, SIGNAL(toggled(bool)), m_baseVomiFactorLabel, SLOT(setEnabled(bool)));
-    connect(m_baseVomiRadioButton, SIGNAL(toggled(bool)), m_baseVomiFactorDoubleSpinBox, SLOT(setEnabled(bool)));
-    connect(m_baseVomi2RadioButton, SIGNAL(toggled(bool)), m_baseVomi2FactorLabel, SLOT(setEnabled(bool)));
-    connect(m_baseVomi2RadioButton, SIGNAL(toggled(bool)), m_baseVomi2FactorDoubleSpinBox, SLOT(setEnabled(bool)));
-    connect(m_baseVomi3RadioButton, SIGNAL(toggled(bool)), m_baseVomi3FactorLabel, SLOT(setEnabled(bool)));
-    connect(m_baseVomi3RadioButton, SIGNAL(toggled(bool)), m_baseVomi3FactorDoubleSpinBox, SLOT(setEnabled(bool)));
+    connect(m_baseVomiRadioButton, SIGNAL(toggled(bool)), SLOT(enableBaseVomi(bool)));
     connect( m_baseImiRadioButton, SIGNAL( toggled(bool) ), m_baseImiFactorLabel, SLOT( setEnabled(bool) ) );
     connect( m_baseImiRadioButton, SIGNAL( toggled(bool) ), m_baseImiFactorDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_baseVoxelSalienciesRadioButton, SIGNAL( toggled(bool) ), m_baseVoxelSalienciesFactorLabel, SLOT( setEnabled(bool) ) );
@@ -971,12 +966,7 @@ void QExperimental3DExtension::createConnections()
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceLowFilterDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceHighFilterLabel, SLOT( setEnabled(bool) ) );
     connect( m_obscuranceCheckBox, SIGNAL( toggled(bool) ), m_obscuranceHighFilterDoubleSpinBox, SLOT( setEnabled(bool) ) );
-    connect(m_vomiCheckBox, SIGNAL(toggled(bool)), m_vomiFactorLabel, SLOT(setEnabled(bool)));
-    connect(m_vomiCheckBox, SIGNAL(toggled(bool)), m_vomiFactorDoubleSpinBox, SLOT(setEnabled(bool)));
-    connect(m_vomi2CheckBox, SIGNAL(toggled(bool)), m_vomi2FactorLabel, SLOT(setEnabled(bool)));
-    connect(m_vomi2CheckBox, SIGNAL(toggled(bool)), m_vomi2FactorDoubleSpinBox, SLOT(setEnabled(bool)));
-    connect(m_vomi3CheckBox, SIGNAL(toggled(bool)), m_vomi3FactorLabel, SLOT(setEnabled(bool)));
-    connect(m_vomi3CheckBox, SIGNAL(toggled(bool)), m_vomi3FactorDoubleSpinBox, SLOT(setEnabled(bool)));
+    connect(m_vomiCheckBox, SIGNAL(toggled(bool)), SLOT(enableVomi(bool)));
     connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmYLabel, SLOT( setEnabled(bool) ) );
     connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmYDoubleSpinBox, SLOT( setEnabled(bool) ) );
     connect( m_vomiCoolWarmCheckBox, SIGNAL( toggled(bool) ), m_vomiCoolWarmBLabel, SLOT( setEnabled(bool) ) );
@@ -1372,10 +1362,13 @@ void QExperimental3DExtension::render()
     else if ( m_baseCoolWarmRadioButton->isChecked() ) m_volume->addCoolWarm( m_baseCoolWarmBDoubleSpinBox->value(), m_baseCoolWarmYDoubleSpinBox->value(), m_baseCoolWarmAlphaDoubleSpinBox->value(),
                                                                               m_baseCoolWarmBetaDoubleSpinBox->value() );
     else if ( m_baseWhiteRadioButton->isChecked() ) m_volume->addWhite();
-    else if (m_baseVomiRadioButton->isChecked()) m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
+    else if (m_baseVomiRadioButton->isChecked())
+    {
+        if (m_baseVomi1RadioButton->isChecked()) m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
+        else if (m_baseVomi2RadioButton->isChecked()) m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_baseVomiFactorDoubleSpinBox->value());
+        else if (m_baseVomi3RadioButton->isChecked()) m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_baseVomiFactorDoubleSpinBox->value());
+    }
     //else if (m_baseVomiRadioButton->isChecked()) m_volume->addVoxelSaliencies(m_vomi, m_maximumVomi, m_baseVomiFactorDoubleSpinBox->value());
-    else if (m_baseVomi2RadioButton->isChecked()) m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_baseVomi2FactorDoubleSpinBox->value());
-    else if (m_baseVomi3RadioButton->isChecked()) m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_baseVomi3FactorDoubleSpinBox->value());
     else if ( m_baseImiRadioButton->isChecked() ) m_volume->addImi( m_imi, m_maximumImi, m_baseImiFactorDoubleSpinBox->value() );
     else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVoxelSaliencies( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
     //else if ( m_baseVoxelSalienciesRadioButton->isChecked() ) m_volume->addVomi( m_voxelSaliencies, m_maximumSaliency, m_baseVoxelSalienciesFactorDoubleSpinBox->value() );
@@ -1410,12 +1403,15 @@ void QExperimental3DExtension::render()
     if ( m_contourCheckBox->isChecked() ) m_volume->addContour( m_contourDoubleSpinBox->value() );
     if ( m_obscuranceCheckBox->isChecked() ) m_volume->addObscurance( m_obscurance, m_obscuranceFactorDoubleSpinBox->value(), m_obscuranceLowFilterDoubleSpinBox->value(), m_obscuranceHighFilterDoubleSpinBox->value(),
                                                                       m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value() );
-    if (m_vomiCheckBox->isChecked()) m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
-                                                       m_additiveObscuranceVomiWeightDoubleSpinBox->value());
-    if (m_vomi2CheckBox->isChecked()) m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_vomi2FactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
-                                                        m_additiveObscuranceVomiWeightDoubleSpinBox->value());
-    if (m_vomi3CheckBox->isChecked()) m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_vomi3FactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(),
-                                                        m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+    if (m_vomiCheckBox->isChecked())
+    {
+        if (m_vomi1RadioButton->isChecked())
+            m_volume->addVomi(m_vomi, m_minimumVomi, m_maximumVomi, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+        else if (m_vomi2RadioButton->isChecked())
+            m_volume->addVomi(m_vomi2, m_minimumVomi2, m_maximumVomi2, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+        else if (m_vomi3RadioButton->isChecked())
+            m_volume->addVomi(m_vomi3, m_minimumVomi3, m_maximumVomi3, m_vomiFactorDoubleSpinBox->value(), m_additiveObscuranceVomiCheckBox->isChecked(), m_additiveObscuranceVomiWeightDoubleSpinBox->value());
+    }
     if ( m_vomiCoolWarmCheckBox->isChecked() ) m_volume->addVomiCoolWarm( m_vomi, m_maximumVomi, m_vomiCoolWarmFactorDoubleSpinBox->value(),
                                                                           m_vomiCoolWarmYDoubleSpinBox->value(), m_vomiCoolWarmBDoubleSpinBox->value() );
     if ( m_colorVomiCheckBox->isChecked() ) m_volume->addColorVomi( m_colorVomi, m_maximumColorVomi, m_colorVomiFactorDoubleSpinBox->value() );
@@ -2129,8 +2125,8 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_minimumVomi2 = viewpointInformationChannel.minimumVomi2();
         m_maximumVomi2 = viewpointInformationChannel.maximumVomi2();
         DEBUG_LOG(QString("range vomi2 = [%1, %2]").arg(m_minimumVomi2).arg(m_maximumVomi2));
-        m_baseVomi2RadioButton->setEnabled(true);
-        m_vomi2CheckBox->setEnabled(true);
+        m_baseVomiRadioButton->setEnabled(true);
+        m_vomiCheckBox->setEnabled(true);
         //m_vomiCoolWarmCheckBox->setEnabled(true);   /// \todo vomi2
         //m_opacityLabel->setEnabled(true);
         //m_opacityVomiCheckBox->setEnabled(true);    /// \todo vomi2
@@ -2144,8 +2140,8 @@ void QExperimental3DExtension::computeSelectedVmi()
         m_minimumVomi3 = viewpointInformationChannel.minimumVomi3();
         m_maximumVomi3 = viewpointInformationChannel.maximumVomi3();
         DEBUG_LOG(QString("range vomi3 = [%1, %2]").arg(m_minimumVomi3).arg(m_maximumVomi3));
-        m_baseVomi3RadioButton->setEnabled(true);
-        m_vomi3CheckBox->setEnabled(true);
+        m_baseVomiRadioButton->setEnabled(true);
+        m_vomiCheckBox->setEnabled(true);
         //m_vomiCoolWarmCheckBox->setEnabled(true);   /// \todo vomi3
         //m_opacityLabel->setEnabled(true);
         //m_opacityVomiCheckBox->setEnabled(true);    /// \todo vomi3
@@ -4287,6 +4283,26 @@ void QExperimental3DExtension::fillWeigthsEditor()
     }
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsTransferFunction);
+}
+
+
+void QExperimental3DExtension::enableBaseVomi(bool on)
+{
+    m_baseVomi1RadioButton->setEnabled(!m_vomi.isEmpty() && on);
+    m_baseVomi2RadioButton->setEnabled(!m_vomi2.isEmpty() && on);
+    m_baseVomi3RadioButton->setEnabled(!m_vomi3.isEmpty() && on);
+    m_baseVomiFactorLabel->setEnabled(on);
+    m_baseVomiFactorDoubleSpinBox->setEnabled(on);
+}
+
+
+void QExperimental3DExtension::enableVomi(bool on)
+{
+    m_vomi1RadioButton->setEnabled(!m_vomi.isEmpty() && on);
+    m_vomi2RadioButton->setEnabled(!m_vomi2.isEmpty() && on);
+    m_vomi3RadioButton->setEnabled(!m_vomi3.isEmpty() && on);
+    m_vomiFactorLabel->setEnabled(on);
+    m_vomiFactorDoubleSpinBox->setEnabled(on);
 }
 
 
