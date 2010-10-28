@@ -2226,9 +2226,11 @@ void QExperimental3DExtension::computeSelectedVmii()
     bool computeViewpointUnstabilities = m_computeViewpointUnstabilitiesICheckBox->isChecked();
     bool computeImi = m_computeImiCheckBox->isChecked();
     bool computeIntensityClustering = m_computeIntensityClusteringCheckBox->isChecked();
+    bool computeDkl_IV_W = false;                            // D_KL(I|V || W)
 
     // Si no hi ha res a calcular marxem
-    if (computePI && !computeHI && !computeHIv && !computeHIV && !computeJointEntropy && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi && !computeIntensityClustering) return;
+    if (computePI && !computeHI && !computeHIv && !computeHIV && !computeJointEntropy && !computeVmii && !computeMii && !computeViewpointUnstabilities && !computeImi && !computeIntensityClustering && !computeDkl_IV_W)
+        return;
 
     setCursor(QCursor(Qt::WaitCursor));
 
@@ -2268,7 +2270,7 @@ void QExperimental3DExtension::computeSelectedVmii()
     QTime time;
     time.start();
     viewpointIntensityInformationChannel.compute(computePI, computeHI, computeHIv, computeHIV, computeJointEntropy, computeVmii, computeMii, computeViewpointUnstabilities, computeImi, computeIntensityClustering,
-                                                 m_vmiiDisplayCheckBox->isChecked());
+                                                 computeDkl_IV_W, m_vmiiDisplayCheckBox->isChecked());
     int elapsed = time.elapsed();
     DEBUG_LOG(QString("Temps total de VMIi i altres: %1 s").arg(elapsed / 1000.0f));
     INFO_LOG(QString("Temps total de VMIi i altres: %1 s").arg(elapsed / 1000.0f));
@@ -3732,7 +3734,8 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     //generateTransferFunctionFromIntensityClusters();
 
-    bool minimizeKullbackLeiblerDivergence = true;
+    bool minimizeKullbackLeiblerDivergence = false;
+    bool minimizeDkl_IV_W = true;
     bool maximizeHIV = false;
     bool maximizeMiiOverHI = false;
     bool minimizeMiiOverHI = false;
@@ -3742,7 +3745,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
     const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
     QVector<float> weights(m_intensityClusters.size());
 
-    if (minimizeKullbackLeiblerDivergence)
+    if (minimizeKullbackLeiblerDivergence || minimizeDkl_IV_W)
     {
         float totalWeight = 0.0f;
 
@@ -3780,6 +3783,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
+        if (minimizeDkl_IV_W) viewpointIntensityInformationChannel.setWeights(weights);
         bool pI = minimizeKullbackLeiblerDivergence;
         bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
         bool HIv = false;
@@ -3790,12 +3794,17 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         bool viewpointUnstabilities = false;
         bool imi = false;
         bool intensityClustering = false;
-        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+        bool Dkl_IV_W = minimizeDkl_IV_W;
+        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, Dkl_IV_W, false);
 
         if (minimizeKullbackLeiblerDivergence)
         {
             bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
             best = InformationTheory::kullbackLeiblerDivergence(bestPI, weights, true);
+        }
+        if (minimizeDkl_IV_W)
+        {
+            best = viewpointIntensityInformationChannel.Dkl_IV_W();
         }
         if (maximizeHIV)
         {
@@ -3848,7 +3857,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
                     deltaMax = +DeltaLimit1;
                 }
             }
-            if (maximizeHIV || maximizeMiiOverHI || minimizeMiiOverHI || maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy)
+            if (minimizeDkl_IV_W || maximizeHIV || maximizeMiiOverHI || minimizeMiiOverHI || maximizeMiiOverJointEntropy || minimizeMiiOverJointEntropy)
             {
                 deltaMin = -DeltaLimit2;
                 deltaMax = +DeltaLimit2;
@@ -3879,6 +3888,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, evolvedTransferFunction);
+        if (minimizeDkl_IV_W) viewpointIntensityInformationChannel.setWeights(weights);
         bool pI = minimizeKullbackLeiblerDivergence;
         bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
         bool HIv = false;
@@ -3889,7 +3899,8 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         bool viewpointUnstabilities = false;
         bool imi = false;
         bool intensityClustering = false;
-        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+        bool Dkl_IV_W = minimizeDkl_IV_W;
+        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, Dkl_IV_W, false);
         double evolved;
         bool accept;
 
@@ -3904,6 +3915,12 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
             evolvedPI = viewpointIntensityInformationChannel.intensityProbabilities();
             evolved = InformationTheory::kullbackLeiblerDivergence(evolvedPI, weights, true);
             DEBUG_LOG(QString(".......................................... distància mínima = %1, distància evolucionada = %2").arg(best).arg(evolved));
+            accept = evolved < best;
+        }
+        if (minimizeDkl_IV_W)
+        {
+            evolved = viewpointIntensityInformationChannel.Dkl_IV_W();
+            DEBUG_LOG(QString(".......................................... D_KL(I|V || W) mínima = %1, D_KL(I|V || W) evolucionada = %2").arg(best).arg(evolved));
             accept = evolved < best;
         }
         if (maximizeHIV)
@@ -3981,7 +3998,8 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
     //generateTransferFunctionFromIntensityClusters();
 
-    bool minimizeKullbackLeiblerDivergence = true;
+    bool minimizeKullbackLeiblerDivergence = false;
+    bool minimizeDkl_IV_W = true;
     bool maximizeHIV = false;
     bool maximizeMiiOverHI = false;
     bool minimizeMiiOverHI = false;
@@ -3991,7 +4009,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
     const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
     QVector<float> weights(m_intensityClusters.size());
 
-    if (minimizeKullbackLeiblerDivergence)
+    if (minimizeKullbackLeiblerDivergence || minimizeDkl_IV_W)
     {
         float totalWeight = 0.0f;
 
@@ -4026,6 +4044,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
+        if (minimizeDkl_IV_W) viewpointIntensityInformationChannel.setWeights(weights);
         bool pI = minimizeKullbackLeiblerDivergence;
         bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
         bool HIv = false;
@@ -4036,12 +4055,17 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         bool viewpointUnstabilities = false;
         bool imi = false;
         bool intensityClustering = false;
-        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+        bool Dkl_IV_W = minimizeDkl_IV_W;
+        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, Dkl_IV_W, false);
 
         if (minimizeKullbackLeiblerDivergence)
         {
             bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
             best = InformationTheory::kullbackLeiblerDivergence(bestPI, weights, true);
+        }
+        if (minimizeDkl_IV_W)
+        {
+            best = viewpointIntensityInformationChannel.Dkl_IV_W();
         }
         if (maximizeHIV)
         {
@@ -4110,6 +4134,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
             // Viewpoint Intensity Information Channel
             ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, fineTunedTransferFunction);
+            if (minimizeDkl_IV_W) viewpointIntensityInformationChannel.setWeights(weights);
             bool pI = minimizeKullbackLeiblerDivergence;
             bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
             bool HIv = false;
@@ -4120,7 +4145,8 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
             bool viewpointUnstabilities = false;
             bool imi = false;
             bool intensityClustering = false;
-            viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+            bool Dkl_IV_W = minimizeDkl_IV_W;
+            viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, Dkl_IV_W, false);
             double fineTuned;
             bool accept;
 
@@ -4135,6 +4161,12 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
                 fineTunedPI = viewpointIntensityInformationChannel.intensityProbabilities();
                 fineTuned = InformationTheory::kullbackLeiblerDivergence(fineTunedPI, weights, true);
                 DEBUG_LOG(QString(".......................................... distància mínima = %1, distància ajustada = %2").arg(best).arg(fineTuned));
+                accept = fineTuned < best;
+            }
+            if (minimizeDkl_IV_W)
+            {
+                fineTuned = viewpointIntensityInformationChannel.Dkl_IV_W();
+                DEBUG_LOG(QString(".......................................... D_KL(I|V || W) mínima = %1, D_KL(I|V || W) ajustada = %2").arg(best).arg(fineTuned));
                 accept = fineTuned < best;
             }
             if (maximizeHIV)

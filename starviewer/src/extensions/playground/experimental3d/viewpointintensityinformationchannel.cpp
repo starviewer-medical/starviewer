@@ -29,9 +29,16 @@ ViewpointIntensityInformationChannel::ViewpointIntensityInformationChannel(const
     m_viewpoints = m_viewpointGenerator.viewpoints();
 }
 
+
 void ViewpointIntensityInformationChannel::setIntensityClusteringNumberOfClusters(int numberOfClusters)
 {
     m_numberOfIntensityClusters = numberOfClusters;
+}
+
+
+void ViewpointIntensityInformationChannel::setWeights(const QVector<float> &weights)
+{
+    m_weights = weights;
 }
 
 
@@ -56,10 +63,10 @@ void ViewpointIntensityInformationChannel::filterViewpoints(const QVector<bool> 
 
 
 void ViewpointIntensityInformationChannel::compute(bool &intensityProbabilities, bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi,
-                                                   bool &intensityClustering, bool display)
+                                                   bool &intensityClustering, bool &Dkl_IV_W, bool display)
 {
     // Si no hi ha res a calcular marxem
-    if (!intensityProbabilities && !HI && !HIv && !HIV && !jointEntropy && !vmii && !mii && !viewpointUnstabilities && !imi && !intensityClustering) return;
+    if (!intensityProbabilities && !HI && !HIv && !HIV && !jointEntropy && !vmii && !mii && !viewpointUnstabilities && !imi && !intensityClustering && !Dkl_IV_W) return;
 
     bool viewProbabilities = false;
 
@@ -73,9 +80,10 @@ void ViewpointIntensityInformationChannel::compute(bool &intensityProbabilities,
     if (viewpointUnstabilities) viewProbabilities = true;
     if (imi) intensityProbabilities = true;
     if (intensityClustering) intensityProbabilities = true;
+    if (Dkl_IV_W) viewProbabilities = true;
     if (intensityProbabilities) viewProbabilities = true;
 
-    computeCuda(viewProbabilities, intensityProbabilities, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, display);
+    computeCuda(viewProbabilities, intensityProbabilities, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, Dkl_IV_W, display);
 }
 
 
@@ -157,6 +165,12 @@ QList< QList<int> > ViewpointIntensityInformationChannel::intensityClusters() co
 }
 
 
+float ViewpointIntensityInformationChannel::Dkl_IV_W() const
+{
+    return m_Dkl_IV_W;
+}
+
+
 QVector<float> ViewpointIntensityInformationChannel::intensityProbabilitiesInView(int i)
 {
     return intensityProbabilitiesInViewCuda(i);
@@ -172,13 +186,13 @@ Matrix4 ViewpointIntensityInformationChannel::viewMatrix(const Vector3 &viewpoin
 
 
 void ViewpointIntensityInformationChannel::computeCuda(bool computeViewProbabilities, bool computeIntensityProbabilities, bool computeHI, bool computeHIv, bool computeHIV, bool computeJointEntropy, bool computeVmii,
-                                                       bool computeMii, bool computeViewpointUnstabilities, bool computeImi, bool computeIntensityClustering, bool display)
+                                                       bool computeMii, bool computeViewpointUnstabilities, bool computeImi, bool computeIntensityClustering, bool computeDkl_IV_W, bool display)
 {
     DEBUG_LOG("computeCuda");
 
     // Inicialitzar progrés
     int nSteps = 0;
-    if (computeViewProbabilities) nSteps++; // p(V)
+    if (computeViewProbabilities || computeDkl_IV_W) nSteps++;  // p(V) + D_KL(I|V || W)
     if (computeIntensityProbabilities || computeHI) nSteps++;   // p(I) + H(I)
     if (computeImi) nSteps++;   // IMI
     if (computeHIv || computeHIV || computeJointEntropy || computeVmii || computeMii || computeViewpointUnstabilities) nSteps++;    // H(I|v) + H(I|V) + H(V,I) + VMIi + MIi + viewpoint unstabilities
@@ -192,10 +206,10 @@ void ViewpointIntensityInformationChannel::computeCuda(bool computeViewProbabili
     cviicSetupRayCast(m_volume->getImage(), m_transferFunction, 1024, 720, m_backgroundColor, display);
     if (computeIntensityProbabilities) cviicSetupIntensityProbabilities();
 
-    // p(V)
-    if (computeViewProbabilities)
+    // p(V) + D_KL(I|V || W)
+    if (computeViewProbabilities || computeDkl_IV_W)
     {
-        computeViewProbabilitiesCuda();
+        computeViewProbabilitiesCuda(computeDkl_IV_W);
         emit totalProgress(++step);
         QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
     }
@@ -250,7 +264,7 @@ QVector<float> ViewpointIntensityInformationChannel::intensityProbabilitiesInVie
 }
 
 
-void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda()
+void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda(bool computeDkl_IV_W)
 {
     int nViewpoints = m_viewpoints.size();
     int nIntensities = m_volume->getRangeMax() + 1;
@@ -260,6 +274,12 @@ void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda()
 
     emit partialProgress(0);
     QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
+    QVector<float> pIv;
+    if (computeDkl_IV_W)
+    {
+        pIv.resize(nIntensities);
+        m_Dkl_IV_W = 0.0;
+    }
 
     for (int i = 0; i < nViewpoints; i++)
     {
@@ -268,6 +288,11 @@ void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda()
         double viewedVolume = 0.0;
         for (int j = 0; j < nIntensities; j++) viewedVolume += histogram.at(j);
         Q_ASSERT(!MathTools::isNaN(viewedVolume));
+
+        if (computeDkl_IV_W)
+        {
+            for (int j = 0; j < nIntensities; j++) pIv[j] = histogram.at(j) / viewedVolume; // p(I|v)
+        }
 
         m_viewProbabilities[i] = viewedVolume;
         totalViewedVolume += viewedVolume;
@@ -283,6 +308,11 @@ void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda()
         DEBUG_LOG(QString("volume(v%1) = %2").arg(i + 1).arg(m_viewProbabilities.at(i)));
         m_viewProbabilities[i] /= totalViewedVolume;
         DEBUG_LOG(QString("p(v%1) = %2").arg(i + 1).arg(m_viewProbabilities.at(i)));
+
+        if (computeDkl_IV_W)
+        {
+            m_Dkl_IV_W += m_viewProbabilities.at(i) * InformationTheory::kullbackLeiblerDivergence(pIv, m_weights);
+        }
     }
 
 #ifndef QT_NO_DEBUG
@@ -295,6 +325,11 @@ void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda()
         sum += pv;
     }
     DEBUG_LOG(QString("sum p(v) = %1").arg(sum));
+    if (computeDkl_IV_W)
+    {
+        Q_ASSERT(!MathTools::isNaN(m_Dkl_IV_W));
+        DEBUG_LOG(QString("D_KL(I|V || W) = %1").arg(m_Dkl_IV_W));
+    }
 #endif
 }
 
