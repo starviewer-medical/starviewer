@@ -303,8 +303,9 @@ void cvicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunct
     float4 *transferFunctionTempArray = new float4[rangeMax + 1];
     for (int i = 0; i <= rangeMax; i++)
     {
-        QColor color = transferFunction.get(i);
-        transferFunctionTempArray[i] = make_float4(color.redF(), color.greenF(), color.blueF(), color.alphaF());
+        QColor color = transferFunction.getColor(i);
+        double opacity = transferFunction.getOpacity(i);
+        transferFunctionTempArray[i] = make_float4(color.redF(), color.greenF(), color.blueF(), opacity);
         //transferFunctionTempArray[4*i+0] = color.redF();
         //transferFunctionTempArray[4*i+1] = color.greenF();
         //transferFunctionTempArray[4*i+2] = color.blueF();
