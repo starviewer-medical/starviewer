@@ -609,6 +609,7 @@ void QViewer::updateWindowLevelData()
     }
 
     const QString DefaultWindowLevelName = tr("Default");
+    const QString AutomaticWindowLevelName = tr("Auto");
 
     m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
 
@@ -655,12 +656,16 @@ void QViewer::updateWindowLevelData()
             }
         }
     }
-    else // No n'hi ha de definits al volum, agafem el que ens doni el viewer
+    
+    // Calculem un window level automàtic que sempre posarem disponible a l'usuari
+    double *range = m_mainVolume->getVtkData()->GetScalarRange();
+    double automaticWindowWidth = range[1] - range[0];
+    double automaticWindowLevel = range[0] + (automaticWindowWidth * 0.5);
+    m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth, automaticWindowLevel, WindowLevelPresetsToolData::FileDefined);
+    // Si no hi ha window levels definits per defecte activarem l'automàtic
+    if (windowLevelCount <= 0)
     {
-        double windowLevel[2];
-        this->getDefaultWindowLevel(windowLevel);
-        m_windowLevelData->addPreset(DefaultWindowLevelName, windowLevel[0], windowLevel[1], WindowLevelPresetsToolData::FileDefined);
-        m_windowLevelData->activatePreset(DefaultWindowLevelName);
+        m_windowLevelData->activatePreset(AutomaticWindowLevelName);
     }
 }
 
