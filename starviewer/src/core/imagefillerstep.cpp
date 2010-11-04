@@ -116,15 +116,6 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                             }
                         }
                     }
-                    // En el cas que tinguem acquisition numbers diferents en la mateixa sèrie, els separarem en diferents volums
-                    // El número de volum que s'assignarà es farà sumant-li 1000 a l'acquisition number
-                    // En cas que no hi hagi acquisition number, es seguirà assignant el mateix volume number que ja s'hagués calculat anteriorment
-                    QString acquisitionNumber = dicomReader->getValueAttributeAsQString(DICOMAcquisitionNumber);
-                    if (!acquisitionNumber.isEmpty())
-                    {
-                        volumeNumber = acquisitionNumber.toUInt() + 1000;
-                    }
-                    // Assignem el número del volum de la imatge dins de la sèrie
                     image->setVolumeNumberInSeries(volumeNumber);
 
                     // Afegirem la imatge a la llista si aquesta s'ha pogut afegir a la corresponent sèrie
