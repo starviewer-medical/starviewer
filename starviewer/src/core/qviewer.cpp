@@ -545,7 +545,7 @@ void QViewer::getDefaultWindowLevel(double windowLevel[2])
         if (m_mainVolume)
         {
             double *range = m_mainVolume->getVtkData()->GetScalarRange();
-            this->setDefaultWindowLevel(range[1] - range[0], (range[1] / 2.) + range[0]);
+            this->setDefaultWindowLevel(range[1] - range[0], (range[1] - range[0] / 2.) + range[0]);
         }
         else
         {
