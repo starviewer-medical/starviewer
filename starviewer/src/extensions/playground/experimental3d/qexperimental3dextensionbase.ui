@@ -2277,8 +2277,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>596</width>
-            <height>1068</height>
+            <width>488</width>
+            <height>1074</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -3298,8 +3298,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>596</width>
-            <height>1068</height>
+            <width>488</width>
+            <height>1074</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -3936,7 +3936,7 @@
                    <number>1000</number>
                   </property>
                   <property name="value">
-                   <number>100</number>
+                   <number>10</number>
                   </property>
                  </widget>
                 </item>
@@ -3961,6 +3961,63 @@
                 </item>
                 <item>
                  <widget class="QProgressBar" name="m_fineTuneGeneticTransferFunctionFromIntensityClusteringProgressBar">
+                  <property name="value">
+                   <number>0</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_71">
+                <item>
+                 <widget class="QPushButton" name="m_optimizeByDerivativeTransferFunctionFromIntensityClusteringPushButton">
+                  <property name="text">
+                   <string>Optimize by derivative</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="m_optimizeByDerivativeTransferFunctionFromIntensityClusteringIterationsSpinBox">
+                  <property name="suffix">
+                   <string> iteration/s</string>
+                  </property>
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>1000000</number>
+                  </property>
+                  <property name="value">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="m_optimizeByDerivativeTransferFunctionFromIntensityClusteringKLabel">
+                  <property name="text">
+                   <string>k</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="m_optimizeByDerivativeTransferFunctionFromIntensityClusteringKDoubleSpinBox">
+                  <property name="decimals">
+                   <number>3</number>
+                  </property>
+                  <property name="maximum">
+                   <double>1.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.001000000000000</double>
+                  </property>
+                  <property name="value">
+                   <double>0.010000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QProgressBar" name="m_optimizeByDerivativeTransferFunctionFromIntensityClusteringProgressBar">
                   <property name="value">
                    <number>0</number>
                   </property>
@@ -4314,8 +4371,8 @@
  <buttongroups>
   <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

@@ -1112,6 +1112,7 @@ void QExperimental3DExtension::createConnections()
     connect(m_transferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(generateTransferFunctionFromIntensityClusters()));
     connect(m_geneticTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(generateAndEvolveTransferFunctionFromIntensityClusters()));
     connect(m_fineTuneGeneticTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(fineTuneGeneticTransferFunctionFromIntensityClusters()));
+    connect(m_optimizeByDerivativeTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(optimizeByDerivativeTransferFunctionFromIntensityClusters()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
@@ -3734,8 +3735,8 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     //generateTransferFunctionFromIntensityClusters();
 
-    bool minimizeKullbackLeiblerDivergence = false;
-    bool minimizeDkl_IV_W = true;
+    bool minimizeKullbackLeiblerDivergence = true;
+    bool minimizeDkl_IV_W = false;
     bool maximizeHIV = false;
     bool maximizeMiiOverHI = false;
     bool minimizeMiiOverHI = false;
@@ -3754,6 +3755,12 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
             float weight = weightsTransferFunction.getOpacity(i);
             weights[i] = weight;
             totalWeight += weight;
+        }
+
+        if (totalWeight == 0.0f)
+        {
+            DEBUG_LOG("tots els pesos són 0 -> marxem");
+            return;
         }
 
         DEBUG_LOG("pesos:");
@@ -3866,6 +3873,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
             double deltaRange = deltaMax - deltaMin;
             double delta = deltaRange * qrand() / RAND_MAX + deltaMin;
             double newOpacity = qBound(0.0, opacity + delta, 1.0);
+            if ((minimizeKullbackLeiblerDivergence || minimizeDkl_IV_W) && weights.at(j) == 0.0f) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, delta = %3%4, opacitat nova = %5").arg(j).arg(opacity).arg(delta > 0.0 ? "+" : "").arg(delta).arg(newOpacity));
 
             if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
@@ -3998,8 +4006,8 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
     //generateTransferFunctionFromIntensityClusters();
 
-    bool minimizeKullbackLeiblerDivergence = false;
-    bool minimizeDkl_IV_W = true;
+    bool minimizeKullbackLeiblerDivergence = true;
+    bool minimizeDkl_IV_W = false;
     bool maximizeHIV = false;
     bool maximizeMiiOverHI = false;
     bool minimizeMiiOverHI = false;
@@ -4018,6 +4026,12 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
             float weight = weightsTransferFunction.getOpacity(i);
             weights[i] = weight;
             totalWeight += weight;
+        }
+
+        if (totalWeight == 0.0f)
+        {
+            DEBUG_LOG("tots els pesos són 0 -> marxem");
+            return;
         }
 
         DEBUG_LOG("pesos:");
@@ -4092,11 +4106,15 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
     {
         DEBUG_LOG(QString("------------------------------------- fine-tune, iteració %1/%2 --------------------------------").arg(i).arg(iterations));
 
-        int cluster = 1 + qrand() % (m_intensityClusters.size() - 1);
-        double x1 = m_intensityClusters[cluster].first();
-        double x2 = m_intensityClusters[cluster].last();
-        double x = (x1 + x2) / 2.0;
-        double opacity = bestTransferFunction.getOpacity(x);
+        int cluster;
+        double x1, x2, x, opacity;
+        do {
+            cluster = 1 + qrand() % (m_intensityClusters.size() - 1);
+            x1 = m_intensityClusters[cluster].first();
+            x2 = m_intensityClusters[cluster].last();
+            x = (x1 + x2) / 2.0;
+            opacity = bestTransferFunction.getOpacity(x);
+        } while (weights.at(cluster) == 0.0f && opacity == 0.0);    // si el cluster ja té pes 0 i opacitat 0 no ens serveix per res
 
         double base, step;
         int start, end = +10;
@@ -4111,7 +4129,15 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         for (int j = start; j <= end; j++)
         {
             TransferFunction fineTunedTransferFunction(bestTransferFunction);
-            double newOpacity = qBound(0.0, base + j * step, 1.0);
+            double newOpacity = base + j * step;
+            if (newOpacity < 0.0 - step || newOpacity > 1.0 + step) continue;   // ens saltem el pas perquè és feina en va
+            newOpacity = qBound(0.0, newOpacity, 1.0);
+
+            if ((minimizeKullbackLeiblerDivergence || minimizeDkl_IV_W) && weights.at(cluster) == 0.0f) // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+            {
+                newOpacity = 0.0;
+                j = end;
+            }
 
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, opacitat nova = %3").arg(cluster).arg(opacity).arg(newOpacity));
 
@@ -4229,6 +4255,204 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
     }
 
     m_fineTuneGeneticTransferFunctionFromIntensityClusteringProgressBar->setValue(100);
+
+    setCursor(QCursor(Qt::ArrowCursor));
+#endif // CUDA_AVAILABLE
+}
+
+
+void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensityClusters()
+{
+#ifndef CUDA_AVAILABLE
+    QMessageBox::information(this, tr("Operation only available with CUDA"), "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them.");
+#else // CUDA_AVAILABLE
+    if (m_intensityClusters.isEmpty()) return;
+
+    setCursor(QCursor(Qt::WaitCursor));
+
+    bool minimizeKullbackLeiblerDivergence = true;
+    bool minimizeDkl_IV_W = false;  // de moment no sé si es pot fer i com hauria d'anar
+
+    const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
+    QVector<float> weights(m_intensityClusters.size());
+
+    {
+        float totalWeight = 0.0f;
+
+        for (int i = 0; i < weights.size(); i++)
+        {
+            float weight = weightsTransferFunction.getOpacity(i);
+            weights[i] = weight;
+            totalWeight += weight;
+        }
+
+        if (totalWeight == 0.0f)
+        {
+            DEBUG_LOG("tots els pesos són 0 -> marxem");
+            return;
+        }
+
+        DEBUG_LOG("pesos:");
+
+        for (int i = 0; i < weights.size(); i++)
+        {
+            weights[i] /= totalWeight;
+            DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+        }
+    }
+
+    const double K = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringKDoubleSpinBox->value();
+
+    int iterations = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
+    TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
+    double best;
+    QVector<float> bestPI;
+
+    {
+        // Obtenir direccions
+        Vector3 position, focus, up;
+        m_viewer->getCamera(position, focus, up);
+        float distance = (position - focus).length();
+        ViewpointGenerator viewpointGenerator;
+        viewpointGenerator.setToUniform6(distance);
+
+        // Viewpoint Intensity Information Channel
+        ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
+        if (minimizeDkl_IV_W) viewpointIntensityInformationChannel.setWeights(weights);
+        bool pI = minimizeKullbackLeiblerDivergence;
+        bool HI = false;
+        bool HIv = false;
+        bool HIV = false;
+        bool jointEntropy = false;
+        bool vmii = false;
+        bool mii = false;
+        bool viewpointUnstabilities = false;
+        bool imi = false;
+        bool intensityClustering = false;
+        bool Dkl_IV_W = minimizeDkl_IV_W;
+        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, Dkl_IV_W, false);
+
+        if (minimizeKullbackLeiblerDivergence)
+        {
+            bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
+            best = InformationTheory::kullbackLeiblerDivergence(bestPI, weights, true);
+        }
+        if (minimizeDkl_IV_W)
+        {
+            best = viewpointIntensityInformationChannel.Dkl_IV_W();
+        }
+    }
+
+    qsrand(time(0));
+    m_optimizeByDerivativeTransferFunctionFromIntensityClusteringProgressBar->setValue(0);
+
+    for (int i = 0; i < iterations; i++)
+    {
+        DEBUG_LOG(QString("------------------------------------- optimització per la derivada, iteració %1/%2 --------------------------------").arg(i).arg(iterations));
+        TransferFunction optimizedTransferFunction(bestTransferFunction);
+
+        //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
+        for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
+        {
+            double x1 = m_intensityClusters[j].first();
+            double x2 = m_intensityClusters[j].last();
+            double x = (x1 + x2) / 2.0;
+            double opacity = bestTransferFunction.getOpacity(x);
+            double delta, derivative;
+            const double Epsilon = 0.001;
+
+            if (minimizeKullbackLeiblerDivergence)
+            {
+                double pi = bestPI.at(j);
+                double w = weights.at(j);
+                derivative = (MathTools::logTwo(pi / w) - best) * pi / ((1 - pi) * opacity);
+                delta = -K * derivative;
+                if (w > 0.0 && opacity == 0.0) delta = +Epsilon;    // si el pes és més gran que 0 però l'opacitat és 0 hem d'incrementar l'opacitat (la derivada és NaN)
+            }
+            if (minimizeDkl_IV_W)
+            {
+            }
+
+            double newOpacity = qBound(0.0, opacity + delta, 1.0);
+            if (weights.at(j) == 0.0f) newOpacity = 0.0;    // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+            DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, derivada = %3, delta = %4%5, opacitat nova = %6").arg(j).arg(opacity).arg(derivative)
+                                                                                                                                                          .arg(delta > 0.0 ? "+" : "").arg(delta).arg(newOpacity));
+
+            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
+            {
+                optimizedTransferFunction.addPointToOpacity(x, newOpacity);
+            }
+            else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
+            {
+                optimizedTransferFunction.addPointToOpacity(x1, newOpacity);
+                optimizedTransferFunction.addPointToOpacity(x2, newOpacity);
+            }
+        }
+
+        // Obtenir direccions
+        Vector3 position, focus, up;
+        m_viewer->getCamera(position, focus, up);
+        float distance = (position - focus).length();
+        ViewpointGenerator viewpointGenerator;
+        viewpointGenerator.setToUniform6(distance);
+
+        // Viewpoint Intensity Information Channel
+        ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, optimizedTransferFunction);
+        if (minimizeDkl_IV_W) viewpointIntensityInformationChannel.setWeights(weights);
+        bool pI = minimizeKullbackLeiblerDivergence;
+        bool HI = false;
+        bool HIv = false;
+        bool HIV = false;
+        bool jointEntropy = false;
+        bool vmii = false;
+        bool mii = false;
+        bool viewpointUnstabilities = false;
+        bool imi = false;
+        bool intensityClustering = false;
+        bool Dkl_IV_W = minimizeDkl_IV_W;
+        viewpointIntensityInformationChannel.compute(pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, Dkl_IV_W, false);
+        double optimized;
+        bool accept;
+
+        QVector<float> optimizedPI;
+        if (minimizeKullbackLeiblerDivergence)
+        {
+            DEBUG_LOG("pesos:");
+            for (int i = 0; i < weights.size(); i++)
+            {
+                DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+            }
+            optimizedPI = viewpointIntensityInformationChannel.intensityProbabilities();
+            optimized = InformationTheory::kullbackLeiblerDivergence(optimizedPI, weights, true);
+            DEBUG_LOG(QString(".......................................... distància mínima = %1, distància optimitzada = %2").arg(best).arg(optimized));
+            accept = optimized < best;
+            accept = true;
+        }
+        if (minimizeDkl_IV_W)
+        {
+        }
+
+        if (accept)
+        {
+            bestPI = optimizedPI;
+            best = optimized;
+            bestTransferFunction = optimizedTransferFunction;
+            m_transferFunctionEditor->setTransferFunction(bestTransferFunction.simplify());
+            setTransferFunction();
+            DEBUG_LOG("......................................... acceptada");
+        }
+        else
+        {
+            DEBUG_LOG("......................................... rebutjada");
+            DEBUG_LOG("......................................... prova amb una altra k o un altre mètode o deixa-ho aquí");
+            i = iterations; // pleguem
+        }
+
+        m_optimizeByDerivativeTransferFunctionFromIntensityClusteringProgressBar->setValue(100 * i / iterations);
+        m_optimizeByDerivativeTransferFunctionFromIntensityClusteringProgressBar->repaint();
+    }
+
+    m_optimizeByDerivativeTransferFunctionFromIntensityClusteringProgressBar->setValue(100);
 
     setCursor(QCursor(Qt::ArrowCursor));
 #endif // CUDA_AVAILABLE
