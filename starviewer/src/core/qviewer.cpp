@@ -654,17 +654,8 @@ void QViewer::updateWindowLevelData()
             {
                 description = tr("Default %1").arg(i);
             }
+            m_windowLevelData->addPreset(description, windowLevel.first, windowLevel.second, WindowLevelPresetsToolData::FileDefined);
 
-            if (windowLevel.first == 0.0 || windowLevel.second == 0.0)
-            {
-                double windowLevel[2];
-                this->getDefaultWindowLevel(windowLevel);
-                m_windowLevelData->addPreset(description, windowLevel[0], windowLevel[1], WindowLevelPresetsToolData::FileDefined);
-            }
-            else
-            {
-                m_windowLevelData->addPreset(description, windowLevel.first, windowLevel.second, WindowLevelPresetsToolData::FileDefined);
-            }
             if (i == 0)
             {
                 m_windowLevelData->activatePreset(description);
