@@ -544,8 +544,9 @@ void QViewer::getDefaultWindowLevel(double windowLevel[2])
     {
         if (m_mainVolume)
         {
-            double *range = m_mainVolume->getVtkData()->GetScalarRange();
-            this->setDefaultWindowLevel(range[1] - range[0], ((range[1] - range[0]) / 2.) + range[0]);
+            double windowWidth, windowLevel;
+            computeAutomaticWindowLevel(windowWidth, windowLevel);
+            this->setDefaultWindowLevel(windowWidth, windowLevel);
         }
         else
         {
@@ -554,6 +555,20 @@ void QViewer::getDefaultWindowLevel(double windowLevel[2])
     }
     windowLevel[0] = m_defaultWindow;
     windowLevel[1] = m_defaultLevel;
+}
+
+void QViewer::computeAutomaticWindowLevel(double &windowWidth, double &windowLevel)
+{
+    if (m_mainVolume)
+    {
+        double *range = m_mainVolume->getVtkData()->GetScalarRange();
+        windowWidth = range[1] - range[0];
+        windowLevel = range[0] + (windowWidth * 0.5);
+    }
+    else
+    {
+        DEBUG_LOG("Calculant el ww/wl automàtic sense input. Valors indefinits.");
+    }
 }
 
 void QViewer::enableContextMenu()
@@ -658,9 +673,9 @@ void QViewer::updateWindowLevelData()
     }
     
     // Calculem un window level automàtic que sempre posarem disponible a l'usuari
-    double *range = m_mainVolume->getVtkData()->GetScalarRange();
-    double automaticWindowWidth = range[1] - range[0];
-    double automaticWindowLevel = range[0] + (automaticWindowWidth * 0.5);
+    double automaticWindowWidth;
+    double automaticWindowLevel;
+    computeAutomaticWindowLevel(automaticWindowWidth, automaticWindowLevel);
     m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth, automaticWindowLevel, WindowLevelPresetsToolData::FileDefined);
     // Si no hi ha window levels definits per defecte activarem l'automàtic
     if (windowLevelCount <= 0)
