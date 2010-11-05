@@ -241,8 +241,11 @@ QString Image::getSliceLocation() const
 
 void Image::addWindowLevel(double window, double level)
 {
-    QPair<double, double> windowLevel(window, level);
-    m_windowLevelList << windowLevel;
+    if (window != 0.0 && level != 0.0)
+    {
+        QPair<double, double> windowLevel(window, level);
+        m_windowLevelList << windowLevel;
+    }
 }
 
 QPair<double, double> Image::getWindowLevel(int index) const
