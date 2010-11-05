@@ -1,0 +1,33 @@
+*~
+*.a
+*.qm
+.DS_Store
+Makefile*
+
+# Especial files
+src/core/i18n_release
+src/main/extensions.h
+
+# Temporals of Qt Single Application
+bin/*.dylib
+src/thirdparty/qtsingleapplication/buildlib
+
+# Directories
+tmp
+bin/starviewer.app/
+src/main/starviewer.xcodeproj
+src/main/Info.plist
+
+# QtCreator generated files
+*.pro.user*
+
+# Visual Studio generated files
+*.ib_pdb_index
+*.idb
+*.ilk
+*.pdb
+*.sln
+*.suo
+*.vcproj
+*vcproj.*.*.user
+*.ncb
