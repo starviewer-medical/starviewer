@@ -4288,6 +4288,7 @@ void QExperimental3DExtension::fillWeigthsEditor()
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->syncToMax();
     TransferFunction weightsTransferFunction(m_transferFunctionEditor->transferFunction());
     weightsTransferFunction.clearOpacity();
+    weightsTransferFunction.addPointToOpacity(0.0, 0.0);
 
     if (m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton->isChecked()) // pesos uniformes
     {
