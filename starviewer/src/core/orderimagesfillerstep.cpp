@@ -233,7 +233,7 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
             foreach ( double key2 , imagePositionSet->keys() )
             {
                 instanceNumberSet = imagePositionSet->take(key2);
-                foreach ( int key3 , instanceNumberSet->keys() )
+                foreach ( unsigned long key3 , instanceNumberSet->keys() )
                 {
                     currentImage = instanceNumberSet->take(key3);
                     currentImage->setOrderNumberInVolume( orderNumberInVolume );
