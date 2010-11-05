@@ -29,7 +29,7 @@ void VolumeReader::read(Volume *volume)
 {
     if (!volume)
     {
-        DEBUG_LOG("El volum proporcionat Ès NUL! Retornem.");
+        DEBUG_LOG("El volum proporcionat √©s NUL! Retornem.");
         return;
     }    
     
@@ -42,7 +42,7 @@ void VolumeReader::read(Volume *volume)
         switch (m_volumePixelDataReader->read(fileList))
         {
             case VolumePixelDataReader::OutOfMemory: 
-                WARN_LOG("No podem carregar els arxius seg¸ents perquË no caben a memÚria\n" + fileList.join("\n"));
+                WARN_LOG("No podem carregar els arxius seg√ºents perqu√® no caben a mem√≤ria\n" + fileList.join("\n"));
                 volume->createNeutralVolume();
                 QMessageBox::warning(0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg(ApplicationNameString));
                 break;
@@ -74,7 +74,7 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
     QList<Image *> imageSet = volume->getImages();
 
     // TODO De moment, per defecte llegirem amb ITK-GDCM
-    // tret que es doni una condiciÛ que ho canvÔi
+    // tret que es doni una condici√≥ que ho canv√Øi
     m_suitablePixelDataReader = ITKGDCMPixelDataReader;
 
     bool containsDifferentSizeImages = false;
@@ -90,16 +90,16 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
     
     foreach (Image *image, imageSet)
     {
-        if (!fileList.contains(image->getPath())) // Evitem afegir mÈs vegades l'arxiu si aquest Ès multiframe
+        if (!fileList.contains(image->getPath())) // Evitem afegir m√©s vegades l'arxiu si aquest √©s multiframe
         {
             fileList << image->getPath();
         }
 
         // Comprovem que no tingui imatges de diferents mides
-        // TODO Aquesta comprovaciÛ podria desaparËixer ja que ara fem que les 
+        // TODO Aquesta comprovaci√≥ podria desapar√®ixer ja que ara fem que les 
         // imatges de diferents mides es guardin en volums diferents, per tant, hauria de
-        // ser anÚmal i inesperat trobar-nos amb aquest cas. Tot i aixÌ ens serveix per evitar que
-        // si es donÈs el cas ens petÈs el programa
+        // ser an√≤mal i inesperat trobar-nos amb aquest cas. Tot i aix√≠ ens serveix per evitar que
+        // si es don√©s el cas ens pet√©s el programa
         if (imageSize[0] != image->getRows() || imageSize[1] != image->getColumns())
         {
             DEBUG_LOG("Tenim imatges de diferents mides!");
@@ -107,33 +107,33 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
         }
 
         // Comprovem si es tracta d'una imatge a color
-        // TODO Caldria diferenciar tambÈ els casos en que tenim mÈs d'una imatge de diferents mides i que alguna Ès de color
+        // TODO Caldria diferenciar tamb√© els casos en que tenim m√©s d'una imatge de diferents mides i que alguna √©s de color
         photometricInterpretation = image->getPhotometricInterpretation();
         if (!photometricInterpretation.contains("MONOCHROME"))
         {
-            // Si photometric interpretation no Ès ni MONOCHROME1 ni MONOCHROME2, llavors Ès algun tipu d'imatge a color:
+            // Si photometric interpretation no √©s ni MONOCHROME1 ni MONOCHROME2, llavors √©s algun tipu d'imatge a color:
             // PALETTE COLOR, RGB YBR_FULL, YBR_FULL_422, YBR_PARTIAL_422, YBR_PARTIAL_420, YBR_ICT o YBR_RCT
             containsColorImages = true;
             DEBUG_LOG("Photometric Interpretation: " + photometricInterpretation);
         }
-        else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16)
+        else if (image->getBitsAllocated() == 16 && image->getBitsStored() == 16 && !image->getSOPInstanceUID().contains("MHDImage"))
         {
-            // Aquesta comprovaciÛ es fa per evitar casos com el del ticket #1257
+            // Aquesta comprovaci√≥ es fa per evitar casos com el del ticket #1257
             // Com que itkImage sempre s'allotja amb el tipus de pixel signed short int, 
-            // quan tenim 16 bits allocated i stored, podria ser que el rang de dades necessitÈs
-            // que el tipus de pixel fos unsigned short int (0..65536) perquË la imatge es visualitzi correctament
+            // quan tenim 16 bits allocated i stored, podria ser que el rang de dades necessit√©s
+            // que el tipus de pixel fos unsigned short int (0..65536) perqu√® la imatge es visualitzi correctament
             avoidWrongPixelType = true;
         }
     }
 
     if (!containsDifferentSizeImages && containsColorImages)
     {
-        // Si contÈ imatges de color i totes sÛn de la mateixa mida les llegirem amb VTK-GDCM
+        // Si cont√© imatges de color i totes s√≥n de la mateixa mida les llegirem amb VTK-GDCM
         m_suitablePixelDataReader = VTKGDCMPixelDataReader;
     }
     else if (avoidWrongPixelType)
     {
-        // Com que el reader de vtkGDCM decideix el tipus din‡micament, allotjarem el tipus de pixel correcte
+        // Com que el reader de vtkGDCM decideix el tipus din√†micament, allotjarem el tipus de pixel correcte
         m_suitablePixelDataReader = VTKGDCMPixelDataReader;
     }
 
@@ -162,7 +162,7 @@ void VolumeReader::setUpReader()
             break;
     }
 
-    // Connectem les senyals de notificaciÛ de progrÈs
+    // Connectem les senyals de notificaci√≥ de progr√©s
     connect(m_volumePixelDataReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
 }
 
