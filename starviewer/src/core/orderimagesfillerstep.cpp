@@ -165,7 +165,7 @@ void OrderImagesFillerStep::processImage( Image *image )
 		keyPlaneNormal = planeNormalString;
 		// ara cal inserir la nova clau
 		instanceNumberSet = new QMap< unsigned long , Image* >();
-        instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
+        instanceNumberSet->insert( QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image );
 
         imagePositionSet = new QMap< double , QMap< unsigned long , Image* > * >();
         imagePositionSet->insert( distance, instanceNumberSet );
