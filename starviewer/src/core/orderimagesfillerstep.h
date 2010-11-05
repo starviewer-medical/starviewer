@@ -52,6 +52,9 @@ private:
 
     //     Series        Volume     NormalVector    Distance  InstanceNumber0FrameNumber
     QHash< Series *, QMap< int, QMap< QString, QMap< double , QMap< unsigned long , Image* >* >* >* >* > OrderImagesInternalInfo;
+
+    //    Series       Volume     AcqNumber MultipleAcqNumbers?
+    QHash<Series*, QHash<int, QPair<QString, bool>*> > m_acquisitionNumberEvaluation;
 };
 
 }

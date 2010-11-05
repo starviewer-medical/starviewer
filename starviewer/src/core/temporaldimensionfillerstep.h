@@ -41,6 +41,8 @@ private:
         int numberOfImages;
         bool isCTLocalizer;
         QString firstImagePosition;
+        QString firstAcquisitionNumber;
+        bool multipleAcquisitionNumber;
     };
 
     /// Estructura que s'utiliza en cas que es processi l'step individiualment per fitxers.
