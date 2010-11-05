@@ -311,7 +311,7 @@ void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda(bool com
 
         if (computeDkl_IV_W)
         {
-            m_Dkl_IV_W += m_viewProbabilities.at(i) * InformationTheory::kullbackLeiblerDivergence(pIv, m_weights);
+            m_Dkl_IV_W += m_viewProbabilities.at(i) * InformationTheory::kullbackLeiblerDivergence(pIv, m_weights, true);
         }
     }
 
