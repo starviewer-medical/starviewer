@@ -1382,7 +1382,12 @@ Variable d&apos;entorn(logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="688"/>
+        <location filename="qviewer.cpp" line="670"/>
+        <source>Auto</source>
+        <translation>Auto</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="689"/>
         <source>Default %1</source>
         <translation>Per defecte %1</translation>
     </message>
