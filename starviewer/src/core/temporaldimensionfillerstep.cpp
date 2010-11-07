@@ -78,6 +78,14 @@ bool TemporalDimensionFillerStep::fillIndividually()
         {
             volumeInfoInitialized = true;
             volumeInfo = volumeHash->value( m_input->getCurrentVolumeNumber() );
+
+            if (!volumeInfo->multipleAcquisitionNumber)
+            {
+                if(volumeInfo->firstAcquisitionNumber != m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber))
+                {
+                    volumeInfo->multipleAcquisitionNumber = true;
+                }
+            }
         }
         else
         {
@@ -100,6 +108,8 @@ bool TemporalDimensionFillerStep::fillIndividually()
         volumeInfo->numberOfImages = 0;
         volumeInfo->isCTLocalizer = false;
         volumeInfo->firstImagePosition = "";
+        volumeInfo->firstAcquisitionNumber = m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber);
+        volumeInfo->multipleAcquisitionNumber = false;
 
         // en el cas del CT ens interessa saber si és localizer
         // \TODO Ara estem considerant que un volume serà localizer si la primera imatge ho és, però res ens indica que els localizers no puguin està barretjats amb la resta.
@@ -183,8 +193,17 @@ void TemporalDimensionFillerStep::postProcessing()
                 if ( volumeHash->contains( currentVolume ) )
                 {
                     VolumeInfo * volumeInfo = volumeHash->take( currentVolume );
-                
-                    numberOfPhases = volumeInfo->numberOfPhases;
+
+                    if (volumeInfo->multipleAcquisitionNumber)
+                    {
+                        numberOfPhases = 1;
+                        DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Considerem que el volume %1 de la sèrie %2 no és dinàmic.").arg(currentVolume).arg(key->getInstanceUID()));
+                        INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Considerem que el volume %1 de la sèrie %2 no és dinàmic.").arg(currentVolume).arg(key->getInstanceUID()));
+                    }
+                    else
+                    {
+                        numberOfPhases = volumeInfo->numberOfPhases;
+                    }
                     // L'esborrem perquè ja no el necessitarem més
                     if ( volumeInfo )
                         delete volumeInfo;

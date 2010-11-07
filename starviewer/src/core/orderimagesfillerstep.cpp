@@ -13,6 +13,7 @@
 #include "series.h"
 #include "image.h"
 #include "mathtools.h"
+#include "dicomdictionary.h"
 
 namespace udg {
 
@@ -49,6 +50,16 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
             delete normalVectorImageSet;
         }
         delete volumesInSeries;
+    }
+
+    foreach(Series *series, m_acquisitionNumberEvaluation.keys())
+    {
+        QHash<int, QPair<QString, bool>*> volumeHash = m_acquisitionNumberEvaluation.take(series);
+        foreach(int volumeNumber, volumeHash.keys())
+        {
+            QPair<QString, bool> *pair = volumeHash.take(volumeNumber);
+            delete pair;
+        }
     }
 }
 
@@ -105,6 +116,36 @@ bool OrderImagesFillerStep::fillIndividually()
     foreach( Image * image, m_input->getCurrentImages() )
     {
         processImage( image );
+    }
+
+    //Evaluació dels AcquisitionNumbers
+    if (m_acquisitionNumberEvaluation.contains(m_input->getCurrentSeries()))
+    {
+        if (m_acquisitionNumberEvaluation.value(m_input->getCurrentSeries()).contains(m_input->getCurrentVolumeNumber()))
+        {
+            //Comparem els Acquisition Numbers
+            QPair<QString,bool> *pair = m_acquisitionNumberEvaluation[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
+            if (!pair->second)
+            {
+                if(pair->first != m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber))
+                {
+                    pair->second = true;
+                }
+            }
+        }
+        else
+        {
+            QPair<QString,bool> *acquisitionPair = new QPair<QString,bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
+            m_acquisitionNumberEvaluation[m_input->getCurrentSeries()].insert(m_input->getCurrentVolumeNumber(), acquisitionPair);
+        }
+    }
+    else
+    {
+        QHash<int, QPair<QString, bool>*> volumeHash;
+        QPair<QString,bool> *acquisitionPair = new QPair<QString,bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
+        volumeHash.insert(m_input->getCurrentVolumeNumber(), acquisitionPair);
+
+        m_acquisitionNumberEvaluation.insert(m_input->getCurrentSeries(), volumeHash);
     }
 
     m_input->addLabelToSeries("OrderImagesFillerStep", m_input->getCurrentSeries() );
@@ -202,7 +243,7 @@ void OrderImagesFillerStep::processImage( Image *image )
 		keyPlaneNormal = planeNormalString;
 		// ara cal inserir la nova clau
 		instanceNumberSet = new QMap< unsigned long , Image* >();
-        instanceNumberSet->insert( image->getInstanceNumber().toInt(), image );
+        instanceNumberSet->insert( QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image );
 
         imagePositionSet = new QMap< double , QMap< unsigned long , Image* > * >();
         imagePositionSet->insert( distance, instanceNumberSet );
@@ -241,43 +282,78 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
 
     foreach ( int currentVolumeNumber, volumesInSeries->keys() )
     {
-        m_orderedImageSet = volumesInSeries->take( currentVolumeNumber );
-        if ( m_orderedImageSet->count() > 1 ) // Cal ordernar les agrupacions d'imatges
+        if (m_acquisitionNumberEvaluation[series][currentVolumeNumber]->second) //Multiple acquisition number
         {
-            foreach (QString key, m_orderedImageSet->keys() )
+            DEBUG_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(currentVolumeNumber).arg(series->getInstanceUID()));
+            INFO_LOG(QString("No totes les imatges tenen el mateix AcquisitionNumber. Ordenem el volume %1 de la serie %2 per Instance Number").arg(currentVolumeNumber).arg(series->getInstanceUID()));
+            m_orderedImageSet = volumesInSeries->take(currentVolumeNumber);
+            QMap<unsigned long, Image*> sortedImagesByInstanceNumber;
+
+            foreach (QString key, m_orderedImageSet->keys())
             {
                 imagePositionSet = m_orderedImageSet->take(key);
-                Image *image = (*(*imagePositionSet->begin())->begin());
+                foreach (double key2, imagePositionSet->keys())
+                {
+                    instanceNumberSet = imagePositionSet->take(key2);
+                    foreach (unsigned long key3, instanceNumberSet->keys())
+                    {
+                        currentImage = instanceNumberSet->take(key3);
+                        sortedImagesByInstanceNumber.insertMulti(key3, currentImage);
+                    }
+                }
+            }
 
-                lastOrderedImageSet.insertMulti(this->distance(image),imagePositionSet);
+            orderNumberInVolume = 0;
+
+            foreach (Image *image, sortedImagesByInstanceNumber.values())
+            {
+                image->setOrderNumberInVolume( orderNumberInVolume );
+                image->setVolumeNumberInSeries( currentVolumeNumber );
+                orderNumberInVolume++;
+
+                imageSet += image;
             }
         }
         else
         {
-            lastOrderedImageSet.insert(0, (*m_orderedImageSet->begin()) );
-            foreach (QString key, m_orderedImageSet->keys() )
+            m_orderedImageSet = volumesInSeries->take( currentVolumeNumber );
+            if ( m_orderedImageSet->count() > 1 ) // Cal ordernar les agrupacions d'imatges
             {
-                m_orderedImageSet->take(key);
-            }
-        }
-
-        orderNumberInVolume = 0;
-
-        // Passar l'estructura a la series
-        foreach ( double key, lastOrderedImageSet.keys() )
-        {
-            imagePositionSet = lastOrderedImageSet.take(key);
-            foreach ( double key2 , imagePositionSet->keys() )
-            {
-                instanceNumberSet = imagePositionSet->take(key2);
-                foreach ( int key3 , instanceNumberSet->keys() )
+                foreach (QString key, m_orderedImageSet->keys() )
                 {
-                    currentImage = instanceNumberSet->take(key3);
-                    currentImage->setOrderNumberInVolume( orderNumberInVolume );
-                    currentImage->setVolumeNumberInSeries( currentVolumeNumber );
-                    orderNumberInVolume++;
+                    imagePositionSet = m_orderedImageSet->take(key);
+                    Image *image = (*(*imagePositionSet->begin())->begin());
 
-                    imageSet += currentImage;                   
+                    lastOrderedImageSet.insertMulti(this->distance(image),imagePositionSet);
+                }
+            }
+            else
+            {
+                lastOrderedImageSet.insert(0, (*m_orderedImageSet->begin()) );
+                foreach (QString key, m_orderedImageSet->keys() )
+                {
+                    m_orderedImageSet->take(key);
+                }
+            }
+
+            orderNumberInVolume = 0;
+
+            // Passar l'estructura a la series
+            foreach ( double key, lastOrderedImageSet.keys() )
+            {
+                imagePositionSet = lastOrderedImageSet.take(key);
+                foreach ( double key2 , imagePositionSet->keys() )
+                {
+                    instanceNumberSet = imagePositionSet->take(key2);
+                    foreach ( unsigned long key3 , instanceNumberSet->keys() )
+                    {
+                        currentImage = instanceNumberSet->take(key3);
+                        currentImage->setOrderNumberInVolume( orderNumberInVolume );
+                        currentImage->setVolumeNumberInSeries( currentVolumeNumber );
+                        orderNumberInVolume++;
+
+                        imageSet += currentImage;
+                    }
                 }
             }
         }

@@ -43,6 +43,8 @@ private:
         int numberOfImages;
         bool isCTLocalizer;
         QString firstImagePosition;
+        QString firstAcquisitionNumber;
+        bool multipleAcquisitionNumber;
     };
 
     /// Mètodes per processar la informació específica de series
