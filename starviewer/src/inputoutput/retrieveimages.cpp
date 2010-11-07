@@ -172,6 +172,11 @@ void RetrieveImages::storeSCPCallback( void *callbackData, T_DIMSE_StoreProgress
                 piSingleton->setError( retrievedDatasetStudyUID );
                 rsp->DimseStatus = STATUS_STORE_Refused_OutOfResources;
                 ERROR_LOG("No s'ha pogut guardar la imatge descarregada" + imageFilenameToSave + ", error: " + stateSaveImage.text()); 
+                if (!QFile::remove(imageFilenameToSave)) 
+                { 
+                    DEBUG_LOG("Ha fallat el voler esborrar el fitxer " + imageFilenameToSave + " que havia fallat prèviament al voler guardar-se."); 
+                    ERROR_LOG("Ha fallat el voler esborrar el fitxer " + imageFilenameToSave + " que havia fallat prèviament al voler guardar-se."); 
+                }
             }
 
             /* should really check the image to make sure it is consistent, that its sopClass and sopInstance correspond with those in

@@ -540,21 +540,30 @@ void Q2DViewerExtension::showViewerInformation( bool show )
 
 void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
 {
-    m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( m_workingArea->getViewerSelected()->getViewer()->getCurrentDisplayedImage() );
-    m_dicomDumpCurrentDisplayedImage->show();
+    Q2DViewerWidget *selectedViewerWidget = m_workingArea->getViewerSelected();
+    if (selectedViewerWidget)
+    {
+        m_dicomDumpCurrentDisplayedImage->setCurrentDisplayedImage( selectedViewerWidget->getViewer()->getCurrentDisplayedImage() );
+        m_dicomDumpCurrentDisplayedImage->show();
+    }
 }
 
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showScreenshotsExporterDialog()
 {
-    if ( m_workingArea->getViewerSelected()->getViewer()->getInput() == NULL )
+    Q2DViewerWidget *selectedViewerWidget = m_workingArea->getViewerSelected();
+    if (selectedViewerWidget)
     {
-        QMessageBox::warning(this, tr("Export to DICOM") , tr("This action is not allowed because the selected viewer is empty.") );
-        return;
+        if ( selectedViewerWidget->getViewer()->getInput() == NULL )
+        {
+            QMessageBox::warning(this, tr("Export to DICOM") , tr("This action is not allowed because the selected viewer is empty.") );
+        }
+        else
+        {
+            QExporterTool exporter( selectedViewerWidget->getViewer() );
+            exporter.exec();
+        }
     }
-
-    QExporterTool exporter( m_workingArea->getViewerSelected()->getViewer() );
-    exporter.exec();
 }
 
 void Q2DViewerExtension::validePhases()

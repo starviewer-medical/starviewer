@@ -184,8 +184,11 @@ QList<Image *> ImageFillerStep::processDICOMFile( DICOMTagReader *dicomReader )
                     // Assignem el número del volum de la imatge dins de la sèrie                    
                     image->setVolumeNumberInSeries( volumeNumber );
 
-                    generatedImages << image;
-                    m_input->getCurrentSeries()->addImage( image );
+                    // Afegirem la imatge a la llista si aquesta s'ha pogut afegir a la corresponent sèrie
+                    if (m_input->getCurrentSeries()->addImage(image))
+                    {
+                        generatedImages << image;
+                    }
                 }
             }
             m_input->setCurrentVolumeNumber( volumeNumber );
@@ -454,8 +457,11 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile( DICOMTagReader *dicomR
             image->setFrameNumber( frameNumber );
             image->setVolumeNumberInSeries( m_input->getCurrentVolumeNumber() );
             
-            generatedImages << image;
-            m_input->getCurrentSeries()->addImage( image );
+            // Afegirem la imatge a la llista si aquesta s'ha pogut afegir a la corresponent sèrie
+            if (m_input->getCurrentSeries()->addImage(image))
+            {
+                generatedImages << image;
+            }
         }
 
         // Tractem la Shared Functional Groups Sequence
