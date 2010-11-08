@@ -36,10 +36,9 @@ namespace udg {
 
 typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
-ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *parent, QString name)
+ExtensionHandler::ExtensionHandler(QApplicationMainWindow *mainApp, QObject *parent)
  : QObject(parent )
 {
-    this->setObjectName( name );
     m_mainApp = mainApp;
 
     // Aquí en principi només farem l'inicialització

@@ -17,7 +17,7 @@ namespace udg {
 class RepositoryBase  : public QObject{
 Q_OBJECT
 public:
-    RepositoryBase(QObject *parent = 0, const char *name = 0);
+    RepositoryBase(QObject *parent = 0);
 
     ~RepositoryBase();
 };

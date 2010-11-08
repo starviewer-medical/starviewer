@@ -69,13 +69,12 @@ namespace udg{
  
 typedef SingletonPointer<StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
-QApplicationMainWindow::QApplicationMainWindow( QWidget *parent, QString name )
+QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     : QMainWindow( parent ), m_patient(0), m_isBetaVersion(false)
 {
     connect(StarviewerSingleApplicationCommandLineSingleton::instance(), SIGNAL(newOptionsToRun()), SLOT(newCommandLineOptionsToRun()));
 
     this->setAttribute( Qt::WA_DeleteOnClose );
-    this->setObjectName( name );
     m_extensionWorkspace = new ExtensionWorkspace( this );
     this->setCentralWidget( m_extensionWorkspace );
  
@@ -404,17 +403,7 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
 
 void QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
 {
-    QString windowName;
-    if( patient )
-    {
-        windowName = patient->getID() + " : " + patient->getFullName();
-    }
-    else
-    {
-        windowName = QString("No Patient Data [%1]").arg( getCountQApplicationMainWindow() + 1 );
-    }
-
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0, windowName );
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow(0);
     newMainWindow->setPatient(patient);
     newMainWindow->show();
 }
