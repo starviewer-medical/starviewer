@@ -64,9 +64,6 @@
        <property name="text" >
         <string>...</string>
        </property>
-       <property name="icon" >
-        <iconset/>
-       </property>
        <property name="checkable" >
         <bool>true</bool>
        </property>
