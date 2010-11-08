@@ -77,8 +77,6 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
     // tret que es doni una condició que ho canvïi
     m_suitablePixelDataReader = ITKGDCMPixelDataReader;
 
-    bool containsDifferentSizeImages = false;
-    bool containsColorImages = false;
     int imageSize[2];
     if (!imageSet.empty())
     {
@@ -86,6 +84,8 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
         imageSize[1] = imageSet.first()->getColumns();
     }
     
+    bool containsDifferentSizeImages = false;
+    bool containsColorImages = false;
     bool avoidWrongPixelType = false;
     
     foreach (Image *image, imageSet)
