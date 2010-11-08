@@ -23,7 +23,7 @@ class ExtensionWorkspace : public QTabWidget{
 Q_OBJECT
 public:
 
-    ExtensionWorkspace(QWidget *parent = 0, QString name = 0);
+    ExtensionWorkspace(QWidget *parent = 0);
 
     ~ExtensionWorkspace();
 

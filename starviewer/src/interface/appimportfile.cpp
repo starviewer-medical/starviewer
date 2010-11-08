@@ -19,7 +19,7 @@
 
 namespace udg {
 
-AppImportFile::AppImportFile(QObject *parent, QString name)
+AppImportFile::AppImportFile(QObject *parent)
  : QObject( parent )
 {
     //TODO: De moment es desactiven els warnings en release perquè no apareixi la finestra vtkOutputWindow 
@@ -28,7 +28,6 @@ AppImportFile::AppImportFile(QObject *parent, QString name)
     itk::Object::GlobalWarningDisplayOff(); 
 #endif 
 
-    this->setObjectName( name );
     readSettings();
 }
 

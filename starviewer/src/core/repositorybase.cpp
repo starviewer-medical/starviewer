@@ -8,10 +8,9 @@
  
 namespace udg {
 
-RepositoryBase::RepositoryBase(QObject *parent, const char *name)
+RepositoryBase::RepositoryBase(QObject *parent)
  : QObject( parent )
 {
-    this->setObjectName( name );
 }
 
 RepositoryBase::~RepositoryBase()

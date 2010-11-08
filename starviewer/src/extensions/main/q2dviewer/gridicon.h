@@ -26,7 +26,7 @@ class GridIcon : public QFrame {
 Q_OBJECT
 public:
 
-    GridIcon( QWidget *parent = 0, QString iconType = 0 );
+    GridIcon( QWidget *parent = 0, QString iconType = "" );
 
     ~GridIcon();
 

@@ -21,7 +21,7 @@ class AppImportFile : public QObject{
 Q_OBJECT
 public:
 
-    AppImportFile(QObject *parent = 0, QString name = 0);
+    AppImportFile(QObject *parent = 0);
     ~AppImportFile();
 
     /// Obre el diàleg per poder obrir arxius

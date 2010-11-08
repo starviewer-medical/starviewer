@@ -12,10 +12,9 @@
 
 namespace udg {
 
-ExtensionWorkspace::ExtensionWorkspace(QWidget *parent, QString name)
+ExtensionWorkspace::ExtensionWorkspace(QWidget *parent)
  : QTabWidget( parent )
 {
-    this->setObjectName( name );
     // Fem que cada pestanya tingui el seu botonet de tancar
     setTabsClosable(true);
 
