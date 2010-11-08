@@ -48,9 +48,6 @@
            <property name="text" >
             <string>...</string>
            </property>
-           <property name="icon" >
-            <iconset/>
-           </property>
            <property name="iconSize" >
             <size>
              <width>32</width>
@@ -73,9 +70,6 @@
            <property name="text" >
             <string>window level</string>
            </property>
-           <property name="icon" >
-            <iconset/>
-           </property>
            <property name="iconSize" >
             <size>
              <width>32</width>
@@ -94,9 +88,6 @@
           <widget class="QToolButton" name="m_zoomToolButton" >
            <property name="text" >
             <string>zoom</string>
-           </property>
-           <property name="icon" >
-            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -117,9 +108,6 @@
            <property name="text" >
             <string>move</string>
            </property>
-           <property name="icon" >
-            <iconset/>
-           </property>
            <property name="iconSize" >
             <size>
              <width>32</width>
@@ -139,9 +127,6 @@
            <property name="text" >
             <string>...</string>
            </property>
-           <property name="icon" >
-            <iconset/>
-           </property>
            <property name="iconSize" >
             <size>
              <width>32</width>
@@ -158,9 +143,6 @@
            <property name="text" >
             <string>...</string>
            </property>
-           <property name="icon" >
-            <iconset/>
-           </property>
            <property name="iconSize" >
             <size>
              <width>32</width>
@@ -176,9 +158,6 @@
           <widget class="QToolButton" name="m_voxelInformationToolButton" >
            <property name="text" >
             <string>voxel information</string>
-           </property>
-           <property name="icon" >
-            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
@@ -198,9 +177,6 @@
           <widget class="QToolButton" name="m_seedToolButton" >
            <property name="text" >
             <string>...</string>
-           </property>
-           <property name="icon" >
-            <iconset/>
            </property>
            <property name="iconSize" >
             <size>
