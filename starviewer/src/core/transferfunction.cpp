@@ -174,7 +174,7 @@ QList<double>& TransferFunction::getPoints() const
 
         for (int i = 0; i < m_definedX.size() - 1; i++)
         {
-            if (m_definedX[i] == m_definedX[i+1]) m_definedX.removeAt(i+1);
+            if (m_definedX.at(i) == m_definedX.at(i+1)) m_definedX.removeAt(i+1);
         }
 
         m_changed = false;
@@ -400,7 +400,7 @@ QList<double> TransferFunction::getPointsInInterval(double begin, double end) co
     getPoints();    // per actualitzar m_definedX
 
     QList<double>::const_iterator lowerBound = qLowerBound(m_definedX, begin);
-    QList<double>::const_iterator itEnd = m_definedX.end();
+    QList<double>::const_iterator itEnd = m_definedX.constEnd();
     QList<double> pointsInInterval;
 
     while (lowerBound != itEnd && *lowerBound <= end) pointsInInterval << *(lowerBound++);
