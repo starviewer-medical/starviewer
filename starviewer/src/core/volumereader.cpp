@@ -5,6 +5,7 @@
 
 #include "volume.h"
 #include "image.h"
+#include "series.h"
 #include "logging.h"
 #include "starviewerapplication.h"
 
@@ -122,7 +123,15 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
             // Com que itkImage sempre s'allotja amb el tipus de pixel signed short int, 
             // quan tenim 16 bits allocated i stored, podria ser que el rang de dades necessités
             // que el tipus de pixel fos unsigned short int (0..65536) perquè la imatge es visualitzi correctament
-            avoidWrongPixelType = true;
+            
+            // Només ho aplicarem si es tracta de modalitats d'imatge "no volumètriques" per acotar el problema
+            // i evitar que es produeixi el problema remarcat al ticket #1313
+            QStringList supportedModalities;
+            supportedModalities << "CR" << "RF" << "DX" << "MG" << "OP" << "US" << "ES" << "NM" << "DT" << "PT" << "XA" << "XC";
+            if (supportedModalities.contains(image->getParentSeries()->getModality()))
+            {
+                avoidWrongPixelType = true;
+            }
         }
     }
 
