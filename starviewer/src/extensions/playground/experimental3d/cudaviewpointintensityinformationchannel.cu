@@ -21,7 +21,7 @@
 
 
 
-static const uint ParallelismFactor = 128;  // quantes entrades hi ha a l'histograma enter per cada valor d'intensitat; ajuda a augmentar el paral·lelisme reduint les col·lisions a l'hora d'escriure
+static const uint ParallelismFactor = 256;  // quantes entrades hi ha a l'histograma enter per cada valor d'intensitat; ajuda a augmentar el paral·lelisme reduint les col·lisions a l'hora d'escriure
 static const uint PARTITIONS = 1;  // en quants trossos es parteix la imatge en cada dimensió (per reduir col·lisions)
 static const int VOLUME_MULTIPLIER = 10000; // multiplicador del volum a l'hora de convertir-lo en enter
 
