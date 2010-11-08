@@ -22,8 +22,8 @@
 
 namespace udg{
 
-/*Tot els talls de codi dins el QT_NO_DEBUG van ser afegits per anar al connectathon de berlin, allà es demanava que les operacions
- *de comunicació amb el PACS es fessin en mode verbose */
+//Diem a quin nivell fem les cerques d'estudis! Molt important hem de fer a nivell de root
+static const char * opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
 
 void QueryPacs::setConnection(PACSConnection pacsConnection)
 {
@@ -81,9 +81,6 @@ void QueryPacs::foundMatchCallback(
         }
     }
 }
-
-//Diem a quin nivell fem les cerques d'estudis! Molt important hem de fer a nivell de root
-static const char *     opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
 
 Status QueryPacs::query()
 {
