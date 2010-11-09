@@ -396,8 +396,8 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
     QString messageErrorLog = "No s'ha pogut descarregar l'estudi, descripció error rebuda";
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
 
-    // A la secció C.4.2.1.5, taula C.4-2 podem trobar un descripció dels errors.
-    // A la secció C.4.2.3.1 es descriu els tipus generals d'error 
+    // Al PS 3.4, secció C.4.2.1.5, taula C.4-2 podem trobar un descripció dels errors.
+    // Al PS 3.4, secció C.4.2.3.1 es descriu els tipus generals d'error 
     //      Failure o Refused: No s'ha pogut descarregat alguna imatge
     //      Warning: S'ha pogut descarregar com a mínim una imatge
     //      Success: Totes les imatges s'han descarregat correctament
