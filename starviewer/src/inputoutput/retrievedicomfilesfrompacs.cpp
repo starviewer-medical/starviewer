@@ -353,6 +353,11 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
 
     OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dicomMask.getDicomMask(), moveCallback, &moveSCPCallbackData, DIMSE_BLOCKING, 0, m_pacsConnection->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail, NULL /*responseIdentifiers*/);
 
+    if (condition.bad())
+    {
+        ERROR_LOG(QString("El metode descarrega no ha finalitzat correctament. Codi error: %1, descripcio error: %2").arg(condition.code()).arg(condition.text()));
+    }
+
     m_pacsConnection->disconnect();
 
     retrieveRequestStatus = processResponseStatusFromMoveSCP(&moveResponse, statusDetail);
