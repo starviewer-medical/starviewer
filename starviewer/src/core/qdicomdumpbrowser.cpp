@@ -75,6 +75,8 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
 
     if (ok)
     {	
+        bool resizeColumnsToContents = m_tagsListQTree->topLevelItemCount() == 0;
+
         m_tagsListQTree->clear();
 
         QTreeWidgetItem *rootTreeItem = m_tagsListQTree->invisibleRootItem();
@@ -93,6 +95,12 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
                 DICOMSequenceAttribute *sequence = dynamic_cast<DICOMSequenceAttribute*>(dicomAttribute);
                 this->addBranch(rootTreeItem, sequence);
             }
+        }
+
+        if (resizeColumnsToContents)
+        {
+            m_tagsListQTree->resizeColumnToContents(0);
+            m_tagsListQTree->resizeColumnToContents(1);
         }
     }
 }
