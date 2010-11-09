@@ -244,7 +244,8 @@ HEADERS += extensionfactory.h \
     applicationversionchecker.h\
     filter.h \
     filterpipeline.h \
-    vtkthresholdfilter.h
+    vtkthresholdfilter.h \
+    dynamicmatrix.h 
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -448,7 +449,8 @@ SOURCES += extensionmediator.cpp \
     applicationversionchecker.cpp\
     filter.cpp \
     filterpipeline.cpp \
-    vtkthresholdfilter.cpp
+    vtkthresholdfilter.cpp \
+    dynamicmatrix.cpp 
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
