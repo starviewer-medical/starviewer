@@ -29,7 +29,7 @@ class Q2DViewer;
 // Menus
 class MenuGridWidget;
 class TableMenu;
-class QDicomDump;
+class QDICOMDumpBrowser;
 class StatsWatcher;
 
 #ifndef STARVIEWER_LITE
@@ -176,7 +176,7 @@ private:
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
     /// Obre la finestra de dicomdump per la imatge que tenim seleccionada en aquests moments
-    QDicomDump *m_dicomDumpCurrentDisplayedImage;
+    QDICOMDumpBrowser *m_dicomDumpCurrentDisplayedImage;
 
     /// Pacient que estem tractant
     Patient *m_patient;

@@ -18,7 +18,7 @@
 #include "toolmanager.h"
 #include "toolconfiguration.h"
 #include "windowlevelpresetstooldata.h"
-#include "qdicomdump.h"
+#include "qdicomdumpbrowser.h"
 #include "statswatcher.h"
 // Per poder fer screenshots desde menú
 #include "screenshottool.h" 
@@ -73,7 +73,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_seriesTableGrid = new TableMenu(this);
     m_predefinedSlicesGrid = new MenuGridWidget(this);
     m_sliceTableGrid = new TableMenu(this);
-    m_dicomDumpCurrentDisplayedImage = new QDicomDump(this);
+    m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
     
 #ifndef STARVIEWER_LITE
     m_previousStudiesWidget = new QPreviousStudiesWidget(this);
