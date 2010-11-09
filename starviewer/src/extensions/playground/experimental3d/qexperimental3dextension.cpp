@@ -1115,6 +1115,7 @@ void QExperimental3DExtension::createConnections()
     connect(m_optimizeByDerivativeTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(optimizeByDerivativeTransferFunctionFromIntensityClusters()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
+    connect(m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
 
     // Program
@@ -3745,6 +3746,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
     bool maximizeMiiOverJointEntropy = false;
     bool minimizeMiiOverJointEntropy = false;
 
+    bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
     const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
     QVector<float> weights(m_intensityClusters.size());
 
@@ -3762,6 +3764,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         if (totalWeight == 0.0f)
         {
             DEBUG_LOG("tots els pesos són 0 -> marxem");
+            setCursor(QCursor(Qt::ArrowCursor));
             return;
         }
 
@@ -3772,6 +3775,11 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
             weights[i] /= totalWeight;
             DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
         }
+    }
+    if (piWeights && minimizeKullbackLeiblerDivergence)
+    {
+        setCursor(QCursor(Qt::ArrowCursor));
+        return; // ja estem a l'objectiu
     }
 
     const double DeltaLimit1 = m_geneticTransferFunctionFromIntensityClusteringDelta1DoubleSpinBox->value();
@@ -3794,7 +3802,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
         bool pIV = minimizeDkl_IV_W;
         bool pV = minimizeDkl_IV_W;
-        bool pI = minimizeKullbackLeiblerDivergence;
+        bool pI = minimizeKullbackLeiblerDivergence || piWeights;
         bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
         bool HIv = false;
         bool HIV = maximizeHIV;
@@ -3813,6 +3821,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         }
         if (minimizeDkl_IV_W)
         {
+            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
             const QVector<float> &bestPV = viewpointIntensityInformationChannel.viewProbabilities();
             const QVector< QVector<float> > &bestPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             int nViewpoints = bestPV.size();
@@ -3904,7 +3913,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, evolvedTransferFunction);
         bool pIV = minimizeDkl_IV_W;
         bool pV = minimizeDkl_IV_W;
-        bool pI = minimizeKullbackLeiblerDivergence;
+        bool pI = minimizeKullbackLeiblerDivergence || piWeights;
         bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
         bool HIv = false;
         bool HIV = maximizeHIV;
@@ -3933,6 +3942,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         }
         if (minimizeDkl_IV_W)
         {
+            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
             const QVector<float> &evolvedPV = viewpointIntensityInformationChannel.viewProbabilities();
             const QVector< QVector<float> > &evolvedPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             int nViewpoints = evolvedPV.size();
@@ -4024,6 +4034,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
     bool maximizeMiiOverJointEntropy = false;
     bool minimizeMiiOverJointEntropy = false;
 
+    bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
     const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
     QVector<float> weights(m_intensityClusters.size());
 
@@ -4041,6 +4052,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         if (totalWeight == 0.0f)
         {
             DEBUG_LOG("tots els pesos són 0 -> marxem");
+            setCursor(QCursor(Qt::ArrowCursor));
             return;
         }
 
@@ -4051,6 +4063,11 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
             weights[i] /= totalWeight;
             DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
         }
+    }
+    if (piWeights && minimizeKullbackLeiblerDivergence)
+    {
+        setCursor(QCursor(Qt::ArrowCursor));
+        return; // ja estem a l'objectiu
     }
 
     int iterations = m_fineTuneGeneticTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
@@ -4070,7 +4087,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
         bool pIV = minimizeDkl_IV_W;
         bool pV = minimizeDkl_IV_W;
-        bool pI = minimizeKullbackLeiblerDivergence;
+        bool pI = minimizeKullbackLeiblerDivergence || piWeights;
         bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
         bool HIv = false;
         bool HIV = maximizeHIV;
@@ -4089,6 +4106,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         }
         if (minimizeDkl_IV_W)
         {
+            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
             const QVector<float> &bestPV = viewpointIntensityInformationChannel.viewProbabilities();
             const QVector< QVector<float> > &bestPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             int nViewpoints = bestPV.size();
@@ -4176,7 +4194,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
             ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, fineTunedTransferFunction);
             bool pIV = minimizeDkl_IV_W;
             bool pV = minimizeDkl_IV_W;
-            bool pI = minimizeKullbackLeiblerDivergence;
+            bool pI = minimizeKullbackLeiblerDivergence || piWeights;
             bool HI = maximizeMiiOverHI || minimizeMiiOverHI;
             bool HIv = false;
             bool HIV = maximizeHIV;
@@ -4205,6 +4223,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
             }
             if (minimizeDkl_IV_W)
             {
+                if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
                 const QVector<float> &fineTunedPV = viewpointIntensityInformationChannel.viewProbabilities();
                 const QVector< QVector<float> > &fineTunedPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
                 int nViewpoints = fineTunedPV.size();
@@ -4291,9 +4310,11 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     bool minimizeKullbackLeiblerDivergence = false;
     bool minimizeDkl_IV_W = true;
 
+    bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
     const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
     QVector<float> weights(m_intensityClusters.size());
 
+    if (!piWeights)
     {
         float totalWeight = 0.0f;
 
@@ -4307,6 +4328,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         if (totalWeight == 0.0f)
         {
             DEBUG_LOG("tots els pesos són 0 -> marxem");
+            setCursor(QCursor(Qt::ArrowCursor));
             return;
         }
 
@@ -4317,6 +4339,11 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             weights[i] /= totalWeight;
             DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
         }
+    }
+    else if (minimizeKullbackLeiblerDivergence)
+    {
+        setCursor(QCursor(Qt::ArrowCursor));
+        return; // ja estem a l'objectiu
     }
 
     const double K = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringKDoubleSpinBox->value();
@@ -4341,7 +4368,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
         bool pIV = minimizeDkl_IV_W;
         bool pV = minimizeDkl_IV_W;
-        bool pI = minimizeKullbackLeiblerDivergence;
+        bool pI = minimizeKullbackLeiblerDivergence || piWeights;
         bool HI = false;
         bool HIv = false;
         bool HIV = false;
@@ -4360,6 +4387,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         }
         if (minimizeDkl_IV_W)
         {
+            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
             bestPV = lastPV = viewpointIntensityInformationChannel.viewProbabilities();
             bestPIV = lastPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             int nViewpoints = bestPV.size();
@@ -4435,7 +4463,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, optimizedTransferFunction);
         bool pIV = minimizeDkl_IV_W;
         bool pV = minimizeDkl_IV_W;
-        bool pI = minimizeKullbackLeiblerDivergence;
+        bool pI = minimizeKullbackLeiblerDivergence || piWeights;
         bool HI = false;
         bool HIv = false;
         bool HIV = false;
@@ -4466,6 +4494,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         }
         if (minimizeDkl_IV_W)
         {
+            if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
             optimizedPV = viewpointIntensityInformationChannel.viewProbabilities();
             optimizedPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
             int nViewpoints = optimizedPV.size();
@@ -4562,6 +4591,7 @@ void QExperimental3DExtension::generateInnernessProportionalOpacityTransferFunct
 void QExperimental3DExtension::fillWeigthsEditor()
 {
     if (m_intensityClusters.isEmpty()) return;
+    if (m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked()) return;
     if (m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton->isChecked()) return;
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setRange(0, m_intensityClusters.size() - 1);

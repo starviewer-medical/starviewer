@@ -2277,8 +2277,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>428</width>
-            <height>909</height>
+            <width>488</width>
+            <height>1074</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -3636,7 +3636,7 @@
                 <number>2</number>
                </property>
                <property name="maximum">
-                <number>256</number>
+                <number>5000</number>
                </property>
                <property name="value">
                 <number>10</number>
@@ -4054,6 +4054,16 @@
                  <widget class="QRadioButton" name="m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton">
                   <property name="text">
                    <string>Volume distribution</string>
+                  </property>
+                  <attribute name="buttonGroup">
+                   <string>buttonGroup_3</string>
+                  </attribute>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton">
+                  <property name="text">
+                   <string>p(I)</string>
                   </property>
                   <attribute name="buttonGroup">
                    <string>buttonGroup_3</string>
