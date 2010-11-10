@@ -4405,6 +4405,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     {
         DEBUG_LOG(QString("------------------------------------- optimització per la derivada, iteració %1/%2 --------------------------------").arg(i).arg(iterations));
         TransferFunction optimizedTransferFunction(lastTransferFunction);
+        double minOpacity = 0.0, maxOpacity = 1.0;
+        QVector<double> newOpacities(m_intensityClusters.size());
 
         //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
         for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
@@ -4446,11 +4448,34 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
             delta = -K.at(j) * derivative;
             if (w > 0.0 && opacity == 0.0) delta = +Epsilon;    // si el pes és més gran que 0 però l'opacitat és 0 hem d'incrementar l'opacitat (la derivada és NaN)
-            double newOpacity = qBound(0.0, opacity + delta, 1.0);
+            //double newOpacity = qBound(0.0, opacity + delta, 1.0);
+            double newOpacity = opacity + delta;
             if (weights.at(j) == 0.0f) newOpacity = 0.0;    // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+            if (newOpacity < minOpacity) minOpacity = newOpacity;
+            if (newOpacity > maxOpacity) maxOpacity = newOpacity;
+            newOpacities[j] = newOpacity;
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, derivada = %3, k = %4, delta = %5%6, opacitat nova = %7").arg(j).arg(opacity).arg(derivative).arg(K.at(j))
                                                                                                                                                                   .arg(delta > 0.0 ? "+" : "").arg(delta)
                                                                                                                                                                   .arg(newOpacity));
+        }
+
+        DEBUG_LOG("........................................");
+
+        //double scale = 1.0; // per no reescalar l'opacitat
+        //double shift = 0.0; // per no reescalar l'opacitat
+        double scale = 1.0 / (maxOpacity - minOpacity);
+        double shift = -minOpacity;
+
+        //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
+        for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
+        {
+            double x1 = m_intensityClusters[j].first();
+            double x2 = m_intensityClusters[j].last();
+            double x = (x1 + x2) / 2.0;
+            double opacity = lastTransferFunction.getOpacity(x);
+            double newOpacity = qBound(0.0, (newOpacities.at(j) + shift) * scale, 1.0); // el qBound és per si no reescalem l'opacitat
+            DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, opacitat nova desitjada = %3, opacitat nova final = %4").arg(j).arg(opacity).arg(newOpacities.at(j))
+                                                                                                                                                                 .arg(newOpacity));
 
             if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
             {
