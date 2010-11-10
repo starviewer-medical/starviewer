@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="CR">
-<hangingProtocolName>CR Series</hangingProtocolName>
+<!-- 
+    Aquest hanging protocol està pensat perquè s'apliqui sobre
+    estudis DX amb més d'una sèrie, on la sèrie primera i segona
+    ocupen el primer i segon visor
+-->
+<hangingProtocol name="DXMultipleSeries">
+<hangingProtocolName>DX Series</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <allDifferent>yes</allDifferent>
-<protocol>CR</protocol>
+<protocol>DX</protocol>
 <imageSet identifier="1">
 </imageSet>
 <imageSet identifier="2">

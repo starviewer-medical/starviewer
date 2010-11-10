@@ -56,7 +56,7 @@ void CoreSettings::init()
     SettingsRegistry *settingsRegistry = SettingsRegistry::instance();
     settingsRegistry->addSetting( ScreenShotToolFolder, QDir::homePath() );
     settingsRegistry->addSetting( ScreenShotToolFileExtension, QObject::tr("PNG (*.png)") );
-    settingsRegistry->addSetting( UserHangingProtocolsPath, UserHangingProtocolsPath );
+    settingsRegistry->addSetting( UserHangingProtocolsPath, UserDataRootPath + "hangingprotocols/");
     settingsRegistry->addSetting( RegisterStatLogs, false );
     settingsRegistry->addSetting( LanguageLocale, QLocale::system().name() );
     settingsRegistry->addSetting( DefaultToolTextSize, 14 );

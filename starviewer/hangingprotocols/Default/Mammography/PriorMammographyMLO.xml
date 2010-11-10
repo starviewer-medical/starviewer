@@ -17,7 +17,7 @@
 <restriction identifier="3">
 <usageFlag>MATCH</usageFlag>
 <selectorAttribute>CodeMeaning</selectorAttribute>
-<valueRepresentation>medio-lateral</valueRepresentation>
+<valueRepresentation>later</valueRepresentation>
 </restriction>
 <restriction identifier="4">
 <usageFlag>MATCH</usageFlag>
@@ -29,15 +29,22 @@
 <selectorAttribute>Anterior</selectorAttribute>
 <valueRepresentation>2</valueRepresentation>
 </restriction>
+<restriction identifier="6">
+<usageFlag>NO_MATCH</usageFlag>
+<selectorAttribute>CodeMeaning</selectorAttribute>
+<valueRepresentation>cranio-caudal</valueRepresentation>
+</restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
 <restriction>3</restriction>
+<restriction>6</restriction>
 <type>image</type>
 <alignment>right</alignment>
 </imageSet>
 <imageSet identifier="2">
 <restriction>2</restriction>
 <restriction>3</restriction>
+<restriction>6</restriction>
 <type>image</type>
 <alignment>left</alignment>
 </imageSet>
@@ -45,6 +52,7 @@
 <restriction>1</restriction>
 <restriction>3</restriction>
 <restriction>4</restriction>
+<restriction>6</restriction>
 <type>image</type>
 <alignment>right</alignment>
 </imageSet>
@@ -52,6 +60,7 @@
 <restriction>2</restriction>
 <restriction>3</restriction>
 <restriction>5</restriction>
+<restriction>6</restriction>
 <type>image</type>
 <alignment>left</alignment>
 </imageSet>

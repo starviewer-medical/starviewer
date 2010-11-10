@@ -36,8 +36,6 @@ const QString UserDataRootPath( QDir::homePath() + "/.starviewer/" );
 const QString UserLogsPath( UserDataRootPath + "log/" );
 /// Ruta absoluta del fitxer de log
 const QString UserLogsFile( UserLogsPath + "starviewer.log" );
-/// Path dels hanging protocols d'usuari
-const QString UserHangingProtocolsPath( UserDataRootPath + "hangingprotocols/" );
 
 // TODO const QString LogConfigurationFileLocation();
 
