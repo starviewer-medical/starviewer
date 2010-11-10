@@ -4418,12 +4418,13 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             double w = weights.at(j);
             double delta, derivative;
             const double Epsilon = 0.001;
+            double sumP = 0.0;  // amb això comprovarem si una intensitat és visible des d'algun lloc
 
             if (minimizeKullbackLeiblerDivergence)
             {
                 double pi = lastPI.at(j);
+                sumP = pi;
                 derivative = (MathTools::logTwo(pi / w) - last) * pi / ((1.0 - pi) * opacity);
-
             }
             if (minimizeDkl_IV_W)
             {
@@ -4433,6 +4434,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 {
                     double pv = lastPV.at(k);
                     double piv = lastPIV.at(k).at(j);
+                    sumP += piv;
                     if (pv == 0.0 || piv == 0.0) continue;  // tots dos es troben multiplicant en algun moment
                     double Dkl = InformationTheory::kullbackLeiblerDivergence(lastPIV.at(k), weights, true);
                     derivative += pv * (MathTools::logTwo(piv / w) - Dkl) * piv / ((1.0 - piv) * opacity);
@@ -4450,7 +4452,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             if (w > 0.0 && opacity == 0.0) delta = +Epsilon;    // si el pes és més gran que 0 però l'opacitat és 0 hem d'incrementar l'opacitat (la derivada és NaN)
             //double newOpacity = qBound(0.0, opacity + delta, 1.0);
             double newOpacity = opacity + delta;
-            if (weights.at(j) == 0.0f) newOpacity = 0.0;    // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+            if (w == 0.0) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
+            if (w > 0.0 && opacity > 0.0 && sumP == 0.0) newOpacity = 2.0 * opacity;    // si té pes i té opacitat però no es veu, li doblem l'opacitat amb la intenció d'augmentar-ne la visibilitat
             if (newOpacity < minOpacity) minOpacity = newOpacity;
             if (newOpacity > maxOpacity) maxOpacity = newOpacity;
             newOpacities[j] = newOpacity;
@@ -4461,10 +4464,10 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
         DEBUG_LOG("........................................");
 
-        //double scale = 1.0; // per no reescalar l'opacitat
         //double shift = 0.0; // per no reescalar l'opacitat
-        double scale = 1.0 / (maxOpacity - minOpacity);
+        //double scale = 1.0; // per no reescalar l'opacitat
         double shift = -minOpacity;
+        double scale = 1.0 / (maxOpacity - minOpacity);
 
         //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
         for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
