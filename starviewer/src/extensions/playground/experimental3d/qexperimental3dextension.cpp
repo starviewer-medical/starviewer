@@ -4346,7 +4346,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         return; // ja estem a l'objectiu
     }
 
-    const double K = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringKDoubleSpinBox->value();
+    QVector<double> K(m_intensityClusters.size(), m_optimizeByDerivativeTransferFunctionFromIntensityClusteringKDoubleSpinBox->value());
+    QVector<char> sign(m_intensityClusters.size());
 
     int iterations = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
@@ -4434,12 +4435,20 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 }
             }
 
-            delta = -K * derivative;
+            if (i == 0) sign[j] = derivative > 0.0 ? +1 : -1;
+            if ((sign.at(j) < 0 && derivative > 0.0) || (sign.at(j) > 0 && derivative < 0.0)) // canvi de signe
+            {
+                K[j] /= 2.0;
+                sign[j] = derivative > 0.0 ? +1 : -1;
+            }
+
+            delta = -K.at(j) * derivative;
             if (w > 0.0 && opacity == 0.0) delta = +Epsilon;    // si el pes és més gran que 0 però l'opacitat és 0 hem d'incrementar l'opacitat (la derivada és NaN)
             double newOpacity = qBound(0.0, opacity + delta, 1.0);
             if (weights.at(j) == 0.0f) newOpacity = 0.0;    // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
-            DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, derivada = %3, delta = %4%5, opacitat nova = %6").arg(j).arg(opacity).arg(derivative)
-                                                                                                                                                          .arg(delta > 0.0 ? "+" : "").arg(delta).arg(newOpacity));
+            DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, derivada = %3, k = %4, delta = %5%6, opacitat nova = %7").arg(j).arg(opacity).arg(derivative).arg(K.at(j))
+                                                                                                                                                                  .arg(delta > 0.0 ? "+" : "").arg(delta)
+                                                                                                                                                                  .arg(newOpacity));
 
             if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
             {
