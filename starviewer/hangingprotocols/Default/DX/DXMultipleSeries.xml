@@ -5,7 +5,7 @@
     ocupen el primer i segon visor
 -->
 <hangingProtocol name="DXMultipleSeries">
-<hangingProtocolName>DX</hangingProtocolName>
+<hangingProtocolName>DX Series</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <allDifferent>yes</allDifferent>
 <protocol>DX</protocol>
