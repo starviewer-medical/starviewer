@@ -17,7 +17,7 @@
 <restriction identifier="3">
 <usageFlag>MATCH</usageFlag>
 <selectorAttribute>CodeMeaning</selectorAttribute>
-<valueRepresentation>medio-lateral</valueRepresentation>
+<valueRepresentation>later</valueRepresentation>
 </restriction>
 <restriction identifier="4">
 <usageFlag>NO_MATCH</usageFlag>
