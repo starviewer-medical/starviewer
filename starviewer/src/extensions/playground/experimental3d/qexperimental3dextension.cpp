@@ -4431,7 +4431,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 {
                     double pv = lastPV.at(k);
                     double piv = lastPIV.at(k).at(j);
-                    derivative += pv * (MathTools::logTwo(piv / w) - last) * piv / ((1.0 - piv) * opacity);
+                    double Dkl = InformationTheory::kullbackLeiblerDivergence(lastPIV.at(k), weights, true);
+                    derivative += pv * (MathTools::logTwo(piv / w) - Dkl) * piv / ((1.0 - piv) * opacity);
                 }
             }
 
