@@ -4666,7 +4666,7 @@ void QExperimental3DExtension::fillWeigthsEditor()
         for (int i = 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, static_cast<double>(count.at(i)) / total);
     }
 
-    m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsTransferFunction);
+    m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsTransferFunction.simplify());
 }
 
 
