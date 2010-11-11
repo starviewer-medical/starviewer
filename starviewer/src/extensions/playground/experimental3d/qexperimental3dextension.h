@@ -315,6 +315,9 @@ private slots:
     void enableBaseVomi(bool on);
     void enableVomi(bool on);
 
+    void checkIntensities();
+    QVector<float> getWeights() const;
+
 private:
 
     Experimental3DVolume *m_volume;
@@ -376,6 +379,8 @@ private:
     float m_maximumSpatialImportanceFunction;
     QVector<float> m_probabilisticAmbientOcclusion;
     QVector<float> m_volumeVariance;
+
+    QVector<bool> m_hasIntensity;
 
     /// Cert quan estiguem executant el l'extensió interactivament.
     bool m_interactive;

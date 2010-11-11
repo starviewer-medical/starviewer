@@ -3746,34 +3746,19 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
     bool maximizeMiiOverJointEntropy = false;
     bool minimizeMiiOverJointEntropy = false;
 
+    checkIntensities();
+
     bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
-    const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
-    QVector<float> weights(m_intensityClusters.size());
+    QVector<float> weights;
 
     if (minimizeKullbackLeiblerDivergence || minimizeDkl_IV_W)
     {
-        float totalWeight = 0.0f;
+        weights = getWeights();
 
-        for (int i = 0; i < weights.size(); i++)
+        if (MathTools::isNaN(weights.at(0)))
         {
-            float weight = weightsTransferFunction.getOpacity(i);
-            weights[i] = weight;
-            totalWeight += weight;
-        }
-
-        if (totalWeight == 0.0f)
-        {
-            DEBUG_LOG("tots els pesos són 0 -> marxem");
             setCursor(QCursor(Qt::ArrowCursor));
             return;
-        }
-
-        DEBUG_LOG("pesos:");
-
-        for (int i = 0; i < weights.size(); i++)
-        {
-            weights[i] /= totalWeight;
-            DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
         }
     }
     if (piWeights && minimizeKullbackLeiblerDivergence)
@@ -3857,6 +3842,8 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
         for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
         {
+            if (!m_hasIntensity.at(j)) continue;
+
             double x1 = m_intensityClusters[j].first();
             double x2 = m_intensityClusters[j].last();
             double x = (x1 + x2) / 2.0;
@@ -4034,34 +4021,19 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
     bool maximizeMiiOverJointEntropy = false;
     bool minimizeMiiOverJointEntropy = false;
 
+    checkIntensities();
+
     bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
-    const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
-    QVector<float> weights(m_intensityClusters.size());
+    QVector<float> weights;
 
     if (minimizeKullbackLeiblerDivergence || minimizeDkl_IV_W)
     {
-        float totalWeight = 0.0f;
+        weights = getWeights();
 
-        for (int i = 0; i < weights.size(); i++)
+        if (MathTools::isNaN(weights.at(0)))
         {
-            float weight = weightsTransferFunction.getOpacity(i);
-            weights[i] = weight;
-            totalWeight += weight;
-        }
-
-        if (totalWeight == 0.0f)
-        {
-            DEBUG_LOG("tots els pesos són 0 -> marxem");
             setCursor(QCursor(Qt::ArrowCursor));
             return;
-        }
-
-        DEBUG_LOG("pesos:");
-
-        for (int i = 0; i < weights.size(); i++)
-        {
-            weights[i] /= totalWeight;
-            DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
         }
     }
     if (piWeights && minimizeKullbackLeiblerDivergence)
@@ -4146,7 +4118,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
             x2 = m_intensityClusters[cluster].last();
             x = (x1 + x2) / 2.0;
             opacity = bestTransferFunction.getOpacity(x);
-        } while (weights.at(cluster) == 0.0f && opacity == 0.0);    // si el cluster ja té pes 0 i opacitat 0 no ens serveix per res
+        } while ((weights.at(cluster) == 0.0f && opacity == 0.0) || !m_hasIntensity.at(cluster));    // si el cluster ja té pes 0 i opacitat 0 no ens serveix per res
 
         double base, step;
         int start, end = +10;
@@ -4310,34 +4282,19 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     bool minimizeKullbackLeiblerDivergence = false;
     bool minimizeDkl_IV_W = true;
 
+    checkIntensities();
+
     bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
-    const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
-    QVector<float> weights(m_intensityClusters.size());
+    QVector<float> weights;
 
     if (!piWeights)
     {
-        float totalWeight = 0.0f;
+        weights = getWeights();
 
-        for (int i = 0; i < weights.size(); i++)
+        if (MathTools::isNaN(weights.at(0)))
         {
-            float weight = weightsTransferFunction.getOpacity(i);
-            weights[i] = weight;
-            totalWeight += weight;
-        }
-
-        if (totalWeight == 0.0f)
-        {
-            DEBUG_LOG("tots els pesos són 0 -> marxem");
             setCursor(QCursor(Qt::ArrowCursor));
             return;
-        }
-
-        DEBUG_LOG("pesos:");
-
-        for (int i = 0; i < weights.size(); i++)
-        {
-            weights[i] /= totalWeight;
-            DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
         }
     }
     else if (minimizeKullbackLeiblerDivergence)
@@ -4411,6 +4368,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
         for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
         {
+            if (!m_hasIntensity.at(j)) continue;
+
             double x1 = m_intensityClusters[j].first();
             double x2 = m_intensityClusters[j].last();
             double x = (x1 + x2) / 2.0;
@@ -4472,6 +4431,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
         for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
         {
+            if (!m_hasIntensity.at(j)) continue;
+
             double x1 = m_intensityClusters[j].first();
             double x2 = m_intensityClusters[j].last();
             double x = (x1 + x2) / 2.0;
@@ -4667,6 +4628,49 @@ void QExperimental3DExtension::fillWeigthsEditor()
     }
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsTransferFunction.simplify());
+}
+
+
+void QExperimental3DExtension::checkIntensities()
+{
+    if (!m_hasIntensity.isEmpty()) return;
+
+    const unsigned short *data = reinterpret_cast<unsigned short*>(m_volume->getImage()->GetScalarPointer());
+    int size = m_volume->getImage()->GetNumberOfPoints();
+    m_hasIntensity.fill(false, m_intensityClusters.size());
+
+    for (int i = 0; i < size; i++) m_hasIntensity[data[i]] = true;
+}
+
+
+QVector<float> QExperimental3DExtension::getWeights() const
+{
+    const TransferFunction &weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
+    QVector<float> weights(m_intensityClusters.size());
+    double totalWeight = 0.0;
+
+    for (int i = 0; i < weights.size(); i++)
+    {
+        float weight = weightsTransferFunction.getOpacity(i);
+        if (!m_hasIntensity.at(i)) weight = 0.0f;
+        weights[i] = weight;
+        totalWeight += weight;
+    }
+
+    if (totalWeight == 0.0)
+    {
+        DEBUG_LOG("tots els pesos són 0");
+    }
+
+    DEBUG_LOG("pesos:");
+
+    for (int i = 0; i < weights.size(); i++)
+    {
+        weights[i] /= totalWeight;
+        DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+    }
+
+    return weights;
 }
 
 
