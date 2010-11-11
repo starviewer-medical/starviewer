@@ -4477,6 +4477,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             double x = (x1 + x2) / 2.0;
             double opacity = lastTransferFunction.getOpacity(x);
             double newOpacity = qBound(0.0, (newOpacities.at(j) + shift) * scale, 1.0); // el qBound és per si no reescalem l'opacitat
+            // cal tornar a posar l'opacitat a 0 si el pes és 0 perquè amb el reescalat pot augmentar
+            if (weights.at(j) == 0.0) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, opacitat nova desitjada = %3, opacitat nova final = %4").arg(j).arg(opacity).arg(newOpacities.at(j))
                                                                                                                                                                  .arg(newOpacity));
 
