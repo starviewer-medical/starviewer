@@ -3724,6 +3724,40 @@
             </layout>
            </item>
            <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_72">
+             <item>
+              <widget class="QLabel" name="m_viewVolumeLabel">
+               <property name="text">
+                <string>View</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_viewNormalVolumeRadioButton">
+               <property name="text">
+                <string>Normal</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+               <attribute name="buttonGroup">
+                <string>buttonGroup_6</string>
+               </attribute>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_viewClusterizedVolumeRadioButton">
+               <property name="text">
+                <string>Clusterized</string>
+               </property>
+               <attribute name="buttonGroup">
+                <string>buttonGroup_6</string>
+               </attribute>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <widget class="QGroupBox" name="m_transferFunctionFromIntensityClusteringGroupBox">
              <property name="title">
               <string>Transfer function from intensity clustering</string>
@@ -4034,6 +4068,16 @@
                  <widget class="QLabel" name="m_geneticTransferFunctionFromIntensityClusteringWeightsLabel">
                   <property name="text">
                    <string>Weights</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="m_geneticTransferFunctionFromIntensityClusteringWeightsZeroSpinBox">
+                  <property name="toolTip">
+                   <string>Zero up to</string>
+                  </property>
+                  <property name="maximum">
+                   <number>1000</number>
                   </property>
                  </widget>
                 </item>
@@ -4387,5 +4431,6 @@
   <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_5"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_6"/>
  </buttongroups>
 </ui>

@@ -310,17 +310,24 @@ private slots:
     void volumeVariance();
 
     void generateInnernessProportionalOpacityTransferFunction();
+    void createClusterizedVolume();
     void fillWeigthsEditor();
 
     void enableBaseVomi(bool on);
     void enableVomi(bool on);
 
-    void checkIntensities();
+    void checkData();
     QVector<float> getWeights() const;
+    void normalToClusterizedTransferFunction();
+    void clusterizedToNormalTransferFunction();
+    void viewNormalVolume();
+    void viewClusterizedVolume();
 
 private:
 
     Experimental3DVolume *m_volume;
+    Experimental3DVolume *m_normalVolume;
+    Experimental3DVolume *m_clusterizedVolume;
 
     QList<TransferFunction> m_recentTransferFunctions;
     QStringListModel *m_recentTransferFunctionsModel;
@@ -373,14 +380,16 @@ private:
     QVector<float> m_imi;
     float m_maximumImi;
     QList< QList<int> > m_intensityClusters;
+    QVector<bool> m_clusterHasData;
+    TransferFunction m_normalTransferFunction;
+    TransferFunction m_clusterizedTransferFunction;
+    bool m_viewClusterizedVolume;
 
     // Filtering
     QVector<float> m_spatialImportanceFunction; // ΔD = G * D − D
     float m_maximumSpatialImportanceFunction;
     QVector<float> m_probabilisticAmbientOcclusion;
     QVector<float> m_volumeVariance;
-
-    QVector<bool> m_hasIntensity;
 
     /// Cert quan estiguem executant el l'extensió interactivament.
     bool m_interactive;
