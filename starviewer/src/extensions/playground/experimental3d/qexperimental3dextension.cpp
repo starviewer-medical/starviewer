@@ -36,8 +36,8 @@ namespace udg {
 
 
 QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
- : QWidget( parent ), m_volume( 0 ),
-   m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 ), m_interactive( true )
+ : QWidget( parent ), m_volume(0), m_normalVolume(0), m_clusterizedVolume(0),
+   m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 ), m_viewClusterizedVolume(false), m_interactive( true )
 {
     setupUi( this );
     Experimental3DSettings().init();
@@ -62,7 +62,9 @@ QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
 
 QExperimental3DExtension::~QExperimental3DExtension()
 {
-    delete m_volume;
+    //delete m_volume;
+    delete m_normalVolume;
+    delete m_clusterizedVolume;
 
     if ( m_computingObscurance )
     {
@@ -77,21 +79,21 @@ QExperimental3DExtension::~QExperimental3DExtension()
 
 void QExperimental3DExtension::setInput( Volume *input )
 {
-    m_volume = new Experimental3DVolume( input );
+    m_volume = m_normalVolume = new Experimental3DVolume(input);
 
-    m_viewer->setInput( input );
-    m_viewer->setVolume( m_volume );
+    m_viewer->setInput(input);
+    m_viewer->setVolume(m_volume);
 
     unsigned short max = m_volume->getRangeMax();
     m_transferFunctionEditor->setRange(0, max);
     m_transferFunctionEditor->syncToMax();
 
     TransferFunction defaultTransferFunction;
-    defaultTransferFunction.addPoint( 0, QColor( 0, 0, 0, 0 ) );
-    defaultTransferFunction.addPoint( max, QColor( 255, 255, 255, 255 ) );
-    m_transferFunctionEditor->setTransferFunction( defaultTransferFunction );
+    defaultTransferFunction.addPoint(0, QColor(0, 0, 0, 0));
+    defaultTransferFunction.addPoint(max, QColor(255, 255, 255, 255));
+    m_transferFunctionEditor->setTransferFunction(defaultTransferFunction);
 
-    setTransferFunction( false );
+    setTransferFunction(false);
     render();
 }
 
@@ -99,7 +101,10 @@ void QExperimental3DExtension::setInput( Volume *input )
 void QExperimental3DExtension::setNewVolume(Volume *volume)
 {
     m_viewer->removeCurrentVolume();
-    delete m_volume;
+    delete m_normalVolume;
+    delete m_clusterizedVolume;
+    m_intensityClusters.clear();
+    m_viewClusterizedVolume = false;
 
     setInput(volume);
 }
@@ -1109,10 +1114,13 @@ void QExperimental3DExtension::createConnections()
     connect( m_colorTransferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateColorTransferFunctionFromImi() ) );
     connect( m_opacityTransferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateOpacityTransferFunctionFromImi() ) );
     connect( m_transferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateTransferFunctionFromImi() ) );
+    connect(m_viewNormalVolumeRadioButton, SIGNAL(clicked()), SLOT(viewNormalVolume()));
+    connect(m_viewClusterizedVolumeRadioButton, SIGNAL(clicked()), SLOT(viewClusterizedVolume()));
     connect(m_transferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(generateTransferFunctionFromIntensityClusters()));
     connect(m_geneticTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(generateAndEvolveTransferFunctionFromIntensityClusters()));
     connect(m_fineTuneGeneticTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(fineTuneGeneticTransferFunctionFromIntensityClusters()));
     connect(m_optimizeByDerivativeTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(optimizeByDerivativeTransferFunctionFromIntensityClusters()));
+    connect(m_geneticTransferFunctionFromIntensityClusteringWeightsZeroSpinBox, SIGNAL(valueChanged(int)), SLOT(fillWeigthsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeigthsEditor()));
@@ -1247,6 +1255,18 @@ void QExperimental3DExtension::setRecentTransferFunction( const QModelIndex &ind
 void QExperimental3DExtension::setTransferFunction( bool render )
 {
     m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
+
+    if (m_viewClusterizedVolume)
+    {
+        m_clusterizedTransferFunction = m_transferFunctionEditor->transferFunction();
+        clusterizedToNormalTransferFunction();
+    }
+    else
+    {
+        m_normalTransferFunction = m_transferFunctionEditor->transferFunction();
+        normalToClusterizedTransferFunction();
+    }
+
     if ( render ) m_viewer->render();
 }
 
@@ -2341,6 +2361,9 @@ void QExperimental3DExtension::computeSelectedVmii()
     if (computeIntensityClustering)
     {
         m_intensityClusters = viewpointIntensityInformationChannel.intensityClusters();
+        m_clusterHasData.clear();
+        createClusterizedVolume();
+        normalToClusterizedTransferFunction();
         fillWeigthsEditor();
     }
 
@@ -3712,6 +3735,8 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
             }
 
             opacity /= x2 - x1;
+
+            if (x1 == x2) opacity = m_normalTransferFunction.getOpacity(x); // cas especial
         }
 
         if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) clusteringTransferFunction.addPoint(x, color, opacity);
@@ -3746,7 +3771,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
     bool maximizeMiiOverJointEntropy = false;
     bool minimizeMiiOverJointEntropy = false;
 
-    checkIntensities();
+    checkData();
 
     bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
     QVector<float> weights;
@@ -3766,6 +3791,9 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         setCursor(QCursor(Qt::ArrowCursor));
         return; // ja estem a l'objectiu
     }
+
+    bool switchMode = !m_viewClusterizedVolume;
+    if (switchMode) viewClusterizedVolume();
 
     const double DeltaLimit1 = m_geneticTransferFunctionFromIntensityClusteringDelta1DoubleSpinBox->value();
     const double DeltaLimit2 = m_geneticTransferFunctionFromIntensityClusteringDelta2DoubleSpinBox->value();
@@ -3842,12 +3870,17 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
         for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
         {
-            if (!m_hasIntensity.at(j)) continue;
+            if (!m_clusterHasData.at(j))
+            {
+                evolvedTransferFunction.removePointFromOpacity(j);
+                continue;
+            }
 
-            double x1 = m_intensityClusters[j].first();
-            double x2 = m_intensityClusters[j].last();
-            double x = (x1 + x2) / 2.0;
-            double opacity = bestTransferFunction.getOpacity(x);
+//            double x1 = m_intensityClusters[j].first();
+//            double x2 = m_intensityClusters[j].last();
+//            double x = (x1 + x2) / 2.0;
+//            double opacity = bestTransferFunction.getOpacity(x);
+            double opacity = bestTransferFunction.getOpacity(j);
             double deltaMin, deltaMax;
 
             if (minimizeKullbackLeiblerDivergence)
@@ -3878,15 +3911,16 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
             if ((minimizeKullbackLeiblerDivergence || minimizeDkl_IV_W) && weights.at(j) == 0.0f) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, delta = %3%4, opacitat nova = %5").arg(j).arg(opacity).arg(delta > 0.0 ? "+" : "").arg(delta).arg(newOpacity));
 
-            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
-            {
-                evolvedTransferFunction.addPointToOpacity(x, newOpacity);
-            }
-            else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
-            {
-                evolvedTransferFunction.addPointToOpacity(x1, newOpacity);
-                evolvedTransferFunction.addPointToOpacity(x2, newOpacity);
-            }
+//            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
+//            {
+//                evolvedTransferFunction.addPointToOpacity(x, newOpacity);
+//            }
+//            else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
+//            {
+//                evolvedTransferFunction.addPointToOpacity(x1, newOpacity);
+//                evolvedTransferFunction.addPointToOpacity(x2, newOpacity);
+//            }
+            evolvedTransferFunction.addPointToOpacity(j, newOpacity);
         }
 
         // Obtenir direccions
@@ -3997,6 +4031,8 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 
     m_geneticTransferFunctionFromIntensityClusteringProgressBar->setValue(100);
 
+    if (switchMode) viewNormalVolume();
+
     setCursor(QCursor(Qt::ArrowCursor));
 #endif // CUDA_AVAILABLE
 }
@@ -4021,7 +4057,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
     bool maximizeMiiOverJointEntropy = false;
     bool minimizeMiiOverJointEntropy = false;
 
-    checkIntensities();
+    checkData();
 
     bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
     QVector<float> weights;
@@ -4041,6 +4077,9 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         setCursor(QCursor(Qt::ArrowCursor));
         return; // ja estem a l'objectiu
     }
+
+    bool switchMode = !m_viewClusterizedVolume;
+    if (switchMode) viewClusterizedVolume();
 
     int iterations = m_fineTuneGeneticTransferFunctionFromIntensityClusteringIterationsSpinBox->value();
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
@@ -4111,14 +4150,16 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
         DEBUG_LOG(QString("------------------------------------- fine-tune, iteració %1/%2 --------------------------------").arg(i).arg(iterations));
 
         int cluster;
-        double x1, x2, x, opacity;
+//        double x1, x2, x;
+        double opacity;
         do {
             cluster = 1 + qrand() % (m_intensityClusters.size() - 1);
-            x1 = m_intensityClusters[cluster].first();
-            x2 = m_intensityClusters[cluster].last();
-            x = (x1 + x2) / 2.0;
-            opacity = bestTransferFunction.getOpacity(x);
-        } while ((weights.at(cluster) == 0.0f && opacity == 0.0) || !m_hasIntensity.at(cluster));    // si el cluster ja té pes 0 i opacitat 0 no ens serveix per res
+//            x1 = m_intensityClusters[cluster].first();
+//            x2 = m_intensityClusters[cluster].last();
+//            x = (x1 + x2) / 2.0;
+//            opacity = bestTransferFunction.getOpacity(x);
+            opacity = bestTransferFunction.getOpacity(cluster);
+        } while ((weights.at(cluster) == 0.0f && opacity == 0.0) || !m_clusterHasData.at(cluster));    // si el cluster ja té pes 0 i opacitat 0 no ens serveix per res
 
         double base, step;
         int start, end = +10;
@@ -4145,15 +4186,16 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, opacitat nova = %3").arg(cluster).arg(opacity).arg(newOpacity));
 
-            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
-            {
-                fineTunedTransferFunction.addPointToOpacity(x, newOpacity);
-            }
-            else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
-            {
-                fineTunedTransferFunction.addPointToOpacity(x1, newOpacity);
-                fineTunedTransferFunction.addPointToOpacity(x2, newOpacity);
-            }
+//            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
+//            {
+//                fineTunedTransferFunction.addPointToOpacity(x, newOpacity);
+//            }
+//            else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
+//            {
+//                fineTunedTransferFunction.addPointToOpacity(x1, newOpacity);
+//                fineTunedTransferFunction.addPointToOpacity(x2, newOpacity);
+//            }
+            fineTunedTransferFunction.addPointToOpacity(cluster, newOpacity);
 
             // Obtenir direccions
             Vector3 position, focus, up;
@@ -4265,6 +4307,8 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 
     m_fineTuneGeneticTransferFunctionFromIntensityClusteringProgressBar->setValue(100);
 
+    if (switchMode) viewNormalVolume();
+
     setCursor(QCursor(Qt::ArrowCursor));
 #endif // CUDA_AVAILABLE
 }
@@ -4282,7 +4326,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     bool minimizeKullbackLeiblerDivergence = false;
     bool minimizeDkl_IV_W = true;
 
-    checkIntensities();
+    checkData();
 
     bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
     QVector<float> weights;
@@ -4302,6 +4346,9 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         setCursor(QCursor(Qt::ArrowCursor));
         return; // ja estem a l'objectiu
     }
+
+    bool switchMode = !m_viewClusterizedVolume;
+    if (switchMode) viewClusterizedVolume();
 
     QVector<double> K(m_intensityClusters.size(), m_optimizeByDerivativeTransferFunctionFromIntensityClusteringKDoubleSpinBox->value());
     QVector<char> sign(m_intensityClusters.size());
@@ -4368,12 +4415,17 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
         for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
         {
-            if (!m_hasIntensity.at(j)) continue;
+            if (!m_clusterHasData.at(j))
+            {
+                optimizedTransferFunction.removePointFromOpacity(j);
+                continue;
+            }
 
-            double x1 = m_intensityClusters[j].first();
-            double x2 = m_intensityClusters[j].last();
-            double x = (x1 + x2) / 2.0;
-            double opacity = lastTransferFunction.getOpacity(x);
+//            double x1 = m_intensityClusters[j].first();
+//            double x2 = m_intensityClusters[j].last();
+//            double x = (x1 + x2) / 2.0;
+//            double opacity = lastTransferFunction.getOpacity(x);
+            double opacity = lastTransferFunction.getOpacity(j);
             double w = weights.at(j);
             double delta, derivative;
             const double Epsilon = 0.001;
@@ -4431,27 +4483,29 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
         for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
         {
-            if (!m_hasIntensity.at(j)) continue;
+            if (!m_clusterHasData.at(j)) continue;
 
-            double x1 = m_intensityClusters[j].first();
-            double x2 = m_intensityClusters[j].last();
-            double x = (x1 + x2) / 2.0;
-            double opacity = lastTransferFunction.getOpacity(x);
+//            double x1 = m_intensityClusters[j].first();
+//            double x2 = m_intensityClusters[j].last();
+//            double x = (x1 + x2) / 2.0;
+//            double opacity = lastTransferFunction.getOpacity(x);
+            double opacity = lastTransferFunction.getOpacity(j);
             double newOpacity = qBound(0.0, (newOpacities.at(j) + shift) * scale, 1.0); // el qBound és per si no reescalem l'opacitat
             // cal tornar a posar l'opacitat a 0 si el pes és 0 perquè amb el reescalat pot augmentar
             if (weights.at(j) == 0.0) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
             DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, opacitat nova desitjada = %3, opacitat nova final = %4").arg(j).arg(opacity).arg(newOpacities.at(j))
                                                                                                                                                                  .arg(newOpacity));
 
-            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
-            {
-                optimizedTransferFunction.addPointToOpacity(x, newOpacity);
-            }
-            else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
-            {
-                optimizedTransferFunction.addPointToOpacity(x1, newOpacity);
-                optimizedTransferFunction.addPointToOpacity(x2, newOpacity);
-            }
+//            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
+//            {
+//                optimizedTransferFunction.addPointToOpacity(x, newOpacity);
+//            }
+//            else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
+//            {
+//                optimizedTransferFunction.addPointToOpacity(x1, newOpacity);
+//                optimizedTransferFunction.addPointToOpacity(x2, newOpacity);
+//            }
+            optimizedTransferFunction.addPointToOpacity(j, newOpacity);
         }
 
         // Obtenir direccions
@@ -4541,6 +4595,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     setTransferFunction();
     DEBUG_LOG(QString("------------------------------------- fi: distància mínima = %1").arg(best));
 
+    if (switchMode) viewNormalVolume();
+
     setCursor(QCursor(Qt::ArrowCursor));
 #endif // CUDA_AVAILABLE
 }
@@ -4590,56 +4646,95 @@ void QExperimental3DExtension::generateInnernessProportionalOpacityTransferFunct
 }
 
 
+void QExperimental3DExtension::createClusterizedVolume()
+{
+    if (m_intensityClusters.isEmpty()) return;
+
+    QVector<unsigned short> map;
+
+    for (int i = 0; i < m_intensityClusters.size(); i++)
+    {
+        int first = m_intensityClusters.at(i).first();
+        int last = m_intensityClusters.at(i).last();
+        int length = last - first + 1;
+        map << QVector<unsigned short>(length, i);
+    }
+
+    delete m_clusterizedVolume;
+
+    vtkImageData *image = vtkImageData::New();
+    image->DeepCopy(m_volume->getImage());
+    unsigned short *data = reinterpret_cast<unsigned short*>(image->GetScalarPointer());
+    int size = image->GetNumberOfPoints();
+
+    for (int i = 0; i < size; i++) data[i] = map.at(data[i]);
+
+    image->Modified();
+    image->Update();
+
+    m_clusterizedVolume = new Experimental3DVolume(image);
+}
+
+
 void QExperimental3DExtension::fillWeigthsEditor()
 {
     if (m_intensityClusters.isEmpty()) return;
-    if (m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked()) return;
-    if (m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton->isChecked()) return;
+
+    int zeroEnd = m_geneticTransferFunctionFromIntensityClusteringWeightsZeroSpinBox->value();
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setRange(0, m_intensityClusters.size() - 1);
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->syncToMax();
-    TransferFunction weightsTransferFunction(m_transferFunctionEditor->transferFunction());
+    TransferFunction weightsTransferFunction(m_clusterizedTransferFunction);
     weightsTransferFunction.clearOpacity();
-    weightsTransferFunction.addPointToOpacity(0.0, 0.0);
+    weightsTransferFunction.addPointToOpacity(zeroEnd, 0.0);
 
     if (m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton->isChecked()) // pesos uniformes
     {
         double weight = 1.0 / (m_intensityClusters.size() - 1);
 
-        for (int i = 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, weight);
+        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, weight);
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton->isChecked()) // pesos segons la distribució al volum
     {
-        const unsigned short *data = reinterpret_cast<unsigned short*>(m_volume->getImage()->GetScalarPointer());
-        int size = m_volume->getImage()->GetNumberOfPoints();
+        const unsigned short *data = reinterpret_cast<unsigned short*>(m_clusterizedVolume->getImage()->GetScalarPointer());
+        int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
         QVector<int> count(m_intensityClusters.size());
         int total = 0;
 
         for (int i = 0; i < size; i++)
         {
-            if (data[i] > 0)
+            if (data[i] > zeroEnd)
             {
                 count[data[i]]++;
                 total++;
             }
         }
 
-        for (int i = 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, static_cast<double>(count.at(i)) / total);
+        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, static_cast<double>(count.at(i)) / total);
+    }
+    else if (m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked())
+    {
+        // res
+    }
+    else if (m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton->isChecked())
+    {
+        TransferFunction currentWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
+        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, currentWeights.getOpacity(i));
     }
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsTransferFunction.simplify());
 }
 
 
-void QExperimental3DExtension::checkIntensities()
+void QExperimental3DExtension::checkData()
 {
-    if (!m_hasIntensity.isEmpty()) return;
+    if (m_intensityClusters.isEmpty() || !m_clusterHasData.isEmpty()) return;
 
-    const unsigned short *data = reinterpret_cast<unsigned short*>(m_volume->getImage()->GetScalarPointer());
-    int size = m_volume->getImage()->GetNumberOfPoints();
-    m_hasIntensity.fill(false, m_intensityClusters.size());
+    const unsigned short *data = reinterpret_cast<unsigned short*>(m_clusterizedVolume->getImage()->GetScalarPointer());
+    int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
+    m_clusterHasData.fill(false, m_intensityClusters.size());
 
-    for (int i = 0; i < size; i++) m_hasIntensity[data[i]] = true;
+    for (int i = 0; i < size; i++) m_clusterHasData[data[i]] = true;
 }
 
 
@@ -4652,7 +4747,7 @@ QVector<float> QExperimental3DExtension::getWeights() const
     for (int i = 0; i < weights.size(); i++)
     {
         float weight = weightsTransferFunction.getOpacity(i);
-        if (!m_hasIntensity.at(i)) weight = 0.0f;
+        if (!m_clusterHasData.at(i)) weight = 0.0f;
         weights[i] = weight;
         totalWeight += weight;
     }
@@ -4671,6 +4766,115 @@ QVector<float> QExperimental3DExtension::getWeights() const
     }
 
     return weights;
+}
+
+
+void QExperimental3DExtension::normalToClusterizedTransferFunction()
+{
+    if (m_intensityClusters.isEmpty()) return;
+
+    m_clusterizedTransferFunction.clear();
+
+    for (int i = 0; i < m_intensityClusters.size(); i++)
+    {
+        double x1 = m_intensityClusters[i].first();
+        double x2 = m_intensityClusters[i].last();
+        double x = (x1 + x2) / 2.0;
+
+        QColor color = m_normalTransferFunction.getColor(x);    // color del punt mig
+        double opacity = 0.0;
+
+        if (m_transferFunctionFromIntensityClusteringOpacityDefaultMinimumRadioButton->isChecked()) // l'opacitat serà la mínima de la funció per defecte
+        {
+            opacity = x1 / m_volume->getRangeMax();
+        }
+        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked())    // l'opacitat serà la mínima del rang
+        {
+            QList<double> points = m_normalTransferFunction.getPointsInInterval(x1, x2);
+            points.prepend(x1); points.append(x2);  // per si no hi són
+            opacity = 1.0;
+
+            for (int j = 0; j < points.size(); j++)
+            {
+                double a = m_normalTransferFunction.getOpacity(points.at(j));
+                if (a < opacity) opacity = a;
+            }
+        }
+        else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())   // l'opacitat serà la mitjana de l'interval
+        {
+            QList<double> points = m_normalTransferFunction.getPointsInInterval(x1, x2);
+            points.prepend(x1); points.append(x2);  // per si no hi són
+            opacity = 0.0;
+
+            for (int j = 1; j < points.size(); j++)
+            {
+                double a1 = m_normalTransferFunction.getOpacity(points.at(j - 1));
+                double a2 = m_normalTransferFunction.getOpacity(points.at(j));
+                opacity += (points.at(j) - points.at(j - 1)) * (a1 + a2) / 2.0;
+            }
+
+            opacity /= x2 - x1;
+
+            if (x1 == x2) opacity = m_normalTransferFunction.getOpacity(x); // cas especial
+        }
+
+        m_clusterizedTransferFunction.addPoint(i, color, opacity);
+    }
+}
+
+
+void QExperimental3DExtension::clusterizedToNormalTransferFunction()
+{
+    if (m_intensityClusters.isEmpty()) return;
+
+    m_normalTransferFunction.clear();
+
+    for (int i = 0; i < m_intensityClusters.size(); i++)
+    {
+        double x1 = m_intensityClusters[i].first();
+        double x2 = m_intensityClusters[i].last();
+        double x = (x1 + x2) / 2.0;
+
+        QColor color = m_clusterizedTransferFunction.getColor(i);
+        double opacity = m_clusterizedTransferFunction.getOpacity(i);
+
+        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) m_normalTransferFunction.addPoint(x, color, opacity);
+        else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
+        {
+            m_normalTransferFunction.addPoint(x1, color, opacity);
+            m_normalTransferFunction.addPoint(x2, color, opacity);
+        }
+    }
+}
+
+
+void QExperimental3DExtension::viewNormalVolume()
+{
+    if (!m_viewNormalVolumeRadioButton->isChecked()) m_viewNormalVolumeRadioButton->setChecked(true);
+    m_viewClusterizedVolume = false;
+    m_volume = m_normalVolume;
+    m_viewer->removeCurrentVolume();
+    m_viewer->setVolume(m_volume);
+    unsigned short max = m_volume->getRangeMax();
+    m_transferFunctionEditor->setRange(0, max);
+    m_transferFunctionEditor->syncToMax();
+    m_transferFunctionEditor->setTransferFunction(m_normalTransferFunction.normalize());
+    setTransferFunction();
+}
+
+
+void QExperimental3DExtension::viewClusterizedVolume()
+{
+    if (!m_viewClusterizedVolumeRadioButton->isChecked()) m_viewClusterizedVolumeRadioButton->setChecked(true);
+    m_viewClusterizedVolume = true;
+    m_volume = m_clusterizedVolume;
+    m_viewer->removeCurrentVolume();
+    m_viewer->setVolume(m_volume);
+    unsigned short max = m_volume->getRangeMax();
+    m_transferFunctionEditor->setRange(0, max);
+    m_transferFunctionEditor->syncToMax();
+    m_transferFunctionEditor->setTransferFunction(m_clusterizedTransferFunction.normalize());
+    setTransferFunction();
 }
 
 
