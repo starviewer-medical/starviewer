@@ -228,9 +228,9 @@ double Q3DViewer::getCurrentColorLevel()
     }
 }
 
-void Q3DViewer::setWindowLevel( double window , double level )
+void Q3DViewer::setWindowLevel(double window , double level)
 {
-    if( m_mainVolume )
+    if(m_mainVolume)
     {
         m_window = window;
         m_level = level;
@@ -239,88 +239,64 @@ void Q3DViewer::setWindowLevel( double window , double level )
         //DEBUG_LOG( QString( "Q3DViewer: new ww = %1, new wl = %2, shift = %3, lowlev = %4, highlev = %5" ).arg( window ).arg( level ).arg( m_shift ).arg( lowLevel ).arg( highLevel ) );
 
         double newScale = m_window / m_range;
-        double newShift = m_level - (m_window/2);
-        QMap<double,QColor> newColorMap;
-        QMap<double,QColor> colorMap = m_newTransferFunction->getColorMap();
-        QMap< double, QColor >::iterator itColor;
-
-        itColor = colorMap.begin();
-
-        while ( itColor != colorMap.end() )
-        {
-            newColorMap.insert( newScale*itColor.key() + newShift, itColor.value() );
-            itColor++;
-        }
-
-        QMap<double,double> newOpacityMap;
-        QMap<double,double> opacityMap = m_newTransferFunction->getOpacityMap();
-        QMap< double, double >::iterator itOpacity;
-
-        itOpacity = opacityMap.begin();
-
-        while ( itOpacity != opacityMap.end() )
-        {
-            newOpacityMap.insert( newScale*itOpacity.key() + newShift, itOpacity.value() );
-            itOpacity++;
-        }
+        double newShift = m_level - (m_window / 2.0);
+        bool pointInZero = false;
+        bool pointInRange = false;
 
         m_transferFunction->clear();
 
-        double key;
-        bool pointInZero = false;
-        bool pointInRange = false;
-        itColor = newColorMap.begin();
+        QList<double> colorPoints = m_newTransferFunction->getColorPoints();
 
-        while ( itColor != newColorMap.end() )
+        foreach (double x, colorPoints)
         {
-            if(itColor.key()<=0)
+            double newX = newScale * x + newShift;
+
+            if (newX <= 0.0)
             {
-                key = 0;
+                newX = 0.0;
                 pointInZero = true;
-            }else if(itColor.key()> m_range)
-            {
-                key = m_range;
-                pointInRange = true;
-            }else
-            {
-                key = itColor.key();
             }
-            m_transferFunction->addPointToColor( key, itColor.value() );
-            itColor++;
+            else if (newX > m_range)
+            {
+                newX = m_range;
+                pointInRange = true;
+            }
+
+            m_transferFunction->addPointToColor(newX, m_newTransferFunction->getColor(x));
         }
 
-        itOpacity = newOpacityMap.begin();
+        QList<double> opacityPoints = m_newTransferFunction->getOpacityPoints();
 
-        while ( itOpacity != newOpacityMap.end() )
+        foreach (double x, opacityPoints)
         {
-            if(itOpacity.key()<0)
+            double newX = newScale * x + newShift;
+
+            if (newX <= 0.0)
             {
-                key = 0;
+                newX = 0.0;
                 pointInZero = true;
-            }else if(itOpacity.key()> m_range)
-            {
-                key = m_range;
-                pointInRange = true;
-            }else
-            {
-                key = itOpacity.key();
             }
-            m_transferFunction->addPointToOpacity( key, itOpacity.value() );
-            itOpacity++;
+            else if (newX > m_range)
+            {
+                newX = m_range;
+                pointInRange = true;
+            }
+
+            m_transferFunction->addPointToOpacity(newX, m_newTransferFunction->getOpacity(x));
         }
 
         m_transferFunction->setNewRange(0, m_range);
 
-        if(!pointInZero)  m_transferFunction->addPointToOpacity( 0, 0.0 );
-        if(!pointInRange) m_transferFunction->addPointToOpacity( m_range, 0.0 );
+        if (!pointInZero) m_transferFunction->addPointToOpacity(0.0, 0.0);
+        if (!pointInRange) m_transferFunction->addPointToOpacity(m_range, 0.0);
 
         this->applyCurrentRenderingMethod();
-        emit windowLevelChanged( window , level );
-        emit transferFunctionChanged ();
+        emit windowLevelChanged(window, level);
+        emit transferFunctionChanged();
     }
     else
     {
-        DEBUG_LOG( "::setWindowLevel() : No tenim input " );
+        DEBUG_LOG("::setWindowLevel(): No tenim input");
     }
 }
 
