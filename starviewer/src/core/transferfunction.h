@@ -99,13 +99,9 @@ public:
 
     /// Retorna els punts x de color. Per accedir al valor d'un punt cal cridar getColor( x ).
     QList< double > getColorPoints() const;
-    /// Retorna el mapa de color.
-    QMap< double, QColor > getColorMap() const;
 
     /// Retorna els punts x d'opacitat. Per accedir al valor d'un punt cal cridar getOpacity( x ).
     QList< double > getOpacityPoints() const;
-    /// Retorna el mapa d'opacitat.
-    QMap< double, double > getOpacityMap() const;
 
     /// Retorna la funció de transferència de color en format VTK.
     vtkColorTransferFunction * getColorTransferFunction() const;

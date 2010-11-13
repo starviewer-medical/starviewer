@@ -188,19 +188,9 @@ QList< double > TransferFunction::getColorPoints() const
     return m_color.keys();
 }
 
-QMap< double, QColor > TransferFunction::getColorMap() const
-{
-    return m_color;
-}
-
 QList< double > TransferFunction::getOpacityPoints() const
 {
     return m_opacity.keys();
-}
-
-QMap< double, double > TransferFunction::getOpacityMap() const
-{
-    return m_opacity;
 }
 
 vtkColorTransferFunction * TransferFunction::getColorTransferFunction() const
