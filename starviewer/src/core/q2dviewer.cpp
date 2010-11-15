@@ -1065,7 +1065,7 @@ void Q2DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
     m_transferFunction = transferFunction;
     // Apliquem la funció de transferència sobre el window level mapper
-    m_windowLevelLUTMapper->SetLookupTable(m_transferFunction->getColorTransferFunction());
+    m_windowLevelLUTMapper->SetLookupTable(m_transferFunction->vtkColorTransferFunction());
 }
 
 void Q2DViewer::getCurrentWindowLevel(double wl[2])

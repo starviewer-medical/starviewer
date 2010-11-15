@@ -8,6 +8,7 @@
 
 #include "obscurancethread.h"
 
+#include <QColor>
 #include <QLinkedList>
 #include <QPair>
 #include <QStack>

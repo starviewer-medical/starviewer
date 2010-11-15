@@ -104,8 +104,8 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_transferFunction->addPointToColorRGB( 192.0, 0.0, 1.0, 0.0 );
     m_transferFunction->addPointToColorRGB( 255.0, 0.0, 0.2, 0.0 );
 
-    m_volumeProperty->SetColor( m_transferFunction->getColorTransferFunction() );
-    m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
+    m_volumeProperty->SetColor(m_transferFunction->vtkColorTransferFunction());
+    m_volumeProperty->SetScalarOpacity(m_transferFunction->vtkOpacityTransferFunction());
 
     m_ambientVoxelShader = new AmbientVoxelShader();
     m_directIlluminationVoxelShader = new DirectIlluminationVoxelShader();
@@ -533,8 +533,8 @@ void Q3DViewer::applyCurrentRenderingMethod()
 void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
 {
     m_transferFunction = transferFunction;
-    m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
-    m_volumeProperty->SetColor( m_transferFunction->getColorTransferFunction() );
+    m_volumeProperty->SetScalarOpacity(m_transferFunction->vtkOpacityTransferFunction());
+    m_volumeProperty->SetColor(m_transferFunction->vtkColorTransferFunction());
     m_ambientVoxelShader->setTransferFunction( *m_transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( *m_transferFunction );
 
@@ -778,8 +778,8 @@ void Q3DViewer::renderMIP3D()
     grayTransferFunction->AddSegment( 0 , 0.0 , m_range , 1.0 );
 
 //     m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
-    m_volumeProperty->SetScalarOpacity( mipTransferFunction.getOpacityTransferFunction() );
-    m_volumeProperty->SetColor( grayTransferFunction /*m_transferFunction->getColorTransferFunction()*/ );
+    m_volumeProperty->SetScalarOpacity(mipTransferFunction.vtkOpacityTransferFunction());
+    m_volumeProperty->SetColor( grayTransferFunction /*m_transferFunction->vtkColorTransferFunction()*/ );
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     grayTransferFunction->Delete();

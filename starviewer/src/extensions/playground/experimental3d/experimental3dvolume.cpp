@@ -270,8 +270,8 @@ void Experimental3DVolume::addObscurance(Obscurance *obscurance, double factor, 
 
 void Experimental3DVolume::setTransferFunction( const TransferFunction &transferFunction )
 {
-    m_property->SetColor( transferFunction.getColorTransferFunction() );
-    m_property->SetScalarOpacity( transferFunction.getOpacityTransferFunction() );
+    m_property->SetColor(transferFunction.vtkColorTransferFunction());
+    m_property->SetScalarOpacity(transferFunction.vtkOpacityTransferFunction());
     m_ambientVoxelShader->setTransferFunction( transferFunction );
     m_directIlluminationVoxelShader->setTransferFunction( transferFunction );
     m_whiteVoxelShader->setTransferFunction( transferFunction );
