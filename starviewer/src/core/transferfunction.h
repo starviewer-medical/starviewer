@@ -1,221 +1,163 @@
-/***************************************************************************
- *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.edu/GGG/index.html                                    *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
 #ifndef UDGTRANSFERFUNCTION_H
 #define UDGTRANSFERFUNCTION_H
 
-#include <QColor>
-#include <QMap>
 
-class vtkColorTransferFunction;
-class vtkPiecewiseFunction;
+#include "colortransferfunction.h"
+#include "opacitytransferfunction.h"
+
+
 class vtkLookupTable;
+
 
 namespace udg {
 
+
 /**
- * Encapsula les dades i la funcionalitat d'una funció de transferència.
- *
- * Permet definir funcions de transferència mitjançant una sèrie de punts que
- * estableixen una correspondència entre els valors de propietat i els colors i
- * opacitats. Internament, els valors de propietat es representen com a reals
- * positius, els colors com a QColors i les opacitats com a reals a l'interval
- * [0,1].
- *
- * \warning En cap dels mètodes d'aquesta classe no es fan comprovacions de
- * rang.
- *
- * Hi ha mètodes per treballar amb la part de color i la d'opacitat per separat
- * i mètodes per treballar-hi alhora. Es poden usar indistintament els dos modes
- * de treball amb el mateix objecte TransferFunction.
- *
- * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
+    Representa una funció de transferència f: X -> (C,O), on X és el conjunt de valors de propietat (reals) i (C,O) el conjunt de parelles de color (QColor) i opacitat (real en el rang [0,1]).
+    En realitat consisteix en una funció de transferència de color fc: X -> C i una d'opacitat fo: X -> O.
+    Hi ha uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper.
+    Es pot treballar amb el color i l'opacitat per separat (opció recomanada) o bé junts. La funció de transferència també té un nom.
  */
-class TransferFunction
-{
+class TransferFunction {
+
 public:
-    /// Construeix una funció de transferència buida (sense punts).
+
+    /// Construeix una funció de transferència buida, sense cap punt i sense nom.
     TransferFunction();
-    TransferFunction(const TransferFunction &transferFunction);
-    // Constructor a partir d'un objecte vtkLookupTable
+    /// Construeix una funció de transferència a partir d'un objecte vtkLookupTable.
     TransferFunction(vtkLookupTable *lookupTable);
-    ~TransferFunction();
 
-    /// Retorna el nom de la funció de transferència.
-    const QString & name() const;
-    /// Assigna un nom a la funció de transferència.
-    void setName( const QString & name );
+    bool operator ==(const TransferFunction &transferFunction) const;
 
-    /// Retorna el color i l'opacitat corresponents a \a x en un QColor RGBA.
-    QColor get( double x ) const;
+    /// Retorna el nom.
+    const QString& name() const;
+    /// Assigna el nom.
+    void setName(const QString &name);
 
-    /// Retorna el color corresponent a \a x.
-    QColor getColor( double x ) const;
-
-    /// Retorna l'opacitat corresponent a \a x.
-    double getOpacity( double x ) const;
-
-    /// Afegeix o modifica un punt de color i d'opacitat mitjançant un QColor RGBA.
-    void addPoint( double x, const QColor & rgba );
-
-    /// Afegeix o modifica un punt de color i d'opacitat.
-    void addPoint( double x, const QColor & color, double opacity );
-
-    /// Esborra un punt de color i d'opacitat (si existeix).
-    void removePoint( double x );
-
-    /// Afegeix o modifica un punt de color.
-    void addPointToColor( double x, const QColor & color );
-
-    /// Afegeix o modifica un punt de color, en format RGB enter.
-    void addPointToColorRGB( double x, int r, int g, int b );
-
-    /// Afegeix o modifica un punt de color, en format RGB real.
-    void addPointToColorRGB( double x, double r, double g, double b );
-
-    /// Esborra un punt de color (si existeix).
-    void removePointFromColor( double x );
-
-    /// Afegeix o modifica un punt d'opacitat.
-    void addPointToOpacity( double x, double opacity );
-
-    /// Esborra un punt d'opacitat (si existeix).
-    void removePointFromOpacity( double x );
-
-    /// Esborra tots els punts de color i d'opacitat.
+    /// Retorna la parella de color i opacitat corresponent al valor de propietat x.
+    /// \note L'opacitat queda encapsulada al canal alfa del QColor i amb això perd precisió. Per evitar això es recomana accedir al color i l'opacitat per separat.
+    QColor get(double x) const;
+    /// Retorna el color corresponent al valor de propietat x.
+    QColor getColor(double x) const;
+    /// Retorna l'opacitat corresponent al valor de propietat x.
+    double getOpacity(double x) const;
+    /// Defineix explícitament el punt (x,((r,g,b),a)).
+    /// \note L'opacitat queda encapsulada al canal alfa del QColor i amb això perd precisió. Per evitar això es recomana afegir el color i l'opacitat amb paràmetres separats.
+    void addPoint(double x, const QColor &rgba);
+    /// Defineix explícitament el punt (x,(color,opacity)).
+    void set(double x, const QColor &color, double opacity);
+    /// Defineix explícitament el punt (x,(color,opacity)).
+    void addPoint(double x, const QColor &color, double opacity);
+    /// Defineix explícitament el punt (x,((red,green,blue),opacity)).
+    void set(double x, int red, int green, int blue, double opacity);
+    /// Defineix explícitament el punt (x,((red,green,blue),opacity)).
+    void set(double x, double red, double green, double blue, double opacity);
+    /// Defineix explícitament el punt de color (x,color).
+    void setColor(double x, const QColor &color);
+    /// Defineix explícitament el punt de color (x,color).
+    void addPointToColor(double x, const QColor &color);
+    /// Defineix explícitament el punt de color (x,(red,green,blue)).
+    void setColor(double x, int red, int green, int blue);
+    /// Defineix explícitament el punt de color (x,(red,green,blue)).
+    void addPointToColorRGB(double x, int red, int green, int blue);
+    /// Defineix explícitament el punt de color (x,(red,green,blue)).
+    void setColor(double x, double red, double green, double blue);
+    /// Defineix explícitament el punt de color (x,(red,green,blue)).
+    void addPointToColorRGB(double x, double red, double green, double blue);
+    /// Defineix explícitament el punt d'opacitat (x,opacity).
+    void setOpacity(double x, double opacity);
+    /// Defineix explícitament el punt d'opacitat (x,opacity).
+    void addPointToOpacity(double x, double opacity);
+    /// Esborra la definició explícita dels punts de color (x,c) i opacitat (x,o) si existeixen.
+    void unset(double x);
+    /// Esborra la definició explícita dels punts de color (x,c) i opacitat (x,o) si existeixen.
+    void removePoint(double x);
+    /// Esborra la definició explícita del punt de color (x,c) si existeix.
+    void unsetColor(double x);
+    /// Esborra la definició explícita del punt de color (x,c) si existeix.
+    void removePointFromColor(double x);
+    /// Esborra la definició explícita del punt d'opacitat (x,o) si existeix.
+    void unsetOpacity(double x);
+    /// Esborra la definició explícita del punt d'opacitat (x,o) si existeix.
+    void removePointFromOpacity(double x);
+    /// Esborra tots els punts definits explícitament.
     void clear();
-
-    /// Esborra tots els punts de color.
+    /// Esborra tots els punts de color definits explícitament.
     void clearColor();
-
-    /// Esborra tots els punts d'opacitat.
+    /// Esborra tots els punts d'opacitat definits explícitament.
     void clearOpacity();
 
-    /// Retorna els punts x de color i d'opacitat. Per accedir al valor d'un punt cal cridar get(x).
+    /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) i opacitat (x,o) definits explícitament.
+    QList<double>& keys() const;
+    /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) i opacitat (x,o) definits explícitament.
     QList<double>& getPoints() const;
-
-    /// Retorna els punts x de color. Per accedir al valor d'un punt cal cridar getColor( x ).
-    QList< double > getColorPoints() const;
-
-    /// Retorna els punts x d'opacitat. Per accedir al valor d'un punt cal cridar getOpacity( x ).
-    QList< double > getOpacityPoints() const;
-
-    /// Retorna la funció de transferència de color en format VTK.
-    vtkColorTransferFunction * getColorTransferFunction() const;
-
-    /// Retorna la funció de transferència d'opacitat en format VTK.
-    vtkPiecewiseFunction * getOpacityTransferFunction() const;
-
-    /// Estableix un nou rang. Elimina els punts de fora de l'interval i que els extrems de l'interval estiguin definits.
-    bool setNewRange( double min, double max );
-
-    /// Escriu la funció de transferència a la sortida estàndard (per a debug).
-    void print() const;
-
-    TransferFunction& operator =(const TransferFunction &transferFunction);
-    bool operator ==( const TransferFunction & transferFunction ) const;
-
-    QVariant toVariant() const;
-    static TransferFunction fromVariant( const QVariant &variant );
-
-    /// Crea una nova funció de transferència resultat de passar aquesta a un rang [0, 1] des de [minimum, maximum].
-    TransferFunction to01( double minimum, double maximum ) const;
-
-    /// Retorna els punts x a l'interval [begin, end].
+    /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat (x,o) definits explícitament dins de l'interval [begin, end].
+    QList<double> keys(double begin, double end) const;
+    /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat (x,o) definits explícitament dins de l'interval [begin, end].
     QList<double> getPointsInInterval(double begin, double end) const;
+    /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat (x,o) definits explícitament dins de l'interval [x-distance, x+distance].
+    QList<double> keysNear(double x, double distance) const;
+    /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat (x,o) definits explícitament dins de l'interval [x-distance, x+distance].
+    QList<double> getPointsNear(double x, double distance) const;
+    /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) definits explícitament.
+    QList<double> colorKeys() const;
+    /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) definits explícitament.
+    QList<double> getColorPoints() const;
+    /// Retorna la llista de valors de propietat x de tots els punts d'opacitat (x,o) definits explícitament.
+    QList<double> opacityKeys() const;
+    /// Retorna la llista de valors de propietat x de tots els punts d'opacitat (x,o) definits explícitament.
+    QList<double> getOpacityPoints() const;
 
-    /// Retorna els punts x a l'interval [x-distance, x+distance].
-    QList<double> getPointsNear( double x, double distance ) const;
-
-    /// Retorna una funció de transferència equivalent on hi ha els mateixos punts de color que d'opacitat (és a dir, l'opacitat no està definida per un x que el color no, i viceversa).
+    /// Retalla la funció de manera que només tingui punts explícits en el rang [x1, x2] i tingui punts explícits a x1 i x2.
+    void trim(double x1, double x2);
+    /// Retalla la funció de manera que només tingui punts explícits en el rang [x1, x2] i tingui punts explícits a x1 i x2.
+    void setNewRange(double x1, double x2);
+    /// Retorna una nova funció de transferència resultat d'escalar i desplaçar aquesta de manera que el rang [x1, x2] passi a ser [0, 1].
+    TransferFunction to01(double x1, double x2) const;
+    /// Retorna una versió simplificada i equivalent de la funció esborrant els punts de color (x,c) i opacitat (x,o) que es poden obtenir per interpolació o extrapolació.
+    TransferFunction simplify() const;
+    /// Retorna una versió equivalent de la funció on tots els punts definits explícitament són ho són per al color i l'opacitat, és a dir, tots són (x,(c,o)).
     TransferFunction normalize() const;
 
-    /// Retorna una funció de transferència equivalent amb el mínim nombre de punts definits (és a dir, si hi ha una sèrie de punts que defineixen una línia, es queda només amb els extrems).
-    TransferFunction simplify() const;
+    /// Retorna la funció de transferència de color.
+    const ColorTransferFunction& colorTransferFunction() const;
+    /// Assigna la funció de transferència de color.
+    void setColorTransferFunction(const ColorTransferFunction &colorTransferFunction);
+    /// Retorna la funció de transferència d'opacitat.
+    const OpacityTransferFunction& opacityTransferFunction() const;
+    /// Assigna la funció de transferència d'opacitat.
+    void setOpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction);
+
+    /// Retorna la funció de transferència de color en format VTK.
+    ::vtkColorTransferFunction* vtkColorTransferFunction() const;
+    /// Retorna la funció de transferència d'opacitat en format VTK.
+    vtkPiecewiseFunction* vtkOpacityTransferFunction() const;
+
+    /// Retorna la funció representada en forma d'string.
+    QString toString() const;
+
+    /// Retorna la funció representada en forma de QVariant.
+    QVariant toVariant() const;
+    /// Retorna la funció representada per variant.
+    static TransferFunction fromVariant(const QVariant &variant);
 
 private:
-    /// Nom de la funció de transferència.
-    QString m_name;
 
-    /// Punts de color RGB.
-    QMap< double, QColor > m_color;
+    /// Actualitza m_keys si hi ha hagut canvis a la funció.
+    void updateKeys() const;
 
-    /// Punts d'opacitat A.
-    QMap< double, double > m_opacity;
+private:
 
-    /// X amb un color o opacitat definits explícitament. S'actualitza només quan es necessita.
-    mutable QList<double> m_definedX;
-
-    /// Indica si hi ha hagut canvis a la funció des de l'últim cop que s'ha actualitzat m_rgba.
+    /// Funció de transferència de color.
+    ColorTransferFunction m_color;
+    /// Funció de transferència d'opacitat.
+    OpacityTransferFunction m_opacity;
+    /// Llista de valors de propietat x de tots els punts de color (x,c) i opacitat (x,o) definits explícitament.
+    mutable QList<double> m_keys;
+    /// Indica si hi ha hagut canvis a la funció des de l'últim cop que s'ha actualitzat m_keys.
     mutable bool m_changed;
 
-    /// Funció de transferència de color. S'actualitza només quan es necessita.
-    mutable vtkColorTransferFunction * m_colorTransferFunction;
-
-    /// Indica si hi ha hagut canvis de color des de l'últim cop que s'ha actualitzat m_colorTransferFunction.
-    mutable bool m_colorChanged;
-
-    /// Funció de transferència d'opacitat. S'actualitza només quan es necessita.
-    mutable vtkPiecewiseFunction * m_opacityTransferFunction;
-
-    /// Indica si hi ha hagut canvis d'opacitat des de l'últim cop que s'ha actualitzat m_opacityTransferFunction.
-    mutable bool m_opacityChanged;
-
 };
-
-
-inline QColor TransferFunction::get( double x ) const
-{
-    QColor rgba = getColor( x );
-    rgba.setAlphaF( getOpacity( x ) );
-    return rgba;
-}
-
-inline QColor TransferFunction::getColor( double x ) const
-{
-    if ( m_color.isEmpty() )
-        return Qt::black;
-
-    QMap<double, QColor>::const_iterator lowerBound = m_color.lowerBound( x );
-
-    if ( lowerBound == m_color.end() )  // > últim
-        return ( --lowerBound ).value();
-
-    if ( lowerBound.key() == x || lowerBound == m_color.begin() )   // exacte o < primer
-        return lowerBound.value();
-
-    QMap<double, QColor>::const_iterator a = lowerBound - 1, b = lowerBound;
-    double alpha = ( x - a.key() ) / ( b.key() - a.key() );
-    QColor aValue = a.value(), bValue = b.value();
-    QColor color;
-    color.setRedF( aValue.redF() + alpha * ( bValue.redF() - aValue.redF() ) );
-    color.setGreenF( aValue.greenF() + alpha * ( bValue.greenF() - aValue.greenF() ) );
-    color.setBlueF( aValue.blueF() + alpha * ( bValue.blueF() - aValue.blueF() ) );
-
-    return color;
-}
-
-inline double TransferFunction::getOpacity( double x ) const
-{
-    if ( m_opacity.isEmpty() )
-        return 0.0;
-
-    QMap<double, double>::const_iterator lowerBound = m_opacity.lowerBound( x );
-
-    if ( lowerBound == m_opacity.end() )    // > últim
-        return ( --lowerBound ).value();
-
-    if ( lowerBound.key() == x || lowerBound == m_opacity.begin() ) // exacte o < primer
-        return lowerBound.value();
-
-    QMap<double, double>::const_iterator a = lowerBound - 1, b = lowerBound;
-    double alpha = ( x - a.key() ) / ( b.key() - a.key() );
-
-    return a.value() + alpha * ( b.value() - a.value() );
-}
 
 
 }

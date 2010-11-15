@@ -4,6 +4,7 @@
 
 #include <QObject>
 
+#include <QColor>
 #include <QPair>
 
 #include "transferfunction.h"

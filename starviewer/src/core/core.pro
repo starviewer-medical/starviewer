@@ -16,7 +16,7 @@ FORMS += qlogviewerbase.ui \
     qthickslabwidgetbase.ui \
     q2dviewerwidgetbase.ui \
     qreleasenotesbase.ui \
-    qdicomdumpbrowserbase.ui 
+    qdicomdumpbrowserbase.ui
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -208,8 +208,8 @@ HEADERS += extensionfactory.h \
     extractimagetoolrepresentation.h \
     superimposeimagetoolrepresentation.h \
     lineoutliner.h \
-    polylineroioutliner.h\
-    polylineangleoutliner.h\
+    polylineroioutliner.h \
+    polylineangleoutliner.h \
     ellipseoutliner.h \
     outliner.h \
     settings.h \
@@ -241,12 +241,15 @@ HEADERS += extensionfactory.h \
     linepathtool.h \
     qreleasenotes.h \
     qdicomdumpbrowser.h \
-    applicationversionchecker.h\
+    applicationversionchecker.h \
     filter.h \
     filterpipeline.h \
     vtkthresholdfilter.h \
     dynamicmatrix.h \
-    screenmanager.h 
+    screenmanager.h \
+    colortransferfunction.h \
+    transferfunctiontemplate.h \
+    opacitytransferfunction.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -417,8 +420,8 @@ SOURCES += extensionmediator.cpp \
     extractimagetoolrepresentation.cpp \
     superimposeimagetoolrepresentation.cpp \
     lineoutliner.cpp \
-    polylineroioutliner.cpp\
-    polylineangleoutliner.cpp\
+    polylineroioutliner.cpp \
+    polylineangleoutliner.cpp \
     ellipseoutliner.cpp \
     outliner.cpp \
     settings.cpp \
@@ -447,12 +450,14 @@ SOURCES += extensionmediator.cpp \
     linepathtool.cpp \
     qreleasenotes.cpp \
     qdicomdumpbrowser.cpp \
-    applicationversionchecker.cpp\
+    applicationversionchecker.cpp \
     filter.cpp \
     filterpipeline.cpp \
     vtkthresholdfilter.cpp \
     dynamicmatrix.cpp \
-    screenmanager.cpp 
+    screenmanager.cpp \
+    colortransferfunction.cpp \
+    opacitytransferfunction.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
@@ -467,4 +472,3 @@ QT += xml \
     network \
     webkit \
     script
-

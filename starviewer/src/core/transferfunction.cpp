@@ -1,452 +1,451 @@
-/***************************************************************************
- *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.edu/GGG/index.html                                    *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
 #include "transferfunction.h"
-#include "logging.h"
 
+#include <QColor>
 #include <QVariant>
 
-// vtk
-#include <vtkColorTransferFunction.h>
-#include <vtkPiecewiseFunction.h>
 #include <vtkLookupTable.h>
+
 
 namespace udg {
 
+
 TransferFunction::TransferFunction()
+    : m_changed(true)
 {
-    m_changed = m_colorChanged = m_opacityChanged = true;
-    m_colorTransferFunction = 0;
-    m_opacityTransferFunction = 0;
 }
 
-TransferFunction::TransferFunction(const TransferFunction &transferFunction)
-{
-    m_name = transferFunction.name();
-    m_color = transferFunction.m_color;
-    m_opacity = transferFunction.m_opacity;
-
-    m_changed = transferFunction.m_changed;
-    if (!m_changed) m_definedX = transferFunction.m_definedX;
-
-    m_colorTransferFunction = 0;
-    m_opacityTransferFunction = 0;
-    m_colorChanged = m_opacityChanged = true;
-}
 
 TransferFunction::TransferFunction(vtkLookupTable *lookupTable)
+    : m_changed(true)
 {
-    m_colorTransferFunction = 0;
-    m_opacityTransferFunction = 0;
-    
-    if (lookupTable)
+    Q_ASSERT(lookupTable);
+
+    // Transformem la vtkLookupTable al nostre format
+    double range[2];
+    lookupTable->GetTableRange(range);
+
+    // Calculem quina és la diferència entre valor i valor de la taula
+    double step = (range[1] - range[0]) / lookupTable->GetNumberOfTableValues();
+
+    // Recorrem la vtkLookupTable i inserim els valors al nostre format
+    for (double value = range[0]; value < range[1]; value += step)
     {
-        // Transformem la vtkLookupTable al nostre format
-        double range[2];
-        lookupTable->GetTableRange(range);
-        
-        // Calculem quina és la diferència entre valor i valor de la taula
-        double step = (range[1] - range[0]) / (double)lookupTable->GetNumberOfTableValues();
-        
-        // Recorrem la vtkLookupTable i inserim els valors al nostre format
-        for (double value = range[0]; value < range[1]; value += step)
-        {
-            double rgb[3];
-            double opacity;
-            lookupTable->GetColor(value, rgb);
-            opacity = lookupTable->GetOpacity(value);
-            addPointToColorRGB(value, rgb[0], rgb[1], rgb[2]);
-            addPointToOpacity(value, opacity);
-        }
-    }
-    else
-    {
-        DEBUG_LOG("No es pot construir la transfer function a través d'un objecte nul de vtkLookupTable");
-        m_changed = m_colorChanged = m_opacityChanged = true;
+        double rgb[3];
+        double opacity;
+        lookupTable->GetColor(value, rgb);
+        opacity = lookupTable->GetOpacity(value);
+        m_color.set(value, rgb[0], rgb[1], rgb[2]);
+        m_opacity.set(value, opacity);
     }
 }
 
-TransferFunction::~TransferFunction()
+
+bool TransferFunction::operator ==(const TransferFunction &transferFunction) const
 {
-    m_definedX.clear(); /// \todo en teoria no cal, però sense això peta (???!!!)
-    if (m_colorTransferFunction) m_colorTransferFunction->Delete();
-    if (m_opacityTransferFunction) m_opacityTransferFunction->Delete();
+    return m_color == transferFunction.m_color && m_opacity == transferFunction.m_opacity;
 }
 
-const QString & TransferFunction::name() const
+
+const QString& TransferFunction::name() const
 {
-    return m_name;
+    return m_color.name();
 }
 
-void TransferFunction::setName( const QString & name )
+
+void TransferFunction::setName(const QString &name)
 {
-    m_name = name;
+    m_color.setName(name);
+    m_opacity.setName(name);
 }
 
-void TransferFunction::addPoint( double x, const QColor & rgba )
+
+QColor TransferFunction::get(double x) const
 {
-    m_color[x] = rgba;
-    m_opacity[x] = rgba.alphaF();
-    m_changed = m_colorChanged = m_opacityChanged = true;
+    QColor rgba = m_color.get(x);
+    rgba.setAlphaF(m_opacity.get(x));
+    return rgba;
 }
 
-void TransferFunction::addPoint( double x, const QColor & color, double opacity )
+
+QColor TransferFunction::getColor(double x) const
 {
-    m_color[x] = color;
-    m_opacity[x] = opacity;
-    m_changed = m_colorChanged = m_opacityChanged = true;
+    return m_color.get(x);
 }
 
-void TransferFunction::removePoint( double x )
+
+double TransferFunction::getOpacity(double x) const
 {
-    m_color.remove( x );
-    m_opacity.remove( x );
-    m_changed = m_colorChanged = m_opacityChanged = true;
+    return m_opacity.get(x);
 }
 
-void TransferFunction::addPointToColor( double x, const QColor & color )
+
+void TransferFunction::addPoint(double x, const QColor &rgba)
 {
-    m_color[x] = color;
-    m_changed = m_colorChanged = true;
+    m_color.set(x, rgba);
+    m_opacity.set(x, rgba.alphaF());
+    m_changed = true;
 }
 
-void TransferFunction::addPointToColorRGB( double x, int r, int g, int b )
+
+void TransferFunction::set(double x, const QColor &color, double opacity)
 {
-    m_color[x] = QColor( r, g, b );
-    m_changed = m_colorChanged = true;
+    m_color.set(x, color);
+    m_opacity.set(x, opacity);
+    m_changed = true;
 }
 
-void TransferFunction::addPointToColorRGB( double x, double r, double g, double b )
+
+void TransferFunction::addPoint(double x, const QColor &color, double opacity)
 {
-    QColor color;
-    color.setRgbF( r, g, b );
-    m_color[x] = color;
-    m_changed = m_colorChanged = true;
+    set(x, color, opacity);
 }
 
-void TransferFunction::removePointFromColor( double x )
+
+void TransferFunction::set(double x, int red, int green, int blue, double opacity)
 {
-    m_color.remove( x );
-    m_changed = m_colorChanged = true;
+    m_color.set(x, red, green, blue);
+    m_opacity.set(x, opacity);
+    m_changed = true;
 }
 
-void TransferFunction::addPointToOpacity( double x, double opacity )
+
+void TransferFunction::set(double x, double red, double green, double blue, double opacity)
 {
-    m_opacity[x] = opacity;
-    m_changed = m_opacityChanged = true;
+    m_color.set(x, red, green, blue);
+    m_opacity.set(x, opacity);
+    m_changed = true;
 }
 
-void TransferFunction::removePointFromOpacity( double x )
+
+void TransferFunction::setColor(double x, const QColor &color)
 {
-    m_opacity.remove( x );
-    m_changed = m_opacityChanged = true;
+    m_color.set(x, color);
+    m_changed = true;
 }
+
+
+void TransferFunction::addPointToColor(double x, const QColor &color)
+{
+    setColor(x, color);
+}
+
+
+void TransferFunction::setColor(double x, int red, int green, int blue)
+{
+    m_color.set(x, red, green, blue);
+    m_changed = true;
+}
+
+
+void TransferFunction::addPointToColorRGB(double x, int red, int green, int blue)
+{
+    setColor(x, red, green, blue);
+}
+
+
+void TransferFunction::setColor(double x, double red, double green, double blue)
+{
+    m_color.set(x, red, green, blue);
+    m_changed = true;
+}
+
+
+void TransferFunction::addPointToColorRGB(double x, double red, double green, double blue)
+{
+    setColor(x, red, green, blue);
+}
+
+
+void TransferFunction::setOpacity(double x, double opacity)
+{
+    m_opacity.set(x, opacity);
+    m_changed = true;
+}
+
+
+void TransferFunction::addPointToOpacity(double x, double opacity)
+{
+    setOpacity(x, opacity);
+}
+
+
+void TransferFunction::unset(double x)
+{
+    m_color.unset(x);
+    m_opacity.unset(x);
+    m_changed = true;
+}
+
+
+void TransferFunction::removePoint(double x)
+{
+    unset(x);
+}
+
+
+void TransferFunction::unsetColor(double x)
+{
+    m_color.unset(x);
+    m_changed = true;
+}
+
+
+void TransferFunction::removePointFromColor(double x)
+{
+    unsetColor(x);
+}
+
+
+void TransferFunction::unsetOpacity(double x)
+{
+    m_opacity.unset(x);
+    m_changed = true;
+}
+
+
+void TransferFunction::removePointFromOpacity(double x)
+{
+    unsetOpacity(x);
+}
+
 
 void TransferFunction::clear()
 {
     m_color.clear();
     m_opacity.clear();
-    m_changed = m_colorChanged = m_opacityChanged = true;
+    m_changed = true;
 }
+
 
 void TransferFunction::clearColor()
 {
     m_color.clear();
-    m_changed = m_colorChanged = true;
+    m_changed = true;
 }
+
 
 void TransferFunction::clearOpacity()
 {
     m_opacity.clear();
-    m_changed = m_opacityChanged = true;
+    m_changed = true;
 }
+
+
+QList<double>& TransferFunction::keys() const
+{
+    updateKeys();
+    return m_keys;
+}
+
 
 QList<double>& TransferFunction::getPoints() const
 {
-    if (m_changed)
-    {
-        m_definedX = m_color.keys();
-        m_definedX << m_opacity.keys();
-        qSort(m_definedX);
-
-        for (int i = 0; i < m_definedX.size() - 1; i++)
-        {
-            if (m_definedX.at(i) == m_definedX.at(i+1)) m_definedX.removeAt(i+1);
-        }
-
-        m_changed = false;
-    }
-
-    return m_definedX;
+    return keys();
 }
 
-QList< double > TransferFunction::getColorPoints() const
+
+QList<double> TransferFunction::keys(double begin, double end) const
 {
-    return m_color.keys();
-}
+    Q_ASSERT(!MathTools::isNaN(begin));
+    Q_ASSERT(!MathTools::isNaN(end));
+    Q_ASSERT(begin <= end);
 
-QList< double > TransferFunction::getOpacityPoints() const
-{
-    return m_opacity.keys();
-}
+    updateKeys();
 
-vtkColorTransferFunction * TransferFunction::getColorTransferFunction() const
-{
-    if ( m_colorChanged )
-    {
-        if ( !m_colorTransferFunction )
-            m_colorTransferFunction = vtkColorTransferFunction::New();
+    QList<double>::const_iterator lowerBound = qLowerBound(m_keys, begin);
+    QList<double>::const_iterator itEnd = m_keys.constEnd();
+    QList<double> keys;
 
-        m_colorTransferFunction->RemoveAllPoints();
+    while (lowerBound != itEnd && *lowerBound <= end) keys << *(lowerBound++);
 
-        QMapIterator< double, QColor > it( m_color );
-
-        while ( it.hasNext() )
-        {
-            it.next();
-            m_colorTransferFunction->AddRGBPoint( it.key(), it.value().redF(), it.value().greenF(), it.value().blueF() );
-        }
-
-        m_colorChanged = false;
-    }
-
-    return m_colorTransferFunction;
-}
-
-vtkPiecewiseFunction * TransferFunction::getOpacityTransferFunction() const
-{
-    if ( m_opacityChanged )
-    {
-        if ( !m_opacityTransferFunction )
-            m_opacityTransferFunction = vtkPiecewiseFunction::New();
-
-        m_opacityTransferFunction->RemoveAllPoints();
-
-        QMapIterator< double, double > it( m_opacity );
-
-        while ( it.hasNext() )
-        {
-            it.next();
-            m_opacityTransferFunction->AddPoint( it.key(), it.value() );
-        }
-
-        m_opacityChanged = false;
-    }
-
-    return m_opacityTransferFunction;
-}
-
-bool TransferFunction::setNewRange( double min, double max )
-{
-    // Primer afegim els extrems. Si ja existeixen es quedarà igual.
-    this->addPoint( min, this->get( min ) );
-    this->addPoint( max, this->get( max ) );
-
-    // Després eliminem els punts fora del rang.
-
-    QMutableMapIterator<double, QColor> itc( m_color );
-    while ( itc.hasNext() )
-    {
-        itc.next();
-        if ( itc.key() < min ) this->removePointFromColor( itc.key() );
-        else break;
-    }
-    itc.toBack();
-    while ( itc.hasPrevious() )
-    {
-        itc.previous();
-        if ( itc.key() > max ) this->removePointFromColor( itc.key() );
-        else break;
-    }
-
-    QMutableMapIterator<double, double> ito( m_opacity );
-    while ( ito.hasNext() )
-    {
-        ito.next();
-        if ( ito.key() < min ) this->removePointFromOpacity( ito.key() );
-        else break;
-    }
-    ito.toBack();
-    while ( ito.hasPrevious() )
-    {
-        ito.previous();
-        if ( ito.key() > max ) this->removePointFromOpacity( ito.key() );
-        else break;
-    }
-
-    m_changed = m_colorChanged = m_opacityChanged = true;
-
-	return true;
-}
-
-void TransferFunction::print() const
-{
-    DEBUG_LOG( "Color:" );
-    QMapIterator< double, QColor > itc( m_color );
-    while ( itc.hasNext() )
-    {
-        itc.next();
-        DEBUG_LOG( qPrintable( QString( "    x = %1    rgb = (%2, %3, %4)" ).arg( itc.key() )
-                  .arg( itc.value().redF() ).arg( itc.value().greenF() ).arg( itc.value().blueF() ) ) );
-    }
-
-    DEBUG_LOG( "Opacity:" );
-    QMapIterator< double, double > ito( m_opacity );
-    while ( ito.hasNext() )
-    {
-        ito.next();
-        DEBUG_LOG( qPrintable( QString( "    x = %1    opacity = %2" ).arg( ito.key() ).arg( ito.value() ) ) );
-    }
-}
-
-TransferFunction& TransferFunction::operator =(const TransferFunction &transferFunction)
-{
-    m_name = transferFunction.m_name;
-    m_color = transferFunction.m_color;
-    m_opacity = transferFunction.m_opacity;
-
-    m_changed = transferFunction.m_changed;
-    if (!m_changed) m_definedX = transferFunction.m_definedX;
-
-    m_colorChanged = m_opacityChanged = true;
-
-    return *this;
-}
-
-bool TransferFunction::operator ==( const TransferFunction & transferFunction ) const
-{
-    return m_name == transferFunction.m_name && m_color == transferFunction.m_color && m_opacity == transferFunction.m_opacity;
-}
-
-QVariant TransferFunction::toVariant() const
-{
-    QMap<QString, QVariant> color;
-    QMapIterator<double, QColor> itc( m_color );
-    while ( itc.hasNext() )
-    {
-        itc.next();
-        color[QString::number( itc.key() )] = itc.value().rgba();
-    }
-
-    QMap<QString, QVariant> opacity;
-    QMapIterator<double, double> ito( m_opacity );
-    while ( ito.hasNext() )
-    {
-        ito.next();
-        opacity[QString::number( ito.key() )] = ito.value();
-    }
-
-    QMap<QString, QVariant> map;
-    map["name"] = m_name;
-    map["color"] = color;
-    map["opacity"] = opacity;
-
-    return map;
-}
-
-TransferFunction TransferFunction::fromVariant( const QVariant &variant )
-{
-    TransferFunction transferFunction;
-    QMap<QString, QVariant> map = variant.toMap();
-
-    transferFunction.setName( map["name"].toString() );
-
-    QMap<QString, QVariant> color = map["color"].toMap();
-    QMapIterator<QString, QVariant> itc( color );
-    while ( itc.hasNext() )
-    {
-        itc.next();
-        transferFunction.addPointToColor( itc.key().toDouble(), itc.value().toUInt() );
-    }
-
-    QMap<QString, QVariant> opacity = map["opacity"].toMap();
-    QMapIterator<QString, QVariant> ito( opacity );
-    while ( ito.hasNext() )
-    {
-        ito.next();
-        transferFunction.addPointToOpacity( ito.key().toDouble(), ito.value().toDouble() );
-    }
-
-    return transferFunction;
-}
-
-TransferFunction TransferFunction::to01( double minimum, double maximum ) const
-{
-    double shift = -minimum, scale = 1.0 / ( maximum - minimum );
-    TransferFunction transferFunction01;
-    QList<double> points = this->getPoints();
-
-    foreach ( double x, points ) transferFunction01.addPoint( ( x + shift ) * scale, this->get( x ) );
-
-    return transferFunction01;
+    return keys;
 }
 
 
 QList<double> TransferFunction::getPointsInInterval(double begin, double end) const
 {
-    getPoints();    // per actualitzar m_definedX
-
-    QList<double>::const_iterator lowerBound = qLowerBound(m_definedX, begin);
-    QList<double>::const_iterator itEnd = m_definedX.constEnd();
-    QList<double> pointsInInterval;
-
-    while (lowerBound != itEnd && *lowerBound <= end) pointsInInterval << *(lowerBound++);
-
-    return pointsInInterval;
+    return keys(begin, end);
 }
 
 
-QList<double> TransferFunction::getPointsNear( double x, double distance ) const
+QList<double> TransferFunction::keysNear(double x, double distance) const
 {
-    return getPointsInInterval( x - distance, x + distance );
+    Q_ASSERT(!MathTools::isNaN(x));
+    Q_ASSERT(!MathTools::isNaN(distance));
+    Q_ASSERT(distance >= 0.0);
+    return keys(x - distance, x + distance);
 }
 
 
-TransferFunction TransferFunction::normalize() const
+QList<double> TransferFunction::getPointsNear(double x, double distance) const
 {
-    getPoints();    // per actualitzar m_definedX
+    return keysNear(x, distance);
+}
 
-    TransferFunction normalized;
-    QListIterator<double> it(m_definedX);
 
-    while (it.hasNext())
-    {
-        double x = it.next();
-        normalized.addPoint(x, getColor(x), getOpacity(x));
-    }
+QList<double> TransferFunction::colorKeys() const
+{
+    return m_color.keys();
+}
 
-    normalized.m_name = m_name;
 
-    return normalized;
+QList<double> TransferFunction::getColorPoints() const
+{
+    return colorKeys();
+}
+
+
+QList<double> TransferFunction::opacityKeys() const
+{
+    return m_opacity.keys();
+}
+
+
+QList<double> TransferFunction::getOpacityPoints() const
+{
+    return opacityKeys();
+}
+
+
+void TransferFunction::trim(double x1, double x2)
+{
+    m_color.trim(x1, x2);
+    m_opacity.trim(x1, x2);
+    m_changed = true;
+}
+
+
+void TransferFunction::setNewRange(double x1, double x2)
+{
+    trim(x1, x2);
+}
+
+
+TransferFunction TransferFunction::to01(double x1, double x2) const
+{
+    Q_ASSERT(!MathTools::isNaN(x1));
+    Q_ASSERT(!MathTools::isNaN(x2));
+    Q_ASSERT(x1 < x2);
+
+    updateKeys();
+
+    double shift = -x1, scale = 1.0 / (x2 - x1);
+    TransferFunction transferFunction01;
+
+    foreach (double x, m_keys) transferFunction01.set((x + shift) * scale, getColor(x), getOpacity(x));
+
+    return transferFunction01;
 }
 
 
 TransferFunction TransferFunction::simplify() const
 {
-    TransferFunction simplified = *this;
-
-    QMapIterator<double, QColor> itc( m_color );
-    while ( itc.hasNext() )
-    {
-        itc.next();
-        TransferFunction tentative = simplified;
-        tentative.removePointFromColor( itc.key() );
-        if ( tentative.getColor( itc.key() ) == simplified.getColor( itc.key() ) ) simplified = tentative;
-    }
-
-    QMapIterator<double, double> ito( m_opacity );
-    while ( ito.hasNext() )
-    {
-        ito.next();
-        TransferFunction tentative = simplified;
-        tentative.removePointFromOpacity( ito.key() );
-        if ( tentative.getOpacity( ito.key() ) == simplified.getOpacity( ito.key() ) ) simplified = tentative;
-    }
-
+    TransferFunction simplified(*this);
+    simplified.m_color.simplify();
+    simplified.m_opacity.simplify();
+    simplified.m_changed = true;
     return simplified;
+}
+
+
+TransferFunction TransferFunction::normalize() const
+{
+    updateKeys();
+
+    TransferFunction normalized;
+    QListIterator<double> it(m_keys);
+
+    while (it.hasNext())
+    {
+        double x = it.next();
+        normalized.set(x, getColor(x), getOpacity(x));
+    }
+
+    normalized.setName(name());
+
+    return normalized;
+}
+
+
+const ColorTransferFunction& TransferFunction::colorTransferFunction() const
+{
+    return m_color;
+}
+
+
+void TransferFunction::setColorTransferFunction(const ColorTransferFunction &colorTransferFunction)
+{
+    m_color = colorTransferFunction;
+    m_color.setName(m_opacity.name());
+    m_changed = true;
+}
+
+
+const OpacityTransferFunction& TransferFunction::opacityTransferFunction() const
+{
+    return m_opacity;
+}
+
+
+void TransferFunction::setOpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction)
+{
+    m_opacity = opacityTransferFunction;
+    m_opacity.setName(m_color.name());
+    m_changed = true;
+}
+
+
+vtkColorTransferFunction* TransferFunction::vtkColorTransferFunction() const
+{
+    return m_color.vtkColorTransferFunction();
+}
+
+
+vtkPiecewiseFunction* TransferFunction::vtkOpacityTransferFunction() const
+{
+    return m_opacity.vtkOpacityTransferFunction();
+}
+
+
+QString TransferFunction::toString() const
+{
+    return "Color:\n" + m_color.toString() + "Opacity:\n" + m_opacity.toString();
+}
+
+
+QVariant TransferFunction::toVariant() const
+{
+    QMap<QString, QVariant> variant;
+    variant["color"] = m_color.toVariant();
+    variant["opacity"] = m_opacity.toVariant();
+    return variant;
+}
+
+
+TransferFunction TransferFunction::fromVariant(const QVariant &variant)
+{
+    TransferFunction transferFunction;
+    const QMap<QString, QVariant> variantMap = variant.toMap();
+    transferFunction.m_color = ColorTransferFunction::fromVariant(variantMap.value("color"));
+    transferFunction.m_opacity = OpacityTransferFunction::fromVariant(variantMap.value("opacity"));
+    return transferFunction;
+}
+
+
+void TransferFunction::updateKeys() const
+{
+    if (!m_changed) return;
+
+    m_keys = m_color.keys();
+    m_keys << m_opacity.keys();
+    qSort(m_keys);
+
+    for (int i = 0; i < m_keys.size() - 1; i++)
+    {
+        if (m_keys.at(i) == m_keys.at(i+1)) m_keys.removeAt(i+1);
+    }
+
+    m_changed = false;
 }
 
 
