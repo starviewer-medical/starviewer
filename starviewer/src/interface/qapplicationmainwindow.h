@@ -129,6 +129,9 @@ private slots:
     /// canvia a pantalla completa o no
     void switchFullScreen( bool full );
 
+    /// Maximitza a tantes pantalles com es pugui
+    void maximizeMultipleScreens();
+
     /// Mostra el diàleg de configuració de l'aplicació.
     /// TODO Millorar, de moment és bastant "xapussa"
     void showConfigurationDialog();
@@ -165,6 +168,8 @@ private:
     QAction *m_exitAction;
     QAction *m_aboutAction;
     QAction *m_fullScreenAction;
+    QAction *m_maximizeAction;
+
     QAction *m_logViewerAction;
     QAction *m_configurationAction;
     QAction *m_openUserGuideAction;

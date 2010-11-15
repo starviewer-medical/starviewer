@@ -24,6 +24,7 @@
 #include "qstarviewersapwrapper.h"
 #include "coresettings.h" // pel LanguageLocale
 #include "inputoutputsettings.h"
+#include "screenmanager.h"
 
 #include <QDebug>
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
@@ -235,6 +236,12 @@ void QApplicationMainWindow::createActions()
     m_fullScreenAction->setCheckable( true );
     connect( m_fullScreenAction , SIGNAL( toggled(bool) ) , this , SLOT( switchFullScreen(bool) ) );
 
+    m_maximizeAction = new QAction(this);
+    m_maximizeAction->setText(tr("Maximize To Multiple Screen"));
+    m_maximizeAction->setStatusTip(tr("Maximize The Window To As Many Screens As Possible"));
+    m_maximizeAction->setCheckable(false);
+    connect(m_maximizeAction, SIGNAL(triggered(bool)), this, SLOT(maximizeMultipleScreens()));    
+    
     m_openUserGuideAction = new QAction( this );
     m_openUserGuideAction->setText( tr("User guide") );
     m_openUserGuideAction->setStatusTip( tr("Open User guide") );
@@ -296,6 +303,12 @@ void QApplicationMainWindow::switchFullScreen( bool full )
     }
 }
 
+void QApplicationMainWindow::maximizeMultipleScreens()
+{
+    ScreenManager screenManager;
+    screenManager.maximize(this);
+}
+
 void QApplicationMainWindow::showConfigurationDialog()
 {
     QConfigurationDialog configurationDialog;
@@ -341,6 +354,7 @@ void QApplicationMainWindow::createMenus()
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu( tr("&Window") );
     m_windowMenu->addAction( m_fullScreenAction );
+    m_windowMenu->addAction(m_maximizeAction);
 
     menuBar()->addSeparator();
 
