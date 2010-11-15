@@ -3798,9 +3798,6 @@
                   <property name="text">
                    <string>Default minimum</string>
                   </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
                   <attribute name="buttonGroup">
                    <string>buttonGroup_2</string>
                   </attribute>
@@ -3820,6 +3817,9 @@
                  <widget class="QRadioButton" name="m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton">
                   <property name="text">
                    <string>Current mean</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
                   </property>
                   <attribute name="buttonGroup">
                    <string>buttonGroup_2</string>
@@ -4430,7 +4430,7 @@
   <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_5"/>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_6"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
