@@ -4688,29 +4688,28 @@ void QExperimental3DExtension::fillWeigthsEditor()
     weightsTransferFunction.clearOpacity();
     weightsTransferFunction.addPointToOpacity(zeroEnd, 0.0);
 
+    // posem pesos que no sumen 1 perquè així és més fàcil editar-los i de totes maneres els normalitzem més tard
     if (m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton->isChecked()) // pesos uniformes
     {
-        double weight = 1.0 / (m_intensityClusters.size() - 1);
-
-        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, weight);
+        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, 1.0);
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton->isChecked()) // pesos segons la distribució al volum
     {
         const unsigned short *data = reinterpret_cast<unsigned short*>(m_clusterizedVolume->getImage()->GetScalarPointer());
         int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
         QVector<int> count(m_intensityClusters.size());
-        int total = 0;
+        int maximum = 0;
 
         for (int i = 0; i < size; i++)
         {
             if (data[i] > zeroEnd)
             {
                 count[data[i]]++;
-                total++;
+                if (count.at(data[i]) > maximum) maximum = count.at(data[i]);
             }
         }
 
-        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, static_cast<double>(count.at(i)) / total);
+        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, static_cast<double>(count.at(i)) / maximum);
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked())
     {
