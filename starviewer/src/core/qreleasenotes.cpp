@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -16,7 +16,7 @@ QReleaseNotes::QReleaseNotes(QWidget *parent)
 {
     setupUi(this);
 
-    //no cal fer un metode a part per les connexions si només en tenim una
+    //no cal fer un metode a part per les connexions si nomÃ©s en tenim una
     connect(m_closePushButton, SIGNAL(clicked()), this, SLOT(close()));
 
     //Fer que la finestra sempre quedi davant i no es pugui fer res fins que no es tanqui
@@ -44,7 +44,7 @@ void QReleaseNotes::setUrl(QUrl url)
 
 void QReleaseNotes::closeEvent(QCloseEvent *event)
 {
-    //llençar el senyal de que es tanca la finestra
+    //llenÃ§ar el senyal de que es tanca la finestra
     closing();
     //i tancar la finestra
     event->accept();
