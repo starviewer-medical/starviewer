@@ -15,7 +15,6 @@ class QNetworkReply;
 class QNetworkProxy;
 class QNetworkAccessManager;
 
-
 namespace udg {
 
     class QReleaseNotes;
@@ -32,7 +31,6 @@ namespace udg {
     class ApplicationVersionChecker : QObject {
 Q_OBJECT
 
-
 public:
     /// Constructor per defecte
     ApplicationVersionChecker();
@@ -43,10 +41,6 @@ public:
     /// Permet especificar un nou interval de temps entre la comprovació de noves versions modificant el setting CheckVersionInterval
     /// Aquest és el mètode que s'ha de cridar si es vol canviar aquest interval des de per exemple un menu d'opcions
     void setCheckVersionInterval(int interval);
-    
-//public slots:
-
-//protected:
 
 private:
     /// Genera la url local del fitxer on hi ha les release notes
