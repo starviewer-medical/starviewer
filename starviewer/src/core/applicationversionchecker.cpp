@@ -32,14 +32,23 @@ ApplicationVersionChecker::ApplicationVersionChecker()
     m_checkNewVersion = true;
     // la versio que ens retorna el servidor per defecte es cadena buida
     m_checkedVersion = QString("");
+    //inicialitzem a null m_releaseNotes i m_manager
+    m_manager = NULL;
+    m_releaseNotes = NULL;
 }
 
 ApplicationVersionChecker::~ApplicationVersionChecker()
 {
-    // i el manager de connexions
-    delete m_manager;
-    // i la finestra de les release notes
-    delete m_releaseNotes;
+    // destruir el manager de connexions
+    if (m_manager)
+    {
+        delete m_manager;
+    }
+     // i la finestra de les release notes
+    if (m_releaseNotes)
+    {
+        delete m_releaseNotes;
+    }
 }
 
 void ApplicationVersionChecker::showIfCorrect()
