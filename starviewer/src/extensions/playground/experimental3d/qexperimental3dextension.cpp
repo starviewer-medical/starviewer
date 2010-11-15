@@ -4684,14 +4684,13 @@ void QExperimental3DExtension::fillWeigthsEditor()
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setRange(0, m_intensityClusters.size() - 1);
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->syncToMax();
-    TransferFunction weightsTransferFunction(m_clusterizedTransferFunction);
-    weightsTransferFunction.clearOpacity();
-    weightsTransferFunction.addPointToOpacity(zeroEnd, 0.0);
+    TransferFunction weightsTransferFunction;
+    weightsTransferFunction.setColorTransferFunction(m_clusterizedTransferFunction.colorTransferFunction());
 
     // posem pesos que no sumen 1 perquè així és més fàcil editar-los i de totes maneres els normalitzem més tard
     if (m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton->isChecked()) // pesos uniformes
     {
-        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, 1.0);
+        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.setOpacity(i, 1.0);
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton->isChecked()) // pesos segons la distribució al volum
     {
@@ -4709,7 +4708,7 @@ void QExperimental3DExtension::fillWeigthsEditor()
             }
         }
 
-        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, static_cast<double>(count.at(i)) / maximum);
+        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.setOpacity(i, static_cast<double>(count.at(i)) / maximum);
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked())
     {
@@ -4717,9 +4716,12 @@ void QExperimental3DExtension::fillWeigthsEditor()
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton->isChecked())
     {
-        TransferFunction currentWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction();
-        for (int i = zeroEnd + 1; i < m_intensityClusters.size(); i++) weightsTransferFunction.addPointToOpacity(i, currentWeights.getOpacity(i));
+        OpacityTransferFunction currentWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction().opacityTransferFunction();
+        currentWeights.trim(zeroEnd + 1, m_intensityClusters.size() - 1);
+        weightsTransferFunction.setOpacityTransferFunction(currentWeights);
     }
+
+    weightsTransferFunction.setOpacity(zeroEnd, 0.0);
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsTransferFunction.simplify());
 }
