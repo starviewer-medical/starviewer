@@ -4859,7 +4859,7 @@ void QExperimental3DExtension::viewNormalVolume()
     unsigned short max = m_volume->getRangeMax();
     m_transferFunctionEditor->setRange(0, max);
     m_transferFunctionEditor->syncToMax();
-    m_transferFunctionEditor->setTransferFunction(m_normalTransferFunction.normalize());
+    m_transferFunctionEditor->setTransferFunction(m_normalTransferFunction.simplify());
     setTransferFunction();
 }
 
@@ -4874,7 +4874,7 @@ void QExperimental3DExtension::viewClusterizedVolume()
     unsigned short max = m_volume->getRangeMax();
     m_transferFunctionEditor->setRange(0, max);
     m_transferFunctionEditor->syncToMax();
-    m_transferFunctionEditor->setTransferFunction(m_clusterizedTransferFunction.normalize());
+    m_transferFunctionEditor->setTransferFunction(m_clusterizedTransferFunction.simplify());
     setTransferFunction();
 }
 
