@@ -21,6 +21,7 @@ public:
     static const QString UserHangingProtocolsPath;
     static const QString RegisterStatLogs;
     static const QString DefaultToolTextSize;
+    static const QString AutoToolTextSize;
     
     static const QString NumberOfDirectionsForLowQualityObscurances;
     static const QString FunctionForLowQualityObscurances;
