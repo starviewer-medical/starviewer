@@ -105,6 +105,10 @@ private:
     ///Envia una petició per descarregar un estudi a través del seu accession number
     void sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber);
 
+    /// Calcula el tamany de la lletra del text de les tools si CoreSettings::AutoToolTextSize es true.
+    /// Altrament s'agafarà el valor que ja hi havia a CoreSettings::DefalutToolTextSize.
+    void computeDefaultToolTextSize();
+
 private slots:
 
     /**
