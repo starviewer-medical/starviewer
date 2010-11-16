@@ -42,7 +42,7 @@
 #include <QLocale>
 #include <QProgressDialog>
 #include <QDesktopServices>
-
+#include <QDesktopWidget>
 #include <QPair>
 //Shortucts
 #include "shortcuts.h"
@@ -126,6 +126,9 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     markAsBetaVersion();
     showBetaVersionDialog();
 #endif
+
+    computeDefaultToolTextSize();
+
     m_statsWatcher = new StatsWatcher("Menu triggering", this);
     m_statsWatcher->addTriggerCounter( m_fileMenu );
     m_statsWatcher->addTriggerCounter( m_visualizationMenu );
@@ -651,4 +654,31 @@ void QApplicationMainWindow::openUserGuide()
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
+void QApplicationMainWindow::computeDefaultToolTextSize()
+{
+    Settings settings;
+    if (settings.getValue(CoreSettings::AutoToolTextSize).toBool())
+    {
+        QDesktopWidget *desktop = QApplication::desktop();
+        //Per calcular el tamany de la lletra tindrem en compte
+        //la resolució de la pantalla a on s'està executant l'Starviewer.
+        const QRect screen = desktop->screenGeometry(this);
+
+        int textSize;
+        if ((screen.width() * screen.height()) >= (5 * 1024 * 1024))
+        {
+            textSize = 22;
+        }
+        else if ((screen.width() * screen.height()) >= (3 * 1024 * 1024))
+        {
+            textSize = 17;
+        }
+        else
+        {
+            textSize = 14;
+        }
+
+        settings.setValue(CoreSettings::DefaultToolTextSize, textSize);
+    }
+}
 }; // end namespace udg
