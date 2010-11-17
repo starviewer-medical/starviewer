@@ -249,7 +249,8 @@ HEADERS += extensionfactory.h \
     screenmanager.h \
     colortransferfunction.h \
     transferfunctiontemplate.h \
-    opacitytransferfunction.h
+    opacitytransferfunction.h \
+    qscreendistribution.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -457,7 +458,8 @@ SOURCES += extensionmediator.cpp \
     dynamicmatrix.cpp \
     screenmanager.cpp \
     colortransferfunction.cpp \
-    opacitytransferfunction.cpp
+    opacitytransferfunction.cpp \
+    qscreendistribution.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
