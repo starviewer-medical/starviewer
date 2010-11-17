@@ -136,6 +136,9 @@ private slots:
     /// Maximitza a tantes pantalles com es pugui
     void maximizeMultipleScreens();
 
+    /// Moura la finestra de pantalla
+    void moveToDesktop();
+
     /// Mostra el diàleg de configuració de l'aplicació.
     /// TODO Millorar, de moment és bastant "xapussa"
     void showConfigurationDialog();
@@ -159,6 +162,7 @@ private:
     QMenu *m_languageMenu;
     QMenu *m_helpMenu;
     QMenu *m_toolsMenu;
+    QMenu *m_moveWindowToDesktopMenu;
 
     /// Accions
     QAction *m_localDatabaseAction;
@@ -173,6 +177,7 @@ private:
     QAction *m_aboutAction;
     QAction *m_fullScreenAction;
     QAction *m_maximizeAction;
+    QAction *m_moveToDesktopAction;
 
     QAction *m_logViewerAction;
     QAction *m_configurationAction;
