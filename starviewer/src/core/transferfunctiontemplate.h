@@ -212,6 +212,7 @@ void TransferFunctionTemplate<T>::simplify()
 
     foreach (double x, keys)
     {
+        if (m_map.size() == 1) break;   // cas especial: si només queda un punt no l'hem de treure
         T y = get(x);
         unset(x);
         if (get(x) != y) set(x, y);
