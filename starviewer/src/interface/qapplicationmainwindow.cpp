@@ -25,6 +25,7 @@
 #include "coresettings.h" // pel LanguageLocale
 #include "inputoutputsettings.h"
 #include "screenmanager.h"
+#include "qscreendistribution.h"
 
 #include <QDebug>
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
@@ -245,6 +246,12 @@ void QApplicationMainWindow::createActions()
     m_maximizeAction->setCheckable(false);
     connect(m_maximizeAction, SIGNAL(triggered(bool)), this, SLOT(maximizeMultipleScreens()));    
     
+    m_moveToDesktopAction = new QAction(this);
+    m_moveToDesktopAction->setText(tr("Move To Screen"));
+    m_moveToDesktopAction->setStatusTip(tr("Move The Window To The Screen ..."));
+    m_moveToDesktopAction->setCheckable(false);
+    connect(m_moveToDesktopAction, SIGNAL(triggered(bool)), this, SLOT(moveToDesktop()));
+
     m_openUserGuideAction = new QAction( this );
     m_openUserGuideAction->setText( tr("User guide") );
     m_openUserGuideAction->setStatusTip( tr("Open User guide") );
@@ -312,6 +319,18 @@ void QApplicationMainWindow::maximizeMultipleScreens()
     screenManager.maximize(this);
 }
 
+void QApplicationMainWindow::moveToDesktop()
+{
+    QScreenDistribution screenDistribution;
+    screenDistribution.setWindowTitle(tr("Choose a Screen"));
+    if (screenDistribution.exec() == QDialog::Accepted)
+    {
+        int screen = screenDistribution.getScreenNumber();
+        ScreenManager screenManager;
+        screenManager.moveToDesktop(this, screen);
+    }
+}
+
 void QApplicationMainWindow::showConfigurationDialog()
 {
     QConfigurationDialog configurationDialog;
@@ -358,6 +377,7 @@ void QApplicationMainWindow::createMenus()
     m_windowMenu = menuBar()->addMenu( tr("&Window") );
     m_windowMenu->addAction( m_fullScreenAction );
     m_windowMenu->addAction(m_maximizeAction);
+    m_windowMenu->addAction(m_moveToDesktopAction);
 
     menuBar()->addSeparator();
 
