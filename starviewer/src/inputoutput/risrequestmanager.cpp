@@ -66,11 +66,14 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
     INFO_LOG("Comencem a cercar l'estudi sol·licitat pel RIS amb accession number " + maskRISRequest.getAccessionNumber());
-    //Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar
+    //Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar i pendents de descarregar
+    //TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la 
+    //última que ha arribat
     m_studiesInstancesUIDRequestedToRetrieve.clear();
+    m_studiesPendingOfRetrieve.clear();
 
     // Mostrem el popUP amb l'accession number
-    m_qpopUpRisRequestsScreen->setAccessionNumber(maskRISRequest.getAccessionNumber());
+    m_qpopUpRisRequestsScreen->queryStudiesByAccessionNumberStarted(maskRISRequest.getAccessionNumber());
     m_qpopUpRisRequestsScreen->show();
 
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
@@ -97,6 +100,8 @@ void RISRequestManager::queryStudyResultsReceived(QList<Patient*> patientsList, 
             {
                 INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1 , PacsId %2").arg( study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
 
+                m_qpopUpRisRequestsScreen->addStudyToRetrieveByAccessionNumber(study->getInstanceUID());
+                m_studiesPendingOfRetrieve.append(study->getInstanceUID());
                 //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
                 emit retrieveStudyFromRISRequest(hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()] , study);
                 m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
@@ -122,6 +127,7 @@ void RISRequestManager::queryRequestRISFinished()
         QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.").arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
 
         QMessageBox::information(NULL , ApplicationNameString , message);
+        m_qpopUpRisRequestsScreen->showNotStudiesFoundMessage();
     }
 
     if (m_queueRISRequests.count() > 0)
@@ -160,6 +166,26 @@ void RISRequestManager::showListenRISRequestThreadError(ListenRISRequestThread::
     }
 
     QMessageBox::critical(NULL, ApplicationNameString, message);
+}
+
+void RISRequestManager::studyRetrieveFinished(QString studyInstanceUID)
+{
+    if (m_studiesPendingOfRetrieve.contains(studyInstanceUID))
+    {
+        //Per si ens han demanat descarregar el mateix estudi dos vegades des del RIS, (error l'usuari ha clickat dos vegades, s'hauria de controlar aquests casos)
+        m_studiesPendingOfRetrieve.removeOne(studyInstanceUID);
+        
+        //Si no hi ha més estudis pendents de descarregar ho indiquem a la QPopUpRisRequestsScreen
+        m_qpopUpRisRequestsScreen->retrieveStudyByAccessionNumberFinished(studyInstanceUID);
+    }
+}
+
+void RISRequestManager::studyRetrieveFailed(QString studyInstanceUID)
+{
+    if (m_studiesPendingOfRetrieve.contains(studyInstanceUID))
+    {
+        m_qpopUpRisRequestsScreen->retrieveStudyByAccessionNumberFailed(studyInstanceUID);
+    }
 }
 
 };

@@ -48,6 +48,15 @@ signals:
     ///Signal que indica que s'ha descarregar un estudi sol·licitat pel RIS
     void retrieveStudyFromRISRequest(QString pacsID, Study *study);
 
+public slots:
+
+    ///Slot que s'activa quan ha finalitzat la descàrrega d'un estudi, comprovem si aquell estudi havia estat demanat pel RIS, i si és així
+    ///comprovem si queden més estudis pendents de descàrrega per comunicar-ho al QPopUpRisRequestsScreen
+    void studyRetrieveFinished(QString studyInstanceUID);
+
+    ///Comuniquem a la QPopUpRisRequestScreen que ha fallat la descàrrega d'un estudi
+    void studyRetrieveFailed(QString studyInstanceUID);
+
 private slots:
 
     ///Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
@@ -87,6 +96,7 @@ private:
     /*Pot ser que diversos PACS continguin el mateix estudi amb un mateix accession number, per evitar descarregar-lo més d'una vegada ens guardem en una
       llista quins són els estudis descarregats.*/
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
+    QStringList m_studiesPendingOfRetrieve;
 
     /**Inicialitza les variables globals per escoltar i executar peticions del RIS.
       *No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria

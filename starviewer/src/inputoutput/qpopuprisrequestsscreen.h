@@ -30,8 +30,23 @@ public:
     ///Destructor
     ~QPopUpRisRequestsScreen();
 
-    ///Especifiquem l'accession number del estudi a descarregar
-    void setAccessionNumber(QString text);
+    ///S'indica que s'està cercant als PACS els estudis amb un determinat accessionnumber
+    void queryStudiesByAccessionNumberStarted(QString accessionNumber);
+
+    ///Afegim un estudi per descarregar que s'ha demanat a través del rIS
+    void addStudyToRetrieveByAccessionNumber(QString studyInstanceUID);
+
+    ///S'indica que la descàrrega dels estudis degut a una petició del RIS ha finalitzat
+    void retrieveStudyByAccessionNumberFinished(QString studyInstanceUID);
+
+    ///S'indica que ha fallat la descàrrega dels estudi demanat pel RIS
+    void retrieveStudyByAccessionNumberFailed(QString studyInstanceUID);
+
+    ///Mostra en el PopUp que no s'ha trobat cap estudi que compleixi els criteris de cerca
+    void showNotStudiesFoundMessage();
+
+    ///Indica que la descàrrega ha finalitzat, indica el número d'estudis descarregats i el cap de 5 segons amaga el PopUp
+    void showRetrieveFinished();
 
 protected:
 
@@ -45,7 +60,15 @@ private slots :
 
 private:
 
+    ///Refresquem el label que indica quants estudis portem descarregats del total d'estudis a descarregar
+    void refreshLabelStudyCounter();
+
+private:
+
     QTimer *m_qTimer;
+    static const int msTimeOutToHidePopUp;
+    QStringList m_studiesInstanceUIDToRetrieve;
+    QStringList m_studiesInstanceUIDRetrieved;
 
 };
 
