@@ -515,12 +515,12 @@
         <translation>No té permisos d&apos;escriptura per generar la imatge en el directori &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="isoimagefilecreator.cpp" line="146"/>
+        <location filename="isoimagefilecreator.cpp" line="153"/>
         <source>The mkisofs program cannot be found on the system.</source>
         <translation>No s&apos;ha pogut trobar l&apos;aplicació mkisofs.</translation>
     </message>
     <message>
-        <location filename="isoimagefilecreator.cpp" line="172"/>
+        <location filename="isoimagefilecreator.cpp" line="179"/>
         <source>An error occurred with the iso image file create process.</source>
         <translation>S&apos;ha produït un error generant la imatge.</translation>
     </message>
@@ -2095,92 +2095,92 @@ Aquests hauran de ser esborrats de forma manual.</translation>
         <translation>Seleccioni un estudi per descarregar i visualitzar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="312"/>
+        <location filename="qinputoutputpacswidget.cpp" line="325"/>
         <source>Please select a PACS to query.</source>
         <oldsource>Please select a PACS to query</oldsource>
         <translation>Seleccioni un PACS a consultar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="319"/>
+        <location filename="qinputoutputpacswidget.cpp" line="332"/>
         <source>No search fields were filled.</source>
         <translation>No s&apos;han introduït criteris de cerca.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="319"/>
+        <location filename="qinputoutputpacswidget.cpp" line="332"/>
         <source>The query can take a long time.
 Do you want continue?</source>
         <translation>La cerca pot tardar bastants minuts.
 Està segur que vol continuar?</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="377"/>
+        <location filename="qinputoutputpacswidget.cpp" line="390"/>
         <source>No series match for this study %1.
 </source>
         <translation>No s&apos;han trobat sèries de l&apos;estudi %1.
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="387"/>
+        <location filename="qinputoutputpacswidget.cpp" line="400"/>
         <source>No images match series %1.
 </source>
         <translation>No s&apos;han trobat imatges de la sèrie %1.
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="401"/>
+        <location filename="qinputoutputpacswidget.cpp" line="414"/>
         <source>%1 can&apos;t query to PACS %2 from %3.
 Be sure that your computer is connected on network and the PACS parameters are correct.</source>
         <translation>%1 no pot cercar al PACS %2 de %3.
 Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="411"/>
+        <location filename="qinputoutputpacswidget.cpp" line="424"/>
         <source>%1 can&apos;t query series from study %2 to PACS %3 from %4.
 </source>
         <translation>%1 no pot cercar les sèries de l&apos;estudi %2 del PACS %3 de %4.
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="412"/>
-        <location filename="qinputoutputpacswidget.cpp" line="420"/>
+        <location filename="qinputoutputpacswidget.cpp" line="425"/>
+        <location filename="qinputoutputpacswidget.cpp" line="433"/>
         <source>Be sure that your computer is connected on network and the PACS parameters are correct.</source>
         <translation>Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="419"/>
+        <location filename="qinputoutputpacswidget.cpp" line="432"/>
         <source>%1 can&apos;t query images from series %2 to PACS %3 from %4.
 </source>
         <translation>%1 no pot cercar les imatges de la sèrie %2 del PACS %3 de %4.
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="439"/>
-        <location filename="qinputoutputpacswidget.cpp" line="459"/>
-        <location filename="qinputoutputpacswidget.cpp" line="466"/>
-        <location filename="qinputoutputpacswidget.cpp" line="473"/>
-        <location filename="qinputoutputpacswidget.cpp" line="480"/>
-        <location filename="qinputoutputpacswidget.cpp" line="487"/>
-        <location filename="qinputoutputpacswidget.cpp" line="512"/>
+        <location filename="qinputoutputpacswidget.cpp" line="452"/>
+        <location filename="qinputoutputpacswidget.cpp" line="472"/>
+        <location filename="qinputoutputpacswidget.cpp" line="479"/>
+        <location filename="qinputoutputpacswidget.cpp" line="486"/>
+        <location filename="qinputoutputpacswidget.cpp" line="493"/>
+        <location filename="qinputoutputpacswidget.cpp" line="500"/>
+        <location filename="qinputoutputpacswidget.cpp" line="525"/>
         <source>Please review the operation list screen, </source>
         <translation>Si us plau reviseu la llista de peticions, </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="440"/>
+        <location filename="qinputoutputpacswidget.cpp" line="453"/>
         <source>%1 can&apos;t connect to PACS %2 trying to retrievev a study.
 </source>
         <translation>%1 no ha pogut connectar amb el PACS %2 al intentar descarregar un estudi.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="441"/>
-        <location filename="qinputoutputpacswidget.cpp" line="514"/>
+        <location filename="qinputoutputpacswidget.cpp" line="454"/>
+        <location filename="qinputoutputpacswidget.cpp" line="527"/>
         <source>
 Be sure that your computer is connected on network and the PACS parameters are correct.</source>
         <translation>
 Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres del PACS són correctes.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="442"/>
-        <location filename="qinputoutputpacswidget.cpp" line="515"/>
+        <location filename="qinputoutputpacswidget.cpp" line="455"/>
+        <location filename="qinputoutputpacswidget.cpp" line="528"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <oldsource>
@@ -2189,41 +2189,41 @@ If the problem persist contact with an administrator.</oldsource>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="451"/>
+        <location filename="qinputoutputpacswidget.cpp" line="464"/>
         <source>There is not enough space to retrieve studies, please free space or change your Local Database settings.</source>
         <translation>No hi ha suficient espai lliure per descarregar estudis, si us plau alliberi espai o canviï les preferències de la base de dades local.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="452"/>
+        <location filename="qinputoutputpacswidget.cpp" line="465"/>
         <source>
 All pending retrieve operations will be cancelled.</source>
         <translation>
 Totes les operacions pendents seran cancel·lades.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="453"/>
+        <location filename="qinputoutputpacswidget.cpp" line="466"/>
         <source>
 
 Available space in Disk: %1 Mb</source>
         <translation>Espai disponible al disc: %1 Mb</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="454"/>
+        <location filename="qinputoutputpacswidget.cpp" line="467"/>
         <source>
 Minimum space required in Disk to retrieve studies: %1 Mb</source>
         <translation>
 Espai mínim requerit en el disc per descarregar estudis: %1 Mb</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="460"/>
+        <location filename="qinputoutputpacswidget.cpp" line="473"/>
         <source>an error ocurred freeing space and some operations may have failed.</source>
         <translation>s&apos;ha produït un error alliberant espai, algunes operacions poden haver fallat.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="461"/>
-        <location filename="qinputoutputpacswidget.cpp" line="468"/>
-        <location filename="qinputoutputpacswidget.cpp" line="499"/>
-        <location filename="qinputoutputpacswidget.cpp" line="526"/>
+        <location filename="qinputoutputpacswidget.cpp" line="474"/>
+        <location filename="qinputoutputpacswidget.cpp" line="481"/>
+        <location filename="qinputoutputpacswidget.cpp" line="512"/>
+        <location filename="qinputoutputpacswidget.cpp" line="539"/>
         <source>
 
 Close all %1 windows and try again.
@@ -2238,17 +2238,17 @@ Tanqueu totes les finestres del %1 i torneu-ho a intentar.
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="467"/>
+        <location filename="qinputoutputpacswidget.cpp" line="480"/>
         <source>a database error ocurred and some operations may have failed.</source>
         <translation>s&apos;ha produït un error a la base de dades, algunes operacions poden haver fallat.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="474"/>
+        <location filename="qinputoutputpacswidget.cpp" line="487"/>
         <source>an error ocurred and some retrieve operations may have failed.</source>
         <translation>s&apos;ha produït un error i algunes de les operacions de descàrrega poden haver fallat.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="475"/>
+        <location filename="qinputoutputpacswidget.cpp" line="488"/>
         <source>
 %1 has not be capable of read correctly DICOM information of the study.</source>
         <oldsource>
@@ -2257,7 +2257,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 %1 no ha estat capaç de llegir correctament la informació DICOM del estudi.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="476"/>
+        <location filename="qinputoutputpacswidget.cpp" line="489"/>
         <source>
 
 The study may be corrupted, if It is not corrupted please contact with %1 team.</source>
@@ -2266,12 +2266,12 @@ The study may be corrupted, if It is not corrupted please contact with %1 team.<
 L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau poseu-vos en contacte amb l&apos;equip del %1.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="481"/>
+        <location filename="qinputoutputpacswidget.cpp" line="494"/>
         <source>PACS %1 doesn&apos;t recognize your computer&apos;s AETitle %2 and some studies can&apos;t be retrieved.</source>
         <translation>PACS %1 no ha reconegut el AETitle %2 del vostre ordinador, alguns estudis no han pogut ser descarregats.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="482"/>
+        <location filename="qinputoutputpacswidget.cpp" line="495"/>
         <source>
 
 Contact with an administrador to register your computer to the PACS.</source>
@@ -2280,7 +2280,7 @@ Contact with an administrador to register your computer to the PACS.</source>
 Contacteu amb un administrador per registrar el vostre ordinador al PACS.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="488"/>
+        <location filename="qinputoutputpacswidget.cpp" line="501"/>
         <source>%1 can&apos;t retrieve images of study %2 because PACS %3 doesn&apos;t respond as expected.
 
 </source>
@@ -2292,17 +2292,17 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="489"/>
+        <location filename="qinputoutputpacswidget.cpp" line="502"/>
         <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
         <translation>La causa del error pot ser que  les imatges demanades estiguin corruptes o que el port de connexions entrants del PACS no estigui correctament configurat.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="493"/>
+        <location filename="qinputoutputpacswidget.cpp" line="506"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation>El port %1 per connexions entrants des del PACS està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="494"/>
+        <location filename="qinputoutputpacswidget.cpp" line="507"/>
         <source>
 
 %1 can&apos;t retrieve the studies, all pending retrieve operations will be cancelled.</source>
@@ -2311,12 +2311,12 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
 %1 no pot descarregar l&apos;estudi, totes les descàrregues pendents seran cancel·lades.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="498"/>
+        <location filename="qinputoutputpacswidget.cpp" line="511"/>
         <source>Please review the operation list screen, an unknown error has ocurred retrieving a study.</source>
         <translation>Si us plau reviseu la llista de peticions, s&apos;ha produït un error desconegut descarregant un estudi.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="513"/>
+        <location filename="qinputoutputpacswidget.cpp" line="526"/>
         <source>%1 can&apos;t connect to PACS %2 trying to store DICOM files.
 </source>
         <oldsource>%1 can&apos;t connect to PACS %2 trying to store files.
@@ -2325,7 +2325,7 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="520"/>
+        <location filename="qinputoutputpacswidget.cpp" line="533"/>
         <source>The store of DICOM files to PACS %1 has failed.
 
 </source>
@@ -2337,28 +2337,28 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="521"/>
+        <location filename="qinputoutputpacswidget.cpp" line="534"/>
         <source>Wait a minute and try again, if the problem persist contact with an administrator.</source>
         <translation>Espereu uns minuts i torneu-ho a intentar, si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="525"/>
+        <location filename="qinputoutputpacswidget.cpp" line="538"/>
         <source>Please review the operation list screen, an unknown error has ocurred storing files to PACS %1.</source>
         <oldsource>Please review the operation list screen, an unknown error has ocurred storing a study to PACS %1.</oldsource>
         <translation>Si us plau reviseu la llista d&apos;operacions, s&apos;ha produït un error desconegut enviant un estudi %1.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="541"/>
+        <location filename="qinputoutputpacswidget.cpp" line="554"/>
         <source>There were problems to retrieve some images from study %1 from PACS %2. Those images may be missing in the local database.</source>
         <translation>Hi han hagut problemes per descarregar algunes imatges de l&apos;estudi %1 del PACS %2, pot ser que aquestes no s&apos;hagin descarregat.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="543"/>
+        <location filename="qinputoutputpacswidget.cpp" line="556"/>
         <source>Try again later. If the problem persists, contact your system administrator.</source>
         <translation>Torneu-ho a intentar més tard. Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="559"/>
+        <location filename="qinputoutputpacswidget.cpp" line="572"/>
         <source>Some DICOM files of study %1 can&apos;t be stored to PACS %2.
 
 </source>
@@ -2370,12 +2370,12 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
 </translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="560"/>
+        <location filename="qinputoutputpacswidget.cpp" line="573"/>
         <source>Please contact with an administrator to solve the problem.</source>
         <translation>Si us plau contacteu amb un administrador per resoldre el problema.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="564"/>
+        <location filename="qinputoutputpacswidget.cpp" line="577"/>
         <source>The study %1 has been stored, but it&apos;s possible that the PACS %1 has changed some data of the images.</source>
         <translation>L&apos;estudi %1 s&apos;ha enviat correctament, pero és possible que el PACS %1 hagi canviat dades d&apos;alguna de les imatges.</translation>
     </message>
@@ -2671,22 +2671,58 @@ Codi d&apos;error: %1</translation>
 <context>
     <name>udg::QPopUpRisRequestsScreen</name>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="34"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="39"/>
         <source>%1 has received a request from a RIS to retrieve the study with accession number</source>
         <translation>%1 ha rebut una petició del RIS per descarregar l&apos;estudi amb l&apos;accession number</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="41"/>
+        <source>Querying PACS...</source>
+        <translation>Cercant estudis al PACS...</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="92"/>
+        <source>No studies found.</source>
+        <translation>No s&apos;han trobat estudis.</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="99"/>
+        <source>%1 of %2.</source>
+        <translation>%1 de %2.</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="105"/>
+        <source>%1 studies has been retrieved.</source>
+        <oldsource>%1 studies has been retrieved</oldsource>
+        <translation>S&apos;han descarregat %1 estudis.</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="54"/>
+        <source>Retrieving study</source>
+        <translation>Descarregant estudi</translation>
     </message>
 </context>
 <context>
     <name>udg::QPopUpRisRequestsScreenBase</name>
     <message>
-        <location filename="qpopuprisrequestsscreenbase.ui" line="104"/>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="105"/>
         <source>Dialog</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreenbase.ui" line="288"/>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="264"/>
+        <source>ani</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="300"/>
         <source>Starviewer will proceed to retrieve it.</source>
         <translation>Starviewer procedirà a descarregar-lo.</translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="322"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2882,12 +2918,12 @@ Codi d&apos;error: %1</translation>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="194"/>
+        <location filename="queryscreen.cpp" line="197"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation>El port %1 per connexions entrants des del PACS està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="195"/>
+        <location filename="queryscreen.cpp" line="198"/>
         <source>
 
 %1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</source>
@@ -2977,12 +3013,12 @@ Codi d&apos;error: %1</translation>
         <translation>Si us plau, comprovi la configuració de PACS.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="127"/>
+        <location filename="risrequestmanager.cpp" line="125"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation>%2 no pot executar la petició del RIS, perquè no ha trobat cap estudi amb l&apos;accession number %1 en els PACS escollits per defecte.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="144"/>
+        <location filename="risrequestmanager.cpp" line="143"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of It are correct.</source>
         <oldsource>Processing the RIS request, can&apos;t query PACS %1 from %2.
@@ -2991,17 +3027,17 @@ Be sure that the IP and AETitle of It are correct</oldsource>
 Asseguris que la IP i el AETitle d &apos;aquest siguin correctes.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="159"/>
+        <location filename="risrequestmanager.cpp" line="158"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation>Starviewer no pot escoltar les peticions del RIS pel port %1, ja que el port està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="162"/>
+        <location filename="risrequestmanager.cpp" line="161"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation>No es poden escoltar peticions del RIS pel port %1, s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="163"/>
+        <location filename="risrequestmanager.cpp" line="162"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <oldsource>
