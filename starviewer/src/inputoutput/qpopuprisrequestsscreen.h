@@ -57,6 +57,8 @@ private slots :
 
     ///Slot que s'activa quan acaba el timer per amagar el popup
     void timeoutTimer();
+    /// Mou el PopUp a la cantonada dreta de la pantalla a on es troba en aquest moment.
+    void moveToBottomRight();
 
 private:
 
@@ -67,6 +69,7 @@ private:
 
     QTimer *m_qTimer;
     static const int msTimeOutToHidePopUp;
+    static const int msTimeOutToMovePopUpToBottomRight;
     QStringList m_studiesInstanceUIDToRetrieve;
     QStringList m_studiesInstanceUIDRetrieved;
 

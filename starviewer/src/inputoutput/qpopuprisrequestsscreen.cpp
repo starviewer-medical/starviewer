@@ -17,10 +17,12 @@
 #include "operation.h"
 #include "logging.h"
 #include "starviewerapplication.h"
+#include "settings.h"
 
 namespace udg {
 
 const int QPopUpRisRequestsScreen::msTimeOutToHidePopUp = 5000;
+const int QPopUpRisRequestsScreen::msTimeOutToMovePopUpToBottomRight = 5000;
 
 QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( parent )
 {
@@ -111,18 +113,26 @@ void QPopUpRisRequestsScreen::showRetrieveFinished()
 
 void QPopUpRisRequestsScreen::showEvent(QShowEvent *)
 {
-    //Es situa el PopUp a baix a l'esquerre de la pantalla on està la interfície activa del Starviewer
-    QDesktopWidget desktopWidget;
+    //Es situa el PopUp al centre de la pantalla on està la mainWindow del Starviewer
+    Settings settings;
+    QWidget fakeMainWindow;
 
-    QRect screenGeometryActiveWindow = desktopWidget.availableGeometry(QApplication::activeWindow()); //Agafem les dimensions de la pantalla on està la finestra activa de l'starviewer
+    settings.restoreGeometry(QString("geometry"), &fakeMainWindow);
 
-    this->move(screenGeometryActiveWindow.x() + screenGeometryActiveWindow.width() - this->width() - 10, screenGeometryActiveWindow.y() + screenGeometryActiveWindow.height() - this->height() -10);
+    this->move(QApplication::desktop()->screenGeometry(&fakeMainWindow).center() - this->rect().center());
+
+    QTimer::singleShot(msTimeOutToMovePopUpToBottomRight, this, SLOT(moveToBottomRight()));
 }
 
 void QPopUpRisRequestsScreen::timeoutTimer()
 {
     this->hide();
     m_qTimer->stop();
+}
+
+void QPopUpRisRequestsScreen::moveToBottomRight()
+{
+   this->move(QApplication::desktop()->availableGeometry(this).bottomRight() - this->rect().bottomRight());
 }
 
 QPopUpRisRequestsScreen::~QPopUpRisRequestsScreen()
