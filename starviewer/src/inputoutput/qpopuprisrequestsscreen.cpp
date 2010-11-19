@@ -40,8 +40,7 @@ QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( pa
 
 void QPopUpRisRequestsScreen::queryStudiesByAccessionNumberStarted(QString accessionNumber)
 {
-    QString popUpText = tr("%1 has received a request from a RIS to retrieve the study with accession number").arg(ApplicationNameString);
-    m_labelRisRequestDescription->setText(popUpText + " " + accessionNumber + ".");
+    m_labelRisRequestDescription->setText(tr("%1 has received a request from RIS to retrieve studies.").arg(ApplicationNameString));
     m_operationDescription->setText(tr("Querying PACS..."));
     m_operationAnimation->show();
 
@@ -109,6 +108,12 @@ void QPopUpRisRequestsScreen::showRetrieveFinished()
     m_operationDescription->setText(tr("%1 studies has been retrieved.").arg(m_studiesInstanceUIDRetrieved.count()));
     m_studiesRetrievingCounter->setText("");
     m_qTimer->start(msTimeOutToHidePopUp);
+}
+
+void QPopUpRisRequestsScreen::setPatientNameOfRetrievingStudies(QString patientName)
+{
+    QString popUpText = tr("%1 has received a request from RIS to retrieve studies of patient %2.").arg(ApplicationNameString).arg(patientName);
+    m_labelRisRequestDescription->setText(popUpText);
 }
 
 void QPopUpRisRequestsScreen::showEvent(QShowEvent *)

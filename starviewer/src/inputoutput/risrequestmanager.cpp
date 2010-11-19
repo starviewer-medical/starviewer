@@ -92,23 +92,33 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 
 void RISRequestManager::queryStudyResultsReceived(QList<Patient*> patientsList, QHash<QString, QString> hashTablePacsIDOfStudyInstanceUID)
 {
-    foreach(Patient *patient, patientsList)
-    {
-        foreach(Study *study, patient->getStudies())
-        {
-            if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
-            {
-                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1 , PacsId %2").arg( study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
 
-                m_qpopUpRisRequestsScreen->addStudyToRetrieveByAccessionNumber(study->getInstanceUID());
-                m_studiesPendingOfRetrieve.append(study->getInstanceUID());
-                //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
-                emit retrieveStudyFromRISRequest(hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()] , study);
-                m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
-            }
-            else
+    if (patientsList.count() > 0)
+    {
+        if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
+        {
+            //Si és el primer estudi que hem trobat a descarregar a partir de l'AccessionNumber indiquem el PopUp quin és el nom del pacient perquè el mostri
+            m_qpopUpRisRequestsScreen->setPatientNameOfRetrievingStudies(patientsList.at(0)->getFullName());
+        }
+
+        foreach(Patient *patient, patientsList)
+        {
+            foreach(Study *study, patient->getStudies())
             {
-                WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat descarregar-lo d'un altre PACS.").arg(study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
+                if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
+                {
+                    INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1 , PacsId %2").arg( study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
+
+                    m_qpopUpRisRequestsScreen->addStudyToRetrieveByAccessionNumber(study->getInstanceUID());
+                    m_studiesPendingOfRetrieve.append(study->getInstanceUID());
+                    //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
+                    emit retrieveStudyFromRISRequest(hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()] , study);
+                    m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
+                }
+                else
+                {
+                    WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat descarregar-lo d'un altre PACS.").arg(study->getInstanceUID(), hashTablePacsIDOfStudyInstanceUID[study->getInstanceUID()]));
+                }
             }
         }
     }

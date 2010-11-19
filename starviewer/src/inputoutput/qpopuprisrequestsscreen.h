@@ -48,6 +48,12 @@ public:
     ///Indica que la descàrrega ha finalitzat, indica el número d'estudis descarregats i el cap de 5 segons amaga el PopUp
     void showRetrieveFinished();
 
+    ///Mostra per pantalla el nom del pacient pel qual s'ha rebut la petició de descarregar estudis.
+    /*El nom del pacient no es pot mostrar inicialment, ja que en el primer moment del RIS només rebem l'accession number del qual hem 
+      *de descarregar els estudis, fins que no s'ha consultat el PACS per saber quins són aquests estudis a descarregar no sabem el nom del pacient, 
+      per això quan es rep la petició del RIS i apareix el popUp inicialment no es mostra el nom del pacient*/
+    void setPatientNameOfRetrievingStudies(QString patientName);
+
 protected:
 
     ///Quan es fa un show al popup s'activa un timer, que passat un temps amaga automàticament el PopUp
