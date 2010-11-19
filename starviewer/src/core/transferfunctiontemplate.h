@@ -46,8 +46,6 @@ public:
     /// Retorna la y corresponent al valor de propietat x.
     T get(double x) const;
     /// Defineix explícitament el punt (x,y).
-    void operator [](double x);
-    /// Defineix explícitament el punt (x,y).
     void set(double x, const T &y);
     /// Esborra la definició explícita del punt (x,y) si existeix.
     void unset(double x);
@@ -129,13 +127,6 @@ T TransferFunctionTemplate<T>::get(double x) const
     double alpha = (x - a.key()) / (b.key() - a.key());
 
     return lerp(a.value(), b.value(), alpha);
-}
-
-
-template <typename T>
-void TransferFunctionTemplate<T>::operator [](double x)
-{
-    set(x);
 }
 
 
