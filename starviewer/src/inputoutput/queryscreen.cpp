@@ -154,6 +154,8 @@ void QueryScreen::createConnections()
     if (m_risRequestManager != NULL)
     {
         connect(m_risRequestManager, SIGNAL(retrieveStudyFromRISRequest(QString, Study*)), SLOT(retrieveStudyFromRISRequest(QString, Study*)));
+        connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_risRequestManager, SLOT(studyRetrieveFinished(QString)));
+        connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFailed(QString)), m_risRequestManager, SLOT(studyRetrieveFailed(QString)));
     }
     #endif
 
@@ -174,9 +176,6 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinishedSlot(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailedSlot(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStartedSlot(QString)));
-
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_risRequestManager, SLOT(studyRetrieveFinished(QString)));
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFailed(QString)), m_risRequestManager, SLOT(studyRetrieveFailed(QString)));
 
     connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(storeDicomObjectsToPacs(PacsDevice, Study*, DicomMask)), SLOT(storeDicomObjectsToPacs(PacsDevice, Study*,DicomMask)));
 }
