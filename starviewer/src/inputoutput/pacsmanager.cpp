@@ -49,12 +49,9 @@ void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
     QueryPacsJob *queryPacsJob = dynamic_cast<QueryPacsJob*> ( job );
     QString studyInstanceUID, seriesInstanceUID;
 
-
     //Encara haguem abortat el job, se'ns indica quan ha finalitzat per això comprovem si ha estat abortat per ignora els resultats que ens envia
     if (!queryPacsJob->isAbortRequested())
     {
-        m_numberOfQueryPacsJobsPending--;
-
         switch (queryPacsJob->getQueryLevel())
         {
             case QueryPacsJob::study :
@@ -87,6 +84,12 @@ void PacsManager::queryJobFinished ( ThreadWeaver::Job* job )
         }
     }
 
+    /*És important decrementar el valor de la variable en aquest punt, ja que per exemple si ho fem al inici i una consulta ha fallat, si en algun dels signals 
+      que s'emet fa que aparegui un QMessageBox l'execució d'aquella consulta quedarà parada, però com el apareixer el QMessageBox el thread principal no quedarà
+      aturat, atendrà alstres signals altres consultes que acaben també i decrementar el valor, fent que més d'una consulta que acabi trobin el valor de la variable a 0 i es faci
+      més d'una vegada l'emit del signal QueryFinished*/
+    m_numberOfQueryPacsJobsPending--;
+    
     //TODO:No hauria d'anar dins el if de si el job no ha estat cancel·lat ?
     if (m_numberOfQueryPacsJobsPending == 0) //Si ja no tenim més jobs pendents d'atendre fem signal
     {
