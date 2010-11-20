@@ -76,6 +76,8 @@ QueryScreen::QueryScreen( QWidget *parent )
     m_statsWatcher->addClicksCounter( m_advancedSearchToolButton );
     m_statsWatcher->addClicksCounter( m_clearToolButton );
     m_statsWatcher->addClicksCounter( m_createDICOMDIRToolButton );
+
+    m_lastAccessionNumberRequestedFromRIS = "";
 }
 
 QueryScreen::~QueryScreen()
@@ -435,7 +437,17 @@ void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
     QInputOutputPacsWidget::RetrieveActions actionAfterRetrieve;
     if( Settings().getValue( InputOutputSettings::RisRequestViewOnceRetrieved ).toBool() )
     {
-        actionAfterRetrieve = QInputOutputPacsWidget::View;
+        if (study->getAccessionNumber() != m_lastAccessionNumberRequestedFromRIS)
+        {
+            actionAfterRetrieve = QInputOutputPacsWidget::View;
+            m_lastAccessionNumberRequestedFromRIS = study->getAccessionNumber();
+        }
+        else
+        {
+            /*Si l'estudi té el mateix accession number que l'anterior descarregat indiquem que l'operació que s'ha de fer després de descarregar
+              és un Load, ja que es tracta del mateixa pacient si tenen el mateix accessionnumber*/
+            actionAfterRetrieve = QInputOutputPacsWidget::Load;
+        }
     }
     else
     {

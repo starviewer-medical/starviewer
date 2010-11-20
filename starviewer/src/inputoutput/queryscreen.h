@@ -191,6 +191,8 @@ private:
 
 	///Llista per controlar la descarrega de quins estudis ha estat sol·licitada
 	QStringList m_studyRequestedToRetrieveFromPublicMethod;
+
+    QString m_lastAccessionNumberRequestedFromRIS;
 };
 
 };
