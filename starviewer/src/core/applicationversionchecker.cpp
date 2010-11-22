@@ -78,7 +78,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
             setCheckFinished();
         }
     }
-    else if (m_checkNewVersion)
+    else if (m_checkNewVersion && !m_dontCheckNewVersionsOnline)
     {
         if (checkTimeInterval())
         {
@@ -289,6 +289,7 @@ void ApplicationVersionChecker::readSettings()
     m_lastVersionCheckedDate = settings.getValue(CoreSettings::LastVersionCheckedDate).toString();
     m_lastVersionChecked = settings.getValue(CoreSettings::LastVersionChecked).toString();
     m_checkVersionInterval = settings.getValue(CoreSettings::CheckVersionInterval).toInt();
+    m_dontCheckNewVersionsOnline = settings.getValue(CoreSettings::DontCheckNewVersionsOnline).toBool();
 }
 
 void ApplicationVersionChecker::setCheckFinished()

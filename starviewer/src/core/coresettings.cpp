@@ -7,7 +7,7 @@
 
 namespace udg {
 
-// DefiniciÃ³ de les claus
+// Definició de les claus
 const QString ScreenShotToolBase("ScreenshotTool/");
 const QString CoreSettings::ScreenShotToolFolder(ScreenShotToolBase + "defaultSaveFolder");
 const QString CoreSettings::ScreenShotToolFileExtension(ScreenShotToolBase + "defaultSaveExtension");
@@ -19,11 +19,11 @@ const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics")
 
 // Mida per defecte de la font de les annotacions
 const QString CoreSettings::DefaultToolTextSize("Tools/DefaultTextSize");
-// BooleÃ  per saber si la mida de text de les tools s'ha d'autocalcular 
+// Booleà per saber si la mida de text de les tools s'ha d'autocalcular 
 // segons les dimensions de la pantalla o la decideix l'usuari. 
 const QString CoreSettings::AutoToolTextSize("Tools/AutoTextSize");
 
-// ParÃ metres d'obscurances
+// Paràmetres d'obscurances
 const QString ObscurancesBase("3DViewer/obscurances/");
 const QString LowQualityObscurancesBase( ObscurancesBase + "low/" );
 const QString MediumQualityObscurancesBase( ObscurancesBase + "medium/" );
@@ -56,6 +56,7 @@ const QString CoreSettings::LastVersionChecked("LastVersionChecked");
 const QString CoreSettings::LastVersionCheckedDate("LastVersionCheckedDate");
 const QString CoreSettings::CheckVersionInterval("CheckVersionInterval");
 const QString CoreSettings::NeverShowNewVersionReleaseNotes("NeverShowNewVersionReleaseNotes");
+const QString CoreSettings::DontCheckNewVersionsOnline("DontCheckNewVersionsOnline");
 
 CoreSettings::CoreSettings()
 {
@@ -81,6 +82,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(LastVersionChecked, "");
     settingsRegistry->addSetting(LastVersionCheckedDate, "");
     settingsRegistry->addSetting(CheckVersionInterval, "15");
+    settingsRegistry->addSetting(DontCheckNewVersionsOnline, false);
 }
 
 } // end namespace udg 
