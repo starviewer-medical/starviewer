@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
+ *   Copyright (C) 2005 by Grup de GrÃ fics de Girona                       *
  *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
  *                                                                         *
  *   Universitat de Girona                                                 *
@@ -28,7 +28,7 @@ namespace udg {
 
 ApplicationVersionChecker::ApplicationVersionChecker()
 {
-    //per defecte diem que volem comprobar la nova versió, si no es canvia
+    //per defecte diem que volem comprobar la nova versiÃ³, si no es canvia
     m_checkNewVersion = true;
     // la versio que ens retorna el servidor per defecte es cadena buida
     m_checkedVersion = QString("");
@@ -51,9 +51,12 @@ ApplicationVersionChecker::~ApplicationVersionChecker()
     }
 }
 
-void ApplicationVersionChecker::showIfCorrect()
+void ApplicationVersionChecker::checkReleaseNotes()
 {
     m_checkNewVersion = true;
+    m_checkFinished = false;
+    m_somethingToShow = false;
+    bool async = false;
 
     //utilitzar els settings
     readSettings();
@@ -68,13 +71,13 @@ void ApplicationVersionChecker::showIfCorrect()
             m_releaseNotes = new QReleaseNotes(0);
             m_releaseNotes->setUrl(url);
             m_releaseNotes->setWindowTitle(tr("Release Notes"));
-            m_releaseNotes->show();
-
+            m_somethingToShow = true;
+            
             connect(m_releaseNotes, SIGNAL(closing()), this, SLOT(closeEvent()));
+            setCheckFinished();
         }
     }
-
-    if (m_checkNewVersion)
+    else if (m_checkNewVersion)
     {
         if (checkTimeInterval())
         {
@@ -83,7 +86,29 @@ void ApplicationVersionChecker::showIfCorrect()
             m_releaseNotes->setWindowTitle(tr("New Version Available"));
             connect(m_releaseNotes, SIGNAL(closing()), this, SLOT(closeEvent()));
             checkVersionOnServer();
+            async = true;
         }
+    }
+    if (!async)
+    {
+        setCheckFinished();
+    }
+}
+
+void ApplicationVersionChecker::showIfCorrect()
+{
+    if (m_checkFinished)
+    {
+        // Aqui basicament hi entra quan mostra les notes locals
+        if (m_somethingToShow)
+        {
+            m_releaseNotes->show();
+        }
+    }
+    else
+    {
+        // Basicament hi entra quan mostra les notes d'una nova versiÃ³ al server
+        connect(this, SIGNAL(checkFinished()), this, SLOT(showWhenCheckFinished()));
     }
 }
 
@@ -119,21 +144,21 @@ bool ApplicationVersionChecker::checkLocalUrl(QUrl url){
 
 bool ApplicationVersionChecker::checkTimeInterval()
 {
-    // s'utilitzen dues dates, l'actual i la última comprobada
+    // s'utilitzen dues dates, l'actual i la Ãºltima comprobada
     QDate today = QDate::currentDate();
     QDate lastTime = QDate::fromString(m_lastVersionCheckedDate, QString("yyyyMMdd"));
     
     int i = m_checkVersionInterval;
 
-    //si la data que hi ha guardada a les settings és correcte
+    //si la data que hi ha guardada a les settings Ã©s correcte
     if (lastTime.isValid())
     {
         // calcular quans dies han passat des de que es va comprobar
         i = lastTime.daysTo(today);
     }
-    //si la data no es correcte llavors i = interval i es tornarà a comprobar
+    //si la data no es correcte llavors i = interval i es tornarÃ  a comprobar
         
-    // retornar si fa tants dies o més com marca l'interval que no s'ha comprobat
+    // retornar si fa tants dies o mÃ©s com marca l'interval que no s'ha comprobat
     return i >= m_checkVersionInterval;
 }
 
@@ -176,7 +201,7 @@ QString ApplicationVersionChecker::createWebServiceUrl()
         }
     }
 
-    // Dono prioritat a la interfície d'àrea local i després busco la primera interfície vàlida
+    // Dono prioritat a la interfÃ­cie d'Ã rea local i desprÃ©s busco la primera interfÃ­cie vÃ lida
     if (macAdress == "")
     {
         found = false;
@@ -188,8 +213,8 @@ QString ApplicationVersionChecker::createWebServiceUrl()
             QNetworkInterface::InterfaceFlags f = inter.flags();
             bool flagsOk = f.testFlag(QNetworkInterface::IsUp) && f.testFlag(QNetworkInterface::IsRunning) && !f.testFlag(QNetworkInterface::IsLoopBack);
 
-            //Per si de cas el bluetooth està engegat i foncionant, fer que no l'agafi
-            //Rarament trobarem una connexió de xarxa que vagi a través d'un dispositiu bluetooth
+            //Per si de cas el bluetooth estÃ  engegat i foncionant, fer que no l'agafi
+            //Rarament trobarem una connexiÃ³ de xarxa que vagi a travÃ©s d'un dispositiu bluetooth
             if (inter.isValid() && flagsOk && !inter.humanReadableName().toLower().contains("bluetooth"))
             {
                 macAdress += inter.hardwareAddress();
@@ -236,21 +261,21 @@ void ApplicationVersionChecker::writeSettings()
     Settings settings;
     if (!m_checkNewVersion)
     {
-        //ja no es mostren més fins la proxima actualització
+        //ja no es mostren mÃ©s fins la proxima actualitzaciÃ³
         settings.setValue(CoreSettings::ShowReleaseNotesFirstTime, false);
 
         //primer de tot comprobar si el 'Don't show on future releases' esta activat
         if (m_releaseNotes->isDontShowAnymoreChecked())
         {
-            //modificar els settings per que no es mostrin mai més  
+            //modificar els settings per que no es mostrin mai mÃ©s  
             settings.setValue(CoreSettings::NeverShowReleaseNotes, true);
         }
     }
     else
     {
-        //Guardar la data en que hem comprobat la versió
+        //Guardar la data en que hem comprobat la versiÃ³
         settings.setValue(CoreSettings::LastVersionCheckedDate, QDate::currentDate().toString(QString("yyyyMMdd")));
-        //Guardar la versió que hem comprobat
+        //Guardar la versiÃ³ que hem comprobat
         settings.setValue(CoreSettings::LastVersionChecked, m_checkedVersion);
     }
 }
@@ -263,6 +288,12 @@ void ApplicationVersionChecker::readSettings()
     m_lastVersionCheckedDate = settings.getValue(CoreSettings::LastVersionCheckedDate).toString();
     m_lastVersionChecked = settings.getValue(CoreSettings::LastVersionChecked).toString();
     m_checkVersionInterval = settings.getValue(CoreSettings::CheckVersionInterval).toInt();
+}
+
+void ApplicationVersionChecker::setCheckFinished()
+{
+    m_checkFinished = true;
+    emit checkFinished();
 }
 
 void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
@@ -301,6 +332,7 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
     else
     {
         ERROR_LOG(QString("Error de la resposta del webservice, tipus ") + QString::number(reply->error()) + QString(": ") + reply->errorString());
+        setCheckFinished();
     }
     reply->deleteLater();
 }
@@ -316,21 +348,29 @@ void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
         if (m_lastVersionChecked != m_checkedVersion)
         {
             m_releaseNotes->setUrl(reply->url());
-            m_releaseNotes->show();
+            m_somethingToShow = true;
         }
     }
     else
     {
-        ERROR_LOG(QString("Error en rebre les notes de la versio, tipus ") + QString::number(reply->error()) + QString(": ") + reply->errorString());
+        ERROR_LOG(QString("Error en rebre les notes de la versio, tipus ") + QString::number(reply->error()) + QString(": ") + reply->errorString());        
     }
-
     reply->deleteLater();
+    setCheckFinished();       
 }
 
 void ApplicationVersionChecker::closeEvent()
 {
     //guardar els settings
     writeSettings();
+}
+
+void ApplicationVersionChecker::showWhenCheckFinished()
+{
+    if (m_somethingToShow)
+    {
+        m_releaseNotes->show();
+    }
 }
 
 }; // end namespace udg
