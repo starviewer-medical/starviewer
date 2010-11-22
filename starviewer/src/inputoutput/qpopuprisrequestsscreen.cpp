@@ -105,7 +105,15 @@ void QPopUpRisRequestsScreen::refreshLabelStudyCounter()
 void QPopUpRisRequestsScreen::showRetrieveFinished()
 {
     m_operationAnimation->hide();
-    m_operationDescription->setText(tr("%1 studies has been retrieved.").arg(m_studiesInstanceUIDRetrieved.count()));
+    int numberOfRetrievedStudies = m_studiesInstanceUIDRetrieved.count();
+    if (numberOfRetrievedStudies == 1)
+    {
+        m_operationDescription->setText(tr("%1 study has been retrieved.").arg(numberOfRetrievedStudies));
+    }
+    else
+    {
+        m_operationDescription->setText(tr("%1 studies have been retrieved.").arg(numberOfRetrievedStudies));
+    }
     m_studiesRetrievingCounter->setText("");
     m_qTimer->start(msTimeOutToHidePopUp);
 }
