@@ -2596,33 +2596,44 @@ Error Number: %1</source>
 <context>
     <name>udg::QPopUpRisRequestsScreen</name>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="39"/>
-        <source>%1 has received a request from a RIS to retrieve the study with accession number</source>
+        <location filename="qpopuprisrequestsscreen.cpp" line="43"/>
+        <source>%1 has received a request from RIS to retrieve studies.</source>
+        <oldsource>%1 has received a request from SAP to retrieve studies.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="41"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="44"/>
         <source>Querying PACS...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="92"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="95"/>
         <source>No studies found.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="99"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="102"/>
         <source>%1 of %2.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="111"/>
+        <source>%1 study has been retrieved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="105"/>
-        <source>%1 studies has been retrieved.</source>
-        <oldsource>%1 studies has been retrieved</oldsource>
+        <location filename="qpopuprisrequestsscreen.cpp" line="115"/>
+        <source>%1 studies have been retrieved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="54"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="123"/>
+        <source>%1 has received a request from RIS to retrieve studies of patient %2.</source>
+        <oldsource>%1 has received a request from SAP to retrieve studies of patient %2.</oldsource>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qpopuprisrequestsscreen.cpp" line="57"/>
         <source>Retrieving study</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2635,17 +2646,17 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreenbase.ui" line="264"/>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="262"/>
         <source>ani</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreenbase.ui" line="300"/>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="298"/>
         <source>Starviewer will proceed to retrieve it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreenbase.ui" line="322"/>
+        <location filename="qpopuprisrequestsscreenbase.ui" line="320"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2843,12 +2854,12 @@ Error Number: %1</source>
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="197"/>
+        <location filename="queryscreen.cpp" line="198"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="198"/>
+        <location filename="queryscreen.cpp" line="199"/>
         <source>
 
 %1 couldn&apos;t retrieve studies from PACS if the port is in use, please close the application that is using port %2 or change Starviewer port for incoming connections from PACS in the configuration screen.</source>
@@ -2921,27 +2932,27 @@ Error Number: %1</source>
 <context>
     <name>udg::RISRequestManager</name>
     <message>
-        <location filename="risrequestmanager.cpp" line="82"/>
+        <location filename="risrequestmanager.cpp" line="85"/>
         <source>The RIS request could not be performed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="82"/>
+        <location filename="risrequestmanager.cpp" line="85"/>
         <source>There are no configured PACS to query.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="82"/>
+        <location filename="risrequestmanager.cpp" line="85"/>
         <source>Please, check your PACS settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="125"/>
+        <location filename="risrequestmanager.cpp" line="137"/>
         <source>%2 can&apos;t execute the RIS request, because hasn&apos;t found the Study with accession number %1 in the default PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="143"/>
+        <location filename="risrequestmanager.cpp" line="155"/>
         <source>Processing the RIS request, can&apos;t query PACS %1 from %2.
 Be sure that the IP and AETitle of It are correct.</source>
         <oldsource>Processing the RIS request, can&apos;t query PACS %1 from %2.
@@ -2949,17 +2960,17 @@ Be sure that the IP and AETitle of It are correct</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="158"/>
+        <location filename="risrequestmanager.cpp" line="170"/>
         <source>Can&apos;t listen RIS requests on port %1, the port is in use by another application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="161"/>
+        <location filename="risrequestmanager.cpp" line="173"/>
         <source>Can&apos;t listen RIS requests on port %1, an unknown network error has produced.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="162"/>
+        <location filename="risrequestmanager.cpp" line="174"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <oldsource>
