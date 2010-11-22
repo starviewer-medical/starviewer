@@ -109,6 +109,7 @@ private:
     QString m_lastVersionChecked;
     int m_checkVersionInterval;
     bool m_neverShowNewVersionReleaseNotes;
+    bool m_dontCheckNewVersionsOnline;
 };
 
 } // end namespace udg

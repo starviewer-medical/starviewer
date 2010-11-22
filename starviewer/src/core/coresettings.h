@@ -53,6 +53,8 @@ public:
     static const QString CheckVersionInterval; 
     /// Per fer que no es vegin més les release notes d'una nova versió online
     static const QString NeverShowNewVersionReleaseNotes;
+    /// Permetre que no es comprobin versions online
+    static const QString DontCheckNewVersionsOnline;
 };
 
 } // end namespace udg 
