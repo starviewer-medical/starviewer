@@ -45,13 +45,14 @@ public:
 
     /// Per fer que no es vegin més les Release Notes
     static const QString ShowReleaseNotesFirstTime;
-    static const QString NeverShowReleaseNotes;
 
     /// Comporbar si hi ha una nova versió
     static const QString LastVersionChecked;
     static const QString LastVersionCheckedDate;
     /// Cada quants dies es comprovarà si hi ha una versió nova
     static const QString CheckVersionInterval; 
+    /// Per fer que no es vegin més les release notes d'una nova versió online
+    static const QString NeverShowNewVersionReleaseNotes;
 };
 
 } // end namespace udg 

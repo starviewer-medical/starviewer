@@ -105,10 +105,10 @@ private:
 
     /// Settings
     bool m_showReleaseNotesFirstTime;
-    bool m_neverShowReleaseNotes;
     QString m_lastVersionCheckedDate;
     QString m_lastVersionChecked;
     int m_checkVersionInterval;
+    bool m_neverShowNewVersionReleaseNotes;
 };
 
 } // end namespace udg

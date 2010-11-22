@@ -61,7 +61,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
     //utilitzar els settings
     readSettings();
 
-    if (m_showReleaseNotesFirstTime && !m_neverShowReleaseNotes)
+    if (m_showReleaseNotesFirstTime)
     {
         //llegir el contingut dels fitxers HTML de les release notes
         QUrl url = createLocalUrl();
@@ -69,6 +69,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
         {
             m_checkNewVersion = false;
             m_releaseNotes = new QReleaseNotes(0);
+            m_releaseNotes->setDontShowVisible(false);
             m_releaseNotes->setUrl(url);
             m_releaseNotes->setWindowTitle(tr("Release Notes"));
             m_somethingToShow = true;
@@ -82,7 +83,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
         if (checkTimeInterval())
         {
             m_releaseNotes = new QReleaseNotes(0);
-            m_releaseNotes->setDontShowVisible(false);
+            m_releaseNotes->setDontShowVisible(true);
             m_releaseNotes->setWindowTitle(tr("New Version Available"));
             connect(m_releaseNotes, SIGNAL(closing()), this, SLOT(closeEvent()));
             checkVersionOnServer();
@@ -263,16 +264,16 @@ void ApplicationVersionChecker::writeSettings()
     {
         //ja no es mostren més fins la proxima actualització
         settings.setValue(CoreSettings::ShowReleaseNotesFirstTime, false);
-
+    }
+    else
+    {
         //primer de tot comprobar si el 'Don't show on future releases' esta activat
         if (m_releaseNotes->isDontShowAnymoreChecked())
         {
             //modificar els settings per que no es mostrin mai més  
-            settings.setValue(CoreSettings::NeverShowReleaseNotes, true);
+            settings.setValue(CoreSettings::NeverShowNewVersionReleaseNotes, true);
         }
-    }
-    else
-    {
+
         //Guardar la data en que hem comprobat la versió
         settings.setValue(CoreSettings::LastVersionCheckedDate, QDate::currentDate().toString(QString("yyyyMMdd")));
         //Guardar la versió que hem comprobat
@@ -284,7 +285,7 @@ void ApplicationVersionChecker::readSettings()
 {
     Settings settings;
     m_showReleaseNotesFirstTime = settings.getValue(CoreSettings::ShowReleaseNotesFirstTime).toBool();
-    m_neverShowReleaseNotes = settings.getValue(CoreSettings::NeverShowReleaseNotes).toBool();
+    m_neverShowNewVersionReleaseNotes = settings.getValue(CoreSettings::NeverShowNewVersionReleaseNotes).toBool();
     m_lastVersionCheckedDate = settings.getValue(CoreSettings::LastVersionCheckedDate).toString();
     m_lastVersionChecked = settings.getValue(CoreSettings::LastVersionChecked).toString();
     m_checkVersionInterval = settings.getValue(CoreSettings::CheckVersionInterval).toInt();
@@ -348,7 +349,17 @@ void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
         if (m_lastVersionChecked != m_checkedVersion)
         {
             m_releaseNotes->setUrl(reply->url());
-            m_somethingToShow = true;
+            if(m_neverShowNewVersionReleaseNotes)
+            {
+                // Si no volem mostrar mes les notes de les noves versions online,
+                // hem de guardar els settings aqui, així les comprobacions es faran quan toca
+                // per exemple, al cap de 15 dies d'això.
+                writeSettings();
+            }
+            else
+            {
+                m_somethingToShow = true;
+            }
         }
     }
     else
