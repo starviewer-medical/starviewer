@@ -4768,7 +4768,7 @@ void QExperimental3DExtension::fillWeigthsEditor()
         weightsTransferFunction.setOpacityTransferFunction(currentWeights);
     }
 
-    weightsTransferFunction.setOpacity(zeroEnd, 0.0);
+    if (zeroEnd >= 0) weightsTransferFunction.setOpacity(zeroEnd, 0.0);
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsTransferFunction.simplify());
 }

@@ -4095,6 +4095,9 @@
                   <property name="toolTip">
                    <string>Zero up to</string>
                   </property>
+                  <property name="minimum">
+                   <number>-1</number>
+                  </property>
                   <property name="maximum">
                    <number>1000</number>
                   </property>
@@ -4450,7 +4453,7 @@
   <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_5"/>
   <buttongroup name="buttonGroup_6"/>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_7"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
