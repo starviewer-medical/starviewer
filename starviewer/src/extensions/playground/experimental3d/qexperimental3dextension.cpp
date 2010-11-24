@@ -4520,8 +4520,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             double shift = -minOpacity;
             double scale = 1.0 / (maxOpacity - minOpacity);
 
-            //for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
-            for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
+            for (int j = 0; j < m_intensityClusters.size(); j++)    // evolucionar-los tots
+            //for (int j = 1; j < m_intensityClusters.size(); j++)    // deixar el primer tal com està (a 0)
             {
                 if (!m_clusterHasData.at(j)) continue;
 
