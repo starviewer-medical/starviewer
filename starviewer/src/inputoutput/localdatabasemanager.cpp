@@ -456,7 +456,7 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
 
     if (freeSpaceInHardDisk < minimumSpaceRequired)
     {
-        INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " Mb) ");
+        INFO_LOG(QString("No hi ha suficient espai lliure per descarregar fitxers. Espai lliure: %1 Mb, espai minim necessari: %2 Mb").arg(QString::number(freeSpaceInHardDisk), QString::number(minimumSpaceRequired)));
 
         if (settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool())
         {
