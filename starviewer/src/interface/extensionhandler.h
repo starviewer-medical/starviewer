@@ -33,6 +33,10 @@ public:
 
     ~ExtensionHandler();
 
+signals:
+    /// Signal que s'emet quan s'ha processat un input
+    void inputProcessed();
+
 public slots:
     /// rep la petició d'un servei/mini-aplicació i fa el que calgui
     void request( int who );
@@ -84,6 +88,9 @@ private slots:
      */
     void processInput(QList<Patient *> patientsList, bool loadOnly = false );
 
+    /// Slot que es processa al acabar de processar un input
+    void processPendingInput();
+
 private:
     /// Crea les connexions de signals i slots
     void createConnections();
@@ -105,6 +112,11 @@ private:
 
     /// Contexte de l'extensió
     ExtensionContext m_extensionContext;
+
+    /// Variables per la gestió dels inputs que s'estan esperant per ser processats
+    bool m_processingInput;
+    bool m_loadOnlyOfInputPendingToProcess;
+    QList<Patient *> m_inputPendingToProcess;
 };
 
 };  //  end  namespace udg

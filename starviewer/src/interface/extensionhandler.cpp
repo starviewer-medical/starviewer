@@ -46,6 +46,7 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
 
     // Aquí en principi només farem l'inicialització
     m_importFileApp = new AppImportFile;
+    m_processingInput = false;
 
     createConnections();
 
@@ -53,6 +54,7 @@ ExtensionHandler::ExtensionHandler( QApplicationMainWindow *mainApp , QObject *p
     //queryscreen l'hem d'instanciar ja a l'inici perquè ja escolti les peticions
     QueryScreenSingleton::instance();
     connect(QueryScreenSingleton::instance(), SIGNAL( selectedPatients(QList<Patient *>,bool) ), SLOT(processInput(QList<Patient*>,bool)));
+    connect(this, SIGNAL(inputProcessed()), this, SLOT(processPendingInput()));
 }
 
 ExtensionHandler::~ExtensionHandler()
@@ -326,24 +328,45 @@ void ExtensionHandler::processInput( QList<Patient *> patientsList, bool loadOnl
 {
     // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
     bool canReplaceActualPatient = true;
-    if (m_mainApp->getCurrentPatient())
+
+    if (m_processingInput)
     {
-        foreach (Patient *patient, patientsList)
+        // Buidem el que tenim pendent de processar
+        int numberOfItems = m_inputPendingToProcess.size();
+        for (int i = 0; i < numberOfItems; i++)
         {
-            if (m_mainApp->getCurrentPatient()->compareTo( patient ) == Patient::SamePatients )
+            delete m_inputPendingToProcess.takeFirst(); // Eliminem els patients, si no quedarien "orfes"
+        }
+
+        m_inputPendingToProcess = patientsList;
+        m_loadOnlyOfInputPendingToProcess = loadOnly;
+    }
+    else
+    {
+        m_processingInput = true;
+
+        if (m_mainApp->getCurrentPatient())
+        {
+            foreach (Patient *patient, patientsList)
             {
-                canReplaceActualPatient = false;
-                break;
+                if (m_mainApp->getCurrentPatient()->compareTo( patient ) == Patient::SamePatients )
+                {
+                    canReplaceActualPatient = false;
+                    break;
+                }
             }
         }
-    }
 
-    // Afegim els pacients carregats correctament
-    foreach (Patient *patient, patientsList)
-    {
-        generatePatientVolumes(patient,QString());
-        this->addPatientToWindow( patient, canReplaceActualPatient, loadOnly );
-        canReplaceActualPatient = false; //Un cop carregat un pacient, ja no el podem reemplaçar
+        // Afegim els pacients carregats correctament
+        foreach (Patient *patient, patientsList)
+        {
+            generatePatientVolumes(patient,QString());
+            this->addPatientToWindow( patient, canReplaceActualPatient, loadOnly );
+            canReplaceActualPatient = false; //Un cop carregat un pacient, ja no el podem reemplaçar
+        }
+
+        m_processingInput = false;
+        emit inputProcessed();
     }
 }
 
@@ -397,6 +420,16 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
         }
     }
     DEBUG_LOG( QString("Patient:\n%1").arg( patient->toString() ));
+}
+
+void ExtensionHandler::processPendingInput()
+{
+    if (m_inputPendingToProcess.size() > 0)
+    {
+        QList<Patient*> patientList = m_inputPendingToProcess;
+        m_inputPendingToProcess.clear();
+        processInput(patientList, m_loadOnlyOfInputPendingToProcess);
+    }
 }
 
 void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly )
