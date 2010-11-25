@@ -398,12 +398,12 @@ void ViewersLayout::resizeEvent ( QResizeEvent * event )
         for( i = 0; i < numberOfElements; i++ )
         {
             viewer = m_vectorViewers.at(i);
-            position = m_positionsList.at(i);
+            position = m_positionsList.value(i);
             listOfPositions = position.split("\\");
-            x1 = listOfPositions.at(0).toDouble();
-            y1 = listOfPositions.at(1).toDouble();
-            x2 = listOfPositions.at(2).toDouble();
-            y2 = listOfPositions.at(3).toDouble();
+            x1 = listOfPositions.value(0).toDouble();
+            y1 = listOfPositions.value(1).toDouble();
+            x2 = listOfPositions.value(2).toDouble();
+            y2 = listOfPositions.value(3).toDouble();
             viewer->setGeometry( x1*screen_x, (1-y1)*screen_y, (x2-x1)*screen_x, (y1-y2)*screen_y );
         }
     }
