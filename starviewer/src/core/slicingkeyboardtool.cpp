@@ -94,34 +94,34 @@ void SlicingKeyboardTool::handleEvent( unsigned long eventID )
                                 }
                             }
                         }
-                    }
-                    int nextVolumeIndex = 0;
-                    if (keySymbol == "plus")
-                    {
-                        if (currentVolumeIndex >= volumesList.size() - 1)
+                        int nextVolumeIndex = 0;
+                        if (keySymbol == "plus")
                         {
-                            nextVolumeIndex = 0;
+                            if (currentVolumeIndex >= volumesList.size() - 1)
+                            {
+                                nextVolumeIndex = 0;
+                            }
+                            else
+                            {
+                                nextVolumeIndex = currentVolumeIndex + 1;
+                            }
+                            Volume *nextVolume = volumesList.at(nextVolumeIndex);
+                            m_2DViewer->setInput(nextVolume);
                         }
                         else
                         {
-                            nextVolumeIndex = currentVolumeIndex + 1;
+                            if (currentVolumeIndex <= 0)
+                            {
+                                nextVolumeIndex = volumesList.size() - 1;
+                            }
+                            else
+                            {
+                                nextVolumeIndex = currentVolumeIndex - 1;
+                            }
+                            Volume *nextVolume = volumesList.at(nextVolumeIndex);
+                            m_2DViewer->setInput(nextVolume);
+                            m_2DViewer->setSlice(m_2DViewer->getMaximumSlice());
                         }
-                        Volume *nextVolume = volumesList.at(nextVolumeIndex);
-                        m_2DViewer->setInput(nextVolume);
-                    }
-                    else
-                    {
-                        if (currentVolumeIndex <= 0)
-                        {
-                            nextVolumeIndex = volumesList.size() - 1;
-                        }
-                        else
-                        {
-                            nextVolumeIndex = currentVolumeIndex - 1;
-                        }
-                        Volume *nextVolume = volumesList.at(nextVolumeIndex);
-                        m_2DViewer->setInput(nextVolume);
-                        m_2DViewer->setSlice(m_2DViewer->getMaximumSlice());
                     }
                     m_2DViewer->refresh();
                 }
