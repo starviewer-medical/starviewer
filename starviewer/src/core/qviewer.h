@@ -281,6 +281,10 @@ protected:
 
     virtual void setupInteraction();
 
+private slots:
+    /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
+    void changeVolume(Volume *volume);
+
 protected:
     /// El volum a visualitzar
     Volume *m_mainVolume;
