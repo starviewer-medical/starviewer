@@ -123,6 +123,7 @@ void SlicingKeyboardTool::handleEvent( unsigned long eventID )
                         m_2DViewer->setInput(nextVolume);
                         m_2DViewer->setSlice(m_2DViewer->getMaximumSlice());
                     }
+                    m_2DViewer->refresh();
                 }
             }
             else
