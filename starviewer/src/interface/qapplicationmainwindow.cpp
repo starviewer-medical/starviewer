@@ -664,7 +664,7 @@ void QApplicationMainWindow::computeDefaultToolTextSize()
         int textSize;
         if ((screen.width() * screen.height()) >= (5 * 1024 * 1024))
         {
-            textSize = 22;
+            textSize = 24;
         }
         else if ((screen.width() * screen.height()) >= (3 * 1024 * 1024))
         {
