@@ -79,7 +79,7 @@ private:
     PacsManager *m_pacsManager;
     QList<Study*> m_mergedStudyList;
     QHash<QString,QString> m_mergedHashPacsIDOfStudyInstanceUID;
-    Study *m_studyToFindPrevious;
+    QString m_studyInstanceUIDToFindPrevious;
     /*Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
     *en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
     *com ja el tindrem aquesta llista ja no en farem signal*/

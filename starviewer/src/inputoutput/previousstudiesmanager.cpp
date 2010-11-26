@@ -21,6 +21,7 @@ namespace udg {
 PreviousStudiesManager::PreviousStudiesManager()
 {
     m_pacsManager = new PacsManager();
+    m_studyInstanceUIDToFindPrevious = "invalid";
     createConnections();
 }
 
@@ -53,7 +54,7 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
     m_mergedStudyList.clear();
     m_pacsDeviceIDErrorEmited.clear();
 
-    m_studyToFindPrevious = study;
+    m_studyInstanceUIDToFindPrevious = study->getInstanceUID();
 
     //Preguntem al PACS per estudis
     if (pacsDeviceListToQuery.count() > 0)
@@ -71,6 +72,7 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
 void PreviousStudiesManager::cancelCurrentQuery()
 {
     m_pacsManager->cancelCurrentQueries();
+    m_studyInstanceUIDToFindPrevious = "invalid";
 }
 
 bool PreviousStudiesManager::isExecutingQueries()
@@ -135,7 +137,7 @@ bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)
 
 bool PreviousStudiesManager::isStudyToFindPrevious(Study *study)
 {
-    return study->getInstanceUID() == m_studyToFindPrevious->getInstanceUID();
+    return study->getInstanceUID() == m_studyInstanceUIDToFindPrevious;
 }
 
 DicomMask PreviousStudiesManager::getBasicDicomMask()
