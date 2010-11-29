@@ -1,11 +1,10 @@
 #include "settingsparser.h"
 
 #include <QHostInfo> // localhostname, ip
+#include <QRegExp>
 #include <QDir>
 #include <QProcess> // pel systemEnvironment
 #include "logging.h"
-
-#include <QRegExp>
 
 namespace udg {
 
@@ -97,30 +96,37 @@ void SettingsParser::initializeParseableStringsTable()
     m_parseableStringsTable["HOSTNAME"] = localHostName;
     
     // obtenció de la ip
+    QStringList ipV4Addresses = getLocalHostIPv4Addresses();
     QString ip;
-    QHostInfo info = QHostInfo::fromName( localHostName );
-    QList<QHostAddress> hostAddresses = info.addresses();
-    if( !hostAddresses.isEmpty() )
-        ip = hostAddresses.first().toString();
-    
-    m_parseableStringsTable["IP"] = ip;
-
-    // "partim" els prefixos de la ip
-    QStringList ipParts = ip.split(".");
-    if( ipParts.count() == 4 )
+    if (!ipV4Addresses.isEmpty())
     {
-        m_parseableStringsTable["IP.1"] = ipParts.at(0);
-        m_parseableStringsTable["IP.2"] = ipParts.at(1);
-        m_parseableStringsTable["IP.3"] = ipParts.at(2);
-        m_parseableStringsTable["IP.4"] = ipParts.at(3);
+        // Assumim que la primera de la llista és la IP bona
+        ip = ipV4Addresses.first();
+        
+        m_parseableStringsTable["IP"] = ip;
+        
+        // "partim" els prefixos de la ip
+        QStringList ipParts = ip.split(".");
+        // Això no hauria de fallar mai ja que la llista d'IPs ha de contenir valors correctament formatats ja que aquests han estat prèviament validats.
+        if (ipParts.count() == 4)
+        {
+            m_parseableStringsTable["IP.1"] = ipParts.at(0);
+            m_parseableStringsTable["IP.2"] = ipParts.at(1);
+            m_parseableStringsTable["IP.3"] = ipParts.at(2);
+            m_parseableStringsTable["IP.4"] = ipParts.at(3);
+        }
     }
     else
     {
-        m_parseableStringsTable["IP.1"] = "0";
-        m_parseableStringsTable["IP.2"] = "0";
-        m_parseableStringsTable["IP.3"] = "0";
-        m_parseableStringsTable["IP.4"] = "0";
+        // No tenim cap adreça IP
+        m_parseableStringsTable["IP"] = "N/A";
+        m_parseableStringsTable["IP.1"] = "[N/A]";
+        m_parseableStringsTable["IP.2"] = "[N/A]";
+        m_parseableStringsTable["IP.3"] = "[N/A]";
+        m_parseableStringsTable["IP.4"] = "[N/A]";
+        WARN_LOG("No s'ha recongeut cap adreça IPv4 en l'equip.");
     }
+
     // home path
     m_parseableStringsTable["HOMEPATH"] = QDir::homePath();
     
@@ -135,6 +141,38 @@ void SettingsParser::initializeParseableStringsTable()
         if( index != -1 )
             m_parseableStringsTable["USERNAME"] = environmentList.at(index);
     }
+}
+
+bool SettingsParser::isIPv4Address(const QString &ipAddress)
+{
+    QString zeroTo255Range("([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])");
+    QRegExp ipv4AddressRegularExpression("^" + zeroTo255Range + "\\." + zeroTo255Range + "\\." + zeroTo255Range + "\\." + zeroTo255Range + "$");
+
+    return ipv4AddressRegularExpression.exactMatch(ipAddress);
+}
+
+QStringList SettingsParser::getLocalHostIPv4Addresses()
+{
+    QStringList ipV4List;
+    
+    QHostInfo hostInfo = QHostInfo::fromName(QHostInfo::localHostName());
+    // TODO També es podria optar per fer servir QNetworkInterface::allAddresses(), tot i que ens retorna l'adreça 127.0.0.1 a més a més, 
+    // en comptes de fer servir hostInfo.addresses()
+    foreach (QHostAddress ip, hostInfo.addresses())
+    {
+        QString ipString = ip.toString();
+        if (isIPv4Address(ipString))
+        {
+            ipV4List << ipString;
+            DEBUG_LOG(ipString + " -> És una adreça IPv4 vàlida");
+        }
+        else
+        {
+            DEBUG_LOG(ipString + " -> NO és una adreça IPv4 vàlida");
+        }
+    }
+    
+    return ipV4List;
 }
 
 } // end namespace udg
