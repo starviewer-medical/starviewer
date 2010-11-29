@@ -75,6 +75,23 @@ private:
     /// Inicialitza la taula amb les paraules clau i els seus corresponents valors
     void initializeParseableStringsTable();
 
+    /// Ens diu si la cadena de texte passada és una adreça IPv4 vàlida.
+    /// Només accepta com a resultats vàlids cadenes de texte que tinguin únicament l'adreça IP
+    /// Si la cadena conté una adreça IP a més d'altres caràcters, aquesta serà donada com a invàlida.
+    /// Es considera una adreça IP vàlida una cadena amb la forma xxx.xxx.xxx.xxx on xxx és un número 
+    /// dins del rang 0..255. La cadena 192.168.2.1 seria considerada com a vàlida, 
+    /// però la cadena 192.168.002.001 no ho seria pas.
+    /// TODO Aquest mètode hauria de formar part d'una classe amb utilitats de sistema o xarxa
+    /// accessible des de qualsevol altre lloc de l'aplicació per fer aquest tipu de comprovacions.
+    bool isIPv4Address(const QString &ipAddress);
+
+    /// Ens retorna una llista amb les adreces IPv4 de la màquina local.
+    /// Normalment el primer element de la llista hauria de ser la IP corresponent 
+    /// a la connexió de xarxa principal.
+    /// TODO Aquest mètode hauria de formar part d'una classe amb utilitats de sistema o xarxa
+    /// accessible des de qualsevol altre lloc de l'aplicació per fer obtenir aquest tipu d'informació.
+    QStringList getLocalHostIPv4Addresses();
+
 private:
     /// Mapa que conté la relació de paraules clau amb el seu valor
     QMap<QString, QString> m_parseableStringsTable;
