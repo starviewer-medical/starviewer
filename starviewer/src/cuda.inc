@@ -11,7 +11,7 @@ cuda {
         QMAKE_CUC = nvcc
     }
     win32 {
-        LIBS += $${CUDALIBDIR}\cuda.lib $${CUDALIBDIR}\cudart.lib
+        LIBS += $${CUDALIBDIR}/cuda.lib $${CUDALIBDIR}/cudart.lib
         QMAKE_CUC = $(CUDABINDIR)/nvcc.exe
     }
 

@@ -44,8 +44,8 @@ win32 {
     INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
     LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
 
-    INCLUDEPATH += C:\sqlite3
-    LIBS += -LC:\sqlite3
+    INCLUDEPATH += C:/sqlite3
+    LIBS += -LC:/sqlite3
     LIBS -= -lxml2
 }
 
