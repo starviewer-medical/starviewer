@@ -478,7 +478,7 @@ void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &ge
     }
     
     QStringList splittedGeometryList = geometry.split("\\");
-    if (splittedGeometryList.count() < 4 )
+    if (splittedGeometryList.count() < 4)
     {
         DEBUG_LOG("La geometria proporcionada no conté el nombre d'elements necessaris o està mal formada. Geometry dump: [" + geometry + "]. No s'aplicarà cap geometria al viewer proporcinat.");
         WARN_LOG("La geometria proporcionada no conté el nombre d'elements necessaris o està mal formada. Geometry dump: [" + geometry + "]. No s'aplicarà cap geometria al viewer proporcinat.");
@@ -496,7 +496,7 @@ void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &ge
 
     int screenX = this->width();
     int screenY = this->height();
-    viewer->setGeometry(x1*screenX, (1 - y1)*screenY, (x2 - x1)*screenX, (y1 - y2)*screenY);
+    viewer->setGeometry(x1 * screenX, (1 - y1) * screenY, (x2 - x1) * screenX, (y1 - y2) * screenY);
 }
 
 int ViewersLayout::getNumberOfVisibleViewers() const
