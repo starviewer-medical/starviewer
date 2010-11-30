@@ -92,7 +92,6 @@ private:
     /// Ens retorna el nombre de visors visibles. Això seran quants viewers tenen una geometria assignada
     int getNumberOfVisibleViewers() const;
 
-private slots:
     /// Inicialitza els objectes que fem servir per distribuir els visors
     /// Només cal cridar-lo al constructor
     void initLayouts();
