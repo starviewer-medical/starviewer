@@ -350,7 +350,7 @@ void ViewersLayout::resizeEvent(QResizeEvent *event)
 
     if (!m_isRegular)
     {
-        for (int i = 0; i < m_vectorViewers.size(); ++i)
+        for (int i = 0; i < getNumberOfVisibleViewers(); ++i)
         {
             setViewerGeometry(m_vectorViewers.at(i), m_geometriesList.at(i));
         }
