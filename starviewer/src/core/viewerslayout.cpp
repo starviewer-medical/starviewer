@@ -45,7 +45,7 @@ void ViewersLayout::initLayouts()
 
 void ViewersLayout::removeLayouts()
 {
-    int numberOfViewers = m_vectorViewers.size();
+    int numberOfViewers = getNumberOfViewers();
 
     for (int i = 0; i < numberOfViewers; ++i)
     {
@@ -56,7 +56,7 @@ void ViewersLayout::removeLayouts()
 
 void ViewersLayout::restoreLayouts()
 {
-    int numberOfViewers = m_vectorViewers.size();
+    int numberOfViewers = getNumberOfViewers();
 
     /// Si tenim més visors que el grid regular que teníem construït, el regenerem.
     if (numberOfViewers > m_totalColumns * m_totalRows)
@@ -78,7 +78,7 @@ void ViewersLayout::restoreLayouts()
     int column = 1;
     int row = 0;
     // S'amaguen tots i es deixa el principal, es tornen a posar amb layout
-    for (int i = 1; i < m_vectorViewers.size(); ++i)
+    for (int i = 1; i < getNumberOfViewers(); ++i)
     {
         m_vectorViewers.value(i)->hide();
         m_viewersLayout->addWidget(getViewerWidget(i), row, column);
@@ -323,7 +323,7 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
         removeLayouts();
     }
 
-    if (getNumberOfVisibleViewers() < m_vectorViewers.size())
+    if (getNumberOfVisibleViewers() < getNumberOfViewers())
     {
         newViewer = getViewerWidget(getNumberOfVisibleViewers());
     }
@@ -461,7 +461,7 @@ Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
     Q2DViewerWidget *viewerWidget = 0;
     
     // Comprovem que el viewer demanat estigui dins del rang
-    if (number < m_vectorViewers.size() && number >= 0)
+    if (number < getNumberOfViewers() && number >= 0)
     {
         viewerWidget = m_vectorViewers.at(number);
     }
