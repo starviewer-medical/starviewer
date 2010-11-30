@@ -449,7 +449,7 @@ void ViewersLayout::hideColumns(int columns)
     }
 }
 
-int ViewersLayout::getNumberOfViewers()
+int ViewersLayout::getNumberOfViewers() const
 {
     return m_vectorViewers.size();
 }
