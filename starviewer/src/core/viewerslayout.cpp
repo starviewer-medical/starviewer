@@ -80,7 +80,7 @@ void ViewersLayout::restoreLayouts()
     // S'amaguen tots i es deixa el principal, es tornen a posar amb layout
     for (int i = 1; i < getNumberOfViewers(); ++i)
     {
-        m_vectorViewers.value(i)->hide();
+        getViewerWidget(i)->hide();
         m_viewersLayout->addWidget(getViewerWidget(i), row, column);
 
         ++column;
