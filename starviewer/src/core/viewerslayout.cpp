@@ -13,7 +13,6 @@ namespace udg {
 ViewersLayout::ViewersLayout(QWidget *parent) 
  : QWidget(parent), m_selectedViewer(0)
 {
-    m_numberOfVisibleViewers = 0;
     initLayouts();
 }
 
@@ -53,7 +52,6 @@ void ViewersLayout::removeLayouts()
         m_viewersLayout->removeWidget(m_vectorViewers.at(i));
     }
     m_geometriesList.clear();
-    m_numberOfVisibleViewers = 0;
 }
 
 void ViewersLayout::restoreLayouts()
@@ -292,8 +290,6 @@ void ViewersLayout::setGrid(const QStringList &geometriesList)
     QString geometry;
     int numberOfElements = geometriesList.size();
 
-    m_numberOfVisibleViewers = 0;
-
     if (m_gridLayout) 
     {
         removeLayouts();
@@ -310,8 +306,6 @@ void ViewersLayout::setGrid(const QStringList &geometriesList)
         }
         geometry = geometriesList.at(i);
         setViewerGeometry(newViewer, geometry);
-        
-        ++m_numberOfVisibleViewers;
     }
 
     m_geometriesList = geometriesList;
@@ -329,9 +323,9 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
         removeLayouts();
     }
 
-    if (m_numberOfVisibleViewers < m_vectorViewers.size())
+    if (getNumberOfVisibleViewers() < m_vectorViewers.size())
     {
-        newViewer = m_vectorViewers.at(m_numberOfVisibleViewers);
+        newViewer = m_vectorViewers.at(getNumberOfVisibleViewers());
     }
     else
     {
@@ -341,7 +335,6 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 	
     setViewerGeometry(newViewer, geometry);
     newViewer->show();
-    ++m_numberOfVisibleViewers;
 
     emit viewerAdded(newViewer);
     
@@ -496,6 +489,11 @@ void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &ge
     int screenX = this->width();
     int screenY = this->height();
     viewer->setGeometry(x1*screenX, (1 - y1)*screenY, (x2 - x1)*screenX, (y1 - y2)*screenY);
+}
+
+int ViewersLayout::getNumberOfVisibleViewers() const
+{
+    return m_geometriesList.size();
 }
 
 }
