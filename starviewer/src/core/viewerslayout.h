@@ -16,7 +16,8 @@ class QResizeEvent;
 namespace udg {
 
 /**
-    Classe que permet crear un widget de visualitzadors amb diferents layouts
+    Classe que permet distribuir sobre un widget una sèrie Q2DViewerWidgets 
+    amb diferents layouts i geometries de forma versàtil.
 
 	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
@@ -29,10 +30,12 @@ public:
     /// Obtenir el visualitzador seleccionat
     Q2DViewerWidget* getSelectedViewer();
 
-    /// Obtenir el nombre de visualitzadors
+    /// Ens retorna en nombre de viewers totals que conté el gestor de layouts,
+    /// independentment de si són visibles o no.
     int getNumberOfViewers();
 
-    /// Obtenir el visualitzador numero "number".
+    /// Ens retorna el visor amb índex "number". Si number està fora de rang, 
+    /// ens retornarà un punter nul.
     Q2DViewerWidget* getViewerWidget(int number);
 
 public slots:
@@ -48,10 +51,10 @@ public slots:
     void hideColumns(int columns);
     void setGrid(const QStringList &geometriesList);
 
-    /// Afegeix un nou visualitzador
+    /// Afegeix un nou visualitzador amb la geometria indicada
     Q2DViewerWidget* addViewer(const QString &geometry);
 
-    /// Posem el widget seleccionat com a actual
+    /// Marquem com a seleccionat el viewer passat per paràmetre
     void setSelectedViewer(Q2DViewerWidget *viewer);
 
 signals:
@@ -59,6 +62,7 @@ signals:
     void viewerAdded(Q2DViewerWidget *viewer);
 
     /// Senyal que s'emet quan s'amaga un visualitzador
+    /// TODO Potser seria més adequat dir-li viewerHidden, ja que no s'elimina sinó que només s'amaga
     void viewerRemoved(Q2DViewerWidget *viewer);
 
     /// Senyal que s'emet quan el visualitzador seleccionat canvia
@@ -66,13 +70,15 @@ signals:
 
 protected:
 	/// Tractament de l'event de canvi de tamany de la finestra
+    /// Quan rebem aquest event, redimensionem els viewers amb la geometria adequada
     void resizeEvent(QResizeEvent *event);
 
 private:
-    /// Obtenir un nou visualitzador
+    /// Crea i retorna un nou visor configurat adequadament
 	Q2DViewerWidget* getNewQ2DViewerWidget();
 
-    /// Restaurar els layouts
+    /// Redistribueix l'espai de visors per quan passem d'un layout 
+    /// no regular a un layout definit regularment ( via setGrid(rows,columns) )
     void restoreLayouts();
 
     /// Coloca el viewer donat en la posició i mides proporcionats
@@ -87,21 +93,23 @@ private:
     int getNumberOfVisibleViewers() const;
 
 private slots:
-    /// Inicialitza els layouts
+    /// Inicialitza els objectes que fem servir per distribuir els visors
+    /// Només cal cridar-lo al constructor
     void initLayouts();
 
-    /// Elimina els layouts
+    /// Elimina els visors de l'espai dels layouts. No elimina ni els visors en sí
+    /// ni tampoc els esborra de la llista de visors. Sí que elimina la llista de geometries.
     void removeLayouts();
 
 private:
     /// Widget contenidor general
     QWidget *m_workingArea;
 
-    /// Grids per mostrar diferents q2dviewers alhora.
+    /// Grids que es fan servir per gestionar les distribucions de visors
     QGridLayout *m_gridLayout;
     QGridLayout *m_viewersLayout;
 
-    /// Visualitzador seleccionat, també sempre en tindrem un
+    /// Visualitzador selecciona. Sempre en tindrem un.
     Q2DViewerWidget *m_selectedViewer;
 
     /// Nombre de files i columnes pels layouts
@@ -110,12 +118,13 @@ private:
     int m_totalRows;
     int m_totalColumns;
 
-    /// Renderers que tenim
+    /// Array amb tots els viewers que podem manipular
     QVector<Q2DViewerWidget *> m_vectorViewers;
 
+    /// Llistat de geometries que cada viewer visible té assignada
     QStringList m_geometriesList;
 
-    /// Grid regular o no regular
+    /// Indica si el layout s'ha definit de forma regular (setGrid(rows, columns)) o no 
     bool m_isRegular;
 };
 
