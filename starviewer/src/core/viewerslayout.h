@@ -83,6 +83,9 @@ private:
     /// Per exemple, un viewer que ocupa la meitat de la pantalla s'expressaria amb un string "0\\0\\0.5\\1.0"
     void setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry);
 
+    /// Ens retorna el nombre de visors visibles. Això seran quants viewers tenen una geometria assignada
+    int getNumberOfVisibleViewers() const;
+
 private slots:
     /// Inicialitza els layouts
     void initLayouts();
@@ -114,9 +117,6 @@ private:
 
     /// Grid regular o no regular
     bool m_isRegular;
-
-    /// Nombre de visualitzadors visibles
-    int m_numberOfVisibleViewers;
 };
 
 }
