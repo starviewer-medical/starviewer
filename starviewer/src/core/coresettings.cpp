@@ -7,7 +7,7 @@
 
 namespace udg {
 
-// Definició de les claus
+// DefiniciÃ³ de les claus
 const QString ScreenShotToolBase("ScreenshotTool/");
 const QString CoreSettings::ScreenShotToolFolder(ScreenShotToolBase + "defaultSaveFolder");
 const QString CoreSettings::ScreenShotToolFileExtension(ScreenShotToolBase + "defaultSaveExtension");
@@ -19,11 +19,11 @@ const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics")
 
 // Mida per defecte de la font de les annotacions
 const QString CoreSettings::DefaultToolTextSize("Tools/DefaultTextSize");
-// Booleà per saber si la mida de text de les tools s'ha d'autocalcular 
+// BooleÃ  per saber si la mida de text de les tools s'ha d'autocalcular 
 // segons les dimensions de la pantalla o la decideix l'usuari. 
 const QString CoreSettings::AutoToolTextSize("Tools/AutoTextSize");
 
-// Paràmetres d'obscurances
+// ParÃ metres d'obscurances
 const QString ObscurancesBase("3DViewer/obscurances/");
 const QString LowQualityObscurancesBase( ObscurancesBase + "low/" );
 const QString MediumQualityObscurancesBase( ObscurancesBase + "medium/" );
@@ -49,7 +49,7 @@ const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale")
 const QString CoreSettings::DICOMImageReaderLibrary("Input/DICOMImageReaderLibrary");
 
 //Release Notes
-const QString CoreSettings::ShowReleaseNotesFirstTime("ShowReleaseNotesFirstTime");
+const QString CoreSettings::LastReleaseNotesVersionShown("LastReleaseNotesVersionShown");
 
 //Comprobar noves versions
 const QString CoreSettings::LastVersionChecked("LastVersionChecked");
@@ -77,7 +77,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting( DefaultToolTextSize, 14 );
     settingsRegistry->addSetting(AutoToolTextSize, true);
     settingsRegistry->addSetting(DICOMImageReaderLibrary, "itkGDCM");
-    settingsRegistry->addSetting(ShowReleaseNotesFirstTime, true);
+    settingsRegistry->addSetting(LastReleaseNotesVersionShown, "");
     settingsRegistry->addSetting(NeverShowNewVersionReleaseNotes, false);
     settingsRegistry->addSetting(LastVersionChecked, "");
     settingsRegistry->addSetting(LastVersionCheckedDate, "");
