@@ -32,7 +32,7 @@ public:
 
     /// Ens retorna en nombre de viewers totals que conté el gestor de layouts,
     /// independentment de si són visibles o no.
-    int getNumberOfViewers();
+    int getNumberOfViewers() const;
 
     /// Ens retorna el visor amb índex "number". Si number està fora de rang, 
     /// ens retornarà un punter nul.
