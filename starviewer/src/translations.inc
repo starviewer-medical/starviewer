@@ -45,7 +45,7 @@ win32 {
 i18n_update.commands = for %%d in ($$I18NPROJECTS) do \
                              pushd . &\
                              cd %%d & \
-                             $$[QT_INSTALL_BINS]\lupdate -noobsolete %%~nxd.pro & \
+                             $$[QT_INSTALL_BINS]/lupdate -noobsolete %%~nxd.pro & \
                              popd
 }
 i18n_release.target = i18n_release
@@ -63,7 +63,7 @@ win32 {
 i18n_release.commands = for %%d in ($$I18NPROJECTS) do \
                              pushd . &\
                              cd %%d & \
-                             $$[QT_INSTALL_BINS]\lrelease %%~nxd.pro & \
+                             $$[QT_INSTALL_BINS]/lrelease %%~nxd.pro & \
                              popd &\
                              echo touch > $$i18n_release.target
 }
