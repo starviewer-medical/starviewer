@@ -43,8 +43,8 @@ public:
     /// Indica quina llibreria fem servir per llegir arxius DICOM
     static const QString DICOMImageReaderLibrary;
 
-    /// Per fer que no es vegin més les Release Notes
-    static const QString ShowReleaseNotesFirstTime;
+    /// La última versió comprobada de les Release Notes
+    static const QString LastReleaseNotesVersionShown;
 
     /// Comporbar si hi ha una nova versió
     static const QString LastVersionChecked;
@@ -53,7 +53,7 @@ public:
     static const QString CheckVersionInterval; 
     /// Per fer que no es vegin més les release notes d'una nova versió online
     static const QString NeverShowNewVersionReleaseNotes;
-    /// Permetre que no es comprobin versions online
+    /// No permetre que es comprobin versions online
     static const QString DontCheckNewVersionsOnline;
 };
 

@@ -22,6 +22,7 @@
 #include <QNetworkProxyQuery>
 #include <QNetworkProxyFactory>
 #include <QProcessEnvironment>
+#include <QStringList>
 
 namespace udg {
     class QReleaseNotes;
@@ -61,7 +62,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
     //utilitzar els settings
     readSettings();
 
-    if (m_showReleaseNotesFirstTime)
+    if (isNewVersionInstalled())
     {
         //llegir el contingut dels fitxers HTML de les release notes
         QUrl url = createLocalUrl();
@@ -126,15 +127,29 @@ QUrl ApplicationVersionChecker::createLocalUrl()
 {
     //agafar el path del fitxer
     QString defaultPath = qApp->applicationDirPath() + "/releasenotes/";
+    // TODO: si en mode desenvolupament no s'han de veure les release notes, això es pot treure.
     if (!QFile::exists(defaultPath))
     {
         /// Mode desenvolupament
         defaultPath = qApp->applicationDirPath() + "/../releasenotes/";
     }
 
+    QUrl result("");
+
     QStringList versionList = udg::StarviewerVersionString.split(QString("."));
-    QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
-    QUrl result = defaultPath + "releasenotes" + version + ".html";
+    if (versionList.count() > 2)
+    {
+        if (versionList[2].contains("-"))
+        {
+            versionList[2] = versionList[2].split("-")[0];
+        }
+        else
+        {
+            QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
+            result = defaultPath + "releasenotes" + version + ".html";
+        }
+    }
+    
     return result;
 }
 
@@ -234,6 +249,7 @@ QString ApplicationVersionChecker::createWebServiceUrl()
 
     QString result;
     QStringList versionList = udg::StarviewerVersionString.split(QString("."));
+    // TODO: buscant noves versions online s'ha de veure si es posen sufixs per les alpha, beta, RC, etc.
     QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
     result = QString("http://trueta.udg.edu/Fusio/updateavailable/?currentVersion=%1&machineID=%2&groupID=%3").arg(version).arg(machineID).arg(groupID);
     
@@ -262,8 +278,19 @@ void ApplicationVersionChecker::writeSettings()
     Settings settings;
     if (!m_checkNewVersion)
     {
-        //ja no es mostren més fins la proxima actualització
-        settings.setValue(CoreSettings::ShowReleaseNotesFirstTime, false);
+        // ja no es mostren més fins la proxima actualització
+        QStringList version = udg::StarviewerVersionString.split(".");
+        // si la versió actual es de debug (això passa quan LastReleaseNotesVersionShown no te valor
+        //i es mostren les release notes per primer cop, podria ser que estiguessim en debug)
+        if (version.count() > 3)
+        {
+            settings.setValue(CoreSettings::LastReleaseNotesVersionShown, 
+                              version[0]+ "." + version[1] + "." + version[2]);
+        }
+        else
+        {
+            settings.setValue(CoreSettings::LastReleaseNotesVersionShown, udg::StarviewerVersionString);
+        }
     }
     else
     {
@@ -284,7 +311,7 @@ void ApplicationVersionChecker::writeSettings()
 void ApplicationVersionChecker::readSettings()
 {
     Settings settings;
-    m_showReleaseNotesFirstTime = settings.getValue(CoreSettings::ShowReleaseNotesFirstTime).toBool();
+    m_lastReleaseNotesVersionShown = settings.getValue(CoreSettings::LastReleaseNotesVersionShown).toString();
     m_neverShowNewVersionReleaseNotes = settings.getValue(CoreSettings::NeverShowNewVersionReleaseNotes).toBool();
     m_lastVersionCheckedDate = settings.getValue(CoreSettings::LastVersionCheckedDate).toString();
     m_lastVersionChecked = settings.getValue(CoreSettings::LastVersionChecked).toString();
@@ -296,6 +323,92 @@ void ApplicationVersionChecker::setCheckFinished()
 {
     m_checkFinished = true;
     emit checkFinished();
+}
+
+bool ApplicationVersionChecker::isNewVersionInstalled()
+{
+    QStringList lastVersionShown = m_lastReleaseNotesVersionShown.split(".");
+    QStringList currentVersion = udg::StarviewerVersionString.split(".");
+
+    QRegExp regularExpression("^[0-9]+\\.[0-9]+\\.[0-9]+(\\-[a-zA-Z]+[0-9]*)?$", Qt::CaseSensitive);
+
+    // si lastVersionShown no és vàlida (buida o mal formada)
+    if (!regularExpression.exactMatch(m_lastReleaseNotesVersionShown))
+    {
+        return true;
+    }
+    // Si la versió actual no s'ajusta a l'expressió regular, no farem res, i si és devel tampoc fem res
+    else if (!regularExpression.exactMatch(udg::StarviewerVersionString) ||
+             getVersionAttribute(currentVersion[2],"type").toLower().contains("devel"))
+    {
+        return false;
+    }
+
+    //comparar la primera component
+    if (currentVersion[0].toInt() != lastVersionShown[0].toInt())
+    {
+        return currentVersion[0].toInt() > lastVersionShown[0].toInt();
+    }
+    //Si son igauls, comparar la segona component
+    if (currentVersion[1].toInt() != lastVersionShown[1].toInt())
+    {
+        return currentVersion[1].toInt() > lastVersionShown[1].toInt();
+    }
+    //si també són iguals, comparar la tercera
+    //si no tenen subversio (alpha, beta, RC, etc.)
+    if (!lastVersionShown[2].contains("-") && !currentVersion[2].contains("-"))
+    {
+        return currentVersion[2].toInt() > lastVersionShown[2].toInt();
+    }
+    else
+    {   
+        return compareVersions(currentVersion[2],lastVersionShown[2]);
+    }
+}
+
+bool ApplicationVersionChecker::compareVersions(const QString &current, const QString &lastShown)
+{
+    QStringList currentSplit = current.split("-");
+    QStringList lastShownSplit = lastShown.split("-");
+    //comparar la primera component
+    if (currentSplit[0].toInt() != lastShownSplit[0].toInt())
+    {
+        return currentSplit[0].toInt() > lastShownSplit[0].toInt();
+    }
+    // si algun té la segona part buida, llavors és major (0.9.1 > 0.9.1-RC1)
+    else if (currentSplit.count() != lastShownSplit.count())
+    {
+        return currentSplit.count() < lastShownSplit.count();
+    }
+    // Si no, comparar les subversions, alpha, beta, RC, etc.
+    else
+    {
+        QString currentSplitType = getVersionAttribute(currentSplit[1], "type").toLower();
+        QString lastShownSplitType = getVersionAttribute(lastShownSplit[1],"type").toLower();
+        // si no son del mateix tipus, es retorna alfabèticament, es tenen en compte alpha, beta i rc
+        if (currentSplitType != lastShownSplitType)
+        {
+            return currentSplitType.compare(lastShownSplitType) > 0;
+        }
+        // si són iguals, compararem el numero
+        return getVersionAttribute(currentSplit[1], "number").toInt() 
+                > getVersionAttribute(lastShownSplit[1], "number").toInt();
+    }
+}
+
+QString ApplicationVersionChecker::getVersionAttribute(const QString &version, const QString &attribute)
+{
+    if (attribute == "type")
+    {
+        return QString(version).remove(QRegExp("[0-9]"));
+    }
+    else if (attribute == "number")
+    {
+        // Si no hi ha numero no passa res, passar una string buida a int retorna 0.
+        return QString(version).remove(QRegExp("[a-zA-Z]"));
+    }
+    //si no es vol obtenir ni tipus ni numero retornem la string tal qual
+    return version;
 }
 
 void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)

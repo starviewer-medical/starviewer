@@ -25,11 +25,12 @@ namespace udg {
     showIfCorrect es mostra si hi ha algo a mostrar. Si no ha acabat de fer les crides asíncrones, quan acabi mostrarà el
     que calgui.
     Treballa sobre els settings:
-        - ShowReleaseNotesFirstTime: booleà que indica si es la primera vegada que s'obre des de l'actualització
+        - LastReleaseNotesVersionShown: String amb la última versió comprobada
         - NeverShowReleaseNotes: L'usuari decideix no mostrar més els missatges de les release notes
         - LastVersionChecked: Quina és la última versió que s'ha comprobat.
         - LastVersionCheckedDate: En quina data s'ha fet la comprobació. 
         - CheckVersionInterval: Cada quants dies es comproba si hi ha una nova versió.
+        - DontCheckNewVersionsOnline: Booleà que impedeix que es facin crides online per comprobar si hi ha una nova versió
   */
 class ApplicationVersionChecker : QObject {
 Q_OBJECT
@@ -78,6 +79,15 @@ private:
     /// Posa l'atribut finished a true i emet la senyal de checkFinished
     void setCheckFinished();
 
+    /// Comproba si la versio instal·lada és més nova que la última que s'han comprobat les release notes
+    bool isNewVersionInstalled();
+    /// Compara la última part de dues versions (0.9.1-RC1, 1-RC1) i retorna si la primera és major que la segona 
+    bool compareVersions(const QString &current, const QString &lastShown);
+    /// Si attribute es type treu el numero de versio d'una alpha, beta, RC, etc. (alpha9 -> alpha), 
+    /// si attribute es number treu la part de davant i deixa el numero.
+    /// @pre Es considera que la versió s'ajusta a l'expressió regular correcte. 
+    QString getVersionAttribute(const QString &version, const QString &attibute);
+
 private slots:
     /// Tracta la resposta del webservice obtenint la versió i la url de les notes d'aquesta nova versió
     void webServiceReply(QNetworkReply *reply);
@@ -86,7 +96,7 @@ private slots:
     /// Event que es crida quan es tanca la finestra de les QReleaseNotes
     void closeEvent();
     /// Quan al cridar el mostrar no hagi acabat de carregar, quan ho faci es cridarà aquest mètode
-    void showWhenCheckFinished(); //show when check finished
+    void showWhenCheckFinished();
 
 private:
     /// Atribut per decidir si tot s'ha carregat correctament i es pot mostrar la finestra
@@ -104,7 +114,7 @@ private:
     QReleaseNotes *m_releaseNotes;
 
     /// Settings
-    bool m_showReleaseNotesFirstTime;
+    QString m_lastReleaseNotesVersionShown;
     QString m_lastVersionCheckedDate;
     QString m_lastVersionChecked;
     int m_checkVersionInterval;
@@ -114,4 +124,4 @@ private:
 
 } // end namespace udg
 
-#endif
+#endif //UDGAPPLICATIONVERSIONCHECKER_H
