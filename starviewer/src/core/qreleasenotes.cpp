@@ -37,7 +37,7 @@ void QReleaseNotes::setDontShowVisible(bool visible)
     m_dontShowCheckBox->setVisible(visible);
 }
 
-void QReleaseNotes::setUrl(QUrl url)
+void QReleaseNotes::setUrl(const QUrl &url)
 {
     m_viewWebView->setUrl(url);
 }
