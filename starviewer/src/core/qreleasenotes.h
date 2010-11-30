@@ -31,7 +31,7 @@ public:
     /// Mostra o amaga el checkbox don't show anymore
     void setDontShowVisible(bool visible);
     /// Determina quin url haurà d'obrir la finestra de les release notes
-    void setUrl(QUrl url);
+    void setUrl(const QUrl &url);
     
 signals:
     /// Senyal per indicar a ApplicationVersionChecker que es tanca la finestra
