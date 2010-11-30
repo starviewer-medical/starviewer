@@ -19,7 +19,7 @@ namespace udg {
     Classe que permet distribuir sobre un widget una sèrie Q2DViewerWidgets 
     amb diferents layouts i geometries de forma versàtil.
 
-	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class ViewersLayout : public QWidget {
 Q_OBJECT
@@ -69,13 +69,13 @@ signals:
     void selectedViewerChanged(Q2DViewerWidget *viewer);
 
 protected:
-	/// Tractament de l'event de canvi de tamany de la finestra
+    /// Tractament de l'event de canvi de tamany de la finestra
     /// Quan rebem aquest event, redimensionem els viewers amb la geometria adequada
     void resizeEvent(QResizeEvent *event);
 
 private:
     /// Crea i retorna un nou visor configurat adequadament
-	Q2DViewerWidget* getNewQ2DViewerWidget();
+    Q2DViewerWidget* getNewQ2DViewerWidget();
 
     /// Redistribueix l'espai de visors per quan passem d'un layout 
     /// no regular a un layout definit regularment ( via setGrid(rows,columns) )
