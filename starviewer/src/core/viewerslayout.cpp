@@ -336,8 +336,6 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
     setViewerGeometry(newViewer, geometry);
     newViewer->show();
 
-    emit viewerAdded(newViewer);
-    
     m_geometriesList << geometry;
     m_isRegular = false;
 
