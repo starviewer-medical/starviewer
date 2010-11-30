@@ -119,6 +119,20 @@ int main(int argc, char *argv[])
       una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
      */
     QtSingleApplication app(argc, argv);
+    
+    QPixmap splashPixmap;
+    #ifdef STARVIEWER_LITE
+    splashPixmap.load(":/images/splashLite.png");
+    #else
+    splashPixmap.load(":/images/splash.png");
+    #endif
+    QSplashScreen splash(splashPixmap);
+
+    if (!app.isRunning())
+    {
+        splash.show();
+    }
+
     QString errorInvalidCommanLineArguments;
 
     app.setOrganizationName( udg::OrganizationNameString );
@@ -201,21 +215,12 @@ int main(int argc, char *argv[])
         QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
 
         INFO_LOG("Creada finestra principal");
-        QPixmap splashPixmap;
-        #ifdef STARVIEWER_LITE
-        splashPixmap.load(":/images/splashLite.png");
-        #else
-        splashPixmap.load(":/images/splash.png");
-        #endif
-        QSplashScreen *splash = new QSplashScreen( splashPixmap );
-        splash->show();
 
         mainWin->show();
 
         QObject::connect( &app, SIGNAL( lastWindowClosed() ),
                           &app, SLOT( quit() ));
-        splash->finish( mainWin );
-        delete splash;
+        splash.finish( mainWin );
         
         /*S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox, 
           ja es llança mostrant-se la MainWindow.*/
