@@ -133,8 +133,6 @@ int main(int argc, char *argv[])
         splash.show();
     }
 
-    QString errorInvalidCommanLineArguments;
-
     app.setOrganizationName( udg::OrganizationNameString );
     app.setOrganizationDomain( udg::OrganizationDomainString );
     app.setApplicationName( udg::ApplicationNameString );
@@ -181,6 +179,7 @@ int main(int argc, char *argv[])
     {
         /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per 
          *processar-los, si els arguments no són correctes mostre QMessagebox si hi ha una altra instància d'Starviewer finalitzem aquí.*/
+        QString errorInvalidCommanLineArguments;
         if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
         {
             QString invalidCommandLine = QObject::tr("Invalid command line: ") + errorInvalidCommanLineArguments + "\n";
@@ -226,6 +225,7 @@ int main(int argc, char *argv[])
           ja es llança mostrant-se la MainWindow.*/
         if (app.arguments().count() > 1)
         {
+            QString errorInvalidCommanLineArguments;
             StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(app.arguments(), errorInvalidCommanLineArguments);
         }
 
