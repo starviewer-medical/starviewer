@@ -153,7 +153,7 @@ QUrl ApplicationVersionChecker::createLocalUrl()
     return result;
 }
 
-bool ApplicationVersionChecker::checkLocalUrl(QUrl url){
+bool ApplicationVersionChecker::checkLocalUrl(const QUrl &url){
     //comprobar si existeix localment el fitxer
     return QFile::exists(QString(url.toString()));
 }
@@ -256,12 +256,12 @@ QString ApplicationVersionChecker::createWebServiceUrl()
     return result;
 }
 
-QString ApplicationVersionChecker::encryptBase64Url(QString url)
+QString ApplicationVersionChecker::encryptBase64Url(const QString &url)
 {
     return QString(QCryptographicHash::hash(url.toAscii(), QCryptographicHash::Sha1).toBase64().replace("=","").replace("+","-").replace("/","_"));
 }
 
-void ApplicationVersionChecker::setProxy(QUrl url)
+void ApplicationVersionChecker::setProxy(const QUrl &url)
 {
     QNetworkProxyQuery q(url);
 

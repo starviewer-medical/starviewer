@@ -57,7 +57,7 @@ private:
     /// Genera la url local del fitxer on hi ha les release notes
     QUrl createLocalUrl();
     /// Comproba que la url local de les release notes existeixi
-    bool checkLocalUrl(QUrl url);
+    bool checkLocalUrl(const QUrl &url);
 
     /// Comprobar si ha passat prou temps per mirar si hi ha una nova versió
     bool checkTimeInterval();
@@ -67,9 +67,9 @@ private:
     /// Genera la url per fer la crida al servidor i obtenir la versió
     QString createWebServiceUrl();
     /// Codifica en base64 una QByteArray i a més el transforma per que sigui una part d'una url vàlida
-    QString encryptBase64Url(QString url);
+    QString encryptBase64Url(const QString &url);
     /// Assigna el proxy per defecte, si n'hi ha, a un QNetworkAccessManager, si no n'hi ha el busca.
-    void setProxy(QUrl url);
+    void setProxy(const QUrl &url);
     
     /// Guardar els settings
     void writeSettings();
