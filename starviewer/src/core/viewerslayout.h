@@ -36,9 +36,9 @@ public:
     Q2DViewerWidget* getViewerWidget(int number);
 
 public slots:
-    ///Canviar el nombre de files i columnes
+    /// Canviar el nombre de files i columnes
     void addColumns(int columns = 1);
-    void addRows( int rows = 1);
+    void addRows(int rows = 1);
     void removeColumns(int columns = 1);
     void removeRows(int rows = 1);
     void setGrid(int rows, int columns);
