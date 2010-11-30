@@ -458,7 +458,15 @@ int ViewersLayout::getNumberOfViewers()
 
 Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
 {
-    return m_vectorViewers.at(number);
+    Q2DViewerWidget *viewerWidget = 0;
+    
+    // Comprovem que el viewer demanat estigui dins del rang
+    if (number < m_vectorViewers.size() && number >= 0)
+    {
+        viewerWidget = m_vectorViewers.at(number);
+    }
+
+    return viewerWidget;
 }
 
 void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry)
