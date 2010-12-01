@@ -1714,7 +1714,11 @@ void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
     }
 
     refreshAnnotations();
-    this->render();
+
+    if (m_mainVolume)
+    {
+        this->render();
+    }
 }
 
 void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
