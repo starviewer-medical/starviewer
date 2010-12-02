@@ -105,7 +105,7 @@ void PolylineAngleOutliner::annotateFirstPoint()
 
     // Afegim el punt
     m_mainPolyline->addPoint(clickedWorldPoint);
-    m_2DViewer->getDrawer()->draw(m_mainPolyline);
+    m_2DViewer->getDrawer()->drawWorkInProgress(m_mainPolyline);
 
     // Actualitzem l'estat de la tool
     m_state = FirstPointFixed;
@@ -126,7 +126,7 @@ void PolylineAngleOutliner::fixFirstSegment()
 
     // Creem la polilínia per a dibuixar l'arc de circumferència i l'afegim al drawer
     m_circlePolyline = new DrawerPolyline;
-    m_2DViewer->getDrawer()->draw(m_circlePolyline);
+    m_2DViewer->getDrawer()->drawWorkInProgress(m_circlePolyline);
 }
 
 void PolylineAngleOutliner::drawCircle()

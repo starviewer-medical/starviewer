@@ -595,7 +595,7 @@ void Q2DViewer::setInput(Volume *volume)
     // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if (m_mainVolume)
     {
-        clearViewer();
+        m_drawer->removeAllPrimitives();
     }
 
     // HACK
@@ -968,7 +968,7 @@ void Q2DViewer::setSlice(int value)
             // TODO Cal actualitzar aquest valor?
             m_thickSlabProjectionFilter->SetNumberOfSlicesToProject(m_slabThickness);
             // Si hi ha el thickslab activat, eliminem totes les roi's. És la decisió ràpida que s'ha près.
-            clearViewer();
+            this->getDrawer()->removeAllPrimitives();
         }
         this->updateDisplayExtent();
         // TODO per cada canvi de llesca potser també caldria
@@ -1763,7 +1763,7 @@ void Q2DViewer::setSlabThickness(int thickness)
     // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
     if (thickness != m_slabThickness)
     {
-        clearViewer();
+        this->getDrawer()->removeAllPrimitives();
     }
 
     computeRangeAndSlice(thickness);
@@ -1973,7 +1973,7 @@ void Q2DViewer::restore()
     // S'esborren les anotacions
     if (m_mainVolume)
     {
-        clearViewer();
+        m_drawer->removeAllPrimitives();
     }
 
     // HACK
@@ -1995,7 +1995,7 @@ void Q2DViewer::restore()
 
 void Q2DViewer::clearViewer()
 {
-    m_representationsLayer->clearAll();
+    m_drawer->clearViewer();
 }
 
 void Q2DViewer::invertWindowLevel()

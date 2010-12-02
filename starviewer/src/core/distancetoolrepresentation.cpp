@@ -62,7 +62,7 @@ void DistanceToolRepresentation::calculate()
     m_text->setAttachmentPoint(m_line->getLeftPoint(m_view));
     m_text->setHorizontalJustification("Right");
     m_text->update();
-    m_drawer->draw(m_text);
+    m_drawer->drawWorkInProgress(m_text);
     m_drawer->updateRenderer();
 
     if (m_toolHandlers.size() == 0) // Already created

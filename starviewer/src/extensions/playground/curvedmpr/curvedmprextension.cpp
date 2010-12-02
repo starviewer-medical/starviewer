@@ -241,14 +241,14 @@ void CurvedMPRExtension::changeThicknessReconstruction()
             m_upPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
             m_upPolylineThickness->setColor( Qt::blue );
             m_upPolylineThickness->setLineWidth( 3 );
-            mainViewer->getDrawer()->draw(m_upPolylineThickness);
+            mainViewer->getDrawer()->draw( m_upPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
 
             // Línia thickness inferior
             m_downPolylineThickness = new DrawerPolyline;
             m_downPolylineThickness->setLinePattern( DrawerPrimitive::DiscontinuousLinePattern );
             m_downPolylineThickness->setColor( Qt::blue );
             m_downPolylineThickness->setLineWidth( 3 );
-            mainViewer->getDrawer()->draw(m_downPolylineThickness);
+            mainViewer->getDrawer()->draw( m_downPolylineThickness , mainViewer->getView(), mainViewer->getCurrentSlice() );
 
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
             m_upPolylineThickness->increaseReferenceCount();

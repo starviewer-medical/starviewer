@@ -191,7 +191,7 @@ void QPerfusionMapReconstructionExtension::changeMap( int value )
     switch(value)
     {
     case 0:     //CBV
-        m_2DView->getViewer()->clearViewer();
+        m_2DView->getViewer()->getDrawer()->removeAllPrimitives();
         m_2DView->getViewer()->setInput( m_mapCalculator->getCBVVolume() );
         this->createColorMap(m_mapCalculator->getCBVImage(), m_2DView->getViewer());
         // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte
@@ -200,7 +200,7 @@ void QPerfusionMapReconstructionExtension::changeMap( int value )
         pos[2] = m_aifIndex[2]*m_map0Volume->getSpacing()[2] + m_map0Volume->getOrigin()[2];*/
        break;
     case 1:     //CBF
-        m_2DView->getViewer()->clearViewer();
+        m_2DView->getViewer()->getDrawer()->removeAllPrimitives();
         m_2DView->getViewer()->setInput( m_mapCalculator->getCBFVolume() );
         this->createColorMap( m_mapCalculator->getCBFImage(), m_2DView->getViewer());
         // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte
@@ -209,7 +209,7 @@ void QPerfusionMapReconstructionExtension::changeMap( int value )
         pos[2] = m_aifIndex[2]*m_map2Volume->getSpacing()[2] + m_map2Volume->getOrigin()[2];*/
         break;
     case 2:     //MTT
-        m_2DView->getViewer()->clearViewer();
+        m_2DView->getViewer()->getDrawer()->removeAllPrimitives();
         m_2DView->getViewer()->setInput( m_mapCalculator->getMTTVolume() );
         this->createColorMap( m_mapCalculator->getMTTImage(), m_2DView->getViewer());
         // Suposem que tots els volums reconstruits tenen les mateixes mides, que en principi és correcte

@@ -123,7 +123,7 @@ void NonClosedAngleToolRepresentation::computeAngle()
     }
 
     // Dibuixem la línia auxiliar
-    m_drawer->draw(m_middleLine);
+    m_drawer->drawWorkInProgress(m_middleLine);
 
     for (int i = 0; i < 3; i++)
     {
@@ -156,7 +156,7 @@ void NonClosedAngleToolRepresentation::computeAngle()
     textPosition(m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint());
 
     m_text->update();
-    m_drawer->draw(m_text);
+    m_drawer->drawWorkInProgress(m_text);
     m_drawer->updateRenderer();
 }
 

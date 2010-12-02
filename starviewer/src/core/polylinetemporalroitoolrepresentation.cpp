@@ -165,7 +165,7 @@ void PolylineTemporalROIToolRepresentation::printData()
 
         m_text->setAttatchmentPoint(intersection);
         m_text->update();
-        m_drawer->draw(m_text);
+        m_drawer->drawWorkInProgress(m_text);
     }
 }
 

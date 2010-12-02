@@ -65,7 +65,7 @@ void AngleToolRepresentation::calculate()
     // Afegim l'annotació textual
     m_text->setText(tr("%1 degrees").arg(m_currentAngle,0,'f',1));
     placeText();
-    m_drawer->draw(m_text);
+    m_drawer->drawWorkInProgress(m_text);
     m_drawer->updateRenderer();
 
     if (m_toolHandlers.size() == 0) // Already created
