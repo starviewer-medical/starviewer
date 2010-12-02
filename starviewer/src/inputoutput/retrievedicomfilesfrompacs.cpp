@@ -39,7 +39,7 @@ OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network *asso
 #ifndef DISABLE_COMPRESSION_EXTENSION
         // Si disposem de compressió la demanem, i podrem accelerar el temps de descàrrega considerablement
         // De moment demanem la compressió lossless que tot PACS que suporti compressió ha
-        // de proporcionar: JPEGLossless:Hierarchical-1stOrderPrediction
+        // de proporcionar: JPEGLossless:Non-Hierarchical-1stOrderPrediction
         transferSyntaxes[0] = UID_JPEGProcess14SV1TransferSyntax;
         transferSyntaxes[1] = UID_LittleEndianExplicitTransferSyntax;
         transferSyntaxes[2] = UID_BigEndianExplicitTransferSyntax;
