@@ -44,7 +44,7 @@ public:
     static const QString VerticalFlipTool;
     static const QString ClearCurrentViewAnnotationsTool;
     static const QString TransDifferenceTool;
-    static const QString EllipticROITool;
+    static const QString OvalROITool;
 
     static const QString NewWindow;
     static const QString OpenFile;

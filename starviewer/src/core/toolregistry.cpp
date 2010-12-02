@@ -31,12 +31,10 @@
 #include "editortool.h"
 #include "imageplaneprojectiontool.h"
 #include "nonclosedangletool.h"
-#include "extractimagetool.h"
-#include "superimposeimagetool.h"
 #include "clippingplanestool.h"
 #include "transdifferencetool.h"
 #include "linepathtool.h"
-#include "ellipticroitool.h"
+#include "ovalroitool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -145,14 +143,6 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new NonClosedAngleTool(viewer);
     }
-    else if (toolName == "ExtractImageTool")
-    {
-        tool = new ExtractImageTool(viewer);
-    }
-    else if (toolName == "SuperimposeImageTool")
-    {
-        tool = new SuperimposeImageTool(viewer);
-    }
     else if (toolName == "ClippingPlanesTool")
     {
         tool = new ClippingPlanesTool(viewer);
@@ -165,9 +155,9 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new LinePathTool(viewer);
     }
-    else if (toolName == "EllipticROITool")
+    else if (toolName == "OvalROITool")
     {
-        tool = new EllipticROITool(viewer);
+        tool = new OvalROITool(viewer);
     }
     else
     {
@@ -355,18 +345,6 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         statusTip = tr("Enable/Disable open-angle tool");
         toolTip = toolAction->text();
     }
-    else if (toolName == "ExtractImageTool")
-    {
-        toolAction->setText(tr("Extract Image"));
-        toolAction->setStatusTip(tr("Enable/Disable extract image tool"));
-        toolAction->setIcon(QIcon(":/images/extractImage.png"));
-    }
-    else if (toolName == "SuperimposeImageTool")
-    {
-        toolAction->setText(tr("Superimpose Image"));
-        toolAction->setStatusTip(tr("Enable/Disable superimpose image tool"));
-        toolAction->setIcon(QIcon(":/images/superimposeImage.png"));
-    }
     else if (toolName == "ClippingPlanesTool")
     {
         toolAction->setText(tr("Clipping Planes"));
@@ -389,12 +367,12 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setIcon(QIcon(":/images/linePath.png"));
         toolAction->setStatusTip(tr("Enable/Disable line path tool"));
     }
-    else if (toolName == "EllipticROITool")
+    else if (toolName == "OvalROITool")
     {
-        toolAction->setText(tr("Elliptic ROI"));
-        toolAction->setIcon(QIcon(":/images/ellipticROITool.png"));
-        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::EllipticROITool));
-        statusTip = tr("Enable/Disable Elliptic ROI tool");
+        toolAction->setText(tr("Oval ROI"));
+        toolAction->setIcon(QIcon(":/images/ovalROITool.png"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OvalROITool));
+        statusTip = tr("Enable/Disable Oval ROI tool");
         toolTip = toolAction->text();
     }
     else

@@ -16,7 +16,9 @@ class vtkPolyDataMapper2D;
 namespace udg {
 
 /**
-    Primitiva de línia per al Drawer
+ *
+ *  Primitiva de línia per al Drawer
+ *
  */
 class DrawerLine : public DrawerPrimitive {
 Q_OBJECT
@@ -40,11 +42,8 @@ public:
     /// Retorna el segon punt de la línia
     double* getSecondPoint();
 
-    /// Obté el punt de més a l'esquerra de la linia, segons la vista en la que estem
-    double* getLeftPoint(int view);
-
     /// Calcula la distancia entre punt i punt
-    double computeDistance(double *spacing = NULL);
+    double computeDistance(double * spacing = NULL);
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
     double getDistanceToPoint(double *point3D);

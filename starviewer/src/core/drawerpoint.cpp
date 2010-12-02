@@ -15,28 +15,12 @@
 namespace udg {
 
 DrawerPoint::DrawerPoint(QObject *parent) 
-: DrawerPrimitive(parent), m_pointRadius(1.0), m_pointActor(NULL)
+: DrawerPrimitive(parent), m_pointRadius(2.0), m_pointActor(NULL)
 {
 }
 
 DrawerPoint::~DrawerPoint()
 {
-    emit dying(this);
-
-    if (m_pointActor)
-    {
-        m_pointActor->Delete();
-    }
-
-    if (m_pointSphere)
-    {
-        m_pointSphere->Delete();
-    }
-
-    if (m_pointMapper)
-    {
-        m_pointMapper->Delete();
-    }
 }
 
 void DrawerPoint::setPosition(double point[3])
@@ -57,19 +41,9 @@ void DrawerPoint::setPosition(QVector<double> point)
     emit changed();
 }
 
-double* DrawerPoint::getPosition()
+void DrawerPoint::setRadius(double radius)
 {
-    return m_position;
-}
-
-void DrawerPoint::setRadius(double r)
-{
-    m_pointRadius = r;
-}
-
-double DrawerPoint::getRadius()
-{
-    return m_pointRadius;
+    m_pointRadius = radius;
 }
 
 vtkProp* DrawerPoint::getAsVtkProp()

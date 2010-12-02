@@ -14,9 +14,6 @@ namespace udg {
 
 class Q2DViewer;
 class DrawerLine;
-class DrawerPrimitive;
-class LineOutliner;
-class DistanceToolRepresentation;
 
 /**
     Eina per mesurar distàncies en un visor 2D.
@@ -39,31 +36,45 @@ class DistanceToolRepresentation;
 
     Quan es canvïi l'input del visor, les annotacions fetes fins aquell moment s'esborraran.
     Quan es desactivi l'eina, les annotacions fetes fins aquell moment es mantindran.
+
+	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class DistanceTool : public Tool {
 Q_OBJECT
 public:
-    DistanceTool(QViewer *viewer, QObject *parent = 0);
+    DistanceTool( QViewer *viewer, QObject *parent = 0 );
     ~DistanceTool();
 
-    void handleEvent(long unsigned eventID);
-
-private slots:
-    ///Indica que l'outliner ha acabat de dibuixar una primitiva
-    void outlinerFinished(DrawerPrimitive *primitive);
+    void handleEvent( long unsigned eventID );
 
 private:
-    /// Viewer 2D sobre el qual treballem
+    /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que 
+    /// haguem fet un clic amb el botó esquerre del mouse.
+    void handlePointAddition();
+
+    /// Marca un nou punt de la distància. Si la corresponent primitiva 
+    /// no s'ha creat es crea abans d'afegir el nou punt.
+    void annotateNewPoint();
+
+    /// Simula la línia quan es mou el ratolí i tenim el primer punt marcat.
+    void simulateLine();
+
+private slots:
+    /// Inicialitza l'estat de la tool.
+    void initialize();
+
+private:
+    /// Estats possibles de la línia dibuixada.
+    enum { NoPointFixed, FirstPointFixed };
+
+    /// Viewer 2D sobre el qual treballem.
     Q2DViewer *m_2DViewer;
 
-    /// Outliner que s'utilitza per a la línia
-    LineOutliner *m_lineOutliner;
-
-    /// ToolRepresentation que s'utilitza
-    DistanceToolRepresentation *m_distanceToolRepresentation;
-
-    /// Línia que es dibuixa
+    /// Línia que es dibuixa.
     QPointer<DrawerLine> m_line;
+
+    /// Estat de la línia.
+    int m_lineState;
 
 };
 }

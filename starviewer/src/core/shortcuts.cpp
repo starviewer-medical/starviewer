@@ -37,7 +37,7 @@ const QString Shortcuts::HorizontalFlipTool(ShortcutsBase + "HorizontalFlipTool"
 const QString Shortcuts::VerticalFlipTool(ShortcutsBase + "VerticalFlipTool");
 const QString Shortcuts::ClearCurrentViewAnnotationsTool(ShortcutsBase + "ClearCurrentViewAnnotationsActionTool");
 const QString Shortcuts::TransDifferenceTool(ShortcutsBase + "TransDifferenceActionTool");
-const QString Shortcuts::EllipticROITool(ShortcutsBase + "OvalROITool");
+const QString Shortcuts::OvalROITool(ShortcutsBase + "OvalROITool");
 
 const QString Shortcuts::NewWindow(ShortcutsBase + "NewWindow");
 const QString Shortcuts::OpenFile(ShortcutsBase + "OpenFile");
@@ -193,7 +193,7 @@ void Shortcuts::init()
     
     shortcutsList.clear();
     shortcutsList.append(QString("O"));
-    settingsRegistry->addSetting(EllipticROITool, shortcutsList);
+    settingsRegistry->addSetting(OvalROITool, shortcutsList);
     
     shortcutsList.clear();
     shortcutsList.append(QKeySequence(QKeySequence::New).toString());
