@@ -271,18 +271,15 @@ void ToolManager::deactivateTool(const QString &toolName)
     {
         // Declarem aquesta variable per fer-ho més llegible
         QViewer *viewer = pair.first;
-        // Recuperem la tool, si aquesta existeix
-        tool = viewer->getToolProxy()->getTool(toolName);
-        if (tool)
+        // recuperem la tool
+        tool = m_toolRegistry->getTool(toolName, viewer);
+        // comprovem si la tool és incompatible amb el mode edició
+        if (!tool->isEditionCompatible())
         {
-            // comprovem si la tool és incompatible amb el mode edició
-            if (!tool->isEditionCompatible())
-            {
-                disconnect(tool, SIGNAL(finished()), this, SLOT(incompatibleToolFinished()));
-            }
-            // Eliminem la tool del proxy
-            viewer->getToolProxy()->removeTool(toolName);
+            disconnect(tool, SIGNAL(finished()), this, SLOT(incompatibleToolFinished()));
         }
+        // Eliminem la tool del proxy
+        viewer->getToolProxy()->removeTool(toolName);
     }
     // Elinimen Shared Data d'aquesta tool
     m_sharedToolDataRepository.remove(toolName);
