@@ -9,7 +9,7 @@
 
 #include "tool.h"
 
-// Forward declarations
+// fwd declarations
 class vtkMatrix4x4;
 
 namespace udg {
@@ -22,20 +22,24 @@ class DrawerLine;
 
 /**
     Tool per aplicar reference lines
+
+	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ReferenceLinesTool : public Tool {
 Q_OBJECT
 public:
     enum { SingleImage, AllImages };
 
-    ReferenceLinesTool(QViewer *viewer, QObject *parent = 0);
+    ReferenceLinesTool( QViewer *viewer, QObject *parent = 0 );
     ~ReferenceLinesTool();
 
-    /// Re-implementa la funció del pare, afegint noves connexions
-    /// @param data
+    /**
+     * Re-implementa la funció del pare, afegint noves connexions
+     * @param data
+     */
     void setToolData(ToolData * data);
 
-    void handleEvent(long unsigned eventID){ eventID = eventID; }; // Cal implementar-lo, ja que a Tool és virtual pur TODO potser seria millor deixar-ho implementat buit en el pare?
+    void handleEvent( long unsigned eventID ){ eventID = eventID; }; // cal implementar-lo, ja que a Tool és virtual pur TODO potser seria millor deixar-ho implementat buit en el pare?
 
 private slots:
     /// Actualitza les línies a projectar sobre la imatge segons les dades de la tool
@@ -66,22 +70,27 @@ private:
 
     /**
      * Donats quatre punts d'un pla (referència) i el pla localitzador, ens dóna els punts d'intersecció
-     * @param tlhc top left hand corner (origen)
+     * @param tlhc top left hand corner ( origen )
      * @param trhc top right hand corner
      * @param brhc bottom right hand corner
      * @param blhc bottom left hand corner
      * @param localizerPlane pla localitzador que volem fer intersectar
-     * @param firstIntersectionPoint[] primer punt d'intersecció trobat (si n'hi ha)
-     * @param secondIntersectionPoint[] segon punt d'intersecció trobat (si n'hi ha)
+     * @param firstIntersectionPoint[] primer punt d'intersecció trobat ( si n'hi ha )
+     * @param secondIntersectionPoint[] segon punt d'intersecció trobat ( si n'hi ha )
      * @return el nombre d'interseccions trobades
      */
-    int getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane, double firstIntersectionPoint[3], double secondIntersectionPoint[3]);
+    int getIntersections( QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane, double firstIntersectionPoint[3], double secondIntersectionPoint[3] );
 
-    /// Ens crea una DrawerLine, ja sigui de les principals o de background
-    DrawerLine* createNewLine(bool isBackgroundLine = false);
+    /**
+     * Ens crea una DrawerLine, ja sigui de les principals
+     * o de background
+     */
+    DrawerLine *createNewLine( bool isBackgroundLine = false );
 
-    /// Comprova que el nombre de DrawerLines a les corresponents llistes
-    /// sigui l'adequat i actua en consequencia
+    /**
+     * Comprova que el nombre de DrawerLines a les corresponents llistes
+     * sigui l'adequat i actua en consequencia
+     */
     void checkAvailableLines();
 
 private:
@@ -110,6 +119,7 @@ private:
     /// Ens indica quins plans volem projectar. Tindra els valors enumerats definits per....
     /// aquesta podria ser una variable usada en un ToolConfiguration
     int m_planesToProject;
+
 };
 
 }
