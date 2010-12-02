@@ -37,61 +37,61 @@ void PolylineAngleOutliner::handleEvent(long unsigned eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
             handlePointAddition();
-            break;
+        break;
 
         case vtkCommand::MouseMoveEvent:
             simulateCorrespondingSegmentOfAngle();
-            break;
+        break;
     }
 }
 
 void PolylineAngleOutliner::findInitialDegreeArc()
 {
     // Per saber quin l'angle inicial, cal calcular l'angle que forma el primer segment anotat i un segment fictici totalment horitzontal.
-    int horizontalCoordinate, zCoordinate;
+    int coord1, depthCoord;
 
     switch (m_2DViewer->getView())
     {
         case QViewer::AxialPlane:
-            horizontalCoordinate = 0;
-            zCoordinate = 2;
+            coord1 = 0;
+            depthCoord = 2;
             break;
 
         case QViewer::SagitalPlane:
-            horizontalCoordinate = 1;
-            zCoordinate = 0;
+            coord1 = 1;
+            depthCoord = 0;
             break;
 
         case QViewer::CoronalPlane:
-            horizontalCoordinate = 2;
-            zCoordinate = 1;
+            coord1 = 2;
+            depthCoord = 1;
             break;
     }
 
-    double horizontalPoint[3];
-    double *secondPointOfAngle = m_mainPolyline->getPoint(1);
+    double horizontalP2[3];
+    double *p2 = m_mainPolyline->getPoint(1);
     
     for (int i = 0; i < 3; i++)
     {
-        horizontalPoint[i] = secondPointOfAngle[i];
+        horizontalP2[i] = p2[i];
     }
 
-    double *firstPointOfAngle = m_mainPolyline->getPoint(0);
-    double *directorVector1 = MathTools::directorVector(firstPointOfAngle, secondPointOfAngle);
+    double *p1 = m_mainPolyline->getPoint(0);
+    double *vd1 = MathTools::directorVector(p1, p2);
 
-    horizontalPoint[horizontalCoordinate] += 10.0;
-    double *directorVector2 = MathTools::directorVector(horizontalPoint, secondPointOfAngle);
+    horizontalP2[coord1] += 10.0;
+    double *vd2 = MathTools::directorVector(horizontalP2, p2);
 
-    double crossProduct[3];
-    MathTools::crossProduct(directorVector1, directorVector2, crossProduct);
+    double pv[3];
+    MathTools::crossProduct(vd1, vd2, pv);
 
-    if (crossProduct[zCoordinate] > 0)
+    if (pv[depthCoord] > 0)
     {
-        m_initialDegreeArc =(int)MathTools::angleInDegrees(directorVector1, directorVector2);
+        m_initialDegreeArc =(int)MathTools::angleInDegrees(vd1, vd2);
     }
     else
     {
-        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(directorVector1, directorVector2);
+        m_initialDegreeArc = -1 * (int)MathTools::angleInDegrees(vd1, vd2);
     }
 }
 
@@ -131,6 +131,9 @@ void PolylineAngleOutliner::fixFirstSegment()
 
 void PolylineAngleOutliner::drawCircle()
 {
+    double degreesIncrease, *newPoint, radius;
+    int initialAngle, finalAngle;
+
     double *firstPoint = m_mainPolyline->getPoint(0);
     double *circleCentre = m_mainPolyline->getPoint(1);
     double *lastPoint = m_mainPolyline->getPoint(2);
@@ -143,35 +146,34 @@ void PolylineAngleOutliner::drawCircle()
     // Calculem el radi de l'arc de circumferència que mesurarà
     // un quart del segment més curt dels dos que formen l'angle
     double distance1 = MathTools::getDistance3D(firstPoint, circleCentre);
-    double distance2 = MathTools::getDistance3D(circleCentre, lastPoint);    
-    double radius = MathTools::minimum(distance1, distance2) / 4.0;
+    double distance2 = MathTools::getDistance3D(circleCentre, lastPoint);
+    radius = MathTools::minimum(distance1, distance2) / 4.0;
 
     // Calculem el rang de les iteracions per pintar l'angle correctament
-    int initialAngle = 360 - m_initialDegreeArc;
-    int finalAngle = int(360 - (m_currentAngle + m_initialDegreeArc));
+    initialAngle = 360 - m_initialDegreeArc;
+    finalAngle = int(360 - (m_currentAngle + m_initialDegreeArc));
 
-    double crossProduct[3];
-    MathTools::crossProduct(firstSegment, secondSegment,crossProduct);
+    double pv[3];
+    MathTools::crossProduct(firstSegment, secondSegment,pv);
 
     int view = m_2DViewer->getView();
     int zIndex = Q2DViewer::getZIndexForView(view);
-    if (crossProduct[zIndex] > 0)
+    if (pv[zIndex] > 0)
     {
         finalAngle = int(m_currentAngle - m_initialDegreeArc);
     }
-    if ((initialAngle - finalAngle) > 180)
+    if ((initialAngle-finalAngle) > 180)
     {
         initialAngle = int(m_currentAngle - m_initialDegreeArc);
         finalAngle = -m_initialDegreeArc;
     }
 
-    double degreesIncrease; 
     // Reconstruim l'arc de circumferència
     m_circlePolyline->deleteAllPoints();
     for (int i = initialAngle; i > finalAngle; --i)
     {
         degreesIncrease = i * 1.0 * MathTools::DegreesToRadiansAsDouble;
-        double *newPoint = new double[3];
+        newPoint = new double[3];
 
         // TODO Aquí hauríem de fer alguna cosa d'aquest estil, però si ho fem així, 
         // no se'ns dibuixa l'arc de circumferència que ens esperem sobre la vista coronal.
@@ -275,8 +277,7 @@ void PolylineAngleOutliner::simulateCorrespondingSegmentOfAngle()
 void PolylineAngleOutliner::finishDrawing()
 {
     // Eliminem l'arc de circumferència (s'esborra automàticament del drawer)
-    delete m_circlePolyline;
-    m_circlePolyline = 0;
+    //delete m_circlePolyline;
 
     emit finished(m_mainPolyline);
 }
