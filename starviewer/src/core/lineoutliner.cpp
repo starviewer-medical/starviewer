@@ -71,7 +71,7 @@ void LineOutliner::annotateNewPoint()
         m_line->setSecondPoint(clickedWorldPoint);
         m_lineState = FirstPoint;
 
-        m_2DViewer->getDrawer()->draw(m_line);
+        m_2DViewer->getDrawer()->drawWorkInProgress(m_line);
     }
     else
     {

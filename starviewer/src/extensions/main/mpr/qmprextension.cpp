@@ -431,11 +431,11 @@ void QMPRExtension::handleAxialViewEvents( unsigned long eventID )
         else if( m_state == Pushing )
             pushAxialViewAxisActor();
 
-        if ( m_pickedActorPlaneSource == m_coronalPlaneSource )
-            m_coronal2DView->clearViewer();
+        if ( m_pickedActorPlaneSource == m_coronalPlaneSource && m_coronal2DView->getDrawer()->getNumberOfDrawnPrimitives() > 0 )
+            m_coronal2DView->getDrawer()->removeAllPrimitives();
 
-        if ( m_pickedActorPlaneSource == m_sagitalPlaneSource )
-            m_sagital2DView->clearViewer();
+        if ( m_pickedActorPlaneSource == m_sagitalPlaneSource && m_sagital2DView->getDrawer()->getNumberOfDrawnPrimitives() > 0 )
+            m_sagital2DView->getDrawer()->removeAllPrimitives();
 
     break;
 
@@ -471,8 +471,8 @@ void QMPRExtension::handleSagitalViewEvents( unsigned long eventID )
                 pushSagitalViewAxialAxisActor();
         }
 
-        if ( m_pickedActorPlaneSource == m_coronalPlaneSource )
-            m_coronal2DView->clearViewer();
+        if ( m_pickedActorPlaneSource == m_coronalPlaneSource && m_coronal2DView->getDrawer()->getNumberOfDrawnPrimitives() > 0 )
+            m_coronal2DView->getDrawer()->removeAllPrimitives();
 
     break;
 

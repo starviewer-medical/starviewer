@@ -77,7 +77,7 @@ void EraserTool::startEraserAction()
         m_polygon->addVertix(m_startPoint);
         m_polygon->addVertix(m_startPoint);
         m_polygon->addVertix(m_startPoint);
-        m_2DViewer->getDrawer()->draw(m_polygon);
+        m_2DViewer->getDrawer()->draw(m_polygon, Q2DViewer::Top2DPlane);
     }
 
     m_state = StartClick;
@@ -109,7 +109,7 @@ void EraserTool::drawAreaOfErasure()
             m_polygon->addVertix(m_endPoint);
             m_polygon->addVertix(p3);
             m_polygon->addVertix(m_startPoint);
-            m_2DViewer->getDrawer()->draw(m_polygon);
+            m_2DViewer->getDrawer()->draw(m_polygon, Q2DViewer::Top2DPlane);
         }
         else
         {
@@ -127,9 +127,17 @@ void EraserTool::drawAreaOfErasure()
 
 void EraserTool::erasePrimitive()
 {
-    if (m_polygon)
+    if (!m_polygon)
     {
-        // Si s'ha dibuixat una àrea d'esborrat, procedim a eliminar les representacions contingudes
+        DrawerPrimitive *primitiveToErase = m_2DViewer->getDrawer()->getPrimitiveNearerToPoint(m_startPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        if (primitiveToErase)
+        {
+            m_2DViewer->getDrawer()->erasePrimitive(primitiveToErase);
+            m_2DViewer->render();
+        }
+    }
+    else
+    {
         double bounds[6];
         m_polygon->getBounds(bounds);
         m_2DViewer->getRepresentationsLayer()->removePrimitivesInsideBounds(bounds);

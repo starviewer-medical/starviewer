@@ -25,7 +25,7 @@ ToolHandlerWithRepresentation::ToolHandlerWithRepresentation(Drawer *drawer, dou
     m_color = color;
     m_point->setColor(m_color);
     m_point->update();
-    m_drawer->draw(m_point);
+    m_drawer->drawWorkInProgress(m_point);
 }
 
 ToolHandlerWithRepresentation::~ToolHandlerWithRepresentation()
