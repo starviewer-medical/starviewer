@@ -126,6 +126,7 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
     {
         if (!queryPACSJob->getStatus().good())
         {
+            ERROR_LOG(QString("S'ha produit un error al cercar estudis al PACS %1 per la sol.licitud del RIS").arg(queryPACSJob->getPacsDevice().getAETitle()));
             errorQueryingStudy(queryPACSJob);
         }
         else
