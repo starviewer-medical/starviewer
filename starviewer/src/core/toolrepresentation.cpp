@@ -142,7 +142,7 @@ bool ToolRepresentation::isInsideOfBounds(double bounds[6], int view)
     int xIndex = Q2DViewer::getXIndexForView(view);
     int yIndex = Q2DViewer::getYIndexForView(view);
 
-    while (isInside && position < m_primitivesList.size())
+    while (isInside && position<m_primitivesList.size())
     {
         m_primitivesList.at(position)->getBounds(primitiveBounds);
         
