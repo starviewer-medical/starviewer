@@ -9,7 +9,6 @@
 #include "logging.h"
 #include "drawer.h"
 #include "drawerpolygon.h"
-#include "representationslayer.h"
 // vtk
 #include <vtkCommand.h>
 
@@ -24,7 +23,7 @@ EraserTool::EraserTool(QViewer *viewer, QObject *parent)
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if (!m_2DViewer)
     {
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ") + viewer->metaObject()->className());
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className());
     }
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(reset()));
@@ -69,16 +68,6 @@ void EraserTool::startEraserAction()
     m_endPoint[0] = m_startPoint[0];
     m_endPoint[1] = m_startPoint[1];
     m_endPoint[2] = m_startPoint[2];
-
-    if (!m_polygon)
-    {
-        m_polygon = new DrawerPolygon;
-        m_polygon->addVertix(m_startPoint);
-        m_polygon->addVertix(m_startPoint);
-        m_polygon->addVertix(m_startPoint);
-        m_polygon->addVertix(m_startPoint);
-        m_2DViewer->getDrawer()->draw(m_polygon, Q2DViewer::Top2DPlane);
-    }
 
     m_state = StartClick;
 }
@@ -140,7 +129,7 @@ void EraserTool::erasePrimitive()
     {
         double bounds[6];
         m_polygon->getBounds(bounds);
-        m_2DViewer->getRepresentationsLayer()->removePrimitivesInsideBounds(bounds);
+        m_2DViewer->getDrawer()->erasePrimitivesInsideBounds(bounds, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
 }
 

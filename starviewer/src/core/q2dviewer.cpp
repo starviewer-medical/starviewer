@@ -6,8 +6,6 @@
  ***************************************************************************/
 #include "q2dviewer.h"
 #include "drawer.h"
-#include "representationslayer.h"
-#include "toolproxy.h"
 #include "volume.h"
 #include "logging.h"
 #include "image.h"
@@ -72,10 +70,6 @@ Q2DViewer::Q2DViewer(QWidget *parent)
     m_imageOrientationOperationsMapper = new ImageOrientationOperationsMapper();
 
     m_alignPosition = Q2DViewer::AlignCenter;
-    m_representationsLayer = new RepresentationsLayer( this );
-    connect( this, SIGNAL(eventReceived(unsigned long)), m_representationsLayer, SLOT(handleEvent(unsigned long)) );
-
-    connect( m_representationsLayer, SIGNAL(editing(bool)), m_toolProxy, SLOT(setEditionMode(bool)) );
 }
 
 Q2DViewer::~Q2DViewer()
@@ -1320,11 +1314,6 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
 Drawer* Q2DViewer::getDrawer() const
 {
     return m_drawer;
-}
-
-RepresentationsLayer* Q2DViewer::getRepresentationsLayer() const
-{
-    return m_representationsLayer;
 }
 
 bool Q2DViewer::getCurrentCursorImageCoordinate(double xyz[3])

@@ -30,7 +30,6 @@ class Image;
 class Drawer;
 class ImagePlane;
 class ImageOrientationOperationsMapper;
-class RepresentationsLayer;
 
 /**
 
@@ -100,9 +99,6 @@ public:
      * @return Objecte drawer del viewer
      */
     Drawer* getDrawer() const;
-
-    /// Retorna el contenidor de representacions
-    RepresentationsLayer* getRepresentationsLayer() const;
 
     /**
      * Calcula la coordenada de la imatge que es troba per sota del cursor en coordenades de món
@@ -474,9 +470,6 @@ private:
 
     /// Posició a on s'ha d'alinear la imatge (dreta, esquerre o centrat )
     AlignPosition m_alignPosition;
-
-    ///Contenidor de toolrepresentations
-    RepresentationsLayer *m_representationsLayer;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)

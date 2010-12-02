@@ -113,14 +113,10 @@ HEADERS += extensionfactory.h \
     drawerline.h \
     drawertext.h \
     drawerpolyline.h \
-    drawerimage.h \
-    extractimagetool.h \
-    superimposeimagetool.h \
     polylineroitool.h \
-    ellipticroitool.h \
+    ovalroitool.h \
     polylinetemporalroitool.h \
     polylinetemporalroitooldata.h \
-    polylinetemporalroitoolrepresentation.h \
     distancetool.h \
     editortool.h \
     editortooldata.h \
@@ -161,10 +157,6 @@ HEADERS += extensionfactory.h \
     starviewerapplication.h \
     viewerslayout.h \
     q2dviewerwidget.h \
-    toolhandler.h \
-    toolhandlerrotation.h \
-    toolhandlerwithoutrepresentation.h \
-    toolhandlerwithrepresentation.h \
     hangingprotocol.h \
     hangingprotocollayout.h \
     hangingprotocolsloader.h \
@@ -195,23 +187,11 @@ HEADERS += extensionfactory.h \
     imageplaneprojectiontool.h \
     nonclosedangletool.h \
     abortrendercommand.h \
+    roitool.h \
     statswatcher.h \
     clippingplanestool.h \
     representationslayer.h \
     toolrepresentation.h \
-    distancetoolrepresentation.h \
-    roitoolrepresentation.h \
-    polylineroitoolrepresentation.h \
-    ellipticroitoolrepresentation.h \
-    angletoolrepresentation.h \
-    nonclosedangletoolrepresentation.h \
-    extractimagetoolrepresentation.h \
-    superimposeimagetoolrepresentation.h \
-    lineoutliner.h \
-    polylineroioutliner.h \
-    polylineangleoutliner.h \
-    ellipseoutliner.h \
-    outliner.h \
     settings.h \
     settingsregistry.h \
     settingsparser.h \
@@ -334,14 +314,10 @@ SOURCES += extensionmediator.cpp \
     drawerline.cpp \
     drawertext.cpp \
     drawerpolyline.cpp \
-    drawerimage.cpp \
-    extractimagetool.cpp \
-    superimposeimagetool.cpp \
     polylineroitool.cpp \
-    ellipticroitool.cpp \
+    ovalroitool.cpp \
     polylinetemporalroitool.cpp \
     polylinetemporalroitooldata.cpp \
-    polylinetemporalroitoolrepresentation.cpp \
     distancetool.cpp \
     windowlevelpresetstooldata.cpp \
     qviewercinecontroller.cpp \
@@ -376,10 +352,6 @@ SOURCES += extensionmediator.cpp \
     drawercrosshair.cpp \
     viewerslayout.cpp \
     q2dviewerwidget.cpp \
-    toolhandler.cpp \
-    toolhandlerrotation.cpp \
-    toolhandlerwithoutrepresentation.cpp \
-    toolhandlerwithrepresentation.cpp \
     hangingprotocol.cpp \
     hangingprotocollayout.cpp \
     hangingprotocolsloader.cpp \
@@ -408,23 +380,11 @@ SOURCES += extensionmediator.cpp \
     imageplaneprojectiontool.cpp \
     nonclosedangletool.cpp \
     abortrendercommand.cpp \
+    roitool.cpp \
     statswatcher.cpp \
     clippingplanestool.cpp \
     representationslayer.cpp \
     toolrepresentation.cpp \
-    distancetoolrepresentation.cpp \
-    roitoolrepresentation.cpp \
-    polylineroitoolrepresentation.cpp \
-    ellipticroitoolrepresentation.cpp \
-    angletoolrepresentation.cpp \
-    nonclosedangletoolrepresentation.cpp \
-    extractimagetoolrepresentation.cpp \
-    superimposeimagetoolrepresentation.cpp \
-    lineoutliner.cpp \
-    polylineroioutliner.cpp \
-    polylineangleoutliner.cpp \
-    ellipseoutliner.cpp \
-    outliner.cpp \
     settings.cpp \
     settingsregistry.cpp \
     settingsparser.cpp \

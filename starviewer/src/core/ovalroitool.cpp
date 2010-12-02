@@ -1,32 +1,48 @@
-#include "ellipseoutliner.h"
-
-#include "drawerpolygon.h"
+/***************************************************************************
+ *   Copyright (C) 2005-2007 by Grup de Gràfics de Girona                  *
+ *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
+ *                                                                         *
+ *   Universitat de Girona                                                 *
+ ***************************************************************************/
+#include "ovalroitool.h"
 #include "q2dviewer.h"
+#include "logging.h"
+#include "series.h"
 #include "drawer.h"
+#include "drawerpolygon.h"
 #include "mathtools.h"
 
 #include <vtkCommand.h>
 
 namespace udg {
 
-EllipseOutliner::EllipseOutliner(Q2DViewer *viewer, QObject *parent)
- : Outliner(viewer, parent), m_state(Ready), m_ellipsePolygon(0)
+OvalROITool::OvalROITool(QViewer *viewer, QObject *parent)
+ : ROITool(viewer, parent), m_state(Ready)
 {
-    // TODO Tenir en compte interrupcions de l'outliner, com canvi de volum 
-    // o eliminació de l'outliner degut a events extern mentres estem editant la forma
+    m_toolName = "OvalROITool";
+
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
 }
 
-EllipseOutliner::~EllipseOutliner()
+OvalROITool::~OvalROITool()
 {
-    // TODO Tenir en compte si la forma encara s'està editant o no?
+    if (!m_roiPolygon.isNull() && m_state == FirstPointFixed)
+    {
+        m_roiPolygon->decreaseReferenceCount();
+        delete m_roiPolygon;
+        m_2DViewer->render();
+    }
+
+    m_roiPolygon = 0;
 }
 
-void EllipseOutliner::handleEvent(long unsigned eventID)
+void OvalROITool::handleEvent(long unsigned eventID)
 {
     if (!m_2DViewer->getInput())
     {
         return;
     }
+    
     switch (eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
@@ -34,7 +50,7 @@ void EllipseOutliner::handleEvent(long unsigned eventID)
             break;
 
         case vtkCommand::MouseMoveEvent:
-            simulateEllipse();
+            simulateOval();
             break;
 
         case vtkCommand::LeftButtonReleaseEvent:
@@ -43,7 +59,7 @@ void EllipseOutliner::handleEvent(long unsigned eventID)
     }
 }
 
-void EllipseOutliner::handlePointAddition()
+void OvalROITool::handlePointAddition()
 {
     if (m_state == Ready)
     {
@@ -53,10 +69,13 @@ void EllipseOutliner::handlePointAddition()
         memcpy(m_secondPoint, m_firstPoint, sizeof(double) * 3);
 
         m_state = FirstPointFixed;
+
+        // Com que estem afegint punts cal indicar que és necessari recalcular les dades estadístiques
+        m_hasToComputeStatisticsData = true;
     }
 }
 
-void EllipseOutliner::simulateEllipse()
+void OvalROITool::simulateOval()
 {
     if (m_state == FirstPointFixed)
     {
@@ -65,22 +84,21 @@ void EllipseOutliner::simulateEllipse()
         m_2DViewer->putCoordinateInCurrentImageBounds(m_secondPoint);
         
         // Si encara no havíem creat el polígon, ho fem
-        if (!m_ellipsePolygon)
+        if (!m_roiPolygon)
         {            
-            m_ellipsePolygon = new DrawerPolygon;
+            m_roiPolygon = new DrawerPolygon;
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
-            m_ellipsePolygon->increaseReferenceCount();
-            m_2DViewer->getDrawer()->drawWorkInProgress(m_ellipsePolygon);
+            m_roiPolygon->increaseReferenceCount();
+            m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         }
 
         // Actualitzem la forma i renderitzem
         updatePolygonPoints();
-        // TODO Fer servir Drawer::updateRenderer()?
         m_2DViewer->render();    
     }
 }
 
-void EllipseOutliner::computeEllipseCentre(double centre[3])
+void OvalROITool::computeOvalCentre(double centre[3])
 {
     for (int i = 0; i < 3; ++i)
     {
@@ -88,10 +106,10 @@ void EllipseOutliner::computeEllipseCentre(double centre[3])
     }
 }
 
-void EllipseOutliner::updatePolygonPoints()
+void OvalROITool::updatePolygonPoints()
 {
     double centre[3];
-    computeEllipseCentre(centre);
+    computeOvalCentre(centre);
 
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
@@ -120,25 +138,39 @@ void EllipseOutliner::updatePolygonPoints()
         polygonPoint[yIndex] = centre[yIndex] + (xRadius * cosinusAlpha * sinusBeta + yRadius * sinusAlpha * cosinusBeta);
         polygonPoint[zIndex] = depthValue;
 
-        m_ellipsePolygon->setVertix(vertixIndex++, polygonPoint);
+        m_roiPolygon->setVertix(vertixIndex++, polygonPoint);
     }
 
-    m_ellipsePolygon->update();
+    m_roiPolygon->update();
 }
 
-void EllipseOutliner::closeForm()
+void OvalROITool::closeForm()
 {
     // Cal comprovar si hi ha un objecte creat ja que podria ser que no s'hagués creat si s'hagués realitzat un doble clic, 
     // per exemple, ja que no s'hauria passat per l'event de mouse move, que és quan es crea la primitiva.
-    if (m_ellipsePolygon)
+    if (m_roiPolygon)
     {
+        printData();
         // Alliberem la primitiva perquè pugui ser esborrada
-        m_ellipsePolygon->decreaseReferenceCount();
-        emit finished(m_ellipsePolygon);
-        // TODO De moment això ho deixem comentat, caldria mirar com fer la gestió d'interrupcions de les tools i de formes inacabades
-        //m_ellipsePolygon = 0;
+        m_roiPolygon->decreaseReferenceCount();
+        m_roiPolygon = 0;
     }
-    m_state = Ready;    
+
+    m_state = Ready;
+}
+
+void OvalROITool::initialize()
+{
+    // Alliberem les primitives perquè puguin ser esborrades
+    if (!m_roiPolygon.isNull())
+    {
+        m_roiPolygon->decreaseReferenceCount();
+        delete m_roiPolygon;
+        m_2DViewer->render();
+    }
+    
+    m_roiPolygon = 0;
+    m_state = Ready;
 }
 
 }

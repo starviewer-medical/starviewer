@@ -10,7 +10,6 @@
 #include <QObject>
 #include <QMultiMap>
 #include <QPair>
-#include <QStringList>
 
 class QAction;
 class QSignalMapper;
@@ -121,12 +120,6 @@ public:
     void enableActionTools(QViewer *viewer, const QStringList &actionToolsList);
     void disableActionTools(QViewer *viewer, const QStringList &actionToolsList);
 
-    /// Guarda com a última Tool compatible la que se li passa per paràmetre
-    void setLastCompatibleTool(const QString &lastCompatibleTool);
-
-    /// Guarda una llista amb les Tool's compatibles amb el mode edició
-    void setEditionCompatibleTools(const QStringList &compatibleTools);
-
     /**
      * Activa/desactiva en un determinat viewer les "Action Tool" registrades
      * @param viewer Viewer sobre el qual volem activar/desactivar les "Action Tools" registrades
@@ -157,11 +150,6 @@ public slots:
     void activateTool(const QString &toolName);
     void deactivateTool(const QString &toolName);
 
-private:
-    /// Comprova si s'ha de guardar la Tool com a última Tool compatible
-    /// En aquest cas la guarda
-    void saveCompatibleTool(const QString &toolName);
-
 private slots:
     /**
      * Quan es dispara l'acció d'una tool, aquest slot la rep i a partir del seu nom
@@ -171,14 +159,12 @@ private slots:
      */
     void triggeredToolAction(const QString &toolName);
 
-    /// Comprova per cada tool registrada, si l'acció associada està checked o no per activar/desactivar
-    /// la tool en els viewers indicats. Es pot fer servir per quan per exemple afegim nous viewers en un mateix contexte
-    /// i volem que s'activin les mateixes tools que estan actives en els altres viewers.
+    /**
+     * Comprova per cada tool registrada, si l'acció associada està checked o no per activar/desactivar
+     * la tool en els viewers indicats. Es pot fer servir per quan per exemple afegim nous viewers en un mateix contexte
+     * i volem que s'activin les mateixes tools que estan actives en els altres viewers.
+     */
     void refreshConnections();
-
-    /// Quan una Tool incompatible amb el mode edició acaba, l'elimina del ToolProxy i hi afegeix
-    /// l'última Tool compatible
-    void incompatibleToolFinished();
 
 private:
     /// Registre que ens proporcionarà tools i accions associades
@@ -206,15 +192,6 @@ private:
 
     /// Mapa que guarda la relació d'"Action Tools" amb les respectives parelles QAction/SLOT
     QMap<QString, QPair<QAction *, QString> > m_actionToolRegistry;
-
-    /// Guarda el nom de la Tool, incompatible amb el mode edició, que s'està utilitzant
-    QString m_incompatibleTool;
-
-    /// Guarda el nom de l'última Tool compatible amb el mode edició que s'ha utilitzat
-    QString m_lastCompatibleTool;
-
-    /// Guarda els noms de les Tool's compatible amb mode edició
-    QStringList m_editionCompatibleTools;
 };
 
 }

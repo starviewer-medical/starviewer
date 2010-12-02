@@ -52,14 +52,4 @@ QString Tool::toolName()
     return m_toolName;
 }
 
-bool Tool::isEditionCompatible()
-{
-    return m_editionCompatibility;
-}
-
-void Tool::setEditionCompatibility(bool compatibility)
-{
-    m_editionCompatibility = compatibility;
-}
-
 }
