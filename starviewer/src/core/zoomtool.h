@@ -19,12 +19,12 @@ class QViewer;
 class ZoomTool : public Tool {
 Q_OBJECT
 public:
-    enum { None , Zooming };
+    enum { None, Zooming };
 
-    ZoomTool( QViewer *viewer, QObject *parent = 0 );
+    ZoomTool(QViewer *viewer, QObject *parent = 0);
     ~ZoomTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
 private slots:
     /// Comença el zoom
