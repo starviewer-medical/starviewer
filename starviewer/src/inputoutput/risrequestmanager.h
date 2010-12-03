@@ -53,7 +53,7 @@ public:
 
 signals:
 
-    ///Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests
+    ///Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests que s'executa en un altre Thread
     void listenRISRequests();
 
     ///Signal que s'emet per indicar que s'ha de visualitzar l'estudi
@@ -104,6 +104,9 @@ private:
 
     ///Mostra un missatge indicant que s'ha produït un error al fer la consulta a un PACS
     void errorQueryingStudy(QueryPacsJob *queryPACSJob);
+
+    ///Descarrega els estudis trobats a partir d'una queryPACSJob
+    void retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob);
 
     ///Sol·licita descarregar l'estudi passat utilitzant el PACSManager
     RetrieveDICOMFilesFromPACSJob* retrieveStudy(QString pacsIDToRetrieve, Study *study);

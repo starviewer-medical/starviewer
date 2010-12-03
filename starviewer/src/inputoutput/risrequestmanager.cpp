@@ -137,37 +137,7 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
         }
         else
         {
-            if (queryPACSJob->getPatientStudyList().count() > 0 && m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
-            {
-                //Si és el primer estudi que hem trobat a descarregar a partir de l'AccessionNumber indiquem el PopUp quin és el nom del pacient perquè el mostri
-                m_qpopUpRisRequestsScreen->setPatientNameOfRetrievingStudies(queryPACSJob->getPatientStudyList().at(0)->getFullName());
-            }
-            
-            foreach(Patient *patient, queryPACSJob->getPatientStudyList())
-            {
-                foreach(Study *study, patient->getStudies())
-                {
-                    if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
-                    {
-                        INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
-
-                        //Descarreguem l'estudi trobat
-                        RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
-
-                        if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
-                        {
-                            //El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
-                            m_pacsJobIDToViewWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
-                        }
-
-                        m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
-                    }
-                    else
-                    {
-                        WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat descarregar-lo d'un altre PACS.").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
-                    }
-                }
-            }
+            retrieveFoundStudiesFromPACS(queryPACSJob);
         }
 
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
@@ -237,6 +207,41 @@ void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
         .arg(queryPACSJob->getPacsDevice().getInstitution());
 
     QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
+}
+
+void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
+{
+    if (queryPACSJob->getPatientStudyList().count() > 0 && m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
+    {
+        //Si és el primer estudi que hem trobat a descarregar a partir de l'AccessionNumber indiquem el PopUp quin és el nom del pacient perquè el mostri
+        m_qpopUpRisRequestsScreen->setPatientNameOfRetrievingStudies(queryPACSJob->getPatientStudyList().at(0)->getFullName());
+    }
+    
+    foreach(Patient *patient, queryPACSJob->getPatientStudyList())
+    {
+        foreach(Study *study, patient->getStudies())
+        {
+            if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
+            {
+                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
+
+                //Descarreguem l'estudi trobat
+                RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
+
+                if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
+                {
+                    //El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
+                    m_pacsJobIDToViewWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
+                }
+
+                m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
+            }
+            else
+            {
+                WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat descarregar-lo d'un altre PACS.").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
+            }
+        }
+    }
 }
 
 RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(QString pacsIDToRetrieve, Study *study)
