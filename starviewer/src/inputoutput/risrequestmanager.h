@@ -29,7 +29,7 @@ class DicomMask;
 class PacsManager;
 class Patient;
 class Study;
-class QPopUpRisRequestsScreen;
+class QPopUpRISRequestsScreen;
 class QueryPacsJob;
 class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
@@ -123,7 +123,7 @@ private:
     QQueue<DicomMask> m_queueRISRequests;
     ListenRISRequests *m_listenRISRequests;
 
-    QPopUpRisRequestsScreen *m_qpopUpRisRequestsScreen;
+    QPopUpRISRequestsScreen *m_qpopUpRISRequestsScreen;
 
     PacsManager *m_pacsManager;
 

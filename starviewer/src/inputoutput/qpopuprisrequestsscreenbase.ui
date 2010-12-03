@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>udg::QPopUpRisRequestsScreenBase</class>
- <widget class="QDialog" name="udg::QPopUpRisRequestsScreenBase">
+ <class>udg::QPopUpRISRequestsScreenBase</class>
+ <widget class="QDialog" name="udg::QPopUpRISRequestsScreenBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -348,6 +348,7 @@
   </layout>
  </widget>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>

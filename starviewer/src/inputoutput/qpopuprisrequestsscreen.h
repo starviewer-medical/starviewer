@@ -23,15 +23,15 @@ class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
 class Patient;
 
-class QPopUpRisRequestsScreen : public QDialog, private Ui::QPopUpRisRequestsScreenBase{
+class QPopUpRISRequestsScreen : public QDialog, private Ui::QPopUpRISRequestsScreenBase{
 Q_OBJECT
 public:
 
     ///Constructor
-    QPopUpRisRequestsScreen( QWidget *parent = 0 );
+    QPopUpRISRequestsScreen(QWidget *parent = 0);
 
     ///Destructor
-    ~QPopUpRisRequestsScreen();
+    ~QPopUpRISRequestsScreen();
 
     ///S'indica que s'està cercant als PACS els estudis amb un determinat accessionnumber
     void queryStudiesByAccessionNumberStarted();
