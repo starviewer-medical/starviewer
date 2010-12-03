@@ -63,11 +63,11 @@ private slots :
 
 private:
 
-    ///Refresquem el label que indica quants estudis portem descarregats del total d'estudis a descarregar
-    void refreshLabelStudyCounter();
-
     ///Mostra per pantalla el nom del pacient pel qual s'ha rebut la petició de descarregar estudis.
     void showPatientNameOfRetrievingStudies(Patient *patient);
+
+    ///Actualitza per pantalla l'estat de la descàrrege
+    void refreshScreenRetrieveStatus();
 
 private:
 
