@@ -11,12 +11,18 @@
 #include <QDesktopWidget>
 #include <QRect>
 #include <QApplication>
+#include <QMovie>
 
 #include "qpopuprisrequestsscreen.h"
 #include "logging.h"
 #include "starviewerapplication.h"
+#include "retrievedicomfilesfrompacsjob.h"
+#include "study.h"
+#include "pacsrequeststatus.h"
 
 namespace udg {
+
+const int QPopUpRisRequestsScreen::msTimeOutToHidePopUp = 5000;
 
 QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( parent )
 {
@@ -25,23 +31,130 @@ QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( pa
 
     m_qTimer = new QTimer();
     connect(m_qTimer,SIGNAL(timeout()),SLOT(timeoutTimer()));
+
+    QMovie *operationAnimation = new QMovie(this);
+    operationAnimation->setFileName(":/images/loader.gif");
+    m_operationAnimation->setMovie(operationAnimation);
+    operationAnimation->start();
 }
 
-
-void QPopUpRisRequestsScreen::setAccessionNumber(QString accessionNumber)
+void QPopUpRisRequestsScreen::queryStudiesByAccessionNumberStarted()
 {
-    QString popUpText = tr("%1 has received a request from a RIS to retrieve the study with accession number").arg(ApplicationNameString);
-    m_labelRisRequestDescription->setText(popUpText + " " + accessionNumber + ".");
+    m_labelRisRequestDescription->setText(tr("%1 has received a request from RIS to retrieve studies.").arg(ApplicationNameString));
+    m_operationDescription->setText(tr("Querying PACS..."));
+    m_operationAnimation->show();
 
-    /*HACK El timer hauria d'estar a showEvent, però si el popUp ja es mostra showEvent no dispara, per tant no es reinicia el timer
-           per això si el timer està actiu (el popUp s'està mostrant) el reiniciem*/
-    if (m_qTimer->isActive())
+    m_studiesRetrievingCounter->setText("");
+
+    m_studiesInstanceUIDToRetrieve.clear();
+    m_studiesInstanceUIDRetrieved.clear();
+}
+
+void QPopUpRisRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
+{
+    if (m_studiesInstanceUIDToRetrieve.count() == 0)
     {
-        m_qTimer->start(5000);
+        m_operationDescription->setText(tr("Retrieving study"));
+    }
+
+    m_studiesInstanceUIDToRetrieve.append(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    refreshLabelStudyCounter();
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *)));
+
+}
+
+void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
+{
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+
+    if (retrieveDICOMFilesFromPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
+    }
+    else
+    {
+        if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveOk || 
+            retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
+        {
+            m_studiesInstanceUIDRetrieved.append(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+            
+            if (m_studiesInstanceUIDRetrieved.count() < m_studiesInstanceUIDToRetrieve.count())
+            {
+                refreshLabelStudyCounter();
+            }
+            else
+            {
+                showRetrieveFinished();
+            }
+        }
+        else
+        {
+            retrieveDICOMFilesFromPACSJobCancelledOrFailed(pacsJob);
+        }
+
     }
 }
 
-void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
+void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *pacsJob)
+{
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+
+    if (retrieveDICOMFilesFromPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
+    }
+    else
+    {
+        //Si ha fallat l'estudi el treiem de la llista d'estudis a descarregar
+        m_studiesInstanceUIDToRetrieve.removeOne(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+        
+        if (m_studiesInstanceUIDRetrieved.count() < m_studiesInstanceUIDToRetrieve.count())
+        {
+            refreshLabelStudyCounter();
+        }
+        else
+        {
+            showRetrieveFinished();
+        }
+    }
+}
+
+void QPopUpRisRequestsScreen::showNotStudiesFoundMessage()
+{
+    m_operationDescription->setText(tr("No studies found."));
+    m_operationAnimation->hide();
+    m_qTimer->start(msTimeOutToHidePopUp);
+}
+
+void QPopUpRisRequestsScreen::refreshLabelStudyCounter()
+{
+    m_studiesRetrievingCounter->setText(QString(tr("%1 of %2.")).arg(m_studiesInstanceUIDRetrieved.count() + 1).arg(m_studiesInstanceUIDToRetrieve.count()));
+}
+
+void QPopUpRisRequestsScreen::showRetrieveFinished()
+{
+    m_operationAnimation->hide();
+    int numberOfRetrievedStudies = m_studiesInstanceUIDRetrieved.count();
+    if (numberOfRetrievedStudies == 1)
+    {
+        m_operationDescription->setText(tr("%1 study has been retrieved.").arg(numberOfRetrievedStudies));
+    }
+    else
+    {
+        m_operationDescription->setText(tr("%1 studies have been retrieved.").arg(numberOfRetrievedStudies));
+    }
+    m_studiesRetrievingCounter->setText("");
+    m_qTimer->start(msTimeOutToHidePopUp);
+}
+
+void QPopUpRisRequestsScreen::setPatientNameOfRetrievingStudies(QString patientName)
+{
+    QString popUpText = tr("%1 has received a request from RIS to retrieve studies of patient %2.").arg(ApplicationNameString).arg(patientName);
+    m_labelRisRequestDescription->setText(popUpText);
+}
+
+void QPopUpRisRequestsScreen::showEvent(QShowEvent *)
 {
     //Es situa el PopUp a baix a l'esquerre de la pantalla on està la interfície activa del Starviewer
     QDesktopWidget desktopWidget;
@@ -49,19 +162,18 @@ void QPopUpRisRequestsScreen::showEvent(QShowEvent * )
     QRect screenGeometryActiveWindow = desktopWidget.availableGeometry(QApplication::activeWindow()); //Agafem les dimensions de la pantalla on està la finestra activa de l'starviewer
 
     this->move(screenGeometryActiveWindow.x() + screenGeometryActiveWindow.width() - this->width() - 10, screenGeometryActiveWindow.y() + screenGeometryActiveWindow.height() - this->height() -10);
-
-    //Activem el timer per amagar el Popup 5 segons després de fer-lo apareixer
-    m_qTimer->start(5000);
 }
 
 void QPopUpRisRequestsScreen::timeoutTimer()
 {
-    this->setVisible(false);
+    this->hide();
+    m_qTimer->stop();
 }
 
 QPopUpRisRequestsScreen::~QPopUpRisRequestsScreen()
 {
     m_qTimer->stop();
+    delete m_qTimer;
 }
 
 };

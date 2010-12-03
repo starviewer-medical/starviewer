@@ -125,7 +125,7 @@ void QueryScreen::initialize()
 #ifndef STARVIEWER_LITE
     if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
     {
-        m_risRequestManager = new RISRequestManager();
+        m_risRequestManager = new RISRequestManager(m_pacsManager);
     }
     else
     {
@@ -154,11 +154,6 @@ void QueryScreen::createConnections()
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
 
     #ifndef STARVIEWER_LITE
-    if (m_risRequestManager != NULL)
-    {
-        connect(m_risRequestManager, SIGNAL(retrieveStudyFromRISRequest(QString, Study*)), SLOT(retrieveStudyFromRISRequest(QString, Study*)));
-    }
-
     connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob *)), SLOT(newPACSJobEnqueued(PACSJob*)));
     #endif
 
@@ -410,24 +405,6 @@ void QueryScreen::writeSettings()
         Settings settings;
         settings.saveGeometry(InputOutputSettings::QueryScreenGeometry, this);
     }
-}
-
-void QueryScreen::retrieveStudyFromRISRequest(QString pacsID, Study *study)
-{
-    DicomMask maskStudyToRetrieve;
-
-    maskStudyToRetrieve.setStudyInstanceUID(study->getInstanceUID());
-    QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve;
-    if( Settings().getValue( InputOutputSettings::RISRequestViewOnceRetrieved ).toBool() )
-    {
-        actionAfterRetrieve = QInputOutputPacsWidget::View;
-    }
-    else
-    {
-        actionAfterRetrieve = QInputOutputPacsWidget::None;
-    }
-
-    m_qInputOutputPacsWidget->retrieve(pacsID, study, maskStudyToRetrieve, QInputOutputPacsWidget::View);
 }
 
 void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, QString pacsID, Study *study)

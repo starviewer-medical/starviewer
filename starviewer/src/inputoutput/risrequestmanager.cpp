@@ -14,8 +14,14 @@
 #include "logging.h"
 #include "qpopuprisrequestsscreen.h"
 #include "querypacsjob.h"
+#include "retrievedicomfilesfrompacsjob.h"
 
 namespace udg{
+
+RISRequestManager::RISRequestManager(PacsManager *pacsManager)
+{
+    m_pacsManager = pacsManager;
+}
 
 RISRequestManager::~RISRequestManager()
 {
@@ -41,8 +47,6 @@ void RISRequestManager::initialize()
     m_listenRISRequestsQThread->start();
 
     m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
-
-    m_pacsManager = new PacsManager();
 
     createConnections();
 }
@@ -80,11 +84,13 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
     INFO_LOG("Comencem a cercar l'estudi sol·licitat pel RIS amb accession number " + maskRISRequest.getAccessionNumber());
-    //Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar
+    //Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar i pendents de descarregar
+    //TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la 
+    //última que ha arribat
     m_studiesInstancesUIDRequestedToRetrieve.clear();
 
     // Mostrem el popUP amb l'accession number
-    m_qpopUpRisRequestsScreen->setAccessionNumber(maskRISRequest.getAccessionNumber());
+    m_qpopUpRisRequestsScreen->queryStudiesByAccessionNumberStarted();
     m_qpopUpRisRequestsScreen->activateWindow();
     m_qpopUpRisRequestsScreen->show();
 
@@ -131,6 +137,12 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
         }
         else
         {
+            if (queryPACSJob->getPatientStudyList().count() > 0 && m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
+            {
+                //Si és el primer estudi que hem trobat a descarregar a partir de l'AccessionNumber indiquem el PopUp quin és el nom del pacient perquè el mostri
+                m_qpopUpRisRequestsScreen->setPatientNameOfRetrievingStudies(queryPACSJob->getPatientStudyList().at(0)->getFullName());
+            }
+            
             foreach(Patient *patient, queryPACSJob->getPatientStudyList())
             {
                 foreach(Study *study, patient->getStudies())
@@ -138,9 +150,9 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
                     if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
                     {
                         INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
-                  
-                        //TODO Aquesta classe és la que hauria de tenir la responsabilitat de descarregar l'estudi
-                        emit retrieveStudyFromRISRequest(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
+
+                        //Descarreguem l'estudi trobat
+                        retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
                         m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID()); 
                     }
                     else
@@ -199,6 +211,7 @@ void RISRequestManager::queryRequestRISFinished()
         //Si no hem trobat cap estudi que coincideix llancem MessageBox
         QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.").arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
 
+        m_qpopUpRisRequestsScreen->showNotStudiesFoundMessage();
         QMessageBox::information(NULL, ApplicationNameString, message);
     }
 
@@ -217,6 +230,17 @@ void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
         .arg(queryPACSJob->getPacsDevice().getInstitution());
 
     QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
+}
+
+void RISRequestManager::retrieveStudy(QString pacsIDToRetrieve, Study *study)
+{
+    PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
+    DicomMask studyToRetrieveDICOMMask;
+    studyToRetrieveDICOMMask.setStudyInstanceUID(study->getInstanceUID());
+    
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, study, studyToRetrieveDICOMMask, RetrieveDICOMFilesFromPACSJob::Medium);
+    m_qpopUpRisRequestsScreen->addStudyToRetrieveByAccessionNumber(retrieveDICOMFilesFromPACSJob);
+    m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
 }
 
 void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)
