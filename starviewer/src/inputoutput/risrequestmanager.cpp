@@ -152,8 +152,15 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
                         INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2").arg(study->getInstanceUID(), queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()]));
 
                         //Descarreguem l'estudi trobat
-                        retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
-                        m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID()); 
+                        RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
+
+                        if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
+                        {
+                            //El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
+                            m_pacsJobIDToViewWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
+                        }
+
+                        m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
                     }
                     else
                     {
@@ -232,7 +239,7 @@ void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
     QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
 }
 
-void RISRequestManager::retrieveStudy(QString pacsIDToRetrieve, Study *study)
+RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(QString pacsIDToRetrieve, Study *study)
 {
     PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(pacsIDToRetrieve);
     DicomMask studyToRetrieveDICOMMask;
@@ -240,7 +247,68 @@ void RISRequestManager::retrieveStudy(QString pacsIDToRetrieve, Study *study)
     
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, study, studyToRetrieveDICOMMask, RetrieveDICOMFilesFromPACSJob::Medium);
     m_qpopUpRisRequestsScreen->addStudyToRetrieveByAccessionNumber(retrieveDICOMFilesFromPACSJob);
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
+    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob *)));
+
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
+
+    return retrieveDICOMFilesFromPACSJob;
+}
+
+void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
+{
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+
+    if (retrieveDICOMFilesFromPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
+    }
+    else
+    {
+        INFO_LOG(QString("La descarrega de l'estudi %1 del PACS %2 sol.licitada pel RIS ha estat cancel.lada")
+            .arg(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID())
+            .arg(retrieveDICOMFilesFromPACSJob->getPacsDevice().getAETitle()));
+    }
+}
+
+///Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
+void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
+{
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+
+    if (retrieveDICOMFilesFromPACSJob == NULL)
+    {
+        ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
+    }
+    else
+    {
+        if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
+        {
+            if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
+            {
+                QMessageBox::warning(NULL, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
+            }
+            else
+            {
+                QMessageBox::critical(NULL, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
+                return;
+            }
+        }
+
+        if (m_pacsJobIDToViewWhenFinished.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
+        {
+            //Si estava dintre la llista de PACSJob pels quals s'havia de fer un view al acabar de descarregar emetem un ViewStudy sinó emetrem un LoadStudy
+            emit viewStudyRetrievedFromRISRequest(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+        }
+        else
+        {
+            emit loadStudyRetrievedFromRISRequest(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+        }
+
+        /*Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
+          que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop*/
+        retrieveDICOMFilesFromPACSJob->deleteLater();
+    }
 }
 
 void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)

@@ -32,6 +32,7 @@ class Study;
 class QPopUpRisRequestsScreen;
 class QueryPacsJob;
 class PACSJob;
+class RetrieveDICOMFilesFromPACSJob;
 
 /** Classe manager que ens permet rebre peticions del RIS i processar-les
 */
@@ -55,6 +56,12 @@ signals:
     ///Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests
     void listenRISRequests();
 
+    ///Signal que s'emet per indicar que s'ha de visualitzar l'estudi
+    void viewStudyRetrievedFromRISRequest(QString studyInstanceUID);
+
+    ///Signal que s'emet per indicar que s'ha de fer un load de l'estudi
+    void loadStudyRetrievedFromRISRequest(QString studyInstanceUID);
+
 private slots:
 
     ///Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
@@ -65,6 +72,12 @@ private slots:
 
     ///Slot que s'activa quan un job de consulta al PACS és cancel·lat
     void queryPACSJobCancelled(PACSJob *pacsJob);
+
+    ///Slot que s'activa quan s'ha cancel·lat la descàrre d'una petició del RIS
+    void retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob);
+
+    ///Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
+    void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
 
     ///Mostrar un missatge indicant que s'ha produït un error escoltant peticions del RIS
     void showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error);
@@ -93,7 +106,7 @@ private:
     void errorQueryingStudy(QueryPacsJob *queryPACSJob);
 
     ///Sol·licita descarregar l'estudi passat utilitzant el PACSManager
-    void retrieveStudy(QString pacsIDToRetrieve, Study *study);
+    RetrieveDICOMFilesFromPACSJob* retrieveStudy(QString pacsIDToRetrieve, Study *study);
 
 private:
 
@@ -117,6 +130,8 @@ private:
     /*Pot ser que diversos PACS continguin el mateix estudi amb un mateix accession number, per evitar descarregar-lo més d'una vegada ens guardem en una
       llista quins són els estudis descarregats.*/
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
+    //Conté una llista de PACSJob pels quals de l'estudi descarregat s'ha de fer un view, pels altres es farà un load
+    QList<int> m_pacsJobIDToViewWhenFinished;
 
     ///Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
     QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
