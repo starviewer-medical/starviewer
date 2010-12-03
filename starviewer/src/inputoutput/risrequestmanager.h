@@ -43,6 +43,7 @@ class RISRequestManager: public QObject{
 Q_OBJECT
 public:
 
+    RISRequestManager(PacsManager *pacsManager);
     ///Destructor de la classe
     ~RISRequestManager();
 
@@ -50,9 +51,6 @@ public:
     void listen();
 
 signals:
-
-    ///Signal que indica que s'ha descarregar un estudi sol·licitat pel RIS
-    void retrieveStudyFromRISRequest(QString pacsID, Study *study);
 
     ///Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests
     void listenRISRequests();
@@ -93,6 +91,9 @@ private:
 
     ///Mostra un missatge indicant que s'ha produït un error al fer la consulta a un PACS
     void errorQueryingStudy(QueryPacsJob *queryPACSJob);
+
+    ///Sol·licita descarregar l'estudi passat utilitzant el PACSManager
+    void retrieveStudy(QString pacsIDToRetrieve, Study *study);
 
 private:
 

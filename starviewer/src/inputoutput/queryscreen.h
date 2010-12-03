@@ -122,9 +122,6 @@ private slots:
     /// Demana que es carregui un estudi descarregat. Útil per casos com el de carregar prèvies, per exemple.
     void loadRetrievedStudyFromPacs(QString studyInstanceUID);
 
-    ///Slot que s'activa quan es rep una petició del RIS per descarregar un estudi d'un determinat PACS
-    void retrieveStudyFromRISRequest(QString pacsID, Study *study);
-
     ///Slot que s'activa quan s'ha produït un error al descarregar un estudi
     void studyRetrieveFailedSlot(QString studyInstanceUID);
 
