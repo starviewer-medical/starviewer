@@ -47,20 +47,20 @@ void QPopUpRisRequestsScreen::queryStudiesByAccessionNumberStarted()
 
     m_studiesRetrievingCounter->setText("");
 
-    m_studiesInstanceUIDToRetrieve.clear();
-    m_studiesInstanceUIDRetrieved.clear();
+    m_numberOfStudiesRetrieved = 0;
+    m_numberOfStudiesToRetrieve = 0;
 }
 
 void QPopUpRisRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
 {
-    if (m_studiesInstanceUIDToRetrieve.count() == 0)
+    if (m_numberOfStudiesToRetrieve == 0)
     {
         //Si és el primer estudi indiquem que comencem a descarregar i indiquem el nom del pacient
         m_operationDescription->setText(tr("Retrieving study"));
         showPatientNameOfRetrievingStudies(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getParentPatient());
     }
 
-    m_studiesInstanceUIDToRetrieve.append(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    m_numberOfStudiesToRetrieve++;
     refreshLabelStudyCounter();
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *)));
@@ -80,9 +80,9 @@ void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
         if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveOk || 
             retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
         {
-            m_studiesInstanceUIDRetrieved.append(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+            m_numberOfStudiesRetrieved++;
             
-            if (m_studiesInstanceUIDRetrieved.count() < m_studiesInstanceUIDToRetrieve.count())
+            if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
             {
                 refreshLabelStudyCounter();
             }
@@ -95,7 +95,6 @@ void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
         {
             retrieveDICOMFilesFromPACSJobCancelledOrFailed(pacsJob);
         }
-
     }
 }
 
@@ -110,9 +109,9 @@ void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PAC
     else
     {
         //Si ha fallat l'estudi el treiem de la llista d'estudis a descarregar
-        m_studiesInstanceUIDToRetrieve.removeOne(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+        m_numberOfStudiesToRetrieve--;
         
-        if (m_studiesInstanceUIDRetrieved.count() < m_studiesInstanceUIDToRetrieve.count())
+        if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
         {
             refreshLabelStudyCounter();
         }
@@ -132,20 +131,25 @@ void QPopUpRisRequestsScreen::showNotStudiesFoundMessage()
 
 void QPopUpRisRequestsScreen::refreshLabelStudyCounter()
 {
-    m_studiesRetrievingCounter->setText(QString(tr("%1 of %2.")).arg(m_studiesInstanceUIDRetrieved.count() + 1).arg(m_studiesInstanceUIDToRetrieve.count()));
+    m_studiesRetrievingCounter->setText(QString(tr("%1 of %2.")).arg(m_numberOfStudiesRetrieved + 1).arg(m_numberOfStudiesToRetrieve));
 }
 
 void QPopUpRisRequestsScreen::showRetrieveFinished()
 {
     m_operationAnimation->hide();
-    int numberOfRetrievedStudies = m_studiesInstanceUIDRetrieved.count();
-    if (numberOfRetrievedStudies == 1)
+
+    if (m_numberOfStudiesRetrieved == 0)
     {
-        m_operationDescription->setText(tr("%1 study has been retrieved.").arg(numberOfRetrievedStudies));
+        m_operationDescription->setText(tr("No studies has been retrieved.").arg(m_numberOfStudiesRetrieved));
+    }
+    else
+    if (m_numberOfStudiesRetrieved  == 1)
+    {
+        m_operationDescription->setText(tr("%1 study has been retrieved.").arg(m_numberOfStudiesRetrieved));
     }
     else
     {
-        m_operationDescription->setText(tr("%1 studies have been retrieved.").arg(numberOfRetrievedStudies));
+        m_operationDescription->setText(tr("%1 studies have been retrieved.").arg(m_numberOfStudiesRetrieved));
     }
     m_studiesRetrievingCounter->setText("");
     m_qTimer->start(msTimeOutToHidePopUp);
