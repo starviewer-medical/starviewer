@@ -23,9 +23,9 @@
 
 namespace udg {
 
-const int QPopUpRisRequestsScreen::msTimeOutToHidePopUp = 5000;
+const int QPopUpRISRequestsScreen::msTimeOutToHidePopUp = 5000;
 
-QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( parent )
+QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(parent)
 {
     setupUi(this);
     this->setWindowFlags(Qt::SubWindow | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
@@ -39,7 +39,7 @@ QPopUpRisRequestsScreen::QPopUpRisRequestsScreen( QWidget *parent ): QDialog( pa
     operationAnimation->start();
 }
 
-void QPopUpRisRequestsScreen::queryStudiesByAccessionNumberStarted()
+void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
 {
     m_labelRisRequestDescription->setText(tr("%1 has received a request from RIS to retrieve studies.").arg(ApplicationNameString));
     m_operationDescription->setText(tr("Querying PACS..."));
@@ -51,7 +51,7 @@ void QPopUpRisRequestsScreen::queryStudiesByAccessionNumberStarted()
     m_numberOfStudiesToRetrieve = 0;
 }
 
-void QPopUpRisRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
+void QPopUpRISRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
 {
     if (m_numberOfStudiesToRetrieve == 0)
     {
@@ -67,7 +67,7 @@ void QPopUpRisRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMF
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *)));
 }
 
-void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
+void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
 {
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
 
@@ -91,7 +91,7 @@ void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
     }
 }
 
-void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *pacsJob)
+void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *pacsJob)
 {
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
 
@@ -108,7 +108,7 @@ void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PAC
     }
 }
 
-void QPopUpRisRequestsScreen::refreshScreenRetrieveStatus()
+void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus()
 {
     if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
     {
@@ -120,14 +120,14 @@ void QPopUpRisRequestsScreen::refreshScreenRetrieveStatus()
     }
 }
 
-void QPopUpRisRequestsScreen::showNotStudiesFoundMessage()
+void QPopUpRISRequestsScreen::showNotStudiesFoundMessage()
 {
     m_operationDescription->setText(tr("No studies found."));
     m_operationAnimation->hide();
     m_qTimer->start(msTimeOutToHidePopUp);
 }
 
-void QPopUpRisRequestsScreen::showRetrieveFinished()
+void QPopUpRISRequestsScreen::showRetrieveFinished()
 {
     m_operationAnimation->hide();
 
@@ -147,13 +147,13 @@ void QPopUpRisRequestsScreen::showRetrieveFinished()
     m_qTimer->start(msTimeOutToHidePopUp);
 }
 
-void QPopUpRisRequestsScreen::showPatientNameOfRetrievingStudies(Patient *patient)
+void QPopUpRISRequestsScreen::showPatientNameOfRetrievingStudies(Patient *patient)
 {
     QString popUpText = tr("%1 has received a request from RIS to retrieve studies of patient %2.").arg(ApplicationNameString).arg(patient->getFullName());
     m_labelRisRequestDescription->setText(popUpText);
 }
 
-void QPopUpRisRequestsScreen::showEvent(QShowEvent *)
+void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
 {
     //Es situa el PopUp a baix a l'esquerre de la pantalla on està la interfície activa del Starviewer
     QDesktopWidget desktopWidget;
@@ -163,13 +163,13 @@ void QPopUpRisRequestsScreen::showEvent(QShowEvent *)
     this->move(screenGeometryActiveWindow.x() + screenGeometryActiveWindow.width() - this->width() - 10, screenGeometryActiveWindow.y() + screenGeometryActiveWindow.height() - this->height() -10);
 }
 
-void QPopUpRisRequestsScreen::timeoutTimer()
+void QPopUpRISRequestsScreen::timeoutTimer()
 {
     this->hide();
     m_qTimer->stop();
 }
 
-QPopUpRisRequestsScreen::~QPopUpRisRequestsScreen()
+QPopUpRISRequestsScreen::~QPopUpRISRequestsScreen()
 {
     m_qTimer->stop();
     delete m_qTimer;

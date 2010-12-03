@@ -33,7 +33,7 @@ RISRequestManager::~RISRequestManager()
 
     delete m_listenRISRequestsQThread;
     delete m_pacsManager;
-    delete m_qpopUpRisRequestsScreen;
+    delete m_qpopUpRISRequestsScreen;
 }
 
 void RISRequestManager::initialize()
@@ -46,7 +46,7 @@ void RISRequestManager::initialize()
     m_listenRISRequests->moveToThread(m_listenRISRequestsQThread);
     m_listenRISRequestsQThread->start();
 
-    m_qpopUpRisRequestsScreen = new QPopUpRisRequestsScreen();
+    m_qpopUpRISRequestsScreen = new QPopUpRISRequestsScreen();
 
     createConnections();
 }
@@ -90,9 +90,9 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     m_studiesInstancesUIDRequestedToRetrieve.clear();
 
     // Mostrem el popUP amb l'accession number
-    m_qpopUpRisRequestsScreen->queryStudiesByAccessionNumberStarted();
-    m_qpopUpRisRequestsScreen->activateWindow();
-    m_qpopUpRisRequestsScreen->show();
+    m_qpopUpRISRequestsScreen->queryStudiesByAccessionNumberStarted();
+    m_qpopUpRISRequestsScreen->activateWindow();
+    m_qpopUpRISRequestsScreen->show();
 
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
     // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant 
@@ -188,7 +188,7 @@ void RISRequestManager::queryRequestRISFinished()
         //Si no hem trobat cap estudi que coincideix llancem MessageBox
         QString message = tr("%2 can't execute the RIS request, because hasn't found the Study with accession number %1 in the default PACS.").arg(dicomMaskRISRequest.getAccessionNumber(), ApplicationNameString);
 
-        m_qpopUpRisRequestsScreen->showNotStudiesFoundMessage();
+        m_qpopUpRISRequestsScreen->showNotStudiesFoundMessage();
         QMessageBox::information(NULL, ApplicationNameString, message);
     }
 
@@ -245,7 +245,7 @@ RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudy(QString pacsIDTo
     studyToRetrieveDICOMMask.setStudyInstanceUID(study->getInstanceUID());
     
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, study, studyToRetrieveDICOMMask, RetrieveDICOMFilesFromPACSJob::Medium);
-    m_qpopUpRisRequestsScreen->addStudyToRetrieveByAccessionNumber(retrieveDICOMFilesFromPACSJob);
+    m_qpopUpRISRequestsScreen->addStudyToRetrieveByAccessionNumber(retrieveDICOMFilesFromPACSJob);
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob *)));
 
