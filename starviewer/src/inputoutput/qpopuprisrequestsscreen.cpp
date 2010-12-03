@@ -61,10 +61,10 @@ void QPopUpRisRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMF
     }
 
     m_numberOfStudiesToRetrieve++;
-    refreshLabelStudyCounter();
+    refreshScreenRetrieveStatus();
+
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob *)));
     connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelledOrFailed(PACSJob *)));
-
 }
 
 void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
@@ -82,14 +82,7 @@ void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
         {
             m_numberOfStudiesRetrieved++;
             
-            if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
-            {
-                refreshLabelStudyCounter();
-            }
-            else
-            {
-                showRetrieveFinished();
-            }
+            refreshScreenRetrieveStatus();
         }
         else
         {
@@ -110,15 +103,20 @@ void QPopUpRisRequestsScreen::retrieveDICOMFilesFromPACSJobCancelledOrFailed(PAC
     {
         //Si ha fallat l'estudi el treiem de la llista d'estudis a descarregar
         m_numberOfStudiesToRetrieve--;
-        
-        if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
-        {
-            refreshLabelStudyCounter();
-        }
-        else
-        {
-            showRetrieveFinished();
-        }
+
+        refreshScreenRetrieveStatus();
+    }
+}
+
+void QPopUpRisRequestsScreen::refreshScreenRetrieveStatus()
+{
+    if (m_numberOfStudiesRetrieved < m_numberOfStudiesToRetrieve)
+    {
+        m_studiesRetrievingCounter->setText(QString(tr("%1 of %2.")).arg(m_numberOfStudiesRetrieved + 1).arg(m_numberOfStudiesToRetrieve));
+    }
+    else
+    {
+        showRetrieveFinished();
     }
 }
 
@@ -129,11 +127,6 @@ void QPopUpRisRequestsScreen::showNotStudiesFoundMessage()
     m_qTimer->start(msTimeOutToHidePopUp);
 }
 
-void QPopUpRisRequestsScreen::refreshLabelStudyCounter()
-{
-    m_studiesRetrievingCounter->setText(QString(tr("%1 of %2.")).arg(m_numberOfStudiesRetrieved + 1).arg(m_numberOfStudiesToRetrieve));
-}
-
 void QPopUpRisRequestsScreen::showRetrieveFinished()
 {
     m_operationAnimation->hide();
@@ -142,8 +135,7 @@ void QPopUpRisRequestsScreen::showRetrieveFinished()
     {
         m_operationDescription->setText(tr("No studies has been retrieved.").arg(m_numberOfStudiesRetrieved));
     }
-    else
-    if (m_numberOfStudiesRetrieved  == 1)
+    else if (m_numberOfStudiesRetrieved  == 1)
     {
         m_operationDescription->setText(tr("%1 study has been retrieved.").arg(m_numberOfStudiesRetrieved));
     }
