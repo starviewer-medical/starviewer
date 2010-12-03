@@ -19,6 +19,7 @@
 #include "retrievedicomfilesfrompacsjob.h"
 #include "study.h"
 #include "pacsrequeststatus.h"
+#include "patient.h"
 
 namespace udg {
 
@@ -54,7 +55,9 @@ void QPopUpRisRequestsScreen::addStudyToRetrieveByAccessionNumber(RetrieveDICOMF
 {
     if (m_studiesInstanceUIDToRetrieve.count() == 0)
     {
+        //Si és el primer estudi indiquem que comencem a descarregar i indiquem el nom del pacient
         m_operationDescription->setText(tr("Retrieving study"));
+        showPatientNameOfRetrievingStudies(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getParentPatient());
     }
 
     m_studiesInstanceUIDToRetrieve.append(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
@@ -148,9 +151,9 @@ void QPopUpRisRequestsScreen::showRetrieveFinished()
     m_qTimer->start(msTimeOutToHidePopUp);
 }
 
-void QPopUpRisRequestsScreen::setPatientNameOfRetrievingStudies(QString patientName)
+void QPopUpRisRequestsScreen::showPatientNameOfRetrievingStudies(Patient *patient)
 {
-    QString popUpText = tr("%1 has received a request from RIS to retrieve studies of patient %2.").arg(ApplicationNameString).arg(patientName);
+    QString popUpText = tr("%1 has received a request from RIS to retrieve studies of patient %2.").arg(ApplicationNameString).arg(patient->getFullName());
     m_labelRisRequestDescription->setText(popUpText);
 }
 

@@ -211,12 +211,6 @@ void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
 
 void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
 {
-    if (queryPACSJob->getPatientStudyList().count() > 0 && m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
-    {
-        //Si és el primer estudi que hem trobat a descarregar a partir de l'AccessionNumber indiquem el PopUp quin és el nom del pacient perquè el mostri
-        m_qpopUpRisRequestsScreen->setPatientNameOfRetrievingStudies(queryPACSJob->getPatientStudyList().at(0)->getFullName());
-    }
-    
     foreach(Patient *patient, queryPACSJob->getPatientStudyList())
     {
         foreach(Study *study, patient->getStudies())
