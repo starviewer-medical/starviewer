@@ -17,27 +17,21 @@ class DrawerCrossHair;
 
 /**
     Implementació de la tool del cursor 3D.
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Cursor3DTool : public Tool {
 Q_OBJECT
 public:
     /// Estats de la tool
-    enum { None , Computing };
+    enum { None, Computing };
 
-    Cursor3DTool( QViewer *viewer, QObject *parent = 0 );
+    Cursor3DTool(QViewer *viewer, QObject *parent = 0);
     ~Cursor3DTool();
 
-    /**
-     * Re-implementa la funció del pare, afegint noves connexions
-     * @param data
-     */
     void setToolData(ToolData * data);
 
-    void handleEvent( long unsigned eventID );
+    void handleEvent(long unsigned eventID);
 
-    void setVisibility( bool visible );
+    void setVisibility(bool visible);
 
 private slots:
     /// Actualitza les línies a projectar sobre la imatge segons les dades de la tool
@@ -86,7 +80,7 @@ private:
     int m_state;
 
     /// Objecte crosshair per representar el punt
-    DrawerCrossHair * m_crossHair;
+    DrawerCrossHair *m_crossHair;
 };
 
 }

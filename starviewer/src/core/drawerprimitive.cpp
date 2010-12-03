@@ -117,7 +117,7 @@ bool DrawerPrimitive::isModified() const
     return m_modified;
 }
 
-// HACK mètodes de sucedani d'smart pointer
+// HACK Mètodes de sucedani d'smart pointer
 void DrawerPrimitive::increaseReferenceCount()
 {
     m_referenceCount++;
@@ -141,7 +141,7 @@ bool DrawerPrimitive::hasOwners() const
     return m_referenceCount > 0;
 }
 
-// FI mètodes de sucedani d'smart pointer
+// FI Mètodes de sucedani d'smart pointer
 
 void DrawerPrimitive::setModified(bool modified)
 {
