@@ -73,9 +73,8 @@ private:
 
     QTimer *m_qTimer;
     static const int msTimeOutToHidePopUp;
-    QStringList m_studiesInstanceUIDToRetrieve;
-    QStringList m_studiesInstanceUIDRetrieved;
-
+    int m_numberOfStudiesToRetrieve;
+    int m_numberOfStudiesRetrieved;
 };
 
 };
