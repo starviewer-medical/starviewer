@@ -52,8 +52,8 @@ protected:
 
 private slots :
 
-    ///Slot que s'activa quan acaba el timer per amagar el popup
-    void timeoutTimer();
+    ///Slot que amaga el PopUp sempre i quan no s'estigui processant cap petició del RIS
+    void hidePopUp();
     /// Mou el PopUp a la cantonada dreta de la pantalla a on es troba en aquest moment.
     void moveToBottomRight();
 
