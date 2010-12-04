@@ -33,7 +33,8 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
     this->setWindowFlags(Qt::SubWindow | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
     m_qTimer = new QTimer();
-    connect(m_qTimer,SIGNAL(timeout()),SLOT(timeoutTimer()));
+    m_qTimer->setSingleShot(true);
+    connect(m_qTimer,SIGNAL(timeout()),SLOT(hidePopUp()));
 
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
@@ -127,6 +128,7 @@ void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus()
     else
     {
         showRetrieveFinished();
+        m_qTimer->start(msTimeOutToHidePopUp);
     }
 }
 
@@ -154,7 +156,6 @@ void QPopUpRISRequestsScreen::showRetrieveFinished()
         m_operationDescription->setText(tr("%1 studies have been retrieved.").arg(m_numberOfStudiesRetrieved));
     }
     m_studiesRetrievingCounter->setText("");
-    m_qTimer->start(msTimeOutToHidePopUp);
 }
 
 void QPopUpRISRequestsScreen::showPatientNameOfRetrievingStudies(Patient *patient)
@@ -176,10 +177,13 @@ void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
     QTimer::singleShot(msTimeOutToMovePopUpToBottomRight, this, SLOT(moveToBottomRight()));
 }
 
-void QPopUpRISRequestsScreen::timeoutTimer()
+void QPopUpRISRequestsScreen::hidePopUp()
 {
-    this->hide();
-    m_qTimer->stop();
+    if (m_operationAnimation->isHidden())
+    {
+        //Si es mostra el gif d'operació vol dir que ha arribat una petició de RIS mentre estava corrent el QTimer, per això hem de fer no s'amagui
+        this->hide();
+    }
 }
 
 void QPopUpRISRequestsScreen::moveToBottomRight()
