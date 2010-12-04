@@ -77,7 +77,7 @@ private:
     static const int msTimeOutToHidePopUp;
     static const int msTimeOutToMovePopUpToBottomRight;
 
-    int m_numberOfStudiesToRetrieve;
+    QList<int> m_pacsJobIDOfStudiesToRetrieve;
     int m_numberOfStudiesRetrieved;
 };
 
