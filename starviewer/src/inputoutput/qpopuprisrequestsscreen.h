@@ -54,6 +54,8 @@ private slots :
 
     ///Slot que s'activa quan acaba el timer per amagar el popup
     void timeoutTimer();
+    /// Mou el PopUp a la cantonada dreta de la pantalla a on es troba en aquest moment.
+    void moveToBottomRight();
 
     ///S'indica que la descàrrega dels estudis degut a una petició del RIS ha finalitzat
     void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
@@ -73,6 +75,8 @@ private:
 
     QTimer *m_qTimer;
     static const int msTimeOutToHidePopUp;
+    static const int msTimeOutToMovePopUpToBottomRight;
+
     int m_numberOfStudiesToRetrieve;
     int m_numberOfStudiesRetrieved;
 };
