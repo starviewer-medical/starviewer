@@ -87,6 +87,10 @@ protected slots:
     /// Si cert, posa el thickness al màxim i el manté encara que es canvïi de vista
     void enableVolumeMode( bool enable );
 
+private:
+    /// Desconnecta els signals i slots associats al viewer vinculat si en tenim
+    void disconnectSignalsAndSlots();
+
 protected:
     /// Visualitzador linkat al widget
     Q2DViewer *m_currentViewer;

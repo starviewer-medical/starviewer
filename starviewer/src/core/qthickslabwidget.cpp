@@ -49,9 +49,7 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
     else
     {
         // primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
-        disconnect( m_currentViewer, 0, this, 0 );
-        disconnect( m_currentViewer, 0, m_slabThicknessSlider, 0 );
-        disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), this, SLOT( applyThickSlab() ) );
+        disconnectSignalsAndSlots();
     }
     // posem a punt el widget d'acord amb les dades del viewer
     m_currentViewer = viewer;
@@ -80,13 +78,7 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
 
 void QThickSlabWidget::unlink()
 {
-    if (m_currentViewer)
-    {
-        // primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
-        disconnect( m_currentViewer, 0, this, 0 );
-        disconnect( m_currentViewer, 0, m_slabThicknessSlider, 0 );
-        disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), this, SLOT( applyThickSlab() ) );
-    }
+    disconnectSignalsAndSlots();
     m_currentViewer = 0;
 }
 
@@ -243,6 +235,16 @@ void QThickSlabWidget::enableVolumeMode( bool enable )
     }
     else
         m_slabThicknessSlider->setEnabled(true);
+}
+
+void QThickSlabWidget::disconnectSignalsAndSlots()
+{
+    if (m_currentViewer)
+    {
+        disconnect(m_currentViewer, 0, this, 0);
+        disconnect(m_currentViewer, 0, m_slabThicknessSlider, 0);
+        disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
+    }
 }
 
 }
