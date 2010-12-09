@@ -735,7 +735,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget" >
+     <widget class="QWidget" name="layoutWidget1" >
       <layout class="QVBoxLayout" >
        <property name="margin" >
         <number>0</number>
@@ -1025,7 +1025,7 @@
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QWidget" name="layoutWidget" >
+         <widget class="QWidget" name="layoutWidget2" >
           <layout class="QVBoxLayout" >
            <property name="margin" >
             <number>0</number>
@@ -1116,7 +1116,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="layoutWidget" >
+         <widget class="QWidget" name="layoutWidget3" >
           <layout class="QVBoxLayout" >
            <property name="margin" >
             <number>0</number>
