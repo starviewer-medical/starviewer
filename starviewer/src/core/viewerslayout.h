@@ -57,6 +57,10 @@ public slots:
     /// Marquem com a seleccionat el viewer passat per paràmetre
     void setSelectedViewer(Q2DViewerWidget *viewer);
 
+    /// Neteja el layout, eliminant tots els visors i geometries, 
+    /// deixant-lo en l'estat inicial, com si acabéssim de crear l'objecte
+    void cleanUp();
+
 signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
     void viewerAdded(Q2DViewerWidget *viewer);
@@ -77,10 +81,6 @@ private:
     /// Crea i retorna un nou visor configurat adequadament
     Q2DViewerWidget* getNewQ2DViewerWidget();
 
-    /// Redistribueix l'espai de visors per quan passem d'un layout 
-    /// no regular a un layout definit regularment ( via setGrid(rows,columns) )
-    void restoreLayouts();
-
     /// Coloca el viewer donat en la posició i mides proporcionats
     /// @param viewer Visor que volem posicionar i ajustar dins del layout
     /// @param geometry String amb les posicions i mides realitives corresponents al viewer
@@ -95,10 +95,6 @@ private:
     /// Inicialitza els objectes que fem servir per distribuir els visors
     /// Només cal cridar-lo al constructor
     void initLayouts();
-
-    /// Elimina els visors de l'espai dels layouts. No elimina ni els visors en sí
-    /// ni tampoc els esborra de la llista de visors. Sí que elimina la llista de geometries.
-    void removeLayouts();
 
 private:
     /// Widget contenidor general
@@ -118,7 +114,10 @@ private:
     int m_totalColumns;
 
     /// Array amb tots els viewers que podem manipular
+    /// Visors dins del grid regular (distribuits dins del gridLayout)
     QVector<Q2DViewerWidget *> m_vectorViewers;
+    /// Visors definits amb geometries lliures (distribuits fora del gridLayout)
+    QList<Q2DViewerWidget *> m_freeLayoutViewersList;
 
     /// Llistat de geometries que cada viewer visible té assignada
     QStringList m_geometriesList;

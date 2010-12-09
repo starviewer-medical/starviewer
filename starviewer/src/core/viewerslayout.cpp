@@ -7,6 +7,7 @@
 #include "viewerslayout.h"
 
 #include "logging.h"
+#include <QPointer>
 
 namespace udg {
 
@@ -22,10 +23,10 @@ ViewersLayout::~ViewersLayout()
 
 void ViewersLayout::initLayouts()
 {
-    m_visibleRows = 1;
-    m_visibleColumns = 1;
-    m_totalRows = 1;
-    m_totalColumns = 1;
+    m_visibleRows = 0;
+    m_visibleColumns = 0;
+    m_totalRows = 0;
+    m_totalColumns = 0;
 
     m_gridLayout = new QGridLayout();
     m_gridLayout->setSpacing(0);
@@ -43,59 +44,6 @@ void ViewersLayout::initLayouts()
     m_isRegular = true;
 }
 
-void ViewersLayout::removeLayouts()
-{
-    int numberOfViewers = getNumberOfViewers();
-
-    for (int i = 0; i < numberOfViewers; ++i)
-    {
-        m_viewersLayout->removeWidget(getViewerWidget(i));
-    }
-    m_geometriesList.clear();
-}
-
-void ViewersLayout::restoreLayouts()
-{
-    int numberOfViewers = getNumberOfViewers();
-
-    /// Si tenim més visors que el grid regular que teníem construït, el regenerem.
-    if (numberOfViewers > m_totalColumns * m_totalRows)
-    {
-        m_totalColumns = ceil(sqrt((double)numberOfViewers));
-        m_totalRows = m_totalColumns;
-
-        if ((m_totalRows * m_totalColumns) > numberOfViewers)
-        {
-            for (int i = 0; i < (m_totalRows * m_totalColumns) - numberOfViewers; ++i)
-            {
-                m_vectorViewers.push_back(getNewQ2DViewerWidget());
-            }
-        }
-    }
-
-    m_viewersLayout->addWidget(getViewerWidget(0), 0, 0);
-
-    int column = 1;
-    int row = 0;
-    // S'amaguen tots i es deixa el principal, es tornen a posar amb layout
-    for (int i = 1; i < getNumberOfViewers(); ++i)
-    {
-        getViewerWidget(i)->hide();
-        m_viewersLayout->addWidget(getViewerWidget(i), row, column);
-
-        ++column;
-        if (column >= m_totalColumns)
-        {
-            ++row;
-            column = 0;
-        }
-    }
-
-    setSelectedViewer(getViewerWidget(0));
-    m_visibleRows = 1;
-    m_visibleColumns = 1;
-}
-
 Q2DViewerWidget* ViewersLayout::getSelectedViewer()
 {
     return m_selectedViewer;
@@ -103,7 +51,7 @@ Q2DViewerWidget* ViewersLayout::getSelectedViewer()
 
 Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
 {
-    Q2DViewerWidget *newViewer = new Q2DViewerWidget(this);
+    QPointer<Q2DViewerWidget> newViewer = new Q2DViewerWidget(this);
     connect(newViewer, SIGNAL(selected(Q2DViewerWidget *)), SLOT(setSelectedViewer(Q2DViewerWidget *)));
     // Per defecte no li posem cap annotació
     newViewer->getViewer()->removeAnnotation(Q2DViewer::AllAnnotation);
@@ -116,13 +64,31 @@ void ViewersLayout::addColumns(int columns)
 {
     while (columns > 0)
     {
+        if (m_totalRows == 0)
+        {
+            m_totalRows = 1;
+            m_visibleRows = 1;
+        }
+        
         int viewerPosition = m_visibleColumns;
         ++m_visibleColumns;
         ++m_totalColumns;
-        for (int rows = 0; rows < m_viewersLayout->rowCount(); ++rows)
+        for (int rows = 0; rows < m_totalRows; ++rows)
         {
-            Q2DViewerWidget *newViewer = getNewQ2DViewerWidget();
+            // Si tenim visors creats anteriorment amb geometries, 
+            // els aprofitem, sinó en creem de nous
+            Q2DViewerWidget *newViewer;
+            if (!m_freeLayoutViewersList.isEmpty())
+            {
+                newViewer = m_freeLayoutViewersList.takeFirst();
+            }
+            else
+            {
+                newViewer = getNewQ2DViewerWidget();
+            }
+            
             m_viewersLayout->addWidget(newViewer, rows, m_totalColumns - 1);
+            newViewer->show();
             m_vectorViewers.insert(viewerPosition,newViewer);
             viewerPosition += m_visibleColumns;
             if (rows >= m_visibleRows)
@@ -139,13 +105,29 @@ void ViewersLayout::addRows(int rows)
 {
     while (rows > 0)
     {
+        if (m_totalColumns == 0)
+        {
+            m_totalColumns = 1;
+            m_visibleColumns = 1;
+        }
         m_visibleRows += 1;
         m_totalRows += 1;
         //Afegim tants widgets com columnes
         for (int column = 0; column < m_totalColumns; ++column)
         {
-            Q2DViewerWidget *newViewer = getNewQ2DViewerWidget();
+            // Si tenim visors creats anteriorment amb geometries, 
+            // els aprofitem, sinó en creem de nous
+            Q2DViewerWidget *newViewer;
+            if (!m_freeLayoutViewersList.isEmpty())
+            {
+                newViewer = m_freeLayoutViewersList.takeFirst();
+            }
+            else
+            {
+                newViewer = getNewQ2DViewerWidget();
+            }
             m_viewersLayout->addWidget(newViewer, m_visibleRows - 1, column);
+            newViewer->show();
             m_vectorViewers.push_back(newViewer);
             if (column >= m_visibleColumns)
             {
@@ -209,7 +191,15 @@ void ViewersLayout::setGrid(int rows, int columns)
 {
     if (!m_isRegular)
     {
-        restoreLayouts();
+        // Amaguem els viewers que tinguem assignats amb geometries
+        for (int i = rows * columns; i < m_freeLayoutViewersList.size(); ++i)
+        {
+            m_freeLayoutViewersList.at(i)->hide();
+        }
+        m_totalRows = 0;
+        m_totalColumns = 0;
+        m_visibleColumns = 0;
+        m_visibleRows = 0;
     }
 
     // Mirem si les tenim amagades i mostrem totes les necessaries
@@ -277,9 +267,11 @@ void ViewersLayout::setGrid(int rows, int columns)
 
 void ViewersLayout::setGrid(const QStringList &geometriesList)
 {
+    // TODO Aquí mai s'entra perquè el mètode no es crida enlloc encara
+    // Tenir-ho en compte, perquè si es fa servir potser no acaba de funcionar bé (caldria tenir un test definit!)
     if (m_gridLayout) 
     {
-        removeLayouts();
+        cleanUp();
     }
 
     int numberOfElements = geometriesList.size();
@@ -300,11 +292,11 @@ void ViewersLayout::setGrid(const QStringList &geometriesList)
 
 Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 {
-    m_visibleRows = 0;
-    m_visibleColumns = 0;
     if (m_isRegular) 
     {
-        removeLayouts();
+        // Si tenim un grid regular, hauríem de fer un  cleanUp() prèviament
+        // per poder afegir els viewers amb geometries
+        cleanUp();
     }
 
     Q2DViewerWidget *newViewer = 0;
@@ -315,7 +307,7 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
     else
     {
         newViewer = getNewQ2DViewerWidget();
-        m_vectorViewers.push_back(newViewer);
+        m_freeLayoutViewersList << newViewer;
     }
 	
     setViewerGeometry(newViewer, geometry);
@@ -335,7 +327,7 @@ void ViewersLayout::resizeEvent(QResizeEvent *event)
     {
         for (int i = 0; i < getNumberOfVisibleViewers(); ++i)
         {
-            setViewerGeometry(getViewerWidget(i), m_geometriesList.at(i));
+            setViewerGeometry(m_freeLayoutViewersList.at(i), m_geometriesList.at(i));
         }
     }
 }
@@ -344,7 +336,9 @@ void ViewersLayout::setSelectedViewer(Q2DViewerWidget *viewer)
 {
     if (!viewer)
     {
-        DEBUG_LOG("El Viewer donat és NUL!");
+        // Si "viewer" és nul, llavors entenem que no volem cap de seleccionat
+        m_selectedViewer = 0;
+        emit selectedViewerChanged(m_selectedViewer);
         return;
     }
 
@@ -358,6 +352,31 @@ void ViewersLayout::setSelectedViewer(Q2DViewerWidget *viewer)
         m_selectedViewer->setSelected(true);
         emit selectedViewerChanged(m_selectedViewer);
     }
+}
+
+void ViewersLayout::cleanUp()
+{
+    // No hi ha cap visor seleccionat
+    setSelectedViewer(0);
+    
+    // Eliminem tots els widgets que contingui viewers layout
+    // i els propis widgets
+    for (int i = 0; i < getNumberOfViewers(); ++i)
+    {
+        m_viewersLayout->removeWidget(getViewerWidget(i));
+        delete getViewerWidget(i);
+    }
+    // Eliminem els visors i les geometries
+    m_vectorViewers.clear();
+    m_freeLayoutViewersList.clear();
+    m_geometriesList.clear();
+
+    /// Reinicialitzem la resta de variables
+    m_visibleRows = 0;
+    m_visibleColumns = 0;
+    m_totalRows = 0;
+    m_totalColumns = 0;
+    m_isRegular = false;
 }
 
 void ViewersLayout::showRows(int rows)
