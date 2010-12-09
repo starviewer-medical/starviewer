@@ -78,6 +78,18 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
         m_projectionModeComboBox->setEnabled(false);
 }
 
+void QThickSlabWidget::unlink()
+{
+    if (m_currentViewer)
+    {
+        // primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
+        disconnect( m_currentViewer, 0, this, 0 );
+        disconnect( m_currentViewer, 0, m_slabThicknessSlider, 0 );
+        disconnect( m_slabThicknessSlider, SIGNAL( valueChanged(int) ), this, SLOT( applyThickSlab() ) );
+    }
+    m_currentViewer = 0;
+}
+
 void QThickSlabWidget::setProjectionMode( int mode )
 {
     m_projectionModeComboBox->setCurrentIndex( mode );
