@@ -92,6 +92,9 @@ private:
     /// Només cal cridar-lo al constructor
     void initLayouts();
 
+    /// Fa les accions necessàries per amagar el viewer indicat del layout actual
+    void hideViewer(Q2DViewerWidget *viewer);
+
 private:
     /// Grid per gestionar les distribucions regulars de visors
     QGridLayout *m_viewersLayout;
