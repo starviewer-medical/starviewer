@@ -93,9 +93,6 @@ private:
     void initLayouts();
 
 private:
-    /// Widget contenidor general
-    QWidget *m_workingArea;
-
     /// Grid per gestionar les distribucions regulars de visors
     QGridLayout *m_viewersLayout;
 
