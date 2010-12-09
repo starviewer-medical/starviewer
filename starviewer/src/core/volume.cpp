@@ -28,25 +28,6 @@ namespace udg {
 Volume::Volume(QObject *parent)
 : QObject(parent)
 {
-    init();
-}
-
-Volume::Volume(ItkImageTypePointer itkImage, QObject *parent)
- : QObject(parent)
-{
-    init();
-    this->setData(itkImage);
-}
-
-Volume::Volume(VtkImageTypePointer vtkImage, QObject *parent)
- : QObject(parent)
-{
-    init();
-    this->setData(vtkImage);
-}
-
-void Volume::init()
-{
     m_numberOfPhases = 1;
     m_numberOfSlicesPerPhase = 1;
     // TODO És millor crear un objecte o assignar-li NUL a l'inicialitzar? 
