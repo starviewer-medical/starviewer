@@ -27,18 +27,11 @@ void ViewersLayout::initLayouts()
     m_totalRows = 0;
     m_totalColumns = 0;
 
-    m_gridLayout = new QGridLayout();
-    m_gridLayout->setSpacing(0);
-    m_gridLayout->setMargin(0);
-
     m_viewersLayout = new QGridLayout();
     m_viewersLayout->setSpacing(0);
     m_viewersLayout->setMargin(0);
 
-    m_gridLayout->addLayout(m_viewersLayout, 0, 0);
-
-    this->setLayout(m_gridLayout);
-    m_gridLayout->update();
+    this->setLayout(m_viewersLayout);
 
     m_isRegular = true;
 }
@@ -268,7 +261,7 @@ void ViewersLayout::setGrid(const QStringList &geometriesList)
 {
     // TODO Aquí mai s'entra perquè el mètode no es crida enlloc encara
     // Tenir-ho en compte, perquè si es fa servir potser no acaba de funcionar bé (caldria tenir un test definit!)
-    if (m_gridLayout) 
+    if (m_isRegular) 
     {
         cleanUp();
     }
