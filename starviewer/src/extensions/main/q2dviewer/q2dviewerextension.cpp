@@ -471,11 +471,6 @@ void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 
 void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 {
-    if (!viewerWidget)
-    {
-        DEBUG_LOG("El Viewer donat és NUL!");
-        return;
-    }
     if (viewerWidget != m_lastSelectedViewer)
     {
         // TODO Canviar aquestes connexions i desconnexions per dos mètodes el qual
@@ -495,37 +490,52 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // Desactivem les "ActionTool" pel visor que acaba de deseleccionar-se
             m_toolManager->disableRegisteredActionTools(m_lastSelectedViewer->getViewer());
         }
+        
+        // Actualitzem l'últim viewer seleccionat
         m_lastSelectedViewer = viewerWidget;
-        Q2DViewer *selected2DViewer = viewerWidget->getViewer();
+        // Si el viewer seleccionat no és nul
+        if (m_lastSelectedViewer)
+        {
+            Q2DViewer *selected2DViewer = viewerWidget->getViewer();
 
 #ifndef STARVIEWER_LITE
-        validePhases();
-        connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume *)), SLOT(validePhases()));
+            validePhases();
+            connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume *)), SLOT(validePhases()));
 #endif
-        connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton(int)));
-        // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
-        ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
-        if (screenShotTool)
-        {
-            connect(m_singleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(singleCapture()));
-            connect(m_multipleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(completeCapture()));
+            connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton(int)));
+
+            // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
+            ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool *>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
+            if (screenShotTool)
+            {
+                connect(m_singleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(singleCapture()));
+                connect(m_multipleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(completeCapture()));
+            }
+
+            // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
+            // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
+            WindowLevelPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
+            m_windowLevelComboBox->setPresetsData(windowLevelData);
+            // TODO Canviem m_windowLevelComboBox->selectPreset() per windowLevelData->activatePreset per solucionar els tickets
+            // 1226 i 1227, però potser s'hauria de millorar una mica el funcionament i/o la interfície de les classes implicades
+            // Pendent de revisar perquè tingui un disseny i interfície més adeqequats (combo box, sobre tot)
+            windowLevelData->activatePreset(windowLevelData->getCurrentPreset());
+
+            m_cineController->setQViewer(selected2DViewer);
+            m_thickSlabWidget->link(selected2DViewer);
+            updateDICOMInformationButton(selected2DViewer->getView());
+
+            // Activem les "ActionTool" pel visor seleccionat
+            m_toolManager->enableRegisteredActionTools(selected2DViewer);
         }
-
-        // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
-        // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
-        WindowLevelPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
-        m_windowLevelComboBox->setPresetsData(windowLevelData);
-        // TODO Canviem m_windowLevelComboBox->selectPreset() per windowLevelData->activatePreset per solucionar els tickets
-        // 1226 i 1227, però potser s'hauria de millorar una mica el funcionament i/o la interfície de les classes implicades
-        // Pendent de revisar perquè tingui un disseny i interfície més adeqequats (combo box, sobre tot)
-        windowLevelData->activatePreset(windowLevelData->getCurrentPreset());
-
-        m_cineController->setQViewer(selected2DViewer);
-        m_thickSlabWidget->link(selected2DViewer);
-        updateDICOMInformationButton(selected2DViewer->getView());
-
-        // Activem les "ActionTool" pel visor seleccionat
-        m_toolManager->enableRegisteredActionTools(selected2DViewer);
+        else
+        {
+            // Si és nul vol dir que en aquell moment o bé no tenim cap 
+            // visor seleccionat o bé no n'existeix cap. És per això que
+            // cal desvincular els widgets adients de qualsevol visor.
+            m_windowLevelComboBox->clearPresets();
+            m_cineController->setQViewer(0);
+        }
     }
 }
 

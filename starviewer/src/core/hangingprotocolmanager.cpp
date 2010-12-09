@@ -187,11 +187,8 @@ void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProto
 {
     cancelHangingProtocolDownloading(); // Si hi havia algun estudi descarregant, es treu de la llista d'espera
 
-    // TODO aixo no deixa de ser un HACK perquè quedi seleccionat el primer dels widgets
-    // Caldria incoporar algun paràmetre per indicar quin és el visor seleccionat per defecte
-    // Es buiden tots els visors per tal que no hi hagi res assignat
-    layout->setGrid(1,1);
-
+    // Abans d'aplicar un nou hanging protocol, fem neteja del layout i eliminem tot el que hi havia anteriorment
+    layout->cleanUp();
     foreach ( HangingProtocolDisplaySet *displaySet , hangingProtocol->getDisplaySets() )
     {
         HangingProtocolImageSet *hangingProtocolImageSet = displaySet->getImageSet();
