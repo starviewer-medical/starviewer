@@ -257,31 +257,6 @@ void ViewersLayout::setGrid(int rows, int columns)
     m_isRegular = true;
 }
 
-void ViewersLayout::setGrid(const QStringList &geometriesList)
-{
-    // TODO Aquí mai s'entra perquè el mètode no es crida enlloc encara
-    // Tenir-ho en compte, perquè si es fa servir potser no acaba de funcionar bé (caldria tenir un test definit!)
-    if (m_isRegular) 
-    {
-        cleanUp();
-    }
-
-    int numberOfElements = geometriesList.size();
-    for (int i = 0; i < numberOfElements; ++i)
-    {
-        Q2DViewerWidget *newViewer = getViewerWidget(i);
-        if (!newViewer)
-        {
-            newViewer = getNewQ2DViewerWidget();
-            m_vectorViewers.push_back(newViewer);
-        }
-        setViewerGeometry(newViewer, geometriesList.at(i));
-    }
-
-    m_geometriesList = geometriesList;
-    m_isRegular = false;
-}
-
 Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 {
     if (m_isRegular) 

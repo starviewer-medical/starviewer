@@ -49,7 +49,6 @@ public slots:
     void hideRows(int rows);
     void showColumns(int columns);
     void hideColumns(int columns);
-    void setGrid(const QStringList &geometriesList);
 
     /// Afegeix un nou visualitzador amb la geometria indicada
     Q2DViewerWidget* addViewer(const QString &geometry);
