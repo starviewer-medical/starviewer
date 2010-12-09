@@ -317,7 +317,7 @@ void ViewersLayout::resizeEvent(QResizeEvent *event)
 
     if (!m_isRegular)
     {
-        for (int i = 0; i < getNumberOfVisibleViewers(); ++i)
+        for (int i = 0; i < m_geometriesList.size(); ++i)
         {
             setViewerGeometry(m_freeLayoutViewersList.at(i), m_geometriesList.at(i));
         }
@@ -497,11 +497,6 @@ void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &ge
     int screenX = this->width();
     int screenY = this->height();
     viewer->setGeometry(x1 * screenX, (1 - y1) * screenY, (x2 - x1) * screenX, (y1 - y2) * screenY);
-}
-
-int ViewersLayout::getNumberOfVisibleViewers() const
-{
-    return m_geometriesList.size();
 }
 
 }
