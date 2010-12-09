@@ -206,7 +206,10 @@ void Q3DMPRViewer::updatePlanesData()
     {
         m_axialImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
         if( !m_axialResliced )
-            m_axialResliced = new Volume( m_axialImagePlaneWidget->GetResliceOutput() );
+        {
+            m_axialResliced = new Volume();
+            m_axialResliced->setData(m_axialImagePlaneWidget->GetResliceOutput());
+        }
         else
             m_axialResliced->setData( m_axialImagePlaneWidget->GetResliceOutput() );
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
@@ -214,7 +217,10 @@ void Q3DMPRViewer::updatePlanesData()
 
         m_sagitalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
         if( !m_sagitalResliced )
-            m_sagitalResliced = new Volume( m_sagitalImagePlaneWidget->GetResliceOutput() );
+        {
+            m_sagitalResliced = new Volume();
+            m_sagitalResliced->setData(m_sagitalImagePlaneWidget->GetResliceOutput());
+        }
         else
             m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
@@ -222,7 +228,10 @@ void Q3DMPRViewer::updatePlanesData()
 
         m_coronalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
         if( !m_coronalResliced )
-            m_coronalResliced = new Volume( m_coronalImagePlaneWidget->GetResliceOutput() );
+        {
+            m_coronalResliced = new Volume();
+            m_coronalResliced->setData(m_coronalImagePlaneWidget->GetResliceOutput());
+        }
         else
             m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...

@@ -50,8 +50,6 @@ public:
     typedef vtkImageData *VtkImageTypePointer;
 
     Volume(QObject *parent = 0);
-    Volume(ItkImageTypePointer itkImage, QObject *parent = 0);
-    Volume(VtkImageTypePointer vtkImage, QObject *parent = 0);
     ~Volume();
 
     /**
@@ -179,10 +177,6 @@ signals:
      * @param progress progrés de la càrrega en una escala de 1 a 100
      */
     void progress(int);
-
-private:
-    /// Mètode d'inicialització d'objectes comuns per als constructors
-    void init();
 
 private:
     /// Filtres per importar/exportar
