@@ -166,6 +166,10 @@ private slots:
      */
     void refreshConnections();
 
+    /// Indica que el viewer passat per paràmetre ja no ha de gestionar-se pel ToolManager
+    /// Aquest mètode es cridarà quan l'objecte viewer envïi la senyal destroyed()
+    void unregisterViewer(QObject *viewer);
+
 private:
     /// Registre que ens proporcionarà tools i accions associades
     ToolRegistry *m_toolRegistry;
