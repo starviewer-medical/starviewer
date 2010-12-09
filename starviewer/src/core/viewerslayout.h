@@ -64,9 +64,9 @@ signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
     void viewerAdded(Q2DViewerWidget *viewer);
 
-    /// Senyal que s'emet quan s'amaga un visualitzador
-    /// TODO Potser seria més adequat dir-li viewerHidden, ja que no s'elimina sinó que només s'amaga
-    void viewerRemoved(Q2DViewerWidget *viewer);
+    /// Senyal que s'emet quan s'amaga un visualitzador, és a dir, 
+    // deixa de ser visible però segueix existint
+    void viewerHidden(Q2DViewerWidget *viewer);
 
     /// Senyal que s'emet quan el visualitzador seleccionat canvia
     void selectedViewerChanged(Q2DViewerWidget *viewer);
