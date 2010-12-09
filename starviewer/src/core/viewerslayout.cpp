@@ -7,7 +7,6 @@
 #include "viewerslayout.h"
 
 #include "logging.h"
-#include <QPointer>
 
 namespace udg {
 
@@ -51,7 +50,7 @@ Q2DViewerWidget* ViewersLayout::getSelectedViewer()
 
 Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
 {
-    QPointer<Q2DViewerWidget> newViewer = new Q2DViewerWidget(this);
+    Q2DViewerWidget *newViewer = new Q2DViewerWidget(this);
     connect(newViewer, SIGNAL(selected(Q2DViewerWidget *)), SLOT(setSelectedViewer(Q2DViewerWidget *)));
     // Per defecte no li posem cap annotació
     newViewer->getViewer()->removeAnnotation(Q2DViewer::AllAnnotation);
