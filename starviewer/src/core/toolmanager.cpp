@@ -36,6 +36,8 @@ ToolManager::~ToolManager()
 
 void ToolManager::setViewerTools(QViewer *viewer, const QStringList &toolsList)
 {
+    // Cada cop que eliminem un viewer que estem gestionant, l'haurem de "desregistrar" del ToolManager
+    connect(viewer, SIGNAL(destroyed(QObject *)), SLOT(unregisterViewer(QObject *)));
     ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = NULL;
@@ -53,6 +55,8 @@ void ToolManager::setupRegisteredTools(QViewer *viewer)
 
 void ToolManager::setViewerTool(QViewer *viewer, const QString &toolName, ToolConfiguration *configuration)
 {
+    // Cada cop que eliminem un viewer que estem gestionant, l'haurem de "desregistrar" del ToolManager
+    connect(viewer, SIGNAL(destroyed(QObject *)), SLOT(unregisterViewer(QObject *)));
     ViewerToolConfigurationPairType pair;
     pair.first = viewer;
     pair.second = configuration;
@@ -325,6 +329,21 @@ void ToolManager::refreshConnections()
     foreach (const QString &tool, toolsList)
     {
         triggeredToolAction(tool);
+    }
+}
+
+void ToolManager::unregisterViewer(QObject *viewer)
+{
+    // Recorrem tot el mapa, eliminant totes les entrades on aparegui el viewer en qüestió
+    QMutableMapIterator<QString, ViewerToolConfigurationPairType> mapIterator(m_toolViewerMap);
+    while (mapIterator.hasNext())
+    {
+        mapIterator.next();
+        ViewerToolConfigurationPairType pair = mapIterator.value();
+        if (pair.first == viewer)
+        {
+            mapIterator.remove(); // Eliminem l'element del map
+        }
     }
 }
 
