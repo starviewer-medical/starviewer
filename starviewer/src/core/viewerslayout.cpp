@@ -299,16 +299,8 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
         cleanUp();
     }
 
-    Q2DViewerWidget *newViewer = 0;
-    if (getNumberOfVisibleViewers() < getNumberOfViewers())
-    {
-        newViewer = getViewerWidget(getNumberOfVisibleViewers());
-    }
-    else
-    {
-        newViewer = getNewQ2DViewerWidget();
-        m_freeLayoutViewersList << newViewer;
-    }
+    Q2DViewerWidget *newViewer = getNewQ2DViewerWidget();
+    m_freeLayoutViewersList << newViewer;
 	
     setViewerGeometry(newViewer, geometry);
     newViewer->show();
