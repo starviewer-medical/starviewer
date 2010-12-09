@@ -25,7 +25,7 @@ class Q3DOrientationMarker;
 class Q3DMPRViewer : public QViewer{
 Q_OBJECT
 public:
-    Q3DMPRViewer( QWidget *parent = 0 );
+    Q3DMPRViewer(QWidget *parent = 0);
     ~Q3DMPRViewer();
 
     /// Retorna el volum transformat segons el reslice de cada vista
@@ -36,52 +36,52 @@ public:
     /// Mètodes per obtenir les coordenades que defineixen els plans
     double *getAxialPlaneOrigin();
     double *getAxialPlaneNormal();
-    void getAxialPlaneOrigin( double origin[3] );
-    void getAxialPlaneNormal( double normal[3] );
+    void getAxialPlaneOrigin(double origin[3]);
+    void getAxialPlaneNormal(double normal[3]);
 
     double *getSagitalPlaneOrigin();
     double *getSagitalPlaneNormal();
-    void getSagitalPlaneOrigin( double origin[3] );
-    void getSagitalPlaneNormal( double normal[3] );
+    void getSagitalPlaneOrigin(double origin[3]);
+    void getSagitalPlaneNormal(double normal[3]);
 
     double *getCoronalPlaneOrigin();
     double *getCoronalPlaneNormal();
-    void getCoronalPlaneOrigin( double origin[3] );
-    void getCoronalPlaneNormal( double normal[3] );
+    void getCoronalPlaneOrigin(double origin[3]);
+    void getCoronalPlaneNormal(double normal[3]);
 
-    void getCurrentWindowLevel( double wl[2] );
-    void resetView( CameraOrientationType view );
+    void getCurrentWindowLevel(double wl[2]);
+    void resetView(CameraOrientationType view);
 
 signals:
     /// senyal que indica que algun dels plans han canviat
-    void planesHasChanged( void );
+    void planesHasChanged(void);
 
 public slots:
     /// Li indiquem el volum a visualitzar
-    virtual void setInput( Volume *inputImage );
+    virtual void setInput(Volume *inputImage);
 
     void resetViewToAxial();
     void resetViewToSagital();
     void resetViewToCoronal();
 
     /// Habilitar/Deshabilitar la visibilitat d'un dels plans
-    void setSagitalVisibility( bool enable );
-    void setCoronalVisibility( bool enable );
-    void setAxialVisibility( bool enable );
+    void setSagitalVisibility(bool enable);
+    void setCoronalVisibility(bool enable);
+    void setAxialVisibility(bool enable);
 
     /// Reinicia de nou els plans
     virtual void resetPlanes();
 
-    void setWindowLevel( double window , double level );
+    void setWindowLevel(double window, double level);
     void setTransferFunction(TransferFunction *transferFunction);
 
     /// mètodes per controlar la visibilitat de l'outline
-    void enableOutline( bool enable );
+    void enableOutline(bool enable);
     void outlineOn();
     void outlineOff();
 
     /// mètodes per controlar la visibilitat de l'orientation marker widget
-    void enableOrientationMarker( bool enable );
+    void enableOrientationMarker(bool enable);
     void orientationMarkerOn();
     void orientationMarkerOff();
 
@@ -90,7 +90,7 @@ public slots:
 
 protected:
     /// Els respectius volums sobre cada pla de reslice
-    Volume *m_axialResliced, *m_sagitalResliced , *m_coronalResliced;
+    Volume *m_axialResliced, *m_sagitalResliced, *m_coronalResliced;
 
     /// Inicialitza els plans
     void initializePlanes();
@@ -119,10 +119,10 @@ protected:
     Q3DOrientationMarker *m_orientationMarker;
 
     /// Valors dels window level per defecte. Pot venir donat pel DICOM o assignat per nosaltres a un valor estàndar de constrast
-    double m_defaultWindow , m_defaultLevel;
+    double m_defaultWindow, m_defaultLevel;
 
     /// control de visibilitat dels plans
-    bool m_axialPlaneVisible, m_sagitalPlaneVisible , m_coronalPlaneVisible;
+    bool m_axialPlaneVisible, m_sagitalPlaneVisible, m_coronalPlaneVisible;
 
     /// control de visibilitat de l'outline i l'orientation marker widget \TODO és possible que aquests membres acabin sent superflus i innecessaris
     bool m_isOutlineEnabled;

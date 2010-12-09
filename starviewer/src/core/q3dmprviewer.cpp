@@ -41,15 +41,15 @@ class PlanesInteractionCallback : public vtkCommand
 public:
     static PlanesInteractionCallback *New(){ return new PlanesInteractionCallback; }
     Q3DMPRViewer *m_viewer;
-    virtual void Execute( vtkObject *vtkNotUsed(caller), unsigned long event, void *vtkNotUsed(callData) )
+    virtual void Execute(vtkObject *vtkNotUsed(caller), unsigned long event, void *vtkNotUsed(callData))
     {
         static double lastWindowLevel[2] = {0.,0.};
-        if( m_viewer )
+        if (m_viewer)
         {
-            switch( event )
+            switch(event)
             {
             case vtkCommand::StartInteractionEvent:
-                m_viewer->getCurrentWindowLevel( lastWindowLevel );
+                m_viewer->getCurrentWindowLevel(lastWindowLevel);
             break;
 
             case vtkCommand::EndInteractionEvent:
@@ -59,10 +59,10 @@ public:
             case vtkCommand::InteractionEvent:
                 // actualitzem únicament si ha canviat el window level
                 double wl[2];
-                m_viewer->getCurrentWindowLevel( wl );
-                if( wl[0] != lastWindowLevel[0] || wl[1] != lastWindowLevel[1] )
+                m_viewer->getCurrentWindowLevel(wl);
+                if (wl[0] != lastWindowLevel[0] || wl[1] != lastWindowLevel[1])
                 {
-                    m_viewer->getWindowLevelData()->setCustomWindowLevel( wl[0], wl[1] );
+                    m_viewer->getWindowLevelData()->setCustomWindowLevel(wl[0], wl[1]);
                 }
             break;
             }
@@ -71,13 +71,13 @@ public:
     }
 };
 
-Q3DMPRViewer::Q3DMPRViewer( QWidget *parent )
- : QViewer( parent )
+Q3DMPRViewer::Q3DMPRViewer(QWidget *parent)
+ : QViewer(parent)
 {
     this->initializePlanes();
     // Assignem el color de fons de pantalla
     // TODO Podríem tenir un mètode genèric per fer això
-    m_renderer->SetBackground( 0.4392, 0.5020, 0.5647 );
+    m_renderer->SetBackground(0.4392, 0.5020, 0.5647);
     // interacció
     m_axialPlaneVisible = true;
     m_sagitalPlaneVisible = true;
@@ -101,7 +101,7 @@ Q3DMPRViewer::~Q3DMPRViewer()
     m_outlineActor->Delete();
 }
 
-void Q3DMPRViewer::setInput( Volume *volume )
+void Q3DMPRViewer::setInput(Volume *volume)
 {
     m_mainVolume = volume;
     this->createOutline();
@@ -119,25 +119,25 @@ void Q3DMPRViewer::setInput( Volume *volume )
 void Q3DMPRViewer::createActors()
 {
     m_outlineActor = vtkActor::New();
-    m_orientationMarker = new Q3DOrientationMarker( this->getInteractor() );
+    m_orientationMarker = new Q3DOrientationMarker(this->getInteractor());
 }
 
 void Q3DMPRViewer::addActors()
 {
-    if( !m_outlineActor )
+    if (!m_outlineActor)
     {
         DEBUG_LOG("Error! Intentant afegir actors que no s'han creat encara");
     }
     else
     {
-        m_renderer->AddViewProp( m_outlineActor );
+        m_renderer->AddViewProp(m_outlineActor);
     }
 }
 
 void Q3DMPRViewer::initializePlanes()
 {
     vtkCellPicker *picker = vtkCellPicker::New();
-    picker->SetTolerance( 0.005 );
+    picker->SetTolerance(0.005);
 
     //Assignem les propietats per defecte
     vtkProperty *ipwProp = vtkProperty::New();
@@ -153,110 +153,116 @@ void Q3DMPRViewer::initializePlanes()
     //     Pla AXIAL
     //
     m_axialImagePlaneWidget->DisplayTextOn();
-    m_axialImagePlaneWidget->SetPicker( picker );
+    m_axialImagePlaneWidget->SetPicker(picker);
     m_axialImagePlaneWidget->RestrictPlaneToVolumeOn();
     m_axialImagePlaneWidget->SetKeyPressActivationValue('z');
-    m_axialImagePlaneWidget->GetPlaneProperty()->SetColor( 1. , 1. , .0 );
-    m_axialImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
+    m_axialImagePlaneWidget->GetPlaneProperty()->SetColor(1., 1., .0);
+    m_axialImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
     m_axialImagePlaneWidget->TextureInterpolateOn();
     m_axialImagePlaneWidget->SetResliceInterpolateToCubic();
     //
     //     Pla SAGITAL
     //
     m_sagitalImagePlaneWidget->DisplayTextOn();
-    m_sagitalImagePlaneWidget->SetPicker( picker );
+    m_sagitalImagePlaneWidget->SetPicker(picker);
     m_sagitalImagePlaneWidget->RestrictPlaneToVolumeOn();
     m_sagitalImagePlaneWidget->SetKeyPressActivationValue('x');
-    m_sagitalImagePlaneWidget->GetPlaneProperty()->SetColor( 1. , .6 , .0 );
-    m_sagitalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
+    m_sagitalImagePlaneWidget->GetPlaneProperty()->SetColor(1., .6, .0);
+    m_sagitalImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
     m_sagitalImagePlaneWidget->TextureInterpolateOn();
-    m_sagitalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
+    m_sagitalImagePlaneWidget->SetLookupTable(m_axialImagePlaneWidget->GetLookupTable());
     m_sagitalImagePlaneWidget->SetResliceInterpolateToCubic();
     //
     //     Pla CORONAL
     //
     m_coronalImagePlaneWidget->DisplayTextOn();
-    m_coronalImagePlaneWidget->SetPicker( picker );
+    m_coronalImagePlaneWidget->SetPicker(picker);
     m_coronalImagePlaneWidget->SetKeyPressActivationValue('y');
-    m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor( .0 , 1. , 1. );
-    m_coronalImagePlaneWidget->SetTexturePlaneProperty( ipwProp );
+    m_coronalImagePlaneWidget->GetPlaneProperty()->SetColor(.0, 1., 1.);
+    m_coronalImagePlaneWidget->SetTexturePlaneProperty(ipwProp);
     m_coronalImagePlaneWidget->TextureInterpolateOn();
-    m_coronalImagePlaneWidget->SetLookupTable( m_axialImagePlaneWidget->GetLookupTable() );
+    m_coronalImagePlaneWidget->SetLookupTable(m_axialImagePlaneWidget->GetLookupTable());
     m_coronalImagePlaneWidget->SetResliceInterpolateToCubic();
     //
     //     INTERACCIÓ
     //
-    m_axialImagePlaneWidget->SetInteractor( getInteractor() );
-    m_sagitalImagePlaneWidget->SetInteractor( getInteractor() );
-    m_coronalImagePlaneWidget->SetInteractor( getInteractor() );
+    m_axialImagePlaneWidget->SetInteractor(getInteractor());
+    m_sagitalImagePlaneWidget->SetInteractor(getInteractor());
+    m_coronalImagePlaneWidget->SetInteractor(getInteractor());
 
     PlanesInteractionCallback *planesInteractionCallback = PlanesInteractionCallback::New();
     planesInteractionCallback->m_viewer = this;
-//     m_axialImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
-//     m_sagitalImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
-//     m_coronalImagePlaneWidget->AddObserver( vtkCommand::InteractionEvent , planesInteractionCallback );
-    m_axialImagePlaneWidget->AddObserver( vtkCommand::AnyEvent , planesInteractionCallback );
-    m_sagitalImagePlaneWidget->AddObserver( vtkCommand::AnyEvent , planesInteractionCallback );
-    m_coronalImagePlaneWidget->AddObserver( vtkCommand::AnyEvent , planesInteractionCallback );
+//     m_axialImagePlaneWidget->AddObserver(vtkCommand::InteractionEvent, planesInteractionCallback);
+//     m_sagitalImagePlaneWidget->AddObserver(vtkCommand::InteractionEvent, planesInteractionCallback);
+//     m_coronalImagePlaneWidget->AddObserver(vtkCommand::InteractionEvent, planesInteractionCallback);
+    m_axialImagePlaneWidget->AddObserver(vtkCommand::AnyEvent, planesInteractionCallback);
+    m_sagitalImagePlaneWidget->AddObserver(vtkCommand::AnyEvent, planesInteractionCallback);
+    m_coronalImagePlaneWidget->AddObserver(vtkCommand::AnyEvent, planesInteractionCallback);
 }
 
 void Q3DMPRViewer::updatePlanesData()
 {
-    if( m_mainVolume )
+    if (m_mainVolume)
     {
-        m_axialImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
-        if( !m_axialResliced )
+        m_axialImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
+        if (!m_axialResliced)
         {
             m_axialResliced = new Volume();
             m_axialResliced->setData(m_axialImagePlaneWidget->GetResliceOutput());
         }
         else
-            m_axialResliced->setData( m_axialImagePlaneWidget->GetResliceOutput() );
+        {
+            m_axialResliced->setData(m_axialImagePlaneWidget->GetResliceOutput());
+        }
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_axialResliced->setImages( m_mainVolume->getImages() );
+        m_axialResliced->setImages(m_mainVolume->getImages());
 
-        m_sagitalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
-        if( !m_sagitalResliced )
+        m_sagitalImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
+        if (!m_sagitalResliced)
         {
             m_sagitalResliced = new Volume();
             m_sagitalResliced->setData(m_sagitalImagePlaneWidget->GetResliceOutput());
         }
         else
-            m_sagitalResliced->setData( m_sagitalImagePlaneWidget->GetResliceOutput() );
+        {
+            m_sagitalResliced->setData(m_sagitalImagePlaneWidget->GetResliceOutput());
+        }
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_sagitalResliced->setImages( m_mainVolume->getImages() );
+        m_sagitalResliced->setImages(m_mainVolume->getImages());
 
-        m_coronalImagePlaneWidget->SetInput( m_mainVolume->getVtkData() );
-        if( !m_coronalResliced )
+        m_coronalImagePlaneWidget->SetInput(m_mainVolume->getVtkData());
+        if (!m_coronalResliced)
         {
             m_coronalResliced = new Volume();
             m_coronalResliced->setData(m_coronalImagePlaneWidget->GetResliceOutput());
         }
         else
-            m_coronalResliced->setData( m_coronalImagePlaneWidget->GetResliceOutput() );
+        {
+            m_coronalResliced->setData(m_coronalImagePlaneWidget->GetResliceOutput());
+        }
         //TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
-        m_coronalResliced->setImages( m_mainVolume->getImages() );
+        m_coronalResliced->setImages(m_mainVolume->getImages());
     }
     else
     {
-        DEBUG_LOG( "No es poden inicialitzar les dades dels plans. No hi ha dades d'entrada" );
+        DEBUG_LOG("No es poden inicialitzar les dades dels plans. No hi ha dades d'entrada");
     }
 }
 
 void Q3DMPRViewer::createOutline()
 {
-    if( m_mainVolume )
+    if (m_mainVolume)
     {
         // creem l'outline
         vtkOutlineFilter *outlineFilter = vtkOutlineFilter::New();
-        outlineFilter->SetInput( m_mainVolume->getVtkData() );
+        outlineFilter->SetInput(m_mainVolume->getVtkData());
         vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
-        outlineMapper->SetInput( outlineFilter->GetOutput() );
-        m_outlineActor->SetMapper( outlineMapper );
+        outlineMapper->SetInput(outlineFilter->GetOutput());
+        m_outlineActor->SetMapper(outlineMapper);
     }
     else
     {
-        DEBUG_LOG( "Intentant crear outline sense haver donat input abans" );
+        DEBUG_LOG("Intentant crear outline sense haver donat input abans");
     }
 }
 
@@ -282,32 +288,44 @@ void Q3DMPRViewer::setSagitalVisibility(bool enable)
 {
     m_sagitalPlaneVisible = enable;
     if (enable)
+    {
         m_sagitalImagePlaneWidget->On();
+    }
     else
+    {
         m_sagitalImagePlaneWidget->Off();
+    }
 }
 
 void Q3DMPRViewer::setCoronalVisibility(bool enable)
 {
     m_coronalPlaneVisible = enable;
     if (enable)
+    {
         m_coronalImagePlaneWidget->On();
+    }
     else
+    {
         m_coronalImagePlaneWidget->Off();
+    }
 }
 
 void Q3DMPRViewer::setAxialVisibility(bool enable)
 {
     m_axialPlaneVisible = enable;
     if (enable)
+    {
         m_axialImagePlaneWidget->On();
+    }
     else
+    {
         m_axialImagePlaneWidget->Off();
+    }
 }
 
 void Q3DMPRViewer::resetPlanes()
 {
-    if( m_mainVolume )
+    if (m_mainVolume)
     {
         int *size = m_mainVolume->getVtkData()->GetDimensions();
 
@@ -320,21 +338,27 @@ void Q3DMPRViewer::resetPlanes()
         m_coronalImagePlaneWidget->SetPlaneOrientationToYAxes();
         m_coronalImagePlaneWidget->SetSliceIndex(size[1]/2);
 
-        if( m_axialPlaneVisible )
+        if (m_axialPlaneVisible)
+        {
             m_axialImagePlaneWidget->On();
-        if( m_sagitalPlaneVisible )
+        }
+        if (m_sagitalPlaneVisible)
+        {
             m_sagitalImagePlaneWidget->On();
-        if( m_coronalPlaneVisible )
+        }
+        if (m_coronalPlaneVisible)
+        {
             m_coronalImagePlaneWidget->On();
+        }
     }
 }
 
-void Q3DMPRViewer::setWindowLevel( double window , double level )
+void Q3DMPRViewer::setWindowLevel(double window, double level)
 {
-    if( m_mainVolume )
+    if (m_mainVolume)
     {
         // amb un n'hi ha prou ja que cada vtkImagePlaneWidget comparteix la mateixa LUT
-        m_axialImagePlaneWidget->SetWindowLevel( window , level );
+        m_axialImagePlaneWidget->SetWindowLevel(window, level);
     }
     else
     {
@@ -349,43 +373,43 @@ void Q3DMPRViewer::setTransferFunction(TransferFunction *transferFunction)
     // TODO Aplicar la funció de color: caldrà fer un pipeline similar al del 2D
 }
 
-void Q3DMPRViewer::enableOutline( bool enable )
+void Q3DMPRViewer::enableOutline(bool enable)
 {
     m_isOutlineEnabled = enable;
-    m_outlineActor->SetVisibility( m_isOutlineEnabled );
+    m_outlineActor->SetVisibility(m_isOutlineEnabled);
 }
 
 void Q3DMPRViewer::outlineOn()
 {
-    this->enableOutline( true );
+    this->enableOutline(true);
 }
 
 void Q3DMPRViewer::outlineOff()
 {
-    this->enableOutline( false );
+    this->enableOutline(false);
 }
 
-void Q3DMPRViewer::enableOrientationMarker( bool enable )
+void Q3DMPRViewer::enableOrientationMarker(bool enable)
 {
-    m_orientationMarker->setEnabled( enable );
+    m_orientationMarker->setEnabled(enable);
 }
 
 void Q3DMPRViewer::orientationMarkerOn()
 {
-    this->enableOrientationMarker( true );
+    this->enableOrientationMarker(true);
 }
 
 void Q3DMPRViewer::orientationMarkerOff()
 {
-    this->enableOrientationMarker( false );
+    this->enableOrientationMarker(false);
 }
 
-void Q3DMPRViewer::getCurrentWindowLevel( double wl[2] )
+void Q3DMPRViewer::getCurrentWindowLevel(double wl[2])
 {
-    m_axialImagePlaneWidget->GetWindowLevel( wl );
+    m_axialImagePlaneWidget->GetWindowLevel(wl);
 }
 
-void Q3DMPRViewer::resetView( CameraOrientationType )
+void Q3DMPRViewer::resetView(CameraOrientationType)
 {
     // TODO estem obligats a implementar-lo. Caldria aplicar la orientació que se'ns demana
 }
@@ -420,14 +444,14 @@ double *Q3DMPRViewer::getAxialPlaneNormal()
     return m_axialImagePlaneWidget->GetNormal();
 }
 
-void Q3DMPRViewer::getAxialPlaneOrigin( double origin[3] )
+void Q3DMPRViewer::getAxialPlaneOrigin(double origin[3])
 {
-    m_axialImagePlaneWidget->GetOrigin( origin );
+    m_axialImagePlaneWidget->GetOrigin(origin);
 }
 
-void Q3DMPRViewer::getAxialPlaneNormal( double normal[3] )
+void Q3DMPRViewer::getAxialPlaneNormal(double normal[3])
 {
-    m_axialImagePlaneWidget->GetNormal( normal );
+    m_axialImagePlaneWidget->GetNormal(normal);
 }
 
 double *Q3DMPRViewer::getSagitalPlaneOrigin()
@@ -440,14 +464,14 @@ double *Q3DMPRViewer::getSagitalPlaneNormal()
     return m_sagitalImagePlaneWidget->GetNormal();
 }
 
-void Q3DMPRViewer::getSagitalPlaneOrigin( double origin[3] )
+void Q3DMPRViewer::getSagitalPlaneOrigin(double origin[3])
 {
-    m_sagitalImagePlaneWidget->GetOrigin( origin );
+    m_sagitalImagePlaneWidget->GetOrigin(origin);
 }
 
-void Q3DMPRViewer::getSagitalPlaneNormal( double normal[3] )
+void Q3DMPRViewer::getSagitalPlaneNormal(double normal[3])
 {
-    m_sagitalImagePlaneWidget->GetNormal( normal );
+    m_sagitalImagePlaneWidget->GetNormal(normal);
 }
 
 double *Q3DMPRViewer::getCoronalPlaneOrigin()
@@ -460,14 +484,14 @@ double *Q3DMPRViewer::getCoronalPlaneNormal()
     return m_coronalImagePlaneWidget->GetNormal();
 }
 
-void Q3DMPRViewer::getCoronalPlaneOrigin( double origin[3] )
+void Q3DMPRViewer::getCoronalPlaneOrigin(double origin[3])
 {
-    m_coronalImagePlaneWidget->GetOrigin( origin );
+    m_coronalImagePlaneWidget->GetOrigin(origin);
 }
 
-void Q3DMPRViewer::getCoronalPlaneNormal( double normal[3] )
+void Q3DMPRViewer::getCoronalPlaneNormal(double normal[3])
 {
-    m_coronalImagePlaneWidget->GetNormal( normal );
+    m_coronalImagePlaneWidget->GetNormal(normal);
 }
 
 };  // end namespace udg
