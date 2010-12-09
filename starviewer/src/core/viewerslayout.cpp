@@ -86,7 +86,7 @@ void ViewersLayout::addColumns(int columns)
             if (rows >= m_visibleRows)
             {
                 newViewer->hide();
-                emit viewerRemoved(newViewer);
+                emit viewerHidden(newViewer);
             }
         }
         --columns;
@@ -124,7 +124,7 @@ void ViewersLayout::addRows(int rows)
             if (column >= m_visibleColumns)
             {
                 newViewer->hide();
-                emit viewerRemoved(newViewer);
+                emit viewerHidden(newViewer);
             }
         }
         --rows;
@@ -361,7 +361,7 @@ void ViewersLayout::hideRows(int rows)
         {
             Q2DViewerWidget *viewer = getViewerWidget(((m_totalColumns * m_visibleRows) + columnNumber));
             viewer->hide();
-            emit viewerRemoved(viewer);
+            emit viewerHidden(viewer);
             if (m_selectedViewer == viewer)
             {
                 setSelectedViewer(getViewerWidget(0));
@@ -394,7 +394,7 @@ void ViewersLayout::hideColumns(int columns)
         {
             Q2DViewerWidget *viewer = getViewerWidget((m_totalColumns * rowNumber) + m_visibleColumns);
             viewer->hide();
-            emit viewerRemoved(viewer);
+            emit viewerHidden(viewer);
             if (m_selectedViewer == viewer)
             {
                 setSelectedViewer(getViewerWidget(0));
