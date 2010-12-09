@@ -25,13 +25,8 @@ QWindowLevelComboBox::~QWindowLevelComboBox()
 
 void QWindowLevelComboBox::setPresetsData( WindowLevelPresetsToolData *windowLevelData )
 {
-    if( m_presetsData )
-    {
-        // desconectem tot el que teníem connectat aquí
-        disconnect( m_presetsData, 0, this, 0 );
-        disconnect( m_presetsData, 0, m_customWindowLevelDialog, 0 );
-        disconnect( m_customWindowLevelDialog, 0, m_presetsData, 0 );
-    }
+    // Desconectem tot el que teníem connectat amb el Presets Data
+    disconnectPresetsData();
     m_presetsData = windowLevelData;
     populateFromPresetsData();
     connect( m_presetsData, SIGNAL(presetAdded(QString)), SLOT( addPreset(QString) ) );
@@ -41,6 +36,13 @@ void QWindowLevelComboBox::setPresetsData( WindowLevelPresetsToolData *windowLev
     // TODO això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
     // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
     connect( m_customWindowLevelDialog, SIGNAL( windowLevel(double,double) ), m_presetsData, SLOT( setCustomWindowLevel(double,double) ) );
+}
+
+void QWindowLevelComboBox::clearPresets()
+{
+    disconnectPresetsData();
+    this->clear();
+    m_presetsData = 0;
 }
 
 void QWindowLevelComboBox::addPreset(const QString &preset)
@@ -108,6 +110,16 @@ void QWindowLevelComboBox::populateFromPresetsData()
     this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::UserDefined ) );
     this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::Other ) );
     this->addItem( tr("Custom") );
+}
+
+void QWindowLevelComboBox::disconnectPresetsData()
+{
+    if( m_presetsData )
+    {   
+        disconnect( m_presetsData, 0, this, 0 );
+        disconnect( m_presetsData, 0, m_customWindowLevelDialog, 0 );
+        disconnect( m_customWindowLevelDialog, 0, m_presetsData, 0 );
+    }
 }
 
 void QWindowLevelComboBox::setActiveWindowLevel( int value )

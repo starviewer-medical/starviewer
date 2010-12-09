@@ -34,6 +34,9 @@ public:
      */
     void setPresetsData( WindowLevelPresetsToolData *windowLevelData );
 
+    /// Neteja el contingut del combo box i elimina qualsevol referència a un WindowLevelPresetsToolData
+    void clearPresets();
+
 public slots:
     /**
      * Selecciona el preset indicat en el combo, però no l'activa
@@ -60,6 +63,9 @@ private:
      * Omple el combo a partir de les dades de presets. Neteja les dades que hi pugui haver anteriorment
      */
     void populateFromPresetsData();
+
+    /// Desconnecta totes les connexions
+    void disconnectPresetsData();
 
     /// Les dades dels valors pre-establerts
     WindowLevelPresetsToolData *m_presetsData;
