@@ -38,6 +38,9 @@ public:
      */
     void link( Q2DViewer *viewer );
 
+    /// Desvinculem el widget del visor que tingui vinculat
+    void unlink();
+
 signals:
     void thicknessChanged( int thickness );
     void projectionModeChanged( int mode ); // TODO enviar int o QString?
