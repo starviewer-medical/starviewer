@@ -97,8 +97,7 @@ private:
     /// Widget contenidor general
     QWidget *m_workingArea;
 
-    /// Grids que es fan servir per gestionar les distribucions de visors
-    QGridLayout *m_gridLayout;
+    /// Grid per gestionar les distribucions regulars de visors
     QGridLayout *m_viewersLayout;
 
     /// Visualitzador selecciona. Sempre en tindrem un.
