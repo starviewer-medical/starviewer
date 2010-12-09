@@ -85,8 +85,7 @@ void ViewersLayout::addColumns(int columns)
             viewerPosition += m_visibleColumns;
             if (rows >= m_visibleRows)
             {
-                newViewer->hide();
-                emit viewerHidden(newViewer);
+                hideViewer(newViewer);
             }
         }
         --columns;
@@ -123,8 +122,7 @@ void ViewersLayout::addRows(int rows)
             m_vectorViewers.push_back(newViewer);
             if (column >= m_visibleColumns)
             {
-                newViewer->hide();
-                emit viewerHidden(newViewer);
+                hideViewer(newViewer);
             }
         }
         --rows;
@@ -186,7 +184,7 @@ void ViewersLayout::setGrid(int rows, int columns)
         // Amaguem els viewers que tinguem assignats amb geometries
         for (int i = rows * columns; i < m_freeLayoutViewersList.size(); ++i)
         {
-            m_freeLayoutViewersList.at(i)->hide();
+            hideViewer(m_freeLayoutViewersList.at(i));
         }
         m_totalRows = 0;
         m_totalColumns = 0;
@@ -360,8 +358,7 @@ void ViewersLayout::hideRows(int rows)
         for (int columnNumber = 0; columnNumber < m_visibleColumns; ++columnNumber)
         {
             Q2DViewerWidget *viewer = getViewerWidget(((m_totalColumns * m_visibleRows) + columnNumber));
-            viewer->hide();
-            emit viewerHidden(viewer);
+            hideViewer(viewer);
             if (m_selectedViewer == viewer)
             {
                 setSelectedViewer(getViewerWidget(0));
@@ -393,8 +390,7 @@ void ViewersLayout::hideColumns(int columns)
         for (int rowNumber = 0; rowNumber < m_visibleRows; ++rowNumber)
         {
             Q2DViewerWidget *viewer = getViewerWidget((m_totalColumns * rowNumber) + m_visibleColumns);
-            viewer->hide();
-            emit viewerHidden(viewer);
+            hideViewer(viewer);
             if (m_selectedViewer == viewer)
             {
                 setSelectedViewer(getViewerWidget(0));
@@ -464,6 +460,15 @@ void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &ge
     int screenX = this->width();
     int screenY = this->height();
     viewer->setGeometry(x1 * screenX, (1 - y1) * screenY, (x2 - x1) * screenX, (y1 - y2) * screenY);
+}
+
+void ViewersLayout::hideViewer(Q2DViewerWidget *viewer)
+{
+    if (viewer)
+    {
+        viewer->hide();
+        emit viewerHidden(viewer);
+    }
 }
 
 }
