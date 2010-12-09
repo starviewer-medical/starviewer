@@ -535,6 +535,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // cal desvincular els widgets adients de qualsevol visor.
             m_windowLevelComboBox->clearPresets();
             m_cineController->setQViewer(0);
+            m_thickSlabWidget->unlink();
         }
     }
 }
