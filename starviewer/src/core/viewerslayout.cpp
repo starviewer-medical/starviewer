@@ -447,7 +447,14 @@ void ViewersLayout::hideColumns(int columns)
 
 int ViewersLayout::getNumberOfViewers() const
 {
-    return m_vectorViewers.size();
+    if (m_isRegular)
+    {
+        return m_vectorViewers.size();
+    }
+    else
+    {
+        return m_freeLayoutViewersList.size();
+    }
 }
 
 Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
@@ -457,7 +464,14 @@ Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
     // Comprovem que el viewer demanat estigui dins del rang
     if (number < getNumberOfViewers() && number >= 0)
     {
-        viewerWidget = m_vectorViewers.at(number);
+        if (m_isRegular)
+        {
+            viewerWidget = m_vectorViewers.at(number);
+        }
+        else
+        {
+            viewerWidget = m_freeLayoutViewersList.at(number);
+        }
     }
 
     return viewerWidget;
