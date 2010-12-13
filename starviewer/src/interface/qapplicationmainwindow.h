@@ -15,6 +15,7 @@
 class QAction;
 class QMenu;
 class QCloseEvent;
+class QShowEvent;
 class QSignalMapper;
 class QLabel;
 class QProgressDialog;
@@ -27,6 +28,7 @@ class ExtensionContext;
 class QLogViewer;
 class Patient;
 class StatsWatcher;
+class ApplicationVersionChecker;
 
 class QApplicationMainWindow : public QMainWindow
 {
@@ -70,6 +72,8 @@ protected:
     virtual void closeEvent(QCloseEvent *event);
 
     virtual void resizeEvent(QResizeEvent *event);
+
+    virtual void showEvent(QShowEvent *event);
 
 private:
     ///Crea i inicialitza les accions de l'aplicació
@@ -202,6 +206,9 @@ private:
 
     /// Estadístiques d'usabilitat
     StatsWatcher *m_statsWatcher;
+
+    /// Les Release Notes o les notes de la nova versió
+    ApplicationVersionChecker *m_applicationVersionChecker;
 };
 
 }; // fi namespace udg

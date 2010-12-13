@@ -24,6 +24,7 @@
 #include "qstarviewersapwrapper.h"
 #include "coresettings.h" // pel LanguageLocale
 #include "inputoutputsettings.h"
+#include "applicationversionchecker.h"
 #include "screenmanager.h"
 #include "qscreendistribution.h"
 
@@ -127,6 +128,9 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     markAsBetaVersion();
     showBetaVersionDialog();
 #endif
+
+    m_applicationVersionChecker = new ApplicationVersionChecker(this);
+    m_applicationVersionChecker->checkReleaseNotes();
 
     computeDefaultToolTextSize();
 
@@ -521,6 +525,12 @@ void QApplicationMainWindow::resizeEvent(QResizeEvent *event)
         updateBetaVersionTextPosition();
     }
     QMainWindow::resizeEvent(event);
+}
+
+void QApplicationMainWindow::showEvent(QShowEvent *event)
+{
+    m_applicationVersionChecker->showIfCorrect();
+    QMainWindow::showEvent(event);
 }
 
 void QApplicationMainWindow::about()
