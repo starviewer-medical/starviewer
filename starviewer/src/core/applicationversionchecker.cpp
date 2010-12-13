@@ -80,7 +80,6 @@ void ApplicationVersionChecker::checkReleaseNotes()
             m_somethingToShow = true;
             
             connect(m_releaseNotes, SIGNAL(closing()), this, SLOT(closeEvent()));
-            setCheckFinished();
         }
     }
     else if (m_checkNewVersion && !m_dontCheckNewVersionsOnline)
