@@ -40,10 +40,6 @@ private:
     /// Modifica el tamany de la finestra passada per paràmtre per tal de que càpiga a la pantalla amb id IdDesktop.
     /// A més, centra la finestra.
     void fitInto(QWidget *window, int IdDesktop);
-    /// Retorna la posició X que ha de tenir la finestra per tal que quedi centrada en la pantalla IdDesktop.
-    int centerWidthInto(QWidget *window, int IdDesktop);
-    /// Retorna la posició Y que ha de tenir la finestra per tal que quedi centrada en la pantalla IdDesktop.
-    int centerHeightInto(QWidget *window, int IdDesktop);
 
     /// Indica si la primera pantalla està sobre de la segona. Per que sigui cert han de ser de la mateixa amplada
     /// i el top de la primera ha de ser igual al bottom de la segona
@@ -89,10 +85,6 @@ private:
 private:
     /// Gestor d'escriptori on es fan les crides referents al múltiples escriptoris o pantalles
     QDesktopWidget *m_applicationDesktop;
-    /// Marc superior de la finestra (barra de títols)
-    const int TopBorderSize;
-    /// Marc lateral i inferior de la finestra
-    const int BorderSize;
     /// Quan dues finestres estan a menys de SamePosition de distància es consideren a la mateixa posició
     const int SamePosition;
 };

@@ -11,11 +11,12 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QWidget>
+#include <QSize>
 
 namespace udg {
 
 ScreenManager::ScreenManager()
-: TopBorderSize(26), BorderSize(4), SamePosition(5)
+: SamePosition(5)
 {
     m_applicationDesktop = QApplication::desktop();
 }
@@ -34,10 +35,24 @@ void ScreenManager::maximize(QWidget *window)
         {
             window->showNormal();
         }
-        int x = topLeft.x();
-        int y = topLeft.y() + TopBorderSize;
-        int width = bottomRight.x() - x + BorderSize / 2;
-        int height = bottomRight.y() - y + BorderSize / 2;
+
+        // Buscar la mida del frame i de la finestra
+        QRect frameSize = window->frameGeometry();
+        QRect windowSize = window->geometry();
+
+        // Trobar el tamany real de les cantonades i la title bar
+        int topBorder = windowSize.top() - frameSize.top();
+        int bottomBorder = frameSize.bottom() - windowSize.bottom();
+        int leftBorder = windowSize.left() - frameSize.left();
+        int rightBorder = frameSize.right() - windowSize.right();
+
+        // Calcular quin és el tamany que ha de tenir.
+        // Se li ha de passar la geometria de la finestra, sense cantonades.
+        int x = topLeft.x() + leftBorder;
+        int y = topLeft.y() + topBorder;
+        int width = bottomRight.x() - x - rightBorder; // x val x + leftBorder
+        int height = bottomRight.y() - y - bottomBorder; // y val y + topBorder
+
         window->setGeometry(x, y, width, height);
     }
     else
@@ -209,50 +224,49 @@ void ScreenManager::fitInto(QWidget *window, int IdDesktop)
     int newDesktopWidth = m_applicationDesktop->availableGeometry(IdDesktop).width();
     int newDesktopHeight = m_applicationDesktop->availableGeometry(IdDesktop).height();
 
-    int width = window->width();
-    int height = window->height();
-    int x = m_applicationDesktop->availableGeometry(IdDesktop).topLeft().x() + BorderSize;
-    int y = m_applicationDesktop->availableGeometry(IdDesktop).topLeft().y() + BorderSize + TopBorderSize;
+    int width = window->frameSize().width();
+    int height = window->frameSize().height();
+    int x = m_applicationDesktop->availableGeometry(IdDesktop).topLeft().x();
+    int y = m_applicationDesktop->availableGeometry(IdDesktop).topLeft().y();
+
+    // Buscar la mida del frame i de la finestra
+    QRect frameSize = window->frameGeometry();
+    QRect windowSize = window->geometry();
+
+    // Trobar el tamany real de les cantonades i la title bar
+    int topBorder = windowSize.top() - frameSize.top();
+    int bottomBorder = frameSize.bottom() - windowSize.bottom();
+    int leftBorder = windowSize.left() - frameSize.left();
+    int rightBorder = frameSize.right() - windowSize.right();
 
     // Si la finestra és més ample que la pantalla
     if (width > newDesktopWidth)
     {
-        width = newDesktopWidth - 2 * BorderSize;
+        width = newDesktopWidth;
+        x += leftBorder;
     }
     else // altrament centrar
     {
-        x = centerWidthInto(window, IdDesktop);
+        x = x + newDesktopWidth / 2 - width / 2 + leftBorder;
     }
 
     // Si la finestra és més alta que la pantalla
     if (height > newDesktopHeight)
     {
-        height = newDesktopHeight - 2 * BorderSize - TopBorderSize;
+        height = newDesktopHeight;
+        y += topBorder;
     }
     else // altrament centrar
     {
-        y = centerHeightInto(window, IdDesktop);
+        y = y + newDesktopHeight / 2 - height / 2 + topBorder;
     }
 
-    window->setGeometry(x,y,width,height);
-}
-
-int ScreenManager::centerWidthInto(QWidget *window, int IdDesktop)
-{
-    //el metode soposa que la finestra ja cap dins el desktop
-    int leftCoordinate = m_applicationDesktop->availableGeometry(IdDesktop).topLeft().x();
-    float halfScreenWidth = m_applicationDesktop->availableGeometry(IdDesktop).width() / 2;
-    float halfWindowWidth = window->width() / 2;
-    return leftCoordinate + (int)(halfScreenWidth - halfWindowWidth) + BorderSize;
-}
-
-int ScreenManager::centerHeightInto(QWidget *window, int IdDesktop)
-{
-    //el metode soposa que la finestra ja cap dins el desktop
-    int topCoordenate = m_applicationDesktop->availableGeometry(IdDesktop).topLeft().y();
-    float halfScreenHeight = m_applicationDesktop->availableGeometry(IdDesktop).height() / 2;
-    float halfWindowHeight = window->height() / 2;
-    return topCoordenate + (int)(halfScreenHeight - halfWindowHeight) + BorderSize + TopBorderSize;
+    // La mida de la finestra l'hem agafat del frame, per tant li hem de treure
+    // les cantonades per que la mida sigui la mateixa
+    window->setGeometry(x, 
+                        y, 
+                        width - leftBorder - rightBorder, 
+                        height - topBorder - bottomBorder);
 }
 
 bool ScreenManager::isTop(int desktop1, int desktop2)
