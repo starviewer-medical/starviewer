@@ -23,7 +23,7 @@ namespace udg {
     buscarà si hi ha una nova versió disponible. Les notes es mostraran a través de la classe QReleaseNotes.
     Funciona de manera asíncrona, quan es crida el mètode check checkReleaseNotes es fan les comprobacions. Amb el mètode
     showIfCorrect es mostra si hi ha algo a mostrar. Si no ha acabat de fer les crides asíncrones, quan acabi mostrarà el
-    que calgui.
+    que calgui. En mode desenvolupament no es mostraran les notes ni es faran peticions online.
     Treballa sobre els settings:
         - LastReleaseNotesVersionShown: String amb la última versió comprobada
         - NeverShowReleaseNotes: L'usuari decideix no mostrar més els missatges de les release notes
@@ -87,6 +87,8 @@ private:
     /// si attribute es number treu la part de davant i deixa el numero.
     /// @pre Es considera que la versió s'ajusta a l'expressió regular correcte. 
     QString getVersionAttribute(const QString &version, const QString &attibute);
+    /// Comprova si s'està en mode desenvolupament
+    bool isDevelopmentMode();
 
 private slots:
     /// Tracta la resposta del webservice obtenint la versió i la url de les notes d'aquesta nova versió
