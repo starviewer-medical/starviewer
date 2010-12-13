@@ -11,7 +11,6 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QWidget>
-#include <QSize>
 
 namespace udg {
 
