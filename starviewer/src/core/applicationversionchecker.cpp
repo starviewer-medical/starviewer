@@ -62,7 +62,11 @@ void ApplicationVersionChecker::checkReleaseNotes()
     //utilitzar els settings
     readSettings();
 
-    if (isNewVersionInstalled())
+    if (isDevelopmentMode())
+    {
+        // En mode desenvolupament no es mostraran les notes ni es faran comprovacions online
+    }
+    else if (isNewVersionInstalled())
     {
         //llegir el contingut dels fitxers HTML de les release notes
         QUrl url = createLocalUrl();
@@ -337,9 +341,8 @@ bool ApplicationVersionChecker::isNewVersionInstalled()
     {
         return true;
     }
-    // Si la versió actual no s'ajusta a l'expressió regular, no farem res, i si és devel tampoc fem res
-    else if (!regularExpression.exactMatch(udg::StarviewerVersionString) ||
-             getVersionAttribute(currentVersion[2],"type").toLower().contains("devel"))
+    // Si la versió actual no s'ajusta a l'expressió regular, no farem res.
+    else if (!regularExpression.exactMatch(udg::StarviewerVersionString))
     {
         return false;
     }
@@ -409,6 +412,24 @@ QString ApplicationVersionChecker::getVersionAttribute(const QString &version, c
     }
     //si no es vol obtenir ni tipus ni numero retornem la string tal qual
     return version;
+}
+
+bool ApplicationVersionChecker::isDevelopmentMode()
+{
+    QStringList currentVersion = udg::StarviewerVersionString.split(".");
+    // si la versio actual té tres o més parts i conté devel (0.9.1-devel o 0.9.1.devel)
+    if (currentVersion.count() > 3)
+    {
+        return true;
+    }
+    else if (currentVersion.count() == 3)
+    {
+        return  getVersionAttribute(currentVersion[2],"type").toLower().contains("devel");
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
