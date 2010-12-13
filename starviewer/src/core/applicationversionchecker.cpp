@@ -27,7 +27,8 @@
 namespace udg {
     class QReleaseNotes;
 
-ApplicationVersionChecker::ApplicationVersionChecker()
+ApplicationVersionChecker::ApplicationVersionChecker(QObject *parent)
+: QObject(parent)
 {
     //per defecte diem que volem comprobar la nova versió, si no es canvia
     m_checkNewVersion = true;

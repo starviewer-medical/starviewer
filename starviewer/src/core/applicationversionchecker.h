@@ -32,12 +32,12 @@ namespace udg {
         - CheckVersionInterval: Cada quants dies es comproba si hi ha una nova versió.
         - DontCheckNewVersionsOnline: Booleà que impedeix que es facin crides online per comprobar si hi ha una nova versió
   */
-class ApplicationVersionChecker : QObject {
+class ApplicationVersionChecker : public QObject {
 Q_OBJECT
 
 public:
     /// Constructor per defecte
-    ApplicationVersionChecker();
+    ApplicationVersionChecker(QObject *parent = 0);
     /// Destructor
     ~ApplicationVersionChecker();
     /// Comprobarà que els url existeixin, fara les crides al webservice si cal i quan tot estigui correcte i a punt per mostrar
