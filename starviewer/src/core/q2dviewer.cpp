@@ -1717,8 +1717,10 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
 
 void Q2DViewer::applyGrayscalePipeline()
 {
+    double range[2];
+    m_mainVolume->getScalarRange(range);
     DEBUG_LOG("*** Grayscale Transform Pipeline Begin ***");
-    DEBUG_LOG(QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6").arg(m_mainVolume->getImage(0)->getBitsAllocated()).arg(m_mainVolume->getImage(0)->getBitsStored()).arg(m_mainVolume->getVtkData()->GetScalarRange()[0]).arg(m_mainVolume->getVtkData()->GetScalarRange()[1]).arg(m_mainVolume->getImage(0)->getPixelRepresentation()).arg(m_mainVolume->getImage(0)->getPhotometricInterpretation()));
+    DEBUG_LOG(QString("Image Information: Bits Allocated: %1, Bits Stored: %2, Pixel Range %3 to %4, SIGNED?Pixel Representation: %5, Photometric interpretation: %6").arg(m_mainVolume->getImage(0)->getBitsAllocated()).arg(m_mainVolume->getImage(0)->getBitsStored()).arg(range[0]).arg(range[1]).arg(m_mainVolume->getImage(0)->getPixelRepresentation()).arg(m_mainVolume->getImage(0)->getPhotometricInterpretation()));
     // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
     if (isThickSlabActive())
     {

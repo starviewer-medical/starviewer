@@ -144,6 +144,12 @@ void Volume::getDimensions(int dims[3])
     getVtkData()->GetDimensions(dims);
 }
 
+void Volume::getScalarRange(double range[2])
+{
+    getVtkData()->UpdateInformation();
+    getVtkData()->GetScalarRange(range);
+}
+
 void Volume::setIdentifier(const Identifier &id)
 {
     m_identifier = id;

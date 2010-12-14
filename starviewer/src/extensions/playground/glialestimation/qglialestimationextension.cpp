@@ -168,7 +168,8 @@ void QGlialEstimationExtension::setInput( Volume *input )
 
     if(m_T1Volume != 0)
     {
-        double *range = m_T1Volume->getVtkData()->GetScalarRange();
+        double range[2];
+        m_T1Volume->getScalarRange(range);
         m_minT1Value = (int)range[0];
         m_maxT1Value = (int)range[1];
         DEBUG_LOG( QString("Max T1 Value=%1, Min T1 Value=%2").arg(m_maxT1Value).arg(m_minT1Value) );

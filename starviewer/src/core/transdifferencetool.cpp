@@ -184,7 +184,7 @@ void TransDifferenceTool::initializeDifferenceImage( )
     }
     
     double range[2];
-    differenceVolume->getVtkData()->GetScalarRange(range);
+    differenceVolume->getScalarRange(range);
     int max;
     if(-range[0] > range[1]){
         max = -range[0];

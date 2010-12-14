@@ -234,8 +234,10 @@ void QEdemaSegmentationExtension::setInput( Volume *input )
     //m_outsideValue = 0;
 
     // obtenim els valors mínim i màxim del volum
-    m_minValue = m_mainVolume->getVtkData()->GetScalarRange()[0];
-    m_maxValue = m_mainVolume->getVtkData()->GetScalarRange()[1];
+    double range[2];
+    m_mainVolume->getScalarRange(range);
+    m_minValue = range[0];
+    m_maxValue = range[1];
 
     m_lowerValueSpinBox->setMinimum(m_minValue);
     m_lowerValueSpinBox->setMaximum(m_maxValue);
