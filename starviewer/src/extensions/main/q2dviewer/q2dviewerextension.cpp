@@ -274,7 +274,6 @@ void Q2DViewerExtension::showPredefinedGrid()
         numberOfSeries += listStudies.value(i)->getNumberOfSeries();
     }
 
-    m_predefinedSeriesGrid->createPredefinedGrids(numberOfSeries);
     m_predefinedSeriesGrid->createHangingProtocolsWidget();
     m_predefinedSeriesGrid->show();
 }
@@ -290,7 +289,6 @@ void Q2DViewerExtension::showPredefinedImageGrid()
 {
     QPoint point = m_imageGrid->mapToGlobal(QPoint(0,0));
     m_predefinedSlicesGrid->move(point.x(),(point.y() + m_imageGrid->frameGeometry().height()));
-    m_predefinedSlicesGrid->createPredefinedGrids(m_workingArea->getSelectedViewer()->getViewer()->getMaximumSlice());
     m_predefinedSlicesGrid->show();
 }
 
