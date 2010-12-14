@@ -154,7 +154,6 @@ void Q2DViewerExtension::createConnections()
     connect(m_imageGrid, SIGNAL(clicked (bool)), SLOT(showInteractiveImageTable()));
 
     // Connexions del menu
-    connect(m_predefinedSeriesGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
     connect(m_predefinedSeriesGrid, SIGNAL(selectedGrid(int)), this, SLOT(setHangingProtocol(int)));
     connect(m_seriesTableGrid, SIGNAL(selectedGrid(int, int)), this, SLOT(setGrid(int, int)));
 
