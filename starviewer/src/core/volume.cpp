@@ -319,9 +319,10 @@ Image* Volume::getImage(int sliceNumber, int phaseNumber) const
 
     if (!m_imageSet.isEmpty())
     {
-        if ((sliceNumber*m_numberOfPhases + phaseNumber) < m_imageSet.count())
+        int imageIndex = sliceNumber * m_numberOfPhases + phaseNumber;
+        if ( imageIndex >= 0 && imageIndex < m_imageSet.count())
         {
-            image = m_imageSet.at(sliceNumber*m_numberOfPhases + phaseNumber);
+            image = m_imageSet.at(imageIndex);
         }
     }
 
