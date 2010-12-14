@@ -254,6 +254,10 @@ protected:
 
     virtual void setupInteraction();
 
+private slots: 
+    /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu 
+    void changeVolume(Volume *volume); 
+
 private:
     /// Calcula un window level automàtic segons l'input actual.
     /// Si no tenim input el resultat és indefinit
