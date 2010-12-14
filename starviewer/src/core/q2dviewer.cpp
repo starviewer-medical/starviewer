@@ -1043,7 +1043,7 @@ void Q2DViewer::setWindowLevel(double window, double level)
 {
     if (m_mainVolume)
     {
-        if ((m_windowLevelLUTMapper->GetWindow() != window) && (m_windowLevelLUTMapper->GetLevel() != level))
+        if ((m_windowLevelLUTMapper->GetWindow() != window) || (m_windowLevelLUTMapper->GetLevel() != level))
         {
             m_windowLevelLUTMapper->SetWindow(window);
             m_windowLevelLUTMapper->SetLevel(level);
