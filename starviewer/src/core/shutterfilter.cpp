@@ -6,7 +6,6 @@
  ***************************************************************************/
 #include "shutterfilter.h"
 
-#include <vtkImageData.h>
 #include <vtkPolyDataToImageStencil.h>
 #include "vtkAtamaiPolyDataToImageStencil2.h"
 #include <vtkImageStencil.h>
@@ -22,8 +21,6 @@
 
 // dcmtk: presentation state
 #include <dvpstat.h> // DVPresentationState
-#include <dcfilefo.h> // per carregar arxius dicom
-#include <dcdatset.h>
 
 namespace udg {
 
