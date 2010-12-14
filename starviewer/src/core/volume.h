@@ -92,6 +92,9 @@ public:
     int* getDimensions();
     void getDimensions(int dims[3]);
 
+    /// Ens retornar el rang de valors del volum (valor mínim i màxim).
+    void getScalarRange(double range[2]);
+    
     /// Assigna/Retorna l'identificador del volum. 
     void setIdentifier(const Identifier &id);
     Identifier getIdentifier() const;

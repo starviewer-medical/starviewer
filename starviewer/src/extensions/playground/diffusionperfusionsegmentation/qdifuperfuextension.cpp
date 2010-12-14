@@ -291,7 +291,8 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 {
     m_diffusionMainVolume = m_diffusionInputVolume->getPhaseVolume(index);
 
-    double *range = m_diffusionMainVolume->getVtkData()->GetScalarRange();
+    double range[2];
+    m_diffusionMainVolume->getScalarRange(range);
     m_diffusionMinValue = (ItkImageType::PixelType)range[0];
     m_diffusionMaxValue = (ItkImageType::PixelType)range[1];
 

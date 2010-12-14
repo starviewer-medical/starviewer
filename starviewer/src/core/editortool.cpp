@@ -53,7 +53,8 @@ void EditorTool::initialize()
 {
     if(m_2DViewer->getOverlayInput()!=0)
     {
-        double *range = m_2DViewer->getOverlayInput()->getVtkData()->GetScalarRange();
+        double range[2];
+        m_2DViewer->getOverlayInput()->getScalarRange(range);
 
         m_outsideValue = (int)range[0];
 		if((int)range[0]!=(int)range[1])

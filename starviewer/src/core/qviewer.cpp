@@ -561,7 +561,8 @@ void QViewer::computeAutomaticWindowLevel(double &windowWidth, double &windowLev
 {
     if (m_mainVolume)
     {
-        double *range = m_mainVolume->getVtkData()->GetScalarRange();
+        double range[2];
+        m_mainVolume->getScalarRange(range);
         windowWidth = range[1] - range[0];
         windowLevel = range[0] + (windowWidth * 0.5);
     }

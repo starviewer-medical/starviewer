@@ -68,7 +68,7 @@ void ShutterFilter::setPresentationStateShutters( const QString &presentationSta
                 // càlcul d'un background adequat amb el rang de dades. Els valors de background poden anar de 0 o 65535 i el rang de dades pot ser qualsevol altre, com per exemple 127..255;
                 double range[2];
                 int backValue = presentationStateHandler->getShutterPresentationValue();
-                m_inputData->getVtkData()->GetScalarRange( range );
+                m_inputData->getScalarRange( range );
                 if( backValue == 0 )
                     m_background = range[0];
                 else
