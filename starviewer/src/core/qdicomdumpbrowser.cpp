@@ -41,31 +41,7 @@ void QDICOMDumpBrowser::createConnections()
 
 
 void QDICOMDumpBrowser::searchTag(const QString &textTosearch)
-{	
-    /*
-	QFont fontNode;
-	QList<QTreeWidgetItem *> llistaNodes = m_tagsListQTree->findItems("", Qt::MatchContains);
-	QList<QTreeWidgetItem *> llistaNodesIgualsColumna1  = m_tagsListQTree->findItems(_textTosearch, Qt::MatchContains,0);
-	QList<QTreeWidgetItem *> llistaNodesIgualsColumna2  = m_tagsListQTree->findItems(_textTosearch, Qt::MatchContains,1);
-	QList<QTreeWidgetItem *> llistaNodesIgualsColumna3  = m_tagsListQTree->findItems(_textTosearch, Qt::MatchContains,2);
-
-    foreach (QTreeWidgetItem *node, llistaNodes)
-    {
-		fontNode = node -> font(0);
-        if (llistaNodesIgualsColumna1.contains(node) || llistaNodesIgualsColumna2.contains(node) || llistaNodesIgualsColumna3.contains(node))
-		{	
-			fontNode.setBold(true);
-		}
-		else
-		{	
-			fontNode.setBold(false);
-		}
-		
-		node->setFont(0,fontNode);
-		node->setFont(1,fontNode);
-		node->setFont(2,fontNode);
-	}
-    */
+{
 }
 
 void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
