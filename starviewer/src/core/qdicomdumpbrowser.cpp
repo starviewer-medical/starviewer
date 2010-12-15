@@ -128,6 +128,8 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
             m_tagsListQTree->resizeColumnToContents(0);
             m_tagsListQTree->resizeColumnToContents(1);
         }
+
+        updateSearch();
     }
 }
 
