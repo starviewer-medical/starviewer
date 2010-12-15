@@ -4099,7 +4099,7 @@
                    <number>-1</number>
                   </property>
                   <property name="maximum">
-                   <number>1000</number>
+                   <number>5000</number>
                   </property>
                  </widget>
                 </item>
@@ -4117,9 +4117,9 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionRadioButton">
+                 <widget class="QRadioButton" name="m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton">
                   <property name="text">
-                   <string>Volume distribution</string>
+                   <string>p(I)</string>
                   </property>
                   <attribute name="buttonGroup">
                    <string>buttonGroup_3</string>
@@ -4127,9 +4127,9 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton">
+                 <widget class="QRadioButton" name="m_geneticTransferFunctionFromIntensityClusteringWeightsInnernessRadioButton">
                   <property name="text">
-                   <string>p(I)</string>
+                   <string>Innerness</string>
                   </property>
                   <attribute name="buttonGroup">
                    <string>buttonGroup_3</string>
@@ -4144,6 +4144,16 @@
                   <attribute name="buttonGroup">
                    <string>buttonGroup_3</string>
                   </attribute>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionCheckBox">
+                  <property name="text">
+                   <string>* Volume</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                </layout>

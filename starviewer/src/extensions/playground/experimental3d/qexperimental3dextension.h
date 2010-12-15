@@ -208,6 +208,10 @@ private:
     bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
     bool programVmiLoadOrSave( int lineNumber, const QString &line, bool run );
 
+    void checkData();
+    QVector<float> getWeights() const;
+    OpacityTransferFunction innernessProportionalOpacityTransferFunction() const;
+
 private slots:
 
     void setNewVolume( Volume *volume );
@@ -316,8 +320,6 @@ private slots:
     void enableBaseVomi(bool on);
     void enableVomi(bool on);
 
-    void checkData();
-    QVector<float> getWeights() const;
     void normalToClusterizedTransferFunction();
     void clusterizedToNormalTransferFunction();
     void viewNormalVolume();
