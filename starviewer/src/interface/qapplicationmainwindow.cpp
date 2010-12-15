@@ -252,6 +252,16 @@ void QApplicationMainWindow::createActions()
     m_openUserGuideAction->setStatusTip( tr("Open User guide") );
     connect( m_openUserGuideAction , SIGNAL( triggered() ) , this , SLOT( openUserGuide() ) );
 
+    m_openQuickStartGuideAction = new QAction( this );
+    m_openQuickStartGuideAction->setText( tr("Quick Start guide") );
+    m_openQuickStartGuideAction->setStatusTip( tr("Open Quick Start guide") );
+    connect( m_openQuickStartGuideAction , SIGNAL( triggered() ) , this , SLOT( openQuickStartGuide() ) );
+
+    m_openShortcutsGuideAction = new QAction( this );
+    m_openShortcutsGuideAction->setText( tr("Shortcuts guide") );
+    m_openShortcutsGuideAction->setStatusTip( tr("Open Shortcuts guide") );
+    connect( m_openShortcutsGuideAction , SIGNAL( triggered() ) , this , SLOT( openShortcutsGuide() ) );
+
     m_logViewerAction = new QAction( this );
     m_logViewerAction->setText( tr("Show log file") );
     m_logViewerAction->setStatusTip( tr("Show log file") );
@@ -358,6 +368,8 @@ void QApplicationMainWindow::createMenus()
     // menú d'ajuda i suport
     m_helpMenu = menuBar()->addMenu( tr("&Help") );
     m_helpMenu->addAction( m_openUserGuideAction );
+    m_helpMenu->addAction( m_openQuickStartGuideAction );
+    m_helpMenu->addAction( m_openShortcutsGuideAction );
     m_helpMenu->addSeparator();
     m_helpMenu->addAction( m_logViewerAction );
     m_helpMenu->addSeparator();
@@ -651,6 +663,18 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
 void QApplicationMainWindow::openUserGuide()
 {
     QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_User_guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+}
+
+void QApplicationMainWindow::openQuickStartGuide()
+{
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Quick_start_guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+}
+
+void QApplicationMainWindow::openShortcutsGuide()
+{
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Shortcuts_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 

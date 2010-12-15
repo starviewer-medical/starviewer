@@ -149,6 +149,12 @@ private slots:
     /// Obre el manual d'usuari
     void openUserGuide();
 
+    /// Obre la guia rapida
+    void openQuickStartGuide();
+
+    /// Obre l'esquema de shortcuts
+    void openShortcutsGuide();
+
 private:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
@@ -182,6 +188,8 @@ private:
     QAction *m_logViewerAction;
     QAction *m_configurationAction;
     QAction *m_openUserGuideAction;
+    QAction *m_openQuickStartGuideAction;
+    QAction *m_openShortcutsGuideAction;
 
     QLabel *m_betaVersionMenuText;
 
