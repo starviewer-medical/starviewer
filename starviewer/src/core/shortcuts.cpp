@@ -49,7 +49,6 @@ const QString Shortcuts::OpenExams(ShortcutsBase + "OpenExams");
 const QString Shortcuts::Preferences(ShortcutsBase + "Preferences");
 const QString Shortcuts::CloseCurrentExtension(ShortcutsBase + "CloseViewer");
 const QString Shortcuts::CloseApplication(ShortcutsBase + "CloseApp");
-const QString Shortcuts::FullScreen(ShortcutsBase + "FullScreen");
 
 const QString Shortcuts::ViewSelectedStudies(ShortcutsBase + "ViewSelectedStudies");
 const QString Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies(ShortcutsBase + "ImportToLocalDatabaseSelectedDICOMDIRStudies");
@@ -234,10 +233,6 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+Q"));
     settingsRegistry->addSetting(CloseApplication, shortcutsList);
-
-    shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Return"));
-    settingsRegistry->addSetting(FullScreen, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+V"));

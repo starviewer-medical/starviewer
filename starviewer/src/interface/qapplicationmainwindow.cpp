@@ -235,15 +235,6 @@ void QApplicationMainWindow::createActions()
         }
     }
 
-    m_fullScreenAction = new QAction( this );
-    m_fullScreenAction->setText( tr("Show Full Screen") );
-    m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
-    m_fullScreenAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::FullScreen ) );
-    m_fullScreenAction->setShortcutContext( Qt::ApplicationShortcut );
-    m_fullScreenAction->setIcon( QIcon(":/images/fullscreen.png") );
-    m_fullScreenAction->setCheckable( true );
-    connect( m_fullScreenAction , SIGNAL( toggled(bool) ) , this , SLOT( switchFullScreen(bool) ) );
-
     m_maximizeAction = new QAction(this);
     m_maximizeAction->setText(tr("Maximize To Multiple Screen"));
     m_maximizeAction->setStatusTip(tr("Maximize The Window To As Many Screens As Possible"));
@@ -295,26 +286,6 @@ void QApplicationMainWindow::createActions()
     m_configurationAction->setStatusTip(tr("Modify %1 configuration").arg(ApplicationNameString));
     m_configurationAction->setIcon( QIcon(":/images/preferences.png") );
     connect(m_configurationAction, SIGNAL(triggered()), SLOT(showConfigurationDialog()));
-}
-
-void QApplicationMainWindow::switchFullScreen( bool full )
-{
-    if( full )
-    {
-        if( !this->isFullScreen() )
-            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
-        m_fullScreenAction->setText( tr("Retract Full Screen") );
-        m_fullScreenAction->setStatusTip( tr("Switch To Normal Screen") );
-        m_fullScreenAction->setIcon( QIcon(":/images/retractFullscreen.png") );
-    }
-    else
-    {
-        if( this->isFullScreen() )
-            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
-        m_fullScreenAction->setText( tr("Show Full Screen") );
-        m_fullScreenAction->setStatusTip( tr("Switch To Full Screen") );
-        m_fullScreenAction->setIcon( QIcon(":/images/fullscreen.png") );
-    }
 }
 
 void QApplicationMainWindow::maximizeMultipleScreens()
@@ -379,7 +350,6 @@ void QApplicationMainWindow::createMenus()
 
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu( tr("&Window") );
-    m_windowMenu->addAction( m_fullScreenAction );
     m_windowMenu->addAction(m_maximizeAction);
     m_windowMenu->addAction(m_moveToDesktopAction);
 
