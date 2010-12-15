@@ -43,6 +43,10 @@ private:
 
     /// Neteja la cerca anterior
     void clearSearch();
+
+private slots:
+    /// Fa una nova cerca
+    void updateSearch();
 };
 
 }

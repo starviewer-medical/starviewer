@@ -36,7 +36,8 @@ QDICOMDumpBrowser::~QDICOMDumpBrowser()
 void QDICOMDumpBrowser::createConnections()
 {
     // Connectem els butons
-    connect(m_searchTagLineEdit, SIGNAL(textChanged(const QString &)), SLOT(searchTag(const QString &)));
+    connect(m_searchTagLineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateSearch()));
+    connect(m_showAllTagsCheckBox, SIGNAL(clicked(bool)), SLOT(updateSearch()));
 }
 
 
@@ -172,6 +173,11 @@ void QDICOMDumpBrowser::addBranch(QTreeWidgetItem *trunkTreeItem, DICOMSequenceA
         trunkBranchItem->addChild(qTreeSequenceItem);
     }
     trunkTreeItem->addChild(trunkBranchItem);
+}
+
+void QDICOMDumpBrowser::updateSearch()
+{
+    searchTag(m_searchTagLineEdit->text(), m_showAllTagsCheckBox->isChecked());
 }
 
 void QDICOMDumpBrowser::clearSearch()
