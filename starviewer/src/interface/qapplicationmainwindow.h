@@ -134,9 +134,6 @@ private slots:
     /// canvia a l'idioma indicat
     void switchToLanguage(QString locale);
 
-    /// canvia a pantalla completa o no
-    void switchFullScreen( bool full );
-
     /// Maximitza a tantes pantalles com es pugui
     void maximizeMultipleScreens();
 
@@ -179,7 +176,6 @@ private:
     QAction *m_closeAction;
     QAction *m_exitAction;
     QAction *m_aboutAction;
-    QAction *m_fullScreenAction;
     QAction *m_maximizeAction;
     QAction *m_moveToDesktopAction;
 

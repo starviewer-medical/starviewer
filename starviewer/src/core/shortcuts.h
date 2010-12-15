@@ -56,7 +56,6 @@ public:
     static const QString Preferences;
     static const QString CloseCurrentExtension;
     static const QString CloseApplication;
-    static const QString FullScreen;
 
     static const QString ViewSelectedStudies;
     static const QString ImportToLocalDatabaseSelectedDICOMDIRStudies;
