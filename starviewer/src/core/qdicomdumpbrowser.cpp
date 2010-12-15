@@ -42,6 +42,28 @@ void QDICOMDumpBrowser::createConnections()
 
 void QDICOMDumpBrowser::searchTag(const QString &textToSearch)
 {
+    m_tagsListQTree->clearSelection();
+    if (textToSearch.isEmpty())
+    {
+        return;
+    }
+
+    m_tagsListQTree->expandAll();
+
+    QTreeWidgetItemIterator iterator(m_tagsListQTree);
+    while (*iterator)
+    {
+        if ((*iterator)->text(0).contains(textToSearch, Qt::CaseInsensitive) || (*iterator)->text(1).contains(textToSearch, Qt::CaseInsensitive))
+        {
+            (*iterator)->setSelected(true);
+        }
+        ++iterator;
+    }
+
+    if (m_tagsListQTree->selectedItems().size() > 0)
+    {
+        m_tagsListQTree->scrollToItem(m_tagsListQTree->selectedItems().at(0));
+    }
 }
 
 void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
