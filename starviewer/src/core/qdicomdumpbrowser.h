@@ -29,7 +29,7 @@ public:
 
 public slots:
     /// Cerca els nodes de l'arbre (Tags) que contenen el valor textToSearch
-    void searchTag(const QString &textToSearch);
+    void searchTag(const QString &textToSearch, bool showAllTags = false);
 
 private:
     /// Crea les connexions dels signals
@@ -40,6 +40,9 @@ private:
 
     /// Mètode que afegeix una branca al tronc o a una branca de l'arbre
     void addBranch(QTreeWidgetItem *trunkTreeItem, DICOMSequenceAttribute *sequence);
+
+    /// Neteja la cerca anterior
+    void clearSearch();
 };
 
 }

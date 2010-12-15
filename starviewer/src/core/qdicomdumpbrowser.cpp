@@ -40,29 +40,56 @@ void QDICOMDumpBrowser::createConnections()
 }
 
 
-void QDICOMDumpBrowser::searchTag(const QString &textToSearch)
+void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
 {
-    m_tagsListQTree->clearSelection();
+    clearSearch();
+
     if (textToSearch.isEmpty())
     {
+
         return;
     }
 
     m_tagsListQTree->expandAll();
 
-    QTreeWidgetItemIterator iterator(m_tagsListQTree);
-    while (*iterator)
+    if (showAllTags)
     {
-        if ((*iterator)->text(0).contains(textToSearch, Qt::CaseInsensitive) || (*iterator)->text(1).contains(textToSearch, Qt::CaseInsensitive))
+        QTreeWidgetItemIterator iterator(m_tagsListQTree);
+        while (*iterator)
         {
-            (*iterator)->setSelected(true);
+            if ((*iterator)->text(0).contains(textToSearch, Qt::CaseInsensitive) || (*iterator)->text(1).contains(textToSearch, Qt::CaseInsensitive))
+            {
+                (*iterator)->setSelected(true);
+            }
+            ++iterator;
         }
-        ++iterator;
-    }
 
-    if (m_tagsListQTree->selectedItems().size() > 0)
+        if (m_tagsListQTree->selectedItems().size() > 0)
+        {
+            m_tagsListQTree->scrollToItem(m_tagsListQTree->selectedItems().at(0));
+        }
+    }
+    else
     {
-        m_tagsListQTree->scrollToItem(m_tagsListQTree->selectedItems().at(0));
+        QTreeWidgetItemIterator iterator(m_tagsListQTree);
+        while (*iterator)
+        {
+            if ((*iterator)->text(0).contains(textToSearch, Qt::CaseInsensitive) || (*iterator)->text(1).contains(textToSearch, Qt::CaseInsensitive))
+            {
+                (*iterator)->setHidden(false);
+                QTreeWidgetItem *parent = (*iterator)->parent();
+                while (parent && parent->isHidden())
+                {
+                    parent->setHidden(false);
+                    parent = parent->parent();
+                }
+            }
+            else
+            {
+                (*iterator)->setHidden(true);
+            }
+            ++iterator;
+        }
     }
 }
 
@@ -145,6 +172,18 @@ void QDICOMDumpBrowser::addBranch(QTreeWidgetItem *trunkTreeItem, DICOMSequenceA
         trunkBranchItem->addChild(qTreeSequenceItem);
     }
     trunkTreeItem->addChild(trunkBranchItem);
+}
+
+void QDICOMDumpBrowser::clearSearch()
+{
+    m_tagsListQTree->clearSelection();
+
+    QTreeWidgetItemIterator iterator(m_tagsListQTree);
+    while (*iterator)
+    {
+        (*iterator)->setHidden(false);
+        ++iterator;
+    }
 }
 
 };
