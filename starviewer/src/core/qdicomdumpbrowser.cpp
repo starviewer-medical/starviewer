@@ -40,7 +40,7 @@ void QDICOMDumpBrowser::createConnections()
 }
 
 
-void QDICOMDumpBrowser::searchTag(const QString &textTosearch)
+void QDICOMDumpBrowser::searchTag(const QString &textToSearch)
 {
 }
 
