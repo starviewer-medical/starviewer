@@ -49,6 +49,13 @@
       <widget class="QLineEdit" name="m_searchTagLineEdit"/>
      </item>
      <item>
+      <widget class="QCheckBox" name="m_showAllTagsCheckBox">
+       <property name="text">
+        <string>Show All Tags</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
