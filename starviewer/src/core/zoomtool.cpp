@@ -85,14 +85,17 @@ void ZoomTool::doZoom()
 
 void ZoomTool::endZoom()
 {
-    m_viewer->setCursor(Qt::ArrowCursor);
-    m_state = None;
-    m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
-    
-    Q3DViewer *q3DViewer = qobject_cast<Q3DViewer*>(m_viewer);
-    if (q3DViewer)
+    if (m_state == Zooming)
     {
-        m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+        m_viewer->setCursor(Qt::ArrowCursor);
+        m_state = None;
+        m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
+    
+        Q3DViewer *q3DViewer = qobject_cast<Q3DViewer*>(m_viewer);
+        if (q3DViewer)
+        {
+            m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+        }
     }
 }
 
