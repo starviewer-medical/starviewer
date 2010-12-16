@@ -188,7 +188,15 @@ void QPopUpRISRequestsScreen::hidePopUp()
 
 void QPopUpRISRequestsScreen::moveToBottomRight()
 {
-   this->move(QApplication::desktop()->availableGeometry(this).bottomRight() - this->rect().bottomRight());
+    if(m_moveToBottomAnimation.state() != QAbstractAnimation::Running)
+    {
+        m_moveToBottomAnimation.setTargetObject(this);
+        m_moveToBottomAnimation.setPropertyName("pos");
+        m_moveToBottomAnimation.setDuration(2000);
+        m_moveToBottomAnimation.setEndValue(QApplication::desktop()->availableGeometry(this).bottomRight() - this->rect().bottomRight());
+        m_moveToBottomAnimation.setEasingCurve(QEasingCurve::OutQuint);
+        m_moveToBottomAnimation.start();
+    }
 }
 
 QPopUpRISRequestsScreen::~QPopUpRISRequestsScreen()
