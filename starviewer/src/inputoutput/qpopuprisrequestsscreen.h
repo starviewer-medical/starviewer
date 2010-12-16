@@ -55,6 +55,8 @@ private slots :
 
     ///Slot que amaga el PopUp sempre i quan no s'estigui processant cap petició del RIS
     void hidePopUp();
+    void hidePopUpSmoothly();
+
     /// Mou el PopUp a la cantonada dreta de la pantalla a on es troba en aquest moment.
     void moveToBottomRight();
 
@@ -83,6 +85,7 @@ private:
 
     /// Animació utilitzada per desplaçar el pop up fin a la cantonada dreta
     QPropertyAnimation m_moveToBottomAnimation;
+    QPropertyAnimation m_hidePopUpAnimation;
 };
 
 };
