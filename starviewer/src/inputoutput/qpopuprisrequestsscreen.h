@@ -8,6 +8,7 @@
 #define UDGQPOPURISREQUESTSCREEN_H
 
 #include <QDialog>
+#include <QPropertyAnimation>
 #include "ui_qpopuprisrequestsscreenbase.h"
 
 class QTimer;
@@ -79,6 +80,9 @@ private:
 
     QList<int> m_pacsJobIDOfStudiesToRetrieve;
     int m_numberOfStudiesRetrieved;
+
+    /// Animació utilitzada per desplaçar el pop up fin a la cantonada dreta
+    QPropertyAnimation m_moveToBottomAnimation;
 };
 
 };
