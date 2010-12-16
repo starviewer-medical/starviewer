@@ -34,12 +34,14 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
 
     m_qTimer = new QTimer();
     m_qTimer->setSingleShot(true);
-    connect(m_qTimer,SIGNAL(timeout()),SLOT(hidePopUp()));
+    connect(m_qTimer,SIGNAL(timeout()), SLOT(hidePopUpSmoothly()));
 
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
     m_operationAnimation->setMovie(operationAnimation);
     operationAnimation->start();
+
+    connect(&m_hidePopUpAnimation, SIGNAL(finished()), this, SLOT(hidePopUp()));
 }
 
 void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
@@ -177,6 +179,18 @@ void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
     QTimer::singleShot(msTimeOutToMovePopUpToBottomRight, this, SLOT(moveToBottomRight()));
 }
 
+void QPopUpRISRequestsScreen::hidePopUpSmoothly()
+{
+    if(m_operationAnimation->isHidden() && m_hidePopUpAnimation.state() != QAbstractAnimation::Running)
+    {
+        m_hidePopUpAnimation.setTargetObject(this);
+        m_hidePopUpAnimation.setPropertyName("windowOpacity");
+        m_hidePopUpAnimation.setDuration(1000);
+        m_hidePopUpAnimation.setEndValue(0.0);
+        m_hidePopUpAnimation.start();
+    }
+}
+
 void QPopUpRISRequestsScreen::hidePopUp()
 {
     if (m_operationAnimation->isHidden())
@@ -184,6 +198,7 @@ void QPopUpRISRequestsScreen::hidePopUp()
         //Si es mostra el gif d'operació vol dir que ha arribat una petició de RIS mentre estava corrent el QTimer, per això hem de fer no s'amagui
         this->hide();
     }
+    this->setWindowOpacity(1.0);
 }
 
 void QPopUpRISRequestsScreen::moveToBottomRight()
