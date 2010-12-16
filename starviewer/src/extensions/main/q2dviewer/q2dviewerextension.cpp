@@ -127,12 +127,12 @@ Q2DViewerExtension::~Q2DViewerExtension()
 #ifndef STARVIEWER_LITE
     m_hangingCandidates.clear();
     // L'objecte es crea quan fem un setInput. Per tant, fem la comprovació.
-    if (!m_previousStudiesWidget)
+    if (m_previousStudiesWidget)
     {
         delete m_previousStudiesWidget;
     }
 
-    if (!m_hangingProtocolManager)
+    if (m_hangingProtocolManager)
     {
         delete m_hangingProtocolManager;
     }
