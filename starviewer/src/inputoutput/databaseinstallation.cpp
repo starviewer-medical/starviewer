@@ -36,7 +36,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
     bool isCorrect;
 
     //Comprovem que existeix el path on s'importen les imatges, sinó existeix l'intentarà crear
-	isCorrect = checkLocalImagePath();
+    isCorrect = checkLocalImagePath();
 
     if (!existsDatabaseFile())
     {
@@ -54,26 +54,16 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         {
             // TODO què fem? cal retornar fals? Avisar a l'usuari?
             ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura, no podrem guardar estudis nous ni modificar els ja existents.");
-			m_errorMessage.append( tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString) );
+            m_errorMessage.append( tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString) );
         }
 
-        if (localDatabaseManager.isDatabaseCorrupted())
-        {
-            INFO_LOG("La base de dades esta corrupte " + LocalDatabaseManager::getDatabaseFilePath());
-            if (!repairDatabase())
-            {
-                ERROR_LOG("NO S'HA POGUT REPARAR LA BASE DE DADES");
-				m_errorMessage.append( tr("\nDatabase is corrupted and it could not be repaired. Please contact with an administrator.") );
-                isCorrect = false;
-            }
-        }
         checkDatabaseRevision();
     }
 
-	if( !isCorrect )
-	{
-		return false;
-	}
+    if( !isCorrect )
+    {
+        return false;
+    }
 
     INFO_LOG("Estat de la base de dades correcte ");
     INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
@@ -87,7 +77,7 @@ bool DatabaseInstallation::checkLocalImagePath()
         if (!createLocalImageDir())
         {
             ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + LocalDatabaseManager::getCachePath());
-			m_errorMessage.append( tr("\nCan't create the cache image directory. Please check users permissions.") );
+            m_errorMessage.append( tr("\nCan't create the cache image directory. Please check users permissions.") );
             return false;
         }
     }
@@ -98,7 +88,7 @@ bool DatabaseInstallation::checkLocalImagePath()
         if( !imagePathInfo.isWritable() )
         {
             ERROR_LOG("El directori de la cache d'imatges no te permisos d'escriptura: " + LocalDatabaseManager::getCachePath() );
-			m_errorMessage.append( tr("\nYou don't have write permissions on cache image directory. You couldn't retrieve or import new studies.") );
+            m_errorMessage.append( tr("\nYou don't have write permissions on cache image directory. You couldn't retrieve or import new studies.") );
             return false;
         }
     }
@@ -134,32 +124,6 @@ bool DatabaseInstallation::checkDatabaseRevision()
         return updateDatabaseRevision();
     }
     else return true;
-}
-
-bool DatabaseInstallation::repairDatabase()
-{
-    LocalDatabaseManager localDatabaseManager;
-    QMessageBox::critical(0, ApplicationNameString, tr("%1 database is corrupted.\n\n%1 will try to repair it.").arg(ApplicationNameString) );
-
-    //La única manera d'intentar reparar la base de dades és compactar la base de dades
-    localDatabaseManager.compact();
-    if (localDatabaseManager.isDatabaseCorrupted())
-    {
-        INFO_LOG("No s'ha pogut reparar la base de dades, s'intentara reinstal·lar la base de dades");
-        //Si la base de dades continua corrupte l'hem de reinstal·lar
-        QMessageBox::critical(0, ApplicationNameString, tr("%1 can't repair database, it will be reinstalled.\n\nAll local studies retrieved and imported will be deleted.").arg(ApplicationNameString) );
-        if (!removeCacheAndReinstallDatabase())
-        {
-            ERROR_LOG("No s'ha pogut reinstal.lar la base de dades");
-            QMessageBox::critical(0, ApplicationNameString , tr("%1 can't reinstall database, be sure you have write permissions on database directory.").arg(ApplicationNameString));
-            return false;
-        }
-        else return true;
-    }
-    else
-    {
-        return true;
-    }
 }
 
 bool DatabaseInstallation::isDatabaseFileWritable()

@@ -13,7 +13,7 @@
 namespace udg {
 
 /** Aquesta classe comprova que els directoris i la base de dades de la cache estiguin correctament creats si no es aquest el cas, els crea, per a que l'aplicacio pugui funcionar correctament
- *	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+ *  @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
  */
 class DatabaseInstallation : public QObject {
 Q_OBJECT
@@ -53,8 +53,8 @@ public:
     ///Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals
     bool updateDatabaseRevision();
 
-	/// Retorna els errors que s'han trobat
-	QString getErrorMessage();
+    /// Retorna els errors que s'han trobat
+    QString getErrorMessage();
 
 private slots:
     ///Fa avançar la barra de progrés
@@ -71,9 +71,6 @@ private:
 
     ///Comprova si la revisió de la base de dades és la necessària per l'actual compilació de l'starviewer i sinó l'intenta actualitzar
     bool checkDatabaseRevision();
-
-    ///Intenta reparar la base dedades, sinó ho aconseguei la reinstal·la
-    bool repairDatabase();
 
     /// Retorna cert si tenim permisos d'escriptura a la base de dades, fals altrament
     bool isDatabaseFileWritable();
@@ -97,8 +94,8 @@ private:
     /// Diàleg de progrés per les operacions costoses
     QProgressDialog *m_qprogressDialog;
 
-	/// Missatges d'errors que s'han anat produint
-	QString m_errorMessage;
+    /// Missatges d'errors que s'han anat produint
+    QString m_errorMessage;
 };
 
 }//end namespace udg
