@@ -78,9 +78,6 @@ public:
     /// Retorna la revisió de la base de dades, sinó ha trobat de quina revisió és la base de dades retorna -1
     int getDatabaseRevision();
 
-    /// Ens indica si la base de dades està corrupte
-    bool isDatabaseCorrupted();
-
     /// Comprova si es disposa d'espai suficient al disc dur per descarregar nous objectes. 
     /// Si la opció de configuració d'esborrar estudis automàticament està activada intentarà 
     /// esborrar estudis vells tant Gb d'estudis vell com s'hagi especificat a la configuració

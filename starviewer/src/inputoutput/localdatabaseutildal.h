@@ -29,9 +29,6 @@ public:
     ///retorna la revisió de la BD a la que està connectada, si no troba a quina revisió pertany retorna -1
     int getDatabaseRevision();
 
-    ///Comprova si la base de dades està corrumpuda
-    bool isDatabaseCorrupted();
-
 private :
 
     ///Ens retorna un string amb el select a executar per retorna la revisió de la base de dades sobre la qual estem connectats
