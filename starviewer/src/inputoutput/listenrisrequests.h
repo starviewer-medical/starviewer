@@ -29,10 +29,6 @@ public:
     enum ListenRISRequestsError {RisPortInUse, UnknownNetworkError};
 
     ListenRISRequests();
-    
-    //TODO: Treure aquest mètode ja que sembla que no s'utilitza
-    ///Indica si s'estant escoltant peticions
-    bool isListening();
 
 public slots:
 
@@ -64,8 +60,6 @@ private :
 private:
     /// Indiquem el temps d'espera (en mil·lisegons) per llegir la petició del RIS, sinó arriba en aquest temps fem time out
     static const int TimeOutToReadData;
-
-    bool m_isListeningRISRequests;
 
     QTcpServer *m_tcpRISServer;
 };

@@ -26,8 +26,6 @@ ListenRISRequests::ListenRISRequests()
 {
     qRegisterMetaType<DicomMask>("DicomMask");//Registrem la classe DicomMask per poder-ne fer un signal
     qRegisterMetaType<ListenRISRequests::ListenRISRequestsError>("ListenRISRequests::ListenRISRequestsError");
-
-    m_isListeningRISRequests = false;
 }
 
 void ListenRISRequests::stopListen()
@@ -36,11 +34,6 @@ void ListenRISRequests::stopListen()
     {
         m_tcpRISServer->close();
     }
-}
-
-bool ListenRISRequests::isListening()
-{
-    return m_isListeningRISRequests;
 }
 
 void ListenRISRequests::listen()
@@ -53,7 +46,6 @@ void ListenRISRequests::listen()
         return;
     }
 
-    m_isListeningRISRequests = true;
     connect(m_tcpRISServer, SIGNAL(newConnection()), SLOT(newRISRequest()));
 }
 
