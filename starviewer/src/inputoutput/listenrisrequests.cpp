@@ -30,24 +30,19 @@ ListenRISRequests::ListenRISRequests()
     m_isListeningRISRequests = false;
 }
 
+void ListenRISRequests::stopListen()
+{
+    if (m_tcpRISServer->isListening())
+    {
+        m_tcpRISServer->close();
+    }
+}
+
 bool ListenRISRequests::isListening()
 {
     return m_isListeningRISRequests;
 }
 
-/* El motiu que el disseny d'escolta peticions del RIS no segueixi el model tradicional de serveis de xarxa, que consisteix en tenir un thread que s'encarrega
- * d'esperar connexions entrants i una vegada les té, crear un thread fill per atendre aquest nova connexió, mentre el thread pare pot tornar a esperar noves 
- * connexions entrants, és per què amb el RIS PIER aquest model donava problemes, ens trobàvem moltes vegades que amb el temps que transcurria en que s'engegava 
- * el thread i cridàvem el mètode readAll de QTcpServer ens donava un error de que el client remot havia tancat la connexió. Hem de tenir en compte que no teníem 
- * accés al codi del RIS PIER que s'utilitzava per fer la petició, per saber com funcionava i quins timeouts tenia, ni teníem accés a una màquina amb el RIS PIER 
- * per fer proves. Finalment es va optar per provar de processar les peticions del RIS amb aquest model, en que hi ha un mateix thread que accepta les connexions 
- * i les processa, amb aquest model es van acabar els problemes amb les connexions del RIS PIER.
-    
- *  Degut aquest mateix fet per això tampoc s'ha implamentat aquesta classe seguint el model recomenat per Qt, en el qual no tenim un loop pendent sempre 
- *  d'acceptar noves connexions, sinó que conectem el signal incomingConnection() amb un slot de la nostra classe que s'activa cada vegada que hi ha una 
- *  nova connexió.
-
- */
 void ListenRISRequests::listen()
 {
     m_tcpRISServer = new QTcpServer();
@@ -59,54 +54,31 @@ void ListenRISRequests::listen()
     }
 
     m_isListeningRISRequests = true;
-
-    while (m_tcpRISServer->waitForNewConnection(-1)) //Esperem rebre connexions
-    {
-        INFO_LOG("S'ha rebut una nova connexió de RIS per atendre.");
-        while (m_tcpRISServer->hasPendingConnections())
-        {
-            QTcpSocket *tcpSocket = m_tcpRISServer->nextPendingConnection();
-            QString risRequestData;
-
-            INFO_LOG("Rebuda peticio de la IP " + tcpSocket->peerAddress().toString());
-            if (tcpSocket->waitForReadyRead(TimeOutToReadData))
-            {
-                risRequestData = QString(tcpSocket->readAll());
-                INFO_LOG("Dades rebudes: " + risRequestData);
-            }
-            else 
-            {
-                INFO_LOG("No s'ha rebut dades, error: " + tcpSocket->errorString());
-            }
-
-            INFO_LOG("Tanco socket");
-            tcpSocket->close();
-            INFO_LOG("Faig delete del socket");
-            delete tcpSocket;
-
-            if (!risRequestData.isEmpty()) processRequest(risRequestData);
-
-            if (m_tcpRISServer->hasPendingConnections()) 
-            {
-                INFO_LOG("Hi ha connexions de RIS pendents per atendre.");
-            }
-            else 
-            {
-                INFO_LOG("No hi ha connexions de RIS pendents per atendre.");
-            }
-        }
-    }
-
-    //Si sortim del bucle és que s'ha produït un error
-    ERROR_LOG("S'ha produït un error esperant peticions del RIS, error: " + m_tcpRISServer->errorString());
-    networkError(m_tcpRISServer);
-
-    m_isListeningRISRequests = false;
+    connect(m_tcpRISServer, SIGNAL(newConnection()), SLOT(newRISRequest()));
 }
 
-void ListenRISRequests::stopListen()
+void ListenRISRequests::newRISRequest()
 {
-    m_tcpRISServer->close();
+    QTcpSocket *tcpSocket = m_tcpRISServer->nextPendingConnection();
+    QString risRequestData;
+
+    INFO_LOG("Rebuda peticio de la IP " + tcpSocket->peerAddress().toString());
+    if (tcpSocket->waitForReadyRead(TimeOutToReadData))
+    {
+        risRequestData = QString(tcpSocket->readAll());
+        INFO_LOG("Dades rebudes: " + risRequestData);
+    }
+    else 
+    {
+        INFO_LOG("No s'ha rebut dades, error: " + tcpSocket->errorString());
+    }
+
+    INFO_LOG("Tanco socket");
+    tcpSocket->disconnectFromHost();
+    INFO_LOG("Faig delete del socket");
+    delete tcpSocket;
+
+    if (!risRequestData.isEmpty()) processRequest(risRequestData);
 }
 
 void ListenRISRequests::processRequest(QString risRequestData)

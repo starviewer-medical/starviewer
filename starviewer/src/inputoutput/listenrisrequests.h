@@ -29,17 +29,18 @@ public:
     enum ListenRISRequestsError {RisPortInUse, UnknownNetworkError};
 
     ListenRISRequests();
-
+    
+    //TODO: Treure aquest mètode ja que sembla que no s'utilitza
     ///Indica si s'estant escoltant peticions
     bool isListening();
-
-    ///Para l'escolta de les peticions del RIS
-    void stopListen();
 
 public slots:
 
     ///Inicia l'escolta de peticions del RIS a través del port que s'ha establet a la configuració
     void listen();
+
+    ///Slot que fa que es parin d'escoltar peticions
+    void stopListen();
 
 signals:
     ///Signal que indica que s'ha fet una petició per descarregar un estudi
@@ -47,6 +48,10 @@ signals:
     
     ///Signal que s'emet indicant que s'ha produït un error escoltant peticions al RIS
     void errorListening(ListenRISRequests::ListenRISRequestsError);
+
+private slots:
+
+    void newRISRequest();
 
 private :
 
