@@ -25,14 +25,14 @@ public:
 
     LocalDatabasePatientDAL(DatabaseConnection *dbConnection);
 
-    ///insereix el nou pacient
+    ///insereix el nou pacient, i emplena el camp DatabaseID de Patient amb el ID de Pacient de la BD.
     void insert(Patient *newPatient);
 
     ///updata el pacient
     void update(Patient *patientToUpdate);
 
     ///Esborra els estudis pacients que compleixen amb els criteris de la màscara, només té en compte el Patient Id
-    void del(const DicomMask &patientMaskToDelete);
+    void del(qlonglong patientID);
 
     ///Cerca els pacients que compleixen amb els criteris de la màscara de cerca, només té en compte el Patient Id
     QList<Patient*> query(const DicomMask &patientMaskToQuery);
@@ -48,7 +48,7 @@ private :
     QString buildSqlSelect(const DicomMask &patientMaskToSelect);
 
     ///Construeix la setència per esborrar pacients a partir de la màscara, només té en compte el Patient Id
-    QString buildSqlDelete(const DicomMask &patientMaskToDelete);
+    QString buildSqlDelete(qlonglong patientID);
 
     ///Emplena un l'objecte series de la fila passada per paràmetre
     Patient* fillPatient(char **reply, int row, int columns);

@@ -22,7 +22,17 @@ void LocalDatabasePatientDAL::insert(Patient *newPatient)
 {
     m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newPatient)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlInsert(newPatient));
+    if (getLastError() != SQLITE_OK)
+    {
+        logError(buildSqlInsert(newPatient));
+    }
+    else
+    {
+        /*El mètode retorna un tipus sqlite3_int64 aquest en funció de l'entorn de compilació equival a un determinat tipus http://www.sqlite.org/c3ref/int64.html
+         __int64 per windows i long long int per la resta, qlonglong de qt http://doc.qt.nokia.com/4.1/qtglobal.html#qlonglong-typedef equival als mateixos tipus 
+         pel mateix entorn de compilació per això retornem el ID com un qlonglong.*/
+        newPatient->setDatabaseID(sqlite3_last_insert_rowid(m_dbConnection->getConnection()));
+    }
 }
 
 void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
@@ -32,11 +42,11 @@ void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
     if (getLastError() != SQLITE_OK) logError(buildSqlUpdate(patientToUpdate));
 }
 
-void LocalDatabasePatientDAL::del(const DicomMask &patientMaskToDelete)
+void LocalDatabasePatientDAL::del(qlonglong patientID)
 {
-    m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlDelete(patientMaskToDelete)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec( m_dbConnection->getConnection(), qPrintable(buildSqlDelete(patientID)), 0, 0, 0);
 
-    if (getLastError() != SQLITE_OK) logError(buildSqlDelete(patientMaskToDelete));
+    if (getLastError() != SQLITE_OK) logError(buildSqlDelete(patientID));
 }
 
 QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
@@ -68,10 +78,11 @@ Patient* LocalDatabasePatientDAL::fillPatient(char **reply, int row, int columns
 {
     Patient *patient = new Patient();
 
-    patient->setID(reply[0 + row * columns]);
-    patient->setFullName(reply[1 + row * columns]);
-    patient->setBirthDate(reply[2 + row * columns]);
-    patient->setSex(reply[3 + row * columns]);
+    patient->setDatabaseID(QString(reply[0 + row * columns]).toLongLong());
+    patient->setID(reply[1 + row * columns]);
+    patient->setFullName(reply[2 + row * columns]);
+    patient->setBirthDate(reply[3 + row * columns]);
+    patient->setSex(reply[4 + row * columns]);
 
     return patient;
 }
@@ -80,18 +91,18 @@ QString LocalDatabasePatientDAL::buildSqlSelect(const DicomMask &patientMaskToSe
 {
     QString selectSentence, whereSentence;
 
-    selectSentence = "Select ID, Name, Birthdate, Sex "
+    selectSentence = "Select ID, DICOMPatientID, Name, Birthdate, Sex "
                        "From Patient ";
 
     if (!patientMaskToSelect.getPatientId().isEmpty())
-        whereSentence = QString(" Where ID = '%1' ").arg( DatabaseConnection::formatTextToValidSQLSyntax( patientMaskToSelect.getPatientId() ) );
+        whereSentence = QString(" Where DICOMPatientID = '%1' ").arg( DatabaseConnection::formatTextToValidSQLSyntax( patientMaskToSelect.getPatientId() ) );
 
     return selectSentence + whereSentence;
 }
 
 QString LocalDatabasePatientDAL::buildSqlInsert(Patient *newPatient)
 {
-    QString insertSentence = QString ("Insert into Patient  (ID, Name, Birthdate, Sex) "
+    QString insertSentence = QString ("Insert into Patient  (DICOMPatientID, Name, Birthdate, Sex) "
                                                    "values ('%1', '%2', '%3', '%4')")
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( newPatient->getID() ) )
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( newPatient->getFullName() ) )
@@ -103,24 +114,25 @@ QString LocalDatabasePatientDAL::buildSqlInsert(Patient *newPatient)
 
 QString LocalDatabasePatientDAL::buildSqlUpdate(Patient *patientToUpdate)
 {
-    QString updateSentence = QString ("Update Patient Set   Name = '%1', "
-                                                           "Birthdate = '%2', "
-                                                           "Sex = '%3' "
-                                                   "Where   ID = '%4'")
+    QString updateSentence = QString ("Update Patient Set  DICOMPatientID = '%1', " 
+                                                           "Name = '%2', "
+                                                           "Birthdate = '%3', "
+                                                           "Sex = '%4' "
+                                                    " Where ID = %5")
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( patientToUpdate->getID() ) )
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( patientToUpdate->getFullName() ) )
                                     .arg( patientToUpdate->getBirthDate().toString("yyyyMMdd") )
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( patientToUpdate->getSex() ) )
-                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( patientToUpdate->getID() ) );
+                                    .arg(patientToUpdate->getDatabaseID());
     return updateSentence;
 }
 
-QString LocalDatabasePatientDAL::buildSqlDelete(const DicomMask &patientMaskToDelete)
+QString LocalDatabasePatientDAL::buildSqlDelete(qlonglong patientID)
 {
     QString deleteSentence, whereSentence = "";
 
     deleteSentence = "Delete From Patient ";
-    if (!patientMaskToDelete.getPatientId().isEmpty())
-        whereSentence = QString(" Where ID = '%1'").arg( DatabaseConnection::formatTextToValidSQLSyntax( patientMaskToDelete.getPatientId() ) );
+    whereSentence = QString(" Where ID = %1").arg(patientID);
 
     return deleteSentence + whereSentence;
 }

@@ -16,7 +16,8 @@ INSERT INTO DatabaseRevision (Revision) VALUES ('$Rev$');
 
 CREATE TABLE Patient
 ( 
-  ID                            TEXT PRIMARY KEY,
+  ID                            INTEGER PRIMARY KEY AUTOINCREMENT,
+  DICOMPatientId                TEXT,
   Name                          TEXT,
   BirthDate                     TEXT,
   Sex                           TEXT
