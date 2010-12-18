@@ -56,6 +56,9 @@ signals:
     ///Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests que s'executa en un altre Thread
     void listenRISRequests();
 
+    ///Signal que s'emet per indicar que es pari d'escoltar peticions a través de la classe ListenRISRequests que s'executa en un altre Thread
+    void stopListenRISRequests();
+
     ///Signal que s'emet per indicar que s'ha de visualitzar l'estudi
     void viewStudyRetrievedFromRISRequest(QString studyInstanceUID);
 

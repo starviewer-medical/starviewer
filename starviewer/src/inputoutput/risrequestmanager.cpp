@@ -25,11 +25,13 @@ RISRequestManager::RISRequestManager(PacsManager *pacsManager)
 
 RISRequestManager::~RISRequestManager()
 {
-    m_listenRISRequests->stopListen();
-    m_listenRISRequests->deleteLater();
+    //Com que la classe que escolta les peticions del RIS s'executa en un thread li emetem un signal indicant-li que s'ha de parar.
+    emit stopListenRISRequests();
 
     m_listenRISRequestsQThread->exit();
     m_listenRISRequestsQThread->wait();
+
+    m_listenRISRequests->deleteLater();
 
     delete m_listenRISRequestsQThread;
     delete m_pacsManager;
@@ -55,9 +57,11 @@ void RISRequestManager::createConnections()
 {
     connect(m_listenRISRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRISRequest(DicomMask)));
     connect(m_listenRISRequests, SIGNAL(errorListening(ListenRISRequests::ListenRISRequestsError)), SLOT(showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError)));
-    /**Hem d'indica a la classe ListenRISRequests que pot començar a escoltar peticions a través d'un signal, perquè si ho fèssim invocant el mètode listen() directament
-       aquest seria executat pel thread que l'invoca, en canvi amb un signal aquest és atés pel thread al que pertany ListenRISRequests*/
+    /**Hem d'indica a la classe ListenRISRequests que pot començar a escoltar/parar peticions a través d'un signal, perquè si ho fèssim invocant el mètode listen()
+       o stopListen directament aquest seria executat pel thread que l'invoca i podria fer petar l'aplicaciño, en canvi amb un signal aquest és atés pel thread 
+       al que pertany ListenRISRequests*/
     connect(this, SIGNAL(listenRISRequests()), m_listenRISRequests, SLOT(listen()));
+    connect(this, SIGNAL(stopListenRISRequests()), m_listenRISRequests, SLOT(stopListen()));
 }
 
 void RISRequestManager::listen()
