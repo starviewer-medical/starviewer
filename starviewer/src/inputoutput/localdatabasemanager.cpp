@@ -75,8 +75,6 @@ void LocalDatabaseManager::save(Patient *newPatient)
             }
         }
 
-        status = savePatient(&dbConnect, newPatient);
-
         if (status != SQLITE_OK) 
         {
             deleteRetrievedObjects(newPatient);
@@ -109,7 +107,7 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         DatabaseConnection dbConnect;
 
         dbConnect.beginTransaction(); 
-        int status = savePatient(&dbConnect, seriesToSave->getParentStudy()->getParentPatient());
+        int status = savePatientOfStudy(&dbConnect, seriesToSave->getParentStudy());
 
         if (status != SQLITE_OK) 
         {
@@ -569,6 +567,13 @@ int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study
         studyToSave->setRetrievedDate(currentDate);
         studyToSave->setRetrievedTime(currentTime);
 
+        status = savePatientOfStudy(dbConnect, studyToSave);
+
+        if (status != SQLITE_OK) 
+        {
+            break;
+        }
+
         // Guardem la sèrie si no s'ha produït cap error
         status = saveStudy(dbConnect, studyToSave);
 
@@ -630,16 +635,21 @@ int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*
     return status;
 }
 
-int LocalDatabaseManager::savePatient(DatabaseConnection *dbConnect, Patient *patientToSave)
+int LocalDatabaseManager::savePatientOfStudy(DatabaseConnection *dbConnect, Study *study)
 {
     LocalDatabasePatientDAL patientDAL(dbConnect);
+    LocalDatabaseStudyDAL studyDAL(dbConnect);
+    qlonglong patientID = studyDAL.getPatientIDFromStudyInstanceUID(study->getInstanceUID());
 
-    patientDAL.insert(patientToSave);
-
-    /// Si el pacient ja existia actualitzem la seva informació
-    if (patientDAL.getLastError() == SQLITE_CONSTRAINT) 
+    if (patientID == NULL)
     {
-        patientDAL.update(patientToSave);
+        //si no existeix l'inserim a la BD
+        patientDAL.insert(study->getParentPatient());
+    }
+    else
+    {
+        study->getParentPatient()->setDatabaseID(patientID);
+        patientDAL.update(study->getParentPatient());
     }
 
     return patientDAL.getLastError();
@@ -763,51 +773,30 @@ void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
 int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
+    
+    //Busquem el ID de pacient
+    qlonglong patientID = localDatabaseStudyDAL.getPatientIDFromStudyInstanceUID(maskToDelete.getStudyInstanceUID());
 
-    // Com de la màscara a esborrar ens passa l'studyUID hem de buscar el patient id per aquell estudi 
-    QList<Patient*> patientList = localDatabaseStudyDAL.queryPatientStudy(maskToDelete);
     if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
     {
         return localDatabaseStudyDAL.getLastError();
     }
-
-    if (patientList.count() > 0) 
+    else if (patientID == NULL)
     {
-        QString patientID = patientList.at(0)->getID(); // Per un mateix studyUID no podem trobar més d'un pacient
-        delete patientList.at(0);// Esborrem el pacient no el necessitem més
-
-        // Busquem quants estudis té el pacient, 
-        int numberOfStudies = localDatabaseStudyDAL.countHowManyStudiesHaveAPatient(patientID);
-        if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
-        {
-            return localDatabaseStudyDAL.getLastError();
-        }
-
-        if (numberOfStudies == 1) // Només podem esborrar el pacient si no té cap més estudi que el que s'ha d'esborrar
-        {
-            DicomMask patientMaskToDelete;
-            patientMaskToDelete.setPatientId(patientID);
-
-            return deletePatientFromDatabase(dbConnect, patientMaskToDelete);
-        }
-        else
-        {
-            return localDatabaseStudyDAL.getLastError();
-        }
-    }
-    else 
-    {
-        ERROR_LOG("No s'ha trobat cap pacient a esborrar");
-        //No s'ha trobat pacient a esborrar
+        ERROR_LOG(QString("No hem trobat el pacient a esborrar de l'estudi amb UID %1").arg(maskToDelete.getStudyInstanceUID()));
         return localDatabaseStudyDAL.getLastError();
+    }
+    else
+    {
+        return deletePatientFromDatabase(dbConnect, patientID);
     }
 }
 
-int LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+int LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection *dbConnect, qlonglong patientID)
 {
     LocalDatabasePatientDAL localDatabasePatientDAL(dbConnect);
 
-    localDatabasePatientDAL.del(maskToDelete);
+    localDatabasePatientDAL.del(patientID);
 
     return localDatabasePatientDAL.getLastError();
 }

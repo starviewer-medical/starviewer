@@ -16,11 +16,13 @@ namespace udg {
 Patient::Patient(QObject *parent)
  : QObject( parent )
 {
+    m_databaseID = NULL;
 }
 
 Patient::Patient( const Patient &patient, QObject *parent )
  : QObject( parent )
 {
+    m_databaseID = patient.m_databaseID;
     m_fullName = patient.m_fullName;
     m_patientID = patient.m_patientID;
     m_birthDate = patient.m_birthDate;
@@ -42,6 +44,16 @@ void Patient::setFullName( QString name )
 void Patient::setID( QString id )
 {
     m_patientID = id;
+}
+
+void Patient::setDatabaseID(qlonglong databaseID)
+{
+    m_databaseID = databaseID;
+}
+
+qlonglong Patient::getDatabaseID()
+{
+    return m_databaseID;
 }
 
 void Patient::setBirthDate( int day , int month , int year )

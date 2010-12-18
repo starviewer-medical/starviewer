@@ -41,6 +41,10 @@ public:
     void setID( QString id );
     QString getID() const { return m_patientID; }
 
+    ///Assigna/Obté el ID de pacient a la BD d'Starviewer
+    void setDatabaseID(qlonglong databaseID);
+    qlonglong getDatabaseID();
+
     /// Assigna/Obté data de naixement
     void setBirthDate( int day , int month , int year );
     void setBirthDate( QString date );
@@ -175,6 +179,9 @@ private:
 
     /// Identificador primari donada al pacient per l'hospital. (0010,0020) Tipus 2.
     QString m_patientID;
+
+    ///ID de pacient a la bd d'Starviewer
+    qlonglong m_databaseID;
 
     /// Data de naixement. (0010,0030) Tipus 2.
     QDate m_birthDate;

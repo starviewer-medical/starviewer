@@ -117,23 +117,29 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patien
     return patientList;
 }
 
-int LocalDatabaseStudyDAL::countHowManyStudiesHaveAPatient(const QString &patientID)
+qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID)
 {
     int columns , rows;
     char **reply = NULL , **error = NULL;
-    QList<Study*> studyList;
+    qlonglong patientID = NULL;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                      qPrintable(buildSqlCountHowManyStudiesHaveAPatient(patientID)),
-                                    &reply, &rows, &columns, error);
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID)), 
+        &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {
-        logError (buildSqlCountHowManyStudiesHaveAPatient(patientID));
-        return -1;
+        logError(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID));
     }
-
-    return QString(reply[1]).toInt();
+    else
+    {
+        if (rows >= 1) //A la row 0 hi ha el header
+        {
+            //Si cerquem per UID només podem tenir un resultat, ja que UID és camp clau al a taula Study
+            patientID = QString(reply[1]).toLongLong();
+        }
+    }
+    
+    return patientID;
 }
 
 Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
@@ -169,10 +175,11 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
 {
     Patient *patient = new Patient();
 
-    patient->setID(reply[16 + row * columns]);
-    patient->setFullName(reply[17 + row * columns]);
-    patient->setBirthDate(reply[18 + row * columns]);
-    patient->setSex(reply[19 + row * columns]);
+    patient->setDatabaseID(QString(reply[16 + row * columns]).toLongLong());
+    patient->setID(reply[17 + row * columns]);
+    patient->setFullName(reply[18 + row * columns]);
+    patient->setBirthDate(reply[19 + row * columns]);
+    patient->setSex(reply[20 + row * columns]);
 
     return patient;
 }
@@ -215,17 +222,18 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
     QString selectSentence, whereSentence, orderBySentence;
 
     selectSentence = "Select InstanceUID, PatientID, Study.ID, PatientAge, PatientWeigth, PatientHeigth, Modalities, Date, Time, "
-                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, " "Study.State, Patient.Id, Patient.Name, Patient.Birthdate, Patient.Sex "
+                            "AccessionNumber, Description, ReferringPhysicianName, LastAccessDate, RetrievedDate, RetrievedTime, " 
+                            "Study.State, Patient.ID, Patient.DICOMPatientId, Patient.Name, Patient.Birthdate, Patient.Sex "
                        "From Study, Patient ";
 
-    whereSentence = "Where Study.PatientId = Patient.Id ";
+    whereSentence = "Where Study.PatientID = Patient.ID ";
 
     if (!studyMaskToSelect.getStudyInstanceUID().isEmpty())
         whereSentence += QString(" and InstanceUID = '%1' ").arg(  DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToSelect.getStudyInstanceUID() ) );
 
     if (!studyMaskToSelect.getPatientId().isEmpty() && studyMaskToSelect.getPatientId() != "*")
     {
-        whereSentence += QString(" and Patient.Id like '%%1%' ").arg(  DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToSelect.getPatientId().replace("*","") ) );
+        whereSentence += QString(" and Patient.DICOMPatientID like '%%1%' ").arg(  DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToSelect.getPatientId().replace("*","") ) );
     }
     if (!studyMaskToSelect.getPatientName().isEmpty() && studyMaskToSelect.getPatientName() != "*")
         whereSentence += QString(" and Patient.Name like '%%1%' ").arg(  DatabaseConnection::formatTextToValidSQLSyntax( studyMaskToSelect.getPatientName().replace("*","") ) );
@@ -261,13 +269,14 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
     return selectSentence + whereSentence + orderBySentence;
 }
 
-QString LocalDatabaseStudyDAL::buildSqlCountHowManyStudiesHaveAPatient(const QString &patientID)
+QString LocalDatabaseStudyDAL::buildSqlGetPatientIDFromStudyInstanceUID(const QString &studyInstanceUID)
 {
-    QString selectSentence = QString ("Select count(*) "
-                                      " From Patient, Study "
-                                      "Where Patient.Id = Study.PatientId  and"
-                                      "      Patient.Id = '%1'")
-                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( patientID ) );
+    QString selectSentence = QString ("Select PatientID "
+                                      " From Study "
+                                      "Where InstanceUID = '%1'")
+                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( studyInstanceUID ) );
+
+    INFO_LOG(selectSentence);
 
     return selectSentence;
 }
@@ -278,10 +287,10 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, const QDate &last
                                                            "Modalities, Date, Time, AccessionNumber, Description, "
                                                            "ReferringPhysicianName, LastAccessDate, RetrievedDate, "
                                                            "RetrievedTime , State) "
-                                                   "values ('%1', '%2', '%3', '%4', %5, %6, '%7', '%8', '%9', '%10', '%11', "
+                                                   "values ('%1', %2, '%3', '%4', %5, %6, '%7', '%8', '%9', '%10', '%11', "
                                                             "'%12', '%13', '%14', '%15', %16)")
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( newStudy->getInstanceUID() ) )
-                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( newStudy->getParentPatient()->getID() ) )
+                                    .arg(newStudy->getParentPatient()->getDatabaseID())
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( newStudy->getID() ) )
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( newStudy->getPatientAge() ) )
                                     .arg( newStudy->getWeight() )
@@ -302,23 +311,21 @@ QString LocalDatabaseStudyDAL::buildSqlInsert(Study *newStudy, const QDate &last
 
 QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, const QDate &lastAccessDate)
 {
-    QString updateSentence = QString ("Update Study set PatientID = '%1', " 
-                                                       "ID = '%2', " 
-                                                       "PatientAge = '%3',"
-                                                       "PatientWeigth = %4, "
-                                                       "PatientHeigth = %5, "
-                                                       "Modalities = '%6', "
-                                                       "Date = '%7', "
-                                                       "Time = '%8', "
-                                                       "AccessionNumber = '%9', "
-                                                       "Description = '%10', "
-                                                       "ReferringPhysicianName = '%11', "
-                                                       "LastAccessDate = '%12', "
-                                                       "RetrievedDate = '%13', "
-                                                       "RetrievedTime = '%14', "
-                                                       "State = %15 "
-                                                "Where InstanceUid = '%16'")
-                                    .arg( DatabaseConnection::formatTextToValidSQLSyntax( studyToUpdate->getParentPatient()->getID() ) )
+    QString updateSentence = QString ("Update Study set ID = '%1', " 
+                                                       "PatientAge = '%2',"
+                                                       "PatientWeigth = %3, "
+                                                       "PatientHeigth = %4, "
+                                                       "Modalities = '%5', "
+                                                       "Date = '%6', "
+                                                       "Time = '%7', "
+                                                       "AccessionNumber = '%8', "
+                                                       "Description = '%9', "
+                                                       "ReferringPhysicianName = '%10', "
+                                                       "LastAccessDate = '%11', "
+                                                       "RetrievedDate = '%12', "
+                                                       "RetrievedTime = '%13', "
+                                                       "State = %14 "
+                                                "Where InstanceUid = '%15'")
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( studyToUpdate->getID() ) )
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( studyToUpdate->getPatientAge() ) )
                                     .arg( studyToUpdate->getWeight() )

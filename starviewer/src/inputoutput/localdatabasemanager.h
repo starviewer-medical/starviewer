@@ -135,7 +135,7 @@ private:
     int saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime);
 
     /// Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
-    int savePatient(DatabaseConnection *dbConnect, Patient *patientToSave);
+    int savePatientOfStudy(DatabaseConnection *dbConnect, Study *study);
     
     /// Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
     int saveStudy(DatabaseConnection *dbConnect, Study *studyToSave);
@@ -159,7 +159,7 @@ private:
     int deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
     
     /// Esborra el pacient que compleix la màscara passada per paràmetre, només es té en compte el patientID
-    int deletePatientFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    int deletePatientFromDatabase(DatabaseConnection *dbConnect, qlonglong patientID);
     
     /// Esborra el l'estudi que compleixi amb la màscara a esborrar
     int deleteStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);

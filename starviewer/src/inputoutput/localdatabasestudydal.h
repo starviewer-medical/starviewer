@@ -43,8 +43,9 @@ public:
     ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
     QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
 
-    ///Ens retorna quan estudis té un determinat pacient
-    int countHowManyStudiesHaveAPatient(const QString &patientID);
+    ///Retorna el ID amb que Starviewer indentifica un pacient (aquest és diferent del Patient ID de DICOM) a partir de l'UID d'un estudi, si no troba l'estudi
+    ///retorna NULL
+    qlonglong getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID);
 
 private :
 
@@ -63,8 +64,8 @@ private :
     ///Construeix la sentència per fer select d'estudi i pacients a partir de la màscara. Té en compte studyUID, Patient Id, Patient Name, i data de l'estudi
     QString buildSqlSelectStudyPatient(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor);
 
-    ///Construeix la sentència per comptar quants estudis té un pacient
-    QString buildSqlCountHowManyStudiesHaveAPatient(const QString &patientID);
+    ///Retorna la sentència per buscar el pacient d'un estudi a partir del Study Instance UID
+    QString buildSqlGetPatientIDFromStudyInstanceUID(const QString &studyInstanceUID);
 
     ///Emplena un l'objecte Study de la fila passada per paràmetre
     Study* fillStudy(char **reply, int row, int columns);
