@@ -66,7 +66,7 @@ public:
     ExtensionWorkspace* getExtensionWorkspace();
 
     /// Connecta els volums d'un pacient al mètode que notifica la càrrega de volums
-    void connectPatientVolumesToNotifier( Patient *patient );
+    void connectPatientVolumesToNotifier(Patient *patient);
 
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
@@ -77,7 +77,7 @@ protected:
     virtual void showEvent(QShowEvent *event);
 
 private:
-    ///Crea i inicialitza les accions de l'aplicació
+    /// Crea i inicialitza les accions de l'aplicació
     void createActions();
 
     /// Crea els menús.
@@ -95,10 +95,8 @@ private:
     /// Escriu la configuració amb la que s'engegarà el programa el pròxim cop. \TODO: s'hauria de cridar també quan obrim una finestra nova?
     void writeSettings();
 
-    /**
-     * Fa accessibles les extensions a través dels menús. S'hauria de cridar quan ja
-     * tenim un input vàlid i es poden carregar volums
-     */
+    // Fa accessibles les extensions a través dels menús. S'hauria de cridar quan ja
+    // tenim un input vàlid i es poden carregar volums
     void enableExtensions();
 
     /// Marca aquesta aplicació com a aplicació beta, mostrant informació a l'usuari.
@@ -107,7 +105,7 @@ private:
     /// Actualitza la informació que es mostra a l'usuari en el menú com a versió beta.
     void updateBetaVersionTextPosition();
 
-    ///Envia una petició per descarregar un estudi a través del seu accession number
+    /// Envia una petició per descarregar un estudi a través del seu accession number
     void sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber);
 
     /// Calcula el tamany de la lletra del text de les tools si CoreSettings::AutoToolTextSize es true.
@@ -116,11 +114,10 @@ private:
 
 private slots:
 
-    /**
-     * Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
-     * com per exemple un QProgressDialog o en un label
-     * @param progress valor del progrés de càrrega
-     */
+    
+    // Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
+    // com per exemple un QProgressDialog o en un label
+    // @param progress valor del progrés de càrrega
     void updateVolumeLoadProgressNotification(int progress);
 
     /// Mostra el diàleg on s'explica que és una versió beta.
