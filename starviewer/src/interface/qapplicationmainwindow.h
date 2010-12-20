@@ -19,6 +19,7 @@ class QShowEvent;
 class QSignalMapper;
 class QLabel;
 class QProgressDialog;
+class QWidgetAction;
 
 namespace udg{
 // Forward declarations
@@ -138,7 +139,7 @@ private slots:
     void maximizeMultipleScreens();
 
     /// Moura la finestra de pantalla
-    void moveToDesktop();
+    void moveToDesktop(int screenIndex);
 
     /// Mostra el diàleg de configuració de l'aplicació.
     /// TODO Millorar, de moment és bastant "xapussa"
@@ -183,7 +184,7 @@ private:
     QAction *m_exitAction;
     QAction *m_aboutAction;
     QAction *m_maximizeAction;
-    QAction *m_moveToDesktopAction;
+    QWidgetAction *m_moveToDesktopAction;
 
     QAction *m_logViewerAction;
     QAction *m_configurationAction;

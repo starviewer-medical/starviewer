@@ -46,6 +46,7 @@
 #include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QPair>
+#include <QWidgetAction>
 //Shortucts
 #include "shortcuts.h"
 #include "shortcutmanager.h"
@@ -241,11 +242,13 @@ void QApplicationMainWindow::createActions()
     m_maximizeAction->setCheckable(false);
     connect(m_maximizeAction, SIGNAL(triggered(bool)), this, SLOT(maximizeMultipleScreens()));    
     
-    m_moveToDesktopAction = new QAction(this);
+    m_moveToDesktopAction = new QWidgetAction(this);
+    QScreenDistribution *screenDistribution = new QScreenDistribution(this);
+    m_moveToDesktopAction->setDefaultWidget(screenDistribution);
     m_moveToDesktopAction->setText(tr("Move To Screen"));
     m_moveToDesktopAction->setStatusTip(tr("Move The Window To The Screen ..."));
     m_moveToDesktopAction->setCheckable(false);
-    connect(m_moveToDesktopAction, SIGNAL(triggered(bool)), this, SLOT(moveToDesktop()));
+    connect(screenDistribution, SIGNAL(screenClicked(int)), this, SLOT(moveToDesktop(int)));
 
     m_openUserGuideAction = new QAction( this );
     m_openUserGuideAction->setText( tr("User guide") );
@@ -304,16 +307,10 @@ void QApplicationMainWindow::maximizeMultipleScreens()
     screenManager.maximize(this);
 }
 
-void QApplicationMainWindow::moveToDesktop()
+void QApplicationMainWindow::moveToDesktop(int screenIndex)
 {
-    QScreenDistribution screenDistribution;
-    screenDistribution.setWindowTitle(tr("Choose a Screen"));
-    if (screenDistribution.exec() == QDialog::Accepted)
-    {
-        int screen = screenDistribution.getScreenNumber();
-        ScreenManager screenManager;
-        screenManager.moveToDesktop(this, screen);
-    }
+    ScreenManager screenManager;
+    screenManager.moveToDesktop(this, screenIndex);
 }
 
 void QApplicationMainWindow::showConfigurationDialog()
@@ -361,7 +358,8 @@ void QApplicationMainWindow::createMenus()
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu( tr("&Window") );
     m_windowMenu->addAction(m_maximizeAction);
-    m_windowMenu->addAction(m_moveToDesktopAction);
+    m_moveWindowToDesktopMenu = m_windowMenu->addMenu(tr("Move To Screen"));
+    m_moveWindowToDesktopMenu->addAction(m_moveToDesktopAction);
 
     menuBar()->addSeparator();
 
