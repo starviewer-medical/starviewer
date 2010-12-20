@@ -8,7 +8,6 @@
 #ifndef UDGQSCREENDISTRIBUTION_H
 #define UDGQSCREENDISTRIBUTION_H
 
-#include <QDialog>
 #include <QWidget>
 #include <QList>
 #include <QRect>
@@ -23,7 +22,7 @@ namespace udg {
     Retorna l'identificador de la pantalla, i és fora d'aquesta que s'ha de fer les operacions
     de moure o no la pantalla.
 */
-class QScreenDistribution : public QDialog {
+class QScreenDistribution : public QWidget {
 Q_OBJECT  
 
 public:
@@ -31,8 +30,9 @@ public:
     QScreenDistribution(QWidget *parent = 0);
     /// Destructor per defecte
     ~QScreenDistribution();
-    /// Retorna a quina pantalla s'ha de moure la finestra
-    int getScreenNumber();
+
+signals:
+    int screenClicked(int screenIndex);
 
 protected:
     /// Retorna la mida adequada per a visualitzar correctament la finestra (400,200)
@@ -58,8 +58,6 @@ private:
     int m_mouseInScreen;
     /// Marge al voltant de la finestra per on començar a pintar (Constant).
     int m_marging;
-    /// Index de la pantalla a on moure la finestra
-    int m_screenIndex;
 };
 
 } // end namespace udg

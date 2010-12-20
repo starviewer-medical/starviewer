@@ -13,32 +13,21 @@
 #include <QSize>
 #include <QMouseEvent>
 #include <QPaintEvent>
+#include <QWidgetAction>
 
 namespace udg {
 
 QScreenDistribution::QScreenDistribution(QWidget *parent)
-    : QDialog(parent)
+    : QWidget(parent)
 {
     setMouseTracking(true);
     m_mouseInScreen = -1;
-    m_screenIndex = -1;
     m_marging = 50;
-
-    //Fer que la finestra sempre quedi davant i no es pugui fer res fins que no es tanqui
-    setWindowModality(Qt::ApplicationModal);
     this->setMinimumSize(QSize(300,200));
-    // Desactivar el boto d'ajuda (el que te forma d'interrogant). Primer els desactiva tots i despres i posa el de tancar
-    this->setWindowFlags(Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
-    setResult(QDialog::Rejected);
 }
 
 QScreenDistribution::~QScreenDistribution()
 {    
-}
-
-int QScreenDistribution::getScreenNumber()
-{
-    return m_screenIndex;
 }
 
 QSize QScreenDistribution::sizeHint() const
@@ -87,10 +76,8 @@ void QScreenDistribution::mousePressEvent(QMouseEvent *event)
         if (m_screens[i].contains(event->pos()))
         {
             outside = false;
-            m_screenIndex = i;
-            setResult(QDialog::Accepted);
-            // per tancar el QDialog i que retorni un resultat cal fer l'accept
-            this->accept();
+            emit screenClicked(i);
+            event->ignore();
         }
         i++;
     }
