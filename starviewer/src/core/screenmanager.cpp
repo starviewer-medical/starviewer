@@ -66,9 +66,16 @@ void ScreenManager::moveToDesktop(QWidget *window, int idDesktop)
     {
         if (window->isMaximized())
         {
-            window->showNormal();
-            fitInto(window, idDesktop);
-            window->showMaximized();
+            // La finestra està maximitzada i es mou a una altra pantalla
+            // per tant es desmaximitza, es mou i es maximitza de nou
+            // Si es mou a la mateixa pantalla, no es fa res
+            int desktopIAm = m_applicationDesktop->screenNumber(window);
+            if (idDesktop != desktopIAm)
+            {
+                window->showNormal();
+                fitInto(window, idDesktop);
+                window->showMaximized();
+            }
         }
         else
         {
