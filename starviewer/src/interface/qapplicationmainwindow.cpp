@@ -74,24 +74,24 @@ namespace udg{
 typedef SingletonPointer<StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
 QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
-    : QMainWindow( parent ), m_patient(0), m_isBetaVersion(false)
+    : QMainWindow(parent), m_patient(0), m_isBetaVersion(false)
 {
     connect(StarviewerSingleApplicationCommandLineSingleton::instance(), SIGNAL(newOptionsToRun()), SLOT(newCommandLineOptionsToRun()));
 
-    this->setAttribute( Qt::WA_DeleteOnClose );
-    m_extensionWorkspace = new ExtensionWorkspace( this );
-    this->setCentralWidget( m_extensionWorkspace );
+    this->setAttribute(Qt::WA_DeleteOnClose);
+    m_extensionWorkspace = new ExtensionWorkspace(this);
+    this->setCentralWidget(m_extensionWorkspace);
  
     DatabaseInstallation databaseInstallation;
-    if( !databaseInstallation.checkStarviewerDatabase() )
+    if (!databaseInstallation.checkStarviewerDatabase())
 	{
 		QString errorMessage = databaseInstallation.getErrorMessage();
-		QMessageBox::critical(0, ApplicationNameString , tr("There have been some errors:\n").append( errorMessage ).append( tr("\n\nYou can resolve this error by Tools>Configuration>Local Database menu.") ) );
+		QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:\n").append(errorMessage).append(tr("\n\nYou can resolve this error by Tools>Configuration>Local Database menu.")));
 	}
 
-    m_extensionHandler = new ExtensionHandler( this );
+    m_extensionHandler = new ExtensionHandler(this);
 
-    m_logViewer = new QLogViewer( this );
+    m_logViewer = new QLogViewer(this);
 
     createActions();
     createMenus();
@@ -99,15 +99,15 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     // Llegim les configuracions de l'aplicació, estat de la finestra, posicio,etc
     readSettings();
     // icona de l'aplicació
-    this->setWindowIcon( QIcon(":/images/starviewer.png") );
-    this->setWindowTitle( ApplicationNameString );
+    this->setWindowIcon(QIcon(":/images/starviewer.png"));
+    this->setWindowTitle(ApplicationNameString);
 
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
     /// Càrrega dels hanging protocols. 
     /// Només carregarem un cop per sessió/instància d'starviewer
     static bool hangingProtocolsAreLoaded = false;
-    if( !hangingProtocolsAreLoaded )
+    if (!hangingProtocolsAreLoaded)
     {
         HangingProtocolsLoader *hangingProtocolsLoader = new HangingProtocolsLoader();
         hangingProtocolsLoader->loadDefaults();
@@ -117,13 +117,13 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 #endif
 
     // creem el progress dialog que notificarà la càrrega de volums
-    m_progressDialog = new QProgressDialog( this );
-    m_progressDialog->setModal( true );
-    m_progressDialog->setRange( 0 , 100 );
-    m_progressDialog->setMinimumDuration( 0 );
-    m_progressDialog->setWindowTitle( tr("Loading") );
-    m_progressDialog->setLabelText( tr("Loading data, please wait...") );
-    m_progressDialog->setCancelButton( 0 );
+    m_progressDialog = new QProgressDialog(this);
+    m_progressDialog->setModal(true);
+    m_progressDialog->setRange(0, 100);
+    m_progressDialog->setMinimumDuration(0);
+    m_progressDialog->setWindowTitle(tr("Loading"));
+    m_progressDialog->setLabelText(tr("Loading data, please wait..."));
+    m_progressDialog->setCancelButton(0);
 
 #ifdef BETA_VERSION
     markAsBetaVersion();
@@ -136,12 +136,12 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     computeDefaultToolTextSize();
 
     m_statsWatcher = new StatsWatcher("Menu triggering", this);
-    m_statsWatcher->addTriggerCounter( m_fileMenu );
-    m_statsWatcher->addTriggerCounter( m_visualizationMenu );
-    m_statsWatcher->addTriggerCounter( m_toolsMenu );
-    m_statsWatcher->addTriggerCounter( m_helpMenu );
-    m_statsWatcher->addTriggerCounter( m_languageMenu );
-    m_statsWatcher->addTriggerCounter( m_windowMenu );
+    m_statsWatcher->addTriggerCounter(m_fileMenu);
+    m_statsWatcher->addTriggerCounter(m_visualizationMenu);
+    m_statsWatcher->addTriggerCounter(m_toolsMenu);
+    m_statsWatcher->addTriggerCounter(m_helpMenu);
+    m_statsWatcher->addTriggerCounter(m_languageMenu);
+    m_statsWatcher->addTriggerCounter(m_windowMenu);
 }
 
 QApplicationMainWindow::~QApplicationMainWindow()
@@ -154,64 +154,64 @@ QApplicationMainWindow::~QApplicationMainWindow()
 
 void QApplicationMainWindow::createActions()
 {
-    m_signalMapper = new QSignalMapper( this );
-    connect( m_signalMapper, SIGNAL( mapped(int) ), m_extensionHandler , SLOT( request(int) ) );
-    connect( m_signalMapper, SIGNAL( mapped( const QString) ), m_extensionHandler , SLOT( request(const QString) ) );
+    m_signalMapper = new QSignalMapper(this);
+    connect(m_signalMapper, SIGNAL(mapped(int)), m_extensionHandler, SLOT(request(int)));
+    connect(m_signalMapper, SIGNAL(mapped(const QString)), m_extensionHandler, SLOT(request(const QString)));
 
-    m_newAction = new QAction( this );
-    m_newAction->setText( tr("&New") );
-    m_newAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::NewWindow ) );
-    m_newAction->setStatusTip(tr("Open a new working window") );
-    m_newAction->setIcon( QIcon(":/images/new.png") );
-    connect( m_newAction , SIGNAL( triggered() ), SLOT( openBlankWindow() ) );
+    m_newAction = new QAction(this);
+    m_newAction->setText(tr("&New"));
+    m_newAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::NewWindow));
+    m_newAction->setStatusTip(tr("Open a new working window"));
+    m_newAction->setIcon(QIcon(":/images/new.png"));
+    connect(m_newAction, SIGNAL(triggered()), SLOT(openBlankWindow()));
 
-    m_openAction = new QAction( this );
-    m_openAction->setText( tr("&Open file...") );
-    m_openAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenFile ) );
+    m_openAction = new QAction(this);
+    m_openAction->setText(tr("&Open file..."));
+    m_openAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenFile));
     m_openAction->setStatusTip(tr("Open an existing volume file"));
-    m_openAction->setIcon( QIcon(":/images/open.png") );
-    m_signalMapper->setMapping( m_openAction , 1 );
-    connect( m_openAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_openAction->setIcon(QIcon(":/images/open.png"));
+    m_signalMapper->setMapping(m_openAction, 1);
+    connect(m_openAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
-    m_openDirAction = new QAction( this );
-    m_openDirAction->setText( tr("Open files from a directory...") );
-    m_openDirAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenDirectory ) );
+    m_openDirAction = new QAction(this);
+    m_openDirAction->setText(tr("Open files from a directory..."));
+    m_openDirAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDirectory));
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
-    m_openDirAction->setIcon( QIcon(":/images/openDicom.png") );
-    m_signalMapper->setMapping( m_openDirAction , 6 );
-    connect( m_openDirAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_openDirAction->setIcon(QIcon(":/images/openDicom.png"));
+    m_signalMapper->setMapping(m_openDirAction, 6);
+    connect(m_openDirAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
 
-    m_pacsAction = new QAction( this );
+    m_pacsAction = new QAction(this);
 #ifdef STARVIEWER_LITE // el menú "PACS" es dirà "Exams"
-    m_pacsAction->setText(tr("&Exams...") );
-    m_pacsAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenExams ) );
-    m_pacsAction->setStatusTip( tr("Browse exams") );
+    m_pacsAction->setText(tr("&Exams..."));
+    m_pacsAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenExams));
+    m_pacsAction->setStatusTip(tr("Browse exams"));
 #else
-    m_pacsAction->setText(tr("&PACS...") );
-    m_pacsAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenPACS ) );
-    m_pacsAction->setStatusTip( tr("Open PACS Query Screen") );
+    m_pacsAction->setText(tr("&PACS..."));
+    m_pacsAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenPACS));
+    m_pacsAction->setStatusTip(tr("Open PACS Query Screen"));
 
     m_localDatabaseAction = new QAction(this);
-    m_localDatabaseAction->setText( tr("&Local Database Studies...") );
-    m_localDatabaseAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenLocalDatabaseStudies ) );
-    m_localDatabaseAction->setStatusTip( tr("Browse Local Database Studies") );
-    m_localDatabaseAction->setIcon( QIcon(":/images/database.png") );
-    m_signalMapper->setMapping( m_localDatabaseAction , 10 );
-    connect( m_localDatabaseAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_localDatabaseAction->setText(tr("&Local Database Studies..."));
+    m_localDatabaseAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenLocalDatabaseStudies));
+    m_localDatabaseAction->setStatusTip(tr("Browse Local Database Studies"));
+    m_localDatabaseAction->setIcon(QIcon(":/images/database.png"));
+    m_signalMapper->setMapping(m_localDatabaseAction, 10);
+    connect(m_localDatabaseAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 #endif
     // TODO potser almenys per la versió Lite caldria canviar la icona
-    m_pacsAction->setIcon( QIcon(":/images/pacsQuery.png") ); 
-    m_signalMapper->setMapping( m_pacsAction , 7 );
-    connect( m_pacsAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_pacsAction->setIcon(QIcon(":/images/pacsQuery.png")); 
+    m_signalMapper->setMapping(m_pacsAction, 7);
+    connect(m_pacsAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
-    m_openDICOMDIRAction = new QAction( this );
-    m_openDICOMDIRAction->setText(tr("Open DICOMDIR...") );
-    m_openDICOMDIRAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::OpenDICOMDIR ) );
-    m_openDICOMDIRAction->setStatusTip( tr("Open DICOMDIR from CD,DVD,Pendrive or HardDisk") );
-    m_openDICOMDIRAction->setIcon( QIcon(":/images/openDICOMDIR.png") );
-    m_signalMapper->setMapping( m_openDICOMDIRAction , 8 );
-    connect( m_openDICOMDIRAction , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+    m_openDICOMDIRAction = new QAction(this);
+    m_openDICOMDIRAction->setText(tr("Open DICOMDIR..."));
+    m_openDICOMDIRAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDICOMDIR));
+    m_openDICOMDIRAction->setStatusTip(tr("Open DICOMDIR from CD,DVD,Pendrive or HardDisk"));
+    m_openDICOMDIRAction->setIcon(QIcon(":/images/openDICOMDIR.png"));
+    m_signalMapper->setMapping(m_openDICOMDIRAction, 8);
+    connect(m_openDICOMDIRAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
     QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
     foreach(QString name, extensionsMediatorNames)
@@ -221,18 +221,18 @@ void QApplicationMainWindow::createActions()
         if (mediator)
         {
             QAction *action = new QAction(this);
-            action->setText( mediator->getExtensionID().getLabel() );
-            action->setStatusTip( tr("Open the %1 Application").arg( mediator->getExtensionID().getLabel() ));
-            action->setEnabled( false );
-            m_signalMapper->setMapping( action , mediator->getExtensionID().getID() );
-            connect( action , SIGNAL( triggered() ) , m_signalMapper , SLOT( map() ) );
+            action->setText(mediator->getExtensionID().getLabel());
+            action->setStatusTip(tr("Open the %1 Application").arg(mediator->getExtensionID().getLabel()));
+            action->setEnabled(false);
+            m_signalMapper->setMapping(action, mediator->getExtensionID().getID());
+            connect(action, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
             m_actionsList.append(action);
 
             delete mediator;
         }
         else
         {
-            ERROR_LOG( "Error carregant el mediator de " + name );
+            ERROR_LOG("Error carregant el mediator de " + name);
         }
     }
 
@@ -250,54 +250,54 @@ void QApplicationMainWindow::createActions()
     m_moveToDesktopAction->setCheckable(false);
     connect(screenDistribution, SIGNAL(screenClicked(int)), this, SLOT(moveToDesktop(int)));
 
-    m_openUserGuideAction = new QAction( this );
-    m_openUserGuideAction->setText( tr("User guide") );
-    m_openUserGuideAction->setStatusTip( tr("Open User guide") );
-    connect( m_openUserGuideAction , SIGNAL( triggered() ) , this , SLOT( openUserGuide() ) );
+    m_openUserGuideAction = new QAction(this);
+    m_openUserGuideAction->setText(tr("User guide"));
+    m_openUserGuideAction->setStatusTip(tr("Open User guide"));
+    connect(m_openUserGuideAction, SIGNAL(triggered()), this, SLOT(openUserGuide()));
 
-    m_openQuickStartGuideAction = new QAction( this );
-    m_openQuickStartGuideAction->setText( tr("Quick Start guide") );
-    m_openQuickStartGuideAction->setStatusTip( tr("Open Quick Start guide") );
-    connect( m_openQuickStartGuideAction , SIGNAL( triggered() ) , this , SLOT( openQuickStartGuide() ) );
+    m_openQuickStartGuideAction = new QAction(this);
+    m_openQuickStartGuideAction->setText(tr("Quick Start guide"));
+    m_openQuickStartGuideAction->setStatusTip(tr("Open Quick Start guide"));
+    connect(m_openQuickStartGuideAction, SIGNAL(triggered()), this, SLOT(openQuickStartGuide()));
 
-    m_openShortcutsGuideAction = new QAction( this );
-    m_openShortcutsGuideAction->setText( tr("Shortcuts guide") );
-    m_openShortcutsGuideAction->setStatusTip( tr("Open Shortcuts guide") );
-    connect( m_openShortcutsGuideAction , SIGNAL( triggered() ) , this , SLOT( openShortcutsGuide() ) );
+    m_openShortcutsGuideAction = new QAction(this);
+    m_openShortcutsGuideAction->setText(tr("Shortcuts guide"));
+    m_openShortcutsGuideAction->setStatusTip(tr("Open Shortcuts guide"));
+    connect(m_openShortcutsGuideAction, SIGNAL(triggered()), this, SLOT(openShortcutsGuide()));
 
-    m_logViewerAction = new QAction( this );
-    m_logViewerAction->setText( tr("Show log file") );
-    m_logViewerAction->setStatusTip( tr("Show log file") );
-    m_logViewerAction->setIcon( QIcon(":/images/logs.png") );
-    connect( m_logViewerAction , SIGNAL( triggered() ) , m_logViewer , SLOT( updateData() ) );
-    connect( m_logViewerAction , SIGNAL( triggered() ) , m_logViewer , SLOT( exec() ) );
+    m_logViewerAction = new QAction(this);
+    m_logViewerAction->setText(tr("Show log file"));
+    m_logViewerAction->setStatusTip(tr("Show log file"));
+    m_logViewerAction->setIcon(QIcon(":/images/logs.png"));
+    connect(m_logViewerAction, SIGNAL(triggered()), m_logViewer, SLOT(updateData()));
+    connect(m_logViewerAction, SIGNAL(triggered()), m_logViewer, SLOT(exec()));
 
 
-    m_aboutAction = new QAction( this );
-    m_aboutAction->setText(tr("&About") );
+    m_aboutAction = new QAction(this);
+    m_aboutAction->setText(tr("&About"));
     m_aboutAction->setStatusTip(tr("Show the application's About box"));
-    m_aboutAction->setIcon( QIcon(":/images/info.png"));
+    m_aboutAction->setIcon(QIcon(":/images/info.png"));
     connect(m_aboutAction, SIGNAL(triggered()), SLOT(about()));
 
-    m_closeAction = new QAction( this );
-    m_closeAction->setText( tr("&Close") );
-    m_closeAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CloseCurrentExtension ) );
+    m_closeAction = new QAction(this);
+    m_closeAction->setText(tr("&Close"));
+    m_closeAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::CloseCurrentExtension));
     m_closeAction->setStatusTip(tr("Close the current extension page"));
-    m_closeAction->setIcon( QIcon(":/images/fileclose.png"));
-    connect( m_closeAction, SIGNAL( triggered() ), m_extensionWorkspace , SLOT( closeCurrentApplication() ) );
+    m_closeAction->setIcon(QIcon(":/images/fileclose.png"));
+    connect(m_closeAction, SIGNAL(triggered()), m_extensionWorkspace, SLOT(closeCurrentApplication()));
 
-    m_exitAction = new QAction( this );
-    m_exitAction->setText( tr("E&xit") );
-    m_exitAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::CloseApplication ) );
+    m_exitAction = new QAction(this);
+    m_exitAction->setText(tr("E&xit"));
+    m_exitAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::CloseApplication));
     m_exitAction->setStatusTip(tr("Exit the application"));
-    m_exitAction->setIcon( QIcon(":/images/exit.png") );
+    m_exitAction->setIcon(QIcon(":/images/exit.png"));
     connect(m_exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
 
     m_configurationAction = new QAction(this);
     m_configurationAction->setText(tr("&Configuration..."));
-    m_configurationAction->setShortcuts( ShortcutManager::getShortcuts( Shortcuts::Preferences ) );
+    m_configurationAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::Preferences));
     m_configurationAction->setStatusTip(tr("Modify %1 configuration").arg(ApplicationNameString));
-    m_configurationAction->setIcon( QIcon(":/images/preferences.png") );
+    m_configurationAction->setIcon(QIcon(":/images/preferences.png"));
     connect(m_configurationAction, SIGNAL(triggered()), SLOT(showConfigurationDialog()));
 }
 
@@ -323,25 +323,25 @@ void QApplicationMainWindow::showConfigurationDialog()
 void QApplicationMainWindow::createMenus()
 {
     // Menú d'arxiu
-    m_fileMenu = menuBar()->addMenu( tr("&File") );
-    m_fileMenu->addAction( m_newAction );
+    m_fileMenu = menuBar()->addMenu(tr("&File"));
+    m_fileMenu->addAction(m_newAction);
 #ifndef STARVIEWER_LITE
-    m_fileMenu->addAction( m_localDatabaseAction );
+    m_fileMenu->addAction(m_localDatabaseAction);
 #endif
-    m_fileMenu->addAction( m_pacsAction );
-    m_fileMenu->addAction( m_openDICOMDIRAction );
+    m_fileMenu->addAction(m_pacsAction);
+    m_fileMenu->addAction(m_openDICOMDIRAction);
     m_fileMenu->addSeparator();
-    m_fileMenu->addAction( m_openAction );
-    m_fileMenu->addAction( m_openDirAction );
+    m_fileMenu->addAction(m_openAction);
+    m_fileMenu->addAction(m_openDirAction);
     m_fileMenu->addSeparator();
-    m_fileMenu->addAction( m_closeAction );
-    m_fileMenu->addAction( m_exitAction );
+    m_fileMenu->addAction(m_closeAction);
+    m_fileMenu->addAction(m_exitAction);
 
 #ifdef STARVIEWER_LITE
     //no afegim els menús de visualització
 #else
     // accions relacionades amb la visualització
-    m_visualizationMenu = menuBar()->addMenu( tr("&Visualization") );
+    m_visualizationMenu = menuBar()->addMenu(tr("&Visualization"));
 
     foreach(QAction *action, m_actionsList)
     {
@@ -350,13 +350,13 @@ void QApplicationMainWindow::createMenus()
 #endif
 
     // Menú tools
-    m_toolsMenu = menuBar()->addMenu( tr("&Tools") );
-    m_languageMenu = m_toolsMenu->addMenu( tr("&Language") );
+    m_toolsMenu = menuBar()->addMenu(tr("&Tools"));
+    m_languageMenu = m_toolsMenu->addMenu(tr("&Language"));
     createLanguageMenu();
     m_toolsMenu->addAction(m_configurationAction);
 
     // Menú 'window'
-    m_windowMenu = menuBar()->addMenu( tr("&Window") );
+    m_windowMenu = menuBar()->addMenu(tr("&Window"));
     m_windowMenu->addAction(m_maximizeAction);
     m_moveWindowToDesktopMenu = m_windowMenu->addMenu(tr("Move To Screen"));
     m_moveWindowToDesktopMenu->addAction(m_moveToDesktopAction);
@@ -364,25 +364,25 @@ void QApplicationMainWindow::createMenus()
     menuBar()->addSeparator();
 
     // menú d'ajuda i suport
-    m_helpMenu = menuBar()->addMenu( tr("&Help") );
-    m_helpMenu->addAction( m_openUserGuideAction );
-    m_helpMenu->addAction( m_openQuickStartGuideAction );
-    m_helpMenu->addAction( m_openShortcutsGuideAction );
+    m_helpMenu = menuBar()->addMenu(tr("&Help"));
+    m_helpMenu->addAction(m_openUserGuideAction);
+    m_helpMenu->addAction(m_openQuickStartGuideAction);
+    m_helpMenu->addAction(m_openShortcutsGuideAction);
     m_helpMenu->addSeparator();
-    m_helpMenu->addAction( m_logViewerAction );
+    m_helpMenu->addAction(m_logViewerAction);
     m_helpMenu->addSeparator();
-    m_helpMenu->addAction( m_aboutAction );
+    m_helpMenu->addAction(m_aboutAction);
 }
 
 void QApplicationMainWindow::createLanguageMenu()
 {
     QMap<QString, QString> languages;
-    languages.insert("ca_ES", tr("Catalan") );
-    languages.insert("es_ES", tr("Spanish") );
-    languages.insert("en_GB", tr("English") );
+    languages.insert("ca_ES", tr("Catalan"));
+    languages.insert("es_ES", tr("Spanish"));
+    languages.insert("en_GB", tr("English"));
 
-    QSignalMapper* signalMapper = new QSignalMapper( this );
-    connect( signalMapper, SIGNAL( mapped(QString) ), this , SLOT( switchToLanguage(QString) ) );
+    QSignalMapper* signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(switchToLanguage(QString)));
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
@@ -393,7 +393,7 @@ void QApplicationMainWindow::createLanguageMenu()
 
         QAction *action = createLanguageAction(i.value(), i.key());
         signalMapper->setMapping(action, i.key());
-        connect(action, SIGNAL( triggered() ), signalMapper, SLOT( map() ));
+        connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
 
         actionGroup->addAction(action);
         m_languageMenu->addAction(action);
@@ -403,13 +403,13 @@ void QApplicationMainWindow::createLanguageMenu()
 QAction *QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
-    QString defaultLocale = settings.getValue( CoreSettings::LanguageLocale ).toString();
+    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
 
     QAction *action = new QAction(this);
     action->setText(language);
-    action->setStatusTip( tr("Switch to %1 Language").arg(language) );
+    action->setStatusTip(tr("Switch to %1 Language").arg(language));
     action->setCheckable(true);
-    action->setChecked( defaultLocale == locale );
+    action->setChecked(defaultLocale == locale);
 
     return action;
 }
@@ -419,7 +419,7 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
     Settings settings;
     settings.setValue(CoreSettings::LanguageLocale, locale);
 
-    QMessageBox::information( this , tr("Language Switch") , tr("The changes will take effect the next time you startup the application") );
+    QMessageBox::information(this, tr("Language Switch"), tr("The changes will take effect the next time you startup the application"));
 }
 
 void QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
@@ -431,13 +431,13 @@ void QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
 
 void QApplicationMainWindow::openBlankWindow()
 {
-    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow( 0 );
+    QApplicationMainWindow *newMainWindow = new QApplicationMainWindow(0);
     newMainWindow->show();
 }
 
 void QApplicationMainWindow::setPatient(Patient *patient)
 {
-    if( !patient ) // si les dades de pacient són nules, no fem res
+    if (!patient) // si les dades de pacient són nules, no fem res
     {
         DEBUG_LOG("NULL Patient, maybe creating a blank new window");
         return;
@@ -455,7 +455,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
     m_patient = patient;
     connectPatientVolumesToNotifier(patient);
 
-    this->setWindowTitle( m_patient->getID() + " : " + m_patient->getFullName() );
+    this->setWindowTitle(m_patient->getID() + " : " + m_patient->getFullName());
     enableExtensions();
     m_extensionHandler->getContext().setPatient(patient);
     m_extensionHandler->openDefaultExtension();
@@ -471,7 +471,7 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
     unsigned int count = 0;
     foreach(QWidget *widget, QApplication::topLevelWidgets())
     {
-        if( qobject_cast<QApplicationMainWindow *>(widget) )
+        if (qobject_cast<QApplicationMainWindow *>(widget))
         {
             ++count;
         }
@@ -482,7 +482,7 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 
 QApplicationMainWindow* QApplicationMainWindow::getActiveApplicationMainWindow()
 {
-    return qobject_cast<QApplicationMainWindow*>( QApplication::activeWindow() );
+    return qobject_cast<QApplicationMainWindow*>(QApplication::activeWindow());
 }
 
 ExtensionWorkspace* QApplicationMainWindow::getExtensionWorkspace()
@@ -518,8 +518,8 @@ void QApplicationMainWindow::about()
     QString aboutMessage = tr("<h2>%1</h2>"
         "<p>Copyright &copy; 2005-2009 Graphics & Imaging Laboratory (GILab), Girona" 
         "<p align='justify'>%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI,"
-        " CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is "
-        "fully compliant with the DICOM standard for image comunication and image file formats." ).arg(ApplicationNameString);
+        " CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is "
+        "fully compliant with the DICOM standard for image comunication and image file formats.").arg(ApplicationNameString);
     // TODO repassar els textos de l'about
 #ifdef STARVIEWER_LITE
     aboutMessage += tr("<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
@@ -529,23 +529,22 @@ void QApplicationMainWindow::about()
                "transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, "
                "STORE SCU - Service Class User, and Query/Retrieve)."
                "<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
-               " multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and"
+               " multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and"
                " Maximum Intensity Projection(MIP)."
                "<p align='justify'>%1 is at the same time a DICOM PACS workstation for medical imaging and an image processing"
                " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.").arg(ApplicationNameString);
 #endif
 
-    aboutMessage += tr("<p>Version: %1 </p>").arg( StarviewerVersionString );
+    aboutMessage += tr("<p>Version: %1 </p>").arg(StarviewerVersionString);
     aboutMessage += tr("<p>Support email: <a href=\"mailto:%1\">%2</a></p>").arg(OrganizationEmailString, OrganizationEmailString);
     aboutMessage += tr("<p>Web: <a href=\"%1\">%2</a></p>").arg(OrganizationWebURL, OrganizationWebURL);
 
-    QMessageBox::about(this, tr("About %1").arg(ApplicationNameString), aboutMessage );        
+    QMessageBox::about(this, tr("About %1").arg(ApplicationNameString), aboutMessage);        
 }
 
 void QApplicationMainWindow::writeSettings()
 {
     Settings settings;
-
     settings.saveGeometry(InterfaceSettings::ApplicationMainWindowGeometry, this);
 }
 
@@ -553,7 +552,7 @@ void QApplicationMainWindow::enableExtensions()
 {
     foreach(QAction *action, m_actionsList)
     {
-        action->setEnabled( true );
+        action->setEnabled(true);
     }
 }
 
@@ -583,28 +582,31 @@ void QApplicationMainWindow::showBetaVersionDialog()
                             "properly.</p>"
                             "<p align='justify'>If you want to help us to improve our software, please, report any found bug or "
                             "any other feature request you have to us.</p>"
-                            "<h3>We really appreciate that you give us your feedback!</h3>").arg(ApplicationNameString) );
+                            "<h3>We really appreciate that you give us your feedback!</h3>").arg(ApplicationNameString));
 }
 
 void QApplicationMainWindow::readSettings()
 {
     Settings settings;
-
-    if ( !settings.contains(InterfaceSettings::ApplicationMainWindowGeometry) )
+    if (!settings.contains(InterfaceSettings::ApplicationMainWindowGeometry))
+    {
         this->showMaximized();
+    }
     else
+    {
         settings.restoreGeometry(InterfaceSettings::ApplicationMainWindowGeometry, this);
+    }
 }
 
-void QApplicationMainWindow::connectPatientVolumesToNotifier( Patient *patient )
+void QApplicationMainWindow::connectPatientVolumesToNotifier(Patient *patient)
 {
-    foreach( Study *study, patient->getStudies() )
+    foreach (Study *study, patient->getStudies())
     {
-        foreach( Series *series, study->getSeries() )
+        foreach (Series *series, study->getSeries())
         {
-            foreach( Volume *volume, series->getVolumesList() )
+            foreach (Volume *volume, series->getVolumesList())
             {
-                connect( volume, SIGNAL(progress(int)), SLOT( updateVolumeLoadProgressNotification(int) ) );
+                connect(volume, SIGNAL(progress(int)), SLOT(updateVolumeLoadProgressNotification(int)));
             }
         }
     }
@@ -637,7 +639,6 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
 void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber)
 {
     Settings settings;
-
     if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
     {
         QStarviewerSAPWrapper().sendRequestToLocalStarviewer(accessionNumber);
