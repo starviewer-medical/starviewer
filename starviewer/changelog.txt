@@ -15,6 +15,8 @@ Noves funcionalitats:
 Minor:
 
  - Es millora el temps d'arrancada d'Starviewer. (Es treu la comprovació d'integritat de la base de dades)
+ - Quan apliquem un hanging protocol s'eliminen tots els virsors anteriors creats i es creen tots els necessaris de nou
+ - Millora en la gestió de recursos quan es creen visors en l'extensió 2D
 
 
 Bugfix:
