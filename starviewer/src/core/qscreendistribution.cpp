@@ -139,7 +139,6 @@ void QScreenDistribution::computeSizesAndPositions()
 {
     QDesktopWidget *desktop = QApplication::desktop();   
 
-    int mainScreen = 0;
     int MinimumX = 0;
     int MinimumY = 0;
     int MaximumX = 0;
@@ -170,11 +169,6 @@ void QScreenDistribution::computeSizesAndPositions()
         if (bottomRight.y() > MaximumY)
         {
             MaximumY = bottomRight.y();
-        }
-
-        if (i == desktop->primaryScreen())
-        {
-            mainScreen = i;
         }
     }
 
