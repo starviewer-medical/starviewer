@@ -48,8 +48,8 @@ protected:
 
 private:
     /// Calcula el tamany de la finestra i calcula les posicions de les icones de les finestres
-    /// per que quedin centrades i escalades correctament. Els paràmetres són de sortida
-    void computeSizesAndPositions(QList<QRect> *screens, QList<QPoint> *centers);
+    /// per que quedin centrades i escalades correctament.
+    void computeSizesAndPositions();
 
 private:
     /// Llista de rectangles que representen monitors, amb posicións preparades per dibuixar.

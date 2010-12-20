@@ -85,12 +85,10 @@ void QScreenDistribution::mousePressEvent(QMouseEvent *event)
 
 void QScreenDistribution::paintEvent(QPaintEvent *event)
 {
-    QList<QPoint> centers;
     m_screens.clear();
 
-    // Calcul de les posicions on s'haurà de pintar les diferents icones de finestres. Es passen
-    // les dades com a punters, així es poden emplenar els vectors dins el mètode.
-    computeSizesAndPositions(&m_screens, &centers);
+    // Calcul de les posicions on s'haurà de pintar les diferents icones de finestres.
+    computeSizesAndPositions();
 
     QPainter painter(this);
     QPen pen = QPen(Qt::blue, 2, Qt::SolidLine);
@@ -102,9 +100,6 @@ void QScreenDistribution::paintEvent(QPaintEvent *event)
         int topLeftY = m_screens.at(i).top();
         int bottomRightX = m_screens.at(i).right();
         int bottomRightY = m_screens.at(i).bottom();
-        QPoint center = centers.at(i);
-        int centerX = center.x();
-        int centerY = center.y();
         
         // Pintar el requadre de la pantalla numero i
         painter.drawLine(topLeftX, topLeftY, bottomRightX, topLeftY);
@@ -135,16 +130,12 @@ void QScreenDistribution::paintEvent(QPaintEvent *event)
             painter.setPen(pen);
         }
         
-        //Pintar el numero
-        QPoint point(centerX - 20, centerY - 7);
-        QSize size(40, 40);
-        QRectF rectangle(point, size); 
-        painter.drawText(rectangle, Qt::AlignHCenter, QString::number(i + 1));
+        painter.drawText(m_screens.at(i), Qt::AlignCenter, QString::number(i + 1));
     }
     event->accept();
 }
 
-void QScreenDistribution::computeSizesAndPositions(QList<QRect> *screens, QList<QPoint> *centers)
+void QScreenDistribution::computeSizesAndPositions()
 {
     QDesktopWidget *desktop = QApplication::desktop();   
 
@@ -161,8 +152,7 @@ void QScreenDistribution::computeSizesAndPositions(QList<QRect> *screens, QList<
         QPoint topLeft = desktop->screenGeometry(i).topLeft();
         QPoint bottomRight = desktop->screenGeometry(i).bottomRight();
 
-        screens->append(QRect(topLeft, bottomRight));
-        centers->append((topLeft + bottomRight) / 2);
+        m_screens.append(QRect(topLeft, bottomRight));
 
         // I calculem el tamany màxim que ocupa tot el conjunt de pantalles
         if (topLeft.x() < MinimumX)
@@ -213,19 +203,14 @@ void QScreenDistribution::computeSizesAndPositions(QList<QRect> *screens, QList<
     }
 
     // Adaptem les posicións a les posicions de dibuix escalades i centrades
-    for (int i = 0; i < screens->count(); i++)
+    for (int i = 0; i < m_screens.count(); i++)
     {
         // Requadre
-        int left = screens->at(i).left() / divisor + offsetX;
-        int top = screens->at(i).top() / divisor + offsetY;
-        int right = screens->at(i).right() / divisor + offsetX;
-        int bottom = screens->at(i).bottom() / divisor + offsetY;
-        screens->replace(i, QRect(QPoint(left, top), QPoint(right, bottom)));
-        
-        // Center
-        int x = centers->at(i).x() / divisor + offsetX;
-        int y = centers->at(i).y() / divisor + offsetY;
-        centers->replace(i, QPoint(x, y));
+        int left = m_screens.at(i).left() / divisor + offsetX;
+        int top = m_screens.at(i).top() / divisor + offsetY;
+        int right = m_screens.at(i).right() / divisor + offsetX;
+        int bottom = m_screens.at(i).bottom() / divisor + offsetY;
+        m_screens.replace(i, QRect(QPoint(left, top), QPoint(right, bottom)));
     }
 }
 
