@@ -33,7 +33,7 @@ QPreviousStudiesWidget::QPreviousStudiesWidget(QWidget *parent)
     m_numberOfDownloadingStudies = 0;
 
     m_noPreviousStudiesLabel = new QLabel(this);
-    m_noPreviousStudiesLabel->setText(tr("No previous studies."));
+    m_noPreviousStudiesLabel->setText(tr("No related studies found."));
 
     initializeLookingForStudiesWidget();
     initializeTree();
@@ -160,7 +160,7 @@ void QPreviousStudiesWidget::initializeLookingForStudiesWidget()
     operationAnimation->start();
 
     horizontalLayout->addWidget(downloadigAnimation);
-    horizontalLayout->addWidget(new QLabel(tr("Looking for previous studies...")));
+    horizontalLayout->addWidget(new QLabel(tr("Looking for related studies...")));
 
 }
 
