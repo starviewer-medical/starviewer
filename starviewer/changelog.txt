@@ -12,6 +12,8 @@ Noves funcionalitats:
  - Es guarda per quin camp i en quin ordre s'ha fet la ordenació del estudis a la pantalla de cerca, de manera que quan es torni a engegar Starviewer
    i es facin cerques els estudis apareixeran  ordenats pel mateix criteri que la última vegada.
  - S'afegeix el format TIFF com a format d'exportació de captures de pantalla
+ - S'afegeix la guia ràpida i l'esquema de shortcuts al menú Ajuda.
+ - S'afegeixen nous hanging protocols per mamografia, DX, ...
 
 Minor:
 
