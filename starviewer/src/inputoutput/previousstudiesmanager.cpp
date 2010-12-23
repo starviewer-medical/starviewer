@@ -16,6 +16,7 @@
 #include "pacsdevicemanager.h"
 #include "logging.h"
 #include "querypacsjob.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
 
@@ -23,6 +24,9 @@ PreviousStudiesManager::PreviousStudiesManager()
 {
     m_pacsManager = new PacsManager();
     m_studyInstanceUIDToFindPrevious = "invalid";
+
+    Settings settings;
+    m_searchRelatedStudiesByName = settings.getValue(InputOutputSettings::SearchRelatedStudiesByName).toBool();
 }
 
 PreviousStudiesManager::~PreviousStudiesManager()
@@ -51,7 +55,10 @@ void PreviousStudiesManager::queryStudies(Patient *patient)
         foreach(const PacsDevice &pacsDevice, pacsDeviceListToQuery)
         {
             enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskID, QueryPacsJob::study));
-            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskName, QueryPacsJob::study));
+            if (m_searchRelatedStudiesByName)
+            {
+                enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskName, QueryPacsJob::study));
+            }
         }
     }
     else
@@ -79,7 +86,10 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
         foreach(const PacsDevice &pacsDevice, pacsDeviceListToQuery)
         {
             enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, getPreviousStudyDicomMaskPatientID(study), QueryPacsJob::study));
-            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, getPreviousStudyDicomMaskPatientName(study), QueryPacsJob::study));
+            if (m_searchRelatedStudiesByName)
+            {
+                enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, getPreviousStudyDicomMaskPatientName(study), QueryPacsJob::study));
+            }
         }
     }
     else 

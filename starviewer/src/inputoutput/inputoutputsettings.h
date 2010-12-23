@@ -94,6 +94,9 @@ public:
     //Columna i ordre d'ordenació de la QOperationStateScreen
     static const QString OperationStateListSortByColumn;
     static const QString OperationStateListSortOrder;
+    
+    //Boolea per saber si s'ha de cercar previes a partir del nom del pacient.
+    static const QString SearchRelatedStudiesByName;
 };
 
 } // end namespace udg 

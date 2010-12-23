@@ -75,6 +75,8 @@ const QString InputOutputSettings::InstitutionCountry(InstitutionInformationBase
 const QString InputOutputSettings::InstitutionPhoneNumber(InstitutionInformationBase + "InstitutionPhoneNumber");
 const QString InputOutputSettings::InstitutionEmail(InstitutionInformationBase + "InstitutionEmail");
 
+const QString InputOutputSettings::SearchRelatedStudiesByName("SearchRelatedStudiesByName");
+
 InputOutputSettings::InputOutputSettings()
 {
 }
@@ -140,7 +142,10 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(DICOMDIRStudyListSortByColumn, QStudyTreeWidget::ObjectName);
     settingsRegistry->addSetting(DICOMDIRStudyListSortOrder, Qt::AscendingOrder);
     settingsRegistry->addSetting(OperationStateListSortByColumn, QOperationStateScreen::Date);
-    settingsRegistry->addSetting(OperationStateListSortOrder, Qt::AscendingOrder);}
+    settingsRegistry->addSetting(OperationStateListSortOrder, Qt::AscendingOrder);
+
+    settingsRegistry->addSetting(SearchRelatedStudiesByName, false);
+}
 
 } // end namespace udg 
 
