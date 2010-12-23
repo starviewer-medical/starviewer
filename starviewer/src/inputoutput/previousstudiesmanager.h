@@ -134,6 +134,8 @@ private:
     QStringList m_pacsDeviceIDErrorEmited;
     ///Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
     QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
+    /// Boolea per saber si s'ha de cercar previes a partir del nom del pacient.
+    bool m_searchRelatedStudiesByName;
 };
 
 }
