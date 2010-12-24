@@ -917,7 +917,6 @@ QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient(const
         dirCosinesZ[i] = imageOrientationPatient[6+i];
     }
     QString patientOrientationString;
-    // \TODO potser el delimitador hauria de ser '\' en comptes de ','
     patientOrientationString = this->mapDirectionCosinesToOrientationString(dirCosinesX);
     patientOrientationString += "\\";
     patientOrientationString += this->mapDirectionCosinesToOrientationString(dirCosinesY);
