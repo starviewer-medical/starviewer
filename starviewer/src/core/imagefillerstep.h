@@ -63,7 +63,8 @@ private:
     void imageOrientationPatientStringToDoubleVector(const QString &imageOrientationPatientString, double imageOrientationPatient[6]);
 
     /// Transforma el vector de doubles amb la informació d'ImageOrientationPatient a l'string equivalent a PatientOrientation
-    QString makePatientOrientationFromImageOrientationPatient(const double imageOrientationPatient[6]);
+    /// El vector imageOrientationPatient tindrà 3 vectors de 3 dimensions (row, column i normal[producte vectorial dels anteriors])
+    QString makePatientOrientationFromImageOrientationPatient(const double imageOrientationPatient[9]);
     
     /// Calcula el pixel spacing i se l'assigna a l'image donada en cas de que aquest es pugui calcular
     /// @param image Image a la que li assignarem el pixel spacing

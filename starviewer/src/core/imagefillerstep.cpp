@@ -292,7 +292,8 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             }
             else  // Si no tenim aquest valor, el calculem a partir dels direction cosines
             {
-                image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(orientation));
+                // Li passem el vector amb tots els direction cosines (row, column i normal) perquè pugui calcular correctament totes les etiquetes
+                image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient()));
             }
         }
         else
@@ -576,8 +577,8 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                     double orientation[6];
                     imageOrientationPatientStringToDoubleVector(dicomValue->getValueAsQString(),orientation);
                     image->setImageOrientationPatient(orientation);
-                    // Calculem el "Patient Orientation" a partir del vector d'orientació
-                    image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(orientation));
+                    // Li passem el vector amb tots els direction cosines (row, column i normal) perquè pugui calcular correctament totes les etiquetes
+                    image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient()));
                 }
             }
         }
@@ -906,7 +907,7 @@ void ImageFillerStep::imageOrientationPatientStringToDoubleVector(const QString 
     }
 }
 
-QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient(const double imageOrientationPatient[6])
+QString ImageFillerStep::makePatientOrientationFromImageOrientationPatient(const double imageOrientationPatient[9])
 {
     double dirCosinesX[3], dirCosinesY[3], dirCosinesZ[3];
     for (int i = 0; i < 3; i++)
