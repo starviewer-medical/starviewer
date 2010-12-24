@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangingProtocol name="BreastBiopsy">
+<hangingProtocolName>BAV</hangingProtocolName>
+<numberScreens>1</numberScreens>
+<strictness>yes</strictness>
+<protocol>MG</protocol>
+<priority>10</priority>
+<restriction identifier="1">
+<usageFlag>MATCH</usageFlag> 
+<selectorAttribute>StudyDescription</selectorAttribute> 
+<valueRepresentation>Estereot</valueRepresentation> 
+</restriction>
+<imageSet identifier="1">
+<restriction>1</restriction>
+</imageSet>
+<displaySet identifier="1">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\1.0\0.5\0.5</position>
+<imageNumber>0</imageNumber>
+<toolActivation>synchronization</toolActivation>
+</displaySet>
+<displaySet identifier="2">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\1.0\1.0\0.5</position>
+<imageNumber>1</imageNumber>
+<toolActivation>synchronization</toolActivation>
+</displaySet>
+<displaySet identifier="3">
+<imageSetNumber>1</imageSetNumber>
+<position>0.0\0.5\0.5\0.0</position>
+<imageNumber>2</imageNumber>
+<toolActivation>synchronization</toolActivation>
+</displaySet>
+<displaySet identifier="4">
+<imageSetNumber>1</imageSetNumber>
+<position>0.5\0.5\1.0\0.0</position>
+<imageNumber>3</imageNumber>
+<toolActivation>synchronization</toolActivation>
+</displaySet>
+</hangingProtocol>
