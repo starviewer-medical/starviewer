@@ -229,7 +229,7 @@ QVector<QString> Q2DViewer::getCurrentDisplayedImageOrientationLabels() const
     // Ara caldrà posar, en funció de les rotacions, flips i vista, les etiquetes en l'ordre adequat
     if (ok)
     {
-        int index = 4+m_rotateFactor;
+        int index = 4 + m_rotateFactor;
         // 0:Esquerra, 1:A dalt, 2:Dreta, 3:Abaix
         if (m_lastView == Axial)
         {
@@ -1570,7 +1570,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
     }
     else
     {
-        this->updateSliceAnnotation(value+1, m_maxSliceValue+1);
+        this->updateSliceAnnotation(value + 1, m_maxSliceValue + 1);
     }
     // Si aquestes anotacions estan activades, llavors li afegim la informació de la hora de la sèrie i la imatge
     if (m_enabledAnnotations & Q2DViewer::PatientInformationAnnotation)
@@ -1582,7 +1582,7 @@ void Q2DViewer::updateSliceAnnotationInformation()
             Image *currentImage = getCurrentDisplayedImage();
             if (currentImage)
             {
-                QString imageTime = "\n"+currentImage->getFormattedImageTime();
+                QString imageTime = "\n" + currentImage->getFormattedImageTime();
                 if (imageTime.isEmpty())
                 {
                     imageTime = "--:--";
@@ -2156,7 +2156,7 @@ void Q2DViewer::rotate(int times)
         times = -times;
     }
 
-    m_rotateFactor = (m_rotateFactor+times) % 4;
+    m_rotateFactor = (m_rotateFactor + times) % 4;
 }
 
 void Q2DViewer::fitImageIntoViewport()
@@ -2170,12 +2170,12 @@ void Q2DViewer::fitImageIntoViewport()
     int xIndex, yIndex, zIndex;
     Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_lastView);
 
-    topCorner[xIndex] = bounds[xIndex*2];
-    topCorner[yIndex] = bounds[yIndex*2];
+    topCorner[xIndex] = bounds[xIndex * 2];
+    topCorner[yIndex] = bounds[yIndex * 2];
     topCorner[zIndex] = 0.0;
 
-    bottomCorner[xIndex] = bounds[xIndex*2+1];
-    bottomCorner[yIndex] = bounds[yIndex*2+1];
+    bottomCorner[xIndex] = bounds[xIndex * 2 + 1];
+    bottomCorner[yIndex] = bounds[yIndex * 2 + 1];
     bottomCorner[zIndex] = 0.0;
 
     // Apliquem el zoom 
