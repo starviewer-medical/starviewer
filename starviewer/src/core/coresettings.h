@@ -55,6 +55,8 @@ public:
     static const QString NeverShowNewVersionReleaseNotes;
     /// No permetre que es comprobin versions online
     static const QString DontCheckNewVersionsOnline;
+    /// Especifica les excepcions en que no ha s'ha d'aplicar la auto orientació en mamografies.
+    static const QString MammographyAutoOrientationExceptions;
 };
 
 } // end namespace udg 

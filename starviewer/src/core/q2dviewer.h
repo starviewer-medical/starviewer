@@ -471,6 +471,9 @@ private:
     /// Posició a on s'ha d'alinear la imatge (dreta, esquerre o centrat )
     AlignPosition m_alignPosition;
 
+    /// Llista d'excepcions per les quals no s'ha d'aplicar una orientació concreta per estudis de mamografia.
+    QStringList m_mammographyAutoOrientationExceptions;
+
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
 };  //  End namespace udg

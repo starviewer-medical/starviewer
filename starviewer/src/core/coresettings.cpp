@@ -4,7 +4,7 @@
 #include "starviewerapplication.h"
 #include <QDir>
 #include <QLocale> // pel LanguageLocale
-
+#include <QStringList>
 namespace udg {
 
 // Definició de les claus
@@ -58,6 +58,8 @@ const QString CoreSettings::CheckVersionInterval("CheckVersionInterval");
 const QString CoreSettings::NeverShowNewVersionReleaseNotes("NeverShowNewVersionReleaseNotes");
 const QString CoreSettings::DontCheckNewVersionsOnline("DontCheckNewVersionsOnline");
 
+const QString CoreSettings::MammographyAutoOrientationExceptions("MammographyAutoOrientationExceptions");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -83,6 +85,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(LastVersionCheckedDate, "");
     settingsRegistry->addSetting(CheckVersionInterval, "15");
     settingsRegistry->addSetting(DontCheckNewVersionsOnline, false);
+    settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
 }
 
 } // end namespace udg 
