@@ -52,9 +52,9 @@ void Image::setImageOrientationPatient(double orientation[6])
 {
     memcpy(m_imageOrientationPatient, orientation, 6 * sizeof(double));
 
-    // calculem la Z
+    // Calculem la Z
     double normal[3];
-    MathTools::crossProduct(&orientation[0] , &orientation[3], normal);
+    MathTools::crossProduct(&orientation[0], &orientation[3], normal);
 
     memcpy(&m_imageOrientationPatient[6], normal, 3 * sizeof(double));
 }
@@ -64,9 +64,9 @@ void Image::setImageOrientationPatient(double xVector[3], double yVector[3])
     memcpy(m_imageOrientationPatient, xVector, 3 * sizeof(double));
     memcpy(&m_imageOrientationPatient[3], yVector, 3 * sizeof(double));
 
-    // calculem la Z
+    // Calculem la Z
     double normal[3];
-    MathTools::crossProduct(xVector , yVector, normal);
+    MathTools::crossProduct(xVector, yVector, normal);
 
     memcpy(&m_imageOrientationPatient[6], normal, 3 * sizeof(double));
 }
@@ -390,7 +390,7 @@ int Image::getOrderNumberInVolume() const
 
 void Image::setImageTime(const QString &imageTime)
 {
-    m_imageTime = imageTime ;
+    m_imageTime = imageTime;
 }
 
 QString Image::getImageTime() const
@@ -494,7 +494,7 @@ QString Image::getProjectionLabelFromPlaneOrientation(const QString &orientation
     QString label;
     
     QStringList axisList = orientation.split("\\");
-    // comprovem si tenim les annotacions esperades
+    // Comprovem si tenim les annotacions esperades
     if (axisList.count() >= 2)
     {
         QString rowAxis = axisList.at(0).trimmed();
