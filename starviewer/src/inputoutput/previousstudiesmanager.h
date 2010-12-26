@@ -84,6 +84,8 @@ private:
     *en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
     *com ja el tindrem aquesta llista ja no en farem signal*/
     QStringList m_pacsDeviceIDErrorEmited;
+    /// Boolea per saber si s'ha de cercar previes a partir del nom del pacient.
+    bool m_searchRelatedStudiesByName;
 
     ///Crea les connexions
     void createConnections();

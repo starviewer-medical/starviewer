@@ -39,6 +39,8 @@ public:
     static const QString GradientRadiusForHighQualityObscurances;
 
     static const QString LanguageLocale;
+    /// Especifica les excepcions en que no ha s'ha d'aplicar la auto orientació en mamografies.
+    static const QString MammographyAutoOrientationExceptions;
 };
 
 } // end namespace udg 

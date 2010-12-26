@@ -406,6 +406,12 @@ bool HangingProtocolManager::isValidSerie( Series *serie, HangingProtocolImageSe
             bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
             valid = contains ^ match;
         }
+        else if( restriction.selectorAttribute == "StudyDescription" )
+        {
+            bool contains = serie->getParentStudy()->getDescription().contains( restriction.valueRepresentation, Qt::CaseInsensitive );
+            bool match = ( restriction.usageFlag  == HangingProtocolImageSet::NoMatch );
+            valid = contains ^ match;
+        }
         else if( restriction.selectorAttribute == "PatientName" )
         {
             if( serie->getParentStudy()->getParentPatient()->getFullName() != restriction.valueRepresentation )

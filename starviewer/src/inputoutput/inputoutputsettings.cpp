@@ -64,6 +64,8 @@ const QString InputOutputSettings::InstitutionCountry( InstitutionInformationBas
 const QString InputOutputSettings::InstitutionPhoneNumber( InstitutionInformationBase + "InstitutionPhoneNumber");
 const QString InputOutputSettings::InstitutionEmail( InstitutionInformationBase + "InstitutionEmail");
 
+const QString InputOutputSettings::SearchRelatedStudiesByName("SearchRelatedStudiesByName");
+
 InputOutputSettings::InputOutputSettings()
 {
 }
@@ -121,7 +123,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting( DICOMDIRFolderPathToCopy, "" );
     settingsRegistry->addSetting( CopyFolderContentToDICOMDIRCdDvd, false );
     settingsRegistry->addSetting( CopyFolderContentToDICOMDIRUsbHardDisk, false );
-
+    settingsRegistry->addSetting(SearchRelatedStudiesByName, false);
 }
 
 } // end namespace udg 

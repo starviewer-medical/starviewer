@@ -16,6 +16,7 @@
 #include "windowlevelpresetstooldata.h"
 // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
 #include "hangingprotocolmanager.h"
+#include "coresettings.h"
 //thickslab
 #include "vtkProjectionImageFilter.h"
 
@@ -86,6 +87,9 @@ Q2DViewer::Q2DViewer( QWidget *parent )
     m_hangingProtocolManager = new HangingProtocolManager(this);
 
     m_alignPosition = Q2DViewer::AlignCenter;
+
+    Settings settings;
+    m_mammographyAutoOrientationExceptions = settings.getValue(CoreSettings::MammographyAutoOrientationExceptions).toStringList();
 }
 
 Q2DViewer::~Q2DViewer()
@@ -1577,78 +1581,89 @@ void Q2DViewer::updateSliceAnnotationInformation()
     Image *image = m_mainVolume->getImage(0);
     if( image->getParentSeries()->getModality() == "MG" )
     {
-        m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
-
-        //En la modalitat de mamografia s'ha de mostar informació especifica de la imatge que s'està mostrant.
-        //Per tant si estem a la vista original agafem la imatge actual, altrament no mostrem cap informació.
-        if( m_lastView == Q2DViewer::Axial )
+        // Hi ha estudis que són de la modalitat MG que no s'han d'orientar. S'han afegit unes excepcions per poder-los controlar.
+        bool found = false;
+        QListIterator<QString> iterator(m_mammographyAutoOrientationExceptions);
+        while(!found && iterator.hasNext())
         {
-            image = m_mainVolume->getImage(m_currentSlice);
+            found = image->getParentSeries()->getParentStudy()->getDescription().contains(iterator.next(), Qt::CaseInsensitive);
         }
-        else
+        
+        if (!found)
         {
-            image = 0;
-        }
+            m_enabledAnnotations =  m_enabledAnnotations & ~Q2DViewer::SliceAnnotation;
 
-        if( image )
-        {
-            QString projection = image->getViewCodeMeaning();
-            /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
-            // TODO tenir-ho carregat en arxius, maps, etc..
-            // TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
-            if( projection == "medio-lateral" )
-                projection = "ML";
-            else if( projection == "medio-lateral oblique" )
-                projection = "MLO";
-            else if( projection == "latero-medial" )
-                projection = "LM";
-            else if( projection == "latero-medial oblique" )
-                projection = "LMO";
-            else if( projection == "cranio-caudal" )
-                projection = "CC";
-            else if( projection == "caudo-cranial (from below)" )
-                projection = "FB";
-            else if( projection == "superolateral to inferomedial oblique" )
-                projection = "SIO";
-            else if( projection == "exaggerated cranio-caudal" )
-                projection = "XCC";
-            else if( projection == "cranio-caudal exaggerated laterally" )
-                projection = "XCCL";
-            else if( projection == "cranio-caudal exaggerated medially" )
-                projection = "XCCM";
-
-            // S'han de seguir les recomanacions IHE de presentació d'imatges de Mammografia
-            // IHE Techincal Framework Vol. 2 revision 8.0, apartat 4.16.4.2.2.1.1.2 Image Orientation and Justification
-            QString desiredOrientation;
-            QString laterality = image->getImageLaterality();
-            if( projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB" )
+            //En la modalitat de mamografia s'ha de mostar informació especifica de la imatge que s'està mostrant.
+            //Per tant si estem a la vista original agafem la imatge actual, altrament no mostrem cap informació.
+            if( m_lastView == Q2DViewer::Axial )
             {
-                if( laterality == "L" )
-                    desiredOrientation = "A\\R";
-                else if( laterality == "R" )
-                    desiredOrientation = "P\\L";
-            }
-            else if( projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO" )
-            {
-                if( laterality == "L" )
-                    desiredOrientation = "A\\F";
-                else if( laterality == "R" )
-                    desiredOrientation = "P\\F";
+                image = m_mainVolume->getImage(m_currentSlice);
             }
             else
             {
-                DEBUG_LOG("Projecció no tractada! :: " + projection );
+                image = 0;
             }
 
-            m_lowerRightText = laterality + " " + projection;
-            // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
-            QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
-            m_hangingProtocolManager->applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3] , desiredOrientation, this);
-        }
-        else
-            m_lowerRightText.clear();
+            if( image )
+            {
+                QString projection = image->getViewCodeMeaning();
+                /// PS 3.16 - 2008, Page 408, Context ID 4014, View for mammography
+                // TODO tenir-ho carregat en arxius, maps, etc..
+                // TODO fer servir millor els codis [Code Value (0008,0100)] en compte dels "code meanings" podria resultar més segur
+                if( projection == "medio-lateral" )
+                    projection = "ML";
+                else if( projection == "medio-lateral oblique" )
+                    projection = "MLO";
+                else if( projection == "latero-medial" )
+                    projection = "LM";
+                else if( projection == "latero-medial oblique" )
+                    projection = "LMO";
+                else if( projection == "cranio-caudal" )
+                    projection = "CC";
+                else if( projection == "caudo-cranial (from below)" )
+                    projection = "FB";
+                else if( projection == "superolateral to inferomedial oblique" )
+                    projection = "SIO";
+                else if( projection == "exaggerated cranio-caudal" )
+                    projection = "XCC";
+                else if( projection == "cranio-caudal exaggerated laterally" )
+                    projection = "XCCL";
+                else if( projection == "cranio-caudal exaggerated medially" )
+                    projection = "XCCM";
 
-        m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
+                // S'han de seguir les recomanacions IHE de presentació d'imatges de Mammografia
+                // IHE Techincal Framework Vol. 2 revision 8.0, apartat 4.16.4.2.2.1.1.2 Image Orientation and Justification
+                QString desiredOrientation;
+                QString laterality = image->getImageLaterality();
+                if( projection == "CC" || projection == "XCC" || projection == "XCCL" || projection == "XCCM" || projection == "FB" )
+                {
+                    if( laterality == "L" )
+                        desiredOrientation = "A\\R";
+                    else if( laterality == "R" )
+                        desiredOrientation = "P\\L";
+                }
+                else if( projection == "MLO" || projection == "ML" || projection == "LM" || projection == "LMO" || projection == "SIO" )
+                {
+                    if( laterality == "L" )
+                        desiredOrientation = "A\\F";
+                    else if( laterality == "R" )
+                        desiredOrientation = "P\\F";
+                }
+                else
+                {
+                    DEBUG_LOG("Projecció no tractada! :: " + projection );
+                }
+
+                m_lowerRightText = laterality + " " + projection;
+                // TODO això estarà temporalment pel tema de penjar correctament les imatges de mamo
+                QVector<QString> labels = getCurrentDisplayedImageOrientationLabels();
+                m_hangingProtocolManager->applyDesiredDisplayOrientation( labels[2]+"\\"+labels[3] , desiredOrientation, this);
+            }
+            else
+                m_lowerRightText.clear();
+
+            m_cornerAnnotations->SetText( 1, qPrintable( m_lowerRightText.trimmed() ) );
+        }
     }
 
     int value = m_currentSlice*m_numberOfPhases + m_currentPhase;

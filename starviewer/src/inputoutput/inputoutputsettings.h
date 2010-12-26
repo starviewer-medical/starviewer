@@ -85,6 +85,9 @@ public:
     static const QString InstitutionCountry;
     static const QString InstitutionPhoneNumber;
     static const QString InstitutionEmail;
+    
+    //Boolea per saber si s'ha de cercar previes a partir del nom del pacient.
+    static const QString SearchRelatedStudiesByName;
 };
 
 } // end namespace udg 

@@ -4,7 +4,7 @@
 #include "starviewerapplication.h"
 #include <QDir>
 #include <QLocale> // pel LanguageLocale
-
+#include <QStringList>
 namespace udg {
 
 // Definició de les claus
@@ -46,6 +46,8 @@ const QString CoreSettings::GradientRadiusForHighQualityObscurances( HighQuality
 
 const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale");
 
+const QString CoreSettings::MammographyAutoOrientationExceptions("MammographyAutoOrientationExceptions");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -64,6 +66,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting( LanguageLocale, QLocale::system().name() );
     settingsRegistry->addSetting( DefaultToolTextSize, 14 );
     settingsRegistry->addSetting(AutoToolTextSize, true);
+    settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
 }
 
 } // end namespace udg 

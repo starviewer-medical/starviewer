@@ -15,6 +15,7 @@
 #include "singleton.h"
 #include "pacsdevicemanager.h"
 #include "logging.h"
+#include "inputoutputsettings.h"
 
 namespace udg {
 
@@ -23,6 +24,9 @@ PreviousStudiesManager::PreviousStudiesManager()
     m_pacsManager = new PacsManager();
     m_studyInstanceUIDToFindPrevious = "invalid";
     createConnections();
+
+    Settings settings;
+    m_searchRelatedStudiesByName = settings.getValue(InputOutputSettings::SearchRelatedStudiesByName).toBool();
 }
 
 PreviousStudiesManager::~PreviousStudiesManager()
@@ -60,7 +64,10 @@ void PreviousStudiesManager::queryPreviousStudies(Study *study)
     if (pacsDeviceListToQuery.count() > 0)
     {
         m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientID(study), pacsDeviceListToQuery);
-        m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientName(study), pacsDeviceListToQuery);
+        if (m_searchRelatedStudiesByName)
+        {
+            m_pacsManager->queryStudy(getPreviousStudyDicomMaskPatientName(study), pacsDeviceListToQuery);
+        }
     }
     else 
     {
