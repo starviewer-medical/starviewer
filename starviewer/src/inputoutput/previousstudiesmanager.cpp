@@ -36,63 +36,63 @@ PreviousStudiesManager::~PreviousStudiesManager()
 
 void PreviousStudiesManager::queryStudies(Patient *patient)
 {
-    PacsDeviceManager pacsDeviceManager;
-    QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
-
     INFO_LOG("Es buscaran els estudis del pacient " + patient->getFullName() + " amb ID " + patient->getID());
 
-    initializeQuery();
-
-    //Preguntem al PACS per estudis
-    if (pacsDeviceListToQuery.count() > 0)
-    {
-        DicomMask maskID = getBasicDicomMask();
-        maskID.setPatientId(patient->getID());
-
-        DicomMask maskName = getBasicDicomMask();
-        maskName.setPatientName(patient->getFullName());
-
-        foreach(const PacsDevice &pacsDevice, pacsDeviceListToQuery)
-        {
-            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskID, QueryPacsJob::study));
-            if (m_searchRelatedStudiesByName)
-            {
-                enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskName, QueryPacsJob::study));
-            }
-        }
-    }
-    else
-    {
-        //Sinó hi ha cap PACS pel qual cercar per defecte fem l'emit del queryFinished
-        queryFinished();
-    }
+    this->makeAsynchronousStudiesQuery(patient);
 }
 
 void PreviousStudiesManager::queryPreviousStudies(Study *study)
 {
-    PacsDeviceManager pacsDeviceManager;
-    QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
-
     INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() + 
     " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
 
+    m_studyInstanceUIDToFindPrevious = study->getInstanceUID();
+
+    this->makeAsynchronousStudiesQuery(study->getParentPatient(), study->getDate());
+}
+
+void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate untilDate)
+{
     initializeQuery();
 
-    m_studyInstanceUIDToFindPrevious = study->getInstanceUID();
+    PacsDeviceManager pacsDeviceManager;
+    QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
 
     //Preguntem al PACS per estudis
     if (pacsDeviceListToQuery.count() > 0)
     {
+        QList<DicomMask> queryDicomMasksList;
+
+        DicomMask maskQueryByID = getBasicDicomMask();
+        maskQueryByID.setPatientId(patient->getID());
+        queryDicomMasksList << maskQueryByID;
+
+        if (m_searchRelatedStudiesByName)
+        {
+            DicomMask maskQueryByName = getBasicDicomMask();
+            maskQueryByName.setPatientName(patient->getFullName());
+            queryDicomMasksList << maskQueryByName;
+        }
+
+        // Si ens diuen que volen els study's fins una data, hem de marcar aquesta data en els dicomMasks
+        if (untilDate.isValid())
+        {
+            QString untilDateAsMaskFormat = getPreviousStudyDateMask(untilDate);
+            foreach(DicomMask dicomMask, queryDicomMasksList)
+            {
+                dicomMask.setStudyDate(untilDateAsMaskFormat);
+            }
+        }
+
         foreach(const PacsDevice &pacsDevice, pacsDeviceListToQuery)
         {
-            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, getPreviousStudyDicomMaskPatientID(study), QueryPacsJob::study));
-            if (m_searchRelatedStudiesByName)
+            foreach(DicomMask queryDicomMask, queryDicomMasksList)
             {
-                enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, getPreviousStudyDicomMaskPatientName(study), QueryPacsJob::study));
+                enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, queryDicomMask, QueryPacsJob::study));
             }
         }
     }
-    else 
+    else
     {
         //Sinó hi ha cap PACS pel qual cercar per defecte fem l'emit del queryFinished
         queryFinished();
@@ -269,28 +269,6 @@ DicomMask PreviousStudiesManager::getBasicDicomMask()
     dicomMask.setStudyDate("");
     dicomMask.setStudyTime("");
     dicomMask.setStudyInstanceUID("");
-
-    return dicomMask;
-}
-
-DicomMask PreviousStudiesManager::getPreviousStudyDicomMaskPatientID(Study *study)
-{
-    DicomMask dicomMask = getBasicDicomMask();
-
-    ///Indiquem que volem buscar estudis igual o menors d'aquella data
-    dicomMask.setStudyDate(getPreviousStudyDateMask(study->getDate()));
-    dicomMask.setPatientId(study->getParentPatient()->getID());
-
-    return dicomMask;
-}
-
-DicomMask PreviousStudiesManager::getPreviousStudyDicomMaskPatientName(Study *study)
-{
-    DicomMask dicomMask = getBasicDicomMask();
-
-    ///Indiquem que volem buscar estudis igual o menors d'aquella data
-    dicomMask.setStudyDate(getPreviousStudyDateMask(study->getDate()));
-    dicomMask.setPatientName(study->getParentPatient()->getFullName());
 
     return dicomMask;
 }
