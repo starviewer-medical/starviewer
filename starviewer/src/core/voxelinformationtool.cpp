@@ -128,7 +128,7 @@ void VoxelInformationTool::placeText(double textPosition[3])
     {
         m_caption->visibilityOn();
         m_caption->setAttachmentPoint(xyz);
-        m_caption->setText(QString("(%1,%2,%3):%4").arg(textPosition[0],0,'f',2).arg(textPosition[1],0,'f',2).arg(textPosition[2],0,'f',2).arg(voxelValue));
+        m_caption->setText(QString("%1").arg(voxelValue));
         m_caption->update();
     }
     else
