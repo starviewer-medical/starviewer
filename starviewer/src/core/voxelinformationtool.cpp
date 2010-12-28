@@ -56,6 +56,7 @@ void VoxelInformationTool::handleEvent(unsigned long eventID)
             m_caption->update();
             m_2DViewer->render();
             break;
+        
         default:
             break;
     }
@@ -69,7 +70,7 @@ void VoxelInformationTool::createCaption()
         // Així evitem que durant l'ús de l'eina la primitiva pugui ser esborrada per events externs
         m_caption->increaseReferenceCount();
         m_caption->shadowOn();
-        m_2DViewer->getDrawer()->draw( m_caption, Q2DViewer::Top2DPlane );
+        m_2DViewer->getDrawer()->draw(m_caption, Q2DViewer::Top2DPlane);
     }
 }
 
