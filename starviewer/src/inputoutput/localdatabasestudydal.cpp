@@ -276,8 +276,6 @@ QString LocalDatabaseStudyDAL::buildSqlGetPatientIDFromStudyInstanceUID(const QS
                                       "Where InstanceUID = '%1'")
                                     .arg( DatabaseConnection::formatTextToValidSQLSyntax( studyInstanceUID ) );
 
-    INFO_LOG(selectSentence);
-
     return selectSentence;
 }
 
