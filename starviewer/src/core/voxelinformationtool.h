@@ -40,9 +40,6 @@ private:
     /// Crear l'actor on es mostrarà la informació del voxel
     void createCaption();
 
-    /// Ens retorna les dimensions de la pantalla
-    int* viewportDimensions();
-
     /// Ens dóna la posició corretgida del caption
     void correctPositionOfCaption(int position[2]);
 
