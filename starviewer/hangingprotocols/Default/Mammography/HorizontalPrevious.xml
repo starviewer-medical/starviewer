@@ -29,6 +29,11 @@
 <selectorAttribute>CodeMeaning</selectorAttribute>
 <valueRepresentation>cranio-caudal</valueRepresentation>
 </restriction>
+<restriction identifier="6">
+<usageFlag>MATCH</usageFlag>
+<selectorAttribute>Anterior</selectorAttribute>
+<valueRepresentation>1</valueRepresentation>
+</restriction>
 <imageSet identifier="1">
 <restriction>1</restriction>
 <restriction>4</restriction>
@@ -55,6 +60,7 @@
 <restriction>1</restriction>
 <restriction>4</restriction>
 <restriction>5</restriction>
+<restriction>6</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
@@ -62,18 +68,21 @@
 <restriction>2</restriction>
 <restriction>4</restriction>
 <restriction>5</restriction>
+<restriction>6</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
 <imageSet identifier="7">
 <restriction>1</restriction>
 <restriction>3</restriction>
+<restriction>6</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
 <imageSet identifier="8">
 <restriction>2</restriction>
 <restriction>3</restriction>
+<restriction>6</restriction>
 <type>image</type>
 <previous>1</previous>
 </imageSet>
