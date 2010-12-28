@@ -55,7 +55,7 @@ Volume::ItkImageTypePointer Volume::getItkData()
     {
         m_vtkToItkFilter->GetImporter()->Update();
     }
-    catch (itk::ExceptionObject & excep)
+    catch (itk::ExceptionObject &excep)
     {
         WARN_LOG(QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription());
     }
@@ -208,7 +208,7 @@ QList<Image *> Volume::getPhaseImages(int index)
         // Obtenim el nombre d'imatges per fase
         int slices = getNumberOfSlicesPerPhase();
         int currentImageIndex = index;
-        for (int i = 0; i < slices; i++)
+        for (int i = 0; i < slices; ++i)
         {
             phaseImages << m_imageSet.at(currentImageIndex);
             currentImageIndex += m_numberOfPhases;
@@ -411,7 +411,10 @@ bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
 void Volume::createNeutralVolume()
 {
     if (m_imageDataVTK)
+    {
         m_imageDataVTK->Delete();
+    }
+
     // Creem un objecte vtkImageData "neutre"
     m_imageDataVTK = vtkImageData::New();
     // Inicialitzem les dades
@@ -423,11 +426,11 @@ void Volume::createNeutralVolume()
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();
     // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
-    signed short * scalarPointer = (signed short *) m_imageDataVTK->GetScalarPointer();
+    signed short *scalarPointer = (signed short *) m_imageDataVTK->GetScalarPointer();
     signed short value;
     for (int i = 0; i < 10; i++)
     {
-        value = 150-i*20;
+        value = 150 - i * 20;
         if (i > 4)
         {
             value = 150 - (10 - i - 1)*20;
