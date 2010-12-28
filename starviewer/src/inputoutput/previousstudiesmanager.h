@@ -10,9 +10,9 @@
 #include <QObject>
 #include <QHash>
 #include <QStringList>
-#include "pacsdevice.h"
+#include <QDate>
 
-class QDate;
+#include "pacsdevice.h"
 
 namespace udg {
 
@@ -70,17 +70,17 @@ signals:
     void errorDownloadingPreviousStudy(QString studyUID);
 
 private:
+
+    /// Realitza una consulta dels estudis del pacient "patient" als PACS marcats per defecte.
+    /// Si s'especifica una data "until" només cercarà els estudis fins la data especificada (aquesta inclosa).
+    /// Si no es passa cap data per paràmetre cercarà tots els estudis, independentment de la data.
+    void makeAsynchronousStudiesQuery(Patient *patient, QDate untilDate = QDate());
+
     /// Crea les connexions
     void createConnections();
 
     /// Retorna una màscara de cerca base a partir de les quals es generan les DicomMask per cercar previs
     DicomMask getBasicDicomMask();
-
-    /// Retorna una màscara per buscar estudis previs que coincideixin amb ID del pacient del Study
-    DicomMask getPreviousStudyDicomMaskPatientID(Study *study);
-
-    /// Retorna una màscara per buscar estudis previs que coincideixin amb Nom del pacient del Study
-    DicomMask getPreviousStudyDicomMaskPatientName(Study *study);
 
     /// Comprova si l'estudi ja l'hem rebut d'un altre PACS si és així no l'afegim, si no l'hem trobat
     void mergeStudyWithReceivedResults(Study *study, QString pacsID);
