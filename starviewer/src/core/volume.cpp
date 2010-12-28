@@ -195,16 +195,7 @@ Volume* Volume::getPhaseVolume(int index)
     else if (index >= 0 && index < m_numberOfPhases)
     {
         result = new Volume();
-        // Obtenim el nombre d'imatges per fase
-        int slices = getNumberOfSlicesPerPhase();
-        int currentImageIndex = index;
-        QList<Image *> phaseImages;
-        for (int i = 0; i < slices; i++)
-        {
-            phaseImages << m_imageSet.at(currentImageIndex);
-            currentImageIndex += m_numberOfPhases;
-        }
-        result->setImages(phaseImages);
+        result->setImages(this->getPhaseImages(index));
     }
     return result;
 }
