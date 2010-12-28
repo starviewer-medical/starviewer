@@ -25,8 +25,8 @@ VoxelInformationTool::VoxelInformationTool(QViewer *viewer, QObject *parent)
         DEBUG_LOG("No s'ha pogut realitzar el casting a 2DViewer!!!");
     }
     createCaption();
-    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateVoxelInformation()));
-    connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(updateVoxelInformation()));
+    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateCaption()));
+    connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(updateCaption()));
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(inputChanged(Volume *)));
 }
 
@@ -45,7 +45,7 @@ void VoxelInformationTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
         case vtkCommand::MouseMoveEvent:
-            updateVoxelInformation();
+            updateCaption();
             break;
 
         case vtkCommand::EnterEvent:
@@ -73,7 +73,7 @@ void VoxelInformationTool::createCaption()
     }
 }
 
-void VoxelInformationTool::updateVoxelInformation()
+void VoxelInformationTool::updateCaption()
 {
     if (!m_caption)
     {
@@ -83,7 +83,17 @@ void VoxelInformationTool::updateVoxelInformation()
     double xyz[3];
     if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
     {
-        placeText(xyz);
+        double attachmentPoint[3];
+        QString horizontalJustification, verticalJustification;
+        computeCaptionAttachmentPointAndTextAlignment(attachmentPoint, horizontalJustification, verticalJustification);
+
+        // Actualitzem els valors del caption
+        m_caption->visibilityOn();
+        m_caption->setAttachmentPoint(attachmentPoint);
+        m_caption->setHorizontalJustification(horizontalJustification);
+        m_caption->setVerticalJustification(verticalJustification);
+        m_caption->setText(computeVoxelValue(xyz));
+        m_caption->update();
     }
     else
     {
@@ -98,88 +108,87 @@ void VoxelInformationTool::inputChanged(Volume *volume)
     createCaption();
 }
 
-void VoxelInformationTool::placeText(double textPosition[3])
+QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
 {
-    if (!m_caption)
-    {
-        return;
-    }
-    
-    double worldPoint[4];
-    int position[2];
-    double xyz[3];
-
-    for (int i = 0; i <3; i++)
-    {
-        xyz[i] = textPosition[i];
-    }
-
-    correctPositionOfCaption(position);
-    m_2DViewer->computeDisplayToWorld(position[0], position[1], 0., worldPoint);
-    xyz[0] = worldPoint[0];
-    xyz[1] = worldPoint[1];
-    xyz[2] = worldPoint[2];
+    QString valueString;
 
     Volume::VoxelType voxelValue;
-    double currentCursorPosition[3];
-    m_2DViewer->getCurrentCursorImageCoordinate(currentCursorPosition);
-    
-    if (m_2DViewer->getInput()->getVoxelValue(currentCursorPosition, voxelValue))
+    if (m_2DViewer->getInput()->getVoxelValue(worldCoordinate, voxelValue))
     {
-        m_caption->visibilityOn();
-        m_caption->setAttachmentPoint(xyz);
-        m_caption->setText(QString("%1").arg(voxelValue));
-        m_caption->update();
+        valueString = QString("%1").arg(voxelValue);        
     }
     else
     {
+        // Això no hauria de passar mai ja que se suposa que worldCoordinate
+        // és una coordenada vàlida dins del Volume actual
+        valueString = tr("N/A");
         DEBUG_LOG("No s'ha trobat valor de la imatge");
     }
+
+    return valueString;
 }
 
-bool VoxelInformationTool::captionExceedsViewportTopLimit()
+void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification, QString &verticalJustification)
 {
-    int *dimensions = m_2DViewer->getRenderWindowSize();
-    double captionHeigth = ((double)dimensions[1]*0.05);
-
-    return (m_2DViewer->getEventPositionY()+captionHeigth > dimensions[1]);
-}
-
-bool VoxelInformationTool::captionExceedsViewportRightLimit()
-{
-    int *dimensions = m_2DViewer->getRenderWindowSize();
-    double captionWidth = ((double)dimensions[0]*0.3)+1.;
-
-    return (m_2DViewer->getEventPositionX()+captionWidth > dimensions[0]);
-}
-
-bool VoxelInformationTool::captionExceedsViewportLimits()
-{
-    return (captionExceedsViewportTopLimit() || captionExceedsViewportRightLimit());
-}
-
-void VoxelInformationTool::correctPositionOfCaption(int correctPositionInViewPort[2])
-{
-    double xSecurityRange = 20.;
-    int eventPosition[2];
-    m_2DViewer->getEventPosition(eventPosition);
+    // Per defecte alinearem el texte a la dreta i el més amunt possible
+    horizontalJustification = "Right";
+    verticalJustification = "Top";
+    // Amb aquest valor definim el marge fins on considerem estar prou a prop d'alguna de les cantonades del visor
+    int marginPixels = 50;
+    // Calculem les mides del viewport per saber on tenim col·locat el cursor
+    int *viewportSize = m_2DViewer->getRenderWindowSize();
+    int cursorPosition[2];
+    m_2DViewer->getEventPosition(cursorPosition);
     
-    int *dimensions = m_2DViewer->getRenderWindowSize();
-    double captionWidth = ((double)dimensions[0]*0.3)+xSecurityRange;
-    double captionHeight = ((double)dimensions[1]*0.05)+xSecurityRange;
-
-    correctPositionInViewPort[0] = eventPosition[0];
-    correctPositionInViewPort[1] = eventPosition[1];
-
-    if (captionExceedsViewportRightLimit())
+    // Aquestes seran les coordenades que ajustarem per col·locar el caption
+    double adjustedXCursorPosition = cursorPosition[0];
+    double adjustedYCursorPosition = cursorPosition[1];
+    
+    bool insideMargins = true;
+    // Estem quasi a dalt de tot?
+    if (cursorPosition[1] > viewportSize[1] - marginPixels)
     {
-        correctPositionInViewPort[0] = eventPosition[0] - (eventPosition[0] + captionWidth - dimensions[0]);
+        adjustedYCursorPosition = viewportSize[1] - marginPixels;
+        verticalJustification = "Bottom";
+        insideMargins = false;
     }
 
-    if (captionExceedsViewportTopLimit())
-    {
-        correctPositionInViewPort[1] = eventPosition[1] - (eventPosition[1] + captionHeight - dimensions[1]);
+    // Estem quasi abaix del tot?
+    if (cursorPosition[1] < marginPixels)
+    {        
+        adjustedYCursorPosition = marginPixels;
+        verticalJustification = "Top";
+        insideMargins = false;
     }
+
+    // Estem a prop de la dreta?
+    if (cursorPosition[0] > viewportSize[0] - marginPixels)
+    {
+        adjustedXCursorPosition = viewportSize[0] - marginPixels;
+        horizontalJustification = "Right";
+        insideMargins = false;
+    }
+
+    // Estem a prop de l'esquerra?
+    if (cursorPosition[0] < marginPixels)
+    {
+        adjustedXCursorPosition = marginPixels;
+        horizontalJustification = "Left";
+        insideMargins = false;
+    }
+
+    if (insideMargins)
+    {
+        adjustedXCursorPosition -= 5;
+        adjustedYCursorPosition += 5;
+    }
+
+    // I finalment transformem la coordenada de viewport en coordenada de món    
+    double dummy[4];
+    m_2DViewer->computeDisplayToWorld(adjustedXCursorPosition, adjustedYCursorPosition, 0.0, dummy);
+    attachmentPoint[0] = dummy[0];
+    attachmentPoint[1] = dummy[1];
+    attachmentPoint[2] = dummy[2];
 }
 
 }

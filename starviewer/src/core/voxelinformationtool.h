@@ -31,7 +31,7 @@ public:
 private slots:
     /// Actualitza la informació de voxel que ha de mostrar el caption
     /// d'acord amb la posició on estigui el cursor
-    void updateVoxelInformation();
+    void updateCaption();
 
     /// Es crida quan canvia l'input del visor
     void inputChanged(Volume *volume);
@@ -40,16 +40,12 @@ private:
     /// Crear l'actor on es mostrarà la informació del voxel
     void createCaption();
 
-    /// Ens dóna la posició corretgida del caption
-    void correctPositionOfCaption(int position[2]);
+    /// Ens retorna el valor de voxel en un string correctament formatat corresponent a la coordenada de món donada
+    QString computeVoxelValue(double worldCoordinate[3]);
 
-    /// Les següents 3 funcions ens diuen si excedim els límits del viewport
-    bool captionExceedsViewportTopLimit();
-    bool captionExceedsViewportRightLimit();
-    bool captionExceedsViewportLimits();
-
-    /// Situa el text del caption
-    void placeText(double textPosition[3]);
+    /// Calcula quin és el punt on col·locarem el caption i la justificació del texte corresponent
+    /// segons la posició en la que es trobi el punter del mouse.
+    void computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification, QString &verticalJustification);
 
 private:
     /// 2DViewer amb el que operem
