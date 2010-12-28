@@ -21,7 +21,7 @@ Minor:
  - Quan apliquem un hanging protocol s'eliminen tots els virsors anteriors creats i es creen tots els necessaris de nou
  - Millora en la gestió de recursos quan es creen visors en l'extensió 2D
  - L'eina de VoxelInformation només mostra el valor de vòxel que és el que interessa i no el de les coordenades.
-
+ - El calendari que apareix al poder indicar entre quines dates s'ha de cercar un estudi es fa que comenci la setmana en dilluns.
 
 Bugfix:
 
