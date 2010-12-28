@@ -8,6 +8,7 @@
 #include "qbasicsearchwidget.h"
 
 #include <QString>
+#include <QCalendarWidget>
 
 #include "dicommask.h"
 #include "status.h"
@@ -37,6 +38,9 @@ void QBasicSearchWidget::initialize()
 {
     m_fromStudyDate->setDate(QDate::currentDate());
     m_toStudyDate->setDate(QDate::currentDate());
+    //Indiquem que les setmanes del calendari que apareixen per escollir la data comencin el dilluns 
+    m_fromStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
+    m_toStudyDate->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
 
     m_widgetHasBeenShowed = false;
 }
