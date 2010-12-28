@@ -38,11 +38,11 @@ public:
     PreviousStudiesManager();
     ~PreviousStudiesManager();
 
-    /// Fa una consulta d'estudis previs assíncrona als PACS passats per paràmetre
+    /// Fa una consulta d'estudis previs assíncrona als PACS que estiguin marcats per defecte
     /// Si ja s'estigués executant una consulta la cancel·laria i faria la nova consulta
     void queryPreviousStudies(Study *study);
 
-    /// Fa una consulta d'estudis del pacient assíncrona als PACS passats per paràmetre
+    /// Fa una consulta d'estudis del pacient assíncronoa als PACSC que estiguin marcats per defecte
     /// Si ja s'estigués executant una consulta la cancel·laria i faria la nova consulta
     void queryStudies(Patient *patient);
 
