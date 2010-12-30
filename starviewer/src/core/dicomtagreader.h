@@ -57,21 +57,21 @@ public:
     DcmDataset* getDcmDataset() const;
     
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
-    bool tagExists(const DICOMTag &tag);
+    bool tagExists(const DICOMTag &tag) const;
 
     /// Obté el valor de l'atribut demanat i ens el retorna com a QString
     /// Si no es troba el tag es retornarà un QString buit
-    QString getValueAttributeAsQString(const DICOMTag &tag);
+    QString getValueAttributeAsQString(const DICOMTag &tag) const;
 
     /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
-    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag);
+    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag) const;
 
     /// Retorna una llista de DICOMAttribute que inclou tots els Tags d'un DcmDataset (Es dóna per suposat que el dataset serà vàlid)
-    QList<DICOMAttribute*> getDICOMAttributes();
+    QList<DICOMAttribute*> getDICOMAttributes() const;
 
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
-    DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence);
+    DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence) const;
 
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació
