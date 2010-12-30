@@ -53,12 +53,21 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
 
     m_tagsListQTree->expandAll();
 
+    QListIterator<QString> wordsIterator(textToSearch.split(QRegExp("\\s+"), QString::SkipEmptyParts));
+
     if (showAllTags)
     {
         QTreeWidgetItemIterator iterator(m_tagsListQTree);
         while (*iterator)
         {
-            if ((*iterator)->text(0).contains(textToSearch, Qt::CaseInsensitive) || (*iterator)->text(1).contains(textToSearch, Qt::CaseInsensitive))
+            bool found = false;
+            wordsIterator.toFront();
+            while (wordsIterator.hasNext() && !found)
+            {
+                QString word = wordsIterator.next();
+                found = (*iterator)->text(0).contains(word, Qt::CaseInsensitive) || (*iterator)->text(1).contains(word, Qt::CaseInsensitive);
+            }
+            if (found)
             {
                 (*iterator)->setSelected(true);
             }
@@ -75,7 +84,14 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
         QTreeWidgetItemIterator iterator(m_tagsListQTree);
         while (*iterator)
         {
-            if ((*iterator)->text(0).contains(textToSearch, Qt::CaseInsensitive) || (*iterator)->text(1).contains(textToSearch, Qt::CaseInsensitive))
+            bool found = false;
+            wordsIterator.toFront();
+            while (wordsIterator.hasNext() && !found)
+            {
+                QString word = wordsIterator.next();
+                found = (*iterator)->text(0).contains(word, Qt::CaseInsensitive) || (*iterator)->text(1).contains(word, Qt::CaseInsensitive);
+            }
+            if (found)
             {
                 (*iterator)->setHidden(false);
                 QTreeWidgetItem *parent = (*iterator)->parent();
