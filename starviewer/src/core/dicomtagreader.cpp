@@ -103,7 +103,7 @@ DcmDataset* DICOMTagReader::getDcmDataset() const
     return m_dicomData;
 }
 
-bool DICOMTagReader::tagExists(const DICOMTag &tag)
+bool DICOMTagReader::tagExists(const DICOMTag &tag) const
 {
     if (m_dicomData)
     {
@@ -116,7 +116,7 @@ bool DICOMTagReader::tagExists(const DICOMTag &tag)
     }
 }
 
-QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag)
+QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
 {
     if (!m_dicomData)
     {
@@ -146,7 +146,7 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag)
     return result;
 }
 
-DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &sequenceTag)
+DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &sequenceTag) const
 {
     if (!m_dicomData)
     {
@@ -175,7 +175,7 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
     return NULL;
 }
 
-DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence)
+DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence) const
 {
     DICOMSequenceAttribute *sequenceAttribute = new DICOMSequenceAttribute();
     DcmVR sequenceVR("SQ");
@@ -222,7 +222,7 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
     return sequenceAttribute;
 }
 
-QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes()
+QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes() const
 {
     QList<DICOMAttribute*> attributeList;
     DcmElement *currentElement = NULL;
