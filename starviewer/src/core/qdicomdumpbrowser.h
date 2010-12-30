@@ -29,7 +29,7 @@ public:
 
 public slots:
     /// Cerca els nodes de l'arbre (Tags) que contenen el valor textToSearch
-    void searchTag(const QString &textToSearch, bool showAllTags = false);
+    void searchTag(const QString &textToSearch, bool highlightOnly = false);
 
 private:
     /// Crea les connexions dels signals
