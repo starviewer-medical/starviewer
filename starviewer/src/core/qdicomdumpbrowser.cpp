@@ -47,7 +47,6 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
 
     if (textToSearch.isEmpty())
     {
-
         return;
     }
 
@@ -55,42 +54,27 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
 
     QListIterator<QString> wordsIterator(textToSearch.split(QRegExp("\\s+"), QString::SkipEmptyParts));
 
-    if (showAllTags)
+
+    QTreeWidgetItemIterator iterator(m_tagsListQTree);
+    while (*iterator)
     {
-        QTreeWidgetItemIterator iterator(m_tagsListQTree);
-        while (*iterator)
+        bool found = false;
+        wordsIterator.toFront();
+        while (wordsIterator.hasNext() && !found)
         {
-            bool found = false;
-            wordsIterator.toFront();
-            while (wordsIterator.hasNext() && !found)
-            {
-                QString word = wordsIterator.next();
-                found = (*iterator)->text(0).contains(word, Qt::CaseInsensitive) || (*iterator)->text(1).contains(word, Qt::CaseInsensitive);
-            }
+            QString word = wordsIterator.next();
+            found = (*iterator)->text(0).contains(word, Qt::CaseInsensitive) || (*iterator)->text(1).contains(word, Qt::CaseInsensitive);
+        }
+
+        if (showAllTags)
+        {
             if (found)
             {
                 (*iterator)->setSelected(true);
             }
-            ++iterator;
         }
-
-        if (m_tagsListQTree->selectedItems().size() > 0)
+        else
         {
-            m_tagsListQTree->scrollToItem(m_tagsListQTree->selectedItems().at(0));
-        }
-    }
-    else
-    {
-        QTreeWidgetItemIterator iterator(m_tagsListQTree);
-        while (*iterator)
-        {
-            bool found = false;
-            wordsIterator.toFront();
-            while (wordsIterator.hasNext() && !found)
-            {
-                QString word = wordsIterator.next();
-                found = (*iterator)->text(0).contains(word, Qt::CaseInsensitive) || (*iterator)->text(1).contains(word, Qt::CaseInsensitive);
-            }
             if (found)
             {
                 (*iterator)->setHidden(false);
@@ -105,7 +89,16 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
             {
                 (*iterator)->setHidden(true);
             }
-            ++iterator;
+        }
+
+        ++iterator;
+    }
+
+    if (showAllTags)
+    {
+        if (m_tagsListQTree->selectedItems().size() > 0)
+        {
+            m_tagsListQTree->scrollToItem(m_tagsListQTree->selectedItems().at(0));
         }
     }
 }
