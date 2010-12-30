@@ -41,7 +41,7 @@ void QDICOMDumpBrowser::createConnections()
 }
 
 
-void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
+void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool highlightOnly)
 {
     clearSearch();
 
@@ -66,7 +66,7 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
             found = (*iterator)->text(0).contains(word, Qt::CaseInsensitive) || (*iterator)->text(1).contains(word, Qt::CaseInsensitive);
         }
 
-        if (showAllTags)
+        if (highlightOnly)
         {
             if (found)
             {
@@ -94,7 +94,7 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool showAllTags)
         ++iterator;
     }
 
-    if (showAllTags)
+    if (highlightOnly)
     {
         if (m_tagsListQTree->selectedItems().size() > 0)
         {
