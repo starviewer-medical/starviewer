@@ -323,7 +323,7 @@ void QueryScreen::refreshTab( int index )
     switch ( index )
     {
         case LocalDataBaseTab:
-                m_qbasicSearchWidget->setEnabledSeriesModality(false);
+                m_qbasicSearchWidget->setEnabledSeriesModality(true);
                 m_qadvancedSearchWidget->setEnabled(false);
                 break;
 
