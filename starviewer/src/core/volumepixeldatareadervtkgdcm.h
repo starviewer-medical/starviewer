@@ -26,6 +26,9 @@ private:
     // TODO Potser aquest processament s'hauria de fer al corresponent visor i no aquí?
     void applyColorProcessing();
 
+    /// Fa DEBUG_LOGs de certa informació que pot resultar útil per debuggar un cop s'han llegit les dades
+    void printDebugInfo();
+
 private slots:
     /// Captura el senyal de vtk perquè poguem notificar el progrés de la lectura
     void slotProgress();

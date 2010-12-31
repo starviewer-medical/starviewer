@@ -77,61 +77,7 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
         errorCode = UnknownError;
     }
 
-    DEBUG_LOG("Scalar type selected by the reader");
-    switch (m_vtkGDCMReader->GetDataScalarType())
-    {
-        case gdcm::PixelFormat::INT16:
-            DEBUG_LOG("INT 16");
-            break;
-
-        case gdcm::PixelFormat::UINT16:
-            DEBUG_LOG("unsigned INT 16");
-            break;
-
-        case gdcm::PixelFormat::UINT8:
-            DEBUG_LOG("unsigned INT 8");
-            break;
-
-        case gdcm::PixelFormat::INT8:
-            DEBUG_LOG("INT 8");
-            break;
-
-        case gdcm::PixelFormat::UINT12:
-            DEBUG_LOG("unsigned INT 12");
-            break;
-
-        case gdcm::PixelFormat::INT12:
-            DEBUG_LOG("INT 12");
-            break;
-
-        case gdcm::PixelFormat::UINT32: // For some DICOM files (RT or SC)
-            DEBUG_LOG("unsigned INT 32");
-            break;
-
-        case gdcm::PixelFormat::INT32: //    "   "
-            DEBUG_LOG("INT 32");
-            break;
-
-        case gdcm::PixelFormat::FLOAT16: // sure why not...
-            DEBUG_LOG("FLOAT 16");
-            break;
-
-        case gdcm::PixelFormat::FLOAT32: // good ol' 'float'
-            DEBUG_LOG("FLOAT 32");
-            break;
-
-        case gdcm::PixelFormat::FLOAT64: // aka 'double'
-            DEBUG_LOG("FLOAT 64");
-            break;
-
-        case gdcm::PixelFormat::UNKNOWN:
-            DEBUG_LOG("UNKNOWN");
-            break;
-
-        default:
-            DEBUG_LOG(QString("Scalar type not listed in switch: %1").arg(m_vtkGDCMReader->GetDataScalarType()));
-            break;
-    }
+    printDebugInfo();
 
     // Processem les dades segons el tipus d'espai de color en el que estiguin definides
     // per finalment assignar les dades a l'objecte vtkImageData
@@ -230,6 +176,68 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
         m_vtkImageData = m_vtkGDCMReader->GetOutput();
     }
 }
+
+void VolumePixelDataReaderVTKGDCM::printDebugInfo()
+{
+    Q_ASSERT(m_vtkGDCMReader);
+    
+    DEBUG_LOG("Scalar type selected by the reader");
+    switch (m_vtkGDCMReader->GetDataScalarType())
+    {
+        case gdcm::PixelFormat::INT16:
+            DEBUG_LOG("INT 16");
+            break;
+
+        case gdcm::PixelFormat::UINT16:
+            DEBUG_LOG("unsigned INT 16");
+            break;
+
+        case gdcm::PixelFormat::UINT8:
+            DEBUG_LOG("unsigned INT 8");
+            break;
+
+        case gdcm::PixelFormat::INT8:
+            DEBUG_LOG("INT 8");
+            break;
+
+        case gdcm::PixelFormat::UINT12:
+            DEBUG_LOG("unsigned INT 12");
+            break;
+
+        case gdcm::PixelFormat::INT12:
+            DEBUG_LOG("INT 12");
+            break;
+
+        case gdcm::PixelFormat::UINT32: // For some DICOM files (RT or SC)
+            DEBUG_LOG("unsigned INT 32");
+            break;
+
+        case gdcm::PixelFormat::INT32: //    "   "
+            DEBUG_LOG("INT 32");
+            break;
+
+        case gdcm::PixelFormat::FLOAT16: // sure why not...
+            DEBUG_LOG("FLOAT 16");
+            break;
+
+        case gdcm::PixelFormat::FLOAT32: // good ol' 'float'
+            DEBUG_LOG("FLOAT 32");
+            break;
+
+        case gdcm::PixelFormat::FLOAT64: // aka 'double'
+            DEBUG_LOG("FLOAT 64");
+            break;
+
+        case gdcm::PixelFormat::UNKNOWN:
+            DEBUG_LOG("UNKNOWN");
+            break;
+
+        default:
+            DEBUG_LOG(QString("Scalar type not listed in switch: %1").arg(m_vtkGDCMReader->GetDataScalarType()));
+            break;
+    }
+}
+
 void VolumePixelDataReaderVTKGDCM::slotProgress()
 {
     emit progress((int)(m_vtkGDCMReader->GetProgress()*100));
