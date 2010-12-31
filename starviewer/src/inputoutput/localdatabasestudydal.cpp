@@ -184,6 +184,7 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
     return patient;
 }
 
+//TODO: Si només acceptem com a paràmatre de filtrar de la DICOMMask l'studyInstanceUID el que s'hauria de fer és directament passar un QString amb StudyInstanceUID
 QString LocalDatabaseStudyDAL::buildSqlSelect(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor)
 {
     QString selectSentence, whereSentence;
@@ -264,6 +265,11 @@ QString LocalDatabaseStudyDAL::buildSqlSelectStudyPatient(const DicomMask &study
     if (lastAccessDateEqualOrMajor.isValid())
         whereSentence += QString(" and '%1' <= LastAccessDate ").arg(lastAccessDateEqualOrMajor.toString("yyyyMMdd"));
 
+    if (studyMaskToSelect.getSeriesModality().length() > 0)
+    {
+        whereSentence += QString(" and Modalities like '%%1%' ").arg(studyMaskToSelect.getSeriesModality());
+    }
+
     orderBySentence = " Order by Patient.Name";
 
     return selectSentence + whereSentence + orderBySentence;
@@ -343,6 +349,7 @@ QString LocalDatabaseStudyDAL::buildSqlUpdate(Study *studyToUpdate, const QDate 
     return updateSentence;
 }
 
+//TODO: Si només acceptem com a paràmtre per eliminar de la DICOMMask l'studyInstanceUID el que s'hauria de fer és directament passar un QString amb StudyInstanceUID
 QString LocalDatabaseStudyDAL::buildSqlDelete(const DicomMask &studyMaskToDelete)
 {
     QString deleteSentence, whereSentence = "";
