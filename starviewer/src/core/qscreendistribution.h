@@ -58,6 +58,11 @@ private:
     int m_mouseInScreen;
     /// Marge al voltant de la finestra per on començar a pintar (Constant).
     int m_marging;
+    /// Tamany de lletra utilitzat pel número de cada pantalla.
+    int m_screenNumberPixelSize;
+
+    /// Tamany màxim que pot tenir el número de cada pantalla.
+    static const int MaximumScreenNumberPixelSize;
 };
 
 } // end namespace udg

@@ -14,8 +14,12 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QWidgetAction>
+#include <QLinearGradient>
+#include <QRadialGradient>
 
 namespace udg {
+
+const int QScreenDistribution::MaximumScreenNumberPixelSize = 50;
 
 QScreenDistribution::QScreenDistribution(QWidget *parent)
     : QWidget(parent)
@@ -91,45 +95,59 @@ void QScreenDistribution::paintEvent(QPaintEvent *event)
     computeSizesAndPositions();
 
     QPainter painter(this);
-    QPen pen = QPen(Qt::blue, 2, Qt::SolidLine);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QPen pen = QPen(Qt::white, 2, Qt::SolidLine);
     painter.setPen(pen);
+
+    QFont font;
+    font.setPixelSize(m_screenNumberPixelSize);
+    painter.setFont(font);
 
     for (int i = 0; i < m_screens.count(); i++)
     {
-        int topLeftX = m_screens.at(i).left();
-        int topLeftY = m_screens.at(i).top();
-        int bottomRightX = m_screens.at(i).right();
-        int bottomRightY = m_screens.at(i).bottom();
-        
-        // Pintar el requadre de la pantalla numero i
-        painter.drawLine(topLeftX, topLeftY, bottomRightX, topLeftY);
-        painter.drawLine(bottomRightX, topLeftY, bottomRightX, bottomRightY);
-        painter.drawLine(bottomRightX, bottomRightY, topLeftX, bottomRightY);
-        painter.drawLine(topLeftX, bottomRightY, topLeftX, topLeftY);
-        
         if (m_mouseInScreen == i)
         {
-            // Pintar el cuadre com a seleccionat, amb relleu
-            // La part de dalt i esquerra de blau clar
-            pen = QPen(QColor(60,60,255), 2, Qt::SolidLine);
-            painter.setPen(pen);
-            painter.drawLine(topLeftX+1, topLeftY+1, bottomRightX-1, topLeftY+1);
-            painter.drawLine(topLeftX, topLeftY, bottomRightX, topLeftY);
-            painter.drawLine(topLeftX+1, bottomRightY-1, topLeftX+1, topLeftY+1);
-            painter.drawLine(topLeftX, bottomRightY, topLeftX, topLeftY);
+            QLinearGradient linearGradient(0.1, 0.1, 1.2, 1.2);
+            linearGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+            linearGradient.setColorAt(0, QColor("#777777"));
+            linearGradient.setColorAt(1, QColor("#111111"));
+            painter.setBrush(QBrush(linearGradient));
+            painter.drawRoundedRect(m_screens.at(i), 2, 2);
 
-            // La part de baix i la dreta de blau més fosc
-            pen = QPen(QColor(0,0,128), 2, Qt::SolidLine);
-            painter.setPen(pen);
-            painter.drawLine(bottomRightX-1, topLeftY+1, bottomRightX-1, bottomRightY-1);
-            painter.drawLine(bottomRightX, topLeftY, bottomRightX, bottomRightY);
-            painter.drawLine(bottomRightX-1, bottomRightY-1, topLeftX+1, bottomRightY-1);
-            painter.drawLine(bottomRightX, bottomRightY, topLeftX, bottomRightY);
-            
-            pen = QPen(Qt::blue, 2, Qt::SolidLine);
+            QRadialGradient radialGradient(0.9, 2.1, 2.5);
+            radialGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+            radialGradient.setColorAt(0, QColor(255, 255, 255, 0));
+            radialGradient.setColorAt(0.74, QColor(255, 255, 255, 0));
+            radialGradient.setColorAt(0.75, QColor(255, 255, 255, 40));
+            radialGradient.setColorAt(1, QColor(255, 255, 255, 0));
+            painter.setBrush(QBrush(radialGradient));
+            painter.drawRoundedRect(m_screens.at(i), 2, 2);
+        }
+        else
+        {
+            painter.setPen(Qt::NoPen);
+
+            QLinearGradient linearGradient(0.1, 0.1, 1.2, 1.2);
+            linearGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+            linearGradient.setColorAt(0, QColor("#666666"));
+            linearGradient.setColorAt(1, QColor("#000000"));
+            painter.setBrush(QBrush(linearGradient));
+            painter.drawRoundedRect(m_screens.at(i), 2, 2);
+
+            QRadialGradient radialGradient(0.9, 2.1, 2.5);
+            radialGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+            radialGradient.setColorAt(0, QColor(255, 255, 255, 0));
+            radialGradient.setColorAt(0.74, QColor(255, 255, 255, 0));
+            radialGradient.setColorAt(0.75, QColor(255, 255, 255, 40));
+            radialGradient.setColorAt(1, QColor(255, 255, 255, 0));
+            painter.setBrush(QBrush(radialGradient));
+            painter.drawRoundedRect(m_screens.at(i), 2, 2);
+
             painter.setPen(pen);
         }
         
+        //Pintar el numero
         painter.drawText(m_screens.at(i), Qt::AlignCenter, QString::number(i + 1));
     }
     event->accept();
@@ -197,15 +215,24 @@ void QScreenDistribution::computeSizesAndPositions()
     }
 
     // Adaptem les posicións a les posicions de dibuix escalades i centrades
+    int minimumScreenHeight = 0;
     for (int i = 0; i < m_screens.count(); i++)
     {
         // Requadre
-        int left = m_screens.at(i).left() / divisor + offsetX;
-        int top = m_screens.at(i).top() / divisor + offsetY;
-        int right = m_screens.at(i).right() / divisor + offsetX;
-        int bottom = m_screens.at(i).bottom() / divisor + offsetY;
-        m_screens.replace(i, QRect(QPoint(left, top), QPoint(right, bottom)));
+        QRect screen;
+        screen.setLeft(m_screens.at(i).left() / divisor + offsetX + 3);
+        screen.setTop(m_screens.at(i).top() / divisor + offsetY + 3);
+        screen.setRight(m_screens.at(i).right() / divisor + offsetX - 3);
+        screen.setBottom(m_screens.at(i).bottom() / divisor + offsetY - 3);
+        m_screens.replace(i, screen);
+
+        if (i == 0 || screen.height() < minimumScreenHeight)
+        {
+           minimumScreenHeight = screen.height();
+        }
     }
+
+    m_screenNumberPixelSize = (minimumScreenHeight - 15 < MaximumScreenNumberPixelSize)? minimumScreenHeight - 15: MaximumScreenNumberPixelSize;
 }
 
 } // end namespace udg
