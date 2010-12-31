@@ -279,17 +279,14 @@ QString QStudyTreeWidget::formatDateTime(const QDate &date, const QTime &time)
 {
     if (!date.isNull() && !time.isNull())
     {
-        DEBUG_LOG("ENTRO DATA HORA");
         return date.toString(Qt::ISODate) + " " + time.toString(Qt::ISODate);
     }
     else if (!date.isNull())
     {
-        DEBUG_LOG("ENTRO DATA");
         return date.toString(Qt::ISODate);
     }
     else
     {
-        DEBUG_LOG("ENTRO RES");
         return "";
     }
 }
