@@ -195,15 +195,9 @@ private:
      */
     QString formatAge( const QString );
 
-    /**Formata la data
-     * @param data de l'estudi
-     */
-    QString formatDate(const QDate &date);
-
-    /**Formata l'hora
-     * @param Hora de l'estudi
-     */
-    QString formatHour(const QTime &time);
+    ///Formata la data i hora passada a ISO 8601 extended (YYYY-MM-DD HH:MM:SS) Amb aquest format de data es pot ordenar els estudis per data/hora
+	///Si l'hora no té valor només retorna la data, i si ni Data i Hora tenen valor retorna string buit
+    QString formatDateTime(const QDate &date, const QTime &time);
 
     /** Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
      * un mateix estudi pot estar a més d'un PACS

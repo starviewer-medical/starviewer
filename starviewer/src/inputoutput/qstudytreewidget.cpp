@@ -36,10 +36,9 @@ QStudyTreeWidget::QStudyTreeWidget( QWidget *parent )
 {
     setupUi( this );
 
-    // m_studyTreeView->setColumnHidden( UID, true );
-
     m_studyTreeView->setColumnHidden( Type, true );
-//     m_studyTreeView->setColumnHidden( ProtocolName , true );
+    //Amaguem la columna Hora, ja que ara es mostra la data i hora en un mateix columna per poder ordenar per data i hora els estudis
+    m_studyTreeView->setColumnHidden(Time, true); 
 
     //carreguem les imatges que es mostren el QStudyTreeWidget
     m_openFolder = QIcon( ":/images/folderopen.png" );
@@ -151,8 +150,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(PatientAge, formatAge(studyToInsert->getPatientAge()));
         item->setText(Modality, studyToInsert->getModalitiesAsSingleString());
         item->setText(Description, studyToInsert->getDescription());
-        item->setText(Date, formatDate(studyToInsert->getDate()));
-        item->setText(Time, formatHour(studyToInsert->getTime()));
+        item->setText(Date, formatDateTime(studyToInsert->getDate(), studyToInsert->getTime()));
         item->setText(StudyID, tr("Study %1").arg(studyToInsert->getID()));
         item->setText(Institution, studyToInsert->getInstitutionName());
         item->setText( AccNumber, studyToInsert->getAccessionNumber());
@@ -204,11 +202,7 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
 
     seriesItem->setText(Description, series->getDescription().simplified());//treiem els espaics en blanc del davant i darrera
 
-    //si no tenim data o hora de la sèrie mostrem la de l'estudi
-    if (!series->getDateAsString().isEmpty()) seriesItem->setText(Date, formatDate(series->getDate()));
-
-    if (!series->getTimeAsString().isEmpty()) seriesItem->setText(Time , formatHour(series->getTime()));
-
+    seriesItem->setText(Date, formatDateTime(series->getDate(), series->getTime()));
     seriesItem->setText(UID, series->getInstanceUID());
     seriesItem->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
 
@@ -281,14 +275,23 @@ QString QStudyTreeWidget::formatAge( const QString age )
     return text;
 }
 
-QString QStudyTreeWidget::formatDate(const QDate &date)
+QString QStudyTreeWidget::formatDateTime(const QDate &date, const QTime &time)
 {
-    return date.toString(Qt::ISODate);
-}
-
-QString QStudyTreeWidget::formatHour(const QTime &time)
-{
-    return time.toString(Qt::ISODate);
+    if (!date.isNull() && !time.isNull())
+    {
+        DEBUG_LOG("ENTRO DATA HORA");
+        return date.toString(Qt::ISODate) + " " + time.toString(Qt::ISODate);
+    }
+    else if (!date.isNull())
+    {
+        DEBUG_LOG("ENTRO DATA");
+        return date.toString(Qt::ISODate);
+    }
+    else
+    {
+        DEBUG_LOG("ENTRO RES");
+        return "";
+    }
 }
 
 void QStudyTreeWidget::clear()
