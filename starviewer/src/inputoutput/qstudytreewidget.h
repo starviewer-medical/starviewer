@@ -198,12 +198,12 @@ private:
     /**Formata la data
      * @param data de l'estudi
      */
-    QString formatDate(const QString &date);
+    QString formatDate(const QDate &date);
 
     /**Formata l'hora
      * @param Hora de l'estudi
      */
-    QString formatHour(const QString &hour);
+    QString formatHour(const QTime &time);
 
     /** Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
      * un mateix estudi pot estar a més d'un PACS

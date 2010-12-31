@@ -151,8 +151,8 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(PatientAge, formatAge(studyToInsert->getPatientAge()));
         item->setText(Modality, studyToInsert->getModalitiesAsSingleString());
         item->setText(Description, studyToInsert->getDescription());
-        item->setText(Date, formatDate(studyToInsert->getDate().toString("yyyyMMdd")));
-        item->setText(Time, formatHour(studyToInsert->getTime().toString("hhmmss")));
+        item->setText(Date, formatDate(studyToInsert->getDate()));
+        item->setText(Time, formatHour(studyToInsert->getTime()));
         item->setText(StudyID, tr("Study %1").arg(studyToInsert->getID()));
         item->setText(Institution, studyToInsert->getInstitutionName());
         item->setText( AccNumber, studyToInsert->getAccessionNumber());
@@ -205,9 +205,9 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     seriesItem->setText(Description, series->getDescription().simplified());//treiem els espaics en blanc del davant i darrera
 
     //si no tenim data o hora de la sèrie mostrem la de l'estudi
-    if (!series->getDateAsString().isEmpty()) seriesItem->setText(Date, formatDate(series->getDate().toString("yyyyMMdd")));
+    if (!series->getDateAsString().isEmpty()) seriesItem->setText(Date, formatDate(series->getDate()));
 
-    if (!series->getTimeAsString().isEmpty()) seriesItem->setText(Time , formatHour(series->getTime().toString("hhmmss")));
+    if (!series->getTimeAsString().isEmpty()) seriesItem->setText(Time , formatHour(series->getTime()));
 
     seriesItem->setText(UID, series->getInstanceUID());
     seriesItem->setText(Type, "SERIES"); //indiquem que es tracta d'una sèrie
@@ -281,14 +281,14 @@ QString QStudyTreeWidget::formatAge( const QString age )
     return text;
 }
 
-QString QStudyTreeWidget::formatDate(const QString &date)
+QString QStudyTreeWidget::formatDate(const QDate &date)
 {
-    return QDate::fromString(date, "yyyyMMdd").toString(Qt::ISODate);
+    return date.toString(Qt::ISODate);
 }
 
-QString QStudyTreeWidget::formatHour(const QString &hour)
+QString QStudyTreeWidget::formatHour(const QTime &time)
 {
-    return QTime::fromString(hour, "hhmmss").toString(Qt::ISODate);
+    return time.toString(Qt::ISODate);
 }
 
 void QStudyTreeWidget::clear()
