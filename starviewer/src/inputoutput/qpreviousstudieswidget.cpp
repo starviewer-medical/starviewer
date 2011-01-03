@@ -134,19 +134,21 @@ void QPreviousStudiesWidget::initializeTree()
 
     // Inicialitzem la capçalera
     QStringList labels;
-    labels << "" << "" <<  "" << tr("Name") << tr("Date") << tr("Hour") << tr("Modality") << tr("Description");
+    labels << "" << "" <<  "" << tr("Name") << tr("Date") << tr("Modality") << tr("Description");
     m_previousStudiesTree->setHeaderLabels(labels);
 
     // Fem 8 columnes perquè la primera l'amagarem
-    m_previousStudiesTree->setColumnCount(8);
+    m_previousStudiesTree->setColumnCount(7);
     m_previousStudiesTree->setColumnHidden(0, true);
     m_previousStudiesTree->setAlternatingRowColors(true);
     m_previousStudiesTree->setUniformRowHeights(true);
     m_previousStudiesTree->setSortingEnabled(true);
 
+    //Ordenem  els estudis per data i hora
+    m_previousStudiesTree->sortItems(4, Qt::SortOrder::DescendingOrder);
+
     // El farem visible quan rebem la llista d'estudis previs
     m_previousStudiesTree->setVisible(false);
-
 }
 
 void QPreviousStudiesWidget::initializeLookingForStudiesWidget()
@@ -174,10 +176,9 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study, QString pacsID)
     item->setFlags(Qt::ItemIsEnabled);
 
     item->setText(3, study->getParentPatient()->getFullName());
-    item->setText(4, study->getDate().toString(Qt::ISODate));
-    item->setText(5, study->getTimeAsString());
-    item->setText(6, study->getModalitiesAsSingleString());
-    item->setText(7, study->getDescription());
+    item->setText(4, study->getDate().toString(Qt::ISODate) + " " + study->getTimeAsString());
+    item->setText(5, study->getModalitiesAsSingleString());
+    item->setText(6, study->getDescription());
 
     QLabel *status = new QLabel();
 
@@ -218,7 +219,7 @@ void QPreviousStudiesWidget::insertStudiesToTree(QList<Study*> studiesList, QHas
 {
     if (studiesList.size() > 0)
     {
-        foreach(Study *study, orderStudiesByDateTime(studiesList, true))
+        foreach(Study *study, studiesList)
         {
             insertStudyToTree(study, hashPacsIDOfStudyInstanceUID[study->getInstanceUID()]);
         }
@@ -321,28 +322,6 @@ void QPreviousStudiesWidget::decreaseNumberOfDownladingStudies()
     {
         emit studiesDownloaded();
     }
-}
-
-QList<Study*> QPreviousStudiesWidget::orderStudiesByDateTime(QList<Study*> &inputList, bool descendingOrder)
-{
-    QMultiMap<long,Study*> output;
-    long key;
-
-    foreach(Study *study, inputList)
-    {
-        if (descendingOrder)
-        {
-            key = -study->getDateTime().toTime_t();
-        }
-        else
-        {
-            key = study->getDateTime().toTime_t();
-        }
-
-        output.insert(key, study);
-    }
-
-    return output.values();
 }
 
 }
