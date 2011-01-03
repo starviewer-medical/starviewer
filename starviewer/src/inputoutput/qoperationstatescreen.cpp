@@ -34,7 +34,10 @@ QOperationStateScreen::QOperationStateScreen( QWidget *parent )
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::OperationStateListSortOrder).toInt();
     m_treeRetrieveStudy->sortItems(sortByColumn, sortOrderColumn);
 
-    m_treeRetrieveStudy->setColumnHidden( QOperationStateScreen::PACSJobID , true );//Conte el PACSJobID 
+    m_treeRetrieveStudy->setColumnHidden( QOperationStateScreen::PACSJobID , true );//Conte el PACSJobID
+    //Aquesta columna mostrava en quina hora s'havia sol·licitat l'estudi, ara l'hora es fusiona conjuntament amb la data per això amaguem aquesta columna
+    //que no la podrem eliminar fins que s'hagi resolt el ticket #1401
+    m_treeRetrieveStudy->setColumnHidden(QOperationStateScreen::Started, true);
 }
 
 QOperationStateScreen::~QOperationStateScreen()
@@ -207,8 +210,7 @@ void QOperationStateScreen::insertNewPACSJob(PACSJob *pacsJob)
     item->setText(QOperationStateScreen::FromTo , pacsJob->getPacsDevice().getAETitle());
     item->setText(QOperationStateScreen::PatientID , study->getParentPatient()->getID());
     item->setText(QOperationStateScreen::PatientName , study->getParentPatient()->getFullName());
-    item->setText(QOperationStateScreen::Date , QDate::currentDate().toString("dd/MM/yyyy"));
-    item->setText(QOperationStateScreen::Started , QTime::currentTime().toString("hh:mm"));
+    item->setText(QOperationStateScreen::Date , QDate::currentDate().toString(Qt::ISODate) + " " + QTime::currentTime().toString("hh:mm"));
     item->setText(QOperationStateScreen::Series , "0"); // series
     item->setText(QOperationStateScreen::Files , "0"); //imatges
     item->setText(QOperationStateScreen::PACSJobID , QString().setNum(pacsJob->getPACSJobID()));
