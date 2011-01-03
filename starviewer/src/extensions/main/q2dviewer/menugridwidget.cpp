@@ -57,8 +57,6 @@ void MenuGridWidget::createHangingProtocolsWidget()
     {
         int hangingProtocolNumber;
         HangingProtocol * hangingProtocol;
-        positionRow = 0;
-        positionColumn = 0;
 
         m_gridLayoutHanging = new QGridLayout();
         m_gridLayoutHanging->setSpacing( 6 );
