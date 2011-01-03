@@ -54,7 +54,6 @@ HEADERS += extensionfactory.h \
     patient.h \
     series.h \
     study.h \
-    output.h \
     q3dorientationmarker.h \
     zoomtool.h \
     qlogviewer.h \
@@ -253,7 +252,6 @@ SOURCES += extensionmediator.cpp \
     patient.cpp \
     series.cpp \
     study.cpp \
-    output.cpp \
     q3dorientationmarker.cpp \
     zoomtool.cpp \
     editortool.cpp \
