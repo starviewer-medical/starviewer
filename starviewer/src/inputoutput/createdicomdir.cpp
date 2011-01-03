@@ -141,7 +141,7 @@ Status CreateDicomdir::create( QString dicomdirPath )
 
         if( !result.good() )
         {
-            ERROR_LOG( "Error al convertir a DICOMDIR el fitxer : " + dicomdirPath + "/" + ( *iter ).c_str() );
+            ERROR_LOG( "Error al convertir a DICOMDIR el fitxer : " + dicomdirPath + "/" + ( *iter ).c_str() + result.text());
             result = EC_IllegalCall;
         }
         else
