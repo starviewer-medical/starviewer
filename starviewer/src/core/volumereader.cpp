@@ -70,25 +70,20 @@ void VolumeReader::read(Volume *volume)
 
 const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
 {
-    QString photometricInterpretation;
-    QStringList fileList;
+    int firstImageRows = 0;
+    int firstImageColumns = 0;
     QList<Image *> imageSet = volume->getImages();
-
-    // TODO De moment, per defecte llegirem amb ITK-GDCM
-    // tret que es doni una condició que ho canvïi
-    m_suitablePixelDataReader = ITKGDCMPixelDataReader;
-
-    int imageSize[2];
     if (!imageSet.empty())
     {
-        imageSize[0] = imageSet.first()->getRows();
-        imageSize[1] = imageSet.first()->getColumns();
+        firstImageRows = imageSet.first()->getRows();
+        firstImageColumns = imageSet.first()->getColumns();
     }
     
     bool containsDifferentSizeImages = false;
     bool containsColorImages = false;
     bool avoidWrongPixelType = false;
-    
+
+    QStringList fileList;
     foreach (Image *image, imageSet)
     {
         if (!fileList.contains(image->getPath())) // Evitem afegir més vegades l'arxiu si aquest és multiframe
@@ -101,7 +96,7 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
         // imatges de diferents mides es guardin en volums diferents, per tant, hauria de
         // ser anòmal i inesperat trobar-nos amb aquest cas. Tot i així ens serveix per evitar que
         // si es donés el cas ens petés el programa
-        if (imageSize[0] != image->getRows() || imageSize[1] != image->getColumns())
+        if (firstImageRows != image->getRows() || firstImageColumns != image->getColumns())
         {
             DEBUG_LOG("Tenim imatges de diferents mides!");
             containsDifferentSizeImages = true;
@@ -109,7 +104,7 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
 
         // Comprovem si es tracta d'una imatge a color
         // TODO Caldria diferenciar també els casos en que tenim més d'una imatge de diferents mides i que alguna és de color
-        photometricInterpretation = image->getPhotometricInterpretation();
+        QString photometricInterpretation = image->getPhotometricInterpretation();
         if (!photometricInterpretation.contains("MONOCHROME"))
         {
             // Si photometric interpretation no és ni MONOCHROME1 ni MONOCHROME2, llavors és algun tipu d'imatge a color:
@@ -134,6 +129,10 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
             }
         }
     }
+
+    // TODO De moment, per defecte llegirem amb ITK-GDCM
+    // tret que es doni una condició que ho canvïi
+    m_suitablePixelDataReader = ITKGDCMPixelDataReader;
 
     if (!containsDifferentSizeImages && containsColorImages)
     {
