@@ -7,7 +7,6 @@
 #ifndef UDGQQUERYPACSJOB_H
 #define UDGQQUERYPACSJOB_H
 
-#include <QThread>
 #include <QList>
 #include <QHash>
 
