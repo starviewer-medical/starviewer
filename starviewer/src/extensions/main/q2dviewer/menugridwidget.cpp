@@ -25,7 +25,7 @@
 namespace udg {
 
 MenuGridWidget::MenuGridWidget( QWidget *parent )
- : QWidget( parent ), m_searchingWidget(0), m_hangingProtocolWidget(0)
+ : QWidget( parent ), m_searchingWidget(0)
 {
     setWindowFlags(Qt::Popup);
     m_maxColumns = 5;
@@ -53,11 +53,6 @@ void MenuGridWidget::createHangingProtocolsWidget()
     int positionColumn = 0;
     int numberOfHangingProtocols = m_hangingItems.size();
 
-    if ( m_hangingProtocolWidget != NULL )
-        delete m_hangingProtocolWidget;
-    
-    m_hangingProtocolWidget = new QWidget( this );
-    
     if( numberOfHangingProtocols > 0 )
     {
         int hangingProtocolNumber;
