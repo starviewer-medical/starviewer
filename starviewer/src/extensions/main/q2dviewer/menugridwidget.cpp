@@ -30,13 +30,7 @@ MenuGridWidget::MenuGridWidget( QWidget *parent )
     setWindowFlags(Qt::Popup);
     m_maxColumns = 5;
 
-    m_gridLayout = new QGridLayout( this );
-    m_gridLayout->setSpacing( 6 );
-    m_gridLayout->setMargin( 6 );
-
-    m_nextHangingProtocolRow = 0;
-    m_nextHangingProtocolColumn = 0;
-    m_gridLayoutHanging = 0;
+    initializeWidget();
 
     // Creem el widget amb l'animació de "searching"
     createSearchingWidget();
@@ -53,32 +47,12 @@ void MenuGridWidget::createHangingProtocolsWidget()
     int positionColumn = 0;
     int numberOfHangingProtocols = m_hangingItems.size();
 
+    dropContent();
+
     if( numberOfHangingProtocols > 0 )
     {
         int hangingProtocolNumber;
         HangingProtocol * hangingProtocol;
-
-        m_gridLayoutHanging = new QGridLayout();
-        m_gridLayoutHanging->setSpacing( 6 );
-        m_gridLayoutHanging->setMargin( 6 );
-        QSpacerItem * spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum); 
-        m_gridLayoutHanging->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
-
-        QFrame * line_hanging = new QFrame(this);
-        line_hanging->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-        line_hanging->setFrameShape(QFrame::HLine);
-        line_hanging->setFrameShadow(QFrame::Sunken);
-        QLabel * label_hanging = new QLabel(this);
-        label_hanging->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-        label_hanging->setText("Hanging protocols");
-        QHBoxLayout * hboxLayout_hanging = new QHBoxLayout();
-        hboxLayout_hanging->setMargin( 0 );
-        hboxLayout_hanging->setSpacing( 6 );
-        hboxLayout_hanging->addWidget(line_hanging);
-        hboxLayout_hanging->addWidget(label_hanging);
-
-        m_gridLayout->addLayout( hboxLayout_hanging, 2, 0, 1, 1 );
-        m_gridLayout->addLayout( m_gridLayoutHanging, 3, 0, 1, 1);
 
         for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
         {
@@ -101,6 +75,38 @@ void MenuGridWidget::createHangingProtocolsWidget()
 
     if( m_putLoadingItem )
         addSearchingItem();
+}
+
+void MenuGridWidget::initializeWidget()
+{
+    m_gridLayout = new QGridLayout( this );
+    m_gridLayout->setSpacing( 6 );
+    m_gridLayout->setMargin( 6 );
+
+    m_nextHangingProtocolRow = 0;
+    m_nextHangingProtocolColumn = 0;
+
+    m_gridLayoutHanging = new QGridLayout(this);
+    m_gridLayoutHanging->setSpacing( 6 );
+    m_gridLayoutHanging->setMargin( 6 );
+    QSpacerItem * spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_gridLayoutHanging->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
+
+    QFrame * line_hanging = new QFrame(this);
+    line_hanging->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    line_hanging->setFrameShape(QFrame::HLine);
+    line_hanging->setFrameShadow(QFrame::Sunken);
+    QLabel * label_hanging = new QLabel(this);
+    label_hanging->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    label_hanging->setText("Hanging protocols");
+    QHBoxLayout * hboxLayout_hanging = new QHBoxLayout(this);
+    hboxLayout_hanging->setMargin( 0 );
+    hboxLayout_hanging->setSpacing( 6 );
+    hboxLayout_hanging->addWidget(line_hanging);
+    hboxLayout_hanging->addWidget(label_hanging);
+
+    m_gridLayout->addLayout( hboxLayout_hanging, 2, 0, 1, 1 );
+    m_gridLayout->addLayout( m_gridLayoutHanging, 3, 0, 1, 1);
 }
 
 ItemMenu * MenuGridWidget::createIcon( const HangingProtocol * hangingProtocol )

@@ -71,6 +71,10 @@ protected:
     /// per trobar hanging protocols potencials a aplicar sobre l'estudi
     void createSearchingWidget();
 
+private:
+    /// Inicialitza el widget i el deixa apunt per afegir-hi hanging protocols.
+    void initializeWidget();
+
 protected:
 
     /// Nombre de columnes a mostrar
