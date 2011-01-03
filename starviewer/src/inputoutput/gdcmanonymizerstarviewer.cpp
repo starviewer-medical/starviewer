@@ -12,25 +12,28 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "gdcmAnonymizer.h"
-#include "gdcmGlobal.h"
-#include "gdcmStringFilter.h"
-#include "gdcmSequenceOfItems.h"
-#include "gdcmExplicitDataElement.h"
-#include "gdcmSwapper.h"
-#include "gdcmDataSetHelper.h"
-#include "gdcmUIDGenerator.h"
-#include "gdcmAttribute.h"
-#include "gdcmDummyValueGenerator.h"
-#include "gdcmDicts.h"
-#include "gdcmType.h"
-#include "gdcmDefs.h"
-#include "gdcmCryptographicMessageSyntax.h"
-#include "gdcmEvent.h"
-#include "gdcmAnonymizeEvent.h"
+#include <gdcmAnonymizer.h>
+#include <gdcmGlobal.h>
+#include <gdcmStringFilter.h>
+#include <gdcmSequenceOfItems.h>
+#include <gdcmExplicitDataElement.h>
+#include <gdcmSwapper.h>
+#include <gdcmDataSetHelper.h>
+#include <gdcmUIDGenerator.h>
+#include <gdcmAttribute.h>
+#include <gdcmDummyValueGenerator.h>
+#include <gdcmDicts.h>
+#include <gdcmType.h>
+#include <gdcmDefs.h>
+//#include "gdcmCryptographicMessageSyntax.h" Commentat per Marc
+#include <gdcmEvent.h>
+#include <gdcmAnonymizeEvent.h>
+
+#include "gdcmanonymizerstarviewer.h"
 
 namespace gdcm
 {
+
 // PS 3.15 - 2008
 // Table E.1-1
 // BALCPA
@@ -86,25 +89,24 @@ static Tag BasicApplicationLevelConfidentialityProfileAttributes[] = {
 /*    Related Frame of Reference UID            */ Tag(0x3006,0x00C2)
 };
 
-
-Anonymizer::~Anonymizer()
+gdcmAnonymizerStarviewer::~gdcmAnonymizerStarviewer()
 {
 }
 
-bool Anonymizer::Empty( Tag const &t)
+bool gdcmAnonymizerStarviewer::Empty( Tag const &t)
 {
   // There is a secret code path to make it work for VR::SQ since operation is just 'make empty'
   return Replace(t, "", 0);
 }
 
-bool Anonymizer::Remove( Tag const &t )
+bool gdcmAnonymizerStarviewer::Remove( Tag const &t )
 {
   if( t.GetGroup() < 0x0008 ) return false;
   DataSet &ds = F->GetDataSet();
   return ds.Remove( t ) == 1;
 }
 
-bool Anonymizer::Replace( Tag const &t, const char *value )
+bool gdcmAnonymizerStarviewer::Replace( Tag const &t, const char *value )
 {
   size_t len = 0;
   if( value )
@@ -114,7 +116,7 @@ bool Anonymizer::Replace( Tag const &t, const char *value )
   return Replace( t, value, len );
 }
 
-bool Anonymizer::Replace( Tag const &t, const char *value, VL const & vl )
+bool gdcmAnonymizerStarviewer::Replace( Tag const &t, const char *value, VL const & vl )
 {
   if( t.GetGroup() < 0x0008 ) return false;
   static const Global &g = GlobalInstance;
@@ -301,7 +303,7 @@ static bool Anonymizer_RemoveRetired(File const &file, DataSet &ds)
   return true;
 }
 
-bool Anonymizer::RemoveRetired()
+bool gdcmAnonymizerStarviewer::RemoveRetired()
 {
   DataSet &ds = F->GetDataSet();
   return Anonymizer_RemoveRetired(*F, ds);
@@ -347,7 +349,7 @@ static bool Anonymizer_RemoveGroupLength(File const &file, DataSet &ds)
   return true;
 }
 
-bool Anonymizer::RemoveGroupLength()
+bool gdcmAnonymizerStarviewer::RemoveGroupLength()
 {
   DataSet &ds = F->GetDataSet();
   return Anonymizer_RemoveGroupLength(*F, ds);
@@ -393,7 +395,7 @@ static bool Anonymizer_RemovePrivateTags(File const &file, DataSet &ds)
   return true;
 }
 
-bool Anonymizer::RemovePrivateTags()
+bool gdcmAnonymizerStarviewer::RemovePrivateTags()
 {
   DataSet &ds = F->GetDataSet();
   return Anonymizer_RemovePrivateTags(*F, ds);
@@ -408,19 +410,20 @@ bool Anonymizer::RemovePrivateTags()
  * automatically...
  * this is left as an exercise for the reader :)
  */
-bool Anonymizer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
+bool gdcmAnonymizerStarviewer::BasicApplicationLevelConfidentialityProfile(bool deidentify)
 {
   this->InvokeEvent( StartEvent() );
   bool ret;
   if( deidentify )
     ret = BasicApplicationLevelConfidentialityProfile1();
-  else
-    ret = BasicApplicationLevelConfidentialityProfile2();
+ /* Comentat per Marc
+   else 
+    ret = BasicApplicationLevelConfidentialityProfile2();*/
   this->InvokeEvent( EndEvent() );
   return ret;
 }
 
-std::vector<Tag> Anonymizer::GetBasicApplicationLevelConfidentialityProfileAttributes()
+std::vector<Tag> gdcmAnonymizerStarviewer::GetBasicApplicationLevelConfidentialityProfileAttributes()
 {
   static const unsigned int deidSize = sizeof(Tag);
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
@@ -429,7 +432,7 @@ std::vector<Tag> Anonymizer::GetBasicApplicationLevelConfidentialityProfileAttri
   return std::vector<Tag>(start, end);
 }
 
-bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems* sqi) const
+bool gdcmAnonymizerStarviewer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems* sqi) const
 {
   static const unsigned int deidSize = sizeof(Tag);
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
@@ -477,14 +480,14 @@ bool Anonymizer::CheckIfSequenceContainsAttributeToAnonymize(File const &file, S
 // 1 EndEvent
 // 6 IterationEvent
 // N AnonymizeEvent (depend on number of tag found)
-bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
+bool gdcmAnonymizerStarviewer::BasicApplicationLevelConfidentialityProfile1()
 {
   static const unsigned int deidSize = sizeof(Tag);
   static const unsigned int numDeIds = sizeof(BasicApplicationLevelConfidentialityProfileAttributes) / deidSize;
   static const Tag *start = BasicApplicationLevelConfidentialityProfileAttributes;
   static const Tag *end = start + numDeIds;
 
-  CryptographicMessageSyntax &p7 = *CMS;
+  //CryptographicMessageSyntax &p7 = *CMS; Comentar per Marc
   //p7.SetCertificate( this->x509 );
 
   DataSet &ds = F->GetDataSet();
@@ -514,6 +517,7 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
   // might have been created. Only a single Item shall be present.
 
   // Create a Sequence
+  /* Comentat per Marc
   SmartPointer<SequenceOfItems> sq1 = new SequenceOfItems();
   sq1->SetLengthToUndefined();
 
@@ -650,10 +654,11 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile1()
     ds.Insert(subdes);
     }
   this->InvokeEvent( IterationEvent() );
-
+*/
   // 2. Each Attribute to be protected shall then either be removed from the dataset, or have its value
   // replaced by a different "replacement value" which does not allow identification of the patient.
 
+  //Aquest codi ha estat comentat per GDCM
   //for(const Tag *ptr = start ; ptr != end ; ++ptr)
   //  {
   //  const Tag& tag = *ptr;
@@ -692,14 +697,6 @@ catch(...)
 
   this->InvokeEvent( IterationEvent() );
 
-  // Since the de-identified SOP Instance is a significantly altered version of the original Data Set, it is
-  // a new SOP Instance, with a SOP Instance UID that differs from the original Data Set.
-  UIDGenerator uid;
-  if( ds.FindDataElement( Tag(0x008,0x0018) ) )
-    Replace( Tag(0x008,0x0018), uid.Generate() );
-
-  this->InvokeEvent( IterationEvent() );
-
   return true;
 }
 
@@ -726,7 +723,7 @@ static const Tag SpecialTypeTags[] = {
 /*   Series Number           */ Tag(0x0020,0x0011)
 };
 
-bool Anonymizer::CanEmptyTag(Tag const &tag, const IOD &iod) const
+bool gdcmAnonymizerStarviewer::CanEmptyTag(Tag const &tag, const IOD &iod) const
 {
   static const Global &g = Global::GetInstance();
   //static const Dicts &dicts = g.GetDicts();
@@ -782,9 +779,9 @@ generate a DICOMDIR
   return !b;
 }
 
-bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
+bool gdcmAnonymizerStarviewer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
 {
-  // \precondition
+ // \precondition
   assert( ds.FindDataElement(tag) );
 
   AnonymizeEvent ae;
@@ -792,50 +789,76 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
   this->InvokeEvent( ae );
 
   typedef std::pair< Tag, std::string > TagValueKey;
-  typedef std::map< TagValueKey, std::string > DummyMap;
-  static DummyMap dummymap;
-  gdcm::UIDGenerator uid;
-
-  //DataSet &ds = F->GetDataSet();
+  typedef std::map< TagValueKey, std::string > DummyMapNonUIDTags;
+  typedef std::map< std::string, std::string > DummyMapUIDTags;
+  static DummyMapNonUIDTags dummyMapNonUIDTags;
+  static DummyMapUIDTags dummyMapUIDTags;
 
   bool canempty = CanEmptyTag( tag, iod );
   if( !canempty )
     {
-    TagValueKey tvk;
-    tvk.first = tag;
     DataElement copy;
     copy = ds.GetDataElement( tag );
-    // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
-    // has an empty 0008,0018 attribute, let's try to handle that:
-    if( !copy.IsEmpty() )
+
+    if ( IsVRUI( tag ) )
       {
-      if( ByteValue *bv = copy.GetByteValue() )
+      std::string UIDToAnonymize = "";
+      gdcm::UIDGenerator uid;
+
+      if( !copy.IsEmpty() )
         {
-        tvk.second = std::string( bv->GetPointer(), bv->GetLength() );
+        if( ByteValue *bv = copy.GetByteValue() )
+          {
+          UIDToAnonymize = std::string( bv->GetPointer(), bv->GetLength() );
+          }
         }
-      }
-    assert( dummymap.count( tvk ) == 0 || dummymap.count( tvk ) == 1 );
-    if( dummymap.count( tvk ) == 0 )
-      {
-      // Generate a new (single) dummy value:
-      if( IsVRUI( tag ) )
+
+      std::string anonymizedUID = ""; 
+      if( !UIDToAnonymize.empty() )
         {
-        dummymap[ tvk ] = uid.Generate();
+        if ( dummyMapUIDTags.count( UIDToAnonymize ) == 0 )
+          {
+          anonymizedUID = uid.Generate();
+          dummyMapUIDTags[ UIDToAnonymize ] = anonymizedUID;
+          //INFO_LOG(QString("Busquem valor per tag %1,%2").arg(tag.GetGroup()).arg(tag.GetElement()) + QString("Genero nou valor per %1 el nou valor es %2").arg(UIDValue.c_str()).arg(anonymizedUID.c_str())); 
+          }
+        else
+          {
+          anonymizedUID = dummyMapUIDTags[ UIDToAnonymize ];
+          //INFO_LOG(QString("Busquem valor per tag %1,%2").arg(tag.GetGroup()).arg(tag.GetElement()) + QString("Trobo valor per %1 el seu valor es %2").arg(UIDValue.c_str()).arg(anonymizedUID.c_str())); 
+          }
         }
       else
+        {
+        // gdcmData/LEADTOOLS_FLOWERS-16-MONO2-JpegLossless.dcm
+        // has an empty 0008,0018 attribute, let's try to handle creating new UID
+        anonymizedUID = uid.Generate();
+        }
+
+        copy.SetByteValue( anonymizedUID.c_str(), anonymizedUID.size() );
+        ds.Replace( copy );
+      }
+    else
+      {      
+      TagValueKey tvk;
+      tvk.first = tag;
+
+      assert( dummyMapNonUIDTags.count( tvk ) == 0 || dummyMapNonUIDTags.count( tvk ) == 1 );
+      if( dummyMapNonUIDTags.count( tvk ) == 0 )
         {
         const char *ret = DummyValueGenerator::Generate( tvk.second.c_str() );
         if( ret )
           {
-          dummymap[ tvk ] = ret;
+          dummyMapNonUIDTags[ tvk ] = ret;
           }
         else
-          dummymap[ tvk ] = "";
+          dummyMapNonUIDTags[ tvk ] = "";
         }
+
+      std::string &v = dummyMapNonUIDTags[ tvk ];
+      copy.SetByteValue( v.c_str(), v.size() );
       }
-    std::string &v = dummymap[ tvk ];
-    copy.SetByteValue( v.c_str(), v.size() );
-    ds.Replace( copy );
+      ds.Replace( copy );
     }
   else
     {
@@ -847,7 +870,7 @@ bool Anonymizer::BALCPProtect(DataSet &ds, Tag const & tag, IOD const & iod)
   return true;
 }
 
-void Anonymizer::RecurseDataSet( DataSet & ds )
+void gdcmAnonymizerStarviewer::RecurseDataSet( DataSet & ds )
 {
   if( ds.IsEmpty() ) return;
 
@@ -912,6 +935,7 @@ void Anonymizer::RecurseDataSet( DataSet & ds )
 //  return AESKey;
 //}
 
+/* No necessitem la part de desencriptar per tant comentem tota aquest mètode. Comentat per Marc
 bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 {
   // 1. The application shall decrypt, using its recipient key, one instance of the Encrypted Content
@@ -1033,7 +1057,9 @@ bool Anonymizer::BasicApplicationLevelConfidentialityProfile2()
 
   return true;
 }
+*/
 
+/* Comentat per Marc
 void Anonymizer::SetCryptographicMessageSyntax(CryptographicMessageSyntax *cms)
 {
   CMS = cms;
@@ -1043,6 +1069,6 @@ const CryptographicMessageSyntax *Anonymizer::GetCryptographicMessageSyntax() co
 {
   return CMS;
 }
-
+*/
 } // end namespace gdcm
 

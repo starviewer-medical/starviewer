@@ -12,19 +12,34 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#ifndef GDCMANONYMIZER_H
-#define GDCMANONYMIZER_H
+#ifndef GDCMANONYMIZERSTARVIEWER_H
+#define GDCMANONYMIZERSTARVIEWER_H
 
-#include "gdcmFile.h"
-#include "gdcmSubject.h"
-#include "gdcmEvent.h"
-#include "gdcmSmartPointer.h"
+#include <gdcmFile.h>
+#include <gdcmSubject.h>
+#include <gdcmEvent.h>
+#include <gdcmSmartPointer.h>
+#include <gdcmWriter.h>
 
+/** ATENCIÓ!!!!!!!!!!!!!!!!!!!!!!!!!!
+    AQUESTA CLASSE ÉS UNA MODIFICACIÓ de la classe de Gdcm Anonymizer, que podrem trobar al fitxer gdcmAnonymizer. Anonymizer és una classe que ens permet 
+    anonimitzar un fitxer DICOM i guardar els valors dels tags originals encriptats en el propi DICOM utilitzant OpenSSL, el problema és que les GDCM amb les que 
+    treballem ara no estan compilades amb OpenSSL i la classe no funcionaria.
+
+    Com en aquestes altures de desenvolupament de la release no considerem que sigui gaire oportu crear un nou sdk amb les GDCM compilades amb openSSL
+    i la part d'encriptar els tags amb el seu valor original no ens interessa, el que hem decidit és modificar aquesta classe treien tota la part d'encriptació
+    ,d'aquesta manera podrem anonimitzar DICOM utilitzant aquesta classe modificada. 
+
+    En la proxima release ja tindrem les GDCM compilades amb OpenSSL i podrem prescindir d'aquesta classe. D'aquesta manera les altres nostres classes que utilitzen
+    aquesta classe simplement hauran de fer referència a la classe de gdcm i ja funcionarà l'anonimització*/
+
+//Utilitzem el namespace de gdcm així quan substituim aquesta classe per la original de gdcm només haurem de canviar el nom de la classe
 namespace gdcm
 {
+
 class TagPath;
 class IOD;
-class CryptographicMessageSyntax;
+//class CryptographicMessageSyntax;
 
 /**
  * \brief Anonymizer
@@ -69,11 +84,13 @@ class CryptographicMessageSyntax;
  *
  * \see CryptographicMessageSyntax
  */
-class GDCM_EXPORT Anonymizer : public Subject
+class gdcmAnonymizerStarviewer: public gdcm::Subject
 {
 public:
-  Anonymizer():F(new File),CMS(NULL) {}
-  ~Anonymizer();
+
+  //Anonymizer():F(new File),CMS(NULL) {} Substituim aquest constructor pel de sota. Comentar per Marc
+  gdcmAnonymizerStarviewer():F(new File) {}
+  ~gdcmAnonymizerStarviewer();
 
   /// Make Tag t empty (if not found tag will be created)
   /// Warning: does not handle SQ element
@@ -120,11 +137,12 @@ public:
   bool BasicApplicationLevelConfidentialityProfile(bool deidentify = true);
 
   /// Set/Get CMS key that will be used to encrypt the dataset within BasicApplicationLevelConfidentialityProfile
+  /* Comentat per Marc
   void SetCryptographicMessageSyntax( CryptographicMessageSyntax *cms );
   const CryptographicMessageSyntax *GetCryptographicMessageSyntax() const;
-
+  */  
   /// for wrapped language: instanciate a reference counted object
-  static SmartPointer<Anonymizer> New() { return new Anonymizer; }
+  static SmartPointer<gdcmAnonymizerStarviewer> New() { return new gdcmAnonymizerStarviewer; }
 
   /// Return the list of Tag that will be considered when anonymizing a DICOM file.
   static std::vector<Tag> GetBasicApplicationLevelConfidentialityProfileAttributes();
@@ -137,13 +155,13 @@ protected:
 
 private:
   bool BasicApplicationLevelConfidentialityProfile1();
-  bool BasicApplicationLevelConfidentialityProfile2();
+  //bool BasicApplicationLevelConfidentialityProfile2(); És el mètode de desencriptar no el necessitem. Comentar per Marc 
   bool CheckIfSequenceContainsAttributeToAnonymize(File const &file, SequenceOfItems* sqi) const;
 
 private:
   // I would prefer to have a smart pointer to DataSet but DataSet does not derive from Object...
   SmartPointer<File> F;
-  CryptographicMessageSyntax *CMS;
+  //CryptographicMessageSyntax *CMS; Commentar per Marc
 };
 
 /**
