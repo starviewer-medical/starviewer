@@ -168,7 +168,7 @@ void MenuGridWidget::dropContent()
     for( i = 0; i < m_itemList.size(); i++ )
     {
         item = m_itemList.value( i );
-        m_gridLayout->removeWidget( item );
+        m_gridLayoutHanging->removeWidget( item );
         delete item;
     }
     m_itemList.clear();
