@@ -22,7 +22,7 @@ Minor:
  - Millora en la gestió de recursos quan es creen visors en l'extensió 2D
  - L'eina de VoxelInformation només mostra el valor de vòxel que és el que interessa i no el de les coordenades.
  - El calendari que apareix al poder indicar entre quines dates s'ha de cercar un estudi es fa que comenci la setmana en dilluns.
- - Es fusionen les columnes data i hora de la pantalla de cerca d'estudis, en una sola columna per poder ordenar els estudis per data i hora.
+ - Es fusionen les columnes data i hora de la pantalla de cerca d'estudis i del llistat d'estudis previs, en una sola columna per poder ordenar els estudis per data i hora.
  - Es permet filtrar per modalitat a les cerques d'estudis locals.
 
 Bugfix:

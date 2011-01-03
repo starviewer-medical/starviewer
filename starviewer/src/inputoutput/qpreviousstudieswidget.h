@@ -60,9 +60,6 @@ private:
     void increaseNumberOfDownladingStudies();
     void decreaseNumberOfDownladingStudies();
 
-    /// Retorna la llista d'estudis ordenada per Data i Hora en ordre ascendent o descendent segons es vulgui.
-    QList<Study*> orderStudiesByDateTime(QList<Study*> &inputList, bool descendingOrder = false);
-
     void initializeSearch();
 
 private slots:
