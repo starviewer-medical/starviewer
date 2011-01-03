@@ -255,39 +255,42 @@ void QCreateDicomdir::createDicomdir()
     ///Comprovem en funció del dispositiu a crear el DICOMDIR, si s'ha de copiar el contingut del directori escollit al DICOMDIR, si és així comprovem si l'usuari
     ///té permisos de lectura sobre el directori i si el directori existeix, en cas que alguna d'aquestes dos condicions no es compleixi es dona la possibilitat
     ///de continuar a l'usuari
+    //TODO: Passar això a un mètode
     if (haveToCopyFolderContentToDICOMDIR())
     {
         Settings settings;
         QString message;
         QDir qdir(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
 
-        if (!qdir.exists())
+        if (!qdir.exists() || ! qdir.isReadable())
         {
-            message = tr("The directory '%1' to copy the content to DICOMDIR doesn't exist.\n\n")
-                .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
-            message += tr("Do you want to continue creating DICOMDIR without copy the content of it?");
-        }
-        else if (!qdir.isReadable())
-        {
-            message = tr("You don't have read permissions on directory '%1' to copy the content of It to DICOMDIR.\n\n")
-                .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
-            message += tr("Do you want to continue creating DICOMDIR without copy the content of it?");
-        }
-
-        if (QMessageBox::question(this, ApplicationNameString, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No)
-        {
-            return;
-        }
-        else
-        {
-            //Si continuem sense copiar el directori desactivem l'opció.
-            if (m_currentDevice == CreateDicomdir::UsbPen || m_currentDevice == CreateDicomdir::HardDisk)
+            if (!qdir.exists())
             {
-                m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(false);
+                message = tr("The directory '%1' to copy the content to DICOMDIR doesn't exist.\n\n")
+                    .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+            }
+            else 
+            {
+                message = tr("You don't have read permissions on directory '%1' to copy the content of It to DICOMDIR.\n\n")
+                    .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+            }
+            message += tr("Do you want to continue creating DICOMDIR without copy the content of it?");        
+
+            if (QMessageBox::question(this, ApplicationNameString, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No)
+            {
+                return;
             }
             else
             {
-                m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(false);
+                //Si continuem sense copiar el directori desactivem l'opció.
+                if (m_currentDevice == CreateDicomdir::UsbPen || m_currentDevice == CreateDicomdir::HardDisk)
+                {
+                    m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(false);
+                }
+                else
+                {
+                    m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(false);
+                }
             }
         }
     }
