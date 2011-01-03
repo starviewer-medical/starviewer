@@ -82,11 +82,6 @@ protected:
     /// Llista dels items
     QList<ItemMenu *> m_itemList;
 
-    /// Agrupament del menu
-    QWidget *m_predefinedGridWidget;
-    QWidget *m_hangingProtocolWidget;
-    QWidget *m_tableGridWidget;
-
     /// Llista de hanging protocols a mostrar
     QList< HangingProtocol * > m_hangingItems;
 
