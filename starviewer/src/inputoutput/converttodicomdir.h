@@ -50,7 +50,7 @@ public:
      * @return Indica l'estat en què finalitza el mètode
      */
     //TODO:La comprovació de que la carpeta destí estigui buida es fa a QCreateDicomdir s'hauria de traslladar en aquesta classe
-    Status convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent );
+    Status convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent, bool anonymizeDICOMDIR);
 
     /** Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
       * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt

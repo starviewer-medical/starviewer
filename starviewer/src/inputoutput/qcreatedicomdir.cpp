@@ -436,7 +436,7 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         INFO_LOG( "L'estudi " + item->text( 7 ) + " s'afegirà al DICOMDIR " );
     }
 
-    state = convertToDicomdir.convert(dicomdirPath, m_currentDevice, haveToCopyFolderContentToDICOMDIR());
+    state = convertToDicomdir.convert(dicomdirPath, m_currentDevice, haveToCopyFolderContentToDICOMDIR(), m_anonymizeDICOMDIRCheckBox->isChecked());
 
     if ( !state.good() )
     {

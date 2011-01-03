@@ -367,10 +367,22 @@
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <property name="rightMargin">
+           <number>9</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="m_DICOMDIRUsedSpaceLabel">
             <property name="font">
@@ -432,6 +444,12 @@
         </widget>
         <widget class="QWidget" name="page_2">
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <layout class="QHBoxLayout">
             <property name="spacing">
@@ -496,6 +514,13 @@
           </item>
          </layout>
         </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="m_anonymizeDICOMDIRCheckBox">
+        <property name="text">
+         <string>Anonymize DICOMDIR.</string>
+        </property>
        </widget>
       </item>
       <item>

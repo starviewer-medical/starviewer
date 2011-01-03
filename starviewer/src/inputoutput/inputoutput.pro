@@ -81,7 +81,9 @@ HEADERS += databaseconnection.h \
     senddicomfilestopacsjob.h \
     pacsrequeststatus.h \
     retrievedicomfilesfrompacsjob.h \
-    echotopacs.h
+    echotopacs.h \
+    gdcmanonymizerstarviewer.h \
+    dicomanonymizer.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsdevice.cpp \
@@ -138,13 +140,16 @@ SOURCES += databaseconnection.cpp \
     pacsjob.cpp \
     senddicomfilestopacsjob.cpp  \
     retrievedicomfilesfrompacsjob.cpp \
-    echotopacs.cpp
+    echotopacs.cpp \
+    gdcmanonymizerstarviewer.cpp \
+        dicomanonymizer.cpp
 INCLUDEPATH += ../core
 DEPENDPATH += ../core
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
 include(../vtk.inc)
+include(../gdcm.inc)
 include(../itk.inc)
 include(../dcmtk.inc)
 include(../log4cxx.inc)

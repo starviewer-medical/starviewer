@@ -22,6 +22,7 @@
 #include "image.h"
 #include "inputoutputsettings.h"
 #include "copydirectory.h"
+#include "dicomanonymizer.h"
 
 namespace udg {
 
@@ -87,7 +88,7 @@ void ConvertToDicomdir::addStudy( const QString &studyUID )
 /*TODO:Si la creació del DICOMDIR Falla aquest mètode esborra el contingut del directori on s'havia de crear el DICOMDIR, al fer això
        la classe abans de crear el DICOMDIR hauria de comprovar que el directori està buit, perquè sinó podríem eliminar contingut del usuari.
        Ara aquesta comprovació es fa a la QCreateDicomdir i s'hauria de fer aquí*/
-Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent)
+Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent, bool anonymizeDICOMDIR)
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     Status state;
@@ -153,6 +154,17 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
         m_progress->close();
         DeleteDirectory().deleteDirectory( m_dicomDirPath , false );
         return state;
+    }
+
+    if (anonymizeDICOMDIR)
+    {
+        DICOMAnonymizer dicomAnonymizer;
+
+        dicomAnonymizer.setReplacePatientIDInsteadOfRemove(true);
+        dicomAnonymizer.setReplaceStudyIDInsteadOfRemove(true);
+        INFO_LOG("Comenco a anonimitzar");
+        dicomAnonymizer.anonymyzeDICOMFilesDirectory(m_dicomDirPath);
+        INFO_LOG("Acabo d'anonimitzar");
     }
 
     //una vegada copiada les imatges les creem
