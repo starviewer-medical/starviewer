@@ -14,7 +14,7 @@
 namespace udg {
 
 VolumeReader::VolumeReader(QObject *parent)
-: QObject(parent), m_volumePixelDataReader(0), m_suitablePixelDataReader(ITKGDCMPixelDataReader)
+: QObject(parent), m_volumePixelDataReader(0)
 {
 }
 
@@ -35,11 +35,12 @@ void VolumeReader::read(Volume *volume)
     }    
     
     // Obtenim els arxius que hem de llegir
-    QStringList fileList = chooseFilesAndSuitableReader(volume);
+    QStringList fileList = this->getFilesToRead(volume);
     if (!fileList.isEmpty())
     {
         // Posem a punt el reader i llegim les dades
-        setUpReader();
+        PixelDataReaderType readerType = this->getSuitableReader(volume);
+        this->setUpReader(readerType);
         switch (m_volumePixelDataReader->read(fileList))
         {
             case VolumePixelDataReader::OutOfMemory: 
@@ -68,7 +69,21 @@ void VolumeReader::read(Volume *volume)
     }
 }
 
-const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
+QStringList VolumeReader::getFilesToRead(Volume *volume) const
+{
+    QStringList fileList;
+    foreach (Image *image, volume->getImages())
+    {
+        if (!fileList.contains(image->getPath())) // Evitem afegir més vegades l'arxiu si aquest és multiframe
+        {
+            fileList << image->getPath();
+        }
+    }
+
+    return fileList;
+}
+
+VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume) const
 {
     int firstImageRows = 0;
     int firstImageColumns = 0;
@@ -83,14 +98,8 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
     bool containsColorImages = false;
     bool avoidWrongPixelType = false;
 
-    QStringList fileList;
     foreach (Image *image, imageSet)
     {
-        if (!fileList.contains(image->getPath())) // Evitem afegir més vegades l'arxiu si aquest és multiframe
-        {
-            fileList << image->getPath();
-        }
-
         // Comprovem que no tingui imatges de diferents mides
         // TODO Aquesta comprovació podria desaparèixer ja que ara fem que les 
         // imatges de diferents mides es guardin en volums diferents, per tant, hauria de
@@ -130,25 +139,24 @@ const QStringList VolumeReader::chooseFilesAndSuitableReader(Volume *volume)
         }
     }
 
-    // TODO De moment, per defecte llegirem amb ITK-GDCM
-    // tret que es doni una condició que ho canvïi
-    m_suitablePixelDataReader = ITKGDCMPixelDataReader;
-
     if (!containsDifferentSizeImages && containsColorImages)
     {
         // Si conté imatges de color i totes són de la mateixa mida les llegirem amb VTK-GDCM
-        m_suitablePixelDataReader = VTKGDCMPixelDataReader;
+        return VTKGDCMPixelDataReader;
     }
     else if (avoidWrongPixelType)
     {
         // Com que el reader de vtkGDCM decideix el tipus dinàmicament, allotjarem el tipus de pixel correcte
-        m_suitablePixelDataReader = VTKGDCMPixelDataReader;
+        return VTKGDCMPixelDataReader;
     }
-
-    return fileList;
+    else
+    {
+        // TODO De moment, per defecte llegirem amb ITK-GDCM excepte en les condicions anteriors
+        return ITKGDCMPixelDataReader;
+    }
 }
 
-void VolumeReader::setUpReader()
+void VolumeReader::setUpReader(PixelDataReaderType readerType)
 {
     // Eliminem un lector anterior si l'havia
     if (m_volumePixelDataReader)
@@ -157,7 +165,7 @@ void VolumeReader::setUpReader()
     }
 
     // Segons quin pixel data reader estigui seleccionat, crearem l'objecte que toqui
-    switch (m_suitablePixelDataReader)
+    switch (readerType)
     {
         case ITKGDCMPixelDataReader:
             m_volumePixelDataReader = new VolumePixelDataReaderITKGDCM(this);

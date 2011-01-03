@@ -27,21 +27,21 @@ signals:
     void progress(int progress);
 
 private:
-    /// Ens retorna els arxius que hem de llegir i escull quin hauria de ser el lector adequat
-    const QStringList chooseFilesAndSuitableReader(Volume *volume);
+    /// Definim els tipus de lectors que podem fer servir segons les dades del volum
+    enum PixelDataReaderType { ITKGDCMPixelDataReader, VTKGDCMPixelDataReader };
 
-    /// Posa a punt el reader adequat
-    void setUpReader();
+    /// Ens retorna els arxius que hem de llegir, sense retornar-ne cap de repetit
+    QStringList getFilesToRead(Volume *volume) const;
+
+    /// Retorna el tipus de lector mes adequat per llegir el volume que se li passa.
+    PixelDataReaderType getSuitableReader(Volume *volume) const;
+
+    /// Crea i posa a punt el tipus de reader que se li passa per poder llegir a continuacio
+    void setUpReader(PixelDataReaderType readerType);
 
 private:
     /// Classe amb la qual llegirem les dades d'imatge del volum
     VolumePixelDataReader *m_volumePixelDataReader;
-
-    /// Definim els tipus de lectors que podem fer servir segons les dades del volum
-    enum SuitablePixelDataReader { ITKGDCMPixelDataReader, VTKGDCMPixelDataReader };
-    
-    /// Amb aquesta variable sabrem quin és el lector que hem de fer servir
-    SuitablePixelDataReader m_suitablePixelDataReader;
 };
 
 } // End namespace udg
