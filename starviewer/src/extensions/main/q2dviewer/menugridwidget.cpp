@@ -74,18 +74,8 @@ void MenuGridWidget::initializeWidget()
 
 ItemMenu* MenuGridWidget::createIcon(const HangingProtocol *hangingProtocol)
 {
-    HangingProtocolDisplaySet *displaySet;
-    int displaySetNumber;
     ItemMenu *icon = new ItemMenu(this);
     icon->setData(QString(tr("%1").arg(hangingProtocol->getIdentifier())));
-    QStringList listOfPositions;
-    double x1;
-    double x2;
-    double y1;
-    double y2;
-    GridIcon *newIcon;
-    QString iconType;
-
     icon->setGeometry(0, 0, 64, 80);
     icon->setMaximumWidth(64);
     icon->setMinimumWidth(64);
@@ -98,23 +88,22 @@ ItemMenu* MenuGridWidget::createIcon(const HangingProtocol *hangingProtocol)
     sizeText->setAlignment(Qt::AlignHCenter);
     sizeText->setGeometry(0, 64, 64, 80);
 
-    for (displaySetNumber = 1; displaySetNumber <= hangingProtocol->getNumberOfDisplaySets(); displaySetNumber++)
+    foreach (HangingProtocolDisplaySet *displaySet, hangingProtocol->getDisplaySets())
     {
-        displaySet = hangingProtocol->getDisplaySet(displaySetNumber);
-        iconType = displaySet->getIconType();
+        QString iconType = displaySet->getIconType();
 
         if (iconType.isEmpty())
         {
             iconType = hangingProtocol->getIconType();
         }
 
-        newIcon = new GridIcon(icon, iconType);
+        GridIcon *newIcon = new GridIcon(icon, iconType);
 
-        listOfPositions = displaySet->getPosition().split("\\");
-        x1 = listOfPositions.value(0).toDouble();
-        y1 = listOfPositions.value(1).toDouble();
-        x2 = listOfPositions.value(2).toDouble();
-        y2 = listOfPositions.value(3).toDouble();
+        QStringList listOfPositions = displaySet->getPosition().split("\\");
+        double x1 = listOfPositions.value(0).toDouble();
+        double y1 = listOfPositions.value(1).toDouble();
+        double x2 = listOfPositions.value(2).toDouble();
+        double y2 = listOfPositions.value(3).toDouble();
 
         newIcon->setGeometry(x1*64, (1-y1)*64, ((x2-x1)*64), (y1-y2)*64);
         newIcon->show();
