@@ -40,10 +40,10 @@ public:
     void dropContent();
 
     /// Posa els hanging protocols que ha de representar el menú
-    void setHangingItems( QList<HangingProtocol *> listOfCandidates );
+    void setHangingItems(const QList<HangingProtocol *> &listOfCandidates );
 
     /// Afegeix hanging protocols a la llista
-    void addHangingItems( QList<HangingProtocol *> items );
+    void addHangingItems(const QList<HangingProtocol *> &items );
 
     /// Posa una element que informa que s'estan carregant
     void addSearchingItem();
