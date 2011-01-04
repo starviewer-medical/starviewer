@@ -20,13 +20,13 @@
 namespace udg {
 
 const int QScreenDistribution::MaximumScreenNumberPixelSize = 50;
+const int QScreenDistribution::WidgetMargin = 50;
 
 QScreenDistribution::QScreenDistribution(QWidget *parent)
     : QWidget(parent)
 {
     setMouseTracking(true);
     m_mouseInScreen = -1;
-    m_marging = 50;
     this->setMinimumSize(QSize(300,200));
 }
 
@@ -157,10 +157,10 @@ void QScreenDistribution::computeSizesAndPositions()
 {
     QDesktopWidget *desktop = QApplication::desktop();   
 
-    int MinimumX = 0;
-    int MinimumY = 0;
-    int MaximumX = 0;
-    int MaximumY = 0;
+    int minimumX = 0;
+    int minimumY = 0;
+    int maximumX = 0;
+    int maximumY = 0;
 
     // Per cada pantalla
     for (int i = 0; i < desktop->screenCount(); i++)
@@ -172,30 +172,30 @@ void QScreenDistribution::computeSizesAndPositions()
         m_screens.append(QRect(topLeft, bottomRight));
 
         // I calculem el tamany màxim que ocupa tot el conjunt de pantalles
-        if (topLeft.x() < MinimumX)
+        if (topLeft.x() < minimumX)
         {
-            MinimumX = topLeft.x();
+            minimumX = topLeft.x();
         }
-        if (bottomRight.x() > MaximumX)
+        if (bottomRight.x() > maximumX)
         {
-            MaximumX = bottomRight.x();
+            maximumX = bottomRight.x();
         }
-        if (topLeft.y() < MinimumY)
+        if (topLeft.y() < minimumY)
         {
-            MinimumY = topLeft.y();
+            minimumY = topLeft.y();
         }
-        if (bottomRight.y() > MaximumY)
+        if (bottomRight.y() > maximumY)
         {
-            MaximumY = bottomRight.y();
+            maximumY = bottomRight.y();
         }
     }
 
-    int totalWidth = MaximumX - MinimumX;
-    int totalHeight = MaximumY - MinimumY;    
+    int totalWidth = maximumX - minimumX;
+    int totalHeight = maximumY - minimumY;    
 
     // Calculem la proporció en que s'ha de dividir per que no es deformi el dibuix
-    float widthDivisor = (float)totalWidth / ((float)width() - m_marging * 2);
-    float heightDivisor = (float)totalHeight / ((float)height() - m_marging * 2);
+    float widthDivisor = (float)totalWidth / ((float)width() - WidgetMargin * 2);
+    float heightDivisor = (float)totalHeight / ((float)height() - WidgetMargin * 2);
 
     float divisor = (widthDivisor < heightDivisor) ? heightDivisor : widthDivisor;
     int offsetX = 0;
@@ -203,15 +203,15 @@ void QScreenDistribution::computeSizesAndPositions()
 
     if (widthDivisor > heightDivisor)
     {
-        float centering = (height() - m_marging * 2 - (totalHeight / divisor)) / 2;
-        offsetX = -1 * MinimumX / divisor + m_marging;
-        offsetY = -1 * MinimumY / divisor + m_marging + centering;
+        float centering = (height() - WidgetMargin * 2 - (totalHeight / divisor)) / 2;
+        offsetX = -1 * minimumX / divisor + WidgetMargin;
+        offsetY = -1 * minimumY / divisor + WidgetMargin + centering;
     }
     else
     {
-        float centering = (width() - m_marging * 2 - (totalWidth / divisor)) / 2;
-        offsetX = -1 * MinimumX / divisor + m_marging + centering;
-        offsetY = -1 * MinimumY / divisor + m_marging;
+        float centering = (width() - WidgetMargin * 2 - (totalWidth / divisor)) / 2;
+        offsetX = -1 * minimumX / divisor + WidgetMargin + centering;
+        offsetY = -1 * minimumY / divisor + WidgetMargin;
     }
 
     // Adaptem les posicións a les posicions de dibuix escalades i centrades
