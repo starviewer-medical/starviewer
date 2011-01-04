@@ -84,6 +84,25 @@ void ScreenManager::moveToDesktop(QWidget *window, int idDesktop)
     }
 }
 
+void ScreenManager::moveToPreviousDesktop(QWidget *window)
+{
+    int screenIndex = getIdOfScreen(window);
+    if (screenIndex - 1 < 0)
+    {
+        screenIndex = getNumberOfScreens() - 1; 
+    }
+    else
+    {
+        screenIndex -= 1;
+    }
+    moveToDesktop(window, screenIndex);
+}
+
+void ScreenManager::moveToNextDesktop(QWidget *window)
+{
+    moveToDesktop(window, (getIdOfScreen(window) + 1) % getNumberOfScreens());
+}
+
 int ScreenManager::getNumberOfScreens()
 {
     return m_applicationDesktop->numScreens();

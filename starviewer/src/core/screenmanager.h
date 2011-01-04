@@ -27,6 +27,10 @@ public:
     void maximize(QWidget *window);
     /// Mètode per canviar la finestra especificada per el primer paràmetre a la pantalla amb l'identificador del segon paràmetre.
     void moveToDesktop(QWidget *window, int idDesktop);
+    /// Mètode per moure la finestra a la pantalla anterior segons l'identificador de pantalla
+    void moveToPreviousDesktop(QWidget *window);
+    /// Mètode per moure la finestra a la següent pantalla segons l'identificador de pantalla
+    void moveToNextDesktop(QWidget *window);
     /// Retrona quantes pantalles hi ha.
     int getNumberOfScreens();
     /// Retorna a quina pantalla està la finestra

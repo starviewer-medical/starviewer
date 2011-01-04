@@ -331,25 +331,13 @@ void QApplicationMainWindow::moveToDesktop(int screenIndex)
 void QApplicationMainWindow::moveToPreviousDesktop()
 {
     ScreenManager screenManager;
-    int numberOfScreens = screenManager.getNumberOfScreens();
-    int screenIndex = screenManager.getIdOfScreen(this);
-    if (screenIndex - 1 < 0)
-    {
-        screenIndex = numberOfScreens - 1; 
-    }
-    else
-    {
-        screenIndex -= 1;
-    }
-    screenManager.moveToDesktop(this, screenIndex);
+    screenManager.moveToPreviousDesktop(this);
 }
 
 void QApplicationMainWindow::moveToNextDesktop()
 {
     ScreenManager screenManager;
-    int numberOfScreens = screenManager.getNumberOfScreens();
-    int screenIndex = screenManager.getIdOfScreen(this);
-    screenManager.moveToDesktop(this, (screenIndex + 1) % numberOfScreens);
+    screenManager.moveToNextDesktop(this);
 }
 
 void QApplicationMainWindow::showConfigurationDialog()
