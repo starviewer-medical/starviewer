@@ -122,12 +122,8 @@ void MenuGridWidget::emitSelected(ItemMenu *selected)
 
 void MenuGridWidget::dropContent()
 {
-    int i;
-    ItemMenu *item;
-
-    for (i = 0; i < m_itemList.size(); i++)
+    foreach (ItemMenu *item, m_itemList)
     {
-        item = m_itemList.value(i);
         m_gridLayoutHanging->removeWidget(item);
         delete item;
     }
