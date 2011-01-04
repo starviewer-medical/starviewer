@@ -20,6 +20,7 @@ class QSignalMapper;
 class QLabel;
 class QProgressDialog;
 class QWidgetAction;
+class QShortcut;
 
 namespace udg{
 // Forward declarations
