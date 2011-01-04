@@ -56,11 +56,11 @@ private:
     QList<QRect> m_screens;
     /// Indica l'identificador del monitor sobre l'icone el que està situat el ratolí.
     int m_mouseInScreen;
-    /// Marge al voltant de la finestra per on començar a pintar (Constant).
-    int m_marging;
     /// Tamany de lletra utilitzat pel número de cada pantalla.
     int m_screenNumberPixelSize;
 
+    /// Marge al voltant de la finestra per on començar a pintar.
+    static const int WidgetMargin;
     /// Tamany màxim que pot tenir el número de cada pantalla.
     static const int MaximumScreenNumberPixelSize;
 };
