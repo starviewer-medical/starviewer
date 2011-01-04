@@ -89,6 +89,11 @@ int ScreenManager::getNumberOfScreens()
     return m_applicationDesktop->numScreens();
 }
 
+int ScreenManager::getIdOfScreen(QWidget *window)
+{
+    return m_applicationDesktop->screenNumber(window);
+}
+
 DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
 {
     int desktopIAm = m_applicationDesktop->screenNumber(window);

@@ -29,6 +29,8 @@ public:
     void moveToDesktop(QWidget *window, int idDesktop);
     /// Retrona quantes pantalles hi ha.
     int getNumberOfScreens();
+    /// Retorna a quina pantalla està la finestra
+    int getIdOfScreen(QWidget *window);
 
 private:
     /// Calcula la matriu de distribució de les pantalles.

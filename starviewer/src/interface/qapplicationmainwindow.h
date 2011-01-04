@@ -135,8 +135,12 @@ private slots:
     /// Maximitza a tantes pantalles com es pugui
     void maximizeMultipleScreens();
 
-    /// Moura la finestra de pantalla
+    /// Moure la finestra de pantalla
     void moveToDesktop(int screenIndex);
+    /// Moure la finestra a la pantalla anterior
+    void moveToPreviousDesktop();
+    /// Moure la finestra a la següent pantalla
+    void moveToNextDesktop();
 
     /// Mostra el diàleg de configuració de l'aplicació.
     /// TODO Millorar, de moment és bastant "xapussa"
@@ -211,6 +215,10 @@ private:
 
     /// Les Release Notes o les notes de la nova versió
     ApplicationVersionChecker *m_applicationVersionChecker;
+
+    /// Els shortcuts per moure la finestra a una altra pantalla
+    QShortcut *m_moveToNextDesktopShortcut;
+    QShortcut *m_moveToPreviousDesktopShortcut;
 };
 
 }; // fi namespace udg

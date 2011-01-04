@@ -65,6 +65,9 @@ public:
     static const QString RetrieveAndViewSelectedStudies;
     static const QString RetrieveSelectedStudies;
 
+    static const QString MoveToPreviousDesktop;
+    static const QString MoveToNextDesktop;
+    static const QString MaximizeMultipleScreens;
 };
 
 }
