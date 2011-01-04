@@ -256,7 +256,6 @@ void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study *> studies, QHa
 
     m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies, qhash);
     m_predefinedSeriesGrid->setHangingItems(m_hangingCandidates);
-    m_predefinedSeriesGrid->createHangingProtocolsWidget();
     m_predefinedSeriesGrid->setSearchingItem(false);
 }
 #endif
@@ -273,7 +272,6 @@ void Q2DViewerExtension::showPredefinedGrid()
         numberOfSeries += listStudies.value(i)->getNumberOfSeries();
     }
 
-    m_predefinedSeriesGrid->createHangingProtocolsWidget();
     m_predefinedSeriesGrid->show();
 }
 

@@ -40,43 +40,6 @@ MenuGridWidget::~MenuGridWidget()
 {
 }
 
-void MenuGridWidget::createHangingProtocolsWidget()
-{
-    ItemMenu * icon;
-    int positionRow = 0;
-    int positionColumn = 0;
-    int numberOfHangingProtocols = m_hangingItems.size();
-
-    dropContent();
-
-    if( numberOfHangingProtocols > 0 )
-    {
-        int hangingProtocolNumber;
-        HangingProtocol * hangingProtocol;
-
-        for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
-        {
-            hangingProtocol = m_hangingItems.value( hangingProtocolNumber );
-            icon = createIcon( hangingProtocol );
-
-            m_gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
-            m_itemList.push_back( icon );
-            positionColumn ++;
-
-            if( positionColumn == m_maxColumns )
-            {
-                positionColumn = 0;
-                positionRow++;
-            }
-        }
-    }
-    m_nextHangingProtocolRow = positionRow;
-    m_nextHangingProtocolColumn = positionColumn;
-
-    if( m_putLoadingItem )
-        addSearchingItem();
-}
-
 void MenuGridWidget::initializeWidget()
 {
     m_gridLayout = new QGridLayout( this );
@@ -182,13 +145,44 @@ void MenuGridWidget::dropContent()
 
 void MenuGridWidget::setHangingItems(const QList<HangingProtocol *> &listOfCandidates )
 {
-    m_hangingItems.clear();
-    m_hangingItems = listOfCandidates;
+    dropContent();
+    addHangingItems(listOfCandidates);
 }
 
 void MenuGridWidget::addHangingItems(const QList<HangingProtocol *> &items )
 {
-    m_hangingItems.append( items );
+    ItemMenu * icon;
+    int positionRow = 0;
+    int positionColumn = 0;
+    int numberOfHangingProtocols = items.size();
+
+    if( numberOfHangingProtocols > 0 )
+    {
+        int hangingProtocolNumber;
+        HangingProtocol * hangingProtocol;
+
+        for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
+        {
+            hangingProtocol = items.value( hangingProtocolNumber );
+            icon = createIcon( hangingProtocol );
+
+            m_gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
+            m_itemList.push_back( icon );
+            positionColumn ++;
+
+            if( positionColumn == m_maxColumns )
+            {
+                positionColumn = 0;
+                positionRow++;
+            }
+        }
+    }
+    m_nextHangingProtocolRow = positionRow;
+    m_nextHangingProtocolColumn = positionColumn;
+
+    if( m_putLoadingItem )
+        addSearchingItem();
+
 }
 
 void MenuGridWidget::setSearchingItem( bool state )
