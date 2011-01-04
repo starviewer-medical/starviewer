@@ -30,7 +30,7 @@ class HangingProtocol;
 class MenuGridWidget: public QWidget {
 Q_OBJECT
 public:
-    MenuGridWidget( QWidget *parent = 0 );
+    MenuGridWidget(QWidget *parent = 0);
 
     ~MenuGridWidget();
 
@@ -38,32 +38,31 @@ public:
     void dropContent();
 
     /// Posa els hanging protocols que ha de representar el menú
-    void setHangingItems(const QList<HangingProtocol *> &listOfCandidates );
+    void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
 
     /// Afegeix hanging protocols al menú
-    void addHangingItems(const QList<HangingProtocol *> &items );
+    void addHangingItems(const QList<HangingProtocol*> &items);
 
     /// Posa una element que informa que s'estan carregant
     void addSearchingItem();
 
     /// Informa de si ha de posar un element que informi que s'està carregant o no
-    void setSearchingItem( bool state );
+    void setSearchingItem(bool state);
 
 
 public slots:
 
     /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
-    void emitSelected( ItemMenu * selected );
+    void emitSelected(ItemMenu *selected);
 
 signals:
     
     /// Emet que s'ha escollit un grid
-    void selectedGrid( int );
+    void selectedGrid(int);
 
 protected:
-   
     /// Mètode que crea una icona segons un hanging protocol
-    ItemMenu * createIcon( const HangingProtocol * hangingProtocol );
+    ItemMenu* createIcon(const HangingProtocol *hangingProtocol);
 
     /// Crea el widget que conté una animació i un label que es mostrarà quan estem buscant estudis previs
     /// per trobar hanging protocols potencials a aplicar sobre l'estudi
@@ -74,7 +73,6 @@ private:
     void initializeWidget();
 
 protected:
-
     /// Nombre de columnes a mostrar
     int m_maxColumns;
 
@@ -82,7 +80,7 @@ protected:
     QGridLayout *m_gridLayout;
 
     /// Llista dels items
-    QList<ItemMenu *> m_itemList;
+    QList<ItemMenu*> m_itemList;
 
     /// Fila a on col·locar el següent element a la zona de hangings
     int m_nextHangingProtocolRow;
@@ -91,7 +89,7 @@ protected:
     int m_nextHangingProtocolColumn;
 
     /// Distribució regular a la zona dels hanging protocols
-    QGridLayout * m_gridLayoutHanging;
+    QGridLayout *m_gridLayoutHanging;
 
     /// Indicador de si cal posar l'element de carregant o no
     bool m_putLoadingItem;
@@ -103,7 +101,7 @@ protected:
     int m_loadingRow;
 
     /// Widget que informa que s'esta carregant (buscant)
-    QWidget * m_searchingWidget;
+    QWidget *m_searchingWidget;
 
 };
 
