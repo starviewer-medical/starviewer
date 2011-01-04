@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml" xml:lang="ca_ES" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3.org/1999/xhtml http://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>
+        Starviewer Changelog
+    </title>
+    <script type="text/javascript">
+        /* <![CDATA[ */ //utilitzat per passar la validació xhtml
+        function setTicketLinks()
+        {
+            var spans = document.getElementsByTagName("span");
+            for (var i = 0; i < spans.length; i++)
+            {
+                // si l'span te la classe ticket i hi ha algun ticket dins aquest span
+                if (/ticket/im.test(spans[i].className) && spans[i].innerHTML != "")
+                {
+                    var tickets = spans[i].innerHTML.replace(/ /g,"");
+                    tickets = tickets.split(",");
+                    var innerTexts = [];
+                    for (var j in tickets)
+                    {
+                        if (/s\:/im.test(tickets[j]))
+                        {
+                            innerTexts[j] = "<a href='https://starviewer.udg.edu/support/" + tickets[j].replace(/s:/g,"") + "' target=\"new\">" + tickets[j] + "</a>";
+                        }
+                        else
+                        {
+                            innerTexts[j] = "<a href='https://starviewer.udg.edu/trac/ticket/" + tickets[j] + "' target=\"new\">" + tickets[j] + "</a>";
+                        }
+                    }
+                    spans[i].innerHTML = innerTexts.join(", "); //si nomes n'hi ha un no hi posa la coma
+                }
+            }
+        }
+        /* ]]> */
+    </script>
+ </head>
+ <body onload="setTicketLinks()">
+    <div class="majorRelease">
+        <div class="version">
+            <span class="versionNumber">0.10</span> <span class="versionDate"></span>
+        </div>
+        <div class="new">
+            <ul>
+                <li>Es permet cancel·lar des de la llista de peticions la descàrrega o enviament de fitxers DICOM a un PACS, en qualsevol moment de l'operació. <span class="ticket"></span></li>
+                <li>Es permet fer diverses operacions d'enviament de fitxers DICOM a PACS de forma simultània, fins ara només es podia fer un enviament de fitxers DICOM a PACS a la vegada. <span class="ticket"></span></li>
+                <li>Es permet l'enviament de fitxers DICOM a un PACS de forma simultània mentre es descarreguen fitxers DICOM de qualsevol PACS, fins ara les dos operacions no es podien fer a la vegada. <span class="ticket"></span></li>
+                <li>Es guarda per quin camp i en quin ordre s'ha fet l'ordenació del estudis a la pantalla de cerca per ordenar de la mateixa manera en les properes cerques. <span class="ticket">1021, 1272</span></li>
+                <li>S'afegeix el format TIFF com a format d'exportació de captures de pantalla. <span class="ticket">1306</span></li>
+                <li>S'afegeix la guia ràpida i l'esquema de shortcuts al menú Ajuda. <span class="ticket">1372</span></li>
+                <li>S'afegeixen nous hanging protocols per mamografia, DX,... <span class="ticket"></span></li>
+                <li>S'implementa el filtratge per modalitat a les cerques d'estudis locals. <span class="ticket">1354</span></li>
+            </ul>
+        </div>
+        <div class="fixed">
+            <ul>
+                <li>S'arregla l'ordre de les tabulacions de la cerca avançada al PACS que era incorrecte. <span class="ticket"></span></li>
+                <li>Es soluciona el problema que no permetia tenir estudis de diferents pacients amb el mateix DICOM Patient ID a la base de dades d'estudis. <span class="ticket">1325</span></li>
+            </ul>
+        </div>
+        <div class="improved">
+            <ul>
+                <li>Es millora el temps d'arrancada d'Starviewer. (Es treu la comprovació d'integritat de la base de dades). <span class="ticket">1369</span></li>
+                <li>Es millora la gestió de visors a l'aplicar un hanging protocol. <span class="ticket">1263</span></li>
+                <li>Millora en la gestió de recursos quan es creen visors en l'extensió 2D. <span class="ticket">1357, 1368</span></li>
+                <li>L'eina de VoxelInformation només mostra el valor de vòxel que és el que interessa i no el de les coordenades. <span class="ticket">1375</span></li>
+                <li>El calendari que apareix al poder indicar entre quines dates s'ha de cercar un estudi es fa que comenci la setmana en dilluns. <span class="ticket">1393</span></li>
+                <li>Es fusionen les columnes data i hora de la pantalla de cerca d'estudis i del llistat d'estudis previs per poder ordenar els estudis per data i hora. <span class="ticket">1355</span></li>
+            </ul>
+        </div>
+        <div class="removed">
+            <ul>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
