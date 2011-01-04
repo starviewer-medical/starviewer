@@ -429,18 +429,9 @@ void ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActua
         }
         else
         {
-            //Alliberem la memoria dels volums generats
-            // \TODO Cal fer una discussió de si és el lloc de fer-ho i de què es fa amb el Patient que no s'assigna
-            foreach( Study *study, patient->getStudies() )
-            {
-                foreach( Series *series, study->getSeries() )
-                {
-                    foreach( Identifier id, series->getVolumesIDList()  )
-                    {
-                        VolumeRepository::getRepository()->removeVolume( id );
-                    }
-                }
-            }
+            // \TODO Tenint en compte els problemes explicats al tiquet #1087, eliminar els objectes aquí pot fer petar l'aplicació en cas de demanar estudis
+            //       sense passar explícitament per la QueryScreen. Donat que en aquest punt encara no s'ha carregat cap volum a memòria,
+            //       per tant no hi haurà fugues importants de memòria si no ho eliminem, obtem per no esborrar cap objecte i així minimitzem el problema.
         }
     }
 }
