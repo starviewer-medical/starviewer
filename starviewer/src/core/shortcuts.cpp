@@ -58,6 +58,10 @@ const QString Shortcuts::SendSelectedStudiesToDICOMDIRList(ShortcutsBase + "Send
 const QString Shortcuts::RetrieveAndViewSelectedStudies(ShortcutsBase + "RetrieveAndViewSelectedStudies");
 const QString Shortcuts::RetrieveSelectedStudies(ShortcutsBase + "RetrieveSelectedStudies");
 
+const QString Shortcuts::MoveToPreviousDesktop(ShortcutsBase + "MoveToPreviousDesktop");
+const QString Shortcuts::MoveToNextDesktop(ShortcutsBase + "MoveToNextDesktop");
+const QString Shortcuts::MaximizeMultipleScreens(ShortcutsBase + "MaximizeMultipleScreens");
+
 Shortcuts::Shortcuts()
 {
 }
@@ -261,6 +265,18 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+R"));
     settingsRegistry->addSetting(RetrieveSelectedStudies, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+Left"));
+    settingsRegistry->addSetting(MoveToPreviousDesktop, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+Right"));
+    settingsRegistry->addSetting(MoveToNextDesktop, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+M"));
+    settingsRegistry->addSetting(MaximizeMultipleScreens, shortcutsList);
 }
 
 } // end namespace udg

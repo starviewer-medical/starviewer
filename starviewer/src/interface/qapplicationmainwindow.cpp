@@ -47,6 +47,7 @@
 #include <QDesktopWidget>
 #include <QPair>
 #include <QWidgetAction>
+#include <QShortcut>
 //Shortucts
 #include "shortcuts.h"
 #include "shortcutmanager.h"
@@ -240,6 +241,7 @@ void QApplicationMainWindow::createActions()
     m_maximizeAction->setText(tr("Maximize To Multiple Screen"));
     m_maximizeAction->setStatusTip(tr("Maximize The Window To As Many Screens As Possible"));
     m_maximizeAction->setCheckable(false);
+    m_maximizeAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MaximizeMultipleScreens));
     connect(m_maximizeAction, SIGNAL(triggered(bool)), this, SLOT(maximizeMultipleScreens()));    
     
     m_moveToDesktopAction = new QWidgetAction(this);
@@ -249,6 +251,19 @@ void QApplicationMainWindow::createActions()
     m_moveToDesktopAction->setStatusTip(tr("Move The Window To The Screen ..."));
     m_moveToDesktopAction->setCheckable(false);
     connect(screenDistribution, SIGNAL(screenClicked(int)), this, SLOT(moveToDesktop(int)));
+    // Shortcuts de MoveToDesktop
+    QList<QKeySequence> keySequence = ShortcutManager::getShortcuts(Shortcuts::MoveToPreviousDesktop);
+    if (keySequence.count() > 0)
+    {
+        m_moveToPreviousDesktopShortcut = new QShortcut(keySequence[0], this);
+        connect(m_moveToPreviousDesktopShortcut, SIGNAL(activated()), this, SLOT(moveToPreviousDesktop()));
+    }
+    keySequence = ShortcutManager::getShortcuts(Shortcuts::MoveToNextDesktop);
+    if (keySequence.count() > 0)
+    {
+        m_moveToNextDesktopShortcut = new QShortcut(keySequence[0], this);
+        connect(m_moveToNextDesktopShortcut, SIGNAL(activated()), this, SLOT(moveToNextDesktop()));
+    }
 
     m_openUserGuideAction = new QAction(this);
     m_openUserGuideAction->setText(tr("User guide"));
@@ -311,6 +326,30 @@ void QApplicationMainWindow::moveToDesktop(int screenIndex)
 {
     ScreenManager screenManager;
     screenManager.moveToDesktop(this, screenIndex);
+}
+
+void QApplicationMainWindow::moveToPreviousDesktop()
+{
+    ScreenManager screenManager;
+    int numberOfScreens = screenManager.getNumberOfScreens();
+    int screenIndex = screenManager.getIdOfScreen(this);
+    if (screenIndex - 1 < 0)
+    {
+        screenIndex = numberOfScreens - 1; 
+    }
+    else
+    {
+        screenIndex -= 1;
+    }
+    screenManager.moveToDesktop(this, screenIndex);
+}
+
+void QApplicationMainWindow::moveToNextDesktop()
+{
+    ScreenManager screenManager;
+    int numberOfScreens = screenManager.getNumberOfScreens();
+    int screenIndex = screenManager.getIdOfScreen(this);
+    screenManager.moveToDesktop(this, (screenIndex + 1) % numberOfScreens);
 }
 
 void QApplicationMainWindow::showConfigurationDialog()
