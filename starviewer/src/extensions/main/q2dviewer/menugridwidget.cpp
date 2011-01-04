@@ -24,11 +24,12 @@
 
 namespace udg {
 
+const int MenuGridWidget::MaximumNumberOfColumns = 5;
+
 MenuGridWidget::MenuGridWidget(QWidget *parent)
  : QWidget(parent), m_searchingWidget(0)
 {
     setWindowFlags(Qt::Popup);
-    m_maxColumns = 5;
 
     initializeWidget();
 
@@ -53,7 +54,7 @@ void MenuGridWidget::initializeWidget()
     m_gridLayoutHanging->setSpacing(6);
     m_gridLayoutHanging->setMargin(6);
     QSpacerItem *spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    m_gridLayoutHanging->addItem(spacerItem2, 0, m_maxColumns, 1, 1);
+    m_gridLayoutHanging->addItem(spacerItem2, 0, MaximumNumberOfColumns, 1, 1);
 
     QFrame *line_hanging = new QFrame(this);
     line_hanging->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -149,7 +150,7 @@ void MenuGridWidget::addHangingItems(const QList<HangingProtocol*> &items)
         m_itemList.push_back(icon);
         positionColumn ++;
 
-        if (positionColumn == m_maxColumns)
+        if (positionColumn == MaximumNumberOfColumns)
         {
             positionColumn = 0;
             positionRow++;
