@@ -34,15 +34,13 @@ public:
 
     ~MenuGridWidget();
 
-    void createHangingProtocolsWidget();
-
     /// Elimina tot el contingut del widget
     void dropContent();
 
     /// Posa els hanging protocols que ha de representar el menú
     void setHangingItems(const QList<HangingProtocol *> &listOfCandidates );
 
-    /// Afegeix hanging protocols a la llista
+    /// Afegeix hanging protocols al menú
     void addHangingItems(const QList<HangingProtocol *> &items );
 
     /// Posa una element que informa que s'estan carregant
@@ -85,9 +83,6 @@ protected:
 
     /// Llista dels items
     QList<ItemMenu *> m_itemList;
-
-    /// Llista de hanging protocols a mostrar
-    QList< HangingProtocol * > m_hangingItems;
 
     /// Fila a on col·locar el següent element a la zona de hangings
     int m_nextHangingProtocolRow;
