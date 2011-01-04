@@ -151,32 +151,24 @@ void MenuGridWidget::setHangingItems(const QList<HangingProtocol *> &listOfCandi
 
 void MenuGridWidget::addHangingItems(const QList<HangingProtocol *> &items )
 {
-    ItemMenu * icon;
     int positionRow = 0;
     int positionColumn = 0;
-    int numberOfHangingProtocols = items.size();
 
-    if( numberOfHangingProtocols > 0 )
+    foreach(HangingProtocol * hangingProtocol, items)
     {
-        int hangingProtocolNumber;
-        HangingProtocol * hangingProtocol;
+        ItemMenu *icon = createIcon( hangingProtocol );
 
-        for( hangingProtocolNumber = 0; hangingProtocolNumber < numberOfHangingProtocols; hangingProtocolNumber++)
+        m_gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
+        m_itemList.push_back( icon );
+        positionColumn ++;
+
+        if( positionColumn == m_maxColumns )
         {
-            hangingProtocol = items.value( hangingProtocolNumber );
-            icon = createIcon( hangingProtocol );
-
-            m_gridLayoutHanging->addWidget( icon, positionRow, positionColumn );
-            m_itemList.push_back( icon );
-            positionColumn ++;
-
-            if( positionColumn == m_maxColumns )
-            {
-                positionColumn = 0;
-                positionRow++;
-            }
+            positionColumn = 0;
+            positionRow++;
         }
     }
+
     m_nextHangingProtocolRow = positionRow;
     m_nextHangingProtocolColumn = positionColumn;
 
