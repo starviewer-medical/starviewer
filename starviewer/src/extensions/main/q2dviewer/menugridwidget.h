@@ -74,7 +74,7 @@ private:
 
 protected:
     /// Nombre de columnes a mostrar
-    int m_maxColumns;
+    static const int MaximumNumberOfColumns;
 
     /// Grid per mostrar els elements predefinits
     QGridLayout *m_gridLayout;
