@@ -30,7 +30,7 @@ HangingProtocol::~HangingProtocol()
 {
 }
 
-void HangingProtocol::setName(QString name)
+void HangingProtocol::setName(const QString &name)
 {
     m_name = name;
 }
@@ -55,12 +55,12 @@ void HangingProtocol::setNumberOfScreens(int screens)
     m_layout->setNumberOfScreens(screens);
 }
 
-void HangingProtocol::setDisplayEnvironmentSpatialPositionList(QList<QString> positions)
+void HangingProtocol::setDisplayEnvironmentSpatialPositionList(const QList<QString> &positions)
 {
     m_layout->setDisplayEnvironmentSpatialPositionList(positions);
 }
 
-void HangingProtocol::setProtocolsList(QList<QString> protocols)
+void HangingProtocol::setProtocolsList(const QList<QString> &protocols)
 {
     m_mask->setProtocolsList(protocols);
 }
@@ -250,7 +250,7 @@ bool HangingProtocol::getAllDiferent() const
     return m_allDiferent;
 }
 
-void HangingProtocol::setIconType(QString iconType)
+void HangingProtocol::setIconType(const QString &iconType)
 {
     m_iconType = iconType;
 }
