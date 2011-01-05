@@ -23,17 +23,17 @@ void HangingProtocolLayout::setNumberOfScreens(int numberOfScreens)
     m_numberOfScreens = numberOfScreens;
 }
 
-void HangingProtocolLayout::setVerticalPixelsList(QList<int> verticalPixelsList)
+void HangingProtocolLayout::setVerticalPixelsList(const QList<int> &verticalPixelsList)
 {
     m_verticalPixelsList = verticalPixelsList;
 }
 
-void HangingProtocolLayout::setHorizontalPixelsList(QList<int> horizontalPixelsList)
+void HangingProtocolLayout::setHorizontalPixelsList(const QList<int> &horizontalPixelsList)
 {
     m_horizontalPixelsList = horizontalPixelsList;
 }
 
-void HangingProtocolLayout::setDisplayEnvironmentSpatialPositionList(QList<QString> displayEnvironmentSpatialPosition)
+void HangingProtocolLayout::setDisplayEnvironmentSpatialPositionList(const QList<QString> &displayEnvironmentSpatialPosition)
 {
     m_displayEnvironmentSpatialPosition = displayEnvironmentSpatialPosition;
 }
