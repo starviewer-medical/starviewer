@@ -202,9 +202,6 @@ private:
     StatsWatcher *m_statsWatcher;
 
 #ifndef STARVIEWER_LITE
-    /// Llista de hanging protocols aplicables
-    QList<HangingProtocol *> m_hangingCandidates;
-    
     /// Widget per poder seleccionar estudis previs
     QPreviousStudiesWidget *m_previousStudiesWidget;
 

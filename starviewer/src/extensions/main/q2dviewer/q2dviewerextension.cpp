@@ -125,7 +125,6 @@ Q2DViewerExtension::~Q2DViewerExtension()
     writeSettings();
 
 #ifndef STARVIEWER_LITE
-    m_hangingCandidates.clear();
     // L'objecte es crea quan fem un setInput. Per tant, fem la comprovació.
     if (m_previousStudiesWidget)
     {
@@ -194,21 +193,21 @@ void Q2DViewerExtension::setInput(Volume *input)
     m_hangingProtocolManager = new HangingProtocolManager();
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
+    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
     QApplication::restoreOverrideCursor();
 
-    if (m_hangingCandidates.size() == 0) // No hi ha hanging protocols
+    if (hangingCandidates.size() == 0) // No hi ha hanging protocols
     {
         Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
         viewerWidget->setInput(m_mainVolume);
     }
     else
     {
-        m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_hangingCandidates, m_workingArea);
+        m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_workingArea);
     }
 
     m_workingArea->setSelectedViewer(m_workingArea->getViewerWidget(0));
-    m_predefinedSeriesGrid->setHangingItems(m_hangingCandidates);
+    m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
 
     connect(m_patient, SIGNAL(patientFused()), SLOT(searchHangingProtocols()));
 
@@ -224,15 +223,15 @@ void Q2DViewerExtension::setInput(Volume *input)
 void Q2DViewerExtension::searchAndApplyBestHangingProtocol()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_hangingCandidates, m_workingArea);
+    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
+    m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingCandidates, m_workingArea);
     QApplication::restoreOverrideCursor();
 }
 
 void Q2DViewerExtension::searchHangingProtocols()
 {
-    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
-    m_predefinedSeriesGrid->setHangingItems(m_hangingCandidates);
+    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
+    m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
     searchPreviousStudiesWithHangingProtocols();
 }
 
@@ -254,8 +253,8 @@ void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study *> studies, QHa
 {
     disconnect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study *>, QHash<QString, QString>)), this, SLOT(addPreviousHangingProtocols(QList<Study *>, QHash<QString, QString>)));
 
-    m_hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies, qhash);
-    m_predefinedSeriesGrid->setHangingItems(m_hangingCandidates);
+    QList<HangingProtocol*> hangingCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies, qhash);
+    m_predefinedSeriesGrid->setHangingItems(hangingCandidates);
     m_predefinedSeriesGrid->setSearchingItem(false);
 }
 #endif
