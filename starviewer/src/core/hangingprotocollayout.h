@@ -12,24 +12,24 @@
 namespace udg {
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG ) <vismed@ima.udg.es>
 */
 class HangingProtocolLayout : public QObject
 {
 Q_OBJECT
 public:
-    HangingProtocolLayout( QObject *parent = 0 );
+    HangingProtocolLayout(QObject *parent = 0);
 
     ~HangingProtocolLayout();
 
     /// Posar el nombre de pantalles
-    void setNumberOfScreens( int numberOfScreens );
+    void setNumberOfScreens(int numberOfScreens);
     /// Posar la llista de píxels en vertical
-    void setVerticalPixelsList( QList<int> verticalPixelsList );
+    void setVerticalPixelsList(QList<int> verticalPixelsList);
     /// Posar la llista de píxels en horitzontal
-    void setHorizontalPixelsList( QList<int> horizontalPixelsList );
+    void setHorizontalPixelsList(QList<int> horizontalPixelsList);
     /// Posar la llista de posicions dels visualitzadors
-    void setDisplayEnvironmentSpatialPositionList( QList<QString> displayEnvironmentSpatialPosition );
+    void setDisplayEnvironmentSpatialPositionList(QList<QString> displayEnvironmentSpatialPosition);
     /// Obtenir el nombre de pantalles
     int getNumberOfScreens() const;
     /// Obtenir la llista de píxels en vertical
@@ -40,7 +40,6 @@ public:
     QList<QString> getDisplayEnvironmentSpatialPositionList() const;
 
 private:
-
     ///Hanging Protocol Environment Module Attributes
     /// Nombre de pantalles
     int m_numberOfScreens;
@@ -50,10 +49,6 @@ private:
     QList<int> m_horizontalPixelsList;
     /// Llista de posicions dels visualitzadors
     QList<QString> m_displayEnvironmentSpatialPosition;
-
-     ///Hanging Protocol Display Module
-
-
 };
 
 }
