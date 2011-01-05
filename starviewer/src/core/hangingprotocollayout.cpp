@@ -9,7 +9,7 @@
 namespace udg {
 
 HangingProtocolLayout::HangingProtocolLayout(QObject *parent)
-: QObject( parent )
+: QObject(parent)
 {
 }
 
@@ -18,22 +18,22 @@ HangingProtocolLayout::~HangingProtocolLayout()
 {
 }
 
-void HangingProtocolLayout::setNumberOfScreens( int numberOfScreens )
+void HangingProtocolLayout::setNumberOfScreens(int numberOfScreens)
 {
     m_numberOfScreens = numberOfScreens;
 }
 
-void HangingProtocolLayout::setVerticalPixelsList( QList<int> verticalPixelsList )
+void HangingProtocolLayout::setVerticalPixelsList(QList<int> verticalPixelsList)
 {
     m_verticalPixelsList = verticalPixelsList;
 }
 
-void HangingProtocolLayout::setHorizontalPixelsList( QList<int> horizontalPixelsList )
+void HangingProtocolLayout::setHorizontalPixelsList(QList<int> horizontalPixelsList)
 {
     m_horizontalPixelsList = horizontalPixelsList;
 }
 
-void HangingProtocolLayout::setDisplayEnvironmentSpatialPositionList( QList<QString> displayEnvironmentSpatialPosition )
+void HangingProtocolLayout::setDisplayEnvironmentSpatialPositionList(QList<QString> displayEnvironmentSpatialPosition)
 {
     m_displayEnvironmentSpatialPosition = displayEnvironmentSpatialPosition;
 }
