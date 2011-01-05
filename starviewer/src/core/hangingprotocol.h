@@ -28,7 +28,7 @@ public:
     ~HangingProtocol();
 
     /// Posar el nom al hanging protocol
-    void setName(QString name);
+    void setName(const QString &name);
 
     /// Definició dels diferents nivells que pot tenir un Hanging Protocol
     enum HangingProtocolLevel {Manufacturer, Site, UserGroup, SingleUser};
@@ -43,10 +43,10 @@ public:
     void setNumberOfScreens(int screens);
 
     /// Assigna els protocols que tracta el hanging protocol
-    void setProtocolsList(QList<QString> protocols);
+    void setProtocolsList(const QList<QString> &protocols);
 
     /// Assigna les posicions de les finestres
-    void setDisplayEnvironmentSpatialPositionList(QList<QString> positions);
+    void setDisplayEnvironmentSpatialPositionList(const QList<QString> &positions);
 
     /// Afegeix un image set
     void addImageSet(HangingProtocolImageSet *imageSet);
@@ -100,7 +100,7 @@ public:
     void setAllDiferent(bool allDiferent);
 
     /// Assigna el tipus d'icona per representar-lo
-    void setIconType(QString iconType);
+    void setIconType(const QString &iconType);
     
     /// Obté el tipus d'icona per representar-lo
     QString getIconType() const;
