@@ -25,11 +25,11 @@ public:
     /// Posar el nombre de pantalles
     void setNumberOfScreens(int numberOfScreens);
     /// Posar la llista de píxels en vertical
-    void setVerticalPixelsList(QList<int> verticalPixelsList);
+    void setVerticalPixelsList(const QList<int> &verticalPixelsList);
     /// Posar la llista de píxels en horitzontal
-    void setHorizontalPixelsList(QList<int> horizontalPixelsList);
+    void setHorizontalPixelsList(const QList<int> &horizontalPixelsList);
     /// Posar la llista de posicions dels visualitzadors
-    void setDisplayEnvironmentSpatialPositionList(QList<QString> displayEnvironmentSpatialPosition);
+    void setDisplayEnvironmentSpatialPositionList(const QList<QString> &displayEnvironmentSpatialPosition);
     /// Obtenir el nombre de pantalles
     int getNumberOfScreens() const;
     /// Obtenir la llista de píxels en vertical
