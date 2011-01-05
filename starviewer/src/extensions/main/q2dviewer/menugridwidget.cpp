@@ -50,7 +50,7 @@ void MenuGridWidget::initializeWidget()
     m_nextHangingProtocolRow = 0;
     m_nextHangingProtocolColumn = 0;
 
-    m_gridLayoutHanging = new QGridLayout(this);
+    m_gridLayoutHanging = new QGridLayout();
     m_gridLayoutHanging->setSpacing(6);
     m_gridLayoutHanging->setMargin(6);
     QSpacerItem *spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -63,7 +63,7 @@ void MenuGridWidget::initializeWidget()
     QLabel *label_hanging = new QLabel(this);
     label_hanging->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     label_hanging->setText("Hanging protocols");
-    QHBoxLayout *hboxLayout_hanging = new QHBoxLayout(this);
+    QHBoxLayout *hboxLayout_hanging = new QHBoxLayout();
     hboxLayout_hanging->setMargin(0);
     hboxLayout_hanging->setSpacing(6);
     hboxLayout_hanging->addWidget(line_hanging);
