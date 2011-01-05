@@ -25,7 +25,7 @@ public:
     ~HangingProtocolMask();
 
     /// Llista de protocols a tractar del hanging protocol
-    void setProtocolsList(QList<QString> protocols);
+    void setProtocolsList(const QList<QString> &protocols);
 
     /// Obtenir la llista de protocols
     QList<QString> getProtocolList() const;
