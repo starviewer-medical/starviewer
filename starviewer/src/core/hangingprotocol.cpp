@@ -91,6 +91,26 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
 
 HangingProtocol::~HangingProtocol()
 {
+    foreach (HangingProtocolImageSet *imageSet, m_listOfImageSets)
+    {
+        if (imageSet)
+        {
+            delete imageSet;
+        }
+    }
+    m_listOfImageSets.clear();
+
+    foreach (HangingProtocolDisplaySet *displaySet, m_listOfDisplaySets)
+    {
+        if (displaySet)
+        {
+            delete displaySet;
+        }
+    }
+    m_listOfDisplaySets.clear();
+
+    delete m_layout;
+    delete m_mask;
 }
 
 void HangingProtocol::setName(const QString &name)
