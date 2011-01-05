@@ -53,23 +53,23 @@ void MenuGridWidget::initializeWidget()
     m_gridLayoutHanging = new QGridLayout();
     m_gridLayoutHanging->setSpacing(6);
     m_gridLayoutHanging->setMargin(6);
-    QSpacerItem *spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    m_gridLayoutHanging->addItem(spacerItem2, 0, MaximumNumberOfColumns, 1, 1);
+    QSpacerItem *spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_gridLayoutHanging->addItem(spacerItem, 0, MaximumNumberOfColumns, 1, 1);
 
-    QFrame *line_hanging = new QFrame(this);
-    line_hanging->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    line_hanging->setFrameShape(QFrame::HLine);
-    line_hanging->setFrameShadow(QFrame::Sunken);
-    QLabel *label_hanging = new QLabel(this);
-    label_hanging->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    label_hanging->setText("Hanging protocols");
-    QHBoxLayout *hboxLayout_hanging = new QHBoxLayout();
-    hboxLayout_hanging->setMargin(0);
-    hboxLayout_hanging->setSpacing(6);
-    hboxLayout_hanging->addWidget(line_hanging);
-    hboxLayout_hanging->addWidget(label_hanging);
+    QFrame *lineHanging = new QFrame(this);
+    lineHanging->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    lineHanging->setFrameShape(QFrame::HLine);
+    lineHanging->setFrameShadow(QFrame::Sunken);
+    QLabel *labelHanging = new QLabel(this);
+    labelHanging->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    labelHanging->setText("Hanging protocols");
+    QHBoxLayout *hBoxLayoutHanging = new QHBoxLayout();
+    hBoxLayoutHanging->setMargin(0);
+    hBoxLayoutHanging->setSpacing(6);
+    hBoxLayoutHanging->addWidget(lineHanging);
+    hBoxLayoutHanging->addWidget(labelHanging);
 
-    m_gridLayout->addLayout(hboxLayout_hanging, 2, 0, 1, 1);
+    m_gridLayout->addLayout(hBoxLayoutHanging, 2, 0, 1, 1);
     m_gridLayout->addLayout(m_gridLayoutHanging, 3, 0, 1, 1);
 }
 
