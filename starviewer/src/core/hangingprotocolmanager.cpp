@@ -33,6 +33,8 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
     m_patient = 0;
     m_previousStudiesManager = new PreviousStudiesManager();
 
+    copyHangingProtocolRepository();
+
     connect(m_previousStudiesManager, SIGNAL( errorDownloadingPreviousStudy(QString) ), SLOT( errorDowlonadingPreviousStudies(QString) ) );
 }
 
@@ -41,6 +43,20 @@ HangingProtocolManager::~HangingProtocolManager()
     cancelHangingProtocolDownloading();
     delete m_studiesDownloading;
     delete m_previousStudiesManager;
+
+    foreach(HangingProtocol *hangingProtocol, m_availableHangingProtocols)
+    {
+        delete hangingProtocol;
+    }
+    m_availableHangingProtocols.clear();
+}
+
+void HangingProtocolManager::copyHangingProtocolRepository()
+{
+    foreach(HangingProtocol *hangingProtocol, HangingProtocolsRepository::getRepository()->getItems())
+    {
+        m_availableHangingProtocols << new HangingProtocol(hangingProtocol);
+    }
 }
 
 QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient *patient)
@@ -64,7 +80,7 @@ QList<HangingProtocol *> HangingProtocolManager::searchHangingProtocols(Patient 
 
     // Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
     // Aprofitem per assignar ja les series, per millorar el rendiment
-    foreach (HangingProtocol *hangingProtocol, HangingProtocolsRepository::getRepository()->getItems() )
+    foreach (HangingProtocol *hangingProtocol, m_availableHangingProtocols )
     {
         if( isModalityCompatible(hangingProtocol, patient) )
         {
@@ -178,9 +194,24 @@ void HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QLis
 
 void HangingProtocolManager::applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient )
 {
-    HangingProtocol *hangingProtocol = HangingProtocolsRepository::getRepository()->getItem( Identifier(hangingProtocolNumber) );
+    HangingProtocol *hangingProtocol = 0;
+    bool found = false;
+    QListIterator<HangingProtocol*> iterator(m_availableHangingProtocols);
 
-    applyHangingProtocol(hangingProtocol,layout, patient);
+    while (!found && iterator.hasNext())
+    {
+        HangingProtocol *candidate = iterator.next();
+        if (candidate->getIdentifier() == hangingProtocolNumber)
+        {
+            found = true;
+            hangingProtocol = candidate;
+        }
+    }
+
+    if (found)
+    {
+        applyHangingProtocol(hangingProtocol,layout, patient);
+    }
 }
 
 void HangingProtocolManager::applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient * patient )
