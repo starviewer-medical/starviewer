@@ -25,6 +25,69 @@ HangingProtocol::HangingProtocol(QObject *parent)
     m_priority = -1;
 }
 
+HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
+{
+
+    m_identifier = hangingProtocol->m_identifier;
+    m_name = hangingProtocol->m_name;
+    m_description = hangingProtocol->m_description;
+    m_level = hangingProtocol->m_level;
+    m_creator = hangingProtocol->m_creator;
+    m_dateTime = hangingProtocol->m_dateTime;
+    m_candidate = hangingProtocol->m_candidate;
+    m_strictness = hangingProtocol->m_strictness;
+    m_allDiferent = hangingProtocol->m_allDiferent;
+    m_iconType = hangingProtocol->m_iconType;
+    m_hasPrevious = hangingProtocol->m_hasPrevious;
+    m_priority =  hangingProtocol->m_priority;
+
+    // Copia del layout
+    m_layout = new HangingProtocolLayout();
+    m_layout->setDisplayEnvironmentSpatialPositionList(hangingProtocol->m_layout->getDisplayEnvironmentSpatialPositionList());
+    m_layout->setHorizontalPixelsList(hangingProtocol->m_layout->getHorizontalPixelsList());
+    m_layout->setNumberOfScreens(hangingProtocol->m_layout->getNumberOfScreens());
+    m_layout->setVerticalPixelsList(hangingProtocol->m_layout->getVerticalPixelsList());
+
+    //Copia de la mascara
+    m_mask = new HangingProtocolMask();
+    m_mask->setProtocolsList(hangingProtocol->m_mask->getProtocolList());
+
+    foreach (HangingProtocolImageSet *imageSet, hangingProtocol->m_listOfImageSets)
+    {
+        HangingProtocolImageSet *copiedImageSet = new HangingProtocolImageSet();
+        copiedImageSet->setRestrictions(imageSet->getRestrictions());
+        copiedImageSet->setIdentifier(imageSet->getIdentifier());
+        copiedImageSet->setTypeOfItem(imageSet->getTypeOfItem());
+        copiedImageSet->setSeriesToDisplay(imageSet->getSeriesToDisplay());
+        copiedImageSet->setImageToDisplay(imageSet->getImageToDisplay());
+        copiedImageSet->setIsPreviousStudy(imageSet->isPreviousStudy());
+        copiedImageSet->setDownloaded(imageSet->isDownloaded());
+        copiedImageSet->setPreviousStudyToDisplay(imageSet->getPreviousStudyToDisplay());
+        copiedImageSet->setPreviousStudyPacs(imageSet->getPreviousStudyPacs());
+        copiedImageSet->setPreviousImageSetReference(imageSet->getPreviousImageSetReference());
+        copiedImageSet->setHangingProtocol(this);
+        m_listOfImageSets.append(copiedImageSet);
+    }
+
+    foreach (HangingProtocolDisplaySet *displaySet, hangingProtocol->m_listOfDisplaySets)
+    {
+        HangingProtocolDisplaySet *copiedDisplaySet = new HangingProtocolDisplaySet();
+        copiedDisplaySet->setIdentifier(displaySet->getIdentifier());
+        copiedDisplaySet->setDescription(displaySet->getDescription());
+        copiedDisplaySet->setPosition(displaySet->getPosition());
+        copiedDisplaySet->setPatientOrientation(displaySet->getPatientOrientation());
+        copiedDisplaySet->setReconstruction(displaySet->getReconstruction());
+        copiedDisplaySet->setPhase(displaySet->getPhase());
+        copiedDisplaySet->setSlice(displaySet->getSlice());
+        copiedDisplaySet->setIconType(displaySet->getIconType());
+        copiedDisplaySet->setAlignment(displaySet->getAlignment());
+        copiedDisplaySet->setToolActivation(displaySet->getToolActivation());
+        copiedDisplaySet->setHangingProtocol(this);
+        copiedDisplaySet->setImageSet(this->getImageSet(displaySet->getImageSet()->getIdentifier()));
+        m_listOfDisplaySets.append(copiedDisplaySet);
+    }
+
+}
 
 HangingProtocol::~HangingProtocol()
 {
