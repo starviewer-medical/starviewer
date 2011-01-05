@@ -19,7 +19,7 @@ HangingProtocolMask::~HangingProtocolMask()
 }
 
 
-void HangingProtocolMask::setProtocolsList(QList<QString> protocols)
+void HangingProtocolMask::setProtocolsList(const QList<QString> &protocols)
 {
     m_protocolsList = protocols;
 }
