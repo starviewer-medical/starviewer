@@ -25,6 +25,9 @@ Q_OBJECT
 public:
     HangingProtocol(QObject *parent = 0);
 
+    /// Constructor còpia. Fa una còpia de tot, inclòs image i display sets.
+    HangingProtocol(const HangingProtocol *hangingProtocol);
+
     ~HangingProtocol();
 
     /// Posar el nom al hanging protocol
