@@ -49,6 +49,9 @@ public:
     /// Afegir una restricció
     void addRestriction( Restriction restriction );
 
+    /// Assignar la llista de restriccions
+    void setRestrictions(const QList<Restriction> &restrictions);
+
     /// Obtenir les restriccions
     QList<Restriction> getRestrictions() const;
 
