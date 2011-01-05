@@ -8,7 +8,7 @@
 #define UDGHANGINGPROTOCOL_H
 
 #include <QObject>
-
+#include <QList>
 namespace udg {
 
 class HangingProtocolLayout;
@@ -17,42 +17,42 @@ class HangingProtocolImageSet;
 class HangingProtocolDisplaySet;
 
 /**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG) <vismed@ima.udg.es>
 */
 class HangingProtocol : public QObject
 {
 Q_OBJECT
 public:
-    HangingProtocol( QObject *parent = 0 );
+    HangingProtocol(QObject *parent = 0);
 
     ~HangingProtocol();
 
     /// Posar el nom al hanging protocol
-    void setName( QString name );
+    void setName(QString name);
 
     /// Definició dels diferents nivells que pot tenir un Hanging Protocol
-    enum HangingProtocolLevel { Manufacturer, Site, UserGroup, SingleUser };
+    enum HangingProtocolLevel {Manufacturer, Site, UserGroup, SingleUser};
 
     /// Obtenir el layout
-    HangingProtocolLayout * getHangingProtocolLayout();
+    HangingProtocolLayout* getHangingProtocolLayout();
 
-    ///Obtenir la mascara
-    HangingProtocolMask * getHangingProtocolMask();
+    /// Obtenir la mascara
+    HangingProtocolMask* getHangingProtocolMask();
 
     /// Assigna el nombre de screens
-    void setNumberOfScreens( int screens );
+    void setNumberOfScreens(int screens);
 
     /// Assigna els protocols que tracta el hanging protocol
-    void setProtocolsList( QList<QString> protocols );
+    void setProtocolsList(QList<QString> protocols);
 
     /// Assigna les posicions de les finestres
-    void setDisplayEnvironmentSpatialPositionList( QList<QString> positions );
+    void setDisplayEnvironmentSpatialPositionList(QList<QString> positions);
 
     /// Afegeix un image set
-    void addImageSet ( HangingProtocolImageSet * imageSet );
+    void addImageSet(HangingProtocolImageSet *imageSet);
 
     /// Afegeix un display set
-    void addDisplaySet ( HangingProtocolDisplaySet * displaySet );
+    void addDisplaySet(HangingProtocolDisplaySet *displaySet);
 
     /// Obtenir el nom del hanging protocol
     QString getName() const;
@@ -64,55 +64,55 @@ public:
     int getNumberOfDisplaySets() const;
 
     /// Obté la llista d'image sets
-    QList<HangingProtocolImageSet *> getImageSets() const;
+    QList<HangingProtocolImageSet*> getImageSets() const;
 
     /// Obté la llista de display sets
-    QList<HangingProtocolDisplaySet *> getDisplaySets() const;
+    QList<HangingProtocolDisplaySet*> getDisplaySets() const;
 
     /// Obté l'image set amb identificador "identifier"
-    HangingProtocolImageSet * getImageSet( int identifier );
+    HangingProtocolImageSet* getImageSet(int identifier);
 
     /// Obté el display set amb identificador "identifier"
-    HangingProtocolDisplaySet * getDisplaySet( int identifier ) const;
+    HangingProtocolDisplaySet* getDisplaySet(int identifier) const;
 
     /// Mètode per mostrar els valors
     void show();
 
     /// Posar l'identificador al hanging protocol
-    void setIdentifier( int id );
+    void setIdentifier(int id);
 
     /// Obtenir l'identificador del hanging protocol
     int getIdentifier() const;
 
     /// Mètode per comparar hanging protocols
-    bool isBetterThan( HangingProtocol * hangingToCompare );
+    bool isBetterThan(HangingProtocol *hangingToCompare);
 
     /// Retorna si el mètode és estricte o no ho hes
     bool isStrict() const;
 
     /// Assigna si el mètode és estricte o no ho hes
-    void setStrictness( bool strictness );
+    void setStrictness(bool strictness);
 
     /// Retorna si el hanging protocol ha de tenir totes les series diferents
     bool getAllDiferent() const;
 
     /// Assigna si el hanging protocol ha de tenir totes les series diferents
-    void setAllDiferent( bool allDiferent );
+    void setAllDiferent(bool allDiferent);
 
     /// Assigna el tipus d'icona per representar-lo
-    void setIconType( QString iconType );
+    void setIconType(QString iconType);
     
     /// Obté el tipus d'icona per representar-lo
     QString getIconType() const;
 
     /// Posa si el hanging protocol és de previes o no
-    void setPrevious( bool isPrevious );
+    void setPrevious(bool isPrevious);
 
     /// retorna si el hanging protocol te previes o no
     bool isPrevious();
 
     /// Assigna una prioritat al hanging protocol
-    void setPriority( double priority );
+    void setPriority(double priority);
 
     /// Retorna la prioritat del hanging protocol
     double getPriority();
@@ -146,16 +146,16 @@ private:
     bool m_candidate;
 
     /// Definició de layouts
-    HangingProtocolLayout * m_layout;
+    HangingProtocolLayout *m_layout;
 
     /// Definició de la màscara
-    HangingProtocolMask * m_mask;
+    HangingProtocolMask *m_mask;
 
     /// Llista d'image sets
-    QList< HangingProtocolImageSet * > m_listOfImageSets;
+    QList<HangingProtocolImageSet*> m_listOfImageSets;
 
     /// Llista de displays sets
-    QList< HangingProtocolDisplaySet * > m_listOfDisplaySets;
+    QList<HangingProtocolDisplaySet*> m_listOfDisplaySets;
 
     /// Boolea que indica si és estricte o no. Si és estricte vol dir que per ser correcte tots els image sets han d'estar assignats.
     bool m_strictness;
