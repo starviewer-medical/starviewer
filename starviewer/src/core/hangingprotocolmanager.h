@@ -27,6 +27,8 @@ class Q2DViewer;
 class PreviousStudiesManager;
 
 /**
+    Classe encarregada de fer la gestió de HP: cercar HP candidats i aplicar HP.
+    Degut a que els HP es modifiquen per assignar-los les sèries que s'han de mostrar, es fa una còpia del repositori.
     @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class HangingProtocolManager : public QObject {
@@ -89,6 +91,9 @@ private:
     /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat. 
     int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
 
+    /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
+    void copyHangingProtocolRepository();
+
 private:
 
     /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi
@@ -105,6 +110,9 @@ private:
 
     /// Objecte utilitzat per descarregar estudis previs. No es fa servir QueryScreen per problemes de dependències entre carpetes.
     PreviousStudiesManager *m_previousStudiesManager;
+
+    /// Còpia del repositori de HP però poder-los modificar sense que afecti al repositori
+    QList<HangingProtocol*> m_availableHangingProtocols;
 };
 
 }
