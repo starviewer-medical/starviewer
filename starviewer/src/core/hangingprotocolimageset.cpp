@@ -52,6 +52,11 @@ void HangingProtocolImageSet::addRestriction( Restriction restriction )
     m_listOfRestrictions << restriction;
 }
 
+void HangingProtocolImageSet::setRestrictions(const QList<Restriction> &restrictions)
+{
+    m_listOfRestrictions = restrictions;
+}
+
 QList<HangingProtocolImageSet::Restriction> HangingProtocolImageSet::getRestrictions() const
 {
     return m_listOfRestrictions;
