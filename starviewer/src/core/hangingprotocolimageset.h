@@ -25,7 +25,6 @@ public:
     ~HangingProtocolImageSet();
 
     enum SelectorUsageFlag { Match, NoMatch };
-    enum SelectorCategory { RelativeTime, AbstractPrior };
 
     struct Restriction
     {
@@ -114,22 +113,7 @@ private:
     /// Hanging Protocol al que pertany
     HangingProtocol *m_hangingProtocol;
 
-    /// Categoria
-    SelectorCategory m_category;
-
-    /// Valor inferior rang
-    int m_relativeTimeMinimum;
-
-    /// Valor superior rang
-    int m_relativeTimeMaximum;
-
-    /// Unitats rang
-    QString m_timeUnits;
-
-    /// Descripció
-    QString m_description;
-
-    /// Per saber si s'ha de tractar a nivell d'imatge o de sèrie. 
+    /// Per saber si s'ha de tractar a nivell d'imatge o de sèrie.
     QString m_typeOfItem;
 
     /// Serie que s'ajusta a les restriccions
