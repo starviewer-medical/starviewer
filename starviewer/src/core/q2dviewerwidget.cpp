@@ -195,7 +195,7 @@ void Q2DViewerWidget::enableDownloadingState()
 {
     if (!m_downloadingWidget)
     {
-        createDownloadingWidget();
+        m_downloadingWidget = this->createDownloadingWidget(this->parentWidget());
     }
 
     m_downloadingWidget->setVisible(false);
@@ -205,28 +205,30 @@ void Q2DViewerWidget::enableDownloadingState()
     m_downloadingWidget->setVisible(true);
 }
 
-void Q2DViewerWidget::createDownloadingWidget()
+QWidget* Q2DViewerWidget::createDownloadingWidget(QWidget *parent)
 {
-    m_downloadingWidget = new QWidget(this->parentWidget());
-    m_downloadingWidget->setStyleSheet("background-color: black; color: white;");
-    QVBoxLayout *verticalLayout = new QVBoxLayout(m_downloadingWidget);
+    QWidget *downloadingWidget = new QWidget(parent);
+    downloadingWidget->setStyleSheet("background-color: black; color: white;");
+    QVBoxLayout *verticalLayout = new QVBoxLayout(downloadingWidget);
 
     QFlags<Qt::AlignmentFlag> topFlag(Qt::AlignTop);
     QFlags<Qt::AlignmentFlag> hCenterFlag(Qt::AlignHCenter);
     QFlags<Qt::AlignmentFlag> bottomFlag(Qt::AlignBottom);
 
-    QLabel *downloadingLabelText = new QLabel(m_downloadingWidget);
+    QLabel *downloadingLabelText = new QLabel(downloadingWidget);
     downloadingLabelText->setText(tr("Downloading previous study..."));
     downloadingLabelText->setAlignment(bottomFlag|hCenterFlag);
     verticalLayout->addWidget(downloadingLabelText);
     QMovie *downloadingMovie = new QMovie();
-    QLabel *downloadingLabelMovie = new QLabel(m_downloadingWidget);
+    QLabel *downloadingLabelMovie = new QLabel(downloadingWidget);
     downloadingLabelMovie->setMovie(downloadingMovie);
     downloadingMovie->setFileName(QString::fromUtf8(":/images/downloading.gif"));
 
     downloadingLabelMovie->setAlignment(topFlag|hCenterFlag);
     verticalLayout->addWidget(downloadingLabelMovie);
     downloadingMovie->start();
+
+    return downloadingWidget;
 }
 
 }
