@@ -631,12 +631,6 @@ void Q2DViewer::setInput(Volume *volume)
 //     m_imageActor->SetUserMatrix(projectionMatrix);
 //     delete currentPlane;
 
-    int extent[6];
-    double origin[3], spacing[3];
-    m_mainVolume->getOrigin(origin);
-    m_mainVolume->getSpacing(spacing);
-    m_mainVolume->getWholeExtent(extent);
-
     m_numberOfPhases = m_mainVolume->getNumberOfPhases();
     m_maxSliceValue = this->getMaximumSlice();
 
