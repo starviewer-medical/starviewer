@@ -20,7 +20,6 @@
 #include <QGroupBox>
 #include <QSpacerItem>
 #include <QMovie>
-#include <QLabel>
 
 namespace udg {
 
