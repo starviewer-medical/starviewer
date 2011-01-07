@@ -46,7 +46,10 @@
 namespace udg {
 
 Q2DViewer::Q2DViewer(QWidget *parent)
-: QViewer(parent), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0), m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0), m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
+: QViewer(parent), m_lastView(Q2DViewer::Axial), m_currentSlice(0), m_currentPhase(0), m_overlayVolume(0), m_blender(0), m_imagePointPicker(0),
+  m_cornerAnnotations(0), m_enabledAnnotations(Q2DViewer::AllAnnotation), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0),
+  m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0),
+  m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
@@ -644,7 +647,7 @@ void Q2DViewer::setInput(Volume *volume)
     // Aquí es crea tot el pipeline del visualitzador
     this->applyGrayscalePipeline();
 
-    // Preparem el thickSlab 
+    // Preparem el thickSlab
     // TODO Cada cop que fem setInput resetejem els valors per defecte?
     m_thickSlabProjectionFilter->SetInput(m_mainVolume->getVtkData());
     m_thickSlabProjectionFilter->SetProjectionDimension(m_lastView);

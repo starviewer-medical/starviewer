@@ -12,13 +12,13 @@
 namespace udg {
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+
 */
-class HangingProtocolsLoader : public QObject
+class HangingProtocolsLoader: public QObject
 {
 Q_OBJECT
 public:
-    HangingProtocolsLoader( QObject *parent = 0 );
+    HangingProtocolsLoader(QObject *parent = 0);
 
     ~HangingProtocolsLoader();
 
@@ -26,8 +26,7 @@ public:
     void loadDefaults();
 
     /// Càrrega des d'un directori de hanging protocols o un fitxer XML
-    bool loadXMLFiles( const QString &filePath );
-
+    bool loadXMLFiles(const QString &filePath);
 };
 
 }

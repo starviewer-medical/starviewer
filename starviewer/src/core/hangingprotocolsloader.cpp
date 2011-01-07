@@ -27,7 +27,7 @@
 namespace udg {
 
 HangingProtocolsLoader::HangingProtocolsLoader(QObject *parent)
- : QObject( parent )
+ : QObject(parent)
 {
 
 }
@@ -41,52 +41,56 @@ void HangingProtocolsLoader::loadDefaults()
 {
     /// Hanging protocols definits per defecte, agafa el directori de l'executable TODO això podria ser un setting més
     QString defaultPath = "/etc/xdg/" + OrganizationNameString + "/" + ApplicationNameString + "/hangingProtocols/"; // Path linux
-    if( !QFile::exists(defaultPath) )
+    if (!QFile::exists(defaultPath))
+    {
         defaultPath = qApp->applicationDirPath() + "/hangingProtocols/";
-    if( !QFile::exists(defaultPath) )
+    }
+    if (!QFile::exists(defaultPath))
     {
         /// Mode desenvolupament
         defaultPath = qApp->applicationDirPath() + "/../hangingProtocols/";
 	
-        if( !QFile::exists(defaultPath) )
+        if (!QFile::exists(defaultPath))
         {
             defaultPath = qApp->applicationDirPath() + "/../hangingprotocols/"; // Linux
         }
     }
 
-    if( !defaultPath.isEmpty() )
+    if (!defaultPath.isEmpty())
     {
-        INFO_LOG( QString("Directori a on es van a buscar els hanging protocols per defecte: %1").arg(defaultPath) );
-        loadXMLFiles( defaultPath );
+        INFO_LOG(QString("Directori a on es van a buscar els hanging protocols per defecte: %1").arg(defaultPath));
+        loadXMLFiles(defaultPath);
     }
     else
     {
-        INFO_LOG( QString("El directori per defecte dels hanging protocols no existeix. No es carregaran.") );
+        INFO_LOG("El directori per defecte dels hanging protocols no existeix. No es carregaran.");
     }
 
     /// Hanging protocols definits per l'usuari
     Settings systemSettings;
-    QString userPath = systemSettings.getValue( CoreSettings::UserHangingProtocolsPath ).toString(); 
-    if( !userPath.isEmpty() )
-        loadXMLFiles( userPath );
+    QString userPath = systemSettings.getValue(CoreSettings::UserHangingProtocolsPath).toString();
+    if (!userPath.isEmpty())
+    {
+        loadXMLFiles(userPath);
+    }
 }
 
-bool HangingProtocolsLoader::loadXMLFiles( const QString &filePath )
+bool HangingProtocolsLoader::loadXMLFiles(const QString &filePath)
 {
 	HangingProtocolXMLReader *xmlReader = new HangingProtocolXMLReader();
-	QList<HangingProtocol *> listHangingProtocols = xmlReader->read( filePath );
+    QList<HangingProtocol *> listHangingProtocols = xmlReader->read(filePath);
 
-    if( listHangingProtocols.size() > 0 )
+    if (listHangingProtocols.size() > 0)
     {
-        INFO_LOG( QString("Carreguem %1 hanging protocols de [%2].").arg( listHangingProtocols.size() ).arg(filePath) );
+        INFO_LOG(QString("Carreguem %1 hanging protocols de [%2].").arg(listHangingProtocols.size()).arg(filePath));
         QString hangingProtocolNamesLogList;
-        foreach( HangingProtocol * hangingProtocol, listHangingProtocols )
+        foreach (HangingProtocol *hangingProtocol, listHangingProtocols)
 		{
-			Identifier id = HangingProtocolsRepository::getRepository()->addItem( hangingProtocol );
-			hangingProtocol->setIdentifier( id.getValue() );
-            hangingProtocolNamesLogList.append( QString( "%1, " ).arg( hangingProtocol->getName() ) );
+            Identifier id = HangingProtocolsRepository::getRepository()->addItem(hangingProtocol);
+            hangingProtocol->setIdentifier(id.getValue());
+            hangingProtocolNamesLogList.append(QString("%1, ").arg(hangingProtocol->getName()));
         }
-        INFO_LOG( QString("Hanging protocols carregats: %1").arg( hangingProtocolNamesLogList ) );
+        INFO_LOG(QString("Hanging protocols carregats: %1").arg(hangingProtocolNamesLogList));
     }
 
     delete xmlReader;
