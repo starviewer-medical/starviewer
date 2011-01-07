@@ -167,12 +167,12 @@ public:
     /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert
     bool fitsIntoMemory();
 
-    /// S'encarrega de crear un volum "de mínims" per donar un output en casos que
+    /// S'encarrega de convertir el volum a un volum "de mínims" per donar un output en casos que
     /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un 
     /// volum neutre per evitar que l'aplicació peti en casos d'error no controlats
     /// TODO Aquest mètode potser s'hauria de transformar en una subclasse de Volume que 
     /// únicament creïi aquest tipu de volum
-    void createNeutralVolume();
+    void convertToNeutralVolume();
 
 signals:
     /**

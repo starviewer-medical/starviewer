@@ -408,7 +408,7 @@ bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
     return found;
 }
 
-void Volume::createNeutralVolume()
+void Volume::convertToNeutralVolume()
 {
     if (m_imageDataVTK)
     {

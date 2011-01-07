@@ -45,19 +45,19 @@ void VolumeReader::read(Volume *volume)
         {
             case VolumePixelDataReader::OutOfMemory: 
                 WARN_LOG("No podem carregar els arxius següents perquè no caben a memòria\n" + fileList.join("\n"));
-                volume->createNeutralVolume();
+                volume->convertToNeutralVolume();
                 QMessageBox::warning(0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg(ApplicationNameString));
                 break;
 
             case VolumePixelDataReader::MissingFile:
                 // Fem el mateix que en el cas OutOfMemory, canviant el missatge d'error
-                volume->createNeutralVolume();
+                volume->convertToNeutralVolume();
                 QMessageBox::warning(0, tr("Missing Files"), tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString));
                 break;
 
             case VolumePixelDataReader::UnknownError:
                 // Hi ha hagut un error no controlat, creem el volum neutral per evitar desastres majors
-                volume->createNeutralVolume();
+                volume->convertToNeutralVolume();
                 QMessageBox::warning(0, tr("Unkwown Error"), tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString));
                 break;
 
