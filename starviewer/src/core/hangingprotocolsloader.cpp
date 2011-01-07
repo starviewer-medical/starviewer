@@ -56,14 +56,14 @@ void HangingProtocolsLoader::loadDefaults()
         defaultPath = qApp->applicationDirPath() + "/../../../../hangingprotocols/";
     }
 
-    if (!defaultPath.isEmpty())
+    if (QFile::exists(defaultPath))
     {
         INFO_LOG(QString("Directori a on es van a buscar els hanging protocols per defecte: %1").arg(defaultPath));
         loadXMLFiles(defaultPath);
     }
     else
     {
-        INFO_LOG("El directori per defecte dels hanging protocols no existeix. No es carregaran.");
+        INFO_LOG(QString("El directori per defecte dels hanging protocols (%1) no existeix. No es carregaran.").arg(defaultPath));
     }
 
     /// Hanging protocols definits per l'usuari
