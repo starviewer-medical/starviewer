@@ -20,6 +20,9 @@
 #include <QHBoxLayout>
 #include <QContextMenuEvent>
 #include <QMessageBox>
+// Qt createDownloadingWidget
+#include <QMovie>
+#include <QLabel>
 
 // Include's vtk
 #include <QVTKWidget.h>
@@ -748,5 +751,31 @@ void QViewer::changeVolume(Volume *volume)
     this->setInput(volume); 
     this->render(); 
 } 
+
+QWidget* QViewer::createDownloadingWidget(QWidget *parent)
+{
+    QWidget *downloadingWidget = new QWidget(parent);
+    downloadingWidget->setStyleSheet("background-color: black; color: white;");
+    QVBoxLayout *verticalLayout = new QVBoxLayout(downloadingWidget);
+
+    QFlags<Qt::AlignmentFlag> topFlag(Qt::AlignTop);
+    QFlags<Qt::AlignmentFlag> hCenterFlag(Qt::AlignHCenter);
+    QFlags<Qt::AlignmentFlag> bottomFlag(Qt::AlignBottom);
+
+    QLabel *downloadingLabelText = new QLabel(downloadingWidget);
+    downloadingLabelText->setText(tr("Downloading previous study..."));
+    downloadingLabelText->setAlignment(bottomFlag|hCenterFlag);
+    verticalLayout->addWidget(downloadingLabelText);
+    QMovie *downloadingMovie = new QMovie();
+    QLabel *downloadingLabelMovie = new QLabel(downloadingWidget);
+    downloadingLabelMovie->setMovie(downloadingMovie);
+    downloadingMovie->setFileName(QString::fromUtf8(":/images/downloading.gif"));
+
+    downloadingLabelMovie->setAlignment(topFlag|hCenterFlag);
+    verticalLayout->addWidget(downloadingLabelMovie);
+    downloadingMovie->start();
+
+    return downloadingWidget;
+}
 
 };  // end namespace udg

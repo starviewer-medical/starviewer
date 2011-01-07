@@ -157,6 +157,9 @@ public:
     /// Ens retorna el menú de pacient amb el que s'escull l'input
     PatientBrowserMenu* getPatientBrowserMenu() const;
 
+    /// Crea el widget que es mostra quan s'ha activat l'estat de descarrega
+    QWidget* createDownloadingWidget(QWidget *parent);
+
 public slots:
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume *volume) = 0;
