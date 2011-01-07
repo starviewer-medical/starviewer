@@ -54,6 +54,11 @@ void configureLogging()
     {
         configurationFile = qApp->applicationDirPath() + "/log.conf";
     }
+    // Afegim localització per Mac OS X en desenvolupament
+    if (!QFile::exists(configurationFile))
+    {
+        configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
+    }
 
     LOGGER_INIT( configurationFile.toStdString() );
     DEBUG_LOG("Arxiu de configuració del log: " + configurationFile );
