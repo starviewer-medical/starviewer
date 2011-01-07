@@ -47,13 +47,13 @@ void HangingProtocolsLoader::loadDefaults()
     }
     if (!QFile::exists(defaultPath))
     {
-        /// Mode desenvolupament
-        defaultPath = qApp->applicationDirPath() + "/../hangingProtocols/";
-	
-        if (!QFile::exists(defaultPath))
-        {
-            defaultPath = qApp->applicationDirPath() + "/../hangingprotocols/"; // Linux
-        }
+        // En entorn de desenvolupament Windows & Linux
+        defaultPath = qApp->applicationDirPath() + "/../hangingprotocols/";
+    }
+    if (!QFile::exists(defaultPath))
+    {
+        // En entorn de desenvolupament Mac OS X
+        defaultPath = qApp->applicationDirPath() + "/../../../../hangingprotocols/";
     }
 
     if (!defaultPath.isEmpty())
