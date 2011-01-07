@@ -46,7 +46,7 @@ bool DICOMImageFileGenerator::generateDICOMFiles()
 
     if ( sopClass  ==  UIDSecondaryCaptureImageStorage )
     {
-        return generateSCDICOMFiles();
+        return generateSecondaryCaptureDICOMFiles();
     }
     else
     {
@@ -56,7 +56,7 @@ bool DICOMImageFileGenerator::generateDICOMFiles()
 
 }
 
-bool DICOMImageFileGenerator::generateSCDICOMFiles()
+bool DICOMImageFileGenerator::generateSecondaryCaptureDICOMFiles()
 {
     vtkImageData * data = m_input->getVtkData();
 
