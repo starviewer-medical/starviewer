@@ -42,7 +42,8 @@
 namespace udg {
 
 QViewer::QViewer(QWidget *parent)
- : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0), m_defaultLevel(.0), m_isRenderingEnabled(true), m_isActive(false), m_hasDefaultWindowLevelDefined(false), m_transferFunction(0)
+ : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0),
+   m_defaultLevel(.0), m_isRenderingEnabled(true), m_isActive(false), m_hasDefaultWindowLevelDefined(false), m_transferFunction(0)
 {
     // TODO: De moment es desactiven els warnings en release i windows perquè no apareixi la finestra vtkOutputWindow
     // però la solució bona és que els viewers no donin warnings.
