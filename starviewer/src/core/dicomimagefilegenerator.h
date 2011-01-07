@@ -32,7 +32,7 @@ public:
     virtual bool generateDICOMFiles();
 
 private:
-    bool generateSCDICOMFiles();
+    bool generateSecondaryCaptureDICOMFiles();
     void fillGeneralImageInfo( DICOMWriter * writer , Image * image);
     void fillImagePixelInfo( DICOMWriter * writer , Image * image);
     void fillSCInfo(DICOMWriter * writer , Image * image );
