@@ -12,8 +12,6 @@
 #include "toolproxy.h"
 
 #include <QAction>
-#include <QPalette>
-#include <QMovie>
 
 namespace udg {
 
@@ -195,7 +193,7 @@ void Q2DViewerWidget::enableDownloadingState()
 {
     if (!m_downloadingWidget)
     {
-        m_downloadingWidget = this->createDownloadingWidget(this->parentWidget());
+        m_downloadingWidget = m_2DView->createDownloadingWidget(this->parentWidget());
     }
 
     m_downloadingWidget->setVisible(false);
@@ -203,32 +201,6 @@ void Q2DViewerWidget::enableDownloadingState()
     QRect size = this->geometry();
     m_downloadingWidget->setGeometry(size.x(), size.y(), size.width(), size.height());
     m_downloadingWidget->setVisible(true);
+
 }
-
-QWidget* Q2DViewerWidget::createDownloadingWidget(QWidget *parent)
-{
-    QWidget *downloadingWidget = new QWidget(parent);
-    downloadingWidget->setStyleSheet("background-color: black; color: white;");
-    QVBoxLayout *verticalLayout = new QVBoxLayout(downloadingWidget);
-
-    QFlags<Qt::AlignmentFlag> topFlag(Qt::AlignTop);
-    QFlags<Qt::AlignmentFlag> hCenterFlag(Qt::AlignHCenter);
-    QFlags<Qt::AlignmentFlag> bottomFlag(Qt::AlignBottom);
-
-    QLabel *downloadingLabelText = new QLabel(downloadingWidget);
-    downloadingLabelText->setText(tr("Downloading previous study..."));
-    downloadingLabelText->setAlignment(bottomFlag|hCenterFlag);
-    verticalLayout->addWidget(downloadingLabelText);
-    QMovie *downloadingMovie = new QMovie();
-    QLabel *downloadingLabelMovie = new QLabel(downloadingWidget);
-    downloadingLabelMovie->setMovie(downloadingMovie);
-    downloadingMovie->setFileName(QString::fromUtf8(":/images/downloading.gif"));
-
-    downloadingLabelMovie->setAlignment(topFlag|hCenterFlag);
-    verticalLayout->addWidget(downloadingLabelMovie);
-    downloadingMovie->start();
-
-    return downloadingWidget;
-}
-
 }

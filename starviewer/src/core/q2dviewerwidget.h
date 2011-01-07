@@ -62,9 +62,6 @@ private:
     /// Crea les connexions entre signals i slots
     void createConnections();
 
-    /// Crea el widget que es mostra quan s'ha activat l'estat de descarrega
-    QWidget* createDownloadingWidget(QWidget *parent);
-
 private slots:
     /// Aquest slot es cridarà quan es faci alguna acció sobre l'slider
     /// i segons l'acció rebuda actualitzarà el valor de la llesca al visor
