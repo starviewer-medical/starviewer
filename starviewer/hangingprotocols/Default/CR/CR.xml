@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangingProtocol name="CR">
-<hangingProtocolName>CR Series</hangingProtocolName>
+<hangingProtocolName>CR</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <allDifferent>yes</allDifferent>
 <protocol>CR</protocol>

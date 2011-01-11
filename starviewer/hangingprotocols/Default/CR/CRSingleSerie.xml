@@ -6,7 +6,7 @@
    segona imatge
 -->
 <hangingProtocol name="CRSingleSerie">
-<hangingProtocolName>CR</hangingProtocolName>
+<hangingProtocolName>CRSingle</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <protocol>CR</protocol>
 <imageSet identifier="1">
