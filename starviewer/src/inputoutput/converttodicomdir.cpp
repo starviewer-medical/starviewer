@@ -152,6 +152,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
         m_DICOMAnonymizer = new DICOMAnonymizer();
         m_DICOMAnonymizer->setReplacePatientIDInsteadOfRemove(true);
         m_DICOMAnonymizer->setReplaceStudyIDInsteadOfRemove(true);
+        m_DICOMAnonymizer->setRemovePrivateTags(true);
     }
     else
     {

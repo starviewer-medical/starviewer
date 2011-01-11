@@ -114,7 +114,6 @@ bool DICOMAnonymizer::anonymyzeDICOMFilesDirectory(QString directoryPath)
 bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPathFile)
 {
     gdcm::Reader gdcmReader;
-
     gdcmReader.SetFileName(qPrintable(inputPathFile));
 
     if (!gdcmReader.Read())
@@ -156,13 +155,12 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
         gdcmAnonymizer->Replace(gdcm::Tag(0x0020, 0x0010), "99999"); //ID Estudi
     }
 
-/*    if (getRemovePrivateTags())
+    if (getRemovePrivateTags())
     {
         gdcmAnonymizer->RemovePrivateTags();
     }
-*/
 
-    //TODO: Perquè serveix?
+    //Regenerem la capçalera DICOM amb el nou SOP Instance UID
     gdcm::FileMetaInformation gdcmFileMetaInformation = gdcmFile.GetHeader();
     gdcmFileMetaInformation.Clear();
 
