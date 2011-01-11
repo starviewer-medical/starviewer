@@ -22,6 +22,7 @@ class Status;
 class Study;
 class Series;
 class Image;
+class DICOMAnonymizer;
 
 /** Converteix un estudi a DICOMDIR, invocant el mètodes i classes necessàries.
   * Per crear un dicomdir, s'han de seguir les normes especificades a la IHE per PDI (portable data information) i DICOM : Aquestes normes són :
@@ -127,6 +128,9 @@ private:
     int m_series;
     int m_image;
 
+    ///És necessari crear-la global per mantenir la consistència dels UID dels fitxers DICOM
+    DICOMAnonymizer *m_DICOMAnonymizer;
+    bool m_anonymizeDICOMDIR;
 };
 
 }

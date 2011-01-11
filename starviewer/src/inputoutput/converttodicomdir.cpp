@@ -95,6 +95,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     int totalNumberOfItems = 0;
 
     m_dicomDirPath = dicomdirPath;
+    m_anonymizeDICOMDIR = anonymizeDICOMDIR; 
 
     if (!AreValidRequirementsOfFolderContentToCopyToDICOMDIR(Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()))
     {
@@ -146,6 +147,17 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     m_progress->setCancelButton( 0 );
     m_progress->setModal(true);
     
+    if (m_anonymizeDICOMDIR)
+    {
+        m_DICOMAnonymizer = new DICOMAnonymizer();
+        m_DICOMAnonymizer->setReplacePatientIDInsteadOfRemove(true);
+        m_DICOMAnonymizer->setReplaceStudyIDInsteadOfRemove(true);
+    }
+    else
+    {
+        m_DICOMAnonymizer = NULL;
+    }
+
     //copiem les imatges dels estudis seleccionats al directori desti
     state = copyStudiesToDicomdirPath(studyList);
 
@@ -155,18 +167,6 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
         DeleteDirectory().deleteDirectory( m_dicomDirPath , false );
         return state;
     }
-
-    if (anonymizeDICOMDIR)
-    {
-        DICOMAnonymizer dicomAnonymizer;
-
-        dicomAnonymizer.setReplacePatientIDInsteadOfRemove(true);
-        dicomAnonymizer.setReplaceStudyIDInsteadOfRemove(true);
-        INFO_LOG("Comenco a anonimitzar");
-        dicomAnonymizer.anonymyzeDICOMFilesDirectory(m_dicomDirPath);
-        INFO_LOG("Acabo d'anonimitzar");
-    }
-
     //una vegada copiada les imatges les creem
     state = createDicomdir( m_dicomDirPath , selectedDevice );
 
@@ -194,6 +194,11 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     }
 
     m_progress->close();
+
+    if (m_DICOMAnonymizer != NULL)
+    {
+        delete m_DICOMAnonymizer;
+    }
 
     return state;
 }
@@ -365,33 +370,48 @@ Status ConvertToDicomdir::copySeriesToDicomdirPath(Series *series)
 
 Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
 {
-    QChar fillChar = '0';
     //creem el nom del fitxer de l'imatge, el format és IMGXXXXX, on XXXXX és el numero d'imatge dins la sèrie
-    QString  imageName = QString( "/IMG%1" ).arg( m_image , 5 , 10 , fillChar );
-    QString imageInputPath, imageOutputPath;
-    ConvertDicomToLittleEndian convertDicom;
+    QString imageOutputPath = m_dicomDirSeriesPath + QString( "/IMG%1" ).arg( m_image , 5 , 10 , QChar('0'));
     Status state;
-
     m_image++;
-
-    //Creem el path de la imatge
-    imageInputPath = image->getPath();
-
-    imageOutputPath = m_dicomDirSeriesPath + imageName;
 
     if (getConvertDicomdirImagesToLittleEndian())
     {
         //convertim la imatge a littleEndian, demanat per la normativa DICOM i la guardem al directori desti
-        state = convertDicom.convert(imageInputPath, imageOutputPath );
+        state = ConvertDicomToLittleEndian().convert(image->getPath(), imageOutputPath );
+
+        if (m_anonymizeDICOMDIR && state.good())
+        {
+            if (m_DICOMAnonymizer->anonymizeDICOMFile(imageOutputPath, imageOutputPath))
+            {
+                state.setStatus("", true, 0);
+            }
+            else state.setStatus(QString("Can't anonymize image Little Endian Image %1").arg(imageOutputPath), false, 3001);
+        }
     }
     else
     {
-        if (QFile::copy(imageInputPath, imageOutputPath))
+        //Si hem d'anonimitzar el fitxer el que fem és que en comptes de copiar-lo i llavors anonimitzar-lo, és  indicar-li al mètode d'anonimitzar 
+        //que guardi el fitxer en el lloc on s'hauria hagut de copiar per crear el DICOMDIR, d'aquesta manera la creació de DICOMDIR per imatges 
+        //que no s'han de convertir a LittleEndian és més ràpid.
+        if (m_anonymizeDICOMDIR)
         {
-            state.setStatus("",true,0);
+            if (m_DICOMAnonymizer->anonymizeDICOMFile(image->getPath(), imageOutputPath))
+            {
+                state.setStatus("", true, 0);
+            }
+            else state.setStatus(QString("Can't anonymize image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3001);
         }
-        else state.setStatus(QString("Can't copy image %1 to %2").arg(imageInputPath,imageOutputPath), false, 3001);
+        else
+        {
+            if (QFile::copy(image->getPath(), imageOutputPath))
+            {
+                state.setStatus("",true,0);
+            }
+            else state.setStatus(QString("Can't copy image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3001);
+        }
     }
+
     m_progress->setValue( m_progress->value() + 1 ); // la barra de progrés avança
     m_progress->repaint();
 
