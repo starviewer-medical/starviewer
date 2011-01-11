@@ -85,7 +85,7 @@ bool HangingProtocolsLoader::loadXMLFiles(const QString &filePath)
         INFO_LOG(QString("Carreguem %1 hanging protocols de [%2].").arg(listHangingProtocols.size()).arg(filePath));
         QString hangingProtocolNamesLogList;
         foreach (HangingProtocol *hangingProtocol, listHangingProtocols)
-		{
+        {
             Identifier id = HangingProtocolsRepository::getRepository()->addItem(hangingProtocol);
             hangingProtocol->setIdentifier(id.getValue());
             hangingProtocolNamesLogList.append(QString("%1, ").arg(hangingProtocol->getName()));
