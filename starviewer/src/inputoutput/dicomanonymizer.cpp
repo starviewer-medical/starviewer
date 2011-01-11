@@ -140,9 +140,6 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
         DEBUG_LOG("No s'ha pogut anonimitzar el fitxer " + inputPathFile);
     }
 
-    std::string newUIDValue = "";
-    gdcm::DataElement copyNew = gdcmFile.GetDataSet().GetDataElement(gdcm::Tag(0x0008, 0x0018));
-
     gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), "Anonymous"); //Nom pacient
     
     if (getReplacePatientIDInsteadOfRemove())
