@@ -4,8 +4,8 @@
     estudis DX amb més d'una sèrie, on la sèrie primera i segona
     ocupen el primer i segon visor
 -->
-<hangingProtocol name="DXMultipleSeries">
-<hangingProtocolName>DX Series</hangingProtocolName>
+<hangingProtocol name="DX">
+<hangingProtocolName>DX</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <allDifferent>yes</allDifferent>
 <protocol>DX</protocol>
