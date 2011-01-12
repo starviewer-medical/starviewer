@@ -24,7 +24,7 @@ DICOMAnonymizer::DICOMAnonymizer()
 
 DICOMAnonymizer::~DICOMAnonymizer()
 {
-    delete gdcmGlobalInstance;
+    delete gdcmAnonymizer;
 }
 
 void DICOMAnonymizer::setReplacePatientIDInsteadOfRemove(bool replace)
