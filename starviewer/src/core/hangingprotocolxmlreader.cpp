@@ -33,27 +33,16 @@ HangingProtocolXMLReader::~HangingProtocolXMLReader()
 QList<HangingProtocol*> HangingProtocolXMLReader::read(const QString &path)
 {
     QFileInfo fileToRead(path);
-    QFileInfo file;
     QList<HangingProtocol*> protocols;
-    QList<HangingProtocol*> directoryProtocols;
-    QFileInfoList entryInfoList;
-    int numberOfFileInfo;
-    int i;
 
     if (fileToRead.isDir())
     {
         QDir directory(path);
-        entryInfoList = directory.entryInfoList();
-        numberOfFileInfo = entryInfoList.size();
-        
-        for (i = 0; i < numberOfFileInfo; i++)
+        foreach (const QFileInfo &file, directory.entryInfoList())
         {
-            file = entryInfoList.value(i);
-
             if ((file.fileName() != ".") && (file.fileName() != ".."))
             {
-                directoryProtocols = read(file.absolutePath() + QDir::toNativeSeparators("/") + file.fileName());
-                protocols << directoryProtocols;
+                protocols << read(file.absolutePath() + QDir::toNativeSeparators("/") + file.fileName());
             }
         }
     }
