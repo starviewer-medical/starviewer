@@ -19,7 +19,7 @@ class HangingProtocol;
 class HangingProtocolDisplaySet;
 
 /**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class HangingProtocolXMLReader : public QObject
 {
@@ -29,22 +29,22 @@ public:
 
     ~HangingProtocolXMLReader();
 
-    /// llegeix els hanging protocols del fitxer
-    QList<HangingProtocol * > readFile( QString path );
+    /// Llegeix els hanging protocols del fitxer
+    QList<HangingProtocol*> readFile(QString path);
 
 	/// Llegeix directoris i fitxers
-	QList<HangingProtocol * > read( QString path );
+    QList<HangingProtocol*> read(QString path);
 
 private:
 
     /// Llegeix una restriccio
-    HangingProtocolImageSet::Restriction readRestriction( QXmlStreamReader * reader );
+    HangingProtocolImageSet::Restriction readRestriction(QXmlStreamReader *reader);
 
     /// Llegeix un image set
-    HangingProtocolImageSet * readImageSet( QXmlStreamReader * reader , const QList<HangingProtocolImageSet::Restriction>  & restrictionList );
+    HangingProtocolImageSet* readImageSet(QXmlStreamReader *reader, const QList<HangingProtocolImageSet::Restriction> &restrictionList);
 
     /// Llegeix un display set
-    HangingProtocolDisplaySet * readDisplaySet( QXmlStreamReader * reader, HangingProtocol *hangingProtocol);
+    HangingProtocolDisplaySet* readDisplaySet(QXmlStreamReader * reader, HangingProtocol *hangingProtocol);
 
 };
 
