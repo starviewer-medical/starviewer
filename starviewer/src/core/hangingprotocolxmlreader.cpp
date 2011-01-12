@@ -70,13 +70,7 @@ QList<HangingProtocol*> HangingProtocolXMLReader::read(const QString &path)
 QList<HangingProtocol*> HangingProtocolXMLReader::readFile(const QString &path)
 {
     QFile file(path);
-    HangingProtocol *hangingProtocol = 0;
-    QList<QString> protocols;
-    HangingProtocolImageSet::Restriction restriction;
-    HangingProtocolImageSet *imageSet;
-    HangingProtocolDisplaySet *displaySet;
     QList<HangingProtocol*> listHangingProtocols;
-    QList<HangingProtocolImageSet::Restriction> restrictionList;
 
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -97,9 +91,9 @@ QList<HangingProtocol*> HangingProtocolXMLReader::readFile(const QString &path)
         {
             if (reader->name() == "hangingProtocol")
             {
-                hangingProtocol = new HangingProtocol();
-                protocols.clear();
-                restrictionList.clear();
+                HangingProtocol *hangingProtocol = new HangingProtocol();
+                QList<QString> protocols;
+                QList<HangingProtocolImageSet::Restriction> restrictionList;
 
                 while (!reader->atEnd())
                 {
@@ -126,17 +120,16 @@ QList<HangingProtocol*> HangingProtocolXMLReader::readFile(const QString &path)
                     }
                     else if (reader->name() == "restriction")
                     {
-                        restriction = readRestriction(reader);
-                        restrictionList << restriction;
+                        restrictionList << readRestriction(reader);
                     }
                     else if (reader->name() == "imageSet")
                     {
-                        imageSet = readImageSet(reader , restrictionList);
+                        HangingProtocolImageSet *imageSet = readImageSet(reader, restrictionList);
                         hangingProtocol->addImageSet(imageSet);
                     }
                     else if (reader->name() == "displaySet")
                     {
-                        displaySet = readDisplaySet(reader, hangingProtocol);
+                        HangingProtocolDisplaySet *displaySet = readDisplaySet(reader, hangingProtocol);
                         hangingProtocol->addDisplaySet(displaySet);
                     }
                     else if (reader->name() == "hangingProtocol" && reader->tokenType() == QXmlStreamReader::EndElement)
@@ -229,7 +222,6 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction(Q
 HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(QXmlStreamReader *reader, const QList<HangingProtocolImageSet::Restriction>  &restrictionList)
 {
     HangingProtocolImageSet * imageSet = new HangingProtocolImageSet();
-    HangingProtocolImageSet::Restriction restriction;
     imageSet->setIdentifier(reader->attributes().value("identifier").toString().toInt());
 
     while (!reader->atEnd())
@@ -239,7 +231,7 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(QXmlStreamReader
         if (reader->name() == "restriction")
         {
             reader->readNext();
-            restriction = restrictionList.value(reader->text().toString().toInt()-1);
+            HangingProtocolImageSet::Restriction restriction = restrictionList.value(reader->text().toString().toInt()-1);
             imageSet->addRestriction(restriction);
         }
         else if (reader->name() == "type")
