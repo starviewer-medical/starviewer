@@ -29,8 +29,8 @@ public:
 
     ~HangingProtocolXMLReader();
 
-    /// Llegeix els hanging protocols del fitxer
-    QList<HangingProtocol*> readFile(const QString &path);
+    /// Llegeix el hanging protocol del fitxer. Retrona NULL si s'han pogut carregar
+    HangingProtocol* readFile(const QString &path);
 
 	/// Llegeix directoris i fitxers
     QList<HangingProtocol*> read(const QString &path);

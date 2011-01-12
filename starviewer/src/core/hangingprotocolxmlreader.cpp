@@ -61,16 +61,20 @@ QList<HangingProtocol*> HangingProtocolXMLReader::read(const QString &path)
     {
         if (fileToRead.suffix() == "xml")
         {
-            protocols = readFile(path);
+            HangingProtocol *hangingProtocol = readFile(path);
+            if (hangingProtocol != NULL)
+            {
+                protocols << hangingProtocol;
+            }
         }
     }
     return protocols;
 }
 
-QList<HangingProtocol*> HangingProtocolXMLReader::readFile(const QString &path)
+HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
 {
     QFile file(path);
-    QList<HangingProtocol*> listHangingProtocols;
+    HangingProtocol* hangingProtocolLoaded = NULL;
 
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -78,12 +82,12 @@ QList<HangingProtocol*> HangingProtocolXMLReader::readFile(const QString &path)
                              tr("Cannot read file %1:\n%2.")
                              .arg(path)
                              .arg(file.errorString()));
-        return listHangingProtocols;
+        return NULL;
     }
 
     QXmlStreamReader *reader = new QXmlStreamReader(&file);
 
-    while (reader->readNextStartElement())
+    if (reader->readNextStartElement())
     {
         if (reader->name() == "hangingProtocol")
         {
@@ -148,7 +152,7 @@ QList<HangingProtocol*> HangingProtocolXMLReader::readFile(const QString &path)
             if (!reader->hasError())
             {
                 hangingProtocol->setProtocolsList(protocols);
-                listHangingProtocols.push_back(hangingProtocol);
+                hangingProtocolLoaded = hangingProtocol;
             }
         }
     }
@@ -160,7 +164,7 @@ QList<HangingProtocol*> HangingProtocolXMLReader::readFile(const QString &path)
 
     delete reader;
 
-    return listHangingProtocols;
+    return hangingProtocolLoaded;
 }
 
 HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction(QXmlStreamReader *reader)
