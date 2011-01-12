@@ -30,7 +30,7 @@ HangingProtocolXMLReader::~HangingProtocolXMLReader()
 {
 }
 
-QList<HangingProtocol*> HangingProtocolXMLReader::read(QString path)
+QList<HangingProtocol*> HangingProtocolXMLReader::read(const QString &path)
 {
     QFileInfo fileToRead(path);
     QFileInfo file;
@@ -67,7 +67,7 @@ QList<HangingProtocol*> HangingProtocolXMLReader::read(QString path)
     return protocols;
 }
 
-QList<HangingProtocol*> HangingProtocolXMLReader::readFile(QString path)
+QList<HangingProtocol*> HangingProtocolXMLReader::readFile(const QString &path)
 {
     QFile file(path);
     HangingProtocol *hangingProtocol = 0;
