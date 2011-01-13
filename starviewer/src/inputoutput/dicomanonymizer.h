@@ -10,9 +10,10 @@
 /**
   * Aquesta classe permet anonimitzar fitxers DICOM seguint les normes descrites pel Basic Application Level Confidentiality Profile de DICOM
   * que podem trobar al annex E del PS 3.15, mantenint la consistència en tags com Frame Of Reference o Image Of Reference, Study Instance UID, 
-  * Series Instance UID, ... després de ser anonimitzats.
+  * Series Instance UID, ... després de ser anonimitzats. Per defecte també treu els tags privats de les imatges ja que aquests poden contenir
+  * informació sensible del pacient, ens aconsellen que els treiem a http://groups.google.com/group/comp.protocols.dicom/browse_thread/thread/fb89f7f5d120db44
   *
-  * Ens permet anonimitzar fitxers sols o tots els fitxers dins i subdirectoris del directori especificat
+  * Ens permet anonimitzar fitxers sols o tots els fitxers dins i subdirectoris del directori especificat.
   */
 
 #include <QHash>
@@ -52,7 +53,9 @@ public:
     void setReplaceStudyIDInsteadOfRemove(bool replace);
     bool getReplaceStudyIDInsteadOfRemove();
     
-    ///Indica si s'han de treure els tags privats de les imatges, per defecte no els treiem
+    ///Indica si s'han de treure els tags privats de les imatges. Per defecte es treuen si no s'indica el contrari, ja que els tags privats poden
+    ///contenir informació sensible del pacient que segons el Basic Application Level Confidentiality Profile de DICOM s'ha d'anonimitzar, com podria
+    ///ser el nom del pacient, edat, ....
     void setRemovePrivateTags(bool removePritaveTags);
     bool getRemovePrivateTags();
 
