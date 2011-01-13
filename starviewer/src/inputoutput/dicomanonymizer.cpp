@@ -76,15 +76,13 @@ bool DICOMAnonymizer::initializeGDCM()
 
     const gdcm::Defs &defs = gdcmGlobalInstance->GetDefs(); (void)defs;
     //TODO:utilitzem el UID de dcmtk hauríem de tenir el nostre propi això també passa a VolumeBuilderFromCaptures
-    //TODO:Treure quan tot funcioni
     if (!gdcm::UIDGenerator::IsValid(SITE_UID_ROOT))
     {
-        DEBUG_LOG("UID NO VÀLID");
+        ERROR_LOG(QString("No es pot anonimitzar els fitxers DICOM perquè el UID arrel per crear els nous fitxers no es valid %1").arg(SITE_UID_ROOT));
+        return false;
     }
 
     gdcm::UIDGenerator::SetRoot(SITE_UID_ROOT);
-
-    DEBUG_LOG("Inicialitzat");
 
     return true;
 }
@@ -98,19 +96,23 @@ bool DICOMAnonymizer::anonymyzeDICOMFilesDirectory(QString directoryPath)
     {
         if (entryInfo.isDir())
         {
-            anonymyzeDICOMFilesDirectory(entryInfo.absoluteFilePath());
+            if (!anonymyzeDICOMFilesDirectory(entryInfo.absoluteFilePath()))
+            {
+                return false;
+            }
         }
         else
         {
-            anonymizeDICOMFile(entryInfo.absoluteFilePath(), entryInfo.absoluteFilePath());
+            if (!anonymizeDICOMFile(entryInfo.absoluteFilePath(), entryInfo.absoluteFilePath()))
+            {
+                return false;
+            }
         }
     }
 
-    //TODO:Retornar valor correcte
     return true;
 }
 
-//TODO:Testejar que el frameofreference, studyInstanceUID, .. tot sigui coherent. 
 bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPathFile)
 {
     gdcm::Reader gdcmReader;
@@ -118,7 +120,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
 
     if (!gdcmReader.Read())
     {
-        DEBUG_LOG("No s'ha trobat el fitxer a anonimitzar " + inputPathFile);
+        ERROR_LOG("No s'ha trobat el fitxer a anonimitzar " + inputPathFile);
         return false;
     }
 
@@ -128,8 +130,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
     gdcmMediaStorage.SetFromFile(gdcmFile);
     if (!gdcm::Defs::GetIODNameFromMediaStorage(gdcmMediaStorage))
     {
-        //TODO:Testejar que retorn el correcte
-        DEBUG_LOG(QString("Media storage type del fitxer no suportat: %1").arg(gdcmMediaStorage.GetString()));
+        ERROR_LOG(QString("Media storage type del fitxer no suportat: %1").arg(gdcmMediaStorage.GetString()));
         return false;
     }
 
@@ -137,13 +138,13 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
     QString originalStudyInstanceUID = readTagValue(&gdcmFile, gdcm::Tag(0x0020, 0x000d));
 
     gdcmAnonymizer->SetFile(gdcmFile);
-
     if (!gdcmAnonymizer->BasicApplicationLevelConfidentialityProfile(true))
     {
-        DEBUG_LOG("No s'ha pogut anonimitzar el fitxer " + inputPathFile);
+        ERROR_LOG("No s'ha pogut anonimitzar el fitxer " + inputPathFile);
+        return false;
     }
 
-    gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), "Anonymous"); //Nom pacient
+    gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), "Anonymous"); //Establi el mom del pacient anonimitzat
     
     if (getReplacePatientIDInsteadOfRemove())
     {
@@ -157,7 +158,11 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
 
     if (getRemovePrivateTags())
     {
-        gdcmAnonymizer->RemovePrivateTags();
+        if (!gdcmAnonymizer->RemovePrivateTags())
+        {
+            ERROR_LOG("No s'ha pogut treure els tags privats del fitxer " + inputPathFile);
+            return false;            
+        }
     }
 
     //Regenerem la capçalera DICOM amb el nou SOP Instance UID
@@ -169,28 +174,11 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
     gdcmWriter.SetFile(gdcmFile);
     if (!gdcmWriter.Write())
     {
-        DEBUG_LOG("No s'ha pogut generar el fitxer anonimitzat " + inputPathFile + " a " + outputPathFile);
+        ERROR_LOG("No s'ha pogut generar el fitxer anonimitzat de " + inputPathFile + " a " + outputPathFile);
         return false;
     }
 
-      /*
-
-  if( !writer.Write() )
-    {
-    std::cerr << "Could not Write : " << outfilename << std::endl;
-    if( strcmp(filename,outfilename) != 0 )
-      {
-      gdcm::System::RemoveFile( outfilename );
-      }
-    else
-      {
-      std::cerr << "gdcmanon just corrupted: " << filename << " for you (data lost)." << std::endl;
-      }
-
-    return false;
-    }*/
   return true;
-
 }
 
 QString DICOMAnonymizer::getAnonimyzedPatientID(QString originalPatientID)
