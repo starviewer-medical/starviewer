@@ -7,7 +7,13 @@
 #ifndef UDGDICOMANONYMIZER_H
 #define UDGDICOMANONYMIZER_H
 
-//TODO: Explicar funcionament classe
+/**
+  * Aquesta classe permet anonimitzar fitxers DICOM seguint les normes descrites pel Basic Application Level Confidentiality Profile de DICOM
+  * que podem trobar al annex E del PS 3.15, mantenint la consistència en tags com Frame Of Reference o Image Of Reference, Study Instance UID, 
+  * Series Instance UID, ... després de ser anonimitzats.
+  *
+  * Ens permet anonimitzar fitxers sols o tots els fitxers dins i subdirectoris del directori especificat
+  */
 
 #include <QHash>
 
@@ -29,10 +35,15 @@ public:
     bool anonymyzeDICOMFilesDirectory(QString directoryPath);
 
     ///Ens anonimitza un fitxer DICOM
+    ///Atenció!!! si utilitzem aquesta opció per anonimitzar diversos fitxers d'un mateix estudi, aquests fitxers s'han d'anonimitzar utilitzant la mateixa
+    ///instància del DICOMAnonymizer per mantenir la consitència de Tags com Study Instance UID, Series Instance UID, Frame Of Reference, Image Reference ...
+    ///Si no es respecta aquest requisit passarà que imatges d'un mateix estudi després de ser anonimitzades tindran Study Instance UID diferents.
     bool anonymizeDICOMFile(QString inputPathFile, QString outputPathFile);
 
     ///En comptes d'eliminar el valor del StudyID tal com indica el Basic Profile el substitueix per un valor arbitrari
-    ///Aquesta opció està pensada pel DICOMDIR en que és obligatori que els estudis tinguin PatientID
+    ///Aquesta opció està pensada pel DICOMDIR en que és obligatori que els estudis tinguin PatientID, tots els estudis a anonimitzar que tinguin en comú 
+    ///mateix el Patient ID abans de ser anonimitzats, després de ser-ho tindran un nou Patient ID en comú, d'aquesta manera es podrà veure que aquells estudis
+    ///són del mateix pacient.
     void setReplacePatientIDInsteadOfRemove(bool replace);
     bool getReplacePatientIDInsteadOfRemove();
 
@@ -44,7 +55,6 @@ public:
     ///Indica si s'han de treure els tags privats de les imatges, per defecte no els treiem
     void setRemovePrivateTags(bool removePritaveTags);
     bool getRemovePrivateTags();
-
 
 private:
 
