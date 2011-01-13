@@ -133,6 +133,9 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
         return false;
     }
 
+    QString originalPatientID = readTagValue(&gdcmFile, gdcm::Tag(0x0010, 0x0020));
+    QString originalStudyInstanceUID = readTagValue(&gdcmFile, gdcm::Tag(0x0020, 0x000d));
+
     gdcmAnonymizer->SetFile(gdcmFile);
 
     if (!gdcmAnonymizer->BasicApplicationLevelConfidentialityProfile(true))
@@ -144,12 +147,12 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
     
     if (getReplacePatientIDInsteadOfRemove())
     {
-        gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0020), "99999"); //ID Pacient
+        gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0020), qPrintable(getAnonimyzedPatientID(originalPatientID))); //ID Pacient
     }
 
     if (getReplaceStudyIDInsteadOfRemove())
     {
-        gdcmAnonymizer->Replace(gdcm::Tag(0x0020, 0x0010), "99999"); //ID Estudi
+        gdcmAnonymizer->Replace(gdcm::Tag(0x0020, 0x0010), qPrintable(getAnonymizedStudyID(originalStudyInstanceUID))); //ID Estudi
     }
 
     if (getRemovePrivateTags())
@@ -188,6 +191,43 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
     }*/
   return true;
 
+}
+
+QString DICOMAnonymizer::getAnonimyzedPatientID(QString originalPatientID)
+{
+    if (!hashOriginalPatientIDToAnonimyzedPatientID.contains(originalPatientID))
+    {
+        hashOriginalPatientIDToAnonimyzedPatientID.insert(originalPatientID, QString::number(hashOriginalPatientIDToAnonimyzedPatientID.count() + 1));
+    }
+    
+    return hashOriginalPatientIDToAnonimyzedPatientID.value(originalPatientID);
+}
+
+QString DICOMAnonymizer::getAnonymizedStudyID(QString originalStudyInstanceUID)
+{
+    if (!hashOriginalStudyInstanceUIDToAnonimyzedStudyID.contains(originalStudyInstanceUID))
+    {
+        hashOriginalStudyInstanceUIDToAnonimyzedStudyID.insert(originalStudyInstanceUID, QString::number(hashOriginalStudyInstanceUIDToAnonimyzedStudyID.count() + 1));
+    }
+
+    return hashOriginalStudyInstanceUIDToAnonimyzedStudyID.value(originalStudyInstanceUID);
+}
+
+
+QString DICOMAnonymizer::readTagValue(gdcm::File *gdcmFile, gdcm::Tag tagToRead)
+{
+    gdcm::DataElement dataElement = gdcmFile->GetDataSet().GetDataElement(tagToRead);
+    QString tagValue = "";
+
+    if(!dataElement.IsEmpty())
+    {
+        if(gdcm::ByteValue *byteValueTag = dataElement.GetByteValue())
+        {
+            tagValue = (std::string(byteValueTag->GetPointer(), byteValueTag->GetLength())).c_str();
+        }
+    }
+
+    return tagValue;
 }
 
 }
