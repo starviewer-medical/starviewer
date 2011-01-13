@@ -37,7 +37,6 @@ bool DICOMAnonymizer::getReplacePatientIDInsteadOfRemove()
     return m_replacePatientIDInsteadOfRemove;
 }
 
-
 void DICOMAnonymizer::setReplaceStudyIDInsteadOfRemove(bool replace)
 {
     m_replaceStudyIDInsteadOfRemove = replace;
@@ -58,10 +57,10 @@ bool DICOMAnonymizer::getRemovePrivateTags()
     return m_removePritaveTags;
 }
 
-bool DICOMAnonymizer::initializeGDCM()
+void DICOMAnonymizer::initializeGDCM()
 {
     gdcmAnonymizer = new gdcm::gdcmAnonymizerStarviewer();
-    gdcmGlobalInstance = &gdcm::Global::GetInstance();
+    gdcm::Global *gdcmGlobalInstance = &gdcm::Global::GetInstance();
 
     //Indiquem el directori on pot trobar el fitxer part3.xml que és un diccionari DICOM.
     //TODO: On posem el fitxer part3.xml
@@ -71,20 +70,17 @@ bool DICOMAnonymizer::initializeGDCM()
     if (!gdcmGlobalInstance->LoadResourcesFiles())
     {
         ERROR_LOG("No s'ha trobat el fitxer part3.xml a " + QCoreApplication::applicationDirPath());
-        return false;
     }
 
-    const gdcm::Defs &defs = gdcmGlobalInstance->GetDefs(); (void)defs;
+    const gdcm::Defs &defs = gdcmGlobalInstance->GetDefs(); 
+    (void)defs;
     //TODO:utilitzem el UID de dcmtk hauríem de tenir el nostre propi això també passa a VolumeBuilderFromCaptures
     if (!gdcm::UIDGenerator::IsValid(SITE_UID_ROOT))
     {
         ERROR_LOG(QString("No es pot anonimitzar els fitxers DICOM perquè el UID arrel per crear els nous fitxers no es valid %1").arg(SITE_UID_ROOT));
-        return false;
     }
 
     gdcm::UIDGenerator::SetRoot(SITE_UID_ROOT);
-
-    return true;
 }
 
 bool DICOMAnonymizer::anonymyzeDICOMFilesDirectory(QString directoryPath)
@@ -125,7 +121,6 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
     }
 
     gdcm::File &gdcmFile = gdcmReader.GetFile();
-
     gdcm::MediaStorage gdcmMediaStorage;
     gdcmMediaStorage.SetFromFile(gdcmFile);
     if (!gdcm::Defs::GetIODNameFromMediaStorage(gdcmMediaStorage))

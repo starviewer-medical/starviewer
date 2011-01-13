@@ -9,8 +9,6 @@
 
 //TODO: Explicar funcionament classe
 
-//TODO:Intentar treure
-#include <gdcmGlobal.h>
 #include <QHash>
 
 #include "gdcmanonymizerstarviewer.h"
@@ -51,7 +49,7 @@ public:
 private:
 
     ///Inicialitza les variables de gdcm necessàries per anonimitzar
-    bool initializeGDCM();
+    void initializeGDCM();
 
     ///Retorna el valor de PatientID anonimitzat a partir del PatientID original del fitxer. Aquest mètode és consistent de manera que si li passem 
     ///una o més vegades el mateix PatientID sempre retornarà el mateix valor com a PatientID anonimitzat.
@@ -73,7 +71,6 @@ private:
     QHash<QString, QString> hashOriginalPatientIDToAnonimyzedPatientID;
     QHash<QString, QString> hashOriginalStudyInstanceUIDToAnonimyzedStudyID;
 
-    gdcm::Global *gdcmGlobalInstance;
     gdcm::gdcmAnonymizerStarviewer *gdcmAnonymizer;
 };
 
