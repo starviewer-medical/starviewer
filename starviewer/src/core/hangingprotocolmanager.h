@@ -35,16 +35,16 @@ class HangingProtocolManager : public QObject {
 Q_OBJECT
 public:
     
-    HangingProtocolManager( QObject *parent = 0 );
+    HangingProtocolManager(QObject *parent = 0);
     ~HangingProtocolManager();
 
     /// Buscar els hanging protocols disponibles
-    QList<HangingProtocol *> searchHangingProtocols(Patient *patient);
-    QList<HangingProtocol *> searchHangingProtocols(Patient *patient, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
+    QList<HangingProtocol*> searchHangingProtocols(Patient *patient);
+    QList<HangingProtocol*> searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
 
     // Aplica un hanging protocol concret, ja sigui via identificador o per instància
-    void applyHangingProtocol( int hangingProtocolNumber, ViewersLayout * layout, Patient * patient );
-    void applyHangingProtocol( HangingProtocol *hangingProtocol, ViewersLayout * layout, Patient * patient );
+    void applyHangingProtocol(int hangingProtocolNumber, ViewersLayout *layout, Patient *patient);
+    void applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient);
 
     /// Aplica el millor hanging protocol de la llista donada
     void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
@@ -80,13 +80,13 @@ private:
     void applyDisplayTransformations(Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet);
 
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
-    QList<Study*> sortStudiesByDate( const QList<Study*> & studies );
+    QList<Study*> sortStudiesByDate( const QList<Study*> &studies );
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
     void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);
 
     /// Buscar els estudis previs
-    Study * searchPreviousStudy( HangingProtocol * protocol , Study * referenceStudy, const QList<Study*> &previousStudies);
+    Study* searchPreviousStudy( HangingProtocol *protocol , Study *referenceStudy, const QList<Study*> &previousStudies);
 
     /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat. 
     int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
@@ -101,12 +101,12 @@ private:
     struct StructPreviousStudyDownloading
     {
         Q2DViewerWidget *widgetToDisplay; /// Widget a on s'ha de mostrar la informacio
-        HangingProtocolDisplaySet * displaySet; /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
+        HangingProtocolDisplaySet *displaySet; /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
     };
 
-    QMultiHash<QString, StructPreviousStudyDownloading*> * m_studiesDownloading;
+    QMultiHash<QString, StructPreviousStudyDownloading*> *m_studiesDownloading;
 
-    Patient * m_patient;
+    Patient *m_patient;
 
     /// Objecte utilitzat per descarregar estudis previs. No es fa servir QueryScreen per problemes de dependències entre carpetes.
     PreviousStudiesManager *m_previousStudiesManager;
