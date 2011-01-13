@@ -10,6 +10,7 @@
 #include "hangingprotocolmask.h"
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
+#include "series.h"
 #include "logging.h"
 
 namespace udg {
@@ -281,21 +282,26 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
             return false;
         }
     }
-    
-    if (this->countFilledImageSets()/(double)this->getNumberOfImageSets() < hangingToCompare->countFilledImageSets()/(double)hangingToCompare->getNumberOfImageSets())
+
+    if (this->countFilledDisplaySets() == hangingToCompare->countFilledDisplaySets())
     {
-        return false;
+        if (this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() == hangingToCompare->countFilledDisplaySets() / (double)hangingToCompare->getNumberOfDisplaySets())
+        {
+            if(this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
+            {
+                return (this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets());
+            }
+        }
+        else
+        {
+            return this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() > hangingToCompare->countFilledDisplaySets() / (double)hangingToCompare->getNumberOfDisplaySets();
+        }
+    }
+    else
+    {
+        return (this->countFilledDisplaySets() > hangingToCompare->countFilledDisplaySets());
     }
 
-    if (this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets())
-    {
-        return(this->getNumberOfDisplaySets() > hangingToCompare->getNumberOfDisplaySets());
-    }
-    else if (this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
-    {
-        return(this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets());
-    }
-    
     return false;
 }
 
@@ -307,6 +313,30 @@ int HangingProtocol::countFilledImageSets() const
         if (imageSet->getSeriesToDisplay())
         {
             count++;
+        }
+    }
+
+    return count;
+}
+
+int HangingProtocol::countFilledDisplaySets() const
+{
+    int count = 0;
+    foreach (HangingProtocolDisplaySet *displaySet, this->getDisplaySets())
+    {
+        if (displaySet->getImageSet() && displaySet->getImageSet()->getSeriesToDisplay())
+        {
+            if (displaySet->getSlice() != -1)
+            {
+                if (displaySet->getImageSet()->getSeriesToDisplay()->getNumberOfImages() > displaySet->getSlice())
+                {
+                    count++;
+                }
+            }
+            else
+            {
+                count++;
+            }
         }
     }
 
