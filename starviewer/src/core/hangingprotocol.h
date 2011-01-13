@@ -125,6 +125,9 @@ private:
     /// Retorna el número de ImageSets que tenen una sèrie assignada
     int countFilledImageSets() const;
 
+    /// Retorna el número de DisplaySets que tenen una sèrie o imatge assignada
+    int countFilledDisplaySets() const;
+
 private:
 
     /// Identificador
