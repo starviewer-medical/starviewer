@@ -11,6 +11,7 @@
 
 //TODO:Intentar treure
 #include <gdcmGlobal.h>
+#include <QHash>
 
 #include "gdcmanonymizerstarviewer.h"
 
@@ -52,11 +53,25 @@ private:
     ///Inicialitza les variables de gdcm necessàries per anonimitzar
     bool initializeGDCM();
 
+    ///Retorna el valor de PatientID anonimitzat a partir del PatientID original del fitxer. Aquest mètode és consistent de manera que si li passem 
+    ///una o més vegades el mateix PatientID sempre retornarà el mateix valor com a PatientID anonimitzat.
+    QString getAnonimyzedPatientID(QString originalPatientID);
+
+    ///Retorna el valor de StudyID anonimitzat a partir del Study Instance UID original del fitxer. Aquest mètode és consistent de manera que si li passem 
+    ///una o més vegades el mateix study Instance UID sempre retornarà el mateix valor com de Study ID anonimitzat.
+    QString getAnonymizedStudyID(QString originalStudyInstanceUID);
+
+    ///Retorna el valor d'un Tag en un string, si no troba el tag retorna un string buit
+    QString readTagValue(gdcm::File *gdcmFile, gdcm::Tag);
+
 private:
 
     bool m_replacePatientIDInsteadOfRemove;
     bool m_replaceStudyIDInsteadOfRemove;
     bool m_removePritaveTags;
+
+    QHash<QString, QString> hashOriginalPatientIDToAnonimyzedPatientID;
+    QHash<QString, QString> hashOriginalStudyInstanceUIDToAnonimyzedStudyID;
 
     gdcm::Global *gdcmGlobalInstance;
     gdcm::gdcmAnonymizerStarviewer *gdcmAnonymizer;
