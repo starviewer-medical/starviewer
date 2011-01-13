@@ -387,7 +387,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             {
                 state.setStatus("", true, 0);
             }
-            else state.setStatus(QString("Can't anonymize image Little Endian Image %1").arg(imageOutputPath), false, 3001);
+            else state.setStatus(QString("Can't anonymize image Little Endian Image %1").arg(imageOutputPath), false, 3003);
         }
     }
     else
@@ -401,7 +401,7 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             {
                 state.setStatus("", true, 0);
             }
-            else state.setStatus(QString("Can't anonymize image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3001);
+            else state.setStatus(QString("Can't anonymize image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3003);
         }
         else
         {
