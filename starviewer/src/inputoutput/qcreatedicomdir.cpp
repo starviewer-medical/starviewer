@@ -457,6 +457,11 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
                     "\n\nRemove it from the directory or uncheck copy folder content option.")
                     .arg(ApplicationNameString, settings.getValue( InputOutputSettings::DICOMDIRFolderPathToCopy ).toString() ) );
                 break;
+            case 3003:
+                QMessageBox::warning(this, ApplicationNameString, tr("Error anonymizing DICOMDIR, be sure you have write permissions on %1 "
+                    "or try to create the DICOMDIR without anonymize option.")
+                    .arg(dicomdirPath));
+                break;
             default :
                 QMessageBox::critical( this , ApplicationNameString , tr( "Error creating DICOMDIR. Be sure you have write permissions in %1 and It is empty." ).arg( m_lineEditDicomdirPath->text() ) );
                 ERROR_LOG( "Error al crear el DICOMDIR ERROR : " + state.text() );
