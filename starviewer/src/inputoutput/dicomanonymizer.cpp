@@ -19,7 +19,7 @@ DICOMAnonymizer::DICOMAnonymizer()
 
     m_replacePatientIDInsteadOfRemove = false;
     m_replaceStudyIDInsteadOfRemove = false;
-    m_removePritaveTags = false;
+    m_removePritaveTags = true;
 }
 
 DICOMAnonymizer::~DICOMAnonymizer()
