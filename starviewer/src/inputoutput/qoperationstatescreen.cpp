@@ -210,7 +210,7 @@ void QOperationStateScreen::insertNewPACSJob(PACSJob *pacsJob)
     item->setText(QOperationStateScreen::FromTo , pacsJob->getPacsDevice().getAETitle());
     item->setText(QOperationStateScreen::PatientID , study->getParentPatient()->getID());
     item->setText(QOperationStateScreen::PatientName , study->getParentPatient()->getFullName());
-    item->setText(QOperationStateScreen::Date , QDate::currentDate().toString(Qt::ISODate) + " " + QTime::currentTime().toString("hh:mm"));
+    item->setText(QOperationStateScreen::Date , QDate::currentDate().toString(Qt::ISODate) + "   " + QTime::currentTime().toString("hh:mm"));
     item->setText(QOperationStateScreen::Series , "0"); // series
     item->setText(QOperationStateScreen::Files , "0"); //imatges
     item->setText(QOperationStateScreen::PACSJobID , QString().setNum(pacsJob->getPACSJobID()));
