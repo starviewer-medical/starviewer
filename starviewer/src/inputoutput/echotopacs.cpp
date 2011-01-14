@@ -12,7 +12,7 @@ namespace udg
 {
 EchoToPACS::EchoToPACS()
 {
-    m_lastError = EchoOk;
+    m_lastError = EchoFailed;
 }
 
 bool EchoToPACS::echo(PacsDevice pacsDevice)
@@ -33,21 +33,20 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
         if (condition.good())
         {
             m_lastError = EchoOk;
-            return true;
         }
         else
         {
             INFO_LOG("Doing echo to " + pacsDevice.getAETitle() + " doesn't responds correctly. Error description: " + condition.text());
             m_lastError = EchoFailed;
-            return false;
         }
     }
     else
     {
         INFO_LOG("Doing echo to " + pacsDevice.getAETitle() + " doesn't responds.");
         m_lastError = EchoCanNotConnectToPACS;
-        return false;
     }
+
+    return m_lastError == EchoOk;
 }
 
 EchoToPACS::EchoRequestStatus EchoToPACS::getLastError()
