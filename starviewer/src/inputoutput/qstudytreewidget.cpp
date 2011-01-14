@@ -150,6 +150,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         item->setText(PatientAge, formatAge(studyToInsert->getPatientAge()));
         item->setText(Modality, studyToInsert->getModalitiesAsSingleString());
         item->setText(Description, studyToInsert->getDescription());
+        //TODO:No hauria de ser l'estudi que tornés la data formatada? Problema necessitem que la data estigui en format yyyy/mm/dd per poder ordenar per data
         item->setText(Date, formatDateTime(studyToInsert->getDate(), studyToInsert->getTime()));
         item->setText(StudyID, tr("Study %1").arg(studyToInsert->getID()));
         item->setText(Institution, studyToInsert->getInstitutionName());
@@ -279,7 +280,7 @@ QString QStudyTreeWidget::formatDateTime(const QDate &date, const QTime &time)
 {
     if (!date.isNull() && !time.isNull())
     {
-        return date.toString(Qt::ISODate) + " " + time.toString(Qt::ISODate);
+        return date.toString(Qt::ISODate) + "   " + time.toString(Qt::ISODate);
     }
     else if (!date.isNull())
     {
