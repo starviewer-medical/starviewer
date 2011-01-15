@@ -171,12 +171,12 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
         6è, 7è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.*/
     m_presentationState = new DVPresentationState(NULL, 1024 , 1024 , 8192 , 8192, 256, 256);
 
-    INFO_LOG("Es transformarà la imatge " + imageToPrint->getPath() + " per imprimir.");
+    INFO_LOG("Es transformara la imatge " + imageToPrint->getPath() + " per imprimir.");
     
     status = DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);//Carreguem la imatge que hem d'imprimor
     if (status != EC_Normal)
     {
-        ERROR_LOG("No s'ha pogut carregar la imatge " + imageToPrint->getPath() + " . Descripció error: " + QString(status.text()));
+        ERROR_LOG("No s'ha pogut carregar la imatge " + imageToPrint->getPath() + " . Descripcio error: " + QString(status.text()));
         m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
         return false;
     }
@@ -187,7 +187,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     status = m_presentationState->createFromImage(*imageToPrintDataset);
     if (status != EC_Normal)
     {
-        ERROR_LOG("No s'ha pogut el Presentation State a partir del dataSet de l'imatge. Descripció error: " + QString(status.text()));
+        ERROR_LOG("No s'ha pogut el Presentation State a partir del dataSet de l'imatge. Descripcio error: " + QString(status.text()));
         m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
         return false;
     }
@@ -201,7 +201,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     status = m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight); 
     if (status != EC_Normal)
     {
-        ERROR_LOG("No s'ha pogut obtenir l'amplada\alçada de la imatge. Descripció error: " + QString(status.text()));
+        ERROR_LOG("No s'ha pogut obtenir l'amplada\alçada de la imatge. Descripcio error: " + QString(status.text()));
         m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
         return false;
     }
@@ -218,7 +218,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
     }
     else
     {
-        ERROR_LOG("No s'ha pogut obtenir el pixelData de la imatge transformada. Descripció del error: " + QString(status.text()));
+        ERROR_LOG("No s'ha pogut obtenir el pixelData de la imatge transformada. Descripcio del error: " + QString(status.text()));
         m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
     }
 
@@ -253,7 +253,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     status = m_storedPrint->writeHardcopyImageAttributes(*transformedImageDatasetToPrint);
     if (status != EC_Normal)
     {
-        ERROR_LOG("No s'han pogut gravar a la imatge per imprimir les dades de l'estudi i la sèrie");
+        ERROR_LOG("No s'han pogut gravar a la imatge per imprimir les dades de l'estudi i la serie");
         m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
         return false;
     }
@@ -311,7 +311,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
             status = m_presentationState->writePresentationLUTforPrint(*transformedImageDatasetToPrint);
             if (status != EC_Normal)
             {
-                ERROR_LOG("No s'ha pogut gravar el presentation LUT. Descripció error" + QString(status.text()));
+                ERROR_LOG("No s'ha pogut gravar el presentation LUT. Descripcio error" + QString(status.text()));
             }
         }
 
@@ -332,7 +332,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
             if (status != EC_Normal)
             {
                 m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
-                ERROR_LOG("No s'ha pogut afegir l'imatge al ImageBox de l'objecte DVPSStoredPrint. Descripció error: " + QString(status.text()));
+                ERROR_LOG("No s'ha pogut afegir l'imatge al ImageBox de l'objecte DVPSStoredPrint. Descripcio error: " + QString(status.text()));
             }
             else
             {
@@ -342,13 +342,13 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
         else
         {
             m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
-            ERROR_LOG("No s'ha pogut gravar la imatge preparada per imprimir " + transformedImagePath + " . Descripció error " + QString(status.text()));
+            ERROR_LOG("No s'ha pogut gravar la imatge preparada per imprimir " + transformedImagePath + " . Descripcio error " + QString(status.text()));
         }
     }
     else
     {
         m_lastError = CreateDicomPrintSpool::ErrorCreatingImageSpool;
-        ERROR_LOG("No s'ha pogut crear l'objecte DcmPolymorphOBOW, l'error sol venir perquè no hi ha suficent memòria RAM lliure");
+        ERROR_LOG("No s'ha pogut crear l'objecte DcmPolymorphOBOW, l'error sol venir perque no hi ha suficent memòria RAM lliure");
     }
 
     delete transformedImageToPrint;

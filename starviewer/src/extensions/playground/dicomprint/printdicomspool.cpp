@@ -42,7 +42,7 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
 
     if (result.bad())
     {
-        ERROR_LOG(QString("No s'ha pogut connectar amb la impressora amb AETitle: %1, IP: %2, port: %3, descripció error:%4 ").arg(m_dicomPrinter.getAETitle(), 
+        ERROR_LOG(QString("No s'ha pogut connectar amb la impressora amb AETitle: %1, IP: %2, port: %3, descripcio error:%4 ").arg(m_dicomPrinter.getAETitle(), 
                            m_dicomPrinter.getHostname(), QString().setNum(m_dicomPrinter.getPort()), result.text()));
          
         m_lastError = PrintDicomSpool::CanNotConnectToDICOMPrinter;
@@ -55,7 +55,7 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
     result = printerConnection.releaseAssociation();
     if (result.bad())
     {
-        DEBUG_LOG(QString("spooler: release of connection to printer failed. %1").arg(result.text()));
+        ERROR_LOG(QString("No s'ha pogut desconnectar correctament de la impressora, descripcio error: %1").arg(result.text()));
     }
 
 }
@@ -81,7 +81,7 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
     result = storedPrintDcmtk->printSCUgetPrinterInstance(printerConnection);
     if (EC_Normal != result)
     {
-        ERROR_LOG(QString("spooler: printer communication failed, unable to request printer settings. %1").arg(result.text()));
+        ERROR_LOG(QString("No s'ha pogut obtenir els settings de la impressora, descripcio error: %1").arg(result.text()));
     }
 
     //Abans de fer un acció amb la impressora comprovem si la última ha anat bé amb EC_NORMAL=result, si ha fallat totes les accions restants no s'executaran
@@ -230,7 +230,7 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
             result = storedPrintDcmtk->printSCUsetBasicImageBox(printerConnection, imageNumber, *imageToPrint, isImageMonochrome1);
             if (EC_Normal != result)
             {
-                ERROR_LOG(QString("spooler: printer communication failed, unable to transmit basic grayscale image box. %1").arg(result.text()));
+                ERROR_LOG(QString("No s'ha pogut enviar el basic grayscale imagebox, descripcio error: %1").arg(result.text()));
                 m_lastError = PrintDicomSpool::ErrorCreatingImageBox;
             }
 			else
@@ -241,7 +241,7 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
         } 
         else 
         {
-            ERROR_LOG("spooler: unable to load image file " + imageToPrintPath );
+            ERROR_LOG("No s'ha pogut carregar la imatge a imprimir " + imageToPrintPath );
             m_lastError = PrintDicomSpool::ErrorLoadingImageToPrint;
         }
         
