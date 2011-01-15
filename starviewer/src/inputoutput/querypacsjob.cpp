@@ -60,9 +60,8 @@ void QueryPacsJob::run()
             ERROR_LOG(QString("Error al fer query al PACS %1. PACS ERROR: %2").arg(getPacsDevice().getAETitle()).arg(m_queryStatus.text()));
         }
 
-        INFO_LOG (QString("Thread del PACS %1 finalitzant").arg(getPacsDevice().getAETitle()));
-
         pacsConnection.disconnect();
+        INFO_LOG (QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
     }
 
     //TODO:Cal?
@@ -115,7 +114,7 @@ QueryPacsJob::~QueryPacsJob()
 
 void QueryPacsJob::requestCancelJob()
 {
-    INFO_LOG(QString("S'ha demanat la cancel·lació del Job de consulta al PACS %1").arg(getPacsDevice().getAETitle()));
+    INFO_LOG(QString("S'ha demanat la cancel.lacio del Job de consulta al PACS %1").arg(getPacsDevice().getAETitle()));
     m_queryPacs->cancelQuery();
 }
 

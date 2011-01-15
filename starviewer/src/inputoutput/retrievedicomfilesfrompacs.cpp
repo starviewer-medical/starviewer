@@ -213,6 +213,7 @@ OFCondition RetrieveDICOMFilesFromPACS::storeSCP(T_ASC_Association *association,
     if (condition.bad())
     {
         // Remove file
+        ERROR_LOG("S'ha produit al processar una peticio de descarregar d'un fitxer, descripcio error " + QString(condition.text()));
         unlink(qPrintable(storeSCPCallbackData.fileName));
     }
 
@@ -245,6 +246,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
                 break;
             
             default:
+                ERROR_LOG("El PACS ens ha sol.licitat un tipus d'operacio invalida");
                 condition = DIMSE_BADCOMMANDTYPE;
                 break;
         }
@@ -252,6 +254,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
     // Clean up on association termination
     if (condition == DUL_PEERREQUESTEDRELEASE)
     {
+        INFO_LOG("El PACS sol.licita tancar la connexio per on ens ha enviat els fitxers");
         condition = ASC_acknowledgeRelease(*subAssociation);
         ASC_dropSCPAssociation(*subAssociation);
         ASC_destroyAssociation(subAssociation);
@@ -263,6 +266,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
     }
     else if (condition != EC_Normal)
     {
+        ERROR_LOG("S'ha produit un error reben la peticio d'una suboperacio, descripcio error: " + QString(condition.text()));
         condition = ASC_abortAssociation(*subAssociation);
     }
     else if (m_abortIsRequested)
@@ -271,7 +275,7 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
         condition = ASC_abortAssociation(*subAssociation);
         if (!condition.good())
         {
-            ERROR_LOG("Error al abortar la connexió pel qual rebem les imatges" + QString(condition.text()));
+            ERROR_LOG("Error al abortar la connexio pel qual rebem les imatges" + QString(condition.text()));
         }
 
         // Tanquem la connexió amb el PACS perquè segons indica la documentació DICOM al PS 3.4 (Baseline Behavior of SCP) C.4.2.3.1 si abortem
@@ -281,11 +285,11 @@ OFCondition RetrieveDICOMFilesFromPACS::subOperationSCP(T_ASC_Association **subA
         condition = ASC_abortAssociation(m_pacsConnection->getConnection());
         if (!condition.good())
         {
-            ERROR_LOG("Error al abortar la connexió pel amb el PACS" + QString(condition.text()));
+            ERROR_LOG("Error al abortar la connexio pel amb el PACS" + QString(condition.text()));
         }
         else
         {
-            INFO_LOG("Abortada la connexió amb el PACS");
+            INFO_LOG("Abortada la connexio amb el PACS");
         }
     }
 
@@ -307,7 +311,15 @@ void RetrieveDICOMFilesFromPACS::subOperationCallback(void *subOperationCallback
 
     if (*subAssociation == NULL)
     {
-        retrieveDICOMFilesFromPACS->acceptSubAssociation(associationNetwork, subAssociation);
+        OFCondition condition = retrieveDICOMFilesFromPACS->acceptSubAssociation(associationNetwork, subAssociation);
+        if (!condition.good())
+        {
+            ERROR_LOG("S'ha produit un error negociant l'associacio de la connexio DICOM entrant, descripcio error: " + QString(condition.text()));
+        }
+        else
+        {
+            INFO_LOG("Rebuda solicitud de connexio pel port de connexions DICOM entrants del PACS.");
+        }
     }
     else
     {
