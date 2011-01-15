@@ -36,7 +36,7 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
         }
         else
         {
-            INFO_LOG("Doing echo to " + pacsDevice.getAETitle() + " doesn't responds correctly. Error description: " + condition.text());
+            ERROR_LOG("Doing echo to " + pacsDevice.getAETitle() + " doesn't responds correctly. Error description: " + condition.text());
             m_lastError = EchoFailed;
         }
     }

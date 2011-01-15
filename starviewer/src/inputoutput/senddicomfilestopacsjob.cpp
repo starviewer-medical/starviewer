@@ -64,7 +64,7 @@ void SendDICOMFilesToPACSJob::run()
 
 void SendDICOMFilesToPACSJob::requestCancelJob()
 {
-    INFO_LOG(QString("S'ha demanat la cancel·lació del Job d'enviament d'imatges de l'estudi %1 al PACS %2").arg(getStudyOfDICOMFilesToSend()->getInstanceUID(),
+    INFO_LOG(QString("S'ha demanat la cancel.lacio del Job d'enviament d'imatges de l'estudi %1 al PACS %2").arg(getStudyOfDICOMFilesToSend()->getInstanceUID(),
         getPacsDevice().getAETitle()));
     m_sendDICOMFilesToPACS->requestCancel();
 }

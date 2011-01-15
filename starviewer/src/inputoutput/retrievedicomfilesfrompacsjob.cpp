@@ -49,7 +49,7 @@ Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
 
 void RetrieveDICOMFilesFromPACSJob::run()
 {
-    INFO_LOG(QString("Iniciant la descàrrega de l'estudi %1 del pacs %2").arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle()));
+    INFO_LOG(QString("Iniciant la descarrega de l'estudi %1 del pacs %2").arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle()));
 
     m_numberOfSeriesRetrieved = 0;
     m_lastImageSeriesInstanceUID = "";
@@ -67,7 +67,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
     if (Utils::isPortInUse(localPort))
     {
         m_retrieveRequestStatus = PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse;
-        ERROR_LOG("El port " + QString::number(localPort) + " per a connexions entrants del PACS, està en ús, no es pot descarregar l'estudi");
+        ERROR_LOG("El port " + QString::number(localPort) + " per a connexions entrants del PACS, esta en us, no es pot descarregar l'estudi");
     }
     else
     {
@@ -97,7 +97,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
         if ((m_retrieveRequestStatus == PACSRequestStatus::RetrieveOk || m_retrieveRequestStatus == PACSRequestStatus::RetrieveSomeDICOMFilesFailed) &&
             !this->isAbortRequested())
         {
-            INFO_LOG("Ha finalitzat la descàrrega de l'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + "del pacs " + getPacsDevice().getAETitle());
+            INFO_LOG("Ha finalitzat la descarrega de l'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + "del PACS " + getPacsDevice().getAETitle());
 
             m_numberOfSeriesRetrieved++;
             emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);//Indiquem que s'ha descarregat la última sèrie
@@ -136,7 +136,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
 
 void RetrieveDICOMFilesFromPACSJob::requestCancelJob()
 {
-    INFO_LOG(QString("S'ha demanat la cancel·lació del Job de descarrega d'imatges de l'estudi %1 del PACS %2").arg(getStudyToRetrieveDICOMFiles()->getInstanceUID(),
+    INFO_LOG(QString("S'ha demanat la cancel.lacio del Job de descarrega d'imatges de l'estudi %1 del PACS %2").arg(getStudyToRetrieveDICOMFiles()->getInstanceUID(),
         getPacsDevice().getAETitle()));
     m_retrieveDICOMFilesFromPACS->requestCancel();
 }

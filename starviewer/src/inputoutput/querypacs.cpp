@@ -116,10 +116,13 @@ Status QueryPacs::query()
     req.DataSetType = DIMSE_DATASET_PRESENT;
 
     /* finally conduct transmission of data */
-    OFCondition cond = DIMSE_findUser( m_assoc , m_presId , &req , m_mask ,
-                          foundMatchCallback , this ,
-                          DIMSE_NONBLOCKING , Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(),
-                          &rsp , &statusDetail );
+    OFCondition condition = DIMSE_findUser( m_assoc , m_presId , &req , m_mask , foundMatchCallback , this , DIMSE_NONBLOCKING , 
+                                Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &rsp , &statusDetail );
+
+    if (!condition.good())
+    {
+        ERROR_LOG(QString("Error al fer una consulta al PACS %1, descripcio error: %2").arg(m_pacs.getAETitle(), condition.text()));
+    }
 
     /* dump status detail information if there is some */
     if ( statusDetail != NULL )
@@ -128,7 +131,7 @@ Status QueryPacs::query()
     }
 
     /* return */
-    return state.setStatus( cond );
+    return state.setStatus( condition );
 }
 
 Status QueryPacs::query( DicomMask mask )

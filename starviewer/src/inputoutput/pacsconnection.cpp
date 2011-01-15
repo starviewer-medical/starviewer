@@ -249,10 +249,24 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
 
 void PACSConnection::disconnect()
 {
-    ASC_releaseAssociation(m_dicomAssociation);
-    ASC_destroyAssociation(&m_dicomAssociation);
+    OFCondition condition = ASC_releaseAssociation(m_dicomAssociation);
+    if (condition.bad())
+    {
+        ERROR_LOG("No s'ha pogut desconnectar del PACS, descripcio error: " + QString(condition.text()));
+    }
+    
+    condition = ASC_destroyAssociation(&m_dicomAssociation);
+    if (condition.bad())
+    {
+        ERROR_LOG("Error al destruir la connexio amb el PACS, descripcio error: " + QString(condition.text()));
+    }
 
-    ASC_dropNetwork(&m_associationNetwork); //destrueix l'objecte i tanca el socket obert, fins que no es fa el drop de l'objecte no es tanca el socket
+    condition = ASC_dropNetwork(&m_associationNetwork); //destrueix l'objecte i tanca el socket obert, fins que no es fa el drop de l'objecte no es tanca el socket
+    if (condition.bad())
+    {
+        ERROR_LOG("Error al tancar el port de connexions entrants, descripcio error: " + QString(condition.text()));
+    }
+
 }
 
 QString PACSConnection::constructPacsServerAddress(PACSServiceToRequest pacsServiceToRequest, PacsDevice pacsDevice)
