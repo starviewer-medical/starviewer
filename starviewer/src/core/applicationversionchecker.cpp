@@ -147,11 +147,8 @@ QUrl ApplicationVersionChecker::createLocalUrl()
         {
             versionList[2] = versionList[2].split("-")[0];
         }
-        else
-        {
-            QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
-            result = defaultPath + "releasenotes" + version + ".html";
-        }
+        QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
+        result = defaultPath + "releasenotes" + version + ".html";
     }
     
     return result;
