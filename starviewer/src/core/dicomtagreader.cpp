@@ -190,29 +190,17 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
         {
             DcmElement *element = dcmtkItem->getElement(j);
             
-            
             if (sequenceVR.isEquivalent(element->getTag().getVR())) // És una Sequence of Items
             {
                 dicomItem->addAttribute(convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*,element)));
             }
             else 
             {
-                OFString value;
-                OFCondition status = element->getOFStringArray(value);
-
-                if (status.good())
+                DICOMValueAttribute *dicomValueAttribute = convertToDICOMValueAttribute(element);
+            
+                if (dicomValueAttribute != NULL)
                 {
-                    DICOMTag tag(element->getGTag(),element->getETag());
-                    
-                    DICOMValueAttribute *valueAttribute = new DICOMValueAttribute();
-                    valueAttribute->setTag(tag);
-                    valueAttribute->setValue(QString(value.c_str()));
-
-                    dicomItem->addAttribute(valueAttribute);
-                }
-                else if (QString(status.text()) != "Tag Not Found")
-                {
-                    DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(element->getTag().toString().c_str() ).arg(status.text()));
+                    dicomItem->addAttribute(dicomValueAttribute);
                 }
             }
         }
@@ -220,6 +208,26 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
     }
 
     return sequenceAttribute;
+}
+
+DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement) const
+{
+    DICOMValueAttribute *dicomValueAttribute = NULL;
+    OFString value;
+    OFCondition status = dcmtkDICOMElement->getOFStringArray(value);
+
+    if (status.good())
+    {
+        dicomValueAttribute = new DICOMValueAttribute();
+        dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
+        dicomValueAttribute->setValue(QString(value.c_str()));
+    }
+    else if (QString(status.text()) != "Tag Not Found")
+    {
+        DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkDICOMElement->getTag().toString().c_str() ).arg(status.text()));
+    }
+
+    return dicomValueAttribute;
 }
 
 QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes() const
@@ -239,16 +247,12 @@ QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes() const
         }
         else
         {
-            OFString value;
-            currentElement->getOFStringArray(value);
-
-            DICOMTag tag(currentElement->getGTag(), currentElement->getETag());
-
-            DICOMValueAttribute *dicomValueAttribute = new DICOMValueAttribute();
-            dicomValueAttribute->setTag(tag);
-            dicomValueAttribute->setValue(QString(value.c_str()));
-
-            attributeList.append(dicomValueAttribute);
+            DICOMValueAttribute *dicomValueAttribute = convertToDICOMValueAttribute(currentElement);
+            
+            if (dicomValueAttribute != NULL)
+            {
+                attributeList.append(dicomValueAttribute);
+            }
         }
     }
     return attributeList;

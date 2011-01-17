@@ -13,12 +13,14 @@
 
 class DcmDataset;
 class DcmSequenceOfItems;
+class DcmElement;
 
 namespace udg {
 
 class DICOMTag;
 class DICOMAttribute;
 class DICOMSequenceAttribute;
+class DICOMValueAttribute;
 
 /**
    Classe encarregada de la lectura d'informació de fitxers DICOM.
@@ -72,6 +74,9 @@ public:
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
     DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence) const;
+
+    ///Converteix un element de de DCMTK a un DICOMValueAttribute propi. Si no s'ha pogut convertir l'element es retorna valor NULL 
+    DICOMValueAttribute* convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement) const;
 
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació
