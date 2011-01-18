@@ -32,6 +32,10 @@ class DICOMValueAttribute;
 */
 class DICOMTagReader {
 public:
+    ///Aquest enum indica si hem de retornar el valor per tots els tags quan ens els requereixen, o si pels Tags "Pesats" (PixelData, OverlayData) 
+    ///hem de retornar-los sense sel seu valor, estalviant-nos de llegir i carregar-los en memòria
+    enum ReturnValueOfTags { AllTags, ExcludeHeavyTags };
+
     DICOMTagReader();
     /// Constructor per nom de fitxer.
     DICOMTagReader(const QString &filename);
@@ -66,17 +70,23 @@ public:
     QString getValueAttributeAsQString(const DICOMTag &tag) const;
 
     /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
-    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag) const;
+    /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
+    /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem, 
+    /// com a segon paràmetre s'ha de passar l'enum amb valor ExcludeHeavyTags.
+    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
 
     /// Retorna una llista de DICOMAttribute que inclou tots els Tags d'un DcmDataset (Es dóna per suposat que el dataset serà vàlid)
-    QList<DICOMAttribute*> getDICOMAttributes() const;
+    /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
+    /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem, 
+    /// com a segon paràmetre s'ha de passar l'enum amb valor ExcludeHeavyTags.
+    QList<DICOMAttribute*> getDICOMAttributes(DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
 
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
-    DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence) const;
+    DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
     ///Converteix un element de de DCMTK a un DICOMValueAttribute propi. Si no s'ha pogut convertir l'element es retorna valor NULL 
-    DICOMValueAttribute* convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement) const;
+    DICOMValueAttribute* convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació

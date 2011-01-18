@@ -15,6 +15,7 @@
 #include <QStringList>
 // dcmtk
 #include <dcfilefo.h>
+#include <dcdeftag.h>
 
 namespace udg {
 
@@ -146,7 +147,7 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
     return result;
 }
 
-DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &sequenceTag) const
+DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
     if (!m_dicomData)
     {
@@ -165,7 +166,7 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
     if (status.good())
     {
         DEBUG_LOG(QString("Cerquem sequencia"));
-        return convertToDICOMSequenceAttribute(sequence);
+        return convertToDICOMSequenceAttribute(sequence, returnValueOfTags);
     }
     else if (QString(status.text()) != "Tag Not Found")
     {
@@ -175,7 +176,7 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
     return NULL;
 }
 
-DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence) const
+DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
     DICOMSequenceAttribute *sequenceAttribute = new DICOMSequenceAttribute();
     DcmVR sequenceVR("SQ");
@@ -192,11 +193,11 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
             
             if (sequenceVR.isEquivalent(element->getTag().getVR())) // És una Sequence of Items
             {
-                dicomItem->addAttribute(convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*,element)));
+                dicomItem->addAttribute(convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*,element), returnValueOfTags));
             }
             else 
             {
-                DICOMValueAttribute *dicomValueAttribute = convertToDICOMValueAttribute(element);
+                DICOMValueAttribute *dicomValueAttribute = convertToDICOMValueAttribute(element, returnValueOfTags);
             
                 if (dicomValueAttribute != NULL)
                 {
@@ -210,27 +211,38 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
     return sequenceAttribute;
 }
 
-DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement) const
+DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
     DICOMValueAttribute *dicomValueAttribute = NULL;
-    OFString value;
-    OFCondition status = dcmtkDICOMElement->getOFStringArray(value);
 
-    if (status.good())
+    if (returnValueOfTags == DICOMTagReader::ExcludeHeavyTags &&  
+        (dcmtkDICOMElement->getTag() == DcmTag(DCM_PixelData) || dcmtkDICOMElement->getTag() == DcmTag(DCM_OverlayData)))
     {
+        //Retornem el tag sense el seu valor, així estalviem memòria RAM.
         dicomValueAttribute = new DICOMValueAttribute();
         dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
-        dicomValueAttribute->setValue(QString(value.c_str()));
     }
-    else if (QString(status.text()) != "Tag Not Found")
+    else
     {
-        DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkDICOMElement->getTag().toString().c_str() ).arg(status.text()));
+        OFString value;
+        OFCondition status = dcmtkDICOMElement->getOFStringArray(value);
+
+        if (status.good())
+        {
+            dicomValueAttribute = new DICOMValueAttribute();
+            dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
+            dicomValueAttribute->setValue(QString(value.c_str()));
+        }
+        else if (QString(status.text()) != "Tag Not Found")
+        {
+            DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkDICOMElement->getTag().toString().c_str() ).arg(status.text()));
+        }
     }
 
     return dicomValueAttribute;
 }
 
-QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes() const
+QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes(DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
     QList<DICOMAttribute*> attributeList;
     DcmElement *currentElement = NULL;
@@ -242,12 +254,12 @@ QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes() const
         // Es tracta d'una seqüència
         if (!currentElement->isLeaf())
         {
-            DICOMSequenceAttribute *dicomSequenceAttribute = convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*, currentElement));
+            DICOMSequenceAttribute *dicomSequenceAttribute = convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*, currentElement), returnValueOfTags);
             attributeList.append(dicomSequenceAttribute);
         }
         else
         {
-            DICOMValueAttribute *dicomValueAttribute = convertToDICOMValueAttribute(currentElement);
+            DICOMValueAttribute *dicomValueAttribute = convertToDICOMValueAttribute(currentElement, returnValueOfTags);
             
             if (dicomValueAttribute != NULL)
             {
