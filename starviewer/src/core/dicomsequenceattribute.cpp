@@ -21,10 +21,7 @@ DICOMSequenceAttribute::DICOMSequenceAttribute()
 
 DICOMSequenceAttribute::~DICOMSequenceAttribute()
 {
-//    while (! m_itemList.isEmpty())
-//    {
-//        delete m_itemList.takeLast();
-//    }
+    qDeleteAll(m_itemList.begin(), m_itemList.end());
 }
 
 bool DICOMSequenceAttribute::isValueAttribute()

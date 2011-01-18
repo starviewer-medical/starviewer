@@ -22,20 +22,7 @@ DICOMSequenceItem::DICOMSequenceItem()
 
 DICOMSequenceItem::~DICOMSequenceItem()
 {
-//    while (! m_attributeList.isEmpty())
-//    {
-//        DICOMAttribute * attribute = m_attributeList.takeLast();
-//        if (attribute->isValueAttribute())
-//        {
-//            DICOMValueAttribute * value = dynamic_cast< DICOMValueAttribute * > (attribute);
-//            delete value;
-//        }
-//        else if (attribute->isSequenceAttribute())
-//        {
-//            DICOMSequenceAttribute * sequence = dynamic_cast< DICOMSequenceAttribute * > (attribute);
-//            delete sequence;
-//        }
-//    }
+    qDeleteAll(m_attributeList.begin(), m_attributeList.end());
 }
 
 void DICOMSequenceItem::addAttribute(DICOMAttribute *attribute)
