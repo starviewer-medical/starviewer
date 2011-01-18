@@ -139,6 +139,8 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
         }
 
         updateSearch();
+        qDeleteAll(dicomAttributesList.begin(), dicomAttributesList.end());
+        dicomAttributesList.clear();
     }
 }
 
