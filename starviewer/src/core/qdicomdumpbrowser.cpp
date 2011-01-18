@@ -116,7 +116,7 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
 
         QTreeWidgetItem *rootTreeItem = m_tagsListQTree->invisibleRootItem();
 
-        QList<DICOMAttribute*> dicomAttributesList = dicomReader.getDICOMAttributes();
+        QList<DICOMAttribute*> dicomAttributesList = dicomReader.getDICOMAttributes(DICOMTagReader::ExcludeHeavyTags);
         
         foreach (DICOMAttribute *dicomAttribute, dicomAttributesList)
         {
@@ -147,10 +147,8 @@ void QDICOMDumpBrowser::addLeaf(QTreeWidgetItem *trunkTreeItem, DICOMValueAttrib
     QTreeWidgetItem *leafTreeItem = new QTreeWidgetItem();
     leafTreeItem->setText(0, value->getTag()->getName());
     leafTreeItem->setText(1, value->getTag()->getKeyAsQString());
-    if (*(value->getTag()) != DICOMPixelData && *(value->getTag()) != DICOMOverlayData)
-    {
-        leafTreeItem->setText(2, value->getValueAsQString());
-    }
+    leafTreeItem->setText(2, value->getValueAsQString());
+    
     trunkTreeItem->addChild(leafTreeItem);
 }
 
