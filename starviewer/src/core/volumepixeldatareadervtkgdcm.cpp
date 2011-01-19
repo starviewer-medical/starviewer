@@ -10,7 +10,7 @@
 #include <vtkImageMapToColors16.h>
 #include <vtkImageMapToColors.h>
 #include <vtkImageYBRToRGB.h>
-#include <gdcmPixelFormat.h> // Només per qüestions d'informació de debug
+#include <gdcmPixelFormat.h> // NomÃ©s per qÃ¼estions d'informaciÃ³ de debug
 // Qt
 #include <QStringList>
 
@@ -37,13 +37,13 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
 
     if (filenames.isEmpty())
     {
-        WARN_LOG("La llista de noms de fitxer per carregar és buida");
+        WARN_LOG("La llista de noms de fitxer per carregar Ã©s buida");
         errorCode = InvalidFileName;
         return errorCode;
     }
 
     // vtk - GDCM
-    // Convertim la QStringList a vtkStringArray que és l'input 
+    // Convertim la QStringList a vtkStringArray que Ã©s l'input 
     // que accepta vtkGDCMImageReader
     if (filenames.size() > 1)
     {

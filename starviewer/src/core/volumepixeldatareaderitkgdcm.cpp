@@ -39,7 +39,7 @@ int VolumePixelDataReaderITKGDCM::read(const QStringList &filenames)
     
     if (filenames.isEmpty())
     {
-        WARN_LOG("La llista de noms de fitxer per carregar Ès buida");
+        WARN_LOG("La llista de noms de fitxer per carregar √©s buida");
         errorCode = InvalidFileName;
     }
     else
@@ -74,7 +74,7 @@ int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames
     }
     catch (itk::ExceptionObject & e)
     {
-        WARN_LOG(QString("ExcepciÛ llegint els arxius del directori [%1] DescripciÛ: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+        WARN_LOG(QString("Excepci√≥ llegint els arxius del directori [%1] Descripci√≥: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
         // Llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage(QString(e.GetDescription()) );
     }
@@ -92,9 +92,9 @@ int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames
 
         case ZeroSpacingNotAllowed:
             errorCode = NoError;
-            // Assignem les dades llegides, aquesta excepciÛ simplement Ès una mena de warning. 
-            // En el cas del z-spacing 0 es pot deure a que la informaciÛ estigui "amagada" en una seq¸Ëncia privada
-            // o que realment la imatge en sÌ nomÈs tÈ sentit com a 2D i no 3D
+            // Assignem les dades llegides, aquesta excepci√≥ simplement √©s una mena de warning. 
+            // En el cas del z-spacing 0 es pot deure a que la informaci√≥ estigui "amagada" en una seq√º√®ncia privada
+            // o que realment la imatge en s√≠ nom√©s t√© sentit com a 2D i no 3D
             setData(m_seriesReader->GetOutput());
             checkZeroSpacingException();
             break;
@@ -116,7 +116,7 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
     }
     catch (itk::ExceptionObject & e)
     {
-        WARN_LOG(QString("ExcepciÛ llegint l'arxiu [%1] DescripciÛ: [%2]").arg(fileName).arg(e.GetDescription()));
+        WARN_LOG(QString("Excepci√≥ llegint l'arxiu [%1] Descripci√≥: [%2]").arg(fileName).arg(e.GetDescription()));
         // Llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage(QString(e.GetDescription()));
     }
@@ -133,9 +133,9 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
     
         case ZeroSpacingNotAllowed:
             errorCode = NoError;
-            // Assignem les dades llegides, aquesta excepciÛ simplement Ès una mena de warning. 
-            // En el cas del z-spacing 0 es pot deure a que la informaciÛ estigui "amagada" en una seq¸Ëncia privada
-            // o que realment la imatge en sÌ nomÈs tÈ sentit com a 2D i no 3D
+            // Assignem les dades llegides, aquesta excepci√≥ simplement √©s una mena de warning. 
+            // En el cas del z-spacing 0 es pot deure a que la informaci√≥ estigui "amagada" en una seq√º√®ncia privada
+            // o que realment la imatge en s√≠ nom√©s t√© sentit com a 2D i no 3D
             setData(reader->GetOutput());
             checkZeroSpacingException();
             break;
@@ -176,7 +176,7 @@ void VolumePixelDataReaderITKGDCM::readDifferentSizeImagesIntoOneVolume(const QS
         }
         catch (itk::ExceptionObject & e)
         {
-            WARN_LOG(QString("ExcepciÛ llegint els arxius del directori [%1] DescripciÛ: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+            WARN_LOG(QString("Excepci√≥ llegint els arxius del directori [%1] Descripci√≥: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
 
             // Llegim el missatge d'error per esbrinar de quin error es tracta
             errorCode = identifyErrorMessage(QString(e.GetDescription()));
@@ -223,7 +223,7 @@ int VolumePixelDataReaderITKGDCM::identifyErrorMessage(const QString &errorMessa
 
 void VolumePixelDataReaderITKGDCM::setData(Volume::ItkImageTypePointer itkImage)
 {
-    // Li donem l'input al filtre i fem la conversiÛ
+    // Li donem l'input al filtre i fem la conversi√≥
     m_itkToVtkFilter->SetInput(itkImage);
     try
     {
@@ -231,7 +231,7 @@ void VolumePixelDataReaderITKGDCM::setData(Volume::ItkImageTypePointer itkImage)
     }
     catch (itk::ExceptionObject & exception)
     {
-        WARN_LOG(QString("ExcepciÛ en el filtre itkToVtk :: VolumePixelDataReaderITKGDCM::setData(ItkImageTypePointer itkImage) -> ") + exception.GetDescription() );
+        WARN_LOG(QString("Excepci√≥ en el filtre itkToVtk :: VolumePixelDataReaderITKGDCM::setData(ItkImageTypePointer itkImage) -> ") + exception.GetDescription() );
     }
     // Assignem l'output
     m_vtkImageData = m_itkToVtkFilter->GetOutput();
@@ -248,16 +248,16 @@ void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
 
         if (spacing[0] == 0.0 || spacing[1] == 0.0)
         {
-            WARN_LOG(QString("x Û y spacing Ès 0; [x,y] = [%1,%2]. Donem el volum per v‡lid igualment.").arg(spacing[0]).arg(spacing[1]));
+            WARN_LOG(QString("x √≥ y spacing √©s 0; [x,y] = [%1,%2]. Donem el volum per v√†lid igualment.").arg(spacing[0]).arg(spacing[1]));
         }
         else if (spacing[2] == 0.0)
         {
-            WARN_LOG("El z-spacing de les dades llegides Ès 0. Possiblement la informaciÛ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins de seq¸Ëncies privades. Donem el volum per v‡lid igualment.");
+            WARN_LOG("El z-spacing de les dades llegides √©s 0. Possiblement la informaci√≥ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins de seq√º√®ncies privades. Donem el volum per v√†lid igualment.");
         }
     }
     else
     {
-        DEBUG_LOG("No s'han assignat les dades vtk! No podem fer cap comprovaciÛ.");
+        DEBUG_LOG("No s'han assignat les dades vtk! No podem fer cap comprovaci√≥.");
     }
 }
 
