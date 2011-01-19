@@ -22,7 +22,6 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <QApplication>
-#include <QDir>
 
 namespace udg {
 
@@ -75,26 +74,56 @@ void HangingProtocolsLoader::loadDefaults()
     }
 }
 
-bool HangingProtocolsLoader::loadXMLFiles(const QString &filePath)
+void HangingProtocolsLoader::loadXMLFiles(const QString &path)
 {
-	HangingProtocolXMLReader *xmlReader = new HangingProtocolXMLReader();
-    QList<HangingProtocol *> listHangingProtocols = xmlReader->read(filePath);
+    QFileInfo fileToRead(path);
+    QStringList hangingProtocolsLoaded = loadXMLFiles(fileToRead);
+    
+    INFO_LOG(QString("Hanging protocols carregats: %1").arg(hangingProtocolsLoaded.join(", ")));
+}
 
-    if (listHangingProtocols.size() > 0)
+QStringList HangingProtocolsLoader::loadXMLFiles(const QFileInfo &fileInfo)
+{
+    QStringList filesLoaded;
+
+    if (fileInfo.isDir())
     {
-        INFO_LOG(QString("Carreguem %1 hanging protocols de [%2].").arg(listHangingProtocols.size()).arg(filePath));
-        QString hangingProtocolNamesLogList;
-        foreach (HangingProtocol *hangingProtocol, listHangingProtocols)
+        QDir directory(fileInfo.absoluteFilePath());
+        foreach (const QFileInfo &file, directory.entryInfoList())
         {
-            Identifier id = HangingProtocolsRepository::getRepository()->addItem(hangingProtocol);
-            hangingProtocol->setIdentifier(id.getValue());
-            hangingProtocolNamesLogList.append(QString("%1, ").arg(hangingProtocol->getName()));
+            if ((file.fileName() != ".") && (file.fileName() != ".."))
+            {
+                filesLoaded << loadXMLFiles(file);
+            }
         }
-        INFO_LOG(QString("Hanging protocols carregats: %1").arg(hangingProtocolNamesLogList));
+    }
+    else
+    {
+        if (fileInfo.suffix() == "xml")
+        {
+            QString fileLoaded = loadXMLFile(fileInfo);
+            if (!fileLoaded.isEmpty())
+            {
+                filesLoaded << fileLoaded;
+            }
+        }
+    }
+    return filesLoaded;
+}
+
+QString HangingProtocolsLoader::loadXMLFile(const QFileInfo &fileInfo)
+{
+    HangingProtocolXMLReader xmlReader;
+    HangingProtocol *hangingProtocol = xmlReader.readFile(fileInfo.absoluteFilePath());
+
+    if (hangingProtocol != NULL)
+    {
+        Identifier id = HangingProtocolsRepository::getRepository()->addItem(hangingProtocol);
+        hangingProtocol->setIdentifier(id.getValue());
+        return hangingProtocol->getName();
     }
 
-    delete xmlReader;
-    return true;
+    return QString();
 }
 
 }
