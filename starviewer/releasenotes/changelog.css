@@ -1,0 +1,111 @@
+@charset "UTF-8";
+/* CSS Document */
+body 
+{
+    background-color:#F5F5F5;
+    font-family: Helvetica, sans-serif;
+}
+
+h1 
+{
+    background-image: url(img/starviewer.png);
+    background-repeat: no-repeat;
+    padding-left: 80px;
+    height: 70px;
+    line-height: 70px;
+    vertical-align: middle;
+}
+
+div.majorRelease 
+{
+    border: 1px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #BBBBBB;
+    background-color:#FFFFFF;
+    margin-bottom: 15px;
+}
+
+div.majorRelease .version 
+{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-color: #BBBBBB;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    background-color: #E0E0E0;
+    padding-left: 20px;
+    color: #555555;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+div.majorRelease .version .versionNumber
+{
+    font-weight:bold;
+    font-size:15px;
+}
+
+div.majorRelease .version .versionDate
+{
+    font-size:12px;
+    margin: 0px 10px;
+}
+
+ul
+{
+    list-style: none;
+    margin: 0px 20px;
+    padding: 0;
+    font-size:13px;
+}
+
+li 
+{
+    padding: 4px 0 3px 0px;
+    margin: 0 0 6px 0;
+}
+
+li:before
+{
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    width: 90px;
+    margin-right: 10px;
+    text-align: center;
+    float: left;
+    padding-top: 5px;
+    padding-bottom: 2px;
+    position: relative;
+    top: -4px;
+}
+
+div.new li:before
+{
+    content: "NOVETAT";
+    background-color: #BCB901;
+}
+div.improved li:before
+{
+    content: "MILLORA";
+    background-color: #0486BC;
+}
+div.fixed li:before
+{
+    content: "CORRECCIÓ";
+    background-color: #00A825;
+}
+div.removed li:before
+{
+    content: "ELIMINAT";
+    background-color: #BC0E00;
+}
+
+span.ticket
+{
+    display: none;
+}
