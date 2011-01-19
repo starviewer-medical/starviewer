@@ -10,7 +10,7 @@ class VolumePixelDataReader;
 
 /**
     Classe encarregada de llegir les dades que han de definir un volum.
-    Li passem un punter a Volume i aquesta s'encarrega de llegir i assignar-li la informaciÛ adequada.
+    Li passem un punter a Volume i aquesta s'encarrega de llegir i assignar-li la informaci√≥ adequada.
  */
 class VolumeReader : public QObject {
 Q_OBJECT
@@ -18,12 +18,12 @@ public:
     VolumeReader(QObject *parent = 0);
     ~VolumeReader();
 
-    /// Donat un punter v‡lid a Volume, llegeix les dades
+    /// Donat un punter v√†lid a Volume, llegeix les dades
     /// corresponents i li assigna.
     void read(Volume *volume);
 
 signals:
-    /// Ens indica el progrÈs del procÈs de lectura
+    /// Ens indica el progr√©s del proc√©s de lectura
     void progress(int progress);
 
 private:

@@ -8,8 +8,8 @@ class vtkImageData;
 namespace udg {
 
 /**
-    Classe encarregada de llegir únicament les dades de píxel d'arxius d'imatge mèdica.
-    Aquesta classe únicament actuarà d'interfície pels diferents possibles motors de lectura
+    Classe encarregada de llegir Ãºnicament les dades de pÃ­xel d'arxius d'imatge mÃ¨dica.
+    Aquesta classe Ãºnicament actuarÃ  d'interfÃ­cie pels diferents possibles motors de lectura
     que podem tenir (itk, gdcm, dcmtk, etc).
     Les dades es retornaran en format vtkImageData.
  */
@@ -24,15 +24,15 @@ public:
 
     /// Donada una llista de noms de fitxer, la llegeix i omple
     /// l'estructura d'imatge que fem servir internament.
-    /// Ens retorna un enter que ens indicarà si hi ha hagut alguna mena d'error en el 
-    /// procés de lectura, seguint els valors enumerats definits a aquesta mateixa classe
+    /// Ens retorna un enter que ens indicarÃ  si hi ha hagut alguna mena d'error en el 
+    /// procÃ©s de lectura, seguint els valors enumerats definits a aquesta mateixa classe
     virtual int read(const QStringList &filenames) = 0;
     
     /// Ens retorna les dades en format vtkImageData
     vtkImageData* getVTKData();
 
 signals:
-    /// Ens indica el progrés del procés de lectura
+    /// Ens indica el progrÃ©s del procÃ©s de lectura
     void progress(int progress);
 
 protected:
