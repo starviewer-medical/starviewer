@@ -23,11 +23,11 @@
                     {
                         if (/s\:/im.test(tickets[j]))
                         {
-                            innerTexts[j] = "<a href='https://starviewer.udg.edu/support/" + tickets[j].replace(/s:/g,"") + "' target=\"new\">" + tickets[j] + "</a>";
+                            innerTexts[j] = "<a href='https://starviewer.udg.edu/support/ticket/" + tickets[j].replace(/s:/g,"") + "' target=\"new\">" + tickets[j] + "</a>";
                         }
                         else
                         {
-                            innerTexts[j] = "<a href='https://starviewer.udg.edu/trac/ticket/" + tickets[j] + "' target=\"new\">" + tickets[j] + "</a>";
+                            innerTexts[j] = "<a href='https://trueta.udg.edu/trac/ticket/" + tickets[j] + "' target=\"new\">" + tickets[j] + "</a>";
                         }
                     }
                     spans[i].innerHTML = innerTexts.join(", "); //si nomes n'hi ha un no hi posa la coma
