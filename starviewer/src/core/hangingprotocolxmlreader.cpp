@@ -30,36 +30,6 @@ HangingProtocolXMLReader::~HangingProtocolXMLReader()
 {
 }
 
-QList<HangingProtocol*> HangingProtocolXMLReader::read(const QString &path)
-{
-    QFileInfo fileToRead(path);
-    QList<HangingProtocol*> protocols;
-
-    if (fileToRead.isDir())
-    {
-        QDir directory(path);
-        foreach (const QFileInfo &file, directory.entryInfoList())
-        {
-            if ((file.fileName() != ".") && (file.fileName() != ".."))
-            {
-                protocols << read(file.absolutePath() + QDir::toNativeSeparators("/") + file.fileName());
-            }
-        }
-    }
-    else
-    {
-        if (fileToRead.suffix() == "xml")
-        {
-            HangingProtocol *hangingProtocol = readFile(path);
-            if (hangingProtocol != NULL)
-            {
-                protocols << hangingProtocol;
-            }
-        }
-    }
-    return protocols;
-}
-
 HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
 {
     QFile file(path);
