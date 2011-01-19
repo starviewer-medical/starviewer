@@ -52,7 +52,7 @@ int Repository< ItemType >::getNumberOfItems()
 }
 
 template< typename ItemType >
-QList<Identifier*> Repository< ItemType >::getIdentifiers()
+QList<Identifier> Repository< ItemType >::getIdentifiers()
 {
     return m_itemList.keys();
 }

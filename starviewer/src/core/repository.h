@@ -48,7 +48,7 @@ public:
     int getNumberOfItems();
 
     /// Retorna una llista amb tots els id del repositori
-    QList<Identifier*> getIdentifiers();
+    QList<Identifier> getIdentifiers();
 
     /// Elimina tots els elements que hi hagi al repositori
     void cleanUp();
