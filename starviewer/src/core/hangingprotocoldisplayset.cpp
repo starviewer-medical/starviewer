@@ -17,6 +17,7 @@ HangingProtocolDisplaySet::HangingProtocolDisplaySet(QObject *parent)
     m_hangingProtocol = NULL;
     m_imageSet = NULL;
     m_sliceNumber = -1;
+    m_sliceModifiedForVolumes = -1;
     m_phase = -1;
 }
 
@@ -156,4 +157,13 @@ QString HangingProtocolDisplaySet::getToolActivation()
     return m_activateTool;
 }
 
+void HangingProtocolDisplaySet::setSliceModifiedForVolumes(int sliceNumber)
+{
+    m_sliceModifiedForVolumes = sliceNumber;
+}
+
+int HangingProtocolDisplaySet::getSliceModifiedForVolumes()
+{
+    return m_sliceModifiedForVolumes;
+}
 }

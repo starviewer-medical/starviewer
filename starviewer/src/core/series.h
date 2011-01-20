@@ -239,6 +239,9 @@ public:
     /// comprovar que es tracti d'un SOP Class suportat per l'aplicació
     bool isViewable() const;
 
+    // Mètode per obtenir el volume que conté una imatge en concret
+    Volume* getVolumeOfImage(Image *image);
+
 public slots:
     /// Selecciona/deselecciona aquesta sèrie
     void select();

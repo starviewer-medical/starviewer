@@ -81,6 +81,12 @@ public:
 
     /// Obtenir la llesca a mostrar
     int getSlice();
+
+    // Llesca per si tenim volums
+    void setSliceModifiedForVolumes(int sliceNumber);
+
+    // Obtenir la llesca per si tenim volums
+    int getSliceModifiedForVolumes();
     
     /// Assigna el tipus d'icona per representar-lo
     void setIconType( QString iconType );
@@ -128,6 +134,9 @@ private:
 
     /// Llesca
     int m_sliceNumber;
+
+    /// Llesca per volums
+    int m_sliceModifiedForVolumes;
 
     /// Indica el tipus d'icona per representar el hanging protocol
     QString m_iconType;

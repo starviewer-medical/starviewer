@@ -332,7 +332,8 @@ Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, Hangin
             else
             {
                 int currentImageIndex = 0;
-                QList<Image*> listOfImages = serie->getFirstVolume()->getImages(); //Es té en compte només les del primer volum que de moment són les que es col·loquen. HACK
+                //Es tenen en compte totes les imatges de tots els volums.
+                QList<Image*> listOfImages = serie->getImages();
                 int numberOfImages = listOfImages.size();
 
                 while(!selectedSeries && currentImageIndex < numberOfImages)
@@ -477,7 +478,15 @@ void HangingProtocolManager::applyDisplayTransformations(Q2DViewerWidget *viewer
     int sliceNumber = displaySet->getSlice();
     if (sliceNumber != -1)
     {
-        viewer->getViewer()->setSlice(sliceNumber);
+        //Comprovem si s'ha modificat el número de llesca pel fet de tenir la imatge dins un volum
+        if (displaySet->getSliceModifiedForVolumes() != -1)
+        {
+            viewer->getViewer()->setSlice(displaySet->getSliceModifiedForVolumes());
+        }
+        else
+        {
+            viewer->getViewer()->setSlice(sliceNumber);
+        }
     }
 
     QString alignment = displaySet->getAlignment();
@@ -679,8 +688,29 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
             // HACK Així evitem el bug del ticket 1249 i tenim el mateix comportament que abans
             // Deshabilitem inicialment la sincronització i només l'activem si és necessari pel hanging protocol
             viewerWidget->enableSynchronization(false);
-            
-            viewerWidget->setInput(series->getFirstVolume());
+
+            if (series->getVolumesList().size() > 1 && displaySet->getSlice() > -1)
+            {
+                Image * image = series->getImageByIndex(displaySet->getSlice());
+                Volume *volume = series->getVolumeOfImage(image);
+                
+                if (!volume)//No exiteix cap imatge al tall corresponent, agafem el volum per defecte
+                {
+                    volume = series->getFirstVolume();
+                }
+                else
+                {
+                    //Tenim nou volum, i per tant, cal calcular el nou número de llesca
+                    int slice = volume->getImages().indexOf(image);
+                    displaySet->setSliceModifiedForVolumes(slice);
+                }
+                viewerWidget->setInput(volume);
+            }
+            else
+            {
+                viewerWidget->setInput(series->getFirstVolume());
+            }
+
             qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             if (displaySet->getImageSet()->getTypeOfItem() == "image")
             {
