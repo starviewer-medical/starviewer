@@ -59,6 +59,10 @@ private:
 private slots:
     /// Fa una nova cerca
     void updateSearch();
+
+private:
+
+    QString m_lastImagePathDICOMDumpDisplayed;
 };
 
 }
