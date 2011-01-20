@@ -35,67 +35,113 @@
    <iconset resource="../main/main.qrc">
     <normaloff>:/images/dicomDump.png</normaloff>:/images/dicomDump.png</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="m_searchTagLabel">
-       <property name="text">
-        <string>Search</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="m_searchTagLineEdit"/>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="m_showAllTagsCheckBox">
-       <property name="text">
-        <string>Show All Tags</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
-    <widget class="QTreeWidget" name="m_tagsListQTree">
-     <property name="alternatingRowColors">
-      <bool>true</bool>
-     </property>
-     <property name="animated">
-      <bool>false</bool>
-     </property>
-     <property name="columnCount">
-      <number>3</number>
-     </property>
-     <column>
-      <property name="text">
-       <string notr="true">Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string notr="true">Tag</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string notr="true">Content</string>
-      </property>
-     </column>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="m_dumpTabWidget">
+     <widget class="QWidget" name="m_defaultTagsTab">
+      <attribute name="title">
+       <string>Meaningful Tags</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QTreeWidget" name="m_defaultTagsQTree">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="animated">
+          <bool>false</bool>
+         </property>
+         <property name="columnCount">
+          <number>3</number>
+         </property>
+         <column>
+          <property name="text">
+           <string notr="true">Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">Tag</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">Content</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="m_allTagsTab">
+      <attribute name="title">
+       <string>All Tags</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="m_searchTagLabel">
+         <property name="text">
+          <string>Search</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLineEdit" name="m_searchTagLineEdit"/>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="m_highlightOnlyCheckBox">
+           <property name="text">
+            <string>Highlight only</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QTreeWidget" name="m_tagsListQTree">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="animated">
+          <bool>false</bool>
+         </property>
+         <property name="columnCount">
+          <number>3</number>
+         </property>
+         <column>
+          <property name="text">
+           <string notr="true">Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">Tag</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">Content</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
