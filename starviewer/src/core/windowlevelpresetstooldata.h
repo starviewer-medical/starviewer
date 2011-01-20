@@ -22,14 +22,14 @@ namespace udg {
     - Altres...
 
     Aquests valors predefinits es poden afegir o treure dinàmicament.
-    Aquests valors poden ser afegits a través de la lectura d'algun tipus de format ( Settings, XML, parelles atribut-valor, com en fitxers ".ini", etc )
+    Aquests valors poden ser afegits a través de la lectura d'algun tipus de format (Settings, XML, parelles atribut-valor, com en fitxers ".ini", etc)
 
     Cada valor vindrà definit per una descripció textual més el parell de valors WL/WW, com per exemple "Bone CT", WL: 500, WW: 2000.
     La descripció serà tractada com a camp clau, per tant no hi poden haver dos presets amb el mateix nom.
 
     Per poder fer una diferenciació de la procedència de cada valor, es poden crear certs grups com ja s'ha anomenat abans.
 
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class WindowLevelPresetsToolData : public ToolData {
 Q_OBJECT
@@ -47,19 +47,19 @@ public:
      * @param level Valor de level
      * @param group Grup al que volem que pertanyi, que serà "Other" si no s'especifica
      */
-    void addPreset( const QString &description, double window, double level, int group = Other );
+    void addPreset(const QString &description, double window, double level, int group = Other);
 
     /**
      * Eliminem el preset que tingui la descripció donada
      * @param description Descripció del preset que volem eliminar
      */
-    void removePreset( const QString &description );
+    void removePreset(const QString &description);
 
     /**
      * Elimina els presets d'un grup
      * @param group Grup que volem buidar
      */
-    void removePresetsFromGroup( int group );
+    void removePresetsFromGroup(int group);
 
     /**
      * Ens retorna els valors de window level del preset amb la descripció donada
@@ -69,7 +69,7 @@ public:
      * @param level variable on es retornarà el valor de level
      * @return Cert si existeix aquest preset, fals altrament
      */
-    bool getWindowLevelFromDescription( const QString &description, double &window, double &level );
+    bool getWindowLevelFromDescription(const QString &description, double &window, double &level);
 
     /**
      * Ens diu a quin grup pertany el preset indicat. Si no existeix la descripció,
@@ -78,7 +78,7 @@ public:
      * @param group variable on se'ns tornarà el grup al que pertany la descripció donada
      * @return Cert si la descripció donada existeix, fals altrement
      */
-    bool getGroup( const QString &description, int &group );
+    bool getGroup(const QString &description, int &group);
 
     /**
      * Ens retorna una llista de presets que conté un grup
@@ -86,7 +86,7 @@ public:
      * @return Retorna llista de descripcions de presets del grup donat.
      * Si no hi ha cap preset dins del grup demanat la llista serà buida.
      */
-    QStringList getDescriptionsFromGroup( int group );
+    QStringList getDescriptionsFromGroup(int group);
 
     /**
      * Ens retorna l'últim preset activat
@@ -100,7 +100,7 @@ public slots:
      * @param window valor de window
      * @param level valor de level
      */
-    void setCustomWindowLevel( double window, double level );
+    void setCustomWindowLevel(double window, double level);
 
     /**
      * Indiquem que volem activar el preset indicat
@@ -114,7 +114,7 @@ signals:
     void presetRemoved(QString preset);
 
     /// Aquest senyal s'emet quan s'activa algun preset, per indicar els seus valors
-    void currentWindowLevel( double window, double level );
+    void currentWindowLevel(double window, double level);
 
     /// Aquest senyal s'envia pre notificar quin preset s'ha activat
     void presetChanged(QString preset);

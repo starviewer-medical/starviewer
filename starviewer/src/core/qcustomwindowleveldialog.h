@@ -14,19 +14,23 @@ namespace udg {
 /**
 Diàleg per escollir manualment els ajustaments pel window level
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class QCustomWindowLevelDialog : public QDialog , private Ui::QCustomWindowLevelDialogBase
+class QCustomWindowLevelDialog : public QDialog, private Ui::QCustomWindowLevelDialogBase
 {
 Q_OBJECT
 public:
-    QCustomWindowLevelDialog( QDialog *parent = 0 );
+    QCustomWindowLevelDialog(QDialog *parent = 0);
 
     ~QCustomWindowLevelDialog();
 
 public slots:
     /// dóna el window level que mostrarà per defecte quan s'obri
-    void setDefaultWindowLevel( double window , double level );
+    void setDefaultWindowLevel(double window, double level);
+
+signals:
+    /// envia la senyal del window level escollit
+    void windowLevel(double window  , double level);
     
 private:
     /// Crea les connexions 
@@ -35,10 +39,6 @@ private:
 private slots:
     /// Comprova el window level quan diem ok, fa les validacions i envia els senyas pertinents
     void confirmWindowLevel();
-
-signals:
-    /// envia la senyal del window level escollit
-    void windowLevel( double window , double level );
 
 };
 
