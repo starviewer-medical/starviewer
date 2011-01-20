@@ -15,6 +15,7 @@
 #include "dicomdumpdefaulttagsloader.h"
 #include "dicomdumpdefaulttagsrepository.h"
 #include "dicomdumpdefaulttagsrestriction.h"
+#include "logging.h"
 
 // Llibreries QT
 #include <QTreeWidgetItem>
@@ -30,6 +31,8 @@ QDICOMDumpBrowser::QDICOMDumpBrowser(QWidget *parent)
     setupUi(this);
 
     createConnections();
+
+    m_lastImagePathDICOMDumpDisplayed = "";
 }
 
 QDICOMDumpBrowser::~QDICOMDumpBrowser()
@@ -109,31 +112,36 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool highlightOnl
 
 void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
 {
-    // \TODO Xapusa per sortir del pas, s'ha de fer ben fet el lazy loading
-    if (DICOMDumpDefaultTagsRepository::getRepository()->getNumberOfItems() == 0)
+    if (currentImage->getPath() != m_lastImagePathDICOMDumpDisplayed)
     {
-        DICOMDumpDefaultTagsLoader dicomDumpDefaultTagsLoader;
-        dicomDumpDefaultTagsLoader.loadDefaults();
-    }
-
-    DICOMTagReader dicomReader;
-    bool ok = dicomReader.setFile(currentImage->getPath());
-
-    if (ok)
-    {	
-        bool resizeColumnsToContents = m_tagsListQTree->topLevelItemCount() == 0;
-
-        initializeQTrees(dicomReader);
-
-        if (resizeColumnsToContents)
+        // \TODO Xapusa per sortir del pas, s'ha de fer ben fet el lazy loading
+        if (DICOMDumpDefaultTagsRepository::getRepository()->getNumberOfItems() == 0)
         {
-            m_tagsListQTree->resizeColumnToContents(0);
-            m_tagsListQTree->resizeColumnToContents(1);
-            m_defaultTagsQTree->resizeColumnToContents(0);
-            m_defaultTagsQTree->resizeColumnToContents(1);
+            DICOMDumpDefaultTagsLoader dicomDumpDefaultTagsLoader;
+            dicomDumpDefaultTagsLoader.loadDefaults();
         }
 
-        updateSearch();
+        DICOMTagReader dicomReader;
+        bool ok = dicomReader.setFile(currentImage->getPath());
+
+        if (ok)
+        {	
+            bool resizeColumnsToContents = m_tagsListQTree->topLevelItemCount() == 0;
+
+            initializeQTrees(dicomReader);
+
+            if (resizeColumnsToContents)
+            {
+                m_tagsListQTree->resizeColumnToContents(0);
+                m_tagsListQTree->resizeColumnToContents(1);
+                m_defaultTagsQTree->resizeColumnToContents(0);
+                m_defaultTagsQTree->resizeColumnToContents(1);
+            }
+
+            updateSearch();
+        }
+        
+        m_lastImagePathDICOMDumpDisplayed  = currentImage->getPath();
     }
 }
 
