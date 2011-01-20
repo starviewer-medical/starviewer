@@ -56,9 +56,6 @@ private slots:
     void setActiveWindowLevel(int value);
 
 private:
-    /// Diàleg per escollir un window level personalitzat
-    QCustomWindowLevelDialog *m_customWindowLevelDialog;
-
     /**
      * Omple el combo a partir de les dades de presets. Neteja les dades que hi pugui haver anteriorment
      */
@@ -66,6 +63,10 @@ private:
 
     /// Desconnecta totes les connexions
     void disconnectPresetsData();
+
+private:
+    /// Diàleg per escollir un window level personalitzat
+    QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
     /// Les dades dels valors pre-establerts
     WindowLevelPresetsToolData *m_presetsData;
