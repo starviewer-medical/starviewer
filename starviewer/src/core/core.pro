@@ -229,7 +229,12 @@ HEADERS += extensionfactory.h \
     colortransferfunction.h \
     transferfunctiontemplate.h \
     opacitytransferfunction.h \
-    qscreendistribution.h
+    qscreendistribution.h \
+    dicomdumpdefaulttags.h \
+    dicomdumpdefaulttagsloader.h \
+    dicomdumpdefaulttagsreader.h \
+    dicomdumpdefaulttagsrepository.h \
+    dicomdumpdefaulttagsrestriction.h 
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -417,7 +422,13 @@ SOURCES += extensionmediator.cpp \
     screenmanager.cpp \
     colortransferfunction.cpp \
     opacitytransferfunction.cpp \
-    qscreendistribution.cpp
+    qscreendistribution.cpp \
+    dicomdumpdefaulttags.cpp \
+    dicomdumpdefaulttagsloader.cpp \
+    dicomdumpdefaulttagsreader.cpp \
+    dicomdumpdefaulttagsrepository.cpp \
+    dicomdumpdefaulttagsrestriction.cpp
+
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
@@ -431,4 +442,5 @@ include(../translations.inc)
 QT += xml \
     network \
     webkit \
-    script
+    script \
+	xmlpatterns

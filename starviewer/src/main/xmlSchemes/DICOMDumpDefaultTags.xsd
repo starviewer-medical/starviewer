@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="DICOMDumpDefaultTags">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="SOPClassUID" type="xsd:string"/>
+                <xsd:element name="restrictions" type="restrictionListType" minOccurs="0" maxOccurs="1"/>
+                <xsd:element name="tagsToShow" type="tagsToShowType" maxOccurs="1"/>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="restrictionListType">
+        <xsd:sequence>
+            <xsd:element name="restriction" type="restrictionType" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="tagsToShowType">
+        <xsd:sequence>
+            <xsd:element name="tag" type="tagType" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="tagType">
+        <xsd:sequence>
+            <xsd:element name="group">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:pattern value="[0-9A-F][0-9A-F][0-9A-F][0-9A-F]"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+
+            <xsd:element name="element">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:pattern value="[0-9A-F][0-9A-F][0-9A-F][0-9A-F]"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+			<xsd:element name="name" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="restrictionType">
+        <xsd:sequence>
+            <xsd:element name="tag" type="tagType"/>
+            <xsd:element name="value" type="xsd:string"/>
+            <xsd:element name="operator">
+              <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                  <xsd:enumeration value="includes"/>
+                  <xsd:enumeration value="excludes"/>
+                  <xsd:enumeration value="equal"/>
+                  <xsd:enumeration value="notEqual"/>
+                  <xsd:enumeration value="lessThan"/>
+                  <xsd:enumeration value="lessOrEqualThan"/>
+                  <xsd:enumeration value="greaterThan"/>
+                  <xsd:enumeration value="greaterOrEqualThan"/>
+                </xsd:restriction>
+              </xsd:simpleType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>
