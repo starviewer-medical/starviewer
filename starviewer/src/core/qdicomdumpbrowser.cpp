@@ -15,7 +15,6 @@
 #include "dicomdumpdefaulttagsloader.h"
 #include "dicomdumpdefaulttagsrepository.h"
 #include "dicomdumpdefaulttagsrestriction.h"
-#include "logging.h"
 
 // Llibreries QT
 #include <QTreeWidgetItem>
