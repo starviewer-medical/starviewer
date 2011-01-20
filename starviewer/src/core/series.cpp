@@ -564,4 +564,22 @@ int Series::findImageIndex( const QString &identifier )
     return i;
 }
 
+Volume* Series::getVolumeOfImage(Image *image)
+{
+    bool found = false;
+    Volume *volume = 0;
+    QListIterator<Identifier> identifiersIterator(VolumeRepository::getRepository()->getIdentifiers());
+
+    while (!found && identifiersIterator.hasNext())
+    {
+       volume = VolumeRepository::getRepository()->getVolume(identifiersIterator.next());
+
+        if (volume->getImages().contains(image))
+        {
+            found = true;
+        }
+    }
+    return volume;
+}
+
 }
