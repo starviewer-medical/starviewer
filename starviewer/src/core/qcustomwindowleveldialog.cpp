@@ -113,7 +113,7 @@ void QCustomWindowLevelDialog::loadFromFile()
     QFile customWindowLevel(directory);
     if (customWindowLevel.exists())
     {
-        if (!customWindowLevel.open(QIODevice.ReadOnly | QIODevice.Text))
+        if (!customWindowLevel.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             DEBUG_LOG("ERROR LLEGINT");
             return;
@@ -157,7 +157,7 @@ void QCustomWindowLevelDialog::saveToFile()
     QFile customWindowLevel(directory);
     if (customWindowLevel.exists())
     {
-        if (!customWindowLevel.open(QIODevice.Append | QIODevice.Text))
+        if (!customWindowLevel.open(QIODevice::Append | QIODevice::Text))
         {
             DEBUG_LOG("ERROR LLEGINT");
             return;
@@ -177,7 +177,7 @@ void QCustomWindowLevelDialog::saveToFile()
     }
     else
     {
-        if (!customWindowLevel.open(QIODevice.ReadWrite | QIODevice.Text))
+        if (!customWindowLevel.open(QIODevice::ReadWrite | QIODevice::Text))
         {
             DEBUG_LOG("ERROR A L' ESCRIURE");
             return;
@@ -216,7 +216,7 @@ void QCustomWindowLevelDialog::editPresets()
 {
     QStringList items;
     QString deleteItem = "";
-    QMap<QString, QVector<double>>::const_iterator i = m_presets.constBegin();
+    QMap<QString, QVector<double> >::const_iterator i = m_presets.constBegin();
     ///Variable per fer el setNum(asignar un Numero a un String)
     QString aux;
     while (i != m_presets.constEnd())
@@ -286,14 +286,14 @@ void QCustomWindowLevelDialog::refreshFile()
     QFile customWindowLevel(directory);
     if (customWindowLevel.exists())
     {
-        if (!customWindowLevel.open(QIODevice.ReadWrite | QIODevice.Truncate | QIODevice.Text))
+        if (!customWindowLevel.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
         {
             DEBUG_LOG("ERROR LLEGINT");
             return;
         }
         else
         {            
-            QMap<QString, QVector<double>>::const_iterator i = m_presets.constBegin();
+            QMap<QString, QVector<double> >::const_iterator i = m_presets.constBegin();
             while (i != m_presets.constEnd())
             {
                 QTextStream out(&customWindowLevel);
