@@ -12,9 +12,13 @@
 #include "dicomsequenceitem.h"
 #include "dicomsequenceattribute.h"
 #include "image.h"
+#include "dicomdumpdefaulttagsloader.h"
+#include "dicomdumpdefaulttagsrepository.h"
+#include "dicomdumpdefaulttagsrestriction.h"
 
 // Llibreries QT
 #include <QTreeWidgetItem>
+#include <QListIterator>
 
 namespace udg {
 
@@ -37,9 +41,8 @@ void QDICOMDumpBrowser::createConnections()
 {
     // Connectem els butons
     connect(m_searchTagLineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateSearch()));
-    connect(m_showAllTagsCheckBox, SIGNAL(clicked(bool)), SLOT(updateSearch()));
+    connect(m_highlightOnlyCheckBox, SIGNAL(clicked(bool)), SLOT(updateSearch()));
 }
-
 
 void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool highlightOnly)
 {
@@ -103,8 +106,16 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool highlightOnl
     }
 }
 
+
 void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
 {
+    // \TODO Xapusa per sortir del pas, s'ha de fer ben fet el lazy loading
+    if (DICOMDumpDefaultTagsRepository::getRepository()->getNumberOfItems() == 0)
+    {
+        DICOMDumpDefaultTagsLoader dicomDumpDefaultTagsLoader;
+        dicomDumpDefaultTagsLoader.loadDefaults();
+    }
+
     DICOMTagReader dicomReader;
     bool ok = dicomReader.setFile(currentImage->getPath());
 
@@ -112,37 +123,20 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
     {	
         bool resizeColumnsToContents = m_tagsListQTree->topLevelItemCount() == 0;
 
-        m_tagsListQTree->clear();
-
-        QTreeWidgetItem *rootTreeItem = m_tagsListQTree->invisibleRootItem();
-
-        QList<DICOMAttribute*> dicomAttributesList = dicomReader.getDICOMAttributes(DICOMTagReader::ExcludeHeavyTags);
-        
-        foreach (DICOMAttribute *dicomAttribute, dicomAttributesList)
-        {
-            if (dicomAttribute->isValueAttribute())
-            {
-                DICOMValueAttribute *value = dynamic_cast<DICOMValueAttribute*>(dicomAttribute);
-                this->addLeaf(rootTreeItem, value);
-            }
-            else
-            {
-                DICOMSequenceAttribute *sequence = dynamic_cast<DICOMSequenceAttribute*>(dicomAttribute);
-                this->addBranch(rootTreeItem, sequence);
-            }
-        }
+        initializeQTrees(dicomReader);
 
         if (resizeColumnsToContents)
         {
             m_tagsListQTree->resizeColumnToContents(0);
             m_tagsListQTree->resizeColumnToContents(1);
+            m_defaultTagsQTree->resizeColumnToContents(0);
+            m_defaultTagsQTree->resizeColumnToContents(1);
         }
 
         updateSearch();
-        qDeleteAll(dicomAttributesList.begin(), dicomAttributesList.end());
-        dicomAttributesList.clear();
     }
 }
+
 
 void QDICOMDumpBrowser::addLeaf(QTreeWidgetItem *trunkTreeItem, DICOMValueAttribute *value)
 {
@@ -188,7 +182,7 @@ void QDICOMDumpBrowser::addBranch(QTreeWidgetItem *trunkTreeItem, DICOMSequenceA
 
 void QDICOMDumpBrowser::updateSearch()
 {
-    searchTag(m_searchTagLineEdit->text(), m_showAllTagsCheckBox->isChecked());
+    searchTag(m_searchTagLineEdit->text(), m_highlightOnlyCheckBox->isChecked());
 }
 
 void QDICOMDumpBrowser::clearSearch()
@@ -201,6 +195,107 @@ void QDICOMDumpBrowser::clearSearch()
         (*iterator)->setHidden(false);
         ++iterator;
     }
+}
+
+void QDICOMDumpBrowser::initializeQTrees(const DICOMTagReader &dicomReader)
+{
+    m_tagsListQTree->clear();
+    m_defaultTagsQTree->clear();
+
+    QList<DICOMAttribute*> dicomAttributesList = dicomReader.getDICOMAttributes(DICOMTagReader::ExcludeHeavyTags);
+    foreach (DICOMAttribute *dicomAttribute, dicomAttributesList)
+    {
+        if (dicomAttribute->isValueAttribute())
+        {
+            DICOMValueAttribute *value = dynamic_cast<DICOMValueAttribute*>(dicomAttribute);
+            this->addLeaf(m_tagsListQTree->invisibleRootItem(), value);
+            this->addLeaf(m_defaultTagsQTree->invisibleRootItem(), value);
+        }
+        else
+        {
+            DICOMSequenceAttribute *sequence = dynamic_cast<DICOMSequenceAttribute*>(dicomAttribute);
+            this->addBranch(m_tagsListQTree->invisibleRootItem(), sequence);
+            this->addBranch(m_defaultTagsQTree->invisibleRootItem(), sequence);
+        }
+    }
+
+    qDeleteAll(dicomAttributesList.begin(), dicomAttributesList.end());
+    dicomAttributesList.clear();
+
+    hideNonDefaultTags(dicomReader);
+}
+
+void QDICOMDumpBrowser::hideNonDefaultTags(const DICOMTagReader &dicomReader)
+{
+    DICOMDumpDefaultTags *defaultTags = getDICOMDumpDefaultTags(dicomReader);
+
+    if (defaultTags != NULL)
+    {
+        QList<DICOMTag> defaultTagsToShow = defaultTags->getTagsToShow();
+        if (!defaultTagsToShow.isEmpty())
+        {
+            m_defaultTagsQTree->expandAll();
+            QTreeWidgetItemIterator iterator(m_defaultTagsQTree);
+            while (*iterator)
+            {
+                (*iterator)->setHidden(true);
+                ++iterator;
+            }
+            foreach (const DICOMTag &defaultTag, defaultTagsToShow)
+            {
+                foreach (QTreeWidgetItem *item, m_defaultTagsQTree->findItems(defaultTag.getKeyAsQString(), Qt::MatchExactly | Qt::MatchRecursive, 1))
+                {
+                    item->setHidden(false);
+                    item->setText(0, defaultTag.getName());
+                    QTreeWidgetItem *parent = item->parent();
+                    while (parent && parent->isHidden())
+                    {
+                        parent->setHidden(false);
+                        parent = parent->parent();
+                    }
+                }
+            }
+        }
+        m_dumpTabWidget->setTabEnabled(0, true);
+    }
+    else
+    {
+       m_dumpTabWidget->setTabEnabled(0, false);
+    }
+}
+
+DICOMDumpDefaultTags* QDICOMDumpBrowser::getDICOMDumpDefaultTags(const DICOMTagReader &dicomReader)
+{
+    QString uidReference = dicomReader.getValueAttributeAsQString(DICOMSOPClassUID);
+
+    DICOMDumpDefaultTags* candidate = NULL;
+    QList<DICOMDumpDefaultTags*> possiblesCandidatesList = DICOMDumpDefaultTagsRepository::getRepository()->getItems();
+
+    foreach(DICOMDumpDefaultTags* possibleCandidate, possiblesCandidatesList)
+    {
+        if(uidReference == possibleCandidate->getSOPClassUID())
+        {
+            QListIterator<DICOMDumpDefaultTagsRestriction> iterator(possibleCandidate->getRestrictions());
+            bool isPossibleCandidate = true;
+
+            while (iterator.hasNext() && isPossibleCandidate)
+            {
+                DICOMDumpDefaultTagsRestriction restriction = iterator.next();
+                QString value = dicomReader.getValueAttributeAsQString(restriction.getDICOMTag());
+                isPossibleCandidate = restriction.isValidValue(value);
+            }
+
+            if (isPossibleCandidate)
+            {
+                if(candidate == NULL || candidate->getNumberOfRestrictions() < possibleCandidate->getNumberOfRestrictions())
+                {
+                    candidate = possibleCandidate;
+                }
+            }
+        }
+    }
+
+    return candidate;
 }
 
 };
