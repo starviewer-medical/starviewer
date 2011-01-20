@@ -33,6 +33,7 @@ DICOMTag::DICOMTag(DICOMTag *tag)
 {
     m_group = tag->getGroup();
     m_element = tag->getElement();
+    m_name = tag->m_name;
 }
 
 void DICOMTag::setGroup(unsigned int group)
@@ -55,9 +56,21 @@ unsigned int DICOMTag::getElement() const
     return m_element;
 }
 
+void DICOMTag::setName(const QString &name)
+{
+    m_name = name;
+}
+
 QString DICOMTag::getName() const
 {
-    return QString(DcmTag(m_group, m_element).getTagName());
+    if (m_name.isEmpty())
+    {
+       return QString(DcmTag(m_group, m_element).getTagName());
+    }
+    else
+    {
+        return m_name;
+    }
 }
 
 QString DICOMTag::getKeyAsQString() const
