@@ -120,6 +120,6 @@
         <file>images/openDICOMDIR.png</file>
         <file>images/RISConfiguration.png</file>
         <file>images/clippingBox.png</file>
-        <file>xmlSchemes/DICOMDumpDefaultTags.xsd</file>
+        <file>xmlSchemes/DICOMDumpDefaultTags.xml</file>
     </qresource>
 </RCC>
