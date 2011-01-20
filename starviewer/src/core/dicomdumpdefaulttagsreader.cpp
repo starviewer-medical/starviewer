@@ -15,7 +15,7 @@ namespace udg {
 DICOMDumpDefaultTagsReader::DICOMDumpDefaultTagsReader()
 {
    QXmlSchema schema;
-   schema.load(QUrl("qrc:xmlSchemes/DICOMDumpDefaultTags.xsd"));
+   schema.load(QUrl("qrc:xmlSchemes/DICOMDumpDefaultTags.xml"));
    m_defaultTagsSchemaValidator.setSchema(schema);
 }
 
