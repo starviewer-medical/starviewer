@@ -15,7 +15,7 @@ QWindowLevelComboBox::QWindowLevelComboBox(QWidget *parent)
  : QComboBox(parent), m_presetsData(0)
 {
     m_customWindowLevelDialog = new QCustomWindowLevelDialog();
-    connect( this, SIGNAL( activated(int) ), SLOT( setActiveWindowLevel(int) ) );
+    connect(this, SIGNAL(activated(int)), SLOT(setActiveWindowLevel(int)));
 }
 
 QWindowLevelComboBox::~QWindowLevelComboBox()
@@ -23,19 +23,19 @@ QWindowLevelComboBox::~QWindowLevelComboBox()
 	delete m_customWindowLevelDialog;
 }
 
-void QWindowLevelComboBox::setPresetsData( WindowLevelPresetsToolData *windowLevelData )
+void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLevelData)
 {
     // Desconectem tot el que teníem connectat amb el Presets Data
     disconnectPresetsData();
     m_presetsData = windowLevelData;
     populateFromPresetsData();
-    connect( m_presetsData, SIGNAL(presetAdded(QString)), SLOT( addPreset(QString) ) );
-    connect( m_presetsData, SIGNAL(presetRemoved(QString)), SLOT( removePreset(QString) ) );
-    connect( m_presetsData, SIGNAL(presetChanged(QString)), SLOT( selectPreset(QString) ) );
-    connect( m_presetsData, SIGNAL( currentWindowLevel( double , double ) ), m_customWindowLevelDialog, SLOT( setDefaultWindowLevel( double , double ) ) );
+    connect(m_presetsData, SIGNAL(presetAdded(QString)), SLOT(addPreset(QString)));
+    connect(m_presetsData, SIGNAL(presetRemoved(QString)), SLOT(removePreset(QString)));
+    connect(m_presetsData, SIGNAL(presetChanged(QString)), SLOT(selectPreset(QString)));
+    connect(m_presetsData, SIGNAL(currentWindowLevel(double, double)), m_customWindowLevelDialog, SLOT(setDefaultWindowLevel(double, double)));
     // TODO això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
     // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
-    connect( m_customWindowLevelDialog, SIGNAL( windowLevel(double,double) ), m_presetsData, SLOT( setCustomWindowLevel(double,double) ) );
+    connect(m_customWindowLevelDialog, SIGNAL(windowLevel(double,double)), m_presetsData, SLOT(setCustomWindowLevel(double,double)));
 }
 
 void QWindowLevelComboBox::clearPresets()
@@ -48,86 +48,86 @@ void QWindowLevelComboBox::clearPresets()
 void QWindowLevelComboBox::addPreset(const QString &preset)
 {
     int group;
-    if( m_presetsData->getGroup( preset, group ) )
+    if(m_presetsData->getGroup(preset, group))
     {
         int index;
-        switch( group )
+        switch(group)
         {
         case WindowLevelPresetsToolData::FileDefined:
-            index = m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ).count() - 1;
+            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() - 1;
         break;
 
         case WindowLevelPresetsToolData::StandardPresets:
-            index = m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ).count() +
-                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets ).count() - 1;
+            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() - 1;
         break;
 
         case WindowLevelPresetsToolData::UserDefined:
-            index = m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ).count() +
-                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets ).count() +
-                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::UserDefined ).count() - 1;
+            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() - 1;
         break;
 
         case WindowLevelPresetsToolData::Other:
-            index = m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ).count() +
-                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets ).count() +
-                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::UserDefined ).count() +
-                m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::Other ).count() - 1;
+            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
         break;
         }
-        this->insertItem( index, preset );
+        this->insertItem(index, preset);
     }
     else
     {
-        DEBUG_LOG("El preset " + preset + " no està present en les dades de window level proporcionades" );
+        DEBUG_LOG("El preset " + preset + " no està present en les dades de window level proporcionades");
     }
 }
 
 void QWindowLevelComboBox::removePreset(const QString &preset)
 {
-    int index = this->findText( preset );
-    if( index > -1 )
-        this->removeItem( index );
+    int index = this->findText(preset);
+    if(index > -1)
+        this->removeItem(index);
 }
 
-void QWindowLevelComboBox::selectPreset( const QString &preset )
+void QWindowLevelComboBox::selectPreset(const QString &preset)
 {
-    int index = this->findText( preset );
-    if( index > -1 )
-        this->setCurrentIndex( index );
+    int index = this->findText(preset);
+    if(index > -1)
+        this->setCurrentIndex(index);
     else
-        this->setCurrentIndex( this->findText( tr("Custom") ) );
+        this->setCurrentIndex(this->findText(tr("Custom")));
 }
 
 void QWindowLevelComboBox::populateFromPresetsData()
 {
-    if( !m_presetsData )
+    if(!m_presetsData)
         return;
 
     this->clear();
-    this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ) );
-    this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::StandardPresets ) );
-    this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::UserDefined ) );
-    this->addItems( m_presetsData->getDescriptionsFromGroup( WindowLevelPresetsToolData::Other ) );
-    this->addItem( tr("Custom") );
+    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other));
+    this->addItem(tr("Custom"));
 }
 
 void QWindowLevelComboBox::disconnectPresetsData()
 {
-    if( m_presetsData )
+    if(m_presetsData)
     {   
-        disconnect( m_presetsData, 0, this, 0 );
-        disconnect( m_presetsData, 0, m_customWindowLevelDialog, 0 );
-        disconnect( m_customWindowLevelDialog, 0, m_presetsData, 0 );
+        disconnect(m_presetsData, 0, this, 0);
+        disconnect(m_presetsData, 0, m_customWindowLevelDialog, 0);
+        disconnect(m_customWindowLevelDialog, 0, m_presetsData, 0);
     }
 }
 
-void QWindowLevelComboBox::setActiveWindowLevel( int value )
+void QWindowLevelComboBox::setActiveWindowLevel(int value)
 {
-    int customIndex = this->findText( tr("Custom") );
-    if( customIndex != value  )
+    int customIndex = this->findText(tr("Custom"));
+    if(customIndex != value )
     {
-        m_presetsData->activatePreset( this->itemText( value ) );
+        m_presetsData->activatePreset(this->itemText(value));
     }
     else
     {

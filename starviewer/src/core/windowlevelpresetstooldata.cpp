@@ -15,18 +15,18 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
 {
     // Per defecte afegirem els window levels predeterminats estàndar.
     // TODO Més endavant aquests valors podrien estar continguts en algun determinat fitxer amb un format definit
-    addPreset( tr("CT Head"), 80, 40, StandardPresets );
-    addPreset( tr("CT Bone"), 2000, 500, StandardPresets );
-    addPreset( tr("CT Lung"), 1500, -650, StandardPresets );
-    addPreset( tr("CT Soft Tissues"), 400, 40, StandardPresets );
-    addPreset( tr("CT Soft Tissues+Contrast"), 400, 70, StandardPresets );
-    addPreset( tr("CT Liver+Contrast"), 300, 60, StandardPresets ); // 60-100
-    addPreset( tr("CT Liver"), 200, 40, StandardPresets );
-    addPreset( tr("CT Neck+Contrast"), 300, 50, StandardPresets );
-    addPreset( tr("Angiography"), 500, 100, StandardPresets ); // 100-200
-    addPreset( tr("Osteoporosis"), 1000, 300, StandardPresets ); //100-1500:window!
-    addPreset( tr("Emphysema"), 800, -800, StandardPresets );
-    addPreset( tr("Petrous Bone"), 4000, 700, StandardPresets );
+    addPreset(tr("CT Head"), 80, 40, StandardPresets);
+    addPreset(tr("CT Bone"), 2000, 500, StandardPresets);
+    addPreset(tr("CT Lung"), 1500, -650, StandardPresets);
+    addPreset(tr("CT Soft Tissues"), 400, 40, StandardPresets);
+    addPreset(tr("CT Soft Tissues+Contrast"), 400, 70, StandardPresets);
+    addPreset(tr("CT Liver+Contrast"), 300, 60, StandardPresets); // 60-100
+    addPreset(tr("CT Liver"), 200, 40, StandardPresets);
+    addPreset(tr("CT Neck+Contrast"), 300, 50, StandardPresets);
+    addPreset(tr("Angiography"), 500, 100, StandardPresets); // 100-200
+    addPreset(tr("Osteoporosis"), 1000, 300, StandardPresets); //100-1500:window!
+    addPreset(tr("Emphysema"), 800, -800, StandardPresets);
+    addPreset(tr("Petrous Bone"), 4000, 700, StandardPresets);
     // TODO ara caldria afegir els presets que tinguem guardats en QSettins, o altres tipus d'arxius tipus XML o ".ini"
 }
 
@@ -34,45 +34,45 @@ WindowLevelPresetsToolData::~WindowLevelPresetsToolData()
 {
 }
 
-void WindowLevelPresetsToolData::addPreset( const QString &description, double window, double level, int group )
+void WindowLevelPresetsToolData::addPreset(const QString &description, double window, double level, int group)
 {
-    if( !m_presets.contains(description) )
+    if(!m_presets.contains(description))
     {
         WindowLevelStruct data = { window, level, group };
-        m_presets.insert( description, data );
-        emit presetAdded( description );
+        m_presets.insert(description, data);
+        emit presetAdded(description);
     }
 }
 
-void WindowLevelPresetsToolData::removePreset( const QString &description )
+void WindowLevelPresetsToolData::removePreset(const QString &description)
 {
-    if( m_presets.contains(description) )
+    if(m_presets.contains(description))
     {
-        m_presets.remove( description );
-        emit presetRemoved( description );
+        m_presets.remove(description);
+        emit presetRemoved(description);
     }
 }
 
-void WindowLevelPresetsToolData::removePresetsFromGroup( int group )
+void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
 {
-    QMutableMapIterator<QString, WindowLevelStruct> iterator( m_presets );
-    while( iterator.hasNext() )
+    QMutableMapIterator<QString, WindowLevelStruct> iterator(m_presets);
+    while(iterator.hasNext())
     {
         iterator.next();
-        if( iterator.value().m_group == group )
+        if(iterator.value().m_group == group)
         {
-            emit presetRemoved( iterator.key() );
+            emit presetRemoved(iterator.key());
             iterator.remove();
         }
     }
 }
 
-bool WindowLevelPresetsToolData::getWindowLevelFromDescription( const QString &description, double &window, double &level )
+bool WindowLevelPresetsToolData::getWindowLevelFromDescription(const QString &description, double &window, double &level)
 {
     bool ok = true;
-    if( m_presets.contains(description) )
+    if(m_presets.contains(description))
     {
-        WindowLevelStruct data = m_presets.value( description );
+        WindowLevelStruct data = m_presets.value(description);
         window = data.m_window;
         level = data.m_level;
     }
@@ -85,12 +85,12 @@ bool WindowLevelPresetsToolData::getWindowLevelFromDescription( const QString &d
     return ok;
 }
 
-bool WindowLevelPresetsToolData::getGroup( const QString &description, int &group )
+bool WindowLevelPresetsToolData::getGroup(const QString &description, int &group)
 {
     bool ok = true;
-    if( m_presets.contains(description) )
+    if(m_presets.contains(description))
     {
-        WindowLevelStruct data = m_presets.value( description );
+        WindowLevelStruct data = m_presets.value(description);
         group = data.m_group;
     }
     else
@@ -101,14 +101,14 @@ bool WindowLevelPresetsToolData::getGroup( const QString &description, int &grou
     return ok;
 }
 
-QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup( int group )
+QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup(int group)
 {
     QStringList descriptionList;
-    QMapIterator< QString, WindowLevelStruct > iterator( m_presets );
-    while( iterator.hasNext() )
+    QMapIterator< QString, WindowLevelStruct > iterator(m_presets);
+    while(iterator.hasNext())
     {
         iterator.next();
-        if( iterator.value().m_group == group )
+        if(iterator.value().m_group == group)
         {
             descriptionList << iterator.key();
         }
@@ -121,21 +121,21 @@ QString WindowLevelPresetsToolData::getCurrentPreset() const
     return m_currentPreset;
 }
 
-void WindowLevelPresetsToolData::setCustomWindowLevel( double window, double level )
+void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)
 {
     WindowLevelStruct data = { window, level, StandardPresets };
-    m_presets.insert( tr("Custom"), data );
-    emit currentWindowLevel( window, level );
-    emit presetChanged( tr("Custom") );
+    m_presets.insert(tr("Custom"), data);
+    emit currentWindowLevel(window, level);
+    emit presetChanged(tr("Custom"));
     m_currentPreset = tr("Custom");
 }
 
 void WindowLevelPresetsToolData::activatePreset(const QString &preset)
 {
     double window, level;
-    if( this->getWindowLevelFromDescription( preset, window, level ) )
+    if(this->getWindowLevelFromDescription(preset, window, level))
     {
-        emit currentWindowLevel( window, level );
+        emit currentWindowLevel(window, level);
         emit presetChanged(preset);
         m_currentPreset = preset;
     }

@@ -18,7 +18,7 @@ class WindowLevelPresetsToolData;
 /**
 Combo box personalitzat per a escollir valors de window level predeterminats i personalitzats
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class QWindowLevelComboBox : public QComboBox
 {
@@ -32,7 +32,7 @@ public:
      * Li assignem la font de dades a partir de la qual obté els valors de window level
      * @param windowLevelData Les dades en sí
      */
-    void setPresetsData( WindowLevelPresetsToolData *windowLevelData );
+    void setPresetsData(WindowLevelPresetsToolData *windowLevelData);
 
     /// Neteja el contingut del combo box i elimina qualsevol referència a un WindowLevelPresetsToolData
     void clearPresets();
@@ -42,7 +42,7 @@ public slots:
      * Selecciona el preset indicat en el combo, però no l'activa
      * @param preset Descripció del preset
      */
-    void selectPreset( const QString &preset );
+    void selectPreset(const QString &preset);
 
 private slots:
     /**
@@ -53,7 +53,7 @@ private slots:
     void removePreset(const QString &preset);
 
     /// Seleccionem el window level que volem aplicar com a actiu
-    void setActiveWindowLevel( int value );
+    void setActiveWindowLevel(int value);
 
 private:
     /// Diàleg per escollir un window level personalitzat
