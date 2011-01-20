@@ -123,7 +123,10 @@ QString WindowLevelPresetsToolData::getCurrentPreset() const
 
 void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)
 {
-    WindowLevelStruct data = { window, level, StandardPresets };
+    //WindowLevelStruct data = { window, level, StandardPresets };
+    // Quan inserim el Custom, no l'hem de poder recuperar amb el mètode getDescriptionsFromGroup
+    // junt amb altres grups, per tant li assignem el grup -1
+    WindowLevelStruct data = { window, level, -1 };
     m_presets.insert(tr("Custom"), data);
     emit currentWindowLevel(window, level);
     emit presetChanged(tr("Custom"));
