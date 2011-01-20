@@ -54,7 +54,13 @@
                 <li>S'afegeix la guia ràpida i l'esquema de shortcuts al menú Ajuda. <span class="ticket">1372</span></li>
                 <li>S'afegeixen nous hanging protocols per mamografia, DX,... <span class="ticket"></span></li>
                 <li>S'implementa el filtratge per modalitat a les cerques d'estudis locals. <span class="ticket">1354</span></li>
-				<li>S'afegeix opció per poder anonimitzar estudis al crear un DICOMDIR, anonimitzant la informació sensible del pacient.<span class="ticket">188</span></li>
+                <li>S'afegeix opció per poder anonimitzar estudis al crear un DICOMDIR, anonimitzant la informació sensible del pacient.<span class="ticket">188</span></li>
+                <li>S'informa de les novetats que incorpora una versió d'Starviewer la primera vegada que s'executa després d'haver-se instal·lat.</li>
+                <li>Es dóna l'opció de ser informat quan es publica una nova versió d'Starviewer. <span class="ticket"></span></li>
+                <li>S'afegeix l'eina de càlcul de l'àrea d'una regió elíptica. <span class="ticket">930</span></li>
+                <li>Es canvia l'eina d'estudis previs a estudis relacionats perquè es puguin consultar tots els estudis del pacient. <span class="ticket">1296, 1311</span></li>
+                <li>S'afegeix la possibilitat de maximitzar les finestres d'Starviewer a múltiples pantalles a través del menú Finestra o amb la combinació de tecles Ctrl+Shift+M. <span class="ticket">1364</span></li>
+                <li>S'afegeix la possibilitat de canviar de pantalla les finestres d'Starviewer a través del menú Finestra o amb la combinació de tecles Ctrl+Shift+&rarr;. <span class="ticket">1364</span></li>
             </ul>
         </div>
         <div class="improved">
@@ -65,15 +71,25 @@
                 <li>L'eina de VoxelInformation només mostra el valor de vòxel que és el que interessa i no el de les coordenades. <span class="ticket">1375</span></li>
                 <li>El calendari que apareix al poder indicar entre quines dates s'ha de cercar un estudi es fa que comenci la setmana en dilluns. <span class="ticket">1393</span></li>
                 <li>Es fusionen les columnes data i hora de la pantalla de cerca d'estudis i del llistat d'estudis previs per poder ordenar els estudis per data i hora. <span class="ticket">1355</span></li>
+                <li>S'afegeix una animació a la finestreta que informa de les peticions rebudes de SAP per millorar l'experiència d'usuari. <span class="ticket">1377</span></li>
+                <li>S'habilita l'ordenació per columna del llistat d'estudis de la finestra d'estudis relacionats. <span class="ticket">1297</span></li>
+                <li>Es mostra la pantalla inicial el més aviat possible per informar que Starviewer està arrencant.</li>
             </ul>
         </div>
         <div class="fixed">
             <ul>
                 <li>S'arregla l'ordre de les tabulacions de la cerca avançada al PACS que era incorrecte. <span class="ticket"></span></li>
                 <li>Es soluciona el problema que no permetia tenir estudis de diferents pacients amb el mateix DICOM Patient ID a la base de dades d'estudis. <span class="ticket">1325</span></li>
+                <li>S'arregla un problema que podia provocar que els pacients es barreguéssin si es treballava amb més d'una pantalla d'Starviewer alhora. <span class="ticket">1244</span></li>
+                <li>Es corregeix un problema que provocava una visualització incorrecta de certs estudis de modalitat RF. <span class="ticket">1257</span></li>
+                <li>No es generaven els thumbnails dels estudis que contenien imatges en color. <span class="ticket">1277</span>
             </ul>
         </div>
         <div class="removed">
+            <ul>
+                <li>S'elimina l'opció de visualitzar Starviewer a pantalla completa. <span class="ticket">1370</span></li>
+                <li>S'eliminen les distribucions per defecte del visor 2D deixant només els Hanging Protocols ja que creava confusió i no se'n feia ús. <span class="ticket">1342</span></li>
+            </ul>
         </div>
     </div>
 </body>
