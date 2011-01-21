@@ -36,14 +36,20 @@ DICOMTagReader::DICOMTagReader(const QString &filename) : m_dicomData(0), m_dico
 
 DICOMTagReader::~DICOMTagReader()
 {
+    deleteDataLastLoadedFile();
+}
+
+void DICOMTagReader::deleteDataLastLoadedFile()
+{
     if (m_dicomData)
     {
         delete m_dicomData;
+        m_dicomData = NULL;
     }
-
     if (m_dicomHeader)
     {
         delete m_dicomHeader;
+        m_dicomHeader = NULL;
     }
 }
 
@@ -58,16 +64,7 @@ bool DICOMTagReader::setFile(const QString &filename)
     {
         m_hasValidFile = true;
         // eliminem l'objecte anterior si n'hi hagués
-        if (m_dicomData)
-        {
-            delete m_dicomData;
-            m_dicomData = NULL;
-        }
-        if (m_dicomHeader)
-        {
-            delete m_dicomHeader;
-            m_dicomHeader = NULL;
-        }
+        deleteDataLastLoadedFile();
 
         m_dicomHeader = new DcmMetaInfo(*dicomFile.getMetaInfo());
         m_dicomData =  dicomFile.getAndRemoveDataset();
@@ -103,15 +100,8 @@ void DICOMTagReader::setDcmDataset(const QString &filename, DcmDataset *dcmDatas
     // Potser en aquests casos el filename hauria de ser sempre buit ja que així expressem
     // explícitament que llegim un element de memòria
     m_hasValidFile = true;
-    if (m_dicomData)
-    {
-        delete m_dicomData;
-    }
-    if (m_dicomHeader)
-    {
-        delete m_dicomHeader;
-        m_dicomHeader = NULL;
-    }
+
+    deleteDataLastLoadedFile();
 
     m_dicomData = dcmDataset;
 }
