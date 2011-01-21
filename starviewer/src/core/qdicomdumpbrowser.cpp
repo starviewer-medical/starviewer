@@ -209,7 +209,7 @@ void QDICOMDumpBrowser::initializeQTrees(const DICOMTagReader &dicomReader)
     m_tagsListQTree->clear();
     m_defaultTagsQTree->clear();
 
-    QList<DICOMAttribute*> dicomAttributesList = dicomReader.getDICOMAttributes(DICOMTagReader::ExcludeHeavyTags);
+    QList<DICOMAttribute*> dicomAttributesList = dicomReader.getDICOMHeader() + dicomReader.getDICOMDataSet(DICOMTagReader::ExcludeHeavyTags);
     foreach (DICOMAttribute *dicomAttribute, dicomAttributesList)
     {
         if (dicomAttribute->isValueAttribute())

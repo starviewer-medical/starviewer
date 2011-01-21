@@ -14,6 +14,8 @@
 class DcmDataset;
 class DcmSequenceOfItems;
 class DcmElement;
+class DcmMetaInfo;
+class DcmItem;
 
 namespace udg {
 
@@ -73,13 +75,19 @@ public:
     /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
     /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem, 
     /// com a segon paràmetre s'ha de passar l'enum amb valor ExcludeHeavyTags.
+    /// La classe que invoqui aquest mètode és responsable d'esborrar la seqüència que es retorna
     DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
 
     /// Retorna una llista de DICOMAttribute que inclou tots els Tags d'un DcmDataset (Es dóna per suposat que el dataset serà vàlid)
     /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
     /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem, 
     /// com a segon paràmetre s'ha de passar l'enum amb valor ExcludeHeavyTags.
-    QList<DICOMAttribute*> getDICOMAttributes(DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
+    /// La classe que invoqui aquest mètode és responsable d'esborrar la llista de DICOMAttribute
+    QList<DICOMAttribute*> getDICOMDataSet(DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
+
+    /// Retorna una llista de DICOMAttribute que inclou tots els Tags del DICOMHeader
+    /// La classe que invoqui aquest mètode és responsable d'esborrar la llista de DICOMAttribute
+    QList<DICOMAttribute*> getDICOMHeader() const;
 
 private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
@@ -88,12 +96,16 @@ private:
     ///Converteix un element de de DCMTK a un DICOMValueAttribute propi. Si no s'ha pogut convertir l'element es retorna valor NULL 
     DICOMValueAttribute* convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
+    ///Converteix un objecte DcmItem de dcmtk a una llista de DICOMAttribute
+    QList<DICOMAttribute*> convertToDICOMAttributeQList(DcmItem *dcmItem, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
+
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació
     QString m_filename;
 
     /// Objecte dcmtk a través del qual obtenim la informació DICOM
     DcmDataset *m_dicomData;
+    DcmMetaInfo *m_dicomHeader;
 
     /// Ens indica si l'arxiu actual és vàlid
     bool m_hasValidFile;
