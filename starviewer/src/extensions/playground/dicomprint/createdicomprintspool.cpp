@@ -282,8 +282,8 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
       El valor d'aquests tags són hard coded obtinguts del mètode saveHardcopyGrayscaleImage de dviface.cxx*/
     transformedImageDatasetToPrint->putAndInsertString(DCM_PhotometricInterpretation, "MONOCHROME2");
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_SamplesPerPixel, 1);
-    transformedImageDatasetToPrint->putAndInsertUint16(DCM_Rows, OFstatic_cast(Uint16, bitmapWidth));
-    transformedImageDatasetToPrint->putAndInsertUint16(DCM_Columns, OFstatic_cast(Uint16, bitmapHeight));
+    transformedImageDatasetToPrint->putAndInsertUint16(DCM_Rows, OFstatic_cast(Uint16, bitmapHeight));
+    transformedImageDatasetToPrint->putAndInsertUint16(DCM_Columns, OFstatic_cast(Uint16, bitmapWidth));
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_BitsAllocated, 16);
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_BitsStored, 12);
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_HighBit, 11);
