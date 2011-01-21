@@ -16,19 +16,20 @@
 // dcmtk
 #include <dcfilefo.h>
 #include <dcdeftag.h>
+#include <dcmetinf.h>
 
 namespace udg {
 
-DICOMTagReader::DICOMTagReader() : m_dicomData(0), m_hasValidFile(false)
+DICOMTagReader::DICOMTagReader() : m_dicomData(0), m_dicomHeader(0), m_hasValidFile(false)
 {
 }
 
-DICOMTagReader::DICOMTagReader(const QString &filename, DcmDataset *dcmDataset) : m_dicomData(0), m_hasValidFile(false)
+DICOMTagReader::DICOMTagReader(const QString &filename, DcmDataset *dcmDataset) : m_dicomData(0), m_dicomHeader(0), m_hasValidFile(false)
 {
     this->setDcmDataset(filename, dcmDataset);
 }
 
-DICOMTagReader::DICOMTagReader(const QString &filename) : m_dicomData(0), m_hasValidFile(false)
+DICOMTagReader::DICOMTagReader(const QString &filename) : m_dicomData(0), m_dicomHeader(0), m_hasValidFile(false)
 {
     this->setFile(filename);
 }
@@ -38,6 +39,11 @@ DICOMTagReader::~DICOMTagReader()
     if (m_dicomData)
     {
         delete m_dicomData;
+    }
+
+    if (m_dicomHeader)
+    {
+        delete m_dicomHeader;
     }
 }
 
@@ -57,7 +63,13 @@ bool DICOMTagReader::setFile(const QString &filename)
             delete m_dicomData;
             m_dicomData = NULL;
         }
+        if (m_dicomHeader)
+        {
+            delete m_dicomHeader;
+            m_dicomHeader = NULL;
+        }
 
+        m_dicomHeader = new DcmMetaInfo(*dicomFile.getMetaInfo());
         m_dicomData =  dicomFile.getAndRemoveDataset();
     }
     else
@@ -94,6 +106,11 @@ void DICOMTagReader::setDcmDataset(const QString &filename, DcmDataset *dcmDatas
     if (m_dicomData)
     {
         delete m_dicomData;
+    }
+    if (m_dicomHeader)
+    {
+        delete m_dicomHeader;
+        m_dicomHeader = NULL;
     }
 
     m_dicomData = dcmDataset;
@@ -242,14 +259,14 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
     return dicomValueAttribute;
 }
 
-QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes(DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
+QList<DICOMAttribute*> DICOMTagReader::convertToDICOMAttributeQList(DcmItem *dcmItem, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
     QList<DICOMAttribute*> attributeList;
     DcmElement *currentElement = NULL;
 
-    for (unsigned int i = 0; i < m_dicomData->card(); i++)
+    for (unsigned int i = 0; i < dcmItem->card(); i++)
     {
-        currentElement = OFstatic_cast(DcmElement*, m_dicomData->nextInContainer(currentElement));
+        currentElement = OFstatic_cast(DcmElement*, dcmItem->nextInContainer(currentElement));
 
         // Es tracta d'una seqüència
         if (!currentElement->isLeaf())
@@ -267,8 +284,24 @@ QList<DICOMAttribute*> DICOMTagReader::getDICOMAttributes(DICOMTagReader::Return
             }
         }
     }
+
     return attributeList;
 }
-
+QList<DICOMAttribute*> DICOMTagReader::getDICOMDataSet(DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
+{
+    return convertToDICOMAttributeQList(m_dicomData, returnValueOfTags);
 }
 
+QList<DICOMAttribute*> DICOMTagReader::getDICOMHeader() const
+{
+    if (m_dicomHeader)
+    {
+        return convertToDICOMAttributeQList(m_dicomHeader, DICOMTagReader::AllTags);
+    }
+    else
+    {
+        return QList<DICOMAttribute*>();
+    }
+}
+
+}
