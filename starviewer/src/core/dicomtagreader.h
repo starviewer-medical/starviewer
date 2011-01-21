@@ -99,6 +99,9 @@ private:
     ///Converteix un objecte DcmItem de dcmtk a una llista de DICOMAttribute
     QList<DICOMAttribute*> convertToDICOMAttributeQList(DcmItem *dcmItem, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
+    ///Esborra les dades de la últim fitxer carregat. Si no teníem cap fitxer carregat no fa res.
+    void deleteDataLastLoadedFile();
+
 private:
     /// Path absolut on es troba l'arxiu del qual extraiem la informació
     QString m_filename;
