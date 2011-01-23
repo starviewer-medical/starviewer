@@ -25,7 +25,7 @@ QWindowLevelComboBox::~QWindowLevelComboBox()
 
 void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLevelData)
 {
-    if(m_presetsData)
+    if (m_presetsData)
     {
         // desconectem tot el que teníem connectat aquí
         disconnect(m_presetsData, 0, this, 0);
@@ -47,7 +47,7 @@ void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLeve
 
 void QWindowLevelComboBox::clearPresets()
 {
-    if(m_presetsData)
+    if (m_presetsData)
     {
         // desconectem tot el que teníem connectat aquí
         disconnect(m_presetsData, 0, this, 0);
@@ -61,7 +61,7 @@ void QWindowLevelComboBox::clearPresets()
 void QWindowLevelComboBox::addPreset(const QString &preset)
 {
     int group;
-    if(m_presetsData->getGroup(preset, group))
+    if (m_presetsData->getGroup(preset, group))
     {
         int index;
         switch(group)
@@ -99,7 +99,7 @@ void QWindowLevelComboBox::addPreset(const QString &preset)
 void QWindowLevelComboBox::removePreset(const QString &preset)
 {
     int index = this->findText(preset);
-    if(index > -1)
+    if (index > -1)
     {
         this->removeItem(index);
     }
@@ -108,7 +108,7 @@ void QWindowLevelComboBox::removePreset(const QString &preset)
 void QWindowLevelComboBox::selectPreset(const QString &preset)
 {
     int index = this->findText(preset);
-    if(index > -1)
+    if (index > -1)
     {
         this->setCurrentIndex(index);
     }
@@ -120,7 +120,7 @@ void QWindowLevelComboBox::selectPreset(const QString &preset)
 
 void QWindowLevelComboBox::populateFromPresetsData()
 {
-    if(!m_presetsData)
+    if (!m_presetsData)
     {
         return;
     }
@@ -136,7 +136,7 @@ void QWindowLevelComboBox::populateFromPresetsData()
 void QWindowLevelComboBox::setActiveWindowLevel(int value)
 {
     int customIndex = this->findText(tr("Custom"));
-    if(customIndex != value)
+    if (customIndex != value)
     {
         m_presetsData->activatePreset(this->itemText(value));
     }

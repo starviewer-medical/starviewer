@@ -36,7 +36,7 @@ WindowLevelPresetsToolData::~WindowLevelPresetsToolData()
 
 void WindowLevelPresetsToolData::addPreset(const QString &description, double window, double level, int group)
 {
-    if(!m_presets.contains(description))
+    if (!m_presets.contains(description))
     {
         WindowLevelStruct data = { window, level, group };
         m_presets.insert(description, data);
@@ -46,7 +46,7 @@ void WindowLevelPresetsToolData::addPreset(const QString &description, double wi
 
 void WindowLevelPresetsToolData::removePreset(const QString &description)
 {
-    if(m_presets.contains(description))
+    if (m_presets.contains(description))
     {
         m_presets.remove(description);
         emit presetRemoved(description);
@@ -59,7 +59,7 @@ void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
     while(iterator.hasNext())
     {
         iterator.next();
-        if(iterator.value().m_group == group)
+        if (iterator.value().m_group == group)
         {
             emit presetRemoved(iterator.key());
             iterator.remove();
@@ -70,7 +70,7 @@ void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
 bool WindowLevelPresetsToolData::getWindowLevelFromDescription(const QString &description, double &window, double &level)
 {
     bool ok = true;
-    if(m_presets.contains(description))
+    if (m_presets.contains(description))
     {
         WindowLevelStruct data = m_presets.value(description);
         window = data.m_window;
@@ -88,7 +88,7 @@ bool WindowLevelPresetsToolData::getWindowLevelFromDescription(const QString &de
 bool WindowLevelPresetsToolData::getGroup(const QString &description, int &group)
 {
     bool ok = true;
-    if(m_presets.contains(description))
+    if (m_presets.contains(description))
     {
         WindowLevelStruct data = m_presets.value(description);
         group = data.m_group;
@@ -108,7 +108,7 @@ QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup(int group)
     while(iterator.hasNext())
     {
         iterator.next();
-        if(iterator.value().m_group == group)
+        if (iterator.value().m_group == group)
         {
             descriptionList << iterator.key();
         }
@@ -136,7 +136,7 @@ void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double leve
 void WindowLevelPresetsToolData::activatePreset(const QString &preset)
 {
     double window, level;
-    if(this->getWindowLevelFromDescription(preset, window, level))
+    if (this->getWindowLevelFromDescription(preset, window, level))
     {
         emit currentWindowLevel(window, level);
         emit presetChanged(preset);
