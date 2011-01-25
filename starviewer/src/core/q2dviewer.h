@@ -352,10 +352,8 @@ private:
     /// Actualitza les característiques dels actors dels viewports
     void updateDisplayExtent();
 
-    /// Aplica el pipeline d'escala de grisos segons la modality, voi i presentation lut's que s'hagin calculat.
-    /// Això permet que el càlcul s'hagi fet en un presentation state, per exemple.
-    /// TODO És públic únicament perquè el fa servir el presentation state attacher. Podria ser protected o private.
-    void applyGrayscalePipeline();
+    /// Construeix el pipeline pel tractament de window/level de la imatge
+    void buildWindowLevelPipeline();
 
     /// Re-inicia la càmera en la vista actual. Posa els paràmetres de rotació, zoom, desplaçament, flip, etc. als seus valors inicials
     void resetCamera();
