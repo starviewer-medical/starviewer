@@ -639,10 +639,17 @@ void QViewer::updateWindowLevelData()
     int index = m_mainVolume->getNumberOfSlicesPerPhase() / 2;
 
     int windowLevelCount = 0;
+    signed short windowWidthSign = 1;
     Image *image = m_mainVolume->getImage(index);
     if (image)
     {
         windowLevelCount = image->getNumberOfWindowLevels();
+        // Si la imatge és de tipus MONOCHROME1, llavors invertim els valors de window/level
+        // perquè la imatge resultant sigui l'adequada
+        if (image->getPhotometricInterpretation() == "MONOCHROME1")
+        {
+            windowWidthSign = -1;
+        }
     }
     else
     {
@@ -659,7 +666,7 @@ void QViewer::updateWindowLevelData()
             {
                 description = tr("Default %1").arg(i);
             }
-            m_windowLevelData->addPreset(description, windowLevel.first, windowLevel.second, WindowLevelPresetsToolData::FileDefined);
+            m_windowLevelData->addPreset(description, windowLevel.first * windowWidthSign, windowLevel.second, WindowLevelPresetsToolData::FileDefined);
 
             if (i == 0)
             {
@@ -672,7 +679,7 @@ void QViewer::updateWindowLevelData()
     double automaticWindowWidth;
     double automaticWindowLevel;
     computeAutomaticWindowLevel(automaticWindowWidth, automaticWindowLevel);
-    m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth, automaticWindowLevel, WindowLevelPresetsToolData::FileDefined);
+    m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth * windowWidthSign, automaticWindowLevel, WindowLevelPresetsToolData::FileDefined);
     // Si no hi ha window levels definits per defecte activarem l'automàtic
     if (windowLevelCount <= 0)
     {
