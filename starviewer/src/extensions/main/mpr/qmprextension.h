@@ -8,23 +8,21 @@
 #define UDGQMPRVIEWER_H
 
 #include "ui_qmprextensionbase.h"
-#include <QString>
 
 // FWD declarations
-class vtkAxisActor2D;
-class vtkPlaneSource;
-class vtkImageReslice;
-class vtkTransform;
-class vtkActor2D;
 class QAction;
 class QStringList;
+class vtkAxisActor2D;
+class vtkImageReslice;
+class vtkPlaneSource;
+class vtkTransform;
 
 namespace udg {
 
 // FWD declarations
-class Volume;
-class Q3DViewer;
 class ToolManager;
+class Q3DViewer;
+class Volume;
 
 /**
     Extensió encarregada de fer l'MPR 2D

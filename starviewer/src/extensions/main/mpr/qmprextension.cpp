@@ -5,36 +5,31 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qmprextension.h"
-#include "volume.h"
-#include "series.h"
-#include "q2dviewer.h"
-#include "mathtools.h" // Per càlculs d'interseccions
-#include "q3dviewer.h"
-#include "qcustomwindowleveldialog.h"
-#include "logging.h"
-#include "toolmanager.h"
-#include "windowlevelpresetstooldata.h"
+
 #include "drawer.h"
+#include "logging.h"
+#include "mathtools.h"  // Per càlculs d'interseccions
 #include "mprsettings.h"
-#include "screenshottool.h" 
+#include "patientbrowsermenu.h"
+#include "q3dviewer.h"
 #include "qexportertool.h"
-#include "patientbrowsermenu.h" 
+#include "screenshottool.h"
+#include "toolmanager.h"
 #include "toolproxy.h"
+#include "volume.h"
+#include "windowlevelpresetstooldata.h"
 // Qt
-#include <QSlider> // Pel control m_axialSlider
-#include <QSplitter>
 #include <QMessageBox>
-// vtk
-#include <vtkRenderer.h>
+// VTK
 #include <vtkAxisActor2D.h>
-#include <vtkProperty2D.h>
-#include <vtkPlaneSource.h>
-#include <vtkRenderWindowInteractor.h>
+#include <vtkCommand.h> // Pels events
+#include <vtkImageChangeInformation.h>  // Per portar a l'origen
 #include <vtkImageReslice.h>
+#include <vtkPlaneSource.h>
+#include <vtkProperty2D.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderer.h>
 #include <vtkTransform.h>
-#include <vtkImageChangeInformation.h> // Per portar a l'origen
-// Pels events
-#include <vtkCommand.h>
 
 namespace udg {
 
