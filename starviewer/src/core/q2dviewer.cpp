@@ -645,7 +645,7 @@ void Q2DViewer::setInput(Volume *volume)
     }
     // Obtenim valors de gris i aquestes coses
     // Aquí es crea tot el pipeline del visualitzador
-    this->applyGrayscalePipeline();
+    this->buildWindowLevelPipeline();
 
     // Preparem el thickSlab
     // TODO Cada cop que fem setInput resetejem els valors per defecte?
@@ -1729,7 +1729,7 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
     enableAnnotation(annotation, false);
 }
 
-void Q2DViewer::applyGrayscalePipeline()
+void Q2DViewer::buildWindowLevelPipeline()
 {
     double range[2];
     m_mainVolume->getScalarRange(range);
@@ -1778,7 +1778,7 @@ void Q2DViewer::setSlabThickness(int thickness)
         DEBUG_LOG("Desactivem thick Slab i resetejem pipeline normal");
         m_thickSlabActive = false;
         // Resetejem el pipeline
-        applyGrayscalePipeline();
+        buildWindowLevelPipeline();
         updateDisplayExtent();
         updateSliceAnnotationInformation();
         this->render();
@@ -1788,7 +1788,7 @@ void Q2DViewer::setSlabThickness(int thickness)
         DEBUG_LOG("Activem thick Slab i resetejem pipeline amb thickSlab");
         m_thickSlabActive = true;
         // Resetejem el pipeline
-        applyGrayscalePipeline();
+        buildWindowLevelPipeline();
     }
 
     m_lastSlabSlice = m_currentSlice + m_slabThickness - 1;
@@ -1986,7 +1986,7 @@ void Q2DViewer::restore()
     // ja que altrament es renderitza múltiples vegades i provoca efectes indesitjats com el flickering
     enableRendering(false);
 
-    this->applyGrayscalePipeline();
+    this->buildWindowLevelPipeline();
     this->resetView(m_lastView);
     this->resetWindowLevelToDefault();
     this->updateWindowLevelData();
