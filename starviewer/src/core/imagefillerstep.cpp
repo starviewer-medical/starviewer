@@ -768,6 +768,13 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 ERROR_LOG("No s'ha trobat el tag Window Width en un arxiu que se suposa que l'ha de tenir!");
             }
 
+            // Per evitar que hi hagi problemes si les llistes no tenen la mateixa llargada tenim en compte la més curta
+            int maxNumberOfElements = windowWidthList.size() < windowLevelList.size()? windowWidthList.size(): windowLevelList.size();
+            for (int i = 0; i < maxNumberOfElements; i++)
+            {
+                image->addWindowLevel(windowWidthList.at(i).toDouble(), windowLevelList.at(i).toDouble());
+            }
+
             //
             // Obtenim Window Explanations (3)
             //
