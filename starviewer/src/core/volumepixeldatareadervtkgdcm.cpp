@@ -29,6 +29,8 @@ VolumePixelDataReaderVTKGDCM::VolumePixelDataReaderVTKGDCM(QObject *parent)
 
 VolumePixelDataReaderVTKGDCM::~VolumePixelDataReaderVTKGDCM()
 {
+    m_vtkGDCMReader->Delete();
+    m_vtkQtConnections->Delete();
 }
 
 int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
