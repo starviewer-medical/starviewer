@@ -689,9 +689,18 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
             // Deshabilitem inicialment la sincronització i només l'activem si és necessari pel hanging protocol
             viewerWidget->enableSynchronization(false);
 
-            if (series->getVolumesList().size() > 1 && displaySet->getSlice() > -1)
+            if (series->getVolumesList().size() > 1 && (displaySet->getSlice() > -1 || displaySet->getImageSet()->getTypeOfItem() == "image"))
             {
-                Image * image = series->getImageByIndex(displaySet->getSlice());
+                Image *image;
+                if (displaySet->getSlice() > -1)
+                {
+                    image = series->getImageByIndex(displaySet->getSlice());
+                }
+                else if (displaySet->getImageSet()->getTypeOfItem() == "image")
+                {
+                    image = series->getImageByIndex(displaySet->getImageSet()->getImageToDisplay());
+                }
+                
                 Volume *volume = series->getVolumeOfImage(image);
                 
                 if (!volume)//No exiteix cap imatge al tall corresponent, agafem el volum per defecte
@@ -712,10 +721,6 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
             }
 
             qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-            if (displaySet->getImageSet()->getTypeOfItem() == "image")
-            {
-                viewerWidget->getViewer()->setSlice(displaySet->getImageSet()->getImageToDisplay());
-            }
             applyDisplayTransformations(viewerWidget, displaySet);
 
             if (!displaySet->getToolActivation().isEmpty()) // Tenim tools activades per defecte des del hanging protocol
