@@ -234,7 +234,11 @@ HEADERS += extensionfactory.h \
     dicomdumpdefaulttagsloader.h \
     dicomdumpdefaulttagsreader.h \
     dicomdumpdefaulttagsrepository.h \
-    dicomdumpdefaulttagsrestriction.h 
+    dicomdumpdefaulttagsrestriction.h \
+    customwindowlevel.h \
+    customwindowlevelsloader.h \
+    customwindowlevelsreader.h \
+    customwindowlevelsrepository.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -427,7 +431,11 @@ SOURCES += extensionmediator.cpp \
     dicomdumpdefaulttagsloader.cpp \
     dicomdumpdefaulttagsreader.cpp \
     dicomdumpdefaulttagsrepository.cpp \
-    dicomdumpdefaulttagsrestriction.cpp
+    dicomdumpdefaulttagsrestriction.cpp \
+    customwindowlevel.cpp \
+    customwindowlevelsloader.cpp \
+    customwindowlevelsreader.cpp \
+    customwindowlevelsrepository.cpp
 
 TEMPLATE = lib
 DESTDIR = ./
