@@ -220,29 +220,24 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
 
 DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
-    DICOMValueAttribute *dicomValueAttribute = NULL;
+    DICOMValueAttribute *dicomValueAttribute = new DICOMValueAttribute();
+    dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
 
-    if (returnValueOfTags == DICOMTagReader::ExcludeHeavyTags &&  
-        (dcmtkDICOMElement->getTag() == DcmTag(DCM_PixelData) || dcmtkDICOMElement->getTag() == DcmTag(DCM_OverlayData)))
-    {
-        //Retornem el tag sense el seu valor, així estalviem memòria RAM.
-        dicomValueAttribute = new DICOMValueAttribute();
-        dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
-    }
-    else
+
+    if (returnValueOfTags != DICOMTagReader::ExcludeHeavyTags ||  
+        (dcmtkDICOMElement->getTag() != DcmTag(DCM_PixelData) && dcmtkDICOMElement->getTag() != DcmTag(DCM_OverlayData)))
     {
         OFString value;
         OFCondition status = dcmtkDICOMElement->getOFStringArray(value);
 
         if (status.good())
         {
-            dicomValueAttribute = new DICOMValueAttribute();
-            dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
             dicomValueAttribute->setValue(QString(value.c_str()));
         }
         else if (QString(status.text()) != "Tag Not Found")
         {
-            DEBUG_LOG(QString("S'ha produit el següent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkDICOMElement->getTag().toString().c_str() ).arg(status.text()));
+            dicomValueAttribute->setValue(QString("Unreadable tag value: %1").arg(status.text()));
+            INFO_LOG(QString("S'ha produit el seguent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkDICOMElement->getTag().toString().c_str() ).arg(status.text()));
         }
     }
 
