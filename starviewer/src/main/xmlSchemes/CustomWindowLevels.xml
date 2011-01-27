@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="CustomWindowLevels">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="CustomWindowLevel" type="customWindowLevelType" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:complexType name="customWindowLevelType">
+        <xsd:sequence>
+            <xsd:element name="window" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="level" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+</xsd:schema>
