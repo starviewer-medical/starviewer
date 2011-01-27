@@ -186,7 +186,6 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
 DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const
 {
     DICOMSequenceAttribute *sequenceAttribute = new DICOMSequenceAttribute();
-    DcmVR sequenceVR("SQ");
 
     sequenceAttribute->setTag(DICOMTag(dcmtkSequence->getGTag(),dcmtkSequence->getETag()));
 
@@ -198,7 +197,7 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
         {
             DcmElement *element = dcmtkItem->getElement(j);
             
-            if (sequenceVR.isEquivalent(element->getTag().getVR())) // És una Sequence of Items
+            if (!element->isLeaf()) // És una Sequence of Items
             {
                 dicomItem->addAttribute(convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*,element), returnValueOfTags));
             }
