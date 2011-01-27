@@ -25,10 +25,9 @@ namespace udg{
 //Diem a quin nivell fem les cerques d'estudis! Molt important hem de fer a nivell de root
 static const char * opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
 
-void QueryPacs::setConnection(PACSConnection pacsConnection)
+QueryPacs::QueryPacs(PacsDevice pacsDevice)
 {
-    m_assoc = pacsConnection.getConnection();
-    m_pacs = pacsConnection.getPacs();
+    m_pacsDevice = pacsDevice;
 }
 
 void QueryPacs::foundMatchCallback(
@@ -84,16 +83,16 @@ void QueryPacs::foundMatchCallback(
 
 Status QueryPacs::query()
 {
-    DIC_US msgId = m_assoc->nextMsgID++;
+    m_pacsConnection = new PACSConnection(m_pacsDevice);
     T_DIMSE_C_FindRQ req;
     T_DIMSE_C_FindRSP rsp;
     DcmDataset *statusDetail = NULL;
     Status state;
 
-    //If not connection has been setted, return error because we need a PACS connection
-    if ( m_assoc == NULL )
+    if (!m_pacsConnection->connectToPACS(PACSConnection::Query))
     {
-        return state.setStatus( DcmtkNoConnectionError );
+        ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer query. AETitle: " + m_pacsDevice.getAETitle());
+        return Status().setStatus(DcmtkCanNotConnectError);
     }
 
     //If not mask has been setted, return error, we need a search mask
@@ -103,7 +102,7 @@ Status QueryPacs::query()
     }
 
     /* figure out which of the accepted presentation contexts should be used */
-    m_presId = ASC_findAcceptedPresentationContextID( m_assoc , UID_FINDStudyRootQueryRetrieveInformationModel );
+    m_presId = ASC_findAcceptedPresentationContextID( m_pacsConnection->getConnection() , UID_FINDStudyRootQueryRetrieveInformationModel );
     if ( m_presId == 0 )
     {
         return state.setStatus( DIMSE_NOVALIDPRESENTATIONCONTEXTID );
@@ -111,17 +110,19 @@ Status QueryPacs::query()
 
     /* prepare the transmission of data */
     bzero( ( char* ) &req, sizeof( req ) );
-    req.MessageID = msgId;
+    req.MessageID = m_pacsConnection->getConnection()->nextMsgID;
     strcpy( req.AffectedSOPClassUID , opt_abstractSyntax );
     req.DataSetType = DIMSE_DATASET_PRESENT;
 
     /* finally conduct transmission of data */
-    OFCondition condition = DIMSE_findUser( m_assoc , m_presId , &req , m_mask , foundMatchCallback , this , DIMSE_NONBLOCKING , 
+    OFCondition condition = DIMSE_findUser( m_pacsConnection->getConnection(), m_presId , &req , m_mask , foundMatchCallback , this , DIMSE_NONBLOCKING , 
                                 Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &rsp , &statusDetail );
+
+    m_pacsConnection->disconnect();
 
     if (!condition.good())
     {
-        ERROR_LOG(QString("Error al fer una consulta al PACS %1, descripcio error: %2").arg(m_pacs.getAETitle(), condition.text()));
+        ERROR_LOG(QString("Error al fer una consulta al PACS %1, descripcio error: %2").arg(m_pacsDevice.getAETitle(), condition.text()));
     }
 
     /* dump status detail information if there is some */
@@ -153,17 +154,17 @@ void QueryPacs::cancelQuery()
 
 void QueryPacs::cancelQuery(T_DIMSE_C_FindRQ *request)
 {
-    INFO_LOG(QString("Demanem cancel·lar al PACS %1 l'actual query").arg(m_pacs.getAETitle()));
+    INFO_LOG(QString("Demanem cancel·lar al PACS %1 l'actual query").arg(m_pacsDevice.getAETitle()));
 
     //Tots els PACS està obligats pel DICOM Conformance a implementar la cancel·lació
-    OFCondition cond = DIMSE_sendCancelRequest(m_assoc, m_presId, request->MessageID);
+    OFCondition cond = DIMSE_sendCancelRequest(m_pacsConnection->getConnection(), m_presId, request->MessageID);
     if (cond.bad())
     {
         ERROR_LOG("S'ha produït el següent error al cancel·lar la query: " + QString(cond.text()));
-        INFO_LOG(QString("Aborto la connexió amb el PACS %1").arg(m_pacs.getAETitle()));
+        INFO_LOG(QString("Aborto la connexió amb el PACS %1").arg(m_pacsDevice.getAETitle()));
 
         //Si hi hagut un error demanant el cancel·lar, abortem l'associació, d'aquesta manera segur que cancel·lem la query
-        ASC_abortAssociation(m_assoc);
+        ASC_abortAssociation(m_pacsConnection->getConnection());
     }
 }
 
@@ -173,12 +174,12 @@ void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
     {
         Patient *patient = CreateInformationModelObject::createPatient(dicomTagReader);
         Study *study = CreateInformationModelObject::createStudy(dicomTagReader);
-        study->setInstitutionName(m_pacs.getInstitution());
+        study->setInstitutionName(m_pacsDevice.getInstitution());
 
         patient->addStudy(study);
 
         m_patientStudyList.append(patient);
-        m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacs.getID();//Afegim a la taula de QHash de quin pacs és l'estudi
+        m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacsDevice.getID();//Afegim a la taula de QHash de quin pacs és l'estudi
     }
 }
 

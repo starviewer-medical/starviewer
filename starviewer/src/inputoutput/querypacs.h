@@ -49,15 +49,14 @@ class QueryPacs
 
 public:
 
-    /** Estableix la connexió a utilitzar per comunicar-se amb el PACS
-      */
-    void setConnection(PACSConnection pacsConnection);
+    ///Constructor de la classe
+    QueryPacs(PacsDevice pacsDevice);
 
     /** màscara dicom a cercar
      * @param mask màscara
      * @return estat del mètode
      */
-    Status query( DicomMask mask);
+    Status query(DicomMask mask);
 
     /**Indiquem que la consulta actual s'ha de cancel·lar. 
       *La cancel·lació de la query no es fa immediatament quan s'invoca el mètode, aquest mètode actualitza un flag, que cada vegada
@@ -74,10 +73,10 @@ public:
 
 private:
 
-    T_ASC_Association *m_assoc; // request DICOM association;
     T_ASC_PresentationContextID m_presId;
     DcmDataset *m_mask;
-    PacsDevice m_pacs;
+    PacsDevice m_pacsDevice;
+    PACSConnection *m_pacsConnection;
 
     QList<Patient*> m_patientStudyList;
     QList<Series*> m_seriesList;

@@ -8,7 +8,6 @@
 
 #include <QString>
 
-#include "pacsconnection.h"
 #include "querypacs.h"
 #include "logging.h"
 #include "patient.h"
@@ -24,7 +23,7 @@ QueryPacsJob::QueryPacsJob(PacsDevice pacsDevice, DicomMask mask, QueryLevel que
  : PACSJob(pacsDevice)
 {
     //creem l'objecte fer la query
-    m_queryPacs = new QueryPacs();
+    m_queryPacs = new QueryPacs(pacsDevice);
     m_mask = mask;
     m_queryLevel = queryLevel;
 }
@@ -36,33 +35,22 @@ PACSJob::PACSJobType QueryPacsJob::getPACSJobType()
 
 void QueryPacsJob::run()
 {
-    PACSConnection pacsConnection(getPacsDevice());
     Settings settings;
 
     INFO_LOG("Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; AEPACS= " + 
         getPacsDevice().getAETitle() + "; PACS Adr= " + getPacsDevice().getAddress() + "; PACS Port= " + 
         QString().setNum(getPacsDevice().getQueryRetrieveServicePort()) + ";");
 
-    if (!pacsConnection.connectToPACS(PACSConnection::Query))
+    //busquem els estudis
+    m_queryStatus = m_queryPacs->query(m_mask);
+    if (! m_queryStatus.good() && !isAbortRequested())
     {
-        ERROR_LOG("S'ha produit un error al intentar connectar al PACS per fer query. AETitle: " + getPacsDevice().getAETitle());
-        m_queryStatus = Status().setStatus(DcmtkCanNotConnectError);
+        /*En el cas que hem abortat la query, i per abortar s'hagi abortat l'assocació, retorna el missatge DIMSE Failed to receive message, 
+        per això comprovem si hem abortat, perquè no donem aquest missatge com error ja que és normal*/
+        ERROR_LOG(QString("Error al fer query al PACS %1. PACS ERROR: %2").arg(getPacsDevice().getAETitle()).arg(m_queryStatus.text()));
     }
-    else
-    {
-        m_queryPacs->setConnection(pacsConnection);
-        //busquem els estudis
-        m_queryStatus = m_queryPacs->query(m_mask);
-        if (! m_queryStatus.good() && !isAbortRequested())
-        {
-            /*En el cas que hem abortat la query, i per abortar s'hagi abortat l'assocació, retorna el missatge DIMSE Failed to receive message, 
-            per això comprovem si hem abortat, perquè no donem aquest missatge com error ja que és normal*/
-            ERROR_LOG(QString("Error al fer query al PACS %1. PACS ERROR: %2").arg(getPacsDevice().getAETitle()).arg(m_queryStatus.text()));
-        }
 
-        pacsConnection.disconnect();
-        INFO_LOG (QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
-    }
+    INFO_LOG (QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
 
     //TODO:Cal?
     setFinished(true);
