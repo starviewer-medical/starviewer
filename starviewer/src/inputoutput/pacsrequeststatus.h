@@ -29,6 +29,9 @@ public:
     enum RetrieveRequestStatus {RetrieveOk, RetrieveDatabaseError, RetrieveCanNotConnectToPACS, RetrieveNoEnoughSpace, RetrieveErrorFreeingSpace, RetrievePatientInconsistent, 
         RetrieveDestinationAETileUnknown, RetrieveIncomingDICOMConnectionsPortInUse, RetrieveFailureOrRefused, RetrieveSomeDICOMFilesFailed, RetrieveCancelled, RetrieveUnknowStatus};
 
+    ///Errors que es poden produir al fer Queries al PACS
+    enum QueryRequestStatus { QueryOk, QueryCanNotConnectToPACS, QueryFailedOrRefused, QueryCancelled, QueryUnknowStatus };
+
 };
 
 }  //  end  namespace udg

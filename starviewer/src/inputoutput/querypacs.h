@@ -26,6 +26,7 @@
 
 #include "assoc.h"
 #include "pacsdevice.h"
+#include "pacsrequeststatus.h"
 /// This class helps to interactive with the pacs, allow us to find studies in the pacs setting a search mask. Very important for this class a connection and a mask search must be setted befoer query Studies
 
 class DcmDataset;
@@ -35,7 +36,6 @@ struct T_DIMSE_C_FindRSP;
 
 namespace udg{
 
-class Status;
 class DicomMask;
 class Patient;
 class Study;
@@ -56,7 +56,7 @@ public:
      * @param mask màscara
      * @return estat del mètode
      */
-    Status query(DicomMask mask);
+    PACSRequestStatus::QueryRequestStatus query(DicomMask mask);
 
     /**Indiquem que la consulta actual s'ha de cancel·lar. 
       *La cancel·lació de la query no es fa immediatament quan s'invoca el mètode, aquest mètode actualitza un flag, que cada vegada
@@ -91,7 +91,7 @@ private:
     bool m_cancelRequestSent;//indica si hem demanat la cancel·lació de la consulta actual
 
     //fa el query al pacs
-    Status query();
+    PACSRequestStatus::QueryRequestStatus query();
 
     /**Aquest és un mètode que és cridat en callback per les dcmtk, per cada objecte dicom que es trobi en el PACS que compleix la query dcmtk el crida. Aquest mètode ens insereix la llista d'estudis, sèries o imatges l'objecte dicom trobat en funció del nivell del que sigui l'objecte.
      */
@@ -112,6 +112,9 @@ private:
     void addSeries( DICOMTagReader *dicomTagReader );
     ///afegeix l'objecte dicom a la llista d'imatges si no hi existeix
     void addImage( DICOMTagReader *dicomTagReader );
+
+    ///Converteix la respota rebuda per partl del PACS a QueryRequestStatus i  en cas d'error processa la resposta i grava l'error al log
+    PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail);
 };
 };
 #endif

@@ -11,8 +11,8 @@
 #include <QHash>
 
 #include "dicommask.h"
-#include "status.h"
 #include "pacsjob.h"
+#include "pacsrequeststatus.h"
 
 class QString;
 
@@ -52,9 +52,6 @@ public:
     ///Indica a quin nivell es fa la consulta study, series, image
     QueryLevel getQueryLevel();
 
-    ///Retorna l'estat de la consulta
-    Status getStatus();
-
     ///Retorna la llista d'estudis trobats que compleixen el criteri de cerca
     QList<Patient*> getPatientStudyList();
 
@@ -67,10 +64,19 @@ public:
     ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
     QHash<QString,QString> getHashTablePacsIDOfStudyInstanceUID();
 
+    ///Retorna l'estat de la consulta
+    PACSRequestStatus::QueryRequestStatus getStatus();
+
+    ///Retorna una descripció de l'estat retornat per la consulta al PACS
+    QString getStatusDescription();
+
 private :
 
     ///Demana que es cancel·li la consulta del job
     void requestCancelJob();
+
+    ///Retorna el Query Level com a QString per poder generar els missatges d'error
+    QString getQueryLevelAsQString();
 
 private :
 
@@ -78,7 +84,7 @@ private :
     QueryPacs *m_queryPacs;
     QueryLevel m_queryLevel;
 
-    Status m_queryStatus;
+    PACSRequestStatus::QueryRequestStatus m_queryRequestStatus;
 };
 
 }  //end namespace UdG

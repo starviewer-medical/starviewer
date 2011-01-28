@@ -178,7 +178,7 @@ void QInputOutputPacsWidget::queryPACSJobFinished(PACSJob *pacsJob)
     }
     else
     {
-        if (!queryPACSJob->getStatus().good())
+        if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk)
         {
             showErrorQueringPACS(queryPACSJob);
         }
@@ -235,33 +235,16 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
 
 void QInputOutputPacsWidget::showErrorQueringPACS(QueryPacsJob *queryPACSJob)
 {
-    if (!queryPACSJob->getStatus().good())
+    if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
     {
-        QString errorMessage;
-
         switch(queryPACSJob->getQueryLevel())
         {
             case QueryPacsJob::study:
-                errorMessage = tr("%1 can't query to PACS %2 from %3.\nBe sure that your computer is connected on network and the PACS parameters are correct.")
-                    .arg(ApplicationNameString)
-                    .arg(queryPACSJob->getPacsDevice().getAETitle())
-                    .arg(queryPACSJob->getPacsDevice().getInstitution());
-
-                QMessageBox::critical(this, ApplicationNameString, errorMessage);
+                QMessageBox::critical(this, ApplicationNameString, queryPACSJob->getStatusDescription());
                 break;
             case QueryPacsJob::series:
-                errorMessage = tr("%1 can't query series from study %2 to PACS %3 from %4.\n")
-                    .arg(ApplicationNameString, queryPACSJob->getDicomMask().getStudyInstanceUID(), queryPACSJob->getPacsDevice().getAETitle(), queryPACSJob->getPacsDevice().getInstitution()) +
-                    tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
-
-                QMessageBox::warning(this, ApplicationNameString, errorMessage);
-                break;
             case QueryPacsJob::image:
-                errorMessage = tr("%1 can't query images from series %2 to PACS %3 from %4.\n")
-                    .arg(ApplicationNameString, queryPACSJob->getDicomMask().getSeriesInstanceUID(), queryPACSJob->getPacsDevice().getAETitle(), queryPACSJob->getPacsDevice().getInstitution()) +
-                    tr("Be sure that your computer is connected on network and the PACS parameters are correct.");
-
-                QMessageBox::warning(this, ApplicationNameString, errorMessage);
+                QMessageBox::warning(this, ApplicationNameString, queryPACSJob->getStatusDescription());
                 break;
         }
     }

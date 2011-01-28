@@ -167,13 +167,13 @@ void PreviousStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
     }
     else
     {
-        if (!queryPACSJob->getStatus().good())
-        {
-            errorQueringPACS(queryPACSJob);
-        }
-        else
+        if (queryPACSJob->getStatus() == PACSRequestStatus::QueryOk)
         {
             mergeFoundStudiesInQuery(queryPACSJob);
+        }
+        else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
+        {
+            errorQueringPACS(queryPACSJob);
         }
 
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
@@ -214,7 +214,7 @@ void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob
 
 void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
 {
-    if (!queryPACSJob->getStatus().good())
+    if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
     {
         /*Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
           dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes

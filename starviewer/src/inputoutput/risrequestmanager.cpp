@@ -134,14 +134,14 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
     }
     else
     {
-        if (!queryPACSJob->getStatus().good())
+        if (queryPACSJob->getStatus() == PACSRequestStatus::QueryOk)
+        {
+            retrieveFoundStudiesFromPACS(queryPACSJob);
+        }
+        else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
         {
             ERROR_LOG(QString("S'ha produit un error al cercar estudis al PACS %1 per la sol.licitud del RIS").arg(queryPACSJob->getPacsDevice().getAETitle()));
             errorQueryingStudy(queryPACSJob);
-        }
-        else
-        {
-            retrieveFoundStudiesFromPACS(queryPACSJob);
         }
 
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
