@@ -95,14 +95,22 @@ QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)
     
     if (isSuitableForThumbnailCreation(reader))
     {
-        // Carreguem el fitxer dicom a escalar
-        DicomImage *dicomImage = new DicomImage(reader->getDcmDataset(), reader->getDcmDataset()->getOriginalXfer());
-        thumbnail = createThumbnail(dicomImage,resolution);
-        
-        // Cal esborrar la DicomImage per no tenir fugues de memòria
-        if (dicomImage)
+        try
         {
-            delete dicomImage;
+            // Carreguem el fitxer dicom a escalar
+            DicomImage *dicomImage = new DicomImage(reader->getDcmDataset(), reader->getDcmDataset()->getOriginalXfer());
+            thumbnail = createThumbnail(dicomImage,resolution);
+
+            // Cal esborrar la DicomImage per no tenir fugues de memòria
+            if (dicomImage)
+            {
+                delete dicomImage;
+            }
+        }
+        catch (std::bad_alloc &e)
+        {
+            ERROR_LOG(QString("No s'ha pogut generar el thumbnail per falta de memòria: %1").arg(e.what()));
+            thumbnail = makeEmptyThumbnailWithCustomText(PreviewNotAvailableText);
         }
     }
     else
