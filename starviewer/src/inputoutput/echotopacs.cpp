@@ -22,7 +22,8 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
     if (pacsConnection.connectToPACS(PACSConnection::Echo))
     {
         DIC_US id = pacsConnection.getConnection()->nextMsgID++; // generate next message ID
-        DIC_US status; // DIMSE status of C-ECHO-RSP will be stored here
+        //Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status només pot ser 0x0000 si s'ha aconseguit connectar, sinó no hauria de tenir valor
+        DIC_US status; 
         DcmDataset *dcmDataset = NULL;
 
         OFCondition condition = DIMSE_echoUser(pacsConnection.getConnection(), id, DIMSE_BLOCKING, 0, &status, &dcmDataset);
