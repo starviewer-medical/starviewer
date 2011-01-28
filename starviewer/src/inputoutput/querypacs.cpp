@@ -1,6 +1,5 @@
 #include "querypacs.h"
 
-#include <assoc.h>
 #include <dimse.h>
 #include <dcdeftag.h> //provide the information for the tags
 #include <ofcond.h>
