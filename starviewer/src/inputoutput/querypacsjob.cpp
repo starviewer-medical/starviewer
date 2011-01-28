@@ -15,7 +15,7 @@
 #include "series.h"
 #include "image.h"
 #include "inputoutputsettings.h"
-#include "errordcmtk.h"
+#include "starviewerapplication.h"
 
 namespace udg {
 
@@ -42,13 +42,7 @@ void QueryPacsJob::run()
         QString().setNum(getPacsDevice().getQueryRetrieveServicePort()) + ";");
 
     //busquem els estudis
-    m_queryStatus = m_queryPacs->query(m_mask);
-    if (! m_queryStatus.good() && !isAbortRequested())
-    {
-        /*En el cas que hem abortat la query, i per abortar s'hagi abortat l'assocació, retorna el missatge DIMSE Failed to receive message, 
-        per això comprovem si hem abortat, perquè no donem aquest missatge com error ja que és normal*/
-        ERROR_LOG(QString("Error al fer query al PACS %1. PACS ERROR: %2").arg(getPacsDevice().getAETitle()).arg(m_queryStatus.text()));
-    }
+    m_queryRequestStatus = m_queryPacs->query(m_mask);
 
     INFO_LOG (QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
 
@@ -64,11 +58,6 @@ DicomMask QueryPacsJob::getDicomMask()
 QueryPacsJob::QueryLevel QueryPacsJob::getQueryLevel()
 {
     return m_queryLevel;
-}
-
-Status QueryPacsJob::getStatus()
-{
-    return m_queryStatus;
 }
 
 QList<Patient*> QueryPacsJob::getPatientStudyList()
@@ -106,4 +95,59 @@ void QueryPacsJob::requestCancelJob()
     m_queryPacs->cancelQuery();
 }
 
+PACSRequestStatus::QueryRequestStatus QueryPacsJob::getStatus()
+{
+    return m_queryRequestStatus;
+}
+
+/*TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors duplicat
+       ni traduccions, però és el millor lloc aquí posar aquest codi? */
+QString QueryPacsJob::getStatusDescription()
+{
+    QString message;
+    QString pacsAETitle = getPacsDevice().getAETitle();
+    QString institutionPACS = getPacsDevice().getInstitution();
+
+    switch (getStatus())
+    {
+        case PACSRequestStatus::QueryOk:
+            message = tr("Query %1 to PACS %2 has been succesfull.").arg(getQueryLevelAsQString(), pacsAETitle);
+            break;
+        case PACSRequestStatus::QueryCancelled:
+            message = tr("Query %1 to PACS %2 has been cancelled.").arg(getQueryLevelAsQString(), pacsAETitle);
+            break;
+        case PACSRequestStatus::QueryCanNotConnectToPACS :
+            message = tr("%1 can't connect to PACS %2 from %3 trying to query %4.\n").arg(ApplicationNameString, pacsAETitle, institutionPACS, getQueryLevelAsQString());
+            message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
+            message += tr("If the problem persists contact with an administrator.");
+            break;
+        case PACSRequestStatus::QueryFailedOrRefused:
+        case PACSRequestStatus::QueryUnknowStatus:
+            message = tr("%1 can't query %2 to PACS %3 from %4 because It doesn't respond as expected.\n\n").arg(ApplicationNameString, getQueryLevelAsQString(),
+                pacsAETitle, institutionPACS);
+            message += tr("If the problem persists contact with an administrator.");
+            break;
+        default:
+            message = tr("An unknown error has ocurred querying %1 to PACS %2 from %3.").arg(getQueryLevelAsQString(), pacsAETitle, institutionPACS);
+            message += tr("\nIf the problem persists contact with an administrator.");
+            break;
+    }
+
+    return message;
+}
+
+QString QueryPacsJob::getQueryLevelAsQString()
+{
+    switch (m_queryLevel)
+    {
+        case study:
+            return tr("studies");
+        case series:
+            return tr("series");
+        case image:
+            return tr("images");
+        default:
+            return tr("unkown query level");
+    }
+}
 }
