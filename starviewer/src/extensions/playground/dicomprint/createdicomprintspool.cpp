@@ -3,6 +3,7 @@
 #include <dviface.h>
 #include <dvpssp.h>      /* for class DVPSStoredPrint */
 #include <dvpshlp.h>
+#include <dvpsabl.h> 
 
 #include <QDir>
 #include <QDateTime>
@@ -54,6 +55,8 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
     if (ok)
     {
         setImageBoxAttributes();
+        createAnnotationBoxes();
+        
         return createStoredPrintDcmtkFile(spoolDirectoryPath);
     }
     else
@@ -375,42 +378,78 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
 	INFO_LOG("Afegits els atributs al ImageBox");
 }
 
+void CreateDicomPrintSpool::createAnnotationBoxes()
+{
+    m_annotationBoxes = new DVPSAnnotationContent_PList();
+
+    if (m_dicomPrintPage.getPageAnnotations().count() > 0)
+    {
+        foreach(int position, m_dicomPrintPage.getPageAnnotations().keys())
+        {
+            //Es genera un UID inventat per cada AnnotationBox, quan des de la classe PrintDICOMSpoool creem un FilmBox a la impressora aquesta 
+            //com a resposta ens retorna els UID's amb el qual hem d'enviar cada un dels Annotation Box. Això ho fa transparentment DVPSStoredPrint 
+            //al invocar el mètode printSCUcreateBasicFilmSession i assignar a cada AnnotationBox un UID vàlid. Si s'envien AnnotationBox amb un 
+            //UID que no ens ha indicat la impressora les anotacions s'ignoren
+            char newuid[70];
+            dcmGenerateUniqueIdentifier(newuid);
+            m_annotationBoxes->addAnnotationBox(newuid, qPrintable(m_dicomPrintPage.getPageAnnotations().value(position)), position);
+        }    
+
+        m_annotationDisplayFormatIDTagValue = m_dicomPrinter.getAnnotationDisplayFormatID();
+    }
+}
+
+
 QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDirectoryPath)
 {
-    OFCondition status;
     DcmFileFormat *fileFormat = new DcmFileFormat();
     DcmDataset *dataset	= fileFormat->getDataset();	
     char storedPrintInstanceUID[70];
-    QString storedPrintDcmtkFilePath; 
-
     dcmGenerateUniqueIdentifier(storedPrintInstanceUID);
 
-    storedPrintDcmtkFilePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + "SP_" + storedPrintInstanceUID + ".dcm";
-
-    m_storedPrint->deleteAnnotations();	
     m_storedPrint->setInstanceUID(storedPrintInstanceUID);	
     
-    status = m_storedPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
+    m_storedPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
+
+    //Si tenim anotacions les enviem
+    if (m_annotationBoxes->size() > 0)
+    {
+        INFO_LOG("Hi ha anotacions per imprimir al FilmSession, creem les AnnotationBox");
+        //HACK: DVPSStoredPrint només permet afegir una anotació al FilmBox a través del mètode setSingleAnnotation, com que la majoria de DICOMPrinters 
+        //permeten fins a 6 anotacions ens interessa evitar aquesta limitació. El que hem fet és guardar en la mateixa estructura que DVPSStoredPrint les anotacions
+        //DVPSAnnotationContent_PList i llavors en el dataSet on gravem les dades de l'impressió de l'objecte m_storedPrint també hi gravem 
+        //les dades de les anotacions, d'aquesta manera podem tenir més d'una anotació en un FilmBox. 
+        //Quan des de PrintDICOMSpool es llegeix el dataset que hem generat en aquesta classe es troba que té més d'una anotació i les envia totes a imprimir.
+        m_annotationBoxes->write(*dataset);
+
+        DcmItem *sequenceFilmBox = NULL;
+        dataset->findOrCreateSequenceItem(DCM_FilmBoxContentSequence, sequenceFilmBox); 
+
+        if (sequenceFilmBox)
+        {
+            //L'annotation Display Format només té sentit enviar-lo si tenim anotacions. Aquest camp serveix per indicar com volem que apareguin les anotacions
+            //En Kodak, Fujifilm, Agfa,... si no especifiquem aquest tag al crear el BasicFilmBox la impressora no ens retorna els UID's amb les quals hem 
+            //d'enviar els Annotation Box. Per exemple per a Agfa ha de tenir el valor 'ANNOTATION' si no no ens retorna com a resposta els UID's amb els quals
+            //s'han d'envies els Annotation box (DICOM Conformance de la dryStar 5500 pàgina 26 
+            //http://www.agfa.com/he/france/fr/binaries/000737_Drystar_5500_1.8%2C_2.0_%2C3.x_and_4.0_tcm224-21750.pdf) altres impressores com Kodak
+            //aquest tag pog agafar diversos valors http://www.carestreamhealth.com/dv6800_dicom_9F2965.pdf
+             sequenceFilmBox->putAndInsertString(DCM_AnnotationDisplayFormatID, qPrintable(m_annotationDisplayFormatIDTagValue), true);
+        }        
+    }
+
+    QString storedPrintDcmtkFilePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + "SP_" + storedPrintInstanceUID + ".dcm";; 
+    OFCondition status = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileFormat, true);
 
     if (!status.good())
     {
-        ERROR_LOG(QString("Error al generar el dataset de les dades del storedPrint(DVPSStoredPrint). Descripcio error: %1").arg(status.text())); 
+        ERROR_LOG(QString("Error al gravar el fitxer storedPrint a %1. Descripció error: %2").arg(storedPrintDcmtkFilePath, status.text()));
         storedPrintDcmtkFilePath = "";
     }
     else
     {
-        status = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileFormat, true);
-
-        if (!status.good())
-        {
-            ERROR_LOG(QString("Error al gravar el fitxer storedPrint a %1. Descripció error: %2").arg(storedPrintDcmtkFilePath, status.text()));
-            storedPrintDcmtkFilePath = "";
-        }
-        else
-        {
-            INFO_LOG("Es guadar el fitxer del storedPrint(DVPSStoredPrint) al path " + QString(storedPrintDcmtkFilePath));
-        }
+        INFO_LOG("Es guadar el fitxer del storedPrint(DVPSStoredPrint) al path " + QString(storedPrintDcmtkFilePath));
     }
+
     delete fileFormat;
     delete m_storedPrint;
 

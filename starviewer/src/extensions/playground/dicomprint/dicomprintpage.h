@@ -2,6 +2,7 @@
 #define UDGDICOMPRINTPAGE_H
 
 #include <QString>
+#include <QMap>
 
 #include "printpage.h"
 
@@ -71,6 +72,17 @@ public:
     void setConfigurationInformation(const QString &configurationInformation);
     QString getConfigurationInformation() const;
 
+    ///Ens afegeix una anotació a la pàgina en la posició indicada. El text de l'anotació no pot fer més de 64 caràcters, si fa més de 64 caràcters el trunca
+    ///Si s'afegeix una anotació en una posició que ja hi havia una altra notació aquesta se sobre escriu, i si el text és buit no afegeix l'anotació
+    ///La majoria d'impressores només tenen 6 posicions per les anotacions Agfa, Kodak, Sony, Codonics. Tenir en compte que totes les impressores les posicions
+    ///de les anotacions són de la 1 a la 6 i Sony és de la 0 a la 5.
+    void addAnnotation(int position, const QString &annotationText);
+    
+    ///Retorna les anotacions que ens han indicat que s'han d'imprimir amb la pàgina
+    QMap<int, QString> getPageAnnotations();
+
+
+
 private:
 
     QString m_filmSize;
@@ -84,6 +96,8 @@ private:
     QString m_polarity;
     ushort m_minDensity, m_maxDensity;
     QString m_configurationInformation;
+    QMap<int, QString> m_pageAnnotations;
+    QString m_annotationDisplayFormatID;
 };
 };
 #endif

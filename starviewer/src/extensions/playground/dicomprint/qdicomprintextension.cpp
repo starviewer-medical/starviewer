@@ -14,6 +14,9 @@
 #include "dicomprinter.h"
 #include "dicomprintpage.h"
 #include "dicomprintjob.h"
+#include "patient.h"
+#include "study.h"
+#include "series.h"
 #include "image.h"
 #include "volume.h"
 #include "q2dviewer.h"
@@ -122,7 +125,6 @@ void QDicomPrintExtension::updateInput(Volume *input)
 
 void QDicomPrintExtension::configurationPrinter()
 {
-    
     m_printerConfigurationWidgetProof->show();
 }
 
@@ -222,15 +224,19 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
     DicomPrinter dicomPrinter = getSelectedDicomPrinter();
     int numberOfImagesPerPage = dicomPrinter.getDefaultFilmLayoutColumns() * dicomPrinter.getDefaultFilmLayoutRows();
     int numberOfPage = 1;
-
+    
     while (!selectedImagesToPrint.isEmpty())
     {
         int indexOfImagePerPage = 0;
         QList<Image*> imagesPageList;
         DicomPrintPage dicomPrintPage = fillDicomPrintPagePrintSettings(dicomPrinter);
-        
-        dicomPrintPage.setPageNumber(numberOfPage);
 
+        if (dicomPrinter.getSupportsAnnotationBox())
+        {
+            addSeriesInformationAsAnnotationsToDicomPrintPage(&dicomPrintPage, selectedImagesToPrint.at(0)->getParentSeries());
+        }
+
+        dicomPrintPage.setPageNumber(numberOfPage);
         //Emplenen una dicomPrintPage amb les imatges en funció del número d'imatges que hi caben
         while (indexOfImagePerPage < numberOfImagesPerPage && !selectedImagesToPrint.isEmpty())
         {
@@ -310,6 +316,19 @@ DicomPrintPage QDicomPrintExtension::fillDicomPrintPagePrintSettings(DicomPrinte
     dicomPrintPage.setConfigurationInformation(dicomPrinter.getDefaultConfigurationInformation());
 
     return dicomPrintPage;
+}
+
+void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Series* seriesToPrint)
+{
+    //A la primera posicio posem el nom de la institució que ha generat l'estudi
+    dicomPrintPage->addAnnotation(1, seriesToPrint->getInstitutionName());
+    //A la segona posició el nom del pacient i edat
+    //TODO:Afegir sexe pacient?
+    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + seriesToPrint->getParentStudy()->getPatientAge());
+    ///A la tercera posició Modalitat estudi i Data/hora
+    dicomPrintPage->addAnnotation(3, seriesToPrint->getParentStudy()->getModalitiesAsSingleString() + " " + seriesToPrint->getParentStudy()->getDateTime().toString("dd/MM/yyyy hh:mm:ss"));
+    ///Quarta posició ID Estudi i descripció
+    dicomPrintPage->addAnnotation(4, tr("Study ID ") + seriesToPrint->getParentStudy()->getID() + " " + seriesToPrint->getParentStudy()->getDescription());
 }
 
 void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter)

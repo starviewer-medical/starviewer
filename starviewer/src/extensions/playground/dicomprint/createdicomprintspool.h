@@ -13,6 +13,7 @@
 
 class DVPSStoredPrint;
 class DVPresentationState;
+class DVPSAnnotationContent_PList;
 
 namespace udg
 { 
@@ -38,6 +39,9 @@ class CreateDicomPrintSpool
 
     void setImageBoxAttributes();
 
+    ///CRea Annotation Box en funció de les anotacions que ens hagin passat
+    void createAnnotationBoxes();
+
     /**Crea el fitxer de Dcmtk on es guarden els paràmetres amb els quals s'ha de fer la impressió i la estructura de FilmBox, que conté un FilmSession
        que conté n imatges, i els seus paràmetres d'impressió.
        Retorna el pathfile del fitxer creat*/
@@ -47,7 +51,9 @@ class CreateDicomPrintSpool
     DicomPrinter m_dicomPrinter;
 	DVPSStoredPrint* m_storedPrint;
 	DVPresentationState * m_presentationState;
+    DVPSAnnotationContent_PList *m_annotationBoxes;
     CreateDicomPrintSpoolError m_lastError;
+    QString m_annotationDisplayFormatIDTagValue;
 };
 };
 

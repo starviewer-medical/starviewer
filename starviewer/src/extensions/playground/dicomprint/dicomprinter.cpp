@@ -9,12 +9,9 @@ DicomPrinter::DicomPrinter()
     m_maxDensityValues = 0;
     m_defaultMinDensity = 0;
     m_minDensityValues = 0;
+    m_supportsAnnotationBox = false;
 }
 
-    /// Especifica el valor per defecte de la Densitat del Border.
-    /// Especifica una llista de  valors disponibles de la Densitat del Border.
-
- 
 DicomPrinter::~DicomPrinter()
 {
 }
@@ -385,6 +382,26 @@ void DicomPrinter::setAvailablePolarityValues(QStringList polarityValues)
 QStringList DicomPrinter::getAvailablePolarityValues()
 {
     return m_polarityValues;
+}
+
+void DicomPrinter::setSupportsAnnotationBox(bool supportsAnnotationBox)
+{
+    m_supportsAnnotationBox = supportsAnnotationBox;
+}
+
+bool DicomPrinter::getSupportsAnnotationBox()
+{
+    return m_supportsAnnotationBox;
+}
+
+void DicomPrinter::setAnnotationDisplayFormatID(const QString &annotationDisplayFormatID)
+{
+    m_annotationDisplayFormatID = annotationDisplayFormatID;
+}
+
+QString DicomPrinter::getAnnotationDisplayFormatID() const
+{
+    return m_annotationDisplayFormatID;
 }
 
 void DicomPrinter::setDefaultConfigurationInformation(const QString configurationInformation)

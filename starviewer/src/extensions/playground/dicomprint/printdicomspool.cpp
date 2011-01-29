@@ -18,7 +18,7 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
 {
     DVPSPrintMessageHandler printerConnection;
     OFCondition result;
-    bool printerSupportsPresentationLUTSOPClass = false, printerSupportsAnnotationSOPClass = false, transferSyntaxImplicit = false;
+    bool printerSupportsPresentationLUTSOPClass = false, printerSupportsAnnotationSOPClass = true, transferSyntaxImplicit = false;
 
     m_dicomPrinter = dicomPrinter;
     m_dicomPrintJob = dicomPrintJob;
@@ -115,6 +115,12 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
         {
             INFO_LOG("S'ha enviat correctament les dades del FilmBox a la impressora DICOM");
         }
+    }
+
+    if (EC_Normal == result)
+    {
+        //Crea i envia els AnnotationBox
+        result = createAndSendFilmBoxAnnotations(printerConnection, storedPrintDcmtk);
     }
 
     if (EC_Normal == result)
@@ -250,6 +256,27 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
         
         return result;
     }
+}
+
+OFCondition PrintDicomSpool::createAndSendFilmBoxAnnotations(DVPSPrintMessageHandler& printConnection, DVPSStoredPrint *storedPrintDcmtk)
+{
+    OFCondition result;
+
+    INFO_LOG(QString("S'enviaran %1 Annotation Box a la impressora").arg(storedPrintDcmtk->getNumberOfAnnotations()));
+
+    ///Enviem totes les anotacions que tinguem de la film box
+    for (size_t currentAnnotation = 0; currentAnnotation < storedPrintDcmtk->getNumberOfAnnotations(); currentAnnotation++)
+    {
+        if (EC_Normal == result)
+        {
+            if (EC_Normal != (result = storedPrintDcmtk->printSCUsetBasicAnnotationBox(printConnection, currentAnnotation)))
+            {
+                INFO_LOG(QString("spooler: printer communication failed, unable to transmit basic annotation box %1. Error %2 ").arg(currentAnnotation).arg(result.text()));
+            }
+        }
+    }
+
+    return result;
 }
 
 DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(const QString &pathStoredPrintDcmtkFile)

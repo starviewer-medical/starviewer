@@ -148,4 +148,19 @@ QString DicomPrintPage::getConfigurationInformation() const
     return m_configurationInformation;
 }
 
+void DicomPrintPage::addAnnotation(int position, const QString &annotationText)
+{
+    //No sé perquè però a DCMTK si li passem una anotació amb el text buit, ja no imprimeix cap de les altres anotacions
+    if (annotationText.length() > 0)
+    {
+        ///Mirant el DICOM Conformance de Kodak, Agfa, Sony, Codonics,.. veiem que cap deixa imprimir anotacions de més de 64 caràcters
+        m_pageAnnotations.insert(position, annotationText.left(64));
+    }
+}
+
+QMap<int, QString> DicomPrintPage::getPageAnnotations()
+{
+    return m_pageAnnotations;
+}
+
 }

@@ -46,6 +46,9 @@ private slots:
     /**Slot que s'activa quan MagnificationType canvia de valor, aquest slot activa/desactiva SmoothingType en funcio del valor de MagnificationType.
       *SmoothingType només pot estar activat segons la normativa DICOM quan MagnificationType té com a valor "CUBIC"*/
     void m_magnitifacationTypeComboBoxIndexChanged(const QString &magnificationTypecomboBoxValue);
+    ///El radioButton per indicar si la impressora suporta anotacions ha canviat el seu valor. En funció de si suporta anotacions el camp Annotation Display
+    ///Format ID és editable.
+    void m_supportsAnnotationBoxYesRadioButtonToogled();
 
 private:
     ///Crea InputValidators pels LineEdit que només accepten valors numèrics

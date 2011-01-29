@@ -178,6 +178,8 @@ Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap( DicomP
     item["DefaultSmoothingType"] = dicomPrinter.getDefaultSmoothingType();
     item["DefaultPrintPriority"] = dicomPrinter.getDefaultPrintPriority();
     item["DefaultPolarity"] = dicomPrinter.getDefaultPolarity();
+    item["SupportsAnnotationBox"] = dicomPrinter.getSupportsAnnotationBox();
+    item["AnnotationDisplayFormatID"] = dicomPrinter.getAnnotationDisplayFormatID();
     item["ConfigurationInformation"] = dicomPrinter.getDefaultConfigurationInformation();
 
     return item;
@@ -208,6 +210,8 @@ DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter( Settings::KeyValueM
     dicomPrinter.setDefaultSmoothingType(item.value("DefaultSmoothingType").toString());
     dicomPrinter.setDefaultPrintPriority(item.value("DefaultPrintPriority").toString());
     dicomPrinter.setDefaultPolarity(item.value("DefaultPolarity").toString());
+    dicomPrinter.setSupportsAnnotationBox(item.value("SupportsAnnotationBox").toBool());
+    dicomPrinter.setAnnotationDisplayFormatID(item.value("AnnotationDisplayFormatID").toString());
     dicomPrinter.setDefaultConfigurationInformation(item.value("ConfigurationInformation").toString());
     
     return dicomPrinter;
