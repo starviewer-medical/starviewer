@@ -25,12 +25,12 @@ class CreateDicomPrintSpool
 
     enum CreateDicomPrintSpoolError { ErrorLoadingImageToPrint, ErrorCreatingImageSpool, Ok };
 
-	QString createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath);	
+    QString createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath);
 
-	CreateDicomPrintSpool::CreateDicomPrintSpoolError getLastError();
+    CreateDicomPrintSpool::CreateDicomPrintSpoolError getLastError();
 
  private:
-	
+
     bool transformImageForPrinting(Image *image, const QString &spoolDirectoryPath);
 
     void setBasicFilmBoxAttributes();
@@ -49,8 +49,8 @@ class CreateDicomPrintSpool
 
     DicomPrintPage m_dicomPrintPage;
     DicomPrinter m_dicomPrinter;
-	DVPSStoredPrint* m_storedPrint;
-	DVPresentationState * m_presentationState;
+    DVPSStoredPrint* m_storedPrint;
+    DVPresentationState * m_presentationState;
     DVPSAnnotationContent_PList *m_annotationBoxes;
     CreateDicomPrintSpoolError m_lastError;
     QString m_annotationDisplayFormatIDTagValue;
