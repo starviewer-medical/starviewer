@@ -24,7 +24,7 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
     QDir spoolDir;
     bool ok;
 
-	m_lastError = CreateDicomPrintSpool::Ok;
+    m_lastError = CreateDicomPrintSpool::Ok;
     //TODO: S'ha de fer aquí ? Comprovem si existeix el directori on s'ha de generar l'spool
     if (!spoolDir.exists(spoolDirectoryPath))
     {
@@ -46,10 +46,10 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
     {
         ok = transformImageForPrinting(image, spoolDirectoryPath);
 
-		if (!ok)
-		{
-			break;
-		}
+        if (!ok)
+        {
+            break;
+        }
     }
 
     if (ok)
@@ -375,7 +375,7 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
         }
     }
 
-	INFO_LOG("Afegits els atributs al ImageBox");
+    INFO_LOG("Afegits els atributs al ImageBox");
 }
 
 void CreateDicomPrintSpool::createAnnotationBoxes()
