@@ -237,6 +237,15 @@ public:
     /// Retorna una llista de polaritats per defecte de l'impressora
     QStringList getAvailablePolarityValues();
 
+    //Especifica/Retorna si la impressora suporta anotacions
+    void setSupportsAnnotationBox(bool supportsAnnotationBox);
+    bool getSupportsAnnotationBox();
+
+    ///Especifica/Retorna el Annotation Display Format ID. Aquesta propietat només serveis si la impressora suporta anotacions, i indica com s'han
+    ///d'imprimir aquestes anotacions a la placa
+    void setAnnotationDisplayFormatID(const QString &annotationDisplayFormatID);
+    QString getAnnotationDisplayFormatID() const;
+
     /**Especifica/retorna el valor de ConfigurationInformation per la impressora, depén de la impressora, per exemple per agfa permet afegir 
       *anotacions a les imatges, aplicar LUT's, ... s'ha de mirar al dicom confomance de cada impressora per mirar quin valor pot agafar aquest camp
       */
@@ -291,6 +300,8 @@ private:
     QStringList m_printPriorityValues;
     QString m_defaultPolarity;
     QStringList m_polarityValues;    
+    bool m_supportsAnnotationBox;
+    QString m_annotationDisplayFormatID;
     QString m_configurationInformation;
 };
 }; 

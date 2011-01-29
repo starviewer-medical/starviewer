@@ -53,6 +53,9 @@ void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
         m_printerSettingsGroupBox->setEnabled(true);
         m_qdicomPrinterBasicSettingsWidget->setEnabled(true);
         m_advancedSettingsGroupBox->setEnabled(true);
+        //Perquè així comprovi si el AnnotationBox ha d'estar activat si aquest no ha canviat de valor respecte l'anterior impressora seleccionada
+        //TODO: S'hauria d'intentar solventar qeu no fes falta invocar el mètode
+        m_supportsAnnotationBoxYesRadioButtonToogled();
     }
     else
     {
@@ -181,6 +184,16 @@ void QDicomPrinterConfigurationWidget::m_magnitifacationTypeComboBoxIndexChanged
     }
 }
 
+void QDicomPrinterConfigurationWidget::m_supportsAnnotationBoxYesRadioButtonToogled()
+{
+    m_annotationDisplayFormatLineEdit->setEnabled(m_supportsAnnotationBoxYesRadioButton->isChecked());
+
+    if (!m_supportsAnnotationBoxYesRadioButton->isChecked())
+    {
+        m_annotationDisplayFormatLineEdit->setText("");
+    }
+}
+
 // Private Methods
 void QDicomPrinterConfigurationWidget::createConnections()
 { 
@@ -194,6 +207,7 @@ void QDicomPrinterConfigurationWidget::createConnections()
     connect( m_listPrintersTreeWidget , SIGNAL( itemSelectionChanged() ), SLOT( printerSelectionChanged() ) );
     connect( m_addPrinterWidget, SIGNAL(newPrinterAddedSignal(int)), SLOT(showNewPrinterAdded(int)));
     connect( m_magnifactionTypeComboBox, SIGNAL(currentIndexChanged ( const QString ) ), SLOT( m_magnitifacationTypeComboBoxIndexChanged( const QString ) ) );
+    connect( m_supportsAnnotationBoxYesRadioButton, SIGNAL( toggled(bool) ), SLOT( m_supportsAnnotationBoxYesRadioButtonToogled() ) ); 
 }
 
 void QDicomPrinterConfigurationWidget::configureInputValidator()
@@ -286,8 +300,10 @@ void QDicomPrinterConfigurationWidget::clearPrinterSettings()
     m_borderDensityComboBox->clear();
     m_emptyDensityComboBox->clear();
     m_configurationInformationLineEdit->setText("");
-    m_printerDefaultPrinterCheckBox->setChecked(false);
     m_yesVisibleTrimRadioButton->setChecked(true);
+    m_supportsAnnotationBoxNoRadioButton->setChecked(true);
+    m_annotationDisplayFormatLineEdit->setText("");
+    m_printerDefaultPrinterCheckBox->setChecked(false);
 }
 
 void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter& printer)
@@ -324,9 +340,12 @@ void QDicomPrinterConfigurationWidget::setAdvancedSettingsToControls(DicomPrinte
     m_emptyDensityComboBox->setCurrentIndex(m_emptyDensityComboBox->findText(printer.getDefaultEmptyImageDensity()));
     m_minimumDensitySpinBox->setMaximum(printer.getAvailableMinDensityValues());
     m_minimumDensitySpinBox->setValue(printer.getDefaultMinDensity());
-    m_configurationInformationLineEdit->setText(printer.getDefaultConfigurationInformation());
     m_yesVisibleTrimRadioButton->setChecked(printer.getDefaultTrim());
     m_noVisibleTrimRadioButton->setChecked(!printer.getDefaultTrim());
+    m_supportsAnnotationBoxYesRadioButton->setChecked(printer.getSupportsAnnotationBox());
+    m_supportsAnnotationBoxNoRadioButton->setChecked(!printer.getSupportsAnnotationBox());
+    m_annotationDisplayFormatLineEdit->setText(printer.getAnnotationDisplayFormatID());
+    m_configurationInformationLineEdit->setText(printer.getDefaultConfigurationInformation());
 }
 
 void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrinter& printer)
@@ -338,8 +357,10 @@ void QDicomPrinterConfigurationWidget::getAdvancedSettingsFromControls(DicomPrin
     printer.setDefaultBorderDensity(m_borderDensityComboBox->currentText());
     printer.setDefaultEmptyImageDensity(m_emptyDensityComboBox->currentText());
     printer.setDefaultMinDensity(m_minimumDensitySpinBox->value());
-    printer.setDefaultConfigurationInformation(m_configurationInformationLineEdit->text());
     printer.setDefaultTrim(m_yesVisibleTrimRadioButton->isChecked());
+    printer.setSupportsAnnotationBox(m_supportsAnnotationBoxYesRadioButton->isChecked());
+    printer.setAnnotationDisplayFormatID(m_annotationDisplayFormatLineEdit->text());
+    printer.setDefaultConfigurationInformation(m_configurationInformationLineEdit->text());
 }
 
 DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()

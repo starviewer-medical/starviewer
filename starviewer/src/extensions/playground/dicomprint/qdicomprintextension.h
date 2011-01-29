@@ -12,6 +12,7 @@ namespace udg {
 class ImagePrintFactory;
 class QPrintJobCreatorWidget;
 class QPrinterConfigurationWidget;
+class Study;
 class Image;
 class DicomPrintPage;
 class DicomPrintJob;
@@ -110,6 +111,10 @@ private:
     void updateVolumeSupport();
 
     void setEnabledPrintControls(bool enabled);
+
+    ///Ens afegeix anotacions a la pàgina a imprimir amb informació de la sèrie i de l'estudi, com nom de pacient,
+    ///Data i hora estudi, Institució, ID Estudi i descripció,...
+    void addSeriesInformationAsAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Series *seriesToPrint);
 
 private:
     /// Gestor de tools pel viewer
