@@ -651,7 +651,7 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &stud
         for (int i = 0; i < count ; i++)
         {
             StructPreviousStudyDownloading *element = m_studiesDownloading->take(studyUID); // s'agafa i es treu de la llista
-            element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
+            element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::DownloadingError);
             delete element;
         }
     }
