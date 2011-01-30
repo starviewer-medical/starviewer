@@ -114,7 +114,7 @@ private:
     void addImage( DICOMTagReader *dicomTagReader );
 
     ///Converteix la respota rebuda per partl del PACS a QueryRequestStatus i  en cas d'error processa la resposta i grava l'error al log
-    PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail);
+    PACSRequestStatus::QueryRequestStatus processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail);
 };
 };
 #endif
