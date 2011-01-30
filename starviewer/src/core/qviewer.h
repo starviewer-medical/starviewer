@@ -162,6 +162,10 @@ public:
     /// Ens retorna el menú de pacient amb el que s'escull l'input
     PatientBrowserMenu* getPatientBrowserMenu() const;
 
+    /// Permet especificar si al seleccionar un input del menú de pacient aquest es carregarà automàticament
+    /// o, pel contrari, no es farà res. Per defecte està activat i es carregarà l'input al visor.
+    void setAutomaticallyLoadPatientBrowserMenuSelectedInput(bool load);
+
     /// Retorna l'status del viewer. Útil per saber si el visor està visualitzant dades
     /// o està carregant...
     ViewerStatus getViewerStatus() const;

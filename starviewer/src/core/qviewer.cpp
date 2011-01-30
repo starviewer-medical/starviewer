@@ -92,9 +92,7 @@ QViewer::QViewer(QWidget *parent)
     this->setMouseTracking(false);
     m_patientBrowserMenu = new PatientBrowserMenu(0);
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
-    // TODO Aquest comportament es podria flexibilitzar proporcionant paràmetres o una interfície per poder
-    // escollir altres comportaments que ens poden ser útils en altres contextes, com per exemple, a les extensions
-    connect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume *)), SLOT(setInputAndRender(Volume *)));
+    this->setAutomaticallyLoadPatientBrowserMenuSelectedInput(true);
 }
 
 QViewer::~QViewer()
@@ -759,6 +757,19 @@ PatientBrowserMenu* QViewer::getPatientBrowserMenu() const
 {
     return m_patientBrowserMenu;
 }
+
+void QViewer::setAutomaticallyLoadPatientBrowserMenuSelectedInput(bool load)
+{
+    if (load)
+    {
+        connect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume *)), this, SLOT(setInputAndRender(Volume *)));
+    }
+    else
+    {
+        disconnect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume*)), this, SLOT(setInputAndRender(Volume*)));
+    }
+}
+
 
 QViewer::ViewerStatus QViewer::getViewerStatus() const
 {

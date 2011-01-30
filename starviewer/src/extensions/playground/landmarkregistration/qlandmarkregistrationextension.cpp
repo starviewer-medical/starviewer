@@ -135,9 +135,9 @@ void QLandmarkRegistrationExtension::createConnections()
     // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
     // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
-    disconnect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView, SLOT( setInput( Volume * ) ) );
+    m_2DView->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
+    m_2DView_2->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     connect( m_2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setInput( Volume * ) ) );
-    disconnect( m_2DView_2->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), m_2DView_2, SLOT( setInput( Volume * ) ) );
     connect( m_2DView_2->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setSecondInput( Volume * ) ) );
 }
 
