@@ -94,7 +94,7 @@ QViewer::QViewer(QWidget *parent)
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
     // TODO Aquest comportament es podria flexibilitzar proporcionant paràmetres o una interfície per poder
     // escollir altres comportaments que ens poden ser útils en altres contextes, com per exemple, a les extensions
-    connect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume *)), SLOT(changeVolume(Volume *)));
+    connect(m_patientBrowserMenu, SIGNAL(selectedVolume(Volume *)), SLOT(setInputAndRender(Volume *)));
 }
 
 QViewer::~QViewer()
@@ -813,7 +813,7 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
     }
 }
 
-void QViewer::changeVolume(Volume *volume)
+void QViewer::setInputAndRender(Volume *volume)
 { 
     this->setInput(volume); 
     this->render(); 
