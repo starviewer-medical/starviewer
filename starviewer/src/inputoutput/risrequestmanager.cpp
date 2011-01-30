@@ -34,7 +34,6 @@ RISRequestManager::~RISRequestManager()
     m_listenRISRequests->deleteLater();
 
     delete m_listenRISRequestsQThread;
-    delete m_pacsManager;
     delete m_qpopUpRISRequestsScreen;
 }
 

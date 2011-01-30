@@ -88,6 +88,7 @@ QueryScreen::~QueryScreen()
 
 #ifndef STARVIEWER_LITE
     delete m_risRequestManager;
+    delete m_pacsManager;
 #endif
 }
 
