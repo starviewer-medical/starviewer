@@ -199,7 +199,7 @@ void Q2DViewerExtension::setInput(Volume *input)
     if (hangingCandidates.size() == 0) // No hi ha hanging protocols
     {
         Q2DViewerWidget *viewerWidget = m_workingArea->addViewer("0.0\\1.0\\1.0\\0.0");
-        viewerWidget->setInput(m_mainVolume);
+        viewerWidget->setInputAsynchronously(m_mainVolume);
     }
     else
     {
