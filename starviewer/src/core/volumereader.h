@@ -22,9 +22,18 @@ public:
     /// corresponents i li assigna.
     void read(Volume *volume);
 
+    /// Mostra per pantalla un message box informant de l'error que s'ha produit al llegir el volum.
+    /// Si no s'ha produit cap error, no fa res.
+    void showMessageBoxWithLastError() const;
+
 signals:
     /// Ens indica el progrés del procés de lectura
     void progress(int progress);
+
+private:
+    /// Grava un missatge de warning amb l'ultim error que s'ha produit al llegir el volum.
+    /// Si no s'ha produit cap error, no fa res.
+    void logWarningLastError(const QStringList &fileList) const;
 
 private:
     /// Definim els tipus de lectors que podem fer servir segons les dades del volum
@@ -42,6 +51,9 @@ private:
 private:
     /// Classe amb la qual llegirem les dades d'imatge del volum
     VolumePixelDataReader *m_volumePixelDataReader;
+
+    /// Guardem l'ultim error que s'ha produit al llegir
+    int m_lastError;
 };
 
 } // End namespace udg

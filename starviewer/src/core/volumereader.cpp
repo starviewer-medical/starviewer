@@ -14,8 +14,9 @@
 namespace udg {
 
 VolumeReader::VolumeReader(QObject *parent)
-: QObject(parent), m_volumePixelDataReader(0)
+    : QObject(parent), m_volumePixelDataReader(0)
 {
+     m_lastError = VolumePixelDataReader::NoError;
 }
 
 VolumeReader::~VolumeReader()
@@ -41,31 +42,68 @@ void VolumeReader::read(Volume *volume)
         // Posem a punt el reader i llegim les dades
         PixelDataReaderType readerType = this->getSuitableReader(volume);
         this->setUpReader(readerType);
-        switch (m_volumePixelDataReader->read(fileList))
+
+        m_lastError = m_volumePixelDataReader->read(fileList);
+        if (m_lastError == VolumePixelDataReader::NoError)
         {
-            case VolumePixelDataReader::OutOfMemory: 
-                WARN_LOG("No podem carregar els arxius següents perquè no caben a memòria\n" + fileList.join("\n"));
-                volume->convertToNeutralVolume();
-                QMessageBox::warning(0, tr("Out of memory"), tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg(ApplicationNameString));
-                break;
-
-            case VolumePixelDataReader::MissingFile:
-                // Fem el mateix que en el cas OutOfMemory, canviant el missatge d'error
-                volume->convertToNeutralVolume();
-                QMessageBox::warning(0, tr("Missing Files"), tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString));
-                break;
-
-            case VolumePixelDataReader::UnknownError:
-                // Hi ha hagut un error no controlat, creem el volum neutral per evitar desastres majors
-                volume->convertToNeutralVolume();
-                QMessageBox::warning(0, tr("Unkwown Error"), tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString));
-                break;
-
-            case VolumePixelDataReader::NoError:
-                // Tot ha anat ok, assignem les dades al volum
-                volume->setData(m_volumePixelDataReader->getVTKData());
-                break;
+            // Tot ha anat ok, assignem les dades al volum
+            volume->setData(m_volumePixelDataReader->getVTKData());
         }
+        else
+        {
+            volume->convertToNeutralVolume();
+            this->showMessageBoxWithLastError();
+            this->logWarningLastError(fileList);
+        }
+    }
+}
+
+void VolumeReader::showMessageBoxWithLastError() const
+{
+    if (m_lastError == VolumePixelDataReader::NoError)
+    {
+        return;
+    }
+
+    QString messageBoxTitle = "";
+    QString messageBoxMessage = "";
+
+    switch (m_lastError)
+    {
+        case VolumePixelDataReader::OutOfMemory:
+            messageBoxTitle = tr("Out of memory");
+            messageBoxMessage = tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg(ApplicationNameString);
+            break;
+
+        case VolumePixelDataReader::MissingFile:
+            messageBoxTitle = tr("Missing Files");
+            messageBoxMessage = tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString);
+            break;
+
+        case VolumePixelDataReader::UnknownError:
+            messageBoxTitle = tr("Unkwown Error");
+            messageBoxMessage = tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString);
+            break;
+    }
+
+    QMessageBox::warning(0, messageBoxTitle, messageBoxMessage);
+}
+
+void VolumeReader::logWarningLastError(const QStringList &fileList) const
+{
+    switch (m_lastError)
+    {
+        case VolumePixelDataReader::OutOfMemory:
+            WARN_LOG("No podem carregar els arxius perquè no caben a memòria\n" + fileList.join("\n"));
+            break;
+
+        case VolumePixelDataReader::MissingFile:
+            WARN_LOG("No podem carregar els arxius perquè falten fitxers");
+            break;
+
+        case VolumePixelDataReader::UnknownError:
+            WARN_LOG("No podem carregar els arxius perquè ha donat un error desconegut");
+            break;
     }
 }
 
