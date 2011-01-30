@@ -76,9 +76,6 @@ private:
     /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
     bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
 
-    /// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
-    void applyDisplayTransformations(Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet);
-
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
     QList<Study*> sortStudiesByDate( const QList<Study*> &studies );
 
