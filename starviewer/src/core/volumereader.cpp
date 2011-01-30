@@ -27,14 +27,16 @@ VolumeReader::~VolumeReader()
     }
 }
 
-void VolumeReader::read(Volume *volume)
+void VolumeReader::executePixelDataReader(Volume *volume)
 {
     if (!volume)
     {
         DEBUG_LOG("El volum proporcionat és NUL! Retornem.");
         return;
-    }    
-    
+    }
+
+    m_lastError = VolumePixelDataReader::NoError;
+
     // Obtenim els arxius que hem de llegir
     QStringList fileList = this->getFilesToRead(volume);
     if (!fileList.isEmpty())
@@ -52,10 +54,22 @@ void VolumeReader::read(Volume *volume)
         else
         {
             volume->convertToNeutralVolume();
-            this->showMessageBoxWithLastError();
             this->logWarningLastError(fileList);
         }
     }
+}
+
+void VolumeReader::read(Volume *volume)
+{
+    this->executePixelDataReader(volume);
+    this->showMessageBoxWithLastError();
+}
+
+bool VolumeReader::readWithoutShowingError(Volume *volume)
+{
+    this->executePixelDataReader(volume);
+
+    return m_lastError == VolumePixelDataReader::NoError;
 }
 
 void VolumeReader::showMessageBoxWithLastError() const
