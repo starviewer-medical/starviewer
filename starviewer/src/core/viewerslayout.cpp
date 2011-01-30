@@ -320,8 +320,10 @@ void ViewersLayout::cleanUp()
     // i els propis widgets
     for (int i = 0; i < getNumberOfViewers(); ++i)
     {
-        m_viewersLayout->removeWidget(getViewerWidget(i));
-        delete getViewerWidget(i);
+        Q2DViewerWidget* viewer = getViewerWidget(i);
+        m_viewersLayout->removeWidget(viewer);
+        // TODO: Si es deixa amb un "delete viewer", peta
+        viewer->deleteLater();
     }
     // Eliminem els visors i les geometries
     m_vectorViewers.clear();
