@@ -26,7 +26,7 @@
 
 namespace udg {
 
-ConvertToDicomdir::ConvertToDicomdir(QObject *parent) : QObject(parent)
+ConvertToDicomdir::ConvertToDicomdir()
 {
     m_study = 0;
     m_series = 0;
@@ -34,10 +34,6 @@ ConvertToDicomdir::ConvertToDicomdir(QObject *parent) : QObject(parent)
     m_patient = 0;
 
     m_convertDicomdirImagesToLittleEndian = false;
-}
-
-ConvertToDicomdir::~ConvertToDicomdir()
-{
 }
 
 void ConvertToDicomdir::setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString patientNameAnonymized)
