@@ -24,7 +24,7 @@ public slots:
 
 private:
     /// Aplicar les transformacions (rotacions, flips..) per mostrar per pantalla
-    void applyDisplayTransformations(Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet);
+    void applyDisplayTransformations(Q2DViewer *viewer, HangingProtocolDisplaySet *displaySet);
 
 private:
     HangingProtocolDisplaySet *m_displaySet;

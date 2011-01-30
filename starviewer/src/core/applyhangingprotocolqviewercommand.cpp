@@ -21,7 +21,7 @@ void ApplyHangingProtocolQViewerCommand::execute()
     // Deshabilitem inicialment la sincronització i només l'activem si és necessari pel hanging protocol
     m_viewerWidget->enableSynchronization(false);
 
-    this->applyDisplayTransformations(m_viewerWidget, m_displaySet);
+    this->applyDisplayTransformations(m_viewerWidget->getViewer(), m_displaySet);
 
     if (!m_displaySet->getToolActivation().isEmpty()) // Tenim tools activades per defecte des del hanging protocol
     {
@@ -32,24 +32,24 @@ void ApplyHangingProtocolQViewerCommand::execute()
     }
 }
 
-void HangingProtocolManager::applyDisplayTransformations(Q2DViewerWidget *viewer, HangingProtocolDisplaySet *displaySet)
+void ApplyHangingProtocolQViewerCommand::applyDisplayTransformations(Q2DViewer *viewer, HangingProtocolDisplaySet *displaySet)
 {
-    viewer->getViewer()->enableRendering(false);
+    viewer->enableRendering(false);
 
     QString reconstruction = displaySet->getReconstruction();
     if (!reconstruction.isEmpty())
     {
         if (reconstruction == "SAGITAL")
         {
-            viewer->getViewer()->resetViewToSagital();
+            viewer->resetViewToSagital();
         }
         else if (reconstruction == "CORONAL")
         {
-            viewer->getViewer()->resetViewToCoronal();
+            viewer->resetViewToCoronal();
         }
         else if (reconstruction == "AXIAL")
         {
-            viewer->getViewer()->resetViewToAxial();
+            viewer->resetViewToAxial();
         }
         else
         {
@@ -58,12 +58,12 @@ void HangingProtocolManager::applyDisplayTransformations(Q2DViewerWidget *viewer
     }
 
     // Apliquem la orientació desitjada
-    viewer->getViewer()->setImageOrientation(displaySet->getPatientOrientation());
+    viewer->setImageOrientation(displaySet->getPatientOrientation());
 
     int phase = displaySet->getPhase();
     if (phase > -1)
     {
-        viewer->getViewer()->setPhase(phase);
+        viewer->setPhase(phase);
     }
 
     int sliceNumber = displaySet->getSlice();
@@ -72,11 +72,11 @@ void HangingProtocolManager::applyDisplayTransformations(Q2DViewerWidget *viewer
         //Comprovem si s'ha modificat el número de llesca pel fet de tenir la imatge dins un volum
         if (displaySet->getSliceModifiedForVolumes() != -1)
         {
-            viewer->getViewer()->setSlice(displaySet->getSliceModifiedForVolumes());
+            viewer->setSlice(displaySet->getSliceModifiedForVolumes());
         }
         else
         {
-            viewer->getViewer()->setSlice(sliceNumber);
+            viewer->setSlice(sliceNumber);
         }
     }
 
@@ -85,20 +85,20 @@ void HangingProtocolManager::applyDisplayTransformations(Q2DViewerWidget *viewer
     {
         if (alignment == "right")
         {
-            viewer->getViewer()->alignRight();
+            viewer->alignRight();
         }
         else if (alignment == "left")
         {
-            viewer->getViewer()->alignLeft();
+            viewer->alignLeft();
         }
     }
     else
     {
-        viewer->getViewer()->setAlignPosition(Q2DViewer::AlignCenter);
+        viewer->setAlignPosition(Q2DViewer::AlignCenter);
     }
 
-    viewer->getViewer()->enableRendering(true);
-    viewer->getViewer()->render();
+    viewer->enableRendering(true);
+    viewer->render();
 }
 
 } // End namespace udg
