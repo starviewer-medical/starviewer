@@ -18,14 +18,21 @@ QViewerWorkInProgressWidget::QViewerWorkInProgressWidget(QWidget *parent)
 
 void QViewerWorkInProgressWidget::reset()
 {
-    m_progressBarAnimation->stop();
-    m_progressLabel->setText("");
+    this->resetProgressWidgets();
     m_headerLabel->setText("");
+    m_errorLabel->setText("");
 }
 
 void QViewerWorkInProgressWidget::setTitle(const QString &text)
 {
     m_headerLabel->setText(text);
+}
+
+void QViewerWorkInProgressWidget::showError(const QString &errorText)
+{
+    this->resetProgressWidgets();
+    m_progressBarLabel->hide();
+    m_errorLabel->setText(errorText);
 }
 
 void QViewerWorkInProgressWidget::updateProgress(int progress)
@@ -46,6 +53,13 @@ void QViewerWorkInProgressWidget::startAnimationByProgress(int progress)
     {
         m_progressBarAnimation->stop();
     }
+}
+
+void QViewerWorkInProgressWidget::resetProgressWidgets()
+{
+    m_progressBarLabel->show();
+    m_progressBarAnimation->stop();
+    m_progressLabel->setText("");
 }
 
 } // End namespace udg

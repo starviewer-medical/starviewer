@@ -80,27 +80,39 @@ void VolumeReader::showMessageBoxWithLastError() const
     }
 
     QString messageBoxTitle = "";
-    QString messageBoxMessage = "";
-
     switch (m_lastError)
     {
         case VolumePixelDataReader::OutOfMemory:
             messageBoxTitle = tr("Out of memory");
-            messageBoxMessage = tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.").arg(ApplicationNameString);
             break;
 
         case VolumePixelDataReader::MissingFile:
             messageBoxTitle = tr("Missing Files");
-            messageBoxMessage = tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString);
             break;
 
         case VolumePixelDataReader::UnknownError:
             messageBoxTitle = tr("Unkwown Error");
-            messageBoxMessage = tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString);
             break;
     }
 
-    QMessageBox::warning(0, messageBoxTitle, messageBoxMessage);
+    QMessageBox::warning(0, messageBoxTitle, this->getLastErrorMessageToUser());
+}
+
+QString VolumeReader::getLastErrorMessageToUser() const
+{
+    switch (m_lastError)
+    {
+        case VolumePixelDataReader::OutOfMemory:
+            return tr("There's not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart "
+                      "the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating "
+                      "system may solve the problem.").arg(ApplicationNameString);
+        case VolumePixelDataReader::MissingFile:
+            return tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString);
+        case VolumePixelDataReader::UnknownError:
+            return tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString);
+        case VolumePixelDataReader::NoError:
+            return "";
+    }
 }
 
 void VolumeReader::logWarningLastError(const QStringList &fileList) const
