@@ -242,7 +242,8 @@ HEADERS += extensionfactory.h \
     customwindowlevelsrepository.h \
     volumereaderjob.h \
     asynchronousvolumereader.h \
-    qviewerworkinprogresswidget.h
+    qviewerworkinprogresswidget.h \
+    qviewercommand.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -442,7 +443,8 @@ SOURCES += extensionmediator.cpp \
     customwindowlevelsrepository.cpp \
     volumereaderjob.cpp \
     asynchronousvolumereader.cpp \
-    qviewerworkinprogresswidget.cpp
+    qviewerworkinprogresswidget.cpp \
+    qviewercommand.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)

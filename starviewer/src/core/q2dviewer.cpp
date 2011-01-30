@@ -21,8 +21,9 @@
 #include "qviewerworkinprogresswidget.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
-#include "asynchronousvolumereader.h" //Read volume asynchronously
-#include "volumereaderjob.h" //Read volume asynchronously
+#include "asynchronousvolumereader.h"
+#include "volumereaderjob.h"
+#include "qviewercommand.h"
 // Qt
 #include <QResizeEvent>
 // Include's bàsics vtk
@@ -56,6 +57,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
   m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
     m_volumeReaderJob = NULL;
+    m_inputFinishedCommand = NULL;
 
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
@@ -108,6 +110,8 @@ Q2DViewer::~Q2DViewer()
     // HACK Imposem que s'esborri primer el drawer
     delete m_drawer;
     delete m_imageOrientationOperationsMapper;
+
+    this->deleteInputFinishedCommand();
 }
 
 void Q2DViewer::createAnnotations()
@@ -598,6 +602,23 @@ void Q2DViewer::setInput(Volume *volume)
         return;
     }
 
+    this->cancelCurrentVolumeReaderJob();
+    this->deleteInputFinishedCommand();
+
+    this->setNewVolume(volume);
+    this->setViewerStatus(VisualizingVolume);
+}
+
+void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFinishedCommand)
+{
+    if (!volume)
+    {
+        return;
+    }
+
+    this->cancelCurrentVolumeReaderJob();
+    this->setInputFinishedCommand(inputFinishedCommand);
+
     if (!volume->hasAllDataLoaded())
     {
         this->loadVolumeAsynchronously(volume);
@@ -606,19 +627,50 @@ void Q2DViewer::setInput(Volume *volume)
     {
         this->setNewVolume(volume);
         this->setViewerStatus(VisualizingVolume);
+        this->executeInputFinishedCommand();
     }
+}
+
+void Q2DViewer::executeInputFinishedCommand()
+{
+    if (m_inputFinishedCommand)
+    {
+        m_inputFinishedCommand->execute();
+    }
+    this->deleteInputFinishedCommand();
+}
+
+void Q2DViewer::setInputFinishedCommand(QViewerCommand *command)
+{
+    this->deleteInputFinishedCommand();
+    m_inputFinishedCommand = command;
+}
+
+void Q2DViewer::deleteInputFinishedCommand()
+{
+    if (m_inputFinishedCommand)
+    {
+        delete m_inputFinishedCommand;
+    }
+    m_inputFinishedCommand = NULL;
+}
+
+void Q2DViewer::cancelCurrentVolumeReaderJob()
+{
+    // TODO: Aquí s'hauria de cancel·lar realment el current job. De moment no podem fer-ho i simplement el desconnectem
+    // Quan es faci bé, tenir en compte què passa si algun altre visor el vol continuar descarregant igualment i nosaltres aquí el cancelem?
+    if (m_volumeReaderJob != NULL)
+    {
+        disconnect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(volumeReaderJobFinished()));
+        disconnect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
+    }
+    m_volumeReaderJob = NULL;
 }
 
 void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
 {
     this->setViewerStatus(LoadingVolume);
 
-    // TODO: Idealment aquí hem de comprovar que no estiguem carregant alguna cosa abans i cancel·lar-la!!
-    // Què passa si algun altre visor el vol continuar descarregant igualment?
-    if (m_volumeReaderJob != NULL)
-    {
-        disconnect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(volumeReaderJobFinished()));
-    }
     // TODO Esborrar volumeReader!!
     AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
     m_volumeReaderJob = volumeReader->read(volume);
@@ -637,7 +689,10 @@ void Q2DViewer::volumeReaderJobFinished()
 {
     if (m_volumeReaderJob->success())
     {
-        this->setInput(m_volumeReaderJob->getVolume());
+        this->setNewVolume(m_volumeReaderJob->getVolume());
+        this->setViewerStatus(VisualizingVolume);
+        this->executeInputFinishedCommand();
+
         m_volumeReaderJob->deleteLater();
         m_volumeReaderJob = NULL;
     }

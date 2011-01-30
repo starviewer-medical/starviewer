@@ -31,6 +31,7 @@ class Drawer;
 class ImagePlane;
 class ImageOrientationOperationsMapper;
 class VolumeReaderJob;
+class QViewerCommand;
 
 /**
 
@@ -212,6 +213,11 @@ public:
 public slots:
     virtual void setInput(Volume *volume);
 
+    /// Especifica el volum d'entrada de forma asíncrona.
+    /// Es pot indicar un command que s'executarà un cop el volum s'ha carregat i està a punt de ser visualitzat.
+    /// Útil per poder especificar canvis al viewer (canvi de llesca, w/l, etc.) sense preocupar-se de quan s'ha carregat el volume.
+    void setInputAsynchronously(Volume *volume, QViewerCommand *inputFinishedCommand = 0);
+
     void resetView(CameraOrientationType view);
     void resetViewToAxial();
     void resetViewToCoronal();
@@ -378,6 +384,19 @@ private:
     /// Retorna un volum "dummy"
     Volume* getDummyVolumeFromVolume(Volume *volume);
 
+    /// Especifica quin command s'ha d'executar després d'especificar un volum com a input
+    void setInputFinishedCommand(QViewerCommand *command);
+
+    /// Elimina el command que s'hauria d'executar després de que s'especifiqui un input
+    void deleteInputFinishedCommand();
+
+    /// Si està definit, executa el command definit per després d'especificar un input al viewer
+    void executeInputFinishedCommand();
+
+    /// Cancela el job actual de carregar un volum en el cas que existeixi
+    /// TODO: De moment només desconnecta el job del viewer, no cancel·la el job en sí
+    void cancelCurrentVolumeReaderJob();
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip )
     void updateCamera();
@@ -488,6 +507,7 @@ private:
 
     VolumeReaderJob *m_volumeReaderJob;
 
+    QViewerCommand *m_inputFinishedCommand;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
 };  //  End namespace udg
