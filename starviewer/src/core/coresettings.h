@@ -57,6 +57,8 @@ public:
     static const QString DontCheckNewVersionsOnline;
     /// Especifica les excepcions en que no ha s'ha d'aplicar la auto orientació en mamografies.
     static const QString MammographyAutoOrientationExceptions;
+    /// Indica si es pot realitzar càrrega de volums asíncrona o no
+    static const QString AllowAsynchronousVolumeLoading;
 };
 
 } // end namespace udg 
