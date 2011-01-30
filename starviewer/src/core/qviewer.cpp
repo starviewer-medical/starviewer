@@ -17,7 +17,7 @@
 #include "../interface/qapplicationmainwindow.h"
 
 // Qt
-#include <QHBoxLayout>
+#include <QStackedLayout>
 #include <QContextMenuEvent>
 #include <QMessageBox>
 // Qt createDownloadingWidget
@@ -78,11 +78,13 @@ QViewer::QViewer(QWidget *parent)
     setWindowLevelData(new WindowLevelPresetsToolData(this));
 
     // Afegim el layout
-    QHBoxLayout *viewerLayout = new QHBoxLayout(this);
-    viewerLayout->setSpacing(0);
-    viewerLayout->setMargin(0);
-    viewerLayout->addWidget(m_vtkWidget);
-    
+    m_stackedLayout = new QStackedLayout(this);
+    m_stackedLayout->setSpacing(0);
+    m_stackedLayout->setMargin(0);
+    m_stackedLayout->addWidget(m_vtkWidget);
+    m_stackedLayout->addWidget(this->createDownloadingWidget(this));
+    this->setStackedLayoutCurrentWidgetFromViewerStatus();
+
     this->setMouseTracking(false);
     m_patientBrowserMenu = new PatientBrowserMenu(0);
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
@@ -764,7 +766,24 @@ void QViewer::setViewerStatus(ViewerStatus status)
     if (m_viewerStatus != status)
     {
         m_viewerStatus = status;
+        this->setStackedLayoutCurrentWidgetFromViewerStatus();
         emit viewerStatusChanged();
+    }
+}
+
+void QViewer::setStackedLayoutCurrentWidgetFromViewerStatus()
+{
+    switch(m_viewerStatus)
+    {
+        case NoVolumeInput:
+        case VisualizingVolume:
+            m_stackedLayout->setCurrentIndex(0);
+            break;
+
+        case DownloadingVolume:
+        case LoadingVolume:
+            m_stackedLayout->setCurrentIndex(1);
+            break;
     }
 }
 

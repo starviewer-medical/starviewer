@@ -41,10 +41,6 @@ public:
 
     void setInput(Volume *input);
 
-    /// Activa/Desactiva l'estat de descarrega.
-    void enableDownloadingState();
-    void disableDownloadingState();
-
 public slots:
     /// Habilita o deshabilita l'eina de sincronització en el visor, si aquest la té registrada
     /// Aquest mètode es podrà invocar al clicar sobré el botó de sincronització o bé cridant-lo directament
@@ -61,6 +57,9 @@ protected:
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
+
+    /// Activa/Desactiva tots els widgets que es troben a la barra de l'slider, és a dir, tots excepte el viewer.
+    void setSliderBarWidgetsEnabled(bool enabled);
 
 private slots:
     /// Aquest slot es cridarà quan es faci alguna acció sobre l'slider
@@ -84,6 +83,9 @@ private slots:
     /// projecció del pla estem veient
     void updateProjectionLabel();
 
+    /// Actualitza l'estat d'habilitat dels widgets de la barra amb l'slider a partir de l'estat del viewer
+    void setSliderBarWidgetsEnabledFromViewerStatus();
+
 private:
     /// El volum principal
     Volume *m_mainVolume;
@@ -93,9 +95,6 @@ private:
 
     /// Per fer estadístiques
     StatsWatcher *m_statsWatcher;
-
-    /// Widget utilitzat per mostrar que s'està descarregant la info que s'ha de mostrar
-    QWidget *m_downloadingWidget;
 };
 
 };
