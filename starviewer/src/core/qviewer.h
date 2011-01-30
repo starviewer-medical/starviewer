@@ -52,6 +52,9 @@ public:
     /// Tipus de format de gravació de vídeo suportats
     enum RecordFileFormatType { MPEG2 };
 
+    /// Estat del viewer
+    enum ViewerStatus { NoVolumeInput, DownloadingVolume, LoadingVolume, VisualizingVolume };
+
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor* getInteractor();
 
@@ -157,8 +160,12 @@ public:
     /// Ens retorna el menú de pacient amb el que s'escull l'input
     PatientBrowserMenu* getPatientBrowserMenu() const;
 
-    /// Crea el widget que es mostra quan s'ha activat l'estat de descarrega
-    QWidget* createDownloadingWidget(QWidget *parent);
+    /// Retorna l'status del viewer. Útil per saber si el visor està visualitzant dades
+    /// o està carregant...
+    ViewerStatus getViewerStatus() const;
+
+    /// Canvia l'status del viewer
+    void setViewerStatus(ViewerStatus status);
 
 public slots:
     /// Indiquem les dades d'entrada
@@ -229,6 +236,9 @@ signals:
     /// Informa que s'ha mogut la imatge
     void panChanged(double *translation);
 
+    /// Indica que l'estat del visor ha canviat
+    void viewerStatusChanged();
+
 protected:
     virtual void contextMenuEvent(QContextMenuEvent *menuEvent);
 
@@ -264,6 +274,10 @@ protected:
 private slots: 
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu 
     void changeVolume(Volume *volume); 
+
+private:
+    /// Crea el widget que es mostra quan s'ha activat l'estat de descarrega
+    QWidget* createDownloadingWidget(QWidget *parent);
 
 protected:
     /// El volum a visualitzar
@@ -313,6 +327,9 @@ private:
     bool m_isActive;
     /// Indica si s'ha definit o no un window level per defecte
     bool m_hasDefaultWindowLevelDefined;
+
+    /// Estat del visor actual
+    ViewerStatus m_viewerStatus;
 };
 
 };  //  end  namespace udg {
