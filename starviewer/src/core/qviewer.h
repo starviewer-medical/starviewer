@@ -281,7 +281,7 @@ private:
     void setStackedLayoutCurrentWidgetFromViewerStatus();
 
     /// Crea el widget que es mostra quan s'ha activat l'estat de descarrega
-    QWidget* createDownloadingWidget(QWidget *parent);
+    QWidget* createWorkInProgressWidget(QWidget *parent);
 
 protected:
     /// El volum a visualitzar

@@ -82,7 +82,7 @@ QViewer::QViewer(QWidget *parent)
     m_stackedLayout->setSpacing(0);
     m_stackedLayout->setMargin(0);
     m_stackedLayout->addWidget(m_vtkWidget);
-    m_stackedLayout->addWidget(this->createDownloadingWidget(this));
+    m_stackedLayout->addWidget(this->createWorkInProgressWidget(this));
     this->setStackedLayoutCurrentWidgetFromViewerStatus();
 
     this->setMouseTracking(false);
@@ -793,30 +793,30 @@ void QViewer::changeVolume(Volume *volume)
     this->render(); 
 } 
 
-QWidget* QViewer::createDownloadingWidget(QWidget *parent)
+QWidget* QViewer::createWorkInProgressWidget(QWidget *parent)
 {
-    QWidget *downloadingWidget = new QWidget(parent);
-    downloadingWidget->setStyleSheet("background-color: black; color: white;");
-    QVBoxLayout *verticalLayout = new QVBoxLayout(downloadingWidget);
+    QWidget *workInProgressWidget = new QWidget(parent);
+    workInProgressWidget->setStyleSheet("background-color: black; color: white;");
 
-    QFlags<Qt::AlignmentFlag> topFlag(Qt::AlignTop);
-    QFlags<Qt::AlignmentFlag> hCenterFlag(Qt::AlignHCenter);
-    QFlags<Qt::AlignmentFlag> bottomFlag(Qt::AlignBottom);
+    QLabel *workInProgressText = new QLabel(workInProgressWidget);
+    workInProgressText->setText(tr("Downloading previous study..."));
+    workInProgressText->setAlignment(Qt::AlignBottom|Qt::AlignHCenter);
 
-    QLabel *downloadingLabelText = new QLabel(downloadingWidget);
-    downloadingLabelText->setText(tr("Downloading previous study..."));
-    downloadingLabelText->setAlignment(bottomFlag|hCenterFlag);
-    verticalLayout->addWidget(downloadingLabelText);
-    QMovie *downloadingMovie = new QMovie();
-    QLabel *downloadingLabelMovie = new QLabel(downloadingWidget);
-    downloadingLabelMovie->setMovie(downloadingMovie);
-    downloadingMovie->setFileName(QString::fromUtf8(":/images/downloading.gif"));
+    QMovie *progressBarAnimation = new QMovie(workInProgressWidget);
+    progressBarAnimation->setFileName(QString::fromUtf8(":/images/downloading.gif"));
 
-    downloadingLabelMovie->setAlignment(topFlag|hCenterFlag);
-    verticalLayout->addWidget(downloadingLabelMovie);
-    downloadingMovie->start();
+    QLabel *progressBarLabel = new QLabel(workInProgressWidget);
+    progressBarLabel->setAlignment(Qt::AlignTop|Qt::AlignHCenter);
 
-    return downloadingWidget;
+    progressBarLabel->setMovie(progressBarAnimation);
+
+    QVBoxLayout *verticalLayout = new QVBoxLayout(workInProgressWidget);
+    verticalLayout->addWidget(workInProgressText);
+    verticalLayout->addWidget(progressBarLabel);
+
+    progressBarAnimation->start();
+
+    return workInProgressWidget;
 }
 
 };  // end namespace udg
