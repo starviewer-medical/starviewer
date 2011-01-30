@@ -40,6 +40,12 @@ ConvertToDicomdir::~ConvertToDicomdir()
 {
 }
 
+void ConvertToDicomdir::setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString patientNameAnonymized)
+{
+    m_anonymizeDICOMDIR = anonymizeDICOMDIR;
+    m_patientNameAnonymized = patientNameAnonymized;
+}
+
 void ConvertToDicomdir::addStudy( const QString &studyUID )
 {
     /*Els estudis s'han d'agrupar per pacient, el que fem és afegir-los a llista d'estudis per convertir a
@@ -88,14 +94,13 @@ void ConvertToDicomdir::addStudy( const QString &studyUID )
 /*TODO:Si la creació del DICOMDIR Falla aquest mètode esborra el contingut del directori on s'havia de crear el DICOMDIR, al fer això
        la classe abans de crear el DICOMDIR hauria de comprovar que el directori està buit, perquè sinó podríem eliminar contingut del usuari.
        Ara aquesta comprovació es fa a la QCreateDicomdir i s'hauria de fer aquí*/
-Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent, bool anonymizeDICOMDIR)
+Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent)
 {
     /* Primer copiem els estudis al directori desti, i posteriorment convertim el directori en un dicomdir*/
     Status state;
     int totalNumberOfItems = 0;
 
     m_dicomDirPath = dicomdirPath;
-    m_anonymizeDICOMDIR = anonymizeDICOMDIR; 
 
     if (!AreValidRequirementsOfFolderContentToCopyToDICOMDIR(Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()))
     {
@@ -150,6 +155,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     if (m_anonymizeDICOMDIR)
     {
         m_DICOMAnonymizer = new DICOMAnonymizer();
+        m_DICOMAnonymizer->setPatientNameAnonymized(m_patientNameAnonymized);
         m_DICOMAnonymizer->setReplacePatientIDInsteadOfRemove(true);
         m_DICOMAnonymizer->setReplaceStudyIDInsteadOfRemove(true);
         m_DICOMAnonymizer->setRemovePrivateTags(true);

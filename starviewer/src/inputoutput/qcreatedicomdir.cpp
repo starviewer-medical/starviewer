@@ -86,6 +86,9 @@ void QCreateDicomdir::initializeControls()
 
     // Per defecte creem els dicomdir al discdur
     m_hardDiskAction->trigger();
+
+    m_anonymizeDICOMDIRCheckBox->setChecked(false);
+    m_patientNameAnonymizedFrame->setVisible(false);
 }
 
 void QCreateDicomdir::createActions()
@@ -145,6 +148,7 @@ void QCreateDicomdir::createConnections()
     connect( m_buttonCreateDicomdir , SIGNAL( clicked() ) , this , SLOT( createDicomdir() ) );
     connect( m_copyFolderContentToDICOMDIRCdDvdCheckBox , SIGNAL( stateChanged(int) ) , this , SLOT( copyContentFolderToDICOMDIRCheckBoxsStateChanged() ) );
     connect( m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox , SIGNAL( stateChanged(int) ) , this , SLOT( copyContentFolderToDICOMDIRCheckBoxsStateChanged() ) );
+    connect( m_anonymizeDICOMDIRCheckBox, SIGNAL( toggled(bool) ), SLOT( m_anonymizeDICOMDIRCheckBoxToggled( bool ) ) );
 }
 
 void QCreateDicomdir::showDICOMDIRSize()
@@ -436,7 +440,12 @@ Status QCreateDicomdir::startCreateDicomdir( QString dicomdirPath )
         INFO_LOG( "L'estudi " + item->text( 7 ) + " s'afegirà al DICOMDIR " );
     }
 
-    state = convertToDicomdir.convert(dicomdirPath, m_currentDevice, haveToCopyFolderContentToDICOMDIR(), m_anonymizeDICOMDIRCheckBox->isChecked());
+    if (m_anonymizeDICOMDIRCheckBox->isChecked())
+    {
+        convertToDicomdir.setAnonymizeDICOMDIR(true, m_patientNameAnonymizedLineEdit->text());
+    }
+
+    state = convertToDicomdir.convert(dicomdirPath, m_currentDevice, haveToCopyFolderContentToDICOMDIR());
 
     if ( !state.good() )
     {
@@ -481,6 +490,8 @@ void QCreateDicomdir::clearQCreateDicomdirScreen()
 {
     m_dicomdirStudiesList->clear();
     m_lineEditDicomdirPath->clear();
+    //TODO: Al mètode m_anonymizeDICOMDIRCheckBoxToggled també se li assignar valor Anonymous
+    m_patientNameAnonymizedLineEdit->setText("Anonymous");
 
     resetDICOMDIRList();
 }
@@ -927,5 +938,19 @@ void QCreateDicomdir::copyContentFolderToDICOMDIRCheckBoxsStateChanged()
 {
     updateDICOMDIRSizeWithFolderToCopyToDICOMDIRSize();
     showDICOMDIRSize();
+}
+
+void QCreateDicomdir::m_anonymizeDICOMDIRCheckBoxToggled(bool checked)
+{
+    m_patientNameAnonymizedFrame->setVisible(checked);
+
+    if (checked)
+    {
+        m_patientNameAnonymizedLineEdit->setText("Anonymous");
+    }
+    else
+    {
+        m_patientNameAnonymizedLineEdit->setText("");
+    }
 }
 }

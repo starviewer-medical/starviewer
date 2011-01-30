@@ -41,6 +41,10 @@ public:
     ///Si no es respecta aquest requisit passarà que imatges d'un mateix estudi després de ser anonimitzades tindran Study Instance UID diferents.
     bool anonymizeDICOMFile(QString inputPathFile, QString outputPathFile);
 
+    ///Ens indica quin nom de pacient han de tenir els estudis anonimitzats.
+    void setPatientNameAnonymized(const QString &patientNameAnonymized);
+    QString getPatientNameAnonymized() const;
+
     ///En comptes d'eliminar el valor del StudyID tal com indica el Basic Profile el substitueix per un valor arbitrari
     ///Aquesta opció està pensada pel DICOMDIR en que és obligatori que els estudis tinguin PatientID, tots els estudis a anonimitzar que tinguin en comú 
     ///mateix el Patient ID abans de ser anonimitzats, després de ser-ho tindran un nou Patient ID en comú, d'aquesta manera es podrà veure que aquells estudis
@@ -77,6 +81,7 @@ private:
 
 private:
 
+    QString m_patientNameAnonymized;
     bool m_replacePatientIDInsteadOfRemove;
     bool m_replaceStudyIDInsteadOfRemove;
     bool m_removePritaveTags;
