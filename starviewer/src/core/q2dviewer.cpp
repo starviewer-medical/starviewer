@@ -620,7 +620,8 @@ void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFini
     this->cancelCurrentVolumeReaderJob();
     this->setInputFinishedCommand(inputFinishedCommand);
 
-    if (!volume->hasAllDataLoaded())
+    bool allowAsynchronousVolumeLoading = Settings().getValue(CoreSettings::AllowAsynchronousVolumeLoading).toBool();
+    if (!volume->hasAllDataLoaded() && allowAsynchronousVolumeLoading)
     {
         this->loadVolumeAsynchronously(volume);
     }

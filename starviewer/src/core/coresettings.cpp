@@ -60,6 +60,8 @@ const QString CoreSettings::DontCheckNewVersionsOnline("DontCheckNewVersionsOnli
 
 const QString CoreSettings::MammographyAutoOrientationExceptions("MammographyAutoOrientationExceptions");
 
+const QString CoreSettings::AllowAsynchronousVolumeLoading("AllowAsynchronousVolumeLoading");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -86,6 +88,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(CheckVersionInterval, "15");
     settingsRegistry->addSetting(DontCheckNewVersionsOnline, false);
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
+    settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
 }
 
 } // end namespace udg 
