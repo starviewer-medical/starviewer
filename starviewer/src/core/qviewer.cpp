@@ -783,6 +783,10 @@ void QViewer::setStackedLayoutCurrentWidgetFromViewerStatus()
         case DownloadingVolume:
         case LoadingVolume:
             m_stackedLayout->setCurrentIndex(1);
+
+            QLabel *workInProgressText = m_stackedLayout->currentWidget()->findChild<QLabel*>("WorkInProgressText");
+            QString message = (m_viewerStatus == LoadingVolume) ? tr("Loading data...") : tr("Downloading previous study...");
+            workInProgressText->setText(message);
             break;
     }
 }
@@ -799,8 +803,8 @@ QWidget* QViewer::createWorkInProgressWidget(QWidget *parent)
     workInProgressWidget->setStyleSheet("background-color: black; color: white;");
 
     QLabel *workInProgressText = new QLabel(workInProgressWidget);
-    workInProgressText->setText(tr("Downloading previous study..."));
     workInProgressText->setAlignment(Qt::AlignBottom|Qt::AlignHCenter);
+    workInProgressText->setObjectName("WorkInProgressText");
 
     QMovie *progressBarAnimation = new QMovie(workInProgressWidget);
     progressBarAnimation->setFileName(QString::fromUtf8(":/images/downloading.gif"));
