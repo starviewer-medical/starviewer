@@ -23,6 +23,9 @@ public:
     /// Especifica quin és el títol que es posa a la tasca que s'estigui fent
     void setTitle(const QString &text);
 
+    /// Mostra l'error que se li passi. Útil per mostrar a l'usuari si es produeix un error al fer el "work in progress".
+    void showError(const QString &errorText);
+
     /// Reinicia el widget.
     void reset();
 
@@ -33,6 +36,9 @@ public slots:
 private:
     /// Activa/desactiva la progressBar depenent de si s'està al mig d'una operació o no
     void startAnimationByProgress(int progress);
+
+    /// Reseteja els widgets involucrats en mostrar el progrés
+    void resetProgressWidgets();
 
 private:
     QMovie *m_progressBarAnimation;

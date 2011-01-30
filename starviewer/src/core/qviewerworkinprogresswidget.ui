@@ -120,6 +120,16 @@ color: rgb(255, 255, 255);</string>
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="m_errorLabel">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>

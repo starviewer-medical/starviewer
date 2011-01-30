@@ -21,6 +21,12 @@ public:
     /// Ens indica si el volume s'ha llegit correctament
     bool success() const;
 
+    /// Ens retorna l'error en format visible per l'usuari de la última execució del job.
+    /// Si no hi ha error, retorna cadena buida.
+    /// TODO: Ens veiem obligats a fer-ho així de moment, per com està a VolumeReader. Idealment aquí només es retornaria
+    /// el codi d'error i és des de la interfície que es converteix en missatge a l'usuari.
+    QString getLastErrorMessageToUser() const;
+
     /// Retorna el volume
     Volume* getVolume() const;
 
@@ -35,6 +41,7 @@ protected:
 private:
     Volume *m_volumeToRead;
     bool m_volumeReadSuccessfully;
+    QString m_lastErrorMessageToUser;
 };
 
 } // End namespace udg

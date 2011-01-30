@@ -30,6 +30,10 @@ public:
     /// Si no s'ha produit cap error, no fa res.
     void showMessageBoxWithLastError() const;
 
+    /// Retorna un missatge que es pot mostrar a un usuari amb l'explicació de l'últim error.
+    /// Si no hi ha cap "últim error" es retorna un QString buit.
+    QString getLastErrorMessageToUser() const;
+
 signals:
     /// Ens indica el progrés del procés de lectura
     void progress(int progress);

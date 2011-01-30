@@ -643,9 +643,8 @@ void Q2DViewer::volumeReaderJobFinished()
     }
     else
     {
-        m_workInProgressWidget->setTitle(tr("Error loading data."));
-        // TODO: Cal tractar els errors!!!!
-        this->setViewerStatus(NoVolumeInput);
+        this->setViewerStatus(LoadingError);
+        m_workInProgressWidget->showError(m_volumeReaderJob->getLastErrorMessageToUser());
     }
 }
 

@@ -55,7 +55,7 @@ public:
     enum RecordFileFormatType { MPEG2 };
 
     /// Estat del viewer
-    enum ViewerStatus { NoVolumeInput, DownloadingVolume, LoadingVolume, VisualizingVolume };
+    enum ViewerStatus { NoVolumeInput, DownloadingVolume, LoadingVolume, LoadingError, VisualizingVolume };
 
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor* getInteractor();

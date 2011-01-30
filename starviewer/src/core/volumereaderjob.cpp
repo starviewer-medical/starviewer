@@ -10,6 +10,7 @@ VolumeReaderJob::VolumeReaderJob(Volume *volume, QObject *parent)
 {
     m_volumeToRead = volume;
     m_volumeReadSuccessfully = false;
+    m_lastErrorMessageToUser = "";
 }
 
 VolumeReaderJob::~VolumeReaderJob()
@@ -20,6 +21,12 @@ bool VolumeReaderJob::success() const
 {
     return m_volumeReadSuccessfully;
 }
+
+QString VolumeReaderJob::getLastErrorMessageToUser() const
+{
+    return m_lastErrorMessageToUser;
+}
+
 
 Volume* VolumeReaderJob::getVolume() const
 {
@@ -36,6 +43,7 @@ void VolumeReaderJob::run()
     VolumeReader *volumeReader = new VolumeReader();
     connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
     m_volumeReadSuccessfully = volumeReader->readWithoutShowingError(m_volumeToRead);
+    m_lastErrorMessageToUser = volumeReader->getLastErrorMessageToUser();
 
     DEBUG_LOG(QString("End run VolumeReaderJob with Volume: %1 and result %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_volumeReadSuccessfully));
 }
