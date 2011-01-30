@@ -20,11 +20,22 @@ DICOMAnonymizer::DICOMAnonymizer()
     m_replacePatientIDInsteadOfRemove = false;
     m_replaceStudyIDInsteadOfRemove = false;
     m_removePritaveTags = true;
+    m_patientNameAnonymized = "";
 }
 
 DICOMAnonymizer::~DICOMAnonymizer()
 {
     delete gdcmAnonymizer;
+}
+
+void DICOMAnonymizer::setPatientNameAnonymized(const QString &patientNameAnonymized)
+{
+    m_patientNameAnonymized = patientNameAnonymized;
+}
+
+QString DICOMAnonymizer::getPatientNameAnonymized() const
+{
+    return m_patientNameAnonymized;
 }
 
 void DICOMAnonymizer::setReplacePatientIDInsteadOfRemove(bool replace)
@@ -139,7 +150,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
         return false;
     }
 
-    gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), "Anonymous"); //Establi el mom del pacient anonimitzat
+    gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), qPrintable(m_patientNameAnonymized)); //Estableix el mom del pacient anonimitzat
     
     if (getReplacePatientIDInsteadOfRemove())
     {

@@ -149,6 +149,9 @@ private slots:
 	///Actualitza el tamany del DICOMDIR en funció de si s'ha de copiar o no la carpeta auxiliar al DICOMDIR
     void copyContentFolderToDICOMDIRCheckBoxsStateChanged();
 
+    ///Amaga/Ensenya el frame per introduir el nom del pacient anonimitzat
+    void m_anonymizeDICOMDIRCheckBoxToggled(bool checked);
+
 private:
     /// Constants per definir les mides de CD/DVD i disc
     static const int CDRomSizeMb;

@@ -36,8 +36,14 @@ class ConvertToDicomdir : public QObject
 {
 Q_OBJECT
 public:
+    //TODO: Arreglar no fa falta destructor ni passar el QObject Parent,
     ConvertToDicomdir(QObject *parent = 0);
     ~ConvertToDicomdir();
+
+    ///Ens permet indicar que volem anonimitzar l'estudi DICOMDIR, i en el cas que l'anonimitzem se li pot indicar quin nom de pacient que han de tenir els
+    ///estudis anonimitzats. Si s'indica que no es vol anonimitzar l'estudi i es passar un valor al segon paràmetre aquest s'ignorarà. 
+    ///TODO: Repassar al fer refactoring de la classe si és la millor manera de passar el nom de pacientAnonimitzat
+    void setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString patientNameAnonymized = "");
 
     /** Afegeix un estudi a la llista per convertir-se a dicomsdir. Quan afageix l'estudi, l'afageix a la llista ordenats per pacient. Ja que els dicomdir s'han d'agrupar primerament per pacients
      * @param studyUID UID de l'estudi a convertir a dicomdir
@@ -51,7 +57,7 @@ public:
      * @return Indica l'estat en què finalitza el mètode
      */
     //TODO:La comprovació de que la carpeta destí estigui buida es fa a QCreateDicomdir s'hauria de traslladar en aquesta classe
-    Status convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent, bool anonymizeDICOMDIR);
+    Status convert( const QString &dicomdirPath, CreateDicomdir::recordDeviceDicomDir selectedDevice, bool copyFolderContent);
 
     /** Crea un fitxer README.TXT, amb informació sobre quina institució ha generat el dicomdir per quan es grava en un cd o dvd en el path que se li especifiqui.
       * En el cas que el txt es vulgui afegir en el mateix directori arrel on hi ha el dicomdir s'haura de fer després d'haver convertir el directori en un dicomdir, si es fes abans el mètode de convertir el directori a dicomdir fallaria, perquè no sabia com tractar el README.txt
@@ -131,6 +137,7 @@ private:
     ///És necessari crear-la global per mantenir la consistència dels UID dels fitxers DICOM
     DICOMAnonymizer *m_DICOMAnonymizer;
     bool m_anonymizeDICOMDIR;
+    QString m_patientNameAnonymized;
 };
 
 }
