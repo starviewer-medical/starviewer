@@ -244,7 +244,8 @@ HEADERS += extensionfactory.h \
     asynchronousvolumereader.h \
     qviewerworkinprogresswidget.h \
     qviewercommand.h \
-    applyhangingprotocolqviewercommand.h
+    applyhangingprotocolqviewercommand.h \
+    renderqviewercommand.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -446,7 +447,8 @@ SOURCES += extensionmediator.cpp \
     asynchronousvolumereader.cpp \
     qviewerworkinprogresswidget.cpp \
     qviewercommand.cpp \
-    applyhangingprotocolqviewercommand.cpp
+    applyhangingprotocolqviewercommand.cpp \
+    renderqviewercommand.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)

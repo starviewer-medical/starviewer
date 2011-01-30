@@ -401,6 +401,11 @@ private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip )
     void updateCamera();
 
+    /// Reimplementem per tal de que faci un setInputAsynchronously
+    /// TODO: De moment es fa així de manera xapussa fins que no es traspassin els mètode de càrrega
+    /// asíncrona a QViewer.
+    virtual void setInputAndRender(Volume *volume);
+
     /// Canvia el volum que s'està visualitzant per un de nou que es passa per paràmetre.
     /// Sempre es canviarà, independentment de si el volume passat és el mateix o no al que ja hi havia.
     /// Es pressuposa que el volume està carregat en memòria.

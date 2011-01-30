@@ -24,6 +24,7 @@
 #include "asynchronousvolumereader.h"
 #include "volumereaderjob.h"
 #include "qviewercommand.h"
+#include "renderqviewercommand.h"
 // Qt
 #include <QResizeEvent>
 // Include's bàsics vtk
@@ -629,6 +630,12 @@ void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFini
         this->setViewerStatus(VisualizingVolume);
         this->executeInputFinishedCommand();
     }
+}
+
+void Q2DViewer::setInputAndRender(Volume *volume)
+{
+    RenderQViewerCommand *command = new RenderQViewerCommand(this);
+    this->setInputAsynchronously(volume, command);
 }
 
 void Q2DViewer::executeInputFinishedCommand()
