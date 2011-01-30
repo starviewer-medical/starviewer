@@ -36,9 +36,7 @@ class ConvertToDicomdir : public QObject
 {
 Q_OBJECT
 public:
-    //TODO: Arreglar no fa falta destructor ni passar el QObject Parent,
-    ConvertToDicomdir(QObject *parent = 0);
-    ~ConvertToDicomdir();
+    ConvertToDicomdir();
 
     ///Ens permet indicar que volem anonimitzar l'estudi DICOMDIR, i en el cas que l'anonimitzem se li pot indicar quin nom de pacient que han de tenir els
     ///estudis anonimitzats. Si s'indica que no es vol anonimitzar l'estudi i es passar un valor al segon paràmetre aquest s'ignorarà. 
