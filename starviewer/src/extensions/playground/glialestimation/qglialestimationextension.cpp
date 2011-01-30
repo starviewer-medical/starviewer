@@ -150,7 +150,7 @@ void QGlialEstimationExtension::createConnections()
     // Fem que no s'assigni automàticament l'input que s'ha seleccionat amb el menú de pacient, ja que fem tractaments adicionals
     // sobre el volum seleccionat i l'input final del visor pot diferir de l'inicial i és l'extensió qui decideix finalment quin input
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
-    disconnect( m_viewersLayout->getViewerWidget(1)->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume( Volume * ) ), m_viewersLayout->getViewerWidget(1)->getViewer(), SLOT( setInput( Volume * ) ) );
+    m_viewersLayout->getViewerWidget(1)->getViewer()->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     connect( m_viewersLayout->getViewerWidget(1)->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume( Volume * ) ), SLOT( setVolumePerfu( Volume * ) ) );
     
     connect( m_viewersLayout->getViewerWidget(3)->getViewer(), SIGNAL( volumeChanged( Volume * ) ), SLOT( setVolumeFlair( Volume * ) ) );
