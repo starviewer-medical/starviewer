@@ -20,7 +20,11 @@
 #include "coresettings.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
+#include "asynchronousvolumereader.h" //Read volume asynchronously
+#include "volumereaderjob.h" //Read volume asynchronously
 // Qt
+#include <QLabel> //Read volume asynchronously
+#include <QStackedLayout>  //Read volume asynchronously
 #include <QResizeEvent>
 // Include's bàsics vtk
 #include <vtkRenderer.h>
@@ -43,6 +47,7 @@
 #include <vtkColorTransferFunction.h>
 // Projecció de punts
 #include <vtkMatrix4x4.h>
+
 namespace udg {
 
 Q2DViewer::Q2DViewer(QWidget *parent)
@@ -51,6 +56,8 @@ Q2DViewer::Q2DViewer(QWidget *parent)
   m_numberOfPhases(1), m_maxSliceValue(0), m_applyFlip(false), m_isImageFlipped(false), m_slabThickness(1), m_firstSlabSlice(0),
   m_lastSlabSlice(0), m_thickSlabActive(false), m_slabProjectionMode(AccumulatorFactory::Maximum)
 {
+    m_volumeReaderJob = NULL;
+
     m_imageSizeInformation[0] = 0;
     m_imageSizeInformation[1] = 0;
 
@@ -592,7 +599,66 @@ void Q2DViewer::setInput(Volume *volume)
         return;
     }
 
-    this->setNewVolume(volume);
+    if (!volume->hasAllDataLoaded())
+    {
+        this->loadVolumeAsynchronously(volume);
+    }
+    else
+    {
+        this->setNewVolume(volume);
+        this->setViewerStatus(VisualizingVolume);
+    }
+}
+
+void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
+{
+    this->setViewerStatus(LoadingVolume);
+
+    // TODO: Idealment aquí hem de comprovar que no estiguem carregant alguna cosa abans i cancel·lar-la!!
+    // Què passa si algun altre visor el vol continuar descarregant igualment?
+    if (m_volumeReaderJob != NULL)
+    {
+        disconnect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(volumeReaderJobFinished()));
+    }
+    // TODO Esborrar volumeReader!!
+    AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
+    m_volumeReaderJob = volumeReader->read(volume);
+    connect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(volumeReaderJobFinished()), Qt::QueuedConnection);
+    connect(m_volumeReaderJob, SIGNAL(progress(int)), SLOT(updateProgress(int)), Qt::QueuedConnection);
+
+    // TODO: De moment no tenim cap més remei que especificar un volume fals. La resta del viewer (i els que en depenen) s'esperen
+    // tenir un volum carregat després de cridar a setInput.
+    // També tenim el problema de que perquè surti al menú de botó dret com a seleccionat, cal posar-li el mateix id.
+    Volume *dummyVolume = this->getDummyVolumeFromVolume(volume);
+    dummyVolume->setIdentifier(volume->getIdentifier());
+    this->setNewVolume(dummyVolume);
+}
+
+void Q2DViewer::volumeReaderJobFinished()
+{
+    if (m_volumeReaderJob->success())
+    {
+        this->setInput(m_volumeReaderJob->getVolume());
+        m_volumeReaderJob->deleteLater();
+        m_volumeReaderJob = NULL;
+    }
+    else
+    {
+        QLabel *workInProgressText = m_stackedLayout->currentWidget()->findChild<QLabel*>("WorkInProgressText");
+        workInProgressText->setText(tr("Error loading data."));
+        // TODO: Cal tractar els errors!!!!
+        this->setViewerStatus(NoVolumeInput);
+    }
+}
+
+Volume* Q2DViewer::getDummyVolumeFromVolume(Volume *volume)
+{
+    // TODO: Estem perdent memòria durant la vida del 2dviewer, caldria esborrar el dummy d'abans
+    Volume *newVolume = new Volume(this);
+    newVolume->setImages(volume->getImages());
+    newVolume->convertToNeutralVolume();
+
+    return newVolume;
 }
 
 void Q2DViewer::setNewVolume(Volume *volume)
@@ -672,6 +738,7 @@ void Q2DViewer::setNewVolume(Volume *volume)
     // HACK
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
+
     // Indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
 }

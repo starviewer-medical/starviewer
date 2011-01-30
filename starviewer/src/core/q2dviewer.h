@@ -30,6 +30,7 @@ class Image;
 class Drawer;
 class ImagePlane;
 class ImageOrientationOperationsMapper;
+class VolumeReaderJob;
 
 /**
 
@@ -371,6 +372,12 @@ private:
     /// S'encarrega d'encaixar la imatge actual a la mida del viewport
     void fitImageIntoViewport();
 
+    /// Carrega un volum asíncronament
+    void loadVolumeAsynchronously(Volume *volume);
+
+    /// Retorna un volum "dummy"
+    Volume* getDummyVolumeFromVolume(Volume *volume);
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip )
     void updateCamera();
@@ -379,6 +386,8 @@ private slots:
     /// Sempre es canviarà, independentment de si el volume passat és el mateix o no al que ja hi havia.
     /// Es pressuposa que el volume està carregat en memòria.
     void setNewVolume(Volume *volume);
+
+    void volumeReaderJobFinished();
 
 protected:
     /// Actor d'imatge
@@ -476,6 +485,8 @@ private:
 
     /// Llista d'excepcions per les quals no s'ha d'aplicar una orientació concreta per estudis de mamografia.
     QStringList m_mammographyAutoOrientationExceptions;
+
+    VolumeReaderJob *m_volumeReaderJob;
 
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)

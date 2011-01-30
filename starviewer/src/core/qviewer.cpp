@@ -791,6 +791,13 @@ void QViewer::setStackedLayoutCurrentWidgetFromViewerStatus()
     }
 }
 
+
+void QViewer::updateProgress(int progress)
+{
+    QLabel *workInProgressText = m_stackedLayout->currentWidget()->findChild<QLabel*>("WorkInProgressText");
+    workInProgressText->setText(tr("Loading data...  (%1\%)").arg(progress));
+}
+
 void QViewer::changeVolume(Volume *volume) 
 { 
     this->setInput(volume); 

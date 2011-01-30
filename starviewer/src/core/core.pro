@@ -238,7 +238,9 @@ HEADERS += extensionfactory.h \
     customwindowlevel.h \
     customwindowlevelsloader.h \
     customwindowlevelsreader.h \
-    customwindowlevelsrepository.h
+    customwindowlevelsrepository.h \
+    volumereaderjob.h \
+    asynchronousvolumereader.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -435,8 +437,9 @@ SOURCES += extensionmediator.cpp \
     customwindowlevel.cpp \
     customwindowlevelsloader.cpp \
     customwindowlevelsreader.cpp \
-    customwindowlevelsrepository.cpp
-
+    customwindowlevelsrepository.cpp \
+    volumereaderjob.cpp \
+    asynchronousvolumereader.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
@@ -447,6 +450,7 @@ include(../dcmtk.inc)
 include(../log4cxx.inc)
 include(../compilationtype.inc)
 include(../translations.inc)
+include(../threadweaver.inc)
 QT += xml \
     network \
     webkit \

@@ -272,6 +272,10 @@ protected:
     /// Si no tenim input el resultat és indefinit
     void computeAutomaticWindowLevel(double &windowWidth, double &windowLevel);
 
+protected slots:
+    /// Actualitza el progrés del widget "work in progress".
+    void updateProgress(int progress);
+
 private slots: 
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu 
     void changeVolume(Volume *volume); 
@@ -326,14 +330,15 @@ protected:
     /// Menú de pacient a través del qual podem escollir l'input del viewer
     PatientBrowserMenu *m_patientBrowserMenu;
 
+    // TODO: Cal que sigui protected???
+    /// Layout que ens permet crear widgets diferents per els estats diferents del visor.
+    QStackedLayout *m_stackedLayout;
+
 private:
     /// Indica si el viewer és actiu o no
     bool m_isActive;
     /// Indica si s'ha definit o no un window level per defecte
     bool m_hasDefaultWindowLevelDefined;
-
-    /// Layout que ens permet crear widgets diferents per els estats diferents del visor.
-    QStackedLayout *m_stackedLayout;
 
     /// Estat del visor actual
     ViewerStatus m_viewerStatus;
