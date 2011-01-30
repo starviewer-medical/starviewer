@@ -276,7 +276,8 @@ protected:
 private slots: 
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
     /// Mètode que especifica un input seguit d'una crida al mètode render()
-    void setInputAndRender(Volume *volume);
+    /// TODO: Convertit en virtual per tal de poder ser reimplementat per Q2DViewer per càrrega asíncrona
+    virtual void setInputAndRender(Volume *volume);
 
 private:
     /// Actualitza quin és el widget actual que es mostra per pantalla a partir de l'estat del viewer
