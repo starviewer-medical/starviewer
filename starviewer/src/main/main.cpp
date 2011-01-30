@@ -155,7 +155,10 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale() );
 
     configureLogging();
-    udg::StatsWatcher::log("Inicialització de l'aplicació");
+
+    // Marquem l'inici de l'aplicació al log
+    INFO_LOG("==================================================== BEGIN ====================================================");
+    INFO_LOG(QString("%1 Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
 
     // Inicialitzem els settings
     udg::CoreSettings coreSettings;
@@ -203,13 +206,15 @@ int main(int argc, char *argv[])
         }
     }
 
+    int returnValue;
     if (app.isRunning())
     {
         //Hi ha una altra instància del Starviewer executant-se
         INFO_LOG("Hi ha una altra instancia de l'starviewer executant-se. S'enviaran els arguments de la linia de comandes a la instancia principal.");
 
         sendToFirstStarviewerInstanceCommandLineOptions(app);
-        return 0;
+
+        returnValue = 0;
     }
     else
     {
@@ -234,10 +239,13 @@ int main(int argc, char *argv[])
             StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(app.arguments(), errorInvalidCommanLineArguments);
         }
 
-        int returnValue = app.exec();
-
-        udg::StatsWatcher::log("Es tanca l'aplicació");
-
-        return returnValue;
+        returnValue = app.exec();
     }
+
+    // Marquem el final de l'aplicació al log
+    INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
+             .arg(udg::StarviewerBuildID).arg(returnValue));
+    INFO_LOG("===================================================== END =====================================================");
+
+    return returnValue;
 }
