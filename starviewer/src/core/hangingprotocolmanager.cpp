@@ -228,7 +228,7 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
 
         if (hangingProtocolImageSet->isDownloaded() == false)
         {
-            viewerWidget->enableDownloadingState();
+            viewerWidget->getViewer()->setViewerStatus(QViewer::DownloadingVolume);
 
             StructPreviousStudyDownloading *structPreviousStudyDownloading = new StructPreviousStudyDownloading;
             structPreviousStudyDownloading->widgetToDisplay = viewerWidget;
@@ -634,7 +634,7 @@ void HangingProtocolManager::previousStudyDownloaded()
             Q2DViewerWidget *viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
             structPreviousStudyDownloading->displaySet->getImageSet()->setDownloaded(true);
 
-            viewerWidget->disableDownloadingState();
+            viewerWidget->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
 
             setInputToViewer(viewerWidget, series, structPreviousStudyDownloading->displaySet);
 
@@ -651,7 +651,7 @@ void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &stud
         for (int i = 0; i < count ; i++)
         {
             StructPreviousStudyDownloading *element = m_studiesDownloading->take(studyUID); // s'agafa i es treu de la llista
-            element->widgetToDisplay->disableDownloadingState();
+            element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
             delete element;
         }
     }
@@ -674,7 +674,7 @@ void HangingProtocolManager::cancelHangingProtocolDownloading()
     foreach(QString key, m_studiesDownloading->keys())
     {
         StructPreviousStudyDownloading *element = m_studiesDownloading->take(key); // S'agafa i es treu de la llista l'element que s'està esperant
-        element->widgetToDisplay->disableDownloadingState(); // es treu el label de downloading
+        element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput); // es treu el label de downloading
         delete element;
     }
 }

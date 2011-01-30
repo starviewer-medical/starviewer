@@ -13,6 +13,7 @@
 #include <vtkImageData.h>
 
 // Fordward declarations
+class QStackedLayout;
 class QVTKWidget;
 class vtkCamera;
 class vtkRenderer;
@@ -276,6 +277,9 @@ private slots:
     void changeVolume(Volume *volume); 
 
 private:
+    /// Actualitza quin és el widget actual de l'stacked layout a partir de l'estat del viewer
+    void setStackedLayoutCurrentWidgetFromViewerStatus();
+
     /// Crea el widget que es mostra quan s'ha activat l'estat de descarrega
     QWidget* createDownloadingWidget(QWidget *parent);
 
@@ -327,6 +331,9 @@ private:
     bool m_isActive;
     /// Indica si s'ha definit o no un window level per defecte
     bool m_hasDefaultWindowLevelDefined;
+
+    /// Layout que ens permet crear widgets diferents per els estats diferents del visor.
+    QStackedLayout *m_stackedLayout;
 
     /// Estat del visor actual
     ViewerStatus m_viewerStatus;

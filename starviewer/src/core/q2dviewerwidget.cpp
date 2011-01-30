@@ -30,10 +30,10 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_synchronizeButton->setDefaultAction(m_synchronizeButtonAction);
     m_synchronizeButton->setEnabled(false);
 
-    m_downloadingWidget = 0;
-
     createConnections();
     m_viewText->setText(QString());
+
+    this->setSliderBarWidgetsEnabledFromViewerStatus();
 
     m_statsWatcher = new StatsWatcher("Q2DViewerWidget", this);
     m_statsWatcher->addClicksCounter(m_synchronizeButton);
@@ -75,11 +75,25 @@ void Q2DViewerWidget::createConnections()
 
     connect(m_2DView, SIGNAL(slabThicknessChanged(int)), SLOT(updateSlider()));
     connect(m_synchronizeButtonAction, SIGNAL(toggled(bool)), SLOT(enableSynchronization(bool)));
+
+    connect(m_2DView, SIGNAL(viewerStatusChanged()), SLOT(setSliderBarWidgetsEnabledFromViewerStatus()));
 }
 
 void Q2DViewerWidget::updateProjectionLabel()
 {
     m_viewText->setText(m_2DView->getCurrentPlaneProjectionLabel());
+}
+
+void Q2DViewerWidget::setSliderBarWidgetsEnabledFromViewerStatus()
+{
+    if (m_2DView->getViewerStatus() == Q2DViewer::VisualizingVolume)
+    {
+        this->setSliderBarWidgetsEnabled(true);
+    }
+    else
+    {
+        this->setSliderBarWidgetsEnabled(false);
+    }
 }
 
 void Q2DViewerWidget::setInput(Volume *input)
@@ -181,26 +195,10 @@ void Q2DViewerWidget::resetSliderRangeAndValue()
     m_slider->setValue(m_2DView->getCurrentSlice());
 }
 
-void Q2DViewerWidget::disableDownloadingState()
+void Q2DViewerWidget::setSliderBarWidgetsEnabled(bool enabled)
 {
-    if (m_downloadingWidget)
-    {
-        m_downloadingWidget->setVisible(false);
-    }
-}
-
-void Q2DViewerWidget::enableDownloadingState()
-{
-    if (!m_downloadingWidget)
-    {
-        m_downloadingWidget = m_2DView->createDownloadingWidget(this->parentWidget());
-    }
-
-    m_downloadingWidget->setVisible(false);
-
-    QRect size = this->geometry();
-    m_downloadingWidget->setGeometry(size.x(), size.y(), size.width(), size.height());
-    m_downloadingWidget->setVisible(true);
-
+    m_slider->setEnabled(enabled);
+    m_synchronizeButtonAction->setEnabled(enabled);
+    m_viewText->setEnabled(enabled);
 }
 }
