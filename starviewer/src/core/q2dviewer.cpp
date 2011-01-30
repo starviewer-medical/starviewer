@@ -592,6 +592,11 @@ void Q2DViewer::setInput(Volume *volume)
         return;
     }
 
+    this->setNewVolume(volume);
+}
+
+void Q2DViewer::setNewVolume(Volume *volume)
+{
     // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if (m_mainVolume)
     {

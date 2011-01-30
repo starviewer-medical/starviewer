@@ -375,6 +375,11 @@ private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip )
     void updateCamera();
 
+    /// Canvia el volum que s'està visualitzant per un de nou que es passa per paràmetre.
+    /// Sempre es canviarà, independentment de si el volume passat és el mateix o no al que ja hi havia.
+    /// Es pressuposa que el volume està carregat en memòria.
+    void setNewVolume(Volume *volume);
+
 protected:
     /// Actor d'imatge
     vtkImageActor *m_imageActor;
