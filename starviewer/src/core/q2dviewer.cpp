@@ -18,13 +18,12 @@
 #include "transferfunction.h"
 #include "windowlevelpresetstooldata.h"
 #include "coresettings.h"
+#include "qviewerworkinprogresswidget.h"
 // Thickslab
 #include "vtkProjectionImageFilter.h"
 #include "asynchronousvolumereader.h" //Read volume asynchronously
 #include "volumereaderjob.h" //Read volume asynchronously
 // Qt
-#include <QLabel> //Read volume asynchronously
-#include <QStackedLayout>  //Read volume asynchronously
 #include <QResizeEvent>
 // Include's bàsics vtk
 #include <vtkRenderer.h>
@@ -624,7 +623,7 @@ void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
     AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
     m_volumeReaderJob = volumeReader->read(volume);
     connect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(volumeReaderJobFinished()), Qt::QueuedConnection);
-    connect(m_volumeReaderJob, SIGNAL(progress(int)), SLOT(updateProgress(int)), Qt::QueuedConnection);
+    connect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)), Qt::QueuedConnection);
 
     // TODO: De moment no tenim cap més remei que especificar un volume fals. La resta del viewer (i els que en depenen) s'esperen
     // tenir un volum carregat després de cridar a setInput.
@@ -644,8 +643,7 @@ void Q2DViewer::volumeReaderJobFinished()
     }
     else
     {
-        QLabel *workInProgressText = m_stackedLayout->currentWidget()->findChild<QLabel*>("WorkInProgressText");
-        workInProgressText->setText(tr("Error loading data."));
+        m_workInProgressWidget->setTitle(tr("Error loading data."));
         // TODO: Cal tractar els errors!!!!
         this->setViewerStatus(NoVolumeInput);
     }

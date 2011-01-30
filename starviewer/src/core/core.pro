@@ -16,7 +16,8 @@ FORMS += qlogviewerbase.ui \
     qthickslabwidgetbase.ui \
     q2dviewerwidgetbase.ui \
     qreleasenotesbase.ui \
-    qdicomdumpbrowserbase.ui
+    qdicomdumpbrowserbase.ui \
+    qviewerworkinprogresswidget.ui
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -240,7 +241,8 @@ HEADERS += extensionfactory.h \
     customwindowlevelsreader.h \
     customwindowlevelsrepository.h \
     volumereaderjob.h \
-    asynchronousvolumereader.h
+    asynchronousvolumereader.h \
+    qviewerworkinprogresswidget.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -439,7 +441,8 @@ SOURCES += extensionmediator.cpp \
     customwindowlevelsreader.cpp \
     customwindowlevelsrepository.cpp \
     volumereaderjob.cpp \
-    asynchronousvolumereader.cpp
+    asynchronousvolumereader.cpp \
+    qviewerworkinprogresswidget.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
