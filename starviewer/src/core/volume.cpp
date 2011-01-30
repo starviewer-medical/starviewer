@@ -96,6 +96,11 @@ void Volume::setData(VtkImageTypePointer vtkImage)
     m_dataLoaded = true;
 }
 
+bool Volume::hasAllDataLoaded() const
+{
+    return m_dataLoaded;
+}
+
 void Volume::getOrigin(double xyz[3])
 {
     getVtkData()->UpdateInformation();

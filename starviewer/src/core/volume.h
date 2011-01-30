@@ -76,6 +76,10 @@ public:
     */
     ItkImageTypePointer getItkData();
 
+    /// Ens indica si té totes les dades carregades.
+    /// Si no té totes les dades carregades els mètodes que pregunten sobre les dades poden donar respostes incorrectes.
+    bool hasAllDataLoaded() const;
+
     /// Obté l'origen del volum
     void getOrigin(double  xyz[3]);
     double* getOrigin();
