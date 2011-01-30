@@ -31,6 +31,7 @@ class ToolProxy;
 class WindowLevelPresetsToolData;
 class TransferFunction;
 class PatientBrowserMenu;
+class QViewerWorkInProgressWidget;
 
 /**
     Classe base per a totes les finestres de visualització
@@ -272,20 +273,16 @@ protected:
     /// Si no tenim input el resultat és indefinit
     void computeAutomaticWindowLevel(double &windowWidth, double &windowLevel);
 
-protected slots:
-    /// Actualitza el progrés del widget "work in progress".
-    void updateProgress(int progress);
-
 private slots: 
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu 
     void changeVolume(Volume *volume); 
 
 private:
-    /// Actualitza quin és el widget actual de l'stacked layout a partir de l'estat del viewer
-    void setStackedLayoutCurrentWidgetFromViewerStatus();
+    /// Actualitza quin és el widget actual que es mostra per pantalla a partir de l'estat del viewer
+    void setCurrentWidgetByViewerStatus(ViewerStatus status);
 
-    /// Crea el widget que es mostra quan s'ha activat l'estat de descarrega
-    QWidget* createWorkInProgressWidget(QWidget *parent);
+    /// Inicialitza el widget QWorkInProgress a partir de l'status
+    void initializeWorkInProgressByViewerStatus(ViewerStatus status);
 
 protected:
     /// El volum a visualitzar
@@ -330,9 +327,8 @@ protected:
     /// Menú de pacient a través del qual podem escollir l'input del viewer
     PatientBrowserMenu *m_patientBrowserMenu;
 
-    // TODO: Cal que sigui protected???
-    /// Layout que ens permet crear widgets diferents per els estats diferents del visor.
-    QStackedLayout *m_stackedLayout;
+    /// Widget que es mostra quan s'està realitzant algun treball asíncron
+    QViewerWorkInProgressWidget *m_workInProgressWidget;
 
 private:
     /// Indica si el viewer és actiu o no
@@ -342,6 +338,9 @@ private:
 
     /// Estat del visor actual
     ViewerStatus m_viewerStatus;
+
+    /// Layout que ens permet crear widgets diferents per els estats diferents del visor.
+    QStackedLayout *m_stackedLayout;
 };
 
 };  //  end  namespace udg {

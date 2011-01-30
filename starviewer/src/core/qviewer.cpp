@@ -12,6 +12,7 @@
 #include "patientbrowsermenu.h"
 #include "windowlevelpresetstooldata.h" // Per poder afegir i modificar els presets que visualitzem
 #include "transferfunction.h"
+#include "qviewerworkinprogresswidget.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de interface, pacs, etc.etc.!!
 #include "../interface/qapplicationmainwindow.h"
@@ -20,9 +21,6 @@
 #include <QStackedLayout>
 #include <QContextMenuEvent>
 #include <QMessageBox>
-// Qt createDownloadingWidget
-#include <QMovie>
-#include <QLabel>
 
 // Include's vtk
 #include <QVTKWidget.h>
@@ -46,8 +44,7 @@ namespace udg {
 
 QViewer::QViewer(QWidget *parent)
  : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0), m_defaultWindow(.0),
-   m_defaultLevel(.0), m_transferFunction(0), m_isRenderingEnabled(true), m_isActive(false), m_hasDefaultWindowLevelDefined(false),
-   m_viewerStatus(NoVolumeInput)
+   m_defaultLevel(.0), m_transferFunction(0), m_isRenderingEnabled(true), m_isActive(false), m_hasDefaultWindowLevelDefined(false)
 {
     // TODO: De moment es desactiven els warnings en release i windows perquè no apareixi la finestra vtkOutputWindow
     // però la solució bona és que els viewers no donin warnings.
@@ -77,13 +74,20 @@ QViewer::QViewer(QWidget *parent)
     // Inicialitzem el window level data
     setWindowLevelData(new WindowLevelPresetsToolData(this));
 
+    m_workInProgressWidget = new QViewerWorkInProgressWidget(this);
+
     // Afegim el layout
     m_stackedLayout = new QStackedLayout(this);
     m_stackedLayout->setSpacing(0);
     m_stackedLayout->setMargin(0);
     m_stackedLayout->addWidget(m_vtkWidget);
-    m_stackedLayout->addWidget(this->createWorkInProgressWidget(this));
-    this->setStackedLayoutCurrentWidgetFromViewerStatus();
+    m_stackedLayout->addWidget(m_workInProgressWidget);
+
+    // Inicialitzem l'status del viewer
+    m_viewerStatus = NoVolumeInput;
+    this->setCurrentWidgetByViewerStatus(m_viewerStatus);
+    this->initializeWorkInProgressByViewerStatus(m_viewerStatus);
+
 
     this->setMouseTracking(false);
     m_patientBrowserMenu = new PatientBrowserMenu(0);
@@ -766,68 +770,47 @@ void QViewer::setViewerStatus(ViewerStatus status)
     if (m_viewerStatus != status)
     {
         m_viewerStatus = status;
-        this->setStackedLayoutCurrentWidgetFromViewerStatus();
+        this->setCurrentWidgetByViewerStatus(status);
+        this->initializeWorkInProgressByViewerStatus(status);
+
         emit viewerStatusChanged();
     }
 }
 
-void QViewer::setStackedLayoutCurrentWidgetFromViewerStatus()
+void QViewer::setCurrentWidgetByViewerStatus(ViewerStatus status)
 {
-    switch(m_viewerStatus)
+    if (status == NoVolumeInput || status == VisualizingVolume)
+    {
+        m_stackedLayout->setCurrentWidget(m_vtkWidget);
+    }
+    else
+    {
+        m_stackedLayout->setCurrentWidget(m_workInProgressWidget);
+    }
+}
+
+void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
+{
+    m_workInProgressWidget->reset();
+    switch(status)
     {
         case NoVolumeInput:
         case VisualizingVolume:
-            m_stackedLayout->setCurrentIndex(0);
+            // Do nothing
             break;
-
         case DownloadingVolume:
+            m_workInProgressWidget->setTitle(tr("Downloading previous study..."));
+            break;
         case LoadingVolume:
-            m_stackedLayout->setCurrentIndex(1);
-
-            QLabel *workInProgressText = m_stackedLayout->currentWidget()->findChild<QLabel*>("WorkInProgressText");
-            QString message = (m_viewerStatus == LoadingVolume) ? tr("Loading data...") : tr("Downloading previous study...");
-            workInProgressText->setText(message);
+            m_workInProgressWidget->setTitle(tr("Loading data..."));
             break;
     }
 }
 
-
-void QViewer::updateProgress(int progress)
-{
-    QLabel *workInProgressText = m_stackedLayout->currentWidget()->findChild<QLabel*>("WorkInProgressText");
-    workInProgressText->setText(tr("Loading data...  (%1\%)").arg(progress));
-}
-
-void QViewer::changeVolume(Volume *volume) 
+void QViewer::changeVolume(Volume *volume)
 { 
     this->setInput(volume); 
     this->render(); 
 } 
-
-QWidget* QViewer::createWorkInProgressWidget(QWidget *parent)
-{
-    QWidget *workInProgressWidget = new QWidget(parent);
-    workInProgressWidget->setStyleSheet("background-color: black; color: white;");
-
-    QLabel *workInProgressText = new QLabel(workInProgressWidget);
-    workInProgressText->setAlignment(Qt::AlignBottom|Qt::AlignHCenter);
-    workInProgressText->setObjectName("WorkInProgressText");
-
-    QMovie *progressBarAnimation = new QMovie(workInProgressWidget);
-    progressBarAnimation->setFileName(QString::fromUtf8(":/images/downloading.gif"));
-
-    QLabel *progressBarLabel = new QLabel(workInProgressWidget);
-    progressBarLabel->setAlignment(Qt::AlignTop|Qt::AlignHCenter);
-
-    progressBarLabel->setMovie(progressBarAnimation);
-
-    QVBoxLayout *verticalLayout = new QVBoxLayout(workInProgressWidget);
-    verticalLayout->addWidget(workInProgressText);
-    verticalLayout->addWidget(progressBarLabel);
-
-    progressBarAnimation->start();
-
-    return workInProgressWidget;
-}
 
 };  // end namespace udg
