@@ -22,6 +22,10 @@ public:
     /// corresponents i li assigna.
     void read(Volume *volume);
 
+    /// Llegeix un Volume sense mostrar cap diàleg d'error
+    /// TODO: S'hauria d'eliminar i fusionar amb read, ja que no s'hauria de mostrar cap error de tan avall
+    bool readWithoutShowingError(Volume *volume);
+
     /// Mostra per pantalla un message box informant de l'error que s'ha produit al llegir el volum.
     /// Si no s'ha produit cap error, no fa res.
     void showMessageBoxWithLastError() const;
@@ -31,6 +35,9 @@ signals:
     void progress(int progress);
 
 private:
+    /// Executa el pixel reader i llegeix el volume
+    void executePixelDataReader(Volume *volume);
+
     /// Grava un missatge de warning amb l'ultim error que s'ha produit al llegir el volum.
     /// Si no s'ha produit cap error, no fa res.
     void logWarningLastError(const QStringList &fileList) const;
