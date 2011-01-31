@@ -231,6 +231,7 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
         QList<Image*> imagesPageList;
         DicomPrintPage dicomPrintPage = fillDicomPrintPagePrintSettings(dicomPrinter);
 
+        //TODO:No tinc clar que això haig de ser responsabilitat de la Interfície emplenar les anotacions
         if (dicomPrinter.getSupportsAnnotationBox())
         {
             addSeriesInformationAsAnnotationsToDicomPrintPage(&dicomPrintPage, selectedImagesToPrint.at(0)->getParentSeries());
@@ -320,15 +321,32 @@ DicomPrintPage QDicomPrintExtension::fillDicomPrintPagePrintSettings(DicomPrinte
 
 void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Series* seriesToPrint)
 {
-    //A la primera posicio posem el nom de la institució que ha generat l'estudi
+    QDate dateToPrintInAnnotation;
+    QTime timeToPrintInAnnotation;
+
+    //Hi ha estudis com el CT del IDI-Girona que no tenen Data/Hora de sèries, sinó en tenen l'agafem de l'estudi
+    if (seriesToPrint->getDate().isValid())
+    {
+        dateToPrintInAnnotation = seriesToPrint->getDate();
+        timeToPrintInAnnotation = seriesToPrint->getTime();
+    }
+    else
+    {
+        dateToPrintInAnnotation = seriesToPrint->getParentStudy()->getDate();
+        timeToPrintInAnnotation = seriesToPrint->getParentStudy()->getTime();
+    }
+
+    //A la primera posicio: posem el nom de la institució que ha generat l'estudi
     dicomPrintPage->addAnnotation(1, seriesToPrint->getInstitutionName());
-    //A la segona posició el nom del pacient i edat
-    //TODO:Afegir sexe pacient?
-    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + seriesToPrint->getParentStudy()->getPatientAge());
-    ///A la tercera posició Modalitat estudi i Data/hora
-    dicomPrintPage->addAnnotation(3, seriesToPrint->getParentStudy()->getModalitiesAsSingleString() + " " + seriesToPrint->getParentStudy()->getDateTime().toString("dd/MM/yyyy hh:mm:ss"));
-    ///Quarta posició ID Estudi i descripció
-    dicomPrintPage->addAnnotation(4, tr("Study ID ") + seriesToPrint->getParentStudy()->getID() + " " + seriesToPrint->getParentStudy()->getDescription());
+    //A la segona posició: el nom del, edat i sexe pacient
+    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + seriesToPrint->getParentStudy()->getPatientAge() + 
+        + " " + seriesToPrint->getParentStudy()->getParentPatient()->getSex());
+    ///A la tercera posició: Modalitat seriesi Data/hora (de la sèrie i si no en té de l'estudi)
+    dicomPrintPage->addAnnotation(3, seriesToPrint->getModality() +  " " + dateToPrintInAnnotation.toString("dd/MM/yyyy") + " " + timeToPrintInAnnotation.toString("hh:mm:ss"));
+    ///Quarta posició: Descripció estudi i descripció serie
+    dicomPrintPage->addAnnotation(4, seriesToPrint->getParentStudy()->getDescription() + " - " + seriesToPrint->getDescription());
+    ///Cinquena posició: Patient ID + Acession number (El patientID l'han demanat els metges perquè és amb el camp que poden cercar els pacients en el SAP)
+    dicomPrintPage->addAnnotation(5, seriesToPrint->getParentStudy()->getParentPatient()->getID() + " " + seriesToPrint->getParentStudy()->getAccessionNumber());
 }
 
 void QDicomPrintExtension::selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter)
