@@ -10,6 +10,7 @@
 #include "tooldata.h"
 
 #include <QMultiMap>
+#include <QStringList>
 
 namespace udg {
 
@@ -94,6 +95,13 @@ public:
      */
     QString getCurrentPreset() const;
 
+    /**
+     * Ens retorna l'índex del preset definit al fitxer.
+     * @param preset Nom del preset
+     * @return Identificador del preset. Retorna -1 si el preset no és de tipus FileDefined
+     */
+    int getFileDefinedPresetIndex(const QString &preset) const;
+
 public slots:
     /**
      * Donem el valor del preset "A mida"
@@ -130,6 +138,9 @@ private:
 
     /// Mapa en el que guardem la informació de cada preset
     QMap< QString, WindowLevelStruct > m_presets;
+
+    /// Guardem els FileDefined presets en l'ordre que s'han inserit
+    QStringList m_fileDefinedPresets;
 
     /// Últim preset activat
     QString m_currentPreset;

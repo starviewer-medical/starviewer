@@ -40,6 +40,10 @@ void WindowLevelPresetsToolData::addPreset(const QString &description, double wi
     {
         WindowLevelStruct data = { window, level, group };
         m_presets.insert(description, data);
+        if (group == WindowLevelPresetsToolData::FileDefined)
+        {
+            m_fileDefinedPresets << description;
+        }
         emit presetAdded(description);
     }
 }
@@ -119,6 +123,11 @@ QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup(int group)
 QString WindowLevelPresetsToolData::getCurrentPreset() const
 {
     return m_currentPreset;
+}
+
+int WindowLevelPresetsToolData::getFileDefinedPresetIndex(const QString &preset) const
+{
+    return m_fileDefinedPresets.indexOf(preset);
 }
 
 void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)
