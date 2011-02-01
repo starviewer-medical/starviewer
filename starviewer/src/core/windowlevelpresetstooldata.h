@@ -38,7 +38,7 @@ public:
     ~WindowLevelPresetsToolData();
 
     /// Etiquetes per cada agrupació de presets
-    enum GroupsLabel{ FileDefined, StandardPresets, UserDefined, Other };
+    enum GroupsLabel{AutomaticPreset, FileDefined, StandardPresets, UserDefined, Other};
 
     /**
      * Afegeix un nou preset. Si la operació es fa amb èxit s'emet un senyal donant la informació del preset.

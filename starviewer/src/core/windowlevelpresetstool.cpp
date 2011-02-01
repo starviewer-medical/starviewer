@@ -113,7 +113,7 @@ void WindowLevelPresetsTool::updateWindowLevelData()
     else
     {
         m_defaultPresets.clear();
-        m_defaultPresets = m_myToolData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined );
+        m_defaultPresets = m_myToolData->getDescriptionsFromGroup( WindowLevelPresetsToolData::FileDefined ) + m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
     }
 }
 
