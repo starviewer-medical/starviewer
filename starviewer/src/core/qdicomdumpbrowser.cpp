@@ -32,6 +32,9 @@ QDICOMDumpBrowser::QDICOMDumpBrowser(QWidget *parent)
     createConnections();
 
     m_lastImagePathDICOMDumpDisplayed = "";
+
+    m_defaultTagsQTree->sortByColumn(0, Qt::AscendingOrder);
+    m_tagsListQTree->sortByColumn(1, Qt::AscendingOrder);
 }
 
 QDICOMDumpBrowser::~QDICOMDumpBrowser()
