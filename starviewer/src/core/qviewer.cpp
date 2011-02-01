@@ -670,7 +670,7 @@ void QViewer::updateWindowLevelData()
             QString description = image->getWindowLevelExplanation(i);
             if (description.isEmpty())
             {
-                description = tr("Default %1").arg(i);
+                description = QString("%1 %2").arg(DefaultWindowLevelName).arg(i);
             }
             m_windowLevelData->addPreset(description, windowLevel.first * windowWidthSign, windowLevel.second, WindowLevelPresetsToolData::FileDefined);
 
