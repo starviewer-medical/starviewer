@@ -138,9 +138,9 @@ void WindowLevelPresetsToolData::activatePreset(const QString &preset)
     double window, level;
     if (this->getWindowLevelFromDescription(preset, window, level))
     {
+        m_currentPreset = preset;
         emit currentWindowLevel(window, level);
         emit presetChanged(preset);
-        m_currentPreset = preset;
     }
 }
 
