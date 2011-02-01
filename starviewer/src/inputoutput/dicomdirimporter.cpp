@@ -18,7 +18,6 @@
 #include "image.h"
 #include "dicommask.h"
 #include "logging.h"
-#include "errordcmtk.h"
 #include "patientfiller.h"
 #include "dicomtagreader.h"
 #include "localdatabasemanager.h"

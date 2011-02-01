@@ -9,7 +9,6 @@
 #include <ofcond.h> //provide the OFcondition structure and his members
 #include <QString>
 
-#include "errordcmtk.h"
 #include "status.h"
 
 namespace udg{
