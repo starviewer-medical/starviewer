@@ -120,7 +120,7 @@ signals:
     void presetChanged(QString preset);
 
 private:
-    typedef struct WindowLevelStruct
+    struct WindowLevelStruct
     {
         /// Valors de window level del preset en sí
         double m_window, m_level;
