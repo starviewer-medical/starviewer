@@ -535,7 +535,7 @@ void QViewer::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
     }
 
     m_windowLevelData = windowLevelData;
-    connect(m_windowLevelData, SIGNAL(currentWindowLevel(double,double)), SLOT(setWindowLevel(double,double)));
+    connect(m_windowLevelData, SIGNAL(presetChanged(QString)), SLOT(setWindowLevelPreset(QString)));
 }
 void QViewer::grabCurrentView()
 {
@@ -830,5 +830,15 @@ void QViewer::setInputAndRender(Volume *volume)
     this->setInput(volume); 
     this->render(); 
 } 
+
+void QViewer::setWindowLevelPreset(const QString &preset)
+{
+    double window;
+    double level;
+    if (m_windowLevelData->getWindowLevelFromDescription(preset, window, level))
+    {
+        setWindowLevel(window, level);
+    }
+}
 
 };  // end namespace udg

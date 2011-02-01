@@ -250,6 +250,10 @@ public slots:
     void setWindowLevel(double window, double level);
     void setTransferFunction(TransferFunction *transferFunction);
 
+    /// Ajusta el window/level a partir del preset.
+    /// Si és de tipus FileDefined i en la vista original, per cada imatge aplicarà el seu WW/WL. Altrament aplicar el WW/WL que indica el preset.
+    virtual void setWindowLevelPreset(const QString &preset);
+
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
     /// TODO Aquest mètode hauria de quedar obsolet
     void setSeedPosition(double pos[3]);
@@ -397,6 +401,10 @@ private:
     /// TODO: De moment només desconnecta el job del viewer, no cancel·la el job en sí
     void cancelCurrentVolumeReaderJob();
 
+    /// En cas que estem en la vista original en la que s'han adquirit les imatges i tinguem un preset
+    /// per defecte activat, actualitzarem el WW/WL perquè per cada imatge es mostri el seu.
+    void updateDefaultPreset();
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip )
     void updateCamera();
@@ -513,6 +521,10 @@ private:
     VolumeReaderJob *m_volumeReaderJob;
 
     QViewerCommand *m_inputFinishedCommand;
+
+    /// Indica el preset per defecte que s'ha d'aplicar.
+    int m_defaultPresetToApply;
+
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(Q2DViewer::AnnotationFlags)
 };  //  End namespace udg

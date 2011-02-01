@@ -85,6 +85,7 @@ Q2DViewer::Q2DViewer(QWidget *parent)
 
     Settings settings;
     m_mammographyAutoOrientationExceptions = settings.getValue(CoreSettings::MammographyAutoOrientationExceptions).toStringList();
+    m_defaultPresetToApply = 0;
 }
 
 Q2DViewer::~Q2DViewer()
@@ -1097,8 +1098,7 @@ void Q2DViewer::setSlice(int value)
             this->getDrawer()->removeAllPrimitives();
         }
         this->updateDisplayExtent();
-        // TODO per cada canvi de llesca potser també caldria
-        // comprovar si el ww/wwl és diferent i aplicar el que toqui (#478)
+        updateDefaultPreset();
         updateSliceAnnotationInformation();
         mapOrientationStringToAnnotation();
         emit sliceChanged(m_currentSlice);
@@ -1126,6 +1126,7 @@ void Q2DViewer::setPhase(int value)
             m_thickSlabProjectionFilter->SetFirstSlice(m_firstSlabSlice * m_numberOfPhases + m_currentPhase);
         }
         this->updateDisplayExtent();
+        updateDefaultPreset();
         updateSliceAnnotationInformation();
         emit phaseChanged(m_currentPhase);
         this->render();
@@ -2309,6 +2310,57 @@ void Q2DViewer::fitImageIntoViewport()
 
     // Apliquem el zoom 
     scaleToFit3D(topCorner, bottomCorner);
+}
+
+void Q2DViewer::setWindowLevelPreset(const QString &preset)
+{
+    double window;
+    double level;
+    int group;
+
+    if (m_windowLevelData->getWindowLevelFromDescription(preset, window, level))
+    {
+        if (m_windowLevelData->getGroup(preset, group))
+        {
+            if (group == WindowLevelPresetsToolData::FileDefined)
+            {
+                m_defaultPresetToApply = m_windowLevelData->getFileDefinedPresetIndex(preset);
+                if (m_lastView == Q2DViewer::Axial)
+                {
+                    updateDefaultPreset();
+                }
+                else
+                {
+                    setWindowLevel(window, level);
+                }
+            }
+            else
+            {
+                m_defaultPresetToApply = -1;
+                setWindowLevel(window, level);
+            }
+        }
+    }
+}
+
+void Q2DViewer::updateDefaultPreset()
+{
+    if (m_defaultPresetToApply >= 0 && m_lastView == Q2DViewer::Axial)
+    {
+        Image *image = getCurrentDisplayedImage();
+        if (m_defaultPresetToApply < image->getNumberOfWindowLevels())
+        {
+            QPair<double, double> windowLevel = image->getWindowLevel(m_defaultPresetToApply);
+            if (image->getPhotometricInterpretation() == "MONOCHROME1")
+            {
+                setWindowLevel(-windowLevel.first, windowLevel.second);
+            }
+            else
+            {
+                setWindowLevel(windowLevel.first, windowLevel.second);
+            }
+        }
+    }
 }
 
 };  // End namespace udg
