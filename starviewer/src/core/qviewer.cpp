@@ -637,6 +637,7 @@ void QViewer::updateWindowLevelData()
     const QString AutomaticWindowLevelName = tr("Auto");
 
     m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
+    m_windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
 
     // Agafem el window level de la imatge central per evitar problemes
     // de que tinguem diferents windows levels a cada imatge i el de la
@@ -684,7 +685,7 @@ void QViewer::updateWindowLevelData()
     double automaticWindowWidth;
     double automaticWindowLevel;
     computeAutomaticWindowLevel(automaticWindowWidth, automaticWindowLevel);
-    m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth * windowWidthSign, automaticWindowLevel, WindowLevelPresetsToolData::FileDefined);
+    m_windowLevelData->addPreset(AutomaticWindowLevelName, automaticWindowWidth * windowWidthSign, automaticWindowLevel, WindowLevelPresetsToolData::AutomaticPreset);
     // Si no hi ha window levels definits per defecte activarem l'automàtic
     if (windowLevelCount <= 0)
     {
