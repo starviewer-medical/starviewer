@@ -44,7 +44,6 @@ HEADERS += databaseconnection.h \
     qcreatedicomdir.h \
     qoperationstatescreen.h \
     queryscreen.h \
-    errordcmtk.h \
     qadvancedsearchwidget.h \
     qbasicsearchwidget.h \
     localdatabasemanager.h \
