@@ -34,6 +34,7 @@ ConvertToDicomdir::ConvertToDicomdir()
     m_patient = 0;
 
     m_convertDicomdirImagesToLittleEndian = false;
+    m_anonymizeDICOMDIR = false;
 }
 
 void ConvertToDicomdir::setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString patientNameAnonymized)
