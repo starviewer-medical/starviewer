@@ -94,7 +94,7 @@ void DICOMAnonymizer::initializeGDCM()
     gdcm::UIDGenerator::SetRoot(SITE_UID_ROOT);
 }
 
-bool DICOMAnonymizer::anonymyzeDICOMFilesDirectory(QString directoryPath)
+bool DICOMAnonymizer::anonymyzeDICOMFilesDirectory(const QString &directoryPath)
 {
     QDir directory;
     directory.setPath(directoryPath);
@@ -120,7 +120,7 @@ bool DICOMAnonymizer::anonymyzeDICOMFilesDirectory(QString directoryPath)
     return true;
 }
 
-bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPathFile)
+bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QString &outputPathFile)
 {
     gdcm::Reader gdcmReader;
     gdcmReader.SetFileName(qPrintable(inputPathFile));
@@ -187,7 +187,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(QString inputPathFile, QString outputPa
   return true;
 }
 
-QString DICOMAnonymizer::getAnonimyzedPatientID(QString originalPatientID)
+QString DICOMAnonymizer::getAnonimyzedPatientID(const QString &originalPatientID)
 {
     if (!hashOriginalPatientIDToAnonimyzedPatientID.contains(originalPatientID))
     {
@@ -197,7 +197,7 @@ QString DICOMAnonymizer::getAnonimyzedPatientID(QString originalPatientID)
     return hashOriginalPatientIDToAnonimyzedPatientID.value(originalPatientID);
 }
 
-QString DICOMAnonymizer::getAnonymizedStudyID(QString originalStudyInstanceUID)
+QString DICOMAnonymizer::getAnonymizedStudyID(const QString &originalStudyInstanceUID)
 {
     if (!hashOriginalStudyInstanceUIDToAnonimyzedStudyID.contains(originalStudyInstanceUID))
     {
@@ -208,7 +208,7 @@ QString DICOMAnonymizer::getAnonymizedStudyID(QString originalStudyInstanceUID)
 }
 
 
-QString DICOMAnonymizer::readTagValue(gdcm::File *gdcmFile, gdcm::Tag tagToRead)
+QString DICOMAnonymizer::readTagValue(gdcm::File *gdcmFile, gdcm::Tag tagToRead) const
 {
     gdcm::DataElement dataElement = gdcmFile->GetDataSet().GetDataElement(tagToRead);
     QString tagValue = "";
