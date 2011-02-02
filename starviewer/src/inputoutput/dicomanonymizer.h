@@ -33,13 +33,13 @@ public:
     ~DICOMAnonymizer();
 
     ///Ens anonimitza els fitxers d'un Directori
-    bool anonymyzeDICOMFilesDirectory(QString directoryPath);
+    bool anonymyzeDICOMFilesDirectory(const QString &directoryPath);
 
     ///Ens anonimitza un fitxer DICOM
     ///Atenció!!! si utilitzem aquesta opció per anonimitzar diversos fitxers d'un mateix estudi, aquests fitxers s'han d'anonimitzar utilitzant la mateixa
     ///instància del DICOMAnonymizer per mantenir la consitència de Tags com Study Instance UID, Series Instance UID, Frame Of Reference, Image Reference ...
     ///Si no es respecta aquest requisit passarà que imatges d'un mateix estudi després de ser anonimitzades tindran Study Instance UID diferents.
-    bool anonymizeDICOMFile(QString inputPathFile, QString outputPathFile);
+    bool anonymizeDICOMFile(const QString &inputPathFile, const QString &outputPathFile);
 
     ///Ens indica quin nom de pacient han de tenir els estudis anonimitzats.
     void setPatientNameAnonymized(const QString &patientNameAnonymized);
@@ -70,14 +70,14 @@ private:
 
     ///Retorna el valor de PatientID anonimitzat a partir del PatientID original del fitxer. Aquest mètode és consistent de manera que si li passem 
     ///una o més vegades el mateix PatientID sempre retornarà el mateix valor com a PatientID anonimitzat.
-    QString getAnonimyzedPatientID(QString originalPatientID);
+    QString getAnonimyzedPatientID(const QString &originalPatientID); 
 
     ///Retorna el valor de StudyID anonimitzat a partir del Study Instance UID original del fitxer. Aquest mètode és consistent de manera que si li passem 
     ///una o més vegades el mateix study Instance UID sempre retornarà el mateix valor com de Study ID anonimitzat.
-    QString getAnonymizedStudyID(QString originalStudyInstanceUID);
+    QString getAnonymizedStudyID(const QString &originalStudyInstanceUID);
 
     ///Retorna el valor d'un Tag en un string, si no troba el tag retorna un string buit
-    QString readTagValue(gdcm::File *gdcmFile, gdcm::Tag);
+    QString readTagValue(gdcm::File *gdcmFile, gdcm::Tag) const;
 
 private:
 
