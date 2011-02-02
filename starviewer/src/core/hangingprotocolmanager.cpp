@@ -618,10 +618,10 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
         if (series->isViewable() && series->getFirstVolume())
         {
             Volume *inputVolume = NULL;
-            if (series->getVolumesList().size() > 1 && (displaySet->getSlice() > -1 || displaySet->getImageSet()->getTypeOfItem() == "image"))
+            if ((series->getVolumesList().size() > 1 && displaySet->getSlice() > -1) || displaySet->getImageSet()->getTypeOfItem() == "image")
             {
                 Image *image;
-                if (displaySet->getSlice() > -1)
+                if (displaySet->getSlice() > -1) //TODO En el cas de fases no funcionaria, perquè l'índex no és correcte
                 {
                     image = series->getImageByIndex(displaySet->getSlice());
                 }

@@ -66,18 +66,14 @@ void ApplyHangingProtocolQViewerCommand::applyDisplayTransformations(Q2DViewer *
         viewer->setPhase(phase);
     }
 
-    int sliceNumber = displaySet->getSlice();
-    if (sliceNumber != -1)
+    //Comprovem si s'ha modificat el número de llesca pel fet de tenir la imatge dins un volum
+    if (displaySet->getSliceModifiedForVolumes() != -1)
     {
-        //Comprovem si s'ha modificat el número de llesca pel fet de tenir la imatge dins un volum
-        if (displaySet->getSliceModifiedForVolumes() != -1)
-        {
-            viewer->setSlice(displaySet->getSliceModifiedForVolumes());
-        }
-        else
-        {
-            viewer->setSlice(sliceNumber);
-        }
+        viewer->setSlice(displaySet->getSliceModifiedForVolumes());
+    }
+    else if (displaySet->getSlice() != -1)
+    {
+        viewer->setSlice(displaySet->getSlice());
     }
 
     QString alignment = displaySet->getAlignment();
