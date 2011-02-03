@@ -1632,7 +1632,7 @@
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
-           <verstretch>2</verstretch>
+           <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
@@ -1640,23 +1640,6 @@
            <width>256</width>
            <height>256</height>
           </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="m_useGradientOpacityTransferFunctionCheckBox">
-         <property name="text">
-          <string>Use gradient opacity transfer function</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="udg::QGraphicTransferFunctionEditor" name="m_gradientOpacityTransferFunctionEditor" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>1</verstretch>
-          </sizepolicy>
          </property>
         </widget>
        </item>
@@ -2294,7 +2277,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>491</width>
+            <width>488</width>
             <height>1074</height>
            </rect>
           </property>
@@ -3315,7 +3298,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>491</width>
+            <width>488</width>
             <height>1074</height>
            </rect>
           </property>
