@@ -65,7 +65,7 @@ private:
 
     void addPoint( double x, double y );
     void removePoint( double x );
-    void changePointColor( double x, QColor &color );
+    void changePointColor(double x, const QColor &color);
     void changeCurrentPoint( double x, double y );
 
     void clearSelection();

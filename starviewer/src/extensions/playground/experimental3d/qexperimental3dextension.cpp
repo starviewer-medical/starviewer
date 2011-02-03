@@ -89,8 +89,8 @@ void QExperimental3DExtension::setInput( Volume *input )
     m_transferFunctionEditor->syncToMax();
 
     TransferFunction defaultTransferFunction;
-    defaultTransferFunction.addPoint(0, QColor(0, 0, 0, 0));
-    defaultTransferFunction.addPoint(max, QColor(255, 255, 255, 255));
+    defaultTransferFunction.set(0.0, Qt::black, 0.0);
+    defaultTransferFunction.set(max, Qt::white, 1.0);
     m_transferFunctionEditor->setTransferFunction(defaultTransferFunction);
 
     setTransferFunction(false);
@@ -3634,7 +3634,7 @@ void QExperimental3DExtension::generateColorTransferFunctionFromImi()
         float red = imi > 0.8f ? 1.0f : imi > 0.6f ? 5.0f * ( imi - 0.6f ) : imi > 0.2f ? 0.0f : 1.0f - 5.0f * imi;
         float green = imi > 0.8f ? 1.0f - 5.0f * ( imi - 0.8f ) : imi > 0.4f ? 1.0f : imi > 0.2f ? 5.0f * ( imi - 0.2f ) : 0.0f;
         float blue = imi > 0.6f ? 0.0f : imi > 0.4f ? 1.0f - 5.0f * ( imi - 0.4f ) : 1.0f;
-        imiTransferFunction.addPointToColor( i, QColor::fromRgbF( red, green, blue ) );
+        imiTransferFunction.setColor(i, QColor::fromRgbF(red, green, blue));
     }
 
     m_transferFunctionEditor->setTransferFunction( imiTransferFunction.simplify() );
@@ -3655,7 +3655,7 @@ void QExperimental3DExtension::generateOpacityTransferFunctionFromImi()
     for ( int i = 0; i < nIntensities; i++ )
     {
         float imi = m_imi.at( i ) / m_maximumImi;
-        imiTransferFunction.addPointToOpacity( i, imi );
+        imiTransferFunction.setOpacity(i, imi);
     }
 
     m_transferFunctionEditor->setTransferFunction( imiTransferFunction.simplify() );
@@ -3678,7 +3678,7 @@ void QExperimental3DExtension::generateTransferFunctionFromImi()
         float red = imi > 0.8f ? 1.0f : imi > 0.6f ? 5.0f * ( imi - 0.6f ) : imi > 0.2f ? 0.0f : 1.0f - 5.0f * imi;
         float green = imi > 0.8f ? 1.0f - 5.0f * ( imi - 0.8f ) : imi > 0.4f ? 1.0f : imi > 0.2f ? 5.0f * ( imi - 0.2f ) : 0.0f;
         float blue = imi > 0.6f ? 0.0f : imi > 0.4f ? 1.0f - 5.0f * ( imi - 0.4f ) : 1.0f;
-        imiTransferFunction.addPoint( i, QColor::fromRgbF( red, green, blue, imi ) );
+        imiTransferFunction.set(i, QColor::fromRgbF(red, green, blue), imi);
     }
 
     m_transferFunctionEditor->setTransferFunction( imiTransferFunction.simplify() );
@@ -3712,7 +3712,7 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
         }
         else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked())    // l'opacitat serà la mínima del rang
         {
-            QList<double> points = currentTransferFunction.getPointsInInterval(x1, x2);
+            QList<double> points = currentTransferFunction.keys(x1, x2);
             points.prepend(x1); points.append(x2);  // per si no hi són
             opacity = 1.0;
 
@@ -3724,7 +3724,7 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
         }
         else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())   // l'opacitat serà la mitjana de l'interval
         {
-            QList<double> points = currentTransferFunction.getPointsInInterval(x1, x2);
+            QList<double> points = currentTransferFunction.keys(x1, x2);
             points.prepend(x1); points.append(x2);  // per si no hi són
             opacity = 0.0;
 
@@ -3740,11 +3740,11 @@ void QExperimental3DExtension::generateTransferFunctionFromIntensityClusters()
             if (x1 == x2) opacity = m_normalTransferFunction.getOpacity(x); // cas especial
         }
 
-        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) clusteringTransferFunction.addPoint(x, color, opacity);
+        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) clusteringTransferFunction.set(x, color, opacity);
         else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
         {
-            clusteringTransferFunction.addPoint(x1, color, opacity);
-            clusteringTransferFunction.addPoint(x2, color, opacity);
+            clusteringTransferFunction.set(x1, color, opacity);
+            clusteringTransferFunction.set(x2, color, opacity);
         }
     }
 
@@ -3873,7 +3873,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
         {
             if (!m_clusterHasData.at(j))
             {
-                evolvedTransferFunction.removePointFromOpacity(j);
+                evolvedTransferFunction.unsetOpacity(j);
                 continue;
             }
 
@@ -3921,7 +3921,7 @@ void QExperimental3DExtension::generateAndEvolveTransferFunctionFromIntensityClu
 //                evolvedTransferFunction.addPointToOpacity(x1, newOpacity);
 //                evolvedTransferFunction.addPointToOpacity(x2, newOpacity);
 //            }
-            evolvedTransferFunction.addPointToOpacity(j, newOpacity);
+            evolvedTransferFunction.setOpacity(j, newOpacity);
         }
 
         // Obtenir direccions
@@ -4196,7 +4196,7 @@ void QExperimental3DExtension::fineTuneGeneticTransferFunctionFromIntensityClust
 //                fineTunedTransferFunction.addPointToOpacity(x1, newOpacity);
 //                fineTunedTransferFunction.addPointToOpacity(x2, newOpacity);
 //            }
-            fineTunedTransferFunction.addPointToOpacity(cluster, newOpacity);
+            fineTunedTransferFunction.setOpacity(cluster, newOpacity);
 
             // Obtenir direccions
             Vector3 position, focus, up;
@@ -4439,7 +4439,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             {
                 if (!m_clusterHasData.at(j))
                 {
-                    optimizedTransferFunction.removePointFromOpacity(j);
+                    optimizedTransferFunction.unsetOpacity(j);
                     continue;
                 }
 
@@ -4509,9 +4509,9 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 if (newOpacity < minOpacity) minOpacity = newOpacity;
                 if (newOpacity > maxOpacity) maxOpacity = newOpacity;
                 newOpacities[j] = newOpacity;
-                DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, derivada = %3, k = %4, delta = %5%6, opacitat nova = %7").arg(j).arg(opacity).arg(derivative).arg(K.at(j))
-                                                                                                                                                                      .arg(delta > 0.0 ? "+" : "").arg(delta)
-                                                                                                                                                                      .arg(newOpacity));
+                //DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, derivada = %3, k = %4, delta = %5%6, opacitat nova = %7").arg(j).arg(opacity).arg(derivative).arg(K.at(j))
+                //                                                                                                                                                      .arg(delta > 0.0 ? "+" : "").arg(delta)
+                //                                                                                                                                                      .arg(newOpacity));
             }
 
             DEBUG_LOG("........................................");
@@ -4534,8 +4534,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 double newOpacity = qBound(0.0, (newOpacities.at(j) + shift) * scale, 1.0); // el qBound és per si no reescalem l'opacitat
                 // cal tornar a posar l'opacitat a 0 si el pes és 0 perquè amb el reescalat pot augmentar
                 if (weights.at(j) == 0.0) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
-                DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, opacitat nova desitjada = %3, opacitat nova final = %4").arg(j).arg(opacity).arg(newOpacities.at(j))
-                                                                                                                                                                     .arg(newOpacity));
+                //DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, opacitat nova desitjada = %3, opacitat nova final = %4").arg(j).arg(opacity).arg(newOpacities.at(j))
+                //                                                                                                                                                     .arg(newOpacity));
 
     //            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked())
     //            {
@@ -4546,7 +4546,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     //                optimizedTransferFunction.addPointToOpacity(x1, newOpacity);
     //                optimizedTransferFunction.addPointToOpacity(x2, newOpacity);
     //            }
-                optimizedTransferFunction.addPointToOpacity(j, newOpacity);
+                optimizedTransferFunction.setOpacity(j, newOpacity);
             }
 
             // Obtenir direccions
@@ -4886,7 +4886,7 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction()
         }
         else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked())    // l'opacitat serà la mínima del rang
         {
-            QList<double> points = m_normalTransferFunction.getPointsInInterval(x1, x2);
+            QList<double> points = m_normalTransferFunction.keys(x1, x2);
             points.prepend(x1); points.append(x2);  // per si no hi són
             opacity = 1.0;
 
@@ -4898,7 +4898,7 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction()
         }
         else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())   // l'opacitat serà la mitjana de l'interval
         {
-            QList<double> points = m_normalTransferFunction.getPointsInInterval(x1, x2);
+            QList<double> points = m_normalTransferFunction.keys(x1, x2);
             points.prepend(x1); points.append(x2);  // per si no hi són
             opacity = 0.0;
 
@@ -4914,7 +4914,7 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction()
             if (x1 == x2) opacity = m_normalTransferFunction.getOpacity(x); // cas especial
         }
 
-        m_clusterizedTransferFunction.addPoint(i, color, opacity);
+        m_clusterizedTransferFunction.set(i, color, opacity);
     }
 }
 
@@ -4934,11 +4934,11 @@ void QExperimental3DExtension::clusterizedToNormalTransferFunction()
         QColor color = m_clusterizedTransferFunction.getColor(i);
         double opacity = m_clusterizedTransferFunction.getOpacity(i);
 
-        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) m_normalTransferFunction.addPoint(x, color, opacity);
+        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) m_normalTransferFunction.set(x, color, opacity);
         else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
         {
-            m_normalTransferFunction.addPoint(x1, color, opacity);
-            m_normalTransferFunction.addPoint(x2, color, opacity);
+            m_normalTransferFunction.set(x1, color, opacity);
+            m_normalTransferFunction.set(x2, color, opacity);
         }
     }
 }

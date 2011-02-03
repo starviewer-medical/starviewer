@@ -341,8 +341,8 @@ void QVolume3DViewTestingExtension::setScalarRange( double min, double max )
 
     if ( m_firstInput )
     {
-        m_currentClut.addPoint( min, QColor( 0, 0, 0, 0 ) );
-        m_currentClut.addPoint( max, QColor( 255, 255, 255, 255 ) );
+        m_currentClut.set(min, Qt::black, 0.0);
+        m_currentClut.set(max, Qt::white, 1.0);
         m_firstInput = false;
         emit newTransferFunction ();
     }

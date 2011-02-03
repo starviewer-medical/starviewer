@@ -73,13 +73,13 @@ TransferFunction * TransferFunctionIO::fromFile( QFile & file )
                     {
                         double r, g, b;
                         lineIn >> r >> g >> b;
-                        transferFunction->addPointToColorRGB( x, r, g, b );
+                        transferFunction->setColor(x, r, g, b);
                     }
                     else
                     {
                         double opacity;
                         lineIn >> opacity;
-                        transferFunction->addPointToOpacity( x, opacity );
+                        transferFunction->setOpacity(x, opacity);
                     }
                 }
                 else continue;
@@ -141,10 +141,10 @@ TransferFunction* TransferFunctionIO::fromXmlFile( QFile &file )    /// \todo af
         for ( uint i = 0; i < colorPoints.length(); i++ )
         {
             QDomElement colorPointElement = colorPoints.item( i ).toElement();
-            transferFunction->addPointToColorRGB( colorPointElement.attribute( "value" ).toDouble(),
-                                                  colorPointElement.attribute( "r" ).toDouble(),
-                                                  colorPointElement.attribute( "g" ).toDouble(),
-                                                  colorPointElement.attribute( "b" ).toDouble() );
+            transferFunction->setColor(colorPointElement.attribute("value").toDouble(),
+                                       colorPointElement.attribute("r").toDouble(),
+                                       colorPointElement.attribute("g").toDouble(),
+                                       colorPointElement.attribute("b").toDouble());
         }
     }
 
@@ -158,8 +158,8 @@ TransferFunction* TransferFunctionIO::fromXmlFile( QFile &file )    /// \todo af
         for ( uint i = 0; i < opacityPoints.length(); i++ )
         {
             QDomElement opacityPointElement = opacityPoints.item( i ).toElement();
-            transferFunction->addPointToOpacity( opacityPointElement.attribute( "value" ).toDouble(),
-                                                 opacityPointElement.attribute( "a" ).toDouble() );
+            transferFunction->setOpacity(opacityPointElement.attribute("value").toDouble(),
+                                         opacityPointElement.attribute("a").toDouble());
         }
     }
 
@@ -190,7 +190,7 @@ void TransferFunctionIO::toFile( QFile & file, const TransferFunction & transfer
     out << "\n";
 
     out << "[Color]\n";
-    QList< double > colorPoints = transferFunction.getColorPoints();
+    QList< double > colorPoints = transferFunction.colorKeys();
     foreach ( double x, colorPoints )
     {
         QColor color = transferFunction.getColor( x );
@@ -200,7 +200,7 @@ void TransferFunctionIO::toFile( QFile & file, const TransferFunction & transfer
     out << "\n";
 
     out << "[Opacity]\n";
-    QList< double > opacityPoints = transferFunction.getOpacityPoints();
+    QList< double > opacityPoints = transferFunction.opacityKeys();
     foreach ( double x, opacityPoints )
     {
         out << x << " " << transferFunction.getOpacity( x ) << "\n";
@@ -241,7 +241,7 @@ void TransferFunctionIO::toXmlFile( QFile &file, const TransferFunction &transfe
     // color
     QDomElement colorElement = xml.createElement( "color" );
     transferFunctionElement.appendChild( colorElement );
-    QList<double> colorPoints = transferFunction.getColorPoints();
+    QList<double> colorPoints = transferFunction.colorKeys();
     foreach ( double x, colorPoints )
     {
         QColor color = transferFunction.getColor( x );
@@ -256,7 +256,7 @@ void TransferFunctionIO::toXmlFile( QFile &file, const TransferFunction &transfe
     // opacitat
     QDomElement opacityElement = xml.createElement( "opacity" );
     transferFunctionElement.appendChild( opacityElement );
-    QList<double> opacityPoints = transferFunction.getOpacityPoints();
+    QList<double> opacityPoints = transferFunction.opacityKeys();
     foreach ( double x, opacityPoints )
     {
         QDomElement opacityPointElement = xml.createElement( "point" );

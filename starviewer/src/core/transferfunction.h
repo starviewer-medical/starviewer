@@ -41,45 +41,26 @@ public:
     QColor getColor(double x) const;
     /// Retorna l'opacitat corresponent al valor de propietat x.
     double getOpacity(double x) const;
-    /// Defineix explícitament el punt (x,((r,g,b),a)).
-    /// \note L'opacitat queda encapsulada al canal alfa del QColor i amb això perd precisió. Per evitar això es recomana afegir el color i l'opacitat amb paràmetres separats.
-    void addPoint(double x, const QColor &rgba);
     /// Defineix explícitament el punt (x,(color,opacity)).
     void set(double x, const QColor &color, double opacity);
-    /// Defineix explícitament el punt (x,(color,opacity)).
-    void addPoint(double x, const QColor &color, double opacity);
     /// Defineix explícitament el punt (x,((red,green,blue),opacity)).
     void set(double x, int red, int green, int blue, double opacity);
     /// Defineix explícitament el punt (x,((red,green,blue),opacity)).
     void set(double x, double red, double green, double blue, double opacity);
     /// Defineix explícitament el punt de color (x,color).
     void setColor(double x, const QColor &color);
-    /// Defineix explícitament el punt de color (x,color).
-    void addPointToColor(double x, const QColor &color);
     /// Defineix explícitament el punt de color (x,(red,green,blue)).
     void setColor(double x, int red, int green, int blue);
     /// Defineix explícitament el punt de color (x,(red,green,blue)).
-    void addPointToColorRGB(double x, int red, int green, int blue);
-    /// Defineix explícitament el punt de color (x,(red,green,blue)).
     void setColor(double x, double red, double green, double blue);
-    /// Defineix explícitament el punt de color (x,(red,green,blue)).
-    void addPointToColorRGB(double x, double red, double green, double blue);
     /// Defineix explícitament el punt d'opacitat (x,opacity).
     void setOpacity(double x, double opacity);
-    /// Defineix explícitament el punt d'opacitat (x,opacity).
-    void addPointToOpacity(double x, double opacity);
     /// Esborra la definició explícita dels punts de color (x,c) i opacitat (x,o) si existeixen.
     void unset(double x);
-    /// Esborra la definició explícita dels punts de color (x,c) i opacitat (x,o) si existeixen.
-    void removePoint(double x);
     /// Esborra la definició explícita del punt de color (x,c) si existeix.
     void unsetColor(double x);
-    /// Esborra la definició explícita del punt de color (x,c) si existeix.
-    void removePointFromColor(double x);
     /// Esborra la definició explícita del punt d'opacitat (x,o) si existeix.
     void unsetOpacity(double x);
-    /// Esborra la definició explícita del punt d'opacitat (x,o) si existeix.
-    void removePointFromOpacity(double x);
     /// Esborra tots els punts definits explícitament.
     void clear();
     /// Esborra tots els punts de color definits explícitament.
@@ -89,29 +70,17 @@ public:
 
     /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) i opacitat (x,o) definits explícitament.
     QList<double>& keys() const;
-    /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) i opacitat (x,o) definits explícitament.
-    QList<double>& getPoints() const;
     /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat (x,o) definits explícitament dins de l'interval [begin, end].
     QList<double> keys(double begin, double end) const;
-    /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat (x,o) definits explícitament dins de l'interval [begin, end].
-    QList<double> getPointsInInterval(double begin, double end) const;
     /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat (x,o) definits explícitament dins de l'interval [x-distance, x+distance].
     QList<double> keysNear(double x, double distance) const;
-    /// Retorna la llista de valors de propietat x dels punts de color (x,c) i opacitat (x,o) definits explícitament dins de l'interval [x-distance, x+distance].
-    QList<double> getPointsNear(double x, double distance) const;
     /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) definits explícitament.
     QList<double> colorKeys() const;
-    /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) definits explícitament.
-    QList<double> getColorPoints() const;
     /// Retorna la llista de valors de propietat x de tots els punts d'opacitat (x,o) definits explícitament.
     QList<double> opacityKeys() const;
-    /// Retorna la llista de valors de propietat x de tots els punts d'opacitat (x,o) definits explícitament.
-    QList<double> getOpacityPoints() const;
 
     /// Retalla la funció de manera que només tingui punts explícits en el rang [x1, x2] i tingui punts explícits a x1 i x2.
     void trim(double x1, double x2);
-    /// Retalla la funció de manera que només tingui punts explícits en el rang [x1, x2] i tingui punts explícits a x1 i x2.
-    void setNewRange(double x1, double x2);
     /// Retorna una nova funció de transferència resultat d'escalar i desplaçar aquesta de manera que el rang [x1, x2] passi a ser [0, 1].
     TransferFunction to01(double x1, double x2) const;
     /// Retorna una versió simplificada i equivalent de la funció esborrant els punts de color (x,c) i opacitat (x,o) que es poden obtenir per interpolació o extrapolació.
