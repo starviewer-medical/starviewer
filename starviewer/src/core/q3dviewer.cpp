@@ -95,14 +95,14 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_transferFunction = new TransferFunction;
     // creem una funció de transferència per defecte TODO la tenim només per tenir alguna cosa per defecte
     // Opacitat
-    m_transferFunction->addPointToOpacity( 20, .0 );
-    m_transferFunction->addPointToOpacity( 255, .2 );
+    m_transferFunction->setOpacity(20.0, 0.0);
+    m_transferFunction->setOpacity(255.0, 0.2);
     // Colors
-    m_transferFunction->addPointToColorRGB( 0.0, 0.0, 0.0, 0.0 );
-    m_transferFunction->addPointToColorRGB( 64.0, 1.0, 0.0, 0.0 );
-    m_transferFunction->addPointToColorRGB( 128.0, 0.0, 0.0, 1.0 );
-    m_transferFunction->addPointToColorRGB( 192.0, 0.0, 1.0, 0.0 );
-    m_transferFunction->addPointToColorRGB( 255.0, 0.0, 0.2, 0.0 );
+    m_transferFunction->setColor(0.0, 0.0, 0.0, 0.0);
+    m_transferFunction->setColor(64.0, 1.0, 0.0, 0.0);
+    m_transferFunction->setColor(128.0, 0.0, 0.0, 1.0);
+    m_transferFunction->setColor(192.0, 0.0, 1.0, 0.0);
+    m_transferFunction->setColor(255.0, 0.0, 0.2, 0.0);
 
     m_volumeProperty->SetColor(m_transferFunction->vtkColorTransferFunction());
     m_volumeProperty->SetScalarOpacity(m_transferFunction->vtkOpacityTransferFunction());
@@ -245,7 +245,7 @@ void Q3DViewer::setWindowLevel(double window , double level)
 
         m_transferFunction->clear();
 
-        QList<double> colorPoints = m_newTransferFunction->getColorPoints();
+        QList<double> colorPoints = m_newTransferFunction->colorKeys();
 
         foreach (double x, colorPoints)
         {
@@ -262,10 +262,10 @@ void Q3DViewer::setWindowLevel(double window , double level)
                 pointInRange = true;
             }
 
-            m_transferFunction->addPointToColor(newX, m_newTransferFunction->getColor(x));
+            m_transferFunction->setColor(newX, m_newTransferFunction->getColor(x));
         }
 
-        QList<double> opacityPoints = m_newTransferFunction->getOpacityPoints();
+        QList<double> opacityPoints = m_newTransferFunction->opacityKeys();
 
         foreach (double x, opacityPoints)
         {
@@ -282,13 +282,13 @@ void Q3DViewer::setWindowLevel(double window , double level)
                 pointInRange = true;
             }
 
-            m_transferFunction->addPointToOpacity(newX, m_newTransferFunction->getOpacity(x));
+            m_transferFunction->setOpacity(newX, m_newTransferFunction->getOpacity(x));
         }
 
-        m_transferFunction->setNewRange(0, m_range);
+        m_transferFunction->trim(0, m_range);
 
-        if (!pointInZero) m_transferFunction->addPointToOpacity(0.0, 0.0);
-        if (!pointInRange) m_transferFunction->addPointToOpacity(m_range, 0.0);
+        if (!pointInZero) m_transferFunction->setOpacity(0.0, 0.0);
+        if (!pointInRange) m_transferFunction->setOpacity(m_range, 0.0);
 
         this->applyCurrentRenderingMethod();
         emit windowLevelChanged(window, level);
@@ -769,8 +769,8 @@ void Q3DViewer::renderMIP3D()
 //     m_transferFunction->addPointToOpacity( 20, .0 );
 //     m_transferFunction->addPointToOpacity( 255, 1. );
     TransferFunction mipTransferFunction;
-    mipTransferFunction.addPointToOpacity( 20.0, 0.0 );
-    mipTransferFunction.addPointToOpacity( m_range, 1.0 );
+    mipTransferFunction.setOpacity(20.0, 0.0);
+    mipTransferFunction.setOpacity(m_range, 1.0);
 
     // Creem la funció de transferència de colors
     // Create a transfer function mapping scalar value to color (grey)

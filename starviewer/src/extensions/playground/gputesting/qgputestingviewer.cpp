@@ -42,8 +42,8 @@ QGpuTestingViewer::QGpuTestingViewer( QWidget *parent )
 {
     setFocusPolicy( Qt::WheelFocus );
 
-    m_transferFunction.addPoint( 0.0, QColor( 0, 0, 0, 0 ) );
-    m_transferFunction.addPoint( 1.0, QColor( 255, 255, 255, 255 ) );
+    m_transferFunction.set(0.0, Qt::black, 0.0);
+    m_transferFunction.set(1.0, Qt::white, 1.0);
 }
 
 

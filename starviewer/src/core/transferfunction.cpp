@@ -79,25 +79,11 @@ double TransferFunction::getOpacity(double x) const
 }
 
 
-void TransferFunction::addPoint(double x, const QColor &rgba)
-{
-    m_color.set(x, rgba);
-    m_opacity.set(x, rgba.alphaF());
-    m_changed = true;
-}
-
-
 void TransferFunction::set(double x, const QColor &color, double opacity)
 {
     m_color.set(x, color);
     m_opacity.set(x, opacity);
     m_changed = true;
-}
-
-
-void TransferFunction::addPoint(double x, const QColor &color, double opacity)
-{
-    set(x, color, opacity);
 }
 
 
@@ -124,22 +110,10 @@ void TransferFunction::setColor(double x, const QColor &color)
 }
 
 
-void TransferFunction::addPointToColor(double x, const QColor &color)
-{
-    setColor(x, color);
-}
-
-
 void TransferFunction::setColor(double x, int red, int green, int blue)
 {
     m_color.set(x, red, green, blue);
     m_changed = true;
-}
-
-
-void TransferFunction::addPointToColorRGB(double x, int red, int green, int blue)
-{
-    setColor(x, red, green, blue);
 }
 
 
@@ -150,22 +124,10 @@ void TransferFunction::setColor(double x, double red, double green, double blue)
 }
 
 
-void TransferFunction::addPointToColorRGB(double x, double red, double green, double blue)
-{
-    setColor(x, red, green, blue);
-}
-
-
 void TransferFunction::setOpacity(double x, double opacity)
 {
     m_opacity.set(x, opacity);
     m_changed = true;
-}
-
-
-void TransferFunction::addPointToOpacity(double x, double opacity)
-{
-    setOpacity(x, opacity);
 }
 
 
@@ -177,12 +139,6 @@ void TransferFunction::unset(double x)
 }
 
 
-void TransferFunction::removePoint(double x)
-{
-    unset(x);
-}
-
-
 void TransferFunction::unsetColor(double x)
 {
     m_color.unset(x);
@@ -190,22 +146,10 @@ void TransferFunction::unsetColor(double x)
 }
 
 
-void TransferFunction::removePointFromColor(double x)
-{
-    unsetColor(x);
-}
-
-
 void TransferFunction::unsetOpacity(double x)
 {
     m_opacity.unset(x);
     m_changed = true;
-}
-
-
-void TransferFunction::removePointFromOpacity(double x)
-{
-    unsetOpacity(x);
 }
 
 
@@ -238,12 +182,6 @@ QList<double>& TransferFunction::keys() const
 }
 
 
-QList<double>& TransferFunction::getPoints() const
-{
-    return keys();
-}
-
-
 QList<double> TransferFunction::keys(double begin, double end) const
 {
     Q_ASSERT(!MathTools::isNaN(begin));
@@ -262,12 +200,6 @@ QList<double> TransferFunction::keys(double begin, double end) const
 }
 
 
-QList<double> TransferFunction::getPointsInInterval(double begin, double end) const
-{
-    return keys(begin, end);
-}
-
-
 QList<double> TransferFunction::keysNear(double x, double distance) const
 {
     Q_ASSERT(!MathTools::isNaN(x));
@@ -277,21 +209,9 @@ QList<double> TransferFunction::keysNear(double x, double distance) const
 }
 
 
-QList<double> TransferFunction::getPointsNear(double x, double distance) const
-{
-    return keysNear(x, distance);
-}
-
-
 QList<double> TransferFunction::colorKeys() const
 {
     return m_color.keys();
-}
-
-
-QList<double> TransferFunction::getColorPoints() const
-{
-    return colorKeys();
 }
 
 
@@ -301,23 +221,11 @@ QList<double> TransferFunction::opacityKeys() const
 }
 
 
-QList<double> TransferFunction::getOpacityPoints() const
-{
-    return opacityKeys();
-}
-
-
 void TransferFunction::trim(double x1, double x2)
 {
     m_color.trim(x1, x2);
     m_opacity.trim(x1, x2);
     m_changed = true;
-}
-
-
-void TransferFunction::setNewRange(double x1, double x2)
-{
-    trim(x1, x2);
 }
 
 

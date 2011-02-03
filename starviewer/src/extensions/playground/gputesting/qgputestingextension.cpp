@@ -38,8 +38,8 @@ void QGpuTestingExtension::setInput( Volume *input )
     m_transferFunctionEditor->setMaximum( max );
 
     TransferFunction defaultTransferFunction;
-    defaultTransferFunction.addPoint( 0, QColor( 0, 0, 0, 0 ) );
-    defaultTransferFunction.addPoint( max, QColor( 255, 255, 255, 255 ) );
+    defaultTransferFunction.set(0, Qt::black, 0.0);
+    defaultTransferFunction.set(max, Qt::white, 1.0);
     m_transferFunctionEditor->setTransferFunction( defaultTransferFunction );
 
     doVisualization();

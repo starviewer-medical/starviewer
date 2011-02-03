@@ -109,7 +109,7 @@ void QTransferFunctionEditorByValues::setTransferFunction( const TransferFunctio
     // sempre tindrem a punt el següent (per evitar restriccions amb els valors)
     QTransferFunctionIntervalEditor * next = addIntervalAndReturnIt();
 
-    QList< double > points = transferFunction.getPoints();
+    QList<double> points = transferFunction.keys();
     bool lastIsInterval = false;
 
     for ( unsigned short i = 0; i < points.size(); i++ )
@@ -158,8 +158,8 @@ const TransferFunction & QTransferFunctionEditorByValues::getTransferFunction() 
         QTransferFunctionIntervalEditor * interval;
         foreach ( interval, intervalList )
         {
-            m_transferFunction.addPoint( interval->start(), interval->color() );
-            if ( interval->isInterval() ) m_transferFunction.addPoint( interval->end(), interval->color() );
+            m_transferFunction.set(interval->start(), interval->color(), interval->color().alphaF());
+            if (interval->isInterval()) m_transferFunction.set(interval->end(), interval->color(), interval->color().alphaF());
         }
 
         m_changed = false;

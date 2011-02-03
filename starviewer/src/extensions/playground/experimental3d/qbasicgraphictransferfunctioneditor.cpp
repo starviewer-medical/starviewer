@@ -85,7 +85,7 @@ void QBasicGraphicTransferFunctionEditor::setTransferFunctionName( const QString
 
 void QBasicGraphicTransferFunctionEditor::adjustRangeToFunction()
 {
-    QList<double> points = m_transferFunction.getPoints();
+    QList<double> points = m_transferFunction.keys();
 
     if ( points.size() < 2 ) return;
 
@@ -239,7 +239,7 @@ void QBasicGraphicTransferFunctionEditor::mouseReleaseEvent( QMouseEvent *event 
         QPointF functionTopLeft = pixelToFunctionPoint( selectionRectangle.topLeft() );
         QPointF functionBottomRight = pixelToFunctionPoint( QPoint( selectionRectangle.left() + selectionRectangle.width(),
                                                                     selectionRectangle.top() + selectionRectangle.height() ) );
-        QList<double> pointsInInterval = m_transferFunction.getPointsInInterval( functionTopLeft.x(), functionBottomRight.x() );
+        QList<double> pointsInInterval = m_transferFunction.keys(functionTopLeft.x(), functionBottomRight.x());
         int nPoints = pointsInInterval.size();
 
         for ( int i = 0; i < nPoints; i++ )
@@ -294,7 +294,7 @@ void QBasicGraphicTransferFunctionEditor::updateColorGradient()
 
     double shift = -m_minimum;
     double scale = 1.0 / ( m_maximum - m_minimum );
-    QList<double> colors = m_transferFunction.getColorPoints();
+    QList<double> colors = m_transferFunction.colorKeys();
     int nColors = colors.size();
 
     for ( int i = 0; i < nColors; i++ )
@@ -342,7 +342,7 @@ void QBasicGraphicTransferFunctionEditor::drawBackground()
 void QBasicGraphicTransferFunctionEditor::drawFunction()
 {
     QPolygonF function;
-    QList<double> points = m_transferFunction.getPoints();
+    QList<double> points = m_transferFunction.keys();
     int nPoints = points.size();
 
     for ( int i = 0; i < nPoints; i++ )
@@ -384,7 +384,7 @@ double QBasicGraphicTransferFunctionEditor::nearestX( const QPoint &pixel, bool 
     QPointF functionPoint = pixelToFunctionPoint( pixel );
     double radiusX = ( m_maximum - m_minimum ) / ( width() - 1 ) * PointSize;
 
-    QList<double> nearPoints = m_transferFunction.getPointsNear( functionPoint.x(), radiusX );
+    QList<double> nearPoints = m_transferFunction.keysNear(functionPoint.x(), radiusX);
     double nearestPointX = 0.0;
     double nearestLength = 2.0 * PointSize;
     int nPoints = nearPoints.size();
@@ -427,29 +427,23 @@ QPointF QBasicGraphicTransferFunctionEditor::functionPointToGraphicPoint( const 
     return QPointF( ( functionPoint.x() + shiftX ) * scaleX, ( functionPoint.y() + shiftY ) * scaleY );
 }
 
-void QBasicGraphicTransferFunctionEditor::addPoint( double x, double y )
+void QBasicGraphicTransferFunctionEditor::addPoint(double x, double y)
 {
-    QColor color = Qt::black;
-    color.setAlphaF( y );
-    m_transferFunction.addPoint( x, color );
-
+    m_transferFunction.set(x, Qt::black, y);
     updateColorGradient();
     update();
 }
 
 void QBasicGraphicTransferFunctionEditor::removePoint( double x )
 {
-    m_transferFunction.removePoint( x );
-
+    m_transferFunction.unset(x);
     updateColorGradient();
     update();
 }
 
-void QBasicGraphicTransferFunctionEditor::changePointColor( double x, QColor &color )
+void QBasicGraphicTransferFunctionEditor::changePointColor(double x, const QColor &color)
 {
-    color.setAlphaF( m_transferFunction.getOpacity( x ) );
-    m_transferFunction.addPoint( x, color );
-
+    m_transferFunction.setColor(x, color);
     updateColorGradient();
     update();
 }
@@ -462,10 +456,9 @@ void QBasicGraphicTransferFunctionEditor::changeCurrentPoint( double x, double y
 
     if ( m_selectedPoints.isEmpty() )
     {
-        QColor color = m_transferFunction.getColor( m_currentX );
-        m_transferFunction.removePoint( m_currentX );
-        color.setAlphaF( y );
-        m_transferFunction.addPoint( x, color );
+        QColor color = m_transferFunction.getColor(m_currentX);
+        m_transferFunction.unset(m_currentX);
+        m_transferFunction.set(x, color, y);
     }
     else
     {
@@ -478,11 +471,12 @@ void QBasicGraphicTransferFunctionEditor::changeCurrentPoint( double x, double y
 
         for ( int i = 0; i < nSelected; i++ )
         {
-            double sx = m_selectedPoints.at( i );
-            QColor rgba = m_transferFunction.get( sx );
-            m_transferFunction.removePoint( sx );
-            rgba.setAlphaF( qBound( 0.0, rgba.alphaF() + deltaY, 1.0 ) );
-            m_transferFunction.addPoint( sx + deltaX, rgba );
+            double sx = m_selectedPoints.at(i);
+            QColor color = m_transferFunction.getColor(sx);
+            double opacity = m_transferFunction.getOpacity(sx);
+            m_transferFunction.unset(sx);
+            opacity = qBound(0.0, opacity + deltaY, 1.0);
+            m_transferFunction.set(sx + deltaX, color, opacity);
             m_selectedPoints[i] = sx + deltaX;
         }
     }
@@ -500,7 +494,7 @@ void QBasicGraphicTransferFunctionEditor::clearSelection()
 void QBasicGraphicTransferFunctionEditor::selectAll()
 {
     m_selectedPoints.clear();
-    m_selectedPoints << m_transferFunction.getPoints();
+    m_selectedPoints << m_transferFunction.keys();
     update();
 }
 
