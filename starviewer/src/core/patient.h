@@ -33,11 +33,11 @@ public:
     ~Patient();
 
     /// Assigna/Obté el nom complet del pacient
-    void setFullName(QString name);
+    void setFullName(const QString &name);
     QString getFullName() const { return m_fullName; }
 
     /// Assigna/Obté l'ID del pacient
-    void setID(QString id);
+    void setID(const QString &id);
     QString getID() const { return m_patientID; }
 
     /// Assigna/Obté el ID de pacient a la BD d'Starviewer
@@ -46,7 +46,7 @@ public:
 
     /// Assigna/Obté data de naixement
     void setBirthDate(int day, int month, int year);
-    void setBirthDate(QString date);
+    void setBirthDate(const QString &date);
     QString getBirthDateAsString();
     QDate getBirthDate();
     int getDayOfBirth();
@@ -54,7 +54,7 @@ public:
     int getYearOfBirth();
 
     /// Assigna/Obté sexe del pacient
-    void setSex(QString sex);
+    void setSex(const QString &sex);
     inline QString getSex() const { return m_sex; };
 
     /// Afegeix un nou estudi. A l'estudi se li assigna com a "parentPatient" aquest Patient.
@@ -62,13 +62,13 @@ public:
     bool addStudy(Study *study);
 
     /// Li treu al pacient l'estudi amb l'UID donat
-    void removeStudy(QString uid);
+    void removeStudy(const QString &uid);
 
     /// Obté l'estudi amb l'UID donat. Si no n'hi ha cap amb aquest uid retorna nul
-    Study* getStudy(QString uid);
+    Study* getStudy(const QString &uid);
 
     /// Retorna cert si aquest pacient té assignat l'estudi amb l'UID donat, fals altrament
-    bool studyExists(QString uid);
+    bool studyExists(const QString &uid);
 
     /// Mètode per obtenir el nombre d'estudis del pacient
     int getNumberOfStudies();
@@ -77,13 +77,13 @@ public:
     QList<Study *> getStudies() const;
 
     /// Mètode ràpid per trobar si hi ha una series amb el uid donat. Retorna nul si aquesta no existeix
-    Series *getSeries(QString uid);
+    Series *getSeries(const QString &uid);
 
     /// Ens retorna una llista amb les sèries que estiguin seleccionades
     QList<Series *> getSelectedSeries();
 
     /// Ens diu si aquest arxiu pertany a alguna series del pacient
-    bool hasFile(QString filename);
+    bool hasFile(const QString &filename);
 
     /// Operador d'assignació
     Patient& operator =(const Patient &patient);
@@ -99,7 +99,7 @@ public:
     Patient::PatientsSimilarity compareTo(const Patient *patient);
 
     /// TODO Mètode que només serveix per debugar i que s'haurà de refer
-    QString toString();
+    QString toString() const;
 
     /// Donada una llista de pacients d'entrada, ens retorna una nova llista on
     /// estaran fusionats els pacients que siguin considerats iguals. És a dir si d'un
@@ -128,7 +128,7 @@ private:
     /// Troba l'índex de l'estudi amb l'uid donat a la llista d'estudis
     /// @param uid L'uid d'estudi que volem trobar
     /// @return L'índex d'aquell estudi dins de la llista, -1 si no existeix l'estudi amb aquell uid.
-    int findStudyIndex(QString uid);
+    int findStudyIndex(const QString &uid);
 
     /// Mètodes per a comparar la simulitud entre noms de pacients
     double levenshteinDistance(const QString &stringA, const QString &stringB);
