@@ -553,7 +553,7 @@ double Patient::computeStringEditDistanceMetric(const QString &stringA, const QS
 
 Patient::PatientsSimilarity Patient::metricToSimilarity(double measure)
 {
-    if (measure < 0.25)
+    if (measure < 0.15)
     {
         return SamePatients;
     }
