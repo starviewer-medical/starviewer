@@ -27,10 +27,10 @@ public:
     ~ImageOrientationOperationsMapper();
 
     /// Indica la orientació inicial
-    void setInitialOrientation( const QString &topLabel, const QString &leftLabel );
+    void setInitialOrientation(const QString &topLabel, const QString &leftLabel);
 
     /// Indica la orientació desitjada
-    void setDesiredOrientation( const QString &topLabel, const QString &leftLabel );
+    void setDesiredOrientation(const QString &topLabel, const QString &leftLabel);
 
     /// Ens retorna el número de girs a aplicar en el sentit de les agulles del rellotge
     /// Els valors possibles són 0, 1, 2 ó 3
@@ -49,7 +49,7 @@ private:
 
     /// Ens retorna l'etiqueta d'orientació en el format intern estipulat
     /// Per exemple, les etiquetes "S" i "I" (Superior i Inferior) es passen als equivalents Head ("H") i Feet ("F")
-    QString formatOrientationLabel( const QString &label );
+    QString formatOrientationLabel(const QString &label);
 
 private:
     /// Orientacions inicial i desitjada
