@@ -14,13 +14,13 @@ ImageOrientationOperationsMapper::~ImageOrientationOperationsMapper()
 {
 }
 
-void ImageOrientationOperationsMapper::setInitialOrientation( const QString &topLabel, const QString &leftLabel )
+void ImageOrientationOperationsMapper::setInitialOrientation(const QString &topLabel, const QString &leftLabel)
 {
     m_initialOrientation = formatOrientationLabel(topLabel+"\\"+leftLabel);
     m_hasToUpdateOperations = true;
 }
     
-void ImageOrientationOperationsMapper::setDesiredOrientation( const QString &topLabel, const QString &leftLabel )
+void ImageOrientationOperationsMapper::setDesiredOrientation(const QString &topLabel, const QString &leftLabel)
 {
     m_desiredOrientation = formatOrientationLabel(topLabel+"\\"+leftLabel);
     m_hasToUpdateOperations = true;
@@ -28,15 +28,19 @@ void ImageOrientationOperationsMapper::setDesiredOrientation( const QString &top
 
 int ImageOrientationOperationsMapper::getNumberOfClockwiseTurnsToApply()
 {
-    if( m_hasToUpdateOperations )
+    if (m_hasToUpdateOperations)
+    {
         updateOperations();
+    }
     return m_clockwiseTurns;
 }
 
 bool ImageOrientationOperationsMapper::requiresHorizontalFlip()
 {
-    if( m_hasToUpdateOperations )
+    if (m_hasToUpdateOperations)
+    {
         updateOperations();
+    }
     return m_horizontalFlip;
 }
 
@@ -212,18 +216,22 @@ void ImageOrientationOperationsMapper::updateOperations()
     // agafarem només la primera lletra del row i de la columna ja que així ja és suficient
     QStringList rowColumn = m_initialOrientation.split("\\");
     QString mapIndex = rowColumn.at(0).left(1) + "\\" + rowColumn.at(1).left(1) + "-" + m_desiredOrientation;
-    QString operations = m_orientationMappingTable.value( mapIndex );
+    QString operations = m_orientationMappingTable.value(mapIndex);
 
-    if( !operations.isEmpty() )
+    if (!operations.isEmpty())
     {
         QStringList listOfOperations = operations.split(",");
         // Assignem el nombre de rotacions
         m_clockwiseTurns = listOfOperations[0].toInt();
         // Assignem el flip horitzontal si n'hi ha
-        if( listOfOperations[1].toInt() )
+        if (listOfOperations[1].toInt())
+        {
             m_horizontalFlip = true;
+        }
         else
+        {
             m_horizontalFlip = false;
+        }
     }
     else
     {
@@ -234,7 +242,7 @@ void ImageOrientationOperationsMapper::updateOperations()
     m_hasToUpdateOperations = false;    
 }
 
-QString ImageOrientationOperationsMapper::formatOrientationLabel( const QString &label )
+QString ImageOrientationOperationsMapper::formatOrientationLabel(const QString &label)
 {
     QString labelCopy = label;
     
