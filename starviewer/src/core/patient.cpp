@@ -248,16 +248,11 @@ Patient Patient::operator +(const Patient &patient)
 
     // Ara recorrem els estudis que té "l'altre pacient" per afegir-los al resultat si no els té ja
     QList<Study *> studyListToAdd = patient.getStudies();
-    QString uid;
     foreach (Study *study, studyListToAdd)
     {
-        uid = study->getInstanceUID();
-        if (!result.studyExists(uid))
-        {
-            // TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! 
-            // Potser caldria fer una copia de l'study
-            result.addStudy(study);
-        }
+        // TODO al tanto! potser hi ha problemes ja que l'addStudy li assigna el parentPatient! 
+        // Potser caldria fer una copia de l'study
+        result.addStudy(study);
     }
 
     emit patientFused();
