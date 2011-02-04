@@ -36,12 +36,12 @@ Patient::~Patient()
     m_studiesSet.clear();
 }
 
-void Patient::setFullName(QString name)
+void Patient::setFullName(const QString &name)
 {
     m_fullName = name;
 }
 
-void Patient::setID(QString id)
+void Patient::setID(const QString &id)
 {
     m_patientID = id;
 }
@@ -61,9 +61,9 @@ void Patient::setBirthDate(int day, int month, int year)
     m_birthDate.setYMD(year, month, day);
 }
 
-void Patient::setBirthDate(QString date)
+void Patient::setBirthDate(const QString &date)
 {
-    m_birthDate = QDate::fromString(date.remove("."), "yyyyMMdd");
+    m_birthDate = QDate::fromString(QString(date).remove("."), "yyyyMMdd");
 }
 
 QString Patient::getBirthDateAsString()
@@ -91,7 +91,7 @@ int Patient::getYearOfBirth()
     return m_birthDate.year();
 }
 
-void Patient::setSex(QString sex)
+void Patient::setSex(const QString &sex)
 {
     m_sex = sex;
 }
@@ -119,7 +119,7 @@ bool Patient::addStudy(Study *study)
     return ok;
 }
 
-void Patient::removeStudy(QString uid)
+void Patient::removeStudy(const QString &uid)
 {
     int index = this->findStudyIndex(uid);
     if (index != -1)
@@ -128,7 +128,7 @@ void Patient::removeStudy(QString uid)
     }
 }
 
-Study *Patient::getStudy(QString uid)
+Study *Patient::getStudy(const QString &uid)
 {
     int index = this->findStudyIndex(uid);
     if (index != -1)
@@ -141,7 +141,7 @@ Study *Patient::getStudy(QString uid)
     }
 }
 
-bool Patient::studyExists(QString uid)
+bool Patient::studyExists(const QString &uid)
 {
     if (this->findStudyIndex(uid) != -1)
     {
@@ -163,7 +163,7 @@ QList<Study *> Patient::getStudies() const
     return m_studiesSet;
 }
 
-Series *Patient::getSeries(QString uid)
+Series *Patient::getSeries(const QString &uid)
 {
     Series *result = NULL;
     foreach (Study *study, m_studiesSet)
@@ -191,7 +191,7 @@ QList<Series *> Patient::getSelectedSeries()
     return selectedSeries;
 }
 
-bool Patient::hasFile(QString filename)
+bool Patient::hasFile(const QString &filename)
 {
     QList<Study *> studyList = this->getStudies();
     foreach (Study *study, studyList)
@@ -369,7 +369,7 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
     return metricToSimilarity(needlemanWunch2Distance(patient->m_patientID, this->m_patientID));
 }
 
-QString Patient::toString()
+QString Patient::toString() const
 {
     QString result;
 
@@ -475,7 +475,7 @@ void Patient::insertStudy(Study *study)
     m_studiesSet.insert(i, study);
 }
 
-int Patient::findStudyIndex(QString uid)
+int Patient::findStudyIndex(const QString &uid)
 {
     int i = 0;
     bool found = false;
