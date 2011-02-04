@@ -359,14 +359,14 @@ Patient::PatientsSimilarity Patient::compareTo(const Patient *patient)
         return SamePatients;
     }
 
-    PatientsSimilarity namesSimilarity = metricToSimilarity(needlemanWunch2Distance(nameOfThis, nameOfParameter));
+    PatientsSimilarity namesSimilarity = metricToSimilarity(computeStringEditDistanceMetric(nameOfThis, nameOfParameter, NeedlemanWunschDistance));
     if (namesSimilarity != IndeterminableSimilarity)
     {
         // Si tenen molta similitud, retornem aquest valor
         return namesSimilarity; 
     }
 
-    return metricToSimilarity(needlemanWunch2Distance(patient->m_patientID, this->m_patientID));
+    return metricToSimilarity(computeStringEditDistanceMetric(patient->m_patientID, this->m_patientID, NeedlemanWunschDistance));
 }
 
 QString Patient::toString() const
@@ -498,18 +498,14 @@ int Patient::findStudyIndex(const QString &uid)
     return i;
 }
 
-double Patient::levenshteinDistance(const QString &stringA, const QString &stringB)
+double Patient::computeStringEditDistanceMetric(const QString &stringA, const QString &stringB, int gap)
 {
-    return needlemanWunchDistance(stringA, stringB, 1);
-}
+    /// Més informacíó sobre l'algorisme:
+    /// http://staffwww.dcs.shef.ac.uk/people/S.Chapman/stringmetrics.html#Levenshtein
+    /// http://en.wikipedia.org/wiki/Levenshtein_distance
+    /// http://staffwww.dcs.shef.ac.uk/people/S.Chapman/stringmetrics.html#needleman
+    /// http://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm
 
-double Patient::needlemanWunch2Distance(const QString &stringA, const QString &stringB)
-{
-    return needlemanWunchDistance(stringA, stringB, 2);
-}
-
-double Patient::needlemanWunchDistance(const QString &stringA, const QString &stringB, int gap)
-{
     int stringALength = stringA.length();
     int stringBLength = stringB.length();
 
