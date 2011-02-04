@@ -2345,21 +2345,28 @@ void Q2DViewer::setWindowLevelPreset(const QString &preset)
 
 void Q2DViewer::updateDefaultPreset()
 {
-    if (m_defaultPresetToApply >= 0 && m_lastView == Q2DViewer::Axial)
+    if (m_mainVolume)
     {
-        Image *image = getCurrentDisplayedImage();
-        if (m_defaultPresetToApply < image->getNumberOfWindowLevels())
+        if (m_defaultPresetToApply >= 0 && m_lastView == Q2DViewer::Axial)
         {
-            QPair<double, double> windowLevel = image->getWindowLevel(m_defaultPresetToApply);
-            if (image->getPhotometricInterpretation() == "MONOCHROME1")
+            Image *image = getCurrentDisplayedImage();
+            if (m_defaultPresetToApply < image->getNumberOfWindowLevels())
             {
-                setWindowLevel(-windowLevel.first, windowLevel.second);
-            }
-            else
-            {
-                setWindowLevel(windowLevel.first, windowLevel.second);
+                QPair<double, double> windowLevel = image->getWindowLevel(m_defaultPresetToApply);
+                if (image->getPhotometricInterpretation() == "MONOCHROME1")
+                {
+                    setWindowLevel(-windowLevel.first, windowLevel.second);
+                }
+                else
+                {
+                    setWindowLevel(windowLevel.first, windowLevel.second);
+                }
             }
         }
+    }
+    else
+    {
+        DEBUG_LOG(QString("::updateDefaultPreset() : No tenim input"));
     }
 }
 
