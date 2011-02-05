@@ -97,6 +97,9 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     createActions();
     createMenus();
 
+	m_applicationVersionChecker = new ApplicationVersionChecker(this);
+    m_applicationVersionChecker->checkReleaseNotes();
+
     // Llegim les configuracions de l'aplicació, estat de la finestra, posicio,etc
     readSettings();
     // icona de l'aplicació
@@ -130,9 +133,6 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     markAsBetaVersion();
     showBetaVersionDialog();
 #endif
-
-    m_applicationVersionChecker = new ApplicationVersionChecker(this);
-    m_applicationVersionChecker->checkReleaseNotes();
 
     computeDefaultToolTextSize();
 
