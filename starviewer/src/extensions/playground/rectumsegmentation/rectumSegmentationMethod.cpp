@@ -6,42 +6,43 @@
  ***************************************************************************/
 #include "rectumSegmentationMethod.h"
 
-#include "itkImage.h"
-#include "itkImageRegionIterator.h"
-#include "itkImageRegionIteratorWithIndex.h"
-#include "itkBinaryThresholdImageFilter.h"
+#include <itkImage.h>
+#include <itkImageRegionIterator.h>
+#include <itkImageRegionIteratorWithIndex.h>
+#include <itkBinaryThresholdImageFilter.h>
 
-#include "itkConfidenceConnectedImageFilter.h"
-#include "itkCurvatureFlowImageFilter.h"
-#include "itkCastImageFilter.h"
-#include "itkConnectedThresholdImageFilter.h"
-#include "itkMedianImageFilter.h"
-#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
-#include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
-#include "itkSigmoidImageFilter.h"
-#include "itkFastMarchingImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
-#include "itkThresholdSegmentationLevelSetImageFilter.h"
-#include "itkZeroCrossingImageFilter.h"
-#include "itkGeodesicActiveContourLevelSetImageFilter.h"
-#include "itkVolumeCalculatorImageFilter.h"
-#include "itkBinaryErodeImageFilter.h"
-#include "itkBinaryDilateImageFilter.h"
-#include "itkBinaryBallStructuringElement.h"
-#include "itkExtractImageFilter.h"
-#include "itkDanielssonDistanceMapImageFilter.h"
+#include <itkConfidenceConnectedImageFilter.h>
+#include <itkCurvatureFlowImageFilter.h>
+#include <itkCastImageFilter.h>
+#include <itkConnectedThresholdImageFilter.h>
+#include <itkMedianImageFilter.h>
+#include <itkCurvatureAnisotropicDiffusionImageFilter.h>
+#include <itkGradientMagnitudeRecursiveGaussianImageFilter.h>
+#include <itkSigmoidImageFilter.h>
+#include <itkFastMarchingImageFilter.h>
+#include <itkRescaleIntensityImageFilter.h>
+#include <itkThresholdSegmentationLevelSetImageFilter.h>
+#include <itkZeroCrossingImageFilter.h>
+#include <itkGeodesicActiveContourLevelSetImageFilter.h>
+#include <itkVolumeCalculatorImageFilter.h>
+#include <itkBinaryErodeImageFilter.h>
+#include <itkBinaryDilateImageFilter.h>
+#include <itkBinaryBallStructuringElement.h>
+#include <itkExtractImageFilter.h>
+#include <itkDanielssonDistanceMapImageFilter.h>
 
-#include "itkVector.h"
-#include "itkListSample.h"
-#include "itkMeanCalculator.h"
-#include "itkCovarianceCalculator.h"
+#include <itkVector.h>
+#include <itkListSample.h>
+#include <itkMeanCalculator.h>
+#include <itkCovarianceCalculator.h>
 
-#include "itkErfcLevelSetImageFilter.h"
-#include "itkImageFileWriter.h"
+#include <itkErfcLevelSetImageFilter.h>
+#include <itkImageFileWriter.h>
 
-#include "itkResampleImageFilter.h"
-#include "itkAffineTransform.h"
-#include "itkNearestNeighborInterpolateImageFunction.h"
+#include <itkResampleImageFilter.h>
+#include <itkAffineTransform.h>
+#include <itkNearestNeighborInterpolateImageFunction.h>
+
 
 #include <QMessageBox>
 

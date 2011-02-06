@@ -6,9 +6,10 @@
  **************************************************************************/
 
 #include "vtkthresholdfilter.h"
-#include "vtkImageThreshold.h"
+
 #include "volume.h"
 
+#include <vtkImageThreshold.h>
 
 namespace udg {
 
