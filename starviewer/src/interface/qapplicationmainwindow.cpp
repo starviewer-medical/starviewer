@@ -97,7 +97,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     createActions();
     createMenus();
 
-	m_applicationVersionChecker = new ApplicationVersionChecker(this);
+    m_applicationVersionChecker = new ApplicationVersionChecker(this);
     m_applicationVersionChecker->checkReleaseNotes();
 
     // Llegim les configuracions de l'aplicació, estat de la finestra, posicio,etc
