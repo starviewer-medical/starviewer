@@ -28,7 +28,7 @@ Volume::Volume(QObject *parent)
     m_numberOfPhases = 1;
     m_numberOfSlicesPerPhase = 1;
 
-    m_dataLoaded = false;
+    m_volumePixelDataLoaded = false;
     m_volumePixelData = new VolumePixelData(this);
 }
 
@@ -50,24 +50,24 @@ vtkImageData* Volume::getVtkData()
 void Volume::setData(ItkImageTypePointer itkImage)
 {
     m_volumePixelData->setData(itkImage);
-    m_dataLoaded = true;
+    m_volumePixelDataLoaded = true;
 }
 
 void Volume::setData(vtkImageData *vtkImage)
 {
     m_volumePixelData->setData(vtkImage);
-    m_dataLoaded = true;
+    m_volumePixelDataLoaded = true;
 }
 
 void Volume::setPixelData(VolumePixelData *pixelData)
 {
     m_volumePixelData = pixelData;
-    m_dataLoaded = true;
+    m_volumePixelDataLoaded = true;
 }
 
 VolumePixelData* Volume::getPixelData()
 {
-    if (!m_dataLoaded)
+    if (!m_volumePixelDataLoaded)
     {
         VolumeReader *volumeReader = new VolumeReader();
         connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
@@ -78,9 +78,9 @@ VolumePixelData* Volume::getPixelData()
     return m_volumePixelData;
 }
 
-bool Volume::hasAllDataLoaded() const
+bool Volume::isPixelDataLoaded() const
 {
-    return m_dataLoaded;
+    return m_volumePixelDataLoaded;
 }
 
 void Volume::getOrigin(double xyz[3])
@@ -219,7 +219,7 @@ void Volume::addImage(Image *image)
     if (!m_imageSet.contains(image))
     {
         m_imageSet << image;
-        m_dataLoaded = false;
+        m_volumePixelDataLoaded = false;
     }
 }
 
@@ -227,7 +227,7 @@ void Volume::setImages(const QList<Image *> &imageList)
 {
     m_imageSet.clear();
     m_imageSet = imageList;
-    m_dataLoaded = false;
+    m_volumePixelDataLoaded = false;
 }
 
 QList<Image *> Volume::getImages() const
@@ -269,7 +269,7 @@ QString Volume::toString(bool verbose)
     Q_UNUSED(verbose);
     QString result;
 
-    if (m_dataLoaded)
+    if (m_volumePixelDataLoaded)
     {
         int dims[3];
         double origin[3];
@@ -373,12 +373,12 @@ void Volume::convertToNeutralVolume()
     this->setNumberOfPhases(1);
     
     // Indiquem que hem carregat les dades
-    m_dataLoaded = true;
+    m_volumePixelDataLoaded = true;
 }
 
 bool Volume::fitsIntoMemory()
 {
-    if (m_dataLoaded)
+    if (m_volumePixelDataLoaded)
     {
         return true;
     }
