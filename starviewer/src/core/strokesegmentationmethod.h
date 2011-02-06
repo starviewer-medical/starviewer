@@ -55,10 +55,6 @@ public:
 
     void setMask(Volume * vol){m_Mask=vol;}
 
-    Volume::ItkImageType * getItkMask (){return m_Mask->getItkData();}
-
-    Volume::VtkImageTypePointer getVtkMask (){return m_Mask->getVtkData();}
-
     void setSeedPosition (double x, double y, double z);
 
     void setHistogramLowerLevel (int x);
