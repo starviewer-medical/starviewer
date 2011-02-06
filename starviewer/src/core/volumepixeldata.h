@@ -30,8 +30,6 @@ public:
     typedef itk::Image<ItkPixelType, VDimension> ItkImageType;
     typedef ItkImageType::Pointer ItkImageTypePointer;
 
-    typedef vtkImageData *VtkImageTypePointer;
-
     explicit VolumePixelData(QObject *parent = 0);
 
     /// Assignem/Retornem les dades en format ITK
@@ -39,8 +37,8 @@ public:
     ItkImageTypePointer getItkData();
 
     /// Assignem/Retornem les dades en format VTK
-    void setData(VtkImageTypePointer vtkImage);
-    VtkImageTypePointer getVtkData();
+    void setData(vtkImageData *vtkImage);
+    vtkImageData* getVtkData();
 
     /// Obtenim el punter a les dades que es troben en l'índex donat. És un accés a molt baix nivell, ja que obtenim
     /// el punter de les dades. Retornem el punter transformat al tipus natiu de dades VoxelType.
