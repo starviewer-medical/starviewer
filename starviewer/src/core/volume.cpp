@@ -17,7 +17,6 @@
 #include "patient.h"
 #include "mathtools.h"
 #include "coresettings.h"
-#include "volumepixeldata.h"
 // VTK
 #include <vtkImageData.h>
 
@@ -43,7 +42,7 @@ Volume::ItkImageTypePointer Volume::getItkData()
     return this->getPixelData()->getItkData();
 }
 
-Volume::VtkImageTypePointer Volume::getVtkData()
+vtkImageData* Volume::getVtkData()
 {
     return this->getPixelData()->getVtkData();
 }
@@ -54,7 +53,7 @@ void Volume::setData(ItkImageTypePointer itkImage)
     m_dataLoaded = true;
 }
 
-void Volume::setData(VtkImageTypePointer vtkImage)
+void Volume::setData(vtkImageData *vtkImage)
 {
     m_volumePixelData->setData(vtkImage);
     m_dataLoaded = true;

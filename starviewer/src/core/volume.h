@@ -10,6 +10,7 @@
 #include <itkImage.h>
 
 #include "identifier.h"
+#include "volumepixeldata.h"
 // Qt
 #include <QPixmap>
 
@@ -21,7 +22,6 @@ namespace udg {
 class Image;
 class Study;
 class Patient;
-class VolumePixelData;
 
 /**
     Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. 
@@ -34,18 +34,12 @@ class VolumePixelData;
 class Volume : public QObject {
 Q_OBJECT
 public:
-    // TODO: Està duplicat de VolumePixelData
-    /// Tipus de vòxel del volum
-    typedef signed short int VoxelType;
-    /// Tipus d'imatge intern per defecte d'itk
-    typedef VoxelType ItkPixelType;
-    static const unsigned int VDimension = 3;
-
-    typedef itk::Image<ItkPixelType, VDimension> ItkImageType;
-    typedef ItkImageType::Pointer ItkImageTypePointer;
-
-    /// Tipus de punter de dades vtk
-    typedef vtkImageData *VtkImageTypePointer;
+    // TODO: Typedef's duplicats de VolumePixelData, es manté de moment mentre no es va substituïnt arreu on s'hi fa referència
+    typedef VolumePixelData::VoxelType VoxelType;
+    typedef VolumePixelData::ItkPixelType ItkPixelType;
+    static const unsigned int VDimension = VolumePixelData::VDimension;
+    typedef VolumePixelData::ItkImageType ItkImageType;
+    typedef VolumePixelData::ItkImageTypePointer ItkImageTypePointer;
 
     Volume(QObject *parent = 0);
     ~Volume();
@@ -55,8 +49,8 @@ public:
     ItkImageTypePointer getItkData();
 
     /// Assignem/Retornem les dades de pixel data en format VTK
-    void setData(VtkImageTypePointer vtkImage);
-    VtkImageTypePointer getVtkData();
+    void setData(vtkImageData *vtkImage);
+    vtkImageData* getVtkData();
 
     /// Assigna/Retorna el Volume Pixel Data
     /// Pressuposa que les dades assignades no estan per carregar i que les que retorna només són vàlides

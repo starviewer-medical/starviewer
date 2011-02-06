@@ -46,12 +46,12 @@ void VolumePixelData::setData(ItkImageTypePointer itkImage)
     this->setData(m_itkToVtkFilter->GetOutput());
 }
 
-VolumePixelData::VtkImageTypePointer VolumePixelData::getVtkData()
+vtkImageData* VolumePixelData::getVtkData()
 {
     return m_imageDataVTK;
 }
 
-void VolumePixelData::setData(VtkImageTypePointer vtkImage)
+void VolumePixelData::setData(vtkImageData *vtkImage)
 {
     if (m_imageDataVTK)
     {
