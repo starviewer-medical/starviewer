@@ -62,8 +62,7 @@ void VolumePixelData::setData(vtkImageData *vtkImage)
 
 VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int z)
 {
-    // TODO Caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
-    return (VolumePixelData::VoxelType *)this->getVtkData()->GetScalarPointer(x,y,z);
+    return static_cast<VolumePixelData::VoxelType *>(this->getVtkData()->GetScalarPointer(x,y,z));
 }
 
 bool VolumePixelData::getVoxelValue(double coordinate[3], VolumePixelData::VoxelType &voxelValue)
