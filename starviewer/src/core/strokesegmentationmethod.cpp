@@ -8,43 +8,44 @@
 
 #include <ctime> // Per la utilització de clock()
 
-#include "itkImage.h"
-#include "itkImageRegionIterator.h"
-#include "itkBinaryThresholdImageFilter.h"
+#include <itkImage.h>
+#include <itkImageRegionIterator.h>
+#include <itkBinaryThresholdImageFilter.h>
 
-#include "itkConfidenceConnectedImageFilter.h"
-#include "itkCurvatureFlowImageFilter.h"
-#include "itkCastImageFilter.h"
-#include "itkConnectedThresholdImageFilter.h"
-#include "itkMedianImageFilter.h"
-#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
-#include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
-#include "itkSigmoidImageFilter.h"
-#include "itkFastMarchingImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
-#include "itkThresholdSegmentationLevelSetImageFilter.h"
-#include "itkZeroCrossingImageFilter.h"
-#include "itkGeodesicActiveContourLevelSetImageFilter.h"
-#include "itkVolumeCalculatorImageFilter.h"
-#include "itkBinaryErodeImageFilter.h"
-#include "itkBinaryDilateImageFilter.h"
-#include "itkBinaryBallStructuringElement.h"
+#include <itkConfidenceConnectedImageFilter.h>
+#include <itkCurvatureFlowImageFilter.h>
+#include <itkCastImageFilter.h>
+#include <itkConnectedThresholdImageFilter.h>
+#include <itkMedianImageFilter.h>
+#include <itkCurvatureAnisotropicDiffusionImageFilter.h>
+#include <itkGradientMagnitudeRecursiveGaussianImageFilter.h>
+#include <itkSigmoidImageFilter.h>
+#include <itkFastMarchingImageFilter.h>
+#include <itkRescaleIntensityImageFilter.h>
+#include <itkThresholdSegmentationLevelSetImageFilter.h>
+#include <itkZeroCrossingImageFilter.h>
+#include <itkGeodesicActiveContourLevelSetImageFilter.h>
+#include <itkVolumeCalculatorImageFilter.h>
+#include <itkBinaryErodeImageFilter.h>
+#include <itkBinaryDilateImageFilter.h>
+#include <itkBinaryBallStructuringElement.h>
 
-#include "itkVector.h"
-#include "itkListSample.h"
-#include "itkMeanCalculator.h"
-#include "itkCovarianceCalculator.h"
-#include "itkMedianImageFilter.h"
-#include "itkBinaryMedianImageFilter.h"
+#include <itkVector.h>
+#include <itkListSample.h>
+#include <itkMeanCalculator.h>
+#include <itkCovarianceCalculator.h>
+#include <itkMedianImageFilter.h>
+#include <itkBinaryMedianImageFilter.h>
 
-#include "itkErfcLevelSetImageFilter.h"
-#include "itkImageFileWriter.h"
+#include <itkErfcLevelSetImageFilter.h>
+#include <itkImageFileWriter.h>
 
-#include "vtkImageThreshold.h"
+#include <itkResampleImageFilter.h>
+#include <itkAffineTransform.h>
+#include <itkNearestNeighborInterpolateImageFunction.h>
 
-#include "itkResampleImageFilter.h"
-#include "itkAffineTransform.h"
-#include "itkNearestNeighborInterpolateImageFunction.h"
+#include <vtkImageThreshold.h>
+
 #include "logging.h"
 
 namespace udg {
