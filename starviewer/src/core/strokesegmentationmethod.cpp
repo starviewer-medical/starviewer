@@ -45,6 +45,7 @@
 #include <itkNearestNeighborInterpolateImageFunction.h>
 
 #include <vtkImageThreshold.h>
+#include <vtkImageData.h>
 
 #include "logging.h"
 

@@ -23,6 +23,8 @@
 #include <QTextStream>
 #include <QWheelEvent>
 
+#include <vtkImageData.h>
+
 #include "camera.h"
 #include "gpuprogram.h"
 #include "volume.h"

@@ -17,6 +17,7 @@
 #include "patient.h"
 #include "mathtools.h"
 #include "coresettings.h"
+#include "volumepixeldata.h"
 // VTK
 #include <vtkImageData.h>
 // Voxel information
@@ -30,36 +31,24 @@ Volume::Volume(QObject *parent)
 {
     m_numberOfPhases = 1;
     m_numberOfSlicesPerPhase = 1;
-    // TODO És millor crear un objecte o assignar-li NUL a l'inicialitzar?
-    // Així potser és més segur des del punt de vista de si li demanem propietats al volum com origen, espaiat, etc
-    m_imageDataVTK = vtkImageData::New();
 
     // Preparem el lector de volums
     m_volumeReader = new VolumeReader();
     connect(m_volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
 
-    m_itkToVtkFilter = ItkToVtkFilterType::New();
-    m_vtkToItkFilter = VtkToItkFilterType::New();
     m_dataLoaded = false;
+    m_volumePixelData = new VolumePixelData(this);
 }
 
 Volume::~Volume()
 {
     delete m_volumeReader;
+    delete m_volumePixelData;
 }
 
 Volume::ItkImageTypePointer Volume::getItkData()
 {
-    m_vtkToItkFilter->SetInput(this->getVtkData());
-    try
-    {
-        m_vtkToItkFilter->GetImporter()->Update();
-    }
-    catch (itk::ExceptionObject &excep)
-    {
-        WARN_LOG(QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription());
-    }
-    return m_vtkToItkFilter->GetImporter()->GetOutput();
+    return m_volumePixelData->getItkData();
 }
 
 Volume::VtkImageTypePointer Volume::getVtkData()
@@ -68,32 +57,30 @@ Volume::VtkImageTypePointer Volume::getVtkData()
     {
         m_volumeReader->read(this);
     }
-    return m_imageDataVTK;
+    return m_volumePixelData->getVtkData();
 }
 
 void Volume::setData(ItkImageTypePointer itkImage)
 {
-    m_itkToVtkFilter->SetInput(itkImage);
-    try
-    {
-        m_itkToVtkFilter->Update();
-    }
-    catch (itk::ExceptionObject & excep)
-    {
-        WARN_LOG(QString("Excepció en el filtre itkToVtk :: Volume::setData(ItkImageTypePointer itkImage) -> ") + excep.GetDescription());
-    }
-    this->setData(m_itkToVtkFilter->GetOutput());
+    m_volumePixelData->setData(itkImage);
+    m_dataLoaded = true;
 }
 
 void Volume::setData(VtkImageTypePointer vtkImage)
 {
-    // TODO Fer còpia local, no només punter-> com fer-ho?
-    if (m_imageDataVTK)
-    {
-        m_imageDataVTK->ReleaseData();
-    }
-    m_imageDataVTK = vtkImage;
+    m_volumePixelData->setData(vtkImage);
     m_dataLoaded = true;
+}
+
+void Volume::setPixelData(VolumePixelData *pixelData)
+{
+    m_volumePixelData = pixelData;
+    m_dataLoaded = true;
+}
+
+VolumePixelData* Volume::getPixelData() const
+{
+    return m_volumePixelData;
 }
 
 bool Volume::hasAllDataLoaded() const
@@ -415,38 +402,8 @@ bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
 
 void Volume::convertToNeutralVolume()
 {
-    if (m_imageDataVTK)
-    {
-        m_imageDataVTK->Delete();
-    }
+    m_volumePixelData->convertToNeutralPixelData();
 
-    // Creem un objecte vtkImageData "neutre"
-    m_imageDataVTK = vtkImageData::New();
-    // Inicialitzem les dades
-    m_imageDataVTK->SetOrigin(.0, .0, .0);
-    m_imageDataVTK->SetSpacing(1., 1., 1.);
-    m_imageDataVTK->SetDimensions(10, 10, 1);
-    m_imageDataVTK->SetWholeExtent(0, 9, 0, 9, 0, 0);
-    m_imageDataVTK->SetScalarTypeToShort();
-    m_imageDataVTK->SetNumberOfScalarComponents(1);
-    m_imageDataVTK->AllocateScalars();
-    // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
-    signed short *scalarPointer = (signed short *) m_imageDataVTK->GetScalarPointer();
-    signed short value;
-    for (int i = 0; i < 10; i++)
-    {
-        value = 150 - i * 20;
-        if (i > 4)
-        {
-            value = 150 - (10 - i - 1)*20;
-        }
-
-        for (int j = 0; j < 10; j++)
-        {            
-            *scalarPointer = value;
-            *scalarPointer++;
-        }
-    }
     // Quan creem el volum neutre indiquem que només tenim 1 sola fase 
     // TODO Potser s'haurien de crear tantes fases com les que indiqui la sèrie?
     this->setNumberOfPhases(1);

@@ -10,6 +10,7 @@
 #include "volume.h"
 
 #include <vtkImageThreshold.h>
+#include <vtkImageData.h>
 
 namespace udg {
 
