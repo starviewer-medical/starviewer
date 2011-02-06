@@ -224,6 +224,9 @@ int VolumePixelDataReaderITKGDCM::identifyErrorMessage(const QString &errorMessa
 
 void VolumePixelDataReaderITKGDCM::setData(Volume::ItkImageTypePointer itkImage)
 {
+    // Desconnectem el pipeline del reader de manera que si es canvia el reader, no afecti a aquestes dades.
+    itkImage->DisconnectPipeline();
+
     m_volumePixelData = new VolumePixelData();
     m_volumePixelData->setData(itkImage);
 }
