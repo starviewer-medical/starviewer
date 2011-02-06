@@ -20,9 +20,6 @@
 #include "volumepixeldata.h"
 // VTK
 #include <vtkImageData.h>
-// Voxel information
-#include <vtkPointData.h>
-#include <vtkCell.h>
 
 namespace udg {
 
@@ -43,19 +40,12 @@ Volume::~Volume()
 
 Volume::ItkImageTypePointer Volume::getItkData()
 {
-    return m_volumePixelData->getItkData();
+    return this->getPixelData()->getItkData();
 }
 
 Volume::VtkImageTypePointer Volume::getVtkData()
 {
-    if (!m_dataLoaded)
-    {
-        VolumeReader *volumeReader = new VolumeReader();
-        connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
-        volumeReader->read(this);
-        delete volumeReader;
-    }
-    return m_volumePixelData->getVtkData();
+    return this->getPixelData()->getVtkData();
 }
 
 void Volume::setData(ItkImageTypePointer itkImage)
@@ -76,8 +66,16 @@ void Volume::setPixelData(VolumePixelData *pixelData)
     m_dataLoaded = true;
 }
 
-VolumePixelData* Volume::getPixelData() const
+VolumePixelData* Volume::getPixelData()
 {
+    if (!m_dataLoaded)
+    {
+        VolumeReader *volumeReader = new VolumeReader();
+        connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
+        volumeReader->read(this);
+        delete volumeReader;
+    }
+
     return m_volumePixelData;
 }
 
@@ -354,48 +352,17 @@ void Volume::getStackDirection(double direction[3], int stack)
 
 Volume::VoxelType* Volume::getScalarPointer(int x, int y, int z)
 {
-	// TODO Caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
-	return (Volume::VoxelType *)this->getVtkData()->GetScalarPointer(x,y,z);
+    return this->getPixelData()->getScalarPointer(x, y, z);
 }
 
 Volume::VoxelType* Volume::getScalarPointer(int index[3])
 {
-	// TODO Caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
 	return this->getScalarPointer(index[0], index[1], index[2]);
 }
 
 bool Volume::getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue)
 {
-    vtkImageData *vtkData = getVtkData();
-    if (!vtkData)
-    {
-        DEBUG_LOG("Dades VTK nul·les!");
-        return false;
-    }
-    
-    // Use tolerance as a function of size of source data
-    double tolerance = vtkData->GetLength();
-    tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
-
-    int subCellId;
-    double parametricCoordinates[3], interpolationWeights[8];
-    bool found = false;
-
-    // Find the cell that contains q and get it
-    vtkCell *cell = vtkData->FindAndGetCell(coordinate, NULL, -1, tolerance, subCellId, parametricCoordinates, interpolationWeights);
-    if (cell)
-    {
-        vtkPointData *pointData = vtkData->GetPointData();
-        vtkPointData *outPointData = vtkPointData::New();
-        outPointData->InterpolateAllocate(pointData, 1, 1);
-        // Interpolate the point data
-        outPointData->InterpolatePoint(pointData, 0, cell->PointIds, interpolationWeights);
-        voxelValue = outPointData->GetScalars()->GetTuple1(0);
-        found = true;
-        outPointData->Delete();
-    }
-
-    return found;
+    return this->getPixelData()->getVoxelValue(coordinate, voxelValue);
 }
 
 void Volume::convertToNeutralVolume()

@@ -62,7 +62,7 @@ public:
     /// Pressuposa que les dades assignades no estan per carregar i que les que retorna només són vàlides
     /// si hasAllDataLoaded() retorna true.
     void setPixelData(VolumePixelData *pixelData);
-    VolumePixelData* getPixelData() const;
+    VolumePixelData* getPixelData();
 
     /// Ens indica si té totes les dades carregades.
     /// Si no té totes les dades carregades els mètodes que pregunten sobre les dades poden donar respostes incorrectes.
@@ -144,16 +144,12 @@ public:
      */
     void getStackDirection(double direction[3], int stack = 0);
 
-    /// Obtenim el punter a les dades que es troben en l'índex donat
-    /// És un accés a baix nivell, ja que obtenim el punter de les dades
-    /// Retornem el punter transformat al tipus natiu de dades VoxelType
+    /// Obtenim un punter a les dades del VolumePixelData. Veure VolumePixelData::getScalarPointer per més informació.
     VoxelType* getScalarPointer(int x = 0, int y = 0, int z = 0);
     VoxelType* getScalarPointer(int index[3]);
 
-    /// Donada una coordenada de món, ens dóna el valor del vòxel corresponent.
-    /// Si la coordenada està dins del volum retorna true, false altrament.
-    /// TODO S'espera que la coordenada sigui dins del món VTK! 
-    /// Caldria determinar si ha de ser així o hauria de ser DICOM o en un altre sistema.
+    /// Donada una coordenada de món, ens dóna el valor del vòxel del VolumePixelData corresponent.
+    /// Veure VolumePixelData::getVoxelValue per més informació.
     bool getVoxelValue(double coordinate[3], Volume::VoxelType &voxelValue);
 
     /// Ens calcula si el volum quep a memòria. Si el volum ja ha estat carregat prèviament amb èxit, retornarà cert

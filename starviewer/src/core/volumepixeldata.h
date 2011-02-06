@@ -42,6 +42,16 @@ public:
     void setData(VtkImageTypePointer vtkImage);
     VtkImageTypePointer getVtkData();
 
+    /// Obtenim el punter a les dades que es troben en l'índex donat. És un accés a molt baix nivell, ja que obtenim
+    /// el punter de les dades. Retornem el punter transformat al tipus natiu de dades VoxelType.
+    VoxelType* getScalarPointer(int x, int y, int z);
+
+    /// Donada una coordenada de món, ens dóna el valor del vòxel corresponent.
+    /// Si la coordenada està dins del volum retorna true, false altrament.
+    /// TODO S'espera que la coordenada sigui dins del món VTK!
+    /// Caldria determinar si ha de ser així o hauria de ser DICOM o en un altre sistema.
+    bool getVoxelValue(double coordinate[3], VoxelType &voxelValue);
+
     /// S'encarrega de convertir el VolumePixelData en un pixel data neutre que permet que es faci servir en casos en
     /// els que ens quedem sense memòria o ens trobem amb altres problemes a l'hora d'intentar allotjar-ne un en memòria
     void convertToNeutralPixelData();
