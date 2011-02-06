@@ -49,7 +49,7 @@ void VolumeReader::executePixelDataReader(Volume *volume)
         if (m_lastError == VolumePixelDataReader::NoError)
         {
             // Tot ha anat ok, assignem les dades al volum
-            volume->setData(m_volumePixelDataReader->getVTKData());
+            volume->setPixelData(m_volumePixelDataReader->getVolumePixelData());
         }
         else
         {

@@ -3,9 +3,9 @@
 
 #include <QObject>
 
-class vtkImageData;
-
 namespace udg {
+
+class VolumePixelData;
 
 /**
     Classe encarregada de llegir únicament les dades de píxel d'arxius d'imatge mèdica.
@@ -28,8 +28,8 @@ public:
     /// procés de lectura, seguint els valors enumerats definits a aquesta mateixa classe
     virtual int read(const QStringList &filenames) = 0;
     
-    /// Ens retorna les dades en format vtkImageData
-    vtkImageData* getVTKData();
+    /// Ens retorna les dades llegides
+    VolumePixelData* getVolumePixelData();
 
 signals:
     /// Ens indica el progrés del procés de lectura
@@ -37,7 +37,8 @@ signals:
 
 protected:
     /// Les dades d'imatge en format vtk
-    vtkImageData *m_vtkImageData;
+    VolumePixelData *m_volumePixelData;
+
 
 };
 
