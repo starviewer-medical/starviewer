@@ -85,10 +85,10 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
  
     DatabaseInstallation databaseInstallation;
     if (!databaseInstallation.checkStarviewerDatabase())
-	{
-		QString errorMessage = databaseInstallation.getErrorMessage();
-		QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:\n").append(errorMessage).append(tr("\n\nYou can resolve this error by Tools>Configuration>Local Database menu.")));
-	}
+    {
+        QString errorMessage = databaseInstallation.getErrorMessage();
+        QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:\n").append(errorMessage).append(tr("\n\nYou can resolve this error by Tools>Configuration>Local Database menu.")));
+    }
 
     m_extensionHandler = new ExtensionHandler(this);
 
@@ -115,7 +115,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     {
         HangingProtocolsLoader *hangingProtocolsLoader = new HangingProtocolsLoader();
         hangingProtocolsLoader->loadDefaults();
-	    delete hangingProtocolsLoader;
+        delete hangingProtocolsLoader;
         hangingProtocolsAreLoaded = true;
     }
 #endif
