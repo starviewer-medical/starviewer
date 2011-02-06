@@ -8,6 +8,7 @@
 
 #include "patient.h"
 #include "volume.h"
+#include "logging.h"
 
 namespace udg {
 

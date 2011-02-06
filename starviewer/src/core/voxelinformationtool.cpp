@@ -9,6 +9,7 @@
 #include "volume.h"
 #include "drawertext.h"
 #include "drawer.h"
+#include "logging.h"
 // vtk
 #include <vtkCommand.h>
 

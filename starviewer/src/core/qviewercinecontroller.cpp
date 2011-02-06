@@ -11,6 +11,7 @@
 #include "q2dviewer.h"
 
 #include "volume.h"
+#include "logging.h"
 
 // Qt
 #include <QAction>

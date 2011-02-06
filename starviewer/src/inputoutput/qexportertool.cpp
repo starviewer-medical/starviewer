@@ -16,6 +16,7 @@
 #include "dicommask.h"
 #include "queryscreen.h"
 #include "singleton.h"
+#include "logging.h"
 #include <vtkWindowToImageFilter.h>
 #include <vtkImageData.h>
 #include <vtkRenderWindow.h>

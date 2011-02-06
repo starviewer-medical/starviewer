@@ -16,6 +16,7 @@
 #include "drawer.h"
 #include "drawerpolyline.h"
 #include "image.h"
+#include "logging.h"
 // Vtk's
 #include <vtkImageData.h>
 

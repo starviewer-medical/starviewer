@@ -2,6 +2,7 @@
 
 #include "volumereader.h"
 #include "volume.h"
+#include "logging.h"
 
 namespace udg {
 
