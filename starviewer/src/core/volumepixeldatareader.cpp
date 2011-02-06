@@ -3,17 +3,18 @@
 namespace udg {
 
 VolumePixelDataReader::VolumePixelDataReader(QObject *parent)
-: QObject(parent), m_vtkImageData(0)
+: QObject(parent)
 {
+    m_volumePixelData = NULL;
 }
 
 VolumePixelDataReader::~VolumePixelDataReader()
 {
 }
 
-vtkImageData* VolumePixelDataReader::getVTKData()
+VolumePixelData* VolumePixelDataReader::getVolumePixelData()
 {
-    return m_vtkImageData;
+    return m_volumePixelData;
 }
 
 } // End namespace udg

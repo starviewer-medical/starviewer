@@ -2,6 +2,7 @@
 
 #include "logging.h"
 #include "dicomtagreader.h"
+#include "volumepixeldata.h"
 
 // ITK
 #include <itkTileImageFilter.h>
@@ -223,27 +224,17 @@ int VolumePixelDataReaderITKGDCM::identifyErrorMessage(const QString &errorMessa
 
 void VolumePixelDataReaderITKGDCM::setData(Volume::ItkImageTypePointer itkImage)
 {
-    // Li donem l'input al filtre i fem la conversió
-    m_itkToVtkFilter->SetInput(itkImage);
-    try
-    {
-        m_itkToVtkFilter->Update();
-    }
-    catch (itk::ExceptionObject & exception)
-    {
-        WARN_LOG(QString("Excepció en el filtre itkToVtk :: VolumePixelDataReaderITKGDCM::setData(ItkImageTypePointer itkImage) -> ") + exception.GetDescription() );
-    }
-    // Assignem l'output
-    m_vtkImageData = m_itkToVtkFilter->GetOutput();
+    m_volumePixelData = new VolumePixelData();
+    m_volumePixelData->setData(itkImage);
 }
 
 void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
 {
-    if (m_vtkImageData)
+    if (m_volumePixelData)
     {
         double spacing[3];
 
-        m_vtkImageData->GetSpacing(spacing);
+        m_volumePixelData->getVtkData()->GetSpacing(spacing);
         DEBUG_LOG(QString("checkZeroSpacing: (x , y , z) = (%1 , %2 , %3)").arg(spacing[0]).arg(spacing[1]).arg(spacing[2]));
 
         if (spacing[0] == 0.0 || spacing[1] == 0.0)

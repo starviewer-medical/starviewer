@@ -1,6 +1,7 @@
 #include "volumepixeldatareadervtkgdcm.h"
 
 #include "logging.h"
+#include "volumepixeldata.h"
 
 #include <vtkGDCMImageReader.h>
 #include <vtkStringArray.h>
@@ -94,6 +95,7 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
 
 void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
 {
+    vtkImageData *imageData;
     //
     // Extret de gdcmviewer.cxx (gdcm\Utilities\VTK\Applications)
     //
@@ -130,8 +132,8 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
                 imageColorMapper16->SetOutputFormatToLuminance();
             }
             imageColorMapper16->Update();
-            m_vtkImageData = imageColorMapper16->GetOutput();
-            imageColorMapper16->Register(m_vtkImageData);
+            imageData = imageColorMapper16->GetOutput();
+            imageColorMapper16->Register(imageData);
             imageColorMapper16->Delete();
         }
         else
@@ -151,8 +153,8 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
                 imageColorMapper->SetOutputFormatToLuminance();
             }
             imageColorMapper->Update();
-            m_vtkImageData = imageColorMapper->GetOutput();
-            imageColorMapper->Register(m_vtkImageData);
+            imageData = imageColorMapper->GetOutput();
+            imageColorMapper->Register(imageData);
             imageColorMapper->Delete();
         }
     }
@@ -162,21 +164,24 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
         vtkImageYBRToRGB *ybrToRGBFilter = vtkImageYBRToRGB::New();
         ybrToRGBFilter->SetInput(m_vtkGDCMReader->GetOutput());
         ybrToRGBFilter->Update();
-        m_vtkImageData = ybrToRGBFilter->GetOutput();
-        ybrToRGBFilter->Register(m_vtkImageData);
+        imageData = ybrToRGBFilter->GetOutput();
+        ybrToRGBFilter->Register(imageData);
         ybrToRGBFilter->Delete();
     }
     else if (imageFormat == VTK_RGB || imageFormat == VTK_RGBA)
     {
         DEBUG_LOG("Llegim directament de vtkGDCMImageReader. No cal aplicar cap mapeig adicional, les dades estan en format RGB/RGBA");
         // easy case !
-        m_vtkImageData = m_vtkGDCMReader->GetOutput();
+        imageData = m_vtkGDCMReader->GetOutput();
     }
     else
     {
         DEBUG_LOG(QString("Llegim directament de vtkGDCMImageReader. No cal aplicar cap mapeig adicional. Format d'imatge: %1").arg(imageFormat));
-        m_vtkImageData = m_vtkGDCMReader->GetOutput();
+        imageData = m_vtkGDCMReader->GetOutput();
     }
+
+    m_volumePixelData = new VolumePixelData();
+    m_volumePixelData->setData(imageData);
 }
 
 void VolumePixelDataReaderVTKGDCM::printDebugInfo()
