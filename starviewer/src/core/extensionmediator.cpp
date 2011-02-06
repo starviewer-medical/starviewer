@@ -13,7 +13,6 @@ namespace udg{
 ExtensionMediator::ExtensionMediator(QObject *parent)
  : QObject(parent)
 {
-    DEBUG_LOG( "ExtensionMediator::ExtensionMediator(parent)" );
 }
 
 
