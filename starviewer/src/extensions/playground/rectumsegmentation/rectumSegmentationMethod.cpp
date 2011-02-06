@@ -45,6 +45,7 @@
 
 #include <QMessageBox>
 
+#include "logging.h"
 
 namespace udg {
 

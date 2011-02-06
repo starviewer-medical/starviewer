@@ -18,6 +18,7 @@
 #include "series.h"
 #include "study.h"
 #include "image.h"
+#include "logging.h"
 
 #include <dcuid.h>
 

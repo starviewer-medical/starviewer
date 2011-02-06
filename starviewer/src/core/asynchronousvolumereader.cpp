@@ -5,6 +5,7 @@
 
 #include "volumereaderjob.h"
 #include "volume.h"
+#include "logging.h"
 
 namespace udg {
 
