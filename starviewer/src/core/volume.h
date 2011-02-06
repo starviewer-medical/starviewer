@@ -51,29 +51,13 @@ public:
     Volume(QObject *parent = 0);
     ~Volume();
 
-    /**
-       Li donem les dades en format ITK
-       \sa getVtkData(), getItkData()
-    */
+    /// Assignem/Retornem les dades de pixel data en format ITK
     void setData(ItkImageTypePointer itkImage);
-
-    /**
-       Li donem les dades en format VTK
-       \sa getVtkData(), getItkData()
-    */
-    void setData(VtkImageTypePointer vtkImage);
-
-    /**
-        Ens retorna la dades en format VTK
-        \sa setData()
-    */
-    VtkImageTypePointer getVtkData();
-
-    /**
-        Ens retorna les dades en format ITK
-        \sa setData()
-    */
     ItkImageTypePointer getItkData();
+
+    /// Assignem/Retornem les dades de pixel data en format VTK
+    void setData(VtkImageTypePointer vtkImage);
+    VtkImageTypePointer getVtkData();
 
     /// Ens indica si té totes les dades carregades.
     /// Si no té totes les dades carregades els mètodes que pregunten sobre les dades poden donar respostes incorrectes.
