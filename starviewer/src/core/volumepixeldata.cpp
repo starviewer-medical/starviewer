@@ -1,6 +1,9 @@
 #include "volumepixeldata.h"
 
 #include <vtkImageData.h>
+// Voxel information
+#include <vtkPointData.h>
+#include <vtkCell.h>
 
 #include "logging.h"
 
@@ -55,6 +58,46 @@ void VolumePixelData::setData(VtkImageTypePointer vtkImage)
         m_imageDataVTK->ReleaseData();
     }
     m_imageDataVTK = vtkImage;
+}
+
+VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int z)
+{
+    // TODO Caldria posar static/dynamic_cast? o en aquest cas ja és suficient així?
+    return (VolumePixelData::VoxelType *)this->getVtkData()->GetScalarPointer(x,y,z);
+}
+
+bool VolumePixelData::getVoxelValue(double coordinate[3], VolumePixelData::VoxelType &voxelValue)
+{
+    vtkImageData *vtkData = this->getVtkData();
+    if (!vtkData)
+    {
+        DEBUG_LOG("Dades VTK nul·les!");
+        return false;
+    }
+
+    // Use tolerance as a function of size of source data
+    double tolerance = vtkData->GetLength();
+    tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
+
+    int subCellId;
+    double parametricCoordinates[3], interpolationWeights[8];
+    bool found = false;
+
+    // Find the cell that contains q and get it
+    vtkCell *cell = vtkData->FindAndGetCell(coordinate, NULL, -1, tolerance, subCellId, parametricCoordinates, interpolationWeights);
+    if (cell)
+    {
+        vtkPointData *pointData = vtkData->GetPointData();
+        vtkPointData *outPointData = vtkPointData::New();
+        outPointData->InterpolateAllocate(pointData, 1, 1);
+        // Interpolate the point data
+        outPointData->InterpolatePoint(pointData, 0, cell->PointIds, interpolationWeights);
+        voxelValue = outPointData->GetScalars()->GetTuple1(0);
+        found = true;
+        outPointData->Delete();
+    }
+
+    return found;
 }
 
 void VolumePixelData::convertToNeutralPixelData()
