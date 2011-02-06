@@ -46,6 +46,8 @@ void VolumeReaderJob::run()
     m_volumeReadSuccessfully = volumeReader->readWithoutShowingError(m_volumeToRead);
     m_lastErrorMessageToUser = volumeReader->getLastErrorMessageToUser();
 
+    delete volumeReader;
+
     DEBUG_LOG(QString("End run VolumeReaderJob with Volume: %1 and result %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_volumeReadSuccessfully));
 }
 
