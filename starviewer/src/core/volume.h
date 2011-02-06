@@ -54,13 +54,13 @@ public:
 
     /// Assigna/Retorna el Volume Pixel Data
     /// Pressuposa que les dades assignades no estan per carregar i que les que retorna només són vàlides
-    /// si hasAllDataLoaded() retorna true.
+    /// si isPixelDataLoaded() retorna true.
     void setPixelData(VolumePixelData *pixelData);
     VolumePixelData* getPixelData();
 
-    /// Ens indica si té totes les dades carregades.
-    /// Si no té totes les dades carregades els mètodes que pregunten sobre les dades poden donar respostes incorrectes.
-    bool hasAllDataLoaded() const;
+    /// Ens indica si té el pixel data carregat.
+    /// Si no el té els mètodes que pregunten sobre dades del volum poden donar respostes incorrectes.
+    bool isPixelDataLoaded() const;
 
     /// Obté l'origen del volum
     void getOrigin(double  xyz[3]);
@@ -166,7 +166,7 @@ signals:
 private:
     /// Ens diu si les dades han estat carregades ja en memòria o no.
     /// Aquest membre el farem servir per aplicar el lazy loading
-    bool m_dataLoaded;
+    bool m_volumePixelDataLoaded;
 
     /// Conjunt d'imatges que composen el volum
     QList<Image *> m_imageSet;
