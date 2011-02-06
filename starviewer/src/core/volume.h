@@ -21,7 +21,6 @@ namespace udg {
 class Image;
 class Study;
 class Patient;
-class VolumeReader;
 class VolumePixelData;
 
 /**
@@ -187,9 +186,6 @@ private:
 
     /// Thumbnail del volum
     QPixmap m_thumbnail;
-
-    /// Classe per llegir les dades del volum
-    VolumeReader *m_volumeReader;
 
     /// Pixel data del volume
     VolumePixelData *m_volumePixelData;

@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include <itkImage.h>
+#include <vtkSmartPointer.h>
 // Els filtres per passar itk<=>vtk: InsightApplications/auxiliary/vtk --> ho tenim a /tools
 #include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
 #include "itkVTKImageToImageFilter.h" // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
@@ -51,7 +52,7 @@ private:
     typedef itk::VTKImageToImageFilter<ItkImageType> VtkToItkFilterType;
 
     /// Les dades en format vtk
-    VtkImageTypePointer m_imageDataVTK;
+    vtkSmartPointer<vtkImageData> m_imageDataVTK;
 
     /// Filtres per passar de vtk a itk
     ItkToVtkFilterType::Pointer m_itkToVtkFilter;

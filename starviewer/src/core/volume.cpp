@@ -32,17 +32,12 @@ Volume::Volume(QObject *parent)
     m_numberOfPhases = 1;
     m_numberOfSlicesPerPhase = 1;
 
-    // Preparem el lector de volums
-    m_volumeReader = new VolumeReader();
-    connect(m_volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
-
     m_dataLoaded = false;
     m_volumePixelData = new VolumePixelData(this);
 }
 
 Volume::~Volume()
 {
-    delete m_volumeReader;
     delete m_volumePixelData;
 }
 
@@ -55,7 +50,10 @@ Volume::VtkImageTypePointer Volume::getVtkData()
 {
     if (!m_dataLoaded)
     {
-        m_volumeReader->read(this);
+        VolumeReader *volumeReader = new VolumeReader();
+        connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
+        volumeReader->read(this);
+        delete volumeReader;
     }
     return m_volumePixelData->getVtkData();
 }
