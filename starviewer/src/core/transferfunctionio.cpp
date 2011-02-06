@@ -163,6 +163,20 @@ TransferFunction* TransferFunctionIO::fromXmlFile( QFile &file )    /// \todo af
         }
     }
 
+    // opacitat del gradient
+    QDomNode gradientOpacityNode = transferFunctionElement.elementsByTagName("gradientopacity").item(0);
+    if (!gradientOpacityNode.isNull())
+    {
+        QDomElement gradientOpacityElement = gradientOpacityNode.toElement();
+        QDomNodeList gradientOpacityPoints = gradientOpacityElement.elementsByTagName("point");
+
+        for (uint i = 0; i < gradientOpacityPoints.length(); i++)
+        {
+            QDomElement gradientOpacityPointElement = gradientOpacityPoints.item(i).toElement();
+            transferFunction->setGradientOpacity(gradientOpacityPointElement.attribute("gradient").toDouble(), gradientOpacityPointElement.attribute("a").toDouble());
+        }
+    }
+
     return transferFunction;
 }
 
@@ -263,6 +277,18 @@ void TransferFunctionIO::toXmlFile( QFile &file, const TransferFunction &transfe
         opacityPointElement.setAttribute( "value", x );
         opacityPointElement.setAttribute( "a", transferFunction.getOpacity( x ) );
         opacityElement.appendChild( opacityPointElement );
+    }
+
+    // opacitat del gradient
+    QDomElement gradientOpacityElement = xml.createElement("gradientopacity");
+    transferFunctionElement.appendChild(gradientOpacityElement);
+    QList<double> gradientOpacityPoints = transferFunction.gradientOpacityKeys();
+    foreach (double y, gradientOpacityPoints)
+    {
+        QDomElement gradientOpacityPointElement = xml.createElement("point");
+        gradientOpacityPointElement.setAttribute("gradient", y);
+        gradientOpacityPointElement.setAttribute("a", transferFunction.getGradientOpacity(y));
+        gradientOpacityElement.appendChild(gradientOpacityPointElement);
     }
 
     QTextStream out( &file );
