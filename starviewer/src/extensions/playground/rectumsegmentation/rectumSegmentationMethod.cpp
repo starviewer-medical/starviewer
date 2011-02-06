@@ -43,6 +43,7 @@
 #include <itkAffineTransform.h>
 #include <itkNearestNeighborInterpolateImageFunction.h>
 
+#include <vtkImageData.h>
 
 #include <QMessageBox>
 

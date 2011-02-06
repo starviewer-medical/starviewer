@@ -8,9 +8,7 @@
 #define UDGVOLUME_H
 
 #include <itkImage.h>
-// Els filtres per passar itk<=>vtk: InsightApplications/auxiliary/vtk --> ho tenim a /tools
-#include "itkImageToVTKImageFilter.h" //Converts an ITK image into a VTK image and plugs a itk data pipeline to a VTK datapipeline.
-#include "itkVTKImageToImageFilter.h" // Converts a VTK image into an ITK image and plugs a vtk data pipeline to an ITK datapipeline.
+
 #include "identifier.h"
 // Qt
 #include <QPixmap>
@@ -24,6 +22,7 @@ class Image;
 class Study;
 class Patient;
 class VolumeReader;
+class VolumePixelData;
 
 /**
     Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. 
@@ -36,6 +35,7 @@ class VolumeReader;
 class Volume : public QObject {
 Q_OBJECT
 public:
+    // TODO: Està duplicat de VolumePixelData
     /// Tipus de vòxel del volum
     typedef signed short int VoxelType;
     /// Tipus d'imatge intern per defecte d'itk
@@ -58,6 +58,12 @@ public:
     /// Assignem/Retornem les dades de pixel data en format VTK
     void setData(VtkImageTypePointer vtkImage);
     VtkImageTypePointer getVtkData();
+
+    /// Assigna/Retorna el Volume Pixel Data
+    /// Pressuposa que les dades assignades no estan per carregar i que les que retorna només són vàlides
+    /// si hasAllDataLoaded() retorna true.
+    void setPixelData(VolumePixelData *pixelData);
+    VolumePixelData* getPixelData() const;
 
     /// Ens indica si té totes les dades carregades.
     /// Si no té totes les dades carregades els mètodes que pregunten sobre les dades poden donar respostes incorrectes.
@@ -169,17 +175,6 @@ signals:
     void progress(int);
 
 private:
-    /// Filtres per importar/exportar
-    typedef itk::ImageToVTKImageFilter<ItkImageType> ItkToVtkFilterType;
-    typedef itk::VTKImageToImageFilter<ItkImageType> VtkToItkFilterType;
-
-    /// Les dades en format vtk
-    VtkImageTypePointer m_imageDataVTK;
-
-    /// Filtres per passar de vtk a itk
-    ItkToVtkFilterType::Pointer m_itkToVtkFilter;
-    VtkToItkFilterType::Pointer m_vtkToItkFilter;
-
     /// Ens diu si les dades han estat carregades ja en memòria o no.
     /// Aquest membre el farem servir per aplicar el lazy loading
     bool m_dataLoaded;
@@ -195,6 +190,9 @@ private:
 
     /// Classe per llegir les dades del volum
     VolumeReader *m_volumeReader;
+
+    /// Pixel data del volume
+    VolumePixelData *m_volumePixelData;
 
     /// TODO membre temporal per la transició al tractament de fases
     int m_numberOfPhases;

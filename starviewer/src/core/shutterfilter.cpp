@@ -15,6 +15,7 @@
 #include <vtkPolyData.h>
 #include <vtkRegularPolygonSource.h>
 #include <vtkImageMask.h>
+#include <vtkImageData.h>
 
 #include "volume.h"
 #include "logging.h"

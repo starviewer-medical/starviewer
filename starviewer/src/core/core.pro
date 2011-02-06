@@ -245,7 +245,8 @@ HEADERS += extensionfactory.h \
     qviewerworkinprogresswidget.h \
     qviewercommand.h \
     applyhangingprotocolqviewercommand.h \
-    renderqviewercommand.h
+    renderqviewercommand.h \
+    volumepixeldata.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -448,7 +449,8 @@ SOURCES += extensionmediator.cpp \
     qviewerworkinprogresswidget.cpp \
     qviewercommand.cpp \
     applyhangingprotocolqviewercommand.cpp \
-    renderqviewercommand.cpp
+    renderqviewercommand.cpp \
+    volumepixeldata.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
