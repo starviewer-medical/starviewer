@@ -14,7 +14,7 @@ namespace udg {
 
 
 /**
-    Representa una funció de transferència d'opacitat f: X -> O, on X és el conjunt de valors de propietat (reals) i O el conjunt d'opacitats (reals en el rang [0,1]).
+    Representa una funció de transferència d'opacitat f: X -> O, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient) i O el conjunt d'opacitats (reals en el rang [0,1]).
     Aquesta funció té uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper. La funció de transferència també té un nom.
  */
 class OpacityTransferFunction : public TransferFunctionTemplate<double> {
