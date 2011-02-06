@@ -35,14 +35,14 @@ TransferFunction::TransferFunction(vtkLookupTable *lookupTable)
         lookupTable->GetColor(value, rgb);
         opacity = lookupTable->GetOpacity(value);
         m_color.set(value, rgb[0], rgb[1], rgb[2]);
-        m_opacity.set(value, opacity);
+        m_scalarOpacity.set(value, opacity);
     }
 }
 
 
 bool TransferFunction::operator ==(const TransferFunction &transferFunction) const
 {
-    return m_color == transferFunction.m_color && m_opacity == transferFunction.m_opacity;
+    return m_color == transferFunction.m_color && m_scalarOpacity == transferFunction.m_scalarOpacity && m_gradientOpacity == transferFunction.m_gradientOpacity;
 }
 
 
@@ -55,14 +55,15 @@ const QString& TransferFunction::name() const
 void TransferFunction::setName(const QString &name)
 {
     m_color.setName(name);
-    m_opacity.setName(name);
+    m_scalarOpacity.setName(name);
+    m_gradientOpacity.setName(name);
 }
 
 
 QColor TransferFunction::get(double x) const
 {
     QColor rgba = m_color.get(x);
-    rgba.setAlphaF(m_opacity.get(x));
+    rgba.setAlphaF(m_scalarOpacity.get(x));
     return rgba;
 }
 
@@ -75,14 +76,32 @@ QColor TransferFunction::getColor(double x) const
 
 double TransferFunction::getOpacity(double x) const
 {
-    return m_opacity.get(x);
+    return getScalarOpacity(x);
+}
+
+
+double TransferFunction::getScalarOpacity(double x) const
+{
+    return m_scalarOpacity.get(x);
+}
+
+
+double TransferFunction::getGradientOpacity(double y) const
+{
+    return m_gradientOpacity.get(y);
+}
+
+
+double TransferFunction::getOpacity(double x, double y) const
+{
+    return m_scalarOpacity.get(x) * m_gradientOpacity.get(y);
 }
 
 
 void TransferFunction::set(double x, const QColor &color, double opacity)
 {
     m_color.set(x, color);
-    m_opacity.set(x, opacity);
+    m_scalarOpacity.set(x, opacity);
     m_changed = true;
 }
 
@@ -90,7 +109,7 @@ void TransferFunction::set(double x, const QColor &color, double opacity)
 void TransferFunction::set(double x, int red, int green, int blue, double opacity)
 {
     m_color.set(x, red, green, blue);
-    m_opacity.set(x, opacity);
+    m_scalarOpacity.set(x, opacity);
     m_changed = true;
 }
 
@@ -98,7 +117,34 @@ void TransferFunction::set(double x, int red, int green, int blue, double opacit
 void TransferFunction::set(double x, double red, double green, double blue, double opacity)
 {
     m_color.set(x, red, green, blue);
-    m_opacity.set(x, opacity);
+    m_scalarOpacity.set(x, opacity);
+    m_changed = true;
+}
+
+
+void TransferFunction::set(double x, double y, const QColor &color, double scalarOpacity, double gradientOpacity)
+{
+    m_color.set(x, color);
+    m_scalarOpacity.set(x, scalarOpacity);
+    m_gradientOpacity.set(y, gradientOpacity);
+    m_changed = true;
+}
+
+
+void TransferFunction::set(double x, double y, int red, int green, int blue, double scalarOpacity, double gradientOpacity)
+{
+    m_color.set(x, red, green, blue);
+    m_scalarOpacity.set(x, scalarOpacity);
+    m_gradientOpacity.set(y, gradientOpacity);
+    m_changed = true;
+}
+
+
+void TransferFunction::set(double x, double y, double red, double green, double blue, double scalarOpacity, double gradientOpacity)
+{
+    m_color.set(x, red, green, blue);
+    m_scalarOpacity.set(x, scalarOpacity);
+    m_gradientOpacity.set(y, gradientOpacity);
     m_changed = true;
 }
 
@@ -126,7 +172,20 @@ void TransferFunction::setColor(double x, double red, double green, double blue)
 
 void TransferFunction::setOpacity(double x, double opacity)
 {
-    m_opacity.set(x, opacity);
+    setScalarOpacity(x, opacity);
+}
+
+
+void TransferFunction::setScalarOpacity(double x, double opacity)
+{
+    m_scalarOpacity.set(x, opacity);
+    m_changed = true;
+}
+
+
+void TransferFunction::setGradientOpacity(double y, double opacity)
+{
+    m_gradientOpacity.set(y, opacity);
     m_changed = true;
 }
 
@@ -134,7 +193,7 @@ void TransferFunction::setOpacity(double x, double opacity)
 void TransferFunction::unset(double x)
 {
     m_color.unset(x);
-    m_opacity.unset(x);
+    m_scalarOpacity.unset(x);
     m_changed = true;
 }
 
@@ -148,7 +207,20 @@ void TransferFunction::unsetColor(double x)
 
 void TransferFunction::unsetOpacity(double x)
 {
-    m_opacity.unset(x);
+    unsetScalarOpacity(x);
+}
+
+
+void TransferFunction::unsetScalarOpacity(double x)
+{
+    m_scalarOpacity.unset(x);
+    m_changed = true;
+}
+
+
+void TransferFunction::unsetGradientOpacity(double y)
+{
+    m_gradientOpacity.unset(y);
     m_changed = true;
 }
 
@@ -156,7 +228,8 @@ void TransferFunction::unsetOpacity(double x)
 void TransferFunction::clear()
 {
     m_color.clear();
-    m_opacity.clear();
+    m_scalarOpacity.clear();
+    m_gradientOpacity.clear();
     m_changed = true;
 }
 
@@ -170,12 +243,25 @@ void TransferFunction::clearColor()
 
 void TransferFunction::clearOpacity()
 {
-    m_opacity.clear();
+    clearScalarOpacity();
+}
+
+
+void TransferFunction::clearScalarOpacity()
+{
+    m_scalarOpacity.clear();
     m_changed = true;
 }
 
 
-QList<double>& TransferFunction::keys() const
+void TransferFunction::clearGradientOpacity()
+{
+    m_gradientOpacity.clear();
+    m_changed = true;
+}
+
+
+const QList<double>& TransferFunction::keys() const
 {
     updateKeys();
     return m_keys;
@@ -217,14 +303,26 @@ QList<double> TransferFunction::colorKeys() const
 
 QList<double> TransferFunction::opacityKeys() const
 {
-    return m_opacity.keys();
+    return scalarOpacityKeys();
+}
+
+
+QList<double> TransferFunction::scalarOpacityKeys() const
+{
+    return m_scalarOpacity.keys();
+}
+
+
+QList<double> TransferFunction::gradientOpacityKeys() const
+{
+    return m_gradientOpacity.keys();
 }
 
 
 void TransferFunction::trim(double x1, double x2)
 {
     m_color.trim(x1, x2);
-    m_opacity.trim(x1, x2);
+    m_scalarOpacity.trim(x1, x2);
     m_changed = true;
 }
 
@@ -240,7 +338,9 @@ TransferFunction TransferFunction::to01(double x1, double x2) const
     double shift = -x1, scale = 1.0 / (x2 - x1);
     TransferFunction transferFunction01;
 
-    foreach (double x, m_keys) transferFunction01.set((x + shift) * scale, getColor(x), getOpacity(x));
+    foreach (double x, m_keys) transferFunction01.set((x + shift) * scale, getColor(x), getScalarOpacity(x));
+
+    transferFunction01.setGradientOpacityTransferFunction(gradientOpacityTransferFunction());
 
     return transferFunction01;
 }
@@ -250,7 +350,8 @@ TransferFunction TransferFunction::simplify() const
 {
     TransferFunction simplified(*this);
     simplified.m_color.simplify();
-    simplified.m_opacity.simplify();
+    simplified.m_scalarOpacity.simplify();
+    simplified.m_gradientOpacity.simplify();
     simplified.m_changed = true;
     return simplified;
 }
@@ -266,9 +367,10 @@ TransferFunction TransferFunction::normalize() const
     while (it.hasNext())
     {
         double x = it.next();
-        normalized.set(x, getColor(x), getOpacity(x));
+        normalized.set(x, getColor(x), getScalarOpacity(x));
     }
 
+    normalized.setGradientOpacityTransferFunction(gradientOpacityTransferFunction());
     normalized.setName(name());
 
     return normalized;
@@ -284,21 +386,47 @@ const ColorTransferFunction& TransferFunction::colorTransferFunction() const
 void TransferFunction::setColorTransferFunction(const ColorTransferFunction &colorTransferFunction)
 {
     m_color = colorTransferFunction;
-    m_color.setName(m_opacity.name());
+    m_color.setName(m_scalarOpacity.name());
     m_changed = true;
 }
 
 
 const OpacityTransferFunction& TransferFunction::opacityTransferFunction() const
 {
-    return m_opacity;
+    return scalarOpacityTransferFunction();
 }
 
 
 void TransferFunction::setOpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction)
 {
-    m_opacity = opacityTransferFunction;
-    m_opacity.setName(m_color.name());
+    setScalarOpacityTransferFunction(opacityTransferFunction);
+}
+
+
+const OpacityTransferFunction& TransferFunction::scalarOpacityTransferFunction() const
+{
+    return m_scalarOpacity;
+}
+
+
+void TransferFunction::setScalarOpacityTransferFunction(const OpacityTransferFunction &scalarOpacityTransferFunction)
+{
+    m_scalarOpacity = scalarOpacityTransferFunction;
+    m_scalarOpacity.setName(m_color.name());
+    m_changed = true;
+}
+
+
+const OpacityTransferFunction& TransferFunction::gradientOpacityTransferFunction() const
+{
+    return m_gradientOpacity;
+}
+
+
+void TransferFunction::setGradientOpacityTransferFunction(const OpacityTransferFunction &gradientOpacityTransferFunction)
+{
+    m_gradientOpacity = gradientOpacityTransferFunction;
+    m_gradientOpacity.setName(m_color.name());
     m_changed = true;
 }
 
@@ -311,13 +439,25 @@ vtkColorTransferFunction* TransferFunction::vtkColorTransferFunction() const
 
 vtkPiecewiseFunction* TransferFunction::vtkOpacityTransferFunction() const
 {
-    return m_opacity.vtkOpacityTransferFunction();
+    return vtkScalarOpacityTransferFunction();
+}
+
+
+vtkPiecewiseFunction* TransferFunction::vtkScalarOpacityTransferFunction() const
+{
+    return m_scalarOpacity.vtkOpacityTransferFunction();
+}
+
+
+vtkPiecewiseFunction* TransferFunction::vtkGradientOpacityTransferFunction() const
+{
+    return m_gradientOpacity.vtkOpacityTransferFunction();
 }
 
 
 QString TransferFunction::toString() const
 {
-    return "Color:\n" + m_color.toString() + "Opacity:\n" + m_opacity.toString();
+    return "Color:\n" + m_color.toString() + "Scalar opacity:\n" + m_scalarOpacity.toString() + "Gradient opacity:\n" + m_gradientOpacity.toString();
 }
 
 
@@ -325,7 +465,8 @@ QVariant TransferFunction::toVariant() const
 {
     QMap<QString, QVariant> variant;
     variant["color"] = m_color.toVariant();
-    variant["opacity"] = m_opacity.toVariant();
+    variant["scalarOpacity"] = m_scalarOpacity.toVariant();
+    variant["gradientOpacity"] = m_gradientOpacity.toVariant();
     return variant;
 }
 
@@ -335,7 +476,8 @@ TransferFunction TransferFunction::fromVariant(const QVariant &variant)
     TransferFunction transferFunction;
     const QMap<QString, QVariant> variantMap = variant.toMap();
     transferFunction.m_color = ColorTransferFunction::fromVariant(variantMap.value("color"));
-    transferFunction.m_opacity = OpacityTransferFunction::fromVariant(variantMap.value("opacity"));
+    transferFunction.m_scalarOpacity = OpacityTransferFunction::fromVariant(variantMap.value("scalarOpacity"));
+    transferFunction.m_gradientOpacity = OpacityTransferFunction::fromVariant(variantMap.value("gradientOpacity"));
     return transferFunction;
 }
 
@@ -345,7 +487,7 @@ void TransferFunction::updateKeys() const
     if (!m_changed) return;
 
     m_keys = m_color.keys();
-    m_keys << m_opacity.keys();
+    m_keys << m_scalarOpacity.keys();
     qSort(m_keys);
 
     for (int i = 0; i < m_keys.size() - 1; i++)

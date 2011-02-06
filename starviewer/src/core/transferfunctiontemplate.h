@@ -22,7 +22,7 @@ T lerp(const T &a, const T &b, double alpha)
 
 
 /**
-    Representa una funció de transferència bàsica f: X -> Y, on X és el conjunt de valors de propietat (reals) i Y un conjunt de valors de tipus T.
+    Representa una funció de transferència bàsica f: X -> Y, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient) i Y un conjunt de valors de tipus T.
     Aquesta funció té uns quants punts definits explícitament i la resta s'obtenen per interpolació lineal o extrapolació del veí més proper. La funció de transferència també té un nom.
 
     Aquesta template té el constructor protegit, de manera que no es pot instanciar directament, sinó que se n'ha de fer una subclasse per cada tipus T que es vulgui.
@@ -41,9 +41,9 @@ public:
     /// Assigna el nom.
     void setName(const QString &name);
 
-    /// Retorna la y corresponent al valor de propietat x.
+    /// Retorna la y corresponent a x.
     T operator ()(double x) const;
-    /// Retorna la y corresponent al valor de propietat x.
+    /// Retorna la y corresponent a x.
     T get(double x) const;
     /// Defineix explícitament el punt (x,y).
     void set(double x, const T &y);
@@ -52,7 +52,7 @@ public:
     /// Esborra tots els punts definits explícitament.
     void clear();
 
-    /// Retorna la llista valors de propietat x de tots els punts (x,y) definits explícitament.
+    /// Retorna la llista de valors x de tots els punts (x,y) definits explícitament.
     QList<double> keys() const;
 
     /// Retalla la funció de manera que només tingui punts explícits en el rang [x1, x2] i tingui punts explícits a x1 i x2.
