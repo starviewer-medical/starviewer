@@ -87,11 +87,15 @@ void QExperimental3DExtension::setInput( Volume *input )
     unsigned short max = m_volume->getRangeMax();
     m_transferFunctionEditor->setRange(0, max);
     m_transferFunctionEditor->syncToMax();
+    m_gradientOpacityTransferFunctionEditor->setRange(0, 255.0);
+    m_gradientOpacityTransferFunctionEditor->syncToMax();
 
     TransferFunction defaultTransferFunction;
     defaultTransferFunction.set(0.0, Qt::black, 0.0);
     defaultTransferFunction.set(max, Qt::white, 1.0);
+    defaultTransferFunction.setGradientOpacity(0.0, 1.0);
     m_transferFunctionEditor->setTransferFunction(defaultTransferFunction);
+    syncNormalToGradientTransferFunction();
 
     setTransferFunction(false);
     render();
@@ -1199,6 +1203,7 @@ void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
     else transferFunction = TransferFunctionIO::fromFile( fileName );
 
     m_transferFunctionEditor->setTransferFunction( *transferFunction );
+    syncNormalToGradientTransferFunction();
 
     m_recentTransferFunctions << *transferFunction;
     int row = m_recentTransferFunctionsModel->rowCount();
@@ -1223,6 +1228,8 @@ void QExperimental3DExtension::saveTransferFunction()
 
 void QExperimental3DExtension::saveTransferFunction( const QString &fileName )
 {
+    syncGradientToNormalTransferFunction();
+
     if ( fileName.endsWith( ".xml" ) ) TransferFunctionIO::toXmlFile( fileName, m_transferFunctionEditor->transferFunction() );
     else TransferFunctionIO::toFile( fileName, m_transferFunctionEditor->transferFunction() );
 
@@ -1237,6 +1244,8 @@ void QExperimental3DExtension::saveTransferFunction( const QString &fileName )
 
 void QExperimental3DExtension::addRecentTransferFunction()
 {
+    syncGradientToNormalTransferFunction();
+
     m_recentTransferFunctions << m_transferFunctionEditor->transferFunction();
     int row = m_recentTransferFunctionsModel->rowCount();
     m_recentTransferFunctionsModel->insertRow( row );
@@ -1249,13 +1258,18 @@ void QExperimental3DExtension::addRecentTransferFunction()
 void QExperimental3DExtension::setRecentTransferFunction( const QModelIndex &index )
 {
     m_transferFunctionEditor->setTransferFunction( m_recentTransferFunctions.at( index.row() ) );
+    syncNormalToGradientTransferFunction();
+
     setTransferFunction();
 }
 
 
 void QExperimental3DExtension::setTransferFunction( bool render )
 {
-    m_volume->setTransferFunction( m_transferFunctionEditor->transferFunction() );
+    syncGradientToNormalTransferFunction();
+    syncNormalToGradientTransferFunction();
+
+    m_volume->setTransferFunction(m_transferFunctionEditor->transferFunction(), m_useGradientOpacityTransferFunctionCheckBox->isChecked());
 
     if (m_viewClusterizedVolume)
     {
@@ -4991,6 +5005,27 @@ void QExperimental3DExtension::enableVomi(bool on)
     m_vomi3RadioButton->setEnabled(!m_vomi3.isEmpty() && on);
     m_vomiFactorLabel->setEnabled(on);
     m_vomiFactorDoubleSpinBox->setEnabled(on);
+}
+
+
+void QExperimental3DExtension::syncNormalToGradientTransferFunction()
+{
+    DEBUG_LOG("sync normal to gradient");
+    TransferFunction gradientTransferFunction;
+    gradientTransferFunction.setName("Gradient transfer function");
+    gradientTransferFunction.setColor(0.0, Qt::black);
+    gradientTransferFunction.setColor(255.0, Qt::white);
+    gradientTransferFunction.setScalarOpacityTransferFunction(m_transferFunctionEditor->transferFunction().gradientOpacityTransferFunction());
+    m_gradientOpacityTransferFunctionEditor->setTransferFunction(gradientTransferFunction);
+}
+
+
+void QExperimental3DExtension::syncGradientToNormalTransferFunction()
+{
+    DEBUG_LOG("sync gradient to normal");
+    TransferFunction currentTransferFunction = m_transferFunctionEditor->transferFunction();
+    currentTransferFunction.setGradientOpacityTransferFunction(m_gradientOpacityTransferFunctionEditor->transferFunction().scalarOpacityTransferFunction());
+    m_transferFunctionEditor->setTransferFunction(currentTransferFunction);
 }
 
 

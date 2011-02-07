@@ -212,6 +212,9 @@ private:
     QVector<float> getWeights() const;
     OpacityTransferFunction innernessProportionalOpacityTransferFunction() const;
 
+    void syncNormalToGradientTransferFunction();
+    void syncGradientToNormalTransferFunction();
+
 private slots:
 
     void setNewVolume( Volume *volume );
