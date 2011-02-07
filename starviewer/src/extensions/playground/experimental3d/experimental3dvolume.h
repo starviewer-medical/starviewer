@@ -13,6 +13,7 @@ class vtkImageData;
 class vtkOpenGLGPUVolumeRayCastMapper;
 class vtkVolume;
 class vtkVolumeProperty;
+class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastMapper;
 
 
@@ -93,7 +94,7 @@ public:
     /// Afegeix obscurances al shading.
     void addObscurance(Obscurance *obscurance, double factor, double filterLow, double filterHigh, bool additive = false, double weight = 0.0);
     /// Estableix la funció de transferència.
-    void setTransferFunction(const TransferFunction &transferFunction);
+    void setTransferFunction(const TransferFunction &transferFunction, bool useGradientOpacityTransferFunction = false);
 
     /// Prepara el rendering amb el voxel shader per fer càlculs de VMI.
     void startVmiMode();
@@ -118,8 +119,8 @@ private:
 
     /// Crea el model de vòxels de treball.
     void createImage(vtkImageData *image);
-    /// Crea la volume ray cast function.
-    void createVolumeRayCastFunction();
+    /// Crea les volume ray cast functions.
+    void createVolumeRayCastFunctions();
     /// Crea els voxel shaders.
     void createVoxelShaders();
     /// Crea els mappers.
@@ -146,6 +147,9 @@ private:
     /// Mida de les dades.
     unsigned int m_dataSize;
 
+    /// Volume ray cast function pels renderings més senzills que no es poden fer amb GPU.
+    /// Això és pel cas especial que fem servir la funció de transferència d'opacitat del gradient, que de moment (5.6) no està suportat pel ray cast mapper de GPU.
+    vtkVolumeRayCastCompositeFunction *m_simpleVolumeRayCastFunction;
     /// Volume ray cast function amb shaders.
     vtkVolumeRayCastVoxelShaderCompositeFunction *m_shaderVolumeRayCastFunction;
 
