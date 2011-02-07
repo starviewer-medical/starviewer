@@ -7,6 +7,7 @@
 
 #include "perfusionmapcalculatorthread.h"
 
+#include "logging.h"
 #include "series.h"
 
 #include <itkImageRegionIteratorWithIndex.h>
