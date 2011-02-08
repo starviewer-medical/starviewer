@@ -17,7 +17,7 @@ namespace udg {
 GridIcon::GridIcon(QWidget *parent, const QString &iconType)
  : QFrame(parent)
 {
-    QGridLayout * gridLayout = new QGridLayout(this);
+    QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setSpacing(0);
     gridLayout->setMargin(1);
     m_label = new QLabel(this);
@@ -72,7 +72,7 @@ void GridIcon::resizeEvent(QResizeEvent *event)
 {
     QFrame::resizeEvent(event);
 
-    m_label->setPixmap(m_label->pixmap()->scaled(event->size().width()-2, event->size().height()-2, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_label->setPixmap(m_label->pixmap()->scaled(event->size().width() - 2, event->size().height() - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     m_label->setAlignment(Qt::AlignCenter);
 }
 
