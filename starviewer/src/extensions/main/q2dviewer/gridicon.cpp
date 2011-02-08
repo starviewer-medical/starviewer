@@ -22,31 +22,31 @@ GridIcon::GridIcon( QWidget *parent, QString iconType )
     gridLayout->setMargin(1);
     m_label = new QLabel( this );
     m_label->setFrameShape(QFrame::StyledPanel);
-    QPixmap * pixmap = new QPixmap();
+    QPixmap pixmap;
     
     if( iconType != 0 )
     {
         if( iconType == "COR" )
-            pixmap->load( QString::fromUtf8(":/images/coronal.png") );
+            pixmap.load( QString::fromUtf8(":/images/coronal.png") );
         else if( iconType == "SAG" )
-            pixmap->load( QString::fromUtf8(":/images/sagital.png") );
+            pixmap.load( QString::fromUtf8(":/images/sagital.png") );
         else if( iconType == "ECO" )
-            pixmap->load( QString::fromUtf8(":/images/eco.png") );
+            pixmap.load( QString::fromUtf8(":/images/eco.png") );
         else if( iconType == "MLO_R" )
-            pixmap->load( QString::fromUtf8(":/images/MLO_R.png") );
+            pixmap.load( QString::fromUtf8(":/images/MLO_R.png") );
         else if( iconType == "MLO_L" )
-            pixmap->load( QString::fromUtf8(":/images/MLO_L.png") );
+            pixmap.load( QString::fromUtf8(":/images/MLO_L.png") );
         else if( iconType == "CC_R" )
-            pixmap->load( QString::fromUtf8(":/images/CC_R.png") );
+            pixmap.load( QString::fromUtf8(":/images/CC_R.png") );
         else if( iconType == "CC_L" )
-            pixmap->load( QString::fromUtf8(":/images/CC_L.png") );
+            pixmap.load( QString::fromUtf8(":/images/CC_L.png") );
     }
     else
     {
-        pixmap->load( QString::fromUtf8(":/images/axial.png") );
+        pixmap.load( QString::fromUtf8(":/images/axial.png") );
     }
 
-    m_label->setPixmap( *pixmap );
+    m_label->setPixmap( pixmap );
     gridLayout->addWidget(m_label, 0, 0, 1, 1);
 }
 
