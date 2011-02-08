@@ -94,6 +94,14 @@ void QWindowLevelComboBox::addPreset(const QString &preset)
                 m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
                 m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
         break;
+        case WindowLevelPresetsToolData::CustomPreset:
+            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() +
+                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::CustomPreset).count() - 1;
+        break;
         }
         this->insertItem(index, preset);
     }
@@ -138,7 +146,7 @@ void QWindowLevelComboBox::populateFromPresetsData()
     this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets));
     this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined));
     this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other));
-    this->addItem(tr("Custom"));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::CustomPreset));
 }
 
 void QWindowLevelComboBox::setActiveWindowLevel(int value)

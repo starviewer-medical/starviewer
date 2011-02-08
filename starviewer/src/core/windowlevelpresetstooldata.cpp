@@ -27,6 +27,7 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
     addPreset(tr("Osteoporosis"), 1000, 300, StandardPresets); //100-1500:window!
     addPreset(tr("Emphysema"), 800, -800, StandardPresets);
     addPreset(tr("Petrous Bone"), 4000, 700, StandardPresets);
+    addPreset(tr("Custom"), 0, 0, CustomPreset);
     // TODO ara caldria afegir els presets que tinguem guardats en QSettins, o altres tipus d'arxius tipus XML o ".ini"
 }
 
@@ -132,10 +133,7 @@ int WindowLevelPresetsToolData::getFileDefinedPresetIndex(const QString &preset)
 
 void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)
 {
-    //WindowLevelStruct data = { window, level, StandardPresets };
-    // Quan inserim el Custom, no l'hem de poder recuperar amb el mètode getDescriptionsFromGroup
-    // junt amb altres grups, per tant li assignem el grup -1
-    WindowLevelStruct data = { window, level, -1 };
+    WindowLevelStruct data = {window, level, CustomPreset};
     m_presets.insert(tr("Custom"), data);
     emit currentWindowLevel(window, level);
     emit presetChanged(tr("Custom"));
