@@ -11,7 +11,6 @@
 
 // FWD declarations
 class QLabel;
-class QGridLayout;
 class QResizeEvent;
 
 namespace udg {
@@ -25,7 +24,7 @@ namespace udg {
 class GridIcon : public QFrame {
 Q_OBJECT
 public:
-    GridIcon(QWidget *parent = 0, QString iconType = "");
+    GridIcon(QWidget *parent = 0, const QString &iconType = QString());
     ~GridIcon();
 
 protected:
