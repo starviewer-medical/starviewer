@@ -66,8 +66,9 @@ void ApplyHangingProtocolQViewerCommand::applyDisplayTransformations(Q2DViewer *
         viewer->setPhase(phase);
     }
 
-    //Comprovem si s'ha modificat el número de llesca pel fet de tenir la imatge dins un volum
-    if (displaySet->getSliceModifiedForVolumes() != -1)
+    // Comprovem si s'ha modificat el número de llesca pel fet de tenir la imatge dins un volum
+    // Si s'ha aplicat una reconstrucció, aquest número de llesca no la tenim en compte
+    if (displaySet->getSliceModifiedForVolumes() != -1 && reconstruction.isEmpty())
     {
         viewer->setSlice(displaySet->getSliceModifiedForVolumes());
     }
