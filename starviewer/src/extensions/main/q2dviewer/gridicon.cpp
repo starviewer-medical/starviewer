@@ -14,7 +14,7 @@
 
 namespace udg {
 
-GridIcon::GridIcon(QWidget *parent, QString iconType)
+GridIcon::GridIcon(QWidget *parent, const QString &iconType)
  : QFrame(parent)
 {
     QGridLayout * gridLayout = new QGridLayout(this);
@@ -24,7 +24,7 @@ GridIcon::GridIcon(QWidget *parent, QString iconType)
     m_label->setFrameShape(QFrame::StyledPanel);
     QPixmap pixmap;
     
-    if (iconType != 0)
+    if (!iconType.isEmpty())
     {
         if (iconType == "COR")
         {
