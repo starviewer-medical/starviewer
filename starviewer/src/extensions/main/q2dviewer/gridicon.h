@@ -17,28 +17,24 @@ class QResizeEvent;
 namespace udg {
 
 /**
-Classe que representa un element del tipus icona per poder crear un menu per escollir una graella de visualitzadors
+    Classe que representa un element del tipus icona per poder crear un menu per escollir una graella de visualitzadors
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 
 class GridIcon : public QFrame {
 Q_OBJECT
 public:
-
-    GridIcon( QWidget *parent = 0, QString iconType = "" );
-
+    GridIcon(QWidget *parent = 0, QString iconType = "");
     ~GridIcon();
 
 protected:
-
     /// Tractament del resize per mantenir els tamanys de les icones
-    void resizeEvent ( QResizeEvent * event );
+    void resizeEvent(QResizeEvent *event);
 
 private:
     /// Label on posarem la icona
     QLabel *m_label;
-
 };
 
 }
