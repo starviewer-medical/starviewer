@@ -6,6 +6,9 @@
  ***************************************************************************/
 #include "strokesegmentationmethod.h"
 
+#include "itkErfcLevelSetImageFilter.h"
+#include "itkVolumeCalculatorImageFilter.h"
+
 #include <ctime> // Per la utilització de clock()
 
 #include <itkImage.h>
@@ -25,7 +28,6 @@
 #include <itkThresholdSegmentationLevelSetImageFilter.h>
 #include <itkZeroCrossingImageFilter.h>
 #include <itkGeodesicActiveContourLevelSetImageFilter.h>
-#include <itkVolumeCalculatorImageFilter.h>
 #include <itkBinaryErodeImageFilter.h>
 #include <itkBinaryDilateImageFilter.h>
 #include <itkBinaryBallStructuringElement.h>
@@ -37,7 +39,6 @@
 #include <itkMedianImageFilter.h>
 #include <itkBinaryMedianImageFilter.h>
 
-#include <itkErfcLevelSetImageFilter.h>
 #include <itkImageFileWriter.h>
 
 #include <itkResampleImageFilter.h>
