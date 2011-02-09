@@ -12,8 +12,8 @@
 
 namespace udg {
 
-Study::Study( Patient *parentPatient, QObject *parent )
- : QObject(parent), m_height(0), m_weight(0), m_parentPatient( parentPatient )
+Study::Study(Patient *parentPatient, QObject *parent)
+ : QObject(parent), m_height(0), m_weight(0), m_parentPatient(parentPatient)
 {
 }
 
@@ -21,10 +21,10 @@ Study::~Study()
 {
 }
 
-void Study::setParentPatient( Patient *patient )
+void Study::setParentPatient(Patient *patient)
 {
     m_parentPatient = patient;
-    this->setParent( m_parentPatient );
+    this->setParent(m_parentPatient);
 }
 
 Patient* Study::getParentPatient() const
@@ -32,7 +32,7 @@ Patient* Study::getParentPatient() const
     return m_parentPatient;
 }
 
-void Study::setInstanceUID( QString uid )
+void Study::setInstanceUID(QString uid)
 {
     m_studyInstanceUID = uid;
 }
@@ -42,7 +42,7 @@ QString Study::getInstanceUID() const
     return m_studyInstanceUID;
 }
 
-void Study::setID( QString id )
+void Study::setID(QString id)
 {
     m_studyID = id;
 }
@@ -52,7 +52,7 @@ QString Study::getID() const
     return m_studyID;
 }
 
-void Study::setAccessionNumber( QString accessionNumber )
+void Study::setAccessionNumber(QString accessionNumber)
 {
     m_accessionNumber = accessionNumber;
 }
@@ -62,7 +62,7 @@ QString Study::getAccessionNumber() const
     return m_accessionNumber;
 }
 
-void Study::setDescription( QString description )
+void Study::setDescription(QString description)
 {
     m_description = description;
 }
@@ -72,7 +72,7 @@ QString Study::getDescription() const
     return m_description;
 }
 
-void Study::setPatientAge( const QString &age )
+void Study::setPatientAge(const QString &age)
 {
     m_age = age;
 }
@@ -82,7 +82,7 @@ QString Study::getPatientAge() const
     return m_age;
 }
 
-void Study::setWeight( double weight )
+void Study::setWeight(double weight)
 {
     m_weight = weight;
 }
@@ -92,7 +92,7 @@ double Study::getWeight() const
     return m_weight;
 }
 
-void Study::setHeight( double height )
+void Study::setHeight(double height)
 {
     m_height = height;
 }
@@ -104,7 +104,7 @@ double Study::getHeight() const
 
 void Study::addModality(const QString &modality)
 {
-    if (!m_modalities.contains(modality) && !modality.isEmpty() )
+    if (!m_modalities.contains(modality) && !modality.isEmpty())
     {
         m_modalities << modality;
     }
@@ -130,49 +130,49 @@ QString Study::getReferringPhysiciansName()
     return m_referringPhysiciansName;
 }
 
-bool Study::setDateTime( int day , int month , int year , int hour , int minute, int second )
+bool Study::setDateTime(int day, int month, int year, int hour, int minute, int second)
 {
-    return this->setDate( day, month, year ) && this->setTime( hour, minute, second );
+    return this->setDate(day, month, year) && this->setTime(hour, minute, second);
 }
 
-bool Study::setDateTime( QString date , QString time )
+bool Study::setDateTime(QString date, QString time)
 {
-    return this->setDate( date ) && this->setTime( time );
+    return this->setDate(date) && this->setTime(time);
 }
 
-bool Study::setDate( int day , int month , int year )
+bool Study::setDate(int day, int month, int year)
 {
-    return this->setDate( QDate( year , month , day ) );
+    return this->setDate(QDate(year, month, day));
 }
 
-bool Study::setDate( QString date )
+bool Study::setDate(QString date)
 {
     // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format yyyy.MM.dd
-    return this->setDate( QDate::fromString(date.remove("."), "yyyyMMdd") );
+    return this->setDate(QDate::fromString(date.remove("."), "yyyyMMdd"));
 }
 
-bool Study::setDate( QDate date )
+bool Study::setDate(QDate date)
 {
     bool ok = true;
-    if( date.isValid() )
+    if (date.isValid())
     {
         m_date = date;
         ok = true;
     }
-    else if( !date.isNull() )
+    else if (!date.isNull())
     {
-        DEBUG_LOG("La data està en un mal format" );
+        DEBUG_LOG("La data està en un mal format");
         ok = false;
     }
     return ok;
 }
 
-bool Study::setTime( int hour , int minute, int second )
+bool Study::setTime(int hour, int minute, int second)
 {
-    return this->setTime( QTime(hour, minute, second) );
+    return this->setTime(QTime(hour, minute, second));
 }
 
-bool Study::setTime( QString time )
+bool Study::setTime(QString time)
 {
     // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
     time = time.remove(":");
@@ -183,23 +183,23 @@ bool Study::setTime( QString time )
     if (split.size() == 2) //té fracció al final
     {
         // Trunquem a milisegons i no a milionèssimes de segons
-        convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
+        convertedTime = convertedTime.addMSecs(split[1].leftJustified(3,'0',true).toInt());
     }
 
-    return this->setTime( convertedTime );
+    return this->setTime(convertedTime);
 }
 
 bool Study::setTime(QTime time)
 {
     bool ok = true;
-    if( time.isValid() )
+    if (time.isValid())
     {
         m_time = time;
         ok = true;
     }
-    else if( !time.isNull() )
+    else if (!time.isNull())
     {
-        DEBUG_LOG( "El time està en un mal format" );
+        DEBUG_LOG("El time està en un mal format");
         ok = false;
     }
     return ok;
@@ -212,7 +212,7 @@ QDate Study::getDate()
 
 QString Study::getDateAsString()
 {
-    return m_date.toString( Qt::LocaleDate );
+    return m_date.toString(Qt::LocaleDate);
 }
 
 QTime Study::getTime()
@@ -222,12 +222,12 @@ QTime Study::getTime()
 
 QString Study::getTimeAsString()
 {
-    return m_time.toString( "HH:mm:ss" );
+    return m_time.toString("HH:mm:ss");
 }
 
 QDateTime Study::getDateTime()
 {
-    return QDateTime( m_date, m_time );
+    return QDateTime(m_date, m_time);
 }
 
 void Study::setRetrievedDate(QDate retrievedDate)
@@ -260,60 +260,72 @@ QString Study::getInstitutionName() const
     return m_institutionName;
 }
 
-bool Study::addSeries( Series *series )
+bool Study::addSeries(Series *series)
 {
     bool ok = true;
     QString uid = series->getInstanceUID();
-    if( uid.isEmpty() )
+    if (uid.isEmpty())
     {
         ok = false;
         DEBUG_LOG("L'uid de la sèrie està buida! No la podem insertar per inconsistent");
     }
-    else if( this->seriesExists(uid) )
+    else if (this->seriesExists(uid))
     {
         ok = false;
-        DEBUG_LOG("Ja existeix una sèrie amb aquest mateix UID:: " + uid );
+        DEBUG_LOG("Ja existeix una sèrie amb aquest mateix UID:: " + uid);
     }
     else
     {
-        series->setParentStudy( this );
-        this->insertSeries( series );
+        series->setParentStudy(this);
+        this->insertSeries(series);
     }
 
     return ok;
 }
 
-void Study::removeSeries( QString uid )
+void Study::removeSeries(QString uid)
 {
     int index = this->findSeriesIndex(uid);
-    if( index != -1 )
-        m_seriesSet.removeAt( index );
+    if (index != -1)
+    {
+        m_seriesSet.removeAt(index);
+    }
 }
 
-Series *Study::getSeries( QString uid )
+Series *Study::getSeries(QString uid)
 {
     int index = this->findSeriesIndex(uid);
-    if( index != -1 )
+    if (index != -1)
+    {
         return m_seriesSet[index];
+    }
     else
+    {
         return NULL;
+    }
 }
 
-bool Study::seriesExists( QString uid )
+bool Study::seriesExists(QString uid)
 {
-    if( this->findSeriesIndex(uid) != -1 )
+    if (this->findSeriesIndex(uid) != -1)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 QList<Series *> Study::getSelectedSeries()
 {
     QList<Series *> seriesList;
-    foreach( Series *series, m_seriesSet )
+    foreach (Series *series, m_seriesSet)
     {
-        if( series->isSelected() )
-            seriesList.append( series );
+        if (series->isSelected())
+        {
+            seriesList.append(series);
+        }
     }
     return seriesList;
 }
@@ -323,7 +335,7 @@ int Study::getNumberOfSeries()
     return m_seriesSet.size();
 }
 
-QList< Series* > Study::getSeries()
+QList<Series *> Study::getSeries()
 {
     return m_seriesSet;
 }
@@ -331,10 +343,12 @@ QList< Series* > Study::getSeries()
 QList<Series *> Study::getViewableSeries()
 {
     QList<Series *> result;
-    foreach( Series *series, m_seriesSet )
+    foreach (Series *series, m_seriesSet)
     {
-        if( series->isViewable() )
+        if (series->isViewable())
+        {
             result << series;
+        }
     }
     return result;
 }
@@ -355,32 +369,40 @@ QString Study::toString()
     return result;
 }
 
-void Study::insertSeries( Series *series )
+void Study::insertSeries(Series *series)
 {
     int i = 0;
-    while( i < m_seriesSet.size() && m_seriesSet.at(i)->getSeriesNumber().toInt() < series->getSeriesNumber().toInt() )
+    while (i < m_seriesSet.size() && m_seriesSet.at(i)->getSeriesNumber().toInt() < series->getSeriesNumber().toInt())
     {
-        i++;
+        ++i;
     }
-    if( !m_modalities.contains( series->getModality() ) )
+    if (!m_modalities.contains(series->getModality()))
+    {
         m_modalities << series->getModality();
+    }
 
-    m_seriesSet.insert( i, series );
+    m_seriesSet.insert(i, series);
 }
 
-int Study::findSeriesIndex( QString uid )
+int Study::findSeriesIndex(QString uid)
 {
     int i = 0;
     bool found = false;
-    while( i < m_seriesSet.size() && !found )
+    while (i < m_seriesSet.size() && !found)
     {
-        if( m_seriesSet.at(i)->getInstanceUID() == uid )
+        if (m_seriesSet.at(i)->getInstanceUID() == uid)
+        {
             found = true;
+        }
         else
-            i++;
+        {
+            ++i;
+        }
     }
-    if( !found )
+    if (!found)
+    {
         i = -1;
+    }
 
     return i;
 }

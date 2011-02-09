@@ -26,7 +26,7 @@ Series::~Series()
 {
 }
 
-void Series::setInstanceUID( QString uid )
+void Series::setInstanceUID(QString uid)
 {
     m_seriesInstanceUID = uid;
 }
@@ -36,34 +36,34 @@ QString Series::getInstanceUID() const
     return m_seriesInstanceUID;
 }
 
-void Series::setParentStudy( Study *study )
+void Series::setParentStudy(Study *study)
 {
     m_parentStudy = study;
-    this->setParent( m_parentStudy );
+    this->setParent(m_parentStudy);
 }
 
-Study *Series::getParentStudy() const
+Study* Series::getParentStudy() const
 {
     return m_parentStudy;
 }
 
-bool Series::addImage( Image *image )
+bool Series::addImage(Image *image)
 {
     bool ok = true;
     QString imageIdentifierKey = image->getKeyIdentifier();
-    if( imageIdentifierKey.isEmpty() )
+    if (imageIdentifierKey.isEmpty())
     {
         ok = false;
         DEBUG_LOG("L'identificador de la imatge està buit! No la podem insertar per inconsistent");
     }
-    else if( this->imageExists(imageIdentifierKey) )
+    else if (this->imageExists(imageIdentifierKey))
     {
         ok = false;
-        DEBUG_LOG("Ja existeix una imatge amb aquest mateix identificador:: " + imageIdentifierKey );
+        DEBUG_LOG("Ja existeix una imatge amb aquest mateix identificador:: " + imageIdentifierKey);
     }
     else
     {
-        image->setParentSeries( this );
+        image->setParentSeries(this);
         m_imageSet << image;
         m_numberOfImages++;
     }
@@ -71,12 +71,16 @@ bool Series::addImage( Image *image )
     return ok;
 }
 
-bool Series::imageExists( const QString &identifier )
+bool Series::imageExists(const QString &identifier)
 {
-    if( this->findImageIndex(identifier) != -1 )
+    if (this->findImageIndex(identifier) != -1)
+    {
         return true;
+    }
     else
+    {
         return false;
+    }
 }
 
 QList<Image *> Series::getImages() const
@@ -84,7 +88,7 @@ QList<Image *> Series::getImages() const
     return m_imageSet;
 }
 
-void Series::setImages( QList<Image *> imageSet )
+void Series::setImages(QList<Image *> imageSet)
 {
     // Buidar la llista abans d'afegir-hi la nova
     m_imageSet.clear();
@@ -106,9 +110,9 @@ int Series::getNumberOfItems()
 {
     int numberOfItems = 0;
     QString lastPath;
-    foreach( Image *image, m_imageSet )
+    foreach (Image *image, m_imageSet)
     {
-        if( lastPath != image->getPath() )
+        if (lastPath != image->getPath())
         {
             numberOfItems++;
         }
@@ -120,10 +124,10 @@ int Series::getNumberOfItems()
 
 bool Series::hasImages() const
 {
-    return ! m_imageSet.isEmpty();
+    return !m_imageSet.isEmpty();
 }
 
-void Series::setSOPClassUID( QString sopClassUID )
+void Series::setSOPClassUID(QString sopClassUID)
 {
     m_sopClassUID = sopClassUID;
 }
@@ -133,7 +137,7 @@ QString Series::getSOPClassUID() const
     return m_sopClassUID;
 }
 
-void Series::setModality( QString modality )
+void Series::setModality(QString modality)
 {
     m_modality = modality;
 }
@@ -143,7 +147,7 @@ QString Series::getModality() const
     return m_modality;
 }
 
-void Series::setSeriesNumber( QString number )
+void Series::setSeriesNumber(QString number)
 {
     m_seriesNumber = number;
 }
@@ -153,7 +157,7 @@ QString Series::getSeriesNumber() const
     return m_seriesNumber;
 }
 
-void Series::setFrameOfReferenceUID( QString uid )
+void Series::setFrameOfReferenceUID(QString uid)
 {
     m_frameOfReferenceUID = uid;
 }
@@ -163,7 +167,7 @@ QString Series::getFrameOfReferenceUID() const
     return m_frameOfReferenceUID;
 }
 
-void Series::setPositionReferenceIndicator( QString position )
+void Series::setPositionReferenceIndicator(QString position)
 {
     m_positionReferenceIndicator = position;
 }
@@ -173,7 +177,7 @@ QString Series::getPositionReferenceIndicator() const
     return m_positionReferenceIndicator;
 }
 
-void Series::setDescription( QString description )
+void Series::setDescription(QString description)
 {
     m_description = description;
 }
@@ -183,7 +187,7 @@ QString Series::getDescription() const
     return m_description;
 }
 
-void Series::setPatientPosition( QString position )
+void Series::setPatientPosition(QString position)
 {
     m_patientPosition = position;
 }
@@ -193,7 +197,7 @@ QString Series::getPatientPosition() const
     return m_patientPosition;
 }
 
-void Series::setProtocolName( QString protocolName )
+void Series::setProtocolName(QString protocolName)
 {
     m_protocolName = protocolName;
 }
@@ -203,7 +207,7 @@ QString Series::getProtocolName() const
     return m_protocolName;
 }
 
-void Series::setImagesPath( QString imagesPath )
+void Series::setImagesPath(QString imagesPath)
 {
     m_imagesPath = imagesPath;
 }
@@ -213,49 +217,49 @@ QString Series::getImagesPath() const
     return m_imagesPath;
 }
 
-bool Series::setDateTime( int day , int month , int year , int hour , int minute, int second )
+bool Series::setDateTime(int day, int month, int year, int hour, int minute, int second)
 {
-    return this->setDate( day, month, year ) && this->setTime( hour, minute, second );
+    return this->setDate(day, month, year) && this->setTime(hour, minute, second);
 }
 
-bool Series::setDateTime( QString date , QString time )
+bool Series::setDateTime(QString date, QString time)
 {
-    return this->setDate( date ) && this->setTime( time );
+    return this->setDate(date) && this->setTime(time);
 }
 
-bool Series::setDate( int day , int month , int year )
+bool Series::setDate(int day, int month, int year)
 {
-    return this->setDate( QDate( year , month , day ) );
+    return this->setDate(QDate(year, month, day));
 }
 
-bool Series::setDate( QString date )
+bool Series::setDate(QString date)
 {
     // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format yyyy.MM.dd
-    return this->setDate( QDate::fromString(date.remove("."), "yyyyMMdd") );
+    return this->setDate(QDate::fromString(date.remove("."), "yyyyMMdd"));
 }
 
-bool Series::setDate( QDate date )
+bool Series::setDate(QDate date)
 {
     bool ok = true;
-    if( date.isValid() )
+    if (date.isValid())
     {
         m_date = date;
         ok = true;
     }
-    else if( !date.isNull() )
+    else if (!date.isNull())
     {
-        DEBUG_LOG("La data està en un mal format: " + date.toString( Qt::LocaleDate ) );
+        DEBUG_LOG("La data està en un mal format: " + date.toString(Qt::LocaleDate));
         ok = false;
     }
     return ok;
 }
 
-bool Series::setTime( int hour , int minute, int second )
+bool Series::setTime(int hour, int minute, int second)
 {
-    return this->setTime( QTime(hour, minute, second) );
+    return this->setTime(QTime(hour, minute, second));
 }
 
-bool Series::setTime( QString time )
+bool Series::setTime(QString time)
 {
     // Seguim la suggerència de la taula 6.2-1 de la Part 5 del DICOM standard de tenir en compte el format hh:mm:ss.frac
     time = time.remove(":");
@@ -266,10 +270,10 @@ bool Series::setTime( QString time )
     if (split.size() == 2) //té fracció al final
     {
         // Trunquem a milisegons i no a milionèssimes de segons
-        convertedTime = convertedTime.addMSecs( split[1].leftJustified(3,'0',true).toInt() );
+        convertedTime = convertedTime.addMSecs(split[1].leftJustified(3,'0',true).toInt());
     }
 
-    return this->setTime( convertedTime );
+    return this->setTime(convertedTime);
 }
 
 bool Series::setTime(QTime time)
@@ -280,9 +284,9 @@ bool Series::setTime(QTime time)
         m_time = time;
         ok = true;
     }
-    else if( !time.isNull() )
+    else if (!time.isNull())
     {
-        DEBUG_LOG( "El time està en un mal format" );
+        DEBUG_LOG("El time està en un mal format");
         ok = false;
     }
     return ok;
@@ -295,7 +299,7 @@ QDate Series::getDate()
 
 QString Series::getDateAsString()
 {
-    return m_date.toString( Qt::LocaleDate );
+    return m_date.toString(Qt::LocaleDate);
 }
 
 QTime Series::getTime()
@@ -305,10 +309,10 @@ QTime Series::getTime()
 
 QString Series::getTimeAsString()
 {
-    return m_time.toString( "HH:mm:ss" );
+    return m_time.toString("HH:mm:ss");
 }
 
-void Series::setInstitutionName( QString institutionName )
+void Series::setInstitutionName(QString institutionName)
 {
     m_institutionName = institutionName;
 }
@@ -318,7 +322,7 @@ QString Series::getInstitutionName() const
     return m_institutionName;
 }
 
-void Series::setBodyPartExamined( QString bodyPart )
+void Series::setBodyPartExamined(QString bodyPart)
 {
     m_bodyPartExamined = bodyPart;
 }
@@ -328,7 +332,7 @@ QString Series::getBodyPartExamined() const
     return m_bodyPartExamined;
 }
 
-void Series::setViewPosition( QString viewPosition )
+void Series::setViewPosition(QString viewPosition)
 {
     m_viewPosition = viewPosition;
 }
@@ -338,7 +342,7 @@ QString Series::getViewPosition() const
     return m_viewPosition;
 }
 
-void Series::setRequestedProcedureID( const QString &requestedProcedureID )
+void Series::setRequestedProcedureID(const QString &requestedProcedureID)
 {
     m_requestedProcedureID = requestedProcedureID;
 }
@@ -348,7 +352,7 @@ QString Series::getRequestedProcedureID() const
     return m_requestedProcedureID;
 }
 
-void Series::setScheduledProcedureStepID( const QString &scheduledProcedureID )
+void Series::setScheduledProcedureStepID(const QString &scheduledProcedureID)
 {
     m_scheduledProcedureStepID = scheduledProcedureID;
 }
@@ -358,7 +362,7 @@ QString Series::getScheduledProcedureStepID() const
     return m_scheduledProcedureStepID;
 }
 
-void Series::setPerformedProcedureStepStartDate(const QString &startDate )
+void Series::setPerformedProcedureStepStartDate(const QString &startDate)
 {
     m_performedProcedureStepStartDate = startDate;
 }
@@ -368,7 +372,7 @@ QString Series::getPerformedProcedureStepStartDate() const
     return m_performedProcedureStepStartDate;
 }
 
-void Series::setPerformedProcedureStepStartTime( const QString &startTime )
+void Series::setPerformedProcedureStepStartTime(const QString &startTime)
 {
     m_performedProcedureStepStartTime = startTime;
 }
@@ -378,7 +382,7 @@ QString Series::getPerformedProcedureStepStartTime() const
     return m_performedProcedureStepStartTime;
 }
 
-void Series::setLaterality( const QChar &laterality )
+void Series::setLaterality(const QChar &laterality)
 {
     m_laterality = laterality;
 }
@@ -412,9 +416,9 @@ Identifier Series::addVolume(Volume *volume)
     return volumeID;
 }
 
-QList<Volume*> Series::getVolumesList()
+QList<Volume *> Series::getVolumesList()
 {
-    QList<Volume*> volumesList;
+    QList<Volume *> volumesList;
     foreach (Identifier id, m_volumesList)
     {
         volumesList << VolumeRepository::getRepository()->getVolume(id);
@@ -430,7 +434,7 @@ QList<Identifier> Series::getVolumesIDList() const
 QStringList Series::getImagesPathList()
 {
     QStringList pathList;
-    foreach( Image *image, m_imageSet )
+    foreach (Image *image, m_imageSet)
     {
         pathList << image->getPath();
     }
@@ -452,7 +456,7 @@ QString Series::toString(bool verbose)
     result += "            Modality : " + getModality() + "\n";
     result += "            Description : " + getDescription() + "\n";
     result += "            ProtocolName : " + getProtocolName() + "\n";
-    result += "            Num.Images : " + QString::number( getImages().size() ) + "\n";
+    result += "            Num.Images : " + QString::number(getImages().size()) + "\n";
 
     if (verbose)
     {
@@ -468,15 +472,15 @@ QString Series::toString(bool verbose)
 
 void Series::select()
 {
-    setSelectStatus( true );
+    setSelectStatus(true);
 }
 
 void Series::unSelect()
 {
-    setSelectStatus( false );
+    setSelectStatus(false);
 }
 
-void Series::setSelectStatus( bool select )
+void Series::setSelectStatus(bool select)
 {
     m_selected = select;
 }
@@ -492,13 +496,12 @@ QPixmap Series::getThumbnail()
     return m_seriesThumbnail;
 }
 
-
-Image *Series::getImageByIndex( int index )
+Image* Series::getImageByIndex(int index)
 {
 	Image *resultImage = 0;
-	if( index >= 0 && index < m_imageSet.count() ) // està dins del rang
+	if (index >= 0 && index < m_imageSet.count()) // està dins del rang
 	{
-		resultImage = m_imageSet.at( index );
+		resultImage = m_imageSet.at(index);
 	}
 
 	return resultImage;
@@ -511,13 +514,17 @@ void Series::setThumbnail(QPixmap seriesThumbnail)
 
 bool Series::isViewable() const
 {
-    if( m_modality == "KO" || m_modality == "PR" || m_modality == "SR" || !this->hasImages() )
+    if (m_modality == "KO" || m_modality == "PR" || m_modality == "SR" || !this->hasImages())
+    {
         return false;
+    }
     else
+    {
         return true;
+    }
 }
 
-void Series::setManufacturer( QString manufacturer )
+void Series::setManufacturer(QString manufacturer)
 {
     m_manufacturer = manufacturer;
 }
@@ -547,19 +554,25 @@ QTime Series::getRetrievedTime()
     return m_retrieveTime;
 }
 
-int Series::findImageIndex( const QString &identifier )
+int Series::findImageIndex(const QString &identifier)
 {
     int i = 0;
     bool found = false;
-    while( i < m_imageSet.size() && !found )
+    while (i < m_imageSet.size() && !found)
     {
-        if( m_imageSet.at(i)->getKeyIdentifier() == identifier )
+        if (m_imageSet.at(i)->getKeyIdentifier() == identifier)
+        {
             found = true;
+        }
         else
-            i++;
+        {
+            ++i;
+        }
     }
-    if( !found )
+    if (!found)
+    {
         i = -1;
+    }
 
     return i;
 }
@@ -572,8 +585,7 @@ Volume* Series::getVolumeOfImage(Image *image)
 
     while (!found && identifiersIterator.hasNext())
     {
-       volume = VolumeRepository::getRepository()->getVolume(identifiersIterator.next());
-
+        volume = VolumeRepository::getRepository()->getVolume(identifiersIterator.next());
         if (volume->getImages().contains(image))
         {
             found = true;

@@ -21,46 +21,45 @@ class Image;
 class Study;
 
 /**
-Classe que encapsula la sèrie d'un pacient.
+    Classe que encapsula la sèrie d'un pacient.
 
-La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. Una sèrie pot equivaler a un o més volums, per tant tindrem la llista de Volums corresponents a la sèrie.
+    La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. Una sèrie pot equivaler a un o més volums,
+    per tant tindrem la llista de Volums corresponents a la sèrie.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class Series : public QObject
-{
+class Series : public QObject {
 Q_OBJECT
 public:
     Series(QObject *parent = 0);
-
     ~Series();
 
     /// Assignar/Obtenir l'identificador universal de la sèrie
-    void setInstanceUID( QString uid );
+    void setInstanceUID(QString uid);
     QString getInstanceUID() const;
 
     /// Assignar/Obtenir el SOP Class UID
-    void setSOPClassUID( QString sopClassUID );
+    void setSOPClassUID(QString sopClassUID);
     QString getSOPClassUID() const;
 
     /// Assignar/Obtenir la modalitat de la sèrie
-    void setModality( QString modality );
+    void setModality(QString modality);
     QString getModality() const;
 
     /// Assignar/Obtenir el número de la sèrie
-    void setSeriesNumber( QString number );
+    void setSeriesNumber(QString number);
     QString getSeriesNumber() const;
 
     /// Assignar/Obtenir el FrameOfReferenceUID
-    void setFrameOfReferenceUID( QString uid );
+    void setFrameOfReferenceUID(QString uid);
     QString getFrameOfReferenceUID() const;
 
     /// Assignar/Obtenir el PositionReferenceIndicator
-    void setPositionReferenceIndicator( QString position );
+    void setPositionReferenceIndicator(QString position);
     QString getPositionReferenceIndicator() const;
 
     /// Assignar/Obtenir la descripció de la sèrie
-    void setDescription( QString description );
+    void setDescription(QString description);
     QString getDescription() const;
 
     /**
@@ -81,112 +80,104 @@ public:
      *
      * @param position String amb un dels valors esmentats
      */
-    void setPatientPosition( QString position );
+    void setPatientPosition(QString position);
     QString getPatientPosition() const;
 
     /// Assignar/Obtenir el protocol de la sèrie
-    void setProtocolName( QString protocolName );
+    void setProtocolName(QString protocolName);
     QString getProtocolName() const;
 
     /// Assignar/Obtenir la data i hora d'adquisició de la sèrie. El format de la data serà YYYYMMDD i el del
     /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
-    ///  Retorna fals si hi ha algun error en el format
-    bool setDateTime( int day , int month , int year , int hour , int minute, int second = 0 );
-    bool setDateTime( QString date , QString time );
-    bool setDate( int day , int month , int year );
-    bool setDate( QString date );
-    bool setDate( QDate date );
-    bool setTime( int hour , int minute, int second = 0 );
-    bool setTime( QString time );
-    bool setTime( QTime time );
+    /// Retorna fals si hi ha algun error en el format
+    bool setDateTime(int day, int month, int year, int hour, int minute, int second = 0);
+    bool setDateTime(QString date, QString time);
+    bool setDate(int day, int month, int year);
+    bool setDate(QString date);
+    bool setDate(QDate date);
+    bool setTime(int hour, int minute, int second = 0);
+    bool setTime(QString time);
+    bool setTime(QTime time);
     QDate getDate();
     QString getDateAsString();
     QTime getTime();
     QString getTimeAsString();
 
     /// Assignar/Obtenir la institució on s'ha realitzat l'estudi
-    void setInstitutionName( QString institutionName );
+    void setInstitutionName(QString institutionName);
     QString getInstitutionName() const;
 
-    /**
-     * Assigna/Retorna la part del cos examinada
-     */
-    void setBodyPartExamined( QString bodyPart );
+    /// Assigna/Retorna la part del cos examinada
+    void setBodyPartExamined(QString bodyPart);
     QString getBodyPartExamined() const;
 
-    /**
-     * Assigna/Retorna la vista radiogràfica associada amb la posició del pacient
-     */
-    void setViewPosition( QString viewPosition );
+    /// Assigna/Retorna la vista radiogràfica associada amb la posició del pacient
+    void setViewPosition(QString viewPosition);
     QString getViewPosition() const;
 
-    ///Assigna/Obté el nom del fabricat de l'equip amb el que s'ha n capturar les imatges de la sèrie
-    void setManufacturer( QString manufactures );
+    /// Assigna/Obté el nom del fabricat de l'equip amb el que s'ha n capturar les imatges de la sèrie
+    void setManufacturer(QString manufactures);
     QString getManufacturer() const;
 
-    ///Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
+    /// Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
     void setRetrievedDate(QDate date);
     void setRetrievedTime(QTime time);
     QDate getRetrievedDate();
     QTime getRetrievedTime();
 
-    /// assigna l'estudi pare de la sèrie
-    void setParentStudy( Study *study );
-    Study *getParentStudy() const;
+    /// Assigna l'estudi pare de la sèrie
+    void setParentStudy(Study *study);
+    Study* getParentStudy() const;
 
-    /// afegeix un objecte imatge a la sèrie i li assigna com a parent aquest objecte series.
+    /// Afegeix un objecte imatge a la sèrie i li assigna com a parent aquest objecte series.
     /// Si la imatge ja existeix al conjunt retorna fals, cert altrament
-    bool addImage( Image *image );
+    bool addImage(Image *image);
 
-    /**
-     * Ens diu si existeix una imatge amb aquest identificador a la llista
-     * @param identifier identificador d'imatge que busquem
-     * @return Cert si existeix, fals altrament
-     */
-    bool imageExists( const QString &identifier );
+    /// Ens diu si existeix una imatge amb aquest identificador a la llista
+    /// @param identifier identificador d'imatge que busquem
+    /// @return Cert si existeix, fals altrament
+    bool imageExists(const QString &identifier);
 
     /// Retorna una llista de totes les imatges de la sèrie
     QList<Image *> getImages() const;
-    void setImages( QList<Image *> imageSet );
+    void setImages(QList<Image *> imageSet);
 
-    /**
-     * Ens diu quantes imatges té aquesta sèrie
-     * @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
-     */
+    /// Ens diu quantes imatges té aquesta sèrie
+    /// @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
     int getNumberOfImages();
     
     /// Ens retorna el nombre d'ítems que té la sèrie, sense diferenciar si són imatges o no. 
     /// Equival al nombre d'arxius que conté la sèrie
     int getNumberOfItems();
     
-    ///Especificia el número d'imatges: necessari per quan omplim desde la bdd   	 	 
+    /// Especificia el número d'imatges: necessari per quan omplim desde la bdd
     void setNumberOfImages(int numberOfImages);
     
     /// Indica si una sèrie té imatges
     bool hasImages() const;
 
     /// Assignar/Obtenir el path de les imatges de la sèrie
-    void setImagesPath( QString imagesPath );
+    void setImagesPath(QString imagesPath);
     QString getImagesPath() const;
 
     /// Assignar/Obtenir el requeste procedure ID
-    void setRequestedProcedureID( const QString &requestedProcedureID );
+    void setRequestedProcedureID(const QString &requestedProcedureID);
     QString getRequestedProcedureID() const;
 
     /// Assignar/Obtenir el scheduled procedure step ID
-    void setScheduledProcedureStepID( const QString &scheduledProcedureStepID );
+    void setScheduledProcedureStepID(const QString &scheduledProcedureStepID);
     QString getScheduledProcedureStepID() const;
 
     /// Assignar/Obtenir el Performed Procedure Step Start Date
-    void setPerformedProcedureStepStartDate( const QString &startDate );
+    void setPerformedProcedureStepStartDate(const QString &startDate);
     QString getPerformedProcedureStepStartDate() const;
 
     /// Assigna/Obté el Perfomed Procedure Step Start Time
-    void setPerformedProcedureStepStartTime( const QString &startTime );
+    void setPerformedProcedureStepStartTime(const QString &startTime);
     QString getPerformedProcedureStepStartTime() const;
 
     /// Assigna/Obté la lateralitat de la sèrie
-    void setLaterality( const QChar &laterality );
+    void setLaterality(const QChar &laterality);
     QChar getLaterality() const;
 
     /// Retorna el nombre de volums dels que es composa la sèrie.
@@ -194,19 +185,19 @@ public:
 
     /// Retorna el Volume amb identificador id
     /// Retorna NULL en cas que no hi hagi cap volum amb aquest id.
-    Volume *getVolume(Identifier id);
+    Volume* getVolume(Identifier id);
 
     /// Mètode per conveniència que serveix per retornar el "primer" volum. En el 90% dels casos (de moment el 100%)
     /// tindrem que per cada sèrie només hi haurà un sol volum. Aquest mètode retorna aquest o, en cas de més d'un, el primer.
     /// Retorna NULL en cas que no hi hagi cap volum.
-    Volume *getFirstVolume();
+    Volume* getFirstVolume();
 
     /// Mètode per afegir un sol volum a la llista de volums de la serie. Retorna l'id amb el que s'ha guardat al repositori
     /// de volums.
     Identifier addVolume(Volume *volume);
 
     /// Retorna una llista amb tots els volums de la sèrie.
-    QList<Volume*> getVolumesList();
+    QList<Volume *> getVolumesList();
 
     /// Retorna la llista d'identificadors de volum
     QList<Identifier> getVolumesIDList() const;
@@ -222,12 +213,12 @@ public:
     /// Obté la imatge de previsualització de la sèrie. Serà la imatge del mig.
     QPixmap getThumbnail();
 
-	/// Mètode temporal per obtenir la Image segons com està ordenada a la llista
-	/// Si l'índex que donem està fora de rang, es retorna una imatge nul·la
-	/// TODO això no ens assegura que obtenim la imatge que suposadament volem
-	Image *getImageByIndex( int index );
+    /// Mètode temporal per obtenir la Image segons com està ordenada a la llista
+    /// Si l'índex que donem està fora de rang, es retorna una imatge nul·la
+    /// TODO això no ens assegura que obtenim la imatge que suposadament volem
+	Image* getImageByIndex(int index);
 
-    ///Permet establir quin és el thumbnail de la sèrie
+    /// Permet establir quin és el thumbnail de la sèrie
     void setThumbnail(QPixmap seriesThumbnail);
 
     /// Aquest mètode comprova si aquesta sèrie és visualitzable
@@ -239,7 +230,7 @@ public:
     /// comprovar que es tracti d'un SOP Class suportat per l'aplicació
     bool isViewable() const;
 
-    // Mètode per obtenir el volume que conté una imatge en concret
+    /// Mètode per obtenir el volume que conté una imatge en concret
     Volume* getVolumeOfImage(Image *image);
 
 public slots:
@@ -249,12 +240,10 @@ public slots:
     void setSelectStatus(bool select);
 
 private:
-    /**
-     * Troba l'índex de la imatge amb el identificadir donat a la llista d'imatges
-     * @param identifier L'identificador de la imatge que volem trobar
-     * @return L'índex d'aquella imatge dins de la llista, -1 si no existeix la imatge amb aquell identificador.
-     */
-    int findImageIndex( const QString &identifier );
+    /// Troba l'índex de la imatge amb el identificadir donat a la llista d'imatges
+    /// @param identifier L'identificador de la imatge que volem trobar
+    /// @return L'índex d'aquella imatge dins de la llista, -1 si no existeix la imatge amb aquell identificador.     
+    int findImageIndex(const QString &identifier);
 
 private:
     /// Identificació única del tipus de SOP. Veure PS 3.4 per conèixer el possibles valors que pot tenir.
@@ -293,20 +282,18 @@ private:
     QString m_description;
 
     // FRAME OF REFERENCE MODULE. C.7.4
-    //\TODO En principi no cal implementar-ho com a una entitat per separat i incloent-ho dins de sèries n'hauria d'haver
-    //prou per poder tractar el que necessitem
+    // TODO En principi no cal implementar-ho com a una entitat per separat i incloent-ho dins de sèries n'hauria d'haver
+    // prou per poder tractar el que necessitem
     /// Identifica el frame of reference universalment. Veure C.7.4.1.1.1 per una explicació més profunda. (0020,0052) Tipus 1
     QString m_frameOfReferenceUID;
 
     /// Part de l'anatomia del pacient usat com a referència. Veure C.7.4.1.1.2, només per propòsits d'annotació. (0020,1040) Tipus 2
     QString m_positionReferenceIndicator;
 
-    /** 
-      Lateralitat de la part del cos examinada. Requerit si aquesta és aparellada i no tenim Image o Frame Laterality.
-      Valors definits:
-      R = right
-      L = left
-    */
+    /// Lateralitat de la part del cos examinada. Requerit si aquesta és aparellada i no tenim Image o Frame Laterality.
+    /// Valors definits:
+    /// R = right
+    /// L = left
     QChar m_laterality;
 
     /// Indica si la sèrie està marcada com a seleccionada o no
@@ -332,26 +319,26 @@ private:
     /// Vista radiogràfica associada amb la posició del pacient[(0018,5101)]. (0018,5101). Tipus 2/3, segons modalitat
     QString m_viewPosition;
 
-    ///Obté el fabricant de l'aparell amb que s'ha obtingut la sèrie (0008,0070) Tipus 2.
+    /// Obté el fabricant de l'aparell amb que s'ha obtingut la sèrie (0008,0070) Tipus 2.
     QString m_manufacturer;
 
-    ///Data en que la sèrie s'ha descarregat a la base de dades local
+    /// Data en que la sèrie s'ha descarregat a la base de dades local
     QDate m_retrievedDate;
     QTime m_retrieveTime;
 
     /// Número d'imatges de la sèrie. Fem el recompte manualment per quan consultem de la BDD
     int m_numberOfImages;
     
-    ///Guarda el thumbnail de la sèrie
+    /// Guarda el thumbnail de la sèrie
     QPixmap m_seriesThumbnail;
 
-    ///Request Procedure ID (0040,1001) Tipus 1C/2 
+    /// Request Procedure ID (0040,1001) Tipus 1C/2 
     QString m_requestedProcedureID;
-    ///Schedulet Procedure Step ID (0040,0253) Tipus 1C/3
+    /// Schedulet Procedure Step ID (0040,0253) Tipus 1C/3
     QString m_scheduledProcedureStepID;
-    ///Perfomed procedure step start date (0040,0244) Tipus 3
+    /// Perfomed procedure step start date (0040,0244) Tipus 3
     QString m_performedProcedureStepStartDate;
-    ///Perfomed procedure step start time (0040,0345) Tipus 3
+    /// Perfomed procedure step start time (0040,0345) Tipus 3
     QString m_performedProcedureStepStartTime;
 };
 
