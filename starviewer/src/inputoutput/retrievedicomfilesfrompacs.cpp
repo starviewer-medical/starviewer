@@ -389,6 +389,11 @@ void RetrieveDICOMFilesFromPACS::requestCancel()
     INFO_LOG("S'ha sol·licitat cancel·lar la descàrrega");
 }
 
+int RetrieveDICOMFilesFromPACS::getNumberOfDICOMFilesRetrieved()
+{
+    return m_numberOfImagesRetrieved;
+}
+
 T_DIMSE_C_MoveRQ RetrieveDICOMFilesFromPACS::getConfiguredMoveRequest(T_ASC_Association *association)
 {
     T_DIMSE_C_MoveRQ moveRequest;

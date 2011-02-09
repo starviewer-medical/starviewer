@@ -42,6 +42,9 @@ public:
     /// fer just després d'haver rebut una imatge.
     void requestCancel();
 
+    ///Retorna el número d'imatges descarregades
+    int getNumberOfDICOMFilesRetrieved();
+
 signals:
     /// Signal que indica que s'ha descarregat un fitxer
     void DICOMFileRetrieved(DICOMTagReader *dicomTagReader, int numberOfImagesRetrieved);
