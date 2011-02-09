@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangingProtocol name="Telemando">
-    <hangingProtocolName>RF</hangingProtocolName>
+    <hangingProtocolName>RF 6</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>RF</protocol>
     <imageSet identifier="1">
