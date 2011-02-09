@@ -184,6 +184,10 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(QXmlStreamReader
                 imageSet->setPreviousImageSetReference(previousText.toInt());
             }
         }
+        else if (reader->name() == "imageNumberInPatientModality")
+        {
+            imageSet->setImageNumberInPatientModality(reader->readElementText().toInt());
+        }
         else
         {
             reader->skipCurrentElement(); // Saltem l'element perquè no és conegut.
