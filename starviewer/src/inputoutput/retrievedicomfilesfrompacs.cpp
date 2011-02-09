@@ -116,7 +116,7 @@ OFCondition RetrieveDICOMFilesFromPACS::echoSCP(T_ASC_Association *association, 
     OFCondition condition = DIMSE_sendEchoResponse(association, presentationContextID, &dimseMessage->msg.CEchoRQ, STATUS_Success, NULL);
     if (condition.bad())
     {
-        ERROR_LOG("El PACS ens ha sol·licitat un echo durant la descàrrega però la resposta a aquest ha fallat");
+        ERROR_LOG("El PACS ens ha sol.licitat un echo durant la descarrega pero la resposta a aquest ha fallat");
     }
 
     return condition;
@@ -168,12 +168,12 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
                 else if (strcmp(sopClass, storeRequest->AffectedSOPClassUID) != 0)
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    ERROR_LOG(QString("No concorda la sop class rebuda amb la sol·licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
+                    ERROR_LOG(QString("No concorda la sop class rebuda amb la sol.licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
                 }
                 else if (strcmp(sopInstance, storeRequest->AffectedSOPInstanceUID) != 0)
                 {
                     storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    ERROR_LOG(QString("No concorda sop instance rebuda amb la sol·licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
+                    ERROR_LOG(QString("No concorda sop instance rebuda amb la sol.licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
                 }
             }
             
@@ -351,7 +351,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
     presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
     if (presentationContextID == 0)
     {
-        ERROR_LOG("No s'ha trobat cap presentation context vàlid");
+        ERROR_LOG("No s'ha trobat cap presentation context valid");
         return PACSRequestStatus::RetrieveFailureOrRefused;
     }
 
@@ -386,7 +386,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
 void RetrieveDICOMFilesFromPACS::requestCancel()
 {
     m_abortIsRequested = true;
-    INFO_LOG("S'ha sol·licitat cancel·lar la descàrrega");
+    INFO_LOG("S'ha sol.licitat cancel.lar la descarrega");
 }
 
 int RetrieveDICOMFilesFromPACS::getNumberOfDICOMFilesRetrieved()
@@ -410,7 +410,7 @@ T_DIMSE_C_MoveRQ RetrieveDICOMFilesFromPACS::getConfiguredMoveRequest(T_ASC_Asso
 PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResponseStatusFromMoveSCP(T_DIMSE_C_MoveRSP *moveResponse, DcmDataset *statusDetail)
 {
     QList<DcmTagKey> relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
-    QString messageErrorLog = "No s'ha pogut descarregar l'estudi, descripció error rebuda";
+    QString messageErrorLog = "No s'ha pogut descarregar l'estudi, descripcio error rebuda";
     PACSRequestStatus::RetrieveRequestStatus retrieveRequestStatus;
 
     // Al PS 3.4, secció C.4.2.1.5, taula C.4-2 podem trobar un descripció dels errors.
@@ -473,7 +473,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::processResp
             // Related fields DCM_NumberOfRemainingSuboperations (0000,1020), DCM_NumberOfFailedSuboperations (0000,1022), DCM_NumberOfWarningSuboperations (0000,1023)
             relatedFieldsList << DCM_NumberOfRemainingSuboperations << DCM_NumberOfFailedSuboperations  << DCM_NumberOfWarningSuboperations;
 
-            WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripció rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
+            WARN_LOG("Error no s'ha pogut descarregar tot l'estudi. Descripcio rebuda: " + QString(DU_cmoveStatusString(moveResponse->DimseStatus)));
             retrieveRequestStatus = PACSRequestStatus::RetrieveSomeDICOMFilesFailed;
             break;
         
@@ -519,7 +519,7 @@ QString RetrieveDICOMFilesFromPACS::getAbsoluteFilePathCompositeInstance(DcmData
     dicomQueryStatus = imageDataset->findAndGetString(DCM_StudyInstanceUID, instanceUID, false);
     if (dicomQueryStatus.bad())
     {
-        DEBUG_LOG("Ha fallat l'obtenció de l'UID d'estudi al dataset. Raó: " + QString(dicomQueryStatus.text()));
+        DEBUG_LOG("Ha fallat l'obtencio de l'UID d'estudi al dataset. Rao: " + QString(dicomQueryStatus.text()));
     }
     else
     {
@@ -535,7 +535,7 @@ QString RetrieveDICOMFilesFromPACS::getAbsoluteFilePathCompositeInstance(DcmData
     dicomQueryStatus = imageDataset->findAndGetString(DCM_SeriesInstanceUID, instanceUID, false);
     if (dicomQueryStatus.bad())
     {
-        DEBUG_LOG("Ha fallat l'obtenció de l'UID de la sèrie al dataset. Raó: " + QString(dicomQueryStatus.text()));
+        DEBUG_LOG("Ha fallat l'obtenció de l'UID de la serie al dataset. Rao: " + QString(dicomQueryStatus.text()));
     }
     else
     {
