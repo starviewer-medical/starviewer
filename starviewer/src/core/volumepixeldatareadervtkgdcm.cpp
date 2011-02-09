@@ -235,6 +235,10 @@ void VolumePixelDataReaderVTKGDCM::printDebugInfo()
             DEBUG_LOG("FLOAT 64");
             break;
 
+        case gdcm::PixelFormat::SINGLEBIT: // bool / monochrome
+            DEBUG_LOG("SINGLE BIT");
+            break;
+        
         case gdcm::PixelFormat::UNKNOWN:
             DEBUG_LOG("UNKNOWN");
             break;
