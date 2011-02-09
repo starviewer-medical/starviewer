@@ -3,11 +3,14 @@
 <hangingProtocolName>RF</hangingProtocolName>
 <numberScreens>1</numberScreens>
 <strictness>yes</strictness>
-<allDifferent>yes</allDifferent>
 <protocol>RF</protocol>
 <imageSet identifier="1">
+<type>image</type>
+<imageNumberInPatientModality>0</imageNumberInPatientModality>
 </imageSet>
 <imageSet identifier="2">
+<type>image</type>
+<imageNumberInPatientModality>1</imageNumberInPatientModality>
 </imageSet>
 <displaySet identifier="1">
 <imageSetNumber>1</imageSetNumber>
