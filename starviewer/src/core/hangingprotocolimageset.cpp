@@ -20,6 +20,7 @@ HangingProtocolImageSet::HangingProtocolImageSet(QObject *parent)
     m_serieToDisplay = NULL;
     m_isPreviousStudy = false;
     m_downloaded = true;
+    m_imageNumberInPatientModality = -1;
 }
 
 HangingProtocolImageSet::~HangingProtocolImageSet()
@@ -153,7 +154,15 @@ int HangingProtocolImageSet::getPreviousImageSetReference()
     return m_previousImageSetReference;
 }
 
+int HangingProtocolImageSet::getImageNumberInPatientModality()
+{
+    return m_imageNumberInPatientModality;
+}
 
+void HangingProtocolImageSet::setImageNumberInPatientModality(int imageNumberInPatientModality)
+{
+    m_imageNumberInPatientModality = imageNumberInPatientModality;
+}
 
 }
 

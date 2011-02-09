@@ -106,6 +106,12 @@ public:
     /// Obté l'ImageSet del qual és previ
     int getPreviousImageSetReference();
 
+    /// Obté l'índex de la imatge a mostrar dins la serie
+    int getImageNumberInPatientModality();
+
+    /// Posa l'índex de la imatge a mostar del pacient
+    void setImageNumberInPatientModality(int imageNumberInPatientModality);
+
 private:
     /// Llista de restriccions que ha de complir l'Image Set
     QList<Restriction> m_listOfRestrictions;
@@ -122,8 +128,13 @@ private:
     /// Serie que s'ajusta a les restriccions
     Series * m_serieToDisplay;
 
-    /// Número d'imatge a mostrar
+    /// Número d'imatge a mostrar, es coneix aquest número un cop 
+    // trobada la imatge que compleix les restriccions
     int m_imageToDisplay;
+
+    /// Índex de la imatge dins l'estudi. Es coneix aquest número
+    /// ja quan es crea el hanging protocol
+    int m_imageNumberInPatientModality;
 
     /// Indica si conte un estudi previ
     bool m_isPreviousStudy;

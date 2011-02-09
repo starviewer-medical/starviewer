@@ -91,6 +91,9 @@ private:
     /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
     void copyHangingProtocolRepository();
 
+    /// Busca la imatge número index dins tots els estudis de la modalitat del hanging protocol 
+    Image* getImageByIndexInPatientModality(Patient *patient, int index, QList<QString> hangingProtocolModalities);
+
 private:
 
     /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi

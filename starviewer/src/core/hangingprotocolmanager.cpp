@@ -305,6 +305,29 @@ Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, Hangin
         }
     }
 
+    //Pot ser que busquem una imatge en concret, llavors no cal examinar totes les sèries i/o totes les imatges
+    if (imageSet->getImageNumberInPatientModality() != -1)//Només pot ser vàlida una imatge
+    {
+        Patient *patient = listOfSeries.at(0)->getParentStudy()->getParentPatient();
+        QList<QString> modalities = imageSet->getHangingProtocol()->getHangingProtocolMask()->getProtocolList();
+        Image *image = getImageByIndexInPatientModality(patient, imageSet->getImageNumberInPatientModality(), modalities);
+
+        if (isValidImage(image, imageSet))
+        {
+            selectedSeries = image->getParentSeries();
+            imageSet->setImageToDisplay(selectedSeries->getImages().indexOf(image));
+            imageSet->setSeriesToDisplay(selectedSeries);
+            return selectedSeries;
+        }
+        else //Segur que no hi ha cap més imatge vàlida
+        {
+            imageSet->setSeriesToDisplay(0);//Important, no hi posem cap serie!
+            imageSet->setImageToDisplay(0);
+            return 0; 
+        }
+    }
+
+
     int currentSeriesIndex = 0;
     int numberOfSeries = listOfSeries.size();
     
@@ -333,10 +356,8 @@ Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, Hangin
             else
             {
                 int currentImageIndex = 0;
-                //Es tenen en compte totes les imatges de tots els volums.
                 QList<Image*> listOfImages = serie->getImages();
                 int numberOfImages = listOfImages.size();
-
                 while(!selectedSeries && currentImageIndex < numberOfImages)
                 {
                     Image *image = listOfImages.value(currentImageIndex);
@@ -348,7 +369,7 @@ Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, Hangin
                     }
                     currentImageIndex++;
                 }
-            }
+            }  
         }
 
         if (selectedSeries && quitStudy)
@@ -632,7 +653,7 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
                 
                 Volume *volumeContainsImage = series->getVolumeOfImage(image);
                 
-                if (!volumeContainsImage)//No exiteix cap imatge al tall corresponent, agafem el volum per defecte
+                if (!volumeContainsImage)//No existeix cap imatge al tall corresponent, agafem el volum per defecte
                 {
                     inputVolume = series->getFirstVolume();
                 }
@@ -655,4 +676,31 @@ void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Ser
         }
     }
 }
+
+Image* HangingProtocolManager::getImageByIndexInPatientModality(Patient *patient, int index, QList<QString> hangingProtocolModalities)
+{
+    QList<Image*> *allImagesInStudy = new QList<Image*>();
+
+    //TODO es podria millorar amb una cerca fins a la imatge que està a l'índex, envers d'un recorregut agafant-les totes
+    foreach (Study *study, patient->getStudies())
+    {
+        foreach (Series *series, study->getSeries())
+        {
+            if (hangingProtocolModalities.contains(series->getModality()))
+            {
+                allImagesInStudy->append(series->getImages());
+            }
+        }
+    }
+
+    if (index < allImagesInStudy->size())
+    {
+        return allImagesInStudy->at(index);
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 }
