@@ -169,7 +169,7 @@ private:
     /// Identificador primari donada al pacient per l'hospital. (0010,0020) Tipus 2.
     QString m_patientID;
 
-    ///ID de pacient a la bd d'Starviewer
+    /// ID de pacient a la bd d'Starviewer
     qlonglong m_databaseID;
 
     /// Data de naixement. (0010,0030) Tipus 2.

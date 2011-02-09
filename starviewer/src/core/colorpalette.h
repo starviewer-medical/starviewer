@@ -17,49 +17,43 @@ namespace udg {
 
     @author Grup de Gràfics de Girona  ( GGG )
 */
-class ColorPalette{
+class ColorPalette {
 public:
-
     /// Aquests enums indiquem quin criteri escollim per ordenar les imatges
-    enum ColorMode{ GRAYSCALE, RGB };
+    enum ColorMode { Grayscale, RGB };
 
-    ///constructor per defecte
     ColorPalette();
+    ColorPalette(ColorMode mode);
+    ~ColorPalette();
     
-    ///constructor amb paràmetre
-    ColorPalette( ColorMode mode );
-    
-    ~ColorPalette(){}
-    
-    ///ens permet determinar el mode de color que utilitzem
-    void setColorMode( ColorMode mode )
-    { m_colorMode = mode; }
+    /// Ens permet determinar el mode de color que utilitzem
+    void setColorMode(ColorMode mode);
 
-    ///ens retorna el tipus de color que estem usant
-    ColorMode getColorMode()
-    { return( m_colorMode ); }
+    /// Ens retorna el tipus de color que estem usant
+    ColorMode getColorMode();
     
-    ///ens retorna el color que usem per a fer highlight1
+    /// Ens retorna el color que usem per a fer highlight1
     QColor getHighlightColor() const;
     
-    ///ens retorna el color que usem per a fer la selecció
+    /// Ens retorna el color que usem per a fer la selecció
     QColor getSelectionColor() const;
     
-    ///ens retorna el color que usem en un estat de normalitat
+    /// Ens retorna el color que usem en un estat de normalitat
     QColor getNormalColor() const;
+
 private:
-    ///Determina el sistema de color que fem servir
+    /// Determina el sistema de color que fem servir
     ColorMode m_colorMode;
 
-    ///constants definides segons el mode de color. Es definiran en el fitxer d'implementació
-    const QColor grayScaleHighlightColor;
-    const QColor rgbHighlightColor;
+    /// Constants definides segons el mode de color. Es definiran en el fitxer d'implementació
+    const QColor GrayScaleHighlightColor;
+    const QColor RGBHighlightColor;
     
-    const QColor grayScaleSelectionColor;
-    const QColor rgbSelectionColor;
+    const QColor GrayScaleSelectionColor;
+    const QColor RGBSelectionColor;
     
-    const QColor grayScaleNormalColor;
-    const QColor rgbNormalColor;
+    const QColor GrayScaleNormalColor;
+    const QColor RGBNormalColor;
 };
 
 };  // end namespace udg

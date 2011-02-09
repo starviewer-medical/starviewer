@@ -9,51 +9,78 @@
 
 namespace udg {
 
-ColorPalette::ColorPalette() : grayScaleHighlightColor( Qt::darkGreen ), rgbHighlightColor( Qt::yellow ), grayScaleSelectionColor( Qt::darkGreen ), rgbSelectionColor( 236, 160, 28 ), grayScaleNormalColor( Qt::green ), rgbNormalColor( Qt::green )
+ColorPalette::ColorPalette()
+ : GrayScaleHighlightColor(Qt::darkGreen), RGBHighlightColor(Qt::yellow), GrayScaleSelectionColor(Qt::darkGreen), RGBSelectionColor(236, 160, 28), GrayScaleNormalColor(Qt::green), RGBNormalColor(Qt::green)
 {
     m_colorMode = RGB;
 }
 
-ColorPalette::ColorPalette( ColorMode mode ) : grayScaleHighlightColor( Qt::darkGreen ), rgbHighlightColor( Qt::yellow ), grayScaleSelectionColor( Qt::darkGreen ), rgbSelectionColor( 236, 160, 28 ), grayScaleNormalColor( Qt::green ), rgbNormalColor( Qt::green )
+ColorPalette::ColorPalette(ColorMode mode)
+ : GrayScaleHighlightColor(Qt::darkGreen), RGBHighlightColor(Qt::yellow), GrayScaleSelectionColor(Qt::darkGreen), RGBSelectionColor(236, 160, 28), GrayScaleNormalColor(Qt::green), RGBNormalColor(Qt::green)
 {
     m_colorMode = mode;
 }
 
+ColorPalette::~ColorPalette()
+{
+}
+
+void ColorPalette::setColorMode(ColorMode mode)
+{
+    m_colorMode = mode;
+}
+
+ColorPalette::ColorMode ColorPalette::getColorMode()
+{
+    return(m_colorMode); 
+}
 
 QColor ColorPalette::getHighlightColor() const
 {
     QColor highlight;
 
-    if ( m_colorMode == RGB )
-        highlight = rgbHighlightColor;
+    if (m_colorMode == RGB)
+    {
+        highlight = RGBHighlightColor;
+    }
     else
-        highlight = grayScaleHighlightColor;
+    {
+        highlight = GrayScaleHighlightColor;
+    }
 
-    return( highlight );
+    return(highlight);
 }
 
 QColor ColorPalette::getSelectionColor() const
 {
     QColor selection;
 
-    if ( m_colorMode == RGB )
-        selection = rgbSelectionColor;
+    if (m_colorMode == RGB)
+    {
+        selection = RGBSelectionColor;
+    }
     else
-        selection = grayScaleSelectionColor;
+    {
+        selection = GrayScaleSelectionColor;
+    }
 
-    return( selection );
+    return(selection);
 }
 
 QColor ColorPalette::getNormalColor() const
 {
     QColor normal;
 
-    if ( m_colorMode == RGB )
-        normal = rgbNormalColor;
+    if (m_colorMode == RGB)
+    {
+        normal = RGBNormalColor;
+    }
     else
-        normal = grayScaleNormalColor;
+    {
+        normal = GrayScaleNormalColor;
+    }
 
-    return( normal );
+    return(normal);
 }
 
 };
