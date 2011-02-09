@@ -57,7 +57,11 @@ bool DatabaseInstallation::checkStarviewerDatabase()
             m_errorMessage.append( tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString) );
         }
 
-        checkDatabaseRevision();
+        isCorrect = checkDatabaseRevision();
+        if (!isCorrect)
+        {
+            m_errorMessage.append( tr("\nCan't upgrade database file. Be sure you have write permissions on database directory.").arg(ApplicationNameString) );    
+        }
     }
 
     if( !isCorrect )
