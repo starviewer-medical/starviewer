@@ -248,6 +248,20 @@ HangingProtocolDisplaySet* HangingProtocolXMLReader::readDisplaySet(QXmlStreamRe
         {
             displaySet->setToolActivation(reader->readElementText());
         }
+        else if (reader->name() == "windowLevel")
+        {
+            while (reader->readNextStartElement())
+            {
+                if (reader->name() == "width")
+                {
+                    displaySet->setWindowWidth(reader->readElementText().toDouble());
+                }
+                else if (reader->name() == "center")
+                {
+                    displaySet->setWindowCenter(reader->readElementText().toDouble());
+                }
+            }
+        }
         else
         {
             reader->skipCurrentElement(); // Saltem l'element perquè no és conegut.

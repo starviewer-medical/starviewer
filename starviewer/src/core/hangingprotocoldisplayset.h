@@ -106,6 +106,18 @@ public:
     /// Obté l'eina a activar al visualitzador
     QString getToolActivation();
 
+    // Posa el windowWidth
+    void setWindowWidth(double windowWidth);
+
+    // Obté el windowWidth
+    double getWindowWidth();
+
+    // Posa el windowCenter
+    void setWindowCenter(double windowCenter);
+
+    // Obté el windowCenter
+    double getWindowCenter();
+
 private:
 
     /// Identificador de la seqüència
@@ -146,6 +158,12 @@ private:
 
     /// Indica la tool a activar
     QString m_activateTool;
+
+    // Indica el windowWidth
+    double m_windowWidth;
+
+    // Indica el windowCenter
+    double m_windowCenter;
 };
 
 }

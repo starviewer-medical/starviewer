@@ -86,6 +86,8 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
         copiedDisplaySet->setToolActivation(displaySet->getToolActivation());
         copiedDisplaySet->setHangingProtocol(this);
         copiedDisplaySet->setImageSet(this->getImageSet(displaySet->getImageSet()->getIdentifier()));
+        copiedDisplaySet->setWindowWidth(displaySet->getWindowWidth());
+        copiedDisplaySet->setWindowCenter(displaySet->getWindowCenter());
         m_listOfDisplaySets.append(copiedDisplaySet);
     }
 

@@ -94,6 +94,11 @@ void ApplyHangingProtocolQViewerCommand::applyDisplayTransformations(Q2DViewer *
         viewer->setAlignPosition(Q2DViewer::AlignCenter);
     }
 
+    if (displaySet->getWindowCenter() != -1 && displaySet->getWindowWidth() != -1)
+    {
+        viewer->setWindowLevel(displaySet->getWindowWidth(), displaySet->getWindowCenter());
+    }
+
     viewer->enableRendering(true);
     viewer->render();
 }

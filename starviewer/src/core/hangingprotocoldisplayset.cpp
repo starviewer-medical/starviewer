@@ -19,6 +19,8 @@ HangingProtocolDisplaySet::HangingProtocolDisplaySet(QObject *parent)
     m_sliceNumber = -1;
     m_sliceModifiedForVolumes = -1;
     m_phase = -1;
+    m_windowWidth = -1;
+    m_windowCenter = -1;
 }
 
 HangingProtocolDisplaySet::~HangingProtocolDisplaySet()
@@ -166,4 +168,25 @@ int HangingProtocolDisplaySet::getSliceModifiedForVolumes()
 {
     return m_sliceModifiedForVolumes;
 }
+
+void HangingProtocolDisplaySet::setWindowWidth(double windowWidth)
+{
+    m_windowWidth = windowWidth;
+}
+
+double HangingProtocolDisplaySet::getWindowWidth()
+{
+    return m_windowWidth;
+}
+
+void HangingProtocolDisplaySet::setWindowCenter(double windowCenter)
+{
+    m_windowCenter = windowCenter;
+}
+
+double HangingProtocolDisplaySet::getWindowCenter()
+{
+    return m_windowCenter;
+}
+
 }
