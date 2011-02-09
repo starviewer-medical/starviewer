@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangingProtocol name="CR_3">
-	<hangingProtocolName>CR 3</hangingProtocolName>
-	<priority>0</priority>
-	<protocol>CR</protocol>
-	<imageSet identifier="1">
-		<type>image</type>
-		<imageNumberInPatientModality>0</imageNumberInPatientModality>
-	</imageSet>
-	<imageSet identifier="2">
-		<type>image</type>
-		<imageNumberInPatientModality>1</imageNumberInPatientModality>
-	</imageSet>
-	<imageSet identifier="3">
-		<type>image</type>
-		<imageNumberInPatientModality>2</imageNumberInPatientModality>
-	</imageSet>
-	<displaySet identifier="1">
-		<imageSetNumber>1</imageSetNumber>
-		<position>0.0\1.0\0.25\0.0</position>
-	</displaySet>
-	<displaySet identifier="2">
-		<imageSetNumber>2</imageSetNumber>
-		<position>0.25\1.0\0.5\0.0</position>
-	</displaySet>
-	<displaySet identifier="3">
-		<imageSetNumber>3</imageSetNumber>
-		<position>0.5\1.0\1.0\0.0</position>
-	</displaySet>
+    <hangingProtocolName>CR 3</hangingProtocolName>
+    <priority>0</priority>
+    <protocol>CR</protocol>
+    <imageSet identifier="1">
+        <type>image</type>
+        <imageNumberInPatientModality>0</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="2">
+        <type>image</type>
+        <imageNumberInPatientModality>1</imageNumberInPatientModality>
+    </imageSet>
+    <imageSet identifier="3">
+        <type>image</type>
+        <imageNumberInPatientModality>2</imageNumberInPatientModality>
+    </imageSet>
+    <displaySet identifier="1">
+        <imageSetNumber>1</imageSetNumber>
+        <position>0.0\1.0\0.25\0.0</position>
+    </displaySet>
+    <displaySet identifier="2">
+        <imageSetNumber>2</imageSetNumber>
+        <position>0.25\1.0\0.5\0.0</position>
+    </displaySet>
+    <displaySet identifier="3">
+        <imageSetNumber>3</imageSetNumber>
+        <position>0.5\1.0\1.0\0.0</position>
+    </displaySet>
 </hangingProtocol>
