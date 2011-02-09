@@ -2,11 +2,14 @@
 <hangingProtocol name="CR">
 <hangingProtocolName>CR</hangingProtocolName>
 <numberScreens>1</numberScreens>
-<allDifferent>yes</allDifferent>
 <protocol>CR</protocol>
 <imageSet identifier="1">
+<type>image</type>
+<imageNumberInPatientModality>0</imageNumberInPatientModality>
 </imageSet>
 <imageSet identifier="2">
+<type>image</type>
+<imageNumberInPatientModality>1</imageNumberInPatientModality>
 </imageSet>
 <displaySet identifier="1">
 <imageSetNumber>1</imageSetNumber>
