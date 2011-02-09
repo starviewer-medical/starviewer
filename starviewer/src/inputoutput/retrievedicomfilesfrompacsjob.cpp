@@ -49,7 +49,8 @@ Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
 
 void RetrieveDICOMFilesFromPACSJob::run()
 {
-    INFO_LOG(QString("Iniciant la descarrega de l'estudi %1 del pacs %2").arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle()));
+    INFO_LOG(QString("Iniciant descarrega del PACS %1 l'estudi UID: %2, series UID: %3, SOP Instance UID:%4").arg(getPacsDevice().getAETitle(), 
+        m_dicomMaskToRetrieve.getStudyInstanceUID(), m_dicomMaskToRetrieve.getSeriesInstanceUID(), m_dicomMaskToRetrieve.getSOPInstanceUID()));
 
     m_numberOfSeriesRetrieved = 0;
     m_lastImageSeriesInstanceUID = "";
@@ -97,7 +98,8 @@ void RetrieveDICOMFilesFromPACSJob::run()
         if ((m_retrieveRequestStatus == PACSRequestStatus::RetrieveOk || m_retrieveRequestStatus == PACSRequestStatus::RetrieveSomeDICOMFilesFailed) &&
             !this->isAbortRequested())
         {
-            INFO_LOG("Ha finalitzat la descarrega de l'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + "del PACS " + getPacsDevice().getAETitle());
+            INFO_LOG(QString("Ha finalitzat la descarrega de l'estudi %1 del PACS %2, s'han descarregat %3 fitxers").
+                arg(m_dicomMaskToRetrieve.getStudyInstanceUID(),getPacsDevice().getAETitle()).arg(m_retrieveDICOMFilesFromPACS->getNumberOfDICOMFilesRetrieved()));
 
             m_numberOfSeriesRetrieved++;
             emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);//Indiquem que s'ha descarregat la última sèrie

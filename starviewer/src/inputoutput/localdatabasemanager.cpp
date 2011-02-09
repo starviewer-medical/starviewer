@@ -53,7 +53,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
 {
     if (newPatient == NULL)
     {
-        ERROR_LOG("No es pot inserir a la base de dades l'estudi que s'ha descarregat, perque el patient es null");
+        ERROR_LOG("No es pot inserir a la base de dades l'estudi perque el patient es null");
         m_lastError = PatientInconsistent;
     }
     else
@@ -556,6 +556,10 @@ int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study
 
     foreach (Study *studyToSave, listStudyToSave)
     {
+        INFO_LOG(QString("S'inserira a la base de dades l'estudi del pacient %1, modalitat %2, data estudi %3, UID estudi %4")
+            .arg(studyToSave->getParentPatient()->getFullName(), studyToSave->getModalitiesAsSingleString())
+            .arg(studyToSave->getDateTime().toString("dd/MM/yyyy hh:mm:ss"), studyToSave->getInstanceUID()));
+
         // Primer guardem les sèries
         status = saveSeries(dbConnect, studyToSave->getSeries(), currentDate, currentTime);
 
