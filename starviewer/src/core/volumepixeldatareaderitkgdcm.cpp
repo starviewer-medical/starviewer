@@ -41,6 +41,7 @@ int VolumePixelDataReaderITKGDCM::read(const QStringList &filenames)
     if (filenames.isEmpty())
     {
         WARN_LOG("La llista de noms de fitxer per carregar Ã©s buida");
+        DEBUG_LOG("La llista de noms de fitxer per carregar Ã©s buida");
         errorCode = InvalidFileName;
     }
     else
@@ -76,6 +77,7 @@ int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames
     catch (itk::ExceptionObject & e)
     {
         WARN_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+        DEBUG_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
         // Llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage(QString(e.GetDescription()) );
     }
@@ -118,6 +120,7 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
     catch (itk::ExceptionObject & e)
     {
         WARN_LOG(QString("ExcepciÃ³ llegint l'arxiu [%1] DescripciÃ³: [%2]").arg(fileName).arg(e.GetDescription()));
+        DEBUG_LOG(QString("ExcepciÃ³ llegint l'arxiu [%1] DescripciÃ³: [%2]").arg(fileName).arg(e.GetDescription()));
         // Llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage(QString(e.GetDescription()));
     }
@@ -178,6 +181,7 @@ void VolumePixelDataReaderITKGDCM::readDifferentSizeImagesIntoOneVolume(const QS
         catch (itk::ExceptionObject & e)
         {
             WARN_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
+            DEBUG_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
 
             // Llegim el missatge d'error per esbrinar de quin error es tracta
             errorCode = identifyErrorMessage(QString(e.GetDescription()));
@@ -243,10 +247,12 @@ void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
         if (spacing[0] == 0.0 || spacing[1] == 0.0)
         {
             WARN_LOG(QString("x Ã³ y spacing Ã©s 0; [x,y] = [%1,%2]. Donem el volum per vÃ lid igualment.").arg(spacing[0]).arg(spacing[1]));
+            DEBUG_LOG(QString("x Ã³ y spacing Ã©s 0; [x,y] = [%1,%2]. Donem el volum per vÃ lid igualment.").arg(spacing[0]).arg(spacing[1]));
         }
         else if (spacing[2] == 0.0)
         {
             WARN_LOG("El z-spacing de les dades llegides Ã©s 0. Possiblement la informaciÃ³ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins de seqÃ¼Ã¨ncies privades. Donem el volum per vÃ lid igualment.");
+            DEBUG_LOG("El z-spacing de les dades llegides Ã©s 0. Possiblement la informaciÃ³ corresponent (SliceThikness/SpacingBetweenSlices) estigui dins de seqÃ¼Ã¨ncies privades. Donem el volum per vÃ lid igualment.");
         }
     }
     else
