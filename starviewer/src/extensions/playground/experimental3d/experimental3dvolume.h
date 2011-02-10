@@ -72,6 +72,8 @@ public:
     unsigned short getRangeMax() const;
     /// Retorna la mida (nombre de vòxels) del volum.
     unsigned int getSize() const;
+    /// Retorna la magnitud del gradient de cada vòxel.
+    const unsigned char* gradientMagnitudes() const;
 
     /// Estableix el tipus d'interpolació.
     void setInterpolation(Interpolation interpolation);
