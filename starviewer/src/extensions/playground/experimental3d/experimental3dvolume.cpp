@@ -128,6 +128,12 @@ unsigned int Experimental3DVolume::getSize() const
 }
 
 
+const unsigned char* Experimental3DVolume::gradientMagnitudes() const
+{
+    return this->gradientEstimator()->GetGradientMagnitudes();
+}
+
+
 void Experimental3DVolume::setInterpolation(Interpolation interpolation)
 {
     switch (interpolation)

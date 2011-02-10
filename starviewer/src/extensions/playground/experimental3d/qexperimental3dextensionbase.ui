@@ -3707,6 +3707,64 @@
             </widget>
            </item>
            <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_73">
+             <item>
+              <widget class="QLabel" name="m_intensityGradientClusteringIntensitiesLabel">
+               <property name="text">
+                <string>Intensities</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="m_intensityGradientClusteringIntensitiesSpinBox">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>1024</number>
+               </property>
+               <property name="value">
+                <number>256</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_intensityGradientClusteringGradientsLabel">
+               <property name="text">
+                <string>Gradients</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="m_intensityGradientClusteringGradientsSpinBox">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>256</number>
+               </property>
+               <property name="value">
+                <number>16</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_intensityGradientClusteringTotalLabel">
+               <property name="text">
+                <string>Total 4096</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="m_intensityGradientClusteringPushButton">
+               <property name="text">
+                <string>Intensity/gradient clustering</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
               <widget class="QPushButton" name="m_colorTransferFunctionFromImiPushButton">
@@ -4021,6 +4079,13 @@
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_71">
+                <item>
+                 <widget class="QLabel" name="m_transferFunctionOptimizationTypeLabel">
+                  <property name="text">
+                   <string>1D</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <widget class="QPushButton" name="m_optimizeByDerivativeTransferFunctionFromIntensityClusteringPushButton">
                   <property name="text">

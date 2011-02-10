@@ -210,10 +210,12 @@ private:
 
     void checkData();
     QVector<float> getWeights() const;
-    OpacityTransferFunction innernessProportionalOpacityTransferFunction() const;
+    OpacityTransferFunction innernessProportionalOpacityTransferFunction(const Experimental3DVolume *volume) const;
 
     void syncNormalToGradientTransferFunction();
     void syncGradientToNormalTransferFunction();
+    int numberOfClusters() const;
+    int cluster2DIndex(int intensityCluster, int gradientCluster) const;
 
 private slots:
 
@@ -318,7 +320,7 @@ private slots:
 
     void generateInnernessProportionalOpacityTransferFunction();
     void createClusterizedVolume();
-    void fillWeigthsEditor();
+    void fillWeightsEditor();
 
     void enableBaseVomi(bool on);
     void enableVomi(bool on);
@@ -327,6 +329,12 @@ private slots:
     void clusterizedToNormalTransferFunction();
     void viewNormalVolume();
     void viewClusterizedVolume();
+
+    void updateIntensityGradientClusteringTotal();
+    void intensityGradientClustering();
+    void create2DClusterizedVolume();
+    void normalToClusterizedTransferFunction2D();
+    void clusterizedToNormalTransferFunction2D();
 
 private:
 
@@ -384,7 +392,10 @@ private:
     QVector<float> m_viewpointUnstabilitiesI;
     QVector<float> m_imi;
     float m_maximumImi;
+    bool m_2DClustering;
     QList< QList<int> > m_intensityClusters;
+    QList< QList<int> > m_gradientClusters;
+    QVector< QVector<unsigned short> > m_intensityGradientMap;
     QVector<bool> m_clusterHasData;
     TransferFunction m_normalTransferFunction;
     TransferFunction m_clusterizedTransferFunction;
