@@ -49,17 +49,13 @@ void CustomWindowLevelsWriter::write()
     // Per cada custom window level
     foreach (CustomWindowLevel *windowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
-        writer.setAutoFormattingIndent(1);
         writer.writeStartElement(QString("CustomWindowLevel"));
         writer.writeAttribute(QString("name"), QString("%1").arg(windowLevel->getName()));
-        writer.setAutoFormattingIndent(2);
         // un tag nou per window i per level
         writer.writeTextElement(QString("width"), QString("%1").arg(windowLevel->getWidth()));
         writer.writeTextElement(QString("level"), QString("%1").arg(windowLevel->getLevel()));
-        writer.setAutoFormattingIndent(1);
         writer.writeEndElement();
     }
-    writer.setAutoFormattingIndent(0);
     writer.writeEndElement();
     writer.writeEndDocument();
  
