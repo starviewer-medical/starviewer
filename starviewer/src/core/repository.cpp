@@ -23,6 +23,7 @@ Identifier Repository< ItemType >::addItem( ItemType* item )
 {
     Identifier id( m_nextIdentifierNumber++ );
     m_itemList[ id ] = item ;
+    emit changed();
     return id;
 }
 
@@ -43,6 +44,7 @@ template< typename ItemType >
 void Repository< ItemType >::removeItem( const Identifier id )
 {
     m_itemList.remove( id );
+    emit changed();
 }
 
 template< typename ItemType >
@@ -62,6 +64,7 @@ void Repository< ItemType >::cleanUp()
 {
     //Buida la llista però no elimina els ItemType
     m_itemList.clear();
+    emit changed();
 }
 
 };  // end namespace udg {
