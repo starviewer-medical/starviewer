@@ -12,7 +12,7 @@ namespace udg {
 VolumePixelData::VolumePixelData(QObject *parent) :
     QObject(parent)
 {
-    m_imageDataVTK = vtkImageData::New();
+    m_imageDataVTK = vtkSmartPointer<vtkImageData>::New();
 
     m_itkToVtkFilter = ItkToVtkFilterType::New();
     m_vtkToItkFilter = VtkToItkFilterType::New();
@@ -101,13 +101,8 @@ bool VolumePixelData::getVoxelValue(double coordinate[3], VolumePixelData::Voxel
 
 void VolumePixelData::convertToNeutralPixelData()
 {
-    if (m_imageDataVTK)
-    {
-        m_imageDataVTK->Delete();
-    }
-
     // Creem un objecte vtkImageData "neutre"
-    m_imageDataVTK = vtkImageData::New();
+    m_imageDataVTK = vtkSmartPointer<vtkImageData>::New();
     // Inicialitzem les dades
     m_imageDataVTK->SetOrigin(.0, .0, .0);
     m_imageDataVTK->SetSpacing(1., 1., 1.);
