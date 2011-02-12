@@ -20,6 +20,9 @@ public:
     RepositoryBase(QObject *parent = 0);
 
     ~RepositoryBase();
+
+signals:
+    void changed();
 };
 
 };  //  end  namespace udg
