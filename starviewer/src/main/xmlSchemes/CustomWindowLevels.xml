@@ -9,7 +9,7 @@
     </xsd:element>
     <xsd:complexType name="customWindowLevelType">
         <xsd:sequence>
-            <xsd:element name="window" type="xsd:double" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="width" type="xsd:double" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="level" type="xsd:double" minOccurs="1" maxOccurs="1"/>
         </xsd:sequence>
         <xsd:attribute name="name" type="xsd:string" use="required"/>
