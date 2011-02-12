@@ -108,15 +108,15 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
-    /// Càrrega dels hanging protocols. 
-    /// Només carregarem un cop per sessió/instància d'starviewer
-    static bool hangingProtocolsAreLoaded = false;
-    if (!hangingProtocolsAreLoaded)
+    // Càrrega dels repositoris que necessitem tenir carregats durant tota l'aplicació
+    // Només carregarem un cop per sessió/instància d'starviewer
+    static bool repositoriesLoaded = false;
+    if (!repositoriesLoaded)
     {
         HangingProtocolsLoader *hangingProtocolsLoader = new HangingProtocolsLoader();
         hangingProtocolsLoader->loadDefaults();
         delete hangingProtocolsLoader;
-        hangingProtocolsAreLoaded = true;
+        repositoriesLoaded = true;
     }
 #endif
 
