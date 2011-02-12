@@ -54,9 +54,9 @@ QList<CustomWindowLevel*> CustomWindowLevelsReader::readFile(const QString &path
 
                     while (reader.readNextStartElement())
                     {
-                        if (reader.name() == "window")
+                        if (reader.name() == "width")
                         {
-                            customWindowLevel->setWindow(reader.readElementText().toDouble());
+                            customWindowLevel->setWidth(reader.readElementText().toDouble());
                         }
                         else if (reader.name() == "level")
                         {

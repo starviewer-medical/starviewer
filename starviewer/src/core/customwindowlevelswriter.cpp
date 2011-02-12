@@ -54,7 +54,7 @@ void CustomWindowLevelsWriter::write()
         writer.writeAttribute(QString("name"), QString("%1").arg(windowLevel->getName()));
         writer.setAutoFormattingIndent(2);
         // un tag nou per window i per level
-        writer.writeTextElement(QString("window"), QString("%1").arg(windowLevel->getWindow()));
+        writer.writeTextElement(QString("width"), QString("%1").arg(windowLevel->getWidth()));
         writer.writeTextElement(QString("level"), QString("%1").arg(windowLevel->getLevel()));
         writer.setAutoFormattingIndent(1);
         writer.writeEndElement();

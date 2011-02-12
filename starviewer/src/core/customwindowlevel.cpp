@@ -19,9 +19,9 @@ void CustomWindowLevel::setName(const QString &name)
     m_name = name;
 }
 
-void CustomWindowLevel::setWindow(double window)
+void CustomWindowLevel::setWidth(double width)
 {
-    m_window = window;
+    m_width = width;
 }
 
 void CustomWindowLevel::setLevel(double level)
@@ -34,9 +34,9 @@ QString CustomWindowLevel::getName() const
     return m_name;
 }
 
-double CustomWindowLevel::getWindow() const
+double CustomWindowLevel::getWidth() const
 {
-    return m_window;
+    return m_width;
 }
 
 double CustomWindowLevel::getLevel() const
