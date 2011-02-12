@@ -8,6 +8,7 @@
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
 #include "windowlevelpresetstooldata.h"
+#include "qcustomwindowleveleditwidget.h"
 
 namespace udg {
 
@@ -15,12 +16,13 @@ QWindowLevelComboBox::QWindowLevelComboBox(QWidget *parent)
  : QComboBox(parent), m_presetsData(0)
 {
     m_customWindowLevelDialog = new QCustomWindowLevelDialog();
-    connect(this, SIGNAL(activated(int)), SLOT(setActiveWindowLevel(int)));
+    m_currentSelectedPreset = "";
+    connect(this, SIGNAL(activated(const QString &)), SLOT(setActiveWindowLevel(const QString &)));
 }
 
 QWindowLevelComboBox::~QWindowLevelComboBox()
 {
-	delete m_customWindowLevelDialog;
+    delete m_customWindowLevelDialog;
 }
 
 void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLevelData)
@@ -108,6 +110,8 @@ void QWindowLevelComboBox::addPreset(const QString &preset)
     {
         DEBUG_LOG("El preset " + preset + " no està present en les dades de window level proporcionades");
     }
+
+    this->selectPreset(m_currentSelectedPreset);
 }
 
 void QWindowLevelComboBox::removePreset(const QString &preset)
@@ -124,6 +128,7 @@ void QWindowLevelComboBox::selectPreset(const QString &preset)
     int index = this->findText(preset);
     if (index > -1)
     {
+        m_currentSelectedPreset = preset;
         this->setCurrentIndex(index);
     }
     else
@@ -145,19 +150,33 @@ void QWindowLevelComboBox::populateFromPresetsData()
     this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets));
     this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined));
     this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other));
+    this->insertSeparator(this->count());
     this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::CustomPreset));
+    this->addItem(tr("Edit Custom WW/WL"));
 }
 
-void QWindowLevelComboBox::setActiveWindowLevel(int value)
+void QWindowLevelComboBox::setActiveWindowLevel(const QString &text)
 {
-    int customIndex = this->findText(tr("Custom"));
-    if (customIndex != value)
+    if (text == tr("Custom"))
     {
-        m_presetsData->activatePreset(this->itemText(value));
+        m_customWindowLevelDialog->exec();
+    }
+    else if (text == tr("Edit Custom WW/WL"))
+    {
+        // Reestablim el valor que hi havia perquè no quedi seleccionat la fila de l'editor.
+        this->selectPreset(m_currentSelectedPreset);
+
+        double width;
+        double level;
+        m_presetsData->getWindowLevelFromDescription(m_presetsData->getCurrentPreset(), width, level);
+
+        QCustomWindowLevelEditWidget customWindowLevelEditWidget;
+        customWindowLevelEditWidget.setDefaultWindowLevel(width, level);
+        customWindowLevelEditWidget.exec();
     }
     else
     {
-        m_customWindowLevelDialog->exec();
+        m_presetsData->activatePreset(text);
     }
 }
 

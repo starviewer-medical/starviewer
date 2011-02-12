@@ -53,7 +53,7 @@ private slots:
     void removePreset(const QString &preset);
 
     /// Seleccionem el window level que volem aplicar com a actiu
-    void setActiveWindowLevel(int value);
+    void setActiveWindowLevel(const QString &text);
 
 private:
     /**
@@ -70,6 +70,9 @@ private:
 
     /// Les dades dels valors pre-establerts
     WindowLevelPresetsToolData *m_presetsData;
+
+    /// Ens guardem el preset actual per reestablir-lo si l'usuari clica l'editor de WW/WL ja que sinó quedaria la fila de l'editor seleccionada.
+    QString m_currentSelectedPreset;
 };
 
 }
