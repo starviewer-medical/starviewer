@@ -32,6 +32,7 @@
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
 #include "hangingprotocolsloader.h"
+#include "customwindowlevelsloader.h"
 #endif
 
 // Qt
@@ -115,6 +116,9 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     {
         HangingProtocolsLoader hangingProtocolsLoader;
         hangingProtocolsLoader.loadDefaults();
+
+        CustomWindowLevelsLoader customWindowLevelsLoader;
+        customWindowLevelsLoader.loadDefaults();
 
         repositoriesLoaded = true;
     }
