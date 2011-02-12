@@ -38,8 +38,7 @@ void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLeve
     connect(m_presetsData, SIGNAL(presetRemoved(QString)), SLOT(removePreset(QString)));
     connect(m_presetsData, SIGNAL(presetChanged(QString)), SLOT(selectPreset(QString)));
     connect(m_presetsData, SIGNAL(currentWindowLevel(double, double)), m_customWindowLevelDialog, SLOT(setDefaultWindowLevel(double, double)));
-    //Assignem el windowLevelData a CustomWindowLevelDialog
-    m_customWindowLevelDialog->setPresetsData(windowLevelData);
+
     // TODO això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
     // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
     connect(m_customWindowLevelDialog, SIGNAL(windowLevel(double,double)), m_presetsData, SLOT(setCustomWindowLevel(double,double)));
