@@ -5,7 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "windowlevelpresetstooldata.h"
-
+#include "customwindowlevelsrepository.h"
 #include <QStringList>
 
 namespace udg {
@@ -29,6 +29,8 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
     addPreset(tr("Petrous Bone"), 4000, 700, StandardPresets);
     addPreset(tr("Custom"), 0, 0, CustomPreset);
     // TODO ara caldria afegir els presets que tinguem guardats en QSettins, o altres tipus d'arxius tipus XML o ".ini"
+    loadCustomWindowLevelPresets();
+    connect(CustomWindowLevelsRepository::getRepository(), SIGNAL(changed()), this, SLOT(updateCustomWindowLevels()));
 }
 
 WindowLevelPresetsToolData::~WindowLevelPresetsToolData()
@@ -149,6 +151,20 @@ void WindowLevelPresetsToolData::activatePreset(const QString &preset)
         emit currentWindowLevel(window, level);
         emit presetChanged(preset);
     }
+}
+
+void WindowLevelPresetsToolData::loadCustomWindowLevelPresets()
+{
+    foreach(CustomWindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
+    {
+        addPreset(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getLevel(), UserDefined);
+    }
+}
+
+void WindowLevelPresetsToolData::updateCustomWindowLevels()
+{
+    this->removePresetsFromGroup(UserDefined);
+    this->loadCustomWindowLevelPresets();
 }
 
 }

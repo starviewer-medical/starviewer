@@ -128,6 +128,14 @@ signals:
     void presetChanged(QString preset);
 
 private:
+    /// Afegeix els CustomWindowLevels que hi ha al repository
+    void loadCustomWindowLevelPresets();
+
+private slots:
+    /// Actualitza els CustomWindowLevels del repository
+    void updateCustomWindowLevels();
+
+private:
     struct WindowLevelStruct
     {
         /// Valors de window level del preset en sí
