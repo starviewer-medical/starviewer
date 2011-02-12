@@ -24,10 +24,6 @@ CustomWindowLevelsWriter::~CustomWindowLevelsWriter()
 
 void CustomWindowLevelsWriter::write()
 {
-    // agafar els custom window levels del repositori
-    CustomWindowLevelsRepository *repository = CustomWindowLevelsRepository::getRepository();
-    QList<CustomWindowLevel*> windowLevels = repository->getItems();
-
     // establir el path per defecte on es guardarà el fitxer
     QString path = getPath();
     QFile file(path);
@@ -51,10 +47,9 @@ void CustomWindowLevelsWriter::write()
     // Per exemple com a atribut xmlns
 
     // Per cada custom window level
-    for (unsigned int i = 0; i < windowLevels.count(); i++)
+    foreach (CustomWindowLevel *windowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
         writer.setAutoFormattingIndent(1);
-        CustomWindowLevel *windowLevel = windowLevels.at(i);
         writer.writeStartElement(QString("CustomWindowLevel"));
         writer.writeAttribute(QString("name"), QString("%1").arg(windowLevel->getName()));
         writer.setAutoFormattingIndent(2);
