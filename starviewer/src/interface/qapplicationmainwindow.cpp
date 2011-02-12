@@ -113,9 +113,9 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     static bool repositoriesLoaded = false;
     if (!repositoriesLoaded)
     {
-        HangingProtocolsLoader *hangingProtocolsLoader = new HangingProtocolsLoader();
-        hangingProtocolsLoader->loadDefaults();
-        delete hangingProtocolsLoader;
+        HangingProtocolsLoader hangingProtocolsLoader;
+        hangingProtocolsLoader.loadDefaults();
+
         repositoriesLoaded = true;
     }
 #endif
