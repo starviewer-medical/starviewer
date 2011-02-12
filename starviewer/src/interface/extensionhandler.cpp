@@ -226,7 +226,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
     progressDialog.close();
 
-    unsigned int numberOfPatients = patientsList.size();
+    int numberOfPatients = patientsList.size();
 
     if (numberOfPatients == 0)
     {
@@ -239,7 +239,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
     QList<int> correctlyLoadedPatients;
 
-    for(unsigned int i = 0; i < numberOfPatients; i++ )
+    for(int i = 0; i < numberOfPatients; i++ )
     {
         DEBUG_LOG( QString("Patient #%1\n %2").arg(i).arg( patientsList.at(i)->toString() ) );
 
@@ -279,7 +279,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
     QString patientsWithError;
     if (correctlyLoadedPatients.count() != numberOfPatients)
     {
-        for (unsigned int i = 0; i < numberOfPatients; i++ )
+        for (int i = 0; i < numberOfPatients; i++ )
         {
             if (!correctlyLoadedPatients.contains(i))
             {
