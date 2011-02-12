@@ -57,7 +57,7 @@ bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
             return !m_retrieveDICOMFilesFromPACSWeaver->isIdle();
             break;
         case PACSJob::QueryPACS:
-            return m_queryWeaver->isIdle();
+            return !m_queryWeaver->isIdle();
             break;   
         default:
             ERROR_LOG("Metode isExecutingPACS ha rebut un Tipus de job invalid");
