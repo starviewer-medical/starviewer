@@ -1055,18 +1055,19 @@ void QMPRExtension::updateControls()
     // Calculem les interseccions
 
     double r[3], t[3], position1[3], position2[3];
+    const double Length = 2000.0;
 
     // Projecció sagital sobre axial i viceversa
     MathTools::planeIntersection(m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(),  m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
     MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
-    position1[0] = r[0] - t[0]*2000;
-    position1[1] = r[1] - t[1]*2000;
-    position1[2] = r[2] - t[2]*2000;
+    position1[0] = r[0] - t[0] * Length;
+    position1[1] = r[1] - t[1] * Length;
+    position1[2] = r[2] - t[2] * Length;
 
-    position2[0] = r[0] + t[0]*2000;
-    position2[1] = r[1] + t[1]*2000;
-    position2[2] = r[2] + t[2]*2000;
+    position2[0] = r[0] + t[0] * Length;
+    position2[1] = r[1] + t[1] * Length;
+    position2[2] = r[2] + t[2] * Length;
 
     m_sagitalOverAxialAxisActor->SetPosition( position1[0], position1[1]);
     m_sagitalOverAxialAxisActor->SetPosition2(position2[0], position2[1]);
@@ -1081,13 +1082,13 @@ void QMPRExtension::updateControls()
     MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
     MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
-    position1[0] = r[0] - t[0]*2000;
-    position1[1] = r[1] - t[1]*2000;
-    position1[2] = r[2] - t[2]*2000;
+    position1[0] = r[0] - t[0] * Length;
+    position1[1] = r[1] - t[1] * Length;
+    position1[2] = r[2] - t[2] * Length;
 
-    position2[0] = r[0] + t[0]*2000;
-    position2[1] = r[1] + t[1]*2000;
-    position2[2] = r[2] + t[2]*2000;
+    position2[0] = r[0] + t[0] * Length;
+    position2[1] = r[1] + t[1] * Length;
+    position2[2] = r[2] + t[2] * Length;
 
     m_transform->TransformPoint(position1, position1);
     m_transform->TransformPoint(position2, position2);
@@ -1098,13 +1099,13 @@ void QMPRExtension::updateControls()
     MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
     MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
-    position1[0] = r[0] - t[0]*2000;
-    position1[1] = r[1] - t[1]*2000;
-    position1[2] = r[2] - t[2]*2000;
+    position1[0] = r[0] - t[0] * Length;
+    position1[1] = r[1] - t[1] * Length;
+    position1[2] = r[2] - t[2] * Length;
 
-    position2[0] = r[0] + t[0]*2000;
-    position2[1] = r[1] + t[1]*2000;
-    position2[2] = r[2] + t[2]*2000;
+    position2[0] = r[0] + t[0] * Length;
+    position2[1] = r[1] + t[1] * Length;
+    position2[2] = r[2] + t[2] * Length;
 
     m_transform->TransformPoint(position1, position1);
     m_transform->TransformPoint(position2, position2);
@@ -1115,13 +1116,13 @@ void QMPRExtension::updateControls()
     MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
     MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
-    position1[0] = r[0] - t[0]*2000;
-    position1[1] = r[1] - t[1]*2000;
-    position1[2] = r[2] - t[2]*2000;
+    position1[0] = r[0] - t[0] * Length;
+    position1[1] = r[1] - t[1] * Length;
+    position1[2] = r[2] - t[2] * Length;
 
-    position2[0] = r[0] + t[0]*2000;
-    position2[1] = r[1] + t[1]*2000;
-    position2[2] = r[2] + t[2]*2000;
+    position2[0] = r[0] + t[0] * Length;
+    position2[1] = r[1] + t[1] * Length;
+    position2[2] = r[2] + t[2] * Length;
 
     m_coronalOverAxialIntersectionAxis->SetPosition( position1[0], position1[1]);
     m_coronalOverAxialIntersectionAxis->SetPosition2(position2[0], position2[1]);
@@ -1130,13 +1131,13 @@ void QMPRExtension::updateControls()
     MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
     MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
-    position1[0] = r[0] - t[0]*2000;
-    position1[1] = r[1] - t[1]*2000;
-    position1[2] = r[2] - t[2]*2000;
+    position1[0] = r[0] - t[0] * Length;
+    position1[1] = r[1] - t[1] * Length;
+    position1[2] = r[2] - t[2] * Length;
 
-    position2[0] = r[0] + t[0]*2000;
-    position2[1] = r[1] + t[1]*2000;
-    position2[2] = r[2] + t[2]*2000;
+    position2[0] = r[0] + t[0] * Length;
+    position2[1] = r[1] + t[1] * Length;
+    position2[2] = r[2] + t[2] * Length;
 
     m_thickSlabOverAxialActor->SetPosition(position1[0], position1[1]);
     m_thickSlabOverAxialActor->SetPosition2(position2[0], position2[1]);
