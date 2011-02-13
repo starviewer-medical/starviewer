@@ -59,6 +59,11 @@ int VolumePixelDataReaderITKGDCM::read(const QStringList &filenames)
     return errorCode;
 }
 
+void VolumePixelDataReaderITKGDCM::requestAbort()
+{
+    m_seriesReader->AbortGenerateDataOn();
+}
+
 int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames)
 {
     // Convertim la QStringList al format std::vector<std::string> que s'esperen les itk
@@ -73,6 +78,10 @@ int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames
     try
     {
         m_seriesReader->Update();
+    }
+    catch (itk::ProcessAborted)
+    {
+        errorCode = ReadAborted;
     }
     catch (itk::ExceptionObject & e)
     {
@@ -120,6 +129,10 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
     try
     {
         reader->Update();
+    }
+    catch (itk::ProcessAborted)
+    {
+        errorCode = ReadAborted;
     }
     catch (itk::ExceptionObject & e)
     {

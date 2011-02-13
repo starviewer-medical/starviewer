@@ -24,7 +24,12 @@ public:
 
     /// Llegeix un Volume sense mostrar cap diàleg d'error
     /// TODO: S'hauria d'eliminar i fusionar amb read, ja que no s'hauria de mostrar cap error de tan avall
+    /// TODO: Fer que es retornin tipus d'errors i no com ara, que només es retorna true o false i així treure responsabilitat d'ui als readers
     bool readWithoutShowingError(Volume *volume);
+
+    /// Demana que s'aborti el procés iniciat amb read() o readWithoutShowingError() de lectura d'un Volume
+    /// Si no s'ha iniciat cap procés de lectura, no farà res. Un cop cridat la lectura retornarà amb error.
+    void requestAbort();
 
     /// Mostra per pantalla un message box informant de l'error que s'ha produit al llegir el volum.
     /// Si no s'ha produit cap error, no fa res.

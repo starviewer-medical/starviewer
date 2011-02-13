@@ -26,6 +26,7 @@ VolumePixelDataReaderVTKGDCM::VolumePixelDataReaderVTKGDCM(QObject *parent)
     // Pel progress de vtk
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT(slotProgress()));
+    m_abortRequested = false;
 }
 
 VolumePixelDataReaderVTKGDCM::~VolumePixelDataReaderVTKGDCM()
@@ -34,9 +35,16 @@ VolumePixelDataReaderVTKGDCM::~VolumePixelDataReaderVTKGDCM()
     m_vtkQtConnections->Delete();
 }
 
+void VolumePixelDataReaderVTKGDCM::requestAbort()
+{
+    m_abortRequested = true;
+    m_vtkGDCMReader->AbortExecuteOn();
+}
+
 int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
 {
     int errorCode = NoError;
+    m_abortRequested = false;
 
     if (filenames.isEmpty())
     {
@@ -78,6 +86,12 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
         DEBUG_LOG("An exception was throwed while reading with vtkGDCMImageReader");
         WARN_LOG("An exception was throwed while reading with vtkGDCMImageReader");
         errorCode = UnknownError;
+    }
+
+    // Vtk no retorna cap error al fer un request d'abort i deixa les dades a mig fer, per tant, ho hem de marcar manualment.
+    if (m_abortRequested)
+    {
+        errorCode = ReadAborted;
     }
 
     printDebugInfo();

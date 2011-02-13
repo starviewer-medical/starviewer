@@ -25,6 +25,8 @@ public:
 
     int read(const QStringList &filenames);
 
+    virtual void requestAbort();
+
 private:
     /// Mètode destinat a llegir quan tenim més d'un arxiu
     /// @param filenames Llistat d'arxius a llegir
