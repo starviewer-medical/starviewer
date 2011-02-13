@@ -50,8 +50,8 @@ public:
     /// Ens retorna un volum del repositori amb l'identificador que especifiquem.
     Volume *getVolume(Identifier id);
     
-    /// Elimina un model del repositori
-    void removeVolume(Identifier id);
+    /// Esborra un Volume de memòria i el treu del repositori
+    void deleteVolume(Identifier id);
 
     /// Retorna el nombre de volums que hi ha al repositori
     int getNumberOfVolumes();
