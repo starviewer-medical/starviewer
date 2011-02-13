@@ -20,4 +20,10 @@ ExtensionMediator::~ExtensionMediator()
 {
 }
 
+bool ExtensionMediator::reinitializeExtension(QWidget* extension)
+{
+    Q_UNUSED(extension);
+    return true;
+}
+
 };
