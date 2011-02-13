@@ -51,7 +51,7 @@ int VolumePixelDataReaderVTKGDCM::read(const QStringList &filenames)
     if (filenames.size() > 1)
     {
         vtkStringArray *stringArray = vtkStringArray::New();
-        for (unsigned int i = 0; i < filenames.size(); i++)
+        for (int i = 0; i < filenames.size(); i++)
         {
             stringArray->InsertNextValue(filenames.at(i).toStdString());
         }

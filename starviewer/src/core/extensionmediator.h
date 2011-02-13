@@ -51,7 +51,7 @@ public:
      * TODO aquest mètode hauria de ser temporal i ser re-emplaçat el més aviat possible quan la funció que implementa 
      * quedi coberta per una altra via.
      */
-    virtual bool reinitializeExtension(QWidget* extension){ return true; };
+    virtual bool reinitializeExtension(QWidget* extension);
 
     /**
      * Retorna l'identificador de la classe Extension amb qui dialoga.
