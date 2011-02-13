@@ -33,7 +33,7 @@ Volume* VolumeRepository::getVolume(Identifier id)
     return this->getItem(id);
 }
 
-void VolumeRepository::removeVolume(Identifier id)
+void VolumeRepository::deleteVolume(Identifier id)
 {
     // l'obtenim
     Volume *volume = this->getVolume(id);

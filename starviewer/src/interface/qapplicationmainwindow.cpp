@@ -460,7 +460,7 @@ void QApplicationMainWindow::killBill()
             {
                 foreach (Identifier id, series->getVolumesIDList())
                 {
-                    VolumeRepository::getRepository()->removeVolume(id);
+                    VolumeRepository::getRepository()->deleteVolume(id);
                 }
             }
         }
