@@ -38,12 +38,6 @@ public slots:
     bool request( const QString &who );
 
     /**
-     * Elimina totes les extensions que contingui el workspace i allibera la memòria que
-     * ocupa el pacient actual (principalment,els volums del repositori)
-     */
-    void killBill();
-
-    /**
      * Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.
      */
     void openDefaultExtension();

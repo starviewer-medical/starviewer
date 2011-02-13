@@ -90,6 +90,10 @@ private:
     /// Crea una acció per canviar d'idioma passant l'idioma (ex. Catalan) i el locale al que s'ha de canviar (ex. ca_ES)
     QAction *createLanguageAction(const QString &language, const QString &locale);
 
+    /// Elimina totes les extensions que contingui el workspace i elimina els volums del pacient actual
+    /// TODO: Cal que s'hi esborrin les dades de Patient, Study, Series, etc. també.
+    void killBill();
+
     /// Llegeix la configuració inicial amb la que engega el programa
     void readSettings();
 

@@ -27,6 +27,7 @@
 #include "applicationversionchecker.h"
 #include "screenmanager.h"
 #include "qscreendistribution.h"
+#include "volumerepository.h"
 
 #include <QDebug>
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
@@ -152,7 +153,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 QApplicationMainWindow::~QApplicationMainWindow()
 {
     writeSettings();
-    m_extensionHandler->killBill();
+    this->killBill();
     delete m_extensionWorkspace;
     delete m_extensionHandler;
 }
@@ -445,6 +446,27 @@ QAction *QApplicationMainWindow::createLanguageAction(const QString &language, c
     return action;
 }
 
+void QApplicationMainWindow::killBill()
+{
+    // eliminem totes les extensions
+    this->getExtensionWorkspace()->killThemAll();
+    // TODO descarregar tots els volums que tingui el pacient en aquesta finestra
+    // quan ens destruim alliberem tots els volums que hi hagi a memòria
+    if (this->getCurrentPatient() != NULL)
+    {
+        foreach (Study *study, this->getCurrentPatient()->getStudies())
+        {
+            foreach (Series *series, study->getSeries())
+            {
+                foreach (Identifier id, series->getVolumesIDList())
+                {
+                    VolumeRepository::getRepository()->removeVolume(id);
+                }
+            }
+        }
+    }
+}
+
 void QApplicationMainWindow::switchToLanguage(QString locale)
 {
     Settings settings;
@@ -477,7 +499,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
     if (this->getCurrentPatient())
     {
         // primer ens carreguem el pacient
-        m_extensionHandler->killBill();
+        this->killBill();
         delete m_patient;
         m_patient = NULL;
         DEBUG_LOG("Ja teníem un pacient, l'esborrem.");
