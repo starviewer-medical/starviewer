@@ -2,10 +2,13 @@
 #define UDGVOLUMEREADERJOB_H
 
 #include <ThreadWeaver/Job>
+#include <QWeakPointer>
+#include <QMutex>
 
 namespace udg {
 
 class Volume;
+class VolumeReader;
 
 /**
     Classe que s'encarrega de llegir el pixel data d'un Volume en forma de job de ThreadWeaver, és a dir
@@ -21,7 +24,11 @@ public:
     VolumeReaderJob(Volume *volume, QObject *parent = 0);
     virtual ~VolumeReaderJob();
 
-    /// Ens indica si el volume s'ha llegit correctament
+    /// Ens permet demanar, de manera asíncrona, que es cancel·li el job.
+    /// El mètode retornarà inmediatament però el job no es cancel·larà fins al cap d'una estona.
+    virtual void requestAbort();
+
+    /// Ens indica si el volume s'ha llegit correctament. Si es fa un request abort, es retornarà que no s'ha llegit correctament.
     bool success() const;
 
     /// Indica si un cop executat el job, després del run, el job s'ha d'autoesborrar o és responsabilitat de qui crea el job.
@@ -56,8 +63,19 @@ private:
     bool m_volumeReadSuccessfully;
     QString m_lastErrorMessageToUser;
 
+    /// Ens indica si s'ha fet o no un requestAbort
+    bool m_abortRequested;
+
     /// Ens indica si hem de fer un autoDelete al acabar el job
     bool m_autoDelete;
+
+    /// Referència al volume reader per poder fer un requestAbort. Només serà vàlid mentre s'estigui executant "run()", a fora d'aquest no ho serà.
+    /// Nota: no es pot fer el volumeReader membre de la classe ja que aquest crea objectes de Qt fills de "this" i this apuntaria a threads diferents
+    /// (un a apuntaria al de gui, per ser crear al constructor, i els altres al del thread de threadweaver, per ser creats al run()).
+    QWeakPointer<VolumeReader> m_volumeReaderToAbort;
+
+    /// Mutex per protegir els canvis de referència a m_volumeReaderToAbort en escenaris de multithreading.
+    QMutex m_volumeReaderToAbortMutex;
 };
 
 } // End namespace udg
