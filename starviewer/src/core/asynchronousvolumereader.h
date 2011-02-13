@@ -31,6 +31,10 @@ public:
     /// Retorna un VolumeReaderJob per tal de poder saber quan és que aquest estarà carregat.
     VolumeReaderJob* read(Volume *volume);
 
+    /// Cancel·la la càrrega de volume i, un cop cancel·lada, esborra volume.
+    /// Si volume no s'està carregant, l'esborrarà directament.
+    void cancelLoadingAndDeleteVolume(Volume *volume);
+
 private slots:
     /// Marca el volume del job que se li passa conforme ja està carregat
     void unmarkVolumeFromJobAsLoading(ThreadWeaver::Job* job);
@@ -47,6 +51,9 @@ private:
 
     /// Ens retorna la instància de Weaver que hem de fer servir per treballar amb els jobs
     ThreadWeaver::Weaver* getWeaverInstance() const;
+
+    /// Ens retorna el VolumeReaderJob del Volume que se li passi, si aquest té un job assignat que l'està llegint. Si no, retornarà null.
+    VolumeReaderJob* getVolumeReaderJob(Volume *volume) const;
 
 private:
     /// Llista dels volums que s'estan carregant
