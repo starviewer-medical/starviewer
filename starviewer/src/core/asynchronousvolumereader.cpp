@@ -33,7 +33,7 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     this->markVolumeAsLoadingByJob(volume, volumeReaderJob);
 
     // TODO Permetre escollir quants jobs alhora volem
-    ThreadWeaver::Weaver *weaver = ThreadWeaver::Weaver::instance();
+    ThreadWeaver::Weaver *weaver = this->getWeaverInstance();
     weaver->enqueue(volumeReaderJob);
 
     // Per activar debug de ThreadWeaver
@@ -69,6 +69,12 @@ void AsynchronousVolumeReader::unmarkVolumeAsLoading(Volume *volume)
 {
     DEBUG_LOG(QString("unmarkVolumeAsLoading:  %1").arg(volume->getIdentifier().getValue()));
     m_volumesLoading.remove(volume->getIdentifier().getValue());
+}
+
+ThreadWeaver::Weaver* AsynchronousVolumeReader::getWeaverInstance() const
+{
+    // TODO De moment es retorna la instància global, caldria permetre passar-la com a paràmetre.
+    return ThreadWeaver::Weaver::instance();
 }
 
 } // End namespace udg

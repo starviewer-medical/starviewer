@@ -6,6 +6,7 @@
 
 namespace ThreadWeaver {
 class Job;
+class Weaver;
 }
 
 namespace udg {
@@ -43,6 +44,9 @@ private:
 
     /// Desmarca el volume que se li passa conforme ja no s'està carregant.
     void unmarkVolumeAsLoading(Volume *volume);
+
+    /// Ens retorna la instància de Weaver que hem de fer servir per treballar amb els jobs
+    ThreadWeaver::Weaver* getWeaverInstance() const;
 
 private:
     /// Llista dels volums que s'estan carregant
