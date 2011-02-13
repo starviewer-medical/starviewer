@@ -34,6 +34,7 @@ Volume::Volume(QObject *parent)
 
 Volume::~Volume()
 {
+    DEBUG_LOG(QString("Destructor ~Volume %1, name: %2").arg(m_identifier.getValue()).arg(this->objectName()));
     delete m_volumePixelData;
 }
 
