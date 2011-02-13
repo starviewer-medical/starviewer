@@ -188,6 +188,9 @@ private:
 
     /// Els plans de tall per cada vista (més el thickSlab)
     vtkPlaneSource *m_sagitalPlaneSource, *m_coronalPlaneSource, *m_axialPlaneSource, *m_thickSlabPlaneSource;
+
+    /// Translació necessària per dibuixar les interseccions dels plans a la vista sagital
+    double m_sagitalTranslation[3];
     
     /// Conjunt de tools disponibles en aquesta extensió
     QStringList m_extensionToolsList;
