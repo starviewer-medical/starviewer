@@ -1274,6 +1274,8 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
 
     reslice->SetResliceAxes(resliceAxes);
 
+    resliceAxes->Delete();
+
     double spacingX = fabs(planeAxis1[0]*spacing[0])+\
                     fabs(planeAxis1[1]*spacing[1])+\
                     fabs(planeAxis1[2]*spacing[2]);
