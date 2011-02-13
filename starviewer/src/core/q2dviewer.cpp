@@ -668,7 +668,7 @@ void Q2DViewer::cancelCurrentVolumeReaderJob()
 {
     // TODO: Aquí s'hauria de cancel·lar realment el current job. De moment no podem fer-ho i simplement el desconnectem
     // Quan es faci bé, tenir en compte què passa si algun altre visor el vol continuar descarregant igualment i nosaltres aquí el cancelem?
-    if (m_volumeReaderJob != NULL)
+    if (!m_volumeReaderJob.isNull())
     {
         disconnect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), this, SLOT(volumeReaderJobFinished()));
         disconnect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
@@ -701,7 +701,6 @@ void Q2DViewer::volumeReaderJobFinished()
         this->setNewVolume(m_volumeReaderJob->getVolume());
         this->setViewerStatus(VisualizingVolume);
         this->executeInputFinishedCommand();
-        m_volumeReaderJob = NULL;
     }
     else
     {

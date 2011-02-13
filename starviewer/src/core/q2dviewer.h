@@ -8,6 +8,9 @@
 #define UDGQ2DVIEWER_H
 
 #include "qviewer.h"
+
+#include <QPointer>
+
 // Fordward declarations
 // vtk
 class vtkPropPicker;
@@ -518,7 +521,8 @@ private:
     /// Llista d'excepcions per les quals no s'ha d'aplicar una orientació concreta per estudis de mamografia.
     QStringList m_mammographyAutoOrientationExceptions;
 
-    VolumeReaderJob *m_volumeReaderJob;
+    /// El job no ens pertany, per això ho guardem en un QPointer
+    QPointer<VolumeReaderJob> m_volumeReaderJob;
 
     QViewerCommand *m_inputFinishedCommand;
 
