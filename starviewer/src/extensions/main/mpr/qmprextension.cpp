@@ -1058,6 +1058,7 @@ void QMPRExtension::updateControls()
 
     // Projecció sagital sobre axial i viceversa
     MathTools::planeIntersection(m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(),  m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
+    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
     position1[0] = r[0] - t[0]*2000;
     position1[1] = r[1] - t[1]*2000;
@@ -1078,6 +1079,7 @@ void QMPRExtension::updateControls()
     // Projecció coronal sobre sagital
 
     MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
+    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
     position1[0] = r[0] - t[0]*2000;
     position1[1] = r[1] - t[1]*2000;
@@ -1094,6 +1096,7 @@ void QMPRExtension::updateControls()
 
     // Projecció thick slab sobre sagital
     MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
+    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
     position1[0] = r[0] - t[0]*2000;
     position1[1] = r[1] - t[1]*2000;
@@ -1110,6 +1113,7 @@ void QMPRExtension::updateControls()
 
     // Projecció coronal sobre axial
     MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
+    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
     position1[0] = r[0] - t[0]*2000;
     position1[1] = r[1] - t[1]*2000;
@@ -1124,6 +1128,7 @@ void QMPRExtension::updateControls()
 
     // Projecció thick slab sobre axial
     MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
+    MathTools::normalize(t);    // normalitzem t per que sempre tinguem la mateixa llargada (1)
 
     position1[0] = r[0] - t[0]*2000;
     position1[1] = r[1] - t[1]*2000;
