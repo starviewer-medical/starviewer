@@ -20,6 +20,8 @@ public:
 
     int read(const QStringList &filenames);
 
+    virtual void requestAbort();
+
 private:
     /// Un cop llegides les dades, les processa segons l'espai de color 
     /// en que estiguin definides i les assigna l'objecte vtkImageData
@@ -37,6 +39,8 @@ private:
     // Lector vtkGDCM + progress
     vtkGDCMImageReader *m_vtkGDCMReader;
     vtkEventQtSlotConnect *m_vtkQtConnections;
+    // Ens serveix per saber si s'ha demanat un abort, ja que vtk no retorna cap informacio al respecte
+    bool m_abortRequested;
 };
 
 } // End namespace udg

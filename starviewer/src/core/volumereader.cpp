@@ -72,6 +72,11 @@ bool VolumeReader::readWithoutShowingError(Volume *volume)
     return m_lastError == VolumePixelDataReader::NoError;
 }
 
+void VolumeReader::requestAbort()
+{
+    m_volumePixelDataReader->requestAbort();
+}
+
 void VolumeReader::showMessageBoxWithLastError() const
 {
     if (m_lastError == VolumePixelDataReader::NoError)
@@ -108,6 +113,8 @@ QString VolumeReader::getLastErrorMessageToUser() const
                       "system may solve the problem.").arg(ApplicationNameString);
         case VolumePixelDataReader::MissingFile:
             return tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString);
+        case VolumePixelDataReader::ReadAborted:
+            return tr("The loading of the data have been aborted.");
         case VolumePixelDataReader::UnknownError:
             return tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString);
         case VolumePixelDataReader::NoError:
