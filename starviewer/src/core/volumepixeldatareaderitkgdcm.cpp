@@ -81,6 +81,10 @@ int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames
         // Llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage(QString(e.GetDescription()) );
     }
+    catch (std::bad_alloc)
+    {
+        errorCode = OutOfMemory;
+    }
 
     switch (errorCode)
     {
