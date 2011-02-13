@@ -683,8 +683,8 @@ void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
     // TODO Esborrar volumeReader!!
     AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
     m_volumeReaderJob = volumeReader->read(volume);
-    connect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(volumeReaderJobFinished()), Qt::QueuedConnection);
-    connect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)), Qt::QueuedConnection);
+    connect(m_volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(volumeReaderJobFinished()));
+    connect(m_volumeReaderJob, SIGNAL(progress(int)), m_workInProgressWidget, SLOT(updateProgress(int)));
 
     // TODO: De moment no tenim cap més remei que especificar un volume fals. La resta del viewer (i els que en depenen) s'esperen
     // tenir un volum carregat després de cridar a setInput.
