@@ -11,10 +11,10 @@
 #include "repository.h"
 #include "volume.h"
 #include "identifier.h"
+
 #include <QObject>
 
 namespace udg {
-
 
 /**
     Aquesta classe és el repositori de volums. En aquesta classe es guarden tots els volums que hi ha oberts durant
@@ -43,40 +43,38 @@ class VolumeRepository : public Repository<Volume>
 Q_OBJECT
 public:
 
-    /**
-        Afegeix un volum al repositori.
-        Ens retorna l'id del volum afegit per poder-lo obtenir més endavant.
-    */    
-    Identifier addVolume( Volume *model ); 
+    /// Afegeix un volum al repositori.
+    /// Ens retorna l'id del volum afegit per poder-lo obtenir més endavant.
+    Identifier addVolume(Volume *model);
     
     /// Ens retorna un volum del repositori amb l'identificador que especifiquem.
-    Volume *getVolume( Identifier id );
+    Volume *getVolume(Identifier id);
     
     /// Elimina un model del repositori
-    void removeVolume( Identifier id );
+    void removeVolume(Identifier id);
 
     /// Retorna el nombre de volums que hi ha al repositori
     int getNumberOfVolumes();
     
     /// Ens retorna l'única instància del repositori.
     static VolumeRepository* getRepository()
-    {   
+    {
         static VolumeRepository repository;
         return &repository;
     }
 
     /// El destructor allibera l'espai ocupat pels volums
     ~VolumeRepository(){};
-    
+
 signals:
-    void itemAdded( Identifier id );
-    void itemRemoved( Identifier id );
-            
+    void itemAdded(Identifier id);
+    void itemRemoved(Identifier id);
+
 private:
     /// ha de quedar amagat perquè no poguem crear instàncies
-    VolumeRepository();                 
+    VolumeRepository();
 };
 
-};  
+}
 
 #endif
