@@ -12,6 +12,8 @@ VolumeReaderJob::VolumeReaderJob(Volume *volume, QObject *parent)
     m_volumeToRead = volume;
     m_volumeReadSuccessfully = false;
     m_lastErrorMessageToUser = "";
+
+    connect(this, SIGNAL(done(ThreadWeaver::Job*)), SLOT(autoDelete()));
 }
 
 VolumeReaderJob::~VolumeReaderJob()
@@ -21,6 +23,16 @@ VolumeReaderJob::~VolumeReaderJob()
 bool VolumeReaderJob::success() const
 {
     return m_volumeReadSuccessfully;
+}
+
+void VolumeReaderJob::setAutoDelete(bool autoDelete)
+{
+    m_autoDelete = autoDelete;
+}
+
+bool VolumeReaderJob::getAutoDelete() const
+{
+    return m_autoDelete;
 }
 
 QString VolumeReaderJob::getLastErrorMessageToUser() const
@@ -45,10 +57,16 @@ void VolumeReaderJob::run()
     connect(volumeReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
     m_volumeReadSuccessfully = volumeReader->readWithoutShowingError(m_volumeToRead);
     m_lastErrorMessageToUser = volumeReader->getLastErrorMessageToUser();
-
+    DEBUG_LOG(QString("End VolumeReaderJob::run() with Volume: %1 and result %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_volumeReadSuccessfully));
     delete volumeReader;
+}
 
-    DEBUG_LOG(QString("End run VolumeReaderJob with Volume: %1 and result %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_volumeReadSuccessfully));
+void VolumeReaderJob::autoDelete()
+{
+    if (m_autoDelete)
+    {
+        this->deleteLater();
+    }
 }
 
 } // End namespace udg
