@@ -18,11 +18,11 @@ AsynchronousVolumeReader::AsynchronousVolumeReader(QObject *parent)
 
 VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
 {
-    DEBUG_LOG(QString("Read volume: %1").arg(volume->getIdentifier().getValue()));
+    DEBUG_LOG(QString("AsynchronousVolumeReader::read Begin volume: %1").arg(volume->getIdentifier().getValue()));
 
     if (this->isVolumeLoading(volume))
     {
-        DEBUG_LOG(QString("Volume already loading: %1").arg(volume->getIdentifier().getValue()));
+        DEBUG_LOG(QString("AsynchronousVolumeReader::read Volume already loading: %1").arg(volume->getIdentifier().getValue()));
 
         return this->getVolumeReaderJob(volume);
     }
@@ -35,9 +35,6 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     // TODO Permetre escollir quants jobs alhora volem
     ThreadWeaver::Weaver *weaver = this->getWeaverInstance();
     weaver->enqueue(volumeReaderJob);
-
-    // Per activar debug de ThreadWeaver
-    //ThreadWeaver::setDebugLevel(true, 4);
 
     return volumeReaderJob;
 }
@@ -63,6 +60,7 @@ void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
 {
     if (this->isVolumeLoading(volume))
     {
+        DEBUG_LOG(QString("Volume %1 isLoading, trying dequeue").arg(volume->getIdentifier().getValue()));
         VolumeReaderJob *job = this->getVolumeReaderJob(volume);
         ThreadWeaver::Weaver *weaver = this->getWeaverInstance();
         if (weaver->dequeue(job))
@@ -71,6 +69,7 @@ void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
         }
         else
         {
+            DEBUG_LOG(QString("Volume %1 cannot be dequeued, requesting abort and delete").arg(volume->getIdentifier().getValue()));
             connect(job, SIGNAL(done(ThreadWeaver::Job*)), volume, SLOT(deleteLater()));
             job->requestAbort();
         }
@@ -83,13 +82,13 @@ void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
 
 void AsynchronousVolumeReader::markVolumeAsLoadingByJob(Volume *volume, VolumeReaderJob *volumeReaderJob)
 {
-    DEBUG_LOG(QString("markVolumeAsLoading: %1").arg(volume->getIdentifier().getValue()));
+    DEBUG_LOG(QString("markVolumeAsLoading: Volume %1").arg(volume->getIdentifier().getValue()));
     m_volumesLoading.insert(volume->getIdentifier().getValue(), volumeReaderJob);
 }
 
 void AsynchronousVolumeReader::unmarkVolumeAsLoading(Volume *volume)
 {
-    DEBUG_LOG(QString("unmarkVolumeAsLoading:  %1").arg(volume->getIdentifier().getValue()));
+    DEBUG_LOG(QString("unmarkVolumeAsLoading: Volume %1").arg(volume->getIdentifier().getValue()));
     m_volumesLoading.remove(volume->getIdentifier().getValue());
 }
 

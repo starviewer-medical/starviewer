@@ -19,6 +19,7 @@ VolumeReaderJob::VolumeReaderJob(Volume *volume, QObject *parent)
 
 VolumeReaderJob::~VolumeReaderJob()
 {
+    DEBUG_LOG(QString("Destructor ~VolumeReaderJob pel Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
 }
 
 void VolumeReaderJob::requestAbort()
@@ -31,9 +32,8 @@ void VolumeReaderJob::requestAbort()
     if (!m_volumeReaderToAbort.isNull())
     {
         m_volumeReaderToAbort.data()->requestAbort();
+        DEBUG_LOG(QString("requestAbort to Volume: %1 done").arg(m_volumeToRead->getIdentifier().getValue()));
     }
-
-    DEBUG_LOG(QString("requestAbort pel Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
 }
 
 bool VolumeReaderJob::success() const
@@ -65,7 +65,7 @@ void VolumeReaderJob::run()
 {
     Q_ASSERT(m_volumeToRead);
 
-    DEBUG_LOG(QString("Begin run VolumeReaderJob with Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
+    DEBUG_LOG(QString("VolumeReaderJob::run() with Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
 
     VolumeReader *volumeReader = new VolumeReader();
 
@@ -88,10 +88,15 @@ void VolumeReaderJob::run()
     }
 
     DEBUG_LOG(QString("End VolumeReaderJob::run() with Volume: %1 and result %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_volumeReadSuccessfully));
+    if (!m_volumeReadSuccessfully)
+    {
+        DEBUG_LOG(QString("                          Error Volume: %1: %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_lastErrorMessageToUser));
+    }
 }
 
 void VolumeReaderJob::autoDelete()
 {
+    DEBUG_LOG(QString("VolumeReaderJob::autoDelete() with Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
     if (m_autoDelete)
     {
         this->deleteLater();

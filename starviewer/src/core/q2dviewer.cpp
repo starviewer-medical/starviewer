@@ -617,6 +617,7 @@ void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFini
     {
         return;
     }
+    DEBUG_LOG(QString("Q2DViewer::setInputAsynchronously to Volume %1").arg(volume->getIdentifier().getValue()));
 
     this->cancelCurrentVolumeReaderJob();
     this->setInputFinishedCommand(inputFinishedCommand);
@@ -713,6 +714,7 @@ Volume* Q2DViewer::getDummyVolumeFromVolume(Volume *volume)
 {
     // TODO: Estem perdent memòria durant la vida del 2dviewer, caldria esborrar el dummy d'abans
     Volume *newVolume = new Volume(this);
+    newVolume->setObjectName("Dummy Volume");
     newVolume->setImages(volume->getImages());
     newVolume->convertToNeutralVolume();
 
