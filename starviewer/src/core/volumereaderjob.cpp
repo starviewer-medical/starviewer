@@ -56,12 +56,10 @@ QString VolumeReaderJob::getLastErrorMessageToUser() const
     return m_lastErrorMessageToUser;
 }
 
-
 Volume* VolumeReaderJob::getVolume() const
 {
     return m_volumeToRead;
 }
-
 
 void VolumeReaderJob::run()
 {
