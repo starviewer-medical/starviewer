@@ -11,6 +11,7 @@
 #include "volumerepository.h"
 #include "volume.h"
 #include "logging.h"
+#include "asynchronousvolumereader.h"
 
 namespace udg {
 
@@ -39,8 +40,10 @@ void VolumeRepository::deleteVolume(Identifier id)
     Volume *volume = this->getVolume(id);
     // el treiem de la llista
     this->removeItem(id);
+
     // i l'eliminem
-    delete volume;
+    AsynchronousVolumeReader volumeReader;
+    volumeReader.cancelLoadingAndDeleteVolume(volume);
 
     emit itemRemoved(id);
     INFO_LOG("S'ha esborrat del repositori el volum amb id: " + QString::number(id.getValue()));

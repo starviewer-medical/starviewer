@@ -24,7 +24,7 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     {
         DEBUG_LOG(QString("Volume already loading: %1").arg(volume->getIdentifier().getValue()));
 
-        return m_volumesLoading.value(volume->getIdentifier().getValue());
+        return this->getVolumeReaderJob(volume);
     }
 
     VolumeReaderJob *volumeReaderJob = new VolumeReaderJob(volume);
@@ -59,6 +59,28 @@ bool AsynchronousVolumeReader::isVolumeLoading(Volume *volume) const
     return m_volumesLoading.contains(volume->getIdentifier().getValue());
 }
 
+void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
+{
+    if (this->isVolumeLoading(volume))
+    {
+        VolumeReaderJob *job = this->getVolumeReaderJob(volume);
+        ThreadWeaver::Weaver *weaver = this->getWeaverInstance();
+        if (weaver->dequeue(job))
+        {
+            delete volume;
+        }
+        else
+        {
+            connect(job, SIGNAL(done(ThreadWeaver::Job*)), volume, SLOT(deleteLater()));
+            job->requestAbort();
+        }
+    }
+    else
+    {
+        delete volume;
+    }
+}
+
 void AsynchronousVolumeReader::markVolumeAsLoadingByJob(Volume *volume, VolumeReaderJob *volumeReaderJob)
 {
     DEBUG_LOG(QString("markVolumeAsLoading: %1").arg(volume->getIdentifier().getValue()));
@@ -75,6 +97,18 @@ ThreadWeaver::Weaver* AsynchronousVolumeReader::getWeaverInstance() const
 {
     // TODO De moment es retorna la instància global, caldria permetre passar-la com a paràmetre.
     return ThreadWeaver::Weaver::instance();
+}
+
+VolumeReaderJob* AsynchronousVolumeReader::getVolumeReaderJob(Volume *volume) const
+{
+    if (this->isVolumeLoading(volume))
+    {
+        return m_volumesLoading.value(volume->getIdentifier().getValue());
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 } // End namespace udg
