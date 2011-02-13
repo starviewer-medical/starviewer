@@ -701,8 +701,6 @@ void Q2DViewer::volumeReaderJobFinished()
         this->setNewVolume(m_volumeReaderJob->getVolume());
         this->setViewerStatus(VisualizingVolume);
         this->executeInputFinishedCommand();
-
-        m_volumeReaderJob->deleteLater();
         m_volumeReaderJob = NULL;
     }
     else
