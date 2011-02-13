@@ -897,24 +897,29 @@ void QMPRExtension::initOrientation()
 
     // YZ, x-normal : vista sagital
     // Estem ajustant la mida del pla a les dimensions d'aquesta orientació
-    // TODO Podríem donar unes mides a cada punt que fossin suficientment grans com per poder mostrejar qualssevol orientació en el volum, potser fent una bounding box o simplement d'una forma més "bruta" doblant la longitud d'aquest pla :P
-    m_sagitalPlaneSource->SetOrigin(xbounds[0], ybounds[0], zbounds[1]);
-    m_sagitalPlaneSource->SetPoint1(xbounds[0], ybounds[1], zbounds[1]);
-    m_sagitalPlaneSource->SetPoint2(xbounds[0], ybounds[0], zbounds[0]);
+    // La mida de la Y inicial, que serà una combinació d'X i Y durant l'execució, ha de ser la diagonal del pla XY. Ampliarem la meitat a cada banda sobre la mida d'Y.
+    // Atenció: estem assumint que xbounds[0] = 0. La forma correcta seria (xbounds[1] - xbounds[0] (+1?)). El mateix per y.
+    double xyDiagonal = sqrt(xbounds[1] * xbounds[1] + ybounds[1] * ybounds[1]);
+    double halfDeltaY = (xyDiagonal - ybounds[1]) * 0.5;
+    m_sagitalPlaneSource->SetOrigin(xbounds[0], ybounds[0] - halfDeltaY, zbounds[1]);
+    m_sagitalPlaneSource->SetPoint1(xbounds[0], ybounds[1] + halfDeltaY, zbounds[1]);
+    m_sagitalPlaneSource->SetPoint2(xbounds[0], ybounds[0] - halfDeltaY, zbounds[0]);
     m_sagitalPlaneSource->Push(-0.5 * (xbounds[1] - xbounds[0]));
+    // Calculem la translació necessària per dibuixar les interseccions dels plans a la vista sagital
+    m_sagitalTranslation[0] = m_sagitalPlaneSource->GetCenter()[1] + halfDeltaY;
+    m_sagitalTranslation[1] = -m_sagitalPlaneSource->GetCenter()[2];
+    m_sagitalTranslation[2] = 0.0;
 
     // ZX, y-normal : vista coronal
     // ídem anterior
-    // TODO Comprovar si és correcte aquest ajustament de mides
-    double maxZBound = sqrt(ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1]);
-    double maxXBound = sqrt(ybounds[1]*ybounds[1] + xbounds[1]*xbounds[1]);
-    double diffXBound = maxXBound - xbounds[1];
-    double diffZBound = maxZBound - zbounds[1];
-
-    m_coronalPlaneSource->SetOrigin(xbounds[0] - diffXBound*0.5, ybounds[1], zbounds[1] + diffZBound*0.5);
-    m_coronalPlaneSource->SetPoint1(xbounds[1] + diffXBound*0.5, ybounds[1], zbounds[1] + diffZBound*0.5);
-    m_coronalPlaneSource->SetPoint2(xbounds[0] - diffXBound*0.5, ybounds[1], zbounds[0] - diffZBound*0.5);
-    // Posem en la llesca central
+    // La mida de la X i la Z inicials, que seran una combinació d'X, Y i Z durant l'execució, ha de ser la diagonal del volum. Ampliarem la meitat a cada banda sobre la mida dels eixos X i Z.
+    // Atenció: estem assumint que xbounds[0] = 0. La forma correcta seria (xbounds[1] - xbounds[0] (+1?)). El mateix per y i z.
+    double diagonal = sqrt(xbounds[1] * xbounds[1] + ybounds[1] * ybounds[1] + zbounds[1] * zbounds[1]);
+    double halfDeltaX = (diagonal - xbounds[1]) * 0.5;
+    double halfDeltaZ = (diagonal - zbounds[1]) * 0.5;
+    m_coronalPlaneSource->SetOrigin(xbounds[0] - halfDeltaX, ybounds[1], zbounds[1] + halfDeltaZ);
+    m_coronalPlaneSource->SetPoint1(xbounds[1] + halfDeltaX, ybounds[1], zbounds[1] + halfDeltaZ);
+    m_coronalPlaneSource->SetPoint2(xbounds[0] - halfDeltaX, ybounds[1], zbounds[0] - halfDeltaZ);
     m_coronalPlaneSource->Push(-0.5 * (ybounds[1] - ybounds[0]));
 
     updatePlanes();
@@ -1013,6 +1018,42 @@ void QMPRExtension::updateControls()
     m_thickSlabPlaneSource->SetPoint2(m_coronalPlaneSource->GetPoint2());
     m_thickSlabPlaneSource->Push(m_thickSlab);
 
+    // Calculem la transformació necessària per dibuixar les interseccions dels plans a la vista sagital
+
+    double sagitalPlaneAxis1[3];
+    double sagitalPlaneAxis2[3];
+    double sagitalPlaneNormal[3];
+    double sagitalPlaneCenter[3];
+    sagitalPlaneAxis1[0] = m_sagitalPlaneSource->GetPoint1()[0] - m_sagitalPlaneSource->GetOrigin()[0];
+    sagitalPlaneAxis1[1] = m_sagitalPlaneSource->GetPoint1()[1] - m_sagitalPlaneSource->GetOrigin()[1];
+    sagitalPlaneAxis1[2] = m_sagitalPlaneSource->GetPoint1()[2] - m_sagitalPlaneSource->GetOrigin()[2];
+    MathTools::normalize(sagitalPlaneAxis1);
+    sagitalPlaneAxis2[0] = m_sagitalPlaneSource->GetPoint2()[0] - m_sagitalPlaneSource->GetOrigin()[0];
+    sagitalPlaneAxis2[1] = m_sagitalPlaneSource->GetPoint2()[1] - m_sagitalPlaneSource->GetOrigin()[1];
+    sagitalPlaneAxis2[2] = m_sagitalPlaneSource->GetPoint2()[2] - m_sagitalPlaneSource->GetOrigin()[2];
+    MathTools::normalize(sagitalPlaneAxis2);
+    m_sagitalPlaneSource->GetNormal(sagitalPlaneNormal);
+    m_sagitalPlaneSource->GetCenter(sagitalPlaneCenter);
+
+    vtkMatrix4x4 *sagitalTransformationMatrix = vtkMatrix4x4::New();
+    sagitalTransformationMatrix->Identity();
+
+    for (int i = 0; i < 3; i++)
+    {
+        sagitalTransformationMatrix->SetElement(0, i, sagitalPlaneAxis1[i]);
+        sagitalTransformationMatrix->SetElement(1, i, sagitalPlaneAxis2[i]);
+        sagitalTransformationMatrix->SetElement(2, i, sagitalPlaneNormal[i]);
+    }
+
+    m_transform->Identity();
+    m_transform->Translate(m_sagitalTranslation);
+    m_transform->Concatenate(sagitalTransformationMatrix);
+    m_transform->Translate(-sagitalPlaneCenter[0], -sagitalPlaneCenter[1], -sagitalPlaneCenter[2]);
+
+    sagitalTransformationMatrix->Delete();
+
+    // Calculem les interseccions
+
     double r[3], t[3], position1[3], position2[3];
 
     // Projecció sagital sobre axial i viceversa
@@ -1029,8 +1070,10 @@ void QMPRExtension::updateControls()
     m_sagitalOverAxialAxisActor->SetPosition( position1[0], position1[1]);
     m_sagitalOverAxialAxisActor->SetPosition2(position2[0], position2[1]);
 
-    m_axialOverSagitalIntersectionAxis->SetPosition( position1[1], position1[2]);
-    m_axialOverSagitalIntersectionAxis->SetPosition2(position2[1], position2[2]);
+    m_transform->TransformPoint(position1, position1);
+    m_transform->TransformPoint(position2, position2);
+    m_axialOverSagitalIntersectionAxis->SetPosition(position1[0], -position1[1]);
+    m_axialOverSagitalIntersectionAxis->SetPosition2(position2[0], -position2[1]);
 
     // Projecció coronal sobre sagital
 
@@ -1044,8 +1087,10 @@ void QMPRExtension::updateControls()
     position2[1] = r[1] + t[1]*2000;
     position2[2] = r[2] + t[2]*2000;
 
-    m_coronalOverSagitalIntersectionAxis->SetPosition(position1[1], position1[2]);
-    m_coronalOverSagitalIntersectionAxis->SetPosition2(position2[1], position2[2]);
+    m_transform->TransformPoint(position1, position1);
+    m_transform->TransformPoint(position2, position2);
+    m_coronalOverSagitalIntersectionAxis->SetPosition(position1[0], -position1[1]);
+    m_coronalOverSagitalIntersectionAxis->SetPosition2(position2[0], -position2[1]);
 
     // Projecció thick slab sobre sagital
     MathTools::planeIntersection(m_thickSlabPlaneSource->GetOrigin(), m_thickSlabPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(), m_sagitalPlaneSource->GetNormal(), r, t);
@@ -1058,8 +1103,10 @@ void QMPRExtension::updateControls()
     position2[1] = r[1] + t[1]*2000;
     position2[2] = r[2] + t[2]*2000;
 
-    m_thickSlabOverSagitalActor->SetPosition(position1[1], position1[2]);
-    m_thickSlabOverSagitalActor->SetPosition2(position2[1], position2[2]);
+    m_transform->TransformPoint(position1, position1);
+    m_transform->TransformPoint(position2, position2);
+    m_thickSlabOverSagitalActor->SetPosition(position1[0], -position1[1]);
+    m_thickSlabOverSagitalActor->SetPosition2(position2[0], -position2[1]);
 
     // Projecció coronal sobre axial
     MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), r, t);
