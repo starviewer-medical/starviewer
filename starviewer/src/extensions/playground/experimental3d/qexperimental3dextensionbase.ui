@@ -2294,7 +2294,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>491</width>
+            <width>494</width>
             <height>1074</height>
            </rect>
           </property>
@@ -3315,7 +3315,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>491</width>
+            <width>494</width>
             <height>1074</height>
            </rect>
           </property>
@@ -4235,6 +4235,37 @@
                   </property>
                   <property name="checked">
                    <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_74">
+                <item>
+                 <spacer name="horizontalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="m_transferFunctionOptimizationWeights2DIntensityVolumeCheckBox">
+                  <property name="text">
+                   <string>* Intensity volume</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="m_transferFunctionOptimizationWeights2DGradientCheckBox">
+                  <property name="text">
+                   <string>* Gradient</string>
                   </property>
                  </widget>
                 </item>
