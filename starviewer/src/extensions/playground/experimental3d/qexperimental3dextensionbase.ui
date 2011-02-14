@@ -2294,8 +2294,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>494</width>
-            <height>1074</height>
+            <width>428</width>
+            <height>909</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -4173,19 +4173,6 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSpinBox" name="m_geneticTransferFunctionFromIntensityClusteringWeightsZeroSpinBox">
-                  <property name="toolTip">
-                   <string>Zero up to</string>
-                  </property>
-                  <property name="minimum">
-                   <number>-1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>5000</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QRadioButton" name="m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton">
                   <property name="text">
                    <string>Uniform</string>
@@ -4242,6 +4229,46 @@
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_74">
+                <item>
+                 <widget class="QLabel" name="m_transferFunctionOptimizationWeightsZeroUpToIntensityLabel">
+                  <property name="text">
+                   <string>ZUTI</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="m_transferFunctionOptimizationWeightsZeroUpToIntensitySpinBox">
+                  <property name="toolTip">
+                   <string>Zero up to intensity</string>
+                  </property>
+                  <property name="minimum">
+                   <number>-1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>5000</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="m_transferFunctionOptimizationWeightsZeroUpToGradientLabel">
+                  <property name="text">
+                   <string>ZUTG</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="m_transferFunctionOptimizationWeightsZeroUpToGradientSpinBox">
+                  <property name="toolTip">
+                   <string>Zero up to gradient</string>
+                  </property>
+                  <property name="minimum">
+                   <number>-1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>5000</number>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <spacer name="horizontalSpacer_5">
                   <property name="orientation">
