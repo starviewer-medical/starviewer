@@ -101,12 +101,11 @@ void QueryScreen::initialize()
     m_showPACSNodes = false;
     m_PACSNodes->setVisible(false);
     m_qcreateDicomdir = new udg::QCreateDicomdir( this );
+#ifndef STARVIEWER_LITE
     /* Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
      * el QOperationStateScreen també es tancarà
      */
     m_operationStateScreen = new udg::QOperationStateScreen( this );
-
-#ifndef STARVIEWER_LITE
     m_qInputOutputLocalDatabaseWidget->setPacsManager(m_pacsManager);
     m_qInputOutputPacsWidget->setPacsManager(m_pacsManager);
     m_operationStateScreen->setPacsManager(m_pacsManager);
@@ -143,9 +142,10 @@ void QueryScreen::createConnections()
     //connectem els butons
     connect( m_searchButton, SIGNAL( clicked() ), SLOT( searchStudy() ) );
     connect( m_clearToolButton, SIGNAL( clicked() ), SLOT( clearTexts() ) );
+#ifndef STARVIEWER_LITE
     connect( m_operationListToolButton, SIGNAL( clicked() ) , SLOT( showOperationStateScreen() ) );
     connect( m_showPACSNodesToolButton, SIGNAL( toggled(bool) ), m_PACSNodes, SLOT( setVisible(bool) ) );
-
+#endif
     connect( m_createDICOMDIRToolButton, SIGNAL( clicked() ), m_qcreateDicomdir, SLOT( show() ) );
 
     //es canvia de pestanya del TAB
@@ -348,16 +348,18 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView, bool loadOnly
     if( !loadOnly )
     {
         this->close();//s'amaga per poder visualitzar la serie
-
+#ifndef STARVIEWER_LITE
         if (m_operationStateScreen->isVisible())
         {
             m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
         }
+#endif
     }
 
     emit selectedPatients(listPatientsToView,loadOnly);
 }
 
+#ifndef STARVIEWER_LITE
 void QueryScreen::showOperationStateScreen()
 {
     if ( !m_operationStateScreen->isVisible() )
@@ -370,6 +372,7 @@ void QueryScreen::showOperationStateScreen()
         m_operationStateScreen->activateWindow();
     }
 }
+#endif
 
 void QueryScreen::openDicomdir()
 {
@@ -388,9 +391,9 @@ DicomMask QueryScreen::buildDicomMask()
 void QueryScreen::closeEvent( QCloseEvent* event )
 {
     writeSettings(); // guardem els settings
-
+#ifndef STARVIEWER_LITE
     m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
-
+#endif
     event->accept();
 }
 

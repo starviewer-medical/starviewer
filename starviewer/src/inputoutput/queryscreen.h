@@ -109,8 +109,10 @@ private slots:
     /// Mostra/amaga els camps de cerca avançats
     void setAdvancedSearchVisible(bool visible);
 
+#ifndef STARVIEWER_LITE
     ///Mostra la pantalla QOperationStateScreen
     void showOperationStateScreen();
+#endif
 
     /// Notifica quins estudis s'han escollit per carregar i/o veure
     /// Afegim un segon paràmetre per indicar si volem fer view o únicament carregar les dades.
@@ -186,7 +188,6 @@ private:
     bool m_showPACSNodes;
     bool m_pacsListIsShowed;
 
-    QOperationStateScreen *m_operationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
 
     StatsWatcher *m_statsWatcher;
@@ -194,6 +195,7 @@ private:
     ///Llista per controlar la descarrega de quins estudis ha estat sol·licitada
     QStringList m_studyRequestedToRetrieveFromPublicMethod;
 #ifndef STARVIEWER_LITE
+    QOperationStateScreen *m_operationStateScreen;
     RISRequestManager *m_risRequestManager;
     PacsManager *m_pacsManager;
 #endif
