@@ -4764,7 +4764,7 @@ void QExperimental3DExtension::createClusterizedVolume()
 
 void QExperimental3DExtension::fillWeightsEditor()
 {
-    if (m_intensityGradientMap.isEmpty()) return;
+    if (m_intensityClusters.isEmpty()) return;
 
     int zeroEnd = m_geneticTransferFunctionFromIntensityClusteringWeightsZeroSpinBox->value();
     int nClusters = numberOfClusters();
