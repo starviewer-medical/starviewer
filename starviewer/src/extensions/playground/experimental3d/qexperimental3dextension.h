@@ -216,6 +216,8 @@ private:
     void syncGradientToNormalTransferFunction();
     int numberOfClusters() const;
     int cluster2DIndex(int intensityCluster, int gradientCluster) const;
+    int intensityBinFromCluster2D(int cluster) const;
+    int gradientBinFromCluster2D(int cluster) const;
 
 private slots:
 

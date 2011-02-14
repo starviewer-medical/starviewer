@@ -1133,6 +1133,8 @@ void QExperimental3DExtension::createConnections()
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsInnernessRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionCheckBox, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
+    connect(m_transferFunctionOptimizationWeights2DIntensityVolumeCheckBox, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
+    connect(m_transferFunctionOptimizationWeights2DGradientCheckBox, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -4820,6 +4822,64 @@ void QExperimental3DExtension::fillWeightsEditor()
         OpacityTransferFunction wtf(weightsTransferFunction);   // còpia, per no llegir de la mateixa que estem modificant (les interpolacions canvien)
 
         for (int i = zeroEnd + 1; i < nClusters; i++) weightsTransferFunction.set(i, wtf(i) * count.at(i) / maximum);
+
+        rescale = true;
+    }
+
+    // multipliquem els pesos pel volum de la intensitat (només 2D)
+    if (m_transferFunctionOptimizationWeights2DIntensityVolumeCheckBox->isChecked())
+    {
+        if (m_intensityGradientMap.isEmpty())
+        {
+            DEBUG_LOG("Atenció! S'ha intentat aplicar pesos 2D a un clustering 1D.");
+            WARN_LOG("Atenció! S'ha intentat aplicar pesos 2D a un clustering 1D.");
+        }
+
+        const unsigned short *data = reinterpret_cast<unsigned short*>(m_clusterizedVolume->getImage()->GetScalarPointer());
+        int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
+        int nIntensityBins = m_intensityClusters.size();
+        QVector<int> count(nIntensityBins);
+        int maximum = 0;
+
+        for (int i = 0; i < size; i++)
+        {
+            if (data[i] > zeroEnd)
+            {
+                int intensityBin = intensityBinFromCluster2D(data[i]);
+                count[intensityBin]++;
+                if (count.at(intensityBin) > maximum) maximum = count.at(intensityBin);
+            }
+        }
+
+        OpacityTransferFunction wtf(weightsTransferFunction);   // còpia, per no llegir de la mateixa que estem modificant (les interpolacions canvien)
+
+        for (int i = zeroEnd + 1; i < nClusters; i++)
+        {
+            int intensity = intensityBinFromCluster2D(i);
+            weightsTransferFunction.set(i, wtf(i) * count.at(intensity) / maximum);
+        }
+
+        rescale = true;
+    }
+
+    // multipliquem els pesos pel gradient (només 2D)
+    if (m_transferFunctionOptimizationWeights2DGradientCheckBox->isChecked())
+    {
+        if (m_intensityGradientMap.isEmpty())
+        {
+            DEBUG_LOG("Atenció! S'ha intentat aplicar pesos 2D a un clustering 1D.");
+            WARN_LOG("Atenció! S'ha intentat aplicar pesos 2D a un clustering 1D.");
+        }
+
+        OpacityTransferFunction wtf(weightsTransferFunction);   // còpia, per no llegir de la mateixa que estem modificant (les interpolacions canvien)
+
+        for (int i = zeroEnd + 1; i < nClusters; i++)
+        {
+            int gradient = gradientBinFromCluster2D(i);
+            weightsTransferFunction.set(i, wtf(i) * static_cast<double>(gradient) / (m_gradientClusters.size() - 1));
+        }
+
+        rescale = true;
     }
 
     if (rescale)
@@ -5295,6 +5355,18 @@ int QExperimental3DExtension::numberOfClusters() const
 int QExperimental3DExtension::cluster2DIndex(int intensityCluster, int gradientCluster) const
 {
     return intensityCluster * m_gradientClusters.size() + gradientCluster;
+}
+
+
+int QExperimental3DExtension::intensityBinFromCluster2D(int cluster) const
+{
+    return cluster / m_gradientClusters.size();
+}
+
+
+int QExperimental3DExtension::gradientBinFromCluster2D(int cluster) const
+{
+    return cluster % m_gradientClusters.size();
 }
 
 
