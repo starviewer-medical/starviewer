@@ -348,12 +348,6 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView, bool loadOnly
     if( !loadOnly )
     {
         this->close();//s'amaga per poder visualitzar la serie
-#ifndef STARVIEWER_LITE
-        if (m_operationStateScreen->isVisible())
-        {
-            m_operationStateScreen->close();//s'amaga per poder visualitzar la serie
-        }
-#endif
     }
 
     emit selectedPatients(listPatientsToView,loadOnly);
@@ -391,9 +385,16 @@ DicomMask QueryScreen::buildDicomMask()
 void QueryScreen::closeEvent( QCloseEvent* event )
 {
     writeSettings(); // guardem els settings
+
+    //TODO: Des del desctructor d'ExtensionHander quan no queda cap més QApplicationMaingWindow oberta s'invoca el mètode close de la QueryScreen perquè es 
+    //tanquin totes les finestres depenents de la QueryScreen, això provoca que es llenci el signal lastWindowClosed el qual hi responem invocant
+    //el mètode quit des de main.cpp. Per això quan s'invoca el mètode close() de la QueryScreen és necessari tancar totes les finestres obertes
+    //des de la QueryScreen perquè Starviewer es tanqui en cas que no hi ha hagi cap visor QApplicationMainWindow.
 #ifndef STARVIEWER_LITE
     m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
 #endif
+    m_qcreateDicomdir->close();
+
     event->accept();
 }
 

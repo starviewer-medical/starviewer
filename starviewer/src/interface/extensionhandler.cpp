@@ -57,7 +57,9 @@ ExtensionHandler::~ExtensionHandler()
     // Si és la última finestra oberta, hem de tancar la queryscreen
     if (m_mainApp->getCountQApplicationMainWindow() == 1)
     {
-        delete QueryScreenSingleton::instance();
+        //TODO:Xapussa invoquem el close() de la QueryScreen que tanca totes les finestres dependent de la QueryScreen perquè s'emeti el signal
+        //lasWindowClosed al qual responem des de la main fent un quit, no podríem fer un quit directament des d'aquí?
+        QueryScreenSingleton::instance()->close();
     }
 }
 
