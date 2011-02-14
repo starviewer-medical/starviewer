@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QMovie>
+#include <QProgressDialog>
 
 #include "qpacslist.h"
 #include "inputoutputsettings.h"
@@ -81,15 +82,23 @@ QueryScreen::QueryScreen( QWidget *parent )
 
 QueryScreen::~QueryScreen()
 {
+#ifndef STARVIEWER_LITE
+    if (m_pacsManager->isExecutingPACSJob())
+    {
+        //Si hi ha PacsJob executant-se demanem cancel·lar i mostrem un QProgressDialog mentre s'estan abortant el Jobs si en 15 segons no s'han
+        //abortat continuem amb la destrucció de la classe
+        m_pacsManager->requestCancelAllPACSJobs();
+        showQProgressDialogUntilNoPACSJobsAreExecuting(15000);
+    }
+
+    delete m_risRequestManager;
+    delete m_pacsManager;
+#endif
+
     /*sinó fem un this.close i tenim la finestra queryscreen oberta al tancar l'starviewer, l'starviewer no finalitza
      *desapareixen les finestres, però el procés continua viu
      */
     this->close();
-
-#ifndef STARVIEWER_LITE
-    delete m_risRequestManager;
-    delete m_pacsManager;
-#endif
 }
 
 void QueryScreen::initialize()
@@ -390,9 +399,7 @@ void QueryScreen::closeEvent( QCloseEvent* event )
     //tanquin totes les finestres depenents de la QueryScreen, això provoca que es llenci el signal lastWindowClosed el qual hi responem invocant
     //el mètode quit des de main.cpp. Per això quan s'invoca el mètode close() de la QueryScreen és necessari tancar totes les finestres obertes
     //des de la QueryScreen perquè Starviewer es tanqui en cas que no hi ha hagi cap visor QApplicationMainWindow.
-#ifndef STARVIEWER_LITE
     m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
-#endif
     m_qcreateDicomdir->close();
 
     event->accept();
@@ -497,5 +504,21 @@ void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
     }
 }
 
+void QueryScreen::showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs)
+{
+    QProgressDialog progressDialog(tr("Cancelling PACS operations"), "", 0, 0);
+    QTime timer;
+
+    progressDialog.setModal(true);
+    progressDialog.show();
+    progressDialog.setCancelButton(0);
+    timer.start();
+
+    while (!m_pacsManager->waitForAllPACSJobsFinished(100) && timer.elapsed() < timeoutMs)
+    {
+        progressDialog.setValue(progressDialog.value() + 1);
+        QCoreApplication::processEvents();
+    }
+}
 };
 

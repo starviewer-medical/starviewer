@@ -42,11 +42,25 @@ public:
     ///Encua un PACSJob per a que es processi
     void enqueuePACSJob(PACSJob *pacsJob);
 
+    ///Indica si s'estan executant PACSJob
+    bool isExecutingPACSJob();
+
     ///Indica si s'executen peticions del tipus de PACSJob indicat
     bool isExecutingPACSJob(PACSJob::PACSJobType pacsJobType);
 
-    ///Demana que es cancel·li l'execució del PACSJob
+    ///Demana que es cancel·li l'execució dels PACSJob d'un tipus. Al invocar aquests mètodes es desencua els jobs pendents d'executar i
+    ///i demana abortar els jobs que s'estan executant. Els jobs que s'estan executant no s'aborten immeditament, el mètode és assíncron.
     void requestCancelPACSJob(PACSJob *pacsJob);
+
+    ///Demana cancel·lar tots els jobs. Els PACSJob pendents d'executar no s'executen i els que s'estan executant s'aborten. Els PACSJob
+    ///que s'estan executant no s'aborten immeditament, el mètode és assíncron.
+    void requestCancelAllPACSJobs();
+
+    ///Indica si s'està executant algun PACSJob
+    bool isIdle();
+
+    ///Espera a que hagin acabat tots els job 
+    bool waitForAllPACSJobsFinished(int msec = INT_MAX);
 
 signals:
 
