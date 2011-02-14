@@ -1,5 +1,8 @@
 #include "pacsmanager.h"
 
+#include <QThread>
+#include <QTime>
+
 #include "dicommask.h"
 #include "pacsdevice.h"
 #include "logging.h"
@@ -7,7 +10,18 @@
 #include "pacsjob.h"
 #include "inputoutputsettings.h"
 
+
 namespace udg{
+
+///Classe utilitza per adormir el Thread al mètode waitForAllPACSJobsFinished, m'entre s'espera que hagin finalitzat totes les operacions.
+class Sleeper : public QThread
+{
+public:
+    static void msleep(unsigned long msecs) 
+    {
+        QThread::msleep(msecs);
+    }
+};
 
 PacsManager::PacsManager()
 {
@@ -44,6 +58,12 @@ void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
     }
 
     emit newPACSJobEnqueued(pacsJob);
+}
+
+//TODO: S'hauria de convertir al plural
+bool PacsManager::isExecutingPACSJob()
+{
+    return !m_sendDICOMFilesToPACSWeaver->isIdle() || !m_retrieveDICOMFilesFromPACSWeaver->isIdle() || !m_queryWeaver->isIdle();
 }
 
 bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
@@ -95,6 +115,34 @@ void PacsManager::requestCancelPACSJob(PACSJob *pacsJob)
         //Si no l'hem pogut desencuar vol dir que s'està executant demanem abortar el job
         pacsJob->requestAbort();
     }
+}
+
+void PacsManager::requestCancelAllPACSJobs()
+{
+    m_sendDICOMFilesToPACSWeaver->dequeue();
+    m_sendDICOMFilesToPACSWeaver->requestAbort();
+    m_retrieveDICOMFilesFromPACSWeaver->dequeue();
+    m_retrieveDICOMFilesFromPACSWeaver->requestAbort();
+    m_queryWeaver->dequeue();
+    m_queryWeaver->requestAbort();
+}
+
+bool PacsManager::waitForAllPACSJobsFinished(int msec)
+{
+    if (!isExecutingPACSJob())
+    {
+        return true;
+    }
+
+    QTime timer;
+    timer.start();
+
+    while (isExecutingPACSJob() && timer.elapsed() < msec)
+    {
+        Sleeper().msleep(50);
+    }
+
+    return !isExecutingPACSJob();
 }
 
 }; //end udg namespace
