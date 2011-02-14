@@ -133,7 +133,6 @@ void QueryScreen::initialize()
     {
         m_risRequestManager = NULL;
     }
-
 #endif
 
     m_PACSJobsPendingToFinish = 0;
@@ -155,9 +154,9 @@ void QueryScreen::createConnections()
     //Amaga o ensenya la cerca avançada
     connect( m_advancedSearchToolButton, SIGNAL( toggled( bool ) ), SLOT( setAdvancedSearchVisible( bool ) ) );
 
-    #ifndef STARVIEWER_LITE
+#ifndef STARVIEWER_LITE
     connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob *)), SLOT(newPACSJobEnqueued(PACSJob*)));
-    #endif
+#endif
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
