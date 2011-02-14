@@ -189,14 +189,14 @@ private:
     QOperationStateScreen *m_operationStateScreen;
     QCreateDicomdir *m_qcreateDicomdir;
 
-    RISRequestManager *m_risRequestManager;
-
     StatsWatcher *m_statsWatcher;
 
     ///Llista per controlar la descarrega de quins estudis ha estat sol·licitada
     QStringList m_studyRequestedToRetrieveFromPublicMethod;
-    
+#ifndef STARVIEWER_LITE
+    RISRequestManager *m_risRequestManager;
     PacsManager *m_pacsManager;
+#endif
 
     int m_PACSJobsPendingToFinish;//Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)
 };
