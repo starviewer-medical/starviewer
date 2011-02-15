@@ -83,7 +83,7 @@ QTreeWidgetItem* QCustomWindowLevelEditWidget::addWindowLevelItem(const QString 
 
 void QCustomWindowLevelEditWidget::removeWindowLevel()
 {
-    if (m_customWindowLevelTreeWidget->topLevelItemCount() > 0)
+    if (m_customWindowLevelTreeWidget->selectedItems().size() > 0)
     {
         QMessageBox messageBox;
         messageBox.setIcon(QMessageBox::Warning);
