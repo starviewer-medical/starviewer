@@ -470,7 +470,7 @@ bool QExporterTool::canAllocateEnoughMemory(int numberOfScreenshots)
         delete[] p;
         return true;
     }
-    catch ( std::bad_alloc &ba )
+    catch ( std::bad_alloc )
     {
         return false;
     }
