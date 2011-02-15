@@ -446,15 +446,25 @@ bool QExporterTool::canAllocateEnoughMemory()
 bool QExporterTool::canAllocateEnoughMemory(int numberOfScreenshots)
 {
     int * windowSize = m_viewer->getRenderWindowSize();
-    // \TODO Com a mida màxima s'agafa el doble del que ocuparà el volum ja que el vtkImageAppend allotja memòria per generarà l'output. Hi posem 100MB de cortesia.
-    int size = windowSize[0] * windowSize[1] * numberOfScreenshots * 3 * sizeof(unsigned char) * 2 + 1024*1024*100;
+    // Calculem quanta memòria ens ocuparà el nou volum a generar
+    // Cal calcular la quantitat de bytes memòria amb un tipus de píxel 
+    // prou gran com perquè no ens desbordi el valor i ens doni el valor correcte
+    // El nou volum serà RGB = 3 bytes per píxel 
+    // TODO Potser aquesta mida ens l'hauria de donar vtkImageData?
+    unsigned short int byteSize = 3 * sizeof(unsigned char);
+    unsigned long long int imageSize = windowSize[0] * windowSize[1];
+    unsigned long long int amountOfMemoryInBytes = imageSize * byteSize * numberOfScreenshots;
+    // TODO Com a mida màxima s'agafa el doble del que ocuparà el volum ja que el vtkImageAppend allotja memòria per generar l'output. 
+    // Hi afegim 100MB de cortesia.
+    unsigned int extraMemory = 1024*1024*100;
+    amountOfMemoryInBytes += amountOfMemoryInBytes + extraMemory;
     
-    DEBUG_LOG( QString("Sizeof = %1").arg( size ) );
+    DEBUG_LOG( QString("Sizeof = %1").arg( amountOfMemoryInBytes ) );
     
     char *p = 0;
     try
     {
-        p = new char[size];
+        p = new char[amountOfMemoryInBytes];
         delete[] p;
         return true;
     }
