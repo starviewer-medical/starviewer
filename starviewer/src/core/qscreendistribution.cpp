@@ -20,7 +20,7 @@
 namespace udg {
 
 const int QScreenDistribution::MaximumScreenNumberPixelSize = 50;
-const int QScreenDistribution::WidgetMargin = 50;
+const int QScreenDistribution::WidgetMargin = 20;
 
 QScreenDistribution::QScreenDistribution(QWidget *parent)
     : QWidget(parent)
