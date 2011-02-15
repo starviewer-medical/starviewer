@@ -399,7 +399,9 @@ void QueryScreen::closeEvent( QCloseEvent* event )
     //tanquin totes les finestres depenents de la QueryScreen, això provoca que es llenci el signal lastWindowClosed el qual hi responem invocant
     //el mètode quit des de main.cpp. Per això quan s'invoca el mètode close() de la QueryScreen és necessari tancar totes les finestres obertes
     //des de la QueryScreen perquè Starviewer es tanqui en cas que no hi ha hagi cap visor QApplicationMainWindow.
+#ifndef STARVIEWER_LITE
     m_operationStateScreen->close(); //Tanquem la QOperationStateScreen al tancar la QueryScreen
+#endif
     m_qcreateDicomdir->close();
 
     event->accept();
@@ -504,6 +506,7 @@ void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
     }
 }
 
+#ifndef STARVIEWER_LITE
 void QueryScreen::showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs)
 {
     QProgressDialog progressDialog(tr("Cancelling PACS operations"), "", 0, 0);
@@ -520,5 +523,7 @@ void QueryScreen::showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs)
         QCoreApplication::processEvents();
     }
 }
+#endif
+
 };
 
