@@ -4771,7 +4771,7 @@ void QExperimental3DExtension::fillWeightsEditor()
 
     int nClusters = numberOfClusters();
 
-    m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setRange(0, nClusters);
+    m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setRange(0, nClusters - 1);
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->syncToMax();
     TransferFunction weightsFullTransferFunction;
     weightsFullTransferFunction.setColorTransferFunction(m_clusterizedTransferFunction.colorTransferFunction());
