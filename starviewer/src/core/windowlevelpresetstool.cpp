@@ -83,8 +83,16 @@ void WindowLevelPresetsTool::applyPreset(char key)
         {
             if( !m_defaultPresets.isEmpty() )
             {
+                if (m_defaultPresets.contains(m_myToolData->getCurrentPreset()))
+                {
+                    m_defaultPresetsIndex = (m_defaultPresets.indexOf(m_myToolData->getCurrentPreset()) + 1) % m_defaultPresets.count();
+                }
+                else
+                {
+                    m_defaultPresetsIndex = 0;
+                }
+
                 preset = m_defaultPresets.at(m_defaultPresetsIndex);
-                m_defaultPresetsIndex = (m_defaultPresetsIndex+1) % m_defaultPresets.count();
 
                 DEBUG_LOG( QString("default Preset index: %1").arg( m_defaultPresetsIndex ) );
             }
