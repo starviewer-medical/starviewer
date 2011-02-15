@@ -4898,7 +4898,10 @@ void QExperimental3DExtension::fillWeightsEditor()
             if (wtf(i) > maximumWeight) maximumWeight = wtf(i);
         }
 
-        for (int i = 0; i < nClusters; i++) weightsTransferFunction.set(i, wtf(i) / maximumWeight);
+        if (maximumWeight > 0.0)    // quan el pes màxim és 0 no hem de fer res
+        {
+            for (int i = 0; i < nClusters; i++) weightsTransferFunction.set(i, wtf(i) / maximumWeight);
+        }
     }
 
     weightsFullTransferFunction.setOpacityTransferFunction(weightsTransferFunction);
