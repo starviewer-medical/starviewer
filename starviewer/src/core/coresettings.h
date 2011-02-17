@@ -49,23 +49,29 @@ public:
     /// Comporbar si hi ha una nova versió
     static const QString LastVersionChecked;
     static const QString LastVersionCheckedDate;
+    
     /// Cada quants dies es comprovarà si hi ha una versió nova
     static const QString CheckVersionInterval; 
+    
     /// Per fer que no es vegin més les release notes d'una nova versió online
     static const QString NeverShowNewVersionReleaseNotes;
+    
     /// No permetre que es comprobin versions online
     static const QString DontCheckNewVersionsOnline;
+    
     /// Especifica les excepcions en que no ha s'ha d'aplicar la auto orientació en mamografies.
     static const QString MammographyAutoOrientationExceptions;
+    
     /// Indica si es pot realitzar càrrega de volums asíncrona o no
     static const QString AllowAsynchronousVolumeLoading;
+    
     /// Defineix el nombre màxim d'ítems visibles al desplegar-se el combo de window/levels per defecte.
     /// Si tenim més presets que els que indiqui aquest setting, apareixerà un scroll vertical.
     /// Aquest comportament serà així per totes les plataformes excepte Mac, que sempre mostrarà tots els elements.
     static const QString MaximumNumberOfVisibleWindowLevelComboItems;
 };
 
-} // end namespace udg 
+} // End namespace udg 
 
 #endif
 
