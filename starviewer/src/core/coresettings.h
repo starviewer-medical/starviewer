@@ -59,6 +59,10 @@ public:
     static const QString MammographyAutoOrientationExceptions;
     /// Indica si es pot realitzar càrrega de volums asíncrona o no
     static const QString AllowAsynchronousVolumeLoading;
+    /// Defineix el nombre màxim d'ítems visibles al desplegar-se el combo de window/levels per defecte.
+    /// Si tenim més presets que els que indiqui aquest setting, apareixerà un scroll vertical.
+    /// Aquest comportament serà així per totes les plataformes excepte Mac, que sempre mostrarà tots els elements.
+    static const QString MaximumNumberOfVisibleWindowLevelComboItems;
 };
 
 } // end namespace udg 

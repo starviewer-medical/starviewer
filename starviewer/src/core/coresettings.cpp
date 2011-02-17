@@ -62,6 +62,8 @@ const QString CoreSettings::MammographyAutoOrientationExceptions("MammographyAut
 
 const QString CoreSettings::AllowAsynchronousVolumeLoading("AllowAsynchronousVolumeLoading");
 
+const QString CoreSettings::MaximumNumberOfVisibleWindowLevelComboItems("MaximumNumberOfVisibleWindowLevelComboItems");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -89,6 +91,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(DontCheckNewVersionsOnline, false);
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
+    settingsRegistry->addSetting(MaximumNumberOfVisibleWindowLevelComboItems, 50);
 }
 
 } // end namespace udg 
