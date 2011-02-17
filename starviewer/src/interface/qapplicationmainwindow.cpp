@@ -29,7 +29,6 @@
 #include "qscreendistribution.h"
 #include "volumerepository.h"
 
-#include <QDebug>
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
 #include "hangingprotocolsloader.h"
