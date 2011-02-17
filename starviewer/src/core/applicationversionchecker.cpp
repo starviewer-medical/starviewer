@@ -225,16 +225,16 @@ QString ApplicationVersionChecker::createWebServiceUrl()
         index = 0;
         while(!found && index < QNetworkInterface::allInterfaces().count())
         {
-            QNetworkInterface inter = QNetworkInterface::allInterfaces()[index++];
+            QNetworkInterface interface = QNetworkInterface::allInterfaces()[index++];
 
-            QNetworkInterface::InterfaceFlags f = inter.flags();
-            bool flagsOk = f.testFlag(QNetworkInterface::IsUp) && f.testFlag(QNetworkInterface::IsRunning) && !f.testFlag(QNetworkInterface::IsLoopBack);
+            QNetworkInterface::InterfaceFlags flags = interface.flags();
+            bool flagsOk = flags.testFlag(QNetworkInterface::IsUp) && flags.testFlag(QNetworkInterface::IsRunning) && !flags.testFlag(QNetworkInterface::IsLoopBack);
 
             //Per si de cas el bluetooth està engegat i foncionant, fer que no l'agafi
             //Rarament trobarem una connexió de xarxa que vagi a través d'un dispositiu bluetooth
-            if (inter.isValid() && flagsOk && !inter.humanReadableName().toLower().contains("bluetooth"))
+            if (interface.isValid() && flagsOk && !interface.humanReadableName().toLower().contains("bluetooth"))
             {
-                macAdress += inter.hardwareAddress();
+                macAdress += interface.hardwareAddress();
                 found = true;
             }
         }
