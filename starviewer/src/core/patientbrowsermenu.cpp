@@ -18,12 +18,16 @@
 #include "image.h"
 #include "volume.h"
 #include "volumerepository.h"
+#include "applicationstylehelper.h"
 
 namespace udg {
 
 PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) 
  : QWidget(parent), m_patientAdditionalInfo(0), m_patientBrowserList(0)
 {
+    ApplicationStyleHelper style;
+    QString changeFontSize = QString("QLabel { font-size: %1pt }").arg(style.getPatientMenuBrowserFontSize());
+    this->setStyleSheet(changeFontSize);
 }
 
 PatientBrowserMenu::~PatientBrowserMenu()

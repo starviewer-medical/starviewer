@@ -1,5 +1,7 @@
 #include "qviewerworkinprogresswidget.h"
 
+#include "applicationstylehelper.h"
+
 #include <QMovie>
 
 namespace udg {
@@ -7,6 +9,10 @@ namespace udg {
 QViewerWorkInProgressWidget::QViewerWorkInProgressWidget(QWidget *parent)
     : QWidget(parent)
 {
+    ApplicationStyleHelper styleHelper;
+    QString changeFontSize = QString("QLabel { font-size: %1pt }").arg(styleHelper.getWorkInProgressFontSize());
+    this->setStyleSheet(changeFontSize);
+
     this->setupUi(this);
 
     m_progressBarAnimation = new QMovie(this);
