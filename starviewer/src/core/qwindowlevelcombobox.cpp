@@ -32,7 +32,7 @@ void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLeve
 {
     if (m_presetsData)
     {
-        // desconectem tot el que teníem connectat aquí
+        // Desconectem tot el que teníem connectat aquí
         disconnect(m_presetsData, 0, this, 0);
         disconnect(m_presetsData, 0, m_customWindowLevelDialog, 0);
         disconnect(m_customWindowLevelDialog, 0, m_presetsData, 0);
@@ -44,7 +44,7 @@ void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLeve
     connect(m_presetsData, SIGNAL(presetChanged(QString)), SLOT(selectPreset(QString)));
     connect(m_presetsData, SIGNAL(currentWindowLevel(double, double)), m_customWindowLevelDialog, SLOT(setDefaultWindowLevel(double, double)));
 
-    // TODO això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
+    // TODO Això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
     // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
     connect(m_customWindowLevelDialog, SIGNAL(windowLevel(double,double)), m_presetsData, SLOT(setCustomWindowLevel(double,double)));
 }
@@ -68,44 +68,31 @@ void QWindowLevelComboBox::addPreset(const QString &preset)
     if (m_presetsData->getGroup(preset, group))
     {
         int index;
-        switch(group)
+        switch (group)
         {
-        case WindowLevelPresetsToolData::AutomaticPreset:
-            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() - 1;
-        break;
-        case WindowLevelPresetsToolData::FileDefined:
-            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                    m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() - 1;
-        break;
+            case WindowLevelPresetsToolData::AutomaticPreset:
+                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() - 1;
+                break;
+            
+            case WindowLevelPresetsToolData::FileDefined:
+                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() - 1;
+                break;
 
-        case WindowLevelPresetsToolData::StandardPresets:
-            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() - 1;
-        break;
+            case WindowLevelPresetsToolData::StandardPresets:
+                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() - 1;
+                break;
 
-        case WindowLevelPresetsToolData::UserDefined:
-            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() - 1;
-        break;
+            case WindowLevelPresetsToolData::UserDefined:
+                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() - 1;
+                break;
 
-        case WindowLevelPresetsToolData::Other:
-            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
-        break;
-        case WindowLevelPresetsToolData::CustomPreset:
-            index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() +
-                m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::CustomPreset).count() - 1;
-        break;
+            case WindowLevelPresetsToolData::Other:
+                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +            m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
+                break;
+            
+            case WindowLevelPresetsToolData::CustomPreset:
+                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::CustomPreset).count() - 1;
+                break;
         }
         this->insertItem(index, preset);
     }

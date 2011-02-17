@@ -67,7 +67,7 @@ bool DICOMTagReader::setFile(const QString &filename)
         deleteDataLastLoadedFile();
 
         m_dicomHeader = new DcmMetaInfo(*dicomFile.getMetaInfo());
-        m_dicomData =  dicomFile.getAndRemoveDataset();
+        m_dicomData = dicomFile.getAndRemoveDataset();
     }
     else
     {
