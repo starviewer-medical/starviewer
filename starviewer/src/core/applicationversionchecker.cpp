@@ -248,13 +248,7 @@ QString ApplicationVersionChecker::createWebServiceUrl()
     QString machineID = encryptBase64Url(macAdress);
     QString groupID = encryptBase64Url(domain);
 
-    QString result;
-    QStringList versionList = udg::StarviewerVersionString.split(QString("."));
-    // TODO: buscant noves versions online s'ha de veure si es posen sufixs per les alpha, beta, RC, etc.
-    QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
-    result = QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&machineID=%2&groupID=%3").arg(version).arg(machineID).arg(groupID);
-    
-    return result;
+    return QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&machineID=%2&groupID=%3").arg(StarviewerVersionString).arg(machineID).arg(groupID);
 }
 
 QString ApplicationVersionChecker::encryptBase64Url(const QString &url)
