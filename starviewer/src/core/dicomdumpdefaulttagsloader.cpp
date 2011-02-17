@@ -54,6 +54,14 @@ void DICOMDumpDefaultTagsLoader::loadDefaults()
     {
         INFO_LOG(QString("El directori per defecte dels dicom dump default tags files no existeix. No es carregaran."));
     }
+
+    /// Default Tags definits per l'usuari
+    Settings systemSettings;
+    QString userPath = systemSettings.getValue(CoreSettings::UserDICOMDumpDefaultTagsPath).toString();
+    if (!userPath.isEmpty())
+    {
+        loadXMLFiles(userPath);
+    }
 }
 
 void DICOMDumpDefaultTagsLoader::loadXMLFiles(const QString &path)
