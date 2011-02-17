@@ -44,10 +44,15 @@ void DICOMDumpDefaultTagsLoader::loadDefaults()
         // En entorn de desenvolupament Mac OS X
         defaultPath = qApp->applicationDirPath() + "/../../../../dicomdumpdefaulttags/";
     }
-    if (!defaultPath.isEmpty())
-    {    
-        INFO_LOG(QString("Directori a on es van a buscar els dicom dump default tags files per defecte: %1").arg(defaultPath));
+    
+    if (QFile::exists(defaultPath))
+    {
+        INFO_LOG(QString("Directori a on es van a buscar els hanging protocols per defecte: %1").arg(defaultPath));
         loadXMLFiles(defaultPath);
+    }
+    else
+    {
+        INFO_LOG(QString("El directori per defecte dels dicom dump default tags files no existeix. No es carregaran."));
     }
 }
 
