@@ -20,11 +20,7 @@ const QString CoreSettings::UserDICOMDumpDefaultTagsPath("DefaultTags/path");
 const QString CoreSettings::UserCustomWindowLevelsPath("CustomWindowLevels/path");
 const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
-// Mida per defecte de la font de les annotacions
-const QString CoreSettings::DefaultToolTextSize("Tools/DefaultTextSize");
-// Booleà per saber si la mida de text de les tools s'ha d'autocalcular 
-// segons les dimensions de la pantalla o la decideix l'usuari. 
-const QString CoreSettings::AutoToolTextSize("Tools/AutoTextSize");
+const QString CoreSettings::ToolsFontSize("Tools/ToolsFontSize");
 
 // Paràmetres d'obscurances
 const QString ObscurancesBase("3DViewer/obscurances/");
@@ -85,8 +81,6 @@ void CoreSettings::init()
     settingsRegistry->addSetting(UserCustomWindowLevelsPath, UserDataRootPath + "customwindowlevels/customwindowlevels.xml");
     settingsRegistry->addSetting(RegisterStatLogs, false);
     settingsRegistry->addSetting(LanguageLocale, QLocale::system().name());
-    settingsRegistry->addSetting(DefaultToolTextSize, 14);
-    settingsRegistry->addSetting(AutoToolTextSize, true);
     settingsRegistry->addSetting(DICOMImageReaderLibrary, "itkGDCM");
     settingsRegistry->addSetting(LastReleaseNotesVersionShown, "");
     settingsRegistry->addSetting(NeverShowNewVersionReleaseNotes, false);
