@@ -37,16 +37,30 @@ void ApplicationStyleHelper::recomputeStyleToScreenOfWidget(QWidget *widget)
 
 int ApplicationStyleHelper::getToolsFontSize() const
 {
-    const static double DefaultToolsFontSize = 14.0;
+    return this->getFontSize(14.0, CoreSettings::ToolsFontSize);
+}
 
-    double toolsFontSize = DefaultToolsFontSize * m_scaleFactor;
+int ApplicationStyleHelper::getWorkInProgressFontSize() const
+{
+    return this->getToolsFontSize();
+}
+
+int ApplicationStyleHelper::getPatientMenuBrowserFontSize() const
+{
+    // Al ser text de Qt, agafem el tamany de font del sistema com a predeterminat
+    return this->getFontSize(QApplication::font().pointSizeF(), CoreSettings::PatientBrowserMenuFontSize);
+}
+
+int ApplicationStyleHelper::getFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const
+{
+    double toolsFontSize = defaultFontSize * m_scaleFactor;
 
     //TODO de moment es deixa un "backdoor" per poder especificar un text arbitrari a partir de configuració
     // caldrà treure'l un cop comprovat que no hi ha problemes
     Settings settings;
-    if (settings.contains(CoreSettings::ToolsFontSize))
+    if (settings.contains(settingsBackdoorKey))
     {
-        toolsFontSize = settings.getValue(CoreSettings::ToolsFontSize).toInt();
+        toolsFontSize = settings.getValue(settingsBackdoorKey).toInt();
     }
 
     return MathTools::roundToNearestInteger(toolsFontSize);
