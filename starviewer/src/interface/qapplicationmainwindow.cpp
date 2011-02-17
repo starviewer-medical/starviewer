@@ -706,10 +706,6 @@ void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalS
 void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
 {
     m_progressDialog->setValue(progress);
-    // TODO de moment ho hem de comentar perquè si processem events podem
-    // ser "concurrents" carregant sèries i ens pot ocasionar problemes
-    // per tant primer cal solucionar la "concurrència" per poder posar això en marxa
-    // qApp->processEvents();
 }
 
 void QApplicationMainWindow::openUserGuide()
