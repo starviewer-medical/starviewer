@@ -98,11 +98,12 @@ void ScreenShotTool::screenShot(bool singleShot)
     if (!filename.isEmpty())
     {
         // Mirem que el nom del fitxer no contingui coses com: nom.png, és a dir, que no es mostri l'extensió
-        QString selectedExtension = m_lastScreenShotExtensionFilter.mid(m_lastScreenShotExtensionFilter.length() - 5, 4);
+        QString selectedExtension = m_lastScreenShotExtensionFilter.mid(m_lastScreenShotExtensionFilter.lastIndexOf("."));
+        selectedExtension.remove(")");
 
         if (filename.endsWith(selectedExtension))
         {
-            filename.remove(filename.lastIndexOf(selectedExtension), 4);
+            filename.remove(filename.lastIndexOf(selectedExtension), selectedExtension.size() + 1);
         }
 
         // Guardem l'últim path de la imatge per a saber on hem d'obrir per defecte l'explorador per a guardar el fitxer
