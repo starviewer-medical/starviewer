@@ -8,7 +8,7 @@
 #include "logging.h"
 #include "mathtools.h"
 #include "q2dviewer.h"
-#include "coresettings.h"
+#include "applicationstylehelper.h"
 // vtk
 #include <vtkTextProperty.h>
 #include <vtkTextActor.h>
@@ -23,7 +23,7 @@ DrawerText::DrawerText(QObject *parent)
     m_verticalJustification = "Centered";
     m_border = false;
     m_fontFamily = "Arial";
-    m_fontSize = Settings().getValue(CoreSettings::DefaultToolTextSize).toInt();
+    m_fontSize = ApplicationStyleHelper().getToolsFontSize();
     m_shadow = false;
     m_italic = false;
     m_bold = false;
