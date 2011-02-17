@@ -6,11 +6,11 @@
 #include "customwindowlevelsrepository.h"
 #include "starviewerapplication.h"
 #include "logging.h"
+#include "coresettings.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QXmlStreamWriter>
-#include <QList>
-#include <QApplication>
 
 namespace udg {
 
@@ -26,6 +26,12 @@ void CustomWindowLevelsWriter::write()
 {
     // establir el path per defecte on es guardarà el fitxer
     QString path = getPath();
+
+    if (path.isEmpty())
+    {
+        return;
+    }
+
     QFile file(path);
     if (file.exists()) 
     {
@@ -59,31 +65,36 @@ void CustomWindowLevelsWriter::write()
     writer.writeEndElement();
     writer.writeEndDocument();
  
+    INFO_LOG(QString("S'han guardat els custom window levels a: %1").arg(path));
 }
 
 QString CustomWindowLevelsWriter::getPath()
 {
-    /// Custom window levels definits per defecte, agafa el directori de l'executable TODO això podria ser un setting més
-    QString defaultPath = "/etc/xdg/" + OrganizationNameString + "/" + ApplicationNameString + "/customwindowlevels/"; // Path linux
-    
-    if (!QFile::exists(defaultPath))
-    {    
-        defaultPath = qApp->applicationDirPath() + "/customwindowlevels/";
-    }
-    if (!QFile::exists(defaultPath))
+    Settings systemSettings;
+    QString userPath = systemSettings.getValue(CoreSettings::UserCustomWindowLevelsPath).toString();
+
+    if (userPath.isEmpty())
     {
-        // En entorn de desenvolupament Windows & Linux
-        defaultPath = qApp->applicationDirPath() + "/../customwindowlevels/";
-    }
-    if (!QFile::exists(defaultPath))
-    {
-        // En entorn de desenvolupament Mac OS X
-        defaultPath = qApp->applicationDirPath() + "/../../../../customwindowlevels/";
+        return "";
     }
 
-    defaultPath += "customwindowlevels.xml";
+    QFileInfo fileInfo(userPath);
+    QDir dir;    
+    if (!dir.exists(fileInfo.absolutePath()))
+    {
+        if (!dir.mkpath(fileInfo.absolutePath()))
+        {
+            return "";
+        }
+    }
 
-    return defaultPath;
+    if(fileInfo.isDir())
+    {
+        userPath += "customwindowlevels.xml"; // Per si de cas al setting s'ha definit un directori.
+    }
+
+
+    return userPath;
 }
 
 }

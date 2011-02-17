@@ -16,6 +16,7 @@ const QString CoreSettings::ScreenShotToolFilename(ScreenShotToolBase + "default
 
 const QString CoreSettings::LogViewerGeometry("logViewerDialogGeometry");
 const QString CoreSettings::UserHangingProtocolsPath("Hanging-Protocols/path");
+const QString CoreSettings::UserCustomWindowLevelsPath("CustomWindowLevels/path");
 const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
 // Mida per defecte de la font de les annotacions
@@ -79,6 +80,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(ScreenShotToolFolder, QDir::homePath());
     settingsRegistry->addSetting(ScreenShotToolFileExtension, QObject::tr("PNG (*.png)"));
     settingsRegistry->addSetting(UserHangingProtocolsPath, UserDataRootPath + "hangingprotocols/");
+    settingsRegistry->addSetting(UserCustomWindowLevelsPath, UserDataRootPath + "customwindowlevels/customwindowlevels.xml");
     settingsRegistry->addSetting(RegisterStatLogs, false);
     settingsRegistry->addSetting(LanguageLocale, QLocale::system().name());
     settingsRegistry->addSetting(DefaultToolTextSize, 14);

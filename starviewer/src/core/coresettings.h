@@ -19,6 +19,7 @@ public:
     static const QString ScreenShotToolFilename;
     static const QString LogViewerGeometry;
     static const QString UserHangingProtocolsPath;
+    static const QString UserCustomWindowLevelsPath;
     static const QString RegisterStatLogs;
     static const QString DefaultToolTextSize;
     static const QString AutoToolTextSize;

@@ -28,28 +28,12 @@ CustomWindowLevelsLoader::~CustomWindowLevelsLoader()
 
 void CustomWindowLevelsLoader::loadDefaults()
 {   
-    /// Custom window levels definits per defecte, agafa el directori de l'executable TODO això podria ser un setting més
-    QString defaultPath = "/etc/xdg/" + OrganizationNameString + "/" + ApplicationNameString + "/customwindowlevels/"; // Path linux
-    
-    if (!QFile::exists(defaultPath))
-    {    
-        defaultPath = qApp->applicationDirPath() + "/customwindowlevels/";
-    }
-    if (!QFile::exists(defaultPath))
+    /// Custom Window Levels definits per l'usuari
+    Settings systemSettings;
+    QString userPath = systemSettings.getValue(CoreSettings::UserCustomWindowLevelsPath).toString();
+    if (!userPath.isEmpty())
     {
-        // En entorn de desenvolupament Windows & Linux
-        defaultPath = qApp->applicationDirPath() + "/../customwindowlevels/";
-    }
-    if (!QFile::exists(defaultPath))
-    {
-        // En entorn de desenvolupament Mac OS X
-        defaultPath = qApp->applicationDirPath() + "/../../../../customwindowlevels/";
-    }
-
-    if (!defaultPath.isEmpty())
-    {    
-        INFO_LOG(QString("Directori a on es van a buscar els custom window levels per defecte: %1").arg(defaultPath));
-        loadXMLFiles(defaultPath);
+        loadXMLFiles(userPath);
     }
 }
 
