@@ -249,7 +249,8 @@ HEADERS += extensionfactory.h \
     renderqviewercommand.h \
     volumepixeldata.h \
     customwindowlevelswriter.h \
-    qcustomwindowleveleditwidget.h
+    qcustomwindowleveleditwidget.h \
+    applicationstylehelper.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -455,7 +456,8 @@ SOURCES += extensionmediator.cpp \
     renderqviewercommand.cpp \
     volumepixeldata.cpp \
     customwindowlevelswriter.cpp \
-    qcustomwindowleveleditwidget.cpp
+    qcustomwindowleveleditwidget.cpp \
+    applicationstylehelper.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)

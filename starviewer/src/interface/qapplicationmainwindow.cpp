@@ -28,6 +28,7 @@
 #include "screenmanager.h"
 #include "qscreendistribution.h"
 #include "volumerepository.h"
+#include "applicationstylehelper.h"
 
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE 
@@ -45,7 +46,6 @@
 #include <QLocale>
 #include <QProgressDialog>
 #include <QDesktopServices>
-#include <QDesktopWidget>
 #include <QPair>
 #include <QWidgetAction>
 #include <QShortcut>
@@ -727,29 +727,6 @@ void QApplicationMainWindow::openShortcutsGuide()
 
 void QApplicationMainWindow::computeDefaultToolTextSize()
 {
-    Settings settings;
-    if (settings.getValue(CoreSettings::AutoToolTextSize).toBool())
-    {
-        QDesktopWidget *desktop = QApplication::desktop();
-        //Per calcular el tamany de la lletra tindrem en compte
-        //la resolució de la pantalla a on s'està executant l'Starviewer.
-        const QRect screen = desktop->screenGeometry(this);
-
-        int textSize;
-        if ((screen.width() * screen.height()) >= (5 * 1024 * 1024))
-        {
-            textSize = 24;
-        }
-        else if ((screen.width() * screen.height()) >= (3 * 1024 * 1024))
-        {
-            textSize = 17;
-        }
-        else
-        {
-            textSize = 14;
-        }
-
-        settings.setValue(CoreSettings::DefaultToolTextSize, textSize);
-    }
+    ApplicationStyleHelper().recomputeStyleToScreenOfWidget(this);
 }
 }; // end namespace udg
