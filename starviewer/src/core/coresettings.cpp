@@ -92,7 +92,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(NeverShowNewVersionReleaseNotes, false);
     settingsRegistry->addSetting(LastVersionChecked, "");
     settingsRegistry->addSetting(LastVersionCheckedDate, "");
-    settingsRegistry->addSetting(CheckVersionInterval, "15");
+    settingsRegistry->addSetting(CheckVersionInterval, "1");
     settingsRegistry->addSetting(DontCheckNewVersionsOnline, false);
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
