@@ -22,8 +22,8 @@ public:
     static const QString UserDICOMDumpDefaultTagsPath;
     static const QString UserCustomWindowLevelsPath;
     static const QString RegisterStatLogs;
-    static const QString DefaultToolTextSize;
-    static const QString AutoToolTextSize;
+    // Mida per defecte de la font de les annotacions, si no s'especifica, s'autocalcula.
+    static const QString ToolsFontSize;
     
     static const QString NumberOfDirectionsForLowQualityObscurances;
     static const QString FunctionForLowQualityObscurances;

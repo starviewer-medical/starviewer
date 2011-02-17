@@ -27,6 +27,9 @@ public:
 
     /// Ens retorna el tamany de font que han de tenir les tools
     int getToolsFontSize() const;
+
+private:
+    static double m_scaleFactor;
 };
 
 } // Ens namespace udg
