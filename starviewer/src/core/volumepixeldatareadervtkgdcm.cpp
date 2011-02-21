@@ -23,6 +23,8 @@ VolumePixelDataReaderVTKGDCM::VolumePixelDataReaderVTKGDCM(QObject *parent)
     m_vtkGDCMReader = vtkGDCMImageReader::New();
     // Mantenim el sistema de coordenades com quan es llegeix amb itkGDCM
     m_vtkGDCMReader->FileLowerLeftOn();
+    // Deshabilitem la lectura d'overlays. L'haurem de reactivar quan volguem suportar-los (#1358).
+    m_vtkGDCMReader->LoadOverlaysOff();
     // Pel progress de vtk
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkQtConnections->Connect(m_vtkGDCMReader, vtkCommand::ProgressEvent, this, SLOT(slotProgress()));
