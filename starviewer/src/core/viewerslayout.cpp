@@ -196,36 +196,6 @@ void ViewersLayout::setGrid(int rows, int columns)
     int windowsToShow = 0;
     int windowsToCreate = 0;
     
-    if (rows > m_visibleRows)
-    {
-        int windowsToHide = m_totalRows - m_visibleRows;
-
-        if (windowsToHide < (rows - m_visibleRows))
-        {
-            windowsToShow = windowsToHide;
-        }
-        else
-        {
-            windowsToShow = rows - m_visibleRows;
-        }
-
-        showRows(windowsToShow);
-
-        if (rows > m_totalRows)
-        {
-            windowsToCreate = rows - m_totalRows;
-        }
-
-        addRows(windowsToCreate);
-    }
-    else if (rows < m_visibleRows)
-    {
-        hideRows(m_visibleRows - rows);
-    }
-
-    windowsToShow = 0;
-    windowsToCreate = 0;
-
     if (columns > m_visibleColumns)
     {
         int windowsToHide = m_totalColumns - m_visibleColumns;
@@ -252,6 +222,37 @@ void ViewersLayout::setGrid(int rows, int columns)
     {
         hideColumns(m_visibleColumns - columns);
     }
+
+    windowsToShow = 0;
+    windowsToCreate = 0;
+
+    if (rows > m_visibleRows)
+    {
+        int windowsToHide = m_totalRows - m_visibleRows;
+
+        if (windowsToHide < (rows - m_visibleRows))
+        {
+            windowsToShow = windowsToHide;
+        }
+        else
+        {
+            windowsToShow = rows - m_visibleRows;
+        }
+
+        showRows(windowsToShow);
+
+        if (rows > m_totalRows)
+        {
+            windowsToCreate = rows - m_totalRows;
+        }
+
+        addRows(windowsToCreate);
+    }
+    else if (rows < m_visibleRows)
+    {
+        hideRows(m_visibleRows - rows);
+    }
+    
     m_isRegular = true;
 }
 
