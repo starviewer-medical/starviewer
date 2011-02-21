@@ -120,7 +120,7 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
     // MONOCHROME1 is also implemented with a lookup table
 
     int imageFormat = m_vtkGDCMReader->GetImageFormat();
-    if (imageFormat == VTK_LOOKUP_TABLE || imageFormat == VTK_INVERSE_LUMINANCE)
+    if (imageFormat == VTK_LOOKUP_TABLE)
     {
         assert(m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars() && m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
         // Convert to color:
@@ -137,16 +137,8 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
             vtkImageMapToColors16 *imageColorMapper16 = vtkImageMapToColors16::New();
             imageColorMapper16->SetInput(m_vtkGDCMReader->GetOutput());
             imageColorMapper16->SetLookupTable(m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
-            if (imageFormat == VTK_LOOKUP_TABLE)
-            {
-                DEBUG_LOG(">> Format RGB");
-                imageColorMapper16->SetOutputFormatToRGB();
-            }
-            else if (imageFormat == VTK_INVERSE_LUMINANCE)
-            {
-                DEBUG_LOG(">> Format INVERSE LUMINANCE");
-                imageColorMapper16->SetOutputFormatToLuminance();
-            }
+            DEBUG_LOG(">> Format RGB");
+            imageColorMapper16->SetOutputFormatToRGB();
             imageColorMapper16->Update();
             imageData = imageColorMapper16->GetOutput();
             imageColorMapper16->Register(imageData);
@@ -158,16 +150,8 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
             vtkImageMapToColors *imageColorMapper = vtkImageMapToColors::New();
             imageColorMapper->SetInput(m_vtkGDCMReader->GetOutput());
             imageColorMapper->SetLookupTable(m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
-            if (imageFormat == VTK_LOOKUP_TABLE)
-            {
-                DEBUG_LOG(">> Format RGB");
-                imageColorMapper->SetOutputFormatToRGB();
-            }
-            else if (imageFormat == VTK_INVERSE_LUMINANCE)
-            {
-                DEBUG_LOG(">> Format INVERSE LUMINANCE");
-                imageColorMapper->SetOutputFormatToLuminance();
-            }
+            DEBUG_LOG(">> Format RGB");
+            imageColorMapper->SetOutputFormatToRGB();
             imageColorMapper->Update();
             imageData = imageColorMapper->GetOutput();
             imageColorMapper->Register(imageData);
