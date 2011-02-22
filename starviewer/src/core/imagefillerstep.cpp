@@ -100,7 +100,7 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                         {
                             // Si la imatge anterior i l'actual tenen mides diferents, aniran en un volum diferent
                             Image *lastProcessedImage = m_input->getCurrentSeries()->getImages().last();
-                            if (lastProcessedImage->getColumns() != image->getColumns() || lastProcessedImage->getRows() != image->getRows())
+                            if (areOfDifferentSize(lastProcessedImage, image) || areOfDifferentPhotometricInterpretation(lastProcessedImage, image))
                             {
                                 m_input->increaseCurrentSingleFrameVolumeNumber();
                                 volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
@@ -969,6 +969,22 @@ QString ImageFillerStep::mapDirectionCosinesToOrientationString(double vector[3]
         *optr='\0';
     }
     return QString(orientation);
+}
+
+bool ImageFillerStep::areOfDifferentSize(Image *firstImage, Image *secondImage)
+{
+    Q_ASSERT(firstImage);
+    Q_ASSERT(secondImage);
+    
+    return firstImage->getColumns() != secondImage->getColumns() || firstImage->getRows() != secondImage->getRows();
+}
+
+bool ImageFillerStep::areOfDifferentPhotometricInterpretation(Image *firstImage, Image *secondImage)
+{
+    Q_ASSERT(firstImage);
+    Q_ASSERT(currentImage);
+
+    return firstImage->getPhotometricInterpretation().trimmed() != secondImage->getPhotometricInterpretation().trimmed();
 }
 
 }
