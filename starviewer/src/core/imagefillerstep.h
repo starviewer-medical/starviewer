@@ -73,6 +73,12 @@ private:
     
     /// Helper method per obtenir l'string corresponent a un direction cosines. Donat un vector de direcció determina la seva etiqueta d'orientació R,L,A,P,S,I
     QString mapDirectionCosinesToOrientationString(double vector[3]);
+
+    /// Ens diu si les imatges són de mides diferents
+    bool areOfDifferentSize(Image *firstImage, Image *secondImage);
+
+    /// Ens diu si les imatges tenen photometric interpretations diferents
+    bool areOfDifferentPhotometricInterpretation(Image *firstImage, Image *secondImage);
 };
 
 }
