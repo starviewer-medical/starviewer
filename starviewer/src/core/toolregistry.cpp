@@ -369,10 +369,10 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "OvalROITool")
     {
-        toolAction->setText(tr("Oval ROI"));
+        toolAction->setText(tr("Elliptical ROI"));
         toolAction->setIcon(QIcon(":/images/ovalROITool.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OvalROITool));
-        statusTip = tr("Enable/Disable Oval ROI tool");
+        statusTip = tr("Enable/Disable Elliptical ROI tool");
         toolTip = toolAction->text();
     }
     else
