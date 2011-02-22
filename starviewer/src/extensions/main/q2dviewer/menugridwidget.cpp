@@ -55,17 +55,12 @@ void MenuGridWidget::initializeWidget()
     QSpacerItem *spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_gridLayoutHanging->addItem(spacerItem, 0, MaximumNumberOfColumns, 1, 1);
 
-    QFrame *lineHanging = new QFrame(this);
-    lineHanging->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    lineHanging->setFrameShape(QFrame::HLine);
-    lineHanging->setFrameShadow(QFrame::Sunken);
     QLabel *labelHanging = new QLabel(this);
     labelHanging->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     labelHanging->setText("Hanging protocols");
     QHBoxLayout *hBoxLayoutHanging = new QHBoxLayout();
     hBoxLayoutHanging->setMargin(0);
     hBoxLayoutHanging->setSpacing(6);
-    hBoxLayoutHanging->addWidget(lineHanging);
     hBoxLayoutHanging->addWidget(labelHanging);
 
     m_gridLayout->addLayout(hBoxLayoutHanging, 2, 0, 1, 1);
