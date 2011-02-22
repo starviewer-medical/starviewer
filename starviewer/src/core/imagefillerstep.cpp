@@ -982,7 +982,7 @@ bool ImageFillerStep::areOfDifferentSize(Image *firstImage, Image *secondImage)
 bool ImageFillerStep::areOfDifferentPhotometricInterpretation(Image *firstImage, Image *secondImage)
 {
     Q_ASSERT(firstImage);
-    Q_ASSERT(currentImage);
+    Q_ASSERT(secondImage);
 
     return firstImage->getPhotometricInterpretation().trimmed() != secondImage->getPhotometricInterpretation().trimmed();
 }
