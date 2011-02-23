@@ -26,8 +26,7 @@ PatientBrowserMenu::PatientBrowserMenu(QWidget *parent)
  : QWidget(parent), m_patientBrowserList(0), m_patientAdditionalInfo(0)
 {
     ApplicationStyleHelper style;
-    QString changeFontSize = QString("QLabel { font-size: %1pt }").arg(style.getPatientMenuBrowserFontSize());
-    this->setStyleSheet(changeFontSize);
+    style.setScaledFontSizeTo(this);
 }
 
 PatientBrowserMenu::~PatientBrowserMenu()

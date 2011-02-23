@@ -21,7 +21,7 @@ const QString CoreSettings::UserCustomWindowLevelsPath("CustomWindowLevels/path"
 const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
 const QString CoreSettings::ToolsFontSize("Tools/ToolsFontSize");
-const QString CoreSettings::PatientBrowserMenuFontSize("PatientBrowserMenuFontSize");
+const QString CoreSettings::ScaledUserInterfaceFontSize("ScaledUserInterfaceFontSize");
 
 // Paràmetres d'obscurances
 const QString ObscurancesBase("3DViewer/obscurances/");
