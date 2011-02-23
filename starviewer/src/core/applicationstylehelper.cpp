@@ -53,17 +53,17 @@ int ApplicationStyleHelper::getPatientMenuBrowserFontSize() const
 
 int ApplicationStyleHelper::getFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const
 {
-    double toolsFontSize = defaultFontSize * m_scaleFactor;
+    double fontSize = defaultFontSize * m_scaleFactor;
 
     //TODO de moment es deixa un "backdoor" per poder especificar un text arbitrari a partir de configuració
     // caldrà treure'l un cop comprovat que no hi ha problemes
     Settings settings;
     if (settings.contains(settingsBackdoorKey))
     {
-        toolsFontSize = settings.getValue(settingsBackdoorKey).toInt();
+        fontSize = settings.getValue(settingsBackdoorKey).toInt();
     }
 
-    return MathTools::roundToNearestInteger(toolsFontSize);
+    return MathTools::roundToNearestInteger(fontSize);
 }
 
 } // Ens namespace udg
