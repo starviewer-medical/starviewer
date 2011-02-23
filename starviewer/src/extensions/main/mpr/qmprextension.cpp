@@ -909,6 +909,9 @@ void QMPRExtension::initOrientation()
         zbounds[0] = zbounds[1];
         zbounds[1] = t;
     }
+
+    double volumeSize[3] = {xbounds[1] - xbounds[0], ybounds[1] - ybounds[0], zbounds[1] - zbounds[0]};
+
     // XY, z-normal : vista axial, en principi d'aquesta vista nomès canviarem la llesca
     m_axialPlaneSource->SetOrigin(xbounds[0], ybounds[0], zbounds[0]);
     m_axialPlaneSource->SetPoint1(xbounds[1], ybounds[0], zbounds[0]);
@@ -919,12 +922,12 @@ void QMPRExtension::initOrientation()
     // Estem ajustant la mida del pla a les dimensions d'aquesta orientació
     // La mida de la Y inicial, que serà una combinació d'X i Y durant l'execució, ha de ser la diagonal del pla XY. Ampliarem la meitat a cada banda sobre la mida d'Y.
     // Atenció: estem assumint que xbounds[0] = 0. La forma correcta seria (xbounds[1] - xbounds[0] (+1?)). El mateix per y.
-    double xyDiagonal = sqrt(xbounds[1] * xbounds[1] + ybounds[1] * ybounds[1]);
-    double halfDeltaY = (xyDiagonal - ybounds[1]) * 0.5;
+    double xyDiagonal = sqrt(volumeSize[0] * volumeSize[0] + volumeSize[1] * volumeSize[1]);
+    double halfDeltaY = (xyDiagonal - volumeSize[1]) * 0.5;
     m_sagitalPlaneSource->SetOrigin(xbounds[0], ybounds[0] - halfDeltaY, zbounds[1]);
     m_sagitalPlaneSource->SetPoint1(xbounds[0], ybounds[1] + halfDeltaY, zbounds[1]);
     m_sagitalPlaneSource->SetPoint2(xbounds[0], ybounds[0] - halfDeltaY, zbounds[0]);
-    m_sagitalPlaneSource->Push(-0.5 * (xbounds[1] - xbounds[0]));
+    m_sagitalPlaneSource->Push(-0.5 * volumeSize[0]);
     // Calculem la translació necessària per dibuixar les interseccions dels plans a la vista sagital
     m_sagitalTranslation[0] = m_sagitalPlaneSource->GetCenter()[1] + halfDeltaY;
     m_sagitalTranslation[1] = m_sagitalPlaneSource->GetCenter()[2];
@@ -943,13 +946,13 @@ void QMPRExtension::initOrientation()
     // ídem anterior
     // La mida de la X i la Z inicials, que seran una combinació d'X, Y i Z durant l'execució, ha de ser la diagonal del volum. Ampliarem la meitat a cada banda sobre la mida dels eixos X i Z.
     // Atenció: estem assumint que xbounds[0] = 0. La forma correcta seria (xbounds[1] - xbounds[0] (+1?)). El mateix per y i z.
-    double diagonal = sqrt(xbounds[1] * xbounds[1] + ybounds[1] * ybounds[1] + zbounds[1] * zbounds[1]);
-    double halfDeltaX = (diagonal - xbounds[1]) * 0.5;
-    double halfDeltaZ = (diagonal - zbounds[1]) * 0.5;
+    double diagonal = sqrt(volumeSize[0] * volumeSize[0] + volumeSize[1] * volumeSize[1] + volumeSize[2] * volumeSize[2]);
+    double halfDeltaX = (diagonal - volumeSize[0]) * 0.5;
+    double halfDeltaZ = (diagonal - volumeSize[2]) * 0.5;
     m_coronalPlaneSource->SetOrigin(xbounds[0] - halfDeltaX, ybounds[0], zbounds[1] + halfDeltaZ);
     m_coronalPlaneSource->SetPoint1(xbounds[1] + halfDeltaX, ybounds[0], zbounds[1] + halfDeltaZ);
     m_coronalPlaneSource->SetPoint2(xbounds[0] - halfDeltaX, ybounds[0], zbounds[0] - halfDeltaZ);
-    m_coronalPlaneSource->Push(0.5 * (ybounds[1] - ybounds[0]));
+    m_coronalPlaneSource->Push(0.5 * volumeSize[1]);
     // Calculem els extents del coronal
     double coronalExtentLength = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1] + extentLength[2] * extentLength[2]));
     // coronalExtentLength *= 2.0; // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
