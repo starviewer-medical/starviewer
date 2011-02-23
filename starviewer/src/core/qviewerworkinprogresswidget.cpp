@@ -16,6 +16,7 @@ QViewerWorkInProgressWidget::QViewerWorkInProgressWidget(QWidget *parent)
     m_progressBarLabel->setMovie(m_progressBarAnimation);
 
     ApplicationStyleHelper styleHelper;
+    styleHelper.setScaledSizeTo(m_progressBarAnimation);
     styleHelper.setScaledFontSizeTo(this);
 
     this->reset();
