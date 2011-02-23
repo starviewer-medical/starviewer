@@ -21,6 +21,7 @@
 #include "pacsrequeststatus.h"
 #include "patient.h"
 #include "settings.h"
+#include "applicationstylehelper.h"
 
 namespace udg {
 
@@ -29,6 +30,9 @@ const int QPopUpRISRequestsScreen::msTimeOutToMovePopUpToBottomRight = 5000;
 
 QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(parent)
 {
+    ApplicationStyleHelper style;
+    style.setScaledFontSizeTo(this);
+
     setupUi(this);
     this->setWindowFlags(Qt::SubWindow | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
@@ -39,9 +43,14 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
     m_operationAnimation->setMovie(operationAnimation);
+    style.setScaledSizeTo(operationAnimation);
     operationAnimation->start();
 
     connect(&m_hidePopUpAnimation, SIGNAL(finished()), this, SLOT(hidePopUp()));
+
+    // TODO: Aquesta és la única manera que s'ha trobat de que el text, al canviar-lo a un tamany major, no quedi tallat
+    // caldria refer el diàleg i vigilar el tema de com es fa per situar-lo, etc. perquè ara mateix és una mica "hack".
+    this->layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
 
 void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
