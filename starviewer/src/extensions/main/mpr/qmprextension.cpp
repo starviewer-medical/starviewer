@@ -76,8 +76,8 @@ QMPRExtension::~QMPRExtension()
 {
     writeSettings();
     // Fent això o no sembla que s'allibera la mateixa memòria gràcies als smart pointers
-    m_sagitalReslice->Delete();
-    m_coronalReslice->Delete();
+    if (m_sagitalReslice) m_sagitalReslice->Delete();
+    if (m_coronalReslice) m_coronalReslice->Delete();
 
     m_transform->Delete();
 
@@ -123,13 +123,8 @@ void QMPRExtension::init()
     m_thickSlabPlaneSource->SetXResolution(1);
     m_thickSlabPlaneSource->SetYResolution(1);
 
-    m_sagitalReslice = vtkImageReslice::New();
-    m_sagitalReslice->AutoCropOutputOn(); // Perquè l'extent d'output sigui suficient i no es "mengi" dades
-    m_sagitalReslice->SetInterpolationModeToCubic();
-
-    m_coronalReslice = vtkImageReslice::New();
-    m_coronalReslice->AutoCropOutputOn();
-    m_coronalReslice->SetInterpolationModeToCubic();
+    m_sagitalReslice = 0;
+    m_coronalReslice = 0;
 
     // Configurem les annotacions que volem veure
     m_sagital2DView->removeAnnotation(Q2DViewer::PatientOrientationAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::SliceAnnotation );
@@ -813,7 +808,16 @@ void QMPRExtension::setInput(Volume *input)
 
     m_volume->getSpacing(m_axialSpacing);
 
+    if (m_sagitalReslice) m_sagitalReslice->Delete();
+    m_sagitalReslice = vtkImageReslice::New();
+    m_sagitalReslice->AutoCropOutputOn(); // Perquè l'extent d'output sigui suficient i no es "mengi" dades
+    m_sagitalReslice->SetInterpolationModeToCubic();
     m_sagitalReslice->SetInput(m_volume->getVtkData());
+
+    if (m_coronalReslice) m_coronalReslice->Delete();
+    m_coronalReslice = vtkImageReslice::New();
+    m_coronalReslice->AutoCropOutputOn();
+    m_coronalReslice->SetInterpolationModeToCubic();
     m_coronalReslice->SetInput(m_volume->getVtkData());
 
     // Faltaria refrescar l'input dels 3 mpr
