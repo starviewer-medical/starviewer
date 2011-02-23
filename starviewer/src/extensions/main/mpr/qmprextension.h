@@ -81,7 +81,7 @@ private:
     void updatePlanes();
 
     /// Actualitza els valors del pla donat amb el reslice associat
-    void updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *reslice);
+    void updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *reslice, int extentLength[2]);
 
     /// Actualitza el punt d'intersecció dels 3 plans
     void updateIntersectionPoint();
@@ -191,6 +191,11 @@ private:
 
     /// Translació necessària per dibuixar les interseccions dels plans a la vista sagital
     double m_sagitalTranslation[3];
+
+    /// Mida de l'extent de l'X i l'Y del pla sagital.
+    int m_sagitalExtentLength[2];
+    /// Mida de l'extent de l'X i l'Y del pla coronal.
+    int m_coronalExtentLength[2];
     
     /// Conjunt de tools disponibles en aquesta extensió
     QStringList m_extensionToolsList;
