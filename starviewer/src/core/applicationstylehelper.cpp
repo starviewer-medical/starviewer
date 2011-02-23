@@ -2,6 +2,7 @@
 
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QMovie>
 
 #include "coresettings.h"
 #include "mathtools.h"
@@ -38,6 +39,14 @@ void ApplicationStyleHelper::recomputeStyleToScreenOfWidget(QWidget *widget)
 int ApplicationStyleHelper::getToolsFontSize() const
 {
     return this->getScaledFontSize(14.0, CoreSettings::ToolsFontSize);
+}
+
+void ApplicationStyleHelper::setScaledSizeTo(QMovie *movie) const
+{
+    //Per tal de que currentImage sigui vàlida, cal especificar un frame, si no, ens arrisquem a que no n'hagi llegit cap
+    //No es fa llegint directament el fitxer per evitar lectures innecessàries
+    movie->jumpToFrame(0);
+    movie->setScaledSize(movie->currentImage().size() * m_scaleFactor);
 }
 
 void ApplicationStyleHelper::setScaledFontSizeTo(QWidget *widget) const
