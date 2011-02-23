@@ -861,6 +861,7 @@ void QMPRExtension::initOrientation()
 */
     int extent[6];
     m_volume->getWholeExtent(extent);
+    int extentLength[3] = {extent[1] - extent[0] + 1, extent[3] - extent[2] + 1, extent[5] - extent[4] + 1};
     double origin[3];
     m_volume->getOrigin(origin);
     double spacing[3];
@@ -912,6 +913,15 @@ void QMPRExtension::initOrientation()
     m_sagitalTranslation[0] = m_sagitalPlaneSource->GetCenter()[1] + halfDeltaY;
     m_sagitalTranslation[1] = m_sagitalPlaneSource->GetCenter()[2];
     m_sagitalTranslation[2] = 0.0;
+    // Calculem els extents del sagital
+    double sagitalExtentLengthX = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1]));
+    // sagitalExtentLengthX *= 2.0;    // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
+    m_sagitalExtentLength[0] = 1;
+    while (m_sagitalExtentLength[0] < sagitalExtentLengthX)
+    {
+        m_sagitalExtentLength[0] *= 2;
+    }
+    m_sagitalExtentLength[1] = extentLength[2];
 
     // ZX, y-normal : vista coronal
     // ídem anterior
@@ -924,6 +934,15 @@ void QMPRExtension::initOrientation()
     m_coronalPlaneSource->SetPoint1(xbounds[1] + halfDeltaX, ybounds[0], zbounds[1] + halfDeltaZ);
     m_coronalPlaneSource->SetPoint2(xbounds[0] - halfDeltaX, ybounds[0], zbounds[0] - halfDeltaZ);
     m_coronalPlaneSource->Push(0.5 * (ybounds[1] - ybounds[0]));
+    // Calculem els extents del coronal
+    double coronalExtentLength = sqrt(static_cast<double>(extentLength[0] * extentLength[0] + extentLength[1] * extentLength[1] + extentLength[2] * extentLength[2]));
+    // coronalExtentLength *= 2.0; // potser caldria doblar l'extent per assegurar que no es perdi detall (Nyquist)
+    m_coronalExtentLength[0] = 1;
+    while (m_coronalExtentLength[0] < coronalExtentLength)
+    {
+        m_coronalExtentLength[0] *= 2;
+    }
+    m_coronalExtentLength[1] = m_coronalExtentLength[0];
 
     updatePlanes();
     updateControls();
@@ -1158,12 +1177,12 @@ void QMPRExtension::updateIntersectionPoint()
 
 void QMPRExtension::updatePlanes()
 {
-    updatePlane(m_sagitalPlaneSource, m_sagitalReslice);
-    updatePlane(m_coronalPlaneSource, m_coronalReslice);
+    updatePlane(m_sagitalPlaneSource, m_sagitalReslice, m_sagitalExtentLength);
+    updatePlane(m_coronalPlaneSource, m_coronalReslice, m_coronalExtentLength);
     updateIntersectionPoint();
 }
 
-void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *reslice)
+void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *reslice, int extentLength[2])
 {
     if (!reslice || !(vtkImageData::SafeDownCast(reslice->GetInput())) )
     {
@@ -1279,62 +1298,10 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
 
     resliceAxes->Delete();
 
-    double spacingX = fabs(planeAxis1[0]*spacing[0])+\
-                    fabs(planeAxis1[1]*spacing[1])+\
-                    fabs(planeAxis1[2]*spacing[2]);
-
-    double spacingY = fabs(planeAxis2[0]*spacing[0])+\
-                    fabs(planeAxis2[1]*spacing[1])+\
-                    fabs(planeAxis2[2]*spacing[2]);
-
-
-    // Pad extent up to a power of two for efficient texture mapping
-
-    // Make sure we're working with valid values
-    double realExtentX = (spacingX == 0) ? 0 : planeSizeX / spacingX;
-
-    int extentX;
-    // Sanity check the input data:
-    // * if realExtentX is too large, extentX will wrap
-    // * if spacingX is 0, things will blow up.
-    // * if realExtentX is naturally 0 or < 0, the padding will yield an
-    //   extentX of 1, which is also not desirable if the input data is invalid.
-    if (realExtentX > (VTK_INT_MAX >> 1) || realExtentX < 1)
-    {
-        WARN_LOG("Invalid X extent. [" + QString::number(realExtentX) + "] Perhaps the input data is empty?");
-        extentX = 0;
-    }
-    else
-    {
-        extentX = 1;
-        while (extentX < realExtentX)
-        {
-            extentX = extentX << 1;
-        }
-    }
-
-    // Make sure extentY doesn't wrap during padding
-    double realExtentY = (spacingY == 0) ? 0 : planeSizeY / spacingY;
-
-    int extentY;
-    if (realExtentY > (VTK_INT_MAX >> 1) || realExtentY < 1)
-    {
-        WARN_LOG("Invalid Y extent. [" + QString::number(realExtentY) + "] Perhaps the input data is empty?");
-        extentY = 0;
-    }
-    else
-    {
-        extentY = 1;
-        while (extentY < realExtentY)
-        {
-            extentY = extentY << 1;
-        }
-    }
-
-    reslice->SetOutputSpacing(planeSizeX/extentX, planeSizeY/extentY, 1);
+    reslice->SetOutputSpacing(planeSizeX / extentLength[0], planeSizeY / extentLength[1], 1.0);
     reslice->SetOutputOrigin(0.0, 0.0, 0.0);
     // TODO Li passem thickSlab que és double però això només accepta int's! Buscar si aquesta és la manera adequada. Potsre si volem fer servir doubles ho hauríem de combinar amb l'outputSpacing
-    reslice->SetOutputExtent(0, extentX-1, 0, extentY-1, 0, static_cast<int>(m_thickSlab)); // obtenim una única llesca
+    reslice->SetOutputExtent(0, extentLength[0] - 1, 0, extentLength[1] - 1, 0, static_cast<int>(m_thickSlab)); // obtenim una única llesca
     reslice->Update();
 }
 
@@ -1513,7 +1480,7 @@ void QMPRExtension::updateThickSlab(double value)
 {
     m_thickSlab = value;
     m_thickSlabSlider->setValue((int) value);
-    updatePlane(m_coronalPlaneSource, m_coronalReslice);
+    updatePlane(m_coronalPlaneSource, m_coronalReslice, m_coronalExtentLength);
     updateControls();
 }
 
@@ -1521,7 +1488,7 @@ void QMPRExtension::updateThickSlab(int value)
 {
     m_thickSlab = (double) value;
     m_thickSlabSpinBox->setValue(m_thickSlab);
-    updatePlane(m_coronalPlaneSource, m_coronalReslice);
+    updatePlane(m_coronalPlaneSource, m_coronalReslice, m_coronalExtentLength);
     updateControls();
 }
 
