@@ -29,16 +29,14 @@ public:
     /// Ens retorna el tamany de font que han de tenir les tools
     int getToolsFontSize() const;
 
-    /// Retorna el tamany de font del text de QWorkInProgressWidget
-    int getWorkInProgressFontSize() const;
 
-    /// Retorna el tamany de la font que ha de tenir el Patient Menú Browser
-    int getPatientMenuBrowserFontSize() const;
+    /// Escala el tamany de lletra d'un QWidget al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
+    void setScaledFontSizeTo(QWidget *widget) const;
 
 private:
     /// A partir d'un tamany per defecte i una clau de setting que indica si el tamany està canviat per config.
     /// retorna el tamany de lletra adaptat a la pantalla
-    int getFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const;
+    int getScaledFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const;
 
 private:
     static double m_scaleFactor;

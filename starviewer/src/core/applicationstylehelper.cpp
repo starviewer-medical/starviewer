@@ -37,21 +37,18 @@ void ApplicationStyleHelper::recomputeStyleToScreenOfWidget(QWidget *widget)
 
 int ApplicationStyleHelper::getToolsFontSize() const
 {
-    return this->getFontSize(14.0, CoreSettings::ToolsFontSize);
+    return this->getScaledFontSize(14.0, CoreSettings::ToolsFontSize);
 }
 
-int ApplicationStyleHelper::getWorkInProgressFontSize() const
-{
-    return this->getToolsFontSize();
-}
-
-int ApplicationStyleHelper::getPatientMenuBrowserFontSize() const
+void ApplicationStyleHelper::setScaledFontSizeTo(QWidget *widget) const
 {
     // Al ser text de Qt, agafem el tamany de font del sistema com a predeterminat
-    return this->getFontSize(QApplication::font().pointSizeF(), CoreSettings::PatientBrowserMenuFontSize);
+    int fontSize = this->getScaledFontSize(QApplication::font().pointSizeF(), CoreSettings::ScaledUserInterfaceFontSize);
+    QString changeFontSize = QString("QLabel { font-size: %1pt }").arg(fontSize);
+    widget->setStyleSheet(changeFontSize);
 }
 
-int ApplicationStyleHelper::getFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const
+int ApplicationStyleHelper::getScaledFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const
 {
     double fontSize = defaultFontSize * m_scaleFactor;
 

@@ -9,15 +9,14 @@ namespace udg {
 QViewerWorkInProgressWidget::QViewerWorkInProgressWidget(QWidget *parent)
     : QWidget(parent)
 {
-    ApplicationStyleHelper styleHelper;
-    QString changeFontSize = QString("QLabel { font-size: %1pt }").arg(styleHelper.getWorkInProgressFontSize());
-    this->setStyleSheet(changeFontSize);
-
     this->setupUi(this);
 
     m_progressBarAnimation = new QMovie(this);
     m_progressBarAnimation->setFileName(":/images/downloading.gif");
     m_progressBarLabel->setMovie(m_progressBarAnimation);
+
+    ApplicationStyleHelper styleHelper;
+    styleHelper.setScaledFontSizeTo(this);
 
     this->reset();
 }
