@@ -169,6 +169,7 @@ void QPopUpRISRequestsScreen::showPatientNameOfRetrievingStudies(Patient *patien
 void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
 {
     //Es situa el PopUp al centre de la pantalla on està la mainWindow del Starviewer
+    //TODO Ara s'està agafant la geometria de manera "xapussilla" dels settings d'interface, caldria solucionar-ho i fer-ho diferent
     Settings settings;
     QWidget fakeMainWindow;
 
