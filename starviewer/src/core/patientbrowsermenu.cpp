@@ -33,82 +33,82 @@ PatientBrowserMenu::~PatientBrowserMenu()
 {
 }
 
-void PatientBrowserMenu::setPatient(Patient * patient)
+void PatientBrowserMenu::setPatient(Patient *patient)
 {
     createWidgets();
     QString caption;
     QString label;
-    foreach( Study *study, patient->getStudies() )
+    foreach (Study *study, patient->getStudies())
     {
         // Extreiem el caption de l'estudi
         caption = tr("Study %1 : %2 [%3] %4")
-            .arg( study->getDateAsString() )
-            .arg( study->getTimeAsString() )
-            .arg( study->getModalitiesAsSingleString() )
-            .arg( study->getDescription() );
+            .arg(study->getDateAsString())
+            .arg(study->getTimeAsString())
+            .arg(study->getModalitiesAsSingleString())
+            .arg(study->getDescription());
 
         // Per cada sèrie de l'estudi extreurem el seu label i l'identificador
-        QList< QPair<QString,QString> > itemsList;
-        foreach( Series *series, study->getViewableSeries() )
+        QList<QPair<QString, QString> > itemsList;
+        foreach (Series *series, study->getViewableSeries())
         {
             label = tr(" Serie %1: %2 %3 %4 %5")
-                        .arg( series->getSeriesNumber().trimmed() )
-                        .arg( series->getProtocolName().trimmed() )
-                        .arg( series->getDescription().trimmed() )
-                        .arg( series->getBodyPartExamined() )
-                        .arg( series->getViewPosition() );
+                        .arg(series->getSeriesNumber().trimmed())
+                        .arg(series->getProtocolName().trimmed())
+                        .arg(series->getDescription().trimmed())
+                        .arg(series->getBodyPartExamined())
+                        .arg(series->getViewPosition());
             
-            if( series->getNumberOfVolumes() > 1 )
+            if (series->getNumberOfVolumes() > 1)
             {
                 QString volumeID;
                 int volumeNumber = 1;
-                foreach( Volume *volume, series->getVolumesList() )
+                foreach (Volume *volume, series->getVolumesList())
                 {
-                    QPair<QString,QString> itemPair;
-                    // label
+                    QPair<QString, QString> itemPair;
+                    // Label
                     itemPair.first = label + " (" + QString::number(volumeNumber) + ")";
                     volumeNumber++;
-                    // identifier
+                    // Identifier
                     itemPair.second = QString::number(volume->getIdentifier().getValue());
-                    // afegim el parell a la llista
+                    // Afegim el parell a la llista
                     itemsList << itemPair;
                 }
             }
-            else // només tenim un sol volum per la sèrie
+            else // Només tenim un sol volum per la sèrie
             {
                 Volume *volume = series->getFirstVolume();
-                QPair<QString,QString> itemPair;
-                // label
+                QPair<QString, QString> itemPair;
+                // Label
                 itemPair.first = label;
-                // identifier
+                // Identifier
                 itemPair.second = QString::number(volume->getIdentifier().getValue());
-                // afegim el parell a la llista
+                // Afegim el parell a la llista
                 itemsList << itemPair;
             }
         }
-        // afegim les sèries agrupades per estudi
-        m_patientBrowserList->addItemsGroup( caption, itemsList );
+        // Afegim les sèries agrupades per estudi
+        m_patientBrowserList->addItemsGroup(caption, itemsList);
     }
 
-    connect(m_patientBrowserList, SIGNAL( isActive(QString) ), SLOT( updateActiveItemView(QString) ));
-    connect(m_patientBrowserList, SIGNAL( selectedItem(QString) ), SLOT ( processSelectedItem(QString) ));
+    connect(m_patientBrowserList, SIGNAL(isActive(QString)), SLOT(updateActiveItemView(QString)));
+    connect(m_patientBrowserList, SIGNAL(selectedItem(QString)), SLOT(processSelectedItem(QString)));
 }
 
 void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
 {
-    Identifier id( identifier.toInt() );
-    Volume *volume = VolumeRepository::getRepository()->getVolume( id );
-    if( volume )
+    Identifier id(identifier.toInt());
+    Volume *volume = VolumeRepository::getRepository()->getVolume(id);
+    if (volume)
     {
-        // actualitzem les dades de l'item amb informació adicional
-        m_patientAdditionalInfo->setPixmap( volume->getThumbnail() );
+        // Actualitzem les dades de l'item amb informació adicional
+        m_patientAdditionalInfo->setPixmap(volume->getThumbnail());
         Series *series = volume->getImage(0)->getParentSeries();
-        m_patientAdditionalInfo->setText( QString( tr("%1 \n%2 \n%3\n%4 Images") )
-                                        .arg( series->getDescription().trimmed() )
-                                        .arg( series->getModality().trimmed() )
-                                        .arg( series->getProtocolName().trimmed() )
-                                        .arg( volume->getNumberOfFrames() )
-                                        );
+        m_patientAdditionalInfo->setText(QString(tr("%1 \n%2 \n%3\n%4 Images"))
+                                        .arg(series->getDescription().trimmed())
+                                        .arg(series->getModality().trimmed())
+                                        .arg(series->getProtocolName().trimmed())
+                                        .arg(volume->getNumberOfFrames())
+                                       );
         // Actualitzem la posició del widget amb la informació adicional
         updatePosition();
     }
@@ -129,40 +129,40 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     }
     else
     {
-        screen_x = qApp->desktop()->availableGeometry( point ).width();
-        screen_y = qApp->desktop()->availableGeometry( point ).height();
+        screen_x = qApp->desktop()->availableGeometry(point).width();
+        screen_y = qApp->desktop()->availableGeometry(point).height();
     }
 
-    m_patientBrowserList->markItem( identifier );
+    m_patientBrowserList->markItem(identifier);
     QSize widgetIdealSize = m_patientBrowserList->sizeHint();
 
-    if ( ( x + widgetIdealSize.width() ) > screen_x )
+    if ((x + widgetIdealSize.width()) > screen_x)
     {
         x = screen_x - widgetIdealSize.width() - 5;
     }
 
-    if ( ( y + widgetIdealSize.height() ) > screen_y )
+    if ((y + widgetIdealSize.height()) > screen_y)
     {
         y = screen_y - widgetIdealSize.height() - 5;
     }
 
-    //moure la finestra del menu al punt que toca
+    // Moure la finestra del menu al punt que toca
     m_patientBrowserList->move(x, y);
     m_patientBrowserList->show();
     
     QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
-    m_patientAdditionalInfo->resize( patientAdditionalInfoSize );
+    m_patientAdditionalInfo->resize(patientAdditionalInfoSize);
 
     // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre del menu
-    if( (m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width() ) > screen_x )
+    if ((m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width()) > screen_x)
     {
-        x = ( m_patientBrowserList->x() ) -( m_patientAdditionalInfo->frameGeometry().width() );
+        x = (m_patientBrowserList->x()) - (m_patientAdditionalInfo->frameGeometry().width());
     }
     else
     {
         x =  m_patientBrowserList->x() + m_patientBrowserList->width();
     }
-    m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
+    m_patientAdditionalInfo->move(x, m_patientBrowserList->y());
     m_patientAdditionalInfo->show();
 }
 
@@ -171,10 +171,10 @@ void PatientBrowserMenu::processSelectedItem(const QString &identifier)
     m_patientAdditionalInfo->hide();
     m_patientBrowserList->hide();
 
-    if( m_patientBrowserList->getMarkedItem() != identifier )
+    if (m_patientBrowserList->getMarkedItem() != identifier)
     {
-        Identifier id( identifier.toInt() );
-        emit selectedVolume( VolumeRepository::getRepository()->getVolume( id ) );
+        Identifier id(identifier.toInt());
+        emit selectedVolume(VolumeRepository::getRepository()->getVolume(id));
     }
 }
 
@@ -182,49 +182,53 @@ void PatientBrowserMenu::updatePosition()
 {
     int x;
     int screen_x;
-    //Passem el point per assegurar-nos que s'agafa la pantalla a on es visualitza el widget
+    // Passem el point per assegurar-nos que s'agafa la pantalla a on es visualitza el widget
     if (qApp->desktop()->isVirtualDesktop())
     {
         screen_x = qApp->desktop()->geometry().width();
     }
     else
     {
-        screen_x = qApp->desktop()->availableGeometry( m_patientBrowserList->pos() ).width();
+        screen_x = qApp->desktop()->availableGeometry(m_patientBrowserList->pos()).width();
     }
 
     QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
-    m_patientAdditionalInfo->resize( patientAdditionalInfoSize );
+    m_patientAdditionalInfo->resize(patientAdditionalInfoSize);
 
     // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre del menu
-    if( (m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width() ) > screen_x )
+    if ((m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width()) > screen_x)
     {
-        x = ( m_patientBrowserList->x() ) -( m_patientAdditionalInfo->frameGeometry().width() );
+        x = (m_patientBrowserList->x()) -(m_patientAdditionalInfo->frameGeometry().width());
     }
     else
     {
         x =  m_patientBrowserList->x() + m_patientBrowserList->width();
     }
-    m_patientAdditionalInfo->move( x, m_patientBrowserList->y() );
+    m_patientAdditionalInfo->move(x, m_patientBrowserList->y());
     m_patientAdditionalInfo->show();
     m_patientBrowserList->show();
 }
 
 void PatientBrowserMenu::createWidgets()
 {
-    if( m_patientAdditionalInfo )
+    if (m_patientAdditionalInfo)
+    {
         delete m_patientAdditionalInfo;
+    }
     
-    if( m_patientBrowserList )
+    if (m_patientBrowserList)
+    {
         delete m_patientBrowserList;
+    }
     
     m_patientAdditionalInfo = new PatientBrowserMenuExtendedItem(this);
     m_patientBrowserList = new PatientBrowserMenuList(this);
 
-    m_patientAdditionalInfo->setWindowFlags( Qt::Popup );
-    m_patientBrowserList->setWindowFlags( Qt::Popup );
+    m_patientAdditionalInfo->setWindowFlags(Qt::Popup);
+    m_patientBrowserList->setWindowFlags(Qt::Popup);
     
-    connect( m_patientAdditionalInfo, SIGNAL( close() ), m_patientBrowserList, SLOT( close() ) );
-    connect( m_patientBrowserList, SIGNAL( close() ), m_patientAdditionalInfo, SLOT( close() ) );
+    connect(m_patientAdditionalInfo, SIGNAL(close()), m_patientBrowserList, SLOT(close()));
+    connect(m_patientBrowserList, SIGNAL(close()), m_patientAdditionalInfo, SLOT(close()));
 }
 
 }
