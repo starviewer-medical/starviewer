@@ -22,10 +22,9 @@ class PatientBrowserMenuList;
     Widget en forma de menú que desplega la informació del pacient que li donem 
     d'entrada de forma que poguem navegar pels seus estudis i corresponents volums
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
-class PatientBrowserMenu : public QWidget
-{
+class PatientBrowserMenu : public QWidget {
 Q_OBJECT
 public:
     PatientBrowserMenu(QWidget *parent = 0);
@@ -36,7 +35,7 @@ public:
 
 public slots:
     /// Fem que es mostri el menú en la posició indicada
-    void popup(const QPoint &point, const QString &identifier = QString() );
+    void popup(const QPoint &point, const QString &identifier = QString());
 
 signals:
     /// Senyal que notifica el volum corresponent a l'ítem escollit
