@@ -30,9 +30,6 @@ const int QPopUpRISRequestsScreen::msTimeOutToMovePopUpToBottomRight = 5000;
 
 QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(parent)
 {
-    ApplicationStyleHelper style;
-    style.setScaledFontSizeTo(this);
-
     setupUi(this);
     this->setWindowFlags(Qt::SubWindow | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
@@ -43,7 +40,6 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
     m_operationAnimation->setMovie(operationAnimation);
-    style.setScaledSizeTo(operationAnimation);
     operationAnimation->start();
 
     connect(&m_hidePopUpAnimation, SIGNAL(finished()), this, SLOT(hidePopUp()));
@@ -185,6 +181,12 @@ void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
     settings.restoreGeometry(QString("geometry"), &fakeMainWindow);
 
     this->move(QApplication::desktop()->screenGeometry(&fakeMainWindow).center() - this->rect().center());
+
+    // TODO Ho hem de fer aquí ja que, tal i com està ara, si es fa al constructor aquest es fa abans que es cridi
+    // ApplicationStyleHelper::recomputeStyleToScreenOfWidget
+    ApplicationStyleHelper style;
+    style.setScaledFontSizeTo(this);
+    style.setScaledSizeTo(m_operationAnimation->movie());
 
     QTimer::singleShot(msTimeOutToMovePopUpToBottomRight, this, SLOT(moveToBottomRight()));
 }
