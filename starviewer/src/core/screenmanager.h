@@ -80,6 +80,32 @@ private:
     /// Indica si la primera pantalla està en diagonal a sota a la dreta de la segona. Per que sigui cert 
     /// el punt topLeft de la primera ha de ser igual al punt bottomRight de la segona
     bool isBottomRight(int desktop1, int desktop2);
+
+    /// Indica si la primera pantalla està per sobre de la segona. Comprova que el bottom de la primera estigui
+    /// per sobre del top de la segona.
+    bool isOver(int desktop1, int desktop2);
+    /// Indica si la primera pantalla està per sota de la segona. Comprova que el top de la primera estigui
+    /// per sota del bottom de la segona.
+    bool isUnder(int desktop1, int desktop2);
+    /// Indica si la primera pantalla està a l'esquerra de la segona. Comprova que el right de la primera sigui
+    /// menor que el left de la segona.
+    bool isOnLeft(int desktop1, int desktop2);
+    /// Indica si la primera pantalla està a la dreta de la segona. Comprova que el left de la primera sigui
+    /// major que el right de la segona.
+    bool isOnRight(int desktop1, int desktop2);
+
+    /// Indica si la primera pantalla està més amunt que la segona. Comprova que el top de la primera estigui
+    /// per sobre del top de la segona.
+    bool isHigher(int desktop1, int desktop2);
+    /// Indica si la primera pantalla està més avall que la segona. Comprova que el top de la primera estigui
+    /// per sota del top de la segona.
+    bool isLower(int desktop1, int desktop2);
+    /// Indica si la primera pantalla està més a l'esquerra que la segona. Comprova que el left de la primera estigui
+    /// per l'esquerra del left de la segona.
+    bool isMoreOnLeft(int desktop1, int desktop2);
+    /// Indica si la primera pantalla està més a la dreta que la segona. Comprova que el left de la primera estigui
+    /// per la dreta del left de la segona.
+    bool isMoreOnRight(int desktop1, int desktop2);
     
     /// Retorna l'identificador de la pantalla que hi ha a l'esquerra de la que es passa per paràmetres.
     int whoIsLeft(int desktopIAm);
