@@ -113,6 +113,16 @@ int ScreenManager::getIdOfScreen(QWidget *window)
     return m_applicationDesktop->screenNumber(window);
 }
 
+int ScreenManager::getScreenID(const QPoint &point) const
+{
+    return m_applicationDesktop->screenNumber(point);
+}
+
+QRect ScreenManager::getAvailableScreenGeometry(int screenID) const
+{
+    return m_applicationDesktop->availableGeometry(screenID);
+}
+
 DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
 {
     int desktopIAm = m_applicationDesktop->screenNumber(window);
