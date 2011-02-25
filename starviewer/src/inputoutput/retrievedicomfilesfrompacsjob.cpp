@@ -49,8 +49,12 @@ Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
 
 void RetrieveDICOMFilesFromPACSJob::run()
 {
-    INFO_LOG(QString("Iniciant descarrega del PACS %1 l'estudi UID: %2, series UID: %3, SOP Instance UID:%4").arg(getPacsDevice().getAETitle(), 
-        m_dicomMaskToRetrieve.getStudyInstanceUID(), m_dicomMaskToRetrieve.getSeriesInstanceUID(), m_dicomMaskToRetrieve.getSOPInstanceUID()));
+    Settings settings;
+    //TODO: És aquest el lloc per aquest missatge ? no seria potser millor fer-ho a RetrieveDICOMFilesFromPACS
+    INFO_LOG(QString("Iniciant descarrega del PACS %1, IP: %2, Port: %3, AETitle Local: %4 Port local: %5, l'estudi UID: %6, series UID: %7, SOP Instance UID:%8")
+        .arg(getPacsDevice().getAETitle(), getPacsDevice().getAddress(), QString::number(getPacsDevice().getQueryRetrieveServicePort()))
+        .arg(settings.getValue(InputOutputSettings::LocalAETitle).toString(), settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString())
+        .arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), m_dicomMaskToRetrieve.getSeriesInstanceUID(), m_dicomMaskToRetrieve.getSOPInstanceUID()));
 
     m_numberOfSeriesRetrieved = 0;
     m_lastImageSeriesInstanceUID = "";
@@ -63,7 +67,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
         return;
     }
 
-    int localPort = Settings().getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt();
+    int localPort = settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toInt();
 
     if (Utils::isPortInUse(localPort))
     {
