@@ -542,9 +542,8 @@ void QMPRExtension::rotateAxialViewAxisActor()
     double clickedWorldPoint[3];
     m_axial2DView->getEventWorldCoordinate(clickedWorldPoint);
 
+    // vectors des del centre del picked plane a m_initialPick i clickedWorldPoint
     double vec1[3], vec2[3];
-    double axis[3];
-    double direction[3];
 
     vec1[0] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
     vec1[1] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
@@ -554,20 +553,29 @@ void QMPRExtension::rotateAxialViewAxisActor()
     vec2[1] = clickedWorldPoint[1] - m_pickedActorPlaneSource->GetCenter()[1];
     vec2[2] = 0.0;
 
-    double degrees = MathTools::angleInDegrees(vec1, vec2);
-
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
-    MathTools::crossProduct(vec1, vec2, direction);
-    this->getRotationAxis(m_pickedActorPlaneSource, axis);
-    double dot = MathTools::dotProduct(direction, axis);
+    // angle de gir en graus
+    double angle = MathTools::angleInDegrees(vec1, vec2);
 
+    // direcció de l'eix de rotació
+    double direction[3];
+    MathTools::crossProduct(vec1, vec2, direction);
+
+    // eix de rotació en coordenades de món
+    double axis[3];
+    m_axialPlaneSource->GetNormal(axis);
+
+    // calculem el producte escalar per saber el sentit de l'eix (i per tant del gir)
+    double dot = MathTools::dotProduct(direction, axis);
     axis[0] *= dot;
     axis[1] *= dot;
     axis[2] *= dot;
     MathTools::normalize(axis);
-    rotateMiddle(degrees, axis, m_pickedActorPlaneSource);
+
+    rotateMiddle(angle, axis, m_pickedActorPlaneSource);
+
     updatePlanes();
     updateControls();
 }
@@ -626,41 +634,56 @@ void QMPRExtension::detectSagitalViewAxisActor()
 
 void QMPRExtension::rotateSagitalViewAxisActor()
 {
-    double clickedWorldPoint[3];
+    double clickedWorldPoint[3];    // coordenades de sagital
     m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
 
+    // transformació de coordenades de món a coordenades de sagital
+    vtkTransform *transform = getWorldToSagitalTransform();
+
+    // centre del picked plane (coordenades de sagital)
+    double pickedPlaneCenter[3];
+    transform->TransformPoint(m_pickedActorPlaneSource->GetCenter(), pickedPlaneCenter);
+
+    // vectors des del centre del picked plane (sempre és el coronal) a m_initialPick i clickedWorldPoint (coordenades de sagital)
     double vec1[3], vec2[3];
-    double axis[3];
-    double direction[3];
 
-    vec1[1] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[1];
-    vec1[2] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[2];
-    vec1[0] = 0.0;
+    vec1[0] = m_initialPickX - pickedPlaneCenter[0];
+    vec1[1] = m_initialPickY - pickedPlaneCenter[1];
+    vec1[2] = 0.0;
 
-    vec2[1] = clickedWorldPoint[0] - m_pickedActorPlaneSource->GetCenter()[1];
-    vec2[2] = clickedWorldPoint[1] - m_pickedActorPlaneSource->GetCenter()[2];
-    vec2[0] = 0.0;
-
-    double degrees = MathTools::angleInDegrees(vec1, vec2);
+    vec2[0] = clickedWorldPoint[0] - pickedPlaneCenter[0];
+    vec2[1] = clickedWorldPoint[1] - pickedPlaneCenter[1];
+    vec2[2] = 0.0;
 
     m_initialPickX = clickedWorldPoint[0];
     m_initialPickY = clickedWorldPoint[1];
 
+    // angle de gir en graus
+    double angle = MathTools::angleInDegrees(vec1, vec2);
+
+    // direcció de l'eix de rotació (coordenades de sagital)
+    double direction[3];
     MathTools::crossProduct(vec1, vec2, direction);
-    axis[0] = m_pickedActorPlaneSource->GetPoint1()[0] - m_pickedActorPlaneSource->GetOrigin()[0];
-    axis[1] = m_pickedActorPlaneSource->GetPoint1()[1] - m_pickedActorPlaneSource->GetOrigin()[1];
-    axis[2] = m_pickedActorPlaneSource->GetPoint1()[2] - m_pickedActorPlaneSource->GetOrigin()[2];
+    transform->Inverse();   // transformació de coordenades de sagital a coordenades de món
+    transform->TransformVector(direction, direction);
+    // ara direction és la direcció de l'eix de rotació en coordenades de món
 
+    // ja no hem de fer més transformacions; destruïm transform
+    transform->Delete();
+
+    // eix de rotació en coordenades de món
+    double axis[3];
+    m_sagitalPlaneSource->GetNormal(axis);
+
+    // calculem el producte escalar per saber el sentit de l'eix (i per tant del gir)
     double dot = MathTools::dotProduct(direction, axis);
-
     axis[0] *= dot;
     axis[1] *= dot;
     axis[2] *= dot;
     MathTools::normalize(axis);
-    // Invertim l'angle perquè la rotació sigui en el sentit que volem amb la vista inicial.
-    // TODO Fer això d'una manera més correcta. De moment ho fem així, mentre no millorem el sistema de rotació.
-    degrees = -degrees;
-    rotateMiddle(degrees, axis, m_pickedActorPlaneSource);
+
+    rotateMiddle(angle, axis, m_pickedActorPlaneSource);
+
     updatePlanes();
     updateControls();
 }
@@ -695,15 +718,28 @@ void QMPRExtension::getRotationAxis(vtkPlaneSource *plane, double axis[3])
 void QMPRExtension::pushSagitalViewCoronalAxisActor()
 {
     this->setCursor(QCursor(Qt::ClosedHandCursor));
-    double clickedWorldPoint[3];
-    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
-    // Get the motion vector
-    double v[3];
-    v[1] = clickedWorldPoint[0] - m_initialPickX;
-    v[2] = clickedWorldPoint[1] - m_initialPickY;
-    v[0] = 0.0;
 
-    m_pickedActorPlaneSource->Push(MathTools::dotProduct(v, m_pickedActorPlaneSource->GetNormal()));
+    double clickedWorldPoint[3];    // coordenades de sagital
+    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
+
+    // translació del pla coronal (coordenades de sagital)
+    double translation[3];
+    translation[0] = clickedWorldPoint[0] - m_initialPickX;
+    translation[1] = clickedWorldPoint[1] - m_initialPickY;
+    translation[2] = 0.0;
+
+    // transformació de coordenades de sagital a coordenades de món
+    vtkTransform *sagitalToWorldTransform = getWorldToSagitalTransform();
+    sagitalToWorldTransform->Inverse();
+
+    sagitalToWorldTransform->TransformVector(translation, translation);
+    // ara translation és la translació del pla coronal en coordenades de món
+
+    // ja no hem de fer més transformacions; destruïm sagitalToWorldTransform
+    sagitalToWorldTransform->Delete();
+
+    m_pickedActorPlaneSource->Push(MathTools::dotProduct(translation, m_pickedActorPlaneSource->GetNormal()));
+
     updatePlanes();
     updateControls();
 
@@ -1064,39 +1100,8 @@ void QMPRExtension::updateControls()
     m_thickSlabPlaneSource->SetPoint2(m_coronalPlaneSource->GetPoint2());
     m_thickSlabPlaneSource->Push(m_thickSlab);
 
-    // Calculem la transformació necessària per dibuixar les interseccions dels plans a la vista sagital
-
-    double sagitalPlaneAxis1[3];
-    double sagitalPlaneAxis2[3];
-    double sagitalPlaneNormal[3];
-    double sagitalPlaneCenter[3];
-    sagitalPlaneAxis1[0] = m_sagitalPlaneSource->GetPoint1()[0] - m_sagitalPlaneSource->GetOrigin()[0];
-    sagitalPlaneAxis1[1] = m_sagitalPlaneSource->GetPoint1()[1] - m_sagitalPlaneSource->GetOrigin()[1];
-    sagitalPlaneAxis1[2] = m_sagitalPlaneSource->GetPoint1()[2] - m_sagitalPlaneSource->GetOrigin()[2];
-    MathTools::normalize(sagitalPlaneAxis1);
-    sagitalPlaneAxis2[0] = m_sagitalPlaneSource->GetPoint2()[0] - m_sagitalPlaneSource->GetOrigin()[0];
-    sagitalPlaneAxis2[1] = m_sagitalPlaneSource->GetPoint2()[1] - m_sagitalPlaneSource->GetOrigin()[1];
-    sagitalPlaneAxis2[2] = m_sagitalPlaneSource->GetPoint2()[2] - m_sagitalPlaneSource->GetOrigin()[2];
-    MathTools::normalize(sagitalPlaneAxis2);
-    m_sagitalPlaneSource->GetNormal(sagitalPlaneNormal);
-    m_sagitalPlaneSource->GetCenter(sagitalPlaneCenter);
-
-    vtkMatrix4x4 *sagitalTransformationMatrix = vtkMatrix4x4::New();
-    sagitalTransformationMatrix->Identity();
-
-    for (int i = 0; i < 3; i++)
-    {
-        sagitalTransformationMatrix->SetElement(0, i, sagitalPlaneAxis1[i]);
-        sagitalTransformationMatrix->SetElement(1, i, sagitalPlaneAxis2[i]);
-        sagitalTransformationMatrix->SetElement(2, i, sagitalPlaneNormal[i]);
-    }
-
-    m_transform->Identity();
-    m_transform->Translate(m_sagitalTranslation);
-    m_transform->Concatenate(sagitalTransformationMatrix);
-    m_transform->Translate(-sagitalPlaneCenter[0], -sagitalPlaneCenter[1], -sagitalPlaneCenter[2]);
-
-    sagitalTransformationMatrix->Delete();
+    // Obtenim la transformació per passar de coordenades de móna coordenades de sagital
+    vtkTransform *worldToSagitalTransform = getWorldToSagitalTransform();
 
     // Calculem les interseccions
 
@@ -1118,8 +1123,8 @@ void QMPRExtension::updateControls()
     m_sagitalOverAxialAxisActor->SetPosition( position1[0], position1[1]);
     m_sagitalOverAxialAxisActor->SetPosition2(position2[0], position2[1]);
 
-    m_transform->TransformPoint(position1, position1);
-    m_transform->TransformPoint(position2, position2);
+    worldToSagitalTransform->TransformPoint(position1, position1);
+    worldToSagitalTransform->TransformPoint(position2, position2);
     m_axialOverSagitalIntersectionAxis->SetPosition(position1[0], position1[1]);
     m_axialOverSagitalIntersectionAxis->SetPosition2(position2[0], position2[1]);
 
@@ -1136,8 +1141,8 @@ void QMPRExtension::updateControls()
     position2[1] = r[1] + t[1] * Length;
     position2[2] = r[2] + t[2] * Length;
 
-    m_transform->TransformPoint(position1, position1);
-    m_transform->TransformPoint(position2, position2);
+    worldToSagitalTransform->TransformPoint(position1, position1);
+    worldToSagitalTransform->TransformPoint(position2, position2);
     m_coronalOverSagitalIntersectionAxis->SetPosition(position1[0], position1[1]);
     m_coronalOverSagitalIntersectionAxis->SetPosition2(position2[0], position2[1]);
 
@@ -1153,8 +1158,8 @@ void QMPRExtension::updateControls()
     position2[1] = r[1] + t[1] * Length;
     position2[2] = r[2] + t[2] * Length;
 
-    m_transform->TransformPoint(position1, position1);
-    m_transform->TransformPoint(position2, position2);
+    worldToSagitalTransform->TransformPoint(position1, position1);
+    worldToSagitalTransform->TransformPoint(position2, position2);
     m_thickSlabOverSagitalActor->SetPosition(position1[0], position1[1]);
     m_thickSlabOverSagitalActor->SetPosition2(position2[0], position2[1]);
 
@@ -1187,6 +1192,8 @@ void QMPRExtension::updateControls()
 
     m_thickSlabOverAxialActor->SetPosition(position1[0], position1[1]);
     m_thickSlabOverAxialActor->SetPosition2(position2[0], position2[1]);
+
+    worldToSagitalTransform->Delete();
 
     // Repintem l'escena
     m_axial2DView->render();
@@ -1549,6 +1556,42 @@ void QMPRExtension::writeSettings()
 
     settings.saveGeometry(MPRSettings::HorizontalSplitterGeometry, m_horizontalSplitter);
     settings.saveGeometry(MPRSettings::VerticalSplitterGeometry, m_verticalSplitter);
+}
+
+vtkTransform* QMPRExtension::getWorldToSagitalTransform() const
+{
+    double sagitalPlaneAxis1[3];
+    double sagitalPlaneAxis2[3];
+    double sagitalPlaneNormal[3];
+    double sagitalPlaneCenter[3];
+    sagitalPlaneAxis1[0] = m_sagitalPlaneSource->GetPoint1()[0] - m_sagitalPlaneSource->GetOrigin()[0];
+    sagitalPlaneAxis1[1] = m_sagitalPlaneSource->GetPoint1()[1] - m_sagitalPlaneSource->GetOrigin()[1];
+    sagitalPlaneAxis1[2] = m_sagitalPlaneSource->GetPoint1()[2] - m_sagitalPlaneSource->GetOrigin()[2];
+    MathTools::normalize(sagitalPlaneAxis1);
+    sagitalPlaneAxis2[0] = m_sagitalPlaneSource->GetPoint2()[0] - m_sagitalPlaneSource->GetOrigin()[0];
+    sagitalPlaneAxis2[1] = m_sagitalPlaneSource->GetPoint2()[1] - m_sagitalPlaneSource->GetOrigin()[1];
+    sagitalPlaneAxis2[2] = m_sagitalPlaneSource->GetPoint2()[2] - m_sagitalPlaneSource->GetOrigin()[2];
+    MathTools::normalize(sagitalPlaneAxis2);
+    m_sagitalPlaneSource->GetNormal(sagitalPlaneNormal);
+    m_sagitalPlaneSource->GetCenter(sagitalPlaneCenter);
+
+    vtkMatrix4x4 *sagitalRotationMatrix = vtkMatrix4x4::New();
+
+    for (int i = 0; i < 3; i++)
+    {
+        sagitalRotationMatrix->SetElement(0, i, sagitalPlaneAxis1[i]);
+        sagitalRotationMatrix->SetElement(1, i, sagitalPlaneAxis2[i]);
+        sagitalRotationMatrix->SetElement(2, i, sagitalPlaneNormal[i]);
+    }
+
+    vtkTransform *sagitalTransform = vtkTransform::New();
+    sagitalTransform->Translate(m_sagitalTranslation);
+    sagitalTransform->Concatenate(sagitalRotationMatrix);
+    sagitalTransform->Translate(-sagitalPlaneCenter[0], -sagitalPlaneCenter[1], -sagitalPlaneCenter[2]);
+
+    sagitalRotationMatrix->Delete();
+
+    return sagitalTransform;
 }
 
 };  // End namespace udg

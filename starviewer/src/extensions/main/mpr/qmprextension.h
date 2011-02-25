@@ -117,6 +117,9 @@ private:
     /// Inicialitzador d'objectes pel constructor
     void init();
 
+    /// Retorna la tranformació necessària per passar de coordenades de món a coordenades de la vista sagital.
+    vtkTransform* getWorldToSagitalTransform() const;
+
 private slots:
     /// Marca quins són els viewers que s'han de considerar seleccionats
     void changeSelectedViewer();
