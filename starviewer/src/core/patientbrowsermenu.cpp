@@ -108,8 +108,6 @@ void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
                                         .arg(series->getProtocolName().trimmed())
                                         .arg(volume->getNumberOfFrames())
                                        );
-        // Actualitzem la posició del widget amb la informació adicional
-        updatePosition();
     }
 }
 
@@ -174,12 +172,6 @@ void PatientBrowserMenu::processSelectedItem(const QString &identifier)
         Identifier id(identifier.toInt());
         emit selectedVolume(VolumeRepository::getRepository()->getVolume(id));
     }
-}
-
-void PatientBrowserMenu::updatePosition()
-{
-    m_patientAdditionalInfo->move(m_patientBrowserList->x() + m_patientBrowserList->sizeHint().width(), m_patientBrowserList->y());
-    m_patientAdditionalInfo->show();
 }
 
 void PatientBrowserMenu::createWidgets()

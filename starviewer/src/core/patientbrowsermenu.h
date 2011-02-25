@@ -50,9 +50,6 @@ private slots:
     void processSelectedItem(const QString &identifier);
 
 private:
-    /// Actualitza la posició de la informació addicional
-    void updatePosition();
-
     /// Crea els widgets dels que es composa el menú
     void createWidgets();
 
