@@ -6,8 +6,6 @@
  ***************************************************************************/
 #include "patientbrowsermenu.h"
 
-#include <QDesktopWidget>
-#include <QApplication>
 #include <QVBoxLayout>
 #include <QMouseEvent>
 
@@ -19,6 +17,7 @@
 #include "volume.h"
 #include "volumerepository.h"
 #include "applicationstylehelper.h"
+#include "screenmanager.h"
 
 namespace udg {
 
@@ -116,54 +115,53 @@ void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
 
 void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
 {
-    // Calcular si el menu hi cap a la pantalla
-    int x = point.x();
-    int y = point.y();
-
-    int screen_x, screen_y;
-
-    if (qApp->desktop()->isVirtualDesktop())
-    {
-        screen_x = qApp->desktop()->geometry().width();
-        screen_y = qApp->desktop()->geometry().height();
-    }
-    else
-    {
-        screen_x = qApp->desktop()->availableGeometry(point).width();
-        screen_y = qApp->desktop()->availableGeometry(point).height();
-    }
-
+    // Marquem l'ítem actual de la llista
     m_patientBrowserList->markItem(identifier);
-    QSize widgetIdealSize = m_patientBrowserList->sizeHint();
 
-    if ((x + widgetIdealSize.width()) > screen_x)
+    // Obtenim la geometria de la pantalla on se'ns ha demanat obrir el menú per posicionar correctament 
+    // el widget per tal que no surti fora de la pantalla i no es pugui veure.
+    ScreenManager screenManager;
+    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(point));
+    QPoint currentScreenGlobalOriginPoint = currentScreenGeometry.topLeft();
+
+    // Calculem la mida total que faran els widgets
+    QSize totalWidgetSize;
+    totalWidgetSize.setWidth(m_patientBrowserList->sizeHint().width() + m_patientAdditionalInfo->sizeHint().width());
+    totalWidgetSize.setHeight(qMax(m_patientBrowserList->sizeHint().height(),m_patientAdditionalInfo->sizeHint().height()));
+
+    // Calculem les fronteres per on ens podria sortir el menú (lateral dret i per sota)
+    int globalRight = currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width();
+    int globalBottom = currentScreenGlobalOriginPoint.y() + currentScreenGeometry.height();
+    int widgetRight = totalWidgetSize.width() + point.x();
+    int widgetBottom = totalWidgetSize.height() + point.y();
+
+    // Calculem quant d'ample i/o alçada ens surt el menú. Si els valors són positius caldrà moure 
+    // la posició original com a mínim tot el que ens sortim de les fronteres
+    int outsideWidth = widgetRight - globalRight;
+    int outsideHeight = widgetBottom - globalBottom;
+
+    const int Margin = 5;
+    int menuXPosition = point.x();
+    int menuYPosition = point.y();
+    if (outsideWidth > 0)
     {
-        x = screen_x - widgetIdealSize.width() - 5;
+        menuXPosition -= outsideWidth + Margin;
+    }
+    if (outsideHeight > 0)
+    {
+        menuYPosition -= outsideHeight + Margin;
     }
 
-    if ((y + widgetIdealSize.height()) > screen_y)
-    {
-        y = screen_y - widgetIdealSize.height() - 5;
-    }
-
-    // Moure la finestra del menu al punt que toca
-    m_patientBrowserList->move(x, y);
+    // Movem la finestra del menu al punt que toca
+    m_patientBrowserList->move(menuXPosition, menuYPosition);
     m_patientBrowserList->show();
-    
-    QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
-    m_patientAdditionalInfo->resize(patientAdditionalInfoSize);
-
-    // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre del menu
-    if ((m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width()) > screen_x)
-    {
-        x = (m_patientBrowserList->x()) - (m_patientAdditionalInfo->frameGeometry().width());
-    }
-    else
-    {
-        x =  m_patientBrowserList->x() + m_patientBrowserList->width();
-    }
-    m_patientAdditionalInfo->move(x, m_patientBrowserList->y());
+    // Col·loquem el widget amb la informació adicional a la dreta del principal
+    m_patientAdditionalInfo->move(menuXPosition + m_patientBrowserList->sizeHint().width(), m_patientBrowserList->y());
     m_patientAdditionalInfo->show();
+    // TODO No es té en compte si després d'haver mogut de lloc el widget aquest ja es veu correctament, 
+    // ja que es podria donar el cas que el widget no hi cabés a tota la pantalla
+    // Caldria millorar el comportament en certs aspectes, com per exemple, redistribuir les files i columnes
+    // del llistat si aquest no hi cap a la pantalla, per exemple.
 }
 
 void PatientBrowserMenu::processSelectedItem(const QString &identifier)
@@ -180,33 +178,8 @@ void PatientBrowserMenu::processSelectedItem(const QString &identifier)
 
 void PatientBrowserMenu::updatePosition()
 {
-    int x;
-    int screen_x;
-    // Passem el point per assegurar-nos que s'agafa la pantalla a on es visualitza el widget
-    if (qApp->desktop()->isVirtualDesktop())
-    {
-        screen_x = qApp->desktop()->geometry().width();
-    }
-    else
-    {
-        screen_x = qApp->desktop()->availableGeometry(m_patientBrowserList->pos()).width();
-    }
-
-    QSize patientAdditionalInfoSize = m_patientAdditionalInfo->sizeHint();
-    m_patientAdditionalInfo->resize(patientAdditionalInfoSize);
-
-    // Calcular si hi cap a la dreta, altrament el mostrarem a l'esquerre del menu
-    if ((m_patientBrowserList->x() + m_patientBrowserList->width() + patientAdditionalInfoSize.width()) > screen_x)
-    {
-        x = (m_patientBrowserList->x()) -(m_patientAdditionalInfo->frameGeometry().width());
-    }
-    else
-    {
-        x =  m_patientBrowserList->x() + m_patientBrowserList->width();
-    }
-    m_patientAdditionalInfo->move(x, m_patientBrowserList->y());
+    m_patientAdditionalInfo->move(m_patientBrowserList->x() + m_patientBrowserList->sizeHint().width(), m_patientBrowserList->y());
     m_patientAdditionalInfo->show();
-    m_patientBrowserList->show();
 }
 
 void PatientBrowserMenu::createWidgets()
