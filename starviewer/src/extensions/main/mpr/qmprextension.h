@@ -20,6 +20,7 @@ class vtkTransform;
 namespace udg {
 
 // FWD declarations
+class DrawerPoint;
 class ToolManager;
 class Q3DViewer;
 class Volume;
@@ -179,6 +180,12 @@ private:
 
     /// Els actors que representen els eixos que podrem modificar. Línia vermella, blava (axial), blava (sagital) respectivament i el thickSlab (línies puntejades blaves en vista axial i sagital).
     vtkAxisActor2D *m_sagitalOverAxialAxisActor, *m_axialOverSagitalIntersectionAxis, *m_coronalOverAxialIntersectionAxis, *m_coronalOverSagitalIntersectionAxis, *m_thickSlabOverAxialActor, *m_thickSlabOverSagitalActor;
+
+    /// Drawer points per pintar els centres dels plans a les vistes.
+    DrawerPoint *m_axialViewSagitalCenterDrawerPoint;
+    DrawerPoint *m_axialViewCoronalCenterDrawerPoint;
+    DrawerPoint *m_sagitalViewAxialCenterDrawerPoint;
+    DrawerPoint *m_sagitalViewCoronalCenterDrawerPoint;
 
     /// Ens serà molt útil ens molts de càlculs i a més serà una dada constant un cop tenim l'input
     double m_axialSpacing[3];

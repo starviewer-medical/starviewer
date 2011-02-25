@@ -7,6 +7,7 @@
 #include "qmprextension.h"
 
 #include "drawer.h"
+#include "drawerpoint.h"
 #include "logging.h"
 #include "mathtools.h"  // Per càlculs d'interseccions
 #include "mprsettings.h"
@@ -93,6 +94,15 @@ QMPRExtension::~QMPRExtension()
     m_coronalOverSagitalIntersectionAxis->Delete();
     m_thickSlabOverAxialActor->Delete();
     m_thickSlabOverSagitalActor->Delete();
+
+    m_axialViewSagitalCenterDrawerPoint->decreaseReferenceCount();
+    delete m_axialViewSagitalCenterDrawerPoint;
+    m_axialViewCoronalCenterDrawerPoint->decreaseReferenceCount();
+    delete m_axialViewCoronalCenterDrawerPoint;
+    m_sagitalViewAxialCenterDrawerPoint->decreaseReferenceCount();
+    delete m_sagitalViewAxialCenterDrawerPoint;
+    m_sagitalViewCoronalCenterDrawerPoint->decreaseReferenceCount();
+    delete m_sagitalViewCoronalCenterDrawerPoint;
 
     m_axialPlaneSource->Delete();
     m_sagitalPlaneSource->Delete();
@@ -1010,6 +1020,10 @@ void QMPRExtension::initOrientation()
 
 void QMPRExtension::createActors()
 {
+    QColor axialColor = QColor::fromRgbF(1.0, 1.0, 0.0);
+    QColor sagitalColor = QColor::fromRgbF(1.0, 0.6, 0.0);
+    QColor coronalColor = QColor::fromRgbF(0.0, 1.0, 1.0);
+
     // Creem els axis actors
     m_sagitalOverAxialAxisActor = vtkAxisActor2D::New();
     m_coronalOverAxialIntersectionAxis = vtkAxisActor2D::New();
@@ -1022,37 +1036,37 @@ void QMPRExtension::createActors()
     m_sagitalOverAxialAxisActor->TickVisibilityOff();
     m_sagitalOverAxialAxisActor->LabelVisibilityOff();
     m_sagitalOverAxialAxisActor->TitleVisibilityOff();
-    m_sagitalOverAxialAxisActor->GetProperty()->SetColor(1., .6, .0);
+    m_sagitalOverAxialAxisActor->GetProperty()->SetColor(sagitalColor.redF(), sagitalColor.greenF(), sagitalColor.blueF());
 
     m_coronalOverAxialIntersectionAxis->TickVisibilityOff();
     m_coronalOverAxialIntersectionAxis->LabelVisibilityOff();
     m_coronalOverAxialIntersectionAxis->TitleVisibilityOff();
-    m_coronalOverAxialIntersectionAxis->GetProperty()->SetColor(.0, 1., 1.);
+    m_coronalOverAxialIntersectionAxis->GetProperty()->SetColor(coronalColor.redF(), coronalColor.greenF(), coronalColor.blueF());
 
     m_coronalOverSagitalIntersectionAxis->AxisVisibilityOn();
     m_coronalOverSagitalIntersectionAxis->TickVisibilityOff();
     m_coronalOverSagitalIntersectionAxis->LabelVisibilityOff();
     m_coronalOverSagitalIntersectionAxis->TitleVisibilityOff();
-    m_coronalOverSagitalIntersectionAxis->GetProperty()->SetColor(.0, 1., 1.);
+    m_coronalOverSagitalIntersectionAxis->GetProperty()->SetColor(coronalColor.redF(), coronalColor.greenF(), coronalColor.blueF());
 
     m_axialOverSagitalIntersectionAxis->AxisVisibilityOn();
     m_axialOverSagitalIntersectionAxis->TickVisibilityOff();
     m_axialOverSagitalIntersectionAxis->LabelVisibilityOff();
     m_axialOverSagitalIntersectionAxis->TitleVisibilityOff();
-    m_axialOverSagitalIntersectionAxis->GetProperty()->SetColor(1., 1., .0);
+    m_axialOverSagitalIntersectionAxis->GetProperty()->SetColor(axialColor.redF(), axialColor.greenF(), axialColor.blueF());
 
     m_thickSlabOverAxialActor->AxisVisibilityOn();
     m_thickSlabOverAxialActor->TickVisibilityOff();
     m_thickSlabOverAxialActor->LabelVisibilityOff();
     m_thickSlabOverAxialActor->TitleVisibilityOff();
-    m_thickSlabOverAxialActor->GetProperty()->SetColor(.0, 1., 1.);
+    m_thickSlabOverAxialActor->GetProperty()->SetColor(coronalColor.redF(), coronalColor.greenF(), coronalColor.blueF());
     m_thickSlabOverAxialActor->GetProperty()->SetLineStipplePattern(65280);
 
     m_thickSlabOverSagitalActor->AxisVisibilityOn();
     m_thickSlabOverSagitalActor->TickVisibilityOff();
     m_thickSlabOverSagitalActor->LabelVisibilityOff();
     m_thickSlabOverSagitalActor->TitleVisibilityOff();
-    m_thickSlabOverSagitalActor->GetProperty()->SetColor(.0, 1., 1.);
+    m_thickSlabOverSagitalActor->GetProperty()->SetColor(coronalColor.redF(), coronalColor.greenF(), coronalColor.blueF());
     m_thickSlabOverSagitalActor->GetProperty()->SetLineStipplePattern(65280);
 
     m_axial2DView->getRenderer()->AddViewProp(m_sagitalOverAxialAxisActor);
@@ -1061,6 +1075,30 @@ void QMPRExtension::createActors()
     m_sagital2DView->getRenderer()->AddViewProp(m_coronalOverSagitalIntersectionAxis);
     m_sagital2DView->getRenderer()->AddViewProp(m_axialOverSagitalIntersectionAxis);
     m_sagital2DView->getRenderer()->AddViewProp(m_thickSlabOverSagitalActor);
+
+    // Creem els drawer points
+
+    const double Radius = 5.0;  // TODO Fer que sigui proporcional a la mida del volum
+
+    m_axialViewSagitalCenterDrawerPoint = new DrawerPoint();
+    m_axialViewSagitalCenterDrawerPoint->increaseReferenceCount();
+    m_axialViewSagitalCenterDrawerPoint->setColor(sagitalColor);
+    m_axialViewSagitalCenterDrawerPoint->setRadius(Radius);
+
+    m_axialViewCoronalCenterDrawerPoint = new DrawerPoint();
+    m_axialViewCoronalCenterDrawerPoint->increaseReferenceCount();
+    m_axialViewCoronalCenterDrawerPoint->setColor(coronalColor);
+    m_axialViewCoronalCenterDrawerPoint->setRadius(Radius);
+
+    m_sagitalViewAxialCenterDrawerPoint = new DrawerPoint();
+    m_sagitalViewAxialCenterDrawerPoint->increaseReferenceCount();
+    m_sagitalViewAxialCenterDrawerPoint->setColor(axialColor);
+    m_sagitalViewAxialCenterDrawerPoint->setRadius(Radius);
+
+    m_sagitalViewCoronalCenterDrawerPoint = new DrawerPoint();
+    m_sagitalViewCoronalCenterDrawerPoint->increaseReferenceCount();
+    m_sagitalViewCoronalCenterDrawerPoint->setColor(coronalColor);
+    m_sagitalViewCoronalCenterDrawerPoint->setRadius(Radius);
 }
 
 void QMPRExtension::axialSliceUpdated(int slice)
@@ -1192,6 +1230,34 @@ void QMPRExtension::updateControls()
 
     m_thickSlabOverAxialActor->SetPosition(position1[0], position1[1]);
     m_thickSlabOverAxialActor->SetPosition2(position2[0], position2[1]);
+
+    // Situem els drawer points
+
+    double center[3];
+
+    m_sagitalPlaneSource->GetCenter(center);
+    center[2] = 0.0;
+    m_axialViewSagitalCenterDrawerPoint->setPosition(center);
+    m_axialViewSagitalCenterDrawerPoint->update();
+    m_axial2DView->getDrawer()->draw(m_axialViewSagitalCenterDrawerPoint, QViewer::Top2DPlane);
+
+    m_coronalPlaneSource->GetCenter(center);
+    center[2] = 0.0;
+    m_axialViewCoronalCenterDrawerPoint->setPosition(center);
+    m_axialViewCoronalCenterDrawerPoint->update();
+    m_axial2DView->getDrawer()->draw(m_axialViewCoronalCenterDrawerPoint, QViewer::Top2DPlane);
+
+    worldToSagitalTransform->TransformPoint(m_axialPlaneSource->GetCenter(), center);
+    center[2] = 0.0;
+    m_sagitalViewAxialCenterDrawerPoint->setPosition(center);
+    m_sagitalViewAxialCenterDrawerPoint->update();
+    m_sagital2DView->getDrawer()->draw(m_sagitalViewAxialCenterDrawerPoint, QViewer::Top2DPlane);
+
+    worldToSagitalTransform->TransformPoint(m_coronalPlaneSource->GetCenter(), center);
+    center[2] = 0.0;
+    m_sagitalViewCoronalCenterDrawerPoint->setPosition(center);
+    m_sagitalViewCoronalCenterDrawerPoint->update();
+    m_sagital2DView->getDrawer()->draw(m_sagitalViewCoronalCenterDrawerPoint, QViewer::Top2DPlane);
 
     worldToSagitalTransform->Delete();
 
