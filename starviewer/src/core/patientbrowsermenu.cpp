@@ -6,9 +6,6 @@
  ***************************************************************************/
 #include "patientbrowsermenu.h"
 
-#include <QVBoxLayout>
-#include <QMouseEvent>
-
 #include "patient.h"
 #include "patientbrowsermenuextendeditem.h"
 #include "patientbrowsermenulist.h"
