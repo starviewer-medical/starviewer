@@ -12,6 +12,7 @@
 
 class QWidget;
 class QDesktopWidget;
+class QRect;
 
 namespace udg {
 
@@ -35,6 +36,14 @@ public:
     int getNumberOfScreens();
     /// Retorna a quina pantalla està la finestra
     int getIdOfScreen(QWidget *window);
+    
+    /// Retorna l'identificador de pantalla segons una posició global
+    int getScreenID(const QPoint &point) const;
+    
+    /// Retorna la geometria disponible de la pantalla indicada. Depenent de la plataforma el que es considera
+    /// dins del disponible pot variar, com per exemple a windows on s'exclouria de l'espai total el que ocupa la barra de tasques
+    /// Resultat indefinit si l'identificador de pantalla no es correspon amb cap id vàlid
+    QRect getAvailableScreenGeometry(int screenID) const;
 
 private:
     /// Calcula la matriu de distribució de les pantalles.
