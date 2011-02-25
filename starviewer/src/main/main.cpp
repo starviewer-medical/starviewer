@@ -114,6 +114,8 @@ void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
     if (!app.sendMessage(app.arguments().join(";"), 10000))
     {
         ERROR_LOG("No s'ha pogut enviar a la instancia principal la llista d'arguments, sembla que l'instancia principal no respon.");
+        QMessageBox::critical(NULL, udg::ApplicationNameString, QObject::tr("%1 is already running, but is not responding. " 
+            "To open %1, you must first close the existing %1 process, or restart your system.").arg(udg::ApplicationNameString));
     }
     INFO_LOG("S'ha enviat correctament a la instancia principal els arguments de la línia de comandes.");
 }
