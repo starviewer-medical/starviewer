@@ -612,7 +612,7 @@ void QApplicationMainWindow::markAsBetaVersion()
 {
     m_isBetaVersion = true;
     m_betaVersionMenuText = new QLabel(menuBar());
-    m_betaVersionMenuText->setText("<a href='beta'><img src=':/images/small-warning.png'></a>&nbsp;<a href='beta'>Beta Version</a>");
+    m_betaVersionMenuText->setText("<a href='beta'><img src=':/images/beta-warning.png'></a>&nbsp;<a href='beta'>Beta Version</a>");
     m_betaVersionMenuText->setAlignment(Qt::AlignVCenter);
     connect(m_betaVersionMenuText, SIGNAL(linkActivated(const QString &)), SLOT(showBetaVersionDialog()));
     updateBetaVersionTextPosition();
