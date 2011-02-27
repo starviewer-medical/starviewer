@@ -588,8 +588,8 @@ void QApplicationMainWindow::about()
 #endif
 
     aboutMessage += tr("<p>Version: %1 </p>").arg(StarviewerVersionString);
-    aboutMessage += tr("<p>Support email: <a href=\"mailto:%1\">%2</a></p>").arg(OrganizationEmailString, OrganizationEmailString);
-    aboutMessage += tr("<p>Web: <a href=\"%1\">%2</a></p>").arg(OrganizationWebURL, OrganizationWebURL);
+    aboutMessage += tr("<p>Support email: <a href=\"mailto:%1\">%1</a></p>").arg(OrganizationEmailString);
+    aboutMessage += tr("<p>Web: <a href=\"%1\">%1</a></p>").arg(OrganizationWebURL);
 
     QMessageBox::about(this, tr("About %1").arg(ApplicationNameString), aboutMessage);        
 }
