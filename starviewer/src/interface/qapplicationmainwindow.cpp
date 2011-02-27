@@ -633,8 +633,8 @@ void QApplicationMainWindow::showBetaVersionDialog()
                             "improve this software. Current users of this version should not expect all of the extensions to work "
                             "properly.</p>"
                             "<p align='justify'>If you want to help us to improve our software, please, report any found bug or "
-                            "any other feature request you have to us.</p>"
-                            "<h3>We really appreciate that you give us your feedback!</h3>").arg(ApplicationNameString));
+                            "any other feature request you have to us at: <a href=\"mailto:%2\">%2</a></p>"
+                            "<h3>We really appreciate that you give us your feedback!</h3>").arg(ApplicationNameString).arg(OrganizationEmailString));
 }
 
 void QApplicationMainWindow::readSettings()
