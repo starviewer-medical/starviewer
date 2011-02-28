@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>653</width>
-    <height>1090</height>
+    <height>886</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -2294,7 +2294,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>428</width>
+            <width>471</width>
             <height>909</height>
            </rect>
           </property>
@@ -3314,9 +3314,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
-            <width>494</width>
-            <height>1074</height>
+            <y>-238</y>
+            <width>491</width>
+            <height>1229</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -4206,13 +4206,10 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QRadioButton" name="m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton">
+                 <widget class="QCheckBox" name="m_transferFunctionOptimizationWeightsManualCheckBox">
                   <property name="text">
-                   <string>Manual</string>
+                   <string>* Manual</string>
                   </property>
-                  <attribute name="buttonGroup">
-                   <string>buttonGroup_3</string>
-                  </attribute>
                  </widget>
                 </item>
                 <item>
@@ -4309,7 +4306,23 @@
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>216</height>
+                  <height>200</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="udg::QGraphicTransferFunctionEditor" name="m_transferFunctionOptimizationManualWeightsEditor" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>200</height>
                  </size>
                 </property>
                </widget>

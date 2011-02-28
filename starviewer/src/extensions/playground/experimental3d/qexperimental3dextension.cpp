@@ -1130,7 +1130,7 @@ void QExperimental3DExtension::createConnections()
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsInnernessRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
-    connect(m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
+    connect(m_transferFunctionOptimizationWeightsManualCheckBox, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionCheckBox, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_transferFunctionOptimizationWeights2DIntensityVolumeCheckBox, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_transferFunctionOptimizationWeights2DGradientCheckBox, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
@@ -4769,34 +4769,42 @@ void QExperimental3DExtension::fillWeightsEditor()
 {
     if (m_intensityClusters.isEmpty()) return;
 
+    TransferFunction weightsFullTransferFunction;
+    weightsFullTransferFunction.setColorTransferFunction(m_clusterizedTransferFunction.colorTransferFunction());
+
     int nClusters = numberOfClusters();
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setRange(0, nClusters - 1);
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->syncToMax();
-    TransferFunction weightsFullTransferFunction;
-    weightsFullTransferFunction.setColorTransferFunction(m_clusterizedTransferFunction.colorTransferFunction());
+    m_transferFunctionOptimizationManualWeightsEditor->setRange(0, nClusters - 1);
+    m_transferFunctionOptimizationManualWeightsEditor->syncToMax();
 
-    OpacityTransferFunction weightsTransferFunction;
-    bool rescale = false;
+    QVector<double> weights(nClusters);
 
     // posem pesos que no sumen 1 perquè així és més fàcil editar-los i de totes maneres els normalitzem més tard
     if (m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton->isChecked()) // pesos uniformes
     {
-        for (int i = 0; i < nClusters; i++) weightsTransferFunction.set(i, 1.0);
+        for (int i = 0; i < nClusters; i++) weights[i] = 1.0;
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked())
     {
         // res
+        m_transferFunctionOptimizationWeightsManualCheckBox->setChecked(false);
         m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionCheckBox->setChecked(false);
+        m_transferFunctionOptimizationWeights2DIntensityVolumeCheckBox->setChecked(false);
+        m_transferFunctionOptimizationWeights2DGradientCheckBox->setChecked(false);
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsInnernessRadioButton->isChecked())
     {
-        weightsTransferFunction = innernessProportionalOpacityTransferFunction(m_clusterizedVolume);
-        rescale = true;
+        OpacityTransferFunction innerness = innernessProportionalOpacityTransferFunction(m_clusterizedVolume);
+
+        for (int i = 0; i < nClusters; i++) weights[i] = innerness(i);
     }
-    else if (m_geneticTransferFunctionFromIntensityClusteringWeightsManualRadioButton->isChecked())
+
+    // multipliquem els pesos pels pesos manuals
+    if (m_transferFunctionOptimizationWeightsManualCheckBox->isChecked())
     {
-        weightsTransferFunction = m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->transferFunction().opacityTransferFunction();
+        for (int i = 0; i < nClusters; i++) weights[i] *= m_transferFunctionOptimizationManualWeightsEditor->transferFunction().opacityTransferFunction().get(i);
     }
 
     // multipliquem els pesos per la distribució del volum
@@ -4805,19 +4813,10 @@ void QExperimental3DExtension::fillWeightsEditor()
         const unsigned short *data = reinterpret_cast<unsigned short*>(m_clusterizedVolume->getImage()->GetScalarPointer());
         int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
         QVector<int> count(nClusters);
-        int maximum = 0;
 
-        for (int i = 0; i < size; i++)
-        {
-            count[data[i]]++;
-            if (count.at(data[i]) > maximum) maximum = count.at(data[i]);
-        }
+        for (int i = 0; i < size; i++) count[data[i]]++;
 
-        OpacityTransferFunction wtf(weightsTransferFunction);   // còpia, per no llegir de la mateixa que estem modificant (les interpolacions canvien)
-
-        for (int i = 0; i < nClusters; i++) weightsTransferFunction.set(i, wtf(i) * count.at(i) / maximum);
-
-        rescale = true;
+        for (int i = 0; i < nClusters; i++) weights[i] *= count.at(i);
     }
 
     // multipliquem els pesos pel volum de la intensitat (només 2D)
@@ -4833,24 +4832,18 @@ void QExperimental3DExtension::fillWeightsEditor()
         int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
         int nIntensityBins = m_intensityClusters.size();
         QVector<int> count(nIntensityBins);
-        int maximum = 0;
 
         for (int i = 0; i < size; i++)
         {
             int intensityBin = intensityBinFromCluster2D(data[i]);
             count[intensityBin]++;
-            if (count.at(intensityBin) > maximum) maximum = count.at(intensityBin);
         }
-
-        OpacityTransferFunction wtf(weightsTransferFunction);   // còpia, per no llegir de la mateixa que estem modificant (les interpolacions canvien)
 
         for (int i = 0; i < nClusters; i++)
         {
             int intensity = intensityBinFromCluster2D(i);
-            weightsTransferFunction.set(i, wtf(i) * count.at(intensity) / maximum);
+            weights[i] *= count.at(intensity);
         }
-
-        rescale = true;
     }
 
     // multipliquem els pesos pel gradient (només 2D)
@@ -4862,15 +4855,11 @@ void QExperimental3DExtension::fillWeightsEditor()
             WARN_LOG("Atenció! S'ha intentat aplicar pesos 2D a un clustering 1D.");
         }
 
-        OpacityTransferFunction wtf(weightsTransferFunction);   // còpia, per no llegir de la mateixa que estem modificant (les interpolacions canvien)
-
         for (int i = 0; i < nClusters; i++)
         {
             int gradient = gradientBinFromCluster2D(i);
-            weightsTransferFunction.set(i, wtf(i) * static_cast<double>(gradient) / (m_gradientClusters.size() - 1));
+            weights[i] *= gradient;
         }
-
-        rescale = true;
     }
 
     // posem a 0 alguns pesos corresponents a les primeres intensitats i els primers gradients
@@ -4884,27 +4873,28 @@ void QExperimental3DExtension::fillWeightsEditor()
             int intensity = m_2DClustering ? intensityBinFromCluster2D(i) : i;
             int gradient = m_2DClustering ? gradientBinFromCluster2D(i) : 0;
 
-            if (intensity <= intensityZeroEnd || gradient <= gradientZeroEnd) weightsTransferFunction.set(i, 0.0);
+            if (intensity <= intensityZeroEnd || gradient <= gradientZeroEnd) weights[i] = 0.0;
         }
     }
 
-    if (rescale)
+    // reescalem els pesos perquè estiguin entre 0 i 1 i els assignem a una funció de transferència
     {
-        OpacityTransferFunction wtf(weightsTransferFunction);   // còpia, per no llegir de la mateixa que estem modificant (les interpolacions canvien)
         double maximumWeight = 0.0;
 
         for (int i = 0; i < nClusters; i++)
         {
-            if (wtf(i) > maximumWeight) maximumWeight = wtf(i);
+            if (weights.at(i) > maximumWeight) maximumWeight = weights.at(i);
         }
+
+        OpacityTransferFunction weightsTransferFunction;
 
         if (maximumWeight > 0.0)    // quan el pes màxim és 0 no hem de fer res
         {
-            for (int i = 0; i < nClusters; i++) weightsTransferFunction.set(i, wtf(i) / maximumWeight);
+            for (int i = 0; i < nClusters; i++) weightsTransferFunction.set(i, weights.at(i) / maximumWeight);
         }
-    }
 
-    weightsFullTransferFunction.setOpacityTransferFunction(weightsTransferFunction);
+        weightsFullTransferFunction.setOpacityTransferFunction(weightsTransferFunction);
+    }
 
     m_geneticTransferFunctionFromIntensityClusteringWeightsEditor->setTransferFunction(weightsFullTransferFunction.simplify());
 }
