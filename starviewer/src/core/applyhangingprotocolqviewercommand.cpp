@@ -57,9 +57,6 @@ void ApplyHangingProtocolQViewerCommand::applyDisplayTransformations(Q2DViewer *
         }
     }
 
-    // Apliquem la orientació desitjada
-    viewer->setImageOrientation(displaySet->getPatientOrientation());
-
     int phase = displaySet->getPhase();
     if (phase > -1)
     {
@@ -77,6 +74,8 @@ void ApplyHangingProtocolQViewerCommand::applyDisplayTransformations(Q2DViewer *
         viewer->setSlice(displaySet->getSlice());
     }
 
+    // Apliquem la orientació desitjada
+    viewer->setImageOrientation(displaySet->getPatientOrientation());
     QString alignment = displaySet->getAlignment();
     if (!alignment.isEmpty())
     {
