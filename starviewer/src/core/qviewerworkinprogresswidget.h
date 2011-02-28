@@ -33,10 +33,13 @@ public slots:
     /// Actualitza el progrés del "work in progress".
     void updateProgress(int progress);
 
-private:
-    /// Activa/desactiva la progressBar depenent de si s'està al mig d'una operació o no
-    void startAnimationByProgress(int progress);
+protected:
+    /// Per evitar que l'animació consumeixi recursos quan no és necessita, només l'activem quan el widget és visible,
+    /// desactivant-la si no ho és.
+    virtual void showEvent(QShowEvent *event);
+    virtual void hideEvent(QHideEvent *event);
 
+private:
     /// Reseteja els widgets involucrats en mostrar el progrés
     void resetProgressWidgets();
 
