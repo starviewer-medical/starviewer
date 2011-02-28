@@ -43,28 +43,22 @@ void QViewerWorkInProgressWidget::showError(const QString &errorText)
 
 void QViewerWorkInProgressWidget::updateProgress(int progress)
 {
-    this->startAnimationByProgress(progress);
     m_progressLabel->setText(tr(" (%1\%)").arg(progress, 3));
 }
 
-void QViewerWorkInProgressWidget::startAnimationByProgress(int progress)
+void QViewerWorkInProgressWidget::showEvent(QShowEvent *event)
 {
-    // Per evitar que l'animació consumeixi recursos quan no és necessita, només l'activem quan s'està realment fent alguna cosa.
-    if (progress >= 0 && progress < 100)
-    {
-        // No cal controlar si ja està running o no, ho fa la mateixa crida
-        m_progressBarAnimation->start();
-    }
-    else
-    {
-        m_progressBarAnimation->stop();
-    }
+    m_progressBarAnimation->start();
+}
+
+void QViewerWorkInProgressWidget::hideEvent(QHideEvent *event)
+{
+    m_progressBarAnimation->setPaused(true);
 }
 
 void QViewerWorkInProgressWidget::resetProgressWidgets()
 {
     m_progressBarLabel->show();
-    m_progressBarAnimation->stop();
     m_progressLabel->setText("");
 }
 
