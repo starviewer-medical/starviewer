@@ -3314,9 +3314,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-238</y>
-            <width>491</width>
-            <height>1229</height>
+            <y>-322</y>
+            <width>512</width>
+            <height>1230</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -4165,6 +4165,19 @@
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_86">
+                <item>
+                 <widget class="QPushButton" name="m_transferFunctionOptimizationOneViewpointAutomaticPushButton">
+                  <property name="toolTip">
+                   <string>1 viewpoint auto</string>
+                  </property>
+                  <property name="text">
+                   <string>1v auto</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <widget class="QLabel" name="m_geneticTransferFunctionFromIntensityClusteringWeightsLabel">
                   <property name="text">

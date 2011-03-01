@@ -30,6 +30,12 @@ ViewpointIntensityInformationChannel::ViewpointIntensityInformationChannel(const
 }
 
 
+void ViewpointIntensityInformationChannel::setViewpoints(const QVector<Vector3> &viewpoints)
+{
+    m_viewpoints = viewpoints;
+}
+
+
 void ViewpointIntensityInformationChannel::setIntensityClusteringNumberOfClusters(int numberOfClusters)
 {
     m_numberOfIntensityClusters = numberOfClusters;
@@ -356,7 +362,7 @@ void ViewpointIntensityInformationChannel::computeIntensityProbabilitiesAndEntro
     for (int j = 0; j < nIntensities; j++)
     {
         float pi = m_intensityProbabilities.at(j);
-        DEBUG_LOG(QString("p(i%1) = %2").arg(j).arg(pi));
+        //DEBUG_LOG(QString("p(i%1) = %2").arg(j).arg(pi));
         Q_ASSERT(!MathTools::isNaN(pi));
         Q_ASSERT(pi >= 0.0f && pi <= 1.0f);
         sum += pi;

@@ -32,6 +32,8 @@ public:
     /// Assigna el volum d'entrada.
     void setInput( Volume *input );
 
+    void optimizeTransferFunctionForOneViewpoint();
+
 public slots:
 
     /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -284,6 +286,7 @@ private slots:
     void generateAndEvolveTransferFunctionFromIntensityClusters();
     void fineTuneGeneticTransferFunctionFromIntensityClusters();
     void optimizeByDerivativeTransferFunctionFromIntensityClusters();
+    void optimizeTransferFunctionAutomaticallyForOneViewpoint(bool on);
 
     void tourBestViews();
     void guidedTour();
@@ -402,6 +405,8 @@ private:
     TransferFunction m_normalTransferFunction;
     TransferFunction m_clusterizedTransferFunction;
     bool m_viewClusterizedVolume;
+    bool m_optimizeTransferFunctionAutomaticallyForOneViewpoint;
+    bool m_optimizing, m_stopOptimization, m_pendingOptimization;
 
     // Filtering
     QVector<float> m_spatialImportanceFunction; // ΔD = G * D − D
