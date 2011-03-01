@@ -34,6 +34,9 @@ public:
 
     ViewpointIntensityInformationChannel(const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume, QExperimental3DViewer *viewer, const TransferFunction &transferFunction);
 
+    // mètode especial per assignar uns punts de vista directament; és una drecera per l'optimització de punts de vista, per evitar un refactoring molt gros
+    void setViewpoints(const QVector<Vector3> &viewpoints);
+
     void setIntensityClusteringNumberOfClusters(int numberOfClusters);
 
     /// Filtra el conjunt de punts de vista que es faran servir.

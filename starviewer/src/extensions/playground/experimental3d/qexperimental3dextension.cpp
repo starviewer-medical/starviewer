@@ -1,17 +1,18 @@
 #include "qexperimental3dextension.h"
 
+#include "experimental3dsettings.h"
 #include "experimental3dvolume.h"
 #include "informationtheory.h"
 #include "logging.h"
 #include "mathtools.h"
 #include "obscurancemainthread.h"
+#include "optimizetransferfunctioncommand.h"
 #include "transferfunctionio.h"
 #include "vector3.h"
 #include "viewpointgenerator.h"
 #include "viewpointinformationchannel.h"
 #include "viewpointintensityinformationchannel.h"
 #include "volumereslicer.h"
-#include "experimental3dsettings.h"
 
 #include <QButtonGroup>
 #include <QColorDialog>
@@ -22,10 +23,12 @@
 #include <QTime>
 #include <QtCore/qmath.h>
 
+#include <vtkCommand.h>
 #include <vtkImageCast.h>
 #include <vtkImageData.h>
 #include <vtkImageGaussianSmooth.h>
 #include <vtkImageMathematics.h>
+#include <vtkRenderer.h>
 
 #ifdef CUDA_AVAILABLE
 #include "cudafiltering.h"
@@ -37,7 +40,8 @@ namespace udg {
 
 QExperimental3DExtension::QExperimental3DExtension( QWidget *parent )
  : QWidget( parent ), m_volume(0), m_normalVolume(0), m_clusterizedVolume(0),
-   m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 ), m_viewClusterizedVolume(false), m_interactive( true )
+   m_computingObscurance( false ), m_obscuranceMainThread( 0 ), m_obscurance( 0 ), m_viewClusterizedVolume(false),
+   m_optimizeTransferFunctionAutomaticallyForOneViewpoint(false), m_optimizing(false), m_stopOptimization(false), m_pendingOptimization(false), m_interactive( true )
 {
     setupUi( this );
     Experimental3DSettings().init();
@@ -1127,6 +1131,7 @@ void QExperimental3DExtension::createConnections()
     connect(m_geneticTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(generateAndEvolveTransferFunctionFromIntensityClusters()));
     connect(m_fineTuneGeneticTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(fineTuneGeneticTransferFunctionFromIntensityClusters()));
     connect(m_optimizeByDerivativeTransferFunctionFromIntensityClusteringPushButton, SIGNAL(clicked()), SLOT(optimizeByDerivativeTransferFunctionFromIntensityClusters()));
+    connect(m_transferFunctionOptimizationOneViewpointAutomaticPushButton, SIGNAL(clicked(bool)), SLOT(optimizeTransferFunctionAutomaticallyForOneViewpoint(bool)));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsUniformRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_geneticTransferFunctionFromIntensityClusteringWeightsInnernessRadioButton, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
@@ -4344,6 +4349,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 #else // CUDA_AVAILABLE
     if (m_intensityClusters.isEmpty()) return;
 
+    m_optimizing = true;
+
     setCursor(QCursor(Qt::WaitCursor));
 
     bool minimizeDkl_I_W = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDkl_I_WRadioButton->isChecked();
@@ -4389,6 +4396,14 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
         // Viewpoint Intensity Information Channel
         ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, bestTransferFunction);
+
+        if (m_optimizeTransferFunctionAutomaticallyForOneViewpoint)
+        {
+            Vector3 position, focus, up;
+            m_viewer->getCamera(position, focus, up);
+            viewpointIntensityInformationChannel.setViewpoints(QVector<Vector3>() << position);
+        }
+
         bool pIV = minimizeDkl_IV_W;
         bool pV = minimizeDkl_IV_W;
         bool pI = minimizeDkl_I_W || piWeights;
@@ -4428,7 +4443,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     int nClusters = numberOfClusters();
     QVector<double> K(nClusters, maximumK);
 
-    while (iteration < MaximumIterations && best > Threshold && maximumK > MinimumK)
+    while (iteration < MaximumIterations && best > Threshold && maximumK > MinimumK && !m_stopOptimization)
     {
         round++;
         DEBUG_LOG(QString("==================== optimització per la derivada, inici ronda %1 ====================").arg(round));
@@ -4537,7 +4552,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 //                                                                                                                                                      .arg(newOpacity));
             }
 
-            DEBUG_LOG("........................................");
+            //DEBUG_LOG("........................................");
 
             //double shift = 0.0; // per no reescalar l'opacitat
             //double scale = 1.0; // per no reescalar l'opacitat
@@ -4581,6 +4596,14 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
             // Viewpoint Intensity Information Channel
             ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, optimizedTransferFunction);
+
+            if (m_optimizeTransferFunctionAutomaticallyForOneViewpoint)
+            {
+                Vector3 position, focus, up;
+                m_viewer->getCamera(position, focus, up);
+                viewpointIntensityInformationChannel.setViewpoints(QVector<Vector3>() << position);
+            }
+
             bool pIV = minimizeDkl_IV_W;
             bool pV = minimizeDkl_IV_W;
             bool pI = minimizeDkl_I_W || piWeights;
@@ -4602,11 +4625,11 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             QVector< QVector<float> > optimizedPIV;
             if (minimizeDkl_I_W)
             {
-                DEBUG_LOG("pesos:");
-                for (int i = 0; i < weights.size(); i++)
-                {
-                    DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
-                }
+//                DEBUG_LOG("pesos:");
+//                for (int i = 0; i < weights.size(); i++)
+//                {
+//                    DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+//                }
                 optimizedPI = viewpointIntensityInformationChannel.intensityProbabilities();
                 optimized = InformationTheory::kullbackLeiblerDivergence(optimizedPI, weights, true);
                 DEBUG_LOG(QString(".......................................... D_KL(I || W) última = %1, D_KL(I || W) optimitzada = %2, D_KL(I || W) mínima = %3").arg(last).arg(optimized).arg(best));
@@ -4630,8 +4653,6 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 lastPIV = optimizedPIV;
                 last = optimized;
                 lastTransferFunction = optimizedTransferFunction;
-                m_transferFunctionEditor->setTransferFunction(lastTransferFunction.simplify());
-                setTransferFunction();
             }
 
             if (accept)
@@ -4641,6 +4662,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 bestPIV = optimizedPIV;
                 best = optimized;
                 bestTransferFunction = optimizedTransferFunction;
+                m_transferFunctionEditor->setTransferFunction(lastTransferFunction.simplify());
+                setTransferFunction();
                 rejected = 0;
                 m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDistanceLabel->setText(QString::number(best));
                 DEBUG_LOG("......................................... acceptada");
@@ -4669,7 +4692,56 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     if (switchMode) viewNormalVolume();
 
     setCursor(QCursor(Qt::ArrowCursor));
+
+    m_optimizing = m_stopOptimization = false;
 #endif // CUDA_AVAILABLE
+}
+
+
+void QExperimental3DExtension::optimizeTransferFunctionAutomaticallyForOneViewpoint(bool on)
+{
+    if (on == m_optimizeTransferFunctionAutomaticallyForOneViewpoint) return;
+
+    m_optimizeTransferFunctionAutomaticallyForOneViewpoint = on;
+
+    if (on)
+    {
+        OptimizeTransferFunctionCommand *optimizeTransferFunctionCommand = OptimizeTransferFunctionCommand::New();
+        optimizeTransferFunctionCommand->setExtension(this);
+        m_viewer->getRenderer()->AddObserver(vtkCommand::ResetCameraClippingRangeEvent, optimizeTransferFunctionCommand);
+        m_viewer->getRenderer()->AddObserver(vtkCommand::ResetCameraEvent, optimizeTransferFunctionCommand);
+        optimizeTransferFunctionCommand->Delete();
+        optimizeTransferFunctionForOneViewpoint();
+    }
+    else
+    {
+        m_viewer->getRenderer()->RemoveObservers(vtkCommand::ResetCameraClippingRangeEvent);
+        m_viewer->getRenderer()->RemoveObservers(vtkCommand::ResetCameraEvent);
+        m_pendingOptimization = false;
+    }
+}
+
+
+void QExperimental3DExtension::optimizeTransferFunctionForOneViewpoint()
+{
+    if (m_optimizing)
+    {
+        DEBUG_LOG("-- parem l'optimització actual --");
+        m_stopOptimization = true;
+        m_pendingOptimization = true;
+    }
+    else
+    {
+        m_pendingOptimization = true;
+
+        while (m_pendingOptimization)
+        {
+            DEBUG_LOG("-- optimitzem --");
+            m_pendingOptimization = false;
+            optimizeByDerivativeTransferFunctionFromIntensityClusters();
+            DEBUG_LOG("-- optimitzat --");
+        }
+    }
 }
 
 
@@ -4931,12 +5003,12 @@ QVector<float> QExperimental3DExtension::getWeights() const
         DEBUG_LOG("tots els pesos són 0");
     }
 
-    DEBUG_LOG("pesos:");
+    //DEBUG_LOG("pesos:");
 
     for (int i = 0; i < weights.size(); i++)
     {
         weights[i] /= totalWeight;
-        DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
+        //DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
     }
 
     return weights;
