@@ -7,6 +7,7 @@
 #include "qcustomwindowleveleditwidget.h"
 #include "customwindowlevelsrepository.h"
 #include "customwindowlevelswriter.h"
+#include "logging.h"
 
 #include <QMessageBox>
 #include <QDoubleSpinBox>
@@ -118,6 +119,7 @@ void QCustomWindowLevelEditWidget::updatePresetsIfAreValid()
     if (validate())
     {
         CustomWindowLevelsRepository::getRepository()->cleanUp();
+        INFO_LOG("S'actualitza el repositori de Window Level amb els següents WW/WL:");
 
         QTreeWidgetItemIterator iterator(m_customWindowLevelTreeWidget);
         while (*iterator)
@@ -127,8 +129,10 @@ void QCustomWindowLevelEditWidget::updatePresetsIfAreValid()
             customWindowLevel->setLevel(qobject_cast<QDoubleSpinBox*>(m_customWindowLevelTreeWidget->itemWidget((*iterator), 1))->value());
             customWindowLevel->setName((*iterator)->text(2));
             CustomWindowLevelsRepository::getRepository()->addItem(customWindowLevel);
+            INFO_LOG(QString("-> Descripcio: %1, WW/WL: %2 / %3").arg(customWindowLevel->getName()).arg(customWindowLevel->getWidth()).arg(customWindowLevel->getLevel()));
             ++iterator;
         }
+        INFO_LOG("Fi de llistat del repositori de WW/WL");
 
         // TODO Caldria pensar bé a on s'ha de fer això.
         CustomWindowLevelsWriter customWindowLevelsWriter;
