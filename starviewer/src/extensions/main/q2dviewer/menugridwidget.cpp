@@ -51,7 +51,7 @@ void MenuGridWidget::initializeWidget()
 
     QLabel *labelHanging = new QLabel(this);
     labelHanging->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    labelHanging->setText("Hanging protocols");
+    labelHanging->setText(tr("Hanging protocols"));
     QVBoxLayout *vBoxLayoutHanging = new QVBoxLayout();
     vBoxLayoutHanging->setMargin(0);
     vBoxLayoutHanging->setSpacing(6);
@@ -228,7 +228,7 @@ void MenuGridWidget::createSearchingWidget()
 
         // Construcció del label pel text
         QLabel *searchingLabelText = new QLabel(m_searchingWidget);
-        searchingLabelText->setText("Searching...");
+        searchingLabelText->setText(tr("Searching..."));
 
         // Es col·loca dins al widget i a la graella per mostrar-ho
         verticalLayout->addWidget(searchingLabelMovie);
