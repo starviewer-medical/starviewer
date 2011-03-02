@@ -20,7 +20,7 @@ namespace udg {
 const int MenuGridWidget::MaximumNumberOfColumns = 5;
 
 MenuGridWidget::MenuGridWidget(QWidget *parent)
- : QWidget(parent), m_searchingWidget(0)
+ : QWidget(parent), m_searchingWidget(0), m_noHangingProtocolsAvailableLabel(0)
 {
     setWindowFlags(Qt::Popup);
 
@@ -52,12 +52,19 @@ void MenuGridWidget::initializeWidget()
     QLabel *labelHanging = new QLabel(this);
     labelHanging->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     labelHanging->setText("Hanging protocols");
-    QHBoxLayout *hBoxLayoutHanging = new QHBoxLayout();
-    hBoxLayoutHanging->setMargin(0);
-    hBoxLayoutHanging->setSpacing(6);
-    hBoxLayoutHanging->addWidget(labelHanging);
+    QVBoxLayout *vBoxLayoutHanging = new QVBoxLayout();
+    vBoxLayoutHanging->setMargin(0);
+    vBoxLayoutHanging->setSpacing(6);
+    vBoxLayoutHanging->addWidget(labelHanging);
 
-    m_gridLayout->addLayout(hBoxLayoutHanging, 2, 0, 1, 1);
+    m_noHangingProtocolsAvailableLabel = new QLabel(this);
+    m_noHangingProtocolsAvailableLabel->setText(tr("No hanging protocols available"));
+    m_noHangingProtocolsAvailableLabel->setAlignment(Qt::AlignHCenter);
+    m_noHangingProtocolsAvailableLabel->setGeometry(0, 64, 64, 80);
+    m_noHangingProtocolsAvailableLabel->setMargin(6);
+    vBoxLayoutHanging->addWidget(m_noHangingProtocolsAvailableLabel);
+    
+    m_gridLayout->addLayout(vBoxLayoutHanging, 2, 0, 1, 1);
     m_gridLayout->addLayout(m_gridLayoutHanging, 3, 0, 1, 1);
 }
 
@@ -122,7 +129,14 @@ void MenuGridWidget::dropContent()
 void MenuGridWidget::setHangingItems(const QList<HangingProtocol *> &listOfCandidates)
 {
     dropContent();
-    addHangingItems(listOfCandidates);
+    if (listOfCandidates.isEmpty())
+    {
+        m_noHangingProtocolsAvailableLabel->show();
+    }
+    else
+    {
+        addHangingItems(listOfCandidates);
+    }
 }
 
 void MenuGridWidget::addHangingItems(const QList<HangingProtocol *> &items)
@@ -130,6 +144,11 @@ void MenuGridWidget::addHangingItems(const QList<HangingProtocol *> &items)
     int positionRow = 0;
     int positionColumn = 0;
 
+    if (!items.isEmpty())
+    {
+        m_noHangingProtocolsAvailableLabel->hide();
+    }
+    
     foreach (HangingProtocol *hangingProtocol, items)
     {
         ItemMenu *icon = createIcon(hangingProtocol);
