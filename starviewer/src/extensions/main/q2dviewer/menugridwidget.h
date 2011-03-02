@@ -99,6 +99,8 @@ protected:
     /// Widget que informa que s'esta carregant (buscant)
     QWidget *m_searchingWidget;
 
+    /// Etiqueta per mostrar quan no hi ha cap hanging protocol disponible per aplicar
+    QLabel *m_noHangingProtocolsAvailableLabel;
 };
 
 }
