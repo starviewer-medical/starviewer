@@ -38,10 +38,12 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const E
 
     q2dviewerExtension->setPatient( extensionContext.getPatient() );
     Volume *input = extensionContext.getDefaultVolume();
+    // Si no tenim cap volum, alertem a l'usuari
     if( !input )
         QMessageBox::information(0,ApplicationNameString, tr("There is not any viewable or supported Series in the selected Studies") );
-    else
-        q2dviewerExtension->setInput( input );
+    
+    // Assignem l'input per defecte al visor
+    q2dviewerExtension->setInput( input );
 
     return true;
 }

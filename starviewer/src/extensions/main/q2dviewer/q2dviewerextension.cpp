@@ -213,7 +213,15 @@ void Q2DViewerExtension::setInput(Volume *input)
 
     // Habilitem la possibilitat de buscar estudis previs.
     m_previousStudiesToolButton->setEnabled(true);
-    m_previousStudiesWidget->searchStudiesOf(m_mainVolume->getPatient());
+    if (m_mainVolume)
+    {
+        m_previousStudiesWidget->searchStudiesOf(m_mainVolume->getPatient());
+    }
+    else
+    {
+        // Si no tenim volum, farem servir el pacient actual directament
+        m_previousStudiesWidget->searchStudiesOf(m_patient);
+    }
 
     searchPreviousStudiesWithHangingProtocols();
 #endif
@@ -246,7 +254,15 @@ void Q2DViewerExtension::searchPreviousStudiesWithHangingProtocols()
     connect(m_previousStudiesManager, SIGNAL(queryPreviousStudiesFinished(QList<Study*>, QHash<QString, QString>)), SLOT(addPreviousHangingProtocols(QList<Study*>, QHash<QString, QString>)));
 
     // 4.- Es busquen els previs
-    m_previousStudiesManager->queryPreviousStudies(m_mainVolume->getStudy());
+    if (m_mainVolume)
+    {
+        m_previousStudiesManager->queryPreviousStudies(m_mainVolume->getStudy());
+    }
+    else
+    {
+        // En el cas que no tinguéssim un input vàlid, ho farem a partir del pacient actual
+        m_previousStudiesManager->queryPreviousStudies(m_patient->getStudies().first());
+    }
 }
 
 void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study *> studies, QHash<QString, QString> qhash)
