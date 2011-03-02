@@ -39,15 +39,15 @@ public:
     ~HangingProtocolManager();
 
     /// Buscar els hanging protocols disponibles
-    QList<HangingProtocol*> searchHangingProtocols(Patient *patient);
-    QList<HangingProtocol*> searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
+    QList<HangingProtocol *> searchHangingProtocols(Patient *patient);
+    QList<HangingProtocol *> searchHangingProtocols(Patient *patient, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
 
-    // Aplica un hanging protocol concret, ja sigui via identificador o per instància
+    /// Aplica un hanging protocol concret, ja sigui via identificador o per instància
     void applyHangingProtocol(int hangingProtocolNumber, ViewersLayout *layout, Patient *patient);
     void applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient);
 
     /// Aplica el millor hanging protocol de la llista donada
-    void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
+    void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol *> &hangingProtocolList, ViewersLayout *layout);
 
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
     void cancelHangingProtocolDownloading();
@@ -67,8 +67,8 @@ private:
     /// Mira si la modalitat és compatible amb el protocol
     bool isModalityCompatible(HangingProtocol *protocol, const QString &modality);
 
-    // Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
-    Series *searchSerie( QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy);
+    /// Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
+    Series* searchSerie(QList<Series *> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy);
 
     /// Cert si la imatge compleix les restriccions
     bool isValidImage(Image *image, HangingProtocolImageSet *imageSet);
@@ -77,16 +77,16 @@ private:
     bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
 
     /// Ordena els estudis per data per tal que els hanging protocols els tingui ordenats.
-    QList<Study*> sortStudiesByDate( const QList<Study*> &studies );
+    QList<Study *> sortStudiesByDate( const QList<Study *> &studies );
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
     void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);
 
     /// Buscar els estudis previs
-    Study* searchPreviousStudy( HangingProtocol *protocol , Study *referenceStudy, const QList<Study*> &previousStudies);
+    Study* searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study *> &previousStudies);
 
     /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat. 
-    int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
+    int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series *> &inputSeries, const QList<Study *> &previousStudies, const QHash<QString, QString> &originOfPreviousStudies);
 
     /// Fa una còpia del repositori de HP per poder-los modificar sense que el repositori es vegi afectat.
     void copyHangingProtocolRepository();
@@ -95,7 +95,6 @@ private:
     Image* getImageByIndexInPatientModality(Patient *patient, int index, QList<QString> hangingProtocolModalities);
 
 private:
-
     /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi
     /// Hem de guardar tota la informació perquè només sabem que és un previ i fins que s'hagi descarregat no podem saber quines series i imatges te
     struct StructPreviousStudyDownloading
@@ -112,7 +111,7 @@ private:
     PreviousStudiesManager *m_previousStudiesManager;
 
     /// Còpia del repositori de HP però poder-los modificar sense que afecti al repositori
-    QList<HangingProtocol*> m_availableHangingProtocols;
+    QList<HangingProtocol *> m_availableHangingProtocols;
 };
 
 }

@@ -18,9 +18,9 @@ class QLabel;
 namespace udg {
 
 /**
-Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
+    Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
 
-@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 // FWD declarations
@@ -31,17 +31,16 @@ class MenuGridWidget: public QWidget {
 Q_OBJECT
 public:
     MenuGridWidget(QWidget *parent = 0);
-
     ~MenuGridWidget();
 
     /// Elimina tot el contingut del widget
     void dropContent();
 
     /// Posa els hanging protocols que ha de representar el menú
-    void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
+    void setHangingItems(const QList<HangingProtocol *> &listOfCandidates);
 
     /// Afegeix hanging protocols al menú
-    void addHangingItems(const QList<HangingProtocol*> &items);
+    void addHangingItems(const QList<HangingProtocol *> &items);
 
     /// Posa una element que informa que s'estan carregant
     void addSearchingItem();
@@ -49,14 +48,11 @@ public:
     /// Informa de si ha de posar un element que informi que s'està carregant o no
     void setSearchingItem(bool state);
 
-
 public slots:
-
     /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
     void emitSelected(ItemMenu *selected);
 
 signals:
-    
     /// Emet que s'ha escollit un grid
     void selectedGrid(int);
 
@@ -80,7 +76,7 @@ protected:
     QGridLayout *m_gridLayout;
 
     /// Llista dels items
-    QList<ItemMenu*> m_itemList;
+    QList<ItemMenu *> m_itemList;
 
     /// Fila a on col·locar el següent element a la zona de hangings
     int m_nextHangingProtocolRow;

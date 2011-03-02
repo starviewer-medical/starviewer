@@ -76,7 +76,7 @@ ItemMenu* MenuGridWidget::createIcon(const HangingProtocol *hangingProtocol)
     icon->setMinimumWidth(64);
     icon->setMinimumHeight(80);
     icon->setMaximumHeight(80);
-    icon->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+    icon->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
     QLabel *sizeText = new QLabel(icon);
     sizeText->setText(hangingProtocol->getName());
@@ -100,12 +100,12 @@ ItemMenu* MenuGridWidget::createIcon(const HangingProtocol *hangingProtocol)
         double x2 = listOfPositions.value(2).toDouble();
         double y2 = listOfPositions.value(3).toDouble();
 
-        newIcon->setGeometry(x1*64, (1-y1)*64, ((x2-x1)*64), (y1-y2)*64);
+        newIcon->setGeometry(x1 * 64, (1 - y1) * 64, ((x2 -x1) * 64), (y1 - y2) * 64);
         newIcon->show();
     }
 
     icon->show();
-    connect(icon, SIGNAL(isSelected(ItemMenu*)), this, SLOT(emitSelected(ItemMenu*)));
+    connect(icon, SIGNAL(isSelected(ItemMenu *)), this, SLOT(emitSelected(ItemMenu *)));
     return icon;
 }
 
@@ -125,13 +125,13 @@ void MenuGridWidget::dropContent()
     m_itemList.clear();
 }
 
-void MenuGridWidget::setHangingItems(const QList<HangingProtocol*> &listOfCandidates)
+void MenuGridWidget::setHangingItems(const QList<HangingProtocol *> &listOfCandidates)
 {
     dropContent();
     addHangingItems(listOfCandidates);
 }
 
-void MenuGridWidget::addHangingItems(const QList<HangingProtocol*> &items)
+void MenuGridWidget::addHangingItems(const QList<HangingProtocol *> &items)
 {
     int positionRow = 0;
     int positionColumn = 0;
@@ -142,12 +142,12 @@ void MenuGridWidget::addHangingItems(const QList<HangingProtocol*> &items)
 
         m_gridLayoutHanging->addWidget(icon, positionRow, positionColumn);
         m_itemList.push_back(icon);
-        positionColumn ++;
+        ++positionColumn;
 
         if (positionColumn == MaximumNumberOfColumns)
         {
             positionColumn = 0;
-            positionRow++;
+            ++positionRow;
         }
     }
 
@@ -158,7 +158,6 @@ void MenuGridWidget::addHangingItems(const QList<HangingProtocol*> &items)
     {
         addSearchingItem();
     }
-
 }
 
 void MenuGridWidget::setSearchingItem(bool state)
@@ -204,7 +203,7 @@ void MenuGridWidget::createSearchingWidget()
         m_searchingWidget->setMinimumWidth(64);
         m_searchingWidget->setMinimumHeight(64);
         m_searchingWidget->setMaximumHeight(64);
-        m_searchingWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+        m_searchingWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
         QVBoxLayout *verticalLayout = new QVBoxLayout(m_searchingWidget);
 
         // Construcció del label per l'animació
