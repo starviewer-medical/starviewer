@@ -8,17 +8,11 @@
 
 #include "gridicon.h"
 #include "itemmenu.h"
-#include "logging.h"
-#include "math.h"
 #include "hangingprotocol.h"
 #include "hangingprotocoldisplayset.h"
-#include <QFrame>
-#include <QPalette>
-#include <QMouseEvent>
+
 #include <QGridLayout>
 #include <QLabel>
-#include <QGroupBox>
-#include <QSpacerItem>
 #include <QMovie>
 
 namespace udg {
