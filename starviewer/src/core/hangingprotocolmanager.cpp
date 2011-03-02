@@ -278,6 +278,12 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, con
 
 Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, HangingProtocolImageSet *imageSet, bool quitStudy)
 {
+    // Si la llista és buida, el resultat de la cerca serà nul
+    if (listOfSeries.isEmpty())
+    {
+        return 0;
+    }
+    
     Series *selectedSeries = 0;
     Study *referenceStudy = 0;
 

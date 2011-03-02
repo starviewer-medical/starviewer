@@ -105,9 +105,12 @@ void Q2DViewerWidget::setInput(Volume *input)
 
 void Q2DViewerWidget::setInputAsynchronously(Volume *input, QViewerCommand *command)
 {
-    m_mainVolume = input;
-    m_2DView->setInputAsynchronously(input, command);
-    updateProjectionLabel();
+    if (input)
+    {
+        m_mainVolume = input;
+        m_2DView->setInputAsynchronously(input, command);
+        updateProjectionLabel();
+    }
 }
 
 void Q2DViewerWidget::updateInput(Volume *input)
