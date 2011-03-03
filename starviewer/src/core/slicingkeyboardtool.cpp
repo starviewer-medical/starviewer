@@ -11,6 +11,8 @@
 #include "study.h"
 #include "series.h"
 #include "patient.h"
+#include "changesliceqviewercommand.h"
+#include "renderqviewercommand.h"
 //qt
 #include <QTime>
 //vtk
@@ -95,6 +97,7 @@ void SlicingKeyboardTool::handleEvent( unsigned long eventID )
                             }
                         }
                         int nextVolumeIndex = 0;
+                        QViewerCommand *command;
                         if (keySymbol == "plus")
                         {
                             if (currentVolumeIndex >= volumesList.size() - 1)
@@ -105,8 +108,7 @@ void SlicingKeyboardTool::handleEvent( unsigned long eventID )
                             {
                                 nextVolumeIndex = currentVolumeIndex + 1;
                             }
-                            Volume *nextVolume = volumesList.at(nextVolumeIndex);
-                            m_2DViewer->setInput(nextVolume);
+                            command = new RenderQViewerCommand(m_2DViewer);
                         }
                         else
                         {
@@ -118,11 +120,10 @@ void SlicingKeyboardTool::handleEvent( unsigned long eventID )
                             {
                                 nextVolumeIndex = currentVolumeIndex - 1;
                             }
-                            Volume *nextVolume = volumesList.at(nextVolumeIndex);
-                            m_2DViewer->setInput(nextVolume);
-                            m_2DViewer->setSlice(m_2DViewer->getMaximumSlice());
+                            command = new ChangeSliceQViewerCommand(m_2DViewer, ChangeSliceQViewerCommand::MaximumSlice);
                         }
-                        m_2DViewer->render();
+                        Volume *nextVolume = volumesList.at(nextVolumeIndex);
+                        m_2DViewer->setInputAsynchronously(nextVolume, command);
                     }
                 }
             }
