@@ -41,6 +41,8 @@ public:
 
 signals:
     /// Ens indica el progrés del procés de lectura
+    /// TODO: De moment quan es vulgui llegir només un fitxer, p.ex. multiframes, mamos, etc. per limitacions de la lectura,
+    /// no tindrem cap tipus de progrés.
     void progress(int progress);
 
 private:
@@ -61,8 +63,9 @@ private:
     /// Retorna el tipus de lector mes adequat per llegir el volume que se li passa.
     PixelDataReaderType getSuitableReader(Volume *volume) const;
 
-    /// Crea i posa a punt el tipus de reader que se li passa per poder llegir a continuacio
-    void setUpReader(PixelDataReaderType readerType);
+    /// Crea i posa a punt el tipus de reader que se li passa per poder llegir a continuació.
+    /// Podem especificar si volem que el reader ens doni el progrés o no.
+    void setUpReader(PixelDataReaderType readerType, bool showProgress);
 
 private:
     /// Classe amb la qual llegirem les dades d'imatge del volum
