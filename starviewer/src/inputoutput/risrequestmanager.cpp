@@ -225,10 +225,19 @@ void RISRequestManager::retrieveFoundStudiesFromPACS(QueryPacsJob *queryPACSJob)
                 //Descarreguem l'estudi trobat
                 RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = retrieveStudy(queryPACSJob->getHashTablePacsIDOfStudyInstanceUID()[study->getInstanceUID()], study);
 
-                if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
+                if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool())
                 {
-                    //El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
-                    m_pacsJobIDToViewWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
+                    //TODO: Això és una mica lleig haver de controlar des d'aquí que fe amb l'estudi una vegada descarregat, no es podria posar com a 
+                    //propietat al Job, i centralitzar-ho a un responsable que fos l'encarregat de fer l'acció pertinent
+                    if (m_studiesInstancesUIDRequestedToRetrieve.count() == 0)
+                    {
+                        //El primer estudi que descarreguem trobat d'una petició del RIS fem un retrieve&view, pels altres serà un retrieve&Load
+                        m_pacsJobIDToViewWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
+                    }
+                    else
+                    {
+                        m_pacsJobIDToLoadWhenFinished.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
+                    }
                 }
 
                 m_studiesInstancesUIDRequestedToRetrieve.append(study->getInstanceUID());
@@ -297,12 +306,12 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
             }
         }
 
+
         if (m_pacsJobIDToViewWhenFinished.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
         {
-            //Si estava dintre la llista de PACSJob pels quals s'havia de fer un view al acabar de descarregar emetem un ViewStudy sinó emetrem un LoadStudy
             emit viewStudyRetrievedFromRISRequest(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
         }
-        else
+        else if (m_pacsJobIDToLoadWhenFinished.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
         {
             emit loadStudyRetrievedFromRISRequest(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
         }
