@@ -52,7 +52,7 @@
                 <li>Es guarda per quin camp i en quin ordre s'ha fet l'ordenació del estudis a la pantalla de cerca per ordenar de la mateixa manera en les properes cerques. <span class="ticket">1021, 1272</span></li>
                 <li>S'afegeix el format TIFF com a format d'exportació de captures de pantalla. <span class="ticket">1306</span></li>
                 <li>S'afegeix la guia ràpida i l'esquema de shortcuts al menú Ajuda. <span class="ticket">1372</span></li>
-                <li>S'afegeixen nous hanging protocols per mamografia, DX,... <span class="ticket"></span></li>
+                <li>S'afegeixen nous hanging protocols per mamografia, CR, DX, RF... <span class="ticket">1384, 1350, 1382</span></li>
                 <li>S'implementa el filtratge per modalitat a les cerques d'estudis locals. <span class="ticket">1354</span></li>
                 <li>S'afegeix opció per poder anonimitzar la informació sensible del pacient al crear DICOMDIR. Es permet indicar quin nom de pacient han de tenir els estudis una vegada anonimitzats.<span class="ticket">188, 1418</span></li>
                 <li>S'informa de les novetats que incorpora una versió d'Starviewer la primera vegada que s'executa després d'haver-se instal·lat.</li>
@@ -65,6 +65,9 @@
                 <li>S'implementa en el visor 2D que per cada imatge s'apliqui el WindowWidth/WindowLevel definit a la pròpia imatge quan s'està treballant amb una finestra predefinida.<span class="ticket">478</span></li>
                 <li>Es dóna la possibiltat a l'usuari de poder definir noves finestres (WindowWidth/WindowLevel), editar-les i eliminar-les dels del visor 2D o MPR.<span class="ticket">974</span></li>
                 <li>El desplegable de finestres predefinides (WW/WL) desplega totes les finestres sense necessitat de recòrrer a l'scroll. Es poden mostrar fins a 50 ítems, siguent aquest valor configurable.<span class="ticket">s:60</span></li>
+                <li>Els hanging protocols incorporen noves eines per tractar els diferents volums (sèries dividides) del pacient. <span class=ticket">1189</span></li>
+                <li>Els hanging protocols permeten definir el número d'imatge dins l'estudi a mostrar a cada visor.<span class="ticket">1425</span></li>
+                <li>Els hanging protocols permeten definir un WW/WL concret a cada visor.<span class="ticket">1426</span></li>
             </ul>
         </div>
         <div class="improved">
@@ -78,6 +81,9 @@
                 <li>S'afegeix una animació a la finestreta que informa de les peticions rebudes de SAP per millorar l'experiència d'usuari. <span class="ticket">1377</span></li>
                 <li>S'habilita l'ordenació per columna del llistat d'estudis de la finestra d'estudis relacionats. <span class="ticket">1297</span></li>
                 <li>Es mostra la pantalla inicial el més aviat possible per informar que Starviewer està arrencant.</li>
+                <li>Es milloren els hanging protocols, per tal que no es puguin confondre.<span class="ticket">1383, 1351</span></li>
+                <li>Millora del rendiment al canviar de visor actiu, on s'actualitzava cada vegada el WW/WL i no calia.<span class="ticket"></span></li>
+                <li>S'actualitza i es millora el manual de l'usuari.<span class="ticket"></span></li>
             </ul>
         </div>
         <div class="fixed">
@@ -91,6 +97,9 @@
                 <li>S'ha solucionat el problema que provocava que no s'imprimissin correctament en plaques les imatges que no eren quadrades.<span class="ticket">1410</span></li>
                 <li>S'ha arreglat un problema que provocava una visualització incorrecta de les biòpsies d'abstracció al buit (BAV).<span class="ticket">1312</span></li>
                 <li>S'ha solucionat un problema per evitar que l'element "Custom" aparegui duplicat a la llista de WW/WL predefinits del visor 2D.<span class="ticket">1403</span></li>
+                <li>S'arregla el problema que hi havia amb Windows Vista i Windows 7, on al canviar de volum, el visor quedava de color negre al no renderitzar correctament.<span class="ticket">1340</span></li>
+                <li>Es solucionen casos de CR i RF on el hanging protocol que s'aplicava era incorrecte.<span class="ticket">1396,1397</span></li>
+                <li><span class="ticket"></span></li>
             </ul>
         </div>
         <div class="removed">
