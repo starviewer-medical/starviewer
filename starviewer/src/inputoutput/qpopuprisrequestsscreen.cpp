@@ -35,7 +35,10 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
 
     m_qTimerToHidePopUp = new QTimer();
     m_qTimerToHidePopUp->setSingleShot(true);
-    connect(m_qTimerToHidePopUp,SIGNAL(timeout()), SLOT(hidePopUpSmoothly()));
+    m_qTimerToMovePopUpToBottomRight = new QTimer();
+    m_qTimerToMovePopUpToBottomRight->setSingleShot(true);
+    connect(m_qTimerToHidePopUp, SIGNAL(timeout()), SLOT(hidePopUpSmoothly()));
+    connect(m_qTimerToMovePopUpToBottomRight, SIGNAL(timeout()), SLOT(moveToBottomRight()));
 
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
@@ -47,6 +50,11 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
     // TODO: Aquesta és la única manera que s'ha trobat de que el text, al canviar-lo a un tamany major, no quedi tallat
     // caldria refer el diàleg i vigilar el tema de com es fa per situar-lo, etc. perquè ara mateix és una mica "hack".
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
+    
+    //Posem EventFilter al Widget i al GroupBox perquè si fan click en qualsevol zona del widget aquest s'amagui. L'objectiu és que si
+    //el Popup es posa en una zona on molesta l'usuari fent-hi click el pugui amagar.
+    this->installEventFilter(this);
+    m_groupBox->installEventFilter(this);
 }
 
 void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
@@ -193,7 +201,25 @@ void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
     style.setScaledFontSizeTo(this);
     style.setScaledSizeTo(m_operationAnimation->movie());
 
-    QTimer::singleShot(msTimeOutToMovePopUpToBottomRight, this, SLOT(moveToBottomRight()));
+    m_qTimerToMovePopUpToBottomRight->start(msTimeOutToMovePopUpToBottomRight);
+}
+
+bool QPopUpRISRequestsScreen::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress) 
+    {
+        //Parem els rellotges perquè no saltin les animacions amb el PopUp amagat, sinó ens podríem trobar que si rebem una altra petició
+        //aparegués el PopUp movent-se
+        m_qTimerToHidePopUp->stop();
+        m_qTimerToMovePopUpToBottomRight->stop();    
+
+        hidePopUpSmoothly();
+        return true;
+    } 
+    else 
+    {
+        return false;
+    }
 }
 
 void QPopUpRISRequestsScreen::hidePopUpSmoothly()
