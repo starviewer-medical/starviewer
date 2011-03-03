@@ -100,6 +100,15 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
     }
     else
     {
+        //Si quan s'ha descarregat l'estudi el PopUp encara no s'ha mogut a baix a l'esquerre, el que fem es forçar-los a moures sense espera
+        //el timeout del Timer, sinó podria passar que ja tinguem els visors amb l'estudi carregat i el PopUp encara aparagués al centre de pantalla molestant a 
+        //l'usuari
+        if (m_qTimerToMovePopUpToBottomRight->isActive())
+        {
+            m_qTimerToMovePopUpToBottomRight->stop();
+            moveToBottomRight();
+        }
+
         if (m_pacsJobIDOfStudiesToRetrieve.contains(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
         {
             //Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
