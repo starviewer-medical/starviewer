@@ -148,12 +148,20 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     }
 
     // Movem la finestra del menu al punt que toca
+    // Col·loquem el widget amb la informació adicional a la dreta del principal
+    m_patientAdditionalInfo->move(menuXPosition + m_patientBrowserList->sizeHint().width(), menuYPosition);
+    m_patientAdditionalInfo->show();
+
+    // TODO: HACK si no mostrem l'"Aditional info" abans que el "browser list" després no processa els events
+    // correctament i quan seleccionem una sèrie no arriba el signal enlloc i no es pot seleccionar cap sèrie
+    // relacionat amb el ticket #555 Això només passa amb qt 4.3, amb qt 4.2 no tenim aquest
+    // problema. Amb qt 4.2 podem fer show en l'ordre que volguem. El que fem per evitar flickering és mostrar-lo sota mateix
+    // del "browser list" i així no es nota tant
+    // Això, a partir de Qt 4.7 sembla que només passa a Mac. Semblaria que això és el símptoma d'un altre problema: que es mostri com un popup?
     m_patientBrowserList->move(menuXPosition, menuYPosition);
     m_patientBrowserList->show();
-    // Col·loquem el widget amb la informació adicional a la dreta del principal
-    m_patientAdditionalInfo->move(menuXPosition + m_patientBrowserList->sizeHint().width(), m_patientBrowserList->y());
-    m_patientAdditionalInfo->show();
-    // TODO No es té en compte si després d'haver mogut de lloc el widget aquest ja es veu correctament, 
+
+    // TODO No es té en compte si després d'haver mogut de lloc el widget aquest ja es veu correctament,
     // ja que es podria donar el cas que el widget no hi cabés a tota la pantalla
     // Caldria millorar el comportament en certs aspectes, com per exemple, redistribuir les files i columnes
     // del llistat si aquest no hi cap a la pantalla, per exemple.
