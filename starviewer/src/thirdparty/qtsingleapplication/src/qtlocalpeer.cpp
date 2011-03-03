@@ -198,6 +198,21 @@ void QtLocalPeer::receiveConnection()
     QString message(QString::fromUtf8(uMsg));
     socket->write(ack, qstrlen(ack));
     socket->waitForBytesWritten(1000);
+
+    /*********************************************************************************************************************************************/
+    //                                                      ATENCIÓ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //
+    //LÍNIA DE CODI POSADA PER EQUIP STARVIEWER DEGUT AL TICKET #1498. ALGUNES VEGADES LA INSTÀNCIA PRINCIPAÑ (LA QUE ESTÀ JA EXECUTANT-SE) TANCA EL SOCKET 
+    //ABANS QUE LA INSTÀNCIA SECUNDÀRIA (LA NOVA INSTANCIA) HAGI POGUT LLEGIR L'ACK DE CONFIRMACIÓ, AIXÒ FA QUE LA INSTÀNCIA SECUNDÀRIA NO REBI L'ACK I 
+    //INDIQUI QUE LA INSTÀNCIA PRINCIPAL NO RESPÓN PER EVITAR AIXÒ POSEM socket->waitForDisconnected(3000) FENT QUE SIGUI LA INSTÀNCIA SECUNDÀRIA 
+    //QUI TANQUI EL SOCKET.
+    //
+    //SI S'ACTUALITZA DE VERSIÓ AQUESTA CLASSE SERÀ NECESSARI COMPROVAR SI EL PROBLEMA AQUÍ DESCRIT CONTINUA PASSANT, SI CONTINUA PASSANT
+    //SI HAURÀ DE TORNAR AFEGIR socket->waitForDisconnected(3000)
+    //
+    /*********************************************************************************************************************************************/
+    socket->waitForDisconnected(3000);
+    
     delete socket;
     emit messageReceived(message); //### (might take a long time to return)
 }
