@@ -51,6 +51,11 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
 
 void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
 {
+    //Si arriba una altra petició mentre hi ha activat el timer per amagar el PopUp o s'està amagant, hem de fer que aquest no s'amagui per 
+    //mostrar la nova petició
+    m_qTimerToHidePopUp->stop();
+    m_hidePopUpAnimation.stop();
+
     m_labelRisRequestDescription->setText(tr("%1 has received a request from RIS to retrieve studies.").arg(ApplicationNameString));
     m_operationDescription->setText(tr("Querying PACS..."));
     m_operationAnimation->show();
@@ -193,7 +198,7 @@ void QPopUpRISRequestsScreen::showEvent(QShowEvent *)
 
 void QPopUpRISRequestsScreen::hidePopUpSmoothly()
 {
-    if(m_operationAnimation->isHidden() && m_hidePopUpAnimation.state() != QAbstractAnimation::Running)
+    if(m_hidePopUpAnimation.state() != QAbstractAnimation::Running)
     {
         m_hidePopUpAnimation.setTargetObject(this);
         m_hidePopUpAnimation.setPropertyName("windowOpacity");
@@ -205,11 +210,7 @@ void QPopUpRISRequestsScreen::hidePopUpSmoothly()
 
 void QPopUpRISRequestsScreen::hidePopUp()
 {
-    if (m_operationAnimation->isHidden())
-    {
-        //Si es mostra el gif d'operació vol dir que ha arribat una petició de RIS mentre estava corrent el QTimer, per això hem de fer no s'amagui
-        this->hide();
-    }
+    this->hide();
     this->setWindowOpacity(1.0);
 }
 
