@@ -132,8 +132,9 @@ private:
     /*Pot ser que diversos PACS continguin el mateix estudi amb un mateix accession number, per evitar descarregar-lo més d'una vegada ens guardem en una
       llista quins són els estudis descarregats.*/
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
-    //Conté una llista de PACSJob pels quals de l'estudi descarregat s'ha de fer un view, pels altres es farà un load
+    //Llista de PACSJob pels quals una vegada l'estudi estigui descarregat s'ha de fer un view/load
     QList<int> m_pacsJobIDToViewWhenFinished;
+    QList<int> m_pacsJobIDToLoadWhenFinished;
 
     ///Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
     QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
