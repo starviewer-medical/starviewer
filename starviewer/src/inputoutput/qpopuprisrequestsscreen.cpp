@@ -33,9 +33,9 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent): QDialog(paren
     setupUi(this);
     this->setWindowFlags(Qt::SubWindow | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
-    m_qTimer = new QTimer();
-    m_qTimer->setSingleShot(true);
-    connect(m_qTimer,SIGNAL(timeout()), SLOT(hidePopUpSmoothly()));
+    m_qTimerToHidePopUp = new QTimer();
+    m_qTimerToHidePopUp->setSingleShot(true);
+    connect(m_qTimerToHidePopUp,SIGNAL(timeout()), SLOT(hidePopUpSmoothly()));
 
     QMovie *operationAnimation = new QMovie(this);
     operationAnimation->setFileName(":/images/loader.gif");
@@ -135,7 +135,7 @@ void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus()
     else
     {
         showRetrieveFinished();
-        m_qTimer->start(msTimeOutToHidePopUp);
+        m_qTimerToHidePopUp->start(msTimeOutToHidePopUp);
     }
 }
 
@@ -143,7 +143,7 @@ void QPopUpRISRequestsScreen::showNotStudiesFoundMessage()
 {
     m_operationDescription->setText(tr("No studies found."));
     m_operationAnimation->hide();
-    m_qTimer->start(msTimeOutToHidePopUp);
+    m_qTimerToHidePopUp->start(msTimeOutToHidePopUp);
 }
 
 void QPopUpRISRequestsScreen::showRetrieveFinished()
@@ -228,8 +228,8 @@ void QPopUpRISRequestsScreen::moveToBottomRight()
 
 QPopUpRISRequestsScreen::~QPopUpRISRequestsScreen()
 {
-    m_qTimer->stop();
-    delete m_qTimer;
+    m_qTimerToHidePopUp->stop();
+    delete m_qTimerToHidePopUp;
 }
 
 };

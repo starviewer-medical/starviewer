@@ -76,7 +76,7 @@ private:
 
 private:
 
-    QTimer *m_qTimer;
+    QTimer *m_qTimerToHidePopUp;
     static const int msTimeOutToHidePopUp;
     static const int msTimeOutToMovePopUpToBottomRight;
 
