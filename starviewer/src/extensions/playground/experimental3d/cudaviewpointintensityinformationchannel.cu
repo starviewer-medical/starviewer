@@ -45,6 +45,7 @@ texture<float, 1> gViewedVolumesTexture;    // textura de l'histograma de reals
 static uint gIntensityRange;
 static cudaExtent gVolumeDataDims;
 static float3 gVolumeDims;
+static float gMinimumSpacing;
 
 // per mostrar la imatge
 static bool gDisplay;
@@ -123,11 +124,10 @@ __device__ static uint rgbaFloatToInt(float4 rgba)
 }
 
 
-__global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, int *histogram, float3 volumeDims, float3x4 invViewMatrix, uint parallelismFactor, uint partitions, int volumeMultiplier)
+__global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, int *histogram, float3 volumeDims, float rayStep, float3x4 invViewMatrix, uint parallelismFactor, uint partitions, int volumeMultiplier)
 {
-    const int MAX_STEPS = 512;
-    const float OPAQUE_ALPHA = 0.9f;
-    const float RAY_STEP = 1.0f;
+    const int MAX_STEPS = 1024;
+    const float OPAQUE_ALPHA = 0.99f;
 
     float3 boxMin = make_float3(-volumeDims.x / 2.0f, -volumeDims.y / 2.0f, -volumeDims.z / 2.0f);
     float3 boxMax = make_float3(volumeDims.x / 2.0f, volumeDims.y / 2.0f, volumeDims.z / 2.0f);
@@ -207,7 +207,7 @@ __global__ void rayCastKernel(uint *image, uint imageWidth, uint imageHeight, in
                     if (sum.w >= OPAQUE_ALPHA) break;
                 }
 
-                t += RAY_STEP;
+                t += rayStep;
 
                 if (t > tfar) break;
             }
@@ -245,6 +245,7 @@ void cviicSetupRayCast(vtkImageData *image, const TransferFunction &transferFunc
     gVolumeDataDims = make_cudaExtent(dimensions[0], dimensions[1], dimensions[2]);
     double *spacing = image->GetSpacing();
     gVolumeDims = make_float3(dimensions[0] * spacing[0], dimensions[1] * spacing[1], dimensions[2] * spacing[2]);
+    gMinimumSpacing = qMin(qMin(spacing[0], spacing[1]), spacing[2]);
     double *scalarRange = image->GetScalarRange();
     int rangeMax = static_cast<int>(scalarRange[1]);
 
@@ -347,7 +348,7 @@ QVector<float> cviicRayCastAndGetHistogram(Vector3 viewpoint, Matrix4 viewMatrix
     invViewMatrix.f[1] = make_float4(viewMatrix[1][0], viewMatrix[1][1], viewMatrix[1][2], viewpoint.y);
     invViewMatrix.f[2] = make_float4(viewMatrix[2][0], viewMatrix[2][1], viewMatrix[2][2], viewpoint.z);
 
-    rayCastKernel<<<gridSize, blockSize>>>(pbo, gRenderSize, gRenderSize, gdiHistogram, gVolumeDims, invViewMatrix, ParallelismFactor, PARTITIONS, VOLUME_MULTIPLIER);
+    rayCastKernel<<<gridSize, blockSize>>>(pbo, gRenderSize, gRenderSize, gdiHistogram, gVolumeDims, gMinimumSpacing, invViewMatrix, ParallelismFactor, PARTITIONS, VOLUME_MULTIPLIER);
     //CUT_CHECK_ERROR( "kernel failed" );
     cudaError_t err = cudaGetLastError();
     if (cudaSuccess != err) std::cout << "ray cast kernel failed: " << cudaGetErrorString(err) << std::endl;
