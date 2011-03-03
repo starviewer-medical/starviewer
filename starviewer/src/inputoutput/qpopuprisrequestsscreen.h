@@ -51,6 +51,9 @@ protected:
     ///Quan es fa un show al popup s'activa un timer, que passat un temps amaga automàticament el PopUp
     void showEvent(QShowEvent *);
 
+    ///Si es rep un event de fer click sobre el PopUp aquest s'amaga
+    bool eventFilter(QObject *obj, QEvent *event);
+
 private slots :
 
     ///Slot que amaga el PopUp sempre i quan no s'estigui processant cap petició del RIS
@@ -77,6 +80,7 @@ private:
 private:
 
     QTimer *m_qTimerToHidePopUp;
+    QTimer *m_qTimerToMovePopUpToBottomRight;
     static const int msTimeOutToHidePopUp;
     static const int msTimeOutToMovePopUpToBottomRight;
 
