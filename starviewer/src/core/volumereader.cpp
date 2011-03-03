@@ -41,9 +41,13 @@ void VolumeReader::executePixelDataReader(Volume *volume)
     QStringList fileList = this->getFilesToRead(volume);
     if (!fileList.isEmpty())
     {
+        // Per evitar donar informació poc acurada, només informarem del progrés quan tinguem més d'una imatge si no, amb imatges úniques molt grans
+        // o multiframes passaríem de 0 a 100 quedant a 0 molta estona.
+        bool showProgress = fileList.count() > 1;
+
         // Posem a punt el reader i llegim les dades
         PixelDataReaderType readerType = this->getSuitableReader(volume);
-        this->setUpReader(readerType);
+        this->setUpReader(readerType, showProgress);
 
         m_lastError = m_volumePixelDataReader->read(fileList);
         if (m_lastError == VolumePixelDataReader::NoError)
@@ -227,7 +231,7 @@ VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume
     }
 }
 
-void VolumeReader::setUpReader(PixelDataReaderType readerType)
+void VolumeReader::setUpReader(PixelDataReaderType readerType, bool showProgress)
 {
     // Eliminem un lector anterior si l'havia
     if (m_volumePixelDataReader)
@@ -249,8 +253,11 @@ void VolumeReader::setUpReader(PixelDataReaderType readerType)
             break;
     }
 
-    // Connectem les senyals de notificació de progrés
-    connect(m_volumePixelDataReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
+    if (showProgress)
+    {
+        // Connectem les senyals de notificació de progrés
+        connect(m_volumePixelDataReader, SIGNAL(progress(int)), SIGNAL(progress(int)));
+    }
 }
 
 } // End namespace udg
