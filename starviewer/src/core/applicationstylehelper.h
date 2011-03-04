@@ -31,7 +31,6 @@ public:
     int getToolsFontSize() const;
 
     /// Escala el tamany d'una QMovie al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
-    /// Només es pot fer si encara no s'ha iniciat l'animació. Si no, resetejarà l'animació al frame 0.
     void setScaledSizeTo(QMovie *movie) const;
 
     /// Escala el tamany de lletra d'un QWidget al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
