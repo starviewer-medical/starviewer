@@ -11,8 +11,6 @@
 
 namespace udg {
 
-class Status;
-
 /** Widget en el que es configuren els paràmetres de la Base de Dades local
 */
 class QLocalDatabaseConfigurationScreen : public QWidget, private Ui::QLocalDatabaseConfigurationScreenBase
@@ -68,9 +66,6 @@ private:
 
     /// Crea els input validators necessaris pels diferents camps d'edició.
     void configureInputValidator();
-
-    /// Tracta els errors que s'han produït a la base de dades en general
-    void showDatabaseErrorMessage( const Status &state );
 
     /// Carrega les dades de configuració de la cache
     void loadCacheDefaults();

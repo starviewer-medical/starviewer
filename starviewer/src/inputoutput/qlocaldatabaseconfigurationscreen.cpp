@@ -279,11 +279,8 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
 
         if (!clearCache())
         {
-            Status state;
-            state.setStatus(tr("The cache cannot be deleted, an unknown error has ocurred."
-                               "\nTry to close all %1 windows and try again."
-                               "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString), false, -1);
-            showDatabaseErrorMessage( state );
+            QMessageBox::critical(this , ApplicationNameString, tr("An error has ocurred deleting all studies, be sure you have write permissions on database and cache directory. ") +
+                tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("\n\nIf the problem persists contact with an administrator."));
         }
 
         emit configurationChanged("Pacs/CacheCleared");
@@ -326,11 +323,8 @@ void QLocalDatabaseConfigurationScreen::compactCache()
 
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok )
     {
-        Status state;
-        state.setStatus(tr("The database cannot be compacted, an unknown error has ocurred."
-                "\nTry to close all %1 windows and try again."
-                "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString), false, -1);
-        showDatabaseErrorMessage( state );
+        QMessageBox::critical(this , ApplicationNameString, tr("The database cannot be compacted, an unknown error has ocurred. ") +
+            tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("\n\nIf the problem persists contact with an administrator."));
     }
     else QMessageBox::information( this, ApplicationNameString, "Starviewer database has been compacted successfully.");
 }
@@ -365,14 +359,6 @@ void QLocalDatabaseConfigurationScreen::createDatabase()
             QMessageBox::warning( this , ApplicationNameString , tr( "The application has to be restarted to apply the changes."  ));
             m_createDatabase = true;
         }
-    }
-}
-
-void QLocalDatabaseConfigurationScreen::showDatabaseErrorMessage( const Status &state )
-{
-    if( !state.good() )
-    {
-        QMessageBox::critical( this , ApplicationNameString , state.text() + tr("\nError Number: %1").arg(state.code() ) );
     }
 }
 
