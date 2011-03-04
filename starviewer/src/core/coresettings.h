@@ -44,6 +44,17 @@ public:
 
     static const QString LanguageLocale;
 
+    /// Els 3 següents settings són "backdoors" que *només* s'haurien de fer servir en casos molt específics i controlats
+    /// Només fer-los servir si se sap el que s'està fent.
+    /// Indica que es forci la lectura de totes les imatges amb una llibreria específica
+    /// Backdoor que *només* s'hauria de fer servir en casos molt específics i controlats
+    static const QString ForcedImageReaderLibrary;
+
+    /// Indica que es forci la lectura de les imatges d'unes certes modalitats amb ITK o VTK
+    /// Cada modalitat anirà separada per '\'
+    static const QString ForceITKImageReaderForSpecifiedModalities;
+    static const QString ForceVTKImageReaderForSpecifiedModalities;
+
     /// La última versió comprobada de les Release Notes
     static const QString LastReleaseNotesVersionShown;
 

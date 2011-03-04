@@ -46,6 +46,10 @@ const QString CoreSettings::GradientRadiusForHighQualityObscurances(HighQualityO
 
 const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale");
 
+const QString CoreSettings::ForcedImageReaderLibrary("Input/ForcedImageReaderLibrary");
+const QString CoreSettings::ForceITKImageReaderForSpecifiedModalities("Input/ForceITKImageReaderForSpecifiedModalities");
+const QString CoreSettings::ForceVTKImageReaderForSpecifiedModalities("Input/ForceVTKImageReaderForSpecifiedModalities");
+
 // Release Notes
 const QString CoreSettings::LastReleaseNotesVersionShown("LastReleaseNotesVersionShown");
 

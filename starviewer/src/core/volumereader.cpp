@@ -8,6 +8,7 @@
 #include "series.h"
 #include "logging.h"
 #include "starviewerapplication.h"
+#include "coresettings.h"
 
 #include <QMessageBox>
 
@@ -160,6 +161,15 @@ QStringList VolumeReader::getFilesToRead(Volume *volume) const
 
 VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume) const
 {
+    // Primer de tot comprovarem si hem de forçar la lectura amb alguna llibreria específica
+    // Això només es farà servir com a backdoor en casos molt específics i controlats per poder 
+    // oferir un workaround fins que puguem oferir una bugfix release que arregli el problema correctament
+    PixelDataReaderType forcedReaderLibrary;
+    if (mustForceReaderLibraryBackdoor(volume, forcedReaderLibrary))
+    {
+        return forcedReaderLibrary;
+    }
+    
     int firstImageRows = 0;
     int firstImageColumns = 0;
     QList<Image *> imageSet = volume->getImages();
@@ -229,6 +239,64 @@ VolumeReader::PixelDataReaderType VolumeReader::getSuitableReader(Volume *volume
         // TODO De moment, per defecte llegirem amb ITK-GDCM excepte en les condicions anteriors
         return ITKGDCMPixelDataReader;
     }
+}
+
+bool VolumeReader::mustForceReaderLibraryBackdoor(Volume *volume, PixelDataReaderType &forcedReaderLibrary) const
+{
+    Q_ASSERT(volume);
+    
+    bool forceLibrary = false;
+    Settings settings;
+
+    // Primer comprovem el setting més prioritari, que indicaria que tot s'ha de llegir amb una única llibreria
+    QString forceReadingWithSpecfiedLibrary = settings.getValue(CoreSettings::ForcedImageReaderLibrary).toString().trimmed();
+    if (forceReadingWithSpecfiedLibrary == "vtk")
+    {
+        INFO_LOG("Forcem la lectura de qualsevol imatge amb vtk");
+        forcedReaderLibrary = VTKGDCMPixelDataReader;
+        forceLibrary = true;
+    }
+    else if (forceReadingWithSpecfiedLibrary == "itk")
+    {
+        INFO_LOG("Forcem la lectura de qualsevol imatge amb itk");
+        forcedReaderLibrary = ITKGDCMPixelDataReader;
+        forceLibrary = true;
+    }
+
+    // Si l'anterior no està assignat comprovarem el següent setting, que ens indica la llibreria segons la modalitat de la imatge
+    if (!forceLibrary)
+    {
+        // Obtenim la modalitat del volum actual
+        QString modality;
+        Image *firstImage = volume->getImage(0);
+        if (firstImage)
+        {
+            modality = firstImage->getParentSeries()->getModality();
+        }
+        
+        // Primer comprovem si hi ha modalitats a forçar per ITK
+        QStringList forceITKForModalities = settings.getValue(CoreSettings::ForceITKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
+        if (forceITKForModalities.contains(modality))
+        {
+            INFO_LOG("Forcem la lectura del volum actual amb ITK perquè és de modalitat=" + modality);
+            forcedReaderLibrary = ITKGDCMPixelDataReader;
+            forceLibrary = true;
+        }
+
+        // Si no s'han de forçar per ITK ho comprovem per VTK
+        if (!forceLibrary)
+        {
+            QStringList forceVTKForModalities = settings.getValue(CoreSettings::ForceVTKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
+            if (forceVTKForModalities.contains(modality))
+            {
+                INFO_LOG("Forcem la lectura del volum actual amb VTK perquè és de modalitat=" + modality);
+                forcedReaderLibrary = VTKGDCMPixelDataReader;
+                forceLibrary = true;
+            }
+        }
+    }
+
+    return forceLibrary;
 }
 
 void VolumeReader::setUpReader(PixelDataReaderType readerType, bool showProgress)
