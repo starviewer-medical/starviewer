@@ -154,32 +154,35 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
                     ERROR_LOG("Ha fallat el voler esborrar el fitxer " + dicomFileAbsolutePath + " que havia fallat prèviament al voler guardar-se.");
                 }
             }
-
-            // Should really check the image to make sure it is consistent, that its 
-            // sopClass and sopInstance correspond with those in the request.
-            if (storeResponse->DimseStatus == STATUS_Success)
+            else
             {
-                // Which SOP class and SOP instance?
-                if (!DU_findSOPClassAndInstanceInDataSet(*imageDataSet, sopClass, sopInstance, correctUIDPadding))
+                // Should really check the image to make sure it is consistent, that its 
+                // sopClass and sopInstance correspond with those in the request.
+                if (storeResponse->DimseStatus == STATUS_Success)
                 {
-                    storeResponse->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
-                    ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(storeSCPCallbackData->fileName));
+                    // Which SOP class and SOP instance?
+                    if (!DU_findSOPClassAndInstanceInDataSet(*imageDataSet, sopClass, sopInstance, correctUIDPadding))
+                    {
+                        storeResponse->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
+                        ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(storeSCPCallbackData->fileName));
+                    }
+                    else if (strcmp(sopClass, storeRequest->AffectedSOPClassUID) != 0)
+                    {
+                        storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
+                        ERROR_LOG(QString("No concorda la sop class rebuda amb la sol.licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
+                    }
+                    else if (strcmp(sopInstance, storeRequest->AffectedSOPInstanceUID) != 0)
+                    {
+                        storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
+                        ERROR_LOG(QString("No concorda sop instance rebuda amb la sol.licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
+                    }
                 }
-                else if (strcmp(sopClass, storeRequest->AffectedSOPClassUID) != 0)
-                {
-                    storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    ERROR_LOG(QString("No concorda la sop class rebuda amb la sol.licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
-                }
-                else if (strcmp(sopInstance, storeRequest->AffectedSOPInstanceUID) != 0)
-                {
-                    storeResponse->DimseStatus = STATUS_STORE_Error_DataSetDoesNotMatchSOPClass;
-                    ERROR_LOG(QString("No concorda sop instance rebuda amb la sol.licitada per la imatge %1").arg(storeSCPCallbackData->fileName));
-                }
-            }
             
-            retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved++;
-            DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFileAbsolutePath, storeSCPCallbackData->dcmFileFormat->getAndRemoveDataset());
-            emit retrieveDICOMFilesFromPACS->DICOMFileRetrieved(dicomTagReader, retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved);
+                //TODO:Té processar el fitxer si ha fallat alguna de les anteriors comprovacions ?
+                retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved++;
+                DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFileAbsolutePath, storeSCPCallbackData->dcmFileFormat->getAndRemoveDataset());
+                emit retrieveDICOMFilesFromPACS->DICOMFileRetrieved(dicomTagReader, retrieveDICOMFilesFromPACS->m_numberOfImagesRetrieved);            
+            }
         }
     }
 }
