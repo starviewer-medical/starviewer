@@ -48,22 +48,36 @@ int main( int argc, char* argv[] )
 {
     QApplication app( argc, argv );
 
-    if ( app.arguments().size() != 3 )
-        return false;
-    
     configureLogging();
 
-    app.setOrganizationName( udg::OrganizationNameString );
-    app.setOrganizationDomain( udg::OrganizationDomainString );
-    app.setApplicationName( udg::ApplicationNameString );
+    INFO_LOG("============================================ CRASH REPORTER BEGIN =============================================");
+    INFO_LOG(QString("%1 Crash Reporter Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
 
-    udg::CoreSettings coreSettings;
-    coreSettings.init();
+    int returnValue;
+    if (app.arguments().size() != 3)
+    {
+        returnValue = false;
+    }
+    else
+    {
+        app.setOrganizationName( udg::OrganizationNameString );
+        app.setOrganizationDomain( udg::OrganizationDomainString );
+        app.setApplicationName( udg::ApplicationNameString );
 
-    initializeTranslations(app);
-    
-    udg::QCrashReporter reporter( app.arguments() );
-    reporter.show();
+        udg::CoreSettings coreSettings;
+        coreSettings.init();
 
-    return app.exec();
+        initializeTranslations(app);
+
+        udg::QCrashReporter reporter( app.arguments() );
+        reporter.show();
+
+        returnValue = app.exec();
+    }
+
+    INFO_LOG(QString("%1 Crash Reporter Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
+             .arg(udg::StarviewerBuildID).arg(returnValue));
+    INFO_LOG("============================================= CRASH REPORTER END ==============================================");
+
+    return returnValue;
 }
