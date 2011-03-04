@@ -48,11 +48,13 @@ void QViewerWorkInProgressWidget::updateProgress(int progress)
 
 void QViewerWorkInProgressWidget::showEvent(QShowEvent *event)
 {
+    Q_UNUSED(event);
     m_progressBarAnimation->start();
 }
 
 void QViewerWorkInProgressWidget::hideEvent(QHideEvent *event)
 {
+    Q_UNUSED(event);
     m_progressBarAnimation->setPaused(true);
 }
 
