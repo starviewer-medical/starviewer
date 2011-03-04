@@ -144,6 +144,7 @@ bool DatabaseInstallation::reinstallDatabase()
     {
         if (!QFile().remove(LocalDatabaseManager::getDatabaseFilePath()))
         {
+            ERROR_LOG("Reinstal.lant la base de dades no s'ha pogut esborrar el fitxer de la base de dades " + LocalDatabaseManager::getDatabaseFilePath());
             return false;
         }
     }
