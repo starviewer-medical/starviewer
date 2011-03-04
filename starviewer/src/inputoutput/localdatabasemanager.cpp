@@ -74,6 +74,10 @@ void LocalDatabaseManager::save(Patient *newPatient)
                 return;
             }
         }
+        else
+        {
+            ERROR_LOG("El pacient que s'intenta inserir a la base de dades, no te cap estudi.");
+        }
 
         if (status != SQLITE_OK) 
         {
