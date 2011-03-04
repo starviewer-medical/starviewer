@@ -29,9 +29,6 @@ Drawer::~Drawer()
 
 void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
 {
-    // Inicialment la primitiva no serà visible fins que no es comprovi el contrari
-    primitive->setVisibility(false);
-
     switch (plane)
     {
         case QViewer::AxialPlane:
@@ -48,7 +45,6 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
 
         case QViewer::Top2DPlane:
             m_top2DPlanePrimitives << primitive;
-            primitive->setVisibility(true);
             break;
 
         default:
@@ -64,6 +60,10 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
         if (slice < 0 || m_2DViewer->getCurrentSlice() == slice)
         {
             primitive->setVisibility(true);
+        }
+        else
+        {
+            primitive->setVisibility(false);
         }
     }
     
