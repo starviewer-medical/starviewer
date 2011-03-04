@@ -44,9 +44,6 @@ public:
 
     static const QString LanguageLocale;
 
-    /// Indica quina llibreria fem servir per llegir arxius DICOM
-    static const QString DICOMImageReaderLibrary;
-
     /// La última versió comprobada de les Release Notes
     static const QString LastReleaseNotesVersionShown;
 

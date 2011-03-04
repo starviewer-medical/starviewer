@@ -46,8 +46,6 @@ const QString CoreSettings::GradientRadiusForHighQualityObscurances(HighQualityO
 
 const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale");
 
-const QString CoreSettings::DICOMImageReaderLibrary("Input/DICOMImageReaderLibrary");
-
 // Release Notes
 const QString CoreSettings::LastReleaseNotesVersionShown("LastReleaseNotesVersionShown");
 
@@ -82,7 +80,6 @@ void CoreSettings::init()
     settingsRegistry->addSetting(UserCustomWindowLevelsPath, UserDataRootPath + "customwindowlevels/customwindowlevels.xml");
     settingsRegistry->addSetting(RegisterStatLogs, false);
     settingsRegistry->addSetting(LanguageLocale, QLocale::system().name());
-    settingsRegistry->addSetting(DICOMImageReaderLibrary, "itkGDCM");
     settingsRegistry->addSetting(LastReleaseNotesVersionShown, "");
     settingsRegistry->addSetting(NeverShowNewVersionReleaseNotes, false);
     settingsRegistry->addSetting(LastVersionChecked, "");
