@@ -273,21 +273,12 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
     {
         INFO_LOG( "Neteja de la cache" );
 
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
-        QApplication::restoreOverrideCursor();
-
-        if (!clearCache())
-        {
-            QMessageBox::critical(this , ApplicationNameString, tr("An error has ocurred deleting all studies, be sure you have write permissions on database and cache directory. ") +
-                tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("\n\nIf the problem persists contact with an administrator."));
-        }
-
+        clearCache();
         emit configurationChanged("Pacs/CacheCleared");
     }
 }
 
-bool QLocalDatabaseConfigurationScreen::clearCache()
+void QLocalDatabaseConfigurationScreen::clearCache()
 {
     /*Esborrem les imatges que tenim a la base de dades local , i reinstal·lem la bd ja que no té sentit eliminar tots els registres i compactar-la, ja que 
       tardaríem més que si la tornem a reinstal·lar.*/
@@ -300,13 +291,21 @@ bool QLocalDatabaseConfigurationScreen::clearCache()
 
     connect(&deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
     
-    if(!deleteDirectory.deleteDirectory(LocalDatabaseManager::getCachePath(), false))
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    
+    bool successDeletingFiles = deleteDirectory.deleteDirectory(LocalDatabaseManager::getCachePath(), false);
+    bool successReinstallingDatabase = DatabaseInstallation().reinstallDatabase();
+
+    QApplication::restoreOverrideCursor();
+   
+    if (!successDeletingFiles)
     {
-        return false;
+        QMessageBox::critical(this , ApplicationNameString, tr("Some files cannot be deleted. \nThese files have to be deleted manually."));
     }
-    else
+    if (!successReinstallingDatabase)
     {
-        return DatabaseInstallation().reinstallDatabase();
+        QMessageBox::critical(this , ApplicationNameString, tr("An error has ocurred deleting studies, be sure you have write permissions on database file. ") +
+            tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("\n\nIf the problem persists contact with an administrator."));
     }
 }
 
