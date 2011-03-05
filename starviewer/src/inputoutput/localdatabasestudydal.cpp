@@ -62,6 +62,8 @@ QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask 
         studyList.append(fillStudy(reply, index, columns));
     }
 
+    sqlite3_free_table(reply);
+
     return studyList;
 }
 
@@ -86,6 +88,8 @@ QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate las
     {
         studyList.append(fillStudy(reply, index, columns));
     }
+
+    sqlite3_free_table(reply);
 
     return studyList;
 }
@@ -114,6 +118,8 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patien
         patientList.append(patient);
     }
 
+    sqlite3_free_table(reply);
+
     return patientList;
 }
 
@@ -139,6 +145,8 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
         }
     }
     
+    sqlite3_free_table(reply);
+
     return patientID;
 }
 

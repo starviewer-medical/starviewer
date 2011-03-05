@@ -64,6 +64,8 @@ QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
         seriesList.append(fillSeries(reply, index, columns));
     }
 
+    sqlite3_free_table(reply);
+
     return seriesList;
 }
 

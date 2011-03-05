@@ -67,12 +67,14 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
         imageList.append(fillImage(reply, index, columns));
     }
 
+    sqlite3_free_table(reply);
+
     return imageList;
 }
 
 int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
 {
-    int columns , rows;
+    int columns, rows;
     char **reply = NULL , **error = NULL;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
@@ -85,7 +87,10 @@ int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
         return -1;
     }
 
-    return QString(reply[1]).toInt();
+    int numberOfImages = QString(reply[1]).toInt();
+    sqlite3_free_table(reply);
+
+    return numberOfImages;
 }
 
 Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)

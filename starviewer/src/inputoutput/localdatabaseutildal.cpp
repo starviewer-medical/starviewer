@@ -49,6 +49,7 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
     {
         QRegExp rexRevisionDatabase("\\d+");//La Revisió es guarda en el format $Revision \d+ $, nosaltres només volem el número per això busquem el \d+
         int pos = rexRevisionDatabase.indexIn(reply[1]);
+        sqlite3_free_table(reply);
 
         if (pos > -1)
         {
