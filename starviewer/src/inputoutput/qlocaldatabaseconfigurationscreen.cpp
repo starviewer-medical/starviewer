@@ -289,8 +289,6 @@ void QLocalDatabaseConfigurationScreen::clearCache()
     qprogressDialog.setValue(1);
     qprogressDialog.setModal(true);
 
-    connect(&deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
-    
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     
     bool successDeletingFiles = deleteDirectory.deleteDirectory(LocalDatabaseManager::getCachePath(), false);
