@@ -71,6 +71,8 @@ QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
         patientList.append(fillPatient(reply, index, columns));
     }
 
+    sqlite3_free_table(reply);
+
     return patientList;
 }
 
