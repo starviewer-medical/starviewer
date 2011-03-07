@@ -4355,6 +4355,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
     bool minimizeDkl_I_W = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDkl_I_WRadioButton->isChecked();
     bool minimizeDkl_IV_W = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDkl_IV_WRadioButton->isChecked();
+    double beta = m_transferFunctionOptimizationBetaDoubleSpinBox->value();
 
     checkData();
 
@@ -4385,6 +4386,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     QVector<float> bestPI;
     QVector<float> bestPV;
     QVector< QVector<float> > bestPIV;
+    double bestTotalViewedVolume;
 
     {
         // Obtenir direccions
@@ -4406,7 +4408,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
         bool pIV = minimizeDkl_IV_W;
         bool pV = minimizeDkl_IV_W;
-        bool pI = minimizeDkl_I_W || piWeights;
+        bool pI = minimizeDkl_I_W || minimizeDkl_IV_W || piWeights;
         bool HI = false;
         bool HIv = false;
         bool HIV = false;
@@ -4421,16 +4423,29 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         if (minimizeDkl_I_W)
         {
             bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
+            bestTotalViewedVolume = viewpointIntensityInformationChannel.totalViewedVolume();
             best = InformationTheory::kullbackLeiblerDivergence(bestPI, weights, true);
+            if (beta > 0.0)
+            {
+                //best = best - beta * bestTotalViewedVolume;     // resta
+                best = best / (beta * bestTotalViewedVolume);   // divisió
+            }
         }
         if (minimizeDkl_IV_W)
         {
             if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
+            bestPI = viewpointIntensityInformationChannel.intensityProbabilities();
             bestPV = viewpointIntensityInformationChannel.viewProbabilities();
             bestPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
+            bestTotalViewedVolume = viewpointIntensityInformationChannel.totalViewedVolume();
             int nViewpoints = bestPV.size();
             best = 0.0;
             for (int k = 0; k < nViewpoints; k++) best += bestPV.at(k) * InformationTheory::kullbackLeiblerDivergence(bestPIV.at(k), weights, true);
+            if (beta > 0.0)
+            {
+                //best = best - beta * bestTotalViewedVolume;     // resta
+                best = best / (beta * bestTotalViewedVolume);   // divisió
+            }
         }
         m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDistanceLabel->setText(QString::number(best));
     }
@@ -4453,6 +4468,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         QVector<float> lastPI(bestPI);
         QVector<float> lastPV(bestPV);
         QVector< QVector<float> > lastPIV(bestPIV);
+        double lastTotalViewedVolume = bestTotalViewedVolume;
 
         double previousBest = best;
         QVector<short> sign(nClusters);
@@ -4463,7 +4479,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         const int MaximumRejections = 10;
         const int SameSignThreshold = 5;
 
-        while (rejected < MaximumRejections && iteration < MaximumIterations && best > Threshold)
+        while (rejected < MaximumRejections && iteration < MaximumIterations && best > Threshold && !m_stopOptimization)
         {
             iteration++;
             DEBUG_LOG(QString("------------------------------------- optimització per la derivada, inici iteració %1 -------------------------------------").arg(iteration));
@@ -4495,7 +4511,19 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 {
                     double pi = lastPI.at(j);
                     sumP = pi;
+                    double intensityViewedVolume = pi * lastTotalViewedVolume;
                     derivative = (MathTools::logTwo(pi / w) - last) * pi / ((1.0 - pi) * opacity);
+                    if (beta > 0.0)
+                    {
+                        // resta
+                        //derivative = derivative - beta * intensityViewedVolume / opacity;
+                        // divisió
+                        double fx = last;
+                        double dfx = derivative;
+                        double gx = beta * lastTotalViewedVolume;
+                        double dgx = beta * intensityViewedVolume / opacity;
+                        derivative = (dfx * gx - fx * dgx) / (gx * gx);
+                    }
                 }
                 if (minimizeDkl_IV_W && w > 0.0)    // quan el pes és 0 ens podem estalviar el càlcul
                 {
@@ -4508,6 +4536,18 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                         if (pv == 0.0 || piv == 0.0) continue;  // tots dos es troben multiplicant en algun moment
                         double Dkl = InformationTheory::kullbackLeiblerDivergence(lastPIV.at(k), weights, true);
                         derivative += pv * (MathTools::logTwo(piv / w) - Dkl) * piv / ((1.0 - piv) * opacity);
+                    }
+                    if (beta > 0.0)
+                    {
+                        double intensityViewedVolume = lastPI.at(j) * lastTotalViewedVolume;
+                        // resta
+                        //derivative = derivative - beta * intensityViewedVolume / opacity;
+                        // divisió
+                        double fx = last;
+                        double dfx = derivative;
+                        double gx = beta * lastTotalViewedVolume;
+                        double dgx = beta * intensityViewedVolume / opacity;
+                        derivative = (dfx * gx - fx * dgx) / (gx * gx);
                     }
                 }
 
@@ -4568,7 +4608,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     //            double x2 = m_intensityClusters[j].last();
     //            double x = (x1 + x2) / 2.0;
     //            double opacity = lastTransferFunction.getOpacity(x);
-                double opacity = lastTransferFunction.getOpacity(j);
+                //double opacity = lastTransferFunction.getOpacity(j);
                 double newOpacity = qBound(0.0, (newOpacities.at(j) + shift) * scale, 1.0); // el qBound és per si no reescalem l'opacitat
                 // cal tornar a posar l'opacitat a 0 si el pes és 0 perquè amb el reescalat pot augmentar
                 if (weights.at(j) == 0.0) newOpacity = 0.0; // si la intensitat actual té pes 0 li posem l'opacitat directament a 0 i ens estalviem temps
@@ -4606,7 +4646,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
             bool pIV = minimizeDkl_IV_W;
             bool pV = minimizeDkl_IV_W;
-            bool pI = minimizeDkl_I_W || piWeights;
+            bool pI = minimizeDkl_I_W || minimizeDkl_IV_W || piWeights;
             bool HI = false;
             bool HIv = false;
             bool HIV = false;
@@ -4623,6 +4663,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             QVector<float> optimizedPI;
             QVector<float> optimizedPV;
             QVector< QVector<float> > optimizedPIV;
+            double optimizedTotalViewedVolume;
             if (minimizeDkl_I_W)
             {
 //                DEBUG_LOG("pesos:");
@@ -4631,18 +4672,35 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 //                    DEBUG_LOG(QString("w(i%1) = %2").arg(i).arg(weights.at(i)));
 //                }
                 optimizedPI = viewpointIntensityInformationChannel.intensityProbabilities();
+                optimizedTotalViewedVolume = viewpointIntensityInformationChannel.totalViewedVolume();
                 optimized = InformationTheory::kullbackLeiblerDivergence(optimizedPI, weights, true);
+                if (beta > 0.0)
+                {
+                    //optimized = optimized - beta * bestTotalViewedVolume;   // resta
+                    optimized = optimized / (beta * bestTotalViewedVolume); // divisió
+                }
+                DEBUG_LOG(QString(".......................................... volum total vist: últim = %1, optimitzat = %2, millor = %3").arg(lastTotalViewedVolume).arg(optimizedTotalViewedVolume).arg(bestTotalViewedVolume));
+                DEBUG_LOG(QString(".......................................... volum total vist * beta: últim = %1, optimitzat = %2, millor = %3").arg(beta * lastTotalViewedVolume).arg(beta * optimizedTotalViewedVolume).arg(beta * bestTotalViewedVolume));
                 DEBUG_LOG(QString(".......................................... D_KL(I || W) última = %1, D_KL(I || W) optimitzada = %2, D_KL(I || W) mínima = %3").arg(last).arg(optimized).arg(best));
                 accept = optimized < best;
             }
             if (minimizeDkl_IV_W)
             {
                 if (piWeights) weights = viewpointIntensityInformationChannel.intensityProbabilities();
+                optimizedPI = viewpointIntensityInformationChannel.intensityProbabilities();
                 optimizedPV = viewpointIntensityInformationChannel.viewProbabilities();
                 optimizedPIV = viewpointIntensityInformationChannel.intensityProbabilitiesGivenView();
+                optimizedTotalViewedVolume = viewpointIntensityInformationChannel.totalViewedVolume();
                 int nViewpoints = optimizedPV.size();
                 optimized = 0.0;
                 for (int k = 0; k < nViewpoints; k++) optimized += optimizedPV.at(k) * InformationTheory::kullbackLeiblerDivergence(optimizedPIV.at(k), weights, true);
+                if (beta > 0.0)
+                {
+                    //optimized = optimized - beta * bestTotalViewedVolume;   // resta
+                    optimized = optimized / (beta * bestTotalViewedVolume); // divisió
+                }
+                DEBUG_LOG(QString(".......................................... volum total vist: últim = %1, optimitzat = %2, millor = %3").arg(lastTotalViewedVolume).arg(optimizedTotalViewedVolume).arg(bestTotalViewedVolume));
+                DEBUG_LOG(QString(".......................................... volum total vist * beta: últim = %1, optimitzat = %2, millor = %3").arg(beta * lastTotalViewedVolume).arg(beta * optimizedTotalViewedVolume).arg(beta * bestTotalViewedVolume));
                 DEBUG_LOG(QString(".......................................... D_KL(I|V || W) última = %1, D_KL(I|V || W) optimitzada = %2, D_KL(I|V || W) mínima = %3").arg(last).arg(optimized).arg(best));
                 accept = optimized < best;
             }
@@ -4651,6 +4709,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 lastPI = optimizedPI;
                 lastPV = optimizedPV;
                 lastPIV = optimizedPIV;
+                lastTotalViewedVolume = optimizedTotalViewedVolume;
                 last = optimized;
                 lastTransferFunction = optimizedTransferFunction;
             }
@@ -4660,6 +4719,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 bestPI = optimizedPI;
                 bestPV = optimizedPV;
                 bestPIV = optimizedPIV;
+                bestTotalViewedVolume = optimizedTotalViewedVolume;
                 best = optimized;
                 bestTransferFunction = optimizedTransferFunction;
                 m_transferFunctionEditor->setTransferFunction(lastTransferFunction.simplify());

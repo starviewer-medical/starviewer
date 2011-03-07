@@ -46,6 +46,7 @@ public:
     void compute(bool &pIV, bool &pV, bool &pI, bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, bool display = false);
     bool hasViewedVolume() const;
     const QVector<float>& viewedVolume() const;
+    double totalViewedVolume() const;
     const QVector< QVector<float> >& intensityProbabilitiesGivenView() const;   // p(I|V)
     const QVector<float>& viewProbabilities() const;                            // p(V)
     const QVector<float>& intensityProbabilities() const;                       // p(I)
@@ -92,6 +93,7 @@ private:
     QVector<Vector3> m_viewpoints;
 
     QVector<float> m_viewedVolume;                                  // volum vist des de cada vista
+    double m_totalViewedVolume;                                     // volum total vist
     QVector< QVector<float> > m_intensityProbabilitiesGivenView;    // p(I|V)
     QVector<float> m_viewProbabilities;                             // p(V)
     QVector<float> m_intensityProbabilities;                        // p(I)

@@ -2294,7 +2294,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>471</width>
+            <width>428</width>
             <height>909</height>
            </rect>
           </property>
@@ -3314,9 +3314,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-322</y>
-            <width>512</width>
-            <height>1230</height>
+            <y>0</y>
+            <width>491</width>
+            <height>1260</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -4094,6 +4094,19 @@
                  </widget>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="m_transferFunctionOptimizationOneViewpointAutomaticPushButton">
+                  <property name="toolTip">
+                   <string>Optimize for current viewpoint (auto-updates itself)</string>
+                  </property>
+                  <property name="text">
+                   <string>1 viewpoint (auto)</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <widget class="QRadioButton" name="m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDkl_I_WRadioButton">
                   <property name="text">
                    <string>I</string>
@@ -4114,6 +4127,40 @@
                   <attribute name="buttonGroup">
                    <string>buttonGroup_7</string>
                   </attribute>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="m_transferFunctionOptimizationBetaLabel">
+                  <property name="text">
+                   <string>beta</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="m_transferFunctionOptimizationBetaDoubleSpinBox">
+                  <property name="decimals">
+                   <number>8</number>
+                  </property>
+                  <property name="maximum">
+                   <double>100.000000000000000</double>
+                  </property>
+                  <property name="singleStep">
+                   <double>0.000010000000000</double>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_88">
+                <item>
+                 <widget class="QLabel" name="m_transferFunctionOptimizationLimitsLabel">
+                  <property name="text">
+                   <string>Limits</string>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -4140,15 +4187,18 @@
                   <property name="text">
                    <string>Distance &lt;</string>
                   </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QDoubleSpinBox" name="m_optimizeByDerivativeTransferFunctionFromIntensityClusteringThresholdDoubleSpinBox">
                   <property name="decimals">
-                   <number>3</number>
+                   <number>4</number>
                   </property>
                   <property name="maximum">
-                   <double>1.000000000000000</double>
+                   <double>10.000000000000000</double>
                   </property>
                   <property name="singleStep">
                    <double>0.001000000000000</double>
@@ -4165,19 +4215,6 @@
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_86">
-                <item>
-                 <widget class="QPushButton" name="m_transferFunctionOptimizationOneViewpointAutomaticPushButton">
-                  <property name="toolTip">
-                   <string>1 viewpoint auto</string>
-                  </property>
-                  <property name="text">
-                   <string>1v auto</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <widget class="QLabel" name="m_geneticTransferFunctionFromIntensityClusteringWeightsLabel">
                   <property name="text">
