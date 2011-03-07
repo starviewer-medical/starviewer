@@ -96,6 +96,12 @@ const QVector<float>& ViewpointIntensityInformationChannel::viewedVolume() const
 }
 
 
+double ViewpointIntensityInformationChannel::totalViewedVolume() const
+{
+    return m_totalViewedVolume;
+}
+
+
 const QVector< QVector<float> >& ViewpointIntensityInformationChannel::intensityProbabilitiesGivenView() const
 {
     return m_intensityProbabilitiesGivenView;
@@ -311,6 +317,7 @@ void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda(bool com
     }
 
     m_viewedVolume = m_viewProbabilities;
+    m_totalViewedVolume = totalViewedVolume;
 
     for (int i = 0; i < nViewpoints; i++)
     {
