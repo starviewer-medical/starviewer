@@ -408,6 +408,9 @@ private:
     /// per defecte activat, actualitzarem el WW/WL perquè per cada imatge es mostri el seu.
     void updateDefaultPreset();
 
+    ///Indica si el volum del visor s'està carregant assíncronament
+    bool isVolumeLoadingAsynchronously();
+
 private slots:
     /// Actualitza les transformacions de càmera (de moment rotació i flip )
     void updateCamera();
