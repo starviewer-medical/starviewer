@@ -20,7 +20,7 @@ namespace udg {
 const int MenuGridWidget::MaximumNumberOfColumns = 5;
 
 MenuGridWidget::MenuGridWidget(QWidget *parent)
- : QWidget(parent), m_searchingWidget(0), m_noHangingProtocolsAvailableLabel(0)
+ : QWidget(parent), m_searchingWidget(0), m_caption(0), m_noHangingProtocolsAvailableLabel(0)
 {
     setWindowFlags(Qt::Popup);
 
