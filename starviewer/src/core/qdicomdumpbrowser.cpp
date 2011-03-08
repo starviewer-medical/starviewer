@@ -16,6 +16,8 @@
 #include "dicomdumpdefaulttagsrepository.h"
 #include "dicomdumpdefaulttagsrestriction.h"
 
+#include "coresettings.h"
+
 // Llibreries QT
 #include <QTreeWidgetItem>
 #include <QListIterator>
@@ -35,11 +37,15 @@ QDICOMDumpBrowser::QDICOMDumpBrowser(QWidget *parent)
 
     m_defaultTagsQTree->sortByColumn(0, Qt::AscendingOrder);
     m_tagsListQTree->sortByColumn(1, Qt::AscendingOrder);
+
+    Settings settings;
+    settings.restoreGeometry(CoreSettings::QDICOMDumpBrowserGeometry, this);
 }
 
 QDICOMDumpBrowser::~QDICOMDumpBrowser()
 {
-
+    Settings settings;
+    settings.saveGeometry(CoreSettings::QDICOMDumpBrowserGeometry, this);
 }
 
 void QDICOMDumpBrowser::createConnections()
