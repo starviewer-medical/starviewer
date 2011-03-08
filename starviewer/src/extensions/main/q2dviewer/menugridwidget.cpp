@@ -49,13 +49,13 @@ void MenuGridWidget::initializeWidget()
     QSpacerItem *spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_gridLayoutHanging->addItem(spacerItem, 0, MaximumNumberOfColumns, 1, 1);
 
-    QLabel *labelHanging = new QLabel(this);
-    labelHanging->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    labelHanging->setText(tr("Hanging protocols"));
+    m_caption = new QLabel(this);
+    m_caption->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_caption->setText(tr("Hanging protocols"));
     QVBoxLayout *vBoxLayoutHanging = new QVBoxLayout();
     vBoxLayoutHanging->setMargin(0);
     vBoxLayoutHanging->setSpacing(6);
-    vBoxLayoutHanging->addWidget(labelHanging);
+    vBoxLayoutHanging->addWidget(m_caption);
 
     m_noHangingProtocolsAvailableLabel = new QLabel(this);
     m_noHangingProtocolsAvailableLabel->setText(tr("No hanging protocols available"));
@@ -132,6 +132,7 @@ void MenuGridWidget::setHangingItems(const QList<HangingProtocol *> &listOfCandi
     if (listOfCandidates.isEmpty())
     {
         m_noHangingProtocolsAvailableLabel->show();
+        m_caption->hide();
     }
     else
     {
@@ -147,6 +148,7 @@ void MenuGridWidget::addHangingItems(const QList<HangingProtocol *> &items)
     if (!items.isEmpty())
     {
         m_noHangingProtocolsAvailableLabel->hide();
+        m_caption->show();
     }
     
     foreach (HangingProtocol *hangingProtocol, items)

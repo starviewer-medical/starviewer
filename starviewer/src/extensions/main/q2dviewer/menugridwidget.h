@@ -99,6 +99,9 @@ protected:
     /// Widget que informa que s'esta carregant (buscant)
     QWidget *m_searchingWidget;
 
+    /// Etiqueta que posarem com a títol del widget
+    QLabel *m_caption;
+    
     /// Etiqueta per mostrar quan no hi ha cap hanging protocol disponible per aplicar
     QLabel *m_noHangingProtocolsAvailableLabel;
 };
