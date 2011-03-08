@@ -81,6 +81,9 @@ public:
     /// Si tenim més presets que els que indiqui aquest setting, apareixerà un scroll vertical.
     /// Aquest comportament serà així per totes les plataformes excepte Mac, que sempre mostrarà tots els elements.
     static const QString MaximumNumberOfVisibleWindowLevelComboItems;
+
+    /// Defineix la geometria de la finestra del DICOMDumpBrowser
+    static const QString QDICOMDumpBrowserGeometry;
 };
 
 } // End namespace udg 

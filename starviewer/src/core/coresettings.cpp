@@ -66,6 +66,9 @@ const QString CoreSettings::AllowAsynchronousVolumeLoading("AllowAsynchronousVol
 
 const QString CoreSettings::MaximumNumberOfVisibleWindowLevelComboItems("MaximumNumberOfVisibleWindowLevelComboItems");
 
+// Geometria de la finestra del QDICOMDumpBrowser
+const QString CoreSettings::QDICOMDumpBrowserGeometry("QDICOMDumpBrowserGeometry");
+
 CoreSettings::CoreSettings()
 {
 }
