@@ -647,13 +647,16 @@ void Q2DViewer::executeInputFinishedCommand()
     {
         m_inputFinishedCommand->execute();
     }
-    this->deleteInputFinishedCommand();
 }
 
 void Q2DViewer::setInputFinishedCommand(QViewerCommand *command)
 {
-    this->deleteInputFinishedCommand();
-    m_inputFinishedCommand = command;
+    ///Ens assegurem que la nova command que ens passen no és la mateixa que tenim actualment
+    if (command != m_inputFinishedCommand)
+    {
+        this->deleteInputFinishedCommand();
+        m_inputFinishedCommand = command;
+    }
 }
 
 void Q2DViewer::deleteInputFinishedCommand()
@@ -708,6 +711,11 @@ void Q2DViewer::volumeReaderJobFinished()
         this->setViewerStatus(LoadingError);
         m_workInProgressWidget->showError(m_volumeReaderJob->getLastErrorMessageToUser());
     }
+}
+
+bool Q2DViewer::isVolumeLoadingAsynchronously()
+{
+    return !m_volumeReaderJob.isNull() && !m_volumeReaderJob->isFinished();
 }
 
 Volume* Q2DViewer::getDummyVolumeFromVolume(Volume *volume)
@@ -2107,27 +2115,13 @@ void Q2DViewer::restore()
         return;
     }
 
-    // S'esborren les anotacions
-    if (m_mainVolume)
+    // Si hi ha un volum carregant no fem el restore
+    if (this->isVolumeLoadingAsynchronously())
     {
-        m_drawer->removeAllPrimitives();
+        return;
     }
 
-    // HACK
-    // Desactivem el rendering per tal de millorar l'eficiència de tornar a executar el pipeline, 
-    // ja que altrament es renderitza múltiples vegades i provoca efectes indesitjats com el flickering
-    enableRendering(false);
-
-    this->buildWindowLevelPipeline();
-    this->resetView(m_lastView);
-    this->resetWindowLevelToDefault();
-    this->updateWindowLevelData();
-
-    // Activem el refresh i refresquem
-    enableRendering(true);
-    this->setAlignPosition(m_alignPosition);
-
-    this->render();
+    this->setInputAsynchronously(m_mainVolume, m_inputFinishedCommand);
 }
 
 void Q2DViewer::clearViewer()
