@@ -33,6 +33,8 @@ EraserTool::~EraserTool()
 {
     if (m_polygon)
     {
+        // Així alliberem la primitiva perquè pugui ser esborrada
+        m_polygon->decreaseReferenceCount();
         delete m_polygon;
     }
 }
@@ -94,6 +96,8 @@ void EraserTool::drawAreaOfErasure()
         if (!m_polygon)
         {
             m_polygon = new DrawerPolygon;
+            // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
+            m_polygon->increaseReferenceCount();
             m_polygon->addVertix(p2);
             m_polygon->addVertix(m_endPoint);
             m_polygon->addVertix(p3);
@@ -137,6 +141,8 @@ void EraserTool::reset()
 {
     if (m_polygon)
     {
+        // Així alliberem la primitiva perquè pugui ser esborrada
+        m_polygon->decreaseReferenceCount();
         delete m_polygon;
         m_polygon = NULL;
     }
