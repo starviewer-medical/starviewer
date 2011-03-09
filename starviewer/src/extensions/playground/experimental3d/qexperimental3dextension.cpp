@@ -4359,7 +4359,6 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     bool minimizeDkl_I_W = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDkl_I_WRadioButton->isChecked();
     bool minimizeDkl_IV_W = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDkl_IV_WRadioButton->isChecked();
     double beta = m_transferFunctionOptimizationBetaDoubleSpinBox->value();
-    if (beta > 0.0) beta = beta / (1024 * 1024 * (m_optimizeTransferFunctionAutomaticallyForOneViewpoint ? 1 : 6));
 
     checkData();
 
@@ -4403,6 +4402,47 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
         }
 
         m_transferFunctionEditor->setTransferFunction(newTransferFunction);
+    }
+
+    // calculem la normalització del volum i l'incorporem a beta
+    // posem el volum completament opac i caculem el seu volum vist, que és igual al màxim que es pot arribar a veure d'ell
+    if (beta > 0.0)
+    {
+        // Obtenir direccions
+        Vector3 position, focus, up;
+        m_viewer->getCamera(position, focus, up);
+        float distance = (position - focus).length();
+        ViewpointGenerator viewpointGenerator;
+        viewpointGenerator.setToUniform6(distance);
+
+        TransferFunction opaqueTransferFunction;
+        opaqueTransferFunction.set(0.0, 0.0, 0.0, 0.0, 1.0);
+
+        // Viewpoint Intensity Information Channel
+        ViewpointIntensityInformationChannel viewpointIntensityInformationChannel(viewpointGenerator, m_volume, m_viewer, opaqueTransferFunction);
+
+        if (m_optimizeTransferFunctionAutomaticallyForOneViewpoint)
+        {
+            Vector3 position, focus, up;
+            m_viewer->getCamera(position, focus, up);
+            viewpointIntensityInformationChannel.setViewpoints(QVector<Vector3>() << position);
+        }
+
+        bool pIV = false;
+        bool pV = true;
+        bool pI = false;
+        bool HI = false;
+        bool HIv = false;
+        bool HIV = false;
+        bool jointEntropy = false;
+        bool vmii = false;
+        bool mii = false;
+        bool viewpointUnstabilities = false;
+        bool imi = false;
+        bool intensityClustering = false;
+        viewpointIntensityInformationChannel.compute(pIV, pV, pI, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, false);
+
+        beta /= viewpointIntensityInformationChannel.totalViewedVolume();
     }
 
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
