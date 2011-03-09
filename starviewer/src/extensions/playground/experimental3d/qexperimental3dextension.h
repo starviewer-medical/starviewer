@@ -33,6 +33,7 @@ public:
     void setInput( Volume *input );
 
     void optimizeTransferFunctionForOneViewpoint();
+    int cluster2DIndex(int intensity, int gradient) const;
 
 public slots:
 
@@ -217,7 +218,7 @@ private:
     void syncNormalToGradientTransferFunction();
     void syncGradientToNormalTransferFunction();
     int numberOfClusters() const;
-    int cluster2DIndex(int intensityCluster, int gradientCluster) const;
+    int cluster2DIndexFromBins(int intensityBin, int gradientBin) const;
     int intensityBinFromCluster2D(int cluster) const;
     int gradientBinFromCluster2D(int cluster) const;
 

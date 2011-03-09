@@ -20,13 +20,13 @@ class vtkVolumeRayCastMapper;
 namespace udg {
 
 
-class AmbientVoxelShader;
+class AmbientVoxelShader2;
 class CelShadingVoxelShader;
 class ColorBleedingVoxelShader;
 class ColorVomiVoxelShader;
 class ContourVoxelShader;
 class CoolWarmVoxelShader;
-class DirectIlluminationVoxelShader;
+class DirectIlluminationVoxelShader2;
 class FilteringAmbientOcclusionMapVoxelShader;
 class FilteringAmbientOcclusionStipplingVoxelShader;
 class FilteringAmbientOcclusionVoxelShader;
@@ -44,6 +44,7 @@ class VoxelSaliencyVoxelShader;
 class vtk4DLinearRegressionGradientEstimator;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
 class WhiteVoxelShader;
+class QExperimental3DExtension;
 
 
 /**
@@ -61,6 +62,13 @@ public:
     Experimental3DVolume(Volume *volume);
     Experimental3DVolume(vtkImageData *image);
     ~Experimental3DVolume();
+
+    /// Assigna el mòdels de vòxels alternatiu.
+    /// TODO Això és una marranada per interpolar sobre el volum original en l'optimització de funcions de transferència 2D. Cal pensar com fer-ho ben fet.
+    void setAlternativeImage(vtkImageData *alternativeImage);
+    /// Assigna l'extensió.
+    /// TODO Això és una marranada per interpolar sobre el volum original en l'optimització de funcions de transferència 2D. Cal pensar com fer-ho ben fet.
+    void setExtension(const QExperimental3DExtension *extension);
 
     /// Retorna el model de vòxels principal.
     vtkImageData* getImage() const;
@@ -97,6 +105,10 @@ public:
     void addObscurance(Obscurance *obscurance, double factor, double filterLow, double filterHigh, bool additive = false, double weight = 0.0);
     /// Estableix la funció de transferència.
     void setTransferFunction(const TransferFunction &transferFunction, bool useGradientOpacityTransferFunction = false);
+    /// Força el renderitzat amb CPU encara que es pogués fer amb GPU.
+    void forceCpuRendering();
+    /// Força el renderitzat amb voxel shaders de CPU encara que es pogués fer amb GPU o amb CPU amb el pipeline normal de VTK.
+    void forceCpuShaderRendering();
 
     /// Prepara el rendering amb el voxel shader per fer càlculs de VMI.
     void startVmiMode();
@@ -138,6 +150,13 @@ private:
 
     /// Model de vòxels principal.
     vtkImageData *m_image;
+    /// Model de vòxels alternatiu.
+    /// TODO Això és una marranada per interpolar sobre el volum original en l'optimització de funcions de transferència 2D. Cal pensar com fer-ho ben fet.
+    vtkImageData *m_alternativeImage;
+
+    /// L'extensió.
+    /// TODO Això és una marranada per interpolar sobre el volum original en l'optimització de funcions de transferència 2D. Cal pensar com fer-ho ben fet.
+    const QExperimental3DExtension *m_extension;
 
     /// Valor de propietat mínim.
     unsigned short m_rangeMin;
@@ -156,9 +175,9 @@ private:
     vtkVolumeRayCastVoxelShaderCompositeFunction *m_shaderVolumeRayCastFunction;
 
     /// Voxel shader d'il·luminació ambient.
-    AmbientVoxelShader *m_ambientVoxelShader;
+    AmbientVoxelShader2 *m_ambientVoxelShader;
     /// Voxel shader d'il·luminació directa (ambient + difusa [+ especular]).
-    DirectIlluminationVoxelShader *m_directIlluminationVoxelShader;
+    DirectIlluminationVoxelShader2 *m_directIlluminationVoxelShader;
     /// Voxel shader de contorns.
     ContourVoxelShader *m_contourVoxelShader;
     /// Voxel shader de cel-shading.

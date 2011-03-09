@@ -33,7 +33,9 @@ HEADERS += experimental3dextensionmediator.h \
     imivoxelshader.h \
     filteringambientocclusionstipplingvoxelshader.h \
     whitevoxelshader.h \
-    optimizetransferfunctioncommand.h
+    optimizetransferfunctioncommand.h \
+    ambientvoxelshader2.h \
+    directilluminationvoxelshader2.h
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
     experimental3dsettings.cpp \
@@ -62,7 +64,9 @@ SOURCES += experimental3dextensionmediator.cpp \
     imivoxelshader.cpp \
     filteringambientocclusionstipplingvoxelshader.cpp \
     whitevoxelshader.cpp \
-    optimizetransferfunctioncommand.cpp
+    optimizetransferfunctioncommand.cpp \
+    ambientvoxelshader2.cpp \
+    directilluminationvoxelshader2.cpp
 RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
 cuda { 

@@ -1503,6 +1503,9 @@ void QExperimental3DExtension::render()
     if ( m_opacityVarianceCheckBox->isChecked() ) m_volume->addOpacity( m_volumeVariance, m_opacityVarianceMaxDoubleSpinBox->value() );
     if ( m_celShadingCheckBox->isChecked() ) m_volume->addCelShading( m_celShadingQuantumsSpinBox->value() );
 
+    if (m_cpuRenderingCheckBox->isChecked()) m_volume->forceCpuRendering();
+    if (m_cpuShaderRenderingCheckBox->isChecked()) m_volume->forceCpuShaderRendering();
+
     m_viewer->render();
 }
 
@@ -4356,6 +4359,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     bool minimizeDkl_I_W = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDkl_I_WRadioButton->isChecked();
     bool minimizeDkl_IV_W = m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDkl_IV_WRadioButton->isChecked();
     double beta = m_transferFunctionOptimizationBetaDoubleSpinBox->value();
+    if (beta > 0.0) beta = beta / (1024 * 1024 * (m_optimizeTransferFunctionAutomaticallyForOneViewpoint ? 1 : 6));
 
     checkData();
 
@@ -4380,6 +4384,26 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 
     bool switchMode = !m_viewClusterizedVolume;
     if (switchMode) viewClusterizedVolume();
+
+    // posem opacitat 0 als clusters amb pes 0
+    {
+        const TransferFunction &currentTransferFunction = m_transferFunctionEditor->transferFunction();
+        TransferFunction newTransferFunction;
+        newTransferFunction.setName(currentTransferFunction.name());
+        newTransferFunction.setColorTransferFunction(currentTransferFunction.colorTransferFunction());
+
+        int nClusters = numberOfClusters();
+
+        for (int j = 0; j < nClusters; j++)    // evolucionar-los tots
+        {
+            if (!m_clusterHasData.at(j)) continue;
+
+            if (weights.at(j) > 0.0) newTransferFunction.setScalarOpacity(j, currentTransferFunction.getScalarOpacity(j));
+            else newTransferFunction.setScalarOpacity(j, 0.0);
+        }
+
+        m_transferFunctionEditor->setTransferFunction(newTransferFunction);
+    }
 
     TransferFunction bestTransferFunction = m_transferFunctionEditor->transferFunction();
     double best;
@@ -4427,8 +4451,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             best = InformationTheory::kullbackLeiblerDivergence(bestPI, weights, true);
             if (beta > 0.0)
             {
-                //best = best - beta * bestTotalViewedVolume;     // resta
-                best = best / (beta * bestTotalViewedVolume);   // divisió
+                best = best - beta * bestTotalViewedVolume;     // resta
+                //best = best / (beta * bestTotalViewedVolume);   // divisió
             }
         }
         if (minimizeDkl_IV_W)
@@ -4443,8 +4467,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             for (int k = 0; k < nViewpoints; k++) best += bestPV.at(k) * InformationTheory::kullbackLeiblerDivergence(bestPIV.at(k), weights, true);
             if (beta > 0.0)
             {
-                //best = best - beta * bestTotalViewedVolume;     // resta
-                best = best / (beta * bestTotalViewedVolume);   // divisió
+                best = best - beta * bestTotalViewedVolume;     // resta
+                //best = best / (beta * bestTotalViewedVolume);   // divisió
             }
         }
         m_optimizeByDerivativeTransferFunctionFromIntensityClusteringDistanceLabel->setText(QString::number(best));
@@ -4515,14 +4539,15 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                     derivative = (MathTools::logTwo(pi / w) - last) * pi / ((1.0 - pi) * opacity);
                     if (beta > 0.0)
                     {
+                        ///DEBUG_LOG(QString("derivative = %1, volum = %2").arg(derivative).arg(beta * intensityViewedVolume / opacity));
                         // resta
-                        //derivative = derivative - beta * intensityViewedVolume / opacity;
+                        derivative = derivative - beta * intensityViewedVolume / opacity;
                         // divisió
-                        double fx = last;
-                        double dfx = derivative;
-                        double gx = beta * lastTotalViewedVolume;
-                        double dgx = beta * intensityViewedVolume / opacity;
-                        derivative = (dfx * gx - fx * dgx) / (gx * gx);
+//                        double fx = last;
+//                        double dfx = derivative;
+//                        double gx = beta * lastTotalViewedVolume;
+//                        double dgx = beta * intensityViewedVolume / opacity;
+//                        derivative = (dfx * gx - fx * dgx) / (gx * gx);
                     }
                 }
                 if (minimizeDkl_IV_W && w > 0.0)    // quan el pes és 0 ens podem estalviar el càlcul
@@ -4541,13 +4566,13 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                     {
                         double intensityViewedVolume = lastPI.at(j) * lastTotalViewedVolume;
                         // resta
-                        //derivative = derivative - beta * intensityViewedVolume / opacity;
+                        derivative = derivative - beta * intensityViewedVolume / opacity;
                         // divisió
-                        double fx = last;
-                        double dfx = derivative;
-                        double gx = beta * lastTotalViewedVolume;
-                        double dgx = beta * intensityViewedVolume / opacity;
-                        derivative = (dfx * gx - fx * dgx) / (gx * gx);
+//                        double fx = last;
+//                        double dfx = derivative;
+//                        double gx = beta * lastTotalViewedVolume;
+//                        double dgx = beta * intensityViewedVolume / opacity;
+//                        derivative = (dfx * gx - fx * dgx) / (gx * gx);
                     }
                 }
 
@@ -4587,9 +4612,9 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 if (newOpacity < minOpacity) minOpacity = newOpacity;
                 if (newOpacity > maxOpacity) maxOpacity = newOpacity;
                 newOpacities[j] = newOpacity;
-                //DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, derivada = %3, k = %4, delta = %5%6, opacitat nova = %7").arg(j).arg(opacity).arg(derivative).arg(K.at(j))
-                //                                                                                                                                                      .arg(delta > 0.0 ? "+" : "").arg(delta)
-                //                                                                                                                                                      .arg(newOpacity));
+//                DEBUG_LOG(QString("........................................ cluster %1: opacitat vella = %2, derivada = %3, k = %4, delta = %5%6, opacitat nova = %7").arg(j).arg(opacity).arg(derivative).arg(K.at(j))
+//                                                                                                                                                                      .arg(delta > 0.0 ? "+" : "").arg(delta)
+//                                                                                                                                                                      .arg(newOpacity));
             }
 
             //DEBUG_LOG("........................................");
@@ -4676,8 +4701,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 optimized = InformationTheory::kullbackLeiblerDivergence(optimizedPI, weights, true);
                 if (beta > 0.0)
                 {
-                    //optimized = optimized - beta * bestTotalViewedVolume;   // resta
-                    optimized = optimized / (beta * bestTotalViewedVolume); // divisió
+                    optimized = optimized - beta * optimizedTotalViewedVolume;   // resta
+                    //optimized = optimized / (beta * optimizedTotalViewedVolume); // divisió
                 }
                 DEBUG_LOG(QString(".......................................... volum total vist: últim = %1, optimitzat = %2, millor = %3").arg(lastTotalViewedVolume).arg(optimizedTotalViewedVolume).arg(bestTotalViewedVolume));
                 DEBUG_LOG(QString(".......................................... volum total vist * beta: últim = %1, optimitzat = %2, millor = %3").arg(beta * lastTotalViewedVolume).arg(beta * optimizedTotalViewedVolume).arg(beta * bestTotalViewedVolume));
@@ -4696,8 +4721,8 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
                 for (int k = 0; k < nViewpoints; k++) optimized += optimizedPV.at(k) * InformationTheory::kullbackLeiblerDivergence(optimizedPIV.at(k), weights, true);
                 if (beta > 0.0)
                 {
-                    //optimized = optimized - beta * bestTotalViewedVolume;   // resta
-                    optimized = optimized / (beta * bestTotalViewedVolume); // divisió
+                    optimized = optimized - beta * optimizedTotalViewedVolume;   // resta
+                    //optimized = optimized / (beta * optimizedTotalViewedVolume); // divisió
                 }
                 DEBUG_LOG(QString(".......................................... volum total vist: últim = %1, optimitzat = %2, millor = %3").arg(lastTotalViewedVolume).arg(optimizedTotalViewedVolume).arg(bestTotalViewedVolume));
                 DEBUG_LOG(QString(".......................................... volum total vist * beta: últim = %1, optimitzat = %2, millor = %3").arg(beta * lastTotalViewedVolume).arg(beta * optimizedTotalViewedVolume).arg(beta * bestTotalViewedVolume));
@@ -5285,7 +5310,7 @@ void QExperimental3DExtension::intensityGradientClustering()
     {
         for (int j = 0; j < gradients; j++)
         {
-            int cluster = cluster2DIndex(intensityMap.at(i), gradientMap.at(j));
+            int cluster = cluster2DIndexFromBins(intensityMap.at(i), gradientMap.at(j));
             if (cluster > 0x0000ffff)
             {
                 DEBUG_LOG(QString("Overflow a l'índex del cluster: %1").arg(cluster));
@@ -5320,6 +5345,8 @@ void QExperimental3DExtension::create2DClusterizedVolume()
     image->Update();
 
     m_clusterizedVolume = new Experimental3DVolume(image);
+    m_clusterizedVolume->setAlternativeImage(m_volume->getImage());
+    m_clusterizedVolume->setExtension(this);
 }
 
 
@@ -5418,7 +5445,7 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction2D()
                 if (y1 == y2) gradientOpacity = m_normalTransferFunction.getGradientOpacity(y); // cas especial
             }
 
-            m_clusterizedTransferFunction.set(cluster2DIndex(i, k), color, opacity * gradientOpacity);
+            m_clusterizedTransferFunction.set(cluster2DIndexFromBins(i, k), color, opacity * gradientOpacity);
         }
     }
 
@@ -5481,9 +5508,15 @@ int QExperimental3DExtension::numberOfClusters() const
 }
 
 
-int QExperimental3DExtension::cluster2DIndex(int intensityCluster, int gradientCluster) const
+int QExperimental3DExtension::cluster2DIndexFromBins(int intensityBin, int gradientBin) const
 {
-    return intensityCluster * m_gradientClusters.size() + gradientCluster;
+    return intensityBin * m_gradientClusters.size() + gradientBin;
+}
+
+
+int QExperimental3DExtension::cluster2DIndex(int intensity, int gradient) const
+{
+    return m_intensityGradientMap.at(intensity).at(gradient);
 }
 
 

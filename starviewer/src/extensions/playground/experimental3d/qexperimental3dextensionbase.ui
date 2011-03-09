@@ -124,6 +124,20 @@
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QCheckBox" name="m_cpuRenderingCheckBox">
+                <property name="text">
+                 <string>CPU render</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="m_cpuShaderRenderingCheckBox">
+                <property name="text">
+                 <string>CPU shader render</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
             <item>
@@ -2294,7 +2308,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>428</width>
+            <width>471</width>
             <height>909</height>
            </rect>
           </property>
@@ -4145,7 +4159,7 @@
                    <number>8</number>
                   </property>
                   <property name="maximum">
-                   <double>100.000000000000000</double>
+                   <double>1000000000.000000000000000</double>
                   </property>
                   <property name="singleStep">
                    <double>0.000010000000000</double>
@@ -4197,8 +4211,11 @@
                   <property name="decimals">
                    <number>4</number>
                   </property>
+                  <property name="minimum">
+                   <double>-1000.000000000000000</double>
+                  </property>
                   <property name="maximum">
-                   <double>10.000000000000000</double>
+                   <double>1000.000000000000000</double>
                   </property>
                   <property name="singleStep">
                    <double>0.001000000000000</double>
