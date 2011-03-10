@@ -119,22 +119,27 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(point));
     QPoint currentScreenGlobalOriginPoint = currentScreenGeometry.topLeft();
 
-    // Calculem la mida total que faran els widgets
-    QSize totalWidgetSize;
-    totalWidgetSize.setWidth(m_patientBrowserList->sizeHint().width() + m_patientAdditionalInfo->sizeHint().width());
-    totalWidgetSize.setHeight(qMax(m_patientBrowserList->sizeHint().height(),m_patientAdditionalInfo->sizeHint().height()));
+    // Calculem les mides dels widgets per saber on els hem de col·locar
+    // TODO Aquestes mesures no són les més exactes. Les adequades haurien de basar-se en els valors de QWidget::frameGeometry()
+    // tal com s'explica a http://doc.trolltech.com/4.7/application-windows.html#window-geometry
+    // El problema és que cal que abans haguem fet un show() per saber les mides de veritat. Una opció també seria implementar 
+    // aquest posicionament quan es produeix un resize d'aquests widgets. Aquesta és una de les raons per la qual veiem el menú
+    // adicional amb una petita ombra quan es queda a la dreta del principal.
+    int mainMenuApproximateWidth = m_patientBrowserList->sizeHint().width();
+    int wholeMenuApproximateHeight = qMax(m_patientBrowserList->sizeHint().height(), m_patientAdditionalInfo->sizeHint().height());
 
     // Calculem les fronteres per on ens podria sortir el menú (lateral dret i per sota)
     int globalRight = currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width();
     int globalBottom = currentScreenGlobalOriginPoint.y() + currentScreenGeometry.height();
-    int widgetRight = totalWidgetSize.width() + point.x();
-    int widgetBottom = totalWidgetSize.height() + point.y();
+    int widgetRight = mainMenuApproximateWidth + point.x();
+    int widgetBottom = wholeMenuApproximateHeight + point.y();
 
     // Calculem quant d'ample i/o alçada ens surt el menú. Si els valors són positius caldrà moure 
     // la posició original com a mínim tot el que ens sortim de les fronteres
     int outsideWidth = widgetRight - globalRight;
     int outsideHeight = widgetBottom - globalBottom;
 
+    // TODO En teoria aquest Margin no seria necessari si fèssim servir frameGeometry() en comptes de sizeHint()
     const int Margin = 5;
     int menuXPosition = point.x();
     int menuYPosition = point.y();
@@ -148,8 +153,19 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     }
 
     // Movem la finestra del menu al punt que toca
-    // Col·loquem el widget amb la informació adicional a la dreta del principal
-    m_patientAdditionalInfo->move(menuXPosition + m_patientBrowserList->sizeHint().width(), menuYPosition);
+    // Col·loquem el widget amb la informació adicional a la dreta o l'esquerra del principal segons l'espai disponible
+    // TODO Aquesta mesura no és la més exacta. L'adequada hauria de basar-se en els valors de QWidget::frameGeometry()
+    int additionalInfoWidgetApproximateWidth = m_patientAdditionalInfo->sizeHint().width();
+    if (menuXPosition + mainMenuApproximateWidth + additionalInfoWidgetApproximateWidth > currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width())
+    {
+        // A l'esquerra
+        m_patientAdditionalInfo->move(menuXPosition - additionalInfoWidgetApproximateWidth, menuYPosition);
+    }
+    else
+    {
+        // A la dreta
+        m_patientAdditionalInfo->move(menuXPosition + mainMenuApproximateWidth, menuYPosition);
+    }
     m_patientAdditionalInfo->show();
 
     // TODO: HACK si no mostrem l'"Aditional info" abans que el "browser list" després no processa els events
