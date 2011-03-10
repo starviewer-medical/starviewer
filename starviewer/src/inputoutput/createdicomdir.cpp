@@ -67,7 +67,7 @@ void CreateDicomdir::setStrictMode(bool enabled)
         m_ddir.disableResolutionCheck( OFFalse );//rebutja imatges que no compleixin l'estàndard dicom en la codificació de la informació dels pixels
         m_ddir.enableInventPatientIDMode( OFFalse );//rebutgem imatges que no tinguin PatientID
 
-        INFO_LOG( "Mode estricte ON" );
+        INFO_LOG( "Es creara el DICOMDIR en mode estricte de compliment del DICOM" );
     }
     else // no volem mode estricte
     {
@@ -76,7 +76,7 @@ void CreateDicomdir::setStrictMode(bool enabled)
         m_ddir.disableResolutionCheck( OFTrue );//Accepta Imatges que no compleixi la resolució espacial
         m_ddir.enableInventPatientIDMode( OFTrue );//en cas que una pacient no tingui PatientID se l'inventa
 
-        INFO_LOG( "Mode estricte OFF" );
+        INFO_LOG( "Es creara el DICOMDIR en mode permisiu en el compliment del DICOM" );
     }
 }
 

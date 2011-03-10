@@ -374,6 +374,7 @@ void QCreateDicomdir::createDicomdirOnHardDiskOrFlashMemories()
     }
     else if (!dicomdirPathIsEmpty(dicomdirPath))
     {
+        WARN_LOG(QString("No es pot crear el DICOMDIR perque no esta buit el directori de desti %1").arg(dicomdirPath)); 
         QMessageBox::information(this, ApplicationNameString, tr("The destination directory is not empty, please choose an empty directory."));
         return;
     }
