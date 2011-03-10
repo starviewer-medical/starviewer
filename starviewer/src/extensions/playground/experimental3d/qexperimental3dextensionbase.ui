@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>653</width>
-    <height>886</height>
+    <height>888</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_41">
@@ -2308,7 +2308,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>471</width>
+            <width>500</width>
             <height>909</height>
            </rect>
           </property>
@@ -3329,8 +3329,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>491</width>
-            <height>1260</height>
+            <width>520</width>
+            <height>1290</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -3775,6 +3775,20 @@
                 <string>Intensity/gradient clustering</string>
                </property>
               </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_89">
+             <item>
+              <widget class="QPushButton" name="m_importanceClusteringPushButton">
+               <property name="text">
+                <string>Importance clustering</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="m_importanceClusteringClustersLabel"/>
              </item>
             </layout>
            </item>

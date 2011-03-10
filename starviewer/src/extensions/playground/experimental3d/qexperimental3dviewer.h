@@ -27,6 +27,8 @@ public:
 
     /// Indiquem les dades d'entrada.
     virtual void setInput( Volume *volume );
+    /// Retorna el volum principal.
+    Volume* getMainVolume() const;
 
     /// Assigna el volum.
     void setVolume( Experimental3DVolume *volume );
