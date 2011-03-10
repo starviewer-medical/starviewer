@@ -535,7 +535,7 @@ void QVolume3DViewTestingExtension::toggleClutEditor()
 
 void QVolume3DViewTestingExtension::hideClutEditor()
 {
-    m_editorSplitter->setSizes( QList<int>() << 0 << 0 );
+    m_editorSplitter->setSizes( QList<int>() << 1 << 0 );
 }
 
 void QVolume3DViewTestingExtension::setCustomStyleButtonStateBySplitter()
