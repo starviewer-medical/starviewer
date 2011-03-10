@@ -99,8 +99,10 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
 
     m_dicomDirPath = dicomdirPath;
 
-    if (copyFolderContent && !AreValidRequirementsOfFolderContentToCopyToDICOMDIR(Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()))
+    QString pathFolderContentToCopyToDICOMDIR = Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString();
+    if (copyFolderContent && !AreValidRequirementsOfFolderContentToCopyToDICOMDIR(pathFolderContentToCopyToDICOMDIR))
     {
+        ERROR_LOG(QString("No es pot crear el DICOMDIR perquè el path %1 conte un element amb el nom DICOM o DICOMDIR").arg(pathFolderContentToCopyToDICOMDIR));
         state.setStatus("", false, 4003);
         return state;
     }
@@ -116,6 +118,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
         Patient *patient = localDatabaseManager.retrieve(studyMask);
         if(localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
         {
+            ERROR_LOG(QString("No s'han trobat les dades del estudi %1 a la base de dades ").arg(studyToConvert.studyUID));
             QString error = QString("Error al fer un retrieve study per generar un DICOMDIR; Error: %1; StudyUID: %2")
                     .arg(localDatabaseManager.getLastError())
                     .arg(studyToConvert.studyUID);
@@ -151,6 +154,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
     
     if (m_anonymizeDICOMDIR)
     {
+        INFO_LOG("El DICOMDIR es creara anonimitzat");
         m_DICOMAnonymizer = new DICOMAnonymizer();
         m_DICOMAnonymizer->setPatientNameAnonymized(m_patientNameAnonymized);
         m_DICOMAnonymizer->setReplacePatientIDInsteadOfRemove(true);
@@ -224,6 +228,7 @@ Status ConvertToDicomdir::createDicomdir( const QString &dicomdirPath, CreateDic
     state = createDicomdir.create( dicomdirPath );//invoquem el mètode per convertir el directori destí Dicomdir on ja s'han copiat les imatges en un dicomdir
     if ( !state.good() )//ha fallat crear el dicomdir, ara intentem crear-lo en mode no estricte
     {
+        WARN_LOG("Algunes de les imatges no compleixen l'estandard DICOM al 100% es provara de crear el DICOMDIR sense el mode estricte");
         createDicomdir.setStrictMode( false );
         state = createDicomdir.create( dicomdirPath );
         if ( state.good() )
@@ -412,7 +417,11 @@ Status ConvertToDicomdir::copyImageToDicomdirPath(Image *image)
             {
                 state.setStatus("",true,0);
             }
-            else state.setStatus(QString("Can't copy image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3001);
+            else
+            {
+                ERROR_LOG(QString("No s'ha pogut copiar la imatge %1 a %2").arg(image->getPath(), imageOutputPath));
+                state.setStatus(QString("Can't copy image %1 to %2").arg(image->getPath(), imageOutputPath), false, 3001);
+            }
         }
     }
 
@@ -430,6 +439,7 @@ void ConvertToDicomdir::createReadmeTxt()
 
     if (file.exists()) 
     {
+        INFO_LOG("Ja s'ha trobat un fitxer readme.txt al DICOMDIR provinent del contingut de la carpeta a copiar");
         /*Si el fitxer ja existeix vol dir que l'hem copiat del contingut la carpeta que s'ha copiar al crear un DICOMDIR
           en aquest cas mantenim el Readme.txt existent i no generem el nostre*/
         return;

@@ -24,6 +24,7 @@
 #endif
 
 #include "status.h"
+#include "logging.h"
 
 namespace udg {
 
@@ -54,8 +55,11 @@ Status ConvertDicomToLittleEndian::convert( QString inputFile , QString outputFi
 
     error = fileformat.loadFile( qPrintable( QDir::toNativeSeparators( inputFile ) ) , opt_ixfer, EGL_noChange , DCM_MaxReadLength , opt_readMode );
 
-    if ( error.bad() ) return state.setStatus( error );
-
+    if ( error.bad() ) 
+    {
+        ERROR_LOG(QString("No s'ha pogut obrir el fitxer a convertir LittleEndian %1, descripcio error: %2").arg(inputFile, error.text()));
+        return state.setStatus( error );
+    }
     dataset->loadAllDataIntoMemory();
 
     DcmXfer opt_oxferSyn( opt_oxfer );
@@ -66,11 +70,16 @@ Status ConvertDicomToLittleEndian::convert( QString inputFile , QString outputFi
     {
         descriptionError =  "Error: no conversion to transfer syntax " + QString( opt_oxferSyn.getXferName() ) + " possible";
         state.setStatus( qPrintable(descriptionError) , false , 1300 );
-
+        ERROR_LOG(descriptionError);
         return state;
     }
 
     error = fileformat.saveFile( qPrintable( QDir::toNativeSeparators( outputFile ) ) , opt_oxfer , opt_oenctype , opt_oglenc , opt_opadenc , OFstatic_cast( Uint32 , opt_filepad ) , OFstatic_cast( Uint32 , opt_itempad ) , opt_oDataset );
+
+    if (!error.good())
+    {
+        ERROR_LOG(QString("S'ha produit un error al intentar gravar la imatge %1 convertida a LittleEndian al path %2, descripcio error: %3").arg(inputFile, outputFile, error.text()));
+    }
 
     return state.setStatus( error );
 }
