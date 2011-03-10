@@ -5,6 +5,7 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 #include "qreleasenotes.h"
+#include "coresettings.h"
 
 #include <QCloseEvent>
 #include <QUrl>
@@ -44,8 +45,13 @@ void QReleaseNotes::setUrl(const QUrl &url)
 
 void QReleaseNotes::closeEvent(QCloseEvent *event)
 {
-    //llençar el senyal de que es tanca la finestra
-    closing();
+    Settings settings;
+    //si el 'Don't show on future releases' esta marcat
+    if (isDontShowAnymoreChecked())
+    {
+        //modificar els settings per que no es mostrin mai més  
+        settings.setValue(CoreSettings::NeverShowNewVersionReleaseNotes, true);
+    }
     //i tancar la finestra
     event->accept();
 }

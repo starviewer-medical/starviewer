@@ -62,6 +62,8 @@ void ApplicationVersionChecker::checkReleaseNotes()
 
     //utilitzar els settings
     readSettings();
+    // si no hi ha nova versió al server guardem l'actual als settings
+    m_checkedVersion = m_lastVersionChecked;
 
     if (isDevelopmentMode())
     {
@@ -75,15 +77,22 @@ void ApplicationVersionChecker::checkReleaseNotes()
         QUrl url = createLocalUrl();
         if (checkLocalUrl(url))
         {
-            m_checkNewVersion = false;
             m_releaseNotes = new QReleaseNotes(0);
             m_releaseNotes->setDontShowVisible(false);
             m_releaseNotes->setUrl(url);
             m_releaseNotes->setWindowTitle(tr("Release Notes"));
             m_somethingToShow = true;
             m_checkNewVersion = false;
+        }
+        else
+        {
+            // Si no existeix el fitxer local de les notes, guardem als settings la versió actual
+            // per tal de que no es busquin més (no es trobaran) fins a la pròxima versió
             
-            connect(m_releaseNotes, SIGNAL(closing()), this, SLOT(closeEvent()));
+            // el write settings guarda la versió de les notes locals només si m_checkNewVersion és fals
+            m_checkNewVersion = false; 
+            writeSettings(); //fem un write settings i no un setCheckFinished per que encara no ha acabat el check
+            m_checkNewVersion = true;
         }
     }
 
@@ -94,7 +103,6 @@ void ApplicationVersionChecker::checkReleaseNotes()
             m_releaseNotes = new QReleaseNotes(0);
             m_releaseNotes->setDontShowVisible(true);
             m_releaseNotes->setWindowTitle(tr("New Version Available"));
-            connect(m_releaseNotes, SIGNAL(closing()), this, SLOT(closeEvent()));
             checkVersionOnServer();
             async = true;
         }
@@ -293,13 +301,6 @@ void ApplicationVersionChecker::writeSettings()
     }
     else
     {
-        //primer de tot comprobar si el 'Don't show on future releases' esta activat
-        if (m_releaseNotes->isDontShowAnymoreChecked())
-        {
-            //modificar els settings per que no es mostrin mai més  
-            settings.setValue(CoreSettings::NeverShowNewVersionReleaseNotes, true);
-        }
-
         //Guardar la data en que hem comprobat la versió
         settings.setValue(CoreSettings::LastVersionCheckedDate, QDate::currentDate().toString(QString("yyyyMMdd")));
         //Guardar la versió que hem comprobat
@@ -321,6 +322,7 @@ void ApplicationVersionChecker::readSettings()
 void ApplicationVersionChecker::setCheckFinished()
 {
     m_checkFinished = true;
+    writeSettings();
     emit checkFinished();
 }
 
@@ -447,6 +449,7 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
         if (scriptValue.property("error").isObject())
         {
             ERROR_LOG(QString("Error parsejant el json ") + scriptValue.property("error").property("code").toString() + QString(": ") + scriptValue.property("error").property("message").toString());
+            setCheckFinished();
         }
         else
         {
@@ -454,11 +457,15 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
             {
                 m_checkedVersion = scriptValue.property("version").toString();
                 releaseNotesURL = scriptValue.property("releaseNotesURL").toString();
+                
+                connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(updateNotesUrlReply(QNetworkReply*)));
+                m_manager->get(QNetworkRequest(QUrl(releaseNotesURL)));
             }
-        }
-
-        connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(updateNotesUrlReply(QNetworkReply*)));
-        m_manager->get(QNetworkRequest(QUrl(releaseNotesURL)));
+            else
+            {
+                setCheckFinished();
+            }
+        }        
     }
     else
     {
@@ -479,14 +486,7 @@ void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
         if (m_lastVersionChecked != m_checkedVersion)
         {
             m_releaseNotes->setUrl(reply->url());
-            if(m_neverShowNewVersionReleaseNotes)
-            {
-                // Si no volem mostrar mes les notes de les noves versions online,
-                // hem de guardar els settings aqui, així les comprobacions es faran quan toca
-                // per exemple, al cap de 15 dies d'això.
-                writeSettings();
-            }
-            else
+            if(!m_neverShowNewVersionReleaseNotes)
             {
                 m_somethingToShow = true;
             }
@@ -498,12 +498,6 @@ void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
     }
     reply->deleteLater();
     setCheckFinished();       
-}
-
-void ApplicationVersionChecker::closeEvent()
-{
-    //guardar els settings
-    writeSettings();
 }
 
 void ApplicationVersionChecker::showWhenCheckFinished()

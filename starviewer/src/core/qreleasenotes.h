@@ -32,15 +32,10 @@ public:
     void setDontShowVisible(bool visible);
     /// Determina quin url haurà d'obrir la finestra de les release notes
     void setUrl(const QUrl &url);
-    
-signals:
-    /// Senyal per indicar a ApplicationVersionChecker que es tanca la finestra
-    void closing();
 
 protected:
     /// Redifinir el close event per quan es tanqui, guardar els settings
     void closeEvent(QCloseEvent *event);
-    
 };
 
 } // end namespace udg
