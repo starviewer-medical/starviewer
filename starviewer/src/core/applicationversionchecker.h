@@ -95,8 +95,6 @@ private slots:
     void webServiceReply(QNetworkReply *reply);
     /// Tracta la resposta de les notes de la nova versió disponible i posa el seu contingut al WebView
     void updateNotesUrlReply(QNetworkReply *reply);
-    /// Event que es crida quan es tanca la finestra de les QReleaseNotes
-    void closeEvent();
     /// Quan al cridar el mostrar no hagi acabat de carregar, quan ho faci es cridarà aquest mètode
     void showWhenCheckFinished();
 
