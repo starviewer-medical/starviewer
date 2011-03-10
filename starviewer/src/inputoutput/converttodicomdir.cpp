@@ -99,7 +99,7 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
 
     m_dicomDirPath = dicomdirPath;
 
-    if (!AreValidRequirementsOfFolderContentToCopyToDICOMDIR(Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()))
+    if (copyFolderContent && !AreValidRequirementsOfFolderContentToCopyToDICOMDIR(Settings().getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString()))
     {
         state.setStatus("", false, 4003);
         return state;
