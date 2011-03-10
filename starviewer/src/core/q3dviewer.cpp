@@ -156,6 +156,10 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_4DLinearRegressionGradientEstimator = 0;
     m_window = 80;
     m_level = 40;
+
+    // Workaround: desactivem l'orientation marker perquè amb VTK 5.6 es renderitza cada vegada que movem el ratolí per sobre el visor.
+    // TODO: buscar una solució real al problema, que no hi hagi un mouse tracking o quelcom per l'estil.
+    orientationMarkerOff();
 }
 
 Q3DViewer::~Q3DViewer()
