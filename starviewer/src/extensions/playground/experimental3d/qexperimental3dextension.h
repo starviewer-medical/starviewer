@@ -342,6 +342,10 @@ private slots:
     void normalToClusterizedTransferFunction2D();
     void clusterizedToNormalTransferFunction2D();
 
+    void importanceClustering();
+    void normalToClusterizedTransferFunction2DImportance();
+    void clusterizedToNormalTransferFunction2DImportance();
+
 private:
 
     Experimental3DVolume *m_volume;
@@ -398,10 +402,12 @@ private:
     QVector<float> m_viewpointUnstabilitiesI;
     QVector<float> m_imi;
     float m_maximumImi;
-    bool m_2DClustering;
+    enum ClusteringType { Intensity, IntensityGradient, Importance };
+    ClusteringType m_clusteringType;
     QList< QList<int> > m_intensityClusters;
     QList< QList<int> > m_gradientClusters;
     QVector< QVector<unsigned short> > m_intensityGradientMap;
+    int m_importantStart;
     QVector<bool> m_clusterHasData;
     TransferFunction m_normalTransferFunction;
     TransferFunction m_clusterizedTransferFunction;

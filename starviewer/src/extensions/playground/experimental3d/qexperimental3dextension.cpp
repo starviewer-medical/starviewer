@@ -7,11 +7,13 @@
 #include "mathtools.h"
 #include "obscurancemainthread.h"
 #include "optimizetransferfunctioncommand.h"
+#include "study.h"
 #include "transferfunctionio.h"
 #include "vector3.h"
 #include "viewpointgenerator.h"
 #include "viewpointinformationchannel.h"
 #include "viewpointintensityinformationchannel.h"
+#include "volume.h"
 #include "volumereslicer.h"
 
 #include <QButtonGroup>
@@ -1122,6 +1124,7 @@ void QExperimental3DExtension::createConnections()
     connect(m_intensityGradientClusteringIntensitiesSpinBox, SIGNAL(valueChanged(int)), SLOT(updateIntensityGradientClusteringTotal()));
     connect(m_intensityGradientClusteringGradientsSpinBox, SIGNAL(valueChanged(int)), SLOT(updateIntensityGradientClusteringTotal()));
     connect(m_intensityGradientClusteringPushButton, SIGNAL(clicked()), SLOT(intensityGradientClustering()));
+    connect(m_importanceClusteringPushButton, SIGNAL(clicked()), SLOT(importanceClustering()));
     connect( m_colorTransferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateColorTransferFunctionFromImi() ) );
     connect( m_opacityTransferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateOpacityTransferFunctionFromImi() ) );
     connect( m_transferFunctionFromImiPushButton, SIGNAL( clicked() ), SLOT( generateTransferFunctionFromImi() ) );
@@ -2389,7 +2392,7 @@ void QExperimental3DExtension::computeSelectedVmii()
 
     if (computeIntensityClustering)
     {
-        m_2DClustering = false;
+        m_clusteringType = Intensity;
         m_transferFunctionOptimizationTypeLabel->setText("1D");
         m_intensityClusters = viewpointIntensityInformationChannel.intensityClusters();
         m_clusterHasData.clear();
@@ -4350,7 +4353,7 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"), "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them.");
 #else // CUDA_AVAILABLE
-    if (m_intensityClusters.isEmpty()) return;
+    if (!m_clusterizedVolume) return;
 
     m_optimizing = true;
 
@@ -4959,12 +4962,14 @@ void QExperimental3DExtension::createClusterizedVolume()
     image->Update();
 
     m_clusterizedVolume = new Experimental3DVolume(image);
+
+    image->Delete();
 }
 
 
 void QExperimental3DExtension::fillWeightsEditor()
 {
-    if (m_intensityClusters.isEmpty()) return;
+    if (!m_clusterizedVolume) return;
 
     TransferFunction weightsFullTransferFunction;
     weightsFullTransferFunction.setColorTransferFunction(m_clusterizedTransferFunction.colorTransferFunction());
@@ -5063,12 +5068,17 @@ void QExperimental3DExtension::fillWeightsEditor()
     {
         int intensityZeroEnd = m_transferFunctionOptimizationWeightsZeroUpToIntensitySpinBox->value();
         int gradientZeroEnd = m_transferFunctionOptimizationWeightsZeroUpToGradientSpinBox->value();
-        if (!m_2DClustering) gradientZeroEnd = -1;
+        if (m_clusteringType != IntensityGradient) gradientZeroEnd = -1;
 
         for (int i = 0; i < nClusters; i++)
         {
-            int intensity = m_2DClustering ? intensityBinFromCluster2D(i) : i;
-            int gradient = m_2DClustering ? gradientBinFromCluster2D(i) : 0;
+            int intensity;
+            if (m_clusteringType == IntensityGradient) intensity = intensityBinFromCluster2D(i);
+            else intensity = i;
+
+            int gradient;
+            if (m_clusteringType == IntensityGradient) gradient = gradientBinFromCluster2D(i);
+            else gradient = 0;
 
             if (intensity <= intensityZeroEnd || gradient <= gradientZeroEnd) weights[i] = 0.0;
         }
@@ -5099,7 +5109,7 @@ void QExperimental3DExtension::fillWeightsEditor()
 
 void QExperimental3DExtension::checkData()
 {
-    if (m_intensityClusters.isEmpty() || !m_clusterHasData.isEmpty()) return;
+    if (!m_clusterizedVolume || !m_clusterHasData.isEmpty()) return;
 
     const unsigned short *data = reinterpret_cast<unsigned short*>(m_clusterizedVolume->getImage()->GetScalarPointer());
     int size = m_clusterizedVolume->getImage()->GetNumberOfPoints();
@@ -5142,9 +5152,14 @@ QVector<float> QExperimental3DExtension::getWeights() const
 
 void QExperimental3DExtension::normalToClusterizedTransferFunction()
 {
-    if (m_2DClustering) // és lleig, però serveix per no haver de canviar moltíssim codi
+    if (m_clusteringType == IntensityGradient)  // és lleig, però serveix per no haver de canviar moltíssim codi
     {
         normalToClusterizedTransferFunction2D();
+        return;
+    }
+    if (m_clusteringType == Importance)
+    {
+        normalToClusterizedTransferFunction2DImportance();
         return;
     }
 
@@ -5202,9 +5217,14 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction()
 
 void QExperimental3DExtension::clusterizedToNormalTransferFunction()
 {
-    if (m_2DClustering) // és lleig, però serveix per no haver de canviar moltíssim codi
+    if (m_clusteringType == IntensityGradient)  // és lleig, però serveix per no haver de canviar moltíssim codi
     {
         clusterizedToNormalTransferFunction2D();
+        return;
+    }
+    if (m_clusteringType == Importance)
+    {
+        clusterizedToNormalTransferFunction2DImportance();
         return;
     }
 
@@ -5310,13 +5330,13 @@ void QExperimental3DExtension::updateIntensityGradientClusteringTotal()
 
 void QExperimental3DExtension::intensityGradientClustering()
 {
-    m_2DClustering = true;
-    m_transferFunctionOptimizationTypeLabel->setText("2D");
+    m_clusteringType = IntensityGradient;
+    m_transferFunctionOptimizationTypeLabel->setText("2DIG");
 
     // fem el clustering (implementació ràpida, lletja i barroera)
     int intensityBins = m_intensityGradientClusteringIntensitiesSpinBox->value();
     int gradientBins = m_intensityGradientClusteringGradientsSpinBox->value();
-    int intensities = m_volume->getRangeMax() + 1;
+    int intensities = m_normalVolume->getRangeMax() + 1;
     int gradients = 256;
 
     m_intensityClusters.clear();
@@ -5387,6 +5407,8 @@ void QExperimental3DExtension::create2DClusterizedVolume()
     m_clusterizedVolume = new Experimental3DVolume(image);
     m_clusterizedVolume->setAlternativeImage(m_volume->getImage());
     m_clusterizedVolume->setExtension(this);
+
+    image->Delete();
 }
 
 
@@ -5489,62 +5511,28 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction2D()
         }
     }
 
-    DEBUG_LOG("normal transfer function");
-    DEBUG_LOG(m_normalTransferFunction.toString());
-    DEBUG_LOG("clusterized transfer function");
-    DEBUG_LOG(m_clusterizedTransferFunction.toString());
+//    DEBUG_LOG("normal transfer function");
+//    DEBUG_LOG(m_normalTransferFunction.toString());
+//    DEBUG_LOG("clusterized transfer function");
+//    DEBUG_LOG(m_clusterizedTransferFunction.toString());
 }
 
 
 void QExperimental3DExtension::clusterizedToNormalTransferFunction2D()
 {
     // no es pot descomposar
-    /*
-    if (m_intensityGradientMap.isEmpty()) return;
-
-    m_normalTransferFunction.clear();
-
-    for (int i = 0; i < m_intensityClusters.size(); i++)
-    {
-        double x1 = m_intensityClusters[i].first();
-        double x2 = m_intensityClusters[i].last();
-        double x = (x1 + x2) / 2.0;
-
-        QColor color = m_clusterizedTransferFunction.getColor(i);
-        double opacity = m_clusterizedTransferFunction.getOpacity(i);
-
-        if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) m_normalTransferFunction.set(x, color, opacity);
-        else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
-        {
-            m_normalTransferFunction.set(x1, color, opacity);
-            m_normalTransferFunction.set(x2, color, opacity);
-        }
-
-        for (int j = 0; j < m_gradientClusters.size(); j++)
-        {
-            double y1 = m_gradientClusters[j].first();
-            double y2 = m_gradientClusters[j].last();
-            double y = (y1 + y2) / 2.0;
-
-            QColor color = m_clusterizedTransferFunction.getColor(i);
-            double opacity = m_clusterizedTransferFunction.getOpacity(i);
-
-            if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeCenterPointRadioButton->isChecked()) m_normalTransferFunction.set(x, color, opacity);
-            else if (m_transferFunctionFromIntensityClusteringTransferFunctionTypeRangeRadioButton->isChecked())
-            {
-                m_normalTransferFunction.set(x1, color, opacity);
-                m_normalTransferFunction.set(x2, color, opacity);
-            }
-        }
-    }
-    */
 }
 
 
 int QExperimental3DExtension::numberOfClusters() const
 {
-    if (m_2DClustering) return m_intensityClusters.size() * m_gradientClusters.size();
-    else return m_intensityClusters.size();
+    switch (m_clusteringType)
+    {
+        case Intensity: return m_intensityClusters.size();
+        case IntensityGradient: return m_intensityClusters.size() * m_gradientClusters.size();
+        case Importance: return 2 * m_importantStart;
+        default: return 0;
+    }
 }
 
 
@@ -5569,6 +5557,78 @@ int QExperimental3DExtension::intensityBinFromCluster2D(int cluster) const
 int QExperimental3DExtension::gradientBinFromCluster2D(int cluster) const
 {
     return cluster % m_gradientClusters.size();
+}
+
+
+void QExperimental3DExtension::importanceClustering()
+{
+    // primer mirem si tenim la màscara, sinó no podem fer res
+    if (m_viewer->getMainVolume()->getStudy()->getNumberOfSeries() < 2)
+    {
+        DEBUG_LOG("No tenim màscara. Bye bye y hasta otro ratito, eh?");
+        return;
+    }
+
+    m_clusteringType = Importance;
+    m_transferFunctionOptimizationTypeLabel->setText("2DI");
+
+    int intensities = m_normalVolume->getRangeMax() + 1;
+    m_importantStart = intensities;
+
+    m_clusterHasData.clear();
+
+    delete m_clusterizedVolume;
+
+    vtkImageData *image = vtkImageData::New();
+    image->DeepCopy(m_volume->getImage());
+    unsigned short *data = reinterpret_cast<unsigned short*>(image->GetScalarPointer());
+    int size = image->GetNumberOfPoints();
+    const unsigned short *mask = reinterpret_cast<unsigned short*>(m_viewer->getMainVolume()->getStudy()->getSeries().at(1)->getFirstVolume()->getVtkData()->GetScalarPointer());
+
+    for (int i = 0; i < size; i++) data[i] = mask[i] > 0 ? data[i] + m_importantStart : data[i];
+
+    image->Modified();
+    image->Update();
+
+    m_clusterizedVolume = new Experimental3DVolume(image);
+    m_clusterizedVolume->setAlternativeImage(m_volume->getImage());
+    m_clusterizedVolume->setExtension(this);
+
+    image->Delete();
+
+    m_importanceClusteringClustersLabel->setText(QString(tr("%1 clusters")).arg(numberOfClusters()));
+    normalToClusterizedTransferFunction();
+    fillWeightsEditor();
+}
+
+
+void QExperimental3DExtension::normalToClusterizedTransferFunction2DImportance()
+{
+    if (!m_clusterizedVolume || m_clusteringType != Importance) return;
+
+    m_clusterizedTransferFunction = m_normalTransferFunction;
+
+    m_clusterizedTransferFunction.setColor(m_importantStart - 1, m_normalTransferFunction.getColor(m_importantStart - 1));
+    QList<double> colorKeys = m_normalTransferFunction.colorKeys();
+    colorKeys.prepend(0);
+    foreach (double x, colorKeys)
+    {
+        m_clusterizedTransferFunction.setColor(x + m_importantStart, m_normalTransferFunction.getColor(x));
+    }
+
+    m_clusterizedTransferFunction.setScalarOpacity(m_importantStart - 1, m_normalTransferFunction.getScalarOpacity(m_importantStart - 1));
+    QList<double> scalarOpacityKeys = m_normalTransferFunction.scalarOpacityKeys();
+    scalarOpacityKeys.prepend(0);
+    foreach (double x, scalarOpacityKeys)
+    {
+        m_clusterizedTransferFunction.setScalarOpacity(x + m_importantStart, m_normalTransferFunction.getScalarOpacity(x));
+    }
+}
+
+
+void QExperimental3DExtension::clusterizedToNormalTransferFunction2DImportance()
+{
+    // no es pot descomposar
 }
 
 
