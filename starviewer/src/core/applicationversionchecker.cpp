@@ -66,8 +66,10 @@ void ApplicationVersionChecker::checkReleaseNotes()
     if (isDevelopmentMode())
     {
         // En mode desenvolupament no es mostraran les notes ni es faran comprovacions online
+        return;
     }
-    else if (isNewVersionInstalled())
+    
+    if (isNewVersionInstalled())
     {
         //llegir el contingut dels fitxers HTML de les release notes
         QUrl url = createLocalUrl();
@@ -79,11 +81,13 @@ void ApplicationVersionChecker::checkReleaseNotes()
             m_releaseNotes->setUrl(url);
             m_releaseNotes->setWindowTitle(tr("Release Notes"));
             m_somethingToShow = true;
+            m_checkNewVersion = false;
             
             connect(m_releaseNotes, SIGNAL(closing()), this, SLOT(closeEvent()));
         }
     }
-    else if (m_checkNewVersion && !m_dontCheckNewVersionsOnline)
+
+    if (m_checkNewVersion && !m_dontCheckNewVersionsOnline)
     {
         if (checkTimeInterval())
         {
