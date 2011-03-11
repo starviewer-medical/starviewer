@@ -488,6 +488,9 @@ void Q3DViewer::setInput( Volume* volume )
 
     m_firstRender = true;
 
+    int *dimensions = volume->getDimensions();
+    m_canEnableShading = dimensions[0] > 1 && dimensions[1] > 1 && dimensions[2] > 1;   // ens basem només en les dimensions; de moment donem per fet que hi ha prou memòria
+
     applyCurrentRenderingMethod();
     // indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
@@ -561,6 +564,7 @@ void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
         {
             ERROR_LOG( QString( "Excepció al voler aplicar shading en el volum: " ) + e.what() );
             QMessageBox::warning( this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected.") );
+            m_canEnableShading = false;
             this->setShading( false );
             this->applyCurrentRenderingMethod(); // TODO Comprovar si seria suficient amb un render()
         }
@@ -1009,7 +1013,14 @@ void Q3DViewer::orientationMarkerOff()
 
 void Q3DViewer::setShading( bool on )
 {
-    on ? m_volumeProperty->ShadeOn() : m_volumeProperty->ShadeOff();
+    if (m_canEnableShading && on)
+    {
+        m_volumeProperty->ShadeOn();
+    }
+    else
+    {
+        m_volumeProperty->ShadeOff();
+    }
 }
 
 void Q3DViewer::setSpecular( bool on )

@@ -228,6 +228,9 @@ private:
     /// Booleà per saber si estem fent el primer render (per reiniciar l'orientació).
     bool m_firstRender;
 
+    /// Booleà que indica si es pot activar el shading (si no hi ha cap dimensió igual a 1 i hi ha prou memòria).
+    bool m_canEnableShading;
+
     /// Thread de control del càlcul d'obscurances.
     ObscuranceMainThread *m_obscuranceMainThread;
 
