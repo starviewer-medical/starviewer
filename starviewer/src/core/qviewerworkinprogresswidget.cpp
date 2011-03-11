@@ -43,7 +43,7 @@ void QViewerWorkInProgressWidget::showError(const QString &errorText)
 
 void QViewerWorkInProgressWidget::updateProgress(int progress)
 {
-    m_progressLabel->setText(tr(" (%1\%)").arg(progress, 3));
+    m_progressLabel->setText(tr(" (%1\%)").arg(progress));
 }
 
 void QViewerWorkInProgressWidget::showEvent(QShowEvent *event)
