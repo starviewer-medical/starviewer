@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
+    <width>451</width>
     <height>346</height>
    </rect>
   </property>
@@ -44,7 +44,7 @@ color: rgb(255, 255, 255);</string>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>121</width>
+          <width>120</width>
           <height>20</height>
          </size>
         </property>
@@ -101,7 +101,7 @@ color: rgb(255, 255, 255);</string>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>15</width>
+              <width>10</width>
               <height>20</height>
              </size>
             </property>
@@ -151,7 +151,7 @@ color: rgb(255, 255, 255);</string>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>189</width>
+          <width>120</width>
           <height>20</height>
          </size>
         </property>
