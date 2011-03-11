@@ -100,6 +100,10 @@ void VolumeReader::showMessageBoxWithLastError() const
             messageBoxTitle = tr("Missing Files");
             break;
 
+        case VolumePixelDataReader::CannotReadFile:
+            messageBoxTitle = tr("Cannot Read File(s)");
+            break;
+
         case VolumePixelDataReader::UnknownError:
             messageBoxTitle = tr("Unkwown Error");
             break;
@@ -118,6 +122,8 @@ QString VolumeReader::getLastErrorMessageToUser() const
                       "system may solve the problem.").arg(ApplicationNameString);
         case VolumePixelDataReader::MissingFile:
             return tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString);
+        case VolumePixelDataReader::CannotReadFile:
+            return tr("%1 could not read the requested file(s) for this Series.").arg(ApplicationNameString);
         case VolumePixelDataReader::ReadAborted:
             return tr("The loading of the data have been aborted.");
         case VolumePixelDataReader::UnknownError:
@@ -139,6 +145,10 @@ void VolumeReader::logWarningLastError(const QStringList &fileList) const
             WARN_LOG("No podem carregar els arxius perquè falten fitxers");
             break;
 
+        case VolumePixelDataReader::CannotReadFile:
+            WARN_LOG("No podem llegir els següents arxius (raó desconeguda)\n" + fileList.join("\n"));
+            break;
+        
         case VolumePixelDataReader::UnknownError:
             WARN_LOG("No podem carregar els arxius perquè ha donat un error desconegut");
             break;
