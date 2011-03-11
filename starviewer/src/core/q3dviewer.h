@@ -150,8 +150,8 @@ private:
     /// fa la visualització per textures 3D \TODO afegir comprovació de si el hard o suporta o no
     void renderTexture3D();
 
-    /// rescala les dades en el format adequat per als corresponents algorismes. Retorna fals si no hi ha cap volum assignat
-    bool rescale();
+    /// Reescala les dades de volume en el format adequat per als corresponents algorismes. Retorna fals si no pot crear el volum reescalat.
+    bool rescale(Volume *volume);
 
     /// reinicia la orientació
     void resetOrientation();

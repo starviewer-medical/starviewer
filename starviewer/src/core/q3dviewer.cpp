@@ -399,10 +399,17 @@ QString Q3DViewer::getRenderFunctionAsString()
     return result;
 }
 
-void Q3DViewer::setInput( Volume* volume )
+void Q3DViewer::setInput(Volume *volume)
 {
-    if( !checkInputVolume(volume) )
+    if(!checkInputVolume(volume))
+    {
         return;
+    }
+
+    if (!rescale(volume))
+    {
+        return;
+    }
 
     if( m_clippingPlanes )
     {
@@ -470,14 +477,7 @@ void Q3DViewer::setInput( Volume* volume )
     m_vtkVolume->SetUserMatrix(projectionMatrix);
     delete currentPlane;
 
-    if (m_imageData)
-    {
-        // Abans de fer el rescale fem un Delete() de m_imageData perquè es destrueixi
-        // La destrucció no és immediata perquè encara hi queden referències al pipeline de VTK
-        m_imageData->Delete();
-    }
-
-    if ( rescale() ) m_volumeMapper->SetInput( m_imageData );
+    m_volumeMapper->SetInput(m_imageData);
 
     unsigned short *data = reinterpret_cast<unsigned short*>( m_imageData->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
     m_ambientVoxelShader->setData( data, static_cast<unsigned short>( m_range ) );
@@ -618,48 +618,67 @@ void Q3DViewer::setDefaultOrientationForCurrentInput()
 }
 
 // Desplacem les dades de manera que el mínim sigui 0 i ho convertim a un unsigned short, perquè el ray casting no accepta signed short.
-bool Q3DViewer::rescale()
+bool Q3DViewer::rescale(Volume *volume)
 {
-    if ( m_mainVolume )
+    if (!volume)
     {
-        vtkImageData *image = m_mainVolume->getVtkData();
-        double *range = image->GetScalarRange();
-        double min = range[0], max = range[1];
-        m_range = max - min;
-        m_shift = -min;
-        m_window = m_range;
-        m_level = (m_range/2.0); //Sabem que el mínim és 0
-        DEBUG_LOG( QString( "Q3DViewer: m_mainVolume scalar range: min = %1, max = %2, range = %3, shift = %4" ).arg( min ).arg( max ).arg( m_range ).arg( m_shift ) );
+        return false;
+    }
 
-        vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
-        rescaler->SetInput( image );
-        rescaler->SetShift( m_shift );
-//         rescaler->SetScale( 1.0 );   // per defecte
-        //Ho psoem en unsigned short per tal de mantenir tota la informació
-        //Desavantatge: ocupa més memòria
-        rescaler->SetOutputScalarTypeToUnsignedShort();
-        rescaler->ClampOverflowOn();
-        try
+    vtkImageData *image = volume->getVtkData();
+    double *range = image->GetScalarRange();
+    double min = range[0], max = range[1];
+    double rangeLength = max - min;
+    double shift = -min;
+    double window = rangeLength;
+    double level = (rangeLength / 2.0); // Sabem que el mínim és 0
+    DEBUG_LOG(QString("Q3DViewer: volume scalar range: min = %1, max = %2, range = %3, shift = %4").arg(min).arg(max).arg(rangeLength).arg(shift));
+
+    vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
+    rescaler->SetInput(image);
+    rescaler->SetShift(shift);
+//    rescaler->SetScale(1.0);    // per defecte
+    // Ho psoem en unsigned short per tal de mantenir tota la informació
+    // Desavantatge: ocupa més memòria
+    rescaler->SetOutputScalarTypeToUnsignedShort();
+    rescaler->ClampOverflowOn();
+
+    try
+    {
+        rescaler->Update(); // el lloc on pot generar l'excepció és aquí
+
+        if (m_imageData)
         {
-            rescaler->Update();
-            m_imageData = rescaler->GetOutput(); 
-            m_imageData->Register( 0 );
+            // Fem un Delete() de m_imageData perquè es destrueixi
+            // La destrucció no és immediata perquè encara hi queden referències al pipeline de VTK
+            m_imageData->Delete();
         }
-        catch( std::exception &e )
-        {
-            ERROR_LOG( QString( "Excepció al voler fer rescale(): " ) + e.what() );
-            QMessageBox::warning( this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected.") );
-        }
+
+        m_imageData = rescaler->GetOutput();
+        m_imageData->Register(0);
+
         rescaler->Delete();
 
-        emit scalarRange( 0, m_range );
+        m_range = rangeLength;
+        m_shift = shift;
+        m_window = window;
+        m_level = level;
+
+        emit scalarRange(0, m_range);
 
         double *newRange = m_imageData->GetScalarRange();
-        DEBUG_LOG( QString( "Q3DViewer: new scalar range: new min = %1, new max = %2" ).arg( newRange[0] ).arg( newRange[1] ) );
+        DEBUG_LOG(QString("Q3DViewer: new scalar range: new min = %1, new max = %2").arg(newRange[0]).arg(newRange[1]));
 
         return true;
     }
-    else return false;
+    catch (std::exception &e)
+    {
+        ERROR_LOG(QString("Excepció al voler fer rescale(): ") + e.what());
+        QMessageBox::warning(this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again."));
+        // mantenim tots els atributs de la classe tal com estaven, per rebutjar el volum netament
+        rescaler->Delete();
+        return false;
+    }
 }
 
 void Q3DViewer::renderRayCasting()
