@@ -608,7 +608,6 @@ void Q2DViewer::setInput(Volume *volume)
     this->deleteInputFinishedCommand();
 
     this->setNewVolume(volume);
-    this->setViewerStatus(VisualizingVolume);
 }
 
 void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFinishedCommand)
@@ -630,7 +629,6 @@ void Q2DViewer::setInputAsynchronously(Volume *volume, QViewerCommand *inputFini
     else
     {
         this->setNewVolume(volume);
-        this->setViewerStatus(VisualizingVolume);
         this->executeInputFinishedCommand();
     }
 }
@@ -695,7 +693,7 @@ void Q2DViewer::loadVolumeAsynchronously(Volume *volume)
     // També tenim el problema de que perquè surti al menú de botó dret com a seleccionat, cal posar-li el mateix id.
     Volume *dummyVolume = this->getDummyVolumeFromVolume(volume);
     dummyVolume->setIdentifier(volume->getIdentifier());
-    this->setNewVolume(dummyVolume);
+    this->setNewVolume(dummyVolume, false);
 }
 
 void Q2DViewer::volumeReaderJobFinished()
@@ -703,7 +701,6 @@ void Q2DViewer::volumeReaderJobFinished()
     if (m_volumeReaderJob->success())
     {
         this->setNewVolume(m_volumeReaderJob->getVolume());
-        this->setViewerStatus(VisualizingVolume);
         this->executeInputFinishedCommand();
     }
     else
@@ -729,8 +726,16 @@ Volume* Q2DViewer::getDummyVolumeFromVolume(Volume *volume)
     return newVolume;
 }
 
-void Q2DViewer::setNewVolume(Volume *volume)
+void Q2DViewer::setNewVolume(Volume *volume, bool setViewerStatusToVisualizingVolume)
 {
+    // Cal que primer posem l'estatus en VisualizingVolume per tal de que el QVTKWidget pugui obtenir el tamany que li correspon
+    // si no, ens podem trobar que encara no s'hagi mostrat i tingui tamanys no definits fent que la imatge no es mostri completa #1434
+    // TODO: Caldria que fitImageIntoViewport() fos indepdent de si s'està visualitzant o no el QVTKWidget
+    if (setViewerStatusToVisualizingVolume)
+    {
+        this->setViewerStatus(VisualizingVolume);
+    }
+
     // Al fer un nou input, les distàncies que guardava el drawer no tenen sentit, pertant s'esborren
     if (m_mainVolume)
     {
