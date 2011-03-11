@@ -12,7 +12,6 @@
 
 #include <QBoxLayout>
 #include <QScrollArea>
-#include <QScrollBar>
 
 #include "qtransferfunctionintervaleditor.h"
 
@@ -57,11 +56,9 @@ QTransferFunctionEditorByValues::QTransferFunctionEditorByValues( QWidget * pare
 
 
     // Mida mínima de la scroll area
-
-    QScrollBar scrollBar( Qt::Vertical );   // necessitem una scroll bar auxiliar per a saber-ne l'amplada
-    scrollBar.show();
-    scrollArea->setMinimumWidth( first->minimumSizeHint().width() + scrollBar.width() );
-    scrollBar.hide();
+    QStyle *style = scrollArea->style();
+    int scrollBarWidth = style->pixelMetric(QStyle::PM_ScrollBarExtent);
+    scrollArea->setMinimumWidth(first->minimumSizeHint().width() + scrollBarWidth);
 
 
     m_numberOfIntervals = 1;
