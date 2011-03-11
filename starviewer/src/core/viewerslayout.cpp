@@ -52,6 +52,16 @@ Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
     return newViewer;
 }
 
+void ViewersLayout::deleteQ2DViewerWidget(Q2DViewerWidget *viewer) const
+{
+    //TODO: Xapussilla que cal fer ja que si es fa un "delete viewer" directament peta al canviar d'HP i cal fer-li un deleteLater.
+    // Si es fa un deleteLater i prou els viewer no s'esborren fins que s'han creat els nous. Això faria que hi hagi un moment en que
+    // tindríem la memòria acumulada dels viewers vells i els nous (això inclou la memòria de textura que allotja el renderer). Això podria provar
+    // que ens en quedessim sense si es tracten d'imatges grans. Per això fem un delete del viewer i després el deleteLater perquè no peti.
+    delete viewer->getViewer();
+    viewer->deleteLater();
+}
+
 void ViewersLayout::addColumns(int columns)
 {
     while (columns > 0)
@@ -144,7 +154,7 @@ void ViewersLayout::removeColumns(int columns)
             {
                 setSelectedViewer(getViewerWidget(0));
             }
-            delete oldViewer;
+            this->deleteQ2DViewerWidget(oldViewer);
             viewerPosition += (m_visibleColumns - 1);
         }
         --m_visibleColumns;
@@ -169,7 +179,7 @@ void ViewersLayout::removeRows(int rows)
             {
                 setSelectedViewer(getViewerWidget(0));
             }
-            delete oldViewer;
+            this->deleteQ2DViewerWidget(oldViewer);
             --viewerPosition;
         }
         --m_visibleRows;
@@ -323,8 +333,7 @@ void ViewersLayout::cleanUp()
     {
         Q2DViewerWidget* viewer = getViewerWidget(i);
         m_viewersLayout->removeWidget(viewer);
-        // TODO: Si es deixa amb un "delete viewer", peta
-        viewer->deleteLater();
+        this->deleteQ2DViewerWidget(viewer);
     }
     // Eliminem els visors i les geometries
     m_vectorViewers.clear();
