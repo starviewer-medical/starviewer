@@ -470,6 +470,12 @@ void Q3DViewer::setInput( Volume* volume )
     m_vtkVolume->SetUserMatrix(projectionMatrix);
     delete currentPlane;
 
+    if (m_imageData)
+    {
+        // Abans de fer el rescale fem un Delete() de m_imageData perquè es destrueixi
+        // La destrucció no és immediata perquè encara hi queden referències al pipeline de VTK
+        m_imageData->Delete();
+    }
 
     if ( rescale() ) m_volumeMapper->SetInput( m_imageData );
 
