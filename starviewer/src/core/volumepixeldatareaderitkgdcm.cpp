@@ -237,6 +237,10 @@ int VolumePixelDataReaderITKGDCM::identifyErrorMessage(const QString &errorMessa
     {
         return ZeroSpacingNotAllowed;
     }
+    else if (errorMessage.contains("Cannot read requested file"))
+    {
+        return CannotReadFile;
+    }
     else
     {
         return UnknownError;
