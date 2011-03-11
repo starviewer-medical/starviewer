@@ -80,6 +80,9 @@ private:
     /// Crea i retorna un nou visor configurat adequadament
     Q2DViewerWidget* getNewQ2DViewerWidget();
 
+    /// Mètode auxiliar per un problema que ens pot provar que ens quedem sense memòria per un bug no solucionat
+    void deleteQ2DViewerWidget(Q2DViewerWidget *viewer) const;
+
     /// Coloca el viewer donat en la posició i mides proporcionats
     /// @param viewer Visor que volem posicionar i ajustar dins del layout
     /// @param geometry String amb les posicions i mides realitives corresponents al viewer
