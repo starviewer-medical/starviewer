@@ -302,8 +302,8 @@ void QLocalDatabaseConfigurationScreen::clearCache()
     }
     if (!successReinstallingDatabase)
     {
-        QMessageBox::critical(this , ApplicationNameString, tr("An error has ocurred deleting studies, be sure you have write permissions on database file. ") +
-            tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("\n\nIf the problem persists contact with an administrator."));
+        QMessageBox::critical(this , ApplicationNameString, tr("An error has ocurred deleting studies from database, be sure you have write permissions on database directory. ") +
+            tr("\n\nClose all %1 windows and try again.").arg(ApplicationNameString) + tr("If the problem persists contact with an administrator."));
     }
 }
 
@@ -320,8 +320,8 @@ void QLocalDatabaseConfigurationScreen::compactCache()
 
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok )
     {
-        QMessageBox::critical(this , ApplicationNameString, tr("The database cannot be compacted, an unknown error has ocurred. ") +
-            tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("\n\nIf the problem persists contact with an administrator."));
+        QMessageBox::critical(this , ApplicationNameString, tr("The database cannot be compacted, an unknown error has ocurred.\n\n") +
+            tr("Close all %1 windows and try again.").arg(ApplicationNameString) + tr("If the problem persists contact with an administrator."));
     }
     else QMessageBox::information( this, ApplicationNameString, "Starviewer database has been compacted successfully.");
 }
