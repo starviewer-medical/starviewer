@@ -60,7 +60,7 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         isCorrect = checkDatabaseRevision();
         if (!isCorrect)
         {
-            m_errorMessage.append( tr("\nCan't upgrade database file. Be sure you have write permissions on database directory.").arg(ApplicationNameString) );    
+            m_errorMessage.append( tr("\nCan't upgrade database file, be sure you have write permissions on database directory.") );    
         }
     }
 

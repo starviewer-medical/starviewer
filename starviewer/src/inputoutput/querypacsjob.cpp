@@ -106,7 +106,6 @@ QString QueryPacsJob::getStatusDescription()
 {
     QString message;
     QString pacsAETitle = getPacsDevice().getAETitle();
-    QString institutionPACS = getPacsDevice().getInstitution();
 
     switch (getStatus())
     {
@@ -117,18 +116,18 @@ QString QueryPacsJob::getStatusDescription()
             message = tr("Query %1 to PACS %2 has been cancelled.").arg(getQueryLevelAsQString(), pacsAETitle);
             break;
         case PACSRequestStatus::QueryCanNotConnectToPACS :
-            message = tr("%1 can't connect to PACS %2 from %3 trying to query %4.\n").arg(ApplicationNameString, pacsAETitle, institutionPACS, getQueryLevelAsQString());
+            message = tr("%1 can't connect to PACS %2 trying to query %3.\n").arg(ApplicationNameString, pacsAETitle, getQueryLevelAsQString());
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::QueryFailedOrRefused:
         case PACSRequestStatus::QueryUnknowStatus:
-            message = tr("%1 can't query %2 to PACS %3 from %4 because It doesn't respond as expected.\n\n").arg(ApplicationNameString, getQueryLevelAsQString(),
-                pacsAETitle, institutionPACS);
+            message = tr("%1 can't query %2 to PACS %3 because It doesn't respond as expected.\n\n")
+                .arg(ApplicationNameString, getQueryLevelAsQString(), pacsAETitle);
             message += tr("If the problem persists contact with an administrator.");
             break;
         default:
-            message = tr("An unknown error has ocurred querying %1 to PACS %2 from %3.").arg(getQueryLevelAsQString(), pacsAETitle, institutionPACS);
+            message = tr("An unknown error has ocurred querying %1 to PACS %2.").arg(getQueryLevelAsQString(), pacsAETitle);
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
     }

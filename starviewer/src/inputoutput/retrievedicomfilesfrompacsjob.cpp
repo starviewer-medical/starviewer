@@ -252,14 +252,14 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::RetrieveOk:
-            message = tr("Study %1 of patient %2 has been retrieved succesfully from PACS %3.").arg(studyID, patientName, pacsAETitle);
+            message = tr("Images from study %1 of patient %2 has been retrieved succesfully from PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCancelled:
-            message = tr("Retrive of study %1 of patient %2 from PACS %3 has been cancelled.").arg(studyID, patientName, pacsAETitle);
+            message = tr("Retrieve images from study %1 of patient %2 from PACS %3 has been cancelled.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCanNotConnectToPACS :
-            message += tr("%1 can't connect to PACS %2 trying to retrieve study %3 from patient %4.\n").arg(ApplicationNameString, pacsAETitle,
-                studyID,patientName);
+            message = tr("%1 can't connect to PACS %2 trying to retrieve images from study %3 of patient %4.\n")
+                .arg(ApplicationNameString, pacsAETitle, studyID,patientName);
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
@@ -269,50 +269,50 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 HardDiskInformation hardDiskInformation;
                 quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
                 quint64 minimumSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
-                message = tr("There is not enough space to retrieve studiy %1 from patient %2, please free space or change your Local Database settings.").arg(
+                message = tr("There is not enough space to retrieve images of study %1 from patient %2, please free space or change your Local Database settings.").arg(
                     studyID, patientName);
                 message += tr("\n\nAvailable space in Disk: %1 Mb").arg(freeSpaceInHardDisk);
                 message += tr("\nMinimum space required in Disk to retrieve studies: %1 Mb").arg(minimumSpaceRequired);
             }
             break;
         case PACSRequestStatus::RetrieveErrorFreeingSpace :
-            message += tr("An error ocurred freeing space the study %1 from patient %2 won't be retrieved.").arg(studyID, patientName);
+            message = tr("An error ocurred freeing space on harddisk, the images from study %1 of patient %2 won't be retrieved.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrieveDatabaseError :
-            message += tr("Study %1 from patient %2 can't be retreived because a database error ocurred.").arg(studyID, patientName);
+            message = tr("Images from study %1 of patient %2 can't be retrieved because a database error ocurred.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrievePatientInconsistent :
-            message += tr("\n%1 can't retrieve the study %2 from patient %3 becuase has not be capable of read correctly DICOM information of the study.").arg(
-                ApplicationNameString,  studyID, patientName);
+            message = tr("Images from study %1 of patient %2 can't be retrieved from PACS %3 because %4 has not be capable of read correctly data images.")
+                .arg(studyID, patientName, pacsAETitle, ApplicationNameString);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrieveDestinationAETileUnknown:
-            message += tr("The study %1 from patient %2 can't be retrieved because PACS %3 doesn't recognize your computer's AETitle %4.").arg(
-                    studyID, patientName, pacsAETitle, settings.getValue(InputOutputSettings::LocalAETitle).toString());
+            message = tr("Images from study %1 of patient %2 can't be retrieved because PACS %3 doesn't recognize your computer's AETitle %4.")
+                    .arg(studyID, patientName, pacsAETitle, settings.getValue(InputOutputSettings::LocalAETitle).toString());
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             break;
         case PACSRequestStatus::RetrieveUnknowStatus:
         case PACSRequestStatus::RetrieveFailureOrRefused:
-            message = tr("Please review the operation list screen, ");
-            message += tr("%1 can't retrieve study %2 from patient %3 because PACS %4 doesn't respond as expected.\n\n").arg(ApplicationNameString, studyID,
-                patientName, pacsAETitle);
+            message = tr("Images from study %1 of patient %2 can't be retrieved because PACS %3 doesn't respond as expected.\n\n")
+                .arg(studyID, patientName, pacsAETitle);
             message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
             break;
         case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse :
-            message = tr("%1 can't retrieve study %2 from patient %3 because port %4 for incoming connections from PACS is already in use by another application.").arg(
-                ApplicationNameString, studyID, patientName, settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString());
+            message = tr("Images from study %1 of patient %2 can't be retrieved because port %3 for incoming connections from PACS is already in use by another application.")
+                .arg(studyID, patientName, settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString());
             break;
         case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:
-            message = tr("There were problems to retrieve some images of study %1 from patient %2 from PACS %3. Those images may be missing in the local database.").arg(
-                studyID, patientName, pacsAETitle);
+            message = tr("%1 can't retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.")
+                .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += "\n";
             break;
         default:
-            message = tr("An unknown error has ocurred and %1 can't retrieve study %2 from patient %3").arg(ApplicationNameString, studyID, patientName);
+            message = tr("An unknown error has ocurred and %1 can't retrieve images from study %2 of patient %3 from PACS %4.")
+                .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;

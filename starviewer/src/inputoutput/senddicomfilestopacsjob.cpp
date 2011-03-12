@@ -86,38 +86,39 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::SendOk:
-            message = tr("Study %1 of patient %2 has been sent succesfully to PACS %3").arg(studyID, patientName, pacsAETitle);
+            message = tr("Images from study %1 of patient %2 has been sent succesfully to PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendCanNotConnectToPACS:
-            message = tr("%1 can't send DICOM files of study %2 of patient %3 because can't connect to PACS %4.\n").arg(ApplicationNameString, 
-                studyID, patientName, pacsAETitle);
+            message = tr("%1 can't send DICOM images from study %2 of patient %3 because can't connect to PACS %4.\n")
+                .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::SendAllDICOMFilesFailed:
         case PACSRequestStatus::SendUnknowStatus:
-            message = tr("The send of DICOM files from study %1 of patient %2 to PACS %3 has failed.\n\n").arg(studyID, patientName, pacsAETitle); 
+            message = tr("The sent images from study %1 of patient %2 to PACS %3 has failed.\n\n")
+                .arg(studyID, patientName, pacsAETitle); 
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
             break;
         case PACSRequestStatus::SendSomeDICOMFilesFailed:
-            message = tr("%1 DICOM files from study %2 of patient %3 can't be send because PACS %4 has rejected them.\n\n").arg(
+            message = tr("%1 images from study %2 of patient %3 can't be sent because PACS %4 has rejected them.\n\n").arg(
                 QString().setNum(m_sendDICOMFilesToPACS->getNumberOfDICOMFilesSentFailed()), studyID, patientName, pacsAETitle);
             message += tr("Please contact with an administrator to solve the problem.");
             break;
         case PACSRequestStatus::SendWarningForSomeImages:
-            message = tr("The study %1 of patient %2 has been sent, but it's possible that the PACS %3 has changed some data of some images.").arg(
+            message = tr("The images from study %1 of patient %2 has been sent, but it's possible that the PACS %3 has changed some data of them.").arg(
                 studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendCancelled:
-            message = tr("The sent of study %1 from patient %2 to PACS %3 has been cnacelled.").arg(
+            message = tr("The sent of images from study %1 from patient %2 to PACS %3 has been cancelled.").arg(
                 studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendPACSConnectionBroken:
-            message = tr("The connection with PACS %1 has been broken sending the DICOM Files from study %2 of patient %3. ").arg(pacsAETitle, studyID, patientName);
+            message = tr("The connection with PACS %1 has been broken sending images from study %2 of patient %3.\n\n").arg(pacsAETitle, studyID, patientName);
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
             break;
         default:
-            message = tr("An unknown error has ocurred sending DICOM files from study %1 of patient %2 to PACS %3 .").arg(
+            message = tr("An unknown error has ocurred sending images from study %1 of patient %2 to PACS %3.").arg(
                 studyID, patientName, pacsAETitle);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);

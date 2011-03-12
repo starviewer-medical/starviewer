@@ -499,7 +499,7 @@ void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
 #ifndef STARVIEWER_LITE
 void QueryScreen::showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs)
 {
-    QProgressDialog progressDialog(tr("Cancelling PACS operations"), "", 0, 0);
+    QProgressDialog progressDialog(tr("Cancelling PACS operations..."), "", 0, 0);
     QTime timer;
 
     progressDialog.setModal(true);
