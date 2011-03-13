@@ -1590,7 +1590,7 @@ Variable de entorno(logFilePath): %2</translation>
         <location filename="qwindowlevelcombobox.cpp" line="145"/>
         <location filename="qwindowlevelcombobox.cpp" line="154"/>
         <source>Edit Custom WW/WL</source>
-        <translation type="unfinished">Editar els WW/WL personalizados</translation>
+        <translation type="unfinished">Editar los WW/WL personalizados</translation>
     </message>
 </context>
 <context>
