@@ -116,10 +116,10 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
 {
     QString valueString;
 
-    Volume::VoxelType voxelValue;
+    QVector<double> voxelValue;
     if (m_2DViewer->getInput()->getVoxelValue(worldCoordinate, voxelValue))
     {
-        valueString = QString("%1").arg(voxelValue);        
+        valueString = QString("%1").arg(voxelValue.at(0));        
     }
     else
     {

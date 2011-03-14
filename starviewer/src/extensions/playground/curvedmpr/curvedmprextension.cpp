@@ -628,12 +628,12 @@ vtkImageData* CurvedMPRExtension::initAndFillImageDataVTK()
                 // i per cada imatge
                 point[zIndex] = depth;
 
-                Volume::VoxelType voxelValue;
+                QVector<double> voxelValue;
                 if (m_mainVolume->getVoxelValue(point, voxelValue))
                 {
                     // Accedim a la posició del volum on es vol modificar el valor del píxel
                     signed short * scalarPointer = (signed short *) imageDataVTK->GetScalarPointer(x, y, idxImage);
-                    *scalarPointer = voxelValue;
+                    *scalarPointer = static_cast<signed short>(voxelValue.at(0));
                 }
 
                 depth += spacing;
