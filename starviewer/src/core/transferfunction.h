@@ -174,8 +174,8 @@ private:
     ColorTransferFunction m_color;
     /// Funció de transferència d'opacitat escalar.
     OpacityTransferFunction m_scalarOpacity;
-	/// Funció de transferència d'opacitat del gradient.
-	OpacityTransferFunction m_gradientOpacity;
+    /// Funció de transferència d'opacitat del gradient.
+    OpacityTransferFunction m_gradientOpacity;
     /// Llista de valors de propietat x de tots els punts de color (x,c) i opacitat escalar (x,o) definits explícitament.
     mutable QList<double> m_keys;
     /// Indica si hi ha hagut canvis a la funció des de l'últim cop que s'ha actualitzat m_keys.
