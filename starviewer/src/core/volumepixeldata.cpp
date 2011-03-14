@@ -65,8 +65,9 @@ VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int 
     return static_cast<VolumePixelData::VoxelType *>(this->getVtkData()->GetScalarPointer(x,y,z));
 }
 
-bool VolumePixelData::getVoxelValue(double coordinate[3], VolumePixelData::VoxelType &voxelValue)
+bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxelValue)
 {
+    voxelValue.clear();
     vtkImageData *vtkData = this->getVtkData();
     if (!vtkData)
     {
@@ -91,7 +92,10 @@ bool VolumePixelData::getVoxelValue(double coordinate[3], VolumePixelData::Voxel
         outPointData->InterpolateAllocate(pointData, 1, 1);
         // Interpolate the point data
         outPointData->InterpolatePoint(pointData, 0, cell->PointIds, interpolationWeights);
-        voxelValue = outPointData->GetScalars()->GetTuple1(0);
+        for (int i = 0; i < outPointData->GetNumberOfComponents(); ++i)
+        {
+            voxelValue << outPointData->GetScalars()->GetComponent(0, i);
+        }
         found = true;
         outPointData->Delete();
     }
