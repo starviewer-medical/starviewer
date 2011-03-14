@@ -280,7 +280,7 @@ void Q3DViewer::setWindowLevel(double window , double level)
                 newX = 0.0;
                 pointInZero = true;
             }
-            else if (newX > m_range)
+            else if (newX >= m_range)
             {
                 newX = m_range;
                 pointInRange = true;
@@ -498,6 +498,10 @@ void Q3DViewer::setInput(Volume *volume)
     m_canEnableShading = dimensions[0] > 1 && dimensions[1] > 1 && dimensions[2] > 1;   // ens basem només en les dimensions; de moment donem per fet que hi ha prou memòria
 
     applyCurrentRenderingMethod();
+
+    // apliquem el window/level actual
+    setWindowLevel(m_window, m_level);
+
     // indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
 }
