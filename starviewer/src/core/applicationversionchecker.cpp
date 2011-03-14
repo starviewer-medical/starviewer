@@ -448,7 +448,7 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
      
         if (scriptValue.property("error").isObject())
         {
-            ERROR_LOG(QString("Error parsejant el json ") + scriptValue.property("error").property("code").toString() + QString(": ") + scriptValue.property("error").property("message").toString());
+            ERROR_LOG(QString("Error llegint la resposta del servidor (error en el json) ") + scriptValue.property("error").property("code").toString() + QString(": ") + scriptValue.property("error").property("message").toString());
             setCheckFinished();
         }
         else
@@ -460,16 +460,19 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
                 
                 connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(updateNotesUrlReply(QNetworkReply*)));
                 m_manager->get(QNetworkRequest(QUrl(releaseNotesURL)));
+
+                INFO_LOG(QString("S'ha trobat una nova versió en el servidor, %1.").arg(m_checkedVersion));
             }
             else
             {
+                INFO_LOG("Starviewer està actualitzat. No s'ha trobat cap versió nova al servidor.");
                 setCheckFinished();
             }
         }        
     }
     else
     {
-        ERROR_LOG(QString("Error de la resposta del webservice, tipus ") + QString::number(reply->error()) + QString(": ") + reply->errorString());
+        ERROR_LOG(QString("Error buscant noves versions al server. La resposta del webservice és del tipus ") + QString::number(reply->error()) + QString(": ") + reply->errorString());
         setCheckFinished();
     }
     reply->deleteLater();
@@ -489,12 +492,21 @@ void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
             if(!m_neverShowNewVersionReleaseNotes)
             {
                 m_somethingToShow = true;
+                INFO_LOG(QString("Es mostren les notes: %1").arg(reply->url().toString()));
             }
+            else
+            {
+                INFO_LOG("No es mostren les release notes perquè l'usuari no ho vol");
+            }
+        }
+        else
+        {
+            INFO_LOG("No es mostren les notes de la nova versió del servidor, per que ja s'han mostrat anteriorment");
         }
     }
     else
     {
-        ERROR_LOG(QString("Error en rebre les notes de la versio, tipus ") + QString::number(reply->error()) + QString(": ") + reply->errorString());        
+        ERROR_LOG(QString("Error en rebre les notes de la versio %1, tipus ").arg(m_checkedVersion) + QString::number(reply->error()) + QString(": ") + reply->errorString());        
     }
     reply->deleteLater();
     setCheckFinished();       
