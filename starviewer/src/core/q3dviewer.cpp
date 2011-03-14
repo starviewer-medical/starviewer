@@ -401,13 +401,17 @@ QString Q3DViewer::getRenderFunctionAsString()
 
 void Q3DViewer::setInput(Volume *volume)
 {
+    setCursor(Qt::WaitCursor);
+
     if(!checkInputVolume(volume))
     {
+        unsetCursor();
         return;
     }
 
     if (!rescale(volume))
     {
+        unsetCursor();
         return;
     }
 
@@ -504,6 +508,8 @@ void Q3DViewer::setInput(Volume *volume)
 
     // indiquem el canvi de volum
     emit volumeChanged(m_mainVolume);
+
+    unsetCursor();
 }
 
 void Q3DViewer::applyCurrentRenderingMethod()
