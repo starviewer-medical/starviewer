@@ -14,6 +14,8 @@
 #include "series.h"
 #include "mathtools.h"
 
+#include <QApplication>
+
 namespace udg {
 
 ROITool::ROITool(QViewer *viewer, QObject *parent)
@@ -312,8 +314,12 @@ void ROITool::printData()
         areaUnits = "mm2";
     }
 
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     // Calculem les dades estadístiques
     computeStatisticsData();
+
+    QApplication::restoreOverrideCursor();
 
     DrawerText *text = new DrawerText;
     text->setText(tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg(m_roiPolygon->computeArea(m_2DViewer->getView(), spacing), 0, 'f', 0).arg(areaUnits).arg(m_mean, 0, 'f', 2).arg(m_standardDeviation, 0, 'f', 2));
