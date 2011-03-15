@@ -35,28 +35,6 @@ ROITool::~ROITool()
 {
 }
 
-Volume::VoxelType ROITool::getGrayValue(double *coordinate)
-{
-    double *origin = m_2DViewer->getInput()->getOrigin();
-    double *spacing = m_2DViewer->getInput()->getSpacing();
-    int index[3];
-
-    int xIndex, yIndex, zIndex;
-    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
-    index[xIndex] = (int)((coordinate[xIndex] - origin[xIndex]) / spacing[xIndex]);
-    index[yIndex] = (int)((coordinate[yIndex] - origin[yIndex]) / spacing[yIndex]);
-    index[zIndex] = m_2DViewer->getCurrentSlice();
-
-    if (m_2DViewer->isThickSlabActive())
-    {
-        return *((Volume::VoxelType *)m_2DViewer->getCurrentSlabProjection()->GetScalarPointer(index));
-    }
-    else
-    {
-        return *(m_2DViewer->getInput()->getScalarPointer(index));
-    }
-}
-
 void ROITool::computeStatisticsData()
 {
     Q_ASSERT(m_roiPolygon);
@@ -162,6 +140,18 @@ void ROITool::computeStatisticsData()
     }
 
     int intersectionState;
+    // Obtenim el punter al contenidor de píxels amb el que calcularem els valors
+    VolumePixelData *pixelData = 0;
+    if (m_2DViewer->isThickSlabActive())
+    {
+        pixelData = new VolumePixelData;
+        pixelData->setData(m_2DViewer->getCurrentSlabProjection());
+    }
+    else
+    {
+        pixelData = m_2DViewer->getInput()->getPixelData();
+    }
+    
     // Inicialitzem la llista de valors de gris
     m_grayValues.clear();
     while (sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit)
@@ -224,7 +214,11 @@ void ROITool::computeStatisticsData()
                 {
                     while (firstIntersection[intersectionCoordinateIndex] <= secondIntersection[intersectionCoordinateIndex])
                     {
-                        m_grayValues << (double)getGrayValue(firstIntersection);
+                        QVector<double> voxelValue;
+                        if (pixelData->getVoxelValue(firstIntersection, voxelValue))
+                        {
+                            m_grayValues << voxelValue.at(0);
+                        }
                         firstIntersection[intersectionCoordinateIndex] += horizontalSpacingIncrement;
                     }
                 }
@@ -232,7 +226,11 @@ void ROITool::computeStatisticsData()
                 {
                     while (firstIntersection[intersectionCoordinateIndex] >= secondIntersection[intersectionCoordinateIndex])
                     {
-                        m_grayValues << (double)getGrayValue(firstIntersection);
+                        QVector<double> voxelValue;
+                        if (pixelData->getVoxelValue(firstIntersection, voxelValue))
+                        {
+                            m_grayValues << voxelValue.at(0);
+                        }
                         firstIntersection[intersectionCoordinateIndex] -= horizontalSpacingIncrement;
                     }
                 }
@@ -277,6 +275,12 @@ void ROITool::computeStatisticsData()
 
     // Ja s'han calculat les dades estadístiques
     m_hasToComputeStatisticsData = false;
+
+    // Alliberem el pixel data, en cas que haguem creat un nou objecte
+    if (m_2DViewer->isThickSlabActive())
+    {
+        delete pixelData;
+    }
 }
 
 void ROITool::printData()

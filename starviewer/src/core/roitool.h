@@ -57,9 +57,6 @@ protected:
     double m_standardDeviation;
 
 private:
-    /// Calcula el vòxel a partir de l'espaiat de la imatge i la coordenada i retorna el valor de gris
-    Volume::VoxelType getGrayValue(double *coordinate);
-
     /// Calcula les dades estadístiques de la ROI. 
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
     void computeStatisticsData();
