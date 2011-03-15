@@ -101,7 +101,7 @@ Volume * VolumeBuilderFromCaptures::build()
     //Fem un flip horitzontal per tal utilitzar el mateix sistema de coordenades que DICOM.
     m_vtkImageAppend->Update();
 
-    vtkImageData * newVtkData = vtkImageData::New();
+    vtkSmartPointer<vtkImageData> newVtkData = vtkSmartPointer<vtkImageData>::New();
     newVtkData->ShallowCopy( m_vtkImageAppend->GetOutput() );
 
     //Creem el nou volume
