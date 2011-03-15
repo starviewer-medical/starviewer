@@ -318,15 +318,21 @@ void ROITool::printData()
         areaUnits = "mm2";
     }
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
-    // Calculem les dades estadístiques
-    computeStatisticsData();
-
-    QApplication::restoreOverrideCursor();
+    QString annotation = tr("Area: %1 %2").arg(m_roiPolygon->computeArea(m_2DViewer->getView(), spacing), 0, 'f', 0).arg(areaUnits);
+    // Només calcularem mitjana i desviació estàndar per imatges monocrom.
+    if (m_2DViewer->getInput()->getImage(0)->getPhotometricInterpretation().contains("MONOCHROME"))
+    {
+        // Calculem les dades estadístiques
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        computeStatisticsData();
+        QApplication::restoreOverrideCursor();
+        
+        // Afegim la informació de les dades estadístiques a l'annotació
+        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(m_mean, 0, 'f', 2).arg(m_standardDeviation, 0, 'f', 2);
+    }
 
     DrawerText *text = new DrawerText;
-    text->setText(tr("Area: %1 %2\nMean: %3\nSt.Dev.: %4").arg(m_roiPolygon->computeArea(m_2DViewer->getView(), spacing), 0, 'f', 0).arg(areaUnits).arg(m_mean, 0, 'f', 2).arg(m_standardDeviation, 0, 'f', 2));
+    text->setText(annotation);
 
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
