@@ -64,7 +64,7 @@ public:
     virtual vtkRenderer* getRenderer();
 
     /// Ens retorna el volum d'entrada
-    virtual Volume* getInput(void) { return m_mainVolume; }
+    virtual Volume* getInput() { return m_mainVolume; }
 
     /// Retorna el vtkRenderWindow
     vtkRenderWindow* getRenderWindow();
