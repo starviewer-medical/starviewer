@@ -119,7 +119,19 @@ QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])
     QVector<double> voxelValue;
     if (m_2DViewer->getInput()->getVoxelValue(worldCoordinate, voxelValue))
     {
-        valueString = QString("%1").arg(voxelValue.at(0));        
+        if (voxelValue.size() == 1)
+        {
+            valueString = QString("%1").arg(voxelValue.at(0));
+        }
+        else
+        {
+            valueString = QString("(%1").arg(voxelValue.at(0));
+            for (int i = 1; i < voxelValue.size(); i++)
+            {
+                valueString += QString(", %1").arg(voxelValue.at(i));
+            }
+            valueString += ")";
+        }
     }
     else
     {
