@@ -1248,7 +1248,14 @@ void QExperimental3DExtension::loadColorTransferFunction(const QString &fileName
     else transferFunction = TransferFunctionIO::fromFile(fileName);
 
     TransferFunction currentTransferFunction = m_transferFunctionEditor->transferFunction();
-    currentTransferFunction.setColorTransferFunction(transferFunction->colorTransferFunction());
+    if (m_viewClusterizedVolume)
+    {
+        currentTransferFunction.setColorTransferFunction(normalToClusterizedTransferFunction2D(*transferFunction).colorTransferFunction());
+    }
+    else
+    {
+        currentTransferFunction.setColorTransferFunction(transferFunction->colorTransferFunction());
+    }
     m_transferFunctionEditor->setTransferFunction(currentTransferFunction);
     syncNormalToGradientTransferFunction();
 
@@ -5438,11 +5445,14 @@ void QExperimental3DExtension::create2DClusterizedVolume()
 }
 
 
-void QExperimental3DExtension::normalToClusterizedTransferFunction2D()
+TransferFunction QExperimental3DExtension::normalToClusterizedTransferFunction2D(const TransferFunction &normalTransferFunction) const
 {
-    if (m_intensityGradientMap.isEmpty()) return;
+    if (m_intensityGradientMap.isEmpty())
+    {
+        return normalTransferFunction;
+    }
 
-    m_clusterizedTransferFunction.clear();
+    TransferFunction clusterizedTransferFunction;
 
     for (int i = 0; i < m_intensityClusters.size(); i++)
     {
@@ -5450,7 +5460,7 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction2D()
         double x2 = m_intensityClusters[i].last();
         double x = (x1 + x2) / 2.0;
 
-        QColor color = m_normalTransferFunction.getColor(x);    // color del punt mig
+        QColor color = normalTransferFunction.getColor(x);  // color del punt mig
         double opacity = 0.0;
 
         if (m_transferFunctionFromIntensityClusteringOpacityDefaultMinimumRadioButton->isChecked()) // l'opacitat serà la mínima de la funció per defecte
@@ -5459,32 +5469,38 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction2D()
         }
         else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked())    // l'opacitat serà la mínima del rang
         {
-            QList<double> points = m_normalTransferFunction.keys(x1, x2);
+            QList<double> points = normalTransferFunction.keys(x1, x2);
             points.prepend(x1); points.append(x2);  // per si no hi són
             opacity = 1.0;
 
             for (int j = 0; j < points.size(); j++)
             {
-                double a = m_normalTransferFunction.getOpacity(points.at(j));
-                if (a < opacity) opacity = a;
+                double a = normalTransferFunction.getOpacity(points.at(j));
+                if (a < opacity)
+                {
+                    opacity = a;
+                }
             }
         }
         else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())   // l'opacitat serà la mitjana de l'interval
         {
-            QList<double> points = m_normalTransferFunction.keys(x1, x2);
+            QList<double> points = normalTransferFunction.keys(x1, x2);
             points.prepend(x1); points.append(x2);  // per si no hi són
             opacity = 0.0;
 
             for (int j = 1; j < points.size(); j++)
             {
-                double a1 = m_normalTransferFunction.getOpacity(points.at(j - 1));
-                double a2 = m_normalTransferFunction.getOpacity(points.at(j));
+                double a1 = normalTransferFunction.getOpacity(points.at(j - 1));
+                double a2 = normalTransferFunction.getOpacity(points.at(j));
                 opacity += (points.at(j) - points.at(j - 1)) * (a1 + a2) / 2.0;
             }
 
             opacity /= x2 - x1;
 
-            if (x1 == x2) opacity = m_normalTransferFunction.getOpacity(x); // cas especial
+            if (x1 == x2)   // cas especial
+            {
+                opacity = normalTransferFunction.getOpacity(x);
+            }
         }
 
         for (int k = 0; k < m_gradientClusters.size(); k++)
@@ -5502,45 +5518,62 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction2D()
             else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMinimumRadioButton->isChecked())    // l'opacitat serà la mínima del rang
             {
                 TransferFunction aux;   // per poder cridar keys(y1, y2)
-                aux.setScalarOpacityTransferFunction(m_normalTransferFunction.gradientOpacityTransferFunction());
+                aux.setScalarOpacityTransferFunction(normalTransferFunction.gradientOpacityTransferFunction());
                 QList<double> points = aux.keys(y1, y2);
                 points.prepend(y1); points.append(y2);  // per si no hi són
                 gradientOpacity = 1.0;
 
                 for (int j = 0; j < points.size(); j++)
                 {
-                    double a = m_normalTransferFunction.getGradientOpacity(points.at(j));
-                    if (a < gradientOpacity) gradientOpacity = a;
+                    double a = normalTransferFunction.getGradientOpacity(points.at(j));
+                    if (a < gradientOpacity)
+                    {
+                        gradientOpacity = a;
+                    }
                 }
             }
             else if (m_transferFunctionFromIntensityClusteringOpacityCurrentMeanRadioButton->isChecked())   // l'opacitat serà la mitjana de l'interval
             {
                 TransferFunction aux;   // per poder cridar keys(y1, y2)
-                aux.setScalarOpacityTransferFunction(m_normalTransferFunction.gradientOpacityTransferFunction());
+                aux.setScalarOpacityTransferFunction(normalTransferFunction.gradientOpacityTransferFunction());
                 QList<double> points = aux.keys(y1, y2);
                 points.prepend(y1); points.append(y2);  // per si no hi són
                 gradientOpacity = 0.0;
 
                 for (int j = 1; j < points.size(); j++)
                 {
-                    double a1 = m_normalTransferFunction.getGradientOpacity(points.at(j - 1));
-                    double a2 = m_normalTransferFunction.getGradientOpacity(points.at(j));
+                    double a1 = normalTransferFunction.getGradientOpacity(points.at(j - 1));
+                    double a2 = normalTransferFunction.getGradientOpacity(points.at(j));
                     gradientOpacity += (points.at(j) - points.at(j - 1)) * (a1 + a2) / 2.0;
                 }
 
                 gradientOpacity /= y2 - y1;
 
-                if (y1 == y2) gradientOpacity = m_normalTransferFunction.getGradientOpacity(y); // cas especial
+                if (y1 == y2)   // cas especial
+                {
+                    gradientOpacity = normalTransferFunction.getGradientOpacity(y);
+                }
             }
 
-            m_clusterizedTransferFunction.set(cluster2DIndexFromBins(i, k), color, opacity * gradientOpacity);
+            clusterizedTransferFunction.set(cluster2DIndexFromBins(i, k), color, opacity * gradientOpacity);
         }
     }
 
 //    DEBUG_LOG("normal transfer function");
-//    DEBUG_LOG(m_normalTransferFunction.toString());
+//    DEBUG_LOG(normalTransferFunction.toString());
 //    DEBUG_LOG("clusterized transfer function");
-//    DEBUG_LOG(m_clusterizedTransferFunction.toString());
+//    DEBUG_LOG(clusterizedTransferFunction.toString());
+
+    return clusterizedTransferFunction;
+}
+
+
+void QExperimental3DExtension::normalToClusterizedTransferFunction2D()
+{
+    if (!m_intensityGradientMap.isEmpty())
+    {
+        m_clusterizedTransferFunction = normalToClusterizedTransferFunction2D(m_normalTransferFunction);
+    }
 }
 
 

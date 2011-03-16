@@ -341,6 +341,7 @@ private slots:
     void updateIntensityGradientClusteringTotal();
     void intensityGradientClustering();
     void create2DClusterizedVolume();
+    TransferFunction normalToClusterizedTransferFunction2D(const TransferFunction &normalTransferFunction) const;
     void normalToClusterizedTransferFunction2D();
     void clusterizedToNormalTransferFunction2D();
 
