@@ -69,7 +69,8 @@ void ExtensionWorkspace::removeApplication( QWidget *application )
         {
             this->setDarkBackgroundColorEnabled(true);
         }
-
+        // Esborrem de memòria l'extensió
+        delete application;
     }
     else
     {
@@ -84,7 +85,6 @@ void ExtensionWorkspace::killThemAll()
     {
         QWidget *currentExtension = this->widget(i);
         removeApplication( currentExtension );
-        delete currentExtension;
     }
 }
 
@@ -97,7 +97,6 @@ void ExtensionWorkspace::closeCurrentApplication()
 {
     QWidget *w = this->currentWidget();
     removeApplication( w );
-    delete w;
 }
 
 void ExtensionWorkspace::closeApplicationByTabIndex(int index)
