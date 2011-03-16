@@ -23,11 +23,6 @@
 #include "starviewerapplication.h"
 #include "interfacesettings.h"
 
-// Espai reservat pels include de les mini-apps
-#include "appimportfile.h"
-
-// Fi de l'espai reservat pels include de les mini-apps
-
 // PACS --------------------------------------------
 #include "queryscreen.h"
 #include "patientfiller.h"
@@ -40,9 +35,6 @@ ExtensionHandler::ExtensionHandler(QApplicationMainWindow *mainApp, QObject *par
  : QObject(parent )
 {
     m_mainApp = mainApp;
-
-    // Aquí en principi només farem l'inicialització
-    m_importFileApp = new AppImportFile;
 
     createConnections();
 
@@ -71,11 +63,11 @@ void ExtensionHandler::request( int who )
     switch( who )
     {
         case 1:
-            m_importFileApp->open();
+            m_importFileApp.open();
             break;
 
         case 6:
-            m_importFileApp->openDirectory();
+            m_importFileApp.openDirectory();
             break;
 
         case 7:
@@ -183,7 +175,7 @@ void ExtensionHandler::updateConfiguration(const QString &configuration)
 
 void ExtensionHandler::createConnections()
 {
-    connect( m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
+    connect( &m_importFileApp,SIGNAL( selectedFiles(QStringList) ), SLOT(processInput(QStringList) ) );
 }
 
 void ExtensionHandler::processInput(const QStringList &inputFiles)
