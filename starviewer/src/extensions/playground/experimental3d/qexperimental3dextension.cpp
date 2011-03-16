@@ -1008,6 +1008,7 @@ void QExperimental3DExtension::createConnections()
 
     // funcions de transferència
     connect( m_loadTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( loadTransferFunction() ) );
+    connect(m_loadColorTransferFunctionPushButton, SIGNAL(clicked()), SLOT(loadColorTransferFunction()));
     connect( m_saveTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( saveTransferFunction() ) );
     connect( m_addRecentTransferFunctionPushButton, SIGNAL( clicked() ), SLOT( addRecentTransferFunction() ) );
     connect( m_recentTransferFunctionsListView, SIGNAL( doubleClicked(const QModelIndex&) ), SLOT( setRecentTransferFunction(const QModelIndex&) ) );
@@ -1225,6 +1226,31 @@ void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
     QString name = transferFunction->name();
     if ( name.isEmpty() ) name = tr("<unnamed>");
     m_recentTransferFunctionsModel->setData( m_recentTransferFunctionsModel->index( row, 0 ), name );
+
+    delete transferFunction;
+
+    setTransferFunction();
+}
+
+
+void QExperimental3DExtension::loadColorTransferFunction()
+{
+    QString transferFunctionFileName = getFileNameToLoad(Experimental3DSettings::TransferFunctionDir, tr("Load color transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"));
+    if (!transferFunctionFileName.isNull()) loadColorTransferFunction(transferFunctionFileName);
+}
+
+
+void QExperimental3DExtension::loadColorTransferFunction(const QString &fileName)
+{
+    TransferFunction *transferFunction;
+
+    if (fileName.endsWith(".xml")) transferFunction = TransferFunctionIO::fromXmlFile(fileName);
+    else transferFunction = TransferFunctionIO::fromFile(fileName);
+
+    TransferFunction currentTransferFunction = m_transferFunctionEditor->transferFunction();
+    currentTransferFunction.setColorTransferFunction(transferFunction->colorTransferFunction());
+    m_transferFunctionEditor->setTransferFunction(currentTransferFunction);
+    syncNormalToGradientTransferFunction();
 
     delete transferFunction;
 

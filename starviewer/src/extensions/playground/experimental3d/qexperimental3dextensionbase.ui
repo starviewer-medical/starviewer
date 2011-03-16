@@ -1619,6 +1619,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="m_loadColorTransferFunctionPushButton">
+           <property name="text">
+            <string>Load color...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="m_addRecentTransferFunctionPushButton">
            <property name="text">
             <string>Add to recent</string>
@@ -2308,7 +2315,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>500</width>
+            <width>428</width>
             <height>909</height>
            </rect>
           </property>
