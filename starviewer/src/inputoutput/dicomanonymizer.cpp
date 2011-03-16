@@ -25,7 +25,7 @@ DICOMAnonymizer::DICOMAnonymizer()
 
 DICOMAnonymizer::~DICOMAnonymizer()
 {
-    delete gdcmAnonymizer;
+    delete m_gdcmAnonymizer;
 }
 
 void DICOMAnonymizer::setPatientNameAnonymized(const QString &patientNameAnonymized)
@@ -70,7 +70,7 @@ bool DICOMAnonymizer::getRemovePrivateTags()
 
 void DICOMAnonymizer::initializeGDCM()
 {
-    gdcmAnonymizer = new gdcm::gdcmAnonymizerStarviewer();
+    m_gdcmAnonymizer = new gdcm::gdcmAnonymizerStarviewer();
     gdcm::Global *gdcmGlobalInstance = &gdcm::Global::GetInstance();
 
     //Indiquem el directori on pot trobar el fitxer part3.xml que és un diccionari DICOM.
@@ -143,28 +143,28 @@ bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QSt
     QString originalPatientID = readTagValue(&gdcmFile, gdcm::Tag(0x0010, 0x0020));
     QString originalStudyInstanceUID = readTagValue(&gdcmFile, gdcm::Tag(0x0020, 0x000d));
 
-    gdcmAnonymizer->SetFile(gdcmFile);
-    if (!gdcmAnonymizer->BasicApplicationLevelConfidentialityProfile(true))
+    m_gdcmAnonymizer->SetFile(gdcmFile);
+    if (!m_gdcmAnonymizer->BasicApplicationLevelConfidentialityProfile(true))
     {
         ERROR_LOG("No s'ha pogut anonimitzar el fitxer " + inputPathFile);
         return false;
     }
 
-    gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), qPrintable(m_patientNameAnonymized)); //Estableix el mom del pacient anonimitzat
+    m_gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), qPrintable(m_patientNameAnonymized)); //Estableix el mom del pacient anonimitzat
     
     if (getReplacePatientIDInsteadOfRemove())
     {
-        gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0020), qPrintable(getAnonimyzedPatientID(originalPatientID))); //ID Pacient
+        m_gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0020), qPrintable(getAnonimyzedPatientID(originalPatientID))); //ID Pacient
     }
 
     if (getReplaceStudyIDInsteadOfRemove())
     {
-        gdcmAnonymizer->Replace(gdcm::Tag(0x0020, 0x0010), qPrintable(getAnonymizedStudyID(originalStudyInstanceUID))); //ID Estudi
+        m_gdcmAnonymizer->Replace(gdcm::Tag(0x0020, 0x0010), qPrintable(getAnonymizedStudyID(originalStudyInstanceUID))); //ID Estudi
     }
 
     if (getRemovePrivateTags())
     {
-        if (!gdcmAnonymizer->RemovePrivateTags())
+        if (!m_gdcmAnonymizer->RemovePrivateTags())
         {
             ERROR_LOG("No s'ha pogut treure els tags privats del fitxer " + inputPathFile);
             return false;            
@@ -184,27 +184,27 @@ bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QSt
         return false;
     }
 
-  return true;
+    return true;
 }
 
 QString DICOMAnonymizer::getAnonimyzedPatientID(const QString &originalPatientID)
 {
-    if (!hashOriginalPatientIDToAnonimyzedPatientID.contains(originalPatientID))
+    if (!m_hashOriginalPatientIDToAnonimyzedPatientID.contains(originalPatientID))
     {
-        hashOriginalPatientIDToAnonimyzedPatientID.insert(originalPatientID, QString::number(hashOriginalPatientIDToAnonimyzedPatientID.count() + 1));
+        m_hashOriginalPatientIDToAnonimyzedPatientID.insert(originalPatientID, QString::number(m_hashOriginalPatientIDToAnonimyzedPatientID.count() + 1));
     }
     
-    return hashOriginalPatientIDToAnonimyzedPatientID.value(originalPatientID);
+    return m_hashOriginalPatientIDToAnonimyzedPatientID.value(originalPatientID);
 }
 
 QString DICOMAnonymizer::getAnonymizedStudyID(const QString &originalStudyInstanceUID)
 {
-    if (!hashOriginalStudyInstanceUIDToAnonimyzedStudyID.contains(originalStudyInstanceUID))
+    if (!m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.contains(originalStudyInstanceUID))
     {
-        hashOriginalStudyInstanceUIDToAnonimyzedStudyID.insert(originalStudyInstanceUID, QString::number(hashOriginalStudyInstanceUIDToAnonimyzedStudyID.count() + 1));
+        m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.insert(originalStudyInstanceUID, QString::number(m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.count() + 1));
     }
 
-    return hashOriginalStudyInstanceUIDToAnonimyzedStudyID.value(originalStudyInstanceUID);
+    return m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.value(originalStudyInstanceUID);
 }
 
 

@@ -86,10 +86,10 @@ private:
     bool m_replaceStudyIDInsteadOfRemove;
     bool m_removePritaveTags;
 
-    QHash<QString, QString> hashOriginalPatientIDToAnonimyzedPatientID;
-    QHash<QString, QString> hashOriginalStudyInstanceUIDToAnonimyzedStudyID;
+    QHash<QString, QString> m_hashOriginalPatientIDToAnonimyzedPatientID;
+    QHash<QString, QString> m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID;
 
-    gdcm::gdcmAnonymizerStarviewer *gdcmAnonymizer;
+    gdcm::gdcmAnonymizerStarviewer *m_gdcmAnonymizer;
 };
 
 };
