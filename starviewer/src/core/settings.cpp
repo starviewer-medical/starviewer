@@ -22,6 +22,11 @@ Settings::Settings()
 
 Settings::~Settings()
 {
+    // Alliberem la memòria ocupada pels objectes
+    foreach (QSettings *setting, m_qsettingsObjectsMap)
+    {
+        delete setting;
+    }
 }
 
 QVariant Settings::getValue(const QString &key) const
