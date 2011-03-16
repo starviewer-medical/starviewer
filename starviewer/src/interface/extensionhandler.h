@@ -12,12 +12,12 @@
 #include <QList>
 #include "patient.h"
 #include "extensioncontext.h"
+#include "appimportfile.h"
 
 namespace udg {
 
 // Fordward Declarations
 class QApplicationMainWindow;
-class AppImportFile;
 
 /**
 Gestor de mini-aplicacions i serveis de l'aplicació principal
@@ -94,7 +94,7 @@ private:
     QApplicationMainWindow *m_mainApp;
 
     /// Importar models del sistema de fitxers al repositori de volums
-    AppImportFile *m_importFileApp;
+    AppImportFile m_importFileApp;
 
     /// Contexte de l'extensió
     ExtensionContext m_extensionContext;
