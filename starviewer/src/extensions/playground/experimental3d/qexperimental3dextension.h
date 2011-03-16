@@ -192,6 +192,7 @@ private:
     QString getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix );
 
     void loadTransferFunction( const QString &fileName );
+    void loadColorTransferFunction(const QString &fileName);
     void saveTransferFunction( const QString &fileName );
     void loadCamera( const QString &fileName );
 
@@ -230,6 +231,7 @@ private slots:
     void chooseBackgroundColor();
     /// Obre un diàleg per carregar una funció de transferència.
     void loadTransferFunction();
+    void loadColorTransferFunction();
     /// Obre un diàleg per desar una funció de transferència.
     void saveTransferFunction();
     void addRecentTransferFunction();
