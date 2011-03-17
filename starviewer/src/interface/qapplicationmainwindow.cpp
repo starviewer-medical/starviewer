@@ -627,14 +627,12 @@ void QApplicationMainWindow::showBetaVersionDialog()
 {
     QMessageBox::warning(this, tr("Beta version"),
                          tr("<h2>%1</h2>"
-                            "<p align='justify'>This is a preview release of %1 and it is"
-                            " being made available for testing purposes only.</p>"
-                            "<p align='justify'>This version is intended for radiologists and our test-team members to "
-                            " help us improving this software. Users of the current version should not expect that all the "
-                            "extensions function properly.</p>"
-                            "<p align='justify'>If you want to help us to improve our software, please, report any found bug or "
-                            "any feature request you may have by sending an e-mail to:: <a href=\"mailto:%2\">%2</a></p>"
-                            "<h3>We really appreciate that you give us your feedback!</h3>").arg(ApplicationNameString).arg(OrganizationEmailString));
+                            "<p align='justify'>This is a preview release of %1 used exclusively for testing purposes.</p>"
+                            "<p align='justify'>This version is intended for radiologists and our test-team members. "
+                            "Users of this version should not expect the extensions function properly.</p>"
+                            "<p align='justify'>If you want to help us to improve %1, please report any found bug or "
+                            "any feature request you may have by sending an e-mail to: <a href=\"mailto:%2\">%2</a></p>"
+                            "<h3>We really appreciate your feedback!</h3>").arg(ApplicationNameString).arg(OrganizationEmailString));
 }
 
 void QApplicationMainWindow::readSettings()
