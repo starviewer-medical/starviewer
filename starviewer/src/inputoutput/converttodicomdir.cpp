@@ -36,14 +36,7 @@ ConvertToDicomdir::ConvertToDicomdir()
     m_convertDicomdirImagesToLittleEndian = false;
     m_anonymizeDICOMDIR = false;
     m_progress = NULL;
-}
-
-ConvertToDicomdir::~ConvertToDicomdir()
-{
-    if (m_progress)
-    {
-        delete m_progress;
-    }
+    m_DICOMAnonymizer = NULL;
 }
 
 void ConvertToDicomdir::setAnonymizeDICOMDIR(bool anonymizeDICOMDIR, QString patientNameAnonymized)
@@ -212,9 +205,16 @@ Status ConvertToDicomdir::convert( const QString &dicomdirPath, CreateDicomdir::
 
     m_progress->close();
 
-    if (m_DICOMAnonymizer != NULL)
+    if (m_DICOMAnonymizer)
     {
         delete m_DICOMAnonymizer;
+        m_DICOMAnonymizer = NULL;
+    }
+
+    if (m_progress)
+    {
+        delete m_progress;
+        m_progress = NULL;
     }
 
     return state;
