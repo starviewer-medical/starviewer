@@ -58,22 +58,36 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
     PacsDeviceManager pacsDeviceManager;
     QList<PacsDevice> pacsDeviceListToQuery = pacsDeviceManager.getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
 
-    //Preguntem al PACS per estudis
-    if (pacsDeviceListToQuery.count() > 0)
+    if (pacsDeviceListToQuery.count() == 0)
     {
-        QList<DicomMask> queryDicomMasksList;
+        //Sinó hi ha cap PACS pel qual cercar per defecte fem l'emit del queryFinished
+        queryFinished();
+        return;
+    }
 
+    QList<DicomMask> queryDicomMasksList;
+
+    if (!patient->getID().isEmpty())
+    {
         DicomMask maskQueryByID = getBasicDicomMask();
         maskQueryByID.setPatientId(patient->getID());
         queryDicomMasksList << maskQueryByID;
+    }
 
-        if (m_searchRelatedStudiesByName)
-        {
-            DicomMask maskQueryByName = getBasicDicomMask();
-            maskQueryByName.setPatientName(patient->getFullName());
-            queryDicomMasksList << maskQueryByName;
-        }
+    if (m_searchRelatedStudiesByName && !patient->getFullName().isEmpty())
+    {
+        DicomMask maskQueryByName = getBasicDicomMask();
+        maskQueryByName.setPatientName(patient->getFullName());
+        queryDicomMasksList << maskQueryByName;
+    }
 
+    if (queryDicomMasksList.count() == 0)
+    {
+        //Sinó hi ha cap cconsulta a fer donem la cerca per finalitzada
+        queryFinished();
+    }
+    else
+    {
         // Si ens diuen que volen els study's fins una data, hem de marcar aquesta data en els dicomMasks
         if (untilDate.isValid())
         {
@@ -91,11 +105,6 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
                 enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, queryDicomMask, QueryPacsJob::study));
             }
         }
-    }
-    else
-    {
-        //Sinó hi ha cap PACS pel qual cercar per defecte fem l'emit del queryFinished
-        queryFinished();
     }
 }
 
