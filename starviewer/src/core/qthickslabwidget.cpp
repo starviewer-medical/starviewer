@@ -80,6 +80,14 @@ void QThickSlabWidget::link( Q2DViewer *viewer )
 void QThickSlabWidget::unlink()
 {
     disconnectSignalsAndSlots();
+    disconnect(m_projectionModeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(applyProjectionMode(int)));
+    m_slabThicknessSlider->setValue(2);
+    m_projectionModeComboBox->setCurrentIndex(0);
+    m_projectionModeComboBox->setEnabled(false);
+    m_slabThicknessSlider->setEnabled(false);
+    m_slabThicknessLabel->setEnabled(false);
+    m_maximumThicknessCheckBox->setChecked(false);
+    m_maximumThicknessCheckBox->setEnabled(false);
     m_currentViewer = 0;
 }
 
