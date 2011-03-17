@@ -32,14 +32,25 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="applicationcommandlineoptions.cpp" line="65"/>
+        <location filename="applicationcommandlineoptions.cpp" line="75"/>
         <source>Unknow option </source>
         <translation>Opción desconocida </translation>
     </message>
     <message>
-        <location filename="applicationcommandlineoptions.cpp" line="75"/>
+        <location filename="applicationcommandlineoptions.cpp" line="81"/>
+        <location filename="applicationcommandlineoptions.cpp" line="101"/>
+        <source> option requires an argument</source>
+        <translation type="unfinished">requiere un argumento</translation>
+    </message>
+    <message>
+        <location filename="applicationcommandlineoptions.cpp" line="92"/>
         <source>Unexpected value </source>
         <translation>Valor inesperado </translation>
+    </message>
+    <message>
+        <location filename="applicationcommandlineoptions.cpp" line="141"/>
+        <source> &lt;value&gt;</source>
+        <translation>&lt;valor&gt;</translation>
     </message>
     <message>
         <location filename="starviewerapplicationcommandline.cpp" line="17"/>
@@ -51,17 +62,17 @@
 <context>
     <name>udg::AppImportFile</name>
     <message>
-        <location filename="appimportfile.cpp" line="46"/>
+        <location filename="appimportfile.cpp" line="45"/>
         <source>Choose a file to open...</source>
         <translation>Seleccionar un archivo para abrir...</translation>
     </message>
     <message>
-        <location filename="appimportfile.cpp" line="69"/>
+        <location filename="appimportfile.cpp" line="68"/>
         <source>Choose a directory to scan</source>
         <translation>Escoger un directorio a explorar</translation>
     </message>
     <message>
-        <location filename="appimportfile.cpp" line="95"/>
+        <location filename="appimportfile.cpp" line="94"/>
         <source>No supported input files found</source>
         <translation>No se encontraron archivos soportados</translation>
     </message>
@@ -69,22 +80,22 @@
 <context>
     <name>udg::ExtensionHandler</name>
     <message>
-        <location filename="extensionhandler.cpp" line="221"/>
+        <location filename="extensionhandler.cpp" line="191"/>
         <source>Loading, please wait...</source>
         <translation>Cargando, espere por favor...</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="220"/>
+        <location filename="extensionhandler.cpp" line="190"/>
         <source>Patient loading</source>
         <translation>Cargando paciente</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="306"/>
+        <location filename="extensionhandler.cpp" line="262"/>
         <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
         <translation>Lo sentimos, ha habido algun error mientras se cargaban los datos de los pacientes:&lt;br&gt; %1</translation>
     </message>
     <message>
-        <location filename="extensionhandler.cpp" line="250"/>
+        <location filename="extensionhandler.cpp" line="206"/>
         <source>Sorry, it seems that there is no patient data we can load.</source>
         <translation>Lo sentimos, pero parece no haber datos de paciente válidos que se puedan cargar.</translation>
     </message>
@@ -92,278 +103,307 @@
 <context>
     <name>udg::QApplicationMainWindow</name>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="151"/>
+        <location filename="qapplicationmainwindow.cpp" line="167"/>
         <source>&amp;New</source>
         <translation>&amp;Nuevo</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="158"/>
+        <location filename="qapplicationmainwindow.cpp" line="174"/>
         <source>&amp;Open file...</source>
         <translation>&amp;Abrir archivo...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="160"/>
+        <location filename="qapplicationmainwindow.cpp" line="176"/>
         <source>Open an existing volume file</source>
         <translation>Abrir un archivo de volumen existente</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="246"/>
+        <location filename="qapplicationmainwindow.cpp" line="296"/>
         <source>&amp;About</source>
         <translation>&amp;Sobre</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="247"/>
+        <location filename="qapplicationmainwindow.cpp" line="297"/>
         <source>Show the application&apos;s About box</source>
         <translation>Muestra información de la aplicación</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="259"/>
+        <location filename="qapplicationmainwindow.cpp" line="309"/>
         <source>E&amp;xit</source>
         <translation>&amp;Salir</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="261"/>
+        <location filename="qapplicationmainwindow.cpp" line="311"/>
         <source>Exit the application</source>
         <translation>Salir de la aplicación</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="252"/>
+        <location filename="qapplicationmainwindow.cpp" line="302"/>
         <source>&amp;Close</source>
         <translation>&amp;Cerrar</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="303"/>
+        <location filename="qapplicationmainwindow.cpp" line="357"/>
         <source>&amp;File</source>
         <translation>&amp;Archivo</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="342"/>
+        <location filename="qapplicationmainwindow.cpp" line="398"/>
         <source>&amp;Help</source>
         <translation>&amp;Ayuda</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="331"/>
+        <location filename="qapplicationmainwindow.cpp" line="385"/>
         <source>&amp;Language</source>
         <translation>&amp;Idioma</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="153"/>
+        <location filename="qapplicationmainwindow.cpp" line="169"/>
         <source>Open a new working window</source>
         <translation>Abre una nueva ventana de trabajo</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="180"/>
+        <location filename="qapplicationmainwindow.cpp" line="196"/>
         <source>&amp;PACS...</source>
         <translation>&amp;PACS...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="182"/>
+        <location filename="qapplicationmainwindow.cpp" line="198"/>
         <source>Open PACS Query Screen</source>
         <translation>Abre el diálogo de consulta del PACS</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="321"/>
+        <location filename="qapplicationmainwindow.cpp" line="375"/>
         <source>&amp;Visualization</source>
         <translation>&amp;Visualización</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="168"/>
+        <location filename="qapplicationmainwindow.cpp" line="184"/>
         <source>Open an existing DICOM folder</source>
         <translation>Abrir una carpeta DICOM existente</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="393"/>
+        <location filename="qapplicationmainwindow.cpp" line="474"/>
         <source>Language Switch</source>
         <translation>Cambio de Idioma</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="254"/>
+        <location filename="qapplicationmainwindow.cpp" line="304"/>
         <source>Close the current extension page</source>
         <translation>Cerrar la página de extensión actual</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="229"/>
-        <location filename="qapplicationmainwindow.cpp" line="287"/>
-        <source>Show Full Screen</source>
-        <translation>Mostrar a pantalla completa</translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="230"/>
         <location filename="qapplicationmainwindow.cpp" line="288"/>
-        <source>Switch To Full Screen</source>
-        <translation>Cambiar a modo pantalla completa</translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="279"/>
-        <source>Retract Full Screen</source>
-        <translation>Salir de modo pantalla completa</translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="280"/>
-        <source>Switch To Normal Screen</source>
-        <translation>Cambiar a modo de pantalla normal</translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="238"/>
-        <location filename="qapplicationmainwindow.cpp" line="239"/>
+        <location filename="qapplicationmainwindow.cpp" line="289"/>
         <source>Show log file</source>
         <translation>Mostrar archivo de bitácora</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="336"/>
+        <location filename="qapplicationmainwindow.cpp" line="390"/>
         <source>&amp;Window</source>
         <translation>&amp;Ventana</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="214"/>
+        <location filename="qapplicationmainwindow.cpp" line="230"/>
         <source>Open the %1 Application</source>
         <translation>Abrir la aplicación %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="393"/>
+        <location filename="qapplicationmainwindow.cpp" line="474"/>
         <source>The changes will take effect the next time you startup the application</source>
         <translation>Los cambios tendrán efecto la próxima vez que inicie la aplicación</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="166"/>
+        <location filename="qapplicationmainwindow.cpp" line="182"/>
         <source>Open files from a directory...</source>
         <translation>Abrir los archivo de un directorio...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="185"/>
+        <location filename="qapplicationmainwindow.cpp" line="201"/>
         <source>&amp;Local Database Studies...</source>
         <oldsource>&amp;Local Database Studies</oldsource>
         <translation>Estudios de la Base de Datos &amp;Local...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="187"/>
+        <location filename="qapplicationmainwindow.cpp" line="203"/>
         <source>Browse Local Database Studies</source>
         <translation>Explorar estudios de la base de datos local</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="198"/>
+        <location filename="qapplicationmainwindow.cpp" line="214"/>
         <source>Open DICOMDIR...</source>
         <translation>Abrir DICOMDIR...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="200"/>
+        <location filename="qapplicationmainwindow.cpp" line="216"/>
         <source>Open DICOMDIR from CD,DVD,Pendrive or HardDisk</source>
         <translation>Abrir DICOMDIR a partir de CD,DVD,Pendrive o Disco Duro</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="266"/>
+        <location filename="qapplicationmainwindow.cpp" line="245"/>
+        <source>Maximize To Multiple Screen</source>
+        <translation type="unfinished">Maximizar a múltiples pantallas</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="246"/>
+        <source>Maximize The Window To As Many Screens As Possible</source>
+        <translation type="unfinished">Maximiza la ventana a todas las pantallas posibles</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="254"/>
+        <location filename="qapplicationmainwindow.cpp" line="392"/>
+        <source>Move To Screen</source>
+        <translation type="unfinished">Mover a la pantalla</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="255"/>
+        <source>Move The Window To The Screen ...</source>
+        <translation type="unfinished">Mueve la ventana a la pantalla...</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="273"/>
+        <source>User guide</source>
+        <translation type="unfinished">Guía de usuario</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="274"/>
+        <source>Open User guide</source>
+        <translation type="unfinished">Abre la guía de usuario</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="278"/>
+        <source>Quick Start guide</source>
+        <translation type="unfinished">Guía rápida</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="279"/>
+        <source>Open Quick Start guide</source>
+        <translation type="unfinished">Abre la guía rápida</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="283"/>
+        <source>Shortcuts guide</source>
+        <translation type="unfinished">Guía de teclas rápidas</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="284"/>
+        <source>Open Shortcuts guide</source>
+        <translation type="unfinished">Abre la guía de teclas rápidas</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="316"/>
         <source>&amp;Configuration...</source>
         <translation>&amp;Configuración...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="330"/>
+        <location filename="qapplicationmainwindow.cpp" line="384"/>
         <source>&amp;Tools</source>
         <translation>&amp;Herramientas</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="351"/>
+        <location filename="qapplicationmainwindow.cpp" line="411"/>
         <source>Catalan</source>
         <translation>Catalán</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="352"/>
+        <location filename="qapplicationmainwindow.cpp" line="412"/>
         <source>Spanish</source>
         <translation>Español</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="353"/>
+        <location filename="qapplicationmainwindow.cpp" line="413"/>
         <source>English</source>
         <translation>Inglés</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="381"/>
+        <location filename="qapplicationmainwindow.cpp" line="441"/>
         <source>Switch to %1 Language</source>
         <translation>Cambiar al lenguage %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="514"/>
-        <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;E-mail de soporte: &lt;a href=&quot;mailto:%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</translation>
+        <location filename="qapplicationmainwindow.cpp" line="570"/>
+        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2009 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="515"/>
-        <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;</translation>
+        <location filename="qapplicationmainwindow.cpp" line="580"/>
+        <source>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="552"/>
+        <location filename="qapplicationmainwindow.cpp" line="628"/>
         <source>Beta version</source>
         <translation>Versión Beta</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="623"/>
+        <location filename="qapplicationmainwindow.cpp" line="629"/>
+        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect the extensions function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</source>
+        <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Esta es una versión preliminar de %1, que se tendría que utilizar exclusivamente con fines de testing.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Esta versión está dirigida a los radiólogos y a nuestro equipo de pruebas. En esta versión es posible que las extensiones no funcionen correctamente.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si quiere ayudarnos a mejorar %1 infórmenos de cualquier error o funcionalidad que necesite, enviando un correo electrónico a: &lt;a href=&quot;mailto:%2&quot;&gt;%2.&lt;/a&gt;&lt;/p&gt;&lt;h3&gt; Agradecemos mucho su colaboración.&lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="699"/>
         <source>Please activate &quot;Listen RIS Request&quot; option in %1 configuration to retrieve studies from SAP.</source>
         <translation>Por favor, active la opción &quot;Escuchar Peticiones del RIS&quot; en el panel de configuración de %1 para poder recibir estudios del SAP.</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="119"/>
+        <location filename="qapplicationmainwindow.cpp" line="132"/>
         <source>Loading</source>
         <translation>Cargando</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="120"/>
+        <location filename="qapplicationmainwindow.cpp" line="133"/>
         <source>Loading data, please wait...</source>
         <translation>Cargando datos, por favor espere...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="176"/>
+        <location filename="qapplicationmainwindow.cpp" line="192"/>
         <source>&amp;Exams...</source>
         <translation>&amp;Estudios...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="178"/>
+        <location filename="qapplicationmainwindow.cpp" line="194"/>
         <source>Browse exams</source>
         <translation>Buscar estudios</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="268"/>
+        <location filename="qapplicationmainwindow.cpp" line="318"/>
         <source>Modify %1 configuration</source>
         <translation>Modificar la configuración de %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="493"/>
-        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2009 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard ( *.mhd files ). It is fully compliant with the DICOM standard for image comunication and image file formats.</source>
-        <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2009 Laboratorio de gráficos e imagen (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1  es un software básico però completo para examinar imágenes con el formato DICOM  producidas por equipamiento médico (MRI, CT, PET, PET-CT, CR, MG,...). También puede leer otros formatos específicos mediante el estandard MetaIO ( *.mhd files ). Es completamente compatible con el standard DICOM para la comunicación y los formatos de imagen.</translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="500"/>
+        <location filename="qapplicationmainwindow.cpp" line="577"/>
         <source>&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images</source>
         <translation>&lt;p align=&apos;justify&apos;&gt;%1 ha estado diseñado especialmente para la navegación y visualización de imágenes multimodales y multidimensionales</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="503"/>
-        <source>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR ( Multiplanar reconstruction ) Viewer , 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</source>
-        <translation>%1 puede recibir imágenes mediante el protocolo de comunicación DICOM desde cualquier PACS o modalidad de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, y Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 ha estado diseñado especialmente para la navegación y visualización de imágenes multimodales y multidimensionales: Visualizador 2D, visualizador MPR 2D ( reconstrucción multiplanar), visualizador MPR 3D, visualizador hibrido MPR y el visualizador de la proyección de màxima intensidad. &lt;p align=&apos;justify&apos;&gt;%1 es al mismo tiempo una workstation para imagen médica y un software de procesamiento para la investigación médica (imagen radiológica y nuclear), imagen funcional e imagen 3D.</translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="513"/>
+        <location filename="qapplicationmainwindow.cpp" line="590"/>
         <source>&lt;p&gt;Version: %1 &lt;/p&gt;</source>
         <translation>&lt;p&gt;Versión: %1 &lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="517"/>
+        <location filename="qapplicationmainwindow.cpp" line="591"/>
+        <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;E-mail de soporte: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt; {1&quot;?} {1&lt;?}</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="592"/>
+        <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt; {1&quot;?} {1&lt;?}</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="594"/>
         <source>About %1</source>
         <translation>Sobre %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="553"/>
-        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 and it is being made available for testing purposes only.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our testing members that are helping us to improve this software. Current users of this version should not expect all of the extensions to work properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve our software, please, report any found bug or any other feature request you have to us.&lt;/p&gt;&lt;h3&gt;We really appreciate that you give us your feedback!&lt;/h3&gt;</source>
-        <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Ésta es una versión previa de %1 que ha sido creada con el objetivo de testear de la aplicación.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Ésta versión va destinada a los radiólogos y a nuestro equipo de pruebas para ayudar a mejorar el software. No se puede esperar a que todas las extensiones funcionen de forma correcta. &lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si quieres ayudarnos a mejorar nuestra aplicación, por favor, haznos saber cualquier problema encontrado o petición de mejora.&lt;/p&gt;&lt;h3&gt;Agradecemos tus comentarios.&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <location filename="qapplicationmainwindow.cpp" line="84"/>
+        <location filename="qapplicationmainwindow.cpp" line="91"/>
         <source>There have been some errors:
 </source>
         <translation>Han ocurrido algunos errores:
 </translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="84"/>
+        <location filename="qapplicationmainwindow.cpp" line="91"/>
         <source>
 
 You can resolve this error by Tools&gt;Configuration&gt;Local Database menu.</source>

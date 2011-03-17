@@ -70,17 +70,17 @@
 <context>
     <name>QViewerWorkInProgressWidget</name>
     <message>
-        <location filename="qviewerworkinprogresswidget.ui" line="86"/>
+        <location filename="qviewerworkinprogresswidget.ui" line="95"/>
         <source>Loading...</source>
         <translation type="unfinished">Cargando...</translation>
     </message>
     <message>
-        <location filename="qviewerworkinprogresswidget.ui" line="93"/>
+        <location filename="qviewerworkinprogresswidget.ui" line="102"/>
         <source>(25%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewerworkinprogresswidget.ui" line="115"/>
+        <location filename="qviewerworkinprogresswidget.ui" line="124"/>
         <source>ProgressBar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -242,39 +242,39 @@
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1782"/>
+        <location filename="q2dviewer.cpp" line="1787"/>
         <source>Slice: %1/%2 Phase: %3/%4</source>
         <translation>Corte: %1/%2 Fase: %3/%4</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1794"/>
+        <location filename="q2dviewer.cpp" line="1799"/>
         <source>Slice: %1/%2</source>
         <translation>Corte: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1778"/>
+        <location filename="q2dviewer.cpp" line="1783"/>
         <source>Slice: %1-%2/%3 Phase: %4/%5</source>
         <translation>Corte: %1-%2/%3 Fase: %4/%5</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1790"/>
+        <location filename="q2dviewer.cpp" line="1795"/>
         <source>Slice: %1-%2/%3</source>
         <translation>Corte: %1-%2/%3</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1800"/>
+        <location filename="q2dviewer.cpp" line="1805"/>
         <source> Thickness: %1 mm</source>
         <translation> Grosor: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1514"/>
+        <location filename="q2dviewer.cpp" line="1519"/>
         <source>%1 x %2
 WW: %5 WL: %6</source>
         <translation>%1 x %2
 WW: %5 WL: %6</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1550"/>
+        <location filename="q2dviewer.cpp" line="1555"/>
         <source>%1
 %2
 %3 %4 %5
@@ -289,12 +289,12 @@ Acc:%6
 %8</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1757"/>
+        <location filename="q2dviewer.cpp" line="1762"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewer.cpp" line="1765"/>
+        <location filename="q2dviewer.cpp" line="1770"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -333,34 +333,34 @@ Acc:%6
 <context>
     <name>udg::Q3DViewer</name>
     <message>
-        <location filename="q3dviewer.cpp" line="1171"/>
+        <location filename="q3dviewer.cpp" line="1217"/>
         <source>Not supported volume</source>
         <translation>Volumen no soportado</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1171"/>
+        <location filename="q3dviewer.cpp" line="1217"/>
         <source>Current volume cannot be opened because its format is not supported.</source>
         <translation>El volumen actual no se puede abrir ya que su formato no está soportado.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1163"/>
+        <location filename="q3dviewer.cpp" line="687"/>
+        <location filename="q3dviewer.cpp" line="1209"/>
         <source>Volume too large</source>
         <translation>Volumen demasiado grande</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1163"/>
+        <location filename="q3dviewer.cpp" line="687"/>
+        <location filename="q3dviewer.cpp" line="1209"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
         <translation>El volumen actual es demasiado grande. Por favor, seleccione otro volumen o cierre las aplicaciones abiertas e inténtelo de nuevo.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="563"/>
-        <location filename="q3dviewer.cpp" line="641"/>
+        <location filename="q3dviewer.cpp" line="582"/>
         <source>Can&apos;t apply rendering style</source>
         <translation>No se puede aplicar el estilo de visualización</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="563"/>
-        <location filename="q3dviewer.cpp" line="641"/>
+        <location filename="q3dviewer.cpp" line="582"/>
         <source>The system hasn&apos;t enough memory to apply properly this rendering style with this volume.
 Shading will be disabled, it won&apos;t render as expected.</source>
         <translation>El sistema no tiene suficiente memoria para aplicar este estilo de visualización a este volumen.
@@ -1471,26 +1471,26 @@ Variable de entorno(logFilePath): %2</translation>
     <name>udg::QThickSlabWidget</name>
     <message>
         <location filename="qthickslabwidget.cpp" line="22"/>
-        <location filename="qthickslabwidget.cpp" line="95"/>
-        <location filename="qthickslabwidget.cpp" line="212"/>
+        <location filename="qthickslabwidget.cpp" line="103"/>
+        <location filename="qthickslabwidget.cpp" line="220"/>
         <source>Disabled</source>
         <translation>Desactivado</translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="22"/>
-        <location filename="qthickslabwidget.cpp" line="133"/>
+        <location filename="qthickslabwidget.cpp" line="141"/>
         <source>MIP</source>
         <translation></translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="22"/>
-        <location filename="qthickslabwidget.cpp" line="137"/>
+        <location filename="qthickslabwidget.cpp" line="145"/>
         <source>MinIP</source>
         <translation></translation>
     </message>
     <message>
         <location filename="qthickslabwidget.cpp" line="22"/>
-        <location filename="qthickslabwidget.cpp" line="141"/>
+        <location filename="qthickslabwidget.cpp" line="149"/>
         <source>Average</source>
         <translation>Media</translation>
     </message>
@@ -1596,13 +1596,18 @@ Variable de entorno(logFilePath): %2</translation>
 <context>
     <name>udg::ROITool</name>
     <message>
-        <location filename="roitool.cpp" line="319"/>
-        <source>Area: %1 %2
-Mean: %3
-St.Dev.: %4</source>
-        <translation type="unfinished">Área: %1 %2
-Media: %3
-Desv.Std.:%4</translation>
+        <location filename="roitool.cpp" line="321"/>
+        <source>Area: %1 %2</source>
+        <translation type="unfinished">Área: %1 %2</translation>
+    </message>
+    <message>
+        <location filename="roitool.cpp" line="331"/>
+        <source>
+Mean: %1
+St.Dev.: %2</source>
+        <translation type="unfinished">
+Media: %1
+Desv.Std.:%2</translation>
     </message>
 </context>
 <context>
@@ -2041,26 +2046,36 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="volumereader.cpp" line="104"/>
+        <source>Cannot Read File(s)</source>
+        <translation type="unfinished">No se han podido leer los archivos</translation>
+    </message>
+    <message>
+        <location filename="volumereader.cpp" line="108"/>
         <source>Unkwown Error</source>
         <translation type="unfinished">Error desconocido</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="116"/>
+        <location filename="volumereader.cpp" line="120"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
         <translation type="unfinished">No hay suficiente memoria para cargar las series. Cierre todas las ventanas abiertas de %1, reinicie la aplicación e inténtelo de nuevo. Si el problema persiste, se podría solucionar añadiendo más memoria RAM o cambiando a un sistema de 64 bits.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="120"/>
+        <location filename="volumereader.cpp" line="124"/>
         <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
         <translation type="unfinished">%1 no puede encontrar los archivos de las series. Puede ser que se hayan eliminado o sean corruptos.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="122"/>
+        <location filename="volumereader.cpp" line="126"/>
+        <source>%1 could not read the requested file(s) for this Series.</source>
+        <translation type="unfinished">%1 no ha podido leer los archivos de la serie solicitada.</translation>
+    </message>
+    <message>
+        <location filename="volumereader.cpp" line="128"/>
         <source>The loading of the data have been aborted.</source>
         <translation type="unfinished">Se ha abortado la carga de los datos.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="124"/>
+        <location filename="volumereader.cpp" line="130"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
         <translation type="unfinished">%1 ha encontrado un error desconocido al leer las series. No se han cargado los datos de la series.</translation>
     </message>
@@ -2068,7 +2083,7 @@ It&apos;s recommended you save them in an empty folder.</source>
 <context>
     <name>udg::VoxelInformationTool</name>
     <message>
-        <location filename="voxelinformationtool.cpp" line="128"/>
+        <location filename="voxelinformationtool.cpp" line="140"/>
         <source>N/A</source>
         <translation type="unfinished">N/D</translation>
     </message>

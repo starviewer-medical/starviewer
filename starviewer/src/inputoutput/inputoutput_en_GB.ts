@@ -69,7 +69,7 @@
 <context>
     <name>udg::ConvertToDicomdir</name>
     <message>
-        <location filename="converttodicomdir.cpp" line="150"/>
+        <location filename="converttodicomdir.cpp" line="152"/>
         <source>Creating DICOMDIR...</source>
         <oldsource>Creating Dicomdir...</oldsource>
         <translation type="unfinished"></translation>
