@@ -384,12 +384,12 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="591"/>
         <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;E-mail de suport: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt; {1&quot;?} {1&lt;?}</translation>
+        <translation type="unfinished">&lt;p&gt;E-mail de suport: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="592"/>
         <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt; {1&quot;?} {1&lt;?}</translation>
+        <translation type="unfinished">&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="594"/>
