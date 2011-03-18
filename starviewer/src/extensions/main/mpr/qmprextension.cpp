@@ -524,6 +524,16 @@ bool QMPRExtension::detectAxialViewAxisActor()
     r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
     distanceToSagital = MathTools::getPointToFiniteLineDistance(point, r1, r2);
 
+    // Passem les distàncies a coordenades de vista per controlar la tolerància
+    double zeroInDisplay[3];
+    m_axial2DView->computeWorldToDisplay(0.0, 0.0, 0.0, zeroInDisplay);
+    double distanceToCoronalInDisplay[3];
+    m_axial2DView->computeWorldToDisplay(distanceToCoronal, 0.0, 0.0, distanceToCoronalInDisplay);
+    distanceToCoronal = MathTools::getDistance3D(zeroInDisplay, distanceToCoronalInDisplay);
+    double distanceToSagitalInDisplay[3];
+    m_axial2DView->computeWorldToDisplay(distanceToSagital, 0.0, 0.0, distanceToSagitalInDisplay);
+    distanceToSagital = MathTools::getDistance3D(zeroInDisplay, distanceToSagitalInDisplay);
+
     // Donem una "tolerància" mínima
     if (distanceToCoronal < PickingDistanceThreshold || distanceToSagital < PickingDistanceThreshold)
     {
@@ -626,6 +636,13 @@ void QMPRExtension::detectSagitalViewAxisActor()
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
     distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2);
+
+    // Passem les distàncies a coordenades de vista per controlar la tolerància
+    double zeroInDisplay[3];
+    m_sagital2DView->computeWorldToDisplay(0.0, 0.0, 0.0, zeroInDisplay);
+    double distanceToCoronalInDisplay[3];
+    m_sagital2DView->computeWorldToDisplay(distanceToCoronal, 0.0, 0.0, distanceToCoronalInDisplay);
+    distanceToCoronal = MathTools::getDistance3D(zeroInDisplay, distanceToCoronalInDisplay);
 
     // Donem una "tolerància" mínima
     if (distanceToCoronal < PickingDistanceThreshold)
@@ -794,6 +811,16 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
     distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2);
+
+    // Passem les distàncies a coordenades de vista per controlar la tolerància
+    double zeroInDisplay[3];
+    m_sagital2DView->computeWorldToDisplay(0.0, 0.0, 0.0, zeroInDisplay);
+    double distanceToCoronalInDisplay[3];
+    m_sagital2DView->computeWorldToDisplay(distanceToCoronal, 0.0, 0.0, distanceToCoronalInDisplay);
+    distanceToCoronal = MathTools::getDistance3D(zeroInDisplay, distanceToCoronalInDisplay);
+    double distanceToAxialInDisplay[3];
+    m_sagital2DView->computeWorldToDisplay(distanceToAxial, 0.0, 0.0, distanceToAxialInDisplay);
+    distanceToAxial = MathTools::getDistance3D(zeroInDisplay, distanceToAxialInDisplay);
 
     // Donem una "tolerància" mínima
     if (distanceToCoronal < PickingDistanceThreshold || distanceToAxial < PickingDistanceThreshold)
