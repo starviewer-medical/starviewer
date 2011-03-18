@@ -606,7 +606,7 @@ void QMPRExtension::releaseAxialViewAxisActor()
     {
         m_pickedActorReslice->SetInterpolationModeToCubic();
         // TODO No seria millor un restoreOverrideCursor?
-        this->setCursor(QCursor(Qt::ArrowCursor));
+        m_axial2DView->setCursor(Qt::ArrowCursor);
         if (m_pickedActorPlaneSource == m_sagitalPlaneSource)
         {
             m_sagital2DView->render();
@@ -719,7 +719,7 @@ void QMPRExtension::releaseSagitalViewAxisActor()
 {
     if (m_pickedActorReslice)
     {
-        this->setCursor(QCursor(Qt::ArrowCursor));
+        m_sagital2DView->setCursor(Qt::ArrowCursor);
         m_pickedActorReslice->SetInterpolationModeToCubic();
         m_coronal2DView->render();
         m_state = None;
@@ -744,7 +744,7 @@ void QMPRExtension::getRotationAxis(vtkPlaneSource *plane, double axis[3])
 
 void QMPRExtension::pushSagitalViewCoronalAxisActor()
 {
-    this->setCursor(QCursor(Qt::ClosedHandCursor));
+    m_sagital2DView->setCursor(Qt::ClosedHandCursor);
 
     double clickedWorldPoint[3];    // coordenades de sagital
     m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
@@ -776,7 +776,7 @@ void QMPRExtension::pushSagitalViewCoronalAxisActor()
 
 void QMPRExtension::pushAxialViewAxisActor()
 {
-    this->setCursor(QCursor(Qt::ClosedHandCursor));
+    m_axial2DView->setCursor(Qt::ClosedHandCursor);
     double clickedWorldPoint[3];
     m_axial2DView->getEventWorldCoordinate(clickedWorldPoint);
     // Get the motion vector
@@ -825,7 +825,7 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
     // Donem una "tolerància" mínima
     if (distanceToCoronal < PickingDistanceThreshold || distanceToAxial < PickingDistanceThreshold)
     {
-        this->setCursor(QCursor(Qt::OpenHandCursor));
+        m_sagital2DView->setCursor(Qt::OpenHandCursor);
         // Desactivem les tools perquè no facin interferència
         m_toolManager->disableAllToolsTemporarily();
         if (distanceToCoronal < distanceToAxial)
@@ -846,6 +846,8 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
 
 void QMPRExtension::pushSagitalViewAxialAxisActor()
 {
+    m_sagital2DView->setCursor(Qt::ClosedHandCursor);
+
     double clickedWorldPoint[3];
     m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
 
