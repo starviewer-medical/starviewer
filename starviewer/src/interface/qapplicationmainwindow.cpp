@@ -577,7 +577,7 @@ void QApplicationMainWindow::about()
     aboutMessage += tr("<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
                " multidimensional images").arg(ApplicationNameString);
 #else
-    aboutMessage = tr("%1 is able to receive images "
+    aboutMessage += tr("%1 is able to receive images "
                "transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, "
                "STORE SCU - Service Class User, and Query/Retrieve)."
                "<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
