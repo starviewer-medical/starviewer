@@ -143,6 +143,7 @@ void QPreviousStudiesWidget::initializeTree()
     m_previousStudiesTree->setItemsExpandable(false);
     m_previousStudiesTree->header()->setResizeMode(DownloadingStatus, QHeaderView::Fixed);
     m_previousStudiesTree->header()->setResizeMode(DownloadButton, QHeaderView::Fixed);
+    m_previousStudiesTree->header()->setMovable(false);
     m_previousStudiesTree->setAlternatingRowColors(true);
     m_previousStudiesTree->setUniformRowHeights(true);
     m_previousStudiesTree->setSortingEnabled(true);
