@@ -1014,6 +1014,30 @@ void QMPRExtension::initOrientation()
     }
     m_coronalExtentLength[1] = m_coronalExtentLength[0];
 
+    // Posem les mides dels drawer points
+    const double RadiusFactor = 0.01;
+    double o[3], p1[3], p2[3];
+    double width, height;
+    double radius;
+    // Axials
+    m_axialPlaneSource->GetOrigin(o);
+    m_axialPlaneSource->GetPoint1(p1);
+    m_axialPlaneSource->GetPoint2(p2);
+    width = MathTools::getDistance3D(o, p1);
+    height = MathTools::getDistance3D(o, p2);
+    radius = RadiusFactor * qMax(width, height);
+    m_axialViewSagitalCenterDrawerPoint->setRadius(radius);
+    m_axialViewCoronalCenterDrawerPoint->setRadius(radius);
+    // Sagitals
+    m_sagitalPlaneSource->GetOrigin(o);
+    m_sagitalPlaneSource->GetPoint1(p1);
+    m_sagitalPlaneSource->GetPoint2(p2);
+    width = MathTools::getDistance3D(o, p1);
+    height = MathTools::getDistance3D(o, p2);
+    radius = RadiusFactor * qMax(width, height);
+    m_sagitalViewAxialCenterDrawerPoint->setRadius(radius);
+    m_sagitalViewCoronalCenterDrawerPoint->setRadius(radius);
+
     updatePlanes();
     updateControls();
 }
@@ -1078,27 +1102,21 @@ void QMPRExtension::createActors()
 
     // Creem els drawer points
 
-    const double Radius = 5.0;  // TODO Fer que sigui proporcional a la mida del volum
-
     m_axialViewSagitalCenterDrawerPoint = new DrawerPoint();
     m_axialViewSagitalCenterDrawerPoint->increaseReferenceCount();
     m_axialViewSagitalCenterDrawerPoint->setColor(sagitalColor);
-    m_axialViewSagitalCenterDrawerPoint->setRadius(Radius);
 
     m_axialViewCoronalCenterDrawerPoint = new DrawerPoint();
     m_axialViewCoronalCenterDrawerPoint->increaseReferenceCount();
     m_axialViewCoronalCenterDrawerPoint->setColor(coronalColor);
-    m_axialViewCoronalCenterDrawerPoint->setRadius(Radius);
 
     m_sagitalViewAxialCenterDrawerPoint = new DrawerPoint();
     m_sagitalViewAxialCenterDrawerPoint->increaseReferenceCount();
     m_sagitalViewAxialCenterDrawerPoint->setColor(axialColor);
-    m_sagitalViewAxialCenterDrawerPoint->setRadius(Radius);
 
     m_sagitalViewCoronalCenterDrawerPoint = new DrawerPoint();
     m_sagitalViewCoronalCenterDrawerPoint->increaseReferenceCount();
     m_sagitalViewCoronalCenterDrawerPoint->setColor(coronalColor);
-    m_sagitalViewCoronalCenterDrawerPoint->setRadius(Radius);
 }
 
 void QMPRExtension::axialSliceUpdated(int slice)
