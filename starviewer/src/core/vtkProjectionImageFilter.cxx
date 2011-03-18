@@ -207,36 +207,44 @@ void vtkProjectionImageFilterExecute(vtkProjectionImageFilter *self,
     // instantiate the accumulator
     udg::Accumulator<T> * accumulator = udg::AccumulatorFactory::getAccumulator<T>(self->GetAccumulatorType(), projectionSize);
 
-    // loop through pixels of input
-    T * inPtr0 = inPtr;
-    T * outPtr0 = outPtr;
+    // Fem tota la composició per cada component
+    // TODO Potser es podria millorar la coherència de cache o alguna història d'aquestes canviant l'ordre dels bucles
+    //      però de moment ja funciona bé.
+    int numberOfComponents = inData->GetNumberOfScalarComponents();
 
-    for ( int inIdx0 = inMin0; inIdx0 <= inMax0 && !self->AbortExecute; ++inIdx0 )
+    for (int component = 0; component <= numberOfComponents; component++)
     {
-        T * inPtr1 = inPtr0;
-        T * outPtr1 = outPtr0;
+        // loop through pixels of input
+        T * inPtr0 = inPtr + component;
+        T * outPtr0 = outPtr + component;
 
-        for ( int inIdx1 = inMin1; inIdx1 <= inMax1 && !self->AbortExecute; ++inIdx1 )
+        for ( int inIdx0 = inMin0; inIdx0 <= inMax0 && !self->AbortExecute; ++inIdx0 )
         {
-            // init the accumulator before a new set of pixels
-            accumulator->initialize();
+            T * inPtr1 = inPtr0;
+            T * outPtr1 = outPtr0;
 
-            T * inPtrA = inPtr1;
-
-            for ( int inIdxA = inMinA; inIdxA <= inMaxA && !self->AbortExecute; inIdxA += step )
+            for ( int inIdx1 = inMin1; inIdx1 <= inMax1 && !self->AbortExecute; ++inIdx1 )
             {
-                accumulator->accumulate( *inPtrA );
-                inPtrA += (step * inIncA);
+                // init the accumulator before a new set of pixels
+                accumulator->initialize();
+
+                T * inPtrA = inPtr1;
+
+                for ( int inIdxA = inMinA; inIdxA <= inMaxA && !self->AbortExecute; inIdxA += step )
+                {
+                    accumulator->accumulate( *inPtrA );
+                    inPtrA += (step * inIncA);
+                }
+
+                *outPtr1 = accumulator->getValue();
+
+                inPtr1 += inInc1;
+                outPtr1 += outInc1;
             }
 
-            *outPtr1 = accumulator->getValue();
-
-            inPtr1 += inInc1;
-            outPtr1 += outInc1;
+            inPtr0 += inInc0;
+            outPtr0 += outInc0;
         }
-
-        inPtr0 += inInc0;
-        outPtr0 += outInc0;
     }
     delete accumulator;
 }
