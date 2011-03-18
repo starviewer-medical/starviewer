@@ -401,9 +401,6 @@ QList<Patient *> Patient::mergePatients(QList<Patient *> patientsList)
             // Agafem el primer element del conjunt i el treiem
             Patient *currentPatient = setIterator.next();
             setIterator.remove();
-            // Fem la còpia de l'element agafat, que un cop 
-            // fusionat o no, afegirem a la llista final
-            Patient *newPatient = new Patient(*currentPatient);
             // Ara examinem la resta d'elements del conjunt
             // per veure si els podem fusionar
             // en cas que es puguin fusionar, els eliminarem del conjunt
@@ -413,7 +410,7 @@ QList<Patient *> Patient::mergePatients(QList<Patient *> patientsList)
                 if (currentPatient->compareTo(setIterator.peekNext()) == Patient::SamePatients)
                 {
                     // BINGO! Són iguals! El fusionem i l'eliminem del conjunt
-                    *newPatient += (*setIterator.peekNext()) ;
+                    *currentPatient += (*setIterator.peekNext()) ;
                     setIterator.next();
                     setIterator.remove();   
                 }
@@ -424,7 +421,7 @@ QList<Patient *> Patient::mergePatients(QList<Patient *> patientsList)
                 }
             }
             // Afegim a la llista el pacient ja fusionat si s'escau
-            resultingPatientsList << newPatient;
+            resultingPatientsList << currentPatient;
             // retornem l'iterador a l'inici per continuar analitzant la resta d'elements del conjunt que quedin
             setIterator.toFront();
         }
