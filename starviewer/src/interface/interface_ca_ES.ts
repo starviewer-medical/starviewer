@@ -323,7 +323,8 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="570"/>
-        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2009 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats.</source>
+        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats.</source>
+        <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-2011 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
