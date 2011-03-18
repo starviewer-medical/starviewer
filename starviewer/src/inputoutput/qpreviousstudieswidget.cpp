@@ -134,18 +134,19 @@ void QPreviousStudiesWidget::initializeTree()
 
     // Inicialitzem la capçalera
     QStringList labels;
-    labels << "" << "" <<  "" << tr("Name") << tr("Date") << tr("Modality") << tr("Description");
+    labels << "" <<  "" << tr("Modality") << tr("Description") << tr("Date") << tr("Name");
     m_previousStudiesTree->setHeaderLabels(labels);
 
     // Fem 8 columnes perquè la primera l'amagarem
-    m_previousStudiesTree->setColumnCount(7);
-    m_previousStudiesTree->setColumnHidden(0, true);
+    m_previousStudiesTree->setColumnCount(6);
+    m_previousStudiesTree->setRootIsDecorated(false);
+    m_previousStudiesTree->setItemsExpandable(false);
     m_previousStudiesTree->setAlternatingRowColors(true);
     m_previousStudiesTree->setUniformRowHeights(true);
     m_previousStudiesTree->setSortingEnabled(true);
 
     //Ordenem  els estudis per data i hora
-    m_previousStudiesTree->sortItems(4, Qt::DescendingOrder);
+    m_previousStudiesTree->sortItems(Date, Qt::DescendingOrder);
 
     // El farem visible quan rebem la llista d'estudis previs
     m_previousStudiesTree->setVisible(false);
@@ -175,14 +176,14 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study, QString pacsID)
 
     item->setFlags(Qt::ItemIsEnabled);
 
-    item->setText(3, study->getParentPatient()->getFullName());
-    item->setText(4, study->getDate().toString(Qt::ISODate) + "   " + study->getTimeAsString());
-    item->setText(5, study->getModalitiesAsSingleString());
-    item->setText(6, study->getDescription());
+    item->setText(Name, study->getParentPatient()->getFullName());
+    item->setText(Date, study->getDate().toString(Qt::ISODate) + "   " + study->getTimeAsString());
+    item->setText(Modality, study->getModalitiesAsSingleString());
+    item->setText(Description, study->getDescription());
 
     QLabel *status = new QLabel();
 
-    m_previousStudiesTree->setItemWidget(item, 1, status);
+    m_previousStudiesTree->setItemWidget(item, DownloadingStatus, status);
 
     QIcon dowloadIcon(QString(":/images/view.png"));
     QPushButton *downloadButton = new QPushButton(dowloadIcon, QString(""));
@@ -190,7 +191,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study, QString pacsID)
     connect(downloadButton, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
     m_signalMapper->setMapping(downloadButton, study->getInstanceUID());
 
-    m_previousStudiesTree->setItemWidget(item, 2, downloadButton);
+    m_previousStudiesTree->setItemWidget(item, DownloadButton, downloadButton);
 
     // Guardem informació relacionada amb l'estudi per facilitar la feina
     StudyInfo *relatedStudyInfo = new StudyInfo;
@@ -207,7 +208,7 @@ void QPreviousStudiesWidget::insertStudyToTree(Study *study, QString pacsID)
 void QPreviousStudiesWidget::updateWidthTree()
 {
     int fixedSize = 0;
-    for (int i = 1; i < m_previousStudiesTree->columnCount(); i++)
+    for (int i = 0; i < m_previousStudiesTree->columnCount(); i++)
     {
         m_previousStudiesTree->resizeColumnToContents(i);
         fixedSize += m_previousStudiesTree->columnWidth(i);
