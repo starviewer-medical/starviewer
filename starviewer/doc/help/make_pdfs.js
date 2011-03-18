@@ -12,8 +12,6 @@ var saveToFolderName = shell.CurrentDirectory + "\\..\\..\\bin\\"
 function docxToPdf(msword, sourceFileName)
 {
     var fileSystem = WScript.CreateObject("Scripting.FileSystemObject");
-    //var shell = WScript.CreateObject("WScript.Shell");
-    //var saveToFileName = shell.CurrentDirectory + "\\..\\..\\bin\\" + fileSystem.GetBaseName(sourceFileName) + ".pdf";
     var saveToFileName = saveToFolderName + fileSystem.GetBaseName(sourceFileName) + ".pdf";
     if (fileSystem.FileExists(saveToFileName))
     {
@@ -26,7 +24,8 @@ function docxToPdf(msword, sourceFileName)
 
 var shell = WScript.CreateObject("WScript.Shell");
 var filenames = [shell.CurrentDirectory + "\\usermanual\\Starviewer_User_guide.docx",
-                 shell.CurrentDirectory + "\\quickstartguide\\Starviewer_Quick_start_guide.docx"];
+                 shell.CurrentDirectory + "\\quickstartguide\\Starviewer_Quick_start_guide.docx",
+                 shell.CurrentDirectory + "\\shortcuts\\Starviewer_Shortcuts_guide.docx"];
 var msword = WScript.CreateObject("Word.Application");
 
 for(var i = 0; i < filenames.length; ++i)
