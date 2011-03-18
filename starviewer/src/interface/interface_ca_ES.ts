@@ -40,7 +40,7 @@
         <location filename="applicationcommandlineoptions.cpp" line="81"/>
         <location filename="applicationcommandlineoptions.cpp" line="101"/>
         <source> option requires an argument</source>
-        <translation type="unfinished"> requereix un argument</translation>
+        <translation> requereix un argument</translation>
     </message>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="92"/>
@@ -242,7 +242,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="245"/>
         <source>Maximize To Multiple Screen</source>
-        <translation type="unfinished">Maximitza a múltiples pantalles</translation>
+        <translation>Maximitza a múltiples pantalles</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="246"/>
@@ -253,43 +253,43 @@
         <location filename="qapplicationmainwindow.cpp" line="254"/>
         <location filename="qapplicationmainwindow.cpp" line="392"/>
         <source>Move To Screen</source>
-        <translation type="unfinished">Mou a la pantalla</translation>
+        <translation>Mou a la pantalla</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="255"/>
         <source>Move The Window To The Screen ...</source>
-        <translation type="unfinished">Mou la finestra a la pantalla...</translation>
+        <translation>Mou la finestra a la pantalla...</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="273"/>
         <source>User guide</source>
-        <translation type="unfinished">Guia d&apos;usuari</translation>
+        <translation>Guia d&apos;usuari</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="274"/>
         <source>Open User guide</source>
         <translatorcomment>Potser millor mostre la guia d&apos;usuari?</translatorcomment>
-        <translation type="unfinished">Obre la guia d&apos;usuari</translation>
+        <translation>Obre la guia d&apos;usuari</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="278"/>
         <source>Quick Start guide</source>
-        <translation type="unfinished">Guia ràpida</translation>
+        <translation>Guia ràpida</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="279"/>
         <source>Open Quick Start guide</source>
-        <translation type="unfinished">Obre la guia ràpida</translation>
+        <translation>Obre la guia ràpida</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="283"/>
         <source>Shortcuts guide</source>
-        <translation type="unfinished">Guia de dreceres</translation>
+        <translation>Guia de dreceres</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="284"/>
         <source>Open Shortcuts guide</source>
-        <translation type="unfinished">Obre la guia dreceres</translation>
+        <translation>Obre la guia dreceres</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="316"/>
@@ -390,7 +390,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="592"/>
         <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="594"/>
