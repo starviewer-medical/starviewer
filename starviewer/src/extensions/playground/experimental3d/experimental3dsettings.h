@@ -15,6 +15,7 @@ public:
 
     /// Declaració de claus
     static const QString TransferFunctionDir;
+    static const QString ColorTransferFunctionDir;
     static const QString ImportanceDir;
 
     static const QString ViewedVolumeDir;

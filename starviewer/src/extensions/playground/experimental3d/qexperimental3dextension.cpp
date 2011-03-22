@@ -1237,7 +1237,7 @@ void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
 
 void QExperimental3DExtension::loadColorTransferFunction()
 {
-    QString transferFunctionFileName = getFileNameToLoad(Experimental3DSettings::TransferFunctionDir, tr("Load color transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"));
+    QString transferFunctionFileName = getFileNameToLoad(Experimental3DSettings::ColorTransferFunctionDir, tr("Load color transfer function"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"));
     if (!transferFunctionFileName.isNull()) loadColorTransferFunction(transferFunctionFileName);
 }
 
