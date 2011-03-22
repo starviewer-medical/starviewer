@@ -121,10 +121,12 @@ QString QueryPacsJob::getStatusDescription()
             message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::QueryFailedOrRefused:
+            message = tr("PACS %1 has report us that could not process the requested query.\n\n").arg(pacsAETitle);
+            message += tr("Wait a few minutes and try it again, if the problem persists contact with PACS administrator.");
+            break;
         case PACSRequestStatus::QueryUnknowStatus:
-            message = tr("%1 can't query %2 to PACS %3 because It doesn't respond as expected.\n\n")
-                .arg(ApplicationNameString, getQueryLevelAsQString(), pacsAETitle);
-            message += tr("If the problem persists contact with an administrator.");
+            message = tr("PACS %1 has report us that could not process the requested query returning an unknow code error.\n\n").arg(pacsAETitle);
+            message += tr("Please contact with PACS administrator to report the issue.");
             break;
         default:
             message = tr("An unknown error has ocurred querying %1 to PACS %2.").arg(getQueryLevelAsQString(), pacsAETitle);
