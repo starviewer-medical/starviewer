@@ -335,6 +335,7 @@ private slots:
     void enableBaseVomi(bool on);
     void enableVomi(bool on);
 
+    TransferFunction normalToClusterizedTransferFunction(const TransferFunction &normalTransferFunction) const;
     void normalToClusterizedTransferFunction();
     void clusterizedToNormalTransferFunction();
     void viewNormalVolume();
@@ -410,7 +411,7 @@ private:
     QVector<float> m_viewpointUnstabilitiesI;
     QVector<float> m_imi;
     float m_maximumImi;
-    enum ClusteringType { Intensity, IntensityGradient, Importance };
+    enum ClusteringType { None, Intensity, IntensityGradient, Importance };
     ClusteringType m_clusteringType;
     QList< QList<int> > m_intensityClusters;
     QList< QList<int> > m_gradientClusters;
