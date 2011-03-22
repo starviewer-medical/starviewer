@@ -195,6 +195,8 @@ private:
     void loadColorTransferFunction(const QString &fileName);
     void saveTransferFunction( const QString &fileName );
     void loadCamera( const QString &fileName );
+    void transferFunctionOptimizationLoadImportance(const QString &fileName);
+    void transferFunctionOptimizationSaveImportance(const QString &fileName);
 
     /// Fa un recorregut pels viewpoints en ordre i amb suavitat.
     void tour( const QList<Vector3> &viewpoints, double speedFactor = 1.0 );
@@ -348,6 +350,9 @@ private slots:
     void importanceClustering();
     void normalToClusterizedTransferFunction2DImportance();
     void clusterizedToNormalTransferFunction2DImportance();
+
+    void transferFunctionOptimizationLoadImportance();
+    void transferFunctionOptimizationSaveImportance();
 
 private:
 

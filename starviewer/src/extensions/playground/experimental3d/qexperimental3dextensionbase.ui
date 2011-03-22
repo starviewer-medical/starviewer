@@ -3337,7 +3337,7 @@
             <x>0</x>
             <y>0</y>
             <width>520</width>
-            <height>1290</height>
+            <height>1320</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -4414,6 +4414,24 @@
                  </size>
                 </property>
                </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_90">
+                <item>
+                 <widget class="QPushButton" name="m_transferFunctionOptimizationLoadImportancePushButton">
+                  <property name="text">
+                   <string>Load importance...</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="m_transferFunctionOptimizationSaveImportancePushButton">
+                  <property name="text">
+                   <string>Save importance...</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
              </layout>
             </widget>

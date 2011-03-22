@@ -1145,6 +1145,8 @@ void QExperimental3DExtension::createConnections()
     connect(m_transferFunctionOptimizationWeights2DGradientCheckBox, SIGNAL(toggled(bool)), SLOT(fillWeightsEditor()));
     connect(m_transferFunctionOptimizationWeightsZeroUpToIntensitySpinBox, SIGNAL(valueChanged(int)), SLOT(fillWeightsEditor()));
     connect(m_transferFunctionOptimizationWeightsZeroUpToGradientSpinBox, SIGNAL(valueChanged(int)), SLOT(fillWeightsEditor()));
+    connect(m_transferFunctionOptimizationLoadImportancePushButton, SIGNAL(clicked()), SLOT(transferFunctionOptimizationLoadImportance()));
+    connect(m_transferFunctionOptimizationSaveImportancePushButton, SIGNAL(clicked()), SLOT(transferFunctionOptimizationSaveImportance()));
 
     // Program
     connect( m_loadAndRunProgramPushButton, SIGNAL( clicked() ), SLOT( loadAndRunProgram() ) );
@@ -1286,6 +1288,40 @@ void QExperimental3DExtension::saveTransferFunction( const QString &fileName )
     QString name = m_transferFunctionEditor->transferFunction().name();
     if ( name.isEmpty() ) name = tr("<unnamed>");
     m_recentTransferFunctionsModel->setData( m_recentTransferFunctionsModel->index( row, 0 ), name );
+}
+
+
+void QExperimental3DExtension::transferFunctionOptimizationLoadImportance()
+{
+    QString importanceFileName = getFileNameToLoad(Experimental3DSettings::ImportanceDir, tr("Load importance"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"));
+    if (!importanceFileName.isNull()) transferFunctionOptimizationLoadImportance(importanceFileName);
+}
+
+
+void QExperimental3DExtension::transferFunctionOptimizationLoadImportance(const QString &fileName)
+{
+    TransferFunction *importance;
+
+    if (fileName.endsWith(".xml")) importance = TransferFunctionIO::fromXmlFile(fileName);
+    else importance = TransferFunctionIO::fromFile(fileName);
+
+    m_transferFunctionOptimizationManualWeightsEditor->setTransferFunction(*importance);
+
+    delete importance;
+}
+
+
+void QExperimental3DExtension::transferFunctionOptimizationSaveImportance()
+{
+    QString importanceFileName = getFileNameToSave(Experimental3DSettings::ImportanceDir, tr("Save importance"), tr("XML files (*.xml);;Transfer function files (*.tf);;All files (*)"), "xml");
+    if (!importanceFileName.isNull()) transferFunctionOptimizationSaveImportance(importanceFileName);
+}
+
+
+void QExperimental3DExtension::transferFunctionOptimizationSaveImportance(const QString &fileName)
+{
+    if (fileName.endsWith(".xml")) TransferFunctionIO::toXmlFile(fileName, m_transferFunctionOptimizationManualWeightsEditor->transferFunction());
+    else TransferFunctionIO::toFile(fileName, m_transferFunctionOptimizationManualWeightsEditor->transferFunction());
 }
 
 
