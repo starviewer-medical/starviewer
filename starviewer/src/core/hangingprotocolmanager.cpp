@@ -262,6 +262,7 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
             setInputToViewer(viewerWidget, hangingProtocolImageSet->getSeriesToDisplay(), displaySet);
         }
     }
+    layout->setSelectedViewer(layout->getViewerWidget(0));
 
     INFO_LOG(QString("Hanging protocol aplicat: %1").arg(hangingProtocol->getName()));
 }
