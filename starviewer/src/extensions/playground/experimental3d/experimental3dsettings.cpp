@@ -6,6 +6,7 @@ namespace udg {
 const QString KeyPrefix("Experimental3D/");
 
 const QString Experimental3DSettings::TransferFunctionDir( KeyPrefix + "transferFunctionDir" );
+const QString Experimental3DSettings::ColorTransferFunctionDir(KeyPrefix + "colorTransferFunctionDir");
 const QString Experimental3DSettings::ImportanceDir(KeyPrefix + "importanceDir");
 
 const QString Experimental3DSettings::ViewedVolumeDir( KeyPrefix + "viewedVolumeDir" );
