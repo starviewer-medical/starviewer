@@ -987,7 +987,7 @@ Remove it from the directory or uncheck copy folder content option.</source>
         <oldsource>%1 can&apos;t create the DICOMDIR because the folder to copy to DICOMDIR &apos;%2&apos; contents an item called DICOMDIR or DICOM.
 
 Remove it from the directory or uncheck copy folder content to DICOMDIR option.</oldsource>
-        <translation>%1 no ha creat el DICOMDIR perquè el contingut del directori a copiar &apos;%2&apos; conté elements amb nom DICOMDIR o DICOM.
+        <translation>%1 no ha pogut crear el DICOMDIR perquè el contingut del directori a copiar &apos;%2&apos; conté elements amb nom DICOMDIR o DICOM.
 
 Esborreu aquests elements del directori o desmarqueu l&apos;opció de copiar el contingut de la carpeta.</translation>
     </message>
@@ -2459,7 +2459,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="165"/>
+        <location filename="qpreviousstudieswidget.cpp" line="169"/>
         <source>Looking for related studies...</source>
         <translation>Cercant estudis relacionats...</translation>
     </message>
@@ -2670,7 +2670,6 @@ Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres 
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="121"/>
-        <location filename="querypacsjob.cpp" line="127"/>
         <source>If the problem persists contact with an administrator.</source>
         <translation>Si el problema persisteix contacti amb un administrador.</translation>
     </message>
@@ -2682,43 +2681,71 @@ Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres 
 </translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="125"/>
-        <source>%1 can&apos;t query %2 to PACS %3 because It doesn&apos;t respond as expected.
+        <location filename="querypacsjob.cpp" line="124"/>
+        <source>PACS %1 has report us that could not process the requested query.
 
 </source>
-        <translation>El PACS %2 no ha respós com s&apos;esperava consultant %3.
+        <oldsource>PACS %1 has report us that can not process the requested query.
+
+</oldsource>
+        <translation>El PACS %1 ha informat de que no ha pogut processar la consulta sol·licitada.
 
 </translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="130"/>
+        <location filename="querypacsjob.cpp" line="125"/>
+        <source>Wait a few minutes and try it again, if the problem persists contact with PACS administrator.</source>
+        <oldsource>%1 can&apos;t query %2 to PACS %3 because It doesn&apos;t respond as expected.
+
+</oldsource>
+        <translation>Espereu uns minuts i torneu a fer la consulta, si el problema persisteix contacteu amb un administador del PACS.</translation>
+    </message>
+    <message>
+        <location filename="querypacsjob.cpp" line="128"/>
+        <source>PACS %1 has report us that could not process the requested query returning an unknow code error.
+
+</source>
+        <oldsource>PACS %1 has report us that can not process the requested query returning an unknow code error.
+
+</oldsource>
+        <translation>El PACS %1 ha informat de que no ha pogut processar la consulta sol·licitada retornant un codi d&apos;error desconegut.
+
+</translation>
+    </message>
+    <message>
+        <location filename="querypacsjob.cpp" line="129"/>
+        <source>Please contact with PACS administrator to report the issue.</source>
+        <translation>Contacteu amb un administrador del PACS per notificar-li el problema.</translation>
+    </message>
+    <message>
+        <location filename="querypacsjob.cpp" line="132"/>
         <source>An unknown error has ocurred querying %1 to PACS %2.</source>
         <translation>S&apos;ha produït un error desconegut al consultar %1 al PACS %2.</translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="131"/>
+        <location filename="querypacsjob.cpp" line="133"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <translation>
 Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="143"/>
+        <location filename="querypacsjob.cpp" line="145"/>
         <source>studies</source>
         <translation>estudis</translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="145"/>
+        <location filename="querypacsjob.cpp" line="147"/>
         <source>series</source>
         <translation>sèries</translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="147"/>
+        <location filename="querypacsjob.cpp" line="149"/>
         <source>images</source>
         <translation>imatges</translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="149"/>
+        <location filename="querypacsjob.cpp" line="151"/>
         <source>unkown query level</source>
         <translation>nivell de consulta desconegut</translation>
     </message>

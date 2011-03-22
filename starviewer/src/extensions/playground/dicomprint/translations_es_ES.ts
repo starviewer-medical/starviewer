@@ -268,10 +268,6 @@ border: 1px solid  #680000;
         <translation>Densidad máxima:</translation>
     </message>
     <message>
-        <source>Trim</source>
-        <translation>Recorte</translation>
-    </message>
-    <message>
         <source>Yes</source>
         <translation>Si</translation>
     </message>
@@ -299,16 +295,17 @@ border: 1px solid  #680000;
         <source>Hostname</source>
         <translation>Nombre del host</translation>
     </message>
-</context>
-<context>
-    <name>QDicomPrintingConfigurationWidgetBase</name>
     <message>
-        <source>QDicomPrintingConfigurationWidget</source>
+        <source>Supports Anotation Box:</source>
+        <translation>Soporta anotaciones:</translation>
+    </message>
+    <message>
+        <source>Trim:</source>
         <translation></translation>
     </message>
     <message>
-        <source>test</source>
-        <translation></translation>
+        <source>Annotation Display Format:</source>
+        <translation>Formato de las anotaciones:</translation>
     </message>
 </context>
 <context>

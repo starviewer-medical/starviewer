@@ -297,47 +297,47 @@ border: 1px solid  #680000;
         <translation>Impressora predeterminada</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="312"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="321"/>
         <source>Magnification Type:</source>
         <translation>Tipus de magnificació:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="344"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="357"/>
         <source>Border Color:</source>
         <translation>Color de la vora:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="357"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="390"/>
         <source>Minimum Density:</source>
         <translation>Densitat mínima:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="386"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="423"/>
         <source>Polarity:</source>
         <translation>Polaritat:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="451"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="450"/>
+        <source>Supports Anotation Box:</source>
+        <translation>Suporta anotacions:</translation>
+    </message>
+    <message>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="537"/>
         <source>Smoothing:</source>
         <translation>Suavitzat:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="484"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="570"/>
         <source>Empty Image Color:</source>
         <translation>Color d&apos;imatge buida:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="517"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="603"/>
         <source>Maximum Denstiy:</source>
         <translation>Densitat màxima:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="544"/>
-        <source>Trim</source>
-        <translation>Retallat</translation>
-    </message>
-    <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="588"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="714"/>
         <source>Configuration Information:</source>
         <translation>Informació de la configuració:</translation>
     </message>
@@ -347,12 +347,14 @@ border: 1px solid  #680000;
         <translation>Paràmetres impressora</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="553"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="462"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="642"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="560"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="469"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="649"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -362,32 +364,29 @@ border: 1px solid  #680000;
         <translation>Configuració avançada</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="648"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="630"/>
+        <source>Trim:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="678"/>
+        <source>Annotation Display Format:</source>
+        <translation>Format de les anotacions:</translation>
+    </message>
+    <message>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="776"/>
         <source>Accept</source>
         <translation>Acceptar</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="658"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="786"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="665"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="793"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
-    </message>
-</context>
-<context>
-    <name>QDicomPrintingConfigurationWidgetBase</name>
-    <message>
-        <location filename="qdicomprintingconfigurationwidgetbase.ui" line="17"/>
-        <source>QDicomPrintingConfigurationWidget</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qdicomprintingconfigurationwidgetbase.ui" line="24"/>
-        <source>test</source>
-        <translation>Provar</translation>
     </message>
 </context>
 <context>
@@ -419,18 +418,18 @@ border: 1px solid  #680000;
 <context>
     <name>udg::QDicomPrintExtension</name>
     <message>
-        <location filename="qdicomprintextension.cpp" line="501"/>
+        <location filename="qdicomprintextension.cpp" line="538"/>
         <source>Some of the pages film can&apos;t be printed because </source>
         <translation>Algunes de les plaques no s&apos;han pogut imprimir perquè </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="505"/>
+        <location filename="qdicomprintextension.cpp" line="542"/>
         <source>The images can&apos;t be printed because </source>
         <oldsource>The film can&apos;t be printed because </oldsource>
         <translation>Les imatges no es poden imprimir perquè </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="511"/>
+        <location filename="qdicomprintextension.cpp" line="548"/>
         <source>the printer doesn&apos;t respond.
 
 </source>
@@ -439,13 +438,13 @@ border: 1px solid  #680000;
 </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="512"/>
+        <location filename="qdicomprintextension.cpp" line="549"/>
         <source>Be sure the computer is connected on the network and the printer network parameters are correct.</source>
         <oldsource>Be sure that computer is connected on the network and the printer network parameters are correct.</oldsource>
         <translation>Assegureu-vos de que l&apos;ordinador està connectat a la xarxa i que els paràmetres de xarxa de la impressora són correctes.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="515"/>
+        <location filename="qdicomprintextension.cpp" line="552"/>
         <source>the printer doesn&apos;t respond as expected.
 
 </source>
@@ -454,24 +453,24 @@ border: 1px solid  #680000;
 </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="516"/>
+        <location filename="qdicomprintextension.cpp" line="553"/>
         <source>In most cases this error is produced because the printer doesn&apos;t support some of the print configuration parameters.</source>
         <oldsource>In most cases this error is produced because the printer doesn&apos;t accept some of the print configuration parameters.</oldsource>
         <translation>En la majoria de casos aquest error es produeix perquè la impressora no suporta alguns dels paràmetres de configuració.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="517"/>
+        <location filename="qdicomprintextension.cpp" line="554"/>
         <source>Check printer DICOM Conformance to be sure that it accepts all your print parameters.</source>
         <oldsource>Check printer DICOM Conformance to be sure that it accepts all your print configuration parameters.</oldsource>
         <translation>Comproveu amb el DICOM conformance de la impressora que aquesta accepti els vostres paràmetres d&apos;impressió.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="520"/>
+        <location filename="qdicomprintextension.cpp" line="557"/>
         <source>%1 can&apos;t create print spool.</source>
         <translation>%1 no ha pogut crear l&apos;spool d&apos;impressió.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="523"/>
+        <location filename="qdicomprintextension.cpp" line="560"/>
         <source>%1 can&apos;t load some of the images to print.
 
 </source>
@@ -480,24 +479,24 @@ border: 1px solid  #680000;
 </translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="524"/>
+        <location filename="qdicomprintextension.cpp" line="561"/>
         <source>Close &apos;DICOM print&apos; tab and try it again.</source>
         <oldsource>Close image print tab and try again to print.</oldsource>
         <translation>Tanqueu la pestanya de &apos;Imprimir DICOM&apos; i torneu-ho a provar.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="528"/>
+        <location filename="qdicomprintextension.cpp" line="565"/>
         <source>an unknow error has produced.</source>
         <oldsource>and unknow error has produced.</oldsource>
         <translation>s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="544"/>
+        <location filename="qdicomprintextension.cpp" line="581"/>
         <source>This series cannot be printed because color is not supported.</source>
         <translation>No es pot imprimir aquesta sèrie perquè la impressió d&apos;imatges en color no està suportada.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextension.cpp" line="556"/>
+        <location filename="qdicomprintextension.cpp" line="593"/>
         <source>This series cannot be printed because multi-frame images are not supported.</source>
         <translation>No es pot imprimir aquesta sèrie perquè la impressió d&apos;imatges multi-frame no està suportada.</translation>
     </message>
@@ -511,23 +510,23 @@ border: 1px solid  #680000;
         <translation>Automàtic</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="91"/>
+        <location filename="qdicomprinterconfigurationwidget.cpp" line="94"/>
         <source>Error can&apos;t apply changes to the printer.</source>
         <translation>Error no es poden aplicar els canvis a la impressora.</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="105"/>
+        <location filename="qdicomprinterconfigurationwidget.cpp" line="108"/>
         <source>No printer is selected to apply the changes.</source>
         <oldsource>No printer is not selected to apply the changes.</oldsource>
         <translation>No s&apos;ha seleccionat cap impressora per aplicar els canvis.</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="136"/>
+        <location filename="qdicomprinterconfigurationwidget.cpp" line="139"/>
         <source>Test of printer %1 is correct.</source>
         <translation>El test de la impressora %1 és correcte.</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="150"/>
+        <location filename="qdicomprinterconfigurationwidget.cpp" line="153"/>
         <source>Printer %1 doesn&apos;t respond.
 Be sure that hostname and AETitle are correct.</source>
         <oldsource>Printer %1 doesn&apos;t respond.
@@ -536,18 +535,18 @@ Be sure that the IP and AETitle are correct.</oldsource>
 Assegureu-vos que la direcció i el AETitle són correctes.</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="159"/>
+        <location filename="qdicomprinterconfigurationwidget.cpp" line="162"/>
         <source>No printer is selected to test.</source>
         <translation>S&apos;ha de seleccionar una impressora per fer el test.</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="262"/>
+        <location filename="qdicomprinterconfigurationwidget.cpp" line="276"/>
         <source>Hostname can&apos;t be empty.</source>
         <oldsource>Hostname can&apos;t be empty</oldsource>
         <translation>Heu d&apos;introduir la direcció de la impressora.</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="146"/>
+        <location filename="qdicomprinterconfigurationwidget.cpp" line="149"/>
         <source>Printer %1 doesn&apos;t respond correclty.
 Be sure that hostname and AETitle are correct.</source>
         <oldsource>Printer %1 doesn&apos;t respond correclty.
@@ -556,7 +555,7 @@ Be sure that the IP and AETitle are correct.</oldsource>
 Assegureu-vos que la direcció i AETitle són correctes.</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidget.cpp" line="255"/>
+        <location filename="qdicomprinterconfigurationwidget.cpp" line="269"/>
         <source>AETitle field can&apos;t be empty.</source>
         <oldsource>AETitle field can&apos;t be empty</oldsource>
         <translation>Heu d&apos;introduir el AETitle de la impressora.</translation>

@@ -2414,7 +2414,7 @@ Close all %1 windows and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpreviousstudieswidget.cpp" line="165"/>
+        <location filename="qpreviousstudieswidget.cpp" line="169"/>
         <source>Looking for related studies...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2624,7 +2624,6 @@ Be sure that your computer is connected on network and the PACS parameters are c
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="121"/>
-        <location filename="querypacsjob.cpp" line="127"/>
         <source>If the problem persists contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2635,40 +2634,66 @@ Be sure that your computer is connected on network and the PACS parameters are c
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="125"/>
-        <source>%1 can&apos;t query %2 to PACS %3 because It doesn&apos;t respond as expected.
+        <location filename="querypacsjob.cpp" line="124"/>
+        <source>PACS %1 has report us that could not process the requested query.
 
 </source>
+        <oldsource>PACS %1 has report us that can not process the requested query.
+
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="130"/>
+        <location filename="querypacsjob.cpp" line="125"/>
+        <source>Wait a few minutes and try it again, if the problem persists contact with PACS administrator.</source>
+        <oldsource>%1 can&apos;t query %2 to PACS %3 because It doesn&apos;t respond as expected.
+
+</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="querypacsjob.cpp" line="128"/>
+        <source>PACS %1 has report us that could not process the requested query returning an unknow code error.
+
+</source>
+        <oldsource>PACS %1 has report us that can not process the requested query returning an unknow code error.
+
+</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="querypacsjob.cpp" line="129"/>
+        <source>Please contact with PACS administrator to report the issue.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="querypacsjob.cpp" line="132"/>
         <source>An unknown error has ocurred querying %1 to PACS %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="131"/>
+        <location filename="querypacsjob.cpp" line="133"/>
         <source>
 If the problem persists contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="143"/>
+        <location filename="querypacsjob.cpp" line="145"/>
         <source>studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="145"/>
+        <location filename="querypacsjob.cpp" line="147"/>
         <source>series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="147"/>
+        <location filename="querypacsjob.cpp" line="149"/>
         <source>images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="149"/>
+        <location filename="querypacsjob.cpp" line="151"/>
         <source>unkown query level</source>
         <translation type="unfinished"></translation>
     </message>

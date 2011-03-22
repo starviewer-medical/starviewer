@@ -268,10 +268,6 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Trim</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -299,15 +295,16 @@ border: 1px solid  #680000;
         <source>Hostname</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QDicomPrintingConfigurationWidgetBase</name>
     <message>
-        <source>QDicomPrintingConfigurationWidget</source>
+        <source>Supports Anotation Box:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>test</source>
+        <source>Trim:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Annotation Display Format:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
