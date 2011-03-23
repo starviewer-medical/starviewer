@@ -154,28 +154,17 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     }
 
     // Movem la finestra del menu al punt que toca
+    m_patientBrowserList->move(menuXPosition, menuYPosition);
+    
     // Col·loquem el widget amb la informació adicional a la dreta o l'esquerra del principal segons l'espai disponible
-    // TODO Aquesta mesura no és la més exacta. L'adequada hauria de basar-se en els valors de QWidget::frameGeometry()
-    int additionalInfoWidgetApproximateWidth = m_patientAdditionalInfo->sizeHint().width();
-    if (menuXPosition + mainMenuApproximateWidth + additionalInfoWidgetApproximateWidth > currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width())
-    {
-        // A l'esquerra
-        m_patientAdditionalInfo->move(menuXPosition - additionalInfoWidgetApproximateWidth, menuYPosition);
-    }
-    else
-    {
-        // A la dreta
-        m_patientAdditionalInfo->move(menuXPosition + mainMenuApproximateWidth, menuYPosition);
-    }
+    placeAdditionalInfoWidget();
     m_patientAdditionalInfo->show();
-
     // TODO: HACK si no mostrem l'"Aditional info" abans que el "browser list" després no processa els events
     // correctament i quan seleccionem una sèrie no arriba el signal enlloc i no es pot seleccionar cap sèrie
     // relacionat amb el ticket #555 Això només passa amb qt 4.3, amb qt 4.2 no tenim aquest
     // problema. Amb qt 4.2 podem fer show en l'ordre que volguem. El que fem per evitar flickering és mostrar-lo sota mateix
     // del "browser list" i així no es nota tant
     // Això, a partir de Qt 4.7 sembla que només passa a Mac. Semblaria que això és el símptoma d'un altre problema: que es mostri com un popup?
-    m_patientBrowserList->move(menuXPosition, menuYPosition);
     m_patientBrowserList->show();
 
     // TODO No es té en compte si després d'haver mogut de lloc el widget aquest ja es veu correctament,
@@ -190,6 +179,7 @@ void PatientBrowserMenu::placeAdditionalInfoWidget()
     QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(m_patientBrowserList->pos()));
     QPoint currentScreenGlobalOriginPoint = currentScreenGeometry.topLeft();
 
+    // TODO Aquesta mesura no és la més exacta. L'adequada hauria de basar-se en els valors de QWidget::frameGeometry()
     int mainMenuApproximateWidth = m_patientBrowserList->sizeHint().width();
     int menuXPosition = m_patientBrowserList->pos().x();
     int menuYPosition = m_patientBrowserList->pos().y();
