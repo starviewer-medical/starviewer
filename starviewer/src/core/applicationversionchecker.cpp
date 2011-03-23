@@ -140,6 +140,24 @@ void ApplicationVersionChecker::setCheckVersionInterval(int interval)
     }
 }
 
+void ApplicationVersionChecker::showReleaseNotes()
+{
+    //llegir el contingut dels fitxers HTML de les release notes
+    QUrl url = createLocalUrl();
+    if (checkLocalUrl(url))
+    {
+        m_releaseNotes = new QReleaseNotes(0);
+        m_releaseNotes->setDontShowVisible(false);
+        m_releaseNotes->setUrl(url);
+        m_releaseNotes->setWindowTitle(tr("Release Notes"));
+        m_releaseNotes->show();
+    }
+    else
+    {
+        ERROR_LOG("Les release notes de la versió actual no existeixen.");
+    }
+}
+
 QUrl ApplicationVersionChecker::createLocalUrl()
 {
     //agafar el path del fitxer

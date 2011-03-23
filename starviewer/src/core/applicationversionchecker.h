@@ -49,6 +49,10 @@ public:
     /// Aquest és el mètode que s'ha de cridar si es vol canviar aquest interval des de per exemple un menu d'opcions
     void setCheckVersionInterval(int interval);
 
+    /// Mostra la finestra de les release notes
+    /// Es crida des del menu ajuda, així que només comprova que existeixin, i no si ja s'han mostrat.
+    void showReleaseNotes();
+
 signals:
     /// Senyal per indicar que s'ha acabat de carregar
     void checkFinished();
