@@ -121,6 +121,7 @@ void ApplicationVersionChecker::showIfCorrect()
         if (m_somethingToShow)
         {
             m_releaseNotes->show();
+            m_somethingToShow = false;
         }
     }
     else
