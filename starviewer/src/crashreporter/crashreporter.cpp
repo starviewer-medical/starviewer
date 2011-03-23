@@ -54,7 +54,10 @@ int main( int argc, char* argv[] )
     INFO_LOG(QString("%1 Crash Reporter Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
 
     int returnValue;
-    if (app.arguments().size() != 3)
+    // Seguint les recomanacions de la documentació de Qt, guardem la llista d'arguments en una variable, ja que aquesta operació és costosa
+    // http://doc.trolltech.com/4.7/qcoreapplication.html#arguments
+    QStringList commandLineArgumentsList = app.arguments();
+    if (commandLineArgumentsList.size() != 3)
     {
         returnValue = false;
     }
@@ -69,7 +72,7 @@ int main( int argc, char* argv[] )
 
         initializeTranslations(app);
 
-        udg::QCrashReporter reporter( app.arguments() );
+        udg::QCrashReporter reporter( commandLineArgumentsList );
         reporter.show();
 
         returnValue = app.exec();

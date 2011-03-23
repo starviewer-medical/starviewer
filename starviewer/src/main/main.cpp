@@ -186,14 +186,17 @@ int main(int argc, char *argv[])
     DJDecoderRegistration::registerCodecs();
     DcmRLEDecoderRegistration::registerCodecs();
 
-    INFO_LOG("Iniciada nova instancia Starviewer amb el seguents arguments de linia de comandes " + app.arguments().join(" "));
+    // Seguint les recomanacions de la documentació de Qt, guardem la llista d'arguments en una variable, ja que aquesta operació és costosa
+    // http://doc.trolltech.com/4.7/qcoreapplication.html#arguments
+    QStringList commandLineArgumentsList = app.arguments();
+    INFO_LOG("Iniciada nova instancia Starviewer amb el seguents arguments de linia de comandes " + commandLineArgumentsList.join(" "));
 
-    if (app.arguments().count() > 1)
+    if (commandLineArgumentsList.count() > 1)
     {
         /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per 
          *processar-los, si els arguments no són correctes mostre QMessagebox si hi ha una altra instància d'Starviewer finalitzem aquí.*/
         QString errorInvalidCommanLineArguments;
-        if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(app.arguments(), errorInvalidCommanLineArguments))
+        if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(commandLineArgumentsList, errorInvalidCommanLineArguments))
         {
             QString invalidCommandLine = QObject::tr("Invalid command line: ") + errorInvalidCommanLineArguments + "\n";
             invalidCommandLine += QObject::tr("usage: %1 [options]").arg(udg::ApplicationNameString) + "\n\n";
@@ -238,10 +241,10 @@ int main(int argc, char *argv[])
         
         /*S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox, 
           ja es llança mostrant-se la MainWindow.*/
-        if (app.arguments().count() > 1)
+        if (commandLineArgumentsList.count() > 1)
         {
             QString errorInvalidCommanLineArguments;
-            StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(app.arguments(), errorInvalidCommanLineArguments);
+            StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(commandLineArgumentsList, errorInvalidCommanLineArguments);
         }
 
         returnValue = app.exec();
