@@ -53,6 +53,9 @@ private:
     /// Crea els widgets dels que es composa el menú
     void createWidgets();
 
+    /// Col·loca el widget d'informació adicional all lloc més adient depenent de la posició del menú principal
+    void placeAdditionalInfoWidget();
+
 private:
     /// Atribut que guarda el punter al menú basic que representa les dades del pacient
     PatientBrowserMenuList *m_patientBrowserList;
