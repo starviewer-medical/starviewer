@@ -62,24 +62,28 @@ void ScreenManager::maximize(QWidget *window)
 
 void ScreenManager::moveToDesktop(QWidget *window, int idDesktop)
 {
-    if (doesItFitInto(window, idDesktop))
+    // Aquesta variable s'utilitza per saber si abans de fer el fit la finestra hi cabia.
+    bool fits = doesItFitInto(window, idDesktop);
+
+    if (window->isMaximized())
     {
-        if (window->isMaximized())
+        // La finestra està maximitzada i es mou a una altra pantalla
+        // per tant es desmaximitza, es mou i es maximitza de nou
+        // Si es mou a la mateixa pantalla, no es fa res
+        int desktopIAm = m_applicationDesktop->screenNumber(window);
+        if (idDesktop != desktopIAm)
         {
-            // La finestra està maximitzada i es mou a una altra pantalla
-            // per tant es desmaximitza, es mou i es maximitza de nou
-            // Si es mou a la mateixa pantalla, no es fa res
-            int desktopIAm = m_applicationDesktop->screenNumber(window);
-            if (idDesktop != desktopIAm)
-            {
-                window->showNormal();
-                fitInto(window, idDesktop);
-                window->showMaximized();
-            }
-        }
-        else
-        {
+            window->showNormal();
             fitInto(window, idDesktop);
+            window->showMaximized();
+        }
+    }
+    else
+    {
+        fitInto(window, idDesktop);
+        if (!fits)
+        {
+            window->showMaximized();    
         }
     }
 }
