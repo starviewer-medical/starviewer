@@ -105,6 +105,7 @@ void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
                                         .arg(series->getProtocolName().trimmed())
                                         .arg(volume->getNumberOfFrames())
                                        );
+        placeAdditionalInfoWidget();
     }
 }
 
@@ -181,6 +182,28 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // ja que es podria donar el cas que el widget no hi cabés a tota la pantalla
     // Caldria millorar el comportament en certs aspectes, com per exemple, redistribuir les files i columnes
     // del llistat si aquest no hi cap a la pantalla, per exemple.
+}
+
+void PatientBrowserMenu::placeAdditionalInfoWidget()
+{
+    ScreenManager screenManager;
+    QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(m_patientBrowserList->pos()));
+    QPoint currentScreenGlobalOriginPoint = currentScreenGeometry.topLeft();
+
+    int mainMenuApproximateWidth = m_patientBrowserList->sizeHint().width();
+    int menuXPosition = m_patientBrowserList->pos().x();
+    int menuYPosition = m_patientBrowserList->pos().y();
+    int additionalInfoWidgetApproximateWidth = m_patientAdditionalInfo->sizeHint().width();
+    if (menuXPosition + mainMenuApproximateWidth + additionalInfoWidgetApproximateWidth > currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width())
+    {
+        // A l'esquerra
+        m_patientAdditionalInfo->move(menuXPosition - additionalInfoWidgetApproximateWidth, menuYPosition);
+    }
+    else
+    {
+        // A la dreta
+        m_patientAdditionalInfo->move(menuXPosition + mainMenuApproximateWidth, menuYPosition);
+    }
 }
 
 void PatientBrowserMenu::processSelectedItem(const QString &identifier)
