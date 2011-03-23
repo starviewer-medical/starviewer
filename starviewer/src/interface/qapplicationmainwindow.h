@@ -162,6 +162,10 @@ private slots:
     /// Obre l'esquema de shortcuts
     void openShortcutsGuide();
 
+    /// Obre les release notes
+    void openReleaseNotes();
+
+
 private:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
@@ -197,6 +201,7 @@ private:
     QAction *m_openUserGuideAction;
     QAction *m_openQuickStartGuideAction;
     QAction *m_openShortcutsGuideAction;
+    QAction *m_openReleaseNotesAction;
 
     QLabel *m_betaVersionMenuText;
 

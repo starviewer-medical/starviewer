@@ -290,7 +290,11 @@ void QApplicationMainWindow::createActions()
     m_logViewerAction->setIcon(QIcon(":/images/logs.png"));
     connect(m_logViewerAction, SIGNAL(triggered()), m_logViewer, SLOT(updateData()));
     connect(m_logViewerAction, SIGNAL(triggered()), m_logViewer, SLOT(exec()));
-
+    
+    m_openReleaseNotesAction = new QAction(this);
+    m_openReleaseNotesAction->setText(tr("&Release notes"));
+    m_openReleaseNotesAction->setStatusTip(tr("Show the application's release notes for current version"));
+    connect(m_openReleaseNotesAction, SIGNAL(triggered()), SLOT(openReleaseNotes()));
 
     m_aboutAction = new QAction(this);
     m_aboutAction->setText(tr("&About"));
@@ -401,6 +405,8 @@ void QApplicationMainWindow::createMenus()
     m_helpMenu->addAction(m_openShortcutsGuideAction);
     m_helpMenu->addSeparator();
     m_helpMenu->addAction(m_logViewerAction);
+    m_helpMenu->addSeparator();
+    m_helpMenu->addAction(m_openReleaseNotesAction);
     m_helpMenu->addSeparator();
     m_helpMenu->addAction(m_aboutAction);
 }
@@ -721,6 +727,11 @@ void QApplicationMainWindow::openShortcutsGuide()
 {
     QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Shortcuts_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+}
+
+void QApplicationMainWindow::openReleaseNotes()
+{
+    m_applicationVersionChecker->showReleaseNotes();
 }
 
 void QApplicationMainWindow::computeDefaultToolTextSize()
