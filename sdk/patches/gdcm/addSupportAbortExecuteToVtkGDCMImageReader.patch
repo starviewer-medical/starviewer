@@ -1,0 +1,5 @@
+diff -r gdcm-2.0.17_original/Utilities/VTK/vtkGDCMImageReader.cxx gdcm-2.0.17/Utilities/VTK/vtkGDCMImageReader.cxx
+1436c1436
+<     for(int j = dext[4]; j <= dext[5]; ++j)
+---
+>     for(int j = dext[4]; !this->AbortExecute && j <= dext[5]; ++j)

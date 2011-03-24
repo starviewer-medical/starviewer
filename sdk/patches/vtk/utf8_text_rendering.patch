@@ -1,0 +1,90 @@
+From 331a44656276882766248c1f8e338434b40226ef Mon Sep 17 00:00:00 2001
+From: Marco Nolden <m.nolden@dkfz-heidelberg.de>
+Date: Tue, 29 Jun 2010 16:13:18 +0200
+Subject: [PATCH] FIX: enable UTF8 text rendering
+
+---
+ Rendering/vtkFreeTypeUtilities.cxx |    8 ++++----
+ Rendering/vtkFreeTypeUtilities.h   |    4 ++--
+ Rendering/vtkTextActor.h           |    3 +--
+ 3 files changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/Rendering/vtkFreeTypeUtilities.cxx b/Rendering/vtkFreeTypeUtilities.cxx
+index a92f196..e82c117 100644
+--- a/Rendering/vtkFreeTypeUtilities.cxx
++++ b/Rendering/vtkFreeTypeUtilities.cxx
+@@ -663,7 +663,7 @@ int vtkFreeTypeUtilities::GetFace(vtkTextProperty *tprop,
+ 
+ //----------------------------------------------------------------------------
+ int vtkFreeTypeUtilities::GetGlyphIndex(unsigned long tprop_cache_id,
+-                                        char c, 
++                                        FT_UInt32 c,
+                                         FT_UInt *gindex)
+ {
+ #if VTK_FTFC_DEBUG_CD
+@@ -705,7 +705,7 @@ int vtkFreeTypeUtilities::GetGlyphIndex(unsigned long tprop_cache_id,
+ 
+ //----------------------------------------------------------------------------
+ int vtkFreeTypeUtilities::GetGlyphIndex(vtkTextProperty *tprop,
+-                                        char c, 
++                                        FT_UInt32 c,
+                                         FT_UInt *gindex)
+ {
+   if (!tprop)
+@@ -929,7 +929,7 @@ int vtkFreeTypeUtilities::GetBoundingBox(vtkTextProperty *tprop,
+       }
+ 
+     // Get the glyph index
+-    if (!this->GetGlyphIndex(tprop_cache_id, *str, &gindex))
++    if (!this->GetGlyphIndex(tprop_cache_id,(unsigned char)*str, &gindex))
+       {
+       continue;
+       }
+@@ -1169,7 +1169,7 @@ int vtkFreeTypeUtilities::PopulateImageData(vtkTextProperty *tprop,
+       }
+ 
+     // Get the glyph index
+-    if (!this->GetGlyphIndex(tprop_cache_id, *str, &gindex))
++    if (!this->GetGlyphIndex(tprop_cache_id, (unsigned char)*str, &gindex))
+       {
+       continue;
+       }
+diff --git a/Rendering/vtkFreeTypeUtilities.h b/Rendering/vtkFreeTypeUtilities.h
+index a2d39ad..eeb815e 100644
+--- a/Rendering/vtkFreeTypeUtilities.h
++++ b/Rendering/vtkFreeTypeUtilities.h
+@@ -123,7 +123,7 @@ public:
+   // Return true on success, false otherwise
+   // This method is successful
+   // only when FreeType version is >= 2.1.9
+-  int GetGlyphIndex(vtkTextProperty *tprop, char c, FT_UInt *gindex);
++  int GetGlyphIndex(vtkTextProperty *tprop, FT_UInt32 c, FT_UInt *gindex);
+ 
+   // Description:
+   // Given a text property and a character, get the corresponding FreeType
+@@ -199,7 +199,7 @@ public:
+   // only when FreeType version is >= 2.1.9
+   int GetSize(unsigned long tprop_cache_id, int font_size, FT_Size *size);
+   int GetFace(unsigned long tprop_cache_id, FT_Face *face);
+-  int GetGlyphIndex(unsigned long tprop_cache_id, char c, FT_UInt *gindex);
++  int GetGlyphIndex(unsigned long tprop_cache_id, FT_UInt32 c, FT_UInt *gindex);
+   int GetGlyph(unsigned long tprop_cache_id, 
+                int font_size, 
+                FT_UInt gindex, 
+diff --git a/Rendering/vtkTextActor.h b/Rendering/vtkTextActor.h
+index 5ed913a..8e1363d 100644
+--- a/Rendering/vtkTextActor.h
++++ b/Rendering/vtkTextActor.h
+@@ -66,8 +66,7 @@ public:
+ 
+   // Description:
+   // Set the text string to be displayed. "\n" is recognized
+-  // as a carriage return/linefeed (line separator). Only 7-bit ASCII is
+-  // allowed (anything else, such as Latin1 or UTF8, is not acceptable).
++  // as a carriage return/linefeed (line separator).
+   // Convenience method to the underlying mapper
+   void SetInput(const char *inputString);
+   char *GetInput();
+-- 
+1.7.0
+

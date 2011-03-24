@@ -1,0 +1,30 @@
+--- vtk-5.6.1_original/Rendering/vtkOpenGLImageActor.cxx	2010-09-27 22:40:07.000000000 +0200
++++ vtk-5.6.1/Rendering/vtkOpenGLImageActor.cxx	2011-03-11 20:09:49.000000000 +0100
+@@ -27,6 +27,10 @@
+ #include "vtkOpenGL.h"
+ #include "vtkgl.h" // vtkgl namespace
+ 
++#ifndef GL_MAX_TEXTURE_SIZE
++#define GL_MAX_TEXTURE_SIZE 1024
++#endif
++
+ #ifndef VTK_IMPLEMENT_MESA_CXX
+ vtkStandardNewMacro(vtkOpenGLImageActor);
+ #endif
+@@ -494,13 +498,10 @@ int vtkOpenGLImageActor::TextureSizeOK( 
+   // In version 1.1 or later, use proxy texture to figure out if
+   // the texture is too big
+ #ifdef GL_VERSION_1_1
+-  
+-  GLint maxSize;
+-  glGetIntegerv(GL_MAX_TEXTURE_SIZE,&maxSize);
+-  
++
+   // Do a quick test to see if we are too large
+-  if ( size[0] > maxSize ||
+-       size[1] > maxSize )
++  if ( size[0] > GL_MAX_TEXTURE_SIZE ||
++       size[1] > GL_MAX_TEXTURE_SIZE )
+     {
+     return 0;
+     }
