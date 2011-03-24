@@ -30,7 +30,8 @@ DICOMAnonymizer::~DICOMAnonymizer()
 
 void DICOMAnonymizer::setPatientNameAnonymized(const QString &patientNameAnonymized)
 {
-    m_patientNameAnonymized = patientNameAnonymized;
+    //Segons el DICOM un tag de tipus PN (PersonName) no pot tenir més de 64 caràcters
+    m_patientNameAnonymized = patientNameAnonymized.left(64);
 }
 
 QString DICOMAnonymizer::getPatientNameAnonymized() const

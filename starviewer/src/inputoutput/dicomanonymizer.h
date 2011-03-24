@@ -41,7 +41,8 @@ public:
     ///Si no es respecta aquest requisit passarà que imatges d'un mateix estudi després de ser anonimitzades tindran Study Instance UID diferents.
     bool anonymizeDICOMFile(const QString &inputPathFile, const QString &outputPathFile);
 
-    ///Ens indica quin nom de pacient han de tenir els estudis anonimitzats.
+    ///Ens indica quin nom de pacient han de tenir els estudis anonimitzats. El nom no pot tenir més de 64 caràcters seguint la normativa DICOM per a tags de 
+    ///tipus PN (Person Name) si es passa un nom de més de 64 caràcters es trunca.
     void setPatientNameAnonymized(const QString &patientNameAnonymized);
     QString getPatientNameAnonymized() const;
 
