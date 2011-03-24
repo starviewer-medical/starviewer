@@ -189,7 +189,9 @@ int main(int argc, char *argv[])
     // Seguint les recomanacions de la documentació de Qt, guardem la llista d'arguments en una variable, ja que aquesta operació és costosa
     // http://doc.trolltech.com/4.7/qcoreapplication.html#arguments
     QStringList commandLineArgumentsList = app.arguments();
-    INFO_LOG("Iniciada nova instancia Starviewer amb el seguents arguments de linia de comandes " + commandLineArgumentsList.join(" "));
+    
+    QString commandLineCall = commandLineArgumentsList.join(" ");
+    INFO_LOG("Iniciada nova instancia Starviewer amb el seguents arguments de linia de comandes " + commandLineCall);
 
     if (commandLineArgumentsList.count() > 1)
     {
@@ -198,7 +200,8 @@ int main(int argc, char *argv[])
         QString errorInvalidCommanLineArguments;
         if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(commandLineArgumentsList, errorInvalidCommanLineArguments))
         {
-            QString invalidCommandLine = QObject::tr("Invalid command line: ") + errorInvalidCommanLineArguments + "\n";
+            QString invalidCommandLine = QObject::tr("There were errors invoking %1 from the command line with the following call:\n\n%2").arg(udg::ApplicationNameString).arg(commandLineCall) + "\n\n";
+            invalidCommandLine += QObject::tr("Detected errors: ") + errorInvalidCommanLineArguments + "\n";
             invalidCommandLine += QObject::tr("usage: %1 [options]").arg(udg::ApplicationNameString) + "\n\n";
             invalidCommandLine += QObject::tr("Options:") + "\n";
             invalidCommandLine += StarviewerSingleApplicationCommandLineSingleton::instance()->getStarviewerApplicationCommandLineOptions().getOptionsDescription();
