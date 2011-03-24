@@ -183,7 +183,10 @@ void PatientBrowserMenu::placeAdditionalInfoWidget()
     int mainMenuApproximateWidth = m_patientBrowserList->sizeHint().width();
     int menuXPosition = m_patientBrowserList->pos().x();
     int menuYPosition = m_patientBrowserList->pos().y();
-    int additionalInfoWidgetApproximateWidth = m_patientAdditionalInfo->sizeHint().width();
+    // Cal fer un adjust size abans perquè les mides del widget quedin actualitzades correctament
+    m_patientAdditionalInfo->adjustSize();
+    int additionalInfoWidgetApproximateWidth = m_patientAdditionalInfo->frameGeometry().width();   
+
     if (menuXPosition + mainMenuApproximateWidth + additionalInfoWidgetApproximateWidth > currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width())
     {
         // A l'esquerra
