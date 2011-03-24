@@ -154,7 +154,7 @@ void ApplicationVersionChecker::showReleaseNotes()
     }
     else
     {
-        ERROR_LOG("Les release notes de la versió actual no existeixen.");
+        ERROR_LOG(QString("No s'ha pogut trobar les release notes de la versió actual al path %1").arg(url.toString()));
     }
 }
 
