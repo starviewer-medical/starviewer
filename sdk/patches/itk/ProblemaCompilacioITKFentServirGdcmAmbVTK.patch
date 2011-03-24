@@ -1,0 +1,43 @@
+From 93833edb2294c0190af9e6c0de26e9485399a7d3 Mon Sep 17 00:00:00 2001
+From: ITK Robot <itkrobot@kitware.com>
+Date: Thu, 22 Jul 2010 10:54:04 -0400
+Subject: [PATCH] r2796 aylward | 2010-07-22T14:53:45.146190Z
+ BUG: Changed from VTK_VERSION to VTK_SOURCE_DIR to determine if being compiled within VTK or ITK.
+
+---
+ Utilities/MetaIO/CMakeLists.txt |    9 ++++++---
+ 1 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/Utilities/MetaIO/CMakeLists.txt b/Utilities/MetaIO/CMakeLists.txt
+index 1f368f0..757bfc6 100644
+--- a/Utilities/MetaIO/CMakeLists.txt
++++ b/Utilities/MetaIO/CMakeLists.txt
+@@ -9,11 +9,14 @@
+ # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ # See the License for more information.
+ #=============================================================================
+-IF(VTK_VERSION)
++IF(VTK_SOURCE_DIR)
++
+   SET(METAIO_FOR_VTK 1)
+   MARK_AS_ADVANCED( METAIO_FOR_VTK )
+   SET(METAIO_NAMESPACE "vtkmetaio")
+-ELSE(VTK_VERSION)
++
++ELSE(VTK_SOURCE_DIR)
++
+   SET(METAIO_FOR_ITK 1)
+   MARK_AS_ADVANCED( METAIO_FOR_ITK )
+   SET(METAIO_NAMESPACE "ITKMetaIO")
+@@ -23,7 +26,7 @@ ELSE(VTK_VERSION)
+     INCLUDE_DIRECTORIES(${ITK_LIBXML2_INCLUDE_DIR})
+   ENDIF(ITK_USE_LIBXML2)
+ 
+-ENDIF(VTK_VERSION)
++ENDIF(VTK_SOURCE_DIR)
+ 
+ PROJECT( ${METAIO_NAMESPACE} )
+ 
+-- 
+1.7.0
+

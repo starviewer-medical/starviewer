@@ -1,0 +1,15 @@
+--- gdcm-2.0.17_original/Source/MediaStorageAndFileFormat/gdcmImageHelper.cxx	2011-01-25 16:48:14.000000000 +0100
++++ gdcm-2.0.17/Source/MediaStorageAndFileFormat/gdcmImageHelper.cxx	2011-02-22 14:32:13.000000000 +0100
+@@ -260,6 +260,12 @@ bool ComputeZSpacingFromIPP(const DataSe
+       }
+     prev = distances[i];
+     }
++
++  if (zspacing == 0.0)
++    {
++    return false;
++    }
++
+   return true;
+ }
+ 
