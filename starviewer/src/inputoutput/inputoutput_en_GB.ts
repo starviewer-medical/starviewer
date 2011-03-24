@@ -1160,23 +1160,18 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="580"/>
-        <source>Patient name anonymized:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="613"/>
+        <location filename="qcreatedicomdirbase.ui" line="617"/>
         <source>Creates a DICOMDIR with the selected studies</source>
         <oldsource>Creates the DICOMDIR with the selected studies</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="616"/>
+        <location filename="qcreatedicomdirbase.ui" line="620"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="623"/>
+        <location filename="qcreatedicomdirbase.ui" line="627"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1215,6 +1210,11 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="475"/>
         <source>Location:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="584"/>
+        <source>Patient name of studies after being anonymized:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

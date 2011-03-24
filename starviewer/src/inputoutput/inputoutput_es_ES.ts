@@ -1179,23 +1179,18 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
         <translation>Anonimizar el DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="580"/>
-        <source>Patient name anonymized:</source>
-        <translation>Nombre del paciente anonimizado:</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="613"/>
+        <location filename="qcreatedicomdirbase.ui" line="617"/>
         <source>Creates a DICOMDIR with the selected studies</source>
         <oldsource>Creates the DICOMDIR with the selected studies</oldsource>
         <translation>Crea un DICOMDIR con estudios seleccionados</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="616"/>
+        <location filename="qcreatedicomdirbase.ui" line="620"/>
         <source>Create</source>
         <translation>Crear</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="623"/>
+        <location filename="qcreatedicomdirbase.ui" line="627"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -1235,6 +1230,12 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
         <location filename="qcreatedicomdirbase.ui" line="475"/>
         <source>Location:</source>
         <translation>Localización:</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="584"/>
+        <source>Patient name of studies after being anonymized:</source>
+        <translatorcomment>Nombre de paciente que tendran los estudios anonimizados:</translatorcomment>
+        <translation></translation>
     </message>
 </context>
 <context>
