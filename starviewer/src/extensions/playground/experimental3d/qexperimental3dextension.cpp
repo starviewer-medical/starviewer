@@ -4437,17 +4437,15 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     bool piWeights = m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked();
     QVector<float> weights;
 
-    if (!piWeights)
-    {
-        weights = getWeights();
+    weights = getWeights();
 
-        if (MathTools::isNaN(weights.at(0)))
-        {
-            setCursor(QCursor(Qt::ArrowCursor));
-            return;
-        }
+    if (MathTools::isNaN(weights.at(0)))
+    {
+        setCursor(QCursor(Qt::ArrowCursor));
+        return;
     }
-    else if (minimizeDkl_I_W)
+
+    if (piWeights && minimizeDkl_I_W)
     {
         setCursor(QCursor(Qt::ArrowCursor));
         return; // ja estem a l'objectiu
@@ -5059,7 +5057,8 @@ void QExperimental3DExtension::fillWeightsEditor()
     }
     else if (m_geneticTransferFunctionFromIntensityClusteringWeightsIntensityProbabilitiesRadioButton->isChecked())
     {
-        // res
+        // ho posem com a l'uniforme per poder posar opacitats a 0 abans de començar
+        for (int i = 0; i < nClusters; i++) weights[i] = 1.0;
         m_transferFunctionOptimizationWeightsManualCheckBox->setChecked(false);
         m_geneticTransferFunctionFromIntensityClusteringWeightsVolumeDistributionCheckBox->setChecked(false);
         m_transferFunctionOptimizationWeights2DIntensityVolumeCheckBox->setChecked(false);
