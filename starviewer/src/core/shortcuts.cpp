@@ -111,7 +111,7 @@ void Shortcuts::init()
     settingsRegistry->addSetting(DistanceTool, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("R"));
+    shortcutsList.append(QString("Shift+R"));
     settingsRegistry->addSetting(ROITool, shortcutsList);
 
     shortcutsList.clear();
@@ -195,7 +195,7 @@ void Shortcuts::init()
     settingsRegistry->addSetting(TransDifferenceTool, shortcutsList);
     
     shortcutsList.clear();
-    shortcutsList.append(QString("O"));
+    shortcutsList.append(QString("R"));
     settingsRegistry->addSetting(OvalROITool, shortcutsList);
     
     shortcutsList.clear();
