@@ -928,6 +928,13 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3677-7"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -937,8 +944,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.3868499"
-     inkscape:cx="234.12495"
-     inkscape:cy="811.91405"
+     inkscape:cx="132.73164"
+     inkscape:cy="707.60468"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:window-width="1680"
@@ -985,7 +992,7 @@
      style="display:inline">
     <g
        id="g3414"
-       transform="matrix(0.10843322,0,0,0.10843322,-124.08021,626.96807)"
+       transform="matrix(0.10790251,0,0,0.10744678,-120.07416,621.83811)"
        inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
@@ -1009,7 +1016,7 @@
          style="color:#000000;fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.5;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5995);enable-background:accumulate"
          transform="matrix(1,0,0,0.95266056,0,-246.18746)" />
       <rect
-         style="opacity:0;color:#000000;fill:#aaaaff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.94488591000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="opacity:0;color:#000000;fill:#aaaaff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.94488591;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect3633"
          width="68.321968"
          height="14.786097"
@@ -1860,7 +1867,7 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
-         style="fill:#c6e9af;fill-opacity:1;stroke:none"
+         style="fill:#ececec;fill-opacity:1;stroke:none"
          d="m 331.17445,151.90861 18.39762,0 c 1.96006,0 3.538,1.45055 3.538,3.25233 l 0,23.74166 c 0,1.80178 -1.57794,3.25223 -3.538,3.25223 l -18.39762,0 c -1.96006,0 -3.53802,-1.45045 -3.53802,-3.25223 l 0,-23.74166 c 0,-1.80178 1.57796,-3.25233 3.53802,-3.25233 z"
          id="path7346" />
       <path
@@ -1882,13 +1889,6 @@
            x="363.83795"
            id="tspan2955"
            sodipodi:role="line">O</tspan></text>
-      <image
-         y="166.26697"
-         x="334.59732"
-         id="image3677"
-         height="16.622786"
-         width="16.622786"
-         xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/ellipticalROITool.png" />
     </g>
     <g
        id="g5120"
@@ -2156,13 +2156,13 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <g
-         style="fill:#ffffff"
+         style="fill:#ececec;fill-opacity:1"
          id="g7268"
          transform="matrix(0.07966248,0,0,0.07966248,85.772248,505.39606)">
         <path
            id="path7270"
            d="m 2828.2076,-4044.4223 230.9447,0 c 24.6045,0 44.4124,18.2083 44.4124,40.8258 l 0,298.0282 c 0,22.6175 -19.8079,40.8258 -44.4124,40.8258 l -230.9447,0 c -24.6045,0 -44.4125,-18.2083 -44.4125,-40.8258 l 0,-298.0282 c 0,-22.6175 19.808,-40.8258 44.4125,-40.8258 z"
-           style="fill:#e6e6e6;fill-opacity:1;stroke:none" />
+           style="fill:#ececec;fill-opacity:1;stroke:none" />
       </g>
       <g
          transform="matrix(0.07966248,0,0,0.07966248,85.772248,505.39606)"
@@ -4591,16 +4591,6 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       y="200.71313"
-       x="23.908327"
-       id="image3650"
-       height="22.963535"
-       width="22.963535"
-       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/polyline.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
-       inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300" />
-    <image
        y="243.56091"
        x="104.8381"
        id="image3678"
@@ -4884,5 +4874,13 @@
            sodipodi:role="line"
            id="tspan5388">entre sèries</tspan></text>
     </g>
+    <image
+       style="display:inline"
+       y="201.57373"
+       x="23.297691"
+       id="image3677"
+       height="22.626238"
+       width="22.626238"
+       xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/ellipticalROITool.png" />
   </g>
 </svg>
