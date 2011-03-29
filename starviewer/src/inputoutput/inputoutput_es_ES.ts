@@ -1174,23 +1174,29 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="533"/>
-        <source>Anonymize DICOMDIR</source>
-        <oldsource>Anonymize DICOMDIR.</oldsource>
-        <translation>Anonimizar el DICOMDIR</translation>
+        <source>Anonymize DICOMDIR studies</source>
+        <oldsource>Anonymize DICOMDIR</oldsource>
+        <translation>Anonimizar los estudios del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="617"/>
+        <location filename="qcreatedicomdirbase.ui" line="606"/>
+        <source>Patient name of anonymized studies:</source>
+        <oldsource>Which patient name has to be assigned to anonymized studies?</oldsource>
+        <translation>Nombre de paciente que tendran los estudios anonimizados:</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="639"/>
         <source>Creates a DICOMDIR with the selected studies</source>
         <oldsource>Creates the DICOMDIR with the selected studies</oldsource>
         <translation>Crea un DICOMDIR con estudios seleccionados</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="620"/>
+        <location filename="qcreatedicomdirbase.ui" line="642"/>
         <source>Create</source>
         <translation>Crear</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="627"/>
+        <location filename="qcreatedicomdirbase.ui" line="649"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -1230,12 +1236,6 @@ Especifique una configuración válida en el menú Herramientas -&gt; Configurac
         <location filename="qcreatedicomdirbase.ui" line="475"/>
         <source>Location:</source>
         <translation>Localización:</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="584"/>
-        <source>Patient name of studies after being anonymized:</source>
-        <translatorcomment>Nombre de paciente que tendran los estudios anonimizados:</translatorcomment>
-        <translation></translation>
     </message>
 </context>
 <context>
@@ -2766,7 +2766,7 @@ Si el problema persiste contacte con un administrador.</translation>
 %1 no puede descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %2 o cambie el puerto para conexiones entrantes del PACS des de la pantalla de configuración.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="502"/>
+        <location filename="queryscreen.cpp" line="498"/>
         <source>Cancelling PACS operations...</source>
         <oldsource>Cancelling PACS operations</oldsource>
         <translation>Cancelando las operaciones con el PACS...</translation>
@@ -2911,7 +2911,7 @@ Si el problema persiste contacte con un administrador.</translation>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="280"/>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="285"/>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="316"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="320"/>
         <source>
 
 Close all %1 windows and try again.
@@ -2941,7 +2941,8 @@ Si el problema persiste contacte con un administrador.</translation>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="261"/>
         <source>%1 can&apos;t connect to PACS %2 trying to retrieve images from study %3 of patient %4.
 </source>
-        <translation>No se ha podido connectar con el PACS %2 para descargar las imágenes del estudio %3 del paciente %4.</translation>
+        <translation>No se ha podido connectar con el PACS %2 para descargar las imágenes del estudio %3 del paciente %4.
+</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="274"/>
@@ -2993,31 +2994,47 @@ Contact with an administrador to register your computer to the PACS.</source>
 Contacte con un administrador para registrar su ordenador al PACS.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="300"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t respond as expected.
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="299"/>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknow error of PACS %3.
 
 </source>
-        <translation>No se han podido descargar las imágenes del estudio %1 del paciente %2 porque el PACS %3 no ha respondido como se esperaba.
+        <translation>No se han podido descargar las imágenes del estudio %1 del paciente %2 debido a un error desconocido que se ha producido en el PACS %3.
 
 </translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="302"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="301"/>
+        <source>The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.</source>
+        <oldsource>The cause of the error can be that the requested images are corrupted.</oldsource>
+        <translation>El error puede ser debido a que la imágenes pedidas estén corruptas, contacte con un administrador del PACS.</translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="304"/>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an error of PACS %3.
+
+</source>
+        <translation>No se han podido descargar las imágenes del estudio %1 del paciente %2 debido a un error que se ha producido en el PACS %3.
+
+</translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
         <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
+        <oldsource>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct. Please contact with a PACS administrator.</oldsource>
         <translation>El error puede ser debido a que la imágenes pedidas estén corruptas o que el puerto de conexiones entrantes del PACS no esté correctamente configurado.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="305"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="309"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved because port %3 for incoming connections from PACS is already in use by another application.</source>
         <translation>Las imágenes del estudio %1 del paciente %2 no se han podido descargar, porque el puerto %3 para conexiones entrantes del PACS está siendo utilitzado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="309"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="313"/>
         <source>%1 can&apos;t retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.</source>
         <translation>No se han podido descargar algunas de las imágenes del estudio %2 del paciente %3. Puede ser que estas imágenes no existan en el PACS o que estén corruptas.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="314"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="318"/>
         <source>An unknown error has ocurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</source>
         <translation>No se han podido descargar las imágenes del estudio %2 del paciente %3 del PACS %4 porque se ha producido un error desconocido.</translation>
     </message>

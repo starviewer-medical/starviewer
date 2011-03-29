@@ -296,8 +296,12 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message += tr("\n\nContact with an administrador to register your computer to the PACS.");
             break;
         case PACSRequestStatus::RetrieveUnknowStatus:
+            message = tr("Images from study %1 of patient %2 can't be retrieved due to an unknow error of PACS %3.\n\n")
+                .arg(studyID, patientName, pacsAETitle);
+            message += tr("The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.");
+            break;
         case PACSRequestStatus::RetrieveFailureOrRefused:
-            message = tr("Images from study %1 of patient %2 can't be retrieved because PACS %3 doesn't respond as expected.\n\n")
+            message = tr("Images from study %1 of patient %2 can't be retrieved due to an error of PACS %3.\n\n")
                 .arg(studyID, patientName, pacsAETitle);
             message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
             break;

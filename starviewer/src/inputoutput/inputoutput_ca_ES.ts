@@ -1171,23 +1171,29 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="533"/>
-        <source>Anonymize DICOMDIR</source>
-        <oldsource>Anonymize DICOMDIR.</oldsource>
-        <translation>Anonimitza el DICOMDIR</translation>
+        <source>Anonymize DICOMDIR studies</source>
+        <oldsource>Anonymize DICOMDIR</oldsource>
+        <translation>Anonimitza el estudis del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="617"/>
+        <location filename="qcreatedicomdirbase.ui" line="606"/>
+        <source>Patient name of anonymized studies:</source>
+        <oldsource>Which patient name has to be assigned to anonymized studies?</oldsource>
+        <translation>Nom de pacient que tindran els estudis anonimizats:</translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="639"/>
         <source>Creates a DICOMDIR with the selected studies</source>
         <oldsource>Creates the DICOMDIR with the selected studies</oldsource>
         <translation>Crea un DICOMDIR amb estudis seleccionats</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="620"/>
+        <location filename="qcreatedicomdirbase.ui" line="642"/>
         <source>Create</source>
         <translation>Crear</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="627"/>
+        <location filename="qcreatedicomdirbase.ui" line="649"/>
         <source>Cancel</source>
         <translation>Cancel·lar</translation>
     </message>
@@ -1227,11 +1233,6 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
         <location filename="qcreatedicomdirbase.ui" line="475"/>
         <source>Location:</source>
         <translation>Localització:</translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="584"/>
-        <source>Patient name of studies after being anonymized:</source>
-        <translation>Nom de pacient que tindran els estudis anonimitzats:</translation>
     </message>
 </context>
 <context>
@@ -2767,7 +2768,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 %1 no pot descarregar estudis del PACS si el port està en ús, si us plau tanqueu l&apos;aplicació que està utilitzant el port %2 o canvieu el port per connexions entrants en la pantalla de configuració.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="502"/>
+        <location filename="queryscreen.cpp" line="498"/>
         <source>Cancelling PACS operations...</source>
         <oldsource>Cancelling PACS operations</oldsource>
         <translation>Cancel·lant les operacions amb el PACS...</translation>
@@ -2912,7 +2913,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="280"/>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="285"/>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="316"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="320"/>
         <source>
 
 Close all %1 windows and try again.
@@ -2942,7 +2943,8 @@ Si el problema persisteix contacteu amb un administrador.</translation>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="261"/>
         <source>%1 can&apos;t connect to PACS %2 trying to retrieve images from study %3 of patient %4.
 </source>
-        <translation>No s&apos;ha pogut connectar amb el PACS %2 per descarregar les imatges de l&apos;estudi %3 del pacient %4.</translation>
+        <translation>No s&apos;ha pogut connectar amb el PACS %2 per descarregar les imatges de l&apos;estudi %3 del pacient %4.
+</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="274"/>
@@ -2993,31 +2995,47 @@ Contact with an administrador to register your computer to the PACS.</source>
 Contacteu amb un administrador per registrar el vostre ordinador al PACS.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="300"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t respond as expected.
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="299"/>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknow error of PACS %3.
 
 </source>
-        <translation>No s&apos;han pogut descarregar les imatges de l&apos;estudi %1 del pacient %2 perquè el PACS %3 no ha respós com s&apos;esperava.
+        <translation>No s&apos;han pogut descarregar les imatges de l&apos;estudi %1 del pacient %2 degut a un error desconegut que s&apos;ha produït en el PACS %3.
 
 </translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="302"/>
-        <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
-        <translation>La causa del error pot ser que les imatges demanades estiguin corruptes o que el port de connexions entrants del PACS no estigui correctament configurat.</translation>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="301"/>
+        <source>The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.</source>
+        <oldsource>The cause of the error can be that the requested images are corrupted.</oldsource>
+        <translation>La causa de l&apos;error podria ser que les imatges demanades estan corruptes, contacteu amb un administrador del PACS.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="305"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="304"/>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an error of PACS %3.
+
+</source>
+        <translation>No s&apos;han pogut descarregar les imatges de l&apos;estudi %1 del pacient %2 degut a un error que s&apos;ha produït en el PACS %3.
+
+</translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
+        <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
+        <oldsource>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct. Please contact with a PACS administrator.</oldsource>
+        <translation>La causa del error podria ser que les imatges demanades estan corruptes o que el port de connexions entrants del PACS no està correctament configurat.</translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="309"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved because port %3 for incoming connections from PACS is already in use by another application.</source>
         <translation>Les imatges de l&apos;estudi %1 del pacient %2 no s&apos;han pogut descarregar, perquè el port %3 per connexions entrants del PACS està sent utilitzat per una altra aplicació.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="309"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="313"/>
         <source>%1 can&apos;t retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.</source>
         <translation>No s&apos;han pogut descarregar algunes de les imatges del estudi %2 del pacient %3. Pot ser que aquestes imatges no existeixin al PACS o que estiguin corruptes.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="314"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="318"/>
         <source>An unknown error has ocurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</source>
         <translation>No s&apos;han pogut descarregar les imatges del l&apos;estudi %2 del pacient %3 del PACS %4 perquè s&apos;ha produït un error desconegut.</translation>
     </message>
