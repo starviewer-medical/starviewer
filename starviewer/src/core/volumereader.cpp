@@ -131,6 +131,7 @@ QString VolumeReader::getLastErrorMessageToUser() const
         case VolumePixelDataReader::NoError:
             return "";
     }
+    return "";
 }
 
 void VolumeReader::logWarningLastError(const QStringList &fileList) const
