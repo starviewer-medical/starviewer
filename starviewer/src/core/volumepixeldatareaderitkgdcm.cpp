@@ -15,7 +15,6 @@ namespace udg {
 VolumePixelDataReaderITKGDCM::VolumePixelDataReaderITKGDCM(QObject *parent)
 : VolumePixelDataReader(parent)
 {
-    m_reader = ReaderType::New();
     m_seriesReader = SeriesReaderType::New();
 
     m_gdcmIO = ImageIOType::New();
@@ -181,19 +180,21 @@ void VolumePixelDataReaderITKGDCM::readDifferentSizeImagesIntoOneVolume(const QS
     layout[2] = 0;
     tileFilter->SetLayout(layout);
 
+    ReaderType::Pointer reader = ReaderType::New();
+    reader->SetImageIO(m_gdcmIO);
+
     int progressCount = 0;
     int progressIncrement = static_cast<int>((1.0 / (double)filenames.count()) * 100);
 
-    m_reader->SetImageIO(m_gdcmIO);
     foreach (const QString &file, filenames)
     {
         emit progress(progressCount);
         // Declarem la imatge que volem carregar
         Volume::ItkImageTypePointer itkImage;
-        m_reader->SetFileName(qPrintable(file));
+        reader->SetFileName(qPrintable(file));
         try
         {
-            m_reader->UpdateLargestPossibleRegion();
+            reader->UpdateLargestPossibleRegion();
         }
         catch (itk::ExceptionObject & e)
         {
@@ -205,8 +206,8 @@ void VolumePixelDataReaderITKGDCM::readDifferentSizeImagesIntoOneVolume(const QS
         }
         if (errorCode == NoError)
         {
-            itkImage = m_reader->GetOutput();
-            m_reader->GetOutput()->DisconnectPipeline();
+            itkImage = reader->GetOutput();
+            reader->GetOutput()->DisconnectPipeline();
         }
         // TODO No es fa tractament d'errors!
 
