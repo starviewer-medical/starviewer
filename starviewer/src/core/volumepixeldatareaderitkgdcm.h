@@ -72,9 +72,6 @@ private:
     /// El lector de sèries dicom
     SeriesReaderType::Pointer m_seriesReader;
 
-    /// El lector estàndar de fitxers singulars
-    ReaderTypePointer m_reader;
-
     /// Motor de lectura DICOM de gdcm
     ImageIOType::Pointer m_gdcmIO;
 
