@@ -530,9 +530,25 @@
            </size>
           </property>
           <property name="text">
-           <string>Anonymize DICOMDIR</string>
+           <string>Anonymize DICOMDIR studies</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>10</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item>
          <widget class="QFrame" name="m_patientNameAnonymizedFrame">
@@ -560,6 +576,12 @@
            </property>
            <item row="0" column="1">
             <widget class="QLineEdit" name="m_patientNameAnonymizedLineEdit">
+             <property name="minimumSize">
+              <size>
+               <width>160</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="maxLength">
               <number>64</number>
              </property>
@@ -581,7 +603,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
-              <string>Patient name of studies after being anonymized:</string>
+              <string>Patient name of anonymized studies:</string>
              </property>
             </widget>
            </item>

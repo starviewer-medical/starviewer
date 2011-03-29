@@ -1155,23 +1155,29 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="533"/>
-        <source>Anonymize DICOMDIR</source>
-        <oldsource>Anonymize DICOMDIR.</oldsource>
+        <source>Anonymize DICOMDIR studies</source>
+        <oldsource>Anonymize DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="617"/>
+        <location filename="qcreatedicomdirbase.ui" line="606"/>
+        <source>Patient name of anonymized studies:</source>
+        <oldsource>Which patient name has to be assigned to anonymized studies?</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdirbase.ui" line="639"/>
         <source>Creates a DICOMDIR with the selected studies</source>
         <oldsource>Creates the DICOMDIR with the selected studies</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="620"/>
+        <location filename="qcreatedicomdirbase.ui" line="642"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="627"/>
+        <location filename="qcreatedicomdirbase.ui" line="649"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1210,11 +1216,6 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="475"/>
         <source>Location:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdirbase.ui" line="584"/>
-        <source>Patient name of studies after being anonymized:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2713,7 +2714,7 @@ If the problem persists contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="502"/>
+        <location filename="queryscreen.cpp" line="498"/>
         <source>Cancelling PACS operations...</source>
         <oldsource>Cancelling PACS operations</oldsource>
         <translation type="unfinished"></translation>
@@ -2854,7 +2855,7 @@ If the problem persists contact with an administrator.</source>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="280"/>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="285"/>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="316"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="320"/>
         <source>
 
 Close all %1 windows and try again.
@@ -2927,29 +2928,43 @@ Contact with an administrador to register your computer to the PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="300"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 doesn&apos;t respond as expected.
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="299"/>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknow error of PACS %3.
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="302"/>
-        <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="301"/>
+        <source>The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.</source>
+        <oldsource>The cause of the error can be that the requested images are corrupted.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="305"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved because port %3 for incoming connections from PACS is already in use by another application.</source>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="304"/>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an error of PACS %3.
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
+        <source>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
+        <oldsource>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct. Please contact with a PACS administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="309"/>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved because port %3 for incoming connections from PACS is already in use by another application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="313"/>
         <source>%1 can&apos;t retrieve all images from study %2 of patient %3 from PACS %4. May be those images are missing or corrupted in PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="314"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="318"/>
         <source>An unknown error has ocurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</source>
         <translation type="unfinished"></translation>
     </message>
