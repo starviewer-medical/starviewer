@@ -27,6 +27,8 @@ VolumePixelDataReaderITKGDCM::VolumePixelDataReaderITKGDCM(QObject *parent)
 
     // Connect the adaptor's Signal to the Qt Widget Slot
     connect(m_progressSignalAdaptor, SIGNAL(Signal()), SLOT(slotProgress()));
+
+    m_seriesReader->SetImageIO(m_gdcmIO);
 }
 
 VolumePixelDataReaderITKGDCM::~VolumePixelDataReaderITKGDCM()
@@ -124,6 +126,7 @@ int VolumePixelDataReaderITKGDCM::readSingleFile(const QString &fileName)
 
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(qPrintable(fileName));
+    reader->SetImageIO(m_gdcmIO);
     emit progress(0);
     try
     {
