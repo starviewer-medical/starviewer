@@ -67,6 +67,13 @@ VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int 
 
 bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxelValue)
 {
+    if (!this->getVtkData())
+    {
+        DEBUG_LOG("Dades VTK nul·les!");
+        voxelValue.clear();
+        return false;
+    }
+
     int voxelIndex[3];
     double parametricCoordinates[3];
     int inside = this->getVtkData()->ComputeStructuredCoordinates(coordinate, voxelIndex, parametricCoordinates);
@@ -86,6 +93,7 @@ bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxel
     }
     else
     {
+        voxelValue.clear();
         return false;
     }
 }
