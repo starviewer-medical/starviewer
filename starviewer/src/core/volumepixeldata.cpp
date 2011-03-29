@@ -81,12 +81,13 @@ bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxel
     if (inside == 1)
     {
         vtkIdType pointId = this->getVtkData()->ComputePointId(voxelIndex);
-        int numberOfComponents = this->getVtkData()->GetNumberOfScalarComponents();
+        vtkDataArray *scalars = this->getVtkData()->GetPointData()->GetScalars();
+        int numberOfComponents = scalars->GetNumberOfComponents();
         voxelValue.resize(numberOfComponents);
 
         for (int i = 0; i < numberOfComponents; i++)
         {
-            voxelValue[i] = this->getVtkData()->GetPointData()->GetScalars()->GetComponent(pointId, i);
+            voxelValue[i] = scalars->GetComponent(pointId, i);
         }
 
         return true;
