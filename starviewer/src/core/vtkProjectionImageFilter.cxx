@@ -212,7 +212,7 @@ void vtkProjectionImageFilterExecute(vtkProjectionImageFilter *self,
     //      però de moment ja funciona bé.
     int numberOfComponents = inData->GetNumberOfScalarComponents();
 
-    for (int component = 0; component <= numberOfComponents; component++)
+    for (int component = 0; component < numberOfComponents; component++)
     {
         // loop through pixels of input
         T * inPtr0 = inPtr + component;
