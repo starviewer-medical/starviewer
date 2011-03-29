@@ -67,40 +67,27 @@ VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int 
 
 bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxelValue)
 {
-    voxelValue.clear();
-    vtkImageData *vtkData = this->getVtkData();
-    if (!vtkData)
+    int voxelIndex[3];
+    double parametricCoordinates[3];
+    int inside = this->getVtkData()->ComputeStructuredCoordinates(coordinate, voxelIndex, parametricCoordinates);
+
+    if (inside == 1)
     {
-        DEBUG_LOG("Dades VTK nul·les!");
+        vtkIdType pointId = this->getVtkData()->ComputePointId(voxelIndex);
+        int numberOfComponents = this->getVtkData()->GetNumberOfScalarComponents();
+        voxelValue.resize(numberOfComponents);
+
+        for (int i = 0; i < numberOfComponents; i++)
+        {
+            voxelValue[i] = this->getVtkData()->GetPointData()->GetScalars()->GetComponent(pointId, i);
+        }
+
+        return true;
+    }
+    else
+    {
         return false;
     }
-
-    // Use tolerance as a function of size of source data
-    double tolerance = vtkData->GetLength();
-    tolerance = tolerance ? tolerance*tolerance / 1000.0 : 0.001;
-
-    int subCellId;
-    double parametricCoordinates[3], interpolationWeights[8];
-    bool found = false;
-
-    // Find the cell that contains q and get it
-    vtkCell *cell = vtkData->FindAndGetCell(coordinate, NULL, -1, tolerance, subCellId, parametricCoordinates, interpolationWeights);
-    if (cell)
-    {
-        vtkPointData *pointData = vtkData->GetPointData();
-        vtkPointData *outPointData = vtkPointData::New();
-        outPointData->InterpolateAllocate(pointData, 1, 1);
-        // Interpolate the point data
-        outPointData->InterpolatePoint(pointData, 0, cell->PointIds, interpolationWeights);
-        for (int i = 0; i < outPointData->GetNumberOfComponents(); ++i)
-        {
-            voxelValue << outPointData->GetScalars()->GetComponent(0, i);
-        }
-        found = true;
-        outPointData->Delete();
-    }
-
-    return found;
 }
 
 void VolumePixelData::convertToNeutralPixelData()
