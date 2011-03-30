@@ -4913,6 +4913,7 @@ void QExperimental3DExtension::optimizeTransferFunctionAutomaticallyForOneViewpo
         m_viewer->getRenderer()->RemoveObservers(vtkCommand::ResetCameraClippingRangeEvent);
         m_viewer->getRenderer()->RemoveObservers(vtkCommand::ResetCameraEvent);
         m_pendingOptimization = false;
+        m_stopOptimization = true;
     }
 }
 
@@ -4922,8 +4923,8 @@ void QExperimental3DExtension::optimizeTransferFunctionForOneViewpoint()
     if (m_optimizing)
     {
         DEBUG_LOG("-- parem l'optimització actual --");
-        m_stopOptimization = true;
         m_pendingOptimization = true;
+        m_stopOptimization = true;
     }
     else
     {
