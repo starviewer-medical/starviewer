@@ -2766,7 +2766,7 @@ Si el problema persiste contacte con un administrador.</translation>
 %1 no puede descargar estudios del PACS si el puerto está en uso, por favor cierre la aplicación que está usando el puerto %2 o cambie el puerto para conexiones entrantes del PACS des de la pantalla de configuración.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="498"/>
+        <location filename="queryscreen.cpp" line="502"/>
         <source>Cancelling PACS operations...</source>
         <oldsource>Cancelling PACS operations</oldsource>
         <translation>Cancelando las operaciones con el PACS...</translation>

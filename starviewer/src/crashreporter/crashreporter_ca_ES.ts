@@ -57,7 +57,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../core/coresettings.cpp" line="55"/>
+        <location filename="../core/coresettings.cpp" line="84"/>
         <source>PNG (*.png)</source>
         <translation>PNG (*.png)</translation>
     </message>
@@ -65,43 +65,43 @@
 <context>
     <name>udg::QCrashReporter</name>
     <message>
-        <location filename="qcrashreporter.cpp" line="29"/>
+        <location filename="qcrashreporter.cpp" line="26"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="30"/>
+        <location filename="qcrashreporter.cpp" line="27"/>
         <source>Quit %1</source>
         <translation>Abandonar %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="31"/>
+        <location filename="qcrashreporter.cpp" line="28"/>
         <source>Restart %1</source>
         <translation>Reiniciar %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="32"/>
+        <location filename="qcrashreporter.cpp" line="29"/>
         <source>Tell %1 about this crash</source>
         <translation>Notifica a %1 sobre aquest problema</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="33"/>
+        <location filename="qcrashreporter.cpp" line="30"/>
         <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
         <translation>Ho sentim però %1 ha tingut algun problema i s&apos;ha tancat inesperadament. Si dedica un moment per enviar-nos un informe de la incidència ens ajudarà a diagnosticar i arreglar el problema. La seva informació personal no s&apos;enviarà en aquest informe.</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="67"/>
+        <location filename="qcrashreporter.cpp" line="64"/>
         <source>IP</source>
         <translation>IP</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="73"/>
+        <location filename="qcrashreporter.cpp" line="70"/>
         <source>User Domain</source>
         <translatorcomment>No s&apos;ha de traduïr!</translatorcomment>
         <translation>User Domain</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="123"/>
+        <location filename="qcrashreporter.cpp" line="125"/>
         <source>Host information</source>
         <translatorcomment>No s&apos;ha de traduïr!</translatorcomment>
         <translation>Host information</translation>

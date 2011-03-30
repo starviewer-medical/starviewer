@@ -93,48 +93,48 @@ con múltiples fases, por lo cual no funcionará correctamente.</translation>
 <context>
     <name>udg::QMPRExtension</name>
     <message>
-        <location filename="qmprextension.cpp" line="75"/>
+        <location filename="qmprextension.cpp" line="71"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
         <translation>Exportar imágen(es) del visor a DICOM y enviarlas al servidor PACS</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="76"/>
+        <location filename="qmprextension.cpp" line="72"/>
         <source>Show/Hide viewer&apos;s textual information</source>
         <translation>Mostrar/Esconder la información textual de los visores</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="77"/>
+        <location filename="qmprextension.cpp" line="73"/>
         <source>Choose Window/Level Presets</source>
         <translation>Escoger Ventana Predeterminada</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="165"/>
-        <location filename="qmprextension.cpp" line="166"/>
+        <location filename="qmprextension.cpp" line="172"/>
+        <location filename="qmprextension.cpp" line="173"/>
         <source>Switch horizontal layout</source>
         <translation>Cambiar distribución horizontal</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="171"/>
+        <location filename="qmprextension.cpp" line="178"/>
         <source>&amp;MIP</source>
         <translation>&amp;MIP</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="172"/>
+        <location filename="qmprextension.cpp" line="179"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="173"/>
+        <location filename="qmprextension.cpp" line="180"/>
         <source>Maximum Intensity Projection</source>
         <translation>Proyección de Máxima Intensidad</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="336"/>
+        <location filename="qmprextension.cpp" line="346"/>
         <source>Export to DICOM</source>
         <translation>Exportar a DICOM</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="336"/>
+        <location filename="qmprextension.cpp" line="346"/>
         <source>Please, select a viewer and try again.</source>
         <translation>Por favor, seleccione un visor e inténtelo de nuevo.</translation>
     </message>

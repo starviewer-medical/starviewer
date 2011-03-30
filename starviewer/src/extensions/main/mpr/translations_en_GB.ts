@@ -91,48 +91,48 @@ Series with multiple phases so it won&apos;t work propperly.</source>
 <context>
     <name>udg::QMPRExtension</name>
     <message>
-        <location filename="qmprextension.cpp" line="75"/>
+        <location filename="qmprextension.cpp" line="71"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="76"/>
+        <location filename="qmprextension.cpp" line="72"/>
         <source>Show/Hide viewer&apos;s textual information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="77"/>
+        <location filename="qmprextension.cpp" line="73"/>
         <source>Choose Window/Level Presets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="165"/>
-        <location filename="qmprextension.cpp" line="166"/>
+        <location filename="qmprextension.cpp" line="172"/>
+        <location filename="qmprextension.cpp" line="173"/>
         <source>Switch horizontal layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="171"/>
+        <location filename="qmprextension.cpp" line="178"/>
         <source>&amp;MIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="172"/>
+        <location filename="qmprextension.cpp" line="179"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="173"/>
+        <location filename="qmprextension.cpp" line="180"/>
         <source>Maximum Intensity Projection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="336"/>
+        <location filename="qmprextension.cpp" line="346"/>
         <source>Export to DICOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="336"/>
+        <location filename="qmprextension.cpp" line="346"/>
         <source>Please, select a viewer and try again.</source>
         <translation type="unfinished"></translation>
     </message>
