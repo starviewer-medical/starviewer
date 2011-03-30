@@ -118,13 +118,29 @@
 <context>
     <name>udg::ApplicationVersionChecker</name>
     <message>
-        <location filename="applicationversionchecker.cpp" line="83"/>
+        <location filename="applicationversionchecker.cpp" line="84"/>
+        <location filename="applicationversionchecker.cpp" line="153"/>
         <source>Release Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="applicationversionchecker.cpp" line="105"/>
+        <location filename="applicationversionchecker.cpp" line="106"/>
         <source>New Version Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="applicationversionchecker.cpp" line="160"/>
+        <source>Release notes for the current version not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="applicationversionchecker.cpp" line="161"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="applicationversionchecker.cpp" line="162"/>
+        <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

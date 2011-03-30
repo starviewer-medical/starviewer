@@ -4,21 +4,24 @@
 <context>
     <name>udg::MenuGridWidget</name>
     <message>
-        <location filename="menugridwidget.cpp" line="197"/>
-        <location filename="menugridwidget.cpp" line="213"/>
-        <location filename="menugridwidget.cpp" line="285"/>
-        <source>%1x%2</source>
-        <translation>%1x%2</translation>
+        <location filename="menugridwidget.cpp" line="54"/>
+        <source>Hanging protocols</source>
+        <translation type="unfinished">Hanging protocols</translation>
     </message>
     <message>
-        <location filename="menugridwidget.cpp" line="272"/>
-        <source>%1,%2</source>
-        <translation>%1,%2</translation>
+        <location filename="menugridwidget.cpp" line="61"/>
+        <source>No hanging protocols available</source>
+        <translation type="unfinished">No hay Hanging Protocols disponibles</translation>
     </message>
     <message>
-        <location filename="menugridwidget.cpp" line="223"/>
+        <location filename="menugridwidget.cpp" line="74"/>
         <source>%1</source>
         <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="menugridwidget.cpp" line="233"/>
+        <source>Searching...</source>
+        <translation type="unfinished">Buscando...</translation>
     </message>
 </context>
 <context>
@@ -49,32 +52,32 @@
         <translation>Escoger Ventanas Predeterminadas</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="420"/>
-        <source>Save current series image</source>
-        <translation>Guardar una imagen de la serie actual</translation>
+        <location filename="q2dviewerextension.cpp" line="444"/>
+        <source>Save current series image...</source>
+        <translation type="unfinished">Guardar una imagen de la serie actual...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="422"/>
+        <location filename="q2dviewerextension.cpp" line="449"/>
+        <source>Save all images from current series...</source>
+        <translation type="unfinished">Guardar todas las imágenes de la serie actual...</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="446"/>
         <source>Save the current image in a standard image format</source>
         <translation>Guardar la imagen actual en un formato estandard</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="425"/>
-        <source>Save all images from current series</source>
-        <translation>Guardar todas las imagenes de la serie actual</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="426"/>
+        <location filename="q2dviewerextension.cpp" line="450"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
         <translation>Guardar todas la imagenes del visualizador selecionado en un formato estandard</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="534"/>
+        <location filename="q2dviewerextension.cpp" line="581"/>
         <source>Export to DICOM</source>
         <translation>Exportar a DICOM</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="534"/>
+        <location filename="q2dviewerextension.cpp" line="581"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation>Esta acción no está permitida ya que el visor está vacío.</translation>
     </message>
@@ -243,7 +246,7 @@
         <translation>Visor 2D</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionmediator.cpp" line="42"/>
+        <location filename="q2dviewerextensionmediator.cpp" line="43"/>
         <source>There is not any viewable or supported Series in the selected Studies</source>
         <translation>No existe ninguna serie suportada o que se pueda mostrar en el estudio seleccionado</translation>
     </message>
