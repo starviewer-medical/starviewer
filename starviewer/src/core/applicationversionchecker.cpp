@@ -23,6 +23,7 @@
 #include <QNetworkProxyFactory>
 #include <QProcessEnvironment>
 #include <QStringList>
+#include <QMessageBox>
 
 namespace udg {
     class QReleaseNotes;
@@ -155,6 +156,11 @@ void ApplicationVersionChecker::showReleaseNotes()
     else
     {
         ERROR_LOG(QString("No s'ha pogut trobar les release notes de la versió actual al path %1").arg(url.toString()));
+        QMessageBox messageBox;
+        messageBox.setText(QString(tr("Release notes for the current version not found.")));
+        messageBox.setWindowTitle(QString(tr("Error")));
+        messageBox.addButton(tr("Ok"), QMessageBox::YesRole);
+        messageBox.exec();
     }
 }
 
