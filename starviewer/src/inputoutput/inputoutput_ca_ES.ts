@@ -2768,7 +2768,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
 %1 no pot descarregar estudis del PACS si el port està en ús, si us plau tanqueu l&apos;aplicació que està utilitzant el port %2 o canvieu el port per connexions entrants en la pantalla de configuració.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="498"/>
+        <location filename="queryscreen.cpp" line="502"/>
         <source>Cancelling PACS operations...</source>
         <oldsource>Cancelling PACS operations</oldsource>
         <translation>Cancel·lant les operacions amb el PACS...</translation>

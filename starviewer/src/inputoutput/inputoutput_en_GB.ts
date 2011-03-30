@@ -2714,7 +2714,7 @@ If the problem persists contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="498"/>
+        <location filename="queryscreen.cpp" line="502"/>
         <source>Cancelling PACS operations...</source>
         <oldsource>Cancelling PACS operations</oldsource>
         <translation type="unfinished"></translation>
