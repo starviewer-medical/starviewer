@@ -4,21 +4,24 @@
 <context>
     <name>udg::MenuGridWidget</name>
     <message>
-        <location filename="menugridwidget.cpp" line="197"/>
-        <location filename="menugridwidget.cpp" line="213"/>
-        <location filename="menugridwidget.cpp" line="285"/>
-        <source>%1x%2</source>
-        <translation>%1x%2</translation>
+        <location filename="menugridwidget.cpp" line="54"/>
+        <source>Hanging protocols</source>
+        <translation type="unfinished">Hanging protocols</translation>
     </message>
     <message>
-        <location filename="menugridwidget.cpp" line="272"/>
-        <source>%1,%2</source>
-        <translation>%1,%2</translation>
+        <location filename="menugridwidget.cpp" line="61"/>
+        <source>No hanging protocols available</source>
+        <translation type="unfinished">No hi ha Hanging Protocols disponibles</translation>
     </message>
     <message>
-        <location filename="menugridwidget.cpp" line="223"/>
+        <location filename="menugridwidget.cpp" line="74"/>
         <source>%1</source>
         <translation>%1</translation>
+    </message>
+    <message>
+        <location filename="menugridwidget.cpp" line="233"/>
+        <source>Searching...</source>
+        <translation type="unfinished">Cercant...</translation>
     </message>
 </context>
 <context>
@@ -49,32 +52,32 @@
         <translation>Escollir Finestres Predeterminades</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="420"/>
-        <source>Save current series image</source>
-        <translation>Guarda una imatge de la sèrie actual</translation>
+        <location filename="q2dviewerextension.cpp" line="444"/>
+        <source>Save current series image...</source>
+        <translation type="unfinished">Desa una imatge de l&apos;actual sèrie...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="422"/>
+        <location filename="q2dviewerextension.cpp" line="449"/>
+        <source>Save all images from current series...</source>
+        <translation type="unfinished">Desa totes les imatges de l&apos;actual sèrie...</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="446"/>
         <source>Save the current image in a standard image format</source>
         <translation>Guarda una imatge de la sèrie actual amb el format estàndard</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="425"/>
-        <source>Save all images from current series</source>
-        <translation>Guardar totes les imatges de la sèrie actual</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="426"/>
+        <location filename="q2dviewerextension.cpp" line="450"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
         <translation>Guarda totes les imatges del visualitzador escollit en un format estàndard</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="534"/>
+        <location filename="q2dviewerextension.cpp" line="581"/>
         <source>Export to DICOM</source>
         <translation>Exportar a DICOM</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="534"/>
+        <location filename="q2dviewerextension.cpp" line="581"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation>Aquesta acció no està permesa ja que el visor està buit.</translation>
     </message>
@@ -243,7 +246,7 @@
         <translation>Visor 2D</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionmediator.cpp" line="42"/>
+        <location filename="q2dviewerextensionmediator.cpp" line="43"/>
         <source>There is not any viewable or supported Series in the selected Studies</source>
         <translation>No hi ha cap sèrie suportada o que es pugui visualitzar a l&apos;estudi seleccionat</translation>
     </message>

@@ -4,20 +4,23 @@
 <context>
     <name>udg::MenuGridWidget</name>
     <message>
-        <location filename="menugridwidget.cpp" line="197"/>
-        <location filename="menugridwidget.cpp" line="213"/>
-        <location filename="menugridwidget.cpp" line="285"/>
-        <source>%1x%2</source>
+        <location filename="menugridwidget.cpp" line="54"/>
+        <source>Hanging protocols</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menugridwidget.cpp" line="272"/>
-        <source>%1,%2</source>
+        <location filename="menugridwidget.cpp" line="61"/>
+        <source>No hanging protocols available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menugridwidget.cpp" line="223"/>
+        <location filename="menugridwidget.cpp" line="74"/>
         <source>%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="menugridwidget.cpp" line="233"/>
+        <source>Searching...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -49,32 +52,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="420"/>
-        <source>Save current series image</source>
+        <location filename="q2dviewerextension.cpp" line="444"/>
+        <source>Save current series image...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="422"/>
+        <location filename="q2dviewerextension.cpp" line="449"/>
+        <source>Save all images from current series...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerextension.cpp" line="446"/>
         <source>Save the current image in a standard image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="425"/>
-        <source>Save all images from current series</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextension.cpp" line="426"/>
+        <location filename="q2dviewerextension.cpp" line="450"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="534"/>
+        <location filename="q2dviewerextension.cpp" line="581"/>
         <source>Export to DICOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="534"/>
+        <location filename="q2dviewerextension.cpp" line="581"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -243,7 +246,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionmediator.cpp" line="42"/>
+        <location filename="q2dviewerextensionmediator.cpp" line="43"/>
         <source>There is not any viewable or supported Series in the selected Studies</source>
         <translation type="unfinished"></translation>
     </message>
