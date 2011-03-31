@@ -133,7 +133,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="m_polylineROIToolButton">
+      <widget class="QToolButton" name="m_ROIToolButton">
        <property name="text">
         <string>Angle</string>
        </property>
