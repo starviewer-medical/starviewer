@@ -21,6 +21,7 @@
 #include "windowlevelpresetstooldata.h"
 // Qt
 #include <QMessageBox>
+#include <QMenu>
 // VTK
 #include <vtkAxisActor2D.h>
 #include <vtkCommand.h> // Pels events
@@ -163,7 +164,7 @@ void QMPRExtension::init()
     m_pickedActorReslice = 0;
     m_mipViewer = 0;
 
-    m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "DistanceTool" << "PolylineROITool" << "EraserTool";
+    m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool" << "DistanceTool" << "PolylineROITool" << "OvalROITool" << "EraserTool";
 }
 
 void QMPRExtension::createActions()
@@ -196,7 +197,13 @@ void QMPRExtension::initializeTools()
     m_toolManager->registerTool("ScreenShotTool");
     m_screenShotToolButton->setToolTip(m_toolManager->getRegisteredToolAction("ScreenShotTool")->toolTip());
     m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
-    m_polylineROIToolButton->setDefaultAction(m_toolManager->registerTool("PolylineROITool"));
+    // La tool de ROI per defecte serà l'el·líptica
+    m_ROIToolButton->setDefaultAction(m_toolManager->registerTool("OvalROITool"));
+    // Afegim un menú al botó de ROI per incorporar la tool de ROI poligonal
+    m_ROIToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu *roiToolMenu = new QMenu(this);
+    m_ROIToolButton->setMenu(roiToolMenu);
+    roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
     m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
     m_openAngleToolButton->setDefaultAction(m_toolManager->registerTool("NonClosedAngleTool"));
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
@@ -205,7 +212,7 @@ void QMPRExtension::initializeTools()
 
     // Definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PolylineROITool" << "OvalROITool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList middleButtonExclusiveTools;
