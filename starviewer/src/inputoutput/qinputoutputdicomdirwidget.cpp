@@ -98,7 +98,7 @@ bool QInputOutputDicomdirWidget::openDicomdir()
         QApplication::restoreOverrideCursor();
         if ( !state.good() )
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Error openning DICOMDIR" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Error opening DICOMDIR" ) );
             ERROR_LOG( "Error al obrir el DICOMDIR " + dicomdirPath + state.text() );
         }
         else
@@ -134,7 +134,7 @@ void QInputOutputDicomdirWidget::queryStudy( DicomMask queryMask )
         }
         else
         {
-            QMessageBox::warning( this , ApplicationNameString , tr( "Error quering in DICOMDIR" ) );
+            QMessageBox::warning( this , ApplicationNameString , tr( "Error querying in DICOMDIR" ) );
             ERROR_LOG( "Error cercant estudis al DICOMDIR " + state.text() );
         }
         return;
@@ -300,13 +300,13 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
                 break;
             }
         case DICOMDIRImporter::ErrorFreeingSpace :
-            message = tr("An error has ocurred freeing space, some studies can't be imported.");
+            message = tr("An error has occurred freeing space, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
         case DICOMDIRImporter::DatabaseError :
-            message = tr("A database error has ocurred, some studies can't be imported.");
+            message = tr("A database error has occurred, some studies can't be imported.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
@@ -318,14 +318,14 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
             break;
        case DICOMDIRImporter::DicomdirInconsistent :
             message = tr("Trying to import study with UID %1 ").arg(studyInstanceUID);
-            message += tr("has ocurred an error. This DICOMDIR is inconsistent, can't be imported.");
+            message += tr("has occurred an error. This DICOMDIR is inconsistent, can't be imported.");
             message += tr("\n\nPlease contact with %1 team.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );
             break;
       case DICOMDIRImporter::Ok :
             break;
         default:
-            message = tr("An unknown error has ocurred importing DICOMDIR.");
+            message = tr("An unknown error has occurred importing DICOMDIR.");
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             QMessageBox::critical( this , ApplicationNameString , message );

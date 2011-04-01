@@ -101,7 +101,7 @@
     <message>
         <location filename="qvolume3dviewtestingextensionbase.ui" line="538"/>
         <source>Ray Casting with Obscurances</source>
-        <translation>Ray Casting con Obscurancias</translation>
+        <translation>Ray Casting con obscurancias</translation>
     </message>
     <message>
         <location filename="qvolume3dviewtestingextensionbase.ui" line="563"/>
@@ -224,7 +224,7 @@
     <message>
         <location filename="qvolume3dviewtestingextension.cpp" line="53"/>
         <source>Export viewer image to DICOM and send it to a PACS server</source>
-        <translation>Exportar imágen(es) del visor a DICOM y enviarlas al servidor PACS</translation>
+        <translation>Exportar imagen(es) del visor a DICOM y enviarlas al servidor PACS</translation>
     </message>
     <message>
         <location filename="qvolume3dviewtestingextension.cpp" line="54"/>

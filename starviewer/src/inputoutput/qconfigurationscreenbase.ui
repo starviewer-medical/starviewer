@@ -992,7 +992,7 @@
            <item row="4" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>EMail:</string>
+              <string>Email:</string>
              </property>
             </widget>
            </item>
@@ -1118,6 +1118,7 @@
   <tabstop>m_buttonApplyPacs</tabstop>
  </tabstops>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>

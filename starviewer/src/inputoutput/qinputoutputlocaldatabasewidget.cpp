@@ -475,7 +475,7 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
                                   .arg( localDatabaseManager.getLastError() )
                                   .arg( dicomMask.getStudyInstanceUID() ));
 
-                QString message = tr("An error ocurred with database, preparing de the DICOM files to send to PACS %1. The DICOM files won't be sent.")
+                QString message = tr("An error occurred with database, preparing the DICOM files to send to PACS %1. The DICOM files won't be sent.")
                     .arg(pacsDevice.getAETitle());
                 message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
@@ -536,7 +536,7 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
     QString message;
 
     if (!doingWhat.isEmpty())
-        message = tr("An error has ocurred while ") + doingWhat + ":\n\n";
+        message = tr("An error has occurred while ") + doingWhat + ":\n\n";
 
     switch(error)
     {

@@ -90,7 +90,7 @@
         </column>
         <column>
          <property name="text">
-          <string>studyUID</string>
+          <string>Study UID</string>
          </property>
         </column>
        </widget>
@@ -426,7 +426,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>650 Mb</string>
+             <string>650 MB</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -501,7 +501,7 @@
           <item>
            <widget class="QLabel" name="m_dicomdirSizeOnDiskLabel">
             <property name="text">
-             <string>The size of the DICOMDIR is XX Mb</string>
+             <string>The size of the DICOMDIR is XX MB</string>
             </property>
            </widget>
           </item>

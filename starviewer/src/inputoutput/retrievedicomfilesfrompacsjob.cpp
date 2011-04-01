@@ -252,7 +252,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::RetrieveOk:
-            message = tr("Images from study %1 of patient %2 has been retrieved succesfully from PACS %3.").arg(studyID, patientName, pacsAETitle);
+            message = tr("Images from study %1 of patient %2 has been retrieved successfully from PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCancelled:
             message = tr("Retrieve images from study %1 of patient %2 from PACS %3 has been cancelled.").arg(studyID, patientName, pacsAETitle);
@@ -271,17 +271,17 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 quint64 minimumSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
                 message = tr("There is not enough space to retrieve images of study %1 from patient %2, please free space or change your Local Database settings.").arg(
                     studyID, patientName);
-                message += tr("\n\n- Available space in Disk: %1 Mb.").arg(freeSpaceInHardDisk);
-                message += tr("\n- Minimum space required in Disk to retrieve studies: %1 Mb.").arg(minimumSpaceRequired);
+                message += tr("\n\n- Available space in Disk: %1 MB.").arg(freeSpaceInHardDisk);
+                message += tr("\n- Minimum space required in Disk to retrieve studies: %1 MB.").arg(minimumSpaceRequired);
             }
             break;
         case PACSRequestStatus::RetrieveErrorFreeingSpace :
-            message = tr("An error ocurred freeing space on harddisk, the images from study %1 of patient %2 won't be retrieved.").arg(studyID, patientName);
+            message = tr("An error occurred freeing space on hard disk, the images from study %1 of patient %2 won't be retrieved.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrieveDatabaseError :
-            message = tr("Images from study %1 of patient %2 can't be retrieved because a database error ocurred.").arg(studyID, patientName);
+            message = tr("Images from study %1 of patient %2 can't be retrieved because a database error occurred.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
@@ -293,10 +293,10 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
         case PACSRequestStatus::RetrieveDestinationAETileUnknown:
             message = tr("Images from study %1 of patient %2 can't be retrieved because PACS %3 doesn't recognize your computer's AETitle %4.")
                     .arg(studyID, patientName, pacsAETitle, settings.getValue(InputOutputSettings::LocalAETitle).toString());
-            message += tr("\n\nContact with an administrador to register your computer to the PACS.");
+            message += tr("\n\nContact with an administrator to register your computer to the PACS.");
             break;
         case PACSRequestStatus::RetrieveUnknowStatus:
-            message = tr("Images from study %1 of patient %2 can't be retrieved due to an unknow error of PACS %3.\n\n")
+            message = tr("Images from study %1 of patient %2 can't be retrieved due to an unknown error of PACS %3.\n\n")
                 .arg(studyID, patientName, pacsAETitle);
             message += tr("The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.");
             break;
@@ -315,7 +315,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message += "\n";
             break;
         default:
-            message = tr("An unknown error has ocurred and %1 can't retrieve images from study %2 of patient %3 from PACS %4.")
+            message = tr("An unknown error has occurred and %1 can't retrieve images from study %2 of patient %3 from PACS %4.")
                 .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);

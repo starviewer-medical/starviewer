@@ -20,9 +20,9 @@
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="69"/>
-        <source>The iso path &quot;%1&quot; that we want to burn doesn&apos;t exist.</source>
-        <oldsource>The iso path %1 that we want to burn doesn&apos;t exist.</oldsource>
-        <translation>La imatge &quot;%1&quot; que es vol gravar no existeix.</translation>
+        <source>The ISO path &quot;%1&quot; that we want to burn doesn&apos;t exist.</source>
+        <oldsource>The iso path &quot;%1&quot; that we want to burn doesn&apos;t exist.</oldsource>
+        <translation>La imatge ISO &quot;%1&quot; que es vol gravar no existeix.</translation>
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="80"/>
@@ -32,9 +32,9 @@
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="113"/>
-        <source>An error occurred during the iso image file burn process.</source>
-        <oldsource>An error occurred with the iso image file burn process.</oldsource>
-        <translation>S&apos;ha produït un error gravant la imatge del DICOMDIR.</translation>
+        <source>An error occurred during the ISO image file burn process.</source>
+        <oldsource>An error occurred during the iso image file burn process.</oldsource>
+        <translation>S&apos;ha produït un error gravant la imatge ISO del DICOMDIR.</translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="81"/>
@@ -51,8 +51,9 @@
     <message>
         <location filename="isoimagefilecreator.cpp" line="103"/>
         <location filename="isoimagefilecreator.cpp" line="113"/>
-        <source>You don&apos;t have permissions to write in the output iso image directory &quot;%1&quot;.</source>
-        <translation>No té permisos d&apos;escriptura per generar la imatge en el directori &quot;%1&quot;.</translation>
+        <source>You don&apos;t have permissions to write in the output ISO image directory &quot;%1&quot;.</source>
+        <oldsource>You don&apos;t have permissions to write in the output iso image directory &quot;%1&quot;.</oldsource>
+        <translation>No té permisos d&apos;escriptura per generar la imatge ISO en el directori &quot;%1&quot;.</translation>
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="153"/>
@@ -61,8 +62,9 @@
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="179"/>
-        <source>An error occurred with the iso image file create process.</source>
-        <translation>S&apos;ha produït un error generant la imatge.</translation>
+        <source>An error occurred with the ISO image file create process.</source>
+        <oldsource>An error occurred with the iso image file create process.</oldsource>
+        <translation>S&apos;ha produït un error generant la imatge ISO.</translation>
     </message>
 </context>
 <context>
@@ -125,7 +127,7 @@ Can&apos;t create the cache image directory. Please check users permissions.</so
         <oldsource>
 Can&apos;t create the cache image directory. Please check users permissions</oldsource>
         <translation>
-No es pot crear el directori de la cache d&apos;imatges. Reviseu els permisos d&apos;usuari.</translation>
+No es pot crear el directori de la caché d&apos;imatges. Reviseu els permisos d&apos;usuari.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="95"/>
@@ -439,8 +441,8 @@ No teniu permisos d&apos;escriptura en el directori de la caché d&apos;imatges.
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="363"/>
-        <source>Maximum simultaenious connections has to be between 1 and 15.</source>
-        <oldsource>Maximum simultaenious connections has to be between 1 and 15</oldsource>
+        <source>Maximum simultaneous connections has to be between 1 and 15.</source>
+        <oldsource>Maximum simultaenious connections has to be between 1 and 15.</oldsource>
         <translation>El nombre màxim de connexions simultànies ha de ser entre 1 i 15.</translation>
     </message>
     <message>
@@ -498,17 +500,18 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="278"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond correclty.
+        <source>PACS &quot;%1&quot; doesn&apos;t respond correctly.
 Be sure that the IP and AETitle of It are correct.</source>
         <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correclty.
-Be sure that the IP and AETitle of it are correct.</oldsource>
-        <translation>PACS &quot;%1&quot; no has respós de la forma esperada.
+Be sure that the IP and AETitle of It are correct.</oldsource>
+        <translation>PACS &quot;%1&quot; no has respòs de la forma esperada.
 Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="285"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknow error has produced.</source>
-        <translation>El PACS &quot;%1&quot; no ha respós com s&apos;esperava, s&apos;ha produït un error desconegut.</translation>
+        <source>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknown error has produced.</source>
+        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknow error has produced.</oldsource>
+        <translation>El PACS &quot;%1&quot; no ha respòs com s&apos;esperava, s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="310"/>
@@ -700,7 +703,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     <message>
         <location filename="qconfigurationscreenbase.ui" line="724"/>
         <source>Max. seconds for Timeout:</source>
-        <translation>Màxim de segons per Timeout:</translation>
+        <translation>Màxim de segons per timeout:</translation>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="747"/>
@@ -734,7 +737,8 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="995"/>
-        <source>EMail:</source>
+        <source>Email:</source>
+        <oldsource>EMail:</oldsource>
         <translation>Correu electrònic:</translation>
     </message>
     <message>
@@ -807,7 +811,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
     <message>
         <location filename="qcreatedicomdir.cpp" line="127"/>
         <source>Pen Drive</source>
-        <translation>Memòria Extraible USB</translation>
+        <translation>Memòria extraïble USB</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="128"/>
@@ -828,7 +832,7 @@ Assegureu-vos que la IP i el AETitle d&apos;aquest siguin correctes.</translatio
         <oldsource>You don&apos;t have read permissions on directory &apos;%&apos;1 to copy the content of It to DICOMDIR.
 
 </oldsource>
-        <translation>No té permisos de lectura en el directori &apos;%1&apos; per copiar-ne el contigut al DICOMDIR.</translation>
+        <translation>No té permisos de lectura en el directori &apos;%1&apos; per copiar-ne el contingut al DICOMDIR.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="331"/>
@@ -906,18 +910,21 @@ Codi d&apos;error: %1</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="166"/>
-        <source>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</source>
-        <translation>Mida DICOMDIR: %1 Mb aproximadament - Espai disponible %2 Mb</translation>
+        <source>DICOMDIR size: %1 MB approximately - Available Space: %2 MB</source>
+        <oldsource>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</oldsource>
+        <translation>Mida DICOMDIR: %1 MB aproximadament - Espai disponible %2 MB</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="170"/>
-        <source>DICOMDIR size: %1 Mb - Available Space: %2 Mb</source>
-        <translation>Mida DICOMDIR: %1 Mb - Espai disponible %2 Mb</translation>
+        <source>DICOMDIR size: %1 MB - Available Space: %2 MB</source>
+        <oldsource>DICOMDIR size: %1 Mb - Available Space: %2 Mb</oldsource>
+        <translation>Mida DICOMDIR: %1 MB - Espai disponible %2 MB</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="182"/>
-        <source>%1 Mb</source>
-        <translation>%1 Mb</translation>
+        <source>%1 MB</source>
+        <oldsource>%1 Mb</oldsource>
+        <translation>%1 MB</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="235"/>
@@ -958,7 +965,7 @@ Codi d&apos;error: %1</translation>
         <location filename="qcreatedicomdir.cpp" line="255"/>
         <source>DICOMDIR creation aborted.
  The selected studies exceed the available space for the current device.</source>
-        <translation>Creació DICOMDIR abortada.
+        <translation>Creació DICOMDIR avortada.
 Els estudis seleccionats excedeixen l&apos;espai disponible en el dispositiu.</translation>
     </message>
     <message>
@@ -999,7 +1006,7 @@ Esborreu aquests elements del directori o desmarqueu l&apos;opció de copiar el 
     <message>
         <location filename="qcreatedicomdir.cpp" line="633"/>
         <source>DICOMDIR Burning Failure</source>
-        <translation>Error al grabar DICOMDIR</translation>
+        <translation>Error al gravar DICOMDIR</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="633"/>
@@ -1013,7 +1020,7 @@ Esborreu aquests elements del directori o desmarqueu l&apos;opció de copiar el 
         <location filename="qcreatedicomdir.cpp" line="633"/>
         <source>There was an error during the burning of the DICOMDIR ISO image file.
 </source>
-        <translation>S&apos;ha produït un error durant la gravació de la image ISO amb el DICOMDIR.</translation>
+        <translation>S&apos;ha produït un error durant la gravació de la imatge ISO amb el DICOMDIR.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="639"/>
@@ -1042,15 +1049,15 @@ Esborreu aquests elements del directori o desmarqueu l&apos;opció de copiar el 
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="768"/>
-        <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</source>
-        <oldsource>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of the device is %1 Mb</oldsource>
-        <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat del dispositiu és de %1 Mb.</translation>
+        <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB.</source>
+        <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</oldsource>
+        <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat del dispositiu és de %1 MB.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="787"/>
-        <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb.</source>
-        <oldsource>The selected device doesn&apos;t have enough space to copy all this studies, please remove some studies. The capacity of a cd is %1 Mb</oldsource>
-        <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat d&apos;un cd és de %1 Mb.</translation>
+        <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 MB.</source>
+        <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 Mb.</oldsource>
+        <translation>El dispositiu seleccionat no té suficient espai lliure per crear el DICOMDIR amb tots els estudis, si us plau tregui alguns dels estudis. La capacitat d&apos;un CD és de %1 MB.</translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="794"/>
@@ -1109,7 +1116,8 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="93"/>
-        <source>studyUID</source>
+        <source>Study UID</source>
+        <oldsource>studyUID</oldsource>
         <translation>UID Estudi</translation>
     </message>
     <message>
@@ -1154,8 +1162,9 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="429"/>
-        <source>650 Mb</source>
-        <translation>650 Mb</translation>
+        <source>650 MB</source>
+        <oldsource>650 Mb</oldsource>
+        <translation>650 MB</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="439"/>
@@ -1166,7 +1175,8 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="504"/>
-        <source>The size of the DICOMDIR is XX Mb</source>
+        <source>The size of the DICOMDIR is XX MB</source>
+        <oldsource>The size of the DICOMDIR is XX Mb</oldsource>
         <translation></translation>
     </message>
     <message>
@@ -1227,7 +1237,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qcreatedicomdirbase.ui" line="353"/>
         <source>Pen Drive</source>
-        <translation>Memòria Extraible USB</translation>
+        <translation>Memòria extraïble USB</translation>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="475"/>
@@ -1262,7 +1272,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qdicomdirconfigurationscreen.cpp" line="121"/>
         <source>Invalid path of folder to copy to DICOMDIR.</source>
-        <translation>Ruta inválida del directorio a copiar al DICOMDIR.</translation>
+        <translation>Ruta invàlida del directori a copiar al DICOMDIR.</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreen.cpp" line="126"/>
@@ -1296,7 +1306,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="101"/>
         <source>Burning application configuration</source>
-        <translation>Configuració de l&apos;aplicació de gravació de Cd/Dvd</translation>
+        <translation>Configuració de l&apos;aplicació de gravació de CD/DVD</translation>
     </message>
     <message>
         <location filename="qdicomdirconfigurationscreenbase.ui" line="130"/>
@@ -1499,8 +1509,8 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="101"/>
-        <source>Error openning DICOMDIR</source>
-        <oldsource>Error openning dicomdir</oldsource>
+        <source>Error opening DICOMDIR</source>
+        <oldsource>Error openning DICOMDIR</oldsource>
         <translation>Error obrint el DICOMDIR</translation>
     </message>
     <message>
@@ -1511,8 +1521,8 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="137"/>
-        <source>Error quering in DICOMDIR</source>
-        <oldsource>Error quering in dicomdir</oldsource>
+        <source>Error querying in DICOMDIR</source>
+        <oldsource>Error quering in DICOMDIR</oldsource>
         <translation>Error consultant el DICOMDIR</translation>
     </message>
     <message>
@@ -1557,7 +1567,7 @@ Especifiqui una configuració vàlida en el menú Eines -&gt; Configuració -&gt
 </source>
         <oldsource>the DICOMDIR file could not be opened. Be sure that the DICOMDIR path is correct.
 </oldsource>
-        <translation>no s&apos;ha pogut obrir el fitxer DICOMDIR, assegureu-vos que la ruta d&apos;aquestr és correcte.
+        <translation>no s&apos;ha pogut obrir el fitxer DICOMDIR, assegureu-vos que la ruta d&apos;aquest és correcte.
 </translation>
     </message>
     <message>
@@ -1576,7 +1586,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="279"/>
         <source>Some files of study with UID %2 could not be imported. Be sure that you have write permissions on the %1 cache directory.</source>
-        <translation>Alguns fitxers del estudi amb UID %2 no s&apos;han pogut importar. Assegureu-vos que teniu permisos d&apos;escriptura en el directori de la cache del %1.</translation>
+        <translation>Alguns fitxers del estudi amb UID %2 no s&apos;han pogut importar. Assegureu-vos que teniu permisos d&apos;escriptura en el directori de la caché del %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="289"/>
@@ -1607,8 +1617,9 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="303"/>
-        <source>An error has ocurred freeing space, some studies can&apos;t be imported.</source>
-        <translation>S&apos;ha porduït un error alliberant espai, alguns estudis no s&apos;han pogut importar.</translation>
+        <source>An error has occurred freeing space, some studies can&apos;t be imported.</source>
+        <oldsource>An error has ocurred freeing space, some studies can&apos;t be imported.</oldsource>
+        <translation>S&apos;ha produït un error alliberant espai, alguns estudis no s&apos;han pogut importar.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="304"/>
@@ -1629,7 +1640,8 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="309"/>
-        <source>A database error has ocurred, some studies can&apos;t be imported.</source>
+        <source>A database error has occurred, some studies can&apos;t be imported.</source>
+        <oldsource>A database error has ocurred, some studies can&apos;t be imported.</oldsource>
         <translation>S&apos;ha produït un error a la base de dades, alguns estudis no s&apos;han pogut importar.</translation>
     </message>
     <message>
@@ -1649,8 +1661,8 @@ L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau pos
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="321"/>
-        <source>has ocurred an error. This DICOMDIR is inconsistent, can&apos;t be imported.</source>
-        <oldsource>has ocurred an error. This dicomdir is inconsistent, can&apos;t be imported.</oldsource>
+        <source>has occurred an error. This DICOMDIR is inconsistent, can&apos;t be imported.</source>
+        <oldsource>has ocurred an error. This DICOMDIR is inconsistent, can&apos;t be imported.</oldsource>
         <translation>s&apos;ha produït un error. El DICOMDIR és inconsistent, no es pot importar.</translation>
     </message>
     <message>
@@ -1664,8 +1676,8 @@ Si us plau contacteu amb l&apos;equip del %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="328"/>
-        <source>An unknown error has ocurred importing DICOMDIR.</source>
-        <oldsource>An unknown error has ocurred importing dicomdir.</oldsource>
+        <source>An unknown error has occurred importing DICOMDIR.</source>
+        <oldsource>An unknown error has ocurred importing DICOMDIR.</oldsource>
         <translation>S&apos;ha produït un error desconegut important el DICOMDIR.</translation>
     </message>
 </context>
@@ -1773,13 +1785,14 @@ Si us plau contacteu amb l&apos;equip del %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="478"/>
-        <source>An error ocurred with database, preparing de the DICOM files to send to PACS %1. The DICOM files won&apos;t be sent.</source>
-        <oldsource>An error ocurred with database, preparing de the DICOM files to send. The DICOM files won&apos;t be sent to PACS.</oldsource>
+        <source>An error occurred with database, preparing the DICOM files to send to PACS %1. The DICOM files won&apos;t be sent.</source>
+        <oldsource>An error ocurred with database, preparing de the DICOM files to send to PACS %1. The DICOM files won&apos;t be sent.</oldsource>
         <translation>S&apos;ha produït un error a la base de dades preparant els arxius DICOM per enviar-los al PACS %1. No s&apos;enviaran els fitxers.</translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="539"/>
-        <source>An error has ocurred while </source>
+        <source>An error has occurred while </source>
+        <oldsource>An error has ocurred while </oldsource>
         <translation>S&apos;ha produït un error al </translation>
     </message>
     <message>
@@ -1999,7 +2012,7 @@ Està segur que vol continuar?</translation>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="120"/>
         <source>The cache image directory doesn&apos;t exists. Do you want to create it?</source>
         <oldsource>The cache image directory doesn&apos;t exists. Do you want to create it ?</oldsource>
-        <translation>El directori d&apos;imatges de la cache no existeix. El voleu crear?</translation>
+        <translation>El directori d&apos;imatges de la caché no existeix. El voleu crear?</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="121"/>
@@ -2019,16 +2032,20 @@ Està segur que vol continuar?</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="142"/>
         <source>
-- At least 1 GByte of free space in harddisk is necessary to retrieve or import new studies.</source>
+- At least 1 GB of free space in hard disk is necessary to retrieve or import new studies.</source>
+        <oldsource>
+- At least 1 GByte of free space in hard disk is necessary to retrieve or import new studies.</oldsource>
         <translation>
-- Es necessita com a mínim 1 GByte d&apos;espai lliure al disc dur per descarregar o importar nous estudis.</translation>
+- Es necessita com a mínim 1 GB d&apos;espai lliure al disc dur per descarregar o importar nous estudis.</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="151"/>
         <source>
-- At least 1 GByte of studies have to be delete when there is not enough space to retrieve or import new studies.</source>
+- At least 1 GB of studies have to be delete when there is not enough space to retrieve or import new studies.</source>
+        <oldsource>
+- At least 1 GByte of studies have to be delete when there is not enough space to retrieve or import new studies.</oldsource>
         <translation>
-- Com a mínim s&apos;ha d&apos;esborrar 1 GByte d&apos;estudis, quan no hi ha suficient espai per descarregar o importar nous estudis.</translation>
+- Com a mínim s&apos;ha d&apos;esborrar 1 GB d&apos;estudis, quan no hi ha suficient espai per descarregar o importar nous estudis.</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="160"/>
@@ -2046,13 +2063,13 @@ Està segur que vol continuar?</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="220"/>
         <source>Choose the Cache images path...</source>
-        <translation>Escolliu el directori de la cache d&apos;imatges...</translation>
+        <translation>Escolliu el directori de la caché d&apos;imatges...</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="269"/>
         <source>Are you sure you want to delete all Studies of the cache?</source>
         <oldsource>Are you sure you want to delete all Studies of the cache ?</oldsource>
-        <translation>Esteu segurs que voleu esborrar tots els estudis de la cache?</translation>
+        <translation>Esteu segur que voleu esborrar tots els estudis de la caché?</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="301"/>
@@ -2062,8 +2079,8 @@ These files have to be deleted manually.</source>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="305"/>
-        <source>An error has ocurred deleting studies from database, be sure you have write permissions on database directory. </source>
-        <oldsource>An error has ocurred deleting studies, be sure you have write permissions on database directory. </oldsource>
+        <source>An error has occurred deleting studies from database, be sure you have write permissions on database directory. </source>
+        <oldsource>An error has ocurred deleting studies from database, be sure you have write permissions on database directory. </oldsource>
         <translation>S&apos;ha produït un error esborrant els estudis de la base de dades, assegureu-vos que teniu permisos sobre el directori de la base de dades.</translation>
     </message>
     <message>
@@ -2084,14 +2101,16 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="324"/>
         <source>Close all %1 windows and try again.</source>
-        <translation>Tanqueu totes les finestes d&apos;%1 i torneu-ho a intentar.</translation>
+        <translation>Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="323"/>
-        <source>The database cannot be compacted, an unknown error has ocurred.
+        <source>The database cannot be compacted, an unknown error has occurred.
 
 </source>
-        <oldsource>The database cannot be compacted, an unknown error has ocurred. </oldsource>
+        <oldsource>The database cannot be compacted, an unknown error has ocurred.
+
+</oldsource>
         <translation>S&apos;ha produït un error al compactar la base de dades.
 
 </translation>
@@ -2138,7 +2157,7 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="231"/>
         <source>Delete all the studies of the cache</source>
-        <translation>Esborra tots els estudis de la cache</translation>
+        <translation>Esborra tots els estudis de la caché</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="234"/>
@@ -2157,13 +2176,15 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="310"/>
-        <source>Minimum space required in harddisk to retrieve DICOM objects:</source>
+        <source>Minimum space required in hard disk to retrieve DICOM objects:</source>
+        <oldsource>Minimum space required in harddisk to retrieve DICOM objects:</oldsource>
         <translation>Espai mínim necessari al disc dur per descarregar objectes DICOM:</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="333"/>
-        <source>Gb</source>
-        <translation>Gb</translation>
+        <source>GB</source>
+        <oldsource>Gb</oldsource>
+        <translation>GB</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="363"/>
@@ -2182,8 +2203,9 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="439"/>
-        <source>Gb of free space.</source>
-        <translation>Gb d&apos;espai lliure.</translation>
+        <source>GB of free space.</source>
+        <oldsource>Gb of free space.</oldsource>
+        <translation>GB d&apos;espai lliure.</translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="496"/>
@@ -2532,99 +2554,99 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
 <context>
     <name>udg::QStudyTreeWidgetBase</name>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="120"/>
+        <location filename="qstudytreewidgetbase.ui" line="119"/>
         <source>Type</source>
         <translation>Tipus</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="60"/>
+        <location filename="qstudytreewidgetbase.ui" line="59"/>
         <source>Patient ID</source>
         <translation>ID Pacient</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="55"/>
+        <location filename="qstudytreewidgetbase.ui" line="54"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="65"/>
+        <location filename="qstudytreewidgetbase.ui" line="64"/>
         <source>Age</source>
         <translation>Edat</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="75"/>
+        <location filename="qstudytreewidgetbase.ui" line="74"/>
         <source>Modality</source>
         <translation>Modalitat</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="70"/>
+        <location filename="qstudytreewidgetbase.ui" line="69"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="80"/>
+        <location filename="qstudytreewidgetbase.ui" line="79"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="85"/>
+        <location filename="qstudytreewidgetbase.ui" line="84"/>
         <source>Hour</source>
         <translation>Hora</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="95"/>
+        <location filename="qstudytreewidgetbase.ui" line="94"/>
         <source>Institution</source>
         <translation>Institució</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="115"/>
+        <location filename="qstudytreewidgetbase.ui" line="114"/>
         <source>Acc. Num</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="90"/>
+        <location filename="qstudytreewidgetbase.ui" line="89"/>
         <source>AETitle</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="100"/>
+        <location filename="qstudytreewidgetbase.ui" line="99"/>
         <source>UID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="110"/>
+        <location filename="qstudytreewidgetbase.ui" line="104"/>
+        <source>Study ID</source>
+        <translation>ID Estudi</translation>
+    </message>
+    <message>
+        <location filename="qstudytreewidgetbase.ui" line="109"/>
         <source>Protocol Name</source>
         <translation>Nom del Protocol</translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="125"/>
+        <location filename="qstudytreewidgetbase.ui" line="124"/>
         <source>Ref Physician Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="130"/>
+        <location filename="qstudytreewidgetbase.ui" line="129"/>
         <source>PP Start Date</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="135"/>
+        <location filename="qstudytreewidgetbase.ui" line="134"/>
         <source>PP Start Time</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="140"/>
+        <location filename="qstudytreewidgetbase.ui" line="139"/>
         <source>Req. Proc. ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="145"/>
+        <location filename="qstudytreewidgetbase.ui" line="144"/>
         <source>Sche. Proc. Step ID</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="qstudytreewidgetbase.ui" line="105"/>
-        <source>StudyID</source>
-        <translation>ID Estudi</translation>
     </message>
 </context>
 <context>
@@ -2654,7 +2676,8 @@ Tanqueu totes les finestres d&apos;%1 i torneu-ho a intentar.</translation>
     <name>udg::QueryPacsJob</name>
     <message>
         <location filename="querypacsjob.cpp" line="113"/>
-        <source>Query %1 to PACS %2 has been succesfull.</source>
+        <source>Query %1 to PACS %2 has been successful.</source>
+        <oldsource>Query %1 to PACS %2 has been succesfull.</oldsource>
         <translation>La consulta %1 al PACS %2 s&apos;ha fet correctament.</translation>
     </message>
     <message>
@@ -2697,14 +2720,14 @@ Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres 
         <location filename="querypacsjob.cpp" line="125"/>
         <source>Try with a different query or wait a few minutes, if the problem persists contact with PACS administrator.</source>
         <oldsource>Wait a few minutes and try it again, if the problem persists contact with PACS administrator.</oldsource>
-        <translation>Torneu-ho a provar amb una consulta diferent o espereu uns minuts. Si el problema persisteix contacteu amb un administador del PACS.</translation>
+        <translation>Torneu-ho a provar amb una consulta diferent o espereu uns minuts. Si el problema persisteix contacteu amb un administrador del PACS.</translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="128"/>
-        <source>PACS %1 could not process the query returning an unknow error.
+        <source>PACS %1 could not process the query returning an unknown error.
 
 </source>
-        <oldsource>PACS %1 has report us that could not process the requested query returning an unknow error.
+        <oldsource>PACS %1 could not process the query returning an unknow error.
 
 </oldsource>
         <translation>El PACS %1 no ha pogut realitzar la consulta retornant un error desconegut.
@@ -2718,7 +2741,8 @@ Asseguris que el seu ordinador està connectat a la xarxa i que els paràmetres 
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="132"/>
-        <source>An unknown error has ocurred querying %1 to PACS %2.</source>
+        <source>An unknown error has occurred querying %1 to PACS %2.</source>
+        <oldsource>An unknown error has ocurred querying %1 to PACS %2.</oldsource>
         <translation>S&apos;ha produït un error desconegut al consultar %1 al PACS %2.</translation>
     </message>
     <message>
@@ -2745,7 +2769,8 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="151"/>
-        <source>unkown query level</source>
+        <source>unknown query level</source>
+        <oldsource>unkown query level</oldsource>
         <translation>nivell de consulta desconegut</translation>
     </message>
 </context>
@@ -2924,12 +2949,14 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="284"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved because a database error ocurred.</source>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved because a database error occurred.</source>
+        <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved because a database error ocurred.</oldsource>
         <translation>No s&apos;ha pogut descarregar les imatges de l&apos;estudi %1 del pacient %2 perquè s&apos;ha produït un error a la base de dades.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="255"/>
-        <source>Images from study %1 of patient %2 has been retrieved succesfully from PACS %3.</source>
+        <source>Images from study %1 of patient %2 has been retrieved successfully from PACS %3.</source>
+        <oldsource>Images from study %1 of patient %2 has been retrieved succesfully from PACS %3.</oldsource>
         <translation>Les imatges del estudi %1 del pacient %2 s&apos;han descarregat correctament del PACS %3.</translation>
     </message>
     <message>
@@ -2948,26 +2975,27 @@ Si el problema persisteix contacteu amb un administrador.</translation>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="274"/>
         <source>
 
-- Available space in Disk: %1 Mb.</source>
+- Available space in Disk: %1 MB.</source>
         <oldsource>
 
-	- Available space in Disk: %1 Mb.</oldsource>
+- Available space in Disk: %1 Mb.</oldsource>
         <translation>
 
-- Espai disponible al disc: %1 Mb.</translation>
+- Espai disponible al disc: %1 MB.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="275"/>
         <source>
-- Minimum space required in Disk to retrieve studies: %1 Mb.</source>
+- Minimum space required in Disk to retrieve studies: %1 MB.</source>
         <oldsource>
-	- Minimum space required in Disk to retrieve studies: %1 Mb.</oldsource>
+- Minimum space required in Disk to retrieve studies: %1 Mb.</oldsource>
         <translation>
-- Espai mínim requerit en el disc per descarregar estudis: %1 Mb.</translation>
+- Espai mínim requerit en el disc per descarregar estudis: %1 MB.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="279"/>
-        <source>An error ocurred freeing space on harddisk, the images from study %1 of patient %2 won&apos;t be retrieved.</source>
+        <source>An error occurred freeing space on hard disk, the images from study %1 of patient %2 won&apos;t be retrieved.</source>
+        <oldsource>An error ocurred freeing space on harddisk, the images from study %1 of patient %2 won&apos;t be retrieved.</oldsource>
         <translation>S&apos;ha produït un error alliberant espai en el disc dur. Les imatges de l&apos;estudi %1 del pacient %2 no es descarregaran.</translation>
     </message>
     <message>
@@ -2994,16 +3022,22 @@ L&apos;estudi pot estar corrupte, si creieu que no està corrupte si us plau pos
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="296"/>
         <source>
 
-Contact with an administrador to register your computer to the PACS.</source>
+Contact with an administrator to register your computer to the PACS.</source>
+        <oldsource>
+
+Contact with an administrador to register your computer to the PACS.</oldsource>
         <translation>
 
 Contacteu amb un administrador per registrar el vostre ordinador al PACS.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="299"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknow error of PACS %3.
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknown error of PACS %3.
 
 </source>
+        <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknow error of PACS %3.
+
+</oldsource>
         <translation>No s&apos;han pogut descarregar les imatges de l&apos;estudi %1 del pacient %2 degut a un error desconegut que s&apos;ha produït en el PACS %3.
 
 </translation>
@@ -3041,7 +3075,8 @@ Contacteu amb un administrador per registrar el vostre ordinador al PACS.</trans
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="318"/>
-        <source>An unknown error has ocurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</source>
+        <source>An unknown error has occurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</source>
+        <oldsource>An unknown error has ocurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</oldsource>
         <translation>No s&apos;han pogut descarregar les imatges del l&apos;estudi %2 del pacient %3 del PACS %4 perquè s&apos;ha produït un error desconegut.</translation>
     </message>
 </context>
@@ -3066,11 +3101,12 @@ Si el problema persisteix contacteu amb un administrador.</translation>
         <location filename="senddicomfilestopacsjob.cpp" line="118"/>
         <source>Wait a few minutes and try again, if the problem persist contact with an administrator.</source>
         <oldsource> Wait a few minutes and try again, if the problem persist contact with an administrator.</oldsource>
-        <translation>Espereu uns minuts i torneu-ho a intentar, si el problema persiteix contacteu amb un administrador.</translation>
+        <translation>Espereu uns minuts i torneu-ho a intentar, si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="89"/>
-        <source>Images from study %1 of patient %2 has been sent succesfully to PACS %3.</source>
+        <source>Images from study %1 of patient %2 has been sent successfully to PACS %3.</source>
+        <oldsource>Images from study %1 of patient %2 has been sent succesfully to PACS %3.</oldsource>
         <translation>Les imatges del estudi %1 del pacient %2 s&apos;han enviat correctament al PACS %3.</translation>
     </message>
     <message>
@@ -3115,7 +3151,7 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="113"/>
         <source>The sent of images from study %1 from patient %2 to PACS %3 has been cancelled.</source>
-        <translation>L&apos;enviament d&apos;imatges de l&apos;estudi %1 del paciente %2 al PACS %3 s&apos;ha cancel·lat</translation>
+        <translation>L&apos;enviament d&apos;imatges de l&apos;estudi %1 del pacient %2 al PACS %3 s&apos;ha cancel·lat</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="117"/>
@@ -3131,9 +3167,9 @@ Si el problema persisteix contacteu amb un administrador.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="121"/>
-        <source>An unknown error has ocurred sending images from study %1 of patient %2 to PACS %3.</source>
-        <oldsource>An unknown error has ocurred sending DICOM files from study %1 of patient %2 to PACS %3.</oldsource>
-        <translation>S&apos;ha produït un error desconegut enviat imatges de l&apos;estudi %1 del pacient %2 al PACS %3.</translation>
+        <source>An unknown error has occurred sending images from study %1 of patient %2 to PACS %3.</source>
+        <oldsource>An unknown error has ocurred sending images from study %1 of patient %2 to PACS %3.</oldsource>
+        <translation>S&apos;ha produït un error desconegut enviant imatges de l&apos;estudi %1 del pacient %2 al PACS %3.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="123"/>

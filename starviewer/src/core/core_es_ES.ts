@@ -213,7 +213,7 @@
     </message>
     <message>
         <location filename="patientbrowsermenu.cpp" line="50"/>
-        <source> Serie %1: %2 %3 %4 %5</source>
+        <source> Series %1: %2 %3 %4 %5</source>
         <translation> Serie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
@@ -1066,7 +1066,7 @@ El sombreado se deshabilitará y, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpctwidgetbase.ui" line="504"/>
         <source>Rotation Time:</source>
-        <translation>Timepo de rotación:</translation>
+        <translation>Tiempo de rotación:</translation>
     </message>
 </context>
 <context>
@@ -1181,7 +1181,7 @@ El sombreado se deshabilitará y, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpmrwidgetbase.ui" line="320"/>
         <source>Spacial plane: </source>
-        <translation>Plano espaial: </translation>
+        <translation>Plano espacial: </translation>
     </message>
     <message>
         <location filename="qdicomdumpmrwidgetbase.ui" line="343"/>
@@ -1206,7 +1206,7 @@ El sombreado se deshabilitará y, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpmrwidgetbase.ui" line="432"/>
         <source>Dynamic Scans:</source>
-        <translation>Exploración dinàmica:</translation>
+        <translation>Exploración dinámica:</translation>
     </message>
 </context>
 <context>
@@ -1526,7 +1526,7 @@ Variable de entorno(logFilePath): %2</translation>
     <message>
         <location filename="qthickslabwidgetbase.ui" line="101"/>
         <source>Max. Thickness</source>
-        <translation>Grosor Máximo</translation>
+        <translation>Grosor máximo</translation>
     </message>
 </context>
 <context>
@@ -1680,7 +1680,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="213"/>
         <source>Put Seed tool</source>
-        <translation>Situa la herramienta de semilla</translation>
+        <translation>Sitúa la herramienta de semilla</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="218"/>
@@ -1831,12 +1831,12 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="372"/>
         <source>Elliptical ROI</source>
-        <translation type="unfinished">ROI eliptica</translation>
+        <translation type="unfinished">ROI elíptica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="375"/>
         <source>Enable/Disable Elliptical ROI tool</source>
-        <translation type="unfinished">Activa/Desactiva la herarramienta de ROI elíptica</translation>
+        <translation type="unfinished">Activa/Desactiva la herramienta de ROI elíptica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="404"/>
@@ -1880,7 +1880,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="444"/>
-        <source>Sagital</source>
+        <source>Saggital</source>
         <translation></translation>
     </message>
     <message>
@@ -2067,7 +2067,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="volumereader.cpp" line="108"/>
-        <source>Unkwown Error</source>
+        <source>Unknown Error</source>
         <translation type="unfinished">Error desconocido</translation>
     </message>
     <message>
@@ -2158,7 +2158,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="28"/>
         <source>Emphysema</source>
-        <translation>Emfisema</translation>
+        <translation>Enfisema</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="29"/>

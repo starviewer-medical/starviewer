@@ -163,11 +163,11 @@ void QCreateDicomdir::showDICOMDIRSize()
     //Si les imatges s'han de convertir a LittleEndian obtenim el tamany que ocuparà l'estudi de manera aproximada
     if (settings.getValue(InputOutputSettings::ConvertDICOMDIRImagesToLittleEndianKey).toBool())
     {
-        sizeOfDicomdirText = tr("DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb").arg(sizeText).arg(m_availableSpaceToRecordInBytes/(1024*1024));
+        sizeOfDicomdirText = tr("DICOMDIR size: %1 MB approximately - Available Space: %2 MB").arg(sizeText).arg(m_availableSpaceToRecordInBytes/(1024*1024));
     }
     else
     {
-        sizeOfDicomdirText = tr("DICOMDIR size: %1 Mb - Available Space: %2 Mb").arg(sizeText).arg(m_availableSpaceToRecordInBytes/(1024*1024));
+        sizeOfDicomdirText = tr("DICOMDIR size: %1 MB - Available Space: %2 MB").arg(sizeText).arg(m_availableSpaceToRecordInBytes/(1024*1024));
     }
 
     m_dicomdirSizeOnDiskLabel->setText( sizeOfDicomdirText );
@@ -179,7 +179,7 @@ void QCreateDicomdir::showDICOMDIRSize()
 
     m_progressBarOcupat->repaint();
 
-    sizeOfDicomdirText = tr("%1 Mb").arg( sizeText );
+    sizeOfDicomdirText = tr("%1 MB").arg( sizeText );
     m_labelMbCdDvdOcupat->setText( sizeOfDicomdirText );
 }
 
@@ -765,7 +765,7 @@ void QCreateDicomdir::deviceChanged( int index )
 
             if ( m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes )
             {
-                QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb." ).arg(m_availableSpaceToRecordInBytes/(1024*1024)) );
+                QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB." ).arg(m_availableSpaceToRecordInBytes/(1024*1024)) );
             }
 
             break;
@@ -784,7 +784,7 @@ void QCreateDicomdir::deviceChanged( int index )
 
                 if (m_dicomdirSizeBytes > m_availableSpaceToRecordInBytes)
                 {
-                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb." ).arg(maximumDeviceCapacity) );
+                    QMessageBox::warning( this , ApplicationNameString , tr( "The selected device doesn't have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 MB." ).arg(maximumDeviceCapacity) );
                 }
             }
             else

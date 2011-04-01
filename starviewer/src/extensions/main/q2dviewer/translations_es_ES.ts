@@ -34,7 +34,7 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="82"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
-        <translation>Exportar imágen(es) del visor a DICOM y enviarlas al servidor PACS</translation>
+        <translation>Exportar imagen(es) del visor a DICOM y enviarlas al servidor PACS</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="85"/>
@@ -64,12 +64,12 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="446"/>
         <source>Save the current image in a standard image format</source>
-        <translation>Guardar la imagen actual en un formato estandard</translation>
+        <translation>Guardar la imagen actual en un formato estándar</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="450"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
-        <translation>Guardar todas la imagenes del visualizador selecionado en un formato estandard</translation>
+        <translation>Guardar todas la imágenes del visualizador seleccionado en un formato estándar</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="581"/>

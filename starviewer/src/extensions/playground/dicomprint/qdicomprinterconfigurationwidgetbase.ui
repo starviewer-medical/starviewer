@@ -379,7 +379,7 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_14">
            <item>
-            <widget class="QLabel" name="m_miniumDensityLabel">
+            <widget class="QLabel" name="m_miniumDenisityLabel">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -447,7 +447,7 @@
            <item>
             <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>Supports Anotation Box:</string>
+              <string>Supports Annotation Box:</string>
              </property>
             </widget>
            </item>
@@ -600,7 +600,7 @@
               </size>
              </property>
              <property name="text">
-              <string>Maximum Denstiy:</string>
+              <string>Maximum Density:</string>
              </property>
             </widget>
            </item>

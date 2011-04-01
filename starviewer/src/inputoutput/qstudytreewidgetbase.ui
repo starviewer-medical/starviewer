@@ -102,7 +102,7 @@
      </column>
      <column>
       <property name="text" >
-       <string>StudyID</string>
+       <string>Study ID</string>
       </property>
      </column>
      <column>

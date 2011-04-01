@@ -213,7 +213,8 @@
     </message>
     <message>
         <location filename="patientbrowsermenu.cpp" line="50"/>
-        <source> Serie %1: %2 %3 %4 %5</source>
+        <source> Series %1: %2 %3 %4 %5</source>
+        <oldsource> Serie %1: %2 %3 %4 %5</oldsource>
         <translation>Sèrie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
@@ -1646,7 +1647,7 @@ Desv.Std.:%2</translation>
         <location filename="screenshottool.cpp" line="93"/>
         <source>You&apos;re going to save several screenshots at one time.
 It&apos;s recommended you save them in an empty folder.</source>
-        <translation>Està a punt de desar diverses captures de pantalla alhora.Es recomana desar-les en una carpeta buida.</translation>
+        <translation>Està a punt de desar diverses captures de pantalla alhora. Es recomana desar-les en una carpeta buida.</translation>
     </message>
 </context>
 <context>
@@ -1845,7 +1846,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="407"/>
         <source>Restore to initial state</source>
-        <translation>Restablir a l&apos;estat incial</translation>
+        <translation>Restablir a l&apos;estat inicial</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="414"/>
@@ -1879,7 +1880,8 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="444"/>
-        <source>Sagital</source>
+        <source>Saggital</source>
+        <oldsource>Sagital</oldsource>
         <translation></translation>
     </message>
     <message>
@@ -1915,7 +1917,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="474"/>
         <source>Rotate Counter Clockwise</source>
-        <translation>Rotar en sentit Anti-horari</translation>
+        <translation>Rotar en sentit anti-horari</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="477"/>
@@ -2002,12 +2004,12 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="304"/>
         <source>Erase</source>
-        <translation>Borrar</translation>
+        <translation>Esborrar</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="307"/>
         <source>Enable/Disable eraser tool</source>
-        <translation>Activar/Desactivar l&apos;eina de borrar</translation>
+        <translation>Activar/Desactivar l&apos;eina de esborrar</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="315"/>
@@ -2066,7 +2068,8 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="volumereader.cpp" line="108"/>
-        <source>Unkwown Error</source>
+        <source>Unknown Error</source>
+        <oldsource>Unkwown Error</oldsource>
         <translation type="unfinished">Error desconegut</translation>
     </message>
     <message>
@@ -2087,7 +2090,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="128"/>
         <source>The loading of the data have been aborted.</source>
-        <translation type="unfinished">S&apos;ha abortat la càrrega de les dades.</translation>
+        <translation type="unfinished">S&apos;ha avortat la càrrega de les dades.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="130"/>

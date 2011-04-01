@@ -86,7 +86,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::SendOk:
-            message = tr("Images from study %1 of patient %2 has been sent succesfully to PACS %3.").arg(studyID, patientName, pacsAETitle);
+            message = tr("Images from study %1 of patient %2 has been sent successfully to PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendCanNotConnectToPACS:
             message = tr("%1 can't send DICOM images from study %2 of patient %3 because can't connect to PACS %4.\n")
@@ -118,7 +118,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
             break;
         default:
-            message = tr("An unknown error has ocurred sending images from study %1 of patient %2 to PACS %3.").arg(
+            message = tr("An unknown error has occurred sending images from study %1 of patient %2 to PACS %3.").arg(
                 studyID, patientName, pacsAETitle);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);

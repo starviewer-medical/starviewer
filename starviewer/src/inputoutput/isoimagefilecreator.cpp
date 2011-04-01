@@ -100,7 +100,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
             // Es a dir, es comproven els permisos del directori.
             if ( !outputIsoImageDirPathInfo.isWritable() )
             {
-                m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output iso image directory \"%1\".").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
+                m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output ISO image directory \"%1\".").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
                 m_lastError = OutputDirPathAccessDenied;
                 emit finishedCreateIsoImageFile(false);
             }
@@ -110,7 +110,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                 // Es a dir, es comproven els permisos del fitxer
                 if ( QFile::exists(outputIsoImageFilePathInfo.absoluteFilePath()) && !outputIsoImageFilePathInfo.isWritable() )
                 {
-                    m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output iso image directory \"%1\".").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
+                    m_lastErrorDescription = QObject::tr("You don't have permissions to write in the output ISO image directory \"%1\".").arg(QDir::toNativeSeparators(outputIsoImageFilePathInfo.absolutePath()));
                     m_lastError = OutputFilePathAccessDenied;
                     emit finishedCreateIsoImageFile(false);
                 }
@@ -176,7 +176,7 @@ void IsoImageFileCreator::finishCreationProcess(int exitCode)
     // correctament i s'emet el signal finishedCreateIsoImageFile(bool)
     if( exitCode != 0 )
     {
-        m_lastErrorDescription = QObject::tr("An error occurred with the iso image file create process.");
+        m_lastErrorDescription = QObject::tr("An error occurred with the ISO image file create process.");
         m_lastError = InternalError;
 
         ERROR_LOG( "Error al crear ISO; Exit code qprocess: " + exitCode );

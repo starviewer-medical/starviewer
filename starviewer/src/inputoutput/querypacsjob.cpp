@@ -110,7 +110,7 @@ QString QueryPacsJob::getStatusDescription()
     switch (getStatus())
     {
         case PACSRequestStatus::QueryOk:
-            message = tr("Query %1 to PACS %2 has been succesfull.").arg(getQueryLevelAsQString(), pacsAETitle);
+            message = tr("Query %1 to PACS %2 has been successful.").arg(getQueryLevelAsQString(), pacsAETitle);
             break;
         case PACSRequestStatus::QueryCancelled:
             message = tr("Query %1 to PACS %2 has been cancelled.").arg(getQueryLevelAsQString(), pacsAETitle);
@@ -125,11 +125,11 @@ QString QueryPacsJob::getStatusDescription()
             message += tr("Try with a different query or wait a few minutes, if the problem persists contact with PACS administrator.");
             break;
         case PACSRequestStatus::QueryUnknowStatus:
-            message = tr("PACS %1 could not process the query returning an unknow error.\n\n").arg(pacsAETitle);
+            message = tr("PACS %1 could not process the query returning an unknown error.\n\n").arg(pacsAETitle);
             message += tr("Please contact with PACS administrator to report the issue.");
             break;
         default:
-            message = tr("An unknown error has ocurred querying %1 to PACS %2.").arg(getQueryLevelAsQString(), pacsAETitle);
+            message = tr("An unknown error has occurred querying %1 to PACS %2.").arg(getQueryLevelAsQString(), pacsAETitle);
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
     }
@@ -148,7 +148,7 @@ QString QueryPacsJob::getQueryLevelAsQString()
         case image:
             return tr("images");
         default:
-            return tr("unkown query level");
+            return tr("unknown query level");
     }
 }
 }

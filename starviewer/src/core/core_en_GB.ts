@@ -212,7 +212,7 @@
     </message>
     <message>
         <location filename="patientbrowsermenu.cpp" line="50"/>
-        <source> Serie %1: %2 %3 %4 %5</source>
+        <source> Series %1: %2 %3 %4 %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1862,7 +1862,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="444"/>
-        <source>Sagital</source>
+        <source>Saggital</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2049,7 +2049,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="volumereader.cpp" line="108"/>
-        <source>Unkwown Error</source>
+        <source>Unknown Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -264,10 +264,6 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Maximum Denstiy:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -296,10 +292,6 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Supports Anotation Box:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Trim:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -307,15 +299,19 @@ border: 1px solid  #680000;
         <source>Annotation Display Format:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Supports Annotation Box:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum Density:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::DicomPrintExtensionMediator</name>
     <message>
         <source>DICOM Print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -379,15 +375,15 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>an unknow error has produced.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Check printer DICOM Conformance to be sure that it accepts all your print parameters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Be sure the computer is connected on the network and the printer network parameters are correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>an unknown error has produced.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -414,11 +410,6 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Printer %1 doesn&apos;t respond correclty.
-Be sure that hostname and AETitle are correct.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Printer %1 doesn&apos;t respond.
 Be sure that hostname and AETitle are correct.</source>
         <translation type="unfinished"></translation>
@@ -429,6 +420,11 @@ Be sure that hostname and AETitle are correct.</source>
     </message>
     <message>
         <source>Hostname can&apos;t be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Printer %1 doesn&apos;t respond correctly.
+Be sure that hostname and AETitle are correct.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

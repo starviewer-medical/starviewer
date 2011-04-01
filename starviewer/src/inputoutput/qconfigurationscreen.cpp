@@ -275,14 +275,14 @@ void QConfigurationScreen::test()
             switch(echoToPACS.getLastError())
             {
                 case EchoToPACS::EchoFailed:
-                    message = tr("PACS \"%1\" doesn't respond correclty.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" doesn't respond correctly.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
                     break;
                 case EchoToPACS::EchoCanNotConnectToPACS:
                     message = tr("PACS \"%1\" doesn't respond.\nBe sure that the IP and AETitle of It are correct.").arg(pacsDevice.getAETitle());
                     break;
                 default:
                     //No hauria de passar mai
-                    message = tr("PACS \"%1\" doesn't respond as expected, and unknow error has produced.").arg(pacsDevice.getAETitle());
+                    message = tr("PACS \"%1\" doesn't respond as expected, and unknown error has produced.").arg(pacsDevice.getAETitle());
                     break;
             }
 
@@ -360,7 +360,7 @@ bool QConfigurationScreen::validateChanges()
     {
         if (m_textMaxConnections->text().toInt(NULL, 10) < 1 || m_textMaxConnections->text().toInt(NULL, 10) > 15)
         {
-            QMessageBox::warning(this, ApplicationNameString, tr("Maximum simultaenious connections has to be between 1 and 15."));
+            QMessageBox::warning(this, ApplicationNameString, tr("Maximum simultaneous connections has to be between 1 and 15."));
             return false;
         }
     }

@@ -441,7 +441,7 @@ QPair<QAction *, QString> ToolRegistry::getActionToolPair(const QString &actionT
     }
     else if (actionToolName == "SagitalViewActionTool")
     {
-        action->setText(tr("Sagital"));
+        action->setText(tr("Saggital"));
         action->setIcon(QIcon(":/images/sagital.png"));
         action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SagitalViewTool));
         statusTip = tr("Switch to Saggital View");

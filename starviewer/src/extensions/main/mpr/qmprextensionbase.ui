@@ -420,7 +420,7 @@
        <property name="text">
         <string>*The current Series has multiple phases. 
 Currently the MPR 2D doesn't support 
-Series with multiple phases so it won't work propperly.</string>
+Series with multiple phases so it won't work properly.</string>
        </property>
       </widget>
      </item>
