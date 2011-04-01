@@ -271,8 +271,8 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 quint64 minimumSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
                 message = tr("There is not enough space to retrieve images of study %1 from patient %2, please free space or change your Local Database settings.").arg(
                     studyID, patientName);
-                message += tr("\n\nAvailable space in Disk: %1 Mb").arg(freeSpaceInHardDisk);
-                message += tr("\nMinimum space required in Disk to retrieve studies: %1 Mb").arg(minimumSpaceRequired);
+                message += tr("\n\n- Available space in Disk: %1 Mb.").arg(freeSpaceInHardDisk);
+                message += tr("\n- Minimum space required in Disk to retrieve studies: %1 Mb.").arg(minimumSpaceRequired);
             }
             break;
         case PACSRequestStatus::RetrieveErrorFreeingSpace :

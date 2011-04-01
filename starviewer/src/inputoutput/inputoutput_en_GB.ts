@@ -2636,28 +2636,26 @@ Be sure that your computer is connected on network and the PACS parameters are c
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="124"/>
-        <source>PACS %1 has report us that could not process the requested query.
+        <source>PACS %1 could not process the query.
 
 </source>
-        <oldsource>PACS %1 has report us that can not process the requested query.
+        <oldsource>PACS %1 has report us that could not process the requested query.
 
 </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="125"/>
-        <source>Wait a few minutes and try it again, if the problem persists contact with PACS administrator.</source>
-        <oldsource>%1 can&apos;t query %2 to PACS %3 because It doesn&apos;t respond as expected.
-
-</oldsource>
+        <source>Try with a different query or wait a few minutes, if the problem persists contact with PACS administrator.</source>
+        <oldsource>Wait a few minutes and try it again, if the problem persists contact with PACS administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="128"/>
-        <source>PACS %1 has report us that could not process the requested query returning an unknow code error.
+        <source>PACS %1 could not process the query returning an unknow error.
 
 </source>
-        <oldsource>PACS %1 has report us that can not process the requested query returning an unknow code error.
+        <oldsource>PACS %1 has report us that could not process the requested query returning an unknow error.
 
 </oldsource>
         <translation type="unfinished"></translation>
@@ -2888,13 +2886,18 @@ If the problem persists contact with an administrator.</source>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="274"/>
         <source>
 
-Available space in Disk: %1 Mb</source>
+- Available space in Disk: %1 Mb.</source>
+        <oldsource>
+
+	- Available space in Disk: %1 Mb.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="275"/>
         <source>
-Minimum space required in Disk to retrieve studies: %1 Mb</source>
+- Minimum space required in Disk to retrieve studies: %1 Mb.</source>
+        <oldsource>
+	- Minimum space required in Disk to retrieve studies: %1 Mb.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
