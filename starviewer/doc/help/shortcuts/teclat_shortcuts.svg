@@ -935,6 +935,13 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3677-1"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -943,9 +950,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.3868499"
-     inkscape:cx="132.73164"
-     inkscape:cy="707.60468"
+     inkscape:zoom="1.9613019"
+     inkscape:cx="442.10828"
+     inkscape:cy="790.22406"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:window-width="1680"
@@ -992,7 +999,7 @@
      style="display:inline">
     <g
        id="g3414"
-       transform="matrix(0.10790251,0,0,0.10744678,-120.07416,621.83811)"
+       transform="matrix(0.10765233,0,0,0.10744678,-118.18569,621.83811)"
        inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
@@ -4321,8 +4328,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300">
       <path
-         style="fill:#ffccaa;fill-opacity:1;stroke:none"
-         d="m 69.236015,120.91929 18.397625,0 c 1.960053,0 3.538005,1.4505 3.538005,3.25228 l 0,23.7416 c 0,1.80179 -1.577952,3.25234 -3.538005,3.25234 l -18.397625,0 c -1.960059,0 -3.53801,-1.45055 -3.53801,-3.25234 l 0,-23.7416 c 0,-1.80178 1.577951,-3.25228 3.53801,-3.25228 z"
+         style="fill:#ff9955;fill-opacity:1;stroke:none"
+         d="m 69.236013,120.91929 18.397625,0 c 1.960053,0 3.538005,1.4505 3.538005,3.25228 l 0,23.7416 c 0,1.80179 -1.577952,3.25234 -3.538005,3.25234 l -18.397625,0 c -1.960059,0 -3.53801,-1.45055 -3.53801,-3.25234 l 0,-23.7416 c 0,-1.80178 1.577951,-3.25228 3.53801,-3.25228 z"
          id="path7322" />
       <text
          transform="scale(0.7632962,1.3101074)"
@@ -4882,5 +4889,38 @@
        height="22.626238"
        width="22.626238"
        xlink:href="file:///C:/Documents%20and%20Settings/Roger/starviewer/src/main/images/ellipticalROITool.png" />
+    <g
+       style="display:inline"
+       id="g5074-2-7"
+       transform="translate(-549.72622,-130.38693)"
+       inkscape:export-filename="C:\Documents and Settings\Roger\Escritorio\image3664.png"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300">
+      <rect
+         ry="1.875"
+         rx="1.875"
+         y="241.80226"
+         x="388.35568"
+         height="25.466616"
+         width="115.76506"
+         id="rect5037-3-4"
+         style="color:#000000;fill:#ff9955;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.94488591;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <text
+         id="text3623-3-0"
+         y="251.58672"
+         x="390.97839"
+         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:9px"
+           y="251.58672"
+           x="390.97839"
+           sodipodi:role="line"
+           id="tspan3705">Navegació per les finestres</tspan><tspan
+           style="font-size:9px"
+           y="262.83673"
+           x="390.97839"
+           sodipodi:role="line"
+           id="tspan3709">definides a la imatge actual</tspan></text>
+    </g>
   </g>
 </svg>
