@@ -244,7 +244,7 @@ border: 1px solid  #680000;
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="52"/>
         <source>Hostname</source>
         <oldsource>HostName</oldsource>
-        <translation>Nom de host</translation>
+        <translation>Direcció</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="57"/>
@@ -318,7 +318,8 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="450"/>
-        <source>Supports Anotation Box:</source>
+        <source>Supports Annotation Box:</source>
+        <oldsource>Supports Anotation Box:</oldsource>
         <translation>Suporta anotacions:</translation>
     </message>
     <message>
@@ -333,7 +334,8 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidgetbase.ui" line="603"/>
-        <source>Maximum Denstiy:</source>
+        <source>Maximum Density:</source>
+        <oldsource>Maximum Denstiy:</oldsource>
         <translation>Densitat màxima:</translation>
     </message>
     <message>
@@ -392,17 +394,12 @@ border: 1px solid  #680000;
 <context>
     <name>udg::DicomPrintExtensionMediator</name>
     <message>
-        <location filename="dicomprintextensionmediator.cpp" line="23"/>
+        <location filename="dicomprintextensionmediator.cpp" line="24"/>
         <source>DICOM Print</source>
         <translation>Imprimir DICOM</translation>
     </message>
     <message>
-        <location filename="dicomprintextensionmediator.cpp" line="37"/>
-        <source>Starviewer</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="dicomprintextensionmediator.cpp" line="37"/>
+        <location filename="dicomprintextensionmediator.cpp" line="38"/>
         <source>The selected item is not an image</source>
         <translation>L&apos;objecte seleccionat no és una imatge</translation>
     </message>
@@ -467,7 +464,7 @@ border: 1px solid  #680000;
     <message>
         <location filename="qdicomprintextension.cpp" line="557"/>
         <source>%1 can&apos;t create print spool.</source>
-        <translation>%1 no ha pogut crear l&apos;spool d&apos;impressió.</translation>
+        <translation>No s&apos;ha pogut crear el treball d&apos;impressió.</translation>
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="560"/>
@@ -486,8 +483,8 @@ border: 1px solid  #680000;
     </message>
     <message>
         <location filename="qdicomprintextension.cpp" line="565"/>
-        <source>an unknow error has produced.</source>
-        <oldsource>and unknow error has produced.</oldsource>
+        <source>an unknown error has produced.</source>
+        <oldsource>an unknow error has produced.</oldsource>
         <translation>s&apos;ha produït un error desconegut.</translation>
     </message>
     <message>
@@ -547,12 +544,12 @@ Assegureu-vos que la direcció i el AETitle són correctes.</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="149"/>
-        <source>Printer %1 doesn&apos;t respond correclty.
+        <source>Printer %1 doesn&apos;t respond correctly.
 Be sure that hostname and AETitle are correct.</source>
         <oldsource>Printer %1 doesn&apos;t respond correclty.
-Be sure that the IP and AETitle are correct.</oldsource>
-        <translation>La impressora %1 no ha respost correctament.
-Assegureu-vos que la direcció i AETitle són correctes.</translation>
+Be sure that hostname and AETitle are correct.</oldsource>
+        <translation>La impressora %1 no ha respòs correctament.
+Assegureu-vos que la direcció IP i AETitle són correctes.</translation>
     </message>
     <message>
         <location filename="qdicomprinterconfigurationwidget.cpp" line="269"/>

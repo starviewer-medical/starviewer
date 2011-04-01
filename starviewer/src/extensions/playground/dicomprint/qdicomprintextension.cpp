@@ -562,7 +562,7 @@ void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
                 break;
             case DicomPrint::UnknowError:
             default:
-                messageError += tr("an unknow error has produced.");
+                messageError += tr("an unknown error has produced.");
                 break;
         }
 

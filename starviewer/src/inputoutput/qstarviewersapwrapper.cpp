@@ -48,7 +48,7 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
     else 
     {
         INFO_LOG("QStarviewerSAPWrapper::S'ha enviat la petició correctament al Starviewer");
-        printf(qPrintable(QString("The request to retrieve the study with accession number %1 has been sent succesfully.\n").arg(accessionNumber)));
+        printf(qPrintable(QString("The request to retrieve the study with accession number %1 has been sent successfully.\n").arg(accessionNumber)));
     }
 
     tcpSocket.flush();

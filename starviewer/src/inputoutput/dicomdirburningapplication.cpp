@@ -66,7 +66,7 @@ bool DICOMDIRBurningApplication::burnIsoImageFile()
     // Es comprova que el fitxer iso que es vol gravar en CD o DVD existeixi
     if( !QFile::exists(m_isoPath) )
     {
-        m_lastErrorDescription = QObject::tr("The iso path \"%1\" that we want to burn doesn't exist.").arg(m_isoPath);
+        m_lastErrorDescription = QObject::tr("The ISO path \"%1\" that we want to burn doesn't exist.").arg(m_isoPath);
         m_lastError = IsoPathNotFound;
         return false;
     }
@@ -110,7 +110,7 @@ bool DICOMDIRBurningApplication::burnIsoImageFile()
 
     if( process.exitCode() != 0 )
     {
-        m_lastErrorDescription = QObject::tr("An error occurred during the iso image file burn process.");
+        m_lastErrorDescription = QObject::tr("An error occurred during the ISO image file burn process.");
         m_lastError = InternalError;
 
         ERROR_LOG( "Error al gravar la imatge ISO amb comanda: " + burningApplicationPath + "; Amb paràmetres: " + processParameters.join(" ") + "; Exit code qprocess: " + process.exitCode() );

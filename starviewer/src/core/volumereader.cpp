@@ -105,7 +105,7 @@ void VolumeReader::showMessageBoxWithLastError() const
             break;
 
         case VolumePixelDataReader::UnknownError:
-            messageBoxTitle = tr("Unkwown Error");
+            messageBoxTitle = tr("Unknown Error");
             break;
     }
 

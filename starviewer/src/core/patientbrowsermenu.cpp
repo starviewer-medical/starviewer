@@ -47,7 +47,7 @@ void PatientBrowserMenu::setPatient(Patient *patient)
         QList<QPair<QString, QString> > itemsList;
         foreach (Series *series, study->getViewableSeries())
         {
-            label = tr(" Serie %1: %2 %3 %4 %5")
+            label = tr(" Series %1: %2 %3 %4 %5")
                         .arg(series->getSeriesNumber().trimmed())
                         .arg(series->getProtocolName().trimmed())
                         .arg(series->getDescription().trimmed())

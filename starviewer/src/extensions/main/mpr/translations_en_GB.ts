@@ -61,7 +61,10 @@
         <location filename="qmprextensionbase.ui" line="421"/>
         <source>*The current Series has multiple phases. 
 Currently the MPR 2D doesn&apos;t support 
-Series with multiple phases so it won&apos;t work propperly.</source>
+Series with multiple phases so it won&apos;t work properly.</source>
+        <oldsource>*The current Series has multiple phases. 
+Currently the MPR 2D doesn&apos;t support 
+Series with multiple phases so it won&apos;t work propperly.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -91,48 +94,48 @@ Series with multiple phases so it won&apos;t work propperly.</source>
 <context>
     <name>udg::QMPRExtension</name>
     <message>
-        <location filename="qmprextension.cpp" line="71"/>
+        <location filename="qmprextension.cpp" line="72"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="72"/>
+        <location filename="qmprextension.cpp" line="73"/>
         <source>Show/Hide viewer&apos;s textual information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="73"/>
+        <location filename="qmprextension.cpp" line="74"/>
         <source>Choose Window/Level Presets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="172"/>
         <location filename="qmprextension.cpp" line="173"/>
+        <location filename="qmprextension.cpp" line="174"/>
         <source>Switch horizontal layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="178"/>
+        <location filename="qmprextension.cpp" line="179"/>
         <source>&amp;MIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="179"/>
+        <location filename="qmprextension.cpp" line="180"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="180"/>
+        <location filename="qmprextension.cpp" line="181"/>
         <source>Maximum Intensity Projection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="346"/>
+        <location filename="qmprextension.cpp" line="353"/>
         <source>Export to DICOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="346"/>
+        <location filename="qmprextension.cpp" line="353"/>
         <source>Please, select a viewer and try again.</source>
         <translation type="unfinished"></translation>
     </message>

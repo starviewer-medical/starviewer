@@ -4,6 +4,7 @@
 #include "series.h"
 #include "volume.h"
 #include "image.h"
+#include "starviewerapplication.h"
 
 // QT
 #include <QMessageBox>
@@ -34,7 +35,7 @@ bool DicomPrintExtensionMediator::initializeExtension(QWidget* extension, const 
 
     Volume *input = extensionContext.getDefaultVolume();
     if( !input )
-        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+        QMessageBox::information(0, udg::ApplicationNameString, tr("The selected item is not an image") );
     else
         dicomPrintExtension->setInput( input );
 

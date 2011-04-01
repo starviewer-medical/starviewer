@@ -20,8 +20,8 @@
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="69"/>
-        <source>The iso path &quot;%1&quot; that we want to burn doesn&apos;t exist.</source>
-        <oldsource>The iso path %1 that we want to burn doesn&apos;t exist.</oldsource>
+        <source>The ISO path &quot;%1&quot; that we want to burn doesn&apos;t exist.</source>
+        <oldsource>The iso path &quot;%1&quot; that we want to burn doesn&apos;t exist.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -32,8 +32,8 @@
     </message>
     <message>
         <location filename="dicomdirburningapplication.cpp" line="113"/>
-        <source>An error occurred during the iso image file burn process.</source>
-        <oldsource>An error occurred with the iso image file burn process.</oldsource>
+        <source>An error occurred during the ISO image file burn process.</source>
+        <oldsource>An error occurred during the iso image file burn process.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -51,8 +51,8 @@
     <message>
         <location filename="isoimagefilecreator.cpp" line="103"/>
         <location filename="isoimagefilecreator.cpp" line="113"/>
-        <source>You don&apos;t have permissions to write in the output iso image directory &quot;%1&quot;.</source>
-        <oldsource>You don&apos;t have permissions to write in the output iso image directory %1.</oldsource>
+        <source>You don&apos;t have permissions to write in the output ISO image directory &quot;%1&quot;.</source>
+        <oldsource>You don&apos;t have permissions to write in the output iso image directory &quot;%1&quot;.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -62,7 +62,8 @@
     </message>
     <message>
         <location filename="isoimagefilecreator.cpp" line="179"/>
-        <source>An error occurred with the iso image file create process.</source>
+        <source>An error occurred with the ISO image file create process.</source>
+        <oldsource>An error occurred with the iso image file create process.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -436,8 +437,8 @@ You don&apos;t have write permissions on cache image directory. You couldn&apos;
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="363"/>
-        <source>Maximum simultaenious connections has to be between 1 and 15.</source>
-        <oldsource>Maximum simultaenious connections has to be between 1 and 15</oldsource>
+        <source>Maximum simultaneous connections has to be between 1 and 15.</source>
+        <oldsource>Maximum simultaenious connections has to be between 1 and 15.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -494,15 +495,16 @@ Be sure that the IP and AETitle of it are correct.</oldsource>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="278"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond correclty.
+        <source>PACS &quot;%1&quot; doesn&apos;t respond correctly.
 Be sure that the IP and AETitle of It are correct.</source>
         <oldsource>PACS &quot;%1&quot; doesn&apos;t respond correclty.
-Be sure that the IP and AETitle of it are correct.</oldsource>
+Be sure that the IP and AETitle of It are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qconfigurationscreen.cpp" line="285"/>
-        <source>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknow error has produced.</source>
+        <source>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknown error has produced.</source>
+        <oldsource>PACS &quot;%1&quot; doesn&apos;t respond as expected, and unknow error has produced.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -728,7 +730,8 @@ Be sure that the IP and AETitle of it are correct.</oldsource>
     </message>
     <message>
         <location filename="qconfigurationscreenbase.ui" line="995"/>
-        <source>EMail:</source>
+        <source>Email:</source>
+        <oldsource>EMail:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -905,17 +908,20 @@ Error Number: %1</source>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="166"/>
-        <source>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</source>
+        <source>DICOMDIR size: %1 MB approximately - Available Space: %2 MB</source>
+        <oldsource>DICOMDIR size: %1 Mb approximately - Available Space: %2 Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="170"/>
-        <source>DICOMDIR size: %1 Mb - Available Space: %2 Mb</source>
+        <source>DICOMDIR size: %1 MB - Available Space: %2 MB</source>
+        <oldsource>DICOMDIR size: %1 Mb - Available Space: %2 Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="182"/>
-        <source>%1 Mb</source>
+        <source>%1 MB</source>
+        <oldsource>%1 Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1027,14 +1033,14 @@ Remove it from the directory or uncheck copy folder content to DICOMDIR option.<
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="768"/>
-        <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</source>
-        <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb</oldsource>
+        <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB.</source>
+        <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 Mb.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qcreatedicomdir.cpp" line="787"/>
-        <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb.</source>
-        <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a cd is %1 Mb</oldsource>
+        <source>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 MB.</source>
+        <oldsource>The selected device doesn&apos;t have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of a CD is %1 Mb.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1093,7 +1099,8 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="93"/>
-        <source>studyUID</source>
+        <source>Study UID</source>
+        <oldsource>studyUID</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1138,7 +1145,8 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="429"/>
-        <source>650 Mb</source>
+        <source>650 MB</source>
+        <oldsource>650 Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1150,7 +1158,8 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     </message>
     <message>
         <location filename="qcreatedicomdirbase.ui" line="504"/>
-        <source>The size of the DICOMDIR is XX Mb</source>
+        <source>The size of the DICOMDIR is XX MB</source>
+        <oldsource>The size of the DICOMDIR is XX Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1482,8 +1491,8 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="101"/>
-        <source>Error openning DICOMDIR</source>
-        <oldsource>Error openning dicomdir</oldsource>
+        <source>Error opening DICOMDIR</source>
+        <oldsource>Error openning DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1494,8 +1503,8 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</source>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="137"/>
-        <source>Error quering in DICOMDIR</source>
-        <oldsource>Error quering in dicomdir</oldsource>
+        <source>Error querying in DICOMDIR</source>
+        <oldsource>Error quering in DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1585,7 +1594,8 @@ If the problem persist contact with an administrator.</oldsource>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="303"/>
-        <source>An error has ocurred freeing space, some studies can&apos;t be imported.</source>
+        <source>An error has occurred freeing space, some studies can&apos;t be imported.</source>
+        <oldsource>An error has ocurred freeing space, some studies can&apos;t be imported.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1604,7 +1614,8 @@ If the problem persist contact with an administrator.</oldsource>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="309"/>
-        <source>A database error has ocurred, some studies can&apos;t be imported.</source>
+        <source>A database error has occurred, some studies can&apos;t be imported.</source>
+        <oldsource>A database error has ocurred, some studies can&apos;t be imported.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1622,8 +1633,8 @@ The study may be corrupted, if It is not corrupted please contact with %1 team.<
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="321"/>
-        <source>has ocurred an error. This DICOMDIR is inconsistent, can&apos;t be imported.</source>
-        <oldsource>has ocurred an error. This dicomdir is inconsistent, can&apos;t be imported.</oldsource>
+        <source>has occurred an error. This DICOMDIR is inconsistent, can&apos;t be imported.</source>
+        <oldsource>has ocurred an error. This DICOMDIR is inconsistent, can&apos;t be imported.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1635,8 +1646,8 @@ Please contact with %1 team.</source>
     </message>
     <message>
         <location filename="qinputoutputdicomdirwidget.cpp" line="328"/>
-        <source>An unknown error has ocurred importing DICOMDIR.</source>
-        <oldsource>An unknown error has ocurred importing dicomdir.</oldsource>
+        <source>An unknown error has occurred importing DICOMDIR.</source>
+        <oldsource>An unknown error has ocurred importing DICOMDIR.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1743,13 +1754,14 @@ Please contact with %1 team.</source>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="478"/>
-        <source>An error ocurred with database, preparing de the DICOM files to send to PACS %1. The DICOM files won&apos;t be sent.</source>
-        <oldsource>An error ocurred with database, preparing de the DICOM files to send. The DICOM files won&apos;t be sent to PACS.</oldsource>
+        <source>An error occurred with database, preparing the DICOM files to send to PACS %1. The DICOM files won&apos;t be sent.</source>
+        <oldsource>An error ocurred with database, preparing de the DICOM files to send to PACS %1. The DICOM files won&apos;t be sent.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qinputoutputlocaldatabasewidget.cpp" line="539"/>
-        <source>An error has ocurred while </source>
+        <source>An error has occurred while </source>
+        <oldsource>An error has ocurred while </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1981,13 +1993,17 @@ Do you want continue?</source>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="142"/>
         <source>
-- At least 1 GByte of free space in harddisk is necessary to retrieve or import new studies.</source>
+- At least 1 GB of free space in hard disk is necessary to retrieve or import new studies.</source>
+        <oldsource>
+- At least 1 GByte of free space in hard disk is necessary to retrieve or import new studies.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="151"/>
         <source>
-- At least 1 GByte of studies have to be delete when there is not enough space to retrieve or import new studies.</source>
+- At least 1 GB of studies have to be delete when there is not enough space to retrieve or import new studies.</source>
+        <oldsource>
+- At least 1 GByte of studies have to be delete when there is not enough space to retrieve or import new studies.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2021,8 +2037,8 @@ These files have to be deleted manually.</source>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="305"/>
-        <source>An error has ocurred deleting studies from database, be sure you have write permissions on database directory. </source>
-        <oldsource>An error has ocurred deleting studies, be sure you have write permissions on database directory. </oldsource>
+        <source>An error has occurred deleting studies from database, be sure you have write permissions on database directory. </source>
+        <oldsource>An error has ocurred deleting studies from database, be sure you have write permissions on database directory. </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2045,10 +2061,12 @@ Close all %1 windows and try again.</source>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreen.cpp" line="323"/>
-        <source>The database cannot be compacted, an unknown error has ocurred.
+        <source>The database cannot be compacted, an unknown error has occurred.
 
 </source>
-        <oldsource>The database cannot be compacted, an unknown error has ocurred. </oldsource>
+        <oldsource>The database cannot be compacted, an unknown error has ocurred.
+
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2112,12 +2130,14 @@ Close all %1 windows and try again.</source>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="310"/>
-        <source>Minimum space required in harddisk to retrieve DICOM objects:</source>
+        <source>Minimum space required in hard disk to retrieve DICOM objects:</source>
+        <oldsource>Minimum space required in harddisk to retrieve DICOM objects:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="333"/>
-        <source>Gb</source>
+        <source>GB</source>
+        <oldsource>Gb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2137,7 +2157,8 @@ Close all %1 windows and try again.</source>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="439"/>
-        <source>Gb of free space.</source>
+        <source>GB of free space.</source>
+        <oldsource>Gb of free space.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2487,98 +2508,98 @@ Close all %1 windows and try again.</source>
 <context>
     <name>udg::QStudyTreeWidgetBase</name>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="120"/>
+        <location filename="qstudytreewidgetbase.ui" line="119"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="60"/>
+        <location filename="qstudytreewidgetbase.ui" line="59"/>
         <source>Patient ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="55"/>
+        <location filename="qstudytreewidgetbase.ui" line="54"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="65"/>
+        <location filename="qstudytreewidgetbase.ui" line="64"/>
         <source>Age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="75"/>
+        <location filename="qstudytreewidgetbase.ui" line="74"/>
         <source>Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="70"/>
+        <location filename="qstudytreewidgetbase.ui" line="69"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="80"/>
+        <location filename="qstudytreewidgetbase.ui" line="79"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="85"/>
+        <location filename="qstudytreewidgetbase.ui" line="84"/>
         <source>Hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="95"/>
+        <location filename="qstudytreewidgetbase.ui" line="94"/>
         <source>Institution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="115"/>
+        <location filename="qstudytreewidgetbase.ui" line="114"/>
         <source>Acc. Num</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="90"/>
+        <location filename="qstudytreewidgetbase.ui" line="89"/>
         <source>AETitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="100"/>
+        <location filename="qstudytreewidgetbase.ui" line="99"/>
         <source>UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="110"/>
+        <location filename="qstudytreewidgetbase.ui" line="104"/>
+        <source>Study ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qstudytreewidgetbase.ui" line="109"/>
         <source>Protocol Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="125"/>
+        <location filename="qstudytreewidgetbase.ui" line="124"/>
         <source>Ref Physician Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="130"/>
+        <location filename="qstudytreewidgetbase.ui" line="129"/>
         <source>PP Start Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="135"/>
+        <location filename="qstudytreewidgetbase.ui" line="134"/>
         <source>PP Start Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="140"/>
+        <location filename="qstudytreewidgetbase.ui" line="139"/>
         <source>Req. Proc. ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="145"/>
+        <location filename="qstudytreewidgetbase.ui" line="144"/>
         <source>Sche. Proc. Step ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qstudytreewidgetbase.ui" line="105"/>
-        <source>StudyID</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2609,7 +2630,8 @@ Close all %1 windows and try again.</source>
     <name>udg::QueryPacsJob</name>
     <message>
         <location filename="querypacsjob.cpp" line="113"/>
-        <source>Query %1 to PACS %2 has been succesfull.</source>
+        <source>Query %1 to PACS %2 has been successful.</source>
+        <oldsource>Query %1 to PACS %2 has been succesfull.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2652,10 +2674,10 @@ Be sure that your computer is connected on network and the PACS parameters are c
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="128"/>
-        <source>PACS %1 could not process the query returning an unknow error.
+        <source>PACS %1 could not process the query returning an unknown error.
 
 </source>
-        <oldsource>PACS %1 has report us that could not process the requested query returning an unknow error.
+        <oldsource>PACS %1 could not process the query returning an unknow error.
 
 </oldsource>
         <translation type="unfinished"></translation>
@@ -2667,7 +2689,8 @@ Be sure that your computer is connected on network and the PACS parameters are c
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="132"/>
-        <source>An unknown error has ocurred querying %1 to PACS %2.</source>
+        <source>An unknown error has occurred querying %1 to PACS %2.</source>
+        <oldsource>An unknown error has ocurred querying %1 to PACS %2.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2693,7 +2716,8 @@ If the problem persists contact with an administrator.</source>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="151"/>
-        <source>unkown query level</source>
+        <source>unknown query level</source>
+        <oldsource>unkown query level</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2863,12 +2887,14 @@ If the problem persists contact with an administrator.</source>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="284"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved because a database error ocurred.</source>
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved because a database error occurred.</source>
+        <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved because a database error ocurred.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="255"/>
-        <source>Images from study %1 of patient %2 has been retrieved succesfully from PACS %3.</source>
+        <source>Images from study %1 of patient %2 has been retrieved successfully from PACS %3.</source>
+        <oldsource>Images from study %1 of patient %2 has been retrieved succesfully from PACS %3.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2886,23 +2912,24 @@ If the problem persists contact with an administrator.</source>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="274"/>
         <source>
 
-- Available space in Disk: %1 Mb.</source>
+- Available space in Disk: %1 MB.</source>
         <oldsource>
 
-	- Available space in Disk: %1 Mb.</oldsource>
+- Available space in Disk: %1 Mb.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="275"/>
         <source>
-- Minimum space required in Disk to retrieve studies: %1 Mb.</source>
+- Minimum space required in Disk to retrieve studies: %1 MB.</source>
         <oldsource>
-	- Minimum space required in Disk to retrieve studies: %1 Mb.</oldsource>
+- Minimum space required in Disk to retrieve studies: %1 Mb.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="279"/>
-        <source>An error ocurred freeing space on harddisk, the images from study %1 of patient %2 won&apos;t be retrieved.</source>
+        <source>An error occurred freeing space on hard disk, the images from study %1 of patient %2 won&apos;t be retrieved.</source>
+        <oldsource>An error ocurred freeing space on harddisk, the images from study %1 of patient %2 won&apos;t be retrieved.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2927,14 +2954,20 @@ The study may be corrupted, if It is not corrupted please contact with %1 team.<
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="296"/>
         <source>
 
-Contact with an administrador to register your computer to the PACS.</source>
+Contact with an administrator to register your computer to the PACS.</source>
+        <oldsource>
+
+Contact with an administrador to register your computer to the PACS.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="299"/>
-        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknow error of PACS %3.
+        <source>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknown error of PACS %3.
 
 </source>
+        <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved due to an unknow error of PACS %3.
+
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2968,7 +3001,8 @@ Contact with an administrador to register your computer to the PACS.</source>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="318"/>
-        <source>An unknown error has ocurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</source>
+        <source>An unknown error has occurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</source>
+        <oldsource>An unknown error has ocurred and %1 can&apos;t retrieve images from study %2 of patient %3 from PACS %4.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2995,7 +3029,8 @@ If the problem persists contact with an administrator.</source>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="89"/>
-        <source>Images from study %1 of patient %2 has been sent succesfully to PACS %3.</source>
+        <source>Images from study %1 of patient %2 has been sent successfully to PACS %3.</source>
+        <oldsource>Images from study %1 of patient %2 has been sent succesfully to PACS %3.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3052,8 +3087,8 @@ If the problem persists contact with an administrator.</source>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="121"/>
-        <source>An unknown error has ocurred sending images from study %1 of patient %2 to PACS %3.</source>
-        <oldsource>An unknown error has ocurred sending DICOM files from study %1 of patient %2 to PACS %3.</oldsource>
+        <source>An unknown error has occurred sending images from study %1 of patient %2 to PACS %3.</source>
+        <oldsource>An unknown error has ocurred sending images from study %1 of patient %2 to PACS %3.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

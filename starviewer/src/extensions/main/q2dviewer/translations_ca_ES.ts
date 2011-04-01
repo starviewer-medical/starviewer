@@ -44,7 +44,7 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="86"/>
         <source>Dump DICOM information of the current image</source>
-        <translation>Volcar informació DICOM de la imatge actual</translation>
+        <translation>Bolca informació DICOM de la imatge actual</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="87"/>
@@ -189,7 +189,7 @@
     <message>
         <location filename="q2dviewerextensionbase.ui" line="469"/>
         <source>Erase</source>
-        <translation>Borrar</translation>
+        <translation>Esborrar</translation>
     </message>
     <message>
         <location filename="q2dviewerextensionbase.ui" line="584"/>

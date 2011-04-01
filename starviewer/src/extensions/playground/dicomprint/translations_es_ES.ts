@@ -264,10 +264,6 @@ border: 1px solid  #680000;
         <translation>Color de imagen vacía:</translation>
     </message>
     <message>
-        <source>Maximum Denstiy:</source>
-        <translation>Densidad máxima:</translation>
-    </message>
-    <message>
         <source>Yes</source>
         <translation>Si</translation>
     </message>
@@ -293,11 +289,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Hostname</source>
-        <translation>Nombre del host</translation>
-    </message>
-    <message>
-        <source>Supports Anotation Box:</source>
-        <translation>Soporta anotaciones:</translation>
+        <translation>Dirección</translation>
     </message>
     <message>
         <source>Trim:</source>
@@ -307,16 +299,20 @@ border: 1px solid  #680000;
         <source>Annotation Display Format:</source>
         <translation>Formato de las anotaciones:</translation>
     </message>
+    <message>
+        <source>Supports Annotation Box:</source>
+        <translation>Soporta anotaciones:</translation>
+    </message>
+    <message>
+        <source>Maximum Density:</source>
+        <translation>Densidad máxima:</translation>
+    </message>
 </context>
 <context>
     <name>udg::DicomPrintExtensionMediator</name>
     <message>
         <source>DICOM Print</source>
         <translation>Imprimir DICOM</translation>
-    </message>
-    <message>
-        <source>Starviewer</source>
-        <translation>Starviewer</translation>
     </message>
     <message>
         <source>The selected item is not an image</source>
@@ -354,7 +350,7 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>%1 can&apos;t create print spool.</source>
-        <translation>%1 no ha podido crear el spool de impresión.</translation>
+        <translation>No se ha podido crear el trabajo de impresión.</translation>
     </message>
     <message>
         <source>%1 can&apos;t load some of the images to print.
@@ -385,16 +381,16 @@ border: 1px solid  #680000;
         <translation>Cierre la pestaña &apos;Imprimir DICOM&quot; y vuelva a intentar-lo.</translation>
     </message>
     <message>
-        <source>an unknow error has produced.</source>
-        <translation>se ha producido un error desconocido.</translation>
-    </message>
-    <message>
         <source>Check printer DICOM Conformance to be sure that it accepts all your print parameters.</source>
-        <translation>Comprueve con el DICOM Conformance de la impresora que esta acepta sus parámetros de impresión.</translation>
+        <translation>Compruebe con el DICOM Conformance de la impresora que esta acepta sus parámetros de impresión.</translation>
     </message>
     <message>
         <source>Be sure the computer is connected on the network and the printer network parameters are correct.</source>
         <translation>Asegúrese que el ordenador está conectado a la red y que los parámetros de red de la impresora sean correctos.</translation>
+    </message>
+    <message>
+        <source>an unknown error has produced.</source>
+        <translation>se ha producido un error desconocido.</translation>
     </message>
 </context>
 <context>
@@ -420,12 +416,6 @@ border: 1px solid  #680000;
         <translation>No se ha seleccionado ninguna impresora para aplicar los cambios.</translation>
     </message>
     <message>
-        <source>Printer %1 doesn&apos;t respond correclty.
-Be sure that hostname and AETitle are correct.</source>
-        <translation>La impresora %1 no ha respondido correctamente.
-Asegúrese que la dirección y el AETitle son correctos.</translation>
-    </message>
-    <message>
         <source>Printer %1 doesn&apos;t respond.
 Be sure that hostname and AETitle are correct.</source>
         <translation>La impresora %1 no ha respondido.
@@ -438,6 +428,12 @@ Asegúrese que la dirección y el AETitle son correctos.</translation>
     <message>
         <source>Hostname can&apos;t be empty.</source>
         <translation>Tiene que introducir la dirección de la impresora.</translation>
+    </message>
+    <message>
+        <source>Printer %1 doesn&apos;t respond correctly.
+Be sure that hostname and AETitle are correct.</source>
+        <translation>La impresora %1 no ha respondido correctamente.
+Asegúrese que la dirección IP y el AETitle son correctos.</translation>
     </message>
 </context>
 </TS>

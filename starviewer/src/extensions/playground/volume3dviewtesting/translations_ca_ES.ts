@@ -101,7 +101,7 @@
     <message>
         <location filename="qvolume3dviewtestingextensionbase.ui" line="538"/>
         <source>Ray Casting with Obscurances</source>
-        <translation>Rays Casting amb Obscurances</translation>
+        <translation>Rays Casting amb obscurances</translation>
     </message>
     <message>
         <location filename="qvolume3dviewtestingextensionbase.ui" line="563"/>
