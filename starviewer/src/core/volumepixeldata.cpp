@@ -65,6 +65,28 @@ VolumePixelData::VoxelType* VolumePixelData::getScalarPointer(int x, int y, int 
     return static_cast<VolumePixelData::VoxelType *>(this->getVtkData()->GetScalarPointer(x,y,z));
 }
 
+bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3])
+{
+    if (!this->getVtkData())
+    {
+        DEBUG_LOG("Dades VTK nul·les!");
+        return false;
+    }
+
+    double *origin = this->getVtkData()->GetOrigin();
+    double *spacing = this->getVtkData()->GetSpacing();
+    int *extent = this->getVtkData()->GetExtent();
+    bool inside = true;
+    
+    for (int i = 0; i < 3; i++)
+    {
+        index[i] = qRound((coordinate[i] - origin[i]) / spacing[i]);
+        inside = inside && index[i] >= extent[2*i] && index[i] <= extent[2*i+1];    // TODO És sempre correcte això?
+    }
+
+    return inside;
+}
+
 bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxelValue)
 {
     if (!this->getVtkData())
@@ -75,10 +97,9 @@ bool VolumePixelData::getVoxelValue(double coordinate[3], QVector<double> &voxel
     }
 
     int voxelIndex[3];
-    double parametricCoordinates[3];
-    int inside = this->getVtkData()->ComputeStructuredCoordinates(coordinate, voxelIndex, parametricCoordinates);
+    bool inside = this->computeCoordinateIndex(coordinate, voxelIndex);
 
-    if (inside == 1)
+    if (inside)
     {
         vtkIdType pointId = this->getVtkData()->ComputePointId(voxelIndex);
         vtkDataArray *scalars = this->getVtkData()->GetPointData()->GetScalars();
