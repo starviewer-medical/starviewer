@@ -2681,33 +2681,31 @@ Asegúrese de que su ordenador está conectado a la red y que los parámetros de
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="124"/>
-        <source>PACS %1 has report us that could not process the requested query.
+        <source>PACS %1 could not process the query.
 
 </source>
-        <oldsource>PACS %1 has report us that can not process the requested query.
+        <oldsource>PACS %1 has report us that could not process the requested query.
 
 </oldsource>
-        <translation>El PACS %1 ha informado de que no ha podido procesar la consulta solicitada.
+        <translation>El PACS %1 no ha podido realizar la consulta.
 
 </translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="125"/>
-        <source>Wait a few minutes and try it again, if the problem persists contact with PACS administrator.</source>
-        <oldsource>%1 can&apos;t query %2 to PACS %3 because It doesn&apos;t respond as expected.
-
-</oldsource>
-        <translation>Espere unos minutos y vuelva a hacer la consulta, si el problema persiste contacte con un administrador del PACS.</translation>
+        <source>Try with a different query or wait a few minutes, if the problem persists contact with PACS administrator.</source>
+        <oldsource>Wait a few minutes and try it again, if the problem persists contact with PACS administrator.</oldsource>
+        <translation>Vuelva intentarlo con una consulta diferente o espere unos minutos. Si el problema persiste contacte con un administrador del PACS.</translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="128"/>
-        <source>PACS %1 has report us that could not process the requested query returning an unknow code error.
+        <source>PACS %1 could not process the query returning an unknow error.
 
 </source>
-        <oldsource>PACS %1 has report us that can not process the requested query returning an unknow code error.
+        <oldsource>PACS %1 has report us that could not process the requested query returning an unknow error.
 
 </oldsource>
-        <translation>EL PACS %1 ha informado que de que no ha podido procesar la consulta solicitada devolviedo un código de error desconocido.
+        <translation>EL PACS %1 no ha podido realizar la consulta devolviedo un error desconocido.
 
 </translation>
     </message>
@@ -2948,15 +2946,22 @@ Si el problema persiste contacte con un administrador.</translation>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="274"/>
         <source>
 
-Available space in Disk: %1 Mb</source>
-        <translation>Espacio disponible en disco: %1 Mb</translation>
+- Available space in Disk: %1 Mb.</source>
+        <oldsource>
+
+	- Available space in Disk: %1 Mb.</oldsource>
+        <translation>
+
+- Espacio disponible en disco: %1 Mb.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="275"/>
         <source>
-Minimum space required in Disk to retrieve studies: %1 Mb</source>
+- Minimum space required in Disk to retrieve studies: %1 Mb.</source>
+        <oldsource>
+	- Minimum space required in Disk to retrieve studies: %1 Mb.</oldsource>
         <translation>
-Espacio mínimo requerido en disco para descargar estudios: %1 Mb</translation>
+- Espacio mínimo requerido en disco para descargar estudios: %1 Mb.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="279"/>
@@ -2968,7 +2973,7 @@ Espacio mínimo requerido en disco para descargar estudios: %1 Mb</translation>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="289"/>
         <source>Images from study %1 of patient %2 can&apos;t be retrieved from PACS %3 because %4 has not be capable of read correctly data images.</source>
         <oldsource>Images from study %1 of patient %2 can&apos;t be retrieved because PACS %3 because has not be capable of read correctly data images.</oldsource>
-        <translation>No se han podido descargar las imágenes del estudio %1 del paciente %2 del PACS %3 al no poder leer correctamente la información de las imágenes.</translation>
+        <translation>No se ha podido descargar el estudio %1 del paciente %2 del PACS %3, porqué no se ha podido leer correctamente la información de las imágenes.</translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="291"/>
