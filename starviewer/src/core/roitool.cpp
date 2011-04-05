@@ -56,8 +56,11 @@ void ROITool::computeStatisticsData()
     double verticalLimit;
 	int currentView = m_2DViewer->getView();
 
+    // Creem una còpia de m_roiPolygon projectada a la mateixa profunditat que la llesca actual
+    // Serà amb aquest polígon amb el que calcularem els corresponents valors de vòxel
+    DrawerPolygon *projectedROIPolygon = createProjectedROIPolygon();
     // El nombre de segments és el mateix que el nombre de punts del polígon
-    int numberOfSegments = m_roiPolygon->getNumberOfPoints();
+    int numberOfSegments = projectedROIPolygon->getNumberOfPoints();
 
     // Llistes de punts inicials i finals de cada segement
     QVector<const double *> segmentsStartPoints;
@@ -66,14 +69,14 @@ void ROITool::computeStatisticsData()
     // Creem els diferents segments
     for (int i = 0; i < numberOfSegments - 1; ++i)
     {
-        const double *p1 = m_roiPolygon->getVertix(i);
-        const double *p2 = m_roiPolygon->getVertix(i + 1);
+        const double *p1 = projectedROIPolygon->getVertix(i);
+        const double *p2 = projectedROIPolygon->getVertix(i + 1);
         segmentsStartPoints.append(p1);
         segmentsEndPoints << p2;
     }
     // Cal afegir l'últim segment que es correspondria amb el segment de l'últim punt al primer
-    const double *p1 = m_roiPolygon->getVertix(numberOfSegments - 1);
-    const double *p2 = m_roiPolygon->getVertix(0);
+    const double *p1 = projectedROIPolygon->getVertix(numberOfSegments - 1);
+    const double *p2 = projectedROIPolygon->getVertix(0);
     segmentsStartPoints.append(p1);
     segmentsEndPoints << p2;
 
@@ -81,7 +84,7 @@ void ROITool::computeStatisticsData()
     // Aquesta línia produirà unes interseccions amb els segments del polígon
     // Les interseccions marcaran el camí a seguir per fer el recompte de vòxels
     double bounds[6];
-    m_roiPolygon->getBounds(bounds);
+    projectedROIPolygon->getBounds(bounds);
     double *spacing = m_2DViewer->getInput()->getSpacing();
 
     double horizontalSpacingIncrement;
@@ -281,6 +284,39 @@ void ROITool::computeStatisticsData()
     {
         delete pixelData;
     }
+}
+
+DrawerPolygon *ROITool::createProjectedROIPolygon()
+{
+    Q_ASSERT(m_roiPolygon);
+
+    int xIndex, yIndex, zIndex;
+    Q2DViewer::getXYZIndexesForView(xIndex, yIndex, zIndex, m_2DViewer->getView());
+    // Calculem la coordenda de profunditat a la que volem projectar el polígon
+    Volume *input = m_2DViewer->getInput();
+    double origin[3];
+    double spacing[3];
+    input->getOrigin(origin);
+    input->getSpacing(spacing);
+    double zCoordinate = origin[zIndex] + spacing[zIndex] * m_2DViewer->getCurrentSlice();
+
+    DrawerPolygon *projectedROIPolygon = new DrawerPolygon;
+    int numberOfPolygonPoints = m_roiPolygon->getNumberOfPoints();
+    for (int i = 0; i < numberOfPolygonPoints; ++i)
+    {
+        const double *vertix = m_roiPolygon->getVertix(i);
+        double projectedVertix[3];
+        projectedVertix[xIndex] = vertix[xIndex];
+        projectedVertix[yIndex] = vertix[yIndex];
+        projectedVertix[zIndex] = zCoordinate;
+        projectedROIPolygon->addVertix(projectedVertix);
+    }
+
+    // Necessari perquè després necessitem el getBounds() que es calcula amb els objectes de vtk
+    // TODO Haver de fer aquesta crida ens planteja si el disseny dels DrawerPrimitive és prou bo
+    // o que potser en aquest cas estem fent servir un DrawerPrimitive per una tasca per la que no està pensat
+    projectedROIPolygon->getAsVtkProp();
+    return projectedROIPolygon;
 }
 
 void ROITool::printData()
