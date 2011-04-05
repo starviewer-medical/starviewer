@@ -935,10 +935,6 @@ void Q3DViewer::renderIsoSurface()
     goTFun->AddPoint( 255, 1.0 );
 
     m_volumeProperty->ShadeOn();
-    m_volumeProperty->SetAmbient(0.3);
-    m_volumeProperty->SetDiffuse(1.0);
-    m_volumeProperty->SetSpecular(0.2);
-    m_volumeProperty->SetSpecularPower(50.0);
 
     m_volumeProperty->SetScalarOpacity(oTFun);
     m_volumeProperty->DisableGradientOpacityOff();
