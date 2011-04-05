@@ -2106,11 +2106,6 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     {
         xyz[yIndex] = bounds[yIndex * 2 + 1];
     }
-
-    // Finalment fem que la z es correspongui amb la de la imatge
-    int zIndex = getZIndexForView(m_lastView);
-    xyz[zIndex] = bounds[zIndex * 2];
-
 }
 
 vtkImageData* Q2DViewer::getCurrentSlabProjection()
