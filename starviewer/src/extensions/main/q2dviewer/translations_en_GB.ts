@@ -59,7 +59,8 @@
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="449"/>
-        <source>Save all images from current series...</source>
+        <source>Save all images of the current series...</source>
+        <oldsource>Save all images from current series...</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

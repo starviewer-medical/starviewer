@@ -446,7 +446,7 @@ void Q2DViewerExtension::initializeTools()
     m_singleShotAction->setToolTip(tr("Save the current image in a standard image format"));
     
     m_multipleShotAction = new QAction(this);
-    m_multipleShotAction->setText(tr("Save all images from current series..."));
+    m_multipleShotAction->setText(tr("Save all images of the current series..."));
     m_multipleShotAction->setToolTip(tr("Save all the images in the selected viewer in a standard image format"));
     m_multipleShotAction->setShortcut(Qt::CTRL + Qt::Key_A);    
     
