@@ -28,7 +28,8 @@
     <name>udg::Q2DViewerExtension</name>
     <message>
         <location filename="q2dviewerextension.cpp" line="81"/>
-        <source>Search prior studies</source>
+        <source>Search related studies</source>
+        <oldsource>Search prior studies</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -246,7 +247,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionmediator.cpp" line="43"/>
+        <location filename="q2dviewerextensionmediator.cpp" line="44"/>
         <source>There is not any viewable or supported Series in the selected Studies</source>
         <translation type="unfinished"></translation>
     </message>

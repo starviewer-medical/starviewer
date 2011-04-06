@@ -78,7 +78,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 #ifndef STARVIEWER_LITE
     m_previousStudiesWidget = new QPreviousStudiesWidget(this);
     m_previousStudiesToolButton->setEnabled(false);
-    m_previousStudiesToolButton->setToolTip(tr("Search prior studies"));
+    m_previousStudiesToolButton->setToolTip(tr("Search related studies"));
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
 #endif
     

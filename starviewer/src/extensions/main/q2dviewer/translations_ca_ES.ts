@@ -28,8 +28,9 @@
     <name>udg::Q2DViewerExtension</name>
     <message>
         <location filename="q2dviewerextension.cpp" line="81"/>
-        <source>Search prior studies</source>
-        <translation>Cercar estudis previs</translation>
+        <source>Search related studies</source>
+        <oldsource>Search prior studies</oldsource>
+        <translation type="unfinished">Cercar estudis previs</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="82"/>
@@ -246,7 +247,7 @@
         <translation>Visor 2D</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionmediator.cpp" line="43"/>
+        <location filename="q2dviewerextensionmediator.cpp" line="44"/>
         <source>There is not any viewable or supported Series in the selected Studies</source>
         <translation>No hi ha cap sèrie suportada o que es pugui visualitzar a l&apos;estudi seleccionat</translation>
     </message>
