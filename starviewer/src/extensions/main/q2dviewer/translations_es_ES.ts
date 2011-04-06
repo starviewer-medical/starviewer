@@ -6,12 +6,12 @@
     <message>
         <location filename="menugridwidget.cpp" line="54"/>
         <source>Hanging protocols</source>
-        <translation type="unfinished">Hanging protocols</translation>
+        <translation>Hanging protocols</translation>
     </message>
     <message>
         <location filename="menugridwidget.cpp" line="61"/>
         <source>No hanging protocols available</source>
-        <translation type="unfinished">No hay Hanging Protocols disponibles</translation>
+        <translation>No hay Hanging Protocols disponibles</translation>
     </message>
     <message>
         <location filename="menugridwidget.cpp" line="74"/>
@@ -21,7 +21,7 @@
     <message>
         <location filename="menugridwidget.cpp" line="233"/>
         <source>Searching...</source>
-        <translation type="unfinished">Buscando...</translation>
+        <translation>Buscando...</translation>
     </message>
 </context>
 <context>
@@ -30,7 +30,7 @@
         <location filename="q2dviewerextension.cpp" line="81"/>
         <source>Search related studies</source>
         <oldsource>Search prior studies</oldsource>
-        <translation type="unfinished">Buscar estudios previos</translation>
+        <translation>Buscar estudios relacionados</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="82"/>
@@ -55,7 +55,7 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="444"/>
         <source>Save current series image...</source>
-        <translation type="unfinished">Guardar una imagen de la serie actual...</translation>
+        <translation>Guardar la imagen de la serie actual...</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="449"/>
