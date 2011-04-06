@@ -166,8 +166,14 @@ void DistanceTool::annotateNewPoint()
             for (i = 0; i < 3; i++)
                 leftPoint[i] = secondPoint[i]; 
         }
-        // TODO Això no es pot solucionar amb setPadding?
-        leftPoint[xIndex] -= 2.;
+
+        // Apliquem un padding
+        const double Padding = 5.0; // padding de 5 pixels
+        double leftPointInDisplay[3];
+        m_2DViewer->computeWorldToDisplay(leftPoint[0], leftPoint[1], leftPoint[2], leftPointInDisplay);    // passem leftPoint a coordenades de display
+        m_2DViewer->computeDisplayToWorld(leftPointInDisplay[0] - Padding, leftPointInDisplay[1], leftPointInDisplay[2], leftPoint);    // apliquem el padding i tornem a coordenades de món
+        // ara leftPoint és l'attachment point que volem
+
         text->setAttachmentPoint( leftPoint );
         text->setHorizontalJustification( "Right" );
         text->shadowOn();

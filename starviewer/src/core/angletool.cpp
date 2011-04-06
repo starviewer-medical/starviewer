@@ -296,11 +296,12 @@ void AngleTool::finishDrawing()
 
 void AngleTool::placeText( DrawerText *angleText )
 {
+    const double Padding = 5.0; // padding de 5 pixels
+
     double *p1 = m_mainPolyline->getPoint(0);
     double *p2 = m_mainPolyline->getPoint(1);
     double *p3 = m_mainPolyline->getPoint(2);
     double position[3];
-    int i;
     int view = m_2DViewer->getView();
     int horizontalCoord = Q2DViewer::getXIndexForView(view);
     int verticalCoord = Q2DViewer::getYIndexForView(view);
@@ -316,18 +317,22 @@ void AngleTool::placeText( DrawerText *angleText )
         }
         else
         {
-            for ( i = 0; i < 3; i++ )
-                position[i] = p2[i];
+            double p2InDisplay[3];
+            m_2DViewer->computeWorldToDisplay(p2[0], p2[1], p2[2], p2InDisplay);    // passem p2 a coordenades de display
 
-            if ( p2[verticalCoord] <= p3[verticalCoord] )
+            // apliquem el padding
+            if (p2[verticalCoord] <= p3[verticalCoord])
             {
-                position[verticalCoord] -= 2.;
+                p2InDisplay[1] -= Padding;
             }
             else
             {
-                position[verticalCoord] += 2.;
+                p2InDisplay[1] += Padding;
             }
-            angleText->setAttachmentPoint( position );
+            m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position);    // tornem a coordenades de món
+            // ara position és l'attachment point que volem
+
+            angleText->setAttachmentPoint(position);
         }
     }
     else
@@ -340,18 +345,22 @@ void AngleTool::placeText( DrawerText *angleText )
         }
         else
         {
-            for ( i = 0; i < 3; i++ )
-                position[i] = p2[i];
+            double p2InDisplay[3];
+            m_2DViewer->computeWorldToDisplay(p2[0], p2[1], p2[2], p2InDisplay);    // passem p2 a coordenades de display
 
-            if ( p2[verticalCoord] <= p3[verticalCoord] )
+            // apliquem el padding
+            if (p2[verticalCoord] <= p3[verticalCoord])
             {
-                position[verticalCoord] += 2.;
+                p2InDisplay[1] += Padding;
             }
             else
             {
-                position[verticalCoord] -= 2.;
+                p2InDisplay[1] -= Padding;
             }
-            angleText->setAttachmentPoint( position );
+            m_2DViewer->computeDisplayToWorld(p2InDisplay[0], p2InDisplay[1], p2InDisplay[2], position);    // tornem a coordenades de món
+            // ara position és l'attachment point que volem
+
+            angleText->setAttachmentPoint(position);
         }
     }
 }
