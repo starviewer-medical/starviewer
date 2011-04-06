@@ -12,22 +12,20 @@
 #include "installextension.h"
 #include "q2dviewerextension.h"
 
-namespace udg{
+namespace udg {
 
 /**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.es>
 */
-class Q2DViewerExtensionMediator: public ExtensionMediator
-{
-    Q_OBJECT
+class Q2DViewerExtensionMediator: public ExtensionMediator {
+Q_OBJECT
 public:
     Q2DViewerExtensionMediator(QObject *parent = 0);
-
     ~Q2DViewerExtensionMediator();
 
-    virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext);
+    virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext);
 
-    virtual bool reinitializeExtension(QWidget* extension);
+    virtual bool reinitializeExtension(QWidget *extension);
 
     virtual DisplayableID getExtensionID() const;
 };
@@ -35,6 +33,6 @@ public:
 static InstallExtension<Q2DViewerExtension, Q2DViewerExtensionMediator> registerQ2DViewerExtension;
 
 
-} //udg namespace
+} // End udg namespace
 
 #endif

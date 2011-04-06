@@ -11,7 +11,7 @@
 // QT
 #include <QMessageBox>
 
-namespace udg{
+namespace udg {
 
 Q2DViewerExtensionMediator::Q2DViewerExtensionMediator(QObject *parent)
  : ExtensionMediator(parent)
@@ -24,35 +24,37 @@ Q2DViewerExtensionMediator::~Q2DViewerExtensionMediator()
 
 DisplayableID Q2DViewerExtensionMediator::getExtensionID() const
 {
-    return DisplayableID("Q2DViewerExtension",tr("2D Viewer"));
+    return DisplayableID("Q2DViewerExtension", tr("2D Viewer"));
 }
 
-bool Q2DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
+bool Q2DViewerExtensionMediator::initializeExtension(QWidget *extension, const ExtensionContext &extensionContext)
 {
     Q2DViewerExtension *q2dviewerExtension;
 
-    if ( !(q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension)) )
+    if (!(q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension)))
     {
         return false;
     }
 
-    q2dviewerExtension->setPatient( extensionContext.getPatient() );
+    q2dviewerExtension->setPatient(extensionContext.getPatient());
     Volume *input = extensionContext.getDefaultVolume();
     // Si no tenim cap volum, alertem a l'usuari
-    if( !input )
-        QMessageBox::information(0,ApplicationNameString, tr("There is not any viewable or supported Series in the selected Studies") );
+    if (!input)
+    {
+        QMessageBox::information(0,ApplicationNameString, tr("There is not any viewable or supported Series in the selected Studies"));
+    }
     
     // Assignem l'input per defecte al visor
-    q2dviewerExtension->setInput( input );
+    q2dviewerExtension->setInput(input);
 
     return true;
 }
 
-bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget* extension)
+bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget *extension)
 {
     Q2DViewerExtension *q2dviewerExtension;
 
-    if ( !(q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension)) )
+    if (!(q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension)))
     {
         return false;
     }
@@ -68,4 +70,4 @@ bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget* extension)
     }
 }
 
-} //udg namespace
+} // End udg namespace
