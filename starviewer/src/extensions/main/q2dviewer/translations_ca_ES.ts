@@ -6,12 +6,12 @@
     <message>
         <location filename="menugridwidget.cpp" line="54"/>
         <source>Hanging protocols</source>
-        <translation type="unfinished">Hanging protocols</translation>
+        <translation>Hanging protocols</translation>
     </message>
     <message>
         <location filename="menugridwidget.cpp" line="61"/>
         <source>No hanging protocols available</source>
-        <translation type="unfinished">No hi ha Hanging Protocols disponibles</translation>
+        <translation>No hi ha Hanging Protocols disponibles</translation>
     </message>
     <message>
         <location filename="menugridwidget.cpp" line="74"/>
@@ -21,7 +21,7 @@
     <message>
         <location filename="menugridwidget.cpp" line="233"/>
         <source>Searching...</source>
-        <translation type="unfinished">Cercant...</translation>
+        <translation>Cercant...</translation>
     </message>
 </context>
 <context>
@@ -30,7 +30,7 @@
         <location filename="q2dviewerextension.cpp" line="81"/>
         <source>Search related studies</source>
         <oldsource>Search prior studies</oldsource>
-        <translation type="unfinished">Cercar estudis previs</translation>
+        <translation>Cercar estudis relacionats</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="82"/>
@@ -55,7 +55,7 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="444"/>
         <source>Save current series image...</source>
-        <translation type="unfinished">Desa una imatge de l&apos;actual sèrie...</translation>
+        <translation>Desa la imatge de la sèrie actual...</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="449"/>
@@ -65,7 +65,7 @@
     <message>
         <location filename="q2dviewerextension.cpp" line="446"/>
         <source>Save the current image in a standard image format</source>
-        <translation>Guarda una imatge de la sèrie actual amb el format estàndard</translation>
+        <translation>Guarda la imatge actual en un format estàndard</translation>
     </message>
     <message>
         <location filename="q2dviewerextension.cpp" line="450"/>
