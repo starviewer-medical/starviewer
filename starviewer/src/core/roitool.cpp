@@ -284,6 +284,9 @@ void ROITool::computeStatisticsData()
     {
         delete pixelData;
     }
+
+    // Ja no necessitem més la còpia del polígon, per tant es pot eliminar de memòria
+    delete projectedROIPolygon;
 }
 
 DrawerPolygon *ROITool::createProjectedROIPolygon()
