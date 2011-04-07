@@ -72,17 +72,17 @@
     <message>
         <location filename="qviewerworkinprogresswidget.ui" line="95"/>
         <source>Loading...</source>
-        <translation type="unfinished">Cargando...</translation>
+        <translation>Cargando...</translation>
     </message>
     <message>
         <location filename="qviewerworkinprogresswidget.ui" line="102"/>
         <source>(25%)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qviewerworkinprogresswidget.ui" line="124"/>
         <source>ProgressBar</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -452,13 +452,13 @@ El sombreado se deshabilitará y, por lo tanto, la visualización no será la es
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="91"/>
         <source>Selected Custom WW/WL will be deleted.</source>
-        <translation type="unfinished">Se borrará el WW/WL seleccionado.</translation>
+        <translation>Se borrará el WW/WL seleccionado.</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="92"/>
         <source>Do you want to continue?</source>
-        <translatorcomment>No me sona gaire correcte en castellà en software utitlitzar el Quiere Continuar</translatorcomment>
-        <translation type="unfinished">¿Quiere continuar?</translation>
+        <translatorcomment>No em sona gaire correcte en castellà en software utitlitzar el Quiere Continuar</translatorcomment>
+        <translation>¿Desea continuar?</translation>
     </message>
 </context>
 <context>
@@ -466,42 +466,42 @@ El sombreado se deshabilitará y, por lo tanto, la visualización no será la es
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="14"/>
         <source>Edit Custom WW/WL</source>
-        <translation type="unfinished">Editar WW/WL personalizados</translation>
+        <translation>Editar WW/WL personalizados</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="36"/>
         <source>Width</source>
-        <translation type="unfinished">Contraste</translation>
+        <translation>Contraste</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="41"/>
         <source>Level</source>
-        <translation type="unfinished">Brillo</translation>
+        <translation>Brillo</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="46"/>
         <source>Description</source>
-        <translation type="unfinished">Descripción</translation>
+        <translation>Descripción</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="68"/>
         <source>Add New</source>
-        <translation type="unfinished">Añadir nuevo WW/WL</translation>
+        <translation>Añadir nuevo WW/WL</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="91"/>
         <source>Remove</source>
-        <translation type="unfinished">Eliminar</translation>
+        <translation>Eliminar</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="132"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="139"/>
         <source>OK</source>
-        <translation type="unfinished">Aceptar</translation>
+        <translation>Aceptar</translation>
     </message>
 </context>
 <context>
@@ -509,28 +509,28 @@ El sombreado se deshabilitará y, por lo tanto, la visualización no será la es
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="32"/>
         <source>DICOM Data</source>
-        <translation type="unfinished">Datos del DICOM</translation>
+        <translation>Datos del DICOM</translation>
     </message>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="43"/>
         <source>Meaningful Tags</source>
         <translatorcomment>Altres alternatives Tags importantes, principales,... ? Traduïm tag?</translatorcomment>
-        <translation type="unfinished">Tags relevantes</translation>
+        <translation>Tags relevantes</translation>
     </message>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="81"/>
         <source>All Tags</source>
-        <translation type="unfinished">Todos los tags</translation>
+        <translation>Todos los tags</translation>
     </message>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="87"/>
         <source>Search</source>
-        <translation type="unfinished">Buscar</translation>
+        <translation>Buscar</translation>
     </message>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="99"/>
         <source>Highlight only</source>
-        <translation type="unfinished">Soló resaltar</translation>
+        <translation>Sólo resaltar</translation>
     </message>
 </context>
 <context>
@@ -1465,22 +1465,22 @@ Variable de entorno(logFilePath): %2</translation>
     <message>
         <location filename="qreleasenotesbase.ui" line="17"/>
         <source>Release Notes</source>
-        <translation type="unfinished">Notas de la versión</translation>
+        <translation>Notas de la versión</translation>
     </message>
     <message>
         <location filename="qreleasenotesbase.ui" line="36"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qreleasenotesbase.ui" line="53"/>
         <source>Don&apos;t show on future releases</source>
-        <translation type="unfinished">No mostrar en futuras versiones</translation>
+        <translation>No mostrar en futuras versiones</translation>
     </message>
     <message>
         <location filename="qreleasenotesbase.ui" line="73"/>
         <source>Close</source>
-        <translation type="unfinished">Cerrar</translation>
+        <translation>Cerrar</translation>
     </message>
 </context>
 <context>
@@ -1547,29 +1547,28 @@ Variable de entorno(logFilePath): %2</translation>
     <message>
         <location filename="qviewer.cpp" line="636"/>
         <source>Auto</source>
-        <translation type="unfinished">Automático</translation>
+        <translation>Automático</translation>
     </message>
     <message>
         <location filename="qviewer.cpp" line="813"/>
-        <source>Downloading previous study...</source>
-        <translation type="unfinished">Descargando estudio previo...</translation>
+        <source>Downloading related study...</source>
+        <translation>Descargando estudio relacionado...</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="819"/>
+        <source>Error downloading related study</source>
+        <translation>Error al descargar estudio relacionado</translation>
     </message>
     <message>
         <location filename="qviewer.cpp" line="816"/>
         <source>Loading data...</source>
-        <translation type="unfinished">Cargando los datos...</translation>
-    </message>
-    <message>
-        <location filename="qviewer.cpp" line="819"/>
-        <source>Error downloading previous study</source>
-        <translatorcomment>No hi faltaria punt a la traducció orginal?</translatorcomment>
-        <translation type="unfinished">Error al descargar el estudio previo</translation>
+        <translation>Cargando los datos...</translation>
     </message>
     <message>
         <location filename="qviewer.cpp" line="822"/>
         <source>Error loading data</source>
         <translatorcomment>No hi faltaria punt a la traducció orginal?</translatorcomment>
-        <translation type="unfinished">Error cargando los datos</translation>
+        <translation>Error cargando los datos</translation>
     </message>
 </context>
 <context>
@@ -1591,7 +1590,7 @@ Variable de entorno(logFilePath): %2</translation>
     <message>
         <location filename="qviewerworkinprogresswidget.cpp" line="46"/>
         <source> (%1%)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1606,7 +1605,7 @@ Variable de entorno(logFilePath): %2</translation>
         <location filename="qwindowlevelcombobox.cpp" line="145"/>
         <location filename="qwindowlevelcombobox.cpp" line="154"/>
         <source>Edit Custom WW/WL</source>
-        <translation type="unfinished">Editar los WW/WL personalizados</translation>
+        <translation>Editar los WW/WL personalizados</translation>
     </message>
 </context>
 <context>
@@ -1614,14 +1613,14 @@ Variable de entorno(logFilePath): %2</translation>
     <message>
         <location filename="roitool.cpp" line="321"/>
         <source>Area: %1 %2</source>
-        <translation type="unfinished">Área: %1 %2</translation>
+        <translation>Área: %1 %2</translation>
     </message>
     <message>
         <location filename="roitool.cpp" line="331"/>
         <source>
 Mean: %1
 St.Dev.: %2</source>
-        <translation type="unfinished">
+        <translation>
 Media: %1
 Desv.Std.:%2</translation>
     </message>
@@ -1791,12 +1790,13 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="336"/>
         <source>Image Plane Projection</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="338"/>
         <source>Enable/Disable image plane projection tool</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">No es tradueix perquè no es fa servir a la versió oficial</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="350"/>
@@ -1811,32 +1811,36 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="358"/>
         <source>Translation Difference</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="361"/>
         <source>Enable/Disable the translation difference tool</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="366"/>
         <source>Line Path</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="368"/>
         <source>Enable/Disable line path tool</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="372"/>
         <source>Elliptical ROI</source>
-        <translation type="unfinished">ROI elíptica</translation>
+        <translation>ROI elíptica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="375"/>
         <source>Enable/Disable Elliptical ROI tool</source>
-        <translation type="unfinished">Activa/Desactiva la herramienta de ROI elíptica</translation>
+        <translation>Activa/Desactiva la herramienta de ROI elíptica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="404"/>
@@ -1880,12 +1884,14 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="444"/>
-        <source>Saggital</source>
-        <translation></translation>
+        <source>Sagittal</source>
+        <oldsource>Saggital</oldsource>
+        <translation>Sagital</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="447"/>
-        <source>Switch to Saggital View</source>
+        <source>Switch to Sagittal View</source>
+        <oldsource>Switch to Saggital View</oldsource>
         <translation>Cambiar a vista Sagital</translation>
     </message>
     <message>
@@ -2053,47 +2059,47 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="96"/>
         <source>Out of memory</source>
-        <translation type="unfinished">No hay memoria suficiente</translation>
+        <translation>No hay memoria suficiente</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="100"/>
         <source>Missing Files</source>
-        <translation type="unfinished">Faltan archivos</translation>
+        <translation>Faltan archivos</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="104"/>
         <source>Cannot Read File(s)</source>
-        <translation type="unfinished">No se han podido leer los archivos</translation>
+        <translation>No se han podido leer los archivos</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="108"/>
         <source>Unknown Error</source>
-        <translation type="unfinished">Error desconocido</translation>
+        <translation>Error desconocido</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="120"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
-        <translation type="unfinished">No hay suficiente memoria para cargar las series. Cierre todas las ventanas abiertas de %1, reinicie la aplicación e inténtelo de nuevo. Si el problema persiste, se podría solucionar añadiendo más memoria RAM o cambiando a un sistema de 64 bits.</translation>
+        <translation>No hay suficiente memoria para cargar las series. Cierre todas las ventanas abiertas de %1, reinicie la aplicación e inténtelo de nuevo. Si el problema persiste, se podría solucionar añadiendo más memoria RAM o cambiando a un sistema de 64 bits.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="124"/>
         <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
-        <translation type="unfinished">%1 no puede encontrar los archivos de las series. Puede ser que se hayan eliminado o sean corruptos.</translation>
+        <translation>%1 no puede encontrar los archivos de las series. Puede ser que se hayan eliminado o sean corruptos.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="126"/>
         <source>%1 could not read the requested file(s) for this Series.</source>
-        <translation type="unfinished">%1 no ha podido leer los archivos de la serie solicitada.</translation>
+        <translation>%1 no ha podido leer los archivos de la serie solicitada.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="128"/>
         <source>The loading of the data have been aborted.</source>
-        <translation type="unfinished">Se ha abortado la carga de los datos.</translation>
+        <translation>Se ha abortado la carga de los datos.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="130"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
-        <translation type="unfinished">%1 ha encontrado un error desconocido al leer las series. No se han cargado los datos de la series.</translation>
+        <translation>%1 ha encontrado un error desconocido al leer las series. No se han cargado los datos de la series.</translation>
     </message>
 </context>
 <context>
@@ -2101,7 +2107,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="voxelinformationtool.cpp" line="140"/>
         <source>N/A</source>
-        <translation type="unfinished">N/D</translation>
+        <translation>N/D</translation>
     </message>
 </context>
 <context>
