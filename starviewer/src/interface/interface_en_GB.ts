@@ -33,7 +33,8 @@
     <name>QObject</name>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="75"/>
-        <source>Unknow option </source>
+        <source>Unknown option </source>
+        <oldsource>Unknow option </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -91,7 +92,8 @@
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="262"/>
-        <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
+        <source>Sorry, an error occurred while loading the data of patients:&lt;br&gt; %1</source>
+        <oldsource>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -236,7 +238,8 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="216"/>
-        <source>Open DICOMDIR from CD,DVD,Pendrive or HardDisk</source>
+        <source>Open DICOMDIR from CD, DVD, Pendrive or hard disk</source>
+        <oldsource>Open DICOMDIR from CD,DVD,Pendrive or HardDisk</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -332,8 +335,8 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="576"/>
-        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats. </source>
-        <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats.</oldsource>
+        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats specified by the MetaIO standard (*.mhd files). It is fully compliant with the DICOM standard for image communication and image file formats. </source>
+        <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats specified by the MetaIO standard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats. </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

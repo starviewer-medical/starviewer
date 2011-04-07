@@ -33,7 +33,8 @@
     <name>QObject</name>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="75"/>
-        <source>Unknow option </source>
+        <source>Unknown option </source>
+        <oldsource>Unknow option </oldsource>
         <translation>Opció desconeguda </translation>
     </message>
     <message>
@@ -91,8 +92,9 @@
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="262"/>
-        <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
-        <translation>Ho sentim, hi ha hagut algun error mentres es carregaven les dades dels pacients:&lt;br&gt; %1</translation>
+        <source>Sorry, an error occurred while loading the data of patients:&lt;br&gt; %1</source>
+        <oldsource>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</oldsource>
+        <translation>Ho sentim, hi ha hagut algun error mentre es carregaven les dades dels pacients:&lt;br&gt; %1</translation>
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="206"/>
@@ -236,8 +238,9 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="216"/>
-        <source>Open DICOMDIR from CD,DVD,Pendrive or HardDisk</source>
-        <translation>Obrir DICOMDIR a partir de CD,DVD,Pendrive o Disc dur</translation>
+        <source>Open DICOMDIR from CD, DVD, Pendrive or hard disk</source>
+        <oldsource>Open DICOMDIR from CD,DVD,Pendrive or HardDisk</oldsource>
+        <translation>Obrir DICOMDIR a partir de CD, DVD, Pendrive o Disc dur</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="245"/>
@@ -299,7 +302,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="296"/>
         <source>Show the application&apos;s release notes for current version</source>
-        <translation type="unfinished">Mostra les notes de laversió actual de l&apos;aplicació</translation>
+        <translation type="unfinished">Mostra les notes de la versió actual de l&apos;aplicació</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="320"/>
@@ -333,8 +336,8 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="576"/>
-        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats. </source>
-        <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats.</oldsource>
+        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats specified by the MetaIO standard (*.mhd files). It is fully compliant with the DICOM standard for image communication and image file formats. </source>
+        <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats specified by the MetaIO standard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats. </oldsource>
         <translation type="unfinished">&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 és un visor d&apos;imatges DICOM produïdes per equips mèdics (MRI, CT, PET, PET-CT, CR, MG,...), també pot llegir altres formats establerts per l&apos;estàndard MetaIO (fitxers *.mhd). %1 compleix l&apos;estàndard DICOM en comunicació d&apos;imatges i formats de fitxer. </translation>
     </message>
     <message>

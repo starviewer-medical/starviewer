@@ -259,7 +259,7 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
                 patientsWithError += "- " + patientsList.at(i)->getFullName() + "; ID: " + patientsList.at(i)->getID() + "<br>";
             }
         }
-        QMessageBox::critical(0, ApplicationNameString, tr("Sorry, an error ocurred while loading the data of patients:<br> %1").arg(patientsWithError) );
+        QMessageBox::critical(0, ApplicationNameString, tr("Sorry, an error occurred while loading the data of patients:<br> %1").arg(patientsWithError) );
     }
     if( patientsWithError.isEmpty() )
     {
