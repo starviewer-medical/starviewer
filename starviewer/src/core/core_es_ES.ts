@@ -2084,7 +2084,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="124"/>
         <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
-        <translation>%1 no puede encontrar los archivos de las series. Puede ser que se hayan eliminado o sean corruptos.</translation>
+        <translation>%1 no puede encontrar los archivos de la serie. Puede ser que se hayan eliminado o sean corruptos.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="126"/>
@@ -2099,7 +2099,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="130"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
-        <translation>%1 ha encontrado un error desconocido al leer las series. No se han cargado los datos de la series.</translation>
+        <translation>%1 ha encontrado un error desconocido al leer la serie. No se han cargado los datos de la serie.</translation>
     </message>
 </context>
 <context>

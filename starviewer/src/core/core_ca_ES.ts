@@ -2083,12 +2083,12 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="120"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
-        <translation>No hi ha prou memòria per carregar les sèries escollides. Tanca totes les finestres obertes de l&apos;%1, restaura l&apos;aplicació i torna-ho a intentar. Si el problema persisteix, es pot solucionar afegint més memòria RAM o canviant el sistema a 64 bits.</translation>
+        <translation>No hi ha prou memòria per carregar la sèrie escollida. Tanca totes les finestres obertes de l&apos;%1, restaura l&apos;aplicació i torna-ho a intentar. Si el problema persisteix, es pot solucionar afegint més memòria RAM o canviant el sistema a 64 bits.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="124"/>
         <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
-        <translation>%1 no pot trobar els fitxers d&apos;aquestes sèries. Potser s&apos;han eliminat o són incorrectes.</translation>
+        <translation>%1 no pot trobar els fitxers d&apos;aquesta sèrie. Potser s&apos;han eliminat o són incorrectes.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="126"/>
@@ -2103,7 +2103,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="130"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
-        <translation>%1 ha trobat un error inesperat al llegir aquestes sèries. No s&apos;ha carregat les dades de les sèries.</translation>
+        <translation>%1 ha trobat un error inesperat al llegir aquesta sèrie. No s&apos;ha carregat les dades de la sèrie.</translation>
     </message>
 </context>
 <context>
