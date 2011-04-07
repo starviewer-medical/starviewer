@@ -430,6 +430,12 @@ void QViewer::render()
 
 void QViewer::zoom(double factor)
 {
+    if (MathTools::isNaN(factor))
+    {
+        DEBUG_LOG("Zoom amb factor NaN. Marxem sense fer res.");
+        return;
+    }
+
     // TODO Potser caldria una comprovació de seguretat pel que torna cadascuna d'aquestes crides
     vtkRenderer *renderer = getRenderer();
     if (renderer)
