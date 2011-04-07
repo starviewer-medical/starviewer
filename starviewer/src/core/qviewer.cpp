@@ -810,13 +810,13 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
             // Do nothing
             break;
         case DownloadingVolume:
-            m_workInProgressWidget->setTitle(tr("Downloading previous study..."));
+            m_workInProgressWidget->setTitle(tr("Downloading related study..."));
             break;
         case LoadingVolume:
             m_workInProgressWidget->setTitle(tr("Loading data..."));
             break;
         case DownloadingError:
-            m_workInProgressWidget->setTitle(tr("Error downloading previous study"));
+            m_workInProgressWidget->setTitle(tr("Error downloading related study"));
             break;
         case LoadingError:
             m_workInProgressWidget->setTitle(tr("Error loading data"));
