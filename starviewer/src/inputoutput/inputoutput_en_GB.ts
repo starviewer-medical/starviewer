@@ -2508,97 +2508,97 @@ Close all %1 windows and try again.</source>
 <context>
     <name>udg::QStudyTreeWidgetBase</name>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="119"/>
+        <location filename="qstudytreewidgetbase.ui" line="120"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="59"/>
+        <location filename="qstudytreewidgetbase.ui" line="60"/>
         <source>Patient ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="54"/>
+        <location filename="qstudytreewidgetbase.ui" line="55"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="64"/>
+        <location filename="qstudytreewidgetbase.ui" line="65"/>
         <source>Age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="74"/>
+        <location filename="qstudytreewidgetbase.ui" line="75"/>
         <source>Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="69"/>
+        <location filename="qstudytreewidgetbase.ui" line="70"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="79"/>
+        <location filename="qstudytreewidgetbase.ui" line="80"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="84"/>
+        <location filename="qstudytreewidgetbase.ui" line="85"/>
         <source>Hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="94"/>
+        <location filename="qstudytreewidgetbase.ui" line="95"/>
         <source>Institution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="114"/>
+        <location filename="qstudytreewidgetbase.ui" line="115"/>
         <source>Acc. Num</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="89"/>
+        <location filename="qstudytreewidgetbase.ui" line="90"/>
         <source>AETitle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="99"/>
+        <location filename="qstudytreewidgetbase.ui" line="100"/>
         <source>UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="104"/>
+        <location filename="qstudytreewidgetbase.ui" line="105"/>
         <source>Study ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="109"/>
+        <location filename="qstudytreewidgetbase.ui" line="110"/>
         <source>Protocol Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="124"/>
+        <location filename="qstudytreewidgetbase.ui" line="125"/>
         <source>Ref Physician Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="129"/>
+        <location filename="qstudytreewidgetbase.ui" line="130"/>
         <source>PP Start Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="134"/>
+        <location filename="qstudytreewidgetbase.ui" line="135"/>
         <source>PP Start Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="139"/>
+        <location filename="qstudytreewidgetbase.ui" line="140"/>
         <source>Req. Proc. ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidgetbase.ui" line="144"/>
+        <location filename="qstudytreewidgetbase.ui" line="145"/>
         <source>Sche. Proc. Step ID</source>
         <translation type="unfinished"></translation>
     </message>

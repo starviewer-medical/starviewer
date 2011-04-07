@@ -339,24 +339,24 @@ Acc:%6
 <context>
     <name>udg::Q3DViewer</name>
     <message>
-        <location filename="q3dviewer.cpp" line="1217"/>
+        <location filename="q3dviewer.cpp" line="1213"/>
         <source>Not supported volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1217"/>
+        <location filename="q3dviewer.cpp" line="1213"/>
         <source>Current volume cannot be opened because its format is not supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="687"/>
-        <location filename="q3dviewer.cpp" line="1209"/>
+        <location filename="q3dviewer.cpp" line="1205"/>
         <source>Volume too large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q3dviewer.cpp" line="687"/>
-        <location filename="q3dviewer.cpp" line="1209"/>
+        <location filename="q3dviewer.cpp" line="1205"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1596,12 +1596,12 @@ Environment variable(logFilePath): %2</source>
 <context>
     <name>udg::ROITool</name>
     <message>
-        <location filename="roitool.cpp" line="321"/>
+        <location filename="roitool.cpp" line="360"/>
         <source>Area: %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="roitool.cpp" line="331"/>
+        <location filename="roitool.cpp" line="370"/>
         <source>
 Mean: %1
 St.Dev.: %2</source>
