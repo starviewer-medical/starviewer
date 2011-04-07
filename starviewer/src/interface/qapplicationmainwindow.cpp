@@ -577,7 +577,7 @@ void QApplicationMainWindow::about()
         "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab), Girona" 
         "<p align='justify'>%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI,"
         " CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is "
-        "fully compliant with the DICOM standard for image comunication and image file formats.").arg(ApplicationNameString).arg(2011);
+        "fully compliant with the DICOM standard for image comunication and image file formats. ").arg(ApplicationNameString).arg(2011);
     // TODO repassar els textos de l'about
 #ifdef STARVIEWER_LITE
     aboutMessage += tr("<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
@@ -589,7 +589,7 @@ void QApplicationMainWindow::about()
                "<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
                " multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and"
                " Maximum Intensity Projection(MIP)."
-               "<p align='justify'>%1 is at the same time a DICOM PACS workstation for medical imaging and an image processing"
+               "<p align='justify'>%1 is at the same time a DICOM workstation for medical imaging and an image processing"
                " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.").arg(ApplicationNameString);
 #endif
 
