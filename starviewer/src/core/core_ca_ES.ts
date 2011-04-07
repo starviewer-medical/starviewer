@@ -72,17 +72,17 @@
     <message>
         <location filename="qviewerworkinprogresswidget.ui" line="95"/>
         <source>Loading...</source>
-        <translation type="unfinished">Carregant...</translation>
+        <translation>Carregant...</translation>
     </message>
     <message>
         <location filename="qviewerworkinprogresswidget.ui" line="102"/>
         <source>(25%)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qviewerworkinprogresswidget.ui" line="124"/>
         <source>ProgressBar</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -453,12 +453,12 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="91"/>
         <source>Selected Custom WW/WL will be deleted.</source>
-        <translation type="unfinished">S&apos;esborrarà el WW/WL seleccionat.</translation>
+        <translation>S&apos;esborrarà el WW/WL seleccionat.</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="92"/>
         <source>Do you want to continue?</source>
-        <translation type="unfinished">Voleu continuar?</translation>
+        <translation>Voleu continuar?</translation>
     </message>
 </context>
 <context>
@@ -466,43 +466,43 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="14"/>
         <source>Edit Custom WW/WL</source>
-        <translation type="unfinished">Editar WW/WL personalitzats</translation>
+        <translation>Editar WW/WL personalitzats</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="36"/>
         <source>Width</source>
-        <translation type="unfinished">Contrast</translation>
+        <translation>Contrast</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="41"/>
         <source>Level</source>
         <translatorcomment>El Widget de WW/WL personalitzat utilitzar lluentor, però no us sona millor brillantor ? Si acordem utilitzar brillantor també canviar-ho en l&apos;altre widget</translatorcomment>
-        <translation type="unfinished">Brillantor</translation>
+        <translation>Brillantor</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="46"/>
         <source>Description</source>
-        <translation type="unfinished">Descripció</translation>
+        <translation>Descripció</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="68"/>
         <source>Add New</source>
-        <translation type="unfinished">Afegeix nou WW/WL</translation>
+        <translation>Afegeix nou WW/WL</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="91"/>
         <source>Remove</source>
-        <translation type="unfinished">Eliminar</translation>
+        <translation>Eliminar</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="132"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel·lar</translation>
+        <translation>Cancel·lar</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="139"/>
         <source>OK</source>
-        <translation type="unfinished">D&apos;acord</translation>
+        <translation>D&apos;acord</translation>
     </message>
 </context>
 <context>
@@ -510,28 +510,28 @@ L&apos;ombrejat estarà deshabilitat i, per tant, no es renderitzarà tal i com 
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="32"/>
         <source>DICOM Data</source>
-        <translation type="unfinished">Dades del DICOM</translation>
+        <translation>Dades del DICOM</translation>
     </message>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="43"/>
         <source>Meaningful Tags</source>
         <translatorcomment>Traduim tag?</translatorcomment>
-        <translation type="unfinished">Tags rellevants</translation>
+        <translation>Tags rellevants</translation>
     </message>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="81"/>
         <source>All Tags</source>
-        <translation type="unfinished">Tots els tags</translation>
+        <translation>Tots els tags</translation>
     </message>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="87"/>
         <source>Search</source>
-        <translation type="unfinished">Cerca</translation>
+        <translation>Cerca</translation>
     </message>
     <message>
         <location filename="qdicomdumpbrowserbase.ui" line="99"/>
         <source>Highlight only</source>
-        <translation type="unfinished">Només ressaltar</translation>
+        <translation>Només ressaltar</translation>
     </message>
 </context>
 <context>
@@ -1466,22 +1466,22 @@ Variable d&apos;entorn(logFilePath): %2</translation>
     <message>
         <location filename="qreleasenotesbase.ui" line="17"/>
         <source>Release Notes</source>
-        <translation type="unfinished">Notes de la versió</translation>
+        <translation>Notes de la versió</translation>
     </message>
     <message>
         <location filename="qreleasenotesbase.ui" line="36"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="qreleasenotesbase.ui" line="53"/>
         <source>Don&apos;t show on future releases</source>
-        <translation type="unfinished">No ho mostris en futures versions</translation>
+        <translation>No ho mostris en futures versions</translation>
     </message>
     <message>
         <location filename="qreleasenotesbase.ui" line="73"/>
         <source>Close</source>
-        <translation type="unfinished">Tanca</translation>
+        <translation>Tancar</translation>
     </message>
 </context>
 <context>
@@ -1548,28 +1548,28 @@ Variable d&apos;entorn(logFilePath): %2</translation>
     <message>
         <location filename="qviewer.cpp" line="636"/>
         <source>Auto</source>
-        <translation type="unfinished">Automàtic</translation>
+        <translation>Automàtic</translation>
     </message>
     <message>
         <location filename="qviewer.cpp" line="813"/>
-        <source>Downloading previous study...</source>
-        <translation type="unfinished">Descarregant estudi previ...</translation>
+        <source>Downloading related study...</source>
+        <translation>Descarregant estudi relacionat...</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="819"/>
+        <source>Error downloading related study</source>
+        <translation>Error al descarregar un estudi relacionat</translation>
     </message>
     <message>
         <location filename="qviewer.cpp" line="816"/>
         <source>Loading data...</source>
         <translatorcomment>No hauria de ser igual que lo d&apos;Assynchronous loading ? En allà simplement s&apos;indica Loading... </translatorcomment>
-        <translation type="unfinished">Carregant les dades...</translation>
-    </message>
-    <message>
-        <location filename="qviewer.cpp" line="819"/>
-        <source>Error downloading previous study</source>
-        <translation type="unfinished">S&apos;ha produït un error descarregant l&apos;estudi previ</translation>
+        <translation>Carregant les dades...</translation>
     </message>
     <message>
         <location filename="qviewer.cpp" line="822"/>
         <source>Error loading data</source>
-        <translation type="unfinished">S&apos;ha produït un error carregant les dades</translation>
+        <translation>S&apos;ha produït un error carregant les dades</translation>
     </message>
 </context>
 <context>
@@ -1591,7 +1591,7 @@ Variable d&apos;entorn(logFilePath): %2</translation>
     <message>
         <location filename="qviewerworkinprogresswidget.cpp" line="46"/>
         <source> (%1%)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1606,7 +1606,7 @@ Variable d&apos;entorn(logFilePath): %2</translation>
         <location filename="qwindowlevelcombobox.cpp" line="145"/>
         <location filename="qwindowlevelcombobox.cpp" line="154"/>
         <source>Edit Custom WW/WL</source>
-        <translation type="unfinished">Edita els WW/WL a mida</translation>
+        <translation>Edita els WW/WL a mida</translation>
     </message>
 </context>
 <context>
@@ -1614,14 +1614,14 @@ Variable d&apos;entorn(logFilePath): %2</translation>
     <message>
         <location filename="roitool.cpp" line="321"/>
         <source>Area: %1 %2</source>
-        <translation type="unfinished">Àrea: %1 %2</translation>
+        <translation>Àrea: %1 %2</translation>
     </message>
     <message>
         <location filename="roitool.cpp" line="331"/>
         <source>
 Mean: %1
 St.Dev.: %2</source>
-        <translation type="unfinished">
+        <translation>
 Mitjana: %1 
 Desv.Std.:%2</translation>
     </message>
@@ -1791,11 +1791,13 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="336"/>
         <source>Image Plane Projection</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="338"/>
         <source>Enable/Disable image plane projection tool</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1811,32 +1813,36 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="358"/>
         <source>Translation Difference</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="361"/>
         <source>Enable/Disable the translation difference tool</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="366"/>
         <source>Line Path</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="368"/>
         <source>Enable/Disable line path tool</source>
+        <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="372"/>
         <source>Elliptical ROI</source>
-        <translation type="unfinished">ROI El·líptica</translation>
+        <translation>ROI El·líptica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="375"/>
         <source>Enable/Disable Elliptical ROI tool</source>
-        <translation type="unfinished">Activa/Desactiva l&apos;eina de ROI el·líptica</translation>
+        <translation>Activa/Desactiva l&apos;eina de ROI el·líptica</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="404"/>
@@ -1880,13 +1886,15 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="444"/>
-        <source>Saggital</source>
-        <oldsource>Sagital</oldsource>
-        <translation></translation>
+        <source>Sagittal</source>
+        <oldsource>Saggital</oldsource>
+        <translation>Sagital
+</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="447"/>
-        <source>Switch to Saggital View</source>
+        <source>Switch to Sagittal View</source>
+        <oldsource>Switch to Saggital View</oldsource>
         <translation>Canviar a vista Sagital</translation>
     </message>
     <message>
@@ -2054,48 +2062,48 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="96"/>
         <source>Out of memory</source>
-        <translation type="unfinished">No hi ha prou memòria</translation>
+        <translation>No hi ha prou memòria</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="100"/>
         <source>Missing Files</source>
-        <translation type="unfinished">Falten fitxers</translation>
+        <translation>Falten fitxers</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="104"/>
         <source>Cannot Read File(s)</source>
-        <translation type="unfinished">No s&apos;han pogut llegir els fitxers</translation>
+        <translation>No s&apos;ha pogut llegir els fitxers</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="108"/>
         <source>Unknown Error</source>
         <oldsource>Unkwown Error</oldsource>
-        <translation type="unfinished">Error desconegut</translation>
+        <translation>Error desconegut</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="120"/>
         <source>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</source>
-        <translation type="unfinished">No hi ha prou memòria per carregar les sèries escollides. Tanca totes les finestres obertes de l&apos;%1, restaura l&apos;aplicació i torna-ho a intentar. Si el problema persisteix, es pot solucionar afegint més memòria RAM o canviant el sistema a 64 bits.</translation>
+        <translation>No hi ha prou memòria per carregar les sèries escollides. Tanca totes les finestres obertes de l&apos;%1, restaura l&apos;aplicació i torna-ho a intentar. Si el problema persisteix, es pot solucionar afegint més memòria RAM o canviant el sistema a 64 bits.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="124"/>
         <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
-        <translation type="unfinished">%1 no pot trobar els fitxers d&apos;aquestes sèries. Potser s&apos;han eliminat o són incorrectes.</translation>
+        <translation>%1 no pot trobar els fitxers d&apos;aquestes sèries. Potser s&apos;han eliminat o són incorrectes.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="126"/>
         <source>%1 could not read the requested file(s) for this Series.</source>
-        <translation type="unfinished">%1 no ha pogut llegir els fitxers de la sèrie sol·licitada.</translation>
+        <translation>%1 no ha pogut llegir els fitxers de la sèrie sol·licitada.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="128"/>
         <source>The loading of the data have been aborted.</source>
-        <translation type="unfinished">S&apos;ha avortat la càrrega de les dades.</translation>
+        <translation>S&apos;ha avortat la càrrega de les dades.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="130"/>
         <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
-        <translation type="unfinished">%1 ha trobat un error inesperat al llegir aquestes sèries. No s&apos;ha carregat les dades de les sèries.</translation>
+        <translation>%1 ha trobat un error inesperat al llegir aquestes sèries. No s&apos;ha carregat les dades de les sèries.</translation>
     </message>
 </context>
 <context>
@@ -2103,7 +2111,7 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="voxelinformationtool.cpp" line="140"/>
         <source>N/A</source>
-        <translation type="unfinished">N/D</translation>
+        <translation>N/D</translation>
     </message>
 </context>
 <context>

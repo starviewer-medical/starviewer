@@ -1537,17 +1537,17 @@ Environment variable(logFilePath): %2</source>
     </message>
     <message>
         <location filename="qviewer.cpp" line="813"/>
-        <source>Downloading previous study...</source>
+        <source>Downloading related study...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="819"/>
+        <source>Error downloading related study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qviewer.cpp" line="816"/>
         <source>Loading data...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qviewer.cpp" line="819"/>
-        <source>Error downloading previous study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1862,12 +1862,14 @@ It&apos;s recommended you save them in an empty folder.</source>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="444"/>
-        <source>Saggital</source>
+        <source>Sagittal</source>
+        <oldsource>Saggital</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="447"/>
-        <source>Switch to Saggital View</source>
+        <source>Switch to Sagittal View</source>
+        <oldsource>Switch to Saggital View</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
