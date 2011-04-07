@@ -33,7 +33,8 @@
     <name>QObject</name>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="75"/>
-        <source>Unknow option </source>
+        <source>Unknown option </source>
+        <oldsource>Unknow option </oldsource>
         <translation>Opción desconocida </translation>
     </message>
     <message>
@@ -91,8 +92,9 @@
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="262"/>
-        <source>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</source>
-        <translation>Lo sentimos, ha habido algun error mientras se cargaban los datos de los pacientes:&lt;br&gt; %1</translation>
+        <source>Sorry, an error occurred while loading the data of patients:&lt;br&gt; %1</source>
+        <oldsource>Sorry, an error ocurred while loading the data of patients:&lt;br&gt; %1</oldsource>
+        <translation>Lo sentimos, ha habido algún error mientras se cargaban los datos de los pacientes:&lt;br&gt; %1</translation>
     </message>
     <message>
         <location filename="extensionhandler.cpp" line="206"/>
@@ -236,8 +238,9 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="216"/>
-        <source>Open DICOMDIR from CD,DVD,Pendrive or HardDisk</source>
-        <translation>Abrir DICOMDIR a partir de CD,DVD,Pendrive o Disco Duro</translation>
+        <source>Open DICOMDIR from CD, DVD, Pendrive or hard disk</source>
+        <oldsource>Open DICOMDIR from CD,DVD,Pendrive or HardDisk</oldsource>
+        <translation>Abrir DICOMDIR a partir de CD, DVD, Pendrive o Disco duro</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="245"/>
@@ -328,19 +331,19 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="447"/>
         <source>Switch to %1 Language</source>
-        <translation>Cambiar al lenguage %1</translation>
+        <translation type="unfinished">Cambiar al lenguaje %1</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="576"/>
-        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats. </source>
-        <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats especified by the MetaIO estandard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats.</oldsource>
-        <translation type="unfinished">&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 es un visor de imágenes DICOM producidas por equipos médicos (MRI, CT, PET, PET-CT, CR, MG,...), tambien puede leer otros formatos establecidos por el estándar MetaIO (archivos *.mhd). %1 cumple el estándar DICOM para  la comunicación de imágenes y formatos de archiu. </translation>
+        <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats specified by the MetaIO standard (*.mhd files). It is fully compliant with the DICOM standard for image communication and image file formats. </source>
+        <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) It can also read many other file formats specified by the MetaIO standard (*.mhd files). It is fully compliant with the DICOM standard for image comunication and image file formats. </oldsource>
+        <translation type="unfinished">&lt;h2&gt;%1&lt;/h2&gt;&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab), Girona&lt;p align=&apos;justify&apos;&gt;%1 es un visor de imágenes DICOM producidas por equipos médicos (MRI, CT, PET, PET-CT, CR, MG,...), también puede leer otros formatos establecidos por el estándar MetaIO (archivos *.mhd). %1 cumple el estándar DICOM para  la comunicación de imágenes y formatos de archivo. </translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="586"/>
         <source>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</source>
         <oldsource>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</oldsource>
-        <translation type="unfinished">%1 puede recibir imágenes enviadas siguiendo el protocolo de comunicación DICOM de cualquier PACS o equipos de imágen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, y Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 ha sido diseñado específicamente para la exploración y visualización de imágenes multimodalidad y multidimensionales: visor 2D, visor MPR 2D (reconstrucción Multiplanar), visor MPR 3D y visor híbrido MPR y MIP.&lt;p align=&apos;justify&apos;&gt;%1 es una estación de trabajo DICOM para imágen médica y a la vez un software de procesamiento de imágenes para investigación médica (radiología y medicina nuclear).</translation>
+        <translation type="unfinished">%1 puede recibir imágenes enviadas siguiendo el protocolo de comunicación DICOM de cualquier PACS o equipos de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, y Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 ha sido diseñado específicamente para la exploración y visualización de imágenes multimodalidad y multidimensionales: visor 2D, visor MPR 2D (reconstrucción Multiplanar), visor MPR 3D y visor híbrido MPR y MIP.&lt;p align=&apos;justify&apos;&gt;%1 es una estación de trabajo DICOM para imagen médica y a la vez un software de procesamiento de imágenes para investigación médica (radiología y medicina nuclear).</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="634"/>

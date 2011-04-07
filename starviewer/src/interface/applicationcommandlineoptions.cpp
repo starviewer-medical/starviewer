@@ -72,7 +72,7 @@ bool ApplicationCommandLineOptions::parse()
                     lastOption = m_commandLineOptions.value(parameter);
                     nextParameterHasToBeAnArgumentOption = lastOption.argumentIsRequired;
                 }
-                else m_parserErrorMessage +=  QObject::tr("Unknow option ") + optionSelectorCharacter + parameter + "\n";
+                else m_parserErrorMessage +=  QObject::tr("Unknown option ") + optionSelectorCharacter + parameter + "\n";
             }
             else
             {
