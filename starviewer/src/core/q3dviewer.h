@@ -66,6 +66,9 @@ public:
     void setClippingPlanes( vtkPlanes *clippingPlanes );
     /// Obté els plans de tall que s'han definit sobre el volum
     vtkPlanes *getClippingPlanes() const;
+
+    /// Retorna el vtkVolume.
+    vtkVolume* getVtkVolume() const;
     
 public slots:
     virtual void setInput( Volume* volume );
