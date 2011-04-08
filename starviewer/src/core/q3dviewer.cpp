@@ -329,9 +329,9 @@ vtkPlanes *Q3DViewer::getClippingPlanes() const
     return m_clippingPlanes;
 }
 
-vtkVolume* Q3DViewer::getVtkVolume() const
+void Q3DViewer::getVolumeBounds(double bounds[6]) const
 {
-    return m_vtkVolume;
+    m_vtkVolume->GetBounds(bounds);
 }
 
 void Q3DViewer::setRenderFunction(RenderFunction function)

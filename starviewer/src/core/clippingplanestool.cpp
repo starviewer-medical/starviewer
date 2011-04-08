@@ -74,7 +74,6 @@ void ClippingPlanesTool::updateInput()
 {
     m_boundingBoxClipperWidget->Off();
     m_boundingBoxClipperWidget->SetPlaceFactor( 1.0 );
-    m_boundingBoxClipperWidget->SetProp3D(m_3DViewer->getVtkVolume());
     
     // Calculem la bounding box del widget
     vtkPlanes *planes = m_3DViewer->getClippingPlanes();
@@ -118,7 +117,9 @@ void ClippingPlanesTool::updateInput()
     }
     else
     {
-        m_boundingBoxClipperWidget->PlaceWidget();
+        double bounds[6];
+        m_3DViewer->getVolumeBounds(bounds);
+        m_boundingBoxClipperWidget->PlaceWidget(bounds);
         updateViewerClippingPlanes();
     }
 
