@@ -3,7 +3,7 @@
  Funciona només sota Windows.
  Per fer-ho fa servir el Word de l'Office. Ha de ser versió Office >= 2007.
 
- TODO: Falta afegir el document de shortcuts i tenirn en compte la versió Lite.
+ TODO: Falta tenirn en compte la versió Lite.
 */
 
 var shell = WScript.CreateObject("WScript.Shell");
