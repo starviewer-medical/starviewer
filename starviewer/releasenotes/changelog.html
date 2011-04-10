@@ -42,74 +42,92 @@
     <h1>Starviewer Changelog</h1>
     <div class="majorRelease">
         <div class="version">
-            <span class="versionNumber">Starviewer 0.10</span><span class="versionDate">(Publicat el .. de .... de 2010)</span>
+            <span class="versionNumber">Starviewer 0.10.0</span><span class="versionDate">(Publicat el 10 d'abril del 2011)</span>
         </div>
         <div class="new">
             <ul>
-                <li>Es permet cancel·lar des de la llista de peticions la descàrrega o enviament de fitxers DICOM a un PACS, en qualsevol moment de l'operació. <span class="ticket"></span></li>
-                <li>Es permet fer diverses operacions d'enviament de fitxers DICOM a PACS de forma simultània, fins ara només es podia fer un enviament de fitxers DICOM a PACS a la vegada. <span class="ticket"></span></li>
-                <li>Es permet l'enviament de fitxers DICOM a un PACS de forma simultània mentre es descarreguen fitxers DICOM de qualsevol PACS, fins ara les dos operacions no es podien fer a la vegada. <span class="ticket"></span></li>
-                <li>Es guarda per quin camp i en quin ordre s'ha fet l'ordenació del estudis a la pantalla de cerca per ordenar de la mateixa manera en les properes cerques. <span class="ticket">1021, 1272</span></li>
+                <li>S'afegeix l'eina ROI elíptica (càlcul de l'àrea d'una regió elíptica). <span class="ticket">930</span></li>
+                <li>S'afegeix l'opció de carregar diversos estudis de forma simultània de manera que s'obrin més ràpidament.</li>
+                <li>S'afegeix l'opció d'anonimitzar els estudis al crear un DICOMDIR. Es permet indicar el nom del pacient dels estudis anonimitzats. <span class="ticket">188, 1418</span></li>
+                <li>S'afegeix suport a la visualització d'imatges DICOM en color.</li>
+                <li>S'afegeix l'opció de ser informat quan es publica una nova versió d'Starviewer i quines novetats incorpora.</li>
+                <li>S'afegeix l'opció per veure les novetats que incorpora Starviewer després d'instal·lar una nova versió. Si es vol tornar a veure es pot anar al menú Ajuda->Notes de la versió.</li>
+                <li>S'afegeixen nous hanging protocols, entre els que destaquem els de MG, CR, DX, RF, estudis amb bilateralitat... <span class="ticket">1384, 1350, 1382</span></li>
                 <li>S'afegeix el format TIFF com a format d'exportació de captures de pantalla. <span class="ticket">1306</span></li>
+                <li>Es permet cancel·lar la descàrrega o enviament de fitxers DICOM a un PACS. Aquesta acció es pot realitzar des de la llista de peticions en qualsevol moment.</li>
+                <li>S'afegeix un editor per les finestres predefinides (WW/WL) de manera que se'n puguin afegir i quedin guardades. <span class="ticket">974</span></li>
+                <li>S'afegeixen opcions per gestionar les finestres d'Starviewer al menú Finestra: maximitzar a múltiples pantalles (amb tecles Ctrl+Shift+M) i moure la finestra actual entre les diferents pantalles (amb tecles Ctrl+Shift+&rarr). <span class="ticket">1364</span></li>
+                <li>S'afegeix l'opció de poder fer cerques d'estudis locals filtrant per modalitat. <span class="ticket">1354</span></li>
+                <li>S'afegeix l'opció als hanging protocols de definir el número d'imatge a mostrar a cada visor de forma absoluta respecte el total d'imatges de l'estudi. <span class="ticket">1425</span></li>
+                <li>S'afegeix l'opció de permetre definir el WW/WL que aplicarà un hanging protocol a cada visor. <span class="ticket">1426</span></li>
                 <li>S'afegeix la guia ràpida i l'esquema de shortcuts al menú Ajuda. <span class="ticket">1372</span></li>
-                <li>S'afegeixen nous hanging protocols per mamografia, CR, DX, RF... <span class="ticket">1384, 1350, 1382</span></li>
-                <li>S'implementa el filtratge per modalitat a les cerques d'estudis locals. <span class="ticket">1354</span></li>
-                <li>S'afegeix opció per poder anonimitzar la informació sensible del pacient al crear DICOMDIR. Es permet indicar quin nom de pacient han de tenir els estudis una vegada anonimitzats.<span class="ticket">188, 1418</span></li>
-                <li>S'informa de les novetats que incorpora una versió d'Starviewer la primera vegada que s'executa després d'haver-se instal·lat.</li>
-                <li>Es dóna l'opció de ser informat quan es publica una nova versió d'Starviewer. <span class="ticket"></span></li>
-                <li>S'afegeix l'eina de càlcul de l'àrea d'una regió elíptica. <span class="ticket">930</span></li>
-                <li>Es canvia l'eina d'estudis previs a estudis relacionats perquè es puguin consultar tots els estudis del pacient. <span class="ticket">1296, 1311</span></li>
-                <li>S'afegeix la possibilitat de maximitzar les finestres d'Starviewer a múltiples pantalles a través del menú Finestra o amb la combinació de tecles Ctrl+Shift+M. <span class="ticket">1364</span></li>
-                <li>S'afegeix la possibilitat de canviar de pantalla les finestres d'Starviewer a través del menú Finestra o amb la combinació de tecles Ctrl+Shift+&rarr;. <span class="ticket">1364</span></li>
-                <li>Al imprimir imatges en plaques en impressores que suportin anotacions, s'imprimirà informació relativa al pacient i l'estudi.<span class="ticket">1415</span></li>
-                <li>S'implementa en el visor 2D que per cada imatge s'apliqui el WindowWidth/WindowLevel definit a la pròpia imatge quan s'està treballant amb una finestra predefinida.<span class="ticket">478</span></li>
-                <li>Es dóna la possibiltat a l'usuari de poder definir noves finestres (WindowWidth/WindowLevel), editar-les i eliminar-les dels del visor 2D o MPR.<span class="ticket">974</span></li>
-                <li>El desplegable de finestres predefinides (WW/WL) desplega totes les finestres sense necessitat de recòrrer a l'scroll. Es poden mostrar fins a 50 ítems, siguent aquest valor configurable.<span class="ticket">s:60</span></li>
-                <li>Els hanging protocols incorporen noves eines per tractar els diferents volums (sèries dividides) del pacient. <span class="ticket">1189</span></li>
-                <li>Els hanging protocols permeten definir el número d'imatge dins l'estudi a mostrar a cada visor.<span class="ticket">1425</span></li>
-                <li>Els hanging protocols permeten definir un WW/WL concret a cada visor.<span class="ticket">1426</span></li>
+                <li>S'afegeix suport a descompressió d'imatges comprimides en el format RLE.</li>
             </ul>
         </div>
         <div class="improved">
             <ul>
-                <li>Es millora el temps d'arrancada d'Starviewer. (Es treu la comprovació d'integritat de la base de dades). <span class="ticket">1369</span></li>
-                <li>Es millora la gestió de visors a l'aplicar un hanging protocol. <span class="ticket">1263</span></li>
-                <li>Millora en la gestió de recursos quan es creen visors en l'extensió 2D. <span class="ticket">1357, 1368</span></li>
-                <li>L'eina de VoxelInformation només mostra el valor de vòxel que és el que interessa i no el de les coordenades. <span class="ticket">1375</span></li>
-                <li>El calendari que apareix al poder indicar entre quines dates s'ha de cercar un estudi es fa que comenci la setmana en dilluns. <span class="ticket">1393</span></li>
-                <li>Es fusionen les columnes data i hora de la pantalla de cerca d'estudis i del llistat d'estudis relacionats per poder ordenar els estudis per data i hora. <span class="ticket">1355</span></li>
-                <li>S'afegeix una animació a la finestreta que informa de les peticions rebudes de SAP per millorar l'experiència d'usuari. <span class="ticket">1377</span></li>
-                <li>S'habilita l'ordenació per columna del llistat d'estudis de la finestra d'estudis relacionats. <span class="ticket">1297</span></li>
+                <li>S'augmenta la mida de la lletra en pantalles de molta resolució (3Mpx, 5Mpx) per facilitar la lectura de les eines de mesura, el menú de botó dret i la càrrega d'estudis.</li>
+                <li>Es fan millores considerables a l'MPR i es resolen diversos bugs.</li>
+                <li>Es canvia l'eina "d'estudis previs" a "estudis relacionats" perquè es puguin consultar tots els estudis del pacient i no només els més vells. <span class="ticket">1296, 1311</span></li>
+                <li>Es millora la velocitat amb la que es carreguen els estudis.</li>
+                <li>S'afegeix la possibilitat d'enviar diversos fitxers DICOM a un PACS de forma simultània i mentre se'n descarreguen d'altres.</li>
+                <li>Es millora l'eina d'esborrar anotacions permetent esborrar una ROI clicant sobre qualsevol part d'aquesta. <span class="ticket">1283</span></li>
+                <li>Es millora el tractament del WW/WL aplicant-lo per cada imatge de forma individual, si aquesta el té definit. <span class="ticket">478,1312</span></li>
+                <li>S'habilita l'ordenació per columna del llistat de la finestra d'estudis relacionats. <span class="ticket">1297</span></li>
+                <li>Es millora el temps d'arrancada d'Starviewer en el casos que la base de dades local fos molt gran. <span class="ticket">1369</span></li>
+                <li>Es permet ordenar per data i hora, alhora, en les pantalles de cerca d'estudis del PACS i d'estudis relacionats, fusionant aquestes dues columnes. <span class="ticket">1355</span></li>
+                <li>S'afegeix l'opció d'amagar la finestra que notifica quan s'ha rebut una petició del RIS fent-li un clic. <span class="ticket">1459</span></li>
+                <li>Es millora l'opció d'imprimir plaques afegint la possibilitat d'afegir informació relativa al pacient i l'estudi al utilitzar impressores que suportin anotacions. <span class="ticket">1415</span></li>
+                <li>Es milloren els hanging protocols, simplificant el menú per escollir-los i poder escollir-ne un de forma més ràpida. <span class="ticket">1383, 1351</span></li>
+                <li>Es fa que es recordi l'ordenació dels estudis en la pantalla de cerca d'estudis al PACS. <span class="ticket">1021, 1272</span></li>
+                <li>Es millora l'eina d'Informació de vòxel fent que no mostri informació supèrflua. <span class="ticket">1375</span></li>
+                <li>Es millora el calendari de cercar estudis al PACS entre dates. <span class="ticket">1393</span></li>
+                <li>Es reorganitzen les columnes del menú d'estudis relacionats per fer-lo més usable. <span class="ticket">1491</span></li>
+                <li>Es millora el menú de finestres predefinides (WW/WL) fent que sempre sigui visible tots els WW/WL disponibles per facilitar-ne la tria. <span class="ticket">s:60</span></li>
                 <li>Es mostra la pantalla inicial el més aviat possible per informar que Starviewer està arrencant.</li>
-                <li>Es milloren els hanging protocols, per tal que no es puguin confondre.<span class="ticket">1383, 1351</span></li>
-                <li>Millora del rendiment al canviar de visor actiu, on s'actualitzava cada vegada el WW/WL i no calia.<span class="ticket"></span></li>
-                <li>S'actualitza i es millora el manual de l'usuari.<span class="ticket"></span></li>
-                <li>El PopUp que notifica quan s'ha rebut una petició del RIS per descarregar un estudi es pot fer desapareixer fent-li un click.<span class="ticket">1459</span></li>
-                <li>Si s'intenta engegar una nova instància d'Starviewer quan n'hi ha una d'altre de penjada, es mostra un missatge al usuari indicant que abans ha tancar el procés d'Starviewer penjat.</li>
-                <li>Es reorganitzen les columnes del menú d'estudis relacionats per fer-lo més usable.<span class="ticket">1491</span></li>
+                <li>Es millora la pantalla de descàrrega d'estudis previs per tal de que sigui més estilitzada i similar a la de càrrega simultània d'estudis.</li>
+                <li>Es millora la informació dels reports de petades per tal de facilitar la resolució de problemes.</li>
+                <li>Es milloren, de forma general, els missatges d'error que es donen a l'usuari per tal de fer-los més informatius.</li>
+                <li>Es millora la gestió de visors en aplicar un hanging protocol. <span class="ticket">1263</span></li>
+                <li>Es realitzen millores en el mòdul de comunicació amb el PACS.</li>
+                <li>S'actualitzen i es milloren els manuals, guies ràpides i document de shortcuts.</li>
+                <li>Es millora el tractament de sèries amb imatges de mides diferents.</li>
+                <li>Es millora el rendiment de l'aplicació al canviar de visor actiu.</li>
+                <li>Es millora la informació que es dona a l'usuari si intenta obrir un altre Starviewer i aquest no respon.</li>
+                <li>Es milloren les traduccions.</li>
+                <li>Es millora la generació de DICOMDIR's.</li>
+                <li>Es milloren els menús.</li>
+                <li>Es realitzen millores en la gestió dels recursos de memòria i targeta gràfica.</li>
             </ul>
         </div>
         <div class="fixed">
             <ul>
-                <li>S'arregla l'ordre de les tabulacions de la cerca avançada al PACS que era incorrecte. <span class="ticket"></span></li>
-                <li>Es soluciona el problema que no permetia tenir estudis de diferents pacients amb el mateix DICOM Patient ID a la base de dades d'estudis. <span class="ticket">1325</span></li>
-                <li>S'arregla un problema que podia provocar que els pacients es barregessin si es treballava amb més d'una pantalla d'Starviewer alhora. <span class="ticket">1244</span></li>
+                <li>Es resol el problema de que sota determinades circumstàncies les etiquetes podien ser errònies. <span class="ticket">1241,1248</span></li>
+                <li>Es resol un problema que podia impedir crear un DICOMDIR. <span class="ticket">1529</span></li>
+                <li>Es millora la fusió de pacients. <span class="ticket">1381</span></li>
+                <li>Es resolen diversos errors que es donaven al carregar imatges amb un z-spacing de 0. <span class="ticket">1444,1429</span></li>
+                <li>Es soluciona un problema en que el menú de pacient es podia situar parcialment fora de la pantalla en un entorn multipantalla.</li>
+                <li>Es solucionen diversos bugs que es podien donar al inserir estudis a la base de dades local. <span class="ticket">1254</span></li>
+                <li>Es resol un problema de suport a variables parsejables de configuració en sistemes Windows Vista/7. <span class="ticket">1270</span></li>
+                <li>S'elimina la possibilitat de que el 3D fes tancar l'aplicació si s'activava el shading en volums d'una sola imatge. <span class="ticket">1251</span></li>
+                <li>Es soluciona un bug que podia fer que certs estudis RF no es visualitzessin amb l'escala de colors correcta. <span class="ticket">1257</span></li>
+                <li>Es soluciona l'ordre de les tabulacions de les opcions de cerca avançada del PACS.</li>
+                <li>Es soluciona el fet de que no es permetia tenir estudis de diferents pacients si aquests tenien el mateix DICOM Patient ID a la base de dades local. <span class="ticket">1325</span></li>
+                <li>Es solucionen diferents problemes a l'hora de treballar amb més d'una finestra alhora. <span class="ticket">1244</span></li>
                 <li>Es corregeix un problema que provocava una visualització incorrecta de certs estudis de modalitat RF. <span class="ticket">1257</span></li>
-                <li>No es generaven els thumbnails dels estudis que contenien imatges en color. <span class="ticket">1277</span></li>
-                <li>S'ha solucionat el problema que provocava el tancament inesperat d'Starviewer al generar els thumbnails d'estudis multiframe. <span class="ticket">1258</span></li>
-                <li>S'ha solucionat el problema que provocava que no s'imprimissin correctament en plaques les imatges que no eren quadrades.<span class="ticket">1410</span></li>
-                <li>S'ha arreglat un problema que provocava una visualització incorrecta de les biòpsies d'abstracció al buit (BAV).<span class="ticket">1312</span></li>
-                <li>S'ha solucionat un problema per evitar que l'element "Custom" aparegui duplicat a la llista de WW/WL predefinits del visor 2D.<span class="ticket">1403</span></li>
-                <li>S'arregla el problema que hi havia amb Windows Vista i Windows 7, on al canviar de volum, el visor quedava de color negre al no renderitzar correctament.<span class="ticket">1340</span></li>
-                <li>Es solucionen casos de CR i RF on el hanging protocol que s'aplicava era incorrecte.<span class="ticket">1396,1397</span></li>
-                <li>Es soluciona problema que podia provocar que Starviewer deixés de respondre al cercar estudis relacionats d'un pacient sense nom o ID de pacient<span class="ticket">1542</span></li> 
-                <li>Es soluciona problema que provocava que Starviewer en certes condicions no deixés crear DICOMDIR indicant l'error de que "Starviewer no ha pogut crear el DICOMDIR perquè el contingut del directori a copiar conté elements amb nom DICOMDIR o DICOM" tot i tenir l'opció de copiar el contingut d'una carpeta al DICOMDIR desactivada.<span class="ticket">1529</span></li>
+                <li>Es soluciona el problema que provocava el tancament inesperat d'Starviewer al generar les vistes prèvies d'alguns estudis multiframe. <span class="ticket">1258</span></li>
+                <li>Es soluciona el problema que provocava que no s'imprimissin correctament les imatges que no eren quadrades. <span class="ticket">1410</span></li>
+                <li>Es corregeix un problema que provocava una visualització incorrecta de les biòpsies d'abstracció al buit (BAV). <span class="ticket">1312</span></li>
+                <li>Es soluciona un problema per evitar que l'element "Custom" aparegui duplicat a la llista de WW/WL predefinits del visor 2D. <span class="ticket">1403</span></li>
+                <li>Es corregeix el problema que hi havia amb Windows Vista i Windows 7 on, al canviar de volum, el visor quedava de color negre al no renderitzar correctament. <span class="ticket">1340</span></li>
+                <li>Es solucionen casos de CR i RF on el hanging protocol que s'aplicava era incorrecte. <span class="ticket">1396,1397</span></li>
+                <li>Es soluciona un problema que podia provocar que Starviewer deixés de respondre al cercar estudis relacionats d'un pacient sense nom o sense ID de pacient. <span class="ticket">1542</span></li>
             </ul>
         </div>
         <div class="removed">
             <ul>
-                <li>S'elimina l'opció de visualitzar Starviewer a pantalla completa. <span class="ticket">1370</span></li>
-                <li>S'eliminen les distribucions per defecte del visor 2D deixant només els Hanging Protocols ja que creava confusió i no se'n feia ús. <span class="ticket">1342</span></li>
+                <li>S'elimina l'opció de visualitzar Starviewer a pantalla completa ja que queda substituït per les noves opcions del menú Finestra. <span class="ticket">1370</span></li>
+                <li>S'eliminen els "rulers" dels visors 2D per tal de que no molestin a l'hora de visualitzar les imatges.</li>
             </ul>
         </div>
     </div>
