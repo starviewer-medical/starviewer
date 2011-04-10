@@ -1,26 +1,12 @@
 # Aquí cal afegir les extensions que volem que s'incloguin a l'executable
 #
 
-PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
-                        curvedmpr \
-                        mpr2d \
-                        edemasegmentation \
-                        landmarkregistration \
-                        vsireconstruction \
-                        angiosubstraction \
-                        perfusionmapreconstruction \
-                        glialestimation \
-                        rectumsegmentation \
-                        volume3dviewtesting \
-                        experimental3d \
-                        gputesting \
-                        dicomprint \
-						dti
+PLAYGROUND_EXTENSIONS = volume3dviewtesting \
+                        dicomprint
 
 #CONTRIB_EXTENSIONS =
 
 MAIN_EXTENSIONS = mpr \
-                  mpr3d \
                   q2dviewer
 
 #
