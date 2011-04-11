@@ -15,9 +15,9 @@
 #include <QTemporaryFile>
 #include "mathtools.h"
 #else // CUDA_AVAILABLE
-#include "../gputesting/camera.h"
+#include "camera.h"
 #include "cudaviewpointinformationchannel.h"
-#include "../gputesting/matrix4.h"
+#include "matrix4.h"
 #endif
 
 
@@ -2357,6 +2357,25 @@ void ViewpointInformationChannel::computeVomi3Cuda()
     }
     DEBUG_LOG(QString("sum VoMI3 = %1").arg(sumVomi3));
 #endif
+
+    // Posar els zeros a vomi màxima
+//    for (int j = 0; j < nVoxels; j++)
+//    {
+//        float vomi3 = m_vomi3.at(j);
+//        if (vomi3 == 0.0f) m_vomi3[j] = m_maximumVomi3;
+//    }
+
+//    m_minimumVomi3 = std::numeric_limits<float>::infinity();
+//    m_maximumVomi3 = -std::numeric_limits<float>::infinity();
+
+//    for (int j = 0; j < nVoxels; j++)
+//    {
+//        float vomi3 = m_vomi3.at(j);
+//        Q_ASSERT(!MathTools::isNaN(vomi3));
+//        //Q_ASSERT(vomi3 >= 0.0f);  // la VoMI3 sí que pot ser negativa
+//        if (vomi3 < m_minimumVomi3) m_minimumVomi3 = vomi3;
+//        if (vomi3 > m_maximumVomi3) m_maximumVomi3 = vomi3;
+//    }
 }
 
 

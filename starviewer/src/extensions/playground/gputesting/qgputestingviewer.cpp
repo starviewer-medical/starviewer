@@ -25,7 +25,7 @@
 
 #include <vtkImageData.h>
 
-#include "camera.h"
+#include "../experimental3d/camera.h"
 #include "gpuprogram.h"
 #include "volume.h"
 

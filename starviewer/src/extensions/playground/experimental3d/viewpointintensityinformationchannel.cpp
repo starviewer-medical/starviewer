@@ -13,9 +13,9 @@
 #include "informationtheory.h"
 #include "logging.h"
 
-#include "../gputesting/camera.h"
+#include "camera.h"
 #include "cudaviewpointintensityinformationchannel.h"
-#include "../gputesting/matrix4.h"
+#include "matrix4.h"
 
 
 namespace udg {
