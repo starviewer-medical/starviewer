@@ -15,7 +15,6 @@ SUBDIRS += diffusionperfusionsegmentation \
            rectumsegmentation \
            volume3dviewtesting \
            experimental3d \
-           gputesting \
            dicomprint \
 	     dti
 include(../../extensions.inc)
