@@ -409,7 +409,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="601"/>
         <source>About %1</source>
-        <translation>Sobre %1</translation>
+        <translation>Quant a %1</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="91"/>
