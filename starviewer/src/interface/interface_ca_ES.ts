@@ -342,22 +342,22 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="586"/>
-        <source>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</source>
-        <oldsource>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM PACS workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</oldsource>
-        <translation type="unfinished">%1 pot rebre imatges transferides seguint el protocol de comunicació DICOM de qualsevol PACS o equips d&apos;imatge mèdica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, i Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 ha estat dissenyat específicament per l&apos;exploració i visualització d&apos;imatges multimodalitat i multidimensionals: visor 2D, visor MPR 2D (reconstrucció Multiplanar), visor MPR 3D i visor híbrid MPR i MIP.&lt;p align=&apos;justify&apos;&gt;%1 és una estació de treball DICOM per imatge mèdica i alhora un software de processament d&apos;imatges per realitzar recerca mèdica (radiologia i medicina nuclear).</translation>
+        <source>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 enables navigation and visualization of multimodality and multidimensional images through a complete 2D Viewer which integrates advanced reconstruction techniques such as Thick Slab (including Maximum Intensity Projection (MIP), Minimum Intensity Projection (MinIP) and average projection), fast orthogonal reconstruction and 3D navigation tools such as 3D-Cursor. It also incorporates Multi-Planar Reconstruction (MPR) and 3D Viewer for volume rendering.&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</source>
+        <oldsource>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and Maximum Intensity Projection(MIP).&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</oldsource>
+        <translation>%1 pot rebre imatges transferides seguint el protocol de comunicació DICOM de qualsevol PACS o equips d&apos;imatge mèdica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, i Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 permet l&apos;exploració i visualització d&apos;imatges multimodalitat i multidimensionals a través d&apos;un complet visor 2D que integra tècniques avançades de recontrucció tals com Thick Slab (incloent Projecció de Màxima Intensitat (MIP), Projecció de Mínima Intensitat (MinIP) i projecció promig), reconstrucció ortogonal ràpida i eines de navegació tridimensionals com el Cursor 3D. També incorpora Reconstrucció Multi-Planar (MPR) i un visor 3D per a realitzar &lt;em&gt;volume rendering&lt;/em&gt;.&lt;p align=&apos;justify&apos;&gt;%1 és una estació de treball DICOM per imatge mèdica i alhora un software de processament d&apos;imatges per realitzar recerca mèdica (radiologia i medicina nuclear).</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="634"/>
+        <location filename="qapplicationmainwindow.cpp" line="635"/>
         <source>Beta version</source>
         <translation>Versió Beta</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="635"/>
+        <location filename="qapplicationmainwindow.cpp" line="636"/>
         <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect the extensions function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</source>
         <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Aquesta és una versió preliminar d&apos;%1 que s&apos;hauria d&apos;utilitzar exclusivament amb finalitats de testeig.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Aquesta versió està dirigida als radiòlegs i al nostre equip de proves. En aquesta versió és possible que les extensions no funcionin correctament.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si ens voleu ajudar a millorar l&apos;%1 informeu-nos de qualsevol error o funcionalitat que necessiteu, enviant-nos un correu electrònic a: &lt;a href=&quot;mailto:%2&quot;&gt;%2.&lt;/a&gt;&lt;/p&gt;&lt;h3&gt; Us agraïm molt la vostra col·laboració.&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="705"/>
+        <location filename="qapplicationmainwindow.cpp" line="706"/>
         <source>Please activate &quot;Listen RIS Request&quot; option in %1 configuration to retrieve studies from SAP.</source>
         <translation>Si us plau, activi la opció &quot;Escoltar Peticions del RIS&quot; en el panell de configuració de %1 per a poder rebre estudis del SAP.</translation>
     </message>
@@ -392,22 +392,22 @@
         <translation>&lt;p align=&apos;justify&apos;&gt;%1 ha estat dissenyat específicament per la navegació i visualització d&apos;imatges multimodals i multidimensionals</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="596"/>
+        <location filename="qapplicationmainwindow.cpp" line="597"/>
         <source>&lt;p&gt;Version: %1 &lt;/p&gt;</source>
         <translation>&lt;p&gt;Versió: %1 &lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="597"/>
+        <location filename="qapplicationmainwindow.cpp" line="598"/>
         <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;E-mail de suport: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="598"/>
+        <location filename="qapplicationmainwindow.cpp" line="599"/>
         <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="600"/>
+        <location filename="qapplicationmainwindow.cpp" line="601"/>
         <source>About %1</source>
         <translation>Sobre %1</translation>
     </message>
