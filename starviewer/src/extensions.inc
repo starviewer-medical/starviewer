@@ -13,7 +13,6 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         rectumsegmentation \
                         volume3dviewtesting \
                         experimental3d \
-                        gputesting \
                         dicomprint \
 						dti
 
