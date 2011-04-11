@@ -586,9 +586,10 @@ void QApplicationMainWindow::about()
     aboutMessage += tr("%1 is able to receive images "
                "transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, "
                "STORE SCU - Service Class User, and Query/Retrieve)."
-               "<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
-               " multidimensional images: 2D Viewer, 2D MPR (Multiplanar reconstruction) Viewer, 3D MPR Viewer and Hybrid MPR Viewer and"
-               " Maximum Intensity Projection(MIP)."
+               "<p align='justify'>%1 enables navigation and visualization of multimodality and multidimensional images through"
+               " a complete 2D Viewer which integrates advanced reconstruction techniques such as Thick Slab (including Maximum"
+               " Intensity Projection (MIP), Minimum Intensity Projection (MinIP) and average projection), fast orthogonal reconstruction"
+               " and 3D navigation tools such as 3D-Cursor. It also incorporates Multi-Planar Reconstruction (MPR) and 3D Viewer for volume rendering."
                "<p align='justify'>%1 is at the same time a DICOM workstation for medical imaging and an image processing"
                " software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.").arg(ApplicationNameString);
 #endif
