@@ -576,8 +576,8 @@ void QApplicationMainWindow::about()
     QString aboutMessage = tr("<h2>%1</h2>"
         "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab), Girona" 
         "<p align='justify'>%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI,"
-        " CT, PET, PET-CT, CR, MG,...) It can also read many other file formats specified by the MetaIO standard (*.mhd files). It is "
-        "fully compliant with the DICOM standard for image communication and image file formats. ").arg(ApplicationNameString).arg(2011);
+        " CT, PET, PET-CT, CR, MG,...) fully compliant with the DICOM standard for image communication and image file formats. It can also read"
+        " many other file formats specified by the MetaIO standard (*.mhd files). ").arg(ApplicationNameString).arg(2011);
     // TODO repassar els textos de l'about
 #ifdef STARVIEWER_LITE
     aboutMessage += tr("<p align='justify'>%1 has been specifically designed for navigation and visualization of multimodality and"
