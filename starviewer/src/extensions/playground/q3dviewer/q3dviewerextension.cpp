@@ -5,13 +5,13 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#include "qvolume3dviewtestingextension.h"
+#include "q3dviewerextension.h"
 #include "volume.h"
 #include "toolmanager.h"
 #include "transferfunctionio.h"
 #include "renderingstyle.h"
 #include "starviewerapplication.h"
-#include "volume3dviewtestingsettings.h"
+#include "q3dviewerextensionsettings.h"
 #include "screenshottool.h"
 #include "toolproxy.h"
 #include "qexportertool.h"
@@ -27,11 +27,11 @@
 
 namespace udg {
 
-QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
+Q3DViewerExtension::Q3DViewerExtension( QWidget * parent )
  : QWidget( parent )
 {
     setupUi( this );
-    Volume3DViewTestingSettings().init();
+    Q3DViewerExtensionSettings().init();
 
     // creem el temporitzador (s'ha de fer abans del createConnections())
     m_timer = new QTimer( this );
@@ -54,14 +54,14 @@ QVolume3DViewTestingExtension::QVolume3DViewTestingExtension( QWidget * parent )
     m_customStyleToolButton->setToolTip( tr("Show/Hide advanced colour options") );
 }
 
-QVolume3DViewTestingExtension::~QVolume3DViewTestingExtension()
+Q3DViewerExtension::~Q3DViewerExtension()
 {
     // el que aquí volem fer és forçar a eliminar primer totes les tools abans de que s'esborri el viewer
     // TODO potser caldria refactoritzar el nom d'aquest mètode o crear-ne un per aquesta tasca
     m_toolManager->disableAllToolsTemporarily();
 }
 
-void QVolume3DViewTestingExtension::initializeTools()
+void Q3DViewerExtension::initializeTools()
 {
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
@@ -96,7 +96,7 @@ void QVolume3DViewTestingExtension::initializeTools()
     connect( m_screenShotToolButton, SIGNAL( clicked() ), screenShotTool, SLOT( singleCapture() ) );
 }
 
-void QVolume3DViewTestingExtension::loadClutPresets()
+void Q3DViewerExtension::loadClutPresets()
 {
     DEBUG_LOG( "loadClutPresets()" );
 
@@ -131,7 +131,7 @@ void QVolume3DViewTestingExtension::loadClutPresets()
     connect( m_clutPresetsComboBox, SIGNAL( currentIndexChanged(const QString&) ), this, SLOT( applyPresetClut(const QString&) ) );
 }
 
-void QVolume3DViewTestingExtension::loadRenderingStyles()
+void Q3DViewerExtension::loadRenderingStyles()
 {
     m_renderingStyleModel = new QStandardItemModel( this );
 
@@ -141,12 +141,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     RenderingStyle renderingStyle;
     TransferFunction *transferFunction;
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/spine2.png" ), tr("Spine") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/spine2.png" ), tr("Spine") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/spine2.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/spine2.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -154,12 +154,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/thorax1.png" ), tr("Thorax") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/thorax1.png" ), tr("Thorax") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/thorax1.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/thorax1.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -167,12 +167,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/pelvis2.png" ), tr("Pelvis") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/pelvis2.png" ), tr("Pelvis") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/pelvis2.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/pelvis2.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -180,11 +180,11 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/cow1.png" ), tr("Circle of Willis") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/cow1.png" ), tr("Circle of Willis") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = false;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/cow1.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/cow1.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -192,12 +192,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/carotids2.png" ), tr("Carotids") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/carotids2.png" ), tr("Carotids") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/carotids2.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/carotids2.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -205,12 +205,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bones4.png" ), tr("Bones") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/bones4.png" ), tr("Bones") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bones4.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/bones4.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -218,11 +218,11 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bonehires.png" ), tr("Bones 2") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/bonehires.png" ), tr("Bones 2") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = false;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/bonehires.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/bonehires.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -230,12 +230,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenbones.png" ), tr("Abdomen bones") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/abdomenbones.png" ), tr("Abdomen bones") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenbones.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/abdomenbones.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -243,12 +243,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenrunoff1.png" ), tr("Abdomen run-off") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/abdomenrunoff1.png" ), tr("Abdomen run-off") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenrunoff1.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/abdomenrunoff1.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -256,12 +256,12 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     item->setData( renderingStyle.toVariant() );
     m_renderingStyleModel->appendRow( item );
 
-    item = new QStandardItem( QIcon( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenslab.png" ), tr("Abdomen slab") );
+    item = new QStandardItem( QIcon( ":/extensions/Q3DViewerExtension/renderingstyles/abdomenslab.png" ), tr("Abdomen slab") );
     renderingStyle.method = RenderingStyle::RayCasting;
     renderingStyle.diffuseLighting = true;
     renderingStyle.specularLighting = true;
     renderingStyle.specularPower = 64.0;
-    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Volume3DViewTestingExtension/renderingstyles/abdomenslab.xml" );
+    transferFunction = TransferFunctionIO::fromXmlFile( ":/extensions/Q3DViewerExtension/renderingstyles/abdomenslab.xml" );
     renderingStyle.transferFunction = *transferFunction;
     delete transferFunction;
     renderingStyle.contour = false;
@@ -272,7 +272,7 @@ void QVolume3DViewTestingExtension::loadRenderingStyles()
     m_renderingStyleListView->setModel( m_renderingStyleModel );
 }
 
-void QVolume3DViewTestingExtension::createConnections()
+void Q3DViewerExtension::createConnections()
 {
     // actualització del mètode de rendering
     connect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateUiForRenderingMethod(int) ) );
@@ -323,7 +323,7 @@ void QVolume3DViewTestingExtension::createConnections()
 
 }
 
-void QVolume3DViewTestingExtension::setInput( Volume * input )
+void Q3DViewerExtension::setInput( Volume * input )
 {
     m_input = input;
     m_3DView->setInput( m_input );
@@ -332,7 +332,7 @@ void QVolume3DViewTestingExtension::setInput( Volume * input )
     this->render();
 }
 
-void QVolume3DViewTestingExtension::setScalarRange( double min, double max )
+void Q3DViewerExtension::setScalarRange( double min, double max )
 {
     unsigned short maximum = static_cast<unsigned short>( qRound( max ) );
     m_gradientEditor->setMaximum( maximum );
@@ -349,7 +349,7 @@ void QVolume3DViewTestingExtension::setScalarRange( double min, double max )
 }
 
 
-void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
+void Q3DViewerExtension::applyPresetClut( const QString & clutName )
 {
     DEBUG_LOG( "applyPresetClut()" );
 
@@ -366,7 +366,7 @@ void QVolume3DViewTestingExtension::applyPresetClut( const QString & clutName )
 }
 
 
-void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut, bool preset )
+void Q3DViewerExtension::applyClut( const TransferFunction & clut, bool preset )
 {
     DEBUG_LOG( "applyClut()" );
 
@@ -385,14 +385,14 @@ void QVolume3DViewTestingExtension::applyClut( const TransferFunction & clut, bo
 //     this->render();
 }
 
-void QVolume3DViewTestingExtension::changeViewerTransferFunction( )
+void Q3DViewerExtension::changeViewerTransferFunction( )
 {
     //Actualitzem l'editor de cluts quan es canvia per la funció pel w/l del visor
     m_gradientEditor->setTransferFunction( *(m_3DView->getTransferFunction()) );
     m_editorByValues->setTransferFunction( *(m_3DView->getTransferFunction()) );
 }
 
-void QVolume3DViewTestingExtension::computeOrCancelObscurance()
+void Q3DViewerExtension::computeOrCancelObscurance()
 {
     this->setCursor( QCursor(Qt::WaitCursor) );
 
@@ -425,7 +425,7 @@ void QVolume3DViewTestingExtension::computeOrCancelObscurance()
     this->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
-void QVolume3DViewTestingExtension::autoCancelObscurance()
+void Q3DViewerExtension::autoCancelObscurance()
 {
     Q_ASSERT( m_computingObscurance );
 
@@ -435,7 +435,7 @@ void QVolume3DViewTestingExtension::autoCancelObscurance()
     this->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
-void QVolume3DViewTestingExtension::endComputeObscurance()
+void Q3DViewerExtension::endComputeObscurance()
 {
     m_computingObscurance = false;
     m_obscuranceComputeCancelPushButton->setText( tr("Compute") );
@@ -443,7 +443,7 @@ void QVolume3DViewTestingExtension::endComputeObscurance()
     m_obscuranceCheckBox->setChecked( true );   // les activem automàticament quan acaba el càlcul
 }
 
-void QVolume3DViewTestingExtension::enableObscuranceRendering( bool on )
+void Q3DViewerExtension::enableObscuranceRendering( bool on )
 {
     if ( !on ) m_obscuranceCheckBox->setChecked( false );
 
@@ -454,18 +454,18 @@ void QVolume3DViewTestingExtension::enableObscuranceRendering( bool on )
     m_obscuranceProgressBar->setVisible( !on );
 }
 
-void QVolume3DViewTestingExtension::render()
+void Q3DViewerExtension::render()
 {
     this->setCursor( QCursor(Qt::WaitCursor) );
     m_3DView->applyCurrentRenderingMethod();
     this->setCursor( QCursor(Qt::ArrowCursor) );
 }
 
-void QVolume3DViewTestingExtension::loadClut()
+void Q3DViewerExtension::loadClut()
 {
     Settings settings;
     
-    QString customClutsDirPath = settings.getValue( Volume3DViewTestingSettings::CustomClutsDirPath ).toString();
+    QString customClutsDirPath = settings.getValue( Q3DViewerExtensionSettings::CustomClutsDirPath ).toString();
 
     QString transferFunctionFileName =
             QFileDialog::getOpenFileName( this, tr("Load CLUT"),
@@ -480,15 +480,15 @@ void QVolume3DViewTestingExtension::loadClut()
         emit newTransferFunction();
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.setValue( Volume3DViewTestingSettings::CustomClutsDirPath, transferFunctionFileInfo.absolutePath() );
+        settings.setValue( Q3DViewerExtensionSettings::CustomClutsDirPath, transferFunctionFileInfo.absolutePath() );
     }
 }
 
-void QVolume3DViewTestingExtension::saveClut()
+void Q3DViewerExtension::saveClut()
 {
     Settings settings;
     
-    QString customClutsDirPath = settings.getValue( Volume3DViewTestingSettings::CustomClutsDirPath ).toString();
+    QString customClutsDirPath = settings.getValue( Q3DViewerExtensionSettings::CustomClutsDirPath ).toString();
 
     QFileDialog saveDialog( this, tr("Save CLUT"), customClutsDirPath, tr("Transfer function files (*.tf);;All files (*)") );
     saveDialog.setAcceptMode( QFileDialog::AcceptSave );
@@ -501,11 +501,11 @@ void QVolume3DViewTestingExtension::saveClut()
         TransferFunctionIO::toFile( transferFunctionFileName, currentEditor->getTransferFunction() );
 
         QFileInfo transferFunctionFileInfo( transferFunctionFileName );
-        settings.setValue( Volume3DViewTestingSettings::CustomClutsDirPath, transferFunctionFileInfo.absolutePath() );
+        settings.setValue( Q3DViewerExtensionSettings::CustomClutsDirPath, transferFunctionFileInfo.absolutePath() );
     }
 }
 
-void QVolume3DViewTestingExtension::switchEditor()
+void Q3DViewerExtension::switchEditor()
 {
     QTransferFunctionEditor * currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
     const TransferFunction & currentTransferFunction = currentEditor->getTransferFunction();
@@ -514,14 +514,14 @@ void QVolume3DViewTestingExtension::switchEditor()
     currentEditor->setTransferFunction( currentTransferFunction );
 }
 
-void QVolume3DViewTestingExtension::applyEditorClut()
+void Q3DViewerExtension::applyEditorClut()
 {
     QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>( m_editorsStackedWidget->currentWidget() );
     applyClut( currentEditor->getTransferFunction() );
     this->render();
 }
 
-void QVolume3DViewTestingExtension::toggleClutEditor()
+void Q3DViewerExtension::toggleClutEditor()
 {
     if ( m_editorSplitter->sizes()[1] == 0 )    // show
     {
@@ -533,17 +533,17 @@ void QVolume3DViewTestingExtension::toggleClutEditor()
         hideClutEditor();
 }
 
-void QVolume3DViewTestingExtension::hideClutEditor()
+void Q3DViewerExtension::hideClutEditor()
 {
     m_editorSplitter->setSizes( QList<int>() << 1 << 0 );
 }
 
-void QVolume3DViewTestingExtension::setCustomStyleButtonStateBySplitter()
+void Q3DViewerExtension::setCustomStyleButtonStateBySplitter()
 {
     m_customStyleToolButton->setChecked( m_editorSplitter->sizes()[1] != 0 );
 }
 
-void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &index )
+void Q3DViewerExtension::applyRenderingStyle( const QModelIndex &index )
 {
     disableAutoUpdate();
 
@@ -618,13 +618,13 @@ void QVolume3DViewTestingExtension::applyRenderingStyle( const QModelIndex &inde
     enableAutoUpdate();
 }
 
-void QVolume3DViewTestingExtension::showScreenshotsExporterDialog()
+void Q3DViewerExtension::showScreenshotsExporterDialog()
 {
     QExporterTool exporter( m_3DView );
     exporter.exec();
 }
 
-void QVolume3DViewTestingExtension::updateUiForRenderingMethod( int index )
+void Q3DViewerExtension::updateUiForRenderingMethod( int index )
 {
     m_shadingOptionsWidget->hide();
     m_contourOptionsWidget->hide();
@@ -665,7 +665,7 @@ void QVolume3DViewTestingExtension::updateUiForRenderingMethod( int index )
 }
 
 
-void QVolume3DViewTestingExtension::updateView( bool fast )
+void Q3DViewerExtension::updateView( bool fast )
 {
     m_timer->stop();
 
@@ -726,7 +726,7 @@ void QVolume3DViewTestingExtension::updateView( bool fast )
 }
 
 
-void QVolume3DViewTestingExtension::enableAutoUpdate()
+void Q3DViewerExtension::enableAutoUpdate()
 {
     // actualització del mètode de rendering
     connect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateView() ) );
@@ -749,7 +749,7 @@ void QVolume3DViewTestingExtension::enableAutoUpdate()
 }
 
 
-void QVolume3DViewTestingExtension::disableAutoUpdate()
+void Q3DViewerExtension::disableAutoUpdate()
 {
     // actualització del mètode de rendering
     disconnect( m_renderingMethodComboBox, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateView() ) );

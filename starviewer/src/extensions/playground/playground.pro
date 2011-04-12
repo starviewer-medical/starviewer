@@ -13,7 +13,7 @@ SUBDIRS += diffusionperfusionsegmentation \
            perfusionmapreconstruction \
            glialestimation \
            rectumsegmentation \
-           volume3dviewtesting \
+           q3dviewer \
            experimental3d \
 	     dti
 include(../../extensions.inc)

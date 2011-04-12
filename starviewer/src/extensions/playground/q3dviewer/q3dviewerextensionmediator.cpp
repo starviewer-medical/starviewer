@@ -4,7 +4,7 @@
  *                                                                         *
  *   Universitat de Girona                                                 *
  ***************************************************************************/
-#include "volume3dviewtestingextensionmediator.h"
+#include "q3dviewerextensionmediator.h"
 
 #include "extensioncontext.h"
 
@@ -13,25 +13,25 @@
 
 namespace udg {
 
-Volume3DViewTestingExtensionMediator::Volume3DViewTestingExtensionMediator( QObject * parent )
+Q3DViewerExtensionMediator::Q3DViewerExtensionMediator( QObject * parent )
     : ExtensionMediator( parent )
 {
 }
 
-Volume3DViewTestingExtensionMediator::~Volume3DViewTestingExtensionMediator()
+Q3DViewerExtensionMediator::~Q3DViewerExtensionMediator()
 {
 }
 
-DisplayableID Volume3DViewTestingExtensionMediator::getExtensionID() const
+DisplayableID Q3DViewerExtensionMediator::getExtensionID() const
 {
-    return DisplayableID( "Volume3DViewTestingExtension", tr("3D Viewer") );
+    return DisplayableID( "Q3DViewerExtension", tr("3D Viewer") );
 }
 
-bool Volume3DViewTestingExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
+bool Q3DViewerExtensionMediator::initializeExtension(QWidget* extension, const ExtensionContext &extensionContext)
 {
-    QVolume3DViewTestingExtension * volume3DViewTestingExtension;
+    Q3DViewerExtension * q3DViewerExtension;
 
-    if ( !( volume3DViewTestingExtension = qobject_cast< QVolume3DViewTestingExtension * >( extension ) ) )
+    if ( !( q3DViewerExtension = qobject_cast< Q3DViewerExtension * >( extension ) ) )
     {
         return false;
     }
@@ -40,7 +40,7 @@ bool Volume3DViewTestingExtensionMediator::initializeExtension(QWidget* extensio
     if( !input )
         QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
     else
-        volume3DViewTestingExtension->setInput( input );
+        q3DViewerExtension->setInput( input );
 
     return true;
 }

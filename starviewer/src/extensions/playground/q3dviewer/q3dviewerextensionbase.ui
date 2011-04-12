@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>QVolume3DViewTestingExtensionBase</class>
- <widget class="QWidget" name="QVolume3DViewTestingExtensionBase">
+ <class>Q3DViewerExtensionBase</class>
+ <widget class="QWidget" name="Q3DViewerExtensionBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -947,26 +947,26 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QToolButton" name="m_screenShotToolButton">
-       <property name="text">
-        <string>Screen Shot</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/photo.png</normaloff>:/images/photo.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextUnderIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
+         <property name="text">
+          <string>Screen Shot</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/photo.png</normaloff>:/images/photo.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QToolButton" name="m_screenshotsExporterToolButton">
@@ -1039,7 +1039,7 @@
  </customwidgets>
  <resources>
   <include location="../../../main/main.qrc"/>
-  <include location="volume3dviewtesting.qrc"/>
+  <include location="q3dviewer.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>
