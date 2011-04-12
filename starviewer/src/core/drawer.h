@@ -87,7 +87,7 @@ private:
 
     /// Esborra la primitiva donada del contenidor de primitives especificat. 
     /// Si la troba l'esborra. Retorna cert si la troba, fals altrament.
-    bool erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive *> &primitiveContainer);
+    bool erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive*> &primitiveContainer);
 
 private slots:
     /// Refresca les primitives que s'han de veure pel viewer segons el seu estat     
@@ -98,10 +98,10 @@ private:
     Q2DViewer *m_2DViewer;
 
     /// Contenidors de primitives per cada pla possible
-    QMultiMap<int, DrawerPrimitive *> m_axialPrimitives;
-    QMultiMap<int, DrawerPrimitive *> m_sagitalPrimitives;
-    QMultiMap<int, DrawerPrimitive *> m_coronalPrimitives;
-    QList<DrawerPrimitive *> m_top2DPlanePrimitives;
+    QMultiMap<int, DrawerPrimitive*> m_axialPrimitives;
+    QMultiMap<int, DrawerPrimitive*> m_sagitalPrimitives;
+    QMultiMap<int, DrawerPrimitive*> m_coronalPrimitives;
+    QList<DrawerPrimitive*> m_top2DPlanePrimitives;
 
     /// Pla i llesca en el que es troba en aquell moment el 2D Viewer. Serveix per controlar
     /// els canvis de llesca i de pla, per saber quines primitives hem de netejar
@@ -109,7 +109,7 @@ private:
     int m_currentSlice;
 
     /// Grups de primitives. Les agrupem per nom
-    QMultiMap<QString, DrawerPrimitive *> m_primitiveGroups;
+    QMultiMap<QString, DrawerPrimitive*> m_primitiveGroups;
 };
 
 }
