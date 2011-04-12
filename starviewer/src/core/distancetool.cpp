@@ -107,7 +107,7 @@ void DistanceTool::annotateNewPoint()
         // Posem el text
         DrawerText * text = new DrawerText;
         // HACK Comprovem si l'imatge té pixel spacing per saber si la mesura ha d'anar en píxels o mm
-        // TODO proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
+        // TODO Proporcionar algun mètode alternatiu per no haver d'haver de fer aquest hack
         double *vtkSpacing = m_2DViewer->getInput()->getSpacing();
         const double *pixelSpacing = m_2DViewer->getInput()->getImage(0)->getPixelSpacing();
 
@@ -119,7 +119,8 @@ void DistanceTool::annotateNewPoint()
         {
             bool distanceIsComputed = false;
             double distance;
-            // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte. \TODO S'hauria d'unificar.
+            // En cas de Ultrasons es fa un tractament especial perquè VTK no agafa l'spacing correcte. 
+            // TODO S'hauria d'unificar.
             // Podem tenir imatges de la mateixa sèrie amb spacings diferents
             if (m_2DViewer->getInput()->getImage(0)->getParentSeries()->getModality() == "US")
             {
@@ -139,7 +140,7 @@ void DistanceTool::annotateNewPoint()
                 else
                 {
                     // S'ha aplicat una reconstrucció, per tant l'spacing que es donarà serà el de vtk
-                    // TODO això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per 
+                    // TODO Això en algun moment desapareixerà ja que caldria deshabilitar les reconstruccions per 
                     // modalitats en les que les reconstruccions no tinguin sentit
                     distanceIsComputed = false;
                 }
@@ -175,13 +176,15 @@ void DistanceTool::annotateNewPoint()
             }
         }
 
-        // Apliquem un padding
-        const double Padding = 5.0; // padding de 5 pixels
+        // Apliquem un padding de 5 pixels
+        const double Padding = 5.0;
         double leftPointInDisplay[3];
-        m_2DViewer->computeWorldToDisplay(leftPoint[0], leftPoint[1], leftPoint[2], leftPointInDisplay);    // passem leftPoint a coordenades de display
-        m_2DViewer->computeDisplayToWorld(leftPointInDisplay[0] - Padding, leftPointInDisplay[1], leftPointInDisplay[2], leftPoint);    // apliquem el padding i tornem a coordenades de món
-        // ara leftPoint és l'attachment point que volem
+        // Passem leftPoint a coordenades de display
+        m_2DViewer->computeWorldToDisplay(leftPoint[0], leftPoint[1], leftPoint[2], leftPointInDisplay);
+        // Apliquem el padding i tornem a coordenades de món
+        m_2DViewer->computeDisplayToWorld(leftPointInDisplay[0] - Padding, leftPointInDisplay[1], leftPointInDisplay[2], leftPoint);
 
+        // Ara leftPoint és l'attachment point que volem
         text->setAttachmentPoint(leftPoint);
         text->setHorizontalJustification("Right");
         text->shadowOn();
