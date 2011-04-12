@@ -4422,6 +4422,14 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
 #ifndef CUDA_AVAILABLE
     QMessageBox::information(this, tr("Operation only available with CUDA"), "VMIi computations are only implemented in CUDA. Compile with CUDA support to use them.");
 #else // CUDA_AVAILABLE
+//    QFile file("/users/bdoc/mruiz/scratch/resultats/optimitzacio-ft-article/evolucio-wbc-uniform_volume.txt");
+//    file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
+//    QTextStream out(&file);
+
+    bool t01 = false, t001 = false, t0001 = false;
+    QTime time;
+    time.start();
+
     if (!m_clusterizedVolume) return;
 
     m_optimizing = true;
@@ -4870,6 +4878,27 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
             }
 
             DEBUG_LOG(QString("------------------------------------- optimització per la derivada, fi iteració %1 -------------------------------------").arg(iteration));
+
+            if (!t01 && best < 0.01)
+            {
+                int elapsed = time.elapsed();
+                std::cout << qPrintable(QString("= Temps < 0.01: %1 s (%2 iteracions) =").arg(elapsed / 1000.0f).arg(iteration)) << std::endl;
+                t01 = true;
+            }
+            if (!t001 && best < 0.001)
+            {
+                int elapsed = time.elapsed();
+                std::cout << qPrintable(QString("== Temps < 0.001: %1 s (%2 iteracions) ==").arg(elapsed / 1000.0f).arg(iteration)) << std::endl;
+                t001 = true;
+            }
+            if (!t0001 && best < 0.0001)
+            {
+                int elapsed = time.elapsed();
+                std::cout << qPrintable(QString("=== Temps < 0.0001: %1 s (%2 iteracions) ===").arg(elapsed / 1000.0f).arg(iteration)) << std::endl;
+                t0001 = true;
+            }
+
+//            out << QString("%1\n%2\n").arg(optimized).arg(best);
         }
 
         m_transferFunctionEditor->setTransferFunction(bestTransferFunction.simplify());
@@ -4889,6 +4918,11 @@ void QExperimental3DExtension::optimizeByDerivativeTransferFunctionFromIntensity
     setCursor(QCursor(Qt::ArrowCursor));
 
     m_optimizing = m_stopOptimization = false;
+
+    int elapsed = time.elapsed();
+    std::cout << qPrintable(QString("Temps total d'optimització: %1 s  (%2 iteracions, distància %3)").arg(elapsed / 1000.0f).arg(iteration).arg(best)) << std::endl;
+
+//    file.close();
 #endif // CUDA_AVAILABLE
 }
 
