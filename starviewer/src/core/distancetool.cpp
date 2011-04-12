@@ -127,8 +127,8 @@ void DistanceTool::annotateNewPoint()
                 if (image)
                 {
                     const double *usSpacing = image->getPixelSpacing();
-                    double * firstPoint = m_line->getFirstPoint();
-                    double * secondPoint = m_line->getSecondPoint();
+                    double *firstPoint = m_line->getFirstPoint();
+                    double *secondPoint = m_line->getSecondPoint();
 
                     double xx = (firstPoint[0] - secondPoint[0]) / vtkSpacing[0] * usSpacing[0];
                     double yy = (firstPoint[1] - secondPoint[1]) / vtkSpacing[1] * usSpacing[1];

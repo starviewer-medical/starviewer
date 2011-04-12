@@ -82,7 +82,7 @@ void Drawer::draw(DrawerPrimitive *primitive, int plane, int slice)
 
 void Drawer::clearViewer()
 {
-    QMultiMap<int, DrawerPrimitive *> primitivesContainer;
+    QMultiMap<int, DrawerPrimitive*> primitivesContainer;
     switch (m_currentPlane)
     {
         case QViewer::AxialPlane:
@@ -187,7 +187,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
     }
 
     // Mirem si està en algun grup
-    QMutableMapIterator<QString, DrawerPrimitive *> groupsIterator(m_primitiveGroups);
+    QMutableMapIterator<QString, DrawerPrimitive*> groupsIterator(m_primitiveGroups);
     while (groupsIterator.hasNext())
     {
         groupsIterator.next();
@@ -227,7 +227,7 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
 
 void Drawer::hide(int plane, int slice)
 {
-    QList<DrawerPrimitive *> primitivesList;
+    QList<DrawerPrimitive*> primitivesList;
     switch (plane)
     {
         case QViewer::AxialPlane:
@@ -258,7 +258,7 @@ void Drawer::hide(int plane, int slice)
 
 void Drawer::show(int plane, int slice)
 {
-    QList< DrawerPrimitive *> primitivesList;
+    QList< DrawerPrimitive*> primitivesList;
     switch (plane)
     {
         case QViewer::AxialPlane:
@@ -296,7 +296,7 @@ int Drawer::getNumberOfDrawnPrimitives()
 void Drawer::hideGroup(const QString &groupName)
 {
     bool hasToRender = false;
-    QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values(groupName);
+    QList<DrawerPrimitive*> primitiveList = m_primitiveGroups.values(groupName);
     foreach (DrawerPrimitive *primitive, primitiveList)
     {
         if (primitive->isModified() || primitive->isVisible())
@@ -316,7 +316,7 @@ void Drawer::hideGroup(const QString &groupName)
 void Drawer::showGroup(const QString &groupName)
 {
     bool hasToRender = false;
-    QList<DrawerPrimitive *> primitiveList = m_primitiveGroups.values(groupName);
+    QList<DrawerPrimitive*> primitiveList = m_primitiveGroups.values(groupName);
     foreach (DrawerPrimitive *primitive, primitiveList)
     {
         if (primitive->isModified() || !primitive->isVisible())
@@ -337,7 +337,7 @@ DrawerPrimitive* Drawer::getPrimitiveNearerToPoint(double point[3], int view, in
 {
     double distance;
     double minimumDistance = 1.0;
-    QList<DrawerPrimitive *> primitivesList;
+    QList<DrawerPrimitive*> primitivesList;
 
     DrawerPrimitive *nearestPrimitive = 0;
 
@@ -373,7 +373,7 @@ DrawerPrimitive* Drawer::getPrimitiveNearerToPoint(double point[3], int view, in
 
 void Drawer::erasePrimitivesInsideBounds(double bounds[6], int view, int slice)
 {
-    QList<DrawerPrimitive *> primitivesList;
+    QList<DrawerPrimitive*> primitivesList;
 
     switch (view)
     {
@@ -419,10 +419,10 @@ bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, int view, double boun
     return inside;
 }
 
-bool Drawer::erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive *> &primitiveContainer)
+bool Drawer::erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive*> &primitiveContainer)
 {
     bool found = false;
-    QMutableMapIterator<int, DrawerPrimitive *> containerIterator(primitiveContainer);
+    QMutableMapIterator<int, DrawerPrimitive*> containerIterator(primitiveContainer);
     while (containerIterator.hasNext() && !found)
     {
         containerIterator.next();
