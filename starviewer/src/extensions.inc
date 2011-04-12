@@ -11,7 +11,6 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         perfusionmapreconstruction \
                         glialestimation \
                         rectumsegmentation \
-                        q3dviewer \
                         experimental3d \
 						dti
 
@@ -20,7 +19,8 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
 MAIN_EXTENSIONS = mpr \
                   mpr3d \
                   dicomprint \
-                  q2dviewer
+                  q2dviewer \
+                  q3dviewer
 
 #
 # En cas que fem un build de la versió "lite" només tindrem l'estensió 2D i prou
