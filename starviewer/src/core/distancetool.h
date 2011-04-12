@@ -30,8 +30,6 @@ class DrawerLine;
 
     Quan es canvïi l'input del visor, les annotacions fetes fins aquell moment s'esborraran.
     Quan es desactivi l'eina, les annotacions fetes fins aquell moment es mantindran.
-
-	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class DistanceTool : public Tool {
 Q_OBJECT
