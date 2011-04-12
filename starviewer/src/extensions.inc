@@ -11,7 +11,7 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         perfusionmapreconstruction \
                         glialestimation \
                         rectumsegmentation \
-                        volume3dviewtesting \
+                        q3dviewer \
                         experimental3d \
 						dti
 

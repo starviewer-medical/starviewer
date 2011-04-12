@@ -5,25 +5,25 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#ifndef VOLUME3DVIEWTESTINGEXTENSIONMEDIATOR_H
-#define VOLUME3DVIEWTESTINGEXTENSIONMEDIATOR_H
+#ifndef UDGQ3DVIEWEREXTENSIONMEDIATOR_H
+#define UDGQ3DVIEWEREXTENSIONMEDIATOR_H
 
 #include "extensionmediator.h"
 #include "installextension.h"
-#include "qvolume3dviewtestingextension.h"
+#include "q3dviewerextension.h"
 
 namespace udg {
 
 /**
  * \author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.edu>
  */
-class Volume3DViewTestingExtensionMediator : public ExtensionMediator
+class Q3DViewerExtensionMediator : public ExtensionMediator
 {
     Q_OBJECT
 public:
 
-    Volume3DViewTestingExtensionMediator( QObject * parent = 0 );
-    ~Volume3DViewTestingExtensionMediator();
+    Q3DViewerExtensionMediator( QObject * parent = 0 );
+    ~Q3DViewerExtensionMediator();
 
     virtual DisplayableID getExtensionID() const;
 
@@ -31,7 +31,7 @@ public:
 
 };
 
-static InstallExtension< QVolume3DViewTestingExtension, Volume3DViewTestingExtensionMediator > registerVolume3DViewTestingExtension;
+static InstallExtension< Q3DViewerExtension, Q3DViewerExtensionMediator > registerQ3DViewerExtensionMediator;
 
 }
 

@@ -5,10 +5,10 @@
  *   Universitat de Girona                                                 *
  ***************************************************************************/
 
-#ifndef UDGQVOLUME3DVIEWTESTINGEXTENSION_H
-#define UDGQVOLUME3DVIEWTESTINGEXTENSION_H
+#ifndef UDGQ3DVIEWEREXTENSION_H
+#define UDGQ3DVIEWEREXTENSION_H
 
-#include "ui_qvolume3dviewtestingextensionbase.h"
+#include "ui_q3dviewerextensionbase.h"
 
 #include <QDir>
 #include <QMap>
@@ -21,7 +21,7 @@ class QStandardItemModel;
 
 namespace udg {
 
-class Volume3DViewTesting;
+class Q3DViewer;
 class Volume;
 class ToolManager;
 
@@ -30,12 +30,12 @@ class ToolManager;
  *
  * @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
-class QVolume3DViewTestingExtension : public QWidget, private ::Ui::QVolume3DViewTestingExtensionBase {
+class Q3DViewerExtension : public QWidget, private ::Ui::Q3DViewerExtensionBase {
 Q_OBJECT
 public:
 
-    QVolume3DViewTestingExtension( QWidget * parent = 0 );
-    virtual ~QVolume3DViewTestingExtension();
+    Q3DViewerExtension( QWidget * parent = 0 );
+    virtual ~Q3DViewerExtension();
 
     /// Li donem l'input a processar
     void setInput( Volume * input );

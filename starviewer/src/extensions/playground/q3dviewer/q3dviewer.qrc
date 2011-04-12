@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/extensions/Volume3DViewTestingExtension" >
+    <qresource prefix="/extensions/Q3DViewerExtension" >
         <file>renderingstyles/abdomenbones.png</file>
         <file>renderingstyles/abdomenbones.xml</file>
         <file>renderingstyles/abdomenrunoff1.png</file>
