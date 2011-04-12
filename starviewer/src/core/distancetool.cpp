@@ -28,7 +28,9 @@ DistanceTool::DistanceTool(QViewer *viewer, QObject *parent)
 
     m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
     if (!m_2DViewer)
+    {
         DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className());
+    }
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
     initialize();
@@ -47,7 +49,9 @@ DistanceTool::~DistanceTool()
     }
 
     if (hasToRefresh)
+    {
         m_2DViewer->render();
+    }
 }
 
 void DistanceTool::handleEvent(long unsigned eventID)
@@ -159,12 +163,16 @@ void DistanceTool::annotateNewPoint()
         if (firstPoint[xIndex] <= secondPoint[xIndex])
         {
             for (i = 0; i < 3; i++)
+            {
                 leftPoint[i] = firstPoint[i]; 
+            }
         }
         else
         {
             for (i = 0; i < 3; i++)
+            {
                 leftPoint[i] = secondPoint[i]; 
+            }
         }
 
         // Apliquem un padding
