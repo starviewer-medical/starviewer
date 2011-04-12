@@ -12,8 +12,6 @@ class DrawerText;
 
 /**
     Tool per calcular angles
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class AngleTool : public Tool {
 Q_OBJECT
