@@ -37,15 +37,15 @@ class DrawerLine;
     Quan es canvïi l'input del visor, les annotacions fetes fins aquell moment s'esborraran.
     Quan es desactivi l'eina, les annotacions fetes fins aquell moment es mantindran.
 
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class DistanceTool : public Tool {
 Q_OBJECT
 public:
-    DistanceTool( QViewer *viewer, QObject *parent = 0 );
+    DistanceTool(QViewer *viewer, QObject *parent = 0);
     ~DistanceTool();
 
-    void handleEvent( long unsigned eventID );
+    void handleEvent(long unsigned eventID);
 
 private:
     /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que 
@@ -75,8 +75,8 @@ private:
 
     /// Estat de la línia.
     int m_lineState;
-
 };
+
 }
 
 #endif
