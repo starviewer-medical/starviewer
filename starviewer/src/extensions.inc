@@ -13,13 +13,13 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         rectumsegmentation \
                         volume3dviewtesting \
                         experimental3d \
-                        dicomprint \
 						dti
 
 #CONTRIB_EXTENSIONS =
 
 MAIN_EXTENSIONS = mpr \
                   mpr3d \
+                  dicomprint \
                   q2dviewer
 
 #

@@ -3,6 +3,7 @@
 
 SUBDIRS = mpr \
           mpr3d \
+          dicomprint \
           q2dviewer
 
 include(../../extensions.inc)
