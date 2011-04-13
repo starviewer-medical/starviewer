@@ -21,15 +21,6 @@
 **
 ****************************************************************************/
 
-
-/***************************************************************************
- *   Copyright (C) 2006-2007 by Grup de Gràfics de Girona                  *
- *   http://iiia.udg.edu/GGG/index.html                                    *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
-
-
 #ifndef UDGQTRANSFERFUNCTIONEDITORBYGRADIENT_H
 #define UDGQTRANSFERFUNCTIONEDITORBYGRADIENT_H
 

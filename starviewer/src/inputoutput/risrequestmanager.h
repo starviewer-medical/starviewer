@@ -1,15 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2005-2007 by Grup de Gràfics de Girona                  *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
-/***************************************************************************
- *   Copyright (C) 2005 by Grup de Gr�fics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
 
 #ifndef UDGRISREQUESTMANAGER_H
 #define UDGRISREQUESTMANAGER_H

@@ -1,9 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2008-2009 by Laboratori de Gràfics i Imatge  ( GILab )  *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
 #include "polylinetemporalroitool.h"
 #include "polylinetemporalroitooldata.h"
 #include "q2dviewer.h"

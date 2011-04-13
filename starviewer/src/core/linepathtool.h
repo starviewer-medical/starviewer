@@ -1,9 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2010 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
 #ifndef UDGLINEPATHTOOL_H
 #define UDGLINEPATHTOOL_H
 
