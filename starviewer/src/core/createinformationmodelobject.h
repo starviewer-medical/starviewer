@@ -1,10 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2005-2009 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
-
 #ifndef CREATEINFORMATIONMODELOBJECT_H
 #define CREATEINFORMATIONMODELOBJECT_H
 

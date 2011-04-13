@@ -1,10 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2005 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
-
 #include "status.h"
 
 #include <ofcond.h> //provide the OFcondition structure and his members

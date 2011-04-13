@@ -1,10 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2005-2006 by Grup de Gr�ics de Girona						      *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
-
 #ifndef UDGCREATEDICOMPRINTSPOOL_H
 #define UDGCREATEDICOMPRINTSPOOL_H
 

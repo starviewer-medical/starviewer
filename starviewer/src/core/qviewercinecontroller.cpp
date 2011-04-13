@@ -1,9 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2005-2007 by Grup de Gràfics de Girona                  *
- *   http://iiia.udg.es/GGG/index.html?langu=uk                            *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
 #include "qviewercinecontroller.h"
 
 // TODO això és així perquè de moment només suportem Q2DViewer

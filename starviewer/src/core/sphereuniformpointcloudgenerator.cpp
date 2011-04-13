@@ -1,10 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.edu/GGG/index.html                                    *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
-
 #include "sphereuniformpointcloudgenerator.h"
 
 #include "mathtools.h"

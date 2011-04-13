@@ -1,11 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2008 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.edu/GGG/index.html?langu=uk                           *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
-
-
 #ifndef UDGOBSCURANCETHREAD_H
 #define UDGOBSCURANCETHREAD_H
 

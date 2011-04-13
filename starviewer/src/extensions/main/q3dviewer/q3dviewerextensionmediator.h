@@ -1,10 +1,3 @@
-/***************************************************************************
- *   Copyright (C) 2007 by Grup de Gràfics de Girona                       *
- *   http://iiia.udg.edu/GGG/index.html                                    *
- *                                                                         *
- *   Universitat de Girona                                                 *
- ***************************************************************************/
-
 #ifndef UDGQ3DVIEWEREXTENSIONMEDIATOR_H
 #define UDGQ3DVIEWEREXTENSIONMEDIATOR_H
 
