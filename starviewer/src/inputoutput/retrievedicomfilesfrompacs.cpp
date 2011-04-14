@@ -20,6 +20,9 @@
 
 namespace udg{
 
+//Constant que contindrà quin Abanstract Syntax de Move utilitzem entre els diversos que hi ha utilitzem
+static const char *MoveAbstractSyntax = UID_MOVEStudyRootQueryRetrieveInformationModel;
+
 RetrieveDICOMFilesFromPACS::RetrieveDICOMFilesFromPACS(PacsDevice pacs)
 {
     m_pacs = pacs;
@@ -351,7 +354,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(Di
 
     // Which presentation context should be used, It's important that the connection has MoveStudyRoot level
     T_ASC_Association *association = m_pacsConnection->getConnection(); 
-    presentationContextID = ASC_findAcceptedPresentationContextID(association, UID_MOVEStudyRootQueryRetrieveInformationModel);
+    presentationContextID = ASC_findAcceptedPresentationContextID(association, MoveAbstractSyntax);
     if (presentationContextID == 0)
     {
         ERROR_LOG("No s'ha trobat cap presentation context valid");
@@ -403,7 +406,7 @@ T_DIMSE_C_MoveRQ RetrieveDICOMFilesFromPACS::getConfiguredMoveRequest(T_ASC_Asso
     DIC_US messageId = association->nextMsgID++;
 
     moveRequest.MessageID = messageId;
-    strcpy(moveRequest.AffectedSOPClassUID, UID_MOVEStudyRootQueryRetrieveInformationModel);
+    strcpy(moveRequest.AffectedSOPClassUID, MoveAbstractSyntax);
     moveRequest.Priority = DIMSE_PRIORITY_MEDIUM;
     moveRequest.DataSetType = DIMSE_DATASET_PRESENT;
 
