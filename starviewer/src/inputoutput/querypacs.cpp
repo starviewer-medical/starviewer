@@ -27,13 +27,8 @@ QueryPacs::QueryPacs(PacsDevice pacsDevice)
     m_pacsDevice = pacsDevice;
 }
 
-void QueryPacs::foundMatchCallback(
-        void * callbackData ,
-        T_DIMSE_C_FindRQ * request,
-        int responseCount,
-        T_DIMSE_C_FindRSP *rsp,
-        DcmDataset *responseIdentifiers
-        )
+void QueryPacs::foundMatchCallback(void * callbackData, T_DIMSE_C_FindRQ * request, int responseCount, T_DIMSE_C_FindRSP *rsp, 
+    DcmDataset *responseIdentifiers)
 {
     Q_UNUSED(rsp);
     Q_UNUSED(responseCount);
@@ -43,7 +38,7 @@ void QueryPacs::foundMatchCallback(
     if (queryPacsCaller->m_cancelQuery)
     {
         /*Hem de comprovar si ja haviem demanat cancel·lar la Query. És degut a que tot i que demanem cancel·lar la query actual
-          el PACS ens envia els dataset que havia posat a la pila de la xarxa just abans de rebre el cancel·lar la query, per això 
+          el PACS ens envia els dataset que havia posat a la pila de la xarxa just abans de rebre el cancel·lar la query, per tant
          pot ser que tot i havent demanat cancel·lar la query rebem algun resultat més, per això comprovem si ja havíem demanat
          cancel·lar la query per no tornar-la  demanar, quan rebem aquests resultats que ja s'havien posat a la pila de la xarxa.
         http://forum.dcmtk.org/viewtopic.php?t=2143
@@ -57,23 +52,25 @@ void QueryPacs::foundMatchCallback(
     else
     {
         DICOMTagReader *dicomTagReader = new DICOMTagReader("", responseIdentifiers);
-        QString queryRetrieveLevel = dicomTagReader->getValueAttributeAsQString( DICOMQueryRetrieveLevel );
+        QString queryRetrieveLevel = dicomTagReader->getValueAttributeAsQString(DICOMQueryRetrieveLevel);
 
-        //en el cas que l'objecte que cercàvem fos un estudi afegi
-        if ( queryRetrieveLevel == "STUDY" )
+        if (queryRetrieveLevel == "STUDY")
         {
-            queryPacsCaller->addPatientStudy( dicomTagReader );
-        } //si la query retorna un objecte sèrie
-        else if ( queryRetrieveLevel == "SERIES" )
+            //en el cas que l'objecte que cercàvem fos un estudi
+            queryPacsCaller->addPatientStudy(dicomTagReader);
+        } 
+        else if (queryRetrieveLevel == "SERIES")
         {
-            queryPacsCaller->addPatientStudy( dicomTagReader );
-            queryPacsCaller->addSeries( dicomTagReader );
-        }// si la query retorna un objecte imatge
-        else if ( queryRetrieveLevel == "IMAGE" )
+            //si la query retorna un objecte sèrie
+            queryPacsCaller->addPatientStudy(dicomTagReader);
+            queryPacsCaller->addSeries(dicomTagReader);
+        }
+        else if (queryRetrieveLevel == "IMAGE")
         {
-            queryPacsCaller->addPatientStudy( dicomTagReader );
-            queryPacsCaller->addSeries( dicomTagReader );
-            queryPacsCaller->addImage( dicomTagReader );
+            // si la query retorna un objecte imatge
+            queryPacsCaller->addPatientStudy(dicomTagReader);
+            queryPacsCaller->addSeries(dicomTagReader);
+            queryPacsCaller->addImage(dicomTagReader);
         }
     }
 }
@@ -81,7 +78,7 @@ void QueryPacs::foundMatchCallback(
 PACSRequestStatus::QueryRequestStatus QueryPacs::query()
 {
     m_pacsConnection = new PACSConnection(m_pacsDevice);
-    T_DIMSE_C_FindRQ req;
+    T_DIMSE_C_FindRQ findRequest;
     T_DIMSE_C_FindRSP findResponse;
     DcmDataset *statusDetail = NULL;
 
@@ -92,22 +89,22 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     }
 
     /* figure out which of the accepted presentation contexts should be used */
-    m_presId = ASC_findAcceptedPresentationContextID( m_pacsConnection->getConnection() , UID_FINDStudyRootQueryRetrieveInformationModel );
-    if ( m_presId == 0 )
+    m_presId = ASC_findAcceptedPresentationContextID(m_pacsConnection->getConnection(), UID_FINDStudyRootQueryRetrieveInformationModel);
+    if (m_presId == 0)
     {
         ERROR_LOG("El PACS no ha acceptat el nivell de cerca d'estudis FINDStudyRootQueryRetrieveInformationModel");
         return PACSRequestStatus::QueryFailedOrRefused;
     }
 
     /* prepare the transmission of data */
-    bzero( ( char* ) &req, sizeof( req ) );
-    req.MessageID = m_pacsConnection->getConnection()->nextMsgID;
-    strcpy( req.AffectedSOPClassUID , opt_abstractSyntax );
-    req.DataSetType = DIMSE_DATASET_PRESENT;
+    bzero((char*) &findRequest, sizeof(findRequest));
+    findRequest.MessageID = m_pacsConnection->getConnection()->nextMsgID;
+    strcpy(findRequest.AffectedSOPClassUID, opt_abstractSyntax);
+    findRequest.DataSetType = DIMSE_DATASET_PRESENT;
 
     /* finally conduct transmission of data */
-    OFCondition condition = DIMSE_findUser( m_pacsConnection->getConnection(), m_presId , &req , m_mask , foundMatchCallback , this , DIMSE_NONBLOCKING , 
-                                Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &findResponse , &statusDetail );
+    OFCondition condition = DIMSE_findUser(m_pacsConnection->getConnection(), m_presId, &findRequest, m_mask, foundMatchCallback, this, DIMSE_NONBLOCKING, 
+                                Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &findResponse, &statusDetail);
 
     m_pacsConnection->disconnect();
 
@@ -119,7 +116,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     PACSRequestStatus::QueryRequestStatus queryRequestStatus = processResponseStatusFromFindUser(&findResponse, statusDetail);
 
     /* dump status detail information if there is some */
-    if ( statusDetail != NULL )
+    if (statusDetail != NULL)
     {
         delete statusDetail;
     }
@@ -127,7 +124,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     return queryRequestStatus;
 }
 
-PACSRequestStatus::QueryRequestStatus QueryPacs::query( DicomMask mask )
+PACSRequestStatus::QueryRequestStatus QueryPacs::query(DicomMask mask)
 {
     m_cancelQuery = false;
     m_cancelRequestSent = false;
@@ -146,21 +143,21 @@ void QueryPacs::cancelQuery()
 
 void QueryPacs::cancelQuery(T_DIMSE_C_FindRQ *request)
 {
-    INFO_LOG(QString("Demanem cancel·lar al PACS %1 l'actual query").arg(m_pacsDevice.getAETitle()));
+    INFO_LOG(QString("Demanem cancel.lar al PACS %1 l'actual query").arg(m_pacsDevice.getAETitle()));
 
     //Tots els PACS està obligats pel DICOM Conformance a implementar la cancel·lació
     OFCondition cond = DIMSE_sendCancelRequest(m_pacsConnection->getConnection(), m_presId, request->MessageID);
     if (cond.bad())
     {
-        ERROR_LOG("S'ha produït el següent error al cancel·lar la query: " + QString(cond.text()));
-        INFO_LOG(QString("Aborto la connexió amb el PACS %1").arg(m_pacsDevice.getAETitle()));
+        ERROR_LOG("S'ha produit el seguent error al cancel.lar la query: " + QString(cond.text()));
+        INFO_LOG(QString("Aborto la connexio amb el PACS %1").arg(m_pacsDevice.getAETitle()));
 
         //Si hi hagut un error demanant el cancel·lar, abortem l'associació, d'aquesta manera segur que cancel·lem la query
         ASC_abortAssociation(m_pacsConnection->getConnection());
     }
 }
 
-void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
+void QueryPacs::addPatientStudy(DICOMTagReader *dicomTagReader)
 {
     if (!m_hashPacsIDOfStudyInstanceUID.contains(dicomTagReader->getValueAttributeAsQString(DICOMStudyInstanceUID)))
     {
@@ -169,20 +166,19 @@ void QueryPacs::addPatientStudy( DICOMTagReader *dicomTagReader )
         study->setInstitutionName(m_pacsDevice.getInstitution());
 
         patient->addStudy(study);
-
         m_patientStudyList.append(patient);
         m_hashPacsIDOfStudyInstanceUID[study->getInstanceUID()] = m_pacsDevice.getID();//Afegim a la taula de QHash de quin pacs és l'estudi
     }
 }
 
-void QueryPacs::addSeries( DICOMTagReader *dicomTagReader )
+void QueryPacs::addSeries(DICOMTagReader *dicomTagReader)
 {
     Series *series = CreateInformationModelObject::createSeries(dicomTagReader);
 
-        m_seriesList.append(series);
+    m_seriesList.append(series);
 }
 
-void QueryPacs::addImage( DICOMTagReader *dicomTagReader )
+void QueryPacs::addImage(DICOMTagReader *dicomTagReader)
 {
     Image *image = CreateInformationModelObject::createImage(dicomTagReader);
 
@@ -211,10 +207,6 @@ QHash<QString,QString> QueryPacs::getHashTablePacsIDOfStudyInstanceUID()
 
 PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUser(T_DIMSE_C_FindRSP *findResponse, DcmDataset *statusDetail)
 {
-    QList<DcmTagKey> relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
-    QString messageErrorLog = "No s'ha pogut fer la cerca, descripció error rebuda";
-    PACSRequestStatus::QueryRequestStatus queryRequestStatus;
-
     // Al PS 3.4, secció C.4.1.1.4, taula C.4-1 podem trobar un descripció dels errors.
     // Per a detalls sobre els "related fields" consultar PS 3.7, Annex C - Status Type Enconding
 
@@ -222,6 +214,10 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::processResponseStatusFromFindUs
     {
         return PACSRequestStatus::QueryOk;
     }
+
+    QList<DcmTagKey> relatedFieldsList;// Llista de camps relacionats amb l'error que poden contenir informació adicional
+    QString messageErrorLog = "No s'ha pogut fer la cerca, descripció error rebuda: ";
+    PACSRequestStatus::QueryRequestStatus queryRequestStatus;
 
     switch (findResponse->DimseStatus)
     {
