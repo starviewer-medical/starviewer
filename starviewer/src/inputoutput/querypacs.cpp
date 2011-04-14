@@ -18,9 +18,8 @@
 
 namespace udg{
 
-//Diem a quin nivell fem les cerques d'estudis! Molt important hem de fer a nivell de root
-//TODO: Hi ha un lloc on s'utilitza directament UID_FINDStudyRootQueryRetrieveInformationModel
-static const char * opt_abstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
+//Constant que contindrà quin Abanstract Syntax de Find utilitzem entre els diversos que hi ha utilitzem
+static const char *FindStudyAbstractSyntax = UID_FINDStudyRootQueryRetrieveInformationModel;
 
 QueryPacs::QueryPacs(PacsDevice pacsDevice)
 {
@@ -89,7 +88,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     }
 
     /* figure out which of the accepted presentation contexts should be used */
-    m_presId = ASC_findAcceptedPresentationContextID(m_pacsConnection->getConnection(), UID_FINDStudyRootQueryRetrieveInformationModel);
+    m_presId = ASC_findAcceptedPresentationContextID(m_pacsConnection->getConnection(), FindStudyAbstractSyntax);
     if (m_presId == 0)
     {
         ERROR_LOG("El PACS no ha acceptat el nivell de cerca d'estudis FINDStudyRootQueryRetrieveInformationModel");
@@ -99,7 +98,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     /* prepare the transmission of data */
     bzero((char*) &findRequest, sizeof(findRequest));
     findRequest.MessageID = m_pacsConnection->getConnection()->nextMsgID;
-    strcpy(findRequest.AffectedSOPClassUID, opt_abstractSyntax);
+    strcpy(findRequest.AffectedSOPClassUID, FindStudyAbstractSyntax);
     findRequest.DataSetType = DIMSE_DATASET_PRESENT;
 
     /* finally conduct transmission of data */
@@ -175,6 +174,8 @@ void QueryPacs::addSeries(DICOMTagReader *dicomTagReader)
 {
     Series *series = CreateInformationModelObject::createSeries(dicomTagReader);
 
+    //TODO: Si ens fan una cerca a nivell d'imatge inserirem la mateixa serie tantes vegades com images tenim, s'hauria de comprovar si ja conté
+    //la sèrie la llista abans d'afegir-la
     m_seriesList.append(series);
 }
 
