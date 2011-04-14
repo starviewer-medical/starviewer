@@ -50,8 +50,6 @@ class QViewerCommand;
     Podem escollir quines annotacions textuals i de referència apareixeran en la vista 2D a través dels flags "AnnotationFlags" definits com enums.
     Aquests flags es poden passar en el constructor o els podem modificar a través dels mètodes \c addAnnotation() o \c removeAnnotation()
     que faran visible o invisible l'anotació indicada. Per defecte el flag és \c AllAnnotation i per tant es veuen totes les anotacions per defecte.
-
-    @author Grup de Gràfics de Girona  (GGG )
 */
 class Q2DViewer : public QViewer {
 Q_OBJECT

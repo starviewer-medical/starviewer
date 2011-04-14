@@ -10,8 +10,6 @@ class Series;
 
 /**
 Mòdul que s'encarrega d'omplir la informació d'objectes PresentationState. Un dels seus prerequisits serà que s'hagi superat el mòdul DICOMFileClassifierFillerStep. Les Series a processar han de de ser de modalitat PR.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PresentationStateFillerStep : public PatientFillerStep
 {

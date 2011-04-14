@@ -17,9 +17,6 @@ namespace udg {
 
 class Image;
 
-/**
-	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
-*/
 class SendDICOMFilesToPACS: public QObject{
 Q_OBJECT
 public:

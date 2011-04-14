@@ -24,8 +24,6 @@ serà Secondary Capture Image Storage (PS 3.4 I.4).
 IMPORTANT: El Volume generat NOMÉS té el pixel data en memòria representat amb un vtkImageData (o itk). Per tant, els objectes
 Image associat al Volume no estan relacionats amb cap fitxer ( path == "" ). Si es necessita els fitxers caldria exportar el
 Volume.
-
-@author Grup de Gràfics de Girona  ( GGG )
 */
 
 class VolumeBuilderFromCaptures : public VolumeBuilder

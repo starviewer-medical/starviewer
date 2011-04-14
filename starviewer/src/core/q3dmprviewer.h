@@ -13,8 +13,6 @@ class Q3DOrientationMarker;
 
 /**
     Visor de Reconstrucció multiplanar 3D
-
-@author Grup de Gràfics de Girona  ( GGG )
 */
 class Q3DMPRViewer : public QViewer{
 Q_OBJECT

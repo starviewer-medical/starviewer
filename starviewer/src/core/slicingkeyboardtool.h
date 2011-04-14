@@ -10,8 +10,6 @@ class Volume;
 
 /**
     Tool per la sincronització de llesques a partir de teclat
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class SlicingKeyboardTool : public Tool {
 Q_OBJECT

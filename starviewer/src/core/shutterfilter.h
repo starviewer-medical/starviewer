@@ -27,8 +27,6 @@ Les coordenades del shutter sempre són referents a l'espai de l'input, per tant
 El shutter s'aplica a totes les imatges del volum !!
 
 \TODO queda per definir com tractar els bitmap shutter
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class Volume;

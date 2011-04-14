@@ -11,7 +11,6 @@ namespace udg {
 class DicomMask;
 
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class LocalDatabaseStudyDAL: public LocalDatabaseBaseDAL
 {

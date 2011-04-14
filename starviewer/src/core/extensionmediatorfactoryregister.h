@@ -8,9 +8,6 @@
 
 namespace udg {
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 template <class FactoryType>
 class ExtensionMediatorFactoryRegister
                         : public GenericSingletonFactoryRegister<ExtensionMediator, FactoryType, QString, ExtensionMediatorFactory>

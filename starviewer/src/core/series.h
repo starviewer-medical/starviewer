@@ -19,8 +19,6 @@ class Study;
 
     La classe conté tot tipu d'informació relacionada amb la sèrie d'un pacient. Una sèrie pot equivaler a un o més volums,
     per tant tindrem la llista de Volums corresponents a la sèrie.
-
-	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class Series : public QObject {
 Q_OBJECT

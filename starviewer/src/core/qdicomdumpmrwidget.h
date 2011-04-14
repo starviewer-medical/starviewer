@@ -9,7 +9,6 @@ class Image;
 class Series;
 
 /** Dicomdump de MR
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QDicomDumpMRWidget : public QWidget , private Ui::QDicomDumpMRWidgetBase{
 Q_OBJECT

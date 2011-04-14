@@ -11,7 +11,6 @@ namespace udg {
     @code
     InstallExtension<3DMPRExtension, 3DMPRExtensionMediator> registerMe;
     @endcode
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 template <class Extension, class Mediator>
 class InstallExtension

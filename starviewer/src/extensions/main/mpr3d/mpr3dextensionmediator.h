@@ -8,9 +8,6 @@
 
 namespace udg{
 
-/**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class MPR3DExtensionMediator: public ExtensionMediator
 {
     Q_OBJECT

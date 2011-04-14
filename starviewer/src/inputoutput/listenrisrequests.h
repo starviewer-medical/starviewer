@@ -11,8 +11,6 @@ class QTcpServer;
 namespace udg {
 
 /** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS i atendre les peticions d'aquests
- *
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 
 class ListenRISRequests: public QObject

@@ -7,8 +7,6 @@ namespace udg {
 
 /**
     Encapsula un identificador numèric.
-    
-@author Grup de Gràfics de Girona  ( GGG )
 */
 
 class Identifier

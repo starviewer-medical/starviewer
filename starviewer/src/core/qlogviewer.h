@@ -5,9 +5,6 @@
 
 namespace udg {
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class QLogViewer : public QDialog, private Ui::QLogViewerBase
 {
 Q_OBJECT

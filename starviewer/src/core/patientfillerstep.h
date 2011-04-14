@@ -10,8 +10,6 @@ class Series;
 
 /**
 Classe pare dels mòduls que omplen parts específiques de l'estructura Patient
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PatientFillerStep{
 public:

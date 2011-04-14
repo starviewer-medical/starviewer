@@ -12,9 +12,6 @@ namespace udg {
 class HangingProtocol;
 class HangingProtocolDisplaySet;
 
-/**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class HangingProtocolXMLReader : public QObject
 {
 Q_OBJECT

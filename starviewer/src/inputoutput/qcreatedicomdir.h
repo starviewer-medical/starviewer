@@ -16,9 +16,6 @@ class Status;
 class Image;
 class IsoImageFileCreator;
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase{
 Q_OBJECT
 public:

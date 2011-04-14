@@ -9,7 +9,6 @@ class QProcess;
 namespace udg {
 
 /** Crea un arxiu d'imatge ISO a partir d'un directori o fitxer.
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class IsoImageFileCreator: public QObject {
 Q_OBJECT

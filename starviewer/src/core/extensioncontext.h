@@ -10,8 +10,6 @@ class Volume;
 
 /**
 Contexte on s'executa una extensió. Permet accedir a informació que pot ser útil a l'extensió com l'objecte Patient, la finestra on s'executa, els "readers"..
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ExtensionContext{
 public:

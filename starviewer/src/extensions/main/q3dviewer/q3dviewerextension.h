@@ -20,8 +20,6 @@ class ToolManager;
 
 /**
  * ...
- *
- * @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Q3DViewerExtension : public QWidget, private ::Ui::Q3DViewerExtensionBase {
 Q_OBJECT

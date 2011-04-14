@@ -23,8 +23,6 @@ namespace udg {
     La descripció serà tractada com a camp clau, per tant no hi poden haver dos presets amb el mateix nom.
 
     Per poder fer una diferenciació de la procedència de cada valor, es poden crear certs grups com ja s'ha anomenat abans.
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class WindowLevelPresetsToolData : public ToolData {
 Q_OBJECT

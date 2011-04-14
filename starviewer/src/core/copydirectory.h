@@ -6,8 +6,6 @@
 namespace udg {
 
 /** Classe que ens permet copiar el contingut d'un directori
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class CopyDirectory{
 public:

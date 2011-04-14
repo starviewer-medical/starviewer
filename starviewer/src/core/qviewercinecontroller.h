@@ -14,8 +14,6 @@ class Volume;
 
 /**
 Controlador de seqüències de CINE acoplable a qualsevol QViewer
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QViewerCINEController: public QObject
 {

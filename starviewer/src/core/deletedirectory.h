@@ -9,7 +9,6 @@ class QDir;
 namespace udg {
 
 /** Aquesta classe, esborra tot els fitxers i subdirectoris que contingui un directori
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class DeleteDirectory : public QObject
 {

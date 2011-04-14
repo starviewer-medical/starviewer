@@ -11,8 +11,6 @@ namespace udg {
 
 /**
 Genera fitxers DICOM utilitzant la llibreria dcmtk.
-
-@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class DICOMWriterDCMTK : public DICOMWriter
 {

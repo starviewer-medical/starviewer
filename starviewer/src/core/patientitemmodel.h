@@ -14,8 +14,6 @@ class Patient;
 /**
 Classe que representa un model del patró Model/View Programming de les Qt's,
 per tal de representar en forma d'arbre les dades d'un pacient.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class PatientItemModel : public QAbstractItemModel {

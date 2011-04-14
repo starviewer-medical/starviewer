@@ -10,8 +10,6 @@ namespace udg {
 
 /**
     Classe encarregada de definir els atributs que configuren una tool. Els guarda de forma genèrica.
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class ToolConfiguration : public QObject {
 Q_OBJECT

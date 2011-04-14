@@ -7,8 +7,6 @@ namespace udg {
 
 /**
     Eina per moure la posició de la càmera en escena d'un viewer
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class TranslateTool : public Tool {
 Q_OBJECT

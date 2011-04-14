@@ -18,7 +18,6 @@ class Status;
 
 /** Aquesta classe permet llegir un dicomdir i consultar-ne els seus elements.
   * Accedint a través de l'estructura d'arbres que representen els dicomdir Pacient/Estudi/Series/Imatges, accedim a la informació el Dicomdir per a realitzar cerques.
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class DICOMDIRReader{
 public:

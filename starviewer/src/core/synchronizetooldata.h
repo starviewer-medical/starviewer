@@ -9,8 +9,6 @@ class Q2DViewer;
 
 /**
     Classe per guardar les dades de la tool de sincronització.
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class SynchronizeToolData : public ToolData {
 Q_OBJECT

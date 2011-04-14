@@ -19,8 +19,6 @@ namespace udg {
  *
  * En principi el format del XML sempre és igual, no hi ha cap més tag, només envien com a paràmetre per cercar l'estudi 
  * l'accesionm number ja que és l'únic paràmetre que els RIS coneixen d'un estudi
- *
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class DicomMask;

@@ -10,9 +10,6 @@ class HangingProtocolMask;
 class HangingProtocolImageSet;
 class HangingProtocolDisplaySet;
 
-/**
-    @author Grup de Gràfics de Girona  ( GGG) <vismed@ima.udg.es>
-*/
 class HangingProtocol : public QObject
 {
 Q_OBJECT

@@ -10,8 +10,6 @@ class Volume;
 
 /**
     Tool que serveix per fer slicing en un visor 2D
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class SlicingTool : public Tool {
 Q_OBJECT

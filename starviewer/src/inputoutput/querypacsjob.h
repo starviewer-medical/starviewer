@@ -19,7 +19,6 @@ class Image;
 class QueryPacs;
 
 /** Classe que cercar estudis en un dispositiu pacs, creant un nou job utilitzant les threadweaver
-	@author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 
 class QueryPacsJob :public PACSJob

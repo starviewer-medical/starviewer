@@ -12,8 +12,6 @@ namespace udg {
 /**
     Classe que permet distribuir sobre un widget una sèrie Q2DViewerWidgets 
     amb diferents layouts i geometries de forma versàtil.
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class ViewersLayout : public QWidget {
 Q_OBJECT

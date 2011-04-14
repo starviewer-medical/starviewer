@@ -11,8 +11,6 @@ class Image;
 
 /**
 Mòdul que s'encarrega d'identificar les sèries dinàmiques. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified i la ImageFillerStep
-
-@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class TemporalDimensionFillerStep : public PatientFillerStep
 {

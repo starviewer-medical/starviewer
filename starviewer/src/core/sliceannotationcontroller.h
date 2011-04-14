@@ -10,8 +10,6 @@ namespace udg {
 
 /**
 Aquesta classe s'encarrega de controlar la visibilitat de les annotacions en un entorn de visualització 2D amb vistes axial, sagital i coronal. Conté tres mapes (un per cada vista) que relacionen la llesca amb les annotacions contingudes per un visualitzador 2D.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class SliceAnnotationController : public QObject
 {

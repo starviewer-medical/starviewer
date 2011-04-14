@@ -23,7 +23,6 @@ class PreviousStudiesManager;
 /**
     Classe encarregada de fer la gestió de HP: cercar HP candidats i aplicar HP.
     Degut a que els HP es modifiquen per assignar-los les sèries que s'han de mostrar, es fa una còpia del repositori.
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class HangingProtocolManager : public QObject {
 Q_OBJECT

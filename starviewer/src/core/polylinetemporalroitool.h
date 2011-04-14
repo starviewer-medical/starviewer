@@ -10,8 +10,6 @@ class PolylineTemporalROIToolData;
 
 /**
 Tool per dibuixar ROIS polilinies i calcular mitjanes de series temporals
-
-	@author Laboratori de Gràfics i Imatge  ( GILab ) <vismed@ima.udg.es>
 */
 class PolylineTemporalROITool : public PolylineROITool
 {

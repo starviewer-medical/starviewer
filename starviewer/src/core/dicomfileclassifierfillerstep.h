@@ -16,9 +16,6 @@ Step del PatientFiller que s'encarrega de classificar arxius de tipus DICOM en l
 L'objecte d'input (PatientFillerInput) contindrà una llista de fitxers i una estructura de llista de Patients la qual pot estar tant buida com amb contingut. Quan un dels arxius es detecti com a classificat (ja s'ha afegit anteriorment associat a un pacient,study uid, series uid, imatge/kin/ps) no se li omplirà cap mena de informació i es passarà al següent objecte. Això ens permet que un altre procés ens hagi "classificat" els arxius dins de l'estructura de PatientFillerInput
 
 TODO De moment només classifiquem imatges que és el que permet l'objecte Series.
-
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class DICOMFileClassifierFillerStep : public PatientFillerStep
 {

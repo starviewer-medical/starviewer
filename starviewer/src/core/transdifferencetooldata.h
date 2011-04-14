@@ -12,8 +12,6 @@ class Volume;
 
 /**
     Classe per guardar les dades de la tool de diferència amb translació.
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class TransDifferenceToolData : public ToolData {
 Q_OBJECT

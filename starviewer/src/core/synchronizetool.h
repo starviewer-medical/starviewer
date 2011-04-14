@@ -10,8 +10,6 @@ class SynchronizeToolData;
 
 /**
     Tool de sincronització entre visualitzadors.
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class SynchronizeTool : public Tool {
 Q_OBJECT

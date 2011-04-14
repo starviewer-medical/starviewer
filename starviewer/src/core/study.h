@@ -12,8 +12,6 @@ class Patient;
 
 /**
     Classe que encapsula l'estudi d'un pacient
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class Study : public QObject {
 Q_OBJECT
