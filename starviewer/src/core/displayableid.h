@@ -20,8 +20,6 @@ id = DisplayableID("nouValor",tr("nouValor"));
 
 id = id2;
 @endcode
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class DisplayableID {

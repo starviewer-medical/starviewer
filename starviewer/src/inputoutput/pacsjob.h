@@ -16,8 +16,6 @@ using namespace ThreadWeaver;
 
     Aquesta classe hereda de ThreadWeaver::Job per així tenir automàticament la gestió de les cues que implementa, i permetre que les operacions
     amb el PACS s'executin en un thread independent.
-
-   @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PACSJob: public Job
 {

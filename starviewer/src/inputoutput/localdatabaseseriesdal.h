@@ -12,7 +12,6 @@ class DicomMask;
 class Series;
 
 /** Classe que conté els mètodes d'accés a la Taula series
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class LocalDatabaseSeriesDAL: public LocalDatabaseBaseDAL
 {

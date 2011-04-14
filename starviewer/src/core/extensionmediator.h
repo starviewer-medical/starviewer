@@ -19,8 +19,6 @@ Classe "mare" de l'Extensió. És l'única que enten a l'Extensió i sap on es t
 "totes les mares són iguals". I els fills no coneixen a les mares.
 
 \TODO Cal revisar tot aquest esquema. Ara és temporal per poder separar en directoris a l'espera del "Nou Disseny(tm)"
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ExtensionMediator : public QObject
 {

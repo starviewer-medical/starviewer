@@ -8,8 +8,6 @@
 class QTimer;
 
 /** Classe que mostra un PopUp indicant que s'ha rebut una petició del RIS per descarregar un estudi
- *
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 namespace udg {

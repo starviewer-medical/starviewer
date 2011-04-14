@@ -8,9 +8,6 @@
 
 namespace udg {
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class HangingProtocolsRepository : public Repository<HangingProtocol>
 {
 Q_OBJECT

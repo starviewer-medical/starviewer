@@ -11,8 +11,6 @@ class QViewer;
 
 /**
     Classe base per a totes les tools
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class Tool : public QObject {
 Q_OBJECT

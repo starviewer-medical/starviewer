@@ -15,9 +15,6 @@ class QApplicationMainWindow;
 
 /**
 Gestor de mini-aplicacions i serveis de l'aplicació principal
-
-@author Grup de Gràfics de Girona  ( GGG )
-
 */
 class ExtensionHandler : public QObject{
 Q_OBJECT

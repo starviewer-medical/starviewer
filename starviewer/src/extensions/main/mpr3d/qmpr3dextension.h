@@ -11,8 +11,6 @@ class ToolManager;
 
 /**
 Extensió de l'MPR 3D
-
-@author Grup de Gràfics de Girona  ( GGG )
 */
 class QMPR3DExtension : public QWidget , private ::Ui::QMPR3DExtensionBase{
 Q_OBJECT

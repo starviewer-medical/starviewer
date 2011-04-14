@@ -12,7 +12,6 @@ namespace udg {
 class DicomMask;
 
 /** Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class LocalDatabaseImageDAL: public LocalDatabaseBaseDAL

@@ -13,8 +13,6 @@ namespace udg {
 
 /**
     Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 // FWD declarations

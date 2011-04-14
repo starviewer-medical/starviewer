@@ -23,8 +23,6 @@ class DICOMValueAttribute;
    Es pot crear a partir d'un fitxer (el cas més habitual) o bé aprofitant un DcmDataset ja existent (per casos d'eficiència).
    En el cas de crear un DICOMTagReader a partir d'un DcmDataset cal tenir en compte que el propietari d'aquest serà el
    mateix DICOMTagReader i, per tant, no es pot destruir l'objecte des de fora. Ho farà el mateix DICOMTagReader.
-
-   @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class DICOMTagReader {
 public:

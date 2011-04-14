@@ -9,9 +9,6 @@
 
 namespace udg {
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 typedef Singleton< GenericFactory<ExtensionMediator, QString> > ExtensionMediatorFactory;
 
 }

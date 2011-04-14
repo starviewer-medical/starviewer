@@ -7,8 +7,6 @@ namespace udg {
 
 /**
     Classe genèrica per a les dades d'un tool
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ToolData : public QObject {
 Q_OBJECT

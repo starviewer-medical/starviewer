@@ -7,9 +7,6 @@
 
 namespace udg {
 
-/**
-@author Grup de Gràfics de Girona  ( GGG )
-*/
 template< typename ItemType >
 class Repository  : public RepositoryBase{
 public:

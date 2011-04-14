@@ -11,8 +11,6 @@ class Volume;
         
 /**
  Classe que guarda les dades compartides per la tool ImagePlaneProjectionTool
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ImagePlaneProjectionToolData : public ToolData
 {

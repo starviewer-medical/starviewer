@@ -21,8 +21,6 @@ class ToolData;
         - Passa els events rebuts a totes les tools actives
         - Està associat a un viewer com atribut d'aquest
         - Guarda el nom de cadascuna de les tools
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class ToolProxy : public QObject {
 Q_OBJECT

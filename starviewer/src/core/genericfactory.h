@@ -44,7 +44,6 @@ namespace udg {
     @TODO Si s'utilitza aquesta classe conjuntament amb un singleton només es podrà tenir un objecte de cada tipus.
     @TODO En cas que fos necessari s'hauria de fer l'implementació més genèrica per permetre de 0 a n paràmetres en el constructor i no
           no obligar a que els objectes creat heretin de QObject.
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
     @see GenericSingletonFactoryRegister
     @see ExtensionFactory
 */

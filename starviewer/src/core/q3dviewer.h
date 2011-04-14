@@ -30,8 +30,6 @@ class ContourVoxelShader;
 
 /**
 Classe base per als visualitzadors 3D
-
-@author Grup de Gràfics de Girona  ( GGG )
 */
 class Q3DViewer : public QViewer{
 Q_OBJECT

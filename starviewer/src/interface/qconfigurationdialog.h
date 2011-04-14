@@ -10,7 +10,6 @@ namespace udg {
 
 /**
     Classe que implementa el diàleg de configuració de l'aplicació.
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QConfigurationDialog : public QDialog, private ::Ui::QConfigurationDialogBase
 {

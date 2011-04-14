@@ -14,8 +14,6 @@ namespace udg {
     Tot i això, aquesta classe s'hauria d'heredar i només fer servir les heredades d'aquesta. Com a exemple es té ExtensionFactoryRegister.
     Així doncs, aquesta classe queda només reservada per quan es vulgui implementar un nou factory i no per utilitzar-la directament en el
     registre de factory's.
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 template <class AncestorType, class BaseClass, typename ClassIdentifier, class SingletonRegistry, class ParentType = QObject>

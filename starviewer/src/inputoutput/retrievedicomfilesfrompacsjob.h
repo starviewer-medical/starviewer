@@ -11,8 +11,6 @@ namespace udg {
 
 /**
     Job que s'encarrega de descarregar fitxers del PACS.
-
-   @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Study;
 class RetrieveDICOMFilesFromPACS;

@@ -8,8 +8,6 @@ namespace udg {
 
 /**
 Mini-aplicació encarregada de permetre carregar un model des del sistema de fitxers al repositori de volums
-
-@author Grup de Gràfics de Girona  ( GGG )
 */
 class AppImportFile : public QObject{
 Q_OBJECT

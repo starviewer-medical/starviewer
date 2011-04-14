@@ -8,8 +8,6 @@ namespace udg {
 /**
     Aquesta classe ens implementa una paleta de colors per tal de saber els colors amb que ha de treballar el Drawer.
     Permetrà definir diferents tipus de colors sogons estem treballant amb pantalla monocrom o color.
-
-    @author Grup de Gràfics de Girona  ( GGG )
 */
 class ColorPalette {
 public:

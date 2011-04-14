@@ -8,7 +8,6 @@ namespace udg {
 class Status;
 
 /** Converteix les imatges guardades al format littleEndian, necessari per crear els DicomDir
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ConvertDicomToLittleEndian
 {

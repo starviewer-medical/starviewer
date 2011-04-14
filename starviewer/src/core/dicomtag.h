@@ -8,8 +8,6 @@ namespace udg {
 /**
    Classe per representar un tag DICOM.
    Un tag està format per enters, el group i l'element. Ex: (0020,0022)
-
-   @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class DICOMTag {

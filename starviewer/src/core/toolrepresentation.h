@@ -11,8 +11,6 @@ class Drawer;
 
 /**
 Classe contenidor de ToolRepresentation
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ToolRepresentation : public QObject
 {

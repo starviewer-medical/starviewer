@@ -9,8 +9,6 @@ class ImagePlane;
         
 /**
     Classe que guarda les dades compartides per la tool de cursor 3D.
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class Cursor3DToolData : public ToolData {
 Q_OBJECT

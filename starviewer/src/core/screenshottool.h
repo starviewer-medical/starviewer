@@ -16,8 +16,6 @@ class QViewer;
     Ctrl+S fa la captura simple del que s'està veient en aquell moment
     Ctrl+A fa totes les captures possibles. En el cas que el viewer sigui el 2D, fara les captures de totes
     les imatges de la sèrie, altrament farà una captura simple
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class ScreenShotTool: public Tool {
 Q_OBJECT

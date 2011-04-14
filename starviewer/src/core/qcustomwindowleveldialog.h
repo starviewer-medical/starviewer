@@ -10,8 +10,6 @@ class WindowLevelPresetsToolData;
 
 /**
 Diàleg per escollir manualment els ajustaments pel window level
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class QCustomWindowLevelDialog : public QDialog, private Ui::QCustomWindowLevelDialogBase
 {

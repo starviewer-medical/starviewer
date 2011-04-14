@@ -9,8 +9,6 @@ class ImagePlane;
 
 /**
     Dades corresponents a la Tool de reference lines
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ReferenceLinesToolData : public ToolData {
 Q_OBJECT

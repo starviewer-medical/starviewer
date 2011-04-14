@@ -15,8 +15,6 @@ class PatientBrowserMenuList;
 /**
     Widget en forma de menú que desplega la informació del pacient que li donem 
     d'entrada de forma que poguem navegar pels seus estudis i corresponents volums
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class PatientBrowserMenu : public QWidget {
 Q_OBJECT

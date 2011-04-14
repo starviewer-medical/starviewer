@@ -9,7 +9,6 @@ class Series;
 class Image;
 
 /** Classe encaragada de fer el dicom dump per a imatges CT helicoïdals
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QDicomDumpCTHelixWidget : public QWidget , private Ui::QDicomDumpCTHelixWidgetBase{
 Q_OBJECT

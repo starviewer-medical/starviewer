@@ -5,10 +5,6 @@
 
 namespace udg {
 
-/**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
-
 class QViewer;
 
 class WindowLevelTool : public Tool {

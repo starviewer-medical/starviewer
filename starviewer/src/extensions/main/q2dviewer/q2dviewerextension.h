@@ -34,8 +34,6 @@ class HangingProtocolManager;
 
 /**
     Extensió que s'executarà  per defecte a l'obrir un model
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class Q2DViewerExtension : public QWidget , private Ui::Q2DViewerExtensionBase {
 Q_OBJECT

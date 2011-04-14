@@ -7,9 +7,6 @@
 
 namespace udg {
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class HangingProtocolMask : public QObject
 {
 Q_OBJECT

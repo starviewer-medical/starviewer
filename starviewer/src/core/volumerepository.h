@@ -27,8 +27,6 @@ namespace udg {
     ...
     Volume* m_volume = m_volumeRepository->getVolume(id);    
     \endcode
-    
-    @author GGG
 */
 
 class VolumeRepository : public Repository<Volume>

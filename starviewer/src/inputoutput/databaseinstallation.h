@@ -7,7 +7,6 @@
 namespace udg {
 
 /** Aquesta classe comprova que els directoris i la base de dades de la cache estiguin correctament creats si no es aquest el cas, els crea, per a que l'aplicacio pugui funcionar correctament
- *  @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
  */
 class DatabaseInstallation : public QObject {
 Q_OBJECT

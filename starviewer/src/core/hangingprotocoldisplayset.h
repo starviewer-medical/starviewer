@@ -8,9 +8,6 @@ namespace udg {
 class HangingProtocol;
 class HangingProtocolImageSet;
 
-/**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class HangingProtocolDisplaySet : public QObject
 {
 Q_OBJECT

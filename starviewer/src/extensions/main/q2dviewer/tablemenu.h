@@ -13,8 +13,6 @@ namespace udg {
 
 /**
 Classe per implementar el menu per seleccionar els grids com si es crees una taula.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 // FWD declarations

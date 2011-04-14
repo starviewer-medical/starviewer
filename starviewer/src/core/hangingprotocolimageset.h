@@ -9,9 +9,6 @@ class Series;
 class Study;
 class HangingProtocol;
 
-/**
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class HangingProtocolImageSet : public QObject {
 Q_OBJECT
 public:

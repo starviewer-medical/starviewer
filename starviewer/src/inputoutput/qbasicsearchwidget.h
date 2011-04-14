@@ -11,7 +11,6 @@ namespace udg {
 class DicomMask;
 
 /** Classe de cerca bàsica d'elemens
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QBasicSearchWidget : public QWidget , private Ui::QBasicSearchWidgetBase{
 Q_OBJECT

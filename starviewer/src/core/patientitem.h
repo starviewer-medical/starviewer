@@ -12,8 +12,6 @@ class Series;
 
 /**
 Classe que representa un item de pacient, per tal de crear un model basat en els pacients
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PatientItem {
 

@@ -13,8 +13,6 @@ class EditorToolData;
 
 /**
     Tool que serveix per editar el volum sobreposat en un visor 2D
-
-    @author Laboratori de Gràfics i Imatge  ( GILab ) <vismed@ima.udg.es>
 */
 class EditorTool : public Tool {
 Q_OBJECT

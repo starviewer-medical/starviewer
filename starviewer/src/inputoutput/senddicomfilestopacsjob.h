@@ -11,8 +11,6 @@ namespace udg {
 
 /**
     Job que s'encarrega d'enviar fitxers del PACS.
-
-   @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class Study;

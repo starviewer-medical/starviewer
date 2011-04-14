@@ -7,9 +7,6 @@ namespace udg {
 
 class QViewer;
 
-/**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class ZoomTool : public Tool {
 Q_OBJECT
 public:

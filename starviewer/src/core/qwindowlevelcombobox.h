@@ -11,8 +11,6 @@ class WindowLevelPresetsToolData;
 
 /**
     Combo box personalitzat per a escollir valors de window level predeterminats i personalitzats
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class QWindowLevelComboBox : public QComboBox {
 Q_OBJECT

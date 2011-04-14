@@ -24,7 +24,6 @@ class DICOMAnonymizer;
   * Les imatges no poden tenir extensió
   * S'ha de seguir l'estructura jeràrquica de directoris de Pacient/Estudi/Series/Imatges
   * La imatge ha d'estar en format littleEndian
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ConvertToDicomdir : public QObject
 {

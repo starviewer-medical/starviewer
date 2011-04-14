@@ -10,7 +10,6 @@ namespace udg {
 class DatabaseConnection;
 
 /** Classe base de les que hereden totes les classes que implementen una DAL per accés a dades
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class LocalDatabaseBaseDAL
 {

@@ -13,8 +13,6 @@ class PatientBrowserMenuBasicItem;
 /**
     Widget que representa el contingut del menú en un llistat d'ítems
     Aquests ítems s'organitzaran en files i columnes dins d'un grup al que li donarem un "caption"
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PatientBrowserMenuList : public QWidget {
 Q_OBJECT

@@ -9,7 +9,6 @@ class Image;
 
 /** 
  *  Classe encaragada de fer el dicom dump per a imatges de mammografia (MG)
- *  @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
  */
 class QDicomDumpMammographyWidget : public QWidget , private Ui::QDicomDumpMammographyWidgetBase{
 Q_OBJECT

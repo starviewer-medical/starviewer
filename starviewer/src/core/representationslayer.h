@@ -13,8 +13,6 @@ class Q2DViewer;
 
 /**
 Classe contenidor de ToolRepresentation
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class RepresentationsLayer : public QObject
 {

@@ -14,8 +14,6 @@ class QViewer;
 
 /**
     Registre de Tools i elements associats
-
-    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class ToolRegistry : public QObject {
 Q_OBJECT

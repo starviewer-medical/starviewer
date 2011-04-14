@@ -12,8 +12,6 @@ namespace udg {
 /**
 Item de menu. Envia un senyal quan esta activat i quan és seleccinat. Així com canvia de color al estar activat. Pot guardar informació del tipus QVariant.
 També es pot escollir el comportament del canvi de color.
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class ItemMenu : public QFrame

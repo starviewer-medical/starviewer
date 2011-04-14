@@ -9,7 +9,6 @@
 namespace udg {
 
 /** Classe encarregada d'esborrar en un thread els estudis vells
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 
 class QDeleteOldStudiesThread : public QThread

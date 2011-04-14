@@ -9,7 +9,6 @@
 namespace udg {
 
 /** Aquesta classe és un widget millorat del ListWidget de QT, fet  modificat per poder mostrar les sèries d'un estudi.
-@author marc
 */
 
 class Series;

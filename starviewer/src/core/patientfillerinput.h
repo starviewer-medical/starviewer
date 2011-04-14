@@ -13,8 +13,6 @@ class DICOMTagReader;
 
 /**
 Classe que encapsula els paràmetres d'input que es faran servir a PatientFiller
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PatientFillerInput{
 public:

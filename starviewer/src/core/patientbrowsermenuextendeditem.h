@@ -8,8 +8,6 @@ namespace udg {
 
 /**
 Classe per mostrar la informació addicional referent a una serie d'un estudi d'un pacient.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class PatientBrowserMenuExtendedItem : public QFrame {
 Q_OBJECT

@@ -39,8 +39,6 @@ namespace udg {
     Cal declarar a Singleton<OnlyOne> com a friend perquè sinó ens veuríem obligats a declarar constructor i destructor
     públics, trencant així la filosofia d'un Singleton.
     \todo Fer-la thread-safe.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 template <typename T>
 class Singleton{

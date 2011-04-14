@@ -10,9 +10,6 @@ class QToolButton;
 
 namespace udg {
 
-/**
-@author Grup de Gràfics de Girona  ( GGG )
-*/
 class ExtensionWorkspace : public QTabWidget{
 Q_OBJECT
 public:

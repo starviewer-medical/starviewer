@@ -12,7 +12,6 @@ class Status;
 class PacsDevice;
 
 /** Interfície que mostra els PACS els quals es pot connectar l'aplicació, permet seleccionar quins es vol connectar l'usuari
-@author marc
 */
 
 class QPacsList : public QWidget, private Ui::QPacsListBase

@@ -9,8 +9,6 @@ class QViewerCINEController;
 class QViewer;
 /**
 Widget per controlar el CINE en els QViewer
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QCINEController : public QWidget, private Ui::QCINEControllerBase
 {

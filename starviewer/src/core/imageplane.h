@@ -9,8 +9,6 @@ namespace udg {
 class Image;
 /**
 Classe que defineix un pla d'imatge. El pla consta de vectors de direcció de X i Y, normal, origen, espaiat i nombre de files i columnes per definir un pla tancat i finit com és el de la imatge. Està definit en coordenades de món.
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class ImagePlane{
 public:

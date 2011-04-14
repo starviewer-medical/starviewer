@@ -14,8 +14,6 @@ Interfície per l'escriptura de fitxers DICOM.
 El mètode \sa newInstance és l'encarregat de crear una instància de les classes d'implementació que es decideix
 tenint en compte un parametre de configuració.
 
-@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-
 */
 class DICOMWriter
 {

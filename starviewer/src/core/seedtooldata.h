@@ -10,9 +10,6 @@ namespace udg {
 class DrawerPoint;
 class Volume;
 
-/**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
-*/
 class SeedToolData : public ToolData {
 Q_OBJECT
 public:

@@ -14,8 +14,6 @@ class Image;
 
 /**
 Mòdul que s'encarrega d'ordenar correctament les imatges de les sèries. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified, la ImageFillerStep i el TemporalDimensionFillerStep.
-
-@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class OrderImagesFillerStep : public PatientFillerStep
 {

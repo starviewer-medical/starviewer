@@ -9,8 +9,6 @@ class Q2DViewer;
 
 /**
 Widget per controlar el Thick Slab d'un Q2DViewer
-
-	@author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class QThickSlabWidget : public QWidget, private Ui::QThickSlabWidgetBase
 {

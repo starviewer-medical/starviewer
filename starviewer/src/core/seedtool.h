@@ -10,8 +10,6 @@ class SeedToolData;
 
 /**
     Eina que serveix per posar llavors en un visor 2D
-
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
 */
 class SeedTool : public Tool {
 Q_OBJECT
