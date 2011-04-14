@@ -92,25 +92,26 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     //última que ha arribat
     m_studiesInstancesUIDRequestedToRetrieve.clear();
 
-    // Mostrem el popUP amb l'accession number
-    m_qpopUpRISRequestsScreen->queryStudiesByAccessionNumberStarted();
-    m_qpopUpRISRequestsScreen->activateWindow();
-    m_qpopUpRISRequestsScreen->show();
-
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
     // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant 
     // un message box, fent un log o el que calgui segons la ocasió.
     QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
     if (queryablePACS.isEmpty())
     {
-        QMessageBox::information(0, ApplicationNameString, tr("The RIS request could not be performed.") + "\n\n" + tr("There are no configured PACS to query.") + "\n" + tr("Please, check your PACS settings."));
+        QMessageBox::information(0, ApplicationNameString, tr("A RIS request has been received, but It could not be performed because there are not configured default PACS to query.") + "\n\n" + tr("Please, check your PACS settings."));
+        INFO_LOG("No s'ha pogut processar la peticio del RIS perque no hi ha PACS configurats per cercar per defecte");
+        m_queueRISRequests.dequeue();
+        return;
     }
-    else
+
+    // Mostrem el popUP amb l'accession number
+    m_qpopUpRISRequestsScreen->queryStudiesByAccessionNumberStarted();
+    m_qpopUpRISRequestsScreen->activateWindow();
+    m_qpopUpRISRequestsScreen->show();
+
+    foreach(const PacsDevice &pacsDevice, queryablePACS)
     {
-        foreach(const PacsDevice &pacsDevice, queryablePACS)
-        {
-            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskRISRequest, QueryPacsJob::study));
-        }
+        enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskRISRequest, QueryPacsJob::study));
     }
 }
 
