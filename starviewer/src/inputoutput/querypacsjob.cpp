@@ -39,9 +39,6 @@ void QueryPacsJob::run()
     m_queryRequestStatus = m_queryPacs->query(m_mask);
 
     INFO_LOG (QString("Consulta al PACS %1 finalitzada").arg(getPacsDevice().getAETitle()));
-
-    //TODO:Cal?
-    setFinished(true);
 }
 
 DicomMask QueryPacsJob::getDicomMask()
