@@ -25,7 +25,9 @@ function docxToPdf(msword, sourceFileName)
 var shell = WScript.CreateObject("WScript.Shell");
 var filenames = [shell.CurrentDirectory + "\\usermanual\\Starviewer_User_guide.docx",
                  shell.CurrentDirectory + "\\quickstartguide\\Starviewer_Quick_start_guide.docx",
-                 shell.CurrentDirectory + "\\shortcuts\\Starviewer_Shortcuts_guide.docx"];
+                 shell.CurrentDirectory + "\\shortcuts\\Starviewer_Shortcuts_guide.docx",
+                 shell.CurrentDirectory + "\\adminGuides\\Starviewer_Administrator_guide.docx",
+                 shell.CurrentDirectory + "\\adminGuides\\Starviewer_Requirements.docx"];
 var msword = WScript.CreateObject("Word.Application");
 
 for(var i = 0; i < filenames.length; ++i)
