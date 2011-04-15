@@ -532,8 +532,8 @@ double Patient::computeStringEditDistanceMetric(const QString &stringA, const QS
     int difference = qMax(stringALength, stringBLength) - min;
 
     double result = (double)p[stringALength] / (double)(min + difference * gap);
-    delete []p;
-    delete []d;
+    delete[] p;
+    delete[] d;
     return result;
 }
 
