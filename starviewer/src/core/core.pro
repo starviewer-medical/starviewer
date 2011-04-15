@@ -4,12 +4,6 @@
 # L'objectiu és una biblioteca:
 FORMS += qlogviewerbase.ui \
     qcustomwindowleveldialogbase.ui \
-    qdicomdumpbase.ui \
-    qdicomdumpcthelixwidgetbase.ui \
-    qdicomdumpctlocalizerwidgetbase.ui \
-    qdicomdumpmrwidgetbase.ui \
-    qdicomdumpctwidgetbase.ui \
-    qdicomdumpmammographywidgetbase.ui \
     qtransferfunctioneditorbyvaluesbase.ui \
     qtransferfunctionintervaleditorbase.ui \
     qcinecontrollerbase.ui \
@@ -123,12 +117,6 @@ HEADERS += extensionfactory.h \
     editortooldata.h \
     windowlevelpresetstooldata.h \
     qviewercinecontroller.h \
-    qdicomdumpcthelixwidget.h \
-    qdicomdumpctlocalizerwidget.h \
-    qdicomdump.h \
-    qdicomdumpmrwidget.h \
-    qdicomdumpctwidget.h \
-    qdicomdumpmammographywidget.h \
     qcinecontroller.h \
     hoverpoints.h \
     qcolorspinbox.h \
@@ -341,12 +329,6 @@ SOURCES += extensionmediator.cpp \
     distancetool.cpp \
     windowlevelpresetstooldata.cpp \
     qviewercinecontroller.cpp \
-    qdicomdump.cpp \
-    qdicomdumpcthelixwidget.cpp \
-    qdicomdumpctlocalizerwidget.cpp \
-    qdicomdumpmrwidget.cpp \
-    qdicomdumpctwidget.cpp \
-    qdicomdumpmammographywidget.cpp \
     qcinecontroller.cpp \
     hoverpoints.cpp \
     qcolorspinbox.cpp \
