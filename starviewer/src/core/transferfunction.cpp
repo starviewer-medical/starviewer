@@ -261,6 +261,30 @@ void TransferFunction::clearGradientOpacity()
 }
 
 
+bool TransferFunction::isSetColor(double x) const
+{
+    return m_color.isSet(x);
+}
+
+
+bool TransferFunction::isSetOpacity(double x) const
+{
+    return isSetScalarOpacity(x);
+}
+
+
+bool TransferFunction::isSetScalarOpacity(double x) const
+{
+    return m_scalarOpacity.isSet(x);
+}
+
+
+bool TransferFunction::isSetGradientOpacity(double y) const
+{
+    return m_gradientOpacity.isSet(y);
+}
+
+
 const QList<double>& TransferFunction::keys() const
 {
     updateKeys();
