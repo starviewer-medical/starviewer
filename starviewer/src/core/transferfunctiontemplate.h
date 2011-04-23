@@ -51,6 +51,8 @@ public:
     void unset(double x);
     /// Esborra tots els punts definits explícitament.
     void clear();
+    /// Retorna cert si hi ha un punt (x,y) definit explícitament, i fals altrament.
+    bool isSet(double x) const;
 
     /// Retorna la llista de valors x de tots els punts (x,y) definits explícitament.
     QList<double> keys() const;
@@ -150,6 +152,13 @@ template <typename T>
 void TransferFunctionTemplate<T>::clear()
 {
     m_map.clear();
+}
+
+
+template <typename T>
+bool TransferFunctionTemplate<T>::isSet(double x) const
+{
+    return m_map.contains(x);
 }
 
 

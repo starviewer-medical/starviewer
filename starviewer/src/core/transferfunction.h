@@ -96,6 +96,15 @@ public:
     void clearScalarOpacity();
     /// Esborra tots els punts d'opacitat del gradient definits explícitament.
     void clearGradientOpacity();
+    /// Retorna cert si hi ha un punt de color (x,c) definit explícitament, i fals altrament.
+    bool isSetColor(double x) const;
+    /// Retorna cert si hi ha un punt d'opacitat escalar (x,o) definit explícitament, i fals altrament.
+    /// Equivalent a isSetScalarOpacity(x).
+    bool isSetOpacity(double x) const;
+    /// Retorna cert si hi ha un punt d'opacitat escalar (x,o) definit explícitament, i fals altrament.
+    bool isSetScalarOpacity(double x) const;
+    /// Retorna cert si hi ha un punt d'opacitat del gradient (y,o) definit explícitament, i fals altrament.
+    bool isSetGradientOpacity(double y) const;
 
     /// Retorna la llista de valors de propietat x de tots els punts de color (x,c) i opacitat escalar (x,o) definits explícitament.
     const QList<double>& keys() const;
