@@ -1164,6 +1164,9 @@ void QExperimental3DExtension::createConnections()
     connect( m_probabilisticAmbientOcclusionTangentSphereGaussianPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionTangentSphereGaussian() ) );
     connect( m_probabilisticAmbientOcclusionGradientPushButton, SIGNAL( clicked() ), SLOT( probabilisticAmbientOcclusionGradient() ) );
     connect( m_volumeVariancePushButton, SIGNAL( clicked() ), SLOT( volumeVariance() ) );
+
+    // TF editor 2
+    connect(m_transferFunctionEditor2OkPushButton, SIGNAL(clicked()), SLOT(setTransferFunction2()));
 }
 
 
@@ -1220,6 +1223,7 @@ void QExperimental3DExtension::loadTransferFunction( const QString &fileName )
     else transferFunction = TransferFunctionIO::fromFile( fileName );
 
     m_transferFunctionEditor->setTransferFunction( *transferFunction );
+    m_transferFunctionEditor2->setTransferFunction(*transferFunction);
     syncNormalToGradientTransferFunction();
 
     m_recentTransferFunctions << *transferFunction;
@@ -5794,6 +5798,12 @@ void QExperimental3DExtension::normalToClusterizedTransferFunction2DImportance()
 void QExperimental3DExtension::clusterizedToNormalTransferFunction2DImportance()
 {
     // no es pot descomposar
+}
+
+
+void QExperimental3DExtension::setTransferFunction2()
+{
+    m_transferFunctionEditor->setTransferFunction(m_transferFunctionEditor2->transferFunction());
 }
 
 
