@@ -12,7 +12,9 @@ FORMS += qlogviewerbase.ui \
     qreleasenotesbase.ui \
     qdicomdumpbrowserbase.ui \
     qviewerworkinprogresswidget.ui \
-    qcustomwindowleveleditwidgetbase.ui
+    qcustomwindowleveleditwidgetbase.ui \
+    qtransferfunctioneditor2base.ui \
+    qtransferfunctiongraphicalviewbase.ui
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
@@ -239,7 +241,14 @@ HEADERS += extensionfactory.h \
     customwindowlevelswriter.h \
     qcustomwindowleveleditwidget.h \
     applicationstylehelper.h \
-    changesliceqviewercommand.h
+    changesliceqviewercommand.h \
+    qtransferfunctioneditor2.h \
+    transferfunctioneditor.h \
+    transferfunctioneditorcommands.h \
+    qtransferfunctionview.h \
+    qtransferfunctiongraphicalview.h \
+    qcolortransferfunctiongraphicalview.h \
+    qcolortransferfunctiongraphicalviewnode.h
 SOURCES += extensionmediator.cpp \
     extensionmanager.cpp \
     displayableid.cpp \
@@ -441,7 +450,14 @@ SOURCES += extensionmediator.cpp \
     customwindowlevelswriter.cpp \
     qcustomwindowleveleditwidget.cpp \
     applicationstylehelper.cpp \
-    changesliceqviewercommand.cpp
+    changesliceqviewercommand.cpp \
+    qtransferfunctioneditor2.cpp \
+    transferfunctioneditor.cpp \
+    transferfunctioneditorcommands.cpp \
+    qtransferfunctionview.cpp \
+    qtransferfunctiongraphicalview.cpp \
+    qcolortransferfunctiongraphicalview.cpp \
+    qcolortransferfunctiongraphicalviewnode.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)
