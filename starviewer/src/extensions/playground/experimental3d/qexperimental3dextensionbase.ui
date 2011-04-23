@@ -2315,8 +2315,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>428</width>
-            <height>909</height>
+            <width>448</width>
+            <height>874</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -3336,8 +3336,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>520</width>
-            <height>1320</height>
+            <width>481</width>
+            <height>1286</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -4682,6 +4682,23 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Page</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_19">
+       <item>
+        <widget class="udg::QTransferFunctionEditor2" name="m_transferFunctionEditor2" native="true"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="m_transferFunctionEditor2OkPushButton">
+         <property name="text">
+          <string>OK</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -4711,6 +4728,12 @@
    <class>udg::QGraphicTransferFunctionEditor</class>
    <extends>QWidget</extends>
    <header>qgraphictransferfunctioneditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>udg::QTransferFunctionEditor2</class>
+   <extends>QWidget</extends>
+   <header>qtransferfunctioneditor2.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -355,6 +355,8 @@ private slots:
     void transferFunctionOptimizationLoadImportance();
     void transferFunctionOptimizationSaveImportance();
 
+    void setTransferFunction2();
+
 private:
 
     Experimental3DVolume *m_volume;
