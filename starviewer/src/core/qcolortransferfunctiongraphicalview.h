@@ -32,8 +32,10 @@ signals:
     void nodeAdded(double x, const QColor &color);
     /// S'emet quan s'esborra un node.
     void nodeRemoved(double x);
-    /// S'emet quan es mou un o més nodes/punts de color.
-    void nodesMoved(const QList< QPair<double, double> > &moves);
+    /// S'emet quan es mou un node.
+    void nodeMoved(double origin, double destination);
+    /// S'emet quan es mou més d'un node.
+    void nodesMoved(const QList<double> &origins, double offset);
 
 protected:
 

@@ -5,8 +5,6 @@
 
 #include "transferfunction.h"
 
-#include <QPair>
-
 class QUndoStack;
 
 namespace udg {
@@ -42,8 +40,8 @@ public slots:
     void removeColorPoint(double x);
     /// Mou un punt de color. Si no existeix l'origen no fa res. Si ja existeix el destí esborra l'origen i assigna el color de l'origen al destí.
     void moveColorPoint(double origin, double destination);
-    /// Mou diversos punts de color alhora. La llista de moviments són parelles (origen, destinació).
-    void moveColorPoints(const QList< QPair<double, double> > &moves);
+    /// Mou diversos punts de color alhora, sumant offset a cada origen.
+    void moveColorPoints(const QList<double> &origins, double offset);
     /// Canvia el color d'un punt. Si no existeix no fa res.
     void changeColorPoint(double x, const QColor &color);
 
