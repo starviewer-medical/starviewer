@@ -170,7 +170,8 @@ void QColorTransferFunctionGraphicalView::beginMoveNodes()
 void QColorTransferFunctionGraphicalView::endMoveNodes()
 {
     QList<QGraphicsItem*> selectedNodes = m_scene->selectedItems();
-    QList< QPair<double, double> > moves;
+    QList<double> origins;
+    double offset = 0.0;
 
     foreach (QGraphicsItem *item, selectedNodes)
     {
@@ -179,16 +180,24 @@ void QColorTransferFunctionGraphicalView::endMoveNodes()
         
         if (node->x() != node->oldX())
         {
-            moves.append(qMakePair(node->oldX(), node->x()));
+            origins.append(node->oldX());
+            double difference = node->x() - node->oldX();
+            Q_ASSERT(offset == 0.0 || qFuzzyCompare(offset, difference));   // l'offset hauria de ser el mateix per tots els moviments
+            offset = difference;
         }
     }
 
-    if (!moves.isEmpty())
+    if (origins.size() == 1)
     {
-        emit nodesMoved(moves);
-        // potser s'hauria de fer un m_scene->setSceneRect(...) aquí
-        // o potser seria millor posar una manera de fer-ho manualment, per començar
+        emit nodeMoved(origins.first(), origins.first() + offset);
     }
+    else if (origins.size() >= 2)
+    {
+        emit nodesMoved(origins, offset);
+    }
+
+    // potser s'hauria de fer un m_scene->setSceneRect(...) aquí, per ajustar el tros visible
+    // o potser seria millor posar una manera de fer-ho manualment, per començar
 }
 
 } // namespace udg

@@ -2,6 +2,7 @@
 
 #include "transferfunctioneditorcommands.h"
 
+#include <QPair>
 #include <QUndoStack>
 
 namespace udg {
@@ -111,36 +112,61 @@ void TransferFunctionEditor::moveColorPointCommand(double origin, double destina
 }
 
 // TODO: és correcta la implementació?
-void TransferFunctionEditor::moveColorPoints(const QList< QPair<double, double> > &moves)
+void TransferFunctionEditor::moveColorPoints(const QList<double> &origins, double offset)
 {
-    if (moves.isEmpty())
+    if (origins.isEmpty())
     {
         return;
     }
 
+    // Creem una llista d'accions a fer per cada origen i destinació
+
     enum Action { Add, Change, Remove };
     QMap< double, QPair<QColor, Action> > actions;
-    QPair<double, double> move; // si té una coma no es pot declarar directament al foreach
+    int numberOfMoves = 0;
 
-    foreach (move, moves)
+    foreach (double origin, origins)
     {
-        if (!actions.contains(move.first))
+        if (!m_transferFunction.isSetColor(origin)) // l'origen no està definit a la funció, passem
         {
-            actions[move.first] = qMakePair(QColor(), Remove);
+            continue;
         }
 
-        if (actions.contains(move.second))
+        double destination = origin + offset;
+
+        if (actions.contains(origin))   // l'origen ja existeix a la llista, hauria de ser com a destinació, és a dir, Add o Change
         {
-            actions[move.second] = qMakePair(m_transferFunction.getColor(move.first), Change);
+            Q_ASSERT(actions[origin].second != Remove);
         }
-        else
+        else    // l'origen no existeix a la llista, el marquem per esborrar
         {
-            actions[move.second] = qMakePair(m_transferFunction.getColor(move.first), Add);
+            actions[origin] = qMakePair(QColor(), Remove);
         }
+
+        if (actions.contains(destination))  // la destinació ja existeix a la llista, hauria de ser com a origen, és a dir, Remove; la marquem per canviar
+        {
+            Q_ASSERT(actions[destination].second == Remove);
+            actions[destination] = qMakePair(m_transferFunction.getColor(origin), Change);
+        }
+        else    // la destinació no existeix a la llista
+        {
+            if (m_transferFunction.isSetColor(destination)) // la destinació està definida a la funció, la marquem per canviar
+            {
+                actions[destination] = qMakePair(m_transferFunction.getColor(origin), Change);
+            }
+            else    // la destinació no està definida a la funció, la marquem per afegir
+            {
+                actions[destination] = qMakePair(m_transferFunction.getColor(origin), Add);
+            }
+        }
+
+        numberOfMoves++;
     }
 
+    // Executem les accions decidides
+
     QList<double> keys = actions.keys();
-    m_undoStack->beginMacro(tr("Move %1 color points").arg(moves.size()));
+    m_undoStack->beginMacro(tr("Move %1 color points").arg(numberOfMoves));
 
     for (int i = 0; i < keys.size(); i++)
     {
