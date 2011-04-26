@@ -38,6 +38,7 @@ void QTransferFunctionEditor2::init(Features features, View view)
     m_editor = new TransferFunctionEditor(this);
     m_view = new QTransferFunctionGraphicalView(m_editor, this);
     m_viewLayout->addWidget(m_view);
+    m_undoView->setStack(m_editor->undoStack());
 
     makeConnections();
 }

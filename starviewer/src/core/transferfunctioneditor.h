@@ -26,6 +26,10 @@ public:
     /// Retorna la funció de transferència representada actualment.
     const TransferFunction& transferFunction() const;
 
+    /// Retorna la pila de desfer/refer.
+    /// \warning Aquest mètode ha de desaparèixer quan estigui l'editor acabat.
+    QUndoStack* undoStack() const;
+
 public slots:
 
     /// Assigna la funció de transferència.
@@ -38,7 +42,7 @@ public slots:
     void addColorPoint(double x, const QColor &color);
     /// Esborra un punt de color. Si no existeix no fa res.
     void removeColorPoint(double x);
-    /// Mou un punt de color. Si no existeix l'origen no fa res. Si ja existeix el destí esborra l'origen i assigna el color de l'origen al destí.
+    /// Mou un punt de color. Si no existeix l'origen no fa res. Si ja existeix la destinació esborra l'origen i assigna el color de l'origen a la destinació.
     void moveColorPoint(double origin, double destination);
     /// Mou diversos punts de color alhora, sumant offset a cada origen.
     void moveColorPoints(const QList<double> &origins, double offset);
