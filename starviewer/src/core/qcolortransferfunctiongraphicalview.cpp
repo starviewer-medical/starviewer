@@ -163,7 +163,7 @@ void QColorTransferFunctionGraphicalView::beginMoveNodes()
     {
         QColorTransferFunctionGraphicalViewNode *node = dynamic_cast<QColorTransferFunctionGraphicalViewNode*>(item);
         node->storeOldX();
-        node->setZValue(1.0);   // amb això fem que a updateBackground() els tinguem en l'ordre que ens interessa (els que s'estan movent seran els últims)
+        node->setZValue(-1.0);  // amb això fem que a updateBackground() els tinguem en l'ordre que ens interessa (els que s'estan movent seran els últims)
     }
 }
 
