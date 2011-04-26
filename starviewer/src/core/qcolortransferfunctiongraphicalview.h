@@ -36,6 +36,8 @@ signals:
     void nodeMoved(double origin, double destination);
     /// S'emet quan es mou més d'un node.
     void nodesMoved(const QList<double> &origins, double offset);
+    /// S'emet quan es canvia el color d'un node.
+    void nodeChangedColor(double x, const QColor &color);
 
 protected:
 
@@ -44,6 +46,7 @@ protected:
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
     virtual void wheelEvent(QWheelEvent *event);
     ///@}
 
@@ -61,6 +64,8 @@ private:
     void beginMoveNodes();
     /// Finalitza el moviment de nodes.
     void endMoveNodes();
+    /// Canvia el color del node a x si existeix.
+    void changeNodeColor(double x);
 
 private:
 
