@@ -94,6 +94,7 @@ void QTransferFunctionGraphicalView::enableEditingConnections()
     connect(m_colorView, SIGNAL(nodeRemoved(double)), m_editor, SLOT(removeColorPoint(double)));
     connect(m_colorView, SIGNAL(nodeMoved(double,double)), m_editor, SLOT(moveColorPoint(double,double)));
     connect(m_colorView, SIGNAL(nodesMoved(QList<double>,double)), m_editor, SLOT(moveColorPoints(QList<double>,double)));
+    connect(m_colorView, SIGNAL(nodeChangedColor(double,QColor)), m_editor, SLOT(changeColorPoint(double,QColor)));
 
     m_editingConnectionsEnabled = true;
 }
@@ -109,6 +110,7 @@ void QTransferFunctionGraphicalView::disableEditingConnections()
     disconnect(m_colorView, SIGNAL(nodeRemoved(double)), m_editor, SLOT(removeColorPoint(double)));
     disconnect(m_colorView, SIGNAL(nodeMoved(double,double)), m_editor, SLOT(moveColorPoint(double,double)));
     disconnect(m_colorView, SIGNAL(nodesMoved(QList<double>,double)), m_editor, SLOT(moveColorPoints(QList<double>,double)));
+    disconnect(m_colorView, SIGNAL(nodeChangedColor(double,QColor)), m_editor, SLOT(changeColorPoint(double,QColor)));
 
     m_editingConnectionsEnabled = false;
 }

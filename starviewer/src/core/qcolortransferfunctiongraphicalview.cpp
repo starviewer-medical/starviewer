@@ -93,6 +93,16 @@ void QColorTransferFunctionGraphicalView::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
+void QColorTransferFunctionGraphicalView::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseDoubleClickEvent(event);
+
+    if (event->button() == Qt::LeftButton)
+    {
+        changeNodeColor(mapToScene(event->pos()).x());
+    }
+}
+
 void QColorTransferFunctionGraphicalView::wheelEvent(QWheelEvent *event)
 {
     double scale = pow(2.0, event->delta() / 240.0);
@@ -198,6 +208,25 @@ void QColorTransferFunctionGraphicalView::endMoveNodes()
 
     // potser s'hauria de fer un m_scene->setSceneRect(...) aquí, per ajustar el tros visible
     // o potser seria millor posar una manera de fer-ho manualment, per començar
+}
+
+void QColorTransferFunctionGraphicalView::changeNodeColor(double x)
+{
+    QGraphicsItem *item = m_scene->itemAt(x, 0.0);  // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
+
+    if (item)
+    {
+        x = item->x();
+        QColorTransferFunctionGraphicalViewNode *node = dynamic_cast<QColorTransferFunctionGraphicalViewNode*>(item);
+        QColor color = QColorDialog::getColor(node->color(), this);
+
+        if (color.isValid())
+        {
+            node->setColor(color);
+            updateBackground();
+            emit nodeChangedColor(x, color);
+        }
+    }
 }
 
 } // namespace udg
