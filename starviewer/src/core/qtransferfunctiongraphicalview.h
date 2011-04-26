@@ -20,26 +20,36 @@ public:
     /// Crea la vista, que treballarà amb l'editor donat.
     explicit QTransferFunctionGraphicalView(TransferFunctionEditor *editor, QWidget *parent = 0);
 
+protected:
+
+    /// Fa les connexions pertinents de signals i slots.
+    virtual void makeConnections();
+
+protected slots:
+
+    /// Assigna la funció de transferència.
+    virtual void setTransferFunction(const TransferFunction &transferFunction);
+    /// Assigna el nom de la funció de transferència.
+    virtual void setName(const QString &name);
+    /// Assigna la funció de transferència de color.
+    virtual void setColorTransferFunction(const ColorTransferFunction &colorTransferFunction);
+    /// Afegeix un punt de color.
+    virtual void addColorPoint(double x, const QColor &color);
+    /// Esborra un punt de color.
+    virtual void removeColorPoint(double x);
+    /// Mou un punt de color.
+    virtual void moveColorPoint(double origin, double destination);
+    /// Canvia el color d'un punt.
+    virtual void changeColorPoint(double x, const QColor &color);
+
 private:
 
     Q_DISABLE_COPY(QTransferFunctionGraphicalView)
 
-    /// Fa les connexions pertinents de signals i slots.
-    void makeConnections();
     /// Habilita les connexions de la vista cap a l'editor.
     void enableEditingConnections();
     /// Inhabilita les connexions de la vista cap a l'editor.
     void disableEditingConnections();
-
-private slots:
-
-    /// Assigna la funció de transferència.
-    void setTransferFunction(const TransferFunction &transferFunction);
-    /// Assigna el nom de la funció de transferència.
-    void setName(const QString &name);
-    /// Assigna la funció de transferència de color.
-    void setColorTransferFunction(const ColorTransferFunction &colorTransferFunction);
-    //void moveColorPoints(const QList< QPair<double, double> > &moves);
 
 private:
 
