@@ -111,7 +111,7 @@ void TransferFunctionEditor::moveColorPointCommand(double origin, double destina
     emit colorPointMoved(origin, destination);
 }
 
-// TODO: Ès correcta la implementaciÛ?
+// TODO: √©s correcta la implementaci√≥?
 void TransferFunctionEditor::moveColorPoints(const QList<double> &origins, double offset)
 {
     if (origins.isEmpty())
@@ -119,22 +119,24 @@ void TransferFunctionEditor::moveColorPoints(const QList<double> &origins, doubl
         return;
     }
 
-    // Creem una llista d'accions a fer per cada origen i destinaciÛ
+    // Creem una llista d'accions a fer per cada origen i destinaci√≥
 
-    enum Action { Add, Change, Remove };
-    QMap< double, QPair<QColor, Action> > actions;
+    // fem servir enters perqu√® C++2003 no accepta un tipus local (per exemple enum) com a argument de template
+    // amb C++0x s√≠ que es pot posar un enum
+    const char Add = 0, Change = 1, Remove = 2;
+    QMap< double, QPair<QColor, char> > actions;
     int numberOfMoves = 0;
 
     foreach (double origin, origins)
     {
-        if (!m_transferFunction.isSetColor(origin)) // l'origen no est‡ definit a la funciÛ, passem
+        if (!m_transferFunction.isSetColor(origin)) // l'origen no est√† definit a la funci√≥, passem
         {
             continue;
         }
 
         double destination = origin + offset;
 
-        if (actions.contains(origin))   // l'origen ja existeix a la llista, hauria de ser com a destinaciÛ, Ès a dir, Add o Change
+        if (actions.contains(origin))   // l'origen ja existeix a la llista, hauria de ser com a destinaci√≥, √©s a dir, Add o Change
         {
             Q_ASSERT(actions[origin].second != Remove);
         }
@@ -143,18 +145,18 @@ void TransferFunctionEditor::moveColorPoints(const QList<double> &origins, doubl
             actions[origin] = qMakePair(QColor(), Remove);
         }
 
-        if (actions.contains(destination))  // la destinaciÛ ja existeix a la llista, hauria de ser com a origen, Ès a dir, Remove; la marquem per canviar
+        if (actions.contains(destination))  // la destinaci√≥ ja existeix a la llista, hauria de ser com a origen, √©s a dir, Remove; la marquem per canviar
         {
             Q_ASSERT(actions[destination].second == Remove);
             actions[destination] = qMakePair(m_transferFunction.getColor(origin), Change);
         }
-        else    // la destinaciÛ no existeix a la llista
+        else    // la destinaci√≥ no existeix a la llista
         {
-            if (m_transferFunction.isSetColor(destination)) // la destinaciÛ est‡ definida a la funciÛ, la marquem per canviar
+            if (m_transferFunction.isSetColor(destination)) // la destinaci√≥ est√† definida a la funci√≥, la marquem per canviar
             {
                 actions[destination] = qMakePair(m_transferFunction.getColor(origin), Change);
             }
-            else    // la destinaciÛ no est‡ definida a la funciÛ, la marquem per afegir
+            else    // la destinaci√≥ no est√† definida a la funci√≥, la marquem per afegir
             {
                 actions[destination] = qMakePair(m_transferFunction.getColor(origin), Add);
             }
@@ -172,13 +174,14 @@ void TransferFunctionEditor::moveColorPoints(const QList<double> &origins, doubl
     {
         double x = keys.at(i);
         QColor color = actions[x].first;
-        Action action = actions[x].second;
+        char action = actions[x].second;
 
         switch (action)
         {
             case Add: m_undoStack->push(new AddColorPointCommand(this, x, color)); break;
             case Change: m_undoStack->push(new ChangeColorPointCommand(this, x, color)); break;
             case Remove: m_undoStack->push(new RemoveColorPointCommand(this, x)); break;
+            default: Q_ASSERT(false); break;    // no ha de passar
         }
     }
 
