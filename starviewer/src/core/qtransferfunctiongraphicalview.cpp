@@ -16,12 +16,71 @@ QTransferFunctionGraphicalView::QTransferFunctionGraphicalView(TransferFunctionE
 
 void QTransferFunctionGraphicalView::makeConnections()
 {
-    connect(m_editor, SIGNAL(transferFunctionChanged(TransferFunction)), SLOT(setTransferFunction(TransferFunction)));
-    connect(m_editor, SIGNAL(nameChanged(QString)), SLOT(setName(QString)));
-    connect(m_editor, SIGNAL(colorTransferFunctionChanged(ColorTransferFunction)), SLOT(setColorTransferFunction(ColorTransferFunction)));
+    QTransferFunctionView::makeConnections();
 
     // textEdited només s'emet quan s'edita el text a la interfície, no quan fem setText, o sigui que podem fer la connexió permanent
     connect(m_nameLineEdit, SIGNAL(textEdited(QString)), m_editor, SLOT(setName(QString)));
+}
+
+void QTransferFunctionGraphicalView::setTransferFunction(const TransferFunction &transferFunction)
+{
+    disableEditingConnections();
+    setName(transferFunction.name());
+    setColorTransferFunction(transferFunction.colorTransferFunction());
+    enableEditingConnections();
+}
+
+void QTransferFunctionGraphicalView::setName(const QString &name)
+{
+    disableEditingConnections();
+    m_nameLineEdit->setText(name);
+    enableEditingConnections();
+}
+
+void QTransferFunctionGraphicalView::setColorTransferFunction(const ColorTransferFunction &colorTransferFunction)
+{
+    disableEditingConnections();
+    m_colorView->setColorTransferFunction(colorTransferFunction);
+    enableEditingConnections();
+}
+
+void QTransferFunctionGraphicalView::addColorPoint(double x, const QColor &color)
+{
+    // TODO: de moment sincronitzem tota la funció per tenir un prototipus més aviat, però es podria optimitzar
+    Q_UNUSED(x)
+    Q_UNUSED(color)
+    disableEditingConnections();
+    m_colorView->setColorTransferFunction(m_editor->transferFunction().colorTransferFunction());
+    enableEditingConnections();
+}
+
+void QTransferFunctionGraphicalView::removeColorPoint(double x)
+{
+    // TODO: de moment sincronitzem tota la funció per tenir un prototipus més aviat, però es podria optimitzar
+    Q_UNUSED(x)
+    disableEditingConnections();
+    m_colorView->setColorTransferFunction(m_editor->transferFunction().colorTransferFunction());
+    enableEditingConnections();
+}
+
+void QTransferFunctionGraphicalView::moveColorPoint(double origin, double destination)
+{
+    // TODO: de moment sincronitzem tota la funció per tenir un prototipus més aviat, però es podria optimitzar
+    Q_UNUSED(origin)
+    Q_UNUSED(destination)
+    disableEditingConnections();
+    m_colorView->setColorTransferFunction(m_editor->transferFunction().colorTransferFunction());
+    enableEditingConnections();
+}
+
+void QTransferFunctionGraphicalView::changeColorPoint(double x, const QColor &color)
+{
+    // TODO: de moment sincronitzem tota la funció per tenir un prototipus més aviat, però es podria optimitzar
+    Q_UNUSED(x)
+    Q_UNUSED(color)
+    disableEditingConnections();
+    m_colorView->setColorTransferFunction(m_editor->transferFunction().colorTransferFunction());
+    enableEditingConnections();
 }
 
 void QTransferFunctionGraphicalView::enableEditingConnections()
@@ -53,41 +112,5 @@ void QTransferFunctionGraphicalView::disableEditingConnections()
 
     m_editingConnectionsEnabled = false;
 }
-
-void QTransferFunctionGraphicalView::setTransferFunction(const TransferFunction &transferFunction)
-{
-    disableEditingConnections();
-    setName(transferFunction.name());
-    setColorTransferFunction(transferFunction.colorTransferFunction());
-    enableEditingConnections();
-}
-
-void QTransferFunctionGraphicalView::setName(const QString &name)
-{
-    disableEditingConnections();
-    m_nameLineEdit->setText(name);
-    enableEditingConnections();
-}
-
-void QTransferFunctionGraphicalView::setColorTransferFunction(const ColorTransferFunction &colorTransferFunction)
-{
-    disableEditingConnections();
-    m_colorView->setColorTransferFunction(colorTransferFunction);
-    enableEditingConnections();
-}
-
-/*
-void QTransferFunctionGraphicalView::moveColorPoints(const QList< QPair<double, double> > &moves)
-{
-    disableEditingConnections();
-    
-    foreach (const QPair &move, moves)
-    {
-        //m_editor->moveToThread..
-    }
-
-    enableEditingConnections();
-}
-*/
 
 } // namespace udg
