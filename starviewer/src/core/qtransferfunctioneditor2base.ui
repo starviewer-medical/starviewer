@@ -14,14 +14,21 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
+   <item>
+    <widget class="QUndoView" name="m_undoView"/>
+   </item>
    <item>
     <layout class="QVBoxLayout" name="m_viewLayout"/>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QUndoView</class>
+   <extends>QListView</extends>
+   <header location="global">QUndoView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

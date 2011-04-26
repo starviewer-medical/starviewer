@@ -18,6 +18,11 @@ const TransferFunction& TransferFunctionEditor::transferFunction() const
     return m_transferFunction;
 }
 
+QUndoStack* TransferFunctionEditor::undoStack() const
+{
+    return m_undoStack;
+}
+
 void TransferFunctionEditor::setTransferFunction(const TransferFunction &transferFunction)
 {
     m_undoStack->push(new SetTransferFunctionCommand(this, transferFunction));
