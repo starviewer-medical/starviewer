@@ -11,7 +11,6 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
 #CONTRIB_EXTENSIONS =
 
 MAIN_EXTENSIONS = mpr \
-                  mpr3d \
                   dicomprint \
                   q2dviewer \
                   q3dviewer
