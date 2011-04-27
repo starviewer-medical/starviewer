@@ -9,8 +9,7 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         perfusionmapreconstruction \
                         glialestimation \
                         rectumsegmentation \
-                        experimental3d \
-						dti
+                        experimental3d
 
 #CONTRIB_EXTENSIONS =
 
