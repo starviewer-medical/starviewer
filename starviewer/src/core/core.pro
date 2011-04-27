@@ -24,7 +24,6 @@ HEADERS += extensionfactory.h \
     genericsingletonfactoryregister.h \
     extensionfactoryregister.h \
     extensionmediator.h \
-    extensionmanager.h \
     displayableid.h \
     extensionmediatorfactory.h \
     extensionmediatorfactoryregister.h \
@@ -77,7 +76,6 @@ HEADERS += extensionfactory.h \
     patientbrowsermenubasicitem.h \
     patientbrowsermenuextendeditem.h \
     patientbrowsermenulist.h \
-    colorpalette.h \
     qcustomwindowleveldialog.h \
     qwindowlevelcombobox.h \
     mhdfileclassifierstep.h \
@@ -137,8 +135,6 @@ HEADERS += extensionfactory.h \
     slicingkeyboardtool.h \
     qthickslabwidget.h \
     erasertool.h \
-    patientitem.h \
-    patientitemmodel.h \
     drawerpoint.h \
     seedtooldata.h \
     cursor3dtool.h \
@@ -211,7 +207,6 @@ HEADERS += extensionfactory.h \
     qdicomdumpbrowser.h \
     applicationversionchecker.h \
     filter.h \
-    filterpipeline.h \
     vtkthresholdfilter.h \
     dynamicmatrix.h \
     screenmanager.h \
@@ -247,7 +242,6 @@ HEADERS += extensionfactory.h \
     qcolortransferfunctiongraphicalview.h \
     qcolortransferfunctiongraphicalviewnode.h
 SOURCES += extensionmediator.cpp \
-    extensionmanager.cpp \
     displayableid.cpp \
     mathtools.cpp \
     harddiskinformation.cpp \
@@ -295,7 +289,6 @@ SOURCES += extensionmediator.cpp \
     patientbrowsermenubasicitem.cpp \
     patientbrowsermenuextendeditem.cpp \
     patientbrowsermenulist.cpp \
-    colorpalette.cpp \
     qcustomwindowleveldialog.cpp \
     qwindowlevelcombobox.cpp \
     mhdfileclassifierstep.cpp \
@@ -350,8 +343,6 @@ SOURCES += extensionmediator.cpp \
     slicingkeyboardtool.cpp \
     qthickslabwidget.cpp \
     erasertool.cpp \
-    patientitem.cpp \
-    patientitemmodel.cpp \
     drawerpoint.cpp \
     seedtooldata.cpp \
     cursor3dtool.cpp \
@@ -418,7 +409,6 @@ SOURCES += extensionmediator.cpp \
     qdicomdumpbrowser.cpp \
     applicationversionchecker.cpp \
     filter.cpp \
-    filterpipeline.cpp \
     vtkthresholdfilter.cpp \
     dynamicmatrix.cpp \
     screenmanager.cpp \
