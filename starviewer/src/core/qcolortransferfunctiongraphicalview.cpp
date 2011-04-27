@@ -20,13 +20,12 @@ QColorTransferFunctionGraphicalView::QColorTransferFunctionGraphicalView(QWidget
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_scene = new QGraphicsScene(this);
-    setScene(m_scene);
+    setScene(new QGraphicsScene(this));
 }
 
 void QColorTransferFunctionGraphicalView::setColorTransferFunction(const ColorTransferFunction &colorTransferFunction)
 {
-    m_scene->clear();
+    scene()->clear();
 
     QList<double> keys = colorTransferFunction.keys();
 
@@ -37,7 +36,7 @@ void QColorTransferFunctionGraphicalView::setColorTransferFunction(const ColorTr
         node->setX(x);
         node->setToolTip(QString("%1").arg(x));
         node->setColor(colorTransferFunction.get(x));
-        m_scene->addItem(node);
+        scene()->addItem(node);
 //        QBrush brush;
 //        brush.setStyle(Qt::SolidPattern);
 //        brush.setColor(colorTransferFunction(x));
@@ -58,7 +57,7 @@ void QColorTransferFunctionGraphicalView::mousePressEvent(QMouseEvent *event)
     
     if (event->button() == Qt::LeftButton)
     {
-        if (m_scene->selectedItems().isEmpty())
+        if (scene()->selectedItems().isEmpty())
         {
             addNode(mapToScene(event->pos()).x());
         }
@@ -110,7 +109,7 @@ void QColorTransferFunctionGraphicalView::wheelEvent(QWheelEvent *event)
     m_zoom *= scale;
     double antiScale = 1.0 / m_zoom;
 
-    QList<QGraphicsItem*> nodes = m_scene->items();
+    QList<QGraphicsItem*> nodes = scene()->items();
     
     foreach (QGraphicsItem *node, nodes)
     {
@@ -120,9 +119,9 @@ void QColorTransferFunctionGraphicalView::wheelEvent(QWheelEvent *event)
 
 void QColorTransferFunctionGraphicalView::updateBackground()    // tenir en compte z value, selected items...
 {
-    QLinearGradient background(m_scene->sceneRect().left(), 0.0, m_scene->sceneRect().right(), 0.0);
-    double shift = -m_scene->sceneRect().left();
-    double scale = 1.0 / m_scene->sceneRect().width();
+    QLinearGradient background(scene()->sceneRect().left(), 0.0, scene()->sceneRect().right(), 0.0);
+    double shift = -scene()->sceneRect().left();
+    double scale = 1.0 / scene()->sceneRect().width();
     QList<QGraphicsItem*> nodes = items();
 
     foreach (QGraphicsItem *item, nodes)
@@ -131,7 +130,7 @@ void QColorTransferFunctionGraphicalView::updateBackground()    // tenir en comp
         background.setColorAt((node->x() + shift) * scale, node->color());
     }
 
-    m_scene->setBackgroundBrush(background);
+    scene()->setBackgroundBrush(background);
     m_backgroundUpdateRequested = false;
 }
 
@@ -146,7 +145,7 @@ void QColorTransferFunctionGraphicalView::addNode(double x)
         node->setToolTip(QString("%1").arg(x));
         node->setColor(color);
         node->setTransform(QTransform::fromScale(1.0 / m_zoom, 1.0));   // si només fem servir escalats es pot fer així, sinó es pot afegir un segon paràmetre a setTransform
-        m_scene->addItem(node);
+        scene()->addItem(node);
         updateBackground();
         emit nodeAdded(x, color);
     }
@@ -154,12 +153,12 @@ void QColorTransferFunctionGraphicalView::addNode(double x)
 
 void QColorTransferFunctionGraphicalView::removeNode(double x)
 {
-    QGraphicsItem *item = m_scene->itemAt(x, 0.0);  // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
+    QGraphicsItem *item = scene()->itemAt(x, 0.0);  // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
     
     if (item)
     {
         x = item->x();
-        m_scene->removeItem(item);
+        scene()->removeItem(item);
         updateBackground();
         emit nodeRemoved(x);
     }
@@ -167,7 +166,7 @@ void QColorTransferFunctionGraphicalView::removeNode(double x)
 
 void QColorTransferFunctionGraphicalView::beginMoveNodes()
 {
-    QList<QGraphicsItem*> selectedNodes = m_scene->selectedItems();
+    QList<QGraphicsItem*> selectedNodes = scene()->selectedItems();
 
     foreach (QGraphicsItem *item, selectedNodes)
     {
@@ -179,7 +178,7 @@ void QColorTransferFunctionGraphicalView::beginMoveNodes()
 
 void QColorTransferFunctionGraphicalView::endMoveNodes()
 {
-    QList<QGraphicsItem*> selectedNodes = m_scene->selectedItems();
+    QList<QGraphicsItem*> selectedNodes = scene()->selectedItems();
     QList<double> origins;
     double offset = 0.0;
 
@@ -212,7 +211,7 @@ void QColorTransferFunctionGraphicalView::endMoveNodes()
 
 void QColorTransferFunctionGraphicalView::changeNodeColor(double x)
 {
-    QGraphicsItem *item = m_scene->itemAt(x, 0.0);  // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
+    QGraphicsItem *item = scene()->itemAt(x, 0.0);  // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
 
     if (item)
     {

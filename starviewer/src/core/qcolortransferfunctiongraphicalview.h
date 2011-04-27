@@ -69,8 +69,6 @@ private:
 
 private:
 
-    /// Escena que guarda els nodes.
-    QGraphicsScene *m_scene;    // això no cal, s'hereta del pare
     /// Nivell de zoom actual.
     double m_zoom;
     /// Indica si s'ha d'actualitzar el fons després de moure el ratolí.
