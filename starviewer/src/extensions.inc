@@ -5,7 +5,6 @@ PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         edemasegmentation \
                         angiosubstraction \
                         perfusionmapreconstruction \
-                        glialestimation \
                         rectumsegmentation \
                         experimental3d
 

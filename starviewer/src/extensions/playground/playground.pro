@@ -7,7 +7,6 @@ SUBDIRS += diffusionperfusionsegmentation \
            edemasegmentation \
            angiosubstraction \
            perfusionmapreconstruction \
-           glialestimation \
            rectumsegmentation \
            experimental3d
 include(../../extensions.inc)
