@@ -3,7 +3,6 @@
 
 PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
                         curvedmpr \
-                        mpr2d \
                         edemasegmentation \
                         angiosubstraction \
                         perfusionmapreconstruction \
