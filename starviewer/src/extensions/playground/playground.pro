@@ -4,7 +4,6 @@
 # L'objectiu �s un subdirectori del projecte
 
 SUBDIRS += diffusionperfusionsegmentation \
-           curvedmpr \
            edemasegmentation \
            angiosubstraction \
            perfusionmapreconstruction \
