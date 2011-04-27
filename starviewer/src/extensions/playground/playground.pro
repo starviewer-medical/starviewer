@@ -11,8 +11,7 @@ SUBDIRS += diffusionperfusionsegmentation \
            perfusionmapreconstruction \
            glialestimation \
            rectumsegmentation \
-           experimental3d \
-	     dti
+           experimental3d
 include(../../extensions.inc)
 TEMPLATE = subdirs
 include(../../compilationtype.inc)
