@@ -23,11 +23,9 @@
 #include "cursor3dtool.h"
 #include "angletool.h"
 #include "editortool.h"
-#include "imageplaneprojectiontool.h"
 #include "nonclosedangletool.h"
 #include "clippingplanestool.h"
 #include "transdifferencetool.h"
-#include "linepathtool.h"
 #include "ovalroitool.h"
 
 #include "shortcutmanager.h"
@@ -129,10 +127,6 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new EditorTool(viewer);
     }
-    else if (toolName == "ImagePlaneProjectionTool")
-    {
-        tool = new ImagePlaneProjectionTool(viewer);
-    }
     else if (toolName == "NonClosedAngleTool")
     {
         tool = new NonClosedAngleTool(viewer);
@@ -144,10 +138,6 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     else if (toolName == "TransDifferenceTool")
     {
         tool = new TransDifferenceTool(viewer);
-    }
-    else if (toolName == "LinePathTool")
-    {
-        tool = new LinePathTool(viewer);
     }
     else if (toolName == "OvalROITool")
     {
@@ -325,12 +315,6 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         statusTip = tr("Enable/Disable editor tool");
         toolTip = toolAction->text();
     }
-    else if (toolName == "ImagePlaneProjectionTool")
-    {
-        toolAction->setText(tr("Image Plane Projection"));
-        toolAction->setIcon(QIcon(":/images/imagePlaneProjection.png"));
-        toolAction->setStatusTip(tr("Enable/Disable image plane projection tool"));
-    }
     else if (toolName == "NonClosedAngleTool")
     {
         toolAction->setText(tr("Open Angle"));
@@ -354,12 +338,6 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::TransDifferenceTool));
         statusTip = tr("Enable/Disable the translation difference tool");
         toolTip = toolAction->text();
-    }
-    else if (toolName == "LinePathTool")
-    {
-        toolAction->setText(tr("Line Path"));
-        toolAction->setIcon(QIcon(":/images/linePath.png"));
-        toolAction->setStatusTip(tr("Enable/Disable line path tool"));
     }
     else if (toolName == "OvalROITool")
     {
