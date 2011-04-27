@@ -7,7 +7,6 @@ SUBDIRS += diffusionperfusionsegmentation \
            curvedmpr \
            mpr2d \
            edemasegmentation \
-           vsireconstruction \
            angiosubstraction \
            perfusionmapreconstruction \
            glialestimation \
