@@ -60,7 +60,8 @@ macx {
                src_breakpad/client/mac/handler/dynamic_images.cc \
                src_breakpad/client/mac/handler/protected_memory_allocator.cc \
                src_breakpad/common/mac/macho_utilities.cc \
-               src_breakpad/common/mac/string_utilities.cc
+               src_breakpad/common/mac/string_utilities.cc \
+               src_breakpad/client/mac/handler/breakpad_nlist_64.cc
 
     LIBS += -lcrypto
 }

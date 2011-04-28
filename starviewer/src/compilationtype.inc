@@ -13,7 +13,11 @@ win32 {
     debug:CONFIG += console
     release:CONFIG -= console
 }
-	
+
+macx {
+    LIBS += -framework Cocoa
+}
+
 # definim que per sistemes de compilació windows basats en visual studio 
 # la compilació es faci en tants cores com sigui possible
 
