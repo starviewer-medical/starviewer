@@ -6,8 +6,6 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
-// itk
-#include <itkGDCMImageIO.h> // per poder saber si l'arxiu que escanejem és llegible
 // recursos
 #include "logging.h"
 
@@ -96,19 +94,11 @@ QStringList AppImportFile::generateFilenames( const QString &dirPath )
     QDir dir(dirPath);
     QFileInfoList fileInfoList = dir.entryInfoList( QDir::Files );
 
-    // TODO ara mateix únicament considerem arxius DICOM que pugui llegir GDCMImageIO
-    // aquesta funcionalitat és molt bàsica i si volguéssim un sistema d'importació DICOM
-    // més complet hauríem de crear tot un framework més complet i integrat amb la resta
-    itk::GDCMImageIO::Pointer gdcmIO = itk::GDCMImageIO::New();
+    // Afegim a la llista cadascun dels paths absoluts dels arxius que contingui el directori
     foreach( QFileInfo fileInfo, fileInfoList )
     {
-        if( gdcmIO->CanReadFile( fileInfo.absoluteFilePath().toLatin1() ) )
-        {
-            list << fileInfo.absoluteFilePath();
-        }
-        else
-            DEBUG_LOG( "File " + fileInfo.absoluteFilePath() + " is not readable for GDCM" );
-    }
+        list << fileInfo.absoluteFilePath();
+    }    
 
     return list;
 }
