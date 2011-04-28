@@ -56,6 +56,17 @@ void TransferFunctionEditor::setColorTransferFunctionCommand(const ColorTransfer
     emit colorTransferFunctionChanged(colorTransferFunction);
 }
 
+void TransferFunctionEditor::setScalarOpacityTransferFunction(const OpacityTransferFunction &scalarOpacityTransferFunction)
+{
+    m_undoStack->push(new SetScalarOpacityTransferFunctionCommand(this, scalarOpacityTransferFunction));
+}
+
+void TransferFunctionEditor::setScalarOpacityTransferFunctionCommand(const OpacityTransferFunction &scalarOpacityTransferFunction)
+{
+    m_transferFunction.setScalarOpacityTransferFunction(scalarOpacityTransferFunction);
+    emit scalarOpacityTransferFunctionChanged(scalarOpacityTransferFunction);
+}
+
 void TransferFunctionEditor::addColorPoint(double x, const QColor &color)
 {
     if (m_transferFunction.isSetColor(x))
@@ -203,6 +214,20 @@ void TransferFunctionEditor::changeColorPointCommand(double x, const QColor &col
     Q_ASSERT(m_transferFunction.isSetColor(x));
     m_transferFunction.setColor(x, color);
     emit colorPointChanged(x, color);
+}
+
+void TransferFunctionEditor::addScalarOpacityPointCommand(double x, double opacity)
+{
+    Q_ASSERT(!m_transferFunction.isSetScalarOpacity(x));
+    m_transferFunction.setScalarOpacity(x, opacity);
+    emit scalarOpacityPointAdded(x, opacity);
+}
+
+void TransferFunctionEditor::removeScalarOpacityPointCommand(double x)
+{
+    Q_ASSERT(m_transferFunction.isSetScalarOpacity(x));
+    m_transferFunction.unsetScalarOpacity(x);
+    emit scalarOpacityPointRemoved(x);
 }
 
 void TransferFunctionEditor::redo()
