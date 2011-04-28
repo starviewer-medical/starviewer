@@ -23,7 +23,6 @@
 #include "dicommask.h"
 #include "image.h"
 #include "dicomdirburningapplication.h"
-#include "copydirectory.h"
 
 namespace udg {
 
