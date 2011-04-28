@@ -2,8 +2,8 @@
 #define TRANSFERFUNCTIONEDITORCOMMANDS_H
 
 /**
-    \file Aquí es defineixen tots els commands de TransferFunctionEditor, per no omplir massa transferfunctioneditor.h.
-    No els documentarem individualment, però tots tenen el constructor, un redo() i un undo().
+    \file AquÃ­ es defineixen tots els commands de TransferFunctionEditor, per no omplir massa transferfunctioneditor.h.
+    No els documentarem individualment, perÃ² tots tenen el constructor, un redo() i un undo().
  */
 
 #include <QUndoCommand>
@@ -45,6 +45,17 @@ private:
     TransferFunctionEditor *m_editor;
     ColorTransferFunction m_oldColorTransferFunction;
     ColorTransferFunction m_newColorTransferFunction;
+};
+
+class TransferFunctionEditor::SetScalarOpacityTransferFunctionCommand : public QUndoCommand {
+public:
+    SetScalarOpacityTransferFunctionCommand(TransferFunctionEditor *editor, const OpacityTransferFunction &scalarOpacityTransferFunction);
+    virtual void undo();
+    virtual void redo();
+private:
+    TransferFunctionEditor *m_editor;
+    OpacityTransferFunction m_oldScalarOpacityTransferFunction;
+    OpacityTransferFunction m_newScalarOpacityTransferFunction;
 };
 
 class TransferFunctionEditor::AddColorPointCommand : public QUndoCommand {
@@ -90,6 +101,28 @@ private:
     double m_x;
     QColor m_oldColor;
     QColor m_newColor;
+};
+
+class TransferFunctionEditor::AddScalarOpacityPointCommand : public QUndoCommand {
+public:
+    AddScalarOpacityPointCommand(TransferFunctionEditor *editor, double x, double opacity);
+    virtual void undo();
+    virtual void redo();
+private:
+    TransferFunctionEditor *m_editor;
+    double m_x;
+    double m_opacity;
+};
+
+class TransferFunctionEditor::RemoveScalarOpacityPointCommand : public QUndoCommand {
+public:
+    RemoveScalarOpacityPointCommand(TransferFunctionEditor *editor, double x);
+    virtual void undo();
+    virtual void redo();
+private:
+    TransferFunctionEditor *m_editor;
+    double m_x;
+    double m_opacity;
 };
 
 } // namespace udg

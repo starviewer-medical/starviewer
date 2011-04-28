@@ -53,6 +53,24 @@ void TransferFunctionEditor::SetColorTransferFunctionCommand::undo()
     m_editor->setColorTransferFunctionCommand(m_oldColorTransferFunction);
 }
 
+TransferFunctionEditor::SetScalarOpacityTransferFunctionCommand
+                      ::SetScalarOpacityTransferFunctionCommand(TransferFunctionEditor *editor, const OpacityTransferFunction &scalarOpacityTransferFunction)
+    : m_editor(editor), m_oldScalarOpacityTransferFunction(editor->transferFunction().scalarOpacityTransferFunction()),
+      m_newScalarOpacityTransferFunction(scalarOpacityTransferFunction)
+{
+    setText(tr("Set scalar opacity transfer function %1").arg(scalarOpacityTransferFunction.name()));
+}
+
+void TransferFunctionEditor::SetScalarOpacityTransferFunctionCommand::redo()
+{
+    m_editor->setScalarOpacityTransferFunctionCommand(m_newScalarOpacityTransferFunction);
+}
+
+void TransferFunctionEditor::SetScalarOpacityTransferFunctionCommand::undo()
+{
+    m_editor->setScalarOpacityTransferFunctionCommand(m_oldScalarOpacityTransferFunction);
+}
+
 TransferFunctionEditor::AddColorPointCommand::AddColorPointCommand(TransferFunctionEditor *editor, double x, const QColor &color)
     : m_editor(editor), m_x(x), m_color(color)
 {
@@ -115,6 +133,38 @@ void TransferFunctionEditor::ChangeColorPointCommand::redo()
 void TransferFunctionEditor::ChangeColorPointCommand::undo()
 {
     m_editor->changeColorPointCommand(m_x, m_oldColor);
+}
+
+TransferFunctionEditor::AddScalarOpacityPointCommand::AddScalarOpacityPointCommand(TransferFunctionEditor *editor, double x, double opacity)
+    : m_editor(editor), m_x(x), m_opacity(opacity)
+{
+    setText(tr("Add scalar opacity point at (%1, %2)").arg(x).arg(opacity));
+}
+
+void TransferFunctionEditor::AddScalarOpacityPointCommand::redo()
+{
+    m_editor->addScalarOpacityPointCommand(m_x, m_opacity);
+}
+
+void TransferFunctionEditor::AddScalarOpacityPointCommand::undo()
+{
+    m_editor->removeScalarOpacityPointCommand(m_x);
+}
+
+TransferFunctionEditor::RemoveScalarOpacityPointCommand::RemoveScalarOpacityPointCommand(TransferFunctionEditor *editor, double x)
+    : m_editor(editor), m_x(x), m_opacity(editor->transferFunction().getScalarOpacity(x))
+{
+    setText(tr("Remove scalar opacity point at %1").arg(x));
+}
+
+void TransferFunctionEditor::RemoveScalarOpacityPointCommand::redo()
+{
+    m_editor->removeScalarOpacityPointCommand(m_x);
+}
+
+void TransferFunctionEditor::RemoveScalarOpacityPointCommand::undo()
+{
+    m_editor->addScalarOpacityPointCommand(m_x, m_opacity);
 }
 
 } // namespace udg

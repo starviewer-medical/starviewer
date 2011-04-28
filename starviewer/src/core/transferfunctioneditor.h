@@ -38,6 +38,8 @@ public slots:
     void setName(const QString &name);
     /// Assigna la funció de transferència de color.
     void setColorTransferFunction(const ColorTransferFunction &colorTransferFunction);
+    /// Assigna la funció de transferència d'opacitat escalar.
+    void setScalarOpacityTransferFunction(const OpacityTransferFunction &scalarOpacityTransferFunction);
     /// Afegeix un punt de color. Si ja existeix un punt de color a x li canvia el color.
     void addColorPoint(double x, const QColor &color);
     /// Esborra un punt de color. Si no existeix no fa res.
@@ -62,6 +64,8 @@ signals:
     void nameChanged(const QString &name);
     /// S'emet quan canvia la funció de transferència de color.
     void colorTransferFunctionChanged(const ColorTransferFunction &colorTransferFunction);
+    /// S'emet quan canvia la funció de transferència d'opacitat escalar.
+    void scalarOpacityTransferFunctionChanged(const OpacityTransferFunction &scalarOpacityTransferFunction);
     /// S'emet quan s'afegeix un punt de color.
     void colorPointAdded(double x, const QColor &color);
     /// S'emet quan s'esborra un punt de color.
@@ -70,6 +74,10 @@ signals:
     void colorPointMoved(double origin, double destination);
     /// S'emet quan es canvia el color d'un punt.
     void colorPointChanged(double x, const QColor &color);
+    /// S'emet quan s'afegeix un punt d'opacitat escalar.
+    void scalarOpacityPointAdded(double x, double opacity);
+    /// S'emet quan s'esborra un punt d'opacitat escalar.
+    void scalarOpacityPointRemoved(double x);
 
 private:
 
@@ -78,10 +86,13 @@ private:
     class SetTransferFunctionCommand;
     class SetNameCommand;
     class SetColorTransferFunctionCommand;
+    class SetScalarOpacityTransferFunctionCommand;
     class AddColorPointCommand;
     class RemoveColorPointCommand;
     class MoveColorPointCommand;
     class ChangeColorPointCommand;
+    class AddScalarOpacityPointCommand;
+    class RemoveScalarOpacityPointCommand;
     ///@}
 
     Q_DISABLE_COPY(TransferFunctionEditor)
@@ -91,10 +102,13 @@ private:
     void setTransferFunctionCommand(const TransferFunction &transferFunction);
     void setNameCommand(const QString &name);
     void setColorTransferFunctionCommand(const ColorTransferFunction &colorTransferFunction);
+    void setScalarOpacityTransferFunctionCommand(const OpacityTransferFunction &scalarOpacityTransferFunction);
     void addColorPointCommand(double x, const QColor &color);
     void removeColorPointCommand(double x);
     void moveColorPointCommand(double origin, double destination);
     void changeColorPointCommand(double x, const QColor &color);
+    void addScalarOpacityPointCommand(double x, double opacity);
+    void removeScalarOpacityPointCommand(double x);
     ///@}
 
 private:
