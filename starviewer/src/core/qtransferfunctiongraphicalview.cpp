@@ -27,6 +27,7 @@ void QTransferFunctionGraphicalView::setTransferFunction(const TransferFunction 
     disableEditingConnections();
     setName(transferFunction.name());
     setColorTransferFunction(transferFunction.colorTransferFunction());
+    setScalarOpacityTransferFunction(transferFunction.scalarOpacityTransferFunction());
     enableEditingConnections();
 }
 
@@ -80,6 +81,13 @@ void QTransferFunctionGraphicalView::changeColorPoint(double x, const QColor &co
     Q_UNUSED(color)
     disableEditingConnections();
     m_colorView->setColorTransferFunction(m_editor->transferFunction().colorTransferFunction());
+    enableEditingConnections();
+}
+
+void QTransferFunctionGraphicalView::setScalarOpacityTransferFunction(const OpacityTransferFunction &scalarOpacityTransferFunction)
+{
+    disableEditingConnections();
+    m_scalarOpacityView->setOpacityTransferFunction(scalarOpacityTransferFunction);
     enableEditingConnections();
 }
 
