@@ -15,7 +15,7 @@ Q_OBJECT
 public:
     QCrashReporter( const QStringList& argv , QWidget *parent = 0);
 
-public slots:
+public Q_SLOTS:
     void quitButtonClickedSlot();
     void restartButtonClickedSlot();
 

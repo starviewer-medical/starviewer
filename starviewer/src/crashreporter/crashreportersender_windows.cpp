@@ -12,7 +12,7 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
 {
     std::map<std::wstring, std::wstring> parameters;
     // Afegim els parametres
-    foreach(QString key, options.keys())
+    Q_FOREACH(QString key, options.keys())
     {
         parameters[key.toStdWString()] = options.take(key).toStdWString();
     }

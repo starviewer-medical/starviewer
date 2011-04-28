@@ -24,7 +24,7 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
     NSLog(@"Parameters:\n");
-    foreach(QString key, options.keys())
+    Q_FOREACH(QString key, options.keys())
     {
         NSString *keyString = [NSString stringWithCString:key.toStdString().c_str()];
         NSString *valueString = [NSString stringWithCString:options.take(key).toStdString().c_str()];

@@ -43,5 +43,5 @@ addSubdirs(starviewersapwrapper)
 # En linux 64bits, de moment, breakpad no està suportat, per tant, no compilem res relacionat.
 include(detectlinux64.inc)
 !linux_x86_64 {
-  addSubdirs(crashreporter)
+  addSubdirs(crashreporter, main core)
 }
