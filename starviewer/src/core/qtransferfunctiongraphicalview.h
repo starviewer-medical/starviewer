@@ -6,8 +6,6 @@
 
 namespace udg {
 
-class TransferFunction;
-
 /**
     Vista gràfica d'una funció de transferència.
  */
@@ -41,6 +39,8 @@ protected slots:
     virtual void moveColorPoint(double origin, double destination);
     /// Canvia el color d'un punt.
     virtual void changeColorPoint(double x, const QColor &color);
+    /// Assigna la funció de transferència d'opacitat escalar.
+    virtual void setScalarOpacityTransferFunction(const OpacityTransferFunction &opacityTransferFunction);
 
 private:
 

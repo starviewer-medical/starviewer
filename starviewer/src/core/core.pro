@@ -240,7 +240,10 @@ HEADERS += extensionfactory.h \
     qtransferfunctionview.h \
     qtransferfunctiongraphicalview.h \
     qcolortransferfunctiongraphicalview.h \
-    qcolortransferfunctiongraphicalviewnode.h
+    qcolortransferfunctiongraphicalviewnode.h \
+    qopacitytransferfunctiongraphicalview.h \
+    qopacitytransferfunctiongraphicalviewnode.h \
+    qopacitytransferfunctiongraphicalviewline.h
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
@@ -441,7 +444,10 @@ SOURCES += extensionmediator.cpp \
     qtransferfunctionview.cpp \
     qtransferfunctiongraphicalview.cpp \
     qcolortransferfunctiongraphicalview.cpp \
-    qcolortransferfunctiongraphicalviewnode.cpp
+    qcolortransferfunctiongraphicalviewnode.cpp \
+    qopacitytransferfunctiongraphicalview.cpp \
+    qopacitytransferfunctiongraphicalviewnode.cpp \
+    qopacitytransferfunctiongraphicalviewline.cpp
 TEMPLATE = lib
 DESTDIR = ./
 include(../corelibsconfiguration.inc)

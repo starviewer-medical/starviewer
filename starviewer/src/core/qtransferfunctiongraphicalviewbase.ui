@@ -35,14 +35,7 @@
     <widget class="udg::QColorTransferFunctionGraphicalView" name="m_colorView"/>
    </item>
    <item>
-    <widget class="QGraphicsView" name="m_scalarOpacityGraphicsView">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOn</enum>
-     </property>
-    </widget>
+    <widget class="udg::QOpacityTransferFunctionGraphicalView" name="m_scalarOpacityView"/>
    </item>
    <item>
     <widget class="QGraphicsView" name="m_gradientOpacityGraphicsView">
@@ -61,6 +54,11 @@
    <class>udg::QColorTransferFunctionGraphicalView</class>
    <extends>QGraphicsView</extends>
    <header>qcolortransferfunctiongraphicalview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QOpacityTransferFunctionGraphicalView</class>
+   <extends>QGraphicsView</extends>
+   <header>qopacitytransferfunctiongraphicalview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
