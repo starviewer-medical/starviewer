@@ -395,7 +395,7 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
         // TODO falta activar el procés de notificació de procés de gravació
         // int progressIncrement = static_cast<int>((1.0/(double)count) * 100);
         // int progress = 0;
-        for (unsigned int i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             videoWriter->SetInput(m_grabList.at(i));
 
