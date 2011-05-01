@@ -122,11 +122,6 @@ void RepresentationsLayer::clearAll()
     }
 }
 
-void RepresentationsLayer::handleEvent(long unsigned eventID, double posX, double posY)
-{
-    //De moment no fa res...
-}
-
 void RepresentationsLayer::refresh()
 {
     m_currentPlane = m_2DViewer->getView();

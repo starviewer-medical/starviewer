@@ -22,7 +22,7 @@ VoxelInformationTool::VoxelInformationTool(QViewer *viewer, QObject *parent)
     createCaption();
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateCaption()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(updateCaption()));
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(inputChanged(Volume *)));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(createCaption()));
 }
 
 VoxelInformationTool::~VoxelInformationTool()
@@ -99,11 +99,6 @@ void VoxelInformationTool::updateCaption()
         m_caption->update();
     }
     m_2DViewer->render();
-}
-
-void VoxelInformationTool::inputChanged(Volume *volume)
-{
-    createCaption();
 }
 
 QString VoxelInformationTool::computeVoxelValue(double worldCoordinate[3])

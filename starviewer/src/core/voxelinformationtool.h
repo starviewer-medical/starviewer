@@ -27,12 +27,10 @@ private slots:
     /// d'acord amb la posició on estigui el cursor
     void updateCaption();
 
-    /// Es crida quan canvia l'input del visor
-    void inputChanged(Volume *volume);
-
-private:
     /// Crear l'actor on es mostrarà la informació del voxel
     void createCaption();
+
+private:
 
     /// Ens retorna el valor de voxel en un string correctament formatat corresponent a la coordenada de món donada
     QString computeVoxelValue(double worldCoordinate[3]);

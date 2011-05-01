@@ -32,14 +32,6 @@ public:
     ///Esboora totes les toolRepresentation's del viewer
     void clearAll();
 
-    /**
-    * Rep events des del ToolProxy
-    * @param eventID tipus d'event
-    * @param posX posició X de l'event
-    * @param posY posició Y de l'event
-    */
-    void handleEvent(long unsigned eventID, double posX, double posY);
-
 public slots:
     ///Actualitza les variables de plane i slice
     void refresh();
