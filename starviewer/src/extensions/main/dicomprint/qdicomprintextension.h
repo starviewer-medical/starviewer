@@ -33,7 +33,7 @@ public slots:
     ///Li assigna el volum que s'ha d'imprimir
     void setInput( Volume *input );
     /// Actualitzem tots els elements que estan lligats al Volume que estem visualitzant.
-    void updateInput( Volume *input );
+    void updateInput();
 
 private slots:
 

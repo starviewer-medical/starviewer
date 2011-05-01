@@ -78,7 +78,9 @@ inline HdrColor CoolWarmVoxelShader::shade( const Vector3 &position, const Vecto
 inline HdrColor CoolWarmVoxelShader::nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor )
 {
     Q_UNUSED( position );
+    Q_UNUSED(direction);
     Q_UNUSED( remainingOpacity );
+    Q_UNUSED(baseColor);
 
     Q_ASSERT( m_data );
     Q_ASSERT( m_encodedNormals );
@@ -105,7 +107,10 @@ inline HdrColor CoolWarmVoxelShader::nvShade( const Vector3 &position, int offse
 
 inline HdrColor CoolWarmVoxelShader::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity, const HdrColor &baseColor )
 {
+    Q_UNUSED(direction);
     Q_UNUSED( remainingOpacity );
+    Q_UNUSED(baseColor);
+
 
     Q_ASSERT( interpolator );
     Q_ASSERT( m_data );

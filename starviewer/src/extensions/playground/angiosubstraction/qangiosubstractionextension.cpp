@@ -308,18 +308,13 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     double TranslationAlongX = finalParameters[0];
     double TranslationAlongY = finalParameters[1];
 
-    unsigned int numberOfIterations = optimizer->GetCurrentIteration();
-
-    double bestValue = optimizer->GetValue();
-
-
     // Print out results
     //
     DEBUG_LOG(QString( "Result = " ));
     DEBUG_LOG(QString( " Translation X = %1").arg( TranslationAlongX ) );
     DEBUG_LOG(QString( " Translation Y = %1").arg( TranslationAlongY ) );
-    DEBUG_LOG(QString( " Iterations    = %1").arg( numberOfIterations ) );
-    DEBUG_LOG(QString( " Metric value  = %1").arg( bestValue ) );
+    DEBUG_LOG(QString(" Iterations    = %1").arg(optimizer->GetCurrentIteration()));
+    DEBUG_LOG(QString(" Metric value  = %1").arg(optimizer->GetValue()));
     double spacing[3];
     m_mainVolume->getSpacing( spacing );
     DEBUG_LOG(QString( " Translation X (in px) = %1").arg( TranslationAlongX / spacing[0] ) );

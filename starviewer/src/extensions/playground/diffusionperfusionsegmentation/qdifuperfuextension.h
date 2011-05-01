@@ -110,7 +110,7 @@ private slots:
     void synchronizeSlices( bool sync );
 
     ///Calcula la diferència de volums
-    void computePenombraVolume( const QString & name);
+    void computePenombraVolume();
 
     ///Desa la màscara de la difusió
     void saveDiffusionVolume( );

@@ -47,6 +47,8 @@ void QWidgetSelectPacsToStoreDicomImage::storeImagesToSelectedPacs()
 
 void QWidgetSelectPacsToStoreDicomImage::showEvent(QShowEvent *event)
 {
+    Q_UNUSED(event);
+
     m_pacsNodeList->clearSelection();
 	m_pacsNodeList->refresh();
 }

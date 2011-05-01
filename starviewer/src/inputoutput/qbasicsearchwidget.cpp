@@ -289,6 +289,8 @@ void QBasicSearchWidget::clearSeriesModality()
 
 void QBasicSearchWidget::showEvent(QShowEvent * event)
 {
+    Q_UNUSED(event);
+
     if (!m_widgetHasBeenShowed)
     {
         /*La primera vegada que mostrem el widget donem focus al patientName. Tot i que en teoria el TabOrder està ben definit pels controls del widget això es fa

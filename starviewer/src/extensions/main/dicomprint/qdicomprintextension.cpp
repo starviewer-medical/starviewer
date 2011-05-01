@@ -76,7 +76,7 @@ void QDicomPrintExtension::createConnections()
     //connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
     connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
     connect( m_2DView, SIGNAL( sliceChanged(int) ), m_sliceViewSlider, SLOT( setValue(int) ) );
-    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput( Volume *) ) );
+    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput() ) );
 
     connect(m_qTimer, SIGNAL(timeout()), SLOT(timeoutTimer()));
 }
@@ -110,7 +110,7 @@ void QDicomPrintExtension::setInput(Volume *input)
     m_2DView->setInput(input);
 }
 
-void QDicomPrintExtension::updateInput(Volume *input)
+void QDicomPrintExtension::updateInput()
 {
     m_sliceViewSlider->setMinimum( 0 );
     m_sliceViewSlider->setMaximum( m_2DView->getMaximumSlice() );

@@ -22,6 +22,7 @@ void OptimizeTransferFunctionCommand::Execute(vtkObject *caller, unsigned long e
 {
     Q_UNUSED(caller);
     Q_UNUSED(callData);
+    Q_UNUSED(eventId);
 
     Q_ASSERT(m_extension);
     Q_ASSERT(eventId == ResetCameraEvent || eventId == ResetCameraClippingRangeEvent);
