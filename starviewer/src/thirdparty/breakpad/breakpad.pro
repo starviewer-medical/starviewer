@@ -11,6 +11,8 @@ TEMPLATE = lib
 
 DESTDIR = ./
 
+INCLUDEPATH += ./
+
 OBJECTS_DIR = ../../../tmp/obj
 UI_DIR = ../../../tmp/ui
 MOC_DIR = ../../../tmp/moc
