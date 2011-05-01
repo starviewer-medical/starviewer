@@ -80,6 +80,7 @@ inline HdrColor ImiVoxelShader::nvShade( const Vector3 &position, int offset, co
     Q_UNUSED( position );
     Q_UNUSED( direction );
     Q_UNUSED( remainingOpacity );
+    Q_UNUSED(baseColor);
 
     Q_ASSERT( m_data );
 
@@ -123,6 +124,7 @@ inline HdrColor ImiVoxelShader::nvShade( const Vector3 &position, const Vector3 
 {
     Q_UNUSED( direction );
     Q_UNUSED( remainingOpacity );
+    Q_UNUSED(baseColor);
 
     Q_ASSERT( interpolator );
     Q_ASSERT( m_data );

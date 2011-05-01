@@ -141,9 +141,11 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain( udg::OrganizationDomainString );
     app.setApplicationName( udg::ApplicationNameString );
 
-	// Inicialitzem el crash handler en el cas que ho suportem.
 #ifndef NO_CRASH_REPORTER
+    // Inicialitzem el crash handler en el cas que ho suportem.
+    // Només cal crear l'objecte per què s'autoregistri automàticament, per això el marquem com no utilitzat per evitar un warning.
     CrashHandler *crashHandler = new CrashHandler();
+    Q_UNUSED(crashHandler);
 #endif
     
 	//TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en

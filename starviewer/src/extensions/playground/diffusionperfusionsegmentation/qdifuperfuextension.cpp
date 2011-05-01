@@ -223,7 +223,7 @@ void QDifuPerfuSegmentationExtension::createConnections()
     connect( m_diffusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setDiffusionInput(Volume *) ) );
     connect( m_perfusion2DView->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume *) ), SLOT( setPerfusionInput(Volume *) ) );
     
-    connect( m_penombraVolumeLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( computePenombraVolume(const QString&) ) );
+    connect( m_penombraVolumeLineEdit, SIGNAL( textChanged(const QString&) ), SLOT( computePenombraVolume() ) );
 
     connect( m_saveDiffusionVolumePushButton, SIGNAL( clicked() ), SLOT( saveDiffusionVolume() ) );
     connect( m_saveDiffusionMaskPushButton, SIGNAL( clicked() ), SLOT( saveDiffusionMask() ) );
@@ -970,7 +970,7 @@ void QDifuPerfuSegmentationExtension::setPerfusionSlice( int slice )
     m_perfusion2DView->render();
 }
 
-void QDifuPerfuSegmentationExtension::computePenombraVolume( const QString & name)
+void QDifuPerfuSegmentationExtension::computePenombraVolume()
 {
     m_penombraLineEdit->clear();
     m_penombraLineEdit->insert(QString("%1").arg(m_penombraVolume - m_strokeVolume, 0, 'f', 2));

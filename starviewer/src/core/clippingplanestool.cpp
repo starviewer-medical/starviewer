@@ -53,6 +53,11 @@ void ClippingPlanesTool::handleEvent( long unsigned eventID )
 
 void ClippingPlanesTool::boundingBoxEventHandler( vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command )
 {
+    Q_UNUSED(obj);
+    Q_UNUSED(client_data);
+    Q_UNUSED(call_data);
+    Q_UNUSED(command);
+
     switch(event)
     {
         case vtkCommand::InteractionEvent:

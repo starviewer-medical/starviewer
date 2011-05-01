@@ -187,7 +187,7 @@ void QRectumSegmentationExtension::setInput( Volume *input )
 void QRectumSegmentationExtension::updateInputFeatures( Volume *input )
 {
     int* dim;
-    dim = m_mainVolume->getDimensions();
+    dim = input->getDimensions();
     m_sliceViewSlider->setMinimum(0);
     m_sliceViewSlider->setMaximum(dim[2]-1);
     m_sliceSpinBox->setMinimum(0);
@@ -201,7 +201,7 @@ void QRectumSegmentationExtension::updateInputFeatures( Volume *input )
     m_outsideValue = (int) (wl[0] - 2.0*wl[1]);
 
     typedef itk::ImageRegionConstIterator<Volume::ItkImageType> ConstIterator;
-    ConstIterator iter( m_mainVolume->getItkData(), m_mainVolume->getItkData()->GetBufferedRegion() );
+    ConstIterator iter( input->getItkData(), input->getItkData()->GetBufferedRegion() );
 
     m_minValue = iter.Get();
     m_maxValue = m_minValue;

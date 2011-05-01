@@ -134,6 +134,9 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
 // directament de la impressora.
 DicomPrinter  DicomPrinterManager::getAvailableParametersValues(const QString &AETitlePrinter, int portPrinter)
 {
+    Q_UNUSED(AETitlePrinter);
+    Q_UNUSED(portPrinter);
+
     DicomPrinter dicomPrinter;
     
     dicomPrinter.setAvailableMediumTypeValues( this->getAvailableMediumTypeValues() );
