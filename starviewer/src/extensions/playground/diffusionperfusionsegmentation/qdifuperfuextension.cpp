@@ -298,8 +298,8 @@ void QDifuPerfuSegmentationExtension::setDiffusionImage( int index )
 
     DEBUG_LOG( QString("diffusionMax=%1, diffusionMin=%2").arg(m_diffusionMaxValue).arg(m_diffusionMinValue) );
 
-    disconnect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), this, SLOT( viewThresholds(int) ) );
-    disconnect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), this, SLOT( viewThresholds(int) ) );
+    disconnect( m_strokeLowerValueSlider, SIGNAL( valueChanged(int) ), this, SLOT( viewThresholds() ) );
+    disconnect( m_strokeUpperValueSlider, SIGNAL( valueChanged(int) ), this, SLOT( viewThresholds() ) );
 
     m_strokeLowerValueSpinBox->setMinimum( m_diffusionMinValue );
     m_strokeLowerValueSpinBox->setMaximum( m_diffusionMaxValue );
@@ -458,16 +458,6 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
     m_diffusion2DView->render();
 }
 
-void QDifuPerfuSegmentationExtension::viewThresholds(int i)
-{
-    this->viewThresholds();
-}
-
-void QDifuPerfuSegmentationExtension::viewThresholds2(int i)
-{
-    this->viewThresholds2();
-}
-
 void QDifuPerfuSegmentationExtension::viewThresholds2()
 {
     if ( !m_penombraMaskVolume ) m_penombraMaskVolume = new Volume();
@@ -548,28 +538,6 @@ void QDifuPerfuSegmentationExtension::applyStrokeSegmentation()
 }
 
 void QDifuPerfuSegmentationExtension::applyVentriclesMethod()
-{
-    if ( !m_ventriclesMaskVolume ) m_ventriclesMaskVolume = new Volume();
-
-    vtkImageThreshold * imageThreshold = vtkImageThreshold::New();
-    imageThreshold->SetInput( m_diffusionMainVolume->getVtkData() );
-    imageThreshold->ThresholdBetween( m_ventriclesLowerValueSlider->value(), m_diffusionMaxValue );
-    // Inverse mask --> we want < lower or > upper
-    imageThreshold->SetInValue( m_diffusionMinValue );
-    imageThreshold->SetOutValue( m_diffusionMaxValue );
-    imageThreshold->Update();
-
-    m_ventriclesMaskVolume->setData( imageThreshold->GetOutput() );
-
-    m_ventriclesViewAction->setEnabled( true );
-    m_ventriclesViewAction->trigger();
-    this->viewVentriclesOverlay();
-
-    m_diffusionOpacityLabel->setEnabled( true );
-    m_diffusionOpacitySlider->setEnabled( true );
-}
-
-void QDifuPerfuSegmentationExtension::applyVentriclesMethod(int a)
 {
     if ( !m_ventriclesMaskVolume ) m_ventriclesMaskVolume = new Volume();
 
@@ -801,7 +769,7 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 
     m_blackpointEstimatedVolume->setData( perfuEstimatorImageResult );
 
-    connect( m_penombraLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds2(int) ) );
+    connect( m_penombraLowerValueSlider, SIGNAL( valueChanged(int) ), SLOT( viewThresholds2() ) );
 
 
 
@@ -941,18 +909,6 @@ void QDifuPerfuSegmentationExtension::viewLesionOverlay()
 }
 
 void QDifuPerfuSegmentationExtension::viewVentriclesOverlay()
-{
-    if(m_ventriclesMaskVolume != 0)
-    {
-        m_activedMaskVolume = m_ventriclesMaskVolume;
-        m_diffusion2DView->setOverlapMethodToBlend();
-        m_diffusion2DView->setOverlayOpacity(((double)m_diffusionOpacitySlider->value())/100.0);
-        m_diffusion2DView->setOverlayInput(m_ventriclesMaskVolume);
-        m_diffusion2DView->render();
-    }
-}
-
-void QDifuPerfuSegmentationExtension::viewVentriclesOverlay(int a)
 {
     if(m_ventriclesMaskVolume != 0)
     {
