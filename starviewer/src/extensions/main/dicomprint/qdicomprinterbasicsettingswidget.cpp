@@ -7,6 +7,7 @@
 namespace udg {
 
 QDicomPrinterBasicSettingsWidget::QDicomPrinterBasicSettingsWidget( QWidget *parent )
+    : QWidget(parent)
 {
     setupUi( this );
     createConnections();

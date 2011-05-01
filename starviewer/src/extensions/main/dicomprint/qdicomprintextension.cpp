@@ -29,6 +29,7 @@
 namespace udg {
 
 QDicomPrintExtension::QDicomPrintExtension( QWidget *parent )
+    : QWidget(parent)
 {
     setupUi( this );
     // Inicialitzem els settings
