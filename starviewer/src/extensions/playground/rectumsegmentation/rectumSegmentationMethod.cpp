@@ -523,9 +523,10 @@ void rectumSegmentationMethod::applyMethodNextSlice( unsigned int slice, int ste
 
     m_Mask->getVtkData()->Update();
     //std::cout<<"End for step "<<step<<" in slice "<<slice<<std::endl;
-    if((slice + step)>=0 && (slice + step) < m_Mask->getItkData()->GetLargestPossibleRegion().GetSize()[2] && contant != m_cont)
+    unsigned int sliceWithStep = slice + step;
+    if (sliceWithStep < m_Mask->getItkData()->GetLargestPossibleRegion().GetSize()[2] && contant != m_cont)
     {
-        this->applyMethodNextSlice(slice + step, step);
+        this->applyMethodNextSlice(sliceWithStep, step);
     }
 
     return;
