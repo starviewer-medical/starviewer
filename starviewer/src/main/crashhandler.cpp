@@ -7,11 +7,11 @@
 #include <QCoreApplication>
 
 #ifdef __APPLE__
-    #include "src_breakpad/client/mac/handler/exception_handler.h"
+    #include <client/mac/handler/exception_handler.h>
 #elif defined WIN32
-    #include "src_breakpad/client/windows/handler/exception_handler.h"
+    #include <client/windows/handler/exception_handler.h>
 #elif defined __linux__
-    #include "src_breakpad/client/linux/handler/exception_handler.h"
+    #include <client/linux/handler/exception_handler.h>
 #endif
 
 #include "../core/starviewerapplication.h"

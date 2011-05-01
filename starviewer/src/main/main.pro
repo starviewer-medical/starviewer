@@ -6,12 +6,26 @@ TARGET = $${TARGET_STARVIEWER}
 DESTDIR = ../../bin
 TEMPLATE = app
 
+# CrashHandler
+SOURCES += crashhandler.cpp
+HEADERS += crashhandler.h
+
+macx {
+    DEFINES += STARVIEWER_CRASH_REPORTER_EXE=\\\"$${TARGET_STARVIEWER_CRASH_REPORTER}.app/Contents/MacOS/$${TARGET_STARVIEWER_CRASH_REPORTER}\\\"
+}
+linux* {
+    DEFINES += STARVIEWER_CRASH_REPORTER_EXE=\\\"$${TARGET_STARVIEWER_CRASH_REPORTER}\\\"
+}
+win32 {
+    DEFINES += STARVIEWER_CRASH_REPORTER_EXE=\\\"$${TARGET_STARVIEWER_CRASH_REPORTER}.exe\\\"
+}
+
+# End CrashHandler
+
 SOURCES += main.cpp \
            applicationtranslationsloader.cpp
 HEADERS += applicationtranslationsloader.h
 RESOURCES = main.qrc
-
-include(crashhandler.inc)
 
 win32{
 RC_FILE = starviewer.rc
@@ -64,6 +78,9 @@ DUMMY = $$addLibraryDependency(.., interface)
 DUMMY = $$addLibraryDependency(.., inputoutput)
 DUMMY = $$addLibraryDependency(.., core)
 
+# Thirdparty libraries
+DUMMY = $$addLibraryDependency(../thirdparty, breakpad)
+
 win32{
   LIBS += -ladvapi32 \
           -lRpcrt4
@@ -79,6 +96,7 @@ include(../cuda.inc)
 include(../compilationtype.inc)
 include(../threadweaver.inc)
 include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
+include(../breakpad.inc)
 
 CONFIG -= staticlib
 
