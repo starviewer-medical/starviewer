@@ -376,7 +376,7 @@ void ImagePlane::setCenter( double center[3] )
         for ( i=0; i < 3; i++ )
         {
             m_center[i] = center[i];
-            m_origin[i] = m_center[i] - 0,5*(m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength() );
+            m_origin[i] = m_center[i] - 0.5*(m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength() );
         }
     }
 }
