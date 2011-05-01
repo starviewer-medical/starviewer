@@ -9,6 +9,7 @@ namespace udg
 {
 
 QWidgetSelectPacsToStoreDicomImage::QWidgetSelectPacsToStoreDicomImage(QWidget *parent)
+    : QWidget(parent)
 {
     setupUi( this );
     createConnections();
