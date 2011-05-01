@@ -60,7 +60,6 @@ public slots:
     /// Executa l'algorisme de segmentació
     void applyStrokeSegmentation();
     void applyVentriclesMethod();
-    void applyVentriclesMethod(int a);
     void applyRegistration();
     void computeBlackpointEstimation();
     void applyPenombraSegmentation();
@@ -78,9 +77,7 @@ private slots:
 
     /// Visualitza la màscara donats uns thresholds
     void viewThresholds();
-    void viewThresholds(int i);
     void viewThresholds2();
-    void viewThresholds2(int i);
 
     /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition(double x, double y, double z);
@@ -107,7 +104,6 @@ private slots:
     /// Visualitza els diferents overlays
     void viewLesionOverlay();
     void viewVentriclesOverlay();
-    void viewVentriclesOverlay(int a);
 
     // [temporal] el farem servir mentre no s'actualitzi la tècnica d'overlay del Q2DViewer
     void setPerfusionSlice( int slice );
