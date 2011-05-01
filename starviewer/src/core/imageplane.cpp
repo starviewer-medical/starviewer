@@ -394,11 +394,7 @@ void ImagePlane::push( double distance )
     {
         m_origin[i] += distance * this->m_normal[i];
     }
-    // set the new center
-    for ( i=0; i < 3; i++ )
-    {
-        m_center[i] = m_origin[i] + 0.5*(m_rowDirectionVector[i] * this->getRowLength() + m_columnDirectionVector[i] * this->getColumnLength() );
-    }
+    this->updateCenter();
 }
 
 }
