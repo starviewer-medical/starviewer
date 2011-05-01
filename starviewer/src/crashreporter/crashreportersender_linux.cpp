@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-#include "../main/src_breakpad/common/linux/http_upload.h"
+#include "../thirdparty/breakpad/common/linux/http_upload.h"
 
 namespace udg {
 

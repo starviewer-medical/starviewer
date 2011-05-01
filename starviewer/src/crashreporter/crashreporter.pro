@@ -47,23 +47,23 @@ TRANSLATIONS += crashreporter_ca_ES.ts \
                 crashreporter_es_ES.ts \
                 crashreporter_en_GB.ts 
                 
-INCLUDEPATH += ../main/src_breakpad ../core
+INCLUDEPATH += ../thirdparty/breakpad ../core
 
 macx {
-    HEADERS += ../main/src_breakpad/common/mac/HTTPMultipartUpload.h
+    HEADERS += ../thidparty/breakpad/common/mac/HTTPMultipartUpload.h
     SOURCES += crashreportersender_mac.mm \
-               ../main/src_breakpad/common/mac/HTTPMultipartUpload.m
+               ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.m
     ICON = ../main/images/starviewer.icns
 }
 linux* {
-    HEADERS += ../main/src_breakpad/common/linux/http_upload.h
+    HEADERS += ../thirdparty/breakpad/common/linux/http_upload.h
     SOURCES += crashreportersender_linux.cpp \
-               ../main/src_breakpad/common/linux/http_upload.cc
+               ../thirdparty/breakpad/common/linux/http_upload.cc
 }
 win32 {
-    HEADERS += ../main/src_breakpad/common/windows/http_upload.h
+    HEADERS += ../thirdparty/breakpad/common/windows/http_upload.h
     SOURCES += crashreportersender_windows.cpp \
-               ../main/src_breakpad/common/windows/http_upload.cc
+               ../thirdparty/breakpad/common/windows/http_upload.cc
                
     LIBS += -lWinInet
 }

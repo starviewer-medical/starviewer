@@ -8,7 +8,7 @@
 #import "crashreportersender.h"
 
 #import <Foundation/Foundation.h>
-#import "../main/src_breakpad/common/mac/HTTPMultipartUpload.h"
+#import "common/mac/HTTPMultipartUpload.h"
 
 
 namespace udg {

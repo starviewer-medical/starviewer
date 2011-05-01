@@ -2,7 +2,7 @@
 
 #include <map>
 #include <string>
-#include "../main/src_breakpad/common/windows/http_upload.h"
+#include "../thirdparty/breakpad/common/windows/http_upload.h"
 
 
 namespace udg {
