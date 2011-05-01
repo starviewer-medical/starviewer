@@ -22,7 +22,7 @@ namespace udg
 QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, DicomPrintPage dicomPrintPage, const QString &spoolDirectoryPath)
 {
     QDir spoolDir;
-    bool ok;
+    bool ok = false;
 
     m_lastError = CreateDicomPrintSpool::Ok;
     //TODO: S'ha de fer aquí ? Comprovem si existeix el directori on s'ha de generar l'spool
