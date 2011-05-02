@@ -3,6 +3,7 @@
 #include "logging.h"
 #include "drawer.h"
 #include "drawerpolygon.h"
+#include "mathtools.h"
 // vtk
 #include <vtkCommand.h>
 
@@ -116,7 +117,7 @@ void EraserTool::erasePrimitive()
 {
     if (!m_polygon)
     {
-        DrawerPrimitive *primitiveToErase = m_2DViewer->getDrawer()->getPrimitiveNearerToPoint(m_startPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        DrawerPrimitive *primitiveToErase = getErasablePrimitive(m_startPoint, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         if (primitiveToErase)
         {
             m_2DViewer->getDrawer()->erasePrimitive(primitiveToErase);
@@ -131,6 +132,30 @@ void EraserTool::erasePrimitive()
     }
 }
 
+DrawerPrimitive* EraserTool::getErasablePrimitive(double point[3], int view, int slice)
+{
+    double closestPoint[3];
+    DrawerPrimitive *nearestPrimitive = m_2DViewer->getDrawer()->getNearestPrimitiveToPoint(point, view, slice, closestPoint);
+
+    if (nearestPrimitive)
+    {
+        double displayPoint[3];
+        m_2DViewer->computeWorldToDisplay(point[0], point[1], point[2], displayPoint);
+
+        double closestDisplayPoint[3];
+        m_2DViewer->computeWorldToDisplay(closestPoint[0], closestPoint[1], closestPoint[2], closestDisplayPoint);
+
+        double displayDistance = MathTools::getDistance3D(displayPoint, closestDisplayPoint);
+        // Si la distància entre els punts no està dins d'un llindar determinat, no considerem que la primitiva es pugui esborrar
+        double proximityThreshold = 5.0;
+        if (displayDistance > proximityThreshold)
+        {
+            nearestPrimitive = 0;
+        }
+    }
+    
+    return nearestPrimitive;
+}
 void EraserTool::reset()
 {
     if (m_polygon)

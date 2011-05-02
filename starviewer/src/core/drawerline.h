@@ -40,7 +40,7 @@ public:
     double computeDistance(double * spacing = NULL);
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(double *point3D);
+    double getDistanceToPoint(double *point3D, double closestPoint[3]);
 
     void getBounds(double bounds[6]);
 

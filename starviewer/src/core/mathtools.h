@@ -66,8 +66,9 @@ static bool closeEnough(float f1, float f2);
 static double getDistance2D(const double firstPoint[2], const double secondPoint[2]);
 static double getDistance3D(const double firstPoint[3], const double secondPoint[3]);
 
-/// Distància entre un punt i un segment finit definit per lineFirstPoint i lineSecondPoint
-static double getPointToFiniteLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3]);
+/// Distància entre un punt i un segment finit definit per lineFirstPoint i lineSecondPoint.
+/// El paràmetre de sortida closestPoint, ens indicarà quin és el punt de la línia que queda més a prop del punt indicat
+static double getPointToFiniteLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3], double closestPoint[3]);
 
 ///
 /// Càlculs d'interseccions

@@ -46,9 +46,10 @@ public:
     void hideGroup(const QString &groupName);
     void showGroup(const QString &groupName);
 
-    /// Ens retorna la primitiva més propera la punt especificat, dins d'un llindar. Si no en troba cap, retorna nul.
-    /// Especifiquem el pla i la llesca perquè així acotem més la cerca de primitives properes i no cal mirar per totes les possibles.
-    DrawerPrimitive* getPrimitiveNearerToPoint(double point[3], int view, int slice);
+    /// Retorna la primitiva més propera al punt donat, dins de la vista i llesca proporcionats
+    /// Aquest mètode no té en compte cap llindar de proximitat, és a dir, ens retorna la primitiva que en termes
+    /// absoluts és més propera al punt donat. En cas que no hi hagi cap primitiva per aquella vista i llesca, es retornarà nul.
+    DrawerPrimitive* getNearestPrimitiveToPoint(double point[3], int view, int slice, double closestPoint[3]);
 
     /// Ens esborra les primitives que estiguin dins de la zona delimitada pels punts passats per paràmetre.
     void erasePrimitivesInsideBounds(double bounds[6], int view, int slice);

@@ -128,8 +128,11 @@ void DrawerCrossHair::updateVtkActorProperties()
     m_lineFront->setLineWidth(2.0);
 }
 
-double DrawerCrossHair::getDistanceToPoint(double *point3D)
+double DrawerCrossHair::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
+    closestPoint[0] = m_centrePoint[0];
+    closestPoint[1] = m_centrePoint[1];
+    closestPoint[2] = m_centrePoint[2];
     return MathTools::getDistance3D(m_centrePoint, point3D);
 }
 

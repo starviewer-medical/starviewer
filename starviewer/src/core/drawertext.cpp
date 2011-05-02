@@ -394,8 +394,12 @@ bool DrawerText::isTextScaled()
     return m_scaled;
 }
 
-double DrawerText::getDistanceToPoint(double *point3D)
+double DrawerText::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
+    closestPoint[0] = m_attachPoint[0];
+    closestPoint[1] = m_attachPoint[1];
+    closestPoint[2] = m_attachPoint[2];
+    
     return MathTools::getDistance3D(m_attachPoint, point3D);
 }
 
