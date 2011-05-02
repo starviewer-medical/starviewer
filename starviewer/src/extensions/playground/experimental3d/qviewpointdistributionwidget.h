@@ -1,19 +1,15 @@
 #ifndef UDGQVIEWPOINTDISTRIBUTIONWIDGET_H
 #define UDGQVIEWPOINTDISTRIBUTIONWIDGET_H
 
-
 #include "ui_qviewpointdistributionwidgetbase.h"
 
 #include <QVector>
 
 #include "vector3.h"
 
-
 namespace udg {
 
-
 class ViewpointGenerator;
-
 
 /**
  * Widget que permet seleccionar un nombre de punts de vista distribuïts uniformement o quasi-uniforme.
@@ -24,7 +20,7 @@ class QViewpointDistributionWidget : public QWidget, private ::Ui::QViewpointDis
 
 public:
 
-    QViewpointDistributionWidget( QWidget *parent = 0 );
+    QViewpointDistributionWidget(QWidget *parent = 0);
     ~QViewpointDistributionWidget();
 
     /// Selecciona la distribució uniforme amb 4 punts.
@@ -38,7 +34,7 @@ public:
     /// Selecciona la distribució uniforme amb 20 punts.
     void setToUniform20();
     /// Selecciona la distribució quasi-uniforme amb el nivell de recursió \a recursionLevel.
-    void setToQuasiUniform( int recursionLevel );
+    void setToQuasiUniform(int recursionLevel);
 
     /// Retorna cert si s'ha seleccionat una distribució uniforme.
     bool isUniform() const;
@@ -49,12 +45,12 @@ public:
     /// Retorna la llista de punts de vista d'acord amb les opcions seleccionades.
     QVector<Vector3> viewpoints() const;
     /// Retorna un generador de punts de vista configurat d'acord amb les opcions seleccionades.
-    ViewpointGenerator viewpointGenerator( float radius = 1.0f ) const;
+    ViewpointGenerator viewpointGenerator(float radius = 1.0f) const;
 
 signals:
 
     /// Es llança quan canvia el nombre de punts de vista.
-    void numberOfViewpointsChanged( int numberOfViewpoints );
+    void numberOfViewpointsChanged(int numberOfViewpoints);
 
 private:
 
@@ -65,16 +61,11 @@ private:
 
 private slots:
 
-    /**
-     * Actualitza l'etiqueta del nombre de plans quasi-uniforme segons el nivell de recursió i emet el signal amb el nou nombre de punts de
-     * vista.
-     */
+    /// Actualitza l'etiqueta del nombre de plans quasi-uniforme segons el nivell de recursió i emet el signal amb el nou nombre de punts de vista.
     void updateNumberOfViewpoints();
 
 };
 
+} // namespace udg
 
-}
-
-
-#endif
+#endif // UDGQVIEWPOINTDISTRIBUTIONWIDGET_H

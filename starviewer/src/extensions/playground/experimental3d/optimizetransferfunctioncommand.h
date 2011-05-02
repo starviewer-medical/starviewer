@@ -1,15 +1,11 @@
 #ifndef OPTIMIZETRANSFERFUNCTIONCOMMAND_H
 #define OPTIMIZETRANSFERFUNCTIONCOMMAND_H
 
-
 #include <vtkCommand.h>
-
 
 namespace udg {
 
-
 class QExperimental3DExtension;
-
 
 class OptimizeTransferFunctionCommand : public vtkCommand {
 
@@ -30,8 +26,6 @@ protected:
 
 };
 
-
 } // namespace udg
-
 
 #endif // OPTIMIZETRANSFERFUNCTIONCOMMAND_H

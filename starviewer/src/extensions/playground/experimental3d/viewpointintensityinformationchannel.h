@@ -1,9 +1,7 @@
 #ifndef VIEWPOINTINTENSITYINFORMATIONCHANNEL_H
 #define VIEWPOINTINTENSITYINFORMATIONCHANNEL_H
 
-
 #ifdef CUDA_AVAILABLE
-
 
 #include <QObject>
 
@@ -13,26 +11,24 @@
 #include "transferfunction.h"
 #include "viewpointgenerator.h"
 
-
 namespace udg {
-
 
 class Experimental3DVolume;
 class QExperimental3DViewer;
 class Matrix4;
 
-
 /**
- * Representa el canal d'informació entre un conjunt de punts de vista (V) i un conjunt de valors d'intensitat del volum (I). Conté mètodes per calcular mesures relatives a aquest canal.
+ * Representa el canal d'informació entre un conjunt de punts de vista (V) i un conjunt de valors d'intensitat del volum (I).
+ * Conté mètodes per calcular mesures relatives a aquest canal.
  */
-class ViewpointIntensityInformationChannel : public QObject
-{
+class ViewpointIntensityInformationChannel : public QObject {
 
     Q_OBJECT
 
 public:
 
-    ViewpointIntensityInformationChannel(const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume, QExperimental3DViewer *viewer, const TransferFunction &transferFunction);
+    ViewpointIntensityInformationChannel(const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume, QExperimental3DViewer *viewer,
+                                         const TransferFunction &transferFunction);
 
     // mètode especial per assignar uns punts de vista directament; és una drecera per l'optimització de punts de vista, per evitar un refactoring molt gros
     void setViewpoints(const QVector<Vector3> &viewpoints);
@@ -43,7 +39,8 @@ public:
     /// \a filter Vector que conté un booleà per cada punt de vista original. Es faran servir els que estiguin a cert.
     void filterViewpoints(const QVector<bool> &filter);
     /// Calcula les mesures demanades. Si en calcula més per dependències actualitza els paràmetres corresponents.
-    void compute(bool &pIV, bool &pV, bool &pI, bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, bool display = false);
+    void compute(bool &pIV, bool &pV, bool &pI, bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities,
+                 bool &imi, bool &intensityClustering, bool display = false);
     bool hasViewedVolume() const;
     const QVector<float>& viewedVolume() const;
     double totalViewedVolume() const;
@@ -69,16 +66,17 @@ signals:
 
 private:
 
-    QVector<float> intensityProbabilitiesInView( int i );
+    QVector<float> intensityProbabilitiesInView(int i);
 
-    static Matrix4 viewMatrix( const Vector3 &viewpoint );
-    void computeCuda(bool computeIntensityProbabilitiesGivenView, bool computeViewProbabilities, bool computeIntensityProbabilities, bool computeHI, bool computeHIv, bool computeHIV, bool computeJointEntropy,
-                     bool computeVmii, bool computeMii, bool computeViewpointUnstabilities, bool computeImi, bool computeIntensityClustering, bool display);
+    static Matrix4 viewMatrix(const Vector3 &viewpoint);
+    void computeCuda(bool computeIntensityProbabilitiesGivenView, bool computeViewProbabilities, bool computeIntensityProbabilities, bool computeHI,
+                     bool computeHIv, bool computeHIV, bool computeJointEntropy, bool computeVmii, bool computeMii, bool computeViewpointUnstabilities,
+                     bool computeImi, bool computeIntensityClustering, bool display);
     QVector<float> intensityProbabilitiesInViewCuda(int i);
     void computeViewProbabilitiesCuda(bool computeIntensityProbabilitiesGivenView);
     void computeIntensityProbabilitiesAndEntropyCuda(bool computeHI);
-    void computeViewMeasuresCuda(bool computeViewpointEntropy, bool computeEntropy, bool computeJHVI, bool computeVmii, bool computeMii, bool computeViewpointUnstabilities/*, bool computeViewpointVomi,
-                                 bool computeEvmiOpacity, bool computeEvmiVomi*/);
+    void computeViewMeasuresCuda(bool computeViewpointEntropy, bool computeEntropy, bool computeJHVI, bool computeVmii, bool computeMii,
+                                 bool computeViewpointUnstabilities/*, bool computeViewpointVomi, bool computeEvmiOpacity, bool computeEvmiVomi*/);
     void computeImiCuda(/* bool computeImi, bool computeColorVomi */);
     void computeIntensityClusteringCuda();
 
@@ -112,11 +110,8 @@ private:
 
 };
 
-
 } // namespace udg
 
-
 #endif // CUDA_AVAILABLE
-
 
 #endif // VIEWPOINTINTENSITYINFORMATIONCHANNEL_H

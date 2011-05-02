@@ -1,7 +1,6 @@
 #ifndef UDGVMIVOXELSHADER2_H
 #define UDGVMIVOXELSHADER2_H
 
-
 #include "voxelshader.h"
 
 #include <QHash>
@@ -12,15 +11,12 @@
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
 
-
 namespace udg {
-
 
 /**
  * Voxel shader per la primera passada del càlcul de la VMI. Acumula volum total.
  */
-class VmiVoxelShader2 : public VoxelShader
-{
+class VmiVoxelShader2 : public VoxelShader {
 
 public:
 
@@ -28,9 +24,9 @@ public:
     virtual ~VmiVoxelShader2();
 
     /// Assigna el volum de dades.
-    void setData( const unsigned short *data, unsigned short maxValue, unsigned int size );
+    void setData(const unsigned short *data, unsigned short maxValue, unsigned int size);
     /// Assigna la funció de transferència.
-    void setTransferFunction( const TransferFunction &transferFunction );
+    void setTransferFunction(const TransferFunction &transferFunction);
     /// Retorna el vector de probabilitats p(o|v) i neteja els acumuladors.
     QVector<float> objectProbabilities();
     /// Retorna el volum vist a l'última passada (s'actualitza quan es crida objectProbabilities()).
@@ -38,15 +34,15 @@ public:
     void clearViewedVolumes();
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    virtual HdrColor shade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                            const HdrColor &baseColor = HdrColor() );
+    virtual HdrColor shade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                           const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició offset.
-    HdrColor nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    HdrColor nvShade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                      const HdrColor &baseColor = HdrColor() );
+    HdrColor nvShade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                     const HdrColor &baseColor = HdrColor());
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -68,35 +64,32 @@ protected:
 
 };
 
-
-inline HdrColor VmiVoxelShader2::shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor )
+inline HdrColor VmiVoxelShader2::shade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor)
 {
-    return nvShade( position, offset, direction, remainingOpacity, baseColor );
+    return nvShade(position, offset, direction, remainingOpacity, baseColor);
 }
 
-
-inline HdrColor VmiVoxelShader2::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                                        const HdrColor &baseColor )
+inline HdrColor VmiVoxelShader2::shade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                                       const HdrColor &baseColor)
 {
-    return nvShade( position, direction, interpolator, remainingOpacity, baseColor );
+    return nvShade(position, direction, interpolator, remainingOpacity, baseColor);
 }
 
-
-inline HdrColor VmiVoxelShader2::nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor )
+inline HdrColor VmiVoxelShader2::nvShade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor)
 {
-    Q_UNUSED( position );
-    Q_UNUSED( direction );
-    Q_UNUSED( baseColor );
+    Q_UNUSED(position);
+    Q_UNUSED(direction);
+    Q_UNUSED(baseColor);
 
-    Q_ASSERT( m_data );
+    Q_ASSERT(m_data);
 
     HdrColor color = m_ambientColors[m_data[offset]];
     QThread *thread = QThread::currentThread();
 
-    if ( !m_objectVolumePerThread.contains( thread ) )
+    if (!m_objectVolumePerThread.contains(thread))
     {
         m_mutex.lock();
-        m_objectVolumePerThread[thread] = QVector<float>( m_dataSize );
+        m_objectVolumePerThread[thread] = QVector<float>(m_dataSize);
         m_totalVolumePerThread[thread] = 0.0f;
         m_mutex.unlock();
     }
@@ -108,42 +101,39 @@ inline HdrColor VmiVoxelShader2::nvShade( const Vector3 &position, int offset, c
     return color;
 }
 
-
-inline HdrColor VmiVoxelShader2::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                                          const HdrColor &baseColor )
+inline HdrColor VmiVoxelShader2::nvShade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                                         const HdrColor &baseColor)
 {
-    Q_UNUSED( direction );
-    Q_UNUSED( baseColor );
+    Q_UNUSED(direction);
+    Q_UNUSED(baseColor);
 
-    Q_ASSERT( interpolator );
-    Q_ASSERT( m_data );
+    Q_ASSERT(interpolator);
+    Q_ASSERT(m_data);
 
     int offsets[8];
     double weights[8];
-    interpolator->getOffsetsAndWeights( position, offsets, weights );
+    interpolator->getOffsetsAndWeights(position, offsets, weights);
 
-    double value = TrilinearInterpolator::interpolate<double>( m_data, offsets, weights );
+    double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
     HdrColor color = m_ambientColors[static_cast<int>(value)];
 
     QThread *thread = QThread::currentThread();
 
-    if ( !m_objectVolumePerThread.contains( thread ) )
+    if (!m_objectVolumePerThread.contains(thread))
     {
         m_mutex.lock();
-        m_objectVolumePerThread[thread] = QVector<float>( m_dataSize );
+        m_objectVolumePerThread[thread] = QVector<float>(m_dataSize);
         m_totalVolumePerThread[thread] = 0.0f;
         m_mutex.unlock();
     }
 
     float volume = color.alpha * remainingOpacity;
-    for ( int i = 0; i < 8; i++ ) m_objectVolumePerThread[thread][offsets[i]] += volume * weights[i];
+    for (int i = 0; i < 8; i++) m_objectVolumePerThread[thread][offsets[i]] += volume * weights[i];
     m_totalVolumePerThread[thread] += volume;
 
     return color;
 }
 
+} // namespace udg
 
-}
-
-
-#endif
+#endif // UDGVMIVOXELSHADER2_H

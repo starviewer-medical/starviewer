@@ -5,9 +5,10 @@
 
 namespace udg {
 
-class Experimental3DSettings : public DefaultSettings
-{
+class Experimental3DSettings : public DefaultSettings {
+
 public:
+
     Experimental3DSettings();
     virtual ~Experimental3DSettings();
 
@@ -54,8 +55,9 @@ public:
     static const QString MutualInformationIntensityDir;
     static const QString ViewpointUnstabilitiesIntensityDir;
     static const QString IntensityMutualInformationDir;
+
 };
 
 } // end namespace udg 
 
-#endif
+#endif // UDGEXPERIMENTAL3DSETTINGS_H

@@ -1,12 +1,14 @@
 #ifndef UDGQBASICGRAPHICTRANSFERFUNCTIONEDITOR_H
 #define UDGQBASICGRAPHICTRANSFERFUNCTIONEDITOR_H
 
-
 #include <QWidget>
+
 #include <QLinearGradient>
+
 #include "transferfunction.h"
 
 namespace udg {
+
 /**
  * Editor de funcions de transferència gràfic en condicions.
  *
@@ -14,43 +16,50 @@ namespace udg {
  *       - Millorar la documentació.
  */
 class QBasicGraphicTransferFunctionEditor : public QWidget {
-Q_OBJECT
+
+    Q_OBJECT
+
 public:
-    QBasicGraphicTransferFunctionEditor( QWidget *parent = 0 );
+
+    QBasicGraphicTransferFunctionEditor(QWidget *parent = 0);
     ~QBasicGraphicTransferFunctionEditor();
 
     double minimum() const;
     double maximum() const;
 
     /// Assigna el rang de valors de la funció de transferència.
-    void setRange( double minimum, double maximum );
+    void setRange(double minimum, double maximum);
     
     /// Retorna/Assigna la funció de transferència.
     const TransferFunction& transferFunction() const;
-    void setTransferFunction( const TransferFunction &transferFunction );
+    void setTransferFunction(const TransferFunction &transferFunction);
 
 public slots:
+
     /// Assigna el nom de la funció de transferència.
-    void setTransferFunctionName( const QString &name );
+    void setTransferFunctionName(const QString &name);
     
     /// Ajusta el mínim i el mínim i el màxim de manera que coincideixin amb els extrems de la funció.
     void adjustRangeToFunction();
 
 signals:
+
     /// S'emet quan canvia el rang.
-    void rangeChanged( double minimum, double maximum );
+    void rangeChanged(double minimum, double maximum);
 
 protected:
-    virtual bool event( QEvent *event );
-    virtual void keyPressEvent( QKeyEvent *event );
-    virtual void mousePressEvent( QMouseEvent *event );
-    virtual void mouseMoveEvent( QMouseEvent *event );
-    virtual void mouseReleaseEvent( QMouseEvent *event );
-    virtual void wheelEvent( QWheelEvent *event );
-    virtual void paintEvent( QPaintEvent *event );
-    virtual void resizeEvent( QResizeEvent *event );
+
+    virtual bool event(QEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void wheelEvent(QWheelEvent *event);
+    virtual void paintEvent(QPaintEvent *event);
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
+
     static const double PointSize;
 
     void updateColorGradient();
@@ -58,20 +67,21 @@ private:
     void drawFunction();
     void drawSelectionRectangle();
 
-    QPointF pixelToFunctionPoint( const QPoint &pixel ) const;
-    QPointF functionPointToGraphicPoint( const QPointF &functionPoint ) const;
+    QPointF pixelToFunctionPoint(const QPoint &pixel) const;
+    QPointF functionPointToGraphicPoint(const QPointF &functionPoint) const;
 
-    double nearestX( const QPoint &pixel, bool &found ) const;
+    double nearestX(const QPoint &pixel, bool &found) const;
 
-    void addPoint( double x, double y );
-    void removePoint( double x );
+    void addPoint(double x, double y);
+    void removePoint(double x);
     void changePointColor(double x, const QColor &color);
-    void changeCurrentPoint( double x, double y );
+    void changeCurrentPoint(double x, double y);
 
     void clearSelection();
     void selectAll();
 
 private:
+
     /// Valor de propietat mínim.
     double m_minimum;
     /// Valor de propietat màxim.
@@ -90,8 +100,9 @@ private:
     QRect m_selectionRectangle;
     QList<double> m_selectedPoints;
     QList<double> m_selectedPointsCopy;         // còpia dels punts seleccionats necessària per arrossegar punts
+
 };
 
-}
+} // namespace udg
 
-#endif
+#endif // UDGQBASICGRAPHICTRANSFERFUNCTIONEDITOR_H

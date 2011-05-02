@@ -1,11 +1,9 @@
 #ifndef UDGEXPERIMENTAL3DVOLUME_H
 #define UDGEXPERIMENTAL3DVOLUME_H
 
-
 #include "vector3.h"
 
 #include <QVector>
-
 
 class vtkEncodedGradientEstimator;
 class vtkFiniteDifferenceGradientEstimator;
@@ -16,9 +14,7 @@ class vtkVolumeProperty;
 class vtkVolumeRayCastCompositeFunction;
 class vtkVolumeRayCastMapper;
 
-
 namespace udg {
-
 
 class AmbientVoxelShader2;
 class CelShadingVoxelShader;
@@ -45,7 +41,6 @@ class vtk4DLinearRegressionGradientEstimator;
 class vtkVolumeRayCastVoxelShaderCompositeFunction;
 class WhiteVoxelShader;
 class QExperimental3DExtension;
-
 
 /**
     Aquesta classe agrupa totes les funcions de tractament de volums de l'extensió experimental3d.
@@ -169,7 +164,8 @@ private:
     unsigned int m_dataSize;
 
     /// Volume ray cast function pels renderings més senzills que no es poden fer amb GPU.
-    /// Això és pel cas especial que fem servir la funció de transferència d'opacitat del gradient, que de moment (5.6) no està suportat pel ray cast mapper de GPU.
+    /// Això és pel cas especial que fem servir la funció de transferència d'opacitat del gradient,
+    /// que de moment (5.6) no està suportat pel ray cast mapper de GPU.
     vtkVolumeRayCastCompositeFunction *m_simpleVolumeRayCastFunction;
     /// Volume ray cast function amb shaders.
     vtkVolumeRayCastVoxelShaderCompositeFunction *m_shaderVolumeRayCastFunction;
@@ -232,8 +228,6 @@ private:
 
 };
 
-
 } // namespace udg
-
 
 #endif // UDGEXPERIMENTAL3DVOLUME_H
