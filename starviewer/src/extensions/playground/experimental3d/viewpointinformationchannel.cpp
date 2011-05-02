@@ -2480,7 +2480,7 @@ void ViewpointInformationChannel::computeBestViews()
 
         if ( m_fixedNumberOfBestViews )
         {
-            emit partialProgress( 100 * m_bestViews.size() / m_fixedNumberOfBestViews );
+            emit partialProgress( 100 * m_bestViews.size() / m_numberOfBestViews );
             QCoreApplication::processEvents();  // necessari perquè el procés vagi fluid
         }
     }
