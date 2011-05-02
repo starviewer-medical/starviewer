@@ -172,9 +172,9 @@ double DrawerLine::computeDistance(double * spacing)
     return distance;
 }
 
-double DrawerLine::getDistanceToPoint(double *point3D)
+double DrawerLine::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
-    return MathTools::getPointToFiniteLineDistance(point3D, m_firstPoint, m_secondPoint);
+    return MathTools::getPointToFiniteLineDistance(point3D, m_firstPoint, m_secondPoint, closestPoint);
 }
 
 void DrawerLine::getBounds(double bounds[6])

@@ -7,6 +7,7 @@ namespace udg {
 
 class Q2DViewer;
 class DrawerPolygon;
+class DrawerPrimitive;
 
 /**
     Tool per esborrar primitives i annotacions de pantalla.
@@ -34,6 +35,14 @@ private:
     
     /// Cercarà quina és la primitiva més propera, i si està lo suficientment aprop l'esborrarà.
     void erasePrimitive();
+
+    /// Determina quina primitiva es pot esborrar amb el punt, vista i llesca donats.
+    /// @param point Coordenada de món a partir de la qual volem determinar si hi ha una primitiva pròxima
+    /// @param view Vista actual del model (Axial, Sagital, Coronal)
+    /// @param slice Llesca d'on volem obtenir la primitiva
+    /// @return La primitiva que estigui propera al punt determinat, dins d'un llindar determinat. 
+    /// Si el punt no és prou proper segons el llindar o no hi ha primitives en aquella llesca, la primitiva retornada serà nul·la.
+    DrawerPrimitive* getErasablePrimitive(double point[3], int view, int slice);
 
 private slots:
     /// Slot que torna la tool al seu estat inicial

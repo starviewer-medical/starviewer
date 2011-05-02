@@ -510,6 +510,7 @@ bool QMPRExtension::detectAxialViewAxisActor()
 {
     bool picked = false;
     double clickedWorldPoint[3];
+    double dummyPoint[3];
     m_axial2DView->getEventWorldCoordinate(clickedWorldPoint);
 
     // Detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
@@ -519,11 +520,11 @@ bool QMPRExtension::detectAxialViewAxisActor()
 
     r1 = m_coronalOverAxialIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverAxialIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
 
     r1 = m_sagitalOverAxialAxisActor->GetPositionCoordinate()->GetValue();
     r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
-    distanceToSagital = MathTools::getPointToFiniteLineDistance(point, r1, r2);
+    distanceToSagital = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
 
     // Passem les distàncies a coordenades de vista per controlar la tolerància
     double zeroInDisplay[3];
@@ -633,10 +634,11 @@ void QMPRExtension::detectSagitalViewAxisActor()
     double point[3] = { clickedWorldPoint[0], clickedWorldPoint[1], 0.0 };
     double *r1, *r2;
     double distanceToCoronal;
+    double dummyPoint[3];
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
 
     // Passem les distàncies a coordenades de vista per controlar la tolerància
     double zeroInDisplay[3];
@@ -804,14 +806,15 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
     double point[3] = { clickedWorldPoint[0], clickedWorldPoint[1], 0.0 };
     double *r1, *r2;
     double distanceToAxial, distanceToCoronal;
+    double dummyPoint[3];
 
     r1 = m_axialOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToAxial = MathTools::getPointToFiniteLineDistance(point, r1, r2);
+    distanceToAxial = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
 
     // Passem les distàncies a coordenades de vista per controlar la tolerància
     double zeroInDisplay[3];

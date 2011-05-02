@@ -27,7 +27,7 @@ public:
 
     vtkProp* getAsVtkProp();
 
-    double getDistanceToPoint(double *point3D);
+    double getDistanceToPoint(double *point3D, double closestPoint[3]);
 
     void getBounds(double bounds[6]);
 

@@ -199,48 +199,35 @@ void DrawerPolyline::swap()
     }
 }
 
-double DrawerPolyline::getDistanceToPoint(double *point3D)
+double DrawerPolyline::getDistanceToPoint(double *point3D, double closestPoint[3])
 {
-    double minDistanceLine = MathTools::DoubleMaximumValue;
-    double distance;
-    bool found = false;
+    double minimumDistanceFound = MathTools::DoubleMaximumValue;
 
     if (!m_pointsList.isEmpty())
     {
-        // Mirem si el polígon conté com a últim punt el primer punt, és a dir, si està tancat o no.
-        // Ens cal que sigui tancat per a dibuixar tots els segments reals que el formen.
-        QList<double *> auxList;
-        auxList += m_pointsList;
-
-        if (auxList.first()[0] != auxList.last()[0] || auxList.first()[1] != auxList.last()[1] || auxList.first()[2] != auxList.last()[2])
+        // Recorrem tots els punts de la polilínia calculant la distància a cadascun dels 
+        // segments que uneixen cada vèrtex
+        double distance;
+        double localClosestPoint[3];
+        int i = 0;
+        while (i < m_pointsList.count() - 1)
         {
-            // Si el primer i últim punt no són iguals, dupliquem el primer punt.
-            auxList << auxList.first();
-        }
-
-        for (int i = 0; (i < auxList.count() - 1) && !found ; i++)
-        {
-            if (isPointIncludedInLineBounds(point3D, auxList[i], auxList[i+1]))
+            double startPoint[3] = { m_pointsList.at(i)[0], m_pointsList.at(i)[1], m_pointsList.at(i)[2] };
+            double endPoint[3] = { m_pointsList.at(i + 1)[0], m_pointsList.at(i + 1)[1], m_pointsList.at(i + 1)[2] };
+            distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint, localClosestPoint);
+            if (distance < minimumDistanceFound)
             {
-                minDistanceLine = 0.0;
-                found = true;
+                minimumDistanceFound = distance;
+                closestPoint[0] = localClosestPoint[0];
+                closestPoint[1] = localClosestPoint[1];
+                closestPoint[2] = localClosestPoint[2];
             }
-            else
-            {
-                distance = MathTools::getPointToFiniteLineDistance(point3D, auxList[i], auxList[i+1]);
 
-                if (minDistanceLine == MathTools::DoubleMaximumValue)
-                {
-                    minDistanceLine = distance;
-                }
-                else if (distance < minDistanceLine)
-                {
-                    minDistanceLine = distance;
-                }
-            }
+            ++i;
         }
     }
-    return minDistanceLine;
+    
+    return minimumDistanceFound;
 }
 
 bool DrawerPolyline::isPointIncludedInLineBounds(double point[3], double *lineP1, double *lineP2)
