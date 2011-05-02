@@ -1037,6 +1037,7 @@ inline double ObscuranceThread::obscurance( double distance ) const
         case ObscuranceMainThread::Exponential: return 1.0 - exp( -distance / m_obscuranceMaximumDistance );
         case ObscuranceMainThread::ExponentialNorm: return ( 1.0 - exp( -distance / m_obscuranceMaximumDistance ) ) / EXP_NORM;
         case ObscuranceMainThread::CubeRoot: return MathTools::cubeRoot( distance / m_obscuranceMaximumDistance );
+        default: Q_ASSERT(false); return 0.0;
     }
 }
 
