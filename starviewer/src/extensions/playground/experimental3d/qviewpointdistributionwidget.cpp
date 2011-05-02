@@ -4,155 +4,137 @@
 
 #include "viewpointgenerator.h"
 
-
 namespace udg {
 
-
-QViewpointDistributionWidget::QViewpointDistributionWidget( QWidget *parent )
- : QWidget( parent )
+QViewpointDistributionWidget::QViewpointDistributionWidget(QWidget *parent)
+    : QWidget(parent)
 {
-    setupUi( this );
+    setupUi(this);
 
     createConnections();
 }
-
 
 QViewpointDistributionWidget::~QViewpointDistributionWidget()
 {
 }
 
-
 void QViewpointDistributionWidget::setToUniform4()
 {
-    m_uniformRadioButton->setChecked( true );
-    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 0 );
+    m_uniformRadioButton->setChecked(true);
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex(0);
 }
-
 
 void QViewpointDistributionWidget::setToUniform6()
 {
-    m_uniformRadioButton->setChecked( true );
-    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 1 );
+    m_uniformRadioButton->setChecked(true);
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex(1);
 }
-
 
 void QViewpointDistributionWidget::setToUniform8()
 {
-    m_uniformRadioButton->setChecked( true );
-    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 2 );
+    m_uniformRadioButton->setChecked(true);
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex(2);
 }
-
 
 void QViewpointDistributionWidget::setToUniform12()
 {
-    m_uniformRadioButton->setChecked( true );
-    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 3 );
+    m_uniformRadioButton->setChecked(true);
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex(3);
 }
-
 
 void QViewpointDistributionWidget::setToUniform20()
 {
-    m_uniformRadioButton->setChecked( true );
-    m_uniformNumberOfViewpointsComboBox->setCurrentIndex( 4 );
+    m_uniformRadioButton->setChecked(true);
+    m_uniformNumberOfViewpointsComboBox->setCurrentIndex(4);
 }
 
-
-void QViewpointDistributionWidget::setToQuasiUniform( int recursionLevel )
+void QViewpointDistributionWidget::setToQuasiUniform(int recursionLevel)
 {
-    m_quasiUniformRadioButton->setChecked( true );
-    m_quasiUniformRecursionLevelSpinBox->setValue( recursionLevel );
+    m_quasiUniformRadioButton->setChecked(true);
+    m_quasiUniformRecursionLevelSpinBox->setValue(recursionLevel);
 }
-
 
 bool QViewpointDistributionWidget::isUniform() const
 {
     return m_uniformRadioButton->isChecked();
 }
 
-
 unsigned int QViewpointDistributionWidget::numberOfViewpoints() const
 {
-    if ( isUniform() ) return m_uniformNumberOfViewpointsComboBox->currentText().toUInt();
+    if (isUniform()) return m_uniformNumberOfViewpointsComboBox->currentText().toUInt();
     else return numberOfQuasiUniformViewpoints();
 }
-
 
 int QViewpointDistributionWidget::recursionLevel() const
 {
     return m_quasiUniformRecursionLevelSpinBox->value();
 }
 
-
 QVector<Vector3> QViewpointDistributionWidget::viewpoints() const
 {
     ViewpointGenerator viewpointGenerator;
 
-    if ( isUniform() )
+    if (isUniform())
     {
-        switch ( numberOfViewpoints() )
+        switch (numberOfViewpoints())
         {
             case 4: viewpointGenerator.setToUniform4(); break;
             case 6: viewpointGenerator.setToUniform6(); break;
             case 8: viewpointGenerator.setToUniform8(); break;
             case 12: viewpointGenerator.setToUniform12(); break;
             case 20: viewpointGenerator.setToUniform20(); break;
-            default: Q_ASSERT_X( false, "viewpoints", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( numberOfViewpoints() ) ) );
+            default: Q_ASSERT_X(false, "viewpoints", qPrintable(QString("Nombre de punts de vista uniformes incorrecte: %1").arg(numberOfViewpoints())));
         }
     }
-    else viewpointGenerator.setToQuasiUniform( recursionLevel() );
+    else viewpointGenerator.setToQuasiUniform(recursionLevel());
 
     return viewpointGenerator.viewpoints();
 }
 
-
-ViewpointGenerator QViewpointDistributionWidget::viewpointGenerator( float radius ) const
+ViewpointGenerator QViewpointDistributionWidget::viewpointGenerator(float radius) const
 {
     ViewpointGenerator viewpointGenerator;
 
-    if ( isUniform() )
+    if (isUniform())
     {
-        switch ( numberOfViewpoints() )
+        switch (numberOfViewpoints())
         {
-            case 4: viewpointGenerator.setToUniform4( radius ); break;
-            case 6: viewpointGenerator.setToUniform6( radius ); break;
-            case 8: viewpointGenerator.setToUniform8( radius ); break;
-            case 12: viewpointGenerator.setToUniform12( radius ); break;
-            case 20: viewpointGenerator.setToUniform20( radius ); break;
-            default: Q_ASSERT_X( false, "viewpoints", qPrintable( QString( "Nombre de punts de vista uniformes incorrecte: %1" ).arg( numberOfViewpoints() ) ) );
+            case 4: viewpointGenerator.setToUniform4(radius); break;
+            case 6: viewpointGenerator.setToUniform6(radius); break;
+            case 8: viewpointGenerator.setToUniform8(radius); break;
+            case 12: viewpointGenerator.setToUniform12(radius); break;
+            case 20: viewpointGenerator.setToUniform20(radius); break;
+            default: Q_ASSERT_X(false, "viewpoints", qPrintable(QString("Nombre de punts de vista uniformes incorrecte: %1").arg(numberOfViewpoints())));
         }
     }
-    else viewpointGenerator.setToQuasiUniform( recursionLevel(), radius );
+    else viewpointGenerator.setToQuasiUniform(recursionLevel(), radius);
 
     return viewpointGenerator;
 }
 
-
 void QViewpointDistributionWidget::createConnections()
 {
-    connect( m_uniformRadioButton, SIGNAL( toggled(bool) ), m_uniformNumberOfViewpointsLabel, SLOT( setEnabled(bool) ) );
-    connect( m_uniformRadioButton, SIGNAL( toggled(bool) ), m_uniformNumberOfViewpointsComboBox, SLOT( setEnabled(bool) ) );
+    connect(m_uniformRadioButton, SIGNAL(toggled(bool)), m_uniformNumberOfViewpointsLabel, SLOT(setEnabled(bool)));
+    connect(m_uniformRadioButton, SIGNAL(toggled(bool)), m_uniformNumberOfViewpointsComboBox, SLOT(setEnabled(bool)));
 
-    connect( m_quasiUniformRadioButton, SIGNAL( toggled(bool) ), m_quasiUniformRecursionLevelLabel, SLOT( setEnabled(bool) ) );
-    connect( m_quasiUniformRadioButton, SIGNAL( toggled(bool) ), m_quasiUniformRecursionLevelSpinBox, SLOT( setEnabled(bool) ) );
-    connect( m_quasiUniformRadioButton, SIGNAL( toggled(bool) ), m_quasiUniformNumberOfViewpointsLabel, SLOT( setEnabled(bool) ) );
+    connect(m_quasiUniformRadioButton, SIGNAL(toggled(bool)), m_quasiUniformRecursionLevelLabel, SLOT(setEnabled(bool)));
+    connect(m_quasiUniformRadioButton, SIGNAL(toggled(bool)), m_quasiUniformRecursionLevelSpinBox, SLOT(setEnabled(bool)));
+    connect(m_quasiUniformRadioButton, SIGNAL(toggled(bool)), m_quasiUniformNumberOfViewpointsLabel, SLOT(setEnabled(bool)));
 
-    connect( m_uniformRadioButton, SIGNAL( toggled(bool) ), SLOT( updateNumberOfViewpoints() ) );
-    connect( m_uniformNumberOfViewpointsComboBox, SIGNAL( currentIndexChanged(int) ), SLOT( updateNumberOfViewpoints() ) );
-    connect( m_quasiUniformRecursionLevelSpinBox, SIGNAL( valueChanged(int) ), SLOT( updateNumberOfViewpoints() ) );
+    connect(m_uniformRadioButton, SIGNAL(toggled(bool)), SLOT(updateNumberOfViewpoints()));
+    connect(m_uniformNumberOfViewpointsComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateNumberOfViewpoints()));
+    connect(m_quasiUniformRecursionLevelSpinBox, SIGNAL(valueChanged(int)), SLOT(updateNumberOfViewpoints()));
 }
-
 
 unsigned int QViewpointDistributionWidget::numberOfQuasiUniformViewpoints() const
 {
-    return static_cast<unsigned int>( 10.0 * pow( 4.0, recursionLevel() ) + 2.0 );
+    return static_cast<unsigned int>(10.0 * pow(4.0, recursionLevel()) + 2.0);
 }
-
 
 void QViewpointDistributionWidget::updateNumberOfViewpoints()
 {
-    m_quasiUniformNumberOfViewpointsLabel->setText( QString( tr("%1 viewpoints") ).arg( numberOfQuasiUniformViewpoints() ) );
-    emit numberOfViewpointsChanged( numberOfViewpoints() );
+    m_quasiUniformNumberOfViewpointsLabel->setText(QString(tr("%1 viewpoints")).arg(numberOfQuasiUniformViewpoints()));
+    emit numberOfViewpointsChanged(numberOfViewpoints());
 }
 
-
-}
+} // namespace udg

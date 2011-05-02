@@ -1,8 +1,6 @@
 #include "viewpointintensityinformationchannel.h"
 
-
 #ifdef CUDA_AVAILABLE
-
 
 #include <QCoreApplication>
 #include <QSet>
@@ -17,36 +15,32 @@
 #include "cudaviewpointintensityinformationchannel.h"
 #include "matrix4.h"
 
-
 namespace udg {
 
-
-ViewpointIntensityInformationChannel::ViewpointIntensityInformationChannel(const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume, QExperimental3DViewer *viewer,
-                                                                           const TransferFunction &transferFunction)
+ViewpointIntensityInformationChannel::ViewpointIntensityInformationChannel(const ViewpointGenerator &viewpointGenerator, Experimental3DVolume *volume,
+                                                                           QExperimental3DViewer *viewer, const TransferFunction &transferFunction)
     : QObject(), m_viewpointGenerator(viewpointGenerator), m_volume(volume), m_viewer(viewer), m_transferFunction(transferFunction)
 {
     m_backgroundColor = m_viewer->getBackgroundColor();
     m_viewpoints = m_viewpointGenerator.viewpoints();
 }
 
-
 void ViewpointIntensityInformationChannel::setViewpoints(const QVector<Vector3> &viewpoints)
 {
     m_viewpoints = viewpoints;
 }
-
 
 void ViewpointIntensityInformationChannel::setIntensityClusteringNumberOfClusters(int numberOfClusters)
 {
     m_numberOfIntensityClusters = numberOfClusters;
 }
 
-
 void ViewpointIntensityInformationChannel::filterViewpoints(const QVector<bool> &filter)
 {
     if (m_viewpoints.size() != filter.size())
     {
-        DEBUG_LOG(QString("Error: mides dels vectors diferents al filtre de punts de vista: %1 punts de vista, %2 filtres").arg(m_viewpoints.size()).arg(filter.size()));
+        DEBUG_LOG(QString("Error: mides dels vectors diferents al filtre de punts de vista: %1 punts de vista, %2 filtres").arg(m_viewpoints.size())
+                                                                                                                           .arg(filter.size()));
         return;
     }
 
@@ -61,12 +55,13 @@ void ViewpointIntensityInformationChannel::filterViewpoints(const QVector<bool> 
     }
 }
 
-
-void ViewpointIntensityInformationChannel::compute(bool &intensityProbabilitiesGivenView, bool &viewProbabilities, bool &intensityProbabilities, bool &HI, bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii,
-                                                   bool &mii, bool &viewpointUnstabilities, bool &imi, bool &intensityClustering, bool display)
+void ViewpointIntensityInformationChannel::compute(bool &intensityProbabilitiesGivenView, bool &viewProbabilities, bool &intensityProbabilities, bool &HI,
+                                                   bool &HIv, bool &HIV, bool &jointEntropy, bool &vmii, bool &mii, bool &viewpointUnstabilities, bool &imi,
+                                                   bool &intensityClustering, bool display)
 {
     // Si no hi ha res a calcular marxem
-    if (!intensityProbabilitiesGivenView && !viewProbabilities && !intensityProbabilities && !HI && !HIv && !HIV && !jointEntropy && !vmii && !mii && !viewpointUnstabilities && !imi && !intensityClustering) return;
+    if (!intensityProbabilitiesGivenView && !viewProbabilities && !intensityProbabilities && !HI && !HIv && !HIV && !jointEntropy && !vmii && !mii
+        && !viewpointUnstabilities && !imi && !intensityClustering) return;
 
     // Dependències
     if (HI) intensityProbabilities = true;
@@ -80,111 +75,94 @@ void ViewpointIntensityInformationChannel::compute(bool &intensityProbabilitiesG
     if (intensityClustering) intensityProbabilities = true;
     if (intensityProbabilities) viewProbabilities = true;
 
-    computeCuda(intensityProbabilitiesGivenView, viewProbabilities, intensityProbabilities, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi, intensityClustering, display);
+    computeCuda(intensityProbabilitiesGivenView, viewProbabilities, intensityProbabilities, HI, HIv, HIV, jointEntropy, vmii, mii, viewpointUnstabilities, imi,
+                intensityClustering, display);
 }
-
 
 bool ViewpointIntensityInformationChannel::hasViewedVolume() const
 {
     return !m_viewedVolume.isEmpty();
 }
 
-
 const QVector<float>& ViewpointIntensityInformationChannel::viewedVolume() const
 {
     return m_viewedVolume;
 }
-
 
 double ViewpointIntensityInformationChannel::totalViewedVolume() const
 {
     return m_totalViewedVolume;
 }
 
-
 const QVector< QVector<float> >& ViewpointIntensityInformationChannel::intensityProbabilitiesGivenView() const
 {
     return m_intensityProbabilitiesGivenView;
 }
-
 
 const QVector<float>& ViewpointIntensityInformationChannel::viewProbabilities() const
 {
     return m_viewProbabilities;
 }
 
-
 const QVector<float>& ViewpointIntensityInformationChannel::intensityProbabilities() const
 {
     return m_intensityProbabilities;
 }
-
 
 float ViewpointIntensityInformationChannel::HI() const
 {
     return m_HI;
 }
 
-
 const QVector<float>& ViewpointIntensityInformationChannel::HIv() const
 {
     return m_HIv;
 }
-
 
 float ViewpointIntensityInformationChannel::HIV() const
 {
     return m_HIV;
 }
 
-
 float ViewpointIntensityInformationChannel::jointEntropy() const
 {
     return m_jointEntropy;
 }
-
 
 const QVector<float>& ViewpointIntensityInformationChannel::vmii() const
 {
     return m_vmii;
 }
 
-
 float ViewpointIntensityInformationChannel::mii() const
 {
     return m_mii;
 }
-
 
 const QVector<float>& ViewpointIntensityInformationChannel::viewpointUnstabilities() const
 {
     return m_viewpointUnstabilities;
 }
 
-
 const QVector<float>& ViewpointIntensityInformationChannel::imi() const
 {
     return m_imi;
 }
-
 
 float ViewpointIntensityInformationChannel::maximumImi() const
 {
     return m_maximumImi;
 }
 
-
 QList< QList<int> > ViewpointIntensityInformationChannel::intensityClusters() const
 {
     return m_intensityClusters;
 }
 
-
 QVector<float> ViewpointIntensityInformationChannel::intensityProbabilitiesInView(int i)
 {
     return intensityProbabilitiesInViewCuda(i);
 }
-
 
 Matrix4 ViewpointIntensityInformationChannel::viewMatrix(const Vector3 &viewpoint)
 {
@@ -193,9 +171,10 @@ Matrix4 ViewpointIntensityInformationChannel::viewMatrix(const Vector3 &viewpoin
     return camera.getViewMatrix();
 }
 
-
-void ViewpointIntensityInformationChannel::computeCuda(bool computeIntensityProbabilitiesGivenView, bool computeViewProbabilities, bool computeIntensityProbabilities, bool computeHI, bool computeHIv, bool computeHIV,
-                                                       bool computeJointEntropy, bool computeVmii, bool computeMii, bool computeViewpointUnstabilities, bool computeImi, bool computeIntensityClustering, bool display)
+void ViewpointIntensityInformationChannel::computeCuda(bool computeIntensityProbabilitiesGivenView, bool computeViewProbabilities,
+                                                       bool computeIntensityProbabilities, bool computeHI, bool computeHIv, bool computeHIV,
+                                                       bool computeJointEntropy, bool computeVmii, bool computeMii, bool computeViewpointUnstabilities,
+                                                       bool computeImi, bool computeIntensityClustering, bool display)
 {
     DEBUG_LOG("computeCuda");
 
@@ -204,7 +183,8 @@ void ViewpointIntensityInformationChannel::computeCuda(bool computeIntensityProb
     if (computeIntensityProbabilitiesGivenView || computeViewProbabilities) nSteps++;    // p(I|V) + p(V)
     if (computeIntensityProbabilities || computeHI) nSteps++;   // p(I) + H(I)
     if (computeImi) nSteps++;   // IMI
-    if (computeHIv || computeHIV || computeJointEntropy || computeVmii || computeMii || computeViewpointUnstabilities) nSteps++;    // H(I|v) + H(I|V) + H(V,I) + VMIi + MIi + viewpoint unstabilities
+    // H(I|v) + H(I|V) + H(V,I) + VMIi + MIi + viewpoint unstabilities
+    if (computeHIv || computeHIV || computeJointEntropy || computeVmii || computeMii || computeViewpointUnstabilities) nSteps++;
     if (computeIntensityClustering) nSteps++;   // intensity clustering
 
     emit totalProgressMaximum(nSteps);
@@ -260,7 +240,6 @@ void ViewpointIntensityInformationChannel::computeCuda(bool computeIntensityProb
     cviicCleanupRayCast();
 }
 
-
 QVector<float> ViewpointIntensityInformationChannel::intensityProbabilitiesInViewCuda(int i)
 {
     if (!m_intensityProbabilitiesGivenView.isEmpty())
@@ -278,7 +257,6 @@ QVector<float> ViewpointIntensityInformationChannel::intensityProbabilitiesInVie
         return pIv;
     }
 }
-
 
 void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda(bool computeIntensityProbabilitiesGivenView)
 {
@@ -339,7 +317,6 @@ void ViewpointIntensityInformationChannel::computeViewProbabilitiesCuda(bool com
 #endif
 }
 
-
 void ViewpointIntensityInformationChannel::computeIntensityProbabilitiesAndEntropyCuda(bool computeHI)
 {
     int nViewpoints = m_viewpoints.size();
@@ -384,8 +361,8 @@ void ViewpointIntensityInformationChannel::computeIntensityProbabilitiesAndEntro
     }
 }
 
-
-void ViewpointIntensityInformationChannel::computeViewMeasuresCuda(bool computeHIv, bool computeHIV, bool computeJointEntropy, bool computeVmii, bool computeMii, bool computeViewpointUnstabilities)
+void ViewpointIntensityInformationChannel::computeViewMeasuresCuda(bool computeHIv, bool computeHIV, bool computeJointEntropy, bool computeVmii,
+                                                                   bool computeMii, bool computeViewpointUnstabilities)
 {
     int nViewpoints = m_viewpoints.size();
     int nIntensities = m_volume->getRangeMax() + 1;
@@ -455,7 +432,8 @@ void ViewpointIntensityInformationChannel::computeViewMeasuresCuda(bool computeH
 
                 QVector<float> intensityProbabilitiesInNeighbour = this->intensityProbabilitiesInView(neighbour);   // p(I|vj)
 
-                float viewpointDissimilarity = InformationTheory::jensenShannonDivergence(pvi / pvij, pvj / pvij, intensityProbabilitiesInView, intensityProbabilitiesInNeighbour);
+                float viewpointDissimilarity = InformationTheory::jensenShannonDivergence(pvi / pvij, pvj / pvij, intensityProbabilitiesInView,
+                                                                                          intensityProbabilitiesInNeighbour);
                 viewpointUnstability += viewpointDissimilarity;
             }
 
@@ -489,7 +467,6 @@ void ViewpointIntensityInformationChannel::computeViewMeasuresCuda(bool computeH
         DEBUG_LOG(QString("I(V;I) = %1").arg(m_mii));
     }
 }
-
 
 void ViewpointIntensityInformationChannel::computeImiCuda()
 {
@@ -532,7 +509,6 @@ void ViewpointIntensityInformationChannel::computeImiCuda()
     }
 }
 
-
 void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
 {
     int nViewpoints = m_viewpoints.size();
@@ -566,7 +542,8 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
     for (int j = 0; j < nIntensities; j++) clusters << (QList<int>() << j); // clusters = [[0], [1], ..., [nIntensities-1]]
 
     // Calculem la pèrdua d'informació mútua per cada possible clustering
-    QList<double> mutualInformationDecrease;    // cada element és la pèrdua d'informació mútua resultat de fusionar l'element de la mateixa posició de clusters amb el següent
+    // cada element és la pèrdua d'informació mútua resultat de fusionar l'element de la mateixa posició de clusters amb el següent
+    QList<double> mutualInformationDecrease;
     for (int j = 0; j < nIntensities - 1; j++)
     {
         float pci = clusterProbabilities[j];
@@ -623,7 +600,8 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
                 float pci = clusterProbabilities[i];
                 float pcj = clusterProbabilities[j];
                 float pcij = pci + pcj;
-                mutualInformationDecrease[i] = (pcij == 0.0f ? 0.0f : pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i], pVC[j]));
+                mutualInformationDecrease[i] = (pcij == 0.0f ? 0.0f : pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i],
+                                                                                                                        pVC[j]));
             }
             if (minDecreaseIndex < mutualInformationDecrease.size())    // següent
             {
@@ -632,7 +610,8 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
                 float pci = clusterProbabilities[i];
                 float pcj = clusterProbabilities[j];
                 float pcij = pci + pcj;
-                mutualInformationDecrease[i] = (pcij == 0.0f ? 0.0f : pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i], pVC[j]));
+                mutualInformationDecrease[i] = (pcij == 0.0f ? 0.0f : pcij * InformationTheory::jensenShannonDivergence(pci / pcij, pcj / pcij, pVC[i],
+                                                                                                                        pVC[j]));
             }
         }
 
@@ -657,8 +636,6 @@ void ViewpointIntensityInformationChannel::computeIntensityClusteringCuda()
     m_intensityClusters = clusters;
 }
 
-
 } // namespace udg
-
 
 #endif // CUDA_AVAILABLE

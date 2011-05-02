@@ -1,21 +1,16 @@
 #ifndef UDGQEXPERIMENTAL3DEXTENSION_H
 #define UDGQEXPERIMENTAL3DEXTENSION_H
 
-
 #include "ui_qexperimental3dextensionbase.h"
-
 
 class QStringListModel;
 
-
 namespace udg {
-
 
 class Experimental3DVolume;
 class Obscurance;
 class ObscuranceMainThread;
 class Volume;
-
 
 /**
  * Aquesta extensió serveix per fer tot tipus d'experiments relacionats amb la visualització 3D, fent un ray casting amb CPU.
@@ -26,11 +21,11 @@ class QExperimental3DExtension : public QWidget, private ::Ui::QExperimental3DEx
 
 public:
 
-    QExperimental3DExtension( QWidget *parent = 0 );
+    QExperimental3DExtension(QWidget *parent = 0);
     ~QExperimental3DExtension();
 
     /// Assigna el volum d'entrada.
-    void setInput( Volume *input );
+    void setInput(Volume *input);
 
     void optimizeTransferFunctionForOneViewpoint();
     int cluster2DIndex(int intensity, int gradient) const;
@@ -38,7 +33,7 @@ public:
 public slots:
 
     /// Desa el volum vist a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
-    void saveViewedVolume( QString fileName = QString() );
+    void saveViewedVolume(QString fileName = QString());
     /// Carrega l'entropia dels punts de vista H(V) des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadHV(QString fileName = QString());
     /// Desa l'entropia dels punts de vista H(V) a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
@@ -105,7 +100,8 @@ public slots:
     void loadColorVomi(QString fileName = QString());
     /// Desa la color VoMI a un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void saveColorVomi(QString fileName = QString());
-    /// Carrega des d'un fitxer la funció de transferència d'on s'agafarà l'opacitat per calcular l'EVMI amb opacitat. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
+    /// Carrega des d'un fitxer la funció de transferència d'on s'agafarà l'opacitat per calcular l'EVMI amb opacitat.
+    /// Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadEvmiOpacityOtherTransferFunction(QString fileName = QString());
     /// Carrega l'EVMI amb opacitat des d'un fitxer. Si no es dóna el nom de fitxer com a paràmetre el demana amb un diàleg.
     void loadEvmiOpacity(QString fileName = QString());
@@ -170,49 +166,49 @@ private:
     template <class T> static void loadData(QDataStream &in, T &data);
     template <class T> static void loadData(QDataStream &in, QVector<T> &data);
     /// Desa dades de tipus T de \a data al fitxer. Retorna cert si s'han desat les dades.
-    template <class T> bool saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix, const T &data, const QString &textFormat = QString(),
-                                     int base = 0);
+    template <class T> bool saveData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, const QString &defaultSuffix,
+                                     const T &data, const QString &textFormat = QString(), int base = 0);
     template <class T> static void saveData(QDataStream &out, const T &data);
     template <class T> static void saveData(QTextStream &out, const T &data, const QString &textFormat, int base);
     template <class T> static void saveData(QDataStream &out, const QVector<T> &data);
     template <class T> static void saveData(QTextStream &out, const QVector<T> &data, const QString &textFormat, int base);
     /// Carrega dades de tipus T del fitxer a la llista. Retorna cert si tot va bé i fals si hi ha error.
-    template <class T> static bool loadData( const QString &fileName, QList<T> &list );
+    template <class T> static bool loadData(const QString &fileName, QList<T> &list);
     /// Desa dades de tipus T de la llista al fitxer. Retorna cert si tot va bé i fals si hi ha error.
-    template <class T> static bool saveData( const QList<T> &list, const QString &fileName );
+    template <class T> static bool saveData(const QList<T> &list, const QString &fileName);
     /// Desa dades de tipus QPair<int, Vector3> de la llista al fitxer en forma de text amb un format. Retorna cert si tot va bé i fals si hi ha error.
-    static bool saveDataAsText( const QList< QPair<int, Vector3> > &list, const QString &fileName, const QString &format, int base1 = 0, int base2 = 0 );
+    static bool saveDataAsText(const QList< QPair<int, Vector3> > &list, const QString &fileName, const QString &format, int base1 = 0, int base2 = 0);
 
     /// Crea les connexions de signals i slots.
     void createConnections();
 
     /// Llança un diàleg per obtenir un nom de fitxer per llegir.
-    QString getFileNameToLoad( const QString &settingsDirKey, const QString &caption, const QString &filter );
+    QString getFileNameToLoad(const QString &settingsDirKey, const QString &caption, const QString &filter);
     /// Llança un diàleg per obtenir un nom de fitxer per escriure.
-    QString getFileNameToSave( const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix );
+    QString getFileNameToSave(const QString &settingsDirKey, const QString &caption, const QString &filter, const QString &defaultSuffix);
 
-    void loadTransferFunction( const QString &fileName );
+    void loadTransferFunction(const QString &fileName);
     void loadColorTransferFunction(const QString &fileName);
-    void saveTransferFunction( const QString &fileName );
-    void loadCamera( const QString &fileName );
+    void saveTransferFunction(const QString &fileName);
+    void loadCamera(const QString &fileName);
     void transferFunctionOptimizationLoadImportance(const QString &fileName);
     void transferFunctionOptimizationSaveImportance(const QString &fileName);
 
     /// Fa un recorregut pels viewpoints en ordre i amb suavitat.
-    void tour( const QList<Vector3> &viewpoints, double speedFactor = 1.0 );
+    void tour(const QList<Vector3> &viewpoints, double speedFactor = 1.0);
 
     /// Escriu al log un error d'un programa.
-    void logProgramError( int lineNumber, const QString &error, const QString &line ) const;
+    void logProgramError(int lineNumber, const QString &error, const QString &line) const;
     /// Comprova que la línia tingi un nombre determinat de paraules.
-    bool programCheckWordCount( int lineNumber, const QString &line, int wordCount ) const;
-    bool programTab( int lineNumber, const QString &line, bool run );
-    bool programRenderingInterpolation( int lineNumber, const QString &line, bool run );
-    bool programRenderingGradientEstimator( int lineNumber, const QString &line, bool run );
-    bool programRenderingBaseShading( int lineNumber, const QString &line, bool run );
-    bool programRenderingCheckOrUncheck( int lineNumber, const QString &line, bool run );
-    bool programVmiViewpoints( int lineNumber, const QString &line, bool run );
-    bool programVmiCheckOrUncheck( int lineNumber, const QString &line, bool run );
-    bool programVmiLoadOrSave( int lineNumber, const QString &line, bool run );
+    bool programCheckWordCount(int lineNumber, const QString &line, int wordCount) const;
+    bool programTab(int lineNumber, const QString &line, bool run);
+    bool programRenderingInterpolation(int lineNumber, const QString &line, bool run);
+    bool programRenderingGradientEstimator(int lineNumber, const QString &line, bool run);
+    bool programRenderingBaseShading(int lineNumber, const QString &line, bool run);
+    bool programRenderingCheckOrUncheck(int lineNumber, const QString &line, bool run);
+    bool programVmiViewpoints(int lineNumber, const QString &line, bool run);
+    bool programVmiCheckOrUncheck(int lineNumber, const QString &line, bool run);
+    bool programVmiLoadOrSave(int lineNumber, const QString &line, bool run);
 
     void checkData();
     QVector<float> getWeights() const;
@@ -227,7 +223,7 @@ private:
 
 private slots:
 
-    void setNewVolume( Volume *volume );
+    void setNewVolume(Volume *volume);
 
     /// Obre un diàleg per triar el color de fons.
     void chooseBackgroundColor();
@@ -237,8 +233,8 @@ private slots:
     /// Obre un diàleg per desar una funció de transferència.
     void saveTransferFunction();
     void addRecentTransferFunction();
-    void setRecentTransferFunction( const QModelIndex &index );
-    void setTransferFunction( bool render = true );
+    void setRecentTransferFunction(const QModelIndex &index);
+    void setTransferFunction(bool render = true);
     /// Renderitza amb les opcions seleccionades.
     void render();
 
@@ -251,11 +247,11 @@ private slots:
     /// Desa els paràmetres de la càmera a un fitxer.
     void saveCamera();
     /// Estableix el nombre de punts de vista.
-    void setNumberOfViewpoints( int numberOfViewpoints );
+    void setNumberOfViewpoints(int numberOfViewpoints);
     /// Situa la càmera al punt de vista seleccionat.
     void setViewpoint();
     /// Situa la càmera al punt de vista passat.
-    void setViewpoint( const Vector3 &viewpoint );
+    void setViewpoint(const Vector3 &viewpoint);
     /// Fa un recorregut pels punts de vista triats per l'usuari.
     void tour();
 
@@ -271,7 +267,7 @@ private slots:
     void saveObscurance();
 
     /// Estableix el nombre de punts de vista de l'SMI.
-    void setNumberOfSmiViewpoints( int numberOfViewpoints );
+    void setNumberOfSmiViewpoints(int numberOfViewpoints);
     /// Calcula les SMI amb el/s punt/s de vista seleccionat/s.
     void computeSmi();
     /// Calcula les inestabilitats de les llesques.
@@ -302,13 +298,13 @@ private slots:
 
     void loadAndRunProgram();
 
-    void opacityVomiChecked( bool checked );
-    void opacitySaliencyChecked( bool checked );
-    void opacityFilteringChecked( bool checked );
-    void opacityProbabilisticAmbientOcclusionChecked( bool checked );
+    void opacityVomiChecked(bool checked);
+    void opacitySaliencyChecked(bool checked);
+    void opacityFilteringChecked(bool checked);
+    void opacityProbabilisticAmbientOcclusionChecked(bool checked);
 
-    void setVmiOneViewpointMaximum( int maximum );
-    void setVmiiOneViewpointMaximum( int maximum );
+    void setVmiOneViewpointMaximum(int maximum);
+    void setVmiiOneViewpointMaximum(int maximum);
 
     void getFileNameToSaveTour();
 
@@ -437,8 +433,6 @@ private:
 
 };
 
-
 } // namespace udg
-
 
 #endif // UDGQEXPERIMENTAL3DEXTENSION_H

@@ -7,7 +7,6 @@
 
 namespace udg {
 
-
 class QCudaRenderWindow : public QGLWidget {
 
     Q_OBJECT
@@ -15,7 +14,7 @@ class QCudaRenderWindow : public QGLWidget {
 public:
 
     /// Crea una finestra que renderitza amb el color de fons \a backgroundColor i amb un pixel buffer object de mida \a renderSize * \a renderSize.
-    QCudaRenderWindow( QColor backgroundColor, int renderSize );
+    QCudaRenderWindow(QColor backgroundColor, int renderSize);
     virtual ~QCudaRenderWindow();
 
     /// Retorna el pixel buffer object.
@@ -24,7 +23,7 @@ public:
 protected:
 
     virtual void initializeGL();
-    virtual void resizeGL( int width, int height );
+    virtual void resizeGL(int width, int height);
     virtual void paintGL();
 
 private:
@@ -36,8 +35,6 @@ private:
 
 };
 
-
 } // namespace udg
-
 
 #endif // QCUDARENDERWINDOW_H
