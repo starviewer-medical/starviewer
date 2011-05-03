@@ -1225,7 +1225,7 @@ bool Q3DViewer::canAllocateMemory( int size )
         delete[] p;
         return true;
     }
-    catch ( std::bad_alloc &ba )
+    catch ( std::bad_alloc )
     {
         return false;
     }

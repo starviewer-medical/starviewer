@@ -106,7 +106,6 @@ void PerfusionMapCalculatorThread::runCheckImage()
     double min;
     bool valid;
     //std::ofstream fout("rcbv.dat", ios::out);
-    double value;
 
     typedef itk::ImageRegionIteratorWithIndex<BoolImageType> BoolIterator;
     BoolIterator boolIter( m_checkImage, m_checkImage->GetBufferedRegion() );
@@ -176,9 +175,8 @@ void PerfusionMapCalculatorThread::runDeltaRImage()
     Volume::ItkImageType::IndexType indexVoxel;
     int slice;
     QVector<signed int> timeseries(tend);
-    double meanbl, stdbl;
+    double meanbl;
     double min;
-    bool valid;
     //std::ofstream fout("rcbv.dat", ios::out);
     double value;
 
@@ -268,13 +266,7 @@ void PerfusionMapCalculatorThread::runPerfusionImage()
     int tend = m_sizet;
     Volume::ItkImageType::IndexType index;
     DoubleTemporalImageType::IndexType indexTemp;
-    Volume::ItkImageType::IndexType indexVoxel;
-    int slice;
-    double meanbl, stdbl;
-    double min;
-    bool valid;
     //std::ofstream fout("rcbv.dat", ios::out);
-    double value;
     double max;
     double valueCbv, valueCbf, valueMtt;
 

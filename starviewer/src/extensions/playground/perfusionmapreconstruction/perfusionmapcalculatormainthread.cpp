@@ -132,7 +132,6 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
 
     Volume::ItkImageType::Pointer  inputImage = m_DSCVolume->getItkData();
 
-    int i,j,k,t;
     int iend = m_DSCVolume->getDimensions()[0];
     int jend = m_DSCVolume->getDimensions()[1];
     int kend = m_DSCVolume->getNumberOfSlicesPerPhase();
@@ -190,15 +189,8 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     }
 
     //S'acaba els threads check image
-    Volume::ItkImageType::IndexType index;
-    Volume::ItkImageType::IndexType indexVoxel;
-    int slice;
     QVector<signed int> timeseries(tend);
-    double meanbl, stdbl;
-    double min;
-    bool valid;
     //std::ofstream fout("rcbv.dat", ios::out);
-    double value;
 /*    imIter.GoToBegin();
     m_aif = QVector<double>(tend);
 
@@ -951,8 +943,7 @@ void PerfusionMapCalculatorMainThread::fftAIF( )
         }
     catch( itk::ExceptionObject & excp )
         {
-        //std::cerr << "Error: " << std::endl;
-        //std::cerr << excp << std::endl;
+        DEBUG_LOG(QString("Exception caught ! %1").arg(excp.GetDescription()));
         return;
         }
 
@@ -1058,8 +1049,7 @@ void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVect
         }
     catch( itk::ExceptionObject & excp )
         {
-        //std::cerr << "Error: " << std::endl;
-        //std::cerr << excp << std::endl;
+        DEBUG_LOG(QString("Exception caught ! %1").arg(excp.GetDescription()));
         return;
         }
 
@@ -1104,8 +1094,7 @@ void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVect
         }
     catch( itk::ExceptionObject & excp )
         {
-        //std::cerr << "Error: " << std::endl;
-        //std::cerr << excp << std::endl;
+        DEBUG_LOG(QString("Exception caught ! %1").arg(excp.GetDescription()));
         return;
         }
 

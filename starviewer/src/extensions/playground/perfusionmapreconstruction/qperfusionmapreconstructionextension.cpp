@@ -935,8 +935,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         }
         catch( itk::ExceptionObject & excep )
         {
-            //std::cerr << "Exception caught !" << std::endl;
-            //std::cerr << excep << std::endl;
+            DEBUG_LOG(QString("Exception caught ! %1").arg(excep.GetDescription()));
         }
 
         typedef itk::ImageRegionIterator<Volume::ItkImageType> Iterator;
@@ -980,8 +979,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage( )
         }
         catch( itk::ExceptionObject & excep )
         {
-            //std::cerr << "Exception caught !" << std::endl;
-            //std::cerr << excep << std::endl;
+            DEBUG_LOG(QString("Exception caught ! %1").arg(excep.GetDescription()));
         }
         //m_mapVolume->getVtkData()->Update();
         m_2DView->getViewer()->setInput( mapVolume );
@@ -1091,7 +1089,6 @@ void QPerfusionMapReconstructionExtension::paintAIFSignal( )
 			DEBUG_LOG(QString("Spacing: [%1,%2]").arg(m_DSCVolume->getSpacing()[0]).arg(m_DSCVolume->getSpacing()[1]));
 			DEBUG_LOG(QString("Index: [%1,%2]").arg(index[0]).arg(index[1]));
 			DEBUG_LOG(QString("Valor index inicial:%1").arg(index[2]));
-            DoubleTemporalImageType::IndexType indexTemp;
             int t, tend = m_DSCVolume->getNumberOfPhases();
 			DEBUG_LOG(QString("tend:%1").arg(tend));
             QVector<double> signal(tend);
