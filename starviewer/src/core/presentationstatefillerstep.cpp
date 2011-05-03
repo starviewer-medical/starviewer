@@ -21,7 +21,7 @@ PresentationStateFillerStep::~PresentationStateFillerStep()
 void PresentationStateFillerStep::processPresentationState()
 {
     DICOMTagReader dicomReader;
-    bool ok;
+    bool ok = false;
 //     ok = dicomReader.setFile( presentationState->getPath() );
     if( ok )
     {
