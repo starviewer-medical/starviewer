@@ -21,7 +21,7 @@ KeyImageNoteFillerStep::~KeyImageNoteFillerStep()
 void KeyImageNoteFillerStep::processKeyImageNote()
 {
     DICOMTagReader dicomReader;
-    bool ok;
+    bool ok = false;
 //     ok = dicomReader.setFile( keyImageNote->getPath() );
     if( ok )
     {
