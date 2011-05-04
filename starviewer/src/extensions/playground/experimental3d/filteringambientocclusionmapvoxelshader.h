@@ -3,15 +3,15 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que pinta amb escala de colors el mapa d'ambient occlusion obtingut a partir d'un filtratge.
+    Voxel shader que pinta amb escala de colors el mapa d'ambient occlusion obtingut a partir d'un filtratge.
  */
 class FilteringAmbientOcclusionMapVoxelShader : public VoxelShader {
 
@@ -43,6 +43,8 @@ protected:
 
      /// Omple la taula d'opacitats.
     void precomputeOpacities();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;

@@ -3,18 +3,18 @@
 
 #include "voxelshader.h"
 
+#include "transferfunction.h"
+#include "trilinearinterpolator.h"
+
 #include <QHash>
 #include <QMutex>
 #include <QThread>
 #include <QVector>
 
-#include "transferfunction.h"
-#include "trilinearinterpolator.h"
-
 namespace udg {
 
 /**
- * Voxel shader per la primera passada del càlcul de la VMI. Acumula volum total.
+    Voxel shader per la primera passada del càlcul de la VMI. Acumula volum total.
  */
 class VmiVoxelShader2 : public VoxelShader {
 
@@ -50,6 +50,8 @@ protected:
 
     /// Omple la taula de colors ambient.
     void precomputeAmbientColors();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;
@@ -113,10 +115,8 @@ inline HdrColor VmiVoxelShader2::nvShade(const Vector3 &position, const Vector3 
     int offsets[8];
     double weights[8];
     interpolator->getOffsetsAndWeights(position, offsets, weights);
-
     double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
     HdrColor color = m_ambientColors[static_cast<int>(value)];
-
     QThread *thread = QThread::currentThread();
 
     if (!m_objectVolumePerThread.contains(thread))
@@ -128,7 +128,10 @@ inline HdrColor VmiVoxelShader2::nvShade(const Vector3 &position, const Vector3 
     }
 
     float volume = color.alpha * remainingOpacity;
-    for (int i = 0; i < 8; i++) m_objectVolumePerThread[thread][offsets[i]] += volume * weights[i];
+    for (int i = 0; i < 8; i++)
+    {
+        m_objectVolumePerThread[thread][offsets[i]] += volume * weights[i];
+    }
     m_totalVolumePerThread[thread] += volume;
 
     return color;

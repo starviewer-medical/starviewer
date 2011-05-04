@@ -3,15 +3,15 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que pinta la color VoMI de cada voxel.
+    Voxel shader que pinta la color VoMI de cada voxel.
  */
 class ColorVomiVoxelShader : public VoxelShader {
 
@@ -61,14 +61,12 @@ inline HdrColor ColorVomiVoxelShader::nvShade(const Vector3 &position, int offse
     Q_UNUSED(remainingOpacity);
 
     HdrColor color = baseColor;
-
     if (!color.isTransparent() && !color.isBlack())
     {
         Vector3Float colorVomi = m_colorVomiFactor * m_colorVomi.at(offset) / m_maximumColorVomi;
         HdrColor shade(qMax(1.0f - colorVomi.x, 0.0f), qMax(1.0f - colorVomi.y, 0.0f), qMax(1.0f - colorVomi.z, 0.0f));
         color *= shade;
     }
-
     return color;
 }
 
@@ -81,19 +79,16 @@ inline HdrColor ColorVomiVoxelShader::nvShade(const Vector3 &position, const Vec
     Q_ASSERT(interpolator);
 
     HdrColor color = baseColor;
-
     if (!color.isTransparent() && !color.isBlack())
     {
         int offsets[8];
         double weights[8];
         interpolator->getOffsetsAndWeights(position, offsets, weights);
-
         Vector3Float colorVomi = m_colorVomiFactor
                                * TrilinearInterpolator::interpolate<Vector3Float>(m_colorVomi.constData(), offsets, weights) / m_maximumColorVomi;
         HdrColor shade(qMax(1.0f - colorVomi.x, 0.0f), qMax(1.0f - colorVomi.y, 0.0f), qMax(1.0f - colorVomi.z, 0.0f));
         color *= shade;
     }
-
     return color;
 }
 

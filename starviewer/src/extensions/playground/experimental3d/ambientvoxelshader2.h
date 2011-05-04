@@ -10,8 +10,8 @@
 namespace udg {
 
 /**
- * És un voxel shader que pinta el volum amb il·luminació ambient.
- * TODO Això és una marranada per interpolar sobre el volum original en l'optimització de funcions de transferència 2D. Cal pensar com fer-ho ben fet.
+    És un voxel shader que pinta el volum amb il·luminació ambient.
+    TODO Això és una marranada per interpolar sobre el volum original en l'optimització de funcions de transferència 2D. Cal pensar com fer-ho ben fet.
  */
 class AmbientVoxelShader2 : public VoxelShader {
 
@@ -48,6 +48,8 @@ protected:
 
     /// Omple la taula de colors ambient.
     void precomputeAmbientColors();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;
@@ -97,7 +99,6 @@ inline HdrColor AmbientVoxelShader2::nvShade(const Vector3 &position, const Vect
     interpolator->getOffsetsAndWeights(position, offsets, weights);
 
     double value;
-
     if (m_alternativeData)
     {
         double intensity = TrilinearInterpolator::interpolate<double>(m_alternativeData, offsets, weights);

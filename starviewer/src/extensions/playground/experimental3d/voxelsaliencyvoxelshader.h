@@ -3,15 +3,15 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que pinta la saliency de cada voxel.
+    Voxel shader que pinta la saliency de cada voxel.
  */
 class VoxelSaliencyVoxelShader : public VoxelShader {
 
@@ -43,6 +43,8 @@ protected:
 
     /// Omple la taula d'opacitats.
     void precomputeOpacities();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;
@@ -85,7 +87,6 @@ inline HdrColor VoxelSaliencyVoxelShader::nvShade(const Vector3 &position, int o
 //        color.red = saliency > 0.8f ? 1.0f : saliency > 0.6f ? 5.0f * (saliency - 0.6f) : saliency > 0.2f ? 0.0f : 1.0f - 5.0f * saliency;
 //        color.green = saliency > 0.8f ? 1.0f - 5.0f * (saliency - 0.8f) : saliency > 0.4f ? 1.0f : saliency > 0.2f ? 5.0f * (saliency - 0.2f) : 0.0f;
 //        color.blue = saliency > 0.6f ? 0.0f : saliency > 0.4f ? 1.0f - 5.0f * (saliency - 0.4f) : 1.0f;
-
         if (saliency < 0.25f)
         {
             saliency *= 4.0f;
@@ -128,7 +129,6 @@ inline HdrColor VoxelSaliencyVoxelShader::nvShade(const Vector3 &position, const
     int offsets[8];
     double weights[8];
     interpolator->getOffsetsAndWeights(position, offsets, weights);
-
     double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
     HdrColor color;
     color.alpha = m_opacities[static_cast<int>(value)];
@@ -139,7 +139,6 @@ inline HdrColor VoxelSaliencyVoxelShader::nvShade(const Vector3 &position, const
 //        color.red = saliency > 0.8f ? 1.0f : saliency > 0.6f ? 5.0f * (saliency - 0.6f) : saliency > 0.2f ? 0.0f : 1.0f - 5.0f * saliency;
 //        color.green = saliency > 0.8f ? 1.0f - 5.0f * (saliency - 0.8f) : saliency > 0.4f ? 1.0f : saliency > 0.2f ? 5.0f * (saliency - 0.2f) : 0.0f;
 //        color.blue = saliency > 0.6f ? 0.0f : saliency > 0.4f ? 1.0f - 5.0f * (saliency - 0.4f) : 1.0f;
-
         if (saliency < 0.25f)
         {
             saliency *= 4.0f;

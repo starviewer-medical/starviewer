@@ -48,10 +48,12 @@ QString AmbientVoxelShader2::toString() const
 
 void AmbientVoxelShader2::precomputeAmbientColors()
 {
-    if (!m_ambientColors) return;
+    if (!m_ambientColors)
+    {
+        return;
+    }
 
     unsigned int size = m_maxValue + 1;
-
     for (unsigned int i = 0; i < size; i++)
     {
         m_ambientColors[i] = m_transferFunction.getColor(i);

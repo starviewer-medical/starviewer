@@ -9,7 +9,7 @@
 namespace udg {
 
 /**
- * És un voxel shader que pinta el volum de color blanc amb l'opacitat segons la funció de transferència.
+    És un voxel shader que pinta el volum de color blanc amb l'opacitat segons la funció de transferència.
  */
 class WhiteVoxelShader : public VoxelShader {
 
@@ -40,6 +40,8 @@ protected:
 
     /// Omple la taula d'opacitats.
     void precomputeOpacities();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;
@@ -84,9 +86,7 @@ inline HdrColor WhiteVoxelShader::nvShade(const Vector3 &position, const Vector3
     int offsets[8];
     double weights[8];
     interpolator->getOffsetsAndWeights(position, offsets, weights);
-
     double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
-
     return HdrColor(1.0f, 1.0f, 1.0f, m_opacities[static_cast<int>(value)]);
 }
 

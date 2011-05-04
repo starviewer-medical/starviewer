@@ -6,8 +6,8 @@
 namespace udg {
 
 /**
- * És un voxel shader que pinta el volum amb il·luminació directa (ambient, difusa, especular).
- * TODO Això és una marranada per interpolar sobre el volum original en l'optimització de funcions de transferència 2D. Cal pensar com fer-ho ben fet.
+    És un voxel shader que pinta el volum amb il·luminació directa (ambient, difusa, especular).
+    TODO Això és una marranada per interpolar sobre el volum original en l'optimització de funcions de transferència 2D. Cal pensar com fer-ho ben fet.
  */
 class DirectIlluminationVoxelShader2 : public AmbientVoxelShader2 {
 
@@ -66,13 +66,15 @@ inline HdrColor DirectIlluminationVoxelShader2::nvShade(const Vector3 &position,
 
     HdrColor color = AmbientVoxelShader2::nvShade(position, offset, direction, remainingOpacity, baseColor);
 
-    if (color.isTransparent()) return color;
+    if (color.isTransparent())
+    {
+        return color;
+    }
 
     unsigned short normal = m_encodedNormals[offset];
     color.red = color.red * m_redDiffuseShadingTable[normal] + m_redSpecularShadingTable[normal];
     color.green = color.green * m_greenDiffuseShadingTable[normal] + m_greenSpecularShadingTable[normal];
     color.blue = color.blue * m_blueDiffuseShadingTable[normal] + m_blueSpecularShadingTable[normal];
-
     return color;
 }
 
@@ -94,7 +96,6 @@ inline HdrColor DirectIlluminationVoxelShader2::nvShade(const Vector3 &position,
     interpolator->getOffsetsAndWeights(position, offsets, weights);
 
     double value;
-
     if (m_alternativeData)
     {
         double intensity = TrilinearInterpolator::interpolate<double>(m_alternativeData, offsets, weights);
@@ -108,10 +109,16 @@ inline HdrColor DirectIlluminationVoxelShader2::nvShade(const Vector3 &position,
 
     HdrColor color = m_ambientColors[static_cast<int>(value)];
 
-    if (color.isTransparent()) return color;
+    if (color.isTransparent())
+    {
+        return color;
+    }
 
     int normals[8];
-    for (int i = 0; i < 8; i++) normals[i] = m_encodedNormals[offsets[i]];
+    for (int i = 0; i < 8; i++)
+    {
+        normals[i] = m_encodedNormals[offsets[i]];
+    }
 
     double diffuseRed = TrilinearInterpolator::interpolate<double>(m_redDiffuseShadingTable, normals, weights);
     double diffuseGreen = TrilinearInterpolator::interpolate<double>(m_greenDiffuseShadingTable, normals, weights);
@@ -119,11 +126,9 @@ inline HdrColor DirectIlluminationVoxelShader2::nvShade(const Vector3 &position,
     double specularRed = TrilinearInterpolator::interpolate<double>(m_redSpecularShadingTable, normals, weights);
     double specularGreen = TrilinearInterpolator::interpolate<double>(m_greenSpecularShadingTable, normals, weights);
     double specularBlue = TrilinearInterpolator::interpolate<double>(m_blueSpecularShadingTable, normals, weights);
-
     color.red = color.red * diffuseRed + specularRed;
     color.green = color.green * diffuseGreen + specularGreen;
     color.blue = color.blue * diffuseBlue + specularBlue;
-
     return color;
 }
 

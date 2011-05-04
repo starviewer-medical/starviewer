@@ -3,15 +3,15 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que pinta l'IMI de cada voxel.
+    Voxel shader que pinta l'IMI de cada voxel.
  */
 class ImiVoxelShader : public VoxelShader {
 
@@ -45,6 +45,8 @@ protected:
 
     /// Omple la taula d'opacitats.
     void precomputeAmbientColors();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;
@@ -80,16 +82,24 @@ inline HdrColor ImiVoxelShader::nvShade(const Vector3 &position, int offset, con
     Q_ASSERT(m_data);
 
 //    HdrColor color(1.0f, 1.0f, 1.0f);
-//
-//    if (m_combine) color = baseColor;
-//    else color.alpha = m_ambientColors[m_data[offset]].alpha;
-//
+
+//    if (m_combine)
+//    {
+//        color = baseColor;
+//    }
+//    else
+//    {
+//        color.alpha = m_ambientColors[m_data[offset]].alpha;
+//    }
+
 //    if (!color.isTransparent() && !color.isBlack())
 //    {
 //        float imi = m_imiFactor * m_imi.at(m_data[offset]) / m_maximumImi;
 //        float gray = qMax(1.0f - imi, 0.0f);
-//
-//        if (!m_additive) color.multiplyColorBy(gray);
+//        if (!m_additive)
+//        {
+//            color.multiplyColorBy(gray);
+//        }
 //        else
 //        {
 //            HdrColor imiColor = m_ambientColors[m_data[offset]];
@@ -97,7 +107,7 @@ inline HdrColor ImiVoxelShader::nvShade(const Vector3 &position, int offset, con
 //            color = color.multiplyColorBy(1.0f - m_additiveWeight) + imiColor.multiplyColorBy(m_additiveWeight * gray);
 //        }
 //    }
-//
+
 //    return color;
 
     HdrColor color;
@@ -127,10 +137,12 @@ inline HdrColor ImiVoxelShader::nvShade(const Vector3 &position, const Vector3 &
 //    int offsets[8];
 //    double weights[8];
 //    bool offsetsAndWeights = false;
-//
 //    HdrColor color(1.0f, 1.0f, 1.0f);
-//
-//    if (m_combine) color = baseColor;
+
+//    if (m_combine)
+//    {
+//        color = baseColor;
+//    }
 //    else
 //    {
 //        interpolator->getOffsetsAndWeights(position, offsets, weights);
@@ -138,18 +150,21 @@ inline HdrColor ImiVoxelShader::nvShade(const Vector3 &position, const Vector3 &
 //        double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
 //        color.alpha = m_ambientColors[static_cast<int>(value)].alpha;
 //    }
-//
+
 //    if (!color.isTransparent() && !color.isBlack())
 //    {
-//        if (!offsetsAndWeights) interpolator->getOffsetsAndWeights(position, offsets, weights);
-//
+//        if (!offsetsAndWeights)
+//        {
+//            interpolator->getOffsetsAndWeights(position, offsets, weights);
+//        }
 //        double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
 //        int iValue = static_cast<int>(value);
-//
 //        float imi = m_imiFactor * m_imi.at(iValue) / m_maximumImi;
 //        float gray = qMax(1.0f - imi, 0.0f);
-//
-//        if (!m_additive) color.multiplyColorBy(gray);
+//        if (!m_additive)
+//        {
+//            color.multiplyColorBy(gray);
+//        }
 //        else
 //        {
 //            HdrColor imiColor = m_ambientColors[iValue];
@@ -157,13 +172,12 @@ inline HdrColor ImiVoxelShader::nvShade(const Vector3 &position, const Vector3 &
 //            color = color.multiplyColorBy(1.0f - m_additiveWeight) + imiColor.multiplyColorBy(m_additiveWeight * gray);
 //        }
 //    }
-//
+
 //    return color;
 
     int offsets[8];
     double weights[8];
     interpolator->getOffsetsAndWeights(position, offsets, weights);
-
     double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
     HdrColor color;
     color.alpha = m_ambientColors[static_cast<int>(value)].alpha;

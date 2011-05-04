@@ -3,15 +3,15 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que pinta la VoMI de cada voxel.
+    Voxel shader que pinta la VoMI de cada voxel.
  */
 class VomiVoxelShader : public VoxelShader {
 
@@ -45,6 +45,8 @@ protected:
 
     /// Omple la taula d'opacitats.
     void precomputeAmbientColors();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;
@@ -81,15 +83,23 @@ inline HdrColor VomiVoxelShader::nvShade(const Vector3 &position, int offset, co
 
     HdrColor color(1.0f, 1.0f, 1.0f);
 
-    if (m_combine) color = baseColor;
-    else color.alpha = m_ambientColors[m_data[offset]].alpha;
+    if (m_combine)
+    {
+        color = baseColor;
+    }
+    else
+    {
+        color.alpha = m_ambientColors[m_data[offset]].alpha;
+    }
 
     if (!color.isTransparent() && !color.isBlack())
     {
         float vomi = m_vomiFactor * (m_vomi.at(offset) - m_minimumVomi) / m_vomiRange;
         float gray = qMax(1.0f - vomi, 0.0f);
-
-        if (!m_additive) color.multiplyColorBy(gray);
+        if (!m_additive)
+        {
+            color.multiplyColorBy(gray);
+        }
         else
         {
             HdrColor vomiColor = m_ambientColors[m_data[offset]];
@@ -113,10 +123,12 @@ inline HdrColor VomiVoxelShader::nvShade(const Vector3 &position, const Vector3 
     int offsets[8];
     double weights[8];
     bool offsetsAndWeights = false;
-
     HdrColor color(1.0f, 1.0f, 1.0f);
 
-    if (m_combine) color = baseColor;
+    if (m_combine)
+    {
+        color = baseColor;
+    }
     else
     {
         interpolator->getOffsetsAndWeights(position, offsets, weights);
@@ -127,12 +139,16 @@ inline HdrColor VomiVoxelShader::nvShade(const Vector3 &position, const Vector3 
 
     if (!color.isTransparent() && !color.isBlack())
     {
-        if (!offsetsAndWeights) interpolator->getOffsetsAndWeights(position, offsets, weights);
-
+        if (!offsetsAndWeights)
+        {
+            interpolator->getOffsetsAndWeights(position, offsets, weights);
+        }
         float vomi = m_vomiFactor * (TrilinearInterpolator::interpolate<float>(m_vomi.constData(), offsets, weights) - m_minimumVomi) / m_vomiRange;
         float gray = qMax(1.0f - vomi, 0.0f);
-
-        if (!m_additive) color.multiplyColorBy(gray);
+        if (!m_additive)
+        {
+            color.multiplyColorBy(gray);
+        }
         else
         {
             double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
