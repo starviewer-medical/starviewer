@@ -3,9 +3,9 @@
 
 #include <QWidget>
 
-#include <QLinearGradient>
-
 #include "transferfunction.h"
+
+#include <QLinearGradient>
 
 namespace udg {
 

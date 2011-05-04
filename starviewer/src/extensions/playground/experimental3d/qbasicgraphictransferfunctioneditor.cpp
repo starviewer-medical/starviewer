@@ -87,7 +87,10 @@ void QBasicGraphicTransferFunctionEditor::adjustRangeToFunction()
 {
     QList<double> points = m_transferFunction.keys();
 
-    if (points.size() < 2) return;
+    if (points.size() < 2)
+    {
+        return;
+    }
 
     setRange(points.first(), points.last());
 }
@@ -105,7 +108,10 @@ bool QBasicGraphicTransferFunctionEditor::event(QEvent *event)
             double y = m_transferFunction.getOpacity(x);
             QToolTip::showText(helpEvent->globalPos(), QString("(%1, %2)").arg(x).arg(y));
         }
-        else QToolTip::hideText();
+        else
+        {
+            QToolTip::hideText();
+        }
     }
 
     return QWidget::event(event);
@@ -115,9 +121,18 @@ void QBasicGraphicTransferFunctionEditor::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key())
     {
-        case Qt::Key_Space: adjustRangeToFunction(); break;
-        case Qt::Key_Escape: clearSelection(); break;
-        case Qt::Key_A: if (event->modifiers().testFlag(Qt::ControlModifier)) selectAll(); break;
+        case Qt::Key_Space:
+            adjustRangeToFunction();
+            break;
+        case Qt::Key_Escape:
+            clearSelection();
+            break;
+        case Qt::Key_A:
+            if (event->modifiers().testFlag(Qt::ControlModifier))
+            {
+                selectAll();
+            }
+            break;
     }
 }
 
@@ -142,7 +157,10 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent(QMouseEvent *event)
             if (found)
             {
                 m_currentX = nearestPointX;
-                if (!m_selectedPoints.contains(m_currentX)) clearSelection();
+                if (!m_selectedPoints.contains(m_currentX))
+                {
+                    clearSelection();
+                }
             }
             else
             {
@@ -159,15 +177,24 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent(QMouseEvent *event)
     else if (event->button() == Qt::RightButton)
     {
         clearSelection();
-        if (found) removePoint(nearestPointX);
+        if (found)
+        {
+            removePoint(nearestPointX);
+        }
     }
     else if (event->button() == Qt::MidButton)
     {
         if (found)
         {
-            if (!m_selectedPoints.contains(m_currentX)) clearSelection();
+            if (!m_selectedPoints.contains(m_currentX))
+            {
+                clearSelection();
+            }
             QColor color = QColorDialog::getColor(m_transferFunction.getColor(nearestPointX), this);
-            if (color.isValid()) changePointColor(nearestPointX, color);
+            if (color.isValid())
+            {
+                changePointColor(nearestPointX, color);
+            }
         }
         else
         {
@@ -207,16 +234,40 @@ void QBasicGraphicTransferFunctionEditor::mouseMoveEvent(QMouseEvent *event)
         QPointF functionPoint = pixelToFunctionPoint(event->pos());
         double x = functionPoint.x(), y = functionPoint.y();
 
-        if (modifiers.testFlag(Qt::ShiftModifier)) x = m_currentX;
-        if (modifiers.testFlag(Qt::ControlModifier)) y = m_transferFunctionCopy.getOpacity(m_currentX);
-        if (modifiers.testFlag(Qt::MetaModifier)) x = qRound(x);
-        if (modifiers.testFlag(Qt::AltModifier)) y = qRound(10.0 * y) / 10.0;
+        if (modifiers.testFlag(Qt::ShiftModifier))
+        {
+            x = m_currentX;
+        }
+        if (modifiers.testFlag(Qt::ControlModifier))
+        {
+            y = m_transferFunctionCopy.getOpacity(m_currentX);
+        }
+        if (modifiers.testFlag(Qt::MetaModifier))
+        {
+            x = qRound(x);
+        }
+        if (modifiers.testFlag(Qt::AltModifier))
+        {
+            y = qRound(10.0 * y) / 10.0;
+        }
 
         // vigilem que no es surti de rang
-        if (x < m_minimum) x = m_minimum;
-        if (x > m_maximum) x = m_maximum;
-        if (y < 0.0) y = 0.0;
-        if (y > 1.0) y = 1.0;
+        if (x < m_minimum)
+        {
+            x = m_minimum;
+        }
+        if (x > m_maximum)
+        {
+            x = m_maximum;
+        }
+        if (y < 0.0)
+        {
+            y = 0.0;
+        }
+        if (y > 1.0)
+        {
+            y = 1.0;
+        }
 
         changeCurrentPoint(x, y);
 
@@ -247,7 +298,10 @@ void QBasicGraphicTransferFunctionEditor::mouseReleaseEvent(QMouseEvent *event)
             double x = pointsInInterval.at(i);
             double y = m_transferFunction.getOpacity(x);
 
-            if (y >= functionBottomRight.y() && y <= functionTopLeft.y() && !m_selectedPoints.contains(x)) m_selectedPoints << x;
+            if (y >= functionBottomRight.y() && y <= functionTopLeft.y() && !m_selectedPoints.contains(x))
+            {
+                m_selectedPoints << x;
+            }
         }
 
         update();
@@ -260,7 +314,10 @@ void QBasicGraphicTransferFunctionEditor::wheelEvent(QWheelEvent *event)
 {
     int zoom = event->delta() / 8;
 
-    if (2 * zoom >= m_maximum - m_minimum) return;
+    if (2 * zoom >= m_maximum - m_minimum)
+    {
+        return;
+    }
 
     m_minimum += zoom;
     m_maximum -= zoom;
@@ -277,7 +334,10 @@ void QBasicGraphicTransferFunctionEditor::paintEvent(QPaintEvent *event)
 
     drawBackground();
     drawFunction();
-    if (m_selecting) drawSelectionRectangle();
+    if (m_selecting)
+    {
+        drawSelectionRectangle();
+    }
 }
 
 void QBasicGraphicTransferFunctionEditor::resizeEvent(QResizeEvent *event)
@@ -362,8 +422,14 @@ void QBasicGraphicTransferFunctionEditor::drawFunction()
     {
         QPointF point = function.at(i);
 
-        if (m_selectedPoints.contains(points.at(i))) painter.setBrush(QColor(99, 39, 77, 189));
-        else painter.setBrush(QColor(248, 248, 248, 202));
+        if (m_selectedPoints.contains(points.at(i)))
+        {
+            painter.setBrush(QColor(99, 39, 77, 189));
+        }
+        else
+        {
+            painter.setBrush(QColor(248, 248, 248, 202));
+        }
 
         QRectF rectangle(point.x() - PointSize, point.y() - PointSize, 2.0 * PointSize, 2.0 * PointSize);
         painter.drawEllipse(rectangle);
@@ -450,7 +516,10 @@ void QBasicGraphicTransferFunctionEditor::changePointColor(double x, const QColo
 
 void QBasicGraphicTransferFunctionEditor::changeCurrentPoint(double x, double y)
 {
-    if (!m_dragging) return;
+    if (!m_dragging)
+    {
+        return;
+    }
 
     m_transferFunction = m_transferFunctionCopy;
 
