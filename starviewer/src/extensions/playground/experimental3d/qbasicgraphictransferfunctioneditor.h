@@ -10,10 +10,9 @@
 namespace udg {
 
 /**
- * Editor de funcions de transferència gràfic en condicions.
- *
- * \todo - Desfer.
- *       - Millorar la documentació.
+    Editor de funcions de transferència gràfic en condicions.
+    \todo - Desfer.
+          - Millorar la documentació.
  */
 class QBasicGraphicTransferFunctionEditor : public QWidget {
 

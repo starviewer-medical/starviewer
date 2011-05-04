@@ -102,7 +102,6 @@ bool QBasicGraphicTransferFunctionEditor::event(QEvent *event)
         QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
         bool found;
         double x = nearestX(helpEvent->pos(), found);
-
         if (found)
         {
             double y = m_transferFunction.getOpacity(x);
@@ -144,7 +143,6 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         Qt::KeyboardModifiers modifiers = event->modifiers();
-
         if (modifiers.testFlag(Qt::ControlModifier) && modifiers.testFlag(Qt::ShiftModifier))
         {
             m_selecting = true;
@@ -153,7 +151,6 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent(QMouseEvent *event)
         else
         {
             m_dragging = true;
-
             if (found)
             {
                 m_currentX = nearestPointX;
@@ -169,7 +166,6 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent(QMouseEvent *event)
                 addPoint(functionPoint.x(), functionPoint.y());
                 m_currentX = functionPoint.x();
             }
-
             m_transferFunctionCopy = m_transferFunction;
             m_selectedPointsCopy = m_selectedPoints;
         }
@@ -199,9 +195,7 @@ void QBasicGraphicTransferFunctionEditor::mousePressEvent(QMouseEvent *event)
         else
         {
             clearSelection();
-
             QColor color = QColorDialog::getColor(Qt::black, this);
-
             if (color.isValid())
             {
                 QPointF functionPoint = pixelToFunctionPoint(event->pos());
@@ -292,12 +286,10 @@ void QBasicGraphicTransferFunctionEditor::mouseReleaseEvent(QMouseEvent *event)
                                                                   selectionRectangle.top() + selectionRectangle.height()));
         QList<double> pointsInInterval = m_transferFunction.keys(functionTopLeft.x(), functionBottomRight.x());
         int nPoints = pointsInInterval.size();
-
         for (int i = 0; i < nPoints; i++)
         {
             double x = pointsInInterval.at(i);
             double y = m_transferFunction.getOpacity(x);
-
             if (y >= functionBottomRight.y() && y <= functionTopLeft.y() && !m_selectedPoints.contains(x))
             {
                 m_selectedPoints << x;
@@ -334,6 +326,7 @@ void QBasicGraphicTransferFunctionEditor::paintEvent(QPaintEvent *event)
 
     drawBackground();
     drawFunction();
+
     if (m_selecting)
     {
         drawSelectionRectangle();
@@ -355,25 +348,22 @@ void QBasicGraphicTransferFunctionEditor::updateColorGradient()
     double shift = -m_minimum;
     double scale = 1.0 / (m_maximum - m_minimum);
     QList<double> colors = m_transferFunction.colorKeys();
-    int nColors = colors.size();
 
+    int nColors = colors.size();
     for (int i = 0; i < nColors; i++)
     {
         double x = colors.at(i);
         double x01 = (x + shift) * scale;
-
         if (x01 < 0.0)
         {
             x01 = 0.0;
             x = x01 / scale - shift;
         }
-
         if (x01 > 1.0)
         {
             x01 = 1.0;
             x = x01 / scale - shift;
         }
-
         QColor color = m_transferFunction.getColor(x);
         color.setAlpha(255);
         m_colorGradient.setColorAt(x01, color);
@@ -384,17 +374,13 @@ void QBasicGraphicTransferFunctionEditor::drawBackground()
 {
     QImage background(size(), QImage::Format_ARGB32_Premultiplied);
     background.fill(0);
-
     QPainter backgroundPainter(&background);
     backgroundPainter.fillRect(rect(), m_colorGradient);
     backgroundPainter.setCompositionMode(QPainter::CompositionMode_DestinationAtop);
-
     QLinearGradient alphaGradient(0, 0, 0, height());
     alphaGradient.setColorAt(0.0, QColor::fromRgbF(0.0, 0.0, 0.0, 1.0));
     alphaGradient.setColorAt(1.0, QColor::fromRgbF(0.0, 0.0, 0.0, 0.0));
-
     backgroundPainter.fillRect(rect(), alphaGradient);
-
     QPainter painter(this);
     painter.drawImage(0, 0, background);
 }
@@ -415,13 +401,11 @@ void QBasicGraphicTransferFunctionEditor::drawFunction()
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(QColor(251, 251, 251, 216));
     painter.setBrush(QColor(248, 248, 248, 202));
-
     painter.drawPolyline(function);
 
     for (int i = 0; i < nPoints; i++)
     {
         QPointF point = function.at(i);
-
         if (m_selectedPoints.contains(points.at(i)))
         {
             painter.setBrush(QColor(99, 39, 77, 189));
@@ -430,7 +414,6 @@ void QBasicGraphicTransferFunctionEditor::drawFunction()
         {
             painter.setBrush(QColor(248, 248, 248, 202));
         }
-
         QRectF rectangle(point.x() - PointSize, point.y() - PointSize, 2.0 * PointSize, 2.0 * PointSize);
         painter.drawEllipse(rectangle);
     }
@@ -449,19 +432,17 @@ double QBasicGraphicTransferFunctionEditor::nearestX(const QPoint &pixel, bool &
 
     QPointF functionPoint = pixelToFunctionPoint(pixel);
     double radiusX = (m_maximum - m_minimum) / (width() - 1) * PointSize;
-
     QList<double> nearPoints = m_transferFunction.keysNear(functionPoint.x(), radiusX);
     double nearestPointX = 0.0;
     double nearestLength = 2.0 * PointSize;
-    int nPoints = nearPoints.size();
 
+    int nPoints = nearPoints.size();
     for (int i = 0; i < nPoints; i++)
     {
         double fx = nearPoints.at(i);
         double fy = m_transferFunction.getOpacity(fx);
         QPointF graphicPoint = functionPointToGraphicPoint(QPointF(fx, fy));
         double length = QLineF(pixel, graphicPoint).length();
-
         if (length < nearestLength)
         {
             nearestPointX = fx;
@@ -479,7 +460,6 @@ QPointF QBasicGraphicTransferFunctionEditor::pixelToFunctionPoint(const QPoint &
     double shiftX = m_minimum;
     double scaleY = 1.0 / -(height() - 1);
     double shiftY = 1.0;
-
     return QPointF(scaleX * pixel.x() + shiftX, scaleY * pixel.y() + shiftY);
 }
 
@@ -489,7 +469,6 @@ QPointF QBasicGraphicTransferFunctionEditor::functionPointToGraphicPoint(const Q
     double scaleX = (width() - 1) / (m_maximum - m_minimum);
     double shiftY = -1.0;
     double scaleY = -(height() - 1);
-
     return QPointF((functionPoint.x() + shiftX) * scaleX, (functionPoint.y() + shiftY) * scaleY);
 }
 
@@ -536,8 +515,8 @@ void QBasicGraphicTransferFunctionEditor::changeCurrentPoint(double x, double y)
         double currentY = m_transferFunction.getOpacity(m_currentX);
         double deltaX = x - m_currentX;
         double deltaY = y - currentY;
-        int nSelected = m_selectedPoints.size();
 
+        int nSelected = m_selectedPoints.size();
         for (int i = 0; i < nSelected; i++)
         {
             double sx = m_selectedPoints.at(i);
