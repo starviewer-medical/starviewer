@@ -5,11 +5,9 @@
 
 namespace udg {
 
-
 /**
- * Histograma d'enters.
- *
- * Guarda el nombre d'ocurrències de cada enter i també el nombre total d'ocurrències.
+    Histograma d'enters.
+    Guarda el nombre d'ocurrències de cada enter i també el nombre total d'ocurrències.
  */
 class Histogram {
 
