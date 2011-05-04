@@ -8,7 +8,7 @@ namespace udg {
 //class Histogram;
 
 /**
- * Aquesta serà una classe estàtica que agruparà mètodes de càlcul de mesures de teoria de la informació.
+    Aquesta serà una classe estàtica que agruparà mètodes de càlcul de mesures de teoria de la informació.
  */
 class InformationTheory {
 
