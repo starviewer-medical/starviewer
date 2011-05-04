@@ -1,8 +1,8 @@
 #include "qviewpointdistributionwidget.h"
 
-#include <cmath>
-
 #include "viewpointgenerator.h"
+
+#include <cmath>
 
 namespace udg {
 
@@ -61,8 +61,14 @@ bool QViewpointDistributionWidget::isUniform() const
 
 unsigned int QViewpointDistributionWidget::numberOfViewpoints() const
 {
-    if (isUniform()) return m_uniformNumberOfViewpointsComboBox->currentText().toUInt();
-    else return numberOfQuasiUniformViewpoints();
+    if (isUniform())
+    {
+        return m_uniformNumberOfViewpointsComboBox->currentText().toUInt();
+    }
+    else
+    {
+        return numberOfQuasiUniformViewpoints();
+    }
 }
 
 int QViewpointDistributionWidget::recursionLevel() const
@@ -86,7 +92,10 @@ QVector<Vector3> QViewpointDistributionWidget::viewpoints() const
             default: Q_ASSERT_X(false, "viewpoints", qPrintable(QString("Nombre de punts de vista uniformes incorrecte: %1").arg(numberOfViewpoints())));
         }
     }
-    else viewpointGenerator.setToQuasiUniform(recursionLevel());
+    else
+    {
+        viewpointGenerator.setToQuasiUniform(recursionLevel());
+    }
 
     return viewpointGenerator.viewpoints();
 }
@@ -107,7 +116,10 @@ ViewpointGenerator QViewpointDistributionWidget::viewpointGenerator(float radius
             default: Q_ASSERT_X(false, "viewpoints", qPrintable(QString("Nombre de punts de vista uniformes incorrecte: %1").arg(numberOfViewpoints())));
         }
     }
-    else viewpointGenerator.setToQuasiUniform(recursionLevel(), radius);
+    else
+    {
+        viewpointGenerator.setToQuasiUniform(recursionLevel(), radius);
+    }
 
     return viewpointGenerator;
 }
