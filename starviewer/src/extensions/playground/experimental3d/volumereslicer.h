@@ -1,9 +1,9 @@
 #ifndef UDGVOLUMERESLICER_H
 #define UDGVOLUMERESLICER_H
 
-#include <QVector>
-
 #include "vector3.h"
+
+#include <QVector>
 
 class vtkImageData;
 class vtkMatrix4x4;

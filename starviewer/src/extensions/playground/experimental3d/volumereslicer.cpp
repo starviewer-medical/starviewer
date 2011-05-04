@@ -1,5 +1,9 @@
 #include "volumereslicer.h"
 
+#include "histogram.h"
+#include "informationtheory.h"
+#include "logging.h"
+
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
@@ -11,10 +15,6 @@
 #include <vtkMatrix4x4.h>
 #include <vtkPointData.h>
 
-#include "histogram.h"
-#include "informationtheory.h"
-#include "logging.h"
-
 namespace udg {
 
 VolumeReslicer::VolumeReslicer(unsigned short id)
@@ -24,8 +24,14 @@ VolumeReslicer::VolumeReslicer(unsigned short id)
 
 VolumeReslicer::~VolumeReslicer()
 {
-    if (m_resliceAxes) m_resliceAxes->Delete();
-    if (m_reslicedImage) m_reslicedImage->Delete();
+    if (m_resliceAxes)
+    {
+        m_resliceAxes->Delete();
+    }
+    if (m_reslicedImage)
+    {
+        m_reslicedImage->Delete();
+    }
 }
 
 void VolumeReslicer::setInput(vtkImageData *input)
@@ -35,7 +41,10 @@ void VolumeReslicer::setInput(vtkImageData *input)
 
 void VolumeReslicer::setViewpoint(const Vector3 &viewpoint, const Vector3 &up)
 {
-    if (m_resliceAxes) m_resliceAxes->Delete();
+    if (m_resliceAxes)
+    {
+        m_resliceAxes->Delete();
+    }
     m_resliceAxes = vtkMatrix4x4::New();
 
     vtkCamera *camera = vtkCamera::New();
@@ -102,7 +111,10 @@ void VolumeReslicer::reslice(bool saveMhd, bool doClip, int maxRange)
     vtkImageClip *clip = vtkImageClip::New();
     clip->SetInput(resliced);
     clip->SetOutputWholeExtent(minX, maxX, minY, maxY, minZ, maxZ);
-    if (doClip) clip->ClipDataOn();
+    if (doClip)
+    {
+        clip->ClipDataOn();
+    }
     clip->Update();
 
     // Get some data about resliced image
@@ -121,7 +133,10 @@ void VolumeReslicer::reslice(bool saveMhd, bool doClip, int maxRange)
     {
         int max1 = max + 1;
 
-        for (int i = 0; i < m_reslicedDataSize; i++) m_reslicedData[i] = m_reslicedData[i] * maxRange / max1;
+        for (int i = 0; i < m_reslicedDataSize; i++)
+        {
+            m_reslicedData[i] = m_reslicedData[i] * maxRange / max1;
+        }
 
         max = maxRange - 1;
         m_reslicedImage->GetPointData()->GetScalars()->Modified();  // perquè s'actualitzi l'scalar range
@@ -140,7 +155,10 @@ void VolumeReslicer::reslice(bool saveMhd, bool doClip, int maxRange)
         if (outFile.open(QFile::WriteOnly | QFile::Truncate))
         {
             QDataStream out(&outFile);
-            for (int i = 0; i < m_reslicedDataSize; i++) out << m_reslicedData[i];
+            for (int i = 0; i < m_reslicedDataSize; i++)
+            {
+                out << m_reslicedData[i];
+            }
             outFile.close();
         }
         QFile outFileMhd(QDir::tempPath().append(QString("/resliced%1.mhd").arg(m_id)));
@@ -185,7 +203,10 @@ void VolumeReslicer::noReslice()
 
 void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 {
-    if (m_slices.isEmpty()) createSlices();
+    if (m_slices.isEmpty())
+    {
+        createSlices();
+    }
 
     DEBUG_LOG("SMI: primer pas");
     // Primer una passada per tenir un histograma independent de les llesques
@@ -194,7 +215,9 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
     {
         unsigned short value = m_reslicedData[i];
         if (value > 0)    // no comptem cap background
+        {
             oneHistogram.add(value);
+        }
     }
     QVector<double> valueProbabilities(m_nLabels);    // vector de probabilitats p(o)
     double oneCount = oneHistogram.count();
@@ -228,7 +251,10 @@ void VolumeReslicer::computeSmi()   /// \todo Fer-ho més eficient!!!
 
 void VolumeReslicer::computeSliceUnstabilities()   /// \todo Fer-ho més eficient!!!
 {
-    if (m_slices.isEmpty()) createSlices();
+    if (m_slices.isEmpty())
+    {
+        createSlices();
+    }
 
     m_sliceUnstabilities.resize(m_sliceCount);
 
@@ -253,12 +279,18 @@ void VolumeReslicer::computeSliceUnstabilities()   /// \todo Fer-ho més eficien
 
 void VolumeReslicer::computePmi()   /// \todo Fer-ho més eficient!!!
 {
-    if (m_properties.isEmpty()) createSlices();
+    if (m_properties.isEmpty())
+    {
+        createSlices();
+    }
 
     DEBUG_LOG("PMI: primer pas");
     // Primer hem de calcular la probabilitat de cada llesca -> volume de la llesca dividit pel volum total
     unsigned int totalVolume = 0;
-    for (int i = 0; i < m_sliceCount; i++) totalVolume += m_slices[i].volume;
+    for (int i = 0; i < m_sliceCount; i++)
+    {
+        totalVolume += m_slices[i].volume;
+    }
     QVector<double> sliceProbabilities(m_sliceCount); // vector de probabilitats p(s)
     double dTotalVolume = totalVolume;
     for (int i = 0; i < m_sliceCount; i++)
@@ -290,7 +322,10 @@ void VolumeReslicer::computePmi()   /// \todo Fer-ho més eficient!!!
 
 void VolumeReslicer::computePropertySaliencies()    /// \todo Fer-ho més eficient!!!
 {
-    if (m_properties.isEmpty()) createSlices();
+    if (m_properties.isEmpty())
+    {
+        createSlices();
+    }
 
     m_propertySaliencies.resize(m_nLabels);
 
@@ -334,9 +369,15 @@ void VolumeReslicer::findExtent(const unsigned short *data, int dim0, int dim1, 
             }
             i1++;
         }
-        if (!found) i0++;
+        if (!found)
+        {
+            i0++;
+        }
     }
-    if (found) min0 = i0;
+    if (found)
+    {
+        min0 = i0;
+    }
 
     found = false;
     i0 = dim0 - 1;
@@ -354,9 +395,15 @@ void VolumeReslicer::findExtent(const unsigned short *data, int dim0, int dim1, 
             }
             i1--;
         }
-        if (!found) i0--;
+        if (!found)
+        {
+            i0--;
+        }
     }
-    if (found) max0 = i0;
+    if (found)
+    {
+        max0 = i0;
+    }
 }
 
 void VolumeReslicer::createSlices()
@@ -365,7 +412,10 @@ void VolumeReslicer::createSlices()
     m_properties.resize(m_nLabels);
 
     QVector<Histogram> propertyHistograms(m_nLabels);
-    for (int i = 0; i < m_nLabels; i++) propertyHistograms[i].setSize(m_sliceCount);
+    for (int i = 0; i < m_nLabels; i++)
+    {
+        propertyHistograms[i].setSize(m_sliceCount);
+    }
 
     for (int i = 0; i < m_sliceCount; i++)
     {
@@ -388,7 +438,10 @@ void VolumeReslicer::createSlices()
         if (histogram.count() > 0)
         {
             double count = histogram.count();
-            for (int j = 0; j < m_nLabels; j++) m_slices[i].probabilities[j] = histogram[j] / count;
+            for (int j = 0; j < m_nLabels; j++)
+            {
+                m_slices[i].probabilities[j] = histogram[j] / count;
+            }
         }
     }
 
@@ -400,7 +453,10 @@ void VolumeReslicer::createSlices()
         if (propertyHistograms[i].count() > 0)
         {
             double count = propertyHistograms[i].count();
-            for (int j = 0; j < m_sliceCount; j++) m_properties[i].sliceProbabilities[j] = propertyHistograms[i][j] / count;
+            for (int j = 0; j < m_sliceCount; j++)
+            {
+                m_properties[i].sliceProbabilities[j] = propertyHistograms[i][j] / count;
+            }
         }
     }
 }
@@ -439,11 +495,17 @@ double VolumeReslicer::sliceUnstability(int slice) const
     Q_ASSERT(!m_slices.isEmpty());
 
     if (slice == 0)   // un extrem
+    {
         return sliceDissimilarity(slice, slice + 1);
+    }
     else if (slice == m_sliceCount - 1)   // l'altre extrem
+    {
         return sliceDissimilarity(slice, slice - 1);
+    }
     else    // general
+    {
         return (sliceDissimilarity(slice, slice - 1) + sliceDissimilarity(slice, slice + 1)) / 2.0;
+    }
 }
 
 // D(oi,oj) = JSD(p(oi)/p(ô), p(oj)/p(ô); p(S|oi), p(S|oj))
@@ -480,11 +542,17 @@ double VolumeReslicer::propertySaliency(int property) const
     Q_ASSERT(!m_properties.isEmpty());
 
     if (property == 0)    // un extrem
+    {
         return propertyDissimilarity(property, property + 1);
+    }
     else if (property == m_nLabels - 1)   // l'altre extrem
+    {
         return propertyDissimilarity(property, property - 1);
+    }
     else    // general
+    {
         return (propertyDissimilarity(property, property - 1) + propertyDissimilarity(property, property + 1)) / 2.0;
+    }
 }
 
 } // namespace udg
