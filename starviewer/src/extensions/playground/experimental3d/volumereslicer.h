@@ -13,7 +13,7 @@ namespace udg {
 class Histogram;
 
 /**
- * Remake de la classe Slicer d'optimal viewpoint.
+    Remake de la classe Slicer d'optimal viewpoint.
  */
 class VolumeReslicer {
 
