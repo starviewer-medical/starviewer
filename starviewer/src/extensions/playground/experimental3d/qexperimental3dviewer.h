@@ -10,7 +10,7 @@ namespace udg {
 class Experimental3DVolume;
 
 /**
- * Visualitzador de l'extensió Experimental 3D.
+    Visualitzador de l'extensió Experimental 3D.
  */
 class QExperimental3DViewer : public QViewer {
 
