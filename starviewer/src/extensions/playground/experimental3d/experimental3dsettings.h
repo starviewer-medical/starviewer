@@ -18,7 +18,6 @@ public:
     static const QString TransferFunctionDir;
     static const QString ColorTransferFunctionDir;
     static const QString ImportanceDir;
-
     static const QString ViewedVolumeDir;
     static const QString HVzDir;
     static const QString HVDir;
@@ -46,7 +45,6 @@ public:
     static const QString ColorVoxelMutualInformationDir;
     static const QString EnhancedViewpointMutualInformationOpacityDir;
     static const QString EnhancedViewpointMutualInformationVoxelMutualInformationDir;
-
     static const QString ViewedVolumeIntensityDir;
     static const QString HIDir;
     static const QString HIvDir;

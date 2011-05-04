@@ -4,11 +4,9 @@ namespace udg {
 
 // Definició de les claus
 const QString KeyPrefix("Experimental3D/");
-
 const QString Experimental3DSettings::TransferFunctionDir(KeyPrefix + "transferFunctionDir");
 const QString Experimental3DSettings::ColorTransferFunctionDir(KeyPrefix + "colorTransferFunctionDir");
 const QString Experimental3DSettings::ImportanceDir(KeyPrefix + "importanceDir");
-
 const QString Experimental3DSettings::ViewedVolumeDir(KeyPrefix + "viewedVolumeDir");
 const QString Experimental3DSettings::HVzDir(KeyPrefix + "HVzDir");
 const QString Experimental3DSettings::HVDir(KeyPrefix + "HVDir");
@@ -36,7 +34,6 @@ const QString Experimental3DSettings::ColorVoxelMutualInformationPaletteDir(KeyP
 const QString Experimental3DSettings::ColorVoxelMutualInformationDir(KeyPrefix + "colorVomiDir");
 const QString Experimental3DSettings::EnhancedViewpointMutualInformationOpacityDir(KeyPrefix + "evmiOpacityDir");
 const QString Experimental3DSettings::EnhancedViewpointMutualInformationVoxelMutualInformationDir(KeyPrefix + "evmiVomiDir");
-
 const QString Experimental3DSettings::ViewedVolumeIntensityDir(KeyPrefix + "viewedVolumeIDir");
 const QString Experimental3DSettings::HIDir(KeyPrefix + "HIDir");
 const QString Experimental3DSettings::HIvDir(KeyPrefix + "HIvDir");
