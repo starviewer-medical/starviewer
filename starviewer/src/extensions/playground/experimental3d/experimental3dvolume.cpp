@@ -88,7 +88,6 @@ Experimental3DVolume::~Experimental3DVolume()
     m_gpuRayCastMapper->Delete();
     m_property->Delete();
     m_volume->Delete();
-
     if (m_finiteDifferenceGradientEstimator)
     {
         m_finiteDifferenceGradientEstimator->Delete();
@@ -304,7 +303,6 @@ void Experimental3DVolume::addObscurance(Obscurance *obscurance, double factor, 
         m_colorBleedingVoxelShader->setColorBleeding(obscurance);
         m_colorBleedingVoxelShader->setFactor(factor);
     }
-
     m_volume->SetMapper(m_cpuRayCastMapper);
 }
 
@@ -464,17 +462,14 @@ QVector<float> Experimental3DVolume::computeVomiGradient(const QVector<float> &v
 {
     vtkFloatArray *vomiArray = vtkFloatArray::New();
     vomiArray->SetArray(const_cast<float*>(vomi.data()), m_dataSize, 1);
-
     vtkImageData *vomiData = vtkImageData::New();
     vomiData->CopyStructure(m_image);
     vomiData->SetScalarTypeToFloat();
-
     vtkPointData *vomiPointData = vomiData->GetPointData();
     vomiPointData->SetScalars(vomiArray);
 
     vtkEncodedGradientEstimator *gradientEstimator = this->gradientEstimator();
     gradientEstimator->SetInput(vomiData);
-
     unsigned char *gradientMagnitudes = gradientEstimator->GetGradientMagnitudes();
 
     QVector<float> vomiGradient(m_dataSize);
@@ -531,9 +526,7 @@ void Experimental3DVolume::createImage(vtkImageData *image)
     double *range = image->GetScalarRange();
     double min = range[0], max = range[1];
     DEBUG_LOG(QString("original range: min = %1, max = %2").arg(min).arg(max));
-
     double shift = -min;
-
     // fem servir directament un vtkImageShiftScale, que permet fer castings també
     vtkImageShiftScale *imageShiftScale = vtkImageShiftScale::New();
     imageShiftScale->SetInput(image);
@@ -542,7 +535,6 @@ void Experimental3DVolume::createImage(vtkImageData *image)
     imageShiftScale->Update();
 
     m_rangeMin = 0; m_rangeMax = static_cast<unsigned short>(max + shift);
-
     m_image = imageShiftScale->GetOutput(); m_image->Register(0);   // el register és necessari (comprovat)
     m_data = reinterpret_cast<unsigned short*>(m_image->GetPointData()->GetScalars()->GetVoidPointer(0));
     m_dataSize = m_image->GetPointData()->GetScalars()->GetSize();
