@@ -1,9 +1,9 @@
 #ifndef CUDAVIEWPOINTINTENSITYINFORMATIONCHANNEL_H
 #define CUDAVIEWPOINTINTENSITYINFORMATIONCHANNEL_H
 
-#include <QVector>
-
 #include "vector3.h"
+
+#include <QVector>
 
 class vtkImageData;
 
