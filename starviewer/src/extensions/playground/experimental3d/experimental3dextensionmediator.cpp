@@ -1,8 +1,8 @@
 #include "experimental3dextensionmediator.h"
 
-#include <QMessageBox>
-
 #include "extensioncontext.h"
+
+#include <QMessageBox>
 
 namespace udg {
 
@@ -23,13 +23,20 @@ DisplayableID Experimental3DExtensionMediator::getExtensionID() const
 bool Experimental3DExtensionMediator::initializeExtension(QWidget *extension, const ExtensionContext &extensionContext)
 {
     QExperimental3DExtension *experimental3DExtension;
-
-    if (!(experimental3DExtension = qobject_cast<QExperimental3DExtension*>(extension))) return false;
+    if (!(experimental3DExtension = qobject_cast<QExperimental3DExtension*>(extension)))
+    {
+        return false;
+    }
 
     Volume *input = extensionContext.getDefaultVolume();
-
-    if (!input) QMessageBox::information(0, tr("Starviewer"), tr("The selected item is not an image"));
-    else experimental3DExtension->setInput(input);
+    if (!input)
+    {
+        QMessageBox::information(0, tr("Starviewer"), tr("The selected item is not an image"));
+    }
+    else
+    {
+        experimental3DExtension->setInput(input);
+    }
 
     return true;
 }
