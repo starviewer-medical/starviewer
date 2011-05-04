@@ -3,15 +3,15 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que pinta la VoMI de cada voxel i té correcció gamma.
+    Voxel shader que pinta la VoMI de cada voxel i té correcció gamma.
  */
 class VomiGammaVoxelShader : public VoxelShader {
 
@@ -44,6 +44,8 @@ protected:
 
     /// Omple la taula d'opacitats.
     void precomputeAmbientColors();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;
@@ -78,13 +80,14 @@ inline HdrColor VomiGammaVoxelShader::nvShade(const Vector3 &position, int offse
     Q_ASSERT(m_data);
 
     HdrColor color = baseColor;
-
     if (!color.isTransparent() && !color.isBlack())
     {
         float vomi = m_vomiFactor * m_vomi.at(offset) / m_maximumVomi;
         float gray = std::pow(qMax(1.0f - vomi, 0.0f), m_gamma);
-
-        if (!m_additive) color.multiplyColorBy(gray);
+        if (!m_additive)
+        {
+            color.multiplyColorBy(gray);
+        }
         else
         {
             HdrColor vomiColor = m_ambientColors[m_data[offset]];
@@ -92,7 +95,6 @@ inline HdrColor VomiGammaVoxelShader::nvShade(const Vector3 &position, int offse
             color = color.multiplyColorBy(1.0f - m_additiveWeight) + vomiColor.multiplyColorBy(m_additiveWeight * gray);
         }
     }
-
     return color;
 }
 
@@ -105,19 +107,18 @@ inline HdrColor VomiGammaVoxelShader::nvShade(const Vector3 &position, const Vec
     Q_ASSERT(interpolator);
     Q_ASSERT(m_data);
 
-
     HdrColor color = baseColor;
-
     if (!color.isTransparent() && !color.isBlack())
     {
         int offsets[8];
         double weights[8];
         interpolator->getOffsetsAndWeights(position, offsets, weights);
-
         float vomi = m_vomiFactor * TrilinearInterpolator::interpolate<float>(m_vomi.constData(), offsets, weights) / m_maximumVomi;
         float gray = std::pow(qMax(1.0f - vomi, 0.0f), m_gamma);
-
-        if (!m_additive) color.multiplyColorBy(gray);
+        if (!m_additive)
+        {
+            color.multiplyColorBy(gray);
+        }
         else
         {
             double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
@@ -126,7 +127,6 @@ inline HdrColor VomiGammaVoxelShader::nvShade(const Vector3 &position, const Vec
             color = color.multiplyColorBy(1.0f - m_additiveWeight) + vomiColor.multiplyColorBy(m_additiveWeight * gray);
         }
     }
-
     return color;
 }
 

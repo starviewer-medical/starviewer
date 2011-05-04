@@ -3,15 +3,15 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que fa stippling segons l'ambient occlusion obtinguta a partir d'un filtratge.
+    Voxel shader que fa stippling segons l'ambient occlusion obtinguta a partir d'un filtratge.
  */
 class FilteringAmbientOcclusionStipplingVoxelShader : public VoxelShader {
 
@@ -43,6 +43,8 @@ protected:
 
      /// Omple la taula d'opacitats.
     void precomputeOpacities();
+
+protected:
 
     const unsigned short *m_data;
     unsigned short m_maxValue;
@@ -80,21 +82,23 @@ inline HdrColor FilteringAmbientOcclusionStipplingVoxelShader::nvShade(const Vec
 
     HdrColor color(1.0f, 1.0f, 1.0f, 1.0f);
     color.alpha = m_opacities[m_data[offset]];
-
     if (!color.isTransparent())
     {
         float ao = m_filteringAmbientOcclusion.at(offset) / m_maximumFilteringAmbientOcclusion;
-
         if (ao < m_filteringAmbientOcclusionThreshold)
         {
             float f = m_filteringAmbientOcclusionFactor * ao;
             f = qBound(0.0f, f, 1.0f);
-
-            if (f < qrand() / (double)RAND_MAX) color.red = color.green = color.blue = 0.0f;
-            else color.red = color.green = color.blue = 1.0f;
+            if (f < qrand() / static_cast<double>(RAND_MAX))
+            {
+                color.red = color.green = color.blue = 0.0f;
+            }
+            else
+            {
+                color.red = color.green = color.blue = 1.0f;
+            }
         }
     }
-
     return color;
 }
 
@@ -112,25 +116,26 @@ inline HdrColor FilteringAmbientOcclusionStipplingVoxelShader::nvShade(const Vec
     int offsets[8];
     double weights[8];
     interpolator->getOffsetsAndWeights(position, offsets, weights);
-
     double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
     HdrColor color(1.0f, 1.0f, 1.0f, 1.0f);;
     color.alpha = m_opacities[static_cast<int>(value)];
-
     if (!color.isTransparent())
     {
         float ao = TrilinearInterpolator::interpolate<float>(m_filteringAmbientOcclusion.constData(), offsets, weights) / m_maximumFilteringAmbientOcclusion;
-
         if (ao < m_filteringAmbientOcclusionThreshold)
         {
             float f = m_filteringAmbientOcclusionFactor * ao;
             f = qBound(0.0f, f, 1.0f);
-
-            if (f < qrand() / (double)RAND_MAX) color.red = color.green = color.blue = 0.0f;
-            else color.red = color.green = color.blue = 1.0f;
+            if (f < qrand() / static_cast<double>(RAND_MAX))
+            {
+                color.red = color.green = color.blue = 0.0f;
+            }
+            else
+            {
+                color.red = color.green = color.blue = 1.0f;
+            }
         }
     }
-
     return color;
 }
 

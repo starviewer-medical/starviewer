@@ -3,14 +3,14 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que modifica l'opacitat d'un voxel segons la VoMI o la saliency.
+    Voxel shader que modifica l'opacitat d'un voxel segons la VoMI o la saliency.
  */
 class OpacityVoxelShader : public VoxelShader {
 
@@ -64,12 +64,21 @@ inline HdrColor OpacityVoxelShader::nvShade(const Vector3 &position, int offset,
     Q_UNUSED(direction);
     Q_UNUSED(remainingOpacity);
 
-    if (baseColor.isTransparent()) return baseColor;
+    if (baseColor.isTransparent())
+    {
+        return baseColor;
+    }
 
     HdrColor color(baseColor);
     float value = m_data.at(offset) / m_maximum;
-    if (value < m_lowThreshold) color.alpha *= m_lowFactor * value;
-    else if (value > m_highThreshold) color.alpha *= m_highFactor * value;
+    if (value < m_lowThreshold)
+    {
+        color.alpha *= m_lowFactor * value;
+    }
+    else if (value > m_highThreshold)
+    {
+        color.alpha *= m_highFactor * value;
+    }
     return color;
 }
 
@@ -81,15 +90,24 @@ inline HdrColor OpacityVoxelShader::nvShade(const Vector3 &position, const Vecto
 
     Q_ASSERT(interpolator);
 
-    if (baseColor.isTransparent()) return baseColor;
+    if (baseColor.isTransparent())
+    {
+        return baseColor;
+    }
 
     HdrColor color(baseColor);
     int offsets[8];
     double weights[8];
     interpolator->getOffsetsAndWeights(position, offsets, weights);
     float value = TrilinearInterpolator::interpolate<float>(m_data.constData(), offsets, weights) / m_maximum;
-    if (value < m_lowThreshold) color.alpha *= m_lowFactor * value;
-    else if (value > m_highThreshold) color.alpha *= m_highFactor * value;
+    if (value < m_lowThreshold)
+    {
+        color.alpha *= m_lowFactor * value;
+    }
+    else if (value > m_highThreshold)
+    {
+        color.alpha *= m_highFactor * value;
+    }
     return color;
 }
 

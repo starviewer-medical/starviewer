@@ -10,7 +10,7 @@
 namespace udg {
 
 /**
- * Voxel shader que aplica color bleeding.
+    Voxel shader que aplica color bleeding.
  */
 class ColorBleedingVoxelShader : public VoxelShader {
 
@@ -65,11 +65,13 @@ inline HdrColor ColorBleedingVoxelShader::nvShade(const Vector3 &position, int o
 
     Q_ASSERT(m_colorBleeding);
 
-    if (baseColor.isTransparent() || baseColor.isBlack()) return baseColor;
+    if (baseColor.isTransparent() || baseColor.isBlack())
+    {
+        return baseColor;
+    }
 
     Vector3 colorBleeding = m_colorBleeding->colorBleeding(offset);
     colorBleeding *= m_factor;
-
     return baseColor * HdrColor(colorBleeding.x, colorBleeding.y, colorBleeding.z);
 }
 
@@ -82,7 +84,10 @@ inline HdrColor ColorBleedingVoxelShader::nvShade(const Vector3 &position, const
     Q_ASSERT(interpolator);
     Q_ASSERT(m_colorBleeding);
 
-    if (baseColor.isTransparent() || baseColor.isBlack()) return baseColor;
+    if (baseColor.isTransparent() || baseColor.isBlack())
+    {
+        return baseColor;
+    }
 
     int offsets[8];
     double weights[8];
@@ -90,9 +95,13 @@ inline HdrColor ColorBleedingVoxelShader::nvShade(const Vector3 &position, const
 
     Vector3 colorBleeding;
     if (m_colorBleeding->isDoublePrecision())
+    {
         colorBleeding = TrilinearInterpolator::interpolate<Vector3Double>(m_colorBleeding->doubleColorBleeding(), offsets, weights);
+    }
     else
+    {
         colorBleeding = TrilinearInterpolator::interpolate<Vector3Float>(m_colorBleeding->floatColorBleeding(), offsets, weights);
+    }
     colorBleeding *= m_factor;
 
     return baseColor * HdrColor(colorBleeding.x, colorBleeding.y, colorBleeding.z);

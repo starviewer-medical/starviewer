@@ -43,11 +43,16 @@ QString FilteringAmbientOcclusionStipplingVoxelShader::toString() const
 
 void FilteringAmbientOcclusionStipplingVoxelShader::precomputeOpacities()
 {
-    if (!m_opacities) return;
+    if (!m_opacities)
+    {
+        return;
+    }
 
     unsigned int size = m_maxValue + 1;
-
-    for (unsigned int i = 0; i < size; i++) m_opacities[i] = m_transferFunction.getOpacity(i);
+    for (unsigned int i = 0; i < size; i++)
+    {
+        m_opacities[i] = m_transferFunction.getOpacity(i);
+    }
 }
 
 } // namespace udg

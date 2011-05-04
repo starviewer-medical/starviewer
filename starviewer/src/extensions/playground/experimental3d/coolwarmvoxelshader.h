@@ -3,17 +3,17 @@
 
 #include "voxelshader.h"
 
-#include <vtkDirectionEncoder.h>
-
 #include "transferfunction.h"
 #include "trilinearinterpolator.h"
+
+#include <vtkDirectionEncoder.h>
 
 class vtkEncodedGradientEstimator;
 
 namespace udg {
 
 /**
- * Voxel shader que pinta amb cool-warm shading.
+    Voxel shader que pinta amb cool-warm shading.
  */
 class CoolWarmVoxelShader : public VoxelShader {
 
@@ -49,6 +49,8 @@ protected:
     /// Omple la taula de colors ambient.
     void precomputeAmbientColors();
 
+protected:
+
     const unsigned short *m_data;
     unsigned short m_maxValue;
     TransferFunction m_transferFunction;
@@ -83,7 +85,6 @@ inline HdrColor CoolWarmVoxelShader::nvShade(const Vector3 &position, int offset
     Q_ASSERT(m_directionEncoder);
 
     HdrColor color = m_ambientColors[m_data[offset]];
-
     if (!color.isTransparent())
     {
         float *gradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[offset]);
@@ -96,7 +97,6 @@ inline HdrColor CoolWarmVoxelShader::nvShade(const Vector3 &position, int offset
         color.green = (1.0f - f) * (m_y + m_beta * color.green);
         color.blue = f * (m_b + m_alpha * color.blue);
     }
-
     return color;
 }
 
@@ -115,20 +115,16 @@ inline HdrColor CoolWarmVoxelShader::nvShade(const Vector3 &position, const Vect
     interpolator->getOffsetsAndWeights(position, offsets, weights);
 
     double value = TrilinearInterpolator::interpolate<double>(m_data, offsets, weights);
-
     HdrColor color = m_ambientColors[static_cast<int>(value)];
-
     if (!color.isTransparent())
     {
         Vector3 normal;
-
         for (int i = 0; i < 8; i++)
         {
             float *gradient = m_directionEncoder->GetDecodedGradient(m_encodedNormals[offsets[i]]);
             Vector3 localNormal(gradient[0], gradient[1], gradient[2]);
             normal += weights[i] * localNormal;
         }
-
         const double SQRT3_INV = 1.0 / sqrt(3.0);
         Vector3 light(SQRT3_INV, SQRT3_INV, SQRT3_INV);
         double dotProduct = light * normal;
@@ -137,7 +133,6 @@ inline HdrColor CoolWarmVoxelShader::nvShade(const Vector3 &position, const Vect
         color.green = (1.0f - f) * (m_y + m_beta * color.green);
         color.blue = f * (m_b + m_alpha * color.blue);
     }
-
     return color;
 }
 

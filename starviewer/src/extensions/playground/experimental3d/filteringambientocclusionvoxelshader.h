@@ -3,14 +3,14 @@
 
 #include "voxelshader.h"
 
-#include <QVector>
-
 #include "trilinearinterpolator.h"
+
+#include <QVector>
 
 namespace udg {
 
 /**
- * Voxel shader que aplica una ambient occlusion a partir d'un filtratge.
+    Voxel shader que aplica una ambient occlusion a partir d'un filtratge.
  */
 class FilteringAmbientOcclusionVoxelShader : public VoxelShader {
 
@@ -62,7 +62,6 @@ inline HdrColor FilteringAmbientOcclusionVoxelShader::nvShade(const Vector3 &pos
     Q_UNUSED(remainingOpacity);
 
     HdrColor color(baseColor);
-
     if (!color.isTransparent())
     {
         float ao = m_filteringAmbientOcclusion.at(offset) / m_maximum * m_lambda;
@@ -71,7 +70,6 @@ inline HdrColor FilteringAmbientOcclusionVoxelShader::nvShade(const Vector3 &pos
         color.green += ao;
         color.blue += ao;
     }
-
     return color;
 }
 
@@ -84,20 +82,17 @@ inline HdrColor FilteringAmbientOcclusionVoxelShader::nvShade(const Vector3 &pos
     Q_ASSERT(interpolator);
 
     HdrColor color(baseColor);
-
     if (!color.isTransparent())
     {
         int offsets[8];
         double weights[8];
         interpolator->getOffsetsAndWeights(position, offsets, weights);
-
         float ao = TrilinearInterpolator::interpolate<float>(m_filteringAmbientOcclusion.constData(), offsets, weights) / m_maximum * m_lambda;
         ao = qBound(-1.0f, ao, 1.0f); // clipping
         color.red += ao;
         color.green += ao;
         color.blue += ao;
     }
-
     return color;
 }
 

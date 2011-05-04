@@ -8,7 +8,7 @@
 namespace udg {
 
 /**
- * Voxel shader que aplica cel-shading.
+    Voxel shader que aplica cel-shading.
  */
 class CelShadingVoxelShader : public VoxelShader {
 
@@ -37,6 +37,8 @@ protected:
 
     float quantize(float value) const;
 
+protected:
+
     int m_quantums;
     QVector<float> m_texture;
 
@@ -60,7 +62,10 @@ inline HdrColor CelShadingVoxelShader::nvShade(const Vector3 &position, int offs
     Q_UNUSED(direction);
     Q_UNUSED(remainingOpacity);
 
-    if (baseColor.isTransparent() || baseColor.isBlack()) return baseColor;
+    if (baseColor.isTransparent() || baseColor.isBlack())
+    {
+        return baseColor;
+    }
 
     HdrColor color(baseColor);
     color.red = quantize(color.red);
@@ -77,7 +82,10 @@ inline HdrColor CelShadingVoxelShader::nvShade(const Vector3 &position, const Ve
     Q_UNUSED(interpolator);
     Q_UNUSED(remainingOpacity);
 
-    if (baseColor.isTransparent() || baseColor.isBlack()) return baseColor;
+    if (baseColor.isTransparent() || baseColor.isBlack())
+    {
+        return baseColor;
+    }
 
     HdrColor color(baseColor);
     color.red = quantize(color.red);
@@ -88,12 +96,18 @@ inline HdrColor CelShadingVoxelShader::nvShade(const Vector3 &position, const Ve
 
 inline float CelShadingVoxelShader::quantize(float value) const
 {
-    if (value <= 0.0f) return 0.0f;
+    if (value <= 0.0f)
+    {
+        return 0.0f;
+    }
 
 //    return (ceil(value * m_quantums) - 1.0) / (m_quantums - 1);
 
     int i = static_cast<int>(ceil(value * m_quantums)) - 1;
-    if (i >= m_quantums) i = m_quantums - 1;
+    if (i >= m_quantums)
+    {
+        i = m_quantums - 1;
+    }
     return m_texture.at(i);
 }
 
