@@ -3,12 +3,12 @@
 
 #include "informationtheory.h"
 
+//#include "histogram.h"
+
 #include <cmath>
 
 #include <QThread>
 #include <QtConcurrentMap>
-
-//#include "histogram.h"
 
 namespace {
 
@@ -21,7 +21,10 @@ T copy(const T &p)
 template <class T>
 void sumEntropy(double &entropy, const T &p)
 {
-    if (p > 0.0) entropy -= p * log(p);
+    if (p > 0.0)
+    {
+        entropy -= p * log(p);
+    }
 }
 
 }
@@ -45,7 +48,10 @@ double InformationTheory::entropy(const QVector<T> &probabilities)
     for (int i = 0; i < size; i++)
     {
         double p = histogram[i] / count;
-        if (p > 0.0) entropy -= p * log(p);
+        if (p > 0.0)
+        {
+            entropy -= p * log(p);
+        }
     }
 
     entropy /= log(2.0);
@@ -64,7 +70,12 @@ double InformationTheory::kullbackLeiblerDivergence(const QVector<T> &probabilit
     if (skipZeroQ)
     {
         for (int i = 0; i < size; i++)
-            if (probabilitiesQ.at(i) > 0.0) sumP += probabilitiesP.at(i);
+        {
+            if (probabilitiesQ.at(i) > 0.0)
+            {
+                sumP += probabilitiesP.at(i);
+            }
+        }
     }
 
     if (size >= MinimumSizeToUseThreads)
@@ -80,7 +91,10 @@ double InformationTheory::kullbackLeiblerDivergence(const QVector<T> &probabilit
             threads[i]->start();
             start += sizePerThread;
             end += sizePerThread;
-            if (end > size) end = size;
+            if (end > size)
+            {
+                end = size;
+            }
         }
 
         for (int i = 0; i < nThreads; i++)
@@ -98,12 +112,18 @@ double InformationTheory::kullbackLeiblerDivergence(const QVector<T> &probabilit
         {
             double p = probabilitiesP.at(i);
 
-            if (skipZeroQ) p /= sumP;
+            if (skipZeroQ)
+            {
+                p /= sumP;
+            }
 
             if (p > 0.0)
             {
                 double q = probabilitiesQ.at(i);
-                if (!skipZeroQ || q > 0.0) kullbackLeiblerDivergence += p * log(p / q);
+                if (!skipZeroQ || q > 0.0)
+                {
+                    kullbackLeiblerDivergence += p * log(p / q);
+                }
             }
         }
     }
@@ -133,7 +153,10 @@ double InformationTheory::jensenShannonDivergence(double pi1, double pi2, const 
             threads[i]->start();
             start += sizePerThread;
             end += sizePerThread;
-            if (end > size) end = size;
+            if (end > size)
+            {
+                end = size;
+            }
         }
 
         for (int i = 0; i < nThreads; i++)
@@ -146,7 +169,10 @@ double InformationTheory::jensenShannonDivergence(double pi1, double pi2, const 
     }
     else
     {
-        for (int i = 0; i < size; i++) probabilitiesMix[i] = pi1 * probabilitiesP1.at(i) + pi2 * probabilitiesP2.at(i);
+        for (int i = 0; i < size; i++)
+        {
+            probabilitiesMix[i] = pi1 * probabilitiesP1.at(i) + pi2 * probabilitiesP2.at(i);
+        }
     }
 
     return entropy(probabilitiesMix) - (pi1 * entropy(probabilitiesP1) + pi2 * entropy(probabilitiesP2));
@@ -165,11 +191,17 @@ public:
         for (int i = m_start; i < m_end; i++)
         {
             double p = m_probabilitiesP.at(i);
-            if (m_skipZeroQ) p /= m_sumP;
+            if (m_skipZeroQ)
+            {
+                p /= m_sumP;
+            }
             if (p > 0.0)
             {
                 double q = m_probabilitiesQ.at(i);
-                if (!m_skipZeroQ || q > 0.0) m_kullbackLeiblerDivergence += p * log(p / q);
+                if (!m_skipZeroQ || q > 0.0)
+                {
+                    m_kullbackLeiblerDivergence += p * log(p / q);
+                }
             }
         }
     }
@@ -196,7 +228,10 @@ public:
     }
     virtual void run()
     {
-        for (int i = m_start; i < m_end; i++) m_probabilitiesMix[i] = m_pi1 * m_probabilitiesP1.at(i) + m_pi2 * m_probabilitiesP2.at(i);
+        for (int i = m_start; i < m_end; i++)
+        {
+            m_probabilitiesMix[i] = m_pi1 * m_probabilitiesP1.at(i) + m_pi2 * m_probabilitiesP2.at(i);
+        }
     }
 private:
     double m_pi1, m_pi2;
