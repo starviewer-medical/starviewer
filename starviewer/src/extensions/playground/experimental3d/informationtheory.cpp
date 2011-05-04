@@ -39,12 +39,12 @@ double InformationTheory::entropy(const QVector<T> &probabilities)
 }
 
 // H(X) = -sum[0,n)( p(x) log p(x) )
-/*double InformationTheory::entropy(const Histogram &histogram)
+/*
+double InformationTheory::entropy(const Histogram &histogram)
 {
     int size = histogram.size();
     double count = histogram.count();
     double entropy = 0.0;
-
     for (int i = 0; i < size; i++)
     {
         double p = histogram[i] / count;
@@ -53,11 +53,10 @@ double InformationTheory::entropy(const QVector<T> &probabilities)
             entropy -= p * log(p);
         }
     }
-
     entropy /= log(2.0);
-
     return entropy;
-}*/
+}
+*/
 
 // D_KL(P||Q) = sum[0,n)( P(i) log ( P(i) / Q(i) ) )
 template <class T>
@@ -65,8 +64,8 @@ double InformationTheory::kullbackLeiblerDivergence(const QVector<T> &probabilit
 {
     int size = probabilitiesP.size();
     double kullbackLeiblerDivergence = 0.0;
-    double sumP = 0.0;
 
+    double sumP = 0.0;
     if (skipZeroQ)
     {
         for (int i = 0; i < size; i++)
@@ -84,7 +83,6 @@ double InformationTheory::kullbackLeiblerDivergence(const QVector<T> &probabilit
         KullbackLeiblerDivergenceThread<T> **threads = new KullbackLeiblerDivergenceThread<T>*[nThreads];
         int sizePerThread = size / nThreads + 1;
         int start = 0, end = sizePerThread;
-
         for (int i = 0; i < nThreads; i++)
         {
             threads[i] = new KullbackLeiblerDivergenceThread<T>(probabilitiesP, probabilitiesQ, skipZeroQ, sumP, start, end);
@@ -96,14 +94,12 @@ double InformationTheory::kullbackLeiblerDivergence(const QVector<T> &probabilit
                 end = size;
             }
         }
-
         for (int i = 0; i < nThreads; i++)
         {
             threads[i]->wait();
             kullbackLeiblerDivergence += threads[i]->kullbackLeiblerDivergence();
             delete threads[i];
         }
-
         delete[] threads;
     }
     else
@@ -146,7 +142,6 @@ double InformationTheory::jensenShannonDivergence(double pi1, double pi2, const 
         ProbabilitiesMixThread<T> **threads = new ProbabilitiesMixThread<T>*[nThreads];
         int sizePerThread = size / nThreads + 1;
         int start = 0, end = sizePerThread;
-
         for (int i = 0; i < nThreads; i++)
         {
             threads[i] = new ProbabilitiesMixThread<T>(pi1, pi2, probabilitiesP1, probabilitiesP2, probabilitiesMix, start, end);
@@ -158,13 +153,11 @@ double InformationTheory::jensenShannonDivergence(double pi1, double pi2, const 
                 end = size;
             }
         }
-
         for (int i = 0; i < nThreads; i++)
         {
             threads[i]->wait();
             delete threads[i];
         }
-
         delete[] threads;
     }
     else
