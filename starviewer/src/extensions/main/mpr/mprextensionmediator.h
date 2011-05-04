@@ -6,9 +6,9 @@
 #include "installextension.h"
 #include "qmprextension.h"
 
-namespace udg{
+namespace udg {
 
-class MPRExtensionMediator: public ExtensionMediator
+class MPRExtensionMediator : public ExtensionMediator
 {
     Q_OBJECT
 public:
@@ -22,7 +22,6 @@ public:
 };
 
 static InstallExtension<QMPRExtension, MPRExtensionMediator> registerMPRExtension;
-
 
 } //udg namespace
 

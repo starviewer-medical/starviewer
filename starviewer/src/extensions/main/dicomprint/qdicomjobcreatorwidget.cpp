@@ -6,10 +6,10 @@ namespace udg {
 
 QDicomJobCreatorWidget::QDicomJobCreatorWidget()
 {
-    setupUi( this );
-	createActions();	
-	createConnections();
-    m_printJob=new DicomPrintJob();
+    setupUi(this);
+    createActions();
+    createConnections();
+    m_printJob = new DicomPrintJob();
 }
 
 QDicomJobCreatorWidget::~QDicomJobCreatorWidget()
@@ -18,17 +18,17 @@ QDicomJobCreatorWidget::~QDicomJobCreatorWidget()
 }
 
 void QDicomJobCreatorWidget::createConnections()
-{ 
-	
+{
+
 }
 
 void QDicomJobCreatorWidget::createActions()
 {
-	
+
 }
 
 PrintJob* QDicomJobCreatorWidget::getPrintJob()
 {
     return m_printJob;
 }
-}                                      
+}

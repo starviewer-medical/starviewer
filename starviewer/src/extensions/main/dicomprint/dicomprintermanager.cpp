@@ -7,8 +7,8 @@
 #include "dicomprinter.h"
 #include "settings.h"
 
-namespace udg 
-{	
+namespace udg
+{
 
 const QString DicomPrinterManager::DicomPrinterListSectionName = "DicomPrinterList";
 
@@ -16,45 +16,45 @@ DicomPrinterManager::DicomPrinterManager()
 {
 
 }
- 
+
 DicomPrinterManager::~DicomPrinterManager()
 {
 
 }
 
-bool DicomPrinterManager::addPrinter( DicomPrinter &printer )
-{   
-    if ( this->indexOfPrinterInSettings( printer ) == -1 )
+bool DicomPrinterManager::addPrinter(DicomPrinter &printer)
+{
+    if (this->indexOfPrinterInSettings(printer) == -1)
     {
         if (printer.getIsDefault())
         {
-            /*Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora 
+            /*Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora
               per defecte, desmarquem les altres*/
             setAllPrintersAsNoDefaultPrinter();
         }
 
         Settings settings;
-        settings.addListItem( DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer) );
-        printer.setID( this->getDicomPrinterList().count() - 1 );
+        settings.addListItem(DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer));
+        printer.setID(this->getDicomPrinterList().count() - 1);
         return true;
     }
     return false;
 }
 
-bool DicomPrinterManager::updatePrinter( int printerID, DicomPrinter &printer )
+bool DicomPrinterManager::updatePrinter(int printerID, DicomPrinter &printer)
 {
     Settings settings;
     int indexTrobat = this->indexOfPrinterInSettings(printer);
-    if( indexTrobat == printerID || indexTrobat==-1 )
+    if (indexTrobat == printerID || indexTrobat == -1)
     {
         if (printer.getIsDefault())
         {
-            /*Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora 
+            /*Només podem tenir una impressora per imprimir per defecte, per tant si aquesta està marcada com a impressora
               per defecte, desmarquem les altres*/
             setAllPrintersAsNoDefaultPrinter();
         }
 
-        settings.setListItem( printerID, DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer) );    
+        settings.setListItem(printerID, DicomPrinterListSectionName, dicomPrinterToKeyValueMap(printer));
         return true;
     }
     else
@@ -63,10 +63,10 @@ bool DicomPrinterManager::updatePrinter( int printerID, DicomPrinter &printer )
     }
 }
 
-void DicomPrinterManager::deletePrinter( int printerID )
+void DicomPrinterManager::deletePrinter(int printerID)
 {
     Settings settings;
-    settings.removeListItem( DicomPrinterListSectionName, printerID );
+    settings.removeListItem(DicomPrinterListSectionName, printerID);
 }
 
 void DicomPrinterManager::setAllPrintersAsNoDefaultPrinter()
@@ -75,36 +75,36 @@ void DicomPrinterManager::setAllPrintersAsNoDefaultPrinter()
     QList<DicomPrinter> dicomPrinterList = getDicomPrinterList();
 
     //Totes les impressores guardares les posem a false
-    foreach(DicomPrinter dicomPrinter, dicomPrinterList)
+    foreach (DicomPrinter dicomPrinter, dicomPrinterList)
     {
         dicomPrinter.setIsDefault(false);
-        settings.setListItem( dicomPrinter.getID() , DicomPrinterListSectionName, dicomPrinterToKeyValueMap(dicomPrinter) );    
+        settings.setListItem(dicomPrinter.getID(), DicomPrinterListSectionName, dicomPrinterToKeyValueMap(dicomPrinter));
     }
 }
 
-DicomPrinter DicomPrinterManager::getPrinterByID( int id )
-{   
+DicomPrinter DicomPrinterManager::getPrinterByID(int id)
+{
     DicomPrinter dicomPrinter;
-    QList<DicomPrinter> dicomPrinterList = getDicomPrinterList();    
-    if ( id < dicomPrinterList.count() ) 
+    QList<DicomPrinter> dicomPrinterList = getDicomPrinterList();
+    if (id < dicomPrinterList.count())
     {
        dicomPrinter = dicomPrinterList.at(id);
     }
-        
-    dicomPrinter.setAvailableMediumTypeValues( this->getAvailableMediumTypeValues() );
-    dicomPrinter.setAvailableFilmSizeValues( this->getAvailableFilmSizeValues() );
-    dicomPrinter.setAvailableFilmLayoutValues( this->getAvailableFilmLayoutValues() );
-    dicomPrinter.setAvailableFilmOrientationValues( this->getAvailableFilmOrientationValues() );
-    dicomPrinter.setAvailableMagnificationTypeValues( this->getAvailableMagnificationTypeValues() );
-    dicomPrinter.setAvailableMaxDensityValues( this->getAvailableMaxDensityValues() );
-    dicomPrinter.setAvailableMinDensityValues( this->getAvailableMinDensityValues() );
-    dicomPrinter.setAvailableTrim( this->getAvailableTrim() );
-    dicomPrinter.setAvailableBorderDensityValues( this->getAvailableBorderDensityValues() );
-    dicomPrinter.setAvailableEmptyImageDensityValues( this->getAvailableEmptyImageDensityValues() );
-    dicomPrinter.setAvailableFilmDestinationValues( this->getAvailableFilmDestinationValues() );
-    dicomPrinter.setAvailableSmoothingTypeValues( this->getAvailableSmoothingTypeValues() );
-    dicomPrinter.setAvailablePrintPriorityValues( this->getAvailablePrintPriorityValues() );
-    dicomPrinter.setAvailablePolarityValues( this->getAvailablePolarityValues() );
+
+    dicomPrinter.setAvailableMediumTypeValues(this->getAvailableMediumTypeValues());
+    dicomPrinter.setAvailableFilmSizeValues(this->getAvailableFilmSizeValues());
+    dicomPrinter.setAvailableFilmLayoutValues(this->getAvailableFilmLayoutValues());
+    dicomPrinter.setAvailableFilmOrientationValues(this->getAvailableFilmOrientationValues());
+    dicomPrinter.setAvailableMagnificationTypeValues(this->getAvailableMagnificationTypeValues());
+    dicomPrinter.setAvailableMaxDensityValues(this->getAvailableMaxDensityValues());
+    dicomPrinter.setAvailableMinDensityValues(this->getAvailableMinDensityValues());
+    dicomPrinter.setAvailableTrim(this->getAvailableTrim());
+    dicomPrinter.setAvailableBorderDensityValues(this->getAvailableBorderDensityValues());
+    dicomPrinter.setAvailableEmptyImageDensityValues(this->getAvailableEmptyImageDensityValues());
+    dicomPrinter.setAvailableFilmDestinationValues(this->getAvailableFilmDestinationValues());
+    dicomPrinter.setAvailableSmoothingTypeValues(this->getAvailableSmoothingTypeValues());
+    dicomPrinter.setAvailablePrintPriorityValues(this->getAvailablePrintPriorityValues());
+    dicomPrinter.setAvailablePolarityValues(this->getAvailablePolarityValues());
 
     return dicomPrinter;
 }
@@ -116,8 +116,8 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
     int indexOfIDPrinter = 0;
 
     Settings::SettingListType list = settings.getList(DicomPrinterListSectionName);
-    
-    foreach( Settings::KeyValueMapType item, list )
+
+    foreach (Settings::KeyValueMapType item, list)
     {
         DicomPrinter dicomPrinter;
 
@@ -126,40 +126,39 @@ QList<DicomPrinter> DicomPrinterManager::getDicomPrinterList()
         dicomPrintersList << dicomPrinter;
         indexOfIDPrinter++;
     }
-    return dicomPrintersList;   
+    return dicomPrintersList;
 }
-
 
 //TODO: Ara mateix et retorna valors per defecte ja que no es comunica amb la impressora. Falta realitza la implementació per obtenir les dades
 // directament de la impressora.
-DicomPrinter  DicomPrinterManager::getAvailableParametersValues(const QString &AETitlePrinter, int portPrinter)
+DicomPrinter DicomPrinterManager::getAvailableParametersValues(const QString &AETitlePrinter, int portPrinter)
 {
     Q_UNUSED(AETitlePrinter);
     Q_UNUSED(portPrinter);
 
     DicomPrinter dicomPrinter;
-    
-    dicomPrinter.setAvailableMediumTypeValues( this->getAvailableMediumTypeValues() );
-    dicomPrinter.setAvailableFilmSizeValues( this->getAvailableFilmSizeValues() );
-    dicomPrinter.setAvailableFilmLayoutValues( this->getAvailableFilmLayoutValues() );
-    dicomPrinter.setAvailableFilmOrientationValues( this->getAvailableFilmOrientationValues() );
-    dicomPrinter.setAvailableMagnificationTypeValues( this->getAvailableMagnificationTypeValues() );
-    dicomPrinter.setAvailableMaxDensityValues( this->getAvailableMaxDensityValues() );
-    dicomPrinter.setAvailableMinDensityValues( this->getAvailableMinDensityValues() );
-    dicomPrinter.setAvailableTrim( this->getAvailableTrim() );
-    dicomPrinter.setAvailableBorderDensityValues( this->getAvailableBorderDensityValues() );
-    dicomPrinter.setAvailableEmptyImageDensityValues( this->getAvailableEmptyImageDensityValues() );
-    dicomPrinter.setAvailableFilmDestinationValues( this->getAvailableFilmDestinationValues() );    
-    dicomPrinter.setAvailableSmoothingTypeValues( this->getAvailableSmoothingTypeValues() );    
-    dicomPrinter.setAvailablePrintPriorityValues( this->getAvailablePrintPriorityValues() );
-    dicomPrinter.setAvailablePolarityValues( this->getAvailablePolarityValues() );
+
+    dicomPrinter.setAvailableMediumTypeValues(this->getAvailableMediumTypeValues());
+    dicomPrinter.setAvailableFilmSizeValues(this->getAvailableFilmSizeValues());
+    dicomPrinter.setAvailableFilmLayoutValues(this->getAvailableFilmLayoutValues());
+    dicomPrinter.setAvailableFilmOrientationValues(this->getAvailableFilmOrientationValues());
+    dicomPrinter.setAvailableMagnificationTypeValues(this->getAvailableMagnificationTypeValues());
+    dicomPrinter.setAvailableMaxDensityValues(this->getAvailableMaxDensityValues());
+    dicomPrinter.setAvailableMinDensityValues(this->getAvailableMinDensityValues());
+    dicomPrinter.setAvailableTrim(this->getAvailableTrim());
+    dicomPrinter.setAvailableBorderDensityValues(this->getAvailableBorderDensityValues());
+    dicomPrinter.setAvailableEmptyImageDensityValues(this->getAvailableEmptyImageDensityValues());
+    dicomPrinter.setAvailableFilmDestinationValues(this->getAvailableFilmDestinationValues());
+    dicomPrinter.setAvailableSmoothingTypeValues(this->getAvailableSmoothingTypeValues());
+    dicomPrinter.setAvailablePrintPriorityValues(this->getAvailablePrintPriorityValues());
+    dicomPrinter.setAvailablePolarityValues(this->getAvailablePolarityValues());
     return dicomPrinter;
 }
 
-Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap( DicomPrinter &dicomPrinter )
+Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap(DicomPrinter &dicomPrinter)
 {
     Settings::KeyValueMapType item;
-    
+
     item["AETitle"] = dicomPrinter.getAETitle();
     item["PrinterName"] = dicomPrinter.getName();
     item["PrinterType"] = dicomPrinter.getType();
@@ -188,7 +187,7 @@ Settings::KeyValueMapType DicomPrinterManager::dicomPrinterToKeyValueMap( DicomP
     return item;
 }
 
-DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter( Settings::KeyValueMapType &item )
+DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter(Settings::KeyValueMapType &item)
 {
     DicomPrinter dicomPrinter;
 
@@ -216,25 +215,25 @@ DicomPrinter DicomPrinterManager::keyValueMapToDicomPrinter( Settings::KeyValueM
     dicomPrinter.setSupportsAnnotationBox(item.value("SupportsAnnotationBox").toBool());
     dicomPrinter.setAnnotationDisplayFormatID(item.value("AnnotationDisplayFormatID").toString());
     dicomPrinter.setDefaultConfigurationInformation(item.value("ConfigurationInformation").toString());
-    
+
     return dicomPrinter;
 }
 
-int DicomPrinterManager::indexOfPrinterInSettings( DicomPrinter &printer )
+int DicomPrinterManager::indexOfPrinterInSettings(DicomPrinter &printer)
 {
-    int i=0;       
+    int i = 0;
     QList<DicomPrinter> dicomPrinterList = getDicomPrinterList();
-    
-    foreach(DicomPrinter printerTemp, dicomPrinterList)
+
+    foreach (DicomPrinter printerTemp, dicomPrinterList)
     {
-       if (printerTemp.getAETitle() == printer.getAETitle() &&
-           printerTemp.getHostname() == printer.getHostname() &&
-           printerTemp.getPort() == printer.getPort())
-       {
-         return i;
-       }
-        
-       i = i+1;
+        if (printerTemp.getAETitle() == printer.getAETitle() &&
+            printerTemp.getHostname() == printer.getHostname() &&
+            printerTemp.getPort() == printer.getPort())
+        {
+            return i;
+        }
+
+        i = i + 1;
     }
     return i = -1;
 }
@@ -257,7 +256,7 @@ QStringList DicomPrinterManager::getAvailableFilmLayoutValues()
 {
     QStringList filmLayoutValuesTemp;
 
-    filmLayoutValuesTemp <<"STANDARD\\1,1" << "STANDARD\\1,2" << "STANDARD\\2,2" << "STANDARD\\2,3" << "STANDARD\\2,4" << "STANDARD\\3,3 " << "STANDARD\\3,4" 
+    filmLayoutValuesTemp <<"STANDARD\\1,1" << "STANDARD\\1,2" << "STANDARD\\2,2" << "STANDARD\\2,3" << "STANDARD\\2,4" << "STANDARD\\3,3 " << "STANDARD\\3,4"
                          << "STANDARD\\3,5" << "STANDARD\\4,4" << "STANDARD\\4,5" << "STANDARD\\4,6" << "STANDARD\\5,6" << "STANDARD\\5,7";
 
     return filmLayoutValuesTemp;
@@ -272,7 +271,7 @@ QStringList DicomPrinterManager::getAvailableFilmOrientationValues()
 
 QStringList DicomPrinterManager::getAvailableMagnificationTypeValues()
 {
-    //Atenció si es canvien els valors de Magnification Type, perquè Smoothing Type només es pot configurar si MagnificationType té com a valor "CUBINC" 
+    //Atenció si es canvien els valors de Magnification Type, perquè Smoothing Type només es pot configurar si MagnificationType té com a valor "CUBINC"
     QStringList magnificationTypeValuesTemp;
     magnificationTypeValuesTemp << "" << "REPLICATE" << "BILINEAR" << "CUBIC" << "NONE";
     return magnificationTypeValuesTemp;
@@ -312,7 +311,7 @@ QStringList DicomPrinterManager::getAvailableEmptyImageDensityValues()
 QStringList DicomPrinterManager::getAvailableFilmDestinationValues()
 {
     QStringList filmDestinationValuesTemp;
-    filmDestinationValuesTemp << "" << "MAGAZINE" << "PROCESSOR" << "BIN_1" << "BIN_2" << "BIN_3" << "BIN_4" << "BIN_5" << "BIN_6" << "BIN_7" 
+    filmDestinationValuesTemp << "" << "MAGAZINE" << "PROCESSOR" << "BIN_1" << "BIN_2" << "BIN_3" << "BIN_4" << "BIN_5" << "BIN_6" << "BIN_7"
                               << "BIN_8" << "BIN_9" << "BIN_10";
     return filmDestinationValuesTemp;
 }

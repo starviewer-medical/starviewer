@@ -20,7 +20,7 @@ public:
 
     /// Retorna el Local de l'aplicació. Aquest pot haver estat escollit per l'usuari o, si no, és el del sistema.
     QLocale getDefaultLocale();
-    
+
     /// Carrega una traducció de Qt (*.qm) que es trobi a translationFilePath. Aquest path pot ser d'un resource.
     /// Retorna true si s'ha carregat correctament, altrament, false.
     bool loadTranslation(QString translationFilePath);

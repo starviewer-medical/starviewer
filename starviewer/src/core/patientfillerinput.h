@@ -21,16 +21,16 @@ public:
     ~PatientFillerInput();
 
     /// Afegeix un pacient a la llista
-    void addPatient( Patient *patient );
+    void addPatient(Patient *patient);
 
     /// Obté un pacient de la llista indexat. Si l'índex supera el nombre de membres de la llista es retorna NUL
-    Patient *getPatient( int index = 0 );
+    Patient *getPatient(int index = 0);
 
     /// Obté un pacient identificat pel seu nom
-    Patient *getPatientByName( QString name );
+    Patient *getPatientByName(QString name);
 
     /// Obté un pacient identificat pel seu ID
-    Patient *getPatientByID( QString id );
+    Patient *getPatientByID(QString id);
 
     /// Retorna el nombre de pacients que tenim a la llista
     unsigned int getNumberOfPatients();
@@ -44,8 +44,8 @@ public:
     QString getFile() const;
 
     /// Afegim etiquetes a nivell global/Series
-    void addLabel( QString label );
-    void addLabelToSeries( QString label, Series *series );
+    void addLabel(QString label);
+    void addLabelToSeries(QString label, Series *series);
 
     /// Obtenim totes les etiquetes que s'han aplicat fins al moment, tant a nivell global com a nivell de sèries.
     /// Retorna una llista composada per les etiquetes globals i de series
@@ -73,23 +73,23 @@ public:
 
     /// Reinicialitza el número de volum (multiframe) actual
     void resetCurrentMultiframeVolumeNumber();
-    
+
     /// Incrementa el número de volum (multiframe) actual
     void increaseCurrentMultiframeVolumeNumber();
-    
+
     /// Retorna el número de volum (multiframe) actual
     int getCurrentMultiframeVolumeNumber() const;
-    
+
     /// Reinicialitza el número de volum (single frame) actual
     void resetCurrentSingleFrameVolumeNumber();
-    
+
     /// Incrementa el número de volum (single frame) actual
     void increaseCurrentSingleFrameVolumeNumber();
-    
+
     /// Retorna el corresponent número de volum pel conjunt d'imatges single frame actual
     int getCurrentSingleFrameVolumeNumber() const;
 
-    /// Assigna/Retorna el número de volum actual que estem tractant, necessari pels 
+    /// Assigna/Retorna el número de volum actual que estem tractant, necessari pels
     /// passos posteriors a l'ImageFillerStep
     void setCurrentVolumeNumber(int volumeNumber);
     int getCurrentVolumeNumber() const;

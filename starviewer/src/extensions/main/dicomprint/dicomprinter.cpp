@@ -1,6 +1,6 @@
 #include "dicomprinter.h"
 
-namespace udg{
+namespace udg {
 
 DicomPrinter::DicomPrinter()
 {
@@ -43,7 +43,7 @@ void DicomPrinter::setType(const QString &type)
 
 QString DicomPrinter::getType() const
 {
-	return m_type;
+    return m_type;
 }
 
 void DicomPrinter::setDescription(const QString &description)
@@ -128,7 +128,7 @@ QStringList DicomPrinter::getAvailableFilmSizeValues()
 
 void DicomPrinter::setDefaultFilmLayout(const QString &_defaultFilmLayout)
 {
-    m_defaultFilmLayout=_defaultFilmLayout;
+    m_defaultFilmLayout = _defaultFilmLayout;
 }
 
 QString DicomPrinter::getDefaultFilmLayout() const
@@ -184,9 +184,9 @@ QStringList DicomPrinter::getAvailableFilmOrientationValues()
     return m_filmOrientationValues;
 }
 
-void  DicomPrinter::setDefaultMagnificationType(const QString &_defaultMagnificationType)
+void DicomPrinter::setDefaultMagnificationType(const QString &_defaultMagnificationType)
 {
-    m_defaultMagnificationType=_defaultMagnificationType;
+    m_defaultMagnificationType = _defaultMagnificationType;
 }
 
 QString DicomPrinter::getDefaultMagnificationType() const
@@ -246,7 +246,7 @@ ushort DicomPrinter::getAvailableMinDensityValues()
 
 void DicomPrinter::setDefaultTrim(bool _defaultTrim)
 {
-    m_defaultTrim=_defaultTrim;
+    m_defaultTrim = _defaultTrim;
 }
 
 bool DicomPrinter::getDefaultTrim()
@@ -264,9 +264,9 @@ bool DicomPrinter::getAvailableTrim()
     return m_availableTrim;
 }
 
-void  DicomPrinter::setDefaultBorderDensity(const QString &_defaultBorderDensity)
+void DicomPrinter::setDefaultBorderDensity(const QString &_defaultBorderDensity)
 {
-    m_defaultBorderDensity=_defaultBorderDensity;
+    m_defaultBorderDensity = _defaultBorderDensity;
 }
 
 QString DicomPrinter::getDefaultBorderDensity() const
@@ -284,9 +284,9 @@ QStringList DicomPrinter::getAvailableBorderDensityValues()
     return m_borderDensityValues;
 }
 
-void  DicomPrinter::setDefaultEmptyImageDensity(const QString &_defaultEmptyImageDensity)
+void DicomPrinter::setDefaultEmptyImageDensity(const QString &_defaultEmptyImageDensity)
 {
-    m_defaultEmptyImageDensity=_defaultEmptyImageDensity;
+    m_defaultEmptyImageDensity = _defaultEmptyImageDensity;
 }
 
 QString DicomPrinter::getDefaultEmptyImageDensity() const
@@ -304,9 +304,9 @@ QStringList DicomPrinter::getAvailableEmptyImageDensityValues()
     return m_emptyImageDensityValues;
 }
 
-void  DicomPrinter::setDefaultFilmDestination(const QString &_defaultFilmDestination)
+void DicomPrinter::setDefaultFilmDestination(const QString &_defaultFilmDestination)
 {
-    m_defaultFilmDestination=_defaultFilmDestination;
+    m_defaultFilmDestination = _defaultFilmDestination;
 }
 
 QString DicomPrinter::getDefaultFilmDestination() const
@@ -416,7 +416,7 @@ QString DicomPrinter::getDefaultConfigurationInformation() const
 
 void DicomPrinter::setIsDefault(const bool isDefault)
 {
-    m_isDefaultPrinter=isDefault;
+    m_isDefaultPrinter = isDefault;
 }
 
 bool DicomPrinter::getIsDefault() const

@@ -12,7 +12,7 @@
 
 namespace udg {
 
-PatientBrowserMenu::PatientBrowserMenu(QWidget *parent) 
+PatientBrowserMenu::PatientBrowserMenu(QWidget *parent)
  : QWidget(parent), m_patientBrowserList(0), m_patientAdditionalInfo(0)
 {
     ApplicationStyleHelper style;
@@ -47,7 +47,7 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                         .arg(series->getDescription().trimmed())
                         .arg(series->getBodyPartExamined())
                         .arg(series->getViewPosition());
-            
+
             if (series->getNumberOfVolumes() > 1)
             {
                 QString volumeID;
@@ -98,7 +98,7 @@ void PatientBrowserMenu::updateActiveItemView(const QString &identifier)
                                         .arg(series->getModality().trimmed())
                                         .arg(series->getProtocolName().trimmed())
                                         .arg(volume->getNumberOfFrames())
-                                       );
+                                         );
         placeAdditionalInfoWidget();
     }
 }
@@ -108,7 +108,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // Marquem l'ítem actual de la llista
     m_patientBrowserList->markItem(identifier);
 
-    // Obtenim la geometria de la pantalla on se'ns ha demanat obrir el menú per posicionar correctament 
+    // Obtenim la geometria de la pantalla on se'ns ha demanat obrir el menú per posicionar correctament
     // el widget per tal que no surti fora de la pantalla i no es pugui veure.
     ScreenManager screenManager;
     QRect currentScreenGeometry = screenManager.getAvailableScreenGeometry(screenManager.getScreenID(point));
@@ -117,7 +117,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     // Calculem les mides dels widgets per saber on els hem de col·locar
     // TODO Aquestes mesures no són les més exactes. Les adequades haurien de basar-se en els valors de QWidget::frameGeometry()
     // tal com s'explica a http://doc.trolltech.com/4.7/application-windows.html#window-geometry
-    // El problema és que cal que abans haguem fet un show() per saber les mides de veritat. Una opció també seria implementar 
+    // El problema és que cal que abans haguem fet un show() per saber les mides de veritat. Una opció també seria implementar
     // aquest posicionament quan es produeix un resize d'aquests widgets. Aquesta és una de les raons per la qual veiem el menú
     // adicional amb una petita ombra quan es queda a la dreta del principal.
     int mainMenuApproximateWidth = m_patientBrowserList->sizeHint().width();
@@ -129,7 +129,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
     int widgetRight = mainMenuApproximateWidth + point.x();
     int widgetBottom = wholeMenuApproximateHeight + point.y();
 
-    // Calculem quant d'ample i/o alçada ens surt el menú. Si els valors són positius caldrà moure 
+    // Calculem quant d'ample i/o alçada ens surt el menú. Si els valors són positius caldrà moure
     // la posició original com a mínim tot el que ens sortim de les fronteres
     int outsideWidth = widgetRight - globalRight;
     int outsideHeight = widgetBottom - globalBottom;
@@ -149,7 +149,7 @@ void PatientBrowserMenu::popup(const QPoint &point, const QString &identifier)
 
     // Movem la finestra del menu al punt que toca
     m_patientBrowserList->move(menuXPosition, menuYPosition);
-    
+
     // Col·loquem el widget amb la informació adicional a la dreta o l'esquerra del principal segons l'espai disponible
     placeAdditionalInfoWidget();
     m_patientAdditionalInfo->show();
@@ -179,7 +179,7 @@ void PatientBrowserMenu::placeAdditionalInfoWidget()
     int menuYPosition = m_patientBrowserList->pos().y();
     // Cal fer un adjust size abans perquè les mides del widget quedin actualitzades correctament
     m_patientAdditionalInfo->adjustSize();
-    int additionalInfoWidgetApproximateWidth = m_patientAdditionalInfo->frameGeometry().width();   
+    int additionalInfoWidgetApproximateWidth = m_patientAdditionalInfo->frameGeometry().width();
 
     if (menuXPosition + mainMenuApproximateWidth + additionalInfoWidgetApproximateWidth > currentScreenGlobalOriginPoint.x() + currentScreenGeometry.width())
     {
@@ -211,18 +211,18 @@ void PatientBrowserMenu::createWidgets()
     {
         delete m_patientAdditionalInfo;
     }
-    
+
     if (m_patientBrowserList)
     {
         delete m_patientBrowserList;
     }
-    
+
     m_patientAdditionalInfo = new PatientBrowserMenuExtendedItem(this);
     m_patientBrowserList = new PatientBrowserMenuList(this);
 
     m_patientAdditionalInfo->setWindowFlags(Qt::Popup);
     m_patientBrowserList->setWindowFlags(Qt::Popup);
-    
+
     connect(m_patientAdditionalInfo, SIGNAL(close()), m_patientBrowserList, SLOT(close()));
     connect(m_patientBrowserList, SIGNAL(close()), m_patientAdditionalInfo, SLOT(close()));
 }

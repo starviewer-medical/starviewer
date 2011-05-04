@@ -35,9 +35,9 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget *extension, const E
     // Si no tenim cap volum, alertem a l'usuari
     if (!input)
     {
-        QMessageBox::information(0,ApplicationNameString, tr("There is not any viewable or supported Series in the selected Studies"));
+        QMessageBox::information(0, ApplicationNameString, tr("There is not any viewable or supported Series in the selected Studies"));
     }
-    
+
     // Assignem l'input per defecte al visor
     q2dviewerExtension->setInput(input);
 
@@ -57,7 +57,7 @@ bool Q2DViewerExtensionMediator::reinitializeExtension(QWidget *extension)
 #ifndef STARVIEWER_LITE
         // Busquem i apliquem el millor hanging protocol possible
         q2dviewerExtension->searchAndApplyBestHangingProtocol();
-		//Actualitzem el widget de prèvies.
+        //Actualitzem el widget de prèvies.
         q2dviewerExtension->updatePreviousStudiesWidget();
 #endif
         return true;

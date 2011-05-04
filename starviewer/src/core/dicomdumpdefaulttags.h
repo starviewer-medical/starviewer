@@ -16,23 +16,23 @@ class DICOMTag;
 
 class DICOMDumpDefaultTags {
 
-public:    
+public:
     DICOMDumpDefaultTags();
 
     ~DICOMDumpDefaultTags();
 
     /// Mètode per definir el SOPClassUID
-    void setSOPClassUID(const QString &sopClassUid );
+    void setSOPClassUID(const QString &sopClassUid);
 
     /// Mètode que retorna el SOPClassUID
     QString getSOPClassUID() const;
 
     /// Mètode per afegir una restricció a la llista de restriccions
-    void addRestriction(const DICOMDumpDefaultTagsRestriction &restriction );
+    void addRestriction(const DICOMDumpDefaultTagsRestriction &restriction);
 
     /// Mètode per definir la llista de restriccions d'un DICOMDumpDefaultTags
-    void addRestrictions(const QList<DICOMDumpDefaultTagsRestriction> &restrictionsList );    
-    
+    void addRestrictions(const QList<DICOMDumpDefaultTagsRestriction> &restrictionsList);
+
     /// Mètode que retorna la llista de restriccions d'un DICOMDumpDefaultTags
     QList<DICOMDumpDefaultTagsRestriction> getRestrictions() const;
 
@@ -48,7 +48,7 @@ public:
     /// Retorna la llista de Tags que s'ha de visualitzar per defecte per el SOPClassUID definit
     QList<DICOMTag> getTagsToShow() const;
 
-private:    
+private:
     QString m_SOPClassUID;
     QList<DICOMDumpDefaultTagsRestriction> m_restrictions;
     QList<DICOMTag> m_tagsToShow;

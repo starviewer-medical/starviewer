@@ -14,7 +14,7 @@ class DICOMTag;
   */
 class DICOMSequenceItem {
 
-public:    
+public:
     DICOMSequenceItem();
     ~DICOMSequenceItem();
 
@@ -40,7 +40,7 @@ public:
 
 private:
     /// Atribut per emmagatzemar els artributs que conté l'item. S'utilitza un QMap per optimitzar la cerca d'atributs.
-    QMap<QString,DICOMAttribute*> m_attributeList;
+    QMap<QString, DICOMAttribute*> m_attributeList;
 };
 
 }

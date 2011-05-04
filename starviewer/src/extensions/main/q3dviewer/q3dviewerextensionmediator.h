@@ -15,7 +15,7 @@ class Q3DViewerExtensionMediator : public ExtensionMediator
     Q_OBJECT
 public:
 
-    Q3DViewerExtensionMediator( QObject * parent = 0 );
+    Q3DViewerExtensionMediator(QObject * parent = 0);
     ~Q3DViewerExtensionMediator();
 
     virtual DisplayableID getExtensionID() const;
@@ -24,7 +24,7 @@ public:
 
 };
 
-static InstallExtension< Q3DViewerExtension, Q3DViewerExtensionMediator > registerQ3DViewerExtensionMediator;
+static InstallExtension<Q3DViewerExtension, Q3DViewerExtensionMediator> registerQ3DViewerExtensionMediator;
 
 }
 

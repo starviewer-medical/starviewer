@@ -13,7 +13,7 @@ VolumeBuilder::~VolumeBuilder()
 {
 }
 
-void VolumeBuilder::setSeriesDescription( QString description)
+void VolumeBuilder::setSeriesDescription(QString description)
 {
     m_seriesDescription = description;
 }

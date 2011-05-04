@@ -14,7 +14,7 @@ class DcmDataset;
 struct T_DIMSE_C_FindRQ;
 struct T_DIMSE_C_FindRSP;
 
-namespace udg{
+namespace udg {
 
 class DicomMask;
 class Patient;
@@ -33,7 +33,7 @@ public:
     ///Cerca els estudis que compleixin la màscara passada
     PACSRequestStatus::QueryRequestStatus query(DicomMask mask);
 
-    ///Indiquem que la consulta actual s'ha de cancel·lar. 
+    ///Indiquem que la consulta actual s'ha de cancel·lar.
     ///La cancel·lació de la query no es fa immediatament quan s'invoca el mètode, aquest mètode actualitza un flag, que cada vegada
     ///que rebem un element DICOM que compleix la màscara es comprova, si el flag indica que s'ha demanat cancel·lar llavors es
     ///cancel·la la query
@@ -44,7 +44,7 @@ public:
     QList<Image*> getQueryResultsAsImageList();
 
     ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
-    QHash<QString,QString> getHashTablePacsIDOfStudyInstanceUID();
+    QHash<QString, QString> getHashTablePacsIDOfStudyInstanceUID();
 
 private:
     ///fa el query al pacs
@@ -75,11 +75,11 @@ private:
     QList<Patient*> m_patientStudyList;
     QList<Series*> m_seriesList;
     QList<Image*> m_imageList;
-    /*TODO m_hashPacsIDOfStudyInstanceUID ara mateix no té gaire sentit perquè per defecte se li posa la ID del PACS el que fem la 
-      cerca, però podem tenir el cas que les consultes es facin a un PACS i que aquest ens indiqui que l'estudi es troba guardat en 
+    /*TODO m_hashPacsIDOfStudyInstanceUID ara mateix no té gaire sentit perquè per defecte se li posa la ID del PACS el que fem la
+      cerca, però podem tenir el cas que les consultes es facin a un PACS i que aquest ens indiqui que l'estudi es troba guardat en
       un altre PACS, tenir en compte per aquest cas que passa si tenim dos PACS amb el mateix nom
      */
-    QHash<QString,QString> m_hashPacsIDOfStudyInstanceUID; //Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
+    QHash<QString, QString> m_hashPacsIDOfStudyInstanceUID; //Fa un relació d'StudyInstanceUID amb el pacs al qual pertany
 
     bool m_cancelQuery;//flag que indica si s'ha de cancel·lar la query actual
     bool m_cancelRequestSent;//indica si hem demanat la cancel·lació de la consulta actual

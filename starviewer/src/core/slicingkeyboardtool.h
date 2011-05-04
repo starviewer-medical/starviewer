@@ -15,10 +15,10 @@ class SlicingKeyboardTool : public Tool {
 Q_OBJECT
 public:
 
-    SlicingKeyboardTool( QViewer *viewer, QObject *parent = 0 );
+    SlicingKeyboardTool(QViewer *viewer, QObject *parent = 0);
     ~SlicingKeyboardTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
 private:
     /// Ens guardem aquest punter per ser més còmode

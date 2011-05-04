@@ -15,12 +15,12 @@ namespace udg {
 template <class Extension, class Mediator>
 class InstallExtension
 {
-public:    
+public:
     InstallExtension()
     {
         Mediator m;
-        ExtensionFactoryRegister<Extension> registerFactory( m.getExtensionID().getID() );
-        ExtensionMediatorFactoryRegister<Mediator> registerMediator( m.getExtensionID().getID() );
+        ExtensionFactoryRegister<Extension> registerFactory(m.getExtensionID().getID());
+        ExtensionMediatorFactoryRegister<Mediator> registerMediator(m.getExtensionID().getID());
     }
 };
 

@@ -18,11 +18,11 @@ class Study;
 class Patient;
 
 /**
-    Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar. 
+    Aquesta classe respresenta un volum de dades. Aquesta serà la classe on es guardaran les dades que voldrem tractar.
     Ens donarà mètodes per poder obtenir les dades en el format que volguem: ITK, VTK, etc.
 
     Es pot inicialitzar amb dades de tipus itk o vtk amb el mètode \c setData() .
-    Per raons d'eficiència, com que el programa principalment el que farà serà visualitzar es retindran les dades en format natiu vtk. 
+    Per raons d'eficiència, com que el programa principalment el que farà serà visualitzar es retindran les dades en format natiu vtk.
     Només es convertiran a itk quan es demanin explícitament.
 */
 class Volume : public QObject {
@@ -57,7 +57,7 @@ public:
     bool isPixelDataLoaded() const;
 
     /// Obté l'origen del volum
-    void getOrigin(double  xyz[3]);
+    void getOrigin(double xyz[3]);
     double* getOrigin();
 
     /// Obté l'espaiat del model al llarg dels eixos
@@ -74,8 +74,8 @@ public:
 
     /// Ens retornar el rang de valors del volum (valor mínim i màxim).
     void getScalarRange(double range[2]);
-    
-    /// Assigna/Retorna l'identificador del volum. 
+
+    /// Assigna/Retorna l'identificador del volum.
     void setIdentifier(const Identifier &id);
     Identifier getIdentifier() const;
 
@@ -144,9 +144,9 @@ public:
     bool fitsIntoMemory();
 
     /// S'encarrega de convertir el volum a un volum "de mínims" per donar un output en casos que
-    /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un 
+    /// ens quedem sense memòria o ens trobem amb altres problemes. Vindria a ser un
     /// volum neutre per evitar que l'aplicació peti en casos d'error no controlats
-    /// TODO Aquest mètode potser s'hauria de transformar en una subclasse de Volume que 
+    /// TODO Aquest mètode potser s'hauria de transformar en una subclasse de Volume que
     /// únicament creïi aquest tipu de volum
     void convertToNeutralVolume();
 

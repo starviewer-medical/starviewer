@@ -57,7 +57,7 @@ void WindowLevelPresetsToolData::removePreset(const QString &description)
 void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
 {
     QMutableMapIterator<QString, WindowLevelStruct> iterator(m_presets);
-    while(iterator.hasNext())
+    while (iterator.hasNext())
     {
         iterator.next();
         if (iterator.value().m_group == group)
@@ -105,8 +105,8 @@ bool WindowLevelPresetsToolData::getGroup(const QString &description, int &group
 QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup(int group)
 {
     QStringList descriptionList;
-    QMapIterator< QString, WindowLevelStruct > iterator(m_presets);
-    while(iterator.hasNext())
+    QMapIterator<QString, WindowLevelStruct> iterator(m_presets);
+    while (iterator.hasNext())
     {
         iterator.next();
         if (iterator.value().m_group == group)
@@ -149,7 +149,7 @@ void WindowLevelPresetsToolData::activatePreset(const QString &preset)
 
 void WindowLevelPresetsToolData::loadCustomWindowLevelPresets()
 {
-    foreach(CustomWindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
+    foreach (CustomWindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
         addPreset(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getLevel(), UserDefined);
     }

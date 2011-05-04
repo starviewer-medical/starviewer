@@ -7,8 +7,8 @@
 
 namespace udg {
 
-VtkThresholdFilter::VtkThresholdFilter( )
-: Filter( )
+VtkThresholdFilter::VtkThresholdFilter()
+: Filter()
 {
     imageThreshold = vtkImageThreshold::New();
 
@@ -29,7 +29,7 @@ void VtkThresholdFilter::thresholdByLower (float thresh)
 }
 void VtkThresholdFilter::thresholdBetween (float lower, float upper)
 {
-    imageThreshold->ThresholdBetween(lower,upper);
+    imageThreshold->ThresholdBetween(lower, upper);
 }
 void VtkThresholdFilter::setInValue (double val)
 {
@@ -44,8 +44,8 @@ void VtkThresholdFilter::update()
 {
     imageThreshold->Update();
     m_outputVolume = new Volume();
-    m_outputVolume->setImages( m_inputVolume->getImages() );
-    m_outputVolume->setData( imageThreshold->GetOutput() );    
+    m_outputVolume->setImages(m_inputVolume->getImages());
+    m_outputVolume->setData(imageThreshold->GetOutput());
 
 }
 void VtkThresholdFilter::setInput(Volume * input)

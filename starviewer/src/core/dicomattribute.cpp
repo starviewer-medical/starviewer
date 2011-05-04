@@ -1,7 +1,6 @@
 #include "dicomattribute.h"
 #include "dicomtag.h"
 
-
 namespace udg {
 
 DICOMAttribute::DICOMAttribute()
@@ -24,6 +23,5 @@ DICOMTag* DICOMAttribute::getTag()
 {
     return m_tag;
 }
-
 
 }

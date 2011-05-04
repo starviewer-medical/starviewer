@@ -9,12 +9,12 @@ class DVPresentationState;
 class DVPSAnnotationContent_PList;
 
 namespace udg
-{ 
+{
 class Image;
 
 class CreateDicomPrintSpool
 {
- public:
+public:
 
     enum CreateDicomPrintSpoolError { ErrorLoadingImageToPrint, ErrorCreatingImageSpool, Ok };
 
@@ -22,7 +22,7 @@ class CreateDicomPrintSpool
 
     CreateDicomPrintSpool::CreateDicomPrintSpoolError getLastError();
 
- private:
+private:
 
     bool transformImageForPrinting(Image *image, const QString &spoolDirectoryPath);
 

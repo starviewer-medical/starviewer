@@ -113,7 +113,7 @@ vtkProp* DrawerPolyline::getAsVtkProp()
 
 void DrawerPolyline::update()
 {
-    switch(m_internalRepresentation)
+    switch (m_internalRepresentation)
     {
     case VTKRepresentation:
         updateVtkProp();
@@ -226,7 +226,7 @@ double DrawerPolyline::getDistanceToPoint(double *point3D, double closestPoint[3
             ++i;
         }
     }
-    
+
     return minimumDistanceFound;
 }
 

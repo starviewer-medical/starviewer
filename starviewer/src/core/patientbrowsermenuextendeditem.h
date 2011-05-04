@@ -16,10 +16,10 @@ public:
     ~PatientBrowserMenuExtendedItem();
 
     // Tractament dels events
-    bool event( QEvent * event );
+    bool event(QEvent * event);
 
-    void setPixmap( const QPixmap &pixmap );
-    void setText( const QString &text );
+    void setPixmap(const QPixmap &pixmap);
+    void setText(const QString &text);
 
 signals:
     /// Signal que s'emet quan es rep l'event de tancar el menu

@@ -55,7 +55,7 @@ private:
 
     /// Actor que dibuixa la llavor
     vtkActor *m_pointActor;
-    
+
     /// Esfera que representa en punt de la llavor
     vtkSphereSource *m_pointSphere;
 

@@ -35,10 +35,10 @@ class Q3DViewer : public QViewer{
 Q_OBJECT
 public:
     enum RenderFunction{ RayCasting, RayCastingObscurance,
-                         MIP3D, IsoSurface , Texture2D , Texture3D, Contouring };
+                         MIP3D, IsoSurface, Texture2D, Texture3D, Contouring };
     enum ObscuranceQuality { Low, Medium, High };
 
-    Q3DViewer( QWidget *parent = 0 );
+    Q3DViewer(QWidget *parent = 0);
     ~Q3DViewer();
 
     /// retorna el tipu de visualització que es té assignat
@@ -50,20 +50,20 @@ public:
     /// Obté el window level actual de la imatge
     double getCurrentColorWindow();
     double getCurrentColorLevel();
-    void getCurrentWindowLevel( double wl[2] );
+    void getCurrentWindowLevel(double wl[2]);
 
-    void resetView( CameraOrientationType view );
+    void resetView(CameraOrientationType view);
 
     /// Determina la bounding box que definex els plans de tall del volum
-    void setClippingPlanes( vtkPlanes *clippingPlanes );
+    void setClippingPlanes(vtkPlanes *clippingPlanes);
     /// Obté els plans de tall que s'han definit sobre el volum
     vtkPlanes *getClippingPlanes() const;
 
     /// Retorna els bounds del vtkVolume.
     void getVolumeBounds(double bounds[6]) const;
-    
+
 public slots:
-    virtual void setInput( Volume* volume );
+    virtual void setInput(Volume* volume);
 
     /// assignem el tipus de visualització 3D que volem. RayCasting, MIP, reconstrucció de superfícies...
     void setRenderFunction(RenderFunction function);
@@ -80,7 +80,7 @@ public slots:
     void resetViewToCoronal();
 
     /// mètodes per controlar la visibilitat de l'orientation marker widget
-    void enableOrientationMarker( bool enable );
+    void enableOrientationMarker(bool enable);
     void orientationMarkerOn();
     void orientationMarkerOff();
 
@@ -88,39 +88,39 @@ public slots:
     void applyCurrentRenderingMethod();
 
     void setTransferFunction(TransferFunction *transferFunction);
-    void setWindowLevel( double window , double level );
-    void setNewTransferFunction( );
+    void setWindowLevel(double window, double level);
+    void setNewTransferFunction();
 
     /// Paràmetres d'il·luminació.
-    void setShading( bool on );
-    void setSpecular( bool on );
-    void setSpecularPower( double power );
+    void setShading(bool on);
+    void setSpecular(bool on);
+    void setSpecularPower(double power);
 
     /// Paràmetres de contorns.
-    void setContour( bool on );
-    void setContourThreshold( double threshold );
+    void setContour(bool on);
+    void setContourThreshold(double threshold);
 
     /// Càlcul d'obscurances.
-    void computeObscurance( ObscuranceQuality quality );
+    void computeObscurance(ObscuranceQuality quality);
     void cancelObscurance();
 
     /// Paràmetres d'obscurances.
-    void setObscurance( bool on );
-    void setObscuranceFactor( double factor );
+    void setObscurance(bool on);
+    void setObscuranceFactor(double factor);
 
     /// Paràmetres d'isosuperfícies.
-    void setIsoValue( int isoValue );
+    void setIsoValue(int isoValue);
 
 signals:
     /// TODO documentar els signals
-    void obscuranceProgress( int progress );
+    void obscuranceProgress(int progress);
     void obscuranceComputed();
     /// Es llança quan les obscurances són cancel·lades pel programa (no per l'usuari).
     void obscuranceCancelledByProgram();
     /// Informa del rang de valors del volum quan aquest canvia.
-    void scalarRange( double min, double max );
+    void scalarRange(double min, double max);
     /// indica el nou window level
-    void windowLevelChanged( double window , double level );
+    void windowLevelChanged(double window, double level);
     void transferFunctionChanged ();
 
 private:
@@ -152,18 +152,18 @@ private:
     void resetOrientation();
 
     /// S'encarrega de decidir quina és la millor orientació
-    /// depenent del tipus d'input que tenim. Generalment serà 
+    /// depenent del tipus d'input que tenim. Generalment serà
     /// Coronal, però depenent del tipus de Sèrie podria ser una altra
     void setDefaultOrientationForCurrentInput();
 
     /// Comprova si el volum és vàlid com a input. Retorna cert si és així, fals altrament
-    bool checkInputVolume( Volume *volume );
-    
+    bool checkInputVolume(Volume *volume);
+
     /// Retorna cert si és possible reservar la quantitat de memòria especificada.
-    bool canAllocateMemory( int size );
+    bool canAllocateMemory(int size);
 
     /// Retorna cert si és el volum que volem visualitzar té un format compatible.
-    bool isSupportedVolume( Volume *volume );
+    bool isSupportedVolume(Volume *volume);
 
 private slots:
     // TODO falta documentar el mètode

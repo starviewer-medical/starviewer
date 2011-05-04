@@ -31,16 +31,16 @@ public:
 
 public slots:
     /// Per canviar les dades de sincronitzacio de llesques
-    void setIncrement( double value );
+    void setIncrement(double value);
 
     /// Per canviar les dades de sincronitzacio del window level
-    void setWindowLevel( double window, double level );
+    void setWindowLevel(double window, double level);
 
     /// Per canviar les dades de sincronitzacio del factor de zoom
-    void setZoomFactor( double factor );
+    void setZoomFactor(double factor);
 
     /// Per canviar les dades de sincronitzacio del pan
-    void setPan( double motionVector[3] );
+    void setPan(double motionVector[3]);
 
 signals:
     /// Signal que s'emet quan les dades de l'increment de llesca canvien

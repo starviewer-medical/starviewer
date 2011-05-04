@@ -4,7 +4,7 @@
 #include "inputoutputsettings.h"
 #include <QStringList>
 
-namespace udg{
+namespace udg {
 
 PacsDevice::PacsDevice()
 {
@@ -76,29 +76,29 @@ void PacsDevice::setDefault(bool isDefault)
 {
     QStringList pacsList = getDefaultPACSKeyNamesList();
     QString keyName = getKeyName();
-    if( isDefault ) // afegir
+    if (isDefault) // afegir
     {
-        if( !pacsList.contains( keyName ) ) // si no està marcat ja
+        if (!pacsList.contains(keyName)) // si no està marcat ja
         {
             Settings settings;
-            QString value = settings.getValue( InputOutputSettings::DefaultPACSListToQuery ).toString();
+            QString value = settings.getValue(InputOutputSettings::DefaultPACSListToQuery).toString();
             value += keyName + "//";
-            settings.setValue( InputOutputSettings::DefaultPACSListToQuery, value );
+            settings.setValue(InputOutputSettings::DefaultPACSListToQuery, value);
         }
     }
     else // eliminar
     {
         Settings settings;
-        QString value = settings.getValue( InputOutputSettings::DefaultPACSListToQuery ).toString();
-        value.remove( keyName + "//" );
-        settings.setValue( InputOutputSettings::DefaultPACSListToQuery, value );
+        QString value = settings.getValue(InputOutputSettings::DefaultPACSListToQuery).toString();
+        value.remove(keyName + "//");
+        settings.setValue(InputOutputSettings::DefaultPACSListToQuery, value);
     }
 }
 
 bool PacsDevice::isDefault() const
 {
     QStringList pacsList = getDefaultPACSKeyNamesList();
-    if( pacsList.contains( getKeyName() ) )
+    if (pacsList.contains(getKeyName()))
         return true;
     else
         return false;
@@ -113,7 +113,6 @@ QString PacsDevice::getID() const
 {
     return m_id;
 }
-
 
 ///Assigna/Retorna si podem fer consultes/descarregues al PACS
 void PacsDevice::setQueryRetrieveServiceEnabled(bool isQueryRetrieveServiceEnabled)
@@ -148,12 +147,12 @@ int PacsDevice::getStoreServicePort() const
 
 bool PacsDevice::isEmpty() const
 {
-    if( m_AETitle.isEmpty() &&
+    if (m_AETitle.isEmpty() &&
         m_address.isEmpty() &&
         m_description.isEmpty() &&
         m_institution.isEmpty() &&
         m_location.isEmpty() &&
-        m_id.isEmpty() )
+        m_id.isEmpty())
     {
         return true;
     }
@@ -185,40 +184,39 @@ QString PacsDevice::getKeyName() const
 QStringList PacsDevice::getDefaultPACSKeyNamesList() const
 {
     Settings settings;
-    QString value = settings.getValue( InputOutputSettings::DefaultPACSListToQuery ).toString();
-    QStringList pacsList = value.split("//",QString::SkipEmptyParts);
+    QString value = settings.getValue(InputOutputSettings::DefaultPACSListToQuery).toString();
+    QStringList pacsList = value.split("//", QString::SkipEmptyParts);
 
-    if( pacsList.isEmpty() )
+    if (pacsList.isEmpty())
     {
         // Migració de dades. Si encara no tenim definits els PACS per defecte en el nou format, obtenim els PACS per defecte
         // del format antic, és a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
         // Un cop llegits, els escrivim en el nou format
         Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
-        foreach( Settings::KeyValueMapType item, list )
-        {             
-            if( item.contains(".") )// El camp "default" té aquesta clau
+        foreach (Settings::KeyValueMapType item, list)
+        {
+            if (item.contains("."))// El camp "default" té aquesta clau
             {
-                if( item.value(".").toString() == "S" )
+                if (item.value(".").toString() == "S")
                 {
                     // Hem de fer servir els mateixos camps i format que al mètode PacsDevice::getKeyName()
                     pacsList << item.value("AETitle").toString() + item.value("PacsHostname").toString() + ":" + item.value("PacsPort").toString();
                 }
             }
         }
-        if( pacsList.isEmpty() )
+        if (pacsList.isEmpty())
         {
             INFO_LOG("No hi ha PACS per defecte definits en el nou format i tampoc s'han trobat de definits en l'antic format");
         }
         else
         {
-            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. Són aquests: " + pacsList.join("//") + "//" );
+            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. Són aquests: " + pacsList.join("//") + "//");
             Settings settings;
-            settings.setValue( InputOutputSettings::DefaultPACSListToQuery, pacsList.join("//") + "//" );
+            settings.setValue(InputOutputSettings::DefaultPACSListToQuery, pacsList.join("//") + "//");
         }
     }
-    
+
     return pacsList;
 }
 
 }
-

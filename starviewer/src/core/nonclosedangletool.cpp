@@ -11,45 +11,45 @@
 
 namespace udg {
 
-NonClosedAngleTool::NonClosedAngleTool( QViewer *viewer, QObject *parent )
+NonClosedAngleTool::NonClosedAngleTool(QViewer *viewer, QObject *parent)
  : Tool(viewer, parent), m_firstLine(0), m_secondLine(0), m_state(None), m_lineState(NoPoints)
 {
     m_toolName = "NonClosedAngleTool";
     m_hasSharedData = false;
 
-    m_2DViewer = qobject_cast<Q2DViewer *>( viewer );
-    if( !m_2DViewer )
-        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className() );
+    m_2DViewer = qobject_cast<Q2DViewer *>(viewer);
+    if (!m_2DViewer)
+        DEBUG_LOG(QString("El casting no ha funcionat!!! És possible que viewer no sigui un Q2DViewer!!!-> ")+ viewer->metaObject()->className());
 
-    connect( m_2DViewer, SIGNAL( volumeChanged(Volume *) ), SLOT( initialize() ) );
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(initialize()));
 }
 
 NonClosedAngleTool::~NonClosedAngleTool()
 {
     bool hasToRefresh = false;
-    // Cal decrementar el reference count perquè 
+    // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
-    if ( m_firstLine )
+    if (m_firstLine)
     {
         m_firstLine->decreaseReferenceCount();
         delete m_firstLine;
         hasToRefresh = true;
     }
-    
-    if ( m_secondLine )
+
+    if (m_secondLine)
     {
         m_secondLine->decreaseReferenceCount();
         delete m_secondLine;
         hasToRefresh = true;
     }
 
-    if( hasToRefresh )
+    if (hasToRefresh)
         m_2DViewer->render();
 }
 
-void NonClosedAngleTool::handleEvent( long unsigned eventID )
+void NonClosedAngleTool::handleEvent(long unsigned eventID)
 {
-    switch( eventID )
+    switch (eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
             handlePointAddition();
@@ -63,13 +63,13 @@ void NonClosedAngleTool::handleEvent( long unsigned eventID )
 
 void NonClosedAngleTool::handlePointAddition()
 {
-    if( m_2DViewer->getInput() )
+    if (m_2DViewer->getInput())
     {
-        if ( m_2DViewer->getInteractor()->GetRepeatCount() == 0 )
+        if (m_2DViewer->getInteractor()->GetRepeatCount() == 0)
         {
             this->annotateLinePoints();
 
-            if ( m_state == SecondLineFixed )
+            if (m_state == SecondLineFixed)
             {
                 computeAngle();
                 // Així alliberem les primitives perquè puguin ser esborrades
@@ -93,43 +93,43 @@ void NonClosedAngleTool::annotateLinePoints()
     DrawerLine *line;
 
     // Creem primera o segona línies
-    if ( ( m_state == None && m_lineState == NoPoints ) ||
-        ( m_state == FirstLineFixed && m_lineState == NoPoints ) )
+    if ((m_state == None && m_lineState == NoPoints) ||
+        (m_state == FirstLineFixed && m_lineState == NoPoints))
     {
         line = new DrawerLine;
         // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
         line->increaseReferenceCount();
     }
-    else if ( m_state == None )
+    else if (m_state == None)
         line = m_firstLine;
     else
         line = m_secondLine;
 
     double clickedWorldPoint[3];
-    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
+    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
 
     // Afegim el punt
-    if( m_lineState == NoPoints )
+    if (m_lineState == NoPoints)
     {
-        line->setFirstPoint( clickedWorldPoint );
-        line->setSecondPoint( clickedWorldPoint );
+        line->setFirstPoint(clickedWorldPoint);
+        line->setSecondPoint(clickedWorldPoint);
         m_lineState = FirstPoint;
 
-        if ( m_state == None )
+        if (m_state == None)
             m_firstLine = line;
         else
             m_secondLine = line;
 
-        m_2DViewer->getDrawer()->draw( line , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+        m_2DViewer->getDrawer()->draw(line, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
     else
     {
-        line->setSecondPoint( clickedWorldPoint );
+        line->setSecondPoint(clickedWorldPoint);
         line->update();
 
         m_lineState = NoPoints;
 
-        if ( m_state == None )
+        if (m_state == None)
             m_state = FirstLineFixed;
         else
             m_state = SecondLineFixed;
@@ -138,17 +138,17 @@ void NonClosedAngleTool::annotateLinePoints()
 
 void NonClosedAngleTool::handleLineDrawing()
 {
-    if( m_firstLine && m_state == None )
+    if (m_firstLine && m_state == None)
         this->simulateLine(m_firstLine);
-    else if ( m_secondLine && m_state == FirstLineFixed )
+    else if (m_secondLine && m_state == FirstLineFixed)
         this->simulateLine(m_secondLine);
 }
 
 void NonClosedAngleTool::simulateLine(DrawerLine *line)
 {
     double clickedWorldPoint[3];
-    m_2DViewer->getEventWorldCoordinate( clickedWorldPoint );
-    line->setSecondPoint( clickedWorldPoint );
+    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
+    line->setSecondPoint(clickedWorldPoint);
     // Actualitzem viewer
     line->update();
     m_2DViewer->render();
@@ -156,7 +156,7 @@ void NonClosedAngleTool::simulateLine(DrawerLine *line)
 
 void NonClosedAngleTool::computeAngle()
 {
-    if ( !m_middleLine )
+    if (!m_middleLine)
     {
         m_middleLine = new DrawerLine;
         // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
@@ -174,7 +174,7 @@ void NonClosedAngleTool::computeAngle()
     double *intersection;
     int state;
 
-    intersection = MathTools::infiniteLinesIntersection(p1,p2,p3,p4,state);
+    intersection = MathTools::infiniteLinesIntersection(p1, p2, p3, p4, state);
 
     double dist1, dist2, dist3, dist4;
     dist1 = MathTools::getDistance3D(intersection, p1);
@@ -182,81 +182,81 @@ void NonClosedAngleTool::computeAngle()
     dist3 = MathTools::getDistance3D(intersection, p3);
     dist4 = MathTools::getDistance3D(intersection, p4);
 
-    // Per calcular el vectors directors farem servir la intersecció i el punt 
+    // Per calcular el vectors directors farem servir la intersecció i el punt
     // més llunyà a la intersecció de cada recta ja que si per alguna casualitat
-    // l'usuari fa coincidir un dels punts de cada recta, la distància seria de 0 
-    // i com a conseqüència l'angle calculat ens sortiria Nan 
-    if ( dist1 <= dist2 )
+    // l'usuari fa coincidir un dels punts de cada recta, la distància seria de 0
+    // i com a conseqüència l'angle calculat ens sortiria Nan
+    if (dist1 <= dist2)
     {
-        if ( dist3 <= dist4 )
+        if (dist3 <= dist4)
         {
-            vd1 = MathTools::directorVector( p2, intersection );
-            vd2 = MathTools::directorVector( p4, intersection );
+            vd1 = MathTools::directorVector(p2, intersection);
+            vd2 = MathTools::directorVector(p4, intersection);
             m_middleLine->setFirstPoint(p1);
             m_middleLine->setSecondPoint(p3);
         }
         else
         {
-            vd1 = MathTools::directorVector( p2, intersection );
-            vd2 = MathTools::directorVector( p3, intersection );
+            vd1 = MathTools::directorVector(p2, intersection);
+            vd2 = MathTools::directorVector(p3, intersection);
             m_middleLine->setFirstPoint(p1);
             m_middleLine->setSecondPoint(p4);
         }
     }
     else
     {
-        if ( dist3 <= dist4 )
+        if (dist3 <= dist4)
         {
-            vd1 = MathTools::directorVector( p1, intersection );
-            vd2 = MathTools::directorVector( p4, intersection );
+            vd1 = MathTools::directorVector(p1, intersection);
+            vd2 = MathTools::directorVector(p4, intersection);
             m_middleLine->setFirstPoint(p2);
             m_middleLine->setSecondPoint(p3);
         }
         else
         {
-            vd1 = MathTools::directorVector( p1, intersection );
-            vd2 = MathTools::directorVector( p3, intersection );
+            vd1 = MathTools::directorVector(p1, intersection);
+            vd2 = MathTools::directorVector(p3, intersection);
             m_middleLine->setFirstPoint(p2);
             m_middleLine->setSecondPoint(p4);
         }
     }
 
     // Dibuixem la línia auxiliar
-    m_2DViewer->getDrawer()->draw( m_middleLine , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    m_2DViewer->getDrawer()->draw(m_middleLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
     for (int i = 0; i < 3; i++)
     {
-        if ( fabs( vd1[i] ) < 0.0001 )
+        if (fabs(vd1[i]) < 0.0001)
             vd1[i] = 0.0;
 
-        if ( fabs( vd2[i] ) < 0.0001 )
+        if (fabs(vd2[i]) < 0.0001)
             vd2[i] = 0.0;
     }
 
-    double angle = MathTools::angleInDegrees( vd1, vd2 );
+    double angle = MathTools::angleInDegrees(vd1, vd2);
 
     DrawerText * text = new DrawerText;
 
-    if ( state == MathTools::ParallelLines )
-        text->setText( tr("0.0 degrees") );
-    else if ( state == MathTools::SkewIntersection )   //Won't occur
-        text->setText( tr("Skew lines.") );
+    if (state == MathTools::ParallelLines)
+        text->setText(tr("0.0 degrees"));
+    else if (state == MathTools::SkewIntersection)   //Won't occur
+        text->setText(tr("Skew lines."));
     else
-        text->setText( tr("%1 degrees").arg( angle,0,'f',1) );
+        text->setText(tr("%1 degrees").arg(angle, 0, 'f', 1));
 
-    textPosition( m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text );
+    textPosition(m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text);
     text->shadowOn();
-    m_2DViewer->getDrawer()->draw( text , m_2DViewer->getView(), m_2DViewer->getCurrentSlice() );
+    m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 }
 
-void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angleText )
+void NonClosedAngleTool::textPosition(double *p1, double *p2, DrawerText *angleText)
 {
     double position[3];
     int horizontalCoord, verticalCoord, zCoordinate;
 
-    Q2DViewer::getXYZIndexesForView( horizontalCoord, verticalCoord, zCoordinate, m_2DViewer->getView() );
-    position[horizontalCoord] = ( p1[horizontalCoord] + p2[horizontalCoord] ) / 2.0;
-    position[verticalCoord] = ( p1[verticalCoord] + p2[verticalCoord] ) / 2.0;
+    Q2DViewer::getXYZIndexesForView(horizontalCoord, verticalCoord, zCoordinate, m_2DViewer->getView());
+    position[horizontalCoord] = (p1[horizontalCoord] + p2[horizontalCoord]) / 2.0;
+    position[verticalCoord] = (p1[verticalCoord] + p2[verticalCoord]) / 2.0;
     position[zCoordinate] = p1[zCoordinate];
 
     angleText->setAttachmentPoint(position);
@@ -265,18 +265,18 @@ void NonClosedAngleTool::textPosition( double *p1, double *p2, DrawerText *angle
 void NonClosedAngleTool::initialize()
 {
     // Alliberem les primitives perquè puguin ser esborrades
-    if( m_firstLine )
+    if (m_firstLine)
     {
         m_firstLine->decreaseReferenceCount();
         delete m_firstLine;
     }
-    
-    if( m_secondLine )
+
+    if (m_secondLine)
     {
         m_secondLine->decreaseReferenceCount();
         delete m_secondLine;
     }
-    
+
     m_firstLine = NULL;
     m_secondLine = NULL;
     m_state = None;

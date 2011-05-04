@@ -61,7 +61,6 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool highlightOnl
 
     QListIterator<QString> wordsIterator(textToSearch.split(QRegExp("\\s+"), QString::SkipEmptyParts));
 
-
     QTreeWidgetItemIterator iterator(m_tagsListQTree);
     while (*iterator)
     {
@@ -110,7 +109,6 @@ void QDICOMDumpBrowser::searchTag(const QString &textToSearch, bool highlightOnl
     }
 }
 
-
 void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
 {
     if (currentImage->getPath() != m_lastImagePathDICOMDumpDisplayed)
@@ -126,7 +124,7 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
         bool ok = dicomReader.setFile(currentImage->getPath());
 
         if (ok)
-        {	
+        {
             bool resizeColumnsToContents = m_tagsListQTree->topLevelItemCount() == 0;
 
             initializeQTrees(dicomReader);
@@ -141,11 +139,10 @@ void QDICOMDumpBrowser::setCurrentDisplayedImage(Image *currentImage)
 
             updateSearch();
         }
-        
-        m_lastImagePathDICOMDumpDisplayed  = currentImage->getPath();
+
+        m_lastImagePathDICOMDumpDisplayed = currentImage->getPath();
     }
 }
-
 
 void QDICOMDumpBrowser::addLeaf(QTreeWidgetItem *trunkTreeItem, DICOMValueAttribute *value)
 {
@@ -153,7 +150,7 @@ void QDICOMDumpBrowser::addLeaf(QTreeWidgetItem *trunkTreeItem, DICOMValueAttrib
     leafTreeItem->setText(0, value->getTag()->getName());
     leafTreeItem->setText(1, value->getTag()->getKeyAsQString());
     leafTreeItem->setText(2, value->getValueAsQString());
-    
+
     trunkTreeItem->addChild(leafTreeItem);
 }
 
@@ -280,9 +277,9 @@ DICOMDumpDefaultTags* QDICOMDumpBrowser::getDICOMDumpDefaultTags(const DICOMTagR
     DICOMDumpDefaultTags* candidate = NULL;
     QList<DICOMDumpDefaultTags*> possiblesCandidatesList = DICOMDumpDefaultTagsRepository::getRepository()->getItems();
 
-    foreach(DICOMDumpDefaultTags* possibleCandidate, possiblesCandidatesList)
+    foreach (DICOMDumpDefaultTags* possibleCandidate, possiblesCandidatesList)
     {
-        if(uidReference == possibleCandidate->getSOPClassUID())
+        if (uidReference == possibleCandidate->getSOPClassUID())
         {
             QListIterator<DICOMDumpDefaultTagsRestriction> iterator(possibleCandidate->getRestrictions());
             bool isPossibleCandidate = true;
@@ -296,7 +293,7 @@ DICOMDumpDefaultTags* QDICOMDumpBrowser::getDICOMDumpDefaultTags(const DICOMTagR
 
             if (isPossibleCandidate)
             {
-                if(candidate == NULL || candidate->getNumberOfRestrictions() < possibleCandidate->getNumberOfRestrictions())
+                if (candidate == NULL || candidate->getNumberOfRestrictions() < possibleCandidate->getNumberOfRestrictions())
                 {
                     candidate = possibleCandidate;
                 }

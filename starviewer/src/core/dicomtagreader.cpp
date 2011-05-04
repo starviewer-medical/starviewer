@@ -89,8 +89,8 @@ void DICOMTagReader::setDcmDataset(const QString &filename, DcmDataset *dcmDatas
     Q_ASSERT(dcmDataset);
 
     m_filename = filename;
-    // Assumim que sempre serà un fitxer vàlid. 
-    /// TODO Cal fer alguna validació en aquests casos? 
+    // Assumim que sempre serà un fitxer vàlid.
+    /// TODO Cal fer alguna validació en aquests casos?
     // Potser en aquests casos el filename hauria de ser sempre buit ja que així expressem
     // explícitament que llegim un element de memòria
     m_hasValidFile = true;
@@ -109,7 +109,7 @@ bool DICOMTagReader::tagExists(const DICOMTag &tag) const
 {
     if (m_dicomData)
     {
-        return m_dicomData->tagExists(DcmTagKey(tag.getGroup(),tag.getElement()));
+        return m_dicomData->tagExists(DcmTagKey(tag.getGroup(), tag.getElement()));
     }
     else
     {
@@ -127,7 +127,7 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
     }
 
     // Convertim DICOMTag al format de dcmtk
-    DcmTagKey dcmtkTag(tag.getGroup(),tag.getElement());
+    DcmTagKey dcmtkTag(tag.getGroup(), tag.getElement());
     QString result;
 
     OFString value;
@@ -153,11 +153,11 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
     if (!m_dicomData)
     {
         DEBUG_LOG("No hi ha cap m_dicomData (DcmDataset) carregat. Tornem string-list buida.");
-        return NULL; 
+        return NULL;
     }
     // Convertim els DICOMTag al format de dcmtk, que serà qui farà la feina
     DcmTagKey dcmtkSequenceTag(sequenceTag.getGroup(), sequenceTag.getElement());
-    
+
     QStringList result;
     // obtenim els atributs de cada item d'una seqüència de "primer nivell"
     DcmSequenceOfItems *sequence = NULL;
@@ -181,7 +181,7 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
 {
     DICOMSequenceAttribute *sequenceAttribute = new DICOMSequenceAttribute();
 
-    sequenceAttribute->setTag(DICOMTag(dcmtkSequence->getGTag(),dcmtkSequence->getETag()));
+    sequenceAttribute->setTag(DICOMTag(dcmtkSequence->getGTag(), dcmtkSequence->getETag()));
 
     for (unsigned int i = 0; i < dcmtkSequence->card(); i++)
     {
@@ -190,15 +190,15 @@ DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSeque
         for (unsigned int j = 0; j < dcmtkItem->card(); j++)
         {
             DcmElement *element = dcmtkItem->getElement(j);
-            
+
             if (!element->isLeaf()) // És una Sequence of Items
             {
-                dicomItem->addAttribute(convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*,element), returnValueOfTags));
+                dicomItem->addAttribute(convertToDICOMSequenceAttribute(OFstatic_cast(DcmSequenceOfItems*, element), returnValueOfTags));
             }
-            else 
+            else
             {
                 DICOMValueAttribute *dicomValueAttribute = convertToDICOMValueAttribute(element, returnValueOfTags);
-            
+
                 if (dicomValueAttribute != NULL)
                 {
                     dicomItem->addAttribute(dicomValueAttribute);
@@ -216,8 +216,7 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
     DICOMValueAttribute *dicomValueAttribute = new DICOMValueAttribute();
     dicomValueAttribute->setTag(DICOMTag(dcmtkDICOMElement->getGTag(), dcmtkDICOMElement->getETag()));
 
-
-    if (returnValueOfTags != DICOMTagReader::ExcludeHeavyTags ||  
+    if (returnValueOfTags != DICOMTagReader::ExcludeHeavyTags ||
         (dcmtkDICOMElement->getTag() != DcmTag(DCM_PixelData) && dcmtkDICOMElement->getTag() != DcmTag(DCM_OverlayData)))
     {
         OFString value;
@@ -230,7 +229,7 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
         else if (QString(status.text()) != "Tag Not Found")
         {
             dicomValueAttribute->setValue(QString("Unreadable tag value: %1").arg(status.text()));
-            INFO_LOG(QString("S'ha produit el seguent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkDICOMElement->getTag().toString().c_str() ).arg(status.text()));
+            INFO_LOG(QString("S'ha produit el seguent problema a l'intentar obtenir el tag %1 :: %2").arg(dcmtkDICOMElement->getTag().toString().c_str()).arg(status.text()));
         }
     }
 
@@ -255,7 +254,7 @@ QList<DICOMAttribute*> DICOMTagReader::convertToDICOMAttributeQList(DcmItem *dcm
         else
         {
             DICOMValueAttribute *dicomValueAttribute = convertToDICOMValueAttribute(currentElement, returnValueOfTags);
-            
+
             if (dicomValueAttribute != NULL)
             {
                 attributeList.append(dicomValueAttribute);

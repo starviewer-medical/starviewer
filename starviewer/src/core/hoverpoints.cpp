@@ -74,7 +74,7 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
 
                 QPointF clickPos = me->pos();
                 int index = -1;
-                for (int i=0; i<m_points.size(); ++i) {
+                for (int i = 0; i < m_points.size(); ++i) {
                     QPainterPath path;
                     if (m_shape == CircleShape)
                     {
@@ -101,13 +101,13 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
                         int pos = 0;
                         // Insert sort for x or y
                         if (m_sortType == XSort) {
-                            for (int i=0; i<m_points.size(); ++i)
+                            for (int i = 0; i < m_points.size(); ++i)
                                 if (m_points.at(i).x() > clickPos.x()) {
                                     pos = i;
                                     break;
                                 }
                         } else if (m_sortType == YSort) {
-                            for (int i=0; i<m_points.size(); ++i)
+                            for (int i = 0; i < m_points.size(); ++i)
                                 if (m_points.at(i).y() > clickPos.y()) {
                                     pos = i;
                                     break;
@@ -148,12 +148,12 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
 
         case QEvent::Resize:
             {
-                if ( m_widget->isVisible() )
+                if (m_widget->isVisible())
                 {
                     QResizeEvent *e = (QResizeEvent *) event;
                     double stretch_x = e->size().width() / double(e->oldSize().width());
                     double stretch_y = e->size().height() / double(e->oldSize().height());
-                    for (int i=0; i<m_points.size(); ++i) {
+                    for (int i = 0; i < m_points.size(); ++i) {
                         QPointF p = m_points[i];
                         movePoint(i, QPointF(p.x() * stretch_x, p.y() * stretch_y), false);
                     }
@@ -168,16 +168,16 @@ bool HoverPoints::eventFilter(QObject *object, QEvent *event)
 
         case QEvent::Show:
             {
-                if ( m_width != m_widget->width() || m_height != m_widget->height() )
+                if (m_width != m_widget->width() || m_height != m_widget->height())
                 {
-                    if ( m_width == -1 && m_height == -1 )
+                    if (m_width == -1 && m_height == -1)
                     {
                         m_width = m_widget->width();
                         m_height = m_widget->height();
                     }
                     double stretch_x = m_widget->width() / double(m_width);
                     double stretch_y = m_widget->height() / double(m_height);
-                    for (int i=0; i<m_points.size(); ++i) {
+                    for (int i = 0; i < m_points.size(); ++i) {
                         QPointF p = m_points[i];
                         movePoint(i, QPointF(p.x() * stretch_x, p.y() * stretch_y), false);
                     }
@@ -220,7 +220,7 @@ void HoverPoints::paintPoints()
         if (m_connectionType == CurveConnection) {
             QPainterPath path;
             path.moveTo(m_points.at(0));
-            for (int i=1; i<m_points.size(); ++i) {
+            for (int i = 1; i < m_points.size(); ++i) {
                 QPointF p1 = m_points.at(i-1);
                 QPointF p2 = m_points.at(i);
                 double distance = p2.x() - p1.x();
@@ -238,7 +238,7 @@ void HoverPoints::paintPoints()
     p.setPen(m_pointPen);
     p.setBrush(m_pointBrush);
 
-    for (int i=0; i<m_points.size(); ++i) {
+    for (int i = 0; i < m_points.size(); ++i) {
         QRectF bounds = pointBoundingRect(i);
         if (m_shape == CircleShape)
         {
@@ -275,7 +275,7 @@ static QPointF bound_point(const QPointF &point, const QRectF &bounds, int lock)
 void HoverPoints::setPoints(const QPolygonF &points)
 {
     m_points.clear();
-    for (int i=0; i<points.size(); ++i)
+    for (int i = 0; i < points.size(); ++i)
         m_points << bound_point(points.at(i), boundingRect(), 0);
 
     m_locks.clear();
@@ -324,7 +324,7 @@ void HoverPoints::firePointChange()
 
         // Compensate for changed order...
         if (m_currentIndex != -1) {
-            for (int i=0; i<m_points.size(); ++i) {
+            for (int i = 0; i < m_points.size(); ++i) {
                 if (m_points[i] == oldCurrent) {
                     m_currentIndex = i;
                     break;
@@ -336,8 +336,8 @@ void HoverPoints::firePointChange()
 
     }
 
-//     for (int i=0; i<m_points.size(); ++i) {
-//         printf(" - point(%2d)=[%.2f, %.2f], lock=%d\n",
+//     for (int i = 0; i < m_points.size(); ++i) {
+//         printf(" - point(%2d) = [%.2f, %.2f], lock = %d\n",
 //                i, m_points.at(i).x(), m_points.at(i).y(), m_locks.at(i));
 //     }
 

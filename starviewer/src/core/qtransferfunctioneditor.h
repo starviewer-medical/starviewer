@@ -1,15 +1,11 @@
 #ifndef UDGQTRANSFERFUNCTIONEDITOR_H
 #define UDGQTRANSFERFUNCTIONEDITOR_H
 
-
 #include <QWidget>
-
 
 namespace udg {
 
-
 class TransferFunction;
-
 
 /**
  * Classe base per a qualsevol editor de funcions de transferència.
@@ -25,16 +21,16 @@ class QTransferFunctionEditor : public QWidget
 
 public:
 
-    QTransferFunctionEditor( QWidget * parent = 0 );
+    QTransferFunctionEditor(QWidget * parent = 0);
     virtual ~QTransferFunctionEditor();
 
     /// Retorna el valor de propietat màxim mapat per aquest editor.
     virtual unsigned short maximum() const;
     /// Assigna el valor de propietat màxim mapat per aquest editor.
-    virtual void setMaximum( unsigned short maximum );
+    virtual void setMaximum(unsigned short maximum);
 
     /// Assigna una funció de transferència a l'editor.
-    virtual void setTransferFunction( const TransferFunction & transferFunction ) = 0;
+    virtual void setTransferFunction(const TransferFunction & transferFunction) = 0;
     /// Retorna la funció de transferència de l'editor.
     virtual const TransferFunction & getTransferFunction() const = 0;
 
@@ -45,8 +41,6 @@ protected:
 
 };
 
-
 }
-
 
 #endif

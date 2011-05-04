@@ -43,7 +43,7 @@ void QCustomWindowLevelEditWidget::loadCustomWindowLevelPresets()
         delete m_customWindowLevelTreeWidget->takeTopLevelItem(0);
     }
 
-    foreach(CustomWindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
+    foreach (CustomWindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
         addWindowLevelItem(customWindowLevel->getName(), customWindowLevel->getWidth(), customWindowLevel->getLevel());
     }

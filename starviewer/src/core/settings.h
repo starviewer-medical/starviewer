@@ -28,7 +28,7 @@ public:
     Settings();
     ~Settings();
 
-    /// Retorna el valor per la clau demanada. Si el setting no existeix, retorna el valor 
+    /// Retorna el valor per la clau demanada. Si el setting no existeix, retorna el valor
     /// per defecte que aquesta clau tingui registrat
     QVariant getValue(const QString &key) const;
 
@@ -48,12 +48,12 @@ public:
     // També existeix el tipus QSettings::SettingsMap que és QMap<QString, QVariant>
     // TODO podríem fer typedef QSettings::SettingsMap en comptes d'això
     typedef QMap<QString, QVariant> KeyValueMapType;
-    typedef QList< KeyValueMapType > SettingListType;
+    typedef QList<KeyValueMapType> SettingListType;
 
     //
     // Obtenció d'informació de llistes de settings
     //
-    
+
     /// Ens retorna l'i-éssim (index) conjunt de valors de la llista amb clau "key"
     KeyValueMapType getListItem(const QString &key, int index);
 
@@ -63,17 +63,17 @@ public:
     //
     // Modificació de llistes de conjunts de valors
     //
-    
+
     /// Afegeix a la llista amb clau "key" un conjunt de valors
     void addListItem(const QString &key, const KeyValueMapType &item);
 
-    /// Actualitza les dades del conjunt de valors "item" a l'índex index de la llista amb clau "key" 
+    /// Actualitza les dades del conjunt de valors "item" a l'índex index de la llista amb clau "key"
     void setListItem(int index, const QString &key, const KeyValueMapType &item);
 
     /// Elimina de la llista amb clau "key" l'element i-éssim (index)
     void removeListItem(const QString &key, int index);
 
-    /// Afegeix una llista sencera de conjunts de valors amb clau "key". 
+    /// Afegeix una llista sencera de conjunts de valors amb clau "key".
     /// Si existia una llista anteriorment amb aquesta clau, els valors queden
     /// sobre-escrits per la llista proporcionada
     void setList(const QString &key, const SettingListType &list);
@@ -82,9 +82,9 @@ public:
     // Mètodes per facilitar el guardar i/o restaurar la geometria de certs widgets
     //
 
-    /// Guarda/Restaura els amples de columna del widget dins de la clau donada. 
+    /// Guarda/Restaura els amples de columna del widget dins de la clau donada.
     /// Sota la clau donada es guardaran els amples de cada columna amb nom columnWidthX on X serà el nombre de columna
-    /// L'unica implementació de moment és per QTreeWidget (i classes que n'hereden). 
+    /// L'unica implementació de moment és per QTreeWidget (i classes que n'hereden).
     /// Es sobrecarregarà el mètode per tants widgets com calgui.
     void saveColumnsWidths(const QString &key, QTreeWidget *treeWidget);
     void restoreColumnsWidths(const QString &key, QTreeWidget *treeWidget);
@@ -96,15 +96,15 @@ public:
     void restoreGeometry(const QString &key, QSplitter *splitter);
 
 private:
-    /// A partir d'una llista de claus, omplim un conjunt clau-valor. 
+    /// A partir d'una llista de claus, omplim un conjunt clau-valor.
     /// És necessari que li passem l'objecte qsettings (user/system) amb el que obtindrà els valors
     KeyValueMapType fillKeyValueMapFromKeyList(const QStringList &keysList, QSettings *qsettings);
 
     /// Traspassa el contingut del conjunt clau-valor a m_settings
     /// És necessari que li passem l'objecte qsettings (user/system) en el que volcarà els valors
-    void dumpKeyValueMap(const KeyValueMapType &item, QSettings *qsettings );
+    void dumpKeyValueMap(const KeyValueMapType &item, QSettings *qsettings);
 
-    /// Ens retorna l'objecte adient de settings (usuari o sistema) 
+    /// Ens retorna l'objecte adient de settings (usuari o sistema)
     /// segons com estigui configurada la clau en qüestió
     QSettings *getSettingsObject(const QString &key);
 

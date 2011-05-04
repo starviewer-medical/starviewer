@@ -12,11 +12,11 @@ class DicomMask;
 
 /** Classe de cerca bàsica d'elemens
 */
-class QBasicSearchWidget : public QWidget , private Ui::QBasicSearchWidgetBase{
+class QBasicSearchWidget : public QWidget, private Ui::QBasicSearchWidgetBase {
 Q_OBJECT
 public:
-    enum DefaultDateFlags{ AnyDate, Today, Yesterday, LastWeek };
-    QBasicSearchWidget( QWidget *parent = 0 );
+    enum DefaultDateFlags { AnyDate, Today, Yesterday, LastWeek };
+    QBasicSearchWidget(QWidget *parent = 0);
     ~QBasicSearchWidget();
 
     ///neteja els camps de la cerca bàsica
@@ -29,12 +29,12 @@ public:
     DicomMask buildDicomMask();
 
     /// Ens marca les flags de cerca per data per defecte
-    void setDefaultDate( DefaultDateFlags flag );
+    void setDefaultDate(DefaultDateFlags flag);
 
 private slots :
     /** Slot que s'activa quan s'ha editat el m_textOtherModality, en cas que el text sigui <> "" deselecciona totes les modalitats,
      * i en cas que sigui = "" selecciona la modalitat checkAll
-    */  
+    */
     void textOtherModalityEdited();
 
     /**

@@ -25,9 +25,8 @@ CustomWindowLevelsLoader::~CustomWindowLevelsLoader()
 {
 }
 
-
 void CustomWindowLevelsLoader::loadDefaults()
-{   
+{
     /// Custom Window Levels definits per l'usuari
     Settings systemSettings;
     QString userPath = systemSettings.getValue(CoreSettings::UserCustomWindowLevelsPath).toString();
@@ -87,7 +86,7 @@ QString CustomWindowLevelsLoader::loadXMLFile(const QFileInfo &fileInfo)
 
     if (listOfCustomWindowLevels.count() > 0)
     {
-        return fileInfo.fileName();    
+        return fileInfo.fileName();
     }
     else
     {

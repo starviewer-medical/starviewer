@@ -26,10 +26,10 @@ namespace udg {
      typedef GenericFactory<Vehicle, std::string> VehicleFactory;
 
      VehicleFactory vehicles;
-     
+
      //.. Aquí hauríem de registrar les diferents classes amb el Factory.
      //   Veure GenericFactoryRegister per tenir una manera de fer-ho senzillament
-     
+
      Vehicle* vehicle = vehicles->create("cotxe");
      Vehicle* vehicle2 = vehicles->create("motocicleta");
 
@@ -38,9 +38,9 @@ namespace udg {
      //.. Això imprimiria "Total de rodes = 6" suposant que cotxe retornes 4 i motocicleta 2.
     @endcode
     Tot i que en l'exemple no es faci, caldria mirar si l'objecte retornat és NULL o no ho és.
-    
+
     Aquesta classe s'utilitzarà, la majoria de les vegades, amb un singleton per facilitar-ne el registre i l'accés però no té perquè.
-    
+
     @TODO Si s'utilitza aquesta classe conjuntament amb un singleton només es podrà tenir un objecte de cada tipus.
     @TODO En cas que fos necessari s'hauria de fer l'implementació més genèrica per permetre de 0 a n paràmetres en el constructor i no
           no obligar a que els objectes creat heretin de QObject.
@@ -79,10 +79,10 @@ public:
     BaseClass* create(const ClassIdentifier &className, ParentType* parent = 0) const
     {
         BaseClass* theObject = NULL;
-        
+
         typename FunctionRegistry::const_iterator regEntry = m_registry.find(className);
 
-        if (regEntry != m_registry.end()) 
+        if (regEntry != m_registry.end())
         {
             try
             {
@@ -99,11 +99,11 @@ public:
     QList<ClassIdentifier> getFactoryNamesList() const
     {
         QList<ClassIdentifier> list;
-        
+
         typename FunctionRegistry::const_iterator item;
-        for(item = m_registry.begin();  item != m_registry.end(); ++item)
+        for (item = m_registry.begin(); item != m_registry.end(); ++item)
         {
-            list.append( item->first );
+            list.append(item->first);
         }
         return list;
     }

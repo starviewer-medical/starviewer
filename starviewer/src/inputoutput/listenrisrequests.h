@@ -13,12 +13,12 @@ namespace udg {
 /** Classe que s'encarrega d'escolta per un port especificat a la configuració peticions d'un RIS i atendre les peticions d'aquests
 */
 
-class ListenRISRequests: public QObject
+class ListenRISRequests : public QObject
 {
 Q_OBJECT
 public:
 
-    enum ListenRISRequestsError {RisPortInUse, UnknownNetworkError};
+    enum ListenRISRequestsError { RisPortInUse, UnknownNetworkError };
 
     ListenRISRequests();
 
@@ -33,7 +33,7 @@ public slots:
 signals:
     ///Signal que indica que s'ha fet una petició per descarregar un estudi
     void requestRetrieveStudy(DicomMask mask);
-    
+
     ///Signal que s'emet indicant que s'ha produït un error escoltant peticions al RIS
     void errorListening(ListenRISRequests::ListenRISRequestsError);
 

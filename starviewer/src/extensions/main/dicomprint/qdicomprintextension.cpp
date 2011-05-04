@@ -28,13 +28,13 @@
 
 namespace udg {
 
-QDicomPrintExtension::QDicomPrintExtension( QWidget *parent )
+QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     : QWidget(parent)
 {
-    setupUi( this );
+    setupUi(this);
     // Inicialitzem els settings
 
-    m_factory=new DicomPrintFactory();
+    m_factory = new DicomPrintFactory();
     m_noSupportedSeriesFrame->setVisible(false);
     fillSelectedDicomPrinterComboBox();
 
@@ -47,8 +47,8 @@ QDicomPrintExtension::QDicomPrintExtension( QWidget *parent )
     configureInputValidator();
     initializeViewerTools();
     // Posem a punt les annotacions que volem veure al viewer
-    m_2DView->removeAnnotation( Q2DViewer::AllAnnotation );
-    m_2DView->enableAnnotation( Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation  | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true );
+    m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
+    m_2DView->enableAnnotation(Q2DViewer::WindowInformationAnnotation | Q2DViewer::PatientOrientationAnnotation | Q2DViewer::SliceAnnotation | Q2DViewer::PatientInformationAnnotation | Q2DViewer::AcquisitionInformationAnnotation, true);
 }
 
 QDicomPrintExtension::~QDicomPrintExtension()
@@ -56,7 +56,7 @@ QDicomPrintExtension::~QDicomPrintExtension()
 }
 
 void QDicomPrintExtension::createConnections()
-{ 
+{
     connect(m_configurationPrinterToolButton, SIGNAL(clicked()), SLOT(configurationPrinter()));
     connect(m_selectedPrinterComboBox, SIGNAL(currentIndexChanged(int)), SLOT(selectedDicomPrinterChanged(int)));
     connect(m_printerConfigurationWidgetProof, SIGNAL(printerSettingsChanged()), SLOT(fillSelectedDicomPrinterComboBox()));
@@ -74,10 +74,10 @@ void QDicomPrintExtension::createConnections()
     connect(m_qdicomPrinterBasicSettingsWidget, SIGNAL(basicDicomPrinterSettingChanged()), SLOT(updateNumberOfDicomPrintPagesToPrint()));
     connect(m_printButton, SIGNAL(clicked()), SLOT(print()));
 
-    //connect( m_2DView, SIGNAL( eventReceived( unsigned long ) ), SLOT( strokeEventHandler(unsigned long) ) );
-    connect( m_sliceViewSlider, SIGNAL( valueChanged(int) ) , m_2DView , SLOT( setSlice(int) ) );
-    connect( m_2DView, SIGNAL( sliceChanged(int) ), m_sliceViewSlider, SLOT( setValue(int) ) );
-    connect( m_2DView, SIGNAL( volumeChanged( Volume * ) ), this, SLOT( updateInput() ) );
+    //connect(m_2DView, SIGNAL(eventReceived(unsigned long)), SLOT(strokeEventHandler(unsigned long)));
+    connect(m_sliceViewSlider, SIGNAL(valueChanged(int)), m_2DView, SLOT(setSlice(int)));
+    connect(m_2DView, SIGNAL(sliceChanged(int)), m_sliceViewSlider, SLOT(setValue(int)));
+    connect(m_2DView, SIGNAL(volumeChanged(Volume *)), this, SLOT(updateInput()));
 
     connect(m_qTimer, SIGNAL(timeout()), SLOT(timeoutTimer()));
 }
@@ -103,7 +103,7 @@ void QDicomPrintExtension::initializeViewerTools()
     QStringList defaultTools;
     defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "WindowLevelTool";
     m_toolManager->triggerTools(defaultTools);
-    m_toolManager->setupRegisteredTools( m_2DView );
+    m_toolManager->setupRegisteredTools(m_2DView);
 }
 
 void QDicomPrintExtension::setInput(Volume *input)
@@ -113,11 +113,11 @@ void QDicomPrintExtension::setInput(Volume *input)
 
 void QDicomPrintExtension::updateInput()
 {
-    m_sliceViewSlider->setMinimum( 0 );
-    m_sliceViewSlider->setMaximum( m_2DView->getMaximumSlice() );
-    m_sliceViewSlider->setValue( 0 );
+    m_sliceViewSlider->setMinimum(0);
+    m_sliceViewSlider->setMaximum(m_2DView->getMaximumSlice());
+    m_sliceViewSlider->setValue(0);
 
-    m_intervalImagesSlider->setValue( 1 );
+    m_intervalImagesSlider->setValue(1);
 
     updateSelectionImagesValue();
 
@@ -136,7 +136,7 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
 
     m_selectedPrinterComboBox->clear();
 
-    foreach(DicomPrinter dicomPrinter, dicomPrinterManager.getDicomPrinterList())
+    foreach (DicomPrinter dicomPrinter, dicomPrinterManager.getDicomPrinterList())
     {
         QString comboBoxText = dicomPrinter.getAETitle();
 
@@ -144,8 +144,8 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
         {
             comboBoxText += " - " + dicomPrinter.getDescription();
         }
-       
-         m_selectedPrinterComboBox->addItem(comboBoxText, dicomPrinter.getID());
+
+        m_selectedPrinterComboBox->addItem(comboBoxText, dicomPrinter.getID());
 
         if (dicomPrinter.getIsDefault())
         {
@@ -155,22 +155,22 @@ void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
             noDefaultPrinter = false;
         }
     }
-    
-    if ( m_selectedPrinterComboBox->count() > 0 )
-    { 
+
+    if (m_selectedPrinterComboBox->count() > 0)
+    {
         if (!m_noSupportedSeriesFrame->isVisible()) // Només ho habilitarem si la serie se suporta
         {
             setEnabledPrintControls(true);
         }
 
         // Si no hi ha cap impressora per defecte fem que quedi seleccionada la primera de la llista.
-        if ( noDefaultPrinter )
+        if (noDefaultPrinter)
         {
             m_selectedPrinterComboBox->setCurrentIndex(0);
             selectedDicomPrinterChanged(0);
         }
     }
-    else 
+    else
     {
         setEnabledPrintControls(false);
         selectedDicomPrinterChanged(-1);
@@ -188,7 +188,7 @@ void QDicomPrintExtension::print()
     if (dicomPrint.getLastError() != DicomPrint::Ok)
     {
         //si hem imprés una o més pàgines i hi ha error vol dir que han quedat algunes pàgines per imprimir
-        showDicomPrintError(dicomPrint.getLastError(), printedPages > 0 );
+        showDicomPrintError(dicomPrint.getLastError(), printedPages > 0);
     }
     else
     {
@@ -225,7 +225,7 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
     DicomPrinter dicomPrinter = getSelectedDicomPrinter();
     int numberOfImagesPerPage = dicomPrinter.getDefaultFilmLayoutColumns() * dicomPrinter.getDefaultFilmLayoutRows();
     int numberOfPage = 1;
-    
+
     while (!selectedImagesToPrint.isEmpty())
     {
         int indexOfImagePerPage = 0;
@@ -257,14 +257,14 @@ QList<DicomPrintPage> QDicomPrintExtension::getDicomPrintPageListToPrint()
 QList<Image*> QDicomPrintExtension::getSelectedImagesToPrint()
 {
     QList<Image*> imagesToPrint, imagesVolum = m_2DView->getInput()->getImages();
-    
-    if ( m_currentImageRadioButton->isChecked() )
+
+    if (m_currentImageRadioButton->isChecked())
     {
-        imagesToPrint.append( m_2DView->getInput()->getImage( m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase() ) );
+        imagesToPrint.append(m_2DView->getInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase()));
     }
     else
     {
-        int indexOfImage = m_fromImageSlider->value() -1;
+        int indexOfImage = m_fromImageSlider->value() - 1;
 
         while (indexOfImage < m_toImageSlider->value())
         {
@@ -280,19 +280,19 @@ int QDicomPrintExtension::getNumberOfPagesToPrint()
     int numberOfDicomPrintPagesToPrint = 0, numberOfImagesPerPage, numberOfImagesToPrint;
     DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
 
-    numberOfImagesToPrint = (m_toImageSlider->value() - m_fromImageSlider->value() +1) / m_intervalImagesSlider->value();
-    /*Si tenim residu hem d'augmena en 1 el número d'imatges Ex: han seleccionat de la 1 a la 15 d'imatge, cada 10 imatges, 
+    numberOfImagesToPrint = (m_toImageSlider->value() - m_fromImageSlider->value() + 1) / m_intervalImagesSlider->value();
+    /*Si tenim residu hem d'augmena en 1 el número d'imatges Ex: han seleccionat de la 1 a la 15 d'imatge, cada 10 imatges,
       haurem d'imprimir la 1 i la 11 -> 2 Imatges
       15 / 10 = 1
       15 % 10 = 5, és més gran de 1 per tant hem d'afegir una altre imatge
       */
-    numberOfImagesToPrint += (m_toImageSlider->value() - m_fromImageSlider->value() +1) % m_intervalImagesSlider->value() > 0 ? 1 : 0;
+    numberOfImagesToPrint += (m_toImageSlider->value() - m_fromImageSlider->value() + 1) % m_intervalImagesSlider->value() > 0 ? 1 : 0;
 
-    numberOfImagesPerPage = selectedDicomPrinter.getDefaultFilmLayoutRows() * selectedDicomPrinter.getDefaultFilmLayoutColumns(); 
+    numberOfImagesPerPage = selectedDicomPrinter.getDefaultFilmLayoutRows() * selectedDicomPrinter.getDefaultFilmLayoutColumns();
 
     if (numberOfImagesToPrint > 0 && numberOfImagesPerPage > 0)
     {
-        numberOfDicomPrintPagesToPrint = numberOfImagesToPrint / numberOfImagesPerPage ;
+        numberOfDicomPrintPagesToPrint = numberOfImagesToPrint / numberOfImagesPerPage;
         //Si tenim residu hem d'incrementar en una el número de pàgines
         numberOfDicomPrintPagesToPrint += numberOfImagesToPrint % numberOfImagesPerPage > 0 ? 1 : 0;
     }
@@ -340,10 +340,10 @@ void QDicomPrintExtension::addSeriesInformationAsAnnotationsToDicomPrintPage(Dic
     //A la primera posicio: posem el nom de la institució que ha generat l'estudi
     dicomPrintPage->addAnnotation(1, seriesToPrint->getInstitutionName());
     //A la segona posició: el nom del, edat i sexe pacient
-    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + seriesToPrint->getParentStudy()->getPatientAge() + 
+    dicomPrintPage->addAnnotation(2, seriesToPrint->getParentStudy()->getParentPatient()->getFullName() + " " + seriesToPrint->getParentStudy()->getPatientAge() +
         + " " + seriesToPrint->getParentStudy()->getParentPatient()->getSex());
     ///A la tercera posició: Modalitat seriesi Data/hora (de la sèrie i si no en té de l'estudi)
-    dicomPrintPage->addAnnotation(3, seriesToPrint->getModality() +  " " + dateToPrintInAnnotation.toString("dd/MM/yyyy") + " " + timeToPrintInAnnotation.toString("hh:mm:ss"));
+    dicomPrintPage->addAnnotation(3, seriesToPrint->getModality() + " " + dateToPrintInAnnotation.toString("dd/MM/yyyy") + " " + timeToPrintInAnnotation.toString("hh:mm:ss"));
     ///Quarta posició: Descripció estudi i descripció serie
     dicomPrintPage->addAnnotation(4, seriesToPrint->getParentStudy()->getDescription() + " - " + seriesToPrint->getDescription());
     ///Cinquena posició: Patient ID + Acession number (El patientID l'han demanat els metges perquè és amb el camp que poden cercar els pacients en el SAP)
@@ -469,7 +469,7 @@ void QDicomPrintExtension::updateSelectionImagesValue()
     int numberOfImagesOfVolume = m_2DView->getInput()->getImages().count();
 
     m_fromImageSlider->setMaximum(numberOfImagesOfVolume);
-    
+
     m_toImageSlider->setMaximum(numberOfImagesOfVolume);
     m_toImageSlider->setValue(numberOfImagesOfVolume);
     m_toImageLineEdit->setText(QString().setNum(numberOfImagesOfVolume));
@@ -513,10 +513,10 @@ DicomPrinter QDicomPrintExtension::getSelectedDicomPrinter()
 
 void QDicomPrintExtension::setEnabledPrintControls(bool enable)
 {
-    m_selectionImagesFrame->setEnabled(enable); 
-    m_printButton->setEnabled(enable); 
-    m_currentImageRadioButton->setEnabled(enable); 
-    m_selectionImageRadioButton->setEnabled(enable); 
+    m_selectionImagesFrame->setEnabled(enable);
+    m_printButton->setEnabled(enable);
+    m_currentImageRadioButton->setEnabled(enable);
+    m_selectionImageRadioButton->setEnabled(enable);
     m_qdicomPrinterBasicSettingsWidget->setEnabled(enable);
     m_numberOfCopiesSpinBox->setEnabled(enable);
 
@@ -538,7 +538,7 @@ void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
         {
             messageError = tr("Some of the pages film can't be printed because ");
         }
-        else 
+        else
         {
             messageError = tr("The images can't be printed because ");
         }
@@ -558,7 +558,7 @@ void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
                 messageError += tr("%1 can't create print spool.").arg(ApplicationNameString);
                 break;
             case DicomPrint::ErrorLoadingImagesToPrint:
-                messageError += tr("%1 can't load some of the images to print.\n\n").arg(ApplicationNameString );
+                messageError += tr("%1 can't load some of the images to print.\n\n").arg(ApplicationNameString);
                 messageError += tr("Close 'DICOM print' tab and try it again.");
                 break;
             case DicomPrint::UnknowError:
@@ -577,28 +577,28 @@ void QDicomPrintExtension::updateVolumeSupport()
 
     // Comprovem si té color.
     QString pi = m_2DView->getInput()->getImage(0)->getPhotometricInterpretation();
-    if ( pi != "MONOCHROME1" && pi != "MONOCHROME2" )
+    if (pi != "MONOCHROME1" && pi != "MONOCHROME2")
     {
-        m_noSupportedSeriesMissage->setText( tr("This series cannot be printed because color is not supported.") );
+        m_noSupportedSeriesMissage->setText(tr("This series cannot be printed because color is not supported."));
         isNotSupported = true;
     }
     // Comprovem si és multi-frame
     // Si les imatges tenen el mateix path, és que són multi-frame
     // TODO això no deixa de ser un hack temporal. Quan millorem el disseny tindrem millors mètodes per esbrinar això.
     QList<Image *> imageList = m_2DView->getInput()->getImages();
-    if( imageList.count() > 1 )
+    if (imageList.count() > 1)
     {
         // Comprovant la primera i segona imatges n'hi ha prou
-        if( imageList.at(0)->getPath() == imageList.at(1)->getPath() )
+        if (imageList.at(0)->getPath() == imageList.at(1)->getPath())
         {
-            m_noSupportedSeriesMissage->setText( tr("This series cannot be printed because multi-frame images are not supported.") );
+            m_noSupportedSeriesMissage->setText(tr("This series cannot be printed because multi-frame images are not supported."));
             isNotSupported = true;
         }
     }
 
-    if ( isNotSupported )
+    if (isNotSupported)
     {
-        if ( !m_noSupportedSeriesFrame->isVisible() )
+        if (!m_noSupportedSeriesFrame->isVisible())
         {
             m_noSupportedSeriesFrame->setVisible(true);
 
@@ -607,12 +607,12 @@ void QDicomPrintExtension::updateVolumeSupport()
     }
     else
     {
-        if ( m_noSupportedSeriesFrame->isVisible() )
+        if (m_noSupportedSeriesFrame->isVisible())
         {
             m_noSupportedSeriesFrame->setVisible(false);
 
             //Només activem les opcions si tenim impressores.
-            if ( m_selectedPrinterComboBox->count() > 0 )
+            if (m_selectedPrinterComboBox->count() > 0)
             {
                 setEnabledPrintControls(true);
             }

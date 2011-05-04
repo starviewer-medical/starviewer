@@ -11,11 +11,11 @@ namespace udg {
 class TranslateTool : public Tool {
 Q_OBJECT
 public:
-    enum { None , Translating };
-    TranslateTool( QViewer *viewer, QObject *parent = 0 );
+    enum { None, Translating };
+    TranslateTool(QViewer *viewer, QObject *parent = 0);
     ~TranslateTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
 private:
     /// Realitza la feina de desplaçament

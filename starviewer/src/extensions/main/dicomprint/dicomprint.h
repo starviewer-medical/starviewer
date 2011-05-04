@@ -8,7 +8,7 @@
 * Imprimeix en una impressora dicom un DicomPrintJob
 */
 
-namespace udg{
+namespace udg {
 
 class DicomPrinter;
 class DicomPrintJob;
@@ -16,9 +16,9 @@ class DicomPrintJob;
 class DicomPrint
 {
 public:
-    
-    enum DicomPrintError {CanNotConnectToDicomPrinter, ErrorSendingDicomPrintJob,  ErrorLoadingImagesToPrint, ErrorCreatingPrintSpool, UnknowError, Ok, 
-                           NotRespondedAsExpected};
+
+    enum DicomPrintError { CanNotConnectToDicomPrinter, ErrorSendingDicomPrintJob, ErrorLoadingImagesToPrint, ErrorCreatingPrintSpool, UnknowError, Ok,
+                           NotRespondedAsExpected };
 
     /*retorna el número de pàgines impreses, com ara tenim el hack de que només poden enviar cada vegada filmbox a imprimir podria ser que s'hagués
      enviat a imprimir correctament alguna de les pàgines, per tant per saber si és aquest el cas indiquem el número de pàgines que s'han imprés*/
@@ -27,7 +27,7 @@ public:
     ///Comprova si amb la configuració passada per paràmetre una impressora respón
     bool echoPrinter(DicomPrinter printer);
 
-	DicomPrint::DicomPrintError getLastError();
+    DicomPrint::DicomPrintError getLastError();
 
 private:
 
@@ -37,7 +37,7 @@ private:
 
     ///Transforma l'error de CreateDicomPrintSpool a un error de la classe DicomPrint
     DicomPrint::DicomPrintError createDicomPrintSpoolErrorToDicomPrintError(CreateDicomPrintSpool::CreateDicomPrintSpoolError error);
-    
+
     ///Transforma l'error de CreateDicomPrintSpool a un error de la classe DicomPrint
     DicomPrint::DicomPrintError printDicomSpoolErrorToDicomPrintError(PrintDicomSpool::PrintDicomSpoolError error);
 
@@ -45,5 +45,5 @@ private:
     QString getSpoolDirectory();
 
 };
-}; 
+};
 #endif

@@ -12,13 +12,13 @@
 namespace udg {
 
 AppImportFile::AppImportFile(QObject *parent)
- : QObject( parent )
+ : QObject(parent)
 {
-    //TODO: De moment es desactiven els warnings en release perquè no apareixi la finestra vtkOutputWindow 
- 	//      però la solució bona passa per evitar els warnings o bé redirigir-los a un fitxer. 
-#ifdef QT_NO_DEBUG 
-    itk::Object::GlobalWarningDisplayOff(); 
-#endif 
+    //TODO: De moment es desactiven els warnings en release perquè no apareixi la finestra vtkOutputWindow
+    //      però la solució bona passa per evitar els warnings o bé redirigir-los a un fitxer.
+#ifdef QT_NO_DEBUG
+    itk::Object::GlobalWarningDisplayOff();
+#endif
 
     readSettings();
 }
@@ -34,90 +34,90 @@ void AppImportFile::open()
     imagesFilter << MetaIOImageFilter << DICOMImageFilter << AllFilesFilter;
 
     QFileDialog *openDialog = new QFileDialog(0);
-    openDialog->setWindowTitle( tr("Choose a file to open...") );
-    openDialog->setDirectory( m_workingDirectory );
-    openDialog->setFilters( imagesFilter );
-    openDialog->selectFilter ( m_lastExtension );
-    openDialog->setFileMode( QFileDialog::ExistingFiles );
-    openDialog->setAcceptMode( QFileDialog::AcceptOpen );
+    openDialog->setWindowTitle(tr("Choose a file to open..."));
+    openDialog->setDirectory(m_workingDirectory);
+    openDialog->setFilters(imagesFilter);
+    openDialog->selectFilter (m_lastExtension);
+    openDialog->setFileMode(QFileDialog::ExistingFiles);
+    openDialog->setAcceptMode(QFileDialog::AcceptOpen);
 
-    if( openDialog->exec() == QDialog::Accepted )
+    if (openDialog->exec() == QDialog::Accepted)
     {
         QStringList fileNames = openDialog->selectedFiles();
-        
-        emit selectedFiles( fileNames );
-        
-        m_workingDirectory = QFileInfo( fileNames.first() ).dir().path();
+
+        emit selectedFiles(fileNames);
+
+        m_workingDirectory = QFileInfo(fileNames.first()).dir().path();
         m_lastExtension = openDialog->selectedFilter();
-        
+
         writeSettings();
     }
     delete openDialog;
 }
 
-void AppImportFile::openDirectory( bool recursively )
+void AppImportFile::openDirectory(bool recursively)
 {
-    QString directoryName = QFileDialog::getExistingDirectory( 0 , tr("Choose a directory to scan") , m_workingDicomDirectory , QFileDialog::ShowDirsOnly );
-    if ( !directoryName.isEmpty() )
+    QString directoryName = QFileDialog::getExistingDirectory(0, tr("Choose a directory to scan"), m_workingDicomDirectory, QFileDialog::ShowDirsOnly);
+    if (!directoryName.isEmpty())
     {
-        INFO_LOG( "S'escaneja el directori: " + directoryName + " per obrir els estudis que hi contingui" );
+        INFO_LOG("S'escaneja el directori: " + directoryName + " per obrir els estudis que hi contingui");
         m_workingDicomDirectory = directoryName;
         writeSettings();
 
         // llista on guardarem tots els arxius compatibles que hi ha als directoris
         QStringList filenames;
-        if( recursively )
+        if (recursively)
         {
             // explorem recursivament tots els directoris
             QStringList dirList;
-            scanDirectories( directoryName, dirList );   
+            scanDirectories(directoryName, dirList);
             // per cada directori, obtenim els arxius que podem tractar
-            foreach( QString dirName, dirList )
+            foreach (QString dirName, dirList)
             {
-                filenames << generateFilenames( dirName );
+                filenames << generateFilenames(dirName);
             }
         }
         else // tindrem en compte únicament els arxius que hi hagi en el directori arrel sense explorar recursivament
-            filenames << generateFilenames( directoryName );
-        
-        if( !filenames.isEmpty() )
-            emit selectedFiles( filenames );
+            filenames << generateFilenames(directoryName);
+
+        if (!filenames.isEmpty())
+            emit selectedFiles(filenames);
         else
-            QMessageBox::warning(0, ApplicationNameString, tr("No supported input files found") );
+            QMessageBox::warning(0, ApplicationNameString, tr("No supported input files found"));
     }
 }
 
-QStringList AppImportFile::generateFilenames( const QString &dirPath )
+QStringList AppImportFile::generateFilenames(const QString &dirPath)
 {
     QStringList list;
     // Comprovem que el directori tingui arxius
     QDir dir(dirPath);
-    QFileInfoList fileInfoList = dir.entryInfoList( QDir::Files );
+    QFileInfoList fileInfoList = dir.entryInfoList(QDir::Files);
 
     // Afegim a la llista cadascun dels paths absoluts dels arxius que contingui el directori
-    foreach( QFileInfo fileInfo, fileInfoList )
+    foreach (QFileInfo fileInfo, fileInfoList)
     {
         list << fileInfo.absoluteFilePath();
-    }    
+    }
 
     return list;
 }
 
-void AppImportFile::scanDirectories( const QString &rootPath, QStringList &dirsList )
+void AppImportFile::scanDirectories(const QString &rootPath, QStringList &dirsList)
 {
-    QDir rootDir( rootPath );
-    if( rootDir.exists() )
+    QDir rootDir(rootPath);
+    if (rootDir.exists())
     {
         // afegim el directori actual a la llista
         dirsList << rootPath;
         // busquem si tenim més directoris
-        QStringList subdirs = rootDir.entryList( QDir::AllDirs | QDir::NoDotAndDotDot );
-        if( !subdirs.isEmpty() )
+        QStringList subdirs = rootDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+        if (!subdirs.isEmpty())
         {
             // per cada subdirectori escanejem recursivament
-            foreach( QString subDir, subdirs )
+            foreach (QString subDir, subdirs)
             {
-                scanDirectories( rootPath + "/" + subDir, dirsList );
+                scanDirectories(rootPath + "/" + subDir, dirsList);
             }
         }
     }
@@ -127,18 +127,18 @@ void AppImportFile::readSettings()
 {
     Settings settings;
 
-    m_workingDirectory = settings.getValue( InterfaceSettings::OpenFileLastPath).toString();
-    m_workingDicomDirectory = settings.getValue( InterfaceSettings::OpenDirectoryLastPath).toString();
-    m_lastExtension = settings.getValue( InterfaceSettings::OpenFileLastFileExtension).toString();
+    m_workingDirectory = settings.getValue(InterfaceSettings::OpenFileLastPath).toString();
+    m_workingDicomDirectory = settings.getValue(InterfaceSettings::OpenDirectoryLastPath).toString();
+    m_lastExtension = settings.getValue(InterfaceSettings::OpenFileLastFileExtension).toString();
 }
 
 void AppImportFile::writeSettings()
 {
     Settings settings;
 
-    settings.setValue( InterfaceSettings::OpenFileLastPath, m_workingDirectory );
-    settings.setValue( InterfaceSettings::OpenDirectoryLastPath, m_workingDicomDirectory );
-    settings.setValue( InterfaceSettings::OpenFileLastFileExtension, m_lastExtension );
+    settings.setValue(InterfaceSettings::OpenFileLastPath, m_workingDirectory);
+    settings.setValue(InterfaceSettings::OpenDirectoryLastPath, m_workingDicomDirectory);
+    settings.setValue(InterfaceSettings::OpenFileLastFileExtension, m_lastExtension);
 }
 
 };  // end namespace udg

@@ -16,7 +16,7 @@ QCustomWindowLevelDialog::~QCustomWindowLevelDialog()
 {
 }
 
-void QCustomWindowLevelDialog::setDefaultWindowLevel(double window , double level)
+void QCustomWindowLevelDialog::setDefaultWindowLevel(double window, double level)
 {
     m_windowSpinBox->setValue(window);
     m_levelSpinBox->setValue(level);

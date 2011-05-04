@@ -36,7 +36,7 @@ void PreviousStudiesManager::queryStudies(Patient *patient)
 
 void PreviousStudiesManager::queryPreviousStudies(Study *study)
 {
-    INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() + 
+    INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() +
     " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
 
     m_studyInstanceUIDToFindPrevious = study->getInstanceUID();
@@ -85,15 +85,15 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
         if (untilDate.isValid())
         {
             QString untilDateAsMaskFormat = getPreviousStudyDateMask(untilDate);
-            foreach(DicomMask dicomMask, queryDicomMasksList)
+            foreach (DicomMask dicomMask, queryDicomMasksList)
             {
                 dicomMask.setStudyDate(untilDateAsMaskFormat);
             }
         }
 
-        foreach(const PacsDevice &pacsDevice, pacsDeviceListToQuery)
+        foreach (const PacsDevice &pacsDevice, pacsDeviceListToQuery)
         {
-            foreach(DicomMask queryDicomMask, queryDicomMasksList)
+            foreach (DicomMask queryDicomMask, queryDicomMasksList)
             {
                 enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, queryDicomMask, QueryPacsJob::study));
             }
@@ -104,7 +104,7 @@ void PreviousStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDat
 void PreviousStudiesManager::initializeQuery()
 {
     cancelCurrentQuery();
-    
+
     ///Fem neteja de consultes anteriors
     m_mergedHashPacsIDOfStudyInstanceUID.clear();
     m_mergedStudyList.clear();
@@ -115,19 +115,19 @@ void PreviousStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(Q
 {
     connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
     connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
-    
+
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
 }
 
 void PreviousStudiesManager::cancelCurrentQuery()
 {
-    foreach(QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
+    foreach (QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
     {
         m_pacsManager->requestCancelPACSJob(queryPACSJob);
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
     }
-    
+
     m_studyInstanceUIDToFindPrevious = "invalid";
 }
 
@@ -161,7 +161,7 @@ void PreviousStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
 
 void PreviousStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
 {
-    QueryPacsJob *queryPACSJob= qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
 
     if (queryPACSJob == NULL)
     {
@@ -198,13 +198,13 @@ void PreviousStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob
         return;
     }
 
-    foreach(Patient *patient, queryPACSJob->getPatientStudyList())
+    foreach (Patient *patient, queryPACSJob->getPatientStudyList())
     {
-        foreach(Study *study, patient->getStudies())
+        foreach (Study *study, patient->getStudies())
         {
             if (!isStudyInMergedStudyList(study) && !isStudyToFindPrevious(study))
             {
-                /*Si l'estudi no està a llista ja d'estudis afegits i no és el mateix estudi pel qua ens han demanat el 
+                /*Si l'estudi no està a llista ja d'estudis afegits i no és el mateix estudi pel qua ens han demanat el
                  *previ l'afegim*/
                 m_mergedStudyList.append(study);
 
@@ -220,7 +220,7 @@ void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
     {
         /*Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
           dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
-          que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals 
+          que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals
           d'errors en PACS emesos*/
         if (!m_pacsDeviceIDErrorEmited.contains(queryPACSJob->getPacsDevice().getID()))
         {
@@ -232,7 +232,7 @@ void PreviousStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
 
 void PreviousStudiesManager::queryFinished()
 {
-    /*Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. No podem emetre els resultats que anem rebent, 
+    /*Quan totes les query han acabat és quant fem l'emit amb els estudis previs trobats. No podem emetre els resultats que anem rebent,
       perquè hem de fer un merge del resultats rebuts, per no tenir duplicats (Estudis del matiex pacient que estiguin a més d'un PACS)*/
     emit queryPreviousStudiesFinished(m_mergedStudyList, m_mergedHashPacsIDOfStudyInstanceUID);
 }
@@ -241,7 +241,7 @@ bool PreviousStudiesManager::isStudyInMergedStudyList(Study *study)
 {
     bool studyFoundInMergedList = false;
 
-    foreach(Study *studyMerged, m_mergedStudyList)
+    foreach (Study *studyMerged, m_mergedStudyList)
     {
         if (study->getInstanceUID() == studyMerged->getInstanceUID())
         {
@@ -280,11 +280,11 @@ QString PreviousStudiesManager::getPreviousStudyDateMask(QDate studyDate)
     return "-" + studyDate.toString("yyyyMMdd");
 }
 
-void PreviousStudiesManager::downloadStudy( Study * study, QString pacs)
+void PreviousStudiesManager::downloadStudy(Study * study, QString pacs)
 {
     QueryScreen * queryScreen = SingletonPointer<QueryScreen>::instance();
-    queryScreen->retrieveStudy( QInputOutputPacsWidget::Load, pacs, study );
-    connect( queryScreen, SIGNAL( studyRetrieveFailed(QString) ), SIGNAL( errorDownloadingPreviousStudy(QString) ) );
+    queryScreen->retrieveStudy(QInputOutputPacsWidget::Load, pacs, study);
+    connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingPreviousStudy(QString)));
 }
 
 }

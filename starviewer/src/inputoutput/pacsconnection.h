@@ -1,7 +1,6 @@
 #ifndef PACSCONNECTION
 #define PACSCONNECTION
 
-
 #include "pacsdevice.h"
 
 struct T_ASC_Network;
@@ -11,14 +10,14 @@ class OFCondition;
 class QString;
 
 /** Aquest classe s'encarrega de configurar la connexió i connectar amb el PACS en funció del servei que li volguem sol·licitar.*/
-namespace udg{
+namespace udg {
 
 class PACSConnection
 {
 
 public:
 
-    enum PACSServiceToRequest {Query, RetrieveDICOMFiles, Echo, SendDICOMFiles};
+    enum PACSServiceToRequest { Query, RetrieveDICOMFiles, Echo, SendDICOMFiles };
 
     /** Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
      * @param Parametres del Pacs a connectar
@@ -96,13 +95,13 @@ private:
 private:
 
     PacsDevice m_pacs;
-    //network struct, contains DICOM upper layer FSM etc. A nivell DICOM no és res és un objecte propi de DCMTK, conté paràmetres de la connexió i en el cas 
-    //descàrrega d'imatges se li indica per quin port escoltem les peticions DICOM. 
-    T_ASC_Network *m_associationNetwork; 
+    //network struct, contains DICOM upper layer FSM etc. A nivell DICOM no és res és un objecte propi de DCMTK, conté paràmetres de la connexió i en el cas
+    //descàrrega d'imatges se li indica per quin port escoltem les peticions DICOM.
+    T_ASC_Network *m_associationNetwork;
     //Defineix els paràmetres de l'associació que s'utilitzarà per la comunicació entre Starviewer i el PACS, conté adreça del PACS, tipus de connexió,....
     T_ASC_Parameters *m_associationParameters; //parameters of association request
     //L'associació és el canal de comunicació que s'utilitza per l'intercanvi d'informació entre dispositius DICOM (és la connexió amb el PACS)
-    T_ASC_Association *m_dicomAssociation; 
+    T_ASC_Association *m_dicomAssociation;
 };
 };
 #endif

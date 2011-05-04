@@ -13,7 +13,7 @@ class PatientBrowserMenuExtendedItem;
 class PatientBrowserMenuList;
 
 /**
-    Widget en forma de menú que desplega la informació del pacient que li donem 
+    Widget en forma de menú que desplega la informació del pacient que li donem
     d'entrada de forma que poguem navegar pels seus estudis i corresponents volums
 */
 class PatientBrowserMenu : public QWidget {
@@ -37,7 +37,7 @@ private slots:
     /// Actualitza les vistes relacionades amb l'ítem actiu (aquell pel qual passa el ratolí per sobre)
     void updateActiveItemView(const QString &identifier);
 
-    /// Donat l'identificador de l'ítem fa les accions pertinents. 
+    /// Donat l'identificador de l'ítem fa les accions pertinents.
     /// En aquest cas s'encarrega d'obtenir el volum seleccionat per l'usuari i notificar-ho
     void processSelectedItem(const QString &identifier);
 

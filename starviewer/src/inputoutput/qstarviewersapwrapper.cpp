@@ -17,7 +17,7 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
     Settings settings;
     QTcpSocket tcpSocket;
     QString locaHostAddress = "127.0.0.1";//IP del localhost
-    int starviewerRisPort = settings.getValue( InputOutputSettings::RISRequestsPort ).toInt();//Port pel que Starviewer espera peticions del RIS
+    int starviewerRisPort = settings.getValue(InputOutputSettings::RISRequestsPort).toInt();//Port pel que Starviewer espera peticions del RIS
 
     INFO_LOG(QString("QStarviewerSAPWrapper::Demanare a l'Starviewer local pel port %1 la descarrega de l'estudi amb accession number %2").arg(QString().setNum(starviewerRisPort), accessionNumber));
 
@@ -38,7 +38,7 @@ void QStarviewerSAPWrapper::sendRequestToLocalStarviewer(QString accessionNumber
             errorWriting(tcpSocket.errorString());
         }
     }
-    else 
+    else
     {
         INFO_LOG("QStarviewerSAPWrapper::S'ha enviat la petició correctament al Starviewer");
         printf(qPrintable(QString("The request to retrieve the study with accession number %1 has been sent successfully.\n").arg(accessionNumber)));

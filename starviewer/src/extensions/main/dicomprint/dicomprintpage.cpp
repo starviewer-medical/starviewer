@@ -5,7 +5,7 @@
 
 #include "dicomprinter.h"
 
-namespace udg 
+namespace udg
 {
 
 void DicomPrintPage::setFilmSize(const QString &filmSize)
@@ -50,7 +50,7 @@ int DicomPrintPage::getFilmLayoutRows()
 
 void DicomPrintPage::setFilmOrientation(const QString &filmOrientation)
 {
-    m_filmOrientation =  filmOrientation;
+    m_filmOrientation = filmOrientation;
 }
 
 QString DicomPrintPage::getFilmOrientation() const

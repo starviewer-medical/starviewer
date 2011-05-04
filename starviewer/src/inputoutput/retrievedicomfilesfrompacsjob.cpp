@@ -21,7 +21,8 @@
 
 namespace udg
 {
-RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, Study *studyToRetrieveDICOMFiles, DicomMask dicomMaskToRetrieve, RetrievePriorityJob retrievePriorityJob):PACSJob(pacsDevice)
+RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, Study *studyToRetrieveDICOMFiles, DicomMask dicomMaskToRetrieve, RetrievePriorityJob retrievePriorityJob)
+ : PACSJob(pacsDevice)
 {
     Q_ASSERT(studyToRetrieveDICOMFiles);
     Q_ASSERT(studyToRetrieveDICOMFiles->getParentPatient());
@@ -87,8 +88,8 @@ void RetrieveDICOMFilesFromPACSJob::run()
         //Connectem amb els signals del patientFiller per processar els fitxers descarregats
         connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader *)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader *)));
         connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
-        /*Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el 
-          el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan surt 
+        /*Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
+          el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan surt
           d'aquí perquè els fillers ja han acabat ja s'ha inserit el pacient a la base de dades.*/
         connect(&patientFiller, SIGNAL(patientProcessed(Patient *)), &localDatabaseManager, SLOT(save(Patient *)), Qt::DirectConnection);
         //Connexions per finalitzar els threads
@@ -96,18 +97,18 @@ void RetrieveDICOMFilesFromPACSJob::run()
 
         localDatabaseManager.setStudyRetrieving(m_dicomMaskToRetrieve.getStudyInstanceUID());
         fillersThread.start();
-        
+
         m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_dicomMaskToRetrieve);
 
         if ((m_retrieveRequestStatus == PACSRequestStatus::RetrieveOk || m_retrieveRequestStatus == PACSRequestStatus::RetrieveSomeDICOMFilesFailed) &&
             !this->isAbortRequested())
         {
             INFO_LOG(QString("Ha finalitzat la descarrega de l'estudi %1 del PACS %2, s'han descarregat %3 fitxers").
-                arg(m_dicomMaskToRetrieve.getStudyInstanceUID(),getPacsDevice().getAETitle()).arg(m_retrieveDICOMFilesFromPACS->getNumberOfDICOMFilesRetrieved()));
+                arg(m_dicomMaskToRetrieve.getStudyInstanceUID(), getPacsDevice().getAETitle()).arg(m_retrieveDICOMFilesFromPACS->getNumberOfDICOMFilesRetrieved()));
 
             m_numberOfSeriesRetrieved++;
             emit DICOMSeriesRetrieved(this, m_numberOfSeriesRetrieved);//Indiquem que s'ha descarregat la última sèrie
-            emit DICOMFilesRetrieveFinished(); 
+            emit DICOMFilesRetrieveFinished();
 
             //Esperem que el processat i l'insersió a la base de dades acabin
             fillersThread.wait();
@@ -119,7 +120,7 @@ void RetrieveDICOMFilesFromPACSJob::run()
                     //No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
                     m_retrieveRequestStatus = PACSRequestStatus::RetrievePatientInconsistent;
                 }
-                else 
+                else
                 {
                     m_retrieveRequestStatus = PACSRequestStatus::RetrieveDatabaseError;
                 }
@@ -129,8 +130,8 @@ void RetrieveDICOMFilesFromPACSJob::run()
         {
             fillersThread.quit();
             /*Esperem que el thread acabi, ja que pel que s'interpreta de la documentació, sembla que el quit del thread no es fa fins que aquest retorna
-              al eventLoop, això provoca per exemple en els casos que ens han cancel·lat la descàrrega d'un estudi, si no esperem al thread que estigui mort 
-              poguem esborrar imatges que els fillers estan processant en aquell moment mentre encara s'estan executant i peti l'Starviewer, perquè no s'ha atés el 
+              al eventLoop, això provoca per exemple en els casos que ens han cancel·lat la descàrrega d'un estudi, si no esperem al thread que estigui mort
+              poguem esborrar imatges que els fillers estan processant en aquell moment mentre encara s'estan executant i peti l'Starviewer, perquè no s'ha atés el
               Slot quit del thread, per això esperem que aquest estigui mort a esborrar les imatges descarregades.*/
             fillersThread.wait();
             deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
@@ -172,10 +173,9 @@ void RetrieveDICOMFilesFromPACSJob::DICOMFileRetrieved(DICOMTagReader *dicomTagR
         }
     }
 
-    
     /*Fem un emit indicat que dicomTagReader està a punt per ser processat per l'Slot processDICOMFile de PatientFiller, no podem fer un connect
       directament entre el signal de DICOMFileRetrieved de RetrieveDICOMFileFromPACS i processDICOMFile de PatientFiller, perquè ens podríem trobar
-      que quan en aquest mètode comprova si hem descarregat una nova sèrie que DICOMTagReader ja no tingui valor, per això primer capturem el signal de 
+      que quan en aquest mètode comprova si hem descarregat una nova sèrie que DICOMTagReader ja no tingui valor, per això primer capturem el signal de
       RetrieveDICOMFileFromPACS comprovem si és una sèrie nova la que es descarrega i llavors fem l'emit per que PatientFiller processi el DICOMTagReader*/
 
     emit DICOMTagReaderReadyForProcess(dicomTagReader);
@@ -188,14 +188,13 @@ int RetrieveDICOMFilesFromPACSJob::priority() const
     return m_retrievePriorityJob;
 }
 
-
 PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::thereIsAvailableSpaceOnHardDisk()
 {
     LocalDatabaseManager localDatabaseManager;
-    /*TODO: Aquest signal no s'hauria de fer des d'aquesta classe sinó des d'una CacheManager, però com de moment encara no està implementada 
+    /*TODO: Aquest signal no s'hauria de fer des d'aquesta classe sinó des d'una CacheManager, però com de moment encara no està implementada
             temporalment emetem el signal des d'aquí*/
     connect(&localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), SIGNAL(studyFromCacheWillBeDeleted(QString)));
-   
+
     if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
     {
         if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok) //si no hi ha prou espai emitim aquest signal
@@ -217,7 +216,7 @@ void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDa
      *com que ja tenim altres elements d'aquest estudi inserits a la base de dades no esborrem el directori de l'estudi*/
     if (!existStudyInLocalDatabase(m_dicomMaskToRetrieve.getStudyInstanceUID()))
     {
-        /*Si l'estudi no existeix a la base de dades esborrem el contingut del directori, en principi segons la normativa DICO; si rebem un status de 
+        /*Si l'estudi no existeix a la base de dades esborrem el contingut del directori, en principi segons la normativa DICO; si rebem un status de
          * tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb èxit */
 
         INFO_LOG("L'estudi " + m_dicomMaskToRetrieve.getStudyInstanceUID() + " no existeix a la base de de dades, esborrem el contingut del seu directori.");
@@ -257,9 +256,9 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
         case PACSRequestStatus::RetrieveCancelled:
             message = tr("Retrieve images from study %1 of patient %2 from PACS %3 has been cancelled.").arg(studyID, patientName, pacsAETitle);
             break;
-        case PACSRequestStatus::RetrieveCanNotConnectToPACS :
+        case PACSRequestStatus::RetrieveCanNotConnectToPACS:
             message = tr("%1 can't connect to PACS %2 trying to retrieve images from study %3 of patient %4.\n")
-                .arg(ApplicationNameString, pacsAETitle, studyID,patientName);
+                .arg(ApplicationNameString, pacsAETitle, studyID, patientName);
             message += tr("\nBe sure that your computer is connected on network and the PACS parameters are correct.");
             message += tr("\nIf the problem persists contact with an administrator.");
             break;
@@ -275,17 +274,17 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 message += tr("\n- Minimum space required in Disk to retrieve studies: %1 MB.").arg(minimumSpaceRequired);
             }
             break;
-        case PACSRequestStatus::RetrieveErrorFreeingSpace :
+        case PACSRequestStatus::RetrieveErrorFreeingSpace:
             message = tr("An error occurred freeing space on hard disk, the images from study %1 of patient %2 won't be retrieved.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
-        case PACSRequestStatus::RetrieveDatabaseError :
+        case PACSRequestStatus::RetrieveDatabaseError:
             message = tr("Images from study %1 of patient %2 can't be retrieved because a database error occurred.").arg(studyID, patientName);
             message += tr("\n\nClose all %1 windows and try again."
                          "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
-        case PACSRequestStatus::RetrievePatientInconsistent :
+        case PACSRequestStatus::RetrievePatientInconsistent:
             message = tr("Images from study %1 of patient %2 can't be retrieved from PACS %3 because %4 has not be capable of read correctly data images.")
                 .arg(studyID, patientName, pacsAETitle, ApplicationNameString);
             message += tr("\n\nThe study may be corrupted, if It is not corrupted please contact with %1 team.").arg(ApplicationNameString);
@@ -305,7 +304,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 .arg(studyID, patientName, pacsAETitle);
             message += tr("The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.");
             break;
-        case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse :
+        case PACSRequestStatus::RetrieveIncomingDICOMConnectionsPortInUse:
             message = tr("Images from study %1 of patient %2 can't be retrieved because port %3 for incoming connections from PACS is already in use by another application.")
                 .arg(studyID, patientName, settings.getValue(InputOutputSettings::IncomingDICOMConnectionsPort).toString());
             break;

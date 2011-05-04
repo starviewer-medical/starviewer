@@ -21,13 +21,13 @@ class QueryPacs;
 /** Classe que cercar estudis en un dispositiu pacs, creant un nou job utilitzant les threadweaver
 */
 
-class QueryPacsJob :public PACSJob
+class QueryPacsJob : public PACSJob
 {
     Q_OBJECT
 public:
 
     ///Indica a quin nivell fem la query
-    enum QueryLevel { study, series, image};
+    enum QueryLevel { study, series, image };
 
     /// Constructor/Desctructor de la classe
     QueryPacsJob(PacsDevice parameters, DicomMask mask, QueryLevel queryLevel);
@@ -55,7 +55,7 @@ public:
     QList<Image*> getImageList();
 
     ///Retorna un Hashtable que indica per l'UID de l'estudi a quin PACS pertany l'estudi
-    QHash<QString,QString> getHashTablePacsIDOfStudyInstanceUID();
+    QHash<QString, QString> getHashTablePacsIDOfStudyInstanceUID();
 
     ///Retorna l'estat de la consulta
     PACSRequestStatus::QueryRequestStatus getStatus();

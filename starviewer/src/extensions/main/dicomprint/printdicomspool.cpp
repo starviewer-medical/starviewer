@@ -12,7 +12,7 @@
 #include "../inputoutput/pacsdevice.h"
 #include "../inputoutput/inputoutputsettings.h"
 
-namespace udg{
+namespace udg {
 
 void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintJob, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath)
 {
@@ -31,20 +31,20 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
         6è Tamany màxim de la pdu per la comunicació, li donem el valor per defecte del els dcmtk
         7è Indiquem si la impressora suporta Presentation LUT SOP Class, com que de moment nosaltres no ho soportem li indiquem fals
         8è Indiquem si la impressora suporta Basic Annotation Box SOP Class, com que de moment nosaltres no ho soportem li indiquem fals
-        9è Indica si la comunicació s'ha de fer amb transfer syntax Implicit, això és degut a que dispositius vells que suportaven Dicom 
+        9è Indica si la comunicació s'ha de fer amb transfer syntax Implicit, això és degut a que dispositius vells que suportaven Dicom
            tot i que indicar en el seu conformance que suportaven transfer syntax explicit, alhora de la veritat tenien problemes, per això
            existeix un paràmetre per indicar només de comunicar-se amb Implicit, com que de moment no ens hem de comunicar amb dispositius vells
            i tots els moderns suporten Explicit indiquem false
      */
-    result = printerConnection.negotiateAssociation(NULL, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_dicomPrinter.getAETitle()), 
-                                                    qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(), ASC_DEFAULTMAXPDU, 
+    result = printerConnection.negotiateAssociation(NULL, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), qPrintable(m_dicomPrinter.getAETitle()),
+                                                    qPrintable(m_dicomPrinter.getHostname()), m_dicomPrinter.getPort(), ASC_DEFAULTMAXPDU,
                                                     printerSupportsPresentationLUTSOPClass, printerSupportsAnnotationSOPClass, transferSyntaxImplicit);
 
     if (result.bad())
     {
-        ERROR_LOG(QString("No s'ha pogut connectar amb la impressora amb AETitle: %1, IP: %2, port: %3, descripcio error:%4 ").arg(m_dicomPrinter.getAETitle(), 
+        ERROR_LOG(QString("No s'ha pogut connectar amb la impressora amb AETitle: %1, IP: %2, port: %3, descripcio error:%4 ").arg(m_dicomPrinter.getAETitle(),
                            m_dicomPrinter.getHostname(), QString().setNum(m_dicomPrinter.getPort()), result.text()));
-         
+
         m_lastError = PrintDicomSpool::CanNotConnectToDICOMPrinter;
 
         return;
@@ -63,15 +63,15 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
 void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &printerConnection, const QString storedPrintDcmtkFilePath, const QString &spoolDirectoryPath)
 {
     OFCondition result;
-    DVPSStoredPrint	*storedPrintDcmtk = loadStoredPrintFileDcmtk(storedPrintDcmtkFilePath);
+    DVPSStoredPrint *storedPrintDcmtk = loadStoredPrintFileDcmtk(storedPrintDcmtkFilePath);
     /*Aquesta variable indica si els Attibutes de PLUT que són Illumination (2010,015E) i (2010,0160) s'han d'afegir al BasicFilmSession o al BasicFilmBox
-     *Nosaltres indiquem que els afegim al BasicFilmBox perquè si mirem la documentació DICOM, tot i que dcmtk ho suporta aquests dos tags no apareixen com 
+     *Nosaltres indiquem que els afegim al BasicFilmBox perquè si mirem la documentació DICOM, tot i que dcmtk ho suporta aquests dos tags no apareixen com
      *a atributs possibles d'un BasicFilmBox.
      *De totes maneres si mirem el codi de les dcmtk on passem aquesta variable, aquesta no té cap afecte, perquè com no soportem les PresentatioLUTSOP el valor
      *que conté la variable s'ignora i aquestes dos tags no s'envien*/
     bool addPLUTAttributesInBasicFilmSession = false;
 
-    if (!storedPrintDcmtk) 
+    if (!storedPrintDcmtk)
     {
         m_lastError = PrintDicomSpool::ErrorLoadingImageToPrint;
         return;
@@ -148,7 +148,7 @@ void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &prin
         }
     }
 
-    /*El printSCUDelete el fem sempre encara que algun pas hagi fallat, per indicar a la impressora que ja pot alliberar els recursos guardats per 
+    /*El printSCUDelete el fem sempre encara que algun pas hagi fallat, per indicar a la impressora que ja pot alliberar els recursos guardats per
       emmagatzemar el FilmSession,FilmBox i ImageBox. Aquest mètode només resultarà útil quan la impressió ha anat correcte o si s'ha produït un error
       s'ha produït després de crear el FilmSession*/
 
@@ -175,12 +175,12 @@ DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
     datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
     attributeBasicFilmSession = new DcmCodeString(DCM_FilmDestination);
-    attributeBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getFilmDestination())); 
+    attributeBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getFilmDestination()));
     datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
-    //TODO:Comprovar si l'utilitzarem  
+    //TODO:Comprovar si l'utilitzarem
     /*attributeBasicFilmSession = new DcmLongString(DCM_FilmSessionLabel);
-    attributeBasicFilmSession->putString(printerFilmSessionLabel.c_str()); else result=EC_IllegalCall;
+    attributeBasicFilmSession->putString(printerFilmSessionLabel.c_str()); else result = EC_IllegalCall;
     datasetBasicFilmSession.insert(attributeBasicFilmSession, OFTrue replaceOld);
    */
 
@@ -188,7 +188,7 @@ DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
     attributeBasicFilmSession->putString(qPrintable(m_dicomPrintJob.getPrintPriority()));
     datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
-    /*TODO:Si no m'equivoco només serveix per quan s'esborra el treball imprés del servidor d'impressió, si no l'especifiquem 
+    /*TODO:Si no m'equivoco només serveix per quan s'esborra el treball imprés del servidor d'impressió, si no l'especifiquem
      el servidor d'impressió l'emplena automàticament*/
     /*attributeBasicFilmSession = new DcmShortString(DCM_OwnerID);
     attributeBasicFilmSession->putString(printerOwnerID.c_str());
@@ -196,7 +196,7 @@ DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
     */
 
     attributeBasicFilmSession = new DcmIntegerString(DCM_NumberOfCopies);
-    attributeBasicFilmSession->putString(qPrintable(QString().setNum(m_dicomPrintJob.getNumberOfCopies()))); 
+    attributeBasicFilmSession->putString(qPrintable(QString().setNum(m_dicomPrintJob.getNumberOfCopies())));
     datasetBasicFilmSession.insert(attributeBasicFilmSession);
 
     INFO_LOG("Llegits els atributs del FilmSession");
@@ -204,7 +204,7 @@ DcmDataset PrintDicomSpool::getAttributesBasicFilmSession()
     return datasetBasicFilmSession;
 }
 
-OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printerConnection, DVPSStoredPrint	*storedPrintDcmtk, size_t imageNumber, const QString &spoolDirectoryPath)
+OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessageHandler& printerConnection, DVPSStoredPrint *storedPrintDcmtk, size_t imageNumber, const QString &spoolDirectoryPath)
 {
     OFCondition result;
     const char *studyUID = NULL, *seriesUID = NULL, *instanceUID = NULL;
@@ -244,16 +244,16 @@ OFCondition PrintDicomSpool::createAndSendBasicGrayscaleImageBox(DVPSPrintMessag
                 INFO_LOG("S'ha enviat a imprmir correctament la imatge " + imageToPrintPath);
             }
 
-        } 
-        else 
+        }
+        else
         {
-            ERROR_LOG("No s'ha pogut carregar la imatge a imprimir " + imageToPrintPath );
+            ERROR_LOG("No s'ha pogut carregar la imatge a imprimir " + imageToPrintPath);
             m_lastError = PrintDicomSpool::ErrorLoadingImageToPrint;
         }
-        
+
         //No s'ha de fer el delete del studyUID, seriesUID i instanceUID perquè són un punter a informació del storedPrint
         delete imageToPrint;
-        
+
         return result;
     }
 }
@@ -286,7 +286,7 @@ DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(const QString &pathSt
         2n El tag (2010,0160) Reflected Ambient Light de la Basic Film Box
         3r AETitle del Starviewer
 
-        Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se 
+        Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se
         suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza dcmtk i també
         s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
      */
@@ -300,8 +300,8 @@ DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(const QString &pathSt
         ERROR_LOG("No s'ha pogut obrir el fitxer StoredPrint de dcmtk, path:" + pathStoredPrintDcmtkFile);
         return NULL;
     }
-    
-    datasetStoredPrintDcmtkFile  = storedPrintDcmtkFile->getDataset();
+
+    datasetStoredPrintDcmtkFile = storedPrintDcmtkFile->getDataset();
 
     if (!datasetStoredPrintDcmtkFile)
     {
@@ -309,7 +309,7 @@ DVPSStoredPrint* PrintDicomSpool::loadStoredPrintFileDcmtk(const QString &pathSt
         return NULL;
     }
 
-    result = storedPrint->read(*datasetStoredPrintDcmtkFile); 
+    result = storedPrint->read(*datasetStoredPrintDcmtkFile);
 
     if (EC_Normal != result)
     {

@@ -24,7 +24,7 @@ private:
 
     /// Gestiona les accions a realitzar quan es clica el ratolí
     void handlePointAddition();
-    
+
     /// Simula la forma de l'òval quan tenim el primer punt i movem el mouse
     void simulateOval();
 

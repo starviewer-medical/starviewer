@@ -15,12 +15,12 @@ class SlicingTool : public Tool {
 Q_OBJECT
 public:
     /// Estats de la tool
-    enum { None , Slicing };
+    enum { None, Slicing };
 
-    SlicingTool( QViewer *viewer, QObject *parent = 0 );
+    SlicingTool(QViewer *viewer, QObject *parent = 0);
     ~SlicingTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
 private:
     /// Comença l'slicing
@@ -49,9 +49,9 @@ private:
     void computeImagesForScrollMode();
 
     /// Segons l'input escull el millor mode d'srcoll per defecte
-    /// Per exemple, en el cas que només tinguem fases i una sola imatge 
+    /// Per exemple, en el cas que només tinguem fases i una sola imatge
     /// és millor que per defecte estem en PhaseMode
-    void chooseBestDefaultScrollMode( Volume *input );
+    void chooseBestDefaultScrollMode(Volume *input);
 
 private slots:
     /// Es crida cada cop que l'input del viewer s'ha actualitzat
@@ -76,10 +76,10 @@ private:
     /// Indica si entre event i event hi ha hagut moviment del ratolí
     bool m_mouseMovement;
 
-	/// Nombre d'imatges ( ja siguin fases o llesques ) del volum sobre el que fem slicing
+    /// Nombre d'imatges (ja siguin fases o llesques) del volum sobre el que fem slicing
     /// útil per calcular l'increment proporcional de llesques
     int m_numberOfImages;
-	
+
     /// Mida de la pantalla
     /// Útil per calcular l'increment proporcional de llesques
     int *m_screenSize;

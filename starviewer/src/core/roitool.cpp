@@ -32,13 +32,13 @@ ROITool::~ROITool()
 void ROITool::computeStatisticsData()
 {
     Q_ASSERT(m_roiPolygon);
-    
+
     // Només cal calcular les dades si és necessari
     if (!m_hasToComputeStatisticsData)
     {
         return;
     }
-    
+
     int initialPosition;
     int endPosition;
     double *firstIntersection;
@@ -48,7 +48,7 @@ void ROITool::computeStatisticsData()
     double sweepLineBeginPoint[3];
     double sweepLineEndPoint[3];
     double verticalLimit;
-	int currentView = m_2DViewer->getView();
+    int currentView = m_2DViewer->getView();
 
     // Creem una còpia de m_roiPolygon projectada a la mateixa profunditat que la llesca actual
     // Serà amb aquest polígon amb el que calcularem els corresponents valors de vòxel
@@ -148,7 +148,7 @@ void ROITool::computeStatisticsData()
     {
         pixelData = m_2DViewer->getInput()->getPixelData();
     }
-    
+
     // Inicialitzem la llista de valors de gris
     m_grayValues.clear();
     while (sweepLineBeginPoint[sweepLineCoordinateIndex] <= verticalLimit)
@@ -163,7 +163,7 @@ void ROITool::computeStatisticsData()
                 intersectedSegmentsIndexList << i;
             }
         }
-        
+
         // Obtenim les interseccions entre tots els segments de la ROI i la línia d'escombrat actual
         foreach (int segmentIndex, intersectedSegmentsIndexList)
         {
@@ -173,11 +173,11 @@ void ROITool::computeStatisticsData()
                 // Cal ordenar les interseccions en la direcció horitzontal per tal que el recompte de píxels es faci correctament
                 bool found = false;
                 int i = 0;
-                while (!found && i<intersectionList.count())
+                while (!found && i < intersectionList.count())
                 {
                     if (foundPoint[intersectionCoordinateIndex] > intersectionList.at(i)[intersectionCoordinateIndex])
                     {
-                        intersectionList.insert(i,foundPoint);
+                        intersectionList.insert(i, foundPoint);
                         found = true;
                     }
                     else
@@ -196,7 +196,7 @@ void ROITool::computeStatisticsData()
         // Fem el recompte de píxels
         if ((intersectionList.count() % 2) == 0)
         {
-            int limit = intersectionList.count()/2;
+            int limit = intersectionList.count() / 2;
             for (int i = 0; i < limit; ++i)
             {
                 initialPosition = i * 2;
@@ -243,16 +243,16 @@ void ROITool::computeStatisticsData()
         sweepLineEndPoint[sweepLineCoordinateIndex] += verticalSpacingIncrement;
     }
     // Un cop hem obtingut les dades necessàries, calculem la mitjana i la desviació estàndar
-    
+
     // Mitjana
     m_mean = 0.0;
     foreach (double value, m_grayValues)
     {
         m_mean += value;
     }
-    
+
     m_mean = m_mean / m_grayValues.size();
-    
+
     // Desviació estàndar
     m_standardDeviation = 0.0;
     QList<double> deviations;
@@ -359,7 +359,7 @@ void ROITool::printData()
         QApplication::setOverrideCursor(Qt::WaitCursor);
         computeStatisticsData();
         QApplication::restoreOverrideCursor();
-        
+
         // Afegim la informació de les dades estadístiques a l'annotació
         annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(m_mean, 0, 'f', 2).arg(m_standardDeviation, 0, 'f', 2);
     }
@@ -369,12 +369,12 @@ void ROITool::printData()
 
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
-    
+
     double *attachmentPoint = new double[3];
     attachmentPoint[0] = (bounds[1] + bounds[0]) / 2.0;
     attachmentPoint[1] = (bounds[3] + bounds[2]) / 2.0;
     attachmentPoint[2] = (bounds[5] + bounds[4]) / 2.0;
-    
+
     text->setAttachmentPoint(attachmentPoint);
     text->shadowOn();
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());

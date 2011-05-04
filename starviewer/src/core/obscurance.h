@@ -1,12 +1,9 @@
 #ifndef UDGOBSCURANCE_H
 #define UDGOBSCURANCE_H
 
-
 #include "vector3.h"
 
-
 namespace udg {
-
 
 /**
  * Classe que encapsula les obscurances.
@@ -15,7 +12,7 @@ class Obscurance {
 
 public:
 
-    Obscurance( unsigned int size, bool color = false, bool doublePrecision = true );
+    Obscurance(unsigned int size, bool color = false, bool doublePrecision = true);
     ~Obscurance();
 
     /// Retorna la mida de les obscurances.
@@ -38,22 +35,22 @@ public:
     Vector3Double* doubleColorBleeding() const;
 
     /// Retorna l'obscurança de la posició \a i (independent de la precisió).
-    double obscurance( int i ) const;
+    double obscurance(int i) const;
     /// Assigna l'obscurança de la posició \a i (independent de la precisió).
-    void setObscurance( int i, double obscurance );
+    void setObscurance(int i, double obscurance);
     /// Afegeix obscurança a la posició \a i (independent de la precisió).
-    void addObscurance( int i, double obscurance );
+    void addObscurance(int i, double obscurance);
     /// Retorna el color bleeding de la posició \a i (independent de la precisió).
-    Vector3 colorBleeding( int i ) const;
+    Vector3 colorBleeding(int i) const;
     /// Assigna el color bleeding de la posició \a i (independent de la precisió).
-    void setColorBleeding( int i, const Vector3 &colorBleeding );
+    void setColorBleeding(int i, const Vector3 &colorBleeding);
     /// Afegeix color bleeding a la posició \a i (independent de la precisió).
-    void addColorBleeding( int i, const Vector3 &colorBleeding );
+    void addColorBleeding(int i, const Vector3 &colorBleeding);
 
     /// Carrega les obscurances des d'un fitxer. Retorna cert si tot va bé i fals si hi ha error.
-    bool load( const QString &fileName );
+    bool load(const QString &fileName);
     /// Desa les obscurances a un fitxer. Retorna cert si tot va bé i fals si hi ha error.
-    bool save( const QString &fileName ) const;
+    bool save(const QString &fileName) const;
 
 private:
 
@@ -75,92 +72,77 @@ private:
 
 };
 
-
 inline unsigned int Obscurance::size() const
 {
     return m_size;
 }
-
 
 inline bool Obscurance::hasColor() const
 {
     return m_color;
 }
 
-
 inline bool Obscurance::isDoublePrecision() const
 {
     return m_doublePrecision;
 }
-
 
 inline float* Obscurance::floatObscurance() const
 {
     return m_floatObscurance;
 }
 
-
 inline double* Obscurance::doubleObscurance() const
 {
     return m_doubleObscurance;
 }
-
 
 inline Vector3Float* Obscurance::floatColorBleeding() const
 {
     return m_floatColorBleeding;
 }
 
-
 inline Vector3Double* Obscurance::doubleColorBleeding() const
 {
     return m_doubleColorBleeding;
 }
 
-
-inline double Obscurance::obscurance( int i ) const
+inline double Obscurance::obscurance(int i) const
 {
-    if ( m_doublePrecision ) return m_doubleObscurance[i];
+    if (m_doublePrecision) return m_doubleObscurance[i];
     else return m_floatObscurance[i];
 }
 
-
-inline void Obscurance::setObscurance( int i, double obscurance )
+inline void Obscurance::setObscurance(int i, double obscurance)
 {
-    if ( m_doublePrecision ) m_doubleObscurance[i] = obscurance;
+    if (m_doublePrecision) m_doubleObscurance[i] = obscurance;
     else m_floatObscurance[i] = obscurance;
 }
 
-
-inline void Obscurance::addObscurance( int i, double obscurance )
+inline void Obscurance::addObscurance(int i, double obscurance)
 {
-    if ( m_doublePrecision ) m_doubleObscurance[i] += obscurance;
+    if (m_doublePrecision) m_doubleObscurance[i] += obscurance;
     else m_floatObscurance[i] += obscurance;
 }
 
-
-inline Vector3 Obscurance::colorBleeding( int i ) const
+inline Vector3 Obscurance::colorBleeding(int i) const
 {
-    if ( m_doublePrecision ) return m_doubleColorBleeding[i];
+    if (m_doublePrecision) return m_doubleColorBleeding[i];
     else return m_floatColorBleeding[i];
 }
 
-
-inline void Obscurance::setColorBleeding( int i, const Vector3 &colorBleeding )
+inline void Obscurance::setColorBleeding(int i, const Vector3 &colorBleeding)
 {
-    if ( m_doublePrecision ) m_doubleColorBleeding[i] = colorBleeding;
+    if (m_doublePrecision) m_doubleColorBleeding[i] = colorBleeding;
     else m_floatColorBleeding[i] = colorBleeding;
 }
 
-
-inline void Obscurance::addColorBleeding( int i, const Vector3 &colorBleeding )
+inline void Obscurance::addColorBleeding(int i, const Vector3 &colorBleeding)
 {
-    if ( m_doublePrecision ) m_doubleColorBleeding[i] += colorBleeding;
+    if (m_doublePrecision) m_doubleColorBleeding[i] += colorBleeding;
     else m_floatColorBleeding[i] += colorBleeding;
 }
 
-
 }
-
 
 #endif

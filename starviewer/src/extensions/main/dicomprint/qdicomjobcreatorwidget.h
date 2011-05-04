@@ -10,15 +10,15 @@
 
 namespace udg {
 
-class QDicomJobCreatorWidget : public QPrintJobCreatorWidget , private::Ui::QDicomJobCreatorWidgetBase
+class QDicomJobCreatorWidget : public QPrintJobCreatorWidget, private::Ui::QDicomJobCreatorWidgetBase
 {
 Q_OBJECT
 
 public:
-    
+
     QDicomJobCreatorWidget();
-     ~QDicomJobCreatorWidget();
-	PrintJob * getPrintJob();
+    ~QDicomJobCreatorWidget();
+    PrintJob * getPrintJob();
 
 private:
     void createConnections();
@@ -27,6 +27,6 @@ private:
 private:
     PrintJob * m_printJob;
 };
-} 
+}
 
 #endif

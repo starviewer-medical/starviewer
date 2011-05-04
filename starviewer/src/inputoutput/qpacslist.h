@@ -20,7 +20,7 @@ Q_OBJECT
 public:
 
     ///Constructor de la classe
-    QPacsList(QWidget *parent = 0 );
+    QPacsList(QWidget *parent = 0);
 
     /// Retorna els pacs seleccionats per l'usuari
     QList<PacsDevice> getSelectedPacs();
@@ -30,7 +30,7 @@ public:
 
     ///Destructor de la classe
     ~QPacsList();
-    
+
     ///Especifica/Retorna per quin Filtre es filtren els PACS mostrats, per defecte si no s'especifica no es filtra.
     void setFilterPACSByService(PacsDeviceManager::FilterPACSByService);
     PacsDeviceManager::FilterPACSByService getFilterPACSByService();

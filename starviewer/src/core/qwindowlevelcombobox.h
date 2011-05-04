@@ -30,7 +30,7 @@ public slots:
     /// @param preset Descripció del preset
     void selectPreset(const QString &preset);
 
-private slots:    
+private slots:
     /// Afegeix o elimina un preset de la llista
     /// @param preset Preset a afegir o eliminar
     void addPreset(const QString &preset);

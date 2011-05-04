@@ -9,29 +9,29 @@
 
 namespace udg {
 
-WindowLevelTool::WindowLevelTool( QViewer *viewer, QObject *parent )  
-: Tool( viewer, parent )
+WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
+: Tool(viewer, parent)
 {
     m_state = None;
     m_toolName = "WindowLevelTool";
     // ens assegurem que desde la creació tenim un viewer vàlid
-    Q_ASSERT( m_viewer );
+    Q_ASSERT(m_viewer);
 }
 
 WindowLevelTool::~WindowLevelTool()
 {
 }
 
-void WindowLevelTool::handleEvent( unsigned long eventID )
+void WindowLevelTool::handleEvent(unsigned long eventID)
 {
-    switch( eventID )
+    switch (eventID)
     {
     case vtkCommand::RightButtonPressEvent:
         this->startWindowLevel();
     break;
 
     case vtkCommand::MouseMoveEvent:
-        if( m_state == WindowLevelling )
+        if (m_state == WindowLevelling)
             this->doWindowLevel();
     break;
 
@@ -51,22 +51,22 @@ void WindowLevelTool::startWindowLevel()
     m_viewer->getCurrentWindowLevel(wl);
     m_initialWindow = wl[0];
     m_initialLevel = wl[1];
-    m_viewer->getEventPosition( m_windowLevelStartPosition );
-	m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetDesiredUpdateRate() );
+    m_viewer->getEventPosition(m_windowLevelStartPosition);
+    m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetDesiredUpdateRate());
 }
 
 void WindowLevelTool::doWindowLevel()
 {
-	m_viewer->setCursor( QCursor(QPixmap(":/images/windowLevel.png")) );
-    m_viewer->getEventPosition( m_windowLevelCurrentPosition );
+    m_viewer->setCursor(QCursor(QPixmap(":/images/windowLevel.png")));
+    m_viewer->getEventPosition(m_windowLevelCurrentPosition);
 
     int *size = m_viewer->getRenderWindowSize();
     double window = m_initialWindow;
     double level = m_initialLevel;
 
     // Compute normalized delta
-    double dx = 4.0 *( m_windowLevelCurrentPosition[0] - m_windowLevelStartPosition[0]) / size[0];
-    double dy = 4.0 *( m_windowLevelStartPosition[1] - m_windowLevelCurrentPosition[1]) / size[1];
+    double dx = 4.0 * (m_windowLevelCurrentPosition[0] - m_windowLevelStartPosition[0]) / size[0];
+    double dy = 4.0 * (m_windowLevelStartPosition[1] - m_windowLevelCurrentPosition[1]) / size[1];
 
     // Scale by current values
     if (fabs(window) > 0.01)
@@ -89,11 +89,11 @@ void WindowLevelTool::doWindowLevel()
     // Abs so that direction does not flip
     if (window < 0.0)
     {
-        dx = -1*dx;
+        dx = -1 * dx;
     }
     if (level < 0.0)
     {
-        dy = -1*dy;
+        dy = -1 * dy;
     }
 
     // Compute new window level
@@ -102,23 +102,23 @@ void WindowLevelTool::doWindowLevel()
     newLevel = level - dy;
 
     // Stay away from zero and really
-    if ( fabs(newWindow) < 0.01 )
+    if (fabs(newWindow) < 0.01)
     {
-        newWindow = 0.01 * ( newWindow < 0 ? -1 : 1 );
+        newWindow = 0.01 * (newWindow < 0 ? -1 : 1);
     }
-    if ( fabs(newLevel) < 0.01 )
+    if (fabs(newLevel) < 0.01)
     {
-        newLevel = 0.01 * ( newLevel < 0 ? -1 : 1 );
+        newLevel = 0.01 * (newLevel < 0 ? -1 : 1);
     }
-    m_viewer->getWindowLevelData()->setCustomWindowLevel( newWindow , newLevel );
+    m_viewer->getWindowLevelData()->setCustomWindowLevel(newWindow, newLevel);
 }
 
 void WindowLevelTool::endWindowLevel()
 {
-    m_viewer->setCursor( Qt::ArrowCursor );
+    m_viewer->setCursor(Qt::ArrowCursor);
     m_state = None;
-	m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate( m_viewer->getInteractor()->GetStillUpdateRate() );
-	m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
+    m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
+    m_viewer->render(); // necessari perquè es torni a renderitzar a alta resolució en el 3D
 }
 
 }

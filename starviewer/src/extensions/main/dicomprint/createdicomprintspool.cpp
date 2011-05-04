@@ -3,7 +3,7 @@
 #include <dviface.h>
 #include <dvpssp.h>      /* for class DVPSStoredPrint */
 #include <dvpshlp.h>
-#include <dvpsabl.h> 
+#include <dvpsabl.h>
 
 #include <QDir>
 #include <QDateTime>
@@ -42,7 +42,7 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
 
     setBasicFilmBoxAttributes();
 
-    foreach(Image *image,m_dicomPrintPage.getImagesToPrint())
+    foreach (Image *image, m_dicomPrintPage.getImagesToPrint())
     {
         ok = transformImageForPrinting(image, spoolDirectoryPath);
 
@@ -56,7 +56,7 @@ QString CreateDicomPrintSpool::createPrintSpool(DicomPrinter dicomPrinter, Dicom
     {
         setImageBoxAttributes();
         createAnnotationBoxes();
-        
+
         return createStoredPrintDcmtkFile(spoolDirectoryPath);
     }
     else
@@ -72,12 +72,12 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
         2n El tag (2010,0160) Reflected Ambient Light de la Basic Film Box
         3r AETitle del Starviewer
 
-        Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se 
+        Els dos primer paràmetres només s'utilitzen si la impressora suporta el Presentation Lut, ara mateix no ho soportem (no està implementat) per tant se
         suposa que aquests valors s'ignoraran. De totes maneres se li ha donat aquests valors per defecte 2000 i 10 respectivament perquè són els que utilitza dcmtk i també
         s'ha consultat el dicom conformance de les impressores agfa i kodak i també utiltizen aquests valors per defecte.
      */
     //TODO preguntar perquè necessita el Illumination i Reflected Ambient Ligth, preguntar si realement són aquests tags
-    m_storedPrint = new DVPSStoredPrint(2000 ,10 , qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()));
+    m_storedPrint = new DVPSStoredPrint(2000, 10, qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()));
     m_storedPrint->setDestination(qPrintable(m_dicomPrinter.getAETitle()));//S'ha d'indicar el AETitle de la impressora
     m_storedPrint->setPrinterName(qPrintable(m_dicomPrinter.getAETitle()));
 
@@ -106,7 +106,7 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     if (m_dicomPrintPage.getMinDensity() != 0)
     {
         //Si la densitat és 0, vol dir que no ens l'han especificat per tant no l'enviem
-        m_storedPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMinDensity())));     
+        m_storedPrint->setMinDensity(qPrintable(QString().setNum(m_dicomPrintPage.getMinDensity())));
     }
 
     if (m_dicomPrintPage.getMaxDensity() != 0)
@@ -123,19 +123,19 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
     {
         m_storedPrint->setFilmOrientation(DVPSF_landscape);
     }
-    
+
     m_storedPrint->setTrim(m_dicomPrintPage.getTrim() ? DVPSH_trim_on : DVPSH_trim_off);
-    
-    /*Tag Configuration Information (2010,0150) de Basic Film Box no li donem valor ara mateix, aquest camp permet configurar les impressions 
+
+    /*Tag Configuration Information (2010,0150) de Basic Film Box no li donem valor ara mateix, aquest camp permet configurar les impressions
       amb característiques que no són Dicom Conformance, sinó que són dependents de al impressora.
       Aquest tag també es pot especificar a nivell de Image Box, assignant-li una valor diferent per cada imatge.*/
     m_storedPrint->setConfigurationInformation(qPrintable(m_dicomPrintPage.getConfigurationInformation()));
 
-     /*Tag Requested Resolution ID (2020,0050) de Basic Film Box serveix per especificar amb quina resolució s'han d'imprimir les imatges, 
+     /*Tag Requested Resolution ID (2020,0050) de Basic Film Box serveix per especificar amb quina resolució s'han d'imprimir les imatges,
       té dos valors STANTARD i HIGH.
-      No se li assigna valor, perquè mirant el dicom conformance de varies impressores, la majoria no accepten aquest tag i les que l'accepten 
+      No se li assigna valor, perquè mirant el dicom conformance de varies impressores, la majoria no accepten aquest tag i les que l'accepten
       només l'accepten amb el valor STANDARD, per tant no s'especifica.
-     */ 
+     */
     //m_storedPrint->setResolutionID(NULL);
 
     /* Tag Requested Decimate/Crop Behaviour (2020,0040) de Imagex Box Indica que s'ha de fer si la imatge excedeix el màxim de píxels que suporta la cel·la
@@ -144,10 +144,10 @@ void CreateDicomPrintSpool::setBasicFilmBoxAttributes()
             - Crop : El centra de la imatge es posa al centra de la cel·la i tot lo que no hi càpiga no s'imprimeix.
             - Fail : La impressora ens ha d'indicar que no ha pogut imprimir
 
-       Aquest tag no s'especifica, perquè mirant el dicom conformance de les impressores, per defecte tenen ja establert el comportament més desitjat que és el 
+       Aquest tag no s'especifica, perquè mirant el dicom conformance de les impressores, per defecte tenen ja establert el comportament més desitjat que és el
        del decimate, per això de moment no s'especifica, i la impressora es comportarà com estigui definida per defecte.
      */
-    //m_storedPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate); 
+    //m_storedPrint->setRequestedDecimateCropBehaviour(DVPSI_decimate);
 
     INFO_LOG("Emplenats els tags del FilmBox a l'objecte DVPStoredPrint");
 }
@@ -167,15 +167,15 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
              per pantalla li donem valor null, no cal aplicar cap filtre per visualitzar-les
 
         2n, 3r i 4t, 5è Indiquen la resolució mínima d'impressió H/V i la màxima H/V respectivament, se li donen els valors per defecte de les dcmtk, consultant
-        el DICOM Conformance d'algunes impressores, s'ha vist que imprimint una sola imatge amb format STARDARD\1,1 per tamanys del film grans algunes 
+        el DICOM Conformance d'algunes impressores, s'ha vist que imprimint una sola imatge amb format STARDARD\1,1 per tamanys del film grans algunes
         impressores poden imprimir en una resolució superior de fins 11000, però com que difícilment tindrem casos en els que s'imprimeixin una sola imatge en films
         grans deixem els valors per defecte de les dcmtk.
 
         6è, 7è - Resolució per la previsualització de la imatge, com que no en farem previsualització deixem els valors standards.*/
-    m_presentationState = new DVPresentationState(NULL, 1024 , 1024 , 8192 , 8192, 256, 256);
+    m_presentationState = new DVPresentationState(NULL, 1024, 1024, 8192, 8192, 256, 256);
 
     INFO_LOG("Es transformara la imatge " + imageToPrint->getPath() + " per imprimir.");
-    
+
     status = DVPSHelper::loadFileFormat(qPrintable(imageToPrint->getPath()), imageToPrintDcmFileFormat);//Carreguem la imatge que hem d'imprimor
     if (status != EC_Normal)
     {
@@ -201,7 +201,7 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
 
     bitmapSize = m_presentationState->getPrintBitmapSize();
 
-    status = m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight); 
+    status = m_presentationState->getPrintBitmapWidthHeight(bitmapWidth, bitmapHeight);
     if (status != EC_Normal)
     {
         ERROR_LOG("No s'ha pogut obtenir l'amplada\alçada de la imatge. Descripcio error: " + QString(status.text()));
@@ -209,11 +209,11 @@ bool CreateDicomPrintSpool::transformImageForPrinting(Image *imageToPrint, const
         return false;
     }
 
-    pixelAspectRatio = m_presentationState->getPrintBitmapPixelAspectRatio();  	    
+    pixelAspectRatio = m_presentationState->getPrintBitmapPixelAspectRatio();
     pixelData = new char[bitmapSize];
 
     /*El 3r paràmetre indica si la imatge s'ha de redenritzar amb el presentation LUT invers*/
-    status = m_presentationState->getPrintBitmap(pixelData, bitmapSize, false); 
+    status = m_presentationState->getPrintBitmap(pixelData, bitmapSize, false);
     if (status == EC_Normal)
     {
         //Guardem la imatge a disc
@@ -263,19 +263,19 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
     // Hardcopy Equipment Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceManufacturer, qPrintable(ApplicationNameString), true);
-    transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceSoftwareVersion, qPrintable(StarviewerVersionString), true);	
+    transformedImageDatasetToPrint->putAndInsertString(DCM_HardcopyDeviceSoftwareVersion, qPrintable(StarviewerVersionString), true);
 
     //General Image Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceNumber, qPrintable(imageToPrint->getInstanceNumber()));
     transformedImageDatasetToPrint->putAndInsertString(DCM_PatientOrientation, qPrintable(imageToPrint->getPatientOrientation()));
     transformedImageDatasetToPrint->putAndInsertString(DCM_ImageType, "DERIVED\\SECONDARY", true);
     transformedImageDatasetToPrint->putAndInsertString(DCM_DerivationDescription, "Hardcopy rendered using Presentation State");
-    
+
     //SOP Common Module
     transformedImageDatasetToPrint->putAndInsertString(DCM_SOPClassUID, UID_HardcopyGrayscaleImageStorage);
 
-    dcmGenerateUniqueIdentifier(InstanceUIDOfTransformedImage);    
-    transformedImageDatasetToPrint->putAndInsertString(DCM_SOPInstanceUID, InstanceUIDOfTransformedImage);		
+    dcmGenerateUniqueIdentifier(InstanceUIDOfTransformedImage);
+    transformedImageDatasetToPrint->putAndInsertString(DCM_SOPInstanceUID, InstanceUIDOfTransformedImage);
 
     //Instance Creation Modukle
     transformedImageDatasetToPrint->putAndInsertString(DCM_InstanceCreationDate, qPrintable(QDateTime::currentDateTime().toString("yyyyMMdd")));
@@ -292,22 +292,22 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_HighBit, 11);
     transformedImageDatasetToPrint->putAndInsertUint16(DCM_PixelRepresentation, 0);
 
-    if(pixelAspectRatio!=1.0)
+    if (pixelAspectRatio != 1.0)
     {
         char pixelAspectRatioAsChar[70];
 
-        sprintf(pixelAspectRatioAsChar, "%ld\\%ld", 1000L, OFstatic_cast(long, pixelAspectRatio*1000.0));
+        sprintf(pixelAspectRatioAsChar, "%ld\\%ld", 1000L, OFstatic_cast(long, pixelAspectRatio * 1000.0));
         transformedImageDatasetToPrint->putAndInsertString(DCM_PixelAspectRatio, pixelAspectRatioAsChar);
     }
 
     DcmPolymorphOBOW *pxData = new DcmPolymorphOBOW(DCM_PixelData);
 
-    if(pxData)
+    if (pxData)
     {
-        pxData->putUint16Array(OFstatic_cast(Uint16 *, OFconst_cast(void *, pixelData)), OFstatic_cast(unsigned long, bitmapWidth*bitmapHeight));
+        pxData->putUint16Array(OFstatic_cast(Uint16 *, OFconst_cast(void *, pixelData)), OFstatic_cast(unsigned long, bitmapWidth * bitmapHeight));
         transformedImageDatasetToPrint->insert(pxData, OFTrue);
 
-        if(m_presentationState->getPresentationLUT() == DVPSP_table)
+        if (m_presentationState->getPresentationLUT() == DVPSP_table)
         {
             //En principi no treballem amb presentation LUT, per tant aquest codi crec que no s'hauria d'executar mai
             INFO_LOG("Gravem presentation LUT");
@@ -329,7 +329,7 @@ bool CreateDicomPrintSpool::createHardcopyGrayscaleImage(Image *imageToPrint, co
 
             m_presentationState->getPrintBitmapRequestedImageSize(requestedImageSizeAsOFString);
             //Afegim la imatge al Image Box
-            status = m_storedPrint->addImageBox(qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL, 
+            status = m_storedPrint->addImageBox(qPrintable(Settings().getValue(InputOutputSettings::LocalAETitle).toString()), InstanceUIDOfTransformedImage, requestedImageSizeAsOFString.c_str(), NULL,
                                        m_presentationState->getPresentationLUTData(), m_presentationState->isMonochrome1Image());
 
             if (status != EC_Normal)
@@ -366,7 +366,7 @@ void CreateDicomPrintSpool::setImageBoxAttributes()
     for (size_t i = 0; i < numImages; i++)
     {
         /*Com atribut del Image Box només especifiquem la polaritat, ja que el Magnification Type (2010,0060), el Smoothing Type (2010,0080) i el Configuration
-          Information (2010,0150) tot i que es poden especificar a nivell de Image Box com aquest tag té el mateix valor per totes les imatges del Film Box, 
+          Information (2010,0150) tot i que es poden especificar a nivell de Image Box com aquest tag té el mateix valor per totes les imatges del Film Box,
           s'especifica a nivell de Film Box, els altres tags del Image Box són emplenats per les dcmtk*/
 
         if (!m_dicomPrintPage.getPolarity().isEmpty())
@@ -384,60 +384,59 @@ void CreateDicomPrintSpool::createAnnotationBoxes()
 
     if (m_dicomPrintPage.getPageAnnotations().count() > 0)
     {
-        foreach(int position, m_dicomPrintPage.getPageAnnotations().keys())
+        foreach (int position, m_dicomPrintPage.getPageAnnotations().keys())
         {
-            //Es genera un UID inventat per cada AnnotationBox, quan des de la classe PrintDICOMSpoool creem un FilmBox a la impressora aquesta 
-            //com a resposta ens retorna els UID's amb el qual hem d'enviar cada un dels Annotation Box. Això ho fa transparentment DVPSStoredPrint 
-            //al invocar el mètode printSCUcreateBasicFilmSession i assignar a cada AnnotationBox un UID vàlid. Si s'envien AnnotationBox amb un 
+            //Es genera un UID inventat per cada AnnotationBox, quan des de la classe PrintDICOMSpoool creem un FilmBox a la impressora aquesta
+            //com a resposta ens retorna els UID's amb el qual hem d'enviar cada un dels Annotation Box. Això ho fa transparentment DVPSStoredPrint
+            //al invocar el mètode printSCUcreateBasicFilmSession i assignar a cada AnnotationBox un UID vàlid. Si s'envien AnnotationBox amb un
             //UID que no ens ha indicat la impressora les anotacions s'ignoren
             char newuid[70];
             dcmGenerateUniqueIdentifier(newuid);
             m_annotationBoxes->addAnnotationBox(newuid, qPrintable(m_dicomPrintPage.getPageAnnotations().value(position)), position);
-        }    
+        }
 
         m_annotationDisplayFormatIDTagValue = m_dicomPrinter.getAnnotationDisplayFormatID();
     }
 }
 
-
 QString CreateDicomPrintSpool::createStoredPrintDcmtkFile(const QString &spoolDirectoryPath)
 {
     DcmFileFormat *fileFormat = new DcmFileFormat();
-    DcmDataset *dataset	= fileFormat->getDataset();	
+    DcmDataset *dataset = fileFormat->getDataset();
     char storedPrintInstanceUID[70];
     dcmGenerateUniqueIdentifier(storedPrintInstanceUID);
 
-    m_storedPrint->setInstanceUID(storedPrintInstanceUID);	
-    
+    m_storedPrint->setInstanceUID(storedPrintInstanceUID);
+
     m_storedPrint->write(*dataset, false, OFTrue, OFFalse, OFTrue);
 
     //Si tenim anotacions les enviem
     if (m_annotationBoxes->size() > 0)
     {
         INFO_LOG("Hi ha anotacions per imprimir al FilmSession, creem les AnnotationBox");
-        //HACK: DVPSStoredPrint només permet afegir una anotació al FilmBox a través del mètode setSingleAnnotation, com que la majoria de DICOMPrinters 
+        //HACK: DVPSStoredPrint només permet afegir una anotació al FilmBox a través del mètode setSingleAnnotation, com que la majoria de DICOMPrinters
         //permeten fins a 6 anotacions ens interessa evitar aquesta limitació. El que hem fet és guardar en la mateixa estructura que DVPSStoredPrint les anotacions
-        //DVPSAnnotationContent_PList i llavors en el dataSet on gravem les dades de l'impressió de l'objecte m_storedPrint també hi gravem 
-        //les dades de les anotacions, d'aquesta manera podem tenir més d'una anotació en un FilmBox. 
+        //DVPSAnnotationContent_PList i llavors en el dataSet on gravem les dades de l'impressió de l'objecte m_storedPrint també hi gravem
+        //les dades de les anotacions, d'aquesta manera podem tenir més d'una anotació en un FilmBox.
         //Quan des de PrintDICOMSpool es llegeix el dataset que hem generat en aquesta classe es troba que té més d'una anotació i les envia totes a imprimir.
         m_annotationBoxes->write(*dataset);
 
         DcmItem *sequenceFilmBox = NULL;
-        dataset->findOrCreateSequenceItem(DCM_FilmBoxContentSequence, sequenceFilmBox); 
+        dataset->findOrCreateSequenceItem(DCM_FilmBoxContentSequence, sequenceFilmBox);
 
         if (sequenceFilmBox)
         {
             //L'annotation Display Format només té sentit enviar-lo si tenim anotacions. Aquest camp serveix per indicar com volem que apareguin les anotacions
-            //En Kodak, Fujifilm, Agfa,... si no especifiquem aquest tag al crear el BasicFilmBox la impressora no ens retorna els UID's amb les quals hem 
+            //En Kodak, Fujifilm, Agfa,... si no especifiquem aquest tag al crear el BasicFilmBox la impressora no ens retorna els UID's amb les quals hem
             //d'enviar els Annotation Box. Per exemple per a Agfa ha de tenir el valor 'ANNOTATION' si no no ens retorna com a resposta els UID's amb els quals
-            //s'han d'envies els Annotation box (DICOM Conformance de la dryStar 5500 pàgina 26 
+            //s'han d'envies els Annotation box (DICOM Conformance de la dryStar 5500 pàgina 26
             //http://www.agfa.com/he/france/fr/binaries/000737_Drystar_5500_1.8%2C_2.0_%2C3.x_and_4.0_tcm224-21750.pdf) altres impressores com Kodak
             //aquest tag pog agafar diversos valors http://www.carestreamhealth.com/dv6800_dicom_9F2965.pdf
-             sequenceFilmBox->putAndInsertString(DCM_AnnotationDisplayFormatID, qPrintable(m_annotationDisplayFormatIDTagValue), true);
-        }        
+            sequenceFilmBox->putAndInsertString(DCM_AnnotationDisplayFormatID, qPrintable(m_annotationDisplayFormatIDTagValue), true);
+        }
     }
 
-    QString storedPrintDcmtkFilePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + "SP_" + storedPrintInstanceUID + ".dcm";; 
+    QString storedPrintDcmtkFilePath = QDir::toNativeSeparators(spoolDirectoryPath) + QDir::separator() + "SP_" + storedPrintInstanceUID + ".dcm";;
     OFCondition status = DVPSHelper::saveFileFormat(qPrintable(storedPrintDcmtkFilePath), fileFormat, true);
 
     if (!status.good())

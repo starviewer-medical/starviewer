@@ -13,21 +13,21 @@ class DcmDataset;
 class OFCondition;
 
 namespace udg
-{   
+{
 
 class PrintDicomSpool
 {
 public:
 
-    enum PrintDicomSpoolError { CanNotConnectToDICOMPrinter , ErrorCreatingFilmSession, ErrorCreatingFilmbox, ErrorCreatingImageBox , ErrorLoadingImageToPrint, Ok };
+    enum PrintDicomSpoolError { CanNotConnectToDICOMPrinter, ErrorCreatingFilmSession, ErrorCreatingFilmbox, ErrorCreatingImageBox, ErrorLoadingImageToPrint, Ok };
 
     void printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJob dicomPrintjob, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath);
 
-	PrintDicomSpool::PrintDicomSpoolError getLastError();
+    PrintDicomSpool::PrintDicomSpoolError getLastError();
 
 private:
 
-    /*TODO: Potser que daria més entés no guardar les variables com a membre i desdle mètode printSpool passar-la al mètode que 
+    /*TODO: Potser que daria més entés no guardar les variables com a membre i desdle mètode printSpool passar-la al mètode que
      *que les necessiti. Per exemple printSCUCreateBasicFilmSession necessita DicomPrintJob*/
     DicomPrinter m_dicomPrinter;
     DicomPrintJob m_dicomPrintJob;
@@ -47,5 +47,5 @@ private:
 
     PrintDicomSpoolError m_lastError;
 };
-}; 
+};
 #endif

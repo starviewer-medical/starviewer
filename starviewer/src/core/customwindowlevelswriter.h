@@ -19,12 +19,11 @@ public:
 
     /// Mètode que crea i escriu un fitxer XML per guardar els custom window levels
     void write();
-        
+
 private:
-    
+
     // Retorna el directori on s'escriurà el fitxer XML (customwindowlevels.xml)
     QString getPath();
-
 
 private:
 
@@ -32,4 +31,4 @@ private:
 
 }
 
-#endif 
+#endif

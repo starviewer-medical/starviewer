@@ -4,19 +4,17 @@
 #include <string>
 #include "../thirdparty/breakpad/common/windows/http_upload.h"
 
-
 namespace udg {
 
-
-bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QString,QString> &options)
+bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QString, QString> &options)
 {
     std::map<std::wstring, std::wstring> parameters;
     // Afegim els parametres
-    Q_FOREACH(QString key, options.keys())
+    Q_FOREACH (QString key, options.keys())
     {
         parameters[key.toStdWString()] = options.take(key).toStdWString();
     }
-    
+
     // Enviem el report
     std::wstring responseBody;
     int responseCode = 0;
@@ -39,6 +37,5 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
 
     return success;
 }
-
 
 };

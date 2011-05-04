@@ -65,7 +65,7 @@ void ApplicationVersionChecker::checkReleaseNotes()
         // En mode desenvolupament no es mostraran les notes ni es faran comprovacions online
         return;
     }
-    
+
     if (isNewVersionInstalled())
     {
         //llegir el contingut dels fitxers HTML de les release notes
@@ -83,9 +83,9 @@ void ApplicationVersionChecker::checkReleaseNotes()
         {
             // Si no existeix el fitxer local de les notes, guardem als settings la versió actual
             // per tal de que no es busquin més (no es trobaran) fins a la pròxima versió
-            
+
             // el write settings guarda la versió de les notes locals només si m_checkNewVersion és fals
-            m_checkNewVersion = false; 
+            m_checkNewVersion = false;
             writeSettings(); //fem un write settings i no un setCheckFinished per que encara no ha acabat el check
             m_checkNewVersion = true;
         }
@@ -181,7 +181,7 @@ QUrl ApplicationVersionChecker::createLocalUrl()
         QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
         result = defaultPath + "releasenotes" + version + ".html";
     }
-    
+
     return result;
 }
 
@@ -195,7 +195,7 @@ bool ApplicationVersionChecker::checkTimeInterval()
     // s'utilitzen dues dates, l'actual i la última comprobada
     QDate today = QDate::currentDate();
     QDate lastTime = QDate::fromString(m_lastVersionCheckedDate, QString("yyyyMMdd"));
-    
+
     int i = m_checkVersionInterval;
 
     //si la data que hi ha guardada a les settings és correcte
@@ -205,7 +205,7 @@ bool ApplicationVersionChecker::checkTimeInterval()
         i = lastTime.daysTo(today);
     }
     //si la data no es correcte llavors i = interval i es tornarà a comprobar
-        
+
     // retornar si fa tants dies o més com marca l'interval que no s'ha comprobat
     return i >= m_checkVersionInterval;
 }
@@ -222,14 +222,14 @@ void ApplicationVersionChecker::checkVersionOnServer()
 QString ApplicationVersionChecker::createWebServiceUrl()
 {
     // Buscar l'adreces MAC del host.
-    QString macAdress(""); 
+    QString macAdress("");
     // Buscar el domini
     QString domain("");
 
     // Primer de tot mirar si hi ha interficia de xarxa local
     bool found = false;
     int index = 0;
-    while(!found && index < QNetworkInterface::allInterfaces().count())
+    while (!found && index < QNetworkInterface::allInterfaces().count())
     {
         QNetworkInterface inter = QNetworkInterface::allInterfaces()[index++];
 
@@ -241,7 +241,7 @@ QString ApplicationVersionChecker::createWebServiceUrl()
 #endif
         QNetworkInterface::InterfaceFlags f = inter.flags();
         bool flagsOk = f.testFlag(QNetworkInterface::IsUp) && f.testFlag(QNetworkInterface::IsRunning) && !f.testFlag(QNetworkInterface::IsLoopBack);
-        
+
         if (isMainInterface && inter.isValid() && flagsOk)
         {
             macAdress += inter.hardwareAddress();
@@ -254,7 +254,7 @@ QString ApplicationVersionChecker::createWebServiceUrl()
     {
         found = false;
         index = 0;
-        while(!found && index < QNetworkInterface::allInterfaces().count())
+        while (!found && index < QNetworkInterface::allInterfaces().count())
         {
             QNetworkInterface interface = QNetworkInterface::allInterfaces()[index++];
 
@@ -270,10 +270,10 @@ QString ApplicationVersionChecker::createWebServiceUrl()
             }
         }
     }
-    
+
  // En cas que estem a windows, Busquem el groupID
 #ifdef WIN32
-    domain = QProcessEnvironment::systemEnvironment().value(QString("USERDOMAIN"),QString(""));
+    domain = QProcessEnvironment::systemEnvironment().value(QString("USERDOMAIN"), QString(""));
 #endif
 
     QString machineID = encryptBase64Url(macAdress);
@@ -284,7 +284,7 @@ QString ApplicationVersionChecker::createWebServiceUrl()
 
 QString ApplicationVersionChecker::encryptBase64Url(const QString &url)
 {
-    return QString(QCryptographicHash::hash(url.toAscii(), QCryptographicHash::Sha1).toBase64().replace("=","").replace("+","-").replace("/","_"));
+    return QString(QCryptographicHash::hash(url.toAscii(), QCryptographicHash::Sha1).toBase64().replace("=", "").replace("+", "-").replace("/", "_"));
 }
 
 void ApplicationVersionChecker::setProxy(const QUrl &url)
@@ -310,7 +310,7 @@ void ApplicationVersionChecker::writeSettings()
         //i es mostren les release notes per primer cop, podria ser que estiguessim en debug)
         if (version.count() > 3)
         {
-            settings.setValue(CoreSettings::LastReleaseNotesVersionShown, 
+            settings.setValue(CoreSettings::LastReleaseNotesVersionShown,
                               version[0]+ "." + version[1] + "." + version[2]);
         }
         else
@@ -380,8 +380,8 @@ bool ApplicationVersionChecker::isNewVersionInstalled()
         return currentVersion[2].toInt() > lastVersionShown[2].toInt();
     }
     else
-    {   
-        return compareVersions(currentVersion[2],lastVersionShown[2]);
+    {
+        return compareVersions(currentVersion[2], lastVersionShown[2]);
     }
 }
 
@@ -403,14 +403,14 @@ bool ApplicationVersionChecker::compareVersions(const QString &current, const QS
     else
     {
         QString currentSplitType = getVersionAttribute(currentSplit[1], "type").toLower();
-        QString lastShownSplitType = getVersionAttribute(lastShownSplit[1],"type").toLower();
+        QString lastShownSplitType = getVersionAttribute(lastShownSplit[1], "type").toLower();
         // si no son del mateix tipus, es retorna alfabèticament, es tenen en compte alpha, beta i rc
         if (currentSplitType != lastShownSplitType)
         {
             return currentSplitType.compare(lastShownSplitType) > 0;
         }
         // si són iguals, compararem el numero
-        return getVersionAttribute(currentSplit[1], "number").toInt() 
+        return getVersionAttribute(currentSplit[1], "number").toInt()
                 > getVersionAttribute(lastShownSplit[1], "number").toInt();
     }
 }
@@ -440,7 +440,7 @@ bool ApplicationVersionChecker::isDevelopmentMode()
     }
     else if (currentVersion.count() == 3)
     {
-        return  getVersionAttribute(currentVersion[2],"type").toLower().contains("devel");
+        return getVersionAttribute(currentVersion[2], "type").toLower().contains("devel");
     }
     else
     {
@@ -460,11 +460,11 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
 
         QString version("");
         QString releaseNotesURL("");
-        
-        QScriptValue scriptValue; 
+
+        QScriptValue scriptValue;
         QScriptEngine engine;
         scriptValue = engine.evaluate("(" + json + ")");
-     
+
         if (scriptValue.property("error").isObject())
         {
             ERROR_LOG(QString("Error llegint la resposta del servidor (error en el json) ") + scriptValue.property("error").property("code").toString() + QString(": ") + scriptValue.property("error").property("message").toString());
@@ -476,7 +476,7 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
             {
                 m_checkedVersion = scriptValue.property("version").toString();
                 releaseNotesURL = scriptValue.property("releaseNotesURL").toString();
-                
+
                 connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(updateNotesUrlReply(QNetworkReply*)));
                 m_manager->get(QNetworkRequest(QUrl(releaseNotesURL)));
 
@@ -487,7 +487,7 @@ void ApplicationVersionChecker::webServiceReply(QNetworkReply *reply)
                 INFO_LOG("Starviewer està actualitzat. No s'ha trobat cap versió nova al servidor.");
                 setCheckFinished();
             }
-        }        
+        }
     }
     else
     {
@@ -508,7 +508,7 @@ void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
         if (m_lastVersionChecked != m_checkedVersion)
         {
             m_releaseNotes->setUrl(reply->url());
-            if(!m_neverShowNewVersionReleaseNotes)
+            if (!m_neverShowNewVersionReleaseNotes)
             {
                 m_somethingToShow = true;
                 INFO_LOG(QString("Es mostren les notes: %1").arg(reply->url().toString()));
@@ -525,10 +525,10 @@ void ApplicationVersionChecker::updateNotesUrlReply(QNetworkReply *reply)
     }
     else
     {
-        ERROR_LOG(QString("Error en rebre les notes de la versio %1, tipus ").arg(m_checkedVersion) + QString::number(reply->error()) + QString(": ") + reply->errorString());        
+        ERROR_LOG(QString("Error en rebre les notes de la versio %1, tipus ").arg(m_checkedVersion) + QString::number(reply->error()) + QString(": ") + reply->errorString());
     }
     reply->deleteLater();
-    setCheckFinished();       
+    setCheckFinished();
 }
 
 void ApplicationVersionChecker::showWhenCheckFinished()

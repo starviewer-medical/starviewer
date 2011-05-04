@@ -22,7 +22,7 @@ public:
 
     void postProcessing(){};
 
-    QString name() {  return "KeyImageNoteFillerStep";  }
+    QString name() { return "KeyImageNoteFillerStep"; }
 
 private:
     // TODO mètode per implementar

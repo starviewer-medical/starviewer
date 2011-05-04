@@ -34,7 +34,7 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
     m_allDiferent = hangingProtocol->m_allDiferent;
     m_iconType = hangingProtocol->m_iconType;
     m_hasPrevious = hangingProtocol->m_hasPrevious;
-    m_priority =  hangingProtocol->m_priority;
+    m_priority = hangingProtocol->m_priority;
 
     // Copia del layout
     m_layout = new HangingProtocolLayout();
@@ -267,7 +267,7 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
     }
     else
     {
-        //Si un des 2 hangings no té la prioritat definida, la prioritat només serveix  
+        //Si un des 2 hangings no té la prioritat definida, la prioritat només serveix
         //per dir si un hanging ha de ser el més o el menys aconsellat.
         if (this->getPriority() == 10 || hangingToCompare->getPriority() == 0)
         {
@@ -284,7 +284,7 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
     {
         if (this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() == hangingToCompare->countFilledDisplaySets() / (double)hangingToCompare->getNumberOfDisplaySets())
         {
-            if(this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
+            if (this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
             {
                 return (this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets());
             }
@@ -305,7 +305,7 @@ bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
 int HangingProtocol::countFilledImageSets() const
 {
     int count = 0;
-    foreach(HangingProtocolImageSet *imageSet, this->getImageSets())
+    foreach (HangingProtocolImageSet *imageSet, this->getImageSets())
     {
         if (imageSet->getSeriesToDisplay())
         {

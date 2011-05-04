@@ -7,7 +7,6 @@ HangingProtocolLayout::HangingProtocolLayout(QObject *parent)
 {
 }
 
-
 HangingProtocolLayout::~HangingProtocolLayout()
 {
 }

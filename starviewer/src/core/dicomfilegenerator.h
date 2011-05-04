@@ -25,23 +25,23 @@ public:
         Assignar el directori a on es vol guardar el/s fitxer/s generat/s
         Si el directori no existeix es crearà.
     */
-    bool setDirPath( QString path );
+    bool setDirPath(QString path);
 
     /// Mètode encarregat de generar el/s fitxer/s. Cada generador decideix què genera.
     virtual bool generateDICOMFiles() = 0;
 
 protected:
     /// Omple la informació bàsica de pacient
-    void fillPatientInfo( DICOMWriter *writer, Patient *patient );
+    void fillPatientInfo(DICOMWriter *writer, Patient *patient);
 
     /// Omple la informació bàsica de l'estudi
-    void fillStudyInfo( DICOMWriter *writer, Study *study );
+    void fillStudyInfo(DICOMWriter *writer, Study *study);
 
     /// Omple la informació bàsica de la serie
-    void fillSeriesInfo( DICOMWriter *writer, Series *series );
+    void fillSeriesInfo(DICOMWriter *writer, Series *series);
 
     /// Omple la informació del modul "General Equipment"
-    void fillGeneralEquipmentInfo( DICOMWriter *writer, Series *series );
+    void fillGeneralEquipmentInfo(DICOMWriter *writer, Series *series);
 
 protected:
     QDir m_dir;

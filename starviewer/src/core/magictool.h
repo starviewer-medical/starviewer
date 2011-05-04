@@ -22,10 +22,10 @@ class DrawerPolygon;
 class MagicTool : public Tool {
 Q_OBJECT
 public:
-    MagicTool( QViewer *viewer, QObject *parent = 0 );
+    MagicTool(QViewer *viewer, QObject *parent = 0);
     ~MagicTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
 private:
     /**
@@ -53,22 +53,22 @@ private:
     void undoMovement(int &a, int &b, int movement);
 
     /**
-     * Detecta les vores 
+     * Detecta les vores
      */
-	void detectBorder();
-	void getNextIndex(int direction,int x1,int y1,int &x2,int &y2);
-	int getNextDirection(int direction);
-	int getInverseDirection(int direction);
-	void addPoint(int direction,int x1,int y1, double z1);
-	bool isLoopReached();
+    void detectBorder();
+    void getNextIndex(int direction, int x1, int y1, int &x2, int &y2);
+    int getNextDirection(int direction);
+    int getInverseDirection(int direction);
+    void addPoint(int direction, int x1, int y1, double z1);
+    bool isLoopReached();
 
-	/**
+    /**
      * Retorna la desviació estàndard dins la regió marcada per la magicSize
      * @param a, @param b, @param c índex del volum de la màscara que estem mirant
      */
-	double getStandardDeviation(int a, int b, int c);
+    double getStandardDeviation(int a, int b, int c);
 
-	/**
+    /**
      * Incrementa la mida de l'editor
      */
     void increaseMagicSize();
@@ -90,7 +90,7 @@ private:
 
     ///Mida de la tool
     int m_magicSize;
-	
+
     QVector<bool> m_mask;
 
     double m_magicFactor;

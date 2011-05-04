@@ -25,8 +25,8 @@ private slots:
     void createConnections();
 
 private:
-	void writeSettings();
-	void readSettings();
+    void writeSettings();
+    void readSettings();
 };
 
 }

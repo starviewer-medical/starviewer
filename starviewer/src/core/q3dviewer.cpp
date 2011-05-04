@@ -46,7 +46,7 @@
 #include <vtkImageShiftScale.h>
 // reorientació del volum
 #include <vtkMatrix4x4.h>
-// Clippping Planes 
+// Clippping Planes
 #include <vtkPlanes.h>
 // obscurances
 #include "obscurancemainthread.h"
@@ -63,28 +63,28 @@
 
 namespace udg {
 
-Q3DViewer::Q3DViewer( QWidget *parent )
- : QViewer( parent ), m_imageData( 0 ), m_vtkVolume(0), m_volumeProperty(0), m_newTransferFunction(0), m_clippingPlanes(0)
+Q3DViewer::Q3DViewer(QWidget *parent)
+ : QViewer(parent), m_imageData(0), m_vtkVolume(0), m_volumeProperty(0), m_newTransferFunction(0), m_clippingPlanes(0)
 {
-    m_vtkWidget->setAutomaticImageCacheEnabled( true );
+    m_vtkWidget->setAutomaticImageCacheEnabled(true);
     // avortar render
     AbortRenderCommand *abortRenderCommand = AbortRenderCommand::New();
-    getRenderWindow()->AddObserver( vtkCommand::AbortCheckEvent, abortRenderCommand );
+    getRenderWindow()->AddObserver(vtkCommand::AbortCheckEvent, abortRenderCommand);
     abortRenderCommand->Delete();
 
     m_renderFunction = RayCasting; // per defecte
 
     setDefaultOrientationForCurrentInput();
-    m_orientationMarker = new Q3DOrientationMarker( this->getInteractor() );
+    m_orientationMarker = new Q3DOrientationMarker(this->getInteractor());
 
     // creem el pipeline del volum
     m_vtkVolume = vtkVolume::New();
     m_volumeProperty = vtkVolumeProperty::New();
     m_volumeProperty->SetInterpolationTypeToLinear();
-    m_vtkVolume->SetProperty( m_volumeProperty );
+    m_vtkVolume->SetProperty(m_volumeProperty);
     m_volumeMapper = vtkVolumeRayCastMapper::New();
-    m_vtkVolume->SetMapper( m_volumeMapper );
-    m_renderer->AddViewProp( m_vtkVolume );
+    m_vtkVolume->SetMapper(m_volumeMapper);
+    m_renderer->AddViewProp(m_vtkVolume);
 
     m_transferFunction = new TransferFunction;
     // creem una funció de transferència per defecte TODO la tenim només per tenir alguna cosa per defecte
@@ -106,38 +106,38 @@ Q3DViewer::Q3DViewer( QWidget *parent )
     m_contourVoxelShader = new ContourVoxelShader();
     m_obscuranceVoxelShader = new ObscuranceVoxelShader();
     m_ambientContourVoxelShader = new AmbientContourVoxelShader();
-    m_ambientContourVoxelShader->setVoxelShaders( m_ambientVoxelShader, m_contourVoxelShader );
+    m_ambientContourVoxelShader->setVoxelShaders(m_ambientVoxelShader, m_contourVoxelShader);
     m_directIlluminationContourVoxelShader = new DirectIlluminationContourVoxelShader();
-    m_directIlluminationContourVoxelShader->setVoxelShaders( m_directIlluminationVoxelShader, m_contourVoxelShader );
+    m_directIlluminationContourVoxelShader->setVoxelShaders(m_directIlluminationVoxelShader, m_contourVoxelShader);
     m_ambientObscuranceVoxelShader = new AmbientObscuranceVoxelShader();
-    m_ambientObscuranceVoxelShader->setVoxelShaders( m_ambientVoxelShader, m_obscuranceVoxelShader );
+    m_ambientObscuranceVoxelShader->setVoxelShaders(m_ambientVoxelShader, m_obscuranceVoxelShader);
     m_directIlluminationObscuranceVoxelShader = new DirectIlluminationObscuranceVoxelShader();
-    m_directIlluminationObscuranceVoxelShader->setVoxelShaders( m_directIlluminationVoxelShader, m_obscuranceVoxelShader );
+    m_directIlluminationObscuranceVoxelShader->setVoxelShaders(m_directIlluminationVoxelShader, m_obscuranceVoxelShader);
     m_ambientContourObscuranceVoxelShader = new AmbientContourObscuranceVoxelShader();
-    m_ambientContourObscuranceVoxelShader->setVoxelShaders( m_ambientContourVoxelShader, m_obscuranceVoxelShader );
+    m_ambientContourObscuranceVoxelShader->setVoxelShaders(m_ambientContourVoxelShader, m_obscuranceVoxelShader);
     m_directIlluminationContourObscuranceVoxelShader = new DirectIlluminationContourObscuranceVoxelShader();
-    m_directIlluminationContourObscuranceVoxelShader->setVoxelShaders( m_directIlluminationContourVoxelShader, m_obscuranceVoxelShader );
+    m_directIlluminationContourObscuranceVoxelShader->setVoxelShaders(m_directIlluminationContourVoxelShader, m_obscuranceVoxelShader);
 
     m_volumeRayCastFunction = vtkVolumeRayCastCompositeFunction::New();
     m_volumeRayCastFunction->SetCompositeMethodToClassifyFirst();
     m_volumeRayCastAmbientContourFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourVoxelShader>::New();
     m_volumeRayCastAmbientContourFunction->SetCompositeMethodToClassifyFirst();
-    m_volumeRayCastAmbientContourFunction->SetVoxelShader( m_ambientContourVoxelShader );
+    m_volumeRayCastAmbientContourFunction->SetVoxelShader(m_ambientContourVoxelShader);
     m_volumeRayCastDirectIlluminationContourFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourVoxelShader>::New();
     m_volumeRayCastDirectIlluminationContourFunction->SetCompositeMethodToClassifyFirst();
-    m_volumeRayCastDirectIlluminationContourFunction->SetVoxelShader( m_directIlluminationContourVoxelShader );
+    m_volumeRayCastDirectIlluminationContourFunction->SetVoxelShader(m_directIlluminationContourVoxelShader);
     m_volumeRayCastAmbientObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientObscuranceVoxelShader>::New();
     m_volumeRayCastAmbientObscuranceFunction->SetCompositeMethodToClassifyFirst();
-    m_volumeRayCastAmbientObscuranceFunction->SetVoxelShader( m_ambientObscuranceVoxelShader );
+    m_volumeRayCastAmbientObscuranceFunction->SetVoxelShader(m_ambientObscuranceVoxelShader);
     m_volumeRayCastDirectIlluminationObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationObscuranceVoxelShader>::New();
     m_volumeRayCastDirectIlluminationObscuranceFunction->SetCompositeMethodToClassifyFirst();
-    m_volumeRayCastDirectIlluminationObscuranceFunction->SetVoxelShader( m_directIlluminationObscuranceVoxelShader );
+    m_volumeRayCastDirectIlluminationObscuranceFunction->SetVoxelShader(m_directIlluminationObscuranceVoxelShader);
     m_volumeRayCastAmbientContourObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<AmbientContourObscuranceVoxelShader>::New();
     m_volumeRayCastAmbientContourObscuranceFunction->SetCompositeMethodToClassifyFirst();
-    m_volumeRayCastAmbientContourObscuranceFunction->SetVoxelShader( m_ambientContourObscuranceVoxelShader );
+    m_volumeRayCastAmbientContourObscuranceFunction->SetVoxelShader(m_ambientContourObscuranceVoxelShader);
     m_volumeRayCastDirectIlluminationContourObscuranceFunction = vtkVolumeRayCastSingleVoxelShaderCompositeFunction<DirectIlluminationContourObscuranceVoxelShader>::New();
     m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetCompositeMethodToClassifyFirst();
-    m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetVoxelShader( m_directIlluminationContourObscuranceVoxelShader );
+    m_volumeRayCastDirectIlluminationContourObscuranceFunction->SetVoxelShader(m_directIlluminationContourObscuranceVoxelShader);
     m_volumeRayCastIsosurfaceFunction = vtkVolumeRayCastIsosurfaceFunction::New();
 
     m_contourOn = false;
@@ -159,7 +159,7 @@ Q3DViewer::Q3DViewer( QWidget *parent )
 Q3DViewer::~Q3DViewer()
 {
     /// \todo falta revisar què falta per destruir
-    if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
+    if (m_obscuranceMainThread && m_obscuranceMainThread->isRunning())
     {
         m_obscuranceMainThread->stop();
         m_obscuranceMainThread->wait();
@@ -178,23 +178,23 @@ Q3DViewer::~Q3DViewer()
     delete m_ambientContourObscuranceVoxelShader;
     delete m_directIlluminationContourObscuranceVoxelShader;
     // eliminem tots els elements vtk creats
-    if ( m_4DLinearRegressionGradientEstimator ) 
+    if (m_4DLinearRegressionGradientEstimator)
         m_4DLinearRegressionGradientEstimator->Delete();
-    if ( m_imageData ) m_imageData->Delete();
-    if ( m_vtkVolume ) m_vtkVolume->Delete();
-    if ( m_volumeProperty ) m_volumeProperty->Delete();
-    if ( m_volumeMapper ) m_volumeMapper->Delete();
-    if ( m_volumeRayCastFunction ) m_volumeRayCastFunction->Delete();
-    if ( m_volumeRayCastAmbientContourFunction ) m_volumeRayCastAmbientContourFunction->Delete();
-    if ( m_volumeRayCastDirectIlluminationContourFunction ) m_volumeRayCastDirectIlluminationContourFunction->Delete();
-    if ( m_volumeRayCastAmbientObscuranceFunction ) m_volumeRayCastAmbientObscuranceFunction->Delete();
-    if ( m_volumeRayCastDirectIlluminationObscuranceFunction ) m_volumeRayCastDirectIlluminationObscuranceFunction->Delete();
-    if ( m_volumeRayCastAmbientContourObscuranceFunction ) m_volumeRayCastAmbientContourObscuranceFunction->Delete();
-    if ( m_volumeRayCastDirectIlluminationContourObscuranceFunction ) m_volumeRayCastDirectIlluminationContourObscuranceFunction->Delete();
-    if ( m_volumeRayCastIsosurfaceFunction ) m_volumeRayCastIsosurfaceFunction->Delete();
+    if (m_imageData) m_imageData->Delete();
+    if (m_vtkVolume) m_vtkVolume->Delete();
+    if (m_volumeProperty) m_volumeProperty->Delete();
+    if (m_volumeMapper) m_volumeMapper->Delete();
+    if (m_volumeRayCastFunction) m_volumeRayCastFunction->Delete();
+    if (m_volumeRayCastAmbientContourFunction) m_volumeRayCastAmbientContourFunction->Delete();
+    if (m_volumeRayCastDirectIlluminationContourFunction) m_volumeRayCastDirectIlluminationContourFunction->Delete();
+    if (m_volumeRayCastAmbientObscuranceFunction) m_volumeRayCastAmbientObscuranceFunction->Delete();
+    if (m_volumeRayCastDirectIlluminationObscuranceFunction) m_volumeRayCastDirectIlluminationObscuranceFunction->Delete();
+    if (m_volumeRayCastAmbientContourObscuranceFunction) m_volumeRayCastAmbientContourObscuranceFunction->Delete();
+    if (m_volumeRayCastDirectIlluminationContourObscuranceFunction) m_volumeRayCastDirectIlluminationContourObscuranceFunction->Delete();
+    if (m_volumeRayCastIsosurfaceFunction) m_volumeRayCastIsosurfaceFunction->Delete();
 }
 
-void Q3DViewer::getCurrentWindowLevel( double wl[2] )
+void Q3DViewer::getCurrentWindowLevel(double wl[2])
 {
     wl[0] = m_window;
     wl[1] = m_level;
@@ -202,39 +202,39 @@ void Q3DViewer::getCurrentWindowLevel( double wl[2] )
 
 double Q3DViewer::getCurrentColorWindow()
 {
-    if( m_mainVolume )
+    if (m_mainVolume)
     {
         return m_window;
     }
     else
     {
-        DEBUG_LOG( "::getCurrentColorWindow() : No tenim input " );
+        DEBUG_LOG("::getCurrentColorWindow() : No tenim input ");
         return 0;
     }
 }
 
 double Q3DViewer::getCurrentColorLevel()
 {
-    if( m_mainVolume )
+    if (m_mainVolume)
     {
         return m_level;
     }
     else
     {
-        DEBUG_LOG( "::getCurrentColorLevel() : No tenim input " );
+        DEBUG_LOG("::getCurrentColorLevel() : No tenim input ");
         return 0;
     }
 }
 
 void Q3DViewer::setWindowLevel(double window , double level)
 {
-    if(m_mainVolume)
+    if (m_mainVolume)
     {
         m_window = window;
         m_level = level;
 //         double lowLevel  = level - (window/2.0);
 //         double highLevel = level + (window/2.0);
-        //DEBUG_LOG( QString( "Q3DViewer: new ww = %1, new wl = %2, shift = %3, lowlev = %4, highlev = %5" ).arg( window ).arg( level ).arg( m_shift ).arg( lowLevel ).arg( highLevel ) );
+        //DEBUG_LOG(QString("Q3DViewer: new ww = %1, new wl = %2, shift = %3, lowlev = %4, highlev = %5").arg(window).arg(level).arg(m_shift).arg(lowLevel).arg(highLevel));
 
         double newScale = m_window / m_range;
         double newShift = m_level - (m_window / 2.0);
@@ -298,19 +298,19 @@ void Q3DViewer::setWindowLevel(double window , double level)
     }
 }
 
-void Q3DViewer::resetView( CameraOrientationType view )
+void Q3DViewer::resetView(CameraOrientationType view)
 {
     m_currentOrientation = view;
     //TODO replantejar si necessitem aquest mètode i el substituïm per aquest mateix
     resetOrientation();
 }
 
-void Q3DViewer::setClippingPlanes( vtkPlanes *clippingPlanes )
+void Q3DViewer::setClippingPlanes(vtkPlanes *clippingPlanes)
 {
-    if( clippingPlanes )
+    if (clippingPlanes)
     {
         m_clippingPlanes = clippingPlanes;
-        m_volumeMapper->SetClippingPlanes( m_clippingPlanes );
+        m_volumeMapper->SetClippingPlanes(m_clippingPlanes);
     }
     else
     {
@@ -371,7 +371,7 @@ void Q3DViewer::setRenderFunctionToTexture3D()
 QString Q3DViewer::getRenderFunctionAsString()
 {
     QString result;
-    switch( m_renderFunction )
+    switch (m_renderFunction)
     {
     case RayCasting:
         result = "RayCasting";
@@ -402,7 +402,7 @@ void Q3DViewer::setInput(Volume *volume)
 {
     setCursor(Qt::WaitCursor);
 
-    if(!checkInputVolume(volume))
+    if (!checkInputVolume(volume))
     {
         unsetCursor();
         return;
@@ -414,7 +414,7 @@ void Q3DViewer::setInput(Volume *volume)
         return;
     }
 
-    if( m_clippingPlanes )
+    if (m_clippingPlanes)
     {
         m_volumeMapper->RemoveAllClippingPlanes();
         m_clippingPlanes->Delete();
@@ -426,24 +426,24 @@ void Q3DViewer::setInput(Volume *volume)
     //\TODO: caldria fer el mateix amb el vtkImageActor del q2Dviewer (veure tiquet #702)
     ImagePlane * currentPlane = new ImagePlane();
     Image *imageReference = m_mainVolume->getImage(0); //Sempre penem la primera llesca suposem que és constant
-    currentPlane->fillFromImage( imageReference );
+    currentPlane->fillFromImage(imageReference);
     double currentPlaneRowVector[3], currentPlaneColumnVector[3];
-    currentPlane->getRowDirectionVector( currentPlaneRowVector );
-    currentPlane->getColumnDirectionVector( currentPlaneColumnVector );
+    currentPlane->getRowDirectionVector(currentPlaneRowVector);
+    currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
     //En realitat el vector normal no és el que ens dona la funció getNormalVector, sinó que és perpendicular a l'eix de coordenades
-    //currentPlane->getNormalVector( currentPlaneNormalVector );
+    //currentPlane->getNormalVector(currentPlaneNormalVector);
 
     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
     projectionMatrix->Identity();
 
-    if ( currentPlaneRowVector[0] != 0.0 || currentPlaneRowVector[1] != 0.0 || currentPlaneRowVector[2] != 0.0 )
+    if (currentPlaneRowVector[0] != 0.0 || currentPlaneRowVector[1] != 0.0 || currentPlaneRowVector[2] != 0.0)
     {
         int row;
 
-        if(currentPlaneRowVector[0]>currentPlaneRowVector[1] || currentPlaneRowVector[0]>currentPlaneRowVector[2])
+        if (currentPlaneRowVector[0]>currentPlaneRowVector[1] || currentPlaneRowVector[0]>currentPlaneRowVector[2])
         {
             //Row = les X -> Column = les Y
-            for( row = 0; row < 3; row++ )
+            for (row = 0; row < 3; row++)
             {
                 projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ]));
                 projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ]));
@@ -451,11 +451,11 @@ void Q3DViewer::setInput(Volume *volume)
         }
         else
         {
-            if(currentPlaneRowVector[1]>currentPlaneRowVector[2])
+            if (currentPlaneRowVector[1]>currentPlaneRowVector[2])
             {
                 //Row = les Y -> Column = les Z
                 int row;
-                for( row = 0; row < 3; row++ )
+                for (row = 0; row < 3; row++)
                 {
                     projectionMatrix->SetElement(row,1, (currentPlaneRowVector[ row ]));
                     projectionMatrix->SetElement(row,2, (currentPlaneColumnVector[ row ]));
@@ -465,7 +465,7 @@ void Q3DViewer::setInput(Volume *volume)
             {
                 //Row = les Z -> Column = les X
                 int row;
-                for( row = 0; row < 3; row++ )
+                for (row = 0; row < 3; row++)
                 {
                     projectionMatrix->SetElement(row,2, (currentPlaneRowVector[ row ]));
                     projectionMatrix->SetElement(row,0, (currentPlaneColumnVector[ row ]));
@@ -474,19 +474,19 @@ void Q3DViewer::setInput(Volume *volume)
         }
     }
 
-    DEBUG_LOG( QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
-    DEBUG_LOG( QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
+    DEBUG_LOG(QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
+    DEBUG_LOG(QString("currentPlaneColumnVector: %1 %2 %3").arg(currentPlaneColumnVector[0]).arg(currentPlaneColumnVector[1]).arg(currentPlaneColumnVector[2]));
 
     m_vtkVolume->SetUserMatrix(projectionMatrix);
     delete currentPlane;
 
     m_volumeMapper->SetInput(m_imageData);
 
-    unsigned short *data = reinterpret_cast<unsigned short*>( m_imageData->GetPointData()->GetScalars()->GetVoidPointer( 0 ) );
-    m_ambientVoxelShader->setData( data, static_cast<unsigned short>( m_range ) );
-    m_directIlluminationVoxelShader->setData( data, static_cast<unsigned short>( m_range ) );
+    unsigned short *data = reinterpret_cast<unsigned short*>(m_imageData->GetPointData()->GetScalars()->GetVoidPointer(0));
+    m_ambientVoxelShader->setData(data, static_cast<unsigned short>(m_range));
+    m_directIlluminationVoxelShader->setData(data, static_cast<unsigned short>(m_range));
 
-    if ( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() )
+    if (m_obscuranceMainThread && m_obscuranceMainThread->isRunning())
     {
         m_obscuranceMainThread->stop();
         m_obscuranceMainThread->wait();
@@ -513,9 +513,9 @@ void Q3DViewer::setInput(Volume *volume)
 
 void Q3DViewer::applyCurrentRenderingMethod()
 {
-    if( m_mainVolume )
+    if (m_mainVolume)
     {
-        switch( m_renderFunction )
+        switch (m_renderFunction)
         {
         case Contouring:
             renderContouring();
@@ -540,7 +540,7 @@ void Q3DViewer::applyCurrentRenderingMethod()
         break;
         }
 
-        if ( m_firstRender )
+        if (m_firstRender)
         {
             this->resetOrientation();
             m_firstRender = false;
@@ -552,43 +552,43 @@ void Q3DViewer::applyCurrentRenderingMethod()
     }
 }
 
-void Q3DViewer::setTransferFunction( TransferFunction *transferFunction )
+void Q3DViewer::setTransferFunction(TransferFunction *transferFunction)
 {
     m_transferFunction = transferFunction;
     m_volumeProperty->SetScalarOpacity(m_transferFunction->vtkOpacityTransferFunction());
     m_volumeProperty->SetColor(m_transferFunction->vtkColorTransferFunction());
-    m_ambientVoxelShader->setTransferFunction( *m_transferFunction );
-    m_directIlluminationVoxelShader->setTransferFunction( *m_transferFunction );
+    m_ambientVoxelShader->setTransferFunction(*m_transferFunction);
+    m_directIlluminationVoxelShader->setTransferFunction(*m_transferFunction);
 
-    if ( m_volumeProperty->GetShade() )
+    if (m_volumeProperty->GetShade())
     {
         try
         {
             vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
-            m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
+            m_directIlluminationVoxelShader->setEncodedNormals(gradientEstimator->GetEncodedNormals());
             vtkEncodedGradientShader *gradientShader = m_volumeMapper->GetGradientShader();
-            gradientShader->UpdateShadingTable( m_renderer, m_vtkVolume, gradientEstimator );
-            m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_vtkVolume ),
-                                                                      gradientShader->GetGreenDiffuseShadingTable( m_vtkVolume ),
-                                                                      gradientShader->GetBlueDiffuseShadingTable( m_vtkVolume ) );
-            m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
-                                                                       gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
-                                                                       gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
+            gradientShader->UpdateShadingTable(m_renderer, m_vtkVolume, gradientEstimator);
+            m_directIlluminationVoxelShader->setDiffuseShadingTables(gradientShader->GetRedDiffuseShadingTable(m_vtkVolume),
+                                                                      gradientShader->GetGreenDiffuseShadingTable(m_vtkVolume),
+                                                                      gradientShader->GetBlueDiffuseShadingTable(m_vtkVolume));
+            m_directIlluminationVoxelShader->setSpecularShadingTables(gradientShader->GetRedSpecularShadingTable(m_vtkVolume),
+                                                                       gradientShader->GetGreenSpecularShadingTable(m_vtkVolume),
+                                                                       gradientShader->GetBlueSpecularShadingTable(m_vtkVolume));
         }
-        catch ( std::bad_alloc &e )
+        catch (std::bad_alloc &e)
         {
-            ERROR_LOG( QString( "Excepció al voler aplicar shading en el volum: " ) + e.what() );
-            QMessageBox::warning( this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected.") );
+            ERROR_LOG(QString("Excepció al voler aplicar shading en el volum: ") + e.what());
+            QMessageBox::warning(this, tr("Can't apply rendering style"), tr("The system hasn't enough memory to apply properly this rendering style with this volume.\nShading will be disabled, it won't render as expected."));
             m_canEnableShading = false;
-            this->setShading( false );
+            this->setShading(false);
             this->applyCurrentRenderingMethod(); // TODO Comprovar si seria suficient amb un render()
         }
     }
 }
 
-void Q3DViewer::setNewTransferFunction( )
+void Q3DViewer::setNewTransferFunction()
 {
-    if(m_newTransferFunction) delete m_newTransferFunction;
+    if (m_newTransferFunction) delete m_newTransferFunction;
 
     m_newTransferFunction = new TransferFunction(*m_transferFunction);
     m_window = m_range;
@@ -597,7 +597,7 @@ void Q3DViewer::setNewTransferFunction( )
 
 void Q3DViewer::resetOrientation()
 {
-    switch( m_currentOrientation )
+    switch (m_currentOrientation)
     {
     case Axial:
         this->resetViewToAxial();
@@ -613,7 +613,7 @@ void Q3DViewer::resetOrientation()
 
     default:
         setDefaultOrientationForCurrentInput();
-        DEBUG_LOG("Q3DViewer: m_currentOrientation no és cap de les tres esperades ( Axial,Sagital,Coronal ). Donem l'orientació per defecte.");
+        DEBUG_LOG("Q3DViewer: m_currentOrientation no és cap de les tres esperades (Axial,Sagital,Coronal). Donem l'orientació per defecte.");
         this->resetOrientation();
     break;
     }
@@ -621,7 +621,7 @@ void Q3DViewer::resetOrientation()
 
 void Q3DViewer::setDefaultOrientationForCurrentInput()
 {
-    // De moment, sempre serà coronal 
+    // De moment, sempre serà coronal
     // TODO cal implementar que analitzi l'input i esculli la millor orientació
     m_currentOrientation = Coronal;
 }
@@ -692,41 +692,41 @@ bool Q3DViewer::rescale(Volume *volume)
 
 void Q3DViewer::renderRayCasting()
 {
-    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    if (!m_renderer->HasViewProp(m_vtkVolume))
     {
         m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp( m_vtkVolume );
+        m_renderer->AddViewProp(m_vtkVolume);
     }
 
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
-    m_vtkVolume->SetMapper( m_volumeMapper );
+    m_vtkVolume->SetMapper(m_volumeMapper);
 
-    if ( m_contourOn )
+    if (m_contourOn)
     {
-        if ( m_volumeProperty->GetShade() ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationContourFunction );
-        else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientContourFunction );
+        if (m_volumeProperty->GetShade()) m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationContourFunction);
+        else m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientContourFunction);
     }
-    else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
+    else m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastFunction);
 
-    if ( m_contourOn && m_volumeProperty->GetShade() )
+    if (m_contourOn && m_volumeProperty->GetShade())
     {
         vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
-        m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
+        m_directIlluminationVoxelShader->setEncodedNormals(gradientEstimator->GetEncodedNormals());
         vtkEncodedGradientShader *gradientShader = m_volumeMapper->GetGradientShader();
-        gradientShader->UpdateShadingTable( m_renderer, m_vtkVolume, gradientEstimator );
-        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_vtkVolume ),
-                                                                  gradientShader->GetGreenDiffuseShadingTable( m_vtkVolume ),
-                                                                  gradientShader->GetBlueDiffuseShadingTable( m_vtkVolume ) );
-        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
-                                                                   gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
-                                                                   gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
+        gradientShader->UpdateShadingTable(m_renderer, m_vtkVolume, gradientEstimator);
+        m_directIlluminationVoxelShader->setDiffuseShadingTables(gradientShader->GetRedDiffuseShadingTable(m_vtkVolume),
+                                                                  gradientShader->GetGreenDiffuseShadingTable(m_vtkVolume),
+                                                                  gradientShader->GetBlueDiffuseShadingTable(m_vtkVolume));
+        m_directIlluminationVoxelShader->setSpecularShadingTables(gradientShader->GetRedSpecularShadingTable(m_vtkVolume),
+                                                                   gradientShader->GetGreenSpecularShadingTable(m_vtkVolume),
+                                                                   gradientShader->GetBlueSpecularShadingTable(m_vtkVolume));
     }
 
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction( new TransferFunction( *transferFunction ) );
+    setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
 
     render();
@@ -734,57 +734,57 @@ void Q3DViewer::renderRayCasting()
 
 void Q3DViewer::renderRayCastingObscurance()
 {
-    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    if (!m_renderer->HasViewProp(m_vtkVolume))
     {
         m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp( m_vtkVolume );
+        m_renderer->AddViewProp(m_vtkVolume);
     }
 
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
-    m_vtkVolume->SetMapper( m_volumeMapper );
-    if ( m_obscuranceOn )
+    m_vtkVolume->SetMapper(m_volumeMapper);
+    if (m_obscuranceOn)
     {
-        if ( m_contourOn )
+        if (m_contourOn)
         {
-            if ( m_volumeProperty->GetShade() )
-                m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationContourObscuranceFunction );
+            if (m_volumeProperty->GetShade())
+                m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationContourObscuranceFunction);
             else
-                m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientContourObscuranceFunction );
+                m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientContourObscuranceFunction);
         }
         else
         {
-            if ( m_volumeProperty->GetShade() )
-                m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationObscuranceFunction );
+            if (m_volumeProperty->GetShade())
+                m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationObscuranceFunction);
             else
-                m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientObscuranceFunction );
+                m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientObscuranceFunction);
         }
     }
-    else if ( m_contourOn )
+    else if (m_contourOn)
     {
-        if ( m_volumeProperty->GetShade() ) m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastDirectIlluminationContourFunction );
-        else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastAmbientContourFunction );
+        if (m_volumeProperty->GetShade()) m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastDirectIlluminationContourFunction);
+        else m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastAmbientContourFunction);
     }
-    else m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastFunction );
+    else m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastFunction);
 
-    if ( ( m_contourOn || m_obscuranceOn ) && m_volumeProperty->GetShade() )
+    if ((m_contourOn || m_obscuranceOn) && m_volumeProperty->GetShade())
     {
         vtkEncodedGradientEstimator *gradientEstimator = m_volumeMapper->GetGradientEstimator();
-        m_directIlluminationVoxelShader->setEncodedNormals( gradientEstimator->GetEncodedNormals() );
+        m_directIlluminationVoxelShader->setEncodedNormals(gradientEstimator->GetEncodedNormals());
         vtkEncodedGradientShader *gradientShader = m_volumeMapper->GetGradientShader();
-        gradientShader->UpdateShadingTable( m_renderer, m_vtkVolume, gradientEstimator );
-        m_directIlluminationVoxelShader->setDiffuseShadingTables( gradientShader->GetRedDiffuseShadingTable( m_vtkVolume ),
-                                                                  gradientShader->GetGreenDiffuseShadingTable( m_vtkVolume ),
-                                                                  gradientShader->GetBlueDiffuseShadingTable( m_vtkVolume ) );
-        m_directIlluminationVoxelShader->setSpecularShadingTables( gradientShader->GetRedSpecularShadingTable( m_vtkVolume ),
-                                                                   gradientShader->GetGreenSpecularShadingTable( m_vtkVolume ),
-                                                                   gradientShader->GetBlueSpecularShadingTable( m_vtkVolume ) );
+        gradientShader->UpdateShadingTable(m_renderer, m_vtkVolume, gradientEstimator);
+        m_directIlluminationVoxelShader->setDiffuseShadingTables(gradientShader->GetRedDiffuseShadingTable(m_vtkVolume),
+                                                                  gradientShader->GetGreenDiffuseShadingTable(m_vtkVolume),
+                                                                  gradientShader->GetBlueDiffuseShadingTable(m_vtkVolume));
+        m_directIlluminationVoxelShader->setSpecularShadingTables(gradientShader->GetRedSpecularShadingTable(m_vtkVolume),
+                                                                   gradientShader->GetGreenSpecularShadingTable(m_vtkVolume),
+                                                                   gradientShader->GetBlueSpecularShadingTable(m_vtkVolume));
     }
 
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction( new TransferFunction( *transferFunction ) );
+    setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
 
     render();
@@ -792,10 +792,10 @@ void Q3DViewer::renderRayCastingObscurance()
 
 void Q3DViewer::renderMIP3D()
 {
-    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    if (!m_renderer->HasViewProp(m_vtkVolume))
     {
         m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp( m_vtkVolume );
+        m_renderer->AddViewProp(m_vtkVolume);
     }
 
     // quan fem MIP3D deixarem disable per defecte ja que la orientació no la sabem ben bé quina és ja que el pla de tall pot ser arbitrari \TODO no sempre un mip serà sobre un pla mpr, llavors tampoc és del tot correcte decidir això aquí
@@ -803,13 +803,13 @@ void Q3DViewer::renderMIP3D()
     //================================================================================================
     // Create a transfer function mapping scalar value to opacity
     // assignem una rampa d'opacitat total per valors alts i nula per valors petits
-    // després en l'escala de grisos donem un  valor de gris constant ( blanc )
+    // després en l'escala de grisos donem un  valor de gris constant (blanc)
 
     //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
 
     // Creem la funció de transferència de l'opacitat
-//     m_transferFunction->addPointToOpacity( 20, .0 );
-//     m_transferFunction->addPointToOpacity( 255, 1. );
+//     m_transferFunction->addPointToOpacity(20, .0);
+//     m_transferFunction->addPointToOpacity(255, 1.);
     TransferFunction mipTransferFunction;
     mipTransferFunction.setOpacity(20.0, 0.0);
     mipTransferFunction.setOpacity(m_range, 1.0);
@@ -817,11 +817,11 @@ void Q3DViewer::renderMIP3D()
     // Creem la funció de transferència de colors
     // Create a transfer function mapping scalar value to color (grey)
     vtkPiecewiseFunction *grayTransferFunction = vtkPiecewiseFunction::New();
-    grayTransferFunction->AddSegment( 0 , 0.0 , m_range , 1.0 );
+    grayTransferFunction->AddSegment(0 , 0.0 , m_range , 1.0);
 
-//     m_volumeProperty->SetScalarOpacity( m_transferFunction->getOpacityTransferFunction() );
+//     m_volumeProperty->SetScalarOpacity(m_transferFunction->getOpacityTransferFunction());
     m_volumeProperty->SetScalarOpacity(mipTransferFunction.vtkOpacityTransferFunction());
-    m_volumeProperty->SetColor( grayTransferFunction /*m_transferFunction->vtkColorTransferFunction()*/ );
+    m_volumeProperty->SetColor(grayTransferFunction /*m_transferFunction->vtkColorTransferFunction()*/);
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     grayTransferFunction->Delete();
@@ -833,12 +833,12 @@ void Q3DViewer::renderMIP3D()
 //         vtkFiniteDifferenceGradientEstimator *gradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
 //     vtkVolumeRayCastMapper* volumeMapper = vtkVolumeRayCastMapper::New();
 
-    m_vtkVolume->SetMapper( m_volumeMapper );
-    m_volumeMapper->SetVolumeRayCastFunction( mipFunction );
-//     volumeMapper->SetInput( m_imageCaster->GetOutput()  );
-//         volumeMapper->SetGradientEstimator( gradientEstimator );
+    m_vtkVolume->SetMapper(m_volumeMapper);
+    m_volumeMapper->SetVolumeRayCastFunction(mipFunction);
+//     volumeMapper->SetInput(m_imageCaster->GetOutput() );
+//         volumeMapper->SetGradientEstimator(gradientEstimator);
 
-//     m_vtkVolume->SetMapper( volumeMapper );
+//     m_vtkVolume->SetMapper(volumeMapper);
 
     mipFunction->Delete();
 
@@ -847,24 +847,24 @@ void Q3DViewer::renderMIP3D()
 
 void Q3DViewer::renderContouring()
 {
-    if ( m_renderer->HasViewProp( m_vtkVolume ) )
+    if (m_renderer->HasViewProp(m_vtkVolume))
     {
         vtkImageShrink3D *shrink = vtkImageShrink3D::New();
-        shrink->SetInput( m_mainVolume->getVtkData() );
+        shrink->SetInput(m_mainVolume->getVtkData());
         vtkImageGaussianSmooth *smooth = vtkImageGaussianSmooth::New();
-        smooth->SetDimensionality( 3 );
-        smooth->SetRadiusFactor( 2 );
-        smooth->SetInput( shrink->GetOutput() );
+        smooth->SetDimensionality(3);
+        smooth->SetRadiusFactor(2);
+        smooth->SetInput(shrink->GetOutput());
 
         vtkContourFilter *contour = vtkContourFilter::New();
-        contour->SetInputConnection( smooth->GetOutputPort());
-        contour->GenerateValues( 1, 30, 30);
+        contour->SetInputConnection(smooth->GetOutputPort());
+        contour->GenerateValues(1, 30, 30);
         contour->ComputeScalarsOff();
         contour->ComputeGradientsOff();
 
         vtkDecimatePro *decimator = vtkDecimatePro::New();
-        decimator->SetInputConnection( contour->GetOutputPort() );
-        decimator->SetTargetReduction( 0.9 );
+        decimator->SetInputConnection(contour->GetOutputPort());
+        decimator->SetTargetReduction(0.9);
         decimator->PreserveTopologyOn();
 
         vtkReverseSense *reverse = vtkReverseSense::New();
@@ -874,16 +874,16 @@ void Q3DViewer::renderContouring()
 
         vtkPolyDataMapper *polyDataMapper = vtkPolyDataMapper::New();
 
-        polyDataMapper->SetInputConnection( reverse->GetOutputPort() );
+        polyDataMapper->SetInputConnection(reverse->GetOutputPort());
         polyDataMapper->ScalarVisibilityOn();
         polyDataMapper->ImmediateModeRenderingOn();
 
         vtkActor *actor = vtkActor::New();
-        actor->SetMapper( polyDataMapper );
+        actor->SetMapper(polyDataMapper);
         actor->GetProperty()->SetColor(1,0.8,0.81);
 
-        m_renderer->RemoveViewProp( m_vtkVolume );
-        m_renderer->AddViewProp( actor );
+        m_renderer->RemoveViewProp(m_vtkVolume);
+        m_renderer->AddViewProp(actor);
 
         decimator->Delete();
         actor->Delete();
@@ -899,10 +899,10 @@ void Q3DViewer::renderContouring()
 
 void Q3DViewer::renderIsoSurface()
 {
-    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    if (!m_renderer->HasViewProp(m_vtkVolume))
     {
         m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp( m_vtkVolume );
+        m_renderer->AddViewProp(m_vtkVolume);
     }
 
     //\TODO Les funcions de transferència no es definiran "a pelo" aquí mai més. Això és cosa de la classe TransferFunction
@@ -911,7 +911,7 @@ void Q3DViewer::renderIsoSurface()
     oTFun->AddSegment(0.0, 0.0, m_range, 0.3);
 
 //     vtkPiecewiseFunction *opacityTransferFunction = vtkPiecewiseFunction::New();
-//     opacityTransferFunction->AddSegment(  0, 0.0, 128, 1.0);
+//     opacityTransferFunction->AddSegment( 0, 0.0, 128, 1.0);
 //     opacityTransferFunction->AddSegment(128, 1.0, 255, 0.0);
 
     // Create a transfer function mapping scalar value to color (grey)
@@ -920,40 +920,40 @@ void Q3DViewer::renderIsoSurface()
 
     // Create a transfer function mapping scalar value to color (color)
     vtkColorTransferFunction *cTFun = vtkColorTransferFunction::New();
-    cTFun->AddRGBPoint(            0.0, 1.0, 0.0, 0.0 );
-    cTFun->AddRGBPoint( 0.25 * m_range, 1.0, 1.0, 0.0 );
-    cTFun->AddRGBPoint( 0.50 * m_range, 0.0, 1.0, 0.0 );
-    cTFun->AddRGBPoint( 0.75 * m_range, 0.0, 1.0, 1.0 );
-    cTFun->AddRGBPoint(        m_range, 0.0, 0.0, 1.0 );
+    cTFun->AddRGBPoint(           0.0, 1.0, 0.0, 0.0);
+    cTFun->AddRGBPoint(0.25 * m_range, 1.0, 1.0, 0.0);
+    cTFun->AddRGBPoint(0.50 * m_range, 0.0, 1.0, 0.0);
+    cTFun->AddRGBPoint(0.75 * m_range, 0.0, 1.0, 1.0);
+    cTFun->AddRGBPoint(       m_range, 0.0, 0.0, 1.0);
 
     // Create a transfer function mapping magnitude of gradient to opacity
     vtkPiecewiseFunction *goTFun = vtkPiecewiseFunction::New();
-    goTFun->AddPoint(   0, 0.0 );
-    goTFun->AddPoint(  30, 0.0 );
-    goTFun->AddPoint(  40, 1.0 );
-    goTFun->AddPoint( 255, 1.0 );
+    goTFun->AddPoint(  0, 0.0);
+    goTFun->AddPoint( 30, 0.0);
+    goTFun->AddPoint( 40, 1.0);
+    goTFun->AddPoint(255, 1.0);
 
     m_volumeProperty->ShadeOn();
 
     m_volumeProperty->SetScalarOpacity(oTFun);
     m_volumeProperty->DisableGradientOpacityOff();
-    m_volumeProperty->SetGradientOpacity( goTFun );
-    m_volumeProperty->SetColor( cTFun );
-//     m_volumeProperty->SetColor( grayTransferFunction );
+    m_volumeProperty->SetGradientOpacity(goTFun);
+    m_volumeProperty->SetColor(cTFun);
+//     m_volumeProperty->SetColor(grayTransferFunction);
     m_volumeProperty->SetInterpolationTypeToLinear(); //prop[index]->SetInterpolationTypeToNearest();
 
-    m_vtkVolume->SetMapper( m_volumeMapper );
-    m_volumeMapper->SetVolumeRayCastFunction( m_volumeRayCastIsosurfaceFunction );
+    m_vtkVolume->SetMapper(m_volumeMapper);
+    m_volumeMapper->SetVolumeRayCastFunction(m_volumeRayCastIsosurfaceFunction);
 
     render();
 }
 
 void Q3DViewer::renderTexture2D()
 {
-    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    if (!m_renderer->HasViewProp(m_vtkVolume))
     {
         m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp( m_vtkVolume );
+        m_renderer->AddViewProp(m_vtkVolume);
     }
 
     /// \todo Això és massa lent, potser l'hauríem de treure.
@@ -964,21 +964,21 @@ void Q3DViewer::renderTexture2D()
 
     // target texture size: en teoria com més gran millor
     // màxim en una Quadro FX 4500 = 4096x4096
-//     volumeMapper->SetTargetTextureSize( 4096, 4096 );
+//     volumeMapper->SetTargetTextureSize(4096, 4096);
 
     // max number of planes: This is the maximum number of planes that will be created for texture mapping the volume. If the volume has more
     // voxels than this along the viewing direction, then planes of the volume will be skipped to ensure that this maximum is not violated. A
     // skip factor is used, and is incremented until the maximum condition is satisfied.
     // 128 és el que té millor relació qualitat/preu amb un model determinat a l'ordinador de la uni
-//     volumeMapper->SetMaximumNumberOfPlanes( 128 );
+//     volumeMapper->SetMaximumNumberOfPlanes(128);
 
-    volumeMapper->SetInput( m_imageData );
-    m_vtkVolume->SetMapper( volumeMapper );
+    volumeMapper->SetInput(m_imageData);
+    m_vtkVolume->SetMapper(volumeMapper);
     volumeMapper->Delete();
 
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction( new TransferFunction( *transferFunction ) );
+    setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
 
     render();
@@ -986,23 +986,23 @@ void Q3DViewer::renderTexture2D()
 
 void Q3DViewer::renderTexture3D()
 {
-    if ( !m_renderer->HasViewProp( m_vtkVolume ) )
+    if (!m_renderer->HasViewProp(m_vtkVolume))
     {
         m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp( m_vtkVolume );
+        m_renderer->AddViewProp(m_vtkVolume);
     }
 
     m_volumeProperty->DisableGradientOpacityOn();
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     vtkVolumeTextureMapper3D *volumeMapper = vtkVolumeTextureMapper3D::New();
-    volumeMapper->SetInput( m_imageData );
-    m_vtkVolume->SetMapper( volumeMapper );
+    volumeMapper->SetInput(m_imageData);
+    m_vtkVolume->SetMapper(volumeMapper);
     volumeMapper->Delete();
 
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction( new TransferFunction( *transferFunction ) );
+    setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
 
     render();
@@ -1010,38 +1010,38 @@ void Q3DViewer::renderTexture3D()
 
 void Q3DViewer::resetViewToAxial()
 {
-    this->setCameraOrientation( Axial );
+    this->setCameraOrientation(Axial);
     m_currentOrientation = Axial;
 }
 
 void Q3DViewer::resetViewToSagital()
 {
-    this->setCameraOrientation( Sagital );
+    this->setCameraOrientation(Sagital);
     m_currentOrientation = Sagital;
 }
 
 void Q3DViewer::resetViewToCoronal()
 {
-    this->setCameraOrientation( Coronal );
+    this->setCameraOrientation(Coronal);
     m_currentOrientation = Coronal;
 }
 
-void Q3DViewer::enableOrientationMarker( bool enable )
+void Q3DViewer::enableOrientationMarker(bool enable)
 {
-    m_orientationMarker->setEnabled( enable );
+    m_orientationMarker->setEnabled(enable);
 }
 
 void Q3DViewer::orientationMarkerOn()
 {
-    this->enableOrientationMarker( true );
+    this->enableOrientationMarker(true);
 }
 
 void Q3DViewer::orientationMarkerOff()
 {
-    this->enableOrientationMarker( false );
+    this->enableOrientationMarker(false);
 }
 
-void Q3DViewer::setShading( bool on )
+void Q3DViewer::setShading(bool on)
 {
     if (m_canEnableShading && on)
     {
@@ -1053,27 +1053,27 @@ void Q3DViewer::setShading( bool on )
     }
 }
 
-void Q3DViewer::setSpecular( bool on )
+void Q3DViewer::setSpecular(bool on)
 {
-    m_volumeProperty->SetSpecular( on ? 1.0 : 0.0 );
+    m_volumeProperty->SetSpecular(on ? 1.0 : 0.0);
 }
 
-void Q3DViewer::setSpecularPower( double power )
+void Q3DViewer::setSpecularPower(double power)
 {
-    m_volumeProperty->SetSpecularPower( power );
+    m_volumeProperty->SetSpecularPower(power);
 }
 
-void Q3DViewer::computeObscurance( ObscuranceQuality quality )
+void Q3DViewer::computeObscurance(ObscuranceQuality quality)
 {
-    Q_ASSERT( !m_obscuranceMainThread || m_obscuranceMainThread->isFinished() );
+    Q_ASSERT(!m_obscuranceMainThread || m_obscuranceMainThread->isFinished());
 
     delete m_obscuranceMainThread; m_obscuranceMainThread = 0;
 
-    if ( !m_4DLinearRegressionGradientEstimator )
+    if (!m_4DLinearRegressionGradientEstimator)
     {
         m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
-        m_volumeMapper->SetGradientEstimator( m_4DLinearRegressionGradientEstimator );  // radi 1 per defecte (-> 3³)
-        m_4DLinearRegressionGradientEstimator->SetInput( m_volumeMapper->GetInput() );  /// \todo hauria de funcionar sense això, però no !?!?!
+        m_volumeMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);  // radi 1 per defecte (-> 3³)
+        m_4DLinearRegressionGradientEstimator->SetInput(m_volumeMapper->GetInput());  /// \todo hauria de funcionar sense això, però no !?!?!
     }
 
     Settings settings;
@@ -1081,142 +1081,142 @@ void Q3DViewer::computeObscurance( ObscuranceQuality quality )
     ObscuranceMainThread::Function function;
     ObscuranceMainThread::Variant variant;
     unsigned int gradientRadius;
-    switch ( quality )
+    switch (quality)
     {
         case Low:
-            numberOfDirections = settings.getValue( CoreSettings::NumberOfDirectionsForLowQualityObscurances ).toInt();
-            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::FunctionForLowQualityObscurances ).toInt() );
-            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::VariantForLowQualityObscurances ).toInt() );
-            gradientRadius = settings.getValue( CoreSettings::GradientRadiusForLowQualityObscurances ).toUInt();
+            numberOfDirections = settings.getValue(CoreSettings::NumberOfDirectionsForLowQualityObscurances).toInt();
+            function = static_cast<ObscuranceMainThread::Function>(settings.getValue(CoreSettings::FunctionForLowQualityObscurances).toInt());
+            variant = static_cast<ObscuranceMainThread::Variant>(settings.getValue(CoreSettings::VariantForLowQualityObscurances).toInt());
+            gradientRadius = settings.getValue(CoreSettings::GradientRadiusForLowQualityObscurances).toUInt();
             break;
 
         case Medium:
-            numberOfDirections = settings.getValue( CoreSettings::NumberOfDirectionsForMediumQualityObscurances ).toInt();
-            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::FunctionForMediumQualityObscurances ).toInt() );
-            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::VariantForMediumQualityObscurances ).toInt() );
-            gradientRadius = settings.getValue( CoreSettings::GradientRadiusForMediumQualityObscurances ).toUInt();
+            numberOfDirections = settings.getValue(CoreSettings::NumberOfDirectionsForMediumQualityObscurances).toInt();
+            function = static_cast<ObscuranceMainThread::Function>(settings.getValue(CoreSettings::FunctionForMediumQualityObscurances).toInt());
+            variant = static_cast<ObscuranceMainThread::Variant>(settings.getValue(CoreSettings::VariantForMediumQualityObscurances).toInt());
+            gradientRadius = settings.getValue(CoreSettings::GradientRadiusForMediumQualityObscurances).toUInt();
             break;
 
         case High:
-            numberOfDirections = settings.getValue( CoreSettings::NumberOfDirectionsForHighQualityObscurances ).toInt();
-            function = static_cast<ObscuranceMainThread::Function>( settings.getValue( CoreSettings::FunctionForHighQualityObscurances ).toInt() );
-            variant = static_cast<ObscuranceMainThread::Variant>( settings.getValue( CoreSettings::VariantForHighQualityObscurances ).toInt() );
-            gradientRadius = settings.getValue( CoreSettings::GradientRadiusForHighQualityObscurances ).toUInt();
+            numberOfDirections = settings.getValue(CoreSettings::NumberOfDirectionsForHighQualityObscurances).toInt();
+            function = static_cast<ObscuranceMainThread::Function>(settings.getValue(CoreSettings::FunctionForHighQualityObscurances).toInt());
+            variant = static_cast<ObscuranceMainThread::Variant>(settings.getValue(CoreSettings::VariantForHighQualityObscurances).toInt());
+            gradientRadius = settings.getValue(CoreSettings::GradientRadiusForHighQualityObscurances).toUInt();
             break;
 
         default:
-            ERROR_LOG( QString( "Valor inesperat per a la qualitat de les obscurances: %1" ).arg( quality ) );
+            ERROR_LOG(QString("Valor inesperat per a la qualitat de les obscurances: %1").arg(quality));
     }
 
     double distance = m_vtkVolume->GetLength() / 2.0;   /// \todo de moment la meitat de la diagonal, però podria ser una altra funció
     // el primer paràmetre és el nombre de direccions
     // pot ser >= 0 i llavors es fan 10*4^n+2 direccions (12, 42, 162, 642, ...)
     // també pot ser < 0 i llavors es fan -n direccions (valors permesos: -4, -6, -8, -12, -20; amb qualsevol altre s'aplica -4)
-    m_obscuranceMainThread = new ObscuranceMainThread( numberOfDirections, distance, function, variant, this );
+    m_obscuranceMainThread = new ObscuranceMainThread(numberOfDirections, distance, function, variant, this);
 
     /// \todo Només canviant això ja recalcularà les normals o cal fer alguna cosa més?
-    if ( m_4DLinearRegressionGradientEstimator->GetRadius() < gradientRadius )
-        m_4DLinearRegressionGradientEstimator->SetRadius( gradientRadius );
+    if (m_4DLinearRegressionGradientEstimator->GetRadius() < gradientRadius)
+        m_4DLinearRegressionGradientEstimator->SetRadius(gradientRadius);
 
-    m_obscuranceMainThread->setVolume( m_vtkVolume );
-    m_obscuranceMainThread->setTransferFunction( *m_transferFunction );
+    m_obscuranceMainThread->setVolume(m_vtkVolume);
+    m_obscuranceMainThread->setTransferFunction(*m_transferFunction);
 
-    connect( m_obscuranceMainThread, SIGNAL( progress(int) ), this, SIGNAL( obscuranceProgress(int) ) );
-    connect( m_obscuranceMainThread, SIGNAL( computed() ), this, SLOT( endComputeObscurance() ) );
+    connect(m_obscuranceMainThread, SIGNAL(progress(int)), this, SIGNAL(obscuranceProgress(int)));
+    connect(m_obscuranceMainThread, SIGNAL(computed()), this, SLOT(endComputeObscurance()));
     m_obscuranceMainThread->start();
 
     // perquè el DirectIlluminationVoxelShader tingui les noves normals
     // no funciona sense fer la còpia
     TransferFunction *transferFunction = m_transferFunction;
-    setTransferFunction( new TransferFunction( *transferFunction ) );
+    setTransferFunction(new TransferFunction(*transferFunction));
     delete transferFunction;
 
     // perquè el ContourVoxelShader tingui les noves normals
-    setContour( m_contourOn );
+    setContour(m_contourOn);
 }
 
 void Q3DViewer::cancelObscurance()
 {
-    Q_ASSERT( m_obscuranceMainThread && m_obscuranceMainThread->isRunning() );
+    Q_ASSERT(m_obscuranceMainThread && m_obscuranceMainThread->isRunning());
 
     m_obscuranceMainThread->stop();
 }
 
 void Q3DViewer::endComputeObscurance()
 {
-    Q_ASSERT( m_obscuranceMainThread );
+    Q_ASSERT(m_obscuranceMainThread);
 
     m_obscurance = m_obscuranceMainThread->getObscurance();
-    m_obscuranceVoxelShader->setObscurance( m_obscurance );
+    m_obscuranceVoxelShader->setObscurance(m_obscurance);
 
     emit obscuranceComputed();
 }
 
-void Q3DViewer::setObscurance( bool on )
+void Q3DViewer::setObscurance(bool on)
 {
     m_obscuranceOn = on;
 }
 
-void Q3DViewer::setObscuranceFactor( double factor )
+void Q3DViewer::setObscuranceFactor(double factor)
 {
-    m_obscuranceVoxelShader->setFactor( factor );
+    m_obscuranceVoxelShader->setFactor(factor);
 }
 
-void Q3DViewer::setContour( bool on )
+void Q3DViewer::setContour(bool on)
 {
     m_contourOn = on;
 
-    if ( on ) m_contourVoxelShader->setGradientEstimator( m_volumeMapper->GetGradientEstimator() );
+    if (on) m_contourVoxelShader->setGradientEstimator(m_volumeMapper->GetGradientEstimator());
 }
 
-void Q3DViewer::setContourThreshold( double threshold )
+void Q3DViewer::setContourThreshold(double threshold)
 {
-    m_contourVoxelShader->setThreshold( threshold );
+    m_contourVoxelShader->setThreshold(threshold);
 }
 
-void Q3DViewer::setIsoValue( int isoValue )
+void Q3DViewer::setIsoValue(int isoValue)
 {
-    m_volumeRayCastIsosurfaceFunction->SetIsoValue( isoValue );
+    m_volumeRayCastIsosurfaceFunction->SetIsoValue(isoValue);
 }
 
-bool Q3DViewer::checkInputVolume( Volume *volume )
+bool Q3DViewer::checkInputVolume(Volume *volume)
 {
-    if( !volume )
+    if (!volume)
     {
         DEBUG_LOG("El volum és NUL");
         WARN_LOG("El volum és NUL");
         return false;
     }
-    
+
     // Comprovem si tenim imatges
-    if( volume->getImages().isEmpty() )
+    if (volume->getImages().isEmpty())
     {
         DEBUG_LOG("El volum no conté imatges");
         WARN_LOG("El volum no conté imatges");
         return false;
     }
 
-    // Comprovem que el volum que volem carregar càpiga a memòria 
-    if ( !volume->fitsIntoMemory() )
+    // Comprovem que el volum que volem carregar càpiga a memòria
+    if (!volume->fitsIntoMemory())
     {
-        DEBUG_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
-        WARN_LOG( "No hi ha prou memòria per veure el volum actual en 3D." );
-        QMessageBox::warning( this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again.") );
+        DEBUG_LOG("No hi ha prou memòria per veure el volum actual en 3D.");
+        WARN_LOG("No hi ha prou memòria per veure el volum actual en 3D.");
+        QMessageBox::warning(this, tr("Volume too large"), tr("Current volume is too large. Please select another volume or close other extensions and try again."));
         return false;
     }
 
-    if ( !isSupportedVolume( volume ) )
+    if (!isSupportedVolume(volume))
     {
-        DEBUG_LOG( "El format del volum no està suportat" );
-        WARN_LOG( "El format del volum no està suportat." );
-        QMessageBox::warning( this, tr("Not supported volume"), tr("Current volume cannot be opened because its format is not supported.") );
+        DEBUG_LOG("El format del volum no està suportat");
+        WARN_LOG("El format del volum no està suportat.");
+        QMessageBox::warning(this, tr("Not supported volume"), tr("Current volume cannot be opened because its format is not supported."));
         return false;
     }
 
     return true;
 }
 
-bool Q3DViewer::canAllocateMemory( int size )
+bool Q3DViewer::canAllocateMemory(int size)
 {
     char *p = 0;
     try
@@ -1225,13 +1225,13 @@ bool Q3DViewer::canAllocateMemory( int size )
         delete[] p;
         return true;
     }
-    catch ( std::bad_alloc )
+    catch (std::bad_alloc)
     {
         return false;
     }
 }
 
-bool Q3DViewer::isSupportedVolume( Volume *volume )
+bool Q3DViewer::isSupportedVolume(Volume *volume)
 {
     return volume->getVtkData()->GetNumberOfScalarComponents() == 1;
 }

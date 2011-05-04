@@ -11,9 +11,9 @@ public:
     EditorToolData(QObject *parent = 0);
     ~EditorToolData();
 
-    void setVolumeVoxels( int vol );
+    void setVolumeVoxels(int vol);
 
-    int getVolumeVoxels( );
+    int getVolumeVoxels();
 
 private:
     /// Hi guardem la posició de la llavor

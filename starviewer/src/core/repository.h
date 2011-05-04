@@ -8,7 +8,7 @@
 namespace udg {
 
 template< typename ItemType >
-class Repository  : public RepositoryBase{
+class Repository : public RepositoryBase {
 public:
 
     /// Constructor per defecte
@@ -24,16 +24,16 @@ public:
         Afegeix un item al repositori.
         Ens retorna l'id de l'item afegit per poder-lo obtenir més endavant.
     */
-    Identifier addItem( ItemType *item );
+    Identifier addItem(ItemType *item);
 
     /// Ens retorna un item del repositori amb l'identificador que especifiquem.
-    ItemType *getItem( const Identifier id );
+    ItemType *getItem(const Identifier id);
 
     /// Ens retorna tots els items del repositoy.
     QList<ItemType*> getItems();
 
     /// Elimina un item del repositori
-    void removeItem( const Identifier id );
+    void removeItem(const Identifier id);
 
     /// Retorna el nombre d'items que hi ha al repositori
     int getNumberOfItems();
@@ -46,7 +46,7 @@ public:
 
 private:
 
-    typedef QHash< Identifier, ItemType*  > ItemListType;
+    typedef QHash<Identifier, ItemType*> ItemListType;
     typedef typename ItemListType::const_iterator ItemListIteratorType;
 
     /// La llista que conté els items amb un ID
@@ -56,9 +56,7 @@ private:
     int m_nextIdentifierNumber;
 };
 
-
 };  //  end  namespace udg
-
 
 #include "repository.cpp"
 

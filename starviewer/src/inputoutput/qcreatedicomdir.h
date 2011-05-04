@@ -16,24 +16,24 @@ class Status;
 class Image;
 class IsoImageFileCreator;
 
-class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase{
+class QCreateDicomdir : public QDialog , private Ui::QCreateDicomdirBase {
 Q_OBJECT
 public:
-    QCreateDicomdir( QWidget *parent = 0 );
+    QCreateDicomdir(QWidget *parent = 0);
     ~QCreateDicomdir();
 
-    /** 
+    /**
      * Afegeix una llista d'estudis per convertir a DICOMDIR
      * @param studies Llista d'estudis per convertir a DICOMDIR
      */
     void addStudies(const QList<Study *> &studies);
 
-    /** 
+    /**
      * Comprova si l'estudi amb UID passat per paràmetre està dins la llista d'estudis pendents de passa a DICOMDIR
      * @param studyUID UID de l'estudi que s'ha de comprovar si existeix dins la llista
      * @return indica si existeix l'estudi a la llista d'estudis pendents de passa a DICOMDIR
      */
-    bool studyExistsInDICOMDIRList( QString studyUID );
+    bool studyExistsInDICOMDIRList(QString studyUID);
 
 public slots:
     /// Slot que esborra l'estudi seleccionat de la llista
@@ -49,11 +49,11 @@ public slots:
     void createDicomdir();
 
 protected:
-    /** 
+    /**
      * Event que s'activa al tancar al rebren un event de tancament
      * @param event de tancament
      */
-    void closeEvent( QCloseEvent* ce );
+    void closeEvent(QCloseEvent* ce);
 
 private:
 
@@ -70,24 +70,24 @@ private:
     void showDICOMDIRSize();
 
     /**
-     * Comprova si hi ha suficient espai lliure al disc dur per crear el DICOMDIR, comprova que l'espai 
+     * Comprova si hi ha suficient espai lliure al disc dur per crear el DICOMDIR, comprova que l'espai
      * lliure sigui superior a l'espai que ocuparà el nou directori DICOMDIR
      * @return indica si hi ha prou espai lliure al disc per crear el DICOMDIR
      */
-    bool enoughFreeSpace( QString path );
+    bool enoughFreeSpace(QString path);
 
-    /** 
+    /**
      * Tracta els errors que s'han produït a la base de dades en general
      * @param state  Estat del mètode
      */
-    void showDatabaseErrorMessage( const Status &state );
+    void showDatabaseErrorMessage(const Status &state);
 
-    /** 
+    /**
      * Crea el DICOMDIR amb els estudis seleccionats, en el directori on se li passa per paràmetre
      * @param dicomdirPath directori on s'ha de crear el DICOMDIR
      * @return retorna l'estat del mètode
      */
-    Status startCreateDicomdir( QString dicomdirPath );
+    Status startCreateDicomdir(QString dicomdirPath);
 
     /// Crea el DICOMDIR en un CD o DVD
     Status createDicomdirOnCdOrDvd();
@@ -98,13 +98,13 @@ private:
     /// Comprova que el directori sigui buit
     bool dicomdirPathIsEmpty(QString dicomdirPath);
 
-    /** 
+    /**
      * Comprova si aquest directori ja és un DICOMDIR
      * @param dicomdirPath Directori a comprovar
      */
-    bool dicomdirPathIsADicomdir( QString dicomdirPath );
+    bool dicomdirPathIsADicomdir(QString dicomdirPath);
 
-    /** 
+    /**
      * Inicia la generació d'una imatge ISO i connecta el signal de finalització de la creació de la imatge
      * amb l'slot que obrirà o no el programa de gravació segons l'èxit de la creació de la imatge ISO
      */
@@ -115,7 +115,7 @@ private:
      * @param process procés que hem executat
      * @param name nom del procés
      */
-    void showProcessErrorMessage( const QProcess &process, QString name );
+    void showProcessErrorMessage(const QProcess &process, QString name);
 
     /// Neteja la pantalla de DICOMDIR, després que s'hagi creat un DICOMDIR amb exit
     void clearQCreateDicomdirScreen();
@@ -131,13 +131,13 @@ private:
 
 private slots:
     /// Es passa per paràmetre l'identificador del dispositiu i es fan les pertinents accions
-    void deviceChanged( int value );
+    void deviceChanged(int value);
 
     /// Slot que s'activa quan s'ha acabat de generar la imatge del DICOMDIR i per tant es pot executar el programa de gravació
     void openBurningApplication(bool createIsoResult);
 
     ///Slot que s'activa quan es canvia el valor d'alguns dels checkbox que indiquen si s'ha de copiar el contingut de la carpeta auxiliar al DICOMDIR
-	///Actualitza el tamany del DICOMDIR en funció de si s'ha de copiar o no la carpeta auxiliar al DICOMDIR
+    ///Actualitza el tamany del DICOMDIR en funció de si s'ha de copiar o no la carpeta auxiliar al DICOMDIR
     void copyContentFolderToDICOMDIRCheckBoxsStateChanged();
 
     ///Amaga/Ensenya el frame per introduir el nom del pacient anonimitzat
@@ -156,7 +156,7 @@ private:
 
     /// Mida en bytes del que ocupen els estudis que es volen incloure en el DICOMDIR
     quint64 m_dicomdirSizeBytes;
-    
+
     /// Espai lliure en bytes del dispositiu de disc escollit sobre el que es vol grabar el DICOMDIR
     quint64 m_availableSpaceToRecordInBytes;
 
@@ -180,10 +180,10 @@ private:
 
     /// Permet mostrar una barra de progrés
     QProgressDialog *m_progressBar;
-    
-    /// Timer 
+
+    /// Timer
     QTimer *m_timer;
-    
+
     /// Permet genera fitxers d'imatge ISO
     IsoImageFileCreator *m_isoImageFileCreator;
 
@@ -194,7 +194,7 @@ private:
     bool m_folderToCopyToDICOMDIRSizeAddedToDICOMDIRSize;
 
     /**
-     * Indica si la configuració és correcte per poder gravar el DICOMDIR en un CD o DVD. No comprova que sigui 
+     * Indica si la configuració és correcte per poder gravar el DICOMDIR en un CD o DVD. No comprova que sigui
      * un programa vàlid, simplement comprova que la ruta ens ha indicat com programa per gravar CD/DVD existeix
      */
     bool checkDICOMDIRBurningApplicationConfiguration();
@@ -202,7 +202,7 @@ private:
     /**
      * Retorna la mida que l'estudi ocuparà en el DICOMDIR, al fer el càlcul ja té en compte si les imatges que s'afegiran al DICOMDIR
      * han de conventir-se a transfer syntax LittleEndian o mantenen la seva transfer syntax, per calcular correctament la mida que ocuparà l'estudi.
-     * Si les imatges s'han de convertir a LittleEndian el resultat que dona aquesta funció és una estimació del que ocuparà l'estudi, si 
+     * Si les imatges s'han de convertir a LittleEndian el resultat que dona aquesta funció és una estimació del que ocuparà l'estudi, si
      * conserva seva transfer syntax origina el càlcul del que ocuparà l'estudi és un càlcul real.
      */
     quint64 getStudySizeInBytes(bool transferSyntaxInLittleEndian, QString studyInstanceUID);

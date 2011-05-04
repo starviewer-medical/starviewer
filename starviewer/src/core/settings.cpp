@@ -34,7 +34,7 @@ QVariant Settings::getValue(const QString &key) const
     QVariant value;
     // Primer mirem si tenim valor als settings
     // Si estigués buit, llavors agafem el valor per defecte que tinguem al registre
-    // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key) 
+    // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key)
     // però cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
     value = m_qsettingsObjectsMap.value(SettingsRegistry::instance()->getAccessLevel(key))->value(key);
     if (value == QVariant())
@@ -60,7 +60,7 @@ void Settings::setValue(const QString &key, const QVariant &value)
 
 bool Settings::contains(const QString &key) const
 {
-    // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key) 
+    // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key)
     // però cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
     return m_qsettingsObjectsMap.value(SettingsRegistry::instance()->getAccessLevel(key))->contains(key);
 }
@@ -119,10 +119,10 @@ void Settings::addListItem(const QString &key, const KeyValueMapType &item)
     int arraySize = qsettings->beginReadArray(key);
     qsettings->endArray();
 
-    qsettings->beginWriteArray(key); 
+    qsettings->beginWriteArray(key);
     qsettings->setArrayIndex(arraySize);
     // omplim
-    dumpKeyValueMap(item,qsettings);
+    dumpKeyValueMap(item, qsettings);
     qsettings->endArray();
 }
 
@@ -133,7 +133,7 @@ void Settings::setListItem(int index, const QString &key, const KeyValueMapType 
     if (index >= 0 && index < listSize)
     {
         list[index] = item;
-        setList(key,list);
+        setList(key, list);
     }
     else
     {
@@ -148,7 +148,7 @@ void Settings::removeListItem(const QString &key, int index)
     if (index >= 0 && index < listSize)
     {
         list.removeAt(index);
-        setList(key,list);
+        setList(key, list);
     }
     else
     {
@@ -180,7 +180,7 @@ void Settings::saveColumnsWidths(const QString &key, QTreeWidget *treeWidget)
     int columnCount = treeWidget->columnCount();
     QString columnKey;
     for (int column = 0; column < columnCount; column++)
-    {   
+    {
         columnKey = key + "/columnWidth" + QString::number(column);
         this->setValue(columnKey, treeWidget->columnWidth(column));
     }
@@ -193,7 +193,7 @@ void Settings::restoreColumnsWidths(const QString &key, QTreeWidget *treeWidget)
     int columnCount = treeWidget->columnCount();
     QString columnKey;
     for (int column = 0; column < columnCount; column++)
-    {   
+    {
         columnKey = key + "/columnWidth" + QString::number(column);
         if (!this->contains(columnKey))
         {
@@ -235,10 +235,10 @@ Settings::KeyValueMapType Settings::fillKeyValueMapFromKeyList(const QStringList
     Q_ASSERT(qsettings);
 
     KeyValueMapType item;
-    
+
     foreach (const QString &key, keysList)
     {
-        item[ key ] = qsettings->value(key);
+        item[key] = qsettings->value(key);
     }
     return item;
 }
@@ -251,7 +251,7 @@ void Settings::dumpKeyValueMap(const KeyValueMapType &item, QSettings *qsettings
     foreach (const QString &key, keysList)
     {
         qsettings->setValue(key, item.value(key));
-    }   
+    }
 }
 
 QSettings *Settings::getSettingsObject(const QString &key)

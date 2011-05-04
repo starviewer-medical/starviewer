@@ -17,7 +17,7 @@ class DICOMWriterDCMTK : public DICOMWriter
 
 public:
     DICOMWriterDCMTK();
-    
+
     ~DICOMWriterDCMTK();
 
     /// Afegir un nou atribut basic al fitxer DICOM
@@ -32,7 +32,7 @@ public:
 private:
 
     /// Genera els elements d'una seqüència
-    DcmSequenceOfItems * generateDcmSequenceOfItems( DICOMSequenceAttribute * sequenceAttribute );
+    DcmSequenceOfItems * generateDcmSequenceOfItems(DICOMSequenceAttribute * sequenceAttribute);
 
 private:
     DcmFileFormat * m_fileFormat;

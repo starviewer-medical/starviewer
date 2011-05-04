@@ -47,15 +47,15 @@ public:
 
     /**
      * Es comporta exactament igual que getTotalNumberOfBytes() però retorna MBytes en comptes de Bytes. Cal tenir en compte, però, que
-     * aquest no és un mètode per saber el número de MBytes amb absoluta precissió (per això fer servir getTotalNumberOfBytes() )
+     * aquest no és un mètode per saber el número de MBytes amb absoluta precissió (per això fer servir getTotalNumberOfBytes())
      * @param path Indica el path a un directori/fitxer dintre de la partició
      * @return El nombre de MBytes truncats (ex.: si és 1,9MBytes reals retornarà 1Mbytes)
      */
     quint64 getTotalNumberOfMBytes(const QString &path);
-    
+
     /**
      * Es comporta exactament igual que getNumberOfFreeBytes() però retorna MBytes en comptes de Bytes. Cal tenir en compte, però, que
-     * aquest no és un mètode per saber el número de MBytes amb absoluta precissió (per això fer servir getNumberOfFreeBytes() )
+     * aquest no és un mètode per saber el número de MBytes amb absoluta precissió (per això fer servir getNumberOfFreeBytes())
      * @param path Indica el path a un directori/fitxer dintre de la partició
      * @return El nombre de MBytes lliures truncats (ex.: si és 1,9MBytes reals retornarà 1MByte)
      */
@@ -70,7 +70,7 @@ private:
     quint64 getTotalBytesPlataformEspecific(const QString &path);
     quint64 getFreeBytesPlataformEspecific(const QString &path);
 
-    /// Loggeja l'últim error segons la plataforma 
+    /// Loggeja l'últim error segons la plataforma
     void logLastError(const QString &additionalInformation);
 
 };

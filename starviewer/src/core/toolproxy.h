@@ -67,7 +67,7 @@ private:
      /// Map on hi guardem les tools associades a una clau determinada pel nom de la tool.
      /// En principi no es poden tenir dues tools amb el mateix nom
     QMap<QString, Tool *> m_toolsMap;
-    
+
     /// En aquest repositori ens encarregarem de guardar les dades persistents de les tools que ho necessitin
     QMap<QString, ToolData *> m_persistentToolDataRepository;
 

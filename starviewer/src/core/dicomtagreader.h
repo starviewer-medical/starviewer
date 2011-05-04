@@ -26,14 +26,14 @@ class DICOMValueAttribute;
 */
 class DICOMTagReader {
 public:
-    ///Aquest enum indica si hem de retornar el valor per tots els tags quan ens els requereixen, o si pels Tags "Pesats" (PixelData, OverlayData) 
+    ///Aquest enum indica si hem de retornar el valor per tots els tags quan ens els requereixen, o si pels Tags "Pesats" (PixelData, OverlayData)
     ///hem de retornar-los sense sel seu valor, estalviant-nos de llegir i carregar-los en memòria
     enum ReturnValueOfTags { AllTags, ExcludeHeavyTags };
 
     DICOMTagReader();
     /// Constructor per nom de fitxer.
     DICOMTagReader(const QString &filename);
-    /// Constructor per nom de fitxer per si es té un DcmDataset ja llegit. 
+    /// Constructor per nom de fitxer per si es té un DcmDataset ja llegit.
     /// D'aquesta forma no cal tornar-lo a llegir.
     DICOMTagReader(const QString &filename, DcmDataset *dcmDataset);
 
@@ -55,7 +55,7 @@ public:
 
     /// Retorna el Dataset de dcmtk que es fa servir internament
     DcmDataset* getDcmDataset() const;
-    
+
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
     bool tagExists(const DICOMTag &tag) const;
 
@@ -65,14 +65,14 @@ public:
 
     /// Retorna un objecte nou que inclou tota la seqüència. Si no existeix o el tag no correspon a una seqüència retorna null.
     /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
-    /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem, 
+    /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem,
     /// com a segon paràmetre s'ha de passar l'enum amb valor ExcludeHeavyTags.
     /// La classe que invoqui aquest mètode és responsable d'esborrar la seqüència que es retorna
     DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
 
     /// Retorna una llista de DICOMAttribute que inclou tots els Tags d'un DcmDataset (Es dóna per suposat que el dataset serà vàlid)
     /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
-    /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem, 
+    /// valor buit degut a que pesen molt (en cas d'una mamo pot ocubar més de 80Mb de RAM el PixelData) i no els utilitzarem,
     /// com a segon paràmetre s'ha de passar l'enum amb valor ExcludeHeavyTags.
     /// La classe que invoqui aquest mètode és responsable d'esborrar la llista de DICOMAttribute
     QList<DICOMAttribute*> getDICOMDataSet(DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
@@ -85,7 +85,7 @@ private:
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
     DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
-    ///Converteix un element de de DCMTK a un DICOMValueAttribute propi. Si no s'ha pogut convertir l'element es retorna valor NULL 
+    ///Converteix un element de de DCMTK a un DICOMValueAttribute propi. Si no s'ha pogut convertir l'element es retorna valor NULL
     DICOMValueAttribute* convertToDICOMValueAttribute(DcmElement *dcmtkDICOMElement, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
 
     ///Converteix un objecte DcmItem de dcmtk a una llista de DICOMAttribute

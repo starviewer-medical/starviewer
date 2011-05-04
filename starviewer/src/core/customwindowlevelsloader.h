@@ -12,7 +12,7 @@ namespace udg {
 
 class CustomWindowLevelsLoader {
 
-public:    
+public:
     CustomWindowLevelsLoader();
 
     ~CustomWindowLevelsLoader();

@@ -11,7 +11,7 @@ namespace udg
 QWidgetSelectPacsToStoreDicomImage::QWidgetSelectPacsToStoreDicomImage(QWidget *parent)
     : QWidget(parent)
 {
-    setupUi( this );
+    setupUi(this);
     createConnections();
 
     ///Indiquem que només volem que es mostrin els PACS que tinguin configurat el servei Store
@@ -21,7 +21,7 @@ QWidgetSelectPacsToStoreDicomImage::QWidgetSelectPacsToStoreDicomImage(QWidget *
 
 void QWidgetSelectPacsToStoreDicomImage::createConnections()
 {
-    connect(m_storeButton, SIGNAL(clicked()), SLOT(storeImagesToSelectedPacs()));  
+    connect(m_storeButton, SIGNAL(clicked()), SLOT(storeImagesToSelectedPacs()));
     connect(m_cancelButton, SIGNAL(clicked()), SLOT(close()));
 }
 
@@ -29,7 +29,6 @@ QList<PacsDevice> QWidgetSelectPacsToStoreDicomImage::getSelectedPacsToStoreDico
 {
     return m_pacsNodeList->getSelectedPacs();
 }
-
 
 void QWidgetSelectPacsToStoreDicomImage::storeImagesToSelectedPacs()
 {
@@ -51,7 +50,7 @@ void QWidgetSelectPacsToStoreDicomImage::showEvent(QShowEvent *event)
     Q_UNUSED(event);
 
     m_pacsNodeList->clearSelection();
-	m_pacsNodeList->refresh();
+    m_pacsNodeList->refresh();
 }
 
 }

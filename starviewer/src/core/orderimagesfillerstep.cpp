@@ -19,21 +19,21 @@ OrderImagesFillerStep::OrderImagesFillerStep()
 
 OrderImagesFillerStep::~OrderImagesFillerStep()
 {
-    QMap< unsigned long  , Image* > * instanceNumberSet;
-    QMap< double , QMap< unsigned long  , Image* >* >* imagePositionSet;
-    QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* > *normalVectorImageSet;
-    QMap< int , QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* >* >*  volumesInSeries;
+    QMap<unsigned long, Image*> * instanceNumberSet;
+    QMap<double, QMap<unsigned long, Image*>*> * imagePositionSet;
+    QMap<QString, QMap<double, QMap< unsigned long, Image*>*>*> *normalVectorImageSet;
+    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> * volumesInSeries;
 
-    foreach ( Series * key , OrderImagesInternalInfo.keys() )
+    foreach (Series * key, OrderImagesInternalInfo.keys())
     {
         volumesInSeries = OrderImagesInternalInfo.take(key);
-        foreach( int volumeNumber, volumesInSeries->keys() )
+        foreach (int volumeNumber, volumesInSeries->keys())
         {
-            normalVectorImageSet = volumesInSeries->take( volumeNumber );
-            foreach ( QString normalVectorKey, normalVectorImageSet->keys() )
+            normalVectorImageSet = volumesInSeries->take(volumeNumber);
+            foreach (QString normalVectorKey, normalVectorImageSet->keys())
             {
                 imagePositionSet = normalVectorImageSet->take(normalVectorKey);
-                foreach ( double distanceKey , imagePositionSet->keys() )
+                foreach (double distanceKey, imagePositionSet->keys())
                 {
                     instanceNumberSet = imagePositionSet->take(distanceKey);
                     delete instanceNumberSet;
@@ -45,10 +45,10 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
         delete volumesInSeries;
     }
 
-    foreach(Series *series, m_acquisitionNumberEvaluation.keys())
+    foreach (Series *series, m_acquisitionNumberEvaluation.keys())
     {
         QHash<int, QPair<QString, bool>*> volumeHash = m_acquisitionNumberEvaluation.take(series);
-        foreach(int volumeNumber, volumeHash.keys())
+        foreach (int volumeNumber, volumeHash.keys())
         {
             QPair<QString, bool> *pair = volumeHash.take(volumeNumber);
             delete pair;
@@ -58,35 +58,35 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
 
 bool OrderImagesFillerStep::fillIndividually()
 {
-    QMap< int , QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* >* >*  volumesInSeries;
+    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> * volumesInSeries;
 
-    if ( OrderImagesInternalInfo.contains( m_input->getCurrentSeries() ) )
+    if (OrderImagesInternalInfo.contains(m_input->getCurrentSeries()))
     {
-        volumesInSeries = OrderImagesInternalInfo.value( m_input->getCurrentSeries() ); 
-        if ( volumesInSeries->contains( m_input->getCurrentVolumeNumber() ) )
+        volumesInSeries = OrderImagesInternalInfo.value(m_input->getCurrentSeries());
+        if (volumesInSeries->contains(m_input->getCurrentVolumeNumber()))
         {
-            m_orderedImageSet = volumesInSeries->value( m_input->getCurrentVolumeNumber() );
+            m_orderedImageSet = volumesInSeries->value(m_input->getCurrentVolumeNumber());
         }
         else
         {
             DEBUG_LOG(QString("Llista nul·la pel volum %1 de la serie %2. En creem una de nova.").arg(m_input->getCurrentVolumeNumber()).arg(m_input->getCurrentSeries()->getInstanceUID()));
-        
-            m_orderedImageSet = new QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* >();
-            volumesInSeries->insert( m_input->getCurrentVolumeNumber(), m_orderedImageSet );
+
+            m_orderedImageSet = new QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>();
+            volumesInSeries->insert(m_input->getCurrentVolumeNumber(), m_orderedImageSet);
         }
     }
     else
     {
         DEBUG_LOG(QString("Llista nul·la en creem una de nova per la serie %1.").arg(m_input->getCurrentSeries()->getInstanceUID()));
-        volumesInSeries = new QMap< int , QMap< QString, QMap< double , QMap< unsigned long  , Image* >* >* >* >();
-        m_orderedImageSet = new QMap< QString, QMap< double , QMap< unsigned long , Image* >* >* >();
-        volumesInSeries->insert(m_input->getCurrentVolumeNumber(), m_orderedImageSet );
-        OrderImagesInternalInfo.insert( m_input->getCurrentSeries() , volumesInSeries );
+        volumesInSeries = new QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>();
+        m_orderedImageSet = new QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>();
+        volumesInSeries->insert(m_input->getCurrentVolumeNumber(), m_orderedImageSet);
+        OrderImagesInternalInfo.insert(m_input->getCurrentSeries(), volumesInSeries);
     }
 
-    foreach( Image * image, m_input->getCurrentImages() )
+    foreach (Image * image, m_input->getCurrentImages())
     {
-        processImage( image );
+        processImage(image);
     }
 
     //Evaluació dels AcquisitionNumbers
@@ -95,10 +95,10 @@ bool OrderImagesFillerStep::fillIndividually()
         if (m_acquisitionNumberEvaluation.value(m_input->getCurrentSeries()).contains(m_input->getCurrentVolumeNumber()))
         {
             //Comparem els Acquisition Numbers
-            QPair<QString,bool> *pair = m_acquisitionNumberEvaluation[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
+            QPair<QString, bool> *pair = m_acquisitionNumberEvaluation[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
             if (!pair->second)
             {
-                if(pair->first != m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber))
+                if (pair->first != m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber))
                 {
                     pair->second = true;
                 }
@@ -106,138 +106,138 @@ bool OrderImagesFillerStep::fillIndividually()
         }
         else
         {
-            QPair<QString,bool> *acquisitionPair = new QPair<QString,bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
+            QPair<QString, bool> *acquisitionPair = new QPair<QString, bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
             m_acquisitionNumberEvaluation[m_input->getCurrentSeries()].insert(m_input->getCurrentVolumeNumber(), acquisitionPair);
         }
     }
     else
     {
         QHash<int, QPair<QString, bool>*> volumeHash;
-        QPair<QString,bool> *acquisitionPair = new QPair<QString,bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
+        QPair<QString, bool> *acquisitionPair = new QPair<QString, bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
         volumeHash.insert(m_input->getCurrentVolumeNumber(), acquisitionPair);
 
         m_acquisitionNumberEvaluation.insert(m_input->getCurrentSeries(), volumeHash);
     }
 
-    m_input->addLabelToSeries("OrderImagesFillerStep", m_input->getCurrentSeries() );
+    m_input->addLabelToSeries("OrderImagesFillerStep", m_input->getCurrentSeries());
 
     return true;
 }
 
 void OrderImagesFillerStep::postProcessing()
 {
-    foreach ( Series * key , OrderImagesInternalInfo.keys() )
+    foreach (Series * key, OrderImagesInternalInfo.keys())
     {
         setOrderedImagesIntoSeries(key);
     }
 }
 
-void OrderImagesFillerStep::processImage( Image *image )
+void OrderImagesFillerStep::processImage(Image *image)
 {
-	// obtenim el vector normal del pla, que ens determina també a quin "stack" pertany la imatge
-	double planeNormalVector[3];
-	image->getImagePlaneNormal( planeNormalVector );
-	// el passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
-	QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[0],0,'f',5).arg(planeNormalVector[1],0,'f',5).arg(planeNormalVector[2],0,'f',5);
+    // obtenim el vector normal del pla, que ens determina també a quin "stack" pertany la imatge
+    double planeNormalVector[3];
+    image->getImagePlaneNormal(planeNormalVector);
+    // el passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
+    QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector[0], 0, 'f', 5).arg(planeNormalVector[1], 0, 'f', 5).arg(planeNormalVector[2], 0, 'f', 5);
 
-    QMap< double , QMap< unsigned long , Image* > * > * imagePositionSet;
-    QMap< unsigned long , Image* > * instanceNumberSet;
+    QMap<double, QMap<unsigned long, Image*> *> * imagePositionSet;
+    QMap<unsigned long, Image*> * instanceNumberSet;
 
     double distance = this->distance(image);
 
-	// primer busquem quina és la key (normal del pla) més semblant de totes les que hi ha
-	// cada key és la normal de cada pla guardat com a string.
-	// En cas que tinguem diferents normals, indicaria que tenim per exemple, diferents stacks en el mateix volum
-	QStringList planeNormals = m_orderedImageSet->uniqueKeys();
+    // primer busquem quina és la key (normal del pla) més semblant de totes les que hi ha
+    // cada key és la normal de cada pla guardat com a string.
+    // En cas que tinguem diferents normals, indicaria que tenim per exemple, diferents stacks en el mateix volum
+    QStringList planeNormals = m_orderedImageSet->uniqueKeys();
 
-	// aquest bucle serveix per trobar si la normal de la nova imatge
-	// coincideix amb alguna normal de les imatges ja processada
-	QString keyPlaneNormal;
-	foreach( QString normal, planeNormals )
-	{
-		if( normal == planeNormalString )
-		{
-			// la normal d'aquest pla ja existeix ( cas més típic )
-			keyPlaneNormal = normal;
-			break;
-		}
-		else // les normals són diferents, comprovar si ho són completament o no
-		{
-			if( normal.isEmpty() )
-			{
-				keyPlaneNormal = planeNormalString;
-				break;
-			}
-			else
-			{
-				// tot i que siguin diferents, pot ser que siguin gairebé iguals
-				// llavors cal comprovar que de fet són prou diferents
-				// ja que d'avegades només hi ha petites imprecisions simplement
-				double normalVector[3];
-				QStringList normalSplitted = normal.split("\\");
-				normalVector[0] = normalSplitted.at(0).toDouble();
-				normalVector[1] = normalSplitted.at(1).toDouble();
-				normalVector[2] = normalSplitted.at(2).toDouble();
+    // aquest bucle serveix per trobar si la normal de la nova imatge
+    // coincideix amb alguna normal de les imatges ja processada
+    QString keyPlaneNormal;
+    foreach (QString normal, planeNormals)
+    {
+        if (normal == planeNormalString)
+        {
+            // la normal d'aquest pla ja existeix (cas més típic)
+            keyPlaneNormal = normal;
+            break;
+        }
+        else // les normals són diferents, comprovar si ho són completament o no
+        {
+            if (normal.isEmpty())
+            {
+                keyPlaneNormal = planeNormalString;
+                break;
+            }
+            else
+            {
+                // tot i que siguin diferents, pot ser que siguin gairebé iguals
+                // llavors cal comprovar que de fet són prou diferents
+                // ja que d'avegades només hi ha petites imprecisions simplement
+                double normalVector[3];
+                QStringList normalSplitted = normal.split("\\");
+                normalVector[0] = normalSplitted.at(0).toDouble();
+                normalVector[1] = normalSplitted.at(1).toDouble();
+                normalVector[2] = normalSplitted.at(2).toDouble();
 
-				double angle = MathTools::angleInDegrees( normalVector, planeNormalVector );
-				if( angle < 1.0 )
-				{
-					// si l'angle entre les normals
-					// està dins d'un threshold,
-					// les podem considerar iguals
-					// TODO definir millor aquest threshold
-					keyPlaneNormal = normal;
-					break;
-				}
-			}
-		}
-	}
-	// ara cal inserir la imatge a la llista ordenada
-	// si no hem posat cap valor, vol dir que la normal és nova i no existia fins el moment
-	if( keyPlaneNormal.isEmpty() )
-	{
-		// assignem la clau
-		keyPlaneNormal = planeNormalString;
-		// ara cal inserir la nova clau
-		instanceNumberSet = new QMap< unsigned long , Image* >();
-        instanceNumberSet->insert( QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image );
+                double angle = MathTools::angleInDegrees(normalVector, planeNormalVector);
+                if (angle < 1.0)
+                {
+                    // si l'angle entre les normals
+                    // està dins d'un threshold,
+                    // les podem considerar iguals
+                    // TODO definir millor aquest threshold
+                    keyPlaneNormal = normal;
+                    break;
+                }
+            }
+        }
+    }
+    // ara cal inserir la imatge a la llista ordenada
+    // si no hem posat cap valor, vol dir que la normal és nova i no existia fins el moment
+    if (keyPlaneNormal.isEmpty())
+    {
+        // assignem la clau
+        keyPlaneNormal = planeNormalString;
+        // ara cal inserir la nova clau
+        instanceNumberSet = new QMap<unsigned long, Image*>();
+        instanceNumberSet->insert(QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image);
 
-        imagePositionSet = new QMap< double , QMap< unsigned long , Image* > * >();
-        imagePositionSet->insert( distance, instanceNumberSet );
-		m_orderedImageSet->insert( keyPlaneNormal, imagePositionSet );
-	}
-	else // la normal ja existia [ m_orderedImageSet->contains( keyPlaneNormal ) == true ], per tant només cal actualitzar l'estructura
-	{
-		imagePositionSet = m_orderedImageSet->value( keyPlaneNormal );
-        if ( imagePositionSet->contains( distance ) )
+        imagePositionSet = new QMap<double, QMap<unsigned long, Image*>*>();
+        imagePositionSet->insert(distance, instanceNumberSet);
+        m_orderedImageSet->insert(keyPlaneNormal, imagePositionSet);
+    }
+    else // la normal ja existia [m_orderedImageSet->contains(keyPlaneNormal) == true], per tant només cal actualitzar l'estructura
+    {
+        imagePositionSet = m_orderedImageSet->value(keyPlaneNormal);
+        if (imagePositionSet->contains(distance))
         {
             // Hi ha series on les imatges comparteixen el mateix instance number.
             // Per evitar el problema es fa un insertMulti.
-            imagePositionSet->value( distance )->insertMulti( QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image );
+            imagePositionSet->value(distance)->insertMulti(QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image);
         }
         else
         {
-            instanceNumberSet = new QMap< unsigned long , Image* >();
-            instanceNumberSet->insert( QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image );
-            imagePositionSet->insert( distance, instanceNumberSet );
+            instanceNumberSet = new QMap<unsigned long, Image*>();
+            instanceNumberSet->insert(QString("%1%2%3").arg(image->getInstanceNumber()).arg("0").arg(image->getFrameNumber()).toULong(), image);
+            imagePositionSet->insert(distance, instanceNumberSet);
         }
-	}
+    }
 }
 
-void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
+void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
 {
     QList<Image *> imageSet;
-    QMap< unsigned long , Image* > * instanceNumberSet;
-    QMap< double , QMap< unsigned long , Image* >* >* imagePositionSet;
-    QMap< double, QMap< double , QMap< unsigned long , Image* >* >* > lastOrderedImageSet;
-    QMap< int , QMap< QString, QMap< double , QMap< unsigned long , Image* >* >* >* >*  volumesInSeries;
+    QMap<unsigned long, Image*> * instanceNumberSet;
+    QMap<double, QMap<unsigned long, Image*>*> * imagePositionSet;
+    QMap<double, QMap<double, QMap<unsigned long, Image*>*>*> lastOrderedImageSet;
+    QMap<int, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> * volumesInSeries;
 
     Image * currentImage;
     int orderNumberInVolume;
 
-    volumesInSeries = OrderImagesInternalInfo.take( series );
+    volumesInSeries = OrderImagesInternalInfo.take(series);
 
-    foreach ( int currentVolumeNumber, volumesInSeries->keys() )
+    foreach (int currentVolumeNumber, volumesInSeries->keys())
     {
         if (m_acquisitionNumberEvaluation[series][currentVolumeNumber]->second) //Multiple acquisition number
         {
@@ -264,8 +264,8 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
 
             foreach (Image *image, sortedImagesByInstanceNumber.values())
             {
-                image->setOrderNumberInVolume( orderNumberInVolume );
-                image->setVolumeNumberInSeries( currentVolumeNumber );
+                image->setOrderNumberInVolume(orderNumberInVolume);
+                image->setVolumeNumberInSeries(currentVolumeNumber);
                 orderNumberInVolume++;
 
                 imageSet += image;
@@ -273,21 +273,21 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
         }
         else
         {
-            m_orderedImageSet = volumesInSeries->take( currentVolumeNumber );
-            if ( m_orderedImageSet->count() > 1 ) // Cal ordernar les agrupacions d'imatges
+            m_orderedImageSet = volumesInSeries->take(currentVolumeNumber);
+            if (m_orderedImageSet->count() > 1) // Cal ordernar les agrupacions d'imatges
             {
-                foreach (QString key, m_orderedImageSet->keys() )
+                foreach (QString key, m_orderedImageSet->keys())
                 {
                     imagePositionSet = m_orderedImageSet->take(key);
                     Image *image = (*(*imagePositionSet->begin())->begin());
 
-                    lastOrderedImageSet.insertMulti(this->distance(image),imagePositionSet);
+                    lastOrderedImageSet.insertMulti(this->distance(image), imagePositionSet);
                 }
             }
             else
             {
-                lastOrderedImageSet.insert(0, (*m_orderedImageSet->begin()) );
-                foreach (QString key, m_orderedImageSet->keys() )
+                lastOrderedImageSet.insert(0, (*m_orderedImageSet->begin()));
+                foreach (QString key, m_orderedImageSet->keys())
                 {
                     m_orderedImageSet->take(key);
                 }
@@ -296,17 +296,17 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
             orderNumberInVolume = 0;
 
             // Passar l'estructura a la series
-            foreach ( double key, lastOrderedImageSet.keys() )
+            foreach (double key, lastOrderedImageSet.keys())
             {
                 imagePositionSet = lastOrderedImageSet.take(key);
-                foreach ( double key2 , imagePositionSet->keys() )
+                foreach (double key2, imagePositionSet->keys())
                 {
                     instanceNumberSet = imagePositionSet->take(key2);
-                    foreach ( unsigned long key3 , instanceNumberSet->keys() )
+                    foreach (unsigned long key3, instanceNumberSet->keys())
                     {
                         currentImage = instanceNumberSet->take(key3);
-                        currentImage->setOrderNumberInVolume( orderNumberInVolume );
-                        currentImage->setVolumeNumberInSeries( currentVolumeNumber );
+                        currentImage->setOrderNumberInVolume(orderNumberInVolume);
+                        currentImage->setVolumeNumberInSeries(currentVolumeNumber);
                         orderNumberInVolume++;
 
                         imageSet += currentImage;
@@ -315,10 +315,10 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries( Series *series )
             }
         }
     }
-    series->setImages( imageSet );
+    series->setImages(imageSet);
 }
 
-double OrderImagesFillerStep::distance( Image *image )
+double OrderImagesFillerStep::distance(Image *image)
 {
     //Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
     double distance = .0;
@@ -326,9 +326,9 @@ double OrderImagesFillerStep::distance( Image *image )
     const double *imagePosition = image->getImagePositionPatient();
     // normal del pla sobre la qual projectarem l'origen
     double normal[3];
-    image->getImagePlaneNormal( normal );
+    image->getImagePlaneNormal(normal);
 
-    for ( int i = 0; i < 3; i++ )
+    for (int i = 0; i < 3; i++)
     {
         distance += normal[i] * imagePosition[i];
     }

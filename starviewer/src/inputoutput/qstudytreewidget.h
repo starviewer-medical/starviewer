@@ -19,24 +19,23 @@ class Image;
 class DicomMask;
 
 /** Aquesta classe  mostrar estudis i sèries d'una manera organitzada i fàcilment.
-  * Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació 
-  * de la cerca d'estudis, permetent consultar les series d'aquell estudi. 
+  * Aquesta classe és una modificació de la QTreeWidget que s'ha adaptat per poder visualitzar la informació
+  * de la cerca d'estudis, permetent consultar les series d'aquell estudi.
   * Aquesta classe es sincronitza amb la informació mostrada a QSeriesListWidget
   */
-class QStudyTreeWidget : public QWidget , private Ui::QStudyTreeWidgetBase
+class QStudyTreeWidget : public QWidget, private Ui::QStudyTreeWidgetBase
 {
 Q_OBJECT
 public:
-    
+
     enum ItemTreeLevels { StudyLevel = 0, SeriesLevel = 1, ImageLevel = 2 };
 
     //Object Name s'utilitza per guardar El NomPacient, Serie + Identificador Sèrie i Imatge + Identificador Image
-    enum ColumnIndex{ ObjectName = 0, PatientID = 1, PatientAge = 2, Description = 3, Modality = 4, Date = 5, Time = 6,
+    enum ColumnIndex { ObjectName = 0, PatientID = 1, PatientAge = 2, Description = 3, Modality = 4, Date = 5, Time = 6,
     PACSId = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
-    RefPhysName = 14, PPStartDate = 15, PPStartTime = 16, ReqProcID = 17, SchedProcStep = 18
-    };
+    RefPhysName = 14, PPStartDate = 15, PPStartTime = 16, ReqProcID = 17, SchedProcStep = 18 };
 
-    QStudyTreeWidget( QWidget *parent = 0 );
+    QStudyTreeWidget(QWidget *parent = 0);
     ~QStudyTreeWidget();
 
     ///Mostrar els estudis passats per paràmetres (Els pacients passats per paràmetre ha de contenir només un estudi)
@@ -58,14 +57,14 @@ public:
     /** removes study from the list
      * @param esbora l'estudi amb StudyUID de la llista
      */
-    void removeStudy( QString StudyInstanceUIDToRemove );
+    void removeStudy(QString StudyInstanceUIDToRemove);
 
     /** Esborra la sèrie del QStudyTreeWidget, si és l'única sèrie de l'estudi també esborra l'estudi, no té sentit tenir una estudi sense
      *  series al TreeWidget
      */
     void removeSeries(const QString &studyInstanceUIDToRemove, const QString &seriesInstanceUIDToRemove);
 
-    ///Indica/Retorna la columna i direcció per la que s'ordena llista 
+    ///Indica/Retorna la columna i direcció per la que s'ordena llista
     void setSortByColumn(QStudyTreeWidget::ColumnIndex sortColumn, Qt::SortOrder sortOrder);
     QStudyTreeWidget::ColumnIndex getSortColumn();
     Qt::SortOrder getSortOrderColumn();
@@ -98,7 +97,7 @@ public:
     void sort();
 
     ///Estableix el menú contextual del Widget
-    void setContextMenu( QMenu *contextMenu );
+    void setContextMenu(QMenu *contextMenu);
 
     /// Retorna el QTreeWidget que conté el widget
     QTreeWidget *getQTreeWidget() const;
@@ -121,7 +120,7 @@ signals :
     void currentStudyChanged();
 
     ///signal que s'emete quan canviem de sèrie seleccionada
-    void currentSeriesChanged( const QString &seriesUID );
+    void currentSeriesChanged(const QString &seriesUID);
 
     ///signal que s'emet quan canviem d'imatge seleccionada
     void currentImageChanged();
@@ -148,23 +147,23 @@ public slots:
     /** Indique que ens marqui la sèrie amb el uid passat per paràmetre com a seleccionada
      * @param SeriesUID Uid de la serie seleccionada en QSeriesListWidget
      */
-    void setCurrentSeries( QString seriesUID );
+    void setCurrentSeries(QString seriesUID);
 
     /// Neteja el TreeView
     void clear();
 
 private slots:
     ///Emet signal quan es selecciona un estudi o serie diferent a l'anterior
-    void currentItemChanged( QTreeWidgetItem * current, QTreeWidgetItem * previous );
+    void currentItemChanged(QTreeWidgetItem * current, QTreeWidgetItem * previous);
 
     ///Emet signal quan s'expandeix un item, i no té items fills
-    void itemExpanded( QTreeWidgetItem *itemExpanded );
+    void itemExpanded(QTreeWidgetItem *itemExpanded);
 
     ///Emet signal quan es col·lapsa un item, i no té items fills
-    void itemCollapsed( QTreeWidgetItem *itemCollapsed );
+    void itemCollapsed(QTreeWidgetItem *itemCollapsed);
 
     ///Emet signal qua es fa doble click sobre un item
-    void doubleClicked( QTreeWidgetItem * , int );
+    void doubleClicked(QTreeWidgetItem *, int);
 
 private:
     /// crea les connexions dels signals i slots
@@ -173,10 +172,10 @@ private:
     /** formata l'edat per mostrar per pantalla
      * @param edat
      */
-    QString formatAge( const QString );
+    QString formatAge(const QString);
 
     ///Formata la data i hora passada a ISO 8601 extended (YYYY-MM-DD HH:MM:SS) Amb aquest format de data es pot ordenar els estudis per data/hora
-	///Si l'hora no té valor només retorna la data, i si ni Data i Hora tenen valor retorna string buit
+    ///Si l'hora no té valor només retorna la data, i si ni Data i Hora tenen valor retorna string buit
     QString formatDateTime(const QDate &date, const QTime &time);
 
     /** Retorna l'objecte TreeWidgetItem, que pertany a un estudi cercem, per studUID i PACS, ja que
@@ -190,16 +189,16 @@ private:
 
 private:
     ///Ens indica si l'item passat és un estudi
-    bool isItemStudy( QTreeWidgetItem * );
+    bool isItemStudy(QTreeWidgetItem *);
 
     ///Ens indica si l'item passat és una sèrie
-    bool isItemSeries( QTreeWidgetItem * );
+    bool isItemSeries(QTreeWidgetItem *);
 
     ///Ens indica si l'item passat és una imatge
-    bool isItemImage( QTreeWidgetItem * );
+    bool isItemImage(QTreeWidgetItem *);
 
     ///Afegeix espais a l'esquerre del text fins arribar l'allargada passada per paràmetre
-    QString paddingLeft( QString text , int length );
+    QString paddingLeft(QString text, int length);
 
     /**Dona una sèrie emplena un QTreeWidgetItem en format sèrie
      *@param informació de la serie
@@ -219,7 +218,7 @@ private:
     QString m_doubleClickedItemUID;
 
     /// Icones utilitzades com a root al TreeWidget
-    QIcon m_openFolder , m_closeFolder , m_iconSeries;
+    QIcon m_openFolder, m_closeFolder, m_iconSeries;
 
     QList<Study*> m_insertedStudyList;
 

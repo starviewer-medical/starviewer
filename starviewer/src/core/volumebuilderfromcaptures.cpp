@@ -23,7 +23,7 @@ VolumeBuilderFromCaptures::VolumeBuilderFromCaptures()
     m_vtkImageAppend = vtkImageAppend::New();
     m_vtkImageAppend->SetAppendAxis(2);
 
-    this->setSeriesDescription( QString("Generated from screen captures") );
+    this->setSeriesDescription(QString("Generated from screen captures"));
     m_modality = QString("OT");
 }
 
@@ -32,29 +32,28 @@ VolumeBuilderFromCaptures::~VolumeBuilderFromCaptures()
     m_vtkImageAppend->Delete();
 }
 
-void VolumeBuilderFromCaptures::addCapture( vtkImageData *data )
+void VolumeBuilderFromCaptures::addCapture(vtkImageData *data)
 {
     // \TODO Realitzem alguna comprovació o deixem que el vtkImageAppend es queixi?
     vtkSmartPointer<vtkImageFlip> imageFlip = vtkSmartPointer<vtkImageFlip>::New();
-    imageFlip->SetInput( data );
+    imageFlip->SetInput(data);
     imageFlip->SetFilteredAxis(1); //Flip horitzontal
     imageFlip->Update();
 
-    m_vtkImageAppend->AddInput( imageFlip->GetOutput() );
+    m_vtkImageAppend->AddInput(imageFlip->GetOutput());
 }
 
-
-void VolumeBuilderFromCaptures::setParentStudy( Study * study )
+void VolumeBuilderFromCaptures::setParentStudy(Study * study)
 {
     m_parentStudy = study;
 }
 
-bool VolumeBuilderFromCaptures::setModality( QString modality )
+bool VolumeBuilderFromCaptures::setModality(QString modality)
 {
-    // Obtenim la llista de modalitats vàlides 
+    // Obtenim la llista de modalitats vàlides
     QStringList allowedModalities = Image::getSupportedModalities();
 
-    if ( allowedModalities.contains( modality ) )
+    if (allowedModalities.contains(modality))
     {
         m_modality = modality;
         return true;
@@ -67,8 +66,8 @@ bool VolumeBuilderFromCaptures::setModality( QString modality )
 
 Volume * VolumeBuilderFromCaptures::build()
 {
-    Q_ASSERT( m_parentStudy );
-    Q_ASSERT( m_vtkImageAppend->GetNumberOfInputs() );
+    Q_ASSERT(m_parentStudy);
+    Q_ASSERT(m_vtkImageAppend->GetNumberOfInputs());
 
     //Creem la nova sèrie
     Series * newSeries = new Series();
@@ -76,31 +75,31 @@ Volume * VolumeBuilderFromCaptures::build()
     //Omplim la informació de la sèrie a partir de la sèrie de referència
 
     //Assignem la modalitat segons el valor introduit. El valor per defecte és 'OT' (Other).
-    newSeries->setModality( m_modality );
-    newSeries->setSOPClassUID( QString(UID_SecondaryCaptureImageStorage) );
+    newSeries->setModality(m_modality);
+    newSeries->setSOPClassUID(QString(UID_SecondaryCaptureImageStorage));
 
     // Generem el SeriesInstanceUID a partir del generador de DCMTK. \TODO Utilitzar el nostre UID_ROOT?
     char seriesUid[100];
     dcmGenerateUniqueIdentifier(seriesUid, SITE_SERIES_UID_ROOT);
-    newSeries->setInstanceUID( QString(seriesUid) );
+    newSeries->setInstanceUID(QString(seriesUid));
     // \TODO Quin criteri volem seguir per donar nous noms?
-    newSeries->setSeriesNumber( QString("0000")+QString::number(m_parentStudy->getSeries().count()) );
-    newSeries->setDescription( this->getSeriesDescription() );
+    newSeries->setSeriesNumber(QString("0000")+QString::number(m_parentStudy->getSeries().count()));
+    newSeries->setDescription(this->getSeriesDescription());
 
      //Assignem la sèrie a l'estudi al qual partenyia l'inputVolume.
-    newSeries->setParentStudy( m_parentStudy );
-    m_parentStudy->addSeries( newSeries );
+    newSeries->setParentStudy(m_parentStudy);
+    m_parentStudy->addSeries(newSeries);
 
     //Obtenim el nou vtkImageData a partir de la sortida del vtkImageAppend.
     //Fem un flip horitzontal per tal utilitzar el mateix sistema de coordenades que DICOM.
     m_vtkImageAppend->Update();
 
     vtkSmartPointer<vtkImageData> newVtkData = vtkSmartPointer<vtkImageData>::New();
-    newVtkData->ShallowCopy( m_vtkImageAppend->GetOutput() );
+    newVtkData->ShallowCopy(m_vtkImageAppend->GetOutput());
 
     //Creem el nou volume
     Volume * newVolume = new Volume();
-    newSeries->addVolume( newVolume );
+    newSeries->addVolume(newVolume);
 
     //Generem les noves imatges a partir del vtkData generat per vtkImageAppend
     int samplesPerPixel = newVtkData->GetNumberOfScalarComponents();
@@ -113,18 +112,18 @@ Volume * VolumeBuilderFromCaptures::build()
 
     // \TODO Potser podriem ser mes precisos
     QString photometricInterpretation;
-    if ( samplesPerPixel == 1 )
+    if (samplesPerPixel == 1)
     {
         photometricInterpretation = QString("MONOCHROME2");
     }
-    else if ( samplesPerPixel == 3 )
+    else if (samplesPerPixel == 3)
     {
         photometricInterpretation = QString("RGB");
     }
 
     int scalarType = newVtkData->GetScalarType();
 
-    switch ( scalarType )
+    switch (scalarType)
     {
         //case VTK_CHAR:
         //break;
@@ -161,7 +160,7 @@ Volume * VolumeBuilderFromCaptures::build()
 //            pixelRepresentation = 1; ?
 //            break;
         default:
-            DEBUG_LOG( QString("Pixel Type no suportat: ") + newVtkData->GetScalarTypeAsString() );
+            DEBUG_LOG(QString("Pixel Type no suportat: ") + newVtkData->GetScalarTypeAsString());
 
     }
 
@@ -176,41 +175,41 @@ Volume * VolumeBuilderFromCaptures::build()
 
     Image * currentImage;
 
-    for ( int i = 0 ; i < dimensions[2] ; i++ )
+    for (int i = 0; i < dimensions[2]; i++)
     {
         currentImage = new Image();
 
         // Generem el SOPInstanceUID a partir del generador de DCMTK. \TODO Utilitzar el nostre UID_ROOT?
         char instanceUid[100];
         dcmGenerateUniqueIdentifier(instanceUid, SITE_INSTANCE_UID_ROOT);
-        currentImage->setSOPInstanceUID( QString(instanceUid) );
-        newSeries->addImage( currentImage );
-        newVolume->addImage( currentImage );
-        currentImage->setParentSeries( newSeries );
-		currentImage->setOrderNumberInVolume( i );
-		currentImage->setVolumeNumberInSeries( 0 );
+        currentImage->setSOPInstanceUID(QString(instanceUid));
+        newSeries->addImage(currentImage);
+        newVolume->addImage(currentImage);
+        currentImage->setParentSeries(newSeries);
+        currentImage->setOrderNumberInVolume(i);
+        currentImage->setVolumeNumberInSeries(0);
 
-        currentImage->setBitsAllocated( bitsAllocated );
-        currentImage->setBitsStored( bitsStored );
-        currentImage->setHighBit( highBit );
-        currentImage->setColumns( columns );
-        currentImage->setInstanceNumber( QString::number(i+1) );
-        currentImage->setPhotometricInterpretation( photometricInterpretation );
-        currentImage->setPixelRepresentation( pixelRepresentation );
-        currentImage->setPixelSpacing( spacing[0], spacing[1] );
-        currentImage->setRows( rows );
-        currentImage->setSamplesPerPixel( samplesPerPixel );
+        currentImage->setBitsAllocated(bitsAllocated);
+        currentImage->setBitsStored(bitsStored);
+        currentImage->setHighBit(highBit);
+        currentImage->setColumns(columns);
+        currentImage->setInstanceNumber(QString::number(i+1));
+        currentImage->setPhotometricInterpretation(photometricInterpretation);
+        currentImage->setPixelRepresentation(pixelRepresentation);
+        currentImage->setPixelSpacing(spacing[0], spacing[1]);
+        currentImage->setRows(rows);
+        currentImage->setSamplesPerPixel(samplesPerPixel);
 
     }
 
     // Es fa després d'haver inserit les imatges perquè el nou Volume activi el flag de dades carregades.
-    newVolume->setData( newVtkData );
+    newVolume->setData(newVtkData);
 
-    newVolume->setNumberOfPhases( 1 );
-    newVolume->setNumberOfSlicesPerPhase( newSeries->getImages().count() );
+    newVolume->setNumberOfPhases(1);
+    newVolume->setNumberOfSlicesPerPhase(newSeries->getImages().count());
 
     //Informació de DEBUG
-    DEBUG_LOG( QString("\nNova sèrie generada:") +
+    DEBUG_LOG(QString("\nNova sèrie generada:") +
      QString("\n  SeriesInstanceUID: ") + newSeries->getInstanceUID() +
      QString("\n  SeriesNumber: ") + newSeries->getSeriesNumber() +
      QString("\n  SeriesDescription: ") + newSeries->getDescription() +
@@ -223,7 +222,7 @@ Volume * VolumeBuilderFromCaptures::build()
      QString("\n  HighBit: ") + QString::number(highBit) +
      QString("\n  PixelRepresentation: ") + QString::number(pixelRepresentation) +
      QString("\n  PixelSpacing: ") + QString::number(spacing[0]) + QString(",") + QString::number(spacing[1]) +
-     QString("\n  Num.Imatges: ") + QString::number(newSeries->getImages().count()) );
+     QString("\n  Num.Imatges: ") + QString::number(newSeries->getImages().count()));
 
     return newVolume;
 

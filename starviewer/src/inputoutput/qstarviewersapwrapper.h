@@ -6,10 +6,10 @@
 
 namespace udg {
 
-/**Aquesta classe és l'encarregada de fer la integració amb el SAP del ICS per a la descàrrega d'estudis, per fer-ho 
-  *aprofitem la part feta al Starviewer d'integració amb el RIS PIER. 
-  *Aquesta classe envia via TCP/IP una petició al Starviewer Local de descàrrega d'un estudi en el mateix format XML que ho 
-  *fa el RIS PIER, d'aquesta manera aprofitant la part d'integració RIS PIER implementada del Starviewer tenim feta 
+/**Aquesta classe és l'encarregada de fer la integració amb el SAP del ICS per a la descàrrega d'estudis, per fer-ho
+  *aprofitem la part feta al Starviewer d'integració amb el RIS PIER.
+  *Aquesta classe envia via TCP/IP una petició al Starviewer Local de descàrrega d'un estudi en el mateix format XML que ho
+  *fa el RIS PIER, d'aquesta manera aprofitant la part d'integració RIS PIER implementada del Starviewer tenim feta
   *la integració amb el SAP.
   */
 class QStarviewerSAPWrapper {

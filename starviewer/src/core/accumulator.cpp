@@ -10,30 +10,30 @@
 namespace udg {
 
 template <class T>
-Accumulator<T> * AccumulatorFactory::getAccumulator( AccumulatorType type, unsigned long size )
+Accumulator<T> * AccumulatorFactory::getAccumulator(AccumulatorType type, unsigned long size)
 {
-    switch ( type )
+    switch (type)
     {
         case Maximum:
-            return new MaximumAccumulator<T>( size );
+            return new MaximumAccumulator<T>(size);
         case Minimum:
-            return new MinimumAccumulator<T>( size );
+            return new MinimumAccumulator<T>(size);
         case Average:
-            return new AverageAccumulator<T>( size );
+            return new AverageAccumulator<T>(size);
         default:
             return 0;
     }
 }
 
 template <class T>
-Accumulator<T> * AccumulatorFactory::getAccumulator( const QString &type, unsigned long size )
+Accumulator<T> * AccumulatorFactory::getAccumulator(const QString &type, unsigned long size)
 {
-    if( type = "Maximum" )
-        return new MaximumAccumulator<T>( size );
-    else if( type = "Minimum" )
-        return new MinimumAccumulator<T>( size );
-    else if( type = "Average" )
-        return new AverageAccumulator<T>( size );
+    if (type = "Maximum")
+        return new MaximumAccumulator<T>(size);
+    else if (type = "Minimum")
+        return new MinimumAccumulator<T>(size);
+    else if (type = "Average")
+        return new AverageAccumulator<T>(size);
     else
         return 0;
 }

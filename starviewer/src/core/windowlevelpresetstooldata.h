@@ -137,7 +137,7 @@ private:
     };
 
     /// Mapa en el que guardem la informació de cada preset
-    QMap< QString, WindowLevelStruct > m_presets;
+    QMap<QString, WindowLevelStruct> m_presets;
 
     /// Guardem els FileDefined presets en l'ordre que s'han inserit
     QStringList m_fileDefinedPresets;

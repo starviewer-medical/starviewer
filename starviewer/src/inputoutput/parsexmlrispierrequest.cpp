@@ -43,7 +43,7 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
             {
                 parseTagMsg(xmlReader, &mask);
             }
-            else 
+            else
             {
                 ERROR_LOG("S'esperava el tag Msg i s'ha trobat el tag " + xmlReader->name().toString());
                 xmlReader->readNext();
@@ -59,8 +59,8 @@ DicomMask ParseXmlRisPIERRequest::parseXml(QString xmlRisPIERRequest)
 
 void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask *mask)
 {
-/*  El Tag Msg té aquest format, té  l'atribut name que indica l'acció, i llavors conté a dintre el tag <Param>, que són  
-    paràmetres que ens ajuden a cercar l'estudi pel qual hem de fer l'acció 
+/*  El Tag Msg té aquest format, té  l'atribut name que indica l'acció, i llavors conté a dintre el tag <Param>, que són
+    paràmetres que ens ajuden a cercar l'estudi pel qual hem de fer l'acció
 
     <Msg Name="OpenStudies">
         <Param Name="AccessionNumber">00239RS00006780</Param>
@@ -83,7 +83,7 @@ void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask 
             {
                 parseTagParam(xmlReader, mask); //parsegem el tag Param
             }
-            else 
+            else
             {
                 ERROR_LOG("S'esperava el tag Param i s'ha trobat el tag " + xmlReader->name().toString());
                 xmlReader->readNext();
@@ -95,7 +95,7 @@ void ParseXmlRisPIERRequest::parseTagMsg(QXmlStreamReader *xmlReader, DicomMask 
 
 void ParseXmlRisPIERRequest::parseTagParam(QXmlStreamReader *xmlReader, DicomMask *mask)
 {
-/*  El Tag Param té el següent format, conté un atribut anomenat name que indica quin paràmetre de l'estudi és el valor que ens 
+/*  El Tag Param té el següent format, conté un atribut anomenat name que indica quin paràmetre de l'estudi és el valor que ens
     passen
 
     <Param Name="AccessionNumber">00239RS00006780</Param>
@@ -103,7 +103,7 @@ void ParseXmlRisPIERRequest::parseTagParam(QXmlStreamReader *xmlReader, DicomMas
 
     /*Només processem el tipus de paràmetre que ens informa del valor de l'accession number, no cal processar-ne cap més
       perquè el RIS PIER només envia aquest*/
-    if (xmlReader->attributes().value("Name").toString().compare("AccessionNumber", Qt::CaseInsensitive) == 0) 
+    if (xmlReader->attributes().value("Name").toString().compare("AccessionNumber", Qt::CaseInsensitive) == 0)
     {
         xmlReader->readNext();
         if (xmlReader->isCharacters())
@@ -113,7 +113,7 @@ void ParseXmlRisPIERRequest::parseTagParam(QXmlStreamReader *xmlReader, DicomMas
             setErrorParsing(false); //Indiquem que no s'ha produït cap error parsejant perquè hem trobat el paràmetre que esperàvem
         }
     }
-    else 
+    else
     {
         ERROR_LOG("El xml conté un paràmetre que no tractem" + xmlReader->attributes().value("Name").toString());
         xmlReader->readNext();
@@ -134,4 +134,3 @@ void ParseXmlRisPIERRequest::setErrorParsing(bool errorParsing)
 }
 
 }
-

@@ -49,8 +49,8 @@ private slots:
     /// Slot que s'utilitza quant es fa algun canvi a la configuració, per activar els buttons apply
     void enableApplyButtons();
 
-    /** Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui 
-     *  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox 
+    /** Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui
+     *  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox
      */
     void checkIncomingConnectionsPortNotInUse();
 
@@ -60,7 +60,7 @@ private slots:
     ///Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Store
     void storeServiceEnabledChanged();
 
-    /**Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat al editar el valor del port de Q/R 
+    /**Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat al editar el valor del port de Q/R
        *li donem per defecte el valor d'aquest*/
     void m_textQueryRetrieveServicePortChanged();
 

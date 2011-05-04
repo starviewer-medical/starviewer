@@ -18,11 +18,11 @@ public:
 
     ~QCINEController();
 
-    void setQViewer( QViewer *viewer );
+    void setQViewer(QViewer *viewer);
 
 protected slots:
-    void updateVelocityLabel( int value );
-    void updateLoopStatus( bool enabled );
+    void updateVelocityLabel(int value);
+    void updateLoopStatus(bool enabled);
 
 protected:
     QViewerCINEController *m_cineController;

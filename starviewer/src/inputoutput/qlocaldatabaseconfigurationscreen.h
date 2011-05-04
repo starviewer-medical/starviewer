@@ -13,7 +13,7 @@ Q_OBJECT
 
 public:
     /// Constructor de la classe
-    QLocalDatabaseConfigurationScreen( QWidget *parent = 0 );
+    QLocalDatabaseConfigurationScreen(QWidget *parent = 0);
 
     ///Destructor de classe
     ~QLocalDatabaseConfigurationScreen();

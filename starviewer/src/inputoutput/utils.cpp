@@ -5,9 +5,7 @@
 
 #include "logging.h"
 
-
-namespace udg{
-
+namespace udg {
 
 bool Utils::isPortInUse(int port)
 {
@@ -16,12 +14,12 @@ bool Utils::isPortInUse(int port)
 
     portInUse = !tcpServer.listen(QHostAddress::Any, port);
 
-    if (!portInUse) 
+    if (!portInUse)
     {
         tcpServer.close();
     }
     //No s'hauria de donar un error diferent a aquest, de totes maneres per seguretat el loggagem
-    else if (tcpServer.serverError() != QAbstractSocket::AddressInUseError) 
+    else if (tcpServer.serverError() != QAbstractSocket::AddressInUseError)
     {
         ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " està en ús, per error: " + tcpServer.errorString());
     }
@@ -29,15 +27,15 @@ bool Utils::isPortInUse(int port)
     return portInUse;
 }
 
-QString Utils::generateUID( const QString &prefix )
+QString Utils::generateUID(const QString &prefix)
 {
     char uid[512];
-    if( prefix.isEmpty() )
+    if (prefix.isEmpty())
         dcmGenerateUniqueIdentifier(uid); // tindrà el prefix de dcmtk
     else
-        dcmGenerateUniqueIdentifier(uid, qPrintable(prefix) );
+        dcmGenerateUniqueIdentifier(uid, qPrintable(prefix));
 
-    DEBUG_LOG( "Obtained UID: " + QString( uid ) );
+    DEBUG_LOG("Obtained UID: " + QString(uid));
 
     return QString(uid);
 }

@@ -14,12 +14,12 @@ namespace udg
     class DicomPrinter;
     class DicomPrintJob;
 
-class DicomPrintMethod: public PrintMethod
+class DicomPrintMethod : public PrintMethod
 {
 public:
 
-	 DicomPrintMethod();
-	~DicomPrintMethod();
+     DicomPrintMethod();
+    ~DicomPrintMethod();
 
     void setPrinter(Printer &_printer);
     void setPrintJob(PrintJob &_printJob);
@@ -30,5 +30,5 @@ private:
     DicomPrinter * m_printer;
     DicomPrintJob * m_printJob;
 };
-}; 
+};
 #endif

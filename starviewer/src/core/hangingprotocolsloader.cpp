@@ -72,7 +72,7 @@ void HangingProtocolsLoader::loadXMLFiles(const QString &path)
 {
     QFileInfo fileToRead(path);
     QStringList hangingProtocolsLoaded = loadXMLFiles(fileToRead);
-    
+
     INFO_LOG(QString("Hanging protocols carregats: %1").arg(hangingProtocolsLoaded.join(", ")));
 }
 

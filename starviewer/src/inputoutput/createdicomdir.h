@@ -9,14 +9,14 @@ namespace udg {
 
 class Status;
 
-/** Converteix un directori determinat a dicomdir. Per a que un directori es pugui convertir a dicomdir, els fitxer dicom han de tenir 
+/** Converteix un directori determinat a dicomdir. Per a que un directori es pugui convertir a dicomdir, els fitxer dicom han de tenir
     un nom com a molt de 8 caràcters.
 */
 class CreateDicomdir
 {
 public:
 
-    enum recordDeviceDicomDir { HardDisk , CdRom , DvdRom  , UsbPen };
+    enum recordDeviceDicomDir { HardDisk, CdRom, DvdRom, UsbPen };
 
     CreateDicomdir();
     ~CreateDicomdir();
@@ -24,7 +24,7 @@ public:
     /** Especifica a quin dispositiu crearem el dicomdir. És important especificar el dispositiu correctament, sinó ens podem trobar, que no ens crei correctament el dicomdir
      * @param deviceToCreateDicomdir Dispositiu on crearem el dicomdir (harddisk,cdDvd,usb)
      */
-    void setDevice( recordDeviceDicomDir deviceToCreateDicomdir );
+    void setDevice(recordDeviceDicomDir deviceToCreateDicomdir);
 
     /** Permet especificar si volem treballar amb Mode Estricte. Amb Mode estricte es comprova
      * - Que totes les imatges els tags de tipus 1 tinguin una longitut més gran de 0
@@ -36,13 +36,13 @@ public:
     void setStrictMode(bool enabled);
 
     /** Indiquem si s'ha de comprovar si les imatges són del transfer syntax que indica la norma DICOM en funció del dispositiu de gravació escollit.
-     * En funció del dispositiu escollit on es crea el dicomdir la normativa DICOM indica que el DICOMDIR només pot contenir imatges 
-     * d'una determinada transfer syntax, per exemple pel profile STD-GEN-CD el  s'indica que només poden contenir imatges amb transfer syntax 
+     * En funció del dispositiu escollit on es crea el dicomdir la normativa DICOM indica que el DICOMDIR només pot contenir imatges
+     * d'una determinada transfer syntax, per exemple pel profile STD-GEN-CD el  s'indica que només poden contenir imatges amb transfer syntax
      * Explicit Little Endian, o en el cas de STD-GEN-DVD-JPEG s'accepta Explicit Little Endian i algunes transfer syntax de jpeg lossless i Lossy,
      * si alguna de les imatges no compleix el transfer syntax el DICOMDIR no és DICOM conformance.
-     * Aquesta funció permet habilitar o deshabilitat comprovar el transfer syntax de les imatges, fent que en un DICOMDIR poguem o no tenir imatges 
-     * que no siguin del transfer syntax que indica la normativa DICOM, si està habilitat i hi ha imatges que no compleixen el transfer syntax es dona error, 
-     * i si ho deshabilitem  es podem generar DICOMDIR per un determinat profile encara que contingui imatges que no compleixen els transfer syntax acceptats 
+     * Aquesta funció permet habilitar o deshabilitat comprovar el transfer syntax de les imatges, fent que en un DICOMDIR poguem o no tenir imatges
+     * que no siguin del transfer syntax que indica la normativa DICOM, si està habilitat i hi ha imatges que no compleixen el transfer syntax es dona error,
+     * i si ho deshabilitem  es podem generar DICOMDIR per un determinat profile encara que contingui imatges que no compleixen els transfer syntax acceptats
      * per la normativa DICOM per aquell profile, ja que no es comprovarà el transfer syntax de les imatges
      *
      * Per defecte es comprova la transfer syntax de les imatges.
@@ -55,7 +55,7 @@ public:
      * @param dicomdirPath directori a convertir a dicomdir
      * @return estat de finalització del mètode
      */
-    Status create( QString dicomdirPath );
+    Status create(QString dicomdirPath);
 
 private:
 

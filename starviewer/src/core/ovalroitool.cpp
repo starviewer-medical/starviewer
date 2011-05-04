@@ -36,7 +36,7 @@ void OvalROITool::handleEvent(long unsigned eventID)
     {
         return;
     }
-    
+
     switch (eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
@@ -59,7 +59,7 @@ void OvalROITool::handlePointAddition()
     {
         m_2DViewer->getEventWorldCoordinate(m_firstPoint);
         m_2DViewer->putCoordinateInCurrentImageBounds(m_firstPoint);
-        
+
         memcpy(m_secondPoint, m_firstPoint, sizeof(double) * 3);
 
         m_state = FirstPointFixed;
@@ -76,10 +76,10 @@ void OvalROITool::simulateOval()
         // Obtenim el segon punt
         m_2DViewer->getEventWorldCoordinate(m_secondPoint);
         m_2DViewer->putCoordinateInCurrentImageBounds(m_secondPoint);
-        
+
         // Si encara no havíem creat el polígon, ho fem
         if (!m_roiPolygon)
-        {            
+        {
             m_roiPolygon = new DrawerPolygon;
             // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
             m_roiPolygon->increaseReferenceCount();
@@ -88,7 +88,7 @@ void OvalROITool::simulateOval()
 
         // Actualitzem la forma i renderitzem
         updatePolygonPoints();
-        m_2DViewer->render();    
+        m_2DViewer->render();
     }
 }
 
@@ -112,7 +112,7 @@ void OvalROITool::updatePolygonPoints()
     double xRadius = (m_secondPoint[xIndex] - m_firstPoint[xIndex]) * 0.5;
     double yRadius = (m_secondPoint[yIndex] - m_firstPoint[yIndex]) * 0.5;
     double depthValue = centre[zIndex];
-    
+
     double beta = MathTools::degreesToRadians(360);
     double sinusBeta = sin(beta);
     double cosinusBeta = cos(beta);
@@ -120,7 +120,7 @@ void OvalROITool::updatePolygonPoints()
     const int polygonPoints = 50;
     double alpha = 0.0;
     int vertixIndex = 0;
-    for (double i = 0; i < 360.0; i += 360.0 / polygonPoints )
+    for (double i = 0; i < 360.0; i += 360.0 / polygonPoints)
     {
         alpha = MathTools::degreesToRadians(i);
         double sinusAlpha = sin(alpha);
@@ -140,7 +140,7 @@ void OvalROITool::updatePolygonPoints()
 
 void OvalROITool::closeForm()
 {
-    // Cal comprovar si hi ha un objecte creat ja que podria ser que no s'hagués creat si s'hagués realitzat un doble clic, 
+    // Cal comprovar si hi ha un objecte creat ja que podria ser que no s'hagués creat si s'hagués realitzat un doble clic,
     // per exemple, ja que no s'hauria passat per l'event de mouse move, que és quan es crea la primitiva.
     if (m_roiPolygon)
     {
@@ -162,7 +162,7 @@ void OvalROITool::initialize()
         delete m_roiPolygon;
         m_2DViewer->render();
     }
-    
+
     m_roiPolygon = 0;
     m_state = Ready;
 }

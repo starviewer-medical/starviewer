@@ -29,14 +29,14 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
     createContextMenuQStudyTreeWidget();
 
     Settings settings;
-    settings.restoreColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget() );
-    settings.restoreGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter );
+    settings.restoreColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget());
+    settings.restoreGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter);
 
     QStudyTreeWidget::ColumnIndex sortByColumn = (QStudyTreeWidget::ColumnIndex) settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortByColumn).toInt();
     Qt::SortOrder sortOrderColumn = (Qt::SortOrder) settings.getValue(InputOutputSettings::LocalDatabaseStudyListSortOrder).toInt();
     m_studyTreeWidget->setSortByColumn (sortByColumn, sortOrderColumn);
 
-    m_statsWatcher = new StatsWatcher("QueryInputOutputLocalDatabaseWidget",this);
+    m_statsWatcher = new StatsWatcher("QueryInputOutputLocalDatabaseWidget", this);
     m_statsWatcher->addClicksCounter(m_viewButton);
 
     m_studyTreeWidget->setMaximumExpandTreeItemsLevel(QStudyTreeWidget::SeriesLevel);
@@ -49,7 +49,7 @@ QInputOutputLocalDatabaseWidget::QInputOutputLocalDatabaseWidget(QWidget *parent
 QInputOutputLocalDatabaseWidget::~QInputOutputLocalDatabaseWidget()
 {
     Settings settings;
-    settings.saveColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget() );
+    settings.saveColumnsWidths(InputOutputSettings::LocalDatabaseStudyList, m_studyTreeWidget->getQTreeWidget());
 
     //Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
     settings.setValue(InputOutputSettings::LocalDatabaseStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
@@ -118,7 +118,7 @@ void QInputOutputLocalDatabaseWidget::clear()
 void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
 {
     m_pacsManager = pacsManager;
-    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*))); 
+    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
 }
 
 void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
@@ -134,7 +134,7 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
 
     patientStudyList = localDatabaseManager.queryPatientStudy(queryMask);
 
-    if (showDatabaseManagerError(localDatabaseManager.getLastError()))    return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
 
     /* Aquest mètode a part de ser cridada quan l'usuari fa click al botó search, també es cridada al
      * constructor d'aquesta classe, per a que al engegar l'aplicació ja es mostri la llista d'estudis
@@ -164,7 +164,7 @@ void QInputOutputLocalDatabaseWidget::addStudyToQStudyTreeWidget(QString studyUI
 
     studyMask.setStudyInstanceUID(studyUID);
     patientList = localDatabaseManager.queryPatientStudy(studyMask);
-    if(showDatabaseManagerError(localDatabaseManager.getLastError()))    return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
 
     if (patientList.count() == 1)
     {
@@ -212,7 +212,7 @@ void QInputOutputLocalDatabaseWidget::expandImagesOfSeries(QString studyInstance
     mask.setSeriesInstanceUID(seriesInstanceUID);
     imageList = localDatabaseManager.queryImage(mask);
 
-    if(showDatabaseManagerError(localDatabaseManager.getLastError()))   return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
 
     if (imageList.isEmpty())
     {
@@ -235,11 +235,11 @@ void QInputOutputLocalDatabaseWidget::setSeriesToSeriesListWidget()
     mask.setStudyInstanceUID(studyInstanceUID);
 
     seriesList = localDatabaseManager.querySeries(mask);
-    if (showDatabaseManagerError(localDatabaseManager.getLastError()))    return;
+    if (showDatabaseManagerError(localDatabaseManager.getLastError())) return;
 
     m_seriesListWidget->clear();
 
-    foreach(Series* series, seriesList)
+    foreach (Series* series, seriesList)
     {
         m_seriesListWidget->insertSeries(studyInstanceUID, series);
     }
@@ -249,29 +249,29 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
 {
     QList<DicomMask> selectedDicomMaskToDelete = m_studyTreeWidget->getDicomMaskOfSelectedItems();
 
-    if(!selectedDicomMaskToDelete.isEmpty())
+    if (!selectedDicomMaskToDelete.isEmpty())
     {
         QMessageBox::StandardButton response = QMessageBox::question(this, ApplicationNameString,
                                                                            tr("Are you sure you want to delete the selected Items?"),
                                                                            QMessageBox::Yes | QMessageBox::No,
                                                                            QMessageBox::No);
-        if (response  == QMessageBox::Yes)
+        if (response == QMessageBox::Yes)
         {
             QApplication::setOverrideCursor(Qt::BusyCursor);
             LocalDatabaseManager localDatabaseManager;
 
-            foreach(DicomMask dicomMaskToDelete, selectedDicomMaskToDelete)
+            foreach (DicomMask dicomMaskToDelete, selectedDicomMaskToDelete)
             {
-                if(m_qcreateDicomdir->studyExistsInDICOMDIRList(dicomMaskToDelete.getStudyInstanceUID()))
+                if (m_qcreateDicomdir->studyExistsInDICOMDIRList(dicomMaskToDelete.getStudyInstanceUID()))
                 {
                     Study *studyToDelete = m_studyTreeWidget->getStudy(dicomMaskToDelete.getStudyInstanceUID());
                     QString warningMessage;
-                    
+
                     if (dicomMaskToDelete.getSeriesInstanceUID().isEmpty())
                     {
                         warningMessage = tr("The study %1 of patient %2 is in use by the DICOMDIR List. If you want to delete "
                                             "this study you should remove it from the DICOMDIR List first.")
-                                         .arg(studyToDelete->getID() , studyToDelete->getParentPatient()->getFullName());
+                                         .arg(studyToDelete->getID(), studyToDelete->getParentPatient()->getFullName());
                     }
                     else
                     {   //TODO:Hauriem de mostar el Series ID en lloc del Series UID
@@ -300,7 +300,7 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
                         m_seriesListWidget->clear();
                         m_studyTreeWidget->removeStudy(dicomMaskToDelete.getStudyInstanceUID());
                     }
-                    
+
                     if (showDatabaseManagerError(localDatabaseManager.getLastError()))
                     break;
                 }
@@ -311,13 +311,13 @@ void QInputOutputLocalDatabaseWidget::deleteSelectedItemsFromLocalDatabase()
     else QMessageBox::information(this, ApplicationNameString, tr("Please select at least one item to delete."));
 }
 
-void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly )
+void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUID, QString selectedSeriesInstanceUID, bool loadOnly)
 {
     DicomMask patientToProcessMask;
     Patient *patient;
     QList<Patient *> selectedPatientsList;
 
-    if(selectedStudiesInstanceUID.isEmpty())
+    if (selectedStudiesInstanceUID.isEmpty())
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select at least one study to view."));
         return;
@@ -325,7 +325,7 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: S'hauria de millorar el mètode ja que per la seva estructura lo d'obrir l'estudi per la sèrie que ens tinguin seleccionada només ho farà per un estudi ja que aquest mètode només se li passa per paràmetre una sèrie per defecte
-    foreach(QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
+    foreach (QString studyInstanceUIDSelected, selectedStudiesInstanceUID)
     {
         LocalDatabaseManager localDatabaseManager;
 
@@ -333,13 +333,13 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
 
         patient = localDatabaseManager.retrieve(patientToProcessMask);
 
-        if(showDatabaseManagerError(localDatabaseManager.getLastError()))
+        if (showDatabaseManagerError(localDatabaseManager.getLastError()))
         {
             QApplication::restoreOverrideCursor();
             return;
         }
 
-        if(patient)
+        if (patient)
         {
             // Marquem la sèrie per defecte
             // TODO ara sempre posem el mateix UID, per tant de moment només funciona bé del tot quan seleccionem un únic estudi
@@ -352,7 +352,7 @@ void QInputOutputLocalDatabaseWidget::view(QStringList selectedStudiesInstanceUI
     if (selectedPatientsList.count() > 0)
     {
         DEBUG_LOG("Llançat signal per visualitzar estudi del pacient " + patient->getFullName());
-        emit viewPatients(Patient::mergePatients(selectedPatientsList), loadOnly );
+        emit viewPatients(Patient::mergePatients(selectedPatientsList), loadOnly);
     }
 
     QApplication::restoreOverrideCursor();
@@ -374,7 +374,7 @@ void QInputOutputLocalDatabaseWidget::viewFromQSeriesListWidget()
 }
 
 /*TODO en comptes de fer un signal cap a la queryscreen, perquè aquesta indiqui a la QInputOutPacsWidget que guardi un estudi al PACS
- *, no hauria de ser aquesta funció l'encarregada de guardar l'estudi directament al PACS, entenc que no és responsabilitat de 
+ *, no hauria de ser aquesta funció l'encarregada de guardar l'estudi directament al PACS, entenc que no és responsabilitat de
  * QInputOutputPacsWidget
  */
 void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
@@ -383,7 +383,7 @@ void QInputOutputLocalDatabaseWidget::selectedStudiesStoreToPacs()
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select at least one item to send to PACS."));
     }
-    else 
+    else
     {
         m_qwidgetSelectPacsToStoreDicomImage->show();
     }
@@ -395,23 +395,23 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
     LocalDatabaseManager localDatabaseManager;
     QList<Patient*> patientList;
     QList<Study *> studies;
-    
-    foreach(QString studyUID, m_studyTreeWidget->getSelectedStudiesUID())
+
+    foreach (QString studyUID, m_studyTreeWidget->getSelectedStudiesUID())
     {
         studyMask.setStudyInstanceUID(studyUID);
         patientList = localDatabaseManager.queryPatientStudy(studyMask);
-        if(showDatabaseManagerError(localDatabaseManager.getLastError())) 
+        if (showDatabaseManagerError(localDatabaseManager.getLastError()))
             return;
 
         // \TODO Això s'ha de fer perquè queryPatientStudy retorna llista de Patients
         // Nosaltres, en realitat, volem llista d'study amb les dades de Patient omplertes.
-        if(patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
+        if (patientList.size() != 1 && patientList.first()->getNumberOfStudies() != 1)
         {
             showDatabaseManagerError(LocalDatabaseManager::DatabaseCorrupted);
             return;
         }
         studies << patientList.first()->getStudies().first();
-   }
+    }
     m_qcreateDicomdir->addStudies(studies);
 }
 
@@ -432,9 +432,9 @@ QList<Image*> QInputOutputLocalDatabaseWidget::getAllImagesFromPatient(Patient *
 {
     QList<Image*> images;
 
-    foreach(Study *study, patient->getStudies())
+    foreach (Study *study, patient->getStudies())
     {
-        foreach(Series *series, study->getSeries())
+        foreach (Series *series, study->getSeries())
         {
             images.append(series->getImages());
         }
@@ -450,14 +450,14 @@ void QInputOutputLocalDatabaseWidget::deleteOldStudiesThreadFinished()
 
 void QInputOutputLocalDatabaseWidget::qSplitterPositionChanged()
 {
-    Settings().saveGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter );
+    Settings().saveGeometry(InputOutputSettings::LocalDatabaseSplitterState, m_StudyTreeSeriesListQSplitter);
 }
 
 void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
 {
-    foreach(PacsDevice pacsDevice, m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
+    foreach (PacsDevice pacsDevice, m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
     {
-        foreach(DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
+        foreach (DicomMask dicomMask, m_studyTreeWidget->getDicomMaskOfSelectedItems())
         {
             LocalDatabaseManager localDatabaseManager;
             Patient *patient = localDatabaseManager.retrieve(dicomMask);
@@ -465,8 +465,8 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
             if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
             {
                 ERROR_LOG(QString("Error a la base de dades intentar obtenir els estudis que s'han d'enviar al PACS, Error: %1; StudyUID: %2")
-                                  .arg( localDatabaseManager.getLastError() )
-                                  .arg( dicomMask.getStudyInstanceUID() ));
+                                  .arg(localDatabaseManager.getLastError())
+                                  .arg(dicomMask.getStudyInstanceUID()));
 
                 QString message = tr("An error occurred with database, preparing the DICOM files to send to PACS %1. The DICOM files won't be sent.")
                     .arg(pacsDevice.getAETitle());
@@ -491,7 +491,7 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice
 
 void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *pacsJob)
 {
-    SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = dynamic_cast<SendDICOMFilesToPACSJob*> ( pacsJob );
+    SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = dynamic_cast<SendDICOMFilesToPACSJob*> (pacsJob);
 
     if (sendDICOMFilesToPACSJob->getStatus() != PACSRequestStatus::SendOk)
     {
@@ -513,14 +513,14 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *p
 
 void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJob *pacsJob)
 {
-    /*Connectem amb el signal RetrieveDICOMFilesFromPACSJob de que s'esborrarà un estudi de la caché per treure'ls de la QStudyTreeWidget quan se 
+    /*Connectem amb el signal RetrieveDICOMFilesFromPACSJob de que s'esborrarà un estudi de la caché per treure'ls de la QStudyTreeWidget quan se
       n'esborrin*/
     /*TODO: RetrieveDICOMFilesFromPACS no hauria d'emetre aquest signal, hauria de ser una CacheManager d'aquesta manera treuriem la responsabilitat
             de RetrieveDICOMFilesFromPACS de fer-ho, i a més no caldria connectar el signal cada vegada que fan un nou Job. Una vegada s'hagi implementar la
             CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h" */
     if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> ( pacsJob ), SIGNAL(studyFromCacheWillBeDeleted(QString)), SLOT(removeStudyFromQStudyTreeWidget(QString)));
+        connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(studyFromCacheWillBeDeleted(QString)), SLOT(removeStudyFromQStudyTreeWidget(QString)));
     }
 }
 
@@ -531,7 +531,7 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
     if (!doingWhat.isEmpty())
         message = tr("An error has occurred while ") + doingWhat + ":\n\n";
 
-    switch(error)
+    switch (error)
     {
         case LocalDatabaseManager::Ok:
             return false;
@@ -541,7 +541,7 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
                          "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
-			message += tr("%1 database is corrupted.").arg(ApplicationNameString);
+            message += tr("%1 database is corrupted.").arg(ApplicationNameString);
             message += tr("\nClose all %1 windows and try again."
                          "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
             break;

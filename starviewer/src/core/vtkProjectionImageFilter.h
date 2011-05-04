@@ -23,13 +23,13 @@
 /** \class vtkProjectionImageFilter
  * \brief Implements an accumulation of an image along a selected direction.
  *
- *    This class accumulates an image along a dimension and reduce the size 
- * of this dimension to 1. The dimension being accumulated is set by 
- * ProjectionDimension. 
+ *    This class accumulates an image along a dimension and reduce the size
+ * of this dimension to 1. The dimension being accumulated is set by
+ * ProjectionDimension.
  *
  *   Each pixel is the cumulative sum of the pixels along the collapsed
- * dimension and reduce the size of the accumulated dimension to 1 (only 
- * on the accumulated). 
+ * dimension and reduce the size of the accumulated dimension to 1 (only
+ * on the accumulated).
  *
  *   The dimensions of the InputImage and the OutputImage must be the same.
  *
@@ -37,7 +37,7 @@
  * the type of the output image.
  *
  * This class was contributed to the Insight Journal by Emilian Beronich and
- * Gaetan Lehmann. The original paper can be found at 
+ * Gaetan Lehmann. The original paper can be found at
  *      http://hdl.handle.net/1926/164
  *
  * \author Emiliano Beronich
@@ -56,27 +56,27 @@ class vtkProjectionImageFilter : public vtkThreadedImageAlgorithm
 public:
     static vtkProjectionImageFilter *New();
     vtkTypeRevisionMacro(vtkProjectionImageFilter,vtkThreadedImageAlgorithm);
-    void PrintSelf( ostream& os, vtkIndent indent );
+    void PrintSelf(ostream& os, vtkIndent indent);
 
 //     typedef TAccumulator<class T> AccumulatorType;
 
 
     /** Set/Get the direction in which to accumulate the data.  It must be set
     * before the update of the filter. Defaults to the last dimension. */
-    vtkSetMacro( ProjectionDimension, unsigned int );
-    vtkGetMacro( ProjectionDimension, unsigned int );
+    vtkSetMacro(ProjectionDimension, unsigned int);
+    vtkGetMacro(ProjectionDimension, unsigned int);
 
-    vtkSetMacro( AccumulatorType, udg::AccumulatorFactory::AccumulatorType );
-    vtkGetMacro( AccumulatorType, udg::AccumulatorFactory::AccumulatorType );
+    vtkSetMacro(AccumulatorType, udg::AccumulatorFactory::AccumulatorType);
+    vtkGetMacro(AccumulatorType, udg::AccumulatorFactory::AccumulatorType);
 
-    vtkSetMacro( FirstSlice, int );
-    vtkGetMacro( FirstSlice, int );
+    vtkSetMacro(FirstSlice, int);
+    vtkGetMacro(FirstSlice, int);
 
-    vtkSetMacro( NumberOfSlicesToProject, int );
-    vtkGetMacro( NumberOfSlicesToProject, int );
+    vtkSetMacro(NumberOfSlicesToProject, int);
+    vtkGetMacro(NumberOfSlicesToProject, int);
 
-    vtkSetMacro( Step, int );
-    vtkGetMacro( Step, int );
+    vtkSetMacro(Step, int);
+    vtkGetMacro(Step, int);
 
 
 protected:
@@ -100,10 +100,10 @@ protected:
   /** Apply changes to the input image requested region. */
 //   virtual void GenerateInputRequestedRegion();
 
-//   virtual void ThreadedGenerateData( 
-//    const OutputImageRegionType& outputRegionForThread, int threadId );
+//   virtual void ThreadedGenerateData(
+//    const OutputImageRegionType& outputRegionForThread, int threadId);
 //     template <class T> Accumulator<T> NewAccumulator();
-    
+
 
 
 private:

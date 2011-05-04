@@ -238,7 +238,7 @@ static void vtkFloatingEndPointLine2D(double pt1[2], double pt2[2],
    {
    vtkstd::swap(pt1,pt2);
    }
- double x0, xN, y0, yN ;
+ double x0, xN, y0, yN;
  double dx, dy;
  int X0, XN, Y0, YN, Xi, X, Y;
  float invGrad;
@@ -289,7 +289,7 @@ static void vtkFloatingEndPointLine2D(double pt1[2], double pt2[2],
 
  //segment 1
  Y = Y0 + 1;
- X = Y*fixInvGrad + fixC ;
+ X = Y*fixInvGrad + fixC;
  while ( Y <= Ymid )
   {
   Xi = ((X >> 15) + 1) >> 1;
@@ -300,7 +300,7 @@ static void vtkFloatingEndPointLine2D(double pt1[2], double pt2[2],
 
  // segment 2
  Y = YN - 1;
- X = Y*fixInvGrad + fixC ;
+ X = Y*fixInvGrad + fixC;
  while ( Y > Ymid )
   {
   Xi = ((X >> 15) + 1) >> 1;
@@ -429,7 +429,7 @@ void vtkAtamaiPolyDataToImageStencil2::ThreadedExecute(
    //    lines->InsertCellPoint(point1Id);
    //    lines->InsertCellPoint(point2Id);
    /////////////////////////////////////////////////////////////////////////
-   vtkIdType currentPointId, firstLooseEndId, secondLooseEndId, currentLooseEndId ;
+   vtkIdType currentPointId, firstLooseEndId, secondLooseEndId, currentLooseEndId;
    vtkIdList *looseEndIdList, *pointIdList, *cellIdList;
    vtkPoints * points;
    int numberOfPoints;
@@ -438,7 +438,7 @@ void vtkAtamaiPolyDataToImageStencil2::ThreadedExecute(
 #else
    double firstLooseEnd[3], secondLooseEnd[3], currentLooseEnd[3];
 #endif
-   double minimumDistance = 0.0 ;
+   double minimumDistance = 0.0;
    double fend1[2], fend2[2];
 
    points = slice->GetPoints();
@@ -448,10 +448,10 @@ void vtkAtamaiPolyDataToImageStencil2::ThreadedExecute(
    looseEndIdList =  vtkIdList::New();
    pointIdList    =  vtkIdList::New();
 
-   for ( int i = 0; i < numberOfPoints ; i++ )
+   for ( int i = 0; i < numberOfPoints; i++ )
      {
      currentPointId = i;
-     slice->GetPointCells( currentPointId , cellIdList );
+     slice->GetPointCells( currentPointId, cellIdList );
      if( cellIdList->GetNumberOfIds()<2 )
        {
        looseEndIdList->InsertNextId( currentPointId ); // stored the
@@ -470,7 +470,7 @@ void vtkAtamaiPolyDataToImageStencil2::ThreadedExecute(
      looseEndIdList->DeleteId( firstLooseEndId );
      minimumDistance = DistanceMeasure(firstLooseEnd, secondLooseEnd);
 
-     for( int j = 2 ; j < looseEndIdList->GetNumberOfIds() ; j++ )
+     for( int j = 2; j < looseEndIdList->GetNumberOfIds(); j++ )
        {
        currentLooseEndId = looseEndIdList->GetId( j );
        slice->GetPoint( looseEndIdList->GetId( j ), currentLooseEnd);
@@ -500,16 +500,16 @@ void vtkAtamaiPolyDataToImageStencil2::ThreadedExecute(
      end1[0] = vtkMath::Round( (point1[0]-origin[0])*invspacing[0] );
      end1[1] = vtkMath::Round( (point1[1]-origin[1])*invspacing[1] );
 
-     fend1[0] =  (point1[0]-origin[0])*invspacing[0] ;
-     fend1[1] =  (point1[1]-origin[1])*invspacing[1] ;
+     fend1[0] =  (point1[0]-origin[0])*invspacing[0];
+     fend1[1] =  (point1[1]-origin[1])*invspacing[1];
 
      slice->GetPoint(ptId2, point2);
 
      end2[0] = vtkMath::Round( (point2[0]-origin[0])*invspacing[0] );
      end2[1] = vtkMath::Round( (point2[1]-origin[1])*invspacing[1] );
 
-     fend2[0] =  (point2[0]-origin[0])*invspacing[0] ;
-     fend2[1] =  (point2[1]-origin[1])*invspacing[1] ;
+     fend2[0] =  (point2[0]-origin[0])*invspacing[0];
+     fend2[1] =  (point2[1]-origin[1])*invspacing[1];
 
      vtkFloatingEndPointLine2D(fend1, fend2, idxZ, dims[1],
                         extent[2], extent[3], zyBucket);

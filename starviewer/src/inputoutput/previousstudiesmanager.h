@@ -17,13 +17,13 @@ class PacsManager;
 class PACSJob;
 class QueryPacsJob;
 
-/**Aquesta classe donat un Study demana els estudis previs en els PACS configurats per defecte, degut a que 
+/**Aquesta classe donat un Study demana els estudis previs en els PACS configurats per defecte, degut a que
   *ara actualment en el PACS tenim el mateix pacients amb PatientID diferents, també a part de cercar estudis
-  *que coincideixin amb el PatientID també es farà una altre cerca per Patient Name. 
+  *que coincideixin amb el PatientID també es farà una altre cerca per Patient Name.
   */
 /*TODO: En teoria amb la implantació del SAP els problemes de que un Pacient té diversos Patient ID o que té el nom
   *escrit de maneres diferents haurien de desapareixer, per tant d'aquí un temps quan la majoria d'estudis del PACS
-  *ja s'hagin fet a través del SAP i constatem que el Patient ID pel mateix pacient sempre és el mateix, 
+  *ja s'hagin fet a través del SAP i constatem que el Patient ID pel mateix pacient sempre és el mateix,
   *la cerca per nom de pacient podria desapareixer*/
 class PreviousStudiesManager : public QObject {
 Q_OBJECT
@@ -98,7 +98,7 @@ private:
     ///de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
     void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob);
 
-    ///Ens afegeix els estudis trobats en una llista, si algun dels estudis ja existeix a la llista perquè s'ha trobat en algun altre PACS no 
+    ///Ens afegeix els estudis trobats en una llista, si algun dels estudis ja existeix a la llista perquè s'ha trobat en algun altre PACS no
     ///se li afegeix
     void mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob);
 
@@ -120,7 +120,7 @@ private:
 
     PacsManager *m_pacsManager;
     QList<Study*> m_mergedStudyList;
-    QHash<QString,QString> m_mergedHashPacsIDOfStudyInstanceUID;
+    QHash<QString, QString> m_mergedHashPacsIDOfStudyInstanceUID;
     QString m_studyInstanceUIDToFindPrevious;
     /*Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
     *en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error

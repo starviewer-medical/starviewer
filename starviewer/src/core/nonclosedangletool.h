@@ -19,13 +19,13 @@ public:
     /// Possibles estats de la tool
     enum { None, FirstLineFixed, SecondLineFixed };
 
-    NonClosedAngleTool( QViewer *viewer, QObject *parent = 0 );
+    NonClosedAngleTool(QViewer *viewer, QObject *parent = 0);
     ~NonClosedAngleTool();
 
-    void handleEvent( long unsigned eventID );
+    void handleEvent(long unsigned eventID);
 
 private:
-    /// Gestiona quin punt de l'angle estem dibuixant. Es cridarà cada cop que 
+    /// Gestiona quin punt de l'angle estem dibuixant. Es cridarà cada cop que
     /// haguem fet un clic amb el botó esquerre del mouse.
     void handlePointAddition();
 
@@ -42,7 +42,7 @@ private:
     void computeAngle();
 
     /// Calcula la correcta posició del caption de l'angle segons els punts de l'angle
-    void textPosition( double *p1, double *p2, DrawerText *angleText );
+    void textPosition(double *p1, double *p2, DrawerText *angleText);
 
 private slots:
     /// Inicialitza l'estat de la tool

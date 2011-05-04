@@ -15,33 +15,33 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
  : QDialog(parent, f)
 {
     setupUi(this);
-    setWindowTitle( tr("%1 Configuration").arg( ApplicationNameString ) );
-    setWindowFlags( (this->windowFlags() | Qt::WindowMaximizeButtonHint)  ^ Qt::WindowContextHelpButtonHint  );
+    setWindowTitle(tr("%1 Configuration").arg(ApplicationNameString));
+    setWindowFlags((this->windowFlags() | Qt::WindowMaximizeButtonHint) ^ Qt::WindowContextHelpButtonHint);
 
 #ifndef STARVIEWER_LITE // no mostrem configuració del PACS
     QConfigurationScreen *pacsConfigurationScreen = new QConfigurationScreen(this);
     this->addConfigurationWidget(pacsConfigurationScreen, tr("PACS"), AdvancedConfiguration);
-    connect(pacsConfigurationScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
-    connect(m_okButton , SIGNAL(clicked()), pacsConfigurationScreen, SLOT(applyChanges()));
+    connect(pacsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
+    connect(m_okButton, SIGNAL(clicked()), pacsConfigurationScreen, SLOT(applyChanges()));
 #endif
 
     // configuracions de la base de dades local
     QLocalDatabaseConfigurationScreen *localDatabaseScreen = new QLocalDatabaseConfigurationScreen(this);
     this->addConfigurationWidget(localDatabaseScreen, tr("Local Database"), AdvancedConfiguration);
-    connect(localDatabaseScreen, SIGNAL( configurationChanged(const QString &) ), this, SIGNAL( configurationChanged(const QString &) ));
-    connect(m_okButton , SIGNAL(clicked()), localDatabaseScreen, SLOT(applyChanges()));
+    connect(localDatabaseScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
+    connect(m_okButton, SIGNAL(clicked()), localDatabaseScreen, SLOT(applyChanges()));
 
 #ifndef STARVIEWER_LITE // no mostrem configuració del servei que escolta les peticions del RIS
     QListenRisRequestsConfigurationScreen *qListenRisRequestsConfigurationScreen = new QListenRisRequestsConfigurationScreen(this);
     this->addConfigurationWidget(qListenRisRequestsConfigurationScreen, tr("RIS Listener"), AdvancedConfiguration);
     connect(qListenRisRequestsConfigurationScreen, SIGNAL(configurationChanged(const QString &)), this, SIGNAL(configurationChanged(const QString &)));
-    connect(m_okButton , SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
+    connect(m_okButton, SIGNAL(clicked()), qListenRisRequestsConfigurationScreen, SLOT(applyChanges()));
 #endif
 
     // configuració del programa de gravació
     QDICOMDIRConfigurationScreen *dicomdirScreen = new QDICOMDIRConfigurationScreen(this);
     this->addConfigurationWidget(dicomdirScreen, tr("DICOMDIR"), AdvancedConfiguration);
-    connect(m_okButton , SIGNAL(clicked()), dicomdirScreen, SLOT(applyChanges()));
+    connect(m_okButton, SIGNAL(clicked()), dicomdirScreen, SLOT(applyChanges()));
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
@@ -55,9 +55,9 @@ QConfigurationDialog::~QConfigurationDialog()
 
 void QConfigurationDialog::setViewAdvancedConfiguration()
 {
-    foreach(QListWidgetItem *item, m_configurationListItems.values(AdvancedConfiguration))
+    foreach (QListWidgetItem *item, m_configurationListItems.values(AdvancedConfiguration))
     {
-        item->setHidden( !m_viewAdvancedOptions->isChecked() );
+        item->setHidden(!m_viewAdvancedOptions->isChecked());
     }
     m_optionsList->setCurrentRow(0);
 }
@@ -75,7 +75,7 @@ void QConfigurationDialog::addConfigurationWidget(QWidget *widget, const QString
     horizontalLayout->setMargin(0);
 
     QLabel *optionTitleIcon = new QLabel(page);
-    optionTitleIcon->setPixmap( widget->windowIcon().pixmap(48, 48) );
+    optionTitleIcon->setPixmap(widget->windowIcon().pixmap(48, 48));
 
     horizontalLayout->addWidget(optionTitleIcon);
 

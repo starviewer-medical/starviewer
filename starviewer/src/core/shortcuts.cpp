@@ -189,15 +189,15 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+E"));
     settingsRegistry->addSetting(ClearCurrentViewAnnotationsTool, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("")); //\TODO
     settingsRegistry->addSetting(TransDifferenceTool, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("R"));
     settingsRegistry->addSetting(OvalROITool, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QKeySequence(QKeySequence::New).toString());
     settingsRegistry->addSetting(NewWindow, shortcutsList);
@@ -205,19 +205,19 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QKeySequence(QKeySequence::Open).toString());
     settingsRegistry->addSetting(OpenFile, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+D"));
     settingsRegistry->addSetting(OpenDICOMDIR, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+Shift+D"));
     settingsRegistry->addSetting(OpenDirectory, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+L"));
     settingsRegistry->addSetting(OpenLocalDatabaseStudies, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+P"));
     settingsRegistry->addSetting(OpenPACS, shortcutsList);
@@ -225,15 +225,15 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+E"));
     settingsRegistry->addSetting(OpenExams, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("")); //\TODO
     settingsRegistry->addSetting(Preferences, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+W"));
     settingsRegistry->addSetting(CloseCurrentExtension, shortcutsList);
-    
+
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+Q"));
     settingsRegistry->addSetting(CloseApplication, shortcutsList);

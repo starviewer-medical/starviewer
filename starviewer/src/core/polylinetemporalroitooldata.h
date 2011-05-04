@@ -20,13 +20,13 @@ public:
     typedef itk::Image<double, 4> TemporalImageType;
 
     /// Li passem la imatge d'on ha de treure les dades
-    void setTemporalImage(TemporalImageType::Pointer a) {std::cout<<"Set TemporalImage!!"<<std::endl; 
-														m_temporalImage = a;m_temporalImageHasBeenDefined = true;}
+    void setTemporalImage(TemporalImageType::Pointer a) {std::cout<<"Set TemporalImage!!"<<std::endl;
+                                                        m_temporalImage = a;m_temporalImageHasBeenDefined = true;}
     TemporalImageType::Pointer getTemporalImage(){return m_temporalImage;}
 
     bool temporalImageHasBeenDefined(){return m_temporalImageHasBeenDefined;}
 
-    void setMeanVector( QVector<double> m );
+    void setMeanVector(QVector<double> m);
     QVector<double> getMeanVector(){return m_mean;}
 
 signals:

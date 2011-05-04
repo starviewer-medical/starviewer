@@ -140,7 +140,7 @@ void TransferFunctionEditor::moveColorPoints(const QList<double> &origins, doubl
     // fem servir enters perquè C++2003 no accepta un tipus local (per exemple enum) com a argument de template
     // amb C++0x sí que es pot posar un enum
     const char Add = 0, Change = 1, Remove = 2;
-    QMap< double, QPair<QColor, char> > actions;
+    QMap<double, QPair<QColor, char> > actions;
     int numberOfMoves = 0;
 
     foreach (double origin, origins)

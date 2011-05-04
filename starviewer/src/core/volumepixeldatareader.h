@@ -18,16 +18,16 @@ Q_OBJECT
 public:
     /// Tipus d'error que podem tenir al llegir
     enum PixelDataReadError { NoError = 1, SizeMismatch, InvalidFileName, MissingFile, OutOfMemory, ZeroSpacingNotAllowed, CannotReadFile, ReadAborted, UnknownError };
-    
+
     VolumePixelDataReader(QObject *parent = 0);
     ~VolumePixelDataReader();
 
     /// Donada una llista de noms de fitxer, la llegeix i omple
     /// l'estructura d'imatge que fem servir internament.
-    /// Ens retorna un enter que ens indicarà si hi ha hagut alguna mena d'error en el 
+    /// Ens retorna un enter que ens indicarà si hi ha hagut alguna mena d'error en el
     /// procés de lectura, seguint els valors enumerats definits a aquesta mateixa classe
     virtual int read(const QStringList &filenames) = 0;
-    
+
     /// Mètode que cal reimplementar per tal de permètre cancel·lar una petició de lectura iniciada amb read().
     /// En el cas de que no estigui realitzant un read, no farà res.
     /// En el cas que estigui en mig d'una operació de lectura, caldrà retornar com a resultat un error ReadAborted.
@@ -43,7 +43,6 @@ signals:
 protected:
     /// Les dades d'imatge en format vtk
     VolumePixelData *m_volumePixelData;
-
 
 };
 

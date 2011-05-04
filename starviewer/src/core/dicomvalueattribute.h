@@ -4,7 +4,6 @@
 #include "dicomattribute.h"
 #include <QVariant>
 
-
 namespace udg {
 
 /** Classe heredada de \class DICOMAttribute encarregada de representar el atributs DICOM de tipus valor.
@@ -18,13 +17,13 @@ public:
     DICOMValueAttribute();
 
     ~DICOMValueAttribute();
-   
+
     /// Retorna sempre cert
     virtual bool isValueAttribute();
 
     /// Retorna sempre false
     virtual bool isSequenceAttribute();
-    
+
     /// Retorna el contingut de l'atribut formatat
     QString toString();
 
@@ -37,7 +36,7 @@ public:
     void setValue(const QByteArray &value);
     void setValue(const QDate &value);
     void setValue(const QTime &value);
-    
+
     /// Mètodes per obtenir el valor segons el tipus
     int getValueAsInt();
     unsigned int getValueAsUnsignedInt();

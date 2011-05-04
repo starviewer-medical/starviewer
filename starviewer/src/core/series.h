@@ -137,14 +137,14 @@ public:
     /// Ens diu quantes imatges té aquesta sèrie
     /// @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
     int getNumberOfImages();
-    
-    /// Ens retorna el nombre d'ítems que té la sèrie, sense diferenciar si són imatges o no. 
+
+    /// Ens retorna el nombre d'ítems que té la sèrie, sense diferenciar si són imatges o no.
     /// Equival al nombre d'arxius que conté la sèrie
     int getNumberOfItems();
-    
+
     /// Especificia el número d'imatges: necessari per quan omplim desde la bdd
     void setNumberOfImages(int numberOfImages);
-    
+
     /// Indica si una sèrie té imatges
     bool hasImages() const;
 
@@ -208,7 +208,7 @@ public:
     /// Mètode temporal per obtenir la Image segons com està ordenada a la llista
     /// Si l'índex que donem està fora de rang, es retorna una imatge nul·la
     /// TODO això no ens assegura que obtenim la imatge que suposadament volem
-	Image* getImageByIndex(int index);
+    Image* getImageByIndex(int index);
 
     /// Permet establir quin és el thumbnail de la sèrie
     void setThumbnail(QPixmap seriesThumbnail);
@@ -218,7 +218,7 @@ public:
     /// Les comprovacions que fa són mirar que no es tracti d'una modalitat
     /// que no sigui d'imatge (PR,KIN,SR...) i/o que contingui realment imatges a l'image set
     /// La comprovació es fa "al vol", és a dir, sota demanda
-    /// TODO queda pendent fer altres comprovacions més acurades com 
+    /// TODO queda pendent fer altres comprovacions més acurades com
     /// comprovar que es tracti d'un SOP Class suportat per l'aplicació
     bool isViewable() const;
 
@@ -234,7 +234,7 @@ public slots:
 private:
     /// Troba l'índex de la imatge amb el identificadir donat a la llista d'imatges
     /// @param identifier L'identificador de la imatge que volem trobar
-    /// @return L'índex d'aquella imatge dins de la llista, -1 si no existeix la imatge amb aquell identificador.     
+    /// @return L'índex d'aquella imatge dins de la llista, -1 si no existeix la imatge amb aquell identificador.
     int findImageIndex(const QString &identifier);
 
 private:
@@ -320,11 +320,11 @@ private:
 
     /// Número d'imatges de la sèrie. Fem el recompte manualment per quan consultem de la BDD
     int m_numberOfImages;
-    
+
     /// Guarda el thumbnail de la sèrie
     QPixmap m_seriesThumbnail;
 
-    /// Request Procedure ID (0040,1001) Tipus 1C/2 
+    /// Request Procedure ID (0040,1001) Tipus 1C/2
     QString m_requestedProcedureID;
     /// Schedulet Procedure Step ID (0040,0253) Tipus 1C/3
     QString m_scheduledProcedureStepID;

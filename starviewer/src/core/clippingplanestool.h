@@ -14,23 +14,23 @@ class Q3DViewer;
 
 /**
     Tool que permet manipular els plans de tall en un visor 3D
-    Mostra un widget que permet rotar, traslladar i manipular els plans de 
+    Mostra un widget que permet rotar, traslladar i manipular els plans de
     la bounding box del volum del visor 3D
 */
 class ClippingPlanesTool : public Tool {
 Q_OBJECT
 public:
-    ClippingPlanesTool( QViewer *viewer, QObject *parent = 0 );
+    ClippingPlanesTool(QViewer *viewer, QObject *parent = 0);
     ~ClippingPlanesTool();
 
     /// Gestiona els events del visor
-    void handleEvent( long unsigned eventID );
+    void handleEvent(long unsigned eventID);
 
 private slots:
     /// Es connectarà als events emesos pel widget per saber quan s'ha interactuat i així aplicar els plans de tall sobre el visor
     void boundingBoxEventHandler(vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command);
 
-    /// Cada cop que s'hagi canviat l'input del visor hem de posar a punt 
+    /// Cada cop que s'hagi canviat l'input del visor hem de posar a punt
     /// el widget d'acord amb el nou volum
     void updateInput();
 

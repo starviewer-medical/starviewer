@@ -33,7 +33,7 @@ void CustomWindowLevelsWriter::write()
     }
 
     QFile file(path);
-    if (file.exists()) 
+    if (file.exists())
     {
         // si ja existeix l'esborrem ja que si és més llarg que el nou, hi quedaran caràcters del vell
         QFile::remove(path);
@@ -64,7 +64,7 @@ void CustomWindowLevelsWriter::write()
     }
     writer.writeEndElement();
     writer.writeEndDocument();
- 
+
     INFO_LOG(QString("S'han guardat els custom window levels a: %1").arg(path));
 }
 
@@ -79,7 +79,7 @@ QString CustomWindowLevelsWriter::getPath()
     }
 
     QFileInfo fileInfo(userPath);
-    QDir dir;    
+    QDir dir;
     if (!dir.exists(fileInfo.absolutePath()))
     {
         if (!dir.mkpath(fileInfo.absolutePath()))
@@ -88,11 +88,10 @@ QString CustomWindowLevelsWriter::getPath()
         }
     }
 
-    if(fileInfo.isDir())
+    if (fileInfo.isDir())
     {
         userPath += "customwindowlevels.xml"; // Per si de cas al setting s'ha definit un directori.
     }
-
 
     return userPath;
 }

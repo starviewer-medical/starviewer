@@ -18,8 +18,8 @@ public:
 
     ~QThickSlabWidget();
 
-    void setSlabThickness( int thickness );
-    void setProjectionMode( int mode ); // TODO int o QString?
+    void setSlabThickness(int thickness);
+    void setProjectionMode(int mode); // TODO int o QString?
 
     /**
      * Enllacem aquest controlador amb un Q2DViewer. De moment només està previst que
@@ -28,14 +28,14 @@ public:
      * "sincronitzat" alhora
      * @param viewer Visualitzador al que linkem el control de thick slab
      */
-    void link( Q2DViewer *viewer );
+    void link(Q2DViewer *viewer);
 
     /// Desvinculem el widget del visor que tingui vinculat
     void unlink();
 
 signals:
-    void thicknessChanged( int thickness );
-    void projectionModeChanged( int mode ); // TODO enviar int o QString?
+    void thicknessChanged(int thickness);
+    void projectionModeChanged(int mode); // TODO enviar int o QString?
 
 protected slots:
     /**
@@ -43,7 +43,7 @@ protected slots:
      * escollit aplica sobre el visor el tipus de projecció adequat
      * @param comboItem
      */
-    void applyProjectionMode( int comboItem );
+    void applyProjectionMode(int comboItem);
 
     /**
      * Actualiza el valor màxim de thickness que es mostra en el combo
@@ -77,7 +77,7 @@ protected slots:
     void onViewChanged();
 
     /// Si cert, posa el thickness al màxim i el manté encara que es canvïi de vista
-    void enableVolumeMode( bool enable );
+    void enableVolumeMode(bool enable);
 
 private:
     /// Desconnecta els signals i slots associats al viewer vinculat si en tenim

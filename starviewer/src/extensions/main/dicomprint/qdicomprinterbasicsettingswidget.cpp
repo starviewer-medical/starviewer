@@ -6,10 +6,10 @@
 
 namespace udg {
 
-QDicomPrinterBasicSettingsWidget::QDicomPrinterBasicSettingsWidget( QWidget *parent )
+QDicomPrinterBasicSettingsWidget::QDicomPrinterBasicSettingsWidget(QWidget *parent)
     : QWidget(parent)
 {
-    setupUi( this );
+    setupUi(this);
     createConnections();
 }
 
@@ -41,10 +41,10 @@ void QDicomPrinterBasicSettingsWidget::clear()
     m_priorityComboBox->clear();
     m_mediumTypeComboBox->clear();
     m_filmDestinationComboBox->clear();
-    
+
     // Film Settings
     m_layoutComboBox->clear();
-    m_filmOrientationComboBox->clear();        
+    m_filmOrientationComboBox->clear();
     m_filmSizeComboBox->clear();
 }
 
@@ -57,7 +57,7 @@ void QDicomPrinterBasicSettingsWidget::getFilmSettings(DicomPrinter& printer)
 
 void QDicomPrinterBasicSettingsWidget::getPrintSettings(DicomPrinter& printer)
 {
-    printer.setDefaultPrintPriority(m_priorityComboBox->currentText());   
+    printer.setDefaultPrintPriority(m_priorityComboBox->currentText());
     printer.setDefaultMediumType(m_mediumTypeComboBox->currentText());
     printer.setDefaultFilmDestination(m_filmDestinationComboBox->currentText());
 }
@@ -65,7 +65,7 @@ void QDicomPrinterBasicSettingsWidget::getPrintSettings(DicomPrinter& printer)
 void QDicomPrinterBasicSettingsWidget::setFilmSettings(DicomPrinter& printer)
 {
     m_layoutComboBox->addItems(printer.getAvailableFilmLayoutValues());
-    m_layoutComboBox->setCurrentIndex(m_layoutComboBox->findText(printer.getDefaultFilmLayout()));    
+    m_layoutComboBox->setCurrentIndex(m_layoutComboBox->findText(printer.getDefaultFilmLayout()));
     m_filmOrientationComboBox->addItems(printer.getAvailableFilmOrientationValues());
     m_filmOrientationComboBox->setCurrentIndex(m_filmOrientationComboBox->findText(printer.getDefaultFilmOrientation()));
     m_filmSizeComboBox->addItems(printer.getAvailableFilmSizeValues());

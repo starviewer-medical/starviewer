@@ -1,5 +1,4 @@
 #include "cursor3dtooldata.h"
-
 #include "imageplane.h"
 
 namespace udg {
@@ -29,18 +28,18 @@ double * Cursor3DToolData::getOriginPointPosition() const
     return m_originPointPosition;
 }
 
-void Cursor3DToolData::setFrameOfReferenceUID( const QString &frameOfReference )
+void Cursor3DToolData::setFrameOfReferenceUID(const QString &frameOfReference)
 {
     m_frameOfReferenceUID = frameOfReference;
 }
 
-void Cursor3DToolData::setImagePlane( ImagePlane *imagePlane )
+void Cursor3DToolData::setImagePlane(ImagePlane *imagePlane)
 {
     m_referenceImagePlane = imagePlane;
     emit changed();
 }
 
-void Cursor3DToolData::setOriginPointPosition( double *position )
+void Cursor3DToolData::setOriginPointPosition(double *position)
 {
     m_originPointPosition = position;
     emit changed();
@@ -51,12 +50,12 @@ QString Cursor3DToolData::getInstanceUID() const
     return m_instanceUID;
 }
 
-void Cursor3DToolData::setInstanceUID( const QString &instanceUID )
+void Cursor3DToolData::setInstanceUID(const QString &instanceUID)
 {
     m_instanceUID = instanceUID;
 }
 
-void Cursor3DToolData::setVisible( bool visibility )
+void Cursor3DToolData::setVisible(bool visibility)
 {
     m_isVisible = visibility;
     emit changed();

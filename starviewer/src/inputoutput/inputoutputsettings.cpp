@@ -29,7 +29,7 @@ const QString InputOutputSettings::RISRequestsPort(RISBase + "listenPort");
 const QString InputOutputSettings::RISRequestViewOnceRetrieved(RISBase + "viewAutomaticallyAStudyRetrievedFromRisRequest");
 
 const QString InterfaceBase("PACS/interface/");
-const QString InputOutputSettings::LastOpenedDICOMDIRPath(InterfaceBase + "lastOpenedDICOMDIRPath");  
+const QString InputOutputSettings::LastOpenedDICOMDIRPath(InterfaceBase + "lastOpenedDICOMDIRPath");
 const QString InputOutputSettings::DICOMDIRStudyListColumnsWidth(InterfaceBase + "studyDicomdirList/");
 const QString InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth(InterfaceBase + "qCreateDicomdir/");
 const QString InputOutputSettings::OperationStateColumnsWidth(InterfaceBase + "qOperationState/");
@@ -88,7 +88,7 @@ InputOutputSettings::~InputOutputSettings()
 void InputOutputSettings::init()
 {
     SettingsRegistry *settingsRegistry = SettingsRegistry::instance();
-    
+
     settingsRegistry->addSetting(DatabaseAbsoluteFilePath, UserDataRootPath + "pacs/database/dicom.sdb", Settings::Parseable);
     settingsRegistry->addSetting(CachePath, UserDataRootPath + "pacs/dicom/", Settings::Parseable);
 
@@ -147,5 +147,4 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(SearchRelatedStudiesByName, false);
 }
 
-} // end namespace udg 
-
+} // end namespace udg

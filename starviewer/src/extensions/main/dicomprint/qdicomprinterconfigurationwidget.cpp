@@ -13,12 +13,12 @@ namespace udg {
 // Public Methods
 QDicomPrinterConfigurationWidget::QDicomPrinterConfigurationWidget()
 {
-    setupUi( this );
+    setupUi(this);
 
-    m_listPrintersTreeWidget->setColumnHidden(0,true);
+    m_listPrintersTreeWidget->setColumnHidden(0, true);
 
-    m_addPrinterWidget = new QDicomAddPrinterWidget();    
-    
+    m_addPrinterWidget = new QDicomAddPrinterWidget();
+
     createConnections();
     configureInputValidator();
     refreshPrinterList();
@@ -35,16 +35,15 @@ QDicomPrinterConfigurationWidget::~QDicomPrinterConfigurationWidget()
 
 }
 
-
 // Public Slots
-void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
+void QDicomPrinterConfigurationWidget::printerSelectionChanged()
 {
-    if(m_listPrintersTreeWidget->selectedItems().count() > 0)
-    {   
+    if (m_listPrintersTreeWidget->selectedItems().count() > 0)
+    {
         DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
 
         this->clearPrinterSettings();
-    
+
         this->setPrinterSettingsToControls(selectedDicomPrinter);
         m_qdicomPrinterBasicSettingsWidget->setDicomPrinterBasicSettings(selectedDicomPrinter);
         this->setAdvancedSettingsToControls(selectedDicomPrinter);
@@ -67,7 +66,7 @@ void  QDicomPrinterConfigurationWidget::printerSelectionChanged()
 }
 
 void QDicomPrinterConfigurationWidget::addPrinter()
-{    
+{
     m_addPrinterWidget->clearInputs();
     m_addPrinterWidget->setVisible(true);
     /*TODO:Després d'afegir una impressora s'hauria de fer signal printerSettingsChanged(), ara aprofitem el fet de que quan s'afegeix una impressora
@@ -79,16 +78,16 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
 {
     DicomPrinter dicomPrinter;
     DicomPrinterManager dicomPrinterManager;
-    
+
     if (!m_listPrintersTreeWidget->selectedItems().isEmpty())
     {
         if (validatePrinterSettings())
-        {   
+        {
             this->getPrinterSettingsFromControls(dicomPrinter);
             m_qdicomPrinterBasicSettingsWidget->getDicomPrinterBasicSettings(dicomPrinter);
             this->getAdvancedSettingsFromControls(dicomPrinter);
 
-            if (!dicomPrinterManager.updatePrinter(m_selectedPrinterId,dicomPrinter))
+            if (!dicomPrinterManager.updatePrinter(m_selectedPrinterId, dicomPrinter))
             {
                 //Si rebem un error és que no ha trobat la impressora amb el ID passat per paràmetre
                 QMessageBox::critical(this, ApplicationNameString, tr("Error can't apply changes to the printer."));
@@ -98,7 +97,7 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
                 refreshPrinterList();
                 clearPrinterSettings();
 
-                emit printerSettingsChanged();                
+                emit printerSettingsChanged();
                 return true;
             }
         }
@@ -123,12 +122,12 @@ void QDicomPrinterConfigurationWidget::deletePrinter()
 
 void QDicomPrinterConfigurationWidget::testPrinter()
 {
-    if(!m_listPrintersTreeWidget->selectedItems().isEmpty())
-    {   
+    if (!m_listPrintersTreeWidget->selectedItems().isEmpty())
+    {
         DicomPrint dicomPrint;
         DicomPrinter selectedDicomPrinter = getSelectedDicomPrinter();
         bool testIsCorrect;
-        
+
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         testIsCorrect = dicomPrint.echoPrinter(selectedDicomPrinter);
         QApplication::restoreOverrideCursor();
@@ -143,14 +142,14 @@ void QDicomPrinterConfigurationWidget::testPrinter()
             //El test ha fallat per algun motiu
             QString messageError;
 
-            switch(dicomPrint.getLastError())
+            switch (dicomPrint.getLastError())
             {
-                case DicomPrint::NotRespondedAsExpected :
-                    messageError = tr("Printer %1 doesn't respond correctly.\nBe sure that hostname and AETitle are correct." ).arg(selectedDicomPrinter.getAETitle());
+                case DicomPrint::NotRespondedAsExpected:
+                    messageError = tr("Printer %1 doesn't respond correctly.\nBe sure that hostname and AETitle are correct.").arg(selectedDicomPrinter.getAETitle());
                     break;
-                case DicomPrint::CanNotConnectToDicomPrinter :
+                case DicomPrint::CanNotConnectToDicomPrinter:
                 default:
-                    messageError = tr("Printer %1 doesn't respond.\nBe sure that hostname and AETitle are correct." ).arg(selectedDicomPrinter.getAETitle());
+                    messageError = tr("Printer %1 doesn't respond.\nBe sure that hostname and AETitle are correct.").arg(selectedDicomPrinter.getAETitle());
                     break;
             }
 
@@ -159,7 +158,7 @@ void QDicomPrinterConfigurationWidget::testPrinter()
     }
     else
     {
-        QMessageBox::information( this , ApplicationNameString, tr("No printer is selected to test.") );
+        QMessageBox::information(this, ApplicationNameString, tr("No printer is selected to test."));
     }
 
 }
@@ -196,46 +195,46 @@ void QDicomPrinterConfigurationWidget::m_supportsAnnotationBoxYesRadioButtonToog
 
 // Private Methods
 void QDicomPrinterConfigurationWidget::createConnections()
-{ 
-    connect( m_addPrinterPushButton, SIGNAL( clicked() ), SLOT( addPrinter() ));
-    connect( m_applySettingsPushButton , SIGNAL( clicked() ), SLOT( modifyPrinter() ));
-    connect( m_acceptSettingsPushButton , SIGNAL( clicked() ), SLOT( accept() ));
-    connect( m_cancelSettingsPushButton , SIGNAL( clicked() ), SLOT( cancel() ));
-    connect( m_deletePrinterPushButton , SIGNAL( clicked() ), SLOT( deletePrinter() ));
-    connect( m_testPrinterPushButton , SIGNAL( clicked() ), SLOT( testPrinter() ));    
+{
+    connect(m_addPrinterPushButton, SIGNAL(clicked()), SLOT(addPrinter()));
+    connect(m_applySettingsPushButton, SIGNAL(clicked()), SLOT(modifyPrinter()));
+    connect(m_acceptSettingsPushButton, SIGNAL(clicked()), SLOT(accept()));
+    connect(m_cancelSettingsPushButton, SIGNAL(clicked()), SLOT(cancel()));
+    connect(m_deletePrinterPushButton, SIGNAL(clicked()), SLOT(deletePrinter()));
+    connect(m_testPrinterPushButton, SIGNAL(clicked()), SLOT(testPrinter()));
 
-    connect( m_listPrintersTreeWidget , SIGNAL( itemSelectionChanged() ), SLOT( printerSelectionChanged() ) );
-    connect( m_addPrinterWidget, SIGNAL(newPrinterAddedSignal(int)), SLOT(showNewPrinterAdded(int)));
-    connect( m_magnifactionTypeComboBox, SIGNAL(currentIndexChanged ( const QString ) ), SLOT( m_magnitifacationTypeComboBoxIndexChanged( const QString ) ) );
-    connect( m_supportsAnnotationBoxYesRadioButton, SIGNAL( toggled(bool) ), SLOT( m_supportsAnnotationBoxYesRadioButtonToogled() ) ); 
+    connect(m_listPrintersTreeWidget, SIGNAL(itemSelectionChanged()), SLOT(printerSelectionChanged()));
+    connect(m_addPrinterWidget, SIGNAL(newPrinterAddedSignal(int)), SLOT(showNewPrinterAdded(int)));
+    connect(m_magnifactionTypeComboBox, SIGNAL(currentIndexChanged (const QString)), SLOT(m_magnitifacationTypeComboBoxIndexChanged(const QString)));
+    connect(m_supportsAnnotationBoxYesRadioButton, SIGNAL(toggled(bool)), SLOT(m_supportsAnnotationBoxYesRadioButtonToogled()));
 }
 
 void QDicomPrinterConfigurationWidget::configureInputValidator()
 {
-    m_printerPortLineEdit->setValidator( new QIntValidator(0, 65535, m_printerPortLineEdit) );
+    m_printerPortLineEdit->setValidator(new QIntValidator(0, 65535, m_printerPortLineEdit));
 }
 
 void QDicomPrinterConfigurationWidget::refreshPrinterList()
-{   
+{
     DicomPrinterManager dicomPrinterManager;
     QList<DicomPrinter> dicomPrintersList = dicomPrinterManager.getDicomPrinterList();
 
     m_listPrintersTreeWidget->clear();
 
-    foreach(DicomPrinter dicomPrinter, dicomPrintersList)
+    foreach (DicomPrinter dicomPrinter, dicomPrintersList)
     {
-        QTreeWidgetItem* item = new QTreeWidgetItem( m_listPrintersTreeWidget );
+        QTreeWidgetItem* item = new QTreeWidgetItem(m_listPrintersTreeWidget);
 
-        item->setText(0, QString::number( m_listPrintersTreeWidget->topLevelItemCount()-1));
+        item->setText(0, QString::number(m_listPrintersTreeWidget->topLevelItemCount() - 1));
         item->setText(1, dicomPrinter.getAETitle());
         item->setText(2, dicomPrinter.getHostname());
-        item->setText(3, QString::number( dicomPrinter.getPort()));
+        item->setText(3, QString::number(dicomPrinter.getPort()));
         item->setText(4, dicomPrinter.getDescription());
     }
 }
 
 void QDicomPrinterConfigurationWidget::selectPrinter(int printerID)
-{   
+{
     DicomPrinterManager dicomPrinterManager;
     QList<DicomPrinter> dicomPrintersList = dicomPrinterManager.getDicomPrinterList();
     QList<DicomPrinter>::iterator dicomPrintersListIterator = dicomPrintersList.begin();
@@ -243,11 +242,11 @@ void QDicomPrinterConfigurationWidget::selectPrinter(int printerID)
     int i = 0;
     bool found = false;
 
-    while( dicomPrintersListIterator != dicomPrintersList.end() && !found )
+    while (dicomPrintersListIterator != dicomPrintersList.end() && !found)
     {
-        if ( printerID == (*dicomPrintersListIterator).getID() )
+        if (printerID == (*dicomPrintersListIterator).getID())
         {
-            m_listPrintersTreeWidget->topLevelItem( i )->setSelected( true );
+            m_listPrintersTreeWidget->topLevelItem(i)->setSelected(true);
             found = true;
         }
         else
@@ -262,18 +261,18 @@ void QDicomPrinterConfigurationWidget::selectPrinter(int printerID)
 bool QDicomPrinterConfigurationWidget::validatePrinterSettings()
 {
     QString text;
-    
+
     text = m_printerAetitleLineEdit->text();
-    if ( text.length() == 0 )
+    if (text.length() == 0)
     {
-        QMessageBox::warning( this , ApplicationNameString , tr("AETitle field can't be empty.") );
+        QMessageBox::warning(this, ApplicationNameString, tr("AETitle field can't be empty."));
         return false;
     }
-    
+
     text = m_printerHostnameLineEdit->text();
-    if ( text.length() == 0 )
+    if (text.length() == 0)
     {
-        QMessageBox::warning( this , ApplicationNameString , tr ( "Hostname can't be empty." ) );
+        QMessageBox::warning(this, ApplicationNameString, tr ("Hostname can't be empty."));
         return false;
     }
 
@@ -311,7 +310,7 @@ void QDicomPrinterConfigurationWidget::setPrinterSettingsToControls(DicomPrinter
     m_printerAetitleLineEdit->setText(printer.getAETitle());
     m_printerDescriptionLineEdit->setText(printer.getDescription());
     m_printerHostnameLineEdit->setText(printer.getHostname());
-    m_printerPortLineEdit->setText(QString::number( printer.getPort()));
+    m_printerPortLineEdit->setText(QString::number(printer.getPort()));
     m_printerDefaultPrinterCheckBox->setChecked(printer.getIsDefault());
 }
 
@@ -375,22 +374,21 @@ DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()
           una impressora a la vegada*/
         selectedItem = m_listPrintersTreeWidget->selectedItems().first();
         m_selectedPrinterId = selectedItem->text(0).toInt();
-        
+
         selectedDicomPrinter = dicomPrinterManager.getPrinterByID(m_selectedPrinterId);
     }
 
     return selectedDicomPrinter;
 }
 
-
 void QDicomPrinterConfigurationWidget::cancel()
 {
     /*Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
-     *com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera 
+     *com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera
      sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial*/
     m_listPrintersTreeWidget->clearSelection();
     clearPrinterSettings();
-    
+
     close();
 }
 
@@ -400,14 +398,14 @@ void QDicomPrinterConfigurationWidget::accept()
 
     if (m_listPrintersTreeWidget->selectedItems().count() > 0)
     {
-        /*Si tenim una impressora seleccionada guardem possibles canvis que s'hagin fet, si es produeix algun error guardant els canvis, 
+        /*Si tenim una impressora seleccionada guardem possibles canvis que s'hagin fet, si es produeix algun error guardant els canvis,
          no tanquem la finestra*/
         if (modifyPrinter())
         {
             closeWindow = true;
         }
     }
-    else 
+    else
     {
         closeWindow = true;
     }
@@ -415,7 +413,7 @@ void QDicomPrinterConfigurationWidget::accept()
     if (closeWindow)
     {
         /*Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
-         *com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera 
+         *com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera
          sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial*/
 
         m_listPrintersTreeWidget->clearSelection();
@@ -424,4 +422,4 @@ void QDicomPrinterConfigurationWidget::accept()
     }
 }
 
-}              
+}

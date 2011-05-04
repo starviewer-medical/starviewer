@@ -6,7 +6,7 @@
 #include <QList>
 #include "printer.h"
 
-/** 
+/**
   * Implementació de la interfície Printer per una impressora del tipus Dicom
   */
 
@@ -21,84 +21,84 @@ public:
 
     ~DicomPrinter();
 
-    /// Afegeix l'ID de l'impressora    
+    /// Afegeix l'ID de l'impressora
     void setID(int ID);
 
-    /// Retorna l'ID de l'impressora    
+    /// Retorna l'ID de l'impressora
     int getID();
 
     /// Afegeix el nom de la impressora.
-    void setName( const QString& name );
+    void setName(const QString& name);
 
     /// Retorna el nom de la impressora.
     QString getName() const;
 
     /// Afegeix el tipus de la impressora.
-    void setType( const QString& type );
+    void setType(const QString& type);
 
     /// Retorna el tipus de la impressora.
     QString getType() const;
 
     /// Afegeix la descripció de la impressora.
-    void setDescription( const QString& description );	
+    void setDescription(const QString& description);
 
-    /// Retorna la descripció de la impressora.    
+    /// Retorna la descripció de la impressora.
     QString getDescription() const;
 
     /// Afageix el AETitle de la impressora
-    void setAETitle( const QString& aeTitle );
+    void setAETitle(const QString& aeTitle);
 
     /// Retorna el AETitle de la impressora
     QString getAETitle() const;
 
     /// Afegeix el HostName (IP) de la impressora.
-    void setHostname( const QString& hostname );
+    void setHostname(const QString& hostname);
 
     /// Retorna el AETitle de la impressora
     QString getHostname() const;
 
     /// Afegeix el Port de la impressora.
-    void setPort( int port );
+    void setPort(int port);
 
     /// Retorna el Port de la impressora.
     int getPort();
 
     /// Especifica el valor per defecte del MediumType
-    void setDefaultMediumType( const QString& mediumType );
+    void setDefaultMediumType(const QString& mediumType);
 
     /// Retorna el valor per defecte del MediumType
-    QString getDefaultMediumType() const; 
+    QString getDefaultMediumType() const;
 
     /// Especifica una llista de valors disponibles del MediumType
-    void setAvailableMediumTypeValues( QStringList mediumTypeValues );
+    void setAvailableMediumTypeValues(QStringList mediumTypeValues);
 
     /// Retorna una llista de valors disponibles del MediumType
     QStringList getAvailableMediumTypeValues();
 
     /// Especifica el valor per defecte del FilmSize
-    void setDefaultFilmSize( const QString& filmSize );	
+    void setDefaultFilmSize(const QString& filmSize);
 
     /// Retorna el valor per defecte del FilmSize
     QString getDefaultFilmSize() const;
 
     /// Especifica una llista de valors disponibles del FilmSize
-    void setAvailableFilmSizeValues( QStringList filmSizeValues );
+    void setAvailableFilmSizeValues(QStringList filmSizeValues);
 
     /// Retorna una llista de valors disponibles del FilmSize
     QStringList getAvailableFilmSizeValues();
 
      /// Especifica el valor per defecte del FilmLayout
-    void setDefaultFilmLayout( const QString& filmLayout );	
+    void setDefaultFilmLayout(const QString& filmLayout);
 
     /// Retorna el valor per defecte del FilmLayout
     QString getDefaultFilmLayout() const;
 
     /// Especifica una llista de valors disponibles del FilmLayout
-    void setAvailableFilmLayoutValues(QStringList filmLayoutValues);	
+    void setAvailableFilmLayoutValues(QStringList filmLayoutValues);
 
     /// Retorna una llista de valors disponibles del FilmLayout
-    QStringList getAvailableFilmLayoutValues();	
-        
+    QStringList getAvailableFilmLayoutValues();
+
      /// Retorna el número de columnes que té el layout del Film per defecte de la impressora.
     int getDefaultFilmLayoutColumns();
 
@@ -106,7 +106,7 @@ public:
     int getDefaultFilmLayoutRows();
 
     /// Especifica la orientació (horitzontal/vertical) per defecte amb la que s'ha d'imprimir la placa
-    void setDefaultFilmOrientation(const QString &filmOrientation);	
+    void setDefaultFilmOrientation(const QString &filmOrientation);
 
     /// Retorna la orientació (horitzontal/vertical) per defecte amb la que s'ha d'imprimir la placa
     QString getDefaultFilmOrientation() const;
@@ -118,7 +118,7 @@ public:
     QStringList getAvailableFilmOrientationValues();
 
     /// Afegeix el Magnification Type per defecte a la impressora
-    void setDefaultMagnificationType( const QString& magnificationType );	
+    void setDefaultMagnificationType(const QString& magnificationType);
 
     /// Retorna el Magnification Type per defecte a la impressora
     QString getDefaultMagnificationType() const;
@@ -130,7 +130,7 @@ public:
     QStringList getAvailableMagnificationTypeValues();
 
     /// Afegeix la Densitat Màxima per defecte a la impressora
-    void setDefaultMaxDensity( ushort maxDensity );
+    void setDefaultMaxDensity(ushort maxDensity);
 
     /// Retorna la Densitat Màxima per defecte a la impressora
     ushort getDefaultMaxDensity() const;
@@ -171,10 +171,10 @@ public:
     /// Retorna el valor per defecte de la Densitat del Border.
     QString getDefaultBorderDensity() const;
 
-    /// Especifica una llista de  valors disponibles de la Densitat del Border.
+    /// Especifica una llista de valors disponibles de la Densitat del Border.
     void setAvailableBorderDensityValues(QStringList borderDensityValues);
 
-    /// Retorna una llista de  valors disponibles de la Densitat del Border.
+    /// Retorna una llista de valors disponibles de la Densitat del Border.
     QStringList getAvailableBorderDensityValues();
 
     /// Especifica el valor per defecte de l'EmptyImageDensity
@@ -183,10 +183,10 @@ public:
     /// Retorna el valor per defecte de l'EmptyImageDensity
     QString getDefaultEmptyImageDensity() const;
 
-    /// Especifica una llista de  valors disponibles de l'EmptyImageDensity    
+    /// Especifica una llista de valors disponibles de l'EmptyImageDensity
     void setAvailableEmptyImageDensityValues(QStringList emptyImageDensityValues);
 
-    /// Retorna una llista de  valors disponibles de l'EmptyImageDensity    
+    /// Retorna una llista de valors disponibles de l'EmptyImageDensity
     QStringList getAvailableEmptyImageDensityValues();
 
     /// Especifica el valor per defecte del FilmDestination
@@ -195,10 +195,10 @@ public:
     /// Retorna el valor per defecte del FilmDestination
     QString getDefaultFilmDestination() const;
 
-    /// Especifica una llista de  valors disponibles del FilmDestination    
+    /// Especifica una llista de valors disponibles del FilmDestination
     void setAvailableFilmDestinationValues(QStringList filmDestinationValues);
 
-    /// Retorna una llista de  valors disponibles del FilmDestination
+    /// Retorna una llista de valors disponibles del FilmDestination
     QStringList getAvailableFilmDestinationValues();
 
     ///Especifica el Smoothing type per defecte amb la que s'imprimirà
@@ -246,7 +246,7 @@ public:
     void setAnnotationDisplayFormatID(const QString &annotationDisplayFormatID);
     QString getAnnotationDisplayFormatID() const;
 
-    /**Especifica/retorna el valor de ConfigurationInformation per la impressora, depén de la impressora, per exemple per agfa permet afegir 
+    /**Especifica/retorna el valor de ConfigurationInformation per la impressora, depén de la impressora, per exemple per agfa permet afegir
       *anotacions a les imatges, aplicar LUT's, ... s'ha de mirar al dicom confomance de cada impressora per mirar quin valor pot agafar aquest camp
       */
     //El configuration Information no té AvailableConfiguration mètodes, perquè per cada impressora el valor és diferent.
@@ -254,33 +254,33 @@ public:
     QString getDefaultConfigurationInformation() const;
 
     /// Especifica si la impressora és la impressora per defecte del sistema.
-    void setIsDefault( bool isDefault );
+    void setIsDefault(bool isDefault);
 
     /// Retorna si la impressora és la impressora per defecte del sistema.
     bool getIsDefault() const;
 
 private:
-    
+
     /**Mètode que retorna el número de columnes i files del layout, s'implementa en un sol mètode per no tenir codi duplicat
     si s'implementés un mètode per obtenir el número de columnes i una altre per obtenir el número de files*/
-    void getDefaultFilmLayoutColumnsRows(int &colums, int &rows);   
+    void getDefaultFilmLayoutColumnsRows(int &colums, int &rows);
 
-private:		
-	
+private:
+
     int m_ID;
     QString m_aeTitle;
     QString m_hostname;
     int m_port;
-    QString	m_defaultDescription;
-    QString	m_defaultMediumType;
+    QString m_defaultDescription;
+    QString m_defaultMediumType;
     QStringList m_mediumTypeValues;
-    QString	m_defaultFilmSize;
+    QString m_defaultFilmSize;
     QStringList m_filmSizeValues;
-    QString	m_defaultFilmLayout;
+    QString m_defaultFilmLayout;
     QStringList m_filmLayoutValues;
     QString m_defaultFilmOrientation;
-    QStringList m_filmOrientationValues;        
-    QString	m_defaultMagnificationType;
+    QStringList m_filmOrientationValues;
+    QString m_defaultMagnificationType;
     QStringList m_magnificationTypeValues;
     ushort m_defaultMaxDensity;
     ushort m_maxDensityValues;
@@ -299,10 +299,10 @@ private:
     QString m_defaultPrintPriority;
     QStringList m_printPriorityValues;
     QString m_defaultPolarity;
-    QStringList m_polarityValues;    
+    QStringList m_polarityValues;
     bool m_supportsAnnotationBox;
     QString m_annotationDisplayFormatID;
     QString m_configurationInformation;
 };
-}; 
+};
 #endif

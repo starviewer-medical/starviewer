@@ -84,7 +84,7 @@ void DICOMAnonymizer::initializeGDCM()
         ERROR_LOG("No s'ha trobat el fitxer part3.xml a " + QCoreApplication::applicationDirPath());
     }
 
-    const gdcm::Defs &defs = gdcmGlobalInstance->GetDefs(); 
+    const gdcm::Defs &defs = gdcmGlobalInstance->GetDefs();
     (void)defs;
     //TODO:utilitzem el UID de dcmtk hauríem de tenir el nostre propi això també passa a VolumeBuilderFromCaptures
     if (!gdcm::UIDGenerator::IsValid(SITE_UID_ROOT))
@@ -100,7 +100,7 @@ bool DICOMAnonymizer::anonymyzeDICOMFilesDirectory(const QString &directoryPath)
     QDir directory;
     directory.setPath(directoryPath);
 
-    foreach(QFileInfo entryInfo, directory.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files))
+    foreach (QFileInfo entryInfo, directory.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files))
     {
         if (entryInfo.isDir())
         {
@@ -152,7 +152,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QSt
     }
 
     m_gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0010), qPrintable(m_patientNameAnonymized)); //Estableix el mom del pacient anonimitzat
-    
+
     if (getReplacePatientIDInsteadOfRemove())
     {
         m_gdcmAnonymizer->Replace(gdcm::Tag(0x0010, 0x0020), qPrintable(getAnonimyzedPatientID(originalPatientID))); //ID Pacient
@@ -168,7 +168,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QSt
         if (!m_gdcmAnonymizer->RemovePrivateTags())
         {
             ERROR_LOG("No s'ha pogut treure els tags privats del fitxer " + inputPathFile);
-            return false;            
+            return false;
         }
     }
 
@@ -194,7 +194,7 @@ QString DICOMAnonymizer::getAnonimyzedPatientID(const QString &originalPatientID
     {
         m_hashOriginalPatientIDToAnonimyzedPatientID.insert(originalPatientID, QString::number(m_hashOriginalPatientIDToAnonimyzedPatientID.count() + 1));
     }
-    
+
     return m_hashOriginalPatientIDToAnonimyzedPatientID.value(originalPatientID);
 }
 
@@ -208,15 +208,14 @@ QString DICOMAnonymizer::getAnonymizedStudyID(const QString &originalStudyInstan
     return m_hashOriginalStudyInstanceUIDToAnonimyzedStudyID.value(originalStudyInstanceUID);
 }
 
-
 QString DICOMAnonymizer::readTagValue(gdcm::File *gdcmFile, gdcm::Tag tagToRead) const
 {
     gdcm::DataElement dataElement = gdcmFile->GetDataSet().GetDataElement(tagToRead);
     QString tagValue = "";
 
-    if(!dataElement.IsEmpty())
+    if (!dataElement.IsEmpty())
     {
-        if(gdcm::ByteValue *byteValueTag = dataElement.GetByteValue())
+        if (gdcm::ByteValue *byteValueTag = dataElement.GetByteValue())
         {
             tagValue = (std::string(byteValueTag->GetPointer(), byteValueTag->GetLength())).c_str();
         }

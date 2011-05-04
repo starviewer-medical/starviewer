@@ -37,34 +37,34 @@ bool DatabaseInstallation::checkStarviewerDatabase()
         if (!createDatabaseFile())
         {
             ERROR_LOG("Error no s'ha pogut crear la base de dades a " + LocalDatabaseManager::getDatabaseFilePath());
-			m_errorMessage.append( tr("\nCan't create database, be sure you have write permissions on database directory.") );
+            m_errorMessage.append(tr("\nCan't create database, be sure you have write permissions on database directory."));
             isCorrect = false;
         }
     }
     else
     {
         // comprovar que tenim permisos d'escriptura a la BDD
-        if(!isDatabaseFileWritable())
+        if (!isDatabaseFileWritable())
         {
             // TODO què fem? cal retornar fals? Avisar a l'usuari?
             ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura, no podrem guardar estudis nous ni modificar els ja existents.");
-            m_errorMessage.append( tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString) );
+            m_errorMessage.append(tr("\nYou don't have write permissions on %1 database, you couldn't retrieve or import new studies.").arg(ApplicationNameString));
         }
 
         isCorrect = checkDatabaseRevision();
         if (!isCorrect)
         {
-            m_errorMessage.append( tr("\nCan't upgrade database file, be sure you have write permissions on database directory.") );    
+            m_errorMessage.append(tr("\nCan't upgrade database file, be sure you have write permissions on database directory."));
         }
     }
 
-    if( !isCorrect )
+    if (!isCorrect)
     {
         return false;
     }
 
     INFO_LOG("Estat de la base de dades correcte ");
-    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " +  QString().setNum(localDatabaseManager.getDatabaseRevision()));
+    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " + QString().setNum(localDatabaseManager.getDatabaseRevision()));
     return true;
 }
 
@@ -75,18 +75,18 @@ bool DatabaseInstallation::checkLocalImagePath()
         if (!createLocalImageDir())
         {
             ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + LocalDatabaseManager::getCachePath());
-            m_errorMessage.append( tr("\nCan't create the cache image directory. Please check users permissions.") );
+            m_errorMessage.append(tr("\nCan't create the cache image directory. Please check users permissions."));
             return false;
         }
     }
     else
     {
         // comprovar que tenim permisos d'escriptura al directori local d'imatges
-        QFileInfo imagePathInfo( LocalDatabaseManager::getCachePath() );
-        if( !imagePathInfo.isWritable() )
+        QFileInfo imagePathInfo(LocalDatabaseManager::getCachePath());
+        if (!imagePathInfo.isWritable())
         {
-            ERROR_LOG("El directori de la cache d'imatges no te permisos d'escriptura: " + LocalDatabaseManager::getCachePath() );
-            m_errorMessage.append( tr("\nYou don't have write permissions on cache image directory. You couldn't retrieve or import new studies.") );
+            ERROR_LOG("El directori de la cache d'imatges no te permisos d'escriptura: " + LocalDatabaseManager::getCachePath());
+            m_errorMessage.append(tr("\nYou don't have write permissions on cache image directory. You couldn't retrieve or import new studies."));
             return false;
         }
     }
@@ -127,7 +127,7 @@ bool DatabaseInstallation::checkDatabaseRevision()
 bool DatabaseInstallation::isDatabaseFileWritable()
 {
     QFileInfo databaseFilePath(LocalDatabaseManager::getDatabaseFilePath());
-    
+
     return databaseFilePath.isWritable();
 }
 
@@ -185,7 +185,7 @@ bool DatabaseInstallation::updateDatabaseRevision()
     m_qprogressDialog->setCancelButton(0);
     m_qprogressDialog->setValue(1);
 
-    /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants 
+    /*Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants
      *canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD*/
     status = removeCacheAndReinstallDatabase();
 
@@ -290,7 +290,7 @@ void DatabaseInstallation::setValueProgressBar()
 
 QString DatabaseInstallation::getErrorMessage()
 {
-	return m_errorMessage;
+    return m_errorMessage;
 }
 
 }

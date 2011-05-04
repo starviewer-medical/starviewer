@@ -16,7 +16,7 @@ class QProgressDialog;
 class QWidgetAction;
 class QShortcut;
 
-namespace udg{
+namespace udg {
 // Forward declarations
 class ExtensionWorkspace;
 class ExtensionHandler;
@@ -113,7 +113,6 @@ private:
 
 private slots:
 
-    
     // Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
     // com per exemple un QProgressDialog o en un label
     // @param progress valor del progrés de càrrega
@@ -158,7 +157,6 @@ private slots:
 
     /// Obre les release notes
     void openReleaseNotes();
-
 
 private:
     /// L'àrea de mini-aplicacions

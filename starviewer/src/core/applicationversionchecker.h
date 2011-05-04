@@ -21,7 +21,7 @@ namespace udg {
         - LastReleaseNotesVersionShown: String amb la última versió comprobada
         - NeverShowReleaseNotes: L'usuari decideix no mostrar més els missatges de les release notes
         - LastVersionChecked: Quina és la última versió que s'ha comprobat.
-        - LastVersionCheckedDate: En quina data s'ha fet la comprobació. 
+        - LastVersionCheckedDate: En quina data s'ha fet la comprobació.
         - CheckVersionInterval: Cada quants dies es comproba si hi ha una nova versió.
         - DontCheckNewVersionsOnline: Booleà que impedeix que es facin crides online per comprobar si hi ha una nova versió
   */
@@ -60,29 +60,29 @@ private:
     bool checkTimeInterval();
     /// Fer la crida al servidor per obtenir si hi ha una nova versió
     void checkVersionOnServer();
-    
+
     /// Genera la url per fer la crida al servidor i obtenir la versió
     QString createWebServiceUrl();
     /// Codifica en base64 una QByteArray i a més el transforma per que sigui una part d'una url vàlida
     QString encryptBase64Url(const QString &url);
     /// Assigna el proxy per defecte, si n'hi ha, a un QNetworkAccessManager, si no n'hi ha el busca.
     void setProxy(const QUrl &url);
-    
+
     /// Guardar els settings
     void writeSettings();
     /// Llegir els settings
     void readSettings();
-    
+
     /// Posa l'atribut finished a true i emet la senyal de checkFinished
     void setCheckFinished();
 
     /// Comproba si la versio instal·lada és més nova que la última que s'han comprobat les release notes
     bool isNewVersionInstalled();
-    /// Compara la última part de dues versions (0.9.1-RC1, 1-RC1) i retorna si la primera és major que la segona 
+    /// Compara la última part de dues versions (0.9.1-RC1, 1-RC1) i retorna si la primera és major que la segona
     bool compareVersions(const QString &current, const QString &lastShown);
-    /// Si attribute es type treu el numero de versio d'una alpha, beta, RC, etc. (alpha9 -> alpha), 
+    /// Si attribute es type treu el numero de versio d'una alpha, beta, RC, etc. (alpha9 -> alpha),
     /// si attribute es number treu la part de davant i deixa el numero.
-    /// @pre Es considera que la versió s'ajusta a l'expressió regular correcte. 
+    /// @pre Es considera que la versió s'ajusta a l'expressió regular correcte.
     QString getVersionAttribute(const QString &version, const QString &attibute);
     /// Comprova si s'està en mode desenvolupament
     bool isDevelopmentMode();

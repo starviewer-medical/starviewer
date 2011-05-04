@@ -59,7 +59,7 @@ void DrawerPolygon::setVertix(int i, double x, double y, double z)
         array[1] = y;
         array[2] = z;
 
-        m_pointsList.insert(i,array);
+        m_pointsList.insert(i, array);
         emit changed();
     }
 }
@@ -160,8 +160,8 @@ void DrawerPolygon::buildVtkPoints()
     if (extraVertix)
     {
         // Tornem a afegir el primer punt
-        m_vtkPoints->InsertPoint(numberOfVertices-1, m_pointsList.at(0).data());
-        m_vtkCellArray->InsertCellPoint(numberOfVertices-1);
+        m_vtkPoints->InsertPoint(numberOfVertices - 1, m_pointsList.at(0).data());
+        m_vtkCellArray->InsertCellPoint(numberOfVertices - 1);
     }
     // Assignem els punts al polydata
     m_vtkPolydata->SetPoints(m_vtkPoints);
@@ -205,7 +205,7 @@ double DrawerPolygon::getDistanceToPoint(double *point3D, double closestPoint[3]
 
     if (!m_pointsList.isEmpty())
     {
-        // Recorrem tots els punts del polígon calculant la distància a cadascun dels 
+        // Recorrem tots els punts del polígon calculant la distància a cadascun dels
         // segments que uneixen cada vèrtex
         double distance;
         double localClosestPoint[3];
@@ -236,8 +236,8 @@ double DrawerPolygon::getDistanceToPoint(double *point3D, double closestPoint[3]
             closestPoint[1] = localClosestPoint[1];
             closestPoint[2] = localClosestPoint[2];
         }
-    }    
-    
+    }
+
     return minimumDistanceFound;
 }
 
@@ -267,7 +267,7 @@ double DrawerPolygon::computeArea(int view, double *spacing)
         volumeSpacing[2] = spacing[2];
     }
     // Mètode extret de http://alienryderflex.com/polygon_area/
-    
+
     // Obtenim els índexs x,y depenent de la vista en que estan projectats els punts
     int xIndex = Q2DViewer::getXIndexForView(view);
     int yIndex = Q2DViewer::getYIndexForView(view);
@@ -275,14 +275,14 @@ double DrawerPolygon::computeArea(int view, double *spacing)
     double area = 0.0;
     int j = 0;
     int numberOfPoints = m_pointsList.count();
-    for (int i = 0; i < numberOfPoints; i++) 
+    for (int i = 0; i < numberOfPoints; i++)
     {
-        j++; 
-        if (j == numberOfPoints) 
+        j++;
+        if (j == numberOfPoints)
         {
             j = 0;
         }
-    
+
         area += (m_pointsList.at(i)[xIndex] + m_pointsList.at(j)[xIndex]) * volumeSpacing[xIndex] * (m_pointsList.at(i)[yIndex] - m_pointsList.at(j)[yIndex]) * volumeSpacing[yIndex];
     }
 

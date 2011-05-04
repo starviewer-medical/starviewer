@@ -37,10 +37,10 @@ public:
     Q3DMPRViewer *m_viewer;
     virtual void Execute(vtkObject *vtkNotUsed(caller), unsigned long event, void *vtkNotUsed(callData))
     {
-        static double lastWindowLevel[2] = {0.,0.};
+        static double lastWindowLevel[2] = {0., 0.};
         if (m_viewer)
         {
-            switch(event)
+            switch (event)
             {
             case vtkCommand::StartInteractionEvent:
                 m_viewer->getCurrentWindowLevel(lastWindowLevel);
@@ -138,9 +138,9 @@ void Q3DMPRViewer::initializePlanes()
 
     // Creem tres vistes ortogonals utilitzant la classe ImagePlaneWidget
     //
-    m_axialImagePlaneWidget =  vtkImagePlaneWidget::New();
-    m_sagitalImagePlaneWidget =  vtkImagePlaneWidget::New();
-    m_coronalImagePlaneWidget =  vtkImagePlaneWidget::New();
+    m_axialImagePlaneWidget = vtkImagePlaneWidget::New();
+    m_sagitalImagePlaneWidget = vtkImagePlaneWidget::New();
+    m_coronalImagePlaneWidget = vtkImagePlaneWidget::New();
     // Els 3 widgets s'utilizen per visualizar el model
     // (mostra imatges en 2D amb 3 orientacions diferents)
     //

@@ -13,7 +13,7 @@ class QDicomAddPrinterWidget;
  * Implementació de la interfície QPrinterConfigurationWidget per impressió d'imatge DICOM en DCMTK.
  */
 
-class QDicomPrinterConfigurationWidget : public QPrinterConfigurationWidget , private::Ui::QDicomPrinterConfigurationWidgetBase
+class QDicomPrinterConfigurationWidget : public QPrinterConfigurationWidget, private::Ui::QDicomPrinterConfigurationWidgetBase
 {
 Q_OBJECT
 
@@ -36,7 +36,7 @@ private slots:
     // Esborra una impressora.
     void deletePrinter();
     // Comprova la connexió amb una impressora entrada al sistema.
-    void testPrinter();    
+    void testPrinter();
     // Després d'afegir una impressora actualitza la llista d'impressores i et mostra la informació de la última. S'executa amb el Signal newPrinterAddedSignal
     void showNewPrinterAdded(int printerID);
     ///Slot que s'executa al prèmer el botó cancel
@@ -69,10 +69,10 @@ private:
     void setAdvancedSettingsToControls(DicomPrinter& printer);
     // Es guarda la informació avançada de la impressió de l'interfície a un objecte DicomPrinter (/p printer és la impressora on es guarden les dades).
     void getAdvancedSettingsFromControls(DicomPrinter& printer);
-    
+
     /**Retorna la impressora seleccionada, si no tenim cap impressora seleccionada retorna l'objecte amb les propietats buides.
-      * Aquest mètode retorna la informació de la impressora com està guardada, si seleccionem una impressora, en modifiquem les dades a través 
-      * d'aquesta d'interfície i cridem aquest mètode retornarà les dades tal com les teniem guardades al settings, no retornarà les dades modificada a la 
+      * Aquest mètode retorna la informació de la impressora com està guardada, si seleccionem una impressora, en modifiquem les dades a través
+      * d'aquesta d'interfície i cridem aquest mètode retornarà les dades tal com les teniem guardades al settings, no retornarà les dades modificada a la
       * interfície si no s'han aplicat els canvis i guardats al settings*/
     DicomPrinter getSelectedDicomPrinter();
 

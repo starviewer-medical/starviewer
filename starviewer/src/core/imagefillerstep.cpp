@@ -52,7 +52,7 @@ bool ImageFillerStep::fillIndividually()
 QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
-    
+
     QList<Image *> generatedImages;
     bool ok = dicomReader->tagExists(DICOMPixelData);
     if (ok)
@@ -77,11 +77,11 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                 }
                 volumeNumber = m_input->getCurrentMultiframeVolumeNumber();
             }
-            
-            for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++) 
+
+            for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++)
             {
                 Image *image = new Image();
-                if (processImage(image,dicomReader))
+                if (processImage(image, dicomReader))
                 {
                     // Li assignem el nº de frame i el nº de volum al que pertany
                     image->setFrameNumber(frameNumber);
@@ -134,7 +134,7 @@ QList<Image *> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
 void ImageFillerStep::saveThumbnail(DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
-    
+
     int volumeNumber = m_input->getCurrentVolumeNumber();
     QString thumbnailPath = QFileInfo(dicomReader->getFileName()).absolutePath();
 
@@ -153,10 +153,10 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
 {
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
-    
+
     // El path on es troba la imatge a disc
     image->setPath(dicomReader->getFileName());
-    
+
     // C.12.1 SOP Common Module
     image->setSOPInstanceUID(dicomReader->getValueAttributeAsQString(DICOMSOPInstanceUID));
     image->setInstanceNumber(dicomReader->getValueAttributeAsQString(DICOMInstanceNumber));
@@ -169,18 +169,18 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
     image->setBitsAllocated(dicomReader->getValueAttributeAsQString(DICOMBitsAllocated).toInt());
     image->setBitsStored(dicomReader->getValueAttributeAsQString(DICOMBitsStored).toInt());
     image->setPixelRepresentation(dicomReader->getValueAttributeAsQString(DICOMPixelRepresentation).toInt());
-    
-    // C.7.6.1 General Image Module (present a totes les modalitats no enhanced, excepte 3D XA, 3D CF i OPT) 
+
+    // C.7.6.1 General Image Module (present a totes les modalitats no enhanced, excepte 3D XA, 3D CF i OPT)
     // C.8.13.1 Enhanced MR Image Module
-    // C.8.15.2 Enhanced CT Image Module 
-    // C.8.19.2 Enhanced XA/XRF Image Module 
+    // C.8.15.2 Enhanced CT Image Module
+    // C.8.19.2 Enhanced XA/XRF Image Module
     image->setImageType(dicomReader->getValueAttributeAsQString(DICOMImageType));
 
     // Obtenim l'hora en que es va crear/obtenir la píxel data
     // C.7.6.1 General Image Module (present a totes les modalitats no enhanced, excepte 3D XA, 3D CF i OPT)
     // C.7.6.16 Multi-Frame Functional Groups Module
     image->setImageTime(dicomReader->getValueAttributeAsQString(DICOMContentTime));
-    
+
     // En el cas d'XA/XRF el pixel spacing vindrà especificat per totes les imatges per igual (no cal fer un recorregut per-frame)
     QString sopClassUID = m_input->getDICOMFile()->getValueAttributeAsQString(DICOMSOPClassUID);
     if (sopClassUID == UIDEnhancedXAImageStorage || sopClassUID == UIDEnhancedXRFImageStorage)
@@ -208,7 +208,7 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
             }
         }
     }
-    
+
     return true;
 }
 
@@ -216,27 +216,27 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
 {
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
-    
+
     // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la comprovació quan llegim fitxer a fitxer
     bool ok = dicomReader->tagExists(DICOMPixelData);
     if (ok)
     {
         QString value;
-        
+
         // Omplim la informació comuna
-        fillCommonImageInformation(image,dicomReader);
-        
+        fillCommonImageInformation(image, dicomReader);
+
         // Calculem el pixel spacing
-        computePixelSpacing(image,dicomReader);
+        computePixelSpacing(image, dicomReader);
 
         //
         // Calculem propietats del pla imatge
         //
-        
+
         //
         // Propietats d'Image Plane Module (C.7.6.2) (Requerit per CT,MR i PET)
         //
-        
+
         //
         // Obtenim Slice Thickness, tipus 2
         //
@@ -276,8 +276,8 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             double orientation[6];
             value = dicomReader->getValueAttributeAsQString(DICOMImageOrientationPatient);
             // Passem l'string llegit a un vector de doubles
-            imageOrientationPatientStringToDoubleVector(value,orientation);
-            image->setImageOrientationPatient(orientation);   
+            imageOrientationPatientStringToDoubleVector(value, orientation);
+            image->setImageOrientationPatient(orientation);
 
             // Cerquem l'string amb la orientació del pacient
             value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
@@ -294,7 +294,7 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
         else
         {
             //
-            // General Image Module (C.7.6.1) 
+            // General Image Module (C.7.6.1)
             // Requerit a pràcticament totes les modalitats no-enhanced, conté el tag Patient Orientation
             //
 
@@ -357,17 +357,17 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
                 case 0:
                     DEBUG_LOG("ViewCodeSequence no té cap ítem o no existeix");
                     break;
-                
+
                 case 1:
                     image->setViewCodeMeaning(items.at(0)->getValueAttribute(DICOMCodeMeaning)->getValueAsQString());
                     break;
-                
+
                 default:
                     DEBUG_LOG("ViewCodeSequence té més d'un ítem!");
                     break;
             }
         }
-        
+
         // Només pel cas que sigui DX tindrem aquest atribut a nivell d'imatge
         image->setViewPosition(dicomReader->getValueAttributeAsQString(DICOMViewPosition));
     }
@@ -382,7 +382,7 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
 QList<Image *> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
-    
+
     QList<Image *> generatedImages;
     // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la comprovació quan llegim fitxer a fitxer
     if (dicomReader->tagExists(DICOMPixelData))
@@ -394,15 +394,15 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomRe
             m_input->increaseCurrentMultiframeVolumeNumber();
         }
         m_input->setCurrentVolumeNumber(m_input->getCurrentMultiframeVolumeNumber());
-        
+
         for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++)
         {
             Image *image = new Image();
-            fillCommonImageInformation(image,dicomReader);
+            fillCommonImageInformation(image, dicomReader);
             // Li assignem el nº de frame i el nº de volum al que pertany
             image->setFrameNumber(frameNumber);
             image->setVolumeNumberInSeries(m_input->getCurrentVolumeNumber());
-            
+
             // Afegirem la imatge a la llista si aquesta s'ha pogut afegir a la corresponent sèrie
             if (m_input->getCurrentSeries()->addImage(image))
             {
@@ -420,7 +420,7 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomRe
             {
                 foreach (Image *image, generatedImages)
                 {
-                    fillFunctionalGroupsInformation(image,sharedItems.first());
+                    fillFunctionalGroupsInformation(image, sharedItems.first());
                 }
             }
         }
@@ -437,7 +437,7 @@ QList<Image *> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomRe
             int frameNumber = 0;
             foreach (DICOMSequenceItem *item, perFrameItems)
             {
-                fillFunctionalGroupsInformation(generatedImages.at(frameNumber),item);
+                fillFunctionalGroupsInformation(generatedImages.at(frameNumber), item);
                 frameNumber++;
             }
         }
@@ -484,7 +484,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
             // MR Image Frame Type (C.8.13.5.1)
             imageFrameTypeSequence = frameItem->getSequenceAttribute(DICOMMRImageFrameTypeSequence);
         }
-        
+
         // Un cop seleccionada la seqüència adient, obtenim els valors
         if (imageFrameTypeSequence)
         {
@@ -570,7 +570,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 if (dicomValue)
                 {
                     double orientation[6];
-                    imageOrientationPatientStringToDoubleVector(dicomValue->getValueAsQString(),orientation);
+                    imageOrientationPatientStringToDoubleVector(dicomValue->getValueAsQString(), orientation);
                     image->setImageOrientationPatient(orientation);
                     // Li passem el vector amb tots els direction cosines (row, column i normal) perquè pugui calcular correctament totes les etiquetes
                     image->setPatientOrientation(makePatientOrientationFromImageOrientationPatient(image->getImageOrientationPatient()));
@@ -612,7 +612,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 }
             }
         }
-        
+
         //
         // CT Pixel Value Transformation Module - C.8.15.3.10 - Enhanced CT
         // Pixel Value Transformation Module - C.7.6.16.2.9 - Enhanced MR
@@ -663,7 +663,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     {
         //
         // X-Ray Object Thickness Macro - C.8.19.6.7
-        // 
+        //
         DICOMSequenceAttribute *objectThicknessSequence = frameItem->getSequenceAttribute(DICOMObjectThicknessSequence);
         if (objectThicknessSequence)
         {
@@ -721,7 +721,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     //
     // A continuació llegim els tags/mòduls que es troben a totes les modalitats enhanced (MR/CT/XA/XRF)
     //
-    
+
     //
     // Frame VOI LUT Macro (C.7.6.16.2.10)
     //
@@ -810,14 +810,14 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
                 ERROR_LOG("No s'ha trobat el tag Frame Laterality en una seqüència que se suposa que l'ha de tenir!");
             }
         }
-    }   
+    }
 }
 
 void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomReader)
 {
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
-    
+
     //
     // Obtenim el pixel spacing segons la modalitat que estem tractant
     //
@@ -825,7 +825,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
     QString modality = dicomReader->getValueAttributeAsQString(DICOMModality);
 
     //
-    // Per modalitats CT, MR i PET el pixel spacing el trobem 
+    // Per modalitats CT, MR i PET el pixel spacing el trobem
     // a Image Plane Module (C.7.6.2), al tag Pixel Spacing, tipus 1
     //
     if (modality == "CT" || modality == "MR" || modality == "PET")
@@ -840,7 +840,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
         DICOMSequenceAttribute *ultraSoundsRegionsSequence = dicomReader->getSequenceAttribute(DICOMSequenceOfUltrasoundRegions);
         if (ultraSoundsRegionsSequence) // Ho hem de comprovar perquè és opcional.
         {
-            // Aquesta seqüència pot tenir més d'un ítem. TODO Nosaltres només tractem el primer, però ho hauríem de fer per tots, 
+            // Aquesta seqüència pot tenir més d'un ítem. TODO Nosaltres només tractem el primer, però ho hauríem de fer per tots,
             // ja que defineix més d'una regió i podríem estar obtenint informació equivocada
             QList<DICOMSequenceItem *> items = ultraSoundsRegionsSequence->getItems();
             if (!items.isEmpty())
@@ -853,7 +853,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
                     double physicalDeltaX = items.at(0)->getValueAttribute(DICOMPhysicalDeltaX)->getValueAsDouble();
                     double physicalDeltaY = items.at(0)->getValueAttribute(DICOMPhysicalDeltaY)->getValueAsDouble();
 
-                    physicalDeltaX = std::abs(physicalDeltaX)* 10.;
+                    physicalDeltaX = std::abs(physicalDeltaX) * 10.;
                     physicalDeltaY = std::abs(physicalDeltaY) * 10.;
 
                     value = QString("%1").arg(physicalDeltaX);
@@ -865,17 +865,17 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
     }
     else // Per altres modalitats li assignarem a partir d'aquest tag
     {
-        // Als mòduls CR Image (C.8.1.2), X-Ray Acquisition (C.8.7.2), DX Detector (C.8.11.4), 
-        // XA/XRF Acquisition (C.8.19.3), X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i 
+        // Als mòduls CR Image (C.8.1.2), X-Ray Acquisition (C.8.7.2), DX Detector (C.8.11.4),
+        // XA/XRF Acquisition (C.8.19.3), X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i
         // X-Ray 3D Craniofacial Image Contributing Sources (C.8.21.2.2)
         // podem trobar el tag ImagerPixelSpacing, que segons el mòdul serà de tipus 1,1C ó 3
         value = dicomReader->getValueAttributeAsQString(DICOMImagerPixelSpacing);
 
-        // TODO en els casos de X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i 
-        // X-Ray 3D Craniofacial Image Contributing Sources (C.8.21.2.2), aquest tag es troba dins de 
+        // TODO en els casos de X-Ray 3D Angiographic Image Contributing Sources (C.8.21.2.1) i
+        // X-Ray 3D Craniofacial Image Contributing Sources (C.8.21.2.2), aquest tag es troba dins de
         // la seqüència Contributing Sources Sequence, que de moment no tractarem
     }
-    
+
     QStringList list;
     if (!value.isEmpty())
     {
@@ -894,7 +894,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
 void ImageFillerStep::imageOrientationPatientStringToDoubleVector(const QString &imageOrientationPatientString, double imageOrientationPatient[6])
 {
     QStringList list = imageOrientationPatientString.split("\\");
-    
+
     if (list.size() == 6)
     {
         for (int i = 0; i < 6; i++)
@@ -969,7 +969,7 @@ bool ImageFillerStep::areOfDifferentSize(Image *firstImage, Image *secondImage)
 {
     Q_ASSERT(firstImage);
     Q_ASSERT(secondImage);
-    
+
     return firstImage->getColumns() != secondImage->getColumns() || firstImage->getRows() != secondImage->getRows();
 }
 

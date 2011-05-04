@@ -18,34 +18,34 @@ class ItemMenu : public QFrame
 {
 Q_OBJECT
 public:
-    ItemMenu( QWidget * parent = 0);
+    ItemMenu(QWidget * parent = 0);
 
     ~ItemMenu();
 
     /// Posar una dada
-    void setData( QString data );
+    void setData(QString data);
 
     /// Obtenir les dades
-    QString getData( );
+    QString getData();
 
     /// Mètode per fixar que les caselles es quedin seleccionades o es deseleccionin al marxar el mouse
-    void setFixed( bool option );
+    void setFixed(bool option);
 
     /// Mètode per fixar l'element com a seleccionat o no seleccionat
-    void setSelected( bool option );
+    void setSelected(bool option);
 
 signals:
 
     /// Signal que s'emet al entrar el mouse al widget
-    void isActive( ItemMenu * );
+    void isActive(ItemMenu *);
 
     /// Signal que s'emet al seleccionar l'item
-    void isSelected( ItemMenu * );
+    void isSelected(ItemMenu *);
 
 protected:
 
     /// Sobrecàrrega del mètode que tracta tots els events
-    bool event( QEvent * event);
+    bool event(QEvent * event);
 
 protected:
 

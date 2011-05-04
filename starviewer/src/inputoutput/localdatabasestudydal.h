@@ -12,7 +12,7 @@ class DicomMask;
 
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 */
-class LocalDatabaseStudyDAL: public LocalDatabaseBaseDAL
+class LocalDatabaseStudyDAL : public LocalDatabaseBaseDAL
 {
 public:
 
@@ -21,17 +21,17 @@ public:
     ///insereix el nou estudi, i insereix com LastAccessDate la data actual
     void insert(Study *newStudy, const QDate &lastAccessData);
 
-    ///updata l'estudi 
+    ///updata l'estudi
     void update(Study *studyToUpdate, const QDate &LastAcessDate);
 
     ///Esborra els estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
     void del(const DicomMask &studyMaskToDelete);
 
     ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID, retorna els estudis ordenats per LastAccessDate de manera creixent
-    QList<Study*> queryOrderByLastAccessDate(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate() );
+    QList<Study*> queryOrderByLastAccessDate(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
 
     ///Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
-    QList<Study*> query(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate() );
+    QList<Study*> query(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
 
     ///Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi i l'study instance UID
     QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());

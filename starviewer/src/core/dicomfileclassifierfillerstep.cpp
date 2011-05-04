@@ -39,35 +39,35 @@ void DICOMFileClassifierFillerStep::classifyFile()
     Q_ASSERT(m_dicomReader);
 
     // primer recopilem tota la informació que ens permet ubicar l'arxiu dins de l'estructura
-    QString patientID = m_dicomReader->getValueAttributeAsQString( DICOMPatientID );
-    QString studyUID = m_dicomReader->getValueAttributeAsQString( DICOMStudyInstanceUID );
-    QString seriesUID = m_dicomReader->getValueAttributeAsQString( DICOMSeriesInstanceUID );
+    QString patientID = m_dicomReader->getValueAttributeAsQString(DICOMPatientID);
+    QString studyUID = m_dicomReader->getValueAttributeAsQString(DICOMStudyInstanceUID);
+    QString seriesUID = m_dicomReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
 
     // fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell
     // d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més
     // ràpid o no? o és ben igual?
     // obtenim el pacient si ja existeix, altrament el creem
-    Patient *patient = m_input->getPatientByID( patientID );
-    if( !patient )
+    Patient *patient = m_input->getPatientByID(patientID);
+    if (!patient)
     {
         patient = CreateInformationModelObject::createPatient(m_dicomReader);
-        m_input->addPatient( patient );
+        m_input->addPatient(patient);
     }
 
     // obtenim l'estudi corresponent si ja existeix, altrament el creem
-    Study *study = patient->getStudy( studyUID );
-    if( !study )
+    Study *study = patient->getStudy(studyUID);
+    if (!study)
     {
         study = CreateInformationModelObject::createStudy(m_dicomReader);
-        patient->addStudy( study );
+        patient->addStudy(study);
     }
 
     // obtenim la serie corresponent si ja existeix, altrament la creem
-    Series *series = study->getSeries( seriesUID );
-    if( !series )
+    Series *series = study->getSeries(seriesUID);
+    if (!series)
     {
         series = CreateInformationModelObject::createSeries(m_dicomReader);
-        study->addSeries( series );
+        study->addSeries(series);
         // Per cada sèrie reiniciem el número de volum multiframe i single frame
         m_input->resetCurrentMultiframeVolumeNumber();
         m_input->resetCurrentSingleFrameVolumeNumber();

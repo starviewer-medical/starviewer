@@ -89,7 +89,7 @@ int VolumePixelDataReaderITKGDCM::readMultipleFiles(const QStringList &filenames
         WARN_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
         DEBUG_LOG(QString("ExcepciÃ³ llegint els arxius del directori [%1] DescripciÃ³: [%2]").arg(QFileInfo(filenames.at(0)).dir().path()).arg(e.GetDescription()));
         // Llegim el missatge d'error per esbrinar de quin error es tracta
-        errorCode = identifyErrorMessage(QString(e.GetDescription()) );
+        errorCode = identifyErrorMessage(QString(e.GetDescription()));
     }
     catch (std::bad_alloc)
     {
@@ -267,7 +267,7 @@ void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
         double spacing[3];
 
         m_volumePixelData->getVtkData()->GetSpacing(spacing);
-        DEBUG_LOG(QString("checkZeroSpacing: (x , y , z) = (%1 , %2 , %3)").arg(spacing[0]).arg(spacing[1]).arg(spacing[2]));
+        DEBUG_LOG(QString("checkZeroSpacing: (x, y, z) = (%1, %2, %3)").arg(spacing[0]).arg(spacing[1]).arg(spacing[2]));
 
         if (spacing[0] == 0.0 || spacing[1] == 0.0)
         {
@@ -288,7 +288,7 @@ void VolumePixelDataReaderITKGDCM::checkZeroSpacingException()
 
 void VolumePixelDataReaderITKGDCM::slotProgress()
 {
-    emit progress((int)(m_seriesReader->GetProgress()*100));
+    emit progress((int)(m_seriesReader->GetProgress() * 100));
 }
 
-} // End namespace udg
+}// End namespace udg

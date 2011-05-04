@@ -11,13 +11,13 @@ namespace udg {
 
 class Printer;
 
-class QPrinterConfigurationWidget : public QWidget{
+class QPrinterConfigurationWidget : public QWidget {
 Q_OBJECT
 
 public slots:
-    virtual void addPrinter() =0;
-    virtual bool modifyPrinter() =0;
-    virtual void deletePrinter() =0; 
+    virtual void addPrinter() = 0;
+    virtual bool modifyPrinter() = 0;
+    virtual void deletePrinter() = 0;
 };
 }
 

@@ -17,34 +17,34 @@ public:
     ~HangingProtocolDisplaySet();
 
     /// Posar l'identificador
-    void setIdentifier( int identifier );
+    void setIdentifier(int identifier);
 
     /// Posar la descripcio
-    void setDescription( QString description );
+    void setDescription(QString description);
 
     /// Assignar el seu image set
     void setImageSet(HangingProtocolImageSet *imageSet);
 
     /// Obtenir el seu image set
-    HangingProtocolImageSet* getImageSet() const ;
+    HangingProtocolImageSet* getImageSet() const;
 
     /// Assignar el hanging protocol al que pertany
     void setHangingProtocol(HangingProtocol *hangingProtocol);
 
     /// Obtenir el hanging protocol al que pertany
-    HangingProtocol* getHangingProtocol() const ;
+    HangingProtocol* getHangingProtocol() const;
 
     /// Posar la posició del visualitzador
-    void setPosition( QString position );
+    void setPosition(QString position);
 
     /// Posar la posició del pacient
-    void setPatientOrientation( QString string );
+    void setPatientOrientation(QString string);
 
     /// Posar la reconstruccio (axial, sagital, coronal)
-    void setReconstruction( QString reconstruction );
+    void setReconstruction(QString reconstruction);
 
     /// Posar la fase
-    void setPhase( int phase );
+    void setPhase(int phase);
 
     /// Obtenir l'identificador
     int getIdentifier() const;
@@ -66,9 +66,9 @@ public:
 
     /// Mètode per mostrar els valors
     void show();
-    
+
     /// Posar la llesca a mostrar
-    void setSlice( int sliceNumber );
+    void setSlice(int sliceNumber);
 
     /// Obtenir la llesca a mostrar
     int getSlice();
@@ -78,22 +78,22 @@ public:
 
     // Obtenir la llesca per si tenim volums
     int getSliceModifiedForVolumes();
-    
+
     /// Assigna el tipus d'icona per representar-lo
-    void setIconType( QString iconType );
-    
+    void setIconType(QString iconType);
+
     /// Obté el tipus d'icona per representar-lo
     QString getIconType() const;
 
     /// Assigna cap a quin costat ha d'estar alineada la imatge
-    void setAlignment( QString alignment );
-    
+    void setAlignment(QString alignment);
+
     /// Obté el costat que s'ha d'alinear la imatge
     QString getAlignment() const;
 
     /// Assigna l'eina a activar al visualitzador
-    void setToolActivation( QString toolActive );
-    
+    void setToolActivation(QString toolActive);
+
     /// Obté l'eina a activar al visualitzador
     QString getToolActivation();
 

@@ -2,16 +2,16 @@
 
 #include <ofcond.h> //provide the OFcondition structure and his members
 
-namespace udg{
+namespace udg {
 
 Status::Status()
 {
-    m_numberError=-1;
+    m_numberError = -1;
 }
 
 bool Status::good() const
 {
-	return m_success;
+    return m_success;
 }
 
 QString Status::text() const
@@ -21,19 +21,19 @@ QString Status::text() const
 
 int Status::code() const
 {
-	return m_numberError;
+    return m_numberError;
 }
 
-Status Status::setStatus( const OFCondition status )
+Status Status::setStatus(const OFCondition status)
 {
-	m_descText = status.text();
-	m_success = status.good();
-	m_numberError = status.code();
-    
+    m_descText = status.text();
+    m_success = status.good();
+    m_numberError = status.code();
+
     return *this;
 }
 
-Status Status::setStatus( QString desc , bool ok , int numError )
+Status Status::setStatus(QString desc, bool ok, int numError)
 {
     m_descText = desc;
     m_success = ok;

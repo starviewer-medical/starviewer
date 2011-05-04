@@ -9,7 +9,7 @@ class vtkEventQtSlotConnect;
 namespace udg {
 
 /**
-    Lector de dades d'imatge per Volume. 
+    Lector de dades d'imatge per Volume.
     Aquest lector fa ús de la interfície vtkGDCM per llegir les dades.
  */
 class VolumePixelDataReaderVTKGDCM : public VolumePixelDataReader {
@@ -23,7 +23,7 @@ public:
     virtual void requestAbort();
 
 private:
-    /// Un cop llegides les dades, les processa segons l'espai de color 
+    /// Un cop llegides les dades, les processa segons l'espai de color
     /// en que estiguin definides i les assigna l'objecte vtkImageData
     // TODO Potser aquest processament s'hauria de fer al corresponent visor i no aquí?
     void applyColorProcessing();

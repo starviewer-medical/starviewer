@@ -1,25 +1,19 @@
 #ifndef UDGOBSCURANCETHREAD_H
 #define UDGOBSCURANCETHREAD_H
 
-
 #include <QThread>
-
 #include <QVector>
 
 #include "obscurancemainthread.h"
 #include "transferfunction.h"
 #include "vector3.h"
 
-
 class vtkDirectionEncoder;
 class vtkEncodedGradientEstimator;
 
-
 namespace udg {
 
-
 class Obscurance;
-
 
 /**
  * Thread que implementa els mètodes de càlcul d'obscurances.
@@ -32,15 +26,15 @@ class ObscuranceThread : public QThread {
 
 public:
 
-    ObscuranceThread( int id, int numberOfThreads, const TransferFunction & transferFunction, QObject * parent = 0 );
+    ObscuranceThread(int id, int numberOfThreads, const TransferFunction & transferFunction, QObject * parent = 0);
     virtual ~ObscuranceThread();
 
     /// Assigna l'estimador del gradient, d'on es treuran les normals.
-    void setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator );
-    void setData( const ushort *data, int dataSize, const int dimensions[3], const int increments[3] );
-    void setObscuranceParameters( double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction, ObscuranceMainThread::Variant obscuranceVariant, Obscurance *obscurance );
-    void setSaliency( const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh );
-    void setPerDirectionParameters( const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta );
+    void setGradientEstimator(vtkEncodedGradientEstimator *gradientEstimator);
+    void setData(const ushort *data, int dataSize, const int dimensions[3], const int increments[3]);
+    void setObscuranceParameters(double obscuranceMaximumDistance, ObscuranceMainThread::Function obscuranceFunction, ObscuranceMainThread::Variant obscuranceVariant, Obscurance *obscurance);
+    void setSaliency(const double * saliency, double fxSaliencyA, double fxSaliencyB, double fxSaliencyLow, double fxSaliencyHigh);
+    void setPerDirectionParameters(const Vector3 & direction, const Vector3 & forward, const int xyz[3], const int sXYZ[3], const QVector<Vector3> & lineStarts, qptrdiff startDelta);
 
 protected:
 
@@ -60,8 +54,8 @@ private:
     void runOpacitySmoothSaliency();
     void runOpacityColorBleeding();
     void runOpacitySmoothColorBleeding();
-    double obscurance( double distance ) const;
-    bool smoothBlocking( const Vector3 &blocking, const Vector3 &blocked, double distance, const float *blockedGradient ) const;
+    double obscurance(double distance) const;
+    bool smoothBlocking(const Vector3 &blocking, const Vector3 &blocked, double distance, const float *blockedGradient) const;
 
     int m_id, m_numberOfThreads;
     const TransferFunction & m_transferFunction;
@@ -87,8 +81,6 @@ private:
 
 };
 
-
 }
-
 
 #endif

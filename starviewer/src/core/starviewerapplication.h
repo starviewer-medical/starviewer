@@ -25,11 +25,11 @@ const QString OrganizationWebURL("http://starviewer.udg.edu");
 
 // Paths per defecte on es guarden configuracions i arxius d'usuari
 /// Path base per a dades d'usuari
-const QString UserDataRootPath( QDir::homePath() + "/.starviewer/" );
+const QString UserDataRootPath(QDir::homePath() + "/.starviewer/");
 /// Path del log
-const QString UserLogsPath( UserDataRootPath + "log/" );
+const QString UserLogsPath(UserDataRootPath + "log/");
 /// Ruta absoluta del fitxer de log
-const QString UserLogsFile( UserLogsPath + "starviewer.log" );
+const QString UserLogsFile(UserLogsPath + "starviewer.log");
 
 // TODO const QString LogConfigurationFileLocation();
 

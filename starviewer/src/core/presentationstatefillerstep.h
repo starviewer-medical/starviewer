@@ -22,7 +22,7 @@ public:
 
     void postProcessing(){};
 
-    QString name() {  return "PresentationStateFillerStep";  }
+    QString name() { return "PresentationStateFillerStep"; }
 
 private:
     // TODO mètode per implementar

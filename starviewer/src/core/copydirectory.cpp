@@ -15,13 +15,13 @@ bool CopyDirectory::copyDirectory(const QString &sourceDirectoryPath, const QStr
     QDir sourceDirectory(sourceDirectoryPath), destinationDirectory(destinationDirectoryPath);
     QStringList files, directories;
 
-    if(!sourceDirectory.exists())
+    if (!sourceDirectory.exists())
     {
         ERROR_LOG(QString("El directori origen %1 no existeix").arg(sourceDirectoryPath));
         return false;
     }
 
-    if(!destinationDirectory.exists())
+    if (!destinationDirectory.exists())
     {
         if (!destinationDirectory.mkdir(destinationDirectoryPath))
         {
@@ -32,7 +32,7 @@ bool CopyDirectory::copyDirectory(const QString &sourceDirectoryPath, const QStr
 
     //Copiem els fitxers del directori
     files = sourceDirectory.entryList(QDir::Files);
-    for(int i = 0; i < files.count(); i++)
+    for (int i = 0; i < files.count(); i++)
     {
         QString sourceFile = sourceDirectoryPath + QDir::separator() + files[i];
         QString destinationFile = destinationDirectoryPath + QDir::separator() + files[i];
@@ -46,7 +46,7 @@ bool CopyDirectory::copyDirectory(const QString &sourceDirectoryPath, const QStr
 
     //Copiem els subdirectoris
     directories = sourceDirectory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-    for(int i = 0; i < directories.count(); i++)
+    for (int i = 0; i < directories.count(); i++)
     {
         QString sourceSubDirectory = sourceDirectoryPath + QDir::separator() + directories[i];
         QString destinationSubDirectory = destinationDirectoryPath + QDir::separator() + directories[i];

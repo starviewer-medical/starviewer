@@ -2,9 +2,7 @@
 
 #include <vtkEncodedGradientEstimator.h>
 
-
 namespace udg {
-
 
 ContourVoxelShader::ContourVoxelShader()
     : VoxelShader()
@@ -14,29 +12,24 @@ ContourVoxelShader::ContourVoxelShader()
     m_threshold = 0.0;
 }
 
-
 ContourVoxelShader::~ContourVoxelShader()
 {
 }
 
-
-void ContourVoxelShader::setGradientEstimator( vtkEncodedGradientEstimator *gradientEstimator )
+void ContourVoxelShader::setGradientEstimator(vtkEncodedGradientEstimator *gradientEstimator)
 {
     m_encodedNormals = gradientEstimator->GetEncodedNormals();
     m_directionEncoder = gradientEstimator->GetDirectionEncoder();
 }
 
-
-void ContourVoxelShader::setThreshold( double threshold )
+void ContourVoxelShader::setThreshold(double threshold)
 {
     m_threshold = threshold;
 }
-
 
 QString ContourVoxelShader::toString() const
 {
     return "ContourVoxelShader";
 }
-
 
 }

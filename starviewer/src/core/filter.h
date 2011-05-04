@@ -7,50 +7,42 @@ namespace udg {
 
 class Volume;
 
-
 /*
-	Classe base per a tots els filtres
-
+    Classe base per a tots els filtres
 */
 
-
-class Filter 
+class Filter
 {
-
 public:
-	Filter();
-	
-	~Filter();
+    Filter();
 
-	/* Tal i com fan els filtres de vtk i itk li assignem les dades que en aquest cas serà un volum
-	Aquest mètode, segons quin tipus de filtre sigui extreurà les dades itk o vtk */
-	void setInput(Volume *input);
+    ~Filter();
 
-	/* Mètode per realitzar els càlculs amb la consegüent transformació del volum */
-	void update();
+    /* Tal i com fan els filtres de vtk i itk li assignem les dades que en aquest cas serà un volum
+    Aquest mètode, segons quin tipus de filtre sigui extreurà les dades itk o vtk */
+    void setInput(Volume *input);
 
-	/* Metode per assignar un identificador */
-	void setFilterName(QString name);
+    /* Mètode per realitzar els càlculs amb la consegüent transformació del volum */
+    void update();
 
-	QString getFilterName();
+    /* Metode per assignar un identificador */
+    void setFilterName(QString name);
+
+    QString getFilterName();
 
     /* Metode que retorna el volum transformat */
-	Volume * getOutput();
-
+    Volume * getOutput();
 
 protected:
 
-	
+    /* Volum d'entrada */
+    Volume * m_inputVolume;
 
+    /* Volum de sortida */
+    Volume * m_outputVolume;
 
-	/* Volum d'entrada */
-	Volume * m_inputVolume;
-
-	/* Volum de sortida */
-	Volume * m_outputVolume;
-
-	/* Nom del filtre */
-	QString m_filterName;
+    /* Nom del filtre */
+    QString m_filterName;
 
 };
 

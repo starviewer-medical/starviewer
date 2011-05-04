@@ -19,7 +19,7 @@ ToolProxy::~ToolProxy()
 void ToolProxy::addTool(Tool *tool)
 {
     if (!m_toolsMap.contains(tool->toolName()))
-	{
+    {
         m_toolsMap.insert(tool->toolName(), tool);
         // Si la tool demanada existeix, comprovem si té dades persistents
         if (tool->hasPersistentData())
@@ -38,8 +38,8 @@ void ToolProxy::addTool(Tool *tool)
                 m_persistentToolDataRepository[tool->toolName()] = tool->getToolData();
             }
         }
-	}
-	else
+    }
+    else
     {
         delete tool;
     }
@@ -73,7 +73,7 @@ bool ToolProxy::isToolActive(const QString &toolName)
     return m_toolsMap.contains(toolName);
 }
 
-Tool* ToolProxy::getTool(const QString &toolName) 
+Tool* ToolProxy::getTool(const QString &toolName)
 {
     Tool *tool = 0;
     if (m_toolsMap.contains(toolName))

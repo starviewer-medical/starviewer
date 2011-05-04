@@ -1,12 +1,9 @@
 #ifndef UDGRENDERINGSTYLE_H
 #define UDGRENDERINGSTYLE_H
 
-
 #include "transferfunction.h"
 
-
 namespace udg {
-
 
 /**
  * Classe que encapsula tots els paràmetres de rendering.
@@ -19,7 +16,7 @@ public:
     enum ObscuranceQuality { Low, Medium, High };
 
     QVariant toVariant() const;
-    static RenderingStyle fromVariant( const QVariant &variant );
+    static RenderingStyle fromVariant(const QVariant &variant);
 
     // Atributs públics
     Method method;
@@ -36,8 +33,6 @@ public:
 
 };
 
-
 }
-
 
 #endif

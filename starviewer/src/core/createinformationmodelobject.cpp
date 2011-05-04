@@ -41,8 +41,8 @@ Study *CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
     //Afegim la modalitat de l'estudi
     //Tenir en compte si aquest objecte s'utilitza per fer el dicomclassifierfillerstep que ells omplen la modalitat a partir de les series
     studyModalities = dicomTagReader->getValueAttributeAsQString(DICOMModalitiesInStudy);
-    
-    foreach(QString modality, studyModalities.split("\\"))
+
+    foreach (QString modality, studyModalities.split("\\"))
     {
         study->addModality(modality);
     }
@@ -75,8 +75,8 @@ Series *CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReade
     series->setBodyPartExamined(dicomTagReader->getValueAttributeAsQString(DICOMBodyPartExamined));
     series->setViewPosition(dicomTagReader->getValueAttributeAsQString(DICOMViewPosition));
     QString laterality = dicomTagReader->getValueAttributeAsQString(DICOMLaterality);
-    if( !laterality.isEmpty() )
-        series->setLaterality( laterality.at(0) );
+    if (!laterality.isEmpty())
+        series->setLaterality(laterality.at(0));
 
     return series;
 }

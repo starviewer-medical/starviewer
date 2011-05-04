@@ -12,12 +12,12 @@ class TransDifferenceTool : public Tool {
 Q_OBJECT
 public:
     /// Estats de la tool
-    enum { None , Moving };
+    enum { None, Moving };
 
-    TransDifferenceTool( QViewer *viewer, QObject *parent = 0 );
+    TransDifferenceTool(QViewer *viewer, QObject *parent = 0);
     ~TransDifferenceTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
     /// Retorna les dades pròpies de la seed
     ToolData *getToolData() const;
@@ -26,7 +26,7 @@ public:
     void setToolData(ToolData * data);
 
     /// Inicialitza i calcula tota la imatge diferència
-    void initializeDifferenceImage( );
+    void initializeDifferenceImage();
 
     /// Assigna una determinada translació a una llesca
     void setSingleDifferenceImage(int dx, int dy);
@@ -56,8 +56,8 @@ private:
 
     /// Valors per controlar la translació
     int m_startPosition[2];
-    int m_dx,m_dy;
-    
+    int m_dx, m_dy;
+
     /// Estats d'execució de la tool
     int m_state;
 };

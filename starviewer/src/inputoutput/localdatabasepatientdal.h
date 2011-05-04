@@ -12,7 +12,7 @@ class DicomMask;
 
 /** Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
 */
-class LocalDatabasePatientDAL: public LocalDatabaseBaseDAL
+class LocalDatabasePatientDAL : public LocalDatabaseBaseDAL
 {
 public:
 
@@ -37,7 +37,7 @@ private :
     ///Construeix la sentència updatar el pacient
     QString buildSqlUpdate(Patient *patientToUpdate);
 
-    ///Construeix la setència per fer select de pacients a partir de la màscara, només té en compte el PatientID 
+    ///Construeix la setència per fer select de pacients a partir de la màscara, només té en compte el PatientID
     QString buildSqlSelect(const DicomMask &patientMaskToSelect);
 
     ///Construeix la setència per esborrar pacients a partir de la màscara, només té en compte el Patient Id

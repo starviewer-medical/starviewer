@@ -30,14 +30,14 @@ class vtk4DLinearRegressionGradientEstimator : public vtkEncodedGradientEstimato
 {
 public:
   vtkTypeRevisionMacro(vtk4DLinearRegressionGradientEstimator,vtkEncodedGradientEstimator);
-  void PrintSelf( ostream& os, vtkIndent indent );
+  void PrintSelf(ostream& os, vtkIndent indent);
 
   // Description:
   // Construct a vtk4DLinearRegressionGradientEstimator.
   static vtk4DLinearRegressionGradientEstimator *New();
 
-  vtkSetMacro( Radius, unsigned int );
-  vtkGetMacro( Radius, unsigned int );
+  vtkSetMacro(Radius, unsigned int);
+  vtkGetMacro(Radius, unsigned int);
 
 protected:
   vtk4DLinearRegressionGradientEstimator();
@@ -46,7 +46,7 @@ protected:
 
   // Description:
   // Recompute the encoded normals and gradient magnitudes.
-  void UpdateNormals( void );
+  void UpdateNormals(void);
 private:
   vtk4DLinearRegressionGradientEstimator(const vtk4DLinearRegressionGradientEstimator&);  // Not implemented.
   void operator=(const vtk4DLinearRegressionGradientEstimator&);  // Not implemented.

@@ -10,7 +10,7 @@ class QResizeEvent;
 namespace udg {
 
 /**
-    Classe que permet distribuir sobre un widget una sèrie Q2DViewerWidgets 
+    Classe que permet distribuir sobre un widget una sèrie Q2DViewerWidgets
     amb diferents layouts i geometries de forma versàtil.
 */
 class ViewersLayout : public QWidget {
@@ -26,7 +26,7 @@ public:
     /// independentment de si són visibles o no.
     int getNumberOfViewers() const;
 
-    /// Ens retorna el visor amb índex "number". Si number està fora de rang, 
+    /// Ens retorna el visor amb índex "number". Si number està fora de rang,
     /// ens retornarà un punter nul.
     Q2DViewerWidget* getViewerWidget(int number);
 
@@ -48,7 +48,7 @@ public slots:
     /// Marquem com a seleccionat el viewer passat per paràmetre
     void setSelectedViewer(Q2DViewerWidget *viewer);
 
-    /// Neteja el layout, eliminant tots els visors i geometries, 
+    /// Neteja el layout, eliminant tots els visors i geometries,
     /// deixant-lo en l'estat inicial, com si acabéssim de crear l'objecte
     void cleanUp();
 
@@ -56,7 +56,7 @@ signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
     void viewerAdded(Q2DViewerWidget *viewer);
 
-    /// Senyal que s'emet quan s'amaga un visualitzador, és a dir, 
+    /// Senyal que s'emet quan s'amaga un visualitzador, és a dir,
     // deixa de ser visible però segueix existint
     void viewerHidden(Q2DViewerWidget *viewer);
 
@@ -78,7 +78,7 @@ private:
     /// Coloca el viewer donat en la posició i mides proporcionats
     /// @param viewer Visor que volem posicionar i ajustar dins del layout
     /// @param geometry String amb les posicions i mides realitives corresponents al viewer
-    /// El format de geometry seran les coordenades x,y de la cantonada esquerra superior i 
+    /// El format de geometry seran les coordenades x,y de la cantonada esquerra superior i
     /// ample i alçada del visor, expresats com a valors dins del rang 0.0..1.0. Cada valor anirà separat per '\\'
     /// Per exemple, un viewer que ocupa la meitat de la pantalla s'expressaria amb un string "0\\0\\0.5\\1.0"
     void setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry);
@@ -112,7 +112,7 @@ private:
     /// Llistat de geometries que cada viewer visible té assignada
     QStringList m_geometriesList;
 
-    /// Indica si el layout s'ha definit de forma regular (setGrid(rows, columns)) o no 
+    /// Indica si el layout s'ha definit de forma regular (setGrid(rows, columns)) o no
     bool m_isRegular;
 };
 

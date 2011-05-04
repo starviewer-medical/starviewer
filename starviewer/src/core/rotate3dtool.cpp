@@ -8,22 +8,22 @@
 
 namespace udg {
 
-Rotate3DTool::Rotate3DTool( QViewer *viewer, QObject *parent ) : Tool(viewer,parent)
+Rotate3DTool::Rotate3DTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
 {
     m_toolName = "Rotate3DTool";
     m_state = None;
-    m_interactorStyle = vtkInteractorStyle::SafeDownCast( viewer->getInteractor()->GetInteractorStyle() );
-    if( !m_interactorStyle )
-        DEBUG_LOG( "L'interactor Style és buit!" );
+    m_interactorStyle = vtkInteractorStyle::SafeDownCast(viewer->getInteractor()->GetInteractorStyle());
+    if (!m_interactorStyle)
+        DEBUG_LOG("L'interactor Style és buit!");
 }
 
 Rotate3DTool::~Rotate3DTool()
 {
 }
 
-void Rotate3DTool::handleEvent( unsigned long eventID )
+void Rotate3DTool::handleEvent(unsigned long eventID)
 {
-    switch( eventID )
+    switch (eventID)
     {
     case vtkCommand::RightButtonPressEvent:
         this->startRotate3D();
@@ -44,33 +44,33 @@ void Rotate3DTool::handleEvent( unsigned long eventID )
 
 void Rotate3DTool::startRotate3D()
 {
-    Q_ASSERT( m_interactorStyle );
-    
-    if( m_viewer->getInteractor()->GetControlKey() )
+    Q_ASSERT(m_interactorStyle);
+
+    if (m_viewer->getInteractor()->GetControlKey())
     {
         m_state = Spinning;
         // TODO podria ser que volguéssim posar-li una icona diferent per quan fem SPIN
-        m_viewer->setCursor( QCursor(QPixmap(":/images/rotate3d.png")) );
+        m_viewer->setCursor(QCursor(QPixmap(":/images/rotate3d.png")));
         m_interactorStyle->StartSpin();
     }
     else
     {
         m_state = Rotating;
-        m_viewer->setCursor( QCursor(QPixmap(":/images/rotate3d.png")) );
+        m_viewer->setCursor(QCursor(QPixmap(":/images/rotate3d.png")));
         m_interactorStyle->StartRotate();
     }
 }
 
 void Rotate3DTool::doRotate3D()
 {
-    Q_ASSERT( m_interactorStyle );
-    
-    switch( m_state )
+    Q_ASSERT(m_interactorStyle);
+
+    switch (m_state)
     {
-    case Rotating:        
+    case Rotating:
         m_interactorStyle->Rotate();
     break;
-    
+
     case Spinning:
         m_interactorStyle->Spin();
     break;
@@ -79,10 +79,10 @@ void Rotate3DTool::doRotate3D()
 
 void Rotate3DTool::endRotate3D()
 {
-    Q_ASSERT( m_interactorStyle );
-    
-    m_viewer->setCursor( Qt::ArrowCursor );
-    switch( m_state )
+    Q_ASSERT(m_interactorStyle);
+
+    m_viewer->setCursor(Qt::ArrowCursor);
+    switch (m_state)
     {
     case Rotating:
         m_interactorStyle->EndRotate();

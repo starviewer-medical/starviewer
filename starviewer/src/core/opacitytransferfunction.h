@@ -1,17 +1,12 @@
 #ifndef OPACITYTRANSFERFUNCTION_H
 #define OPACITYTRANSFERFUNCTION_H
 
-
 #include "transferfunctiontemplate.h"
 
-
 class QVariant;
-
 class vtkPiecewiseFunction;
 
-
 namespace udg {
-
 
 /**
     Representa una funció de transferència d'opacitat f: X -> O, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient) i O el conjunt d'opacitats (reals en el rang [0,1]).
@@ -46,8 +41,6 @@ private:
 
 };
 
-
 } // namespace udg
-
 
 #endif // OPACITYTRANSFERFUNCTION_H

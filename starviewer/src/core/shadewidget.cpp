@@ -181,7 +181,7 @@ void ShadeWidget::generateShade()
                 shade.setColorAt(0, Qt::green);
             else if (m_shade_type == BlueShade)
                 shade.setColorAt(0, Qt::blue);
-            else 
+            else
                 shade.setColorAt(0, Qt::black);
 
             QPainter p(&m_shade);

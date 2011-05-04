@@ -19,17 +19,17 @@ struct T_DIMSE_Message;
 class DcmDataset;
 class DcmFileFormat;
 
-namespace udg{
+namespace udg {
 
 class Status;
 class DicomMask;
 class DICOMTagReader;
 class PACSConnection;
 
-/** 
+/**
     Aquesta classe s'encarrega d'interactuars amb els PACS, responent als serveis move i store
  */
-class RetrieveDICOMFilesFromPACS: public QObject {
+class RetrieveDICOMFilesFromPACS : public QObject {
 Q_OBJECT
 public:
     RetrieveDICOMFilesFromPACS(PacsDevice pacs);
@@ -38,7 +38,7 @@ public:
     PACSRequestStatus::RetrieveRequestStatus retrieve(DicomMask dicomMask);
 
     /// Cancel·la la descàrrega. La cancel·lació de la descàrrega és assíncrona, quan l'estudi s'ha cancel·lat es retorna l'Status RetrieveCancelled
-    /// El motiu de que sigui assíncron és perquè mentre s'està processant la descàrrega d'una imatge no es pot cancel·lar la descàrrega, només es pot 
+    /// El motiu de que sigui assíncron és perquè mentre s'està processant la descàrrega d'una imatge no es pot cancel·lar la descàrrega, només es pot
     /// fer just després d'haver rebut una imatge.
     void requestCancel();
 
@@ -65,7 +65,7 @@ private:
     /// Guarda una composite instance descarregada
     OFCondition save(DcmFileFormat *fileRetrieved, QString dicomFileAbsolutePath);
 
-    /// Retorna el nom del fitxer amb que s'ha de guardar l'objecte descarregat, composa el path on s'ha de guardar més el nom del fitxer. 
+    /// Retorna el nom del fitxer amb que s'ha de guardar l'objecte descarregat, composa el path on s'ha de guardar més el nom del fitxer.
     /// Si el path on s'ha de guardar la imatge no existeix, el crea
     QString getAbsoluteFilePathCompositeInstance(DcmDataset *imageDataset, QString fileName);
 

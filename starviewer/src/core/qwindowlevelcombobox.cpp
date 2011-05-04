@@ -40,7 +40,7 @@ void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLeve
 
     // TODO Això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
     // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
-    connect(m_customWindowLevelDialog, SIGNAL(windowLevel(double,double)), m_presetsData, SLOT(setCustomWindowLevel(double,double)));
+    connect(m_customWindowLevelDialog, SIGNAL(windowLevel(double, double)), m_presetsData, SLOT(setCustomWindowLevel(double, double)));
 }
 
 void QWindowLevelComboBox::clearPresets()
@@ -67,7 +67,7 @@ void QWindowLevelComboBox::addPreset(const QString &preset)
             case WindowLevelPresetsToolData::AutomaticPreset:
                 index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() - 1;
                 break;
-            
+
             case WindowLevelPresetsToolData::FileDefined:
                 index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() - 1;
                 break;
@@ -81,9 +81,9 @@ void QWindowLevelComboBox::addPreset(const QString &preset)
                 break;
 
             case WindowLevelPresetsToolData::Other:
-                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +            m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
+                index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
                 break;
-            
+
             case WindowLevelPresetsToolData::CustomPreset:
                 index = m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other).count() + m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::CustomPreset).count() - 1;
                 break;
@@ -165,4 +165,3 @@ void QWindowLevelComboBox::setActiveWindowLevel(const QString &text)
 }
 
 };
-

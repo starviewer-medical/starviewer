@@ -14,10 +14,10 @@ class CrashHandler
 {
 public:
     CrashHandler();
-    
+
     ~CrashHandler(){};
 
-    void setCrashReporterPath( const char* path );
+    void setCrashReporterPath(const char* path);
     const char* getCrashReporterPath() const;
 
 private:

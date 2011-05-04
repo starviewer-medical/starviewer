@@ -26,7 +26,7 @@ public:
     /// Controlar quin estudi està baixant-se
     static const QString RetrievingStudy;
 
-    /// Conjunt de PACS que tenim seleccionats per defecte per consultar. 
+    /// Conjunt de PACS que tenim seleccionats per defecte per consultar.
     /// La llista consistirà en un string on cada PACS s'identificarà pel seu camp clau, els quals estaran delimitats per "//"
     static const QString DefaultPACSListToQuery;
 
@@ -94,11 +94,11 @@ public:
     //Columna i ordre d'ordenació de la QOperationStateScreen
     static const QString OperationStateListSortByColumn;
     static const QString OperationStateListSortOrder;
-    
+
     //Boolea per saber si s'ha de cercar previes a partir del nom del pacient.
     static const QString SearchRelatedStudiesByName;
 };
 
-} // end namespace udg 
+} // end namespace udg
 
 #endif

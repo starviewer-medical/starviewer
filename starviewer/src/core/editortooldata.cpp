@@ -1,7 +1,6 @@
 #include "editortooldata.h"
 #include "logging.h"
 
-
 namespace udg {
 
 EditorToolData::EditorToolData(QObject *parent)
@@ -10,17 +9,16 @@ EditorToolData::EditorToolData(QObject *parent)
     m_volumeCont = 0;
 }
 
-
 EditorToolData::~EditorToolData()
 {
 }
 
-void EditorToolData::setVolumeVoxels( int vol )
+void EditorToolData::setVolumeVoxels(int vol)
 {
     m_volumeCont = vol;
 }
 
-int EditorToolData::getVolumeVoxels( )
+int EditorToolData::getVolumeVoxels()
 {
     return m_volumeCont;
 }

@@ -112,7 +112,7 @@ int Series::getNumberOfItems()
         }
         lastPath = image->getPath();
     }
-    
+
     return numberOfItems;
 }
 
@@ -264,7 +264,7 @@ bool Series::setTime(QString time)
     if (split.size() == 2) //té fracció al final
     {
         // Trunquem a milisegons i no a milionèssimes de segons
-        convertedTime = convertedTime.addMSecs(split[1].leftJustified(3,'0',true).toInt());
+        convertedTime = convertedTime.addMSecs(split[1].leftJustified(3, '0', true).toInt());
     }
 
     return this->setTime(convertedTime);
@@ -492,13 +492,13 @@ QPixmap Series::getThumbnail()
 
 Image* Series::getImageByIndex(int index)
 {
-	Image *resultImage = 0;
-	if (index >= 0 && index < m_imageSet.count()) // està dins del rang
-	{
-		resultImage = m_imageSet.at(index);
-	}
+    Image *resultImage = 0;
+    if (index >= 0 && index < m_imageSet.count()) // està dins del rang
+    {
+        resultImage = m_imageSet.at(index);
+    }
 
-	return resultImage;
+    return resultImage;
 }
 
 void Series::setThumbnail(QPixmap seriesThumbnail)

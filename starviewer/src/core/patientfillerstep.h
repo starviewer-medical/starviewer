@@ -22,7 +22,7 @@ public:
 
     /// Li assignem les dades d'entrada que li caldrà processar. Aquestes dades seran proporcionades per una classe externa.
     /// Es presuposa que aquest input mai serà NUL.
-    void setInput( PatientFillerInput *input );
+    void setInput(PatientFillerInput *input);
 
     /// Retorna la llista d'etiquetes que s'han de complir per poder processar aquest step.
     QStringList getRequiredLabels() const { return m_requiredLabelsList; }
@@ -47,9 +47,9 @@ public:
 protected:
     /// mètodes de conveniència
     /// Ens diu si aquella sèrie és d'imatges, kin's o presentation states
-    bool isImageSeries( Series *series );
-    bool isKeyImageNoteSeries( Series *series );
-    bool isPresentationStateSeries( Series *series );
+    bool isImageSeries(Series *series);
+    bool isKeyImageNoteSeries(Series *series);
+    bool isPresentationStateSeries(Series *series);
 
 protected:
     /// L'input a tractar

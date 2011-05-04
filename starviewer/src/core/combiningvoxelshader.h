@@ -1,14 +1,11 @@
 #ifndef UDGCOMBININGVOXELSHADER_H
 #define UDGCOMBININGVOXELSHADER_H
 
-
 #include "voxelshader.h"
 
 #include "trilinearinterpolator.h"
 
-
 namespace udg {
-
 
 /**
  * És un voxel shader que en combina dos.
@@ -26,18 +23,18 @@ public:
     virtual ~CombiningVoxelShader();
 
     /// Assigna els dos voxel shaders que es combinaran.
-    void setVoxelShaders( VS1 *voxelShader1, VS2 *voxelShader2 );
+    void setVoxelShaders(VS1 *voxelShader1, VS2 *voxelShader2);
 
     /// Retorna el color corresponent al vòxel a la posició offset.
-    virtual HdrColor shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    virtual HdrColor shade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    virtual HdrColor shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                            const HdrColor &baseColor = HdrColor() );
+    virtual HdrColor shade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                            const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició offset.
-    HdrColor nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor() );
+    HdrColor nvShade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity, const HdrColor &baseColor = HdrColor());
     /// Retorna el color corresponent al vòxel a la posició position, fent servir valors interpolats.
-    HdrColor nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
-                      const HdrColor &baseColor = HdrColor() );
+    HdrColor nvShade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator, float remainingOpacity,
+                      const HdrColor &baseColor = HdrColor());
     /// Retorna un string representatiu del voxel shader.
     virtual QString toString() const;
 
@@ -48,51 +45,44 @@ private:
 
 };
 
+template <class VS1, class VS2>
+inline HdrColor CombiningVoxelShader<VS1, VS2>::shade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
+                                                       const HdrColor &baseColor)
+{
+    return nvShade(position, offset, direction, remainingOpacity, baseColor);
+}
 
 template <class VS1, class VS2>
-inline HdrColor CombiningVoxelShader<VS1, VS2>::shade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
-                                                       const HdrColor &baseColor )
+inline HdrColor CombiningVoxelShader<VS1, VS2>::shade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                                       float remainingOpacity, const HdrColor &baseColor)
 {
-    return nvShade( position, offset, direction, remainingOpacity, baseColor );
+    return nvShade(position, direction, interpolator, remainingOpacity, baseColor);
 }
-
 
 template <class VS1, class VS2>
-inline HdrColor CombiningVoxelShader<VS1, VS2>::shade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
-                                                       float remainingOpacity, const HdrColor &baseColor )
+inline HdrColor CombiningVoxelShader<VS1, VS2>::nvShade(const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
+                                                         const HdrColor &baseColor)
 {
-    return nvShade( position, direction, interpolator, remainingOpacity, baseColor );
-}
+    Q_ASSERT(m_voxelShader1);
+    Q_ASSERT(m_voxelShader2);
 
+    HdrColor color1 = m_voxelShader1->nvShade(position, offset, direction, remainingOpacity, baseColor);
+    return m_voxelShader2->nvShade(position, offset, direction, remainingOpacity, color1);
+}
 
 template <class VS1, class VS2>
-inline HdrColor CombiningVoxelShader<VS1, VS2>::nvShade( const Vector3 &position, int offset, const Vector3 &direction, float remainingOpacity,
-                                                         const HdrColor &baseColor )
+inline HdrColor CombiningVoxelShader<VS1, VS2>::nvShade(const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
+                                                         float remainingOpacity, const HdrColor &baseColor)
 {
-    Q_ASSERT( m_voxelShader1 );
-    Q_ASSERT( m_voxelShader2 );
+    Q_ASSERT(m_voxelShader1);
+    Q_ASSERT(m_voxelShader2);
 
-    HdrColor color1 = m_voxelShader1->nvShade( position, offset, direction, remainingOpacity, baseColor );
-    return m_voxelShader2->nvShade( position, offset, direction, remainingOpacity, color1 );
+    HdrColor color1 = m_voxelShader1->nvShade(position, direction, interpolator, remainingOpacity, baseColor);
+    return m_voxelShader2->nvShade(position, direction, interpolator, remainingOpacity, color1);
 }
 
-
-template <class VS1, class VS2>
-inline HdrColor CombiningVoxelShader<VS1, VS2>::nvShade( const Vector3 &position, const Vector3 &direction, const TrilinearInterpolator *interpolator,
-                                                         float remainingOpacity, const HdrColor &baseColor )
-{
-    Q_ASSERT( m_voxelShader1 );
-    Q_ASSERT( m_voxelShader2 );
-
-    HdrColor color1 = m_voxelShader1->nvShade( position, direction, interpolator, remainingOpacity, baseColor );
-    return m_voxelShader2->nvShade( position, direction, interpolator, remainingOpacity, color1 );
 }
-
-
-}
-
 
 #include "combiningvoxelshader.cpp"
-
 
 #endif

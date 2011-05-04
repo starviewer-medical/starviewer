@@ -8,10 +8,7 @@
 
 namespace udg {
 
-/**
-
-*/
-class HangingProtocolsLoader: public QObject
+class HangingProtocolsLoader : public QObject
 {
 Q_OBJECT
 public:

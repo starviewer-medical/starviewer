@@ -35,7 +35,7 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
 
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume *)), SLOT(refreshReferenceViewerData()));
-    connect(m_2DViewer, SIGNAL(selected()),SLOT(refreshReferenceViewerData()));
+    connect(m_2DViewer, SIGNAL(selected()), SLOT(refreshReferenceViewerData()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(hideCrossHair()));
 
     refreshReferenceViewerData();
@@ -76,7 +76,7 @@ void Cursor3DTool::handleEvent(long unsigned eventID)
         case vtkCommand::MouseMoveEvent:
             updatePosition();
             break;
-        
+
         case vtkCommand::LeftButtonReleaseEvent:
             removePosition();
             break;
@@ -89,7 +89,7 @@ void Cursor3DTool::initializePosition()
     {
         return;
     }
-    
+
     m_viewer->setCursor(QCursor(Qt::BlankCursor));
     m_state = Computing;
 
@@ -166,10 +166,10 @@ void Cursor3DTool::updatePosition()
                 projectionMatrix->Identity();
                 for (int row = 0; row < 3; row++)
                 {
-                    projectionMatrix->SetElement(row,0, (currentPlaneRowVector[ row ])*spacing[0]);
-                    projectionMatrix->SetElement(row,1, (currentPlaneColumnVector[ row ])*spacing[1]);
-                    projectionMatrix->SetElement(row,2, 0.0);
-                    projectionMatrix->SetElement(row,3, currentPlaneOrigin[row]);
+                    projectionMatrix->SetElement(row, 0, (currentPlaneRowVector[row]) * spacing[0]);
+                    projectionMatrix->SetElement(row, 1, (currentPlaneColumnVector[row]) * spacing[1]);
+                    projectionMatrix->SetElement(row, 2, 0.0);
+                    projectionMatrix->SetElement(row, 3, currentPlaneOrigin[row]);
                 }
 
                 // 3.- Mappeig de l'índex del píxel al món real
@@ -256,7 +256,7 @@ void Cursor3DTool::projectPoint()
         double distance;
         int nearestSlice = getNearestSlice(m_myData->getOriginPointPosition(), distance);
 
-        if (nearestSlice != -1 && distance < (m_2DViewer->getThickness()*1.5))
+        if (nearestSlice != -1 && distance < (m_2DViewer->getThickness() * 1.5))
         {
             m_2DViewer->setSlice(nearestSlice);
             m_crossHair->setCentrePoint(position[0], position[1], position[2]);

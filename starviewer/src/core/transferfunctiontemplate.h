@@ -1,16 +1,13 @@
 #ifndef TRANSFERFUNCTIONTEMPLATE_H
 #define TRANSFERFUNCTIONTEMPLATE_H
 
-
 #include "logging.h"
 #include "mathtools.h"
 
 #include <QMap>
 #include <QString>
 
-
 namespace udg {
-
 
 /// Retorna la interpolació lineal entre a i b avaluant "a + alpha * (b - a)", que és equivalent a "a * (1 - alpha) + b * alpha".
 template <typename T>
@@ -19,7 +16,6 @@ T lerp(const T &a, const T &b, double alpha)
     Q_ASSERT(!MathTools::isNaN(alpha));
     return a + alpha * (b - a);
 }
-
 
 /**
     Representa una funció de transferència bàsica f: X -> Y, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient) i Y un conjunt de valors de tipus T.
@@ -76,13 +72,11 @@ protected:
 
 };
 
-
 template <typename T>
 bool TransferFunctionTemplate<T>::operator ==(const TransferFunctionTemplate<T> &transferFunction) const
 {
     return m_name == transferFunction.m_name && m_map == transferFunction.m_map;
 }
-
 
 template <typename T>
 const QString& TransferFunctionTemplate<T>::name() const
@@ -90,20 +84,17 @@ const QString& TransferFunctionTemplate<T>::name() const
     return m_name;
 }
 
-
 template <typename T>
 void TransferFunctionTemplate<T>::setName(const QString &name)
 {
     m_name = name;
 }
 
-
 template <typename T>
 T TransferFunctionTemplate<T>::operator ()(double x) const
 {
     return get(x);
 }
-
 
 template <typename T>
 T TransferFunctionTemplate<T>::get(double x) const
@@ -131,14 +122,12 @@ T TransferFunctionTemplate<T>::get(double x) const
     return lerp(a.value(), b.value(), alpha);
 }
 
-
 template <typename T>
 void TransferFunctionTemplate<T>::set(double x, const T &y)
 {
     //Q_ASSERT(!MathTools::isNaN(x));   // problema amb QTransferFunctionEditorByGradient
     m_map[x] = y;
 }
-
 
 template <typename T>
 void TransferFunctionTemplate<T>::unset(double x)
@@ -147,13 +136,11 @@ void TransferFunctionTemplate<T>::unset(double x)
     m_map.remove(x);
 }
 
-
 template <typename T>
 void TransferFunctionTemplate<T>::clear()
 {
     m_map.clear();
 }
-
 
 template <typename T>
 bool TransferFunctionTemplate<T>::isSet(double x) const
@@ -161,13 +148,11 @@ bool TransferFunctionTemplate<T>::isSet(double x) const
     return m_map.contains(x);
 }
 
-
 template <typename T>
 QList<double> TransferFunctionTemplate<T>::keys() const
 {
     return m_map.keys();
 }
-
 
 template <typename T>
 void TransferFunctionTemplate<T>::trim(double x1, double x2)
@@ -204,7 +189,6 @@ void TransferFunctionTemplate<T>::trim(double x1, double x2)
     }
 }
 
-
 template <typename T>
 void TransferFunctionTemplate<T>::simplify()
 {
@@ -219,14 +203,11 @@ void TransferFunctionTemplate<T>::simplify()
     }
 }
 
-
 template <typename T>
 TransferFunctionTemplate<T>::TransferFunctionTemplate()
 {
 }
 
-
 } // namespace udg
-
 
 #endif // TRANSFERFUNCTIONTEMPLATE_H

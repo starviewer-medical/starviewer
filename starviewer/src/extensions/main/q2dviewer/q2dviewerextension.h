@@ -35,7 +35,7 @@ class HangingProtocolManager;
 /**
     Extensió que s'executarà  per defecte a l'obrir un model
 */
-class Q2DViewerExtension : public QWidget , private Ui::Q2DViewerExtensionBase {
+class Q2DViewerExtension : public QWidget, private Ui::Q2DViewerExtensionBase {
 Q_OBJECT
 public:
     Q2DViewerExtension(QWidget *parent = 0);
@@ -83,7 +83,7 @@ public slots:
     void showScreenshotsExporterDialog();
 #endif
 
-    /// TODO Mètode per solucionar problemes perquè la sincronització 
+    /// TODO Mètode per solucionar problemes perquè la sincronització
     /// encara no està adaptada a la resta de les tools
     /// Desactiva l'eina de sincronització.
     void disableSynchronization();
@@ -200,9 +200,9 @@ private:
     /// Manager per estudis previs
     PreviousStudiesManager *m_previousStudiesManager;
 
-    /// Manager de hanging protocols 
+    /// Manager de hanging protocols
     HangingProtocolManager *m_hangingProtocolManager;
-#endif 
+#endif
 
 };
 

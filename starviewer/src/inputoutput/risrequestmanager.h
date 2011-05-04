@@ -24,7 +24,7 @@ class RetrieveDICOMFilesFromPACSJob;
 
 /** Classe manager que ens permet rebre peticions del RIS i processar-les
 */
-class RISRequestManager: public QObject{
+class RISRequestManager : public QObject {
 Q_OBJECT
 public:
 
@@ -100,12 +100,12 @@ private:
 
 private:
 
-    /*No podem executar diverses peticions de RIS a la vegada, per això creem aquesta cua, que ens permetrà en el cas que se'ns 
+    /*No podem executar diverses peticions de RIS a la vegada, per això creem aquesta cua, que ens permetrà en el cas que se'ns
      *demani una petició, quan ja n'hi hagi un altre executant, encuar la sol·licitud i esperar a llançar-la que l'actual hagi finalitzat.
      El motiu de que no podem executar més d'una sol·licitud a la vegada, és degut a la naturalesa assíncrona del PacsManager,
       quan retorna els resultats no sabem a quina sol·licitud del RIS pertany, no hi ha cap ordre establert, dificultant les coses.
-     Necessitem saber si per un determinada sol·licitud hem trobat un estudi que compleixi el criteri de cerca, controls 
-     d'errors, etc.. si processim més d'una sol·licitud a la vegada, no sabríem de quina sol·licitud són els resultats o error, 
+     Necessitem saber si per un determinada sol·licitud hem trobat un estudi que compleixi el criteri de cerca, controls
+     d'errors, etc.. si processim més d'una sol·licitud a la vegada, no sabríem de quina sol·licitud són els resultats o error,
      dificultant el control de les sol·licituds*/
     QQueue<DicomMask> m_queueRISRequests;
     ListenRISRequests *m_listenRISRequests;

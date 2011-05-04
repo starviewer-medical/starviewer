@@ -10,14 +10,13 @@
 #include "pacsjob.h"
 #include "inputoutputsettings.h"
 
-
-namespace udg{
+namespace udg {
 
 ///Classe utilitza per adormir el Thread al mètode waitForAllPACSJobsFinished, m'entre s'espera que hagin finalitzat totes les operacions.
 class Sleeper : public QThread
 {
 public:
-    static void msleep(unsigned long msecs) 
+    static void msleep(unsigned long msecs)
     {
         QThread::msleep(msecs);
     }
@@ -30,11 +29,11 @@ PacsManager::PacsManager()
     m_queryWeaver = NULL;
     m_queryWeaver = new ThreadWeaver::Weaver();
     m_queryWeaver->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
-    
+
     m_sendDICOMFilesToPACSWeaver = new ThreadWeaver::Weaver();
     m_sendDICOMFilesToPACSWeaver->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
 
-    m_retrieveDICOMFilesFromPACSWeaver  = new ThreadWeaver::Weaver();
+    m_retrieveDICOMFilesFromPACSWeaver = new ThreadWeaver::Weaver();
     //Només podem descarregar un estudi a la vegada del PACS, per això com a número màxim de threads especifiquem 1
     m_retrieveDICOMFilesFromPACSWeaver ->setMaximumNumberOfThreads(1);
 }
@@ -43,7 +42,7 @@ void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
 {
     switch (pacsJob->getPACSJobType())
     {
-        case PACSJob::SendDICOMFilesToPACSJobType :
+        case PACSJob::SendDICOMFilesToPACSJobType:
             m_sendDICOMFilesToPACSWeaver->enqueue(pacsJob);
             break;
         case PACSJob::RetrieveDICOMFilesFromPACSJobType:
@@ -78,7 +77,7 @@ bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
             break;
         case PACSJob::QueryPACS:
             return !m_queryWeaver->isIdle();
-            break;   
+            break;
         default:
             ERROR_LOG("Metode isExecutingPACS ha rebut un Tipus de job invalid");
             return false;

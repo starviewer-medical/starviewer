@@ -35,14 +35,14 @@ public slots:
      * Dins d'una mateixa sèrie, totes les imatges tenen el mateix frame of reference
      * @param frameOfReference
      */
-    void setFrameOfReferenceUID( const QString &frameOfReference );
+    void setFrameOfReferenceUID(const QString &frameOfReference);
 
     /**
      * Assigna els plans de la serie de referencia
      * @param imagePlane
      */
-    void setPlanesToProject( QList<ImagePlane *> planes );
-    void setPlanesToProject( ImagePlane *plane );
+    void setPlanesToProject(QList<ImagePlane *> planes);
+    void setPlanesToProject(ImagePlane *plane);
 
 private:
     /// El frame of reference UID del pla de referència

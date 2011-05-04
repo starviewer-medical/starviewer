@@ -12,19 +12,19 @@ class DrawerLine;
 /**
     Eina per mesurar distàncies en un visor 2D.
     Ens permet fixar dos punts a la pantalla i calcular la distància que els separa.
-    
+
     Per marcar cadascun dels punts es farà amb un clic o doble-clic amb el botó esquerre
     del ratolí.
-    Un cop marcat el primer punt de la distància a calcular, es mostrarà una línia que unirà 
+    Un cop marcat el primer punt de la distància a calcular, es mostrarà una línia que unirà
     el primer punt marcat amb el punt on es trobi el punter del mouse. Mentres l'usuari no
     hagi marcat el segon punt, no es mostrarà cap informació respecte a la distància en aquell moment.
 
-    Un cop marcat el segon punt, la mesura es mostrarà en mil·límetres, si existeix informació 
+    Un cop marcat el segon punt, la mesura es mostrarà en mil·límetres, si existeix informació
     d'espaiat, en píxels altrament.
 
     Un cop acabada la mesura, es poden annotar successivament tantes mesures com es desitji.
 
-    Les mesures annotades només apareixeran sobre les imatges sobre les que s'han realitzat, 
+    Les mesures annotades només apareixeran sobre les imatges sobre les que s'han realitzat,
     però no s'esborren si canviem d'imatge. Si canviem d'imatge però tornem a mostrar-la més endavant
     les annotacions fetes sobre aquesta anteriorment, tornaran a aparèixer.
 
@@ -40,11 +40,11 @@ public:
     void handleEvent(long unsigned eventID);
 
 private:
-    /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que 
+    /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que
     /// haguem fet un clic amb el botó esquerre del mouse.
     void handlePointAddition();
 
-    /// Marca un nou punt de la distància. Si la corresponent primitiva 
+    /// Marca un nou punt de la distància. Si la corresponent primitiva
     /// no s'ha creat es crea abans d'afegir el nou punt.
     void annotateNewPoint();
 

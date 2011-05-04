@@ -9,7 +9,7 @@
 namespace udg {
 
 /**
-    Classe que representa la unitat central de treball de l'aplicació: el Pacient. 
+    Classe que representa la unitat central de treball de l'aplicació: el Pacient.
     Guardarà tota la informació relacionada amb aquests (Estudis, Sèries, etc.)
 */
 class Patient : public QObject {
@@ -101,7 +101,7 @@ public:
     static QList<Patient *> mergePatients(QList<Patient *> patientsList);
 
     /// Marca com a seleccionada la sèrie amb l'UID indicat
-    /// En cas que no existeixi tal UID, se selecciona la primera 
+    /// En cas que no existeixi tal UID, se selecciona la primera
     /// sèrie del primer estudi
     void setSelectedSeries(const QString &selectedSeriesUID);
 
@@ -140,13 +140,13 @@ private:
     /// També elimina els números que contingui en nom del pacient.
     QString clearPatientName(const QString &patientName);
 
-    /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules, 
-    /// però sense eliminar els números que contingui el nom, ja que poden haver pacients anonimitzats i diferenciats 
+    /// Fa tractament del nom del pacient, traient caràcters extranys, espais inicials, finals i passant a majúscules,
+    /// però sense eliminar els números que contingui el nom, ja que poden haver pacients anonimitzats i diferenciats
     /// per un número, com per exemple VOLUNTARI1, VOLUNTARI2 i no són el mateix pacient, en canvi si treiem els números
     /// els detectarà com a l mateix pacient.
     QString clearStrangeSymbols(const QString &patientName);
 
-    /// Ens diu si el nom del pacient conté números identificadors. Considerem números entre 0-9999, és un rang 
+    /// Ens diu si el nom del pacient conté números identificadors. Considerem números entre 0-9999, és un rang
     /// suficientment gran.
     bool containtsNumericalSymbols(const QString &patientName);
 

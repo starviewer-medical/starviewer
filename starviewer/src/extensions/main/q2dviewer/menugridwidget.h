@@ -19,7 +19,7 @@ namespace udg {
 class ItemMenu;
 class HangingProtocol;
 
-class MenuGridWidget: public QWidget {
+class MenuGridWidget : public QWidget {
 Q_OBJECT
 public:
     MenuGridWidget(QWidget *parent = 0);
@@ -72,7 +72,7 @@ protected:
 
     /// Fila a on col·locar el següent element a la zona de hangings
     int m_nextHangingProtocolRow;
-    
+
     /// Columna a on col·locar el següent element a la zona de hangings
     int m_nextHangingProtocolColumn;
 
@@ -93,7 +93,7 @@ protected:
 
     /// Etiqueta que posarem com a títol del widget
     QLabel *m_caption;
-    
+
     /// Etiqueta per mostrar quan no hi ha cap hanging protocol disponible per aplicar
     QLabel *m_noHangingProtocolsAvailableLabel;
 };

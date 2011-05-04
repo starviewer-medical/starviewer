@@ -14,18 +14,18 @@ class SynchronizeToolData;
 class SynchronizeTool : public Tool {
 Q_OBJECT
 public:
-    SynchronizeTool( QViewer *viewer, QObject *parent = 0 );
+    SynchronizeTool(QViewer *viewer, QObject *parent = 0);
     ~SynchronizeTool();
 
-    void handleEvent( unsigned long eventID );
+    void handleEvent(unsigned long eventID);
 
     /// Assignem una configuracio
-    void setConfiguration( ToolConfiguration *configuration );
+    void setConfiguration(ToolConfiguration *configuration);
 
     /// Per posar dades (compartides)
-    virtual void setToolData( ToolData *data );
+    virtual void setToolData(ToolData *data);
 
-    /// Per obtenir les dades ( per compartir )
+    /// Per obtenir les dades (per compartir)
     virtual ToolData *getToolData() const;
 
     /// Habilita o deshabilita la tool
@@ -36,16 +36,16 @@ public:
 
 private slots:
     /// Posa l'increment a les dades
-    void setIncrement( int slice );
+    void setIncrement(int slice);
 
     /// Posa el window level a les dades
-    void setWindowLevel( double window, double level );
+    void setWindowLevel(double window, double level);
 
     /// Posa el factor de zoom
-    void setZoomFactor( double factor );
+    void setZoomFactor(double factor);
 
     /// Posa el pan
-    void setPan( double * motionVector);
+    void setPan(double * motionVector);
 
     /// Aplica els canvis de canvi de llesca
     void applySliceChanges();

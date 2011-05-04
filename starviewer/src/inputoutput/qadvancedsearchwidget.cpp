@@ -16,7 +16,7 @@ QAdvancedSearchWidget::QAdvancedSearchWidget(QWidget *parent)
 
 void QAdvancedSearchWidget::createConnections()
 {
-    foreach(QLineEdit *lineEdit, m_qwidgetAdvancedSearch->findChildren<QLineEdit*>())
+    foreach (QLineEdit *lineEdit, m_qwidgetAdvancedSearch->findChildren<QLineEdit*>())
     {
         connect(lineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateAdvancedSearchModifiedStatus()));
     }
@@ -68,18 +68,17 @@ DicomMask QAdvancedSearchWidget::buildDicomMask()
 
     //si hem de filtrar per un camp a nivell d'imatge o serie activem els filtres de serie
     if (!m_seriesUIDText->text().isEmpty() || !m_scheduledProcedureStepIDText->text().isEmpty() ||
-        !m_requestedProcedureIDText->text().isEmpty() || 
+        !m_requestedProcedureIDText->text().isEmpty() ||
         !m_SOPInstanceUIDText->text().isEmpty() || !m_instanceNumberText->text().isEmpty() ||
         !m_PPStartDateText->text().isEmpty() || !m_PPStartTimeText->text().isEmpty() ||
-        !m_seriesNumberText->text().isEmpty()
-      )
+        !m_seriesNumberText->text().isEmpty())
     {
         mask.setSeriesDate("");
         mask.setSeriesTime("");
         mask.setSeriesModality("");
         mask.setSeriesNumber(m_seriesNumberText->text());
         mask.setSeriesInstanceUID(m_seriesUIDText->text());
-        mask.setRequestAttributeSequence(m_requestedProcedureIDText->text() , m_scheduledProcedureStepIDText->text());
+        mask.setRequestAttributeSequence(m_requestedProcedureIDText->text(), m_scheduledProcedureStepIDText->text());
         mask.setPPSStartDate(m_PPStartDateText->text());
         mask.setPPStartTime(m_PPStartTimeText->text());
 
@@ -96,12 +95,12 @@ DicomMask QAdvancedSearchWidget::buildDicomMask()
 
 void QAdvancedSearchWidget::updateAdvancedSearchModifiedStatus()
 {
-    for(int i = 0; i < m_qwidgetAdvancedSearch->count(); i++)
+    for (int i = 0; i < m_qwidgetAdvancedSearch->count(); i++)
     {
         bool hasModifiedLineEdit = false;
         QWidget *tab = m_qwidgetAdvancedSearch->widget(i);
 
-        foreach(QLineEdit *lineEdit, tab->findChildren<QLineEdit*>())
+        foreach (QLineEdit *lineEdit, tab->findChildren<QLineEdit*>())
         {
             if (lineEdit->text() != "")
             {

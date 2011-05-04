@@ -15,7 +15,7 @@
 #include "qdicomdumpbrowser.h"
 #include "statswatcher.h"
 // Per poder fer screenshots desde menú
-#include "screenshottool.h" 
+#include "screenshottool.h"
 #include "toolproxy.h"
 #include "q2dviewersettings.h"
 
@@ -36,7 +36,7 @@
 namespace udg {
 
 Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
- : QWidget(parent), m_mainVolume(0), m_patient(0), m_lastSelectedViewer(0) 
+ : QWidget(parent), m_mainVolume(0), m_patient(0), m_lastSelectedViewer(0)
 {
     setupUi(this);
     Q2DViewerSettings().init();
@@ -68,18 +68,18 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_predefinedSlicesGrid = new MenuGridWidget(this);
     m_sliceTableGrid = new TableMenu(this);
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
-    
+
 #ifndef STARVIEWER_LITE
     m_previousStudiesWidget = new QPreviousStudiesWidget(this);
     m_previousStudiesToolButton->setEnabled(false);
     m_previousStudiesToolButton->setToolTip(tr("Search related studies"));
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
 #endif
-    
+
     m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
     m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
-    
+
     // TODO De moment no fem accessible aquesta funcionalitat ja que no està a punt
     m_imageGrid->setVisible(false);
     m_downImageGrid->setVisible(false);
@@ -89,7 +89,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     initializeTools();
 
     // Incorporem estadístiques
-    m_statsWatcher = new StatsWatcher("2D Extension",this);
+    m_statsWatcher = new StatsWatcher("2D Extension", this);
     m_statsWatcher->addClicksCounter(m_slicingToolButton);
     m_statsWatcher->addClicksCounter(m_zoomToolButton);
     m_statsWatcher->addClicksCounter(m_roiButton);
@@ -107,7 +107,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher->addClicksCounter(m_rotateClockWiseToolButton);
     m_statsWatcher->addClicksCounter(m_flipHorizontalToolButton);
     m_statsWatcher->addClicksCounter(m_flipVerticalToolButton);
-    
+
     m_statsWatcher->addClicksCounter(m_cursor3DToolButton);
     m_statsWatcher->addClicksCounter(m_referenceLinesToolButton);
 
@@ -162,7 +162,7 @@ void Q2DViewerExtension::createConnections()
 #ifndef STARVIEWER_LITE
     // Per mostrar exportació
     connect(m_screenshotsExporterToolButton, SIGNAL(clicked()), SLOT(showScreenshotsExporterDialog()));
-    
+
     connect(m_previousStudiesWidget, SIGNAL(downloadingStudies()), this, SLOT(changeToPreviousStudiesDownloadingIcon()));
     connect(m_previousStudiesWidget, SIGNAL(studiesDownloaded()), this, SLOT(changeToPreviousStudiesDefaultIcon()));
     connect(m_previousStudiesToolButton, SIGNAL(clicked (bool)), SLOT(showPreviousStudiesWidget()));
@@ -271,8 +271,8 @@ void Q2DViewerExtension::addPreviousHangingProtocols(QList<Study *> studies, QHa
 
 void Q2DViewerExtension::showPredefinedGrid()
 {
-    QPoint point = m_buttonGrid->mapToGlobal(QPoint(0,0));
-    m_predefinedSeriesGrid->move(point.x(),(point.y() + m_buttonGrid->frameGeometry().height()));
+    QPoint point = m_buttonGrid->mapToGlobal(QPoint(0, 0));
+    m_predefinedSeriesGrid->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
 
     QList<Study *> listStudies = m_patient->getStudies();
     int numberOfSeries = 0;
@@ -286,30 +286,30 @@ void Q2DViewerExtension::showPredefinedGrid()
 
 void Q2DViewerExtension::showInteractiveTable()
 {
-    QPoint point = m_buttonGrid->mapToGlobal(QPoint(0,0));
-    m_seriesTableGrid->move(point.x(),(point.y() + m_buttonGrid->frameGeometry().height()));
+    QPoint point = m_buttonGrid->mapToGlobal(QPoint(0, 0));
+    m_seriesTableGrid->move(point.x(), (point.y() + m_buttonGrid->frameGeometry().height()));
     m_seriesTableGrid->show();
 }
 
 void Q2DViewerExtension::showPredefinedImageGrid()
 {
-    QPoint point = m_imageGrid->mapToGlobal(QPoint(0,0));
-    m_predefinedSlicesGrid->move(point.x(),(point.y() + m_imageGrid->frameGeometry().height()));
+    QPoint point = m_imageGrid->mapToGlobal(QPoint(0, 0));
+    m_predefinedSlicesGrid->move(point.x(), (point.y() + m_imageGrid->frameGeometry().height()));
     m_predefinedSlicesGrid->show();
 }
 
 void Q2DViewerExtension::showInteractiveImageTable()
 {
-    QPoint point = m_imageGrid->mapToGlobal(QPoint(0,0));
-    m_sliceTableGrid->move(point.x(),(point.y() + m_imageGrid->frameGeometry().height()));
+    QPoint point = m_imageGrid->mapToGlobal(QPoint(0, 0));
+    m_sliceTableGrid->move(point.x(), (point.y() + m_imageGrid->frameGeometry().height()));
     m_sliceTableGrid->show();
 }
 
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showPreviousStudiesWidget()
 {
-    QPoint point = m_previousStudiesToolButton->mapToGlobal(QPoint(0,0));
-    m_previousStudiesWidget->move(point.x(),(point.y() + m_previousStudiesToolButton->frameGeometry().height()));
+    QPoint point = m_previousStudiesToolButton->mapToGlobal(QPoint(0, 0));
+    m_previousStudiesWidget->move(point.x(), (point.y() + m_previousStudiesToolButton->frameGeometry().height()));
     m_previousStudiesWidget->show();
 }
 #endif
@@ -371,7 +371,7 @@ void Q2DViewerExtension::initializeTools()
     // les finestres sincronitzades es desactivarien (ticket #1236)
     m_toolManager->getRegisteredToolAction("SynchronizeTool")->setChecked(true);
 
-    // Registrem les "Action Tool"    
+    // Registrem les "Action Tool"
 #ifndef STARVIEWER_LITE
     m_sagitalViewAction = m_toolManager->registerActionTool("SagitalViewActionTool");
     m_coronalViewAction = m_toolManager->registerActionTool("CoronalViewActionTool");
@@ -399,7 +399,7 @@ void Q2DViewerExtension::initializeTools()
 #else
     leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "OvalROITool";
 #endif
-    
+
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -438,15 +438,15 @@ void Q2DViewerExtension::initializeTools()
     m_singleShotAction->setText(tr("Save current series image..."));
     m_singleShotAction->setShortcut(Qt::CTRL + Qt::Key_S);
     m_singleShotAction->setToolTip(tr("Save the current image in a standard image format"));
-    
+
     m_multipleShotAction = new QAction(this);
     m_multipleShotAction->setText(tr("Save all images of the current series..."));
     m_multipleShotAction->setToolTip(tr("Save all the images in the selected viewer in a standard image format"));
-    m_multipleShotAction->setShortcut(Qt::CTRL + Qt::Key_A);    
-    
+    m_multipleShotAction->setShortcut(Qt::CTRL + Qt::Key_A);
+
     QMenu *screenShotMenu = new QMenu(this);
     m_screenShotToolButton->setMenu(screenShotMenu);
-    
+
     screenShotMenu->addAction(m_singleShotAction);
     screenShotMenu->addAction(m_multipleShotAction);
 
@@ -494,7 +494,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // Desactivem les "ActionTool" pel visor que acaba de deseleccionar-se
             m_toolManager->disableRegisteredActionTools(m_lastSelectedViewer->getViewer());
         }
-        
+
         // Actualitzem l'últim viewer seleccionat
         m_lastSelectedViewer = viewerWidget;
         // Si el viewer seleccionat no és nul
@@ -534,7 +534,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
         }
         else
         {
-            // Si és nul vol dir que en aquell moment o bé no tenim cap 
+            // Si és nul vol dir que en aquell moment o bé no tenim cap
             // visor seleccionat o bé no n'existeix cap. És per això que
             // cal desvincular els widgets adients de qualsevol visor.
             m_windowLevelComboBox->clearPresets();

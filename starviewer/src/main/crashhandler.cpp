@@ -22,11 +22,11 @@
 #include <string>
 #include <iostream>
 
-bool launchCrashReporter( const char* dumpDirPath, const char* minidumpId, void* crashHandler, bool succeeded )
+bool launchCrashReporter(const char* dumpDirPath, const char* minidumpId, void* crashHandler, bool succeeded)
 {
     // DON'T USE THE HEAP!!!
     // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
-    
+
     if (!succeeded)
         return false;
 
@@ -35,11 +35,11 @@ bool launchCrashReporter( const char* dumpDirPath, const char* minidumpId, void*
     if (pid == -1) // fork failed
         return false;
     if (pid == 0) { // we are the fork
-        execl( static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
-               static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
-               dumpDirPath,
-               minidumpId,
-               (char*) 0 );
+        execl(static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
+              static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
+              dumpDirPath,
+              minidumpId,
+              (char*) 0);
         // execl replaces this process, so no more code will be executed
         // unless it failed. If it failed, then we should return false.
         return false;
@@ -61,8 +61,8 @@ static bool launchCrashReporter(const wchar_t* dumpDirPath, const wchar_t* minid
 
     const char* crashReporterPath = static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath();
 
-    //convert crashReporterPath to widechars, which sadly means the product name must be Latin1    
-    wchar_t crashReporterPathWchar[ 256 ];
+    //convert crashReporterPath to widechars, which sadly means the product name must be Latin1
+    wchar_t crashReporterPathWchar[256];
     char* out = (char*)crashReporterPathWchar;
     const char* in = crashReporterPath - 1;
     do {
@@ -72,27 +72,27 @@ static bool launchCrashReporter(const wchar_t* dumpDirPath, const wchar_t* minid
     while (*in);
 
     wchar_t command[MAX_PATH * 3 + 6];
-    wcscpy_s( command, crashReporterPathWchar);
-    wcscat_s( command, L" \"" );
-    wcscat_s( command, dumpDirPath );
-    wcscat_s( command, L"\" \"" );
-    wcscat_s( command, minidumpId );
-    wcscat_s( command, L"\"" );
+    wcscpy_s(command, crashReporterPathWchar);
+    wcscat_s(command, L" \"");
+    wcscat_s(command, dumpDirPath);
+    wcscat_s(command, L"\" \"");
+    wcscat_s(command, minidumpId);
+    wcscat_s(command, L"\"");
 
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
 
-    ZeroMemory( &si, sizeof(si) );
+    ZeroMemory(&si, sizeof(si));
     si.cb = sizeof(si);
     si.dwFlags = STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_SHOWNORMAL;
-    ZeroMemory( &pi, sizeof(pi) );
+    ZeroMemory(&pi, sizeof(pi));
 
-    if (CreateProcess( NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+    if (CreateProcess(NULL, command, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
     {
-        CloseHandle( pi.hProcess );
-        CloseHandle( pi.hThread );
-        TerminateProcess( GetCurrentProcess(), 1 );
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+        TerminateProcess(GetCurrentProcess(), 1);
     }
 
     return false;
@@ -105,10 +105,10 @@ CrashHandler::CrashHandler()
 #ifndef NO_CRASH_REPORTER
     // primer comprovem que existeixi el directori ~/.starviewer/dumps/ on guradarem els dumps
     QDir dumpsDir = udg::UserDataRootPath + "dumps/";
-    if( !dumpsDir.exists() )
+    if (!dumpsDir.exists())
     {
         // creem el directori
-        dumpsDir.mkpath( dumpsDir.absolutePath() );
+        dumpsDir.mkpath(dumpsDir.absolutePath());
     }
 
     QString crashReporterPath = QCoreApplication::applicationDirPath() + "/" + STARVIEWER_CRASH_REPORTER_EXE;
@@ -117,7 +117,7 @@ CrashHandler::CrashHandler()
     const char *crashReporterPathCString = crashReporterPathByteArray.constData();
 
     this->setCrashReporterPath(crashReporterPathCString);
-	
+
 #ifndef WIN32
     exceptionHandler = new google_breakpad::ExceptionHandler(dumpsDir.absolutePath().toStdString(), 0, launchCrashReporter, this, true);
 #else
@@ -127,7 +127,7 @@ CrashHandler::CrashHandler()
 #endif //NO_CRASH_REPORTER
 }
 
-void CrashHandler::setCrashReporterPath( const char* path )
+void CrashHandler::setCrashReporterPath(const char* path)
 {
     m_crashReporterPath = path;
 }

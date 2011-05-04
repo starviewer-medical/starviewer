@@ -9,7 +9,7 @@ class DcmDataset;
 /** Aquesta classe construeix una màscara per la cerca d'estudis.
    *Cada camp que volem que la cerca ens retorni li hem de fer el set, sinó retornarà valor null per aquell camp. Per tots els camps podem passar, cadena buida que significa que buscarà tots els valors d'aquell camp, o passar-li un valor en concret, on només retornarà els compleixin aquell criteri.
  */
-namespace udg{
+namespace udg {
 
 class Status;
 
@@ -324,11 +324,11 @@ public:
     DicomMask operator +(const DicomMask &mask);
 
     /// Mètode de conveniència que ens retorna un string indicant els camps
-    /// que s'han omplert per fer la màscara de forma que es pugui loggejar per estadístiques. 
-    /// Els camps amb informació personal s'indicaran com a omplerts amb un asterisc, però no 
-    /// es posarà la informació. Per exemple, si es fa servir el camp "nom de pacient" s'indicarà 
+    /// que s'han omplert per fer la màscara de forma que es pugui loggejar per estadístiques.
+    /// Els camps amb informació personal s'indicaran com a omplerts amb un asterisc, però no
+    /// es posarà la informació. Per exemple, si es fa servir el camp "nom de pacient" s'indicarà
     /// el valor "#*#" però no la informació que ha posat l'usuari. Tampoc es tindran en compte
-    /// les wildcards '*' que puguin haver, per tant, si un camp està omplert amb "*", considerarem 
+    /// les wildcards '*' que puguin haver, per tant, si un camp està omplert amb "*", considerarem
     /// que no s'ha fet servir
     QString getFilledMaskFields() const;
 
@@ -346,7 +346,7 @@ private:
     QString m_studyDate;
     QString m_studyTime;
     QString m_studyDescription;
-    QString m_studyModality; 
+    QString m_studyModality;
     QString m_studyInstanceUID;
     QString m_accessionNumber;
     QString m_referringPhysiciansName;

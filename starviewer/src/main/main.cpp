@@ -36,15 +36,15 @@ void configureLogging()
 {
     // primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
     QDir logDir = udg::UserLogsPath;
-    if( !logDir.exists() )
+    if (!logDir.exists())
     {
         // creem el directori
-        logDir.mkpath( udg::UserLogsPath );
+        logDir.mkpath(udg::UserLogsPath);
     }
     // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
     // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
     QString configurationFile = "/etc/starviewer/log.conf";
-    if( ! QFile::exists(configurationFile) )
+    if (!QFile::exists(configurationFile))
     {
         configurationFile = qApp->applicationDirPath() + "/log.conf";
     }
@@ -54,16 +54,16 @@ void configureLogging()
         configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
     }
 
-    LOGGER_INIT( configurationFile.toStdString() );
-    DEBUG_LOG("Arxiu de configuració del log: " + configurationFile );
+    LOGGER_INIT(configurationFile.toStdString());
+    DEBUG_LOG("Arxiu de configuració del log: " + configurationFile);
 }
 
 void initializeTranslations(QApplication &app)
 {
     udg::ApplicationTranslationsLoader translationsLoader(&app);
-	// li indiquem la locale corresponent
+    // li indiquem la locale corresponent
     QLocale defaultLocale = translationsLoader.getDefaultLocale();
-	QLocale::setDefault( defaultLocale );
+    QLocale::setDefault(defaultLocale);
 
     translationsLoader.loadTranslation(":/core/core_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/interface/interface_" + defaultLocale.name());
@@ -73,7 +73,7 @@ void initializeTranslations(QApplication &app)
     INFO_LOG("Locales = " + defaultLocale.name());
 
     QList<QString> extensionsMediatorNames = udg::ExtensionMediatorFactory::instance()->getFactoryNamesList();
-    foreach(QString mediatorName, extensionsMediatorNames)
+    foreach (QString mediatorName, extensionsMediatorNames)
     {
         udg::ExtensionMediator* mediator = udg::ExtensionMediatorFactory::instance()->create(mediatorName);
 
@@ -88,7 +88,7 @@ void initializeTranslations(QApplication &app)
         }
         else
         {
-            ERROR_LOG( "Error carregant el mediator de " + mediatorName );
+            ERROR_LOG("Error carregant el mediator de " + mediatorName);
         }
     }
 }
@@ -108,7 +108,7 @@ void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
     if (!app.sendMessage(app.arguments().join(";"), 10000))
     {
         ERROR_LOG("No s'ha pogut enviar a la instancia principal la llista d'arguments, sembla que l'instancia principal no respon.");
-        QMessageBox::critical(NULL, udg::ApplicationNameString, QObject::tr("%1 is already running, but is not responding. " 
+        QMessageBox::critical(NULL, udg::ApplicationNameString, QObject::tr("%1 is already running, but is not responding. "
             "To open %1, you must first close the existing %1 process, or restart your system.").arg(udg::ApplicationNameString));
     }
     else
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
       una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
      */
     QtSingleApplication app(argc, argv);
-    
+
     QPixmap splashPixmap;
     #ifdef STARVIEWER_LITE
     splashPixmap.load(":/images/splashLite.png");
@@ -137,9 +137,9 @@ int main(int argc, char *argv[])
         splash.show();
     }
 
-    app.setOrganizationName( udg::OrganizationNameString );
-    app.setOrganizationDomain( udg::OrganizationDomainString );
-    app.setApplicationName( udg::ApplicationNameString );
+    app.setOrganizationName(udg::OrganizationNameString);
+    app.setOrganizationDomain(udg::OrganizationDomainString);
+    app.setApplicationName(udg::ApplicationNameString);
 
 #ifndef NO_CRASH_REPORTER
     // Inicialitzem el crash handler en el cas que ho suportem.
@@ -147,13 +147,13 @@ int main(int argc, char *argv[])
     CrashHandler *crashHandler = new CrashHandler();
     Q_UNUSED(crashHandler);
 #endif
-    
-	//TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
+
+    //TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
     // una classe dedicada a tal efecte
 
-    // ajustem el codec per els strings pelats ( no QString,sinó "bla bla bla" ).
+    // ajustem el codec per els strings pelats (no QString,sinó "bla bla bla").
     // Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
-    QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale() );
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());
 
     configureLogging();
 
@@ -166,12 +166,12 @@ int main(int argc, char *argv[])
     udg::InputOutputSettings inputoutputSettings;
     udg::InterfaceSettings interfaceSettings;
     udg::Shortcuts shortcuts;
-    
+
     coreSettings.init();
     inputoutputSettings.init();
     interfaceSettings.init();
     shortcuts.init();
-    
+
     initQtPluginsDirectory();
     initializeTranslations(app);
 
@@ -185,13 +185,13 @@ int main(int argc, char *argv[])
     // Seguint les recomanacions de la documentació de Qt, guardem la llista d'arguments en una variable, ja que aquesta operació és costosa
     // http://doc.trolltech.com/4.7/qcoreapplication.html#arguments
     QStringList commandLineArgumentsList = app.arguments();
-    
+
     QString commandLineCall = commandLineArgumentsList.join(" ");
     INFO_LOG("Iniciada nova instancia Starviewer amb el seguents arguments de linia de comandes " + commandLineCall);
 
     if (commandLineArgumentsList.count() > 1)
     {
-        /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per 
+        /*Només parsegem els arguments de línia de comandes per saber si són correctes, ens esperem més endavant a que tot estigui carregat per
          *processar-los, si els arguments no són correctes mostre QMessagebox si hi ha una altra instància d'Starviewer finalitzem aquí.*/
         QString errorInvalidCommanLineArguments;
         if (!StarviewerSingleApplicationCommandLineSingleton::instance()->parse(commandLineArgumentsList, errorInvalidCommanLineArguments))
@@ -234,11 +234,11 @@ int main(int argc, char *argv[])
 
         mainWin->show();
 
-        QObject::connect( &app, SIGNAL( lastWindowClosed() ),
-                          &app, SLOT( quit() ));
-        splash.finish( mainWin );
-        
-        /*S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox, 
+        QObject::connect(&app, SIGNAL(lastWindowClosed()),
+                         &app, SLOT(quit()));
+        splash.finish(mainWin);
+
+        /*S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun QMessageBox,
           ja es llança mostrant-se la MainWindow.*/
         if (commandLineArgumentsList.count() > 1)
         {

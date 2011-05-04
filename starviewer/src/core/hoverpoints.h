@@ -24,12 +24,9 @@
 #ifndef UDGHOVERPOINTS_H
 #define UDGHOVERPOINTS_H
 
-
 #include <QtGui>
 
-
 namespace udg {
-
 
 class HoverPoints : public QObject
 {
@@ -126,7 +123,6 @@ private:
     int m_width, m_height;
 };
 
-
 inline QRectF HoverPoints::pointBoundingRect(int i) const
 {
     QPointF p = m_points.at(i);
@@ -145,8 +141,6 @@ inline QRectF HoverPoints::boundingRect() const
         return m_bounds;
 }
 
-
 }
-
 
 #endif

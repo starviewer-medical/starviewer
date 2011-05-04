@@ -15,7 +15,7 @@ Q_OBJECT
 
 public:
     /// Constructor de la classe
-    QDICOMDIRConfigurationScreen( QWidget *parent = 0 );
+    QDICOMDIRConfigurationScreen(QWidget *parent = 0);
 
     /// Destructor de classe
     ~QDICOMDIRConfigurationScreen();
@@ -27,7 +27,7 @@ public slots:
 private slots:
     /// Mostra un QDialog per especificar on es troba el programa de gravació en el disc dur
     void examinateDICOMDIRBurningApplicationPath();
-    
+
     /// Mostra QDialog que permet especificar el directori on es troba el contingut que s'ha de copiar al crear un DICOMDIR
     void examinateDICOMDIRFolderPathToCopy();
 

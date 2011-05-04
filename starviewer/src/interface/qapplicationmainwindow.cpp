@@ -25,7 +25,7 @@
 #include "applicationstylehelper.h"
 
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
-#ifndef STARVIEWER_LITE 
+#ifndef STARVIEWER_LITE
 #include "hangingprotocolsloader.h"
 #include "customwindowlevelsloader.h"
 #endif
@@ -47,26 +47,26 @@
 #include "shortcuts.h"
 #include "shortcutmanager.h"
 
-namespace udg{
+namespace udg {
 
 /*Per processar les opcions entrades per línia de comandes hem d'utilitzar un Singleton de StarviewerApplicationCommandLine, això ve degut a que
-  d'instàncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Instàncies deQApplicationMainWindow es crees 
-  i es destrueixen  a mesura que s'obre una nova finestra o es tanca una finestra d'Starviewer per tant no podem responsabilitzar a cap 
+  d'instàncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Instàncies deQApplicationMainWindow es crees
+  i es destrueixen  a mesura que s'obre una nova finestra o es tanca una finestra d'Starviewer per tant no podem responsabilitzar a cap
   QApplicationMainWindow que  s'encarregui de antendre les peticions rebudes via arguments o rebudes d'altres instàncies d'Starviewer a través
   de QtSingleApplication, perquè no podem  garantir que cap QApplicationMainWindow estigui viva durant tota l'execució d'Starviewer, per encarregar-se
   de processar els arugments de línia de comandes.
-  
-  Per això el que s'ha fet és que totes les QApplicationMainWindow es connectin a un signal de la mateixa instància de 
-  StarviewerSingleApplicationCommandLineSingleton, aquest signal és newOptionsToRun() que s'emet cada vegada que es reben nous arguments ja 
-  procedeixin de la mateixa instància al iniciar-la o d'altres instàncies via QtSingleApplication. Una vegada s'ha emés el signal les instàncies 
-  de QApplicationMainWindow a mesura que responen al signal amb el mètode takeOptionToRun() van processan tots els arguments fins que no en 
+
+  Per això el que s'ha fet és que totes les QApplicationMainWindow es connectin a un signal de la mateixa instància de
+  StarviewerSingleApplicationCommandLineSingleton, aquest signal és newOptionsToRun() que s'emet cada vegada que es reben nous arguments ja
+  procedeixin de la mateixa instància al iniciar-la o d'altres instàncies via QtSingleApplication. Una vegada s'ha emés el signal les instàncies
+  de QApplicationMainWindow a mesura que responen al signal amb el mètode takeOptionToRun() van processan tots els arguments fins que no en
   queda cap per processar.
-  
+
   L'opció que processa una instància de QApplicationMainWindow obtinguda a través del mètode takeOptionToRun() desapereix de la llista d'opcions
-  per processar de StarviewerApplicationCommandLine, de manera que tot i que totes les instàncies de QApplicationMainWindow poden processar 
+  per processar de StarviewerApplicationCommandLine, de manera que tot i que totes les instàncies de QApplicationMainWindow poden processar
   opcions rebuts, cada opció només serà processat per la primera instància que l'agafi a través del mètode takeOptionToRun().
  */
- 
+
 typedef SingletonPointer<StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
 QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
@@ -77,7 +77,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     this->setAttribute(Qt::WA_DeleteOnClose);
     m_extensionWorkspace = new ExtensionWorkspace(this);
     this->setCentralWidget(m_extensionWorkspace);
- 
+
     DatabaseInstallation databaseInstallation;
     if (!databaseInstallation.checkStarviewerDatabase())
     {
@@ -102,7 +102,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     this->setWindowTitle(ApplicationNameString);
 
 // amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
-#ifndef STARVIEWER_LITE 
+#ifndef STARVIEWER_LITE
     // Càrrega dels repositoris que necessitem tenir carregats durant tota l'aplicació
     // Només carregarem un cop per sessió/instància d'starviewer
     static bool repositoriesLoaded = false;
@@ -180,7 +180,6 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping(m_openDirAction, 6);
     connect(m_openDirAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
-
     m_pacsAction = new QAction(this);
 #ifdef STARVIEWER_LITE // el menú "PACS" es dirà "Exams"
     m_pacsAction->setText(tr("&Exams..."));
@@ -200,7 +199,7 @@ void QApplicationMainWindow::createActions()
     connect(m_localDatabaseAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 #endif
     // TODO potser almenys per la versió Lite caldria canviar la icona
-    m_pacsAction->setIcon(QIcon(":/images/pacsQuery.png")); 
+    m_pacsAction->setIcon(QIcon(":/images/pacsQuery.png"));
     m_signalMapper->setMapping(m_pacsAction, 7);
     connect(m_pacsAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
@@ -213,7 +212,7 @@ void QApplicationMainWindow::createActions()
     connect(m_openDICOMDIRAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 
     QList<QString> extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryNamesList();
-    foreach(QString name, extensionsMediatorNames)
+    foreach (QString name, extensionsMediatorNames)
     {
         ExtensionMediator* mediator = ExtensionMediatorFactory::instance()->create(name);
 
@@ -240,8 +239,8 @@ void QApplicationMainWindow::createActions()
     m_maximizeAction->setStatusTip(tr("Maximize The Window To As Many Screens As Possible"));
     m_maximizeAction->setCheckable(false);
     m_maximizeAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MaximizeMultipleScreens));
-    connect(m_maximizeAction, SIGNAL(triggered(bool)), this, SLOT(maximizeMultipleScreens()));    
-    
+    connect(m_maximizeAction, SIGNAL(triggered(bool)), this, SLOT(maximizeMultipleScreens()));
+
     m_moveToDesktopAction = new QWidgetAction(this);
     QScreenDistribution *screenDistribution = new QScreenDistribution(this);
     m_moveToDesktopAction->setDefaultWidget(screenDistribution);
@@ -284,7 +283,7 @@ void QApplicationMainWindow::createActions()
     m_logViewerAction->setIcon(QIcon(":/images/logs.png"));
     connect(m_logViewerAction, SIGNAL(triggered()), m_logViewer, SLOT(updateData()));
     connect(m_logViewerAction, SIGNAL(triggered()), m_logViewer, SLOT(exec()));
-    
+
     m_openReleaseNotesAction = new QAction(this);
     m_openReleaseNotesAction->setText(tr("&Release notes"));
     m_openReleaseNotesAction->setStatusTip(tr("Show the application's release notes for current version"));
@@ -372,7 +371,7 @@ void QApplicationMainWindow::createMenus()
     // accions relacionades amb la visualització
     m_visualizationMenu = menuBar()->addMenu(tr("&Visualization"));
 
-    foreach(QAction *action, m_actionsList)
+    foreach (QAction *action, m_actionsList)
     {
         m_visualizationMenu->addAction(action);
     }
@@ -521,7 +520,7 @@ Patient *QApplicationMainWindow::getCurrentPatient()
 unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 {
     unsigned int count = 0;
-    foreach(QWidget *widget, QApplication::topLevelWidgets())
+    foreach (QWidget *widget, QApplication::topLevelWidgets())
     {
         if (qobject_cast<QApplicationMainWindow *>(widget))
         {
@@ -568,7 +567,7 @@ void QApplicationMainWindow::showEvent(QShowEvent *event)
 void QApplicationMainWindow::about()
 {
     QString aboutMessage = tr("<h2>%1</h2>"
-        "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab), Girona" 
+        "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab), Girona"
         "<p align='justify'>%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI,"
         " CT, PET, PET-CT, CR, MG,...) fully compliant with the DICOM standard for image communication and image file formats. It can also read"
         " many other file formats specified by the MetaIO standard (*.mhd files). ").arg(ApplicationNameString).arg(2011);
@@ -592,7 +591,7 @@ void QApplicationMainWindow::about()
     aboutMessage += tr("<p>Support email: <a href=\"mailto:%1\">%1</a></p>").arg(OrganizationEmailString);
     aboutMessage += tr("<p>Web: <a href=\"%1\">%1</a></p>").arg(OrganizationWebURL);
 
-    QMessageBox::about(this, tr("About %1").arg(ApplicationNameString), aboutMessage);        
+    QMessageBox::about(this, tr("About %1").arg(ApplicationNameString), aboutMessage);
 }
 
 void QApplicationMainWindow::writeSettings()
@@ -603,7 +602,7 @@ void QApplicationMainWindow::writeSettings()
 
 void QApplicationMainWindow::enableExtensions()
 {
-    foreach(QAction *action, m_actionsList)
+    foreach (QAction *action, m_actionsList)
     {
         action->setEnabled(true);
     }

@@ -12,7 +12,7 @@ class DrawerPolygon;
 
 /**
 *
-*   Tool pare per totes aquelles tools destinades a crear ROIs. 
+*   Tool pare per totes aquelles tools destinades a crear ROIs.
 *   S'encarrega de proporcionar els mètodes necessaris per calcular
 *   les dades estadístiques relacionades amb la ROI (àrea, mitjana, desviació estàndar).
 *   La gestió dels events i de com es dibuixa la forma de la ROI queda delegada en les
@@ -43,7 +43,7 @@ protected:
     /// Un cop s'hagin calculat, serà false fins que no es torni a modificar
     /// Per defecte el valor és true
     bool m_hasToComputeStatisticsData;
-    
+
     /// Mitjana de valors de la ROI
     double m_mean;
 
@@ -51,7 +51,7 @@ protected:
     double m_standardDeviation;
 
 private:
-    /// Calcula les dades estadístiques de la ROI. 
+    /// Calcula les dades estadístiques de la ROI.
     /// Serà necessari cridar aquest mètode abans si volem obtenir la mitjana i/o la desviació estàndar
     void computeStatisticsData();
 

@@ -8,7 +8,7 @@
 #include "logging.h"
 #include "inputoutputsettings.h"
 
-namespace udg{
+namespace udg {
 
 PACSConnection::PACSConnection(PacsDevice pacsDevice)
 {
@@ -24,7 +24,7 @@ PACSConnection::PACSConnection(PacsDevice pacsDevice)
 
 OFCondition PACSConnection::configureEcho()
 {
-    const char *transferSyntaxes[] = {UID_LittleEndianImplicitTransferSyntax};
+    const char *transferSyntaxes[] = { UID_LittleEndianImplicitTransferSyntax };
     int presentationContextID = 1; //presentationContextID always has to be odd
 
     return ASC_addPresentationContext(m_associationParameters, presentationContextID, UID_VerificationSOPClass, transferSyntaxes, DIM_OF(transferSyntaxes));
@@ -32,19 +32,19 @@ OFCondition PACSConnection::configureEcho()
 
 OFCondition PACSConnection::configureFind()
 {
-    const char *transferSyntaxes[] = {NULL, NULL, NULL};
+    const char *transferSyntaxes[] = { NULL, NULL, NULL };
     int presentationContextID = 1;//sempre ha de ser imparell, el seu valor és 1 perquè només passem un presentation context
 
     getTransferSyntaxForFindOrMoveConnection(transferSyntaxes);
 
-    return ASC_addPresentationContext(m_associationParameters, presentationContextID, UID_FINDStudyRootQueryRetrieveInformationModel, transferSyntaxes, 
+    return ASC_addPresentationContext(m_associationParameters, presentationContextID, UID_FINDStudyRootQueryRetrieveInformationModel, transferSyntaxes,
         DIM_OF(transferSyntaxes));
 }
 
 OFCondition PACSConnection::configureMove()
 {
     T_ASC_PresentationContextID associationPresentationContextID = 1;
-    const char *transferSyntaxes[] = {NULL, NULL, NULL};
+    const char *transferSyntaxes[] = { NULL, NULL, NULL };
 
     getTransferSyntaxForFindOrMoveConnection(transferSyntaxes);
 
@@ -56,10 +56,10 @@ OFCondition PACSConnection::configureMove()
 OFCondition PACSConnection::configureStore()
 {
     /*Each SOP Class will be proposed in two presentation contexts (unless the opt_combineProposedTransferSyntaxes global variable is true).
-     The command line specified a preferred transfer syntax to use. This prefered transfer syntax will be proposed in one presentation context 
+     The command line specified a preferred transfer syntax to use. This prefered transfer syntax will be proposed in one presentation context
      and a set of alternative (fallback) transfer syntaxes will be proposed in a different presentation context.
-     
-     Generally, we prefer to use Explicitly encoded transfer syntaxes and if running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
+
+     Generally, we prefer to use Explicitly encoded transfer syntaxes and if running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax
      to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
      organise the proposed transfer syntaxes to take advantage of such behaviour. */
 
@@ -72,13 +72,13 @@ OFCondition PACSConnection::configureStore()
     fallbackSyntaxes.append(UID_LittleEndianImplicitTransferSyntax);
 
     /*Afegim totes les classes SOP de transfarència d'imatges. com que desconeixem de quina modalitat són
-     les imatges alhora de preparar la connexió les hi incloem totes les modalitats. Si alhora de connectar sabèssim de quina modalitat és 
+     les imatges alhora de preparar la connexió les hi incloem totes les modalitats. Si alhora de connectar sabèssim de quina modalitat és
      l'estudi només caldria afegir-hi la de la motalitat de l'estudi
-     
-     Les sopClass o també conegudes com AbstractSyntax és equivalent amb el Move quina acció volem fer per exemple 
-     UID_MOVEStudyRootQueryRetrieveInformationModel, en el case del move, en el cas de StoreScu, el sopClass que tenim van en funció del tipus d'imatge 
-     per exemple tenim ComputedRadiographyImageStorage, CTImageStore, etc.. aquestes sopClass indiquen  quin tipus d'imatge anirem a guardar, per això sinó 
-     sabem de quin tipus de SOPClass són les imatges que anem a guardar al PACS, li indiquem una llista per defecte que cobreix la gran majoria i més 
+
+     Les sopClass o també conegudes com AbstractSyntax és equivalent amb el Move quina acció volem fer per exemple
+     UID_MOVEStudyRootQueryRetrieveInformationModel, en el case del move, en el cas de StoreScu, el sopClass que tenim van en funció del tipus d'imatge
+     per exemple tenim ComputedRadiographyImageStorage, CTImageStore, etc.. aquestes sopClass indiquen  quin tipus d'imatge anirem a guardar, per això sinó
+     sabem de quin tipus de SOPClass són les imatges que anem a guardar al PACS, li indiquem una llista per defecte que cobreix la gran majoria i més
      comuns de SOPClass que existeixen */
 
     /*Amb l'Abstract syntax o SOPClass definim quina operació volem fer, i amb els transfer syntax indiquem amb quin protocol es farà
@@ -101,11 +101,11 @@ OFCondition PACSConnection::configureStore()
     int presentationContextID = 1;
 
     //Creem un presentation context per cada SOPClass que tinguem, indicant per cada SOPClass quina transfer syntax utilitzarem
-    /*En el cas del Store amb el presentation Context indiquem que per cada tipus d'imatge que volem guardar SOPClass amb quins 
+    /*En el cas del Store amb el presentation Context indiquem que per cada tipus d'imatge que volem guardar SOPClass amb quins
      *transfer syntax ens podem comunicar, llavors el PACS ens indicarà si ell pot guardar aquest tipus de SOPClass, i amb quin
      *transfer syntax li hem d'enviar la imatge*/
 
-    foreach(QString sopClass, sopClasses)
+    foreach (QString sopClass, sopClasses)
     {
         // No poden haver més de 255 presentation context
         if (presentationContextID > 255)
@@ -114,7 +114,7 @@ OFCondition PACSConnection::configureStore()
         }
 
         // sop class with preferred transfer syntax
-        condition = ASC_addPresentationContext(m_associationParameters, presentationContextID, qPrintable(sopClass), &preferredTransferSyntax, 1, ASC_SC_ROLE_DEFAULT); 
+        condition = ASC_addPresentationContext(m_associationParameters, presentationContextID, qPrintable(sopClass), &preferredTransferSyntax, 1, ASC_SC_ROLE_DEFAULT);
         presentationContextID += 2;   /* only odd presentation context id's */
         if (!condition.good())
         {
@@ -123,7 +123,7 @@ OFCondition PACSConnection::configureStore()
 
         if (fallbackSyntaxes.size() > 0)
         {
-            if (presentationContextID > 255) 
+            if (presentationContextID > 255)
             {
                 return ASC_BADPRESENTATIONCONTEXTID;
             }
@@ -147,12 +147,12 @@ OFCondition PACSConnection::addPresentationContext(int presentationContextId, co
     const char **transferSyntaxes = new const char*[transferSyntaxList.size()];
     int transferSyntaxCount = 0;
 
-    foreach(const char *transferSyntax, transferSyntaxList)
+    foreach (const char *transferSyntax, transferSyntaxList)
     {
         transferSyntaxes[transferSyntaxCount++] = transferSyntax;
     }
 
-    OFCondition condition = ASC_addPresentationContext(m_associationParameters, presentationContextId, qPrintable(abstractSyntax), transferSyntaxes, 
+    OFCondition condition = ASC_addPresentationContext(m_associationParameters, presentationContextId, qPrintable(abstractSyntax), transferSyntaxes,
         transferSyntaxCount, ASC_SC_ROLE_DEFAULT);
 
     delete[] transferSyntaxes;
@@ -178,7 +178,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
     //defineix el nivell de seguretat de la connexió en aquest cas diem que no utilitzem cap nivell de seguretat
     ASC_setTransportLayerType(m_associationParameters, OFFalse);
 
-    ASC_setPresentationAddresses(m_associationParameters, qPrintable(QHostInfo::localHostName()), 
+    ASC_setPresentationAddresses(m_associationParameters, qPrintable(QHostInfo::localHostName()),
         qPrintable(constructPacsServerAddress(pacsServiceToRequest, m_pacs)));
 
     //Especifiquem el timeout de connexió, si amb aquest temps no rebem resposta donem error per time out
@@ -186,7 +186,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
 
     switch (pacsServiceToRequest)
     {
-        case Echo: 
+        case Echo:
             condition = configureEcho();
             break;
         case Query:
@@ -203,7 +203,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
     if (!condition.good())
     {
         ERROR_LOG("S'ha produit un error al configurar la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
-            constructPacsServerAddress(pacsServiceToRequest, m_pacs) + ". Descripcio error: " + QString(condition.text())); 
+            constructPacsServerAddress(pacsServiceToRequest, m_pacs) + ". Descripcio error: " + QString(condition.text()));
         return false;
     }
 
@@ -212,7 +212,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
 
     if (m_associationNetwork == NULL)
     {
-        ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
+        ERROR_LOG("S'ha produit un error inicialitzant els parametres de la connexio. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
             constructPacsServerAddress(pacsServiceToRequest, m_pacs));
         return false;
     }
@@ -222,19 +222,19 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
 
     if (condition.good())
     {
-        if (ASC_countAcceptedPresentationContexts(m_associationParameters)  ==  0)
+        if (ASC_countAcceptedPresentationContexts(m_associationParameters) == 0)
         {
-            ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
+            ERROR_LOG("El PACS no ens ha acceptat cap dels Presentation Context presentats. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
                 constructPacsServerAddress(pacsServiceToRequest, m_pacs));
             return false;
         }
     }
     else
     {
-        ERROR_LOG( "S'ha produit un error al intentar connectar amb el PACS. AETitle: " + m_pacs.getAETitle() + ", adreca: " + 
-            constructPacsServerAddress(pacsServiceToRequest, m_pacs)+ ". Descripcio error: " + QString(condition.text()));
+        ERROR_LOG("S'ha produit un error al intentar connectar amb el PACS. AETitle: " + m_pacs.getAETitle() + ", adreca: " +
+            constructPacsServerAddress(pacsServiceToRequest, m_pacs) + ". Descripcio error: " + QString(condition.text()));
 
-        /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM, com no que podrem descarregar 
+        /*Si no hem pogut connectar al PACS i és una descàrrega haurem obert el port per rebre connexions entrants DICOM, com no que podrem descarregar
          les imatges perquè no hem pogut connectar amb el PACS per sol·licitar-ne la descarrega, tanquem el port local que espera per connexions entrants.*/
         if (pacsServiceToRequest == RetrieveDICOMFiles)
         {
@@ -244,7 +244,7 @@ bool PACSConnection::connectToPACS(PACSServiceToRequest pacsServiceToRequest)
         return false;
     }
 
-   return true;
+    return true;
 }
 
 void PACSConnection::disconnect()
@@ -254,7 +254,7 @@ void PACSConnection::disconnect()
     {
         ERROR_LOG("No s'ha pogut desconnectar del PACS, descripcio error: " + QString(condition.text()));
     }
-    
+
     condition = ASC_destroyAssociation(&m_dicomAssociation);
     if (condition.bad())
     {
@@ -286,7 +286,7 @@ QString PACSConnection::constructPacsServerAddress(PACSServiceToRequest pacsServ
         case PACSConnection::Echo:
             if (pacsDevice.isQueryRetrieveServiceEnabled())
             {
-                pacsServerAddress +=  QString().setNum(pacsDevice.getQueryRetrieveServicePort());
+                pacsServerAddress += QString().setNum(pacsDevice.getQueryRetrieveServicePort());
             }
             else if (pacsDevice.isStoreServiceEnabled())
             {
@@ -315,7 +315,7 @@ T_ASC_Network* PACSConnection::initializeAssociationNetwork(PACSServiceToRequest
     T_ASC_NetworkRole networkRole = pacsServiceToRequest == RetrieveDICOMFiles ? NET_ACCEPTORREQUESTOR : NET_REQUESTOR;
     T_ASC_Network *associationNetwork;
 
-    OFCondition condition = ASC_initializeNetwork(networkRole, networkPort , timeout, &associationNetwork);
+    OFCondition condition = ASC_initializeNetwork(networkRole, networkPort, timeout, &associationNetwork);
     if (!condition.good())
     {
         ERROR_LOG("No s'ha pogut inicialitzar l'objecte network, despripcio error" + QString(condition.text()));
@@ -327,7 +327,7 @@ T_ASC_Network* PACSConnection::initializeAssociationNetwork(PACSServiceToRequest
 
 void PACSConnection::getTransferSyntaxForFindOrMoveConnection(const char *transferSyntaxes[3])
 {
-    /* We prefer to use Explicitly encoded transfer syntaxes. If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax 
+    /* We prefer to use Explicitly encoded transfer syntaxes. If we are running on a Little Endian machine we prefer LittleEndianExplicitTransferSyntax
     to BigEndianTransferSyntax. Some SCP implementations will just select the first transfer syntax they support (this is not part of the standard) so
     organise the proposed transfer syntaxes to take advantage of such behaviour.
     The presentation presentationContextIDs proposed here are only used for C-FIND and C-MOVE, so there is no need to support compressed transmission. */

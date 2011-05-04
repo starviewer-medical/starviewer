@@ -5,9 +5,7 @@
 
 #include <vtkColorTransferFunction.h>
 
-
 namespace udg {
-
 
 template <>
 QColor lerp(const QColor &a, const QColor &b, double alpha)
@@ -21,24 +19,20 @@ QColor lerp(const QColor &a, const QColor &b, double alpha)
     return QColor::fromRgbF(red, green, blue);
 }
 
-
 ColorTransferFunction::ColorTransferFunction()
     : m_vtkColorTransferFunction(0)
 {
 }
-
 
 ColorTransferFunction::ColorTransferFunction(const ColorTransferFunction &colorTransferFunction)
     : TransferFunctionTemplate<QColor>(colorTransferFunction), m_vtkColorTransferFunction(0)
 {
 }
 
-
 ColorTransferFunction::~ColorTransferFunction()
 {
     if (m_vtkColorTransferFunction) m_vtkColorTransferFunction->Delete();
 }
-
 
 ColorTransferFunction& ColorTransferFunction::operator =(const ColorTransferFunction &colorTransferFunction)
 {
@@ -51,13 +45,11 @@ ColorTransferFunction& ColorTransferFunction::operator =(const ColorTransferFunc
     return *this;
 }
 
-
 void ColorTransferFunction::set(double x, const QColor &color)
 {
     Q_ASSERT(color.isValid());
     TransferFunctionTemplate<QColor>::set(x, color);
 }
-
 
 void ColorTransferFunction::set(double x, int red, int green, int blue)
 {
@@ -67,7 +59,6 @@ void ColorTransferFunction::set(double x, int red, int green, int blue)
     set(x, QColor(red, green, blue));
 }
 
-
 void ColorTransferFunction::set(double x, double red, double green, double blue)
 {
     Q_ASSERT(red >= 0.0 && red <= 1.0);
@@ -75,7 +66,6 @@ void ColorTransferFunction::set(double x, double red, double green, double blue)
     Q_ASSERT(blue >= 0.0 && blue <= 1.0);
     set(x, QColor::fromRgbF(red, green, blue));
 }
-
 
 vtkColorTransferFunction* ColorTransferFunction::vtkColorTransferFunction() const
 {
@@ -93,7 +83,6 @@ vtkColorTransferFunction* ColorTransferFunction::vtkColorTransferFunction() cons
     return m_vtkColorTransferFunction;
 }
 
-
 QString ColorTransferFunction::toString() const
 {
     QString string;
@@ -107,7 +96,6 @@ QString ColorTransferFunction::toString() const
 
     return string;
 }
-
 
 QVariant ColorTransferFunction::toVariant() const
 {
@@ -127,7 +115,6 @@ QVariant ColorTransferFunction::toVariant() const
     return variant;
 }
 
-
 ColorTransferFunction ColorTransferFunction::fromVariant(const QVariant &variant)
 {
     ColorTransferFunction colorTransferFunction;
@@ -144,6 +131,5 @@ ColorTransferFunction ColorTransferFunction::fromVariant(const QVariant &variant
 
     return colorTransferFunction;
 }
-
 
 } // namespace udg

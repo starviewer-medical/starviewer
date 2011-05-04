@@ -7,16 +7,16 @@
 
 namespace udg {
 
-QSeriesListWidget::QSeriesListWidget(QWidget *parent )
- : QWidget( parent )
+QSeriesListWidget::QSeriesListWidget(QWidget *parent)
+ : QWidget(parent)
 {
-    setupUi( this );
+    setupUi(this);
     QSize size;
 
     //Definim la mida de la imatge que mostrem
-    size.setHeight( scaledSeriesSizeY );
-    size.setWidth( scaledSeriesSizeX );
-    m_seriesListWidget->setIconSize( size );
+    size.setHeight(scaledSeriesSizeY);
+    size.setWidth(scaledSeriesSizeX);
+    m_seriesListWidget->setIconSize(size);
 
     createConnections();
 
@@ -26,38 +26,38 @@ QSeriesListWidget::QSeriesListWidget(QWidget *parent )
 
 void QSeriesListWidget::createConnections()
 {
-    connect( m_seriesListWidget , SIGNAL( itemClicked ( QListWidgetItem *) ) , SLOT( clicked( QListWidgetItem * ) ) );
-    connect( m_seriesListWidget , SIGNAL( itemDoubleClicked ( QListWidgetItem * ) ), SLOT( view(QListWidgetItem * ) ) );
+    connect(m_seriesListWidget, SIGNAL(itemClicked (QListWidgetItem *)), SLOT(clicked(QListWidgetItem *)));
+    connect(m_seriesListWidget, SIGNAL(itemDoubleClicked (QListWidgetItem *)), SLOT(view(QListWidgetItem *)));
 }
 
 void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
 {
-    QString text,num;
+    QString text, num;
     QListWidgetItem *item = new QListWidgetItem();
     QString statusTip;
 
-    text = tr( " Series " ) + series->getSeriesNumber();
+    text = tr(" Series ") + series->getSeriesNumber();
     if (series->getProtocolName().length() > 0)
     {//si hi ha descripció la inserim
         text += " " + series->getProtocolName();
     }
     text +="\n";
 
-    if(series->getNumberOfImages() > 0)
+    if (series->getNumberOfImages() > 0)
     {
         text += QString::number(series->getNumberOfImages());
         QString modality = series->getModality();
-        if( modality == "KO" )
+        if (modality == "KO")
             text += tr(" Key Object Note");
-        else if( modality == "PR" )
+        else if (modality == "PR")
             text += tr(" Presentation State");
-        else if( modality == "SR" )
+        else if (modality == "SR")
             text += tr(" Structured Report");
         else
             text += tr(" Images");
     }
 
-    QIcon  icon( series->getThumbnail() );
+    QIcon icon(series->getThumbnail());
 
     item->setText(text);
     item->setIcon(icon);
@@ -82,50 +82,49 @@ void QSeriesListWidget::insertSeries(QString studyInstanceUID, Series *series)
     }
 }
 
-void QSeriesListWidget::setCurrentSeries( const QString &seriesUID )
+void QSeriesListWidget::setCurrentSeries(const QString &seriesUID)
 {
     int index = 0;
     bool stop = false;
-    QList<QListWidgetItem *> llistaSeries =  m_seriesListWidget->findItems ( "" , Qt::MatchContains );
+    QList<QListWidgetItem *> llistaSeries = m_seriesListWidget->findItems ("", Qt::MatchContains);
 
-
-    while ( !stop && index < llistaSeries.count() )
+    while (!stop && index < llistaSeries.count())
     {
-        if ( llistaSeries.at( index )->statusTip() == seriesUID )
+        if (llistaSeries.at(index)->statusTip() == seriesUID)
         {
             stop = true;
         }
         else index++;
     }
-    if ( stop ) m_seriesListWidget->setCurrentItem( llistaSeries.at( index ) );
+    if (stop) m_seriesListWidget->setCurrentItem(llistaSeries.at(index));
 }
 
-void QSeriesListWidget::removeSeries( const QString &seriesInstanceUID )
+void QSeriesListWidget::removeSeries(const QString &seriesInstanceUID)
 {
     int index = 0;
     bool stop = false;
-    QList<QListWidgetItem *> llistaSeries =  m_seriesListWidget->findItems ( "" , Qt::MatchContains );
+    QList<QListWidgetItem *> llistaSeries = m_seriesListWidget->findItems("", Qt::MatchContains);
 
-    while ( !stop && index < llistaSeries.count() )
+    while (!stop && index < llistaSeries.count())
     {
-        if ( llistaSeries.at( index )->statusTip() == seriesInstanceUID )
+        if (llistaSeries.at(index)->statusTip() == seriesInstanceUID)
         {
             stop = true;
         }
         else index++;
     }
 
-    if ( stop ) delete llistaSeries.at( index );
+    if (stop) delete llistaSeries.at(index);
 }
 
-void QSeriesListWidget::clicked( QListWidgetItem *item )
+void QSeriesListWidget::clicked(QListWidgetItem *item)
 {
-     if ( item != NULL ) emit( selectedSeriesIcon( item->statusTip() ) );
+    if (item != NULL) emit(selectedSeriesIcon(item->statusTip()));
 }
 
-void QSeriesListWidget::view( QListWidgetItem *item )
+void QSeriesListWidget::view(QListWidgetItem *item)
 {
-    if ( item != NULL ) emit( viewSeriesIcon() );
+    if (item != NULL) emit(viewSeriesIcon());
 }
 
 QString QSeriesListWidget::getCurrentSeriesUID()

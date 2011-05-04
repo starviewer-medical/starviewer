@@ -11,7 +11,7 @@
 
 #include "status.h"
 
-namespace udg{
+namespace udg {
 
 DicomMask::DicomMask()
 {
@@ -43,7 +43,6 @@ void DicomMask::setPatientAge(const QString &patientAge)
 {
     m_patientAge = patientAge;
 }
-
 
 QString DicomMask::getPatientId() const
 {
@@ -234,7 +233,6 @@ QString DicomMask::getSeriesModality() const
     return m_seriesModality;
 }
 
-
 QString DicomMask::getSeriesProtocolName() const
 {
     return m_seriesProtocolName;
@@ -291,7 +289,7 @@ DcmDataset* DicomMask::getDicomMask()
 {
     DcmDataset *maskDcmDataset = new DcmDataset();
 
-    /*Especifiquem que per defecte l'Specific character set utilitzat per fer les consultes cap al PACS serà ISO_IR 100, és a dir Latin 1, ja que els PACS 
+    /*Especifiquem que per defecte l'Specific character set utilitzat per fer les consultes cap al PACS serà ISO_IR 100, és a dir Latin 1, ja que els PACS
      que utilitza l'IDI utilitzen aquesta codificació (és el que suporta dcm4chee), a més amb Latin1 és la codificació que utilitzen
      la majoria de països europeus. Per dubtes consultar C.12.1.1.2 on s'especifiquen quins Specific characters set, també és important
      consultar el conformance statement del PACS contra el que consultem per saber quin Specific character set suporta. Com que el character set és Latin1 haurem d
@@ -305,7 +303,7 @@ DcmDataset* DicomMask::getDicomMask()
     /*Especifiquem a quin nivell es fa el QueryRetrieve, a través del mètode getQueryRetrieveLevel, que ens retorna el nivell en funció dels camps de la màscara*/
     DcmElement *elem = newDicomElement(DCM_QueryRetrieveLevel);
     elem->putString(qPrintable(getQueryRetrieveLevel()));
-    maskDcmDataset->insert(elem , OFTrue);
+    maskDcmDataset->insert(elem, OFTrue);
 
     if (!getPatientId().isNull())
     {
@@ -325,126 +323,126 @@ DcmDataset* DicomMask::getDicomMask()
     {
         DcmElement *elem = newDicomElement(DCM_PatientsBirthDate);
         elem->putString(qPrintable(getPatientBirth()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getPatientSex().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_PatientsSex);
         elem->putString(qPrintable(getPatientSex()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getPatientAge().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_PatientsAge);
         elem->putString(qPrintable(getPatientAge()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getStudyId().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_StudyID);
         elem->putString(getStudyId().toLatin1().data());
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getStudyDescription().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_StudyDescription);
         elem->putString(getStudyDescription().toLatin1().data());
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getStudyModality().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_ModalitiesInStudy);
         elem->putString(qPrintable(getStudyModality()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getStudyDate().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_StudyDate);
         elem->putString(qPrintable(getStudyDate()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getStudyTime().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_StudyTime);
         elem->putString(qPrintable(getStudyTime()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getAccessionNumber().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_AccessionNumber);
         elem->putString(getAccessionNumber().toLatin1().data());
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getReferringPhysiciansName().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_ReferringPhysiciansName);
         elem->putString(getReferringPhysiciansName().toLatin1().data());
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getStudyInstanceUID().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_StudyInstanceUID);
         elem->putString(qPrintable(getStudyInstanceUID()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getSeriesNumber().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_SeriesNumber);
         elem->putString(qPrintable(getSeriesNumber()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getSeriesDate().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_SeriesDate);
         elem->putString(qPrintable(getSeriesDate()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getSeriesModality().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_Modality);
         elem->putString(qPrintable(getSeriesModality()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getSeriesTime().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_SeriesTime);
         elem->putString(qPrintable(getSeriesTime()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getSeriesDescription().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_SeriesDescription);
         elem->putString(getSeriesDescription().toLatin1().data());
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getSeriesProtocolName().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_ProtocolName);
         elem->putString(getSeriesProtocolName().toLatin1().data());
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getSeriesInstanceUID().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_SeriesInstanceUID);
         elem->putString(qPrintable(getSeriesInstanceUID()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getRequestedProcedureID().isNull() || !getScheduledProcedureStepID().isNull())
@@ -464,28 +462,28 @@ DcmDataset* DicomMask::getDicomMask()
     {
         DcmElement *elem = newDicomElement(DCM_PerformedProcedureStepStartDate);
         elem->putString(qPrintable(getPPSStartDate()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getPPSStartTime().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_PerformedProcedureStepStartTime);
         elem->putString(qPrintable(getPPSStartTime()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getSOPInstanceUID().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_SOPInstanceUID);
         elem->putString(qPrintable(getSOPInstanceUID()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     if (!getImageNumber().isNull())
     {
         DcmElement *elem = newDicomElement(DCM_InstanceNumber);
         elem->putString(qPrintable(getImageNumber()));
-        maskDcmDataset->insert(elem , OFTrue);
+        maskDcmDataset->insert(elem, OFTrue);
     }
 
     return maskDcmDataset;
@@ -493,7 +491,7 @@ DcmDataset* DicomMask::getDicomMask()
 
 bool DicomMask::operator ==(const DicomMask &mask)
 {
-    if(   getStudyInstanceUID() == mask.getStudyInstanceUID()
+    if (   getStudyInstanceUID() == mask.getStudyInstanceUID()
         && getPatientId() == mask.getPatientId()
         && getPatientName() == mask.getPatientName()
         && getPatientBirth() == mask.getPatientBirth()
@@ -518,8 +516,7 @@ bool DicomMask::operator ==(const DicomMask &mask)
         && getPPSStartDate() == mask.getPPSStartDate()
         && getPPSStartTime() == mask.getPPSStartTime()
         && getImageNumber() == mask.getImageNumber()
-        && getSOPInstanceUID() == mask.getSOPInstanceUID()
-   )
+        && getSOPInstanceUID() == mask.getSOPInstanceUID())
         return true;
     else
         return false;
@@ -556,7 +553,7 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
     if (!mask.getSeriesTime().isNull() && getSeriesTime().isEmpty()) returnDicomMask.setSeriesTime(mask.getSeriesTime());
     if (!mask.getSeriesInstanceUID().isNull() && getSeriesInstanceUID().isEmpty()) returnDicomMask.setSeriesInstanceUID(mask.getSeriesInstanceUID());
     if (!mask.getRequestedProcedureID().isNull() && getRequestedProcedureID().isEmpty() &&
-        !mask.getScheduledProcedureStepID().isNull() && getScheduledProcedureStepID().isEmpty()) 
+        !mask.getScheduledProcedureStepID().isNull() && getScheduledProcedureStepID().isEmpty())
     {
         returnDicomMask.setRequestAttributeSequence(mask.getRequestedProcedureID(), mask.getScheduledProcedureStepID());
     }
@@ -574,20 +571,20 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
 bool DicomMask::isEmpty()
 {
     bool empty = m_patientId.isEmpty() && m_patientName.isEmpty() && m_patientBirth.isEmpty() && m_patientSex.isEmpty() &&
-                 m_patientAge.isEmpty() && m_studyId.isEmpty() && m_studyDate.isEmpty() && m_studyTime.isEmpty() && 
-                 m_studyDescription.isEmpty() && m_studyModality.isEmpty() && m_studyInstanceUID.isEmpty() && m_accessionNumber.isEmpty() && 
-                 m_referringPhysiciansName.isEmpty() && m_seriesNumber.isEmpty() && m_seriesDate.isEmpty() && m_seriesTime.isEmpty() && 
-                 m_seriesModality.isEmpty() && m_seriesDescription.isEmpty() && m_seriesProtocolName.isEmpty() && m_seriesInstanceUID.isEmpty() && 
-                 m_requestedProcedureID.isEmpty() && m_scheduledProcedureStepID.isEmpty() && m_PPSStartDate.isEmpty() && 
+                 m_patientAge.isEmpty() && m_studyId.isEmpty() && m_studyDate.isEmpty() && m_studyTime.isEmpty() &&
+                 m_studyDescription.isEmpty() && m_studyModality.isEmpty() && m_studyInstanceUID.isEmpty() && m_accessionNumber.isEmpty() &&
+                 m_referringPhysiciansName.isEmpty() && m_seriesNumber.isEmpty() && m_seriesDate.isEmpty() && m_seriesTime.isEmpty() &&
+                 m_seriesModality.isEmpty() && m_seriesDescription.isEmpty() && m_seriesProtocolName.isEmpty() && m_seriesInstanceUID.isEmpty() &&
+                 m_requestedProcedureID.isEmpty() && m_scheduledProcedureStepID.isEmpty() && m_PPSStartDate.isEmpty() &&
                  m_PPSStartTime.isEmpty() && m_SOPInstanceUID.isEmpty() && m_imageNumber.isEmpty();
-    
+
     return empty;
 }
 
 QString DicomMask::getQueryRetrieveLevel()
 {
     bool isImageLevel = !getSOPInstanceUID().isNull() || !getImageNumber().isNull();
-    bool isSeriesLevel = !getSeriesDescription().isNull()  || !getSeriesDate().isNull() || !getSeriesModality().isNull() ||
+    bool isSeriesLevel = !getSeriesDescription().isNull() || !getSeriesDate().isNull() || !getSeriesModality().isNull() ||
                          !getSeriesNumber().isNull() || !getSeriesProtocolName().isNull() || !getSeriesTime().isNull() ||
                          !getSeriesInstanceUID().isNull() || !getRequestedProcedureID().isNull() || !getScheduledProcedureStepID().isNull() ||
                          !getPPSStartDate().isNull() || !getPPSStartTime().isNull();
@@ -606,94 +603,93 @@ QString DicomMask::getQueryRetrieveLevel()
 QString DicomMask::getFilledMaskFields() const
 {
     QString maskFields;
-    
-    if( !QString(m_patientId).remove("*").isEmpty() )
+
+    if (!QString(m_patientId).remove("*").isEmpty())
         maskFields += "Patient_ID=[#*#] ";
-    if( !QString(m_patientName).remove("*").isEmpty() )
+    if (!QString(m_patientName).remove("*").isEmpty())
         maskFields += "Patient_Name=[#*#] ";
-    if( !QString(m_patientBirth).remove("*").isEmpty() )
+    if (!QString(m_patientBirth).remove("*").isEmpty())
         maskFields += "Patient_Birth=[#*#] ";
-    if( !QString(m_patientSex).remove("*").isEmpty() )
+    if (!QString(m_patientSex).remove("*").isEmpty())
         maskFields += "Patient_Sex=[" + m_patientSex + "] ";
-    if( !QString(m_patientAge).remove("*").isEmpty() )
+    if (!QString(m_patientAge).remove("*").isEmpty())
         maskFields += "Patient_Age=[" + m_patientAge + "] ";
-    if( !QString(m_studyId).remove("*").isEmpty() )
+    if (!QString(m_studyId).remove("*").isEmpty())
         maskFields += "Study_ID=[#*#] ";
     // en el cas de la data fem un tractament especial per fer-ho més llegible i amb més informació
-    if( !QString(m_studyDate).remove("*").isEmpty() )
+    if (!QString(m_studyDate).remove("*").isEmpty())
     {
         QDate date;
         QDate today = QDate::currentDate();
         QDate yesterday = QDate::currentDate().addDays(-1);
         QStringList formattedDates;
         maskFields += "Study_Date=[";
-        
+
         // si tenim un rang de dates estaran separades per el guió "-"
-        // TODO encara no sabem traduir si el rang és només "desde" o "fins" una data 
+        // TODO encara no sabem traduir si el rang és només "desde" o "fins" una data
         // per exemple [20090512-] (desde), [-20090611] (fins), i ens ho mostrarà com una data única
-        QStringList datesList = m_studyDate.split( "-", QString::SkipEmptyParts );
+        QStringList datesList = m_studyDate.split("-", QString::SkipEmptyParts);
         // "traduim" less dates a un format mé llegible
-        foreach( QString dateString, datesList )
+        foreach (QString dateString, datesList)
         {
-            date = QDate::fromString( dateString, "yyyyMMdd" );
-            if( date == today )
+            date = QDate::fromString(dateString, "yyyyMMdd");
+            if (date == today)
                 formattedDates << "Today";
-            else if( date == yesterday )
+            else if (date == yesterday)
                 formattedDates << "Yesterday";
             else
                 formattedDates << date.toString("dd/MM/yyyy") + " (" + QString::number(date.daysTo(today)) + " days ago)";
         }
-        
-        if( formattedDates.count() == 2 )
+
+        if (formattedDates.count() == 2)
         {
             maskFields += "From " + formattedDates.at(0) + " to " + formattedDates.at(1) + "]";
         }
         else
             maskFields += formattedDates.at(0) + "]";
-        
+
     }
 
-    if( !QString(m_studyTime).remove("*").isEmpty() )
+    if (!QString(m_studyTime).remove("*").isEmpty())
         maskFields += "Study_Time=[" + m_studyTime + "] ";
-    if( !QString(m_studyDescription).remove("*").isEmpty() )
+    if (!QString(m_studyDescription).remove("*").isEmpty())
         maskFields += "Study_Description=[" + m_studyDescription + "] ";
-    if( !QString(m_studyModality).remove("*").isEmpty() )
+    if (!QString(m_studyModality).remove("*").isEmpty())
         maskFields += "Study_Modality=[" + m_studyModality + "] ";
-    if( !QString(m_studyInstanceUID).remove("*").isEmpty() )
+    if (!QString(m_studyInstanceUID).remove("*").isEmpty())
         maskFields += "Study_UID=[#*#] ";
-    if( !QString(m_accessionNumber).remove("*").isEmpty() )
+    if (!QString(m_accessionNumber).remove("*").isEmpty())
         maskFields += "Accession_Number=[#*#] ";
-    if( !QString(m_referringPhysiciansName).remove("*").isEmpty() )
+    if (!QString(m_referringPhysiciansName).remove("*").isEmpty())
         maskFields += "Referring_PhysiciansName=[#*#] ";
-    if( !QString(m_seriesNumber).remove("*").isEmpty() )
+    if (!QString(m_seriesNumber).remove("*").isEmpty())
         maskFields += "Series_Number=[#*#] ";
-    if( !QString(m_seriesDate).remove("*").isEmpty() )
+    if (!QString(m_seriesDate).remove("*").isEmpty())
         maskFields += "Series_Date=[" + m_seriesDate + "] ";
-    if( !QString(m_seriesTime).remove("*").isEmpty() )
+    if (!QString(m_seriesTime).remove("*").isEmpty())
         maskFields += "Series_Time=[" + m_seriesTime + "] ";
-    if( !QString(m_seriesModality).remove("*").isEmpty() )
+    if (!QString(m_seriesModality).remove("*").isEmpty())
         maskFields += "Series_Modality=[" + m_seriesModality + "] ";
-    if( !QString(m_seriesDescription).remove("*").isEmpty() )
+    if (!QString(m_seriesDescription).remove("*").isEmpty())
         maskFields += "Series_Description=[" + m_seriesDescription + "] ";
-    if( !QString(m_seriesProtocolName).remove("*").isEmpty() )
+    if (!QString(m_seriesProtocolName).remove("*").isEmpty())
         maskFields += "Series_Protocol_Name=[" + m_seriesProtocolName + "] ";
-    if( !QString(m_seriesInstanceUID).remove("*").isEmpty() )
+    if (!QString(m_seriesInstanceUID).remove("*").isEmpty())
         maskFields += "Series_UID=[#*#] ";
-    if( !QString(m_requestedProcedureID).remove("*").isEmpty() )
+    if (!QString(m_requestedProcedureID).remove("*").isEmpty())
         maskFields += "Requested_Procedure_ID=[#*#] ";
-    if( !QString(m_scheduledProcedureStepID).remove("*").isEmpty() )
+    if (!QString(m_scheduledProcedureStepID).remove("*").isEmpty())
         maskFields += "Scheduled_Procedure_Step_ID=[#*#] ";
-    if( !QString(m_PPSStartDate).remove("*").isEmpty() )
+    if (!QString(m_PPSStartDate).remove("*").isEmpty())
         maskFields += "PPS_Start_Date=[#*#] ";
-    if( !QString(m_PPSStartTime).remove("*").isEmpty() )
+    if (!QString(m_PPSStartTime).remove("*").isEmpty())
         maskFields += "PPS_Start_Time=[#*#] ";
-    if( !QString(m_SOPInstanceUID).remove("*").isEmpty() )
+    if (!QString(m_SOPInstanceUID).remove("*").isEmpty())
         maskFields += "SOP_Instance_UID=[#*#] ";
-    if( !QString(m_imageNumber).remove("*").isEmpty() )
+    if (!QString(m_imageNumber).remove("*").isEmpty())
         maskFields += "Image_Number=[" + m_imageNumber + "] ";
 
     return maskFields;
 }
 
 };
-

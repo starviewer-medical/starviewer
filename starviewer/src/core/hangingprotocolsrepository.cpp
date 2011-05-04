@@ -6,10 +6,8 @@ HangingProtocolsRepository::HangingProtocolsRepository()
 {
 }
 
-
 HangingProtocolsRepository::~HangingProtocolsRepository()
 {
 }
-
 
 }

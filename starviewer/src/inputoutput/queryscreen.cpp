@@ -40,7 +40,7 @@ QueryScreen::QueryScreen(QWidget *parent)
     initialize();
     // Connectem signals i slots
     createConnections();
-    // Fa les comprovacions necessaries per poder executar la QueryScreen de forma correcte   
+    // Fa les comprovacions necessaries per poder executar la QueryScreen de forma correcte
     checkRequeriments();
 
     readSettings();
@@ -57,15 +57,15 @@ QueryScreen::QueryScreen(QWidget *parent)
     m_tab->removeTab(1);
 #else
     // L'engeguem després d'haver fet els connects, no es pot fer abans, perquè per exemple en el cas que tinguem un error
-    // perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut 
+    // perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut
     // temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
-    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
+    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
     {
         m_risRequestManager->listen();
     }
 #endif
 
-    m_statsWatcher = new StatsWatcher("QueryScreen",this);
+    m_statsWatcher = new StatsWatcher("QueryScreen", this);
     m_statsWatcher->addClicksCounter(m_operationListToolButton);
     m_statsWatcher->addClicksCounter(m_showPACSNodesToolButton);
     m_statsWatcher->addClicksCounter(m_createDICOMDIRToolButton);
@@ -79,7 +79,7 @@ QueryScreen::~QueryScreen()
 #ifndef STARVIEWER_LITE
     if (m_pacsManager->isExecutingPACSJob())
     {
-        // Si hi ha PacsJob executant-se demanem cancel·lar i mostrem un QProgressDialog mentre s'estan 
+        // Si hi ha PacsJob executant-se demanem cancel·lar i mostrem un QProgressDialog mentre s'estan
         // abortant el Jobs si en 15 segons no s'han abortat continuem amb la destrucció de la classe
         m_pacsManager->requestCancelAllPACSJobs();
         showQProgressDialogUntilNoPACSJobsAreExecuting(15000);
@@ -108,7 +108,7 @@ void QueryScreen::initialize()
     m_qInputOutputLocalDatabaseWidget->setPacsManager(m_pacsManager);
     m_qInputOutputPacsWidget->setPacsManager(m_pacsManager);
     m_operationStateScreen->setPacsManager(m_pacsManager);
-    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool()) 
+    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
     {
         m_risRequestManager = new RISRequestManager(m_pacsManager);
     }
@@ -139,7 +139,7 @@ void QueryScreen::createConnections()
     connect(m_searchButton, SIGNAL(clicked()), SLOT(searchStudy()));
     connect(m_clearToolButton, SIGNAL(clicked()), SLOT(clearTexts()));
 #ifndef STARVIEWER_LITE
-    connect(m_operationListToolButton, SIGNAL(clicked()) , SLOT(showOperationStateScreen()));
+    connect(m_operationListToolButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesToolButton, SIGNAL(toggled(bool)), m_PACSNodes, SLOT(setVisible(bool)));
     connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob *)), SLOT(newPACSJobEnqueued(PACSJob*)));
     if (m_risRequestManager != NULL)
@@ -152,7 +152,7 @@ void QueryScreen::createConnections()
     connect(m_createDICOMDIRToolButton, SIGNAL(clicked()), m_qcreateDicomdir, SLOT(show()));
 
     // Es canvia de pestanya del TAB
-    connect(m_tab , SIGNAL(currentChanged(int)), SLOT(refreshTab(int)));
+    connect(m_tab, SIGNAL(currentChanged(int)), SLOT(refreshTab(int)));
 
     // Amaga o ensenya la cerca avançada
     connect(m_advancedSearchToolButton, SIGNAL(toggled(bool)), SLOT(setAdvancedSearchVisible(bool)));
@@ -161,7 +161,7 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
 
-    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>,bool)), SLOT(viewPatients(QList<Patient*>,bool)));
+    connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>, bool)), SLOT(viewPatients(QList<Patient*>, bool)));
 
     connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadRetrievedStudyFromPacs(QString)));
@@ -214,12 +214,12 @@ void QueryScreen::setAdvancedSearchVisible(bool visible)
 
     if (visible)
     {
-        m_advancedSearchToolButton->setText(m_advancedSearchToolButton->text().replace(">>","<<"));
+        m_advancedSearchToolButton->setText(m_advancedSearchToolButton->text().replace(">>", "<<"));
     }
     else
     {
         m_qadvancedSearchWidget->clear();
-        m_advancedSearchToolButton->setText(m_advancedSearchToolButton->text().replace("<<",">>"));
+        m_advancedSearchToolButton->setText(m_advancedSearchToolButton->text().replace("<<", ">>"));
     }
 }
 
@@ -343,7 +343,7 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView, bool loadOnly
         this->close();
     }
 
-    emit selectedPatients(listPatientsToView,loadOnly);
+    emit selectedPatients(listPatientsToView, loadOnly);
 }
 
 #ifndef STARVIEWER_LITE
@@ -379,9 +379,9 @@ DicomMask QueryScreen::buildDicomMask()
 void QueryScreen::closeEvent(QCloseEvent* event)
 {
     // Guardem els settings
-    writeSettings(); 
+    writeSettings();
 
-    // TODO: Des del desctructor d'ExtensionHander quan no queda cap més QApplicationMaingWindow oberta s'invoca el mètode close de la QueryScreen perquè es 
+    // TODO: Des del desctructor d'ExtensionHander quan no queda cap més QApplicationMaingWindow oberta s'invoca el mètode close de la QueryScreen perquè es
     // tanquin totes les finestres depenents de la QueryScreen, això provoca que es llenci el signal lastWindowClosed el qual hi responem invocant
     // el mètode quit des de main.cpp. Per això quan s'invoca el mètode close() de la QueryScreen és necessari tancar totes les finestres obertes
     // des de la QueryScreen perquè Starviewer es tanqui en cas que no hi ha hagi cap visor QApplicationMainWindow.
@@ -396,7 +396,7 @@ void QueryScreen::closeEvent(QCloseEvent* event)
 void QueryScreen::readSettings()
 {
     Settings settings;
-    settings.restoreGeometry(InputOutputSettings::QueryScreenGeometry,this);
+    settings.restoreGeometry(InputOutputSettings::QueryScreenGeometry, this);
     // Aquesta clau substitueix les obsoletes "queryScreenWindowPositionX", "queryScreenWindowPositionY", "queryScreenWindowWidth" i "queryScreenWindowHeight"
     // que tenien les claus /interface/queryscreen/ + windowPositionX, windowPositionY, windowWidth i windowHeigth respectivament
     // TODO fer neteja d'aquestes claus antigues amb la migració de dades
@@ -439,7 +439,7 @@ void QueryScreen::studyRetrieveFailedSlot(QString studyInstanceUID)
         emit studyRetrieveFailed(studyInstanceUID);
     }
 }
-	
+
 void QueryScreen::studyRetrieveFinishedSlot(QString studyInstanceUID)
 {
     if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
@@ -476,8 +476,8 @@ void QueryScreen::newPACSJobEnqueued(PACSJob *pacsJob)
 
 void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
 {
-    // No podem utilitzar isExecutingPACSJob per controlar si hi ha jobs pendents d'executar, perquè algunes vegades ens 
-    // hem trobat que tot i no tenir cap job pendent d'executar, el mètode respón que hi ha algun job executant-se. 
+    // No podem utilitzar isExecutingPACSJob per controlar si hi ha jobs pendents d'executar, perquè algunes vegades ens
+    // hem trobat que tot i no tenir cap job pendent d'executar, el mètode respón que hi ha algun job executant-se.
     // Això passa algunes vegades quan s'aten el signal PACSJobFinished d'un job de seguida i es pregunta al mètode isExecutingPACSJob
     // si hi ha jobs executant-se, semblaria que tot i haver finalitzar l'últim job pendent ThreadWeaver està acabant de fer
     // alguna acció i per això indica que hi ha jobs executant-se
@@ -510,4 +510,3 @@ void QueryScreen::showQProgressDialogUntilNoPACSJobsAreExecuting(int timeoutMs)
 #endif
 
 };
-
