@@ -10,7 +10,6 @@ QCudaRenderWindow::QCudaRenderWindow(QColor backgroundColor, int renderSize)
     makeCurrent();
 
     GLenum glew = glewInit();
-
     if (glew != GLEW_OK)
     {
         DEBUG_LOG("No s'ha pogut inicialitzar GLEW");
