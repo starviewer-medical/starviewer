@@ -128,11 +128,9 @@ void QViewpointDistributionWidget::createConnections()
 {
     connect(m_uniformRadioButton, SIGNAL(toggled(bool)), m_uniformNumberOfViewpointsLabel, SLOT(setEnabled(bool)));
     connect(m_uniformRadioButton, SIGNAL(toggled(bool)), m_uniformNumberOfViewpointsComboBox, SLOT(setEnabled(bool)));
-
     connect(m_quasiUniformRadioButton, SIGNAL(toggled(bool)), m_quasiUniformRecursionLevelLabel, SLOT(setEnabled(bool)));
     connect(m_quasiUniformRadioButton, SIGNAL(toggled(bool)), m_quasiUniformRecursionLevelSpinBox, SLOT(setEnabled(bool)));
     connect(m_quasiUniformRadioButton, SIGNAL(toggled(bool)), m_quasiUniformNumberOfViewpointsLabel, SLOT(setEnabled(bool)));
-
     connect(m_uniformRadioButton, SIGNAL(toggled(bool)), SLOT(updateNumberOfViewpoints()));
     connect(m_uniformNumberOfViewpointsComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateNumberOfViewpoints()));
     connect(m_quasiUniformRecursionLevelSpinBox, SIGNAL(valueChanged(int)), SLOT(updateNumberOfViewpoints()));
