@@ -98,11 +98,9 @@ void VolumeReslicer::reslice(bool saveMhd, bool doClip, int maxRange)
     int dimensions[3];
     resliced->GetDimensions(dimensions);
     int minX, maxX, minY, maxY, minZ, maxZ;
-
     findExtent(data, dimensions[0], dimensions[1], dimensions[2], increments[0], increments[1], increments[2], minX, maxX);
     findExtent(data, dimensions[1], dimensions[0], dimensions[2], increments[1], increments[0], increments[2], minY, maxY);
     findExtent(data, dimensions[2], dimensions[0], dimensions[1], increments[2], increments[0], increments[1], minZ, maxZ);
-
     DEBUG_LOG(QString("minX = %1, maxX = %2").arg(minX).arg(maxX));
     DEBUG_LOG(QString("minY = %1, maxY = %2").arg(minY).arg(maxY));
     DEBUG_LOG(QString("minZ = %1, maxZ = %2").arg(minZ).arg(maxZ));
@@ -132,12 +130,10 @@ void VolumeReslicer::reslice(bool saveMhd, bool doClip, int maxRange)
     if (maxRange > 0 && max >= maxRange)
     {
         int max1 = max + 1;
-
         for (int i = 0; i < m_reslicedDataSize; i++)
         {
             m_reslicedData[i] = m_reslicedData[i] * maxRange / max1;
         }
-
         max = maxRange - 1;
         m_reslicedImage->GetPointData()->GetScalars()->Modified();  // perquè s'actualitzi l'scalar range
     }
@@ -474,7 +470,6 @@ double VolumeReslicer::sliceDissimilarity(int slice1, int slice2) const
     double volume2 = s2.volume;
     double totalVolume = volume1 + volume2;
     double pi1, pi2;
-
     if (totalVolume > 0.0)
     {
         pi1 = volume1 / totalVolume;
@@ -484,7 +479,6 @@ double VolumeReslicer::sliceDissimilarity(int slice1, int slice2) const
     {
         pi1 = pi2 = 0.0;
     }
-
     return InformationTheory::jensenShannonDivergence(pi1, pi2, s1.probabilities, s2.probabilities);
 }
 
@@ -521,7 +515,6 @@ double VolumeReslicer::propertyDissimilarity(int property1, int property2) const
     double volume2 = p2.volume;
     double totalVolume = volume1 + volume2;
     double pi1, pi2;
-
     if (totalVolume > 0.0)
     {
         pi1 = volume1 / totalVolume;
@@ -531,7 +524,6 @@ double VolumeReslicer::propertyDissimilarity(int property1, int property2) const
     {
         pi1 = pi2 = 0.0;
     }
-
     return InformationTheory::jensenShannonDivergence(pi1, pi2, p1.sliceProbabilities, p2.sliceProbabilities);
 }
 
