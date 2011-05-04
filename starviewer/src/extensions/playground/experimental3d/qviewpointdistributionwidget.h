@@ -3,9 +3,9 @@
 
 #include "ui_qviewpointdistributionwidgetbase.h"
 
-#include <QVector>
-
 #include "vector3.h"
+
+#include <QVector>
 
 namespace udg {
 
