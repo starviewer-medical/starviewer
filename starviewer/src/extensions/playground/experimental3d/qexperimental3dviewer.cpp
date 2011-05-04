@@ -1,5 +1,8 @@
 #include "qexperimental3dviewer.h"
 
+#include "abortrendercommand.h"
+#include "experimental3dvolume.h"
+
 #include <QVTKWidget.h>
 
 #include <vtkCamera.h>
@@ -10,9 +13,6 @@
 #include <vtkRenderer.h>
 #include <vtkUnsignedCharArray.h>
 #include <vtkVolumeRayCastMapper.h>
-
-#include "abortrendercommand.h"
-#include "experimental3dvolume.h"
 
 namespace udg {
 
