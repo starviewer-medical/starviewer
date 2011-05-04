@@ -12,7 +12,7 @@ namespace udg {
 class ViewpointGenerator;
 
 /**
- * Widget que permet seleccionar un nombre de punts de vista distribuïts uniformement o quasi-uniforme.
+    Widget que permet seleccionar un nombre de punts de vista distribuïts uniformement o quasi-uniforme.
  */
 class QViewpointDistributionWidget : public QWidget, private ::Ui::QViewpointDistributionWidgetBase {
 
