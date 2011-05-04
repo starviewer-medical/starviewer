@@ -89,8 +89,14 @@ Experimental3DVolume::~Experimental3DVolume()
     m_property->Delete();
     m_volume->Delete();
 
-    if (m_finiteDifferenceGradientEstimator) m_finiteDifferenceGradientEstimator->Delete();
-    if (m_4DLinearRegressionGradientEstimator) m_4DLinearRegressionGradientEstimator->Delete();
+    if (m_finiteDifferenceGradientEstimator)
+    {
+        m_finiteDifferenceGradientEstimator->Delete();
+    }
+    if (m_4DLinearRegressionGradientEstimator)
+    {
+        m_4DLinearRegressionGradientEstimator->Delete();
+    }
 }
 
 void Experimental3DVolume::setAlternativeImage(vtkImageData *alternativeImage)
@@ -167,20 +173,26 @@ void Experimental3DVolume::setGradientEstimator(GradientEstimator gradientEstima
     {
         case FiniteDifference:
             if (!m_finiteDifferenceGradientEstimator)
+            {
                 m_finiteDifferenceGradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
+            }
             m_cpuRayCastMapper->SetGradientEstimator(m_finiteDifferenceGradientEstimator);
             m_finiteDifferenceGradientEstimator->SetInput(m_alternativeImage ? m_alternativeImage : m_image);
             break;
         case FourDLInearRegression1:
             if (!m_4DLinearRegressionGradientEstimator)
+            {
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+            }
             m_4DLinearRegressionGradientEstimator->SetRadius(1);
             m_cpuRayCastMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
             m_4DLinearRegressionGradientEstimator->SetInput(m_alternativeImage ? m_alternativeImage : m_image);
             break;
         case FourDLInearRegression2:
             if (!m_4DLinearRegressionGradientEstimator)
+            {
                 m_4DLinearRegressionGradientEstimator = vtk4DLinearRegressionGradientEstimator::New();
+            }
             m_4DLinearRegressionGradientEstimator->SetRadius(2);
             m_cpuRayCastMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
             m_4DLinearRegressionGradientEstimator->SetInput(m_alternativeImage ? m_alternativeImage : m_image);
@@ -199,7 +211,10 @@ void Experimental3DVolume::addAmbientLighting()
 {
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_simpleVolumeRayCastFunction);
     m_shaderVolumeRayCastFunction->AddVoxelShader(m_ambientVoxelShader);
-    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_ambientVoxelShader) == 0) m_volume->SetMapper(m_gpuRayCastMapper);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_ambientVoxelShader) == 0)
+    {
+        m_volume->SetMapper(m_gpuRayCastMapper);
+    }
     m_property->ShadeOff();
     if (m_alternativeImage)
     {
@@ -211,7 +226,10 @@ void Experimental3DVolume::addFullLighting(double ambient, double diffuse, doubl
 {
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_simpleVolumeRayCastFunction);
     m_shaderVolumeRayCastFunction->AddVoxelShader(m_directIlluminationVoxelShader);
-    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_directIlluminationVoxelShader) == 0) m_volume->SetMapper(m_gpuRayCastMapper);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_directIlluminationVoxelShader) == 0)
+    {
+        m_volume->SetMapper(m_gpuRayCastMapper);
+    }
     m_property->ShadeOn();
     m_property->SetAmbient(ambient);
     m_property->SetDiffuse(diffuse);
@@ -235,7 +253,10 @@ void Experimental3DVolume::addFullLighting(double ambient, double diffuse, doubl
 void Experimental3DVolume::addCoolWarm(float b, float y, float alpha, float beta)
 {
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_shaderVolumeRayCastFunction);
-    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_coolWarmVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_coolWarmVoxelShader);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_coolWarmVoxelShader) < 0)
+    {
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_coolWarmVoxelShader);
+    }
     m_coolWarmVoxelShader->setGradientEstimator(gradientEstimator());
     m_coolWarmVoxelShader->setBYAlphaBeta(b, y, alpha, beta);
     m_coolWarmVoxelShader->setCombine(m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_coolWarmVoxelShader) != 0);
@@ -325,7 +346,10 @@ void Experimental3DVolume::forceCpuShaderRendering()
     m_volume->SetMapper(m_cpuRayCastMapper);
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_shaderVolumeRayCastFunction);
     // fem això perquè el mapper no ens foti enlaire les trampes perquè el gradient sigui el d'm_alternativeImage
-    if (m_alternativeImage) m_property->ShadeOff();
+    if (m_alternativeImage)
+    {
+        m_property->ShadeOff();
+    }
 }
 
 void Experimental3DVolume::startVmiMode()
@@ -354,7 +378,10 @@ float Experimental3DVolume::viewedVolumeInVmiSecondPass() const
 void Experimental3DVolume::addVomi(const QVector<float> &vomi, float minimumVomi, float maximumVomi, float factor, bool additive, float weight)
 {
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_shaderVolumeRayCastFunction);
-    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_vomiVoxelShader);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiVoxelShader) < 0)
+    {
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_vomiVoxelShader);
+    }
     m_vomiVoxelShader->setVomi(vomi, minimumVomi, maximumVomi, factor);
     m_vomiVoxelShader->setCombine(m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiVoxelShader) != 0);
     m_vomiVoxelShader->setAdditive(additive, weight);
@@ -364,7 +391,10 @@ void Experimental3DVolume::addVomi(const QVector<float> &vomi, float minimumVomi
 void Experimental3DVolume::addVomiGamma(const QVector<float> &vomi, float maximumVomi, float factor, float gamma, bool additive, float weight)
 {
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_shaderVolumeRayCastFunction);
-    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiGammaVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_vomiGammaVoxelShader);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiGammaVoxelShader) < 0)
+    {
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_vomiGammaVoxelShader);
+    }
     m_vomiGammaVoxelShader->setVomi(vomi, maximumVomi, factor, gamma);
     m_vomiGammaVoxelShader->setAdditive(additive, weight);
     m_volume->SetMapper(m_cpuRayCastMapper);
@@ -374,7 +404,9 @@ void Experimental3DVolume::addVomiCoolWarm(const QVector<float> &vomi, float max
 {
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_shaderVolumeRayCastFunction);
     if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_vomiCoolWarmVoxelShader) < 0)
+    {
         m_shaderVolumeRayCastFunction->AddVoxelShader(m_vomiCoolWarmVoxelShader);
+    }
     m_vomiCoolWarmVoxelShader->setVomi(vomi, maximumVomi, factor);
     m_vomiCoolWarmVoxelShader->setYB(y, b);
     m_volume->SetMapper(m_cpuRayCastMapper);
@@ -383,7 +415,10 @@ void Experimental3DVolume::addVomiCoolWarm(const QVector<float> &vomi, float max
 void Experimental3DVolume::addColorVomi(const QVector<Vector3Float> &colorVomi, float maximumColorVomi, float factor)
 {
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_shaderVolumeRayCastFunction);
-    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_colorVomiVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_colorVomiVoxelShader);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_colorVomiVoxelShader) < 0)
+    {
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_colorVomiVoxelShader);
+    }
     m_colorVomiVoxelShader->setColorVomi(colorVomi, maximumColorVomi, factor);
     m_volume->SetMapper(m_cpuRayCastMapper);
 }
@@ -391,7 +426,10 @@ void Experimental3DVolume::addColorVomi(const QVector<Vector3Float> &colorVomi, 
 void Experimental3DVolume::addImi(const QVector<float> &imi, float maximumImi, float factor, bool additive, float weight)
 {
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_shaderVolumeRayCastFunction);
-    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_imiVoxelShader) < 0) m_shaderVolumeRayCastFunction->AddVoxelShader(m_imiVoxelShader);
+    if (m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_imiVoxelShader) < 0)
+    {
+        m_shaderVolumeRayCastFunction->AddVoxelShader(m_imiVoxelShader);
+    }
     m_imiVoxelShader->setImi(imi, maximumImi, factor);
     m_imiVoxelShader->setCombine(m_shaderVolumeRayCastFunction->IndexOfVoxelShader(m_imiVoxelShader) != 0);
     m_imiVoxelShader->setAdditive(additive, weight);
@@ -441,8 +479,17 @@ QVector<float> Experimental3DVolume::computeVomiGradient(const QVector<float> &v
 
     QVector<float> vomiGradient(m_dataSize);
     float maxVomiGradient = 0.0f;
-    for (unsigned int i = 0; i < m_dataSize; i++) if (gradientMagnitudes[i] > maxVomiGradient) maxVomiGradient = gradientMagnitudes[i];
-    for (unsigned int i = 0; i < m_dataSize; i++) vomiGradient[i] = gradientMagnitudes[i] / maxVomiGradient;
+    for (unsigned int i = 0; i < m_dataSize; i++)
+    {
+        if (gradientMagnitudes[i] > maxVomiGradient)
+        {
+            maxVomiGradient = gradientMagnitudes[i];
+        }
+    }
+    for (unsigned int i = 0; i < m_dataSize; i++)
+    {
+        vomiGradient[i] = gradientMagnitudes[i] / maxVomiGradient;
+    }
 
     gradientEstimator->SetInput(m_image);
 
